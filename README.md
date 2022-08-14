@@ -8,12 +8,14 @@
 
 <p>&nbsp;</p>
 
-- Previous repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
-- Current repo (self)
-
-
 ![pre-release](https://img.shields.io/badge/Status-pre--release-orange.svg)  
 API's and other structures will change (probably radically 🐷) prior to `1.x` release.
+
+
+- Previous repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
+- Current repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (self)
+
+
 
 
 <p>&nbsp;</p>
