@@ -11,10 +11,8 @@
 ![pre-release](https://img.shields.io/badge/Status-pre--release-orange.svg)  
 API's and other structures will change (probably radically 🐷) prior to `1.x` release.
 
-
 - Previous repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
 - Current repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (self)
-
 
 
 
@@ -25,7 +23,8 @@ API's and other structures will change (probably radically 🐷) prior to `1.x` 
 
 # Philosophy
 
-As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and Node.js"](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs), [Doug McIlroy's](https://en.wikipedia.org/wiki/Douglas_McIlroy) 4-point formulation of the [Unix Philosophy](http://www.catb.org/esr/writings/taoup/html/ch01s06.html):
+As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and Node.js"](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs),  
+[Doug McIlroy's](https://en.wikipedia.org/wiki/Douglas_McIlroy) 4-point formulation of the [Unix Philosophy](http://www.catb.org/esr/writings/taoup/html/ch01s06.html):
 
 <p>&nbsp;</p>
 
