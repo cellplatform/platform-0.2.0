@@ -71,6 +71,14 @@ When setting up a new developer (or your next machine). Extract all your "secret
 
 **This temporarily generated folder must never be commited into the repo.**  Once you have your temporary folder assembled, transmit it to the next developer (or yourself on your next development machine) after appropriately editing out any API keys/tokens that are personally assigned to you. Send this over some sensibly secure "password/secret" transmission channel.
 
+<p>&nbsp;</p>
+
+### Licence Analysis
+
+The system/platform is an "open commons" shared resource for the world.  As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and also all dependencies must conform with amenable OSS licences.  To run an analysis over the depenency graph run ([pre-reqs](https://docs.fossa.com/docs/importing-a-project)):
+
+      fossa analyze
+
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -81,6 +89,9 @@ When setting up a new developer (or your next machine). Extract all your "secret
 
 For a scintillating break down of this open-source classic, treat yourself to **Kyle E. Mitchell's**  
 "[The MIT License line-by-line.](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html) 171 words every programmer should understand."
+
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
+
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
 <p>&nbsp;</p>
