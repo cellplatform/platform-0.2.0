@@ -2,11 +2,11 @@
   "name": "lib-1",
   "version": "0.0.0",
   "type": "module",
-  "types": "./dist.types/src/main.d.ts",
+  "types": "./types/main.d.ts",
   "typesVersions": {
     "*": {
       "bar": [
-        "./dist.types/src/child/bar.d.ts"
+        "./types/child/bar.d.ts"
       ]
     }
   },
@@ -16,10 +16,13 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && tsc -p tsconfig.d.json",
+    "build": "yarn tsc && vite build",
+    "tsc": "yarn tsc.code && yarn tsc.types",
+    "tsc.code": "tsc -p config/tsconfig.json",
+    "tsc.types": "sh script.sh/build.types.sh",
     "test": "vitest",
     "preview": "vite preview",
-    "clean": "rm -rf .build"
+    "clean": "rm -rf .cache && rm -rf dist"
   },
   "license": "MIT",
   "private": true
