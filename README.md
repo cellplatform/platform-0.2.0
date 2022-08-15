@@ -75,9 +75,11 @@ When setting up a new developer (or your next machine). Extract all your "secret
 
 ### Licence Analysis
 
-The system/platform is an "open commons" shared resource for the world.  As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and also all dependencies must conform with amenable OSS licences.  To run an analysis over the depenency graph run ([pre-reqs](https://docs.fossa.com/docs/importing-a-project)):
+The system/platform is an "open commons" shared resource for the world.  As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well.  To run an analysis over the depenency graph run:
 
       fossa analyze
+
+(see [pre-reqs](https://docs.fossa.com/docs/importing-a-project) setup)
 
 
 <p>&nbsp;</p>
