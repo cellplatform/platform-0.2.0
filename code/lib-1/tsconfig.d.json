@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "outDir": "dist.types",
+    "tsBuildInfoFile": ".build/tsconfig.d.tsbuildinfo",
+    "noEmit": false,
+    "emitDeclarationOnly": true
+  }
+}
