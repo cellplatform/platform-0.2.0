@@ -100,9 +100,3 @@ For a scintillating break down of this open-source classic, treat yourself to **
 <p>&nbsp;</p>
 
 
-
-
-
-## TODO ( WIP )
-
-- [ ] [npm deprecations](https://docs.npmjs.com/cli/v7/commands/npm-deprecate) on archived (obsolete/cleaned out) published code modules.
