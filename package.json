@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "type": "module",
   "scripts": {
-    "build": "ts-node-esm -T script.ts/build.mts",
+    "build": "ts-node-esm -T script.ts/build/run.mts",
     "tmp": "yarn build code/lib-1"
   },
   "dependencies": {
