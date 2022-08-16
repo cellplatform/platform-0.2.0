@@ -1,19 +1,12 @@
 #!/usr/bin/env ts-node
-import path from 'path';
-import { build } from 'vite';
-
 import { Typescript } from './build.Typescript.mjs';
-
-/**
- * Refs:
- * - https://vitejs.dev/guide/api-javascript.html#build
- */
+import { Vite } from './build.Vite.mjs';
 
 const argv = process.argv.slice(2);
-const base = argv[0] ?? '';
+const dir = argv[0] ?? '';
 
-if (!base) {
-  console.error(`ERR(Build): path to module directory required`);
+if (!dir) {
+  console.error(`FAIL(Build): path to module directory required.`);
   process.exit(1);
 }
 
@@ -21,8 +14,7 @@ if (!base) {
  * Run
  */
 (async () => {
-  const root = path.resolve('.', base);
-  await Typescript.build(root);
-
-  await build({ root });
+  const exitOnError = true;
+  await Typescript.build(dir, { exitOnError });
+  await Vite.build(dir);
 })();
