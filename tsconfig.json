@@ -7,7 +7,6 @@
     "types": ["vitest/globals"],
 
     "sourceMap": true,
-    "declarationMap": true,
 
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,8 +21,8 @@
 
     "strict": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noUnusedLocals": false,
 
     "noEmit": true,
     "jsx": "react-jsx"

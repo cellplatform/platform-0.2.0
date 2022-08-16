@@ -1,0 +1,7 @@
+{
+  "extends": "",
+  "include": ["../src"],
+  "compilerOptions": {
+    "composite": true
+  }
+}

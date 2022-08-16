@@ -16,13 +16,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "yarn tsc && vite build",
-    "tsc": "yarn tsc.code && yarn tsc.types",
-    "tsc.code": "tsc -p config/tsconfig.json",
-    "tsc.types": "sh script.sh/build.types.sh",
-    "test": "vitest",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "clean": "rm -rf .cache && rm -rf dist"
+    "test": "vitest",
+    "clean": "rm -rf dist"
   },
   "license": "MIT",
   "private": true
