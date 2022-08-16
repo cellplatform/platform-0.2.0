@@ -16,5 +16,8 @@ describe('Main (lib-2)', () => {
     console.log('-------------------------------------------');
     console.log('obj1', obj1);
     console.log('obj2', obj2);
+
+    console.log('-------------------------------------------');
+    expect(123).to.eql(123);
   });
 });

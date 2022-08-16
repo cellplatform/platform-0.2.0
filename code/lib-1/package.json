@@ -12,7 +12,7 @@
   },
   "exports": {
     ".": "./dist/main.js",
-    "./bar": "./dist/bar.546bbcf1.js"
+    "./bar": "./dist/bar.152d9b7c.js"
   },
   "scripts": {
     "dev": "vite",
