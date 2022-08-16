@@ -1,5 +1,5 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fphilcockfield%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fphilcockfield%2Fplatform-0.0.2?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) for [@platform](https://www.npmjs.com/org/platform) system modules.
@@ -11,21 +11,20 @@
 ![pre-release](https://img.shields.io/badge/Status-pre--release-orange.svg)  
 API's and other structures will change (probably radically 🐷) prior to `1.x` release.
 
-
-- Previous repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
-- Current repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (self)
-
+- repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1) (previous)
+- repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (current)
 
 
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-
+curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
 
 # Philosophy
 
-As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and Node.js"](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs), [Doug McIlroy's](https://en.wikipedia.org/wiki/Douglas_McIlroy) 4-point formulation of the [Unix Philosophy](http://www.catb.org/esr/writings/taoup/html/ch01s06.html):
+As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and Node.js"](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs),  
+[Doug McIlroy's](https://en.wikipedia.org/wiki/Douglas_McIlroy) 4-point formulation of the [Unix Philosophy](http://www.catb.org/esr/writings/taoup/html/ch01s06.html):
 
 <p>&nbsp;</p>
 
@@ -72,6 +71,16 @@ When setting up a new developer (or your next machine). Extract all your "secret
 
 **This temporarily generated folder must never be commited into the repo.**  Once you have your temporary folder assembled, transmit it to the next developer (or yourself on your next development machine) after appropriately editing out any API keys/tokens that are personally assigned to you. Send this over some sensibly secure "password/secret" transmission channel.
 
+<p>&nbsp;</p>
+
+### Licence Analysis
+
+The system/platform is an "open commons" shared resource for the world.  As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well.  To run an analysis over the depenency graph run:
+
+      fossa analyze
+
+(see [fossa](https://docs.fossa.com/docs/importing-a-project) CLI setup)
+
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -83,15 +92,11 @@ When setting up a new developer (or your next machine). Extract all your "secret
 For a scintillating break down of this open-source classic, treat yourself to **Kyle E. Mitchell's**  
 "[The MIT License line-by-line.](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html) 171 words every programmer should understand."
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fphilcockfield%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fphilcockfield%2Fplatform-0.0.2?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
 
+
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
 
-
-
-
-## TODO ( WIP )
-
-- [ ] [npm deprecations](https://docs.npmjs.com/cli/v7/commands/npm-deprecate) on archived (obsolete/cleaned out) published code modules.

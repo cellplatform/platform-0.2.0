@@ -1,0 +1,26 @@
+{
+  "name": "lib-1",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./types/main.d.ts",
+  "typesVersions": {
+    "*": {
+      "child/bar": [
+        "./types/child/bar.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": "./dist/main.js",
+    "./child/bar": "./dist/bar.277cd7ce.js"
+  }
+}
