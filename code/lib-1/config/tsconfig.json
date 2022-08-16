@@ -1,9 +1,0 @@
-{
-  "extends": "../../../tsconfig.json",
-  "include": ["../src"],
-  "compilerOptions": {
-    "rootDir": "..",
-    "composite": true,
-    "tsBuildInfoFile": "../.cache/tsconfig.tsbuildinfo"
-  }
-}
