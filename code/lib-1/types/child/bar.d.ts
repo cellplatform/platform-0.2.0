@@ -3,3 +3,4 @@ declare const Bar: {
 };
 export { Bar };
 export default Bar;
+export declare const F = 1235;

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Foo, MyType, t } from 'lib-1';
-import { Bar } from 'lib-1/bar';
+import { Bar } from 'lib-1/child/bar';
 
 describe('Main (lib-2)', () => {
   it('foo', () => {
