@@ -3,4 +3,3 @@ declare const Bar: {
 };
 export { Bar };
 export default Bar;
-//# sourceMappingURL=bar.d.ts.map
