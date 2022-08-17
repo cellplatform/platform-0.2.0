@@ -11,9 +11,10 @@ export const fs = { ...fsextra, ...path };
 import { fileURLToPath } from 'url';
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
 const rootDir = fs.join(__dirname, '../..');
+const templateDir = fs.join(__dirname, 'tmpl');
 
 export const Paths = {
   __dirname,
   rootDir,
-  templateDir: fs.join(__dirname, 'tmpl'),
+  templateDir,
 };

@@ -14,7 +14,7 @@ export const Package = {
    * generate the [package.json] { exports } index based on
    * the manifest output of Vite/Rollup.
    */
-  async update(rootDir: t.PathString, options: { save?: boolean } = {}) {
+  async updateEsm(rootDir: t.PathString, options: { save?: boolean } = {}) {
     rootDir = fs.resolve(rootDir);
 
     const pkgPath = fs.join(rootDir, 'package.json');

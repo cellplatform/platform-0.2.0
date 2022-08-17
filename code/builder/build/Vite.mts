@@ -25,8 +25,8 @@ export const Vite = {
       build: { manifest: true },
     });
 
-    // Update the exports/types on the [package.json] file.
-    await Package.update(root, { save: true });
+    // Update the ESM { exports/types } index on the [package.json] file.
+    await Package.updateEsm(root, { save: true });
   },
 
   /**
@@ -38,8 +38,8 @@ export const Vite = {
       template: fs.join(Paths.templateDir, 'vite.config.ts'),
       instance: fs.join(rootDir, 'vite.config.ts'),
     };
-    if (!(await fs.pathExists(path.instance))) {
-      await fs.copy(path.template, path.instance);
-    }
+
+    const exists = await fs.pathExists(path.instance);
+    if (!exists) await fs.copy(path.template, path.instance);
   },
 };
