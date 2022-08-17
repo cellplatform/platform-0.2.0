@@ -2,6 +2,7 @@ import { t, fs, Paths } from './common.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
 import { Package } from './build/Package.mjs';
+import { Template } from './Template.mjs';
 
 /**
  * ESM module builder.
@@ -24,6 +25,7 @@ export const Builder = {
     const { silent = false } = options;
     const exitOnError = true;
 
+    await Template.ensureBaseline(dir);
     await Typescript.build(dir, { exitOnError });
     await Vite.build(dir, { silent });
     await Package.updateEsm(dir, { save: true });
@@ -37,6 +39,7 @@ export const Builder = {
   async clean(dir: t.PathString) {
     dir = fs.resolve(dir);
     await fs.remove(fs.join(dir, 'dist'));
+    await fs.remove(fs.join(dir, 'types'));
   },
 };
 
