@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [],
 
   build: {
-    manifest: true,
     lib: {
       name: pkg.name,
       entry: `${__dirname}/src/main`,

@@ -14,7 +14,7 @@ export const Vite = {
   async build(rootDir: t.PathString, options: { silent?: boolean } = {}) {
     const root = fs.resolve(rootDir);
     const logLevel = options.silent ? 'silent' : undefined;
-    await build({ root, logLevel });
+    await build({ root, logLevel, build: { manifest: true } });
     await Package.update(root, { save: true });
   },
 };
