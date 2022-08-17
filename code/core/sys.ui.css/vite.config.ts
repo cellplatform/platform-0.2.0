@@ -1,4 +1,4 @@
-import { defineConfig, ViteConfig } from '../../../config/Vite.mjs';
+import { defineConfig, ViteConfig } from '../../../config.mjs';
 import pkg from './package.json';
 
 export default defineConfig(async ({ command, mode }) => {
