@@ -14,13 +14,11 @@ export default defineConfig({
       formats: ['es'],
     },
 
-    rollupOptions: {
-      output: { globals: {} },
-    },
+    rollupOptions: { output: { globals: {} } },
   },
 
   test: {
     globals: true,
-    include: ['**/*.{TEST,SPEC}.{ts,tsx}'],
+    include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
   },
 });
