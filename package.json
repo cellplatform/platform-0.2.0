@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "ts-node-esm -T script.ts/build/run.mts",
-    "tmp": "yarn build code/lib-1"
+    "tmp": "yarn build code/samples/lib-1"
   },
   "dependencies": {
     "react": "^18.2.0",

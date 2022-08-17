@@ -15,6 +15,8 @@ if (!dir) {
  */
 (async () => {
   const exitOnError = true;
+  const silent = false;
+
   await Typescript.build(dir, { exitOnError });
-  await Vite.build(dir);
+  await Vite.build(dir, { silent });
 })();

@@ -11,9 +11,10 @@ export const Vite = {
    * Generate the [dist] module compilation output.
    * Run the ESM/JS bundler (Vite => Rollup)
    */
-  async build(rootDir: t.PathString) {
+  async build(rootDir: t.PathString, options: { silent?: boolean } = {}) {
     const root = fs.resolve(rootDir);
-    await build({ root });
+    const logLevel = options.silent ? 'silent' : undefined;
+    await build({ root, logLevel });
     await Package.update(root, { save: true });
   },
 };
