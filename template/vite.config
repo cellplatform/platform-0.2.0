@@ -21,6 +21,6 @@ export default defineConfig({
 
   test: {
     globals: true,
-    include: ['**/*.{TEST,SPEC}.{ts,tsx}'],
+    include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
   },
 });
