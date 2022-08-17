@@ -1,4 +1,0 @@
-{
-  ".": "./src/main.ts",
-  "./child/bar": "./src/child/bar.ts"
-}

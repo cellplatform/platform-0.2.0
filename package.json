@@ -3,8 +3,9 @@
   "version": "0.0.2",
   "type": "module",
   "scripts": {
-    "build": "ts-node-esm -T script.ts/build/run.mts",
-    "tmp": "yarn build code/lib-1"
+    "build": "ts-node-esm -T script.ts/build-root.mts",
+    "tmp1": "yarn build code/samples/lib-1",
+    "tmp2": "yarn build code/samples/lib-2"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,7 +26,7 @@
   },
   "workspaces": {
     "packages": [
-      "code/*"
+      "code/*/*"
     ]
   },
   "license": "MIT",
