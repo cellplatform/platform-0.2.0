@@ -1,5 +1,6 @@
 import { exec, ExecException } from 'child_process';
 import { fs, t, Paths } from '../common.mjs';
+import { Util } from './Util.mjs';
 
 /**
  * Template path names.
@@ -23,6 +24,10 @@ export const Typescript = {
    */
   async build(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
     rootDir = fs.resolve(rootDir);
+
+    const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
+    const tsVersion = (pkg.devDependencies?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
+    console.log(`tsc  v${tsVersion} building for production...`);
 
     if (!(await fs.pathExists(rootDir))) {
       console.log(`\nERROR(Typescript.build): root directory does not exist.\n${rootDir}\n`);

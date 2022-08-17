@@ -1,4 +1,5 @@
 export type PathString = string;
+export type VersionString = string;
 
 /**
  * [tsconfig.json] file.
@@ -10,6 +11,21 @@ export type TsConfig = {
   compilerOptions: TsConfigCompilerOptions;
 };
 export type TsConfigCompilerOptions = { rootDir?: string };
+
+/**
+ * Configuration instructions for an ESM module,
+ * that is translated into [nodejs] index entries
+ * on the [package.json] file.
+ */
+export type EsmConfig = {
+  exports: EsmConfigExports;
+};
+
+/**
+ * Ref:
+ * https://nodejs.org/api/packages.html#packages_exports
+ */
+export type EsmConfigExports = { [entry: string]: PathString };
 
 /**
  * Vite [manifest.json] file.
@@ -34,6 +50,8 @@ export type PackageJson = {
   types?: string;
   typesVersions?: PackageJsonTypesVersions;
   exports?: PackageJsonExports;
+  dependencies?: { [name: string]: VersionString };
+  devDependencies?: { [name: string]: VersionString };
 };
 
 /**

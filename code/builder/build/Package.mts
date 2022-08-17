@@ -1,8 +1,9 @@
-import { fs, t } from '../common.mjs';
+import { fs, t, Paths } from '../common.mjs';
+import { Util } from './Util.mjs';
 
-const Path = {
+const PkgPaths = {
   buildManifest: 'dist/manifest.json',
-  exports: 'exports.json',
+  esmJsonFilename: 'esm.json',
 };
 
 /**
@@ -18,16 +19,16 @@ export const Package = {
     rootDir = fs.resolve(rootDir);
 
     const pkgPath = fs.join(rootDir, 'package.json');
-    const pkg = await loadJsonFile<t.PackageJson>(pkgPath);
-    const files = await Package.loadManifestFiles(rootDir);
+    const pkg = await Util.loadJsonFile<t.PackageJson>(pkgPath);
+    const config = await Package.loadManifestFiles(rootDir);
 
     const exports: t.PackageJsonExports = {};
     const typesVersions: t.PackageJsonTypesVersions = { '*': {} };
 
-    for (const key of Object.keys(files.exports)) {
-      const path = files.exports[key];
-      const match = Object.values(files.manifest).find(({ src }) => {
-        return path === `./${stripRelativeRoot(src)}`;
+    for (const key of Object.keys(config.esm.exports)) {
+      const path = config.esm.exports[key];
+      const match = Object.values(config.manifest).find((file) => {
+        return path === Util.ensureRelativeRoot(file.src);
       });
       if (match) {
         exports[key] = `./dist/${match.file}`;
@@ -44,8 +45,8 @@ export const Package = {
       delete pkg.exports;
       delete pkg.typesVersions;
       let next = { ...pkg, types };
-      if (hasKeys(typesVersions['*'])) next = { ...next, typesVersions };
-      if (hasKeys(exports)) next = { ...next, exports };
+      if (Util.objectHasKeys(typesVersions['*'])) next = { ...next, typesVersions };
+      if (Util.objectHasKeys(exports)) next = { ...next, exports };
 
       await fs.writeFile(pkgPath, `${JSON.stringify(next, null, '  ')}\n`);
     }
@@ -76,33 +77,18 @@ export const Package = {
    */
   async loadManifestFiles(root: t.PathString) {
     const paths = {
-      manifest: fs.resolve(fs.join(root, Path.buildManifest)),
-      exports: fs.resolve(fs.join(root, Path.exports)),
+      manifest: fs.resolve(fs.join(root, PkgPaths.buildManifest)),
+      esmConfig: fs.resolve(fs.join(root, PkgPaths.esmJsonFilename)),
     };
 
-    if (!(await fs.pathExists(paths.exports))) {
-      const tmpl = fs.resolve(fs.join('template', Path.exports));
-      await fs.copy(tmpl, paths.exports);
+    if (!(await fs.pathExists(paths.esmConfig))) {
+      const tmpl = fs.join(fs.join(Paths.templateDir, PkgPaths.esmJsonFilename));
+      await fs.copy(tmpl, paths.esmConfig);
     }
 
-    const manifest = await loadJsonFile<t.ViteManifest>(paths.manifest);
-    const exports = await loadJsonFile<t.PackageJsonExports>(paths.exports);
-    return { manifest, exports };
+    const manifest = await Util.loadJsonFile<t.ViteManifest>(paths.manifest);
+    const esm = await Util.loadJsonFile<t.EsmConfig>(paths.esmConfig);
+
+    return { manifest, esm };
   },
 };
-
-/**
- * Helpers
- */
-async function loadJsonFile<T>(file: t.PathString) {
-  return (await fs.readJson(fs.resolve(file))) as T;
-}
-
-function stripRelativeRoot(input: t.PathString) {
-  return (input || '').replace(/^\.\//, '');
-}
-
-function hasKeys(input: any) {
-  if (typeof input !== 'object') return false;
-  return Object.keys(input).length > 0;
-}

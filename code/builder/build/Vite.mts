@@ -23,10 +23,8 @@ export const Vite = {
       root,
       logLevel,
       build: { manifest: true },
+      worker: { format: 'es' },
     });
-
-    // Update the ESM { exports/types } index on the [package.json] file.
-    await Package.updateEsm(root, { save: true });
   },
 
   /**
