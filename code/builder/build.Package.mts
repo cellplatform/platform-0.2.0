@@ -1,10 +1,6 @@
 import { fs, t, Paths } from './common.mjs';
 import { Util } from './Util.mjs';
-
-const PkgPaths = {
-  buildManifest: 'dist/manifest.json',
-  esmJsonFilename: 'esm.json',
-};
+import { Template } from './Template.mjs';
 
 /**
  * Helpers for adjust a [package.json] file after a build operation.
@@ -76,18 +72,15 @@ export const Package = {
    * Load build related JSON files.
    */
   async loadManifestFiles(root: t.PathString) {
-    const paths = {
-      manifest: fs.resolve(fs.join(root, PkgPaths.buildManifest)),
-      esmConfig: fs.resolve(fs.join(root, PkgPaths.esmJsonFilename)),
+    await Template.ensureExists('esm.json', root);
+
+    const target = {
+      manifest: fs.join(root, Paths.buildManifest),
+      esm: fs.join(root, Paths.tmpl.esmConfig),
     };
 
-    if (!(await fs.pathExists(paths.esmConfig))) {
-      const tmpl = fs.join(fs.join(Paths.templateDir, PkgPaths.esmJsonFilename));
-      await fs.copy(tmpl, paths.esmConfig);
-    }
-
-    const manifest = await Util.loadJsonFile<t.ViteManifest>(paths.manifest);
-    const esm = await Util.loadJsonFile<t.EsmConfig>(paths.esmConfig);
+    const manifest = await Util.loadJsonFile<t.ViteManifest>(target.manifest);
+    const esm = await Util.loadJsonFile<t.EsmConfig>(target.esm);
 
     return { manifest, esm };
   },

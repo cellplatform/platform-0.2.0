@@ -16,7 +16,7 @@ export const Vite = {
     const logLevel = options.silent ? 'silent' : undefined;
 
     // Ensure the Vite config file exists.
-    await Template.ensureFileExists('vite.config', rootDir);
+    await Template.ensureExists('vite.config', rootDir);
 
     // Run the builder operation.
     await build({
@@ -25,19 +25,5 @@ export const Vite = {
       build: { manifest: true },
       worker: { format: 'es' },
     });
-  },
-
-  /**
-   * Ensure the [vite.config.ts] file exists within the target module.
-   */
-  async ensureConfigFileExists(rootDir: t.PathString) {
-    rootDir = fs.resolve(rootDir);
-    const path = {
-      template: fs.join(Paths.templateDir, 'vite.config.ts'),
-      instance: fs.join(rootDir, 'vite.config.ts'),
-    };
-
-    const exists = await fs.pathExists(path.instance);
-    if (!exists) await fs.copy(path.template, path.instance);
   },
 };

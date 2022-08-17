@@ -7,12 +7,7 @@ import { Util } from './Util.mjs';
  */
 const TsPaths = {
   tmp: '.builder',
-  rootDir: Paths.rootDir,
   tsc: fs.join(Paths.rootDir, 'node_modules/typescript/bin/tsc'),
-  filename: {
-    code: 'tsconfig.code.json',
-    types: 'tsconfig.types.json',
-  },
 };
 
 /**
@@ -30,7 +25,7 @@ export const Typescript = {
     console.log(`tsc  v${tsVersion} building for production...`);
 
     if (!(await fs.pathExists(rootDir))) {
-      console.log(`\nERROR(Typescript.build): root directory does not exist.\n${rootDir}\n`);
+      console.log(`\nERROR(Typescript.build) root directory does not exist.\n${rootDir}\n`);
       if (options.exitOnError) process.exit(1);
       return;
     }
@@ -45,7 +40,7 @@ export const Typescript = {
    * Build ESM code.
    */
   async buildCode(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
-    const tsconfig = fs.join(TsPaths.tmp, TsPaths.filename.code);
+    const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.code);
     const res = await Typescript.tsc(rootDir, tsconfig);
     if (!res.ok && options.exitOnError) process.exit(res.code);
     return res;
@@ -55,7 +50,7 @@ export const Typescript = {
    * Build type definitions (.d.ts)
    */
   async buildTypes(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
-    const tsconfig = fs.join(TsPaths.tmp, TsPaths.filename.types);
+    const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.types);
     const res = await Typescript.tsc(rootDir, tsconfig);
     if (!res.ok && options.exitOnError) process.exit(res.code);
 
@@ -97,7 +92,7 @@ export const Typescript = {
    */
   async copyTsConfigFiles(rootDir: t.PathString, options: { clear?: boolean } = {}) {
     rootDir = fs.resolve(rootDir);
-    const sourceDir = Paths.templateDir;
+    const sourceDir = Paths.tmpl.dir;
     const targetDir = fs.join(rootDir, TsPaths.tmp);
     if (options.clear) await fs.remove(targetDir);
     await fs.ensureDir(targetDir);
@@ -110,12 +105,12 @@ export const Typescript = {
       await fs.writeFile(target, `${JSON.stringify(json, null, '  ')}\n`);
     };
 
-    await copy(TsPaths.filename.code, (tsconfig) => {
-      tsconfig.extends = fs.join(TsPaths.rootDir, './tsconfig.json');
+    await copy(Paths.tmpl.tsconfig.code, (tsconfig) => {
+      tsconfig.extends = fs.join(Paths.rootDir, './tsconfig.json');
       tsconfig.compilerOptions.rootDir = rootDir;
     });
 
-    await copy(TsPaths.filename.types, (tsconfig) => {
+    await copy(Paths.tmpl.tsconfig.types, (tsconfig) => {
       tsconfig.compilerOptions.rootDir = rootDir;
     });
   },

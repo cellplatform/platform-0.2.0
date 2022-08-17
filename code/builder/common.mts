@@ -10,11 +10,17 @@ export const fs = { ...fsextra, ...path };
  */
 import { fileURLToPath } from 'url';
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
-const rootDir = fs.join(__dirname, '../..');
-const templateDir = fs.join(__dirname, 'tmpl');
 
 export const Paths = {
   __dirname,
-  rootDir,
-  templateDir,
+  rootDir: fs.join(__dirname, '../..'),
+  buildManifest: 'dist/manifest.json',
+  tmpl: {
+    dir: fs.join(__dirname, 'tmpl'),
+    esmConfig: 'esm.json',
+    tsconfig: {
+      code: 'tsconfig.code.json',
+      types: 'tsconfig.types.json',
+    },
+  },
 };
