@@ -1,5 +1,10 @@
 import { fs, t } from '../common.mjs';
 
+const Path = {
+  buildManifest: 'dist/manifest.json',
+  exports: 'exports.json',
+};
+
 /**
  * Helpers for adjust a [package.json] file after a build operation.
  */
@@ -67,8 +72,18 @@ export const Package = {
    * Load build related JSON files.
    */
   async loadManifestFiles(root: t.PathString) {
-    const manifest = await loadJsonFile<t.ViteManifest>(fs.join(root, 'dist/manifest.json'));
-    const exports = await loadJsonFile<t.PackageJsonExports>(fs.join(root, 'exports.json'));
+    const paths = {
+      manifest: fs.resolve(fs.join(root, Path.buildManifest)),
+      exports: fs.resolve(fs.join(root, Path.exports)),
+    };
+
+    if (!(await fs.pathExists(paths.exports))) {
+      const tmpl = fs.resolve(fs.join('template', Path.exports));
+      await fs.copy(tmpl, paths.exports);
+    }
+
+    const manifest = await loadJsonFile<t.ViteManifest>(paths.manifest);
+    const exports = await loadJsonFile<t.PackageJsonExports>(paths.exports);
     return { manifest, exports };
   },
 };

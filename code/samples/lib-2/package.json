@@ -2,7 +2,6 @@
   "name": "lib-2",
   "version": "0.0.0",
   "type": "module",
-  "types": "dist.types/src/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && tsc -p tsconfig.d.json",
@@ -11,5 +10,10 @@
     "clean": "rm -rf .build"
   },
   "license": "MIT",
-  "private": true
+  "private": true,
+  "types": "dist.types/src/index.d.ts",
+  "typesVersions": {
+    "*": {}
+  },
+  "exports": {}
 }
