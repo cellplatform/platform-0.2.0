@@ -1,6 +1,5 @@
 #!/usr/bin/env ts-node
-import { Typescript } from './build.Typescript.mjs';
-import { Vite } from './build.Vite.mjs';
+import { Builder } from './builder.mjs';
 
 const argv = process.argv.slice(2);
 const dir = argv[0] ?? '';
@@ -14,9 +13,5 @@ if (!dir) {
  * Run
  */
 (async () => {
-  const exitOnError = true;
-  const silent = false;
-
-  await Typescript.build(dir, { exitOnError });
-  await Vite.build(dir, { silent });
+  await Builder.build(dir);
 })();
