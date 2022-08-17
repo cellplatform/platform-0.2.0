@@ -22,6 +22,14 @@ export const Typescript = {
    * Complete build
    */
   async build(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
+    rootDir = fs.resolve(rootDir);
+
+    if (!(await fs.pathExists(rootDir))) {
+      console.log(`\nERROR(Typescript.build): root directory does not exist.\n${rootDir}\n`);
+      if (options.exitOnError) process.exit(1);
+      return;
+    }
+
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
     await Typescript.buildCode(rootDir, options);
     await Typescript.buildTypes(rootDir, options);
