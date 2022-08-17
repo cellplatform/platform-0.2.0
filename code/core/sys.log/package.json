@@ -1,5 +1,5 @@
 {
-  "name": "sys.ui.css",
+  "name": "sys.log",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -7,7 +7,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "build": "ts-node-esm -T ../../../script.ts/build.mts",
-    "clean": "rm -rf dist"
+    "clean": "ts-node-esm -T ../../../script.ts/clean.mts"
   },
   "license": "MIT",
   "private": true,

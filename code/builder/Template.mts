@@ -1,6 +1,6 @@
 import { fs, Paths, t } from './common.mjs';
 
-type TemplateKind = 'vite.config' | 'esm.json';
+type TemplateKind = 'vite.config' | 'esm.json' | 'entry:src' | 'entry:html';
 
 /**
  * Template helpers.
@@ -25,20 +25,43 @@ export const Template = {
       return true;
     };
 
+    const copyFileMaybe = async (file: t.PathString) => {
+      await copyMaybe(Template.path(file), fs.join(targetDir, file));
+    };
+
     if (kind === 'vite.config') {
-      const filename = 'vite.config.ts';
-      const source = Template.path(filename);
-      const target = fs.join(targetDir, filename);
-      return await copyMaybe(source, target);
+      await copyFileMaybe(Paths.tmpl.viteConfig);
+      return;
     }
 
     if (kind === 'esm.json') {
-      const filename = 'esm.json';
-      const source = Template.path(filename);
-      const target = fs.join(targetDir, filename);
-      return await copyMaybe(source, target);
+      await copyFileMaybe(Paths.tmpl.esmConfig);
+      return;
+    }
+
+    if (kind === 'entry:src') {
+      for (const path of Paths.tmpl.src) {
+        await copyFileMaybe(path);
+      }
+      return;
+    }
+
+    if (kind === 'entry:html') {
+      await copyFileMaybe(Paths.tmpl.indexHtml);
+      return;
     }
 
     throw new Error(`template '${kind}' not supported`);
+  },
+
+  /**
+   * Ensure the target directory has baseline files within it.
+   */
+  async ensureBaseline(targetDir: t.PathString) {
+    const ensure = Template.ensureExists;
+    await ensure('vite.config', targetDir);
+    await ensure('esm.json', targetDir);
+    await ensure('entry:src', targetDir);
+    await ensure('entry:html', targetDir);
   },
 };

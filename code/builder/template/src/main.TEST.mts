@@ -5,5 +5,3 @@ describe('main', () => {
     expect(123).to.equal(123);
   });
 });
-
-export {};

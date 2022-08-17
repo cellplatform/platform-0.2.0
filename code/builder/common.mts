@@ -11,14 +11,18 @@ export const fs = { ...fsextra, ...path };
  * Paths
  */
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
+const rootDir = fs.join(__dirname, '../..');
+const tmplDir = fs.join(__dirname, 'template');
 
 export const Paths = {
-  __dirname,
-  rootDir: fs.join(__dirname, '../..'),
+  rootDir,
   buildManifest: 'dist/manifest.json',
   tmpl: {
-    dir: fs.join(__dirname, 'tmpl'),
+    dir: tmplDir,
     esmConfig: 'esm.json',
+    viteConfig: 'vite.config.mts',
+    indexHtml: 'index.html',
+    src: ['src/main.mts', 'src/main.TEST.mts'],
     tsconfig: {
       code: 'tsconfig.code.json',
       types: 'tsconfig.types.json',
