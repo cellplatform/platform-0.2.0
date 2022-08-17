@@ -15,5 +15,5 @@ const rootDir = fs.join(__dirname, '../..');
 export const Paths = {
   __dirname,
   rootDir,
-  templateDir: fs.join(__dirname, 'template'),
+  templateDir: fs.join(__dirname, 'tmpl'),
 };
