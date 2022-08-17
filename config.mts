@@ -10,7 +10,7 @@ export const ViteConfig = {
      */
     test: {
       globals: true,
-      include: ['**/*.{TEST}.{ts,tsx,mts,mtsx}'],
+      include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
     },
 
     /**
