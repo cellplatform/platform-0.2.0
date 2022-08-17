@@ -1,6 +1,6 @@
 import { build } from 'vite';
-import { fs, t, Paths } from '../common.mjs';
-import { Package } from './Package.mjs';
+import { fs, t, Paths } from './common.mjs';
+import { Template } from './Template.mjs';
 
 /**
  * Refs:
@@ -16,7 +16,7 @@ export const Vite = {
     const logLevel = options.silent ? 'silent' : undefined;
 
     // Ensure the Vite config file exists.
-    await Vite.ensureConfigFileExists(rootDir);
+    await Template.ensureFileExists('vite.config', rootDir);
 
     // Run the builder operation.
     await build({

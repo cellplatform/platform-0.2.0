@@ -1,4 +1,4 @@
-import { fs, t, Paths } from '../common.mjs';
+import { fs, t, Paths } from './common.mjs';
 import { Util } from './Util.mjs';
 
 const PkgPaths = {
