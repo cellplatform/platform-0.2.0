@@ -1,24 +1,13 @@
-/// <reference types="vitest" />
-
-import { defineConfig } from 'vite';
+import { defineConfig, ViteConfig } from '../../../config/Vite.mjs';
 import pkg from './package.json';
 
-export default defineConfig({
-  plugins: [],
-
-  build: {
-    lib: {
-      name: pkg.name,
-      entry: `${__dirname}/src/main`,
-      fileName: 'main',
-      formats: ['es'],
+export default defineConfig(async ({ command, mode }) => {
+  return {
+    plugins: [],
+    build: {
+      lib: ViteConfig.default.library(__dirname, pkg.name),
+      rollupOptions: { output: { globals: {} } },
     },
-
-    rollupOptions: { output: { globals: {} } },
-  },
-
-  test: {
-    globals: true,
-    include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
-  },
+    test: ViteConfig.default.test,
+  };
 });
