@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "build": "ts-node-esm -T ../../../script.ts/build.mts",
     "clean": "rm -rf dist"
   },
   "license": "MIT",
@@ -21,6 +21,6 @@
   },
   "exports": {
     ".": "./dist/main.js",
-    "./child/bar": "./dist/bar.2807dac3.js"
+    "./child/bar": "./dist/bar.bdc58744.js"
   }
 }

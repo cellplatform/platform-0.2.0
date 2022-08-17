@@ -1,6 +1,6 @@
 import { build } from 'vite';
 import { fs, t } from '../common.mjs';
-import { Package } from './build.Package.mjs';
+import { Package } from './Package.mjs';
 
 /**
  * Refs:

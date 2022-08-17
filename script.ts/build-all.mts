@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder } from './builder.mjs';
+import { Builder } from '../code/builder/Builder.mjs';
 
 const argv = process.argv.slice(2);
 const dir = argv[0] ?? '';
@@ -12,6 +12,4 @@ if (!dir) {
 /**
  * Run
  */
-(async () => {
-  await Builder.build(dir);
-})();
+await Builder.build(dir);

@@ -4,16 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && tsc -p tsconfig.d.json",
     "test": "vitest",
     "preview": "vite preview",
+    "build": "ts-node-esm -T ../../../script.ts/build.mts",
     "clean": "rm -rf .build"
   },
   "license": "MIT",
   "private": true,
-  "types": "dist.types/src/index.d.ts",
-  "typesVersions": {
-    "*": {}
-  },
-  "exports": {}
+  "types": "dist.types/src/index.d.ts"
 }

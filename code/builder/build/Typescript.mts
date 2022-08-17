@@ -1,11 +1,13 @@
 import { exec, ExecException } from 'child_process';
-import { fs, t } from '../common.mjs';
+import { fs, t, Paths } from '../common.mjs';
 
 /**
  * Template path names.
  */
-const Path = {
-  tmpBuilderDir: '.builder',
+const TsPaths = {
+  tmp: '.builder',
+  rootDir: Paths.rootDir,
+  tsc: fs.join(Paths.rootDir, 'node_modules/typescript/bin/tsc'),
   filename: {
     code: 'tsconfig.code.json',
     types: 'tsconfig.types.json',
@@ -16,8 +18,6 @@ const Path = {
  * Helpers for preparing and transpiling typescript modules (build).
  */
 export const Typescript = {
-  Path,
-
   /**
    * Complete build
    */
@@ -33,14 +33,14 @@ export const Typescript = {
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
     await Typescript.buildCode(rootDir, options);
     await Typescript.buildTypes(rootDir, options);
-    await fs.remove(fs.join(rootDir, Path.tmpBuilderDir));
+    await fs.remove(fs.join(rootDir, TsPaths.tmp));
   },
 
   /**
    * Build ESM code.
    */
   async buildCode(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
-    const tsconfig = fs.join(Path.tmpBuilderDir, Path.filename.code);
+    const tsconfig = fs.join(TsPaths.tmp, TsPaths.filename.code);
     const res = await Typescript.tsc(rootDir, tsconfig);
     if (!res.ok && options.exitOnError) process.exit(res.code);
     return res;
@@ -50,17 +50,17 @@ export const Typescript = {
    * Build type definitions (.d.ts)
    */
   async buildTypes(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
-    const tsconfig = fs.join(Path.tmpBuilderDir, Path.filename.types);
+    const tsconfig = fs.join(TsPaths.tmp, TsPaths.filename.types);
     const res = await Typescript.tsc(rootDir, tsconfig);
     if (!res.ok && options.exitOnError) process.exit(res.code);
 
     // Move the child "src/" folder up into the root "types/" folder.
     if (res.ok) {
-      const source = fs.join(rootDir, Path.tmpBuilderDir, 'types/src');
+      const source = fs.join(rootDir, TsPaths.tmp, 'types/src');
       const target = fs.join(rootDir, 'types');
       await fs.remove(target);
       await fs.move(source, target);
-      await fs.remove(fs.join(rootDir, Path.tmpBuilderDir, 'types'));
+      await fs.remove(fs.join(rootDir, TsPaths.tmp, 'types'));
     }
 
     return res;
@@ -72,8 +72,7 @@ export const Typescript = {
   tsc(dir: t.PathString, tsconfig: t.PathString, options: { silent?: boolean } = {}) {
     type R = { ok: boolean; code: number; stdout: string; stderr: string; error?: ExecException };
     return new Promise<R>(async (resolve) => {
-      const tscompiler = fs.resolve('node_modules/typescript/bin/tsc');
-      const cmd = `${tscompiler} --project "${fs.join(dir, tsconfig)}"`;
+      const cmd = `${TsPaths.tsc} --project "${fs.join(dir, tsconfig)}"`;
       exec(cmd, (err, stdout, stderr) => {
         const ok = !Boolean(stderr || err);
         const code = typeof err?.code === 'number' ? err.code : ok ? 0 : 1;
@@ -93,8 +92,8 @@ export const Typescript = {
    */
   async copyTsConfigFiles(rootDir: t.PathString, options: { clear?: boolean } = {}) {
     rootDir = fs.resolve(rootDir);
-    const sourceDir = fs.resolve('./template');
-    const targetDir = fs.join(rootDir, Path.tmpBuilderDir);
+    const sourceDir = Paths.templateDir;
+    const targetDir = fs.join(rootDir, TsPaths.tmp);
     if (options.clear) await fs.remove(targetDir);
     await fs.ensureDir(targetDir);
 
@@ -106,12 +105,12 @@ export const Typescript = {
       await fs.writeFile(target, `${JSON.stringify(json, null, '  ')}\n`);
     };
 
-    await copy(Path.filename.code, (tsconfig) => {
-      tsconfig.extends = fs.resolve('./tsconfig.json');
+    await copy(TsPaths.filename.code, (tsconfig) => {
+      tsconfig.extends = fs.join(TsPaths.rootDir, './tsconfig.json');
       tsconfig.compilerOptions.rootDir = rootDir;
     });
 
-    await copy(Path.filename.types, (tsconfig) => {
+    await copy(TsPaths.filename.types, (tsconfig) => {
       tsconfig.compilerOptions.rootDir = rootDir;
     });
   },

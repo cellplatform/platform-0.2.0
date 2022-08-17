@@ -43,8 +43,11 @@ export const Package = {
       delete pkg.types;
       delete pkg.exports;
       delete pkg.typesVersions;
-      const changed = { ...pkg, types, typesVersions, exports };
-      await fs.writeFile(pkgPath, `${JSON.stringify(changed, null, '  ')}\n`);
+      let next = { ...pkg, types };
+      if (hasKeys(typesVersions['*'])) next = { ...next, typesVersions };
+      if (hasKeys(exports)) next = { ...next, exports };
+
+      await fs.writeFile(pkgPath, `${JSON.stringify(next, null, '  ')}\n`);
     }
 
     return {
@@ -97,4 +100,9 @@ async function loadJsonFile<T>(file: t.PathString) {
 
 function stripRelativeRoot(input: t.PathString) {
   return (input || '').replace(/^\.\//, '');
+}
+
+function hasKeys(input: any) {
+  if (typeof input !== 'object') return false;
+  return Object.keys(input).length > 0;
 }

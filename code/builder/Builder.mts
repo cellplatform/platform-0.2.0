@@ -1,13 +1,12 @@
-import { fs, t } from '../common.mjs';
-
-import { Typescript } from './build.Typescript.mjs';
-import { Vite } from './build.Vite.mjs';
+import { t } from './common.mjs';
+import { Typescript } from './build/Typescript.mjs';
+import { Vite } from './build/Vite.mjs';
 
 /**
  * ESM module builder.
  * Uses:
  *  - tsc (typescript)
- *  - Vite (=> Rollup)
+ *  - Vite => Rollup
  */
 export const Builder = {
   /**
@@ -28,5 +27,5 @@ export const Builder = {
 /**
  * TODO 🐷
  * - Workers
- * - manifest (Cell, Hash)
+ * - manifest (Cell, Hash, TypeRefs)
  */
