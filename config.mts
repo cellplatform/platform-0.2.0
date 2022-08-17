@@ -4,16 +4,13 @@ import { defineConfig, LibraryOptions } from 'vite';
 export { defineConfig };
 
 export const ViteConfig = {
-  /**
-   * Configuration defaults.
-   */
   default: {
     /**
      * Test runner.
      */
     test: {
       globals: true,
-      include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+      include: ['**/*.{TEST}.{ts,tsx,mts,mtsx}'],
     },
 
     /**
