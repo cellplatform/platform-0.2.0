@@ -1,7 +1,7 @@
 import { t } from './common.mjs';
-import { Typescript } from './build.Typescript.mjs';
-import { Vite } from './build.Vite.mjs';
-import { Package } from './build.Package.mjs';
+import { Typescript } from './build/Typescript.mjs';
+import { Vite } from './build/Vite.mjs';
+import { Package } from './build/Package.mjs';
 
 /**
  * ESM module builder.

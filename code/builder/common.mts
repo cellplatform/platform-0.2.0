@@ -1,6 +1,8 @@
-import * as t from './types.mjs';
 import fsextra from 'fs-extra';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+import * as t from './types.mjs';
 
 export { t };
 export const fs = { ...fsextra, ...path };
@@ -8,7 +10,6 @@ export const fs = { ...fsextra, ...path };
 /**
  * Paths
  */
-import { fileURLToPath } from 'url';
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
 
 export const Paths = {

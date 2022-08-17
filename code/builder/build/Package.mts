@@ -1,6 +1,6 @@
-import { fs, t, Paths } from './common.mjs';
-import { Util } from './Util.mjs';
-import { Template } from './Template.mjs';
+import { fs, t, Paths } from '../common.mjs';
+import { Util } from '../Util.mjs';
+import { Template } from '../Template.mjs';
 
 /**
  * Helpers for adjust a [package.json] file after a build operation.

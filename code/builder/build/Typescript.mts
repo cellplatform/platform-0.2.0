@@ -1,6 +1,6 @@
 import { exec, ExecException } from 'child_process';
-import { fs, t, Paths } from './common.mjs';
-import { Util } from './Util.mjs';
+import { fs, t, Paths } from '../common.mjs';
+import { Util } from '../Util.mjs';
 
 /**
  * Template path names.
