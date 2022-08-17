@@ -11,6 +11,7 @@ export default defineConfig({
       name: pkg.name,
       entry: `${__dirname}/src/main`,
       fileName: 'main',
+      formats: ['es'],
     },
 
     rollupOptions: {
