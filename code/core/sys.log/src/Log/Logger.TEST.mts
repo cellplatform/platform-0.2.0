@@ -1,4 +1,4 @@
-import { Logger } from '.';
+import { Logger } from './index.mjs';
 
 const log = Logger.create();
 
