@@ -3,12 +3,14 @@
   "version": "0.0.2",
   "type": "module",
   "scripts": {
-    "build": "ts-node-esm -T script.ts/build-all.mts",
-    "nuke": "ts-node-esm -T script.ts/nuke.mts"
+    "build": "ts-node-esm -T script.ts/cmd.all/build.mts",
+    "test": "ts-node-esm -T script.ts/cmd.all/test.mts",
+    "nuke": "ts-node-esm -T script.ts/cmd.nuke.mts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.2.0",
+    "@types/minimist": "^1.2.2",
     "@types/node": "^18.7.3",
     "@vitejs/plugin-react": "^2.0.1",
     "@types/ramda": "^0.28.15",
@@ -18,9 +20,11 @@
     "@vitest/ui": "^0.22.0",
     "cuid": "^2.1.8",
     "dayjs": "^1.11.5",
+    "execa": "^6.1.0",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "picocolors": "^1.0.0",
+    "minimist": "^1.2.6",
     "ramda": "^0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -33,7 +37,6 @@
   },
   "workspaces": {
     "packages": [
-      "code/*",
       "code/*/*"
     ]
   },

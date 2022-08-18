@@ -5,12 +5,15 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "test": "vitest",
-    "build": "ts-node-esm -T ../../../script.ts/build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/clean.mts"
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "license": "MIT",
   "private": true,
+  "devDependencies": {
+    "@vitest/coverage-c8": "^0.22.1"
+  },
   "types": "./types/index.d.mts",
   "exports": {
     ".": "./dist/entry.js"

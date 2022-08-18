@@ -1,14 +1,11 @@
-import { exec, ExecException } from 'child_process';
-
-import { colors, fs, Paths, t } from '../common.mjs';
-import { Util } from '../Util.mjs';
+import { pc, execa, fs, t, Util } from '../common/index.mjs';
+import { Paths } from '../Paths.mjs';
 
 /**
  * Template path names.
  */
 const TsPaths = {
   tmp: '.builder',
-  tsc: fs.join(Paths.rootDir, 'node_modules/typescript/bin/tsc'),
 };
 
 /**
@@ -24,7 +21,8 @@ export const Typescript = {
     const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
     const tsVersion = (pkg.devDependencies?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
 
-    console.log(colors.green(`${colors.cyan(`tsc  v${tsVersion}`)} building for production...`));
+    const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
+    console.log(msg);
 
     if (!(await fs.pathExists(rootDir))) {
       console.log(`\nERROR(Typescript.build) root directory does not exist.\n${rootDir}\n`);
@@ -45,7 +43,7 @@ export const Typescript = {
   async buildCode(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
     const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.code);
     const res = await Typescript.tsc(rootDir, tsconfig);
-    if (!res.ok && options.exitOnError) process.exit(res.code);
+    if (!res.ok && options.exitOnError) process.exit(res.exitCode);
     return res;
   },
 
@@ -55,7 +53,7 @@ export const Typescript = {
   async buildTypes(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
     const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.types);
     const res = await Typescript.tsc(rootDir, tsconfig);
-    if (!res.ok && options.exitOnError) process.exit(res.code);
+    if (!res.ok && options.exitOnError) process.exit(res.exitCode);
 
     // Move the child "src/" folder up into the root "types/" folder.
     if (res.ok) {
@@ -77,22 +75,20 @@ export const Typescript = {
   /**
    * Run the [tsc] typescript compiler
    */
-  tsc(dir: t.PathString, tsconfig: t.PathString, options: { silent?: boolean } = {}) {
-    type R = { ok: boolean; code: number; stdout: string; stderr: string; error?: ExecException };
-    return new Promise<R>(async (resolve) => {
-      const cmd = `${TsPaths.tsc} --project "${fs.join(dir, tsconfig)}"`;
-      exec(cmd, (err, stdout, stderr) => {
-        const ok = !Boolean(stderr || err);
-        const code = typeof err?.code === 'number' ? err.code : ok ? 0 : 1;
-        const error = err || undefined;
-        if (!options.silent) {
-          if (stdout) console.log(`\n${stdout}`);
-          if (stderr) console.error(`\n${stderr}`);
-          if (error) console.error(`[command failed]:\n${cmd}\n`);
-        }
-        resolve({ ok, code, stdout, stderr, error });
+  async tsc(dir: t.PathString, tsconfig: t.PathString, options: { silent?: boolean } = {}) {
+    try {
+      const args = ['--project', fs.join(dir, tsconfig)];
+      const { exitCode } = await execa('tsc', args, {
+        cwd: fs.resolve(dir),
+        stdio: options.silent ? 'ignore' : 'inherit',
       });
-    });
+      const ok = exitCode === 0;
+      return { ok, exitCode };
+    } catch (error: any) {
+      const exitCode = error.exitCode as number;
+      const ok = exitCode === 0;
+      return { ok, exitCode };
+    }
   },
 
   /**

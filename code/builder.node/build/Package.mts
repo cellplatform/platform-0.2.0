@@ -1,5 +1,5 @@
-import { fs, t, Paths } from '../common.mjs';
-import { Util } from '../Util.mjs';
+import { fs, t, Util } from '../common/index.mjs';
+import { Paths } from '../Paths.mjs';
 import { Template } from '../Template.mjs';
 
 /**

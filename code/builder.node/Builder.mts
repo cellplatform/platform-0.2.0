@@ -1,7 +1,8 @@
 import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
-import { fs, t } from './common.mjs';
+import { test } from './Builder.test.mjs';
+import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -11,6 +12,8 @@ import { Template } from './Template.mjs';
  *  - Vite => Rollup
  */
 export const Builder = {
+  test,
+
   /**
    * Run a build that:
    *
