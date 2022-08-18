@@ -1,5 +1,5 @@
 {
-  "name": "sys.log",
+  "name": "sys.util",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -11,19 +11,5 @@
   },
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "@types/node": "^18.7.3",
-    "vite": "^3.0.0"
-  },
-  "types": "./types/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "index": [
-        "./types/index.d.mts"
-      ]
-    }
-  },
-  "exports": {
-    ".": "./dist/entry.js"
-  }
+  "types": "./types/index.d.mts"
 }
