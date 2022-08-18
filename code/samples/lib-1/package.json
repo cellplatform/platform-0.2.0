@@ -11,8 +11,16 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./types/main.d.ts",
+  "types": "./types/index.d.mts",
+  "typesVersions": {
+    "*": {
+      "child/bar": [
+        "./types/child/bar.d.mts"
+      ]
+    }
+  },
   "exports": {
-    ".": "./dist/main.js"
+    ".": "./dist/entry.js",
+    "./child/bar": "./dist/bar.344b4df6.js"
   }
 }
