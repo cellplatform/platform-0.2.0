@@ -1,6 +1,6 @@
 import { Observable, of, timeout } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
-import { Event } from '@platform/types';
+import { Event } from 'sys.types';
 
 type Milliseconds = number;
 

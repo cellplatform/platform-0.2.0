@@ -3,9 +3,9 @@ import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { id } from '../Id/Id.mjs';
-import { isEvent } from './rx.event.mjs';
-import { instance, busAsType, isBus } from './rx.bus.util.mjs';
-import { Pump } from './rx.pump.mjs';
+import { isEvent } from './Rx.event.mjs';
+import { instance, busAsType, isBus } from './Rx.bus.util.mjs';
+import { Pump } from './Rx.Pump.mjs';
 
 type E = t.Event;
 

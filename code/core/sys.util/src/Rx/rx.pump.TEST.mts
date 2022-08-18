@@ -1,9 +1,9 @@
-import * as t from '@platform/types';
+import * as t from 'sys.types';
 
 import { expect } from 'chai';
 import { rx } from '.';
 
-import { Pump } from './rx.pump';
+import { Pump } from './Rx.Pump.mjs';
 
 type E = {
   type: 'foo';
@@ -134,8 +134,8 @@ describe('Pump', () => {
         const connection = Pump.connect(pump).to(bus1);
 
         const fired = {
-          bus1: <E[]>[],
-          bus2: <E[]>[],
+          bus1: [] as E[],
+          bus2: [] as E[],
           reset() {
             fired.bus1 = [];
             fired.bus2 = [];
@@ -180,8 +180,8 @@ describe('Pump', () => {
         expect(connection.alive).to.eql(true);
 
         const fired = {
-          bus1: <E[]>[],
-          bus2: <E[]>[],
+          bus1: [] as E[],
+          bus2: [] as E[],
           reset() {
             fired.bus1 = [];
             fired.bus2 = [];
@@ -264,8 +264,8 @@ describe('Pump', () => {
         Pump.connect(pump, { filter }).to(bus1);
 
         const fired = {
-          bus1: <E[]>[],
-          bus2: <E[]>[],
+          bus1: [] as E[],
+          bus2: [] as E[],
           reset() {
             fired.bus1 = [];
             fired.bus2 = [];
@@ -302,8 +302,8 @@ describe('Pump', () => {
           .to(bus1);
 
         const fired = {
-          bus1: <E[]>[],
-          bus2: <E[]>[],
+          bus1: [] as E[],
+          bus2: [] as E[],
           reset() {
             fired.bus1 = [];
             fired.bus2 = [];

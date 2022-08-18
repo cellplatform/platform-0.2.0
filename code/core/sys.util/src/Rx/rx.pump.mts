@@ -1,9 +1,9 @@
-import * as t from '@platform/types';
+import * as t from 'sys.types';
 import { filter, takeUntil } from 'rxjs/operators';
-import { Observable } from './rx';
+import { Observable } from 'rxjs';
 
-import { instance, isBus } from './rx.bus.util';
-import { disposable } from './rx.disposable';
+import { instance, isBus } from './Rx.bus.util.mjs';
+import { disposable } from './Rx.disposable.mjs';
 
 /**
  * An [EventPump] implementation.
