@@ -21,6 +21,6 @@
   },
   "exports": {
     ".": "./dist/entry.js",
-    "./child/bar": "./dist/bar.344b4df6.js"
+    "./child/bar": "./dist/bar.30468e26.js"
   }
 }
