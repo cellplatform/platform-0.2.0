@@ -32,5 +32,4 @@ const worker1 = new Worker(url);
 // console.log('imported worker', new MyWorker());
 
 // const f = import('./workers/Web.Worker.mjs?worker');
-
 // const url = new URL('./workers/Web.Worker.js?worker&inline&module', import.meta.url);
