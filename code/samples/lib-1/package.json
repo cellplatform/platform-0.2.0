@@ -11,5 +11,8 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./types/main.d.ts"
+  "types": "./types/main.d.ts",
+  "exports": {
+    ".": "./dist/main.js"
+  }
 }

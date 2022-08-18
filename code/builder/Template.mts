@@ -17,6 +17,8 @@ export const Template = {
    * Check for the existence of a template file and copy if not already in the target.
    */
   async ensureExists(kind: TemplateKind, targetDir: t.PathString) {
+    targetDir = fs.resolve(targetDir);
+
     const copyMaybe = async (source: t.PathString, target: t.PathString) => {
       source = fs.resolve(source);
       target = fs.resolve(target);
@@ -40,8 +42,11 @@ export const Template = {
     }
 
     if (kind === 'entry:src') {
-      for (const path of Paths.tmpl.src) {
-        await copyFileMaybe(path);
+      const srcExists = await fs.pathExists(fs.join(targetDir, 'src'));
+      if (!srcExists) {
+        for (const path of Paths.tmpl.src) {
+          await copyFileMaybe(path);
+        }
       }
       return;
     }
