@@ -1,8 +1,5 @@
 #!/usr/bin/env ts-node
-import pc from 'picocolors';
-
-import { Builder } from '../../code/builder.node/Builder.mjs';
-import { Util } from './util.mjs';
+import { pc, Builder, Util } from '../common/index.mjs';
 
 /**
  * Run

@@ -1,10 +1,9 @@
 #!/usr/bin/env ts-node
-import fspath from 'path';
-import rimraf from 'rimraf';
+import { fs, rimraf } from './common/index.mjs';
 
 function remove(path: string) {
   return new Promise<void>((resolve, reject) => {
-    rimraf(fspath.resolve(path), (err) => (err ? reject(err) : resolve()));
+    rimraf(fs.resolve(path), (err) => (err ? reject(err) : resolve()));
   });
 }
 

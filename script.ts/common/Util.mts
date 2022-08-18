@@ -1,7 +1,4 @@
-import pc from 'picocolors';
-import { fs } from '../../code/builder.node/common.mjs';
-
-export { pc };
+import { pc, fs } from './libs.mjs';
 
 export const Util = {
   async loadPackageJson() {
