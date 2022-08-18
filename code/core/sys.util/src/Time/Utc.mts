@@ -6,7 +6,7 @@ import * as t from './types.mjs';
  */
 export function utc(input?: t.DateInput) {
   const date = day(input);
-  const res: t.IDate = {
+  const res: t.DateTime = {
     get date() {
       return date.toDate();
     },

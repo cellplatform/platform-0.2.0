@@ -6,7 +6,7 @@ import * as t from './types.mjs';
  */
 export function timer(start?: Date, options: { round?: number } = {}) {
   let startedAt = start || new Date();
-  const api: t.ITimer = {
+  const api: t.Timer = {
     startedAt,
     reset() {
       startedAt = new Date();

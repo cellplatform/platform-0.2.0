@@ -30,27 +30,27 @@ export type DayFactory = (config?: ConfigType) => Dayjs;
 
 export type DateInput = number | string | Date | Dayjs;
 
-export type ITime = {
+export type Time = {
   delay: TimeDelay;
   wait: TimeWait;
   elapsed: TimeElapsed;
   day: DayFactory;
-  now: IDate;
+  now: DateTime;
   timezone: string;
-  utc(input?: Date | number): IDate;
-  timer(start?: Date, options?: { round?: number }): ITimer;
+  utc(input?: Date | number): DateTime;
+  timer(start?: Date, options?: { round?: number }): Timer;
   duration(msec: number | string, options?: { round?: number }): TimeDuration;
 };
 
-export type IDate = {
+export type DateTime = {
   date: Date;
   timestamp: number;
   unix: number;
   format(template?: string): string;
 };
 
-export type ITimer = {
+export type Timer = {
   startedAt: Date;
-  reset: () => ITimer;
+  reset: () => Timer;
   elapsed: TimeDuration;
 };

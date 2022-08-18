@@ -1,3 +1,3 @@
-import { ITime } from './types.mjs';
+import { Time } from './types.mjs';
 export * from './types.mjs';
-export declare const time: ITime;
+export declare const time: Time;

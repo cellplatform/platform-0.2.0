@@ -2,8 +2,8 @@ import * as t from './types.mjs';
 export declare type IDurationOptions = {
     round?: number;
 };
-export declare class Duration implements t.IDuration {
-    static create(msec: number, options?: IDurationOptions): t.IDuration;
+export declare class Duration implements t.TimeDuration {
+    static create(msec: number, options?: IDurationOptions): t.TimeDuration;
     static to: {
         sec: (msec: number, precision?: number) => number;
         min: (msec: number, precision?: number) => number;
@@ -12,7 +12,7 @@ export declare class Duration implements t.IDuration {
         date: (input: t.DateInput) => Date;
     };
     static format(msec: number, unit: t.TimeUnit, round?: number): string;
-    static parse(input: string | number, options?: IDurationOptions): t.IDuration;
+    static parse(input: string | number, options?: IDurationOptions): t.TimeDuration;
     /**
      * [Lifecycle]
      */
