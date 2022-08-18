@@ -3,8 +3,6 @@ import { build } from 'vite';
 import { fs, t } from '../common.mjs';
 import { Template } from '../Template.mjs';
 
-// import { Event } from 'sys.types';
-
 /**
  * Refs:
  * - https://vitejs.dev/guide/api-javascript.html#build
