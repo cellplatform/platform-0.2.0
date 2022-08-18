@@ -15,5 +15,3 @@ function remove(path: string) {
   await remove('./node_modules');
   await remove('./yarn.lock');
 })();
-
-console.log('rimraf', rimraf);
