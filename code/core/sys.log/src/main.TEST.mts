@@ -8,9 +8,8 @@ describe('main', () => {
   });
 
   it('level.[color]', () => {
-    // log.info.gr
     log.info.green(`info: green, ${log.cyan('hello', 123)}`, 123);
-    // console.log('log.info.green', log.info.green);
+    log.warn.cyan(`warn: cyan, ${log.magenta('hello', 123)}`, 123);
   });
 
   it('colors', () => {
@@ -24,5 +23,12 @@ describe('main', () => {
     log.info('cyan', log.cyan('hello'));
     log.info('white', log.white('hello'));
     log.info('gray', log.gray('hello'));
+  });
+
+  it('group', () => {
+    log.group('hello group');
+    log.info('inside');
+    log.groupEnd();
+    log.info('after');
   });
 });

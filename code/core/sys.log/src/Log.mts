@@ -18,11 +18,17 @@ export const Logger = {
   /**
    * Instantiate a new log instance.
    */
-  create() {
+  create(): t.Log {
     const write = (level: t.LogLevel, items: any[]) => {
       console[level].apply(console, items);
       return items.join(' ');
     };
+
+    const group: t.Logger = (...items) => {
+      console.group(...items);
+      return items.join(' ');
+    };
+    const groupEnd = () => console.groupEnd();
 
     const colorizer = (color: t.LogColor): t.Logger => {
       return (...items) => {
@@ -59,6 +65,8 @@ export const Logger = {
       warn: levelMethod('warn'),
       error: levelMethod('error'),
       ...colorMethods,
+      group,
+      groupEnd,
     };
   },
 };
