@@ -18,7 +18,7 @@ export const ViteConfig = {
      */
     lib(dir: string, name: string): LibraryOptions {
       return {
-        name: name,
+        name,
         entry: `${dir}/src/index`,
         fileName: 'entry',
         formats: ['es'],

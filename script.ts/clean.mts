@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder } from '../code/builder/Builder.mjs';
+import { Builder } from '../code/builder.node/Builder.mjs';
 
 const dir = process.cwd();
 const argv = process.argv.slice(2);
