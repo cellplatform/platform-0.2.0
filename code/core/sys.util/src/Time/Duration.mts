@@ -12,9 +12,9 @@ const DAY = HOUR * 24;
 
 export type IDurationOptions = { round?: number };
 
-export class Duration implements t.IDuration {
+export class Duration implements t.TimeDuration {
   public static create(msec: number, options?: IDurationOptions) {
-    return new Duration(msec, options) as t.IDuration;
+    return new Duration(msec, options) as t.TimeDuration;
   }
 
   public static to = {

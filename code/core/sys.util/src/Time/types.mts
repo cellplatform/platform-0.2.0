@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Dayjs, ConfigType } from 'dayjs';
 
-export type IDuration = {
+export type TimeDuration = {
   ok: boolean;
   msec: number;
   sec: number;
@@ -25,7 +25,7 @@ export type TimeWait = (msecs: number | Observable<any>) => Promise<unknown>;
 export type TimeElapsed = (
   from: DateInput,
   options?: { to?: DateInput; round?: number },
-) => IDuration;
+) => TimeDuration;
 export type DayFactory = (config?: ConfigType) => Dayjs;
 
 export type DateInput = number | string | Date | Dayjs;
@@ -39,7 +39,7 @@ export type ITime = {
   timezone: string;
   utc(input?: Date | number): IDate;
   timer(start?: Date, options?: { round?: number }): ITimer;
-  duration(msec: number | string, options?: { round?: number }): IDuration;
+  duration(msec: number | string, options?: { round?: number }): TimeDuration;
 };
 
 export type IDate = {
@@ -52,5 +52,5 @@ export type IDate = {
 export type ITimer = {
   startedAt: Date;
   reset: () => ITimer;
-  elapsed: IDuration;
+  elapsed: TimeDuration;
 };
