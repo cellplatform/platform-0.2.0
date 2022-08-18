@@ -1,10 +1,11 @@
+import colors from 'picocolors';
 import fsextra from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import * as t from './types.mjs';
 
-export { t };
+export { t, colors };
 export const fs = { ...fsextra, ...path };
 
 /**

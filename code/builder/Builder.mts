@@ -1,7 +1,7 @@
-import { t, fs, Paths } from './common.mjs';
+import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
-import { Package } from './build/Package.mjs';
+import { fs, t } from './common.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -20,8 +20,6 @@ export const Builder = {
    *
    */
   async build(dir: t.PathString, options: { silent?: boolean } = {}) {
-    if (!options.silent) console.log();
-
     const { silent = false } = options;
     const exitOnError = true;
 
