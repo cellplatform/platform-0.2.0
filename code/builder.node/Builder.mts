@@ -45,13 +45,14 @@ export const Builder = {
    */
   async test(
     dir: t.PathString,
-    options: { watch?: boolean; ui?: boolean; coverage?: boolean } = {},
+    options: { watch?: boolean; ui?: boolean; coverage?: boolean; silent?: boolean } = {},
   ) {
-    const { watch = true, coverage = false, ui = false } = options;
+    const { watch = true, coverage = false, ui = false, silent = false } = options;
 
     const args = [`--watch=${watch}`];
-    if (coverage) args.push('--coverage');
     if (ui) args.push('--ui');
+    if (silent) args.push('--silent');
+    if (coverage) args.push('--coverage');
 
     const cmd = 'vitest';
     const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });

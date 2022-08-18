@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Util, pc } from '../common/index.mjs';
+import { Util, pc, Builder } from '../common/index.mjs';
 
 /**
  * Run
@@ -17,12 +17,6 @@ import { Util, pc } from '../common/index.mjs';
 
   // Build each project.
   for (const path of paths) {
-    console.log(`💦 ${Util.formatPath(path)}`);
-    // await Builder.build(path);
-    /**
-     * TODO 🐷
-     */
-    console.log('run test [TODO]');
-    console.log();
+    await Builder.test(path, { watch: false });
   }
 })();
