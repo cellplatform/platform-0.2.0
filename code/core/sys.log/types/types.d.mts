@@ -18,7 +18,6 @@ export declare type Log = LogColors & {
     info: LogMethod;
     warn: LogMethod;
     error: LogMethod;
-    group: LogMethod;
+    group: Logger;
     groupEnd: () => void;
-    clear: () => void;
 };
