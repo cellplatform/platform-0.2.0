@@ -5,7 +5,8 @@
   "scripts": {
     "build": "ts-node-esm -T script.ts/all/build.mts",
     "test": "ts-node-esm -T script.ts/all/test.mts",
-    "nuke": "ts-node-esm -T script.ts/nuke.mts"
+    "nuke": "ts-node-esm -T script.ts/nuke.mts",
+    "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
@@ -19,6 +20,7 @@
     "@vitest/ui": "^0.22.0",
     "cuid": "^2.1.8",
     "dayjs": "^1.11.5",
+    "execa": "^6.1.0",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "picocolors": "^1.0.0",
