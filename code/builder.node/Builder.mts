@@ -1,7 +1,7 @@
 import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
-import { fs, t } from './common/index.mjs';
+import { execa, fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -24,7 +24,6 @@ export const Builder = {
     const exitOnError = true;
 
     await Template.ensureBaseline(dir);
-
     await Typescript.build(dir, { exitOnError });
     await Vite.build(dir, { silent });
     await Package.updateEsm(dir, { save: true });
@@ -39,6 +38,26 @@ export const Builder = {
     dir = fs.resolve(dir);
     await fs.remove(fs.join(dir, 'dist'));
     await fs.remove(fs.join(dir, 'types'));
+  },
+
+  /**
+   * Run unit-tests
+   */
+  async test(
+    dir: t.PathString,
+    options: { watch?: boolean; ui?: boolean; coverage?: boolean } = {},
+  ) {
+    const { watch = true, coverage = false, ui = false } = options;
+
+    const args = [`--watch=${watch}`];
+    if (coverage) args.push('--coverage');
+    if (ui) args.push('--ui');
+
+    const cmd = 'vitest';
+    const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });
+    const ok = res.exitCode === 0;
+
+    return { ok, cmd, args };
   },
 };
 
