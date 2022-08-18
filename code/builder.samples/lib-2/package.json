@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
     "preview": "vite preview",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "rm -rf .build"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "license": "MIT",
   "private": true,

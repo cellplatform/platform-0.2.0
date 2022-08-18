@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "test": "vitest",
-    "coverage": "vitest run --coverage",
-    "test.once": "vitest run --watch=false",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
