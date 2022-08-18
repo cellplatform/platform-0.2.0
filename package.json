@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "type": "module",
   "scripts": {
+    "build": "ts-node-esm -T script.ts/build-all.mts",
     "nuke": "ts-node-esm -T script.ts/nuke.mts"
   },
   "devDependencies": {

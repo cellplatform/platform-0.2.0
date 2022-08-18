@@ -3,12 +3,10 @@ import day from 'dayjs';
 import { delay, wait } from './Delay.mjs';
 import { elapsed, timer } from './Timer.mjs';
 import { utc } from './Utc.mjs';
-import { Time } from './types.mjs';
+import * as t from './types.mjs';
 import { Duration } from './Duration.mjs';
 
-export * from './types.mjs';
-
-export const time: Time = {
+const Time: t.Time = {
   day,
   delay,
   wait,
@@ -28,3 +26,5 @@ export const time: Time = {
       : Duration.create(msec, { round });
   },
 };
+
+export { Time, Time as time };

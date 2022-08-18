@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Value } from '.';
+import { Time, time } from '../Time';
 
 describe('compact', () => {
   it('makes no change', () => {
@@ -60,5 +61,16 @@ describe('asArray', () => {
     expect(res).to.not.equal(input); // NB: Converted into an array
     expect(res[0]).to.equal(input);
     expect(res[0].count).to.eql(1); // NB: Type inferred and returned.
+  });
+});
+
+describe('asyncFilter', () => {
+  it('filters (async)', async () => {
+    const list = ['cat', 'hello cat', 'foobar'];
+    const res = await Value.asyncFilter(list, async (value) => {
+      await Time.wait(3);
+      return value.includes('cat');
+    });
+    expect(res).to.eql(['cat', 'hello cat']);
   });
 });

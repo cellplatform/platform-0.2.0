@@ -1,3 +1,4 @@
-import * as rx from './Rx.mjs';
+import * as Rx from './Rx.mjs';
 
-export { rx };
+export { Rx, Rx as rx };
+export default Rx;

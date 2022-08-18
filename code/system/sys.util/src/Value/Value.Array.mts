@@ -31,3 +31,11 @@ export function flatten<T>(list: any): T[] {
 export function asArray<T>(input: T | T[]): T[] {
   return Array.isArray(input) ? input : [input];
 }
+
+/**
+ * Filter an array with an asynchronous predicate.
+ */
+export async function asyncFilter<T>(list: T[], predicate: (value: T) => Promise<boolean>) {
+  const results = await Promise.all(list.map(predicate));
+  return list.filter((_, index) => results[index]);
+}
