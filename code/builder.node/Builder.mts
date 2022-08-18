@@ -1,7 +1,8 @@
 import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
-import { execa, fs, t } from './common/index.mjs';
+import { test } from './Builder.test.mjs';
+import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -11,6 +12,8 @@ import { Template } from './Template.mjs';
  *  - Vite => Rollup
  */
 export const Builder = {
+  test,
+
   /**
    * Run a build that:
    *
@@ -38,27 +41,6 @@ export const Builder = {
     dir = fs.resolve(dir);
     await fs.remove(fs.join(dir, 'dist'));
     await fs.remove(fs.join(dir, 'types'));
-  },
-
-  /**
-   * Run unit-tests
-   */
-  async test(
-    dir: t.PathString,
-    options: { watch?: boolean; ui?: boolean; coverage?: boolean; silent?: boolean } = {},
-  ) {
-    const { watch = true, coverage = false, ui = false, silent = false } = options;
-
-    const args = [`--watch=${watch}`];
-    if (ui) args.push('--ui');
-    if (silent) args.push('--silent');
-    if (coverage) args.push('--coverage');
-
-    const cmd = 'vitest';
-    const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });
-    const ok = res.exitCode === 0;
-
-    return { ok, cmd, args };
   },
 };
 
