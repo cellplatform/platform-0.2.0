@@ -11,5 +11,8 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./types/index.d.mts"
+  "types": "./types/index.d.mts",
+  "exports": {
+    ".": "./dist/entry.js"
+  }
 }

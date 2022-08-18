@@ -1,0 +1,24 @@
+import day from 'dayjs';
+import * as t from './types.mjs';
+
+/**
+ * Helpers for working with
+ */
+export function utc(input?: t.DateInput) {
+  const date = day(input);
+  const res: t.IDate = {
+    get date() {
+      return date.toDate();
+    },
+    get timestamp() {
+      return date.toDate().getTime();
+    },
+    get unix() {
+      return date.unix();
+    },
+    format(template?: string) {
+      return date.format(template);
+    },
+  };
+  return res;
+}

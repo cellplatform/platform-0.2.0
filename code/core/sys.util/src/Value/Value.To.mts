@@ -1,4 +1,4 @@
-import { Is } from '../Is';
+import { Is } from '../Is/Is.mjs';
 
 /**
  * Converts a value to a number if possible.

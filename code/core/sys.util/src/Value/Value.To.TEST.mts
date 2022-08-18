@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Value } from '.';
+import { Value } from './Value.mjs';
 
 describe('Value.toNumber', () => {
   it('returns the non-number value', () => {
