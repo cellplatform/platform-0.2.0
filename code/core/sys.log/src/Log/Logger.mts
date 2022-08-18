@@ -1,4 +1,4 @@
-import { t, pc } from './common';
+import { t, pc } from '../common';
 
 const colors: t.LogColor[] = [
   'black',

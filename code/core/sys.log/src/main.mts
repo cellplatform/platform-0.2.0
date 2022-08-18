@@ -1,4 +1,5 @@
-import { Logger } from './Log.mjs';
+import { Logger } from './Log';
 
 const Log = Logger.create();
-export { Logger, Log, Log as log };
+const log = Log;
+export { Logger, Log, log };

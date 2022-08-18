@@ -1,4 +1,6 @@
-import { log } from './main.mjs';
+import { Logger } from '.';
+
+const log = Logger.create();
 
 describe('main', () => {
   it('levels', () => {
