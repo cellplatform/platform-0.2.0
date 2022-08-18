@@ -5,14 +5,21 @@ import { execa, t } from './common/index.mjs';
  */
 export async function test(
   dir: t.PathString,
-  options: { watch?: boolean; ui?: boolean; coverage?: boolean; silent?: boolean } = {},
+  options: {
+    watch?: boolean;
+    run?: boolean;
+    ui?: boolean;
+    coverage?: boolean;
+    silent?: boolean;
+  } = {},
 ) {
-  const { watch = true, coverage = false, ui = false, silent = false } = options;
+  const { watch = true, coverage = false, ui = false, silent = false, run = false } = options;
 
   const args = [`--watch=${watch}`];
   if (ui) args.push('--ui');
   if (silent) args.push('--silent');
   if (coverage) args.push('--coverage');
+  if (run) args.push('--run');
 
   const cmd = 'vitest';
   const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });

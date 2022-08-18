@@ -3,6 +3,6 @@ import { Builder, minimist } from './common/index.mjs';
 
 const dir = process.cwd();
 const argv = minimist(process.argv.slice(2));
-const { watch, ui, coverage } = argv;
+const { watch, run, ui, coverage } = argv;
 
-Builder.test(dir, { watch, ui, coverage });
+Builder.test(dir, { watch, run, ui, coverage });

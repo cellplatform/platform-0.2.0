@@ -1,8 +1,8 @@
 #!/usr/bin/env ts-node
-import { Builder } from './common/index.mjs';
+import { Builder, minimist } from './common/index.mjs';
 
 const dir = process.cwd();
-const argv = process.argv.slice(2);
+const argv = minimist(process.argv.slice(2));
 
 console.log('clean | argv', argv); // TEMP 🐷
 
