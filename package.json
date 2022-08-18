@@ -3,9 +3,9 @@
   "version": "0.0.2",
   "type": "module",
   "scripts": {
-    "build": "ts-node-esm -T script.ts/all/build.mts",
-    "test": "ts-node-esm -T script.ts/all/test.mts",
-    "nuke": "ts-node-esm -T script.ts/nuke.mts",
+    "build": "ts-node-esm -T script.ts/cmd.all/build.mts",
+    "test": "ts-node-esm -T script.ts/cmd.all/test.mts",
+    "nuke": "ts-node-esm -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "devDependencies": {

@@ -8,8 +8,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "test.once": "vitest run --watch=false",
-    "build": "ts-node-esm -T ../../../script.ts/build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/clean.mts"
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "license": "MIT",
   "private": true,

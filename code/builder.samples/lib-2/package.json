@@ -6,7 +6,7 @@
     "dev": "vite",
     "test": "vitest",
     "preview": "vite preview",
-    "build": "ts-node-esm -T ../../../script.ts/build.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "rm -rf .build"
   },
   "license": "MIT",
