@@ -1,4 +1,5 @@
-import { fs, t } from './common.mjs';
+import * as t from '../types.mjs';
+import { fs } from './fs.mjs';
 
 export const Util = {
   async loadJsonFile<T>(file: t.PathString) {

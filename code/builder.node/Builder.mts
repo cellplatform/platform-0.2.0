@@ -1,7 +1,7 @@
 import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
-import { fs, t } from './common.mjs';
+import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -24,6 +24,7 @@ export const Builder = {
     const exitOnError = true;
 
     await Template.ensureBaseline(dir);
+
     await Typescript.build(dir, { exitOnError });
     await Vite.build(dir, { silent });
     await Package.updateEsm(dir, { save: true });

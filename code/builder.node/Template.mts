@@ -1,4 +1,5 @@
-import { fs, Paths, t } from './common.mjs';
+import { fs, t } from './common/index.mjs';
+import { Paths } from './Paths.mjs';
 
 type TemplateKind = 'vite.config' | 'esm.json' | 'entry:src' | 'entry:html';
 
