@@ -1,5 +1,6 @@
 import { exec, ExecException } from 'child_process';
-import { fs, t, Paths, colors } from '../common.mjs';
+
+import { colors, fs, Paths, t } from '../common.mjs';
 import { Util } from '../Util.mjs';
 
 /**
@@ -34,6 +35,7 @@ export const Typescript = {
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
     await Typescript.buildCode(rootDir, options);
     await Typescript.buildTypes(rootDir, options);
+
     await fs.remove(fs.join(rootDir, TsPaths.tmp));
   },
 
@@ -63,6 +65,11 @@ export const Typescript = {
       await fs.move(source, target);
       await fs.remove(fs.join(rootDir, TsPaths.tmp, 'types'));
     }
+
+    // Remove any test types.
+    const pattern = '**/*.{TEST,SPEC}.d.{ts,tsx,mts,mtsx}';
+    const tests = await fs.glob.find(fs.join(rootDir, 'types', pattern));
+    await Promise.all(tests.map((path) => fs.remove(path)));
 
     return res;
   },

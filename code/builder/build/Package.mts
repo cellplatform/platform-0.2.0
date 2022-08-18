@@ -21,7 +21,7 @@ export const Package = {
     const exports: t.PackageJsonExports = {};
     const typesVersions: t.PackageJsonTypesVersions = { '*': {} };
 
-    for (const key of Object.keys(config.esm.exports)) {
+    for (const key of Object.keys(config.esm.exports ?? {})) {
       const path = config.esm.exports[key];
       const match = Object.values(config.manifest).find((file) => {
         return path === Util.ensureRelativeRoot(file.src);
@@ -63,7 +63,8 @@ export const Package = {
       .replace(/^\.\//, '')
       .replace(/^src\//, '')
       .replace(/\.(m)?ts(x)?$/, '');
-    const file = `./types/${key}.d.ts`;
+    const ext = fs.extname(src);
+    const file = `./types/${key}.d${ext}`;
     const filepath = fs.join(fs.resolve(rootDir), file);
     return (await fs.pathExists(filepath)) ? { src, key, file } : undefined;
   },

@@ -15,8 +15,15 @@
     "@types/node": "^18.7.3",
     "vite": "^3.0.0"
   },
-  "types": "./types/main.d.ts",
+  "types": "./types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "index": [
+        "./types/index.d.mts"
+      ]
+    }
+  },
   "exports": {
-    ".": "./dist/main.js"
+    ".": "./dist/entry.js"
   }
 }

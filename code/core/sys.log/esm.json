@@ -1,5 +1,5 @@
 {
   "exports": {
-    ".": "./src/main.mts"
+    ".": "./src/index.mts"
   }
 }

@@ -1,15 +1,30 @@
-import colors from 'picocolors';
 import fsextra from 'fs-extra';
+import glob from 'glob';
 import path from 'path';
+import colors from 'picocolors';
 import { fileURLToPath } from 'url';
 
 import * as t from './types.mjs';
 
 export { t, colors };
-export const fs = { ...fsextra, ...path };
 
 /**
- * Paths
+ * Filesystem.
+ */
+export const fs = {
+  ...fsextra,
+  ...path,
+  glob: {
+    find(pattern: string) {
+      return new Promise<string[]>((resolve, reject) => {
+        glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
+      });
+    },
+  },
+};
+
+/**
+ * Paths.
  */
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
 const rootDir = fs.join(__dirname, '../..');
@@ -23,7 +38,7 @@ export const Paths = {
     esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
-    src: ['src/main.mts', 'src/main.TEST.mts'],
+    src: ['src/index.mts', 'src/index.TEST.mts'],
     tsconfig: {
       code: 'tsconfig.code.json',
       types: 'tsconfig.types.json',
