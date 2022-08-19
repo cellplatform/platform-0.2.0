@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { fs } from '.';
-import { NodeGlob } from '../NodeGlob';
 
 describe('NodeFs', () => {
   const methodExists = (method: keyof typeof fs) => {
