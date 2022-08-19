@@ -22,9 +22,8 @@ export const Builder = {
    *    - Updates [packag.json] with ESM {exports} and typescript {typesVersions}.
    *
    */
-  async build(dir: t.PathString, options: { silent?: boolean } = {}) {
-    const { silent = false } = options;
-    const exitOnError = true;
+  async build(dir: t.PathString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
+    const { silent = false, exitOnError = true } = options;
 
     await Template.ensureBaseline(dir);
     await Typescript.build(dir, { exitOnError });
