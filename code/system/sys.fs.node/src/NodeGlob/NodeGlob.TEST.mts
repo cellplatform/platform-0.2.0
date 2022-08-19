@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { NodeGlob } from '.';
+import { NodeGlob } from './NodeGlob.mjs';
 import path from 'path';
 
 describe('NodeGlob', () => {

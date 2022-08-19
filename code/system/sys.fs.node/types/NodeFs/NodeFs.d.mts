@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { t } from '../common/index.mjs';
 /**
  * An interface for interacting with POSIX style file-systems
  * via the node-js API bindings.

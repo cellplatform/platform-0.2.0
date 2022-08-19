@@ -1,5 +1,5 @@
-import { fsextra, path, t } from '../common';
-import { NodeGlob } from '../NodeGlob';
+import { fsextra, path, t } from '../common/index.mjs';
+import { NodeGlob } from '../NodeGlob/index.mjs';
 
 /**
  * An interface for interacting with POSIX style file-systems

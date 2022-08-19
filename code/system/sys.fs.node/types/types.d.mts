@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { fsextra, path } from './common';
+import { fsextra, path } from './common/index.mjs';
 /**
  * Common Node (POSIX) based filesystem interface.
  */
