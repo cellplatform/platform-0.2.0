@@ -23,8 +23,8 @@ export { t };
 
 // import('./workers/Web.Worker.mjs');
 
-const url = new URL('./workers/Web.Worker.ts?worker&inline&module', import.meta.url);
-const worker1 = new Worker(url);
+// const url = new URL('./workers/Web.Worker.ts?worker&inline&module', import.meta.url);
+// const worker1 = new Worker(url);
 
 // console.log('worker1', worker1);
 

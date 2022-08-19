@@ -4,9 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "yarn build.types && tsc && vite build",
-    "build.types": "tsc -p ./tsconfig.types.json",
-    "test": "vitest"
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts"
   },
   "license": "MIT",
   "private": true,
@@ -19,6 +18,6 @@
     }
   },
   "exports": {
-    ".": "./dist/main.js"
+    ".": "./dist/index.js"
   }
 }

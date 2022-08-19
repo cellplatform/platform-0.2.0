@@ -12,3 +12,7 @@ export declare const Imports: {
 export * from './types';
 import * as t from './types';
 export { t };
+/**
+ * Workers
+ * https://vitejs.dev/guide/features.html#web-workers
+ */
