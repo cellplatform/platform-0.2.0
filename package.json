@@ -26,6 +26,7 @@
     "glamor-jss": "1.4.1",
     "glob": "^8.0.3",
     "jss-plugin-global": "10.9.2",
+    "jsdom": "20.0.0",
     "picocolors": "^1.0.0",
     "minimist": "^1.2.6",
     "ramda": "^0.28.0",
