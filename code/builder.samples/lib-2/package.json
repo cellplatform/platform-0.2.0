@@ -11,5 +11,5 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "dist.types/src/index.d.ts"
+  "types": "./types/src/index.d.ts"
 }
