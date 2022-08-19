@@ -12,4 +12,4 @@ export const R = { isEmpty };
  */
 import * as t from './types.mjs';
 export { t };
-export { Is, Value } from 'sys.util';
+export { Is, Value, Id } from 'sys.util';

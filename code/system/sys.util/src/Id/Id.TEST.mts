@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { Id } from './index.mjs';
+import { Id, slug, cuid } from './index.mjs';
 import { R } from '../common/index.mjs';
 
 describe('Id', () => {
   describe('cuid', () => {
-    it('creates a new CUID', () => {
+    it('creates a new long id', () => {
       const result = Id.cuid();
       expect(result.length).to.be.greaterThan(24);
     });
@@ -13,6 +13,10 @@ describe('Id', () => {
     it('ids are unique', () => {
       const ids = Array.from({ length: 1000 }).map(() => Id.cuid());
       expect(ids.length).to.eql(R.uniq(ids).length);
+    });
+
+    it('function export', () => {
+      expect(Id.cuid).to.equal(cuid);
     });
   });
 
@@ -30,6 +34,10 @@ describe('Id', () => {
     it('slug (alias)', () => {
       const result = Id.slug();
       expect(result.length).to.be.greaterThan(5);
+    });
+
+    it('function export', () => {
+      expect(Id.slug).to.equal(slug);
     });
   });
 });

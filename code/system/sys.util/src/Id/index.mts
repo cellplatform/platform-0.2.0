@@ -1,4 +1,4 @@
-import { Id } from './Id.mjs';
+import { Id, slug, cuid } from './Id.mjs';
 
-export { Id, Id as id };
+export { Id, slug, cuid };
 export default Id;

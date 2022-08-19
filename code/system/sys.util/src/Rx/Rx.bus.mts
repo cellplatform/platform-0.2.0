@@ -2,7 +2,7 @@ import * as t from 'sys.types';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { id } from '../Id/Id.mjs';
+import { Id } from '../Id/Id.mjs';
 import { isEvent } from './Rx.event.mjs';
 import { instance, busAsType, isBus } from './Rx.bus.util.mjs';
 import { Pump } from './Rx.Pump.mjs';
@@ -30,7 +30,7 @@ const factory: BusFactory = <T extends E = E>(input?: Subject<any> | t.EventBus<
     fire: (e) => subject$.next(e),
   };
 
-  (res as any)._instance = `bus.${id.slug()}`; // NB: An instance ID for debugging sanity.
+  (res as any)._instance = `bus.${Id.slug()}`; // NB: An instance ID for debugging sanity.
 
   return res;
 };
