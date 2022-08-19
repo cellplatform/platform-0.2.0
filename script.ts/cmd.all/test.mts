@@ -24,8 +24,7 @@ import { Builder, pc, Util } from '../common/index.mjs';
     try {
       await Builder.test(path, { run: true, silent: true });
     } catch (err: any) {
-      const error = err.message;
-      failed.push({ path, error });
+      failed.push({ path, error: err.message });
     }
   }
   const ok = failed.length === 0;
