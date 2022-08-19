@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { Id } from '.';
-import { R } from '../common';
+import { Id } from './index.mjs';
+import { R } from '../common/index.mjs';
 
 describe('Id', () => {
   describe('cuid', () => {

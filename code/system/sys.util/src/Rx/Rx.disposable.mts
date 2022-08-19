@@ -1,7 +1,7 @@
 import { Disposable } from 'sys.types';
 import { Observable, Subject } from 'rxjs';
 
-import { Dispose } from '../Dispose';
+import { Dispose } from '../Dispose/index.mjs';
 
 /**
  * Generates the base mechanism of an disposable observable.

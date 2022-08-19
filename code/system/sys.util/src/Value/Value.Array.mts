@@ -1,4 +1,4 @@
-import { R } from '../common';
+import { R } from '../common/index.mjs';
 
 /**
  * Returns a copy of the array with falsey values removed.

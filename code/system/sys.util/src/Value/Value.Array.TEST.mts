@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Value } from '.';
-import { Time, time } from '../Time';
+import { Value } from './index.mjs';
+import { Time } from '../Time/index.mjs';
 
 describe('compact', () => {
   it('makes no change', () => {

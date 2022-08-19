@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { time } from '.';
+import { time } from './index.mjs';
 import { Duration } from './Duration.mjs';
 
 const MSEC = 1;

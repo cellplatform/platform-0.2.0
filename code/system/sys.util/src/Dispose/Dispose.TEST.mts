@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Subject } from 'rxjs';
 
-import { Dispose } from '.';
+import { Dispose } from './index.mjs';
 
 describe('Disposable', () => {
   it('create', () => {

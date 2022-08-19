@@ -1,4 +1,4 @@
-export { Id } from './Id';
-export { Is } from './Is';
-export { Value } from './Value';
-export { Dispose } from './Dispose';
+export { Id } from './Id/index.mjs';
+export { Is } from './Is/index.mjs';
+export { Value } from './Value/index.mjs';
+export { Dispose } from './Dispose/index.mjs';

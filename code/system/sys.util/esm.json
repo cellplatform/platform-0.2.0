@@ -1,6 +1,5 @@
 {
   "exports": {
-    ".": "./src/index.mts",
-    "./id": "./src/Id/index.mts"
+    ".": "./src/index.mts"
   }
 }

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { Observable, Subject } from 'rxjs';
-import { t } from '../common';
+import { t } from '../common/index.mjs';
 
-import { rx } from '.';
+import { rx } from './index.mjs';
 
 describe('rx.bus', () => {
   describe('isBus', () => {
