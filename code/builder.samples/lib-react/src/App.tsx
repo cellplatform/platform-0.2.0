@@ -1,7 +1,7 @@
 import { useState } from 'react';
 // import './App.css';
 
-import { css } from 'sys.ui.css';
+import { css } from 'sys.util.css';
 
 import { Foo } from 'lib-1';
 
