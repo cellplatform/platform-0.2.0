@@ -1,0 +1,17 @@
+{
+  "name": "lib-2c",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "yarn build.types && tsc && vite build",
+    "build.types": "tsc -p ./tsconfig.types.json",
+    "test": "vitest"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./types/src/index.d.mts",
+  "exports": {
+    ".": "./dist/main.js"
+  }
+}
