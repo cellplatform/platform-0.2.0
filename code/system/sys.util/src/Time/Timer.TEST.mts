@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { time } from '.';
+import { time } from './index.mjs';
 
 const FORMAT = 'YYYY-MM-DD hh:mm:ss';
 const format = (date: Date) => time.day(date).format(FORMAT);

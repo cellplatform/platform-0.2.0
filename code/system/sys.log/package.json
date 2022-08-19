@@ -24,6 +24,6 @@
     }
   },
   "exports": {
-    ".": "./dist/entry.js"
+    ".": "./dist/index.js"
   }
 }

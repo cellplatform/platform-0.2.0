@@ -13,6 +13,6 @@
   "private": true,
   "types": "./types/index.d.mts",
   "exports": {
-    ".": "./dist/entry.js"
+    ".": "./dist/index.js"
   }
 }

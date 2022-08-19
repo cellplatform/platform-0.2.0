@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Subject } from 'rxjs';
 
-import { rx } from '.';
+import { rx } from './index.mjs';
 
 describe('rx', () => {
   describe('exports', () => {

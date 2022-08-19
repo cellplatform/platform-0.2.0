@@ -6,7 +6,7 @@ import { Builder, pc, Util } from '../common/index.mjs';
  */
 (async () => {
   const paths = await Util.findProjectDirs((path) => {
-    if (path.includes('builder.samples/')) return false;
+    if (path.includes('/builder.samples')) return false;
     return true;
   });
   if (paths.length === 0) return;
@@ -24,8 +24,7 @@ import { Builder, pc, Util } from '../common/index.mjs';
     try {
       await Builder.test(path, { run: true, silent: true });
     } catch (err: any) {
-      const error = err.message;
-      failed.push({ path, error });
+      failed.push({ path, error: err.message });
     }
   }
   const ok = failed.length === 0;

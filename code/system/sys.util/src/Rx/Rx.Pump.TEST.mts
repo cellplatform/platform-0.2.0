@@ -1,7 +1,7 @@
 import * as t from 'sys.types';
 
 import { expect } from 'chai';
-import { rx } from '.';
+import { rx } from './index.mjs';
 
 import { Pump } from './Rx.Pump.mjs';
 

@@ -1,27 +1,19 @@
-import cuid from 'cuid';
+import { customAlphabet } from 'nanoid';
 
-export function generate() {
-  return cuid.slug() as string;
-}
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const cuid = customAlphabet(alphabet, 30);
+const slug = customAlphabet(alphabet, 8);
 
 export const Id = {
   /**
-   * Creates a short non-sequental identifier.
-   *    Wrapper around the `shortid` NPM module.
-   *    https://www.npmjs.com/package/shortid
+   * Creates long collision-resistant long identifier.
    */
-  slug() {
-    return cuid.slug();
-  },
+  cuid,
 
   /**
-   * Creates a CUID (collision-resistant id).
-   *    Wrapper around the `cuid` NPM module.
-   *    https://github.com/ericelliott/cuid
+   * Creates a short non-sequental identifier.
    */
-  cuid() {
-    return cuid();
-  },
+  slug,
 };
 
-export const id = Id;
+export { slug, cuid };

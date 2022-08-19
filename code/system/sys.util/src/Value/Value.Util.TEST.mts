@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Value } from '.';
+import { Value } from './index.mjs';
 
 describe('deleteUndefined', () => {
   it('retains existing values, removes undefined', () => {

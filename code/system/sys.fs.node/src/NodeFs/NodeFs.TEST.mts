@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import { fs } from '.';
-import { NodeGlob } from '../NodeGlob';
+import { fs } from './index.mjs';
 
 describe('NodeFs', () => {
   const methodExists = (method: keyof typeof fs) => {

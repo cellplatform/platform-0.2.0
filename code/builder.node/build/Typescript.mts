@@ -31,9 +31,7 @@ export const Typescript = {
     }
 
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
-    await Typescript.buildCode(rootDir, options);
     await Typescript.buildTypes(rootDir, options);
-
     await fs.remove(fs.join(rootDir, TsPaths.tmp));
   },
 

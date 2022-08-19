@@ -19,8 +19,8 @@ export const ViteConfig = {
     lib(dir: string, name: string): LibraryOptions {
       return {
         name,
-        entry: `${dir}/src/index`,
-        fileName: 'entry',
+        entry: `${dir}/src/index.mts`,
+        fileName: 'index',
         formats: ['es'],
       };
     },
@@ -33,7 +33,9 @@ export const ViteConfig = {
     return defineConfig(async ({ command, mode }) => {
       return {
         plugins: [],
-        test: ViteConfig.defaults.test,
+        test: {
+          ...ViteConfig.defaults.test,
+        },
         build: {
           lib: ViteConfig.defaults.lib(dir, name),
           rollupOptions: { output: { globals: {} } },

@@ -1,5 +1,5 @@
-import { t } from '../common';
-import { Is } from '../Is';
+import { t } from '../common/index.mjs';
+import { Is } from '../Is/index.mjs';
 
 /**
  * Read the "_instance" hidden ID from the bus.

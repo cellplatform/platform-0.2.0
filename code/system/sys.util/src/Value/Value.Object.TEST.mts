@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Value } from '.';
+import { Value } from './index.mjs';
 
 describe('Value.object.build', () => {
   it('return default root object (no keyPath)', () => {

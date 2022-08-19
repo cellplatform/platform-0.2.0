@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { t } from '../common/index.mjs';
 /**
  * Read the "_instance" hidden ID from the bus.
  */
