@@ -71,7 +71,7 @@ Development machine [environment install/setup](docs/setup.environment.md) sugge
 
 The system/platform is an "open commons" shared resource for the world. As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well, in the case of this repo baseline is the [MIT Licence](LICENSE). To run an analysis over the depenency graph run:
 
-      fossa analyze
+      $ fossa analyze
 
 (see [fossa](https://docs.fossa.com/docs/importing-a-project) CLI setup)
 
