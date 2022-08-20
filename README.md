@@ -67,7 +67,8 @@ Conceptual thinking references:
 
 [![ci](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
 
-Main commands that run over all sub-modules of the system. Also approximately the [`main` CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) steps.
+Main commands that run at root of project that operate on all nested sub-modules of the system in this monorepo.
+Also approximately the global [`main` CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) steps.
 
 ```bash
 
