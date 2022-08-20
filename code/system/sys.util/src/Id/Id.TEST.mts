@@ -11,8 +11,8 @@ describe('Id', () => {
 
   describe('cuid', () => {
     it('creates a new long id', () => {
-      const result = Id.cuid();
-      expect(result.length).to.be.greaterThan(24);
+      const res = Id.cuid();
+      expect(res.length).to.be.greaterThan(24);
     });
 
     it('ids are unique', () => {
@@ -27,9 +27,9 @@ describe('Id', () => {
 
   describe('slug (short id)', () => {
     it('creates a new short id', () => {
-      const result = Id.slug();
-      expect(result.length).to.be.greaterThan(5);
-      expect(result.length).to.be.lessThan(10);
+      const res = Id.slug();
+      expect(res.length).to.be.greaterThan(5);
+      expect(res.length).to.be.lessThan(10);
     });
 
     it('ids are unique (1000)', () => {
@@ -42,7 +42,7 @@ describe('Id', () => {
       expect(ids.length).to.eql(R.uniq(ids).length);
     });
 
-    it.skip('slug (alias)', () => {
+    it('slug (alias)', () => {
       const result = Id.slug();
       expect(result.length).to.be.greaterThan(5);
     });
