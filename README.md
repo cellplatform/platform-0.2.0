@@ -86,3 +86,5 @@ For a scintillating break down of this open-source classic, treat yourself to **
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
+
+![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
