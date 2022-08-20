@@ -13,7 +13,7 @@
 API's and other structures will change (probably radically 🐷) prior to `1.x` release.
 
 - repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
-- repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (current)
+- repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (**current**)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
