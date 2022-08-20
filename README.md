@@ -50,6 +50,8 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 # Development
 
+### Machine Setup
+
 Development machine [environment install/setup](docs/setup.environment.md) suggestions.
 
 <p>&nbsp;</p>
@@ -79,4 +81,7 @@ For a scintillating break down of this open-source classic, treat yourself to **
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
+---
+
 ![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
+[ref.](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay
