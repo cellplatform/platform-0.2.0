@@ -1,5 +1,6 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
+[![CI (node)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) for [@platform](https://www.npmjs.com/org/platform) system modules.
@@ -58,7 +59,7 @@ Development machine [environment install/setup](docs/setup.environment.md) sugge
 
 ### Licence Analysis
 
-The system/platform is an "open commons" shared resource for the world. As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well. To run an analysis over the depenency graph run:
+The system/platform is an "open commons" shared resource for the world. As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well, in the case of this repo baseline is the [MIT Licence](LICENSE). To run an analysis over the depenency graph run:
 
       fossa analyze
 
@@ -84,4 +85,4 @@ For a scintillating break down of this open-source classic, treat yourself to **
 ---
 
 ![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
-[ref.](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay
+[video ref.](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay
