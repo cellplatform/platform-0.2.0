@@ -1,13 +1,16 @@
 declare const cuid: (size?: number | undefined) => string;
-declare const slug: (size?: number | undefined) => string;
+declare const slug: () => string;
 export declare const Id: {
     /**
      * Creates long collision-resistant long identifier.
      */
     cuid: (size?: number | undefined) => string;
     /**
-     * Creates a short non-sequental identifier.
+     * Creates a short sequental identifier.
+     * IMPORTANT
+     *    [[DO NOT]] put "slugs" into databases as keys.
+     *    Use the long "cuid" for that.
      */
-    slug: (size?: number | undefined) => string;
+    slug: () => string;
 };
 export { slug, cuid };
