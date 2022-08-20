@@ -23,11 +23,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          yarn-version: 3.2.2,
           cache: 'yarn'
 
-      # - run: yarn install --frozen-lockfile
-      - run: yarn install
-      - run: yarn npm audit
+      - run: yarn install --frozen-lockfile
+      - run: yarn audit
       - run: yarn build
       - run: yarn test

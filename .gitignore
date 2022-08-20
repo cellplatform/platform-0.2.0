@@ -23,13 +23,3 @@ coverage
 
 # Typescript
 *.tsbuildinfo
-
-# Yarn
-# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored%20but%20nested%20for%20e2e%20directories
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
