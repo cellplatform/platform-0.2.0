@@ -65,6 +65,18 @@ Conceptual thinking references:
 
 # Development
 
+[![ci](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
+
+Main commands that run over all sub-modules of the system. Also approximately the [`main` CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) steps.
+
+```bash
+
+yarn
+yarn build
+yarn test
+
+```
+
 ### Development Machine Setup
 
 Development machine [environment install/setup](docs/setup.environment.md) suggestions.
