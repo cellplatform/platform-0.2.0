@@ -50,7 +50,7 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 # Development
 
-[Environment suggestions](docs/setup.environment.md).
+Development machine [environment install/setup](docs/setup.environment.md) suggestions.
 
 <p>&nbsp;</p>
 
