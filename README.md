@@ -9,7 +9,7 @@
 
 <p>&nbsp;</p>
 
-![pre-release](https://img.shields.io/badge/Status-pre--release-orange.svg)  
+![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
 API's and other structures will change (probably radically 🐷) prior to `1.x` release.
 
 - repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
