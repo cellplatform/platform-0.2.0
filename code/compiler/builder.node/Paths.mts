@@ -5,14 +5,13 @@ import { fs } from './common/fs.mjs';
  * Paths.
  */
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
-const rootDir = fs.join(__dirname, '../..');
-const tmplDir = fs.join(__dirname, 'template');
+const rootDir = fs.join(__dirname, '../../..');
 
 export const Paths = {
   rootDir,
   buildManifest: 'dist/manifest.json',
   tmpl: {
-    dir: tmplDir,
+    dir: fs.join(__dirname, 'template'),
     esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
