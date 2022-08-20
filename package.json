@@ -51,5 +51,6 @@
     "printWidth": 100
   },
   "license": "MIT",
+  "packageManager": "yarn@3.2.2",
   "private": true
 }
