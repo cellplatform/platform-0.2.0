@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, pc, Util } from '../common/index.mjs';
+import { Builder, pc, Util } from './common/index.mjs';
 
 /**
  * Run
