@@ -48,6 +48,16 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 - **Simplicity** is better than anything.
 
 <p>&nbsp;</p>
+
+---
+
+![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
+
+Design source refs
+
+- [video](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay (2019)
+
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 
 # Development
@@ -82,8 +92,3 @@ For a scintillating break down of this open-source classic, treat yourself to **
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-
----
-
-![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
-[video ref.](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay
