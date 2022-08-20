@@ -26,6 +26,6 @@ jobs:
           cache: 'yarn'
 
       - run: yarn --frozen-lockfile
-      - run: yarn audit
+      - run: yarn npm audit
       - run: yarn build
       - run: yarn test
