@@ -91,4 +91,3 @@ For a scintillating break down of this open-source classic, treat yourself to **
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
 
 <p>&nbsp;</p>
-<p>&nbsp;</p>
