@@ -3,7 +3,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
-[Monorepo](https://en.wikipedia.org/wiki/Monorepo) for platform system modules.
+[Monorepo](https://en.wikipedia.org/wiki/Monorepo) for the set of system modules that make up "cell" platform.
 
 ---
 
@@ -52,7 +52,6 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 ![alan-kay](https://user-images.githubusercontent.com/185555/185724123-ffd8c0c6-0391-4a1d-ac75-96db74dee914.png)
 ![start-your-turing-machine-quote-kay](https://user-images.githubusercontent.com/185555/185737245-e82cd372-e253-4fd9-8221-435c001198ed.png)
-
 
 Conceptual thinking references:
 
