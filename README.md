@@ -61,7 +61,7 @@ Conceptual thinking references:
 
 # Development
 
-### Machine Setup
+### Development Machine Setup
 
 Development machine [environment install/setup](docs/setup.environment.md) suggestions.
 
