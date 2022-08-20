@@ -4,7 +4,7 @@
 
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
-[Monorepo](https://en.wikipedia.org/wiki/Monorepo) for [@platform](https://www.npmjs.com/org/platform) system modules.
+[Monorepo](https://en.wikipedia.org/wiki/Monorepo) for platform system modules.
 
 ---
 
