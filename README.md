@@ -85,6 +85,9 @@ Development machine [environment setup](docs/setup.environment.md) suggestions.
 
 ### Licence Analysis
 
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 The system (platform) lives as an "open commons" shared resource for the world. As such the core code modules are "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences as well. In the case of this repo the baseline is the [MIT Licence](LICENSE). To run an analysis over the depenency graph run:
 
       $ fossa analyze
@@ -92,9 +95,6 @@ The system (platform) lives as an "open commons" shared resource for the world. 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
 <p>&nbsp;</p>
-
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
 
