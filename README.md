@@ -85,7 +85,7 @@ Development machine [environment setup](docs/setup.environment.md) suggestions.
 
 ### Licence Analysis
 
-The system/platform is an "open commons" shared resource for the world. As such it is "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all dependencies must conform with amenable OSS licences as well, in the case of this repo the baseline is the [MIT Licence](LICENSE). To run an analysis over the depenency graph run:
+The system (platform) lives as an "open commons" shared resource for the world. As such the core code modules are "[open source](https://en.wikipedia.org/wiki/Open-source_software)" (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences as well.  In the case of this repo the baseline is the [MIT Licence](LICENSE). To run an analysis over the depenency graph run:
 
       $ fossa analyze
 
