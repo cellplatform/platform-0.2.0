@@ -39,7 +39,7 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 <p>&nbsp;</p>
 
-[@isaacs](https://www.npmjs.com/~isaacs) follows this up with a thoughtful translation into [nodejs](https://nodejs.org) terms. His [whole post](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs) is worth the read, but here's a distillation:
+[@isaacs](https://www.npmjs.com/~isaacs) variations on this theme [distilled to](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs):
 
 - **Working** is better than perfect.
 - **Focus** is better than features.
