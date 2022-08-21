@@ -89,7 +89,7 @@ The system/platform is an "open commons" shared resource for the world. As such 
 
       $ fossa analyze
 
-(see [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs)
+ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
