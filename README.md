@@ -19,7 +19,7 @@ Architecture, API's, and other structures will change (probably radically 🐷) 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-# Philosophy
+# Philosophy: Dev
 
 As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and Node.js"](https://blog.izs.me/2013/04/unix-philosophy-and-nodejs),  
 [Doug McIlroy's](https://en.wikipedia.org/wiki/Douglas_McIlroy) 4-point formulation of the [Unix Philosophy](http://www.catb.org/esr/writings/taoup/html/ch01s06.html):
@@ -49,7 +49,7 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 <p>&nbsp;</p>
 
----
+# Philosophy: Design
 
 ![kay-pure-relationships](https://user-images.githubusercontent.com/185555/185737245-e82cd372-e253-4fd9-8221-435c001198ed.png)
 ![func](https://user-images.githubusercontent.com/185555/185738258-68e54981-0eb8-49b8-b8a8-a64b1ac45023.png)
