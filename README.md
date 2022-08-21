@@ -79,7 +79,7 @@ yarn test
 
 ### Development Machine Setup
 
-Development machine [environment install/setup](docs/setup.environment.md) suggestions.
+Development machine [environment setup](docs/setup.environment.md) suggestions.
 
 <p>&nbsp;</p>
 
