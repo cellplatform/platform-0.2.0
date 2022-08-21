@@ -66,8 +66,9 @@ References (conceptual context):
 
 [![ci](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
 
-The following global commands run from the root of the project and operate on all nested sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).  
-These are also run in the [CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) steps invoked on each PR merged into `main`.
+The following global commands run from the root of the project and operate on all nested sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
+
+These commands also approximate the main [CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) behavior covered in this [github action steps](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) when merging a PR into the [`main`](/tree/main) branch.
 
 ```bash
 
@@ -94,15 +95,14 @@ The system (platform) lives as an "open commons" shared resource for the world. 
 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
-<p>&nbsp;</p>
-
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
 
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 
 # License
 
-[MIT](LICENSE) all the way!
+[MIT](LICENSE)
 
 For a scintillating break down of this open-source classic, treat yourself to **Kyle E. Mitchell's**  
 "[The MIT License line-by-line.](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html) 171 words every programmer should understand."
