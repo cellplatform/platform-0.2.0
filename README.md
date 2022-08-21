@@ -10,7 +10,7 @@
 <p>&nbsp;</p>
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
-Long range R&D.  
+Sustained long range R&D.  
 Architecture, API's, and other structures will change (probably radically 🐷) prior to any `1.x` release.
 
 - repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (**current**)
