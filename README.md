@@ -60,7 +60,9 @@ References (conceptual context):
 - [video](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay (2019)
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Douglas Crockford (2011) - "The JSON Saga\*"
 
-- - "JSON is the intersetion of modern programming languages" - [timestamp](https://youtu.be/-C-JoyNuQJs?t=741)
+---
+
+- "JSON is the intersetion of modern programming languages" - [timestamp](https://youtu.be/-C-JoyNuQJs?t=741)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
