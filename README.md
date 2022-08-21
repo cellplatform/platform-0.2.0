@@ -55,7 +55,7 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 
 ---
 
-Conceptual thinking references:
+References (conceptual context):
 
 - [video](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay (2019)
 
