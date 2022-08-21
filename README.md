@@ -80,7 +80,6 @@ These commands also approximate the main [CI](https://github.com/cellplatform/pl
 
 ```bash
 
-yarn
 yarn build
 yarn test
 
