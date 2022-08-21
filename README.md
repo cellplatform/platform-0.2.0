@@ -10,7 +10,7 @@
 <p>&nbsp;</p>
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
-API's, architecture, and other structures will change (probably radically 🐷) prior to `1.x` release.
+API's, architecture, and other structures will change (probably radically 🐷) prior to any `1.x` release.
 
 - repo: [platform-0.0.2](https://github.com/philcockfield/platform-0.0.2) (**current**)
 - repo: [platform-0.0.1](https://github.com/uiharness/platform-0.0.1)
