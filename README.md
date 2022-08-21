@@ -66,7 +66,7 @@ References (conceptual context):
 
 [![ci](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
 
-The following global commands to run from the root `/` of the project and operate on all nested sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).  
+The following global commands run from the root of the project and operate on all nested sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).  
 These are also run in the [CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) steps invoked on each PR merged into `main`.
 
 ```bash
