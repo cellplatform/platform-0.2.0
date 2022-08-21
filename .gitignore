@@ -23,3 +23,6 @@ coverage
 
 # Typescript
 *.tsbuildinfo
+
+# Temporary
+script.ts/tmp*
