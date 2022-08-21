@@ -89,7 +89,8 @@ Development machine [environment setup](docs/setup.environment.md) suggestions.
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-The system (platform) lives as an "open commons" shared resource of the world. As such the core modules are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences. In the case of this repo the baseline is the [MIT Licence](LICENSE).
+The system (platform) lives as an "open commons" shared resource of the world. As such the core modules are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.  
+In the case of this repo the baseline is the [MIT Licence](LICENSE).
 
 To run a "licence analysis" and validate the depenency graph against this principle run:
 
