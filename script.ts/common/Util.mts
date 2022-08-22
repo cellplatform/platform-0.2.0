@@ -1,4 +1,4 @@
-import { pc, fs } from './libs.mjs';
+import { pc, fs, glob } from './libs.mjs';
 
 export const Util = {
   async loadPackageJson() {
@@ -34,6 +34,15 @@ export const Util = {
       if (path.includes('/template')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
       return filter ? filter(path) : true;
+    });
+  },
+
+  /**
+   * Find matching files.
+   */
+  glob(pattern: string) {
+    return new Promise<string[]>((resolve, reject) => {
+      glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
     });
   },
 };
