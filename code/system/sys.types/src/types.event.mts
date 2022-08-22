@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 type O = Record<string, unknown>;
 
@@ -13,7 +13,7 @@ export type Event<P extends O = any> = { type: string; payload: P };
 export type FireEvent<E extends Event = Event> = (event: E) => void;
 
 /**
- * An structure that exposes an observable and can fire events.
+ * A structure that exposes an observable and can fire events.
  */
 export type EventBus<E extends Event = Event> = {
   readonly $: Observable<E>;

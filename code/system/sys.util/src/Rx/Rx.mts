@@ -1,5 +1,4 @@
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-export { Observable, Subject, BehaviorSubject };
+export { Observable, Subject } from 'rxjs';
 
 export { Pump as pump } from './Rx.Pump.mjs';
 

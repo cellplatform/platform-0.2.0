@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { Dayjs, ConfigType } from 'dayjs';
+import type { Observable } from 'rxjs';
+import type { Dayjs, ConfigType } from 'dayjs';
 
 export type TimeDuration = {
   ok: boolean;

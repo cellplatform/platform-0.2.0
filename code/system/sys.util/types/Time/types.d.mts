@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { Observable } from 'rxjs';
-import { Dayjs, ConfigType } from 'dayjs';
+import type { Observable } from 'rxjs';
+import type { Dayjs, ConfigType } from 'dayjs';
 export declare type TimeDuration = {
     ok: boolean;
     msec: number;
