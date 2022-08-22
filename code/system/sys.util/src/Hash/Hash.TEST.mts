@@ -21,6 +21,8 @@ describe('hash', () => {
       expect(res2).to.match(new RegExp(`${expected}$`));
     };
 
+    test(new TextEncoder().encode('hello'), '62938b9824');
+    test('hello', 'ff3f354e7a');
     test(123, 'f7f7a27ae3');
     test('', 'a03d82e126');
     test({ msg: 'abc' }, '43991ca7b7');
