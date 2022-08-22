@@ -18,7 +18,7 @@ describe('Filesize', () => {
     expect(Filesize(1234, { locale: 'de' })).to.eql('1,23 kB');
   });
 
-  it.skip('Filesystem.Filesize(...)', () => {
+  it('Filesystem.Filesize(...)', () => {
     expect(Filesystem.Filesize).to.equal(Filesize);
     expect(Filesystem.Filesize(1234)).to.eql('1.23 kB');
   });

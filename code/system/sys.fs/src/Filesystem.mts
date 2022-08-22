@@ -5,4 +5,3 @@ export const Filesystem = {
   Filesize,
   Path,
 };
-//
