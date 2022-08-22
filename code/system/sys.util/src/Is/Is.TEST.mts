@@ -4,13 +4,12 @@ import { Subject } from 'rxjs';
 import { Is } from './index.mjs';
 
 describe('Is', () => {
-  it('Is.test', () => {
-    expect(Is.nodeEnv).to.eql('test');
-    expect(Is.test).to.eql(true);
-  });
-
   it('Is.browser', () => {
     expect(Is.browser).to.eql(false);
+  });
+
+  it('Is.node', () => {
+    expect(Is.node).to.eql(true);
   });
 
   it('Is.observable', () => {

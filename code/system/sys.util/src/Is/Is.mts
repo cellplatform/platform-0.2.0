@@ -4,37 +4,14 @@ import * as t from './types.mjs';
  * Environment flags.
  */
 export const Is: t.Is = {
-  get nodeEnv() {
-    return this.browser ? 'browser' : process.env.NODE_ENV || 'development';
-  },
-
   get browser() {
     return typeof window !== 'undefined';
   },
 
-  get dev() {
-    const env = this.nodeEnv;
-    return this.browser
-      ? window && window.location.hostname === 'localhost'
-      : env !== 'production' && env !== 'prod';
-  },
-
-  get prod() {
-    return !this.dev;
-  },
-
-  get test() {
-    return this.nodeEnv === 'test';
-  },
-
-  toObject(): t.IsFlags {
-    return {
-      nodeEnv: this.nodeEnv,
-      browser: this.browser,
-      dev: this.dev,
-      prod: this.prod,
-      test: this.test,
-    };
+  get node() {
+    return (
+      typeof process !== 'undefined' && process.versions != null && process.versions.node != null
+    );
   },
 
   /**
