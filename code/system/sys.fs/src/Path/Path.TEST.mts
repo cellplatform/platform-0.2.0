@@ -2,46 +2,6 @@ import { expect } from 'chai';
 import { Path } from './index.mjs';
 
 describe('Path', () => {
-  // describe('resolve.FileUri', () => {
-  //   it('throw on invalid URI', () => {
-  //     const test = (uri: any) => {
-  //       const fn = () => Path.resolve.fileUri({ uri, dir: '/tmp' });
-  //       expect(fn).to.throw(/Invalid URI/);
-  //     };
-
-  //     test(undefined);
-  //     test('');
-  //     test('  ');
-  //     test('ns:foo');
-  //     test('cell:foo!A1'); // NB: "!" not correct format within a URI.
-  //     test('file:boom');
-  //   });
-
-  //   it('throw if not root path provided', () => {
-  //     const test = (dir: any) => {
-  //       const fn = () => Path.resolve.fileUri({ uri: 'file:foo:123', dir });
-  //       expect(fn).to.throw(/Invalid root directory path/);
-  //     };
-  //     test(undefined);
-  //     test('');
-  //     test('  ');
-  //   });
-
-  //   it('resolve URI as path', () => {
-  //     const test = (uri: string, dir: string, expected: string) => {
-  //       const res = Path.resolve.fileUri({ uri, dir });
-  //       expect(res).to.eql(`${dir}/${expected}`);
-  //     };
-  //     test('file:foo:123', '/tmp', 'ns.foo/123');
-  //     test('file:foo:123', 'tmp', 'ns.foo/123');
-  //     test(
-  //       'file:ck3jldh1z00043fetc11ockko:1z53tcj',
-  //       '/tmp',
-  //       'ns.ck3jldh1z00043fetc11ockko/1z53tcj',
-  //     );
-  //   });
-  // });
-
   it('join', () => {
     const test = (parts: string[], expected: string) => {
       const res = Path.join(...parts);

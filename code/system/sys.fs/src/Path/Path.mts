@@ -34,6 +34,9 @@ export const Path = {
     return res.join('/');
   },
 
+  /**
+   * Trim whitespace.
+   */
   trim,
 
   /**
