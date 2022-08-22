@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./types/index.d.mts",
+  "types": "./types.d/index.d.mts",
   "typesVersions": {
     "*": {
       "child/bar": [

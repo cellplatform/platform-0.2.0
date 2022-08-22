@@ -2,6 +2,8 @@ tmp
 .tmp
 .builder
 
+types.d/
+
 # Logs
 logs
 *.log

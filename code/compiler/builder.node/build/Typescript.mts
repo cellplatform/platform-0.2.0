@@ -67,11 +67,11 @@ export const Typescript = {
 
     // Move the child "src/" folder up into the root "types/" folder.
     if (res.ok) {
-      const source = fs.join(rootDir, TsPaths.tmp, 'types/src');
-      const target = fs.join(rootDir, 'types');
+      const source = fs.join(rootDir, TsPaths.tmp, 'types.d/src');
+      const target = fs.join(rootDir, 'types.d');
       await fs.remove(target);
       await fs.move(source, target);
-      await fs.remove(fs.join(rootDir, TsPaths.tmp, 'types'));
+      await fs.remove(fs.join(rootDir, TsPaths.tmp, 'types.d'));
     }
 
     // Remove any test types.

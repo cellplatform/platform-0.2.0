@@ -13,7 +13,7 @@
   "devDependencies": {
     "@vitest/coverage-c8": "^0.22.1"
   },
-  "types": "./types/index.d.mts",
+  "types": "./types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
   }
