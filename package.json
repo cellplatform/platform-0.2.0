@@ -21,6 +21,7 @@
     "@types/tinycolor2": "1.4.3",
     "@vitejs/plugin-react": "^2.0.1",
     "@vitest/ui": "^0.22.0",
+    "asmcrypto.js": "^2.3.2",
     "dayjs": "^1.11.5",
     "execa": "^6.1.0",
     "fs-extra": "^10.1.0",

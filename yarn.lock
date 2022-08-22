@@ -593,6 +593,11 @@ argsarray@^0.0.1:
   resolved "https://registry.yarnpkg.com/argsarray/-/argsarray-0.0.1.tgz#6e7207b4ecdb39b0af88303fa5ae22bda8df61cb"
   integrity sha512-u96dg2GcAKtpTrBdDoFIM7PjcBA+6rSP0OR94MOReNRyUECL6MtQt5XXmRr4qrftYaef9+l5hcpO5te7sML1Cg==
 
+asmcrypto.js@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/asmcrypto.js/-/asmcrypto.js-2.3.2.tgz#b9f84bd0a1fb82f21f8c29cc284a707ad17bba2e"
+  integrity sha512-3FgFARf7RupsZETQ1nHnhLUUvpcttcCq1iZCaVAbJZbCZ5VNRrNyvpDyHTOb0KC3llFcsyOT/a99NZcCbeiEsA==
+
 assertion-error@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
