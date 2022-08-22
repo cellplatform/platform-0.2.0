@@ -1,9 +1,5 @@
 import { t } from './common.mjs';
 
-type CellUri = string; //     URI "cell:<ns>:A1"
-type CellDomain = string; //  Host "<domain>"
-type CellAddress = string; // Combination "<domain>/<cell:uri>"
-
 type Milliseconds = number;
 type FilesystemId = string;
 type FilePath = string;
@@ -18,7 +14,6 @@ export type SysFsEvents = t.Disposable & {
   is: { base(input: any): boolean };
   io: t.SysFsEventsIo;
   index: t.SysFsEventsIndex;
-  remote: t.SysFsEventsRemote;
   ready: SysFsReady;
   fs(options?: FsOptions): t.Fs;
   fs(subdir?: string): t.Fs;
@@ -101,43 +96,4 @@ export type SysFsEventsIo = {
       options?: { timeout?: Milliseconds },
     ): Promise<t.SysFsDeleteResponse>;
   };
-};
-
-/**
- * Event API: remote cell
- */
-export type SysFsEventsRemote = {
-  push: {
-    req$: t.Observable<t.SysFsCellPushReq>;
-    res$: t.Observable<t.SysFsCellPushRes>;
-    fire(
-      uri: CellAddress,
-      path?: FilePath | FilePath[],
-      options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsCellPushRes>;
-  };
-  pull: {
-    req$: t.Observable<t.SysFsCellPullReq>;
-    res$: t.Observable<t.SysFsCellPullRes>;
-    fire(
-      uri: CellAddress,
-      path?: FilePath | FilePath[],
-      options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsCellPullRes>;
-  };
-  cell(domain: CellDomain, uri: CellUri): SysFsEventsCell;
-  cell(address: CellAddress): SysFsEventsCell;
-};
-
-export type SysFsEventsCell = {
-  domain: CellDomain;
-  uri: CellUri;
-  push(
-    path?: FilePath | FilePath[],
-    options?: { timeout?: Milliseconds },
-  ): Promise<t.SysFsCellPushRes>;
-  pull(
-    path?: FilePath | FilePath[],
-    options?: { timeout?: Milliseconds },
-  ): Promise<t.SysFsCellPullRes>;
 };
