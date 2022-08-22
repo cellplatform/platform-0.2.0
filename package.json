@@ -7,6 +7,8 @@
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts"
+    "tmp": "ts-node-esm   -T script.ts/tmp.mts",
+    "tmp.ext": "ts-node-esm -T script.ts/helpers/update-extensions.mts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
