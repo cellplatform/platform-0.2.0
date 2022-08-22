@@ -17,14 +17,16 @@ import { pc, Builder, Util } from './common/index.mjs';
 
   type E = { path: string; error: string };
   const failed: E[] = [];
+  const pushError = (path: string, error: string) => failed.push({ path, error });
 
   // Build each project.
   for (const path of paths) {
     try {
       console.log(`💦 ${Util.formatPath(path)}`);
-      await Builder.build(path, { exitOnError: false });
+      const res = await Builder.build(path, { exitOnError: false, silent: false });
+      if (!res.ok) pushError(path, `Failed to build (${res.errorCode})`);
     } catch (err: any) {
-      failed.push({ path, error: err.message });
+      pushError(path, err.message);
     }
   }
 

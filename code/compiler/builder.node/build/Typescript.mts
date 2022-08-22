@@ -15,43 +15,55 @@ export const Typescript = {
   /**
    * Complete build
    */
-  async build(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
+  async build(rootDir: t.PathString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
+    const { silent = false } = options;
     rootDir = fs.resolve(rootDir);
 
     const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
     const tsVersion = (pkg.devDependencies?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
 
-    const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
-    console.log(msg);
+    if (!silent) {
+      const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
+      console.log(msg);
+    }
 
     if (!(await fs.pathExists(rootDir))) {
       console.log(`\nERROR(Typescript.build) root directory does not exist.\n${rootDir}\n`);
       if (options.exitOnError) process.exit(1);
-      return;
     }
 
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
-    await Typescript.buildTypes(rootDir, options);
+    const res = await Typescript.buildTypes(rootDir, options);
     await fs.remove(fs.join(rootDir, TsPaths.tmp));
+
+    return res;
   },
 
   /**
    * Build ESM code.
    */
-  async buildCode(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
+  async buildCode(
+    rootDir: t.PathString,
+    options: { exitOnError?: boolean; silent?: boolean } = {},
+  ) {
+    const { silent = false } = options;
     const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.code);
-    const res = await Typescript.tsc(rootDir, tsconfig);
-    if (!res.ok && options.exitOnError) process.exit(res.exitCode);
+    const res = await Typescript.tsc(rootDir, tsconfig, { silent });
+    if (!res.ok && options.exitOnError) process.exit(res.errorCode);
     return res;
   },
 
   /**
    * Build type definitions (.d.ts)
    */
-  async buildTypes(rootDir: t.PathString, options: { exitOnError?: boolean } = {}) {
+  async buildTypes(
+    rootDir: t.PathString,
+    options: { exitOnError?: boolean; silent?: boolean } = {},
+  ) {
+    const { silent = false } = options;
     const tsconfig = fs.join(TsPaths.tmp, Paths.tmpl.tsconfig.types);
-    const res = await Typescript.tsc(rootDir, tsconfig);
-    if (!res.ok && options.exitOnError) process.exit(res.exitCode);
+    const res = await Typescript.tsc(rootDir, tsconfig, { silent });
+    if (!res.ok && options.exitOnError) process.exit(res.errorCode);
 
     // Move the child "src/" folder up into the root "types/" folder.
     if (res.ok) {
@@ -76,16 +88,16 @@ export const Typescript = {
   async tsc(dir: t.PathString, tsconfig: t.PathString, options: { silent?: boolean } = {}) {
     try {
       const args = ['--project', fs.join(dir, tsconfig)];
-      const { exitCode } = await execa('tsc', args, {
+      const { exitCode: errorCode } = await execa('tsc', args, {
         cwd: fs.resolve(dir),
         stdio: options.silent ? 'ignore' : 'inherit',
       });
-      const ok = exitCode === 0;
-      return { ok, exitCode };
+      const ok = errorCode === 0;
+      return { ok, errorCode };
     } catch (error: any) {
-      const exitCode = error.exitCode as number;
-      const ok = exitCode === 0;
-      return { ok, exitCode };
+      const errorCode = error.exitCode as number;
+      const ok = errorCode === 0;
+      return { ok, errorCode };
     }
   },
 
