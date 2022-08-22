@@ -1,4 +1,4 @@
-export { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { Filesize } from './index.mjs';
 import { Filesystem } from '../index.mjs';
 

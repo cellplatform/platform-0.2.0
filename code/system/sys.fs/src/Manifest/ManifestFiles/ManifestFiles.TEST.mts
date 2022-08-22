@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../../TEST/index.mjs';
 
 import { t, Hash } from '../common.mjs';
 import { ManifestFiles } from './index.mjs';
