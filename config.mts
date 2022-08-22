@@ -3,6 +3,10 @@
 import { defineConfig, LibraryOptions } from 'vite';
 export { defineConfig };
 
+/**
+ * Common configuration defaults.
+ */
+
 export const ViteConfig = {
   defaults: {
     /**
