@@ -100,7 +100,7 @@ Development machine [environment setup](docs/setup.environment.md) suggestions.
 
 The system (platform) lives as an "open commons" shared resource of the world's peoples. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
 
-In the case of this repo the baseline is the [MIT Licence](LICENSE), with the licencing strategy being reearched and refined while moving towards a 1.0 release, with an attractor towards "more free" as in "freedoms" (libre). TBD.
+In the case of this repo the baseline currently is the [MIT Licence](LICENSE), with the licencing strategy being reearched and refined while moving towards a 1.0 release, with an attractor towards "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)). TBD.
 
 To run a "licence analysis" and validate the depenency graph against this principle run:
 
