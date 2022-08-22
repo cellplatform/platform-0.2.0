@@ -63,7 +63,7 @@ References (conceptual context):
 
 ---
 
-- \*"[JSON](https://en.wikipedia.org/wiki/JSON) [as the] intersetion of all modern programming languages" - Crockford [timestamp](https://youtu.be/-C-JoyNuQJs?t=741)
+- \*"JSON [as the] intersetion of all modern programming languages" - Crockford [timestamp](https://youtu.be/-C-JoyNuQJs?t=741)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
