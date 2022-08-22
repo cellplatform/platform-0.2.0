@@ -1,6 +1,7 @@
 export * from '../Filesize/types.mjs';
 export * from '../types.Manifest/index.mjs';
 // export * from '../FsDriver.IndexedDb/types.mjs';
+export * from '../web.BusEvents.types/index.mjs';
 
 export * from './types.File.mjs';
 export * from './types.Fs.mjs';

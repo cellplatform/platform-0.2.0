@@ -1,9 +1,13 @@
+export { Observable } from 'rxjs';
+
 /**
  * @system
  */
-import { Json as SysJson, EventBus as SysEventBus } from 'sys.types';
-export type Json = SysJson;
-export type EventBus = SysEventBus;
+import * as sys from 'sys.types';
+
+export type Json = sys.Json;
+export type EventBus = sys.EventBus;
+export type Disposable = sys.Disposable;
 
 /**
  * @local
