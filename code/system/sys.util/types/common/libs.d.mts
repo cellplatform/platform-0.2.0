@@ -1,4 +1,4 @@
-import { equals, is, isEmpty, isNil, pipe, reject, startsWith, uniq } from 'ramda';
+import { equals, is, isEmpty, isNil, pipe, reject, startsWith, uniq, toString } from 'ramda';
 export declare const R: {
     equals: typeof equals;
     is: typeof is;
@@ -8,4 +8,5 @@ export declare const R: {
     reject: typeof reject;
     startsWith: typeof startsWith;
     uniq: typeof uniq;
+    toString: typeof toString;
 };
