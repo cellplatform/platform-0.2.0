@@ -1,10 +1,4 @@
 /**
- * Deletes undefined keys from an object (clone).
- */
-/**
- * Deletes empty keys from an object (clone).
- */
-/**
  * Determines whether an HTTP status is OK.
  */
 export declare const isStatusOk: (status: number) => boolean;
