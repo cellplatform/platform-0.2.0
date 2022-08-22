@@ -6,9 +6,8 @@
     "build": "ts-node-esm -T script.ts/cmd.all.build.mts",
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
-    "tmp": "ts-node-esm   -T script.ts/tmp.mts"
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
-    "tmp.ext": "ts-node-esm -T script.ts/helpers/update-extensions.mts"
+    "tmp.ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
@@ -27,8 +26,8 @@
     "fs-extra": "^10.1.0",
     "glamor-jss": "1.4.1",
     "glob": "^8.0.3",
-    "jsdom": "20.0.0",
     "jss-plugin-global": "10.9.2",
+    "indexeddbshim": "^10.0.0",
     "minimist": "^1.2.6",
     "nanoid": "^4.0.0",
     "pretty-bytes": "^6.0.0",
