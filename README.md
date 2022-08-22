@@ -3,7 +3,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
-The set of `core system` modules that compose into a late-bound (strongly typed) distributed "cell" platform ([monorepo](https://en.wikipedia.org/wiki/Monorepo)).
+The set of `core system` modules that flexibly compose into a late-bound (strongly typed) distributed "cell" platform ([monorepo](https://en.wikipedia.org/wiki/Monorepo)).
 
 ---
 
