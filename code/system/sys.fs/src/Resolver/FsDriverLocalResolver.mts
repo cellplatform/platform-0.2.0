@@ -45,11 +45,9 @@ function resolve(dir: string, uri: string) {
     return result;
   };
 
-  // if (Schema.Uri.is.file(uri)) return ensureScope(Path.resolve.fileUri({ dir, uri }));
-
   if (PathUri.is(uri)) {
     return ensureScope(Path.join(dir, PathUri.path(uri) ?? ''));
   }
 
-  throw new Error(`Invalid URI. Must be "file:.." or "path:..". Value: "${uri}"`);
+  throw new Error(`Invalid URI. Must be "path:..". Value: "${uri}"`);
 }
