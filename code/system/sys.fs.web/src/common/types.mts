@@ -1,5 +1,9 @@
-export type { Disposable } from 'sys.types';
+export type { Observable } from 'rxjs';
+export type { Disposable, EventBus, Event, Json } from 'sys.types';
+
 export type {
+  Fs,
+  FsFileInfo,
   FsDriverLocal,
   FsIndexer,
   ManifestFile,
@@ -12,4 +16,5 @@ export type {
   FsPathResolver,
   IFsLocation,
 } from 'sys.fs/types.d/types.d.mjs';
+
 export * from '../types.mjs';

@@ -19,8 +19,8 @@ describe('FsDriver (IndexedDB)', () => {
     fs.dispose();
   });
 
-  e.describe('paths', (e) => {
-    it('exposes root (dir)', async (e) => {
+  describe('paths', () => {
+    it('exposes root (dir)', async () => {
       const { fs } = await testCreate();
       expect(fs.driver.dir).to.eql('/'); // NB: Not part of a wider file-system.
       fs.dispose();
@@ -101,7 +101,7 @@ describe('FsDriver (IndexedDB)', () => {
     });
   });
 
-  e.describe('info', (e) => {
+  describe('info', () => {
     it('file:uri', async () => {
       const { fs, sample } = await testCreate();
       const png = sample.data;
@@ -181,7 +181,7 @@ describe('FsDriver (IndexedDB)', () => {
     });
   });
 
-  e.describe('read/write', (e) => {
+  describe('read/write', () => {
     it('read: binary (Uint8Array)', async () => {
       const { fs, sample } = await testCreate();
 
@@ -310,7 +310,7 @@ describe('FsDriver (IndexedDB)', () => {
     });
   });
 
-  e.describe('delete', (e) => {
+  describe('delete', () => {
     it('delete (one)', async () => {
       const { fs } = await testCreate();
       const data = new TextEncoder().encode(slug());
@@ -399,7 +399,7 @@ describe('FsDriver (IndexedDB)', () => {
     });
   });
 
-  e.describe('copy', (e) => {
+  describe('copy', () => {
     it('copy file', async () => {
       const { fs, sample } = await testCreate();
       const sourceUri = `file:${slug()}:bird1`;
@@ -439,7 +439,7 @@ describe('FsDriver (IndexedDB)', () => {
     });
   });
 
-  e.describe('errors', (e) => {
+  describe('errors', () => {
     it('fail: 404 while reading file', async () => {
       const { fs } = await testCreate();
 
