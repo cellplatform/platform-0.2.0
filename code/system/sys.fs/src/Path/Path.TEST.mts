@@ -1,7 +1,12 @@
 import { expect } from '../TEST/index.mjs';
 import { Path } from './index.mjs';
+import { PathUri } from '../PathUri/index.mjs';
 
 describe('Path', () => {
+  it('Uri', () => {
+    expect(Path.Uri).to.equal(PathUri);
+  });
+
   it('join', () => {
     const test = (parts: string[], expected: string) => {
       const res = Path.join(...parts);
@@ -212,6 +217,50 @@ describe('Path', () => {
       expect(res.filename).to.eql('.');
       expect(res.name).to.eql('');
       expect(res.ext).to.eql('');
+    });
+  });
+
+  describe('to... (conversion)', () => {
+    it('toAbsolute', () => {
+      const test = (path: string, root: string, expected: string) => {
+        const res1 = Path.toAbsolutePath({ path, root });
+        const res2 = Path.toAbsoluteLocation({ path, root });
+        expect(res1).to.eql(expected);
+        expect(res2).to.eql(`file://${expected}`);
+      };
+
+      test('  ', ' /Users/bob/ ', '/Users/bob/');
+      test(' /foo/bar.png ', ' /Users/bob/ ', '/Users/bob/foo/bar.png');
+      test('foo/bar.png', '/Users/bob', '/Users/bob/foo/bar.png');
+      test('foo/bar.png', '/Users/bob///', '/Users/bob/foo/bar.png');
+      test('/Users/bob/foo/bar.png', '/Users/bob', '/Users/bob/foo/bar.png');
+      test('/Users/bob/foo/bar.png', '/Users/bob/', '/Users/bob/foo/bar.png');
+
+      test(' ~/foo/bar.png', '/Users/bob', '/Users/bob/foo/bar.png'); // NB: Strip home ("~") prefix character.
+
+      // NB: home ("~") prefix character not stripped if part of filename.
+      test(' ~foo/bar.png  ', '/Users/bob', '/Users/bob/~foo/bar.png');
+      test('/~foo/bar.png', '/Users/bob', '/Users/bob/~foo/bar.png');
+    });
+
+    it('toRelative', () => {
+      const test = (path: string, root: string, expected: string) => {
+        const res1 = Path.toRelativePath({ path, root });
+        const res2 = Path.toRelativeLocation({ path, root });
+        expect(res1).to.eql(expected);
+        expect(res2).to.eql(`file://${expected}`);
+      };
+
+      // No absolute prefix match.
+      test(' /foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+      test('///foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+      test(' foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+      test(' ~/foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+      test(' ~//foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+
+      // Match absolute prefix.
+      test(' /Users/bob/foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
+      test('file:///Users/bob/foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
     });
   });
 });

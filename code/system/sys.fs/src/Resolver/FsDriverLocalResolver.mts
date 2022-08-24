@@ -1,5 +1,5 @@
 import { t } from '../common/index.mjs';
-import { Path, PathUri } from '../Path/index.mjs';
+import { Path } from '../Path/index.mjs';
 
 type O = t.IFsResolveOptionsLocal;
 
@@ -45,8 +45,8 @@ function resolve(dir: string, uri: string) {
     return result;
   };
 
-  if (PathUri.is(uri)) {
-    return ensureScope(Path.join(dir, PathUri.path(uri) ?? ''));
+  if (Path.Uri.is(uri)) {
+    return ensureScope(Path.join(dir, Path.Uri.path(uri) ?? ''));
   }
 
   throw new Error(`Invalid URI. Must be "path:..". Value: "${uri}"`);
