@@ -1,5 +1,4 @@
-import { t } from '../common/index.mjs';
-import { Path } from '../Path/index.mjs';
+import { t, Path } from '../common/index.mjs';
 
 type O = t.IFsResolveOptionsLocal;
 

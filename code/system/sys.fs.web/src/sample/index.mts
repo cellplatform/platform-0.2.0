@@ -1,5 +1,2 @@
-import('../IndexedDb/shim.mjs');
-
-console.log('sample');
-
+console.log('sys.fs.web');
 export {};

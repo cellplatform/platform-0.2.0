@@ -1,5 +1,4 @@
-export * from './types.mjs';
-
-export { Filesystem } from './Filesystem.mjs';
-export { Filesize } from './Filesize/index.mjs';
-export { Path } from './Path/index.mjs';
+export * from './Filesystem.mjs';
+export * from './Filesize/index.mjs';
+export * from './Manifest/index.mjs';
+export * from './Path/index.mjs';
