@@ -8,9 +8,6 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
-  "devDependencies": {
-    "sys.test": "latest"
-  },
   "license": "MIT",
   "private": true,
   "types": "./types.d/index.d.mts",
