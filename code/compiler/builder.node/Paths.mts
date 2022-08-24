@@ -15,7 +15,7 @@ export const Paths = {
     esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
-    src: ['src/index.mts', 'src/index.TEST.mts'],
+    src: ['src/index.mts', 'src/index.TEST.mts', 'src/TEST/index.mts'],
     tsconfig: {
       code: 'tsconfig.code.json',
       types: 'tsconfig.types.json',
