@@ -1,6 +1,6 @@
 import { Is } from '../common/index.mjs';
 
-const getIndexedDb = async () => {
+const getDbFactory = async () => {
   if (Is.browser) return window.indexedDB;
   if (Is.node) return (await import('fake-indexeddb')).indexedDB;
   throw new Error('Runtime environment not supported');
@@ -9,14 +9,13 @@ const getIndexedDb = async () => {
 type DeleteResponse = { name: string; version: number; error?: string };
 
 /**
- * A promise based wrapper into the IndexedDB API.
+ * A promise based wrapper into the (Web Standards) IndexedDB API.
  *
  *    https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
  *    https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
  *    https://gist.github.com/JamesMessinger/a0d6389a5d0e3a24814b
  *
  */
-
 export const IndexedDb = {
   /**
    * Create a promised base interface into an IndexedDb
@@ -34,7 +33,7 @@ export const IndexedDb = {
         reject(new Error(msg.trim()));
       };
       try {
-        const indexedDb = await getIndexedDb();
+        const indexedDb = await getDbFactory();
         const req = indexedDb.open(name, version);
         req.onupgradeneeded = (e) => args.schema?.(req, e);
         req.onsuccess = () => resolve(args.store(req.result));
@@ -49,7 +48,7 @@ export const IndexedDb = {
    * List databases.
    */
   async list(): Promise<IDBDatabaseInfo[]> {
-    const indexedDb = await getIndexedDb();
+    const indexedDb = await getDbFactory();
     return indexedDb.databases();
   },
 
@@ -75,7 +74,7 @@ export const IndexedDb = {
       if (!db) return fail('Database does not exist');
 
       try {
-        const indexedDb = await getIndexedDb();
+        const indexedDb = await getDbFactory();
         const req = indexedDb.deleteDatabase(name);
         req.onerror = () => fail();
         req.onsuccess = (e) => done();
