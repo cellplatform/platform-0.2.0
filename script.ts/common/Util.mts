@@ -1,4 +1,7 @@
-import { pc, fs, glob } from './libs.mjs';
+import { pc, fs, glob, TopologicalSort } from './libs.mjs';
+
+type Package = { name: string; dependencies?: PackageDeps; devDependencies?: PackageDeps };
+type PackageDeps = { [key: string]: string };
 
 export const Util = {
   async loadPackageJson() {
@@ -20,6 +23,15 @@ export const Util = {
   },
 
   /**
+   * Find matching files.
+   */
+  glob(pattern: string) {
+    return new Promise<string[]>((resolve, reject) => {
+      glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
+    });
+  },
+
+  /**
    * Find all project dirs within the project.
    */
   async findProjectDirs(filter?: (path: string) => boolean) {
@@ -30,19 +42,39 @@ export const Util = {
       )
     ).flat();
 
-    return Util.asyncFilter(paths, async (path) => {
+    const dirs = await Util.asyncFilter(paths, async (path) => {
       if (path.includes('/template')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
       return filter ? filter(path) : true;
     });
+
+    return Util.sortProjectDirsDepthFirst(dirs);
   },
 
   /**
-   * Find matching files.
+   * Sort project dirs (topological sort on dependency graph)
    */
-  glob(pattern: string) {
-    return new Promise<string[]>((resolve, reject) => {
-      glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
-    });
+  async sortProjectDirsDepthFirst(dirs: string[], options: { algorithm?: 'DFS' | 'BFS' } = {}) {
+    const { algorithm = 'DFS' } = options;
+
+    const graph = new Map<string, string[]>();
+    await Promise.all(
+      dirs.map(async (dir) => {
+        const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as Package;
+        const deps = Object.keys({ ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) });
+        graph.set(pkg.name, deps);
+      }),
+    );
+
+    const order = (() => {
+      if (algorithm === 'DFS') return TopologicalSort.dfs(graph);
+      if (algorithm === 'BFS') return TopologicalSort.bfs(graph);
+      throw new Error(`Sort algorithm kind '${algorithm}' not supported.`);
+    })();
+
+    return order
+      .map((name) => dirs.find((path) => path.endsWith(`/${name}`)) ?? '')
+      .filter(Boolean)
+      .reverse();
   },
 };

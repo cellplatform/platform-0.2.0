@@ -6,3 +6,4 @@ import minimist from 'minimist';
 
 export { pc, rimraf, execa, minimist, glob };
 export { fs, Builder } from '../../code/compiler/builder.node/index.mjs';
+export { TopologicalSort } from '../../code/system/sys.util/src/Sort/Sort.Topological.mjs';
