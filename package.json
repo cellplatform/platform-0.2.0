@@ -27,6 +27,7 @@
     "fs-extra": "^10.1.0",
     "glamor-jss": "1.4.1",
     "glob": "^8.0.3",
+    "image-js": "^0.35.1",
     "jss-plugin-global": "10.9.2",
     "fake-indexeddb": "4.0.0",
     "minimist": "^1.2.6",
