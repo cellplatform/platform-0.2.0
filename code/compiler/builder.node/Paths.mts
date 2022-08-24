@@ -15,7 +15,15 @@ export const Paths = {
     esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
-    src: ['src/index.mts', 'src/index.TEST.mts', 'src/TEST/index.mts'],
+    src: [
+      'src/index.mts',
+      'src/index.TEST.mts',
+      'src/types.mts',
+      'src/TEST/index.mts',
+      'src/common/index.mts',
+      'src/common/libs.mts',
+      'src/common/types.mts',
+    ],
     tsconfig: {
       code: 'tsconfig.code.json',
       types: 'tsconfig.types.json',
