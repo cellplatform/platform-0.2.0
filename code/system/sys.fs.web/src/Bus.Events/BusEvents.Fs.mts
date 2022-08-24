@@ -77,7 +77,7 @@ export function BusEventsFs(args: {
   };
 
   /**
-   * Write a file.
+   * Write a file
    */
   const write: t.Fs['write'] = async (path, input) => {
     path = formatPath(path);
