@@ -1,5 +1,6 @@
+export * from './types.mjs';
+
 import { Logger } from './Log/index.mjs';
 
 const Log = Logger.create();
-const log = Log;
-export { Logger, Log, log };
+export { Logger, Log, Log as log, Log as default };
