@@ -1,7 +1,7 @@
 import { t, Json } from './common.mjs';
 
 /**
- * Work with a readable stream.
+ * Work with a readable stream
  *
  *    - https://developer.mozilla.org/en-US/docs/Web/API/ReadStream
  *    - https://developer.mozilla.org/en-US/docs/Web/API/Streams_API#concepts_and_usage
