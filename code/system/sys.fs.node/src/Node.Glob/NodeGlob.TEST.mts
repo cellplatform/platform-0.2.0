@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { NodeGlob } from './NodeGlob.mjs';
 import path from 'path';
 

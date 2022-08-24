@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { Style } from '../index.mjs';
 
 describe('Style', () => {
