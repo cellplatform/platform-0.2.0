@@ -26,6 +26,7 @@ export const Package = {
       const match = Object.values(config.manifest).find((file) => {
         return path === Util.ensureRelativeRoot(file.src);
       });
+
       if (match) {
         exports[key] = `./dist/${match.file}`;
         const type = await Package.findTypePath(rootDir, match.src);
