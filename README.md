@@ -54,16 +54,18 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 ![kay-pure-relationships](https://user-images.githubusercontent.com/185555/185737245-e82cd372-e253-4fd9-8221-435c001198ed.png)
 ![func](https://user-images.githubusercontent.com/185555/185738258-68e54981-0eb8-49b8-b8a8-a64b1ac45023.png)
 
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
 ---
 
 References (conceptual context):
 
 - [video](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay (2019)
-- [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Douglas Crockford (2011) - "The JSON Saga\*"
+- [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersetion of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
 
 ---
-
-- \*"JSON [as the] intersetion of all modern programming languages" - Crockford [timestamp](https://youtu.be/-C-JoyNuQJs?t=741)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
