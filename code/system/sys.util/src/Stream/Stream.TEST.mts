@@ -1,6 +1,6 @@
 import { Stream } from './index.mjs';
 import { expect } from 'chai';
-import { t, stringify } from '../common/index.mjs';
+import { t, Json } from './common.mjs';
 
 describe.skip('ReadStream (web)', () => {
   describe('read (Uint8Array)', () => {
@@ -8,8 +8,9 @@ describe.skip('ReadStream (web)', () => {
       const test = async (input: t.Json) => {
         const res = await Stream.toUint8Array(input);
         const text = new TextDecoder().decode(res);
-        expect(text).to.eql(stringify(input));
+        expect(text).to.eql(Json.stringify(input));
       };
+
       await test(undefined);
       await test(null);
       await test('hello');

@@ -1,4 +1,4 @@
-import { t, stringify } from './common.mjs';
+import { t, Json } from './common.mjs';
 
 /**
  * Work with a readable stream.
@@ -41,7 +41,7 @@ export const Stream = {
 
     // Process JSON.
     if (!isStream) {
-      const json = typeof input === 'string' ? input : stringify(input as t.Json);
+      const json = typeof input === 'string' ? input : Json.stringify(input as t.Json);
       return Stream.encode(json);
     }
 
