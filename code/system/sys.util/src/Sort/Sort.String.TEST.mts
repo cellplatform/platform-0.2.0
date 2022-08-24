@@ -1,5 +1,6 @@
-import { expect } from '../../TEST/index.mjs';
-import { naturalCompare } from './compare.mjs';
+import { expect } from '../TEST/index.mjs';
+import { naturalCompare } from './Sort.String.naturalCompare.mjs';
+import { Sort } from './index.mjs';
 
 /**
  *
@@ -8,6 +9,10 @@ import { naturalCompare } from './compare.mjs';
  *
  */
 describe('ManifestFiles: naturalCompare', () => {
+  it('exposed from [Sort] index', () => {
+    expect(Sort.String.naturalCompare).to.equal(naturalCompare);
+  });
+
   it('simple, case-sensitive sorting', () => {
     const files = ['z1.doc', 'z10.doc', 'z17.doc', 'z2.doc', 'z23.doc', 'z3.doc'];
     files.sort(naturalCompare);
