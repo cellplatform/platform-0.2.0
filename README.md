@@ -115,9 +115,7 @@ ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-# License
-
-[MIT](LICENSE)
+# License - [MIT](LICENSE)
 
 For a scintillating break down of this open-source classic, treat yourself to **Kyle E. Mitchell's**  
 "[The MIT License line-by-line.](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html) 171 words every programmer should understand."
