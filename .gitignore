@@ -1,5 +1,8 @@
 tmp
+.tmp
 .builder
+
+types.d/
 
 # Logs
 logs
@@ -14,7 +17,6 @@ dist
 dist-ssr
 dist.types
 coverage
-*.local
 
 # Editor directories and files
 .vscode/*
