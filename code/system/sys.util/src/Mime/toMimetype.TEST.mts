@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { toMimetype } from './toMimetype.mjs';
 
 describe('toMimetype (content-type)', () => {

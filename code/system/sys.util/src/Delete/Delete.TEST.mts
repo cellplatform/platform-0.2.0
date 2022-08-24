@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { Delete } from './index.mjs';
 
 describe('Delete', () => {

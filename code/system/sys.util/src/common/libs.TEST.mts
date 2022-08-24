@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { R } from './libs.mjs';
 
 const circular: any = { foo: 123 };

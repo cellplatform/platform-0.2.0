@@ -1,5 +1,5 @@
 import { Stream } from './index.mjs';
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { t, Json } from './common.mjs';
 
 describe.skip('ReadStream (web)', () => {

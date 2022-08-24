@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { Observable, Subject } from 'rxjs';
 import { t } from '../common/index.mjs';
 
