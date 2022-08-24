@@ -10,8 +10,12 @@
   },
   "license": "MIT",
   "private": true,
+  "dependencies": {
+    "sys.types": "latest",
+    "sys.util": "latest"
+  },
   "devDependencies": {
-    "@vitest/coverage-c8": "^0.22.1"
+    "sys.test": "latest"
   },
   "types": "./types.d/index.d.mts",
   "exports": {
