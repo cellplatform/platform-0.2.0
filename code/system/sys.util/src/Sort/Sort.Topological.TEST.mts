@@ -33,13 +33,13 @@ describe('Topological Sort', () => {
     list.set('G', ['E', 'F']);
 
     it('BFS (Breadth-First-Search)', () => {
-      const res = TopologicalSort.bfs(list);
-      expect(res).to.eql(['A', 'G', 'B', 'C', 'E', 'F', 'D']);
+      const bfs = TopologicalSort.bfs(list);
+      expect(bfs).to.eql(['A', 'G', 'B', 'C', 'E', 'F', 'D']);
     });
 
     it('DFS (Depth-First-Search)', () => {
-      const res = TopologicalSort.dfs(list);
-      expect(res).to.eql(['G', 'A', 'B', 'C', 'D', 'F', 'E']);
+      const dfs = TopologicalSort.dfs(list);
+      expect(dfs).to.eql(['G', 'A', 'B', 'C', 'D', 'F', 'E']);
     });
   });
 });

@@ -1,6 +1,4 @@
 import { expect } from '../TEST/index.mjs';
-
-// import { fs } from 'sys.fs.node';
 import { Hash } from './index.mjs';
 
 const circular: any = { foo: 123 };
