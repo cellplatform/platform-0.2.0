@@ -11,11 +11,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "sys.types": "latest",
-    "sys.util": "latest"
+    "sys.types": "^0.0.0",
+    "sys.util": "^0.0.0"
   },
   "devDependencies": {
-    "sys.test": "latest"
+    "sys.test": "^0.0.0"
   },
   "types": "./types.d/index.d.mts",
   "exports": {
