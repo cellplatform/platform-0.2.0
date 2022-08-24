@@ -5,7 +5,7 @@
 
 The set of `core system` modules that flexibly compose into a late-bound (strongly typed) distributed "cell" network.
 
-([monorepo](https://en.wikipedia.org/wiki/Monorepo))
+[monorepo](https://en.wikipedia.org/wiki/Monorepo)
 
 ---
 
