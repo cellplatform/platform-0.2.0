@@ -4,25 +4,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
+  "devDependencies": {
+    "sys.test": "^0.0.0"
+  },
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "@types/node": "^18.7.3",
-    "vite": "^3.0.0"
-  },
-  "types": "./types/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "index": [
-        "./types/index.d.mts"
-      ]
-    }
-  },
+  "types": "./types.d/index.d.ts",
   "exports": {
     ".": "./dist/index.js"
   }

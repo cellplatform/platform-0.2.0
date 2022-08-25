@@ -2,7 +2,7 @@
   "extends": "./tsconfig.code.json",
   "include": ["../src"],
   "compilerOptions": {
-    "outDir": "types",
+    "outDir": "types.d",
     "noEmit": false,
     "composite": true,
     "declaration": true,

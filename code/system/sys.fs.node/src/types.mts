@@ -1,4 +1,5 @@
-import { fsextra, path } from './common/index.mjs';
+import fsextra from 'fs-extra';
+import path from 'path';
 
 /**
  * Common Node (POSIX) based filesystem interface.

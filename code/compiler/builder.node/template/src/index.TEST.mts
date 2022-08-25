@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from './TEST/index.mjs';
 
 describe('main', () => {
   it('tmp', () => {

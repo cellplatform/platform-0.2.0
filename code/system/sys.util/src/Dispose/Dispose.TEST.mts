@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { Subject } from 'rxjs';
 
 import { Dispose } from './index.mjs';

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { time } from './index.mjs';
 
 const FORMAT = 'YYYY-MM-DD hh:mm:ss';
