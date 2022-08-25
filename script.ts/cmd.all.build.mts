@@ -5,6 +5,9 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
  * Run
  */
 (async () => {
+  type Pkg = { name: string; version: string };
+  const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
+
   let paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
@@ -49,6 +52,7 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
 
   console.log();
   console.log(pc.gray(`${Util.filesize(totalBytes)}`));
+  console.log(pc.gray(`platform/builder v${pkg.version}`));
   console.log();
 
   if (!ok) process.exit(1);
