@@ -1,7 +1,32 @@
 /// <reference types="vitest" />
+import { defineConfig, LibraryOptions, UserConfig } from 'vite';
 
-import { defineConfig, LibraryOptions } from 'vite';
+import fs from 'fs-extra';
+import { join } from 'path';
+import type { RollupOptions } from 'rollup';
 export { defineConfig };
+
+export type PackageJson = {
+  name: string;
+  version: string;
+  types: string;
+  type: 'module';
+  dependencies?: { [key: string]: string };
+  devDependencies?: { [key: string]: string };
+};
+
+type ModifyConfig = (args: ModifyConfigArgs) => Promise<void>;
+type ModifyConfigArgs = {
+  readonly ctx: ModifyConfigCtx;
+  addExternalDependency(moduleName: string | string[]): void;
+};
+type ModifyConfigCtx = {
+  readonly command: 'build' | 'serve';
+  readonly mode: string;
+  readonly config: UserConfig;
+  readonly pkg: PackageJson;
+  readonly deps: { [key: string]: string }; // All dependencies (incl. "dev")
+};
 
 /**
  * Common configuration defaults.
@@ -12,9 +37,11 @@ export const ViteConfig = {
     /**
      * Test runner.
      */
-    test: {
-      globals: true,
-      include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+    test() {
+      return {
+        globals: true,
+        include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+      };
     },
 
     /**
@@ -33,18 +60,46 @@ export const ViteConfig = {
   /**
    * Default configuration
    */
-  default(dir: string, name: string) {
+  default(dir: string, name: string, modify?: ModifyConfig) {
     return defineConfig(async ({ command, mode }) => {
-      return {
-        plugins: [],
-        test: {
-          ...ViteConfig.defaults.test,
-        },
-        build: {
-          lib: ViteConfig.defaults.lib(dir, name),
-          rollupOptions: { output: { globals: {} } },
-        },
+      const pkg = (await fs.readJson(join(dir, 'package.json'))) as PackageJson;
+      const lib = ViteConfig.defaults.lib(dir, name);
+
+      const external: string[] = [];
+      const rollupOptions: RollupOptions = {
+        external,
+        output: { globals: {} },
       };
+
+      const config: UserConfig = {
+        plugins: [],
+        test: ViteConfig.defaults.test(),
+        build: { lib, rollupOptions },
+      };
+
+      if (modify) {
+        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+        const args: ModifyConfigArgs = {
+          ctx: { command, mode, config, pkg, deps },
+          addExternalDependency(moduleName) {
+            asArray(moduleName)
+              .filter((name) => !external.includes(name))
+              .forEach((name) => external.push(name));
+          },
+        };
+
+        await modify(args);
+      }
+
+      return config;
     });
   },
 };
+
+/**
+ * [Helpers]
+ */
+
+function asArray<T>(input: T | T[]) {
+  return (Array.isArray(input) ? input : [input]).filter(Boolean);
+}
