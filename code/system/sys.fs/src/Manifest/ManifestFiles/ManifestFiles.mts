@@ -1,5 +1,4 @@
-import { t } from '../common.mjs';
-import { naturalCompare as compare } from './compare.mjs';
+import { t, Sort } from '../common.mjs';
 import { ManifestHash } from '../ManifestHash/index.mjs';
 
 /**
@@ -7,11 +6,14 @@ import { ManifestHash } from '../ManifestHash/index.mjs';
  */
 export const ManifestFiles = {
   hash: ManifestHash.files,
-  compare,
+  compare: Sort.String.naturalCompare,
   sort<T extends t.ManifestFile | string>(items: T[]) {
     if (items.length === 0) return [];
     return [...items].sort((a, b) => {
-      return compare(typeof a === 'string' ? a : a.path, typeof b === 'string' ? b : b.path);
+      return ManifestFiles.compare(
+        typeof a === 'string' ? a : a.path,
+        typeof b === 'string' ? b : b.path,
+      );
     });
   },
 };

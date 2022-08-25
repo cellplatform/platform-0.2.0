@@ -1,9 +1,8 @@
 import { expect } from '../../TEST/index.mjs';
 
-import { t, Hash } from '../common.mjs';
+import { t, Hash, Sort } from '../common.mjs';
 import { ManifestFiles } from './index.mjs';
 import { ManifestHash } from '../index.mjs';
-import { naturalCompare } from './compare.mjs';
 
 describe('ManifestFiles', () => {
   const testFile = (path: string, text?: string): t.ManifestFile => {
@@ -40,7 +39,7 @@ describe('ManifestFiles', () => {
     const SORTED = ['z1.doc', 'z2.doc', 'z3.doc', 'z10.doc', 'z17.doc', 'z23.doc'];
 
     it('compare', () => {
-      expect(ManifestFiles.compare).to.equal(naturalCompare);
+      expect(ManifestFiles.compare).to.equal(Sort.String.naturalCompare);
     });
 
     it('sort - {file} objects', () => {
