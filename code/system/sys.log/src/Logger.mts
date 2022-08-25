@@ -1,4 +1,5 @@
-import { t, pc } from '../common';
+import pc from 'picocolors';
+import * as t from './types.mjs';
 
 const colors: t.LogColor[] = [
   'black',

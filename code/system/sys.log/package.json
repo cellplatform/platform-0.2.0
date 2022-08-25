@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./types.d/index.d.ts",
+  "types": "./types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
   }
