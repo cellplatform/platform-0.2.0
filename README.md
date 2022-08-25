@@ -110,7 +110,7 @@ In the case of this repo the baseline is the [MIT Licence](LICENSE), and when ev
 
 To run a "licence analysis" and validate the depenency graph against this principle run:
 
-      $ fossa analyze
+   $ fossa analyze
 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
