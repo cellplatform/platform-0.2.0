@@ -1,2 +1,2 @@
-console.log('sys.fs.web');
+console.log('sys.fs.idb');
 export {};
