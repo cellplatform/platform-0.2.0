@@ -26,11 +26,18 @@ export const Builder = {
     const { silent = false, exitOnError = true } = options;
 
     await Template.ensureBaseline(dir);
-    await Typescript.build(dir, { exitOnError });
-    await Vite.build(dir, { silent });
+
+    const tscResponse = await Typescript.build(dir, { exitOnError, silent });
+    if (!tscResponse.ok) return tscResponse;
+
+    const viteResponse = await Vite.build(dir, { silent });
+    if (!viteResponse.ok) return viteResponse;
+
     await Package.updateEsm(dir, { save: true });
 
-    if (!options.silent) console.log();
+    if (!silent) console.log();
+
+    return { ok: true, errorCode: 0 };
   },
 
   /**

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as t from './types.mjs';
+import * as t from './index.mjs';
 
 describe('sys.types', () => {
   it('<placeholder>', async () => {

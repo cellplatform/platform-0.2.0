@@ -26,5 +26,7 @@ export const Vite = {
       build: { manifest: true },
       worker: { format: 'es' },
     });
+
+    return { ok: true, errorCode: 0 };
   },
 };

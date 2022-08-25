@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect } from '../TEST/index.mjs';
 import { MEDIA_QUERY_RETINA, image } from '../Css/index.mjs';
 import { Style } from '../index.mjs';
 
