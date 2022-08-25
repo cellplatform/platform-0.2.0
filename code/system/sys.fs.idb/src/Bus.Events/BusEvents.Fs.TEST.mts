@@ -1,12 +1,48 @@
 // import { expect, expectError, TestFs, TestPrep, beforeEach } from '../TEST/index.mjs';
 
 // import { stringify, Path, t, Hash, ManifestFiles, DEFAULT } from './common.mjs';
-import { t } from './common.mjs';
+import { t, rx, Path, Time, Hash, cuid, slug } from './common.mjs';
+import { Mock } from '../TEST/index.mjs';
 
 // const nodefs = TestFs.node;
 
-describe('BusEvents.Fs', function () {
+async function TestPrep(options: { id?: string; dir?: string } = {}) {
+  //
+  const { dir } = options;
+
+  const bus = rx.bus<t.SysFsEvent>();
+  const id = options.id ?? 'foo';
+  const driver = Mock.FsDriver({ dir });
+
+  console.log('------------------------------------------');
+  console.log('slug', slug());
+  console.log('cuid', cuid());
+
+  const api = {};
+
+  return api;
+}
+
+describe.only('BusEvents.Fs', function () {
   // beforeEach(() => TestFs.reset());
+
+  it('TMP', async () => {
+    //
+    // console.log('Mock', Mock);
+    // const driver = Mock.FsDriver({});
+    const mock = await TestPrep();
+
+    console.log('-------------------------------------------');
+    console.log('mock', mock);
+    // console.log('driver', driver);
+
+    const { randomFillSync } = await import('crypto');
+    console.log('randomFillSync', randomFillSync);
+
+    /**
+     * TODO 🐷
+     */
+  });
 
   describe('sub-directory', () => {
     it.skip('normalise "root" sub-directory', async () => {
