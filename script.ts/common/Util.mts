@@ -1,4 +1,4 @@
-import { pc, fs, glob, TopologicalSort } from './libs.mjs';
+import { pc, fs, glob, TopologicalSort, filesize } from './libs.mjs';
 
 type Package = { name: string; dependencies?: PackageDeps; devDependencies?: PackageDeps };
 type PackageDeps = { [key: string]: string };
@@ -29,6 +29,21 @@ export const Util = {
     return new Promise<string[]>((resolve, reject) => {
       glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
     });
+  },
+
+  /**
+   * Calculate the size of a folder
+   */
+  async folderSize(dir: string) {
+    const paths = await Util.glob(fs.join(dir, '**/*'));
+    let bytes = 0;
+    await Promise.all(
+      paths.map(async (path) => {
+        const stats = await fs.stat(path);
+        bytes += stats.size;
+      }),
+    );
+    return { dir, paths, bytes, toString: () => filesize(bytes) };
   },
 
   /**

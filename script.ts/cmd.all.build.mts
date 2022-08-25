@@ -1,11 +1,11 @@
 #!/usr/bin/env ts-node
-import { pc, Builder, Util } from './common/index.mjs';
+import { pc, Builder, Util, fs } from './common/index.mjs';
 
 /**
  * Run
  */
 (async () => {
-  const paths = await Util.findProjectDirs((path) => {
+  let paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
   });
@@ -31,16 +31,17 @@ import { pc, Builder, Util } from './common/index.mjs';
   }
 
   const ok = failed.length === 0;
-
   const statusColor = (ok: boolean, text: string) => (ok ? pc.green(text) : pc.red(text));
   const bullet = (path: string) => {
     const ok = !failed.some((error) => error.path === path);
     return statusColor(ok, ok ? '✓' : '×');
   };
 
-  console.log();
   console.log(statusColor(ok, 'built:'));
-  paths.forEach((path) => console.log(` ${bullet(path)} ${Util.formatPath(path)}`));
+  for (const path of paths) {
+    const size = await Util.folderSize(fs.join(path, 'dist'));
+    console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)}  (${size.toString()})`));
+  }
   console.log();
 
   if (!ok) process.exit(1);
