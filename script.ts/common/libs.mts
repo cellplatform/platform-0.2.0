@@ -8,3 +8,4 @@ import filesize from 'pretty-bytes';
 export { pc, rimraf, execa, minimist, glob, filesize };
 export { fs, Builder } from '../../code/compiler/builder.node/index.mjs';
 export { TopologicalSort } from '../../code/system/sys.util/src/Sort/Sort.Topological.mjs';
+export { Log } from '../../code/system/sys.log.node/src/index.mjs';
