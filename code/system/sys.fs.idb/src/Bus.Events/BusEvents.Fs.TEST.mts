@@ -23,7 +23,7 @@ async function TestPrep(options: { id?: string; dir?: string } = {}) {
   return api;
 }
 
-describe.only('BusEvents.Fs', function () {
+describe('BusEvents.Fs', function () {
   // beforeEach(() => TestFs.reset());
 
   it('TMP', async () => {
