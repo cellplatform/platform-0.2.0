@@ -12,7 +12,8 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
 
   // Log complete build list.
   console.log(pc.green('build list:'));
-  paths.forEach((path) => console.log(` • ${Util.formatPath(path)}`));
+  paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
+  console.log();
   console.log();
 
   type E = { path: string; error: string };
@@ -46,6 +47,7 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
     console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)} (${size.toString()})`));
   }
 
+  console.log();
   console.log(pc.gray(`${Util.filesize(totalBytes)}`));
   console.log();
 
