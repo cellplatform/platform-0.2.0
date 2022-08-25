@@ -21,11 +21,12 @@ type ModifyConfigArgs = {
   addExternalDependency(moduleName: string | string[]): void;
 };
 type ModifyConfigCtx = {
+  readonly name: string;
   readonly command: 'build' | 'serve';
   readonly mode: string;
-  readonly config: UserConfig;
   readonly pkg: PackageJson;
   readonly deps: { [key: string]: string }; // All dependencies (incl. "dev")
+  readonly config: UserConfig;
 };
 
 /**
@@ -60,9 +61,10 @@ export const ViteConfig = {
   /**
    * Default configuration
    */
-  default(dir: string, name: string, modify?: ModifyConfig) {
+  default(dir: string, modify?: ModifyConfig) {
     return defineConfig(async ({ command, mode }) => {
       const pkg = (await fs.readJson(join(dir, 'package.json'))) as PackageJson;
+      const name = pkg.name;
       const lib = ViteConfig.defaults.lib(dir, name);
 
       const external: string[] = [];
@@ -80,7 +82,7 @@ export const ViteConfig = {
       if (modify) {
         const deps = { ...pkg.dependencies, ...pkg.devDependencies };
         const args: ModifyConfigArgs = {
-          ctx: { command, mode, config, pkg, deps },
+          ctx: { name, command, mode, config, pkg, deps },
           addExternalDependency(moduleName) {
             asArray(moduleName)
               .filter((name) => !external.includes(name))
