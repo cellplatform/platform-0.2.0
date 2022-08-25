@@ -37,11 +37,16 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
     return statusColor(ok, ok ? '✓' : '×');
   };
 
+  let totalBytes = 0;
+
   console.log(statusColor(ok, 'built:'));
   for (const path of paths) {
     const size = await Util.folderSize(fs.join(path, 'dist'));
+    totalBytes += size.bytes;
     console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)} (${size.toString()})`));
   }
+
+  console.log(pc.gray(`${Util.filesize(totalBytes)}`));
   console.log();
 
   if (!ok) process.exit(1);

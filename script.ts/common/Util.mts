@@ -32,6 +32,13 @@ export const Util = {
   },
 
   /**
+   * Convert a number (bytes) to a human readable file-size string.
+   */
+  filesize(bytes: number) {
+    return filesize(bytes);
+  },
+
+  /**
    * Calculate the size of a folder
    */
   async folderSize(dir: string) {
