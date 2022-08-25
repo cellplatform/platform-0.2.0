@@ -5,7 +5,7 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
  * Run
  */
 (async () => {
-  let paths = await Util.findProjectDirs((path) => {
+  const paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
   });
@@ -40,7 +40,7 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
   console.log(statusColor(ok, 'built:'));
   for (const path of paths) {
     const size = await Util.folderSize(fs.join(path, 'dist'));
-    console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)}  (${size.toString()})`));
+    console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)} (${size.toString()})`));
   }
   console.log();
 
