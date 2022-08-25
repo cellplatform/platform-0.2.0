@@ -1,4 +1,2 @@
 import { ViteConfig } from '../../../config.mjs';
-export default ViteConfig.default(__dirname, async (e) => {
-  e.addExternalDependency(['sys.util', 'sys.test']);
-});
+export default ViteConfig.default(__dirname);
