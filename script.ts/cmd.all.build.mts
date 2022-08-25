@@ -5,7 +5,7 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
  * Run
  */
 (async () => {
-  const paths = await Util.findProjectDirs((path) => {
+  let paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
   });

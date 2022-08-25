@@ -64,9 +64,13 @@ export const ViteConfig = {
   default(dir: string, modify?: ModifyConfig) {
     return defineConfig(async ({ command, mode }) => {
       const pkg = (await fs.readJson(join(dir, 'package.json'))) as PackageJson;
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
       const name = pkg.name;
       const lib = ViteConfig.defaults.lib(dir, name);
 
+      /**
+       * Vite configuration.
+       */
       const external: string[] = [];
       const rollupOptions: RollupOptions = {
         external,
@@ -79,20 +83,20 @@ export const ViteConfig = {
         build: { lib, rollupOptions },
       };
 
-      if (modify) {
-        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-        const args: ModifyConfigArgs = {
-          ctx: { name, command, mode, config, pkg, deps },
-          addExternalDependency(moduleName) {
-            asArray(moduleName)
-              .filter((name) => !external.includes(name))
-              .forEach((name) => external.push(name));
-          },
-        };
+      /**
+       * Modification IoC (called within each module to perform specific adjustments).
+       */
+      const args: ModifyConfigArgs = {
+        ctx: { name, command, mode, config, pkg, deps },
+        addExternalDependency(moduleName) {
+          asArray(moduleName)
+            .filter((name) => !external.includes(name))
+            .forEach((name) => external.push(name));
+        },
+      };
 
-        await modify(args);
-      }
-
+      Object.keys(deps).forEach((moduleName) => args.addExternalDependency(moduleName));
+      await modify?.(args);
       return config;
     });
   },
