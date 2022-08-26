@@ -59,7 +59,7 @@ export const ViteConfig = {
   },
 
   /**
-   * Default configuration
+   * Build configuration generator (with standard defaults).
    */
   default(dir: string, modify?: ModifyConfig) {
     return defineConfig(async ({ command, mode }) => {
