@@ -11,6 +11,7 @@ describe('main', () => {
 
   it('level.[color]', () => {
     log.info.green(`info: green, ${log.cyan('hello', 123)}`, 123);
+    log.info.gray('gray', 456);
     log.warn.cyan(`warn: cyan, ${log.magenta('hello', 123)}`, 123);
   });
 

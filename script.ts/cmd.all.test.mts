@@ -16,7 +16,7 @@ import { Builder, pc, Util, fs } from './common/index.mjs';
 
   // Log complete build list.
   console.log(pc.cyan('test list:'));
-  paths.forEach((path) => console.log(` • ${Util.formatPath(path)}`));
+  paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
   console.log();
 
   type E = { path: string; error: string };

@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { pc, Builder, Util, fs, Log } from './common/index.mjs';
+import { pc, Builder, Util, fs, Table } from './common/index.mjs';
 
 /**
  * Run
@@ -42,7 +42,7 @@ import { pc, Builder, Util, fs, Log } from './common/index.mjs';
   };
 
   let totalBytes = 0;
-  const table = Log.Table();
+  const table = Table();
   for (const path of paths) {
     const size = await Util.folderSize(fs.join(path, 'dist'));
     const display = {
