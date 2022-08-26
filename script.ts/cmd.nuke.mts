@@ -12,5 +12,5 @@ function remove(path: string) {
  */
 (async () => {
   await remove('./node_modules');
-  await remove('./yarn.lock');
+  // await remove('./yarn.lock');
 })();
