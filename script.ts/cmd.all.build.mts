@@ -53,6 +53,7 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
     table.push([display.path, display.size]);
   }
 
+  console.log();
   console.log(statusColor(ok, 'built:'));
   console.log(table.toString());
   console.log();
