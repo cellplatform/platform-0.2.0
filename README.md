@@ -1,11 +1,9 @@
-[![ci](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml/badge.svg)](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
+[![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the set of `core system` modules that flexibly compose into varying arrangements of extremely-late-bound (strongly typed) distributed "cell" processes.
-
-
 
 ---
 
@@ -56,11 +54,8 @@ As quoted on [@isaacs](https://www.npmjs.com/~isaacs) post ["Unix Philosophy and
 ![kay-pure-relationships](https://user-images.githubusercontent.com/185555/186360463-cfd81f46-3429-4741-bbb3-b32015a388ac.png)
 ![func](https://user-images.githubusercontent.com/185555/185738258-68e54981-0eb8-49b8-b8a8-a64b1ac45023.png)
 
-
-
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-
 
 ---
 
