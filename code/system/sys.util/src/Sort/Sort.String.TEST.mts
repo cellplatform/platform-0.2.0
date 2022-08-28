@@ -1,4 +1,4 @@
-import { expect } from '../TEST/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
 import { naturalCompare } from './Sort.String.naturalCompare.mjs';
 import { Sort } from './index.mjs';
 

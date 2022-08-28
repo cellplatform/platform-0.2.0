@@ -9,6 +9,9 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {},
+  "devDependencies": {
+    "sys.test": "^0.0.0"
+  },
   "license": "MIT",
   "private": true,
   "types": "./types.d/index.d.mts",

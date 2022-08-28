@@ -1,4 +1,4 @@
-import { expect } from '../TEST/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
 import { fs } from './index.mjs';
 import { NodeGlob } from '../Node.Glob/index.mjs';
 

@@ -1,4 +1,5 @@
 import { Logger } from './index.mjs';
+import { describe, it } from './TEST/index.mjs';
 
 const log = Logger.create();
 

@@ -1,4 +1,4 @@
-import { expect } from '../TEST/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
 
 import { Id, slug, cuid } from './index.mjs';
 import { R } from '../common/index.mjs';

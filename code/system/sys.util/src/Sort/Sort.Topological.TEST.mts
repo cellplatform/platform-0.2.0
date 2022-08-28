@@ -1,4 +1,4 @@
-import { expect } from '../TEST/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
 import { TopologicalSort } from './Sort.Topological.mjs';
 
 describe('Topological Sort', () => {

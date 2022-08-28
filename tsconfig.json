@@ -4,7 +4,6 @@
 
     "skipLibCheck": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
-    "types": ["vitest/globals"],
 
     "sourceMap": true,
 
