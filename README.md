@@ -81,6 +81,7 @@ These commands also approximate the main [CI](https://github.com/cellplatform/pl
 
 ```bash
 
+$ yarn audit
 $ yarn build
 $ yarn test
 
