@@ -1,10 +1,13 @@
 #!/usr/bin/env ts-node
-import { Builder, pc, Util } from './common/index.mjs';
+import { Builder, pc, Util, fs } from './common/index.mjs';
 
 /**
  * Run
  */
 (async () => {
+  type Pkg = { name: string; version: string };
+  const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
+
   const paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
@@ -13,7 +16,7 @@ import { Builder, pc, Util } from './common/index.mjs';
 
   // Log complete build list.
   console.log(pc.cyan('test list:'));
-  paths.forEach((path) => console.log(` • ${Util.formatPath(path)}`));
+  paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
   console.log();
 
   type E = { path: string; error: string };
@@ -36,9 +39,10 @@ import { Builder, pc, Util } from './common/index.mjs';
   };
 
   console.log();
-  console.log(statusColor(ok, 'results:'));
+  console.log(statusColor(ok, 'test results:'));
   paths.forEach((path) => console.log(` ${bullet(path)} ${Util.formatPath(path)}`));
   console.log();
+  console.log(pc.gray(`platform/builder v${pkg.version}`));
 
   if (!ok) process.exit(1);
 })();

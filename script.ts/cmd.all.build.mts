@@ -1,10 +1,13 @@
 #!/usr/bin/env ts-node
-import { pc, Builder, Util, fs } from './common/index.mjs';
+import { pc, Builder, Util, fs, Table } from './common/index.mjs';
 
 /**
  * Run
  */
 (async () => {
+  type Pkg = { name: string; version: string };
+  const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
+
   let paths = await Util.findProjectDirs((path) => {
     if (path.includes('/builder.samples')) return false;
     return true;
@@ -39,16 +42,23 @@ import { pc, Builder, Util, fs } from './common/index.mjs';
   };
 
   let totalBytes = 0;
-
-  console.log(statusColor(ok, 'built:'));
+  const table = Table();
   for (const path of paths) {
     const size = await Util.folderSize(fs.join(path, 'dist'));
+    const display = {
+      path: pc.gray(` ${bullet(path)} ${Util.formatPath(path)}`),
+      size: pc.gray(`  ${Util.filesize(size.bytes)}`),
+    };
     totalBytes += size.bytes;
-    console.log(pc.gray(` ${bullet(path)} ${Util.formatPath(path)} (${size.toString()})`));
+    table.push([display.path, display.size]);
   }
 
   console.log();
+  console.log(statusColor(ok, 'built:'));
+  console.log(table.toString());
+  console.log();
   console.log(pc.gray(`${Util.filesize(totalBytes)}`));
+  console.log(pc.gray(`platform/builder v${pkg.version}`));
   console.log();
 
   if (!ok) process.exit(1);

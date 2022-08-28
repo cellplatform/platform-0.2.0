@@ -11,7 +11,7 @@ describe('time.utc', () => {
 
   it('from timestamp', () => {
     const now = new Date();
-    const utc = time.utc();
+    const utc = time.utc(now);
     expect(utc.date).to.eql(now);
     expect(utc.timestamp).to.eql(now.getTime());
     expect(utc.unix).to.eql(time.day(now).unix());

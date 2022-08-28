@@ -1,6 +1,6 @@
 {
-  "name": "platform-0.0.2",
-  "version": "0.0.2-alpha.1",
+  "name": "platform-0.2.0",
+  "version": "0.2.0-alpha.1",
   "type": "module",
   "scripts": {
     "build": "ts-node-esm -T script.ts/cmd.all.build.mts",
@@ -23,6 +23,7 @@
     "@vitejs/plugin-react": "^2.0.1",
     "@vitest/ui": "^0.22.0",
     "asmcrypto.js": "^2.3.2",
+    "cli-table3": "0.6.2",
     "dayjs": "^1.11.5",
     "execa": "^6.1.0",
     "fs-extra": "^10.1.0",

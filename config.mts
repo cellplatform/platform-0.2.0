@@ -15,7 +15,7 @@ export type PackageJson = {
   devDependencies?: { [key: string]: string };
 };
 
-type ModifyConfig = (args: ModifyConfigArgs) => Promise<void>;
+type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown>;
 type ModifyConfigArgs = {
   readonly ctx: ModifyConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
@@ -59,7 +59,7 @@ export const ViteConfig = {
   },
 
   /**
-   * Default configuration
+   * Build configuration generator (with standard defaults).
    */
   default(dir: string, modify?: ModifyConfig) {
     return defineConfig(async ({ command, mode }) => {

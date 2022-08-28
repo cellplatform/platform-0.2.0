@@ -1,5 +1,5 @@
 {
-  "name": "sys.log",
+  "name": "sys.util.node",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -8,9 +8,7 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
-  "devDependencies": {
-    "sys.test": "^0.0.0"
-  },
+  "dependencies": {},
   "license": "MIT",
   "private": true,
   "types": "./types.d/index.d.mts",

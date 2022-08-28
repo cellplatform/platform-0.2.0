@@ -3,7 +3,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![banner](https://user-images.githubusercontent.com/185555/88729229-76ac1280-d187-11ea-81c6-14146ec64848.png)
 
-[Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the set of `core system` modules that flexibly compose into varying extremely-late-bound (strongly typed) distributed "cell" networks.
+[Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the set of `core system` modules that flexibly compose into varying arrangements of extremely-late-bound (strongly typed) distributed "cell" processes.
 
 
 
@@ -110,7 +110,9 @@ In the case of this repo the baseline is the [MIT Licence](LICENSE), and when ev
 
 To run a "licence analysis" and validate the depenency graph against this principle run:
 
-      $ fossa analyze
+```bash
+$ fossa analyze
+```
 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
