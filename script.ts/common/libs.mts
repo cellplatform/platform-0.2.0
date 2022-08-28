@@ -1,3 +1,6 @@
+/**
+ * @external
+ */
 import pc from 'picocolors';
 import rimraf from 'rimraf';
 import glob from 'glob';
@@ -6,6 +9,14 @@ import minimist from 'minimist';
 import filesize from 'pretty-bytes';
 
 export { pc, rimraf, execa, minimist, glob, filesize };
-export { fs, Builder } from '../../code/compiler/builder.node/index.mjs';
+
+/**
+ * @system
+ */
 export { TopologicalSort } from '../../code/system/sys.util/src/Sort/Sort.Topological.mjs';
-export { Table } from '../../code/system/sys.util.node/src/LogTable.mjs';
+export { Table } from '../../code/system/sys.util.node/src/index.mjs';
+
+/**
+ * @local
+ */
+export { fs, Builder } from '../../code/compiler/builder.node/index.mjs';

@@ -1,4 +1,4 @@
-import { expect } from '../TEST/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
 import { Path } from './index.mjs';
 import { PathUri } from '../PathUri/index.mjs';
 
