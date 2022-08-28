@@ -1,4 +1,4 @@
-import { expect , describe, it} from '../TEST/index.mjs';
+import { expect, describe, it, afterEach } from '../TEST/index.mjs';
 import { MEDIA_QUERY_RETINA, image } from '../Css/index.mjs';
 import { Style } from '../index.mjs';
 

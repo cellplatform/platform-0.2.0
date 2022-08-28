@@ -1,2 +1,2 @@
 export { expect, expectError } from 'sys.test';
-export { describe, it } from 'vitest';
+export { describe, it, afterEach } from 'vitest';
