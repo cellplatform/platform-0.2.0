@@ -37,7 +37,7 @@ export const ViteConfig = {
      */
     test() {
       return {
-        globals: true,
+        globals: false,
         include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
       };
     },
