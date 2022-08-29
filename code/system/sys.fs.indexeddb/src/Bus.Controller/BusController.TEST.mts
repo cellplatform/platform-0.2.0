@@ -8,6 +8,7 @@ import {
   // TestFs,
   // TestPrep,
   // DEFAULT,
+  FsMock,
 } from '../TEST/index.mjs';
 
 describe('BusController', function () {
@@ -16,9 +17,14 @@ describe('BusController', function () {
   const bus = rx.bus<t.SysFsEvent>();
   // const nodefs = TestFs.node;
 
-  it.skip('id (specified)', () => {
-    // const id = 'foo';
+  it('id (specified)', () => {
+    const id = 'foo';
     // const driver = TestFs.driver;
+
+    const driver = FsMock.Driver();
+
+    console.log('driver', driver);
+
     // const index = TestFs.index(driver.dir);
     // const controller = Filesystem.Controller({ id, driver, bus, index });
     // expect(controller.id).to.eql(id);
