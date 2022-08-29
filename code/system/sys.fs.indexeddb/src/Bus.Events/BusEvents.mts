@@ -26,7 +26,7 @@ export function BusEvents(args: {
   const toUint8Array = args.toUint8Array ?? Stream.toUint8Array;
 
   const toTimeout = Wrangle.timeout(args.timeout);
-  const msecs = toTimeout();
+  const timeout = toTimeout();
 
   const $ = bus.$.pipe(
     takeUntil(dispose$),
@@ -39,8 +39,8 @@ export function BusEvents(args: {
   /**
    * Initialize sub-event API's
    */
-  const io = BusEventsIo({ id, $, bus, timeout: msecs });
-  const index = BusEventsIndexer({ id, $, bus, timeout: msecs });
+  const io = BusEventsIo({ id, $, bus, timeout });
+  const index = BusEventsIndexer({ id, $, bus, timeout });
 
   /**
    * Filesystem API.
