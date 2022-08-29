@@ -75,9 +75,12 @@ References (conceptual context):
 
 ### Primary Commands (Global)
 
-The following global commands run from the root of the project and operate on all nested sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
+The following global commands run from the root of the project and operate on all nested
+sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
 
-These commands also approximate the main [CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.esm.yml) behavior covered in this [github action steps](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml) when merging a PR into the [`main`](/tree/main) branch.
+These commands also approximate the main [CI](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.esm.yml)
+behavior covered in the [github action](https://github.com/cellplatform/platform-0.0.2/actions/workflows/node.js.yml)
+when merging a PR into the [`main`](/tree/main) branch.
 
 ```bash
 
