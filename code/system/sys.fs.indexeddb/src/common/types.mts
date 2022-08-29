@@ -6,6 +6,7 @@ export type {
   FsFileInfo,
   FsDriverLocal,
   FsIndexer,
+  FsPathFilter,
   ManifestFile,
   ManifestFileImage,
   DirManifest,
