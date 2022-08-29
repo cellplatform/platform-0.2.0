@@ -1,16 +1,12 @@
 import { IFsError } from './types.Error.mjs';
-import { t } from './common.mjs';
 
 type EmptyObject = Record<string, undefined>; // 🐷 NB: Used as a placeholder object.
 type FileUri = string; // "file:..."
 type FilePath = string; // "foo/bar.txt"
 type FileAddress = FileUri | FilePath;
 
-export type FsType = FsTypeLocal | FsTypeS3;
+export type FsType = FsTypeLocal;
 export type FsTypeLocal = 'LOCAL';
-export type FsTypeS3 = 'S3';
-
-export type FsS3Permission = 'private' | 'public-read';
 
 /**
  * Driver (API)
@@ -33,31 +29,11 @@ export type FsDriverLocal = IFsMembers<
   IFsResolveOptionsLocal
 >;
 
-/**
- * Remote cloud <BLOB> storage that conforms to the AWS/S3 "pseudo-standard" API.
- */
-// export type FsDriverS3 = IFsMembers<
-//   FsTypeS3,
-//   IFsInfoS3,
-//   IFsReadS3,
-//   IFsWriteS3,
-//   IFsWriteOptionsS3,
-//   IFsDeleteS3,
-//   IFsCopyS3,
-//   IFsCopyOptionsS3,
-//   IFsResolveOptionsS3
-// > & {
-//   bucket: string;
-//   endpoint: t.S3Endpoint;
-// };
-
-export type IFsWriteOptions = IFsWriteOptionsLocal | IFsWriteOptionsS3;
+export type IFsWriteOptions = IFsWriteOptionsLocal;
 export type IFsWriteOptionsLocal = { filename?: string };
-export type IFsWriteOptionsS3 = { filename?: string; permission?: FsS3Permission };
 
-export type IFsCopyOptions = IFsCopyOptionsLocal | IFsCopyOptionsS3;
+export type IFsCopyOptions = IFsCopyOptionsLocal;
 export type IFsCopyOptionsLocal = EmptyObject; // 🐷 No option parameters.
-export type IFsCopyOptionsS3 = { permission?: FsS3Permission };
 
 /**
  * File-system Members
@@ -117,21 +93,7 @@ export type IFsLocation = {
 };
 
 export type IFsResolveOptions = IFsResolveOptionsLocal;
-
-export type IFsResolveOptionsLocal = IFsResolveOptionsS3; // NB: the local file-system can simulate an S3 post.
-
-export type IFsResolveOptionsS3 = IFsResolveDefaultOptionsS3;
-//   | IFsResolveSignedGetOptionsS3
-//   | IFsResolveSignedPutOptionsS3
-//   | IFsResolveSignedPostOptionsS3;
-
-export type IFsResolveDefaultOptionsS3 = { type: 'DEFAULT' };
-// export type IFsResolveSignedGetOptionsS3 = t.S3SignedUrlGetObjectOptions & {
-//   type: 'SIGNED/get';
-//   endpoint?: t.S3EndpointKind;
-// };
-// export type IFsResolveSignedPutOptionsS3 = t.S3SignedUrlPutObjectOptions & { type: 'SIGNED/put' };
-// export type IFsResolveSignedPostOptionsS3 = t.S3SignedPostOptions & { type: 'SIGNED/post' };
+export type IFsResolveOptionsLocal = { type: 'DEFAULT' };
 
 /**
  * File (meta/info)
@@ -142,9 +104,8 @@ type IFsMetaCommon = {
   hash: string;
   bytes: number;
 };
-export type IFsMeta = IFsMetaLocal | IFsMetaS3;
+export type IFsMeta = IFsMetaLocal;
 export type IFsMetaLocal = IFsMetaCommon;
-export type IFsMetaS3 = IFsMetaCommon & { 's3:etag'?: string; 's3:permission'?: t.FsS3Permission };
 
 /**
  * File (info + data)
@@ -203,20 +164,3 @@ export type IFsReadLocal = IFsReadCommon & { file?: IFsFileData<IFsMetaLocal> };
 export type IFsWriteLocal = IFsWriteCommon & { file: IFsFileData<IFsMetaLocal> };
 export type IFsDeleteLocal = IFsDeleteCommon;
 export type IFsCopyLocal = IFsCopyCommon;
-
-/**
- * S3 (Extensions)
- */
-// export type IFsInfoS3 = IFsInfoCommon & IFsMetaS3;
-// export type IFsReadS3 = IFsReadCommon & {
-//   file?: IFsFileData<IFsMetaS3>;
-//   's3:etag'?: string;
-//   's3:permission'?: t.FsS3Permission;
-// };
-// export type IFsWriteS3 = IFsWriteCommon & {
-//   file: IFsFileData<IFsMetaS3>;
-//   's3:etag'?: string;
-//   's3:permission'?: t.FsS3Permission;
-// };
-// export type IFsDeleteS3 = IFsDeleteCommon;
-// export type IFsCopyS3 = IFsCopyCommon;
