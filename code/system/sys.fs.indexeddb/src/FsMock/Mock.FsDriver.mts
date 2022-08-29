@@ -3,7 +3,7 @@ import { t } from '../common/index.mjs';
 /**
  * A driver used for mocking the file-system while testing.
  */
-export function MockFsDriver(options: { dir?: string } = {}) {
+export function FsMockDriver(options: { dir?: string } = {}) {
   const { dir = '/mock/' } = options;
   const root = dir;
 

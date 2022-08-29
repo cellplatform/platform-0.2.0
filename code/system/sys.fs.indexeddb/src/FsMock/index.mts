@@ -1,9 +1,9 @@
-import { MockFsDriver } from './Mock.FsDriver.mjs';
-import { MockBusController } from './Mock.BusController.mjs';
+import { FsMockDriver } from './Mock.FsDriver.mjs';
+import { FsMockBusController } from './Mock.BusController.mjs';
 
-export { MockFsDriver, MockBusController };
+export { FsMockDriver, FsMockBusController };
 
-export const Mock = {
-  BusController: MockBusController,
-  FsDriver: MockFsDriver,
+export const FsMock = {
+  BusController: FsMockBusController,
+  Driver: FsMockDriver,
 };

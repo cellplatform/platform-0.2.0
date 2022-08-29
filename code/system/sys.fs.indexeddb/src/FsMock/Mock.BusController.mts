@@ -3,13 +3,12 @@ import { t } from '../common/index.mjs';
 type FilesystemId = string;
 type Milliseconds = number;
 
-export function MockBusController(args: {
+export function FsMockBusController(args: {
   bus: t.EventBus<any>;
   driver: t.FsDriverLocal;
   id?: FilesystemId;
   index?: t.FsIndexer;
   filter?: (e: t.SysFsEvent) => boolean;
-  // httpFactory?: (host: string | number) => t.IHttpClient;
   timeout?: Milliseconds;
 }) {
   const { bus, id, filter, timeout } = args;

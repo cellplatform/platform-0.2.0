@@ -13,7 +13,7 @@ import {
 describe('BusController', function () {
   // this.timeout(9999);
 
-  // const bus = rx.bus<t.SysFsEvent>();
+  const bus = rx.bus<t.SysFsEvent>();
   // const nodefs = TestFs.node;
 
   it.skip('id (specified)', () => {

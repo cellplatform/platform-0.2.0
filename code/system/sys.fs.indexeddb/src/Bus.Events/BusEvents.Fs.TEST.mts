@@ -1,5 +1,5 @@
 // import { expect, expectError, TestFs, TestPrep, beforeEach } from '../TEST/index.mjs';
-import { describe, it, Mock } from '../TEST/index.mjs';
+import { describe, it, FsMock } from '../TEST/index.mjs';
 
 // import { stringify, Path, t, Hash, ManifestFiles, DEFAULT } from './common.mjs';
 import { t, rx, Path, Time, Hash, cuid, slug } from './common.mjs';
@@ -13,11 +13,11 @@ async function TestPrep(options: { id?: string; dir?: string } = {}) {
 
   const bus = rx.bus<t.SysFsEvent>();
   const id = options.id ?? 'foo';
-  const driver = Mock.FsDriver({ dir });
+  const driver = FsMock.Driver({ dir });
 
-  console.log('------------------------------------------');
-  console.log('slug', slug());
-  console.log('cuid', cuid());
+  // console.log('------------------------------------------');
+  // console.log('slug', slug());
+  // console.log('cuid', cuid());
 
   // const api = {};
 
@@ -34,15 +34,11 @@ describe('BusEvents.Fs', function () {
     const mock = await TestPrep();
     const { id, bus } = mock;
 
-    console.log('-------------------------------------------');
-    console.log('mock', mock);
-    // console.log('driver', driver);
-
     const events = BusEvents({ id, bus });
 
     /**
      * TODO 🐷
-     */ 
+     */
   });
 
   describe('sub-directory', () => {
