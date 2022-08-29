@@ -13,8 +13,8 @@
 Sustained long range R&D.  
 Architecture, API's, and other structures will change (probably radically 🐷) prior to any `1.x` release.
 
-- repo: [platform-0.2.0](https://github.com/philcockfield/platform-0.2.0) (**current**)
-- repo: [platform-0.1.0](https://github.com/uiharness/platform-0.1.0)
+- repo: [platform-0.2.0](https://github.com/cellplatform/platform-0.2.0) (**current**)
+- repo: [platform-0.1.0](https://github.com/cellplatform/platform-0.1.0)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
