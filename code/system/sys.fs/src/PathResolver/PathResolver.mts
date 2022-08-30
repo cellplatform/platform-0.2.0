@@ -1,4 +1,5 @@
-import { t, Path } from './common.mjs';
+import { t } from '../common/index.mjs';
+import { Path } from '../Path/index.mjs';
 
 /**
  * Generates a resolver function.
@@ -7,10 +8,9 @@ export function PathResolverFactory(args: { dir: string }): t.FsPathResolver {
   if (!(args.dir ?? '').trim()) throw new Error(`Path resolver must have root directory`);
   const dir = Path.ensureSlashStart(args.dir ?? '');
 
-  const fn: t.FsPathResolver = (address: string): t.IFsLocation => {
+  const fn: t.FsPathResolver = (address: string) => {
     const uri = (address ?? '').trim();
-    const path = resolve(dir, uri);
-    return { path };
+    return resolve(dir, uri);
   };
 
   return fn;

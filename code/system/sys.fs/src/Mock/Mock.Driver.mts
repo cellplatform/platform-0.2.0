@@ -1,5 +1,5 @@
 import { t, DEFAULT } from './common.mjs';
-import { PathResolverFactory } from '../Driver/index.mjs';
+import { PathResolverFactory } from '../PathResolver/index.mjs';
 import { Path } from '../Path/index.mjs';
 
 type MockInfoHandler = (e: { uri: string; info: t.IFsInfo }) => void;
@@ -26,7 +26,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.info++;
 
       uri = (uri || '').trim();
-      const path = resolve(uri).path;
+      const path = resolve(uri);
       const location = Path.toAbsoluteLocation({ path, root: dir });
 
       const info: t.IFsInfo = {

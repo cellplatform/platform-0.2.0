@@ -7,7 +7,7 @@ describe('Mock: FsDriver', () => {
       const mock = FsMockDriver();
       const resolve = mock.driver.resolve;
       const res = resolve('path:.');
-      expect(res.path).to.eql('/mock/');
+      expect(res).to.eql('/mock/');
     });
 
     it('custom root directory', () => {
@@ -16,8 +16,8 @@ describe('Mock: FsDriver', () => {
 
       const res1 = resolve('path:.');
       const res2 = resolve('path:dir/file.txt');
-      expect(res1.path).to.eql('/foo/bar/');
-      expect(res2.path).to.eql('/foo/bar/dir/file.txt');
+      expect(res1).to.eql('/foo/bar/');
+      expect(res2).to.eql('/foo/bar/dir/file.txt');
     });
   });
 

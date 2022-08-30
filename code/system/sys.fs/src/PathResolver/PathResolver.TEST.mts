@@ -1,6 +1,6 @@
 import { describe, it, expect } from '../TEST/index.mjs';
 import { PathResolverFactory } from './index.mjs';
-import { Path } from './common.mjs';
+import { Path } from '../Path/index.mjs';
 
 describe('PathResolver', () => {
   it('throw: root directory not specified', () => {
@@ -30,7 +30,7 @@ describe('PathResolver', () => {
     const resolve = PathResolverFactory({ dir: 'root' });
 
     const test = (uri: string, expected: string) => {
-      const path = resolve(uri).path;
+      const path = resolve(uri);
       expect(path).to.eql(Path.join('/root', expected));
     };
 
