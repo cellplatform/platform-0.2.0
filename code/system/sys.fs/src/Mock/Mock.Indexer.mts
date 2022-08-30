@@ -31,7 +31,7 @@ export function FsMockIndexer(options: Options = {}) {
   const mock = {
     indexer,
     count: { manifest: 0 },
-    manifest(handler: MockManifestHandler) {
+    onManifest(handler: MockManifestHandler) {
       _manifestHandler = handler;
       return mock;
     },

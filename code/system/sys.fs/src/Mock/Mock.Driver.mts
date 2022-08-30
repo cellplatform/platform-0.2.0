@@ -80,7 +80,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
 
-    info(handler: MockInfoHandler) {
+    onInfo(handler: MockInfoHandler) {
       _infoHandler = handler;
       return mock;
     },

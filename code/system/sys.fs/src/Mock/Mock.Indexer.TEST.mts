@@ -28,7 +28,7 @@ describe('Mock: FsIndexer', () => {
     });
 
     it('override manifest handler', async () => {
-      const mock = FsMockIndexer().manifest((e) => {
+      const mock = FsMockIndexer().onManifest((e) => {
         e.manifest.hash.dir = 'abcd';
         e.manifest.hash.files = '1234';
       });
