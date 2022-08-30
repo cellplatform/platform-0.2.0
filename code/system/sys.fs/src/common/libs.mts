@@ -1,1 +1,5 @@
-export { Is, Mime, Hash, Stream, Delete, Time, slug, cuid, rx, Json, Sort } from 'sys.util';
+export { Mime, Delete, Hash, Is, Stream, Json, Sort, Time } from 'sys.util';
+export { asArray, cuid, slug, rx } from 'sys.util';
+
+import { clone, uniq, flatten } from 'ramda';
+export const R = { clone, uniq, flatten };
