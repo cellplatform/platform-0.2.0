@@ -15,31 +15,31 @@ import {
 import { BusController } from './index.mjs';
 import { BusEvents } from '../BusEvents/index.mjs';
 
+const MockSetup = (options: { dir?: string } = {}) => {
+  const { dir } = options;
+  const driver = FsMock.Driver({ dir }).driver;
+  const indexer = FsMock.Indexer({ dir }).indexer;
+  return { driver, indexer };
+};
+
+const TestPrep = (options: { dir?: string; id?: string } = {}) => {
+  const { dir, id = `foo.${slug()}` } = options;
+  const bus = rx.bus<t.SysFsEvent>();
+  const { driver, indexer } = MockSetup({ dir });
+  const controller = BusController({ id, driver, bus, indexer });
+  const events = controller.events;
+  const { dispose } = events;
+  return { bus, controller, events, dispose };
+};
+
 describe('BusController', function () {
-  const MockSetup = (options: { dir?: string } = {}) => {
-    const { dir } = options;
-    const driver = FsMock.Driver({ dir }).driver;
-    const indexer = FsMock.Indexer({ dir }).indexer;
-    return { driver, indexer };
-  };
-
-  const TestPrep = (options: { dir?: string; id?: string } = {}) => {
-    const { dir, id = `foo.${slug()}` } = options;
-    const bus = rx.bus<t.SysFsEvent>();
-    const { driver, indexer } = MockSetup({ dir });
-    const controller = BusController({ id, driver, bus, indexer });
-    const events = controller.events;
-    const { dispose } = events;
-    return { bus, controller, events, dispose };
-  };
-
   it('id (specified)', () => {
     const bus = rx.bus<t.SysFsEvent>();
     const driver = FsMock.Driver().driver;
-    const index = FsMock.Indexer().indexer;
+    const indexer = FsMock.Indexer().indexer;
 
     const id = 'foo';
-    const controller = BusController({ id, bus, driver, indexer: index });
+    const controller = BusController({ id, bus, driver, indexer });
     const events = BusEvents({ id, bus });
 
     expect(controller.id).to.eql(id);
@@ -143,6 +143,28 @@ describe('BusController', function () {
       expect(res.ready).to.eql(false);
       expect(res.error?.code).to.eql('client/timeout');
       expect(res.error?.message).to.include(`did not respond`);
+    });
+  });
+
+  describe('dispose', () => {
+    it('disposing Controller disposes Events', () => {
+      const mock = TestPrep();
+
+      let count = 0;
+      mock.events.dispose$.subscribe(() => count++);
+      mock.controller.dispose();
+      mock.controller.dispose();
+      expect(count).to.eql(1);
+    });
+
+    it('disposing Event disposes Controller', () => {
+      const mock = TestPrep();
+
+      let count = 0;
+      mock.controller.dispose$.subscribe(() => count++);
+      mock.events.dispose();
+      mock.events.dispose();
+      expect(count).to.eql(1);
     });
   });
 });
