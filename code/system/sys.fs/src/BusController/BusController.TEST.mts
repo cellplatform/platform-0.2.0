@@ -13,7 +13,7 @@ import {
 } from '../TEST/index.mjs';
 
 import { BusController } from './index.mjs';
-import { BusEvents } from '../Bus.Events/index.mjs';
+import { BusEvents } from '../BusEvents/index.mjs';
 
 describe('BusController', function () {
   const MockSetup = (options: { dir?: string } = {}) => {

@@ -1,7 +1,7 @@
 export * from '../Filesize/types.mjs';
 export * from '../Manifest/types.mjs';
-export * from '../Bus.Events/types.mjs';
-export * from '../Bus.Controller/types.mjs';
+export * from '../BusEvents/types.mjs';
+export * from '../BusController/types.mjs';
 
 export * from './types.File.mjs';
 export * from './types.Fs.mjs';
