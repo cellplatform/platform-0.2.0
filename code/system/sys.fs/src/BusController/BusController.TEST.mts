@@ -1,19 +1,6 @@
-import {
-  describe,
-  it,
-  expect,
-  rx,
-  t,
-  // Filesystem,
-  // TestFs,
-  // TestPrep,
-  slug,
-  DEFAULT,
-  FsMock,
-} from '../TEST/index.mjs';
-
-import { BusController } from './index.mjs';
 import { BusEvents } from '../BusEvents/index.mjs';
+import { DEFAULT, describe, expect, FsMock, it, rx, slug, t } from '../TEST/index.mjs';
+import { BusController } from './index.mjs';
 
 const MockSetup = (options: { dir?: string } = {}) => {
   const { dir } = options;
@@ -24,7 +11,8 @@ const MockSetup = (options: { dir?: string } = {}) => {
 
 const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir, id = `foo.${slug()}` } = options;
-  const { driver, indexer } = MockSetup({ dir });
+  const mock = MockSetup({ dir });
+  const { driver, indexer } = mock;
 
   const bus = rx.bus<t.SysFsEvent>();
   const controller = BusController({ id, driver, bus, indexer });
@@ -32,7 +20,7 @@ const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const events = controller.events;
   const { dispose } = events;
 
-  return { bus, controller, events, dispose };
+  return { bus, controller, events, dispose, mock };
 };
 
 describe('BusController', function () {
@@ -106,26 +94,28 @@ describe('BusController', function () {
     expect(info2.fs?.dir).to.match(/\/bar$/);
   });
 
-  it.skip('controller.fs', async () => {
+  it('controller.fs', async () => {
     const mock = TestPrep();
 
-    // const mock = await TestPrep();
-    // await mock.reset();
-    const root = mock.controller.dir;
-    // const png = await mock.readFile('static.test/child/tree.png');
-    // const fs1 = mock.controller.fs();
-    // const fs2 = mock.controller.fs('images');
-    // const fs3 = mock.controller.fs({ dir: 'images/' });
-    // await fs1.write('images/tree1.png', png.data);
-    // await fs2.write('tree2.png', png.data);
-    // await fs3.write('tree3.png', png.data);
-    // const file1 = await mock.readFile(nodefs.join(root, 'images/tree1.png'));
-    // const file2 = await mock.readFile(nodefs.join(root, 'images/tree2.png'));
-    // const file3 = await mock.readFile(nodefs.join(root, 'images/tree3.png'));
-    // expect(file1.hash).to.eql(png.hash);
-    // expect(file2.hash).to.eql(png.hash);
-    // expect(file3.hash).to.eql(png.hash);
-    // await mock.dispose();
+    const file1 = FsMock.randomFile(10);
+    const file2 = FsMock.randomFile(50);
+    const file3 = FsMock.randomFile(100);
+
+    const fs1 = mock.controller.fs();
+    const fs2 = mock.controller.fs('images');
+    const fs3 = mock.controller.fs({ dir: 'images/' });
+
+    await fs1.write('images/tree1.png', file1.data);
+    await fs2.write('tree2.png', file2.data);
+    await fs3.write('tree3.png', file3.data);
+
+    const read1 = await fs1.read('images/tree1.png');
+    const read2 = await fs2.read('tree2.png');
+    const read3 = await fs3.read('tree3.png');
+
+    expect(read1).to.eql(file1.data);
+    expect(read2).to.eql(file2.data);
+    expect(read3).to.eql(file3.data);
   });
 
   describe('ready', () => {
