@@ -29,16 +29,3 @@ export type IFileIntegrity = {
   uploadedAt?: number;
   filehash?: string;
 };
-
-/**
- * Upload (presigned URL)
- */
-export type IFilePresignedUploadUrl = {
-  method: 'POST';
-  expiresAt: number;
-  filesystem: t.FsType;
-  filename: string;
-  uri: string;
-  url: string;
-  props: { [key: string]: string };
-};
