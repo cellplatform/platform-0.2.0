@@ -87,6 +87,20 @@ describe('Path', () => {
       test('/foo  /  ', '/foo');
     });
 
+    it('ensureSlashStart', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureSlashStart(input)).to.eql(expected);
+      };
+
+      test('foo', '/foo');
+      test('   foo/   ', '/foo/');
+      test('/', '/');
+      test('', '/');
+      test('   ', '/');
+      test('///', '/');
+      test('///foo/bar', '/foo/bar');
+    });
+
     it('ensureSlashEnd', () => {
       const test = (input: any, expected: string) => {
         expect(Path.ensureSlashEnd(input)).to.eql(expected);
