@@ -1,13 +1,16 @@
 import { t, DEFAULT, Time } from './common.mjs';
 
-type Options = { dir?: string; handleManifest?: MockManifestHandler };
+type Options = { dir?: string };
 type MockManifestHandler = (e: {
   options: t.FsIndexerGetManifestOptions;
   manifest: t.DirManifest;
 }) => void;
 
 export function FsMockIndexer(options: Options = {}) {
-  const { dir = DEFAULT.ROOT_DIR, handleManifest } = options;
+  const { dir = DEFAULT.ROOT_DIR } = options;
+
+  let _manifestHandler: undefined | MockManifestHandler;
+
   const indexer: t.FsIndexer = {
     dir,
 
@@ -20,7 +23,7 @@ export function FsMockIndexer(options: Options = {}) {
         hash: { dir: '', files: '' },
         files: [],
       };
-      handleManifest?.({ options, manifest });
+      _manifestHandler?.({ options, manifest });
       return manifest;
     },
   };
@@ -28,6 +31,10 @@ export function FsMockIndexer(options: Options = {}) {
   const mock = {
     indexer,
     count: { indexer: 0 },
+    manifest(handler: MockManifestHandler) {
+      _manifestHandler = handler;
+      return mock;
+    },
   };
 
   return mock;

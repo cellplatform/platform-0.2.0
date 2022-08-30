@@ -38,15 +38,14 @@ describe('Mock: FsDriver', () => {
     });
 
     it('override info', async () => {
-      const uri = '  path:foo/bar.txt  ';
-      const mock = FsMockDriver({
-        handleInfo(e) {
-          e.info.hash = 'sha256-abc';
-          e.info.exists = true;
-          e.info.kind = 'file';
-          e.info.bytes = 1234;
-        },
+      const mock = FsMockDriver({}).info((e) => {
+        e.info.hash = 'sha256-abc';
+        e.info.exists = true;
+        e.info.kind = 'file';
+        e.info.bytes = 1234;
       });
+
+      const uri = '  path:foo/bar.txt  ';
       const res = await mock.driver.info(uri);
 
       expect(mock.count.info).to.eql(1);

@@ -3,19 +3,20 @@ import { PathResolverFactory } from '../Driver/index.mjs';
 import { Path } from '../Path/index.mjs';
 
 type MockInfoHandler = (e: { uri: string; info: t.IFsInfo }) => void;
-// type MockReadHandler = (e: { uri: string }) => void;
 
 /**
  * A driver used for mocking the file-system while testing.
  */
-export function FsMockDriver(options: { dir?: string; handleInfo?: MockInfoHandler } = {}) {
+export function FsMockDriver(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
 
   const TMP = null as any; // TEMP 🐷
 
+  let _infoHandler: undefined | MockInfoHandler;
   const resolve = PathResolverFactory({ dir });
 
   const driver: t.FsDriver = {
+    dir,
     resolve,
 
     /**
@@ -38,7 +39,7 @@ export function FsMockDriver(options: { dir?: string; handleInfo?: MockInfoHandl
         bytes: -1,
       };
 
-      options.handleInfo?.({ uri, info });
+      _infoHandler?.({ uri, info });
       return info;
     },
 
@@ -78,6 +79,11 @@ export function FsMockDriver(options: { dir?: string; handleInfo?: MockInfoHandl
   const mock = {
     driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
+
+    info(handler: MockInfoHandler) {
+      _infoHandler = handler;
+      return mock;
+    },
   };
 
   return mock;

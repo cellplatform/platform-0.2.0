@@ -28,12 +28,9 @@ describe('Mock: FsIndexer', () => {
     });
 
     it('override manifest handler', async () => {
-      const mock = FsMockIndexer({
-        handleManifest(e) {
-          console.log('e', e);
-          e.manifest.hash.dir = 'abcd';
-          e.manifest.hash.files = '1234';
-        },
+      const mock = FsMockIndexer().manifest((e) => {
+        e.manifest.hash.dir = 'abcd';
+        e.manifest.hash.files = '1234';
       });
       const res = await mock.indexer.manifest();
       expect(mock.count.indexer).to.eql(1);
