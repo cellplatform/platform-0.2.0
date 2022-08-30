@@ -4,11 +4,8 @@ import { t, Path } from './common.mjs';
  * Generates a resolver function.
  */
 export function PathResolverFactory(args: { dir: string }): t.FsPathResolver {
-  const dir = (args.dir ?? '').trim();
-
-  if (!dir) {
-    throw new Error(`Path resolver must have root directory`);
-  }
+  if (!(args.dir ?? '').trim()) throw new Error(`Path resolver must have root directory`);
+  const dir = Path.ensureSlashStart(args.dir ?? '');
 
   const fn: t.FsPathResolver = (address: string): t.IFsLocation => {
     const uri = (address ?? '').trim();
@@ -25,8 +22,9 @@ export function PathResolverFactory(args: { dir: string }): t.FsPathResolver {
 
 function resolve(dir: string, uri: string) {
   const ensureScope = (result: string) => {
-    if (!result.startsWith(dir))
-      throw new Error(`Resulting path is not within scope of root directory.`);
+    if (!result.startsWith(dir)) {
+      throw new Error(`Resulting path is not within scope of the root directory`);
+    }
     return result;
   };
 

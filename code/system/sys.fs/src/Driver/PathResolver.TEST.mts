@@ -21,17 +21,17 @@ describe('PathResolver', () => {
     };
 
     test('');
+    test('.');
     test('./foo');
     test('foo:bar');
   });
 
   it('resolve: to path', async () => {
-    const dir = '/root';
-    const resolve = PathResolverFactory({ dir: '/root' });
+    const resolve = PathResolverFactory({ dir: 'root' });
 
     const test = (uri: string, expected: string) => {
       const path = resolve(uri).path;
-      expect(path).to.eql(Path.join(dir, expected));
+      expect(path).to.eql(Path.join('/root', expected));
     };
 
     test('path:foo', 'foo');
@@ -39,6 +39,7 @@ describe('PathResolver', () => {
     test('path:///foo', 'foo');
     test('path:', '/');
     test('path:/', '/');
+    test('path:.', '/');
     test('path:///', '/');
     test('path:./foo', 'foo');
     test('path:../foo', '/');
@@ -46,5 +47,6 @@ describe('PathResolver', () => {
     // Security.
     test('path:foo/../../bar', '/'); // NB: Does not step above root directory.
     test('path:./foo/../..', '/'); //   NB: Does not step above root directory.
+    test('path:./foo/../../../../../../../', '/'); //   NB: Does not step above root directory.
   });
 });
