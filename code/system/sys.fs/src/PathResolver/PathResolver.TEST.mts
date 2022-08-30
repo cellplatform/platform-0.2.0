@@ -26,12 +26,12 @@ describe('PathResolver', () => {
     test('foo:bar');
   });
 
-  it('resolve: to path', async () => {
+  it('resolve', () => {
     const resolve = PathResolverFactory({ dir: 'root' });
 
     const test = (uri: string, expected: string) => {
-      const path = resolve(uri);
-      expect(path).to.eql(Path.join('/root', expected));
+      const res = resolve(uri);
+      expect(res).to.eql(Path.join('/root', expected));
     };
 
     test('path:foo', 'foo');

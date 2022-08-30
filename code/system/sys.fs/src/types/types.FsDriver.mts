@@ -1,8 +1,9 @@
-import { IFsError } from './types.Error.mjs';
+import { FsError } from './types.Error.mjs';
 
 type EmptyObject = Record<string, undefined>; // 🐷 NB: Used as a placeholder object.
 type DirPath = string;
 type FileAddress = string; // "foo/bar.txt"
+type PathUri = string;
 
 /**
  * Driver (API)
@@ -49,7 +50,7 @@ type IFsMembers<
   delete: FsDeleteMethod<Delete>;
 };
 
-export type FsPathResolver = (uri: string) => FileAddress;
+export type FsPathResolver = (uri: PathUri) => FileAddress;
 export type FsInfoMethod<Info extends IFsMeta> = (address: FileAddress) => Promise<Info>;
 export type FsReadMethod<Read extends IFsRead> = (address: FileAddress) => Promise<Read>;
 export type FsWriteMethod<Write extends IFsWrite, WriteOptions extends IFsWriteOptions> = (
@@ -70,8 +71,8 @@ export type FsDeleteMethod<Delete extends IFsDelete> = (
  * File (meta/info)
  */
 export type IFsMeta = {
-  path: string;
-  location: string;
+  path: string; // TODO 🐷 remove ??
+  location: string; // TODO 🐷 remove ??
   hash: string;
   bytes: number;
 };
@@ -85,35 +86,35 @@ export type IFsFileData<I extends IFsMeta = IFsMeta> = I & { data: Uint8Array };
  * Local file-system (Extensions)
  */
 export type IFsInfo = IFsMeta & {
-  uri: string;
+  uri: PathUri;
   exists: boolean;
   kind: 'file' | 'dir' | 'unknown';
 };
 export type IFsRead = {
-  uri: string;
-  ok: boolean;
-  status: number;
-  error?: IFsError;
+  uri: PathUri;
+  ok: boolean; // TODO 🐷 remove OK - presence of error is enough.
+  status: number; // TODO 🐷  remove status code
+  error?: FsError;
   file?: IFsFileData<IFsMeta>;
 };
 export type IFsWrite = {
-  uri: string;
+  uri: PathUri;
   ok: boolean;
   status: number;
-  error?: IFsError;
+  error?: FsError;
   file: IFsFileData<IFsMeta>;
 };
 export type IFsDelete = {
   ok: boolean;
   status: number;
-  uris: string[];
+  uris: PathUri[];
   locations: string[];
-  error?: IFsError;
+  error?: FsError;
 };
 export type IFsCopy = {
   ok: boolean;
   status: number;
-  error?: IFsError;
-  source: string;
-  target: string;
+  error?: FsError;
+  source: PathUri;
+  target: PathUri;
 };

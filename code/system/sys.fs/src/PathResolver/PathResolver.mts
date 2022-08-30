@@ -10,7 +10,8 @@ export function PathResolverFactory(args: { dir: string }): t.FsPathResolver {
 
   const fn: t.FsPathResolver = (address: string) => {
     const uri = (address ?? '').trim();
-    return resolve(dir, uri);
+    const path = resolve(dir, uri);
+    return path;
   };
 
   return fn;

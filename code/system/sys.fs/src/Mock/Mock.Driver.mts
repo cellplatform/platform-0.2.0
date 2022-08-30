@@ -1,6 +1,5 @@
-import { t, DEFAULT } from './common.mjs';
 import { PathResolverFactory } from '../PathResolver/index.mjs';
-import { Path } from '../Path/index.mjs';
+import { DEFAULT, Hash, Path, Stream, t } from './common.mjs';
 
 type MockInfoHandler = (e: { uri: string; info: t.IFsInfo }) => void;
 
@@ -9,11 +8,18 @@ type MockInfoHandler = (e: { uri: string; info: t.IFsInfo }) => void;
  */
 export function FsMockDriver(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
-
-  const TMP = null as any; // TEMP 🐷
+  const root = dir;
 
   let _infoHandler: undefined | MockInfoHandler;
   const resolve = PathResolverFactory({ dir });
+  const memory: { [uri: string]: { data: Uint8Array; hash: string } } = {};
+
+  const formatUri = (uri: string) => {
+    uri = Path.Uri.ensurePrefix(uri);
+    const path = Path.Uri.trimPrefix(uri);
+    const location = Path.toAbsoluteLocation({ root, path });
+    return { uri, path, location };
+  };
 
   const driver: t.FsDriver = {
     dir,
@@ -22,21 +28,20 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     /**
      * Retrieve meta-data of a local file.
      */
-    async info(uri) {
+    async info(address) {
       mock.count.info++;
 
-      uri = (uri || '').trim();
-      const path = resolve(uri);
-      const location = Path.toAbsoluteLocation({ path, root: dir });
+      const { uri, path, location } = formatUri(address);
+      const ref = memory[uri];
 
       const info: t.IFsInfo = {
         uri,
-        exists: false,
+        exists: Boolean(ref),
         kind: 'unknown',
         path,
         location,
-        hash: '',
-        bytes: -1,
+        hash: ref?.hash ?? '',
+        bytes: ref?.data.byteLength ?? -1,
       };
 
       _infoHandler?.({ uri, info });
@@ -46,25 +51,56 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     /**
      * Read from the local file-system.
      */
-    async read(uri) {
+    async read(address) {
       mock.count.read++;
-      return TMP;
+
+      const { uri, path, location } = formatUri(address);
+      const ref = memory[uri];
+
+      if (ref) {
+        const { hash, data } = ref;
+        const bytes = data.byteLength;
+        const file: t.IFsFileData = { path, location, hash, bytes, data };
+        return { uri, ok: true, status: 200, file };
+      } else {
+        const error: t.FsError = { type: 'FS/read', message: 'Not found', path };
+        return { uri, ok: false, status: 404, error };
+      }
     },
 
     /**
      * Write to the local file-system.
      */
-    async write(uri, input) {
+    async write(address, input) {
       mock.count.write++;
-      return TMP;
+
+      const { uri, path, location } = formatUri(address);
+      const data = Stream.isReadableStream(input)
+        ? await Stream.toUint8Array(input)
+        : (input as Uint8Array);
+
+      const hash = Hash.sha256(input);
+      const bytes = data.byteLength;
+      const file: t.IFsFileData = { path, location, hash, bytes, data };
+      const res: t.IFsWrite = { uri, ok: true, status: 200, file };
+
+      memory[uri] = { data, hash };
+      return res;
     },
 
     /**
      * Delete from the local file-system.
      */
-    async delete(uri) {
+    async delete(input) {
       mock.count.delete++;
-      return TMP;
+
+      const inputs = Array.isArray(input) ? input : [input];
+      const items = inputs.map((input) => formatUri(input)).filter(({ uri }) => memory[uri]);
+      const uris = items.map(({ uri }) => uri);
+      const locations = items.map(({ location }) => location);
+
+      items.forEach(({ uri }) => delete memory[uri]);
+      return { ok: true, status: 200, uris, locations };
     },
 
     /**
@@ -72,7 +108,26 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
-      return TMP;
+
+      const source = formatUri(sourceUri);
+      const target = formatUri(targetUri);
+      const ref = memory[source.uri];
+
+      if (!ref) {
+        const path = source.path;
+        const error: t.FsError = { type: 'FS/copy', message: 'Source not found', path };
+        return { ok: false, status: 404, source: source.uri, target: target.uri, error };
+      }
+
+      delete memory[source.uri];
+      memory[target.uri] = ref;
+
+      return {
+        ok: true,
+        status: 200,
+        source: source.uri,
+        target: target.uri,
+      };
     },
   };
 
