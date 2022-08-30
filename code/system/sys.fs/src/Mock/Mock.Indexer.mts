@@ -15,7 +15,7 @@ export function FsMockIndexer(options: Options = {}) {
     dir,
 
     async manifest(options = {}) {
-      mock.count.indexer++;
+      mock.count.manifest++;
 
       const manifest: t.DirManifest = {
         kind: 'dir',
@@ -30,7 +30,7 @@ export function FsMockIndexer(options: Options = {}) {
 
   const mock = {
     indexer,
-    count: { indexer: 0 },
+    count: { manifest: 0 },
     manifest(handler: MockManifestHandler) {
       _manifestHandler = handler;
       return mock;

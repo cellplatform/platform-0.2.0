@@ -18,7 +18,7 @@ describe('Mock: FsIndexer', () => {
     it('default (no handler)', async () => {
       const mock = FsMockIndexer();
       const res = await mock.indexer.manifest();
-      expect(mock.count.indexer).to.eql(1);
+      expect(mock.count.manifest).to.eql(1);
 
       expect(typeof res.dir.indexedAt).to.eql('number');
       expect(res.kind).to.eql('dir');
@@ -33,7 +33,7 @@ describe('Mock: FsIndexer', () => {
         e.manifest.hash.files = '1234';
       });
       const res = await mock.indexer.manifest();
-      expect(mock.count.indexer).to.eql(1);
+      expect(mock.count.manifest).to.eql(1);
 
       expect(res.hash.dir).to.eql('abcd');
       expect(res.hash.files).to.eql('1234');
