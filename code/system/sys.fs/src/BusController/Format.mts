@@ -1,4 +1,9 @@
 export const Format = {
+  /**
+   * TODO 🐷
+   * remove URI prefix concept? ("file:" for sure, "path:" ??)
+   */
+
   file: {
     trimPrefix(input: string) {
       return (input ?? '').trim().replace(/^file:\/\//, '');
