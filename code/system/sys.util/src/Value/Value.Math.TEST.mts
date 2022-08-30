@@ -22,11 +22,3 @@ describe('round', () => {
     expect(Value.round(1.156, 3)).to.equal(1.156);
   });
 });
-
-describe('random', () => {
-  it('is random within bounds (5..10)', () => {
-    const res = Value.random(5, 10);
-    expect(res).to.greaterThan(4);
-    expect(res).to.lessThan(11);
-  });
-});
