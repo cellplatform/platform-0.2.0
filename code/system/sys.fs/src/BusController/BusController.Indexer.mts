@@ -7,8 +7,8 @@ type FilesystemId = string;
  * Event controller.
  */
 export function BusControllerIndexer(args: {
-  bus: t.EventBus<t.SysFsEvent>;
   id: FilesystemId;
+  bus: t.EventBus<t.SysFsEvent>;
   driver: t.FsDriver;
   indexer: t.FsIndexer;
   events: t.SysFsEvents;

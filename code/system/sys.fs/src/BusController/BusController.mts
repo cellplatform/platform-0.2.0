@@ -28,8 +28,8 @@ export function BusController(args: {
   /**
    * Sub-controllers.
    */
-  BusControllerIo({ id, driver, bus, events });
-  BusControllerIndexer({ id, driver, bus, events, indexer });
+  BusControllerIo({ id, bus, driver, events });
+  BusControllerIndexer({ id, bus, driver, indexer, events });
   BusControllerChange({ id, bus, events });
 
   /**

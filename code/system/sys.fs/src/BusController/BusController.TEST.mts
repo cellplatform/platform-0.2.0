@@ -24,11 +24,14 @@ const MockSetup = (options: { dir?: string } = {}) => {
 
 const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir, id = `foo.${slug()}` } = options;
-  const bus = rx.bus<t.SysFsEvent>();
   const { driver, indexer } = MockSetup({ dir });
+
+  const bus = rx.bus<t.SysFsEvent>();
   const controller = BusController({ id, driver, bus, indexer });
+
   const events = controller.events;
   const { dispose } = events;
+
   return { bus, controller, events, dispose };
 };
 

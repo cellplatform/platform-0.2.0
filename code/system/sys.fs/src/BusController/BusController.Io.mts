@@ -10,8 +10,8 @@ type FilePath = string;
  */
 export function BusControllerIo(args: {
   id: FilesystemId;
-  driver: t.FsDriver;
   bus: t.EventBus<t.SysFsEvent>;
+  driver: t.FsDriver;
   events: t.SysFsEvents;
 }) {
   const { id, driver, bus, events } = args;
