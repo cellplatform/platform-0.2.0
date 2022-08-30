@@ -1,13 +1,14 @@
 import { IFsError } from './types.Error.mjs';
 
 type EmptyObject = Record<string, undefined>; // 🐷 NB: Used as a placeholder object.
+type DirPath = string;
 type FileAddress = string; // "foo/bar.txt"
 
 /**
  * Driver (API)
  * The low-level bridge into a specific platform file-system API
  */
-export type FsDriver = IFsMembers<
+export type FsDriver = { dir: DirPath } & IFsMembers<
   IFsInfo,
   IFsRead,
   IFsWrite,
@@ -48,7 +49,7 @@ type IFsMembers<
   delete: FsDeleteMethod<Delete>;
 };
 
-export type FsPathResolver = (uri: string) => IFsLocation;
+export type FsPathResolver = (uri: string) => FileAddress;
 export type FsInfoMethod<Info extends IFsMeta> = (address: FileAddress) => Promise<Info>;
 export type FsReadMethod<Read extends IFsRead> = (address: FileAddress) => Promise<Read>;
 export type FsWriteMethod<Write extends IFsWrite, WriteOptions extends IFsWriteOptions> = (
@@ -66,19 +67,8 @@ export type FsDeleteMethod<Delete extends IFsDelete> = (
 ) => Promise<Delete>;
 
 /**
- * File-system Location (Resolve)
- */
-export type IFsLocation = { path: string };
-
-/**
  * File (meta/info)
  */
-// type IFsMetaCommon = {
-//   path: string;
-//   location: string;
-//   hash: string;
-//   bytes: number;
-// };
 export type IFsMeta = {
   path: string;
   location: string;
@@ -90,43 +80,6 @@ export type IFsMeta = {
  * File (info + data)
  */
 export type IFsFileData<I extends IFsMeta = IFsMeta> = I & { data: Uint8Array };
-
-/**
- * Method Responses
- */
-// type IFsInfoCommon = {
-//   uri: string;
-//   exists: boolean;
-// };
-
-type IFsWriteCommon = {
-  uri: string;
-  ok: boolean;
-  status: number;
-  error?: IFsError;
-};
-
-type IFsDeleteCommon = {
-  ok: boolean;
-  status: number;
-  uris: string[];
-  locations: string[];
-  error?: IFsError;
-};
-
-type IFsCopyCommon = {
-  ok: boolean;
-  status: number;
-  error?: IFsError;
-  source: string;
-  target: string;
-};
-
-// export type IFsInfo = IFsInfoLocal;
-// export type IFsRead = IFsReadLocal;
-// export type IFsWrite = IFsWriteLocal;
-// export type IFsDelete = IFsDeleteLocal;
-// export type IFsCopy = IFsCopyLocal;
 
 /**
  * Local file-system (Extensions)
@@ -143,6 +96,24 @@ export type IFsRead = {
   error?: IFsError;
   file?: IFsFileData<IFsMeta>;
 };
-export type IFsWrite = IFsWriteCommon & { file: IFsFileData<IFsMeta> };
-export type IFsDelete = IFsDeleteCommon;
-export type IFsCopy = IFsCopyCommon;
+export type IFsWrite = {
+  uri: string;
+  ok: boolean;
+  status: number;
+  error?: IFsError;
+  file: IFsFileData<IFsMeta>;
+};
+export type IFsDelete = {
+  ok: boolean;
+  status: number;
+  uris: string[];
+  locations: string[];
+  error?: IFsError;
+};
+export type IFsCopy = {
+  ok: boolean;
+  status: number;
+  error?: IFsError;
+  source: string;
+  target: string;
+};
