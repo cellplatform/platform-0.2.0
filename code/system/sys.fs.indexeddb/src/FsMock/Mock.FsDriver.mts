@@ -4,7 +4,7 @@ import { t } from '../common/index.mjs';
  * A driver used for mocking the file-system while testing.
  */
 export function FsMockDriver(options: { dir?: string } = {}) {
-  const { dir = '/mock/' } = options;
+  const { dir = '/' } = options;
   const root = dir;
 
   const TMP = null as any; // TEMP 🐷
@@ -52,5 +52,10 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     },
   };
 
-  return { driver };
+  const mock = {
+    driver,
+    handleInfo() {},
+  };
+
+  return mock;
 }
