@@ -1,27 +1,6 @@
 import { BusEvents } from '../BusEvents/index.mjs';
-import { DEFAULT, describe, expect, FsMock, it, rx, slug, t } from '../TEST/index.mjs';
+import { DEFAULT, describe, expect, FsMock, it, rx, TestPrep, t } from '../TEST/index.mjs';
 import { BusController } from './index.mjs';
-
-const MockSetup = (options: { dir?: string } = {}) => {
-  const { dir } = options;
-  const driver = FsMock.Driver({ dir }).driver;
-  const indexer = FsMock.Indexer({ dir }).indexer;
-  return { driver, indexer };
-};
-
-const TestPrep = (options: { dir?: string; id?: string } = {}) => {
-  const { dir, id = `foo.${slug()}` } = options;
-  const mock = MockSetup({ dir });
-  const { driver, indexer } = mock;
-
-  const bus = rx.bus<t.SysFsEvent>();
-  const controller = BusController({ id, driver, bus, indexer });
-
-  const events = controller.events;
-  const { dispose } = events;
-
-  return { bus, controller, events, dispose, mock };
-};
 
 describe('BusController', function () {
   it('id (specified)', () => {
@@ -42,7 +21,7 @@ describe('BusController', function () {
     const bus = rx.bus<t.SysFsEvent>();
 
     const test = (id?: string) => {
-      const { driver, indexer } = MockSetup();
+      const { driver, indexer } = TestPrep();
       const controller = BusController({ id, driver, bus, indexer });
       expect(controller.id).to.eql(DEFAULT.FILESYSTEM_ID);
       controller.dispose();
@@ -55,7 +34,7 @@ describe('BusController', function () {
 
   it('filter (global)', async () => {
     const id = 'foo';
-    const { driver, indexer } = MockSetup();
+    const { driver, indexer } = TestPrep();
 
     let allow = true;
 
