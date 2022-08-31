@@ -148,6 +148,9 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     },
   };
 
+  /**
+   * Mock API wrapper of the in-memory <Driver>.
+   */
   const mock = {
     driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },

@@ -69,9 +69,13 @@ export function FsMockIndexer(options: Options = {}) {
     },
   };
 
+  /**
+   * Mock API wrapper of the in-memory <Indexer>.
+   */
   const mock = {
     indexer,
     count: { manifest: 0 },
+
     onManifestRequest(fn: MockManifestHandler) {
       _onManifestReq = fn;
       return mock;
