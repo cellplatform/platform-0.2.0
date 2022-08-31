@@ -1,5 +1,5 @@
-import { FsMockDriver } from './Mock.Driver.mjs';
-import { FsMockIndexer } from './Mock.Indexer.mjs';
+import { FsMockDriver, FsMockDriver as Driver } from './Mock.Driver.mjs';
+import { FsMockIndexer, FsMockIndexer as Indexer } from './Mock.Indexer.mjs';
 import { randomFile } from './util.mjs';
 export { DEFAULT } from './common.mjs';
 
@@ -25,8 +25,8 @@ export { FsMockDriver, FsMockIndexer };
  *
  */
 export const MemoryMock = {
-  Driver: FsMockDriver,
-  Indexer: FsMockIndexer,
+  Driver,
+  Indexer,
   randomFile,
 };
 
