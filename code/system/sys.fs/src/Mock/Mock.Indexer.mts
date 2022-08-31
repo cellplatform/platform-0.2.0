@@ -27,7 +27,7 @@ export function FsMockIndexer(options: Options = {}) {
 
       const formatPath = (path: string) => {
         path = Path.Uri.trimPrefix(path);
-        path = Path.trimSlashesStart(path);
+        path = Path.trimSlashes(path);
         return path;
       };
 

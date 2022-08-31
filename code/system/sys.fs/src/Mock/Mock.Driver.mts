@@ -15,6 +15,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
   const formatUri = (uri: string) => {
+    if (uri === 'path:') uri = 'path:.';
     const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
     const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
     const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
