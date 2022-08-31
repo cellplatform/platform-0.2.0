@@ -1,12 +1,12 @@
 import { BusEvents } from '../BusEvents/index.mjs';
-import { DEFAULT, describe, expect, FsMock, it, rx, TestPrep, t } from '../TEST/index.mjs';
+import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../TEST/index.mjs';
 import { BusController } from './index.mjs';
 
 describe('BusController', function () {
   it('id (specified)', () => {
     const bus = rx.bus<t.SysFsEvent>();
-    const driver = FsMock.Driver().driver;
-    const indexer = FsMock.Indexer().indexer;
+    const driver = MemoryMock.Driver().driver;
+    const indexer = MemoryMock.Indexer().indexer;
 
     const id = 'foo';
     const controller = BusController({ id, bus, driver, indexer });
@@ -76,9 +76,9 @@ describe('BusController', function () {
   it('controller.fs', async () => {
     const mock = TestPrep();
 
-    const file1 = FsMock.randomFile(10);
-    const file2 = FsMock.randomFile(50);
-    const file3 = FsMock.randomFile(100);
+    const file1 = MemoryMock.randomFile(10);
+    const file2 = MemoryMock.randomFile(50);
+    const file3 = MemoryMock.randomFile(100);
 
     const fs1 = mock.controller.fs();
     const fs2 = mock.controller.fs('images');

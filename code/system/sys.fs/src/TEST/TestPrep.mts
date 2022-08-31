@@ -1,4 +1,4 @@
-import { BusController, DEFAULT, FsMock, Path, rx, slug, t } from './common.mjs';
+import { BusController, DEFAULT, MemoryMock, Path, rx, slug, t } from './common.mjs';
 
 /**
  * Setup a mock FS driver and Controller.
@@ -7,8 +7,8 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir = DEFAULT.ROOT_DIR, id = `foo.${slug()}` } = options;
 
   const mocks = {
-    driver: FsMock.Driver({ dir }),
-    indexer: FsMock.Indexer({ dir }).onManifest((e) => {
+    driver: MemoryMock.Driver({ dir }),
+    indexer: MemoryMock.Indexer({ dir }).onManifest((e) => {
       const state = mocks.driver.state;
       Object.keys(state).forEach((uri) => {
         const path = Path.ensureSlashStart(Path.Uri.trimPrefix(uri));

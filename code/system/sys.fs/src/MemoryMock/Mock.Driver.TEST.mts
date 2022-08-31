@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../TEST/index.mjs';
-import { FsMockDriver, FsMock } from './index.mjs';
+import { FsMockDriver, MemoryMock } from './index.mjs';
 import { Path } from './common.mjs';
 
 describe('Mock: FsDriver', () => {
@@ -77,7 +77,7 @@ describe('Mock: FsDriver', () => {
       const uri = 'path:foo/bar/file.txt';
       const mock = FsMockDriver();
 
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write(uri, file.data);
 
       const res1 = await mock.driver.info(uri);
@@ -96,7 +96,7 @@ describe('Mock: FsDriver', () => {
     it('write', async () => {
       const mock = FsMockDriver();
       const path = '  foo/bar.png  ';
-      const png = FsMock.randomFile();
+      const png = MemoryMock.randomFile();
 
       const res = await mock.driver.write(path, png.data);
       expect(mock.count.write).to.eql(1);
@@ -130,7 +130,7 @@ describe('Mock: FsDriver', () => {
     it('read (200)', async () => {
       const mock = FsMockDriver();
       const path = 'foo/bar.png';
-      const png = FsMock.randomFile();
+      const png = MemoryMock.randomFile();
 
       await mock.driver.write(path, png.data);
       expect(mock.count.write).to.eql(1);
@@ -150,7 +150,7 @@ describe('Mock: FsDriver', () => {
 
     it('write/read - remove leading slash', async () => {
       const mock = FsMockDriver();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:/foo/bar.txt', file.data);
       expect((await mock.driver.read('path:foo/bar.txt')).status).to.eql(200);
     });
@@ -174,7 +174,7 @@ describe('Mock: FsDriver', () => {
       const mock = FsMockDriver();
 
       const path = '  foo/bar.png  ';
-      const png = FsMock.randomFile();
+      const png = MemoryMock.randomFile();
       await mock.driver.write(path, png.data);
 
       const res = await mock.driver.delete(path);
@@ -189,8 +189,8 @@ describe('Mock: FsDriver', () => {
     it('many files', async () => {
       const mock = FsMockDriver();
 
-      const file1 = FsMock.randomFile();
-      const file2 = FsMock.randomFile(500);
+      const file1 = MemoryMock.randomFile();
+      const file2 = MemoryMock.randomFile(500);
       await mock.driver.write('foo/bar.png', file1.data);
       await mock.driver.write('thing.pdf', file2.data);
 
@@ -208,7 +208,7 @@ describe('Mock: FsDriver', () => {
     it('copy file', async () => {
       const mock = FsMockDriver();
 
-      const png = FsMock.randomFile();
+      const png = MemoryMock.randomFile();
       await mock.driver.write('path:foo.png', png.data);
 
       const res = await mock.driver.copy('path:foo.png', 'path:images/bird.png');

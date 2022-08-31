@@ -1,4 +1,4 @@
-import { describe, it, DEFAULT, expect, Hash, t, TestPrep, FsMock } from '../TEST/index.mjs';
+import { describe, it, DEFAULT, expect, Hash, t, TestPrep, MemoryMock } from '../TEST/index.mjs';
 
 import { ManifestFiles } from '../Manifest/index.mjs';
 import { Path } from './common.mjs';
@@ -29,8 +29,8 @@ describe('BusController.Indexer', function () {
       const mock = TestPrep();
       const io = mock.events.io;
 
-      const src1 = FsMock.randomFile();
-      const src2 = FsMock.randomFile();
+      const src1 = MemoryMock.randomFile();
+      const src2 = MemoryMock.randomFile();
 
       const path1 = '/foo/data.json';
       const path2 = '/bar/tree.png';
@@ -63,7 +63,7 @@ describe('BusController.Indexer', function () {
     it('empty "dir" param variants (return root)', async () => {
       const mock = TestPrep();
       const io = mock.events.io;
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
       await write('/root.json');
@@ -94,7 +94,7 @@ describe('BusController.Indexer', function () {
     it('multiple sub-trees', async () => {
       const mock = TestPrep();
       const io = mock.events.io;
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
       await write('/root.json');
@@ -128,8 +128,8 @@ describe('BusController.Indexer', function () {
     it('hash comparison (SHA256)', async () => {
       const mock = TestPrep();
       const io = mock.events.io;
-      const src1 = FsMock.randomFile();
-      const src2 = FsMock.randomFile();
+      const src1 = MemoryMock.randomFile();
+      const src2 = MemoryMock.randomFile();
       const path1 = 'foo/data.json';
       const path2 = 'bar/tree.png';
 
@@ -152,7 +152,7 @@ describe('BusController.Indexer', function () {
     it('error: binary not an image, but named with an image extension ', async () => {
       const mock = TestPrep();
       const io = mock.events.io;
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
       await write('json.png'); // NB: Writing the JSON file with an image file-extension.
@@ -174,7 +174,7 @@ describe('BusController.Indexer', function () {
     const cachePrep = async () => {
       const mock = TestPrep();
       const io = mock.events.io;
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
       await write('/root.json');

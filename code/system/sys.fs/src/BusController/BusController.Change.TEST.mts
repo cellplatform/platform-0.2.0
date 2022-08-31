@@ -1,4 +1,4 @@
-import { describe, it, expect, t, TestPrep, FsMock } from '../TEST/index.mjs';
+import { describe, it, expect, t, TestPrep, MemoryMock } from '../TEST/index.mjs';
 
 describe('BusController.Change', function () {
   async function changeSetup<T extends t.SysFsChange>() {
@@ -6,7 +6,7 @@ describe('BusController.Change', function () {
     const { events, dispose } = mock;
     const io = events.io;
 
-    const file = FsMock.randomFile();
+    const file = MemoryMock.randomFile();
     const fired: T[] = [];
     events.changed$.subscribe((e) => fired.push(e.change as T));
 

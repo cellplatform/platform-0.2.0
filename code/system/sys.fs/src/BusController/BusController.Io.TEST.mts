@@ -1,4 +1,4 @@
-import { describe, expect, Filesystem, FsMock, it, rx, TestPrep } from '../TEST/index.mjs';
+import { describe, expect, Filesystem, MemoryMock, it, rx, TestPrep } from '../TEST/index.mjs';
 
 describe('BusController.IO', function () {
   describe('info', function () {
@@ -29,7 +29,7 @@ describe('BusController.IO', function () {
 
     it('file: single', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
       const path = '  foo/bar/kitty.jpg   '; // NB: spacing trimmed.
       await mock.events.io.write.fire({ path, hash: src.hash, data: src.data });
 
@@ -45,7 +45,7 @@ describe('BusController.IO', function () {
 
     it('dir: single', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const path = '  foo/bar/kitty.jpg   '; // NB: spacing trimmed.
       await mock.events.io.write.fire({ path, hash: src.hash, data: src.data });
@@ -61,7 +61,7 @@ describe('BusController.IO', function () {
 
     it('multiple paths', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       const path1 = '/foo/bar/kitty.jpg';
       const path2 = '/foo/bar/';
 
@@ -92,7 +92,7 @@ describe('BusController.IO', function () {
   describe('read', () => {
     it('reads file (single)', async () => {
       const mock = TestPrep();
-      const png = FsMock.randomFile();
+      const png = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', png.data);
 
       const res = await mock.events.io.read.get('images/tree.png');
@@ -107,8 +107,8 @@ describe('BusController.IO', function () {
 
     it('reads files (multiple)', async () => {
       const mock = TestPrep();
-      const image1 = FsMock.randomFile();
-      const image2 = FsMock.randomFile(500);
+      const image1 = MemoryMock.randomFile();
+      const image2 = MemoryMock.randomFile(500);
 
       await mock.driver.write('path:images/tree.png', image1.data);
       await mock.driver.write('path:images/kitten.jpg', image2.data);
@@ -141,7 +141,7 @@ describe('BusController.IO', function () {
   describe('write', function () {
     it('writes file (single)', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const { hash, data } = src;
       const path = 'foo/bar/kitten.jpg';
@@ -160,8 +160,8 @@ describe('BusController.IO', function () {
 
     it('write files (multiple)', async () => {
       const mock = TestPrep();
-      const src1 = FsMock.randomFile();
-      const src2 = FsMock.randomFile();
+      const src1 = MemoryMock.randomFile();
+      const src2 = MemoryMock.randomFile();
 
       const PATH = {
         kitten: 'foo/bar/kitten.jpg',
@@ -210,7 +210,7 @@ describe('BusController.IO', function () {
 
     it('delete (single)', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
       const { hash, data } = src;
       const path = 'foo/bar/kitten.jpg';
 
@@ -230,8 +230,8 @@ describe('BusController.IO', function () {
     it('delete (multiple)', async () => {
       const mock = TestPrep();
 
-      const src1 = FsMock.randomFile();
-      const src2 = FsMock.randomFile();
+      const src1 = MemoryMock.randomFile();
+      const src2 = MemoryMock.randomFile();
 
       const path1 = 'foo/bar/milk.jpg';
       const path2 = 'foo/bar/green.png';
@@ -258,7 +258,7 @@ describe('BusController.IO', function () {
   describe('copy', function () {
     it('copy (single)', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
       const { hash, data } = src;
       const PATH = {
         source: 'foo/bar/kitten.jpg',
@@ -282,7 +282,7 @@ describe('BusController.IO', function () {
 
     it('copy (multiple)', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
       const { hash, data } = src;
       const PATH1 = {
         source: 'foo/bar/kitten.jpg',
@@ -330,7 +330,7 @@ describe('BusController.IO', function () {
   describe('move (copy + delete)', function () {
     it('move', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
       const { hash, data } = src;
       const PATH = {
         source: 'foo/bar/kitten.jpg',

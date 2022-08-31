@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../TEST/index.mjs';
-import { FsMockIndexer, FsMock } from './index.mjs';
+import { FsMockIndexer, MemoryMock } from './index.mjs';
 import { ManifestHash } from '../Manifest/index.mjs';
 
 describe('Mock: FsIndexer', () => {
@@ -28,12 +28,12 @@ describe('Mock: FsIndexer', () => {
     });
 
     it('inject files', async () => {
-      const png = FsMock.randomFile(50);
+      const png = MemoryMock.randomFile(50);
       const mock = FsMockIndexer().onManifest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png')
           .addFile('foo/bar.png', png.data) // NB: repeat - file replaced
-          .addFile('apple.txt', FsMock.randomFile().data);
+          .addFile('apple.txt', MemoryMock.randomFile().data);
       });
 
       const res = await mock.indexer.manifest();
@@ -48,7 +48,7 @@ describe('Mock: FsIndexer', () => {
     });
 
     it('inject files: options{ dir, filter }', async () => {
-      const file = FsMock.randomFile(50);
+      const file = MemoryMock.randomFile(50);
       const mock = FsMockIndexer().onManifest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png', file.data)

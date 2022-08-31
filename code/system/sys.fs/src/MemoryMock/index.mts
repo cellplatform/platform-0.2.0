@@ -5,8 +5,10 @@ export { DEFAULT } from './common.mjs';
 
 export { FsMockDriver, FsMockIndexer };
 
-export const FsMock = {
+export const MemoryMock = {
   Indexer: FsMockIndexer,
   Driver: FsMockDriver,
   randomFile,
 };
+
+export default MemoryMock;

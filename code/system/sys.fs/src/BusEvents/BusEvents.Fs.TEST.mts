@@ -1,5 +1,5 @@
 // import { expect, expectError, TestFs, TestPrep, beforeEach } from '../TEST/index.mjs';
-import { expect, expectError, describe, it, FsMock, TestPrep } from '../TEST/index.mjs';
+import { expect, expectError, describe, it, MemoryMock, TestPrep } from '../TEST/index.mjs';
 
 // import { stringify, Path, t, Hash, ManifestFiles, DEFAULT } from './common.mjs';
 import { t, rx, Path, Time, Hash, cuid, slug, DEFAULT } from './common.mjs';
@@ -10,7 +10,7 @@ describe('BusEvents.Fs', () => {
   describe('sub-directory', () => {
     it('normalise "root" sub-directory', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const test = async (dir: string) => {
@@ -49,7 +49,7 @@ describe('BusEvents.Fs', () => {
     it('deep', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:foo/bar/tree.png', file.data);
 
       // await mock.copy('static.test/child/tree.png', 'foo/bar/tree.png');
@@ -74,7 +74,7 @@ describe('BusEvents.Fs', () => {
     it('path variants', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:foo/bar/tree.png', file.data);
 
       const test = async (path: string, exists: boolean) => {
@@ -97,7 +97,7 @@ describe('BusEvents.Fs', () => {
     it('sub-directory not specified', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:foo/bar/tree.png', file.data);
 
       const test = async (path: string) => {
@@ -119,7 +119,7 @@ describe('BusEvents.Fs', () => {
     it('file', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const info = await fs.info('///images/tree.png');
@@ -149,7 +149,7 @@ describe('BusEvents.Fs', () => {
     it('dir', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/foo/tree.png', file.data);
 
       const info = await fs.info('///images/foo/');
@@ -164,7 +164,7 @@ describe('BusEvents.Fs', () => {
 
     it('within "sub/directory"', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const fs1 = mock.events.fs();
@@ -192,7 +192,7 @@ describe('BusEvents.Fs', () => {
     it('file: true', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:foo/bar.json', file.data);
 
       const test = async (path: string) => {
@@ -225,7 +225,7 @@ describe('BusEvents.Fs', () => {
 
     it('dir', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       const fs = mock.events.fs();
       await mock.driver.write('path:foo/bar/data.json', file.data);
 
@@ -254,7 +254,7 @@ describe('BusEvents.Fs', () => {
 
     it('within "sub/directory"', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const root = mock.events.fs();
@@ -274,7 +274,7 @@ describe('BusEvents.Fs', () => {
     it('is.file', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const test = async (path: string, expected: boolean) => {
@@ -293,7 +293,7 @@ describe('BusEvents.Fs', () => {
     it('is.dir', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const test = async (path: string, expected: boolean) => {
@@ -325,7 +325,7 @@ describe('BusEvents.Fs', () => {
     it('read: files', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
       await mock.driver.write('path:images/foo/tree.png', file.data);
 
@@ -347,7 +347,7 @@ describe('BusEvents.Fs', () => {
     it('read: fs.dir("child").manifest', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       await mock.driver.write('path:root.png', file.data);
       await mock.driver.write('path:images/tree.png', file.data);
@@ -373,7 +373,7 @@ describe('BusEvents.Fs', () => {
     it('sub-directory (parameter)', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       await mock.driver.write('path:root.png', file.data);
       await mock.driver.write('path:images/tree.png', file.data);
@@ -400,7 +400,7 @@ describe('BusEvents.Fs', () => {
     it('filter', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       await mock.driver.write('path:images/tree.png', file.data);
       await mock.driver.write('path:images/foo/willow.png', file.data);
@@ -419,7 +419,7 @@ describe('BusEvents.Fs', () => {
       it('cache: true', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
         await mock.driver.write('path:images/tree.png', file.data);
 
         // await fs.write('images/tree.png', src.data);
@@ -443,7 +443,7 @@ describe('BusEvents.Fs', () => {
       it('cache: "remove"', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
         await mock.driver.write('path:images/tree.png', file.data);
 
         // const mock =  TestPrep();
@@ -467,7 +467,7 @@ describe('BusEvents.Fs', () => {
       it('cache: "force"', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
         await mock.driver.write('path:tree.png', file.data);
 
         const paths = (manifest?: t.DirManifest) =>
@@ -510,7 +510,7 @@ describe('BusEvents.Fs', () => {
       it('cache: custom filename', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
         await mock.driver.write('path:tree.png', file.data);
 
         const cachefile = 'index.json';
@@ -543,7 +543,7 @@ describe('BusEvents.Fs', () => {
     it('<undefined> (does not exist)', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:tree.png', file.data);
 
       const res = await fs.read('404.png');
@@ -555,7 +555,7 @@ describe('BusEvents.Fs', () => {
     it('binary: Uint8Array', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const test = async (path: string) => {
@@ -572,7 +572,7 @@ describe('BusEvents.Fs', () => {
 
     it('read within "/sub-directory"', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       await mock.driver.write('path:images/tree.png', file.data);
 
       const test = async (dir: string, path: string) => {
@@ -595,7 +595,7 @@ describe('BusEvents.Fs', () => {
       const test = async (path: string) => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const src = FsMock.randomFile();
+        const src = MemoryMock.randomFile();
 
         const exists = async () => await mock.fileExists(path);
         expect(await exists()).to.eql(false); // Not yet copied.
@@ -685,7 +685,7 @@ describe('BusEvents.Fs', () => {
 
     it('write: within "/sub-directory"', async () => {
       const mock = TestPrep();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       const root = mock.events.fs();
       const subdir = mock.events.fs('images');
@@ -701,7 +701,7 @@ describe('BusEvents.Fs', () => {
       it('throw: timeout', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs({ timeout: 10 });
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
 
         mock.controller.dispose(); // NB: Kill the controller so the operation times out.
 
@@ -714,7 +714,7 @@ describe('BusEvents.Fs', () => {
       it.skip('throw: attempt "step up" outside the root directory', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const file = FsMock.randomFile();
+        const file = MemoryMock.randomFile();
 
         // const mock =  TestPrep();
         // const src = await mock.readFile('static.test/data.json');
@@ -740,7 +740,7 @@ describe('BusEvents.Fs', () => {
     it('copy: binary', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const PATH = {
         source: 'images/tree.png',
@@ -759,7 +759,7 @@ describe('BusEvents.Fs', () => {
     it('copy: "sub/directory"', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs('images');
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       const PATH = {
         source: 'tree.png',
@@ -779,7 +779,7 @@ describe('BusEvents.Fs', () => {
     it('move: binary', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs('images');
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       const PATH = {
         source: 'images/tree.png',
@@ -800,7 +800,7 @@ describe('BusEvents.Fs', () => {
     it('move: "sub/directory"', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs('images');
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
 
       const PATH = {
         source: 'tree.png',
@@ -821,7 +821,7 @@ describe('BusEvents.Fs', () => {
     it('delete: binary', async () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
-      const file = FsMock.randomFile();
+      const file = MemoryMock.randomFile();
       const path = 'images/tree.png';
 
       await fs.write(path, file.data);
@@ -835,7 +835,7 @@ describe('BusEvents.Fs', () => {
 
     it('delete: "sub/directory"', async () => {
       const mock = TestPrep();
-      const src = FsMock.randomFile();
+      const src = MemoryMock.randomFile();
 
       const fs1 = mock.events.fs();
       const fs2 = mock.events.fs('images');
