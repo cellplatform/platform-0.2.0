@@ -16,8 +16,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
   const formatUri = (uri: string) => {
     const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
-    const location = Path.toAbsoluteLocation({ root, path: content });
-    const path = Path.ensureSlashStart(content);
+    const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
+    const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
     uri = Path.Uri.ensurePrefix(content);
     return { uri, path, location };
   };
@@ -26,6 +26,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     if (state[uri]) return 'file';
 
     const possibleDir = `${Path.Uri.trimPrefix(uri).replace(/\/*$/, '')}/`;
+    if (possibleDir === './') return 'dir';
+
     const keys = Object.keys(state).map((key) => Path.Uri.trimPrefix(key));
     for (const key of keys) {
       if (key.startsWith(possibleDir) && key !== possibleDir) return 'dir';
@@ -46,11 +48,13 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const { uri, path, location } = formatUri(address);
       const ref = state[uri];
+      const kind = toKind(uri);
+      const exists = kind === 'dir' ? true : Boolean(ref);
 
       const info: t.IFsInfo = {
         uri,
-        exists: Boolean(ref),
-        kind: toKind(uri),
+        exists,
+        kind,
         path,
         location,
         hash: ref?.hash ?? '',

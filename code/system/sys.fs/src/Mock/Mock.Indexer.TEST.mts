@@ -1,5 +1,6 @@
 import { describe, it, expect } from '../TEST/index.mjs';
-import { FsMockIndexer } from './index.mjs';
+import { FsMockIndexer, FsMock } from './index.mjs';
+import { ManifestHash } from '../Manifest/index.mjs';
 
 describe('Mock: FsIndexer', () => {
   describe('dir', () => {
@@ -15,28 +16,62 @@ describe('Mock: FsIndexer', () => {
   });
 
   describe('manifest', () => {
-    it('default (no handler)', async () => {
+    it('default no files', async () => {
       const mock = FsMockIndexer();
       const res = await mock.indexer.manifest();
       expect(mock.count.manifest).to.eql(1);
 
       expect(typeof res.dir.indexedAt).to.eql('number');
       expect(res.kind).to.eql('dir');
-      expect(res.hash.dir).to.eql('');
-      expect(res.hash.files).to.eql('');
+      expect(res.hash).to.eql(ManifestHash.dir(res.dir, res.files));
       expect(res.files).to.eql([]);
     });
 
-    it('override manifest handler', async () => {
+    it('inject files', async () => {
+      const png = FsMock.randomFile(50);
       const mock = FsMockIndexer().onManifest((e) => {
-        e.manifest.hash.dir = 'abcd';
-        e.manifest.hash.files = '1234';
+        e.addFile('zoo.jpg')
+          .addFile('/foo/bar.png')
+          .addFile('foo/bar.png', png.data) // NB: repeat - file replaced
+          .addFile('apple.txt', FsMock.randomFile().data);
       });
+
       const res = await mock.indexer.manifest();
       expect(mock.count.manifest).to.eql(1);
 
-      expect(res.hash.dir).to.eql('abcd');
-      expect(res.hash.files).to.eql('1234');
+      expect(res.kind).to.eql('dir');
+      expect(res.files.length).to.eql(3);
+      expect(res.files.map((e) => e.path)).to.eql(['apple.txt', 'foo/bar.png', 'zoo.jpg']);
+      expect(res.files[1].filehash).to.eql(png.hash);
+      expect(res.hash.files).to.eql(ManifestHash.files(res.files));
+      expect(res.hash).to.eql(ManifestHash.dir(res.dir, res.files));
+    });
+
+    it('inject files: options{ dir, filter }', async () => {
+      const file = FsMock.randomFile(50);
+      const mock = FsMockIndexer().onManifest((e) => {
+        e.addFile('zoo.jpg')
+          .addFile('/foo/bar.png', file.data)
+          .addFile('foo/baz.jpg', file.data) // NB: repeat - replace
+          .addFile('apple.txt');
+      });
+
+      const res1 = await mock.indexer.manifest({});
+      const res2 = await mock.indexer.manifest({ dir: 'foo' });
+      const res3 = await mock.indexer.manifest({ dir: '/foo' });
+      const res4 = await mock.indexer.manifest({
+        dir: '/foo',
+        filter: ({ path }) => path.endsWith('.jpg'),
+      });
+
+      expect(res1.files.length).to.eql(4);
+      expect(res2.files.length).to.eql(2);
+      expect(res3.files.length).to.eql(2);
+      expect(res4.files.length).to.eql(1);
+
+      expect(res2.files).to.eql(res3.files);
+      expect(res2.files.every((file) => file.path.startsWith('foo/'))).to.eql(true);
+      expect(res4.files[0].path).to.eql('foo/baz.jpg');
     });
   });
 });

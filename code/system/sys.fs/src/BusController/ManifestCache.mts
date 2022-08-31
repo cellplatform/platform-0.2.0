@@ -14,7 +14,7 @@ export function ManifestCache(args: { driver: t.FsDriver; dir: string; filename?
     path,
 
     async dirExists() {
-      const uri = `path:${dir.substring(driver.dir.length)}`;
+      const uri = `path:${dir.substring(driver.dir.length) || '.'}`;
       return (await driver.info(uri)).exists;
     },
 

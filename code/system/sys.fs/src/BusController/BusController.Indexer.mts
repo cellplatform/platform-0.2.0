@@ -46,7 +46,8 @@ export function BusControllerIndexer(args: {
 
     const toManifest = async (path?: string): Promise<t.SysFsManifestDirResponse> => {
       const dir = Path.ensureSlashEnd(path ? Path.join(driver.dir, path) : driver.dir);
-      const cache = ManifestCache({ driver: driver, dir, filename: cachefile });
+
+      const cache = ManifestCache({ driver, dir, filename: cachefile });
       try {
         if (e.cache === true) {
           const manifest = await cache.read();

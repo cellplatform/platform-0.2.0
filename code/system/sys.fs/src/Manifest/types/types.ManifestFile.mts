@@ -16,7 +16,7 @@ export type ManifestFile = {
    *    the target URL will be a "signed link" required to access
    *    the access-controlled S3 resource.
    */
-  public?: boolean;
+  // public?: boolean;
 };
 
 /**

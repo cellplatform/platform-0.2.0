@@ -24,8 +24,8 @@ describe('Mock: FsDriver', () => {
 
   describe('info', () => {
     it('no handler', async () => {
-      const uri = '  path:foo/bar.txt  ';
       const mock = FsMockDriver();
+      const uri = '  path:foo/bar.txt  ';
       const res = await mock.driver.info(uri);
 
       expect(mock.count.info).to.eql(1);
@@ -35,6 +35,18 @@ describe('Mock: FsDriver', () => {
       expect(res.kind).to.eql('unknown');
       expect(res.path).to.eql('/foo/bar.txt');
       expect(res.location).to.eql('file:///mock/foo/bar.txt');
+      expect(res.hash).to.eql('');
+      expect(res.bytes).to.eql(-1);
+    });
+
+    it('root directory ("path:.")', async () => {
+      const mock = FsMockDriver();
+      const res = await mock.driver.info('  path:.  ');
+
+      expect(res.exists).to.eql(true);
+      expect(res.uri).to.eql('path:.');
+      expect(res.path).to.eql('/');
+      expect(res.location).to.eql('file:///mock/');
       expect(res.hash).to.eql('');
       expect(res.bytes).to.eql(-1);
     });
