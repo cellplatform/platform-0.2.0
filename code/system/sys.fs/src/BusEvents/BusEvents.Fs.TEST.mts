@@ -1,10 +1,6 @@
-// import { expect, expectError, TestFs, TestPrep, beforeEach } from '../TEST/index.mjs';
-import { expect, expectError, describe, it, MemoryMock, TestPrep } from '../TEST/index.mjs';
-
-// import { stringify, Path, t, Hash, ManifestFiles, DEFAULT } from './common.mjs';
-import { t, rx, Path, Time, Hash, cuid, slug, DEFAULT } from './common.mjs';
 import { ManifestFiles } from '../Manifest/index.mjs';
-import { BusEvents } from './index.mjs';
+import { describe, expect, expectError, it, MemoryMock, TestPrep } from '../TEST/index.mjs';
+import { DEFAULT, Hash, Json, t } from './common.mjs';
 
 describe('BusEvents.Fs', () => {
   describe('sub-directory', () => {
@@ -615,71 +611,45 @@ describe('BusEvents.Fs', () => {
       mock.dispose();
     });
 
-    describe('simple types', () => {
-      const test = async (data: t.Json, expected: string) => {
+    describe('simple types (JSON primitives)', () => {
+      const test = async (data: t.Json | undefined, expected: string) => {
         const mock = TestPrep();
-        // await mock.reset();
-
-        const path = 'my-file';
-        // const targetPath = nodefs.join(mock.rootDir, path);
-        const targetPath = path;
         const fs = mock.events.fs();
+        const path = 'my-file';
 
-        expect(await mock.fileExists(targetPath)).to.eql(false);
-
+        expect(await mock.fileExists(path)).to.eql(false);
         const res = await fs.write(path, data);
-        expect(await mock.fileExists(targetPath)).to.eql(true);
-
-        // const file = await mock.readFile(targetPath);
+        expect(await mock.fileExists(path)).to.eql(true);
 
         const file = (await mock.driver.read(path)).file as t.IFsFileData;
         const hash = Hash.sha256(file.data);
         expect(file.hash).to.eql(hash);
         expect(res.hash).to.eql(hash);
 
-        // const data = file.data
-
-        // console.log('file', file);
         const decoded = new TextDecoder().decode(file.data);
-        // console.log('f', decoded, data, decoded === data, decoded === expected);
-        console.log('-------------------------------------------');
-        console.log('decoded', `|${decoded}|`);
-        console.log('expected', expected);
-
-        // expect(new TextDecoder().decode(file.data)).to.eql(expected);
+        expect(decoded).to.eql(expected);
 
         mock.dispose();
       };
 
-      it.skip('write: string', async () => {
-        await test('hello', 'hello');
-      });
+      it('write: undefined', async () => await test(undefined, ''));
+      it('write: null', async () => await test(null, 'null'));
+      it('write: string', async () => await test('hello', 'hello'));
+      it('write: number', async () => await test(1234, '1234'));
 
-      it.skip('write: number', async () => {
-        await test(1234, '1234');
-      });
-
-      it.skip('write: boolean', async () => {
+      it('write: boolean', async () => {
         await test(true, 'true');
         await test(false, 'false');
       });
 
-      it.skip('write: null', async () => {
-        // await test(null, 'null');
+      it('write: JSON [array]', async () => {
+        const json = [1, 2, 3];
+        await test(json, Json.stringify(json));
       });
 
-      it.skip('write: undefined', async () => {
-        // await test(undefined, 'undefined');
-      });
-
-      it.skip('write: JSON [array]', async () => {
-        // const json = [1, 2, 3];
-        // await test(json, stringify(json));
-      });
-
-      it.skip('write: JSON {object}', async () => {
-        // const json = { msg: 'hello', count: 123 };
-        // await test(json, stringify(json));
+      it('write: JSON {object}', async () => {
+        const json = { msg: 'hello', count: 123 };
+        await test(json, Json.stringify(json));
       });
     });
 

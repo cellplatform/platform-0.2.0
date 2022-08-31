@@ -17,7 +17,7 @@ export function BusEventsFs(args: {
   const formatPath = (path: string) => {
     path = Path.trim(path);
     path = Path.Uri.trimPrefix(path);
-    path = join(subdir, path);
+    path = Path.join(subdir, path);
     path = Path.trimSlashesStart(path);
     return path;
   };
@@ -83,13 +83,11 @@ export function BusEventsFs(args: {
     path = formatPath(path);
     const data = await toUint8Array(input);
     const hash = Hash.sha256(data);
-    const bytes = data.byteLength;
 
     const res = await io.write.fire({ path, hash, data });
-    if (res.error) {
-      throw new Error(res.error.message);
-    }
+    if (res.error) throw new Error(res.error.message);
 
+    const bytes = data.byteLength;
     return { hash, bytes };
   };
 
@@ -187,7 +185,7 @@ export function BusEventsFs(args: {
    * Scope: child directory.
    */
   const dir: t.Fs['dir'] = (path) => {
-    const dir = join(subdir, Path.trimSlashesStart(path));
+    const dir = Path.join(subdir, Path.trimSlashesStart(path));
     return BusEventsFs({ dir, index, io, toUint8Array });
   };
 
