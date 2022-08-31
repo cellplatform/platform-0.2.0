@@ -232,8 +232,6 @@ describe('BusController.Indexer', function () {
       expect(await loadCachedFile()).to.eql(undefined);
       const res1 = await mock.events.index.manifest.get({ cache: true });
 
-      // console.log('mock.drver.state', Object.keys(mock.mocks.driver.state));
-
       expect(asFiles(res1.dirs[0])).to.eql(all);
       expect(await mock.fileExists(cachefile)).to.eql(true);
       expect(await loadCachedFile()).to.eql(res1.dirs[0].manifest);
@@ -243,7 +241,8 @@ describe('BusController.Indexer', function () {
       const json = await loadCachedFile();
       (json?.files[0] as any).foobar = 'my-test';
       await mock.driver.write(cachefile, new TextEncoder().encode(JSON.stringify(json)));
-      // // Requery and ensure the cached version is returned.
+
+      // Requery and ensure the cached version is returned.
       const res2 = await mock.events.index.manifest.get({ cache: true });
       expect((res2.dirs[0].manifest.files[0] as any).foobar).to.eql('my-test');
 
