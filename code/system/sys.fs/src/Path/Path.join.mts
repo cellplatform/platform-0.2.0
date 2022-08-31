@@ -1,3 +1,5 @@
+import { trimSlashes } from './Path.trim.mjs';
+
 /**
  * Join multiple parts into a single "/" delimited path.
  * NB:
@@ -32,4 +34,22 @@ export function join(...segments: string[]) {
   }
 
   return res.join('/');
+}
+
+/**
+ * Determine if the given path is within scope.
+ */
+export function isWithin(root: string, path: string) {
+  root = trimSlashes(root);
+  path = trimSlashes(path);
+
+  if (root === '.') root = '';
+  if (root === '..' || includesStepup(root)) return false;
+
+  const filename = path.substring(path.lastIndexOf('/') + 1);
+  return join(root, path).length > filename.length;
+}
+
+function includesStepup(path: string) {
+  return path.includes('../') || path.includes('/..');
 }
