@@ -75,11 +75,8 @@ export function BusControllerIo(args: {
     const address = Path.Uri.ensurePrefix(file.path);
     const res = await driver.write(address, data);
     const error: MaybeError = res.error ? { code: 'write', message: res.error.message } : undefined;
-    return {
-      path: stripDirRoot(res.file.path),
-      hash,
-      error,
-    };
+    const path = stripDirRoot(res.file.path);
+    return { path, hash, error };
   };
 
   const copyFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileCopyResponse> => {
