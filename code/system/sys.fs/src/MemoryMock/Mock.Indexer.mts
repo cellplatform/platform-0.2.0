@@ -13,7 +13,7 @@ export type MockManifestHandlerArgs = {
 export function FsMockIndexer(options: Options = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
 
-  let _manifestHandler: undefined | MockManifestHandler;
+  let _onManifestReq: undefined | MockManifestHandler;
 
   const indexer: t.FsIndexer = {
     dir,
@@ -31,7 +31,7 @@ export function FsMockIndexer(options: Options = {}) {
         return path;
       };
 
-      if (_manifestHandler) {
+      if (_onManifestReq) {
         const args: MockManifestHandlerArgs = {
           options,
           addFile(path, data) {
@@ -48,7 +48,7 @@ export function FsMockIndexer(options: Options = {}) {
           },
         };
 
-        _manifestHandler(args);
+        _onManifestReq(args);
       }
 
       if (options.dir) {
@@ -72,8 +72,8 @@ export function FsMockIndexer(options: Options = {}) {
   const mock = {
     indexer,
     count: { manifest: 0 },
-    onManifestRequest(handler: MockManifestHandler) {
-      _manifestHandler = handler;
+    onManifestRequest(fn: MockManifestHandler) {
+      _onManifestReq = fn;
       return mock;
     },
   };

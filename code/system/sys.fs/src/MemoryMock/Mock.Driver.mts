@@ -10,7 +10,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
   const root = dir;
 
-  let _infoHandler: undefined | MockInfoHandler;
+  let _onInfoReq: undefined | MockInfoHandler;
   const resolve = PathResolverFactory({ dir });
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
@@ -62,7 +62,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
         bytes: ref?.data.byteLength ?? -1,
       };
 
-      _infoHandler?.({ uri, info });
+      _onInfoReq?.({ uri, info });
       return info;
     },
 
@@ -156,8 +156,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       return { ...state };
     },
 
-    onInfoRequest(handler: MockInfoHandler) {
-      _infoHandler = handler;
+    onInfoRequest(fn: MockInfoHandler) {
+      _onInfoReq = fn;
       return mock;
     },
   };
