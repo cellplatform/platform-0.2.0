@@ -33,14 +33,14 @@ export const Stream = {
   },
 
   /**
-   * WEB: Read the given stream into an [Uint8Array].
+   * Read the given stream into an [Uint8Array].
    */
-  async toUint8Array(input: ReadableStream | t.Json | Uint8Array): Promise<Uint8Array> {
+  async toUint8Array(input: ReadableStream | Uint8Array | t.Json | undefined): Promise<Uint8Array> {
     if (input instanceof Uint8Array) return input;
-    const isStream = Stream.isReadableStream(input);
+    if (input === undefined) return Stream.encode();
 
     // Process JSON.
-    if (!isStream) {
+    if (!Stream.isReadableStream(input)) {
       const json = typeof input === 'string' ? input : Json.stringify(input as t.Json);
       return Stream.encode(json);
     }
