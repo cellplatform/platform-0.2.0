@@ -12,13 +12,26 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
   let _infoHandler: undefined | MockInfoHandler;
   const resolve = PathResolverFactory({ dir });
-  const memory: { [uri: string]: { data: Uint8Array; hash: string } } = {};
+  const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
   const formatUri = (uri: string) => {
-    uri = Path.Uri.ensurePrefix(uri);
-    const path = Path.Uri.trimPrefix(uri);
-    const location = Path.toAbsoluteLocation({ root, path });
+    const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
+    const location = Path.toAbsoluteLocation({ root, path: content });
+    const path = Path.ensureSlashStart(content);
+    uri = Path.Uri.ensurePrefix(content);
     return { uri, path, location };
+  };
+
+  const toKind = (uri: string): t.IFsInfo['kind'] => {
+    if (state[uri]) return 'file';
+
+    const possibleDir = `${Path.Uri.trimPrefix(uri).replace(/\/*$/, '')}/`;
+    const keys = Object.keys(state).map((key) => Path.Uri.trimPrefix(key));
+    for (const key of keys) {
+      if (key.startsWith(possibleDir) && key !== possibleDir) return 'dir';
+    }
+
+    return 'unknown';
   };
 
   const driver: t.FsDriver = {
@@ -32,12 +45,12 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.info++;
 
       const { uri, path, location } = formatUri(address);
-      const ref = memory[uri];
+      const ref = state[uri];
 
       const info: t.IFsInfo = {
         uri,
         exists: Boolean(ref),
-        kind: 'unknown',
+        kind: toKind(uri),
         path,
         location,
         hash: ref?.hash ?? '',
@@ -55,7 +68,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.read++;
 
       const { uri, path, location } = formatUri(address);
-      const ref = memory[uri];
+      const ref = state[uri];
 
       if (ref) {
         const { hash, data } = ref;
@@ -84,7 +97,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const file: t.IFsFileData = { path, location, hash, bytes, data };
       const res: t.IFsWrite = { uri, ok: true, status: 200, file };
 
-      memory[uri] = { data, hash };
+      state[uri] = { data, hash };
       return res;
     },
 
@@ -95,11 +108,11 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const inputs = Array.isArray(input) ? input : [input];
-      const items = inputs.map((input) => formatUri(input)).filter(({ uri }) => memory[uri]);
+      const items = inputs.map((input) => formatUri(input)).filter(({ uri }) => state[uri]);
       const uris = items.map(({ uri }) => uri);
       const locations = items.map(({ location }) => location);
 
-      items.forEach(({ uri }) => delete memory[uri]);
+      items.forEach(({ uri }) => delete state[uri]);
       return { ok: true, status: 200, uris, locations };
     },
 
@@ -111,16 +124,15 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const source = formatUri(sourceUri);
       const target = formatUri(targetUri);
-      const ref = memory[source.uri];
+      const ref = state[source.uri];
 
       if (!ref) {
         const path = source.path;
-        const error: t.FsError = { type: 'FS/copy', message: 'Source not found', path };
+        const error: t.FsError = { type: 'FS/copy', message: 'Source file not found', path };
         return { ok: false, status: 404, source: source.uri, target: target.uri, error };
       }
 
-      delete memory[source.uri];
-      memory[target.uri] = ref;
+      state[target.uri] = ref;
 
       return {
         ok: true,
@@ -134,6 +146,10 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const mock = {
     driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
+
+    get state() {
+      return { ...state };
+    },
 
     onInfo(handler: MockInfoHandler) {
       _infoHandler = handler;

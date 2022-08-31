@@ -17,7 +17,12 @@ export function BusControllerIo(args: {
   const { id, driver, bus, events } = args;
 
   const root = Path.ensureSlashStart(driver.dir);
-  const stripDirPrefix = (path: FilePath) => Path.join(root, Path.Uri.trimPrefix(path));
+  const stripDirRoot = (path: FilePath) => {
+    path = Path.Uri.trimPrefix(path);
+    path = Path.ensureSlashStart(path);
+    path = path.startsWith(root) ? path.substring(root.length) : path;
+    return Path.ensureSlashStart(path);
+  };
 
   const getFileInfo = async (filepath: FilePath): Promise<t.SysFsPathInfo> => {
     try {
@@ -25,8 +30,10 @@ export function BusControllerIo(args: {
       const uri = Path.Uri.ensurePrefix(filepath);
       const res = await driver.info(uri);
       const { kind, exists, hash, bytes } = res;
-      let path = stripDirPrefix(res.path);
+
+      let path = stripDirRoot(res.path);
       if (kind === 'dir') path = `${path}/`;
+
       return { kind, path, exists, hash, bytes };
     } catch (err: any) {
       const error: t.SysFsError = { code: 'info', message: err.message };
@@ -36,7 +43,7 @@ export function BusControllerIo(args: {
 
   const readFile = async (path: string): Promise<t.SysFsFileReadResponse> => {
     const address = Path.Uri.ensurePrefix(path);
-    path = Path.Uri.trimPrefix(path);
+    path = stripDirRoot(path);
 
     const info = await driver.info(address);
     if (!info.exists) {
@@ -57,6 +64,7 @@ export function BusControllerIo(args: {
     }
 
     const { hash, data } = res.file;
+
     return {
       file: { path: res.file.path, data, hash },
     };
@@ -68,7 +76,7 @@ export function BusControllerIo(args: {
     const res = await driver.write(address, data);
     const error: MaybeError = res.error ? { code: 'write', message: res.error.message } : undefined;
     return {
-      path: stripDirPrefix(res.file.path),
+      path: stripDirRoot(res.file.path),
       hash,
       error,
     };
@@ -81,8 +89,8 @@ export function BusControllerIo(args: {
     const info = await driver.info(target);
     const error: MaybeError = res.error ? { code: 'copy', message: res.error.message } : undefined;
     return {
-      source: stripDirPrefix(file.source),
-      target: stripDirPrefix(file.target),
+      source: stripDirRoot(file.source),
+      target: stripDirRoot(file.target),
       hash: info.hash,
       error,
     };
@@ -96,9 +104,11 @@ export function BusControllerIo(args: {
     const error: MaybeError = res.error
       ? { code: 'delete', message: res.error.message }
       : undefined;
+
     return {
-      path: stripDirPrefix(res.locations[0]),
+      path: stripDirRoot(filepath),
       hash: info.hash,
+      existed: res.locations.length > 0,
       error,
     };
   };
@@ -119,8 +129,8 @@ export function BusControllerIo(args: {
     }
 
     return {
-      source: stripDirPrefix(file.source),
-      target: stripDirPrefix(file.target),
+      source: stripDirRoot(file.source),
+      target: stripDirRoot(file.target),
       hash,
       error,
     };

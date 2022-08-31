@@ -33,7 +33,7 @@ describe('Mock: FsDriver', () => {
       expect(res.uri).to.eql(uri.trim());
       expect(res.exists).to.eql(false);
       expect(res.kind).to.eql('unknown');
-      expect(res.path).to.eql('foo/bar.txt');
+      expect(res.path).to.eql('/foo/bar.txt');
       expect(res.location).to.eql('file:///mock/foo/bar.txt');
       expect(res.hash).to.eql('');
       expect(res.bytes).to.eql(-1);
@@ -55,10 +55,28 @@ describe('Mock: FsDriver', () => {
       expect(res.uri).to.eql(uri.trim());
       expect(res.exists).to.eql(true);
       expect(res.kind).to.eql('file');
-      expect(res.path).to.eql('foo/bar.txt');
+      expect(res.path).to.eql('/foo/bar.txt');
       expect(res.location).to.eql('file:///mock/foo/bar.txt');
       expect(res.hash).to.eql('sha256-abc');
       expect(res.bytes).to.eql(1234);
+    });
+
+    it('info.kind: "file" | "dir" | "unknown"', async () => {
+      const uri = 'path:foo/bar/file.txt';
+      const mock = FsMockDriver();
+
+      const file = FsMock.randomFile();
+      await mock.driver.write(uri, file.data);
+
+      const res1 = await mock.driver.info(uri);
+      const res2 = await mock.driver.info('path:foo/bar');
+      const res3 = await mock.driver.info('path:foo/bar/');
+      const res4 = await mock.driver.info('path:404');
+
+      expect(res1.kind).to.eql('file');
+      expect(res2.kind).to.eql('dir');
+      expect(res3.kind).to.eql('dir');
+      expect(res4.kind).to.eql('unknown');
     });
   });
 
@@ -76,14 +94,14 @@ describe('Mock: FsDriver', () => {
       expect(res.status).to.eql(200);
       expect(res.file.data).to.eql(png.data);
       expect(res.file.hash).to.eql(png.hash);
-      expect(res.file.path).to.eql('foo/bar.png');
+      expect(res.file.path).to.eql('/foo/bar.png');
       expect(res.file.location).to.eql('file:///mock/foo/bar.png');
       expect(res.error).to.eql(undefined);
     });
 
     it('read: not found (404)', async () => {
       const mock = FsMockDriver();
-      const path = '  foo/bar.png  ';
+      const path = '  /foo/bar.png  ';
       const uri = Path.Uri.ensurePrefix(path);
 
       const res = await mock.driver.read(uri);
@@ -94,7 +112,7 @@ describe('Mock: FsDriver', () => {
       expect(res.status).to.eql(404);
       expect(res.file).to.eql(undefined);
       expect(res.error?.type).to.eql('FS/read');
-      expect(res.error?.path).to.eql('foo/bar.png');
+      expect(res.error?.path).to.eql('/foo/bar.png');
     });
 
     it('read (200)', async () => {
@@ -113,9 +131,16 @@ describe('Mock: FsDriver', () => {
       expect(res.status).to.eql(200);
       expect(res.file?.data).to.eql(png.data);
       expect(res.file?.hash).to.eql(png.hash);
-      expect(res.file?.path).to.eql('foo/bar.png');
+      expect(res.file?.path).to.eql('/foo/bar.png');
       expect(res.file?.location).to.eql('file:///mock/foo/bar.png');
       expect(res.error).to.eql(undefined);
+    });
+
+    it('write/read - remove leading slash', async () => {
+      const mock = FsMockDriver();
+      const file = FsMock.randomFile();
+      await mock.driver.write('path:/foo/bar.txt', file.data);
+      expect((await mock.driver.read('path:foo/bar.txt')).status).to.eql(200);
     });
   });
 
@@ -186,7 +211,7 @@ describe('Mock: FsDriver', () => {
       // Ensure the file is copied.
       const from = await mock.driver.read('path:foo.png');
       const to = await mock.driver.read('path:images/bird.png');
-      expect(from.status).to.eql(404);
+      expect(from.status).to.eql(200);
       expect(to.status).to.eql(200);
     });
 
@@ -199,7 +224,8 @@ describe('Mock: FsDriver', () => {
       expect(res.source).to.eql('path:foo.png');
       expect(res.target).to.eql('path:images/bird.png');
       expect(res.error?.type).to.eql('FS/copy');
-      expect(res.error?.path).to.eql('foo.png');
+      expect(res.error?.path).to.eql('/foo.png');
+      expect(res.error?.message).to.include('Source file not found');
     });
   });
 });

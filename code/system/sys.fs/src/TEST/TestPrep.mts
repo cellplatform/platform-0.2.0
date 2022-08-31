@@ -8,14 +8,28 @@ import { BusController } from '../BusController/index.mjs';
 export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir, id = `foo.${slug()}` } = options;
 
-  const driver = FsMock.Driver({ dir }).driver;
-  const indexer = FsMock.Indexer({ dir }).indexer;
+  const mocks = {
+    driver: FsMock.Driver({ dir }),
+    indexer: FsMock.Indexer({ dir }),
+  };
+  const driver = mocks.driver.driver;
+  const indexer = mocks.indexer.indexer;
 
   const bus = rx.bus<t.SysFsEvent>();
   const controller = BusController({ id, driver, bus, indexer });
 
   const events = controller.events;
   const { dispose } = events;
+  const fileExists = async (path: string) => Boolean((await driver.read(path)).file);
 
-  return { bus, controller, events, dispose, driver, indexer };
+  return {
+    bus,
+    controller,
+    events,
+    driver,
+    indexer,
+    mocks,
+    fileExists,
+    dispose,
+  };
 };

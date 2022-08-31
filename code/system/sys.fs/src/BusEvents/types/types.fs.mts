@@ -46,6 +46,7 @@ export type SysFsFileMoveResponse = {
 export type SysFsFileDeleteResponse = {
   path: FilePath;
   hash: FileHash;
+  existed: boolean;
   error?: t.SysFsError;
 };
 
