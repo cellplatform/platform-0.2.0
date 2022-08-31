@@ -1,7 +1,4 @@
-import { t, slug, rx } from '../common/index.mjs';
-import { FsMock, DEFAULT } from '../Mock/index.mjs';
-import { BusController } from '../BusController/index.mjs';
-import { Path } from '../Path/index.mjs';
+import { BusController, DEFAULT, FsMock, Path, rx, slug, t } from './common.mjs';
 
 /**
  * Setup a mock FS driver and Controller.
