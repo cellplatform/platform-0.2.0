@@ -52,7 +52,7 @@ describe('Mock: FsDriver', () => {
     });
 
     it('override info', async () => {
-      const mock = FsMockDriver({}).onInfo((e) => {
+      const mock = FsMockDriver({}).onInfoRequest((e) => {
         e.info.hash = 'sha256-abc';
         e.info.exists = true;
         e.info.kind = 'file';

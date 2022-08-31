@@ -156,7 +156,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       return { ...state };
     },
 
-    onInfo(handler: MockInfoHandler) {
+    onInfoRequest(handler: MockInfoHandler) {
       _infoHandler = handler;
       return mock;
     },

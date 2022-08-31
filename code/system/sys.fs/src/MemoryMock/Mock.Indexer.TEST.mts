@@ -29,7 +29,7 @@ describe('Mock: FsIndexer', () => {
 
     it('inject files', async () => {
       const png = MemoryMock.randomFile(50);
-      const mock = FsMockIndexer().onManifest((e) => {
+      const mock = FsMockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png')
           .addFile('foo/bar.png', png.data) // NB: repeat - file replaced
@@ -49,7 +49,7 @@ describe('Mock: FsIndexer', () => {
 
     it('inject files: options{ dir, filter }', async () => {
       const file = MemoryMock.randomFile(50);
-      const mock = FsMockIndexer().onManifest((e) => {
+      const mock = FsMockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png', file.data)
           .addFile('foo/baz.jpg', file.data) // NB: repeat - replace

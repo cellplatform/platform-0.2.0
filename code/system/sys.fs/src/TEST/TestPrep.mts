@@ -8,7 +8,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
 
   const mocks = {
     driver: MemoryMock.Driver({ dir }),
-    indexer: MemoryMock.Indexer({ dir }).onManifest((e) => {
+    indexer: MemoryMock.Indexer({ dir }).onManifestRequest((e) => {
       const state = mocks.driver.state;
       Object.keys(state).forEach((uri) => {
         const path = Path.ensureSlashStart(Path.Uri.trimPrefix(uri));
