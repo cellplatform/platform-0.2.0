@@ -17,6 +17,7 @@ export const ManifestHash = {
 
     /**
      * TODO 🐷
+     * ISSUE: https://github.com/cellplatform/platform-0.2.0/issues/28
      */
     // files =ManifestFiles.sort(files)
     // const f = ManifestFiles.sort(files);

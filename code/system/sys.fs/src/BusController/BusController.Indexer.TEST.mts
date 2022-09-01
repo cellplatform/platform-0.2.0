@@ -53,6 +53,7 @@ describe('BusController.Indexer', function () {
 
       /**
        * TODO 🐷
+       * See issue: https://github.com/cellplatform/platform-0.2.0/issues/24
        */
       // expect(files[0].image?.kind).to.eql('png');
       // expect(files[1].image).to.eql(undefined);

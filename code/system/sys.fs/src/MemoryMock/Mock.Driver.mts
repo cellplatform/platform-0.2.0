@@ -97,8 +97,11 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       /**
        * TODO 🐷
-       * - put image meta-data (pixel size) on data data object.
-       * - ensure it shows up in Indexer <Manifest>
+       * ISSUE: https://github.com/cellplatform/platform-0.2.0/issues/24
+       *
+       *    - put image meta-data (pixel size) on data data object.
+       *    - ensure it shows up in Indexer <Manifest>
+       *
        */
       //  const image = await Image.toInfo(path, data);
 
