@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 
 import { NAME, ROOT_DIR, t } from '../common/index.mjs';
 import { IndexedDb } from '../IndexedDb/index.mjs';
-import { FsDriverImpl } from './FsDriver.impl.mjs';
-// import { FsIndexer } from './FsIndexer';
+import { FsDriverImpl } from './FsDriverImpl.mjs';
+import { FsIndexer } from '../IndexedDb.Indexer/index.mjs';
 
 /**
  * A filesystem driver running against the browser [IndexedDB] store.
@@ -56,13 +56,8 @@ export const FsDriver = (args: { id?: string }) => {
           return _driver || (_driver = FsDriverImpl({ dir, db }));
         },
         get index() {
-          // const fs = api.driver;
-          // return _index || (_index = FsIndexer({ dir, db, fs }));
-
-          /**
-           * TODO 🐷
-           */
-          return null as any;
+          const fs = api.driver;
+          return _index || (_index = FsIndexer({ dir, db, fs }));
         },
       };
 

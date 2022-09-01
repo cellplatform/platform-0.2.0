@@ -1,25 +1,12 @@
-import { FsDriver } from './index.mjs';
-import {
-  expect,
-  // TestIndexedDb,
-  // TestFilesystem,
-  describe,
-  it,
-  MemoryMock,
-} from '../TEST/index.mjs';
 import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
+import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.mjs';
+import { FsDriver } from './index.mjs';
 
 describe('FsDriver (IndexedDB)', () => {
   const testCreate = async () => {
-    const id = `fs.${slug()}`;
+    const id = `fs:test.${slug()}`;
     const fs = await FsDriver({ id });
     const sample = MemoryMock.randomFile();
-    // const data = new Uint8Array([1, 2, 3]);
-    // const sample = {
-    //   data,
-    //   hash: Hash.sha256(data),
-    //   bytes: data.byteLength,
-    // };
     return { fs, sample };
   };
 
@@ -225,28 +212,28 @@ describe('FsDriver (IndexedDB)', () => {
       expect(decode(res2.file?.data)).to.include('"name": "foo"');
     });
 
-    it.skip('write (replace)', async () => {
-      // const test = await TestIndexedDb.create(TestFilesystem.id);
-      // await test.deleteAll();
-      // const { fs } = await testCreate();
-      // const encode = (text: string) => new TextEncoder().encode(text);
-      // const uri = 'path:file.txt';
-      //
-      // const write1 = await fs.driver.write(uri, encode('hello'));
-      // const records1 = await test.getAll();
-      //
-      // expect(records1.paths.length).to.eql(1);
-      // expect(records1.files.length).to.eql(1);
-      //
-      // const write2 = await fs.driver.write(uri, encode('world'));
-      // const records2 = await test.getAll();
-      //
-      // expect(records2.paths.length).to.eql(1);
-      // expect(records2.files.length).to.eql(1); // NB: Still only a single file.
-      // expect(write1.file.path).to.eql(write2.file.path);
-      // expect(write1.file.hash).to.not.eql(write2.file.hash);
-      //
-      // fs.dispose();
+    it('write (replace)', async () => {
+      const { fs } = await testCreate();
+      const test = await TestIndexedDb.create(fs.id);
+
+      const encode = (text: string) => new TextEncoder().encode(text);
+      const uri = 'path:file.txt';
+
+      const write1 = await fs.driver.write(uri, encode('hello'));
+      const records1 = await test.getAll();
+
+      expect(records1.paths.length).to.eql(1);
+      expect(records1.files.length).to.eql(1);
+
+      const write2 = await fs.driver.write(uri, encode('world'));
+      const records2 = await test.getAll();
+
+      expect(records2.paths.length).to.eql(1);
+      expect(records2.files.length).to.eql(1); // NB: Still only a single file.
+      expect(write1.file.path).to.eql(write2.file.path);
+      expect(write1.file.hash).to.not.eql(write2.file.hash);
+
+      fs.dispose();
     });
   });
 
