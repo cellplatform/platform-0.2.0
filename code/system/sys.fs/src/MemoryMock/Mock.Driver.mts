@@ -128,13 +128,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       if (outOfScope.length > 0) {
         const path = outOfScope.map((item) => item.path).join('; ');
-        return {
-          ok: false,
-          status: 422,
-          uris,
-          locations,
-          error: { type: 'FS/delete', message: 'Path out of scope', path },
-        };
+        const error: t.FsError = { type: 'FS/delete', message: 'Path out of scope', path };
+        return { ok: false, status: 422, uris, locations, error };
       }
 
       items.forEach(({ uri }) => delete state[uri]);
