@@ -620,7 +620,7 @@ describe('BusEvents.Fs', () => {
         const res = await fs.write(uri, data);
         expect(await mock.fileExists(uri)).to.eql(true);
 
-        const file = (await mock.driver.read(uri)).file as t.IFsFileData;
+        const file = (await mock.driver.read(uri)).file as t.FsFileData;
         const hash = Hash.sha256(file.data);
         expect(file.hash).to.eql(hash);
         expect(res.hash).to.eql(hash);

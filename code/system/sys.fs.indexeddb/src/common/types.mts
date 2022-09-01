@@ -13,8 +13,8 @@ export type {
   ManifestFile,
   DirManifestInfo,
   DirManifest,
-  IFsInfo,
-  IFsFileData,
+  FsInfo,
+  FsFileData,
 } from 'sys.fs/src/types.mjs';
 
 /**

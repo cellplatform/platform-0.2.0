@@ -41,7 +41,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
       const path = resolve(uri);
       const location = Path.toAbsoluteLocation({ path, root });
 
-      type T = t.IFsInfo;
+      type T = t.FsInfo;
       let kind: T['kind'] = 'unknown';
       let hash: T['hash'] = '';
       let bytes: T['bytes'] = -1;
@@ -208,7 +208,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
         return { ok, status, hash, source: source.uri, target: target.uri, error };
       };
 
-      const createPathReference = async (sourceInfo: t.IFsInfo, targetPath: string) => {
+      const createPathReference = async (sourceInfo: t.FsInfo, targetPath: string) => {
         const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
         const store = tx.objectStore(NAME.STORE.PATHS);
         const { dir } = Path.parts(targetPath);

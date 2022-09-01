@@ -119,7 +119,7 @@ describe('FsDriver (IndexedDB)', () => {
         await fs.driver.write(uri, sample.data);
 
         const res = await fs.driver.read(` ${uri} `);
-        const file = res.file as t.IFsFileData;
+        const file = res.file as t.FsFileData;
 
         expect(res.uri).to.eql(uri);
         expect(res.ok).to.eql(true);
