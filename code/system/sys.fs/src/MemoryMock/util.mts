@@ -6,5 +6,6 @@ import { Hash } from '../common/index.mjs';
 export function randomFile(length = 10) {
   const data = crypto.getRandomValues(new Uint8Array(length));
   const hash = Hash.sha256(data);
-  return { data, hash };
+  const bytes = data.byteLength;
+  return { data, hash, bytes };
 }

@@ -8,11 +8,12 @@ export type { Disposable } from 'sys.types';
 export type {
   FsDriver,
   FsIndexer,
-  IFsInfo,
   FsError,
   ManifestFile,
   DirManifestInfo,
   DirManifest,
+  IFsInfo,
+  IFsFileData,
 } from 'sys.fs/src/types.mjs';
 
 /**
