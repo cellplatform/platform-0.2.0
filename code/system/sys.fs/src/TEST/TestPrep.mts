@@ -24,7 +24,11 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
 
   const events = controller.events;
   const { dispose } = events;
-  const fileExists = async (path: string) => Boolean((await driver.read(path)).file);
+
+  const fileExists = async (path: string) => {
+    const uri = Path.Uri.ensurePrefix(path);
+    return Boolean((await driver.read(uri)).file);
+  };
 
   return {
     dir,

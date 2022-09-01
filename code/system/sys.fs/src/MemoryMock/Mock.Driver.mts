@@ -14,13 +14,19 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const resolve = PathResolverFactory({ dir });
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
-  const formatUri = (uri: string) => {
+  const processPathUri = (uri: string) => {
+    if (!Path.Uri.is(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
+
     if (uri === 'path:') uri = 'path:.';
+    uri = uri.trim();
+
     const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
     const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
     const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
     const withinScope = Path.isWithin(root, path);
-    uri = Path.Uri.ensurePrefix(content);
+
+    // uri = Path.Uri.ensurePrefix(content); // TEMP 🐷
+
     return { uri, path, location, withinScope };
   };
 
@@ -48,7 +54,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async info(address) {
       mock.count.info++;
 
-      const { uri, path, location } = formatUri(address);
+      const { uri, path, location } = processPathUri(address);
       const ref = state[uri];
       const kind = resolveToKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
@@ -72,7 +78,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async read(address) {
       mock.count.read++;
-      const { uri, path, location, withinScope } = formatUri(address);
+      const { uri, path, location, withinScope } = processPathUri(address);
 
       const toError = (message: string): t.FsError => ({ type: 'FS/read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
@@ -93,7 +99,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async write(address, input) {
       mock.count.write++;
-      const { uri, path, location, withinScope } = formatUri(address);
+      const { uri, path, location, withinScope } = processPathUri(address);
 
       /**
        * TODO 🐷
@@ -135,7 +141,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const inputs = Array.isArray(input) ? input : [input];
-      const formatted = inputs.map((input) => formatUri(input));
+      const formatted = inputs.map((input) => processPathUri(input));
 
       const items = formatted.filter(({ uri }) => state[uri]);
       const uris = items.map(({ uri }) => uri);
@@ -158,8 +164,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const source = formatUri(sourceUri);
-      const target = formatUri(targetUri);
+      const source = processPathUri(sourceUri);
+      const target = processPathUri(targetUri);
 
       const toError = (path: string, message: string): t.FsError => ({
         type: 'FS/copy',

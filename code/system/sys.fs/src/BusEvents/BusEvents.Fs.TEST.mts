@@ -614,13 +614,13 @@ describe('BusEvents.Fs', () => {
       const test = async (data: t.Json | undefined, expected: string) => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const path = 'my-file';
+        const uri = 'path:my-file';
 
-        expect(await mock.fileExists(path)).to.eql(false);
-        const res = await fs.write(path, data);
-        expect(await mock.fileExists(path)).to.eql(true);
+        expect(await mock.fileExists(uri)).to.eql(false);
+        const res = await fs.write(uri, data);
+        expect(await mock.fileExists(uri)).to.eql(true);
 
-        const file = (await mock.driver.read(path)).file as t.IFsFileData;
+        const file = (await mock.driver.read(uri)).file as t.IFsFileData;
         const hash = Hash.sha256(file.data);
         expect(file.hash).to.eql(hash);
         expect(res.hash).to.eql(hash);
@@ -822,7 +822,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
 
-      const path = 'foo/data.json';
+      const path = 'path:foo/data.json';
       const write = await fs.json.write(path, data);
       const file = (await mock.driver.read(path)).file;
 

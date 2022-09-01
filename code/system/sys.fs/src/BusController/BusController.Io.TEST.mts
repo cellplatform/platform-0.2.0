@@ -145,8 +145,7 @@ describe('BusController.IO', function () {
       const src = MemoryMock.randomFile();
 
       const { hash, data } = src;
-      const path = 'foo/bar/kitten.jpg';
-
+      const path = 'path:foo/bar/kitten.jpg';
       const res = await mock.events.io.write.fire({ path, hash, data });
 
       expect(res.error).to.eql(undefined);
@@ -165,8 +164,8 @@ describe('BusController.IO', function () {
       const src2 = MemoryMock.randomFile();
 
       const PATH = {
-        kitten: 'foo/bar/kitten.jpg',
-        tree: 'foo/bar/tree.png',
+        kitten: 'path:foo/bar/kitten.jpg',
+        tree: 'path:foo/bar/tree.png',
       };
       expect(await mock.fileExists(PATH.kitten)).to.eql(false);
       expect(await mock.fileExists(PATH.tree)).to.eql(false);
