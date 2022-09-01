@@ -82,6 +82,10 @@ describe('PathUri', () => {
     test('  /foo/bar/  ', 'path:/foo/bar/');
     test('///foo/bar/  ', 'path:/foo/bar/');
 
+    test('.manifest.json', 'path:.manifest.json');
+    test('.file ', 'path:.file');
+    test(' .filename.yaml ', 'path:.filename.yaml');
+
     test(undefined, '');
     test(null, '');
     test(123, '');
