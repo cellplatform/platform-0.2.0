@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "sys.types": "^0.0.0",
-    "sys.util": "^0.0.0"
+    "sys.util": "^0.0.0",
+    "image-js": "latest"
   },
   "devDependencies": {
     "sys.test": "^0.0.0"
