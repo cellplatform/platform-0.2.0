@@ -19,8 +19,9 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
     const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
     const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
+    const withinScope = Path.isWithin(root, path);
     uri = Path.Uri.ensurePrefix(content);
-    return { uri, path, location };
+    return { uri, path, location, withinScope };
   };
 
   const toKind = (uri: string): t.IFsInfo['kind'] => {
@@ -71,18 +72,19 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async read(address) {
       mock.count.read++;
+      const { uri, path, location, withinScope } = formatUri(address);
 
-      const { uri, path, location } = formatUri(address);
+      const toError = (message: string): t.FsError => ({ type: 'FS/read', message, path });
+      if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
+
       const ref = state[uri];
-
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
         const file: t.IFsFileData = { path, location, hash, bytes, data };
         return { uri, ok: true, status: 200, file };
       } else {
-        const error: t.FsError = { type: 'FS/read', message: 'Not found', path };
-        return { uri, ok: false, status: 404, error };
+        return { uri, ok: false, status: 404, error: toError('Not found') };
       }
     },
 
@@ -91,8 +93,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async write(address, input) {
       mock.count.write++;
+      const { uri, path, location, withinScope } = formatUri(address);
 
-      const { uri, path, location } = formatUri(address);
       const data = Stream.isReadableStream(input)
         ? await Stream.toUint8Array(input)
         : (input as Uint8Array);
@@ -100,9 +102,13 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const hash = Hash.sha256(input);
       const bytes = data.byteLength;
       const file: t.IFsFileData = { path, location, hash, bytes, data };
-      const res: t.IFsWrite = { uri, ok: true, status: 200, file };
+
+      const toError = (message: string): t.FsError => ({ type: 'FS/write', message, path });
+      if (!withinScope)
+        return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
 
       state[uri] = { data, hash };
+      const res: t.IFsWrite = { uri, ok: true, status: 200, file };
       return res;
     },
 
@@ -113,9 +119,23 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const inputs = Array.isArray(input) ? input : [input];
-      const items = inputs.map((input) => formatUri(input)).filter(({ uri }) => state[uri]);
+      const formatted = inputs.map((input) => formatUri(input));
+
+      const items = formatted.filter(({ uri }) => state[uri]);
       const uris = items.map(({ uri }) => uri);
       const locations = items.map(({ location }) => location);
+      const outOfScope = formatted.filter((item) => !item.withinScope);
+
+      if (outOfScope.length > 0) {
+        const path = outOfScope.map((item) => item.path).join('; ');
+        return {
+          ok: false,
+          status: 422,
+          uris,
+          locations,
+          error: { type: 'FS/delete', message: 'Path out of scope', path },
+        };
+      }
 
       items.forEach(({ uri }) => delete state[uri]);
       return { ok: true, status: 200, uris, locations };
@@ -129,11 +149,26 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const source = formatUri(sourceUri);
       const target = formatUri(targetUri);
-      const ref = state[source.uri];
 
+      const toError = (path: string, message: string): t.FsError => ({
+        type: 'FS/copy',
+        message,
+        path,
+      });
+
+      if (!source.withinScope) {
+        const error = toError(source.path, 'Source path out of scope');
+        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
+      }
+
+      if (!target.withinScope) {
+        const error = toError(target.path, 'Target path out of scope');
+        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
+      }
+
+      const ref = state[source.uri];
       if (!ref) {
-        const path = source.path;
-        const error: t.FsError = { type: 'FS/copy', message: 'Source file not found', path };
+        const error = toError(source.path, 'Source file not found');
         return { ok: false, status: 404, source: source.uri, target: target.uri, error };
       }
 

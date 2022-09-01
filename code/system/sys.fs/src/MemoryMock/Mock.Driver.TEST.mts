@@ -1,4 +1,4 @@
-import { describe, it, expect } from '../TEST/index.mjs';
+import { expectError, describe, it, expect } from '../TEST/index.mjs';
 import { FsMockDriver, MemoryMock } from './index.mjs';
 import { Path } from './common.mjs';
 
@@ -238,6 +238,70 @@ describe('Mock: FsDriver', () => {
       expect(res.error?.type).to.eql('FS/copy');
       expect(res.error?.path).to.eql('/foo.png');
       expect(res.error?.message).to.include('Source file not found');
+    });
+  });
+
+  describe('throw on step-up out of root directory', () => {
+    it('read', async () => {
+      const mock = FsMockDriver();
+      const png = MemoryMock.randomFile();
+      await mock.driver.write('path:foo.png', png.data);
+
+      const res1 = await mock.driver.read('path:foo.png');
+      expect(res1.ok).to.eql(true);
+
+      const res2 = await mock.driver.read('path:../foo.png');
+      expect(res2.ok).to.eql(false);
+      expect(res2.status).to.eql(422);
+      expect(res2.error?.message).to.include('Path out of scope');
+    });
+
+    it('write', async () => {
+      const mock = FsMockDriver();
+      const png = MemoryMock.randomFile();
+
+      const res = await mock.driver.write('path:../foo.png', png.data);
+      expect(res.ok).to.eql(false);
+      expect(res.status).to.eql(422);
+      expect(res.error?.message).to.include('Path out of scope');
+    });
+
+    it('delete', async () => {
+      const mock = FsMockDriver();
+
+      const res1 = await mock.driver.delete('path:../foo.png');
+      const res2 = await mock.driver.delete([
+        'path:../foo.png',
+        'path:bar.png',
+        'path:../../bar.png',
+      ]);
+
+      expect(res1.ok).to.eql(false);
+      expect(res1.status).to.eql(422);
+      expect(res1.error?.message).to.include('Path out of scope');
+      expect(res1.error?.path).to.include('/../foo.png');
+
+      expect(res2.ok).to.eql(false);
+      expect(res2.status).to.eql(422);
+      expect(res2.error?.message).to.include('Path out of scope');
+      expect(res2.error?.path).to.include('/../foo.png; /../../bar.png');
+    });
+
+    it('copy', async () => {
+      const mock = FsMockDriver();
+
+      const res1 = await mock.driver.copy('path:../foo.png', 'path:foo.png');
+      const res2 = await mock.driver.copy('path:foo.png', 'path:../foo.png');
+
+      expect(res1.ok).to.eql(false);
+      expect(res1.status).to.eql(422);
+      expect(res1.error?.message).to.include('Source path out of scope');
+      expect(res1.error?.path).to.include('/../foo.png');
+
+      expect(res2.ok).to.eql(false);
+      expect(res2.status).to.eql(422);
+      expect(res2.error?.message).to.include('Target path out of scope');
+      expect(res2.error?.path).to.include('/../foo.png');
     });
   });
 });
