@@ -128,7 +128,7 @@ describe('Mock: FsDriver', () => {
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(404);
       expect(res.file).to.eql(undefined);
-      expect(res.error?.type).to.eql('FS/read');
+      expect(res.error?.code).to.eql('FS/read');
       expect(res.error?.path).to.eql('/foo/bar.png');
     });
 
@@ -242,7 +242,7 @@ describe('Mock: FsDriver', () => {
       expect(res.status).to.eql(404);
       expect(res.source).to.eql('path:foo.png');
       expect(res.target).to.eql('path:images/bird.png');
-      expect(res.error?.type).to.eql('FS/copy');
+      expect(res.error?.code).to.eql('FS/copy');
       expect(res.error?.path).to.eql('/foo.png');
       expect(res.error?.message).to.include('Source file not found');
     });

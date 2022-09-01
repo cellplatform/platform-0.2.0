@@ -357,7 +357,7 @@ describe('FsDriver (IndexedDB)', () => {
 
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(500);
-      expect(res.error?.type).to.eql('FS/copy');
+      expect(res.error?.code).to.eql('FS/copy');
       expect(res.error?.message).to.include(`Failed to copy from [${sourceUri}] to [${targetUri}]`);
       expect(res.error?.message).to.include(`Source file does not exist`);
 
@@ -377,7 +377,7 @@ describe('FsDriver (IndexedDB)', () => {
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(404);
       expect(res.file).to.eql(undefined);
-      expect(error.type).to.eql('FS/read');
+      expect(error.code).to.eql('FS/read');
       expect(error.path).to.eql(fs.driver.resolve(uri));
       expect(error.message).to.contain(`[path:foo:noexist] does not exist`);
 

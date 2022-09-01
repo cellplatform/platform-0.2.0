@@ -77,7 +77,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.read++;
       const { uri, path, location, withinScope } = processPathUri(address);
 
-      const toError = (message: string): t.FsError => ({ type: 'FS/read', message, path });
+      const toError = (message: string): t.FsError => ({ code: 'FS/read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
 
       const ref = state[path];
@@ -122,7 +122,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const bytes = data.byteLength;
       const file: t.FsDriverFileData = { path, location, hash, bytes, data };
 
-      const toError = (message: string): t.FsError => ({ type: 'FS/write', message, path });
+      const toError = (message: string): t.FsError => ({ code: 'FS/write', message, path });
       if (!withinScope)
         return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
 
@@ -147,7 +147,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       if (outOfScope.length > 0) {
         const path = outOfScope.map((item) => item.path).join('; ');
-        const error: t.FsError = { type: 'FS/delete', message: 'Path out of scope', path };
+        const error: t.FsError = { code: 'FS/delete', message: 'Path out of scope', path };
         return { ok: false, status: 422, uris, locations, error };
       }
 
@@ -165,7 +165,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const target = processPathUri(targetUri);
 
       const toError = (path: string, message: string): t.FsError => ({
-        type: 'FS/copy',
+        code: 'FS/copy',
         message,
         path,
       });
