@@ -17,13 +17,14 @@ export function BusEventsIo(args: {
   const toTimeout = Wrangle.timeout(args.timeout);
 
   const toError = (
-    error?: { message: string; code: string },
-    defaultCode?: t.SysFsErrorCode,
-  ): t.SysFsError => {
+    error?: { message: string; code: string; path?: string },
+    defaultCode?: t.FsErrorCode,
+  ): t.FsError => {
     const message = error?.message ?? 'Failed';
-    const code: t.SysFsErrorCode =
+    const path = error?.path ?? '';
+    const code: t.FsErrorCode =
       error?.code === 'timeout' ? 'fs:client/timeout' : defaultCode ?? 'fs:unknown';
-    return { code, message };
+    return { code, message, path };
   };
 
   /**

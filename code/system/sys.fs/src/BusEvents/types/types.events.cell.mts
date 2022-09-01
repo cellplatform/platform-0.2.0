@@ -41,7 +41,7 @@ export type SysFsCellPushRes = {
   tx: string;
   id: FilesystemId;
   files: t.SysFsPushedFile[];
-  errors: t.SysFsError[];
+  errors: t.FsError[];
 };
 
 /**
@@ -67,5 +67,5 @@ export type SysFsCellPullRes = {
   tx: string;
   id: FilesystemId;
   files: t.SysFsPulledFile[];
-  errors: t.SysFsError[];
+  errors: t.FsError[];
 };

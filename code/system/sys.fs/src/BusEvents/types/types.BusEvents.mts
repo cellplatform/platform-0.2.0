@@ -24,7 +24,7 @@ export type FsBusEvents = t.Disposable & {
  */
 export type FsReady = (options?: FsReadyArgs) => Promise<FsReadyResponse>;
 export type FsReadyArgs = { timeout?: Milliseconds; retries?: number };
-export type FsReadyResponse = { ready: boolean; error?: t.SysFsError };
+export type FsReadyResponse = { ready: boolean; error?: t.FsError };
 
 /**
  * Event API: indexing

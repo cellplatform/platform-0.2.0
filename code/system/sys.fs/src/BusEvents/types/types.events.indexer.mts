@@ -6,7 +6,7 @@ type FilePath = string;
 export type SysFsManifestDirResponse = {
   dir: FilePath;
   manifest: t.DirManifest;
-  error?: t.SysFsError;
+  error?: t.FsError;
 };
 
 /**
@@ -37,5 +37,5 @@ export type SysFsManifestRes = {
   tx: string;
   id: FilesystemId;
   dirs: SysFsManifestDirResponse[];
-  error?: t.SysFsError;
+  error?: t.FsError;
 };

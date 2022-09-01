@@ -1,7 +1,7 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 
-import { rx, slug, t, Wrangle } from './common.mjs';
+import { rx, slug, t, Wrangle, asArray } from './common.mjs';
 
 type FilesystemId = string;
 
@@ -44,11 +44,19 @@ export function BusEventsIndexer(args: {
         return res;
       }
 
-      const error: t.SysFsError = { code: 'fs:client/timeout', message: res };
+      const error: t.FsError = { code: 'fs:client/timeout', message: res, path: flattenPath(dir) };
       const fail: t.SysFsManifestRes = { tx, id, dirs: [], error };
       return fail;
     },
   };
 
   return { manifest };
+}
+
+/**
+ * Helpers
+ */
+
+function flattenPath(input?: string | string[]) {
+  return asArray(input).join('; ');
 }

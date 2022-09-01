@@ -2,6 +2,7 @@ import { asArray, Path, t, R, DEFAULT } from './common.mjs';
 import { ManifestCache } from './ManifestCache.mjs';
 
 type FilesystemId = string;
+type MaybeError = t.FsError | undefined;
 
 /**
  * Event controller.
@@ -40,7 +41,7 @@ export function BusControllerIndexer(args: {
       return {
         dir,
         manifest: R.clone(DEFAULT.ERROR_MANIFEST),
-        error: { code: 'fs:manifest', message },
+        error: { code: 'fs:manifest', message, path: dir },
       };
     };
 
@@ -70,9 +71,9 @@ export function BusControllerIndexer(args: {
     const dirs = await Promise.all(paths.length === 0 ? [toManifest()] : paths.map(toManifest));
 
     const hasError = dirs.some((dir) => dir.error);
-    const error: t.SysFsError | undefined = hasError
-      ? { code: 'fs:manifest', message: `Indexing failed` }
-      : undefined;
+    const error: MaybeError = !hasError
+      ? undefined
+      : { code: 'fs:manifest', message: `Indexing failed`, path: paths.join('; ') };
 
     bus.fire({
       type: 'sys.fs/manifest:res',

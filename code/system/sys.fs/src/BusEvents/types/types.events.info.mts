@@ -21,5 +21,5 @@ export type SysFsInfoRes = {
   id: FilesystemId;
   fs?: t.SysFsInfo;
   paths: t.SysFsPathInfo[];
-  error?: t.SysFsError;
+  error?: t.FsError;
 };
