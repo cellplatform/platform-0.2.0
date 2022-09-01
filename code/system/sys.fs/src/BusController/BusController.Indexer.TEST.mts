@@ -25,7 +25,7 @@ describe('BusController.Indexer', function () {
       mock.dispose();
     });
 
-    it('root (no "dir" parameter passed)', async () => {
+    it.skip('root (no "dir" parameter passed)', async () => {
       const mock = TestPrep();
       const io = mock.events.io;
 
