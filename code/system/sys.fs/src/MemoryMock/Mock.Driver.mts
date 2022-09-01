@@ -95,6 +95,19 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.write++;
       const { uri, path, location, withinScope } = formatUri(address);
 
+      /**
+       * TODO 🐷
+       * - put image meta-data (pixel size) on data data object.
+       * - ensure it shows up in Indexer <Manifest>
+       */
+      //  const image = await Image.toInfo(path, data);
+
+      // const put = IndexedDb.record.put;
+      // await Promise.all([
+      //   put<t.PathRecord>(store.paths, deleteUndefined({ path, dir, hash, bytes, image })),
+      //   put<t.BinaryRecord>(store.files, { hash, data }),
+      // ]);
+
       const data = Stream.isReadableStream(input)
         ? await Stream.toUint8Array(input)
         : (input as Uint8Array);
