@@ -1,4 +1,4 @@
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 export { reset } from './reset/index.mjs';
 
 export type CssProps = t.CssProps;

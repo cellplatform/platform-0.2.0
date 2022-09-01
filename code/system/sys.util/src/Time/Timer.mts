@@ -1,5 +1,5 @@
 import { Duration } from './Duration.mjs';
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 
 /**
  * Starts a timer.

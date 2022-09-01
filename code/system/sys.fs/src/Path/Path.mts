@@ -1,14 +1,13 @@
 import { parts } from './Path.parts.mjs';
 import { PathUri as Uri } from '../PathUri/index.mjs';
-import { join, isWithin } from './Path.join.mjs';
-import * as trim from './Path.trim.mjs';
-import * as to from './Path.to.mjs';
+import * as Join from './Path.join.mjs';
+import * as Trim from './Path.trim.mjs';
+import * as To from './Path.to.mjs';
 
 export const Path = {
   Uri,
   parts,
-  join,
-  isWithin,
-  ...trim,
-  ...to,
+  ...Join,
+  ...Trim,
+  ...To,
 };

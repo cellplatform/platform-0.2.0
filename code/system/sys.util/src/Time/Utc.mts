@@ -1,5 +1,5 @@
 import day from 'dayjs';
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 
 /**
  * Helpers for working with

@@ -1,4 +1,4 @@
-import * as t from 'sys.types';
+import type * as t from 'sys.types';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
