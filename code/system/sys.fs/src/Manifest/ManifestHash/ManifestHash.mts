@@ -1,4 +1,5 @@
 import { t, Hash } from '../common.mjs';
+import { ManifestFiles } from '../ManifestFiles/index.mjs';
 
 const sha256 = Hash.sha256;
 
@@ -12,9 +13,18 @@ export const ManifestHash = {
    * SHA256 hash for a list of files.
    */
   files(input: t.ManifestFile[] | t.Manifest) {
-    const files = Array.isArray(input) ? input : input.files;
+    let files = Array.isArray(input) ? input : input.files;
+
+    /**
+     * TODO 🐷
+     */
+    // files =ManifestFiles.sort(files)
+    // const f = ManifestFiles.sort(files);
+
     const hashes = files.filter(Boolean).map((file) => file.filehash);
+
     sort(hashes);
+
     return sha256(hashes);
   },
 

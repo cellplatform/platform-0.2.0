@@ -58,8 +58,10 @@ describe('PathUri', () => {
     test('path:foo', 'path:foo');
     test('  path:foo/bar  ', 'path:foo/bar');
     test('  foo  ', 'path:foo');
-    test('  /foo/bar/  ', 'path:/foo/bar/');
+    test('  /foo/bar/  ', 'path:foo/bar/');
+    test('///foo/bar/  ', 'path:foo/bar/');
     test('foo/bar', 'path:foo/bar');
+    test('/foo/bar', 'path:foo/bar');
 
     test(null, '');
     test(123, '');

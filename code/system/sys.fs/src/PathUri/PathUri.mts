@@ -1,4 +1,5 @@
-import { Path } from '../Path/index.mjs';
+import { trim, trimSlashesStart } from '../Path/Path.trim.mjs';
+import { join } from '../Path/Path.join.mjs';
 
 /**
  * A string URI that represents the path to a file.
@@ -14,7 +15,7 @@ export const PathUri = {
    * Determines if the given string is a "path:" URI.
    */
   is(input?: string) {
-    const uri = Path.trim(input);
+    const uri = trim(input);
     return uri.startsWith('path:');
   },
 
@@ -23,7 +24,7 @@ export const PathUri = {
    */
   path(input?: string) {
     if (!PathUri.is(input)) return undefined;
-    const uri = Path.trim(input);
+    const uri = trim(input);
 
     let res = uri
       .substring(PathUri.prefix.length + 1)
@@ -32,21 +33,24 @@ export const PathUri = {
 
     if (res.startsWith('./')) res = res.substring(2);
 
-    return Path.join(res); // NB: The "join" call passes the path through a "../.." resolver.
+    return join(res); // NB: The "join" call passes the path through a "../.." resolver.
   },
 
   /**
    * Ensures the given string is trimmed and has "path:" as a prefix
    */
   ensurePrefix(path: string) {
-    return typeof path === 'string' ? `path:${PathUri.trimPrefix(path)}` : '';
+    if (typeof path !== 'string') return '';
+    path = PathUri.trimPrefix(path);
+    path = trimSlashesStart(path);
+    return `path:${path}`;
   },
 
   /**
    * Remotes the "path:" prefix from the given string.
    */
   trimPrefix(path: string) {
-    path = Path.trim(path);
+    path = trim(path);
     return path ? path.replace(/^path:/, '').trim() : '';
   },
 };

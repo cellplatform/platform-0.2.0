@@ -46,7 +46,7 @@ type FsExistsMethod = (path: FilePath) => Promise<boolean>;
 type FsReadMethod = (path: FilePath) => Promise<Uint8Array | undefined>;
 
 type FsWriteMethod = (path: FilePath, data: FsWriteMethodData) => Promise<FsWriteMethodResponse>;
-type FsWriteMethodData = t.Json | Uint8Array | ReadableStream;
+type FsWriteMethodData = t.Json | Uint8Array | ReadableStream | undefined;
 type FsWriteMethodResponse = { hash: string; bytes: number };
 
 type FsCopyMethod = (source: FilePath, target: FilePath) => Promise<void>;

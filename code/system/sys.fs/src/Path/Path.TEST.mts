@@ -37,6 +37,52 @@ describe('Path', () => {
     test(['foo/bar/baz', '../.././zoo'], 'foo/zoo');
   });
 
+  it('isWithin', () => {
+    const test = (expected: boolean, root: string, path: string) => {
+      const res = Path.isWithin(root, path);
+      const joined = Path.join(root, path);
+      expect(res).to.eql(expected, `root:${root} | path:${path} | joined: ${joined}`);
+    };
+
+    test(true, '', 'file.png');
+    test(true, '.', 'file.png'); // => "/file.png" (safe)
+    test(true, 'root', 'file.png');
+    test(true, '/', 'file.png');
+    test(true, '/root', 'file.png');
+
+    test(false, '', '../file.png');
+    test(false, '/', '../file.png');
+    test(false, '   ', '../file.png');
+    test(false, '.', '../file.png');
+    test(false, ' . ', '../file.png');
+
+    test(true, '', 'foo/../file.png'); // NB: not stepped out of root
+    test(false, '', 'foo/../../file.png');
+    test(false, '.', 'foo/../../file.png');
+    test(false, '  ', 'foo/../../file.png');
+
+    test(true, '/root/foo', '../file.png');
+    test(false, '/root/foo', '../../file.png');
+
+    test(true, '/root/foo', 'bar/../file.png');
+    test(true, '/root/foo', 'bar/../../file.png');
+    test(false, '/root/foo', 'bar/../../../file.png');
+
+    // Should not have ".." within root dir.
+    test(false, '..', 'file.png');
+    test(false, ' .. ', 'file.png');
+    test(false, '../dir', 'file.png');
+    test(false, '../foo/..', 'file.png');
+    test(false, '..', '');
+
+    // (NB: ".." is part of filename, not a step-up directive).
+    test(true, 'root', '..file.txt');
+    test(true, '', '..file.txt');
+    test(true, 'root', 'file...txt');
+    test(true, '..dirname', 'file...txt');
+    test(true, 'dirname..', 'file.txt');
+  });
+
   describe('trim', () => {
     it('trimSlashes', () => {
       const test = (input: any, expected: string) => {
@@ -85,6 +131,20 @@ describe('Path', () => {
       test('/foo', '/foo');
       test('/foo/  ', '/foo');
       test('/foo  /  ', '/foo');
+    });
+
+    it('ensureSlashStart', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureSlashStart(input)).to.eql(expected);
+      };
+
+      test('foo', '/foo');
+      test('   foo/   ', '/foo/');
+      test('/', '/');
+      test('', '/');
+      test('   ', '/');
+      test('///', '/');
+      test('///foo/bar', '/foo/bar');
     });
 
     it('ensureSlashEnd', () => {

@@ -1,29 +1,5 @@
 import { customAlphabet } from 'nanoid';
-
-import { Is } from '../Is/index.mjs';
-import { random } from '../Value/Value.Math.mjs';
-
-/**
- * NOTE: [Shim/Polyfill]
- *    Required when running on node-js.
- *    Prevents environment error within module 'nonoid':
- *
- *        ReferenceError: "crypto is not defined"
- *
- * IMPORTANT:
- *    Do NOT rely on this being secure in it's generation
- *    if random numbers when running on node-js.
- *
- */
-if (Is.node && !(global as any).crypto?.getRandomValues) {
-  (global as any).crypto = {
-    getRandomValues(buffer: Uint8Array) {
-      const length = buffer.length;
-      const values = Array.from({ length }).map(() => random(1000, 999999));
-      return new Uint8Array(values);
-    },
-  };
-}
+import '../Value/Value.Random.mjs';
 
 /**
  * Random generator.

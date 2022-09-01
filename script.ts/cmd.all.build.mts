@@ -14,6 +14,7 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
   });
 
   // Log complete build list.
+  console.log();
   console.log(pc.green('build list:'));
   paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
   console.log();
@@ -58,7 +59,7 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
   console.log(table.toString());
   console.log();
   console.log(pc.gray(`${Util.filesize(totalBytes)}`));
-  console.log(pc.gray(`platform/builder v${pkg.version}`));
+  console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
   console.log();
 
   if (!ok) process.exit(1);

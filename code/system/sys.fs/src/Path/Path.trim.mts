@@ -51,6 +51,13 @@ export function trimWildcardEnd(input: string) {
 }
 
 /**
+ * Ensures the path starts with a single "/".
+ */
+export function ensureSlashStart(input: string) {
+  return `/${trimSlashesStart(input)}`;
+}
+
+/**
  * Ensures the path ends in a single "/".
  */
 export function ensureSlashEnd(input: string) {
