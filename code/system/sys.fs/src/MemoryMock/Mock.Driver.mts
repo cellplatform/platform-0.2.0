@@ -127,7 +127,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
         return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
 
       state[path] = { data, hash };
-      const res: t.IFsWrite = { uri, ok: true, status: 200, file };
+      const res: t.FsWrite = { uri, ok: true, status: 200, file };
       return res;
     },
 
