@@ -1,7 +1,7 @@
 import { t } from './common.mjs';
 
-type FilePath = string;
-type DirPath = string;
+type DirPath = string; //  Path to a directory, eg: "foo/"
+type FilePath = string; // Path to a file, eg: "foo/bar.txt"
 
 /**
  * Information about a file.

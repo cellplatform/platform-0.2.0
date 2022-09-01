@@ -1,7 +1,7 @@
 import { PathResolverFactory } from '../PathResolver/index.mjs';
 import { DEFAULT, Hash, Path, Stream, t } from './common.mjs';
 
-type MockInfoHandler = (e: { uri: string; info: t.FsInfo }) => void;
+type MockInfoHandler = (e: { uri: string; info: t.FsDriverInfo }) => void;
 
 /**
  * A driver used for mocking the file-system while testing.
@@ -26,7 +26,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     return { uri, path, location, withinScope };
   };
 
-  const resolveKind = (uri: string): t.FsInfo['kind'] => {
+  const resolveKind = (uri: string): t.FsDriverInfo['kind'] => {
     const { path } = processPathUri(uri);
     if (state[path]) return 'file';
 
@@ -56,7 +56,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
 
-      const info: t.FsInfo = {
+      const info: t.FsDriverInfo = {
         uri,
         exists,
         kind,
@@ -84,7 +84,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
-        const file: t.FsFileData = { path, location, hash, bytes, data };
+        const file: t.FsDriverFileData = { path, location, hash, bytes, data };
         return { uri, ok: true, status: 200, file };
       } else {
         return { uri, ok: false, status: 404, error: toError('Not found') };
@@ -120,14 +120,14 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const hash = Hash.sha256(input);
       const bytes = data.byteLength;
-      const file: t.FsFileData = { path, location, hash, bytes, data };
+      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
 
       const toError = (message: string): t.FsError => ({ type: 'FS/write', message, path });
       if (!withinScope)
         return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
 
       state[path] = { data, hash };
-      const res: t.FsWrite = { uri, ok: true, status: 200, file };
+      const res: t.FsDriverWrite = { uri, ok: true, status: 200, file };
       return res;
     },
 

@@ -6,5 +6,4 @@ export type FsError = {
   type: FsErrorType;
   message: string;
   path: string;
-  stack?: string;
 };

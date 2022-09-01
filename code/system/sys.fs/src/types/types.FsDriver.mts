@@ -12,19 +12,20 @@ type HttpStatusCode = number;
  */
 export type FsDriver = {
   dir: DirPath;
+
   /**
    * Meta-data.
    */
   resolve: FsPathResolver;
-  info: FsInfoMethod<FsInfo>;
+  info: FsDriverInfoMethod<FsDriverInfo>;
 
   /**
    * Network IO (in/out).
    */
-  read: FsReadMethod<FsRead>;
-  write: FsWriteMethod<FsWrite>;
-  copy: FsCopyMethod<FsCopy>;
-  delete: FsDeleteMethod<FsDelete>;
+  read: FsDriverReadMethod<FsDriverRead>;
+  write: FsDriverWriteMethod<FsDriverWrite>;
+  copy: FsDriverCopyMethod<FsDriverCopy>;
+  delete: FsDriverDeleteMethod<FsDriverDelete>;
 };
 
 /**
@@ -32,26 +33,28 @@ export type FsDriver = {
  */
 
 export type FsPathResolver = (uri: PathUri) => FilePath;
-export type FsInfoMethod<Info extends FsMeta> = (address: PathUri) => Promise<Info>;
-export type FsReadMethod<Read extends FsRead> = (address: PathUri) => Promise<Read>;
+export type FsDriverInfoMethod<Info extends FsDriverMeta> = (address: PathUri) => Promise<Info>;
+export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUri) => Promise<Read>;
 
-export type FsWriteOptions = { filename?: string };
-export type FsWriteMethod<Write extends FsWrite> = (
+export type FsDriverWriteMethod<Write extends FsDriverWrite> = (
   address: PathUri,
   data: Uint8Array | ReadableStream,
-  options?: FsWriteOptions,
+  options?: { filename?: string },
 ) => Promise<Write>;
 
-export type FsCopyMethod<Copy extends FsCopy> = (source: PathUri, target: PathUri) => Promise<Copy>;
+export type FsDriverCopyMethod<Copy extends FsDriverCopy> = (
+  source: PathUri,
+  target: PathUri,
+) => Promise<Copy>;
 
-export type FsDeleteMethod<Delete extends FsDelete> = (
+export type FsDriverDeleteMethod<Delete extends FsDriverDelete> = (
   address: PathUri | PathUri[],
 ) => Promise<Delete>;
 
 /**
  * File (meta/info)
  */
-export type FsMeta = {
+export type FsDriverMeta = {
   path: FilePath;
   location: FileUri;
   hash: string;
@@ -61,38 +64,38 @@ export type FsMeta = {
 /**
  * File (info + data)
  */
-export type FsFileData<I extends FsMeta = FsMeta> = I & { data: Uint8Array };
+export type FsDriverFileData<I extends FsDriverMeta = FsDriverMeta> = I & { data: Uint8Array };
 
 /**
  * Operations.
  */
-export type FsInfo = FsMeta & {
+export type FsDriverInfo = FsDriverMeta & {
   uri: PathUri;
   exists: boolean;
   kind: 'file' | 'dir' | 'unknown';
 };
-export type FsRead = {
+export type FsDriverRead = {
   ok: boolean;
   status: HttpStatusCode;
   uri: PathUri;
-  file?: FsFileData<FsMeta>;
+  file?: FsDriverFileData<FsDriverMeta>;
   error?: FsError;
 };
-export type FsWrite = {
+export type FsDriverWrite = {
   ok: boolean;
   status: HttpStatusCode;
   uri: PathUri;
-  file: FsFileData<FsMeta>;
+  file: FsDriverFileData<FsDriverMeta>;
   error?: FsError;
 };
-export type FsDelete = {
+export type FsDriverDelete = {
   ok: boolean;
   status: HttpStatusCode;
   uris: PathUri[];
-  locations: string[];
+  locations: FileUri[];
   error?: FsError;
 };
-export type FsCopy = {
+export type FsDriverCopy = {
   ok: boolean;
   status: HttpStatusCode;
   source: PathUri;
