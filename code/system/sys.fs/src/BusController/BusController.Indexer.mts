@@ -11,7 +11,7 @@ export function BusControllerIndexer(args: {
   bus: t.EventBus<t.SysFsEvent>;
   driver: t.FsDriver;
   indexer: t.FsIndexer;
-  events: t.SysFsEvents;
+  events: t.FsBusEvents;
 }) {
   const { id, driver, bus, events, indexer } = args;
 

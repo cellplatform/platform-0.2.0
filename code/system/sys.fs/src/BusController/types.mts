@@ -9,6 +9,6 @@ type FilePath = string;
 export type SysFsController = t.Disposable & {
   id: FilesystemId;
   dir: FilePath;
-  events: t.SysFsEvents;
-  fs: t.SysFsEvents['fs'];
+  events: t.FsBusEvents;
+  fs: t.FsBusEvents['fs'];
 };

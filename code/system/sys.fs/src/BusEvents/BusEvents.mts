@@ -18,7 +18,7 @@ export function BusEvents(args: {
   timeout?: Milliseconds; // Default timeout.
   toUint8Array?: t.SysFsToUint8Array;
   dispose$?: t.Observable<any>;
-}): t.SysFsEvents {
+}): t.FsBusEvents {
   const { id } = args;
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
   const bus = rx.busAsType<t.SysFsEvent>(args.bus);
@@ -45,7 +45,7 @@ export function BusEvents(args: {
   /**
    * Filesystem API.
    */
-  const fs: t.SysFsEvents['fs'] = (input) => {
+  const fs: t.FsBusEvents['fs'] = (input) => {
     const options = typeof input === 'string' ? { dir: input } : input;
     const { dir } = options ?? {};
     const timeout = toTimeout(options);
@@ -57,10 +57,10 @@ export function BusEvents(args: {
   /**
    * Ready check.
    */
-  const ready: t.SysFsReady = async (options = {}) => {
+  const ready: t.FsReady = async (options = {}) => {
     const { timeout = 500, retries = 5 } = options;
 
-    const ping = async (retries: number): Promise<t.SysFsReadyRes> => {
+    const ping = async (retries: number): Promise<t.FsReadyResponse> => {
       const ready = !(await io.info.get({ timeout })).error;
       if (!ready && retries > 1) return await ping(retries - 1); // <== RECURSION 🌳
       if (ready) return { ready: true };

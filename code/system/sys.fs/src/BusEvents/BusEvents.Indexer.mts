@@ -13,11 +13,11 @@ export function BusEventsIndexer(args: {
   $: t.Observable<t.SysFsEvent>;
   bus: t.EventBus<t.SysFsEvent>;
   timeout: number;
-}): t.SysFsEventsIndex {
+}): t.FsBusEventsIndex {
   const { id, $, bus } = args;
   const toTimeout = Wrangle.timeout(args.timeout);
 
-  const manifest: t.SysFsEventsIndex['manifest'] = {
+  const manifest: t.FsBusEventsIndex['manifest'] = {
     req$: rx.payload<t.SysFsManifestReqEvent>($, 'sys.fs/manifest:req'),
     res$: rx.payload<t.SysFsManifestResEvent>($, 'sys.fs/manifest:res'),
 

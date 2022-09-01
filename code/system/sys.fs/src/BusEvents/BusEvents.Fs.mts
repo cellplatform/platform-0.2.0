@@ -5,8 +5,8 @@ import { Hash, Path, t, Json } from './common.mjs';
  */
 export function BusEventsFs(args: {
   dir?: string; // Sub-directory within root.
-  index: t.SysFsEventsIndex;
-  io: t.SysFsEventsIo;
+  index: t.FsBusEventsIndex;
+  io: t.FsBusEventsIo;
   toUint8Array: t.SysFsToUint8Array;
 }): t.Fs {
   const { io, index, toUint8Array } = args;

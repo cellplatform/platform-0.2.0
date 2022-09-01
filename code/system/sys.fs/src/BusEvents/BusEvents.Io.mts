@@ -12,7 +12,7 @@ export function BusEventsIo(args: {
   $: t.Observable<t.SysFsEvent>;
   bus: t.EventBus<t.SysFsEvent>;
   timeout: number;
-}): t.SysFsEventsIo {
+}): t.FsBusEventsIo {
   const { id, $, bus } = args;
   const toTimeout = Wrangle.timeout(args.timeout);
 
@@ -28,7 +28,7 @@ export function BusEventsIo(args: {
   /**
    * File/system information.
    */
-  const info: t.SysFsEventsIo['info'] = {
+  const info: t.FsBusEventsIo['info'] = {
     req$: rx.payload<t.SysFsInfoReqEvent>($, 'sys.fs/info:req'),
     res$: rx.payload<t.SysFsInfoResEvent>($, 'sys.fs/info:res'),
     async get(options = {}) {
@@ -56,7 +56,7 @@ export function BusEventsIo(args: {
   /**
    * Read
    */
-  const read: t.SysFsEventsIo['read'] = {
+  const read: t.FsBusEventsIo['read'] = {
     req$: rx.payload<t.SysFsReadReqEvent>($, 'sys.fs/read:req'),
     res$: rx.payload<t.SysFsReadResEvent>($, 'sys.fs/read:res'),
     async get(path, options = {}) {
@@ -88,7 +88,7 @@ export function BusEventsIo(args: {
   /**
    * Write
    */
-  const write: t.SysFsEventsIo['write'] = {
+  const write: t.FsBusEventsIo['write'] = {
     req$: rx.payload<t.SysFsWriteReqEvent>($, 'sys.fs/write:req'),
     res$: rx.payload<t.SysFsWriteResEvent>($, 'sys.fs/write:res'),
     async fire(file, options = {}) {
@@ -120,7 +120,7 @@ export function BusEventsIo(args: {
   /**
    * Copy
    */
-  const copy: t.SysFsEventsIo['copy'] = {
+  const copy: t.FsBusEventsIo['copy'] = {
     req$: rx.payload<t.SysFsCopyReqEvent>($, 'sys.fs/copy:req'),
     res$: rx.payload<t.SysFsCopyResEvent>($, 'sys.fs/copy:res'),
     async fire(file, options = {}) {
@@ -152,7 +152,7 @@ export function BusEventsIo(args: {
   /**
    * Move
    */
-  const move: t.SysFsEventsIo['move'] = {
+  const move: t.FsBusEventsIo['move'] = {
     req$: rx.payload<t.SysFsMoveReqEvent>($, 'sys.fs/move:req'),
     res$: rx.payload<t.SysFsMoveResEvent>($, 'sys.fs/move:res'),
     async fire(file, options = {}) {
@@ -184,7 +184,7 @@ export function BusEventsIo(args: {
   /**
    * Delete
    */
-  const del: t.SysFsEventsIo['delete'] = {
+  const del: t.FsBusEventsIo['delete'] = {
     req$: rx.payload<t.SysFsDeleteReqEvent>($, 'sys.fs/delete:req'),
     res$: rx.payload<t.SysFsDeleteResEvent>($, 'sys.fs/delete:res'),
     async fire(path, options = {}) {

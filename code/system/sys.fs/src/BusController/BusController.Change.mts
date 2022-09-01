@@ -9,7 +9,7 @@ type FilesystemId = string;
 export function BusControllerChange(args: {
   id: FilesystemId;
   bus: t.EventBus<t.SysFsEvent>;
-  events: t.SysFsEvents;
+  events: t.FsBusEvents;
 }) {
   const { id, events, bus } = args;
 

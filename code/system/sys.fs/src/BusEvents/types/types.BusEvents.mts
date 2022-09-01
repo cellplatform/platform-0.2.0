@@ -1,37 +1,35 @@
 import { t } from './common.mjs';
 
+type FilePath = string; //      Path to a file, eg: "foo/bar.txt"
+type FilesystemId = string; //  Unique identifier of the file-system store.
 type Milliseconds = number;
-type FilesystemId = string;
-type FilePath = string;
 
 /**
  * Event API
  */
-export type SysFsEvents = t.Disposable & {
+export type FsBusEvents = t.Disposable & {
   id: FilesystemId;
   $: t.Observable<t.SysFsEvent>;
   changed$: t.Observable<t.SysFsChanged>;
   is: { base(input: any): boolean };
-  io: t.SysFsEventsIo;
-  index: t.SysFsEventsIndex;
-  ready: SysFsReady;
-  fs(options?: FsOptions): t.Fs;
+  io: t.FsBusEventsIo;
+  index: t.FsBusEventsIndex;
+  ready: FsReady;
+  fs(options?: { dir?: string; timeout?: Milliseconds }): t.Fs;
   fs(subdir?: string): t.Fs;
 };
-
-type FsOptions = { dir?: string; timeout?: Milliseconds };
 
 /**
  * Response to the ready method.
  */
-export type SysFsReady = (options?: SysFsReadyArgs) => Promise<SysFsReadyRes>;
-export type SysFsReadyArgs = { timeout?: Milliseconds; retries?: number };
-export type SysFsReadyRes = { ready: boolean; error?: t.SysFsError };
+export type FsReady = (options?: FsReadyArgs) => Promise<FsReadyResponse>;
+export type FsReadyArgs = { timeout?: Milliseconds; retries?: number };
+export type FsReadyResponse = { ready: boolean; error?: t.SysFsError };
 
 /**
  * Event API: indexing
  */
-export type SysFsEventsIndex = {
+export type FsBusEventsIndex = {
   manifest: {
     req$: t.Observable<t.SysFsManifestReq>;
     res$: t.Observable<t.SysFsManifestRes>;
@@ -47,7 +45,7 @@ export type SysFsEventsIndex = {
 /**
  * Event API: IO (read/write)
  */
-export type SysFsEventsIo = {
+export type FsBusEventsIo = {
   info: {
     req$: t.Observable<t.SysFsInfoReq>;
     res$: t.Observable<t.SysFsInfoRes>;
