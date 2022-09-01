@@ -18,7 +18,7 @@ export function BusControllerIo(args: {
 
   const root = Path.ensureSlashStart(driver.dir);
   const stripDirRoot = (path: FilePath) => {
-    path = Path.Uri.trimPrefix(path);
+    path = Path.Uri.trimUriPrefix(path);
     path = Path.ensureSlashStart(path);
     path = path.startsWith(root) ? path.substring(root.length) : path;
     return Path.ensureSlashStart(path);
@@ -27,7 +27,7 @@ export function BusControllerIo(args: {
   const getFileInfo = async (filepath: FilePath): Promise<t.SysFsPathInfo> => {
     try {
       filepath = Path.trimSlashesEnd(filepath);
-      const uri = Path.Uri.ensurePrefix(filepath);
+      const uri = Path.Uri.ensureUriPrefix(filepath);
       const res = await driver.info(uri);
       const { kind, exists, hash, bytes } = res;
 
@@ -42,7 +42,7 @@ export function BusControllerIo(args: {
   };
 
   const readFile = async (path: string): Promise<t.SysFsFileReadResponse> => {
-    const address = Path.Uri.ensurePrefix(path);
+    const address = Path.Uri.ensureUriPrefix(path);
     path = stripDirRoot(path);
 
     const info = await driver.info(address);
@@ -84,15 +84,15 @@ export function BusControllerIo(args: {
     };
 
     if (!path) return done('No file-path to write to');
-    const address = Path.Uri.ensurePrefix(path);
+    const address = Path.Uri.ensureUriPrefix(path);
 
     const res = await driver.write(address, data);
     return done(res.error?.message);
   };
 
   const copyFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileCopyResponse> => {
-    const source = Path.Uri.ensurePrefix(file.source);
-    const target = Path.Uri.ensurePrefix(file.target);
+    const source = Path.Uri.ensureUriPrefix(file.source);
+    const target = Path.Uri.ensureUriPrefix(file.target);
     const res = await driver.copy(source, target);
     const info = await driver.info(target);
     const error: MaybeError = res.error ? { code: 'copy', message: res.error.message } : undefined;
@@ -105,7 +105,7 @@ export function BusControllerIo(args: {
   };
 
   const deleteFile = async (filepath: FilePath): Promise<t.SysFsFileDeleteResponse> => {
-    const address = Path.Uri.ensurePrefix(filepath);
+    const address = Path.Uri.ensureUriPrefix(filepath);
     const info = await driver.info(address);
     const res = await driver.delete(address);
 

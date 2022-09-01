@@ -11,7 +11,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
     indexer: MemoryMock.Indexer({ dir }).onManifestRequest((e) => {
       const state = mocks.driver.state;
       Object.keys(state).forEach((uri) => {
-        const path = Path.ensureSlashStart(Path.Uri.trimPrefix(uri));
+        const path = Path.ensureSlashStart(Path.Uri.trimUriPrefix(uri));
         e.addFile(path, state[uri].data);
       });
     }),
@@ -26,7 +26,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dispose } = events;
 
   const fileExists = async (path: string) => {
-    const uri = Path.Uri.ensurePrefix(path);
+    const uri = Path.Uri.ensureUriPrefix(path);
     return Boolean((await driver.read(uri)).file);
   };
 

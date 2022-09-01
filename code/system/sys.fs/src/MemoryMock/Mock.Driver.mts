@@ -16,9 +16,9 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
   const processPathUri = (uri: string) => {
     if (!Path.Uri.isPathUri(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
-    uri = Path.Uri.ensurePrefix(uri); // Clean up URI.
+    uri = Path.Uri.ensureUriPrefix(uri); // Clean up URI.
 
-    const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
+    const content = Path.trimSlashesStart(Path.Uri.trimUriPrefix(uri));
     const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
     const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
     const withinScope = Path.isWithin(root, path);
@@ -34,7 +34,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
     if (possibleDir === '/') return 'dir'; // Test for "root directory" (special).
 
-    const keys = Object.keys(state).map((key) => Path.Uri.trimPrefix(key));
+    const keys = Object.keys(state).map((key) => Path.Uri.trimUriPrefix(key));
     for (const key of keys) {
       if (key.startsWith(possibleDir) && key !== possibleDir) return 'dir';
     }

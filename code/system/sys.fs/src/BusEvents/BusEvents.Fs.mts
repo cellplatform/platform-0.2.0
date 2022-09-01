@@ -16,7 +16,7 @@ export function BusEventsFs(args: {
   const { join } = Path;
   const formatPath = (path: string) => {
     path = Path.trim(path);
-    path = Path.Uri.trimPrefix(path);
+    path = Path.Uri.trimUriPrefix(path);
     path = Path.join(subdir, path);
     path = Path.trimSlashesStart(path);
     return path;
@@ -64,7 +64,7 @@ export function BusEventsFs(args: {
   const read: t.Fs['read'] = async (path) => {
     path = formatPath(path);
 
-    const uri = Path.Uri.ensurePrefix(path);
+    const uri = Path.Uri.ensureUriPrefix(path);
     const res = await io.read.get(uri);
     const files = res.files ?? [];
     const first = files[0];

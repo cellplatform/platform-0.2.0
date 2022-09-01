@@ -26,7 +26,7 @@ export function FsMockIndexer(options: Options = {}) {
       let files: t.ManifestFile[] = [];
 
       const formatPath = (path: string) => {
-        path = Path.Uri.trimPrefix(path);
+        path = Path.Uri.trimUriPrefix(path);
         path = Path.trimSlashes(path);
         return path;
       };
@@ -36,7 +36,7 @@ export function FsMockIndexer(options: Options = {}) {
           options,
           addFile(path, data) {
             path = formatPath(path);
-            const uri = Path.Uri.ensurePrefix(path);
+            const uri = Path.Uri.ensureUriPrefix(path);
 
             data = data ?? randomFile().data;
             const bytes = data.byteLength;

@@ -15,8 +15,7 @@ export const PathUri = {
    * Determines if the given string is a "path:" URI.
    */
   isPathUri(input?: string) {
-    const uri = trim(input);
-    return uri.startsWith('path:');
+    return trim(input).startsWith('path:');
   },
 
   /**
@@ -36,14 +35,20 @@ export const PathUri = {
     return join(res); // NB: The "join" call passes the path through a "../.." resolver.
   },
 
+  cleanPath(path: string) {
+    if (typeof path !== 'string') return '';
+
+    return path;
+  },
+
   /**
    * Ensures the given string is cleaned/trimmed and has "path:" as a prefix
    */
-  ensurePrefix(path: string) {
+  ensureUriPrefix(path: string) {
     if (typeof path !== 'string') return '';
 
     path = path.trim();
-    path = PathUri.trimPrefix(path);
+    path = PathUri.trimUriPrefix(path);
     if (path === '' || trimSlashesEnd(path) === '.') path = '/';
 
     if (path.startsWith('/')) path = `/${trimSlashesStart(path)}`; // Ensure single leading slash.
@@ -53,7 +58,7 @@ export const PathUri = {
   /**
    * Remotes the "path:" prefix from the given string.
    */
-  trimPrefix(path: string) {
+  trimUriPrefix(path: string) {
     path = trim(path);
     return path ? path.replace(/^path:/, '').trim() : '';
   },

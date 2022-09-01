@@ -51,7 +51,7 @@ describe('PathUri', () => {
 
   it('ensurePrefix', () => {
     const test = (input: any, expected: string) => {
-      const res = PathUri.ensurePrefix(input);
+      const res = PathUri.ensureUriPrefix(input);
       expect(res).to.eql(expected, input);
     };
 
@@ -88,7 +88,7 @@ describe('PathUri', () => {
 
   it('trimPrefix', () => {
     const test = (input: any, expected: string) => {
-      expect(PathUri.trimPrefix(input)).to.eql(expected);
+      expect(PathUri.trimUriPrefix(input)).to.eql(expected);
     };
 
     test('  ', '');
