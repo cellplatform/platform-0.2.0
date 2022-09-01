@@ -40,15 +40,21 @@ describe('Mock: FsDriver', () => {
     });
 
     it('root directory ("path:.")', async () => {
-      const mock = FsMockDriver();
-      const res = await mock.driver.info('  path:.  ');
+      const test = async (path: string) => {
+        const mock = FsMockDriver();
+        const res = await mock.driver.info(path);
 
-      expect(res.exists).to.eql(true);
-      expect(res.uri).to.eql('path:.');
-      expect(res.path).to.eql('/');
-      expect(res.location).to.eql('file:///mock/');
-      expect(res.hash).to.eql('');
-      expect(res.bytes).to.eql(-1);
+        expect(res.exists).to.eql(true);
+        expect(res.uri).to.eql('path:/');
+        expect(res.path).to.eql('/');
+        expect(res.location).to.eql('file:///mock/');
+        expect(res.hash).to.eql('');
+        expect(res.bytes).to.eql(-1);
+      };
+
+      await test('path:/');
+      await test('path:'); // NB: root "/" inferred.
+      await test('  path:.  ');
     });
 
     it('override info', async () => {
@@ -146,19 +152,14 @@ describe('Mock: FsDriver', () => {
       expect(res.error).to.eql(undefined);
     });
 
-    it.skip('write/read - remove leading slash', async () => {
+    it('write/read - remove leading slash', async () => {
       const mock = FsMockDriver();
       const file = MemoryMock.randomFile();
 
       await mock.driver.write('path:/foo/bar.txt', file.data);
 
       const res = await mock.driver.read('path:foo/bar.txt');
-
-      console.log('-------------------------------------------');
-      console.log('res', res);
-
       expect(res.status).to.eql(200);
-      // expect((await mock.driver.read('path:foo/bar.txt')).status).to.eql(200);
     });
   });
 

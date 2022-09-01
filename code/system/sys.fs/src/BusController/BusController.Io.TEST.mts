@@ -111,7 +111,7 @@ describe('BusController.IO', function () {
       const image1 = MemoryMock.randomFile();
       const image2 = MemoryMock.randomFile(500);
 
-      await mock.driver.write('path:images/tree.png', image1.data);
+      await mock.driver.write('path:/images/tree.png', image1.data);
       await mock.driver.write('path:images/kitten.jpg', image2.data);
 
       const res = await mock.events.io.read.get(['/images/tree.png', 'images/kitten.jpg']);

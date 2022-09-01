@@ -51,21 +51,39 @@ describe('PathUri', () => {
 
   it('ensurePrefix', () => {
     const test = (input: any, expected: string) => {
-      expect(PathUri.ensurePrefix(input)).to.eql(expected);
+      const res = PathUri.ensurePrefix(input);
+      expect(res).to.eql(expected, input);
     };
 
-    test('  ', 'path:');
+    test('', 'path:/');
+    test('  ', 'path:/');
+    test('path:', 'path:/');
+    test(' path: ', 'path:/');
+
+    test('.', 'path:/');
+    test(' . ', 'path:/');
+    test(' ./ ', 'path:/');
+    test(' ./// ', 'path:/');
+    test('path:.', 'path:/');
+    test('path:./', 'path:/');
+
+    test('path', 'path:path'); // NB: not a URI prefix.
     test('path:foo', 'path:foo');
     test('  path:foo/bar  ', 'path:foo/bar');
+    test('  path:/foo/bar.png  ', 'path:/foo/bar.png');
     test('  foo  ', 'path:foo');
-    test('  /foo/bar/  ', 'path:foo/bar/');
-    test('///foo/bar/  ', 'path:foo/bar/');
-    test('foo/bar', 'path:foo/bar');
-    test('/foo/bar', 'path:foo/bar');
 
+    test('foo/bar', 'path:foo/bar');
+    test('/foo/bar', 'path:/foo/bar');
+    test('  /foo/bar/  ', 'path:/foo/bar/');
+    test('///foo/bar/  ', 'path:/foo/bar/');
+
+    test(undefined, '');
     test(null, '');
     test(123, '');
+    test(true, '');
     test({}, '');
+    test([], '');
   });
 
   it('trimPrefix', () => {
