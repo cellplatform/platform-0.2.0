@@ -1,102 +1,102 @@
 import { t } from './common.mjs';
 
-type FilesystemId = string;
 type FilePath = string;
+type FilesystemId = string;
 
 /**
  * EVENTS
  */
-export type SysFsIoEvent =
-  | SysFsReadReqEvent
-  | SysFsReadResEvent
-  | SysFsWriteReqEvent
-  | SysFsWriteResEvent
-  | SysFsDeleteReqEvent
-  | SysFsDeleteResEvent
-  | SysFsCopyReqEvent
-  | SysFsCopyResEvent
-  | SysFsMoveReqEvent
-  | SysFsMoveResEvent;
+export type FsBusIoEvent =
+  | FsBusReadReqEvent
+  | FsBusReadResEvent
+  | FsBusWriteReqEvent
+  | FsBusWriteResEvent
+  | FsBusDeleteReqEvent
+  | FsBusDeleteResEvent
+  | FsBusCopyReqEvent
+  | FsBusCopyResEvent
+  | FsBusMoveReqEvent
+  | FsBusMoveResEvent;
 
 /**
  * IO: Read
  */
-export type SysFsReadReqEvent = {
+export type FsBusReadReqEvent = {
   type: 'sys.fs/read:req';
-  payload: SysFsReadReq;
+  payload: FsBusReadReq;
 };
-export type SysFsReadReq = { tx: string; id: FilesystemId; path: FilePath | FilePath[] };
+export type FsBusReadReq = { tx: string; id: FilesystemId; path: FilePath | FilePath[] };
 
-export type SysFsReadResEvent = {
+export type FsBusReadResEvent = {
   type: 'sys.fs/read:res';
-  payload: SysFsReadRes;
+  payload: FsBusReadRes;
 };
-export type SysFsReadRes = t.FsBusReadResponse & { tx: string; id: FilesystemId };
+export type FsBusReadRes = t.FsBusReadResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Write
  */
-export type SysFsWriteReqEvent = {
+export type FsBusWriteReqEvent = {
   type: 'sys.fs/write:req';
-  payload: SysFsWriteReq;
+  payload: FsBusWriteReq;
 };
-export type SysFsWriteReq = { tx: string; id: FilesystemId; file: t.FsBusFile | t.FsBusFile[] };
+export type FsBusWriteReq = { tx: string; id: FilesystemId; file: t.FsBusFile | t.FsBusFile[] };
 
-export type SysFsWriteResEvent = {
+export type FsBusWriteResEvent = {
   type: 'sys.fs/write:res';
-  payload: SysFsWriteRes;
+  payload: FsBusWriteRes;
 };
-export type SysFsWriteRes = t.FsBusWriteResponse & { tx: string; id: FilesystemId };
+export type FsBusWriteRes = t.FsBusWriteResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Delete
  */
-export type SysFsDeleteReqEvent = {
+export type FsBusDeleteReqEvent = {
   type: 'sys.fs/delete:req';
-  payload: SysFsDeleteReq;
+  payload: FsBusDeleteReq;
 };
-export type SysFsDeleteReq = { tx: string; id: FilesystemId; path: FilePath | FilePath[] };
+export type FsBusDeleteReq = { tx: string; id: FilesystemId; path: FilePath | FilePath[] };
 
-export type SysFsDeleteResEvent = {
+export type FsBusDeleteResEvent = {
   type: 'sys.fs/delete:res';
-  payload: SysFsDeleteRes;
+  payload: FsBusDeleteRes;
 };
-export type SysFsDeleteRes = t.FsBusDeleteResponse & { tx: string; id: FilesystemId };
+export type FsBusDeleteRes = t.FsBusDeleteResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Copy
  */
-export type SysFsCopyReqEvent = {
+export type FsBusCopyReqEvent = {
   type: 'sys.fs/copy:req';
-  payload: SysFsCopyReq;
+  payload: FsBusCopyReq;
 };
-export type SysFsCopyReq = {
+export type FsBusCopyReq = {
   tx: string;
   id: FilesystemId;
   file: t.FsBusFileTarget | t.FsBusFileTarget[];
 };
 
-export type SysFsCopyResEvent = {
+export type FsBusCopyResEvent = {
   type: 'sys.fs/copy:res';
-  payload: SysFsCopyRes;
+  payload: FsBusCopyRes;
 };
-export type SysFsCopyRes = t.FsBusCopyResponse & { tx: string; id: FilesystemId };
+export type FsBusCopyRes = t.FsBusCopyResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Move
  */
-export type SysFsMoveReqEvent = {
+export type FsBusMoveReqEvent = {
   type: 'sys.fs/move:req';
-  payload: SysFsMoveReq;
+  payload: FsBusMoveReq;
 };
-export type SysFsMoveReq = {
+export type FsBusMoveReq = {
   tx: string;
   id: FilesystemId;
   file: t.FsBusFileTarget | t.FsBusFileTarget[];
 };
 
-export type SysFsMoveResEvent = {
+export type FsBusMoveResEvent = {
   type: 'sys.fs/move:res';
-  payload: SysFsMoveRes;
+  payload: FsBusMoveRes;
 };
-export type SysFsMoveRes = t.FsBusMoveResponse & { tx: string; id: FilesystemId };
+export type FsBusMoveRes = t.FsBusMoveResponse & { tx: string; id: FilesystemId };

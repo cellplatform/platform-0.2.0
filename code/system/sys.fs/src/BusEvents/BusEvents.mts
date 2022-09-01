@@ -14,14 +14,14 @@ type Milliseconds = number;
 export function BusEvents(args: {
   id: FilesystemId;
   bus: t.EventBus<any>;
-  filter?: (e: t.SysFsEvent) => boolean;
+  filter?: (e: t.FsBusEvent) => boolean;
   timeout?: Milliseconds; // Default timeout.
   toUint8Array?: t.FsBusToUint8Array;
   dispose$?: t.Observable<any>;
 }): t.FsBusEvents {
   const { id } = args;
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
-  const bus = rx.busAsType<t.SysFsEvent>(args.bus);
+  const bus = rx.busAsType<t.FsBusEvent>(args.bus);
   const is = BusEvents.is;
   const toUint8Array = args.toUint8Array ?? Stream.toUint8Array;
 
@@ -34,7 +34,7 @@ export function BusEvents(args: {
     filter((e) => args.filter?.(e) ?? true),
   );
 
-  const changed$ = rx.payload<t.SysFsChangedEvent>($, 'sys.fs/changed');
+  const changed$ = rx.payload<t.FsBusChangedEvent>($, 'sys.fs/changed');
 
   /**
    * Initialize sub-event API's

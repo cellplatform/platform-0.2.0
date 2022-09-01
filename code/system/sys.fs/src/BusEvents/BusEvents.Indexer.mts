@@ -10,16 +10,16 @@ type FilesystemId = string;
  */
 export function BusEventsIndexer(args: {
   id: FilesystemId;
-  $: t.Observable<t.SysFsEvent>;
-  bus: t.EventBus<t.SysFsEvent>;
+  $: t.Observable<t.FsBusEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   timeout: number;
 }): t.FsBusEventsIndex {
   const { id, $, bus } = args;
   const toTimeout = Wrangle.timeout(args.timeout);
 
   const manifest: t.FsBusEventsIndex['manifest'] = {
-    req$: rx.payload<t.SysFsManifestReqEvent>($, 'sys.fs/manifest:req'),
-    res$: rx.payload<t.SysFsManifestResEvent>($, 'sys.fs/manifest:res'),
+    req$: rx.payload<t.FsBusManifestReqEvent>($, 'sys.fs/manifest:req'),
+    res$: rx.payload<t.FsBusManifestResEvent>($, 'sys.fs/manifest:res'),
 
     async get(options = {}) {
       const { dir, cache, cachefile } = options;
@@ -45,7 +45,7 @@ export function BusEventsIndexer(args: {
       }
 
       const error: t.FsError = { code: 'fs:client/timeout', message: res, path: flattenPath(dir) };
-      const fail: t.SysFsManifestRes = { tx, id, dirs: [], error };
+      const fail: t.FsBusManifestRes = { tx, id, dirs: [], error };
       return fail;
     },
   };

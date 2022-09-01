@@ -9,7 +9,7 @@ type MaybeError = t.FsError | undefined;
  */
 export function BusControllerIo(args: {
   id: FilesystemId;
-  bus: t.EventBus<t.SysFsEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   driver: t.FsDriver;
   events: t.FsBusEvents;
 }) {

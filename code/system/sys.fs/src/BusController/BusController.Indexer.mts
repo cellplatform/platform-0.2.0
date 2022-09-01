@@ -9,7 +9,7 @@ type MaybeError = t.FsError | undefined;
  */
 export function BusControllerIndexer(args: {
   id: FilesystemId;
-  bus: t.EventBus<t.SysFsEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   driver: t.FsDriver;
   indexer: t.FsIndexer;
   events: t.FsBusEvents;
@@ -36,7 +36,7 @@ export function BusControllerIndexer(args: {
       return false;
     };
 
-    const toErrorResponse = (dir: string, error: string): t.SysFsManifestDirResponse => {
+    const toErrorResponse = (dir: string, error: string): t.FsBusManifestDirResponse => {
       const message = `Failed while building manifest. ${error ?? ''}`.trim();
       return {
         dir,
@@ -45,7 +45,7 @@ export function BusControllerIndexer(args: {
       };
     };
 
-    const toManifest = async (path?: string): Promise<t.SysFsManifestDirResponse> => {
+    const toManifest = async (path?: string): Promise<t.FsBusManifestDirResponse> => {
       const dir = Path.ensureSlashEnd(path ? Path.join(driver.dir, path) : driver.dir);
 
       const cache = ManifestCache({ driver, dir, filename: cachefile });

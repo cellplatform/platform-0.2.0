@@ -1,14 +1,14 @@
-import { SysFsIoEvent } from './types.events.io.mjs';
-import { SysFsIndexEvent } from './types.events.indexer.mjs';
-import { SysFsChangedEvent } from './types.events.change.mjs';
-import { SysFsInfoReqEvent, SysFsInfoResEvent } from './types.events.info.mjs';
+import { FsBusIoEvent } from './types.events.io.mjs';
+import { FsBusIndexEvent } from './types.events.indexer.mjs';
+import { FsBusChangedEvent } from './types.events.change.mjs';
+import { FsBusInfoReqEvent, FsBusInfoResEvent } from './types.events.info.mjs';
 
 /**
  * EVENTS
  */
-export type SysFsEvent =
-  | SysFsIoEvent
-  | SysFsIndexEvent
-  | SysFsInfoReqEvent
-  | SysFsInfoResEvent
-  | SysFsChangedEvent;
+export type FsBusEvent =
+  | FsBusIoEvent
+  | FsBusIndexEvent
+  | FsBusInfoReqEvent
+  | FsBusInfoResEvent
+  | FsBusChangedEvent;

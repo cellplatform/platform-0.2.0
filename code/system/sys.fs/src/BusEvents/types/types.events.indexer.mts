@@ -1,9 +1,9 @@
 import { t } from './common.mjs';
 
-type FilesystemId = string;
 type FilePath = string;
+type FilesystemId = string;
 
-export type SysFsManifestDirResponse = {
+export type FsBusManifestDirResponse = {
   dir: FilePath;
   manifest: t.DirManifest;
   error?: t.FsError;
@@ -12,16 +12,16 @@ export type SysFsManifestDirResponse = {
 /**
  * EVENTS
  */
-export type SysFsIndexEvent = SysFsManifestReqEvent | SysFsManifestResEvent;
+export type FsBusIndexEvent = FsBusManifestReqEvent | FsBusManifestResEvent;
 
 /**
  * Manifest index of directory.
  */
-export type SysFsManifestReqEvent = {
+export type FsBusManifestReqEvent = {
   type: 'sys.fs/manifest:req';
-  payload: SysFsManifestReq;
+  payload: FsBusManifestReq;
 };
-export type SysFsManifestReq = {
+export type FsBusManifestReq = {
   tx: string;
   id: FilesystemId;
   dir?: FilePath | FilePath[];
@@ -29,13 +29,13 @@ export type SysFsManifestReq = {
   cachefile?: string; // Used in conjuction with [cache] flag. Filename of the cached manifest to save.
 };
 
-export type SysFsManifestResEvent = {
+export type FsBusManifestResEvent = {
   type: 'sys.fs/manifest:res';
-  payload: SysFsManifestRes;
+  payload: FsBusManifestRes;
 };
-export type SysFsManifestRes = {
+export type FsBusManifestRes = {
   tx: string;
   id: FilesystemId;
-  dirs: SysFsManifestDirResponse[];
+  dirs: FsBusManifestDirResponse[];
   error?: t.FsError;
 };

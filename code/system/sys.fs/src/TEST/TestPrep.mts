@@ -19,7 +19,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const driver = mocks.driver.driver;
   const indexer = mocks.indexer.indexer;
 
-  const bus = rx.bus<t.SysFsEvent>();
+  const bus = rx.bus<t.FsBusEvent>();
   const controller = BusController({ id, driver, bus, indexer });
 
   const events = controller.events;

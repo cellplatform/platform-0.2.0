@@ -4,7 +4,7 @@ import { ManifestFiles } from '../Manifest/index.mjs';
 import { Path } from './common.mjs';
 
 describe('BusController.Indexer', function () {
-  type R = t.SysFsManifestDirResponse;
+  type R = t.FsBusManifestDirResponse;
   const asFiles = (dir: R) => ManifestFiles.sort(dir.manifest.files.map((file) => file.path));
 
   describe('manifest', () => {
@@ -312,7 +312,7 @@ describe('BusController.Indexer', function () {
       const res1 = await mock.events.index.manifest.get({ cache: true });
       const res2 = await mock.events.index.manifest.get({ cache: 'force' });
 
-      const expectNoCachefile = (dir: t.SysFsManifestDirResponse) => {
+      const expectNoCachefile = (dir: t.FsBusManifestDirResponse) => {
         const files = asFiles(dir);
         const exists = files.some((file) => file.endsWith(DEFAULT.CACHE_FILENAME));
         expect(exists).to.eql(false);

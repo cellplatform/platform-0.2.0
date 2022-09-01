@@ -8,13 +8,13 @@ type FilesystemId = string;
  */
 export function BusControllerChange(args: {
   id: FilesystemId;
-  bus: t.EventBus<t.SysFsEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   events: t.FsBusEvents;
 }) {
   const { id, events, bus } = args;
 
-  const fire = (op: t.SysFsChange['op'], files: t.SysFsChange['files']) => {
-    const change = { op, files } as t.SysFsChange;
+  const fire = (op: t.FsBusChange['op'], files: t.FsBusChange['files']) => {
+    const change = { op, files } as t.FsBusChange;
     bus.fire({ type: 'sys.fs/changed', payload: { id, change } });
   };
 
