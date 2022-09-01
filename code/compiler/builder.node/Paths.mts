@@ -11,7 +11,7 @@ export const Paths = {
   rootDir,
   buildManifest: 'dist/manifest.json',
   tmpl: {
-    dir: fs.join(__dirname, '../builder.templates'),
+    dir: fs.join(__dirname, '../builder.tmpl.esm'),
     esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
