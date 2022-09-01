@@ -42,7 +42,7 @@ import { Builder, pc, Util, fs } from './common/index.mjs';
   console.log(statusColor(ok, 'test results:'));
   paths.forEach((path) => console.log(` ${bullet(path)} ${Util.formatPath(path)}`));
   console.log();
-  console.log(pc.gray(`platform/builder v${pkg.version}`));
+  console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
   if (!ok) process.exit(1);
 })();
