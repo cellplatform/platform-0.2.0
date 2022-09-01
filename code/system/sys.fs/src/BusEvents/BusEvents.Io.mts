@@ -21,7 +21,8 @@ export function BusEventsIo(args: {
     defaultCode?: t.SysFsErrorCode,
   ): t.SysFsError => {
     const message = error?.message ?? 'Failed';
-    const code = error?.code === 'timeout' ? 'client/timeout' : defaultCode ?? 'unknown';
+    const code: t.SysFsErrorCode =
+      error?.code === 'fs:timeout' ? 'fs:client/timeout' : defaultCode ?? 'fs:unknown';
     return { code, message };
   };
 
@@ -47,7 +48,7 @@ export function BusEventsIo(args: {
         return res.payload;
       }
 
-      const error = toError(res.error, 'info');
+      const error = toError(res.error, 'fs:info');
       const fail: t.SysFsInfoRes = { tx, id, paths: [], error };
       return fail;
     },
@@ -79,7 +80,7 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'read');
+      const error = toError(res.error, 'fs:read');
       const fail: t.SysFsReadResponse = { files: [], error };
       return fail;
     },
@@ -111,7 +112,7 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'write');
+      const error = toError(res.error, 'fs:write');
       const fail: t.SysFsWriteResponse = { files: [], error };
       return fail;
     },
@@ -143,7 +144,7 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'copy');
+      const error = toError(res.error, 'fs:copy');
       const fail: t.SysFsCopyResponse = { files: [], error };
       return fail;
     },
@@ -175,7 +176,7 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'move');
+      const error = toError(res.error, 'fs:move');
       const fail: t.SysFsMoveResponse = { files: [], error };
       return fail;
     },
@@ -207,7 +208,7 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'delete');
+      const error = toError(res.error, 'fs:delete');
       const fail: t.SysFsDeleteResponse = { files: [], error };
       return fail;
     },

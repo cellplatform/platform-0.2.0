@@ -67,7 +67,7 @@ export function BusEvents(args: {
       return {
         ready: false,
         error: {
-          code: 'client/timeout',
+          code: 'fs:client/timeout',
           message: `Filesystem '${id}' did not respond after ${retries} attempts`,
         },
       };

@@ -44,7 +44,7 @@ export function BusEventsIndexer(args: {
         return res;
       }
 
-      const error: t.SysFsError = { code: 'client/timeout', message: res };
+      const error: t.SysFsError = { code: 'fs:client/timeout', message: res };
       const fail: t.SysFsManifestRes = { tx, id, dirs: [], error };
       return fail;
     },

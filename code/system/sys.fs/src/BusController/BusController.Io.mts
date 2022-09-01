@@ -36,7 +36,7 @@ export function BusControllerIo(args: {
 
       return { kind, path, exists, hash, bytes };
     } catch (err: any) {
-      const error: t.SysFsError = { code: 'info', message: err.message };
+      const error: t.SysFsError = { code: 'fs:info', message: err.message };
       return { kind: 'unknown', path: filepath, exists: false, hash: '', bytes: -1, error };
     }
   };
@@ -47,19 +47,19 @@ export function BusControllerIo(args: {
 
     const info = await driver.info(address);
     if (!info.exists) {
-      const error: Error = { code: 'read/404', message: `File not found`, path };
+      const error: Error = { code: 'fs:read/404', message: `File not found`, path };
       return { error };
     }
 
     const res = await driver.read(address);
 
     if (res.error) {
-      const error: Error = { code: 'read', message: res.error.message, path };
+      const error: Error = { code: 'fs:read', message: res.error.message, path };
       return { error };
     }
 
     if (!res.file) {
-      const error: Error = { code: 'read/404', message: `File not found`, path };
+      const error: Error = { code: 'fs:read/404', message: `File not found`, path };
       return { error };
     }
 
@@ -74,7 +74,7 @@ export function BusControllerIo(args: {
     const { hash, data } = file;
     const path = Path.trim(file.path);
 
-    const toError = (message: string): t.SysFsError => ({ code: 'write', message });
+    const toError = (message: string): t.SysFsError => ({ code: 'fs:write', message });
     const done = (err?: string) => {
       return {
         hash,
@@ -95,7 +95,9 @@ export function BusControllerIo(args: {
     const target = Path.Uri.ensureUriPrefix(file.target);
     const res = await driver.copy(source, target);
     const info = await driver.info(target);
-    const error: MaybeError = res.error ? { code: 'copy', message: res.error.message } : undefined;
+    const error: MaybeError = res.error
+      ? { code: 'fs:copy', message: res.error.message }
+      : undefined;
     return {
       source: stripDirRoot(file.source),
       target: stripDirRoot(file.target),
@@ -110,7 +112,7 @@ export function BusControllerIo(args: {
     const res = await driver.delete(address);
 
     const error: MaybeError = res.error
-      ? { code: 'delete', message: res.error.message }
+      ? { code: 'fs:delete', message: res.error.message }
       : undefined;
 
     return {
@@ -166,7 +168,7 @@ export function BusControllerIo(args: {
     const files = await Promise.all(asArray(e.path).map(readFile));
 
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'read', message: 'Failed while reading' }
+      ? { code: 'fs:read', message: 'Failed while reading' }
       : undefined;
 
     bus.fire({
@@ -183,7 +185,7 @@ export function BusControllerIo(args: {
 
     const files = await Promise.all(asArray(e.file).map(writeFile));
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'read', message: 'Failed while writing' }
+      ? { code: 'fs:read', message: 'Failed while writing' }
       : undefined;
 
     bus.fire({
@@ -199,7 +201,7 @@ export function BusControllerIo(args: {
     const { tx } = e;
     const files = await Promise.all(asArray(e.path).map(deleteFile));
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'delete', message: 'Failed while deleting' }
+      ? { code: 'fs:delete', message: 'Failed while deleting' }
       : undefined;
 
     bus.fire({
@@ -215,7 +217,7 @@ export function BusControllerIo(args: {
     const { tx } = e;
     const files = await Promise.all(asArray(e.file).map((e) => copyFile(e)));
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'copy', message: 'Failed while copying' }
+      ? { code: 'fs:copy', message: 'Failed while copying' }
       : undefined;
 
     bus.fire({
@@ -231,7 +233,7 @@ export function BusControllerIo(args: {
     const { tx } = e;
     const files = await Promise.all(asArray(e.file).map(moveFile));
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'move', message: 'Failed while moving' }
+      ? { code: 'fs:move', message: 'Failed while moving' }
       : undefined;
 
     bus.fire({

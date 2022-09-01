@@ -40,7 +40,7 @@ export function BusControllerIndexer(args: {
       return {
         dir,
         manifest: R.clone(DEFAULT.ERROR_MANIFEST),
-        error: { code: 'manifest', message },
+        error: { code: 'fs:manifest', message },
       };
     };
 
@@ -75,7 +75,7 @@ export function BusControllerIndexer(args: {
 
     const hasError = dirs.some((dir) => dir.error);
     const error: t.SysFsError | undefined = hasError
-      ? { code: 'manifest', message: `Indexing failed` }
+      ? { code: 'fs:manifest', message: `Indexing failed` }
       : undefined;
 
     bus.fire({

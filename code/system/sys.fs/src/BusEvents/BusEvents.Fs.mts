@@ -69,7 +69,7 @@ export function BusEventsFs(args: {
     const files = res.files ?? [];
     const first = files[0];
 
-    if (first?.error?.code === 'read/404') return undefined;
+    if (first?.error?.code === 'fs:read/404') return undefined;
     if (first?.error) throw new Error(first.error.message);
     if (res.error) throw new Error(res.error.message);
 
