@@ -13,7 +13,7 @@ export type PackageJson = {
   devDependencies?: { [key: string]: string };
 };
 
-type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown>;
+type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown> | unknown;
 type ModifyConfigArgs = {
   readonly ctx: ModifyConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
