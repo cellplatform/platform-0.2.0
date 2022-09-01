@@ -48,7 +48,6 @@ describe('BusEvents.Fs', () => {
       const file = MemoryMock.randomFile();
       await mock.driver.write('path:foo/bar/tree.png', file.data);
 
-      // await mock.copy('static.test/child/tree.png', 'foo/bar/tree.png');
       const dir1 = fs.dir('foo');
       const dir2 = dir1.dir('bar');
 
@@ -668,7 +667,7 @@ describe('BusEvents.Fs', () => {
     });
 
     describe('errors', () => {
-      it('throw: timeout', async () => {
+      it('throw on write: timeout', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs({ timeout: 10 });
         const file = MemoryMock.randomFile();
@@ -681,21 +680,14 @@ describe('BusEvents.Fs', () => {
         mock.dispose();
       });
 
-      it.skip('throw: attempt "step up" outside the root directory', async () => {
+      it('throw on write: attempt "step up" outside the root directory', async () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
         const file = MemoryMock.randomFile();
 
-        // const mock =  TestPrep();
-        // const src = await mock.readFile('static.test/data.json');
-        // const fs = mock.events.fs();
-
         // Success.
         const res = await fs.write('data.json', file.data);
         expect(res.hash).to.eql(file.hash);
-
-        // const r = await fs.write('../../data.json', src.data);
-        // console.log('r', r);
 
         // Fail (illegal path).
         const fn = () => fs.write('../../data.json', file.data);

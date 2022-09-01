@@ -72,11 +72,22 @@ export function BusControllerIo(args: {
 
   const writeFile = async (file: t.SysFsFile): Promise<t.SysFsFileWriteResponse> => {
     const { hash, data } = file;
-    const address = Path.Uri.ensurePrefix(file.path);
+    const path = Path.trim(file.path);
+
+    const toError = (message: string): t.SysFsError => ({ code: 'write', message });
+    const done = (err?: string) => {
+      return {
+        hash,
+        path: stripDirRoot(path),
+        error: err ? toError(err) : undefined,
+      };
+    };
+
+    if (!path) return done('No file-path to write to');
+    const address = Path.Uri.ensurePrefix(path);
+
     const res = await driver.write(address, data);
-    const error: MaybeError = res.error ? { code: 'write', message: res.error.message } : undefined;
-    const path = stripDirRoot(res.file.path);
-    return { path, hash, error };
+    return done(res.error?.message);
   };
 
   const copyFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileCopyResponse> => {
@@ -153,6 +164,7 @@ export function BusControllerIo(args: {
   events.io.read.req$.subscribe(async (e) => {
     const { tx } = e;
     const files = await Promise.all(asArray(e.path).map(readFile));
+
     const error: MaybeError = files.some((file) => Boolean(file.error))
       ? { code: 'read', message: 'Failed while reading' }
       : undefined;
@@ -168,9 +180,10 @@ export function BusControllerIo(args: {
    */
   events.io.write.req$.subscribe(async (e) => {
     const { tx } = e;
+
     const files = await Promise.all(asArray(e.file).map(writeFile));
     const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'write', message: 'Failed while writing' }
+      ? { code: 'read', message: 'Failed while writing' }
       : undefined;
 
     bus.fire({
