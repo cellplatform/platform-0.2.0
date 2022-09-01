@@ -9,7 +9,7 @@ import { Builder, fs, pc, Util } from './common/index.mjs';
   const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
   const paths = await Util.findProjectDirs((path) => {
-    if (path.includes('/builder.samples')) return false;
+    if (path.includes('/code/samples')) return false;
     return true;
   });
   if (paths.length === 0) return;
