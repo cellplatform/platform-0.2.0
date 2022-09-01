@@ -31,7 +31,7 @@ export type SysFsReadResEvent = {
   type: 'sys.fs/read:res';
   payload: SysFsReadRes;
 };
-export type SysFsReadRes = t.SysFsReadResponse & { tx: string; id: FilesystemId };
+export type SysFsReadRes = t.FsBusReadResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Write
@@ -40,13 +40,13 @@ export type SysFsWriteReqEvent = {
   type: 'sys.fs/write:req';
   payload: SysFsWriteReq;
 };
-export type SysFsWriteReq = { tx: string; id: FilesystemId; file: t.SysFsFile | t.SysFsFile[] };
+export type SysFsWriteReq = { tx: string; id: FilesystemId; file: t.FsBusFile | t.FsBusFile[] };
 
 export type SysFsWriteResEvent = {
   type: 'sys.fs/write:res';
   payload: SysFsWriteRes;
 };
-export type SysFsWriteRes = t.SysFsWriteResponse & { tx: string; id: FilesystemId };
+export type SysFsWriteRes = t.FsBusWriteResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Delete
@@ -61,7 +61,7 @@ export type SysFsDeleteResEvent = {
   type: 'sys.fs/delete:res';
   payload: SysFsDeleteRes;
 };
-export type SysFsDeleteRes = t.SysFsDeleteResponse & { tx: string; id: FilesystemId };
+export type SysFsDeleteRes = t.FsBusDeleteResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Copy
@@ -73,14 +73,14 @@ export type SysFsCopyReqEvent = {
 export type SysFsCopyReq = {
   tx: string;
   id: FilesystemId;
-  file: t.SysFsFileTarget | t.SysFsFileTarget[];
+  file: t.FsBusFileTarget | t.FsBusFileTarget[];
 };
 
 export type SysFsCopyResEvent = {
   type: 'sys.fs/copy:res';
   payload: SysFsCopyRes;
 };
-export type SysFsCopyRes = t.SysFsCopyResponse & { tx: string; id: FilesystemId };
+export type SysFsCopyRes = t.FsBusCopyResponse & { tx: string; id: FilesystemId };
 
 /**
  * IO: Move
@@ -92,11 +92,11 @@ export type SysFsMoveReqEvent = {
 export type SysFsMoveReq = {
   tx: string;
   id: FilesystemId;
-  file: t.SysFsFileTarget | t.SysFsFileTarget[];
+  file: t.FsBusFileTarget | t.FsBusFileTarget[];
 };
 
 export type SysFsMoveResEvent = {
   type: 'sys.fs/move:res';
   payload: SysFsMoveRes;
 };
-export type SysFsMoveRes = t.SysFsMoveResponse & { tx: string; id: FilesystemId };
+export type SysFsMoveRes = t.FsBusMoveResponse & { tx: string; id: FilesystemId };

@@ -16,7 +16,7 @@ export function BusEvents(args: {
   bus: t.EventBus<any>;
   filter?: (e: t.SysFsEvent) => boolean;
   timeout?: Milliseconds; // Default timeout.
-  toUint8Array?: t.SysFsToUint8Array;
+  toUint8Array?: t.FsBusToUint8Array;
   dispose$?: t.Observable<any>;
 }): t.FsBusEvents {
   const { id } = args;

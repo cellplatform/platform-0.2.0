@@ -7,7 +7,7 @@ export function BusEventsFs(args: {
   dir?: string; // Sub-directory within root.
   index: t.FsBusEventsIndex;
   io: t.FsBusEventsIo;
-  toUint8Array: t.SysFsToUint8Array;
+  toUint8Array: t.FsBusToUint8Array;
 }): t.Fs {
   const { io, index, toUint8Array } = args;
 

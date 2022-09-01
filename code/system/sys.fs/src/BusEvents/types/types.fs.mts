@@ -1,16 +1,16 @@
 import { t } from './common.mjs';
 
-type FilesystemId = string;
-type FilePath = string;
-type DirPath = string;
+type DirPath = string; //  Path to a directory, eg: "foo/"
+type FilePath = string; // Path to a file, eg: "foo/bar.txt"
 type FileHash = string;
+type FilesystemId = string;
 
-export type SysFsInfo = {
+export type FsBusInfo = {
   id: FilesystemId;
   dir: DirPath; // The root directory of the filesystem scope.
 };
 
-export type SysFsPathInfo = {
+export type FsBusPathInfo = {
   kind: 'file' | 'dir' | 'unknown';
   path: FilePath | DirPath;
   exists: boolean;
@@ -19,43 +19,42 @@ export type SysFsPathInfo = {
   error?: t.FsError;
 };
 
-export type SysFsFile = { path: FilePath; data: Uint8Array; hash: FileHash };
-export type SysFsFileTarget = { source: FilePath; target: FilePath };
+export type FsBusFile = { path: FilePath; data: Uint8Array; hash: FileHash };
+export type FsBusFileTarget = { source: FilePath; target: FilePath };
 
-export type SysFsFileReadResponse = {
-  file?: SysFsFile;
+export type FsBusFileReadResponse = {
+  file?: FsBusFile;
   error?: t.FsError;
 };
-export type SysFsFileWriteResponse = {
+export type FsBusFileWriteResponse = {
   path: FilePath;
   hash: FileHash;
   error?: t.FsError;
 };
-export type SysFsFileCopyResponse = {
+export type FsBusFileCopyResponse = {
   source: FilePath;
   target: FilePath;
   hash: FileHash;
   error?: t.FsError;
 };
-export type SysFsFileMoveResponse = {
+export type FsBusFileMoveResponse = {
   source: FilePath;
   target: FilePath;
   hash: FileHash;
   error?: t.FsError;
 };
-export type SysFsFileDeleteResponse = {
+export type FsBusFileDeleteResponse = {
   path: FilePath;
   hash: FileHash;
   existed: boolean;
   error?: t.FsError;
 };
 
-export type SysFsReadResponse = { files: SysFsFileReadResponse[]; error?: t.FsError };
-export type SysFsWriteResponse = { files: SysFsFileWriteResponse[]; error?: t.FsError };
-export type SysFsDeleteResponse = { files: SysFsFileDeleteResponse[]; error?: t.FsError };
-export type SysFsCopyResponse = { files: SysFsFileCopyResponse[]; error?: t.FsError };
-export type SysFsMoveResponse = { files: SysFsFileMoveResponse[]; error?: t.FsError };
+export type FsBusReadResponse = { files: FsBusFileReadResponse[]; error?: t.FsError };
+export type FsBusWriteResponse = { files: FsBusFileWriteResponse[]; error?: t.FsError };
+export type FsBusDeleteResponse = { files: FsBusFileDeleteResponse[]; error?: t.FsError };
+export type FsBusCopyResponse = { files: FsBusFileCopyResponse[]; error?: t.FsError };
+export type FsBusMoveResponse = { files: FsBusFileMoveResponse[]; error?: t.FsError };
 
-export type SysFsToUint8Array = (
-  input: Uint8Array | ReadableStream | t.Json | undefined,
-) => Promise<Uint8Array>;
+export type FsBusToUint8Array = (input: FsBusToUint8ArrayInput) => Promise<Uint8Array>;
+type FsBusToUint8ArrayInput = Uint8Array | ReadableStream | t.Json | undefined;

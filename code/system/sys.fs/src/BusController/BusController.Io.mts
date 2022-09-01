@@ -23,7 +23,7 @@ export function BusControllerIo(args: {
     return Path.ensureSlashStart(path);
   };
 
-  const getFileInfo = async (filepath: FilePath): Promise<t.SysFsPathInfo> => {
+  const getFileInfo = async (filepath: FilePath): Promise<t.FsBusPathInfo> => {
     try {
       filepath = Path.trimSlashesEnd(filepath);
       const uri = Path.Uri.ensureUriPrefix(filepath);
@@ -42,7 +42,7 @@ export function BusControllerIo(args: {
     }
   };
 
-  const readFile = async (path: string): Promise<t.SysFsFileReadResponse> => {
+  const readFile = async (path: string): Promise<t.FsBusFileReadResponse> => {
     const address = Path.Uri.ensureUriPrefix(path);
     path = stripDirRoot(path);
 
@@ -71,7 +71,7 @@ export function BusControllerIo(args: {
     };
   };
 
-  const writeFile = async (file: t.SysFsFile): Promise<t.SysFsFileWriteResponse> => {
+  const writeFile = async (file: t.FsBusFile): Promise<t.FsBusFileWriteResponse> => {
     const { hash, data } = file;
     const path = Path.trim(file.path);
 
@@ -91,7 +91,7 @@ export function BusControllerIo(args: {
     return done(res.error?.message);
   };
 
-  const copyFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileCopyResponse> => {
+  const copyFile = async (file: t.FsBusFileTarget): Promise<t.FsBusFileCopyResponse> => {
     const source = Path.Uri.ensureUriPrefix(file.source);
     const target = Path.Uri.ensureUriPrefix(file.target);
     const res = await driver.copy(source, target);
@@ -109,7 +109,7 @@ export function BusControllerIo(args: {
     };
   };
 
-  const deleteFile = async (path: FilePath): Promise<t.SysFsFileDeleteResponse> => {
+  const deleteFile = async (path: FilePath): Promise<t.FsBusFileDeleteResponse> => {
     const address = Path.Uri.ensureUriPrefix(path);
     const info = await driver.info(address);
     const res = await driver.delete(address);
@@ -126,7 +126,7 @@ export function BusControllerIo(args: {
     };
   };
 
-  const moveFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileMoveResponse> => {
+  const moveFile = async (file: t.FsBusFileTarget): Promise<t.FsBusFileMoveResponse> => {
     let error: MaybeError;
     let hash = '';
 
@@ -154,7 +154,7 @@ export function BusControllerIo(args: {
    */
   events.io.info.req$.subscribe(async (e) => {
     const { tx } = e;
-    const info: t.SysFsInfo = { id, dir: root };
+    const info: t.FsBusInfo = { id, dir: root };
     const paths = asArray(e.path ?? []);
     const files = await Promise.all(paths.map(getFileInfo));
     bus.fire({

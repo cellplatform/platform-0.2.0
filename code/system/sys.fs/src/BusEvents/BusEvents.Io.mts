@@ -82,7 +82,7 @@ export function BusEventsIo(args: {
       }
 
       const error = toError(res.error, 'fs:read');
-      const fail: t.SysFsReadResponse = { files: [], error };
+      const fail: t.FsBusReadResponse = { files: [], error };
       return fail;
     },
   };
@@ -114,7 +114,7 @@ export function BusEventsIo(args: {
       }
 
       const error = toError(res.error, 'fs:write');
-      const fail: t.SysFsWriteResponse = { files: [], error };
+      const fail: t.FsBusWriteResponse = { files: [], error };
       return fail;
     },
   };
@@ -146,7 +146,7 @@ export function BusEventsIo(args: {
       }
 
       const error = toError(res.error, 'fs:copy');
-      const fail: t.SysFsCopyResponse = { files: [], error };
+      const fail: t.FsBusCopyResponse = { files: [], error };
       return fail;
     },
   };
@@ -178,7 +178,7 @@ export function BusEventsIo(args: {
       }
 
       const error = toError(res.error, 'fs:move');
-      const fail: t.SysFsMoveResponse = { files: [], error };
+      const fail: t.FsBusMoveResponse = { files: [], error };
       return fail;
     },
   };
@@ -210,7 +210,7 @@ export function BusEventsIo(args: {
       }
 
       const error = toError(res.error, 'fs:delete');
-      const fail: t.SysFsDeleteResponse = { files: [], error };
+      const fail: t.FsBusDeleteResponse = { files: [], error };
       return fail;
     },
   };

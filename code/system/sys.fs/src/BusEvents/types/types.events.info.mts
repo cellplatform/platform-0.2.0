@@ -19,7 +19,7 @@ export type SysFsInfoResEvent = {
 export type SysFsInfoRes = {
   tx: string;
   id: FilesystemId;
-  fs?: t.SysFsInfo;
-  paths: t.SysFsPathInfo[];
+  fs?: t.FsBusInfo;
+  paths: t.FsBusPathInfo[];
   error?: t.FsError;
 };

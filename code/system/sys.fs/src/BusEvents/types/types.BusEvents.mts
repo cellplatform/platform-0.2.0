@@ -60,31 +60,31 @@ export type FsBusEventsIo = {
     get(
       path: FilePath | FilePath[],
       options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsReadResponse>;
+    ): Promise<t.FsBusReadResponse>;
   };
   write: {
     req$: t.Observable<t.SysFsWriteReq>;
     res$: t.Observable<t.SysFsWriteRes>;
     fire(
-      file: t.SysFsFile | t.SysFsFile[],
+      file: t.FsBusFile | t.FsBusFile[],
       options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsWriteResponse>;
+    ): Promise<t.FsBusWriteResponse>;
   };
   copy: {
     req$: t.Observable<t.SysFsCopyReq>;
     res$: t.Observable<t.SysFsCopyRes>;
     fire(
-      file: t.SysFsFileTarget | t.SysFsFileTarget[],
+      file: t.FsBusFileTarget | t.FsBusFileTarget[],
       options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsCopyResponse>;
+    ): Promise<t.FsBusCopyResponse>;
   };
   move: {
     req$: t.Observable<t.SysFsMoveReq>;
     res$: t.Observable<t.SysFsMoveRes>;
     fire(
-      file: t.SysFsFileTarget | t.SysFsFileTarget[],
+      file: t.FsBusFileTarget | t.FsBusFileTarget[],
       options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsMoveResponse>;
+    ): Promise<t.FsBusMoveResponse>;
   };
   delete: {
     req$: t.Observable<t.SysFsDeleteReq>;
@@ -92,6 +92,6 @@ export type FsBusEventsIo = {
     fire(
       path: FilePath | FilePath[],
       options?: { timeout?: Milliseconds },
-    ): Promise<t.SysFsDeleteResponse>;
+    ): Promise<t.FsBusDeleteResponse>;
   };
 };
