@@ -56,13 +56,9 @@ export function BusControllerIndexer(args: {
 
         const manifest = await indexer.manifest({ dir: path, filter: filterPaths });
 
-        if (shouldCache() && (await cache.dirExists())) {
-          await cache.write(manifest);
-        }
+        if (shouldCache() && (await cache.dirExists())) await cache.write(manifest);
 
-        if (e.cache === 'remove') {
-          await cache.delete();
-        }
+        if (e.cache === 'remove') await cache.delete();
 
         return { dir, manifest };
       } catch (error: any) {

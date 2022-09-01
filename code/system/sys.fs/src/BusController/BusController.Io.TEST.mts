@@ -85,7 +85,7 @@ describe('BusController.IO', function () {
       const events = Filesystem.BusEvents({ id: 'bar', bus });
       const res = await events.io.info.get({ timeout: 10 });
 
-      expect(res.error?.code).to.eql('client/timeout');
+      expect(res.error?.code).to.eql('fs:client/timeout');
       expect(res.error?.message).to.include('Timed out');
     });
   });
@@ -131,9 +131,9 @@ describe('BusController.IO', function () {
       const res = await mock.events.io.read.get('path:images/tree.png');
       const file = res.files[0];
 
-      expect(res.error?.code).to.eql('read');
+      expect(res.error?.code).to.eql('fs:read');
       expect(res.error?.message).to.include('Failed while reading');
-      expect(file.error?.code).to.eql('read/404');
+      expect(file.error?.code).to.eql('fs:read/404');
       expect(file.error?.message).to.include('File not found');
       expect(file.error?.path).to.eql('/images/tree.png');
     });
@@ -320,9 +320,11 @@ describe('BusController.IO', function () {
       ]);
 
       expect(res.files.length).to.eql(1);
-      expect(res.error?.code).to.eql('copy');
+
+      expect(res.error?.code).to.eql('fs:copy');
       expect(res.error?.message).to.include('Failed while copying');
-      expect(res.files[0].error?.code).to.eql('copy');
+
+      expect(res.files[0].error?.code).to.eql('fs:copy');
       expect(res.files[0].error?.message).to.include('Source file not found');
     });
   });
@@ -362,12 +364,12 @@ describe('BusController.IO', function () {
       const res = await mock.events.io.move.fire({ source: PATH.source, target: PATH.target });
 
       expect(res.files.length).to.eql(1);
-      expect(res.error?.code).to.eql('move');
+      expect(res.error?.code).to.eql('fs:move');
       expect(res.error?.message).to.include('Failed while moving');
       expect(res.files[0].source).to.eql('/foo/bar/kitten.jpg');
       expect(res.files[0].target).to.eql('/cat.jpg');
 
-      expect(res.files[0].error?.code).to.eql('copy');
+      expect(res.files[0].error?.code).to.eql('fs:copy');
       expect(res.files[0].error?.message).to.include('not found');
     });
   });

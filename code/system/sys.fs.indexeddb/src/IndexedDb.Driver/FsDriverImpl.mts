@@ -85,7 +85,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
       let error: t.FsError | undefined;
       if (!hash || !data) {
         status = 404;
-        error = { code: 'FS/read', path, message: `[${uri}] does not exist` };
+        error = { code: 'fs:read', path, message: `[${uri}] does not exist` };
       }
       const file = !data ? undefined : { path, location, data, hash, bytes };
       const ok = status.toString().startsWith('2');
@@ -138,7 +138,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
         return { uri, ok: true, status: 200, file };
       } catch (err: any) {
         const message = `Failed to write [${uri}]. ${err.message}`;
-        const error: t.FsError = { code: 'FS/write', message, path };
+        const error: t.FsError = { code: 'fs:write', message, path };
         return { ok: false, status: 500, uri, file, error };
       }
     },
@@ -182,7 +182,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
         return { ok: true, status: 200, uris, locations };
       } catch (err: any) {
         const error: t.FsError = {
-          code: 'FS/delete',
+          code: 'fs:delete',
           message: `Failed to delete [${uri}]. ${err.message}`,
           path: paths.join(','),
         };
@@ -224,7 +224,7 @@ export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver
       } catch (err: any) {
         const message = `Failed to copy from [${source.uri}] to [${target.uri}]. ${err.message}`;
         const path = target.path;
-        const error: t.FsError = { code: 'FS/copy', message, path };
+        const error: t.FsError = { code: 'fs:copy', message, path };
         const hash = '';
         return done(500, hash, error);
       }

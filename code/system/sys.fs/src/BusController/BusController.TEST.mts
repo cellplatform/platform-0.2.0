@@ -50,7 +50,8 @@ describe('BusController', function () {
     events.dispose();
 
     expect(res1.error).to.eql(undefined);
-    expect(res2.error?.code).to.eql('client/timeout');
+
+    expect(res2.error?.code).to.eql('fs:client/timeout');
     expect(res2.error?.message).to.include('Timed out');
   });
 
@@ -113,7 +114,7 @@ describe('BusController', function () {
 
       const res = await mock.events.ready({ timeout: 10 });
       expect(res.ready).to.eql(false);
-      expect(res.error?.code).to.eql('client/timeout');
+      expect(res.error?.code).to.eql('fs:client/timeout');
       expect(res.error?.message).to.include(`did not respond`);
     });
   });

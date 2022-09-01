@@ -22,7 +22,7 @@ export function BusEventsIo(args: {
   ): t.SysFsError => {
     const message = error?.message ?? 'Failed';
     const code: t.SysFsErrorCode =
-      error?.code === 'fs:timeout' ? 'fs:client/timeout' : defaultCode ?? 'fs:unknown';
+      error?.code === 'timeout' ? 'fs:client/timeout' : defaultCode ?? 'fs:unknown';
     return { code, message };
   };
 
