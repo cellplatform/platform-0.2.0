@@ -57,5 +57,5 @@ export type SysFsCopyResponse = { files: SysFsFileCopyResponse[]; error?: t.SysF
 export type SysFsMoveResponse = { files: SysFsFileMoveResponse[]; error?: t.SysFsError };
 
 export type SysFsToUint8Array = (
-  input: Uint8Array | ReadableStream | t.Json,
+  input: Uint8Array | ReadableStream | t.Json | undefined,
 ) => Promise<Uint8Array>;

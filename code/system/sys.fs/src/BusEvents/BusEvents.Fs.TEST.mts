@@ -876,7 +876,7 @@ describe('BusEvents.Fs', () => {
 
     describe('errors', () => {
       it('throw: write undefined', async () => {
-        const fn = () => test(undefined);
+        const fn = () => test(undefined as any);
         expectError(fn, 'JSON cannot be undefined');
       });
     });
