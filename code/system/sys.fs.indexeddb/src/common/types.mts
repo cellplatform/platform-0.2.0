@@ -9,6 +9,7 @@ export type {
   FsDriver,
   FsIndexer,
   FsError,
+  Manifest,
   ManifestFile,
   DirManifestInfo,
   DirManifest,
