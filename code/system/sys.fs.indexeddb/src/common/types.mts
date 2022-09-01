@@ -3,12 +3,22 @@ import type { ManifestFileImage } from 'sys.fs/src/types.mjs';
 /**
  * @system
  */
-export type { FsDriver, IFsInfo, FsError } from 'sys.fs/src/types.mjs';
+export type { Disposable } from 'sys.types';
+
+export type {
+  FsDriver,
+  FsIndexer,
+  IFsInfo,
+  FsError,
+  ManifestFile,
+  DirManifestInfo,
+  DirManifest,
+} from 'sys.fs/src/types.mjs';
 
 /**
  * @local
  */
-export { ManifestFileImage };
+export type { ManifestFileImage };
 export * from '../types.mjs';
 
 /**
