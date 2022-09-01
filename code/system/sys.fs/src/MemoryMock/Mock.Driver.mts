@@ -15,7 +15,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
   const processPathUri = (uri: string) => {
-    if (!Path.Uri.is(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
+    if (!Path.Uri.isPathUri(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
     uri = Path.Uri.ensurePrefix(uri); // Clean up URI.
 
     const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));

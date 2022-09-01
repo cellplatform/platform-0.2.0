@@ -29,7 +29,7 @@ function resolve(dir: string, uri: string) {
     return result;
   };
 
-  if (Path.Uri.is(uri)) {
+  if (Path.Uri.isPathUri(uri)) {
     return ensureScope(Path.join(dir, Path.Uri.path(uri) ?? ''));
   }
 

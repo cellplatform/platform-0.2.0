@@ -14,7 +14,7 @@ export const PathUri = {
   /**
    * Determines if the given string is a "path:" URI.
    */
-  is(input?: string) {
+  isPathUri(input?: string) {
     const uri = trim(input);
     return uri.startsWith('path:');
   },
@@ -23,7 +23,7 @@ export const PathUri = {
    * Retrieves the path from the given URI.
    */
   path(input?: string) {
-    if (!PathUri.is(input)) return undefined;
+    if (!PathUri.isPathUri(input)) return undefined;
     const uri = trim(input);
 
     let res = uri

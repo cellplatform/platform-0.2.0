@@ -8,7 +8,7 @@ describe('PathUri', () => {
 
   it('is', () => {
     const test = (input: any, expected: boolean) => {
-      expect(PathUri.is(input)).to.eql(expected);
+      expect(PathUri.isPathUri(input)).to.eql(expected);
     };
 
     test('path:foo/bar.txt', true);
