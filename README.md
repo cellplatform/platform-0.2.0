@@ -106,7 +106,7 @@ $ fossa analyze
 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs
 
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.0.2?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=large)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_large)
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
