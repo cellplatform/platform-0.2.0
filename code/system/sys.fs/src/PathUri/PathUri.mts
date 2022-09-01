@@ -37,7 +37,10 @@ export const PathUri = {
 
   cleanPath(path: string) {
     if (typeof path !== 'string') return '';
-
+    path = path.trim();
+    path = PathUri.trimUriPrefix(path);
+    if (path === '' || trimSlashesEnd(path) === '.') path = '/';
+    if (path.startsWith('/')) path = `/${trimSlashesStart(path)}`; // Ensure single leading slash.
     return path;
   },
 
@@ -46,13 +49,8 @@ export const PathUri = {
    */
   ensureUriPrefix(path: string) {
     if (typeof path !== 'string') return '';
-
-    path = path.trim();
-    path = PathUri.trimUriPrefix(path);
-    if (path === '' || trimSlashesEnd(path) === '.') path = '/';
-
-    if (path.startsWith('/')) path = `/${trimSlashesStart(path)}`; // Ensure single leading slash.
-    return `path:${path}`;
+    path = PathUri.cleanPath(path);
+    return `path:${PathUri.cleanPath(path)}`;
   },
 
   /**
