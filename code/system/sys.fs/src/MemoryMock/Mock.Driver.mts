@@ -24,7 +24,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     return { uri, path, location, withinScope };
   };
 
-  const toKind = (uri: string): t.IFsInfo['kind'] => {
+  const resolveToKind = (uri: string): t.IFsInfo['kind'] => {
     if (state[uri]) return 'file';
 
     const possibleDir = `${Path.Uri.trimPrefix(uri).replace(/\/*$/, '')}/`;
@@ -50,7 +50,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const { uri, path, location } = formatUri(address);
       const ref = state[uri];
-      const kind = toKind(uri);
+      const kind = resolveToKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
 
       const info: t.IFsInfo = {
