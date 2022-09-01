@@ -1,7 +1,7 @@
 import { describe, it, expect, t, TestPrep, MemoryMock } from '../TEST/index.mjs';
 
 describe('BusController.Change', function () {
-  async function changeSetup<T extends t.SysFsChange>() {
+  async function testChangeSetup<T extends t.SysFsChange>() {
     const mock = TestPrep();
     const { events, dispose } = mock;
     const io = events.io;
@@ -14,7 +14,7 @@ describe('BusController.Change', function () {
   }
 
   it('write', async () => {
-    const test = await changeSetup<t.SysFsChangeWrite>();
+    const test = await testChangeSetup<t.SysFsChangeWrite>();
     const { hash, data } = test.file;
     const path = '/foo/bar/kitten.jpg';
 
@@ -31,7 +31,7 @@ describe('BusController.Change', function () {
   });
 
   it('copy', async () => {
-    const test = await changeSetup<t.SysFsChangeCopy>();
+    const test = await testChangeSetup<t.SysFsChangeCopy>();
     const { hash, data } = test.file;
 
     await test.io.write.fire({ path: 'kitten.jpg', hash, data });
@@ -50,7 +50,7 @@ describe('BusController.Change', function () {
   });
 
   it('move', async () => {
-    const test = await changeSetup<t.SysFsChangeMove>();
+    const test = await testChangeSetup<t.SysFsChangeMove>();
     const { hash, data } = test.file;
 
     await test.io.write.fire({ path: 'kitten.jpg', hash, data });
@@ -69,7 +69,7 @@ describe('BusController.Change', function () {
   });
 
   it('delete', async () => {
-    const test = await changeSetup<t.SysFsChangeDelete>();
+    const test = await testChangeSetup<t.SysFsChangeDelete>();
     const { hash, data } = test.file;
 
     await test.io.write.fire({ path: 'kitten.jpg', hash, data });
@@ -93,12 +93,15 @@ describe('BusController.Change', function () {
     it.skip('write', async () => {
       //
     });
+
     it.skip('copy', async () => {
       //
     });
+
     it.skip('move', async () => {
       //
     });
+
     it.skip('delete', async () => {
       //
     });
