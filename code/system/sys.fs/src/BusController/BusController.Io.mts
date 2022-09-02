@@ -1,33 +1,32 @@
 import { asArray, t, Path } from './common.mjs';
 
 type FilesystemId = string;
-type Error = t.SysFsError;
-type MaybeError = Error | undefined;
 type FilePath = string;
+type MaybeError = t.FsError | undefined;
 
 /**
  * Event controller.
  */
 export function BusControllerIo(args: {
   id: FilesystemId;
-  bus: t.EventBus<t.SysFsEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   driver: t.FsDriver;
-  events: t.SysFsEvents;
+  events: t.FsBusEvents;
 }) {
   const { id, driver, bus, events } = args;
 
   const root = Path.ensureSlashStart(driver.dir);
   const stripDirRoot = (path: FilePath) => {
-    path = Path.Uri.trimPrefix(path);
+    path = Path.Uri.trimUriPrefix(path);
     path = Path.ensureSlashStart(path);
     path = path.startsWith(root) ? path.substring(root.length) : path;
     return Path.ensureSlashStart(path);
   };
 
-  const getFileInfo = async (filepath: FilePath): Promise<t.SysFsPathInfo> => {
+  const getFileInfo = async (filepath: FilePath): Promise<t.FsBusPathInfo> => {
     try {
       filepath = Path.trimSlashesEnd(filepath);
-      const uri = Path.Uri.ensurePrefix(filepath);
+      const uri = Path.Uri.ensureUriPrefix(filepath);
       const res = await driver.info(uri);
       const { kind, exists, hash, bytes } = res;
 
@@ -36,30 +35,32 @@ export function BusControllerIo(args: {
 
       return { kind, path, exists, hash, bytes };
     } catch (err: any) {
-      const error: t.SysFsError = { code: 'info', message: err.message };
+      const path = filepath;
+      const message = err.message;
+      const error: t.FsError = { code: 'fs:info', message, path };
       return { kind: 'unknown', path: filepath, exists: false, hash: '', bytes: -1, error };
     }
   };
 
-  const readFile = async (path: string): Promise<t.SysFsFileReadResponse> => {
-    const address = Path.Uri.ensurePrefix(path);
+  const readFile = async (path: string): Promise<t.FsBusFileReadResponse> => {
+    const address = Path.Uri.ensureUriPrefix(path);
     path = stripDirRoot(path);
 
     const info = await driver.info(address);
     if (!info.exists) {
-      const error: Error = { code: 'read/404', message: `File not found`, path };
+      const error: t.FsError = { code: 'fs:read/404', message: `File not found`, path };
       return { error };
     }
 
     const res = await driver.read(address);
 
     if (res.error) {
-      const error: Error = { code: 'read', message: res.error.message, path };
+      const error: t.FsError = { code: 'fs:read', message: res.error.message, path };
       return { error };
     }
 
     if (!res.file) {
-      const error: Error = { code: 'read/404', message: `File not found`, path };
+      const error: t.FsError = { code: 'fs:read/404', message: `File not found`, path };
       return { error };
     }
 
@@ -70,11 +71,11 @@ export function BusControllerIo(args: {
     };
   };
 
-  const writeFile = async (file: t.SysFsFile): Promise<t.SysFsFileWriteResponse> => {
+  const writeFile = async (file: t.FsBusFile): Promise<t.FsBusFileWriteResponse> => {
     const { hash, data } = file;
     const path = Path.trim(file.path);
 
-    const toError = (message: string): t.SysFsError => ({ code: 'write', message });
+    const toError = (message: string): t.FsError => ({ code: 'fs:write', message, path });
     const done = (err?: string) => {
       return {
         hash,
@@ -84,18 +85,22 @@ export function BusControllerIo(args: {
     };
 
     if (!path) return done('No file-path to write to');
-    const address = Path.Uri.ensurePrefix(path);
+    const address = Path.Uri.ensureUriPrefix(path);
 
     const res = await driver.write(address, data);
     return done(res.error?.message);
   };
 
-  const copyFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileCopyResponse> => {
-    const source = Path.Uri.ensurePrefix(file.source);
-    const target = Path.Uri.ensurePrefix(file.target);
+  const copyFile = async (file: t.FsBusFileTarget): Promise<t.FsBusFileCopyResponse> => {
+    const source = Path.Uri.ensureUriPrefix(file.source);
+    const target = Path.Uri.ensureUriPrefix(file.target);
     const res = await driver.copy(source, target);
     const info = await driver.info(target);
-    const error: MaybeError = res.error ? { code: 'copy', message: res.error.message } : undefined;
+
+    const error: MaybeError = !res.error
+      ? undefined
+      : { code: 'fs:copy', message: res.error.message, path: file.source };
+
     return {
       source: stripDirRoot(file.source),
       target: stripDirRoot(file.target),
@@ -104,24 +109,24 @@ export function BusControllerIo(args: {
     };
   };
 
-  const deleteFile = async (filepath: FilePath): Promise<t.SysFsFileDeleteResponse> => {
-    const address = Path.Uri.ensurePrefix(filepath);
+  const deleteFile = async (path: FilePath): Promise<t.FsBusFileDeleteResponse> => {
+    const address = Path.Uri.ensureUriPrefix(path);
     const info = await driver.info(address);
     const res = await driver.delete(address);
 
-    const error: MaybeError = res.error
-      ? { code: 'delete', message: res.error.message }
-      : undefined;
+    const error: MaybeError = !res.error
+      ? undefined
+      : { code: 'fs:delete', message: res.error.message, path };
 
     return {
-      path: stripDirRoot(filepath),
+      path: stripDirRoot(path),
       hash: info.hash,
       existed: res.locations.length > 0,
       error,
     };
   };
 
-  const moveFile = async (file: t.SysFsFileTarget): Promise<t.SysFsFileMoveResponse> => {
+  const moveFile = async (file: t.FsBusFileTarget): Promise<t.FsBusFileMoveResponse> => {
     let error: MaybeError;
     let hash = '';
 
@@ -149,7 +154,7 @@ export function BusControllerIo(args: {
    */
   events.io.info.req$.subscribe(async (e) => {
     const { tx } = e;
-    const info: t.SysFsInfo = { id, dir: root };
+    const info: t.FsBusInfo = { id, dir: root };
     const paths = asArray(e.path ?? []);
     const files = await Promise.all(paths.map(getFileInfo));
     bus.fire({
@@ -163,11 +168,16 @@ export function BusControllerIo(args: {
    */
   events.io.read.req$.subscribe(async (e) => {
     const { tx } = e;
-    const files = await Promise.all(asArray(e.path).map(readFile));
+    const paths = asArray(e.path);
+    const files = await Promise.all(paths.map(readFile));
 
-    const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'read', message: 'Failed while reading' }
-      : undefined;
+    const error: MaybeError = !files.some((file) => Boolean(file.error))
+      ? undefined
+      : {
+          code: 'fs:read',
+          message: 'Failed while reading',
+          path: paths.join('; '),
+        };
 
     bus.fire({
       type: 'sys.fs/read:res',
@@ -182,9 +192,13 @@ export function BusControllerIo(args: {
     const { tx } = e;
 
     const files = await Promise.all(asArray(e.file).map(writeFile));
-    const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'read', message: 'Failed while writing' }
-      : undefined;
+    const error: MaybeError = !files.some((file) => Boolean(file.error))
+      ? undefined
+      : {
+          code: 'fs:read',
+          message: 'Failed while writing',
+          path: files.map((file) => file.path).join('; '),
+        };
 
     bus.fire({
       type: 'sys.fs/write:res',
@@ -198,9 +212,13 @@ export function BusControllerIo(args: {
   events.io.delete.req$.subscribe(async (e) => {
     const { tx } = e;
     const files = await Promise.all(asArray(e.path).map(deleteFile));
-    const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'delete', message: 'Failed while deleting' }
-      : undefined;
+    const error: MaybeError = !files.some((file) => Boolean(file.error))
+      ? undefined
+      : {
+          code: 'fs:delete',
+          message: 'Failed while deleting',
+          path: files.map((file) => file.path).join('; '),
+        };
 
     bus.fire({
       type: 'sys.fs/delete:res',
@@ -214,9 +232,13 @@ export function BusControllerIo(args: {
   events.io.copy.req$.subscribe(async (e) => {
     const { tx } = e;
     const files = await Promise.all(asArray(e.file).map((e) => copyFile(e)));
-    const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'copy', message: 'Failed while copying' }
-      : undefined;
+    const error: MaybeError = !files.some((file) => Boolean(file.error))
+      ? undefined
+      : {
+          code: 'fs:copy',
+          message: 'Failed while copying',
+          path: files.map((file) => file.source).join('; '),
+        };
 
     bus.fire({
       type: 'sys.fs/copy:res',
@@ -230,9 +252,13 @@ export function BusControllerIo(args: {
   events.io.move.req$.subscribe(async (e) => {
     const { tx } = e;
     const files = await Promise.all(asArray(e.file).map(moveFile));
-    const error: MaybeError = files.some((file) => Boolean(file.error))
-      ? { code: 'move', message: 'Failed while moving' }
-      : undefined;
+    const error: MaybeError = !files.some((file) => Boolean(file.error))
+      ? undefined
+      : {
+          code: 'fs:move',
+          message: 'Failed while moving',
+          path: files.map((file) => file.source).join('; '),
+        };
 
     bus.fire({
       type: 'sys.fs/move:res',

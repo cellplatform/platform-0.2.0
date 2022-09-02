@@ -9,7 +9,7 @@
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "tmp.ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
-  "devDependencies": {
+  "dependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/glob": "8.0.0",
     "@types/minimist": "^1.2.2",

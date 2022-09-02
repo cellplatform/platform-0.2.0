@@ -7,7 +7,7 @@ export { Path } from '../Path/index.mjs';
 export const Wrangle = {
   timeout(defaultTimeout?: number) {
     return (options: { timeout?: number } = {}) => {
-      return options.timeout ?? defaultTimeout ?? 20000;
+      return options.timeout ?? defaultTimeout ?? 20 * 1000;
     };
   },
 };

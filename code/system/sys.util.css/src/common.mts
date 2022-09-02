@@ -10,6 +10,6 @@ export const R = { isEmpty };
 /**
  * @local
  */
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 export { t };
 export { Is, Value, Id } from 'sys.util';

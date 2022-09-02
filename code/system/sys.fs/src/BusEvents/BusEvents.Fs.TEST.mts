@@ -14,6 +14,7 @@ describe('BusEvents.Fs', () => {
         const info = await fs.info('images/tree.png');
         expect(info.hash).to.eql(file.hash);
       };
+
       await test('');
       await test('  ');
       await test('/');
@@ -441,10 +442,6 @@ describe('BusEvents.Fs', () => {
         const file = MemoryMock.randomFile();
         await mock.driver.write('path:images/tree.png', file.data);
 
-        // const mock =  TestPrep();
-        // const fs = mock.events.fs();
-        // const src = await mock.readFile('static.test/child/tree.png');
-        // await fs.write('images/tree.png', src.data);
         const expectCacheExists = async (exists: boolean) => {
           const manifest = await fs.json.read(DEFAULT.CACHE_FILENAME);
           expect(Boolean(manifest)).to.eql(exists);
@@ -561,6 +558,9 @@ describe('BusEvents.Fs', () => {
       await test('/images/tree.png');
       await test('///images/tree.png');
       await test('  images/tree.png  ');
+      await test('path:images/tree.png');
+      await test('path:/images/tree.png');
+      await test('  path:///images/tree.png  ');
 
       mock.dispose();
     });
@@ -614,13 +614,13 @@ describe('BusEvents.Fs', () => {
       const test = async (data: t.Json | undefined, expected: string) => {
         const mock = TestPrep();
         const fs = mock.events.fs();
-        const path = 'my-file';
+        const uri = 'path:my-file';
 
-        expect(await mock.fileExists(path)).to.eql(false);
-        const res = await fs.write(path, data);
-        expect(await mock.fileExists(path)).to.eql(true);
+        expect(await mock.fileExists(uri)).to.eql(false);
+        const res = await fs.write(uri, data);
+        expect(await mock.fileExists(uri)).to.eql(true);
 
-        const file = (await mock.driver.read(path)).file as t.IFsFileData;
+        const file = (await mock.driver.read(uri)).file as t.FsDriverFileData;
         const hash = Hash.sha256(file.data);
         expect(file.hash).to.eql(hash);
         expect(res.hash).to.eql(hash);
@@ -822,7 +822,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
 
-      const path = 'foo/data.json';
+      const path = 'path:foo/data.json';
       const write = await fs.json.write(path, data);
       const file = (await mock.driver.read(path)).file;
 

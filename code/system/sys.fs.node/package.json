@@ -9,8 +9,7 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "sys.fs": "^0.0.0",
-    "sys.util": "^0.0.0"
+    "sys.fs": "^0.0.0"
   },
   "devDependencies": {
     "sys.test": "^0.0.0"

@@ -1,25 +1,25 @@
 import { t } from './common.mjs';
 
-type FilesystemId = string;
 type FilePath = string;
+type FilesystemId = string;
 
 /**
  * Compile the project into a bundle.
  */
-export type SysFsInfoReqEvent = {
+export type FsBusInfoReqEvent = {
   type: 'sys.fs/info:req';
-  payload: t.SysFsInfoReq;
+  payload: t.FsBusInfoReq;
 };
-export type SysFsInfoReq = { tx: string; id: FilesystemId; path?: FilePath | FilePath[] };
+export type FsBusInfoReq = { tx: string; id: FilesystemId; path?: FilePath | FilePath[] };
 
-export type SysFsInfoResEvent = {
+export type FsBusInfoResEvent = {
   type: 'sys.fs/info:res';
-  payload: t.SysFsInfoRes;
+  payload: t.FsBusInfoRes;
 };
-export type SysFsInfoRes = {
+export type FsBusInfoRes = {
   tx: string;
   id: FilesystemId;
-  fs?: t.SysFsInfo;
-  paths: t.SysFsPathInfo[];
-  error?: t.SysFsError;
+  fs?: t.FsBusInfo;
+  paths: t.FsBusPathInfo[];
+  error?: t.FsError;
 };

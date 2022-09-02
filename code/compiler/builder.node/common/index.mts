@@ -1,4 +1,4 @@
-import * as t from '../types.mjs';
+import type * as t from '../types.mjs';
 import { fs } from './fs.mjs';
 
 export { t, fs };

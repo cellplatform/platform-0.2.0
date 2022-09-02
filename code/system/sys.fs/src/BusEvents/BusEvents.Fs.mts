@@ -5,9 +5,9 @@ import { Hash, Path, t, Json } from './common.mjs';
  */
 export function BusEventsFs(args: {
   dir?: string; // Sub-directory within root.
-  index: t.SysFsEventsIndex;
-  io: t.SysFsEventsIo;
-  toUint8Array: t.SysFsToUint8Array;
+  index: t.FsBusEventsIndex;
+  io: t.FsBusEventsIo;
+  toUint8Array: t.FsBusToUint8Array;
 }): t.Fs {
   const { io, index, toUint8Array } = args;
 
@@ -16,7 +16,7 @@ export function BusEventsFs(args: {
   const { join } = Path;
   const formatPath = (path: string) => {
     path = Path.trim(path);
-    path = Path.Uri.trimPrefix(path);
+    path = Path.Uri.trimUriPrefix(path);
     path = Path.join(subdir, path);
     path = Path.trimSlashesStart(path);
     return path;
@@ -64,12 +64,12 @@ export function BusEventsFs(args: {
   const read: t.Fs['read'] = async (path) => {
     path = formatPath(path);
 
-    const uri = Path.Uri.ensurePrefix(path);
+    const uri = Path.Uri.ensureUriPrefix(path);
     const res = await io.read.get(uri);
     const files = res.files ?? [];
     const first = files[0];
 
-    if (first?.error?.code === 'read/404') return undefined;
+    if (first?.error?.code === 'fs:read/404') return undefined;
     if (first?.error) throw new Error(first.error.message);
     if (res.error) throw new Error(res.error.message);
 

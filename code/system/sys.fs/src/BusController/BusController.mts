@@ -14,14 +14,14 @@ export function BusController(args: {
   driver: t.FsDriver;
   indexer: t.FsIndexer;
   id?: FilesystemId;
-  filter?: (e: t.SysFsEvent) => boolean;
+  filter?: (e: t.FsBusEvent) => boolean;
   timeout?: Milliseconds;
 }): t.SysFsController {
   const { driver, indexer, timeout, filter } = args;
   const id = (args.id || '').trim() || DEFAULT.FILESYSTEM_ID;
   const dir = Path.ensureSlashStart(driver.dir);
 
-  const bus = rx.busAsType<t.SysFsEvent>(args.bus);
+  const bus = rx.busAsType<t.FsBusEvent>(args.bus);
   const events = BusEvents({ id, bus, timeout, filter });
   const { fs, dispose, dispose$ } = events;
 

@@ -40,15 +40,21 @@ describe('Mock: FsDriver', () => {
     });
 
     it('root directory ("path:.")', async () => {
-      const mock = FsMockDriver();
-      const res = await mock.driver.info('  path:.  ');
+      const test = async (path: string) => {
+        const mock = FsMockDriver();
+        const res = await mock.driver.info(path);
 
-      expect(res.exists).to.eql(true);
-      expect(res.uri).to.eql('path:.');
-      expect(res.path).to.eql('/');
-      expect(res.location).to.eql('file:///mock/');
-      expect(res.hash).to.eql('');
-      expect(res.bytes).to.eql(-1);
+        expect(res.exists).to.eql(true);
+        expect(res.uri).to.eql('path:/');
+        expect(res.path).to.eql('/');
+        expect(res.location).to.eql('file:///mock/');
+        expect(res.hash).to.eql('');
+        expect(res.bytes).to.eql(-1);
+      };
+
+      await test('path:/');
+      await test('path:'); // NB: root "/" inferred.
+      await test('  path:.  ');
     });
 
     it('override info', async () => {
@@ -95,10 +101,10 @@ describe('Mock: FsDriver', () => {
   describe('read/write', () => {
     it('write', async () => {
       const mock = FsMockDriver();
-      const path = '  foo/bar.png  ';
+      const uri = '  path:foo/bar.png  ';
       const png = MemoryMock.randomFile();
 
-      const res = await mock.driver.write(path, png.data);
+      const res = await mock.driver.write(uri, png.data);
       expect(mock.count.write).to.eql(1);
 
       expect(res.uri).to.eql('path:foo/bar.png');
@@ -113,29 +119,27 @@ describe('Mock: FsDriver', () => {
 
     it('read: not found (404)', async () => {
       const mock = FsMockDriver();
-      const path = '  /foo/bar.png  ';
-      const uri = Path.Uri.ensurePrefix(path);
+      const uri = '  path:/foo/bar.png  ';
 
       const res = await mock.driver.read(uri);
       expect(mock.count.read).to.eql(1);
 
-      expect(res.uri).to.eql(uri);
+      expect(res.uri).to.eql('path:/foo/bar.png');
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(404);
       expect(res.file).to.eql(undefined);
-      expect(res.error?.type).to.eql('FS/read');
+      expect(res.error?.code).to.eql('fs:read');
       expect(res.error?.path).to.eql('/foo/bar.png');
     });
 
     it('read (200)', async () => {
       const mock = FsMockDriver();
-      const path = 'foo/bar.png';
+      const uri = 'path:foo/bar.png';
       const png = MemoryMock.randomFile();
 
-      await mock.driver.write(path, png.data);
+      await mock.driver.write(uri, png.data);
       expect(mock.count.write).to.eql(1);
 
-      const uri = Path.Uri.ensurePrefix(path);
       const res = await mock.driver.read(uri);
 
       expect(res.uri).to.eql(uri);
@@ -151,8 +155,11 @@ describe('Mock: FsDriver', () => {
     it('write/read - remove leading slash', async () => {
       const mock = FsMockDriver();
       const file = MemoryMock.randomFile();
+
       await mock.driver.write('path:/foo/bar.txt', file.data);
-      expect((await mock.driver.read('path:foo/bar.txt')).status).to.eql(200);
+
+      const res = await mock.driver.read('path:foo/bar.txt');
+      expect(res.status).to.eql(200);
     });
   });
 
@@ -173,7 +180,7 @@ describe('Mock: FsDriver', () => {
     it('single file', async () => {
       const mock = FsMockDriver();
 
-      const path = '  foo/bar.png  ';
+      const path = '  path:foo/bar.png  ';
       const png = MemoryMock.randomFile();
       await mock.driver.write(path, png.data);
 
@@ -191,8 +198,8 @@ describe('Mock: FsDriver', () => {
 
       const file1 = MemoryMock.randomFile();
       const file2 = MemoryMock.randomFile(500);
-      await mock.driver.write('foo/bar.png', file1.data);
-      await mock.driver.write('thing.pdf', file2.data);
+      await mock.driver.write('path:foo/bar.png', file1.data);
+      await mock.driver.write('path:thing.pdf', file2.data);
 
       const res = await mock.driver.delete(['path:foo/bar.png', 'path:404', 'path:thing.pdf']);
       expect(mock.count.delete).to.eql(1);
@@ -235,7 +242,7 @@ describe('Mock: FsDriver', () => {
       expect(res.status).to.eql(404);
       expect(res.source).to.eql('path:foo.png');
       expect(res.target).to.eql('path:images/bird.png');
-      expect(res.error?.type).to.eql('FS/copy');
+      expect(res.error?.code).to.eql('fs:copy');
       expect(res.error?.path).to.eql('/foo.png');
       expect(res.error?.message).to.include('Source file not found');
     });

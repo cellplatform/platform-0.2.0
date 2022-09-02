@@ -2,11 +2,11 @@ import { t } from './common.mjs';
 
 type FilesystemId = string;
 
-export type SysFsChange = SysFsChangeWrite | SysFsChangeCopy | SysFsChangeMove | SysFsChangeDelete;
-export type SysFsChangeWrite = { op: 'write'; files: t.SysFsFileWriteResponse[] };
-export type SysFsChangeCopy = { op: 'copy'; files: t.SysFsFileCopyResponse[] };
-export type SysFsChangeMove = { op: 'move'; files: t.SysFsFileMoveResponse[] };
-export type SysFsChangeDelete = { op: 'delete'; files: t.SysFsFileDeleteResponse[] };
+export type FsBusChange = FsBusChangeWrite | FsBusChangeCopy | FsBusChangeMove | FsBusChangeDelete;
+export type FsBusChangeWrite = { op: 'write'; files: t.FsBusFileWriteResponse[] };
+export type FsBusChangeCopy = { op: 'copy'; files: t.FsBusFileCopyResponse[] };
+export type FsBusChangeMove = { op: 'move'; files: t.FsBusFileMoveResponse[] };
+export type FsBusChangeDelete = { op: 'delete'; files: t.FsBusFileDeleteResponse[] };
 
 /**
  * EVENTS
@@ -15,11 +15,11 @@ export type SysFsChangeDelete = { op: 'delete'; files: t.SysFsFileDeleteResponse
 /**
  * Filesystem change event.
  */
-export type SysFsChangedEvent = {
+export type FsBusChangedEvent = {
   type: 'sys.fs/changed';
-  payload: SysFsChanged;
+  payload: FsBusChanged;
 };
-export type SysFsChanged = {
+export type FsBusChanged = {
   id: FilesystemId;
-  change: SysFsChange;
+  change: FsBusChange;
 };

@@ -1,78 +1,62 @@
 import { FsError } from './types.Error.mjs';
 
-type EmptyObject = Record<string, undefined>; // 🐷 NB: Used as a placeholder object.
-type DirPath = string;
-type FileAddress = string; // "foo/bar.txt"
-type PathUri = string;
+type DirPath = string; //  Path to a directory, eg: "foo/"
+type FilePath = string; // Path to a file, eg: "foo/bar.txt"
+type PathUri = string; //  URI representing a file-path, eg: "path:foo/bar.png"
+type FileUri = string; //  URI representing an absolute location of a file, eg: "file:///foo/bar.png"
+type HttpStatusCode = number;
 
 /**
- * Driver (API)
+ * MAIN Driver (API)
  * The low-level bridge into a specific platform file-system API
  */
-export type FsDriver = { dir: DirPath } & IFsMembers<
-  IFsInfo,
-  IFsRead,
-  IFsWrite,
-  IFsWriteOptions,
-  IFsDelete,
-  IFsCopy,
-  IFsCopyOptionsLocal
->;
+export type FsDriver = {
+  dir: DirPath;
 
-export type IFsWriteOptions = { filename?: string };
-export type IFsCopyOptions = IFsCopyOptionsLocal;
-export type IFsCopyOptionsLocal = EmptyObject; // 🐷 No option parameters.
-
-/**
- * File-system Members
- */
-type IFsMembers<
-  Info extends IFsMeta,
-  Read extends IFsRead,
-  Write extends IFsWrite,
-  WriteOptions extends IFsWriteOptions,
-  Delete extends IFsDelete,
-  Copy extends IFsCopy,
-  CopyOptions extends IFsCopyOptions,
-> = {
   /**
    * Meta-data.
    */
   resolve: FsPathResolver;
-  info: FsInfoMethod<Info>;
+  info: FsDriverInfoMethod<FsDriverInfo>;
 
   /**
    * Network IO (in/out).
    */
-  read: FsReadMethod<Read>;
-  write: FsWriteMethod<Write, WriteOptions>;
-  copy: FsCopyMethod<Copy, CopyOptions>;
-  delete: FsDeleteMethod<Delete>;
+  read: FsDriverReadMethod<FsDriverRead>;
+  write: FsDriverWriteMethod<FsDriverWrite>;
+  copy: FsDriverCopyMethod<FsDriverCopy>;
+  delete: FsDriverDeleteMethod<FsDriverDelete>;
 };
 
-export type FsPathResolver = (uri: PathUri) => FileAddress;
-export type FsInfoMethod<Info extends IFsMeta> = (address: FileAddress) => Promise<Info>;
-export type FsReadMethod<Read extends IFsRead> = (address: FileAddress) => Promise<Read>;
-export type FsWriteMethod<Write extends IFsWrite, WriteOptions extends IFsWriteOptions> = (
-  address: FileAddress,
+/**
+ * ...implementation parts...
+ */
+
+export type FsPathResolver = (uri: PathUri) => FilePath;
+export type FsDriverInfoMethod<Info extends FsDriverMeta> = (address: PathUri) => Promise<Info>;
+export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUri) => Promise<Read>;
+
+export type FsDriverWriteMethod<Write extends FsDriverWrite> = (
+  address: PathUri,
   data: Uint8Array | ReadableStream,
-  options?: WriteOptions,
+  options?: { filename?: string },
 ) => Promise<Write>;
-export type FsCopyMethod<Copy extends IFsCopy, CopyOptions extends IFsCopyOptions> = (
-  source: FileAddress,
-  target: FileAddress,
-  options?: CopyOptions,
+
+export type FsDriverCopyMethod<Copy extends FsDriverCopy> = (
+  source: PathUri,
+  target: PathUri,
 ) => Promise<Copy>;
-export type FsDeleteMethod<Delete extends IFsDelete> = (
-  address: FileAddress | FileAddress[],
+
+export type FsDriverDeleteMethod<Delete extends FsDriverDelete> = (
+  address: PathUri | PathUri[],
 ) => Promise<Delete>;
 
 /**
  * File (meta/info)
  */
-export type IFsMeta = {
-  path: string; // TODO 🐷 remove ??
-  location: string; // TODO 🐷 remove ??
+export type FsDriverMeta = {
+  path: FilePath;
+  location: FileUri;
   hash: string;
   bytes: number;
 };
@@ -80,41 +64,41 @@ export type IFsMeta = {
 /**
  * File (info + data)
  */
-export type IFsFileData<I extends IFsMeta = IFsMeta> = I & { data: Uint8Array };
+export type FsDriverFileData<I extends FsDriverMeta = FsDriverMeta> = I & { data: Uint8Array };
 
 /**
- * Local file-system (Extensions)
+ * Operations.
  */
-export type IFsInfo = IFsMeta & {
+export type FsDriverInfo = FsDriverMeta & {
   uri: PathUri;
   exists: boolean;
   kind: 'file' | 'dir' | 'unknown';
 };
-export type IFsRead = {
-  uri: PathUri;
-  ok: boolean; // TODO 🐷 remove OK - presence of error is enough.
-  status: number; // TODO 🐷  remove status code
-  error?: FsError;
-  file?: IFsFileData<IFsMeta>;
-};
-export type IFsWrite = {
-  uri: PathUri;
+export type FsDriverRead = {
   ok: boolean;
-  status: number;
+  status: HttpStatusCode;
+  uri: PathUri;
+  file?: FsDriverFileData<FsDriverMeta>;
   error?: FsError;
-  file: IFsFileData<IFsMeta>;
 };
-export type IFsDelete = {
+export type FsDriverWrite = {
   ok: boolean;
-  status: number;
+  status: HttpStatusCode;
+  uri: PathUri;
+  file: FsDriverFileData<FsDriverMeta>;
+  error?: FsError;
+};
+export type FsDriverDelete = {
+  ok: boolean;
+  status: HttpStatusCode;
   uris: PathUri[];
-  locations: string[];
+  locations: FileUri[];
   error?: FsError;
 };
-export type IFsCopy = {
+export type FsDriverCopy = {
   ok: boolean;
-  status: number;
-  error?: FsError;
+  status: HttpStatusCode;
   source: PathUri;
   target: PathUri;
+  error?: FsError;
 };

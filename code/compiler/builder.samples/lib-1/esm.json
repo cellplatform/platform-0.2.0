@@ -1,6 +1,0 @@
-{
-  "exports": {
-    ".": "./src/index.mts",
-    "./child/bar": "./src/child/bar.mts"
-  }
-}

@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, pc, Util, fs } from './common/index.mjs';
+import { Builder, fs, pc, Util } from './common/index.mjs';
 
 /**
  * Run
@@ -9,7 +9,7 @@ import { Builder, pc, Util, fs } from './common/index.mjs';
   const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
   const paths = await Util.findProjectDirs((path) => {
-    if (path.includes('/builder.samples')) return false;
+    if (path.includes('/code/samples')) return false;
     return true;
   });
   if (paths.length === 0) return;
@@ -42,7 +42,7 @@ import { Builder, pc, Util, fs } from './common/index.mjs';
   console.log(statusColor(ok, 'test results:'));
   paths.forEach((path) => console.log(` ${bullet(path)} ${Util.formatPath(path)}`));
   console.log();
-  console.log(pc.gray(`platform/builder v${pkg.version}`));
+  console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
   if (!ok) process.exit(1);
 })();

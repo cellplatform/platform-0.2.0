@@ -8,7 +8,7 @@ describe('PathUri', () => {
 
   it('is', () => {
     const test = (input: any, expected: boolean) => {
-      expect(PathUri.is(input)).to.eql(expected);
+      expect(PathUri.isPathUri(input)).to.eql(expected);
     };
 
     test('path:foo/bar.txt', true);
@@ -49,28 +49,54 @@ describe('PathUri', () => {
     test('path:foo/bar/../zoo', 'foo/zoo');
   });
 
-  it('ensurePrefix', () => {
+  it('ensureUriPrefix | cleanPath', () => {
     const test = (input: any, expected: string) => {
-      expect(PathUri.ensurePrefix(input)).to.eql(expected);
+      const res = PathUri.ensureUriPrefix(input);
+      expect(res).to.eql(expected, input);
+
+      // NB: Test secondary method ("cleanPath") that is used within the [ensureUriPrefix] method.
+      const trimAndClean = (input: string) => PathUri.cleanPath(PathUri.trimUriPrefix(input));
+      expect(trimAndClean(res)).to.eql(trimAndClean(expected));
     };
 
-    test('  ', 'path:');
+    test('', 'path:/');
+    test('  ', 'path:/');
+    test('path:', 'path:/');
+    test(' path: ', 'path:/');
+
+    test('.', 'path:/');
+    test(' . ', 'path:/');
+    test(' ./ ', 'path:/');
+    test(' ./// ', 'path:/');
+    test('path:.', 'path:/');
+    test('path:./', 'path:/');
+
+    test('path', 'path:path'); // NB: not a URI prefix.
     test('path:foo', 'path:foo');
     test('  path:foo/bar  ', 'path:foo/bar');
+    test('  path:/foo/bar.png  ', 'path:/foo/bar.png');
     test('  foo  ', 'path:foo');
-    test('  /foo/bar/  ', 'path:foo/bar/');
-    test('///foo/bar/  ', 'path:foo/bar/');
-    test('foo/bar', 'path:foo/bar');
-    test('/foo/bar', 'path:foo/bar');
 
+    test('foo/bar', 'path:foo/bar');
+    test('/foo/bar', 'path:/foo/bar');
+    test('  /foo/bar/  ', 'path:/foo/bar/');
+    test('///foo/bar/  ', 'path:/foo/bar/');
+
+    test('.manifest.json', 'path:.manifest.json');
+    test('.file ', 'path:.file');
+    test(' .filename.yaml ', 'path:.filename.yaml');
+
+    test(undefined, '');
     test(null, '');
     test(123, '');
+    test(true, '');
     test({}, '');
+    test([], '');
   });
 
-  it('trimPrefix', () => {
+  it('trimUriPrefix', () => {
     const test = (input: any, expected: string) => {
-      expect(PathUri.trimPrefix(input)).to.eql(expected);
+      expect(PathUri.trimUriPrefix(input)).to.eql(expected);
     };
 
     test('  ', '');

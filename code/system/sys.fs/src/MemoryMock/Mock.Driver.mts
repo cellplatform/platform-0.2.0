@@ -1,7 +1,7 @@
 import { PathResolverFactory } from '../PathResolver/index.mjs';
 import { DEFAULT, Hash, Path, Stream, t } from './common.mjs';
 
-type MockInfoHandler = (e: { uri: string; info: t.IFsInfo }) => void;
+type MockInfoHandler = (e: { uri: string; info: t.FsDriverInfo }) => void;
 
 /**
  * A driver used for mocking the file-system while testing.
@@ -14,23 +14,26 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   const resolve = PathResolverFactory({ dir });
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
 
-  const formatUri = (uri: string) => {
-    if (uri === 'path:') uri = 'path:.';
-    const content = Path.trimSlashesStart(Path.Uri.trimPrefix(uri));
+  const processPathUri = (uri: string) => {
+    if (!Path.Uri.isPathUri(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
+    uri = Path.Uri.ensureUriPrefix(uri); // Clean up URI.
+
+    const content = Path.trimSlashesStart(Path.Uri.trimUriPrefix(uri));
     const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
     const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
     const withinScope = Path.isWithin(root, path);
-    uri = Path.Uri.ensurePrefix(content);
+
     return { uri, path, location, withinScope };
   };
 
-  const toKind = (uri: string): t.IFsInfo['kind'] => {
-    if (state[uri]) return 'file';
+  const resolveKind = (uri: string): t.FsDriverInfo['kind'] => {
+    const { path } = processPathUri(uri);
+    if (state[path]) return 'file';
 
-    const possibleDir = `${Path.Uri.trimPrefix(uri).replace(/\/*$/, '')}/`;
-    if (possibleDir === './') return 'dir';
+    const possibleDir = `${path.replace(/\/*$/, '')}/`;
+    if (possibleDir === '/') return 'dir'; // Test for "root directory" (special).
 
-    const keys = Object.keys(state).map((key) => Path.Uri.trimPrefix(key));
+    const keys = Object.keys(state).map((key) => Path.Uri.trimUriPrefix(key));
     for (const key of keys) {
       if (key.startsWith(possibleDir) && key !== possibleDir) return 'dir';
     }
@@ -48,12 +51,12 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async info(address) {
       mock.count.info++;
 
-      const { uri, path, location } = formatUri(address);
-      const ref = state[uri];
-      const kind = toKind(uri);
+      const { uri, path, location } = processPathUri(address);
+      const ref = state[path];
+      const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
 
-      const info: t.IFsInfo = {
+      const info: t.FsDriverInfo = {
         uri,
         exists,
         kind,
@@ -72,16 +75,16 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async read(address) {
       mock.count.read++;
-      const { uri, path, location, withinScope } = formatUri(address);
+      const { uri, path, location, withinScope } = processPathUri(address);
 
-      const toError = (message: string): t.FsError => ({ type: 'FS/read', message, path });
+      const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
 
-      const ref = state[uri];
+      const ref = state[path];
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
-        const file: t.IFsFileData = { path, location, hash, bytes, data };
+        const file: t.FsDriverFileData = { path, location, hash, bytes, data };
         return { uri, ok: true, status: 200, file };
       } else {
         return { uri, ok: false, status: 404, error: toError('Not found') };
@@ -93,7 +96,23 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async write(address, input) {
       mock.count.write++;
-      const { uri, path, location, withinScope } = formatUri(address);
+      const { uri, path, location, withinScope } = processPathUri(address);
+
+      /**
+       * TODO 🐷
+       * ISSUE: https://github.com/cellplatform/platform-0.2.0/issues/24
+       *
+       *    - put image meta-data (pixel size) on data data object.
+       *    - ensure it shows up in Indexer <Manifest>
+       *
+       */
+      //  const image = await Image.toInfo(path, data);
+
+      // const put = IndexedDb.record.put;
+      // await Promise.all([
+      //   put<t.PathRecord>(store.paths, deleteUndefined({ path, dir, hash, bytes, image })),
+      //   put<t.BinaryRecord>(store.files, { hash, data }),
+      // ]);
 
       const data = Stream.isReadableStream(input)
         ? await Stream.toUint8Array(input)
@@ -101,14 +120,14 @@ export function FsMockDriver(options: { dir?: string } = {}) {
 
       const hash = Hash.sha256(input);
       const bytes = data.byteLength;
-      const file: t.IFsFileData = { path, location, hash, bytes, data };
+      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
 
-      const toError = (message: string): t.FsError => ({ type: 'FS/write', message, path });
+      const toError = (message: string): t.FsError => ({ code: 'fs:write', message, path });
       if (!withinScope)
         return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
 
-      state[uri] = { data, hash };
-      const res: t.IFsWrite = { uri, ok: true, status: 200, file };
+      state[path] = { data, hash };
+      const res: t.FsDriverWrite = { uri, ok: true, status: 200, file };
       return res;
     },
 
@@ -119,20 +138,20 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const inputs = Array.isArray(input) ? input : [input];
-      const formatted = inputs.map((input) => formatUri(input));
+      const formatted = inputs.map((input) => processPathUri(input));
 
-      const items = formatted.filter(({ uri }) => state[uri]);
+      const items = formatted.filter((item) => state[item.path]);
       const uris = items.map(({ uri }) => uri);
       const locations = items.map(({ location }) => location);
       const outOfScope = formatted.filter((item) => !item.withinScope);
 
       if (outOfScope.length > 0) {
         const path = outOfScope.map((item) => item.path).join('; ');
-        const error: t.FsError = { type: 'FS/delete', message: 'Path out of scope', path };
+        const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
         return { ok: false, status: 422, uris, locations, error };
       }
 
-      items.forEach(({ uri }) => delete state[uri]);
+      items.forEach((item) => delete state[item.path]);
       return { ok: true, status: 200, uris, locations };
     },
 
@@ -142,11 +161,11 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const source = formatUri(sourceUri);
-      const target = formatUri(targetUri);
+      const source = processPathUri(sourceUri);
+      const target = processPathUri(targetUri);
 
       const toError = (path: string, message: string): t.FsError => ({
-        type: 'FS/copy',
+        code: 'fs:copy',
         message,
         path,
       });
@@ -161,13 +180,13 @@ export function FsMockDriver(options: { dir?: string } = {}) {
         return { ok: false, status: 422, source: source.uri, target: target.uri, error };
       }
 
-      const ref = state[source.uri];
+      const ref = state[source.path];
       if (!ref) {
         const error = toError(source.path, 'Source file not found');
         return { ok: false, status: 404, source: source.uri, target: target.uri, error };
       }
 
-      state[target.uri] = ref;
+      state[target.path] = ref;
 
       return {
         ok: true,

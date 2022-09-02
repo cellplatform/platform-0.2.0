@@ -4,7 +4,7 @@ import { BusController } from './index.mjs';
 
 describe('BusController', function () {
   it('id (specified)', () => {
-    const bus = rx.bus<t.SysFsEvent>();
+    const bus = rx.bus<t.FsBusEvent>();
     const driver = MemoryMock.Driver().driver;
     const indexer = MemoryMock.Indexer().indexer;
 
@@ -18,7 +18,7 @@ describe('BusController', function () {
   });
 
   it('id (generated)', () => {
-    const bus = rx.bus<t.SysFsEvent>();
+    const bus = rx.bus<t.FsBusEvent>();
 
     const test = (id?: string) => {
       const { driver, indexer } = TestPrep();
@@ -38,7 +38,7 @@ describe('BusController', function () {
 
     let allow = true;
 
-    const bus = rx.bus<t.SysFsEvent>();
+    const bus = rx.bus<t.FsBusEvent>();
     const controller = BusController({ id, driver, indexer, bus, filter: (e) => allow });
     const events = BusEvents({ id, bus });
     const res1 = await events.io.info.get();
@@ -50,7 +50,8 @@ describe('BusController', function () {
     events.dispose();
 
     expect(res1.error).to.eql(undefined);
-    expect(res2.error?.code).to.eql('client/timeout');
+
+    expect(res2.error?.code).to.eql('fs:client/timeout');
     expect(res2.error?.message).to.include('Timed out');
   });
 
@@ -113,7 +114,7 @@ describe('BusController', function () {
 
       const res = await mock.events.ready({ timeout: 10 });
       expect(res.ready).to.eql(false);
-      expect(res.error?.code).to.eql('client/timeout');
+      expect(res.error?.code).to.eql('fs:client/timeout');
       expect(res.error?.message).to.include(`did not respond`);
     });
   });

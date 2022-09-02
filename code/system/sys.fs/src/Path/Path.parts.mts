@@ -1,7 +1,6 @@
 /**
  * Break a path into it's constituent parts.
  */
-
 export function parts(input: string) {
   const path = (input || '').trim();
 

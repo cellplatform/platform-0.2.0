@@ -1,10 +1,18 @@
+type FilePath = string; // Path to a file, eg: "foo/bar.txt"
+
 /**
  * Filesystem errors.
  */
-export type FsErrorType = 'FS/read' | 'FS/write' | 'FS/delete' | 'FS/copy';
-export type FsError = {
-  type: FsErrorType;
-  message: string;
-  path: string;
-  stack?: string;
-};
+export type FsErrorCode =
+  | 'fs:client/timeout'
+  | 'fs:info'
+  | 'fs:read'
+  | 'fs:read/404'
+  | 'fs:write'
+  | 'fs:delete'
+  | 'fs:copy'
+  | 'fs:move'
+  | 'fs:manifest'
+  | 'fs:unknown';
+
+export type FsError = { code: FsErrorCode; message: string; path: FilePath };

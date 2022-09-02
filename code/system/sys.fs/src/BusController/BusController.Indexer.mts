@@ -2,16 +2,17 @@ import { asArray, Path, t, R, DEFAULT } from './common.mjs';
 import { ManifestCache } from './ManifestCache.mjs';
 
 type FilesystemId = string;
+type MaybeError = t.FsError | undefined;
 
 /**
  * Event controller.
  */
 export function BusControllerIndexer(args: {
   id: FilesystemId;
-  bus: t.EventBus<t.SysFsEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   driver: t.FsDriver;
   indexer: t.FsIndexer;
-  events: t.SysFsEvents;
+  events: t.FsBusEvents;
 }) {
   const { id, driver, bus, events, indexer } = args;
 
@@ -35,16 +36,16 @@ export function BusControllerIndexer(args: {
       return false;
     };
 
-    const toErrorResponse = (dir: string, error: string): t.SysFsManifestDirResponse => {
+    const toErrorResponse = (dir: string, error: string): t.FsBusManifestDirResponse => {
       const message = `Failed while building manifest. ${error ?? ''}`.trim();
       return {
         dir,
         manifest: R.clone(DEFAULT.ERROR_MANIFEST),
-        error: { code: 'manifest', message },
+        error: { code: 'fs:manifest', message, path: dir },
       };
     };
 
-    const toManifest = async (path?: string): Promise<t.SysFsManifestDirResponse> => {
+    const toManifest = async (path?: string): Promise<t.FsBusManifestDirResponse> => {
       const dir = Path.ensureSlashEnd(path ? Path.join(driver.dir, path) : driver.dir);
 
       const cache = ManifestCache({ driver, dir, filename: cachefile });
@@ -56,13 +57,9 @@ export function BusControllerIndexer(args: {
 
         const manifest = await indexer.manifest({ dir: path, filter: filterPaths });
 
-        if (shouldCache() && (await cache.dirExists())) {
-          await cache.write(manifest);
-        }
+        if (shouldCache() && (await cache.dirExists())) await cache.write(manifest);
 
-        if (e.cache === 'remove') {
-          await cache.delete();
-        }
+        if (e.cache === 'remove') await cache.delete();
 
         return { dir, manifest };
       } catch (error: any) {
@@ -74,9 +71,9 @@ export function BusControllerIndexer(args: {
     const dirs = await Promise.all(paths.length === 0 ? [toManifest()] : paths.map(toManifest));
 
     const hasError = dirs.some((dir) => dir.error);
-    const error: t.SysFsError | undefined = hasError
-      ? { code: 'manifest', message: `Indexing failed` }
-      : undefined;
+    const error: MaybeError = !hasError
+      ? undefined
+      : { code: 'fs:manifest', message: `Indexing failed`, path: paths.join('; ') };
 
     bus.fire({
       type: 'sys.fs/manifest:res',

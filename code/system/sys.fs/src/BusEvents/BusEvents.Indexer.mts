@@ -1,7 +1,7 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 
-import { rx, slug, t, Wrangle } from './common.mjs';
+import { rx, slug, t, Wrangle, asArray } from './common.mjs';
 
 type FilesystemId = string;
 
@@ -10,16 +10,16 @@ type FilesystemId = string;
  */
 export function BusEventsIndexer(args: {
   id: FilesystemId;
-  $: t.Observable<t.SysFsEvent>;
-  bus: t.EventBus<t.SysFsEvent>;
+  $: t.Observable<t.FsBusEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   timeout: number;
-}): t.SysFsEventsIndex {
+}): t.FsBusEventsIndex {
   const { id, $, bus } = args;
   const toTimeout = Wrangle.timeout(args.timeout);
 
-  const manifest: t.SysFsEventsIndex['manifest'] = {
-    req$: rx.payload<t.SysFsManifestReqEvent>($, 'sys.fs/manifest:req'),
-    res$: rx.payload<t.SysFsManifestResEvent>($, 'sys.fs/manifest:res'),
+  const manifest: t.FsBusEventsIndex['manifest'] = {
+    req$: rx.payload<t.FsBusManifestReqEvent>($, 'sys.fs/manifest:req'),
+    res$: rx.payload<t.FsBusManifestResEvent>($, 'sys.fs/manifest:res'),
 
     async get(options = {}) {
       const { dir, cache, cachefile } = options;
@@ -44,11 +44,19 @@ export function BusEventsIndexer(args: {
         return res;
       }
 
-      const error: t.SysFsError = { code: 'client/timeout', message: res };
-      const fail: t.SysFsManifestRes = { tx, id, dirs: [], error };
+      const error: t.FsError = { code: 'fs:client/timeout', message: res, path: flattenPath(dir) };
+      const fail: t.FsBusManifestRes = { tx, id, dirs: [], error };
       return fail;
     },
   };
 
   return { manifest };
+}
+
+/**
+ * Helpers
+ */
+
+function flattenPath(input?: string | string[]) {
+  return asArray(input).join('; ');
 }

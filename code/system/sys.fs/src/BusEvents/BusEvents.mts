@@ -14,14 +14,14 @@ type Milliseconds = number;
 export function BusEvents(args: {
   id: FilesystemId;
   bus: t.EventBus<any>;
-  filter?: (e: t.SysFsEvent) => boolean;
+  filter?: (e: t.FsBusEvent) => boolean;
   timeout?: Milliseconds; // Default timeout.
-  toUint8Array?: t.SysFsToUint8Array;
+  toUint8Array?: t.FsBusToUint8Array;
   dispose$?: t.Observable<any>;
-}): t.SysFsEvents {
+}): t.FsBusEvents {
   const { id } = args;
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
-  const bus = rx.busAsType<t.SysFsEvent>(args.bus);
+  const bus = rx.busAsType<t.FsBusEvent>(args.bus);
   const is = BusEvents.is;
   const toUint8Array = args.toUint8Array ?? Stream.toUint8Array;
 
@@ -34,7 +34,7 @@ export function BusEvents(args: {
     filter((e) => args.filter?.(e) ?? true),
   );
 
-  const changed$ = rx.payload<t.SysFsChangedEvent>($, 'sys.fs/changed');
+  const changed$ = rx.payload<t.FsBusChangedEvent>($, 'sys.fs/changed');
 
   /**
    * Initialize sub-event API's
@@ -45,7 +45,7 @@ export function BusEvents(args: {
   /**
    * Filesystem API.
    */
-  const fs: t.SysFsEvents['fs'] = (input) => {
+  const fs: t.FsBusEvents['fs'] = (input) => {
     const options = typeof input === 'string' ? { dir: input } : input;
     const { dir } = options ?? {};
     const timeout = toTimeout(options);
@@ -57,18 +57,19 @@ export function BusEvents(args: {
   /**
    * Ready check.
    */
-  const ready: t.SysFsReady = async (options = {}) => {
+  const ready: t.FsReady = async (options = {}) => {
     const { timeout = 500, retries = 5 } = options;
 
-    const ping = async (retries: number): Promise<t.SysFsReadyRes> => {
+    const ping = async (retries: number): Promise<t.FsReadyResponse> => {
       const ready = !(await io.info.get({ timeout })).error;
       if (!ready && retries > 1) return await ping(retries - 1); // <== RECURSION 🌳
       if (ready) return { ready: true };
       return {
         ready: false,
         error: {
-          code: 'client/timeout',
+          code: 'fs:client/timeout',
           message: `Filesystem '${id}' did not respond after ${retries} attempts`,
+          path: '',
         },
       };
     };

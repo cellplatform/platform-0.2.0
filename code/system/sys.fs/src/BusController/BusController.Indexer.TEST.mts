@@ -4,7 +4,7 @@ import { ManifestFiles } from '../Manifest/index.mjs';
 import { Path } from './common.mjs';
 
 describe('BusController.Indexer', function () {
-  type R = t.SysFsManifestDirResponse;
+  type R = t.FsBusManifestDirResponse;
   const asFiles = (dir: R) => ManifestFiles.sort(dir.manifest.files.map((file) => file.path));
 
   describe('manifest', () => {
@@ -32,8 +32,8 @@ describe('BusController.Indexer', function () {
       const src1 = MemoryMock.randomFile();
       const src2 = MemoryMock.randomFile();
 
-      const path1 = '/foo/data.json';
-      const path2 = '/bar/tree.png';
+      const path1 = 'path:/foo/data.json';
+      const path2 = 'path:/bar/tree.png';
 
       await io.write.fire({ path: path1, hash: src1.hash, data: src1.data });
       await io.write.fire({ path: path2, hash: src2.hash, data: src2.data });
@@ -53,6 +53,7 @@ describe('BusController.Indexer', function () {
 
       /**
        * TODO 🐷
+       * See issue: https://github.com/cellplatform/platform-0.2.0/issues/24
        */
       // expect(files[0].image?.kind).to.eql('png');
       // expect(files[1].image).to.eql(undefined);
@@ -177,44 +178,29 @@ describe('BusController.Indexer', function () {
       const src = MemoryMock.randomFile();
 
       const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
-      await write('/root.json');
-      await write('/data/bar/list.json');
-      await write('/data/foo/data.json');
+      await write('path:/root.json');
+      await write('path:/data/bar/list.json');
+      await write('path:/data/foo/data.json');
       const all = ['data/bar/list.json', 'data/foo/data.json', 'root.json'];
 
-      // const cachefile = Path.join(mock.dir, DEFAULT.CACHE_FILENAME);
-      const cachefile = DEFAULT.CACHE_FILENAME;
+      const cachefilename = DEFAULT.CACHE_FILENAME;
+      // const cachefileUri =
 
       const loadCachedFile = async (filename?: string) => {
         const cachefile = Path.join(filename ?? DEFAULT.CACHE_FILENAME);
-
-        // const res1 = await mock.driver.read(cachefile);
-        // console.log('res||', res1);
-
-        // if (!(await mock.fileExists(cachefile))) return undefined;
-        // return
-        const res = await mock.driver.read(cachefile);
+        const uri = Path.Uri.ensureUriPrefix(cachefile);
+        const res = await mock.driver.read(uri);
         if (!res.file) return undefined;
 
-        // console.log('-------lkjfldksjfl-----------------------');
-        // console.log('res', res);
-
         const text = new TextDecoder().decode(res.file.data);
-
-        // console.log('text', text);
         return JSON.parse(text);
-
-        // return undefined; // TEMP 🐷
-
-        // mock.bus
-        // if (!(await nodefs.exists(cachefile))) return undefined;
-        // return (await nodefs.readJson(cachefile)) as t.DirManifest;
       };
-      return { mock, all, cachefile, loadCachedFile };
+
+      return { mock, all, cachefilename, loadCachedFile };
     };
 
     it('no caching - default', async () => {
-      const { mock, all, cachefile } = await cachePrep();
+      const { mock, all, cachefilename: cachefile } = await cachePrep();
       const test = async (cache: boolean | undefined) => {
         expect(await mock.fileExists(cachefile)).to.eql(false);
         const res = await mock.events.index.manifest.get({ cache });
@@ -228,19 +214,23 @@ describe('BusController.Indexer', function () {
     });
 
     it('cache:true (uses cache)', async () => {
-      const { mock, all, cachefile, loadCachedFile } = await cachePrep();
+      const { mock, all, cachefilename, loadCachedFile } = await cachePrep();
+
       expect(await loadCachedFile()).to.eql(undefined);
       const res1 = await mock.events.index.manifest.get({ cache: true });
 
       expect(asFiles(res1.dirs[0])).to.eql(all);
-      expect(await mock.fileExists(cachefile)).to.eql(true);
+      expect(await mock.fileExists(cachefilename)).to.eql(true);
       expect(await loadCachedFile()).to.eql(res1.dirs[0].manifest);
 
       // Manipulate the cached file to test if it's used.
       // NB: This should never be done in the wild!
       const json = await loadCachedFile();
       (json?.files[0] as any).foobar = 'my-test';
-      await mock.driver.write(cachefile, new TextEncoder().encode(JSON.stringify(json)));
+      await mock.driver.write(
+        Path.Uri.ensureUriPrefix(cachefilename),
+        new TextEncoder().encode(JSON.stringify(json)),
+      );
 
       // Requery and ensure the cached version is returned.
       const res2 = await mock.events.index.manifest.get({ cache: true });
@@ -250,7 +240,7 @@ describe('BusController.Indexer', function () {
     });
 
     it('cache: "force"', async () => {
-      const { mock, cachefile, loadCachedFile } = await cachePrep();
+      const { mock, cachefilename, loadCachedFile } = await cachePrep();
       expect(await loadCachedFile()).to.eql(undefined);
       const res1 = await mock.events.index.manifest.get({ cache: true });
       expect((res1.dirs[0].manifest.files[0] as any).foobar).to.eql(undefined);
@@ -258,7 +248,10 @@ describe('BusController.Indexer', function () {
       // Manipulate the cached file to test if it's used.
       const json = await loadCachedFile();
       (json?.files[0] as any).foobar = 'my-test';
-      await mock.driver.write(cachefile, new TextEncoder().encode(JSON.stringify(json)));
+      await mock.driver.write(
+        Path.Uri.ensureUriPrefix(cachefilename),
+        new TextEncoder().encode(JSON.stringify(json)),
+      );
 
       // Requery and ensure the cached version is returned.
       const res2 = await mock.events.index.manifest.get({ cache: true });
@@ -319,7 +312,7 @@ describe('BusController.Indexer', function () {
       const res1 = await mock.events.index.manifest.get({ cache: true });
       const res2 = await mock.events.index.manifest.get({ cache: 'force' });
 
-      const expectNoCachefile = (dir: t.SysFsManifestDirResponse) => {
+      const expectNoCachefile = (dir: t.FsBusManifestDirResponse) => {
         const files = asFiles(dir);
         const exists = files.some((file) => file.endsWith(DEFAULT.CACHE_FILENAME));
         expect(exists).to.eql(false);
@@ -339,11 +332,11 @@ describe('BusController.Indexer', function () {
       });
 
       const cacheFile = (path: string) => Path.join(path, DEFAULT.CACHE_FILENAME);
-
       const expectExists = async (path: string, expected: boolean) => {
         const exists = await mock.fileExists(path);
         expect(exists).to.eql(expected);
       };
+
       await expectExists('data/404', false); // NB: When a folder doesn't exist, it is not created by the cache.
       await expectExists(cacheFile('/'), true);
       await expectExists(cacheFile('data/foo'), true);

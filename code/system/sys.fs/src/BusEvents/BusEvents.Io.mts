@@ -9,33 +9,35 @@ type FilesystemId = string;
  */
 export function BusEventsIo(args: {
   id: FilesystemId;
-  $: t.Observable<t.SysFsEvent>;
-  bus: t.EventBus<t.SysFsEvent>;
+  $: t.Observable<t.FsBusEvent>;
+  bus: t.EventBus<t.FsBusEvent>;
   timeout: number;
-}): t.SysFsEventsIo {
+}): t.FsBusEventsIo {
   const { id, $, bus } = args;
   const toTimeout = Wrangle.timeout(args.timeout);
 
   const toError = (
-    error?: { message: string; code: string },
-    defaultCode?: t.SysFsErrorCode,
-  ): t.SysFsError => {
+    error?: { message: string; code: string; path?: string },
+    defaultCode?: t.FsErrorCode,
+  ): t.FsError => {
     const message = error?.message ?? 'Failed';
-    const code = error?.code === 'timeout' ? 'client/timeout' : defaultCode ?? 'unknown';
-    return { code, message };
+    const path = error?.path ?? '';
+    const code: t.FsErrorCode =
+      error?.code === 'timeout' ? 'fs:client/timeout' : defaultCode ?? 'fs:unknown';
+    return { code, message, path };
   };
 
   /**
    * File/system information.
    */
-  const info: t.SysFsEventsIo['info'] = {
-    req$: rx.payload<t.SysFsInfoReqEvent>($, 'sys.fs/info:req'),
-    res$: rx.payload<t.SysFsInfoResEvent>($, 'sys.fs/info:res'),
+  const info: t.FsBusEventsIo['info'] = {
+    req$: rx.payload<t.FsBusInfoReqEvent>($, 'sys.fs/info:req'),
+    res$: rx.payload<t.FsBusInfoResEvent>($, 'sys.fs/info:res'),
     async get(options = {}) {
       const { path } = options;
       const tx = slug();
       const res$ = info.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsInfoResEvent>(res$, { timeout: toTimeout(options) });
+      const first = rx.asPromise.first<t.FsBusInfoResEvent>(res$, { timeout: toTimeout(options) });
 
       bus.fire({
         type: 'sys.fs/info:req',
@@ -47,8 +49,8 @@ export function BusEventsIo(args: {
         return res.payload;
       }
 
-      const error = toError(res.error, 'info');
-      const fail: t.SysFsInfoRes = { tx, id, paths: [], error };
+      const error = toError(res.error, 'fs:info');
+      const fail: t.FsBusInfoRes = { tx, id, paths: [], error };
       return fail;
     },
   };
@@ -56,14 +58,14 @@ export function BusEventsIo(args: {
   /**
    * Read
    */
-  const read: t.SysFsEventsIo['read'] = {
-    req$: rx.payload<t.SysFsReadReqEvent>($, 'sys.fs/read:req'),
-    res$: rx.payload<t.SysFsReadResEvent>($, 'sys.fs/read:res'),
+  const read: t.FsBusEventsIo['read'] = {
+    req$: rx.payload<t.FsBusReadReqEvent>($, 'sys.fs/read:req'),
+    res$: rx.payload<t.FsBusReadResEvent>($, 'sys.fs/read:res'),
     async get(path, options = {}) {
       const tx = slug();
       const op = 'read';
       const res$ = read.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsReadResEvent>(res$, {
+      const first = rx.asPromise.first<t.FsBusReadResEvent>(res$, {
         op,
         timeout: toTimeout(options),
       });
@@ -79,8 +81,8 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'read');
-      const fail: t.SysFsReadResponse = { files: [], error };
+      const error = toError(res.error, 'fs:read');
+      const fail: t.FsBusReadResponse = { files: [], error };
       return fail;
     },
   };
@@ -88,14 +90,14 @@ export function BusEventsIo(args: {
   /**
    * Write
    */
-  const write: t.SysFsEventsIo['write'] = {
-    req$: rx.payload<t.SysFsWriteReqEvent>($, 'sys.fs/write:req'),
-    res$: rx.payload<t.SysFsWriteResEvent>($, 'sys.fs/write:res'),
+  const write: t.FsBusEventsIo['write'] = {
+    req$: rx.payload<t.FsBusWriteReqEvent>($, 'sys.fs/write:req'),
+    res$: rx.payload<t.FsBusWriteResEvent>($, 'sys.fs/write:res'),
     async fire(file, options = {}) {
       const tx = slug();
       const op = 'write';
       const res$ = write.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsWriteResEvent>(res$, {
+      const first = rx.asPromise.first<t.FsBusWriteResEvent>(res$, {
         op,
         timeout: toTimeout(options),
       });
@@ -111,8 +113,8 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'write');
-      const fail: t.SysFsWriteResponse = { files: [], error };
+      const error = toError(res.error, 'fs:write');
+      const fail: t.FsBusWriteResponse = { files: [], error };
       return fail;
     },
   };
@@ -120,14 +122,14 @@ export function BusEventsIo(args: {
   /**
    * Copy
    */
-  const copy: t.SysFsEventsIo['copy'] = {
-    req$: rx.payload<t.SysFsCopyReqEvent>($, 'sys.fs/copy:req'),
-    res$: rx.payload<t.SysFsCopyResEvent>($, 'sys.fs/copy:res'),
+  const copy: t.FsBusEventsIo['copy'] = {
+    req$: rx.payload<t.FsBusCopyReqEvent>($, 'sys.fs/copy:req'),
+    res$: rx.payload<t.FsBusCopyResEvent>($, 'sys.fs/copy:res'),
     async fire(file, options = {}) {
       const tx = slug();
       const op = 'copy';
       const res$ = copy.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsCopyResEvent>(res$, {
+      const first = rx.asPromise.first<t.FsBusCopyResEvent>(res$, {
         op,
         timeout: toTimeout(options),
       });
@@ -143,8 +145,8 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'copy');
-      const fail: t.SysFsCopyResponse = { files: [], error };
+      const error = toError(res.error, 'fs:copy');
+      const fail: t.FsBusCopyResponse = { files: [], error };
       return fail;
     },
   };
@@ -152,14 +154,14 @@ export function BusEventsIo(args: {
   /**
    * Move
    */
-  const move: t.SysFsEventsIo['move'] = {
-    req$: rx.payload<t.SysFsMoveReqEvent>($, 'sys.fs/move:req'),
-    res$: rx.payload<t.SysFsMoveResEvent>($, 'sys.fs/move:res'),
+  const move: t.FsBusEventsIo['move'] = {
+    req$: rx.payload<t.FsBusMoveReqEvent>($, 'sys.fs/move:req'),
+    res$: rx.payload<t.FsBusMoveResEvent>($, 'sys.fs/move:res'),
     async fire(file, options = {}) {
       const tx = slug();
       const op = 'move';
       const res$ = move.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsMoveResEvent>(res$, {
+      const first = rx.asPromise.first<t.FsBusMoveResEvent>(res$, {
         op,
         timeout: toTimeout(options),
       });
@@ -175,8 +177,8 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'move');
-      const fail: t.SysFsMoveResponse = { files: [], error };
+      const error = toError(res.error, 'fs:move');
+      const fail: t.FsBusMoveResponse = { files: [], error };
       return fail;
     },
   };
@@ -184,14 +186,14 @@ export function BusEventsIo(args: {
   /**
    * Delete
    */
-  const del: t.SysFsEventsIo['delete'] = {
-    req$: rx.payload<t.SysFsDeleteReqEvent>($, 'sys.fs/delete:req'),
-    res$: rx.payload<t.SysFsDeleteResEvent>($, 'sys.fs/delete:res'),
+  const del: t.FsBusEventsIo['delete'] = {
+    req$: rx.payload<t.FsBusDeleteReqEvent>($, 'sys.fs/delete:req'),
+    res$: rx.payload<t.FsBusDeleteResEvent>($, 'sys.fs/delete:res'),
     async fire(path, options = {}) {
       const tx = slug();
       const op = 'delete';
       const res$ = del.res$.pipe(filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.SysFsDeleteResEvent>(res$, {
+      const first = rx.asPromise.first<t.FsBusDeleteResEvent>(res$, {
         op,
         timeout: toTimeout(options),
       });
@@ -207,8 +209,8 @@ export function BusEventsIo(args: {
         return { files, error };
       }
 
-      const error = toError(res.error, 'delete');
-      const fail: t.SysFsDeleteResponse = { files: [], error };
+      const error = toError(res.error, 'fs:delete');
+      const fail: t.FsBusDeleteResponse = { files: [], error };
       return fail;
     },
   };

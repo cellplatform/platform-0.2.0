@@ -1,4 +1,4 @@
-import { trim, trimSlashesStart } from '../Path/Path.trim.mjs';
+import { trim, trimSlashesStart, trimSlashesEnd } from '../Path/Path.trim.mjs';
 import { join } from '../Path/Path.join.mjs';
 
 /**
@@ -14,16 +14,15 @@ export const PathUri = {
   /**
    * Determines if the given string is a "path:" URI.
    */
-  is(input?: string) {
-    const uri = trim(input);
-    return uri.startsWith('path:');
+  isPathUri(input?: string) {
+    return trim(input).startsWith('path:');
   },
 
   /**
    * Retrieves the path from the given URI.
    */
   path(input?: string) {
-    if (!PathUri.is(input)) return undefined;
+    if (!PathUri.isPathUri(input)) return undefined;
     const uri = trim(input);
 
     let res = uri
@@ -36,20 +35,28 @@ export const PathUri = {
     return join(res); // NB: The "join" call passes the path through a "../.." resolver.
   },
 
-  /**
-   * Ensures the given string is trimmed and has "path:" as a prefix
-   */
-  ensurePrefix(path: string) {
+  cleanPath(path: string) {
     if (typeof path !== 'string') return '';
-    path = PathUri.trimPrefix(path);
-    path = trimSlashesStart(path);
-    return `path:${path}`;
+    path = path.trim();
+    path = PathUri.trimUriPrefix(path);
+    if (path === '' || trimSlashesEnd(path) === '.') path = '/';
+    if (path.startsWith('/')) path = `/${trimSlashesStart(path)}`; // Ensure single leading slash.
+    return path;
+  },
+
+  /**
+   * Ensures the given string is cleaned/trimmed and has "path:" as a prefix
+   */
+  ensureUriPrefix(path: string) {
+    if (typeof path !== 'string') return '';
+    path = PathUri.cleanPath(path);
+    return `path:${PathUri.cleanPath(path)}`;
   },
 
   /**
    * Remotes the "path:" prefix from the given string.
    */
-  trimPrefix(path: string) {
+  trimUriPrefix(path: string) {
     path = trim(path);
     return path ? path.replace(/^path:/, '').trim() : '';
   },
