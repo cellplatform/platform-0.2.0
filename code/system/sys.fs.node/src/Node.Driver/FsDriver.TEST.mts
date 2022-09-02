@@ -3,15 +3,16 @@ import { FsDriver } from './index.mjs';
 export { slug } from '../common/index.mjs';
 import { NodeFs } from '../node/NodeFs/index.mjs';
 
+const TMP = TEST_PATH.tmp;
+
 describe('FsDriver (Node)', () => {
   const testCreate = async () => {
-    const dir = TEST_PATH.tmp;
+    const dir = TMP;
+    await NodeFs.remove(TEST_PATH.tmp);
     await NodeFs.ensureDir(dir);
 
     const driver = FsDriver({ dir });
-    const sample = MemoryMock.randomFile();
-
-    return { driver, sample };
+    return { driver };
   };
 
   describe('paths', () => {
@@ -34,24 +35,52 @@ describe('FsDriver (Node)', () => {
   });
 
   describe('info', () => {
-    it('throw: not a "path:.." URI', async () => {
+    it('unknown: does not exist', async () => {
       const { driver } = await testCreate();
-      const fn = () => driver.info('foo/bar.png');
-      await expectError(fn, 'Invalid URI');
+      const res = await driver.info('path:foo/bar/');
+      expect(res.exists).to.eql(false);
+      expect(res.uri).to.eql('path:foo/bar/');
+      expect(res.kind).to.eql('unknown');
+      expect(res.path).to.eql('/foo/bar/');
+      expect(res.hash).to.eql(''); // No hashing for directory.
+      expect(res.bytes).to.eql(-1); // Byte size for file only.
     });
 
-    it('root directory', async () => {
+    it('dir: root', async () => {
       const { driver } = await testCreate();
       const uri = 'path:/';
       const res = await driver.info(` ${uri}  `);
 
-      expect(res.uri).to.eql('path:/');
       expect(res.exists).to.eql(true);
+      expect(res.uri).to.eql('path:/');
       expect(res.kind).to.eql('dir');
       expect(res.location).to.eql(`file://${driver.dir}`);
       expect(res.path).to.eql('/');
       expect(res.hash).to.eql(''); // No hashing for directory.
-      expect(res.bytes).to.eql(-1); // Byte size for file only.
+      expect(res.bytes).to.eql(64);
+    });
+
+    it('file', async () => {
+      const { driver } = await testCreate();
+
+      const tmp = NodeFs.join(TMP, 'foo.txt');
+      await NodeFs.writeFile(tmp, 'Hello world!');
+
+      const res = await driver.info('path:foo.txt');
+
+      expect(res.exists).to.eql(true);
+      expect(res.uri).to.eql('path:foo.txt');
+      expect(res.kind).to.eql('file');
+      expect(res.location).to.eql(`file://${driver.dir}foo.txt`);
+      expect(res.path).to.eql('/foo.txt');
+      expect(res.hash.endsWith('a3faec05ecffcbb7df31ad9e51a')).to.eql(true);
+      expect(res.bytes).to.eql(12);
+    });
+
+    it('throw: not a "path:.." URI', async () => {
+      const { driver } = await testCreate();
+      const fn = () => driver.info('foo/bar.png');
+      await expectError(fn, 'Invalid URI');
     });
   });
 });

@@ -1,4 +1,4 @@
-import { t, PathResolverFactory, Path } from '../common/index.mjs';
+import { t, PathResolverFactory, Path, Hash } from '../common/index.mjs';
 import { NodeFs } from '../node/NodeFs/index.mjs';
 
 /**
@@ -38,9 +38,17 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
       let bytes: T['bytes'] = -1;
 
       const exists = await NodeFs.pathExists(path);
-      const stats = await NodeFs.stat(path);
-      if (kind === 'unknown' && stats.isFile()) kind = 'file';
-      if (kind === 'unknown' && stats.isDirectory()) kind = 'dir';
+
+      if (exists) {
+        const stats = await NodeFs.stat(path);
+        if (kind === 'unknown' && stats.isFile()) kind = 'file';
+        if (kind === 'unknown' && stats.isDirectory()) kind = 'dir';
+        if (kind !== 'unknown') bytes = stats.size;
+        if (kind === 'file') {
+          const data = await NodeFs.readFile(path);
+          hash = Hash.sha256(data);
+        }
+      }
 
       return {
         uri,

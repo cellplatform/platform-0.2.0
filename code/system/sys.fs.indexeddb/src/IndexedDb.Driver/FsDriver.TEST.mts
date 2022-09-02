@@ -104,6 +104,7 @@ describe('FsDriver (IndexedDB)', () => {
       expect(res.exists).to.eql(false);
       expect(res.bytes).to.eql(-1);
       expect(res.hash).to.eql('');
+      expect(res.kind).to.eql('unknown');
       expect(res.path).to.match(/foo\/404/);
 
       fs.dispose();
