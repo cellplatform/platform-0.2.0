@@ -1,5 +1,5 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
-import { FsIndexedDbDriver } from '../IndexedDb.Driver/index.mjs';
+import { FsIndexedDb } from '../FsIndexedDb/index.mjs';
 import { deleteAll, describe, expect, it } from '../TEST/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {
@@ -7,7 +7,7 @@ describe('FsIndexer (IndexedDB)', () => {
 
   const testCreate = async () => {
     const id = `fs:test.${slug()}`;
-    const fs = await FsIndexedDbDriver({ id });
+    const fs = await FsIndexedDb({ id });
     return { fs, name: id, deleteAll: () => deleteAll(fs) };
   };
 
@@ -26,7 +26,7 @@ describe('FsIndexer (IndexedDB)', () => {
 
   it('dir', async () => {
     const { fs } = await testCreate();
-    expect(fs.index.dir).to.eql('/');
+    expect(fs.indexer.dir).to.eql('/');
     fs.dispose();
   });
 
@@ -36,7 +36,7 @@ describe('FsIndexer (IndexedDB)', () => {
       await deleteAll();
 
       const now = Time.now.timestamp;
-      const manifest = await fs.index.manifest();
+      const manifest = await fs.indexer.manifest();
       expect(manifest.kind).to.eql('dir');
       expect(manifest.dir.indexedAt).to.within(now - 10, now + 2000);
       expect(manifest.files).to.eql([]);
@@ -55,7 +55,7 @@ describe('FsIndexer (IndexedDB)', () => {
       const file3 = await testFile({ fs, path: 'images/foo/bar/icon.svg' });
 
       const now = Time.now.timestamp;
-      const manifest = await fs.index.manifest();
+      const manifest = await fs.indexer.manifest();
       const files = manifest.files;
 
       expect(manifest.kind).to.eql('dir');
@@ -83,8 +83,8 @@ describe('FsIndexer (IndexedDB)', () => {
       await testFile({ fs, path: '/foo/icon-1.svg' });
       await testFile({ fs, path: '/foo/zoo/icon-2.svg' });
 
-      const manifest1 = await fs.index.manifest({ filter: (e) => !e.path.endsWith('.svg') });
-      const manifest2 = await fs.index.manifest({ filter: (e) => !e.path.endsWith('.png') });
+      const manifest1 = await fs.indexer.manifest({ filter: (e) => !e.path.endsWith('.svg') });
+      const manifest2 = await fs.indexer.manifest({ filter: (e) => !e.path.endsWith('.png') });
 
       const files1 = manifest1.files.map((file) => file.path);
       const files2 = manifest2.files.map((file) => file.path);
@@ -105,13 +105,13 @@ describe('FsIndexer (IndexedDB)', () => {
       await testFile({ fs, path: '/foo/icon-1.svg' });
       await testFile({ fs, path: 'foo/bar/icon-2.svg' });
 
-      const manifest0 = await fs.index.manifest({ dir: '      ' });
+      const manifest0 = await fs.indexer.manifest({ dir: '      ' });
 
-      const manifest1 = await fs.index.manifest({ dir: '   foo   ' });
-      const manifest2 = await fs.index.manifest({ dir: '///foo///' });
-      const manifest3 = await fs.index.manifest({ dir: 'foo/bar' });
-      const manifest4 = await fs.index.manifest({ dir: '404' });
-      const manifest5 = await fs.index.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: File specified, steps up to containing folder.
+      const manifest1 = await fs.indexer.manifest({ dir: '   foo   ' });
+      const manifest2 = await fs.indexer.manifest({ dir: '///foo///' });
+      const manifest3 = await fs.indexer.manifest({ dir: 'foo/bar' });
+      const manifest4 = await fs.indexer.manifest({ dir: '404' });
+      const manifest5 = await fs.indexer.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: File specified, steps up to containing folder.
 
       const files0 = mapFiles(manifest0);
       const files1 = mapFiles(manifest1);
@@ -146,7 +146,7 @@ describe('FsIndexer (IndexedDB)', () => {
         await fs.driver.write(`path:${filename}`, data);
       }
 
-      const manifest = await fs.index.manifest();
+      const manifest = await fs.indexer.manifest();
 
       // NB: the paths are sorted in a "human/natural" way.
       const names2 = manifest.files.map((file) => file.path);
@@ -165,7 +165,7 @@ describe('FsIndexer (IndexedDB)', () => {
         const body = (await fetch(path)).body as ReadableStream;
         await fs.driver.write(uri, body);
 
-        const manifest = await fs.index.manifest();
+        const manifest = await fs.indexer.manifest();
         const file = manifest.files[0];
         expect(file.image).to.eql(expected);
       };

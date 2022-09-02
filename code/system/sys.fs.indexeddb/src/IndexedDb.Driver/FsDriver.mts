@@ -13,7 +13,7 @@ import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 /**
  * A filesystem driver running against the browser [IndexedDB] store.
  */
-export function FsDriverImpl(args: { dir: string; db: IDBDatabase }): t.FsDriver {
+export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
   const { dir, db } = args;
   const root = dir;
   const lookup = DbLookup(db);

@@ -2,15 +2,17 @@ import { Subject } from 'rxjs';
 
 import { NAME, ROOT_DIR, t } from '../common/index.mjs';
 import { IndexedDb } from '../IndexedDb/index.mjs';
-import { FsDriverImpl } from './FsDriver.mjs';
+import { FsDriver } from '../IndexedDb.Driver/index.mjs';
 import { FsIndexer } from '../IndexedDb.Indexer/index.mjs';
+
+type FilesystemId = string;
 
 /**
  * A filesystem driver running against the browser [IndexedDB] store.
  */
-export const FsIndexedDbDriver = (args: { id?: string }) => {
+export const FsIndexedDb = (options: { id?: FilesystemId } = {}) => {
   const dir = ROOT_DIR;
-  const id = (args.id ?? 'fs').trim();
+  const id = (options.id ?? 'fs').trim();
 
   return IndexedDb.create<t.FsIndexedDb>({
     name: id,
@@ -42,7 +44,7 @@ export const FsIndexedDbDriver = (args: { id?: string }) => {
 
       const { version } = db;
       let _driver: t.FsDriver | undefined;
-      let _index: t.FsIndexer | undefined;
+      let _indexer: t.FsIndexer | undefined;
 
       /**
        * API.
@@ -53,11 +55,11 @@ export const FsIndexedDbDriver = (args: { id?: string }) => {
         dispose$: dispose$.asObservable(),
         dispose,
         get driver() {
-          return _driver || (_driver = FsDriverImpl({ dir, db }));
+          return _driver || (_driver = FsDriver({ dir, db }));
         },
-        get index() {
+        get indexer() {
           const fs = api.driver;
-          return _index || (_index = FsIndexer({ dir, db, fs }));
+          return _indexer || (_indexer = FsIndexer({ dir, db, fs }));
         },
       };
 
