@@ -26,6 +26,10 @@ console.log('read (driver):', typeof driverRead, driverRead);
 const bus = rx.bus();
 const controller = Filesystem.BusController({ id, bus, driver, indexer });
 
+bus.$.subscribe((e) => {
+  console.log('e', e);
+});
+
 const fs = controller.fs();
 const fsRead = await fs.json.read(uri);
 console.log('read (fs):', fsRead);
