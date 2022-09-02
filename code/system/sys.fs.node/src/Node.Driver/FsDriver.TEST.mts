@@ -1,6 +1,6 @@
 import { describe, it, expect, MemoryMock, TEST_PATH, expectError } from '../TEST/index.mjs';
 import { FsDriver } from './index.mjs';
-export { slug } from '../common/index.mjs';
+import { Hash } from '../common/index.mjs';
 import { NodeFs } from '../node/NodeFs/index.mjs';
 
 const TMP = TEST_PATH.tmp;
@@ -63,8 +63,8 @@ describe('FsDriver (Node)', () => {
     it('file', async () => {
       const { driver } = await testCreate();
 
-      const tmp = NodeFs.join(TMP, 'foo.txt');
-      await NodeFs.writeFile(tmp, 'Hello world!');
+      const path = NodeFs.join(TMP, 'foo.txt');
+      await NodeFs.writeFile(path, 'Hello world!');
 
       const res = await driver.info('path:foo.txt');
 
@@ -82,6 +82,29 @@ describe('FsDriver (Node)', () => {
       const { driver } = await testCreate();
       const fn = () => driver.info('foo/bar.png');
       await expectError(fn, 'Invalid URI');
+    });
+  });
+
+  describe('read', () => {
+    it('read file (exists)', async () => {
+      const { driver } = await testCreate();
+
+      const path = NodeFs.join(TMP, 'foo.txt');
+      await NodeFs.writeFile(path, 'Hello world!');
+      const buffer = await NodeFs.readFile(path);
+
+      const uri = 'path:foo.txt';
+      const res = await driver.read(uri);
+
+      expect(res.uri).to.eql(uri);
+      expect(res.ok).to.eql(true);
+      expect(res.status).to.eql(200);
+
+      expect(res.file?.path).to.eql('/foo.txt');
+      expect(res.file?.location).to.eql(`file://${driver.dir}foo.txt`);
+      expect(res.file?.data).to.eql(new Uint8Array(buffer));
+      expect(res.file?.bytes).to.eql(buffer.byteLength);
+      expect(res.file?.hash).to.eql(Hash.sha256(buffer));
     });
   });
 });

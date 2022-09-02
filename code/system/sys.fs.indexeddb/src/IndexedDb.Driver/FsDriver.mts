@@ -21,6 +21,13 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
   const lookup = DbLookup(db);
   const resolve = PathResolverFactory({ dir });
 
+  const unpackUri = (uri: string) => {
+    uri = (uri || '').trim();
+    const path = resolve(uri);
+    const location = Path.toAbsoluteLocation({ path, root });
+    return { uri, path, location };
+  };
+
   const driver: t.FsDriver = {
     /**
      * Root directory of the file system.
@@ -38,10 +45,8 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
     /**
      * Retrieve meta-data of a local file.
      */
-    async info(uri) {
-      uri = (uri || '').trim();
-      const path = resolve(uri);
-      const location = Path.toAbsoluteLocation({ path, root });
+    async info(address) {
+      const { uri, path, location } = unpackUri(address);
 
       type T = t.FsDriverInfo;
       let kind: T['kind'] = 'unknown';
@@ -67,16 +72,14 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
     /**
      * Read from the local file-system.
      */
-    async read(uri) {
+    async read(address) {
+      const { uri, path, location } = unpackUri(address);
+
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readonly');
       const store = {
         paths: tx.objectStore(NAME.STORE.PATHS),
         files: tx.objectStore(NAME.STORE.FILES),
       };
-
-      uri = (uri || '').trim();
-      const path = resolve(uri);
-      const location = Path.toAbsoluteLocation({ path, root });
 
       const get = IndexedDb.record.get;
       const hash = (await get<t.PathRecord>(store.paths, path))?.hash || '';
@@ -97,14 +100,10 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
     /**
      * Write to the local file-system.
      */
-    async write(uri, input) {
-      if (input === undefined) {
-        throw new Error(`No data`);
-      }
+    async write(address, input) {
+      if (input === undefined) throw new Error(`No data`);
 
-      uri = (uri || '').trim();
-      const path = resolve(uri);
-      const location = Path.toAbsoluteLocation({ path, root });
+      const { uri, path, location } = unpackUri(address);
       const { dir } = Path.parts(path);
 
       const isStream = Stream.isReadableStream(input);
