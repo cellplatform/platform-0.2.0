@@ -14,6 +14,7 @@ describe('BusEvents.Fs', () => {
         const info = await fs.info('images/tree.png');
         expect(info.hash).to.eql(file.hash);
       };
+
       await test('');
       await test('  ');
       await test('/');
@@ -441,10 +442,6 @@ describe('BusEvents.Fs', () => {
         const file = MemoryMock.randomFile();
         await mock.driver.write('path:images/tree.png', file.data);
 
-        // const mock =  TestPrep();
-        // const fs = mock.events.fs();
-        // const src = await mock.readFile('static.test/child/tree.png');
-        // await fs.write('images/tree.png', src.data);
         const expectCacheExists = async (exists: boolean) => {
           const manifest = await fs.json.read(DEFAULT.CACHE_FILENAME);
           expect(Boolean(manifest)).to.eql(exists);
@@ -561,6 +558,9 @@ describe('BusEvents.Fs', () => {
       await test('/images/tree.png');
       await test('///images/tree.png');
       await test('  images/tree.png  ');
+      await test('path:images/tree.png');
+      await test('path:/images/tree.png');
+      await test('  path:///images/tree.png  ');
 
       mock.dispose();
     });
