@@ -2,7 +2,6 @@ import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
 import { FsDriver } from '../IndexedDb.Driver/index.mjs';
 import { deleteAll, describe, expect, it } from '../TEST/index.mjs';
 
-// import { FsDriverLocal } from '..';
 describe('FsIndexer (IndexedDB)', () => {
   const EMPTY_HASH = Hash.sha256([]);
 
@@ -11,13 +10,6 @@ describe('FsIndexer (IndexedDB)', () => {
     const fs = await FsDriver({ id });
     return { fs, name: id, deleteAll: () => deleteAll(fs) };
   };
-
-  // const deleteAll = async (fs: t.FsIndexedDb) => {
-  //   const manifest = await fs.index.manifest();
-  //   for (const file of manifest.files) {
-  //     await fs.driver.delete(`path:${file.path}`);
-  //   }
-  // };
 
   const testFile = async (options: { path?: string; text?: string; fs?: t.FsIndexedDb } = {}) => {
     const { fs, path = 'dir/foo.txt', text = 'hello' } = options;
