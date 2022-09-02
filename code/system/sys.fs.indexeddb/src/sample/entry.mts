@@ -18,7 +18,7 @@ const uri = 'path:foo/bar.json';
 await db.driver.write(uri, data);
 
 const driverRead = new TextDecoder().decode((await db.driver.read(uri)).file?.data);
-console.log('read (driver):', driverRead, typeof driverRead);
+console.log('read (driver):', typeof driverRead, driverRead);
 
 /**
  * Sample: Bus/Controller
