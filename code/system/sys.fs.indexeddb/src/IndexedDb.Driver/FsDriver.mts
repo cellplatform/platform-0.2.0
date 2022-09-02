@@ -11,10 +11,12 @@ import {
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
 /**
- * A filesystem driver running against the browser [IndexedDB] store.
+ * A filesystem driver running against the browser's [IndexedDB] store.
  */
 export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
-  const { dir, db } = args;
+  const { db } = args;
+  const dir = args.dir.trim();
+
   const root = dir;
   const lookup = DbLookup(db);
   const resolve = PathResolverFactory({ dir });

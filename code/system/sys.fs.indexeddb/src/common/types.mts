@@ -4,7 +4,6 @@ import type { ManifestFileImage } from 'sys.fs/src/types.mjs';
  * @system
  */
 export type { Disposable } from 'sys.types';
-
 export type {
   FsDriver,
   FsDriverInfo,
