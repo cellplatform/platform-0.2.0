@@ -65,11 +65,8 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
       try {
         const exists = await NodeFs.pathExists(fullpath);
         const status = exists ? 200 : 404;
-        const res: t.FsDriverRead = {
-          ok: status.toString().startsWith('2'),
-          status,
-          uri,
-        };
+        const ok = status.toString().startsWith('2');
+        const res: t.FsDriverRead = { ok, status, uri };
 
         if (exists) {
           const buffer = await NodeFs.readFile(fullpath);

@@ -106,5 +106,31 @@ describe('FsDriver (Node)', () => {
       expect(res.file?.bytes).to.eql(buffer.byteLength);
       expect(res.file?.hash).to.eql(Hash.sha256(buffer));
     });
+
+    it('read: 404', async () => {
+      const { driver } = await testCreate();
+      const uri = 'path:404.png';
+      const res = await driver.read(uri);
+
+      expect(res.ok).to.eql(false);
+      expect(res.status).to.eql(404);
+      expect(res.uri).to.eql('path:404.png');
+    });
+
+    it('read: error', async () => {
+      const { driver } = await testCreate();
+      const dirpath = NodeFs.join(TMP, 'foobar');
+      await NodeFs.ensureDir(dirpath);
+
+      const uri = 'path:foobar';
+      const res = await driver.read(uri);
+
+      expect(res.ok).to.eql(false);
+      expect(res.status).to.eql(500);
+      expect(res.uri).to.eql('path:foobar');
+      expect(res.error?.code).to.eql('fs:read');
+      expect(res.error?.message).to.include('EISDIR: illegal operation on a directory, read'); // NB: underlying node-fs error message.
+      expect(res.error?.path).to.eql('/foobar');
+    });
   });
 });
