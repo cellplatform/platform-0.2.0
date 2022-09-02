@@ -57,7 +57,7 @@ describe('FsDriver (Node)', () => {
       expect(res.location).to.eql(`file://${driver.dir}`);
       expect(res.path).to.eql('/');
       expect(res.hash).to.eql(''); // No hashing for directory.
-      expect(res.bytes).to.eql(64);
+      expect(res.bytes).to.greaterThan(60);
     });
 
     it('file', async () => {
@@ -73,7 +73,8 @@ describe('FsDriver (Node)', () => {
       expect(res.kind).to.eql('file');
       expect(res.location).to.eql(`file://${driver.dir}foo.txt`);
       expect(res.path).to.eql('/foo.txt');
-      expect(res.hash.endsWith('a3faec05ecffcbb7df31ad9e51a')).to.eql(true);
+      expect(res.hash.startsWith('sha256-')).to.eql(true);
+      expect(res.hash.endsWith('ffcbb7df31ad9e51a')).to.eql(true);
       expect(res.bytes).to.eql(12);
     });
 
