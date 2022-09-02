@@ -6,7 +6,7 @@ export * from '../types.mjs';
 export type { Disposable } from 'sys.types';
 export type {
   FsDriver,
-  //  FsDriverInfo,
+  FsDriverInfo,
   //  FsIndexer,
   //  FsError,
   //  Manifest,

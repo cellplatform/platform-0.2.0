@@ -1,4 +1,5 @@
 import { t, PathResolverFactory, Path } from '../common/index.mjs';
+import { NodeFs } from '../node/NodeFs/index.mjs';
 
 /**
  * A filesystem driver running against the "node-js" POSIX interface.
@@ -27,7 +28,29 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
      * Retrieve meta-data of a local file.
      */
     async info(uri) {
-      throw new Error('not implemented');
+      uri = (uri || '').trim();
+      const path = resolve(uri);
+      const location = Path.toAbsoluteLocation({ path, root });
+
+      type T = t.FsDriverInfo;
+      let kind: T['kind'] = 'unknown';
+      let hash: T['hash'] = '';
+      let bytes: T['bytes'] = -1;
+
+      const exists = await NodeFs.pathExists(path);
+      const stats = await NodeFs.stat(path);
+      if (kind === 'unknown' && stats.isFile()) kind = 'file';
+      if (kind === 'unknown' && stats.isDirectory()) kind = 'dir';
+
+      return {
+        uri,
+        exists,
+        kind,
+        path: path.substring(dir.length - 1), // NB: hide full path up to root of driver scope.
+        location,
+        hash,
+        bytes,
+      };
     },
 
     /**
