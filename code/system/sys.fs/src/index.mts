@@ -5,3 +5,5 @@ export * from './Path/index.mjs';
 export * from './PathResolver/index.mjs';
 export * from './Image/index.mjs';
 export { MemoryMock } from './MemoryMock/index.mjs';
+export { BusController } from './BusController/index.mjs';
+export { BusEvents } from './BusEvents/index.mjs';

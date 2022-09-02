@@ -6,6 +6,6 @@ import { Path } from './Path/index.mjs';
 export const Filesystem = {
   BusEvents,
   BusController,
-  Filesize,
   Path,
+  Filesize,
 };
