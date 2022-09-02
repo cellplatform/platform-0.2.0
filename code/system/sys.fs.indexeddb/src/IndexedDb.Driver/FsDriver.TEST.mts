@@ -1,11 +1,11 @@
 import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
 import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.mjs';
-import { FsDriver } from './index.mjs';
+import { FsIndexedDbDriver } from './index.mjs';
 
 describe('FsDriver (IndexedDB)', () => {
   const testCreate = async () => {
     const id = `fs:test.${slug()}`;
-    const fs = await FsDriver({ id });
+    const fs = await FsIndexedDbDriver({ id });
     const sample = MemoryMock.randomFile();
     return { fs, sample };
   };
