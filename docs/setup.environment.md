@@ -5,7 +5,7 @@
 Recommended development tooling baseline (pre-prerequisites):
 
 - VSCode [installer](https://code.visualstudio.com/) (code editor).
-- Github Desktop [installer](https://desktop.github.com/) (source control UI).
+- Github Desktop [installer](https://desktop.github.com/) (source control user-interface).
 
 ---
 
