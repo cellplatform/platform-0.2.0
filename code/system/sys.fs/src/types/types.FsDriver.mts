@@ -39,7 +39,6 @@ export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUri) =
 export type FsDriverWriteMethod<Write extends FsDriverWrite> = (
   address: PathUri,
   data: Uint8Array | ReadableStream,
-  options?: { filename?: string },
 ) => Promise<Write>;
 
 export type FsDriverCopyMethod<Copy extends FsDriverCopy> = (
