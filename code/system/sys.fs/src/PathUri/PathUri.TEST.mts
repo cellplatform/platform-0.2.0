@@ -1,5 +1,6 @@
 import { expect, describe, it } from '../TEST/index.mjs';
 import { PathUri } from './index.mjs';
+import { Path } from '../Path/index.mjs';
 
 describe('PathUri', () => {
   it('prefix', () => {
@@ -55,6 +56,24 @@ describe('PathUri', () => {
     test('path:....../foo', '');
     test('path:foo/../../bar', '');
     test('path:foo/../../../bar', '');
+  });
+
+  it('trimUriPrefix', () => {
+    const test = (input: any, expected: string) => {
+      expect(PathUri.trimUriPrefix(input)).to.eql(expected);
+    };
+
+    test('  ', '');
+    test('', '');
+    test('foo', 'foo');
+    test('path:foo', 'foo');
+    test('  path:foo  ', 'foo');
+    test('  path:  foo  ', 'foo');
+    test('  path:/foo/bar  ', '/foo/bar');
+
+    test(null, '');
+    test(123, '');
+    test({}, '');
   });
 
   describe('ensureUriPrefix', () => {
@@ -126,21 +145,70 @@ describe('PathUri', () => {
     });
   });
 
-  it('trimUriPrefix', () => {
-    const test = (input: any, expected: string) => {
-      expect(PathUri.trimUriPrefix(input)).to.eql(expected);
-    };
+  describe('resolve', () => {
+    it('throw: root directory not specified', () => {
+      const test = (dir: string) => {
+        const fn = () => PathUri.resolve(dir, 'path:foo');
+        expect(fn).to.throw(/Path resolver must have root directory/);
+      };
+      test('');
+      test('  ');
+    });
 
-    test('  ', '');
-    test('', '');
-    test('foo', 'foo');
-    test('path:foo', 'foo');
-    test('  path:foo  ', 'foo');
-    test('  path:  foo  ', 'foo');
-    test('  path:/foo/bar  ', '/foo/bar');
+    it('throw if not valid input', async () => {
+      const test = (input: any) => {
+        const fn = () => PathUri.resolve('/root/foo', input);
+        expect(fn).to.throw(/Invalid input/);
+      };
 
-    test(null, '');
-    test(123, '');
-    test({}, '');
+      test(null);
+      test(undefined);
+      test(1234);
+      test({});
+      test([]);
+    });
+
+    it('resolve', () => {
+      const dir = '/root';
+
+      const test = (uri: string, expected: string) => {
+        const res = PathUri.resolve(dir, uri);
+        expect(res).to.eql(expected, uri);
+      };
+
+      test('path:foo', '/root/foo');
+      test('path:/foo', '/root/foo');
+      test('path:///foo', '/root/foo');
+      test('  path:foo/bar  ', '/root/foo/bar');
+
+      test('path:', '/root/');
+      test('path:/', '/root/');
+      test('path:.', '/root/');
+      test('path:///', '/root/');
+      test('path:./foo', '/root/foo');
+    });
+
+    it('throw when stepping out of scope (security) ', () => {
+      const dir = '/root';
+
+      const test = (uri: string) => {
+        const fn = () => PathUri.resolve(dir, uri);
+        expect(fn).to.throw(/Invalid input/);
+      };
+
+      test('path:../foo');
+      test('path:foo/../../bar');
+      test('path:./foo/../..');
+      test('path:./foo/../../../../../../../');
+    });
+  });
+
+  describe('unpack', () => {
+    it.skip('no base directory', () => {
+      //
+      /**
+       * TODO 🐷
+       */
+    });
   });
 });
