@@ -195,7 +195,7 @@ describe('FsDriver (IndexedDB)', () => {
       fs.dispose();
     });
 
-    it.skip('write (stream)', async () => {
+    it.skip('write: stream', async () => {
       const { fs } = await testCreate();
       const path = 'static/test/foo.json';
       const uri = `path:foo/${path}`;

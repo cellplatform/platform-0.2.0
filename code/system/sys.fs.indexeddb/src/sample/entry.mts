@@ -8,7 +8,7 @@ console.log('Filesystem', Filesystem);
 console.log('-------------------------------------------');
 
 const id = 'fs.dev';
-const db = await Filesystem.IndexedDb({ id });
+const db = await Filesystem.driver.IndexedDb({ id });
 const { driver, indexer } = db;
 console.log('db', db);
 
@@ -26,7 +26,7 @@ console.log('-------------------------------------------');
  * Sample: Bus/Controller
  */
 const bus = rx.bus();
-const controller = Filesystem.BusController({ id, bus, driver, indexer });
+const controller = Filesystem.driver.BusController({ id, bus, driver, indexer });
 
 bus.$.subscribe((e) => {
   console.log('💦', e);

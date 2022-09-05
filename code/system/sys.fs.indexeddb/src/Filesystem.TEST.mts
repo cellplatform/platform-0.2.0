@@ -3,6 +3,6 @@ import { Filesystem } from './Filesystem.mjs';
 
 describe('Filesystem (IndexedDB)', () => {
   it('base object', () => {
-    expect(Filesystem.kind).to.eql('IndexedDb');
+    expect(Filesystem.driver.kind).to.eql('IndexedDb');
   });
 });
