@@ -146,29 +146,6 @@ describe('PathUri', () => {
   });
 
   describe('resolve', () => {
-    it('throw: root directory not specified', () => {
-      const test = (dir: string) => {
-        const fn = () => PathUri.resolve(dir, 'path:foo');
-        expect(fn).to.throw(/Path resolver must have root directory/);
-      };
-      test('');
-      test('  ');
-    });
-
-    it('throw if not valid input', async () => {
-      const test = (input: any) => {
-        const fn = () => PathUri.resolve('/root/foo', input);
-        expect(fn).to.throw(/Invalid URI/);
-      };
-
-      test('/foo/bar');
-      test(null);
-      test(undefined);
-      test(1234);
-      test({});
-      test([]);
-    });
-
     it('resolve', () => {
       const dir = '/root';
 
@@ -189,18 +166,51 @@ describe('PathUri', () => {
       test('path:./foo', '/root/foo');
     });
 
-    it('throw when stepping out of scope (security) ', () => {
+    it('throw: root directory not specified', () => {
+      const test = (dir: string) => {
+        const fn = () => PathUri.resolve(dir, 'path:foo');
+        expect(fn).to.throw(/Path resolver must have root directory/);
+      };
+      test('');
+      test('  ');
+    });
+
+    it('throw: invalid input', async () => {
+      const test = (input: any) => {
+        const fn = () => PathUri.resolve('/root/foo', input);
+        expect(fn).to.throw(/Invalid input/);
+      };
+
+      test('/foo/bar');
+      test(null);
+      test(undefined);
+      test(1234);
+      test({});
+      test([]);
+    });
+
+    it('throw: stepping out of root directory scope (security) ', () => {
       const dir = '/root';
 
       const test = (uri: string) => {
         const fn = () => PathUri.resolve(dir, uri);
-        expect(fn).to.throw(/Invalid input/);
+        expect(fn).to.throw(/Path out of scope of root directory/, uri);
       };
 
       test('path:../foo');
       test('path:foo/../../bar');
       test('path:./foo/../..');
       test('path:./foo/../../../../../../../');
+    });
+
+    it('resolve factory', () => {
+      const resolve = PathUri.resolveFactory('foo/bar');
+
+      expect(resolve('path:file.txt')).to.eql('/foo/bar/file.txt');
+      expect(resolve('path:./images/bird.png')).to.eql('/foo/bar/images/bird.png');
+
+      const fn = () => resolve('file.txt'); // NB: not a "path:uri"
+      expect(fn).to.throw(/Invalid input/);
     });
   });
 

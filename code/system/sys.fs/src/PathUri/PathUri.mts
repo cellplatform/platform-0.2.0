@@ -5,7 +5,8 @@ import {
   ensureSlashStart,
   ensureSlashEnd,
 } from '../Path/Path.trim.mjs';
-import { join } from '../Path/Path.join.mjs';
+import { join, isWithin } from '../Path/Path.join.mjs';
+import { t } from '../common/index.mjs';
 
 type UriString = string;
 type DirPath = string;
@@ -65,15 +66,26 @@ export const PathUri = {
     if (!trim(root)) throw new Error(`Path resolver must have root directory`);
     root = formatRootDir(root);
 
-    if (!PathUri.isPathUri(uri)) throw new Error(`Invalid URI. Must be "path:..". Value: "${uri}"`);
+    const throwInvalidUri = (suffix?: string) => {
+      throw new Error(`Invalid input URI "${uri}". ${suffix}`.trim());
+    };
+
+    if (!PathUri.isPathUri(uri)) throwInvalidUri('Should be "path:.." value');
+
+    const withinScope = isWithin(root, PathUri.trimUriPrefix(uri));
+    if (!withinScope) throwInvalidUri(`Path out of scope of root directory "${root}".`);
 
     const path = PathUri.path(PathUri.ensureUriPrefix(uri));
-    if (!path) {
-      const err = `Invalid input "${uri}".  Must be a valid "path:" uri within scope of the root directory "${root}".`;
-      throw new Error(err);
-    }
+    if (!path) throwInvalidUri();
 
     return join(root, path);
+  },
+
+  /**
+   * Factory for a path resolver.
+   */
+  resolveFactory(dir: DirPath): t.FsPathResolver {
+    return (uri: UriString) => PathUri.resolve(dir, uri);
   },
 
   /**
