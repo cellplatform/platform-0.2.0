@@ -158,9 +158,10 @@ describe('PathUri', () => {
     it('throw if not valid input', async () => {
       const test = (input: any) => {
         const fn = () => PathUri.resolve('/root/foo', input);
-        expect(fn).to.throw(/Invalid input/);
+        expect(fn).to.throw(/Invalid URI/);
       };
 
+      test('/foo/bar');
       test(null);
       test(undefined);
       test(1234);

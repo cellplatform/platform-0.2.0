@@ -61,13 +61,15 @@ export const PathUri = {
   /**
    * Perform safe path resolution on a URI.
    */
-  resolve(root: DirPath, pathOrUri: string) {
+  resolve(root: DirPath, uri: UriString) {
     if (!trim(root)) throw new Error(`Path resolver must have root directory`);
     root = formatRootDir(root);
 
-    const path = PathUri.path(PathUri.ensureUriPrefix(pathOrUri));
+    if (!PathUri.isPathUri(uri)) throw new Error(`Invalid URI. Must be "path:..". Value: "${uri}"`);
+
+    const path = PathUri.path(PathUri.ensureUriPrefix(uri));
     if (!path) {
-      const err = `Invalid input "${pathOrUri}".  Must be a valid "path:" uri within scope of the root directory "${root}".`;
+      const err = `Invalid input "${uri}".  Must be a valid "path:" uri within scope of the root directory "${root}".`;
       throw new Error(err);
     }
 
@@ -80,9 +82,7 @@ export const PathUri = {
   unpack(uri: string, options: { root?: DirPath } = {}) {
     const root = options.root && trim(options.root) ? formatRootDir(options.root) : '';
 
-    /**
-     * TODO 🐷
-     */
+    //
     uri = (uri || '').trim();
 
     return { uri, root };
