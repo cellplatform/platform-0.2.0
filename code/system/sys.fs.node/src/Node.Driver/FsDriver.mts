@@ -68,6 +68,10 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
         const ok = status.toString().startsWith('2');
         const res: t.FsDriverRead = { ok, status, uri };
 
+        if (!exists) {
+          res.error = { code: 'fs:read', path, message: `[${uri}] does not exist` };
+        }
+
         if (exists) {
           const buffer = await NodeFs.readFile(fullpath);
           const data = new Uint8Array(buffer);

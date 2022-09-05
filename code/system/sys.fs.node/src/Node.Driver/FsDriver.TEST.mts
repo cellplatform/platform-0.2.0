@@ -115,6 +115,10 @@ describe('FsDriver (Node)', () => {
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(404);
       expect(res.uri).to.eql('path:404.png');
+
+      expect(res.error?.code).to.eql('fs:read');
+      expect(res.error?.message).to.include('[path:404.png] does not exist');
+      expect(res.error?.path).to.eql('/404.png');
     });
 
     it('read: error', async () => {
