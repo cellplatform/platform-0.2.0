@@ -145,7 +145,6 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
 
       const inputs = Array.isArray(input) ? input : [input];
       const formatted = inputs.map((input) => unpackUri(input));
-
       const items = formatted.filter((item) => state[item.path]);
       const uris = items.map(({ uri }) => uri);
       const locations = items.map(({ location }) => location);

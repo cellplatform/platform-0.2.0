@@ -17,4 +17,20 @@ describe('FsDriver (IndexedDb) - functional specification', () => {
   Spec.Driver.IO.every({ factory, describe, it });
   // Spec.Driver.Indexer.every({ factory, describe, it });
 
+  /**
+   * TODO 🐷 - delete
+   */
+  it('TMP', async () => {
+    // const driver = (await factory()).io;
+    // const png = MemoryMock.randomFile();
+    // await driver.write('path:foo.png', png.data);
+    // const res1 = await driver.read('path:foo.png');
+    // expect(res1.ok).to.eql(true);
+    // const res2 = await driver.read('path:../foo.png');
+    // console.log('-------------------------------------------');
+    // console.log('res2', res2);
+    // expect(res2.ok).to.eql(false);
+    // expect(res2.status).to.eql(422);
+    // expect(res2.error?.message).to.include('Path out of scope');
+  });
 });
