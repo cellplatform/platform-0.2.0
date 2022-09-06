@@ -10,11 +10,12 @@ import { MemoryMock } from './index.mjs';
  */
 
 describe('MemoryMock: DriverIO (mocking helpers)', () => {
-  it('onInfoRequest', async () => {
+  it('mock.onInfoRequest (override info)', async () => {
     const mock = MemoryMock.IO();
     mock.onInfoRequest((e) => {
       if (e.path === '/bird') {
         e.modify((info) => {
+          info.hash = 'sha256-abc';
           info.exists = true;
           info.bytes = 1234;
           info.kind = 'file';
@@ -23,18 +24,21 @@ describe('MemoryMock: DriverIO (mocking helpers)', () => {
     });
 
     const res1 = await mock.io.info('path:foo/bar');
-    const res2 = await mock.io.info('path:bird');
+    const res2 = await mock.io.info('   path:bird   '); // NB: whitespace cleaned up.
 
+    expect(res1.uri).to.eql('path:foo/bar');
     expect(res1.exists).to.eql(false);
     expect(res1.bytes).to.eql(-1);
     expect(res1.kind).to.eql('unknown');
 
+    expect(res2.uri).to.eql('path:bird');
     expect(res2.exists).to.eql(true);
     expect(res2.bytes).to.eql(1234);
     expect(res2.kind).to.eql('file');
+    expect(res2.hash).to.eql('sha256-abc');
   });
 
-  it('state', async () => {
+  it('mock.state', async () => {
     const mock = MemoryMock.IO();
     const png = MemoryMock.randomFile();
 
