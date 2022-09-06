@@ -42,10 +42,12 @@ describe('MemoryMock: DriverIO (mocking helpers)', () => {
     const mock = MemoryMock.IO();
     const png = MemoryMock.randomFile();
 
-    expect(mock.state).to.eql({});
+    expect(mock.getState()).to.eql({});
+
     await mock.io.write('path:foo.png', png.data);
 
-    expect(mock.state['/foo.png'].data).to.eql(png.data);
-    expect(mock.state['/foo.png'].hash).to.eql(png.hash);
+    const state = mock.getState();
+    expect(state['/foo.png'].data).to.eql(png.data);
+    expect(state['/foo.png'].hash).to.eql(png.hash);
   });
 });

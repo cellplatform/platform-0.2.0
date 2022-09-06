@@ -14,7 +14,7 @@ const MockIndexer = MemoryMock.Indexer;
 
 describe('MemoryMock: Indexer (mocking helpers)', () => {
   describe('manifest', () => {
-    it('inject files (mock)', async () => {
+    it('mock: inject files', async () => {
       const png = MemoryMock.randomFile(50);
       const mock = MockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
@@ -34,7 +34,7 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
       expect(res.hash).to.eql(ManifestHash.dir(res.dir, res.files));
     });
 
-    it('inject files: options{ dir, filter }', async () => {
+    it('mock: inject files - options{ dir, filter }', async () => {
       const file = MemoryMock.randomFile(50);
       const mock = MockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
@@ -59,6 +59,30 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
       expect(res2.files).to.eql(res3.files);
       expect(res2.files.every((file) => file.path.startsWith('foo/'))).to.eql(true);
       expect(res4.files[0].path).to.eql('foo/baz.jpg');
+    });
+
+    it('mock: read from IO { state }', async () => {
+      const driver = MemoryMock.create();
+      const file1 = MemoryMock.randomFile();
+      const file2 = MemoryMock.randomFile();
+
+      const m1 = await driver.indexer.manifest();
+      expect(m1.files).to.eql([]);
+
+      await driver.io.write('path:a.png', file1.data);
+      await driver.io.write('path:b.jpg', file2.data);
+
+      const m2 = await driver.indexer.manifest();
+      expect(m2.files.length).to.eql(2);
+
+      expect(m2.files[0].filehash).to.eql(file1.hash);
+      expect(m2.files[1].filehash).to.eql(file2.hash);
+
+      expect(m2.files[0].path).to.eql('/a.png');
+      expect(m2.files[1].path).to.eql('/b.jpg');
+
+      expect(m2.files[0].uri).to.eql('path:/a.png');
+      expect(m2.files[1].uri).to.eql('path:/b.jpg');
     });
   });
 });

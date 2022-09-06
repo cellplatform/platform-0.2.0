@@ -1,7 +1,7 @@
 import { FsMockDriverIO as IO } from './Mock.DriverIO.mjs';
 import { FsMockIndexer as Indexer } from './Mock.Indexer.mjs';
 import { randomFile } from './util.mjs';
-import { DEFAULT } from './common.mjs';
+import { t, DEFAULT } from './common.mjs';
 
 /**
  * FUNCTIONAL SPECIFICATION
@@ -23,11 +23,17 @@ import { DEFAULT } from './common.mjs';
  *    injected implementation in unit-tests (aka. a "functional shim").
  *
  *    🌳
- *    See the "function specification" test suite within [sys.fs.spec].
+ *    See the "functional specification" test suite within [sys.fs.spec].
  */
 export const MemoryMock = {
   DEFAULT,
   IO,
   Indexer,
   randomFile,
+
+  create(dir?: string): t.FsDriver {
+    const { io, getState } = IO({ dir });
+    const { indexer } = Indexer({ dir, getState });
+    return { io, indexer };
+  },
 };

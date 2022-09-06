@@ -1,8 +1,9 @@
 import { ManifestHash, ManifestFiles } from '../Manifest/index.mjs';
 import { DEFAULT, t, Time, Path, Hash } from './common.mjs';
 import { randomFile } from './util.mjs';
+import { MockState, StateMap } from './MockState.mjs';
 
-type Options = { dir?: string };
+type DirString = string;
 
 export type MockIndexer = {
   readonly indexer: t.FsIndexer;
@@ -16,8 +17,13 @@ export type MockManifestHandlerArgs = {
   addFile(path: string, data?: Uint8Array): MockManifestHandlerArgs;
 };
 
-export function FsMockIndexer(options: Options = {}): MockIndexer {
-  let dir = options.dir ?? DEFAULT.ROOT_DIR;
+/**
+ * Mock in-memory filesystem [Indexer] implementation.
+ */
+export function FsMockIndexer(
+  args: { dir?: DirString; getState?: () => StateMap } = {},
+): MockIndexer {
+  let dir = args.dir ?? DEFAULT.ROOT_DIR;
   dir = Path.ensureSlashStart(dir);
   dir = Path.ensureSlashEnd(dir);
 
@@ -31,7 +37,7 @@ export function FsMockIndexer(options: Options = {}): MockIndexer {
 
       const indexedAt = Time.now.timestamp;
       const dir: t.DirManifestInfo = { indexedAt };
-      let files: t.ManifestFile[] = [];
+      let files: t.ManifestFile[] = MockState.toManifestFiles(args.getState?.());
 
       const formatPath = (path: string) => {
         path = Path.Uri.trimUriPrefix(path);
@@ -63,12 +69,14 @@ export function FsMockIndexer(options: Options = {}): MockIndexer {
         const dir = formatPath(options.dir);
         files = files.filter((file) => file.path.startsWith(dir));
       }
+
       if (options.filter) {
         files = files.filter((file) => {
           const args: t.FsPathFilterArgs = { path: file.path, is: { dir: false, file: true } };
           return options.filter?.(args);
         });
       }
+
       files = ManifestFiles.sort(files);
 
       const hash = ManifestHash.dir(dir, files);

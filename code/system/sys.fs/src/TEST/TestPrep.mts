@@ -11,7 +11,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const mocks = {
     driver: MemoryMock.IO({ dir }),
     indexer: MemoryMock.Indexer({ dir }).onManifestRequest((e) => {
-      const state = mocks.driver.state;
+      const state = mocks.driver.getState();
       Object.keys(state).forEach((uri) => {
         const path = Path.ensureSlashStart(Path.Uri.trimUriPrefix(uri));
         e.addFile(path, state[uri].data);

@@ -1,4 +1,5 @@
 import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
+import { StateMap } from './MockState.mjs';
 
 export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
 export type MockInfoHandlerArgs = {
@@ -10,21 +11,19 @@ export type MockInfoHandlerArgs = {
 export type MockDriver = {
   io: t.FsDriverIO;
   count: { info: number; read: number; write: number; delete: number; copy: number };
-  state: S;
+  getState(): StateMap;
   onInfoRequest(fn: MockInfoHandler): MockDriver;
 };
 
-type S = { [uri: string]: { data: Uint8Array; hash: string } };
-
 /**
- * A driver used for mocking the file-system while testing.
+ * Mock in-memory filesystem [IO] driver implementation.
  */
 export function FsMockDriverIO(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
 
   let _onInfoReq: undefined | MockInfoHandler;
 
-  const state: S = {};
+  const state: StateMap = {};
   const resolve = Path.Uri.resolver(dir);
   const unpackUri = Path.Uri.unpacker(dir);
 
@@ -212,7 +211,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     io,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
 
-    get state() {
+    getState() {
       return { ...state };
     },
 
