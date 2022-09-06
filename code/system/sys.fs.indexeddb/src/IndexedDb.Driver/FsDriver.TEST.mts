@@ -17,13 +17,6 @@ describe('FsDriver (IndexedDB)', () => {
       fs.dispose();
     });
 
-    it('resolve: throw if not "path:.." or "file:.." URI', async () => {
-      const { fs } = await testCreate();
-      const fn = () => fs.driver.resolve('foo');
-      expect(fn).to.throw(/Invalid URI/);
-      fs.dispose();
-    });
-
     it('resolve: to path', async () => {
       const { fs } = await testCreate();
       const test = (uri: string, expected: string) => {
@@ -38,10 +31,21 @@ describe('FsDriver (IndexedDB)', () => {
       test('path:/', '/');
       test('path:///', '/');
       test('path:./foo', 'foo');
-      test('path:../foo', '/');
-      test('path:foo/../../bar', '/'); // NB: Does not step above root directory.
-      test('path:./foo/../..', '/'); //   NB: Does not step above root directory.
 
+      fs.dispose();
+    });
+
+    it('resolve: throw if not "path:.." URI', async () => {
+      const { fs } = await testCreate();
+      const fn = () => fs.driver.resolve('foo');
+      expect(fn).to.throw(/Invalid input/);
+      fs.dispose();
+    });
+
+    it('resolve: throw if out of scope', async () => {
+      const { fs } = await testCreate();
+      const fn = () => fs.driver.resolve('path:../foo');
+      expect(fn).to.throw(/out of scope/);
       fs.dispose();
     });
   });
@@ -394,7 +398,8 @@ describe('FsDriver (IndexedDB)', () => {
 
       expect(res1.error).to.eql(undefined);
       expect(res2.error?.message).to.include('Failed to write');
-      expect(res2.error?.message).to.include('Path out of scope');
+      expect(res2.error?.message).to.include('Invalid input');
+      expect(res2.error?.message).to.include('out of scope of root directory');
 
       fs.dispose();
     });

@@ -1,13 +1,4 @@
-import {
-  Delete,
-  Hash,
-  Image,
-  NAME,
-  Path,
-  PathResolverFactory,
-  Stream,
-  t,
-} from '../common/index.mjs';
+import { Delete, Hash, Image, NAME, Path, Stream, t } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
 /**
@@ -19,14 +10,9 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
 
   const root = dir;
   const lookup = DbLookup(db);
-  const resolve = PathResolverFactory({ dir });
 
-  const unpackUri = (uri: string) => {
-    uri = (uri || '').trim();
-    const path = resolve(uri);
-    const location = Path.toAbsoluteLocation({ path, root });
-    return { uri, path, location };
-  };
+  const resolve = Path.Uri.resolver(dir);
+  const unpackUri = Path.Uri.unpacker(dir);
 
   const driver: t.FsDriver = {
     /**
@@ -103,7 +89,13 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
     async write(address, input) {
       if (input === undefined) throw new Error(`No data`);
 
-      const { uri, path, location } = unpackUri(address);
+      const toError = (path: string, msg: string): t.FsError => {
+        const message = `Failed to write [${uri}]. ${msg}`;
+        return { code: 'fs:write', message, path };
+      };
+
+      const unpack = unpackUri(address);
+      const { uri, path, location } = unpack;
       const { dir } = Path.parts(path);
 
       const isStream = Stream.isReadableStream(input);
@@ -112,6 +104,10 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
       const hash = Hash.sha256(data);
       const bytes = data.byteLength;
       const file = { path, location, hash, data, bytes };
+
+      if (unpack.error) {
+        return { ok: false, status: 500, uri, file, error: toError(path, unpack.error) };
+      }
 
       try {
         if (!path || path === root) throw new Error(`Path out of scope`);
@@ -138,8 +134,7 @@ export function FsDriver(args: { dir: string; db: IDBDatabase }): t.FsDriver {
         // Finish up.
         return { uri, ok: true, status: 200, file };
       } catch (err: any) {
-        const message = `Failed to write [${uri}]. ${err.message}`;
-        const error: t.FsError = { code: 'fs:write', message, path };
+        const error = toError(path, err.message);
         return { ok: false, status: 500, uri, file, error };
       }
     },
