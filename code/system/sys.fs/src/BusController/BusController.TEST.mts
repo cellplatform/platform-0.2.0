@@ -5,11 +5,12 @@ import { BusController } from './index.mjs';
 describe('BusController', function () {
   it('id (specified)', () => {
     const bus = rx.bus<t.FsBusEvent>();
-    const driver = MemoryMock.Driver().driver;
+    const io = MemoryMock.IO().io;
     const indexer = MemoryMock.Indexer().indexer;
+    const driver = { io, indexer };
 
     const id = 'foo';
-    const controller = BusController({ id, bus, driver, indexer });
+    const controller = BusController({ id, bus, driver });
     const events = BusEvents({ id, bus });
 
     expect(controller.id).to.eql(id);
@@ -21,8 +22,8 @@ describe('BusController', function () {
     const bus = rx.bus<t.FsBusEvent>();
 
     const test = (id?: string) => {
-      const { driver, indexer } = TestPrep();
-      const controller = BusController({ id, driver, bus, indexer });
+      const { driver } = TestPrep();
+      const controller = BusController({ id, driver, bus });
       expect(controller.id).to.eql(DEFAULT.FILESYSTEM_ID);
       controller.dispose();
     };
@@ -34,12 +35,12 @@ describe('BusController', function () {
 
   it('filter (global)', async () => {
     const id = 'foo';
-    const { driver, indexer } = TestPrep();
+    const { driver } = TestPrep();
 
     let allow = true;
 
     const bus = rx.bus<t.FsBusEvent>();
-    const controller = BusController({ id, driver, indexer, bus, filter: (e) => allow });
+    const controller = BusController({ id, driver, bus, filter: (e) => allow });
     const events = BusEvents({ id, bus });
     const res1 = await events.io.info.get();
 

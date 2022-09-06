@@ -12,14 +12,15 @@ type Milliseconds = number;
 export function BusController(args: {
   bus: t.EventBus<any>;
   driver: t.FsDriver;
-  indexer: t.FsIndexer;
   id?: FilesystemId;
   filter?: (e: t.FsBusEvent) => boolean;
   timeout?: Milliseconds;
 }): t.SysFsController {
-  const { driver, indexer, timeout, filter } = args;
+  const { driver, timeout, filter } = args;
+  const { io } = driver;
+
   const id = (args.id || '').trim() || DEFAULT.FILESYSTEM_ID;
-  const dir = Path.ensureSlashStart(driver.dir);
+  const dir = Path.ensureSlashStart(driver.io.dir);
 
   const bus = rx.busAsType<t.FsBusEvent>(args.bus);
   const events = BusEvents({ id, bus, timeout, filter });
@@ -28,8 +29,8 @@ export function BusController(args: {
   /**
    * Sub-controllers.
    */
-  BusControllerIo({ id, bus, driver, events });
-  BusControllerIndexer({ id, bus, driver, indexer, events });
+  BusControllerIo({ id, bus, io, events });
+  BusControllerIndexer({ id, bus, driver, events });
   BusControllerChange({ id, bus, events });
 
   /**

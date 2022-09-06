@@ -3,10 +3,10 @@ import { DEFAULT, Path, t } from './common.mjs';
 /**
  * Helpers for working with file-caching a directory.
  */
-export function ManifestCache(args: { driver: t.FsDriver; dir: string; filename?: string }) {
-  const { driver, dir } = args;
+export function ManifestCache(args: { io: t.FsDriverIO; dir: string; filename?: string }) {
+  const { io, dir } = args;
   const filename = Path.trim(args.filename ?? DEFAULT.CACHE_FILENAME);
-  const path = Path.join(dir, filename).substring(driver.dir.length);
+  const path = Path.join(dir, filename).substring(io.dir.length);
   const uri = `path:${path}`;
 
   const api = {
@@ -14,12 +14,12 @@ export function ManifestCache(args: { driver: t.FsDriver; dir: string; filename?
     path,
 
     async dirExists() {
-      const uri = `path:${dir.substring(driver.dir.length) || '.'}`;
-      return (await driver.info(uri)).exists;
+      const uri = `path:${dir.substring(io.dir.length) || '.'}`;
+      return (await io.info(uri)).exists;
     },
 
     async read() {
-      const file = (await driver.read(uri)).file?.data;
+      const file = (await io.read(uri)).file?.data;
       if (!file) return undefined;
       try {
         const text = new TextDecoder().decode(file);
@@ -33,11 +33,11 @@ export function ManifestCache(args: { driver: t.FsDriver; dir: string; filename?
     async write(manifest: t.DirManifest) {
       const json = JSON.stringify(manifest, null, '  ');
       const data = new TextEncoder().encode(json);
-      await driver.write(uri, data);
+      await io.write(uri, data);
     },
 
     async delete() {
-      await driver.delete(uri);
+      await io.delete(uri);
     },
   };
 

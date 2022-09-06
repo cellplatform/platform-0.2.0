@@ -1,4 +1,6 @@
-import { BusController, DEFAULT, MemoryMock, Path, rx, slug, t } from './common.mjs';
+import { BusController, MemoryMock, Path, rx, slug, t } from './common.mjs';
+
+const DEFAULT = MemoryMock.DEFAULT;
 
 /**
  * Setup a mock FS driver and Controller.
@@ -7,7 +9,7 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir = DEFAULT.ROOT_DIR, id = `foo.${slug()}` } = options;
 
   const mocks = {
-    driver: MemoryMock.Driver({ dir }),
+    driver: MemoryMock.IO({ dir }),
     indexer: MemoryMock.Indexer({ dir }).onManifestRequest((e) => {
       const state = mocks.driver.state;
       Object.keys(state).forEach((uri) => {
@@ -16,29 +18,29 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
       });
     }),
   };
-  const driver = mocks.driver.driver;
+  const io = mocks.driver.io;
   const indexer = mocks.indexer.indexer;
+  const driver: t.FsDriver = { io, indexer };
 
   const bus = rx.bus<t.FsBusEvent>();
-  const controller = BusController({ id, driver, bus, indexer });
+  const controller = BusController({ id, driver, bus });
 
   const events = controller.events;
   const { dispose } = events;
 
   const fileExists = async (path: string) => {
     const uri = Path.Uri.ensureUriPrefix(path);
-    return Boolean((await driver.read(uri)).file);
+    return Boolean((await io.read(uri)).file);
   };
 
   return {
+    dispose,
     dir,
     bus,
     controller,
     events,
     driver,
-    indexer,
     mocks,
     fileExists,
-    dispose,
   };
 };

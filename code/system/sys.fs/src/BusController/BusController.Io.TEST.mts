@@ -10,7 +10,7 @@ describe('BusController.IO', function () {
 
       expect(info.id).to.eql(id);
       expect(info.fs?.id).to.eql(id);
-      expect(info.fs?.dir).to.eql(mock.driver.dir);
+      expect(info.fs?.dir).to.eql(mock.driver.io.dir);
       expect(info.paths).to.eql([]);
       expect(info.error).to.eql(undefined);
     });
@@ -94,7 +94,7 @@ describe('BusController.IO', function () {
     it('reads file (single)', async () => {
       const mock = TestPrep();
       const png = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', png.data);
+      await mock.driver.io.write('path:images/tree.png', png.data);
 
       const res = await mock.events.io.read.get('images/tree.png');
 
@@ -111,8 +111,8 @@ describe('BusController.IO', function () {
       const image1 = MemoryMock.randomFile();
       const image2 = MemoryMock.randomFile(500);
 
-      await mock.driver.write('path:/images/tree.png', image1.data);
-      await mock.driver.write('path:images/kitten.jpg', image2.data);
+      await mock.driver.io.write('path:/images/tree.png', image1.data);
+      await mock.driver.io.write('path:images/kitten.jpg', image2.data);
 
       const res = await mock.events.io.read.get(['/images/tree.png', 'images/kitten.jpg']);
       expect(res.error).to.eql(undefined);
@@ -153,7 +153,7 @@ describe('BusController.IO', function () {
       expect(res.files[0].path).to.eql('/foo/bar/kitten.jpg'); // Absolute path ("/..") starting at [fs.dir] root.
       expect(res.files[0].hash).to.eql(src.hash);
 
-      const after = await mock.driver.read(path);
+      const after = await mock.driver.io.read(path);
       expect(after.file?.hash).to.eql(hash);
       expect(after.file?.data).to.eql(data);
     });
@@ -185,8 +185,8 @@ describe('BusController.IO', function () {
       expect(await mock.fileExists(PATH.kitten)).to.eql(true);
       expect(await mock.fileExists(PATH.tree)).to.eql(true);
 
-      const after1 = await mock.driver.read(PATH.kitten);
-      const after2 = await mock.driver.read(PATH.tree);
+      const after1 = await mock.driver.io.read(PATH.kitten);
+      const after2 = await mock.driver.io.read(PATH.tree);
 
       expect(after1.file?.hash).to.eql(src1.hash);
       expect(after1.file?.data).to.eql(src1.data);

@@ -10,12 +10,12 @@ type MaybeError = t.FsError | undefined;
 export function BusControllerIo(args: {
   id: FilesystemId;
   bus: t.EventBus<t.FsBusEvent>;
-  driver: t.FsDriver;
+  io: t.FsDriverIO;
   events: t.FsBusEvents;
 }) {
-  const { id, driver, bus, events } = args;
+  const { id, io, bus, events } = args;
 
-  const root = Path.ensureSlashStart(driver.dir);
+  const root = Path.ensureSlashStart(io.dir);
   const stripDirRoot = (path: FilePath) => {
     path = Path.Uri.trimUriPrefix(path);
     path = Path.ensureSlashStart(path);
@@ -27,7 +27,7 @@ export function BusControllerIo(args: {
     try {
       filepath = Path.trimSlashesEnd(filepath);
       const uri = Path.Uri.ensureUriPrefix(filepath);
-      const res = await driver.info(uri);
+      const res = await io.info(uri);
       const { kind, exists, hash, bytes } = res;
 
       let path = stripDirRoot(res.path);
@@ -46,13 +46,13 @@ export function BusControllerIo(args: {
     const address = Path.Uri.ensureUriPrefix(path);
     path = stripDirRoot(path);
 
-    const info = await driver.info(address);
+    const info = await io.info(address);
     if (!info.exists) {
       const error: t.FsError = { code: 'fs:read/404', message: `File not found`, path };
       return { error };
     }
 
-    const res = await driver.read(address);
+    const res = await io.read(address);
 
     if (res.error) {
       const error: t.FsError = { code: 'fs:read', message: res.error.message, path };
@@ -87,15 +87,15 @@ export function BusControllerIo(args: {
     if (!path) return done('No file-path to write to');
     const address = Path.Uri.ensureUriPrefix(path);
 
-    const res = await driver.write(address, data);
+    const res = await io.write(address, data);
     return done(res.error?.message);
   };
 
   const copyFile = async (file: t.FsBusFileTarget): Promise<t.FsBusFileCopyResponse> => {
     const source = Path.Uri.ensureUriPrefix(file.source);
     const target = Path.Uri.ensureUriPrefix(file.target);
-    const res = await driver.copy(source, target);
-    const info = await driver.info(target);
+    const res = await io.copy(source, target);
+    const info = await io.info(target);
 
     const error: MaybeError = !res.error
       ? undefined
@@ -111,8 +111,8 @@ export function BusControllerIo(args: {
 
   const deleteFile = async (path: FilePath): Promise<t.FsBusFileDeleteResponse> => {
     const address = Path.Uri.ensureUriPrefix(path);
-    const info = await driver.info(address);
-    const res = await driver.delete(address);
+    const info = await io.info(address);
+    const res = await io.delete(address);
 
     const error: MaybeError = !res.error
       ? undefined
