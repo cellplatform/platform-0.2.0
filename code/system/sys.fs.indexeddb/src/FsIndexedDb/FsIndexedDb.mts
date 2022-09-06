@@ -5,13 +5,14 @@ import { IndexedDb } from '../IndexedDb/index.mjs';
 import { FsDriver } from '../IndexedDb.Driver/index.mjs';
 import { FsIndexer } from '../IndexedDb.Indexer/index.mjs';
 
+type DirPath = string;
 type FilesystemId = string;
 
 /**
  * A filesystem driver running against the browser [IndexedDB] store.
  */
-export const FsIndexedDb = (options: { id?: FilesystemId } = {}) => {
-  const dir = ROOT_DIR;
+export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {
+  const dir = options.dir ?? ROOT_DIR;
   const id = (options.id ?? 'fs').trim();
 
   return IndexedDb.create<t.FsIndexedDb>({

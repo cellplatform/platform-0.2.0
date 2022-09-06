@@ -7,6 +7,11 @@ type FileUri = string; //  URI representing an absolute location of a file, eg: 
 type HttpStatusCode = number;
 
 /**
+ * Factory function for creating a driver.
+ */
+export type FsDriverFactory = (dir?: DirPath) => Promise<FsDriver>;
+
+/**
  * MAIN Driver (API)
  * The low-level bridge into a specific platform file-system API
  */

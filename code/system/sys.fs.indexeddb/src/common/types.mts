@@ -14,6 +14,7 @@ export type {
   DirManifestInfo,
   DirManifest,
   FsDriverFileData,
+  FsDriverFactory,
 } from 'sys.fs/src/types.mjs';
 
 /**
