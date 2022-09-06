@@ -1,2 +1,9 @@
-export { ManifestHash } from './ManifestHash/index.mjs';
-export { ManifestFiles } from './ManifestFiles/index.mjs';
+import { ManifestHash } from './ManifestHash/index.mjs';
+import { ManifestFiles } from './ManifestFiles/index.mjs';
+
+export { ManifestHash, ManifestFiles };
+
+export const Manifest = {
+  Hash: ManifestHash,
+  Files: ManifestFiles,
+};
