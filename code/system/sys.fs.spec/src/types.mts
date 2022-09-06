@@ -1,4 +1,4 @@
-import type { TestAPI, SuiteAPI } from 'vitest';
+import type { SpecSuite, SpecTest } from 'sys.test/src/types.mjs';
 import type { FsDriverFactory } from 'sys.fs/src/types.mjs';
 
 /**
@@ -6,6 +6,6 @@ import type { FsDriverFactory } from 'sys.fs/src/types.mjs';
  */
 export type SpecContext = {
   factory: FsDriverFactory;
-  describe: SuiteAPI;
-  it: TestAPI;
+  describe: SpecSuite;
+  it: SpecTest;
 };
