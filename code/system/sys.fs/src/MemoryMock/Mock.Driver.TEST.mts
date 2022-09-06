@@ -27,8 +27,6 @@ describe('Mock: FsDriver', () => {
       const uri = '  path:foo/bar.txt  ';
       const res = await mock.driver.info(uri);
 
-      expect(mock.count.info).to.eql(1);
-
       expect(res.uri).to.eql(uri.trim());
       expect(res.exists).to.eql(false);
       expect(res.kind).to.eql('unknown');
@@ -67,8 +65,6 @@ describe('Mock: FsDriver', () => {
       const uri = '  path:foo/bar.txt  ';
       const res = await mock.driver.info(uri);
 
-      expect(mock.count.info).to.eql(1);
-
       expect(res.uri).to.eql(uri.trim());
       expect(res.exists).to.eql(true);
       expect(res.kind).to.eql('file');
@@ -104,7 +100,6 @@ describe('Mock: FsDriver', () => {
       const png = MemoryMock.randomFile();
 
       const res = await mock.driver.write(uri, png.data);
-      expect(mock.count.write).to.eql(1);
 
       expect(res.uri).to.eql('path:foo/bar.png');
       expect(res.ok).to.eql(true);
@@ -121,7 +116,6 @@ describe('Mock: FsDriver', () => {
       const uri = '  path:/foo/bar.png  ';
 
       const res = await mock.driver.read(uri);
-      expect(mock.count.read).to.eql(1);
 
       expect(res.uri).to.eql('path:/foo/bar.png');
       expect(res.ok).to.eql(false);
@@ -137,7 +131,6 @@ describe('Mock: FsDriver', () => {
       const png = MemoryMock.randomFile();
 
       await mock.driver.write(uri, png.data);
-      expect(mock.count.write).to.eql(1);
 
       const res = await mock.driver.read(uri);
 
@@ -168,7 +161,6 @@ describe('Mock: FsDriver', () => {
       const uri = 'path:foo/bar.png';
 
       const res = await mock.driver.delete(uri);
-      expect(mock.count.delete).to.eql(1);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
@@ -184,7 +176,6 @@ describe('Mock: FsDriver', () => {
       await mock.driver.write(path, png.data);
 
       const res = await mock.driver.delete(path);
-      expect(mock.count.delete).to.eql(1);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
@@ -201,7 +192,6 @@ describe('Mock: FsDriver', () => {
       await mock.driver.write('path:thing.pdf', file2.data);
 
       const res = await mock.driver.delete(['path:foo/bar.png', 'path:404', 'path:thing.pdf']);
-      expect(mock.count.delete).to.eql(1);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
@@ -218,7 +208,6 @@ describe('Mock: FsDriver', () => {
       await mock.driver.write('path:foo.png', png.data);
 
       const res = await mock.driver.copy('path:foo.png', 'path:images/bird.png');
-      expect(mock.count.copy).to.eql(1);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
