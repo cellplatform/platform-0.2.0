@@ -1,9 +1,9 @@
 import { describe, it } from 'vitest';
 
-import { t, MemoryMock } from './common/index.mjs';
-import { FsDriverSpec } from './Driver.spec/index.mjs';
+import { MemoryMock, t } from './common/index.mjs';
+import { FilesystemSpec } from './Spec.mjs';
 
-describe('Filesystem Driver', () => {
+describe('Filesystem (Spec)', () => {
   const factory: t.FsDriverFactory = async (dir?: string) => MemoryMock.create(dir);
-  FsDriverSpec.every({ describe, it, factory });
+  FilesystemSpec.every({ describe, it, factory });
 });
