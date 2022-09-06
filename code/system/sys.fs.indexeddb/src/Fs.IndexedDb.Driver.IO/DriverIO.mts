@@ -17,9 +17,6 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
   const driver: t.FsDriverIO = {
     /**
      * Root directory of the file system.
-     * NOTE:
-     *    This will always be "/". The IndexedDb implementation of the driver
-     *    works with it's own root database and is not a part of a wider file-system.
      */
     dir,
 
@@ -59,7 +56,10 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Read from the local file-system.
      */
     async read(address) {
-      const { uri, path, location } = unpackUri(address);
+      const { uri, path, location, withinScope } = unpackUri(address);
+
+      const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
+      if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readonly');
       const store = {
@@ -76,7 +76,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
       let error: t.FsError | undefined;
       if (!hash || !data) {
         status = 404;
-        error = { code: 'fs:read', path, message: `[${uri}] does not exist` };
+        error = toError('Not found');
       }
       const file = !data ? undefined : { path, location, data, hash, bytes };
       const ok = status.toString().startsWith('2');
@@ -95,7 +95,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
       };
 
       const unpack = unpackUri(address);
-      const { uri, path, location } = unpack;
+      const { uri, path, location, withinScope } = unpack;
       const { dir } = Path.parts(path);
 
       const isStream = Stream.isReadableStream(input);
@@ -104,6 +104,10 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
       const hash = Hash.sha256(data);
       const bytes = data.byteLength;
       const file = { path, location, hash, data, bytes };
+
+      if (!withinScope) {
+        return { uri, ok: false, status: 422, file, error: toError(path, `Path out of scope`) };
+      }
 
       if (unpack.error) {
         return { ok: false, status: 500, uri, file, error: toError(path, unpack.error) };
@@ -142,10 +146,19 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Delete from the local file-system.
      */
-    async delete(uri) {
-      const uris = (Array.isArray(uri) ? uri : [uri]).map((uri) => (uri || '').trim());
-      const paths = uris.map((uri) => resolve(uri));
-      const locations = paths.map((path) => Path.toAbsoluteLocation({ path, root }));
+    async delete(input) {
+      const inputs = Array.isArray(input) ? input : [input];
+      const items = inputs.map((input) => unpackUri(input));
+      const uris = items.map(({ uri }) => uri);
+      const locations = items.map(({ location }) => location);
+      const paths = items.map(({ path }) => path);
+      const outOfScope = items.filter((item) => !item.withinScope);
+
+      if (outOfScope.length > 0) {
+        const path = outOfScope.map((item) => item.rawpath).join('; ');
+        const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
+        return { ok: false, status: 422, uris, locations, error };
+      }
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
       const store = {
@@ -159,7 +172,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
       const remove = async (path: string) => {
         // Lookup the [Path] meta-data record.
         const pathRecord = await IndexedDb.record.get<t.PathRecord>(store.paths, path);
-        if (!pathRecord) return;
+        if (!pathRecord) return false;
 
         // Determine if the file (hash) is referenced by any other paths.
         const hash = pathRecord.hash;
@@ -171,16 +184,26 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
         // Delete the file-data if there are no other path's referencing the file.
         if (isLastRef) await IndexedDb.record.delete<t.BinaryRecord>(store.files, hash);
+
+        return true;
       };
 
       try {
-        await Promise.all(paths.map(remove));
+        const res = await Promise.all(
+          items.map(async (item) => {
+            return { ...item, removed: await remove(item.path) };
+          }),
+        );
+
+        const uris = res.filter((item) => item.removed).map(({ uri }) => uri);
+        const locations = res.filter((item) => item.removed).map(({ location }) => location);
+
         return { ok: true, status: 200, uris, locations };
       } catch (err: any) {
         const error: t.FsError = {
           code: 'fs:delete',
-          message: `Failed to delete [${uri}]. ${err.message}`,
-          path: paths.join(','),
+          message: `Failed to delete [${uris.join('; ')}]. ${err.message}`,
+          path: paths.join('; '),
         };
         return { ok: false, status: 500, uris, locations, error };
       }
@@ -190,19 +213,28 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Copy a file.
      */
     async copy(sourceUri, targetUri) {
-      const format = (input: string) => {
-        const uri = (input || '').trim();
-        const path = resolve(uri);
-        return { uri, path };
+      const source = unpackUri(sourceUri);
+      const target = unpackUri(targetUri);
+
+      const toError = (path: string, msg?: string): t.FsError => {
+        const message = `Failed to copy from [${source.uri}] to [${target.uri}]. ${msg}`.trim();
+        return { code: 'fs:copy', message, path };
       };
 
-      const source = format(sourceUri);
-      const target = format(targetUri);
-
-      const done = (status: number, hash: string, error?: t.FsError) => {
+      const done = (status: number, error?: t.FsError): t.FsDriverCopy => {
         const ok = status.toString().startsWith('2');
-        return { ok, status, hash, source: source.uri, target: target.uri, error };
+        return { ok, status, source: source.uri, target: target.uri, error };
       };
+
+      if (!source.withinScope) {
+        const error = toError(source.rawpath, 'Source path out of scope');
+        return done(422, error);
+      }
+
+      if (!target.withinScope) {
+        const error = toError(target.rawpath, 'Target path out of scope');
+        return done(422, error);
+      }
 
       const createPathReference = async (sourceInfo: t.FsDriverInfo, targetPath: string) => {
         const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
@@ -214,15 +246,17 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
       try {
         const info = await driver.info(source.uri);
-        if (!info.exists) throw new Error(`Source file does not exist.`);
+
+        if (!info.exists) {
+          const error = toError(source.rawpath, 'Source file not found');
+          return done(404, error);
+        }
+
         await createPathReference(info, target.path);
-        return done(200, info.hash);
+        return done(200);
       } catch (err: any) {
-        const message = `Failed to copy from [${source.uri}] to [${target.uri}]. ${err.message}`;
-        const path = target.path;
-        const error: t.FsError = { code: 'fs:copy', message, path };
-        const hash = '';
-        return done(500, hash, error);
+        const error = toError(target.path, err.message);
+        return done(500, error);
       }
     },
   };

@@ -16,6 +16,7 @@ export type {
   FsDriverFactory,
   FsDriver,
   FsDriverIO,
+  FsDriverCopy,
 } from 'sys.fs/src/types.mjs';
 
 /**

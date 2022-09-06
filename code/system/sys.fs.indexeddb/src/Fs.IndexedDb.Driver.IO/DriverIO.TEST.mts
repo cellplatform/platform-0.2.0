@@ -361,10 +361,10 @@ describe('FsDriver (IndexedDB)', () => {
       const res = await fs.driver.io.copy(sourceUri, targetUri);
 
       expect(res.ok).to.eql(false);
-      expect(res.status).to.eql(500);
+      expect(res.status).to.eql(404);
       expect(res.error?.code).to.eql('fs:copy');
       expect(res.error?.message).to.include(`Failed to copy from [${sourceUri}] to [${targetUri}]`);
-      expect(res.error?.message).to.include(`Source file does not exist`);
+      expect(res.error?.message).to.include(`Source file not found`);
 
       fs.dispose();
     });
@@ -384,7 +384,7 @@ describe('FsDriver (IndexedDB)', () => {
       expect(res.file).to.eql(undefined);
       expect(error.code).to.eql('fs:read');
       expect(error.path).to.eql(fs.driver.io.resolve(uri));
-      expect(error.message).to.contain(`[path:foo:noexist] does not exist`);
+      expect(error.message).to.contain(`Not found`);
 
       fs.dispose();
     });
@@ -398,8 +398,7 @@ describe('FsDriver (IndexedDB)', () => {
 
       expect(res1.error).to.eql(undefined);
       expect(res2.error?.message).to.include('Failed to write');
-      expect(res2.error?.message).to.include('Invalid input');
-      expect(res2.error?.message).to.include('out of scope of root directory');
+      expect(res2.error?.message).to.include('out of scope');
 
       fs.dispose();
     });

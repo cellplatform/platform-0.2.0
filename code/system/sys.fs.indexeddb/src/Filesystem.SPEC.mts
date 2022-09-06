@@ -1,6 +1,6 @@
-import { FilesystemSpec } from 'sys.fs.spec';
+import { Spec } from 'sys.fs.spec';
 import { FsIndexedDb } from './index.mjs';
-import { describe, it, slug, t } from './TEST/index.mjs';
+import { describe, it, slug, t, MemoryMock, expect } from './TEST/index.mjs';
 
 /**
  * Baseline functional specifications from [sys.fs].
@@ -13,5 +13,8 @@ describe('FsDriver (IndexedDb) - functional specification', () => {
     return db.driver;
   };
 
-  FilesystemSpec.every({ factory, describe, it });
+  // Spec.every({ factory, describe, it });
+  Spec.Driver.IO.every({ factory, describe, it });
+  // Spec.Driver.Indexer.every({ factory, describe, it });
+
 });
