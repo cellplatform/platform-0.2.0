@@ -1,15 +1,30 @@
-import { DEFAULT, Hash, Path, Stream, t } from './common.mjs';
+import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
 
-type MockInfoHandler = (e: { uri: string; info: t.FsDriverInfo }) => void;
+export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
+export type MockInfoHandlerArgs = {
+  readonly uri: string;
+  readonly path: string;
+  modify(fn: (info: t.FsDriverInfo) => void): void;
+};
+
+export type MockDriver = {
+  io: t.FsDriverIO;
+  count: { info: number; read: number; write: number; delete: number; copy: number };
+  state: S;
+  onInfoRequest(fn: MockInfoHandler): MockDriver;
+};
+
+type S = { [uri: string]: { data: Uint8Array; hash: string } };
 
 /**
  * A driver used for mocking the file-system while testing.
  */
-export function FsMockDriver(options: { dir?: string } = {}) {
+export function FsMockDriverIO(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
 
   let _onInfoReq: undefined | MockInfoHandler;
-  const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
+
+  const state: S = {};
   const resolve = Path.Uri.resolver(dir);
   const unpackUri = Path.Uri.unpacker(dir);
 
@@ -28,7 +43,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     return 'unknown';
   };
 
-  const driver: t.FsDriver = {
+  const io: t.FsDriverIO = {
     dir,
     resolve,
 
@@ -43,7 +58,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
 
-      const info: t.FsDriverInfo = {
+      let info: t.FsDriverInfo = {
         uri,
         exists,
         kind,
@@ -53,7 +68,17 @@ export function FsMockDriver(options: { dir?: string } = {}) {
         bytes: ref?.data.byteLength ?? -1,
       };
 
-      _onInfoReq?.({ uri, info });
+      const args: MockInfoHandlerArgs = {
+        uri,
+        path,
+        modify(fn) {
+          const clone = R.clone(info);
+          fn(clone);
+          info = clone;
+        },
+      };
+
+      _onInfoReq?.(args);
       return info;
     },
 
@@ -95,12 +120,6 @@ export function FsMockDriver(options: { dir?: string } = {}) {
        *
        */
       //  const image = await Image.toInfo(path, data);
-
-      // const put = IndexedDb.record.put;
-      // await Promise.all([
-      //   put<t.PathRecord>(store.paths, deleteUndefined({ path, dir, hash, bytes, image })),
-      //   put<t.BinaryRecord>(store.files, { hash, data }),
-      // ]);
 
       const data = Stream.isReadableStream(input)
         ? await Stream.toUint8Array(input)
@@ -188,8 +207,9 @@ export function FsMockDriver(options: { dir?: string } = {}) {
   /**
    * Mock API wrapper of the in-memory <Driver>.
    */
-  const mock = {
-    driver,
+
+  const mock: MockDriver = {
+    io,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
 
     get state() {

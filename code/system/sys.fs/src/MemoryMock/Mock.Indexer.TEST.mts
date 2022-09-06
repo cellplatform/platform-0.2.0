@@ -1,35 +1,22 @@
 import { describe, it, expect } from '../TEST/index.mjs';
-import { FsMockIndexer, MemoryMock } from './index.mjs';
+import { MemoryMock } from './index.mjs';
 import { ManifestHash } from '../Manifest/index.mjs';
 
-describe('Mock: FsIndexer', () => {
-  describe('dir', () => {
-    it('default', () => {
-      const mock = FsMockIndexer();
-      expect(mock.indexer.dir).to.eql('/mock/');
-    });
+const MockIndexer = MemoryMock.Indexer;
 
-    it('custom', () => {
-      const mock = FsMockIndexer({ dir: '/foo/bar/' });
-      expect(mock.indexer.dir).to.eql('/foo/bar/');
-    });
-  });
+/**
+ * NOTE: The remainder of the mock is deeply tested via the
+ *       standardised 🌳[sys.fs.spec] module.
+ *
+ *       See 🌳[sys.fs.spec] for the full test suite, which has
+ *       an incoming dependency on this the base [sys.fs] module.
+ */
 
+describe('MemoryMock: Indexer (mocking helpers)', () => {
   describe('manifest', () => {
-    it('default no files', async () => {
-      const mock = FsMockIndexer();
-      const res = await mock.indexer.manifest();
-      expect(mock.count.manifest).to.eql(1);
-
-      expect(typeof res.dir.indexedAt).to.eql('number');
-      expect(res.kind).to.eql('dir');
-      expect(res.hash).to.eql(ManifestHash.dir(res.dir, res.files));
-      expect(res.files).to.eql([]);
-    });
-
-    it('inject files', async () => {
+    it('inject files (mock)', async () => {
       const png = MemoryMock.randomFile(50);
-      const mock = FsMockIndexer().onManifestRequest((e) => {
+      const mock = MockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png')
           .addFile('foo/bar.png', png.data) // NB: repeat - file replaced
@@ -49,7 +36,7 @@ describe('Mock: FsIndexer', () => {
 
     it('inject files: options{ dir, filter }', async () => {
       const file = MemoryMock.randomFile(50);
-      const mock = FsMockIndexer().onManifestRequest((e) => {
+      const mock = MockIndexer().onManifestRequest((e) => {
         e.addFile('zoo.jpg')
           .addFile('/foo/bar.png', file.data)
           .addFile('foo/baz.jpg', file.data) // NB: repeat - replace

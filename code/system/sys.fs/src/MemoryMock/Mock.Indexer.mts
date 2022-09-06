@@ -4,14 +4,22 @@ import { randomFile } from './util.mjs';
 
 type Options = { dir?: string };
 
+export type MockIndexer = {
+  readonly indexer: t.FsIndexer;
+  readonly count: { manifest: number };
+  onManifestRequest(fn: MockManifestHandler): MockIndexer;
+};
+
 export type MockManifestHandler = (e: MockManifestHandlerArgs) => void;
 export type MockManifestHandlerArgs = {
-  options: t.FsIndexerGetManifestOptions;
+  readonly options: t.FsIndexerGetManifestOptions;
   addFile(path: string, data?: Uint8Array): MockManifestHandlerArgs;
 };
 
-export function FsMockIndexer(options: Options = {}) {
-  const { dir = DEFAULT.ROOT_DIR } = options;
+export function FsMockIndexer(options: Options = {}): MockIndexer {
+  let dir = options.dir ?? DEFAULT.ROOT_DIR;
+  dir = Path.ensureSlashStart(dir);
+  dir = Path.ensureSlashEnd(dir);
 
   let _onManifestReq: undefined | MockManifestHandler;
 
@@ -72,11 +80,12 @@ export function FsMockIndexer(options: Options = {}) {
   /**
    * Mock API wrapper of the in-memory <Indexer>.
    */
-  const mock = {
+
+  const mock: MockIndexer = {
     indexer,
     count: { manifest: 0 },
 
-    onManifestRequest(fn: MockManifestHandler) {
+    onManifestRequest(fn: MockManifestHandler): typeof mock {
       _onManifestReq = fn;
       return mock;
     },
