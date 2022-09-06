@@ -50,6 +50,11 @@ describe('Path', () => {
     test(true, '/', 'file.png');
     test(true, '/root', 'file.png');
 
+    test(true, '', '.');
+    test(true, '/', '.');
+    test(true, '  /  ', '  .  ');
+    test(true, '    ', '  .  ');
+
     test(false, '', '../file.png');
     test(false, '/', '../file.png');
     test(false, '   ', '../file.png');

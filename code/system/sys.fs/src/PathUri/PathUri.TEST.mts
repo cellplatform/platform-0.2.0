@@ -165,6 +165,10 @@ describe('PathUri', () => {
       test('path:./foo', '/root/foo');
     });
 
+    it('resolve (/.)', async () => {
+      expect(PathUri.resolve('/', 'path:.')).to.eql('/');
+    });
+
     it('throw: root directory not specified', () => {
       const test = (dir: string) => {
         const fn = () => PathUri.resolve(dir, 'path:foo');

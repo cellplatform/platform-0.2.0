@@ -163,7 +163,7 @@ function resolve(root: DirPath, uri: UriString) {
     return res;
   }
 
-  const path = PathUri.path(PathUri.ensureUriPrefix(uri));
+  const path = cleanPath(uri);
   if (!path) {
     res.error = invalidUriError();
     return res;
