@@ -13,15 +13,15 @@ describe('FsDriver (IndexedDB)', () => {
   describe('paths', () => {
     it('exposes root (dir)', async (g) => {
       const { fs } = await testCreate();
-      expect(fs.driver.dir).to.eql('/'); // NB: Not part of a wider file-system.
+      expect(fs.driver.io.dir).to.eql('/'); // NB: Not part of a wider file-system.
       fs.dispose();
     });
 
     it('resolve: to path', async () => {
       const { fs } = await testCreate();
       const test = (uri: string, expected: string) => {
-        const path = fs.driver.resolve(uri);
-        expect(path).to.eql(Path.join(fs.driver.dir, expected));
+        const path = fs.driver.io.resolve(uri);
+        expect(path).to.eql(Path.join(fs.driver.io.dir, expected));
       };
 
       test('path:foo', 'foo');
@@ -37,14 +37,14 @@ describe('FsDriver (IndexedDB)', () => {
 
     it('resolve: throw if not "path:.." URI', async () => {
       const { fs } = await testCreate();
-      const fn = () => fs.driver.resolve('foo');
+      const fn = () => fs.driver.io.resolve('foo');
       expect(fn).to.throw(/Invalid input/);
       fs.dispose();
     });
 
     it('resolve: throw if out of scope', async () => {
       const { fs } = await testCreate();
-      const fn = () => fs.driver.resolve('path:../foo');
+      const fn = () => fs.driver.io.resolve('path:../foo');
       expect(fn).to.throw(/out of scope/);
       fs.dispose();
     });
@@ -55,9 +55,9 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs, sample } = await testCreate();
       const png = sample.data;
       const uri = 'path:foo/bird.png';
-      await fs.driver.write(uri, png);
+      await fs.driver.io.write(uri, png);
 
-      const res = await fs.driver.info(` ${uri}  `);
+      const res = await fs.driver.io.info(` ${uri}  `);
       expect(res.uri).to.eql(uri);
       expect(res.exists).to.eql(true);
 
@@ -67,9 +67,9 @@ describe('FsDriver (IndexedDB)', () => {
     it('kind: "file"', async () => {
       const { fs, sample } = await testCreate();
       const uri = 'path:foo/bird.png';
-      await fs.driver.write(uri, sample.data);
+      await fs.driver.io.write(uri, sample.data);
 
-      const res = await fs.driver.info('path:foo/bird.png');
+      const res = await fs.driver.io.info('path:foo/bird.png');
       expect(res.exists).to.eql(true);
       expect(res.kind).to.eql('file');
       expect(res.bytes).to.eql(sample.bytes);
@@ -81,10 +81,10 @@ describe('FsDriver (IndexedDB)', () => {
     it('kind: "dir"', async () => {
       const { fs, sample } = await testCreate();
       const uri = 'path:foo/bird.png';
-      await fs.driver.write(uri, sample.data);
+      await fs.driver.io.write(uri, sample.data);
 
       const test = async (uri: string) => {
-        const res = await fs.driver.info(uri);
+        const res = await fs.driver.io.info(uri);
         expect(res.uri).to.eql(uri);
         expect(res.exists).to.eql(true);
         expect(res.kind).to.eql('dir');
@@ -102,7 +102,7 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs } = await testCreate();
 
       const uri = 'path:foo/404';
-      const res = await fs.driver.info(uri);
+      const res = await fs.driver.io.info(uri);
 
       expect(res.uri).to.eql(uri);
       expect(res.exists).to.eql(false);
@@ -120,10 +120,10 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs, sample } = await testCreate();
 
       const test = async (uri: string) => {
-        const path = fs.driver.resolve(uri);
-        await fs.driver.write(uri, sample.data);
+        const path = fs.driver.io.resolve(uri);
+        await fs.driver.io.write(uri, sample.data);
 
-        const res = await fs.driver.read(` ${uri} `);
+        const res = await fs.driver.io.read(` ${uri} `);
         const file = res.file as t.FsDriverFileData;
 
         expect(res.uri).to.eql(uri);
@@ -146,14 +146,14 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs, sample } = await testCreate();
 
       const test = async (uri: string) => {
-        const res = await fs.driver.write(`  ${uri} `, sample.data); // NB: URI padded with spaces (corrected internally).
+        const res = await fs.driver.io.write(`  ${uri} `, sample.data); // NB: URI padded with spaces (corrected internally).
         const file = res.file;
         expect(res.uri).to.eql(uri);
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql(200);
         expect(res.error).to.eql(undefined);
         expect(file.location).to.eql(`file://${file.path}`);
-        expect(file.path).to.eql(fs.driver.resolve(uri));
+        expect(file.path).to.eql(fs.driver.io.resolve(uri));
         expect(file.hash).to.match(/^sha256-[a-z0-9]+/);
         expect(file.data).to.eql(sample.data);
       };
@@ -171,8 +171,8 @@ describe('FsDriver (IndexedDB)', () => {
       const text = 'hello world!';
       const data = new TextEncoder().encode(text);
 
-      const write = await fs.driver.write(uri, data);
-      const read = await fs.driver.read(uri);
+      const write = await fs.driver.io.write(uri, data);
+      const read = await fs.driver.io.read(uri);
 
       expect(write.file.hash).to.eql(Hash.sha256(data));
       expect(write.file.bytes).to.eql(data.byteLength);
@@ -191,10 +191,10 @@ describe('FsDriver (IndexedDB)', () => {
       const root = slug();
       const path = `/${root}/zoo/file.txt`;
       const uri = `path:${root}/bar/baz/../../zoo/file.txt`;
-      const res = await fs.driver.write(uri, sample.data);
+      const res = await fs.driver.io.write(uri, sample.data);
 
       expect(res.file.path).to.eql(path);
-      expect((await fs.driver.info(`path:${path}`)).exists).to.eql(true);
+      expect((await fs.driver.io.info(`path:${path}`)).exists).to.eql(true);
 
       fs.dispose();
     });
@@ -207,8 +207,8 @@ describe('FsDriver (IndexedDB)', () => {
       const body = (await fetch(path)).body as ReadableStream;
       expect(Stream.isReadableStream(body)).to.eql(true);
 
-      const res1 = await fs.driver.write(uri, body);
-      const res2 = await fs.driver.read(uri);
+      const res1 = await fs.driver.io.write(uri, body);
+      const res2 = await fs.driver.io.read(uri);
       fs.dispose();
 
       const decode = (input?: Uint8Array) => new TextDecoder().decode(input);
@@ -224,13 +224,13 @@ describe('FsDriver (IndexedDB)', () => {
       const encode = (text: string) => new TextEncoder().encode(text);
       const uri = 'path:file.txt';
 
-      const write1 = await fs.driver.write(uri, encode('hello'));
+      const write1 = await fs.driver.io.write(uri, encode('hello'));
       const records1 = await test.getAll();
 
       expect(records1.paths.length).to.eql(1);
       expect(records1.files.length).to.eql(1);
 
-      const write2 = await fs.driver.write(uri, encode('world'));
+      const write2 = await fs.driver.io.write(uri, encode('world'));
       const records2 = await test.getAll();
 
       expect(records2.paths.length).to.eql(1);
@@ -248,14 +248,14 @@ describe('FsDriver (IndexedDB)', () => {
       const data = new TextEncoder().encode(slug());
 
       const test = async (uri: string) => {
-        const path = fs.driver.resolve(uri);
+        const path = fs.driver.io.resolve(uri);
 
-        expect((await fs.driver.info(uri)).exists).to.eql(false);
-        await fs.driver.write(uri, data);
-        expect((await fs.driver.info(uri)).exists).to.eql(true);
+        expect((await fs.driver.io.info(uri)).exists).to.eql(false);
+        await fs.driver.io.write(uri, data);
+        expect((await fs.driver.io.info(uri)).exists).to.eql(true);
 
-        const res = await fs.driver.delete(uri);
-        expect((await fs.driver.info(uri)).exists).to.eql(false);
+        const res = await fs.driver.io.delete(uri);
+        expect((await fs.driver.io.info(uri)).exists).to.eql(false);
 
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql(200);
@@ -276,19 +276,19 @@ describe('FsDriver (IndexedDB)', () => {
       const uri1 = `path:${slug()}/file1.txt`;
       const uri2 = `path:${slug()}/file2.txt`;
 
-      await fs.driver.write(uri1, data);
-      await fs.driver.write(uri2, data);
+      await fs.driver.io.write(uri1, data);
+      await fs.driver.io.write(uri2, data);
 
-      expect((await fs.driver.info(uri1)).exists).to.eql(true);
-      expect((await fs.driver.info(uri2)).exists).to.eql(true);
+      expect((await fs.driver.io.info(uri1)).exists).to.eql(true);
+      expect((await fs.driver.io.info(uri2)).exists).to.eql(true);
 
-      await fs.driver.delete(uri1);
-      expect((await fs.driver.info(uri1)).exists).to.eql(false);
-      expect((await fs.driver.info(uri2)).exists).to.eql(true);
+      await fs.driver.io.delete(uri1);
+      expect((await fs.driver.io.info(uri1)).exists).to.eql(false);
+      expect((await fs.driver.io.info(uri2)).exists).to.eql(true);
 
-      await fs.driver.delete(uri2);
-      expect((await fs.driver.info(uri1)).exists).to.eql(false);
-      expect((await fs.driver.info(uri2)).exists).to.eql(false);
+      await fs.driver.io.delete(uri2);
+      expect((await fs.driver.io.info(uri1)).exists).to.eql(false);
+      expect((await fs.driver.io.info(uri2)).exists).to.eql(false);
 
       fs.dispose();
     });
@@ -299,21 +299,21 @@ describe('FsDriver (IndexedDB)', () => {
         const png = new TextEncoder().encode(slug());
         const jpg = new TextEncoder().encode(slug());
 
-        const path1 = fs.driver.resolve(uri1);
-        const path2 = fs.driver.resolve(uri2);
+        const path1 = fs.driver.io.resolve(uri1);
+        const path2 = fs.driver.io.resolve(uri2);
 
-        expect((await fs.driver.info(uri1)).exists).to.eql(false);
-        expect((await fs.driver.info(uri2)).exists).to.eql(false);
+        expect((await fs.driver.io.info(uri1)).exists).to.eql(false);
+        expect((await fs.driver.io.info(uri2)).exists).to.eql(false);
 
-        await fs.driver.write(uri1, png);
-        await fs.driver.write(uri2, jpg);
-        expect((await fs.driver.info(uri1)).exists).to.eql(true);
-        expect((await fs.driver.info(uri2)).exists).to.eql(true);
+        await fs.driver.io.write(uri1, png);
+        await fs.driver.io.write(uri2, jpg);
+        expect((await fs.driver.io.info(uri1)).exists).to.eql(true);
+        expect((await fs.driver.io.info(uri2)).exists).to.eql(true);
 
-        const res = await fs.driver.delete([uri1, uri2]);
+        const res = await fs.driver.io.delete([uri1, uri2]);
 
-        expect((await fs.driver.info(uri1)).exists).to.eql(false);
-        expect((await fs.driver.info(uri2)).exists).to.eql(false);
+        expect((await fs.driver.io.info(uri1)).exists).to.eql(false);
+        expect((await fs.driver.io.info(uri2)).exists).to.eql(false);
 
         expect(res.ok).to.eql(true);
         expect(res.status).to.eql(200);
@@ -336,10 +336,10 @@ describe('FsDriver (IndexedDB)', () => {
       const sourceUri = `path:${slug()}:bird1`;
       const targetUri = `path:${slug()}/foo.png`;
 
-      expect((await fs.driver.read(targetUri)).status).to.eql(404);
+      expect((await fs.driver.io.read(targetUri)).status).to.eql(404);
 
-      await fs.driver.write(sourceUri, sample.data);
-      const res = await fs.driver.copy(sourceUri, targetUri);
+      await fs.driver.io.write(sourceUri, sample.data);
+      const res = await fs.driver.io.copy(sourceUri, targetUri);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
@@ -347,8 +347,8 @@ describe('FsDriver (IndexedDB)', () => {
       expect(res.target).to.eql(targetUri);
       expect(res.error).to.eql(undefined);
 
-      expect((await fs.driver.read(targetUri)).status).to.eql(200);
-      expect((await fs.driver.read(targetUri)).file?.data).to.eql(sample.data);
+      expect((await fs.driver.io.read(targetUri)).status).to.eql(200);
+      expect((await fs.driver.io.read(targetUri)).file?.data).to.eql(sample.data);
 
       fs.dispose();
     });
@@ -358,7 +358,7 @@ describe('FsDriver (IndexedDB)', () => {
       const sourceUri = `path:${slug()}:bird`;
       const targetUri = `path:${slug()}/foo.png`;
 
-      const res = await fs.driver.copy(sourceUri, targetUri);
+      const res = await fs.driver.io.copy(sourceUri, targetUri);
 
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(500);
@@ -375,7 +375,7 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs } = await testCreate();
 
       const uri = 'path:foo:noexist';
-      const res = await fs.driver.read(` ${uri} `);
+      const res = await fs.driver.io.read(` ${uri} `);
       const error = res.error as t.FsError;
 
       expect(res.uri).to.eql(uri);
@@ -383,7 +383,7 @@ describe('FsDriver (IndexedDB)', () => {
       expect(res.status).to.eql(404);
       expect(res.file).to.eql(undefined);
       expect(error.code).to.eql('fs:read');
-      expect(error.path).to.eql(fs.driver.resolve(uri));
+      expect(error.path).to.eql(fs.driver.io.resolve(uri));
       expect(error.message).to.contain(`[path:foo:noexist] does not exist`);
 
       fs.dispose();
@@ -393,8 +393,8 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs, sample } = await testCreate();
       const png = sample.data;
 
-      const res1 = await fs.driver.write('path:foo/bird.png', png);
-      const res2 = await fs.driver.write('path:foo/../../bird.png', png);
+      const res1 = await fs.driver.io.write('path:foo/bird.png', png);
+      const res2 = await fs.driver.io.write('path:foo/../../bird.png', png);
 
       expect(res1.error).to.eql(undefined);
       expect(res2.error?.message).to.include('Failed to write');
@@ -408,7 +408,7 @@ describe('FsDriver (IndexedDB)', () => {
       const { fs } = await testCreate();
       let message = '';
       try {
-        await fs.driver.write('path:foo/bird.png', undefined as any);
+        await fs.driver.io.write('path:foo/bird.png', undefined as any);
       } catch (err: any) {
         message = err.message;
       }

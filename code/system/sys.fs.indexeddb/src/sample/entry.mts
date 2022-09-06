@@ -1,5 +1,5 @@
+import { rx } from '../common/index.mjs';
 import { Filesystem } from '../index.mjs';
-import { Json, rx } from '../common/index.mjs';
 
 /**
  * Sample: Base Driver (DB)
@@ -9,16 +9,17 @@ console.log('-------------------------------------------');
 
 const id = 'fs.dev';
 const db = await Filesystem.driver.IndexedDb({ id });
-const { driver, indexer } = db;
+const { driver } = db;
+
 console.log('db', db);
 
 const json = JSON.stringify({ foo: 123 });
 const data = new TextEncoder().encode(json);
 
 const uri = 'path:foo/bar.json';
-await db.driver.write(uri, data);
+await driver.io.write(uri, data);
 
-const driverRead = new TextDecoder().decode((await db.driver.read(uri)).file?.data);
+const driverRead = new TextDecoder().decode((await driver.io.read(uri)).file?.data);
 console.log('driver/read:', typeof driverRead, driverRead);
 console.log('-------------------------------------------');
 
@@ -26,7 +27,7 @@ console.log('-------------------------------------------');
  * Sample: Bus/Controller
  */
 const bus = rx.bus();
-const controller = Filesystem.driver.BusController({ id, bus, driver, indexer });
+const controller = Filesystem.driver.BusController({ id, bus, driver });
 
 bus.$.subscribe((e) => {
   console.log('💦', e);

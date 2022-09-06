@@ -6,8 +6,8 @@ export const Filesystem = {
   Filesize,
   driver: {
     kind: 'IndexedDb',
+    IndexedDb,
     BusController,
     BusEvents,
-    IndexedDb,
   },
 };

@@ -20,13 +20,13 @@ describe('FsIndexer (IndexedDB)', () => {
     const file: t.ManifestFile = { path, bytes, filehash };
     const uri = `path:${path}`;
 
-    if (fs) await fs.driver.write(uri, data);
+    if (fs) await fs.driver.io.write(uri, data);
     return { uri, file, data };
   };
 
   it('dir', async () => {
     const { fs } = await testCreate();
-    expect(fs.indexer.dir).to.eql('/');
+    expect(fs.driver.indexer.dir).to.eql('/');
     fs.dispose();
   });
 
@@ -36,7 +36,7 @@ describe('FsIndexer (IndexedDB)', () => {
       await deleteAll();
 
       const now = Time.now.timestamp;
-      const manifest = await fs.indexer.manifest();
+      const manifest = await fs.driver.indexer.manifest();
       expect(manifest.kind).to.eql('dir');
       expect(manifest.dir.indexedAt).to.within(now - 10, now + 2000);
       expect(manifest.files).to.eql([]);
@@ -55,7 +55,7 @@ describe('FsIndexer (IndexedDB)', () => {
       const file3 = await testFile({ fs, path: 'images/foo/bar/icon.svg' });
 
       const now = Time.now.timestamp;
-      const manifest = await fs.indexer.manifest();
+      const manifest = await fs.driver.indexer.manifest();
       const files = manifest.files;
 
       expect(manifest.kind).to.eql('dir');
@@ -83,8 +83,12 @@ describe('FsIndexer (IndexedDB)', () => {
       await testFile({ fs, path: '/foo/icon-1.svg' });
       await testFile({ fs, path: '/foo/zoo/icon-2.svg' });
 
-      const manifest1 = await fs.indexer.manifest({ filter: (e) => !e.path.endsWith('.svg') });
-      const manifest2 = await fs.indexer.manifest({ filter: (e) => !e.path.endsWith('.png') });
+      const manifest1 = await fs.driver.indexer.manifest({
+        filter: (e) => !e.path.endsWith('.svg'),
+      });
+      const manifest2 = await fs.driver.indexer.manifest({
+        filter: (e) => !e.path.endsWith('.png'),
+      });
 
       const files1 = manifest1.files.map((file) => file.path);
       const files2 = manifest2.files.map((file) => file.path);
@@ -105,13 +109,13 @@ describe('FsIndexer (IndexedDB)', () => {
       await testFile({ fs, path: '/foo/icon-1.svg' });
       await testFile({ fs, path: 'foo/bar/icon-2.svg' });
 
-      const manifest0 = await fs.indexer.manifest({ dir: '      ' });
+      const manifest0 = await fs.driver.indexer.manifest({ dir: '      ' });
 
-      const manifest1 = await fs.indexer.manifest({ dir: '   foo   ' });
-      const manifest2 = await fs.indexer.manifest({ dir: '///foo///' });
-      const manifest3 = await fs.indexer.manifest({ dir: 'foo/bar' });
-      const manifest4 = await fs.indexer.manifest({ dir: '404' });
-      const manifest5 = await fs.indexer.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: File specified, steps up to containing folder.
+      const manifest1 = await fs.driver.indexer.manifest({ dir: '   foo   ' });
+      const manifest2 = await fs.driver.indexer.manifest({ dir: '///foo///' });
+      const manifest3 = await fs.driver.indexer.manifest({ dir: 'foo/bar' });
+      const manifest4 = await fs.driver.indexer.manifest({ dir: '404' });
+      const manifest5 = await fs.driver.indexer.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: File specified, steps up to containing folder.
 
       const files0 = mapFiles(manifest0);
       const files1 = mapFiles(manifest1);
@@ -143,10 +147,10 @@ describe('FsIndexer (IndexedDB)', () => {
 
       for (const filename of names1) {
         const data = new TextEncoder().encode(filename);
-        await fs.driver.write(`path:${filename}`, data);
+        await fs.driver.io.write(`path:${filename}`, data);
       }
 
-      const manifest = await fs.indexer.manifest();
+      const manifest = await fs.driver.indexer.manifest();
 
       // NB: the paths are sorted in a "human/natural" way.
       const names2 = manifest.files.map((file) => file.path);
@@ -163,9 +167,9 @@ describe('FsIndexer (IndexedDB)', () => {
       const test = async (path: string, expected: t.ManifestFileImage) => {
         const uri = `path:${path}`;
         const body = (await fetch(path)).body as ReadableStream;
-        await fs.driver.write(uri, body);
+        await fs.driver.io.write(uri, body);
 
-        const manifest = await fs.indexer.manifest();
+        const manifest = await fs.driver.indexer.manifest();
         const file = manifest.files[0];
         expect(file.image).to.eql(expected);
       };

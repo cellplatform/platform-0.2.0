@@ -15,7 +15,7 @@ export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) 
   const dir = options.dir ?? ROOT_DIR;
   const id = (options.id ?? 'fs').trim();
 
-  return IndexedDb.create<t.FsIndexedDb>({
+  const db = IndexedDb.create<t.FsIndexedDb>({
     name: id,
     version: 1,
 
@@ -44,7 +44,7 @@ export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) 
       };
 
       const { version } = db;
-      let _driver: t.FsDriver | undefined;
+      let _io: t.FsDriverIO | undefined;
       let _indexer: t.FsIndexer | undefined;
 
       /**
@@ -55,16 +55,20 @@ export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) 
         version,
         dispose$: dispose$.asObservable(),
         dispose,
-        get driver() {
-          return _driver || (_driver = FsDriver({ dir, db }));
-        },
-        get indexer() {
-          const fs = api.driver;
-          return _indexer || (_indexer = FsIndexer({ dir, db, fs }));
+        driver: {
+          get io() {
+            return _io || (_io = FsDriver({ dir, db }));
+          },
+          get indexer() {
+            const fs = api.driver.io;
+            return _indexer || (_indexer = FsIndexer({ dir, db, fs }));
+          },
         },
       };
 
       return api;
     },
   });
+
+  return db;
 };

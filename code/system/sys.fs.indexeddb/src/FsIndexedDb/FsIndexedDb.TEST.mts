@@ -17,18 +17,18 @@ describe('FsIndexedDb', () => {
   it('lazy evaluation: driver', async () => {
     const db = await FsIndexedDb();
 
-    const driver1 = db.driver;
-    const driver2 = db.driver;
+    const io1 = db.driver.io;
+    const io2 = db.driver.io;
 
-    expect(driver1.dir).to.eql('/');
-    expect(driver1).to.equal(driver2);
+    expect(io1.dir).to.eql('/');
+    expect(io1).to.equal(io2);
   });
 
   it('lazy evaluation: indexer', async () => {
     const db = await FsIndexedDb();
 
-    const indexer1 = db.indexer;
-    const indexer2 = db.indexer;
+    const indexer1 = db.driver.indexer;
+    const indexer2 = db.driver.indexer;
 
     expect(indexer1.dir).to.eql('/');
     expect(indexer1).to.equal(indexer2);
