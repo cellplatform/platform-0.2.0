@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 
 import { NAME, ROOT_DIR, t } from '../common/index.mjs';
 import { IndexedDb } from '../IndexedDb/index.mjs';
-import { FsDriver } from '../IndexedDb.Driver/index.mjs';
-import { FsIndexer } from '../IndexedDb.Indexer/index.mjs';
+import { FsDriverIO } from '../Fs.IndexedDb.Driver.IO/index.mjs';
+import { FsIndexer } from '../Fs.IndexedDb.Indexer/index.mjs';
 
 type DirPath = string;
 type FilesystemId = string;
@@ -57,7 +57,7 @@ export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) 
         dispose,
         driver: {
           get io() {
-            return _io || (_io = FsDriver({ dir, db }));
+            return _io || (_io = FsDriverIO({ dir, db }));
           },
           get indexer() {
             const fs = api.driver.io;

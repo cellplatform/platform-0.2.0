@@ -1,5 +1,5 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
-import { FsIndexedDb } from '../FsIndexedDb/index.mjs';
+import { FsIndexedDb } from '../Fs.IndexedDb/index.mjs';
 import { deleteAll, describe, expect, it } from '../TEST/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {

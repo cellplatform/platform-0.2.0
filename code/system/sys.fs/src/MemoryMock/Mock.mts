@@ -1,4 +1,4 @@
-import { FsMockDriverIO as IO } from './Mock.DriverIO.mjs';
+import { FsMockDriverIO as IO } from './Mock.Driver.IO.mjs';
 import { FsMockIndexer as Indexer } from './Mock.Indexer.mjs';
 import { randomFile } from './util.mjs';
 import { t, DEFAULT } from './common.mjs';
