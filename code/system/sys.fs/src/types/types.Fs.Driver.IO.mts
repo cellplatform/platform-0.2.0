@@ -1,22 +1,22 @@
 import { FsError } from './types.Error.mjs';
 
-type DirPath = string; //  Path to a directory, eg: "foo/"
-type FilePath = string; // Path to a file, eg: "foo/bar.txt"
-type PathUri = string; //  URI representing a file-path, eg: "path:foo/bar.png"
-type FileUri = string; //  URI representing an absolute location of a file, eg: "file:///foo/bar.png"
+type DirPathString = string; //  Path to a directory, eg: "foo/"
+type FilePathString = string; // Path to a file, eg: "foo/bar.txt"
+type PathUriString = string; //  URI representing a file-path, eg: "path:foo/bar.png"
+type FileUriString = string; //  URI representing an absolute location of a file, eg: "file:///foo/bar.png"
 type HttpStatusCode = number;
 
 /**
- * Factory function for creating a driver.
+ * IO (Input/Output) driver.
+ *    The low-level bridge into a specific platform file-system API or other form
+ *    of path-addressable [Uint8Array] data-storage mechanism.
  */
-export type FsDriverFactory = (dir?: DirPath) => Promise<FsDriver>;
-
-/**
- * MAIN Driver (API)
- * The low-level bridge into a specific platform file-system API
- */
-export type FsDriver = {
-  dir: DirPath;
+export type FsDriverIO = {
+  /**
+   * Path to the directory that represents the top-leve "scope" the driver
+   * has permission to access within the underlying store.
+   */
+  dir: DirPathString;
 
   /**
    * Meta-data.
@@ -37,30 +37,30 @@ export type FsDriver = {
  * ...implementation parts...
  */
 
-export type FsPathResolver = (uri: PathUri) => FilePath;
-export type FsDriverInfoMethod<Info extends FsDriverMeta> = (address: PathUri) => Promise<Info>;
-export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUri) => Promise<Read>;
+export type FsPathResolver = (uri: PathUriString) => FilePathString;
+export type FsDriverInfoMethod<Info extends FsDriverMeta> = (address: PathUriString) => Promise<Info>;
+export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUriString) => Promise<Read>;
 
 export type FsDriverWriteMethod<Write extends FsDriverWrite> = (
-  address: PathUri,
+  address: PathUriString,
   data: Uint8Array | ReadableStream,
 ) => Promise<Write>;
 
 export type FsDriverCopyMethod<Copy extends FsDriverCopy> = (
-  source: PathUri,
-  target: PathUri,
+  source: PathUriString,
+  target: PathUriString,
 ) => Promise<Copy>;
 
 export type FsDriverDeleteMethod<Delete extends FsDriverDelete> = (
-  address: PathUri | PathUri[],
+  address: PathUriString | PathUriString[],
 ) => Promise<Delete>;
 
 /**
  * File (meta/info)
  */
 export type FsDriverMeta = {
-  path: FilePath;
-  location: FileUri;
+  path: FilePathString;
+  location: FileUriString;
   hash: string;
   bytes: number;
 };
@@ -74,35 +74,35 @@ export type FsDriverFileData<I extends FsDriverMeta = FsDriverMeta> = I & { data
  * Operations.
  */
 export type FsDriverInfo = FsDriverMeta & {
-  uri: PathUri;
+  uri: PathUriString;
   exists: boolean;
   kind: 'file' | 'dir' | 'unknown';
 };
 export type FsDriverRead = {
   ok: boolean;
   status: HttpStatusCode;
-  uri: PathUri;
+  uri: PathUriString;
   file?: FsDriverFileData<FsDriverMeta>;
   error?: FsError;
 };
 export type FsDriverWrite = {
   ok: boolean;
   status: HttpStatusCode;
-  uri: PathUri;
+  uri: PathUriString;
   file: FsDriverFileData<FsDriverMeta>;
   error?: FsError;
 };
 export type FsDriverDelete = {
   ok: boolean;
   status: HttpStatusCode;
-  uris: PathUri[];
-  locations: FileUri[];
+  uris: PathUriString[];
+  locations: FileUriString[];
   error?: FsError;
 };
 export type FsDriverCopy = {
   ok: boolean;
   status: HttpStatusCode;
-  source: PathUri;
-  target: PathUri;
+  source: PathUriString;
+  target: PathUriString;
   error?: FsError;
 };

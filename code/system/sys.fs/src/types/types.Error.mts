@@ -1,4 +1,4 @@
-type FilePath = string; // Path to a file, eg: "foo/bar.txt"
+type FilePathString = string; // Path to a file, eg: "foo/bar.txt"
 
 /**
  * Filesystem errors.
@@ -15,4 +15,4 @@ export type FsErrorCode =
   | 'fs:manifest'
   | 'fs:unknown';
 
-export type FsError = { code: FsErrorCode; message: string; path: FilePath };
+export type FsError = { code: FsErrorCode; message: string; path: FilePathString };
