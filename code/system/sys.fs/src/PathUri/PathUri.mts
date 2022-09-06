@@ -6,6 +6,7 @@ import {
   ensureSlashEnd,
 } from '../Path/Path.trim.mjs';
 import { join, isWithin } from '../Path/Path.join.mjs';
+import { toAbsoluteLocation } from '../Path/Path.to.mjs';
 import { t } from '../common/index.mjs';
 
 type UriString = string;
@@ -63,41 +64,47 @@ export const PathUri = {
    * Perform safe path resolution on a URI.
    */
   resolve(root: DirPath, uri: UriString) {
-    if (!trim(root)) throw new Error(`Path resolver must have root directory`);
-    root = formatRootDir(root);
-
-    const throwInvalidUri = (suffix?: string) => {
-      throw new Error(`Invalid input URI "${uri}". ${suffix}`.trim());
-    };
-
-    if (!PathUri.isPathUri(uri)) throwInvalidUri('Should be "path:.." value');
-
-    const withinScope = isWithin(root, PathUri.trimUriPrefix(uri));
-    if (!withinScope) throwInvalidUri(`Path out of scope of root directory "${root}".`);
-
-    const path = PathUri.path(PathUri.ensureUriPrefix(uri));
-    if (!path) throwInvalidUri();
-
-    return join(root, path);
+    const { path, error } = resolve(root, uri);
+    if (error) throw new Error(error);
+    return path;
   },
 
   /**
    * Factory for a path resolver.
    */
-  resolveFactory(dir: DirPath): t.FsPathResolver {
+  resolver(dir: DirPath): t.FsPathResolver {
     return (uri: UriString) => PathUri.resolve(dir, uri);
   },
 
   /**
    * Unpacks a URI into constituent parts.
    */
-  unpack(uri: string, options: { root?: DirPath } = {}) {
-    const root = options.root && trim(options.root) ? formatRootDir(options.root) : '';
+  unpack(uri: UriString, options: { root?: DirPath } = {}) {
+    const root = (options.root && trim(options.root) ? formatRootDir(options.root) : '/') || '/';
 
-    //
     uri = (uri || '').trim();
+    if (!PathUri.isPathUri(uri)) {
+      throw new Error(`Invalid input URI "${uri}". Should start with "path:.."`);
+    }
 
-    return { uri, root };
+    const resolved = resolve(root, uri);
+    const { error, withinScope } = resolved;
+
+    const rawpath = PathUri.trimUriPrefix(uri);
+    uri = PathUri.ensureUriPrefix(uri) || uri; // Clean up URI.
+
+    const fullpath = error ? '' : resolved.path;
+    const path = error ? '' : fullpath.substring(root.length - 1); // NB: hide full path up to root of driver scope.
+    const location = error ? '' : toAbsoluteLocation({ root, path });
+
+    return { uri, root, path, fullpath, rawpath, location, withinScope, error };
+  },
+
+  /**
+   * Factory for a URI unpacker.
+   */
+  unpacker(root?: DirPath) {
+    return (uri: UriString) => PathUri.unpack(uri, { root });
   },
 };
 
@@ -124,4 +131,47 @@ function formatRootDir(path: string) {
   path = ensureSlashStart(path);
   path = ensureSlashEnd(path);
   return path;
+}
+
+function resolve(root: DirPath, uri: UriString) {
+  type R = { path: string; withinScope: boolean; error?: string };
+
+  const res: R = {
+    path: '',
+    withinScope: true,
+    error: undefined,
+  };
+
+  const invalidUriError = (suffix?: string) => `Invalid input URI "${uri}". ${suffix}`.trim();
+
+  if (!trim(root)) {
+    res.error = `Path resolver must have root directory`;
+    return res;
+  }
+
+  root = formatRootDir(root);
+
+  if (!PathUri.isPathUri(uri)) {
+    res.error = invalidUriError('Should start with "path:.."');
+    return res;
+  }
+
+  const withinScope = isWithin(root, PathUri.trimUriPrefix(uri));
+  if (!withinScope) {
+    res.error = invalidUriError(`Path out of scope of root directory "${root}".`);
+    res.withinScope = false;
+    return res;
+  }
+
+  const path = PathUri.path(PathUri.ensureUriPrefix(uri));
+  if (!path) {
+    res.error = invalidUriError();
+    return res;
+  }
+
+  if (withinScope && path) {
+    res.path = join(root, path);
+  }
+
+  return res;
 }

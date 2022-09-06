@@ -1,6 +1,5 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { describe, expect, it } from '../TEST/index.mjs';
 import { PathUri } from './index.mjs';
-import { Path } from '../Path/index.mjs';
 
 describe('PathUri', () => {
   it('prefix', () => {
@@ -203,8 +202,8 @@ describe('PathUri', () => {
       test('path:./foo/../../../../../../../');
     });
 
-    it('resolve factory', () => {
-      const resolve = PathUri.resolveFactory('foo/bar');
+    it('resolver (factory)', () => {
+      const resolve = PathUri.resolver('foo/bar');
 
       expect(resolve('path:file.txt')).to.eql('/foo/bar/file.txt');
       expect(resolve('path:./images/bird.png')).to.eql('/foo/bar/images/bird.png');
@@ -215,11 +214,81 @@ describe('PathUri', () => {
   });
 
   describe('unpack', () => {
-    it.skip('no base directory', () => {
-      //
-      /**
-       * TODO 🐷
-       */
+    it('no root directory', () => {
+      const res = PathUri.unpack('  path:foo/bar  ');
+
+      expect(res.uri).to.eql('path:foo/bar');
+      expect(res.root).to.eql('/');
+      expect(res.path).to.eql('/foo/bar');
+      expect(res.fullpath).to.eql('/foo/bar');
+      expect(res.location).to.eql('file:///foo/bar');
+      expect(res.withinScope).to.eql(true);
+      expect(res.rawpath).to.eql('foo/bar');
+      expect(res.error).to.eql(undefined);
+    });
+
+    it('root directory', () => {
+      const res = PathUri.unpack('path://foo/bar', { root: '  base ' });
+
+      expect(res.uri).to.eql('path:/foo/bar');
+      expect(res.root).to.eql('/base/');
+      expect(res.path).to.eql('/foo/bar');
+      expect(res.fullpath).to.eql('/base/foo/bar');
+      expect(res.location).to.eql('file:///base/foo/bar');
+      expect(res.withinScope).to.eql(true);
+      expect(res.rawpath).to.eql('//foo/bar');
+      expect(res.error).to.eql(undefined);
+    });
+
+    it('throw: not a "path:.." uri', () => {
+      const fn = () => PathUri.unpack('foo/bar');
+      expect(fn).to.throw(/Should start with \"path:\.\.\"/);
+    });
+
+    it('error: out of scope', () => {
+      const res1 = PathUri.unpack('path:../foo');
+      const res2 = PathUri.unpack('path:../foo/', { root: 'base' });
+
+      expect(res1.withinScope).to.eql(false);
+      expect(res2.withinScope).to.eql(false);
+
+      expect(res1.error).to.include('Path out of scope');
+      expect(res2.error).to.include('Path out of scope');
+
+      expect(res1.uri).to.eql('path:../foo');
+      expect(res2.uri).to.eql('path:../foo/');
+
+      expect(res1.rawpath).to.eql('../foo');
+      expect(res2.rawpath).to.eql('../foo/');
+
+      expect(res1.root).to.eql('/');
+      expect(res2.root).to.eql('/base/');
+
+      expect(res1.path).to.eql('');
+      expect(res2.path).to.eql('');
+
+      expect(res1.location).to.eql('');
+      expect(res2.location).to.eql('');
+    });
+
+    it('unpacker (factory)', () => {
+      const unpacker1 = PathUri.unpacker();
+      const unpacker2 = PathUri.unpacker('/root');
+
+      const res1 = unpacker1('path:foo');
+      const res2 = unpacker2('path:foo');
+
+      expect(res1.uri).to.eql('path:foo');
+      expect(res2.uri).to.eql('path:foo');
+
+      expect(res1.root).to.eql('/');
+      expect(res2.root).to.eql('/root/');
+
+      expect(res1.path).to.eql('/foo');
+      expect(res2.path).to.eql('/foo');
+
+      expect(res1.fullpath).to.eql('/foo');
+      expect(res2.fullpath).to.eql('/root/foo');
     });
   });
 });

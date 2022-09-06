@@ -1,4 +1,3 @@
-import { PathResolverFactory } from '../PathResolver/index.mjs';
 import { DEFAULT, Hash, Path, Stream, t } from './common.mjs';
 
 type MockInfoHandler = (e: { uri: string; info: t.FsDriverInfo }) => void;
@@ -8,26 +7,14 @@ type MockInfoHandler = (e: { uri: string; info: t.FsDriverInfo }) => void;
  */
 export function FsMockDriver(options: { dir?: string } = {}) {
   const { dir = DEFAULT.ROOT_DIR } = options;
-  const root = dir;
 
   let _onInfoReq: undefined | MockInfoHandler;
-  const resolve = PathResolverFactory({ dir });
   const state: { [uri: string]: { data: Uint8Array; hash: string } } = {};
-
-  const processPathUri = (uri: string) => {
-    if (!Path.Uri.isPathUri(uri)) throw new Error(`Not a "path:" URI: ${uri}`);
-    uri = Path.Uri.ensureUriPrefix(uri); // Clean up URI.
-
-    const content = Path.trimSlashesStart(Path.Uri.trimUriPrefix(uri));
-    const location = Path.toAbsoluteLocation({ root, path: content }).replace(/\/\.$/, '/');
-    const path = Path.ensureSlashStart(content).replace(/\/\.$/, '/');
-    const withinScope = Path.isWithin(root, path);
-
-    return { uri, path, location, withinScope };
-  };
+  const resolve = Path.Uri.resolver(dir);
+  const unpack = Path.Uri.unpacker(dir);
 
   const resolveKind = (uri: string): t.FsDriverInfo['kind'] => {
-    const { path } = processPathUri(uri);
+    const { path } = unpack(uri);
     if (state[path]) return 'file';
 
     const possibleDir = `${path.replace(/\/*$/, '')}/`;
@@ -51,7 +38,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async info(address) {
       mock.count.info++;
 
-      const { uri, path, location } = processPathUri(address);
+      const { uri, path, location } = unpack(address);
       const ref = state[path];
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
@@ -75,7 +62,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async read(address) {
       mock.count.read++;
-      const { uri, path, location, withinScope } = processPathUri(address);
+
+      const { uri, path, location, withinScope } = unpack(address);
 
       const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
@@ -96,7 +84,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
      */
     async write(address, input) {
       mock.count.write++;
-      const { uri, path, location, withinScope } = processPathUri(address);
+      const { uri, path, location, withinScope } = unpack(address);
 
       /**
        * TODO 🐷
@@ -118,7 +106,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
         ? await Stream.toUint8Array(input)
         : (input as Uint8Array);
 
-      const hash = Hash.sha256(input);
+      const hash = Hash.sha256(data);
       const bytes = data.byteLength;
       const file: t.FsDriverFileData = { path, location, hash, bytes, data };
 
@@ -138,7 +126,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const inputs = Array.isArray(input) ? input : [input];
-      const formatted = inputs.map((input) => processPathUri(input));
+      const formatted = inputs.map((input) => unpack(input));
 
       const items = formatted.filter((item) => state[item.path]);
       const uris = items.map(({ uri }) => uri);
@@ -146,7 +134,7 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       const outOfScope = formatted.filter((item) => !item.withinScope);
 
       if (outOfScope.length > 0) {
-        const path = outOfScope.map((item) => item.path).join('; ');
+        const path = outOfScope.map((item) => item.rawpath).join('; ');
         const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
         return { ok: false, status: 422, uris, locations, error };
       }
@@ -161,8 +149,8 @@ export function FsMockDriver(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const source = processPathUri(sourceUri);
-      const target = processPathUri(targetUri);
+      const source = unpack(sourceUri);
+      const target = unpack(targetUri);
 
       const toError = (path: string, message: string): t.FsError => ({
         code: 'fs:copy',
@@ -171,18 +159,18 @@ export function FsMockDriver(options: { dir?: string } = {}) {
       });
 
       if (!source.withinScope) {
-        const error = toError(source.path, 'Source path out of scope');
+        const error = toError(source.rawpath, 'Source path out of scope');
         return { ok: false, status: 422, source: source.uri, target: target.uri, error };
       }
 
       if (!target.withinScope) {
-        const error = toError(target.path, 'Target path out of scope');
+        const error = toError(target.rawpath, 'Target path out of scope');
         return { ok: false, status: 422, source: source.uri, target: target.uri, error };
       }
 
       const ref = state[source.path];
       if (!ref) {
-        const error = toError(source.path, 'Source file not found');
+        const error = toError(source.rawpath, 'Source file not found');
         return { ok: false, status: 404, source: source.uri, target: target.uri, error };
       }
 

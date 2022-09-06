@@ -1,6 +1,5 @@
-import { expectError, describe, it, expect } from '../TEST/index.mjs';
+import { describe, expect, it } from '../TEST/index.mjs';
 import { FsMockDriver, MemoryMock } from './index.mjs';
-import { Path } from './common.mjs';
 
 describe('Mock: FsDriver', () => {
   describe('driver.resolve', () => {
@@ -243,7 +242,7 @@ describe('Mock: FsDriver', () => {
       expect(res.source).to.eql('path:foo.png');
       expect(res.target).to.eql('path:images/bird.png');
       expect(res.error?.code).to.eql('fs:copy');
-      expect(res.error?.path).to.eql('/foo.png');
+      expect(res.error?.path).to.eql('foo.png');
       expect(res.error?.message).to.include('Source file not found');
     });
   });
@@ -268,6 +267,7 @@ describe('Mock: FsDriver', () => {
       const png = MemoryMock.randomFile();
 
       const res = await mock.driver.write('path:../foo.png', png.data);
+
       expect(res.ok).to.eql(false);
       expect(res.status).to.eql(422);
       expect(res.error?.message).to.include('Path out of scope');
@@ -286,12 +286,12 @@ describe('Mock: FsDriver', () => {
       expect(res1.ok).to.eql(false);
       expect(res1.status).to.eql(422);
       expect(res1.error?.message).to.include('Path out of scope');
-      expect(res1.error?.path).to.include('/../foo.png');
+      expect(res1.error?.path).to.include('../foo.png');
 
       expect(res2.ok).to.eql(false);
       expect(res2.status).to.eql(422);
       expect(res2.error?.message).to.include('Path out of scope');
-      expect(res2.error?.path).to.include('/../foo.png; /../../bar.png');
+      expect(res2.error?.path).to.include('../foo.png; ../../bar.png');
     });
 
     it('copy', async () => {
@@ -303,12 +303,12 @@ describe('Mock: FsDriver', () => {
       expect(res1.ok).to.eql(false);
       expect(res1.status).to.eql(422);
       expect(res1.error?.message).to.include('Source path out of scope');
-      expect(res1.error?.path).to.include('/../foo.png');
+      expect(res1.error?.path).to.include('../foo.png');
 
       expect(res2.ok).to.eql(false);
       expect(res2.status).to.eql(422);
       expect(res2.error?.message).to.include('Target path out of scope');
-      expect(res2.error?.path).to.include('/../foo.png');
+      expect(res2.error?.path).to.include('../foo.png');
     });
   });
 });
