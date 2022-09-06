@@ -1,8 +1,9 @@
-import { t, Time, ManifestHash, Path, Delete, ManifestFiles } from '../common/index.mjs';
+import { Delete, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 
 export function FsIndexer(args: { dir: string; db: IDBDatabase; fs: t.FsDriverIO }) {
-  const { dir, db, fs } = args;
+  const { db, fs } = args;
+  const dir = Path.ensureSlashes(args.dir);
   const baseDir = dir;
   const lookup = DbLookup(db);
 
