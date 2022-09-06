@@ -138,6 +138,21 @@ describe('Path', () => {
       test('/foo  /  ', '/foo');
     });
 
+    it('ensureSlashes (start AND end)', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureSlashes(input)).to.eql(expected);
+      };
+
+      test('foo', '/foo/');
+      test('   foo   ', '/foo/');
+      test('/', '/');
+      test('', '/');
+      test('   ', '/');
+      test('///', '/');
+      test('///foo/bar', '/foo/bar/');
+      test('foo/bar///', '/foo/bar/');
+    });
+
     it('ensureSlashStart', () => {
       const test = (input: any, expected: string) => {
         expect(Path.ensureSlashStart(input)).to.eql(expected);
