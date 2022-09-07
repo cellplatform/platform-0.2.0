@@ -13,14 +13,22 @@ const TsPaths = {
  */
 export const Typescript = {
   /**
+   * Read the current version of typecript.
+   */
+  async version() {
+    const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    const typescriptVersion = (deps?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
+    return typescriptVersion;
+  },
+
+  /**
    * Complete build
    */
   async build(rootDir: t.PathString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
     const { silent = false } = options;
     rootDir = fs.resolve(rootDir);
-
-    const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
-    const tsVersion = (pkg.devDependencies?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
+    const tsVersion = await Typescript.version();
 
     if (!silent) {
       const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
