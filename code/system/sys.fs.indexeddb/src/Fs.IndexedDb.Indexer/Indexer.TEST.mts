@@ -1,13 +1,14 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
 import { FsIndexedDb } from '../Fs.IndexedDb/index.mjs';
-import { deleteAll, describe, expect, it } from '../TEST/index.mjs';
+import { deleteAll, describe, expect, it, MemoryMock } from '../TEST/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {
   const EMPTY_HASH = Hash.sha256([]);
 
-  const testCreate = async () => {
+  const testCreate = async (options: { dir?: string } = {}) => {
+    const { dir } = options;
     const id = `fs:test.${slug()}`;
-    const fs = await FsIndexedDb({ id });
+    const fs = await FsIndexedDb({ id, dir });
     return { fs, name: id, deleteAll: () => deleteAll(fs) };
   };
 
@@ -115,7 +116,7 @@ describe('FsIndexer (IndexedDB)', () => {
       const manifest2 = await fs.driver.indexer.manifest({ dir: '///foo///' });
       const manifest3 = await fs.driver.indexer.manifest({ dir: 'foo/bar' });
       const manifest4 = await fs.driver.indexer.manifest({ dir: '404' });
-      const manifest5 = await fs.driver.indexer.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: File specified, steps up to containing folder.
+      const manifest5 = await fs.driver.indexer.manifest({ dir: '/foo/bar/icon-2.svg' }); // NB: Not a directory.
 
       const files0 = mapFiles(manifest0);
       const files1 = mapFiles(manifest1);
@@ -134,9 +135,41 @@ describe('FsIndexer (IndexedDB)', () => {
       expect(files2).to.eql(files1);
       expect(files3).to.eql(['foo/bar/icon-2.svg']);
       expect(files4).to.eql([]);
-      expect(files5).to.eql(['foo/bar/icon-2.svg']);
+      expect(files5).to.eql([]);
 
       fs.dispose();
+    });
+
+    it('IO: read/write', async () => {
+      const { fs, deleteAll } = await testCreate();
+      const file = MemoryMock.randomFile();
+
+      await deleteAll();
+      await fs.driver.io.write('path:/a', file.data);
+      await fs.driver.io.write('path:foo/b', file.data);
+
+      const manifest = await fs.driver.indexer.manifest();
+      expect(manifest.files.length).to.eql(2);
+      expect(manifest.files[0].path).to.eql('a');
+      expect(manifest.files[1].path).to.eql('foo/b');
+    });
+
+    it('IO: read/write (custom driver directory)', async () => {
+      const { fs, deleteAll } = await testCreate({ dir: 'root/dir' });
+      const file = MemoryMock.randomFile();
+
+      await deleteAll();
+      await fs.driver.io.write('path:/a', file.data);
+      await fs.driver.io.write('path:foo/b', file.data);
+
+      const m1 = await fs.driver.indexer.manifest();
+      expect(m1.files.length).to.eql(2);
+      expect(m1.files[0].path).to.eql('a');
+      expect(m1.files[1].path).to.eql('foo/b');
+
+      const m2 = await fs.driver.indexer.manifest({ dir: '///foo//' });
+      expect(m2.files.length).to.eql(1);
+      expect(m2.files[0].path).to.eql('foo/b');
     });
 
     it('natural sort', async () => {

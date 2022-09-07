@@ -55,13 +55,13 @@ export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) 
         version,
         dispose$: dispose$.asObservable(),
         dispose,
+        database: db,
         driver: {
           get io() {
             return _io || (_io = FsDriverIO({ dir, db }));
           },
           get indexer() {
-            const fs = api.driver.io;
-            return _indexer || (_indexer = FsIndexer({ dir, db, fs }));
+            return _indexer || (_indexer = FsIndexer({ dir, db }));
           },
         },
       };

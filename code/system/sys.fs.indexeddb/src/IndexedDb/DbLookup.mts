@@ -7,6 +7,7 @@ import { IndexedDb } from './IndexedDb.mjs';
 export function DbLookup(db: IDBDatabase) {
   return {
     path(path: string) {
+      path = formatPath(path);
       const tx = db.transaction([NAME.STORE.PATHS], 'readonly');
       const store = tx.objectStore(NAME.STORE.PATHS);
       return IndexedDb.record.get<t.PathRecord>(store, path);
@@ -23,6 +24,7 @@ export function DbLookup(db: IDBDatabase) {
     },
 
     dir(path: string) {
+      path = formatPath(path);
       const tx = db.transaction([NAME.STORE.PATHS], 'readonly');
       const store = tx.objectStore(NAME.STORE.PATHS);
       const index = store.index(NAME.INDEX.DIRS);
@@ -30,4 +32,12 @@ export function DbLookup(db: IDBDatabase) {
       return IndexedDb.record.get<t.PathRecord>(index, [dir]);
     },
   };
+}
+
+/**
+ * Helpers
+ */
+
+function formatPath(path: string) {
+  return (path || '').trim().replace(/^file:\/\//, '');
 }

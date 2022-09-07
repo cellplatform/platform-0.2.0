@@ -27,24 +27,24 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Retrieve meta-data of a local file.
      */
-    async info(address) {
-      const { uri, path, location } = unpackUri(address);
+    async info(uriInput) {
+      const { uri, path, location } = unpackUri(uriInput);
 
       type T = t.FsDriverInfo;
       let kind: T['kind'] = 'unknown';
       let hash: T['hash'] = '';
       let bytes: T['bytes'] = -1;
 
-      const pathRes = await lookup.path(path);
-      if (pathRes) {
+      const pathLookup = await lookup.path(path);
+      if (pathLookup) {
         kind = 'file';
-        hash = pathRes.hash;
-        bytes = pathRes.bytes;
+        hash = pathLookup.hash;
+        bytes = pathLookup.bytes;
       }
 
-      if (!pathRes) {
-        const dirRes = await lookup.dir(path);
-        if (dirRes) kind = 'dir';
+      if (!pathLookup) {
+        const dirLookup = await lookup.dir(Path.join(dir, path));
+        if (dirLookup) kind = 'dir';
       }
 
       const exists = kind !== 'unknown';
@@ -54,8 +54,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Read from the local file-system.
      */
-    async read(address) {
-      const { uri, path, location, withinScope } = unpackUri(address);
+    async read(uriInput) {
+      const { uri, path, location, withinScope } = unpackUri(uriInput);
 
       const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
@@ -85,20 +85,20 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Write to the local file-system.
      */
-    async write(address, input) {
-      if (input === undefined) throw new Error(`No data`);
+    async write(uriInput, dataInput) {
+      if (dataInput === undefined) throw new Error(`No data`);
 
       const toError = (path: string, msg: string): t.FsError => {
         const message = `Failed to write [${uri}]. ${msg}`;
         return { code: 'fs:write', message, path };
       };
 
-      const unpack = unpackUri(address);
+      const unpack = unpackUri(uriInput);
       const { uri, path, location, withinScope } = unpack;
       const { dir } = Path.parts(location);
 
-      const isStream = Stream.isReadableStream(input);
-      const data = (isStream ? await Stream.toUint8Array(input) : input) as Uint8Array;
+      const isStream = Stream.isReadableStream(dataInput);
+      const data = (isStream ? await Stream.toUint8Array(dataInput) : dataInput) as Uint8Array;
 
       const hash = Hash.sha256(data);
       const bytes = data.byteLength;
@@ -145,8 +145,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Delete from the local file-system.
      */
-    async delete(input) {
-      const inputs = Array.isArray(input) ? input : [input];
+    async delete(uriInput) {
+      const inputs = Array.isArray(uriInput) ? uriInput : [uriInput];
       const items = inputs.map((input) => unpackUri(input));
       const uris = items.map(({ uri }) => uri);
       const locations = items.map(({ location }) => location);
