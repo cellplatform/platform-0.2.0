@@ -14,12 +14,13 @@ export const Util = {
     return list.filter((_, index) => results[index]);
   },
 
-  formatPath(path: string) {
+  formatPath(path: string, options: { filenameColor?: (value?: string | number) => string } = {}) {
+    const filenameColor = options.filenameColor ?? pc.white;
     const base = fs.resolve('.');
     const relative = path.substring(base.length + 1);
     const dirname = fs.basename(relative);
     const prefix = relative.substring(0, relative.length - dirname.length);
-    return pc.gray(`${prefix}${pc.white(dirname)}`);
+    return pc.gray(`${prefix}${filenameColor(dirname)}`);
   },
 
   /**

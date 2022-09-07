@@ -89,7 +89,7 @@ describe('BusController.Change', function () {
   /**
    * TODO 🐷
    */
-  describe.skip('no change (event not fired)', () => {
+  describe('no change (event not fired)', () => {
     it.skip('write', async () => {
       //
     });

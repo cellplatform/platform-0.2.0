@@ -2,7 +2,7 @@
  * Break a path into it's constituent parts.
  */
 export function parts(input: string) {
-  const path = (input || '').trim();
+  const path = (input || '').trim().replace(/^file:\/\//, '');
 
   let filename = '';
   let dir = '';

@@ -8,6 +8,23 @@ Recommended development tooling baseline (pre-prerequisites):
 - Github Desktop [installer](https://desktop.github.com/) (source control user-interface).
 
 ---
+Environment runtimes:
+
+- [Node](https://nodejs.org) - download the "LTS" version [installer](https://nodejs.org)
+- Yarn [installer](https://yarnpkg.com/getting-started/install).
+
+
+=====
+
+Notes:
+
+- For Rowan: Oh M ZHS
+- node-js from installer - https://nodejs.org/en/ (the "LTS" version)
+- Mac: Xcode Developer Tools
+- command line tools - vscode
+
+---
+# OLD
 
 - [Node](https://nodejs.org/en/) (via [N](https://github.com/tj/n)).  
   Installer from no prios, coped (Sep,2022) from "[N](https://github.com/tj/n)" installation docs.  
@@ -18,5 +35,3 @@ Recommended development tooling baseline (pre-prerequisites):
       bash n lts
       # Now node and npm are available
       npm install -g n
-
-- Yarn [installer](https://yarnpkg.com/getting-started/install).

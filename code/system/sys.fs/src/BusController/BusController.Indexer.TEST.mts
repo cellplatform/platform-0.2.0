@@ -189,7 +189,7 @@ describe('BusController.Indexer', function () {
       const loadCachedFile = async (filename?: string) => {
         const cachefile = Path.join(filename ?? DEFAULT.CACHE_FILENAME);
         const uri = Path.Uri.ensureUriPrefix(cachefile);
-        const res = await mock.driver.read(uri);
+        const res = await mock.driver.io.read(uri);
         if (!res.file) return undefined;
 
         const text = new TextDecoder().decode(res.file.data);
@@ -227,7 +227,7 @@ describe('BusController.Indexer', function () {
       // NB: This should never be done in the wild!
       const json = await loadCachedFile();
       (json?.files[0] as any).foobar = 'my-test';
-      await mock.driver.write(
+      await mock.driver.io.write(
         Path.Uri.ensureUriPrefix(cachefilename),
         new TextEncoder().encode(JSON.stringify(json)),
       );
@@ -248,7 +248,7 @@ describe('BusController.Indexer', function () {
       // Manipulate the cached file to test if it's used.
       const json = await loadCachedFile();
       (json?.files[0] as any).foobar = 'my-test';
-      await mock.driver.write(
+      await mock.driver.io.write(
         Path.Uri.ensureUriPrefix(cachefilename),
         new TextEncoder().encode(JSON.stringify(json)),
       );

@@ -16,7 +16,7 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
   // Log complete build list.
   console.log();
   console.log(pc.green('build list:'));
-  paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
+  paths.forEach((path) => console.log(pc.green(` ○ ${pc.gray(Util.formatPath(path))}`)));
   console.log();
   console.log();
 
@@ -37,25 +37,25 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
 
   const ok = failed.length === 0;
   const statusColor = (ok: boolean, text: string) => (ok ? pc.green(text) : pc.red(text));
-  const bullet = (path: string) => {
-    const ok = !failed.some((error) => error.path === path);
-    return statusColor(ok, ok ? '✓' : '×');
-  };
+  const pathOK = (path: string) => !failed.some((error) => error.path === path);
+  const bullet = (path: string) => statusColor(pathOK(path), '●');
 
   let totalBytes = 0;
   const table = Table();
   for (const path of paths) {
+    const ok = pathOK(path);
     const size = await Util.folderSize(fs.join(path, 'dist'));
+    const formattedPath = Util.formatPath(path, { filenameColor: ok ? pc.white : pc.red });
     const display = {
-      path: pc.gray(` ${bullet(path)} ${Util.formatPath(path)}`),
-      size: pc.gray(`  ${Util.filesize(size.bytes)}`),
+      path: pc.gray(` ${bullet(path)} ${formattedPath}`),
+      size: pc.gray(`  ${size.bytes === 0 ? '-' : Util.filesize(size.bytes)}`),
     };
     totalBytes += size.bytes;
     table.push([display.path, display.size]);
   }
 
   console.log();
-  console.log(statusColor(ok, 'built:'));
+  console.log(statusColor(ok, ok ? 'built:' : 'built (with failures):'));
   console.log(table.toString());
   console.log();
   console.log(pc.gray(`${Util.filesize(totalBytes)}`));

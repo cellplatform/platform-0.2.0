@@ -4,5 +4,5 @@ export type FsIndexedDb = t.Disposable & {
   id: string;
   version: number;
   driver: t.FsDriver;
-  indexer: t.FsIndexer;
+  database: IDBDatabase;
 };

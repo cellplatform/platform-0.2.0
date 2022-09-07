@@ -63,3 +63,12 @@ export function ensureSlashStart(input: string) {
 export function ensureSlashEnd(input: string) {
   return `${trimSlashesEnd(input)}/`;
 }
+
+/**
+ * Ensures the path starts and ends in a single "/".
+ */
+export function ensureSlashes(input: string) {
+  input = ensureSlashStart(input);
+  input = ensureSlashEnd(input);
+  return input;
+}

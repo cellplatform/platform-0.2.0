@@ -45,6 +45,7 @@ export function isWithin(root: string, path: string) {
 
   if (root === '.') root = '';
   if (root === '..' || includesStepup(root)) return false;
+  if (path === '.') return true;
 
   const filename = path.substring(path.lastIndexOf('/') + 1);
   return join(root, path).length > filename.length;

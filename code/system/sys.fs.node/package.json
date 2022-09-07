@@ -6,12 +6,14 @@
     "dev": "vite",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "sample": "ts-node-esm -T ./script.ts/sample.node.mts"
   },
   "dependencies": {
     "sys.fs": "^0.0.0"
   },
   "devDependencies": {
+    "sys.fs.spec": "^0.0.0",
     "sys.test": "^0.0.0"
   },
   "license": "MIT",

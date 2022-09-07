@@ -11,10 +11,10 @@ export function BusControllerIndexer(args: {
   id: FilesystemId;
   bus: t.EventBus<t.FsBusEvent>;
   driver: t.FsDriver;
-  indexer: t.FsIndexer;
   events: t.FsBusEvents;
 }) {
-  const { id, driver, bus, events, indexer } = args;
+  const { id, driver, bus, events } = args;
+  const { io, indexer } = driver;
 
   /**
    * Manifest.
@@ -46,9 +46,9 @@ export function BusControllerIndexer(args: {
     };
 
     const toManifest = async (path?: string): Promise<t.FsBusManifestDirResponse> => {
-      const dir = Path.ensureSlashEnd(path ? Path.join(driver.dir, path) : driver.dir);
+      const dir = Path.ensureSlashEnd(path ? Path.join(io.dir, path) : io.dir);
 
-      const cache = ManifestCache({ driver, dir, filename: cachefile });
+      const cache = ManifestCache({ io, dir, filename: cachefile });
       try {
         if (e.cache === true) {
           const manifest = await cache.read();

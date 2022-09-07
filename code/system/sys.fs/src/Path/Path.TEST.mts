@@ -1,6 +1,5 @@
 import { expect, describe, it } from '../TEST/index.mjs';
-import { Path } from './index.mjs';
-import { PathUri } from '../PathUri/index.mjs';
+import { Path, PathUri } from './index.mjs';
 
 describe('Path', () => {
   it('Uri', () => {
@@ -49,6 +48,11 @@ describe('Path', () => {
     test(true, 'root', 'file.png');
     test(true, '/', 'file.png');
     test(true, '/root', 'file.png');
+
+    test(true, '', '.');
+    test(true, '/', '.');
+    test(true, '  /  ', '  .  ');
+    test(true, '    ', '  .  ');
 
     test(false, '', '../file.png');
     test(false, '/', '../file.png');
@@ -131,6 +135,21 @@ describe('Path', () => {
       test('/foo', '/foo');
       test('/foo/  ', '/foo');
       test('/foo  /  ', '/foo');
+    });
+
+    it('ensureSlashes (start AND end)', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureSlashes(input)).to.eql(expected);
+      };
+
+      test('foo', '/foo/');
+      test('   foo   ', '/foo/');
+      test('/', '/');
+      test('', '/');
+      test('   ', '/');
+      test('///', '/');
+      test('///foo/bar', '/foo/bar/');
+      test('foo/bar///', '/foo/bar/');
     });
 
     it('ensureSlashStart', () => {
@@ -277,6 +296,16 @@ describe('Path', () => {
       expect(res.filename).to.eql('.');
       expect(res.name).to.eql('');
       expect(res.ext).to.eql('');
+    });
+
+    it('location: "file:///..."', () => {
+      const test = (input: string, expected: string) => {
+        expect(Path.parts(input).path).to.eql(expected);
+      };
+
+      test('file:///foo.txt', '/foo.txt');
+      test('  file:///foo.txt  ', '/foo.txt');
+      test('file:///foo/bar.txt', '/foo/bar.txt');
     });
   });
 

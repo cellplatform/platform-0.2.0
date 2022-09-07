@@ -7,7 +7,7 @@ describe('BusEvents.Fs', () => {
     it('normalise "root" sub-directory', async () => {
       const mock = TestPrep();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const test = async (dir: string) => {
         const fs = mock.events.fs(dir);
@@ -47,7 +47,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:foo/bar/tree.png', file.data);
+      await mock.driver.io.write('path:foo/bar/tree.png', file.data);
 
       const dir1 = fs.dir('foo');
       const dir2 = dir1.dir('bar');
@@ -71,7 +71,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:foo/bar/tree.png', file.data);
+      await mock.driver.io.write('path:foo/bar/tree.png', file.data);
 
       const test = async (path: string, exists: boolean) => {
         const dir = fs.dir(path);
@@ -94,7 +94,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:foo/bar/tree.png', file.data);
+      await mock.driver.io.write('path:foo/bar/tree.png', file.data);
 
       const test = async (path: string) => {
         const dir = fs.dir(path);
@@ -116,7 +116,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const info = await fs.info('///images/tree.png');
       expect(info.exists).to.eql(true);
@@ -146,7 +146,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/foo/tree.png', file.data);
+      await mock.driver.io.write('path:images/foo/tree.png', file.data);
 
       const info = await fs.info('///images/foo/');
       expect(info.exists).to.eql(true);
@@ -161,7 +161,7 @@ describe('BusEvents.Fs', () => {
     it('within "sub/directory"', async () => {
       const mock = TestPrep();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const fs1 = mock.events.fs();
       const fs2 = mock.events.fs('  images  ');
@@ -189,7 +189,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:foo/bar.json', file.data);
+      await mock.driver.io.write('path:foo/bar.json', file.data);
 
       const test = async (path: string) => {
         const res = await fs.exists(path);
@@ -223,7 +223,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const file = MemoryMock.randomFile();
       const fs = mock.events.fs();
-      await mock.driver.write('path:foo/bar/data.json', file.data);
+      await mock.driver.io.write('path:foo/bar/data.json', file.data);
 
       const test = async (path: any, exists: boolean) => {
         const res = await fs.exists(path);
@@ -251,7 +251,7 @@ describe('BusEvents.Fs', () => {
     it('within "sub/directory"', async () => {
       const mock = TestPrep();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const root = mock.events.fs();
       const subdir = mock.events.fs('images');
@@ -271,7 +271,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const test = async (path: string, expected: boolean) => {
         const res = await fs.is.file(path);
@@ -290,7 +290,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const test = async (path: string, expected: boolean) => {
         const res = await fs.is.dir(path);
@@ -322,8 +322,8 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
-      await mock.driver.write('path:images/foo/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/foo/tree.png', file.data);
 
       const manifest = await fs.manifest();
 
@@ -345,9 +345,9 @@ describe('BusEvents.Fs', () => {
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
 
-      await mock.driver.write('path:root.png', file.data);
-      await mock.driver.write('path:images/tree.png', file.data);
-      await mock.driver.write('path:images/foo/tree.png', file.data);
+      await mock.driver.io.write('path:root.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/foo/tree.png', file.data);
 
       const dir1 = fs.dir('images');
       const dir2 = dir1.dir('  //foo// ');
@@ -371,9 +371,9 @@ describe('BusEvents.Fs', () => {
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
 
-      await mock.driver.write('path:root.png', file.data);
-      await mock.driver.write('path:images/tree.png', file.data);
-      await mock.driver.write('path:images/foo/tree.png', file.data);
+      await mock.driver.io.write('path:root.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/foo/tree.png', file.data);
 
       const manifest1 = await fs.manifest();
       const manifest2 = await fs.manifest({ dir: '  //images// ' });
@@ -398,8 +398,8 @@ describe('BusEvents.Fs', () => {
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
 
-      await mock.driver.write('path:images/tree.png', file.data);
-      await mock.driver.write('path:images/foo/willow.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/foo/willow.png', file.data);
 
       const manifest1 = await fs.manifest({ filter: (e) => e.path.endsWith('.txt') });
       const manifest2 = await fs.manifest({ filter: (e) => e.path.endsWith('/foo/willow.png') });
@@ -416,7 +416,7 @@ describe('BusEvents.Fs', () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
         const file = MemoryMock.randomFile();
-        await mock.driver.write('path:images/tree.png', file.data);
+        await mock.driver.io.write('path:images/tree.png', file.data);
 
         // await fs.write('images/tree.png', src.data);
         const expectCacheExists = async (exists: boolean) => {
@@ -440,7 +440,7 @@ describe('BusEvents.Fs', () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
         const file = MemoryMock.randomFile();
-        await mock.driver.write('path:images/tree.png', file.data);
+        await mock.driver.io.write('path:images/tree.png', file.data);
 
         const expectCacheExists = async (exists: boolean) => {
           const manifest = await fs.json.read(DEFAULT.CACHE_FILENAME);
@@ -460,7 +460,7 @@ describe('BusEvents.Fs', () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
         const file = MemoryMock.randomFile();
-        await mock.driver.write('path:tree.png', file.data);
+        await mock.driver.io.write('path:tree.png', file.data);
 
         const paths = (manifest?: t.DirManifest) =>
           ManifestFiles.sort((manifest?.files || []).map((file) => file.path));
@@ -474,7 +474,7 @@ describe('BusEvents.Fs', () => {
         await fs.manifest({ cache: true });
         await expectManifestPaths(['tree.png']);
 
-        await mock.driver.write('path:images/foo.png', file.data);
+        await mock.driver.io.write('path:images/foo.png', file.data);
 
         // No change (filesystem changed BUT cached).
         await expectManifestPaths(['tree.png']);
@@ -503,7 +503,7 @@ describe('BusEvents.Fs', () => {
         const mock = TestPrep();
         const fs = mock.events.fs();
         const file = MemoryMock.randomFile();
-        await mock.driver.write('path:tree.png', file.data);
+        await mock.driver.io.write('path:tree.png', file.data);
 
         const cachefile = 'index.json';
         const paths = (manifest?: t.DirManifest) =>
@@ -536,7 +536,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:tree.png', file.data);
+      await mock.driver.io.write('path:tree.png', file.data);
 
       const res = await fs.read('404.png');
       expect(res).to.eql(undefined);
@@ -548,7 +548,7 @@ describe('BusEvents.Fs', () => {
       const mock = TestPrep();
       const fs = mock.events.fs();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const test = async (path: string) => {
         const res = await fs.read(path);
@@ -568,7 +568,7 @@ describe('BusEvents.Fs', () => {
     it('read within "/sub-directory"', async () => {
       const mock = TestPrep();
       const file = MemoryMock.randomFile();
-      await mock.driver.write('path:images/tree.png', file.data);
+      await mock.driver.io.write('path:images/tree.png', file.data);
 
       const test = async (dir: string, path: string) => {
         const fs = mock.events.fs({ dir });
@@ -620,7 +620,7 @@ describe('BusEvents.Fs', () => {
         const res = await fs.write(uri, data);
         expect(await mock.fileExists(uri)).to.eql(true);
 
-        const file = (await mock.driver.read(uri)).file as t.FsDriverFileData;
+        const file = (await mock.driver.io.read(uri)).file as t.FsDriverFileData;
         const hash = Hash.sha256(file.data);
         expect(file.hash).to.eql(hash);
         expect(res.hash).to.eql(hash);
@@ -824,7 +824,7 @@ describe('BusEvents.Fs', () => {
 
       const path = 'path:foo/data.json';
       const write = await fs.json.write(path, data);
-      const file = (await mock.driver.read(path)).file;
+      const file = (await mock.driver.io.read(path)).file;
 
       const read = await fs.json.read(path);
       expect(write.hash).to.eql(file?.hash);

@@ -39,7 +39,7 @@ import { Builder, fs, pc, Util } from './common/index.mjs';
   };
 
   console.log();
-  console.log(statusColor(ok, 'test results:'));
+  console.log(statusColor(ok, ok ? 'all tests passed' : 'some failures'));
   paths.forEach((path) => console.log(` ${bullet(path)} ${Util.formatPath(path)}`));
   console.log();
   console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
