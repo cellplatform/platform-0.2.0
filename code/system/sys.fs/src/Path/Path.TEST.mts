@@ -300,8 +300,7 @@ describe('Path', () => {
 
     it('location: "file:///..."', () => {
       const test = (input: string, expected: string) => {
-        const res = Path.parts(input);
-        expect(res.path).to.eql(expected);
+        expect(Path.parts(input).path).to.eql(expected);
       };
 
       test('file:///foo.txt', '/foo.txt');
