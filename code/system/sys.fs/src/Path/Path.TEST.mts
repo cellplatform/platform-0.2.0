@@ -1,6 +1,5 @@
 import { expect, describe, it } from '../TEST/index.mjs';
-import { Path } from './index.mjs';
-import { PathUri } from '../PathUri/index.mjs';
+import { Path, PathUri } from './index.mjs';
 
 describe('Path', () => {
   it('Uri', () => {
@@ -297,6 +296,17 @@ describe('Path', () => {
       expect(res.filename).to.eql('.');
       expect(res.name).to.eql('');
       expect(res.ext).to.eql('');
+    });
+
+    it('location: "file:///..."', () => {
+      const test = (input: string, expected: string) => {
+        const res = Path.parts(input);
+        expect(res.path).to.eql(expected);
+      };
+
+      test('file:///foo.txt', '/foo.txt');
+      test('  file:///foo.txt  ', '/foo.txt');
+      test('file:///foo/bar.txt', '/foo/bar.txt');
     });
   });
 
