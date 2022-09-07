@@ -69,10 +69,10 @@ const InfoSpec = (ctx: t.SpecContext) => {
       const res3 = await driver.info('path:foo/bar/');
       const res4 = await driver.info('path:404');
 
-      expect(res1.kind).to.eql('file');
-      expect(res2.kind).to.eql('dir');
-      expect(res3.kind).to.eql('dir');
-      expect(res4.kind).to.eql('unknown');
+      expect(res1.kind).to.eql('file', res1.kind);
+      expect(res2.kind).to.eql('dir', res2.kind);
+      expect(res3.kind).to.eql('dir', res3.kind);
+      expect(res4.kind).to.eql('unknown', res4.kind);
     });
   });
 };
@@ -210,9 +210,9 @@ const DeleteSpec = (ctx: t.SpecContext) => {
 
       const path = '  path:foo/bar.png  ';
       const png = MemoryMock.randomFile();
-      await mock.io.write(path, png.data);
+      await mock.driver.write(path, png.data);
 
-      const res = await mock.io.delete(path);
+      const res = await mock.driver.delete(path);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
@@ -225,10 +225,10 @@ const DeleteSpec = (ctx: t.SpecContext) => {
 
       const file1 = MemoryMock.randomFile();
       const file2 = MemoryMock.randomFile(500);
-      await mock.io.write('path:foo/bar.png', file1.data);
-      await mock.io.write('path:thing.pdf', file2.data);
+      await mock.driver.write('path:foo/bar.png', file1.data);
+      await mock.driver.write('path:thing.pdf', file2.data);
 
-      const res = await mock.io.delete(['path:foo/bar.png', 'path:404', 'path:thing.pdf']);
+      const res = await mock.driver.delete(['path:foo/bar.png', 'path:404', 'path:thing.pdf']);
 
       expect(res.ok).to.eql(true);
       expect(res.status).to.eql(200);
