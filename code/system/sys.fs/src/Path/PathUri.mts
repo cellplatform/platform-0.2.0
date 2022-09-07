@@ -41,7 +41,7 @@ export const PathUri = {
   /**
    * Ensures the given string is cleaned/trimmed and has "path:" as a prefix
    */
-  ensureUriPrefix(input: string, options: { throw?: boolean } = {}) {
+  ensureUriPrefix(input: UriString, options: { throw?: boolean } = {}) {
     const throwOrReturnInvalid = () => {
       if (options.throw) throw new Error(`Invalid input "${input}"`);
       return '';
@@ -55,9 +55,9 @@ export const PathUri = {
   },
 
   /**
-   * Remotes the "path:" prefix from the given string.
+   * Removes the "path:" prefix from the given string.
    */
-  trimUriPrefix(input: string) {
+  trimUriPrefix(input: UriString) {
     const path = trim(input);
     return path ? path.replace(/^path:/, '').trim() : '';
   },

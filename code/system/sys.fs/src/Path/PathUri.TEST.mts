@@ -64,7 +64,7 @@ describe('PathUri', () => {
 
   it('trimUriPrefix', () => {
     const test = (input: any, expected: string) => {
-      expect(PathUri.trimUriPrefix(input)).to.eql(expected);
+      expect(PathUri.trimUriPrefix(input)).to.eql(expected, input);
     };
 
     test('  ', '');
@@ -75,16 +75,19 @@ describe('PathUri', () => {
     test('  path:  foo  ', 'foo');
     test('  path:/foo/bar  ', '/foo/bar');
 
+    test(undefined, '');
     test(null, '');
     test(123, '');
+    test(true, '');
     test({}, '');
+    test([], '');
   });
 
   describe('ensureUriPrefix', () => {
     it('input variants', () => {
       const test = (input: any, expected: string) => {
         const uri = PathUri.ensureUriPrefix(input);
-        expect(uri.startsWith('path:')).to.eql(true, uri);
+        expect(uri.startsWith('path:')).to.eql(true, input);
         expect(uri).to.eql(expected, input);
 
         const path = PathUri.path(uri);
@@ -127,11 +130,11 @@ describe('PathUri', () => {
       test('path:foo/bar/../zoo', 'path:foo/zoo');
     });
 
-    it('invalid input - stepped out of root (security)', () => {
+    it('invalid input - not a string', () => {
       const test = (input: any) => {
+        expect(PathUri.ensureUriPrefix(input)).to.eql('', input); // NB: no "throw" option.
         const fn = () => PathUri.ensureUriPrefix(input, { throw: true });
         expect(fn).to.throw(/Invalid input/);
-        expect(PathUri.ensureUriPrefix(input)).to.eql('', input);
       };
 
       test(undefined);
@@ -140,6 +143,14 @@ describe('PathUri', () => {
       test(true);
       test({});
       test([]);
+    });
+
+    it('invalid input - stepped out of root (security)', () => {
+      const test = (input: any) => {
+        expect(PathUri.ensureUriPrefix(input)).to.eql('', input); // NB: no "throw" option.
+        const fn = () => PathUri.ensureUriPrefix(input, { throw: true });
+        expect(fn).to.throw(/Invalid input/);
+      };
 
       // Stepped out of root (security)
       test('path:../foo');
