@@ -6,7 +6,7 @@ describe('PathUri', () => {
     expect(PathUri.prefix).to.eql('path');
   });
 
-  it('is', () => {
+  it('isPathUri', () => {
     const test = (input: any, expected: boolean) => {
       expect(PathUri.isPathUri(input)).to.eql(expected);
     };
@@ -18,8 +18,13 @@ describe('PathUri', () => {
     test('  file:foo:123  ', false);
     test('', false);
     test('/foo', false);
+
     test(null, false);
+    test(undefined, false);
     test({}, false);
+    test([], false);
+    test(true, false);
+    test(1234, false);
   });
 
   it('path', () => {

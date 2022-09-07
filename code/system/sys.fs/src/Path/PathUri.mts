@@ -16,7 +16,9 @@ type DirPath = string;
  * A string URI that represents the path to a file.
  * Example:
  *
- *    "path:foo/bar.png"
+ *     |    |                |
+ *     "path:foo/bar/file.png"
+ *     |    |                |
  *
  */
 export const PathUri = {
