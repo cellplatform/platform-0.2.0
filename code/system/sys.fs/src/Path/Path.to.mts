@@ -8,7 +8,7 @@ export function toAbsolutePath(args: { path: string; root: string }) {
 }
 
 /**
- * Convert a valuew to a relative path, using the home ("~") character.
+ * Convert a value to a relative path, using the home ("~") character.
  */
 export function toRelativePath(args: { path: string; root: string }) {
   const root = Clean.root(args.root);
