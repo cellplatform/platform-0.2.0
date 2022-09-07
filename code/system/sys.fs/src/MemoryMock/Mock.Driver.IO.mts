@@ -8,11 +8,11 @@ export type MockInfoHandlerArgs = {
   modify(fn: (info: t.FsDriverInfo) => void): void;
 };
 
-export type MockDriver = {
-  io: t.FsDriverIO;
+export type MockDriverIO = {
+  driver: t.FsDriverIO;
   count: { info: number; read: number; write: number; delete: number; copy: number };
   getState(): StateMap;
-  onInfoRequest(fn: MockInfoHandler): MockDriver;
+  onInfoRequest(fn: MockInfoHandler): MockDriverIO;
 };
 
 /**
@@ -42,7 +42,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     return 'unknown';
   };
 
-  const io: t.FsDriverIO = {
+  const driver: t.FsDriverIO = {
     dir,
     resolve,
 
@@ -206,8 +206,8 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
    * Mock API wrapper of the in-memory <Driver>.
    */
 
-  const mock: MockDriver = {
-    io,
+  const mock: MockDriverIO = {
+    driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
 
     getState() {

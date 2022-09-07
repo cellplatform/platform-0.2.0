@@ -5,8 +5,8 @@ import { BusController } from './index.mjs';
 describe('BusController', function () {
   it('id (specified)', () => {
     const bus = rx.bus<t.FsBusEvent>();
-    const io = MemoryMock.IO().io;
-    const indexer = MemoryMock.Indexer().indexer;
+    const io = MemoryMock.IO().driver;
+    const indexer = MemoryMock.Indexer().driver;
     const driver = { io, indexer };
 
     const id = 'foo';

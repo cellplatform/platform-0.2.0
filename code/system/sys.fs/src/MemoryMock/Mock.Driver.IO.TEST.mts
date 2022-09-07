@@ -23,8 +23,8 @@ describe('MemoryMock: DriverIO (mocking helpers)', () => {
       }
     });
 
-    const res1 = await mock.io.info('path:foo/bar');
-    const res2 = await mock.io.info('   path:bird   '); // NB: whitespace cleaned up.
+    const res1 = await mock.driver.info('path:foo/bar');
+    const res2 = await mock.driver.info('   path:bird   '); // NB: whitespace cleaned up.
 
     expect(res1.uri).to.eql('path:foo/bar');
     expect(res1.exists).to.eql(false);
@@ -44,7 +44,7 @@ describe('MemoryMock: DriverIO (mocking helpers)', () => {
 
     expect(mock.getState()).to.eql({});
 
-    await mock.io.write('path:foo.png', png.data);
+    await mock.driver.write('path:foo.png', png.data);
 
     const state = mock.getState();
     expect(state['/foo.png'].data).to.eql(png.data);

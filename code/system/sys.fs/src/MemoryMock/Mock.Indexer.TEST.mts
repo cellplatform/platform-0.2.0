@@ -1,6 +1,6 @@
-import { describe, it, expect } from '../TEST/index.mjs';
-import { MemoryMock } from './index.mjs';
 import { ManifestHash } from '../Manifest/index.mjs';
+import { describe, expect, it } from '../TEST/index.mjs';
+import { MemoryMock } from './index.mjs';
 
 const MockIndexer = MemoryMock.Indexer;
 
@@ -23,7 +23,7 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
           .addFile('apple.txt', MemoryMock.randomFile().data);
       });
 
-      const res = await mock.indexer.manifest();
+      const res = await mock.driver.manifest();
       expect(mock.count.manifest).to.eql(1);
 
       expect(res.kind).to.eql('dir');
@@ -43,10 +43,10 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
           .addFile('apple.txt');
       });
 
-      const res1 = await mock.indexer.manifest({});
-      const res2 = await mock.indexer.manifest({ dir: 'foo' });
-      const res3 = await mock.indexer.manifest({ dir: '/foo' });
-      const res4 = await mock.indexer.manifest({
+      const res1 = await mock.driver.manifest({});
+      const res2 = await mock.driver.manifest({ dir: 'foo' });
+      const res3 = await mock.driver.manifest({ dir: '/foo' });
+      const res4 = await mock.driver.manifest({
         dir: '/foo',
         filter: ({ path }) => path.endsWith('.jpg'),
       });
@@ -62,15 +62,15 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
     });
 
     it('mock: read from IO { state }', async () => {
-      const driver = MemoryMock.create();
+      const driver = MemoryMock.create().driver;
       const file1 = MemoryMock.randomFile();
       const file2 = MemoryMock.randomFile();
 
       const m1 = await driver.indexer.manifest();
       expect(m1.files).to.eql([]);
 
-      await driver.io.write('path:a.png', file1.data);
-      await driver.io.write('path:b.jpg', file2.data);
+      await driver.io.write('path:/a.png', file1.data);
+      await driver.io.write('path:foo/b.jpg', file2.data);
 
       const m2 = await driver.indexer.manifest();
       expect(m2.files.length).to.eql(2);
@@ -78,11 +78,16 @@ describe('MemoryMock: Indexer (mocking helpers)', () => {
       expect(m2.files[0].filehash).to.eql(file1.hash);
       expect(m2.files[1].filehash).to.eql(file2.hash);
 
-      expect(m2.files[0].path).to.eql('/a.png');
-      expect(m2.files[1].path).to.eql('/b.jpg');
+      expect(m2.files[0].path).to.eql('a.png');
+      expect(m2.files[1].path).to.eql('foo/b.jpg');
 
-      expect(m2.files[0].uri).to.eql('path:/a.png');
-      expect(m2.files[1].uri).to.eql('path:/b.jpg');
+      const m3 = await driver.indexer.manifest({ dir: 'foo' });
+      expect(m3.files.length).to.eql(1);
+      expect(m3.files[0].path).to.eql('foo/b.jpg');
+
+      // NB: "dir" filter not a directory.
+      const m4 = await driver.indexer.manifest({ dir: 'foo/b.jpg' });
+      expect(m4.files).to.eql([]);
     });
   });
 });

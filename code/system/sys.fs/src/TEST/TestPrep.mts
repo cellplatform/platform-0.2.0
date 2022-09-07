@@ -7,30 +7,16 @@ const DEFAULT = MemoryMock.DEFAULT;
  */
 export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
   const { dir = DEFAULT.rootdir, id = `foo.${slug()}` } = options;
-
-  const mocks = {
-    driver: MemoryMock.IO({ dir }),
-    indexer: MemoryMock.Indexer({ dir }).onManifestRequest((e) => {
-      const state = mocks.driver.getState();
-      Object.keys(state).forEach((uri) => {
-        const path = Path.ensureSlashStart(Path.Uri.trimUriPrefix(uri));
-        e.addFile(path, state[uri].data);
-      });
-    }),
-  };
-  const io = mocks.driver.io;
-  const indexer = mocks.indexer.indexer;
-  const driver: t.FsDriver = { io, indexer };
+  const { mocks, driver } = MemoryMock.create(dir);
 
   const bus = rx.bus<t.FsBusEvent>();
   const controller = BusController({ id, driver, bus });
-
   const events = controller.events;
   const { dispose } = events;
 
   const fileExists = async (path: string) => {
     const uri = Path.Uri.ensureUriPrefix(path);
-    return Boolean((await io.read(uri)).file);
+    return Boolean((await driver.io.read(uri)).file);
   };
 
   return {
@@ -39,8 +25,8 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
     bus,
     controller,
     events,
-    driver,
     mocks,
+    driver,
     fileExists,
   };
 };

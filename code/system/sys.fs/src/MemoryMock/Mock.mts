@@ -2,6 +2,7 @@ import { FsMockDriverIO as IO } from './Mock.Driver.IO.mjs';
 import { FsMockIndexer as Indexer } from './Mock.Indexer.mjs';
 import { randomFile } from './util.mjs';
 import { t, DEFAULT } from './common.mjs';
+import type { GetStateMap } from './MockState.mjs';
 
 /**
  * FUNCTIONAL SPECIFICATION
@@ -31,9 +32,19 @@ export const MemoryMock = {
   Indexer,
   randomFile,
 
-  create(dir?: string): t.FsDriver {
-    const { io, getState } = IO({ dir });
-    const { indexer } = Indexer({ dir, getState });
-    return { io, indexer };
+  create(dir?: string) {
+    const getState: GetStateMap = () => mocks.io.getState();
+
+    const mocks = {
+      io: IO({ dir }),
+      indexer: Indexer({ dir, getState }),
+    };
+
+    const driver: t.FsDriver = {
+      io: mocks.io.driver,
+      indexer: mocks.indexer.driver,
+    };
+
+    return { driver, mocks };
   },
 };

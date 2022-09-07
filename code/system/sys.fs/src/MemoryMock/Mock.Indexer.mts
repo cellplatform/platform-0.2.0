@@ -1,13 +1,14 @@
 import { ManifestHash, ManifestFiles } from '../Manifest/index.mjs';
 import { DEFAULT, t, Time, Path, Hash } from './common.mjs';
 import { randomFile } from './util.mjs';
-import { MockState, StateMap } from './MockState.mjs';
+import { MockState } from './MockState.mjs';
+import type { GetStateMap } from './MockState.mjs';
 
 type DirString = string;
 
 export type MockIndexer = {
-  readonly indexer: t.FsIndexer;
-  readonly count: { manifest: number };
+  driver: t.FsIndexer;
+  count: { manifest: number };
   onManifestRequest(fn: MockManifestHandler): MockIndexer;
 };
 
@@ -20,14 +21,12 @@ export type MockManifestHandlerArgs = {
 /**
  * Mock in-memory filesystem [Indexer] implementation.
  */
-export function FsMockIndexer(
-  args: { dir?: DirString; getState?: () => StateMap } = {},
-): MockIndexer {
-  let dir = Path.ensureSlashes(args.dir ?? DEFAULT.rootdir);
+export function FsMockIndexer(args: { dir?: DirString; getState?: GetStateMap } = {}): MockIndexer {
+  const rootDir = Path.ensureSlashes(args.dir ?? DEFAULT.rootdir);
   let _onManifestReq: undefined | MockManifestHandler;
 
-  const indexer: t.FsIndexer = {
-    dir,
+  const driver: t.FsIndexer = {
+    dir: rootDir,
 
     async manifest(options = {}) {
       mock.count.manifest++;
@@ -47,14 +46,13 @@ export function FsMockIndexer(
           options,
           addFile(path, data) {
             path = formatPath(path);
-            const uri = Path.Uri.ensureUriPrefix(path);
 
             data = data ?? randomFile().data;
             const bytes = data.byteLength;
             const filehash = Hash.sha256(data);
 
             files = files.filter((file) => file.path !== path); // NB: Ensure no repeats.
-            files.push({ uri, path, filehash, bytes });
+            files.push({ path, filehash, bytes });
             return args;
           },
         };
@@ -63,13 +61,20 @@ export function FsMockIndexer(
       }
 
       if (options.dir) {
-        const dir = formatPath(options.dir);
-        files = files.filter((file) => file.path.startsWith(dir));
+        let filterDir = formatPath(options.dir);
+        if (filterDir) {
+          filterDir = Path.ensureSlashEnd(filterDir);
+          files = files.filter((file) => {
+            const dir = Path.parts(file.path).dir;
+            return Path.ensureSlashEnd(dir).startsWith(filterDir);
+          });
+        }
       }
 
       if (options.filter) {
         files = files.filter((file) => {
-          const args: t.FsPathFilterArgs = { path: file.path, is: { dir: false, file: true } };
+          const is = { dir: false, file: true };
+          const args: t.FsPathFilterArgs = { path: file.path, is };
           return options.filter?.(args);
         });
       }
@@ -87,7 +92,7 @@ export function FsMockIndexer(
    */
 
   const mock: MockIndexer = {
-    indexer,
+    driver,
     count: { manifest: 0 },
 
     onManifestRequest(fn: MockManifestHandler): typeof mock {
