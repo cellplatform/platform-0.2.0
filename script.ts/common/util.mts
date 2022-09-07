@@ -2,7 +2,6 @@ import { pc, fs, glob, TopologicalSort, filesize } from './libs.mjs';
 
 type Package = { name: string; dependencies?: PackageDeps; devDependencies?: PackageDeps };
 type PackageDeps = { [key: string]: string };
-type RenderColor = (value?: string | number | boolean | null) => string;
 
 export const Util = {
   async loadPackageJson() {
