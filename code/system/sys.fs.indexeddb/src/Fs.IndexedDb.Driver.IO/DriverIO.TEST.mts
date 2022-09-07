@@ -1,19 +1,27 @@
 import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
 import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.mjs';
 import { FsIndexedDb } from '../index.mjs';
+import { DbLookup } from '../IndexedDb/index.mjs';
 
 describe('FsDriver (IndexedDB)', () => {
-  const testCreate = async () => {
+  const testCreate = async (options: { dir?: string } = {}) => {
+    const { dir } = options;
     const id = `fs:test.${slug()}`;
-    const fs = await FsIndexedDb({ id });
+    const fs = await FsIndexedDb({ id, dir });
     const sample = MemoryMock.randomFile();
     return { fs, sample };
   };
 
   describe('paths', () => {
-    it('exposes root (dir)', async (g) => {
+    it('default root directory', async (g) => {
       const { fs } = await testCreate();
-      expect(fs.driver.io.dir).to.eql('/'); // NB: Not part of a wider file-system.
+      expect(fs.driver.io.dir).to.eql('/');
+      fs.dispose();
+    });
+
+    it('custom root driver directory', async () => {
+      const { fs } = await testCreate({ dir: 'root/foo' });
+      expect(fs.driver.io.dir).to.eql('/root/foo/');
       fs.dispose();
     });
 
@@ -51,17 +59,37 @@ describe('FsDriver (IndexedDB)', () => {
   });
 
   describe('info', () => {
-    it('path:uri', async () => {
+    it('no root dir', async () => {
       const { fs, sample } = await testCreate();
       const png = sample.data;
       const uri = 'path:foo/bird.png';
       await fs.driver.io.write(uri, png);
 
       const res = await fs.driver.io.info(` ${uri}  `);
+      fs.dispose();
+
       expect(res.uri).to.eql(uri);
       expect(res.exists).to.eql(true);
+      expect(res.path).to.eql('/foo/bird.png');
+      expect(res.location).to.eql('file:///foo/bird.png');
+      expect(res.hash).to.eql(sample.hash);
+    });
 
+    it('with root dir', async () => {
+      const { fs, sample } = await testCreate({ dir: 'mock' });
+      const png = sample.data;
+
+      const uri = 'path:foo/bird.png';
+      await fs.driver.io.write(uri, png);
+
+      const res = await fs.driver.io.info(` ${uri}  `);
       fs.dispose();
+
+      expect(res.uri).to.eql(uri);
+      expect(res.exists).to.eql(true);
+      expect(res.path).to.eql('/foo/bird.png');
+      expect(res.location).to.eql('file:///mock/foo/bird.png');
+      expect(res.hash).to.eql(sample.hash);
     });
 
     it('kind: "file"', async () => {
@@ -162,6 +190,32 @@ describe('FsDriver (IndexedDB)', () => {
       await test('path:foo/bar/bird.png');
 
       fs.dispose();
+    });
+
+    it('read/write - custom driver directory', async () => {
+      const { fs, sample } = await testCreate({ dir: 'root' });
+      const uri = 'path:a.png';
+      const res1 = await fs.driver.io.write(uri, sample.data);
+
+      expect(res1.file.path).to.eql('/a.png');
+      expect(res1.file.location).to.eql('file:///root/a.png');
+
+      // Check the raw database written entry.
+      const lookup = DbLookup(fs.database);
+      const entry = (await lookup.paths())[0];
+      expect(entry.dir).to.eql('/root');
+      expect(entry.path).to.eql('/a.png');
+
+      const res2 = await fs.driver.io.read(uri);
+      expect(res2.status).to.eql(200);
+      expect(res2.file?.data).to.eql(sample.data);
+      expect(res2.file?.path).to.eql('/a.png');
+      expect(res2.file?.location).to.eql('file:///root/a.png');
+
+      const info = await fs.driver.io.info(uri);
+      expect(info.exists).to.eql(true);
+      expect(info.path).to.eql('/a.png');
+      expect(info.location).to.eql('file:///root/a.png');
     });
 
     it('read/write: "string" (TextEncoder | TextDecoder)', async () => {
@@ -328,6 +382,30 @@ describe('FsDriver (IndexedDB)', () => {
 
       fs.dispose();
     });
+
+    it('delete (custom driver directory)', async () => {
+      const { fs, sample } = await testCreate({ dir: 'root' });
+      const uri = 'path:foo.png';
+      await fs.driver.io.write(uri, sample.data);
+
+      const res1 = await fs.driver.io.read(uri);
+      expect(res1.status).to.eql(200);
+
+      const info1 = await fs.driver.io.info(uri);
+      expect(info1.exists).to.eql(true);
+      expect(info1.path).to.eql('/foo.png');
+      expect(info1.location).to.eql('file:///root/foo.png');
+
+      const res2 = await fs.driver.io.delete(uri);
+      expect(res2.status).to.eql(200);
+      expect(res2.locations).to.eql(['file:///root/foo.png']);
+
+      const info2 = await fs.driver.io.info(uri);
+      const res3 = await fs.driver.io.read(uri);
+
+      expect(info2.exists).to.eql(false);
+      expect(res3.status).to.eql(404);
+    });
   });
 
   describe('copy', () => {
@@ -339,16 +417,50 @@ describe('FsDriver (IndexedDB)', () => {
       expect((await fs.driver.io.read(targetUri)).status).to.eql(404);
 
       await fs.driver.io.write(sourceUri, sample.data);
-      const res = await fs.driver.io.copy(sourceUri, targetUri);
+      const res1 = await fs.driver.io.copy(sourceUri, targetUri);
 
-      expect(res.ok).to.eql(true);
-      expect(res.status).to.eql(200);
-      expect(res.source).to.eql(sourceUri);
-      expect(res.target).to.eql(targetUri);
-      expect(res.error).to.eql(undefined);
+      expect(res1.ok).to.eql(true);
+      expect(res1.status).to.eql(200);
+      expect(res1.source).to.eql(sourceUri);
+      expect(res1.target).to.eql(targetUri);
+      expect(res1.error).to.eql(undefined);
 
-      expect((await fs.driver.io.read(targetUri)).status).to.eql(200);
-      expect((await fs.driver.io.read(targetUri)).file?.data).to.eql(sample.data);
+      const res2 = await fs.driver.io.read(sourceUri);
+      const res3 = await fs.driver.io.read(targetUri);
+
+      expect(res2.status).to.eql(200);
+      expect(res2.file?.data).to.eql(sample.data);
+
+      expect(res3.status).to.eql(200);
+      expect(res3.file?.data).to.eql(sample.data);
+
+      fs.dispose();
+    });
+
+    it('copy (custom driver directory)', async () => {
+      const { fs, sample } = await testCreate({ dir: 'root/folder' });
+      const sourceUri = `path:bird`;
+      const targetUri = `path:/foo/bar.png`;
+
+      await fs.driver.io.write(sourceUri, sample.data);
+      const res1 = await fs.driver.io.copy(sourceUri, targetUri);
+
+      expect(res1.ok).to.eql(true);
+      expect(res1.status).to.eql(200);
+      expect(res1.source).to.eql(sourceUri);
+      expect(res1.target).to.eql(targetUri);
+      expect(res1.error).to.eql(undefined);
+
+      const res2 = await fs.driver.io.read(sourceUri);
+      const res3 = await fs.driver.io.read(targetUri);
+
+      expect(res2.status).to.eql(200);
+      expect(res2.file?.data).to.eql(sample.data);
+      expect(res2.file?.location).to.eql('file:///root/folder/bird');
+
+      expect(res3.status).to.eql(200);
+      expect(res3.file?.data).to.eql(sample.data);
+      expect(res3.file?.location).to.eql('file:///root/folder/foo/bar.png');
 
       fs.dispose();
     });

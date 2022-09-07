@@ -6,8 +6,7 @@ import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
  */
 export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO {
   const { db } = args;
-  const dir = args.dir.trim();
-
+  const dir = Path.ensureSlashes(args.dir);
   const root = dir;
   const lookup = DbLookup(db);
 
@@ -16,7 +15,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
   const driver: t.FsDriverIO = {
     /**
-     * Root directory of the file system.
+     * Root directory of the file system within the store.
      */
     dir,
 
@@ -96,7 +95,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
       const unpack = unpackUri(address);
       const { uri, path, location, withinScope } = unpack;
-      const { dir } = Path.parts(path);
+      const { dir } = Path.parts(location);
 
       const isStream = Stream.isReadableStream(input);
       const data = (isStream ? await Stream.toUint8Array(input) : input) as Uint8Array;
