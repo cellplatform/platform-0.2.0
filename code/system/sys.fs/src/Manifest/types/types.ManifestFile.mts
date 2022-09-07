@@ -7,7 +7,6 @@ export type ManifestFile = {
   path: string;
   bytes: number;
   filehash: string;
-  uri?: string;
   image?: t.ManifestFileImage;
 };
 

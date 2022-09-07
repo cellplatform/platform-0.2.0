@@ -19,10 +19,9 @@ export const MockState = {
 
   toManifestFile(path: string, file: StateMapFile): t.ManifestFile {
     return {
-      path,
+      path: Path.trimSlashesStart(path),
       bytes: file.data.byteLength,
       filehash: file.hash,
-      uri: Path.Uri.ensureUriPrefix(path),
     };
   },
 };
