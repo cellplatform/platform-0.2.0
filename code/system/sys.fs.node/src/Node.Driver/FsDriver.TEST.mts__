@@ -137,4 +137,24 @@ describe('FsDriver (Node)', () => {
       expect(res.error?.path).to.eql('/foobar');
     });
   });
+
+  describe('write', () => {
+    it('writes a file', async () => {
+      //
+      const { driver } = await testCreate();
+
+      const data = new TextEncoder().encode('Hello world!');
+      const uri = 'path:foo.txt';
+
+      const res = await driver.write(uri, data);
+
+      console.log('-------------------------------------------');
+      console.log('----------------------------------------');
+      console.log('res', res);
+    });
+
+    it.skip('write: error', async () => {
+      //
+    });
+  });
 });

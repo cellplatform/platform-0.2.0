@@ -4,11 +4,10 @@ import { NodeFs } from '../node/NodeFs/index.mjs';
 /**
  * A filesystem driver running against the "node-js" POSIX interface.
  */
-export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
+export function FsDriver(options: { dir?: string } = {}): t.FsDriverIO {
   const dir = formatRootDir(options.dir ?? '/');
   const root = dir;
-
-  const resolve = PathResolverFactory({ dir });
+  const resolve = Path.Uri.resolveFactory(dir);
 
   const unpackUri = (uri: string) => {
     uri = (uri || '').trim();
@@ -18,7 +17,7 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
     return { uri, fullpath, path, location };
   };
 
-  const driver: t.FsDriver = {
+  const driver: t.FsDriverIO = {
     /**
      * Root directory of the file system (scope).
      */
@@ -92,7 +91,18 @@ export function FsDriver(options: { dir?: string } = {}): t.FsDriver {
      */
     async write(address, input) {
       const { uri, fullpath, path, location } = unpackUri(address);
-      throw new Error('not implemented');
+
+      try {
+        //
+
+        console.log('input', input);
+        console.log('-------------------------------------------');
+      } catch (err: any) {
+        const error: t.FsError = { code: 'fs:write', message: err.message, path };
+        return { ok: false, status: 500, uri, error };
+      }
+
+      return null as any; // TEMP 🐷
     },
 
     /**

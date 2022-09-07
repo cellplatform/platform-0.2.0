@@ -5,11 +5,17 @@ export * from '../types.mjs';
  */
 export type { Disposable } from 'sys.types';
 export type {
-  FsDriver,
+  FsDriverIO as FsDriver,
   FsDriverInfo,
   //  FsIndexer,
   FsError,
   FsDriverRead,
+  FsDriverWrite,
+
+  /**
+   * TODO 🐷
+   */
+
   //  Manifest,
   //  ManifestFile,
   //  DirManifestInfo,
