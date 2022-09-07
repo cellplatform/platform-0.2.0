@@ -19,7 +19,7 @@ export type MockDriver = {
  * Mock in-memory filesystem [IO] driver implementation.
  */
 export function FsMockDriverIO(options: { dir?: string } = {}) {
-  const { dir = DEFAULT.ROOT_DIR } = options;
+  const { dir = DEFAULT.rootdir } = options;
 
   let _onInfoReq: undefined | MockInfoHandler;
 

@@ -23,7 +23,7 @@ export type MockManifestHandlerArgs = {
 export function FsMockIndexer(
   args: { dir?: DirString; getState?: () => StateMap } = {},
 ): MockIndexer {
-  let dir = Path.ensureSlashes(args.dir ?? DEFAULT.ROOT_DIR);
+  let dir = Path.ensureSlashes(args.dir ?? DEFAULT.rootdir);
   let _onManifestReq: undefined | MockManifestHandler;
 
   const indexer: t.FsIndexer = {

@@ -6,7 +6,7 @@ const DEFAULT = MemoryMock.DEFAULT;
  * Setup a mock FS driver and Controller.
  */
 export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
-  const { dir = DEFAULT.ROOT_DIR, id = `foo.${slug()}` } = options;
+  const { dir = DEFAULT.rootdir, id = `foo.${slug()}` } = options;
 
   const mocks = {
     driver: MemoryMock.IO({ dir }),
