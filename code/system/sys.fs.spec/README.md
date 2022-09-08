@@ -1,8 +1,13 @@
 # sys.fs.spec
-Filesystem specifications.
+Functional Filesystem Specifications.  Types:
+
+- `sys.fs / FsDriver`
+
+<p>&nbsp;</p>
+
 
 ### About
-Executable specifications to run against `sys.fs` (filesystem) implementations 
+An executable set of specifications to run against `sys.fs` driver implementations 
 to certify that they comply with the intended behavior of the 
 filesystem `<Type>` abstraction.
 
@@ -25,3 +30,9 @@ See [`Spec.TEST.mts`](/src/Spec.TEST.mts) for usage example of running within a 
 
 ```
 
+<p>&nbsp;</p>
+
+To see the specification run (with verbose output) against a `MemoryMock` run:
+
+
+    yarn spec
