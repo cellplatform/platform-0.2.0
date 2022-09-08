@@ -1,6 +1,6 @@
-import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
-import { StateMap } from './MockState.mjs';
 import { Wrangle } from '../Wrangle.mjs';
+import { DEFAULT, Path, R, t } from './common.mjs';
+import { StateMap } from './MockState.mjs';
 
 export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
 export type MockInfoHandlerArgs = {
@@ -111,9 +111,9 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
 
       const params = await Wrangle.io.write(root, address, payload);
       const { error, file } = params;
-      const { data, hash, path } = file;
 
       if (error) return error;
+      const { data, hash, path } = file;
 
       /**
        * TODO 🐷

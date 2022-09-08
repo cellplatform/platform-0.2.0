@@ -55,10 +55,9 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Read from the local file-system.
      */
     async read(address) {
-      const { uri, path, location, withinScope } = unpackUri(address);
-
-      const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
-      if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
+      const params = await Wrangle.io.read(root, address);
+      const { error, path, location } = params;
+      if (error) return error;
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readonly');
       const store = {
@@ -71,15 +70,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
       const data = hash ? (await get<t.BinaryRecord>(store.files, hash))?.data : undefined;
       const bytes = data ? data.byteLength : -1;
 
-      let status = 200;
-      let error: t.FsError | undefined;
-      if (!hash || !data) {
-        status = 404;
-        error = toError('Not found');
-      }
-      const file = !data ? undefined : { path, location, data, hash, bytes };
-      const ok = status.toString().startsWith('2');
-      return { uri, ok, status, file, error };
+      if (!hash || !data) return params.response404();
+      return params.response200({ path, location, data, hash, bytes });
     },
 
     /**
