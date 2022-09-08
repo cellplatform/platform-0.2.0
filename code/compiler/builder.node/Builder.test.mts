@@ -21,7 +21,7 @@ export async function test(
     ui = false,
     silent = false,
     run = false,
-    reporter = 'deault',
+    reporter,
   } = options;
   const args = [];
 
