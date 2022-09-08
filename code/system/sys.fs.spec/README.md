@@ -2,7 +2,12 @@
 Functional Filesystem Specifications.  
 Types:
 
-- `sys.fs / FsDriver`
+```
+sys.fs:  FsDriver
+         - IO
+         - Indexer
+```
+
 
 <p>&nbsp;</p>
 
