@@ -1,6 +1,6 @@
 import { t } from './common.mjs';
-import { FsIOSpec as IO } from './Driver.IO.spec.mjs';
-import { FsIndexerSpec as Indexer } from './Driver.Indexer.spec.mjs';
+import { IOSpec as IO } from './Driver.IO.spec.mjs';
+import { IndexerSpec as Indexer } from './Driver.Indexer.spec.mjs';
 
 /**
  * Functional specification for modules implementing
