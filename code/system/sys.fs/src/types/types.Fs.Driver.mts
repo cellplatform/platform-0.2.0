@@ -12,6 +12,6 @@ export type FsDriverFactory = (dir?: DirPathString) => Promise<t.FsDriver>;
  * or other path addressable [Uint8Array] storage mechanism.
  */
 export type FsDriver = {
-  io: t.FsDriverIO;
+  io: t.FsIO;
   indexer: t.FsIndexer;
 };

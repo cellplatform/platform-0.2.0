@@ -11,7 +11,7 @@ type HttpStatusCode = number;
  *    The low-level bridge into a specific platform file-system API or other form
  *    of path-addressable [Uint8Array] data-storage mechanism.
  */
-export type FsDriverIO = {
+export type FsIO = {
   /**
    * Path to the directory that represents the top-leve "scope" the driver
    * has permission to access within the underlying store.

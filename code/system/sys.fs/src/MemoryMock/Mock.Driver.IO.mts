@@ -10,7 +10,7 @@ export type MockInfoHandlerArgs = {
 };
 
 export type MockDriverIO = {
-  driver: t.FsDriverIO;
+  driver: t.FsIO;
   count: { info: number; read: number; write: number; delete: number; copy: number };
   getState(): StateMap;
   onInfoRequest(fn: MockInfoHandler): MockDriverIO;
@@ -43,7 +43,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     return 'unknown';
   };
 
-  const driver: t.FsDriverIO = {
+  const driver: t.FsIO = {
     dir: root,
     resolve,
 
