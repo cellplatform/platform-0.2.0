@@ -79,8 +79,6 @@ export function FsIO(args: { dir: DirPathString; db: IDBDatabase }): t.FsIO {
       const { dir } = Path.parts(location);
 
       try {
-        if (!path || path === root) throw new Error(`Path out of scope`);
-
         /**
          * TODO 🐷
          * still storing Image data at root driver level (??)

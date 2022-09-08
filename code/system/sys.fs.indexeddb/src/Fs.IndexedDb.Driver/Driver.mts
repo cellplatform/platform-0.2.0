@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 
 import { NAME, ROOT_DIR, t } from '../common/index.mjs';
 import { IndexedDb } from '../IndexedDb/index.mjs';
-import { FsIO } from './Fs.Driver.IO.mjs';
-import { FsIndexer } from './Fs.Driver.Indexer.mjs';
+import { FsIO } from './Driver.IO.mjs';
+import { FsIndexer } from './Driver.Indexer.mjs';
 
 type DirPath = string;
 type FilesystemId = string;

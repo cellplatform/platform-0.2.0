@@ -1,3 +1,3 @@
-export * from './Fs.Driver.mjs';
-export * from './Fs.Driver.Indexer.mjs';
-export * from './Fs.Driver.IO.mjs';
+export * from './Driver.mjs';
+export * from './Driver.Indexer.mjs';
+export * from './Driver.IO.mjs';
