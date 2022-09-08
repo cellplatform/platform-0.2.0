@@ -3,7 +3,7 @@ import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.m
 import { FsIndexedDb } from '../index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 
-describe('FsDriver (IndexedDB)', () => {
+describe('FsIO (IndexedDB)', () => {
   const testCreate = async (options: { dir?: string } = {}) => {
     const { dir } = options;
     const id = `fs:test.${slug()}`;

@@ -15,7 +15,7 @@ export type {
   FsDriverFileData,
   FsDriverFactory,
   FsDriver,
-  FsDriverIO,
+  FsIO,
   FsDriverRead,
   FsDriverWrite,
   FsDriverCopy,
