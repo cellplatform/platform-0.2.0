@@ -11,16 +11,64 @@ type UriString = string;
 export const Wrangle = {
   io: {
     /**
+     * Read
+     */
+    async read(root: DirString, address: UriString) {
+      const unpackUri = Path.Uri.unpacker(root);
+      const { uri, path, location, withinScope, error: unpackError } = unpackUri(address);
+
+      const toError = (msg?: string): t.FsError => {
+        return {
+          code: 'fs:read',
+          message: `Failed to read [${uri}]. ${msg}`.trim(),
+          path,
+        };
+      };
+
+      const checkOutOfScope = (): t.FsDriverRead | undefined => {
+        if (withinScope) return undefined;
+        return { ok: false, status: 422, uri, error: toError(`Path out of scope`) };
+      };
+
+      const checkUnpackError = (): t.FsDriverRead | undefined => {
+        if (!unpackError) return undefined;
+        return { ok: false, status: 500, uri, error: toError(unpackError) };
+      };
+
+      return {
+        uri,
+        path,
+        location,
+        toError,
+
+        get error(): t.FsDriverRead | undefined {
+          const scopeError = checkOutOfScope();
+          if (scopeError) return scopeError;
+
+          const unpackError = checkUnpackError();
+          if (unpackError) return unpackError;
+
+          return undefined;
+        },
+
+        response200(file: t.FsDriverFileData): t.FsDriverRead {
+          return { uri, ok: true, status: 200, file };
+        },
+
+        response404(): t.FsDriverRead {
+          return { uri, ok: false, status: 404, error: toError('Not found') };
+        },
+      };
+    },
+
+    /**
      * Write
      */
     async write(root: DirString, address: UriString, payload: Uint8Array | ReadableStream) {
       if (payload === undefined) throw new Error('No data');
 
       const unpackUri = Path.Uri.unpacker(root);
-
       const { uri, path, location, withinScope, error: unpackError } = unpackUri(address);
-
-      // const e = unpack.error
 
       const toError = (msg?: string): t.FsError => {
         return {
@@ -37,19 +85,29 @@ export const Wrangle = {
       const bytes = data.byteLength;
       const file: t.FsDriverFileData = { path, location, hash, bytes, data };
 
-      return {
+      const checkOutOfScope = (): t.FsDriverWrite | undefined => {
+        if (withinScope) return undefined;
+        return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
+      };
+
+      const checkUnpackError = (): t.FsDriverWrite | undefined => {
+        if (!unpackError) return undefined;
+        return { ok: false, status: 500, uri, file, error: toError(unpackError) };
+      };
+
+      const api = {
         uri,
         file,
         toError,
 
-        get unpackError(): t.FsDriverWrite | undefined {
-          if (!unpackError) return undefined;
-          return { ok: false, status: 500, uri, file, error: toError(unpackError) };
-        },
+        get error(): t.FsDriverWrite | undefined {
+          const scopeError = checkOutOfScope();
+          if (scopeError) return scopeError;
 
-        get outOfScope(): t.FsDriverWrite | undefined {
-          if (withinScope) return undefined;
-          return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
+          const unpackError = checkUnpackError();
+          if (unpackError) return unpackError;
+
+          return undefined;
         },
 
         response200(): t.FsDriverWrite {
@@ -61,6 +119,8 @@ export const Wrangle = {
           return { ok: false, status: 500, uri, file, error };
         },
       };
+
+      return api;
     },
 
     /**
@@ -84,20 +144,25 @@ export const Wrangle = {
         };
       };
 
+      const checkOutOfScope = (): t.FsDriverDelete | undefined => {
+        const invalids = items.filter((item) => !item.withinScope);
+        const length = invalids.length;
+        if (length === 0) return undefined;
+
+        const path = invalids.map((item) => item.rawpath).join('; ');
+        const error = toError(path, 'Path out of scope');
+        const response: t.FsDriverDelete = { ok: false, status: 422, uris, locations, error };
+
+        return response;
+      };
+
       return {
         items,
         parts: { uris, locations, paths },
 
-        get outOfScope(): t.FsDriverDelete | undefined {
-          const invalids = items.filter((item) => !item.withinScope);
-          const length = invalids.length;
-          if (length === 0) return undefined;
-
-          const path = invalids.map((item) => item.rawpath).join('; ');
-          const error = toError(path, 'Path out of scope');
-          const response: t.FsDriverDelete = { ok: false, status: 422, uris, locations, error };
-
-          return response;
+        get error(): t.FsDriverDelete | undefined {
+          const error = checkOutOfScope();
+          return error;
         },
 
         response200(removedUris: string[]): t.FsDriverDelete {
@@ -132,20 +197,25 @@ export const Wrangle = {
         return { ok, status, source: source.uri, target: target.uri, error };
       };
 
+      const checkOutOfScope = (): t.FsDriverCopy | undefined => {
+        if (!source.withinScope) {
+          return done(422, toError(source.rawpath, 'Source path out of scope'));
+        }
+        if (!target.withinScope) {
+          return done(422, toError(target.rawpath, 'Target path out of scope'));
+        }
+        return undefined;
+      };
+
       return {
         done,
         source,
         target,
         toError,
 
-        get outOfScope(): t.FsDriverCopy | undefined {
-          if (!source.withinScope) {
-            return done(422, toError(source.rawpath, 'Source path out of scope'));
-          }
-          if (!target.withinScope) {
-            return done(422, toError(target.rawpath, 'Target path out of scope'));
-          }
-          return undefined;
+        get error(): t.FsDriverCopy | undefined {
+          const error = checkOutOfScope();
+          return error;
         },
 
         response200(): t.FsDriverCopy {

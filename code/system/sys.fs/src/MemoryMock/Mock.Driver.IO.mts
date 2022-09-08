@@ -88,19 +88,18 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async read(address) {
       mock.count.read++;
 
-      const { uri, path, location, withinScope } = unpackUri(address);
-
-      const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
-      if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
+      const params = await Wrangle.io.read(root, address);
+      const { error, path, location } = params;
+      if (error) return error;
 
       const ref = state[path];
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
         const file: t.FsDriverFileData = { path, location, hash, bytes, data };
-        return { uri, ok: true, status: 200, file };
+        return params.response200(file);
       } else {
-        return { uri, ok: false, status: 404, error: toError('Not found') };
+        return params.response404();
       }
     },
 
@@ -111,11 +110,10 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
       mock.count.write++;
 
       const params = await Wrangle.io.write(root, address, payload);
-      const { outOfScope, unpackError, file } = params;
+      const { error, file } = params;
       const { data, hash, path } = file;
 
-      if (outOfScope) return outOfScope;
-      if (unpackError) return unpackError;
+      if (error) return error;
 
       /**
        * TODO 🐷
@@ -138,10 +136,10 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
       mock.count.delete++;
 
       const params = await Wrangle.io.delete(root, input);
-      const { outOfScope } = params;
-      if (outOfScope) return outOfScope;
+      const { error, items } = params;
+      if (error) return error;
 
-      const exists = params.items.filter((item) => Boolean(state[item.path]));
+      const exists = items.filter((item) => Boolean(state[item.path]));
       exists.forEach(({ path }) => delete state[path]);
       return params.response200(exists.map(({ uri }) => uri));
     },
@@ -153,8 +151,8 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
       mock.count.copy++;
 
       const params = await Wrangle.io.copy(root, sourceUri, targetUri);
-      const { source, target, outOfScope } = params;
-      if (outOfScope) return outOfScope;
+      const { source, target, error } = params;
+      if (error) return error;
 
       const ref = state[source.path];
       if (!ref) return params.response404();

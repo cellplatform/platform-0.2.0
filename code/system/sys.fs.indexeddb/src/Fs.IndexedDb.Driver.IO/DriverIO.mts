@@ -54,8 +54,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Read from the local file-system.
      */
-    async read(input) {
-      const { uri, path, location, withinScope } = unpackUri(input);
+    async read(address) {
+      const { uri, path, location, withinScope } = unpackUri(address);
 
       const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
@@ -87,10 +87,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      */
     async write(address, payload) {
       const params = await Wrangle.io.write(root, address, payload);
-
-      const { unpackError, outOfScope, file, uri } = params;
-      if (outOfScope) return outOfScope;
-      if (unpackError) return unpackError;
+      const { error, file, uri } = params;
+      if (error) return error;
 
       const { hash, bytes, data, path, location } = file;
       const { dir } = Path.parts(location);
@@ -134,9 +132,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      */
     async delete(input) {
       const params = await Wrangle.io.delete(root, input);
-      const { items, outOfScope } = params;
-
-      if (outOfScope) return outOfScope;
+      const { items, error } = params;
+      if (error) return error;
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
       const store = {
@@ -185,9 +182,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      */
     async copy(sourceUri, targetUri) {
       const params = await Wrangle.io.copy(root, sourceUri, targetUri);
-      const { source, target, outOfScope } = params;
-
-      if (outOfScope) return outOfScope;
+      const { source, target, error } = params;
+      if (error) return error;
 
       const createPathReference = async (sourceInfo: t.FsDriverInfo, targetPath: string) => {
         const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
