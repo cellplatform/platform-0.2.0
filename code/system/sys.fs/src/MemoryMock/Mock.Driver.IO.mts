@@ -107,9 +107,15 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     /**
      * Write to the local file-system.
      */
-    async write(address, input) {
+    async write(address, payload) {
       mock.count.write++;
-      const { uri, path, location, withinScope } = unpackUri(address);
+
+      const params = await Wrangle.io.write(root, address, payload);
+      const { outOfScope, unpackError, file } = params;
+      const { data, hash, path } = file;
+
+      if (outOfScope) return outOfScope;
+      if (unpackError) return unpackError;
 
       /**
        * TODO 🐷
@@ -121,21 +127,8 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
        */
       //  const image = await Image.toInfo(path, data);
 
-      const data = Stream.isReadableStream(input)
-        ? await Stream.toUint8Array(input)
-        : (input as Uint8Array);
-
-      const hash = Hash.sha256(data);
-      const bytes = data.byteLength;
-      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
-
-      const toError = (message: string): t.FsError => ({ code: 'fs:write', message, path });
-      if (!withinScope)
-        return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
-
       state[path] = { data, hash };
-      const res: t.FsDriverWrite = { uri, ok: true, status: 200, file };
-      return res;
+      return params.response200();
     },
 
     /**
@@ -144,8 +137,9 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async delete(input) {
       mock.count.delete++;
 
-      const params = Wrangle.io.delete(root, input);
-      if (params.outOfScope) return params.outOfScope;
+      const params = await Wrangle.io.delete(root, input);
+      const { outOfScope } = params;
+      if (outOfScope) return outOfScope;
 
       const exists = params.items.filter((item) => Boolean(state[item.path]));
       exists.forEach(({ path }) => delete state[path]);
@@ -158,7 +152,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const params = Wrangle.io.copy(root, sourceUri, targetUri);
+      const params = await Wrangle.io.copy(root, sourceUri, targetUri);
       const { source, target, outOfScope } = params;
       if (outOfScope) return outOfScope;
 

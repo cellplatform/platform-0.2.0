@@ -1,15 +1,72 @@
-import { t } from './common/index.mjs';
+import { t, Stream, Hash } from './common/index.mjs';
 import { Path } from './Path/index.mjs';
 
 type DirString = string;
 type UriString = string;
 
 /**
- * Helpers for wrangling method input values in a consistent manner.
+ * Helpers for wrangling method input values to a Filesystem Driver
+ * implementation in a consistent manner.
  */
 export const Wrangle = {
   io: {
-    delete(root: DirString, input: string | string[]) {
+    /**
+     * Write
+     */
+    async write(root: DirString, address: UriString, payload: Uint8Array | ReadableStream) {
+      if (payload === undefined) throw new Error('No data');
+
+      const unpackUri = Path.Uri.unpacker(root);
+
+      const { uri, path, location, withinScope, error: unpackError } = unpackUri(address);
+
+      // const e = unpack.error
+
+      const toError = (msg?: string): t.FsError => {
+        return {
+          code: 'fs:write',
+          message: `Failed to write [${uri}]. ${msg}`.trim(),
+          path,
+        };
+      };
+
+      const isStream = Stream.isReadableStream(payload);
+      const data = (isStream ? await Stream.toUint8Array(payload) : payload) as Uint8Array;
+
+      const hash = Hash.sha256(data);
+      const bytes = data.byteLength;
+      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
+
+      return {
+        uri,
+        file,
+        toError,
+
+        get unpackError(): t.FsDriverWrite | undefined {
+          if (!unpackError) return undefined;
+          return { ok: false, status: 500, uri, file, error: toError(unpackError) };
+        },
+
+        get outOfScope(): t.FsDriverWrite | undefined {
+          if (withinScope) return undefined;
+          return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
+        },
+
+        response200(): t.FsDriverWrite {
+          return { uri, ok: true, status: 200, file };
+        },
+
+        response500(err: Error): t.FsDriverWrite {
+          const error = toError(err.message);
+          return { ok: false, status: 500, uri, file, error };
+        },
+      };
+    },
+
+    /**
+     * Delete
+     */
+    async delete(root: DirString, input: string | string[]) {
       const unpackUri = Path.Uri.unpacker(root);
 
       const inputs = Array.isArray(input) ? input : [input];
@@ -57,7 +114,10 @@ export const Wrangle = {
       };
     },
 
-    copy(root: DirString, sourceUri: UriString, targetUri: UriString) {
+    /**
+     * Copy
+     */
+    async copy(root: DirString, sourceUri: UriString, targetUri: UriString) {
       const unpackUri = Path.Uri.unpacker(root);
       const source = unpackUri(sourceUri);
       const target = unpackUri(targetUri);

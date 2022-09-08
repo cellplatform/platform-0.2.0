@@ -1,4 +1,4 @@
-import { t, MemoryMock, expect } from './common.mjs';
+import { t, MemoryMock, expect, expectError } from './common.mjs';
 
 const ResolveSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory } = ctx;
@@ -138,6 +138,12 @@ const ReadWriteSpec = (ctx: t.SpecContext) => {
 
       const res = await driver.read('path:foo/bar.txt');
       expect(res.status).to.eql(200);
+    });
+
+    it('exception: no data', async () => {
+      const driver = (await factory()).io;
+      const fn = () => driver.write('path:foo/bird.png', undefined as any);
+      expectError(fn, 'No data');
     });
   });
 };

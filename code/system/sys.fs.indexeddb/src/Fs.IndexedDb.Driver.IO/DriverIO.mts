@@ -85,35 +85,23 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Write to the local file-system.
      */
-    async write(addres, payload) {
-      if (payload === undefined) throw new Error(`No data`);
+    async write(address, payload) {
+      const params = await Wrangle.io.write(root, address, payload);
 
-      const toError = (path: string, msg: string): t.FsError => {
-        const message = `Failed to write [${uri}]. ${msg}`;
-        return { code: 'fs:write', message, path };
-      };
+      const { unpackError, outOfScope, file, uri } = params;
+      if (outOfScope) return outOfScope;
+      if (unpackError) return unpackError;
 
-      const unpack = unpackUri(addres);
-      const { uri, path, location, withinScope } = unpack;
+      const { hash, bytes, data, path, location } = file;
       const { dir } = Path.parts(location);
-
-      const isStream = Stream.isReadableStream(payload);
-      const data = (isStream ? await Stream.toUint8Array(payload) : payload) as Uint8Array;
-
-      const hash = Hash.sha256(data);
-      const bytes = data.byteLength;
-      const file = { path, location, hash, data, bytes };
-
-      if (!withinScope) {
-        return { uri, ok: false, status: 422, file, error: toError(path, `Path out of scope`) };
-      }
-
-      if (unpack.error) {
-        return { ok: false, status: 500, uri, file, error: toError(path, unpack.error) };
-      }
 
       try {
         if (!path || path === root) throw new Error(`Path out of scope`);
+
+        /**
+         * TODO 🐷
+         * still storing Image data at root driver level (??)
+         */
         const image = await Image.toInfo(path, data);
 
         // Delete existing.
@@ -135,10 +123,9 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
         ]);
 
         // Finish up.
-        return { uri, ok: true, status: 200, file };
+        return params.response200();
       } catch (err: any) {
-        const error = toError(path, err.message);
-        return { ok: false, status: 500, uri, file, error };
+        return params.response500(err);
       }
     },
 
@@ -146,8 +133,9 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Delete from the local file-system.
      */
     async delete(input) {
-      const params = Wrangle.io.delete(root, input);
+      const params = await Wrangle.io.delete(root, input);
       const { items, outOfScope } = params;
+
       if (outOfScope) return outOfScope;
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
@@ -196,8 +184,9 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Copy a file.
      */
     async copy(sourceUri, targetUri) {
-      const params = Wrangle.io.copy(root, sourceUri, targetUri);
+      const params = await Wrangle.io.copy(root, sourceUri, targetUri);
       const { source, target, outOfScope } = params;
+
       if (outOfScope) return outOfScope;
 
       const createPathReference = async (sourceInfo: t.FsDriverInfo, targetPath: string) => {

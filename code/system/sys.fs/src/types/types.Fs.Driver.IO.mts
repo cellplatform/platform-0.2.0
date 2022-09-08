@@ -38,12 +38,16 @@ export type FsDriverIO = {
  */
 
 export type FsPathResolver = (uri: PathUriString) => FilePathString;
-export type FsDriverInfoMethod<Info extends FsDriverMeta> = (address: PathUriString) => Promise<Info>;
-export type FsDriverReadMethod<Read extends FsDriverRead> = (address: PathUriString) => Promise<Read>;
+export type FsDriverInfoMethod<Info extends FsDriverMeta> = (
+  address: PathUriString,
+) => Promise<Info>;
+export type FsDriverReadMethod<Read extends FsDriverRead> = (
+  address: PathUriString,
+) => Promise<Read>;
 
 export type FsDriverWriteMethod<Write extends FsDriverWrite> = (
   address: PathUriString,
-  data: Uint8Array | ReadableStream,
+  payload: Uint8Array | ReadableStream,
 ) => Promise<Write>;
 
 export type FsDriverCopyMethod<Copy extends FsDriverCopy> = (
