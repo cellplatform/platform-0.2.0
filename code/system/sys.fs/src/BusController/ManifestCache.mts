@@ -3,7 +3,7 @@ import { DEFAULT, Path, t } from './common.mjs';
 /**
  * Helpers for working with file-caching a directory.
  */
-export function ManifestCache(args: { io: t.FsDriverIO; dir: string; filename?: string }) {
+export function ManifestCache(args: { io: t.FsIO; dir: string; filename?: string }) {
   const { io, dir } = args;
   const filename = Path.trim(args.filename ?? DEFAULT.CACHE_FILENAME);
   const path = Path.join(dir, filename).substring(io.dir.length);

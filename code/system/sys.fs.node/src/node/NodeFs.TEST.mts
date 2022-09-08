@@ -1,10 +1,9 @@
-import { expect, describe, it } from '../../TEST/index.mjs';
-import { fs } from './index.mjs';
-import { NodeGlob } from '../NodeGlob/index.mjs';
+import { expect, describe, it } from '../TEST/index.mjs';
+import { NodeGlob, NodeFs } from './index.mjs';
 
 describe('NodeFs', () => {
-  const methodExists = (method: keyof typeof fs) => {
-    expect(typeof fs[method]).to.eql('function');
+  const methodExists = (method: keyof typeof NodeFs) => {
+    expect(typeof NodeFs[method]).to.eql('function');
   };
 
   it('has "fs-extra"', () => {
@@ -21,6 +20,6 @@ describe('NodeFs', () => {
   });
 
   it('has glob', () => {
-    expect(fs.glob).to.equal(NodeGlob.find);
+    expect(NodeFs.glob).to.equal(NodeGlob.find);
   });
 });

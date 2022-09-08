@@ -1,7 +1,7 @@
 import { describe, it, expect, slug } from '../TEST/index.mjs';
 import { FsIndexedDb } from './index.mjs';
 
-describe('FsIndexedDb', () => {
+describe('FsDriver (IndexedDb)', () => {
   it('default', async () => {
     const db = await FsIndexedDb();
     expect(db.id).to.eql('fs');

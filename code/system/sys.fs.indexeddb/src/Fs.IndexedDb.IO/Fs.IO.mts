@@ -1,19 +1,16 @@
-import { Delete, Hash, Image, NAME, Path, Stream, t, Wrangle } from '../common/index.mjs';
+import { Delete, Image, NAME, Path, t, Wrangle } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
 /**
  * A filesystem driver running against the browser's [IndexedDB] store.
  */
-export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO {
+export function FsIO(args: { dir: string; db: IDBDatabase }): t.FsIO {
   const { db } = args;
   const dir = Path.ensureSlashes(args.dir);
   const root = dir;
   const lookup = DbLookup(db);
 
-  const resolve = Path.Uri.resolver(dir);
-  const unpackUri = Path.Uri.unpacker(dir);
-
-  const driver: t.FsDriverIO = {
+  const driver: t.FsIO = {
     /**
      * Root directory of the file system within the store.
      */
@@ -22,7 +19,7 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Convert the given string to an absolute path.
      */
-    resolve,
+    resolve: Path.Uri.resolver(dir),
 
     /**
      * Retrieve meta-data of a local file.

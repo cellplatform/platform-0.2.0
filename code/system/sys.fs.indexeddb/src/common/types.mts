@@ -5,21 +5,17 @@ import type { ManifestFileImage } from 'sys.fs/src/types.mjs';
  */
 export type { Disposable } from 'sys.types';
 export type {
-  FsDriverInfo,
+  FsDriver,
+  FsIO,
   FsIndexer,
+  FsDriverInfo,
+  FsDriverFactory,
+  FsDriverFile,
   FsError,
   Manifest,
   ManifestFile,
-  DirManifestInfo,
   DirManifest,
-  FsDriverFileData,
-  FsDriverFactory,
-  FsDriver,
-  FsDriverIO,
-  FsDriverRead,
-  FsDriverWrite,
-  FsDriverCopy,
-  FsDriverDelete,
+  DirManifestInfo,
 } from 'sys.fs/src/types.mjs';
 
 /**
@@ -29,7 +25,7 @@ export type { ManifestFileImage };
 export * from '../types.mjs';
 
 /**
- * IndexedDB structures.
+ * IndexedDB table structures.
  */
 type FilePath = string;
 type FileDir = string;

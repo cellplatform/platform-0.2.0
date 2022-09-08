@@ -7,7 +7,7 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "spec": "ts-node-esm  -T ../../../script.ts/cmd.test.mts --run --reporter verbose"
+    "spec": "yarn test --run --reporter verbose"
   },
   "dependencies": {
     "sys.fs": "^0.0.0",

@@ -11,7 +11,7 @@ type HttpStatusCode = number;
  *    The low-level bridge into a specific platform file-system API or other form
  *    of path-addressable [Uint8Array] data-storage mechanism.
  */
-export type FsDriverIO = {
+export type FsIO = {
   /**
    * Path to the directory that represents the top-leve "scope" the driver
    * has permission to access within the underlying store.
@@ -72,7 +72,7 @@ export type FsDriverMeta = {
 /**
  * File (info + data)
  */
-export type FsDriverFileData<I extends FsDriverMeta = FsDriverMeta> = I & { data: Uint8Array };
+export type FsDriverFile<I extends FsDriverMeta = FsDriverMeta> = I & { data: Uint8Array };
 
 /**
  * Operations.
@@ -87,14 +87,14 @@ export type FsDriverRead = {
   ok: boolean;
   status: HttpStatusCode;
   uri: PathUriString;
-  file?: FsDriverFileData<FsDriverMeta>;
+  file?: FsDriverFile<FsDriverMeta>;
   error?: FsError;
 };
 export type FsDriverWrite = {
   ok: boolean;
   status: HttpStatusCode;
   uri: PathUriString;
-  file: FsDriverFileData<FsDriverMeta>;
+  file: FsDriverFile<FsDriverMeta>;
   error?: FsError;
 };
 export type FsDriverDelete = {
