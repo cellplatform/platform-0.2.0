@@ -1,5 +1,6 @@
 # sys.fs.spec
-Functional Filesystem Specifications.  Types:
+Functional Filesystem Specifications.  
+Types:
 
 - `sys.fs / FsDriver`
 
