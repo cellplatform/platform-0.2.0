@@ -4,7 +4,7 @@ export const ManifestSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory } = ctx;
 
   describe('manifest', () => {
-    it('default no files', async () => {
+    it('no files', async () => {
       const driver = await factory();
       const res = await driver.indexer.manifest();
 
@@ -35,37 +35,41 @@ export const ManifestSpec = (ctx: t.SpecContext) => {
       expect(m2.files[1].path).to.eql('foo/b');
     });
 
-    it('sub-dir', async () => {
-      const driver = await factory();
-      const file1 = MemoryMock.randomFile();
-      const file2 = MemoryMock.randomFile();
-      const file3 = MemoryMock.randomFile();
+    describe('sub-directory: manifest({ dir })', () => {
+      it('filter on directory', async () => {
+        const driver = await factory();
+        const file1 = MemoryMock.randomFile();
+        const file2 = MemoryMock.randomFile();
+        const file3 = MemoryMock.randomFile();
 
-      await driver.io.write('path:/a', file1.data);
-      await driver.io.write('path:foo/b', file2.data);
-      await driver.io.write('path:foo/c', file3.data);
+        await driver.io.write('path:/a', file1.data);
+        await driver.io.write('path:foo/b', file2.data);
+        await driver.io.write('path:foo/c', file3.data);
 
-      const m1 = await driver.indexer.manifest();
-      const m2 = await driver.indexer.manifest({ dir: '  ///foo ' });
+        const m1 = await driver.indexer.manifest();
+        const m2 = await driver.indexer.manifest({ dir: '  ///foo ' });
 
-      expect(m1.files.length).to.eql(3);
-      expect(m2.files.length).to.eql(2);
-      expect(m2.files.map((item) => item.path)).to.eql(['foo/b', 'foo/c']);
-    });
+        expect(m1.files.length).to.eql(3);
+        expect(m2.files.length).to.eql(2);
+        expect(m2.files.map((item) => item.path)).to.eql(['foo/b', 'foo/c']);
+      });
 
-    it('not a directory', async () => {
-      const driver = await factory();
-      const file = MemoryMock.randomFile();
+      it('invalid directory filter (path not a folder)', async () => {
+        const driver = await factory();
+        const file = MemoryMock.randomFile();
 
-      await driver.io.write('path:a.png', file.data);
-      await driver.io.write('path:foo/a.png', file.data);
-      await driver.io.write('path:foo/b.png', file.data);
+        await driver.io.write('path:a.png', file.data);
+        await driver.io.write('path:foo/a.png', file.data);
+        await driver.io.write('path:foo/b.png', file.data);
 
-      const m1 = await driver.indexer.manifest({ dir: 'foo' });
-      const m2 = await driver.indexer.manifest({ dir: 'foo/b.png' });
+        const m1 = await driver.indexer.manifest({ dir: 'foo' });
+        const m2 = await driver.indexer.manifest({ dir: 'foo/b.png' });
+        const m3 = await driver.indexer.manifest({ dir: 'foo/bar/404' });
 
-      expect(m1.files.length).to.eql(2);
-      expect(m2.files.length).to.eql(0);
+        expect(m1.files.length).to.eql(2);
+        expect(m2.files.length).to.eql(0);
+        expect(m3.files.length).to.eql(0);
+      });
     });
 
     it('natural sort (filename)', async () => {

@@ -18,7 +18,7 @@ export const IOSpec = {
   ExceptionsSpec,
 
   every(ctx: t.SpecContext) {
-    ctx.describe('IO (Spec)', () => {
+    ctx.describe('I/O (Specification)', () => {
       ResolveSpec(ctx);
       InfoSpec(ctx);
       ReadWriteSpec(ctx);

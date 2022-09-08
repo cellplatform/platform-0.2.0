@@ -11,7 +11,9 @@ export const FsDriverSpec = {
   Indexer,
 
   every(ctx: t.SpecContext) {
-    IO.every(ctx);
-    Indexer.every(ctx);
+    ctx.describe('Driver (Specification)', () => {
+      IO.every(ctx);
+      Indexer.every(ctx);
+    });
   },
 };

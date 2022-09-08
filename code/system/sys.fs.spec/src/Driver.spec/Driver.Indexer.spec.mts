@@ -10,7 +10,7 @@ export const IndexerSpec = {
   ManifestSpec,
 
   every(ctx: t.SpecContext) {
-    ctx.describe('Indexer (Spec)', () => {
+    ctx.describe('Indexer (Specification)', () => {
       DirSpec(ctx);
       ManifestSpec(ctx);
     });
