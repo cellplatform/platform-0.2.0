@@ -1,6 +1,8 @@
 import { Delete, Hash, Image, NAME, Path, Stream, t } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
+type DirString = string;
+
 /**
  * A filesystem driver running against the browser's [IndexedDB] store.
  */
@@ -27,8 +29,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Retrieve meta-data of a local file.
      */
-    async info(uriInput) {
-      const { uri, path, location } = unpackUri(uriInput);
+    async info(input) {
+      const { uri, path, location } = unpackUri(input);
 
       type T = t.FsDriverInfo;
       let kind: T['kind'] = 'unknown';
@@ -54,8 +56,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Read from the local file-system.
      */
-    async read(uriInput) {
-      const { uri, path, location, withinScope } = unpackUri(uriInput);
+    async read(input) {
+      const { uri, path, location, withinScope } = unpackUri(input);
 
       const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
       if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
@@ -85,20 +87,20 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Write to the local file-system.
      */
-    async write(uriInput, dataInput) {
-      if (dataInput === undefined) throw new Error(`No data`);
+    async write(addres, payload) {
+      if (payload === undefined) throw new Error(`No data`);
 
       const toError = (path: string, msg: string): t.FsError => {
         const message = `Failed to write [${uri}]. ${msg}`;
         return { code: 'fs:write', message, path };
       };
 
-      const unpack = unpackUri(uriInput);
+      const unpack = unpackUri(addres);
       const { uri, path, location, withinScope } = unpack;
       const { dir } = Path.parts(location);
 
-      const isStream = Stream.isReadableStream(dataInput);
-      const data = (isStream ? await Stream.toUint8Array(dataInput) : dataInput) as Uint8Array;
+      const isStream = Stream.isReadableStream(payload);
+      const data = (isStream ? await Stream.toUint8Array(payload) : payload) as Uint8Array;
 
       const hash = Hash.sha256(data);
       const bytes = data.byteLength;
@@ -145,19 +147,10 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Delete from the local file-system.
      */
-    async delete(uriInput) {
-      const inputs = Array.isArray(uriInput) ? uriInput : [uriInput];
-      const items = inputs.map((input) => unpackUri(input));
-      const uris = items.map(({ uri }) => uri);
-      const locations = items.map(({ location }) => location);
-      const paths = items.map(({ path }) => path);
-      const outOfScope = items.filter((item) => !item.withinScope);
-
-      if (outOfScope.length > 0) {
-        const path = outOfScope.map((item) => item.rawpath).join('; ');
-        const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
-        return { ok: false, status: 422, uris, locations, error };
-      }
+    async delete(input) {
+      const params = Wrangle.io.delete(root, input);
+      const { items } = params;
+      if (params.outOfScope) return params.outOfScope;
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
       const store = {
@@ -194,17 +187,10 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
           }),
         );
 
-        const uris = res.filter((item) => item.removed).map(({ uri }) => uri);
-        const locations = res.filter((item) => item.removed).map(({ location }) => location);
-
-        return { ok: true, status: 200, uris, locations };
+        const uris = res.filter(({ removed }) => removed).map(({ uri }) => uri);
+        return params.response200(uris);
       } catch (err: any) {
-        const error: t.FsError = {
-          code: 'fs:delete',
-          message: `Failed to delete [${uris.join('; ')}]. ${err.message}`,
-          path: paths.join('; '),
-        };
-        return { ok: false, status: 500, uris, locations, error };
+        return params.response500(err);
       }
     },
 
@@ -262,3 +248,56 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
   return driver;
 }
+
+/**
+ * Helpers for wrangling method input values in a consistent manner.
+ */
+export const Wrangle = {
+  io: {
+    delete(root: DirString, input: string | string[]) {
+      const unpackUri = Path.Uri.unpacker(root);
+
+      const inputs = Array.isArray(input) ? input : [input];
+      const items = inputs.map((input) => unpackUri(input));
+
+      const uris = items.map(({ uri }) => uri);
+      const locations = items.map(({ location }) => location);
+      const paths = items.map(({ path }) => path);
+
+      const params = {
+        items,
+        parts: { uris, locations, paths },
+
+        get outOfScope() {
+          const invalids = items.filter((item) => !item.withinScope);
+          const length = invalids.length;
+          if (length === 0) return undefined;
+
+          const path = invalids.map((item) => item.rawpath).join('; ');
+          const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
+          const response: t.FsDriverDelete = { ok: false, status: 422, uris, locations, error };
+
+          return response;
+        },
+
+        response200(removedUris: string[]) {
+          const removed = items.filter(({ uri }) => removedUris.includes(uri));
+          const uris = removed.map(({ uri }) => uri);
+          const locations = removed.map(({ location }) => location);
+          return { ok: true, status: 200, uris, locations };
+        },
+
+        response500(err: Error): t.FsDriverDelete {
+          const error: t.FsError = {
+            code: 'fs:delete',
+            message: `Failed to delete [${uris.join('; ')}]. ${err.message}`,
+            path: paths.join('; '),
+          };
+          return { ok: false, status: 500, uris, locations, error };
+        },
+      };
+
+      return params;
+    },
+  },
+};

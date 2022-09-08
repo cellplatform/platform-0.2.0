@@ -5,6 +5,8 @@ export const Spec = {
   Driver,
 
   every(ctx: t.SpecContext) {
-    Driver.every(ctx);
+    ctx.describe('Filesystem:Driver (Spec)', () => {
+      Driver.every(ctx);
+    });
   },
 };

@@ -110,7 +110,9 @@ export const FsIndexerSpec = {
   ManifestSpec,
 
   every(ctx: t.SpecContext) {
-    DirSpec(ctx);
-    ManifestSpec(ctx);
+    ctx.describe('Indexer (Spec)', () => {
+      DirSpec(ctx);
+      ManifestSpec(ctx);
+    });
   },
 };

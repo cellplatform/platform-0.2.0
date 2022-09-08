@@ -1,5 +1,6 @@
 import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
 import { StateMap } from './MockState.mjs';
+import { Wrangle } from './Wrangle.mjs';
 
 export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
 export type MockInfoHandlerArgs = {
@@ -19,13 +20,13 @@ export type MockDriverIO = {
  * Mock in-memory filesystem [IO] driver implementation.
  */
 export function FsMockDriverIO(options: { dir?: string } = {}) {
-  const { dir = DEFAULT.rootdir } = options;
+  const root = Path.ensureSlashes(options.dir ?? DEFAULT.rootdir);
 
   let _onInfoReq: undefined | MockInfoHandler;
 
   const state: StateMap = {};
-  const resolve = Path.Uri.resolver(dir);
-  const unpackUri = Path.Uri.unpacker(dir);
+  const resolve = Path.Uri.resolver(root);
+  const unpackUri = Path.Uri.unpacker(root);
 
   const resolveKind = (uri: string): t.FsDriverInfo['kind'] => {
     const { path } = unpackUri(uri);
@@ -43,7 +44,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
   };
 
   const driver: t.FsDriverIO = {
-    dir,
+    dir: root,
     resolve,
 
     /**
@@ -143,21 +144,12 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async delete(input) {
       mock.count.delete++;
 
-      const inputs = Array.isArray(input) ? input : [input];
-      const formatted = inputs.map((input) => unpackUri(input));
-      const items = formatted.filter((item) => state[item.path]);
-      const uris = items.map(({ uri }) => uri);
-      const locations = items.map(({ location }) => location);
-      const outOfScope = formatted.filter((item) => !item.withinScope);
+      const params = Wrangle.io.delete(root, input);
+      if (params.outOfScope) return params.outOfScope;
 
-      if (outOfScope.length > 0) {
-        const path = outOfScope.map((item) => item.rawpath).join('; ');
-        const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
-        return { ok: false, status: 422, uris, locations, error };
-      }
-
-      items.forEach((item) => delete state[item.path]);
-      return { ok: true, status: 200, uris, locations };
+      const exists = params.items.filter((item) => Boolean(state[item.path]));
+      exists.forEach(({ path }) => delete state[path]);
+      return params.response200(exists.map(({ uri }) => uri));
     },
 
     /**

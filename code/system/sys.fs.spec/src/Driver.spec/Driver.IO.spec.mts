@@ -316,11 +316,13 @@ export const FsIOSpec = {
   ExceptionsSpec,
 
   every(ctx: t.SpecContext) {
-    ResolveSpec(ctx);
-    InfoSpec(ctx);
-    ReadWriteSpec(ctx);
-    CopySpec(ctx);
-    DeleteSpec(ctx);
-    ExceptionsSpec(ctx);
+    ctx.describe('IO (Spec)', () => {
+      ResolveSpec(ctx);
+      InfoSpec(ctx);
+      ReadWriteSpec(ctx);
+      CopySpec(ctx);
+      DeleteSpec(ctx);
+      ExceptionsSpec(ctx);
+    });
   },
 };
