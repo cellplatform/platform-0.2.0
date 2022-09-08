@@ -98,7 +98,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
-        const file: t.FsDriverFileData = { path, location, hash, bytes, data };
+        const file: t.FsDriverFile = { path, location, hash, bytes, data };
         return params.response200(file);
       } else {
         return params.response404();

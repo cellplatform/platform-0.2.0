@@ -152,7 +152,7 @@ describe('FsIO (IndexedDB)', () => {
         await fs.driver.io.write(uri, sample.data);
 
         const res = await fs.driver.io.read(` ${uri} `);
-        const file = res.file as t.FsDriverFileData;
+        const file = res.file as t.FsDriverFile;
 
         expect(res.uri).to.eql(uri);
         expect(res.ok).to.eql(true);

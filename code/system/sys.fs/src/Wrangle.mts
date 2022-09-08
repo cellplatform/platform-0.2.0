@@ -97,7 +97,7 @@ export const Wrangle = {
           return undefined;
         },
 
-        response200(file: t.FsDriverFileData): t.FsDriverRead {
+        response200(file: t.FsDriverFile): t.FsDriverRead {
           return { uri, ok: true, status: 200, file };
         },
 
@@ -129,7 +129,7 @@ export const Wrangle = {
 
       const hash = Hash.sha256(data);
       const bytes = data.byteLength;
-      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
+      const file: t.FsDriverFile = { path, location, hash, bytes, data };
 
       const checkOutOfScope = (): t.FsDriverWrite | undefined => {
         if (withinScope) return undefined;

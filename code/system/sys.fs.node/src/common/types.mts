@@ -8,7 +8,7 @@ export type {
   FsIndexer,
   FsDriverInfo,
   FsDriverFactory,
-  FsDriverFileData,
+  FsDriverFile,
   FsError,
   Manifest,
   ManifestFile,
