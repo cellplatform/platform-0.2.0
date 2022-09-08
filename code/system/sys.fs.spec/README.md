@@ -16,8 +16,6 @@ to verify they comply with the intended behavior of the filesystem's plugin `<Ty
 
 ---
 
-<p>&nbsp;</p>
-
 ### Usage
 See [`Spec.TEST.mts`](/src/Spec.TEST.mts) for usage example of running within a test-runner.
 
