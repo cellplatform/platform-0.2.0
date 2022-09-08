@@ -27,8 +27,10 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
     /**
      * Retrieve meta-data of a local file.
      */
-    async info(input) {
-      const { uri, path, location } = unpackUri(input);
+    async info(address) {
+      const params = await Wrangle.io.info(root, address);
+      const { uri, path, location, error } = params;
+      if (error) return error;
 
       type T = t.FsDriverInfo;
       let kind: T['kind'] = 'unknown';

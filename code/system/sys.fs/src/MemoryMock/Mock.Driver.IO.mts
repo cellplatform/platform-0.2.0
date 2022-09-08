@@ -53,7 +53,9 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async info(address) {
       mock.count.info++;
 
-      const { uri, path, location } = unpackUri(address);
+      const { uri, path, location, error } = await Wrangle.io.info(root, address);
+      if (error) return error;
+
       const ref = state[path];
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);

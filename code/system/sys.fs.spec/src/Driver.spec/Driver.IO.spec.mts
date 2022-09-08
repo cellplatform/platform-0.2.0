@@ -38,6 +38,7 @@ const InfoSpec = (ctx: t.SpecContext) => {
       expect(res.location).to.eql('file:///mock/foo/bar.txt');
       expect(res.hash).to.eql('');
       expect(res.bytes).to.eql(-1);
+      expect(res.error).to.eql(undefined);
     });
 
     it('root directory ("path:.")', async () => {
@@ -50,6 +51,7 @@ const InfoSpec = (ctx: t.SpecContext) => {
         expect(res.location).to.eql('file:///mock/');
         expect(res.hash).to.eql('');
         expect(res.bytes).to.eql(-1);
+        expect(res.error).to.eql(undefined);
       };
 
       await test('path:/');
@@ -73,6 +75,21 @@ const InfoSpec = (ctx: t.SpecContext) => {
       expect(res2.kind).to.eql('dir', res2.kind);
       expect(res3.kind).to.eql('dir', res3.kind);
       expect(res4.kind).to.eql('unknown', res4.kind);
+    });
+
+    it('error: path out of scope', async () => {
+      const driver = (await factory()).io;
+      const uri = 'path:../foo';
+      const res = await driver.info(uri);
+
+      expect(res.uri).to.eql(uri);
+      expect(res.path).to.eql('');
+      expect(res.location).to.eql('');
+      expect(res.hash).to.eql('');
+      expect(res.bytes).to.eql(-1);
+      expect(res.error?.code).to.eql('fs:info');
+      expect(res.error?.message).to.include('Path out of scope');
+      expect(res.error?.path).to.eql('../foo');
     });
   });
 };

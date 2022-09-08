@@ -81,6 +81,7 @@ export type FsDriverInfo = FsDriverMeta & {
   uri: PathUriString;
   exists: boolean;
   kind: 'file' | 'dir' | 'unknown';
+  error?: FsError;
 };
 export type FsDriverRead = {
   ok: boolean;

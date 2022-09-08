@@ -11,6 +11,52 @@ type UriString = string;
 export const Wrangle = {
   io: {
     /**
+     * Info
+     */
+    async info(root: DirString, address: UriString) {
+      const unpackUri = Path.Uri.unpacker(root);
+      const { uri, path, location, withinScope } = unpackUri(address);
+
+      const toError = (msg?: string): t.FsError => {
+        const path = Path.Uri.trimUriPrefix(uri);
+        return {
+          code: 'fs:info',
+          message: `Failed to retrieve info for [${uri}]. ${msg}`.trim(),
+          path,
+        };
+      };
+
+      const info: t.FsDriverInfo = {
+        uri,
+        exists: false,
+        kind: 'unknown',
+        path,
+        location,
+        hash: '',
+        bytes: -1,
+      };
+
+      const checkOutOfScope = (): t.FsDriverInfo | undefined => {
+        if (withinScope) return undefined;
+        const error = toError('Path out of scope');
+        return { ...info, error };
+      };
+
+      return {
+        uri,
+        path,
+        location,
+        toError,
+        get error(): t.FsDriverInfo | undefined {
+          const scopeError = checkOutOfScope();
+          if (scopeError) return scopeError;
+
+          return undefined;
+        },
+      };
+    },
+
+    /**
      * Read
      */
     async read(root: DirString, address: UriString) {
