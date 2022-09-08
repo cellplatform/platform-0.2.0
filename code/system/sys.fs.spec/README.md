@@ -1,5 +1,5 @@
 # sys.fs.spec
-Filesystem Functional Specifications.  
+Filesystem Functional Specification.  
 Types:
 
 ```
