@@ -1,7 +1,12 @@
 import { Delete, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 
-export function FsIndexer(args: { dir: string; db: IDBDatabase }) {
+type DirPathString = string
+
+/**
+ * Provides indexing (manifest generation) services.
+ */
+export function FsIndexer(args: { dir: DirPathString; db: IDBDatabase }) {
   const { db } = args;
   const rootDir = Path.ensureSlashes(args.dir);
   const lookup = DbLookup(db);

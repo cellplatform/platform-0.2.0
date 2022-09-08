@@ -9,6 +9,7 @@ type DirPath = string;
 type FilesystemId = string;
 
 /**
+ * DRIVER
  * A filesystem driver running against the browser [IndexedDB] store.
  */
 export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {

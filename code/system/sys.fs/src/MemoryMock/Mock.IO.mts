@@ -19,7 +19,7 @@ export type MockDriverIO = {
 /**
  * Mock in-memory filesystem [IO] driver implementation.
  */
-export function FsMockDriverIO(options: { dir?: string } = {}) {
+export function FsMockIO(options: { dir?: string } = {}) {
   const root = Path.ensureSlashes(options.dir ?? DEFAULT.rootdir);
 
   let _onInfoReq: undefined | MockInfoHandler;
