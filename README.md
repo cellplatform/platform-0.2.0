@@ -74,7 +74,7 @@ References (conceptual context):
 The following global commands run from the root of the project and operate on all nested
 sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
 
-These commands also approximate the main CI (continuous integration)
+These commands also approximate the primary CI (continuous integration)
 behavior covered in the [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 when merging a PR into the [`main`] branch.
 
