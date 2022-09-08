@@ -5,21 +5,17 @@ import type { ManifestFileImage } from 'sys.fs/src/types.mjs';
  */
 export type { Disposable } from 'sys.types';
 export type {
-  FsDriverInfo,
+  FsDriver,
+  FsIO,
   FsIndexer,
+  FsDriverInfo,
+  FsDriverFactory,
+  FsDriverFileData,
   FsError,
   Manifest,
   ManifestFile,
-  DirManifestInfo,
   DirManifest,
-  FsDriverFileData,
-  FsDriverFactory,
-  FsDriver,
-  FsIO,
-  FsDriverRead,
-  FsDriverWrite,
-  FsDriverCopy,
-  FsDriverDelete,
+  DirManifestInfo,
 } from 'sys.fs/src/types.mjs';
 
 /**
