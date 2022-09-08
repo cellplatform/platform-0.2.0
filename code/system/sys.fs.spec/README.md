@@ -9,8 +9,8 @@ Types:
 
 ### About
 An executable set of specifications to run against `sys.fs` driver implementations 
-to certify that they comply with the intended behavior of the 
-filesystem `<Type>` abstraction.
+to verify they comply with the intended behavior of the filesystem's plugin `<Type>` definitions.
+
 
 <p>&nbsp;</p>
 
