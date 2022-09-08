@@ -36,7 +36,7 @@ See [`Spec.TEST.mts`](/src/Spec.TEST.mts) for usage example of running within a 
 
 <p>&nbsp;</p>
 
-To see the specification run (with verbose output) against a `MemoryMock` run:
+To see the specification run (with verbose output) against a `MemoryMock`, run:
 
 
     yarn spec
