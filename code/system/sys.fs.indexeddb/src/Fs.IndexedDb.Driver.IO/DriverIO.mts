@@ -1,7 +1,5 @@
-import { Delete, Hash, Image, NAME, Path, Stream, t } from '../common/index.mjs';
+import { Delete, Hash, Image, NAME, Path, Stream, t, Wrangle } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
-
-type DirString = string;
 
 /**
  * A filesystem driver running against the browser's [IndexedDB] store.
@@ -149,8 +147,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      */
     async delete(input) {
       const params = Wrangle.io.delete(root, input);
-      const { items } = params;
-      if (params.outOfScope) return params.outOfScope;
+      const { items, outOfScope } = params;
+      if (outOfScope) return outOfScope;
 
       const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
       const store = {
@@ -189,8 +187,8 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
         const uris = res.filter(({ removed }) => removed).map(({ uri }) => uri);
         return params.response200(uris);
-      } catch (err: any) {
-        return params.response500(err);
+      } catch (error: any) {
+        return params.response500(error);
       }
     },
 
@@ -198,28 +196,9 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
      * Copy a file.
      */
     async copy(sourceUri, targetUri) {
-      const source = unpackUri(sourceUri);
-      const target = unpackUri(targetUri);
-
-      const toError = (path: string, msg?: string): t.FsError => {
-        const message = `Failed to copy from [${source.uri}] to [${target.uri}]. ${msg}`.trim();
-        return { code: 'fs:copy', message, path };
-      };
-
-      const done = (status: number, error?: t.FsError): t.FsDriverCopy => {
-        const ok = status.toString().startsWith('2');
-        return { ok, status, source: source.uri, target: target.uri, error };
-      };
-
-      if (!source.withinScope) {
-        const error = toError(source.rawpath, 'Source path out of scope');
-        return done(422, error);
-      }
-
-      if (!target.withinScope) {
-        const error = toError(target.rawpath, 'Target path out of scope');
-        return done(422, error);
-      }
+      const params = Wrangle.io.copy(root, sourceUri, targetUri);
+      const { source, target, outOfScope } = params;
+      if (outOfScope) return outOfScope;
 
       const createPathReference = async (sourceInfo: t.FsDriverInfo, targetPath: string) => {
         const tx = db.transaction([NAME.STORE.PATHS, NAME.STORE.FILES], 'readwrite');
@@ -231,73 +210,17 @@ export function FsDriverIO(args: { dir: string; db: IDBDatabase }): t.FsDriverIO
 
       try {
         const info = await driver.info(source.uri);
-
-        if (!info.exists) {
-          const error = toError(source.rawpath, 'Source file not found');
-          return done(404, error);
+        if (info.exists) {
+          await createPathReference(info, target.path);
+          return params.response200();
+        } else {
+          return params.response404();
         }
-
-        await createPathReference(info, target.path);
-        return done(200);
-      } catch (err: any) {
-        const error = toError(target.path, err.message);
-        return done(500, error);
+      } catch (error: any) {
+        return params.response500(error);
       }
     },
   };
 
   return driver;
 }
-
-/**
- * Helpers for wrangling method input values in a consistent manner.
- */
-export const Wrangle = {
-  io: {
-    delete(root: DirString, input: string | string[]) {
-      const unpackUri = Path.Uri.unpacker(root);
-
-      const inputs = Array.isArray(input) ? input : [input];
-      const items = inputs.map((input) => unpackUri(input));
-
-      const uris = items.map(({ uri }) => uri);
-      const locations = items.map(({ location }) => location);
-      const paths = items.map(({ path }) => path);
-
-      const params = {
-        items,
-        parts: { uris, locations, paths },
-
-        get outOfScope() {
-          const invalids = items.filter((item) => !item.withinScope);
-          const length = invalids.length;
-          if (length === 0) return undefined;
-
-          const path = invalids.map((item) => item.rawpath).join('; ');
-          const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
-          const response: t.FsDriverDelete = { ok: false, status: 422, uris, locations, error };
-
-          return response;
-        },
-
-        response200(removedUris: string[]) {
-          const removed = items.filter(({ uri }) => removedUris.includes(uri));
-          const uris = removed.map(({ uri }) => uri);
-          const locations = removed.map(({ location }) => location);
-          return { ok: true, status: 200, uris, locations };
-        },
-
-        response500(err: Error): t.FsDriverDelete {
-          const error: t.FsError = {
-            code: 'fs:delete',
-            message: `Failed to delete [${uris.join('; ')}]. ${err.message}`,
-            path: paths.join('; '),
-          };
-          return { ok: false, status: 500, uris, locations, error };
-        },
-      };
-
-      return params;
-    },
-  },
-};

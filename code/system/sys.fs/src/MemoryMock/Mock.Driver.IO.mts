@@ -1,6 +1,6 @@
 import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
 import { StateMap } from './MockState.mjs';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from '../Wrangle.mjs';
 
 export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
 export type MockInfoHandlerArgs = {
@@ -158,39 +158,15 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const source = unpackUri(sourceUri);
-      const target = unpackUri(targetUri);
-
-      const toError = (path: string, message: string): t.FsError => ({
-        code: 'fs:copy',
-        message,
-        path,
-      });
-
-      if (!source.withinScope) {
-        const error = toError(source.rawpath, 'Source path out of scope');
-        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
-      }
-
-      if (!target.withinScope) {
-        const error = toError(target.rawpath, 'Target path out of scope');
-        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
-      }
+      const params = Wrangle.io.copy(root, sourceUri, targetUri);
+      const { source, target, outOfScope } = params;
+      if (outOfScope) return outOfScope;
 
       const ref = state[source.path];
-      if (!ref) {
-        const error = toError(source.rawpath, 'Source file not found');
-        return { ok: false, status: 404, source: source.uri, target: target.uri, error };
-      }
+      if (!ref) return params.response404();
 
       state[target.path] = ref;
-
-      return {
-        ok: true,
-        status: 200,
-        source: source.uri,
-        target: target.uri,
-      };
+      return params.response200();
     },
   };
 
