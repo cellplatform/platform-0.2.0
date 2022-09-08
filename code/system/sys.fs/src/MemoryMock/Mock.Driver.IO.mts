@@ -1,4 +1,5 @@
-import { DEFAULT, Hash, Path, Stream, t, R } from './common.mjs';
+import { Wrangle } from '../Wrangle.mjs';
+import { DEFAULT, Path, R, t } from './common.mjs';
 import { StateMap } from './MockState.mjs';
 
 export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
@@ -19,13 +20,13 @@ export type MockDriverIO = {
  * Mock in-memory filesystem [IO] driver implementation.
  */
 export function FsMockDriverIO(options: { dir?: string } = {}) {
-  const { dir = DEFAULT.rootdir } = options;
+  const root = Path.ensureSlashes(options.dir ?? DEFAULT.rootdir);
 
   let _onInfoReq: undefined | MockInfoHandler;
 
   const state: StateMap = {};
-  const resolve = Path.Uri.resolver(dir);
-  const unpackUri = Path.Uri.unpacker(dir);
+  const resolve = Path.Uri.resolver(root);
+  const unpackUri = Path.Uri.unpacker(root);
 
   const resolveKind = (uri: string): t.FsDriverInfo['kind'] => {
     const { path } = unpackUri(uri);
@@ -43,7 +44,7 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
   };
 
   const driver: t.FsDriverIO = {
-    dir,
+    dir: root,
     resolve,
 
     /**
@@ -52,7 +53,9 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async info(address) {
       mock.count.info++;
 
-      const { uri, path, location } = unpackUri(address);
+      const { uri, path, location, error } = await Wrangle.io.info(root, address);
+      if (error) return error;
+
       const ref = state[path];
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
@@ -87,28 +90,32 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async read(address) {
       mock.count.read++;
 
-      const { uri, path, location, withinScope } = unpackUri(address);
-
-      const toError = (message: string): t.FsError => ({ code: 'fs:read', message, path });
-      if (!withinScope) return { uri, ok: false, status: 422, error: toError(`Path out of scope`) };
+      const params = await Wrangle.io.read(root, address);
+      const { error, path, location } = params;
+      if (error) return error;
 
       const ref = state[path];
       if (ref) {
         const { hash, data } = ref;
         const bytes = data.byteLength;
         const file: t.FsDriverFileData = { path, location, hash, bytes, data };
-        return { uri, ok: true, status: 200, file };
+        return params.response200(file);
       } else {
-        return { uri, ok: false, status: 404, error: toError('Not found') };
+        return params.response404();
       }
     },
 
     /**
      * Write to the local file-system.
      */
-    async write(address, input) {
+    async write(address, payload) {
       mock.count.write++;
-      const { uri, path, location, withinScope } = unpackUri(address);
+
+      const params = await Wrangle.io.write(root, address, payload);
+      const { error, file } = params;
+
+      if (error) return error;
+      const { data, hash, path } = file;
 
       /**
        * TODO 🐷
@@ -120,21 +127,8 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
        */
       //  const image = await Image.toInfo(path, data);
 
-      const data = Stream.isReadableStream(input)
-        ? await Stream.toUint8Array(input)
-        : (input as Uint8Array);
-
-      const hash = Hash.sha256(data);
-      const bytes = data.byteLength;
-      const file: t.FsDriverFileData = { path, location, hash, bytes, data };
-
-      const toError = (message: string): t.FsError => ({ code: 'fs:write', message, path });
-      if (!withinScope)
-        return { uri, ok: false, status: 422, file, error: toError(`Path out of scope`) };
-
       state[path] = { data, hash };
-      const res: t.FsDriverWrite = { uri, ok: true, status: 200, file };
-      return res;
+      return params.response200();
     },
 
     /**
@@ -143,21 +137,13 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async delete(input) {
       mock.count.delete++;
 
-      const inputs = Array.isArray(input) ? input : [input];
-      const formatted = inputs.map((input) => unpackUri(input));
-      const items = formatted.filter((item) => state[item.path]);
-      const uris = items.map(({ uri }) => uri);
-      const locations = items.map(({ location }) => location);
-      const outOfScope = formatted.filter((item) => !item.withinScope);
+      const params = await Wrangle.io.delete(root, input);
+      const { error, items } = params;
+      if (error) return error;
 
-      if (outOfScope.length > 0) {
-        const path = outOfScope.map((item) => item.rawpath).join('; ');
-        const error: t.FsError = { code: 'fs:delete', message: 'Path out of scope', path };
-        return { ok: false, status: 422, uris, locations, error };
-      }
-
-      items.forEach((item) => delete state[item.path]);
-      return { ok: true, status: 200, uris, locations };
+      const exists = items.filter((item) => Boolean(state[item.path]));
+      exists.forEach(({ path }) => delete state[path]);
+      return params.response200(exists.map(({ uri }) => uri));
     },
 
     /**
@@ -166,39 +152,15 @@ export function FsMockDriverIO(options: { dir?: string } = {}) {
     async copy(sourceUri, targetUri) {
       mock.count.copy++;
 
-      const source = unpackUri(sourceUri);
-      const target = unpackUri(targetUri);
-
-      const toError = (path: string, message: string): t.FsError => ({
-        code: 'fs:copy',
-        message,
-        path,
-      });
-
-      if (!source.withinScope) {
-        const error = toError(source.rawpath, 'Source path out of scope');
-        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
-      }
-
-      if (!target.withinScope) {
-        const error = toError(target.rawpath, 'Target path out of scope');
-        return { ok: false, status: 422, source: source.uri, target: target.uri, error };
-      }
+      const params = await Wrangle.io.copy(root, sourceUri, targetUri);
+      const { source, target, error } = params;
+      if (error) return error;
 
       const ref = state[source.path];
-      if (!ref) {
-        const error = toError(source.rawpath, 'Source file not found');
-        return { ok: false, status: 404, source: source.uri, target: target.uri, error };
-      }
+      if (!ref) return params.response404();
 
       state[target.path] = ref;
-
-      return {
-        ok: true,
-        status: 200,
-        source: source.uri,
-        target: target.uri,
-      };
+      return params.response200();
     },
   };
 

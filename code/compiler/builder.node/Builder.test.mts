@@ -12,9 +12,17 @@ export async function test(
     ui?: boolean;
     coverage?: boolean;
     silent?: boolean;
+    reporter?: 'deault' | 'verbose' | 'json' | 'dot' | 'junit';
   } = {},
 ) {
-  const { watch = true, coverage = false, ui = false, silent = false, run = false } = options;
+  const {
+    watch = true,
+    coverage = false,
+    ui = false,
+    silent = false,
+    run = false,
+    reporter,
+  } = options;
   const args = [];
 
   // Filters.
@@ -26,6 +34,7 @@ export async function test(
   if (silent) args.push('--silent');
   if (coverage) args.push('--coverage');
   if (run) args.push('--run');
+  if (reporter) args.push(`--reporter=${reporter}`);
 
   const cmd = `vitest`;
   const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });

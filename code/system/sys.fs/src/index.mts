@@ -1,4 +1,5 @@
 export { MemoryMock } from './MemoryMock/index.mjs';
+export { Wrangle } from './Wrangle.mjs';
 
 export { Manifest, ManifestHash, ManifestFiles } from './Manifest/index.mjs';
 export { Filesystem } from './Filesystem.mjs';

@@ -68,11 +68,11 @@ describe('BusController', function () {
     expect(info1.fs?.id).to.eql('one');
     expect(info2.fs?.id).to.eql('two');
 
-    expect(one.controller.dir).to.match(/\/foo$/);
-    expect(two.controller.dir).to.match(/\/bar$/);
+    expect(one.controller.dir).to.match(/\/foo\/$/);
+    expect(two.controller.dir).to.match(/\/bar\/$/);
 
-    expect(info1.fs?.dir).to.match(/\/foo$/);
-    expect(info2.fs?.dir).to.match(/\/bar$/);
+    expect(info1.fs?.dir).to.match(/\/foo\/$/);
+    expect(info2.fs?.dir).to.match(/\/bar\/$/);
   });
 
   it('controller.fs', async () => {
