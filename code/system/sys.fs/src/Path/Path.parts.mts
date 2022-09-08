@@ -1,8 +1,10 @@
+import { trimFilePrefix } from './Path.trim.mjs';
+
 /**
  * Break a path into it's constituent parts.
  */
 export function parts(input: string) {
-  const path = (input || '').trim().replace(/^file:\/\//, '');
+  const path = trimFilePrefix(input);
 
   let filename = '';
   let dir = '';

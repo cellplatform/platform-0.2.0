@@ -31,10 +31,17 @@ export function trimSlashes(input: string) {
 /**
  * Remove http/https prefix.
  */
-export function trimHttp(input: string) {
+export function trimHttpPrefix(input: string) {
   return trim(input)
     .replace(/^http:\/\//, '')
     .replace(/^https:\/\//, '');
+}
+
+/**
+ * Trims the "file://" prefix if present
+ */
+export function trimFilePrefix(input: string) {
+  return trim(input).replace(/^file:\/\//, '');
 }
 
 /**
