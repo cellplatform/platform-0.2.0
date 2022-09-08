@@ -1,10 +1,12 @@
-import { expect, MemoryMock, t } from './common.mjs';
+import { expect, MemoryMock, t, Path } from './common.mjs';
 
 export const InfoSpec = (ctx: t.SpecContext) => {
-  const { describe, it, factory } = ctx;
+  const { describe, it, factory, root } = ctx;
+
+  const toLocation = (path: string) => Path.toAbsoluteLocation(path, { root });
 
   describe('info', () => {
-    it('no handler', async () => {
+    it('does not exist', async () => {
       const driver = (await factory()).io;
       const uri = '  path:foo/bar.txt  ';
       const res = await driver.info(uri);
@@ -13,7 +15,7 @@ export const InfoSpec = (ctx: t.SpecContext) => {
       expect(res.exists).to.eql(false);
       expect(res.kind).to.eql('unknown');
       expect(res.path).to.eql('/foo/bar.txt');
-      expect(res.location).to.eql('file:///mock/foo/bar.txt');
+      expect(res.location).to.eql(toLocation('foo/bar.txt'));
       expect(res.hash).to.eql('');
       expect(res.bytes).to.eql(-1);
       expect(res.error).to.eql(undefined);
@@ -26,7 +28,7 @@ export const InfoSpec = (ctx: t.SpecContext) => {
 
         expect(res.uri).to.eql('path:/');
         expect(res.path).to.eql('/');
-        expect(res.location).to.eql('file:///mock/');
+        expect(res.location).to.eql(toLocation(''));
         expect(res.hash).to.eql('');
         expect(res.bytes).to.eql(-1);
         expect(res.error).to.eql(undefined);
