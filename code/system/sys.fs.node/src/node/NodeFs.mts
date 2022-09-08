@@ -2,8 +2,8 @@ import { fsextra, path, t } from '../common/index.mjs';
 import { NodeGlob } from './NodeGlob.mjs';
 
 /**
- * An interface for interacting with POSIX style file-systems
- * via the node-js API bindings.
+ * An single interface for interacting with POSIX style
+ * file-systems via the node-js API bindings.
  *
  * Union of:
  *
