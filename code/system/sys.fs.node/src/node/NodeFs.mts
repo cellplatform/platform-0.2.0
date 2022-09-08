@@ -1,5 +1,5 @@
-import { fsextra, path, t } from '../../common/index.mjs';
-import { NodeGlob } from '../NodeGlob/index.mjs';
+import { fsextra, path, t } from '../common/index.mjs';
+import { NodeGlob } from './NodeGlob.mjs';
 
 /**
  * An interface for interacting with POSIX style file-systems
@@ -26,5 +26,3 @@ export const NodeFs: t.NodeFs = {
   ...path,
   glob: NodeGlob.find,
 };
-
-export { NodeFs as default, NodeFs as fs };

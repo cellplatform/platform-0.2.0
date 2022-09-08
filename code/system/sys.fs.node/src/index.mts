@@ -1,1 +1,1 @@
-export { NodeFs } from './node/NodeFs/index.mjs';
+export { NodeFs } from './node/index.mjs';
