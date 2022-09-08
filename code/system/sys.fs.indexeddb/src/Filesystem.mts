@@ -1,4 +1,4 @@
-import { FsIndexedDb as IndexedDb } from './Fs.IndexedDb/index.mjs';
+import { FsIndexedDbDriver as IndexedDb } from './Fs.IndexedDb.Driver/index.mjs';
 import { Path, Filesize, BusController, BusEvents } from 'sys.fs';
 
 export const Filesystem = {

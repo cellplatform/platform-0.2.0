@@ -2,8 +2,8 @@ import { Subject } from 'rxjs';
 
 import { NAME, ROOT_DIR, t } from '../common/index.mjs';
 import { IndexedDb } from '../IndexedDb/index.mjs';
-import { FsIO } from '../Fs.IndexedDb.IO/index.mjs';
-import { FsIndexer } from '../Fs.IndexedDb.Indexer/index.mjs';
+import { FsIO } from './Fs.Driver.IO.mjs';
+import { FsIndexer } from './Fs.Driver.Indexer.mjs';
 
 type DirPath = string;
 type FilesystemId = string;
@@ -12,7 +12,7 @@ type FilesystemId = string;
  * DRIVER
  * A filesystem driver running against the browser [IndexedDB] store.
  */
-export const FsIndexedDb = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {
+export const FsIndexedDbDriver = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {
   const dir = options.dir ?? ROOT_DIR;
   const id = (options.id ?? 'fs').trim();
 

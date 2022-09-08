@@ -1,18 +1,18 @@
 import { Delete, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 
-type DirPathString = string
+type DirPathString = string;
 
 /**
- * Provides indexing (manifest generation) services.
+ * Provides indexing services over the filesystem (manifest generation).
  */
 export function FsIndexer(args: { dir: DirPathString; db: IDBDatabase }) {
   const { db } = args;
-  const rootDir = Path.ensureSlashes(args.dir);
+  const root = Path.ensureSlashes(args.dir);
   const lookup = DbLookup(db);
 
-  const api: t.FsIndexer = {
-    dir: rootDir,
+  const driver: t.FsIndexer = {
+    dir: root,
 
     /**
      * Generate a directory listing manifest.
@@ -28,7 +28,7 @@ export function FsIndexer(args: { dir: DirPathString; db: IDBDatabase }) {
         }
         const dir = Path.trim(options.dir);
         const recordDir = Path.ensureSlashes(record.dir);
-        const matchDir = Path.ensureSlashes(Path.join(rootDir, dir));
+        const matchDir = Path.ensureSlashes(Path.join(root, dir));
 
         return recordDir.startsWith(matchDir);
       };
@@ -52,5 +52,5 @@ export function FsIndexer(args: { dir: DirPathString; db: IDBDatabase }) {
     },
   };
 
-  return api;
+  return driver;
 }
