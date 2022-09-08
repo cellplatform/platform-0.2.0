@@ -1,24 +1,22 @@
-export * from '../types.mjs';
-
 /**
  * @system
  */
 export type { Disposable } from 'sys.types';
 export type {
-  FsDriverIO as FsDriver,
+  FsDriver,
+  FsIO,
+  FsIndexer,
   FsDriverInfo,
-  //  FsIndexer,
+  FsDriverFactory,
+  FsDriverFileData,
   FsError,
-  FsDriverRead,
-  FsDriverWrite,
-
-  /**
-   * TODO 🐷
-   */
-
-  //  Manifest,
-  //  ManifestFile,
-  //  DirManifestInfo,
-  //  DirManifest,
-  //  FsDriverFileData,
+  Manifest,
+  ManifestFile,
+  DirManifest,
+  DirManifestInfo,
 } from 'sys.fs/src/types.mjs';
+
+/**
+ * @local
+ */
+export * from '../types.mjs';

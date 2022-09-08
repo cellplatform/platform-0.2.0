@@ -25,7 +25,7 @@ export type { ManifestFileImage };
 export * from '../types.mjs';
 
 /**
- * IndexedDB structures.
+ * IndexedDB table structures.
  */
 type FilePath = string;
 type FileDir = string;
