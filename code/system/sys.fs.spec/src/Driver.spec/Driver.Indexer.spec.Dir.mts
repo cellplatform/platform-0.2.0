@@ -6,7 +6,8 @@ export const DirSpec = (ctx: t.SpecContext) => {
   describe('dir', () => {
     it('default', async () => {
       const driver = await factory();
-      expect(driver.indexer.dir).to.eql(root);
+      const dir = driver.indexer.dir;
+      expect(dir).to.eql(Path.ensureSlashes(root));
     });
 
     it('custom', async () => {

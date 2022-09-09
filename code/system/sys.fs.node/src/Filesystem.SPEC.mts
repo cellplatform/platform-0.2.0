@@ -17,10 +17,13 @@ describe('FsDriver (Node) - functional specification', () => {
   };
 
   // Spec.every({ root, factory, describe, it });
-  Spec.Driver.IO.InfoSpec({ root, factory, describe, it });
-  Spec.Driver.IO.ReadWriteSpec({ root, factory, describe, it });
-  Spec.Driver.IO.DeleteSpec({ root, factory, describe, it });
-  Spec.Driver.IO.CopySpec({ root, factory, describe, it });
+
+  const ctx = { root, factory, describe, it };
+  Spec.Driver.IO.InfoSpec(ctx);
+  Spec.Driver.IO.ReadWriteSpec(ctx);
+  Spec.Driver.IO.DeleteSpec(ctx);
+  Spec.Driver.IO.CopySpec(ctx);
+  Spec.Driver.Indexer.DirSpec(ctx);
 
   // TEMP 🐷
   it('TMP', async () => {
