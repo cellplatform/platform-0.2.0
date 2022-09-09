@@ -4,9 +4,9 @@ import { glob, t } from '../common/index.mjs';
  * Reference:
  *    https://www.npmjs.com/package/glob
  */
-const find: t.NodeGlobMatcher = (pattern) => {
+const find: t.NodeGlobMatcher = (pattern, options: {} = {}) => {
   return new Promise<string[]>((resolve, reject) => {
-    glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
+    glob(pattern, options, (err, matches) => (err ? reject(err) : resolve(matches)));
   });
 };
 
