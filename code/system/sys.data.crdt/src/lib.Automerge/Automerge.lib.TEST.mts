@@ -1,6 +1,6 @@
+import { Automerge } from '../common/index.mjs';
+import { describe, expect, it, TestFilesystem } from '../TEST/index.mjs';
 import { AutomergeDoc } from './index.mjs';
-import { Automerge, rx, t } from '../common/index.mjs';
-import { expect, describe, it } from '../TEST/index.mjs';
 
 /**
  * https://github.com/automerge/automerge
@@ -13,10 +13,6 @@ describe('Automerge (CRDT)', () => {
     cards: Automerge.List<Card>; // NB: An [Array] type with extension methods (eg. insertAt)
     json?: any;
   };
-
-  // const PATH = TestFilesystem.PATH;
-  const bus = rx.bus();
-  let fs: t.Fs;
 
   function createTestDoc() {
     return AutomergeDoc.init<Doc>((doc) => (doc.cards = []));
@@ -266,40 +262,36 @@ describe('Automerge (CRDT)', () => {
       });
     }
 
-    // const getFilesystem = async (options: { clear?: boolean } = {}) => {
-    //   if (!fs) fs = (await TestFilesystem.init({ bus }).ready()).fs;
-    //   if (options.clear) await TestFilesystem.clear(fs);
-    //   return fs;
-    // };
+    it('save binary', async () => {
+      const { fs } = TestFilesystem.memory();
+      const path = 'myfile.crdt';
+      const doc = await getSampleDoc();
 
-    it.skip('save binary', async () => {
-      //       const fs = await getFilesystem({ clear: true });
-      //       const doc = await getSampleDoc();
-      //       const path = fs.join(PATH.ROOT, 'myfile.crdt');
-      //       const binary = Automerge.save(doc);
-      //
-      //       expect(await fs.exists(path)).to.eql(false);
-      //       await fs.write(path, binary);
-      //       expect(await fs.exists(path)).to.eql(true);
+      const binary = Automerge.save(doc);
+      expect(binary instanceof Uint8Array).to.eql(true);
+
+      expect(await fs.exists(path)).to.eql(false);
+      await fs.write(path, binary);
+      expect(await fs.exists(path)).to.eql(true);
     });
 
     it('load from saved binary', async () => {
-      // const fs = await getFilesystem({ clear: true });
-      // const doc1 = await getSampleDoc();
-      //
-      // const STATE = { cards: [{ title: 'hello', done: false }] };
-      // expect(doc1).to.eql(STATE);
-      //
-      // const path = fs.join(PATH.ROOT, 'myfile.crdt');
-      // await fs.write(path, Automerge.save(doc1));
-      //
-      // const binary = (await fs.read(path)) as Automerge.BinaryDocument;
-      //
-      // const doc2 = Automerge.load(binary);
-      // expect(doc2).to.eql(STATE);
-      //
-      // const { getActorId } = Automerge;
-      // expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
+      const { fs } = TestFilesystem.memory();
+      const path = 'myfile.crdt';
+      const doc1 = await getSampleDoc();
+
+      const STATE = { cards: [{ title: 'hello', done: false }] };
+      expect(doc1).to.eql(STATE);
+
+      await fs.write(path, Automerge.save(doc1));
+
+      const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+
+      const doc2 = Automerge.load(binary);
+      expect(doc2).to.eql(STATE);
+
+      const { getActorId } = Automerge;
+      expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
     });
   });
 
