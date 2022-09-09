@@ -17,7 +17,7 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
   // Log complete build list.
   console.log();
   console.log(pc.green('build list:'));
-  paths.forEach((path) => console.log(pc.green(` ○ ${pc.gray(Util.formatPath(path))}`)));
+  paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
   console.log();
   console.log();
 
