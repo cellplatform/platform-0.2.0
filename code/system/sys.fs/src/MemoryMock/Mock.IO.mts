@@ -1,5 +1,5 @@
 import { Wrangle } from '../Wrangle.mjs';
-import { DEFAULT, Path, R, t } from './common.mjs';
+import { DEFAULT, Path, t } from './common.mjs';
 import { StateMap } from './MockState.mjs';
 
 export type MockDriverIO = {
