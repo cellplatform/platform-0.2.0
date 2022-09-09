@@ -6,11 +6,10 @@
     "dev": "vite",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "vitest"
   },
-  "devDependencies": {
-    "sys.test": "^0.0.0"
-  },
+  "devDependencies": {},
   "license": "MIT",
   "private": true,
   "types": "./types.d/index.d.mts",

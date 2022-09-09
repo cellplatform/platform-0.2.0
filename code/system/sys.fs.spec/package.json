@@ -10,6 +10,7 @@
     "spec": "yarn test --run --reporter verbose"
   },
   "dependencies": {
+    "sys.types": "^0.0.0",
     "sys.fs": "^0.0.0",
     "sys.util": "^0.0.0"
   },
