@@ -5,5 +5,5 @@ export { describe, it } from 'vitest';
 export { MemoryMock } from 'sys.fs.spec';
 
 export * from '../common/index.mjs';
-export * from './TestIndexedDb';
+export * from './TestIndexedDb.mjs';
 export * from './helpers.mjs';
