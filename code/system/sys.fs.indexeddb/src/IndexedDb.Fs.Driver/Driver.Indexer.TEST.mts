@@ -1,5 +1,5 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
-import { IndexedDbDriver } from '../Fs.IndexedDb.Driver/index.mjs';
+import { IndexedDbDriver } from './index.mjs';
 import { deleteAll, describe, expect, it, MemoryMock } from '../TEST/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {

@@ -1,13 +1,13 @@
 import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
 import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.mjs';
-import { FsIndexedDb } from '../index.mjs';
+import { IndexedDbDriver } from '../index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 
 describe('FsIO (IndexedDB)', () => {
   const testCreate = async (options: { dir?: string } = {}) => {
     const { dir } = options;
     const id = `fs:test.${slug()}`;
-    const fs = await FsIndexedDb({ id, dir });
+    const fs = await IndexedDbDriver({ id, dir });
     const sample = MemoryMock.randomFile();
     return { fs, sample };
   };
