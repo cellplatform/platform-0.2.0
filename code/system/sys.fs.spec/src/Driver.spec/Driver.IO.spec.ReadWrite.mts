@@ -1,7 +1,9 @@
-import { expect, expectError, MemoryMock, t } from './common.mjs';
+import { expect, expectError, MemoryMock, t, Path } from './common.mjs';
 
 export const ReadWriteSpec = (ctx: t.SpecContext) => {
-  const { describe, it, factory } = ctx;
+  const { describe, it, factory, root } = ctx;
+
+  const toLocation = (path: string) => Path.toAbsoluteLocation(path, { root });
 
   describe('read/write', () => {
     it('write', async () => {
@@ -17,7 +19,7 @@ export const ReadWriteSpec = (ctx: t.SpecContext) => {
       expect(res.file.data).to.eql(png.data);
       expect(res.file.hash).to.eql(png.hash);
       expect(res.file.path).to.eql('/foo/bar.png');
-      expect(res.file.location).to.eql('file:///mock/foo/bar.png');
+      expect(res.file.location).to.eql(toLocation('/foo/bar.png'));
       expect(res.error).to.eql(undefined);
     });
 
@@ -49,7 +51,7 @@ export const ReadWriteSpec = (ctx: t.SpecContext) => {
       expect(res.file?.data).to.eql(png.data);
       expect(res.file?.hash).to.eql(png.hash);
       expect(res.file?.path).to.eql('/foo/bar.png');
-      expect(res.file?.location).to.eql('file:///mock/foo/bar.png');
+      expect(res.file?.location).to.eql(toLocation('foo/bar.png'));
       expect(res.error).to.eql(undefined);
     });
 

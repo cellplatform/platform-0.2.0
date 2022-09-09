@@ -5,7 +5,8 @@ import {
   ensureSlashStart,
   ensureSlashEnd,
 } from '../Path/Path.trim.mjs';
-import { join, isWithin } from '../Path/Path.join.mjs';
+import { join } from '../Path/Path.join.mjs';
+import { isWithin } from '../Path/Path.within.mjs';
 import { toAbsoluteLocation } from '../Path/Path.to.mjs';
 import { t } from '../common/index.mjs';
 
@@ -97,7 +98,7 @@ export const PathUri = {
 
     const fullpath = error ? '' : resolved.path;
     const path = error ? '' : fullpath.substring(root.length - 1); // NB: hide full path up to root of driver scope.
-    const location = error ? '' : toAbsoluteLocation({ root, path });
+    const location = error ? '' : toAbsoluteLocation(path, { root });
 
     return { uri, root, path, fullpath, rawpath, location, withinScope, error };
   },
@@ -144,8 +145,6 @@ function resolve(root: DirPath, uri: UriString) {
     error: undefined,
   };
 
-  const invalidUriError = (suffix?: string) => `Invalid input URI "${uri}". ${suffix}`.trim();
-
   if (!trim(root)) {
     res.error = `Path resolver must have root directory`;
     return res;
@@ -154,20 +153,20 @@ function resolve(root: DirPath, uri: UriString) {
   root = formatRootDir(root);
 
   if (!PathUri.isPathUri(uri)) {
-    res.error = invalidUriError('Should start with "path:.."');
+    res.error = 'URI should start with "path:.."';
     return res;
   }
 
-  const withinScope = isWithin(root, PathUri.trimUriPrefix(uri));
+  const withinScope = isWithin('/', PathUri.trimUriPrefix(uri));
   if (!withinScope) {
-    res.error = invalidUriError(`Path out of scope of root directory "${root}".`);
+    res.error = `Path out of scope of root directory "${root}"`;
     res.withinScope = false;
     return res;
   }
 
   const path = cleanPath(uri);
   if (!path) {
-    res.error = invalidUriError();
+    res.error = `Invalid input URI "${uri}"`;
     return res;
   }
 

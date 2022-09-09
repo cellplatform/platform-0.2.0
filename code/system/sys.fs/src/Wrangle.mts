@@ -1,4 +1,4 @@
-import { t, Stream, Hash } from './common/index.mjs';
+import { Hash, Stream, t } from './common/index.mjs';
 import { Path } from './Path/index.mjs';
 
 type DirString = string;
@@ -15,7 +15,7 @@ export const Wrangle = {
      */
     async info(root: DirString, address: UriString) {
       const unpackUri = Path.Uri.unpacker(root);
-      const { uri, path, location, withinScope } = unpackUri(address);
+      const { uri, path, location, withinScope, error: unpackError } = unpackUri(address);
 
       const toError = (msg?: string): t.FsError => {
         const path = Path.Uri.trimUriPrefix(uri);
@@ -36,20 +36,19 @@ export const Wrangle = {
         bytes: -1,
       };
 
-      const checkOutOfScope = (): t.FsDriverInfo | undefined => {
-        if (withinScope) return undefined;
-        const error = toError('Path out of scope');
-        return { ...info, error };
-      };
-
       return {
         uri,
         path,
         location,
         toError,
         get error(): t.FsDriverInfo | undefined {
-          const scopeError = checkOutOfScope();
-          if (scopeError) return scopeError;
+          if (unpackError) {
+            return { ...info, error: toError(unpackError) };
+          }
+
+          if (!withinScope) {
+            return { ...info, error: toError('Path out of scope') };
+          }
 
           return undefined;
         },
@@ -103,6 +102,10 @@ export const Wrangle = {
 
         response404(): t.FsDriverRead {
           return { uri, ok: false, status: 404, error: toError('Not found') };
+        },
+
+        response500(err: Error): t.FsDriverRead {
+          return { uri, ok: false, status: 500, error: toError(err.message) };
         },
       };
     },

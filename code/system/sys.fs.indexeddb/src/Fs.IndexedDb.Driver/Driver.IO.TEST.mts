@@ -46,7 +46,7 @@ describe('FsIO (IndexedDB)', () => {
     it('resolve: throw if not "path:.." URI', async () => {
       const { fs } = await testCreate();
       const fn = () => fs.driver.io.resolve('foo');
-      expect(fn).to.throw(/Invalid input/);
+      expect(fn).to.throw(/URI should start with \"path\:/);
       fs.dispose();
     });
 

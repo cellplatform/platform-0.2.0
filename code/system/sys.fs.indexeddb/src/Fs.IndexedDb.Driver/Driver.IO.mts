@@ -1,25 +1,19 @@
 import { Delete, Image, NAME, Path, t, Wrangle } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
+type DirPathString = string;
+
 /**
- * A filesystem driver running against the browser's [IndexedDB] store.
+ * A filesystem I/O driver running against the browser's [IndexedDB] store.
  */
-export function FsIO(args: { dir: string; db: IDBDatabase }): t.FsIO {
+export function FsIO(args: { dir: DirPathString; db: IDBDatabase }): t.FsIO {
   const { db } = args;
-  const dir = Path.ensureSlashes(args.dir);
-  const root = dir;
+  const root = Path.ensureSlashes(args.dir);
   const lookup = DbLookup(db);
 
   const driver: t.FsIO = {
-    /**
-     * Root directory of the file system within the store.
-     */
-    dir,
-
-    /**
-     * Convert the given string to an absolute path.
-     */
-    resolve: Path.Uri.resolver(dir),
+    dir: root,
+    resolve: Path.Uri.resolver(root),
 
     /**
      * Retrieve meta-data of a local file.
@@ -42,7 +36,7 @@ export function FsIO(args: { dir: string; db: IDBDatabase }): t.FsIO {
       }
 
       if (!pathLookup) {
-        const dirLookup = await lookup.dir(Path.join(dir, path));
+        const dirLookup = await lookup.dir(Path.join(root, path));
         if (dirLookup) kind = 'dir';
       }
 
@@ -85,8 +79,6 @@ export function FsIO(args: { dir: string; db: IDBDatabase }): t.FsIO {
       const { dir } = Path.parts(location);
 
       try {
-        if (!path || path === root) throw new Error(`Path out of scope`);
-
         /**
          * TODO 🐷
          * still storing Image data at root driver level (??)

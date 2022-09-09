@@ -182,7 +182,7 @@ describe('Path', () => {
 
     it('trimHttp', () => {
       const test = (input: any, expected: string) => {
-        expect(Path.trimHttp(input)).to.eql(expected);
+        expect(Path.trimHttpPrefix(input)).to.eql(expected);
       };
 
       test('   ', '');
@@ -201,6 +201,22 @@ describe('Path', () => {
       test(123, '');
       test([123], '');
       test({}, '');
+    });
+
+    it('trimFilePrefix', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.trimFilePrefix(input)).to.eql(expected);
+      };
+
+      test('   ', '');
+      test('foo', 'foo');
+      test('  /foo/', '/foo/');
+
+      test('file://foo', 'foo');
+      test('file:///foo', '/foo');
+      test('  file:///foo  ', '/foo');
+      test('file:///', '/');
+      test('file://', '');
     });
 
     it('trimWildcardEnd', () => {
@@ -311,9 +327,9 @@ describe('Path', () => {
 
   describe('to... (conversion)', () => {
     it('toAbsolute', () => {
-      const test = (path: string, root: string, expected: string) => {
-        const res1 = Path.toAbsolutePath({ path, root });
-        const res2 = Path.toAbsoluteLocation({ path, root });
+      const test = (path: string, root: string | undefined, expected: string) => {
+        const res1 = Path.toAbsolutePath(path, { root });
+        const res2 = Path.toAbsoluteLocation(path, { root });
         expect(res1).to.eql(expected);
         expect(res2).to.eql(`file://${expected}`);
       };
@@ -332,10 +348,26 @@ describe('Path', () => {
       test('/~foo/bar.png', '/Users/bob', '/Users/bob/~foo/bar.png');
     });
 
+    it('toAbsolute (no root specified)', () => {
+      const test = (path: string, expected: string) => {
+        const res1 = Path.toAbsolutePath(path);
+        const res2 = Path.toAbsoluteLocation(path);
+        expect(res1).to.eql(expected);
+        expect(res2).to.eql(`file://${expected}`);
+      };
+
+      test('/foo/bar', '/foo/bar');
+      test('foo/bar', '/foo/bar');
+      test('~foo/bar', '/~foo/bar'); // NB: home ("~") prefix character not stripped if part of filename.
+      test('  foo/bar  ', '/foo/bar');
+      test('', '/');
+      test('  ', '/');
+    });
+
     it('toRelative', () => {
-      const test = (path: string, root: string, expected: string) => {
-        const res1 = Path.toRelativePath({ path, root });
-        const res2 = Path.toRelativeLocation({ path, root });
+      const test = (path: string, root: string | undefined, expected: string) => {
+        const res1 = Path.toRelativePath(path, { root });
+        const res2 = Path.toRelativeLocation(path, { root });
         expect(res1).to.eql(expected);
         expect(res2).to.eql(`file://${expected}`);
       };
@@ -351,5 +383,20 @@ describe('Path', () => {
       test(' /Users/bob/foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
       test('file:///Users/bob/foo/bar.png ', ' /Users/bob/ ', '~/foo/bar.png');
     });
+  });
+
+  it('toRelative (no root specified)', () => {
+    const test = (path: string, expected: string) => {
+      const res1 = Path.toRelativePath(path);
+      const res2 = Path.toRelativeLocation(path);
+      expect(res1).to.eql(expected);
+      expect(res2).to.eql(`file://${expected}`);
+    };
+
+    test('/foo/bar', '~/foo/bar');
+    test('foo/bar', '~/foo/bar');
+    test('  foo/bar  ', '~/foo/bar');
+    test('', '~/');
+    test('  ', '~/');
   });
 });

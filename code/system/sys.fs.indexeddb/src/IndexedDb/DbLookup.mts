@@ -39,5 +39,5 @@ export function DbLookup(db: IDBDatabase) {
  */
 
 function formatPath(path: string) {
-  return (path || '').trim().replace(/^file:\/\//, '');
+  return Path.trimFilePrefix(path);
 }

@@ -1,33 +1,33 @@
+type O = { root?: string };
+
 /**
  * Convert a value to an absolute path.
  */
-export function toAbsolutePath(args: { path: string; root: string }) {
-  const root = Clean.root(args.root);
-  const path = Clean.path(args.path, root);
-  return `${root}/${path}`;
+export function toAbsolutePath(path: string, options: O = {}) {
+  const root = Clean.root(options.root);
+  return `${root}/${Clean.path(path, root)}`;
 }
 
 /**
  * Convert a value to a relative path, using the home ("~") character.
  */
-export function toRelativePath(args: { path: string; root: string }) {
-  const root = Clean.root(args.root);
-  const path = Clean.path(args.path, root);
-  return `~/${path}`;
+export function toRelativePath(path: string, options: O = {}) {
+  const root = Clean.root(options.root);
+  return `~/${Clean.path(path, root)}`;
 }
 
 /**
  * Convert a path to a location field value.
  */
-export function toAbsoluteLocation(args: { path: string; root: string }) {
-  return `file://${toAbsolutePath(args)}`;
+export function toAbsoluteLocation(path: string, options: O = {}) {
+  return `file://${toAbsolutePath(path, options)}`;
 }
 
 /**
  * Convert a path to a relative location, using the home ("~") character.
  */
-export function toRelativeLocation(args: { path: string; root: string }) {
-  return `file://${toRelativePath(args)}`;
+export function toRelativeLocation(path: string, options: O = {}) {
+  return `file://${toRelativePath(path, options)}`;
 }
 
 /**
@@ -35,16 +35,14 @@ export function toRelativeLocation(args: { path: string; root: string }) {
  */
 
 const Clean = {
-  root(path: string) {
+  root(path?: string) {
     return (path ?? '').trim().replace(/\/*$/, '');
   },
 
-  path(path: string, root: string) {
-    return (path ?? '')
-      .trim()
-      .replace(/^file:\/\//, '')
-      .replace(new RegExp(`^${root}`), '')
-      .replace(/^~\//, '')
-      .replace(/^\/*/, '');
+  path(path: string, root?: string) {
+    path = (path ?? '').trim().replace(/^file:\/\//, '');
+    if (typeof root === 'string') path = path.replace(new RegExp(`^${root}`), '');
+    path = path.replace(/^~\//, '').replace(/^\/*/, '');
+    return path;
   },
 };

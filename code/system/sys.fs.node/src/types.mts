@@ -1,17 +1,1 @@
-import fsextra from 'fs-extra';
-import path from 'path';
-
-/**
- * Common Node (POSIX) based filesystem interface.
- */
-export type NodeFs = typeof fsextra & typeof path & { glob: NodeGlobMatcher };
-
-/**
- * Filesystem path pattern searcher (glob, minimatch).
- *
- *    - https://www.npmjs.com/package/glob
- *    - https://www.npmjs.com/package/minimatch
- *
- */
-export type NodeGlob = { find: NodeGlobMatcher };
-export type NodeGlobMatcher = (pattern: string) => Promise<string[]>;
+export * from './node/types.mjs';

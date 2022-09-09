@@ -162,23 +162,28 @@ describe('PathUri', () => {
 
   describe('resolve', () => {
     it('resolve', () => {
-      const dir = '/root';
-
-      const test = (uri: string, expected: string) => {
-        const res = PathUri.resolve(dir, uri);
+      const test = (root: string, uri: string, expected: string) => {
+        const res = PathUri.resolve(root, uri);
         expect(res).to.eql(expected, uri);
       };
 
-      test('path:foo', '/root/foo');
-      test('path:/foo', '/root/foo');
-      test('path:///foo', '/root/foo');
-      test('  path:foo/bar  ', '/root/foo/bar');
+      test('/root', 'path:foo', '/root/foo');
+      test('/root', 'path:/foo', '/root/foo');
+      test('/root', 'path:///foo', '/root/foo');
+      test('/root', '  path:foo/bar  ', '/root/foo/bar');
+      test('/root', '  path:   foo/bar  ', '/root/foo/bar');
 
-      test('path:', '/root/');
-      test('path:/', '/root/');
-      test('path:.', '/root/');
-      test('path:///', '/root/');
-      test('path:./foo', '/root/foo');
+      test('/root', 'path:', '/root/');
+      test('/root', 'path:/', '/root/');
+      test('/root', 'path:.', '/root/');
+      test('/root', 'path:///', '/root/');
+      test('/root', 'path:./foo', '/root/foo');
+
+      test('root', 'path:.', '/root/');
+      test('/root/', 'path:.', '/root/');
+      test('  /root/  ', 'path:.', '/root/');
+      test('  ///root///  ', 'path:/foo', '/root/foo');
+      test('  ///root///  ', 'path:  /foo  ', '/root/foo');
     });
 
     it('resolve (/.)', async () => {
@@ -197,7 +202,7 @@ describe('PathUri', () => {
     it('throw: invalid input', async () => {
       const test = (input: any) => {
         const fn = () => PathUri.resolve('/root/foo', input);
-        expect(fn).to.throw(/Invalid input/);
+        expect(fn).to.throw(/URI should start with \"path\:/);
       };
 
       test('/foo/bar');
@@ -223,13 +228,13 @@ describe('PathUri', () => {
     });
 
     it('resolver (factory)', () => {
-      const resolve = PathUri.resolver('foo/bar');
+      const resolve = PathUri.resolver('  foo/bar  ');
 
       expect(resolve('path:file.txt')).to.eql('/foo/bar/file.txt');
       expect(resolve('path:./images/bird.png')).to.eql('/foo/bar/images/bird.png');
 
       const fn = () => resolve('file.txt'); // NB: not a "path:uri"
-      expect(fn).to.throw(/Invalid input/);
+      expect(fn).to.throw(/URI should start with \"path\:/);
     });
   });
 
