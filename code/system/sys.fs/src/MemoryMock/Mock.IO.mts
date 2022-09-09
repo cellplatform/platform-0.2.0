@@ -96,16 +96,6 @@ export function FsMockIO(options: { dir?: string } = {}) {
       if (error) return error;
       const { data, hash, path } = file;
 
-      /**
-       * TODO 🐷
-       * ISSUE: https://github.com/cellplatform/platform-0.2.0/issues/24
-       *
-       *    - put image meta-data (pixel size) on data data object.
-       *    - ensure it shows up in Indexer <Manifest>
-       *
-       */
-      //  const image = await Image.toInfo(path, data);
-
       state[path] = { data, hash };
       return params.response200();
     },
