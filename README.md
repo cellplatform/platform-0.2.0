@@ -6,7 +6,7 @@
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the set of core `system` modules that flexibly compose into varying arrangements of (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" processes.
 
 - [system](/code/system/) modules
-- [compilation](/code/compiler/) build toolchain
+- [compilation](/code/compiler/) toolchain
 
 ---
 
