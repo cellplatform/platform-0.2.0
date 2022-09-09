@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "echo no-op",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "vitest"
   },
   "devDependencies": {},
   "license": "MIT",

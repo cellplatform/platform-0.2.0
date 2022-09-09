@@ -30,6 +30,7 @@ export async function test(
 
   // Options.
   args.push(`--watch=${watch}`);
+  args.push('--passWithNoTests');
   if (ui) args.push('--ui');
   if (silent) args.push('--silent');
   if (coverage) args.push('--coverage');
