@@ -7,7 +7,8 @@ import { AutomergeDoc } from './index.mjs';
  * https://github.com/automerge/automerge/blob/main/SYNC.md
  */
 describe('Automerge (CRDT)', () => {
-  type Card = { title: string; done: boolean };
+  const DEFAULT_CARD: Card = { title: 'hello', done: false, count: 0 };
+  type Card = { title: string; done: boolean; count: number };
   type Doc = {
     name?: string;
     cards: Automerge.List<Card>; // NB: An [Array] type with extension methods (eg. insertAt)
@@ -65,24 +66,24 @@ describe('Automerge (CRDT)', () => {
       it('named change "add card"', () => {
         const doc1 = Automerge.from<Doc>({ cards: [] });
         const doc2 = Automerge.change<Doc>(doc1, 'Add card', (doc) => {
-          doc.cards.push({ title: 'hello', done: false });
+          doc.cards.push({ title: 'hello', done: false, count: 0 });
         });
 
         expect(doc2).to.not.equal(doc1); // NB: Different instance.
 
         expect(doc1).to.eql({ cards: [] });
-        expect(doc2).to.eql({ cards: [{ title: 'hello', done: false }] });
+        expect(doc2).to.eql({ cards: [{ title: 'hello', done: false, count: 0 }] });
       });
 
       it('`.getChanges` retrieves change-set (Uint8Array)', () => {
         const doc1 = Automerge.from<Doc>({ cards: [] });
         const doc2 = Automerge.change<Doc>(doc1, 'Add card', (doc) => {
-          doc.cards.push({ title: 'hello', done: false });
+          doc.cards.push({ title: 'hello', done: false, count: 0 });
         });
 
         const changes = Automerge.getChanges<Doc>(doc1, doc2);
         expect(changes[0] instanceof Uint8Array).to.eql(true);
-        expect(changes[0].length).to.eql(139);
+        expect(changes[0].length).to.eql(147);
       });
 
       it('`delete obj.prop` => undefined', () => {
@@ -193,16 +194,16 @@ describe('Automerge (CRDT)', () => {
        */
       let doc1 = Automerge.from<Doc>({ cards: [] });
       doc1 = Automerge.change<Doc>(doc1, 'Add card', (doc) => {
-        doc.cards.push({ title: 'hello-1a', done: false });
+        doc.cards.push({ title: 'hello-1a', done: false, count: 0 });
       });
       doc1 = Automerge.change<Doc>(doc1, 'Add another card', (doc) => {
-        doc.cards.push({ title: 'hello-2a', done: false });
+        doc.cards.push({ title: 'hello-2a', done: false, count: 0 });
       });
 
       expect(doc1).to.eql({
         cards: [
-          { title: 'hello-1a', done: false },
-          { title: 'hello-2a', done: false },
+          { title: 'hello-1a', done: false, count: 0 },
+          { title: 'hello-2a', done: false, count: 0 },
         ],
       });
 
@@ -258,7 +259,7 @@ describe('Automerge (CRDT)', () => {
     async function getSampleDoc() {
       const doc = Automerge.from<Doc>({ cards: [] });
       return Automerge.change<Doc>(doc, 'Add card', (doc) => {
-        doc.cards.push({ title: 'hello', done: false });
+        doc.cards.push(DEFAULT_CARD);
       });
     }
 
@@ -280,7 +281,7 @@ describe('Automerge (CRDT)', () => {
       const path = 'myfile.crdt';
       const doc1 = await getSampleDoc();
 
-      const STATE = { cards: [{ title: 'hello', done: false }] };
+      const STATE = { cards: [DEFAULT_CARD] };
       expect(doc1).to.eql(STATE);
 
       await fs.write(path, Automerge.save(doc1));
@@ -292,6 +293,40 @@ describe('Automerge (CRDT)', () => {
 
       const { getActorId } = Automerge;
       expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
+    });
+
+    it('getLastLocalChange (saving a log of changes)', async () => {
+      const { fs } = TestFilesystem.memory();
+
+      const saveChange = async (doc: Doc, path: string) => {
+        const binary = Automerge.getLastLocalChange(doc);
+        await fs.write(path, binary);
+      };
+
+      const A1 = await getSampleDoc();
+      const B1a = Automerge.merge(Automerge.init<Doc>(), A1);
+      const B1b = Automerge.merge(Automerge.init<Doc>(), A1);
+
+      await saveChange(A1, 'crdt/1');
+
+      const A2 = Automerge.change<Doc>(A1, (doc) => {
+        doc.cards[0].count++;
+        doc.cards[0].title = 'foo';
+      });
+
+      await saveChange(A2, 'crdt/2');
+
+      const file1 = (await fs.read('crdt/1')) as Automerge.BinaryChange;
+      const file2 = (await fs.read('crdt/2')) as Automerge.BinaryChange;
+
+      const [C1a] = Automerge.applyChanges(B1a, [file1, file2]);
+      const [C1b] = Automerge.applyChanges(B1b, [file2, file1]); // NB: Different order.
+
+      expect(C1a.cards[0].count).to.eql(1);
+      expect(C1a.cards[0].title).to.eql('foo');
+
+      expect(C1b.cards[0].count).to.eql(1);
+      expect(C1b.cards[0].title).to.eql('foo');
     });
   });
 
