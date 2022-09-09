@@ -28,3 +28,4 @@ coverage
 
 # Temporary
 script.ts/tmp*
+fossa.debug.json.gz
