@@ -20,6 +20,7 @@ describe('FsDriver (Node) - functional specification', () => {
   Spec.Driver.IO.InfoSpec({ root, factory, describe, it });
   Spec.Driver.IO.ReadWriteSpec({ root, factory, describe, it });
   Spec.Driver.IO.DeleteSpec({ root, factory, describe, it });
+  Spec.Driver.IO.CopySpec({ root, factory, describe, it });
 
   // TEMP 🐷
   it('TMP', async () => {

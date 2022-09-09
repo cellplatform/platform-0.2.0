@@ -118,6 +118,17 @@ export function FsIO(args: { dir: DirPathString }) {
       const { source, target, error } = params;
       if (error) return error;
 
+      try {
+        const sourcePath = Path.trimFilePrefix(source.location);
+        const targetPath = Path.trimFilePrefix(target.location);
+        if (!(await NodeFs.pathExists(sourcePath))) return params.response404();
+
+        await NodeFs.copy(sourcePath, targetPath);
+        return params.response200();
+      } catch (error: any) {
+        return params.response500(error);
+      }
+
       throw new Error('Not implemented - copy'); // TEMP 🐷
     },
   };
