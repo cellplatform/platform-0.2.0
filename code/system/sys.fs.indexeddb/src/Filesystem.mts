@@ -4,7 +4,7 @@ import { Path, Filesize, BusController, BusEvents } from 'sys.fs';
 export const Filesystem = {
   Path,
   Filesize,
-  driver: {
+  Driver: {
     kind: 'IndexedDb',
     IndexedDb,
     BusController,
