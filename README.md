@@ -79,7 +79,8 @@ sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/M
 
 These commands constitute the primary CI (continuous integration) pipeline.
 See [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
-which protects the `main` branch when merging in pull-requests (PRs).
+which protects the `main` branch when merging in pull-requests (PRs). 
+A security audit is performed on the up-stream dependencies on each CI cycle.
 
 
 ```bash
