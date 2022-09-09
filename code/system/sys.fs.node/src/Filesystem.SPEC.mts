@@ -17,9 +17,12 @@ describe('FsDriver (Node) - functional specification', () => {
   };
 
   // Spec.every({ root, factory, describe, it });
-  // Spec.Driver.IO.InfoSpec({ root, factory, describe, it });
+  Spec.Driver.IO.InfoSpec({ root, factory, describe, it });
   Spec.Driver.IO.ReadWriteSpec({ root, factory, describe, it });
+  Spec.Driver.IO.DeleteSpec({ root, factory, describe, it });
 
   // TEMP 🐷
-  it('TMP', async () => {});
+  it('TMP', async () => {
+    //
+  });
 });

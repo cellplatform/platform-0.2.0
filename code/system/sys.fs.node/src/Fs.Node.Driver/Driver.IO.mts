@@ -61,8 +61,8 @@ export function FsIO(args: { dir: DirPathString }) {
         const hash = Hash.sha256(data);
         const bytes = data.byteLength;
         return params.response200({ path, location, data, hash, bytes });
-      } catch (err: any) {
-        return params.response500(err);
+      } catch (error: any) {
+        return params.response500(error);
       }
     },
 
@@ -79,8 +79,8 @@ export function FsIO(args: { dir: DirPathString }) {
         await NodeFs.ensureDir(NodeFs.dirname(path));
         await NodeFs.writeFile(path, file.data);
         return params.response200();
-      } catch (err: any) {
-        return params.response500(err);
+      } catch (error: any) {
+        return params.response500(error);
       }
     },
 
@@ -92,7 +92,22 @@ export function FsIO(args: { dir: DirPathString }) {
       const { items, error } = params;
       if (error) return error;
 
-      throw new Error('Not implemented - delete'); // TEMP 🐷
+      const remove = async (location: string) => {
+        const path = Path.trimFilePrefix(location);
+        if (!(await NodeFs.pathExists(path))) return false;
+        await NodeFs.remove(path);
+        return true;
+      };
+
+      try {
+        const res = await Promise.all(
+          items.map(async (item) => ({ ...item, removed: await remove(item.location) })),
+        );
+        const uris = res.filter(({ removed }) => removed).map(({ uri }) => uri);
+        return params.response200(uris);
+      } catch (error: any) {
+        return params.response500(error);
+      }
     },
 
     /**
