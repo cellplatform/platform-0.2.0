@@ -72,7 +72,7 @@ References (conceptual context):
 
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 
-### Primary Commands (Global)
+### Primary Global Commands (All Modules)
 
 The following global commands run from the root of the project and operate on all nested
 sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
