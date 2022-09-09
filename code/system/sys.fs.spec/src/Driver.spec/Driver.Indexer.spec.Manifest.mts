@@ -76,8 +76,8 @@ export const ManifestSpec = (ctx: t.SpecContext) => {
       const driver = await factory();
       const file = MemoryMock.randomFile();
 
-      const unsorted = ['z1.d', 'z10.d', 'z17.d', '', 'a999.d', 'z2.d', 'z23.d', 'z3.d'];
-      const sorted = ['', 'a999.d', 'z1.d', 'z2.d', 'z3.d', 'z10.d', 'z17.d', 'z23.d'];
+      const unsorted = ['z1.d', 'z10.d', 'z17.d', 'a999.d', 'z2.d', 'z23.d', 'z3.d'];
+      const sorted = ['a999.d', 'z1.d', 'z2.d', 'z3.d', 'z10.d', 'z17.d', 'z23.d'];
 
       for (const name of unsorted) {
         await driver.io.write(`path:${name}`, file.data);
