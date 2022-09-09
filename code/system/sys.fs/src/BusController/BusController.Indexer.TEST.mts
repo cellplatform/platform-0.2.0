@@ -149,26 +149,6 @@ describe('BusController.Indexer', function () {
 
       mock.dispose();
     });
-
-    it('error: binary not an image, but named with an image extension ', async () => {
-      const mock = TestPrep();
-      const io = mock.events.io;
-      const src = MemoryMock.randomFile();
-
-      const write = (path: string) => io.write.fire({ path, hash: src.hash, data: src.data });
-      await write('json.png'); // NB: Writing the JSON file with an image file-extension.
-
-      const res = await mock.events.index.manifest.get({});
-
-      expect(res.dirs.length).to.eql(1);
-      const manifest = res.dirs[0].manifest;
-      const files = manifest.files;
-      expect(files.length).to.eql(1);
-      expect(files[0].path).to.eql('json.png');
-      expect(files[0].image).to.eql(undefined); // NB: Not assigned as this is not really an image.
-
-      mock.dispose();
-    });
   });
 
   describe('manifest caching', () => {

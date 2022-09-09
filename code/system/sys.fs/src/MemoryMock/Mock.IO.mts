@@ -1,19 +1,11 @@
 import { Wrangle } from '../Wrangle.mjs';
-import { DEFAULT, Path, R, t } from './common.mjs';
+import { DEFAULT, Path, t } from './common.mjs';
 import { StateMap } from './MockState.mjs';
-
-export type MockInfoHandler = (e: MockInfoHandlerArgs) => void;
-export type MockInfoHandlerArgs = {
-  readonly uri: string;
-  readonly path: string;
-  modify(fn: (info: t.FsDriverInfo) => void): void;
-};
 
 export type MockDriverIO = {
   driver: t.FsIO;
   count: { info: number; read: number; write: number; delete: number; copy: number };
   getState(): StateMap;
-  onInfoRequest(fn: MockInfoHandler): MockDriverIO;
 };
 
 /**
@@ -21,8 +13,6 @@ export type MockDriverIO = {
  */
 export function FsMockIO(options: { dir?: string } = {}) {
   const root = Path.ensureSlashes(options.dir ?? DEFAULT.rootdir);
-
-  let _onInfoReq: undefined | MockInfoHandler;
 
   const state: StateMap = {};
   const resolve = Path.Uri.resolver(root);
@@ -60,7 +50,7 @@ export function FsMockIO(options: { dir?: string } = {}) {
       const kind = resolveKind(uri);
       const exists = kind === 'dir' ? true : Boolean(ref);
 
-      let info: t.FsDriverInfo = {
+      const info: t.FsDriverInfo = {
         uri,
         exists,
         kind,
@@ -70,17 +60,6 @@ export function FsMockIO(options: { dir?: string } = {}) {
         bytes: ref?.data.byteLength ?? -1,
       };
 
-      const args: MockInfoHandlerArgs = {
-        uri,
-        path,
-        modify(fn) {
-          const clone = R.clone(info);
-          fn(clone);
-          info = clone;
-        },
-      };
-
-      _onInfoReq?.(args);
       return info;
     },
 
@@ -171,14 +150,8 @@ export function FsMockIO(options: { dir?: string } = {}) {
   const mock: MockDriverIO = {
     driver,
     count: { info: 0, read: 0, write: 0, delete: 0, copy: 0 },
-
     getState() {
       return { ...state };
-    },
-
-    onInfoRequest(fn: MockInfoHandler) {
-      _onInfoReq = fn;
-      return mock;
     },
   };
 

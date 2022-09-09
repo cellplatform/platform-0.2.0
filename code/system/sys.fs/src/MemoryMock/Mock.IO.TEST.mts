@@ -10,34 +10,6 @@ import { MemoryMock } from './index.mjs';
  */
 
 describe('MemoryMock: DriverIO (mocking helpers)', () => {
-  it('mock.onInfoRequest (override info)', async () => {
-    const mock = MemoryMock.IO();
-    mock.onInfoRequest((e) => {
-      if (e.path === '/bird') {
-        e.modify((info) => {
-          info.hash = 'sha256-abc';
-          info.exists = true;
-          info.bytes = 1234;
-          info.kind = 'file';
-        });
-      }
-    });
-
-    const res1 = await mock.driver.info('path:foo/bar');
-    const res2 = await mock.driver.info('   path:bird   '); // NB: whitespace cleaned up.
-
-    expect(res1.uri).to.eql('path:foo/bar');
-    expect(res1.exists).to.eql(false);
-    expect(res1.bytes).to.eql(-1);
-    expect(res1.kind).to.eql('unknown');
-
-    expect(res2.uri).to.eql('path:bird');
-    expect(res2.exists).to.eql(true);
-    expect(res2.bytes).to.eql(1234);
-    expect(res2.kind).to.eql('file');
-    expect(res2.hash).to.eql('sha256-abc');
-  });
-
   it('mock.state', async () => {
     const mock = MemoryMock.IO();
     const png = MemoryMock.randomFile();
@@ -46,8 +18,12 @@ describe('MemoryMock: DriverIO (mocking helpers)', () => {
 
     await mock.driver.write('path:foo.png', png.data);
 
-    const state = mock.getState();
-    expect(state['/foo.png'].data).to.eql(png.data);
-    expect(state['/foo.png'].hash).to.eql(png.hash);
+    const state1 = mock.getState();
+    const state2 = mock.getState();
+    expect(state1).to.not.equal(state2); // NB: Different object instance.
+    expect(state1).to.eql(state2);
+
+    expect(state1['/foo.png'].data).to.eql(png.data);
+    expect(state1['/foo.png'].hash).to.eql(png.hash);
   });
 });

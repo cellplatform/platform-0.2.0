@@ -192,25 +192,5 @@ describe('FsIndexer (IndexedDB)', () => {
 
       fs.dispose();
     });
-
-    it.skip('read: image meta-data', async () => {
-      const { fs, deleteAll } = await testCreate();
-      await deleteAll();
-
-      const test = async (path: string, expected: t.ManifestFileImage) => {
-        const uri = `path:${path}`;
-        const body = (await fetch(path)).body as ReadableStream;
-        await fs.driver.io.write(uri, body);
-
-        const manifest = await fs.driver.indexer.manifest();
-        const file = manifest.files[0];
-        expect(file.image).to.eql(expected);
-      };
-
-      await test('/static/test/kitten.jpg', { kind: 'jpg', width: 189, height: 147 });
-      await test('/static/test/bird.png', { kind: 'png', width: 272, height: 226 });
-
-      fs.dispose();
-    });
   });
 });
