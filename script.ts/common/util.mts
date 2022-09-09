@@ -1,4 +1,4 @@
-import { pc, fs, glob, TopologicalSort, filesize } from './libs.mjs';
+import { pc, fs, glob, filesize, Sort } from './libs.mjs';
 
 type Package = { name: string; dependencies?: PackageDeps; devDependencies?: PackageDeps };
 type PackageDeps = { [key: string]: string };
@@ -57,21 +57,28 @@ export const Util = {
   /**
    * Find all project dirs within the project.
    */
-  async findProjectDirs(filter?: (path: string) => boolean) {
+  async findProjectDirs(
+    options: {
+      filter?: (path: string) => boolean;
+      sort?: 'DependencyGraph' | 'Alpha' | 'None';
+    } = {},
+  ) {
     const pkg = await Util.loadPackageJson();
-    const paths = (
-      await Promise.all(
-        pkg.workspaces.packages.map((pattern) => fs.glob.find(fs.resolve(fs.join('.', pattern)))),
-      )
-    ).flat();
+
+    const findPattern = (pattern: string) => fs.glob.find(fs.resolve(fs.join('.', pattern)));
+    const paths = (await Promise.all(pkg.workspaces.packages.map(findPattern))).flat();
 
     const dirs = await Util.asyncFilter(paths, async (path) => {
       if (path.includes('/template')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
-      return filter ? filter(path) : true;
+      return options.filter ? options.filter(path) : true;
     });
 
-    return Util.sortProjectDirsDepthFirst(dirs);
+    const { sort = 'Alpha' } = options;
+    if (sort === 'Alpha') return Util.sortAlpha(dirs);
+    if (sort === 'DependencyGraph') return Util.sortProjectDirsDepthFirst(dirs);
+
+    return dirs;
   },
 
   /**
@@ -90,8 +97,8 @@ export const Util = {
     );
 
     const order = (() => {
-      if (algorithm === 'DFS') return TopologicalSort.dfs(graph);
-      if (algorithm === 'BFS') return TopologicalSort.bfs(graph);
+      if (algorithm === 'DFS') return Sort.Topological.dfs(graph);
+      if (algorithm === 'BFS') return Sort.Topological.bfs(graph);
       throw new Error(`Sort algorithm kind '${algorithm}' not supported.`);
     })();
 
@@ -99,5 +106,12 @@ export const Util = {
       .map((name) => dirs.find((path) => path.endsWith(`/${name}`)) ?? '')
       .filter(Boolean)
       .reverse();
+  },
+
+  /**
+   * Sort alphabetically ("natural" compare)
+   */
+  async sortAlpha(dirs: string[]) {
+    return [...dirs].sort(Sort.String.naturalCompare);
   },
 };

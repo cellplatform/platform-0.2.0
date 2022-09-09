@@ -13,7 +13,7 @@ export { pc, rimraf, execa, minimist, glob, filesize };
 /**
  * @system
  */
-export { TopologicalSort } from '../../code/system/sys.util/src/Sort/Sort.Topological.mjs';
+export { Sort } from '../../code/system/sys.util/src/Sort/index.mjs';
 export { Table } from '../../code/system/sys.util.node/src/index.mjs';
 
 /**

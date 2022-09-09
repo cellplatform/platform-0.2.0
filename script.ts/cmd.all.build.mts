@@ -8,10 +8,11 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
   type Pkg = { name: string; version: string };
   const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
-  let paths = await Util.findProjectDirs((path) => {
+  const filter = (path: string) => {
     if (path.includes('code/samples/')) return false;
     return true;
-  });
+  };
+  let paths = await Util.findProjectDirs({ filter, sort: 'DependencyGraph' });
 
   // Log complete build list.
   console.log();

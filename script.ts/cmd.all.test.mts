@@ -8,10 +8,11 @@ import { Builder, fs, pc, Util } from './common/index.mjs';
   type Pkg = { name: string; version: string };
   const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
-  const paths = await Util.findProjectDirs((path) => {
+  const filter = (path: string) => {
     if (path.includes('/code/samples')) return false;
     return true;
-  });
+  };
+  const paths = await Util.findProjectDirs({ filter });
   if (paths.length === 0) return;
 
   // Log complete build list.
