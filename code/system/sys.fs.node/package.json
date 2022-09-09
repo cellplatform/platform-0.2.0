@@ -8,10 +8,12 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "spec": "yarn test --run --reporter verbose",
-    "sample": "ts-node-esm -T ./script.ts/sample.node.mts"
+    "sample": "ts-node-esm -T ./script.ts/sample.node.mts",
+    "tmp": "yarn sample"
   },
   "dependencies": {
-    "sys.fs": "^0.0.0"
+    "sys.fs": "^0.0.0",
+    "sys.util.node": "^0.0.0"
   },
   "devDependencies": {
     "sys.fs.spec": "^0.0.0",
