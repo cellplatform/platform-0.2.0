@@ -1,8 +1,10 @@
 import { describe, it, expect } from './TEST/index.mjs';
-import { Filesystem } from './Filesystem.mjs';
+
+import { Filesystem, NodeDriver } from './index.mjs';
 
 describe('Filesystem (Node)', () => {
-  it('base object', () => {
-    expect(Filesystem.driver.kind).to.eql('Node');
+  it('Filesystem.Driver', () => {
+    expect(Filesystem.Driver.kind).to.eql('Node');
+    expect(Filesystem.Driver.Node).to.equal(NodeDriver);
   });
 });
