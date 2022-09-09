@@ -38,7 +38,6 @@ export function FsIndexer(args: { dir: DirPathString; db: IDBDatabase }) {
           path: toManifestFilePath(record.path),
           bytes: record.bytes,
           filehash: record.hash,
-          image: record.image,
         });
       };
 
