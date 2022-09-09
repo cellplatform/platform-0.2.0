@@ -25,15 +25,18 @@ type Milliseconds = number;
 
   type R = { path: string; elapsed: Milliseconds; error?: string };
   const results: R[] = [];
+  const pushResult = (path: string, elapsed: Milliseconds, error?: string) => {
+    results.push({ path, elapsed, error });
+  };
 
   // Build each project.
   for (const path of paths) {
     const timer = Time.timer();
     try {
       await Builder.test(path, { run: true, silent: true });
-      results.push({ path, elapsed: timer.elapsed.msec });
-    } catch (err: any) {
-      results.push({ path, elapsed: timer.elapsed.msec, error: err.message });
+      pushResult(path, timer.elapsed.msec);
+    } catch (error: any) {
+      pushResult(path, timer.elapsed.msec, error.message);
     }
   }
   const failed = results.filter((item) => Boolean(item.error));
