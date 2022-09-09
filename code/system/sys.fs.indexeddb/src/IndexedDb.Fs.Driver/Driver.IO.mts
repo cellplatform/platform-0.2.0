@@ -1,4 +1,4 @@
-import { Delete, Image, NAME, Path, t, Wrangle } from '../common/index.mjs';
+import { Delete, NAME, Path, t, Wrangle } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
 type DirPathString = string;
@@ -79,12 +79,6 @@ export function FsIO(args: { dir: DirPathString; db: IDBDatabase }): t.FsIO {
       const { dir } = Path.parts(location);
 
       try {
-        /**
-         * TODO 🐷
-         * still storing Image data at root driver level (??)
-         */
-        const image = await Image.toInfo(path, data);
-
         // Delete existing.
         // NB:  This ensures the hash-referenced file-record is removed if
         //      this are no other paths referencing the file-hash.
@@ -99,7 +93,7 @@ export function FsIO(args: { dir: DirPathString; db: IDBDatabase }): t.FsIO {
 
         const put = IndexedDb.record.put;
         await Promise.all([
-          put<t.PathRecord>(store.paths, Delete.undefined({ path, dir, hash, bytes, image })),
+          put<t.PathRecord>(store.paths, Delete.undefined({ path, dir, hash, bytes })),
           put<t.BinaryRecord>(store.files, { hash, data }),
         ]);
 

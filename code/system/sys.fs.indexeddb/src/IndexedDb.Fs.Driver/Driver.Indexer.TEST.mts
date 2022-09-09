@@ -1,5 +1,5 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
-import { FsIndexedDbDriver } from '../Fs.IndexedDb.Driver/index.mjs';
+import { IndexedDbDriver } from './index.mjs';
 import { deleteAll, describe, expect, it, MemoryMock } from '../TEST/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {
@@ -8,7 +8,7 @@ describe('FsIndexer (IndexedDB)', () => {
   const testCreate = async (options: { dir?: string } = {}) => {
     const { dir } = options;
     const id = `fs:test.${slug()}`;
-    const fs = await FsIndexedDbDriver({ id, dir });
+    const fs = await IndexedDbDriver({ id, dir });
     return { fs, name: id, deleteAll: () => deleteAll(fs) };
   };
 

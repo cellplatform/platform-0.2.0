@@ -1,13 +1,18 @@
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![banner](https://user-images.githubusercontent.com/185555/189297181-a6f55630-a952-40e1-b32e-8e490068f6ab.png)
+![banner](https://user-images.githubusercontent.com/185555/189298052-c5d9c101-22e0-410d-a4dc-19adafd4f20e.png)
 
 
 
 
 
-[Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" processes.
+
+[Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
+(1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" processes.
+
+- [system](/code/system/) modules
+- [compilation](/code/compiler/) toolchain
 
 ---
 
@@ -73,14 +78,15 @@ References (conceptual context):
 
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 
-### Primary Commands (Global)
+### Primary Global Commands (All Modules)
 
 The following global commands run from the root of the project and operate on all nested
 sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
 
 These commands constitute the primary CI (continuous integration) pipeline.
 See [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
-which protects the `main` branch when merging in pull-requests (PRs).
+which protects the `main` branch when merging in pull-requests (PRs). 
+A security audit on the up-stream dependencies is performed on each CI cycle.
 
 
 ```bash

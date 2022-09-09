@@ -12,7 +12,7 @@ type FilesystemId = string;
  * DRIVER
  * A filesystem driver running against the browser [IndexedDB] store.
  */
-export const FsIndexedDbDriver = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {
+export const IndexedDbDriver = (options: { id?: FilesystemId; dir?: DirPath } = {}) => {
   const dir = options.dir ?? ROOT_DIR;
   const id = (options.id ?? 'fs').trim();
 

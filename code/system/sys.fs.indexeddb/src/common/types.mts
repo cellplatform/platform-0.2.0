@@ -1,5 +1,3 @@
-import type { ManifestFileImage } from 'sys.fs/src/types.mjs';
-
 /**
  * @system
  */
@@ -21,7 +19,6 @@ export type {
 /**
  * @local
  */
-export type { ManifestFileImage };
 export * from '../types.mjs';
 
 /**
@@ -36,5 +33,4 @@ export type PathRecord = {
   dir: FileDir;
   hash: FileHash;
   bytes: number;
-  image?: ManifestFileImage;
 };

@@ -1,2 +1,2 @@
 export { Filesystem } from './Filesystem.mjs';
-export { FsIndexedDbDriver as FsIndexedDb } from './Fs.IndexedDb.Driver/index.mjs';
+export { IndexedDbDriver } from './IndexedDb.Fs.Driver/index.mjs';
