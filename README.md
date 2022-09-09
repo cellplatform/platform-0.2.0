@@ -74,9 +74,10 @@ References (conceptual context):
 The following global commands run from the root of the project and operate on all nested
 sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/Monorepo).
 
-These commands also approximate the primary CI (continuous integration)
-behavior covered in the [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
-when merging a PR into the [`main`] branch.
+These commands constitute the primary CI (continuous integration) pipeline.
+See [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
+which protects the `main` branch when merging in pull-requests (PRs).
+
 
 ```bash
 
@@ -85,6 +86,13 @@ $ yarn build
 $ yarn test
 
 ```
+
+Ron all of these locally with:
+```bash
+$ yarn ci
+```
+
+
 
 <p>&nbsp;</p>
 
