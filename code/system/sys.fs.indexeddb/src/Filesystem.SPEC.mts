@@ -1,12 +1,12 @@
 import { Spec } from 'sys.fs.spec';
 
 import { FsIndexedDb } from './index.mjs';
-import { expect, Path, describe, it, MemoryMock, slug, t } from './TEST/index.mjs';
+import { describe, it, MemoryMock, Path, slug, t } from './TEST/index.mjs';
 
 /**
  * Baseline functional specifications from [sys.fs].
  */
-describe('FsDriver (IndexedDb) - functional specification', () => {
+describe('Filesystem: IndexedDB (functional specification)', () => {
   const root = MemoryMock.DEFAULT.rootdir;
 
   const factory: t.FsDriverFactory = async (dir) => {

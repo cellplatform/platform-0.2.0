@@ -6,7 +6,7 @@ import { describe, it, Path, t } from './TEST/index.mjs';
 /**
  * Baseline functional specifications from [sys.fs].
  */
-describe('Node FsDriver - functional specification', () => {
+describe('Filesystem: NodeDriver (functional specification)', () => {
   const root = NodeFs.resolve('./tmp');
 
   const factory: t.FsDriverFactory = async (dir) => {

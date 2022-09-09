@@ -1,21 +1,21 @@
 import { describe, it, expect, slug } from '../TEST/index.mjs';
-import { FsIndexedDbDriver } from './index.mjs';
+import { IndexedDbDriver } from './index.mjs';
 
 describe('FsDriver (IndexedDb)', () => {
   it('default', async () => {
-    const db = await FsIndexedDbDriver();
+    const db = await IndexedDbDriver();
     expect(db.id).to.eql('fs');
     expect(db.version).to.eql(1);
   });
 
   it('custom "id"', async () => {
     const id = `fs.${slug}`;
-    const db = await FsIndexedDbDriver({ id: `  ${id}  ` });
+    const db = await IndexedDbDriver({ id: `  ${id}  ` });
     expect(db.id).to.eql(id); // NB: trimmed.
   });
 
   it('lazy evaluation: driver', async () => {
-    const db = await FsIndexedDbDriver();
+    const db = await IndexedDbDriver();
 
     const io1 = db.driver.io;
     const io2 = db.driver.io;
@@ -25,7 +25,7 @@ describe('FsDriver (IndexedDb)', () => {
   });
 
   it('lazy evaluation: indexer', async () => {
-    const db = await FsIndexedDbDriver();
+    const db = await IndexedDbDriver();
 
     const indexer1 = db.driver.indexer;
     const indexer2 = db.driver.indexer;
