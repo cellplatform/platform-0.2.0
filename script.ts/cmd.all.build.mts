@@ -47,12 +47,12 @@ import { pc, Builder, Util, fs, Table } from './common/index.mjs';
     const ok = pathOK(path);
     const size = await Util.folderSize(fs.join(path, 'dist'));
     const formattedPath = Util.formatPath(path, { filenameColor: ok ? pc.white : pc.red });
-    const display = {
+    const column = {
       path: pc.gray(` ${bullet(path)} ${formattedPath}`),
       size: pc.gray(`  ${size.bytes === 0 ? '-' : Util.filesize(size.bytes)}`),
     };
     totalBytes += size.bytes;
-    table.push([display.path, display.size]);
+    table.push([column.path, column.size]);
   }
 
   console.log();
