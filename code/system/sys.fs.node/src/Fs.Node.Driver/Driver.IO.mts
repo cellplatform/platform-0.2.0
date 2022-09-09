@@ -51,7 +51,19 @@ export function FsIO(args: { dir: DirPathString }) {
       const { error, path, location } = params;
       if (error) return error;
 
-      throw new Error('Not implemented - read'); // TEMP 🐷
+      const fullpath = Path.trimFilePrefix(location);
+      const exists = await NodeFs.pathExists(fullpath);
+      if (!exists) return params.response404();
+
+      try {
+        const buffer = await NodeFs.readFile(fullpath);
+        const data = new Uint8Array(buffer);
+        const hash = Hash.sha256(data);
+        const bytes = data.byteLength;
+        return params.response200({ path, location, data, hash, bytes });
+      } catch (err: any) {
+        return params.response500(err);
+      }
     },
 
     /**

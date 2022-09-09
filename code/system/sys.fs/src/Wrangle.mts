@@ -103,6 +103,10 @@ export const Wrangle = {
         response404(): t.FsDriverRead {
           return { uri, ok: false, status: 404, error: toError('Not found') };
         },
+
+        response500(err: Error): t.FsDriverRead {
+          return { uri, ok: false, status: 500, error: toError(err.message) };
+        },
       };
     },
 
