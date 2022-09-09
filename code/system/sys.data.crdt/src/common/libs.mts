@@ -7,4 +7,4 @@ export { Automerge };
 /**
  * @system
  */
-export { rx, slug, cuid, Time } from 'sys.util';
+export { rx, slug, cuid, Time, Hash } from 'sys.util';

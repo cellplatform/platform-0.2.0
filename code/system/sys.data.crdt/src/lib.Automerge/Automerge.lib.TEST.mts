@@ -148,8 +148,8 @@ describe('Automerge (CRDT)', () => {
       describe('[ array ] methods', () => {
         it('.insertAt', () => {
           const doc = Automerge.change<Doc>(createTestDoc(), (draft) => {
-            draft.cards.push({ title: 'item-1', done: false });
-            draft.cards.insertAt?.(1, { title: 'item-2', done: false });
+            draft.cards.push({ title: 'item-1', done: false, count: 0 });
+            draft.cards.insertAt?.(1, { title: 'item-2', done: false, count: 0 });
           });
 
           expect(doc.cards.length).to.eql(2);
@@ -159,8 +159,8 @@ describe('Automerge (CRDT)', () => {
 
         it('.deleteAt', () => {
           const doc = Automerge.change<Doc>(createTestDoc(), (draft) => {
-            draft.cards.insertAt?.(0, { title: 'item-1', done: false });
-            draft.cards.insertAt?.(1, { title: 'item-2', done: false });
+            draft.cards.insertAt?.(0, { title: 'item-1', done: false, count: 0 });
+            draft.cards.insertAt?.(1, { title: 'item-2', done: false, count: 0 });
             draft.cards.deleteAt?.(0);
           });
           expect(doc.cards.length).to.eql(1);
