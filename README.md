@@ -87,7 +87,7 @@ $ yarn test
 
 ```
 
-Ron all of these locally with:
+To run all of these locally within a single command:
 ```bash
 $ yarn ci
 ```
