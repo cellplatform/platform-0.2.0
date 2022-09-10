@@ -35,7 +35,7 @@ export const Builder = {
     if (!viteBuildOutput.ok) return viteBuildOutput;
 
     await Package.updateEsm(dir, { save: true });
-    await BuildManifest.generate(dir);
+    // await BuildManifest.generate(dir);
 
     if (!silent) console.log();
 
