@@ -1,3 +1,5 @@
 #!/usr/bin/env ts-node
 import { Builder } from './common/index.mjs';
-Builder.build(process.cwd());
+
+const dir = process.cwd();
+Builder.build(dir);
