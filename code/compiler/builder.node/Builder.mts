@@ -4,6 +4,7 @@ import { Vite } from './build/Vite.mjs';
 import { test } from './Builder.test.mjs';
 import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
+import { BuildManifest } from './build/BuildManifest.mjs';
 
 /**
  * ESM module builder.
@@ -27,13 +28,14 @@ export const Builder = {
 
     await Template.ensureBaseline(dir);
 
-    const tscResponse = await Typescript.build(dir, { exitOnError, silent });
-    if (!tscResponse.ok) return tscResponse;
+    const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
+    if (!tsBuildOutput.ok) return tsBuildOutput;
 
-    const viteResponse = await Vite.build(dir, { silent });
-    if (!viteResponse.ok) return viteResponse;
+    const viteBuildOutput = await Vite.build(dir, { silent });
+    if (!viteBuildOutput.ok) return viteBuildOutput;
 
     await Package.updateEsm(dir, { save: true });
+    await BuildManifest.generate(dir);
 
     if (!silent) console.log();
 
