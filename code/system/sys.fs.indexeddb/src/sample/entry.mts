@@ -27,7 +27,7 @@ console.log('-------------------------------------------');
  * Sample: Bus/Controller
  */
 const bus = rx.bus();
-const controller = Filesystem.Driver.BusController({ id, bus, driver });
+const controller = Filesystem.Bus.Controller({ id, bus, driver });
 
 bus.$.subscribe((e) => {
   console.log('💦', e);
