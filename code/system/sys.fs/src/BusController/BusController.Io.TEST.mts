@@ -82,7 +82,7 @@ describe('BusController.IO', function () {
 
     it('error: timeout', async () => {
       const bus = rx.bus();
-      const events = Filesystem.BusEvents({ id: 'bar', bus });
+      const events = Filesystem.Bus.Events({ id: 'bar', bus });
       const res = await events.io.info.get({ timeout: 10 });
 
       expect(res.error?.code).to.eql('fs:client/timeout');
