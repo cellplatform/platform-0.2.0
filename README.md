@@ -110,7 +110,7 @@ Note: the system uses [node-js](https://nodejs.org/en/) currently for build-chai
 
 ### Development Machine Setup
 
-Development machine [environment setup](docs/setup.environment.md) suggestions.
+Development machine [environment setup](docs/env.setup.md) suggestions.
 
 <p>&nbsp;</p>
 
