@@ -3,7 +3,7 @@
  * - Do not manually edit.
  * - Do check into source-code repository.
  */
-export const Pkg: Pkg = {
+export const Pkg: ModuleDef = {
   name: 'sys.data.crdt',
   version: '0.0.0',
   dependencies: {
@@ -11,7 +11,7 @@ export const Pkg: Pkg = {
   },
 };
 
-export type Pkg = {
+export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };

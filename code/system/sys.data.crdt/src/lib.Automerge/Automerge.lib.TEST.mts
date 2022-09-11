@@ -352,8 +352,13 @@ describe('Automerge (CRDT)', () => {
   });
 
   /**
-   * https://github.com/automerge/automerge/blob/main/SYNC.md
-   * https://github.com/automerge/automerge/blob/main/test/sync_test.js
+   * Network synchronization (using "bloom filters").
+   *
+   * Refs:
+   *    Paper (Theory):       https://arxiv.org/abs/2012.00472
+   *    Blog Post:            https://martin.kleppmann.com/2020/12/02/bloom-filter-hash-graph-sync.html
+   *    Lib Unit-Tests:       https://github.com/automerge/automerge/blob/main/test/sync_test.js#L15-L35
+   *
    */
   describe('sync (v2) - "bloom filters"', () => {
     function sync<D>(

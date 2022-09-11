@@ -5,8 +5,8 @@ describe('Module', () => {
   it('Pkg', async () => {
     //
     /**
-     * TODO 🐷 
-     * 
+     * TODO 🐷
+     *
      */
     expect(Pkg.name).to.eql('sys.data.crdt');
     expect(Pkg.version).to.eql('0.0.0');
