@@ -1,4 +1,5 @@
+export { Filesystem, Filesystem as default } from './Filesystem.mjs';
+export { Path, Filesize, Bus } from 'sys.fs';
+
 export { NodeFs } from './node/index.mjs';
 export { NodeDriver } from './Node.Fs.Driver/index.mjs';
-export { Path, Filesize } from './common/index.mjs';
-export { Filesystem } from './Filesystem.mjs';
