@@ -1,1 +1,1 @@
-export { ViteConfig } from './code/compiler/builder.node/Config.Vite.mjs';
+export { ViteConfig } from './code/compiler/builder.node/ViteConfig.mjs';
