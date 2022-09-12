@@ -1,7 +1,7 @@
-import { describe, expect, it } from './TEST/index.mjs';
+import { describe, expect, it, Pkg } from './TEST/index.mjs';
 
 describe('main', () => {
   it('tmp', () => {
-    expect(123).to.equal(123);
+    expect(Pkg.version.length).to.greaterThan(0);
   });
 });

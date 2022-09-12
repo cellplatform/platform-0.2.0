@@ -1,10 +1,10 @@
+import { BuildManifest } from './build/Manifest.mjs';
 import { Package } from './build/Package.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
 import { test } from './Builder.test.mjs';
 import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
-import { BuildManifest } from './build/BuildManifest.mjs';
 
 /**
  * ESM module builder.
@@ -26,19 +26,23 @@ export const Builder = {
   async build(dir: t.PathString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
     const { silent = false, exitOnError = true } = options;
 
+    // Pre-build.
     await Template.ensureBaseline(dir);
 
+    // - Typescript.
     const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
     if (!tsBuildOutput.ok) return tsBuildOutput;
 
+    // - ESM bundling.
     const viteBuildOutput = await Vite.build(dir, { silent });
     if (!viteBuildOutput.ok) return viteBuildOutput;
-
     await Package.updateEsm(dir, { save: true });
-    // await BuildManifest.generate(dir);
 
+    // Post build.
+    await BuildManifest.generate(dir);
+
+    // Finish up.
     if (!silent) console.log();
-
     return { ok: true, errorCode: 0 };
   },
 

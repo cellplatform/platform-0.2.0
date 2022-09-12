@@ -16,18 +16,17 @@ export const Typescript = {
    * Read the current version of typecript.
    */
   async version() {
-    const pkg = await Util.loadJsonFile<t.PackageJson>(fs.join(Paths.rootDir, 'package.json'));
+    const pkg = await Util.loadPackageJsonFile(Paths.rootDir);
     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-    const typescriptVersion = (deps?.['typescript'] ?? '0.0.0').replace(/^\^/, '');
-    return typescriptVersion;
+    return (deps['typescript'] ?? '0.0.0').replace(/^\^/, '');
   },
 
   /**
    * Complete build
    */
   async build(rootDir: t.PathString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
-    const { silent = false } = options;
     rootDir = fs.resolve(rootDir);
+    const { silent = false } = options;
     const tsVersion = await Typescript.version();
 
     if (!silent) {
@@ -41,9 +40,10 @@ export const Typescript = {
     }
 
     await Typescript.copyTsConfigFiles(rootDir, { clear: true });
+    await Typescript.generatePkgMetadata(rootDir);
     const res = await Typescript.buildTypes(rootDir, options);
-    await fs.remove(fs.join(rootDir, TsPaths.tmp));
 
+    await fs.remove(fs.join(rootDir, TsPaths.tmp));
     return res;
   },
 
@@ -135,5 +135,42 @@ export const Typescript = {
     await copy(Paths.tmpl.tsconfig.types, (tsconfig) => {
       tsconfig.compilerOptions.rootDir = rootDir;
     });
+  },
+
+  /**
+   * Generate the [index.pkg.mts] file that contains static
+   * meta-data about the module.
+   *
+   * DESIGN
+   *    This is generated prior to the TSC build step, allowing the module to
+   *    know basic things about itself (such as version, dependencies, etc) without
+   *    resorting to complicated JSON imports up to the root [package.json] file
+   *    which tend to fail in unexpected ways as the environment shifts
+   *    and other processes operate with the module directory.
+   */
+  async generatePkgMetadata(rootDir: t.PathString) {
+    rootDir = fs.resolve(rootDir);
+    const rootPkg = await Util.loadPackageJsonFile(Paths.rootDir);
+    const modulePkg = await Util.loadPackageJsonFile(rootDir);
+    let text = (await fs.readFile(fs.join(Paths.tmpl.dir, Paths.tmpl.pkg))).toString();
+
+    const rootDeps = { ...rootPkg.dependencies, ...rootPkg.devDependencies }; // Include both for fallback version lookup.
+    const moduleDeps = { ...modulePkg.dependencies };
+    const version = Util.trimVersionAdornments(modulePkg.version);
+
+    let dependencies = '  dependencies: {\n';
+    Object.keys(moduleDeps).forEach((key) => {
+      const rootVersion = Util.trimVersionAdornments(rootDeps[key]);
+      let version = Util.trimVersionAdornments(moduleDeps[key]);
+      if (version === 'latest' && rootVersion) version = rootVersion;
+      dependencies += `    '${key}': '${version}',\n`;
+    });
+    dependencies += '  },';
+
+    text = text.replace(/name: '',/, `name: '${modulePkg.name}',`);
+    text = text.replace(/version: '',/, `version: '${version}',`);
+    text = text.replace(/  dependencies: \{\},/, dependencies);
+
+    await fs.writeFile(fs.join(rootDir, Paths.tmpl.pkg), text);
   },
 };
