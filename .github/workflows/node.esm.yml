@@ -28,5 +28,5 @@ jobs:
       - run: yarn install
       - run: yarn audit
       - run: yarn build
-      - run: yarn tmp
+      - run: yarn foo
       # - run: yarn test

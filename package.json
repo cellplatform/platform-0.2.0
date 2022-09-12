@@ -7,6 +7,7 @@
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
     "ci": "yarn build && yarn test",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
+    "foo": "ts-node-esm   -T script.ts/foo.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "tmp.ext": "ts-node-esm -T script.ts/tmp.ext.mts",
     "tmp.del": "ts-node-esm -T script.ts/tmp.delete.mts"
