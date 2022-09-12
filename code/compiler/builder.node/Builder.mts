@@ -39,7 +39,7 @@ export const Builder = {
     await Package.updateEsm(dir, { save: true });
 
     // Post build.
-    await BuildManifest.generate(dir);
+    // await BuildManifest.generate(dir);
 
     // Finish up.
     if (!silent) console.log();

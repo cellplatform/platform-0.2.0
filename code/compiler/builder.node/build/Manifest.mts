@@ -14,7 +14,7 @@ export const BuildManifest = {
   async generate(projectDir: string) {
     //
     // TEMP 🐷
-    console.log('🐷🐷🐷 genreate manifest', projectDir);
+    console.log('🐷🐷🐷 generate manifest', projectDir);
 
     // console.log('Path', Path);
     // console.log('Filesystem', Filesystem);
