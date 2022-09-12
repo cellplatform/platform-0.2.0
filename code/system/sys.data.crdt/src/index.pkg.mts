@@ -1,13 +1,20 @@
 /**
- * GENERATED Metadata.
- * - Do not manually edit.
- * - Do check into source-code repository.
+ * [GENERATED FILE]
+ *    This file is generated on each build.
+ *    Use it (via an import) to determine basic facts about the bundled module.
+ *
+ *    - Do not manually edit.
+ *    - Do commit it to source-control.
  */
+
 export const Pkg: ModuleDef = {
   name: 'sys.data.crdt',
   version: '0.0.0',
   dependencies: {
-    automerge: '1.0.1-preview.7',
+    'sys.fs': '0.0.0',
+    'sys.types': '0.0.0',
+    'sys.util': '0.0.0',
+    'automerge': '1.0.1-preview.7',
   },
 };
 
