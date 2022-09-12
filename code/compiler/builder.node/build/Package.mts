@@ -73,12 +73,12 @@ export const Package = {
   /**
    * Load build related JSON files.
    */
-  async loadManifestFiles(root: t.PathString) {
-    await Template.ensureExists('esm.json', root);
+  async loadManifestFiles(rootDir: t.PathString) {
+    await Template.ensureExists('esm.json', rootDir);
 
     const target = {
-      manifest: fs.join(root, Paths.buildManifest),
-      esm: fs.join(root, Paths.tmpl.esmConfig),
+      manifest: fs.join(rootDir, Paths.buildManifest),
+      esm: fs.join(rootDir, Paths.tmpl.esmConfig),
     };
 
     const manifest = await Util.loadJsonFile<t.ViteManifest>(target.manifest);
