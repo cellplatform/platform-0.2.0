@@ -15,7 +15,6 @@ yarn-error.log*
 node_modules
 dist
 dist-ssr
-dist.types
 coverage
 
 # Editor directories and files
