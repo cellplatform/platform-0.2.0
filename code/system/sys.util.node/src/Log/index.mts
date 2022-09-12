@@ -1,1 +1,1 @@
-export { Table } from './LogTable.mjs';
+export { LogTable } from './LogTable.mjs';
