@@ -1,8 +1,9 @@
 /// <reference types="vitest" />
 
-import { defineConfig, LibraryOptions, UserConfig } from 'vite';
+import { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
 import { fs } from './common/index.mjs';
 import type { RollupOptions } from 'rollup';
+import { Paths } from './Paths.mjs';
 
 export type PackageJson = {
   name: string;
@@ -17,6 +18,7 @@ type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown> | unknown;
 type ModifyConfigArgs = {
   readonly ctx: ModifyConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
+  platform(target: 'web' | 'node'): void;
 };
 type ModifyConfigCtx = {
   readonly name: string;
@@ -74,10 +76,17 @@ export const ViteConfig = {
         output: { globals: {} },
       };
 
+      const build: BuildOptions = {
+        lib,
+        rollupOptions,
+        manifest: fs.basename(Paths.viteManifest),
+      };
+
       const config: UserConfig = {
         plugins: [],
         test: ViteConfig.defaults.test(),
-        build: { lib, rollupOptions },
+        build,
+        worker: { format: 'es' },
       };
 
       /**
@@ -89,6 +98,10 @@ export const ViteConfig = {
           asArray(moduleName)
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
+        },
+        platform(target) {
+          if (target === 'web') build.ssr = undefined;
+          if (target === 'node') build.ssr = true;
         },
       };
 

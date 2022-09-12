@@ -2,7 +2,6 @@ import { build } from 'vite';
 
 import { fs, t } from '../common/index.mjs';
 import { Template } from '../Template.mjs';
-import { Paths } from '../Paths.mjs';
 
 /**
  * Refs:
@@ -17,17 +16,8 @@ export const Vite = {
     const root = fs.resolve(rootDir);
     const logLevel = options.silent ? 'silent' : undefined;
 
-    // Ensure the Vite config file exists.
     await Template.ensureExists('vite.config', rootDir);
-
-    // Run the builder operation.
-    await build({
-      root,
-      logLevel,
-      build: { manifest: fs.basename(Paths.viteManifest) },
-      worker: { format: 'es' },
-    });
-
+    await build({ root, logLevel });
     return { ok: true, errorCode: 0 };
   },
 };
