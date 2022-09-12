@@ -73,10 +73,10 @@ export const Typescript = {
     const res = await Typescript.tsc(rootDir, tsconfig, { silent });
     if (!res.ok && options.exitOnError) process.exit(res.errorCode);
 
-    // Move the child "src/" folder up into the root "types/" folder.
+    // Move the child "src/" folder into the distirbution output folder
+    const source = fs.join(rootDir, TsPaths.tmp, 'types.d/src');
+    const target = fs.join(rootDir, 'types.d');
     if (res.ok) {
-      const source = fs.join(rootDir, TsPaths.tmp, 'types.d/src');
-      const target = fs.join(rootDir, 'types.d');
       await fs.remove(target);
       await fs.move(source, target);
       await fs.remove(fs.join(rootDir, TsPaths.tmp, 'types.d'));
@@ -84,8 +84,9 @@ export const Typescript = {
 
     // Remove any test types.
     const pattern = '**/*.{TEST,SPEC}.d.{ts,tsx,mts,mtsx}';
-    const tests = await fs.glob.find(fs.join(rootDir, 'types', pattern));
+    const tests = await fs.glob.find(fs.join(target, pattern));
     await Promise.all(tests.map((path) => fs.remove(path)));
+    await fs.remove(fs.join(target, 'TEST/'));
 
     return res;
   },

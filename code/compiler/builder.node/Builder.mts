@@ -5,6 +5,7 @@ import { Vite } from './build/Vite.mjs';
 import { test } from './Builder.test.mjs';
 import { fs, t } from './common/index.mjs';
 import { Template } from './Template.mjs';
+import { Paths } from './Paths.mjs';
 
 /**
  * ESM module builder.
@@ -25,6 +26,7 @@ export const Builder = {
    */
   async build(dir: t.PathString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
     const { silent = false, exitOnError = true } = options;
+    dir = fs.resolve(dir);
 
     // Pre-build.
     await Template.ensureBaseline(dir);
@@ -39,6 +41,7 @@ export const Builder = {
     await Package.updateEsm(dir, { save: true });
 
     // Post build.
+    await fs.copy(fs.join(dir, Paths.types.root), fs.join(dir, Paths.types.dist));
     // await BuildManifest.generate(dir);
 
     // Finish up.
@@ -46,17 +49,14 @@ export const Builder = {
     return { ok: true, errorCode: 0 };
   },
 
-  async tmp() {
-    //
-  },
-
   /**
    * Clean a module of transient build artifacts and temporary data.
    */
   async clean(dir: t.PathString) {
     dir = fs.resolve(dir);
-    await fs.remove(fs.join(dir, 'dist'));
-    await fs.remove(fs.join(dir, 'types'));
+    await fs.remove(fs.join(dir, Paths.dist));
+    await fs.remove(fs.join(dir, Paths.types.root));
+    await fs.remove(fs.join(dir, 'tmp'));
   },
 };
 
