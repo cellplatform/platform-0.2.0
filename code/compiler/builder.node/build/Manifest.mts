@@ -21,7 +21,7 @@ export const BuildManifest = {
 
     const dist = Path.join(projectDir, 'dist');
 
-    console.log('dist', dist);
+    console.log('Generate Manifest:', dist);
 
     const bus = rx.bus();
     const id = 'fs.build-tools';
@@ -32,8 +32,7 @@ export const BuildManifest = {
     // Filesystem.b
     const controller = Filesystem.Bus.Controller({ id, bus, driver });
     const fs = controller.fs();
-
     const m = await fs.manifest({ dir: 'dist' });
-    console.log('m', m);
+    // console.log('m', m);
   },
 };
