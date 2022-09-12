@@ -16,14 +16,14 @@ export const Package = {
 
     const pkgPath = fs.join(rootDir, 'package.json');
     const pkg = await Util.loadJsonFile<t.PackageJson>(pkgPath);
-    const config = await Package.loadManifestFiles(rootDir);
+    const config = await Package.loadJsonFiles(rootDir);
 
     const exports: t.PackageJsonExports = {};
     const typesVersions: t.PackageJsonTypesVersions = { '*': {} };
 
     for (const key of Object.keys(config.esm.exports ?? {})) {
       const path = config.esm.exports[key];
-      const match = Object.values(config.manifest).find((file) => {
+      const match = Object.values(config.viteManifest).find((file) => {
         return path === Util.ensureRelativeRoot(file.src);
       });
 
@@ -71,19 +71,19 @@ export const Package = {
   },
 
   /**
-   * Load build related JSON files.
+   * Load the vite builder related JSON files.
    */
-  async loadManifestFiles(rootDir: t.PathString) {
+  async loadJsonFiles(rootDir: t.PathString) {
     await Template.ensureExists('esm.json', rootDir);
 
     const target = {
-      manifest: fs.join(rootDir, Paths.buildManifest),
+      viteManifest: fs.join(rootDir, Paths.viteManifest),
       esm: fs.join(rootDir, Paths.tmpl.esmConfig),
     };
 
-    const manifest = await Util.loadJsonFile<t.ViteManifest>(target.manifest);
+    const viteManifest = await Util.loadJsonFile<t.ViteManifest>(target.viteManifest);
     const esm = await Util.loadJsonFile<t.EsmConfig>(target.esm);
 
-    return { manifest, esm };
+    return { viteManifest, esm };
   },
 };

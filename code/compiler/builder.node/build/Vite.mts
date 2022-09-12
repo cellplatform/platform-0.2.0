@@ -2,6 +2,7 @@ import { build } from 'vite';
 
 import { fs, t } from '../common/index.mjs';
 import { Template } from '../Template.mjs';
+import { Paths } from '../Paths.mjs';
 
 /**
  * Refs:
@@ -23,7 +24,7 @@ export const Vite = {
     await build({
       root,
       logLevel,
-      build: { manifest: true },
+      build: { manifest: fs.basename(Paths.viteManifest) },
       worker: { format: 'es' },
     });
 
