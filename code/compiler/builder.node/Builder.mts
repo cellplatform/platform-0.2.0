@@ -46,6 +46,10 @@ export const Builder = {
     return { ok: true, errorCode: 0 };
   },
 
+  async tmp() {
+    //
+  },
+
   /**
    * Clean a module of transient build artifacts and temporary data.
    */

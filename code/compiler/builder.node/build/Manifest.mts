@@ -5,8 +5,6 @@ import { rx } from '../../../system/sys.util/src/index.mjs';
  * Helpers for building and saving the manifest of a compiled build.
  */
 export const BuildManifest = {
-  //
-
   /**
    * Generate a build manifest from the given project/module
    * directory.
