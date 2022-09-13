@@ -491,7 +491,7 @@ assertion-error@^1.1.0:
   resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
   integrity sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==
 
-automerge@^1.0.1-preview.7:
+automerge@^1.0.1-preview.7, automerge@latest:
   version "1.0.1-preview.7"
   resolved "https://registry.yarnpkg.com/automerge/-/automerge-1.0.1-preview.7.tgz#6a0cadaa8efbcdb578ed899ac03d7002763e8d2c"
   integrity sha512-Fz5fJdU59xYYj0viteMKTGg/bQWTyibZlkY3V8VQqx9Do1Eg3jtud2+BAI5ZQiKwdWocXc4KKC5o5vT1dzouag==
