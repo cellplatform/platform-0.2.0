@@ -1,4 +1,9 @@
 /**
+ * @vendor
+ */
+export type { Observable } from 'rxjs';
+
+/**
  * @system
  */
 export type { Json, JsonMap, Disposable, Manifest, ModuleManifest, DirManifest } from 'sys.types';
