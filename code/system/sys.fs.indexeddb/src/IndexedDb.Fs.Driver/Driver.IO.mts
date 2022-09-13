@@ -1,12 +1,12 @@
 import { Delete, NAME, Path, t, Wrangle } from '../common/index.mjs';
 import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
 
-type DirPathString = string;
+type DirPath = string;
 
 /**
  * A filesystem I/O driver running against the browser's [IndexedDB] store.
  */
-export function FsIO(args: { dir: DirPathString; db: IDBDatabase }): t.FsIO {
+export function FsIO(args: { dir: DirPath; db: IDBDatabase }): t.FsIO {
   const { db } = args;
   const root = Path.ensureSlashes(args.dir);
   const lookup = DbLookup(db);
