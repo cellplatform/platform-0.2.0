@@ -64,7 +64,6 @@ describe('ManifestHash', () => {
       version: '1.2.3',
       compiler: `@platform/compiler@0.0.0`,
       compiledAt: 123456789,
-      mode: 'production',
       target: 'web',
       entry: 'index.html',
       remote: {

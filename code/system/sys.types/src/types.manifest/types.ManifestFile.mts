@@ -1,5 +1,3 @@
-import { t } from './common.mjs';
-
 /**
  * A single file within a manifest.
  */

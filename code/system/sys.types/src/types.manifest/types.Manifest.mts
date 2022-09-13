@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t } from '../common.mjs';
 
 type Sha256 = string;
 
