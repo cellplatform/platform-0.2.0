@@ -25,6 +25,7 @@
     "image-js": "^0.35.1",
     "jss-plugin-global": "^10.9.2",
     "fake-indexeddb": "^4.0.0",
+    "immer": "^9.0.15",
     "minimist": "^1.2.6",
     "nanoid": "^4.0.0",
     "pretty-bytes": "^6.0.0",
