@@ -8,7 +8,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.net',
+  name: 'sys.net.http',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',

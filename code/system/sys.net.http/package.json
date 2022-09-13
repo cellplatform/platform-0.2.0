@@ -1,5 +1,5 @@
 {
-  "name": "sys.net",
+  "name": "sys.net.http",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -15,7 +15,8 @@
     "cross-fetch": "latest"
   },
   "devDependencies": {
-    "sys.test": "^0.0.0"
+    "sys.test": "^0.0.0",
+    "sys.fs": "^0.0.0"
   },
   "license": "MIT",
   "private": true,
