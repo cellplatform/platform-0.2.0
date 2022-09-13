@@ -62,13 +62,6 @@ export function toCtx(fs: Util.Fs, http: Util.Http, token: string, version?: num
  */
 export function shasum(data?: Uint8Array | string) {
   if (data === undefined) return '';
-
-  /**
-   * TODO 🐷
-   */
+  if (typeof data === 'string') data = new TextEncoder().encode(data);
   return Hash.sha1(data, { prefix: false });
-
-  // const hash = Sha1.create();
-  // hash.update(data);
-  // return hash.hex();
 }
