@@ -11,7 +11,7 @@ type Milliseconds = number;
   const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
   const filter = (path: string) => {
-    if (path.includes('/code/samples')) return false;
+    if (path.includes('/code/compiler.sample')) return false;
     return true;
   };
   let paths = await Util.findProjectDirs({ filter });
