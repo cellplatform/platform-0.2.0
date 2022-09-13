@@ -1,5 +1,5 @@
 import { Automerge } from '../common/index.mjs';
-import { describe, expect, it, TestFilesystem } from '../TEST/index.mjs';
+import { describe, expect, it, TestFilesystem } from '../Test/index.mjs';
 import { AutomergeDoc } from './index.mjs';
 
 /**
