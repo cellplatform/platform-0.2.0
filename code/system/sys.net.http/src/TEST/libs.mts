@@ -1,2 +1,2 @@
 export * from '../common/index.mjs';
-export { TestFilesystem } from 'sys.fs';
+export { NodeFs } from 'sys.fs.node';
