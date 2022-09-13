@@ -10,10 +10,10 @@ const rootDir = fs.join(__dirname, '../../..');
 export const Paths = {
   rootDir,
   dist: 'dist',
-  viteManifest: 'dist/.vite.manifest.json',
+  viteManifest: 'dist/.build.manifest.json',
   types: {
-    root: 'types.d',
-    dist: 'dist/types',
+    dirname: 'types.d',
+    dist: 'dist/types.d',
   },
   tmpl: {
     dir: fs.join(__dirname, '../template.esm'),

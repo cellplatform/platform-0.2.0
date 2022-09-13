@@ -1,11 +1,11 @@
-import { BuildManifest } from './build/Manifest.mjs';
-import { Package } from './build/Package.mjs';
+import { PackageRoot } from './build/Package.Root.mjs';
+import { PackageDist } from './build/Packge.Dist.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
 import { test } from './Builder.test.mjs';
 import { fs, t } from './common/index.mjs';
-import { Template } from './Template.mjs';
 import { Paths } from './Paths.mjs';
+import { Template } from './Template.mjs';
 
 /**
  * ESM module builder.
@@ -24,7 +24,7 @@ export const Builder = {
    *    - Updates [packag.json] with ESM {exports} and typescript {typesVersions}.
    *
    */
-  async build(dir: t.PathString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
+  async build(dir: t.DirString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
     const { silent = false, exitOnError = true } = options;
     dir = fs.resolve(dir);
 
@@ -38,10 +38,12 @@ export const Builder = {
     // - ESM bundling.
     const viteBuildOutput = await Vite.build(dir, { silent });
     if (!viteBuildOutput.ok) return viteBuildOutput;
-    await Package.updateEsm(dir, { save: true });
 
     // Post build.
-    await fs.copy(fs.join(dir, Paths.types.root), fs.join(dir, Paths.types.dist));
+    await fs.copy(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
+
+    await PackageRoot.updateEsmEntries(dir);
+    await PackageDist.generate(dir);
     // await BuildManifest.generate(dir);
 
     // Finish up.
@@ -52,10 +54,10 @@ export const Builder = {
   /**
    * Clean a module of transient build artifacts and temporary data.
    */
-  async clean(dir: t.PathString) {
+  async clean(dir: t.DirString) {
     dir = fs.resolve(dir);
     await fs.remove(fs.join(dir, Paths.dist));
-    await fs.remove(fs.join(dir, Paths.types.root));
+    await fs.remove(fs.join(dir, Paths.types.dirname));
     await fs.remove(fs.join(dir, 'tmp'));
   },
 };
