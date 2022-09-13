@@ -1,5 +1,5 @@
 import { ManifestFiles } from '../Manifest/index.mjs';
-import { describe, expect, expectError, it, MemoryMock, TestPrep } from '../TEST/index.mjs';
+import { describe, expect, expectError, it, MemoryMock, TestPrep } from '../Test/index.mjs';
 import { DEFAULT, Hash, Json, t } from './common.mjs';
 
 describe('BusEvents.Fs', () => {

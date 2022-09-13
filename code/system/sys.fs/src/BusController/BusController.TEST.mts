@@ -1,5 +1,5 @@
 import { BusEvents } from '../BusEvents/index.mjs';
-import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../TEST/index.mjs';
+import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../Test/index.mjs';
 import { BusController } from './index.mjs';
 
 describe('BusController', function () {

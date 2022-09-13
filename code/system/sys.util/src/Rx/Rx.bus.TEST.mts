@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { expect, describe, it } from '../Test/index.mjs';
 import { Observable, Subject } from 'rxjs';
 import { t } from '../common/index.mjs';
 

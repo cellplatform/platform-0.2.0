@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { expect, describe, it } from '../Test/index.mjs';
 import { Style } from '../index.mjs';
 
 describe('css.toEdges', () => {

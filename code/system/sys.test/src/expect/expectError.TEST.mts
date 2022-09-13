@@ -1,5 +1,5 @@
 import { expectError } from './index.mjs';
-import { describe, it } from '../TEST/index.mjs';
+import { describe, it } from '../Test/index.mjs';
 
 describe('expectError', () => {
   const throwError = (message: string) => {
