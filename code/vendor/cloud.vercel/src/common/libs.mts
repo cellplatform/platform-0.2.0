@@ -1,1 +1,4 @@
-export { rx } from 'sys.util';
+/**
+ * @system
+ */
+export { rx, Hash } from 'sys.util';
