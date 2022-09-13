@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import { Readable } from 'stream';
 
-import { t, Time, util } from '../common/index.mjs';
+import { t, Time, Util } from '../common/index.mjs';
 import { beforeEach, NodeFs, describe, expect, it, randomPort } from '../TEST/index.mjs';
 import { Http, http } from './index.mjs';
 
@@ -362,7 +362,7 @@ describe('http', () => {
 
       expect(res.text).to.eql(data);
       expect(res.json).to.eql('');
-      expect(util.isStream(res.body)).to.eql(true);
+      expect(Util.isStream(res.body)).to.eql(true);
     });
 
     it('http server: json', async () => {
@@ -387,7 +387,7 @@ describe('http', () => {
 
       expect(res.text).to.eql('');
       expect(res.json).to.eql(data);
-      expect(util.isStream(res.body)).to.eql(true);
+      expect(Util.isStream(res.body)).to.eql(true);
     });
 
     it('http server: json (404)', async () => {
@@ -433,7 +433,7 @@ describe('http', () => {
       expect(res.text).to.eql('');
       expect(res.json).to.eql('');
 
-      expect(util.isStream(res.body)).to.eql(true);
+      expect(Util.isStream(res.body)).to.eql(true);
       if (res.body) {
         const path = NodeFs.resolve('tmp/kitten.jpg');
         await NodeFs.stream.save(path, res.body);
@@ -449,7 +449,7 @@ describe('http', () => {
         await Time.wait(10);
         return {
           status: 202,
-          headers: util.toRawHeaders({ foo: 'bar', 'Content-Type': 'application/json' }),
+          headers: Util.toRawHeaders({ foo: 'bar', 'Content-Type': 'application/json' }),
           body: null,
           text: async () => JSON.stringify(data),
           json: async () => data,
@@ -494,7 +494,7 @@ describe('http', () => {
         await Time.wait(10);
         return {
           status: 202,
-          headers: util.toRawHeaders({ 'Content-Type': 'application/vnd.foo.picture+json' }),
+          headers: Util.toRawHeaders({ 'Content-Type': 'application/vnd.foo.picture+json' }),
           body: null,
           text: async () => JSON.stringify(data),
           json: async () => data,

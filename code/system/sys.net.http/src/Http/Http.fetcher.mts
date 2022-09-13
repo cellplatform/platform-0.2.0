@@ -1,4 +1,4 @@
-import { t, util, slug, Time, Delete, Headers } from '../common/index.mjs';
+import { t, Util, slug, Time, Delete, Headers } from '../common/index.mjs';
 
 export const fetcher = async (args: {
   url: string;
@@ -63,7 +63,7 @@ export const fetcher = async (args: {
     // Exit with faked/overridden response if one was returned via the BEFORE event.
     const respond = modifications.respond;
     const payload = typeof respond === 'function' ? await respond() : respond;
-    const response = await util.response.fromPayload(payload, modifications);
+    const response = await Util.response.fromPayload(payload, modifications);
     const elapsed = timer.elapsed.msec;
     const { ok, status } = response;
     fire({
@@ -73,7 +73,7 @@ export const fetcher = async (args: {
     return response;
   } else {
     const done = async (fetched: t.HttpFetchResponse) => {
-      const response = await util.response.fromFetch(fetched);
+      const response = await Util.response.fromFetch(fetched);
       const elapsed = timer.elapsed.msec;
       const { ok, status } = response;
       fire({

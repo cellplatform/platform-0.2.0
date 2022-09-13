@@ -1,4 +1,4 @@
-import { t, util, CrossFetch } from '../common/index.mjs';
+import { t, Util, CrossFetch } from '../common/index.mjs';
 
 export const fetch: t.HttpFetch = async (req) => {
   const { url, method, mode, data } = req;
@@ -8,12 +8,12 @@ export const fetch: t.HttpFetch = async (req) => {
 
   const toBody = (): any => {
     if (data instanceof Uint8Array) return data;
-    if (util.isFormData(req.headers)) return data;
+    if (Util.isFormData(req.headers)) return data;
     if (typeof data === 'string') return data;
-    return util.stringify(data, onError);
+    return Util.stringify(data, onError);
   };
 
-  const headers = util.toRawHeaders(req.headers);
+  const headers = Util.toRawHeaders(req.headers);
   const body = ['GET', 'HEAD'].includes(method) ? undefined : toBody();
 
   return CrossFetch(url, { method, mode, body, headers });
