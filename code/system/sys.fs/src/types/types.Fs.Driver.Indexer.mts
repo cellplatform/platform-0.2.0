@@ -1,6 +1,6 @@
 import { t } from './common.mjs';
 
-type DirPathString = string;
+type DirPath = string;
 
 export type FsPathFilter = (e: FsPathFilterArgs) => boolean;
 export type FsPathFilterArgs = { path: string; is: { dir: boolean; file: boolean } };
@@ -9,7 +9,7 @@ export type FsPathFilterArgs = { path: string; is: { dir: boolean; file: boolean
  * Index of a file-system.
  */
 export type FsIndexer = {
-  readonly dir: DirPathString; // Root directory of the file-system.
+  readonly dir: DirPath; // Root directory of the file-system.
   manifest: FsIndexerGetManifest;
 };
 
@@ -19,4 +19,4 @@ export type FsIndexer = {
 export type FsIndexerGetManifest = (
   options?: FsIndexerGetManifestOptions,
 ) => Promise<t.DirManifest>;
-export type FsIndexerGetManifestOptions = { dir?: DirPathString; filter?: FsPathFilter };
+export type FsIndexerGetManifestOptions = { dir?: DirPath; filter?: FsPathFilter };

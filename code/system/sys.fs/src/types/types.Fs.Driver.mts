@@ -1,11 +1,11 @@
 import { t } from './common.mjs';
 
-type DirPathString = string;
+type DirPath = string;
 
 /**
  * Factory function for creating a filesystem driver.
  */
-export type FsDriverFactory = (dir?: DirPathString) => Promise<t.FsDriver>;
+export type FsDriverFactory = (dir?: DirPath) => Promise<t.FsDriver>;
 
 /**
  * A driver that implements a bridge to an underlying platform filesystem

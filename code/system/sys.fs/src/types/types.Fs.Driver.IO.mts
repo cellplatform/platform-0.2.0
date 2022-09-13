@@ -1,7 +1,7 @@
 import { FsError } from './types.Error.mjs';
 
-type DirPathString = string; //  Path to a directory, eg: "foo/"
-type FilePathString = string; // Path to a file, eg: "foo/bar.txt"
+type DirPath = string; //  Path to a directory, eg: "foo/"
+type FilePath = string; // Path to a file, eg: "foo/bar.txt"
 type PathUriString = string; //  URI representing a file-path, eg: "path:foo/bar.png"
 type FileUriString = string; //  URI representing an absolute location of a file, eg: "file:///foo/bar.png"
 type HttpStatusCode = number;
@@ -16,7 +16,7 @@ export type FsIO = {
    * Path to the directory that represents the top-leve "scope" the driver
    * has permission to access within the underlying store.
    */
-  dir: DirPathString;
+  dir: DirPath;
 
   /**
    * Meta-data.
@@ -37,7 +37,7 @@ export type FsIO = {
  * ...implementation parts...
  */
 
-export type FsPathResolver = (uri: PathUriString) => FilePathString;
+export type FsPathResolver = (uri: PathUriString) => FilePath;
 export type FsDriverInfoMethod<Info extends FsDriverMeta> = (
   address: PathUriString,
 ) => Promise<Info>;
@@ -63,7 +63,7 @@ export type FsDriverDeleteMethod<Delete extends FsDriverDelete> = (
  * File (meta/info)
  */
 export type FsDriverMeta = {
-  path: FilePathString;
+  path: FilePath;
   location: FileUriString;
   hash: string;
   bytes: number;
