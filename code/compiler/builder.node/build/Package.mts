@@ -1,15 +1,21 @@
 import { fs, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
-import { Vite } from './Vite.mjs';
 
 export const Package = {
   /**
    * Updates the ESM entry points on a [package.json] based on the
    * build output within the given manifest.
    */
-  async updateEsmEntries(root: t.DirString, pkg: t.PackageJson, options: { subdir?: string } = {}) {
-    const { subdir } = options;
-    const { files } = await Vite.loadManifest(root);
+  async updateEsmEntries(args: {
+    root: t.DirString;
+    pkg: t.PackageJson;
+    manifest: t.ViteManifest;
+    subdir?: string; // eg. '/dist/' if building a [package.json] at a higher level that the 'dist/' folder itself.
+  }) {
+    const { subdir, manifest } = args;
+    const root = fs.resolve(args.root);
+    const files = Object.keys(manifest).map((key) => manifest[key]);
+    let pkg = args.pkg;
 
     pkg = { ...pkg };
     delete pkg.exports;

@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../TEST/index.mjs';
-import { NodeGlob, NodeFs } from './index.mjs';
+import { NodeGlob, NodeFs, NodeStream } from './index.mjs';
 
 describe('NodeFs', () => {
   const methodExists = (method: keyof typeof NodeFs) => {
@@ -21,5 +21,9 @@ describe('NodeFs', () => {
 
   it('has glob', () => {
     expect(NodeFs.glob).to.equal(NodeGlob.find);
+  });
+
+  it('has stream', () => {
+    expect(NodeFs.stream).to.equal(NodeStream);
   });
 });

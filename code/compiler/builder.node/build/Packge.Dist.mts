@@ -1,13 +1,15 @@
 import { fs, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 import { Package } from './Package.mjs';
+import { Vite } from './Vite.mjs';
 
 export const PackageDist = {
+  /**
+   * Generate a [package.json] file for the /dist/ build output.
+   */
   async generate(root: t.DirString) {
-    root = fs.resolve(root);
-
-    const projectPkg = await Util.PackageJson.load(root);
-    const { name, version } = projectPkg;
+    const { name, version } = await Util.PackageJson.load(root);
+    const { manifest } = await Vite.loadManifest(root);
 
     const pkg: t.PackageJson = {
       name,
@@ -16,8 +18,8 @@ export const PackageDist = {
     };
 
     // Update and save.
-    const subdir = Paths.dist;
-    const esm = await Package.updateEsmEntries(root, pkg, { subdir });
-    await Util.PackageJson.save(fs.join(root, Paths.dist), esm);
+    root = fs.resolve(root, Paths.dist);
+    const esm = await Package.updateEsmEntries({ root, pkg, manifest });
+    await Util.PackageJson.save(root, esm);
   },
 };

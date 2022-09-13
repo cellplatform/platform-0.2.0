@@ -12,9 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 
 node_modules
-dist
-dist-ssr
-coverage
+dist/
+dist-ssr/
+coverage/
 
 # Editor directories and files
 .vscode/*

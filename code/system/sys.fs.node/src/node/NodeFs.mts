@@ -1,5 +1,6 @@
 import { fsextra, path, t } from '../common/index.mjs';
 import { NodeGlob } from './NodeGlob.mjs';
+import { NodeStream } from './NodeStream.mjs';
 
 /**
  * An single interface for interacting with POSIX style
@@ -25,4 +26,5 @@ export const NodeFs: t.NodeFs = {
   ...fsextra,
   ...path,
   glob: NodeGlob.find,
+  stream: NodeStream,
 };
