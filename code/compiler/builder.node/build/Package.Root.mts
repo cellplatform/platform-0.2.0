@@ -1,6 +1,5 @@
 import { fs, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
-import { Template } from '../Template.mjs';
 import { Package } from './Package.mjs';
 
 /**
@@ -18,13 +17,5 @@ export const PackageRoot = {
     const pkg = await Util.PackageJson.load(root);
     const updated = await Package.updateEsmEntries(root, pkg, { subdir });
     await Util.PackageJson.save(root, updated);
-  },
-
-  /**
-   * Load the vite builder related JSON files.
-   */
-  async loadEsmConfig(root: t.DirString) {
-    await Template.ensureExists('esm.json', root);
-    return Util.loadJson<t.EsmConfig>(fs.join(root, Paths.tmpl.esmConfig));
   },
 };

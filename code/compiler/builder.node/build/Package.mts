@@ -32,7 +32,6 @@ export const Package = {
 
     for (const item of files) {
       const type = await Package.findTypePath(subdir ? fs.join(root, subdir) : root, item.src);
-      console.log(item.src, 'type', type);
       if (item.isEntry) exports['.'] = formatPath(item.file);
       if (type) {
         if (item.isDynamicEntry) exports[ensureRelative(type.key)] = formatPath(item.file);

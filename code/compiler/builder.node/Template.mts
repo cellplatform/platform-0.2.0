@@ -37,11 +37,6 @@ export const Template = {
       return;
     }
 
-    if (kind === 'esm.json') {
-      await copyFileMaybe(Paths.tmpl.esmConfig);
-      return;
-    }
-
     if (kind === 'entry:src') {
       const srcExists = await fs.pathExists(fs.join(targetDir, 'src'));
       if (!srcExists) {
@@ -66,7 +61,6 @@ export const Template = {
   async ensureBaseline(targetDir: t.DirString) {
     const ensure = Template.ensureExists;
     await ensure('vite.config', targetDir);
-    await ensure('esm.json', targetDir);
     await ensure('entry:src', targetDir);
     await ensure('entry:html', targetDir);
   },

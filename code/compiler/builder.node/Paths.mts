@@ -17,7 +17,6 @@ export const Paths = {
   },
   tmpl: {
     dir: fs.join(__dirname, '../template.esm'),
-    esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
     pkg: 'src/index.pkg.mts',
