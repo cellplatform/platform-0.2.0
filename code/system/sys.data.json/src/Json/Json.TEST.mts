@@ -1,4 +1,4 @@
-import { describe, it, expect, t } from '../TEST/index.mjs';
+import { describe, it, expect, t } from '../Test/index.mjs';
 import { Json } from './index.mjs';
 
 import JsonDefault from '../index.mjs';

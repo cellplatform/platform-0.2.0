@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { expect, describe, it } from '../Test/index.mjs';
 import { toMimetype } from './toMimetype.mjs';
 
 describe('toMimetype (content-type)', () => {

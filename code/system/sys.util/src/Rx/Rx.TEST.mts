@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { expect, describe, it } from '../Test/index.mjs';
 import { Subject } from 'rxjs';
 
 import { rx } from './index.mjs';

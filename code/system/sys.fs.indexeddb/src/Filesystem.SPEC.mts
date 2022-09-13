@@ -1,7 +1,7 @@
 import { Spec } from 'sys.fs.spec';
 
 import { IndexedDbDriver } from './index.mjs';
-import { describe, it, MemoryMock, Path, slug, t } from './TEST/index.mjs';
+import { describe, it, MemoryMock, Path, slug, t } from './Test/index.mjs';
 
 /**
  * Baseline functional specifications from [sys.fs].

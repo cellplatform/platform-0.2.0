@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { describe, expect, it } from '../TEST/index.mjs';
+import { describe, expect, it } from '../Test/index.mjs';
 import { NodeGlob } from './index.mjs';
 
 describe('NodeGlob', () => {

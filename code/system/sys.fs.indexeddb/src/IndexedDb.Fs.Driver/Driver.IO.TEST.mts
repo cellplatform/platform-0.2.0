@@ -1,5 +1,5 @@
 import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
-import { describe, expect, it, MemoryMock, TestIndexedDb } from '../TEST/index.mjs';
+import { describe, expect, it, MemoryMock, TestIndexedDb } from '../Test/index.mjs';
 import { IndexedDbDriver } from '../index.mjs';
 import { DbLookup } from '../IndexedDb/index.mjs';
 

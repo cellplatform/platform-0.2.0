@@ -1,5 +1,5 @@
 import { LogTable } from './index.mjs';
-import { describe, it } from '../TEST/index.mjs';
+import { describe, it } from '../Test/index.mjs';
 
 describe('LogTable', () => {
   it('simple 2-column table (no borders)', () => {

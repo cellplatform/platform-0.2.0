@@ -1,4 +1,4 @@
-import { expect, t, describe, it } from '../TEST/index.mjs';
+import { expect, t, describe, it } from '../Test/index.mjs';
 import * as Util from './Util.mjs';
 
 describe('Util', () => {

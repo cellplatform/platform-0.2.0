@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../TEST/index.mjs';
+import { expect, describe, it } from '../Test/index.mjs';
 import { Value } from './index.mjs';
 
 describe('Value.object.build', () => {
