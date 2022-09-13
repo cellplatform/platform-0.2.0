@@ -1,7 +1,7 @@
 import { expect, t, describe, it } from '../TEST/index.mjs';
-import * as Util from './util.mjs';
+import * as Util from './Util.mjs';
 
-describe('util', () => {
+describe('Util', () => {
   it('headerValue', () => {
     const test = (key: string, headers: t.HttpHeaders | undefined, expected: any) => {
       const res = Util.headerValue(key, headers);
