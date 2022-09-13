@@ -10,10 +10,10 @@ const MIN = SEC * 60;
 const HOUR = MIN * 60;
 const DAY = HOUR * 24;
 
-export type IDurationOptions = { round?: number };
+export type DurationOptions = { round?: number };
 
 export class Duration implements t.TimeDuration {
-  public static create(msec: number, options?: IDurationOptions) {
+  public static create(msec: number, options?: DurationOptions) {
     return new Duration(msec, options) as t.TimeDuration;
   }
 
@@ -53,7 +53,7 @@ export class Duration implements t.TimeDuration {
     }
   }
 
-  public static parse(input: string | number, options: IDurationOptions = {}) {
+  public static parse(input: string | number, options: DurationOptions = {}) {
     const done = (msecs: number) => Duration.create(msecs, options);
 
     if (typeof input === 'number') {
@@ -101,7 +101,7 @@ export class Duration implements t.TimeDuration {
   /**
    * [Lifecycle]
    */
-  private constructor(msec: number, options: IDurationOptions = {}) {
+  private constructor(msec: number, options: DurationOptions = {}) {
     this.msec = msec < 0 ? -1 : msec;
     this.round = options.round === undefined ? 1 : options.round;
   }
