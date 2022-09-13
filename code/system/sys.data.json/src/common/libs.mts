@@ -1,1 +1,1 @@
-export { rx, slug, Time } from 'sys.util';
+export { rx, slug, Time, Json, Is } from 'sys.util';
