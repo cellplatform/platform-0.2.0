@@ -4,7 +4,7 @@ import { execa, t } from './common/index.mjs';
  * Execute unit-tests within the target module directory.
  */
 export async function test(
-  dir: t.PathString,
+  dir: t.DirString,
   options: {
     filter?: string[];
     watch?: boolean;

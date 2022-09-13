@@ -17,7 +17,7 @@ export const Template = {
   /**
    * Check for the existence of a template file and copy if not already in the target.
    */
-  async ensureExists(kind: TemplateKind, targetDir: t.PathString) {
+  async ensureExists(kind: TemplateKind, targetDir: t.DirString) {
     targetDir = fs.resolve(targetDir);
 
     const copyMaybe = async (source: t.PathString, target: t.PathString) => {
@@ -63,7 +63,7 @@ export const Template = {
   /**
    * Ensure the target directory has baseline files within it.
    */
-  async ensureBaseline(targetDir: t.PathString) {
+  async ensureBaseline(targetDir: t.DirString) {
     const ensure = Template.ensureExists;
     await ensure('vite.config', targetDir);
     await ensure('esm.json', targetDir);
