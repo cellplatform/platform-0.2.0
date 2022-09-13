@@ -1,12 +1,12 @@
 import { Hash, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
 import { NodeFs } from '../node/index.mjs';
 
-type DirPathString = string;
+type DirPath = string;
 
 /**
  * Provides indexing services over the filesystem (manifest generation).
  */
-export function FsIndexer(args: { dir: DirPathString }) {
+export function FsIndexer(args: { dir: DirPath }) {
   const root = Path.ensureSlashes(args.dir);
 
   const driver: t.FsIndexer = {
