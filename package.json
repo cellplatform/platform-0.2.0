@@ -5,6 +5,7 @@
   "scripts": {
     "build": "yarn audit && ts-node-esm -T script.ts/cmd.all.build.mts",
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
+    "clean": "ts-node-esm  -T script.ts/cmd.all.clean.mts",
     "ci": "yarn build && yarn test",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",

@@ -14,7 +14,7 @@ type Milliseconds = number;
     if (path.includes('/code/compiler.sample')) return false;
     return true;
   };
-  let paths = await Util.findProjectDirs({ filter });
+  let paths = await Util.findProjectDirs({ filter, sort: 'Alpha' });
   if (paths.length === 0) return;
 
   // Log complete build list.
