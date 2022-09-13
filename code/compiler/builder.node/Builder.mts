@@ -1,8 +1,10 @@
-import { Package } from './build/Package.mjs';
+import { PackageRoot } from './build/Package.Root.mjs';
+import { PackageDist } from './build/Packge.Dist.mjs';
 import { Typescript } from './build/Typescript.mjs';
 import { Vite } from './build/Vite.mjs';
 import { test } from './Builder.test.mjs';
 import { fs, t } from './common/index.mjs';
+import { Paths } from './Paths.mjs';
 import { Template } from './Template.mjs';
 
 /**
@@ -22,31 +24,40 @@ export const Builder = {
    *    - Updates [packag.json] with ESM {exports} and typescript {typesVersions}.
    *
    */
-  async build(dir: t.PathString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
+  async build(dir: t.DirString, options: { silent?: boolean; exitOnError?: boolean } = {}) {
     const { silent = false, exitOnError = true } = options;
+    dir = fs.resolve(dir);
 
+    // Pre-build.
     await Template.ensureBaseline(dir);
 
-    const tscResponse = await Typescript.build(dir, { exitOnError, silent });
-    if (!tscResponse.ok) return tscResponse;
+    // - Typescript.
+    const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
+    if (!tsBuildOutput.ok) return tsBuildOutput;
 
-    const viteResponse = await Vite.build(dir, { silent });
-    if (!viteResponse.ok) return viteResponse;
+    // - ESM bundling.
+    const viteBuildOutput = await Vite.build(dir, { silent });
+    if (!viteBuildOutput.ok) return viteBuildOutput;
 
-    await Package.updateEsm(dir, { save: true });
+    // Post build.
+    await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
+    await PackageRoot.updateEsmEntries(dir);
+    await PackageDist.generate(dir);
+    // await BuildManifest.generate(dir);
 
+    // Finish up.
     if (!silent) console.log();
-
     return { ok: true, errorCode: 0 };
   },
 
   /**
    * Clean a module of transient build artifacts and temporary data.
    */
-  async clean(dir: t.PathString) {
+  async clean(dir: t.DirString) {
     dir = fs.resolve(dir);
-    await fs.remove(fs.join(dir, 'dist'));
-    await fs.remove(fs.join(dir, 'types'));
+    await fs.remove(fs.join(dir, Paths.dist));
+    await fs.remove(fs.join(dir, Paths.types.dirname));
+    await fs.remove(fs.join(dir, 'tmp'));
   },
 };
 

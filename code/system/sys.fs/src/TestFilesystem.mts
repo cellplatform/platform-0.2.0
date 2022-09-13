@@ -18,7 +18,7 @@ export const TestFilesystem = {
   memory(options: { bus?: t.EventBus; id?: FilesystemId; dir?: DirPathString } = {}) {
     const { bus = rx.bus(), id = `foo.${slug()}` } = options;
     const driver = MemoryMock.create().driver;
-    const controller = Filesystem.BusController({ id, bus, driver });
+    const controller = Filesystem.Bus.Controller({ id, bus, driver });
     const { events, dispose } = controller;
     const fs = events.fs(options.dir);
     return { bus, driver, fs, events, dispose };

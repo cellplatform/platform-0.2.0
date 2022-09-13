@@ -17,7 +17,7 @@
   "devDependencies": {
     "sys.test": "^0.0.0"
   },
-  "types": "./types.d/index.d.mts",
+  "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
   }

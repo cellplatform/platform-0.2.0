@@ -23,7 +23,7 @@ const DEFAULTS = {
 /**
  * CLI Table wrapper.
  */
-export function Table(options: { paddingLeft?: number; paddingRight?: number } = {}) {
+export function LogTable(options: { paddingLeft?: number; paddingRight?: number } = {}) {
   const { paddingLeft = 0, paddingRight = 0 } = options;
   return new CliTable({
     chars: DEFAULTS.BORDERLESS,

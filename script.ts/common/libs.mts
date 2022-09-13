@@ -13,9 +13,9 @@ export { pc, rimraf, execa, minimist, glob, filesize };
 /**
  * @system
  */
- export { Sort } from '../../code/system/sys.util/src/Sort/index.mjs';
- export { Time } from '../../code/system/sys.util/src/Time/index.mjs';
-export { Table } from '../../code/system/sys.util.node/src/index.mjs';
+export { Sort } from '../../code/system/sys.util/src/Sort/index.mjs';
+export { Time } from '../../code/system/sys.util/src/Time/index.mjs';
+export { LogTable } from '../../code/system/sys.util.node/src/index.mjs';
 
 /**
  * @local

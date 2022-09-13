@@ -12,7 +12,7 @@
   "devDependencies": {},
   "license": "MIT",
   "private": true,
-  "types": "./types.d/index.d.mts",
+  "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
   }

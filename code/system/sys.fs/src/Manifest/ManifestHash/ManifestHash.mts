@@ -18,7 +18,11 @@ export const ManifestHash = {
     /**
      * TODO 🐷
      * ISSUE: https://github.com/cellplatform/platform-0.2.0/issues/28
+     * - which sort code-path
+     * - ensure this is a canonical, unambiguous, deterministic product
+     *   that can be repeated and solidly verifiable.
      */
+
     // files =ManifestFiles.sort(files)
     // const f = ManifestFiles.sort(files);
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, fs, pc, Util, Table, Time } from './common/index.mjs';
+import { Builder, fs, pc, Util, LogTable, Time } from './common/index.mjs';
 
 type Milliseconds = number;
 
@@ -46,7 +46,7 @@ type Milliseconds = number;
   const pathOK = (path: string) => !failed.some((error) => error.path === path);
   const bullet = (path: string) => statusColor(pathOK(path), '●');
 
-  const table = Table();
+  const table = LogTable();
   for (const result of results) {
     const path = result.path;
     const column = {

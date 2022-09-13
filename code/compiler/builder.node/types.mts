@@ -1,4 +1,5 @@
 export type PathString = string;
+export type DirString = PathString;
 export type VersionString = string;
 
 /**

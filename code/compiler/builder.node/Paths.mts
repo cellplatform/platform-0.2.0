@@ -9,14 +9,20 @@ const rootDir = fs.join(__dirname, '../../..');
 
 export const Paths = {
   rootDir,
-  buildManifest: 'dist/manifest.json',
+  dist: 'dist',
+  viteManifest: 'dist/.build.manifest.json',
+  types: {
+    dirname: 'types.d',
+    dist: 'dist/types.d',
+  },
   tmpl: {
     dir: fs.join(__dirname, '../template.esm'),
-    esmConfig: 'esm.json',
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
+    pkg: 'src/index.pkg.mts',
     src: [
       'src/index.mts',
+      'src/index.pkg.mts',
       'src/index.TEST.mts',
       'src/types.mts',
       'src/TEST/index.mts',
