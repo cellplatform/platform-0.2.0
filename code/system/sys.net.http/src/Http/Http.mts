@@ -1,8 +1,6 @@
-import { Mime, Util } from '../common/index.mjs';
+import { fromRawHeaders, Mime, toRawHeaders } from '../common/index.mjs';
 import { fetch } from './fetch.mjs';
 import { create } from './Http.create.mjs';
-
-const { toRawHeaders, fromRawHeaders } = Util;
 
 export const Http = {
   Mime,
