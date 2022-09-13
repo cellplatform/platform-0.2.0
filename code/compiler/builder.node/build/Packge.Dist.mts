@@ -5,7 +5,6 @@ import { Package } from './Package.mjs';
 export const PackageDist = {
   async generate(root: t.DirString) {
     root = fs.resolve(root);
-    const dist = fs.join(root, Paths.dist);
 
     const projectPkg = await Util.PackageJson.load(root);
     const { name, version } = projectPkg;
@@ -17,7 +16,8 @@ export const PackageDist = {
     };
 
     // Update and save.
-    const esm = await Package.updateEsmEntries(root, pkg);
-    await Util.PackageJson.save(dist, esm);
+    const subdir = Paths.dist;
+    const esm = await Package.updateEsmEntries(root, pkg, { subdir });
+    await Util.PackageJson.save(fs.join(root, Paths.dist), esm);
   },
 };

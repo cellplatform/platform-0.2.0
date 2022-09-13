@@ -8,6 +8,7 @@ export const Package = {
    * build output within the given manifest.
    */
   async updateEsmEntries(root: t.DirString, pkg: t.PackageJson, options: { subdir?: string } = {}) {
+    const { subdir } = options;
     const { files } = await Vite.loadManifest(root);
 
     pkg = { ...pkg };
@@ -17,7 +18,7 @@ export const Package = {
 
     const ensureRelative = Util.ensureRelativeRoot;
     const formatPath = (path: string) => {
-      if (options.subdir) path = fs.join(options.subdir, path);
+      if (subdir) path = fs.join(subdir, path);
       return Util.ensureRelativeRoot(path);
     };
 
@@ -30,7 +31,8 @@ export const Package = {
     const typesVersions: t.PackageJsonTypesVersions = { '*': typesFiles };
 
     for (const item of files) {
-      const type = await Package.findTypePath(root, item.src);
+      const type = await Package.findTypePath(subdir ? fs.join(root, subdir) : root, item.src);
+      console.log(item.src, 'type', type);
       if (item.isEntry) exports['.'] = formatPath(item.file);
       if (type) {
         if (item.isDynamicEntry) exports[ensureRelative(type.key)] = formatPath(item.file);
