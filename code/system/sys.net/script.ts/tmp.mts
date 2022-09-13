@@ -1,3 +1,3 @@
 console.log('tmp');
 
-console.log('fetch', fetch);
+console.log('fetch', typeof fetch);

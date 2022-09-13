@@ -1,5 +1,10 @@
-export { Time, Mime, Value, slug, rx, Is } from 'sys.util';
-export { Headers } from 'cross-fetch';
+/**
+ * @vendor
+ */
+import CrossFetch, { Headers } from 'cross-fetch';
+export { CrossFetch, Headers };
 
-import CrossFetch from 'cross-fetch';
-export { CrossFetch };
+/**
+ * @system
+ */
+export { Time, Mime, Value, slug, rx, Is, Delete } from 'sys.util';
