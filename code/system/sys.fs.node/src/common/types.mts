@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { Disposable } from 'sys.types';
+export type { Disposable, Json } from 'sys.types';
 export type {
   FsDriver,
   FsIO,

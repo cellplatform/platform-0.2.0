@@ -7,7 +7,7 @@ import { describe, it, Path, t } from './TEST/index.mjs';
  * Baseline functional specifications from [sys.fs].
  */
 describe('Filesystem: NodeDriver (functional specification)', () => {
-  const root = NodeFs.resolve('./tmp');
+  const root = NodeFs.resolve('tmp/spec');
 
   const factory: t.FsDriverFactory = async (dir) => {
     await NodeFs.remove(root); // NB: reset test state.
