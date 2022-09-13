@@ -1,7 +1,8 @@
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![banner](https://user-images.githubusercontent.com/185555/189459081-d427f48a-2436-4224-9507-36da26d67535.png)
+![unsplash.com/photos/HLhvZ9HRAwo](https://user-images.githubusercontent.com/185555/189859826-73ec5c5a-9232-427d-9384-059d4c791966.png)
+
 
 
 
@@ -10,7 +11,7 @@
 
 
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
-(1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" processes.
+(1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
 - [system](/code/system/) modules
 - [compilation](/code/compiler/) toolchain
@@ -21,7 +22,7 @@
 
 ![pre-release](https://img.shields.io/badge/status-pre--release-orange.svg)  
 Sustained long range R&D.  
-Architecture, API's, and other structures will change (probably radically 🐷) prior to any `1.x` release.
+Architecture, API's, and other conceptual primmitives will change (probably radically 🐷) prior to any `1.x` release.
 
 - repo: [platform-0.2.0](https://github.com/cellplatform/platform-0.2.0) - **current**
 - repo: [platform-0.1.0](https://github.com/cellplatform/platform-0.1.0) - previous
@@ -86,7 +87,7 @@ sub-modules of the system within this [monorepo](https://en.wikipedia.org/wiki/M
 
 These commands constitute the primary CI (continuous integration) pipeline.
 See [github action](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
-which protects the `main` branch when merging in pull-requests (PRs). 
+which protects the `main` branch when merging in PRs (pull-requests). 
 A security audit on the up-stream dependencies is performed on each CI cycle.
 
 
