@@ -10,15 +10,14 @@ export const PackageDist = {
     const projectPkg = await Util.PackageJson.load(root);
     const { name, version } = projectPkg;
 
-    let pkg: t.PackageJson = {
+    const pkg: t.PackageJson = {
       name,
       version,
       type: 'module',
     };
 
-    pkg = await Package.updateEsmEntries(root, pkg);
-
-    // Save.
-    await Util.PackageJson.save(dist, pkg);
+    // Update and save.
+    const esm = await Package.updateEsmEntries(root, pkg);
+    await Util.PackageJson.save(dist, esm);
   },
 };

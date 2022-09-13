@@ -31,8 +31,8 @@ export const Package = {
 
     for (const item of files) {
       const type = await Package.findTypePath(root, item.src);
+      if (item.isEntry) exports['.'] = formatPath(item.file);
       if (type) {
-        if (item.isEntry) exports['.'] = formatPath(item.file);
         if (item.isDynamicEntry) exports[ensureRelative(type.key)] = formatPath(item.file);
         if (type.filepath !== entryType.filepath) {
           typesFiles[type.key] = [formatPath(type.filepath)];
@@ -46,7 +46,7 @@ export const Package = {
       pkg = { ...pkg, [field]: value };
     };
 
-    appendField('types', entryType.filepath);
+    appendField('types', formatPath(entryType.filepath));
     appendField('exports', exports);
     if (Object.keys(typesFiles).length > 0) appendField('typesVersions', typesVersions);
 

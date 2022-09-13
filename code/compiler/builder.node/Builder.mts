@@ -40,8 +40,7 @@ export const Builder = {
     if (!viteBuildOutput.ok) return viteBuildOutput;
 
     // Post build.
-    await fs.copy(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
-
+    await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
     await PackageRoot.updateEsmEntries(dir);
     await PackageDist.generate(dir);
     // await BuildManifest.generate(dir);
