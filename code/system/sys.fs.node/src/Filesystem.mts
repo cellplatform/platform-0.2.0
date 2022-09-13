@@ -17,14 +17,11 @@ export const Filesystem = {
    */
   async client(dir: DirPath, options: { bus?: t.EventBus; id?: FilesystemId } = {}) {
     const { bus = rx.bus(), id = `fs.node.${slug()}` } = options;
-
     const controller = Bus.Controller({ bus, id, driver: Node({ dir }) });
     const { events, dispose } = controller;
     const fs = events.fs();
-
     const ready = await events.ready();
     if (ready.error) throw new Error(ready.error.message);
-
-    return { fs, events, dispose };
+    return { fs, bus, events, dispose };
   },
 };
