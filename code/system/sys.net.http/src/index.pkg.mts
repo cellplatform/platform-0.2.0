@@ -15,10 +15,14 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'cross-fetch': '3.1.5',
   },
+  toString() {
+    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+  },
 };
 
 export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };
+  toString(): string;
 };

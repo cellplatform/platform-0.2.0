@@ -11,10 +11,14 @@ export const Pkg: ModuleDef = {
   name: '',
   version: '',
   dependencies: {},
+  toString() {
+    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+  },
 };
 
 export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };
+  toString(): string;
 };

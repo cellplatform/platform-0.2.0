@@ -7,9 +7,6 @@
 
 
 
-
-
-
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
 (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 

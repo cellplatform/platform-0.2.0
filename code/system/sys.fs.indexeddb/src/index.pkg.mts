@@ -15,10 +15,14 @@ export const Pkg: ModuleDef = {
     'sys.fs': '0.0.0',
     'sys.util': '0.0.0',
   },
+  toString() {
+    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+  },
 };
 
 export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };
+  toString(): string;
 };

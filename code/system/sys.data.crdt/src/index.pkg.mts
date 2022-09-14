@@ -16,10 +16,14 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'automerge': '1.0.1-preview.7',
   },
+  toString() {
+    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+  },
 };
 
 export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };
+  toString(): string;
 };

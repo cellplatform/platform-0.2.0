@@ -1,6 +1,8 @@
 import { t, slug, rx } from './common/index.mjs';
 import { Path, Filesize, Bus } from 'sys.fs';
-import { NodeDriver as Node } from './Node.Fs.Driver/index.mjs';
+import { NodeDriver, NodeDriver as Node } from './Node.Fs.Driver/index.mjs';
+
+export { Path, Filesize, MemoryMock } from 'sys.fs';
 
 type FilesystemId = string;
 type DirPath = string;
@@ -17,7 +19,8 @@ export const Filesystem = {
    */
   async client(dir: DirPath, options: { bus?: t.EventBus; id?: FilesystemId } = {}) {
     const { bus = rx.bus(), id = `fs.node.${slug()}` } = options;
-    const controller = Bus.Controller({ bus, id, driver: Node({ dir }) });
+    const driver = NodeDriver({ dir });
+    const controller = Bus.Controller({ bus, id, driver });
     const { events, dispose } = controller;
     const fs = events.fs();
     const ready = await events.ready();
