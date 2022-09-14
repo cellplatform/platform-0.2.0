@@ -1,12 +1,16 @@
 import React from 'react';
-import sanitizeHtml from 'sanitize-html';
+import sanitize from 'sanitize-html';
 
-import { css, CssValue } from '../common/index.mjs';
+import { css, t } from '../common/index.mjs';
+
+export const DEFAULT = {
+  allowedTags: [...sanitize.defaults.allowedTags, 'img'],
+};
 
 export type SanitizeHtmlProps = {
   html?: string;
   className?: string;
-  style?: CssValue;
+  style?: t.CssValue;
 };
 
 /**
@@ -16,6 +20,6 @@ export type SanitizeHtmlProps = {
  */
 export const SanitizeHtml: React.FC<SanitizeHtmlProps> = (props) => {
   const { html, className } = props;
-  const __html = sanitizeHtml(html ?? '');
+  const __html = sanitize(html ?? '', { allowedTags: DEFAULT.allowedTags });
   return <div {...css(props.style)} dangerouslySetInnerHTML={{ __html }} className={className} />;
 };
