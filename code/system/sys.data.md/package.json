@@ -6,17 +6,20 @@
     "dev": "vite",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "^0.0.0",
     "sys.util": "^0.0.0",
-    "sanitize-html": "2.7.1",
-    "rehype-format": "3.1.0",
-    "rehype-stringify": "8.0.0",
-    "remark-parse": "9.0.0",
-    "remark-rehype": "8.1.0",
-    "unified": "9.2.1"
+    "sys.util.css": "^0.0.0",
+    "sanitize-html": "^2.7.1",
+    "rehype-format": "^4.0.1",
+    "rehype-stringify": "^9.0.3",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2",
+    "react": "latest"
   },
   "devDependencies": {
     "@types/sanitize-html": "2.6.2",
