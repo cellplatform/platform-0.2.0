@@ -13,6 +13,12 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
+    'sanitize-html': '2.7.1',
+    'rehype-format': '3.1.0',
+    'rehype-stringify': '8.0.0',
+    'remark-parse': '9.0.0',
+    'remark-rehype': '8.1.0',
+    'unified': '9.2.1',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
