@@ -32,16 +32,21 @@ const pushResult = (path: string, elapsed: Milliseconds, error?: string) => {
   results.push({ path, elapsed, error });
 };
 
-// Build each project.
-for (const path of paths) {
+const runTests = async (path: string) => {
   const timer = Time.timer();
   try {
-    await Builder.test(path, { run: true, silent: true });
+    await Builder.test(path, { run: true, silentTestConsole: true });
     pushResult(path, timer.elapsed.msec);
   } catch (error: any) {
     pushResult(path, timer.elapsed.msec, error.message);
   }
+};
+
+// Build each project.
+for (const path of paths) {
+  await runTests(path);
 }
+
 const failed = results.filter((item) => Boolean(item.error));
 const ok = failed.length === 0;
 

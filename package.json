@@ -11,7 +11,8 @@
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "tmp.ext": "ts-node-esm -T script.ts/tmp.ext.mts",
-    "tmp.del": "ts-node-esm -T script.ts/tmp.delete.mts"
+    "tmp.del": "ts-node-esm -T script.ts/tmp.delete.mts",
+    "tmp.test": "vitest"
   },
   "dependencies": {
     "asmcrypto.js": "^2.3.2",
