@@ -7,7 +7,8 @@ import { rx, Vercel } from 'vendor.cloud.vercel';
 
 import { Pkg } from '../index.pkg.mjs';
 
-console.info(`💦 module: ${Pkg.name} (v${Pkg.version})`);
+console.info(Pkg.toString());
+console.info('');
 
 /**
  * TOKEN: for testing, create a [.env.local] file
@@ -15,7 +16,7 @@ console.info(`💦 module: ${Pkg.name} (v${Pkg.version})`);
  *
  *               VITE_VERCEL_TEST_TOKEN="<< secret >>"
  *
- *        (CAREFUL: make sure to never let a secret get checked in).
+ *       (CAREFUL: make sure to never ever let a secret get checked-in to the repo).
  */
 const token = (import.meta as any).env.VITE_VERCEL_TEST_TOKEN;
 
@@ -42,13 +43,12 @@ const vercel = Vercel.client({ bus, fs, token }); // <═══╗
 //                                        SHARED EventBus 🌳
 
 console.info('vercel (client):', vercel);
-console.info('vercel.deploy', vercel.deploy);
 
 const now = Time.now.format('hh:mm');
 const content = `<h1>Hello World - ${now}</h1>`;
 
 console.info('');
-console.info('content:', content);
+console.info(`     content: "${content}"`);
 console.info('');
 
 await fs.delete('tmp');
@@ -78,4 +78,4 @@ console.log('filesystem manifest:', m);
 
 console.info(`HINT: Use the test [vercel] object from the command-line to perform a sample deploy`);
 console.info(`eg:   > vercel.deploy()`);
-console.info(``);
+console.info('');
