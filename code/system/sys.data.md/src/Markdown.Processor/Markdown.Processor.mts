@@ -7,25 +7,28 @@ import { unified, Processor } from 'unified';
 let _processor: Processor | undefined; // Lazily initialized singleton.
 
 /**
+ * Converts the given markdown to HTML asynchronously.
+ */
+export async function toHtml(markdown?: string): Promise<string> {
+  const res = await Util.processor.process(markdown ?? '');
+  return Util.formatHtml(res.toString());
+}
+
+/**
+ * Converts the given markdown to HTML synchronously.
+ */
+export function toHtmlSync(markdown?: string): string {
+  const res = Util.processor.processSync(markdown ?? '');
+  return Util.formatHtml(res.toString());
+}
+
+/**
  * See:
  *   - https://github.com/remarkjs/remark-rehype
  */
 export const MarkdownProcessor = {
-  /**
-   * Converts the given markdown to HTML asynchronously.
-   */
-  async toHtml(markdown?: string): Promise<string> {
-    const res = await Util.processor.process(markdown ?? '');
-    return Util.formatHtml(res.toString());
-  },
-
-  /**
-   * Converts the given markdown to HTML synchronously.
-   */
-  toHtmlSync(markdown: string): string {
-    const res = Util.processor.processSync(markdown ?? '');
-    return Util.formatHtml(res.toString());
-  },
+  toHtml,
+  toHtmlSync,
 };
 
 /**

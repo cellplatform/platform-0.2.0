@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { CssValue, Style, t } from '../common';
-import { SanitizeHtml } from '../SanitizeHtml';
-import { MarkdownProcessor } from './Markdown.Processor';
+import { Style, t } from '../common/index.mjs';
+import { SanitizeHtml } from '../SanitizeHtml/index.mjs';
+import { toHtmlSync } from '../Markdown.Processor/index.mjs';
 
 const globalStyles: { [className: string]: boolean } = {};
 
@@ -15,11 +15,11 @@ export const MarkdownUI = {
    */
   toElement(
     markdown: MarkdownString | HtmlString | undefined,
-    options: { style?: CssValue; className?: string } = {},
+    options: { style?: t.CssValue; className?: string } = {},
   ) {
     const text = (markdown ?? '').trim();
     const isHtml = text.startsWith('<') && text.endsWith('>');
-    const html = isHtml ? text : MarkdownProcessor.toHtmlSync(markdown ?? '');
+    const html = isHtml ? text : toHtmlSync(markdown ?? '');
     return <SanitizeHtml html={html} style={options.style} className={options.className} />;
   },
 

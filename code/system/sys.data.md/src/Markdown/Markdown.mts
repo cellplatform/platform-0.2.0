@@ -1,7 +1,5 @@
-import { MarkdownProcessor } from './Markdown.Processor.mjs';
-// import { MarkdownUI as UI } from './Markdown.UI';
-
-const { toHtml, toHtmlSync } = MarkdownProcessor;
+import { toHtml, toHtmlSync } from '../Markdown.Processor/index.mjs';
+import { MarkdownUI as UI } from '../Markdown.UI/index.mjs';
 
 /**
  * See:
@@ -10,10 +8,5 @@ const { toHtml, toHtmlSync } = MarkdownProcessor;
 export const Markdown = {
   toHtml,
   toHtmlSync,
-
-  /**
-   * TODO 🐷
-   */
-
-  // UI,
+  UI,
 };
