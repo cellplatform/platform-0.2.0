@@ -3,7 +3,7 @@ import { Filesystem } from './Filesystem.mjs';
 import { MemoryMock } from './MemoryMock/index.mjs';
 
 type FilesystemId = string;
-type DirPathString = string;
+type DirPath = string;
 
 /**
  * Common setup for tests that interact with a filesystem.
@@ -15,7 +15,7 @@ export const TestFilesystem = {
   /**
    * A test filesystem backed my an in-memory shim.
    */
-  memory(options: { bus?: t.EventBus; id?: FilesystemId; dir?: DirPathString } = {}) {
+  memory(options: { bus?: t.EventBus; id?: FilesystemId; dir?: DirPath } = {}) {
     const { bus = rx.bus(), id = `foo.${slug()}` } = options;
     const driver = MemoryMock.create().driver;
     const controller = Filesystem.Bus.Controller({ id, bus, driver });

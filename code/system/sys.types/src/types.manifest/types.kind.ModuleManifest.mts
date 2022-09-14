@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t } from '../common.mjs';
 
 type Url = string;
 type FilePath = string;
@@ -25,9 +25,8 @@ export type ModuleManifestFile = t.ManifestFile;
 export type ModuleManifestInfo = {
   namespace: string;
   version: string; //   semver ("0.0.0" if not specified)
-  compiler: string; //  "<name>@<version>" (eg "@platform/cell.compiler@0.1.2")
+  compiler: string; //  "<name>@<version>"
   compiledAt: Timestamp;
-  mode: string; //      "production" | "development"
   target: string; //    "web" | "node"
   entry: FilePath;
   remote?: ModuleManifestRemoteExports;

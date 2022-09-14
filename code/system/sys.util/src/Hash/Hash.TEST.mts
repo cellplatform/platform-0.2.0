@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../Test/index.mjs';
+import { describe, expect, it } from '../Test/index.mjs';
 import { Hash } from './index.mjs';
 
 const circular: any = { foo: 123 };
@@ -39,5 +39,41 @@ describe('hash', () => {
     test(BigInt(9999), '456a506e05');
     test(Symbol('foo'), 'b4f8db9f3e');
     test((i: number) => i, 'fd3fbf2906');
+  });
+
+  it('sha1', () => {
+    const test = (input: any, expected: string) => {
+      const res1 = Hash.sha1(input);
+      const res2 = Hash.sha1(input, { prefix: false });
+
+      // console.log(res1.substring(res1.length - 10));
+
+      expect(res1).to.match(/^sha1-/);
+      expect(res2).to.not.match(/^sha1-/);
+
+      expect(res1).to.match(new RegExp(`${expected}$`));
+      expect(res2).to.match(new RegExp(`${expected}$`));
+    };
+
+    test(new TextEncoder().encode('hello'), 'd9aea9434d');
+    test('hello', '5d06f9d0c4');
+    test(123, '5ecbdbbeef');
+    test('', '9e1ecb2585');
+    test({ msg: 'abc' }, 'bd818251c2');
+    test({ foo: 123 }, 'f3b5753ac0');
+    test(new Uint8Array([21, 31]).buffer, 'b23dece0d3'); // NB: Not converted to string first.
+    test(undefined, 'a24b69856e');
+    test(null, '65032d6833');
+    test({}, '0917b2202f');
+    test(circular, '326953447b');
+    test([], '302a97674c');
+    test([1, { item: 2 }], '488d93ac98');
+    test([1, circular], '6705b3f7e6');
+    test(true, 'fc8ada44db');
+    test(false, 'e14d12cb04');
+    test(123, '5ecbdbbeef');
+    test(BigInt(9999), '482c1bd594');
+    test(Symbol('foo'), '902ba95c2a');
+    test((i: number) => i, '40de1fa8e1');
   });
 });

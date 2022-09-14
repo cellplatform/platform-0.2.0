@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t } from '../common.mjs';
 
 type Sha256 = string;
 
@@ -22,8 +22,7 @@ export type ManifestHash = {
  *
  * Notes:
  *
- *    1. Path may, or may not be a "cell:<ns>:A1/fs/..."
- *    2. Entry query-string is optional (and is a compiler "export" entry).
+ *    1. Entry query-string is optional (and is an ESM "export" entry).
  *
  */
 export type ManifestUrl = string;

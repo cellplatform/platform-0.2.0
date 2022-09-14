@@ -1,1 +1,1 @@
-export * from './types/index.mjs';
+export * from 'sys.types/src/types.manifest/index.mjs';

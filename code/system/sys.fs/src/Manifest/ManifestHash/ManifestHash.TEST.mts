@@ -22,7 +22,8 @@ describe('ManifestHash', () => {
   };
 
   const expectHash = (value: string, expected: string) => {
-    expect(value.endsWith(expected)).to.eql(true, `value: ${value} | expected: ${expected}`);
+    const message = `value: ${value} | expected end: ${expected}`;
+    expect(value.endsWith(expected)).to.eql(true, message);
   };
 
   it('sha256', () => {
@@ -64,7 +65,6 @@ describe('ManifestHash', () => {
       version: '1.2.3',
       compiler: `@platform/compiler@0.0.0`,
       compiledAt: 123456789,
-      mode: 'production',
       target: 'web',
       entry: 'index.html',
       remote: {
@@ -76,14 +76,14 @@ describe('ManifestHash', () => {
     it('empty', () => {
       const res = ManifestHash.module(module, []);
       expectHash(res.files, EMPTY);
-      expectHash(res.module, '225a4bf897b1dcf7a91c6fc4');
+      expectHash(res.module, '8b0a9');
     });
 
     it('files', () => {
       const files = testFiles(5);
       const res = ManifestHash.module(module, files);
       expectHash(res.files, ManifestHash.files(files));
-      expectHash(res.module, '6614d5b41fe550594a4');
+      expectHash(res.module, '84e64');
     });
   });
 

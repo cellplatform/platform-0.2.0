@@ -1,12 +1,12 @@
 import { Delete, Image, Path, t, Wrangle, Hash } from '../common/index.mjs';
 import { NodeFs } from '../node/index.mjs';
 
-type DirPathString = string;
+type DirPath = string;
 
 /**
  * A filesystem I/O driver running against the [fs] node-js interface.
  */
-export function FsIO(args: { dir: DirPathString }) {
+export function FsIO(args: { dir: DirPath }) {
   const root = Path.ensureSlashes(args.dir);
 
   const driver: t.FsIO = {

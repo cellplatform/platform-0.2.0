@@ -13,12 +13,26 @@ export const Hash = {
   sha256(input: any, options: HashOptions = {}) {
     const { prefix = true } = options;
 
-    const sha256 = new AsmCrypto.Sha256();
+    const algorithm = new AsmCrypto.Sha256();
     const bytes = Hash.toBytes(input, options);
-    const result = sha256.process(bytes).finish().result;
+    const result = algorithm.process(bytes).finish().result;
     const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
 
     return hash && prefix ? `sha256-${hash}` : hash;
+  },
+
+  /**
+   * Generate a self-descriving SHA1 hash of the given object.
+   */
+  sha1(input: any, options: HashOptions = {}) {
+    const { prefix = true } = options;
+
+    const algorithm = new AsmCrypto.Sha1();
+    const bytes = Hash.toBytes(input, options);
+    const result = algorithm.process(bytes).finish().result;
+    const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
+
+    return hash && prefix ? `sha1-${hash}` : hash;
   },
 
   /**
@@ -29,3 +43,7 @@ export const Hash = {
     return AsmCrypto.string_to_bytes((options.asString ?? R.toString)(input));
   },
 };
+
+/**
+ * Helpers
+ */

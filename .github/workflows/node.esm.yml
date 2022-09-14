@@ -3,6 +3,9 @@
 
 name: ci(esm)
 
+env:
+  VERCEL_TEST_TOKEN: ${{ secrets.VERCEL_TEST_TOKEN }}
+
 on:
   push:
     branches: ['main']
