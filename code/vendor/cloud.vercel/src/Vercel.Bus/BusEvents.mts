@@ -9,13 +9,14 @@ type Id = string;
  * Event API.
  */
 export function BusEvents(args: {
-  instance: { bus: t.EventBus<any>; id?: Id };
-  filter?: (e: t.VercelEvent) => boolean;
+  bus: t.EventBus<any>;
+  instance?: Id;
+  filter?: t.VercelEventFilter;
 }): t.VercelEvents {
-  const instance = args.instance.id ?? DEFAULT.id;
+  const instance = args.instance ?? DEFAULT.id;
 
   const { dispose, dispose$ } = rx.disposable();
-  const bus = rx.busAsType<t.VercelEvent>(args.instance.bus);
+  const bus = rx.busAsType<t.VercelEvent>(args.bus);
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
@@ -59,9 +60,19 @@ export function BusEvents(args: {
     req$: rx.payload<t.VercelDeployReqEvent>($, 'vendor.vercel/deploy:req'),
     res$: rx.payload<t.VercelDeployResEvent>($, 'vendor.vercel/deploy:res'),
     async fire(args) {
-      const { source, team, project, timeout: msecs = 10000 } = args;
-      const { name, env, buildEnv, functions, routes, target, alias } = args;
-      const config = { name, env, buildEnv, functions, routes, target, alias, public: args.public };
+      const { source, team, project, ensureProject, timeout: msecs = 10000 } = args;
+      const { name, env, buildEnv, functions, routes, target, alias, regions } = args;
+      const config = {
+        name,
+        env,
+        buildEnv,
+        functions,
+        routes,
+        target,
+        alias,
+        regions,
+        public: args.public,
+      };
 
       const tx = slug();
 
@@ -75,11 +86,11 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'vendor.vercel/deploy:req',
-        payload: { tx, instance, source, team, project, config },
+        payload: { tx, instance, source, team, project, ensureProject, config },
       });
 
       const res = await first;
-      return typeof res === 'string' ? { tx, instance, paths: [], error: res } : res;
+      return typeof res === 'string' ? { status: 500, tx, instance, paths: [], error: res } : res;
     },
   };
 

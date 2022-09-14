@@ -1,4 +1,10 @@
 /**
+ * @vendor
+ */
+import pc from 'picocolors';
+export { pc };
+
+/**
  * @system
  */
 export { Path, Filesize } from 'sys.fs';

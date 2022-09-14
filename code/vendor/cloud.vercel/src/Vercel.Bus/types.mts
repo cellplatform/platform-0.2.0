@@ -4,6 +4,7 @@ type Id = string;
 type Milliseconds = number;
 type IdOrName = string;
 type Name = string;
+type DirPath = string;
 
 export type VercelInfo = {
   /**
@@ -19,6 +20,7 @@ export type VercelInfo = {
 /**
  * EVENTS
  */
+export type VercelEventFilter = (e: t.VercelEvent) => boolean;
 
 export type VercelEvent =
   | VercelInfoReqEvent
@@ -43,27 +45,30 @@ export type VercelEvents = t.Disposable & {
   deploy: {
     req$: t.Observable<t.VercelDeployReq>;
     res$: t.Observable<t.VercelDeployRes>;
-    fire(args: {
-      source: t.VercelSourceBundle;
-      team: IdOrName;
-      project: Name;
-      timeout?: Milliseconds;
-
-      /**
-       * Vercel configuration options.
-       * https://vercel.com/docs/rest-api#endpoints/deployments/create-a-new-deployment
-       */
-      name?: t.VercelHttpDeployConfig['name'];
-      env?: t.VercelHttpDeployConfig['env'];
-      buildEnv?: t.VercelHttpDeployConfig['buildEnv'];
-      functions?: t.VercelHttpDeployConfig['functions'];
-      regions?: t.VercelHttpDeployConfig['regions'];
-      routes?: t.VercelHttpDeployConfig['routes'];
-      public?: t.VercelHttpDeployConfig['public'];
-      target?: t.VercelHttpDeployConfig['target'];
-      alias?: t.VercelHttpDeployConfig['alias'];
-    }): Promise<VercelDeployRes>;
+    fire(args: VercelEventsDeployArgs): Promise<VercelDeployRes>;
   };
+};
+
+export type VercelEventsDeployArgs = {
+  source: t.VercelSourceBundle | DirPath;
+  team: IdOrName;
+  project: Name;
+  ensureProject?: boolean;
+  timeout?: Milliseconds;
+
+  /**
+   * Vercel configuration options.
+   * https://vercel.com/docs/rest-api#endpoints/deployments/create-a-new-deployment
+   */
+  name?: t.VercelHttpDeployConfig['name'];
+  env?: t.VercelHttpDeployConfig['env'];
+  buildEnv?: t.VercelHttpDeployConfig['buildEnv'];
+  functions?: t.VercelHttpDeployConfig['functions'];
+  regions?: t.VercelHttpDeployConfig['regions'];
+  routes?: t.VercelHttpDeployConfig['routes'];
+  public?: t.VercelHttpDeployConfig['public'];
+  target?: t.VercelHttpDeployConfig['target'];
+  alias?: t.VercelHttpDeployConfig['alias'];
 };
 
 /**
@@ -93,7 +98,8 @@ export type VercelDeployReq = {
   instance: Id;
   team: IdOrName;
   project: Name;
-  source: t.VercelSourceBundle;
+  ensureProject?: boolean;
+  source: t.VercelSourceBundle | DirPath;
   config?: t.VercelHttpDeployConfig;
 };
 
@@ -104,6 +110,7 @@ export type VercelDeployResEvent = {
 export type VercelDeployRes = {
   tx: string;
   instance: Id;
+  status: number;
   paths: string[];
   deployment?: t.VercelHttpDeployResponse['deployment'];
   error?: string;

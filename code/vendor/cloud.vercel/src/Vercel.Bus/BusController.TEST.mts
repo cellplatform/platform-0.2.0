@@ -6,13 +6,12 @@ describe('BusController', () => {
   const token = process.env.VERCEL_TEST_TOKEN || '';
   const bus = rx.bus<t.VercelEvent>();
   const busid = rx.bus.instance(bus);
-  const instance = { bus };
   const fs = TestFilesystem.memory().fs;
 
   describe('Info', () => {
     it('defaults', async () => {
-      const controller = BusController({ instance, token, fs });
-      const events = BusEvents({ instance });
+      const controller = BusController({ bus, token, fs });
+      const events = BusEvents({ bus });
 
       const res = await events.info.get();
       controller.dispose();
@@ -35,19 +34,19 @@ describe('BusController', () => {
     });
 
     it('explicit id', async () => {
-      const id = 'my-instance';
-      const controller = BusController({ instance: { bus, id }, token, fs });
+      const instance = 'my-instance';
+      const controller = BusController({ bus, instance, token, fs });
 
-      expect(controller.instance.id).to.eql(id);
+      expect(controller.instance.id).to.eql(instance);
       expect(controller.instance.bus).to.eql(busid);
-      expect(controller.events.instance.id).to.eql(id);
+      expect(controller.events.instance.id).to.eql(instance);
       expect(controller.events.instance.bus).to.eql(busid);
     });
 
     it('filter', async () => {
       let allow = true;
-      const controller = BusController({ instance, token, fs, filter: (e) => allow });
-      const events = BusEvents({ instance });
+      const controller = BusController({ bus, token, fs, filter: (e) => allow });
+      const events = BusEvents({ bus });
 
       const res1 = await events.info.get();
       allow = false;

@@ -8,15 +8,16 @@ type Id = string;
  * Event controller.
  */
 export function BusController(args: {
-  instance: { bus: t.EventBus<any>; id?: Id };
+  bus: t.EventBus<any>;
   token: string;
   fs: t.Fs;
-  filter?: (e: t.VercelEvent) => boolean;
+  instance?: Id;
+  filter?: t.VercelEventFilter;
 }) {
   const { token, fs } = args;
-  const instance = args.instance.id ?? DEFAULT.id;
-  const bus = rx.busAsType<t.VercelEvent>(args.instance.bus);
-  const events = BusEvents({ instance: { id: instance, bus }, filter: args.filter });
+  const instance = args.instance ?? DEFAULT.id;
+  const bus = rx.busAsType<t.VercelEvent>(args.bus);
+  const events = BusEvents({ bus, instance, filter: args.filter });
   const client = VercelHttp({ fs, token });
   const { dispose, dispose$ } = events;
 
@@ -54,33 +55,46 @@ export function BusController(args: {
     const { tx, source, config } = e;
 
     const done = (options: {
+      status: number;
       error?: string;
       paths?: string[];
       deployment?: t.VercelDeployRes['deployment'];
     }) => {
-      const { error, deployment, paths = [] } = options;
+      const { status, error, deployment, paths = [] } = options;
       return bus.fire({
         type: 'vendor.vercel/deploy:res',
-        payload: { tx, instance, paths, deployment, error },
+        payload: { tx, instance, status, paths, deployment, error },
       });
     };
 
     const team = await teamByNameOrId(e.team);
     if (!team) {
       const error = `Failed to retrieve team: "${e.team}"`;
-      return done({ error });
+      return done({ status: 500, error });
     }
 
     const project = team.project(e.project);
+    const projectExists = await project.exists();
+
+    if (!projectExists) {
+      if (e.ensureProject) {
+        const res = await project.create();
+        if (res.error) return done({ status: 500, error: res.error.message });
+      } else {
+        const error = `The project "${e.project}" does not exist. Hint: pass [ensureProject] flag to automatically create.`;
+        return done({ status: 404, error });
+      }
+    }
+
     const res = await project.deploy({ source, ...config });
+    const { status, paths, deployment } = res;
 
     if (res.error) {
       const error = `Failed while deploying. [${res.error.code}] ${res.error.message}`;
-      return done({ error });
+      return done({ status, error });
     }
 
-    const { paths, deployment } = res;
-    return done({ paths, deployment });
+    return done({ status, paths, deployment });
   });
 
   /**
