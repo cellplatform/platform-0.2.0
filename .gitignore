@@ -16,6 +16,8 @@ node_modules
 dist/
 dist-ssr/
 coverage/
+types.d/
+vite.config.mts.timestamp*
 
 # Editor directories and files
 .vscode/*
