@@ -43,8 +43,6 @@ export const Global: t.CssGlobal = (styles: t.CssPropsMap, options: { prefix?: s
   glamor.jss.createStyleSheet({ '@global': global }).attach();
 };
 
-export { Global as global };
-
 /**
  * [Helpers]
  */
