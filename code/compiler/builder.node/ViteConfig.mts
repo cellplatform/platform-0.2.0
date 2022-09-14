@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 
 import { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
-import { fs } from './common/index.mjs';
+import { fs, t } from './common/index.mjs';
 import type { RollupOptions } from 'rollup';
 import { Paths } from './Paths.mjs';
 
@@ -12,21 +12,6 @@ export type PackageJson = {
   type: 'module';
   dependencies?: { [key: string]: string };
   devDependencies?: { [key: string]: string };
-};
-
-type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> | unknown;
-type ModifyViteConfigArgs = {
-  readonly ctx: ModifyViteConfigCtx;
-  addExternalDependency(moduleName: string | string[]): void;
-  platform(target: 'web' | 'node'): void;
-};
-type ModifyViteConfigCtx = {
-  readonly name: string;
-  readonly command: 'build' | 'serve';
-  readonly mode: string;
-  readonly pkg: PackageJson;
-  readonly deps: { [key: string]: string }; // All dependencies (incl. "dev")
-  readonly config: UserConfig;
 };
 
 /**
@@ -41,7 +26,7 @@ export const ViteConfig = {
       return {
         globals: false,
         include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
-        environment: 'jsdom',
+        // environment: 'jsdom',
       };
     },
 
@@ -61,7 +46,7 @@ export const ViteConfig = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  default(dir: string, modify?: ModifyViteConfig) {
+  default(dir: string, modify?: t.ModifyViteConfig) {
     return defineConfig(async ({ command, mode }) => {
       const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as PackageJson;
       const deps = { ...pkg.dependencies, ...pkg.devDependencies };
@@ -93,7 +78,7 @@ export const ViteConfig = {
       /**
        * Modification IoC (called within each module to perform specific adjustments).
        */
-      const args: ModifyViteConfigArgs = {
+      const args: t.ModifyViteConfigArgs = {
         ctx: { name, command, mode, config, pkg, deps },
         addExternalDependency(moduleName) {
           asArray(moduleName)
