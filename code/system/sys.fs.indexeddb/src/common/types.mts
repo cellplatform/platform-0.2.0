@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { Disposable } from 'sys.types';
+export type { Disposable, EventBus } from 'sys.types';
 export type {
   FsDriver,
   FsIO,
