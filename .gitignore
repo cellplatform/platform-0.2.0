@@ -1,7 +1,8 @@
 tmp
 .tmp
 .builder
-
+.env
+*.local
 
 # Logs
 logs
