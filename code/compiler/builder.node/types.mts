@@ -35,7 +35,7 @@ export type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> 
 export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
-  platform(target: 'web' | 'node'): void;
+  environment(target: 'web' | 'node'): void;
 };
 export type ModifyViteConfigCtx = {
   readonly name: string;

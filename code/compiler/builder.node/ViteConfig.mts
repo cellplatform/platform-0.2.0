@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
+import { BuildOptions, defineConfig, LibraryOptions, UserConfig } from 'vite';
 
-import { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
 import { fs, t } from './common/index.mjs';
-import type { RollupOptions } from 'rollup';
 import { Paths } from './Paths.mjs';
 
+import type { RollupOptions } from 'rollup';
 export type PackageJson = {
   name: string;
   version: string;
@@ -14,6 +14,8 @@ export type PackageJson = {
   devDependencies?: { [key: string]: string };
 };
 
+import type { InlineConfig as TestConfig } from 'vitest';
+
 /**
  * Common configuration defaults.
  */
@@ -22,11 +24,11 @@ export const ViteConfig = {
     /**
      * Test runner.
      */
-    test() {
+    test(): TestConfig {
       return {
         globals: false,
         include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
-        // environment: 'jsdom',
+        environment: 'node',
       };
     },
 
@@ -68,9 +70,11 @@ export const ViteConfig = {
         manifest: fs.basename(Paths.viteManifest),
       };
 
+      const test = ViteConfig.defaults.test();
+
       const config: UserConfig = {
         plugins: [],
-        test: ViteConfig.defaults.test(),
+        test,
         build,
         worker: { format: 'es' },
       };
@@ -85,9 +89,15 @@ export const ViteConfig = {
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
         },
-        platform(target) {
-          if (target === 'web') build.ssr = undefined;
-          if (target === 'node') build.ssr = true;
+        environment(target) {
+          if (target === 'web') {
+            build.ssr = undefined;
+            test.environment = 'jsdom';
+          }
+          if (target === 'node') {
+            build.ssr = true;
+            test.environment = 'node';
+          }
         },
       };
 
