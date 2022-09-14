@@ -14,13 +14,13 @@ export type PackageJson = {
   devDependencies?: { [key: string]: string };
 };
 
-type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown> | unknown;
-type ModifyConfigArgs = {
-  readonly ctx: ModifyConfigCtx;
+type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> | unknown;
+type ModifyViteConfigArgs = {
+  readonly ctx: ModifyViteConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
   platform(target: 'web' | 'node'): void;
 };
-type ModifyConfigCtx = {
+type ModifyViteConfigCtx = {
   readonly name: string;
   readonly command: 'build' | 'serve';
   readonly mode: string;
@@ -61,7 +61,7 @@ export const ViteConfig = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  default(dir: string, modify?: ModifyConfig) {
+  default(dir: string, modify?: ModifyViteConfig) {
     return defineConfig(async ({ command, mode }) => {
       const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as PackageJson;
       const deps = { ...pkg.dependencies, ...pkg.devDependencies };
@@ -93,7 +93,7 @@ export const ViteConfig = {
       /**
        * Modification IoC (called within each module to perform specific adjustments).
        */
-      const args: ModifyConfigArgs = {
+      const args: ModifyViteConfigArgs = {
         ctx: { name, command, mode, config, pkg, deps },
         addExternalDependency(moduleName) {
           asArray(moduleName)
