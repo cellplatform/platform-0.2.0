@@ -11,6 +11,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.util.node',
   version: '0.0.0',
   dependencies: {
+    'picocolors': '1.0.0',
   },
 };
 
