@@ -41,6 +41,7 @@ export const ViteConfig = {
       return {
         globals: false,
         include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+        environment: 'jsdom',
       };
     },
 
