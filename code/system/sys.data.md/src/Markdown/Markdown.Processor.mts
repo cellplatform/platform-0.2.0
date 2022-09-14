@@ -2,7 +2,9 @@ import format from 'rehype-format';
 import html from 'rehype-stringify';
 import markdown from 'remark-parse';
 import remark2rehype from 'remark-rehype';
-import unified, { Processor } from 'unified';
+import { unified, Processor } from 'unified';
+
+let _processor: Processor | undefined; // Lazily initialized singleton.
 
 /**
  * See:
@@ -29,7 +31,7 @@ export const MarkdownProcessor = {
 /**
  * Helpers
  */
-let _processor: Processor | undefined;
+
 const Util = {
   get processor(): Processor {
     if (!_processor) _processor = unified().use(markdown).use(remark2rehype).use(format).use(html);
