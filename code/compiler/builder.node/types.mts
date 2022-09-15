@@ -1,3 +1,5 @@
+import type { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
+
 export type PathString = string;
 export type DirString = PathString;
 export type VersionString = string;
@@ -14,21 +16,6 @@ export type TsConfig = {
 export type TsConfigCompilerOptions = { rootDir?: string };
 
 /**
- * Configuration instructions for an ESM module,
- * that is translated into [nodejs] index entries
- * on the [package.json] file.
- */
-export type EsmConfig = {
-  exports: EsmConfigExports;
-};
-
-/**
- * Ref:
- * https://nodejs.org/api/packages.html#packages_exports
- */
-export type EsmConfigExports = { [entry: string]: PathString };
-
-/**
  * Vite [manifest.json] file.
  * https://vitejs.dev/config/build-options.html#build-manifest
  */
@@ -39,6 +26,24 @@ export type ViteManifestFile = {
   dynamicImports?: PathString[];
   isDynamicEntry?: boolean;
   isEntry?: boolean;
+};
+
+/**
+ * Modify the vite config programatically from within the subject module.
+ */
+export type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> | unknown;
+export type ModifyViteConfigArgs = {
+  readonly ctx: ModifyViteConfigCtx;
+  addExternalDependency(moduleName: string | string[]): void;
+  environment(target: 'web' | 'node'): void;
+};
+export type ModifyViteConfigCtx = {
+  readonly name: string;
+  readonly command: 'build' | 'serve';
+  readonly mode: string;
+  readonly pkg: PackageJson;
+  readonly deps: { [key: string]: string }; // All dependencies (incl. "dev")
+  readonly config: UserConfig;
 };
 
 /**

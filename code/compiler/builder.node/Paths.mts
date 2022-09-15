@@ -25,7 +25,7 @@ export const Paths = {
       'src/index.pkg.mts',
       'src/index.TEST.mts',
       'src/types.mts',
-      'src/TEST/index.mts',
+      'src/Test/index.mts',
       'src/common/index.mts',
       'src/common/libs.mts',
       'src/common/types.mts',

@@ -11,15 +11,15 @@ export async function test(
     run?: boolean;
     ui?: boolean;
     coverage?: boolean;
-    silent?: boolean;
-    reporter?: 'deault' | 'verbose' | 'json' | 'dot' | 'junit';
+    silentTestConsole?: boolean; // NB: silence console output from tests
+    reporter?: 'default' | 'verbose' | 'json' | 'dot' | 'junit';
   } = {},
 ) {
   const {
     watch = true,
     coverage = false,
     ui = false,
-    silent = false,
+    silentTestConsole: testConsoleSilent = false, // Output from console
     run = false,
     reporter,
   } = options;
@@ -32,7 +32,7 @@ export async function test(
   args.push(`--watch=${watch}`);
   args.push('--passWithNoTests');
   if (ui) args.push('--ui');
-  if (silent) args.push('--silent');
+  if (testConsoleSilent) args.push('--silent');
   if (coverage) args.push('--coverage');
   if (run) args.push('--run');
   if (reporter) args.push(`--reporter=${reporter}`);

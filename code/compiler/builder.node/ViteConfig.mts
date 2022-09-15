@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
+import { BuildOptions, defineConfig, LibraryOptions, UserConfig } from 'vite';
 
-import { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
-import { fs } from './common/index.mjs';
-import type { RollupOptions } from 'rollup';
+import { fs, t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
+import type { RollupOptions } from 'rollup';
 export type PackageJson = {
   name: string;
   version: string;
@@ -14,20 +14,7 @@ export type PackageJson = {
   devDependencies?: { [key: string]: string };
 };
 
-type ModifyConfig = (args: ModifyConfigArgs) => Promise<unknown> | unknown;
-type ModifyConfigArgs = {
-  readonly ctx: ModifyConfigCtx;
-  addExternalDependency(moduleName: string | string[]): void;
-  platform(target: 'web' | 'node'): void;
-};
-type ModifyConfigCtx = {
-  readonly name: string;
-  readonly command: 'build' | 'serve';
-  readonly mode: string;
-  readonly pkg: PackageJson;
-  readonly deps: { [key: string]: string }; // All dependencies (incl. "dev")
-  readonly config: UserConfig;
-};
+import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
  * Common configuration defaults.
@@ -37,10 +24,11 @@ export const ViteConfig = {
     /**
      * Test runner.
      */
-    test() {
+    test(): TestConfig {
       return {
         globals: false,
         include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+        environment: 'node',
       };
     },
 
@@ -60,7 +48,7 @@ export const ViteConfig = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  default(dir: string, modify?: ModifyConfig) {
+  default(dir: string, modify?: t.ModifyViteConfig) {
     return defineConfig(async ({ command, mode }) => {
       const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as PackageJson;
       const deps = { ...pkg.dependencies, ...pkg.devDependencies };
@@ -82,9 +70,11 @@ export const ViteConfig = {
         manifest: fs.basename(Paths.viteManifest),
       };
 
+      const test = ViteConfig.defaults.test();
+
       const config: UserConfig = {
         plugins: [],
-        test: ViteConfig.defaults.test(),
+        test,
         build,
         worker: { format: 'es' },
       };
@@ -92,16 +82,22 @@ export const ViteConfig = {
       /**
        * Modification IoC (called within each module to perform specific adjustments).
        */
-      const args: ModifyConfigArgs = {
+      const args: t.ModifyViteConfigArgs = {
         ctx: { name, command, mode, config, pkg, deps },
         addExternalDependency(moduleName) {
           asArray(moduleName)
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
         },
-        platform(target) {
-          if (target === 'web') build.ssr = undefined;
-          if (target === 'node') build.ssr = true;
+        environment(target) {
+          if (target === 'web') {
+            build.ssr = undefined;
+            test.environment = 'jsdom';
+          }
+          if (target === 'node') {
+            build.ssr = true;
+            test.environment = 'node';
+          }
         },
       };
 
