@@ -101,6 +101,12 @@ To run all of these locally within a single command:
 $ yarn ci
 ```
 
+To list the entire set of modules:
+```bash
+$ yarn ls            <= Sorted alphabetically
+$ yarn ls --topo     <= Topologically sorted on dependency graph (depth-first)
+```
+
 
 
 <p>&nbsp;</p>
