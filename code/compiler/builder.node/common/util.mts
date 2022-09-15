@@ -70,7 +70,8 @@ export const Util = {
     const pkg = await Util.PackageJson.load(Paths.rootDir);
 
     const findPattern = (pattern: string) => fs.glob.find(fs.resolve(fs.join('.', pattern)));
-    const paths = (await Promise.all(pkg.workspaces.packages.map(findPattern))).flat();
+    const workspaces = pkg.workspaces ?? { packages: [] };
+    const paths = (await Promise.all(workspaces.packages.map(findPattern))).flat();
 
     const dirs = await Util.asyncFilter(paths, async (path) => {
       if (path.includes('/template')) return false;
