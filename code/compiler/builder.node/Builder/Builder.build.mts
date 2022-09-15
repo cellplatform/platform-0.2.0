@@ -1,11 +1,11 @@
-import { PackageRoot } from './operations/Package.Root.mjs';
-import { PackageDist } from './operations/Packge.Dist.mjs';
-import { Typescript } from './operations/Typescript.mjs';
-import { Vite } from './operations/Vite.mjs';
-import { fs, t } from './common/index.mjs';
-import { Paths } from './Paths.mjs';
-import { Template } from './Template.mjs';
-import { Dependencies } from './operations/Dependencies.mjs';
+import { fs, t } from '../common/index.mjs';
+import { Dependencies } from '../op/Dependencies.mjs';
+import { PackageRoot } from '../op/Package.Root.mjs';
+import { PackageDist } from '../op/Packge.Dist.mjs';
+import { Typescript } from '../op/Typescript.mjs';
+import { Vite } from '../op/Vite.mjs';
+import { Paths } from '../Paths.mjs';
+import { Template } from '../Template.mjs';
 
 /**
  * Run a build that:

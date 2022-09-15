@@ -1,4 +1,4 @@
-import { execa, t } from './common/index.mjs';
+import { execa, t } from '../common/index.mjs';
 import Vitest from 'vitest';
 
 /**
