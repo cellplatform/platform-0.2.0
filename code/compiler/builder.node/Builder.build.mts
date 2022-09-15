@@ -1,7 +1,7 @@
-import { PackageRoot } from './build/Package.Root.mjs';
-import { PackageDist } from './build/Packge.Dist.mjs';
-import { Typescript } from './build/Typescript.mjs';
-import { Vite } from './build/Vite.mjs';
+import { PackageRoot } from './op/Package.Root.mjs';
+import { PackageDist } from './op/Packge.Dist.mjs';
+import { Typescript } from './op/Typescript.mjs';
+import { Vite } from './op/Vite.mjs';
 import { fs, t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 import { Template } from './Template.mjs';
