@@ -9,22 +9,33 @@ describe('SanitizeHtml', () => {
     return render(el).container.innerHTML;
   };
 
-  it('div: allowed', () => {
-    const source = '<div>foo</div>';
-    const html = renderToHtml(source);
-    expect(html).to.include('class="my-container"');
-    expect(html).to.include(source);
+  it('sanitize (helper)', () => {
+    const test = (html: string, after: string) => {
+      expect(SanitizeHtml.sanitize(html)).to.eql(after);
+    };
+    test(`<div>foo</div>`, `<div>foo</div>`);
+    test(`<script>alert('hello world')</script>`, '');
+    test(`<div><script>alert('hello world')</script></div>`, '<div></div>');
   });
 
-  it('img: allowed', () => {
-    const source = `<img src="./img.png">`;
-    const html = renderToHtml(source);
-    expect(html).to.include(source);
-  });
+  describe('render', () => {
+    it('div: allowed', () => {
+      const source = '<div>foo</div>';
+      const html = renderToHtml(source);
+      expect(html).to.include('class="my-container"');
+      expect(html).to.include(source);
+    });
 
-  it('script: disallowed', () => {
-    const source = `<script>alert('hello world')</script>`;
-    const html = renderToHtml(source);
-    expect(html).to.not.include(source);
+    it('img: allowed', () => {
+      const source = `<img src="./img.png">`;
+      const html = renderToHtml(source);
+      expect(html).to.include(source);
+    });
+
+    it('script: disallowed', () => {
+      const source = `<script>alert('hello world')</script>`;
+      const html = renderToHtml(source);
+      expect(html).to.not.include(source);
+    });
   });
 });
