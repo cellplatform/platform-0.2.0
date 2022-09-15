@@ -1,11 +1,11 @@
 #!/usr/bin/env ts-node
-import { LogTable, pc, Util } from './common/index.mjs';
+import { LogTable, pc, Util, Builder } from './common/index.mjs';
 
 const filter = (path: string) => {
   if (path.includes('/code/compiler.sample')) return false;
   return true;
 };
-let paths = await Util.findProjectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.findProjectDirs({ filter, sort: 'Alpha' });
 
 if (paths.length === 0) {
   console.warn(pc.gray('no paths'));

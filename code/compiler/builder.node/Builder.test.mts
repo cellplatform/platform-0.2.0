@@ -1,4 +1,5 @@
 import { execa, t } from './common/index.mjs';
+import Vitest from 'vitest';
 
 /**
  * Execute unit-tests within the target module directory.
@@ -38,7 +39,8 @@ export async function test(
   if (reporter) args.push(`--reporter=${reporter}`);
 
   const cmd = `vitest`;
-  const res = await execa(cmd, args, { cwd: dir, stdio: 'inherit' });
+  const cwd = dir;
+  const res = await execa(cmd, args, { cwd, stdio: 'inherit' });
   const ok = res.exitCode === 0;
 
   return { ok, cmd, args };

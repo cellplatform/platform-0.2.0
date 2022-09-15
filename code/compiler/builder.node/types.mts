@@ -58,6 +58,7 @@ export type PackageJson = {
   exports?: PackageJsonExports;
   dependencies?: { [name: string]: VersionString };
   devDependencies?: { [name: string]: VersionString };
+  workspaces: { packages: string[] };
 };
 
 /**

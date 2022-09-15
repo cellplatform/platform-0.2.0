@@ -13,7 +13,7 @@ const filter = (path: string) => {
   if (path.includes('code/samples/')) return false;
   return true;
 };
-let paths = await Util.findProjectDirs({ filter, sort: 'DependencyGraph' });
+let paths = await Builder.findProjectDirs({ filter, sort: 'DependencyGraph' });
 
 // Log module list.
 console.log();
