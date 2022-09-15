@@ -20,10 +20,10 @@ export const JsonUtil = {
  */
 export const PackageJsonUtil = {
   async load(dir: t.PathString) {
-    return JsonUtil.load<t.PackageJson>(PackageJsonUtil.path(dir));
+    return JsonUtil.load<t.PkgJson>(PackageJsonUtil.path(dir));
   },
 
-  async save(dir: t.PathString, pkg: t.PackageJson) {
+  async save(dir: t.PathString, pkg: t.PkgJson) {
     await fs.writeFile(PackageJsonUtil.path(dir), JsonUtil.stringify(pkg));
   },
 
@@ -31,5 +31,17 @@ export const PackageJsonUtil = {
     dir = (dir || '').trim();
     if (!dir.endsWith('/package.json')) dir = `${dir}/package.json`;
     return dir;
+  },
+
+  deps(pkg: t.PkgJson) {
+    const dependencies = pkg.dependencies ?? {};
+    const devDependencies = pkg.devDependencies ?? {};
+    const all = { ...devDependencies, ...dependencies };
+    return {
+      all,
+      dependencies,
+      devDependencies,
+      exists: (name: string) => Boolean(all[name]),
+    };
   },
 };
