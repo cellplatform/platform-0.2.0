@@ -1,5 +1,5 @@
 /**
- * @external
+ * @vendor
  */
 import pc from 'picocolors';
 import rimraf from 'rimraf';
@@ -7,8 +7,9 @@ import glob from 'glob';
 import { execa } from 'execa';
 import minimist from 'minimist';
 import filesize from 'pretty-bytes';
+import semver from 'semver';
 
-export { pc, rimraf, execa, minimist, glob, filesize };
+export { pc, rimraf, execa, minimist, glob, filesize, semver };
 
 /**
  * @system
