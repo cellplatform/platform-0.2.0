@@ -24,7 +24,7 @@ export async function build(
 
   // Pre-build.
   await Template.ensureBaseline(dir);
-  await Dependencies.ensureInSyncWithRoot(dir);
+  await Dependencies.ensureInSyncWithRoot____(dir);
 
   // - Typescript.
   const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });

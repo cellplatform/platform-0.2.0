@@ -9,7 +9,7 @@ const filter = (path: string) => {
 };
 let paths = await Builder.Find.projectDirs({
   filter,
-  sort: argv.topo ? 'DependencyGraph' : 'Alpha',
+  sort: argv.topo ? 'Topological' : 'Alpha',
 });
 
 if (paths.length === 0) {

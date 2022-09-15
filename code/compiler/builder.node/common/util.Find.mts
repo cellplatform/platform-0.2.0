@@ -15,8 +15,8 @@ export const FindUtil = {
    */
   async projectDirs(
     options: {
-      filter?: (path: string) => boolean;
-      sort?: 'DependencyGraph' | 'Alpha' | 'None';
+      filter?: t.PathFilter;
+      sort?: 'Topological' | 'Alpha' | 'None';
     } = {},
   ) {
     const pkg = await PackageJsonUtil.load(Paths.rootDir);
@@ -26,14 +26,15 @@ export const FindUtil = {
     const paths = (await Promise.all(workspaces.packages.map(findPattern))).flat();
 
     const dirs = await asyncFilter(paths, async (path) => {
-      if (path.includes('/template')) return false;
+      if (path.includes('/code/compiler')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
+      path = path.substring(Paths.rootDir.length);
       return options.filter ? options.filter(path) : true;
     });
 
     const { sort = 'Alpha' } = options;
     if (sort === 'Alpha') return FindUtil.sortAlpha(dirs);
-    if (sort === 'DependencyGraph') return FindUtil.sortProjectDirsDepthFirst(dirs);
+    if (sort === 'Topological') return FindUtil.sortProjectDirsDepthFirst(dirs);
 
     return dirs;
   },
@@ -54,7 +55,7 @@ export const FindUtil = {
     const graph = new Map<string, string[]>();
     await Promise.all(
       dirs.map(async (dir) => {
-        const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as t.PackageJson;
+        const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as t.PkgJson;
         const deps = Object.keys({ ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) });
         graph.set(pkg.name, deps);
       }),

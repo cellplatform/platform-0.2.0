@@ -13,7 +13,7 @@ const filter = (path: string) => {
   if (path.includes('code/samples/')) return false;
   return true;
 };
-let paths = await Builder.Find.projectDirs({ filter, sort: 'DependencyGraph' });
+let paths = await Builder.Find.projectDirs({ filter, sort: 'Topological' });
 
 // Log module list.
 console.log();
@@ -57,8 +57,8 @@ for (const result of results) {
   const formattedPath = Util.formatPath(path, { filenameColor: ok ? pc.white : pc.red });
   const column = {
     path: pc.gray(` ${bullet(path)} ${formattedPath}`),
-    size: pc.gray(`  ${size.bytes === 0 ? '-' : Util.filesize(size.bytes)}`),
-    time: pc.gray(`  ${Time.duration(result.elapsed).toString()} `),
+    size: pc.gray(`  /dist: ${size.bytes === 0 ? '-' : Util.filesize(size.bytes)}`),
+    time: pc.gray(`   ${Time.duration(result.elapsed).toString()} `),
   };
   totalBytes += size.bytes;
   table.push([column.path, column.size, column.time]);
