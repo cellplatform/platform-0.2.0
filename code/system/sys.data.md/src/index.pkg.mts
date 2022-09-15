@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.util.css': '0.0.0',
+    'sys.util.react': '0.0.0',
     'sanitize-html': '2.7.1',
     'rehype-format': '4.0.1',
     'rehype-stringify': '9.0.3',
