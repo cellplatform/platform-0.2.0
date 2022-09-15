@@ -1,5 +1,6 @@
 import { pc, execa, fs, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
+import { Version } from './Version.mjs';
 
 /**
  * Template path names.
@@ -28,6 +29,8 @@ export const Typescript = {
     root = fs.resolve(root);
     const { silent = false } = options;
     const tsVersion = await Typescript.version();
+
+    await Version.sync(root);
 
     if (!silent) {
       const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
