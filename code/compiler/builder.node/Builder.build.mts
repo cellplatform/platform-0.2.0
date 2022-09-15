@@ -5,6 +5,7 @@ import { Vite } from './op/Vite.mjs';
 import { fs, t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 import { Template } from './Template.mjs';
+import { Dependencies } from './op/Dependencies.mjs';
 
 /**
  * Run a build that:
@@ -23,6 +24,7 @@ export async function build(
 
   // Pre-build.
   await Template.ensureBaseline(dir);
+  await Dependencies.ensureInSyncWithRoot(dir);
 
   // - Typescript.
   const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
@@ -39,6 +41,6 @@ export async function build(
   // await BuildManifest.generate(dir);
 
   // Finish up.
-  if (!silent) console.log();
+  if (!silent) console.info('');
   return { ok: true, errorCode: 0 };
 }

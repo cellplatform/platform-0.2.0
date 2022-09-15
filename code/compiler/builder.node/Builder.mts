@@ -1,10 +1,9 @@
 import { build } from './Builder.build.mjs';
 import { clean } from './Builder.clean.mjs';
 import { test } from './Builder.test.mjs';
-import { Util } from './common/index.mjs';
+import { FindUtil as Find } from './common/index.mjs';
+import { Dependencies } from './op/Dependencies.mjs';
 import { Paths } from './Paths.mjs';
-
-const { findProjectDirs } = Util;
 
 /**
  * ESM module builder.
@@ -13,12 +12,13 @@ const { findProjectDirs } = Util;
  *  - Vite => Rollup
  */
 export const Builder = {
+  Paths,
+  Find,
+  Dependencies,
+
   build,
   test,
   clean,
-
-  Paths,
-  findProjectDirs,
 };
 
 /**

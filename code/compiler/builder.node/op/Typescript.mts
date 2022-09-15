@@ -1,6 +1,5 @@
 import { pc, execa, fs, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
-import { Version } from './Version.mjs';
 
 /**
  * Template path names.
@@ -29,8 +28,6 @@ export const Typescript = {
     root = fs.resolve(root);
     const { silent = false } = options;
     const tsVersion = await Typescript.version();
-
-    await Version.sync(root);
 
     if (!silent) {
       const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
@@ -122,7 +119,7 @@ export const Typescript = {
       const target = fs.join(targetDir, filename);
       const json = (await fs.readJson(source)) as t.TsConfig;
       adjust?.(json);
-      await fs.writeFile(target, Util.stringify(json));
+      await fs.writeFile(target, Util.Json.stringify(json));
     };
 
     await copy(Paths.tmpl.tsconfig.code, (tsconfig) => {

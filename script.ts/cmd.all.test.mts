@@ -13,7 +13,7 @@ const filter = (path: string) => {
   if (path.includes('/code/compiler.sample')) return false;
   return true;
 };
-let paths = await Builder.findProjectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.Find.projectDirs({ filter, sort: 'Alpha' });
 
 if (paths.length === 0) {
   console.warn(pc.yellow('no paths'));
