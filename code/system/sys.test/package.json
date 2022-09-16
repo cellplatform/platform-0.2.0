@@ -10,13 +10,12 @@
   },
   "devDependencies": {
     "sys.types": "0.0.0",
-    "chai": "latest"
+    "chai": "^4.3.6"
   },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
-  },
-  "dependencies": {}
+  }
 }
