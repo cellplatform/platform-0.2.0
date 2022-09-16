@@ -111,7 +111,7 @@ $ yarn ls --topo     <= Topologically sorted on the module dependency graph (dep
 
 <p>&nbsp;</p>
 
-Note: the system uses [node-js](https://nodejs.org/en/) currently for build-chain bootstrapping only. Once the Typescript compiler and ESM module bundler is active, the dependency on `node-js` falls away.
+Note: the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler and ESM module bundler is active, the dependency on `node-js` falls away.
 
 <p>&nbsp;</p>
 
