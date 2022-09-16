@@ -3,7 +3,7 @@
  */
 import { Filesystem } from 'sys.fs.indexeddb';
 import { Time } from 'sys.util';
-import { rx, Vercel } from 'vendor.cloud.vercel';
+import { rx, Vercel } from '../index.mjs';
 
 import { Pkg } from '../index.pkg.mjs';
 
