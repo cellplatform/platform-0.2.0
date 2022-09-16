@@ -9,7 +9,7 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "devDependencies": {
-    "sys.types": "^0.0.0",
+    "sys.types": "0.0.0",
     "chai": "latest"
   },
   "license": "MIT",
@@ -17,5 +17,6 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/index.js"
-  }
+  },
+  "dependencies": {}
 }

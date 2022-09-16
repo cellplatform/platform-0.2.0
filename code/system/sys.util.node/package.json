@@ -9,10 +9,10 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "picocolors": "latest"
+    "picocolors": "^1.0.0"
   },
   "devDependencies": {
-    "sys.test": "^0.0.0"
+    "sys.test": "0.0.0"
   },
   "license": "MIT",
   "private": true,
