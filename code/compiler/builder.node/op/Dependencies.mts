@@ -36,34 +36,12 @@ export const Dependencies = {
    *  2b. Ensure the "hightest version used" scope extends across all modules within the "global workspace".
    *
    */
-  async ensureInSyncWithRoot____(moduleDir: t.PathString) {
-    moduleDir = fs.resolve(moduleDir);
+  async sync(options: { filter?: t.PathFilter; save?: boolean } = {}) {
+    const { filter, save = true } = options;
 
-    const rootPkg = await PackageJson.load(Paths.rootDir);
-    const modulePkg = await PackageJson.load(moduleDir);
-
-    console.log('version sync: ', rootPkg.name, '<==>', modulePkg.name);
-
-    // console.log('-------------------------------------------');
-    // console.log('modulePkg.dependencies', modulePkg.dependencies);
-  },
-
-  /**
-   * Examines the given module's dependencies:
-   *
-   *  1.  Ensure each external dependency referenced in the module is
-   *      also referenced on the root [package.json], aka "global workspace".
-   *
-   *  2a. Ensure the latest semver between the root and the module is used on both of them.
-   *  2b. Ensure the "hightest version used" scope extends across all modules within the "global workspace".
-   *
-   */
-  async sync(options: { filter?: t.PathFilter } = {}) {
-    const { filter } = options;
-
+    const loadRootPackage = () => PackageJson.load(Paths.rootDir);
+    let rootPkg = await loadRootPackage();
     const modules = await Dependencies.buildGraph();
-    let rootPkg = await PackageJson.load(Paths.rootDir);
-    const rootDeps = PackageJson.deps.get(rootPkg);
 
     const changes: C[] = [];
     const registerChange = (target: C['target'], module: string, toVersion: string, dep: D) => {
@@ -72,21 +50,33 @@ export const Dependencies = {
       changes.push({ target, module, dep: { name, isDev }, version });
     };
 
-    const highestVersion = (a: string, b: string) => (semver.gte(a, b) ? a : b);
+    const calcHighestVersion = (a?: string, b?: string): string => {
+      if (a === undefined && b === undefined) return '0.0.0';
+      if (a === undefined) return b ?? '0.0.0';
+      if (b === undefined) return a ?? '0.0.0';
+      const clean = (v: string) => {
+        v = (v || '').trim() || '0.0.0';
+        v = v.replace(/^\^/, '').replace(/^\~/, '');
+        return semver.clean(v) || '0.0.0';
+      };
+      return semver.gte(clean(a), clean(b)) ? a : b;
+    };
 
     for (const module of filterGraph(modules, { filter })) {
+      const rootDeps = PackageJson.deps.get(rootPkg);
+
       const loadModulePackage = () => PackageJson.load(module.path);
       let modulePkg = await loadModulePackage();
 
       for (const dep of module.deps) {
         if (dep.isLocal) {
           // This is a [LOCAL] inter-module reference.
-          // Ensure current version from source.
+          //    Ensure current version from source.
           const source = modules.find((item) => item.name === dep.name);
           if (source) {
             const version = source.version;
-            registerChange('module', module.name, version, dep);
             modulePkg = PackageJson.deps.set(modulePkg, dep.name, version, dep.isDev);
+            registerChange('module', module.name, version, dep);
           }
         } else {
           // This is an [EXTERNAL] module.
@@ -94,40 +84,40 @@ export const Dependencies = {
           const existsInRoot = rootDeps.exists(dep.name);
           const rootVersion = rootDeps.all[dep.name];
           const depVersion = dep.version;
-          const isSemver = Boolean(semver.valid(depVersion));
 
-          console.log(dep.name, dep.version, 'depVersion', depVersion, isSemver);
           if (existsInRoot) {
-            // Is accounted for in the root - ensure we have the latest version.
-            const version = !isSemver ? rootVersion : highestVersion(rootVersion, depVersion);
+            // Reference is accounted for in the root - ensure we have the latest version.
+            const version = calcHighestVersion(rootVersion, depVersion);
             if (dep.version !== version) {
-              registerChange('module', module.name, version, dep);
               modulePkg = PackageJson.deps.set(modulePkg, dep.name, version, dep.isDev);
+              registerChange('module', module.name, version, dep);
             }
-          } else {
+          }
+
+          const isDifferentFromRoot = !rootDeps.eq(dep.name, dep.version);
+          if (!existsInRoot || isDifferentFromRoot) {
             // Not accounted for in the root.
-            // Add it to the root now.
-            const { name, version } = dep;
+            //    Add it to the root now.
+            const { name } = dep;
+            const version = calcHighestVersion(rootVersion, depVersion);
             rootPkg = PackageJson.deps.set(rootPkg, name, version, dep.isDev);
             registerChange('root', module.name, version, dep);
           }
         }
       }
 
+      // Save the module [package.json] file.
       const isChanged = !R.equals(await loadModulePackage(), modulePkg);
-      console.log('isChanged', isChanged);
-
-      await PackageJson.save(module.path, modulePkg, { filename: 'package.TMP.json' }); // TEMP 🐷
+      if (save && isChanged) {
+        await PackageJson.save(module.path, modulePkg);
+      }
     }
 
-    // console.log('-------------------------------------------');
-    // console.log('changes', changes);
-
-    const saveRoot = changes.some((c) => c.target === 'root');
-    console.log('saveRoot', saveRoot);
-
-    // TEMP 🐷
-    await PackageJson.save(Paths.rootDir, rootPkg, { filename: 'package.TMP.json' }); // TEMP 🐷
+    // Save root [package.json] file.
+    const isRootChanged = changes.some((c) => c.target === 'root');
+    if (save && isRootChanged) {
+      await PackageJson.save(Paths.rootDir, rootPkg);
+    }
 
     // Finish up.
     return { changes };
