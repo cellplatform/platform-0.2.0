@@ -37,6 +37,9 @@ function trim(value?: string) {
 }
 
 function clean(version?: string) {
-  version = trim(version).replace(/^\^/, '').replace(/^\~/, '');
-  return semver.coerce(version)?.version || '';
+  let res = trim(version);
+  const prerelease = res.includes('-') ? res.substring(res.indexOf('-')) : '';
+  res = trim(res).replace(/^\^/, '').replace(/^\~/, '');
+  res = semver.coerce(res)?.version || '';
+  return `${res}${prerelease}`;
 }
