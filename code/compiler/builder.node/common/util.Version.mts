@@ -25,7 +25,7 @@ export const VersionUtil = {
     if (a === undefined && b === undefined) return '0.0.0';
     if (a === undefined) return b ?? '0.0.0';
     if (b === undefined) return a ?? '0.0.0';
-    return semver.gte(clean(a), clean(b)) ? a : b;
+    return semver.gte(clean(a) || '0.0.0', clean(b) || '0.0.0') ? a : b;
   },
 };
 

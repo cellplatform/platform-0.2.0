@@ -1,4 +1,4 @@
-import { fs, t, Util, semver, R } from '../common/index.mjs';
+import { R, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 
 const PackageJson = Util.PackageJson;
@@ -36,7 +36,7 @@ export const Dependencies = {
    *  2b. Ensure the "hightest version used" scope extends across all modules within the "global workspace".
    *
    */
-  async sync(options: { filter?: t.PathFilter; save?: boolean } = {}) {
+  async syncVersions(options: { filter?: t.PathFilter; save?: boolean } = {}) {
     const { filter, save = true } = options;
 
     const loadRootPackage = () => PackageJson.load(Paths.rootDir);
