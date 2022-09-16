@@ -1,4 +1,4 @@
-import type { defineConfig, LibraryOptions, UserConfig, BuildOptions } from 'vite';
+import type { UserConfig } from 'vite';
 
 export type PathString = string;
 export type DirString = PathString;
@@ -30,6 +30,8 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
+export type ViteBuilderEnv = 'web' | 'node';
+
 /**
  * Modify the vite config programatically from within the subject module.
  */
@@ -37,7 +39,7 @@ export type ModifyViteConfig = (args: ModifyViteConfigArgs) => Promise<unknown> 
 export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   addExternalDependency(moduleName: string | string[]): void;
-  environment(target: 'web' | 'node'): void;
+  environment(target: ViteBuilderEnv | ViteBuilderEnv[]): void;
 };
 export type ModifyViteConfigCtx = {
   readonly name: string;
