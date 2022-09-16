@@ -51,7 +51,6 @@ export function VercelHttpDeploymentFiles(args: {
 
         if (!path.startsWith('src/')) return;
         path = path.replace(/^src\//, '');
-        console.log('path', path);
 
         const url = `${baseUrl}/${path}`;
         const res = await http.get(url);

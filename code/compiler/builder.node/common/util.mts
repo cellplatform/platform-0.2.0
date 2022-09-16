@@ -1,5 +1,6 @@
 import { FindUtil } from './util.Find.mjs';
 import { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
+import { semver } from './libs.mjs';
 
 import type * as t from '../types.mjs';
 
@@ -12,7 +13,7 @@ export const Util = {
   Find: FindUtil,
 
   stripRelativeRoot(input: t.PathString) {
-    return (input || '').replace(/^\.\//, '');
+    return trim(input).replace(/^\.\//, '');
   },
 
   ensureRelativeRoot(input: t.PathString) {
@@ -24,8 +25,13 @@ export const Util = {
     return Object.keys(input).length > 0;
   },
 
-  trimVersionAdornments(version: string) {
-    return (version || '').trim().replace(/^\^/, '').replace(/^\~/, '');
+  trimVersionAdornment(version: string) {
+    version = trim(version);
+    let adornment = '';
+    if (version.startsWith('^')) adornment = '^';
+    if (version.startsWith('~')) adornment = '~';
+    version = (version || '').trim().replace(/^\^/, '').replace(/^\~/, '');
+    return { version, adornment };
   },
 
   async asyncFilter<T>(list: T[], predicate: (value: T) => Promise<boolean>) {
@@ -33,3 +39,10 @@ export const Util = {
     return list.filter((_, index) => results[index]);
   },
 };
+
+/**
+ * Helpers
+ */
+function trim(value?: string) {
+  return (value || '').trim();
+}
