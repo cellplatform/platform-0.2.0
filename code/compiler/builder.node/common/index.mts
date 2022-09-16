@@ -6,4 +6,4 @@ export * from './libs.mjs';
 
 export { Util } from './util.mjs';
 export { FindUtil } from './util.Find.mjs';
-export { JsonUtil } from './util.Json.mjs';
+export { JsonUtil, PackageJsonUtil } from './util.Json.mjs';

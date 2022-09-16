@@ -6,8 +6,8 @@ type Milliseconds = number;
 /**
  * Run
  */
-type Pkg = { name: string; version: string };
-const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
+await Builder.Dependencies.syncVersions({ save: true });
+const pkg = await Builder.PackageJson.load(fs.resolve('.'));
 
 const filter = (path: string) => {
   if (path.includes('code/samples/')) return false;
