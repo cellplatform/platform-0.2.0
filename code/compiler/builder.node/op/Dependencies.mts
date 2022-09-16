@@ -99,14 +99,14 @@ export const Dependencies = {
       // Save the module [package.json] file.
       const isChanged = !R.equals(await loadModulePackage(), modulePkg);
       if (save && isChanged) {
-        await PackageJson.save(module.path, modulePkg);
+        await savePkg(module.path, modulePkg);
       }
     }
 
     // Save root [package.json] file.
     const isRootChanged = !R.equals(await loadRootPackage(), rootPkg);
     if (save && isRootChanged) {
-      await PackageJson.save(Paths.rootDir, rootPkg);
+      await savePkg(Paths.rootDir, rootPkg);
     }
 
     // Finish up.
@@ -165,3 +165,7 @@ function filterGraph(modules: M[], options: { filter?: t.PathFilter } = {}) {
   };
   return modules.filter((module) => filter(module.path));
 }
+
+const savePkg = async (path: string, pkg: t.PkgJson) => {
+  return PackageJson.save(path, PackageJson.deps.clean(pkg));
+};

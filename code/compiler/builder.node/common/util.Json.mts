@@ -60,5 +60,12 @@ export const PackageJsonUtil = {
       if (isDev) devDependencies[name] = version;
       return pkg;
     },
+
+    clean(pkg: t.PkgJson) {
+      pkg = R.clone(pkg);
+      if (Object.keys(pkg.dependencies || {}).length === 0) delete pkg.dependencies;
+      if (Object.keys(pkg.devDependencies || {}).length === 0) delete pkg.devDependencies;
+      return pkg;
+    },
   },
 };
