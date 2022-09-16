@@ -130,7 +130,7 @@ The system (platform) lives as an "open commons" shared resource of the world's 
 
 In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through reearched refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
 
-To run a "licence analysis" and validate the depenency graph against this principle run:
+To run a "licence analysis" and validate the module depenency graph against this principle run:
 
 ```bash
 $ fossa analyze
