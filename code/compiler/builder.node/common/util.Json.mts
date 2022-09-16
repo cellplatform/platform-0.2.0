@@ -47,6 +47,10 @@ export const PackageJsonUtil = {
         dependencies,
         devDependencies,
         exists: (name: string) => Boolean(all[name]),
+        eq: (name: string, version: string) => {
+          const clean = (v: string) => (v || '').trim().replace(/^\^/, '').replace(/^\~/, '');
+          return clean(all[name]) === clean(version);
+        },
       };
     },
 
