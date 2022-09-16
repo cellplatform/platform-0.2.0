@@ -11,12 +11,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "sys.types": "^0.0.0",
-    "sys.util": "^0.0.0",
-    "asmcrypto.js": "latest"
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0",
+    "asmcrypto.js": "^2.3.2"
   },
   "devDependencies": {
-    "sys.test": "^0.0.0"
+    "sys.test": "0.0.0"
   },
   "types": "./dist/types.d/index.d.mts",
   "exports": {

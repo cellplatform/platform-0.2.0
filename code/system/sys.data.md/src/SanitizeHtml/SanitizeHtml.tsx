@@ -1,10 +1,10 @@
 import React from 'react';
-import sanitize from 'sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
-import { css, t } from '../common/index.mjs';
+import { css, t, FC } from '../common/index.mjs';
 
 export const DEFAULT = {
-  allowedTags: [...sanitize.defaults.allowedTags, 'img'],
+  allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
 };
 
 export type SanitizeHtmlProps = {
@@ -18,8 +18,30 @@ export type SanitizeHtmlProps = {
  *    https://www.npmjs.com/package/sanitize-html
  *    https://stackoverflow.com/a/38663813
  */
-export const SanitizeHtml: React.FC<SanitizeHtmlProps> = (props) => {
+const View: React.FC<SanitizeHtmlProps> = (props) => {
   const { html, className } = props;
-  const __html = sanitize(html ?? '', { allowedTags: DEFAULT.allowedTags });
+  const __html = sanitize(html ?? '');
   return <div {...css(props.style)} dangerouslySetInnerHTML={{ __html }} className={className} />;
 };
+
+/**
+ * Sanitize HTML
+ */
+function sanitize(html?: string) {
+  return sanitizeHtml(html ?? '', {
+    allowedTags: DEFAULT.allowedTags,
+  });
+}
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULT: typeof DEFAULT;
+  sanitize: typeof sanitize;
+};
+export const SanitizeHtml = FC.decorate<SanitizeHtmlProps, Fields>(
+  View,
+  { DEFAULT, sanitize },
+  { displayName: 'SanitizeHtml' },
+);

@@ -1,41 +1,20 @@
+import { FindUtil } from './util.Find.mjs';
+import { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
+import { VersionUtil } from './util.Version.mjs';
+
 import type * as t from '../types.mjs';
-import { fs } from './fs.mjs';
-
-/**
- * Package JSON.
- */
-export const PackageJson = {
-  async load(dir: t.PathString) {
-    return Util.loadJson<t.PackageJson>(PackageJson.path(dir));
-  },
-
-  async save(dir: t.PathString, pkg: t.PackageJson) {
-    await fs.writeFile(PackageJson.path(dir), Util.stringify(pkg));
-  },
-
-  path(dir: t.PathString) {
-    dir = (dir || '').trim();
-    if (!dir.endsWith('/package.json')) dir = `${dir}/package.json`;
-    return dir;
-  },
-};
 
 /**
  * Common helpers.
  */
 export const Util = {
-  PackageJson,
-
-  async loadJson<T>(file: t.PathString) {
-    return (await fs.readJson(fs.resolve(file))) as T;
-  },
-
-  stringify(input: any) {
-    return `${JSON.stringify(input, null, '  ')}\n`;
-  },
+  Json: JsonUtil,
+  PackageJson: PackageJsonUtil,
+  Version: VersionUtil,
+  Find: FindUtil,
 
   stripRelativeRoot(input: t.PathString) {
-    return (input || '').replace(/^\.\//, '');
+    return trim(input).replace(/^\.\//, '');
   },
 
   ensureRelativeRoot(input: t.PathString) {
@@ -47,7 +26,15 @@ export const Util = {
     return Object.keys(input).length > 0;
   },
 
-  trimVersionAdornments(version: string) {
-    return (version || '').trim().replace(/^\^/, '').replace(/^\~/, '');
+  async asyncFilter<T>(list: T[], predicate: (value: T) => Promise<boolean>) {
+    const results = await Promise.all(list.map(predicate));
+    return list.filter((_, index) => results[index]);
   },
 };
+
+/**
+ * Helpers
+ */
+function trim(value?: string) {
+  return (value || '').trim();
+}

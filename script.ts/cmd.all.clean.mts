@@ -1,14 +1,12 @@
 #!/usr/bin/env ts-node
 import { Builder, pc, Util } from './common/index.mjs';
 
-type Milliseconds = number;
-
 /**
  * Run
  */
 
 const filter = (path: string) => true;
-let paths = await Util.findProjectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.Find.projectDirs({ filter, sort: 'Alpha' });
 
 if (paths.length === 0) {
   console.warn(pc.gray('no paths'));

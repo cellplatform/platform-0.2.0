@@ -9,8 +9,8 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "devDependencies": {
-    "sys.types": "^0.0.0",
-    "chai": "latest"
+    "sys.types": "0.0.0",
+    "chai": "^4.3.6"
   },
   "license": "MIT",
   "private": true,

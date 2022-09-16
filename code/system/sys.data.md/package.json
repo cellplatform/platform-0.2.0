@@ -10,20 +10,21 @@
     "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "dependencies": {
-    "sys.types": "^0.0.0",
-    "sys.util": "^0.0.0",
-    "sys.util.css": "^0.0.0",
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0",
+    "sys.util.css": "0.0.0",
+    "sys.util.react": "0.0.0",
     "sanitize-html": "^2.7.1",
     "rehype-format": "^4.0.1",
     "rehype-stringify": "^9.0.3",
     "remark-parse": "^10.0.1",
     "remark-rehype": "^10.1.0",
     "unified": "^10.1.2",
-    "react": "latest"
+    "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/sanitize-html": "2.6.2",
-    "sys.test": "^0.0.0"
+    "sys.test": "0.0.0",
+    "@types/sanitize-html": "^2.6.2"
   },
   "license": "MIT",
   "private": true,

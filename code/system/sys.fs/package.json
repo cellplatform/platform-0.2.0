@@ -9,12 +9,12 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "sys.types": "^0.0.0",
-    "sys.util": "^0.0.0",
-    "image-js": "latest"
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0",
+    "image-js": "^0.35.1"
   },
   "devDependencies": {
-    "sys.test": "^0.0.0"
+    "sys.test": "0.0.0"
   },
   "license": "MIT",
   "private": true,

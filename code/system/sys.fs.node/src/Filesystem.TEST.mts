@@ -28,6 +28,6 @@ describe('Filesystem (Node)', () => {
     expect(await fs.read(path)).to.eql(file.data);
 
     const m = await fs.manifest();
-    expect(m.files[0].filehash).to.eql(file.hash);
+    expect(m.files.find((file) => file.path === path)?.filehash).to.eql(file.hash);
   });
 });

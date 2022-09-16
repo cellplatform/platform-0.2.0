@@ -11,7 +11,7 @@ export const PackageDist = {
     const { name, version } = await Util.PackageJson.load(root);
     const { manifest } = await Vite.loadManifest(root);
 
-    const pkg: t.PackageJson = {
+    const pkg: t.PkgJson = {
       name,
       version,
       type: 'module',

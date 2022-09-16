@@ -1,11 +1,16 @@
 #!/usr/bin/env ts-node
-import { LogTable, pc, Util } from './common/index.mjs';
+import { fs, LogTable, pc, Util, Builder, minimist } from './common/index.mjs';
+
+const argv = minimist(process.argv.slice(2));
 
 const filter = (path: string) => {
   if (path.includes('/code/compiler.sample')) return false;
   return true;
 };
-let paths = await Util.findProjectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.Find.projectDirs({
+  filter,
+  sort: argv.topo ? 'Topological' : 'Alpha',
+});
 
 if (paths.length === 0) {
   console.warn(pc.gray('no paths'));
@@ -15,10 +20,13 @@ if (paths.length === 0) {
 const table = LogTable();
 
 for (const path of paths) {
+  const size = await Util.folderSize(fs.join(path, 'dist'));
+
   const column = {
     path: pc.gray(` • ${Util.formatPath(path)}`),
+    size: pc.gray(`  /dist: ${size.toString()}`),
   };
-  table.push([column.path]);
+  table.push([column.path, column.size]);
 }
 
 console.log('');

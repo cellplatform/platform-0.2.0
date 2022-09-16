@@ -28,7 +28,7 @@ export const Vite = {
   async loadManifest(root: t.DirString) {
     const path = fs.join(root, Paths.viteManifest);
     if (!(await fs.pathExists(path))) throw new Error(`Vite manifest not found: ${path}`);
-    const manifest = await Util.loadJson<t.ViteManifest>(path);
+    const manifest = await Util.Json.load<t.ViteManifest>(path);
     const files = Object.keys(manifest).map((path) => manifest[path]);
     return { manifest, files };
   },

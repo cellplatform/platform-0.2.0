@@ -8,7 +8,7 @@ export const Package = {
    */
   async updateEsmEntries(args: {
     root: t.DirString;
-    pkg: t.PackageJson;
+    pkg: t.PkgJson;
     manifest: t.ViteManifest;
     subdir?: string; // eg. '/dist/' if building a [package.json] at a higher level that the 'dist/' folder itself.
   }) {
@@ -32,9 +32,9 @@ export const Package = {
     if (!entry) throw new Error(`Entry file not found. Package: ${pkg.name}`);
 
     const entryType = Package.toTypeFile(entry.src);
-    const exports: t.PackageJsonExports = {};
-    const typesFiles: t.PackageJsonTypesVersionsFiles = {};
-    const typesVersions: t.PackageJsonTypesVersions = { '*': typesFiles };
+    const exports: t.PkgJsonExports = {};
+    const typesFiles: t.PkgJsonTypesVersionsFiles = {};
+    const typesVersions: t.PkgJsonTypesVersions = { '*': typesFiles };
 
     for (const item of files) {
       const type = await Package.findTypePath(subdir ? fs.join(root, subdir) : root, item.src);
@@ -47,7 +47,7 @@ export const Package = {
       }
     }
 
-    const appendField = (field: keyof t.PackageJson, value: any) => {
+    const appendField = (field: keyof t.PkgJson, value: any) => {
       pkg = { ...pkg };
       delete pkg[field];
       pkg = { ...pkg, [field]: value };

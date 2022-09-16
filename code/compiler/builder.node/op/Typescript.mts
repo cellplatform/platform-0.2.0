@@ -119,7 +119,7 @@ export const Typescript = {
       const target = fs.join(targetDir, filename);
       const json = (await fs.readJson(source)) as t.TsConfig;
       adjust?.(json);
-      await fs.writeFile(target, Util.stringify(json));
+      await fs.writeFile(target, Util.Json.stringify(json));
     };
 
     await copy(Paths.tmpl.tsconfig.code, (tsconfig) => {
@@ -151,12 +151,12 @@ export const Typescript = {
 
     const rootDeps = { ...rootPkg.dependencies, ...rootPkg.devDependencies }; // Include both for fallback version lookup.
     const moduleDeps = { ...modulePkg.dependencies };
-    const version = Util.trimVersionAdornments(modulePkg.version);
+    const version = Util.Version.trimAdornment(modulePkg.version).version;
 
     let dependencies = '  dependencies: {\n';
     Object.keys(moduleDeps).forEach((key) => {
-      const rootVersion = Util.trimVersionAdornments(rootDeps[key]);
-      let version = Util.trimVersionAdornments(moduleDeps[key]);
+      const rootVersion = Util.Version.trimAdornment(rootDeps[key]).version;
+      let version = Util.Version.trimAdornment(moduleDeps[key]).version;
       if (version === 'latest' && rootVersion) version = rootVersion;
       dependencies += `    '${key}': '${version}',\n`;
     });
