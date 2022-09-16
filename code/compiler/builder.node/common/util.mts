@@ -1,6 +1,6 @@
 import { FindUtil } from './util.Find.mjs';
 import { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
-import { semver } from './libs.mjs';
+import { VersionUtil } from './util.Version.mjs';
 
 import type * as t from '../types.mjs';
 
@@ -10,6 +10,7 @@ import type * as t from '../types.mjs';
 export const Util = {
   Json: JsonUtil,
   PackageJson: PackageJsonUtil,
+  Version: VersionUtil,
   Find: FindUtil,
 
   stripRelativeRoot(input: t.PathString) {
@@ -23,15 +24,6 @@ export const Util = {
   objectHasKeys(input: any) {
     if (typeof input !== 'object') return false;
     return Object.keys(input).length > 0;
-  },
-
-  trimVersionAdornment(version: string) {
-    version = trim(version);
-    let adornment = '';
-    if (version.startsWith('^')) adornment = '^';
-    if (version.startsWith('~')) adornment = '~';
-    version = (version || '').trim().replace(/^\^/, '').replace(/^\~/, '');
-    return { version, adornment };
   },
 
   async asyncFilter<T>(list: T[], predicate: (value: T) => Promise<boolean>) {

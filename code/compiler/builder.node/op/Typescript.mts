@@ -151,12 +151,12 @@ export const Typescript = {
 
     const rootDeps = { ...rootPkg.dependencies, ...rootPkg.devDependencies }; // Include both for fallback version lookup.
     const moduleDeps = { ...modulePkg.dependencies };
-    const version = Util.trimVersionAdornment(modulePkg.version).version;
+    const version = Util.Version.trimAdornment(modulePkg.version).version;
 
     let dependencies = '  dependencies: {\n';
     Object.keys(moduleDeps).forEach((key) => {
-      const rootVersion = Util.trimVersionAdornment(rootDeps[key]).version;
-      let version = Util.trimVersionAdornment(moduleDeps[key]).version;
+      const rootVersion = Util.Version.trimAdornment(rootDeps[key]).version;
+      let version = Util.Version.trimAdornment(moduleDeps[key]).version;
       if (version === 'latest' && rootVersion) version = rootVersion;
       dependencies += `    '${key}': '${version}',\n`;
     });

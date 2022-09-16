@@ -1,5 +1,6 @@
 import { fs } from './fs.mjs';
 import { R } from './libs.mjs';
+import { VersionUtil } from './util.Version.mjs';
 
 import type * as t from '../types.mjs';
 
@@ -48,8 +49,7 @@ export const PackageJsonUtil = {
         devDependencies,
         exists: (name: string) => Boolean(all[name]),
         eq: (name: string, version: string) => {
-          const clean = (v: string) => (v || '').trim().replace(/^\^/, '').replace(/^\~/, '');
-          return clean(all[name]) === clean(version);
+          return VersionUtil.clean(all[name]) === VersionUtil.clean(version);
         },
       };
     },
