@@ -42,31 +42,21 @@ export const Dependencies = {
     const loadRootPackage = () => PackageJson.load(Paths.rootDir);
     let rootPkg = await loadRootPackage();
     const modules = await Dependencies.buildGraph();
-
     const changes: C[] = [];
-    const registerChange = (target: C['target'], module: string, toVersion: string, dep: D) => {
-      const { name, isDev } = dep;
-      const version = { from: dep.version, to: toVersion };
-      changes.push({ target, module, dep: { name, isDev }, version });
-    };
-
-    const calcHighestVersion = (a?: string, b?: string): string => {
-      if (a === undefined && b === undefined) return '0.0.0';
-      if (a === undefined) return b ?? '0.0.0';
-      if (b === undefined) return a ?? '0.0.0';
-      const clean = (v: string) => {
-        v = (v || '').trim() || '0.0.0';
-        v = v.replace(/^\^/, '').replace(/^\~/, '');
-        return semver.clean(v) || '0.0.0';
-      };
-      return semver.gte(clean(a), clean(b)) ? a : b;
-    };
 
     for (const module of filterGraph(modules, { filter })) {
       const rootDeps = PackageJson.deps.get(rootPkg);
 
       const loadModulePackage = () => PackageJson.load(module.path);
       let modulePkg = await loadModulePackage();
+
+      const registerChange = (target: C['target'], module: string, toVersion: string, dep: D) => {
+        const { name, isDev } = dep;
+        const version = { from: dep.version, to: toVersion };
+        if (!Util.Version.eq(version.from, version.to)) {
+          changes.push({ target, module, dep: { name, isDev }, version });
+        }
+      };
 
       for (const dep of module.deps) {
         if (dep.isLocal) {
@@ -87,7 +77,7 @@ export const Dependencies = {
 
           if (existsInRoot) {
             // Reference is accounted for in the root - ensure we have the latest version.
-            const version = calcHighestVersion(rootVersion, depVersion);
+            const version = Util.Version.max(rootVersion, depVersion);
             if (dep.version !== version) {
               modulePkg = PackageJson.deps.set(modulePkg, dep.name, version, dep.isDev);
               registerChange('module', module.name, version, dep);
@@ -99,7 +89,7 @@ export const Dependencies = {
             // Not accounted for in the root.
             //    Add it to the root now.
             const { name } = dep;
-            const version = calcHighestVersion(rootVersion, depVersion);
+            const version = Util.Version.max(rootVersion, depVersion);
             rootPkg = PackageJson.deps.set(rootPkg, name, version, dep.isDev);
             registerChange('root', module.name, version, dep);
           }
@@ -114,7 +104,7 @@ export const Dependencies = {
     }
 
     // Save root [package.json] file.
-    const isRootChanged = changes.some((c) => c.target === 'root');
+    const isRootChanged = !R.equals(await loadRootPackage(), rootPkg);
     if (save && isRootChanged) {
       await PackageJson.save(Paths.rootDir, rootPkg);
     }

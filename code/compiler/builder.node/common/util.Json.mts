@@ -48,9 +48,7 @@ export const PackageJsonUtil = {
         dependencies,
         devDependencies,
         exists: (name: string) => Boolean(all[name]),
-        eq: (name: string, version: string) => {
-          return VersionUtil.clean(all[name]) === VersionUtil.clean(version);
-        },
+        eq: (name: string, version: string) => VersionUtil.eq(all[name], version),
       };
     },
 
