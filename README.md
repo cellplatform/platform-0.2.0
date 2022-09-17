@@ -104,7 +104,8 @@ $ yarn ci
 To see the layout of the module namespace, and related meta-data, run the `list` command:
 ```bash
 $ yarn ls            <= Sorted alphabetically
-$ yarn ls --topo     <= Topologically sorted on the module dependency graph (depth-first)
+$ yarn ls --topo     <= Topologically sorted on the module dependency graph (depth-first, build order)
+                        
 ```
 
 
