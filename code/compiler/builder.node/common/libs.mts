@@ -1,5 +1,5 @@
-import { clone, equals } from 'ramda';
-export const R = { clone, equals };
+import { clone, equals, uniq } from 'ramda';
+export const R = { clone, equals, uniq };
 
 import { execa } from 'execa';
 import pc from 'picocolors';

@@ -8,7 +8,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.cloud.vercel',
+  name: 'cloud.vercel',
   version: '0.0.0',
   dependencies: {
     'sys.fs': '0.0.0',

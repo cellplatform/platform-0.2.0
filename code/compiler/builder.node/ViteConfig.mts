@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig } from 'vite';
 
-import { fs, t } from './common/index.mjs';
+import { R, fs, t, asArray } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 import type { RollupOptions } from 'rollup';
@@ -85,19 +85,15 @@ export const ViteConfig = {
       const args: t.ModifyViteConfigArgs = {
         ctx: { name, command, mode, config, pkg, deps },
         addExternalDependency(moduleName) {
-          asArray(moduleName)
+          R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
         },
         environment(target) {
-          if (target === 'web') {
-            build.ssr = undefined;
-            test.environment = 'jsdom';
-          }
-          if (target === 'node') {
-            build.ssr = true;
-            test.environment = 'node';
-          }
+          const env = R.uniq(asArray(target));
+          if (env.includes('web')) test.environment = 'jsdom';
+          if (env.includes('node')) build.ssr = true;
+          if (env.includes('node') && !env.includes('web')) test.environment = 'node';
         },
       };
 
@@ -107,11 +103,3 @@ export const ViteConfig = {
     });
   },
 };
-
-/**
- * [Helpers]
- */
-
-function asArray<T>(input: T | T[]) {
-  return (Array.isArray(input) ? input : [input]).filter(Boolean);
-}

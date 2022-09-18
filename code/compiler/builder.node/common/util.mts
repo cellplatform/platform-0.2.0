@@ -13,6 +13,8 @@ export const Util = {
   Version: VersionUtil,
   Find: FindUtil,
 
+  asArray,
+
   stripRelativeRoot(input: t.PathString) {
     return trim(input).replace(/^\.\//, '');
   },
@@ -37,4 +39,8 @@ export const Util = {
  */
 function trim(value?: string) {
   return (value || '').trim();
+}
+
+export function asArray<T>(input: T | T[]): T[] {
+  return Array.isArray(input) ? input : [input];
 }
