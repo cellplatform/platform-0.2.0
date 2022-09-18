@@ -1,4 +1,4 @@
-import { describe, expect, it, Pkg } from './TEST/index.mjs';
+import { describe, expect, it, Pkg } from './Test/index.mjs';
 
 describe('main', () => {
   it('tmp', () => {
