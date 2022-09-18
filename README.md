@@ -112,7 +112,13 @@ $ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-
 
 <p>&nbsp;</p>
 
-Note: the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler and ESM module bundler is active, the dependency on `node-js` falls away, or put another way, is not a primary dependency.
+Note: the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler 
+and ESM module bundler is active, the dependency on `node-js` falls away, or put another way, is not a primary dependency.  
+This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
+Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in the moment.  But careful, and sustained
+attention while making these kinds of calls can also ensure the long run-ramp, where the "idea" itself remains consistent, but the implementation
+choices can be swapped out and evolved over time.  This is the ideal; AND "reality™️ is a bitch!"  Evolution is messy, yet we also find pristine, 
+self-cleaning ecosystems present and evolving within nature.
 
 <p>&nbsp;</p>
 
