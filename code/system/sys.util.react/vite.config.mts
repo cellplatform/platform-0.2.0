@@ -1,4 +1,6 @@
 import { ViteConfig } from '../../../config.mjs';
 export default ViteConfig.default(__dirname, (e) => {
-  e.environment('web');
+  e.lib();
+  e.environment(['web', 'web:react']);
+  e.addExternalDependency(e.ctx.deps.map((d) => d.name));
 });
