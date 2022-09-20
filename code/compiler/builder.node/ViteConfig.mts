@@ -75,11 +75,12 @@ export const ViteConfig = {
           if (env.includes('web:react')) config.plugins?.push(react());
         },
         lib(options = {}) {
-          const { name = pkg.name, outname = 'index', entry = '/src/index.mts' } = options;
+          const { name = pkg.name, outname: fileName = 'index' } = options;
+          const entry = fs.join(dir, options.entry ?? '/src/index.mts');
           const lib: LibraryOptions = {
             name,
-            entry: fs.join(dir, entry),
-            fileName: outname,
+            entry,
+            fileName,
             formats: ['es'],
           };
           build.lib = lib;
