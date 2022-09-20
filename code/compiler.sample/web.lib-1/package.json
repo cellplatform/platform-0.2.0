@@ -1,5 +1,5 @@
 {
-  "name": "sample.web-1",
+  "name": "sample.web.lib-1",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "sample.web-2": "0.0.0"
+    "sample.web.lib-2": "0.0.0"
   },
   "license": "MIT",
   "private": true,

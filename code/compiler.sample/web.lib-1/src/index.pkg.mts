@@ -8,10 +8,10 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web-1',
+  name: 'sample.web.lib-1',
   version: '0.0.0',
   dependencies: {
-    'sample.lib-2': '0.0.0',
+    'sample.web.lib-2': '0.0.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

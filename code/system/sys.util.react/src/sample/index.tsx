@@ -1,11 +1,5 @@
 export {};
 
-// @ts-ignore
-// import React from 'https://cdn.skypack.dev/react';
-
-// @ts-ignore
-// import { createRoot } from 'https://cdn.skypack.dev/react-dom';
-
 console.log('-------------------------------------------');
 
 import React from 'react';
