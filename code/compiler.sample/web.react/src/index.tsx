@@ -1,27 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { css } from 'sys.util.css';
 
-export {};
+import { Foo } from './Foo';
+import workerUrl from './Worker.mjs?worker&url';
 
-const styles = {
-  base: css({
-    Absolute: 0,
-    backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    fontFamily: 'sans-serif',
-    Flex: 'y-center-center',
-  }),
-  h1: css({
-    backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    textAlign: 'center',
-  }),
-};
+/**
+ * Init
+ */
+const root = createRoot(document.getElementById('root')!);
+root.render(<Foo />);
 
-const el = (
-  <div {...styles.base}>
-    <h1 {...styles.h1}>Hello World</h1>
-  </div>
-);
+/**
+ * Sample worker instantiation.
+ */
+const worker = new Worker(workerUrl, { type: 'module' });
 
-const root = createRoot(document.body);
-root.render(el);
+console.log('-------------------------------------------');
+console.log('workerUrl:', workerUrl);
+console.log('worker (instance on main): ', worker);
