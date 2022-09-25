@@ -10,7 +10,7 @@ await Builder.Dependencies.syncVersions({ save: true });
 const pkg = await Builder.PackageJson.load(fs.resolve('.'));
 
 const filter = (path: string) => {
-  if (path.includes('code/samples/')) return false;
+  if (path.includes('code/compiler.sample/')) return false;
   return true;
 };
 let paths = await Builder.Find.projectDirs({ filter, sort: 'Topological' });
