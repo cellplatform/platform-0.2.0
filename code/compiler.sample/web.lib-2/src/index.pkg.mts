@@ -8,7 +8,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web-2',
+  name: 'sample.web.lib-2',
   version: '0.0.0',
   dependencies: {
   },
