@@ -41,10 +41,10 @@ export const Dependencies = {
 
     const loadRootPackage = () => PackageJson.load(Paths.rootDir);
     let rootPkg = await loadRootPackage();
-    const modules = await Dependencies.buildGraph();
+    const allModules = await Dependencies.buildGraph();
     const changes: C[] = [];
 
-    for (const module of filterGraph(modules, { filter })) {
+    for (const module of filterGraph(allModules, { filter })) {
       const rootDeps = PackageJson.deps.get(rootPkg);
 
       const loadModulePackage = () => PackageJson.load(module.path);
@@ -62,7 +62,7 @@ export const Dependencies = {
         if (dep.isLocal) {
           // This is a [LOCAL] inter-module reference.
           //    Ensure current version from source.
-          const source = modules.find((item) => item.name === dep.name);
+          const source = allModules.find((item) => item.name === dep.name);
           if (source) {
             const version = source.version;
             modulePkg = PackageJson.deps.set(modulePkg, dep.name, version, dep.isDev);

@@ -21,20 +21,19 @@ export const FindUtil = {
   ) {
     const pkg = await PackageJsonUtil.load(Paths.rootDir);
 
-    const findPattern = (pattern: string) => fs.glob.find(fs.resolve(fs.join('.', pattern)));
+    const findPattern = async (pattern: string) => fs.glob.find(fs.join(Paths.rootDir, pattern));
     const workspaces = pkg.workspaces ?? { packages: [] };
     const paths = (await Promise.all(workspaces.packages.map(findPattern))).flat();
 
-    const dirs = await asyncFilter(paths, async (path) => {
-      if (path.includes('/code/compiler')) return false;
+    let dirs = await asyncFilter(paths, async (path) => {
+      if (path.includes('/code/compiler/')) return false;
       if (!(await fs.pathExists(fs.join(path, 'package.json')))) return false;
-      path = path.substring(Paths.rootDir.length);
-      return options.filter ? options.filter(path) : true;
+      return options.filter ? options.filter(path.substring(Paths.rootDir.length)) : true;
     });
 
     const { sort = 'Alpha' } = options;
-    if (sort === 'Alpha') return FindUtil.sortAlpha(dirs);
-    if (sort === 'Topological') return FindUtil.sortProjectDirsDepthFirst(dirs);
+    if (sort === 'Alpha') dirs = await FindUtil.sortAlpha(dirs);
+    if (sort === 'Topological') dirs = await FindUtil.sortTopological(dirs);
 
     return dirs;
   },
@@ -49,26 +48,29 @@ export const FindUtil = {
   /**
    * Sort project dirs (topological sort on dependency graph)
    */
-  async sortProjectDirsDepthFirst(dirs: string[], options: { algorithm?: 'DFS' | 'BFS' } = {}) {
+  async sortTopological(dirs: string[], options: { algorithm?: 'DFS' | 'BFS' } = {}) {
     const { algorithm = 'DFS' } = options;
 
     const graph = new Map<string, string[]>();
+    const pkgDirs: { dir: string; pkg: t.PkgJson }[] = [];
     await Promise.all(
       dirs.map(async (dir) => {
         const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as t.PkgJson;
         const deps = Object.keys({ ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) });
         graph.set(pkg.name, deps);
+        pkgDirs.push({ dir, pkg });
       }),
     );
 
-    const order = (() => {
+    let order = (() => {
       if (algorithm === 'DFS') return TopologicalSort.dfs(graph);
       if (algorithm === 'BFS') return TopologicalSort.bfs(graph);
       throw new Error(`Sort algorithm kind '${algorithm}' not supported.`);
     })();
 
     return order
-      .map((name) => dirs.find((path) => path.endsWith(`/${name}`)) ?? '')
+      .map((name) => pkgDirs.find(({ pkg }) => pkg.name === name))
+      .map((item) => (item ? item.dir : ''))
       .filter(Boolean)
       .reverse();
   },
