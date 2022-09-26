@@ -15,6 +15,7 @@ export const Paths = {
     dirname: 'types.d',
     dist: 'dist/types.d',
   },
+  tsc: { tmp: '.builder' },
   tmpl: {
     dir: fs.join(__dirname, '../template.esm'),
     viteConfig: 'vite.config.mts',
