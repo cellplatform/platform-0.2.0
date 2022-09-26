@@ -7,3 +7,5 @@ export const Root = {
 };
 
 export default Root;
+
+console.log('Root', Root);

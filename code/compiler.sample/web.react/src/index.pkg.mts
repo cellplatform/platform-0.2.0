@@ -8,9 +8,18 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web-2',
+  name: 'sample.web.react',
   version: '0.0.0',
   dependencies: {
+    'sys.types': '0.0.0',
+    'sys.util': '0.0.0',
+    'sys.util.css': '0.0.0',
+    'sys.util.react': '0.0.0',
+    'react': '18.2.0',
+    'react-dom': '18.2.0',
+  },
+  toString() {
+    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
   },
 };
 
@@ -18,4 +27,5 @@ export type ModuleDef = {
   name: string;
   version: string;
   dependencies: { [key: string]: string };
+  toString(): string;
 };

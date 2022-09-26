@@ -1,18 +1,11 @@
 /// <reference types="vitest" />
-import { BuildOptions, defineConfig, LibraryOptions, UserConfig } from 'vite';
+import { BuildOptions, defineConfig, LibraryOptions, UserConfigExport } from 'vite';
 
-import { R, fs, t, asArray } from './common/index.mjs';
+import { R, fs, t, asArray, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
+import react from '@vitejs/plugin-react';
 
 import type { RollupOptions } from 'rollup';
-export type PackageJson = {
-  name: string;
-  version: string;
-  types: string;
-  type: 'module';
-  dependencies?: { [key: string]: string };
-  devDependencies?: { [key: string]: string };
-};
 
 import type { InlineConfig as TestConfig } from 'vitest';
 
@@ -31,18 +24,6 @@ export const ViteConfig = {
         environment: 'node',
       };
     },
-
-    /**
-     * Builder options.
-     */
-    lib(dir: string, name: string): LibraryOptions {
-      return {
-        name,
-        entry: `${dir}/src/index.mts`,
-        fileName: 'index',
-        formats: ['es'],
-      };
-    },
   },
 
   /**
@@ -50,40 +31,37 @@ export const ViteConfig = {
    */
   default(dir: string, modify?: t.ModifyViteConfig) {
     return defineConfig(async ({ command, mode }) => {
-      const pkg = (await fs.readJson(fs.join(dir, 'package.json'))) as PackageJson;
-      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+      const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
-      const lib = ViteConfig.defaults.lib(dir, name);
+      const deps = [
+        ...toDepsList(false, pkg.dependencies),
+        ...toDepsList(true, pkg.devDependencies),
+      ];
 
       /**
        * Vite configuration.
        */
       const external: string[] = [];
-      const rollupOptions: RollupOptions = {
-        external,
-        output: { globals: {} },
-      };
-
+      const rollupOptions: RollupOptions = { external };
       const build: BuildOptions = {
-        lib,
         rollupOptions,
         manifest: fs.basename(Paths.viteManifest),
       };
 
-      const test = ViteConfig.defaults.test();
-
-      const config: UserConfig = {
+      const config: UserConfigExport = {
         plugins: [],
-        test,
         build,
         worker: { format: 'es' },
       };
+
+      const test = ViteConfig.defaults.test();
+      (config as any).test = test;
 
       /**
        * Modification IoC (called within each module to perform specific adjustments).
        */
       const args: t.ModifyViteConfigArgs = {
-        ctx: { name, command, mode, config, pkg, deps },
+        ctx: R.clone({ name, command, mode, config, pkg, deps }),
         addExternalDependency(moduleName) {
           R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
@@ -92,14 +70,32 @@ export const ViteConfig = {
         environment(target) {
           const env = R.uniq(asArray(target));
           if (env.includes('web')) test.environment = 'jsdom';
-          if (env.includes('node')) build.ssr = true;
           if (env.includes('node') && !env.includes('web')) test.environment = 'node';
+          if (env.includes('node')) build.ssr = true;
+          if (env.includes('web:react')) config.plugins?.push(react());
+        },
+        lib(options = {}) {
+          const { name = pkg.name, outname: fileName = 'index' } = options;
+          const entry = fs.join(dir, options.entry ?? '/src/index.mts');
+          const lib: LibraryOptions = {
+            name,
+            entry,
+            fileName,
+            formats: ['es'],
+          };
+          build.lib = lib;
         },
       };
 
-      Object.keys(deps).forEach((moduleName) => args.addExternalDependency(moduleName));
       await modify?.(args);
       return config;
     });
   },
+};
+
+/**
+ * Helpers
+ */
+const toDepsList = (isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] => {
+  return Object.keys(deps).map((name) => ({ name, version: deps[name], isDev }));
 };

@@ -65,7 +65,7 @@ for (const result of results) {
 }
 
 console.log();
-console.log(statusColor(ok, ok ? 'all tests passed' : 'some failures'));
+console.log(statusColor(ok, ok ? 'all tests passed' : 'some tests failured'));
 console.log(table.toString());
 console.log();
 console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));

@@ -1,5 +1,5 @@
 {
-  "name": "sample.web-2",
+  "name": "sample.web.lib-2",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -8,6 +8,12 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "tmp": "ts-node-esm -T script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
   },
   "license": "MIT",
   "private": true,

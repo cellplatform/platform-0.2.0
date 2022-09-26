@@ -17,13 +17,19 @@ import { Template } from '../Template.mjs';
  */
 export async function build(
   dir: t.DirString,
-  options: { silent?: boolean; exitOnError?: boolean } = {},
+  options: { silent?: boolean; exitOnError?: boolean; syncDeps?: boolean } = {},
 ) {
-  const { silent = false, exitOnError = true } = options;
+  const { silent = false, exitOnError = true, syncDeps = false } = options;
+
   dir = fs.resolve(dir);
+  const relativeDir = dir.substring(Paths.rootDir.length);
 
   // Pre-build.
   await Template.ensureBaseline(dir);
+
+  if (syncDeps) {
+    await Dependencies.syncVersions({ filter: (dir) => dir === relativeDir });
+  }
 
   // - Typescript.
   const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
