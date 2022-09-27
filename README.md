@@ -49,7 +49,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
    Don’t hesitate to throw away the clumsy parts and rebuild them.
 
 4. **Use tools in preference to unskilled help to lighten a programming task**,  
-   even if you have to detour to build the tools and expect to throw some of them out after you’ve finished using them.
+   Even if you have to detour to build the tools and expect to throw some of them out after you’ve finished using them.
 
 <p>&nbsp;</p>
 
@@ -63,9 +63,11 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 ---
 
-References (conceptual context):
+References (conceptual context, history):
 
 - [video](https://www.youtube.com/watch?v=nOrdzDaPYV4&t=1443s) Alan Kay (2019)
+- [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
+  "But what's interesting, is once the engineers got a hold, the visionaries went away ([timestamp](https://www.youtube.com/watch?v=cmi-AXKvx30&t=253s))"
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersection of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
 
 ---
@@ -104,22 +106,31 @@ $ yarn ci
 To see the layout of the module namespace, and related meta-data, run the `list` command:
 ```bash
 $ yarn ls         <= Sorted alphabetically
-$ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-first, build order)
+$ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-first)
                         
 ```
+
+The topologically sorted option (`--topo`) shows the build order used when running the compiler over each module (global `yarn build`).
+
+Here the usage of the term "compiler" flexibly maps to any kind of code transpiling activity, from module bundling through to binary compilation (eg, rust/wasm).
+
+
+![cmd:ls](https://user-images.githubusercontent.com/185555/192442837-debd2c41-b1e8-4c1a-a4d6-1dcbf83173fd.png)
+
+
 
 
 
 <p>&nbsp;</p>
 
-Note: the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler 
+**Note:** the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is active, the dependency on `node-js` falls away, or put another way, is not a primary dependency.  
 
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
-Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in the moment.  But careful, and sustained
+Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long run-ramp, where the "idea" itself remains consistent, but the implementation
-choices can be swapped out and evolved over time.  This is the ideal; `AND` "reality™️ is a bitch!"  Evolution is messy, yet we also find pristine, 
-self-cleaning ecosystems present and evolving within nature.
+choices can be swapped out and evolved over time.  This is the ideal at least; `AND` "reality is a bitch!"  Evolution is messy, yet we also find pristine, 
+self-cleansing ecosystems existing and evolving through time within nature all the time.
 
 <p>&nbsp;</p>
 
