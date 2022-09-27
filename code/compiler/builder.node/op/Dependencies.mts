@@ -117,7 +117,7 @@ export const Dependencies = {
    * Builds a topologically sorted list of dependencies within the system.
    */
   async buildGraph(options: { filter?: t.PathFilter } = {}) {
-    const allPaths = await Util.Find.projectDirs({ sort: 'Topological' });
+    const allPaths = await Util.Find.projectDirs({ sortBy: 'Topological' });
 
     const pkgCache: { [dir: string]: t.PkgJson } = {};
     const getPkg = async (dir: string): Promise<t.PkgJson> => {
