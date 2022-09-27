@@ -49,7 +49,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
    Don’t hesitate to throw away the clumsy parts and rebuild them.
 
 4. **Use tools in preference to unskilled help to lighten a programming task**,  
-   even if you have to detour to build the tools and expect to throw some of them out after you’ve finished using them.
+   Even if you have to detour to build the tools and expect to throw some of them out after you’ve finished using them.
 
 <p>&nbsp;</p>
 
