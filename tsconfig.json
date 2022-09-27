@@ -6,7 +6,6 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
 
     "sourceMap": true,
-
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
 
