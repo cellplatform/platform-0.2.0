@@ -114,6 +114,13 @@ The topologically sorted option (`--topo`) shows the build order used when runni
 
 Here the usage of the term "compiler" flexibly maps to any kind of code transpiling activity, from module bundling through to binary compilation (eg, rust/wasm).
 
+
+![cmd:ls](https://user-images.githubusercontent.com/185555/192442837-debd2c41-b1e8-4c1a-a4d6-1dcbf83173fd.png)
+
+
+
+
+
 <p>&nbsp;</p>
 
 **Note:** the system currently uses [node-js](https://nodejs.org/en/) for build-chain bootstrapping only. Once the Typescript compiler 
