@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
-import { BuildOptions, defineConfig, LibraryOptions, UserConfigExport } from 'vite';
+import { BuildOptions, defineConfig, UserConfigExport } from 'vite';
+import { fileURLToPath } from 'url';
 
 import { R, fs, t, asArray, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
@@ -29,7 +30,9 @@ export const ViteConfig = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  default(dir: string, modify?: t.ModifyViteConfig) {
+  default(importMetaUrl: string, modify?: t.ModifyViteConfig) {
+    const dir = fs.dirname(fileURLToPath(importMetaUrl));
+
     return defineConfig(async ({ command, mode }) => {
       const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
@@ -77,13 +80,12 @@ export const ViteConfig = {
         lib(options = {}) {
           const { name = pkg.name, outname: fileName = 'index' } = options;
           const entry = fs.join(dir, options.entry ?? '/src/index.mts');
-          const lib: LibraryOptions = {
+          build.lib = {
             name,
             entry,
             fileName,
             formats: ['es'],
           };
-          build.lib = lib;
         },
       };
 
