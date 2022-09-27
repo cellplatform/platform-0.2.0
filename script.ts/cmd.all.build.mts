@@ -13,7 +13,7 @@ const filter = (path: string) => {
   if (path.includes('code/compiler.sample/')) return false;
   return true;
 };
-let paths = await Builder.Find.projectDirs({ filter, sort: 'Topological' });
+let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological' });
 
 // Log module list.
 console.log();

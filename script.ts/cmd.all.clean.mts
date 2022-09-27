@@ -6,7 +6,7 @@ import { Builder, pc, Util } from './common/index.mjs';
  */
 
 const filter = (path: string) => true;
-let paths = await Builder.Find.projectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 
 if (paths.length === 0) {
   console.warn(pc.gray('no paths'));
