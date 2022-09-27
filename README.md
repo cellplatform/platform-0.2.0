@@ -122,7 +122,7 @@ This is a general theme of the system, to think of commitments to technology cho
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long run-ramp, where the "idea" itself remains consistent, but the implementation
 choices can be swapped out and evolved over time.  This is the ideal; `AND` "reality™️ is a bitch!"  Evolution is messy, yet we also find pristine, 
-self-cleaning ecosystems present and evolving within nature.
+self-cleaning ecosystems present and evolving through time within nature all the time.
 
 <p>&nbsp;</p>
 
