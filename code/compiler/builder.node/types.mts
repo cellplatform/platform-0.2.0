@@ -30,7 +30,7 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
-export type ViteBuilderEnv = 'node' | 'web' | 'web:react';
+export type BuilderEnv = 'node' | 'web' | 'web:react';
 
 /**
  * Modify the vite config programatically from within the subject module.
@@ -40,15 +40,27 @@ export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   lib(options?: { name?: string; entry?: string; outname?: string }): void;
   addExternalDependency(moduleName: string | string[]): void;
-  environment(target: ViteBuilderEnv | ViteBuilderEnv[]): void;
+  environment(target: BuilderEnv | BuilderEnv[]): void;
 };
 export type ModifyViteConfigCtx = {
-  readonly name: string;
+  readonly name: PkgJson['name'];
   readonly command: 'build' | 'serve';
-  readonly mode: string;
+  readonly mode: string; // eg: "production"
   readonly pkg: PkgJson;
   readonly deps: PkgDep[];
   readonly config: UserConfig;
+};
+
+/**
+ * Modify the builder [tsconfig.json] from within the subject module.
+ */
+export type ModifyTsconfig = (args: ModifyTsconfigArgs) => Promise<unknown> | unknown;
+export type ModifyTsconfigArgs = {
+  readonly ctx: ModifyTsconfigCtx;
+  environment(target: BuilderEnv | BuilderEnv[]): void;
+};
+export type ModifyTsconfigCtx = {
+  readonly name: PkgJson['name'];
 };
 
 /**
