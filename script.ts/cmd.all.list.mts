@@ -5,7 +5,7 @@ const argv = minimist(process.argv.slice(2));
 const sortOrder = argv.topo ? 'Topological' : 'Alpha';
 
 const filter = (path: string) => {
-  if (path.includes('/code/compiler.sample')) return false;
+  if (path.includes('/code/compiler.samples/')) return false;
   return true;
 };
 let paths = await Builder.Find.projectDirs({
