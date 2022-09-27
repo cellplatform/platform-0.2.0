@@ -1,5 +1,5 @@
-import { ViteConfig } from '../../../config.mjs';
-export default ViteConfig.default(import.meta.url, (e) => {
+import { Config } from '../../../config.mjs';
+export default Config.vite(import.meta.url, (e) => {
   /**
    * NOTE
    *    The module is NOT configured as a "library" and with

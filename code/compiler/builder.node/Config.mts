@@ -1,19 +1,19 @@
 /// <reference types="vitest" />
-import { BuildOptions, defineConfig, UserConfigExport } from 'vite';
-import { fileURLToPath } from 'url';
-
-import { R, fs, t, asArray, Util } from './common/index.mjs';
-import { Paths } from './Paths.mjs';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'url';
+import { BuildOptions, defineConfig, UserConfigExport } from 'vite';
+
+import { asArray, fs, R, t, Util } from './common/index.mjs';
+import { Paths } from './Paths.mjs';
 
 import type { RollupOptions } from 'rollup';
 
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
- * Common configuration defaults.
+ * Common configuration setup.
  */
-export const ViteConfig = {
+export const Config = {
   defaults: {
     /**
      * Test runner.
@@ -30,7 +30,7 @@ export const ViteConfig = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  default(importMetaUrl: string, modify?: t.ModifyViteConfig) {
+  vite(importMetaUrl: string, modify?: t.ModifyViteConfig) {
     const dir = fs.dirname(fileURLToPath(importMetaUrl));
 
     return defineConfig(async ({ command, mode }) => {
@@ -57,7 +57,7 @@ export const ViteConfig = {
         worker: { format: 'es' },
       };
 
-      const test = ViteConfig.defaults.test();
+      const test = Config.defaults.test();
       (config as any).test = test;
 
       /**
