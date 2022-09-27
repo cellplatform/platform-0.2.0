@@ -2,6 +2,7 @@ import type { UserConfig } from 'vite';
 
 export type PathString = string;
 export type DirString = PathString;
+export type ImportMetaUrl = PathString; // eg: the ESM [import.meta.url] value.
 export type VersionString = string;
 
 export type PathFilter = (path: PathString) => boolean;

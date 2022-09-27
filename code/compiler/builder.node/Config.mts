@@ -30,8 +30,8 @@ export const Config = {
   /**
    * Build configuration generator (with standard defaults).
    */
-  vite(importMetaUrl: string, modify?: t.ModifyViteConfig) {
-    const dir = fs.dirname(fileURLToPath(importMetaUrl));
+  vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig) {
+    const dir = toDirname(modulePath);
 
     return defineConfig(async ({ command, mode }) => {
       const pkg = await Util.PackageJson.load(dir);
@@ -98,6 +98,11 @@ export const Config = {
 /**
  * Helpers
  */
-const toDepsList = (isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] => {
+
+function toDepsList(isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] {
   return Object.keys(deps).map((name) => ({ name, version: deps[name], isDev }));
-};
+}
+
+function toDirname(modulePath: t.ImportMetaUrl) {
+  return fs.dirname(fileURLToPath(modulePath));
+}
