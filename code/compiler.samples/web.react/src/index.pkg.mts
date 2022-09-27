@@ -1,5 +1,5 @@
 /**
- * [GENERATED FILE]
+ * [💦 GENERATED FILE 💦]
  *    This file is generated on each build.
  *    Use it (via an import) to determine basic facts about the bundled module.
  *
@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'sys.util.css': '0.0.0',
     'sys.util.react': '0.0.0',
-    'react': '18.2.0',
+    react: '18.2.0',
     'react-dom': '18.2.0',
   },
   toString() {

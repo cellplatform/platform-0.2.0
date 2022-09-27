@@ -12,6 +12,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'sample.web.lib-2': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
