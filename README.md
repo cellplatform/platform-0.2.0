@@ -108,7 +108,7 @@ $ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-
                         
 ```
 
-The topologically sorted option shows the build order used when running the compiler over each module.  Here the term "copmpiler" 
+The topologically sorted option (`--topo`) shows the build order used when running the compiler over each module.  Here the term "copmpiler" 
 flexily maps to any kind of code transpiler, from bundling through to binary compilation outputs (eg, rust/wasm).
 
 <p>&nbsp;</p>
