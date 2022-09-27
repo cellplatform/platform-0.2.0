@@ -23,7 +23,7 @@ export const Vite = {
   },
 
   /**
-   * Loads the vite generate manifest fiile
+   * Loads the vite generated manifest file.
    */
   async loadManifest(root: t.DirString) {
     const path = fs.join(root, Paths.viteManifest);
