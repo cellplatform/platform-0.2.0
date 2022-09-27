@@ -104,11 +104,12 @@ $ yarn ci
 To see the layout of the module namespace, and related meta-data, run the `list` command:
 ```bash
 $ yarn ls         <= Sorted alphabetically
-$ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-first, build order)
+$ yarn ls --topo  <= Topologically sorted on the module dependency graph (depth-first)
                         
 ```
 
-
+The topologically sorted option shows the build order used when running the compiler over each module.  Here the term "copmpiler" 
+flexily maps to any kind of code transpiler, from bundling through to binary compilation outputs (eg, rust/wasm).
 
 <p>&nbsp;</p>
 
