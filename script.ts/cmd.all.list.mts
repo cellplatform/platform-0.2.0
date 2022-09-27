@@ -33,12 +33,15 @@ for (const path of paths) {
 /**
  * Display output.
  */
+const arrow = pc.green('↓');
 const sortOrderPrint =
-  sortOrder === 'Alpha' ? `( ↓ ) sorted alphabetically` : `( ↓ ) sorted topologically`;
+  sortOrder === 'Alpha'
+    ? ` ${arrow} sorted alphabetically (use --topo for build order)`
+    : ` ${arrow} sorted topologically on dependency graph`;
 
 console.log('');
 console.log(pc.green(`${paths.length} modules:`));
 console.log(table.toString());
-console.log('');
+console.log(pc.gray(' _'));
 console.info(pc.gray(sortOrderPrint));
 console.log('');
