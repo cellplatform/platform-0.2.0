@@ -24,6 +24,6 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.833c9b7c.js"
+    ".": "./dist/assets/index.b891d715.js"
   }
 }
