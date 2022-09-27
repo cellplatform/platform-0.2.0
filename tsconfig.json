@@ -12,9 +12,10 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "esModuleInterop": false,
+    "isolatedModules": true,
+
     "useDefineForClassFields": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "allowJs": false,
 
     "strict": true,
