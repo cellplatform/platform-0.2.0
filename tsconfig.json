@@ -3,7 +3,7 @@
     "target": "ESNext",
 
     "skipLibCheck": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
 
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
