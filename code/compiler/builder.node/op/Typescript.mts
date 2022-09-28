@@ -104,27 +104,43 @@ export const Typescript = {
     root = fs.resolve(root);
     const sourceDir = Paths.tmpl.dir;
     const targetDir = fs.join(root, Paths.tsc.tmpBuilder);
+    const rootConfig = (await fs.readJson(Paths.tsc.rootTsConfig)) as t.TsConfig;
 
     if (options.clear) await fs.remove(targetDir);
     await fs.ensureDir(targetDir);
 
-    const rootConfig = (await fs.readJson(Paths.tsc.rootTsConfig)) as t.TsConfig;
-    rootConfig.compilerOptions.rootDir = root;
-
-    const mergeIntoRootConfig = async (path: string) => {
+    const mergeWithRoot = async (path: string) => {
       return R.mergeDeepRight(rootConfig, await fs.readJson(path)) as t.TsConfig;
+    };
+
+    const write = async (path: string, config: t.TsConfig) => {
+      await fs.writeFile(path, Util.Json.stringify(config));
     };
 
     const copy = async (kind: t.ModifyTsConfigKind, filename: string) => {
       const source = fs.join(sourceDir, filename);
       const target = fs.join(targetDir, filename);
-      let config = await mergeIntoRootConfig(source);
-      config = await Typescript.modifyTsConfigFromModule({ root, config, kind });
-      await fs.writeFile(target, Util.Json.stringify(config));
+      let config = await mergeWithRoot(source);
+      config = await Typescript.modifyTsConfigFromModule({ root, kind, config });
+      config.compilerOptions.rootDir = root;
+      await write(target, config);
+      return config;
     };
 
     await copy('code', Paths.tmpl.tsConfig.code);
     await copy('types', Paths.tmpl.tsConfig.types);
+
+    /**
+     * Store a [tsconfig.json] copy of the compiler options
+     * within the module root to ensure the editor environment
+     * understands what's going on.
+     */
+    const localConfig = await Typescript.modifyTsConfigFromModule({
+      root,
+      kind: 'code',
+      config: rootConfig,
+    });
+    write(fs.join(root, 'tsconfig.json'), localConfig);
   },
 
   /**
@@ -138,10 +154,10 @@ export const Typescript = {
   }) {
     const { kind } = args;
     const root = fs.resolve(args.root);
-    const configPath = fs.join(root, 'vite.config.mts');
-    if (!(await fs.pathExists(configPath))) return args.config;
+    const modulePath = fs.join(root, 'vite.config.mts');
+    if (!(await fs.pathExists(modulePath))) return args.config;
 
-    const m = (await import(configPath)) as { tsconfig: t.TsConfigExport };
+    const m = (await import(modulePath)) as { tsconfig: t.TsConfigExport };
     return m?.tsconfig ? m.tsconfig({ kind, config: R.clone(args.config) }) : args.config;
   },
 

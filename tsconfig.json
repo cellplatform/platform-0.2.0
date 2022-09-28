@@ -3,7 +3,7 @@
     "target": "ESNext",
 
     "skipLibCheck": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
+    "lib": ["ESNext", "DOM"],
 
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
@@ -23,7 +23,6 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
 
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "noEmit": true
   }
 }
