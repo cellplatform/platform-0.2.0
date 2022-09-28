@@ -7,6 +7,8 @@ export type VersionString = string;
 
 export type PathFilter = (path: PathString) => boolean;
 
+export type BuilderEnv = 'node' | 'web' | 'web:react';
+
 /**
  * [tsconfig.json] file.
  * https://www.typescriptlang.org/tsconfig
@@ -39,8 +41,6 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
-export type BuilderEnv = 'node' | 'web' | 'web:browser' | 'web:react';
-
 /**
  * Modify the vite config programatically from within the subject module.
  */
@@ -49,7 +49,7 @@ export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   lib(options?: { name?: string; entry?: string; outname?: string }): void;
   addExternalDependency(moduleName: string | string[]): void;
-  environment(target: BuilderEnv | BuilderEnv[]): void;
+  env(...target: BuilderEnv[]): void;
 };
 export type ModifyViteConfigCtx = {
   readonly name: PkgJson['name'];
@@ -76,7 +76,7 @@ export type ModifyTsConfigArgs = {
   readonly kind: ModifyTsConfigKind;
   readonly current: TsConfig;
   edit(fn: (current: TsConfig) => void): void;
-  environment(...target: BuilderEnv[]): void;
+  env(...target: BuilderEnv[]): void;
 };
 
 /**

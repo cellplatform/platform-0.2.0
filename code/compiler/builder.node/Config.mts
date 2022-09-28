@@ -57,11 +57,11 @@ export const Config = {
         /**
          * Named environment(s).
          */
-        environment(...target) {
-          const env = R.uniq(asArray(target));
+        env(...target) {
+          const env = R.uniq(target);
           const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
 
-          if (is('web:browser')) {
+          if (is('web')) {
             api.edit((tsconfig) => ensureLibs(tsconfig, 'DOM', 'DOM.Iterable', 'WebWorker'));
           }
 
@@ -119,11 +119,11 @@ export const Config = {
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
         },
-        environment(target) {
-          const env = R.uniq(asArray(target));
+        env(...target) {
+          const env = R.uniq(target);
           const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
-          if (is('web:browser')) test.environment = 'jsdom';
-          if (is('node') && !is('web:browser')) test.environment = 'node';
+          if (is('web')) test.environment = 'jsdom';
+          if (is('node') && !is('web')) test.environment = 'node';
           if (is('node')) build.ssr = true;
           if (is('web:react')) config.plugins?.push(react());
         },
