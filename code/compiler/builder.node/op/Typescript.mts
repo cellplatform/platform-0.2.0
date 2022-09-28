@@ -36,7 +36,7 @@ export const Typescript = {
     await Typescript.generatePkgMetadata(root);
     const res = await Typescript.buildTypes(root, options);
 
-    await fs.remove(fs.join(root, Paths.tsc.tmpBuilder));
+    await fs.remove(fs.join(root, Paths.tmpBuilderDir));
     return res;
   },
 
@@ -45,7 +45,7 @@ export const Typescript = {
    */
   async buildCode(root: t.DirString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
     const { silent = false } = options;
-    const tsconfig = fs.join(Paths.tsc.tmpBuilder, Paths.tmpl.tsConfig.code);
+    const tsconfig = fs.join(Paths.tmpBuilderDir, fs.basename(Paths.tsConfig.code));
     const res = await Typescript.tsc(root, tsconfig, { silent });
     if (!res.ok && options.exitOnError) process.exit(res.errorCode);
     return res;
@@ -56,17 +56,17 @@ export const Typescript = {
    */
   async buildTypes(root: t.DirString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
     const { silent = false } = options;
-    const tsconfig = fs.join(Paths.tsc.tmpBuilder, Paths.tmpl.tsConfig.types);
+    const tsconfig = fs.join(Paths.tmpBuilderDir, fs.basename(Paths.tsConfig.types));
     const res = await Typescript.tsc(root, tsconfig, { silent });
     if (!res.ok && options.exitOnError) process.exit(res.errorCode);
 
     // Move the child "src/" folder into the distirbution output folder
-    const source = fs.join(root, Paths.tsc.tmpBuilder, Paths.types.dirname, 'src');
+    const source = fs.join(root, Paths.tmpBuilderDir, Paths.types.dirname, 'src');
     const target = fs.join(root, Paths.types.dirname);
     if (res.ok) {
       await fs.remove(target);
       await fs.move(source, target);
-      await fs.remove(fs.join(root, Paths.tsc.tmpBuilder, Paths.types.dirname));
+      await fs.remove(fs.join(root, Paths.tmpBuilderDir, Paths.types.dirname));
     }
 
     // Remove any test types.
@@ -102,9 +102,8 @@ export const Typescript = {
    */
   async copyTsConfigFiles(root: t.DirString, options: { clear?: boolean } = {}) {
     root = fs.resolve(root);
-    const sourceDir = Paths.tmpl.dir;
-    const targetDir = fs.join(root, Paths.tsc.tmpBuilder);
-    const rootConfig = (await fs.readJson(Paths.tsc.rootTsConfig)) as t.TsConfig;
+    const targetDir = fs.join(root, Paths.tmpBuilderDir);
+    const rootConfig = (await fs.readJson(Paths.tsConfig.base)) as t.TsConfig;
 
     if (options.clear) await fs.remove(targetDir);
     await fs.ensureDir(targetDir);
@@ -117,23 +116,21 @@ export const Typescript = {
       await fs.writeFile(path, Util.Json.stringify(config));
     };
 
-    const copy = async (kind: t.ModifyTsConfigKind, filename: string) => {
-      const source = fs.join(sourceDir, filename);
-      const target = fs.join(targetDir, filename);
+    const copy = async (kind: t.ModifyTsConfigKind, source: t.PathString) => {
+      const target = fs.join(targetDir, fs.basename(source));
       let config = await mergeWithRoot(source);
       config = await Typescript.modifyTsConfigFromModule({ root, kind, config });
       config.compilerOptions.rootDir = root;
       await write(target, config);
-      return config;
     };
 
-    await copy('code', Paths.tmpl.tsConfig.code);
-    await copy('types', Paths.tmpl.tsConfig.types);
+    await copy('code', Paths.tsConfig.code);
+    await copy('types', Paths.tsConfig.types);
 
     /**
-     * Store a [tsconfig.json] copy of the compiler options
-     * within the module root to ensure the editor environment
-     * understands what's going on.
+     * Store a [tsconfig.json] copy of the "compiler options"
+     * within the module's root to ensure the editor environment
+     * understands how to treat it.
      */
     const localConfig = await Typescript.modifyTsConfigFromModule({
       root,
