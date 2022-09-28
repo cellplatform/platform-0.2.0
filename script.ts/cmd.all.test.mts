@@ -10,10 +10,10 @@ type Pkg = { name: string; version: string };
 const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
 const filter = (path: string) => {
-  if (path.includes('/code/compiler.sample')) return false;
+  if (path.includes('/code/compiler.samples/')) return false;
   return true;
 };
-let paths = await Builder.Find.projectDirs({ filter, sort: 'Alpha' });
+let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 
 if (paths.length === 0) {
   console.warn(pc.yellow('no paths'));

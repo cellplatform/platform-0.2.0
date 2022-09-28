@@ -2,9 +2,12 @@ import type { UserConfig } from 'vite';
 
 export type PathString = string;
 export type DirString = PathString;
+export type ImportMetaUrl = PathString; // eg: the ESM [import.meta.url] value.
 export type VersionString = string;
 
 export type PathFilter = (path: PathString) => boolean;
+
+export type BuilderEnv = 'node' | 'web' | 'web:react';
 
 /**
  * [tsconfig.json] file.
@@ -15,7 +18,15 @@ export type TsConfig = {
   include?: string[];
   compilerOptions: TsConfigCompilerOptions;
 };
-export type TsConfigCompilerOptions = { rootDir?: string };
+export type TsConfigCompilerOptions = {
+  rootDir?: string;
+  lib: string[];
+  jsx?: 'react-jsx';
+
+  allowJs?: boolean;
+  checkJs?: boolean;
+  noEmit: boolean;
+};
 
 /**
  * Vite [manifest.json] file.
@@ -30,8 +41,6 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
-export type ViteBuilderEnv = 'node' | 'web' | 'web:react';
-
 /**
  * Modify the vite config programatically from within the subject module.
  */
@@ -40,15 +49,34 @@ export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   lib(options?: { name?: string; entry?: string; outname?: string }): void;
   addExternalDependency(moduleName: string | string[]): void;
-  environment(target: ViteBuilderEnv | ViteBuilderEnv[]): void;
+  env(...target: BuilderEnv[]): void;
 };
 export type ModifyViteConfigCtx = {
-  readonly name: string;
+  readonly name: PkgJson['name'];
   readonly command: 'build' | 'serve';
-  readonly mode: string;
+  readonly mode: string; // eg: "production"
   readonly pkg: PkgJson;
   readonly deps: PkgDep[];
   readonly config: UserConfig;
+};
+
+/**
+ * Raw modification of [tsconfig.json] from within the subject module.
+ */
+export type TsConfigExport = (args: TsConfigExportArgs) => Promise<TsConfig>;
+export type TsConfigExportArgs = { config: TsConfig; kind: ModifyTsConfigKind };
+
+/**
+ * A set of "conceptual" alterations to signal to a configurator helper
+ * how to adjust a [tsconfig.json] file.
+ */
+export type ModifyTsConfigKind = 'code' | 'types';
+export type ModifyTsConfig = (args: ModifyTsConfigArgs) => Promise<unknown> | unknown;
+export type ModifyTsConfigArgs = {
+  readonly kind: ModifyTsConfigKind;
+  readonly current: TsConfig;
+  edit(fn: (current: TsConfig) => void): void;
+  env(...target: BuilderEnv[]): void;
 };
 
 /**

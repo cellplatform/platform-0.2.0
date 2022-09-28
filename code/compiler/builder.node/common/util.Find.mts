@@ -16,7 +16,7 @@ export const FindUtil = {
   async projectDirs(
     options: {
       filter?: t.PathFilter;
-      sort?: 'Topological' | 'Alpha' | 'None';
+      sortBy?: 'Topological' | 'Alpha' | 'None';
     } = {},
   ) {
     const pkg = await PackageJsonUtil.load(Paths.rootDir);
@@ -31,7 +31,7 @@ export const FindUtil = {
       return options.filter ? options.filter(path.substring(Paths.rootDir.length)) : true;
     });
 
-    const { sort = 'Alpha' } = options;
+    const { sortBy: sort = 'Alpha' } = options;
     if (sort === 'Alpha') dirs = await FindUtil.sortAlpha(dirs);
     if (sort === 'Topological') dirs = await FindUtil.sortTopological(dirs);
 

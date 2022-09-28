@@ -2,14 +2,15 @@
 import { fs, LogTable, pc, Util, Builder, minimist } from './common/index.mjs';
 
 const argv = minimist(process.argv.slice(2));
+const sortOrder = argv.topo ? 'Topological' : 'Alpha';
 
 const filter = (path: string) => {
-  if (path.includes('/code/compiler.sample')) return false;
+  if (path.includes('/code/compiler.samples/')) return false;
   return true;
 };
 let paths = await Builder.Find.projectDirs({
   filter,
-  sort: argv.topo ? 'Topological' : 'Alpha',
+  sortBy: sortOrder,
 });
 
 if (paths.length === 0) {
@@ -29,7 +30,18 @@ for (const path of paths) {
   table.push([column.path, column.size]);
 }
 
+/**
+ * Display output.
+ */
+const arrow = pc.green('↓');
+const sortOrderPrint =
+  sortOrder === 'Alpha'
+    ? ` ${arrow} sorted alphabetically (use --topo for build order)`
+    : ` ${arrow} sorted topologically on dependency graph`;
+
 console.log('');
 console.log(pc.green(`${paths.length} modules:`));
 console.log(table.toString());
+console.log(pc.gray(' _'));
+console.info(pc.gray(sortOrderPrint));
 console.log('');

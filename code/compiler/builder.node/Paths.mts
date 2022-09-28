@@ -6,6 +6,8 @@ import { fs } from './common/fs.mjs';
  */
 const __dirname = fs.dirname(fileURLToPath(import.meta.url));
 const rootDir = fs.join(__dirname, '../../..');
+const tmplDir = fs.join(__dirname, '../template.esm');
+const tsconfigDir = fs.join(__dirname, '../tsconfig');
 
 export const Paths = {
   rootDir,
@@ -15,8 +17,14 @@ export const Paths = {
     dirname: 'types.d',
     dist: 'dist/types.d',
   },
+  tmpBuilderDir: '.builder',
+  tsConfig: {
+    base: fs.join(tsconfigDir, 'tsconfig.json'),
+    code: fs.join(tsconfigDir, 'tsconfig.code.json'),
+    types: fs.join(tsconfigDir, 'tsconfig.types.json'),
+  },
   tmpl: {
-    dir: fs.join(__dirname, '../template.esm'),
+    dir: tmplDir,
     viteConfig: 'vite.config.mts',
     indexHtml: 'index.html',
     pkg: 'src/index.pkg.mts',
@@ -30,9 +38,5 @@ export const Paths = {
       'src/common/libs.mts',
       'src/common/types.mts',
     ],
-    tsconfig: {
-      code: 'tsconfig.code.json',
-      types: 'tsconfig.types.json',
-    },
   },
 };
