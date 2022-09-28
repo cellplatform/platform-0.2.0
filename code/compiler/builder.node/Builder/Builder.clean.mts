@@ -8,5 +8,6 @@ export async function clean(dir: t.DirString) {
   dir = fs.resolve(dir);
   await fs.remove(fs.join(dir, Paths.dist));
   await fs.remove(fs.join(dir, Paths.types.dirname));
+  await fs.remove(fs.join(dir, Paths.tsc.tmpBuilder));
   await fs.remove(fs.join(dir, 'tmp'));
 }
