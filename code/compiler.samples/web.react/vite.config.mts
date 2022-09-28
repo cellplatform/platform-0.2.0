@@ -1,4 +1,5 @@
 import { Config } from '../../../config.mjs';
+
 export default Config.vite(import.meta.url, (e) => {
   /**
    * NOTE
@@ -9,3 +10,5 @@ export default Config.vite(import.meta.url, (e) => {
 
   e.environment('web:react');
 });
+
+export const tsconfig = Config.ts((e) => e.environment('web:browser', 'web:react'));
