@@ -7,8 +7,7 @@ export default Config.vite(import.meta.url, (e) => {
    *    no `addExternalDependency` calls, everything is bundled into
    *    a single deployable bundle.
    */
-
-  e.environment('web:react');
+  e.env('web', 'web:react');
 });
 
-export const tsconfig = Config.ts((e) => e.environment('web:browser', 'web:react'));
+export const tsconfig = Config.ts((e) => e.env('web', 'web:react'));
