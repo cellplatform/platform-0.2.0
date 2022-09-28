@@ -43,6 +43,7 @@ export const Config = {
 
       const api: t.ModifyTsConfigArgs = {
         kind,
+
         get current() {
           return { ..._current };
         },
