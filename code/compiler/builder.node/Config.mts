@@ -1,5 +1,4 @@
 /// <reference types="vitest" />
-import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, UserConfigExport } from 'vite';
 
@@ -85,6 +84,7 @@ export const Config = {
     return defineConfig(async ({ command, mode }) => {
       const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
+      const env: t.BuilderEnv[] = [];
       const deps = [
         ...toDepsList(false, pkg.dependencies),
         ...toDepsList(true, pkg.devDependencies),
@@ -120,12 +120,9 @@ export const Config = {
             .forEach((name) => external.push(name));
         },
         env(...target) {
-          const env = R.uniq(target);
-          const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
-          if (is('web')) test.environment = 'jsdom';
-          if (is('node') && !is('web')) test.environment = 'node';
-          if (is('node')) build.ssr = true;
-          if (is('web:react')) config.plugins?.push(react());
+          R.uniq(target)
+            .filter((name) => !env.includes(name))
+            .forEach((name) => env.push(name));
         },
         lib(options = {}) {
           const { name = pkg.name, outname: fileName = 'index' } = options;
@@ -139,7 +136,20 @@ export const Config = {
         },
       };
 
+      // Pass execution to the callback.
       await modify?.(args);
+
+      // Update configuration based on passed environment settings.
+      const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
+      if (is('web')) test.environment = 'jsdom';
+      if (is('node') && !is('web')) test.environment = 'node';
+      if (is('node')) build.ssr = true;
+      if (is('web:react')) {
+        const react = (await import('@vitejs/plugin-react')).default;
+        config.plugins?.push(react());
+      }
+
+      // Finish up.
       return config;
     });
   },
