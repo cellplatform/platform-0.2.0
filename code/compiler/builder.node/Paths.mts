@@ -15,7 +15,10 @@ export const Paths = {
     dirname: 'types.d',
     dist: 'dist/types.d',
   },
-  tsc: { tmp: '.builder' },
+  tsc: {
+    tmpBuilder: '.builder',
+    rootTsConfig: fs.join(rootDir, 'tsconfig.json'),
+  },
   tmpl: {
     dir: fs.join(__dirname, '../template.esm'),
     viteConfig: 'vite.config.mts',
@@ -31,7 +34,7 @@ export const Paths = {
       'src/common/libs.mts',
       'src/common/types.mts',
     ],
-    tsconfig: {
+    tsConfig: {
       code: 'tsconfig.code.json',
       types: 'tsconfig.types.json',
     },

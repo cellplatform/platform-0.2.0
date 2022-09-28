@@ -1,7 +1,4 @@
 {
-  "extends": "<root-tsconfig>",
   "include": ["../src"],
-  "compilerOptions": {
-    "composite": true
-  }
+  "compilerOptions": {}
 }

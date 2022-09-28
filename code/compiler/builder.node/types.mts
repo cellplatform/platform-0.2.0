@@ -16,7 +16,15 @@ export type TsConfig = {
   include?: string[];
   compilerOptions: TsConfigCompilerOptions;
 };
-export type TsConfigCompilerOptions = { rootDir?: string };
+export type TsConfigCompilerOptions = {
+  rootDir?: string;
+  lib: string[];
+  jsx?: 'react-jsx';
+
+  allowJs?: boolean;
+  checkJs?: boolean;
+  noEmit: boolean;
+};
 
 /**
  * Vite [manifest.json] file.
@@ -31,7 +39,7 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
-export type BuilderEnv = 'node' | 'web' | 'web:react';
+export type BuilderEnv = 'node' | 'web' | 'web:browser' | 'web:react';
 
 /**
  * Modify the vite config programatically from within the subject module.
@@ -53,15 +61,22 @@ export type ModifyViteConfigCtx = {
 };
 
 /**
- * Modify the builder [tsconfig.json] from within the subject module.
+ * Raw modification of [tsconfig.json] from within the subject module.
  */
-export type ModifyTsconfig = (args: ModifyTsconfigArgs) => Promise<unknown> | unknown;
-export type ModifyTsconfigArgs = {
-  readonly ctx: ModifyTsconfigCtx;
-  environment(target: BuilderEnv | BuilderEnv[]): void;
-};
-export type ModifyTsconfigCtx = {
-  readonly name: PkgJson['name'];
+export type TsConfigExport = (args: TsConfigExportArgs) => Promise<TsConfig>;
+export type TsConfigExportArgs = { config: TsConfig; kind: ModifyTsConfigKind };
+
+/**
+ * A set of "conceptual" alterations to signal to a configurator helper
+ * how to adjust a [tsconfig.json] file.
+ */
+export type ModifyTsConfigKind = 'code' | 'types';
+export type ModifyTsConfig = (args: ModifyTsConfigArgs) => Promise<unknown> | unknown;
+export type ModifyTsConfigArgs = {
+  readonly kind: ModifyTsConfigKind;
+  readonly current: TsConfig;
+  edit(fn: (current: TsConfig) => void): void;
+  environment(...target: BuilderEnv[]): void;
 };
 
 /**

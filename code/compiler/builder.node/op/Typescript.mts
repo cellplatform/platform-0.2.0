@@ -1,4 +1,4 @@
-import { execa, fs, pc, t, Util } from '../common/index.mjs';
+import { execa, fs, pc, R, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 
 /**
@@ -36,7 +36,7 @@ export const Typescript = {
     await Typescript.generatePkgMetadata(root);
     const res = await Typescript.buildTypes(root, options);
 
-    await fs.remove(fs.join(root, Paths.tsc.tmp));
+    await fs.remove(fs.join(root, Paths.tsc.tmpBuilder));
     return res;
   },
 
@@ -45,7 +45,7 @@ export const Typescript = {
    */
   async buildCode(root: t.DirString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
     const { silent = false } = options;
-    const tsconfig = fs.join(Paths.tsc.tmp, Paths.tmpl.tsconfig.code);
+    const tsconfig = fs.join(Paths.tsc.tmpBuilder, Paths.tmpl.tsConfig.code);
     const res = await Typescript.tsc(root, tsconfig, { silent });
     if (!res.ok && options.exitOnError) process.exit(res.errorCode);
     return res;
@@ -56,17 +56,17 @@ export const Typescript = {
    */
   async buildTypes(root: t.DirString, options: { exitOnError?: boolean; silent?: boolean } = {}) {
     const { silent = false } = options;
-    const tsconfig = fs.join(Paths.tsc.tmp, Paths.tmpl.tsconfig.types);
+    const tsconfig = fs.join(Paths.tsc.tmpBuilder, Paths.tmpl.tsConfig.types);
     const res = await Typescript.tsc(root, tsconfig, { silent });
     if (!res.ok && options.exitOnError) process.exit(res.errorCode);
 
     // Move the child "src/" folder into the distirbution output folder
-    const source = fs.join(root, Paths.tsc.tmp, Paths.types.dirname, 'src');
+    const source = fs.join(root, Paths.tsc.tmpBuilder, Paths.types.dirname, 'src');
     const target = fs.join(root, Paths.types.dirname);
     if (res.ok) {
       await fs.remove(target);
       await fs.move(source, target);
-      await fs.remove(fs.join(root, Paths.tsc.tmp, Paths.types.dirname));
+      await fs.remove(fs.join(root, Paths.tsc.tmpBuilder, Paths.types.dirname));
     }
 
     // Remove any test types.
@@ -103,26 +103,46 @@ export const Typescript = {
   async copyTsConfigFiles(root: t.DirString, options: { clear?: boolean } = {}) {
     root = fs.resolve(root);
     const sourceDir = Paths.tmpl.dir;
-    const targetDir = fs.join(root, Paths.tsc.tmp);
+    const targetDir = fs.join(root, Paths.tsc.tmpBuilder);
+
     if (options.clear) await fs.remove(targetDir);
     await fs.ensureDir(targetDir);
 
-    const copy = async (filename: string, adjust?: (config: t.TsConfig) => void) => {
-      const source = fs.join(sourceDir, filename);
-      const target = fs.join(targetDir, filename);
-      const json = (await fs.readJson(source)) as t.TsConfig;
-      adjust?.(json);
-      await fs.writeFile(target, Util.Json.stringify(json));
+    const rootConfig = (await fs.readJson(Paths.tsc.rootTsConfig)) as t.TsConfig;
+    rootConfig.compilerOptions.rootDir = root;
+
+    const mergeIntoRootConfig = async (path: string) => {
+      return R.mergeDeepRight(rootConfig, await fs.readJson(path)) as t.TsConfig;
     };
 
-    await copy(Paths.tmpl.tsconfig.code, (tsconfig) => {
-      tsconfig.extends = fs.join(Paths.rootDir, './tsconfig.json');
-      tsconfig.compilerOptions.rootDir = root;
-    });
+    const copy = async (kind: t.ModifyTsConfigKind, filename: string) => {
+      const source = fs.join(sourceDir, filename);
+      const target = fs.join(targetDir, filename);
+      let config = await mergeIntoRootConfig(source);
+      config = await Typescript.modifyTsConfigFromModule({ root, config, kind });
+      await fs.writeFile(target, Util.Json.stringify(config));
+    };
 
-    await copy(Paths.tmpl.tsconfig.types, (tsconfig) => {
-      tsconfig.compilerOptions.rootDir = root;
-    });
+    await copy('code', Paths.tmpl.tsConfig.code);
+    await copy('types', Paths.tmpl.tsConfig.types);
+  },
+
+  /**
+   * Runs the module specific modifications over the tsconfig if declared
+   * within the [vite.config.mts] file.
+   */
+  async modifyTsConfigFromModule(args: {
+    root: t.DirString;
+    config: t.TsConfig;
+    kind: t.ModifyTsConfigKind;
+  }) {
+    const { kind } = args;
+    const root = fs.resolve(args.root);
+    const configPath = fs.join(root, 'vite.config.mts');
+    if (!(await fs.pathExists(configPath))) return args.config;
+
+    const m = (await import(configPath)) as { tsconfig: t.TsConfigExport };
+    return m?.tsconfig ? m.tsconfig({ kind, config: R.clone(args.config) }) : args.config;
   },
 
   /**

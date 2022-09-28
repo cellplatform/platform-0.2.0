@@ -7,7 +7,6 @@ import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 import type { RollupOptions } from 'rollup';
-
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -28,9 +27,59 @@ export const Config = {
   },
 
   /**
+   * Typescript configuration modifier (tsconfig.json).
+   */
+  ts(modify: t.ModifyTsConfig): t.TsConfigExport {
+    return async (args) => {
+      const { kind } = args;
+
+      let _current = R.clone(args.config);
+
+      const ensureLibs = (input: t.TsConfig, ...items: string[]) => {
+        let next = input;
+        let lib = next.compilerOptions.lib || (next.compilerOptions.lib = []);
+        next.compilerOptions.lib = R.uniq([...lib, ...items]);
+        return next;
+      };
+
+      const api: t.ModifyTsConfigArgs = {
+        kind,
+        get current() {
+          return { ..._current };
+        },
+
+        edit(fn) {
+          const next = api.current; // retrieve the clone to mutate.
+          fn(next);
+          _current = next;
+        },
+
+        /**
+         * Named environment(s).
+         */
+        environment(...target) {
+          const env = R.uniq(asArray(target));
+          const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
+
+          if (is('web:browser')) {
+            api.edit((tsconfig) => ensureLibs(tsconfig, 'DOM', 'DOM.Iterable', 'WebWorker'));
+          }
+
+          if (is('web:react')) {
+            api.edit((tsconfig) => (tsconfig.compilerOptions.jsx = 'react-jsx'));
+          }
+        },
+      };
+
+      modify(api);
+      return _current;
+    };
+  },
+
+  /**
    * Build configuration generator (with standard defaults).
    */
-  vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig) {
+  vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig): UserConfigExport {
     const dir = toDirname(modulePath);
 
     return defineConfig(async ({ command, mode }) => {
@@ -72,10 +121,11 @@ export const Config = {
         },
         environment(target) {
           const env = R.uniq(asArray(target));
-          if (env.includes('web')) test.environment = 'jsdom';
-          if (env.includes('node') && !env.includes('web')) test.environment = 'node';
-          if (env.includes('node')) build.ssr = true;
-          if (env.includes('web:react')) config.plugins?.push(react());
+          const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
+          if (is('web:browser')) test.environment = 'jsdom';
+          if (is('node') && !is('web:browser')) test.environment = 'node';
+          if (is('node')) build.ssr = true;
+          if (is('web:react')) config.plugins?.push(react());
         },
         lib(options = {}) {
           const { name = pkg.name, outname: fileName = 'index' } = options;
