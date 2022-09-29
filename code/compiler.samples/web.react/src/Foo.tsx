@@ -24,6 +24,7 @@ const View: React.FC<FooProps> = (props) => {
     h1: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       textAlign: 'center',
+      fontSize: 60,
     }),
   };
   return (
