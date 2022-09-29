@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { t, FC, css } from './common/index.mjs';
 
-import { FC } from 'sys.util.react';
-import { createRoot } from 'react-dom/client';
-import { css, CssValue } from 'sys.util.css';
+export type AppProps = { style?: t.CssValue };
 
-export type FooProps = { style?: CssValue };
-
-const View: React.FC<FooProps> = (props) => {
+const View: React.FC<AppProps> = (props) => {
   useEffect(() => {
     //
   }, []);
@@ -34,5 +31,8 @@ const View: React.FC<FooProps> = (props) => {
   );
 };
 
+/**
+ * Export
+ */
 type Fields = {};
-export const Foo = FC.decorate<FooProps, Fields>(View, {}, { displayName: 'Foo' });
+export const App = FC.decorate<AppProps, Fields>(View, {}, { displayName: 'Foo' });
