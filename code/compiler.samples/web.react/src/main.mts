@@ -19,4 +19,4 @@ console.log('worker (instance): ', worker);
 console.groupEnd();
 
 worker.onmessage = (e: MessageEvent) => console.log('🌼 from worker:', e.data);
-setTimeout(() => worker.postMessage({ msg: 'Hello from 🌼' }), 500);
+setTimeout(() => worker.postMessage({ msg: 'Delayed hello from 🌼' }), 700);
