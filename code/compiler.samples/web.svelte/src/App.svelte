@@ -4,7 +4,7 @@
 
 <main>
   <div class="main">
-    <h1>My Title</h1>
+    <h1>Hello World (Svelte)</h1>
     <div>
       <Counter />
     </div>
