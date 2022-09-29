@@ -1,7 +1,8 @@
 #!/usr/bin/env ts-node
-import { Filesystem } from 'sys.fs.node';
+import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Time } from 'sys.util';
 import { rx, Vercel } from 'cloud.vercel';
+import { Util } from './util.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -18,7 +19,9 @@ const now = Time.now.format('hh:mm');
 console.log('now:', now);
 
 await fs.delete('tmp');
-await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
+// await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
+await Util.copy(fs, '../../compiler.samples/web.react/dist', 'tmp/dist');
+// await Util.copy(fs, '../../compiler.samples/web.svelte/dist', 'tmp/dist');
 
 /**
  * 🧠 VENDOR: The Vercel API "wrapper"
