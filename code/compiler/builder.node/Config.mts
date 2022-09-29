@@ -149,6 +149,10 @@ export const Config = {
         const react = (await import('@vitejs/plugin-react')).default;
         config.plugins?.push(react());
       }
+      if (is('web:svelte')) {
+        const svelte = (await import('@sveltejs/vite-plugin-svelte')).svelte;
+        config.plugins?.push(svelte());
+      }
 
       // Finish up.
       return config;
