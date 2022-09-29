@@ -1,1 +1,1 @@
-export * from '../types.mjs';
+export type { Event, EventBus } from 'sys.types';
