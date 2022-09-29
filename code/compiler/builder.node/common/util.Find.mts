@@ -21,7 +21,7 @@ export const FindUtil = {
   ) {
     const pkg = await PackageJsonUtil.load(Paths.rootDir);
 
-    const findPattern = async (pattern: string) => fs.glob.find(fs.join(Paths.rootDir, pattern));
+    const findPattern = async (pattern: string) => fs.glob(fs.join(Paths.rootDir, pattern));
     const workspaces = pkg.workspaces ?? { packages: [] };
     const paths = (await Promise.all(workspaces.packages.map(findPattern))).flat();
 

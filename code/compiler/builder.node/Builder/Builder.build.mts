@@ -1,4 +1,4 @@
-import { fs, t } from '../common/index.mjs';
+import { fs, t, pc, Util } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
 import { PackageRoot } from '../op/Package.Root.mjs';
 import { PackageDist } from '../op/Packge.Dist.mjs';
@@ -46,6 +46,9 @@ export async function build(
   // await BuildManifest.generate(dir);
 
   // Finish up.
-  if (!silent) console.info('');
+  if (!silent) {
+    console.info(``);
+    console.info(pc.gray(`${pc.white('/dist:')} ${await Util.folderSize(dir)}`));
+  }
   return { ok: true, errorCode: 0 };
 }

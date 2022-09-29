@@ -71,7 +71,7 @@ export const Typescript = {
 
     // Remove any test types.
     const pattern = '**/*.{TEST,SPEC}.d.{ts,tsx,mts,mtsx}';
-    const tests = await fs.glob.find(fs.join(target, pattern));
+    const tests = await fs.glob(fs.join(target, pattern));
     await Promise.all(tests.map((path) => fs.remove(path)));
     await fs.remove(fs.join(target, 'TEST/'));
 
