@@ -47,8 +47,18 @@ export async function build(
 
   // Finish up.
   if (!silent) {
+    const size = await Util.folderSize(fs.join(dir, 'dist'));
+    const totalBundle = size.paths.filter((p) => !p.includes('/types.d/')).length;
+    const totalTypes = size.paths.filter((p) => p.includes('/types.d/')).length;
+
+    const prefix = pc.bgCyan(pc.bold(' dist '));
+    const filesize = pc.bold(pc.white(size.toString()));
+    const total = `${totalBundle} files, ${totalTypes} typefiles`;
+
     console.info(``);
-    console.info(pc.gray(`${pc.white('/dist:')} ${await Util.folderSize(dir)}`));
+    console.info(pc.gray(`${prefix} ${filesize}`));
+    console.info(pc.gray(`       ${total}`));
+    console.info(``);
   }
   return { ok: true, errorCode: 0 };
 }
