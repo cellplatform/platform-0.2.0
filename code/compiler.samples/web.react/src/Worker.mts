@@ -1,3 +1,12 @@
 export {};
+import { rx } from 'sys.util';
 
-console.log('💦 inside worker:::', self);
+const bus = rx.bus();
+
+/**
+ * Log worker init.
+ */
+console.group('💦 worker');
+console.log(`worker bus:`, bus);
+console.log('self', self);
+console.groupEnd();
