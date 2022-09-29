@@ -1,7 +1,8 @@
 #!/usr/bin/env ts-node
-import { Filesystem, NodeFs } from 'sys.fs.node';
-import { Time } from 'sys.util';
 import { rx, Vercel } from 'cloud.vercel';
+import { Filesystem } from 'sys.fs.node';
+import { Time } from 'sys.util';
+
 import { Util } from './util.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
@@ -18,10 +19,15 @@ const { fs } = await Filesystem.client(dir, { bus }); // <═══╗
 const now = Time.now.format('hh:mm');
 console.log('now:', now);
 
+/**
+ * Copy source content
+ */
 await fs.delete('tmp');
+const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
+
 // await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
-await Util.copy(fs, '../../compiler.samples/web.react/dist', 'tmp/dist');
-// await Util.copy(fs, '../../compiler.samples/web.svelte/dist', 'tmp/dist');
+await copy('../../compiler.samples/web.react/dist');
+// await copy('../../compiler.samples/web.svelte/dist');
 
 /**
  * 🧠 VENDOR: The Vercel API "wrapper"

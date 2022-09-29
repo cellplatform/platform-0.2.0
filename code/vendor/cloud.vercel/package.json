@@ -7,7 +7,9 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "tmp": "ts-node-esm -T script.ts/tmp.mts"
+    "sample.deploy": "ts-node-esm -T script.ts/sample.deploy.mts",
+    "sample.crdt": "ts-node-esm -T script.ts/sample.crdt.mts",
+    "tmp": "yarn sample.crdt"
   },
   "dependencies": {
     "sys.fs": "0.0.0",
