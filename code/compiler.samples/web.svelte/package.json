@@ -1,0 +1,20 @@
+{
+  "name": "sample.web.svelte",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "vite preview",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.html.d.html",
+  "exports": {
+    ".": "./dist/assets/index.ff4af008.js"
+  }
+}

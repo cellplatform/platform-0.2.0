@@ -7,7 +7,7 @@ export type VersionString = string;
 
 export type PathFilter = (path: PathString) => boolean;
 
-export type BuilderEnv = 'node' | 'web' | 'web:react';
+export type BuilderEnv = 'node' | 'web' | 'web:react' | 'web:svelte';
 
 /**
  * [tsconfig.json] file.
