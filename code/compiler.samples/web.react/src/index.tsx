@@ -1,10 +1,4 @@
-import { createRoot } from 'react-dom/client';
+export {};
 
-import { App } from './App';
-import('./main.mjs');
-
-/**
- * User Interface
- */
-const root = createRoot(document.getElementById('root')!);
-root.render(<App />);
+import('./ui/entry');
+import('./main/entry.mjs');

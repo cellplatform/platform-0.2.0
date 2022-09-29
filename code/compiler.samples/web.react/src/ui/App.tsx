@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { t, FC, css } from './common/index.mjs';
 
 export type AppProps = { style?: t.CssValue };
 
 const View: React.FC<AppProps> = (props) => {
-  useEffect(() => {
-    //
-  }, []);
-
   /**
    * [Render]
    */
@@ -21,12 +17,12 @@ const View: React.FC<AppProps> = (props) => {
     h1: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       textAlign: 'center',
-      fontSize: 60,
+      fontSize: 80,
     }),
   };
   return (
     <div {...css(styles.base, props.style)}>
-      <h1 {...styles.h1}>Hello World 🐷</h1>
+      <h1 {...styles.h1}>Hello UNDP 🇺🇳</h1>
     </div>
   );
 };

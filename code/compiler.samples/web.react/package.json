@@ -25,13 +25,13 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.c6094f4a.js",
-    "./main": "./dist/assets/main.06ce5ad7.js"
+    ".": "./dist/assets/index.8f07ebc7.js",
+    "./main/entry": "./dist/assets/entry.9c4d4e8c.js"
   },
   "typesVersions": {
     "*": {
-      "main": [
-        "./dist/types.d/main.d.mts"
+      "main/entry": [
+        "./dist/types.d/main/entry.d.mts"
       ]
     }
   }
