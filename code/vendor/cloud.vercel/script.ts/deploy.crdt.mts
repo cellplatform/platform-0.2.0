@@ -21,4 +21,8 @@ const doc = await crdt.doc<D>({ id: '1', initial: { msg: '', count: 0 } });
 
 await doc.change((doc) => (doc.msg = 'hello'));
 
+/**
+ * TODO 🐷
+ * - deploy CRDT state to cloud.
+ */
 console.log('doc', doc.current);

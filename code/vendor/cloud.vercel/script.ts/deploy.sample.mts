@@ -3,7 +3,7 @@ import { rx, Vercel } from 'cloud.vercel';
 import { Filesystem } from 'sys.fs.node';
 import { Time } from 'sys.util';
 
-import { Util } from './util.mjs';
+import { Util } from './common.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -17,7 +17,7 @@ const { fs } = await Filesystem.client(dir, { bus }); // <═══╗
 //                                            SHARED EventBus 🌳
 
 const now = Time.now.format('hh:mm');
-console.log('now:', now);
+console.info('now:', now);
 
 /**
  * Copy source content
