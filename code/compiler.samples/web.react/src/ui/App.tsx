@@ -22,7 +22,7 @@ const View: React.FC<AppProps> = (props) => {
   };
   return (
     <div {...css(styles.base, props.style)}>
-      <h1 {...styles.h1}>Hello UNDP 🇺🇳</h1>
+      <h1 {...styles.h1}>Hello World 🐷</h1>
     </div>
   );
 };

@@ -1,45 +1,70 @@
-// import { rx, t } from './common/index.mjs';
-import { rx } from 'sys.util';
-import type { WorkerGlobalScope } from 'sys.types';
+import { filter } from 'rxjs/operators';
+import { rx, slug } from 'sys.util';
+import * as t from './types.mjs';
 
-const ctx: WorkerGlobalScope = self as any;
-
+const ctx: t.WorkerGlobalScope = self as any;
 const id = ctx.name;
-console.log('id', id);
 
-// ctx.
+const bus = rx.bus<t.NetworkMessageEvent>();
 
-const l = location;
-
-const localbus = rx.bus();
-const pump = rx.pump.create(localbus);
-
-// bus.$.subscribe((e) => {
-//   console.info(`💦`, e.payload);
-// });
+bus.$.subscribe((e) => {
+  console.info(`💦 bus:`, e.payload);
+});
 
 /**
  * Log worker init.
  */
 console.group('💦 worker');
-console.info('- pump:', pump);
-console.info(`- localbus:`, localbus);
+// console.info('- pump:', pump);
+console.info(`- localbus:`, bus);
 console.info('- self:', self);
 console.groupEnd();
 
-// IO:n | Respond to message from parent thread.
-ctx.addEventListener('message', (e) => console.info('💦 from main:', e.data));
+/**
+ * INCOMING message
+ */
+ctx.addEventListener('message', (e) => {
+  if (!isNetworkMessage(e.data)) return;
 
-// IO:Out | Post data to parent thread.
-ctx.postMessage({ msg: 'Hello from 💦' });
+  const event = e.data as t.NetworkMessageEvent;
+  const payload = event.payload;
+
+  if (typeof payload.target === 'string' && payload.target !== id) return;
+  bus.fire(event);
+});
 
 /**
- * Bus Hookup
+ * OUTGOING
  */
-// ctx.addEventListener('message', (e) => {
-//   const data = e.data ?? {};
-//   if (typeof data.type === 'string' && typeof data.payload === 'object') {
-//     const { type, payload } = data;
-//     bus.fire({ type, payload });
-//   }
-// });
+bus.$.pipe(
+  filter((e) => e.type === 'Network/message'),
+  filter((e) => e.payload.sender === id),
+).subscribe((e) => {
+  ctx.postMessage(e);
+});
+
+function isNetworkMessage(data: any) {
+  if (typeof data !== 'object') return false;
+  if (data.type !== 'Network/message') return false;
+  if (typeof data.payload.sender !== 'string') return false;
+  if (typeof data.payload.tx !== 'string') return false;
+  return rx.isEvent(data.payload.event);
+}
+
+let _count = 0;
+const fireSample = () => {
+  _count++;
+  bus.fire({
+    type: 'Network/message',
+    payload: {
+      tx: slug(),
+      sender: id,
+      event: { type: 'foo', payload: { msg: `Hello from "${id}" 💦`, count: _count } },
+    },
+  });
+};
+
+/**
+ * TEST Pump
+ */
+fireSample();
