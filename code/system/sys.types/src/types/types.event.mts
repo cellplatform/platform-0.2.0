@@ -29,12 +29,12 @@ export type EventBus<E extends Event = Event> = {
  */
 export type EventPump<E extends Event = Event> = {
   id: string;
-  in: EventPumpIn<E>; //   "Inward" to the subject bus.
-  out: EventPumpOut<E>; // "Outward" from the subject bus.
+  in: EventPumpIn<E>; //   Recieved "INWARD" from the subject bus.
+  out: EventPumpOut<E>; // Fires "OUTWARD" from the subject bus.
 };
 
 /**
- * Recieves messages/events inward to the "subject" bus.
+ * Recieves messages/events inward from the "subject" bus.
  */
 export type EventPumpIn<E extends Event> = (fn: EventPumpInSubscriber<E>) => void;
 export type EventPumpInSubscriber<T extends Event> = (e: T) => void;
