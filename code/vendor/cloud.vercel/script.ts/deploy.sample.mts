@@ -28,6 +28,7 @@ const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
 // await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
 await copy('../../compiler.samples/web.react/dist');
 // await copy('../../compiler.samples/web.svelte/dist');
+// await copy('../../tmp/phil.cockfield.net/dist');
 
 /**
  * 🧠 VENDOR: The Vercel API "wrapper"
@@ -42,9 +43,9 @@ await vercel.deploy({
   source: 'tmp/dist',
   team: 'tdb',
   project: 'tdb-tmp',
+  alias: 'tmp.db.team',
   ensureProject: true,
   regions: ['sfo1'],
-  alias: 'tmp.db.team',
   target: 'production', // NB: required to be "production" for the DNS alias to be applied.
   silent: false, // Standard BEFORE and AFTER deploy logging to console.
 });
