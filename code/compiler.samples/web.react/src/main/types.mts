@@ -1,5 +1,7 @@
-import type { Event } from 'sys.types';
-export type { WorkerGlobalScope } from 'sys.types';
+import type { Event, EventBus } from 'sys.types';
+
+export { Event, EventBus };
+export type { WorkerGlobal } from 'sys.types';
 
 type Id = string;
 
