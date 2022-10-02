@@ -14,9 +14,11 @@
 <style>
   .main {
     font-family: sans-serif;
-    padding: 50px;
+    padding-top: 30px;
+    padding-left: 45px;
   }
   h1 {
+    font-size: 60px;
     color: red;
   }
 </style>
