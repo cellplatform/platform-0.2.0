@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "serve": "cd dist && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
@@ -17,8 +18,8 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/index.d.mts",
+  "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/assets/index.44188579.js"
   }
 }
