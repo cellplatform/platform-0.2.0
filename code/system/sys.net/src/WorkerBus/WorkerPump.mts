@@ -45,6 +45,9 @@ const Is = {
 export const WorkerPump = {
   Is,
 
+  /**
+   * Create a new pump within the [Main] window thread.
+   */
   main(args: { worker: Worker; bus: t.EventBus<any>; dispose$?: t.Observable<any> }): t.WorkerPump {
     const { worker, bus, dispose$ } = args;
     const id = MAIN;
@@ -54,7 +57,7 @@ export const WorkerPump = {
   },
 
   /**
-   * Create a new pump instance.
+   * Create a new pump within a [Worker] thread.
    */
   worker(args: {
     ctx: CtxWorker;
