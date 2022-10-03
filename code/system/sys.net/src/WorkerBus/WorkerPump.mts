@@ -49,11 +49,7 @@ export const WorkerPump = {
     const { worker, bus, dispose$ } = args;
     const id = MAIN;
     const message$ = new Subject<MessageEvent>();
-    args.worker.onmessage = (e) => {
-      message$.next(e);
-      console.log('e.data', e.data);
-      console.log('|||', e);
-    };
+    args.worker.onmessage = (e) => message$.next(e);
     return monitor({ id, bus, dispose$, message$, post: (e) => worker.postMessage(e) });
   },
 
