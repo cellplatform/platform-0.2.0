@@ -1,11 +1,9 @@
 import { WorkerBus } from 'sys.net';
 import { rx } from 'sys.util';
 import { WorkerGlobal } from 'sys.types';
-import * as t from './common/types.mjs';
-
-const ctx: WorkerGlobal = self as any;
 
 const bus = rx.bus();
+const ctx: WorkerGlobal = self as any;
 const pump = WorkerBus.Pump.worker({ ctx, bus });
 
 bus.$.subscribe((e) => {
