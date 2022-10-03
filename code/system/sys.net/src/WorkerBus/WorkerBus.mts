@@ -1,5 +1,5 @@
-import { WorkerTransport as Transport } from './WorkerTransport.mjs';
+import { WorkerPump as Pump } from './WorkerPump.mjs';
 
 export const WorkerBus = {
-  Transport,
+  Pump,
 };
