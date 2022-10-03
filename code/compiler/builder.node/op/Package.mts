@@ -73,7 +73,7 @@ export const Package = {
   /**
    * Parse a "/src/" file path into type parts.
    */
-  toTypeFile(src: t.PathString) {
+  toTypeFile(src: t.PathString = '') {
     const key = src
       .replace(/^\.\//, '')
       .replace(/^src\//, '')

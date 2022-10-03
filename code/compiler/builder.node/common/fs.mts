@@ -8,11 +8,9 @@ import path from 'path';
 export const fs = {
   ...fsextra,
   ...path,
-  glob: {
-    find(pattern: string) {
-      return new Promise<string[]>((resolve, reject) => {
-        glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
-      });
-    },
+  glob(pattern: string) {
+    return new Promise<string[]>((resolve, reject) => {
+      glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
+    });
   },
 };

@@ -1,7 +1,4 @@
-import { pc, fs, glob, filesize, Sort } from './libs.mjs';
-
-type Package = { name: string; dependencies?: PackageDeps; devDependencies?: PackageDeps };
-type PackageDeps = { [key: string]: string };
+import { pc, fs, glob, filesize } from './libs.mjs';
 
 export const Util = {
   async loadPackageJson() {

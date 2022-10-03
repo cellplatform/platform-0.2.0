@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "vite preview",
+    "preview": "vite preview",
+    "serve": "cd dist && serve -p 1234",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
@@ -24,6 +25,14 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.b891d715.js"
+    ".": "./dist/assets/index.0026b870.js",
+    "./main/main": "./dist/assets/main.493a9696.js"
+  },
+  "typesVersions": {
+    "*": {
+      "main/main": [
+        "./dist/types.d/main/main.d.mts"
+      ]
+    }
   }
 }

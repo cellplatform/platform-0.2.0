@@ -4,7 +4,7 @@
 
 <main>
   <div class="main">
-    <h1>My Title</h1>
+    <h1>Hello World (Svelte)</h1>
     <div>
       <Counter />
     </div>
@@ -14,9 +14,11 @@
 <style>
   .main {
     font-family: sans-serif;
-    padding: 50px;
+    padding-top: 30px;
+    padding-left: 45px;
   }
   h1 {
+    font-size: 60px;
     color: red;
   }
 </style>

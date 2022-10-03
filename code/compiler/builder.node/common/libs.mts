@@ -5,8 +5,9 @@ import { execa } from 'execa';
 import pc from 'picocolors';
 import rimraf from 'rimraf';
 import semver from 'semver';
+import prettybytes from 'pretty-bytes';
 
 /**
  * @vendor
  */
-export { pc, execa, rimraf, semver };
+export { pc, execa, rimraf, semver, prettybytes };

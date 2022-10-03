@@ -7,6 +7,8 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "deploy-sample": "ts-node-esm -T script.ts/deploy.sample.mts",
+    "deploy-crdt": "ts-node-esm -T script.ts/deploy.crdt.mts",
     "tmp": "ts-node-esm -T script.ts/tmp.mts"
   },
   "dependencies": {

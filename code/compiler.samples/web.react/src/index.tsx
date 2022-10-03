@@ -1,20 +1,7 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+export {};
 
-import { Foo } from './Foo';
-import workerUrl from './Worker.mjs?worker&url';
+import { Pkg } from './index.pkg.mjs';
+console.info(`Pkg:`, Pkg);
 
-/**
- * Init
- */
-const root = createRoot(document.getElementById('root')!);
-root.render(<Foo />);
-
-/**
- * Sample worker instantiation.
- */
-const worker = new Worker(workerUrl, { type: 'module' });
-
-console.log('-------------------------------------------');
-console.log('workerUrl:', workerUrl);
-console.log('worker (instance on main): ', worker);
+import('./ui/entry');
+import('./main/main.mjs');

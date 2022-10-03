@@ -1,4 +1,4 @@
-import { fs, t } from '../common/index.mjs';
+import { fs, t, pc, Util } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
 import { PackageRoot } from '../op/Package.Root.mjs';
 import { PackageDist } from '../op/Packge.Dist.mjs';
@@ -46,6 +46,19 @@ export async function build(
   // await BuildManifest.generate(dir);
 
   // Finish up.
-  if (!silent) console.info('');
+  if (!silent) {
+    const size = await Util.folderSize(fs.join(dir, 'dist'));
+    const totalBundle = size.paths.filter((p) => !p.includes('/types.d/')).length;
+    const totalTypes = size.paths.filter((p) => p.includes('/types.d/')).length;
+
+    const prefix = pc.bgCyan(pc.bold(' dist '));
+    const filesize = pc.bold(pc.white(size.toString()));
+    const total = `${totalBundle} files, ${totalTypes} typefiles`;
+
+    console.info(``);
+    console.info(pc.gray(`${prefix} ${filesize}`));
+    console.info(pc.gray(`       ${total}`));
+    console.info(``);
+  }
   return { ok: true, errorCode: 0 };
 }
