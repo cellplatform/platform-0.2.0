@@ -14,8 +14,8 @@ bus.$.subscribe((e) => {
  * Log worker init.
  */
 console.group('💦 worker');
+console.info(`- bus:`, bus);
 console.info('- pump:', pump);
-console.info(`- localbus:`, bus);
 console.info('- self:', self);
 console.groupEnd();
 
