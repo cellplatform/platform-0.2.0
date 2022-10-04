@@ -61,7 +61,7 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} data-tauri-drag-region>
       <img src={iconLogoUrl} {...styles.logoCellIcon} />
       <div {...styles.divider} />
       <div {...styles.titleCell}>cell</div>

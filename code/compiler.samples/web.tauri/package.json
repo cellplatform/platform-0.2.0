@@ -20,6 +20,18 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.44188579.js"
+    ".": "./dist/assets/index.42f3c28d.js",
+    "./main/index": "./dist/assets/index.9b9a1856.js",
+    "./ui/App/index": "./dist/assets/index.7d89ba56.js"
+  },
+  "typesVersions": {
+    "*": {
+      "main/index": [
+        "./dist/types.d/main/index.d.mts"
+      ],
+      "ui/App/index": [
+        "./dist/types.d/ui/App/index.d.mts"
+      ]
+    }
   }
 }

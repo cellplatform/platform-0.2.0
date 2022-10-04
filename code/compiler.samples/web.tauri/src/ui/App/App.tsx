@@ -23,7 +23,7 @@ export const App: React.FC<AppProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} data-tauri-drag-region>
+    <div {...css(styles.base, props.style)}>
       <AppBody />
     </div>
   );

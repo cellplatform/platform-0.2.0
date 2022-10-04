@@ -6,13 +6,12 @@ import { createRoot } from 'react-dom/client';
  */
 (async () => {
   const root = createRoot(document.getElementById('root')!);
+
   const withinTauri = Boolean((window as any).__TAURI_IPC__);
 
   if (withinTauri) {
     import('./main/index.mjs');
     const { App } = await import('./ui/App/index.mjs');
-    // const m = await import('./ui/App/index.mjs');
-    // console.log('m', m);
     root.render(<App version={await getVersion()} />);
   }
 
