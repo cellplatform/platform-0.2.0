@@ -1,7 +1,5 @@
-import { rx, slug, t, Time, WorkerBus } from './common/index.mjs';
+import { rx, slug, Time, WorkerBus } from './common/index.mjs';
 import workerUrl from './worker.mjs?worker&url';
-
-const workerbus = rx.bus<t.NetworkMessageEvent>();
 
 /**
  * Sample worker instantiation.
@@ -13,11 +11,13 @@ const bus = rx.bus();
 const pump = WorkerBus.Pump.main({ worker, bus });
 bus.$.subscribe((e) => console.info(`🌼 bus:`, e.payload));
 
+console.log('worker', worker);
+
 /**
  * Log worker init.
  */
 console.group('🌼 main');
-console.info(`- bus:`, workerbus);
+console.info(`- bus:`, bus);
 console.info(`- pump:`, pump);
 console.info('- workerId:', workerId);
 console.info('- workerUrl:', workerUrl);

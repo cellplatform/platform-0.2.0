@@ -2,39 +2,13 @@ import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { rx, slug, t } from '../common/index.mjs';
+import { Is } from './Is.mjs';
 
 const DEFAULTS = {
   MAIN: 'Main',
 };
 
 type Id = string;
-type CtxWorker = {
-  name: string;
-  addEventListener: Worker['addEventListener'];
-  postMessage: Worker['postMessage'];
-};
-
-type WorkerPump = t.Disposable & {
-  id: Id;
-  fire(event: t.Event, options?: { tx?: Id; target?: Id }): t.NetworkMessageEvent;
-};
-
-const Is = {
-  main(self: any) {
-    return self.window === self && self.document;
-  },
-  worker(self: any) {
-    return self.self === self && !self.window;
-  },
-  messageEvent(data: any) {
-    const type: t.NetworkMessageEvent['type'] = 'sys.net/msg';
-    if (typeof data !== 'object') return false;
-    if (data.type !== type) return false;
-    if (typeof data.payload.sender !== 'string') return false;
-    if (typeof data.payload.tx !== 'string') return false;
-    return rx.isEvent(data.payload.event);
-  },
-};
 
 /**
  * And [EventPump] that ferries "Network Message" events between an
@@ -48,11 +22,19 @@ export const WorkerPump = {
   /**
    * Create a new pump within the [Main] window thread.
    */
-  main(args: { worker: Worker; bus: t.EventBus<any>; dispose$?: t.Observable<any> }): t.WorkerPump {
+  main(args: {
+    worker: t.WorkerInstance;
+    bus: t.EventBus<any>;
+    dispose$?: t.Observable<any>;
+  }): t.WorkerPump {
     const { worker, bus, dispose$ } = args;
     const id = DEFAULTS.MAIN;
     const message$ = new Subject<MessageEvent>();
-    args.worker.onmessage = (e) => message$.next(e);
+    const originalOnMessage = args.worker.onmessage;
+    args.worker.onmessage = (e) => {
+      if (originalOnMessage) originalOnMessage.call(worker as any, e);
+      message$.next(e);
+    };
     return monitor({ id, bus, dispose$, message$, post: (e) => worker.postMessage(e) });
   },
 
@@ -60,7 +42,7 @@ export const WorkerPump = {
    * Create a new pump within a [Worker] thread.
    */
   worker(args: {
-    ctx: CtxWorker;
+    ctx: t.WorkerSelf;
     bus: t.EventBus<any>;
     dispose$?: t.Observable<any>;
   }): t.WorkerPump {
