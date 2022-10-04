@@ -16,6 +16,6 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./src/index.mjs"
+    ".": "./dist/index.js"
   }
 }
