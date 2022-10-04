@@ -1,4 +1,4 @@
-import { Disposable } from 'sys.types';
+import type { Disposable } from 'sys.types';
 import { Observable, Subject } from 'rxjs';
 
 export const Dispose = {
