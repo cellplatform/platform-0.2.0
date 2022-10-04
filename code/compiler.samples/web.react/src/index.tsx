@@ -4,4 +4,4 @@ import { Pkg } from './index.pkg.mjs';
 console.info(`Pkg:`, Pkg);
 
 import('./ui/entry');
-import('./main/main.mjs');
+import('./main/entry.mjs');

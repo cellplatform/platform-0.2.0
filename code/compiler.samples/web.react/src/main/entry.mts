@@ -1,0 +1,1 @@
+import('./worker.main.mjs');
