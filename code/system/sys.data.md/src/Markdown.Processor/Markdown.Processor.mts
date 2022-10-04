@@ -37,7 +37,9 @@ export const MarkdownProcessor = {
 
 const Util = {
   get processor(): Processor {
-    if (!_processor) _processor = unified().use(markdown).use(remark2rehype).use(format).use(html);
+    if (!_processor) {
+      _processor = unified().use(markdown).use(remark2rehype).use(format).use(html);
+    }
     return _processor;
   },
 
