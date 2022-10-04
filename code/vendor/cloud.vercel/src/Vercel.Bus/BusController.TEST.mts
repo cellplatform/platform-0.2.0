@@ -1,4 +1,4 @@
-import { describe, expect, it, rx, t, TestFilesystem } from '../Test/index.mjs';
+import { describe, expect, it, rx, t, TestFilesystem } from '../test/index.mjs';
 import { DEFAULT } from './common.mjs';
 import { BusController, BusEvents } from './index.mjs';
 

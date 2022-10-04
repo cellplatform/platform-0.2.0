@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../Test/index.mjs';
+import { expect, describe, it } from '../test/index.mjs';
 import { toPositionEdges } from '../Css/index.mjs';
 import { Style } from '../index.mjs';
 

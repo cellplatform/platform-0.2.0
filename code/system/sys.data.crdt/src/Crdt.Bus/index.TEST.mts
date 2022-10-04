@@ -1,5 +1,5 @@
 import { CrdtBus } from './index.mjs';
-import { Automerge, cuid, expect, Is, Pkg, rx, t, describe, it } from '../Test/index.mjs';
+import { Automerge, cuid, expect, Is, Pkg, rx, t, describe, it } from '../test/index.mjs';
 
 type Doc = { count: number; msg?: string };
 

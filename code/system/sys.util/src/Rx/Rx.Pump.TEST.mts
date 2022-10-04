@@ -1,6 +1,6 @@
 import type * as t from 'sys.types';
 
-import { expect, describe, it } from '../Test/index.mjs';
+import { expect, describe, it } from '../test/index.mjs';
 import { rx } from './index.mjs';
 
 import { Pump } from './Rx.Pump.mjs';
