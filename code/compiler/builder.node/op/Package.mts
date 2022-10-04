@@ -18,8 +18,6 @@ export const Package = {
     const files = Object.keys(manifest).map((key) => manifest[key]);
     let pkg = args.pkg;
 
-    console.log('root', root);
-
     pkg = { ...pkg };
     delete pkg.exports;
     delete pkg.types;
@@ -39,8 +37,6 @@ export const Package = {
 
     const entry = files.find((file) => file.isEntry);
     if (!entry) throw new Error(`Entry file not found. Package: ${pkg.name}`);
-
-    console.log('files', files);
 
     const entryType = Package.toTypeFile(entry.src);
     const exports: t.PkgJsonExports = {};

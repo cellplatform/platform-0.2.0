@@ -24,11 +24,11 @@ export const Typescript = {
 
     if (!silent) {
       const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
-      console.log(msg);
+      console.info(msg);
     }
 
     if (!(await fs.pathExists(root))) {
-      console.log(`\nERROR(Typescript.build) root directory does not exist.\n${root}\n`);
+      console.error(`\nERROR(Typescript.build) root directory does not exist.\n${root}\n`);
       if (options.exitOnError) process.exit(1);
     }
 
