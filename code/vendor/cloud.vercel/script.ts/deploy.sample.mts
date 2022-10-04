@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
-import { rx, Vercel } from 'cloud.vercel';
+import { Vercel } from 'cloud.vercel';
 import { Filesystem } from 'sys.fs.node';
-import { Time } from 'sys.util';
+import { Time, rx } from 'sys.util';
 
 import { Util } from './common.mjs';
 
@@ -20,7 +20,7 @@ const now = Time.now.format('hh:mm');
 console.info('now:', now);
 
 /**
- * Copy source content
+ * Copy source content (local)
  */
 await fs.delete('tmp');
 const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
