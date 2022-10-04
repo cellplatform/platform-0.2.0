@@ -18,8 +18,7 @@ export const PackageRoot = {
     const pkg = await Util.PackageJson.load(root);
 
     const subdir = Paths.dist;
-    const updated = await Package.updateEsmEntries({ root, pkg, manifest, subdir });
-
-    await Util.PackageJson.save(root, updated);
+    const esm = await Package.updateEsmEntries({ root, pkg, manifest, subdir, use: 'src' });
+    await Util.PackageJson.save(root, esm);
   },
 };
