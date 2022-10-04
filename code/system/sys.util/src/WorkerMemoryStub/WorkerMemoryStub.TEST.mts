@@ -4,7 +4,7 @@ import { t } from '../common/index.mjs';
 import { Time } from '../Time/index.mjs';
 import { WorkerMemoryStub } from './index.mjs';
 
-describe.only('WorkerMemoryStub', () => {
+describe('WorkerMemoryStub', () => {
   it('adds worker to list and initialized with self/context', () => {
     const stub = WorkerMemoryStub();
     expect(stub.workers).to.eql([]);
