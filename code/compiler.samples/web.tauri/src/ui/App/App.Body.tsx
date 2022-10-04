@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, FC } from '../../common/index.mjs';
+import { Filesystem } from '../../main/Filesystem.mjs';
 
 import iconLogoUrl from '../../assets/favicon.png?url';
-// import { COLORS, css, t } from '../../common/index.mjs';
 
 export type AppBodyProps = { style?: t.CssValue };
 
 export const AppBody: React.FC<AppBodyProps> = (props) => {
+  /**
+   * Handlers
+   */
+  const onSampleFilesystemClick = async () => {
+    await Filesystem.tmpSample();
+  };
+
   /**
    * [Render]
    */
@@ -58,6 +65,11 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
       backgroundColor: COLORS.DARK,
       opacity: 0.0,
     }),
+    tmp: css({
+      Absolute: [20, null, null, 20],
+      cursor: 'pointer',
+      ':hover': { color: COLORS.BLUE },
+    }),
   };
 
   return (
@@ -67,6 +79,9 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
       <div {...styles.titleCell}>cell</div>
       <div {...styles.titleRuntime}>
         <span style={{ opacity: 0.2 }}>system.</span>runtime
+      </div>
+      <div {...styles.tmp}>
+        <div onClick={onSampleFilesystemClick}>run: fs sample</div>
       </div>
     </div>
   );
