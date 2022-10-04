@@ -69,7 +69,7 @@ export const WorkerPump = {
 
     if (!Is.worker(ctx)) throw new Error(`Worker context not specified`);
     if (!id) throw new Error(`Workers must have an id (no "name" value found)`);
-    if (id === MAIN) throw new Error(`Worker name (id) cannot be "Main"`);
+    if (id === DEFAULTS.MAIN) throw new Error(`Worker name (id) cannot be "Main"`);
 
     const message$ = new Subject<MessageEvent>();
     ctx.addEventListener('message', (message) => message$.next(message));
