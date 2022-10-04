@@ -1,6 +1,5 @@
 import { rx, slug, Time, WorkerBus } from '../common/index.mjs';
 import workerUrl from './worker.thread.mjs?worker&url';
-import { Filesystem } from './Filesystem.mjs';
 
 /**
  * Sample worker instantiation.
@@ -18,8 +17,8 @@ bus.$.subscribe((e) => console.info(`🌼 bus:`, e.payload));
 console.group('🌼 main');
 console.info(`- bus:`, bus);
 console.info(`- pump:`, pump);
-console.info('- workerId:', workerId);
-console.info('- workerUrl:', workerUrl);
+console.info('- worker id:', workerId);
+console.info('- worker url:', workerUrl);
 console.info('- worker instance: ', worker);
 console.groupEnd();
 
@@ -35,12 +34,3 @@ Time.delay(800, () => {
     { target: workerId },
   );
 });
-
-/**
- * IndexedDB
- */
-(async () => {
-  // const m = await Filesystem.indexedDb({ bus });
-  // console.log('m', m);
-  // console.log('IndexedDB', window.indexedDB);
-})();
