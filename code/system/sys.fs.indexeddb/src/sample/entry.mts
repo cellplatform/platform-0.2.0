@@ -38,6 +38,5 @@ const fsRead = await fs.json.read(uri);
 console.log('read (fs):', fsRead);
 
 console.log('-------------------------------------------');
-
-const manifest = await fs.manifest();
-console.log('manifest', manifest);
+console.log('manifest', await fs.manifest());
+console.log('info', await fs.info('foo'));
