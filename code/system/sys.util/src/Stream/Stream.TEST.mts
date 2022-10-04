@@ -1,5 +1,5 @@
 import { Stream } from './index.mjs';
-import { expect, describe, it } from '../Test/index.mjs';
+import { expect, describe, it } from '../test/index.mjs';
 import { t, Json } from './common.mjs';
 
 describe('Stream', () => {
