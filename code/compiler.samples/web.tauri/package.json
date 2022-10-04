@@ -1,22 +1,17 @@
 {
-  "name": "sample.web.react",
+  "name": "sample.web.tauri",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
-    "serve": "cd dist && serve -p 1234",
+    "serve": "cd dist && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0",
-    "sys.util.css": "0.0.0",
-    "sys.util.react": "0.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -25,13 +20,17 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.372bb841.js",
-    "./main/main": "./dist/assets/main.e62970bb.js"
+    ".": "./dist/assets/index.42f3c28d.js",
+    "./main/index": "./dist/assets/index.9b9a1856.js",
+    "./ui/App/index": "./dist/assets/index.7d89ba56.js"
   },
   "typesVersions": {
     "*": {
-      "main/main": [
-        "./dist/types.d/main/main.d.mts"
+      "main/index": [
+        "./dist/types.d/main/index.d.mts"
+      ],
+      "ui/App/index": [
+        "./dist/types.d/ui/App/index.d.mts"
       ]
     }
   }

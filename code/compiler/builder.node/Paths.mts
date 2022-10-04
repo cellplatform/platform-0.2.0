@@ -29,11 +29,12 @@ export const Paths = {
     indexHtml: 'index.html',
     pkg: 'src/index.pkg.mts',
     src: [
+      'src/declare.d.ts',
       'src/index.mts',
       'src/index.pkg.mts',
       'src/index.TEST.mts',
       'src/types.mts',
-      'src/Test/index.mts',
+      'src/test/index.mts',
       'src/common/index.mts',
       'src/common/libs.mts',
       'src/common/types.mts',

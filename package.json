@@ -13,6 +13,7 @@
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
   "dependencies": {
+    "@tauri-apps/api": "1.1.0",
     "asmcrypto.js": "^2.3.2",
     "automerge": "^1.0.1-preview.7",
     "cli-table3": "^0.6.2",

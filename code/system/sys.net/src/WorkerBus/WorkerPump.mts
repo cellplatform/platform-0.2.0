@@ -3,7 +3,9 @@ import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { rx, slug, t } from '../common/index.mjs';
 
-const MAIN = 'Main';
+const DEFAULTS = {
+  MAIN: 'Main',
+};
 
 type Id = string;
 type CtxWorker = {
@@ -36,21 +38,19 @@ const Is = {
 
 /**
  * And [EventPump] that ferries "Network Message" events between an
- * event-bus and the WebWorker mechanics.
+ * event-bus and the W3C [WebWorker] mechanics.
  *
  * REFS:
  *   - https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
  *
  */
 export const WorkerPump = {
-  Is,
-
   /**
    * Create a new pump within the [Main] window thread.
    */
   main(args: { worker: Worker; bus: t.EventBus<any>; dispose$?: t.Observable<any> }): t.WorkerPump {
     const { worker, bus, dispose$ } = args;
-    const id = MAIN;
+    const id = DEFAULTS.MAIN;
     const message$ = new Subject<MessageEvent>();
     args.worker.onmessage = (e) => message$.next(e);
     return monitor({ id, bus, dispose$, message$, post: (e) => worker.postMessage(e) });
@@ -69,12 +69,17 @@ export const WorkerPump = {
 
     if (!Is.worker(ctx)) throw new Error(`Worker context not specified`);
     if (!id) throw new Error(`Workers must have an id (no "name" value found)`);
-    if (id === MAIN) throw new Error(`Worker name (id) cannot be "Main"`);
+    if (id === DEFAULTS.MAIN) throw new Error(`Worker name (id) cannot be "Main"`);
 
     const message$ = new Subject<MessageEvent>();
     ctx.addEventListener('message', (message) => message$.next(message));
     return monitor({ id, bus, dispose$, message$, post: (e) => ctx.postMessage(e) });
   },
+
+  /**
+   * Meta
+   */
+  is: Is,
 };
 
 /**
