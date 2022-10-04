@@ -10,3 +10,4 @@ export { Sort } from './Sort/index.mjs';
 export { Stream } from './Stream/index.mjs';
 export { Time } from './Time/index.mjs';
 export { Value, asArray } from './Value/index.mjs';
+export { WorkerMemoryStub } from './WorkerMemoryStub/index.mjs';
