@@ -1,4 +1,4 @@
-import { describe, it, expect, render } from '../Test/index.mjs';
+import { describe, it, expect, render } from '../test/index.mjs';
 import { MarkdownUI } from './index.mjs';
 
 describe('MarkdownUI', () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from './Test/index.mjs';
+import { describe, it, expect } from './test/index.mjs';
 import { Filesystem } from './Filesystem.mjs';
 
 describe('Filesystem (IndexedDB)', () => {

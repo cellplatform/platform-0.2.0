@@ -1,4 +1,4 @@
-import { describe, it, expect, t, TestPrep, MemoryMock } from '../Test/index.mjs';
+import { describe, it, expect, t, TestPrep, MemoryMock } from '../test/index.mjs';
 
 describe('BusController.Change', function () {
   async function testChangeSetup<T extends t.FsBusChange>() {

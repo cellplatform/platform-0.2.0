@@ -1,4 +1,4 @@
-import { describe, expect, it, TestUtil } from '../../Test/index.mjs';
+import { describe, expect, it, TestUtil } from '../../test/index.mjs';
 import { Util } from './common/index.mjs';
 import { VercelHttp } from './index.mjs';
 

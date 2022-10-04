@@ -1,5 +1,5 @@
 import { Automerge } from '../common/index.mjs';
-import { describe, expect, it } from '../Test/index.mjs';
+import { describe, expect, it } from '../test/index.mjs';
 import { AutomergeDoc } from './index.mjs';
 
 describe('AutomergeDoc (helpers)', () => {

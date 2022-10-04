@@ -1,6 +1,6 @@
 import { Hash, ManifestHash, Path, slug, t, Time } from '../common/index.mjs';
 import { IndexedDbDriver } from './index.mjs';
-import { deleteAll, describe, expect, it, MemoryMock } from '../Test/index.mjs';
+import { deleteAll, describe, expect, it, MemoryMock } from '../test/index.mjs';
 
 describe('FsIndexer (IndexedDB)', () => {
   const EMPTY_HASH = Hash.sha256([]);

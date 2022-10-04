@@ -1,6 +1,6 @@
 import { Filesystem, NodeDriver } from './index.mjs';
 import { NodeFs } from './node/index.mjs';
-import { describe, expect, it, MemoryMock, Path } from './Test/index.mjs';
+import { describe, expect, it, MemoryMock, Path } from './test/index.mjs';
 
 describe('Filesystem (Node)', () => {
   it('Filesystem.Driver', () => {

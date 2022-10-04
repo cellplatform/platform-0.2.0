@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../Test/index.mjs';
+import { describe, expect, it } from '../test/index.mjs';
 import { Filesystem } from '../index.mjs';
 import { Filesize } from './index.mjs';
 

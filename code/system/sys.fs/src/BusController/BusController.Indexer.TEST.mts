@@ -1,4 +1,4 @@
-import { describe, it, DEFAULT, expect, Hash, t, TestPrep, MemoryMock } from '../Test/index.mjs';
+import { describe, it, DEFAULT, expect, Hash, t, TestPrep, MemoryMock } from '../test/index.mjs';
 
 import { ManifestFiles } from '../Manifest/index.mjs';
 import { Path } from './common.mjs';

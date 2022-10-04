@@ -1,4 +1,4 @@
-import { describe, it, expect, slug } from '../Test/index.mjs';
+import { describe, it, expect, slug } from '../test/index.mjs';
 import { IndexedDbDriver } from './index.mjs';
 
 describe('FsDriver (IndexedDb)', () => {

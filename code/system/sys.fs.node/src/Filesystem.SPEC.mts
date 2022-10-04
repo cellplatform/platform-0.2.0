@@ -1,7 +1,7 @@
 import { Spec } from 'sys.fs.spec';
 
 import { NodeDriver, NodeFs } from './index.mjs';
-import { describe, it, Path, t } from './Test/index.mjs';
+import { describe, it, Path, t } from './test/index.mjs';
 
 /**
  * Baseline functional specifications from [sys.fs].

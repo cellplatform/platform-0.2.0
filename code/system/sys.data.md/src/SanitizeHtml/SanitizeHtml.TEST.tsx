@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { describe, expect, it, render } from '../Test/index.mjs';
+import { describe, expect, it, render } from '../test/index.mjs';
 import { SanitizeHtml } from './index.mjs';
 
 describe('SanitizeHtml', () => {
