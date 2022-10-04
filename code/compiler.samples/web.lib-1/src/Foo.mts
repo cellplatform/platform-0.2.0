@@ -1,5 +1,5 @@
 export const Foo = {
-  count: 0,
+  count: 1234,
 };
 
 export default Foo;

@@ -11,11 +11,14 @@ export const Package = {
     pkg: t.PkgJson;
     manifest: t.ViteManifest;
     subdir?: string; // eg. '/dist/' if building a [package.json] at a higher level that the 'dist/' folder itself.
+    use: 'src' | 'dist';
   }) {
-    const { subdir, manifest } = args;
+    const { subdir, manifest, use } = args;
     const root = fs.resolve(args.root);
     const files = Object.keys(manifest).map((key) => manifest[key]);
     let pkg = args.pkg;
+
+    console.log('root', root);
 
     pkg = { ...pkg };
     delete pkg.exports;
@@ -23,6 +26,12 @@ export const Package = {
     delete pkg.typesVersions;
 
     const ensureRelative = Util.ensureRelativeRoot;
+
+    const toPath = (item: t.ViteManifestFile) => {
+      if (use === 'src') return Util.ensureRelativeRoot(item.src.replace(/\.mts$/, '.mjs'));
+      return formatPath(item.file);
+    };
+
     const formatPath = (path: string) => {
       if (subdir) path = fs.join(subdir, path);
       return Util.ensureRelativeRoot(path);
@@ -31,6 +40,8 @@ export const Package = {
     const entry = files.find((file) => file.isEntry);
     if (!entry) throw new Error(`Entry file not found. Package: ${pkg.name}`);
 
+    console.log('files', files);
+
     const entryType = Package.toTypeFile(entry.src);
     const exports: t.PkgJsonExports = {};
     const typesFiles: t.PkgJsonTypesVersionsFiles = {};
@@ -38,9 +49,9 @@ export const Package = {
 
     for (const item of files) {
       const type = await Package.findTypePath(subdir ? fs.join(root, subdir) : root, item.src);
-      if (item.isEntry) exports['.'] = formatPath(item.file);
+      if (item.isEntry) exports['.'] = toPath(item);
       if (type) {
-        if (item.isDynamicEntry) exports[ensureRelative(type.key)] = formatPath(item.file);
+        if (item.isDynamicEntry) exports[ensureRelative(type.key)] = toPath(item);
         if (type.filepath !== entryType.filepath) {
           typesFiles[type.key] = [formatPath(type.filepath)];
         }
