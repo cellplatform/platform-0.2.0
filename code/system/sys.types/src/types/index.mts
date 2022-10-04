@@ -5,4 +5,3 @@ export * from './types.event.pump.mjs';
 export * from './types.json.mjs';
 export * from './types.partial.mjs';
 export * from './types.pkg.mjs';
-export * from './types.std.web.mjs';
