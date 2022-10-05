@@ -19,7 +19,7 @@ export const PackageDist = {
 
     // Update and save.
     root = fs.resolve(root, Paths.dist);
-    const esm = await Package.updateEsmEntries({ root, pkg, manifest, use: 'dist' });
+    const esm = await Package.updateEsmEntries({ root, pkg, manifest });
     await Util.PackageJson.save(root, esm);
   },
 };
