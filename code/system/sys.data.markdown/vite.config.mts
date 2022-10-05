@@ -12,8 +12,8 @@ export default Config.vite(import.meta.url, (e) => {
    *      /dist/node
    *
    * - Exports:
-   *      import { Markdown } from 'sys.data.md/web`
-   *      import { Markdown } from 'sys.data.md/node`
+   *      import { Markdown } from 'sys.data.markdown/web`
+   *      import { Markdown } from 'sys.data.markdown/node`
    */
   // e.env('web');
   e.env('node');
