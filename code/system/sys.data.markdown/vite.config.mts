@@ -2,7 +2,7 @@ import { Config } from '../../../config.mjs';
 
 export default Config.vite(import.meta.url, (e) => {
   e.lib();
-  e.addExternalDependency(e.ctx.deps.filter((d) => d.name.startsWith('sys.')).map((d) => d.name));
+  e.externalDependency(e.ctx.deps.filter((d) => d.name.startsWith('sys.')).map((d) => d.name));
 
   /**
    * TODO 🐷

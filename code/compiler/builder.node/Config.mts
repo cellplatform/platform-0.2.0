@@ -131,7 +131,7 @@ export const Config = {
             .filter((name) => !plugins.includes(name))
             .forEach((name) => plugins.push(name));
         },
-        addExternalDependency(moduleName) {
+        externalDependency(moduleName) {
           R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));

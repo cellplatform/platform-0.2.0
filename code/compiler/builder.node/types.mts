@@ -52,7 +52,7 @@ export type ModifyViteConfigArgs = {
   target(...target: ViteTarget[]): void;
   plugin(...kind: VitePlugin[]): void;
   lib(options?: { name?: string; entry?: string; outname?: string }): void;
-  addExternalDependency(moduleName: string | string[]): void;
+  externalDependency(moduleName: string | string[]): void;
 };
 export type ModifyViteConfigCtx = {
   readonly name: PkgJson['name'];
