@@ -1,4 +1,5 @@
 export {};
+import { Pkg } from './index.pkg.mjs';
 
 export const Root = {
   async loadFoo() {
@@ -8,4 +9,4 @@ export const Root = {
 
 export default Root;
 
-console.log('Root', Root);
+console.info('Package:', Pkg.name, Pkg.version);

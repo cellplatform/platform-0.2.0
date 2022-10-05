@@ -19,8 +19,8 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./src/index.mjs",
-    "./Foo": "./src/Foo.mjs"
+    ".": "./dist/index.js",
+    "./Foo": "./dist/Foo.4b5e1830.js"
   },
   "typesVersions": {
     "*": {
