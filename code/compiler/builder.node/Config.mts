@@ -59,7 +59,7 @@ export const Config = {
          */
         env(...target) {
           const env = R.uniq(target);
-          const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
+          const is = (...items: t.TsEnv[]) => items.some((name) => env.includes(name));
 
           if (is('web')) {
             api.edit((tsconfig) => ensureLibs(tsconfig, 'DOM', 'DOM.Iterable', 'WebWorker'));
@@ -67,6 +67,10 @@ export const Config = {
 
           if (is('web:react')) {
             api.edit((tsconfig) => (tsconfig.compilerOptions.jsx = 'react-jsx'));
+          }
+
+          if (is('web:svelte')) {
+            // Placeholder.
           }
         },
       };
@@ -85,11 +89,13 @@ export const Config = {
     return defineConfig(async ({ command, mode }) => {
       const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
-      const env: t.BuilderEnv[] = [];
       const deps = [
         ...toDepsList(false, pkg.dependencies),
         ...toDepsList(true, pkg.devDependencies),
       ];
+
+      const targets: t.ViteTarget[] = [];
+      const plugins: t.VitePlugin[] = [];
 
       /**
        * Vite configuration.
@@ -115,15 +121,20 @@ export const Config = {
        */
       const args: t.ModifyViteConfigArgs = {
         ctx: R.clone({ name, command, mode, config, pkg, deps }),
+        target(...target) {
+          R.uniq(target)
+            .filter((name) => !targets.includes(name))
+            .forEach((name) => targets.push(name));
+        },
+        plugin(...kind) {
+          R.uniq(kind)
+            .filter((name) => !plugins.includes(name))
+            .forEach((name) => plugins.push(name));
+        },
         addExternalDependency(moduleName) {
           R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
-        },
-        env(...target) {
-          R.uniq(target)
-            .filter((name) => !env.includes(name))
-            .forEach((name) => env.push(name));
         },
         lib(options = {}) {
           const { name = pkg.name, outname: fileName = 'index' } = options;
@@ -140,16 +151,28 @@ export const Config = {
       // Pass execution to the callback.
       await modify?.(args);
 
-      // Update configuration based on passed environment settings.
-      const is = (...items: t.BuilderEnv[]) => items.some((name) => env.includes(name));
-      if (is('web')) test.environment = 'jsdom';
-      if (is('node') && !is('web')) test.environment = 'node';
-      if (is('node')) build.ssr = true;
-      if (is('web:react')) {
+      /**
+       * Configure build/target environment.
+       */
+      const isTarget = (...items: t.ViteTarget[]) => {
+        if (targets.length === 0 && items.includes('web')) return true; // NB: Default "web" target if nothing specified.
+        return items.some((name) => targets.includes(name));
+      };
+      if (isTarget('web')) test.environment = 'jsdom';
+      if (isTarget('node') && !isTarget('web')) test.environment = 'node';
+      if (isTarget('node')) build.ssr = true;
+
+      /**
+       * Configure plugins.
+       */
+      const hasPlugin = (...items: t.VitePlugin[]) => items.some((name) => plugins.includes(name));
+
+      if (hasPlugin('web:react')) {
         const react = (await import('@vitejs/plugin-react')).default;
         config.plugins?.push(react());
       }
-      if (is('web:svelte')) {
+
+      if (hasPlugin('web:svelte')) {
         const svelte = (await import('@sveltejs/vite-plugin-svelte')).svelte;
         config.plugins?.push(svelte());
       }
