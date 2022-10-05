@@ -25,13 +25,17 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.372bb841.js",
-    "./main/main": "./dist/assets/main.e62970bb.js"
+    ".": "./dist/assets/index.87c7638c.js",
+    "./main/entry": "./dist/assets/entry.1cb668fe.js",
+    "./main/worker.main": "./dist/assets/worker.main.bd50df96.js"
   },
   "typesVersions": {
     "*": {
-      "main/main": [
-        "./dist/types.d/main/main.d.mts"
+      "main/entry": [
+        "./dist/types.d/main/entry.d.mts"
+      ],
+      "main/worker.main": [
+        "./dist/types.d/main/worker.main.d.mts"
       ]
     }
   }
