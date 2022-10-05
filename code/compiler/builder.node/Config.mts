@@ -19,7 +19,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['**/*.{TEST,SPEC}.{ts,tsx,mts,mtsx}'],
+        include: ['**/*.{TEST,SPEC}.{mts,tsx}'],
         environment: 'node',
       };
     },
@@ -31,7 +31,8 @@ export const Config = {
   vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig): UserConfigExport {
     const dir = toDirname(modulePath);
 
-    return defineConfig(async ({ command, mode }) => {
+    return defineConfig(async (e) => {
+      const { command, mode } = e;
       const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
       const deps = [
@@ -124,6 +125,7 @@ export const Config = {
       }
 
       // Finish up.
+      (config as any).__targets = targets;
       return config;
     });
   },

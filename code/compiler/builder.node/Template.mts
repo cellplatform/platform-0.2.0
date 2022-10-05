@@ -1,7 +1,7 @@
 import { fs, t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
-type TemplateKind = 'vite.config' | 'esm.json' | 'entry:src' | 'entry:html';
+type TemplateKind = 'config' | 'esm.json' | 'entry:src' | 'entry:html';
 
 /**
  * Template helpers.
@@ -32,8 +32,8 @@ export const Template = {
       await copyMaybe(Template.path(file), fs.join(targetDir, file));
     };
 
-    if (kind === 'vite.config') {
-      await copyFileMaybe(Paths.tmpl.viteConfig);
+    if (kind === 'config') {
+      await copyFileMaybe(Paths.tmpl.config);
       return;
     }
 
@@ -60,7 +60,7 @@ export const Template = {
    */
   async ensureBaseline(targetDir: t.DirString) {
     const ensure = Template.ensureExists;
-    await ensure('vite.config', targetDir);
+    await ensure('config', targetDir);
     await ensure('entry:src', targetDir);
     await ensure('entry:html', targetDir);
   },
