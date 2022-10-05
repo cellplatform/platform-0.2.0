@@ -158,6 +158,7 @@ export const Config = {
         if (targets.length === 0 && items.includes('web')) return true; // NB: Default "web" target if nothing specified.
         return items.some((name) => targets.includes(name));
       };
+
       if (isTarget('web')) test.environment = 'jsdom';
       if (isTarget('node') && !isTarget('web')) test.environment = 'node';
       if (isTarget('node')) build.ssr = true;
