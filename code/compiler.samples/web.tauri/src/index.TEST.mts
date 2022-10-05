@@ -1,4 +1,4 @@
-import { describe, expect, it, Pkg } from './test/index.mjs';
+import { describe, expect, it, Pkg, TestTauri} from './test/index.mjs';
 
 import * as fs from '@tauri-apps/api/fs';
 import { mockIPC } from '@tauri-apps/api/mocks';
