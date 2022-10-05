@@ -1,21 +1,25 @@
 {
-  "name": "sample.web.svelte",
+  "name": "sample.node.lib",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
-    "preview": "vite preview",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
+  },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/index.html.d.html",
+  "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/assets/index.3cd6a36e.js"
+    ".": "./dist/index.js"
   }
 }
