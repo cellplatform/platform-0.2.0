@@ -4,4 +4,5 @@ export const COLORS = {
   DARK: '#293042', // Inky blue/black.
   CYAN: '#00C2FF',
   MAGENTA: '#FE0064',
+  BLUE: '#4D7EF7',
 };

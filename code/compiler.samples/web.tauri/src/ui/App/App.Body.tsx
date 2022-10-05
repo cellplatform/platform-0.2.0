@@ -1,12 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../../common/index.mjs';
+import React from 'react';
 
 import iconLogoUrl from '../../assets/favicon.png?url';
-// import { COLORS, css, t } from '../../common/index.mjs';
+import { COLORS, css, FC, t } from '../../common/index.mjs';
+import { Sample } from '../../main/Sample.mjs';
 
 export type AppBodyProps = { style?: t.CssValue };
 
 export const AppBody: React.FC<AppBodyProps> = (props) => {
+  /**
+   * Handlers
+   */
+  const onSampleFilesystemClick = async () => {
+    await Sample.fs();
+  };
+
+  const onSampleDeploy = async () => {
+    // await Sample.tmpDeploy();
+    await Sample.tmp();
+  };
+
   /**
    * [Render]
    */
@@ -58,6 +70,14 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
       backgroundColor: COLORS.DARK,
       opacity: 0.0,
     }),
+    tmp: css({
+      Absolute: [20, null, null, 20],
+      lineHeight: 1.6,
+    }),
+    btn: css({
+      cursor: 'pointer',
+      ':hover': { color: COLORS.BLUE },
+    }),
   };
 
   return (
@@ -67,6 +87,14 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
       <div {...styles.titleCell}>cell</div>
       <div {...styles.titleRuntime}>
         <span style={{ opacity: 0.2 }}>system.</span>runtime
+      </div>
+      <div {...styles.tmp}>
+        <div {...styles.btn} onClick={onSampleFilesystemClick}>
+          {'run: filesystem sample'}
+        </div>
+        <div {...styles.btn} onClick={onSampleDeploy}>
+          {'run: deploy sample'}
+        </div>
       </div>
     </div>
   );

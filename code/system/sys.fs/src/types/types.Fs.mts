@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import type { t } from './common.mjs';
 
 type DirPath = string; //  Path to a directory, eg: "foo/"
 type FilePath = string; // Path to a file, eg: "foo/bar.txt"
