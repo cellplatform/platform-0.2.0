@@ -1,5 +1,16 @@
 import { CrdtBus } from './index.mjs';
-import { Automerge, cuid, expect, Is, Pkg, rx, t, describe, it } from '../test/index.mjs';
+import {
+  Automerge,
+  cuid,
+  expect,
+  Is,
+  Pkg,
+  rx,
+  t,
+  describe,
+  it,
+  TestFilesystem,
+} from '../test/index.mjs';
 
 type Doc = { count: number; msg?: string };
 
@@ -393,6 +404,29 @@ describe('CrdtBus', (e) => {
 
         expect(doc1.current).to.eql({ count: 123 });
         expect(doc2.current).to.eql({ count: 123 });
+
+        dispose();
+      });
+    });
+
+    describe('events.doc.save', () => {
+      it('save to path', async () => {
+        const { fs } = TestFilesystem.memory();
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const initial: Doc = { count: 0 };
+        const doc = await events.doc<Doc>({ id: '1', initial });
+
+        const res = await doc.save(fs, 'foo/file.crdt');
+
+        /**
+         * TODO 🐷
+         * CRDT save strategy
+         * https://github.com/cellplatform/platform-0.2.0/issues/53
+         */
+        console.log('-------------------------------------------');
+        console.log('res', res);
+        console.log('-------------------------------------------');
+        console.log('manifest (after)', await fs.manifest());
 
         dispose();
       });

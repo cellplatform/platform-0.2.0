@@ -52,6 +52,14 @@ export type CrdtDocEvents<T extends O> = {
   current: T;
   changed$: t.Observable<t.CrdtRefChanged<O>>;
   change(handler: t.CrdtChangeHandler<T>): Promise<T>;
+  save(fs: t.Fs, path: string): Promise<CrdtDocSaveRes>;
 };
 
 export type CrdtDocEventsArgs<T> = { id: DocumentId; initial: T | (() => T) };
+
+/**
+ * Save CRDT Document
+ */
+export type CrdtDocSaveRes = {
+  ok: boolean;
+};
