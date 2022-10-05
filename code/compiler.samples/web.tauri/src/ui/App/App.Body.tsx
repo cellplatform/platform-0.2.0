@@ -11,7 +11,7 @@ export const AppBody: React.FC<AppBodyProps> = (props) => {
    * Handlers
    */
   const onSampleFilesystemClick = async () => {
-    await Sample.tauriFs();
+    await Sample.fs();
   };
 
   const onSampleDeploy = async () => {

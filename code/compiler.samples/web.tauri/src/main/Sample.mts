@@ -14,7 +14,7 @@ export const Sample = {
    * 🐷 TEMP 🐷
    *  Sample filesystem interactions
    */
-  async tauriFs() {
+  async fs() {
     // TEMP 🐷
     const dir = fs.BaseDirectory.Document;
     const recursive = true;
@@ -58,7 +58,7 @@ export const Sample = {
   /**
    * Sample deploy
    */
-  async tmpDeploy(options: { fs?: t.Fs; bus?: t.EventBus<any> } = {}) {
+  async deploy(options: { fs?: t.Fs; bus?: t.EventBus<any> } = {}) {
     const bus = options.bus ?? rx.bus();
     const fs = options.fs ?? (await Sample.IndexedDbFilesystem());
 
