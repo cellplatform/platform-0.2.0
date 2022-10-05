@@ -26,61 +26,6 @@ export const Config = {
   },
 
   /**
-   * Typescript configuration modifier (tsconfig.json).
-   */
-  ts(modify: t.ModifyTsConfig): t.TsConfigExport {
-    return async (args) => {
-      const { kind } = args;
-
-      let _current = R.clone(args.config);
-
-      const ensureLibs = (input: t.TsConfig, ...items: string[]) => {
-        let next = input;
-        let lib = next.compilerOptions.lib || (next.compilerOptions.lib = []);
-        next.compilerOptions.lib = R.uniq([...lib, ...items]);
-        return next;
-      };
-
-      const api: t.ModifyTsConfigArgs = {
-        kind,
-
-        get current() {
-          return { ..._current };
-        },
-
-        edit(fn) {
-          const next = api.current; // retrieve the clone to mutate.
-          fn(next);
-          _current = next;
-        },
-
-        /**
-         * Named environment(s).
-         */
-        env(...target) {
-          const env = R.uniq(target);
-          const is = (...items: t.TsEnv[]) => items.some((name) => env.includes(name));
-
-          if (is('web')) {
-            api.edit((tsconfig) => ensureLibs(tsconfig, 'DOM', 'DOM.Iterable', 'WebWorker'));
-          }
-
-          if (is('web:react')) {
-            api.edit((tsconfig) => (tsconfig.compilerOptions.jsx = 'react-jsx'));
-          }
-
-          if (is('web:svelte')) {
-            // Placeholder.
-          }
-        },
-      };
-
-      modify(api);
-      return _current;
-    };
-  },
-
-  /**
    * Build configuration generator (with standard defaults).
    */
   vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig): UserConfigExport {
@@ -181,6 +126,61 @@ export const Config = {
       // Finish up.
       return config;
     });
+  },
+
+  /**
+   * Typescript configuration modifier (tsconfig.json).
+   */
+  ts(modify: t.ModifyTsConfig): t.TsConfigExport {
+    return async (args) => {
+      const { kind } = args;
+
+      let _current = R.clone(args.config);
+
+      const ensureLibs = (input: t.TsConfig, ...items: string[]) => {
+        let next = input;
+        let lib = next.compilerOptions.lib || (next.compilerOptions.lib = []);
+        next.compilerOptions.lib = R.uniq([...lib, ...items]);
+        return next;
+      };
+
+      const api: t.ModifyTsConfigArgs = {
+        kind,
+
+        get current() {
+          return { ..._current };
+        },
+
+        edit(fn) {
+          const next = api.current; // retrieve the clone to mutate.
+          fn(next);
+          _current = next;
+        },
+
+        /**
+         * Named environment(s).
+         */
+        env(...target) {
+          const env = R.uniq(target);
+          const is = (...items: t.TsEnv[]) => items.some((name) => env.includes(name));
+
+          if (is('web')) {
+            api.edit((tsconfig) => ensureLibs(tsconfig, 'DOM', 'DOM.Iterable', 'WebWorker'));
+          }
+
+          if (is('web:react')) {
+            api.edit((tsconfig) => (tsconfig.compilerOptions.jsx = 'react-jsx'));
+          }
+
+          if (is('web:svelte')) {
+            // Placeholder.
+          }
+        },
+      };
+
+      modify(api);
+      return _current;
+    };
   },
 };
 
