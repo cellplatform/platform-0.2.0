@@ -1,8 +1,10 @@
-import format from 'rehype-format';
-import html from 'rehype-stringify';
-import markdown from 'remark-parse';
-import remark2rehype from 'remark-rehype';
 import { unified, Processor } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkStringify from 'remark-stringify';
+import remarkGfm from 'remark-gfm';
+import remarkFrontmatter from 'remark-frontmatter';
+
+import rehypeSanitize from 'rehype-sanitize';
 
 let _processor: Processor | undefined; // Lazily initialized singleton.
 
@@ -38,7 +40,12 @@ export const MarkdownProcessor = {
 const Util = {
   get processor(): Processor {
     if (!_processor) {
-      _processor = unified().use(markdown).use(remark2rehype).use(format).use(html);
+      _processor = unified()
+        .use(remarkParse)
+        .use(remarkGfm)
+        .use(remarkFrontmatter, ['yaml', 'toml'])
+        // .use(rehypeSanitize)
+        .use(remarkStringify);
     }
     return _processor;
   },

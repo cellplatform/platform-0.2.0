@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.data.md': '0.0.0',
+    'sys.data.markdown': '0.0.0',
     'cloud.vercel': '0.0.0',
   },
   toString() {

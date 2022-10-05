@@ -1,23 +1,12 @@
-// import format from 'rehype-format';
-// import html from 'rehype-stringify';
-// import rehypeSanitize from 'rehype-sanitize';
-// import markdown from 'remark-parse';
-// import remark2rehype from 'remark-rehype';
-// import { unified, Processor } from 'unified';
-
-// import {read} from 'to-vfile'
-
-import { inspect } from 'util';
 import { NodeFs } from 'sys.fs.node';
 
 import { unified, Processor } from 'unified';
 import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
-import rehypeSanitize from 'rehype-sanitize';
-import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
 import remarkFrontmatter from 'remark-frontmatter';
+
+import rehypeSanitize from 'rehype-sanitize';
 
 let _processor: Processor | undefined; // Lazily initialized singleton.
 
@@ -87,7 +76,7 @@ const Util = {
         .use(remarkParse)
         .use(remarkGfm)
         .use(remarkFrontmatter, ['yaml', 'toml'])
-        .use(rehypeSanitize)
+        // .use(rehypeSanitize)
         .use(remarkStringify)
         .use(() => (tree: any) => {
           console.dir(tree, {});
