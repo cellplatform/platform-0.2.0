@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import remarkFrontmatter from 'remark-frontmatter';
 
 import rehypeSanitize from 'rehype-sanitize';
+import rehypeStringify from 'rehype-stringify';
 
 let _processor: Processor | undefined; // Lazily initialized singleton.
 
@@ -77,7 +78,8 @@ const Util = {
         .use(remarkGfm)
         .use(remarkFrontmatter, ['yaml', 'toml'])
         // .use(rehypeSanitize)
-        .use(remarkStringify)
+        // .use(remarkStringify)
+        .use(rehypeStringify)
         .use(() => (tree: any) => {
           console.dir(tree, {});
         });
