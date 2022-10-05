@@ -9,4 +9,4 @@ export const Root = {
 
 export default Root;
 
-console.info('Package:', Pkg.name, Pkg.version);
+console.info(`Package: ${Pkg.name} | v${Pkg.version}`);

@@ -7,7 +7,9 @@
     "serve": "cd dist && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "sample.node": "node dist/index.js",
+    "tmp": "yarn sample.node"
   },
   "dependencies": {
     "sys.types": "0.0.0",
