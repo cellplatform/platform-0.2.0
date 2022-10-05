@@ -15,8 +15,6 @@ export default Config.vite(import.meta.url, (e) => {
    *      import { Markdown } from 'sys.data.markdown/web`
    *      import { Markdown } from 'sys.data.markdown/node`
    */
-  // e.env('web');
-  e.env('node');
-});
 
-export const tsconfig = Config.ts((e) => e.env('web', 'web:react'));
+  e.target('node');
+});
