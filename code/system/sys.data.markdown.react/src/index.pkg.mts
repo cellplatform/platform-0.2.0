@@ -10,21 +10,16 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.markdown',
+  name: 'sys.data.markdown.react',
   version: '0.0.0',
   dependencies: {
+    'react': '18.2.0',
+    'sanitize-html': '2.7.1',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
+    'sys.data.markdown': '0.0.0',
     'sys.util.css': '0.0.0',
     'sys.util.react': '0.0.0',
-    'sanitize-html': '2.7.1',
-    'rehype-sanitize': '5.0.1',
-    'remark-frontmatter': '4.0.1',
-    'remark-stringify': '10.0.2',
-    'remark-gfm': '3.0.1',
-    'remark-parse': '10.0.1',
-    'unified': '10.1.2',
-    'react': '18.2.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
