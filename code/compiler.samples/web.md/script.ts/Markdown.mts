@@ -52,7 +52,7 @@ async function main() {
     .use(remarkGfm)
     .use(remarkFrontmatter, ['yaml', 'toml'])
     .use(remarkStringify)
-    .use(() => (tree) => {
+    .use(() => (tree: any) => {
       console.dir(tree, { depth: 10 });
     })
     .process(markdown);
