@@ -60,8 +60,8 @@ for (const file of source.files) {
   }
 }
 
-await logFsInfo('source', fs.source);
-await logFsInfo('tmp (local)', fs.tmp);
+// await logFsInfo('source', fs.source);
+// await logFsInfo('tmp (local)', fs.tmp);
 
 /**
  * Do some CRDT thing ( 🧠 ).
@@ -80,7 +80,7 @@ console.log('-------------------------------------------');
 console.log('🐷🐷 CRDT 🐷🐷 (TODO) working example:', doc.current);
 console.log('-------------------------------------------');
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
