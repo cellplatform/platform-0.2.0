@@ -1,7 +1,7 @@
 import { fs, t, pc, Util } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
-import { PackageRoot } from '../op/Package.Root.mjs';
-import { PackageDist } from '../op/Packge.Dist.mjs';
+import { PackageRoot } from '../op/Pkg.Root.mjs';
+import { PackageDist } from '../op/Pkg.Dist.mjs';
 import { Typescript } from '../op/Typescript.mjs';
 import { Vite } from '../op/Vite.mjs';
 import { Paths } from '../Paths.mjs';

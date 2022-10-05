@@ -17,9 +17,13 @@ export const PackageDist = {
       type: 'module',
     };
 
+    /**
+     * TODO 🐷 
+     */
+
     // Update and save.
-    root = fs.resolve(root, Paths.dist);
-    const esm = await Package.updateEsmEntries({ root, pkg, manifest });
-    await Util.PackageJson.save(root, esm);
+    // root = fs.resolve(root, Paths.dist);
+    // const esm = await Package.updateEsmEntries({ root, pkg, manifest });
+    // await Util.PackageJson.save(root, esm);
   },
 };
