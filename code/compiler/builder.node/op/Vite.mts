@@ -31,7 +31,10 @@ export const Vite = {
 
     for (const target of targets) {
       const config = targetConfig(target);
-      await build(config);
+      await build({
+        ...config, //         <== NB: The configuration is being passed explicitly as an object.
+        configFile: false, // <==     This flag tells Vite to ignore the [vite.config.mts] file and not build twice.
+      });
     }
 
     // Finish up.
