@@ -1,5 +1,1 @@
-import { CrdtBus as Bus } from './Crdt.Bus/index.mjs';
-
-export const Crdt = {
-  Bus,
-};
+export { Crdt } from './Crdt/index.mjs';
