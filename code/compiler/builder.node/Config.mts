@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 import { fileURLToPath } from 'url';
-import { BuildOptions, defineConfig, UserConfigExport } from 'vite';
+import { BuildOptions, defineConfig, UserConfigExport, LibraryOptions } from 'vite';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
@@ -50,7 +50,7 @@ export const Config = {
       const rollupOptions: RollupOptions = { external };
       const build: BuildOptions = {
         rollupOptions,
-        manifest: fs.basename(Paths.viteManifest),
+        manifest: Paths.viteBuildManifest,
       };
 
       const config: UserConfigExport = {
@@ -83,14 +83,14 @@ export const Config = {
             .forEach((name) => external.push(name));
         },
         lib(options = {}) {
-          const { name = pkg.name, outname: fileName = 'index' } = options;
+          const { outname: fileName = 'index' } = options;
           const entry = fs.join(dir, options.entry ?? '/src/index.mts');
-          build.lib = {
-            name,
+          const lib: LibraryOptions = {
             entry,
             fileName,
             formats: ['es'],
           };
+          build.lib = lib;
         },
       };
 

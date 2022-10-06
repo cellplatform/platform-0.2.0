@@ -51,7 +51,7 @@ export type ModifyViteConfigArgs = {
   readonly ctx: ModifyViteConfigCtx;
   target(...target: ViteTarget[]): void;
   plugin(...kind: VitePlugin[]): void;
-  lib(options?: { name?: string; entry?: string; outname?: string }): void;
+  lib(options?: { entry?: string; outname?: string }): void;
   externalDependency(moduleName: string | string[]): void;
 };
 export type ModifyViteConfigCtx = {

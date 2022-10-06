@@ -11,7 +11,7 @@ const tsconfigDir = fs.join(__dirname, '../tsconfig');
 
 export const Paths = {
   rootDir,
-  viteManifest: 'dist/.build.manifest.json',
+  viteBuildManifest: '.build.manifest.json',
 
   outDir: {
     root: 'dist',

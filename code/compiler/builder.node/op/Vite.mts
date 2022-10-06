@@ -18,13 +18,10 @@ export const Vite = {
     root = fs.resolve(root);
 
     // Load base configuration.
-    const config = await Vite.loadConfig(root);
+    const { config, targets } = await Vite.loadConfig(root);
+    config.root = root;
     config.logLevel = options.silent ? 'silent' : undefined;
     config.build!.outDir = 'dist/web';
-
-    // Extract targets.
-    const targets: t.ViteTarget[] = (config as any).__targets ?? ['web'];
-    delete (config as any).__targets;
 
     const targetConfig = (target: t.ViteTarget) => {
       const clone = R.clone(config);
@@ -33,7 +30,8 @@ export const Vite = {
     };
 
     for (const target of targets) {
-      await build(targetConfig(target));
+      const config = targetConfig(target);
+      await build(config);
     }
 
     // Finish up.
@@ -43,8 +41,8 @@ export const Vite = {
   /**
    * Loads the vite generated manifest file.
    */
-  async loadManifest(root: t.DirString) {
-    const path = fs.join(root, Paths.viteManifest);
+  async loadManifest(dist: t.DirString) {
+    const path = fs.join(dist, Paths.viteBuildManifest);
     if (!(await fs.pathExists(path))) throw new Error(`Vite manifest not found: ${path}`);
     const manifest = await Util.Json.load<t.ViteManifest>(path);
     const files = Object.keys(manifest).map((path) => manifest[path]);
@@ -65,6 +63,10 @@ export const Vite = {
 
     const args = env ?? { command: 'build', mode: 'production' };
     const config = await Promise.resolve(fn(args));
-    return config;
+
+    const targets: t.ViteTarget[] = (config as any).__targets ?? ['web'];
+    delete (config as any).__targets;
+
+    return { config, targets };
   },
 };
