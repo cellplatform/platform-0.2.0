@@ -69,4 +69,13 @@ export const Vite = {
 
     return { config, targets };
   },
+
+  /**
+   * Remove all generated build manifest files.
+   */
+  async deleteBuildManifests(root: t.DirString) {
+    const pattern = fs.resolve(root, '**', Paths.viteBuildManifest);
+    const paths = await fs.glob(pattern);
+    await Promise.all(paths.map((path) => fs.remove(path)));
+  },
 };

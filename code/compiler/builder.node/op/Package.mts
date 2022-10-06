@@ -7,7 +7,7 @@ const join = fs.join;
 type PkgMeta = {
   types: string;
   exports: t.PkgJsonExports;
-  typesVersions: t.PkgJsonTypesVersions;
+  typesVersions?: t.PkgJsonTypesVersions;
 };
 
 export const Package = {
@@ -109,10 +109,11 @@ export const Package = {
     exports['.'] = exports[Util.ensureRelativeRoot(defaultTarget)];
 
     // Finish up.
+    const hasTypes = Object.keys(typesFiles).length > 0;
     return {
       types,
       exports: sortKeys(exports),
-      typesVersions: { '*': sortKeys(typesFiles) },
+      typesVersions: hasTypes ? { '*': sortKeys(typesFiles) } : undefined,
     };
   },
 

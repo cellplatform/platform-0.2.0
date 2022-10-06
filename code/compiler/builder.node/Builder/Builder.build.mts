@@ -40,6 +40,7 @@ export async function build(
   await fs.remove(fs.join(dir, Paths.types.dist));
   await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
   await Package.generate(dir);
+  await Vite.deleteBuildManifests(dir);
 
   /**
    * TODO 🐷
