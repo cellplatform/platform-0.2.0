@@ -9,7 +9,7 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "sample.node": "node dist/index.js",
-    "tmp": "yarn sample.node"
+    "tmp": "ts-node-esm -T ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
