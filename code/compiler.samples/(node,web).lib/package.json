@@ -1,5 +1,5 @@
 {
-  "name": "sample.node.lib",
+  "name": "sample.node-web.lib",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
