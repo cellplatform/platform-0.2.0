@@ -4,8 +4,7 @@ import { Crdt } from 'sys.data.crdt';
 import { Vercel } from 'cloud.vercel';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
-import { Markdown } from 'sys.data.markdown';
-// import { MarkdownProcessor } from './Markdown.mjs';
+import { Markdown } from 'sys.data.markdown/node';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
