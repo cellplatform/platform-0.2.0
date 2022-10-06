@@ -7,3 +7,5 @@ import { Pkg } from './index.pkg.mjs';
 console.info(`Package: ${Pkg.name} | v${Pkg.version}`);
 console.info(` - ${resolve('./')}`);
 console.info(``);
+
+export default Pkg;

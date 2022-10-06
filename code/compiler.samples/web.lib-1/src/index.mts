@@ -1,8 +1,10 @@
 export {};
 import { Pkg } from './index.pkg.mjs';
 
+import('./Bar.mjs');
+
 export const Root = {
-  async loadFoo() {
+  async foo() {
     return (await import('./Foo.mjs')).Foo;
   },
 };

@@ -20,7 +20,9 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./web": "./dist/web/index.js",
+    "./web/Bar": "./dist/web/Bar.f2cc4df3.js",
+    "./web/Foo": "./dist/web/Foo.ad0b6b66.js"
   },
   "typesVersions": {
     "*": {
