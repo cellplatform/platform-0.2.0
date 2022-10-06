@@ -1,0 +1,34 @@
+{
+  "name": "sample.web.lib-1",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+  },
+  "dependencies": {
+    "sample.web.lib-2": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.d.mts",
+  "exports": {
+    ".": "./dist/web/index.js",
+    "./web": "./dist/web/index.js",
+    "./web/Bar": "./dist/web/Bar.f2cc4df3.js",
+    "./web/Foo": "./dist/web/Foo.ad0b6b66.js"
+  },
+  "typesVersions": {
+    "*": {
+      "web": [
+        "./dist/types.d/index.d.mts"
+      ]
+    }
+  }
+}

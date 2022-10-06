@@ -1,7 +1,6 @@
 import { fs, t, pc, Util } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
-import { PackageRoot } from '../op/Package.Root.mjs';
-import { PackageDist } from '../op/Packge.Dist.mjs';
+import { Package } from '../op/Package.mjs';
 import { Typescript } from '../op/Typescript.mjs';
 import { Vite } from '../op/Vite.mjs';
 import { Paths } from '../Paths.mjs';
@@ -20,13 +19,11 @@ export async function build(
   options: { silent?: boolean; exitOnError?: boolean; syncDeps?: boolean } = {},
 ) {
   const { silent = false, exitOnError = true, syncDeps = false } = options;
-
   dir = fs.resolve(dir);
   const relativeDir = dir.substring(Paths.rootDir.length);
 
   // Pre-build.
   await Template.ensureBaseline(dir);
-
   if (syncDeps) {
     await Dependencies.syncVersions({ filter: (dir) => dir === relativeDir });
   }
@@ -40,9 +37,14 @@ export async function build(
   if (!viteBuildOutput.ok) return viteBuildOutput;
 
   // Post build.
+  await fs.remove(fs.join(dir, Paths.types.dist));
   await fs.move(fs.join(dir, Paths.types.dirname), fs.join(dir, Paths.types.dist));
-  await PackageRoot.updateEsmEntries(dir);
-  await PackageDist.generate(dir);
+  await Package.generate(dir);
+  await Vite.deleteBuildManifests(dir);
+
+  /**
+   * TODO 🐷
+   */
   // await BuildManifest.generate(dir);
 
   // Finish up.

@@ -19,13 +19,13 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./src/index.mjs",
-    "./Foo": "./src/Foo.mjs"
+    ".": "./dist/web/index.js",
+    "./web": "./dist/web/index.js"
   },
   "typesVersions": {
     "*": {
-      "Foo": [
-        "./dist/types.d/Foo.d.mts"
+      "web": [
+        "./dist/types.d/index.d.mts"
       ]
     }
   }

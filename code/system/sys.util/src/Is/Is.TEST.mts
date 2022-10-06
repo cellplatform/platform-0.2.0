@@ -4,11 +4,10 @@ import { Subject } from 'rxjs';
 import { Is } from './index.mjs';
 
 describe('Is', () => {
-  it('Is.browser', () => {
-    expect(Is.browser).to.eql(false);
-  });
-
-  it('Is.node', () => {
+  it('Is.node | Is.browser', () => {
+    // NB: Tests are running within on [node] via Vitest, which is why [Is.node === true]
+    //     Also, the target environment is set to "web", and so [jsdom] has been turned on for testing.
+    expect(Is.browser).to.eql(true);
     expect(Is.node).to.eql(true);
   });
 
