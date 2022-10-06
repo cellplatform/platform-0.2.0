@@ -1,22 +1,20 @@
 {
-  "name": "cloud.vercel",
-  "version": "0.0.0",
+  "name": "spike.content-pipeline",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "serve": "cd dist && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "deploy-sample": "ts-node-esm -T script.ts/deploy.sample.mts",
-    "deploy-crdt": "ts-node-esm -T script.ts/deploy.crdt.mts",
-    "tmp": "ts-node-esm -T script.ts/tmp.mts"
+    "tmp": "ts-node-esm -T  ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "sys.fs": "0.0.0",
-    "sys.fs.indexeddb": "0.0.0",
-    "sys.net.http": "0.0.0",
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "sys.data.markdown": "0.0.0",
+    "cloud.vercel": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"

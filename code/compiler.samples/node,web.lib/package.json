@@ -1,6 +1,6 @@
 {
-  "name": "sample.web.md",
-  "version": "0.0.1",
+  "name": "sample.node-web.lib",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -8,13 +8,12 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "tmp": "ts-node-esm -T  ./script.ts/tmp.mts"
+    "sample.node": "node dist/index.js",
+    "tmp": "ts-node-esm -T ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0",
-    "sys.data.markdown": "0.0.0",
-    "cloud.vercel": "0.0.0"
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -23,6 +22,18 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/web/index.js",
+    "./node": "./dist/node/index.js",
+    "./web": "./dist/web/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "node": [
+        "./dist/types.d/index.d.mts"
+      ],
+      "web": [
+        "./dist/types.d/index.d.mts"
+      ]
+    }
   }
 }

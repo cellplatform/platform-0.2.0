@@ -4,6 +4,7 @@ import type { UserConfigFn, ConfigEnv } from 'vite';
 import { fs, t, Util, R } from '../common/index.mjs';
 import { Template } from '../Template.mjs';
 import { Paths } from '../Paths.mjs';
+import { Config } from '../Config.mjs';
 
 /**
  * Refs:
@@ -20,18 +21,21 @@ export const Vite = {
     // Load base configuration.
     const { config, targets } = await Vite.loadConfig(root);
     config.root = root;
-    config.logLevel = options.silent ? 'silent' : undefined;
-    config.build!.outDir = 'dist/web';
+    if (options.silent) config.logLevel = 'silent';
 
     const targetConfig = (target: t.ViteTarget) => {
-      const clone = R.clone(config);
+      const clone = Config.target.apply(Config.target.reset(config), target);
+      clone.mode = 'production';
       clone.build!.outDir = Paths.outDir.target(target);
       return clone;
     };
 
     for (const target of targets) {
       const config = targetConfig(target);
-      await build(config);
+      await build({
+        ...config, //         <== NB: The configuration is being passed explicitly as an object.
+        configFile: false, // <==     This flag tells Vite to ignore the [vite.config.mts] file and not build twice.
+      });
     }
 
     // Finish up.
@@ -64,8 +68,7 @@ export const Vite = {
     const args = env ?? { command: 'build', mode: 'production' };
     const config = await Promise.resolve(fn(args));
 
-    const targets: t.ViteTarget[] = (config as any).__targets ?? [];
-    delete (config as any).__targets;
+    const targets = Config.target.get(config);
     if (targets.length === 0) {
       throw new Error(`The module configuration did not specify a target. ${path}`);
     }

@@ -1,5 +1,5 @@
 {
-  "name": "sample.web.tauri",
+  "name": "spike.tauri",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -24,17 +24,13 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.6821c8c6.js",
-    "./main/index": "./dist/assets/index.a84fff66.js",
-    "./ui/App/index": "./dist/assets/index.b0793004.js"
+    ".": "./dist/web/assets/index.a25710c8.js",
+    "./web": "./dist/web/assets/index.a25710c8.js"
   },
   "typesVersions": {
     "*": {
-      "main/index": [
-        "./dist/types.d/main/index.d.mts"
-      ],
-      "ui/App/index": [
-        "./dist/types.d/ui/App/index.d.mts"
+      "web": [
+        "./dist/types.d/index.html.d.html"
       ]
     }
   }
