@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web.md',
+  name: 'spike.content-pipeline',
   version: '0.0.1',
   dependencies: {
     'sys.types': '0.0.0',

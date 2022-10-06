@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web.tauri',
+  name: 'spike.tauri',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',
