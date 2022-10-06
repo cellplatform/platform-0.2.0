@@ -1,5 +1,4 @@
 import { execa, t } from '../common/index.mjs';
-import Vitest from 'vitest';
 
 /**
  * Execute unit-tests within the target module directory.
@@ -24,9 +23,9 @@ export async function test(
     run = false,
     reporter,
   } = options;
-  const args = [];
 
   // Filters.
+  const args: string[] = [];
   (options.filter ?? []).forEach((filter) => args.push(filter));
 
   // Options.

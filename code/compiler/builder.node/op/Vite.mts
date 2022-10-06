@@ -64,8 +64,11 @@ export const Vite = {
     const args = env ?? { command: 'build', mode: 'production' };
     const config = await Promise.resolve(fn(args));
 
-    const targets: t.ViteTarget[] = (config as any).__targets ?? ['web'];
+    const targets: t.ViteTarget[] = (config as any).__targets ?? [];
     delete (config as any).__targets;
+    if (targets.length === 0) {
+      throw new Error(`The module configuration did not specify a target. ${path}`);
+    }
 
     return { config, targets };
   },
