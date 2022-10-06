@@ -16,5 +16,5 @@ export default Config.vite(import.meta.url, (e) => {
    *      import { Markdown } from 'sys.data.markdown/node`
    */
 
-  e.target('node');
+  e.target('web', 'node');
 });
