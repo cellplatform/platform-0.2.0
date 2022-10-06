@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 import { fileURLToPath } from 'url';
-import { BuildOptions, defineConfig, UserConfigExport, LibraryOptions } from 'vite';
+import { BuildOptions, defineConfig, UserConfigExport, UserConfig, LibraryOptions } from 'vite';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
@@ -53,14 +53,11 @@ export const Config = {
         manifest: Paths.viteBuildManifest,
       };
 
-      const config: UserConfigExport = {
+      let config: UserConfig = {
         plugins: [],
         build,
         worker: { format: 'es' },
       };
-
-      const test = Config.defaults.test();
-      (config as any).test = test;
 
       /**
        * Modification IoC (called within each module to perform specific adjustments).
@@ -98,18 +95,6 @@ export const Config = {
       await modify?.(args);
 
       /**
-       * Configure build/target environment.
-       */
-      const isTarget = (...items: t.ViteTarget[]) => {
-        if (targets.length === 0 && items.includes('web')) return true; // NB: Default "web" target if nothing specified.
-        return items.some((name) => targets.includes(name));
-      };
-
-      if (isTarget('web')) test.environment = 'jsdom';
-      if (isTarget('node') && !isTarget('web')) test.environment = 'node';
-      if (isTarget('node')) build.ssr = true;
-
-      /**
        * Configure plugins.
        */
       const hasPlugin = (...items: t.VitePlugin[]) => items.some((name) => plugins.includes(name));
@@ -124,10 +109,52 @@ export const Config = {
         config.plugins?.push(svelte());
       }
 
+      /**
+       * Configure for target environment.
+       */
+      config = Config.target.apply(config, ...targets);
+
       // Finish up.
-      (config as any).__targets = targets;
       return config;
     });
+  },
+
+  /**
+   * Helpers for adjusting a configuration based on the build targets.
+   */
+  target: {
+    get(config: UserConfig): t.ViteTarget[] {
+      return (config as any).__targets ?? [];
+    },
+
+    apply(config: UserConfig, ...targets: t.ViteTarget[]) {
+      config = R.clone(config);
+      const test = getAndAssignTest(config);
+
+      const DEFAULT: t.ViteTarget = 'web';
+      const isTarget = (...items: t.ViteTarget[]) => {
+        if (targets.length === 0 && items.includes(DEFAULT)) return true; // NB: Default "web" target if nothing specified.
+        return items.some((name) => targets.includes(name));
+      };
+
+      if (isTarget('web')) test.environment = 'jsdom';
+      if (isTarget('node') && !isTarget('web')) test.environment = 'node';
+      if (isTarget('node')) config.build!.ssr = true;
+
+      (config as any).__targets = targets;
+      return config;
+    },
+
+    reset(config: UserConfig) {
+      config = R.clone(config);
+      const test = getAndAssignTest(config);
+
+      test.environment = undefined;
+      config.build!.ssr = undefined;
+      delete (config as any).__targets;
+
+      return config;
+    },
   },
 
   /**
@@ -196,4 +223,9 @@ function toDepsList(isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] {
 
 function toDirname(modulePath: t.ImportMetaUrl) {
   return fs.dirname(fileURLToPath(modulePath));
+}
+
+function getAndAssignTest(config: UserConfig): TestConfig {
+  const test = (config as any).test || ((config as any).test = Config.defaults.test());
+  return test;
 }
