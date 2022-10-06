@@ -39,7 +39,7 @@ export const Paths = {
 
   tmpl: {
     dir: tmplDir,
-    config: 'config.mts',
+    config: 'vite.config.mts',
     indexHtml: 'index.html',
     pkg: 'src/index.pkg.mts',
     src: [
