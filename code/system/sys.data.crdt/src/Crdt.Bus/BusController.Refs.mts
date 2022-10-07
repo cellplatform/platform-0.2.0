@@ -1,8 +1,8 @@
-import { t, Automerge, rx, Is } from '../common/index.mjs';
+import { Automerge, Is, rx, t } from '../common/index.mjs';
+import { Filesystem } from './BusController.Filesystem.mjs';
 
 type O = Record<string, unknown>;
 type DocumentId = string;
-type InstanceId = string;
 type Ref = { id: DocumentId; data: O };
 type Refs = { [id: DocumentId]: Ref };
 
@@ -29,37 +29,66 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
      */
 
     const created = !Boolean(ref) && typeof e.change === 'object';
-    const changed = !created && Boolean(e.change);
+    let changed = !created && Boolean(e.change);
 
     let data = ref?.data;
     const prev = data;
 
-    // Replacement/initial object.
+    /**
+     * Replacement/initial object.
+     */
     if (typeof e.change === 'object') {
       data = Is.automergeObject(e.change) ? e.change : Automerge.from(e.change);
     }
 
-    // Mutation handler.
+    /**
+     * Mutation handler.
+     */
     if (typeof e.change === 'function') {
       if (!data) {
         error = `Cannot change data with handler. The document has not been initialized.`;
+        changed = false;
       } else {
         data = Automerge.change(data, (doc) => {
-          if (typeof e.change === 'function') e.change?.(doc);
+          if (typeof e.change === 'function') e.change(doc);
         });
       }
     }
 
-    // Store reference.
+    /**
+     * Save (persist to filesystem).
+     */
+    let saved = false;
+    if (!error && typeof e.save === 'object') {
+      if (!data) {
+        error = `Cannot save data. The document has not been initialized.`;
+      } else {
+        const { fs, path, strategy = 'Default' } = e.save;
+        if (strategy === 'Default') {
+          const res = await Filesystem.save.default({ fs, path, data });
+          if (res.error) error = res.error;
+        } else {
+          error = `CRDT save strategy "${strategy}" not supported.`;
+        }
+        saved = !error;
+      }
+    }
+
+    /**
+     * Store reference.
+     */
     const exists = Boolean(data);
     const doc = { id: e.doc.id, data };
     if (exists) {
       refs[e.doc.id] = { id: e.doc.id, data };
     }
 
+    /**
+     * Finish up.
+     */
     bus.fire({
       type: 'sys.crdt/ref:res',
-      payload: { tx, id, doc, exists, created, changed, error },
+      payload: { tx, id, doc, exists, created, changed, saved, error },
     });
 
     if (changed) {

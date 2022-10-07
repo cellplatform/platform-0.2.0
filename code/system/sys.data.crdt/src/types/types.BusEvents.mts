@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import { t } from './common.mjs';
 
 type O = Record<string, unknown>;
 type Id = string;
@@ -27,6 +27,7 @@ export type CrdtEvents = t.Disposable & {
     fire<T extends O>(args: {
       id: DocumentId;
       change?: t.CrdtChangeHandler<T> | T;
+      save?: t.CrdtSaveCtx;
       timeout?: Milliseconds;
     }): Promise<t.CrdtRefRes<T>>;
     exists: {
@@ -52,14 +53,7 @@ export type CrdtDocEvents<T extends O> = {
   current: T;
   changed$: t.Observable<t.CrdtRefChanged<O>>;
   change(handler: t.CrdtChangeHandler<T>): Promise<T>;
-  save(fs: t.Fs, path: string): Promise<CrdtDocSaveRes>;
+  save(fs: t.Fs, path: string): Promise<t.CrdtSaveResponse>;
 };
 
 export type CrdtDocEventsArgs<T> = { id: DocumentId; initial: T | (() => T) };
-
-/**
- * Save CRDT Document
- */
-export type CrdtDocSaveRes = {
-  ok: boolean;
-};
