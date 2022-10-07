@@ -23,7 +23,7 @@ export const Filesystem = {
         const binary = Automerge.save(args.data as Automerge.FreezeObject<any>);
         await fs.write(path, binary);
       } catch (error: any) {
-        return fail(`Failed while saving CRDT data to path "${path}". ${error.message}`);
+        return fail(`Error saving CRDT data. ${error.message}`);
       }
 
       // Finish up.

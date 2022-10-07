@@ -21,4 +21,3 @@ export type CrdtChangeHandler<T extends O> = (doc: T) => void;
  */
 export type CrdtSaveCtx = { fs: t.Fs; path: string; strategy?: CrdtSaveStrategy };
 export type CrdtSaveStrategy = 'Default';
-export type CrdtSaveResponse = { ok: boolean; error?: string };

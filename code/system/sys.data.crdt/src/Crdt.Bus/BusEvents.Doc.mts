@@ -1,5 +1,5 @@
 import { filter, map } from 'rxjs/operators';
-import { Automerge, t } from './common.mjs';
+import { Automerge, t, Delete } from './common.mjs';
 
 type O = Record<string, unknown>;
 
@@ -33,9 +33,7 @@ export async function CrdtDocEvents<T extends O>(
     map((e) => e as t.CrdtRefChanged<T>),
   );
 
-  changed$.subscribe((e) => {
-    _current = e.doc.next;
-  });
+  changed$.subscribe((e) => (_current = e.doc.next));
 
   const api: t.CrdtDocEvents<T> = {
     id,
@@ -52,23 +50,19 @@ export async function CrdtDocEvents<T extends O>(
      * Immutable update to the data-structure.
      */
     async change(handler) {
-      events.ref.fire({ id, change: handler });
+      const change = handler;
+      events.ref.fire({ id, change });
       return _current;
     },
 
     /**
      * Persist the data-structure to a filesystem.
      */
-    async save(fs, path) {
-      /**
-       * TODO 🐷
-       * https://github.com/cellplatform/platform-0.2.0/issues/53
-       */
-      const doc = await getCurrentDoc();
-      console.log('save doc', path, doc);
-      console.log('-------------------------------------------');
-
-      return { ok: true };
+    async save(fs, path, options = {}) {
+      const { strategy } = options;
+      const res = await events.ref.fire({ id, save: { fs, path, strategy } });
+      const { error } = res;
+      return Delete.undefined({ path, error });
     },
   };
 

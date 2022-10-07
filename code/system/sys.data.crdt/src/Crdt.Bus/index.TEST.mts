@@ -459,25 +459,58 @@ describe('CrdtBus', (e) => {
     });
 
     describe('events.doc.save', () => {
-      it.skip('save to path', async () => {
+      it('save: success', async () => {
         const { fs } = TestFilesystem.memory();
         const { dispose, events } = CrdtBus.Controller({ bus });
         const initial: Doc = { count: 0 };
         const doc = await events.doc<Doc>({ id: '1', initial });
 
-        const res = await doc.save(fs, 'foo/file.crdt');
+        const path = 'foo/file.crdt';
+        const res = await doc.save(fs, path);
+        dispose();
 
-        /**
-         * TODO 🐷
-         * CRDT save strategy
-         * https://github.com/cellplatform/platform-0.2.0/issues/53
-         */
-        // console.log('-------------------------------------------');
-        // console.log('res', res);
-        // console.log('-------------------------------------------');
-        // console.log('manifest (after)', await fs.manifest());
+        expect(res.path).to.eql(path);
+        expect(res.error).to.eql(undefined);
+
+        const manifest = await fs.manifest();
+        expect(manifest.files.some((f) => f.path === path)).to.eql(true);
+
+        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+        expect(Automerge.load(binary)).to.eql(initial);
+      });
+
+      it('save changes', async () => {
+        const { fs } = TestFilesystem.memory();
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+
+        const path = 'foo/file.crdt';
+        await doc.save(fs, path);
+        const m1 = await fs.manifest();
+
+        await doc.change((doc) => (doc.count = 1234));
+        await doc.save(fs, path);
+        const m2 = await fs.manifest();
+
+        const f1 = m1.files.find((f) => f.path === path);
+        const f2 = m2.files.find((f) => f.path === path);
+
+        expect(f1?.bytes).to.not.eql(f2?.bytes);
+        expect(f1?.filehash).to.not.eql(f2?.filehash);
+
+        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+        expect(Automerge.load(binary)).to.eql({ count: 1234 });
 
         dispose();
+      });
+
+      it('save: error', async () => {
+        const { fs } = TestFilesystem.memory();
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+        const res = await doc.save(fs, '../../foo.crdt');
+        dispose();
+        expect(res.error).to.include('Error saving CRDT data. Failed while writing');
       });
     });
   });
