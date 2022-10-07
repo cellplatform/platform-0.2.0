@@ -81,7 +81,7 @@ console.log('-------------------------------------------');
 console.log('🐷🐷 CRDT 🐷🐷 (TODO) working example:', doc.current);
 console.log('-------------------------------------------');
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
