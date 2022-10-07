@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import { t } from './common.mjs';
 import { CrdtRefEvent } from './types.Event.Ref.mjs';
 
 type InstanceId = string;

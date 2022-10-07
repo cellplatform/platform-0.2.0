@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import { t } from './common.mjs';
 
 type O = Record<string, unknown>;
 type DocumentId = string;
@@ -25,6 +25,7 @@ export type CrdtRefReq<T extends O = O> = {
   id: InstanceId;
   doc: { id: DocumentId };
   change?: t.CrdtChangeHandler<T> | T;
+  save?: t.CrdtSaveCtx;
 };
 
 export type CrdtRefResEvent<T extends O = O> = {
@@ -34,9 +35,10 @@ export type CrdtRefResEvent<T extends O = O> = {
 export type CrdtRefRes<T extends O = O> = {
   tx: string;
   id: InstanceId;
+  exists: boolean;
   created: boolean;
   changed: boolean;
-  exists: boolean;
+  saved: boolean;
   doc: { id: DocumentId; data?: T };
   error?: string;
 };

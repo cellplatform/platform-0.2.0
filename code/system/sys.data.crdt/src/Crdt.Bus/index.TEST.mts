@@ -1,16 +1,6 @@
+import { describe, expect, Is, it, TestFilesystem } from '../test/index.mjs';
+import { Automerge, Pkg, rx, slug, t } from './common.mjs';
 import { CrdtBus } from './index.mjs';
-import {
-  Automerge,
-  cuid,
-  expect,
-  Is,
-  Pkg,
-  rx,
-  t,
-  describe,
-  it,
-  TestFilesystem,
-} from '../test/index.mjs';
 
 type Doc = { count: number; msg?: string };
 
@@ -112,12 +102,13 @@ describe('CrdtBus', (e) => {
       describe('initial', () => {
         it('does not exist', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
           const res = await events.ref.fire<Doc>({ id });
           dispose();
 
           expect(res.created).to.eql(false);
           expect(res.changed).to.eql(false);
+          expect(res.saved).to.eql(false);
 
           expect(res.doc.data).to.eql(undefined);
           expect(res.doc.id).to.eql(id);
@@ -126,7 +117,7 @@ describe('CrdtBus', (e) => {
 
         it('via plain { object }', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
 
           const res1 = await events.ref.fire<Doc>({ id, change: { count: 0 } });
           const res2 = await events.ref.fire<Doc>({ id });
@@ -149,7 +140,7 @@ describe('CrdtBus', (e) => {
 
         it('via { Automerge } object', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
 
           const initial = Automerge.from<Doc>({ count: 0 });
           const res = await events.ref.fire<Doc>({ id, change: initial });
@@ -164,7 +155,7 @@ describe('CrdtBus', (e) => {
 
         it('fires "created" event', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
           const doc: Doc = { count: 0 };
 
           const fired: t.CrdtRefCreated[] = [];
@@ -182,7 +173,7 @@ describe('CrdtBus', (e) => {
 
       it('exists', async () => {
         const { dispose, events } = CrdtBus.Controller({ bus });
-        const id = cuid();
+        const id = slug();
 
         const test = async (exists: boolean) => {
           const res = await events.ref.exists.fire(id);
@@ -205,7 +196,7 @@ describe('CrdtBus', (e) => {
       describe('remove (memory ref)', () => {
         it('removes an existing reference', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
 
           const res1 = await events.ref.fire<Doc>({ id, change: { count: 0 } });
           const res2 = await events.ref.fire<Doc>({ id });
@@ -225,7 +216,7 @@ describe('CrdtBus', (e) => {
 
         it('fires "removed" event', async () => {
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
+          const id = slug();
 
           const fired: t.CrdtRefRemoved[] = [];
           events.ref.remove.removed$.subscribe((e) => fired.push(e));
@@ -240,94 +231,152 @@ describe('CrdtBus', (e) => {
         });
       });
 
-      describe('change', () => {
-        it('change (function)', async () => {
-          const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
-
-          const change = (doc: Doc) => {
-            doc.count = 123;
-            doc.msg = 'hello';
-          };
-
-          await events.ref.fire<Doc>({ id, change: { count: 0 } });
-          const res = await events.ref.fire<Doc>({ id, change: change });
-
-          expect(res.changed).to.eql(true);
-          expect(res.doc.data?.count).to.eql(123);
-          expect(res.doc.data?.msg).to.eql('hello');
-
-          dispose();
-        });
-
-        it('change (replace { object })', async () => {
-          const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
-          await events.ref.fire<Doc>({ id, change: { count: 0 } });
-
-          const getDoc = async () => (await events.ref.fire({ id })).doc;
-
-          const fired: t.CrdtRefChanged[] = [];
-          events.ref.changed$.subscribe((e) => fired.push(e));
-
-          const res1 = await events.ref.fire<Doc>({ id, change: { count: 123 } });
-          expect(fired.length).to.eql(1);
-          expect(fired[0].doc.next).to.eql({ count: 123 });
-
-          expect(Is.automergeObject(res1.doc.data)).to.eql(true);
-          expect(res1.doc.data).to.eql({ count: 123 });
-          expect(await getDoc()).to.eql(res1.doc);
-
-          // Make a change.
-          if (res1.doc.data) {
-            const replacement = Automerge.change<Doc>(res1.doc.data, (d) => (d.count = 999));
-            expect((await getDoc()).data).to.not.eql(replacement);
-
-            // Submit the change as a replacement.
-            const res2 = await events.ref.fire<Doc>({ id, change: replacement });
-            expect(res2.doc.data).to.eql(replacement);
-            expect((await getDoc()).data).to.eql(replacement);
-
-            expect(fired.length).to.eql(2);
-            expect(fired[1].doc.next).to.eql(replacement);
-          }
-
-          dispose();
-        });
-
-        it('"changed" event', async () => {
-          const { dispose, events } = CrdtBus.Controller({ bus });
-          const id = cuid();
-          await events.ref.fire<Doc>({ id, change: { count: 0 } });
-
-          const changed: t.CrdtRefChanged[] = [];
-          events.ref.changed$.subscribe((e) => changed.push(e));
-
-          await events.ref.fire<Doc>({ id, change: (doc) => (doc.msg = 'foobar') });
-          await events.ref.fire<Doc>({ id, change: (doc) => doc.count++ });
-
-          expect(changed.length).to.eql(2);
-
-          expect(changed[0].doc.prev).to.eql({ count: 0 });
-          expect(changed[0].doc.next).to.eql({ msg: 'foobar', count: 0 });
-
-          expect(changed[1].doc.prev).to.eql(changed[0].doc.next);
-          expect(changed[1].doc.next).to.eql({ msg: 'foobar', count: 1 });
-
-          dispose();
-        });
-      });
-
       it('error: change attempt on non-initialized document', async () => {
         const { dispose, events } = CrdtBus.Controller({ bus });
-        const id = cuid();
+        const id = slug();
         const res = await events.ref.fire<Doc>({
           id,
           change: (doc) => (doc.msg = 'foobar'),
         });
         dispose();
 
+        expect(res.error).to.include('Cannot change data');
         expect(res.error).to.include('document has not been initialized');
+        expect(res.changed).to.eql(false);
+      });
+    });
+
+    describe('events.ref (change)', () => {
+      it('change (function)', async () => {
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const id = slug();
+
+        const change = (doc: Doc) => {
+          doc.count = 123;
+          doc.msg = 'hello';
+        };
+
+        await events.ref.fire<Doc>({ id, change: { count: 0 } });
+        const res = await events.ref.fire<Doc>({ id, change: change });
+
+        expect(res.changed).to.eql(true);
+        expect(res.doc.data?.count).to.eql(123);
+        expect(res.doc.data?.msg).to.eql('hello');
+
+        dispose();
+      });
+
+      it('change (replace { object })', async () => {
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const id = slug();
+        await events.ref.fire<Doc>({ id, change: { count: 0 } });
+
+        const getDoc = async () => (await events.ref.fire({ id })).doc;
+
+        const fired: t.CrdtRefChanged[] = [];
+        events.ref.changed$.subscribe((e) => fired.push(e));
+
+        const res1 = await events.ref.fire<Doc>({ id, change: { count: 123 } });
+        expect(fired.length).to.eql(1);
+        expect(fired[0].doc.next).to.eql({ count: 123 });
+
+        expect(Is.automergeObject(res1.doc.data)).to.eql(true);
+        expect(res1.doc.data).to.eql({ count: 123 });
+        expect(await getDoc()).to.eql(res1.doc);
+
+        // Make a change.
+        if (res1.doc.data) {
+          const replacement = Automerge.change<Doc>(res1.doc.data, (d) => (d.count = 999));
+          expect((await getDoc()).data).to.not.eql(replacement);
+
+          // Submit the change as a replacement.
+          const res2 = await events.ref.fire<Doc>({ id, change: replacement });
+          expect(res2.doc.data).to.eql(replacement);
+          expect((await getDoc()).data).to.eql(replacement);
+
+          expect(fired.length).to.eql(2);
+          expect(fired[1].doc.next).to.eql(replacement);
+        }
+
+        dispose();
+      });
+
+      it('"changed" event', async () => {
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const id = slug();
+        await events.ref.fire<Doc>({ id, change: { count: 0 } });
+
+        const changed: t.CrdtRefChanged[] = [];
+        events.ref.changed$.subscribe((e) => changed.push(e));
+
+        await events.ref.fire<Doc>({ id, change: (doc) => (doc.msg = 'foobar') });
+        await events.ref.fire<Doc>({ id, change: (doc) => doc.count++ });
+
+        expect(changed.length).to.eql(2);
+
+        expect(changed[0].doc.prev).to.eql({ count: 0 });
+        expect(changed[0].doc.next).to.eql({ msg: 'foobar', count: 0 });
+
+        expect(changed[1].doc.prev).to.eql(changed[0].doc.next);
+        expect(changed[1].doc.next).to.eql({ msg: 'foobar', count: 1 });
+
+        dispose();
+      });
+    });
+
+    describe('events.ref (save)', () => {
+      describe('strategy: "Default"', () => {
+        it('error: save attempt on non-initialized document', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const id = slug();
+          const res = await events.ref.fire<Doc>({ id, save: { fs, path: 'foo.crdt' } });
+          dispose();
+
+          expect(res.error).to.include('Cannot save data');
+          expect(res.error).to.include('document has not been initialized');
+          expect(res.saved).to.eql(false);
+        });
+
+        it('save from initial data', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const id = slug();
+
+          const path = 'foo/file.crdt';
+          const save: t.CrdtSaveCtx = { fs, path };
+          const res = await events.ref.fire<Doc>({ id, change: { count: 1234 }, save });
+          dispose();
+
+          expect(res.created).to.eql(true);
+          expect(res.saved).to.eql(true);
+          expect(res.error).to.eql(undefined);
+
+          const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+          const doc = Automerge.load(binary);
+          expect(doc).to.eql({ count: 1234 });
+        });
+
+        it('change then save', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const id = slug();
+
+          const path = 'foo/file.crdt';
+          const res1 = await events.ref.fire<Doc>({ id, change: { count: 1234 } });
+
+          expect(res1.created).to.eql(true);
+          expect(res1.saved).to.eql(false);
+          expect(res1.error).to.eql(undefined);
+
+          const res2 = await events.ref.fire<Doc>({ id, save: { fs, path } });
+
+          expect(res2.created).to.eql(false);
+          expect(res2.saved).to.eql(true);
+          expect(res2.error).to.eql(undefined);
+
+          dispose();
+        });
       });
     });
 
@@ -410,25 +459,58 @@ describe('CrdtBus', (e) => {
     });
 
     describe('events.doc.save', () => {
-      it('save to path', async () => {
+      it('save: success', async () => {
         const { fs } = TestFilesystem.memory();
         const { dispose, events } = CrdtBus.Controller({ bus });
         const initial: Doc = { count: 0 };
         const doc = await events.doc<Doc>({ id: '1', initial });
 
-        const res = await doc.save(fs, 'foo/file.crdt');
+        const path = 'foo/file.crdt';
+        const res = await doc.save(fs, path);
+        dispose();
 
-        /**
-         * TODO 🐷
-         * CRDT save strategy
-         * https://github.com/cellplatform/platform-0.2.0/issues/53
-         */
-        console.log('-------------------------------------------');
-        console.log('res', res);
-        console.log('-------------------------------------------');
-        console.log('manifest (after)', await fs.manifest());
+        expect(res.path).to.eql(path);
+        expect(res.error).to.eql(undefined);
+
+        const manifest = await fs.manifest();
+        expect(manifest.files.some((f) => f.path === path)).to.eql(true);
+
+        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+        expect(Automerge.load(binary)).to.eql(initial);
+      });
+
+      it('save changes', async () => {
+        const { fs } = TestFilesystem.memory();
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+
+        const path = 'foo/file.crdt';
+        await doc.save(fs, path);
+        const m1 = await fs.manifest();
+
+        await doc.change((doc) => (doc.count = 1234));
+        await doc.save(fs, path);
+        const m2 = await fs.manifest();
+
+        const f1 = m1.files.find((f) => f.path === path);
+        const f2 = m2.files.find((f) => f.path === path);
+
+        expect(f1?.bytes).to.not.eql(f2?.bytes);
+        expect(f1?.filehash).to.not.eql(f2?.filehash);
+
+        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+        expect(Automerge.load(binary)).to.eql({ count: 1234 });
 
         dispose();
+      });
+
+      it('save: error', async () => {
+        const { fs } = TestFilesystem.memory();
+        const { dispose, events } = CrdtBus.Controller({ bus });
+        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+        const res = await doc.save(fs, '../../foo.crdt');
+        dispose();
+        expect(res.error).to.include('Error saving CRDT data. Failed while writing');
       });
     });
   });
