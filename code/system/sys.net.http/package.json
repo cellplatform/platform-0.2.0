@@ -22,12 +22,12 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    ".": "./dist/lib.web/index.js",
+    "./lib.web": "./dist/lib.web/index.js"
   },
   "typesVersions": {
     "*": {
-      "web": [
+      "lib.web": [
         "./dist/types.d/index.d.mts"
       ]
     }
