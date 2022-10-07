@@ -1,10 +1,11 @@
-import { rx } from 'sys.util';
-import { Filesystem, NodeFs, Path } from 'sys.fs.node';
-import { Crdt } from 'sys.data.crdt';
 import { Vercel } from 'cloud.vercel';
+import { Crdt } from 'sys.data.crdt';
+import { Markdown } from 'sys.data.markdown/node';
+import { Filesystem, NodeFs, Path } from 'sys.fs.node';
+import { rx } from 'sys.util';
+
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
-import { Markdown } from 'sys.data.markdown/node';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -73,13 +74,14 @@ await doc.change((doc) => {
   doc.msg = 'hello';
   doc.count++;
 });
+await doc.save(fs.tmp, 'dist/data/file.crdt');
 
 console.log('');
 console.log('-------------------------------------------');
 console.log('🐷🐷 CRDT 🐷🐷 (TODO) working example:', doc.current);
 console.log('-------------------------------------------');
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
