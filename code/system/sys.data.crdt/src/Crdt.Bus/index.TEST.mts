@@ -447,10 +447,22 @@ describe('CrdtBus', (e) => {
           expect(res.error).to.include(`Error loading CRDT. The path "/file.crdt" does not exist`);
         });
 
-        it.skip('load error: file not an automerge object', async () => {
-          /**
-           * TODO 🐷
-           */
+        it('load error: file not an automerge object', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+
+          const path = 'foo/file.crdt';
+          await fs.write(path, new TextEncoder().encode('Hello!'));
+
+          const res = await events.ref.fire<Doc>({ id: slug(), load: { fs, path } });
+          dispose();
+
+          expect(res.exists).to.eql(false);
+          expect(res.created).to.eql(false);
+          expect(res.changed).to.eql(false);
+          expect(res.saved).to.eql(false);
+          expect(res.loaded).to.eql(false);
+          expect(res.error).to.include('Error loading CRDT. Data does not begin with magic bytes');
         });
       });
 
