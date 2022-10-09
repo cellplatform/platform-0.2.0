@@ -15,8 +15,8 @@ export const Paths = {
 
   outDir: {
     root: 'dist',
-    web: 'dist/lib.web',
-    node: 'dist/lib.node',
+    web: 'dist/web',
+    node: 'dist/node',
     target(target: t.ViteTarget) {
       if (target === 'web') return Paths.outDir.web;
       if (target === 'node') return Paths.outDir.node;
