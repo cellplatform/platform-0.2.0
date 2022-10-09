@@ -4,6 +4,12 @@
 - Concepts derived from within `/spikes` are harvested and refactored into `/system` 
   (or other "production quality code" locations).
 
+---
+
+**IMPORTANT**  
+Unlike all other folders in this repo, the quality of the code in products within "spikes" is not to
+be considered "systems grade engineering quality" code.  
+These are quick, exploratory, experimental, throw-away [sketches](https://en.wikipedia.org/wiki/Bill_Buxton).
 
 ### Terminology
 
