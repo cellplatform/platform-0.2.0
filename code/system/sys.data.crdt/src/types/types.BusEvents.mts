@@ -56,7 +56,7 @@ export type CrdtDocEvents<T extends O> = {
   save(
     fs: t.Fs,
     path: string,
-    options?: { strategy?: t.CrdtSaveStrategy },
+    options?: { strategy?: t.CrdtSaveStrategy; json?: boolean },
   ): Promise<t.CrdtDocSaveResponse>;
 };
 

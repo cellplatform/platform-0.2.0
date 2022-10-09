@@ -51,7 +51,7 @@ export const CrdtFilesystem = {
 
         if (args.json) {
           const path = format.toString({ json: true });
-          const json = `JSON.stringify(data)\n`;
+          const json = `${JSON.stringify(data)}\n`;
           paths.push(path);
           await fs.write(path, json);
         }

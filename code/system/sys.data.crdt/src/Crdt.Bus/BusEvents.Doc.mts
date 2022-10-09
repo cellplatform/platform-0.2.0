@@ -59,8 +59,8 @@ export async function CrdtDocEvents<T extends O>(
      * Persist the data-structure to a filesystem.
      */
     async save(fs, path, options = {}) {
-      const { strategy } = options;
-      const res = await events.ref.fire({ id, save: { fs, path, strategy } });
+      const { strategy, json } = options;
+      const res = await events.ref.fire({ id, save: { fs, path, strategy, json } });
       const { error } = res;
       return Delete.undefined({ path, error });
     },

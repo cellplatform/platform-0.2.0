@@ -357,7 +357,7 @@ describe('CrdtBus', (e) => {
           expect(doc).to.eql({ count: 1234 });
         });
 
-        it('saved file paths', async () => {
+        it('saved file paths (CRDT and JSON)', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
           const id = slug();
@@ -506,58 +506,84 @@ describe('CrdtBus', (e) => {
     });
 
     describe('events.doc.save', () => {
-      it('save: success (default strategy: "Doc")', async () => {
-        const { fs } = TestFilesystem.memory();
-        const { dispose, events } = CrdtBus.Controller({ bus });
-        const initial: Doc = { count: 0 };
-        const doc = await events.doc<Doc>({ id: '1', initial });
+      describe('strategy: "Doc" (whole document)', () => {
+        it('save: success (default strategy: "Doc")', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const initial: Doc = { count: 0 };
+          const doc = await events.doc<Doc>({ id: '1', initial });
 
-        const path = 'foo/file.crdt';
-        const res = await doc.save(fs, path);
-        dispose();
+          const path = 'foo/file.crdt';
+          const res = await doc.save(fs, path);
+          dispose();
 
-        expect(res.path).to.eql(path);
-        expect(res.error).to.eql(undefined);
+          expect(res.path).to.eql(path);
+          expect(res.error).to.eql(undefined);
 
-        const manifest = await fs.manifest();
-        expect(manifest.files.some((f) => f.path === path)).to.eql(true);
+          const manifest = await fs.manifest();
+          expect(manifest.files.some((f) => f.path === path)).to.eql(true);
 
-        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
-        expect(Automerge.load(binary)).to.eql(initial);
-      });
+          const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+          expect(Automerge.load(binary)).to.eql(initial);
+        });
 
-      it('save changes', async () => {
-        const { fs } = TestFilesystem.memory();
-        const { dispose, events } = CrdtBus.Controller({ bus });
-        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+        it('re-save after changes', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
 
-        const path = 'foo/file.crdt';
-        await doc.save(fs, path);
-        const m1 = await fs.manifest();
+          await doc.save(fs, 'foo/file');
+          const m1 = await fs.manifest();
 
-        await doc.change((doc) => (doc.count = 1234));
-        await doc.save(fs, path);
-        const m2 = await fs.manifest();
+          await doc.change((doc) => (doc.count = 1234));
+          await doc.save(fs, 'foo/file');
+          const m2 = await fs.manifest();
 
-        const f1 = m1.files.find((f) => f.path === path);
-        const f2 = m2.files.find((f) => f.path === path);
+          const f1 = m1.files.find((f) => f.path === 'foo/file.crdt');
+          const f2 = m2.files.find((f) => f.path === 'foo/file.crdt');
+          const f3 = m2.files.find((f) => f.path === 'foo/file.crdt.json');
 
-        expect(f1?.bytes).to.not.eql(f2?.bytes);
-        expect(f1?.filehash).to.not.eql(f2?.filehash);
+          expect(f1?.bytes).to.not.eql(f2?.bytes);
+          expect(f1?.filehash).to.not.eql(f2?.filehash);
+          expect(f3).to.eql(undefined);
 
-        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
-        expect(Automerge.load(binary)).to.eql({ count: 1234 });
+          const binary = (await fs.read('foo/file.crdt')) as Automerge.BinaryDocument;
+          expect(Automerge.load(binary)).to.eql({ count: 1234 });
 
-        dispose();
-      });
+          dispose();
+        });
 
-      it('save: error', async () => {
-        const { fs } = TestFilesystem.memory();
-        const { dispose, events } = CrdtBus.Controller({ bus });
-        const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
-        const res = await doc.save(fs, '../../foo.crdt');
-        dispose();
-        expect(res.error).to.include('Error saving CRDT. Failed while writing');
+        it('save json snapshot', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+
+          await doc.save(fs, 'foo/file', { json: true });
+          const m = await fs.manifest();
+
+          const f1 = m.files.find((f) => f.path === 'foo/file.crdt');
+          const f2 = m.files.find((f) => f.path === 'foo/file.crdt.json');
+
+          expect(f1?.bytes).to.greaterThan(100);
+          expect(f2?.bytes).to.greaterThan(10);
+
+          const binary = (await fs.read('foo/file.crdt')) as Automerge.BinaryDocument;
+          expect(Automerge.load(binary)).to.eql({ count: 0 });
+
+          const json = await fs.json.read('foo/file.crdt.json');
+          expect(json).to.eql({ count: 0 });
+
+          dispose();
+        });
+
+        it('save error', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
+          const res = await doc.save(fs, '../../foo.crdt');
+          dispose();
+          expect(res.error).to.include('Error saving CRDT. Failed while writing');
+        });
       });
     });
   });
