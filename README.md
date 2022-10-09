@@ -53,7 +53,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 <p>&nbsp;</p>
 
-#### Subject Measures of Quality (Design/System Engineering):
+#### Subject Measures of Quality (Design / System Engineering):
 
 - [Modularity](https://en.wikipedia.org/wiki/Modularity)
 - [Cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science))
