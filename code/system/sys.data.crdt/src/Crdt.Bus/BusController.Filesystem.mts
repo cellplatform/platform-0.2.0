@@ -1,4 +1,4 @@
-import { t, Automerge, Is } from './common.mjs';
+import { t, Automerge, Is, CrdtPath } from './common.mjs';
 
 export const Filesystem = {
   /**
@@ -8,11 +8,12 @@ export const Filesystem = {
     /**
      * Save using the default strategy.
      */
-    async default<T>(args: { fs: t.Fs; path: string; data: T }) {
-      const { fs, path } = args;
+    async default<T>(args: { fs: t.Fs; path: string; data: T; json?: boolean }) {
+      const { fs } = args;
       const data = args.data as Automerge.FreezeObject<any>;
+      const paths: string[] = [];
 
-      const done = (args: { error?: string } = {}) => ({ error: args.error });
+      const done = (args: { error?: string } = {}) => ({ paths, error: args.error });
       const fail = (error: string) => done({ error });
 
       if (!Is.automergeObject(data)) {
@@ -20,8 +21,19 @@ export const Filesystem = {
       }
 
       try {
+        const format = CrdtPath.format(args.path);
         const binary = Automerge.save(args.data as Automerge.FreezeObject<any>);
-        await fs.write(path, binary);
+
+        const defaultPath = format.toString({});
+        paths.push(defaultPath);
+        await fs.write(defaultPath, binary);
+
+        if (args.json) {
+          const path = format.toString({ json: true });
+          const json = `JSON.stringify(data)\n`;
+          paths.push(path);
+          await fs.write(path, json);
+        }
       } catch (error: any) {
         return fail(`Error saving CRDT data. ${error.message}`);
       }

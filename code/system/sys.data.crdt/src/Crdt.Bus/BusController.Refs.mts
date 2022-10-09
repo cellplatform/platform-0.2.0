@@ -63,9 +63,9 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
       if (!data) {
         error = `Cannot save data. The document has not been initialized.`;
       } else {
-        const { fs, path, strategy = 'Default' } = e.save;
+        const { fs, path, strategy = 'Default', json } = e.save;
         if (strategy === 'Default') {
-          const res = await Filesystem.save.default({ fs, path, data });
+          const res = await Filesystem.save.default({ fs, path, data, json });
           if (res.error) error = res.error;
         } else {
           error = `CRDT save strategy "${strategy}" not supported.`;

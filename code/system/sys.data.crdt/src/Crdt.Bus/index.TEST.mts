@@ -357,6 +357,31 @@ describe('CrdtBus', (e) => {
           expect(doc).to.eql({ count: 1234 });
         });
 
+        it('saved file paths', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const id = slug();
+
+          await events.ref.fire<Doc>({
+            id,
+            change: { count: 1234 },
+            save: { fs, path: 'foo/file' },
+          });
+
+          const files1 = (await fs.manifest()).files.map((f) => f.path);
+          expect(files1).to.eql(['foo/file.crdt']);
+
+          await events.ref.fire<Doc>({
+            id,
+            save: { fs, path: 'foo/file', json: true },
+          });
+
+          const files2 = (await fs.manifest()).files.map((f) => f.path);
+          expect(files2).to.eql(['foo/file.crdt', 'foo/file.crdt.json']);
+
+          dispose();
+        });
+
         it('change then save', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });

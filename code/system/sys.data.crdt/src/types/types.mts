@@ -19,5 +19,10 @@ export type CrdtChangeHandler<T extends O> = (doc: T) => void;
 /**
  * Handler that persists the CRDT to a filesystem store.
  */
-export type CrdtSaveCtx = { fs: t.Fs; path: string; strategy?: CrdtSaveStrategy };
+export type CrdtSaveCtx = {
+  fs: t.Fs;
+  path: string;
+  strategy?: CrdtSaveStrategy;
+  json?: boolean; // Flag indicating if a JSON snapshot should also be written to storage.
+};
 export type CrdtSaveStrategy = 'Default';
