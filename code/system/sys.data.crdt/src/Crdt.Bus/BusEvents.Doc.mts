@@ -36,10 +36,7 @@ export async function CrdtDocEvents<T extends O>(
     return (await events.ref.fire<T>(payload)).doc;
   };
 
-  const getCurrent = async () => {
-    const doc = await getCurrentDoc();
-    return doc.data as T;
-  };
+  const getCurrent = async () => (await getCurrentDoc()).data as T;
   let _current: T = await getCurrent();
 
   const changed$ = events.ref.changed$.pipe(
