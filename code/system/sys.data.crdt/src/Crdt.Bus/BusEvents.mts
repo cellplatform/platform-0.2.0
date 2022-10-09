@@ -70,7 +70,7 @@ export function BusEvents(args: {
       id: DocumentId;
       load?: t.CrdtStorageCtx;
       change?: t.CrdtChangeHandler<T> | T;
-      save?: t.CrdtStorageCtx;
+      save?: t.CrdtStorageSaveCtx;
       timeout?: Milliseconds;
     }) {
       const { timeout = 3000, load, save } = args;
@@ -135,7 +135,7 @@ export function BusEvents(args: {
     dispose$,
     info,
     ref: state,
-    doc<T extends O>(args: t.CrdtDocEventsArgsInit<T> | t.CrdtDocEventsArgsLoad) {
+    doc<T extends O>(args: t.CrdtDocEventsArgs<T>) {
       return CrdtDocEvents<T>({ ...args, events });
     },
   };

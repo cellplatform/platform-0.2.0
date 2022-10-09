@@ -6,10 +6,10 @@ type DocumentId = string;
 /**
  * Initialization variants for a new document wrapper.
  */
-export type CrdtDocEventsArgsInit<T> = { id: DocumentId; initial: T | (() => T) };
-export type CrdtDocEventsArgsLoad = {
+export type CrdtDocEventsArgs<T> = {
   id: DocumentId;
-  load: { fs: t.Fs; path: string; strategy?: t.CrdtStorageStrategy };
+  initial: T | (() => T);
+  load?: { fs: t.Fs; path: string; strategy?: t.CrdtStorageStrategy };
 };
 
 /**

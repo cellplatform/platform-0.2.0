@@ -25,7 +25,7 @@ export const CrdtFilesystem = {
    */
   async load<T>(
     strategy: t.CrdtStorageStrategy,
-    args: { fs: t.Fs; path: string; data: T; json?: boolean },
+    args: { fs: t.Fs; path: string },
   ): Promise<LoadResponse<T>> {
     const { path } = args;
     const fail = (error: string) => ({ path, error });
@@ -79,7 +79,7 @@ export const CrdtFilesystem = {
       return done();
     },
 
-    async load<T>(args: { fs: t.Fs; path: string; json?: boolean }): Promise<LoadResponse<T>> {
+    async load<T>(args: { fs: t.Fs; path: string }): Promise<LoadResponse<T>> {
       const { fs } = args;
       const path = CrdtPath.format(args.path).toString();
 
@@ -126,7 +126,7 @@ export const CrdtFilesystem = {
       return fail(`Save strategy "${strategy}" not implemented.`);
     },
 
-    async load<T>(args: { fs: t.Fs; path: string; json?: boolean }): Promise<LoadResponse<T>> {
+    async load<T>(args: { fs: t.Fs; path: string }): Promise<LoadResponse<T>> {
       const path = CrdtPath.format(args.path).toString();
 
       const done = (args: { error?: string } = {}) => ({ path, error: args.error });

@@ -388,43 +388,43 @@ describe('CrdtBus', (e) => {
           const id = slug();
 
           const path = 'foo/file.crdt';
-          const res1 = await events.ref.fire<Doc>({ id, change: { count: 1234 } });
+          const doc1 = await events.ref.fire<Doc>({ id, change: { count: 1234 } });
 
-          expect(res1.created).to.eql(true);
-          expect(res1.saved).to.eql(false);
-          expect(res1.error).to.eql(undefined);
+          expect(doc1.created).to.eql(true);
+          expect(doc1.saved).to.eql(false);
+          expect(doc1.error).to.eql(undefined);
 
-          const res2 = await events.ref.fire<Doc>({ id, save: { fs, path } });
+          const doc2 = await events.ref.fire<Doc>({ id, save: { fs, path } });
 
-          expect(res2.created).to.eql(false);
-          expect(res2.saved).to.eql(true);
-          expect(res2.error).to.eql(undefined);
+          expect(doc2.created).to.eql(false);
+          expect(doc2.saved).to.eql(true);
+          expect(doc2.error).to.eql(undefined);
 
           dispose();
         });
 
-        it('load: ', async () => {
+        it('load', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
 
-          const path = 'file';
+          const path = 'foo/myfile';
           await events.ref.fire<Doc>({ id: '1', change: { count: 1234 }, save: { fs, path } });
 
-          const res1 = await events.ref.fire<Doc>({ id: '2' }); // NB: No "load" instruction given.
-          const res2 = await events.ref.fire<Doc>({ id: '2', load: { fs, path } });
+          const doc1 = await events.ref.fire<Doc>({ id: '2' }); // NB: No "load" instruction given.
+          const doc2 = await events.ref.fire<Doc>({ id: '2', load: { fs, path } });
 
-          expect(res1.exists).to.eql(false);
-          expect(res1.loaded).to.eql(false);
-          expect(res1.created).to.eql(false);
-          expect(res1.saved).to.eql(false);
+          expect(doc1.exists).to.eql(false);
+          expect(doc1.loaded).to.eql(false);
+          expect(doc1.created).to.eql(false);
+          expect(doc1.saved).to.eql(false);
 
-          expect(res2.exists).to.eql(true);
-          expect(res2.loaded).to.eql(true);
-          expect(res2.created).to.eql(false);
-          expect(res2.saved).to.eql(false);
+          expect(doc2.exists).to.eql(true);
+          expect(doc2.loaded).to.eql(true);
+          expect(doc2.created).to.eql(false);
+          expect(doc2.saved).to.eql(false);
 
-          expect(res2.doc.id).to.eql('2');
-          expect(res2.doc.data).to.eql({ count: 1234 });
+          expect(doc2.doc.id).to.eql('2');
+          expect(doc2.doc.data).to.eql({ count: 1234 });
 
           dispose();
         });
@@ -574,7 +574,7 @@ describe('CrdtBus', (e) => {
 
     describe('events.doc.(load | save)', () => {
       describe('strategy: "Doc" (whole document)', () => {
-        it('save: success (default strategy: "Doc")', async () => {
+        it('save', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
           const initial: Doc = { count: 0 };
@@ -666,11 +666,10 @@ describe('CrdtBus', (e) => {
 
           await doc1.change((doc) => (doc.count = 1234));
           await doc1.save(fs, path);
-
-          const doc2 = await ctx2.events.doc<Doc>({ id: '2', load: { fs, path } });
+          const doc2 = await ctx2.events.doc<Doc>({ id: '2', initial, load: { fs, path } });
 
           expect(doc1.current).to.eql({ count: 1234 });
-          expect(doc2.current).to.eql({ count: 1234 }); // <== NB: Loaded from filesystem.
+          expect(doc2.current).to.eql({ count: 1234 }); // <== NB: Loaded from filesystem (NOT initial value).
         });
       });
     });

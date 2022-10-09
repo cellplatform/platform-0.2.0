@@ -37,15 +37,13 @@ export type CrdtEvents = t.Disposable & {
     };
   };
 
-  doc<T extends O>(
-    args: t.CrdtDocEventsArgsInit<T> | t.CrdtDocEventsArgsLoad,
-  ): Promise<t.CrdtDocEvents<T>>;
+  doc<T extends O>(args: t.CrdtDocEventsArgs<T>): Promise<t.CrdtDocEvents<T>>;
 };
 
 export type CrdtEventsRefArgs<T extends O> = {
   id: DocumentId;
-  load?: t.CrdtStorageCtx;
+  load?: t.CrdtStorageLoadCtx;
   change?: t.CrdtChangeHandler<T> | T;
-  save?: t.CrdtStorageCtx;
+  save?: t.CrdtStorageSaveCtx;
   timeout?: Milliseconds;
 };
