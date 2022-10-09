@@ -12,6 +12,9 @@
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
+  "resolutions": {
+    "automerge-wasm": "^0.1.6"
+  },
   "dependencies": {
     "@tauri-apps/api": "1.1.0",
     "asmcrypto.js": "^2.3.2",
