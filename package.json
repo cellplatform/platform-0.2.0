@@ -15,7 +15,8 @@
   "dependencies": {
     "@tauri-apps/api": "1.1.0",
     "asmcrypto.js": "^2.3.2",
-    "automerge": "^1.0.1-preview.7",
+    "automerge": "^2.0.0-alpha.3",
+    "automerge-wasm": "^0.1.6",
     "cli-table3": "^0.6.2",
     "cross-fetch": "^3.1.5",
     "dayjs": "^1.11.5",
