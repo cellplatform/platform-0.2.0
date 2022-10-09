@@ -12,14 +12,10 @@
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
-  "resolutions": {
-    "automerge-wasm": "^0.1.6"
-  },
   "dependencies": {
     "@tauri-apps/api": "1.1.0",
     "asmcrypto.js": "^2.3.2",
-    "automerge": "^2.0.0-alpha.3",
-    "automerge-wasm": "^0.1.6",
+    "automerge": "^1.0.1-preview.7",
     "cli-table3": "^0.6.2",
     "cross-fetch": "^3.1.5",
     "dayjs": "^1.11.5",

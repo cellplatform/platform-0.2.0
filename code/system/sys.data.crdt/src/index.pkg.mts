@@ -16,8 +16,7 @@ export const Pkg: ModuleDef = {
     'sys.fs': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'automerge': '2.0.0-alpha.3',
-    'automerge-wasm': '0.1.6',
+    'automerge': '1.0.1-preview.7',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
