@@ -24,12 +24,7 @@ export type CrdtEvents = t.Disposable & {
     res$: t.Observable<t.CrdtRefRes>;
     created$: t.Observable<t.CrdtRefCreated>;
     changed$: t.Observable<t.CrdtRefChanged>;
-    fire<T extends O>(args: {
-      id: DocumentId;
-      change?: t.CrdtChangeHandler<T> | T;
-      save?: t.CrdtSaveCtx;
-      timeout?: Milliseconds;
-    }): Promise<t.CrdtRefRes<T>>;
+    fire<T extends O>(args: CrdtEventsRefArgs<T>): Promise<t.CrdtRefRes<T>>;
     exists: {
       req$: t.Observable<t.CrdtRefExistsReq>;
       res$: t.Observable<t.CrdtRefExistsRes>;
@@ -42,23 +37,15 @@ export type CrdtEvents = t.Disposable & {
     };
   };
 
-  doc<T extends O>(args: CrdtDocEventsArgs<T>): Promise<CrdtDocEvents<T>>;
+  doc<T extends O>(
+    args: t.CrdtDocEventsArgsInit<T> | t.CrdtDocEventsArgsLoad,
+  ): Promise<t.CrdtDocEvents<T>>;
 };
 
-/**
- * Event API: Single document.
- */
-export type CrdtDocEvents<T extends O> = {
+export type CrdtEventsRefArgs<T extends O> = {
   id: DocumentId;
-  current: T;
-  changed$: t.Observable<t.CrdtRefChanged<O>>;
-  change(handler: t.CrdtChangeHandler<T>): Promise<T>;
-  save(
-    fs: t.Fs,
-    path: string,
-    options?: { strategy?: t.CrdtSaveStrategy },
-  ): Promise<t.CrdtDocSaveResponse>;
+  load?: t.CrdtStorageCtx;
+  change?: t.CrdtChangeHandler<T> | T;
+  save?: t.CrdtStorageCtx;
+  timeout?: Milliseconds;
 };
-
-export type CrdtDocEventsArgs<T> = { id: DocumentId; initial: T | (() => T) };
-export type CrdtDocSaveResponse = { path: string; error?: string };

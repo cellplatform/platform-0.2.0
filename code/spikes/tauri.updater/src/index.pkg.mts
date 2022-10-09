@@ -10,12 +10,9 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'cloud.vercel',
+  name: 'spike.tauri.updater',
   version: '0.0.0',
   dependencies: {
-    'sys.fs': '0.0.0',
-    'sys.fs.indexeddb': '0.0.0',
-    'sys.net.http': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },

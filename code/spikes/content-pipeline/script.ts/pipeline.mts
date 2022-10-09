@@ -74,14 +74,14 @@ await doc.change((doc) => {
   doc.msg = 'hello';
   doc.count++;
 });
-await doc.save(fs.tmp, 'dist/data/file.crdt');
+await doc.save(fs.tmp, 'dist/data/file', { json: true });
 
 console.log('');
 console.log('-------------------------------------------');
 console.log('🐷🐷 CRDT 🐷🐷 (TODO) working example:', doc.current);
 console.log('-------------------------------------------');
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
