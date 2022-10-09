@@ -18,12 +18,12 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/lib.node/index.js",
-    "./lib.node": "./dist/lib.node/index.js"
+    ".": "./dist/node/index.js",
+    "./node": "./dist/node/index.js"
   },
   "typesVersions": {
     "*": {
-      "lib.node": [
+      "node": [
         "./dist/types.d/index.d.mts"
       ]
     }
