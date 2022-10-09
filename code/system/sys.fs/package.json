@@ -11,7 +11,7 @@
   "dependencies": {
     "sys.types": "0.0.0",
     "sys.util": "0.0.0",
-    "image-js": "^0.35.1"
+    "image-js": "^0.35.2"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
