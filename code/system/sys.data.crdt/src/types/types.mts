@@ -25,4 +25,4 @@ export type CrdtSaveCtx = {
   strategy?: CrdtSaveStrategy;
   json?: boolean; // Flag indicating if a JSON snapshot should also be written to storage.
 };
-export type CrdtSaveStrategy = 'Default';
+export type CrdtSaveStrategy = 'Doc' | 'Log';

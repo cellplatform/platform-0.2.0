@@ -325,7 +325,7 @@ describe('CrdtBus', (e) => {
     });
 
     describe('events.ref (save)', () => {
-      describe('strategy: "Default"', () => {
+      describe('strategy: "Doc" (whole document)', () => {
         it('error: save attempt on non-initialized document', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
@@ -401,6 +401,28 @@ describe('CrdtBus', (e) => {
           expect(res2.error).to.eql(undefined);
 
           dispose();
+        });
+      });
+
+      describe('strategy: "Log" (append only log)', () => {
+        it('error: "Log" strategy not implemented', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+
+          const res = await events.ref.fire<Doc>({
+            id: slug(),
+            change: { count: 1234 },
+            save: { fs, path: 'myfile', strategy: 'Log' },
+          });
+
+          dispose();
+
+          /**
+           * TODO 🐷
+           *    https://github.com/cellplatform/platform-0.2.0/issues/53
+           *    https://automerge.org/docs/cookbook/persistence/
+           */
+          expect(res.error).to.include(`Save strategy "Log" not implemented`);
         });
       });
     });
@@ -484,7 +506,7 @@ describe('CrdtBus', (e) => {
     });
 
     describe('events.doc.save', () => {
-      it('save: success', async () => {
+      it('save: success (default strategy: "Doc")', async () => {
         const { fs } = TestFilesystem.memory();
         const { dispose, events } = CrdtBus.Controller({ bus });
         const initial: Doc = { count: 0 };
@@ -535,7 +557,7 @@ describe('CrdtBus', (e) => {
         const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
         const res = await doc.save(fs, '../../foo.crdt');
         dispose();
-        expect(res.error).to.include('Error saving CRDT data. Failed while writing');
+        expect(res.error).to.include('Error saving CRDT. Failed while writing');
       });
     });
   });

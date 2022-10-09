@@ -1,5 +1,5 @@
 import { Automerge, Is, rx, t } from '../common/index.mjs';
-import { Filesystem } from './BusController.Filesystem.mjs';
+import { CrdtFilesystem } from './BusController.fs.mjs';
 
 type O = Record<string, unknown>;
 type DocumentId = string;
@@ -26,6 +26,7 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
     /**
      * TODO 🐷
      * - lookup in file-system if provided.
+     * - ad as "load" property to Request event.
      */
 
     const created = !Boolean(ref) && typeof e.change === 'object';
@@ -63,14 +64,10 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
       if (!data) {
         error = `Cannot save data. The document has not been initialized.`;
       } else {
-        const { fs, path, strategy = 'Default', json } = e.save;
-        if (strategy === 'Default') {
-          const res = await Filesystem.save.default({ fs, path, data, json });
-          if (res.error) error = res.error;
-        } else {
-          error = `CRDT save strategy "${strategy}" not supported.`;
-        }
-        saved = !error;
+        const { fs, path, strategy = 'Doc', json } = e.save;
+        const res = await CrdtFilesystem.save(strategy, { fs, path, data, json });
+        if (res.error) error = res.error;
+        saved = !res.error;
       }
     }
 
