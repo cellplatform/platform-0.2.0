@@ -74,7 +74,7 @@ await doc.change((doc) => {
   doc.msg = 'hello';
   doc.count++;
 });
-await doc.save(fs.tmp, 'dist/data/file.crdt');
+await doc.save(fs.tmp, 'dist/data/file', { json: true });
 
 console.log('');
 console.log('-------------------------------------------');
