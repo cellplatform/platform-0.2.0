@@ -68,9 +68,9 @@ export function BusEvents(args: {
 
     async fire<T extends O>(args: {
       id: DocumentId;
-      load?: t.CrdtSaveCtx;
+      load?: t.CrdtStorageCtx;
       change?: t.CrdtChangeHandler<T> | T;
-      save?: t.CrdtSaveCtx;
+      save?: t.CrdtStorageCtx;
       timeout?: Milliseconds;
     }) {
       const { timeout = 3000, load, save } = args;
@@ -79,16 +79,10 @@ export function BusEvents(args: {
       const res$ = state.res$.pipe(filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.CrdtRefResEvent>(res$, { op, timeout });
 
+      const doc = { id: args.id };
       bus.fire({
         type: 'sys.crdt/ref:req',
-        payload: {
-          tx,
-          id,
-          doc: { id: args.id },
-          load,
-          change: args.change as any,
-          save,
-        },
+        payload: { tx, id, doc, load, save, change: args.change as any },
       });
 
       const res = await first;
@@ -141,7 +135,7 @@ export function BusEvents(args: {
     dispose$,
     info,
     ref: state,
-    doc<T extends O>(args: t.CrdtDocEventsArgs<T>) {
+    doc<T extends O>(args: t.CrdtDocEventsArgsInit<T> | t.CrdtDocEventsArgsLoad) {
       return CrdtDocEvents<T>({ ...args, events });
     },
   };

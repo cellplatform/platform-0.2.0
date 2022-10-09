@@ -257,7 +257,7 @@ describe('CrdtBus', (e) => {
         };
 
         await events.ref.fire<Doc>({ id, change: { count: 0 } });
-        const res = await events.ref.fire<Doc>({ id, change: change });
+        const res = await events.ref.fire<Doc>({ id, change });
 
         expect(res.changed).to.eql(true);
         expect(res.doc.data?.count).to.eql(123);
@@ -344,7 +344,7 @@ describe('CrdtBus', (e) => {
           const id = slug();
 
           const path = 'foo/file.crdt';
-          const save: t.CrdtSaveCtx = { fs, path };
+          const save: t.CrdtStorageCtx = { fs, path };
           const res = await events.ref.fire<Doc>({ id, change: { count: 1234 }, save });
           dispose();
 
@@ -406,14 +406,12 @@ describe('CrdtBus', (e) => {
         it('load: ', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
-          const id1 = slug();
-          const id2 = slug();
 
           const path = 'file';
-          await events.ref.fire<Doc>({ id: id1, change: { count: 1234 }, save: { fs, path } });
+          await events.ref.fire<Doc>({ id: '1', change: { count: 1234 }, save: { fs, path } });
 
-          const res1 = await events.ref.fire<Doc>({ id: id2 }); // NB: No "load" instruction given.
-          const res2 = await events.ref.fire<Doc>({ id: id2, load: { fs, path } });
+          const res1 = await events.ref.fire<Doc>({ id: '2' }); // NB: No "load" instruction given.
+          const res2 = await events.ref.fire<Doc>({ id: '2', load: { fs, path } });
 
           expect(res1.exists).to.eql(false);
           expect(res1.loaded).to.eql(false);
@@ -425,7 +423,7 @@ describe('CrdtBus', (e) => {
           expect(res2.created).to.eql(false);
           expect(res2.saved).to.eql(false);
 
-          expect(res2.doc.id).to.eql(id2);
+          expect(res2.doc.id).to.eql('2');
           expect(res2.doc.data).to.eql({ count: 1234 });
 
           dispose();
@@ -548,6 +546,7 @@ describe('CrdtBus', (e) => {
 
         dispose();
         expect(res).to.eql({ count: 1 });
+        expect(doc.current).to.eql({ count: 1 });
 
         expect(fired.length).to.eql(1);
         expect(fired[0].doc.id).to.eql(doc.id);
@@ -573,7 +572,7 @@ describe('CrdtBus', (e) => {
       });
     });
 
-    describe('events.doc.save', () => {
+    describe('events.doc.(load | save)', () => {
       describe('strategy: "Doc" (whole document)', () => {
         it('save: success (default strategy: "Doc")', async () => {
           const { fs } = TestFilesystem.memory();
@@ -653,6 +652,25 @@ describe('CrdtBus', (e) => {
           expect(res.error).to.include(
             'Error saving CRDT to path "../../foo.crdt". Failed while writing',
           );
+        });
+
+        it('load', async () => {
+          const { fs } = TestFilesystem.memory();
+
+          const ctx1 = CrdtBus.Controller({ bus: rx.bus() });
+          const ctx2 = CrdtBus.Controller({ bus: rx.bus() });
+
+          const path = 'foo/file';
+          const initial: Doc = { count: 0 };
+          const doc1 = await ctx1.events.doc<Doc>({ id: '1', initial });
+
+          await doc1.change((doc) => (doc.count = 1234));
+          await doc1.save(fs, path);
+
+          const doc2 = await ctx2.events.doc<Doc>({ id: '2', load: { fs, path } });
+
+          expect(doc1.current).to.eql({ count: 1234 });
+          expect(doc2.current).to.eql({ count: 1234 }); // <== NB: Loaded from filesystem.
         });
       });
     });

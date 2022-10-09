@@ -24,9 +24,9 @@ export type CrdtRefReq<T extends O = O> = {
   tx: string;
   id: InstanceId;
   doc: { id: DocumentId };
-  load?: t.CrdtSaveCtx;
+  load?: t.CrdtStorageCtx;
   change?: T | t.CrdtChangeHandler<T>;
-  save?: t.CrdtSaveCtx;
+  save?: t.CrdtStorageCtx;
 };
 
 export type CrdtRefResEvent<T extends O = O> = {

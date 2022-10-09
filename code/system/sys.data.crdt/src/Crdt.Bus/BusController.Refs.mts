@@ -37,7 +37,7 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
     let loaded = false;
     if (e.load) {
       const { fs, path, strategy = 'Doc', json } = e.load;
-      const res = await CrdtFilesystem.load<T>(strategy, { fs, path, data, json });
+      const res = await CrdtFilesystem.load(strategy, { fs, path, data, json });
       if (res.error) error = res.error;
       if (!res.error && res.doc) data = res.doc;
       loaded = !res.error;

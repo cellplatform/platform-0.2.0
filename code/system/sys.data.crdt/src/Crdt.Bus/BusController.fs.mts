@@ -8,7 +8,7 @@ export const CrdtFilesystem = {
    * Delegate to the specified save strategy.
    */
   async save<T>(
-    strategy: t.CrdtSaveStrategy,
+    strategy: t.CrdtStorageStrategy,
     args: { fs: t.Fs; path: string; data: T; json?: boolean },
   ): Promise<SaveResponse> {
     const paths: string[] = [];
@@ -24,7 +24,7 @@ export const CrdtFilesystem = {
    * Delegate to the specified load strategy.
    */
   async load<T>(
-    strategy: t.CrdtSaveStrategy,
+    strategy: t.CrdtStorageStrategy,
     args: { fs: t.Fs; path: string; data: T; json?: boolean },
   ): Promise<LoadResponse<T>> {
     const { path } = args;
@@ -122,7 +122,7 @@ export const CrdtFilesystem = {
        *    https://github.com/cellplatform/platform-0.2.0/issues/53
        *    https://automerge.org/docs/cookbook/persistence/
        */
-      const strategy: t.CrdtSaveStrategy = 'Log';
+      const strategy: t.CrdtStorageStrategy = 'Log';
       return fail(`Save strategy "${strategy}" not implemented.`);
     },
 
@@ -137,7 +137,7 @@ export const CrdtFilesystem = {
        *    https://github.com/cellplatform/platform-0.2.0/issues/53
        *    https://automerge.org/docs/cookbook/persistence/
        */
-      const strategy: t.CrdtSaveStrategy = 'Log';
+      const strategy: t.CrdtStorageStrategy = 'Log';
       return fail(`Load strategy "${strategy}" not implemented.`);
     },
   },
