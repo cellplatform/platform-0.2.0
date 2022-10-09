@@ -68,11 +68,12 @@ export function BusEvents(args: {
 
     async fire<T extends O>(args: {
       id: DocumentId;
+      load?: t.CrdtSaveCtx;
       change?: t.CrdtChangeHandler<T> | T;
       save?: t.CrdtSaveCtx;
       timeout?: Milliseconds;
     }) {
-      const { timeout = 3000, save } = args;
+      const { timeout = 3000, load, save } = args;
       const tx = slug();
       const op = 'ref.get';
       const res$ = state.res$.pipe(filter((e) => e.tx === tx));
@@ -84,6 +85,7 @@ export function BusEvents(args: {
           tx,
           id,
           doc: { id: args.id },
+          load,
           change: args.change as any,
           save,
         },

@@ -26,6 +26,7 @@ export type CrdtEvents = t.Disposable & {
     changed$: t.Observable<t.CrdtRefChanged>;
     fire<T extends O>(args: {
       id: DocumentId;
+      load?: t.CrdtSaveCtx;
       change?: t.CrdtChangeHandler<T> | T;
       save?: t.CrdtSaveCtx;
       timeout?: Milliseconds;

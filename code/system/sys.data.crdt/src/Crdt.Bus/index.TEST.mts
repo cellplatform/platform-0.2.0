@@ -324,7 +324,7 @@ describe('CrdtBus', (e) => {
       });
     });
 
-    describe('events.ref (save)', () => {
+    describe('events.ref (load | save)', () => {
       describe('strategy: "Doc" (whole document)', () => {
         it('error: save attempt on non-initialized document', async () => {
           const { fs } = TestFilesystem.memory();
@@ -338,7 +338,7 @@ describe('CrdtBus', (e) => {
           expect(res.saved).to.eql(false);
         });
 
-        it('save from initial data', async () => {
+        it('save: from initial data', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
           const id = slug();
@@ -357,7 +357,7 @@ describe('CrdtBus', (e) => {
           expect(doc).to.eql({ count: 1234 });
         });
 
-        it('saved file paths (CRDT and JSON)', async () => {
+        it('save: file paths (both CRDT and JSON)', async () => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
           const id = slug();
@@ -402,6 +402,56 @@ describe('CrdtBus', (e) => {
 
           dispose();
         });
+
+        it('load: ', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+          const id1 = slug();
+          const id2 = slug();
+
+          const path = 'file';
+          await events.ref.fire<Doc>({ id: id1, change: { count: 1234 }, save: { fs, path } });
+
+          const res1 = await events.ref.fire<Doc>({ id: id2 }); // NB: No "load" instruction given.
+          const res2 = await events.ref.fire<Doc>({ id: id2, load: { fs, path } });
+
+          expect(res1.exists).to.eql(false);
+          expect(res1.loaded).to.eql(false);
+          expect(res1.created).to.eql(false);
+          expect(res1.saved).to.eql(false);
+
+          expect(res2.exists).to.eql(true);
+          expect(res2.loaded).to.eql(true);
+          expect(res2.created).to.eql(false);
+          expect(res2.saved).to.eql(false);
+
+          expect(res2.doc.id).to.eql(id2);
+          expect(res2.doc.data).to.eql({ count: 1234 });
+
+          dispose();
+        });
+
+        it('load error: does not exist', async () => {
+          const { fs } = TestFilesystem.memory();
+          const { dispose, events } = CrdtBus.Controller({ bus });
+
+          const path = 'file';
+          const res = await events.ref.fire<Doc>({ id: slug(), load: { fs, path } });
+          dispose();
+
+          expect(res.exists).to.eql(false);
+          expect(res.created).to.eql(false);
+          expect(res.changed).to.eql(false);
+          expect(res.saved).to.eql(false);
+          expect(res.loaded).to.eql(false);
+          expect(res.error).to.include(`Error loading CRDT. The path "/file.crdt" does not exist`);
+        });
+
+        it.skip('load error: file not an automerge object', async () => {
+          /**
+           * TODO 🐷
+           */
+        });
       });
 
       describe('strategy: "Log" (append only log)', () => {
@@ -409,10 +459,15 @@ describe('CrdtBus', (e) => {
           const { fs } = TestFilesystem.memory();
           const { dispose, events } = CrdtBus.Controller({ bus });
 
-          const res = await events.ref.fire<Doc>({
-            id: slug(),
+          const id = slug();
+          const res1 = await events.ref.fire<Doc>({
+            id,
             change: { count: 1234 },
             save: { fs, path: 'myfile', strategy: 'Log' },
+          });
+          const res2 = await events.ref.fire<Doc>({
+            id,
+            load: { fs, path: 'myfile', strategy: 'Log' },
           });
 
           dispose();
@@ -422,7 +477,8 @@ describe('CrdtBus', (e) => {
            *    https://github.com/cellplatform/platform-0.2.0/issues/53
            *    https://automerge.org/docs/cookbook/persistence/
            */
-          expect(res.error).to.include(`Save strategy "Log" not implemented`);
+          expect(res1.error).to.include(`Save strategy "Log" not implemented`);
+          expect(res2.error).to.include(`Load strategy "Log" not implemented`);
         });
       });
     });
@@ -582,7 +638,9 @@ describe('CrdtBus', (e) => {
           const doc = await events.doc<Doc>({ id: '1', initial: { count: 0 } });
           const res = await doc.save(fs, '../../foo.crdt');
           dispose();
-          expect(res.error).to.include('Error saving CRDT. Failed while writing');
+          expect(res.error).to.include(
+            'Error saving CRDT to path "../../foo.crdt". Failed while writing',
+          );
         });
       });
     });

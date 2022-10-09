@@ -24,7 +24,8 @@ export type CrdtRefReq<T extends O = O> = {
   tx: string;
   id: InstanceId;
   doc: { id: DocumentId };
-  change?: t.CrdtChangeHandler<T> | T;
+  load?: t.CrdtSaveCtx;
+  change?: T | t.CrdtChangeHandler<T>;
   save?: t.CrdtSaveCtx;
 };
 
@@ -37,6 +38,7 @@ export type CrdtRefRes<T extends O = O> = {
   id: InstanceId;
   exists: boolean;
   created: boolean;
+  loaded: boolean;
   changed: boolean;
   saved: boolean;
   doc: { id: DocumentId; data?: T };

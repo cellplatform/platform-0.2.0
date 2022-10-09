@@ -7,7 +7,9 @@ type Ref = { id: DocumentId; data: O };
 type Refs = { [id: DocumentId]: Ref };
 
 /**
- * Maintain memory references to documents.
+ * Maintain memory references to documents,
+ * acting as central I/O for interacting with the Automerge object(s).
+ *
  */
 export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEvents }) {
   const { events } = args;
@@ -23,20 +25,26 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
     const ref = refs[e.doc.id];
     let error: string | undefined;
 
-    /**
-     * TODO 🐷
-     * - lookup in file-system if provided.
-     * - ad as "load" property to Request event.
-     */
-
-    const created = !Boolean(ref) && typeof e.change === 'object';
+    let created = !Boolean(ref) && typeof e.change === 'object' && !e.load;
     let changed = !created && Boolean(e.change);
 
     let data = ref?.data;
     const prev = data;
 
     /**
-     * Replacement/initial object.
+     * Load (from filesystem)
+     */
+    let loaded = false;
+    if (e.load) {
+      const { fs, path, strategy = 'Doc', json } = e.load;
+      const res = await CrdtFilesystem.load<T>(strategy, { fs, path, data, json });
+      if (res.error) error = res.error;
+      if (!res.error && res.doc) data = res.doc;
+      loaded = !res.error;
+    }
+
+    /**
+     * Replacement OR initial object.
      */
     if (typeof e.change === 'object') {
       data = Is.automergeObject(e.change) ? e.change : Automerge.from(e.change);
@@ -85,7 +93,7 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
      */
     bus.fire({
       type: 'sys.crdt/ref:res',
-      payload: { tx, id, doc, exists, created, changed, saved, error },
+      payload: { tx, id, doc, exists, created, loaded, changed, saved, error },
     });
 
     if (changed) {
