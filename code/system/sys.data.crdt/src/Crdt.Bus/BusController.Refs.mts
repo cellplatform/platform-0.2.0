@@ -43,7 +43,7 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
     }
 
     /**
-     * Mutation handler.
+     * Change/mutate handler.
      */
     if (typeof e.change === 'function') {
       if (!data) {
