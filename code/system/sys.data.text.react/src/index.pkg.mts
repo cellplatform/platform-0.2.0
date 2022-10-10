@@ -10,14 +10,14 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.markdown.react',
+  name: 'sys.data.text.react',
   version: '0.0.0',
   dependencies: {
     'react': '18.2.0',
     'sanitize-html': '2.7.1',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.data.markdown': '0.0.0',
+    'sys.data.text': '0.0.0',
     'sys.util.css': '0.0.0',
     'sys.util.react': '0.0.0',
   },

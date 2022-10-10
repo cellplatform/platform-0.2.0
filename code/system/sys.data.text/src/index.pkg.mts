@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.markdown',
+  name: 'sys.data.text',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',

@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Markdown } from 'sys.data.markdown';
+import { Markdown } from 'sys.data.text';
 
 const md = `# Hello`;
 const html = await Markdown.toHtml(md);
