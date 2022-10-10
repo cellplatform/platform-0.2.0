@@ -1,6 +1,6 @@
 import { Vercel } from 'cloud.vercel';
 import { Crdt } from 'sys.data.crdt';
-import { Markdown } from 'sys.data.markdown/node';
+import { Markdown } from 'sys.data.text/node';
 import { Filesystem, NodeFs, Path } from 'sys.fs.node';
 import { rx } from 'sys.util';
 
