@@ -17,6 +17,7 @@ const bus = rx.bus();
 const Paths = {
   sourceDir: NodeFs.resolve('../../../../../live-state/tdb.meeting/undp'),
   tmpDir: NodeFs.resolve('./tmp'),
+  tmpCrdt: 'dist/data/file',
 };
 
 const FsSource = await Filesystem.client(Paths.sourceDir, { bus });
@@ -69,12 +70,18 @@ await logFsInfo('tmp (local)', fs.tmp);
 const crdt = Crdt.Bus.Controller({ bus }).events;
 
 type D = { msg: string; count: number };
-const doc = await crdt.doc<D>({ id: '1', initial: { msg: '', count: 0 } });
+const doc = await crdt.doc<D>({
+  id: '1',
+  initial: { msg: '', count: 0 },
+  load: { fs: fs.tmp, path: Paths.tmpCrdt },
+});
+
 await doc.change((doc) => {
   doc.msg = 'hello';
   doc.count++;
 });
-await doc.save(fs.tmp, 'dist/data/file', { json: true });
+
+await doc.save(fs.tmp, Paths.tmpCrdt, { json: true });
 
 console.log('');
 console.log('-------------------------------------------');

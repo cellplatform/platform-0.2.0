@@ -36,8 +36,8 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
      */
     let loaded = false;
     if (e.load) {
-      const { fs, path, strategy = 'Doc', json } = e.load;
-      const res = await CrdtFilesystem.load(strategy, { fs, path, data, json });
+      const { fs, path, strategy = 'Doc' } = e.load;
+      const res = await CrdtFilesystem.load<O>(strategy, { fs, path });
       if (res.error) error = res.error;
       if (!res.error && res.doc) data = res.doc;
       loaded = !res.error;
@@ -46,7 +46,7 @@ export function BusControllerRefs(args: { bus: t.EventBus<any>; events: t.CrdtEv
     /**
      * Replacement OR initial object.
      */
-    if (typeof e.change === 'object') {
+    if (!loaded && typeof e.change === 'object') {
       data = Is.automergeObject(e.change) ? e.change : Automerge.from(e.change);
     }
 

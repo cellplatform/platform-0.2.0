@@ -15,7 +15,8 @@
     "automerge": "^1.0.1-preview.7"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "sys.fs.indexeddb": "0.0.0"
   },
   "license": "MIT",
   "private": true,

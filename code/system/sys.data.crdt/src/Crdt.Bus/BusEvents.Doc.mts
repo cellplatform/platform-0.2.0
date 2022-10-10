@@ -7,7 +7,7 @@ type O = Record<string, unknown>;
  * Event API: Single document.
  */
 export async function CrdtDocEvents<T extends O>(
-  args: (t.CrdtDocEventsArgsInit<T> | t.CrdtDocEventsArgsLoad) & { events: t.CrdtEvents },
+  args: t.CrdtDocEventsArgs<T> & { events: t.CrdtEvents },
 ) {
   const { id, events } = args;
 
@@ -21,16 +21,9 @@ export async function CrdtDocEvents<T extends O>(
     const payload: t.CrdtEventsRefArgs<T> = { id };
 
     if (!exists) {
-      const initial = (args as t.CrdtDocEventsArgsInit<T>).initial;
-      const load = (args as t.CrdtDocEventsArgsLoad).load;
-
-      if (initial) {
-        payload.change = wrangleInitial((args as any).initial);
-      }
-
-      if (load) {
-        payload.load = load;
-      }
+      const { load, initial } = args;
+      if (load) payload.load = load;
+      if (initial) payload.change = wrangleInitial((args as any).initial);
     }
 
     return (await events.ref.fire<T>(payload)).doc;
