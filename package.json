@@ -82,11 +82,6 @@
       "code/*/*"
     ]
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 100
-  },
   "license": "MIT",
   "private": true
 }
