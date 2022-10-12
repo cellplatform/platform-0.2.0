@@ -1,7 +1,7 @@
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-import { visit } from 'unist-util-visit';
+import { visit, SKIP } from 'unist-util-visit';
 
 import { describe, expect, it } from '../test/index.mjs';
 import { visitParents } from 'unist-util-visit-parents';
@@ -64,10 +64,11 @@ describe('Plugin (Sample)', () => {
           visitParents(mdast, 'listItem', (listItem, parents) => {
             //
             // console.dir(parents, { depth: 15 });
+            console.log('listItem', listItem);
 
             if (!parents.some((parent) => parent.type === 'list')) {
-              console.log('listItem', listItem);
-              options.onError('not within list');
+              // console.log('listItem', listItem);
+              // options.onError('not within list');
             }
           });
         };
@@ -95,6 +96,41 @@ describe('Plugin (Sample)', () => {
   describe('unist-util-select', () => {
     it('select a node', async () => {
       //
+    });
+  });
+
+  describe('spike', () => {
+    it.only('does', async () => {
+      function samplePlugin() {
+        return (mdast: Root) => {
+          visit(mdast, 'code', (node, index = -1, parent) => {
+            console.log('node', node);
+            (parent as any).children.splice(index, 1);
+            return [SKIP, index];
+          });
+        };
+      }
+
+      const pipeline = unified()
+        //
+        .use(remarkParse)
+        .use(samplePlugin)
+        .use(remarkStringify);
+
+      const md = `
+# My Title
+
+\`\`\`yaml foo
+foo:
+  bar: 123
+\`\`\`
+
+      `;
+
+      const res = await pipeline.process(md);
+      // expect(res.toString()).to.eql(`*   Hello\n`);
+      console.log('-----------------------------------------');
+      console.log('res', res);
     });
   });
 });
