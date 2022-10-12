@@ -18,27 +18,6 @@ describe('processor', () => {
   describe('word match and replacement', () => {
     /**
      * TODO 🐷
-     * https://github.com/cellplatform/platform-0.2.0/issues/83
-     */
-    it.skip('scenario: replaces "CO2" => "CO₂"', async () => {
-      const SAMPLE = `
-        # Sample
-        **Lorem ipsum** dolor CO2 sit amet, consectetur adipiscing elit. Quisque nec quam lorem. Praesent 
-        fermentum, augue ut porta varius, eros nisl euismod ante, [co2] ac suscipit elit libero 
-        nec dolor. Morbi magna enim, molestie non arcu id, "Co2" varius sollicitudin neque. 
-        In sed quam mauris. Aenean mi nisl, elementum non arcu quis, ultrices tincidunt 
-        augue. Vivamus fermentum iaculis tellus finibus porttitor. Nulla <CO2> eu purus id dolor auctor 
-        suscipit. Integer lacinia sapien at ante tempus volutpat....co2!
-      `;
-
-      // NB: Psudo-functions
-      pattern((word) => match('CO2', word))
-        .replaceWith('CO₂')
-        .process(SAMPLE);
-    });
-
-    /**
-     * TODO 🐷
      * https://github.com/cellplatform/platform-0.2.0/issues/84
      */
     it.skip('scenario: match and derive "config props" inline within markdown', async () => {
