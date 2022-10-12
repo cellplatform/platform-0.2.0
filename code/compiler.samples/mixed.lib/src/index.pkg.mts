@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.node-web.lib',
+  name: 'sample.mixed.lib',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',
