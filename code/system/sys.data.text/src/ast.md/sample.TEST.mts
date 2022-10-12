@@ -1,13 +1,13 @@
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-import { selectAll } from 'unist-util-select';
+import { selectAll, select } from 'unist-util-select';
 import { SKIP, visit } from 'unist-util-visit';
 import { visitParents } from 'unist-util-visit-parents';
 
 import { describe, expect, it } from '../test/index.mjs';
 
-import type { Root } from 'mdast';
+import type { Root, Heading, Text } from 'mdast';
 import type { Parent, Node, Data } from 'unist';
 
 describe('Sample: markdown with "universal syntax tree" utilities (unist)', () => {
@@ -115,9 +115,38 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
   });
 
   describe('partial processing and combining', () => {
-    it('combine', async () => {
-      //
+    it('combine: markdown to markdown', async () => {
+      type O = { suffix: string };
+
+      function plugin(options: O) {
+        return (tree: Root) => {
+          const matches = selectAll('heading', tree) as Heading[];
+          matches
+            .filter((heading) => heading.depth === 1)
+            .forEach((heading) => {
+              const text = select('text', heading) as Text | null;
+              if (text?.value) {
+                text.value = `${text.value}${options.suffix}`;
+              }
+            });
+        };
+      }
+
+      const pipeline1 = unified()
+        .use(remarkParse)
+        .use(plugin, { suffix: '...' })
+        .use(remarkStringify);
+
+      const pipeline2 = unified()
+        .use(remarkParse)
+        .use(plugin, { suffix: '!' })
+        .use(remarkStringify);
+
+      const res1 = (await pipeline1.process('# Hello')).toString();
+      const res2 = await pipeline2.process(res1);
+
+      expect(res1.toString()).to.eql('# Hello...\n');
+      expect(res2.toString()).to.eql('# Hello...!\n');
     });
   });
 });
-  
