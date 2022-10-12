@@ -7,104 +7,117 @@ import { describe, expect, it } from '../test/index.mjs';
 import { visitParents } from 'unist-util-visit-parents';
 import type { Root } from 'mdast';
 import { selectAll } from 'unist-util-select';
+import type { Parent, Node, Data } from 'unist';
 
-describe('Plugin (Sample)', () => {
-  /**
-   * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-visit
-   */
-  describe('unist-util-visit', () => {
-    it('sample: increase markdown heading level', async () => {
-      function samplePlugin() {
-        return (mdast: Root) => {
-          visit(mdast, 'heading', (node) => {
-            node.depth += 1;
-          });
-        };
-      }
+describe('Plugin (Samples)', () => {
+  describe('unist-util (universal syntax tree: utilities)', () => {
+    /**
+     * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-visit
+     */
+    describe('unist-util-visit', () => {
+      it('sample: increase markdown heading level', async () => {
+        function samplePlugin() {
+          return (mdast: Root) => {
+            visit(mdast, 'heading', (node) => {
+              node.depth += 1;
+            });
+          };
+        }
 
-      const pipeline = unified()
-        //
-        .use(remarkParse)
-        .use(samplePlugin)
-        .use(remarkStringify);
+        const pipeline = unified()
+          //
+          .use(remarkParse)
+          .use(samplePlugin)
+          .use(remarkStringify);
 
-      const res = await pipeline.process(`# Hello`);
-      expect(res.toString()).to.eql(`## Hello\n`);
+        const res = await pipeline.process(`# Hello`);
+        expect(res.toString()).to.eql(`## Hello\n`);
+      });
+
+      it('sample: make all ordered lists in a markdown document unordered', async () => {
+        function samplePlugin() {
+          return (mdast: Root) => {
+            visit(mdast, 'list', (node) => {
+              if (node.ordered) node.ordered = false;
+            });
+          };
+        }
+
+        const pipeline = unified()
+          //
+          .use(remarkParse)
+          .use(samplePlugin)
+          .use(remarkStringify);
+
+        const res = await pipeline.process(`1. Hello`);
+        expect(res.toString()).to.eql(`*   Hello\n`);
+      });
     });
 
-    it('sample: make all ordered lists in a markdown document unordered', async () => {
-      function samplePlugin() {
-        return (mdast: Root) => {
-          visit(mdast, 'list', (node) => {
-            if (node.ordered) node.ordered = false;
-          });
-        };
-      }
+    /**
+     * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-visit-parents
+     */
+    describe('unist-util-visit-parents', () => {
+      it('check if all markdown [ListItem] are inside a [List]', async () => {
+        const _parents: Parent[] = [];
 
-      const pipeline = unified()
-        //
-        .use(remarkParse)
-        .use(samplePlugin)
-        .use(remarkStringify);
+        function samplePlugin() {
+          return (mdast: Root) => {
+            visitParents(mdast, 'listItem', (listItem, parents) => {
+              _parents.push(...parents);
+            });
+          };
+        }
 
-      const res = await pipeline.process(`1. Hello`);
-      expect(res.toString()).to.eql(`*   Hello\n`);
+        const pipeline = unified()
+          //
+          .use(remarkParse)
+          .use(samplePlugin)
+          .use(remarkStringify);
+
+        const res = await pipeline.process(`1. Hello`);
+        expect(res.toString()).to.eql('1.  Hello\n');
+
+        expect(_parents.length).to.eql(2);
+        expect(_parents[0].type).to.eql('root');
+        expect(_parents[1].type).to.eql('list');
+      });
+    });
+
+    /**
+     * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-select
+     */
+    describe('unist-util-select', () => {
+      it('select a node', async () => {
+        const _matches: Node<Data>[] = [];
+
+        function samplePlugin() {
+          return (mdast: Root) => {
+            const matches = selectAll('blockquote paragraph', mdast);
+            _matches.push(...matches);
+          };
+        }
+
+        const pipeline = unified()
+          //
+          .use(remarkParse)
+          .use(samplePlugin)
+          .use(remarkStringify);
+
+        const res = await pipeline.process(`>> Hello`);
+        expect(res.toString()).to.eql('> > Hello\n');
+
+        expect(_matches.length).to.eql(1);
+        expect(_matches[0].type).to.eql('paragraph');
+      });
     });
   });
 
-  /**
-   * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-visit-parents
-   */
-  describe('unist-util-visit-parents', () => {
-    it('check if all markdown [ListItem] are inside a [List]', async () => {
-      type O = { onError: (msg: string) => void };
-
-      function samplePlugin(options: O) {
-        return (mdast: Root) => {
-          visitParents(mdast, 'listItem', (listItem, parents) => {
-            //
-            // console.dir(parents, { depth: 15 });
-            console.log('listItem', listItem);
-
-            if (!parents.some((parent) => parent.type === 'list')) {
-              // console.log('listItem', listItem);
-              // options.onError('not within list');
-            }
-          });
-        };
-      }
-
-      const errors: string[] = [];
-
-      const pipeline = unified()
-        //
-        .use(remarkParse)
-        .use(samplePlugin, { onError: (msg) => errors.push(msg) })
-        .use(remarkStringify);
-
-      const res = await pipeline.process(`1. Hello`);
-
-      console.log('-------------------------------------------');
-      console.log('res.toString()', res.toString());
-      console.log('errors', errors);
-    });
-  });
-
-  /**
-   * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-select
-   */
-  describe('unist-util-select', () => {
-    it('select a node', async () => {
-      //
-    });
-  });
-
-  describe('spike', () => {
-    it.only('does', async () => {
+  describe('matchers and helpers', () => {
+    it.skip('code block: yaml | meta:<text>', async () => {
       function samplePlugin() {
         return (mdast: Root) => {
           visit(mdast, 'code', (node, index = -1, parent) => {
-            console.log('node', node);
             (parent as any).children.splice(index, 1);
             return [SKIP, index];
           });
@@ -120,9 +133,9 @@ describe('Plugin (Sample)', () => {
       const md = `
 # My Title
 
-\`\`\`yaml foo
-foo:
-  bar: 123
+\`\`\`yaml document:meta
+version: 0.0.0
+title:   My Document
 \`\`\`
 
       `;
