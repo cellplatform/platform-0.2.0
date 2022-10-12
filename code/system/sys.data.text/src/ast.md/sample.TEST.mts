@@ -115,37 +115,43 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
   });
 
   describe('partial processing and combining', () => {
-    it('combine: markdown to markdown', async () => {
-      type O = { suffix: string };
+    type O = { suffix: string };
+    function headingSuffix(options: O) {
+      return (tree: Root) => {
+        const matches = selectAll('heading', tree) as Heading[];
+        matches
+          .filter((heading) => heading.depth === 1)
+          .forEach((heading) => {
+            const text = select('text', heading) as Text | null;
+            if (text?.value) {
+              text.value = `${text.value}${options.suffix}`;
+            }
+          });
+      };
+    }
 
-      function plugin(options: O) {
-        return (tree: Root) => {
-          const matches = selectAll('heading', tree) as Heading[];
-          matches
-            .filter((heading) => heading.depth === 1)
-            .forEach((heading) => {
-              const text = select('text', heading) as Text | null;
-              if (text?.value) {
-                text.value = `${text.value}${options.suffix}`;
-              }
-            });
-        };
-      }
+    const pipeline1 = unified()
+      .use(remarkParse)
+      .use(headingSuffix, { suffix: '...' })
+      .use(remarkStringify);
 
-      const pipeline1 = unified()
-        .use(remarkParse)
-        .use(plugin, { suffix: '...' })
-        .use(remarkStringify);
+    const pipeline2 = unified()
+      .use(remarkParse)
+      .use(headingSuffix, { suffix: '!' })
+      .use(remarkStringify);
 
-      const pipeline2 = unified()
-        .use(remarkParse)
-        .use(plugin, { suffix: '!' })
-        .use(remarkStringify);
-
+    it('combine: input/output as strings (immutable)', async () => {
       const res1 = (await pipeline1.process('# Hello')).toString();
-      const res2 = await pipeline2.process(res1);
+      const res2 = (await pipeline2.process(res1)).toString();
+      expect(res1).to.eql('# Hello...\n');
+      expect(res2).to.eql('# Hello...!\n');
+    });
 
+    it('combine: input/output as VFile objects (mutable)', async () => {
+      const res1 = await pipeline1.process('# Hello');
       expect(res1.toString()).to.eql('# Hello...\n');
+
+      const res2 = await pipeline2.process(res1);
       expect(res2.toString()).to.eql('# Hello...!\n');
     });
   });
