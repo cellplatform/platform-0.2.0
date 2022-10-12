@@ -1,24 +1,25 @@
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-import { visit, SKIP } from 'unist-util-visit';
+import { selectAll } from 'unist-util-select';
+import { SKIP, visit } from 'unist-util-visit';
+import { visitParents } from 'unist-util-visit-parents';
 
 import { describe, expect, it } from '../test/index.mjs';
-import { visitParents } from 'unist-util-visit-parents';
+
 import type { Root } from 'mdast';
-import { selectAll } from 'unist-util-select';
 import type { Parent, Node, Data } from 'unist';
 
-describe('Plugin (Samples)', () => {
-  describe('unist-util (universal syntax tree: utilities)', () => {
+describe('Sample: markdown with "universal syntax tree" utilities (unist)', () => {
+  describe('unist-util ', () => {
     /**
      * https://unifiedjs.com/learn/recipe/tree-traversal-typescript/#unist-util-visit
      */
     describe('unist-util-visit', () => {
       it('sample: increase markdown heading level', async () => {
         function samplePlugin() {
-          return (mdast: Root) => {
-            visit(mdast, 'heading', (node) => {
+          return (tree: Root) => {
+            visit(tree, 'heading', (node) => {
               node.depth += 1;
             });
           };
@@ -36,8 +37,8 @@ describe('Plugin (Samples)', () => {
 
       it('sample: make all ordered lists in a markdown document unordered', async () => {
         function samplePlugin() {
-          return (mdast: Root) => {
-            visit(mdast, 'list', (node) => {
+          return (tree: Root) => {
+            visit(tree, 'list', (node) => {
               if (node.ordered) node.ordered = false;
             });
           };
@@ -62,8 +63,8 @@ describe('Plugin (Samples)', () => {
         const _parents: Parent[] = [];
 
         function samplePlugin() {
-          return (mdast: Root) => {
-            visitParents(mdast, 'listItem', (listItem, parents) => {
+          return (tree: Root) => {
+            visitParents(tree, 'listItem', (listItem, parents) => {
               _parents.push(...parents);
             });
           };
@@ -92,8 +93,8 @@ describe('Plugin (Samples)', () => {
         const _matches: Node<Data>[] = [];
 
         function samplePlugin() {
-          return (mdast: Root) => {
-            const matches = selectAll('blockquote paragraph', mdast);
+          return (tree: Root) => {
+            const matches = selectAll('blockquote paragraph', tree);
             _matches.push(...matches);
           };
         }
@@ -116,8 +117,8 @@ describe('Plugin (Samples)', () => {
   describe('matchers and helpers', () => {
     it.skip('code block: yaml | meta:<text>', async () => {
       function samplePlugin() {
-        return (mdast: Root) => {
-          visit(mdast, 'code', (node, index = -1, parent) => {
+        return (tree: Root) => {
+          visit(tree, 'code', (node, index = -1, parent) => {
             (parent as any).children.splice(index, 1);
             return [SKIP, index];
           });
