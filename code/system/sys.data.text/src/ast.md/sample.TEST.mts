@@ -114,37 +114,10 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
     });
   });
 
-  describe('matchers and helpers', () => {
-    it.skip('code block: yaml | meta:<text>', async () => {
-      function samplePlugin() {
-        return (tree: Root) => {
-          visit(tree, 'code', (node, index = -1, parent) => {
-            (parent as any).children.splice(index, 1);
-            return [SKIP, index];
-          });
-        };
-      }
-
-      const pipeline = unified()
-        //
-        .use(remarkParse)
-        .use(samplePlugin)
-        .use(remarkStringify);
-
-      const md = `
-# My Title
-
-\`\`\`yaml document:meta
-version: 0.0.0
-title:   My Document
-\`\`\`
-
-      `;
-
-      const res = await pipeline.process(md);
-      // expect(res.toString()).to.eql(`*   Hello\n`);
-      console.log('-----------------------------------------');
-      console.log('res', res);
+  describe('partial processing and combining', () => {
+    it('combine', async () => {
+      //
     });
   });
 });
+  
