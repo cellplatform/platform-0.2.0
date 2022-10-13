@@ -25,20 +25,19 @@ foo: "props:view"
 The End.
     `;
 
-    const processor = TextProcessor.markdown();
-    const res = await processor.run(MARKDOWN);
+    const res = await TextProcessor.markdown(MARKDOWN);
+    // const res = await processor.run(MARKDOWN);
 
     console.log('---------------------------------------');
     console.log('res.markdown\n', res.markdown);
 
     const html = await res.toHtml();
 
-    console.log('-----------------------------------------');
-    console.log('html:', html.toString());
-
     console.log('---------------------------------');
     console.log('res.info', res.info);
-    console.log('-----------------------------------------');
+    console.log('------------------------------------');
     console.log('run response:', res);
+    console.log('--------------------------------------');
+    console.log('html:', html.toString());
   });
 });
