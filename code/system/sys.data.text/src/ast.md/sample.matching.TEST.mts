@@ -13,6 +13,40 @@ import { describe, it } from '../test/index.mjs';
 import type { Root as MRoot, Code } from 'mdast';
 import type { Element, Root as HRoot } from 'hast';
 
+type MetaBlock = {
+  id: string;
+  lang: string;
+  type: string;
+  text: string;
+};
+
+function Meta() {
+  const blocks: MetaBlock[] = [];
+
+  return {
+    get blocks() {
+      return blocks;
+    },
+    push(block: MetaBlock) {
+      blocks.push(block);
+    },
+    toElement(id: string): Element {
+      return {
+        type: 'element',
+        tagName: 'div',
+        children: [{ type: 'text', value: `code:${id}` }],
+      };
+    },
+    fromElement(node: Element) {
+      if (!(node.type === 'element' && node.tagName === 'div')) return;
+      if (node.children[0].type !== 'text') return;
+      if (!node.children[0].value.startsWith('code:')) return;
+      const id = node.children[0].value.replace(/^code\:/, '');
+      return blocks.find((item) => item.id === id);
+    },
+  };
+}
+
 describe('Sample: process/matching', () => {
   it('match and process markdown', async () => {
     function MarkdownProcessor() {
@@ -40,18 +74,11 @@ describe('Sample: process/matching', () => {
 
       const api = {
         async process(input: VFileCompatible) {
-          type CodeBlock = {
-            id: string;
-            lang: string;
-            type: string;
-            text: string;
-          };
-
-          const codeBlocks: CodeBlock[] = [];
+          const meta = Meta();
 
           const onMarkdownCodeBlock: CodeMatch = (e) => {
             if (e.node.meta) {
-              codeBlocks.push({
+              meta.push({
                 id: slug(),
                 lang: e.node.lang || '',
                 type: e.node.meta || '',
@@ -69,58 +96,43 @@ describe('Sample: process/matching', () => {
 
           return {
             get meta() {
-              return codeBlocks;
+              return meta.blocks;
             },
             toObject: () => file,
             toString: () => file?.toString(),
             toHtml() {
               let index = 0;
-
-              const onHtmlCodeBlock: CodeMatch = (e) => {
+              const onCodeBlock: CodeMatch = (e) => {
                 if (e.node.meta) {
-                  const item = codeBlocks[index];
-
-                  const div: Element = {
-                    type: 'element',
-                    tagName: 'div',
-                    children: [{ type: 'text', value: `code:${item.id}` }],
-                  };
-
-                  e.replace(div);
+                  const item = meta.blocks[index];
+                  if (item) e.replace(meta.toElement(item.id));
                   index++;
                 }
               };
 
-              function myPlugin() {
+              function convertBlocksToDivPlaceholder() {
                 return (tree: HRoot) => {
-                  const findCodeItem = (node: Element) => {
-                    if (!(node.type === 'element' && node.tagName === 'div')) return;
-                    if (node.children[0].type !== 'text') return;
-                    if (!node.children[0].value.startsWith('code:')) return;
-                    const id = node.children[0].value.replace(/^code\:/, '');
-                    return codeBlocks.find((item) => item.id === id);
-                  };
-
                   visit(tree, 'element', (el) => {
-                    const item = findCodeItem(el);
-                    if (!item) return;
-
-                    const props = el.properties || (el.properties = {});
-                    props['id'] = item.id;
-                    props['data-lang'] = item.lang;
-                    props['data-type'] = item.type;
-                    el.children = [];
+                    const item = meta.fromElement(el);
+                    if (item) {
+                      const props = el.properties || (el.properties = {});
+                      props['id'] = item.id;
+                      props['data-lang'] = item.lang;
+                      props['data-type'] = item.type;
+                      el.children = [];
+                    }
                   });
                 };
               }
 
               const pipeline = unified()
                 .use(remarkParse)
-                .use(codeBlock, onHtmlCodeBlock)
+                .use(codeBlock, onCodeBlock)
                 .use(remarkToRehype)
                 .use(rehypeFormat)
-                .use(myPlugin)
+                .use(convertBlocksToDivPlaceholder)
                 .use(rehypeStringify);
+
               return pipeline.process(file);
             },
           };
@@ -157,10 +169,8 @@ end
 
     const res = await md.process(sample);
 
-    console.log('-----------------------------------------');
+    console.log('---------------------------------------');
     console.log('res', res.meta);
-
-    // console.log('res.meta', res.meta);
 
     const html = await res.toHtml();
 
