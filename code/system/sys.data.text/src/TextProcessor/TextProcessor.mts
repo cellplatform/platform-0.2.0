@@ -7,8 +7,7 @@ import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 import { VFileCompatible } from 'vfile';
 
-import type { Code as MdCodeNode } from 'mdast';
-import type { Root as HtmlRootNode, Element as HtmlElementNode } from 'hast';
+import type { Root as HtmlRootNode } from 'hast';
 import { CodeBlock } from './CodeBlock.mjs';
 import { t } from '../common/index.mjs';
 
@@ -17,6 +16,9 @@ import { t } from '../common/index.mjs';
  * Context: [unified.js] text AST processing.
  */
 export const TextProcessor = {
+  /**
+   * Markdown transformer.
+   */
   async markdown(input: VFileCompatible) {
     const codeblocks: t.CodeBlock[] = [];
 
