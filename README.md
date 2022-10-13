@@ -67,6 +67,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 >> An orientation toward "libraries not frameworks"  
 >> Framework agnosticism
 
+<p>&nbsp;</p>
 
 # Philosophy: Design
 
