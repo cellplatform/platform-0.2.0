@@ -59,7 +59,7 @@ export const TextProcessor = {
         function codeBlocksToPlaceholders() {
           return (tree: HtmlRootNode) => {
             visit(tree, 'element', (el) => {
-              const block = CodeBlock.placeholder.findBlock(el, codeblocks);
+              const block = CodeBlock.findBlock(el, codeblocks);
               if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
             });
           };

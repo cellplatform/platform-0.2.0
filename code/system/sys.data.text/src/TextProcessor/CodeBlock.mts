@@ -45,6 +45,13 @@ export const CodeBlock = {
     };
   },
 
+  findBlock(el: HtmlElementNode, blocks: t.CodeBlock[]) {
+    if (!CodeBlock.placeholder.isMatch(el)) return;
+    const child = el.children[0] as HtmlTextNode;
+    const id = child.value.replace(/^code\:/, '');
+    return blocks.find((item) => item.id === id);
+  },
+
   placeholder: {
     createPendingElement(id: string): HtmlElementNode {
       return {
@@ -60,12 +67,6 @@ export const CodeBlock = {
       props['data-type'] = block.type;
       el.children = [];
       return el;
-    },
-    findBlock(el: HtmlElementNode, blocks: t.CodeBlock[]) {
-      if (!CodeBlock.placeholder.isMatch(el)) return;
-      const child = el.children[0] as HtmlTextNode;
-      const id = child.value.replace(/^code\:/, '');
-      return blocks.find((item) => item.id === id);
     },
     isMatch(el: HtmlElementNode) {
       if (!(el.type === 'element' && el.tagName === 'div')) return false;
