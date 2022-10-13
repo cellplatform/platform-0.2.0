@@ -2,14 +2,11 @@ import rehypeFormat from 'rehype-format';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkToRehype from 'remark-rehype';
-import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-import { visit } from 'unist-util-visit';
 import { VFileCompatible } from 'vfile';
 
-import type { Root as HtmlRootNode } from 'hast';
-import { CodeBlock } from './CodeBlock.mjs';
 import { t } from '../common/index.mjs';
+import { CodeBlock } from './CodeBlock.mjs';
 
 /**
  * Namespace: Plugin Processing Content extracting metatadata.
@@ -22,62 +19,33 @@ export const TextProcessor = {
   async markdown(input: VFileCompatible) {
     const codeblocks: t.CodeBlock[] = [];
 
-    function codeBlocksToPlaceholders() {
-      return (tree: HtmlRootNode) => {
-        visit(tree, 'element', (el) => {
-          const block = CodeBlock.findBlock(el, codeblocks);
-          if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
-        });
-      };
-    }
-
-    const handleCodeBlock: t.CodeMatch = (e) => {
+    const handleCodeBlockMatch: t.CodeMatch = (e) => {
       if (e.node.meta) {
         const def = CodeBlock.toObject(e.node);
-        // e.replace(CodeBlock.placeholder.createPendingElement(def.id));
+        e.replace(CodeBlock.placeholder.createPendingElement(def.id)); // HACK: Pending <div> contains the ID and is finalised within [rehype] as ID is not being passed through HTML conversion.
         codeblocks.push(def);
       }
     };
 
     const pipeline = unified()
       .use(remarkParse)
-      .use(CodeBlock.plugin, handleCodeBlock)
-      .use(remarkStringify);
+      .use(CodeBlock.plugin.markdown, handleCodeBlockMatch)
+      .use(remarkToRehype)
+      .use(rehypeFormat)
+      .use(CodeBlock.plugin.html, () => codeblocks)
+      .use(rehypeStringify);
 
     const vfile = await pipeline.process(input);
 
     return {
       get info() {
-        return { code: [...codeblocks] };
-      },
-
-      get markdown() {
-        return vfile?.toString() || '';
-      },
-
-      async toHtml() {
-        let index = 0;
-
-        const handleCodeBlock: t.CodeMatch = (e) => {
-          if (e.node.meta) {
-            const item = codeblocks[index];
-            if (item) {
-              const div = CodeBlock.placeholder.createPendingElement(item.id);
-              e.replace(div);
-            }
-            index++;
-          }
+        return {
+          code: [...codeblocks],
         };
+      },
 
-        const pipeline = unified()
-          .use(remarkParse)
-          .use(CodeBlock.plugin, handleCodeBlock)
-          .use(remarkToRehype)
-          .use(rehypeFormat)
-          .use(codeBlocksToPlaceholders)
-          .use(rehypeStringify);
-
-        return (await pipeline.process(vfile)).toString();
+      get html() {
+        return vfile?.toString() || '';
       },
     };
   },

@@ -1,8 +1,8 @@
-import { describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test/index.mjs';
 import { TextProcessor } from './TextProcessor.mjs';
 
-describe('Sample: process/matching', () => {
-  it('match and process markdown', async () => {
+describe('TextProcessor: Markdown', () => {
+  it('match meta-data code blocks', async () => {
     const MARKDOWN = `
 # My Title
 
@@ -26,18 +26,24 @@ The End.
     `;
 
     const res = await TextProcessor.markdown(MARKDOWN);
-    // const res = await processor.run(MARKDOWN);
+    const html = res.html;
 
-    console.log('---------------------------------------');
-    console.log('res.markdown\n', res.markdown);
+    expect(res.info.code.length).to.eql(2);
 
-    const html = await res.toHtml();
+    expect(res.info.code[0].lang).to.eql('yaml');
+    expect(res.info.code[1].lang).to.eql('yaml');
 
-    console.log('---------------------------------');
-    console.log('res.info', res.info);
-    console.log('------------------------------------');
-    console.log('run response:', res);
-    console.log('-------------------------------------------');
-    console.log('html:', html.toString());
+    expect(res.info.code[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
+    expect(res.info.code[1].text).to.eql('foo: "props:view"');
+
+    res.info.code.forEach((item) => {
+      const lang = `data-lang="${item.lang}"`;
+      const type = `data-type="${item.type}"`;
+      expect(html).to.include(`<div id="${item.id}" ${lang} ${type}`);
+    });
+
+    // NB: Blocks with no "meta" entry are not converted.
+    expect(html).to.include(`<code class="language-yaml">sample: "plain block not a meta block"`);
+    expect(html).to.include('<p>The End.</p>');
   });
 });

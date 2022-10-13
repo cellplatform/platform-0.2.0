@@ -4,7 +4,7 @@ import { slug, t } from '../common/index.mjs';
 
 import type { Node as AstNode } from 'unist';
 import type { Root as MdRootNode, Code as MdCodeNode } from 'mdast';
-import type { Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
+import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
 
 /**
  * Helpers for working with tripple-tick (```) code blocks within markdown.
@@ -17,15 +17,26 @@ import type { Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
  *
  */
 export const CodeBlock = {
-  plugin(onMatch: t.CodeMatch) {
-    return (tree: MdRootNode) => {
-      visit(tree, 'code', (node, i, parent) => {
-        onMatch({
-          node,
-          replace: (node: HtmlElementNode) => CodeBlock.replace(node, parent, i),
+  plugin: {
+    markdown(onMatch: t.CodeMatch) {
+      return (tree: MdRootNode) => {
+        visit(tree, 'code', (node, i, parent) => {
+          const replace: t.CodeMatchArgs['replace'] = (node) => CodeBlock.replace(node, parent, i);
+          onMatch({ node, replace });
         });
-      });
-    };
+      };
+    },
+
+    html(getBlocks: () => t.CodeBlock[]) {
+      //
+      return (tree: HtmlRootNode) => {
+        visit(tree, 'element', (el) => {
+          const blocks = getBlocks();
+          const block = CodeBlock.findBlock(el, blocks);
+          if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+        });
+      };
+    },
   },
 
   replace(node: AstNode, parent: any, index?: number | null) {
