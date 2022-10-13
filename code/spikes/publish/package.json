@@ -1,5 +1,5 @@
 {
-  "name": "spike.content-pipeline",
+  "name": "spike.publish",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
