@@ -1,6 +1,6 @@
 import { Markdown } from './index.mjs';
 import { expect, describe, it } from '../test/index.mjs';
-import { toHtml, toHtmlSync } from './process.mjs';
+import { toHtml, toHtmlSync } from './processor.mjs';
 
 describe('Markdown', () => {
   it('toHtml methods', () => {

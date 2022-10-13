@@ -1,4 +1,4 @@
-import { toHtml, toHtmlSync } from './process.mjs';
+import { toHtml, toHtmlSync } from './processor.mjs';
 
 /**
  * See:

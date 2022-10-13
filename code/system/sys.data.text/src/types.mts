@@ -1,1 +1,1 @@
-export {};
+export * from './TextProcessor/types.mjs';
