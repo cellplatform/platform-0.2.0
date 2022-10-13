@@ -28,15 +28,15 @@ The End.
     const res = await TextProcessor.markdown(MARKDOWN);
     const html = res.html;
 
-    expect(res.info.code.length).to.eql(2);
+    expect(res.info.codeblocks.length).to.eql(2);
 
-    expect(res.info.code[0].lang).to.eql('yaml');
-    expect(res.info.code[1].lang).to.eql('yaml');
+    expect(res.info.codeblocks[0].lang).to.eql('yaml');
+    expect(res.info.codeblocks[1].lang).to.eql('yaml');
 
-    expect(res.info.code[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
-    expect(res.info.code[1].text).to.eql('foo: "props:view"');
+    expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
+    expect(res.info.codeblocks[1].text).to.eql('foo: "props:view"');
 
-    res.info.code.forEach((item) => {
+    res.info.codeblocks.forEach((item) => {
       const lang = `data-lang="${item.lang}"`;
       const type = `data-type="${item.type}"`;
       expect(html).to.include(`<div id="${item.id}" ${lang} ${type}`);

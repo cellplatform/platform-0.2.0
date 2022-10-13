@@ -48,12 +48,11 @@ let version = '';
 let dir = 'dist';
 
 const processREADME = async (markdown: string) => {
-  const processor = TextProcessor.markdown();
+  const res = await TextProcessor.markdown(markdown);
 
-  const res = await processor.run(markdown);
-  const README = await res.toHtml();
+  const README = res.html;
 
-  const propjectProps = res.info.metablocks.filter((m) => m.type === 'project:props')[0];
+  const propjectProps = res.info.codeblocks.filter((m) => m.type === 'project:props')[0];
   const props = Yaml.parse(propjectProps.text);
   version = props.version;
   dir = Path.join(dir, version);

@@ -40,7 +40,7 @@ export const TextProcessor = {
     return {
       get info() {
         return {
-          code: [...codeblocks],
+          codeblocks: [...codeblocks],
         };
       },
 
