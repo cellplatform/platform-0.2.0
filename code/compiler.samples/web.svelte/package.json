@@ -16,6 +16,14 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/assets/index.3cd6a36e.js"
+    ".": "./dist/web/assets/index.ef040d42.js",
+    "./web": "./dist/web/assets/index.ef040d42.js"
+  },
+  "typesVersions": {
+    "*": {
+      "web": [
+        "./dist/types.d/index.html.d.html"
+      ]
+    }
   }
 }
