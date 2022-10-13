@@ -28,7 +28,6 @@ export const CodeBlock = {
     },
 
     html(getBlocks: () => t.CodeBlock[]) {
-      //
       return (tree: HtmlRootNode) => {
         visit(tree, 'element', (el) => {
           const blocks = getBlocks();
