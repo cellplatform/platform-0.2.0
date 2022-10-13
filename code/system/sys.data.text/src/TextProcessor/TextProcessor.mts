@@ -22,20 +22,33 @@ export const TextProcessor = {
   async markdown(input: VFileCompatible) {
     const codeblocks: t.CodeBlock[] = [];
 
-    const extractMetaCodeBlocks: t.CodeMatch = (e) => {
-      if (e.node.meta) codeblocks.push(CodeBlock.toObject(e.node));
+    function codeBlocksToPlaceholders() {
+      return (tree: HtmlRootNode) => {
+        visit(tree, 'element', (el) => {
+          const block = CodeBlock.findBlock(el, codeblocks);
+          if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+        });
+      };
+    }
+
+    const handleCodeBlock: t.CodeMatch = (e) => {
+      if (e.node.meta) {
+        const def = CodeBlock.toObject(e.node);
+        // e.replace(CodeBlock.placeholder.createPendingElement(def.id));
+        codeblocks.push(def);
+      }
     };
 
     const pipeline = unified()
       .use(remarkParse)
-      .use(CodeBlock.plugin, extractMetaCodeBlocks)
+      .use(CodeBlock.plugin, handleCodeBlock)
       .use(remarkStringify);
 
     const vfile = await pipeline.process(input);
 
     return {
       get info() {
-        return { codeblocks: [...codeblocks] };
+        return { code: [...codeblocks] };
       },
 
       get markdown() {
@@ -45,7 +58,7 @@ export const TextProcessor = {
       async toHtml() {
         let index = 0;
 
-        const onCodeBlock: t.CodeMatch = (e) => {
+        const handleCodeBlock: t.CodeMatch = (e) => {
           if (e.node.meta) {
             const item = codeblocks[index];
             if (item) {
@@ -56,18 +69,9 @@ export const TextProcessor = {
           }
         };
 
-        function codeBlocksToPlaceholders() {
-          return (tree: HtmlRootNode) => {
-            visit(tree, 'element', (el) => {
-              const block = CodeBlock.findBlock(el, codeblocks);
-              if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
-            });
-          };
-        }
-
         const pipeline = unified()
           .use(remarkParse)
-          .use(CodeBlock.plugin, onCodeBlock)
+          .use(CodeBlock.plugin, handleCodeBlock)
           .use(remarkToRehype)
           .use(rehypeFormat)
           .use(codeBlocksToPlaceholders)
