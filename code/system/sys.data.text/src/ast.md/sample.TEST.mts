@@ -2,7 +2,7 @@ import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 import { selectAll, select } from 'unist-util-select';
-import { SKIP, visit } from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import { visitParents } from 'unist-util-visit-parents';
 
 import { describe, expect, it } from '../test/index.mjs';

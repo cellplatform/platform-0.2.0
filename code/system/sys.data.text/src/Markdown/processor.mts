@@ -3,7 +3,6 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 
 import remarkToRehype from 'remark-rehype';
-
 import rehypeFormat from 'rehype-format';
 import rehypeStringify from 'rehype-stringify';
 
