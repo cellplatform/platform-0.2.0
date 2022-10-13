@@ -73,14 +73,9 @@ const fileReadme = source.files.find((file) => file.path.endsWith('README.md'));
 
 if (fileReadme) {
   const data = await fs.source.read(fileReadme.path);
-
   const markdown = new TextDecoder().decode(data);
-  const res = await processREADME(markdown);
-
-  // await fs.tmp.write(Path.join(dir, fileReadme.path), data);
+  await processREADME(markdown);
 }
-
-// const dir = Path.join('dist', version);
 
 /**
  * Copy source content (local)
@@ -88,13 +83,13 @@ if (fileReadme) {
 for (const file of source.files) {
   // As markdown file.
   const data = await fs.source.read(file.path);
-  await fs.tmp.write(Path.join(dir, 'md', file.path), data);
+  await fs.tmp.write(Path.join(dir, 'data.md', file.path), data);
 
   // As HTML.
   const text = new TextDecoder().decode(data);
   const html = await Markdown.toHtml(text);
   const filename = `${file.path}.html`;
-  await fs.tmp.write(Path.join(dir, 'html', filename), html);
+  await fs.tmp.write(Path.join(dir, 'data.html', filename), html);
 }
 
 // await logFsInfo('source', fs.source);
@@ -126,7 +121,7 @@ console.log('-------------------------------------------');
 console.log('🐷🐷 CRDT 🐷🐷 (TODO) working example:', doc.current);
 console.log('-------------------------------------------');
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
@@ -142,4 +137,5 @@ await vercel.deploy({
   regions: ['sfo1'],
   target: 'production', // NB: required to be "production" for the DNS alias to be applied.
   silent: false, // Standard BEFORE and AFTER deploy logging to console.
+  timeout: 90000,
 });
