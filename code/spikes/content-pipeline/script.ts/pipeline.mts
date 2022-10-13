@@ -7,6 +7,10 @@ import { rx } from 'sys.util';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
+import { TextProcessor } from 'sys.data.text/node';
+
+import Yaml from 'yaml';
+
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
 
@@ -17,7 +21,6 @@ const bus = rx.bus();
 const Paths = {
   sourceDir: NodeFs.resolve('../../../../../live-state/tdb.meeting/undp'),
   tmpDir: NodeFs.resolve('./tmp'),
-  tmpCrdt: 'dist/data/file',
 };
 
 const FsSource = await Filesystem.client(Paths.sourceDir, { bus });
@@ -41,6 +44,44 @@ const logFsInfo = async (title: string, fs: t.Fs) => {
  * Read in the source markdown.
  */
 const source = await fs.source.manifest();
+let version = '';
+let dir = 'dist';
+
+const processREADME = async (markdown: string) => {
+  const processor = TextProcessor.markdown();
+
+  const res = await processor.run(markdown);
+  const README = await res.toHtml();
+
+  const propjectProps = res.info.metablocks.filter((m) => m.type === 'project:props')[0];
+  const props = Yaml.parse(propjectProps.text);
+  version = props.version;
+  dir = Path.join(dir, version);
+
+  console.log('to => Yaml.parse => obj:', props);
+  console.log('-------------------------------------------');
+  console.log('meta/project:props', propjectProps);
+
+  // const readme = await Markdown.toHtml(text);
+
+  await fs.tmp.write(Path.join(dir, 'README.md'), markdown);
+  await fs.tmp.write(Path.join(dir, 'index.html'), README);
+
+  return { props };
+};
+
+const fileReadme = source.files.find((file) => file.path.endsWith('README.md'));
+
+if (fileReadme) {
+  const data = await fs.source.read(fileReadme.path);
+
+  const markdown = new TextDecoder().decode(data);
+  const res = await processREADME(markdown);
+
+  // await fs.tmp.write(Path.join(dir, fileReadme.path), data);
+}
+
+// const dir = Path.join('dist', version);
 
 /**
  * Copy source content (local)
@@ -48,32 +89,30 @@ const source = await fs.source.manifest();
 for (const file of source.files) {
   // As markdown file.
   const data = await fs.source.read(file.path);
-  await fs.tmp.write(Path.join('dist/md', file.path), data);
+  await fs.tmp.write(Path.join(dir, 'md', file.path), data);
 
   // As HTML.
   const text = new TextDecoder().decode(data);
   const html = await Markdown.toHtml(text);
-  await fs.tmp.write(Path.join('dist/html', `${file.path}.html`), html);
-
-  if (file.path.endsWith('README.md')) {
-    const readme = await Markdown.toHtml(text);
-    await fs.tmp.write('dist/index.html', readme);
-  }
+  const filename = `${file.path}.html`;
+  await fs.tmp.write(Path.join(dir, 'html', filename), html);
 }
 
-await logFsInfo('source', fs.source);
-await logFsInfo('tmp (local)', fs.tmp);
+// await logFsInfo('source', fs.source);
+// await logFsInfo('tmp (local)', fs.tmp);
 
 /**
  * Do some CRDT thing ( 🧠 ).
  */
 const crdt = Crdt.Bus.Controller({ bus }).events;
 
+const crdtPath = Path.join(dir, 'data/file');
+
 type D = { msg: string; count: number };
 const doc = await crdt.doc<D>({
   id: '1',
   initial: { msg: '', count: 0 },
-  load: { fs: fs.tmp, path: Paths.tmpCrdt },
+  load: { fs: fs.tmp, path: crdtPath },
 });
 
 await doc.change((doc) => {
@@ -81,7 +120,7 @@ await doc.change((doc) => {
   doc.count++;
 });
 
-await doc.save(fs.tmp, Paths.tmpCrdt, { json: true });
+await doc.save(fs.tmp, crdtPath, { json: true });
 
 console.log('');
 console.log('-------------------------------------------');
