@@ -9,16 +9,8 @@ import { VFileCompatible } from 'vfile';
 
 import type { Code as MdCodeNode } from 'mdast';
 import type { Root as HtmlRootNode, Element as HtmlElementNode } from 'hast';
-
-type CodeBlock = {
-  id: string;
-  lang: string;
-  type: string;
-  text: string;
-};
-
-type CodeMatch = (e: CodeMatchArgs) => void;
-type CodeMatchArgs = { node: MdCodeNode; replace(value: HtmlElementNode): void };
+import { CodeBlock } from './CodeBlock.mjs';
+import { t } from '../common/index.mjs';
 
 /**
  * Namespace: Plugin Processing Content extracting metatadata.
@@ -26,9 +18,9 @@ type CodeMatchArgs = { node: MdCodeNode; replace(value: HtmlElementNode): void }
  */
 export const TextProcessor = {
   async markdown(input: VFileCompatible) {
-    const codeblocks: CodeBlock[] = [];
+    const codeblocks: t.CodeBlock[] = [];
 
-    const extractMetaCodeBlocks: CodeMatch = (e) => {
+    const extractMetaCodeBlocks: t.CodeMatch = (e) => {
       if (e.node.meta) codeblocks.push(CodeBlock.toObject(e.node));
     };
 
@@ -51,7 +43,7 @@ export const TextProcessor = {
       async toHtml() {
         let index = 0;
 
-        const onCodeBlock: CodeMatch = (e) => {
+        const onCodeBlock: t.CodeMatch = (e) => {
           if (e.node.meta) {
             const item = codeblocks[index];
             if (item) {
