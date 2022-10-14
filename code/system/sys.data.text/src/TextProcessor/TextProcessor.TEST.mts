@@ -16,8 +16,13 @@ sample: "plain block not a meta block"
 detail: "not a meta block"
 \`\`\`
 
-\`\`\`yaml props:view
-foo: "props:view"
+\`\`\`ts
+// Sample code.
+\`\`\`
+
+
+\`\`\`ts props:view
+export default { foo: 123 }
 \`\`\`
 
 ---
@@ -31,10 +36,10 @@ The End.
     expect(res.info.codeblocks.length).to.eql(2);
 
     expect(res.info.codeblocks[0].lang).to.eql('yaml');
-    expect(res.info.codeblocks[1].lang).to.eql('yaml');
+    expect(res.info.codeblocks[1].lang).to.eql('ts');
 
     expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
-    expect(res.info.codeblocks[1].text).to.eql('foo: "props:view"');
+    expect(res.info.codeblocks[1].text).to.eql('export default { foo: 123 }');
 
     res.info.codeblocks.forEach((item) => {
       const lang = `data-lang="${item.lang}"`;
@@ -44,6 +49,7 @@ The End.
 
     // NB: Blocks with no "meta" entry are not converted.
     expect(html).to.include(`<code class="language-yaml">sample: "plain block not a meta block"`);
+    expect(html).to.include(`<code class="language-ts">// Sample code.`);
     expect(html).to.include('<p>The End.</p>');
   });
 });

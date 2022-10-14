@@ -4,9 +4,12 @@ import remarkParse from 'remark-parse';
 import remarkToRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { VFileCompatible } from 'vfile';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
 import { t } from '../common/index.mjs';
 import { CodeBlock } from './CodeBlock.mjs';
+
+import type { Schema } from 'hast-util-sanitize';
 
 /**
  * Namespace: Plugin Processing Content extracting metatadata.
@@ -27,11 +30,24 @@ export const TextProcessor = {
       }
     };
 
+    // REF: https://github.com/rehypejs/rehype-sanitize
+    const sanitizeSchema: Schema = {
+      ...defaultSchema,
+      attributes: {
+        ...defaultSchema.attributes,
+        code: [
+          ...((defaultSchema.attributes || {}).code || []),
+          ['className', 'language-ts', 'language-yaml'],
+        ],
+      },
+    };
+
     const pipeline = unified()
       .use(remarkParse)
       .use(CodeBlock.plugin.markdown, handleCodeBlockMatch)
       .use(remarkToRehype)
       .use(rehypeFormat)
+      .use(rehypeSanitize, sanitizeSchema)
       .use(CodeBlock.plugin.html, () => codeblocks)
       .use(rehypeStringify);
 
