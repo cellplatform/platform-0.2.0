@@ -17,7 +17,7 @@ export const Pkg: ModuleDef = {
     'sanitize-html': '2.7.1',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.data.text': '0.0.0',
+    'sys.text': '0.0.0',
     'sys.util.css': '0.0.0',
     'sys.util.react': '0.0.0',
   },

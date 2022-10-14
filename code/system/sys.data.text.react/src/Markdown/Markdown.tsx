@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Style, t } from '../common/index.mjs';
 import { SanitizeHtml } from '../SanitizeHtml/index.mjs';
-import { Markdown as MD } from 'sys.data.text/web';
+import { Markdown as MD } from 'sys.text/web';
 
 const globalStyles: { [className: string]: boolean } = {};
 

@@ -1,13 +1,13 @@
 import { Vercel } from 'cloud.vercel';
 import { Crdt } from 'sys.data.crdt';
-import { Markdown } from 'sys.data.text/node';
+import { Markdown } from 'sys.text/node';
 import { Filesystem, NodeFs, Path } from 'sys.fs.node';
 import { rx } from 'sys.util';
 
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
-import { TextProcessor } from 'sys.data.text/node';
+import { TextProcessor } from 'sys.text/node';
 
 import Yaml from 'yaml';
 
