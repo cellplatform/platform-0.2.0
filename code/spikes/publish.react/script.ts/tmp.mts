@@ -1,2 +1,2 @@
 #!/usr/bin/env ts-node
-import('./pipeline.mjs');
+import('./deploy-pipeline.mjs');
