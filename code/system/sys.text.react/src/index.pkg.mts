@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.text.react',
+  name: 'sys.text.react',
   version: '0.0.0',
   dependencies: {
     'react': '18.2.0',
