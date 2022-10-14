@@ -1,32 +1,40 @@
 import rehypeFormat from 'rehype-format';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
+import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkToRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { VFileCompatible } from 'vfile';
-import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
-import { t } from '../common/index.mjs';
-import { CodeBlock } from './CodeBlock.mjs';
+import { t, Yaml } from '../common/index.mjs';
+import { CodeBlock } from './MD.CodeBlock.mjs';
 
 import type { Schema } from 'hast-util-sanitize';
+type MarkdownConvertOptions = {
+  gfm?: boolean;
+};
 
 /**
  * Namespace: Plugin Processing Content extracting metatadata.
  * Context: [unified.js] text AST processing.
  */
 export const TextProcessor = {
+  Yaml,
+
   /**
    * Markdown transformer.
    */
-  async markdown(input: VFileCompatible) {
-    const codeblocks: t.CodeBlock[] = [];
+  async markdown(input: VFileCompatible, options: MarkdownConvertOptions = {}) {
+    const _codeblocks: t.CodeBlock[] = [];
+
+    const { gfm = true } = options;
 
     const handleCodeBlockMatch: t.CodeMatch = (e) => {
       if (e.node.meta) {
         const def = CodeBlock.toObject(e.node);
         e.replace(CodeBlock.placeholder.createPendingElement(def.id)); // HACK: Pending <div> contains the ID and is finalised within [rehype] as ID is not being passed through HTML conversion.
-        codeblocks.push(def);
+        _codeblocks.push(def);
       }
     };
 
@@ -42,13 +50,32 @@ export const TextProcessor = {
       },
     };
 
-    const pipeline = unified()
-      .use(remarkParse)
-      .use(CodeBlock.plugin.markdown, handleCodeBlockMatch)
+    /**
+     * PIPELINE Compose Text Processors.
+     */
+    let pipeline = unified();
+
+    /**
+     * Markdown (Grammar)
+     */
+    pipeline = pipeline.use(remarkParse);
+    if (gfm) {
+      pipeline = pipeline.use(remarkGfm);
+    }
+    pipeline = pipeline.use(CodeBlock.plugin.markdown, handleCodeBlockMatch);
+
+    /**
+     * HTML (Grammar)
+     */
+    pipeline = pipeline
+      // -> Html
       .use(remarkToRehype)
       .use(rehypeFormat)
-      .use(rehypeSanitize, sanitizeSchema)
-      .use(CodeBlock.plugin.html, () => codeblocks)
+      .use(rehypeSanitize, sanitizeSchema);
+
+    pipeline = pipeline
+      // -- Html
+      .use(CodeBlock.plugin.html, () => _codeblocks)
       .use(rehypeStringify);
 
     const vfile = await pipeline.process(input);
@@ -56,12 +83,15 @@ export const TextProcessor = {
     return {
       get info() {
         return {
-          codeblocks: [...codeblocks],
+          codeblocks: [..._codeblocks],
         };
       },
 
       get html() {
-        return vfile?.toString() || '';
+        let text = vfile?.toString() || '';
+        if (text.startsWith('\n')) text = text.substring(1);
+        if (text.endsWith('\n')) text = text.substring(0, text.length - 1);
+        return text;
       },
     };
   },

@@ -3,7 +3,7 @@ import { TextProcessor } from './TextProcessor.mjs';
 
 describe('TextProcessor: Markdown', () => {
   it('match meta-data code blocks', async () => {
-    const MARKDOWN = `
+    const SAMPLE = `
 # My Title
 
 \`\`\`yaml doc:meta
@@ -30,7 +30,7 @@ export default { foo: 123 }
 The End.
     `;
 
-    const res = await TextProcessor.markdown(MARKDOWN);
+    const res = await TextProcessor.markdown(SAMPLE);
     const html = res.html;
 
     expect(res.info.codeblocks.length).to.eql(2);
@@ -51,5 +51,27 @@ The End.
     expect(html).to.include(`<code class="language-yaml">sample: "plain block not a meta block"`);
     expect(html).to.include(`<code class="language-ts">// Sample code.`);
     expect(html).to.include('<p>The End.</p>');
+  });
+
+  it('option: GFM (Github Flavored Markdown)', async () => {
+    /**
+     * Examples of GFM variants covered by the parser:
+     *    https://github.com/remarkjs/remark-gfm#use
+     *
+     *   - Tables
+     *   - Tasklists
+     *   - Strikethrough
+     *   - Footnote
+     *   - Autolink literals
+     *
+     */
+    const SAMPLE = `~one~`;
+    const res1 = await TextProcessor.markdown(SAMPLE); // Default.
+    const res2 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+
+    expect(res1.html).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
+    expect(res2.html).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
+    //                                                          - https://commonmark.org
+    //                                                          - https://github.com/micromark/micromark
   });
 });
