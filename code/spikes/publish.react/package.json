@@ -1,6 +1,6 @@
 {
   "name": "spike.publish.react",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,8 +25,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.ba5a89c3.js",
-    "./web": "./dist/web/assets/index.ba5a89c3.js"
+    ".": "./dist/web/assets/index.cdb8830a.js",
+    "./web": "./dist/web/assets/index.cdb8830a.js"
   },
   "typesVersions": {
     "*": {
