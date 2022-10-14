@@ -49,8 +49,8 @@ export const CodeBlock = {
   toObject(node: MdCodeNode) {
     return {
       id: `codeblock.${slug()}`,
-      type: node.meta || '',
       lang: node.lang || '',
+      type: node.meta || '',
       text: node.value,
     };
   },
