@@ -10,8 +10,9 @@
 [Monorepo](https://en.wikipedia.org/wiki/Monorepo) comprising the core set of shared `system` modules that flexibly compose into varying arrangements of   
 (1) extremely-late-bound, (2) strongly typed, (3) decentralised, "cell like" functional processes.
 
-- [system](/code/system/) modules
 - [compilation](/code/compiler/) toolchain
+- [system](/code/system/) modules
+  - [sys.text](/code/system/sys.text/)
 
 ---
 
@@ -64,8 +65,8 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 <p>&nbsp;</p>
 
 
->> "libraries not frameworks"  
->> Framework agnosticism
+>> **"libraries not frameworks"**  
+>> System Orientation: Framework Agnosticism
 
 <p>&nbsp;</p>
 
