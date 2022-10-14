@@ -25,8 +25,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.57362c57.js",
-    "./web": "./dist/web/assets/index.57362c57.js"
+    ".": "./dist/web/assets/index.068b0c9f.js",
+    "./web": "./dist/web/assets/index.068b0c9f.js"
   },
   "typesVersions": {
     "*": {
