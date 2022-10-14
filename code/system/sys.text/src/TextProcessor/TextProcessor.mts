@@ -26,9 +26,8 @@ export const TextProcessor = {
    * Markdown transformer.
    */
   async markdown(input: VFileCompatible, options: MarkdownConvertOptions = {}) {
-    const _codeblocks: t.CodeBlock[] = [];
-
     const { gfm = true } = options;
+    const _codeblocks: t.CodeBlock[] = [];
 
     const handleCodeBlockMatch: t.CodeMatch = (e) => {
       if (e.node.meta) {
@@ -36,18 +35,6 @@ export const TextProcessor = {
         e.replace(CodeBlock.placeholder.createPendingElement(def.id)); // HACK: Pending <div> contains the ID and is finalised within [rehype] as ID is not being passed through HTML conversion.
         _codeblocks.push(def);
       }
-    };
-
-    // REF: https://github.com/rehypejs/rehype-sanitize
-    const sanitizeSchema: Schema = {
-      ...defaultSchema,
-      attributes: {
-        ...defaultSchema.attributes,
-        code: [
-          ...((defaultSchema.attributes || {}).code || []),
-          ['className', 'language-ts', 'language-yaml'],
-        ],
-      },
     };
 
     /**
@@ -71,7 +58,7 @@ export const TextProcessor = {
       // -> Html
       .use(remarkToRehype)
       .use(rehypeFormat)
-      .use(rehypeSanitize, sanitizeSchema);
+      .use(rehypeSanitize, Sanatize.schema());
 
     pipeline = pipeline
       // -- Html
@@ -92,6 +79,27 @@ export const TextProcessor = {
         if (text.startsWith('\n')) text = text.substring(1);
         if (text.endsWith('\n')) text = text.substring(0, text.length - 1);
         return text;
+      },
+    };
+  },
+};
+
+/**
+ * Helpers for working with the markdown sanatizer
+ */
+const Sanatize = {
+  /**
+   *  REF: https://github.com/rehypejs/rehype-sanitize
+   */
+  schema(): Schema {
+    return {
+      ...defaultSchema,
+      attributes: {
+        ...defaultSchema.attributes,
+        code: [
+          ...((defaultSchema.attributes || {}).code || []),
+          ['className', 'language-ts', 'language-yaml'],
+        ],
       },
     };
   },
