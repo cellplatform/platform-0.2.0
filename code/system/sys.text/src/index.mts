@@ -6,7 +6,6 @@ import { TextProcessor } from './TextProcessor/TextProcessor.mjs';
  */
 export { Pkg } from './index.pkg.mjs';
 export { TextProcessor };
-export { Markdown, Markdown as default } from './Markdown/index.mjs';
 
 /**
  *
