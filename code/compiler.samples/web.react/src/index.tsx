@@ -1,7 +1,4 @@
-export {};
-
 import { Pkg } from './index.pkg.mjs';
-console.info(`Pkg:`, Pkg);
+export { Pkg };
 
-import('./ui/entry');
-// import('./main/entry.mjs');
+console.info(`Pkg:`, Pkg);
