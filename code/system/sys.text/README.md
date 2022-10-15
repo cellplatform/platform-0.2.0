@@ -14,7 +14,7 @@ Standards:
 ---
 
 ![doing-images-symbols](https://user-images.githubusercontent.com/185555/196011268-378be479-55e5-4ca6-a25c-5757c58c15b0.png)
-Ref: Alan Kay ⬅︎ Jerome Bruner ([timestamp](https://www.youtube.com/watch?v=Ud8WRAdihPg&t=24s))
+Ref: Alan Kay ← Jerome Bruner ([timestamp](https://www.youtube.com/watch?v=Ud8WRAdihPg&t=24s))
 
 
 ---
