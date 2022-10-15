@@ -9,7 +9,7 @@
 Standards: 
 - [CommonMark.org](https://commonmark.org/) - common markdown stanard
 - [GFM: Github Flavored Markdown](https://github.github.com/gfm/) - markdown variant
-- [Unified](http://unifiedjs.com/) - text processing ecosystem (aka. "stdlib")
+- [Unified](http://unifiedjs.com/) - text processing ecosystem (aka. "stdlib" baseline)
 
 ---
 
