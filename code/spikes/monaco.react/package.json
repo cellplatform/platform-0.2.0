@@ -23,8 +23,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.99b6940d.js",
-    "./web": "./dist/web/assets/index.99b6940d.js"
+    ".": "./dist/web/assets/index.e9d1aa4f.js",
+    "./web": "./dist/web/assets/index.e9d1aa4f.js"
   },
   "typesVersions": {
     "*": {

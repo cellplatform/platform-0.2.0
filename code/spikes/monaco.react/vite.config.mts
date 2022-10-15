@@ -5,6 +5,7 @@ export const tsconfig = Config.ts((e) => {
 });
 
 export default Config.vite(import.meta.url, (e) => {
+  // e.lib();
   e.target('web');
   e.plugin('web:react');
 });
