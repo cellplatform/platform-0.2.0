@@ -19,15 +19,15 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/index.d.mts",
+  "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    ".": "./dist/web/assets/index.891d93e6.js",
+    "./web": "./dist/web/assets/index.891d93e6.js"
   },
   "typesVersions": {
     "*": {
       "web": [
-        "./dist/types.d/index.d.mts"
+        "./dist/types.d/index.html.d.html"
       ]
     }
   }

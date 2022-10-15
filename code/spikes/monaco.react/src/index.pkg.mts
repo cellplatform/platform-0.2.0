@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.monaco',
+  name: 'spike.monaco.react',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',
