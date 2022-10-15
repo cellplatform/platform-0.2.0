@@ -13,6 +13,7 @@ import { CodeBlock } from './MD.CodeBlock.mjs';
 import type { Schema } from 'hast-util-sanitize';
 type MarkdownConvertOptions = {
   gfm?: boolean;
+  output?: 'md' | 'html';
 };
 
 /**
@@ -26,7 +27,7 @@ export const TextProcessor = {
    * Markdown transformer.
    */
   async markdown(input: VFileCompatible, options: MarkdownConvertOptions = {}) {
-    const { gfm = true } = options;
+    const { gfm = true, output = 'html' } = options;
     const _codeblocks: t.CodeBlock[] = [];
 
     const handleCodeBlockMatch: t.CodeMatch = (e) => {
@@ -74,7 +75,7 @@ export const TextProcessor = {
         };
       },
 
-      get html() {
+      get text() {
         let text = vfile?.toString() || '';
         if (text.startsWith('\n')) text = text.substring(1);
         if (text.endsWith('\n')) text = text.substring(0, text.length - 1);

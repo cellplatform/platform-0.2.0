@@ -31,7 +31,7 @@ The End.
     `;
 
     const res = await TextProcessor.markdown(SAMPLE);
-    const html = res.html;
+    const html = res.text;
 
     expect(res.info.codeblocks.length).to.eql(2);
 
@@ -69,8 +69,8 @@ The End.
     const res1 = await TextProcessor.markdown(SAMPLE); // Default.
     const res2 = await TextProcessor.markdown(SAMPLE, { gfm: false });
 
-    expect(res1.html).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
-    expect(res2.html).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
+    expect(res1.text).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
+    expect(res2.text).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
     //                                                          - https://commonmark.org
     //                                                          - https://github.com/micromark/micromark
   });
