@@ -74,4 +74,16 @@ The End.
     //                                                          - https://commonmark.org
     //                                                          - https://github.com/micromark/micromark
   });
+
+  it('santized input', async () => {
+    const res1 = await TextProcessor.markdown('# Hello');
+    const res2 = await TextProcessor.markdown('<div>hello</div>');
+
+    expect(res1.text).to.eql('<h1>Hello</h1>');
+    expect(res2.text).to.eql('');
+  });
+
+  it.skip('option: output ("md" | "html")', async () => {
+    //
+  });
 });
