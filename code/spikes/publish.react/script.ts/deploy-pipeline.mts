@@ -8,9 +8,7 @@ import pc from 'picocolors';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
-import { TextProcessor } from 'sys.text/node';
-
-import Yaml from 'yaml';
+import { Text } from 'sys.text/node';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -43,15 +41,18 @@ const logFsInfo = async (title: string, fs: t.Fs) => {
   console.info('  paths:', paths);
 };
 
+// await logFsInfo('tmp', fs.source);
+
 /**
  * Read in the source markdown.
  */
 const source = await fs.source.manifest();
 let version = '';
-let dir = 'deploy';
+const dir = 'deploy';
 
-// await logFsInfo('source', fs.source);
-// await logFsInfo('tmp (local)', fs.tmp);
+await logFsInfo('source', fs.source);
+await logFsInfo('tmp (local)', fs.tmp);
+// process.exit(0);
 
 const SourceRepo = {
   paths: {
@@ -68,21 +69,21 @@ const SourceRepo = {
     },
 
     async process(markdown: string) {
-      const res = await TextProcessor.markdown(markdown);
-      // const README = res.html;
+      const res = await Text.Processor.markdown(markdown);
 
       const propjectProps = res.info.codeblocks.filter((m) => m.type === 'project:props')[0];
-      const props = Yaml.parse(propjectProps.text);
-      const version = props.version;
+      const props = Text.Yaml.parse(propjectProps.text);
+      const version = props.doc.version;
 
       console.log('-------------------------------------------');
-      console.log('to => Yaml.parse => obj:');
       console.log('meta/project:props', props);
 
-      // const readme = await Markdown.toHtml(text);
+      const deployDir = Path.join(dir, version, 'app/web');
+      console.log('deployDir', deployDir);
 
-      await fs.tmp.write(Path.join(dir, version, 'app/web/README.md'), markdown);
-      await fs.tmp.write(Path.join(dir, version, 'app/web/README.html'), res.html);
+      // README.
+      await fs.tmp.write(Path.join(deployDir, 'README.md'), markdown); //   Raw Markdown
+      await fs.tmp.write(Path.join(deployDir, 'README.md.html'), res.text); // Markdown as HTML
 
       return { props, version, dir };
     },
@@ -90,53 +91,22 @@ const SourceRepo = {
 };
 
 /**
- * Update local version.
+ * Read out latest version.
  */
 await (async () => {
+  // return;
   const README = await SourceRepo.README.load();
   version = README.version;
 
-  const pkg = (await NodeFs.readJson(Paths.localPackage)) as { version: string };
-  pkg.version = README.version;
-  await NodeFs.writeFile(Paths.localPackage, `${JSON.stringify(pkg, null, '  ')}\n`);
-
-  console.log('pkg', pkg);
   console.log('version', version);
-  dir = Path.join(dir, version);
 })();
-
-/**
- * TODO 🐷
- * run the [yarn build] command here
- */
 
 // process.exit(0); // TEMP 🐷
 
 /**
- * Process files.
+ * Prepare files.
  */
 await (async () => {
-  //   const processREADME = async (markdown: string) => {
-  //     const res = await TextProcessor.markdown(markdown);
-  //     const README = res.html;
-  //
-  //     const propjectProps = res.info.codeblocks.filter((m) => m.type === 'project:props')[0];
-  //     const props = Yaml.parse(propjectProps.text);
-  //     version = props.version;
-  //     dir = Path.join(dir, version);
-  //
-  //     console.log('to => Yaml.parse => obj:', props);
-  //     console.log('-------------------------------------------');
-  //     console.log('meta/project:props', propjectProps);
-  //
-  //     // const readme = await Markdown.toHtml(text);
-  //
-  //     await fs.tmp.write(Path.join(dir, 'README.md'), markdown);
-  //     // await fs.tmp.write(Path.join(dir, 'index.html'), README);
-  //
-  //     return { props };
-  //   };
-
   const fileReadme = source.files.find((file) => file.path.endsWith('README.md'));
 
   if (fileReadme) {
@@ -151,13 +121,13 @@ await (async () => {
   for (const file of source.files) {
     // As markdown file.
     const data = await fs.source.read(file.path);
-    await fs.tmp.write(Path.join(dir, 'data.md', file.path), data);
+    await fs.tmp.write(Path.join(dir, version, 'data.md', file.path), data);
 
     // As HTML.
     const text = new TextDecoder().decode(data);
     const html = await Markdown.toHtml(text);
     const filename = `${file.path}.html`;
-    await fs.tmp.write(Path.join(dir, 'data.html', filename), html);
+    await fs.tmp.write(Path.join(dir, version, 'data.html', filename), html);
   }
 })();
 
@@ -197,7 +167,7 @@ await (async () => {
  */
 await (async () => {
   const from = Paths.localDist;
-  const to = Path.join(Paths.tmpDir, dir, 'app');
+  const to = Path.join(Paths.tmpDir, dir, version, 'app');
 
   console.log('');
   console.log('');
