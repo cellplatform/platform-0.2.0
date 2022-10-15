@@ -13,6 +13,8 @@ export const Pkg: ModuleDef = {
   name: 'spike.monaco.react',
   version: '0.0.0',
   dependencies: {
+    '@monaco-editor/react': '4.4.6',
+    'monaco-editor': '0.34.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
