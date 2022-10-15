@@ -26,8 +26,9 @@ Grammars:
 - [CommonMark](https://commonmark.org/)
 - GFM ([Github Flavored Markdown](https://github.github.com/gfm/))
 
+<p>&nbsp;</p>
 
-### GFM (Github Flavored Markdown)
+#### GFM (Github Flavored Markdown)
 
 ```
 # GFM
