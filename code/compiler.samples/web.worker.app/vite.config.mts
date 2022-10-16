@@ -6,5 +6,4 @@ export const tsconfig = Config.ts((e) => {
 
 export default Config.vite(import.meta.url, (e) => {
   e.target('web');
-  e.externalDependency(e.ctx.deps.map((d) => d.name));
 });

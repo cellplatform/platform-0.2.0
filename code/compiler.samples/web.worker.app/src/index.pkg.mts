@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sample.web.worke.app',
+  name: 'sample.web.worker.app',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',

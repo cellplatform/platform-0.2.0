@@ -1,10 +1,10 @@
 {
-  "name": "sample.web.worke.app",
+  "name": "sample.web.worker.app",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist && serve",
+    "serve": "cd dist/web && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
@@ -21,8 +21,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.891d93e6.js",
-    "./web": "./dist/web/assets/index.891d93e6.js"
+    ".": "./dist/web/assets/index.dc5955cf.js",
+    "./web": "./dist/web/assets/index.dc5955cf.js"
   },
   "typesVersions": {
     "*": {
