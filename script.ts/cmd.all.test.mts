@@ -45,24 +45,26 @@ const runTests = async (path: string, options: { silent?: boolean } = {}) => {
 };
 
 const runInParallel = async (args: { paths: string[]; batch?: number }) => {
-  const { batch = 5, paths } = args;
+  const { paths, batch = 5 } = args;
   const batches = R.splitEvery(batch, paths);
 
   console.info(pc.gray(`Running in ${batches.length} batches of ${batch}...`));
-  console.info('');
+  console.info(' ');
 
   for (const batch of batches) {
     batch.forEach((path) => console.info(pc.gray(` ${pc.cyan('•')} ${Util.formatPath(path)}`)));
-    console.info('');
+    console.info(pc.gray('---'));
 
     const wait = Promise.all(batch.map((path) => runTests(path, { silent: true })));
     await wait;
   }
 
   const failed = results.filter((item) => Boolean(item.error));
-  if (failed.length > 0) {
-    console.error('failed', failed);
-  }
+  failed.forEach((item) => {
+    console.info(pc.yellow(`Failed: ${Util.formatPath(item.path)}`));
+    console.info(pc.gray(item.error));
+    console.info(` `);
+  });
 };
 
 const runSerial = async () => {
@@ -73,8 +75,6 @@ const runSerial = async () => {
 
 // await runSerial()
 await runInParallel({ paths, batch: 5 });
-
-// process.exit(0); // TEMP 🐷
 
 const failed = results.filter((item) => Boolean(item.error));
 const ok = failed.length === 0;

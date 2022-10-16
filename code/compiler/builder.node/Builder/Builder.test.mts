@@ -41,8 +41,9 @@ export async function test(
 
   const cmd = `vitest`;
   const cwd = dir;
-  const res = await execa(cmd, args, { cwd, stdio: silent ? 'ignore' : 'inherit' });
-  const ok = res.exitCode === 0;
+  const res = await execa(cmd, args, { cwd, stdio: silent ? 'pipe' : 'inherit' });
+  const { exitCode } = res;
+  const ok = exitCode === 0;
 
-  return { ok, cmd, args };
+  return { ok, exitCode, cmd, args };
 }
