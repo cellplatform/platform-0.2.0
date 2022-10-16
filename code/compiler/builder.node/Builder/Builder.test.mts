@@ -11,17 +11,19 @@ export async function test(
     run?: boolean;
     ui?: boolean;
     coverage?: boolean;
-    silentTestConsole?: boolean; // NB: silence console output from tests
     reporter?: 'default' | 'verbose' | 'json' | 'dot' | 'junit';
+    silentTestConsole?: boolean; // NB: silence console output from tests
+    silent?: boolean;
   } = {},
 ) {
   const {
     watch = true,
     coverage = false,
     ui = false,
-    silentTestConsole: testConsoleSilent = false, // Output from console
     run = false,
     reporter,
+    silentTestConsole: testConsoleSilent = false, // Output from console
+    silent = false,
   } = options;
 
   // Filters.
@@ -39,7 +41,7 @@ export async function test(
 
   const cmd = `vitest`;
   const cwd = dir;
-  const res = await execa(cmd, args, { cwd, stdio: 'inherit' });
+  const res = await execa(cmd, args, { cwd, stdio: silent ? 'ignore' : 'inherit' });
   const ok = res.exitCode === 0;
 
   return { ok, cmd, args };

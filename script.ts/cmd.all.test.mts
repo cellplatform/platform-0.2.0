@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, fs, pc, Util, LogTable, Time } from './common/index.mjs';
+import { Builder, fs, pc, Util, LogTable, Time, R, execa } from './common/index.mjs';
 
 type Milliseconds = number;
 
@@ -11,6 +11,7 @@ const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
 const filter = (path: string) => {
   if (path.includes('/code/compiler.samples/')) return false;
+  if (path.includes('/code/spikes/')) return false;
   return true;
 };
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
@@ -21,10 +22,10 @@ if (paths.length === 0) {
 }
 
 // Log module list.
-console.log();
-console.log(pc.green('test list:'));
-paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
-console.log();
+console.info();
+console.info(pc.green('test list:'));
+paths.forEach((path) => console.info(pc.gray(` • ${Util.formatPath(path)}`)));
+console.info();
 
 type R = { path: string; elapsed: Milliseconds; error?: string };
 const results: R[] = [];
@@ -32,20 +33,48 @@ const pushResult = (path: string, elapsed: Milliseconds, error?: string) => {
   results.push({ path, elapsed, error });
 };
 
-const runTests = async (path: string) => {
+const runTests = async (path: string, options: { silent?: boolean } = {}) => {
+  const { silent } = options;
   const timer = Time.timer();
   try {
-    await Builder.test(path, { run: true, silentTestConsole: true });
+    await Builder.test(path, { run: true, silentTestConsole: true, silent });
     pushResult(path, timer.elapsed.msec);
   } catch (error: any) {
     pushResult(path, timer.elapsed.msec, error.message);
   }
 };
 
-// Build each project.
-for (const path of paths) {
-  await runTests(path);
-}
+const runInParallel = async (args: { paths: string[]; batch?: number }) => {
+  const { batch = 5, paths } = args;
+  const batches = R.splitEvery(batch, paths);
+
+  console.info(pc.gray(`Running in ${batches.length} batches of ${batch}...`));
+  console.info('');
+
+  for (const batch of batches) {
+    batch.forEach((path) => console.info(pc.gray(` ${pc.cyan('•')} ${Util.formatPath(path)}`)));
+    console.info('');
+
+    const wait = Promise.all(batch.map((path) => runTests(path, { silent: true })));
+    await wait;
+  }
+
+  const failed = results.filter((item) => Boolean(item.error));
+  if (failed.length > 0) {
+    console.error('failed', failed);
+  }
+};
+
+const runSerial = async () => {
+  for (const path of paths) {
+    await runTests(path);
+  }
+};
+
+// await runSerial()
+await runInParallel({ paths, batch: 5 });
+
+// process.exit(0); // TEMP 🐷
 
 const failed = results.filter((item) => Boolean(item.error));
 const ok = failed.length === 0;
@@ -64,10 +93,10 @@ for (const result of results) {
   table.push([column.path, column.time]);
 }
 
-console.log();
-console.log(statusColor(ok, ok ? 'all tests passed' : 'some tests failured'));
-console.log(table.toString());
-console.log();
-console.log(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
+console.info();
+console.info(statusColor(ok, ok ? 'all tests passed' : 'some tests failured'));
+console.info(table.toString());
+console.info();
+console.info(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
 if (!ok) process.exit(1);
