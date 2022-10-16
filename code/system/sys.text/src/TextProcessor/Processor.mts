@@ -13,7 +13,6 @@ import { CodeBlock } from './MD.CodeBlock.mjs';
 import type { Schema } from 'hast-util-sanitize';
 type MarkdownConvertOptions = {
   gfm?: boolean;
-  output?: 'md' | 'html';
 };
 
 /**
@@ -25,7 +24,7 @@ export const TextProcessor = {
    * Markdown transformer.
    */
   async markdown(input: VFileCompatible, options: MarkdownConvertOptions = {}) {
-    const { gfm = true, output = 'html' } = options;
+    const { gfm = true } = options;
     const _codeblocks: t.CodeBlock[] = [];
 
     const handleCodeBlockMatch: t.CodeMatch = (e) => {
@@ -39,27 +38,27 @@ export const TextProcessor = {
     /**
      * PIPELINE Compose Text Processors.
      */
-    let pipeline = unified();
+    const pipeline = unified();
 
     /**
      * Markdown (Grammar)
      */
-    pipeline = pipeline.use(remarkParse);
+    pipeline.use(remarkParse);
     if (gfm) {
-      pipeline = pipeline.use(remarkGfm);
+      pipeline.use(remarkGfm);
     }
-    pipeline = pipeline.use(CodeBlock.plugin.markdown, handleCodeBlockMatch);
+    pipeline.use(CodeBlock.plugin.markdown, handleCodeBlockMatch);
 
     /**
      * HTML (Grammar)
      */
-    pipeline = pipeline
+    pipeline
       // -> Html
       .use(remarkToRehype)
       .use(rehypeFormat)
       .use(rehypeSanitize, Sanatize.schema());
 
-    pipeline = pipeline
+    pipeline
       // -- Html
       .use(CodeBlock.plugin.html, () => _codeblocks)
       .use(rehypeStringify);

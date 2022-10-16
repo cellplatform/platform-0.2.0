@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test/index.mjs';
-import { TextProcessor } from './TextProcessor.mjs';
+import { TextProcessor } from './index.mjs';
 
 describe('TextProcessor: Markdown', () => {
   it('match meta-data code blocks', async () => {
