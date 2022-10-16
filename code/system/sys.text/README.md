@@ -1,7 +1,8 @@
 # sys.text
 
 
-![sys.text](https://user-images.githubusercontent.com/185555/196014295-d4047202-a740-4311-90bc-fd5c743a9f62.png)
+![sys.text](https://user-images.githubusercontent.com/185555/196016589-03436392-11fd-4d73-a630-21eb5dffa605.png)
+
 
 
 ---
