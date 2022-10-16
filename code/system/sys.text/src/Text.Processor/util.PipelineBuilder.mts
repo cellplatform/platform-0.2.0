@@ -48,10 +48,7 @@ export function MarkdownPipelineBuilder(kind: 'md:only' | 'md > html', options: 
       // -> Html
       .use(remarkToRehype)
       .use(rehypeFormat)
-      .use(rehypeSanitize, Sanatize.schema());
-
-    pipeline
-      // -- Html
+      .use(rehypeSanitize, Sanatize.schema())
       .use(CodeBlock.plugin.html, () => _codeblocks)
       .use(rehypeStringify);
   }
@@ -61,7 +58,7 @@ export function MarkdownPipelineBuilder(kind: 'md:only' | 'md > html', options: 
    */
   return {
     pipeline,
-    get info() {
+    get info(): t.MarkdownInfo {
       return {
         codeblocks: [..._codeblocks],
       };

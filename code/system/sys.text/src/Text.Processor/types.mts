@@ -26,3 +26,7 @@ export type MarkdownOptions = {
 export type HtmlOptions = MarkdownOptions & {
   //
 };
+
+export type MarkdownInfo = {
+  codeblocks: CodeBlock[];
+};

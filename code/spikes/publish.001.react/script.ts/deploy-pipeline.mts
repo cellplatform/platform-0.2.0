@@ -69,7 +69,7 @@ const SourceRepo = {
     },
 
     async process(markdown: string) {
-      const res = await Text.Processor.markdown(markdown);
+      const res = await Text.Processor.md().html(markdown);
 
       const propjectProps = res.info.codeblocks.filter((m) => m.type === 'project:props')[0];
       const props = Text.Yaml.parse(propjectProps.text);
@@ -125,14 +125,12 @@ await (async () => {
 
     // As HTML.
     const text = new TextDecoder().decode(data);
-    const md = await Text.Processor.markdown(text);
+    const md = await Text.Processor.md().html(text);
 
     const filename = `${file.path}.html`;
     await fs.tmp.write(Path.join(dir, version, 'data.html', filename), md.text);
   }
 })();
-
-process.exit(0); // TEMP 🐷
 
 /**
  * Do some CRDT thing ( 🧠 ).

@@ -39,6 +39,10 @@ export const TextProcessor = {
   },
 };
 
+/**
+ * Helpers
+ */
+
 function formatText(text: string = '') {
   if (text.startsWith('\n')) text = text.substring(1);
   if (text.endsWith('\n')) text = text.substring(0, text.length - 1);
