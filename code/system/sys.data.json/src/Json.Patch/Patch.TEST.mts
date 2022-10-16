@@ -4,6 +4,11 @@ import { Patch } from './index.mjs';
 import { expect, t, describe, it, Time } from '../test/index.mjs';
 
 describe('Patch', () => {
+  it('tmp', async () => {
+    // TEMP 🐷
+    throw new Error('Foo!!!!');
+  });
+
   describe('toObject', () => {
     type T = { count: number; items?: any[] };
 
