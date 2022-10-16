@@ -13,6 +13,7 @@
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
     "@tauri-apps/api": "1.1.0",
     "asmcrypto.js": "^2.3.2",
     "automerge": "^1.0.1-preview.7",
@@ -28,6 +29,7 @@
     "fake-indexeddb": "^4.0.0",
     "immer": "^9.0.15",
     "minimist": "^1.2.7",
+    "monaco-editor": "^0.34.0",
     "nanoid": "^4.0.0",
     "pretty-bytes": "^6.0.0",
     "picocolors": "^1.0.0",
