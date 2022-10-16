@@ -48,7 +48,7 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
   const { paths, batch = 5 } = args;
   const batches = R.splitEvery(batch, paths);
 
-  console.info(pc.gray(`Running in ${batches.length} batches of ${batch}...`));
+  console.info(pc.gray(`Running in ${batches.length} batches...`));
   console.info(' ');
 
   for (const batch of batches) {
