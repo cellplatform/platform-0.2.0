@@ -1,1 +1,1 @@
-export { TextProcessor } from './Processor.mjs';
+export { TextProcessor } from './TextProcessor.mjs';
