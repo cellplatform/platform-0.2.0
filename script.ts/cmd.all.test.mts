@@ -22,10 +22,10 @@ if (paths.length === 0) {
 }
 
 // Log module list.
-console.info();
+console.info(' ');
 console.info(pc.green('test list:'));
 paths.forEach((path) => console.info(pc.gray(` • ${Util.formatPath(path)}`)));
-console.info();
+console.info(' ');
 
 type R = { path: string; elapsed: Milliseconds; error?: string };
 const results: R[] = [];
