@@ -53,37 +53,79 @@ The End.
     expect(html).to.include('<p>The End.</p>');
   });
 
-  it('option: GFM (Github Flavored Markdown)', async () => {
-    /**
-     * Examples of GFM variants covered by the parser:
-     *    https://github.com/remarkjs/remark-gfm#use
-     *
-     *   - Tables
-     *   - Tasklists
-     *   - Strikethrough
-     *   - Footnote
-     *   - Autolink literals
-     *
-     */
-    const SAMPLE = `~one~`;
-    const res1 = await TextProcessor.markdown(SAMPLE); // Default.
-    const res2 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+  describe('option: GFM (Github Flavored Markdown)', () => {
+    console.info(`
+    Examples of GFM variants covered by the parser:
+    
+    - Tables
+    - Tasklists
+    - Strikethrough
+    - Footnote
+    - Autolink literals
 
-    expect(res1.text).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
-    expect(res2.text).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
-    //                                                          - https://commonmark.org
-    //                                                          - https://github.com/micromark/micromark
+    Specification: https://github.github.com/gfm/
+    `);
+
+    it('strikethrough', async () => {
+      const SAMPLE = `~one~`;
+      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+      const res2 = await TextProcessor.markdown(SAMPLE); // Default: true (enabled).
+
+      expect(res2.text).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
+      expect(res1.text).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
+      //                                                          - https://commonmark.org
+      //                                                          - https://github.com/micromark/micromark
+    });
+
+    it('footnote', async () => {
+      const SAMPLE = `
+A note[^1]
+
+[^1]: My note...
+      `;
+      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+      const res2 = await TextProcessor.markdown(SAMPLE, { gfm: true });
+
+      expect(res1.text).to.include(`<p>A note[^1]</p>`);
+
+      expect(res2.text).to.include('<p>A note');
+      expect(res2.text).to.include('<sup><a href="#');
+      expect(res2.text).to.include('Footnotes</h2>');
+      expect(res2.text).to.include('<ol>');
+      expect(res2.text).to.include('<p>My note...');
+    });
+
+    it('table', async () => {
+      const SAMPLE = `
+| a | b  |  c |  d  |
+| - | :- | -: | :-: |
+      `;
+      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+      const res2 = await TextProcessor.markdown(SAMPLE, { gfm: true });
+
+      expect(res1.text).to.include('| a | b');
+      expect(res2.text).to.include('<table>');
+      expect(res2.text).to.include('<th>a</th>');
+      expect(res2.text).to.include('<th align="left">b</th>');
+      expect(res2.text).to.include('<th align="right">c</th>');
+      expect(res2.text).to.include('<th align="center">d</th>');
+    });
   });
 
-  it('santized input', async () => {
-    const res1 = await TextProcessor.markdown('# Hello');
-    const res2 = await TextProcessor.markdown('<div>hello</div>');
+  describe('santized input', () => {
+    it('santized input', async () => {
+      const res1 = await TextProcessor.markdown('# Hello');
+      const res2 = await TextProcessor.markdown('<div>hello</div>');
 
-    expect(res1.text).to.eql('<h1>Hello</h1>');
-    expect(res2.text).to.eql('');
+      expect(res1.text).to.eql('<h1>Hello</h1>');
+      expect(res2.text).to.eql('');
+    });
   });
 
   it.skip('option: output ("md" | "html")', async () => {
     //
+    /**
+     * TODO 🐷
+     */
   });
 });
