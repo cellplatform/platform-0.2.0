@@ -7,7 +7,7 @@ import remarkToRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { VFileCompatible } from 'vfile';
 
-import { t, Yaml } from '../common/index.mjs';
+import { t } from '../common/index.mjs';
 import { CodeBlock } from './MD.CodeBlock.mjs';
 
 import type { Schema } from 'hast-util-sanitize';
