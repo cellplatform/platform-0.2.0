@@ -1,0 +1,38 @@
+{
+  "name": "spike.publish.react",
+  "version": "0.0.7",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "yarn serve-tmp",
+    "serve-tmp": "cd tmp/dist && serve",
+    "serve-dist": "cd dist && serve",
+    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "prepare": "yarn build && yarn test --run --reporter=verbose",
+    "deploy": "yarn prepare && yarn tmp",
+    "tmp": "ts-node-esm -T  ./script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.html.d.html",
+  "exports": {
+    ".": "./dist/web/assets/index.cdb8830a.js",
+    "./web": "./dist/web/assets/index.cdb8830a.js"
+  },
+  "typesVersions": {
+    "*": {
+      "web": [
+        "./dist/types.d/index.html.d.html"
+      ]
+    }
+  }
+}

@@ -202,7 +202,7 @@ export const Config = {
           }
 
           if (is('web:svelte')) {
-            // Placeholder.
+            api.edit((tsconfig) => (tsconfig.extends = '@tsconfig/svelte/tsconfig.json'));
           }
         },
       };

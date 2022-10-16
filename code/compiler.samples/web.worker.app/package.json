@@ -1,21 +1,18 @@
 {
-  "name": "sample.web.react",
+  "name": "sample.web.worker.app",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist/web && serve -p 1234",
+    "serve": "cd dist/web && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0",
-    "sys.util.css": "0.0.0",
-    "sys.util.react": "0.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -24,8 +21,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.f9179fbe.js",
-    "./web": "./dist/web/assets/index.f9179fbe.js"
+    ".": "./dist/web/assets/index.dc5955cf.js",
+    "./web": "./dist/web/assets/index.dc5955cf.js"
   },
   "typesVersions": {
     "*": {
