@@ -21,8 +21,6 @@ type MarkdownConvertOptions = {
  * Context: [unified.js] text AST processing.
  */
 export const TextProcessor = {
-  Yaml,
-
   /**
    * Markdown transformer.
    */

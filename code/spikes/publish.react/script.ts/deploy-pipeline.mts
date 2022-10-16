@@ -1,6 +1,6 @@
 import { Vercel } from 'cloud.vercel';
 import { Crdt } from 'sys.data.crdt';
-import { Markdown } from 'sys.text/node';
+
 import { Filesystem, NodeFs, Path } from 'sys.fs.node';
 import { rx } from 'sys.util';
 
@@ -125,15 +125,14 @@ await (async () => {
 
     // As HTML.
     const text = new TextDecoder().decode(data);
-    const html = await Markdown.toHtml(text);
+    const md = await Text.Processor.markdown(text);
+
     const filename = `${file.path}.html`;
-    await fs.tmp.write(Path.join(dir, version, 'data.html', filename), html);
+    await fs.tmp.write(Path.join(dir, version, 'data.html', filename), md.text);
   }
 })();
 
-console.log('dir', dir);
-
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 /**
  * Do some CRDT thing ( 🧠 ).
