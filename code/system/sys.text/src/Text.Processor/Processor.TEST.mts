@@ -30,11 +30,10 @@ export default { foo: 123 }
 The End.
     `;
 
-    const res = await TextProcessor.markdown(SAMPLE);
+    const res = await TextProcessor.markdown().html(SAMPLE);
     const html = res.text;
 
     expect(res.info.codeblocks.length).to.eql(2);
-
     expect(res.info.codeblocks[0].lang).to.eql('yaml');
     expect(res.info.codeblocks[1].lang).to.eql('ts');
 
@@ -53,6 +52,14 @@ The End.
     expect(html).to.include('<p>The End.</p>');
   });
 
+  it('tmp', async () => {
+    const SAMPLE = `~one~`;
+    // const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
+    const res = await TextProcessor.markdown().html(SAMPLE);
+
+    console.log('res', res);
+  });
+
   describe('option: GFM (Github Flavored Markdown)', () => {
     console.info(`
     Examples of GFM variants covered by the parser:
@@ -68,8 +75,8 @@ The End.
 
     it('strikethrough', async () => {
       const SAMPLE = `~one~`;
-      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
-      const res2 = await TextProcessor.markdown(SAMPLE); // Default: true (enabled).
+      const res1 = await TextProcessor.markdown({ gfm: false }).html(SAMPLE);
+      const res2 = await TextProcessor.markdown().html(SAMPLE); // Default: true (enabled).
 
       expect(res2.text).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
       expect(res1.text).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
@@ -83,8 +90,8 @@ A note[^1]
 
 [^1]: My note...
       `;
-      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
-      const res2 = await TextProcessor.markdown(SAMPLE, { gfm: true });
+      const res1 = await TextProcessor.markdown({ gfm: false }).html(SAMPLE);
+      const res2 = await TextProcessor.markdown({ gfm: true }).html(SAMPLE);
 
       expect(res1.text).to.include(`<p>A note[^1]</p>`);
 
@@ -100,8 +107,8 @@ A note[^1]
 | a | b  |  c |  d  |
 | - | :- | -: | :-: |
       `;
-      const res1 = await TextProcessor.markdown(SAMPLE, { gfm: false });
-      const res2 = await TextProcessor.markdown(SAMPLE, { gfm: true });
+      const res1 = await TextProcessor.markdown({ gfm: false }).html(SAMPLE);
+      const res2 = await TextProcessor.markdown({ gfm: true }).html(SAMPLE);
 
       expect(res1.text).to.include('| a | b');
       expect(res2.text).to.include('<table>');
@@ -114,8 +121,8 @@ A note[^1]
 
   describe('santized input', () => {
     it('santized input', async () => {
-      const res1 = await TextProcessor.markdown('# Hello');
-      const res2 = await TextProcessor.markdown('<div>hello</div>');
+      const res1 = await TextProcessor.markdown().html('# Hello');
+      const res2 = await TextProcessor.markdown().html('<div>hello</div>');
 
       expect(res1.text).to.eql('<h1>Hello</h1>');
       expect(res2.text).to.eql('');
