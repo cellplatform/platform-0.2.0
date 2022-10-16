@@ -1,6 +1,9 @@
 /**
  * @vendor
  */
+import { splitEvery } from 'ramda';
+export const R = { splitEvery };
+
 import pc from 'picocolors';
 import rimraf from 'rimraf';
 import glob from 'glob';
