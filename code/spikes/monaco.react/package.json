@@ -1,22 +1,20 @@
 {
-  "name": "sample.web.react",
+  "name": "spike.monaco.react",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "preview": "vite preview",
-    "serve": "cd dist && serve -p 1234",
+    "serve": "cd dist/web && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
+    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
+    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
+    "monaco-editor": "^0.34.0",
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0",
-    "sys.util.css": "0.0.0",
-    "sys.util.react": "0.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -25,6 +23,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
+    ".": "./dist/web/assets/index.e9d1aa4f.js",
+    "./web": "./dist/web/assets/index.e9d1aa4f.js"
   },
   "typesVersions": {
     "*": {
