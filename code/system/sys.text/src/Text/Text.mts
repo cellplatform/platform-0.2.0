@@ -1,5 +1,5 @@
 import { Yaml } from '../common/index.mjs';
-import { TextProcessor as Processor } from '../TextProcessor/TextProcessor.mjs';
+import { TextProcessor as Processor } from '../Text.Processor/index.mjs';
 
 /**
  * Module Root Index
