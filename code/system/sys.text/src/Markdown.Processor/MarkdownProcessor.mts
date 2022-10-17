@@ -10,26 +10,28 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
     /**
      * Process markdown only, but do not convert to HTML.
      */
-    async toMarkdown(input: t.MarkdownString, options: t.MarkdownOptions = {}) {
+    async toMarkdown(input, options = {}) {
+      const text = Format.input(input);
       const builder = MarkdownPipelineBuilder('md:only', { ...base, ...options });
-      const vfile = await builder.pipeline.process(input);
-      const md = formatText(vfile?.toString());
+      const vfile = await builder.pipeline.process(text);
+      const markdown = Format.text(vfile?.toString());
       const info = builder.info;
       return {
-        markdown: md,
         info,
-        toString: () => md,
+        markdown,
+        toString: () => markdown,
       };
     },
 
     /**
      * Convert from Markdown to Html
      */
-    async toHtml(input: t.MarkdownString, options: t.HtmlOptions = {}) {
+    async toHtml(input, options = {}) {
+      const text = Format.input(input);
       const builder = MarkdownPipelineBuilder('md > html', { ...base, ...options });
-      const vfile = await builder.pipeline.process(input);
-      const html = formatText(vfile?.toString());
-      const markdown = formatText(input);
+      const vfile = await builder.pipeline.process(text);
+      const html = Format.text(vfile?.toString());
+      const markdown = Format.text(text);
       const info = builder.info;
       return {
         info,
@@ -45,7 +47,15 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
  * Helpers
  */
 
-function formatText(text: string = ''): string {
-  const res = text.replace(/^\n/, '').replace(/\n$/, '');
-  return res === text ? res : formatText(res); // 🌳 <== RECURSION (ensure all \n chars are stripped)
-}
+const Format = {
+  input(input: t.MarkdownInput): string {
+    if (typeof input === 'string') return input;
+    if (input instanceof Uint8Array) return new TextDecoder().decode(input);
+    throw new Error(`Failed to format markdown input: ${typeof input}`);
+  },
+
+  text(text: string = ''): string {
+    const res = text.replace(/^\n/, '').replace(/\n$/, '');
+    return res === text ? res : Format.text(res); // 🌳 <== RECURSION (ensure all \n chars are stripped)
+  },
+};

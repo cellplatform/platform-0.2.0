@@ -149,13 +149,28 @@ A note[^1]
     });
   });
 
-  describe('santized input', () => {
+  describe('santizing input', () => {
     it('santized input', async () => {
       const res1 = await MarkdownProcessor().toHtml('# Hello');
       const res2 = await MarkdownProcessor().toHtml('<div>hello</div>');
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res2.html).to.eql('');
+    });
+  });
+
+  describe('Uint8Array input', () => {
+    it('toMarkdown', async () => {
+      const data = new TextEncoder().encode('# Hello\n');
+      const res = await MarkdownProcessor().toMarkdown(data);
+      expect(res.markdown).to.eql('# Hello');
+    });
+
+    it('toHtml', async () => {
+      const data = new TextEncoder().encode('# Hello\n');
+      const res = await MarkdownProcessor().toHtml(data);
+      expect(res.markdown).to.eql('# Hello');
+      expect(res.html).to.eql('<h1>Hello</h1>');
     });
   });
 });

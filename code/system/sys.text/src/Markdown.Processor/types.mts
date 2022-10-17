@@ -1,13 +1,11 @@
 import type { Code as MdastCode } from 'mdast';
 import type { Element as HastElement } from 'hast';
 
-
-
-export type MarkdownString = string;
+export type MarkdownInput = string | Uint8Array;
 
 export type MarkdownProcessor = {
-  toMarkdown(input: MarkdownString, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
-  toHtml(input: MarkdownString, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
+  toMarkdown(input: MarkdownInput, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
+  toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
 };
 
 export type MarkdownProcessorMd = {
