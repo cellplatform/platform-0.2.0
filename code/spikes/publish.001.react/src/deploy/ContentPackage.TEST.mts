@@ -1,7 +1,7 @@
 import { Text } from 'sys.text';
 
 import { describe, expect, expectError, it, TestFilesystem } from '../test/index.mjs';
-import { ContentPipeline } from './index.mjs';
+import { ContentPackage } from './index.mjs';
 
 describe('ContentPipeline.README', () => {
   const README = `
@@ -33,17 +33,17 @@ version: 0.1.2
     await src.content.delete('README.md'); // Remove the README that will cause the error to throw.
 
     // Error thrown.
-    const fn = () => ContentPipeline({ Text, src, throwError: true });
+    const fn = () => ContentPackage({ Text, src, throwError: true });
     await expectError(fn, 'File not found');
 
     // Error reported (silently).
-    const pipeline = await ContentPipeline({ Text, src, throwError: false }); // NB: default.
+    const pipeline = await ContentPackage({ Text, src, throwError: false }); // NB: default.
     expect(pipeline.README.error).to.include('File not found');
   });
 
   it('load (default dir <none>)', async () => {
     const { src, target } = await setup();
-    const pipeline = await ContentPipeline({ Text, src });
+    const pipeline = await ContentPackage({ Text, src });
     await pipeline.README.write(target);
 
     const m = await target.manifest();
@@ -53,7 +53,7 @@ version: 0.1.2
 
   it('write: default dir (none)', async () => {
     const { src, target } = await setup();
-    const pipeline = await ContentPipeline({ Text, src });
+    const pipeline = await ContentPackage({ Text, src });
     await pipeline.write(target);
 
     const m = await target.manifest();
@@ -66,7 +66,7 @@ version: 0.1.2
 
   it('write: custom dir', async () => {
     const { src, target } = await setup();
-    const pipeline = await ContentPipeline({ Text, src });
+    const pipeline = await ContentPackage({ Text, src });
     await pipeline.write(target, { dir: '/foo/bar/' });
 
     const m = await target.manifest();

@@ -8,7 +8,7 @@ import pc from 'picocolors';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
-import { ContentPipeline } from '../src/deploy/index.mjs';
+import { ContentPackage } from '../src/deploy/index.mjs';
 
 import { Text } from 'sys.text/node';
 
@@ -21,7 +21,7 @@ const toFsClient = async (dir: string) => {
   return store.fs;
 };
 
-const pipeline = await ContentPipeline({
+const pipeline = await ContentPackage({
   Text,
   throwError: true,
   src: {
@@ -33,7 +33,10 @@ const pipeline = await ContentPipeline({
 const targetfs = await toFsClient('./dist.deploy');
 
 console.log('pipeline', pipeline);
-await pipeline.write(targetfs);
+const res = await pipeline.write(targetfs);
+
+console.log('write', res);
+console.log('res.manifest', res.target.manifest);
 
 /**
  * 🐷🐷🐷🐷🐷🐷🐷🐷 OLD BELOW 🐷🐷🐷🐷🐷🐷🐷🐷

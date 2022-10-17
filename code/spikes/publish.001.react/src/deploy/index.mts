@@ -1,2 +1,2 @@
-export { ContentPipeline } from './ContentPipeline.mjs';
+export { ContentPackage } from './ContentPackage.mjs';
 export { MarkdownFile } from '../Markdown.File/index.mjs';

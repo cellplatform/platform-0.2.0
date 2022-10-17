@@ -16,7 +16,7 @@ type Args = {
 /**
  * Setup a deployment.
  */
-export async function ContentPipeline(args: Args) {
+export async function ContentPackage(args: Args) {
   const { Text, src, throwError, propsType = 'project.props' } = args;
 
   /**
@@ -40,9 +40,36 @@ export async function ContentPipeline(args: Args) {
       return README;
     },
 
+    /**
+     * Write the content to the given filesystem location.
+     */
     async write(target: t.Fs, options: { dir?: string } = {}) {
       const dir = options.dir ? Path.join(options.dir, api.dir) : api.dir;
+
+      /**
+       * Copy rendering application bundle.
+       */
+      const app = await src.app.manifest();
+      await Promise.all(
+        app.files.map(async (file) => {
+          const path = Path.join(dir, file.path);
+          await target.write(path, await src.app.read(file.path));
+        }),
+      );
+
+      /**
+       * Copy root meta-data.
+       */
       await README.write(target, { dir });
+
+      // Finish up.
+      const manifest = await target.manifest({ dir });
+      return {
+        get target() {
+          const fs = target;
+          return { fs, dir, manifest };
+        },
+      };
     },
   };
 
