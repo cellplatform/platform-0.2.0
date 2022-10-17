@@ -31,11 +31,10 @@ export async function ContentPipeline(args: Args) {
   });
 
   const version = README.props.version;
-  const dir = `${version}`;
 
   const api = {
     version,
-    dir,
+    dir: `${version}`,
 
     get README() {
       return README;

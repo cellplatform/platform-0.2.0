@@ -23,6 +23,7 @@ const toFsClient = async (dir: string) => {
 
 const pipeline = await ContentPipeline({
   Text,
+  throwError: true,
   src: {
     app: await toFsClient('./dist/'),
     content: await toFsClient('../../../../../live-state/tdb.meeting/undp'),

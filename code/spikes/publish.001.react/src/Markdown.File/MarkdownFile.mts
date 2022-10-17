@@ -3,21 +3,20 @@ import { t, Path } from '../common/index.mjs';
 type B = t.MarkdownPropsBase;
 
 /**
- * Load the root README.md as an informational data-structure.
+ * Represents a markdown file stored within the given [src] filesystem.
  */
-
 export async function MarkdownFile<T extends B = B>(args: t.MarkdownFileFactoryArgs) {
-  const { Text, src: sourcefs, propsType, throwError } = args;
+  const { Text, src, propsType, throwError } = args;
   const file = Path.parts(args.path);
   let _error = '';
 
-  const exists = await sourcefs.exists(file.path);
+  const exists = await src.exists(file.path);
   if (!exists) {
     _error = `File not found: ${file.path}`;
     if (throwError) throw new Error(_error);
   }
 
-  const binary = await sourcefs.read(file.path);
+  const binary = await src.read(file.path);
   const text = new TextDecoder().decode(binary);
   const processor = Text.Processor.markdown();
 
