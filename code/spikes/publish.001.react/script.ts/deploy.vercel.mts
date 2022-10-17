@@ -8,9 +8,10 @@ export async function pushToVercel(args: {
   fs: t.Fs;
   token: string;
   version: string;
+  source: string;
   bus?: t.EventBus<any>;
 }) {
-  const { fs, token, version } = args;
+  const { fs, token, version, source } = args;
   const bus = args.bus ?? rx.bus();
 
   const vercel = Vercel.client({ bus, token, fs });
@@ -18,7 +19,7 @@ export async function pushToVercel(args: {
     team: 'tdb',
     name: `tdb.undp.v${version}`,
     project: 'tdb-undp',
-    source: '', // NB: Root directory
+    source,
     alias: 'undp.db.team',
     ensureProject: true,
     regions: ['sfo1'],

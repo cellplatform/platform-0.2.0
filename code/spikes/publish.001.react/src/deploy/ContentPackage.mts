@@ -44,34 +44,44 @@ export async function ContentPackage(args: Args) {
      * Write the content to the given filesystem location.
      */
     async write(target: t.Fs, options: { dir?: string } = {}) {
-      const dir = options.dir ? Path.join(options.dir, api.dir) : api.dir;
+      const base = options.dir ? Path.join(options.dir, api.dir) : api.dir;
+      const dir = { app: 'app' };
 
       /**
-       * Copy the application bundle (renders data).
+       * Copy the application bundle.
        */
       const app = await src.app.manifest();
       await Promise.all(
         app.files.map(async (file) => {
-          const path = Path.join(dir, file.path);
+          const path = Path.join(base, dir.app, file.path);
           const data = await src.app.read(file.path);
           await target.write(path, data);
         }),
       );
 
       /**
+       * Copy and process source content.
+       */
+
+      /**
+       * TODO 🐷
+       */
+
+      /**
        * Copy root meta-data.
        */
-      await README.write(target, { dir });
-
-      // Store index JSON.
-      const fs = target.dir(dir);
+      await README.write(target, { dir: Path.join(base, dir.app) });
+      const fs = target.dir(base);
       const manifest = await fs.manifest();
-      await target.write(Path.join(dir, 'index.json'), manifest);
+      await target.write(Path.join(base, 'index.json'), manifest);
 
       // Finish up.
       return {
-        get target() {
-          return { fs, dir, manifest };
+        fs,
+        dir,
+        version,
+        get manifest() {
+          return manifest;
         },
       };
     },

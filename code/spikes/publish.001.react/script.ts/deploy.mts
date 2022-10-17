@@ -34,12 +34,18 @@ const content = await ContentPackage({
 const targetfs = await toFs('./dist.deploy');
 
 console.log('pipeline', content);
-const res = await content.write(targetfs);
+const bundle = await content.write(targetfs);
 const version = content.version;
 
-console.log('write', res);
+console.log('write', bundle);
 // console.log('res.manifest', res.target.manifest);
 
-// const res2 = await pushToVercel({ fs: res.target.fs, token, version });
-// console.log('-------------------------------------------');
-// console.log('res2', res2);
+const res2 = await pushToVercel({
+  fs: bundle.fs,
+  token,
+  version,
+  source: bundle.dir.app,
+});
+
+console.log('-------------------------------------------');
+console.log('res2', res2);
