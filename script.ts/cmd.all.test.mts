@@ -9,6 +9,8 @@ type Milliseconds = number;
 type Pkg = { name: string; version: string };
 const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 
+const timer = Time.timer();
+
 const filter = (path: string) => {
   if (path.includes('/code/compiler.samples/')) return false;
   if (path.includes('/code/spikes/')) return false;
@@ -101,6 +103,7 @@ console.info();
 console.info(statusColor(ok, ok ? 'all tests passed' : 'some tests failured'));
 console.info(table.toString());
 console.info();
+console.info(pc.gray(`elapsed ${timer.elapsed.toString()}`));
 console.info(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
 if (!ok) process.exit(1);
