@@ -34,7 +34,7 @@ export async function ContentPackage(args: Args) {
 
   const api = {
     version,
-    dir: `${version}`,
+    // dir: `${version}`,
 
     get README() {
       return README;
@@ -44,15 +44,24 @@ export async function ContentPackage(args: Args) {
      * Write the content to the given filesystem location.
      */
     async write(target: t.Fs, options: { dir?: string } = {}) {
-      const base = options.dir ? Path.join(options.dir, api.dir) : api.dir;
-      const dir = { app: 'app' };
+      const base = options.dir ? Path.join(options.dir, version) : version;
+      const dir = {
+        base,
+        app: 'app',
+        data: {
+          md: 'app/data.md',
+          html: 'app/data.html',
+        },
+      };
+
+      const appManifest = await src.app.manifest();
+      const contentManifest = await src.content.manifest();
 
       /**
        * Copy the application bundle.
        */
-      const app = await src.app.manifest();
       await Promise.all(
-        app.files.map(async (file) => {
+        appManifest.files.map(async (file) => {
           const path = Path.join(base, dir.app, file.path);
           const data = await src.app.read(file.path);
           await target.write(path, data);
@@ -62,10 +71,15 @@ export async function ContentPackage(args: Args) {
       /**
        * Copy and process source content.
        */
-
-      /**
-       * TODO 🐷
-       */
+      const MD = Text.Processor.markdown();
+      await Promise.all(
+        contentManifest.files.map(async (file) => {
+          const data = await src.content.read(file.path);
+          const md = await MD.toHtml(data);
+          await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
+          await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
+        }),
+      );
 
       /**
        * Copy root meta-data.
@@ -77,11 +91,13 @@ export async function ContentPackage(args: Args) {
 
       // Finish up.
       return {
-        fs,
         dir,
         version,
         get manifest() {
           return manifest;
+        },
+        get fs() {
+          return fs;
         },
       };
     },

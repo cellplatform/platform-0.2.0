@@ -59,9 +59,10 @@ version: 0.1.2
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);
 
-    expect(files.length).to.eql(2);
-    expect(files).to.includes('0.1.2/README.md');
-    expect(files).to.includes('0.1.2/README.md.html');
+    expect(files).to.includes('0.1.2/app/README.md');
+    expect(files).to.includes('0.1.2/app/README.md.html');
+
+    console.log('files', files);
   });
 
   it('write: custom dir', async () => {
@@ -72,8 +73,7 @@ version: 0.1.2
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);
 
-    expect(files.length).to.eql(2);
-    expect(files).to.includes('foo/bar/0.1.2/README.md');
-    expect(files).to.includes('foo/bar/0.1.2/README.md.html');
+    expect(files).to.includes('foo/bar/0.1.2/app/README.md');
+    expect(files).to.includes('foo/bar/0.1.2/app/README.md.html');
   });
 });
