@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, fs, pc, Util, LogTable, Time, R, execa } from './common/index.mjs';
+import { Builder, fs, pc, Util, LogTable, Time, R, ora } from './common/index.mjs';
 
 type Milliseconds = number;
 
@@ -48,15 +48,19 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
   const { paths, batch = 5 } = args;
   const batches = R.splitEvery(batch, paths);
 
-  console.info(pc.gray(`Running in ${batches.length} batches...`));
+  const spinner = ora({ indent: 1 });
+
+  console.info(pc.gray(`Running across ${batches.length} batches...`));
   console.info(' ');
 
   for (const batch of batches) {
     batch.forEach((path) => console.info(pc.gray(` ${pc.cyan('•')} ${Util.formatPath(path)}`)));
-    console.info(pc.gray('---'));
+    spinner.start();
 
     const wait = Promise.all(batch.map((path) => runTests(path, { silent: true })));
     await wait;
+    spinner.stop();
+    console.log(' ');
   }
 
   const failed = results.filter((item) => Boolean(item.error));
