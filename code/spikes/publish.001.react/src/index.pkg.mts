@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.7',
   dependencies: {
     'sys.types': '0.0.0',
+    'sys.text': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {
