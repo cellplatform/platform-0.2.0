@@ -159,18 +159,40 @@ A note[^1]
     });
   });
 
-  describe('Uint8Array input', () => {
-    it('toMarkdown', async () => {
-      const data = new TextEncoder().encode('# Hello\n');
-      const res = await MarkdownProcessor().toMarkdown(data);
-      expect(res.markdown).to.eql('# Hello');
+  describe('input (string, Uint8Array, undefined)', () => {
+    it('Uint8Array', async () => {
+      const input = new TextEncoder().encode('# Hello\n');
+      const res1 = await MarkdownProcessor().toMarkdown(input);
+      const res2 = await MarkdownProcessor().toHtml(input);
+      expect(res1.markdown).to.eql('# Hello');
+      expect(res2.markdown).to.eql('# Hello');
+      expect(res2.html).to.eql('<h1>Hello</h1>');
     });
 
-    it('toHtml', async () => {
-      const data = new TextEncoder().encode('# Hello\n');
-      const res = await MarkdownProcessor().toHtml(data);
-      expect(res.markdown).to.eql('# Hello');
-      expect(res.html).to.eql('<h1>Hello</h1>');
+    it('string', async () => {
+      const input = '# Hello\n';
+      const res1 = await MarkdownProcessor().toMarkdown(input);
+      const res2 = await MarkdownProcessor().toHtml(input);
+      expect(res1.markdown).to.eql('# Hello');
+      expect(res2.markdown).to.eql('# Hello');
+      expect(res2.html).to.eql('<h1>Hello</h1>');
+    });
+
+    it('nothing | non-standard type', async () => {
+      const test = async (input?: any) => {
+        const res1 = await MarkdownProcessor().toMarkdown(input);
+        const res2 = await MarkdownProcessor().toHtml(input);
+        expect(res1.markdown).to.eql('');
+        expect(res2.markdown).to.eql('');
+        expect(res2.html).to.eql('');
+      };
+
+      await test();
+      await test(null);
+      await test(true);
+      await test(1234);
+      await test({});
+      await test([{ count: 123 }]);
     });
   });
 });

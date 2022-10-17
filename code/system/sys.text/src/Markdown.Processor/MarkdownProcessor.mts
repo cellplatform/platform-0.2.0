@@ -51,7 +51,7 @@ const Format = {
   input(input: t.MarkdownInput): string {
     if (typeof input === 'string') return input;
     if (input instanceof Uint8Array) return new TextDecoder().decode(input);
-    throw new Error(`Failed to format markdown input: ${typeof input}`);
+    return '';
   },
 
   text(text: string = ''): string {
