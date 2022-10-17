@@ -1,7 +1,7 @@
 import { expect, describe, it } from '../test/index.mjs';
 import { TextProcessor } from './index.mjs';
 
-describe('TextProcessor: Markdown', () => {
+describe('TextProcessor.md', () => {
   describe('code-block processing', () => {
     it('extract code blocks (that contain a meta-data suffix)', async () => {
       const SAMPLE = `
@@ -136,12 +136,5 @@ A note[^1]
       expect(res1.text).to.eql('<h1>Hello</h1>');
       expect(res2.text).to.eql('');
     });
-  });
-
-  it.skip('option: output ("md" | "html")', async () => {
-    //
-    /**
-     * TODO 🐷
-     */
   });
 });

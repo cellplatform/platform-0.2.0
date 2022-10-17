@@ -1,5 +1,25 @@
+import { VFileCompatible } from 'vfile';
 import type { Code as MdastCode } from 'mdast';
 import type { Element as HastElement } from 'hast';
+
+export type TextProcessor = {
+  md(options?: MarkdownOptions): MarkdownProcessor;
+};
+
+export type MarkdownProcessor = {
+  html(input: VFileCompatible, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
+  markdown(input: VFileCompatible, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
+};
+
+export type MarkdownProcessorHtml = {
+  readonly text: string;
+  readonly info: MarkdownInfo;
+};
+
+export type MarkdownProcessorMd = {
+  readonly text: string;
+  readonly info: MarkdownInfo;
+};
 
 /**
  * Represents a code-block within Markdown.
