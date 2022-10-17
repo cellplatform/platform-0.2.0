@@ -3,7 +3,7 @@ import { Text } from 'sys.text';
 import { describe, expect, expectError, it, TestFilesystem } from '../test/index.mjs';
 import { MarkdownFile } from './index.mjs';
 
-describe('MarkdownFile', () => {
+describe.only('MarkdownFile', () => {
   const README = `
 # My Report
 

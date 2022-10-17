@@ -1,5 +1,5 @@
 import { t, Path } from '../common/index.mjs';
-import { MarkdownFile } from './MarkdownFile.mjs';
+import { MarkdownFile } from '../Markdown.File/index.mjs';
 
 type Sources = {
   app: t.Fs;
@@ -36,7 +36,10 @@ export async function ContentPipeline(args: Args) {
   const api = {
     version,
     dir,
-    README,
+
+    get README() {
+      return README;
+    },
 
     async write(target: t.Fs, options: { dir?: string } = {}) {
       const dir = options.dir ? Path.join(options.dir, api.dir) : api.dir;

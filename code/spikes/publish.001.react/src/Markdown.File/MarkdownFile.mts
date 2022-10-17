@@ -1,19 +1,12 @@
 import { t, Path } from '../common/index.mjs';
 
-type P = {
-  version: string;
-};
+type B = t.MarkdownPropsBase;
 
 /**
  * Load the root README.md as an informational data-structure.
  */
-export async function MarkdownFile<T extends P>(args: {
-  Text: t.Text;
-  src: t.Fs;
-  path: string;
-  propsType?: string;
-  throwError?: boolean;
-}) {
+
+export async function MarkdownFile<T extends B = B>(args: t.MarkdownFileFactoryArgs) {
   const { Text, src: sourcefs, propsType, throwError } = args;
   const file = Path.parts(args.path);
   let _error = '';
@@ -26,19 +19,18 @@ export async function MarkdownFile<T extends P>(args: {
 
   const binary = await sourcefs.read(file.path);
   const text = new TextDecoder().decode(binary);
-  const processor = Text.Processor.md();
+  const processor = Text.Processor.markdown();
 
-  const md = await processor.html(text);
+  const md = await processor.toHtml(text);
   const propsBlock = md.info.codeblocks.filter((m) => m.type === propsType)[0];
   const props = (propsBlock ? Text.Yaml.parse(propsBlock.text) : { version: '0.0.0' }) as T;
-  const version = props.version;
 
   const content = {
     html: md.html,
     markdown: md.markdown,
   };
 
-  return {
+  const api: t.MarkdownFile<T> = {
     file,
     props,
     error: _error || undefined,
@@ -60,4 +52,6 @@ export async function MarkdownFile<T extends P>(args: {
       if (html) await fs.write(path('.md.html'), content.html); //  Markdown as HTML
     },
   };
+
+  return api;
 }
