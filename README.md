@@ -23,10 +23,10 @@ Sustained long range R&D.
 Architecture, API's, and other conceptual primmitives will change (probably radically 🐷) prior to any `1.x` release.
 
 
-| repo | ref                 | status
-| ---- | :---                | :---
-|      | platform-0.2.0      | __current__
-|      | platform-0.1.0      | [previous](https://github.com/cellplatform/platform-0.1.0)
+|     | repo                | status
+| --- | :---                | :---
+|  ●  | platform-0.2.0      | __current__
+|  ○  | platform-0.1.0      | [previous](https://github.com/cellplatform/platform-0.1.0)
 
 
 
