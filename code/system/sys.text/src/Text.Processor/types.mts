@@ -1,24 +1,28 @@
-import { VFileCompatible } from 'vfile';
 import type { Code as MdastCode } from 'mdast';
 import type { Element as HastElement } from 'hast';
+
+export type MarkdownString = string;
 
 export type TextProcessor = {
   md(options?: MarkdownOptions): MarkdownProcessor;
 };
 
 export type MarkdownProcessor = {
-  html(input: VFileCompatible, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
-  markdown(input: VFileCompatible, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
-};
-
-export type MarkdownProcessorHtml = {
-  readonly text: string;
-  readonly info: MarkdownInfo;
+  markdown(input: MarkdownString, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
+  html(input: MarkdownString, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
 };
 
 export type MarkdownProcessorMd = {
-  readonly text: string;
   readonly info: MarkdownInfo;
+  readonly markdown: string;
+  toString(): string;
+};
+
+export type MarkdownProcessorHtml = {
+  readonly info: MarkdownInfo;
+  readonly html: string;
+  readonly markdown: string;
+  toString(): string;
 };
 
 /**

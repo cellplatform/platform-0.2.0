@@ -1,28 +1,7 @@
 import { expect, describe, it } from '../test/index.mjs';
 import { TextProcessor } from './index.mjs';
 
-describe('TextProcessor.md', () => {
-  describe('markdown formatting', () => {
-    it('trims \\n characters', async () => {
-      const SAMPLE = `
-# Hello
-
-
-`;
-      expect(SAMPLE[0]).to.eql('\n'); // NB: Assert the input markdown is padded with \n characters.
-
-      const res1 = await TextProcessor.md().html(SAMPLE);
-      const res2 = await TextProcessor.md().markdown(SAMPLE);
-
-      expect(res1.html).to.eql('<h1>Hello</h1>');
-      expect(res1.markdown).to.eql('# Hello');
-      expect(res1.toString()).to.eql(res1.html);
-
-      expect(res2.markdown).to.eql('# Hello');
-      expect(res2.toString()).to.eql(res2.markdown);
-    });
-  });
-
+describe('TextProcessor: Markdown', () => {
   describe('code-block processing', () => {
     it('extract code blocks (that contain a meta-data suffix)', async () => {
       const SAMPLE = `
@@ -157,5 +136,12 @@ A note[^1]
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res2.html).to.eql('');
     });
+  });
+
+  it.skip('option: output ("md" | "html")', async () => {
+    //
+    /**
+     * TODO 🐷
+     */
   });
 });

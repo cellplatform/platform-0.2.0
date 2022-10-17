@@ -1,5 +1,3 @@
-import { VFileCompatible } from 'vfile';
-
 import { t } from '../common/index.mjs';
 import { MarkdownPipelineBuilder } from './util.PipelineBuilder.mjs';
 
@@ -10,25 +8,35 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
   const base = options;
   return {
     /**
-     * Convert from Markdown to Html
+     * Process markdown only, but do not convert to HTML.
      */
-    async html(input: VFileCompatible, options: t.HtmlOptions = {}) {
-      const builder = MarkdownPipelineBuilder('md > html', { ...base, ...options });
+    async markdown(input: t.MarkdownString, options: t.MarkdownOptions = {}) {
+      const builder = MarkdownPipelineBuilder('md:only', { ...base, ...options });
       const vfile = await builder.pipeline.process(input);
-      const text = formatText(vfile?.toString());
+      const md = formatText(vfile?.toString());
       const info = builder.info;
-      return { text, info };
+      return {
+        markdown: md,
+        info,
+        toString: () => md,
+      };
     },
 
     /**
-     * Process markdown only, but do not convert to HTML.
+     * Convert from Markdown to Html
      */
-    async markdown(input: VFileCompatible, options: t.MarkdownOptions = {}) {
-      const builder = MarkdownPipelineBuilder('md:only', { ...base, ...options });
+    async html(input: t.MarkdownString, options: t.HtmlOptions = {}) {
+      const builder = MarkdownPipelineBuilder('md > html', { ...base, ...options });
       const vfile = await builder.pipeline.process(input);
-      const text = formatText(vfile?.toString());
+      const html = formatText(vfile?.toString());
+      const markdown = formatText(input);
       const info = builder.info;
-      return { text, info };
+      return {
+        info,
+        html,
+        markdown,
+        toString: () => html,
+      };
     },
   };
 }
@@ -37,8 +45,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
  * Helpers
  */
 
-function formatText(text: string = '') {
-  if (text.startsWith('\n')) text = text.substring(1);
-  if (text.endsWith('\n')) text = text.substring(0, text.length - 1);
-  return text;
+function formatText(text: string = ''): string {
+  const res = text.replace(/^\n/, '').replace(/\n$/, '');
+  return res === text ? res : formatText(res); // 🌳 <== RECURSION (ensure all \n chars are stripped)
 }
