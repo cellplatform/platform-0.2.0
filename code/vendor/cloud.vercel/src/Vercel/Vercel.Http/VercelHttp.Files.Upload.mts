@@ -52,13 +52,15 @@ export function VercelHttpUploadFiles(args: { ctx: t.Ctx; teamId?: Id }): t.Verc
 
       const loadFiles = async (dir: string): Promise<t.VercelFile[]> => {
         const paths = await toPaths(fs, dir);
-        return await Promise.all(
-          paths.map(async (path) => {
-            const data = await fs.read(path);
-            if (!data) throw new Error(`Failed to read file: ${path}`);
-            return { path, data };
-          }),
-        );
+
+        const running = paths.map(async (path) => {
+          const data = await fs.read(path);
+          if (!data) throw new Error(`Failed to read file: ${path}`);
+          const file: t.VercelFile = { path, data };
+          return file;
+        });
+
+        return await Promise.all(running);
       };
 
       const files = typeof source === 'string' ? await loadFiles(source) : source.files;
@@ -95,7 +97,12 @@ export function VercelHttpUploadFiles(args: { ctx: t.Ctx; teamId?: Id }): t.Verc
 
         // Prepare response.
         const { ok, status, contentType, contentLength, digest, error, elapsed } = posted;
-        const filepath = typeof source === 'string' ? path.substring(source.length + 1) : path;
+
+        let filepath = path;
+        if (typeof source === 'string' && source.trim()) {
+          filepath = path.substring(source.length + 1); // NB: Trim the source directory fitler.
+        }
+
         const file: t.VercelFileUpload = { file: filepath, sha: digest, size: contentLength };
         res.files.push({ ok, status, contentType, file, error, elapsed });
       };
