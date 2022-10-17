@@ -47,13 +47,14 @@ export async function ContentPackage(args: Args) {
       const dir = options.dir ? Path.join(options.dir, api.dir) : api.dir;
 
       /**
-       * Copy rendering application bundle.
+       * Copy the application bundle (renders data).
        */
       const app = await src.app.manifest();
       await Promise.all(
         app.files.map(async (file) => {
           const path = Path.join(dir, file.path);
-          await target.write(path, await src.app.read(file.path));
+          const data = await src.app.read(file.path);
+          await target.write(path, data);
         }),
       );
 
@@ -62,11 +63,14 @@ export async function ContentPackage(args: Args) {
        */
       await README.write(target, { dir });
 
+      // Store index JSON.
+      const fs = target.dir(dir);
+      const manifest = await fs.manifest();
+      await target.write(Path.join(dir, 'index.json'), manifest);
+
       // Finish up.
-      const manifest = await target.manifest({ dir });
       return {
         get target() {
-          const fs = target;
           return { fs, dir, manifest };
         },
       };

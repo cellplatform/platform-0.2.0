@@ -30,19 +30,6 @@ const pipeline = await ContentPackage({
   },
 });
 
-const targetfs = await toFsClient('./dist.deploy');
-
-console.log('pipeline', pipeline);
-const res = await pipeline.write(targetfs);
-
-console.log('write', res);
-console.log('res.manifest', res.target.manifest);
-
-/**
- * 🐷🐷🐷🐷🐷🐷🐷🐷 OLD BELOW 🐷🐷🐷🐷🐷🐷🐷🐷
- */
-process.exit(0);
-
 /**
  * Initialize filesystem access.
  */
