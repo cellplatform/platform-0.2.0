@@ -10,7 +10,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
     /**
      * Process markdown only, but do not convert to HTML.
      */
-    async markdown(input: t.MarkdownString, options: t.MarkdownOptions = {}) {
+    async toMarkdown(input: t.MarkdownString, options: t.MarkdownOptions = {}) {
       const builder = MarkdownPipelineBuilder('md:only', { ...base, ...options });
       const vfile = await builder.pipeline.process(input);
       const md = formatText(vfile?.toString());
@@ -25,7 +25,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
     /**
      * Convert from Markdown to Html
      */
-    async html(input: t.MarkdownString, options: t.HtmlOptions = {}) {
+    async toHtml(input: t.MarkdownString, options: t.HtmlOptions = {}) {
       const builder = MarkdownPipelineBuilder('md > html', { ...base, ...options });
       const vfile = await builder.pipeline.process(input);
       const html = formatText(vfile?.toString());

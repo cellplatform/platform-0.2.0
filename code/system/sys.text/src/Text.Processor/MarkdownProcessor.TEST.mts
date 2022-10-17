@@ -11,8 +11,8 @@ describe('TextProcessor.md', () => {
 `;
       expect(SAMPLE[0]).to.eql('\n'); // NB: Assert the input markdown is padded with \n characters.
 
-      const res1 = await TextProcessor.md().html(SAMPLE);
-      const res2 = await TextProcessor.md().markdown(SAMPLE);
+      const res1 = await TextProcessor.markdown().toHtml(SAMPLE);
+      const res2 = await TextProcessor.markdown().toMarkdown(SAMPLE);
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res1.markdown).to.eql('# Hello');
@@ -52,7 +52,7 @@ export default { foo: 123 }
 The End.
     `;
 
-      const res = await TextProcessor.md().html(SAMPLE);
+      const res = await TextProcessor.markdown().toHtml(SAMPLE);
       const html = res.html;
 
       expect(res.info.codeblocks.length).to.eql(2);
@@ -81,8 +81,8 @@ The End.
   \`\`\`
             `;
 
-      const processor = TextProcessor.md();
-      const res = await processor.markdown(SAMPLE);
+      const processor = TextProcessor.markdown();
+      const res = await processor.toMarkdown(SAMPLE);
 
       expect(res.markdown).to.eql('```yaml doc:meta\nversion: 0.0.0\n```');
       expect(res.info.codeblocks.length).to.eql(1);
@@ -105,8 +105,8 @@ The End.
 
     it('strikethrough', async () => {
       const SAMPLE = `~one~`;
-      const res1 = await TextProcessor.md({ gfm: false }).html(SAMPLE);
-      const res2 = await TextProcessor.md().html(SAMPLE); // Default: true (enabled).
+      const res1 = await TextProcessor.markdown({ gfm: false }).toHtml(SAMPLE);
+      const res2 = await TextProcessor.markdown().toHtml(SAMPLE); // Default: true (enabled).
 
       expect(res2.html).to.eql('<p><del>one</del></p>'); // <== GFM (Github Flavored Markdown): https://github.github.com/gfm/
       expect(res1.html).to.eql('<p>~one~</p>'); //          <== CommonMark (via Micromark):
@@ -120,8 +120,8 @@ A note[^1]
 
 [^1]: My note...
       `;
-      const res1 = await TextProcessor.md().html(SAMPLE, { gfm: false });
-      const res2 = await TextProcessor.md().html(SAMPLE, { gfm: true });
+      const res1 = await TextProcessor.markdown().toHtml(SAMPLE, { gfm: false });
+      const res2 = await TextProcessor.markdown().toHtml(SAMPLE, { gfm: true });
 
       expect(res1.html).to.include(`<p>A note[^1]</p>`);
 
@@ -137,8 +137,8 @@ A note[^1]
 | a | b  |  c |  d  |
 | - | :- | -: | :-: |
       `;
-      const res1 = await TextProcessor.md({ gfm: false }).html(SAMPLE);
-      const res2 = await TextProcessor.md({ gfm: true }).html(SAMPLE);
+      const res1 = await TextProcessor.markdown({ gfm: false }).toHtml(SAMPLE);
+      const res2 = await TextProcessor.markdown({ gfm: true }).toHtml(SAMPLE);
 
       expect(res1.html).to.include('| a | b');
       expect(res2.html).to.include('<table>');
@@ -151,8 +151,8 @@ A note[^1]
 
   describe('santized input', () => {
     it('santized input', async () => {
-      const res1 = await TextProcessor.md().html('# Hello');
-      const res2 = await TextProcessor.md().html('<div>hello</div>');
+      const res1 = await TextProcessor.markdown().toHtml('# Hello');
+      const res2 = await TextProcessor.markdown().toHtml('<div>hello</div>');
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res2.html).to.eql('');

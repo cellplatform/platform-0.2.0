@@ -4,12 +4,12 @@ import type { Element as HastElement } from 'hast';
 export type MarkdownString = string;
 
 export type TextProcessor = {
-  md(options?: MarkdownOptions): MarkdownProcessor;
+  markdown(options?: MarkdownOptions): MarkdownProcessor;
 };
 
 export type MarkdownProcessor = {
-  markdown(input: MarkdownString, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
-  html(input: MarkdownString, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
+  toMarkdown(input: MarkdownString, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
+  toHtml(input: MarkdownString, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
 };
 
 export type MarkdownProcessorMd = {
