@@ -16,7 +16,7 @@ import { DocStructure } from './util.plugin.Structure.mjs';
 /**
  * Builds a pipeline for processing markdown.
  */
-export function MarkdownPipelineBuilder(kind: 'md:only' | 'md > html', options: t.MarkdownOptions) {
+export function PipelineBuilder(kind: 'md:only' | 'md > html', options: t.MarkdownOptions) {
   const { gfm = true } = options;
   const pipeline = unified();
   const _codeblocks: t.CodeBlock[] = [];

@@ -1,5 +1,5 @@
 import { t } from '../common/index.mjs';
-import { MarkdownPipelineBuilder } from './util.PipelineBuilder.mjs';
+import { PipelineBuilder } from './util.Pipeline.mjs';
 
 /**
  * Markdown transformer.
@@ -12,7 +12,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
      */
     async toMarkdown(input, options = {}) {
       const text = Format.input(input);
-      const builder = MarkdownPipelineBuilder('md:only', { ...base, ...options });
+      const builder = PipelineBuilder('md:only', { ...base, ...options });
       const vfile = await builder.pipeline.process(text);
       const markdown = Format.text(vfile?.toString());
       const info = builder.info;
@@ -28,7 +28,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
      */
     async toHtml(input, options = {}) {
       const text = Format.input(input);
-      const builder = MarkdownPipelineBuilder('md > html', { ...base, ...options });
+      const builder = PipelineBuilder('md > html', { ...base, ...options });
       const vfile = await builder.pipeline.process(text);
       const html = Format.text(vfile?.toString());
       const markdown = Format.text(text);
