@@ -38,7 +38,7 @@ export const Pipeline = {
      */
     pipeline.use(remarkParse);
     if (gfm) pipeline.use(remarkGfm);
-    pipeline.use(CodeBlock.plugin.markdown, handleCodeBlock);
+    pipeline.use(CodeBlock.plugin.markdown, { onMatch: handleCodeBlock });
     pipeline.use(DocStructure.plugin);
     if (kind === 'md:only') pipeline.use(remarkStringify);
 
@@ -51,7 +51,7 @@ export const Pipeline = {
         .use(remarkToRehype)
         .use(rehypeFormat)
         .use(rehypeSanitize, Sanatize.schema())
-        .use(CodeBlock.plugin.html, () => _code)
+        .use(CodeBlock.plugin.html, { getBlocks: () => _code })
         .use(rehypeStringify);
     }
 

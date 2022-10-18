@@ -11,17 +11,22 @@ import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlText
  *
  *    ```<lang> <meta:type>
  *
- * Example:
+ * Example (typed):
  *
  *    ```yaml project:props
+ *
+ * Example (untyped):
+ *
+ *    ```ts
  *
  */
 export const CodeBlock = {
   plugin: {
-    markdown(onMatch: t.CodeMatch) {
+    markdown(options: { onMatch?: t.CodeMatch } = {}) {
       return (tree: MdRootNode) => {
+        const { onMatch } = options;
         visit(tree, 'code', (node, i, parent) => {
-          onMatch({
+          onMatch?.({
             node,
             replace: (node) => CodeBlock.replace(node, parent, i),
           });
@@ -29,16 +34,19 @@ export const CodeBlock = {
       };
     },
 
-    html(getBlocks: () => t.CodeBlock[]) {
+    html(options: { getBlocks?: () => t.CodeBlock[] } = {}) {
       return (tree: HtmlRootNode) => {
+        const { getBlocks } = options;
         visit(tree, 'element', (el) => {
           /**
            * - Find the adjusted MD element placeholder.
            * - Mutate into the final shape of the epement (updating ID attributes etc).
            */
-          const blocks = getBlocks().filter((block) => Boolean(block.type));
-          const block = CodeBlock.findBlock(el, blocks);
-          if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+          if (getBlocks) {
+            const blocks = getBlocks().filter((block) => Boolean(block.type));
+            const block = CodeBlock.findBlock(el, blocks);
+            if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+          }
         });
       };
     },
