@@ -3,18 +3,12 @@ import { MarkdownProcessor } from './index.mjs';
 
 describe('Markdown: DocStructure', () => {
   describe('plugin', () => {
-    const SAMPLE = `# Hello`;
+    it('has root tree', async () => {
+      const { info } = await MarkdownProcessor().toMarkdown(`# Hello`);
 
-    it('parse outline', async () => {
-      const res = await MarkdownProcessor().toMarkdown(SAMPLE);
-
-      console.log('----------------------------------------');
-      console.log('res', res);
-
-      /**
-       * TODO 🐷
-       */
-      //
+      expect(info.root.type).to.eql('root');
+      expect(info.root.children.length).to.eql(1);
+      expect(info.root.children[0].type).to.eql('heading');
     });
   });
 });

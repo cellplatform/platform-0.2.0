@@ -1,8 +1,4 @@
-import { SKIP, visit } from 'unist-util-visit';
-
-import type { Node as AstNode } from 'unist';
-import type { Root as MdRootNode, Code as MdCodeNode } from 'mdast';
-import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
+import { t } from './common.mjs';
 
 /**
  * Tools for extracting and working with "Documet Structure", eg:
@@ -13,14 +9,11 @@ import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlText
  *
  */
 export const DocStructure = {
-  plugin() {
-    return (tree: MdRootNode) => {
-      console.log('DocStructure::/tree', tree);
-      console.log('-------------------------------------------');
-
-      visit(tree, (node, i, parent) => {
-        console.log('DocStructure::/node', node);
-      });
-    };
+  /**
+   * Simple plugin that provides the root AST tree of the
+   * markdown document when parsed via a callback.
+   */
+  plugin(options: { onParse?: (e: { tree: t.MdastRoot }) => void } = {}) {
+    return (tree: t.MdastRoot) => options.onParse?.({ tree });
   },
 };

@@ -21,7 +21,7 @@ export const Pipeline = {
     const { gfm = true } = options;
     const pipeline = unified();
     const _code: t.CodeBlock[] = [];
-    // const _root:
+    let _root: t.MdastRoot | undefined;
 
     const handleCodeBlock: t.CodeMatch = (e) => {
       const def = CodeBlock.toObject(e.node);
@@ -40,7 +40,7 @@ export const Pipeline = {
     pipeline.use(remarkParse);
     if (gfm) pipeline.use(remarkGfm);
     pipeline.use(CodeBlock.plugin.markdown, { onMatch: handleCodeBlock });
-    pipeline.use(DocStructure.plugin);
+    pipeline.use(DocStructure.plugin, { onParse: (e) => (_root = e.tree) });
     if (kind === 'md:only') pipeline.use(remarkStringify);
 
     /**
@@ -63,6 +63,11 @@ export const Pipeline = {
       pipeline,
       get info(): t.MarkdownInfo {
         return {
+          get root() {
+            if (!_root) throw new Error(`The root of the markdown has not been parsed`);
+            return _root;
+          },
+
           code: {
             get all() {
               return [..._code];
