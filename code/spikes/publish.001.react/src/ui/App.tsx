@@ -18,6 +18,7 @@ export const App: React.FC<AppProps> = (props) => {
   };
   return (
     <div {...css(styles.base, props.style)}>
+      <div>{'This is the markdown renderer app (react).'}</div>
       <div>
         <pre>{JSON.stringify(Pkg, null, '  ')}</pre>
       </div>

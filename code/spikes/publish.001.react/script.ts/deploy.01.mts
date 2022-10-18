@@ -8,10 +8,27 @@ import pc from 'picocolors';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
+import { ContentPackage } from '../src/deploy/index.mjs';
+
 import { Text } from 'sys.text/node';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
+
+const toFsClient = async (dir: string) => {
+  dir = NodeFs.resolve(dir);
+  const store = await Filesystem.client(dir, { bus });
+  return store.fs;
+};
+
+const pipeline = await ContentPackage({
+  Text,
+  throwError: true,
+  src: {
+    app: await toFsClient('./dist/'),
+    content: await toFsClient('../../../../../live-state/tdb.meeting/undp'),
+  },
+});
 
 /**
  * Initialize filesystem access.
@@ -19,7 +36,7 @@ const bus = rx.bus();
 
 const Paths = {
   sourceDir: NodeFs.resolve('../../../../../live-state/tdb.meeting/undp'),
-  tmpDir: NodeFs.resolve('./tmp'),
+  tmpDir: NodeFs.resolve('./dist/deploy'),
   localDist: NodeFs.resolve('./dist'),
   localPackage: NodeFs.resolve('./package.json'),
 };
@@ -47,7 +64,7 @@ const logFsInfo = async (title: string, fs: t.Fs) => {
  * Read in the source markdown.
  */
 const source = await fs.source.manifest();
-let version = '';
+let version = pipeline.README.version;
 const dir = 'deploy';
 
 await logFsInfo('source', fs.source);

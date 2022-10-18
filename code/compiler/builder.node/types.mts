@@ -112,3 +112,12 @@ export type PkgJsonExports = { [entry: string]: PathString };
  */
 export type PkgJsonTypesVersions = { [matchVersion: string]: PkgJsonTypesVersionsFiles };
 export type PkgJsonTypesVersionsFiles = { [matchFile: string]: string[] };
+
+/**
+ * Vitest test result object
+ */
+export type TestStats = {
+  success: boolean;
+  suites: { total: number; passed: number; failed: number; pending: number };
+  tests: { total: number; passed: number; failed: number; pending: number; todo: number };
+};

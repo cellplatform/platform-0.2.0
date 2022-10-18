@@ -1,10 +1,10 @@
-import { Yaml } from '../common/index.mjs';
+import { t, Yaml } from '../common/index.mjs';
 import { TextProcessor as Processor } from '../Text.Processor/index.mjs';
 
 /**
  * Module Root Index
  */
-export const Text = {
-  Yaml,
+export const Text: t.Text = {
   Processor,
+  Yaml,
 };

@@ -42,8 +42,35 @@ export async function test(
   const cmd = `vitest`;
   const cwd = dir;
   const res = await execa(cmd, args, { cwd, stdio: silent ? 'pipe' : 'inherit' });
-  const { exitCode } = res;
-  const ok = exitCode === 0;
 
-  return { ok, exitCode, cmd, args };
+  const { exitCode, stdout } = res;
+  const ok = exitCode === 0;
+  const stats = reporter === 'json' ? parseStats(stdout) : undefined;
+
+  return { ok, exitCode, cmd, args, stats };
+}
+
+/**
+ * Helpers
+ */
+
+function parseStats(json: string): t.TestStats {
+  const data = JSON.parse(json);
+
+  return {
+    success: data.success,
+    suites: {
+      total: data.numTotalTestSuites,
+      passed: data.numPassedTestSuites,
+      failed: data.numFailedTestSuites,
+      pending: data.numPendingTestSuites,
+    },
+    tests: {
+      total: data.numTotalTests,
+      passed: data.numPassedTests,
+      failed: data.numFailedTests,
+      pending: data.numPendingTests,
+      todo: data.numTodoTests,
+    },
+  };
 }

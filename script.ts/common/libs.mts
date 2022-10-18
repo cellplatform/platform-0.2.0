@@ -4,6 +4,7 @@
 import { splitEvery } from 'ramda';
 export const R = { splitEvery };
 
+import ora from 'ora';
 import pc from 'picocolors';
 import rimraf from 'rimraf';
 import glob from 'glob';
@@ -12,7 +13,7 @@ import minimist from 'minimist';
 import filesize from 'pretty-bytes';
 import semver from 'semver';
 
-export { pc, rimraf, execa, minimist, glob, filesize, semver };
+export { ora, pc, rimraf, execa, minimist, glob, filesize, semver };
 
 /**
  * @system

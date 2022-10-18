@@ -1,5 +1,31 @@
 # sys.text
 
+Text processing library.
+
+## Example
+
+
+```ts
+import { Text } from 'sys.text'
+
+
+/**
+ * Parse and transform text (via ASTs).
+ */
+
+const transform = Text.Processor.markdown();
+const md = transform.toHtml(text);
+
+// Produces:
+console.info(md.html); //        <== Parsed HTML
+console.info(md.markdown); //    <== Formatted Markdown
+console.info(md.toString());
+console.info(md.info); //        <== Extracted Data-Structures
+
+```
+
+
+---
 
 ![sys.text](https://user-images.githubusercontent.com/185555/196023331-c4a18283-3143-464b-8438-03306a0823e2.png)
 
@@ -11,6 +37,7 @@ Standards:
 - [CommonMark](https://commonmark.org/) - common markdown standard
 - [GFM: Github Flavored Markdown](https://github.github.com/gfm/) - markdown variant
 - [Unified](http://unifiedjs.com/) - text processing ecosystem (aka. a "`stdlib`" baseline)
+- [AST: Abstract Syntax Tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 
 ---
 
