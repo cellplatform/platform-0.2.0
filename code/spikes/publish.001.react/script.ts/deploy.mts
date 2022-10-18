@@ -8,7 +8,7 @@ import pc from 'picocolors';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
-import { ContentPackage } from '../src/deploy/index.mjs';
+import { ContentPackage } from '../src/ContentPackage/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
 
 import { Text } from 'sys.text/node';
@@ -40,9 +40,9 @@ const version = content.version;
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
-const res2 = await pushToVercel({
+const deployed = await pushToVercel({
   fs: bundle.fs,
   token,
   version,
@@ -50,4 +50,4 @@ const res2 = await pushToVercel({
 });
 
 console.log('-------------------------------------------');
-console.log('res2', res2);
+console.log('deployed', deployed);

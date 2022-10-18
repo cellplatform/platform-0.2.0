@@ -25,6 +25,7 @@ export async function pushToVercel(args: {
     regions: ['sfo1'],
     target: 'production', // NB: required to be "production" for the DNS alias to be applied.
     silent: false, // Standard BEFORE and AFTER deploy logging to console.
+    timeout: 30000,
   });
 
   console.info(pc.bold(pc.green(`version: ${pc.white(version)}`)));

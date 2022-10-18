@@ -34,7 +34,6 @@ export async function ContentPackage(args: Args) {
 
   const api = {
     version,
-    // dir: `${version}`,
 
     get README() {
       return README;
@@ -71,20 +70,29 @@ export async function ContentPackage(args: Args) {
       /**
        * Copy and process source content.
        */
-      const MD = Text.Processor.markdown();
-      await Promise.all(
-        contentManifest.files.map(async (file) => {
-          const data = await src.content.read(file.path);
-          const md = await MD.toHtml(data);
-          await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
-          await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
-        }),
-      );
+      (async () => {
+        const MD = Text.Processor.markdown();
+
+        await Promise.all(
+          contentManifest.files.map(async (file) => {
+            const data = await src.content.read(file.path);
+            const md = await MD.toHtml(data);
+            await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
+            await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
+          }),
+        );
+
+        // await target.write(Path.join(base, 'index.json'), manifest);
+        const dirname = Path.join(base, dir.app);
+        const fs = target.dir(dirname);
+        const manifest = await fs.manifest();
+        await target.write(Path.join(dirname, 'index.json'), manifest);
+      })();
 
       /**
-       * Copy root meta-data.
+       * Write root level README.
        */
-      await README.write(target, { dir: Path.join(base, dir.app) });
+      await README.write(target, { dir: base, html: false });
       const fs = target.dir(base);
       const manifest = await fs.manifest();
       await target.write(Path.join(base, 'index.json'), manifest);
