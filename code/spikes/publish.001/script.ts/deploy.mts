@@ -8,7 +8,7 @@ import pc from 'picocolors';
 import { t } from '../src/common/index.mjs';
 import { Pkg } from '../src/index.pkg.mjs';
 
-import { ContentPackage } from '../src/ContentPackage/index.mjs';
+import { ContentPackage } from '../src/ContentBundle/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
 
 import { Text } from 'sys.text/node';

@@ -3,8 +3,8 @@ import { MarkdownFile } from '../Markdown.File/index.mjs';
 import { Filesize } from 'sys.fs';
 
 type Sources = {
-  app: t.Fs;
-  content: t.Fs;
+  app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
+  content: t.Fs; // The source markdown content, and other assorted "author(s) generated" content.
 };
 
 type Args = {
@@ -17,7 +17,7 @@ type Args = {
 /**
  * Setup a deployment.
  */
-export async function ContentPackage(args: Args) {
+export async function ContentBundle(args: Args) {
   const { Text, src, throwError, propsType = 'project.props' } = args;
 
   /**
