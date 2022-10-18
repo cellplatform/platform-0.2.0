@@ -39,6 +39,8 @@ const version = content.version;
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
+console.log();
+console.log('sizes:', bundle.size);
 
 // process.exit(0); // TEMP 🐷
 
@@ -50,4 +52,4 @@ const deployed = await pushToVercel({
 });
 
 console.log('-------------------------------------------');
-console.log('deployed', deployed);
+console.log('deployed', deployed.status);

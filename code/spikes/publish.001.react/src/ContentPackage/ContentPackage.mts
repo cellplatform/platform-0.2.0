@@ -1,5 +1,6 @@
 import { t, Path } from '../common/index.mjs';
 import { MarkdownFile } from '../Markdown.File/index.mjs';
+import { Filesize } from 'sys.fs';
 
 type Sources = {
   app: t.Fs;
@@ -47,9 +48,10 @@ export async function ContentPackage(args: Args) {
       const dir = {
         base,
         app: 'app',
+        assets: 'app/assets',
         data: {
           md: 'app/data.md',
-          html: 'app/data.html',
+          // html: 'app/data.html/',
         },
       };
 
@@ -78,14 +80,12 @@ export async function ContentPackage(args: Args) {
             const data = await src.content.read(file.path);
             const md = await MD.toHtml(data);
             await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
-            await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
+            // await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
           }),
         );
 
-        // await target.write(Path.join(base, 'index.json'), manifest);
         const dirname = Path.join(base, dir.app);
-        const fs = target.dir(dirname);
-        const manifest = await fs.manifest();
+        const manifest = await target.dir(dirname).manifest();
         await target.write(Path.join(dirname, 'index.json'), manifest);
       })();
 
@@ -97,12 +97,31 @@ export async function ContentPackage(args: Args) {
       const manifest = await fs.manifest();
       await target.write(Path.join(base, 'index.json'), manifest);
 
+      const toSize = (manifest: t.DirManifest, filter: (path: string) => boolean) => {
+        const bytes = manifest.files
+          .filter((file) => filter(`${Path.trimSlashesEnd(file.path)}/`))
+          .map(({ bytes }) => bytes)
+          .reduce((acc, next) => acc + next, 0);
+        const size = Filesize(bytes);
+        return { bytes, size };
+      };
+
       // Finish up.
       return {
         dir,
         version,
         get manifest() {
           return manifest;
+        },
+        get size() {
+          return {
+            total: toSize(manifest, () => true),
+            assets: toSize(manifest, (path) => path.startsWith(dir.assets)),
+            data: {
+              md: toSize(manifest, (path) => path.startsWith(dir.data.md)),
+              // html: toSize(manifest, (path) => path.startsWith(dir.data.html)),
+            },
+          };
         },
         get fs() {
           return fs;

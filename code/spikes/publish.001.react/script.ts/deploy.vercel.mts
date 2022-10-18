@@ -15,7 +15,7 @@ export async function pushToVercel(args: {
   const bus = args.bus ?? rx.bus();
 
   const vercel = Vercel.client({ bus, token, fs });
-  await vercel.deploy({
+  const res = await vercel.deploy({
     team: 'tdb',
     name: `tdb.undp.v${version}`,
     project: 'tdb-undp',
@@ -29,4 +29,6 @@ export async function pushToVercel(args: {
   });
 
   console.info(pc.bold(pc.green(`version: ${pc.white(version)}`)));
+
+  return res;
 }
