@@ -7,7 +7,7 @@ import type { Root as MdRootNode, Code as MdCodeNode } from 'mdast';
 import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
 
 /**
- * Helpers for working with tripple-tick (```) code blocks within markdown.
+ * Tools for working with tripple-tick (```) code blocks within markdown.
  *
  *    ```<lang> <meta:type>
  *

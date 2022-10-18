@@ -7,9 +7,11 @@ import remarkToRehype from 'remark-rehype';
 import { unified } from 'unified';
 
 import { t } from '../common/index.mjs';
-import { CodeBlock } from './util.CodeBlock.mjs';
+import { CodeBlock } from './util.plugin.CodeBlock.mjs';
 import { Sanatize } from './util.Sanitize.mjs';
 import remarkStringify from 'remark-stringify';
+
+import { DocStructure } from './util.plugin.Structure.mjs';
 
 /**
  * Builds a pipeline for processing markdown.
@@ -38,6 +40,7 @@ export function MarkdownPipelineBuilder(kind: 'md:only' | 'md > html', options: 
   pipeline.use(remarkParse);
   if (gfm) pipeline.use(remarkGfm);
   pipeline.use(CodeBlock.plugin.markdown, handleCodeBlockMatch);
+  pipeline.use(DocStructure.plugin);
   if (kind === 'md:only') pipeline.use(remarkStringify);
 
   /**
