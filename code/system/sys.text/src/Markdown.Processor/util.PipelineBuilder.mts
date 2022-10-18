@@ -60,7 +60,7 @@ export function MarkdownPipelineBuilder(kind: 'md:only' | 'md > html', options: 
     pipeline,
     get info(): t.MarkdownInfo {
       return {
-        codeblocks: [..._codeblocks],
+        typedCodeBlocks: [..._codeblocks],
       };
     },
   };

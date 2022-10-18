@@ -55,14 +55,14 @@ The End.
       const res = await MarkdownProcessor().toHtml(SAMPLE);
       const html = res.html;
 
-      expect(res.info.codeblocks.length).to.eql(2);
-      expect(res.info.codeblocks[0].lang).to.eql('yaml');
-      expect(res.info.codeblocks[1].lang).to.eql('ts');
+      expect(res.info.typedCodeBlocks.length).to.eql(2);
+      expect(res.info.typedCodeBlocks[0].lang).to.eql('yaml');
+      expect(res.info.typedCodeBlocks[1].lang).to.eql('ts');
 
-      expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
-      expect(res.info.codeblocks[1].text).to.eql('export default { foo: 123 }');
+      expect(res.info.typedCodeBlocks[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
+      expect(res.info.typedCodeBlocks[1].text).to.eql('export default { foo: 123 }');
 
-      res.info.codeblocks.forEach((item) => {
+      res.info.typedCodeBlocks.forEach((item) => {
         const lang = `data-lang="${item.lang}"`;
         const type = `data-type="${item.type}"`;
         expect(html).to.include(`<div id="${item.id}" ${lang} ${type}`);
@@ -85,8 +85,8 @@ The End.
       const res = await processor.toMarkdown(SAMPLE);
 
       expect(res.markdown).to.eql('```yaml doc:meta\nversion: 0.0.0\n```');
-      expect(res.info.codeblocks.length).to.eql(1);
-      expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0');
+      expect(res.info.typedCodeBlocks.length).to.eql(1);
+      expect(res.info.typedCodeBlocks[0].text).to.eql('version: 0.0.0');
     });
   });
 

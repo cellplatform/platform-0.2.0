@@ -44,9 +44,9 @@ export type MarkdownOptions = {
 };
 
 export type HtmlOptions = MarkdownOptions & {
-  //
+  // <<= Any specific HTML rendering hints here.
 };
 
 export type MarkdownInfo = {
-  codeblocks: CodeBlock[];
+  typedCodeBlocks: CodeBlock[]; // code blocks with a "type" suffix, (eg. ```yaml my.typename).
 };
