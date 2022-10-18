@@ -23,15 +23,13 @@ export const Pipeline = {
     const _codeblocks: t.CodeBlock[] = [];
 
     const handleCodeBlockMatch: t.CodeMatch = (e) => {
-      if (e.node.meta) {
-        const def = CodeBlock.toObject(e.node);
-        _codeblocks.push(def);
+      const def = CodeBlock.toObject(e.node);
+      _codeblocks.push(def);
 
-        if (kind === 'md > html') {
-          // HACK: Pending <div> contains the ID and is finalised within [rehype]
-          //       as ID is not being passed through HTML conversion.
-          e.replace(CodeBlock.placeholder.createPendingElement(def.id));
-        }
+      if (kind === 'md > html' && def.type) {
+        // HACK: Pending <div> contains the ID and is finalised within [rehype]
+        //       as ID is not being passed through HTML conversion.
+        e.replace(CodeBlock.placeholder.createPendingElement(def.id));
       }
     };
 
@@ -64,7 +62,17 @@ export const Pipeline = {
       pipeline,
       get info(): t.MarkdownInfo {
         return {
-          typedCodeBlocks: [..._codeblocks],
+          code: {
+            get all() {
+              return [..._codeblocks];
+            },
+            get typed() {
+              return _codeblocks.filter((block) => Boolean(block.type));
+            },
+            get untyped() {
+              return _codeblocks.filter((block) => !Boolean(block.type));
+            },
+          },
         };
       },
     };

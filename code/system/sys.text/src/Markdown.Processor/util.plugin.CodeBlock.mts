@@ -21,8 +21,10 @@ export const CodeBlock = {
     markdown(onMatch: t.CodeMatch) {
       return (tree: MdRootNode) => {
         visit(tree, 'code', (node, i, parent) => {
-          const replace: t.CodeMatchArgs['replace'] = (node) => CodeBlock.replace(node, parent, i);
-          onMatch({ node, replace });
+          onMatch({
+            node,
+            replace: (node) => CodeBlock.replace(node, parent, i),
+          });
         });
       };
     },
@@ -30,7 +32,11 @@ export const CodeBlock = {
     html(getBlocks: () => t.CodeBlock[]) {
       return (tree: HtmlRootNode) => {
         visit(tree, 'element', (el) => {
-          const blocks = getBlocks();
+          /**
+           * - Find the adjusted MD element placeholder.
+           * - Mutate into the final shape of the epement (updating ID attributes etc).
+           */
+          const blocks = getBlocks().filter((block) => Boolean(block.type));
           const block = CodeBlock.findBlock(el, blocks);
           if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
         });
