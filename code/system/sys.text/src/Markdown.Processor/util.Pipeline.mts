@@ -20,15 +20,15 @@ export const Pipeline = {
   compose(kind: 'md:only' | 'md > html', options: t.MarkdownOptions) {
     const { gfm = true } = options;
     const pipeline = unified();
-    const _codeblocks: t.CodeBlock[] = [];
+    const _code: t.CodeBlock[] = [];
 
-    const handleCodeBlockMatch: t.CodeMatch = (e) => {
+    const handleCodeBlock: t.CodeMatch = (e) => {
       const def = CodeBlock.toObject(e.node);
-      _codeblocks.push(def);
+      _code.push(def);
 
       if (kind === 'md > html' && def.type) {
         // HACK: Pending <div> contains the ID and is finalised within [rehype]
-        //       as ID is not being passed through HTML conversion.
+        //       as ID will not be passed through the HTML conversion.
         e.replace(CodeBlock.placeholder.createPendingElement(def.id));
       }
     };
@@ -38,7 +38,7 @@ export const Pipeline = {
      */
     pipeline.use(remarkParse);
     if (gfm) pipeline.use(remarkGfm);
-    pipeline.use(CodeBlock.plugin.markdown, handleCodeBlockMatch);
+    pipeline.use(CodeBlock.plugin.markdown, handleCodeBlock);
     pipeline.use(DocStructure.plugin);
     if (kind === 'md:only') pipeline.use(remarkStringify);
 
@@ -51,7 +51,7 @@ export const Pipeline = {
         .use(remarkToRehype)
         .use(rehypeFormat)
         .use(rehypeSanitize, Sanatize.schema())
-        .use(CodeBlock.plugin.html, () => _codeblocks)
+        .use(CodeBlock.plugin.html, () => _code)
         .use(rehypeStringify);
     }
 
@@ -64,13 +64,13 @@ export const Pipeline = {
         return {
           code: {
             get all() {
-              return [..._codeblocks];
+              return [..._code];
             },
             get typed() {
-              return _codeblocks.filter((block) => Boolean(block.type));
+              return _code.filter((block) => Boolean(block.type));
             },
             get untyped() {
-              return _codeblocks.filter((block) => !Boolean(block.type));
+              return _code.filter((block) => !Boolean(block.type));
             },
           },
         };
