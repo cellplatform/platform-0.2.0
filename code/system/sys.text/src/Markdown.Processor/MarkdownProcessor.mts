@@ -1,5 +1,5 @@
 import { t } from '../common/index.mjs';
-import { PipelineBuilder } from './util.Pipeline.mjs';
+import { Pipeline } from './util.Pipeline.mjs';
 
 /**
  * Markdown transformer.
@@ -11,8 +11,8 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
      * Process markdown only, but do not convert to HTML.
      */
     async toMarkdown(input, options = {}) {
+      const builder = Pipeline.compose('md:only', { ...base, ...options });
       const text = Format.input(input);
-      const builder = PipelineBuilder('md:only', { ...base, ...options });
       const vfile = await builder.pipeline.process(text);
       const markdown = Format.text(vfile?.toString());
       const info = builder.info;
@@ -27,8 +27,8 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
      * Convert from Markdown to Html
      */
     async toHtml(input, options = {}) {
+      const builder = Pipeline.compose('md > html', { ...base, ...options });
       const text = Format.input(input);
-      const builder = PipelineBuilder('md > html', { ...base, ...options });
       const vfile = await builder.pipeline.process(text);
       const html = Format.text(vfile?.toString());
       const markdown = Format.text(text);
