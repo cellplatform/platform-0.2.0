@@ -30,5 +30,17 @@ export async function pushToVercel(args: {
 
   console.info(pc.bold(pc.green(`version: ${pc.white(version)}`)));
 
-  return res;
+  return {
+    ...res,
+
+    /**
+     * Data about the deployment to be written to a log.
+     */
+    toObject() {
+      return {
+        kind: 'vercel:deployment',
+        ...res.deployment,
+      };
+    },
+  };
 }

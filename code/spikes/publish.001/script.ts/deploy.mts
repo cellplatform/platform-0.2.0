@@ -1,17 +1,9 @@
-import { Vercel } from 'cloud.vercel';
-import { Crdt } from 'sys.data.crdt';
-
-import { Filesystem, NodeFs, Path } from 'sys.fs.node';
-import { rx } from 'sys.util';
-
-import pc from 'picocolors';
-import { t } from '../src/common/index.mjs';
-import { Pkg } from '../src/index.pkg.mjs';
-
-import { ContentPackage } from '../src/ContentBundle/index.mjs';
-import { pushToVercel } from './deploy.vercel.mjs';
-
+import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
+import { rx, slug, Time } from 'sys.util';
+
+import { ContentBundle } from '../src/ContentBundle/index.mjs';
+import { pushToVercel } from './deploy.vercel.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -22,7 +14,7 @@ const toFs = async (dir: string) => {
   return store.fs;
 };
 
-const content = await ContentPackage({
+const content = await ContentBundle({
   Text,
   throwError: true,
   src: {
@@ -32,6 +24,7 @@ const content = await ContentPackage({
 });
 
 const targetfs = await toFs('./dist.deploy');
+const logfs = await toFs('./dist.deploy/.log');
 
 console.log('content', content);
 const bundle = await content.write(targetfs);
@@ -48,8 +41,16 @@ const deployed = await pushToVercel({
   fs: bundle.fs,
   token,
   version,
-  source: bundle.dir.app,
+  source: bundle.dir.app.base,
 });
 
 console.log('-------------------------------------------');
 console.log('deployed', deployed.status);
+
+// Write deployment to the file-log.
+const filename = `${Time.now.timestamp}-${slug()}.log.json`;
+const logentry = {
+  bundle: bundle.toObject(),
+  deployment: deployed.toObject(),
+};
+await logfs.write(filename, JSON.stringify(logentry));

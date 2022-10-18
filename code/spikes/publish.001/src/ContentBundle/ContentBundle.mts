@@ -47,10 +47,12 @@ export async function ContentBundle(args: Args) {
       const base = options.dir ? Path.join(options.dir, version) : version;
       const dir = {
         base,
-        app: 'app',
-        assets: 'app/assets',
+        app: {
+          base: 'app/',
+          assets: 'app/assets/',
+        },
         data: {
-          md: 'app/data.md',
+          md: 'app/data.md/',
           // html: 'app/data.html/',
         },
       };
@@ -63,7 +65,7 @@ export async function ContentBundle(args: Args) {
        */
       await Promise.all(
         appManifest.files.map(async (file) => {
-          const path = Path.join(base, dir.app, file.path);
+          const path = Path.join(base, dir.app.base, file.path);
           const data = await src.app.read(file.path);
           await target.write(path, data);
         }),
@@ -84,7 +86,7 @@ export async function ContentBundle(args: Args) {
           }),
         );
 
-        const dirname = Path.join(base, dir.app);
+        const dirname = Path.join(base, dir.app.base);
         const manifest = await target.dir(dirname).manifest();
         await target.write(Path.join(dirname, 'index.json'), manifest);
       })();
@@ -97,38 +99,58 @@ export async function ContentBundle(args: Args) {
       const manifest = await fs.manifest();
       await target.write(Path.join(base, 'index.json'), manifest);
 
-      const toSize = (manifest: t.DirManifest, filter: (path: string) => boolean) => {
-        const bytes = manifest.files
-          .filter((file) => filter(`${Path.trimSlashesEnd(file.path)}/`))
-          .map(({ bytes }) => bytes)
-          .reduce((acc, next) => acc + next, 0);
-        const size = Filesize(bytes);
-        return { bytes, size };
-      };
-
       // Finish up.
-      return {
-        dir,
+      const api = {
         version,
+        dir,
         get manifest() {
           return manifest;
         },
         get size() {
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => path.startsWith(dir.assets)),
+            assets: toSize(manifest, (path) => path.startsWith(dir.app.assets)),
             data: {
               md: toSize(manifest, (path) => path.startsWith(dir.data.md)),
               // html: toSize(manifest, (path) => path.startsWith(dir.data.html)),
             },
           };
         },
+
+        /**
+         * Scoped filesystem that was written to.
+         * Example (use): fs.manifest()
+         */
         get fs() {
           return fs;
         },
+
+        /**
+         * Data about write operation to be written to a log.
+         */
+        toObject() {
+          const { size } = api;
+          const kind = 'pkg:content-bundle';
+          return { kind, dir, version, size };
+        },
       };
+
+      return api;
     },
   };
 
   return api;
 }
+
+/**
+ * Helpers
+ */
+
+const toSize = (manifest: t.DirManifest, filter: (path: string) => boolean) => {
+  const bytes = manifest.files
+    .filter(({ path }) => filter(`${Path.trimSlashesEnd(path)}/`))
+    .map(({ bytes }) => bytes)
+    .reduce((acc, next) => acc + next, 0);
+  const size = Filesize(bytes);
+  return { bytes, size };
+};
