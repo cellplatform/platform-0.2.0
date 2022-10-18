@@ -1,7 +1,8 @@
 # sys.fs
 
 
-![filesystem-diagram](https://user-images.githubusercontent.com/185555/196328980-762ca9b9-f3c4-476a-8e4d-631a16052abf.png)
+![filesystem-diagram](https://user-images.githubusercontent.com/185555/196359531-1e6f6dc9-7b05-47d6-ab22-bffebbb0174f.png")
+
 
 
 ```yaml layout.props
