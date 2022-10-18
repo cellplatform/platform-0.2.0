@@ -233,7 +233,6 @@ export type VercelSourceBundle = { manifest: VercelManifest; files: t.VercelFile
 
 export type VercelSourceBundleInfo = {
   name: string;
-  version: Semver;
   meta: t.VercelHttpDeployMeta;
   source: t.VercelSourceBundle;
   files: {
@@ -284,7 +283,6 @@ export type VercelHttpDeployResponse = VercelHttpResponse & {
  * Deployment Meta-data.
  */
 type MetaCommon = {
-  version: string;
   bytes: string;
   fileshash: string; // Hash of all file-hashes within the bundle (sorted by name).
 };

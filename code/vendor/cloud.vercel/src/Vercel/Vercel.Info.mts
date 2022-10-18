@@ -16,7 +16,6 @@ export const VercelInfo = {
 
     let meta: t.VercelHttpDeployMeta = {
       kind: 'bundle:plain/files',
-      version: '0.0.0',
       fileshash: bundle.manifest.hash.files,
       bytes: bundle.manifest.files.reduce((acc, next) => acc + next.bytes, 0).toString(),
     };
@@ -29,7 +28,6 @@ export const VercelInfo = {
         meta = {
           ...meta,
           kind: 'bundle:code/module',
-          version,
           namespace,
         };
         name = name ?? `${namespace}-v${version}`;
@@ -53,16 +51,15 @@ export const VercelInfo = {
     };
 
     // Final preparation of meta-data.
-    const version = meta.version;
+    // const version = meta.version;
     Object.keys(meta)
       .map((key) => key as keyof t.VercelHttpDeployMeta)
       .map((key) => (meta[key] = meta[key].toString() as any)); // NB: Ensure all values are strings.
-    name = name ?? `unnamed-v${version}`;
+    name = name ?? `unnamed-v${'0.0.0'}`;
 
     // Finish up.
     const info: t.VercelSourceBundleInfo = {
       name,
-      version,
       files,
       meta,
       source: bundle,
