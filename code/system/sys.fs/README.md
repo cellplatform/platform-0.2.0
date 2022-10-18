@@ -6,7 +6,7 @@
 
 ```yaml layout.props
 
-id: filesystem-diagram
+ref: filesystem-diagram
 type: image
 width: 500
 align: center
