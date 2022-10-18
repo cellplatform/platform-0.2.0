@@ -21,6 +21,8 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       const md = await Text.Processor.markdown().toHtml(text);
       console.log('md', md);
       setHtml(md.html);
+
+      console.log('md.info', md.info);
     })();
   }, []);
 
