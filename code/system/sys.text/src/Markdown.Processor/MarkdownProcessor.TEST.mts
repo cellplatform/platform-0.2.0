@@ -5,8 +5,8 @@ describe('TextProcessor.md', () => {
   describe('markdown formatting', () => {
     it('trims \\n characters', async () => {
       const SAMPLE = `
-# Hello
 
+# Hello
 
 `;
       expect(SAMPLE[0]).to.eql('\n'); // NB: Assert the input markdown is padded with \n characters.
@@ -20,73 +20,6 @@ describe('TextProcessor.md', () => {
 
       expect(res2.markdown).to.eql('# Hello');
       expect(res2.toString()).to.eql(res2.markdown);
-    });
-  });
-
-  describe('code-block processing', () => {
-    it('extract code blocks (that contain a meta-data suffix)', async () => {
-      const SAMPLE = `
-# My Title
-
-\`\`\`yaml doc:meta
-version: 0.0.0
-title:   My Document
-\`\`\`
-
-\`\`\`yaml
-sample: "plain block not a meta block"
-detail: "not a meta block"
-\`\`\`
-
-\`\`\`ts
-// Sample code.
-\`\`\`
-
-
-\`\`\`ts props:view
-export default { foo: 123 }
-\`\`\`
-
----
-
-The End.
-    `;
-
-      const res = await MarkdownProcessor().toHtml(SAMPLE);
-      const html = res.html;
-
-      expect(res.info.codeblocks.length).to.eql(2);
-      expect(res.info.codeblocks[0].lang).to.eql('yaml');
-      expect(res.info.codeblocks[1].lang).to.eql('ts');
-
-      expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0\ntitle:   My Document');
-      expect(res.info.codeblocks[1].text).to.eql('export default { foo: 123 }');
-
-      res.info.codeblocks.forEach((item) => {
-        const lang = `data-lang="${item.lang}"`;
-        const type = `data-type="${item.type}"`;
-        expect(html).to.include(`<div id="${item.id}" ${lang} ${type}`);
-      });
-
-      // NB: Blocks with no "meta" entry are not converted.
-      expect(html).to.include(`<code class="language-yaml">sample: "plain block not a meta block"`);
-      expect(html).to.include(`<code class="language-ts">// Sample code.`);
-      expect(html).to.include('<p>The End.</p>');
-    });
-
-    it('markdown only', async () => {
-      const SAMPLE = `
-  \`\`\`yaml doc:meta
-  version: 0.0.0
-  \`\`\`
-            `;
-
-      const processor = MarkdownProcessor();
-      const res = await processor.toMarkdown(SAMPLE);
-
-      expect(res.markdown).to.eql('```yaml doc:meta\nversion: 0.0.0\n```');
-      expect(res.info.codeblocks.length).to.eql(1);
-      expect(res.info.codeblocks[0].text).to.eql('version: 0.0.0');
     });
   });
 
@@ -164,6 +97,7 @@ A note[^1]
       const input = new TextEncoder().encode('# Hello\n');
       const res1 = await MarkdownProcessor().toMarkdown(input);
       const res2 = await MarkdownProcessor().toHtml(input);
+
       expect(res1.markdown).to.eql('# Hello');
       expect(res2.markdown).to.eql('# Hello');
       expect(res2.html).to.eql('<h1>Hello</h1>');
@@ -173,6 +107,7 @@ A note[^1]
       const input = '# Hello\n';
       const res1 = await MarkdownProcessor().toMarkdown(input);
       const res2 = await MarkdownProcessor().toHtml(input);
+
       expect(res1.markdown).to.eql('# Hello');
       expect(res2.markdown).to.eql('# Hello');
       expect(res2.html).to.eql('<h1>Hello</h1>');
@@ -182,6 +117,7 @@ A note[^1]
       const test = async (input?: any) => {
         const res1 = await MarkdownProcessor().toMarkdown(input);
         const res2 = await MarkdownProcessor().toHtml(input);
+
         expect(res1.markdown).to.eql('');
         expect(res2.markdown).to.eql('');
         expect(res2.html).to.eql('');

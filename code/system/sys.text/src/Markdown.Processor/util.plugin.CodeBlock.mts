@@ -1,44 +1,53 @@
 import { SKIP, visit } from 'unist-util-visit';
-
-import { slug, t } from '../common/index.mjs';
-
-import type { Node as AstNode } from 'unist';
-import type { Root as MdRootNode, Code as MdCodeNode } from 'mdast';
-import type { Root as HtmlRootNode, Element as HtmlElementNode, Text as HtmlTextNode } from 'hast';
+import { slug, t } from './common.mjs';
 
 /**
- * Helpers for working with tripple-tick (```) code blocks within markdown.
+ * Tools for working with tripple-tick (```) code blocks within markdown.
  *
  *    ```<lang> <meta:type>
  *
- * Example:
+ * Example (typed):
  *
  *    ```yaml project:props
+ *
+ * Example (untyped):
+ *
+ *    ```ts
  *
  */
 export const CodeBlock = {
   plugin: {
-    markdown(onMatch: t.CodeMatch) {
-      return (tree: MdRootNode) => {
+    markdown(options: { onMatch?: t.CodeMatch } = {}) {
+      return (tree: t.MdastRoot) => {
+        const { onMatch } = options;
         visit(tree, 'code', (node, i, parent) => {
-          const replace: t.CodeMatchArgs['replace'] = (node) => CodeBlock.replace(node, parent, i);
-          onMatch({ node, replace });
+          onMatch?.({
+            node,
+            replace: (node) => CodeBlock.replace(node, parent, i),
+          });
         });
       };
     },
 
-    html(getBlocks: () => t.CodeBlock[]) {
-      return (tree: HtmlRootNode) => {
+    html(options: { getBlocks?: () => t.CodeBlock[] } = {}) {
+      return (tree: t.HastRoot) => {
+        const { getBlocks } = options;
         visit(tree, 'element', (el) => {
-          const blocks = getBlocks();
-          const block = CodeBlock.findBlock(el, blocks);
-          if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+          /**
+           * - Find the adjusted MD element placeholder.
+           * - Mutate into the final shape of the epement (updating ID attributes etc).
+           */
+          if (getBlocks) {
+            const blocks = getBlocks().filter((block) => Boolean(block.type));
+            const block = CodeBlock.findBlock(el, blocks);
+            if (block) CodeBlock.placeholder.mutateToFinalElement(el, block);
+          }
         });
       };
     },
   },
 
-  replace(node: AstNode, parent: any, index?: number | null) {
+  replace(node: t.AstNode, parent: any, index?: number | null) {
     const i = index || -1;
     if (i < 0) return;
     if (typeof parent !== 'object') return;
@@ -46,7 +55,7 @@ export const CodeBlock = {
     return [SKIP, i];
   },
 
-  toObject(node: MdCodeNode) {
+  toObject(node: t.MdastCode) {
     return {
       id: `container.${slug()}`,
       lang: node.lang || '',
@@ -55,22 +64,22 @@ export const CodeBlock = {
     };
   },
 
-  findBlock(el: HtmlElementNode, blocks: t.CodeBlock[]) {
+  findBlock(el: t.HastElement, blocks: t.CodeBlock[]) {
     if (!CodeBlock.placeholder.isMatch(el)) return;
-    const child = el.children[0] as HtmlTextNode;
+    const child = el.children[0] as t.HastText;
     const id = child.value.replace(/^code\:/, '');
     return blocks.find((item) => item.id === id);
   },
 
   placeholder: {
-    createPendingElement(id: string): HtmlElementNode {
+    createPendingElement(id: string): t.HastElement {
       return {
         type: 'element',
         tagName: 'div',
         children: [{ type: 'text', value: `code:${id}` }],
       };
     },
-    mutateToFinalElement(el: HtmlElementNode, block: t.CodeBlock) {
+    mutateToFinalElement(el: t.HastElement, block: t.CodeBlock) {
       const props = el.properties || (el.properties = {});
       props['id'] = block.id;
       props['data-lang'] = block.lang;
@@ -78,7 +87,7 @@ export const CodeBlock = {
       el.children = [];
       return el;
     },
-    isMatch(el: HtmlElementNode) {
+    isMatch(el: t.HastElement) {
       if (!(el.type === 'element' && el.tagName === 'div')) return false;
       if (el.children[0].type !== 'text') return false;
       if (!el.children[0].value.startsWith('code:')) return false;

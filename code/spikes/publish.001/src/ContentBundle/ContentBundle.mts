@@ -1,9 +1,10 @@
 import { t, Path } from '../common/index.mjs';
 import { MarkdownFile } from '../Markdown.File/index.mjs';
+import { Filesize } from 'sys.fs';
 
 type Sources = {
-  app: t.Fs;
-  content: t.Fs;
+  app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
+  content: t.Fs; // The source markdown content, and other assorted "author(s) generated" content.
 };
 
 type Args = {
@@ -16,7 +17,7 @@ type Args = {
 /**
  * Setup a deployment.
  */
-export async function ContentPackage(args: Args) {
+export async function ContentBundle(args: Args) {
   const { Text, src, throwError, propsType = 'project.props' } = args;
 
   /**
@@ -46,10 +47,13 @@ export async function ContentPackage(args: Args) {
       const base = options.dir ? Path.join(options.dir, version) : version;
       const dir = {
         base,
-        app: 'app',
+        app: {
+          base: 'app/',
+          assets: 'app/assets/',
+        },
         data: {
-          md: 'app/data.md',
-          html: 'app/data.html',
+          md: 'app/data.md/',
+          // html: 'app/data.html/',
         },
       };
 
@@ -61,7 +65,7 @@ export async function ContentPackage(args: Args) {
        */
       await Promise.all(
         appManifest.files.map(async (file) => {
-          const path = Path.join(base, dir.app, file.path);
+          const path = Path.join(base, dir.app.base, file.path);
           const data = await src.app.read(file.path);
           await target.write(path, data);
         }),
@@ -78,14 +82,12 @@ export async function ContentPackage(args: Args) {
             const data = await src.content.read(file.path);
             const md = await MD.toHtml(data);
             await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
-            await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
+            // await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
           }),
         );
 
-        // await target.write(Path.join(base, 'index.json'), manifest);
-        const dirname = Path.join(base, dir.app);
-        const fs = target.dir(dirname);
-        const manifest = await fs.manifest();
+        const dirname = Path.join(base, dir.app.base);
+        const manifest = await target.dir(dirname).manifest();
         await target.write(Path.join(dirname, 'index.json'), manifest);
       })();
 
@@ -98,18 +100,57 @@ export async function ContentPackage(args: Args) {
       await target.write(Path.join(base, 'index.json'), manifest);
 
       // Finish up.
-      return {
-        dir,
+      const api = {
         version,
+        dir,
         get manifest() {
           return manifest;
         },
+        get size() {
+          return {
+            total: toSize(manifest, () => true),
+            assets: toSize(manifest, (path) => path.startsWith(dir.app.assets)),
+            data: {
+              md: toSize(manifest, (path) => path.startsWith(dir.data.md)),
+              // html: toSize(manifest, (path) => path.startsWith(dir.data.html)),
+            },
+          };
+        },
+
+        /**
+         * Scoped filesystem that was written to.
+         * Example (use): fs.manifest()
+         */
         get fs() {
           return fs;
         },
+
+        /**
+         * Data about write operation to be written to a log.
+         */
+        toObject() {
+          const { size } = api;
+          const kind = 'pkg:content-bundle';
+          return { kind, dir, version, size };
+        },
       };
+
+      return api;
     },
   };
 
   return api;
 }
+
+/**
+ * Helpers
+ */
+
+const toSize = (manifest: t.DirManifest, filter: (path: string) => boolean) => {
+  const bytes = manifest.files
+    .filter(({ path }) => filter(`${Path.trimSlashesEnd(path)}/`))
+    .map(({ bytes }) => bytes)
+    .reduce((acc, next) => acc + next, 0);
+  const size = Filesize(bytes);
+  return { bytes, size };
+};

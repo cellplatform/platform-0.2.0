@@ -1,4 +1,4 @@
-import { DEFAULT, Mime, shasum, t, Time, Delete } from './common/index.mjs';
+import { DEFAULT, Delete, Mime, Path, shasum, t, Time } from './common/index.mjs';
 
 type Id = string;
 
@@ -100,7 +100,9 @@ export function VercelHttpUploadFiles(args: { ctx: t.Ctx; teamId?: Id }): t.Verc
 
         let filepath = path;
         if (typeof source === 'string' && source.trim()) {
-          filepath = path.substring(source.length + 1); // NB: Trim the source directory fitler.
+          // NB: Trim the given source directory filter from the path.
+          const src = Path.trimSlashesEnd(source);
+          filepath = path.substring(src.length + 1);
         }
 
         const file: t.VercelFileUpload = { file: filepath, sha: digest, size: contentLength };

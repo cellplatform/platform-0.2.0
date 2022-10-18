@@ -21,7 +21,7 @@ export async function MarkdownFile<T extends B = B>(args: t.MarkdownFileFactoryA
   const processor = Text.Processor.markdown();
 
   const md = await processor.toHtml(text);
-  const propsBlock = md.info.codeblocks.filter((m) => m.type === propsType)[0];
+  const propsBlock = md.info.code.typed.filter((m) => m.type === propsType)[0];
   const props = (propsBlock ? Text.Yaml.parse(propsBlock.text) : { version: '0.0.0' }) as T;
 
   const content = {

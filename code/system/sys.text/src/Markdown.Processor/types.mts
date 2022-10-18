@@ -1,20 +1,19 @@
-import type { Code as MdastCode } from 'mdast';
-import type { Element as HastElement } from 'hast';
+import * as t from '../common/types.mjs';
 
 export type MarkdownInput = string | Uint8Array | undefined;
 
 export type MarkdownProcessor = {
-  toMarkdown(input: MarkdownInput, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
-  toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
+  toMarkdown(input: MarkdownInput, options?: MarkdownOptions): Promise<MarkdownProcessedMd>;
+  toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<MarkdownProcessedHtml>;
 };
 
-export type MarkdownProcessorMd = {
+export type MarkdownProcessedMd = {
   readonly info: MarkdownInfo;
   readonly markdown: string;
   toString(): string;
 };
 
-export type MarkdownProcessorHtml = {
+export type MarkdownProcessedHtml = {
   readonly info: MarkdownInfo;
   readonly html: string;
   readonly markdown: string;
@@ -27,13 +26,13 @@ export type MarkdownProcessorHtml = {
 export type CodeBlock = {
   id: string;
   lang: string;
-  type: string;
+  type: string; // meta.
   text: string;
 };
 export type CodeMatch = (e: CodeMatchArgs) => void;
 export type CodeMatchArgs = {
-  node: MdastCode;
-  replace(node: HastElement): void;
+  node: t.MdastCode;
+  replace(node: t.HastElement): void;
 };
 
 /**
@@ -44,9 +43,18 @@ export type MarkdownOptions = {
 };
 
 export type HtmlOptions = MarkdownOptions & {
-  //
+  // <<= Any specific HTML rendering hints here.
 };
 
+/**
+ * Derived information about the structure of some markdown
+ * resulting from the markdown text-processor running.
+ */
 export type MarkdownInfo = {
-  codeblocks: CodeBlock[];
+  root: t.MdastRoot;
+  code: {
+    all: CodeBlock[];
+    typed: CodeBlock[]; //   Code blocks with a "type" meta-data suffix, (eg. ```yaml my.typename).
+    untyped: CodeBlock[]; // Code blocks without a "type" meta-data suffix.
+  };
 };
