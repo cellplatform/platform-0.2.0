@@ -8,6 +8,7 @@ describe('Markdown: DocStructure', () => {
     it('parse outline', async () => {
       const res = await MarkdownProcessor().toMarkdown(SAMPLE);
 
+      console.log('----------------------------------------');
       console.log('res', res);
 
       /**

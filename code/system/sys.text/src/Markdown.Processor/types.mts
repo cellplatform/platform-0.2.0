@@ -4,17 +4,17 @@ import type { Element as HastElement } from 'hast';
 export type MarkdownInput = string | Uint8Array | undefined;
 
 export type MarkdownProcessor = {
-  toMarkdown(input: MarkdownInput, options?: MarkdownOptions): Promise<MarkdownProcessorMd>;
-  toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<MarkdownProcessorHtml>;
+  toMarkdown(input: MarkdownInput, options?: MarkdownOptions): Promise<MarkdownProcessedMd>;
+  toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<MarkdownProcessedHtml>;
 };
 
-export type MarkdownProcessorMd = {
+export type MarkdownProcessedMd = {
   readonly info: MarkdownInfo;
   readonly markdown: string;
   toString(): string;
 };
 
-export type MarkdownProcessorHtml = {
+export type MarkdownProcessedHtml = {
   readonly info: MarkdownInfo;
   readonly html: string;
   readonly markdown: string;
