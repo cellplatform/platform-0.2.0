@@ -27,7 +27,7 @@ export type MarkdownProcessedHtml = {
 export type CodeBlock = {
   id: string;
   lang: string;
-  type: string;
+  type: string; // meta.
   text: string;
 };
 export type CodeMatch = (e: CodeMatchArgs) => void;
