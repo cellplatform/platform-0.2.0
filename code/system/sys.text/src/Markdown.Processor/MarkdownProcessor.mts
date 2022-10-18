@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { t } from './common.mjs';
 import { Pipeline } from './util.Pipeline.mjs';
 
 /**

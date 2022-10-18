@@ -1,5 +1,4 @@
-import type { Code as MdastCode } from 'mdast';
-import type { Element as HastElement } from 'hast';
+import * as t from '../common/types.mjs';
 
 export type MarkdownInput = string | Uint8Array | undefined;
 
@@ -32,8 +31,8 @@ export type CodeBlock = {
 };
 export type CodeMatch = (e: CodeMatchArgs) => void;
 export type CodeMatchArgs = {
-  node: MdastCode;
-  replace(node: HastElement): void;
+  node: t.MdastCode;
+  replace(node: t.HastElement): void;
 };
 
 /**
@@ -52,6 +51,7 @@ export type HtmlOptions = MarkdownOptions & {
  * resulting from the markdown text-processor running.
  */
 export type MarkdownInfo = {
+  // root: MdastRoot;
   code: {
     all: CodeBlock[];
     typed: CodeBlock[]; //   Code blocks with a "type" meta-data suffix, (eg. ```yaml my.typename).
