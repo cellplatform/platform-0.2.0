@@ -11,7 +11,7 @@ import { CodeBlock } from './util.plugin.CodeBlock.mjs';
 import { Sanatize } from './util.Sanitize.mjs';
 import remarkStringify from 'remark-stringify';
 
-import { DocStructure } from './util.plugin.Structure.mjs';
+import { DocStructure } from './util.plugin.DocStructure.mjs';
 
 /**
  * Builds a pipeline for processing markdown.
