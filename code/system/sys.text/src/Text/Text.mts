@@ -1,4 +1,4 @@
-import { t, Yaml } from '../common/index.mjs';
+import { t, Yaml } from '../common.mjs';
 import { TextProcessor as Processor } from '../Text.Processor/index.mjs';
 
 /**
