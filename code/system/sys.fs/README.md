@@ -5,6 +5,7 @@
 
 
 ```yaml layout.image
+
 id: image-banner
 width: 500
 align: center
