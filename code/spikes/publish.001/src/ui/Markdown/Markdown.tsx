@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common/index.mjs';
+import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
 import { Text } from 'sys.text';
-import { FetchUtil } from './Fetch.Util.mjs';
-import { MarkdownDocOutline } from './Markdown.DocOutline';
+import { Fetch } from '../Fetch.Util.mjs';
+import { MarkdownOutline } from './Markdown.Outline';
+import { MarkdownEditor } from './Markdown.Editor';
 
 type DataCtx = {
   html: string;
@@ -10,9 +11,9 @@ type DataCtx = {
   ast: t.MdastRoot;
 };
 
-export type AppMarkdownProps = { data: DataCtx; style?: t.CssValue };
+export type MarkdownProps = { data: DataCtx; style?: t.CssValue };
 
-export const AppMarkdown: React.FC<AppMarkdownProps> = (props) => {
+export const Markdown: React.FC<MarkdownProps> = (props) => {
   const [html, setHtml] = useState('');
   const [md, setMd] = useState('');
   const [mdAst, setMdAst] = useState<t.MdastRoot>();
@@ -20,8 +21,12 @@ export const AppMarkdown: React.FC<AppMarkdownProps> = (props) => {
   useEffect(() => {
     (async () => {
       const url = '/data.md/main.md';
-      const md = await FetchUtil.markdown(url);
+      const md = await Fetch.markdown(url);
 
+      /**
+       * TODO 🐷
+       * refactor into proper state manager
+       */
       console.log('-------------------------------------------');
       console.log('md', md);
       console.log('md.info', md.info);
@@ -68,40 +73,28 @@ export const AppMarkdown: React.FC<AppMarkdownProps> = (props) => {
   const styles = {
     base: css({
       Absolute: 0,
-      padding: 10,
       Flex: 'x-stretch-stretch',
       fontSize: 16,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     left: css({
       flex: 1,
-      padding: 15,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-    middle: css({
-      flex: 1,
-      padding: 15,
-      Margin: [null, 10],
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     right: css({
       flex: 1,
-      padding: 15,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      opacity: 0.3,
     }),
   };
 
   const elHtml = html && <div dangerouslySetInnerHTML={{ __html: html }} />;
-  const elOutline = mdAst && <MarkdownDocOutline ast={mdAst} />;
+  const elEditor = <MarkdownEditor md={md} />;
+  const elOutline = mdAst && <MarkdownOutline ast={mdAst} />;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>
-        <pre>{md}</pre>
-      </div>
-      <div {...styles.middle}>{elOutline}</div>
-      <div {...styles.right}>{elHtml}</div>
+      <div {...styles.left}>{elEditor}</div>
+      <div style={{ width: 20 }} />
+      <div {...styles.right}>{elOutline}</div>
     </div>
   );
 };

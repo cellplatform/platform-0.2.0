@@ -12,7 +12,7 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "prepare": "yarn build && yarn test --run --reporter=verbose",
     "deploy": "yarn prepare && yarn tmp",
-    "tmp": "rm -rf dist.deploy && ts-node-esm -T  ./script.ts/tmp.mts"
+    "tmp": "ts-node-esm -T  ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
@@ -26,8 +26,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.e2b801e9.js",
-    "./web": "./dist/web/assets/index.e2b801e9.js"
+    ".": "./dist/web/assets/index.cbc91af2.js",
+    "./web": "./dist/web/assets/index.cbc91af2.js"
   },
   "typesVersions": {
     "*": {

@@ -16,7 +16,7 @@ const toFs = async (dir: string) => {
   return store.fs;
 };
 
-const content = await ContentBundle({
+const bundler = await ContentBundle({
   Text,
   throwError: true,
   src: {
@@ -25,30 +25,28 @@ const content = await ContentBundle({
   },
 });
 
-const targetfs = await toFs('./dist.deploy');
-const logfs = await toFs('./dist.deploy/.log');
-const publicfs = await toFs('./public');
+const targetdir = await toFs('./dist.deploy/');
+const logdir = await toFs('./dist.deploy/.log/');
+const srcdir = await toFs('./src/');
+const publicfs = await toFs('./public/');
 
-console.log('content', content);
+console.log('content', bundler);
 
-const logger = ContentLog.log(logfs);
-const bundle = await content.write.bundle(targetfs);
-const version = content.version;
+const logger = ContentLog.log(logdir);
+const version = bundler.version;
+const bundle = await bundler.write.bundle(targetdir, { logdir, srcdir });
 
 /**
  * Store the data in /public (for local dev usage)
  */
-await content.write.data(publicfs);
+await bundler.write.data(publicfs, { logdir });
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
 
-const summary = await logger.summary({ max: 50 });
-console.log('summary', summary);
-
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
