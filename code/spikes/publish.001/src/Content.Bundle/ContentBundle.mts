@@ -174,7 +174,8 @@ export async function ContentBundle(args: Args) {
       let log: t.PublicLogSummary | undefined;
       if (options.logdir) {
         const logger = ContentLog.log(options.logdir);
-        log = await logger.publicSummary({ max: 50 });
+        const latest = version;
+        log = await logger.publicSummary({ max: 50, latest });
         await target.write('log.public.json', log);
       }
 
