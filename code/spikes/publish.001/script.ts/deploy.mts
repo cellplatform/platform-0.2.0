@@ -2,7 +2,7 @@ import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
 import { rx, slug, Time } from 'sys.util';
 
-import { ContentBundle } from '../src/ContentBundle/index.mjs';
+import { ContentBundle } from '../src/Content.Bundle/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
 import { t } from '../src/common.mjs';
 

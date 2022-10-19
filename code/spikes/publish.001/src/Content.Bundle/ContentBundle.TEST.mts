@@ -51,7 +51,7 @@ version: 0.1.2
     expect(m.files.map((f) => f.path)).to.eql(['README.md', 'README.md.html']);
   });
 
-  it('write: default dir (none)', async () => {
+  it.skip('write: default dir (none)', async () => {
     const { src, target } = await setup();
     const pipeline = await ContentBundle({ Text, src });
     await pipeline.write.bundle(target);
@@ -65,7 +65,7 @@ version: 0.1.2
     console.log('files', files);
   });
 
-  it('write: custom dir', async () => {
+  it.skip('write: custom dir', async () => {
     const { src, target } = await setup();
     const pipeline = await ContentBundle({ Text, src });
     await pipeline.write.bundle(target, { dir: '/foo/bar/' });
