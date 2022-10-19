@@ -33,6 +33,20 @@ export async function ContentBundle(args: Args) {
 
   const version = README.props.version;
 
+  const toPaths = (dir?: string) => {
+    const base = dir ?? version;
+    return {
+      base,
+      app: {
+        base: Path.join(base, 'app/'),
+        assets: Path.join(base, 'app/assets/'),
+      },
+      data: {
+        md: Path.join(base, 'app/data.md/'),
+      },
+    };
+  };
+
   const api = {
     version,
 
@@ -40,102 +54,103 @@ export async function ContentBundle(args: Args) {
       return README;
     },
 
-    /**
-     * Write the content to the given filesystem location.
-     */
-    async write(target: t.Fs, options: { dir?: string } = {}) {
-      const base = options.dir ? Path.join(options.dir, version) : version;
-      const dir = {
-        base,
-        app: {
-          base: 'app/',
-          assets: 'app/assets/',
-        },
-        data: {
-          md: 'app/data.md/',
-          // html: 'app/data.html/',
-        },
-      };
-
-      const appManifest = await src.app.manifest();
-      const contentManifest = await src.content.manifest();
-
+    write: {
       /**
-       * Copy the application bundle.
+       * Write the content to the given filesystem location.
        */
-      await Promise.all(
-        appManifest.files.map(async (file) => {
-          const path = Path.join(base, dir.app.base, file.path);
-          const data = await src.app.read(file.path);
-          await target.write(path, data);
-        }),
-      );
+      async bundle(target: t.Fs, options: { dir?: string } = {}) {
+        const dir = toPaths(options.dir);
+        const { base } = dir;
 
-      /**
-       * Copy and process source content.
-       */
-      (async () => {
-        const MD = Text.Processor.markdown();
+        const appManifest = await src.app.manifest();
+        const contentManifest = await src.content.manifest();
 
+        /**
+         * Copy the application bundle.
+         */
         await Promise.all(
-          contentManifest.files.map(async (file) => {
-            const data = await src.content.read(file.path);
-            const md = await MD.toHtml(data);
-            await target.write(Path.join(dir.base, dir.data.md, file.path), md.markdown);
-            // await target.write(Path.join(dir.base, dir.data.html, `${file.path}.html`), md.html);
+          appManifest.files.map(async (file) => {
+            const path = Path.join(dir.app.base, file.path);
+            const data = await src.app.read(file.path);
+            await target.write(path, data);
           }),
         );
 
-        const dirname = Path.join(base, dir.app.base);
-        const manifest = await target.dir(dirname).manifest();
-        await target.write(Path.join(dirname, 'index.json'), manifest);
-      })();
+        /**
+         * Copy and process source content (data).
+         */
+        (async () => {
+          const MD = Text.Processor.markdown();
+
+          await Promise.all(
+            contentManifest.files.map(async (file) => {
+              const data = await src.content.read(file.path);
+              const md = await MD.toHtml(data);
+              await target.write(Path.join(dir.data.md, file.path), md.markdown);
+            }),
+          );
+
+          const dirname = Path.join(dir.app.base);
+          const manifest = await target.dir(dirname).manifest();
+          await target.write(Path.join(dirname, 'index.json'), manifest);
+        })();
+
+        /**
+         * Write root level README.
+         */
+        await README.write(target, { dir: base, html: false });
+        const fs = target.dir(base);
+        const manifest = await fs.manifest();
+        await target.write(Path.join(base, 'index.json'), manifest);
+
+        // Finish up.
+        const api = {
+          version,
+          dir,
+          get manifest() {
+            return manifest;
+          },
+          get size() {
+            const trimBase = (path: string) => path.substring(base.length + 1);
+            const startsWith = (path: string, match: string) => path.startsWith(trimBase(match));
+            return {
+              total: toSize(manifest, () => true),
+              assets: toSize(manifest, (path) => startsWith(path, dir.app.assets)),
+              data: {
+                md: toSize(manifest, (path) => startsWith(path, dir.data.md)),
+              },
+            };
+          },
+
+          /**
+           * Scoped filesystem that was written to.
+           * Example (use): fs.manifest()
+           */
+          get fs() {
+            return fs;
+          },
+
+          /**
+           * Data about write operation to be written to a log.
+           */
+          toObject() {
+            const { size } = api;
+            const kind = 'pkg:content-bundle';
+            return { kind, dir, version, size };
+          },
+        };
+
+        return api;
+      },
 
       /**
-       * Write root level README.
+       * Write data
        */
-      await README.write(target, { dir: base, html: false });
-      const fs = target.dir(base);
-      const manifest = await fs.manifest();
-      await target.write(Path.join(base, 'index.json'), manifest);
-
-      // Finish up.
-      const api = {
-        version,
-        dir,
-        get manifest() {
-          return manifest;
-        },
-        get size() {
-          return {
-            total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => path.startsWith(dir.app.assets)),
-            data: {
-              md: toSize(manifest, (path) => path.startsWith(dir.data.md)),
-              // html: toSize(manifest, (path) => path.startsWith(dir.data.html)),
-            },
-          };
-        },
-
+      async data(target: t.Fs, options: { dir?: string } = {}) {
         /**
-         * Scoped filesystem that was written to.
-         * Example (use): fs.manifest()
+         * TODO 🐷
          */
-        get fs() {
-          return fs;
-        },
-
-        /**
-         * Data about write operation to be written to a log.
-         */
-        toObject() {
-          const { size } = api;
-          const kind = 'pkg:content-bundle';
-          return { kind, dir, version, size };
-        },
-      };
-
-      return api;
+      },
     },
   };
 
