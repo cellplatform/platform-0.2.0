@@ -37,10 +37,12 @@ export async function pushToVercel(args: {
      * Data about the deployment to be written to a log.
      */
     toObject() {
-      return {
+      const obj: t.DeploymentLogEntry = {
         kind: 'vercel:deployment',
-        ...res.deployment,
+        success: res.deployment,
+        error: res.error,
       };
+      return obj;
     },
   };
 }

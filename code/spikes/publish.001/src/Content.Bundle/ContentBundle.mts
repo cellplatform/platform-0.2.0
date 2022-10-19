@@ -33,7 +33,7 @@ export async function ContentBundle(args: Args) {
 
   const version = README.props.version;
 
-  const paths = {
+  const paths: t.BundlePaths = {
     app: {
       base: 'app/',
       assets: 'app/assets/',
@@ -87,6 +87,14 @@ export async function ContentBundle(args: Args) {
           return manifest;
         },
 
+        /**
+         * Scoped filesystem that was written to.
+         * Example usage: passed into the `deploy` pipeline.
+         */
+        get fs() {
+          return fs;
+        },
+
         get size() {
           const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
@@ -99,20 +107,12 @@ export async function ContentBundle(args: Args) {
         },
 
         /**
-         * Scoped filesystem that was written to.
-         * Example usage (see what was written): fs.manifest()
-         */
-        get fs() {
-          return fs;
-        },
-
-        /**
          * Data about write operation to be written to a log.
          */
-        toObject() {
+        toObject(): t.BundleLogEntry {
           const { size } = api;
           const kind = 'pkg:content-bundle';
-          return { kind, dir: paths, version, size };
+          return { kind, version, size, paths };
         },
       };
 

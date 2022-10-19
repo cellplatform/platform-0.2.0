@@ -4,6 +4,7 @@ import { rx, slug, Time } from 'sys.util';
 
 import { ContentBundle } from '../src/Content.Bundle/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
+import { ContentLog } from '../src/Content.Log/index.mjs';
 import { t } from '../src/common.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
@@ -30,9 +31,13 @@ const publicfs = await toFs('./public');
 
 console.log('content', content);
 
+const logger = ContentLog.log(logfs);
 const bundle = await content.write.bundle(targetfs);
 const version = content.version;
 
+/**
+ * Store the data in /public (for local dev usage)
+ */
 await content.write.data(publicfs);
 
 console.log('-------------------------------------------');
@@ -40,7 +45,10 @@ console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
 
-// process.exit(0); // TEMP 🐷
+const summary = await logger.summary({ max: 50 });
+console.log('summary', summary);
+
+process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
@@ -56,11 +64,11 @@ console.log('-------------------------------------------');
 console.log('deployed', deployed.status);
 
 /**
- * Write deployment to the file-log.
+ * Log results.
  */
-const filename = `${Time.now.timestamp}-${slug()}.log.json`;
-const logentry = {
+
+await logger.writeDeployment({
+  timestamp: Time.now.timestamp,
   bundle: bundle.toObject(),
   deployment: deployed.toObject(),
-};
-await logfs.write(filename, JSON.stringify(logentry));
+});
