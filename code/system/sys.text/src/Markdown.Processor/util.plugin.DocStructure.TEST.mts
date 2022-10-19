@@ -6,9 +6,9 @@ describe('Markdown: DocStructure', () => {
     it('has root tree', async () => {
       const { info } = await MarkdownProcessor().toMarkdown(`# Hello`);
 
-      expect(info.root.type).to.eql('root');
-      expect(info.root.children.length).to.eql(1);
-      expect(info.root.children[0].type).to.eql('heading');
+      expect(info.ast.type).to.eql('root');
+      expect(info.ast.children.length).to.eql(1);
+      expect(info.ast.children[0].type).to.eql('heading');
     });
   });
 });

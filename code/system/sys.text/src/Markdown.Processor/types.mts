@@ -51,7 +51,7 @@ export type HtmlOptions = MarkdownOptions & {
  * resulting from the markdown text-processor running.
  */
 export type MarkdownInfo = {
-  root: t.MdastRoot;
+  ast: t.MdastRoot;
   code: {
     all: CodeBlock[];
     typed: CodeBlock[]; //   Code blocks with a "type" meta-data suffix, (eg. ```yaml my.typename).
