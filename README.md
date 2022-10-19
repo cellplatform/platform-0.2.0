@@ -71,7 +71,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 
 >> **"libraries not frameworks"**  
->> System Orientation: Framework Agnosticism
+>> Orient toward framework agnosticism (by default).
 
 <p>&nbsp;</p>
 
