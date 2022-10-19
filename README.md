@@ -65,7 +65,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 - [Cohesion](https://en.wikipedia.org/wiki/Cohesion_(computer_science))
 - Good [Seperation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns)
 - [Loose Coupling](https://en.wikipedia.org/wiki/Loose_coupling)
-- [Abstractions](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) / [Information Hiding](https://en.wikipedia.org/wiki/Information_hiding)
+- Good lines of [Abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science))  ([information hiding](https://en.wikipedia.org/wiki/Information_hiding))
 
 <p>&nbsp;</p>
 
