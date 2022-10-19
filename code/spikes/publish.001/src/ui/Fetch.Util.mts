@@ -13,6 +13,12 @@ export const Fetch = {
       return Markdown;
     },
   },
+  module: {
+    async Text() {
+      const { Text } = await import('sys.text');
+      return Text;
+    },
+  },
 
   /**
    * Fetch the JSON at the given URL path.
@@ -26,7 +32,7 @@ export const Fetch = {
    * Fetch the "text/markdown" from the given URL path.
    */
   async markdown(path: UrlPathString) {
-    const { Text } = await import('sys.text');
+    const Text = await Fetch.module.Text();
     const processor = Text.Processor.markdown();
     const res = await fetch(path);
     const text = await res.text();

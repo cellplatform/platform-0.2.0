@@ -6,6 +6,7 @@ import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
 export type MarkdownEditorProps = {
   md: string;
   style?: t.CssValue;
+  onChange?: (e: { text: string }) => void;
 };
 
 export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
@@ -24,9 +25,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
         height={'90vh'}
         defaultLanguage={'markdown'}
         defaultValue={md}
-        onChange={(e) => {
-          console.log('e', e);
-        }}
+        onChange={(text = '') => props.onChange?.({ text })}
       />
     </div>
   );

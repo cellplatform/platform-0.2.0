@@ -1,14 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { COLORS, css, FC, t } from '../common.mjs';
+import { COLORS, css, t } from '../common.mjs';
 import { Fetch } from '../Fetch.Util.mjs';
 import { History } from '../History/index.mjs';
-
-type DataCtx = {
-  html: string;
-  md: string;
-  ast: t.MdastRoot;
-};
 
 export type AppProps = {
   style?: t.CssValue;
@@ -16,41 +10,30 @@ export type AppProps = {
 
 export const App: React.FC<AppProps> = (props) => {
   const [elBody, setElBody] = useState<JSX.Element | undefined>();
-  const [data, setData] = useState<DataCtx>();
+
   const [log, setLog] = useState<t.PublicLogSummary | undefined>();
 
   useEffect(() => {
     (async () => {
       /**
-       * Load Markdown data
+       * Load markdown data
        */
-      const md = await Fetch.markdown('/data.md/main.md');
-      const { html, markdown } = md;
-      const { ast } = md.info;
-
-      const ctx: DataCtx = { html, md: markdown, ast };
-      setData(ctx);
+      const md = await Fetch.markdown('/data.md/outline.md');
 
       /**
-       * Load Log (History)
+       * Load log (history)
        */
       const publicLog = (await Fetch.json('/log.public.json')) as t.PublicLogSummary;
       setLog(publicLog);
+
+      /**
+       * Load <Markdown> component (code-splitting)
+       */
+      const Markdown = await Fetch.component.Markdown();
+      const el = <Markdown markdown={md.markdown} style={{ Absolute: 0 }} />;
+      setElBody(el);
     })();
   }, []);
-
-  /**
-   * Render Markdown
-   */
-  useEffect(() => {
-    (async () => {
-      if (data) {
-        const Markdown = await Fetch.component.Markdown();
-        const el = <Markdown data={data} style={{ Absolute: 0 }} />;
-        setElBody(el);
-      }
-    })();
-  }, [data]);
 
   /**
    * [Render]
@@ -76,7 +59,7 @@ export const App: React.FC<AppProps> = (props) => {
     },
 
     body: css({
-      Absolute: [100, 240, 30, 30],
+      Absolute: [100, 240, 30, 12],
       Flex: 'x-stretch-stretch',
     }),
   };
