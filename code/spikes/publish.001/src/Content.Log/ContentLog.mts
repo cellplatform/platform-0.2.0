@@ -1,5 +1,7 @@
 import { slug, t, Time } from '../common.mjs';
 
+type VersionString = string;
+
 const ContentLogFilename = {
   ext: '.log.json',
   isMatch: (path: string) => String(path).trim().endsWith(ContentLogFilename.ext),
@@ -28,7 +30,7 @@ export const ContentLog = {
       /**
        * Read in a summary of the log and produce a "publicly shareable" view for the client..
        */
-      async publicSummary(options: { max?: number } = {}) {
+      async publicSummary(options: { max?: number; latest?: VersionString } = {}) {
         const m = await fs.manifest({});
         let paths = m.files
           .filter((item) => ContentLog.Filename.isMatch(item.path))
@@ -54,7 +56,9 @@ export const ContentLog = {
         /**
          * Finish up.
          */
-        const latest = history[0];
+        const latest = options.latest
+          ? { version: options.latest }
+          : { version: history[0].version };
         const res: t.PublicLogSummary = { latest, history };
         return res;
       },

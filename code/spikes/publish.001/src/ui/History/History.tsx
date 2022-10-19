@@ -8,8 +8,7 @@ export type HistoryProps = {
 };
 
 export const History: React.FC<HistoryProps> = (props) => {
-  const { data } = props;
-  const history = HistoryUtil.format(data);
+  const data = HistoryUtil.format(props.data);
 
   /**
    * [Render]
@@ -23,16 +22,22 @@ export const History: React.FC<HistoryProps> = (props) => {
     title: css({
       userSelect: 'none',
       fontWeight: 'bold',
-      borderBottom: `solid 4px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      paddingBottom: 8,
-      marginBottom: 8,
+      paddingBottom: 10,
+      marginBottom: 16,
+      borderBottom: `solid 6px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
+
     list: css({
       lineHeight: '1.6em',
     }),
 
     item: {
       base: css({ cursor: 'pointer' }),
+      latest: css({
+        paddingBottom: 6,
+        marginBottom: 6,
+        borderBottom: `dashed 1px ${Color.alpha(COLORS.DARK, 0.3)}`,
+      }),
     },
   };
 
@@ -42,8 +47,10 @@ export const History: React.FC<HistoryProps> = (props) => {
         History
       </div>
 
+      <div {...css(styles.item.base, styles.item.latest)}>{data.latest.version}</div>
+
       <div {...styles.list}>
-        {history.map((item, i) => {
+        {data.history.map((item, i) => {
           const isLatest = item.version === data.latest?.version;
           const onClick = () => console.info(item);
           return (

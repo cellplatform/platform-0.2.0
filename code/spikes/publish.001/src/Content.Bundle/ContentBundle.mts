@@ -49,10 +49,15 @@ export async function ContentBundle(args: Args) {
      * Write the content to the given filesystem location.
      */
     async bundle(target: t.Fs, options: { dir?: string; logdir?: t.Fs; srcdir?: t.Fs } = {}) {
-      const { logdir, srcdir } = options;
+      const { logdir } = options;
       const source = await src.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
       const appfs = target.dir(Path.join(base, paths.app.base));
+
+      /**
+       * Root README.
+       */
+      await README.write(target, { dir: base, html: false });
 
       /**
        * Copy the application bundle.
@@ -84,7 +89,6 @@ export async function ContentBundle(args: Args) {
       /**
        * Write root level README.
        */
-      await README.write(target, { dir: base, html: false });
       const fs = target.dir(base);
       const manifest = await fs.manifest();
       await fs.write('index.json', manifest);
@@ -192,10 +196,7 @@ export async function ContentBundle(args: Args) {
         rewrites.push({ source: '/:version', destination: '/' });
 
         // Redirect to latest version.
-        if (log?.latest) {
-          const version = log.latest.version;
-          redirects.push({ source: '/', destination: version });
-        }
+        redirects.push({ source: '/', destination: `/${version}` });
 
         const config: VercelConfig = {
           cleanUrls: true,

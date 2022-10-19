@@ -5,7 +5,7 @@ import type { VercelHttpDeployResponse } from 'cloud.vercel/src/types.mjs';
 type UnixEpoch = number;
 
 export type PublicLogSummary = {
-  latest?: PublicLogHistoryItem;
+  latest: { version: string };
   history: PublicLogHistoryItem[];
 };
 
