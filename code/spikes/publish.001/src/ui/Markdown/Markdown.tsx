@@ -58,12 +58,6 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       console.log('typedCodeBlocks', typedCodeBlocks);
       console.log('yamlBlocks', yamlBlocks);
       console.log('version', version);
-
-      // const propSet = yamlBlocks.map((item) => Text.Yaml.parse(item.text));
-
-      // const version
-
-      // console.log('md.info', md.info.ast);
     })();
   }, []);
 
@@ -78,7 +72,6 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     }),
     left: css({
       flex: 1,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     right: css({
       flex: 1,
