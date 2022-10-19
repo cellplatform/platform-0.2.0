@@ -1,4 +1,4 @@
-import { t, Time, slug } from '../common.mjs';
+import { slug, t, Time } from '../common.mjs';
 
 const ContentLogFilename = {
   ext: '.log.json',
@@ -26,12 +26,10 @@ export const ContentLog = {
       },
 
       /**
-       * Read in a summary of the log.
+       * Read in a summary of the log and produce a "publicly shareable" view for the client..
        */
-      async summary(options: { max?: number } = {}) {
-        //
+      async publicSummary(options: { max?: number } = {}) {
         const m = await fs.manifest({});
-        // console.log('m', m);
         let paths = m.files
           .filter((item) => ContentLog.Filename.isMatch(item.path))
           .map((item) => item.path)
@@ -44,29 +42,21 @@ export const ContentLog = {
         const wait = paths.map((path) => fs.json.read<t.LogEntry>(path));
         const items = (await Promise.all(wait)) as t.LogEntry[];
 
-        //.filter(Boolean) as t.LogEntry[];
-
-        // console.log(
-        //   'files',
-        //   paths.map((f) => f),
-        // );
-        // const items = files.map(() => )
-
-        items.forEach((entry) => {
+        let history = items.map((entry) => {
           const timestamp = entry.timestamp;
           const version = entry.bundle.version;
           const { success, error } = entry.deployment;
-
-          // const urls = entry.deployment.success?.urls;
-          const urls = success?.urls ?? [];
-
-          console.log('-------------------------------------------');
-          console.log('timestamp', timestamp);
-          console.log('version', version);
-          // console.log('success', success);
-          console.log('urls', urls);
-          console.log('error', error);
+          const urls = success?.urls;
+          const item: t.PublicLogHistoryItem = { timestamp, version, urls, error };
+          return item;
         });
+
+        /**
+         * Finish up.
+         */
+        const latest = history[0];
+        const res: t.PublicLogSummary = { latest, history };
+        return res;
       },
     };
   },

@@ -1,6 +1,7 @@
 import { t, Path } from '../common/index.mjs';
 import { MarkdownFile } from '../Markdown.File/index.mjs';
 import { Filesize } from 'sys.fs';
+import { ContentLog } from '../Content.Log/ContentLog.mjs';
 
 type Sources = {
   app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
@@ -47,7 +48,8 @@ export async function ContentBundle(args: Args) {
     /**
      * Write the content to the given filesystem location.
      */
-    async bundle(target: t.Fs, options: { dir?: string } = {}) {
+    async bundle(target: t.Fs, options: { dir?: string; logdir?: t.Fs; srcdir?: t.Fs } = {}) {
+      const { logdir, srcdir } = options;
       const source = await src.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
       const appfs = target.dir(Path.join(base, paths.app.base));
@@ -64,8 +66,20 @@ export async function ContentBundle(args: Args) {
       /**
        * Copy and process source content (data).
        */
-      await write.data(appfs, { writeManifest: false });
+      await write.data(appfs, { logdir, manifest: false, vercelConfig: true });
       await appfs.write('index.json', await appfs.manifest());
+
+      /**
+       * Copy in source (.ts files) from "/src"
+       * Used for vercel edge functions.
+       */
+      if (options.srcdir) {
+        const fs = options.srcdir;
+        const m = await fs.manifest({ dir: '/api/' });
+        for (const { path } of m.files) {
+          await target.write(path, await fs.read(path));
+        }
+      }
 
       /**
        * Write root level README.
@@ -120,12 +134,22 @@ export async function ContentBundle(args: Args) {
     },
 
     /**
-     * Write data
+     * Write content
      */
-    async data(target: t.Fs, options: { writeManifest?: boolean } = {}) {
+    async data(
+      target: t.Fs,
+      options: {
+        logdir?: t.Fs;
+        manifest?: boolean;
+        vercelConfig?: boolean;
+      } = {},
+    ) {
       const MD = Text.Processor.markdown();
       const source = await src.content.manifest();
 
+      /**
+       * Copy source content files.
+       */
       await Promise.all(
         source.files.map(async (file) => {
           const data = await src.content.read(file.path);
@@ -135,9 +159,50 @@ export async function ContentBundle(args: Args) {
         }),
       );
 
-      if (options.writeManifest) {
+      if (options.manifest) {
         const manifest = await target.manifest();
         await target.write('index.json', manifest);
+      }
+
+      /**
+       * Copy in a summary of the log (latest n-items).
+       */
+      let log: t.PublicLogSummary | undefined;
+      if (options.logdir) {
+        const logger = ContentLog.log(options.logdir);
+        log = await logger.publicSummary({ max: 50 });
+        await target.write('log.public.json', log);
+      }
+
+      /**
+       * Write a [vercel.json] configuration file.
+       * Ref:
+       *  - https://vercel.com/docs/project-configuration#project-configuration/redirects
+       *  - https://vercel.com/docs/project-configuration#project-configuration/rewrites
+       */
+      if (options.vercelConfig) {
+        type VercelConfig = { cleanUrls?: boolean; redirects?: Redirect[]; rewrites?: Rewrite[] };
+        type Redirect = { source: string; destination: string };
+        type Rewrite = { source: string; destination: string };
+
+        const redirects: Redirect[] = [];
+        const rewrites: Rewrite[] = [];
+
+        // Display root renderer from any version match.
+        rewrites.push({ source: '/:version', destination: '/' });
+
+        // Redirect to latest version.
+        if (log?.latest) {
+          const version = log.latest.version;
+          redirects.push({ source: '/', destination: version });
+        }
+
+        const config: VercelConfig = {
+          cleanUrls: true,
+          redirects,
+          rewrites,
+        };
+        await target.write('vercel.json', config);
       }
     },
   };
