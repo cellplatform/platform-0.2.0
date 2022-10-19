@@ -54,7 +54,7 @@ version: 0.1.2
   it('write: default dir (none)', async () => {
     const { src, target } = await setup();
     const pipeline = await ContentBundle({ Text, src });
-    await pipeline.write(target);
+    await pipeline.write.bundle(target);
 
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);
@@ -68,7 +68,7 @@ version: 0.1.2
   it('write: custom dir', async () => {
     const { src, target } = await setup();
     const pipeline = await ContentBundle({ Text, src });
-    await pipeline.write(target, { dir: '/foo/bar/' });
+    await pipeline.write.bundle(target, { dir: '/foo/bar/' });
 
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);

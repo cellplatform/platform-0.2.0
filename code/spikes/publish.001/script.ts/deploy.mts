@@ -29,17 +29,18 @@ const logfs = await toFs('./dist.deploy/.log');
 const publicfs = await toFs('./public');
 
 console.log('content', content);
+
 const bundle = await content.write.bundle(targetfs);
 const version = content.version;
 
-// await content.write.data(publicfs, { dir: '.' });
+await content.write.data(publicfs);
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 /**
  * Deploy
@@ -48,7 +49,7 @@ const deployed = await pushToVercel({
   fs: bundle.fs,
   token,
   version,
-  source: bundle.dir.app.base,
+  source: bundle.dir.app,
 });
 
 console.log('-------------------------------------------');

@@ -33,18 +33,14 @@ export async function ContentBundle(args: Args) {
 
   const version = README.props.version;
 
-  const toPaths = (dir?: string) => {
-    const base = dir ?? version;
-    return {
-      base,
-      app: {
-        base: Path.join(base, 'app/'),
-        assets: Path.join(base, 'app/assets/'),
-      },
-      data: {
-        md: Path.join(base, 'app/data.md/'),
-      },
-    };
+  const paths = {
+    app: {
+      base: 'app/',
+      assets: 'app/assets/',
+    },
+    data: {
+      md: 'data.md/',
+    },
   };
 
   const write = {
@@ -53,24 +49,23 @@ export async function ContentBundle(args: Args) {
      */
     async bundle(target: t.Fs, options: { dir?: string } = {}) {
       const source = await src.app.manifest();
-      const dir = toPaths(options.dir);
-      const { base } = dir;
+      const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
+      const appfs = target.dir(Path.join(base, paths.app.base));
 
       /**
        * Copy the application bundle.
        */
       await Promise.all(
         source.files.map(async (file) => {
-          const path = Path.join(dir.app.base, file.path);
-          const data = await src.app.read(file.path);
-          await target.write(path, data);
+          await appfs.write(file.path, await src.app.read(file.path));
         }),
       );
 
       /**
        * Copy and process source content (data).
        */
-      write.data(target, { dir: base });
+      await write.data(appfs, { writeManifest: false });
+      await appfs.write('index.json', await appfs.manifest());
 
       /**
        * Write root level README.
@@ -83,25 +78,29 @@ export async function ContentBundle(args: Args) {
       // Finish up.
       const api = {
         version,
-        dir,
+
+        dir: {
+          app: paths.app.base,
+        },
+
         get manifest() {
           return manifest;
         },
+
         get size() {
-          const trimBase = (path: string) => path.substring(base.length + 1);
-          const startsWith = (path: string, match: string) => path.startsWith(trimBase(match));
+          const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => startsWith(path, dir.app.assets)),
+            assets: toSize(manifest, (path) => match(path, paths.app.assets)),
             data: {
-              md: toSize(manifest, (path) => startsWith(path, dir.data.md)),
+              md: toSize(manifest, (path) => match(path, paths.app.base, paths.data.md)),
             },
           };
         },
 
         /**
          * Scoped filesystem that was written to.
-         * Example (use): fs.manifest()
+         * Example usage (see what was written): fs.manifest()
          */
         get fs() {
           return fs;
@@ -113,7 +112,7 @@ export async function ContentBundle(args: Args) {
         toObject() {
           const { size } = api;
           const kind = 'pkg:content-bundle';
-          return { kind, dir, version, size };
+          return { kind, dir: paths, version, size };
         },
       };
 
@@ -123,22 +122,23 @@ export async function ContentBundle(args: Args) {
     /**
      * Write data
      */
-    async data(target: t.Fs, options: { dir?: string } = {}) {
-      const dir = toPaths(options.dir);
-      const source = await src.content.manifest();
+    async data(target: t.Fs, options: { writeManifest?: boolean } = {}) {
       const MD = Text.Processor.markdown();
+      const source = await src.content.manifest();
 
       await Promise.all(
         source.files.map(async (file) => {
           const data = await src.content.read(file.path);
           const md = await MD.toHtml(data);
-          await target.write(Path.join(dir.data.md, file.path), md.markdown);
+          const path = Path.join(paths.data.md, file.path);
+          await target.write(path, md.markdown);
         }),
       );
 
-      const dirname = Path.join(dir.app.base);
-      const manifest = await target.dir(dirname).manifest();
-      await target.write(Path.join(dirname, 'index.json'), manifest);
+      if (options.writeManifest) {
+        const manifest = await target.manifest();
+        await target.write('index.json', manifest);
+      }
     },
   };
 
