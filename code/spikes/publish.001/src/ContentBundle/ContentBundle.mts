@@ -73,7 +73,7 @@ export async function ContentBundle(args: Args) {
       await README.write(target, { dir: base, html: false });
       const fs = target.dir(base);
       const manifest = await fs.manifest();
-      await target.write(Path.join(base, 'index.json'), manifest);
+      await fs.write('index.json', manifest);
 
       // Finish up.
       const api = {
