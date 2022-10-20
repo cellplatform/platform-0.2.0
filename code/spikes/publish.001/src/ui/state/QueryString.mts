@@ -6,7 +6,15 @@ const DEFAULT = {
   show: ['outline'] as ShowMarkdownComponent[],
 };
 
+/**
+ * Query-string schema.
+ */
 export const QueryString = {
+  DEFAULT,
+
+  /**
+   * /?show=
+   */
   show(input?: string | URL): ShowMarkdownComponent[] {
     if (!input) return DEFAULT.show;
 
