@@ -12,4 +12,7 @@ export type {
   Code as MdastCode,
   Heading as MdastHeading,
   Text as MdastText,
+  List as MdastList,
+  ListItem as MdastListItem,
+  Paragraph as MdastParagraph,
 } from 'mdast';
