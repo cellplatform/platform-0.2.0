@@ -36,7 +36,7 @@ export const App: React.FC<AppProps> = (props) => {
       const Markdown = await Fetch.component.Markdown();
       const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
 
-      const el = <Markdown markdown={markdown} location={location} style={{ Absolute: 0 }} />;
+      const el = <Markdown markdown={markdown} location={location.href} style={{ Absolute: 0 }} />;
       setElBody(el);
     })();
   }, []);
