@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { COLORS, css, FC, t } from '../common.mjs';
-import { MarkdownUtil } from './Markdown.Util.mjs';
+import { COLORS, css, FC, t, MarkdownUtil } from './common.mjs';
+
 import { MarkdownOutlineRootSection } from './Markdown.Outline.RootSection';
 
 export type MarkdownOutlineProps = {

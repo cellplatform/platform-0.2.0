@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { css, t } from '../common.mjs';
-import { MarkdownEditor } from './Markdown.Editor';
-import { MarkdownOutline } from './Markdown.Outline';
+import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
+import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 import { State } from '../../ui.logic/index.mjs';
 
 export type MarkdownProps = {
