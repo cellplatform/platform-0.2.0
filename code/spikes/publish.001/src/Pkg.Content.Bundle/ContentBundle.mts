@@ -1,7 +1,7 @@
 import { t, Path } from '../common/index.mjs';
 import { MarkdownFile } from '../Markdown.File/index.mjs';
 import { Filesize } from 'sys.fs';
-import { ContentLog } from '../Content.Log/ContentLog.mjs';
+import { ContentLog } from '../Pkg.Content.Log/ContentLog.mjs';
 
 type Sources = {
   app: t.Fs; //     The compiled bundle of the content rendering "app" (application).

@@ -1,11 +1,10 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, slug, Time } from 'sys.util';
+import { rx, Time } from 'sys.util';
 
-import { ContentBundle } from '../src/Content.Bundle/index.mjs';
+import { ContentBundle } from '../src/Pkg.Content.Bundle/index.mjs';
+import { ContentLog } from '../src/Pkg.Content.Log/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
-import { ContentLog } from '../src/Content.Log/index.mjs';
-import { t } from '../src/common.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
