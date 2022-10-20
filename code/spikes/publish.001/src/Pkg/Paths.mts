@@ -1,4 +1,4 @@
-import type { BundlePaths as T } from '../types.mjs';
+import type { BundlePaths as T } from './Content.Bundle/types.mjs';
 
 export const BundlePaths: T = {
   app: {

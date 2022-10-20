@@ -17,4 +17,4 @@ export { css, Color, Style } from 'sys.util.css';
 /**
  * WARNING - be careful these external references do not blow-up the bundle size.
  */
-export { BundlePaths } from '../../Pkg.Content.Bundle/Paths.mjs';
+export { BundlePaths } from '../../Pkg/Paths.mjs';

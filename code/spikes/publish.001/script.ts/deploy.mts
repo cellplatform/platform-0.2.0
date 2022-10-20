@@ -2,8 +2,8 @@ import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
 import { rx, Time } from 'sys.util';
 
-import { ContentBundle } from '../src/Pkg.Content.Bundle/index.mjs';
-import { ContentLog } from '../src/Pkg.Content.Log/index.mjs';
+import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
+
 import { pushToVercel } from './deploy.vercel.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
