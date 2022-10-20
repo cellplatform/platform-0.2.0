@@ -38,12 +38,14 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
    */
   const styles = {
     base: css({
+      marginTop: 20,
       ':first-child': { marginTop: 0 },
+      Flex: 'x-stretch-stretch',
     }),
     block: css({
+      flex: 1,
       boxSizing: 'border-box',
       padding: 30,
-      marginTop: 20,
       background: COLORS.MAGENTA,
       borderRadius: 10,
       ':hover': {
@@ -60,6 +62,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
       <div {...styles.block}>
         <div {...styles.title}>{_text}</div>
       </div>
+      <div>hello</div>
     </div>
   );
 };
