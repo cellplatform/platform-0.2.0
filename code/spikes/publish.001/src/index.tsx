@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Root } from './ui/Root/index.mjs';
+import { Root } from './ui.react/Root/index.mjs';
 
 /**
  * User Interface
