@@ -23,7 +23,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       fontSize: 16,
     }),
     left: css({ flex: 1 }),
-    right: css({ flex: 1 }),
+    right: css({
+      flex: 1,
+      padding: 60,
+    }),
   };
 
   const elEditor = <MarkdownEditor md={markdown} onChange={(e) => setMarkdown(e.text)} />;
@@ -32,7 +35,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>{elEditor}</div>
-      <div style={{ width: 20 }} />
+      {/* <div style={{ width: 20 }} /> */}
       <div {...styles.right}>{elOutline}</div>
     </div>
   );

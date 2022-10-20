@@ -17,6 +17,8 @@ export const History: React.FC<HistoryProps> = (props) => {
     base: css({
       padding: 15,
       paddingRight: 0,
+      borderLeft: `solid 1px ${Color.format(-0.1)}`,
+      boxSizing: 'border-box',
     }),
     body: css({}),
     title: css({
