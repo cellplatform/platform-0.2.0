@@ -1,4 +1,9 @@
-export type { MdastRoot, MarkdownProcessor } from 'sys.text/src/types.mjs';
+/**
+ * @system
+ */
 export type { CssValue } from 'sys.util.css';
 
-export * from '../../common/types.mjs';
+/**
+ * @local
+ */
+export * from '../../ui.logic/common/types.mjs';

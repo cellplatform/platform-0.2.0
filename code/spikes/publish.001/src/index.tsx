@@ -1,8 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import { App } from './ui/Root/index.mjs';
+import { Root } from './ui/Root/index.mjs';
 
 /**
  * User Interface
  */
+
+const el = <Root />;
 const root = createRoot(document.getElementById('root')!);
-root.render(<App />);
+root.render(el);

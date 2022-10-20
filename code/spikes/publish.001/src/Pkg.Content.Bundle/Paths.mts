@@ -1,6 +1,6 @@
-import { t } from '../common/index.mjs';
+import type { BundlePaths as T } from '../types.mjs';
 
-export const BundlePaths: t.BundlePaths = {
+export const BundlePaths: T = {
   app: {
     base: 'app/',
     assets: 'app/assets/',

@@ -1,14 +1,13 @@
 import { QueryString } from './QueryString.mjs';
-import { BundlePaths } from '../../Pkg.Content.Bundle/Paths.mjs';
-
-export { BundlePaths, QueryString };
+import { BundlePaths } from './common.mjs';
+export { BundlePaths };
 
 /**
  * UI State Manager
  */
 export const State = {
-  QueryString,
   BundlePaths,
+  QueryString,
 
   //
   /**

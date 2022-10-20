@@ -1,6 +1,13 @@
 import type * as t from './types.mjs';
 
+export * from '../../ui.logic/common.mjs';
 export { t };
-export * from '../../index.pkg.mjs';
-export * from './libs.mjs';
-export * from './colors.mjs';
+
+export const COLORS = {
+  BLACK: '#000',
+  WHITE: '#fff',
+  DARK: '#293042', // Inky blue/black.
+  CYAN: '#00C2FF',
+  MAGENTA: '#FE0064',
+  BLUE: '#4D7EF7',
+};

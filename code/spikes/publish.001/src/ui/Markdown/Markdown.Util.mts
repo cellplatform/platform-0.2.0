@@ -1,5 +1,5 @@
 import { t } from '../common.mjs';
-import { Fetch } from '../Fetch.Util.mjs';
+import { Fetch } from '../Fetch.mjs';
 
 export const MarkdownUtil = {
   /**

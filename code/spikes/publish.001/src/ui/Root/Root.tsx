@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, t, State, BundlePaths } from '../common.mjs';
-import { Fetch } from '../Fetch.Util.mjs';
+import { Color, COLORS, css, t } from '../common.mjs';
+import { Fetch } from '../Fetch.mjs';
 import { History } from '../History/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
+import { State, BundlePaths } from '../../ui.logic/index.mjs';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
-export type AppProps = {
+export type RootProps = {
   style?: t.CssValue;
 };
 
-export const App: React.FC<AppProps> = (props) => {
+export const Root: React.FC<RootProps> = (props) => {
   const [elBody, setElBody] = useState<JSX.Element>();
   const [log, setLog] = useState<t.PublicLogSummary>();
 
@@ -20,13 +21,15 @@ export const App: React.FC<AppProps> = (props) => {
       /**
        * Load markdown data
        */
-      const md = await Fetch.markdown('/data.md/outline.md');
+      // const md = await Fetch.markdown('/data.md/outline.md');
+      const md = await Fetch.markdown(BundlePaths.data.md + 'outline.md');
 
       /**
        * Load log (history)
        */
-      const publicLog = await Fetch.json<t.PublicLogSummary>(BundlePaths.data.log);
-      setLog(publicLog);
+      const logdir = BundlePaths.data.log;
+      const log = await Fetch.json<t.PublicLogSummary>(logdir);
+      setLog(log);
 
       /**
        * Load <Markdown> component (code-splitting)
