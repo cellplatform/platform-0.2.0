@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
 import { Fetch } from '../Fetch.Util.mjs';
+import { MarkdownUtil } from './Markdown.Util.mjs';
 
 export type MarkdownOutlineProps = {
   markdown?: string;
@@ -8,24 +9,15 @@ export type MarkdownOutlineProps = {
 };
 
 export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
-  const { markdown = '' } = props;
+  // const { markdown = '' } = props;
   const [ast, setAst] = useState<t.MdastRoot | undefined>();
-  const processorRef = useRef<t.MarkdownProcessor>();
 
-  // console.log('ast', ast);
   useEffect(() => {
     (async () => {
-      if (!processorRef.current) {
-        const Text = await Fetch.module.Text();
-        processorRef.current = Text.Processor.markdown();
-      }
-
-      if (processorRef.current) {
-        const { info } = await processorRef.current.toMarkdown(markdown);
-        setAst(info.ast);
-      }
+      const { ast } = await MarkdownUtil.parseMarkdown(props.markdown ?? '');
+      setAst(ast);
     })();
-  }, [markdown]);
+  }, [props.markdown]);
 
   /**
    * [Render]

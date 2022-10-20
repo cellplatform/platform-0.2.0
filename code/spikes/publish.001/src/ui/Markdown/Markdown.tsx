@@ -35,7 +35,6 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>{elEditor}</div>
-      {/* <div style={{ width: 20 }} /> */}
       <div {...styles.right}>{elOutline}</div>
     </div>
   );

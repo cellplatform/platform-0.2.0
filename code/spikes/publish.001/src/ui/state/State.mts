@@ -5,4 +5,8 @@ import { t } from '../common.mjs';
  */
 export const State = {
   //
+  /**
+   * TODO 🐷
+   * Centralise all state tree changes here (remove from UI components)
+   */
 };
