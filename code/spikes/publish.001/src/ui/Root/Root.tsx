@@ -21,7 +21,6 @@ export const Root: React.FC<RootProps> = (props) => {
       /**
        * Load markdown data
        */
-      // const md = await Fetch.markdown('/data.md/outline.md');
       const md = await Fetch.markdown(BundlePaths.data.md + 'outline.md');
 
       /**
