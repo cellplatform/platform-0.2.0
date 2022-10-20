@@ -51,9 +51,6 @@ export const App: React.FC<AppProps> = (props) => {
     title: css({
       Absolute: [30, 240, null, 30],
       fontSize: 30,
-      // borderBottom: `solid 8px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      // paddingBottom: 15,
-      // marginBottom: 20,
     }),
 
     history: {
@@ -66,18 +63,14 @@ export const App: React.FC<AppProps> = (props) => {
       borderTop: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
     }),
     bodyInner: css({
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       Absolute: 0,
-      // Absolute: [10, 0, 0, 0],
       Flex: 'x-stretch-stretch',
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      // paddingLeft: 50,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.title}>🇺🇳 Report</div>
+      <div {...styles.title}>Report</div>
       <div {...styles.body}>
         <div {...styles.bodyInner}>{elBody}</div>
       </div>
