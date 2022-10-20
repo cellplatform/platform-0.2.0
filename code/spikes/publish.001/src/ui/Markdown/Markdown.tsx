@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { css, t } from '../common.mjs';
+import { css, t, State } from '../common.mjs';
 import { MarkdownEditor } from './Markdown.Editor';
 import { MarkdownOutline } from './Markdown.Outline';
-import { State } from '../state/index.mjs';
 
 export type MarkdownProps = {
   location: string;
