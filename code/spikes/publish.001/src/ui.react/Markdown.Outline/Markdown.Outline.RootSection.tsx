@@ -40,29 +40,56 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
     base: css({
       marginTop: 20,
       ':first-child': { marginTop: 0 },
+
       Flex: 'x-stretch-stretch',
     }),
-    block: css({
+
+    block: {
+      base: css({
+        flex: 1,
+        boxSizing: 'border-box',
+        color: COLORS.WHITE,
+        background: COLORS.MAGENTA,
+        ':hover': {
+          backgroundColor: 'rgba(255, 0, 0, 0.5)' /* RED */,
+        },
+      }),
+      root: css({
+        padding: 30,
+        paddingRight: 60,
+        borderRadius: 10,
+        fontSize: 24,
+      }),
+
+      child: css({
+        padding: 30,
+        fontSize: 18,
+        marginLeft: 8,
+        borderRadius: 8,
+
+        marginTop: 10,
+        ':first-child': { marginTop: 0 },
+      }),
+    },
+
+    children: css({
       flex: 1,
-      boxSizing: 'border-box',
-      padding: 30,
-      background: COLORS.MAGENTA,
-      borderRadius: 10,
-      ':hover': {
-        backgroundColor: 'rgba(255, 0, 0, 0.5)' /* RED */,
-      },
-    }),
-    title: css({
-      color: COLORS.WHITE,
-      fontSize: 24,
     }),
   };
+
+  const elChildBlocks = (
+    <div {...styles.children}>
+      <div {...css(styles.block.base, styles.block.child)}>child</div>
+      <div {...css(styles.block.base, styles.block.child)}>child</div>
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.block}>
-        <div {...styles.title}>{_text}</div>
+      <div {...css(styles.block.base, styles.block.root)}>
+        <div>{_text}</div>
       </div>
-      <div>hello</div>
+      {elChildBlocks}
     </div>
   );
 };

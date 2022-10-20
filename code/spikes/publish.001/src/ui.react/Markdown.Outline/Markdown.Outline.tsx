@@ -14,7 +14,7 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
 
   useEffect(() => {
     (async () => {
-      const { ast } = await MarkdownUtil.parseMarkdown(props.markdown ?? '');
+      const { ast } = await MarkdownUtil.parseMarkdown(props.markdown);
       setAst(ast);
     })();
   }, [props.markdown]);
@@ -26,25 +26,9 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
     base: css({
       boxSizing: 'border-box',
       Padding: [40, 50],
-      minWidth: 450,
+      minWidth: 500,
       maxWidth: 600,
     }),
-    header: css({
-      marginBottom: 50,
-      overflow: 'hidden',
-    }),
-    block: css({
-      padding: 30,
-      background: COLORS.MAGENTA,
-      color: COLORS.WHITE,
-      borderRadius: 10,
-      marginTop: 20,
-      ':first-child': { marginTop: 0 },
-      ':hover': {
-        backgroundColor: 'rgba(255, 0, 0, 0.5)' /* RED */,
-      },
-    }),
-    blockHeader: css({ fontSize: 32 }),
   };
 
   const children = ast?.children ?? [];

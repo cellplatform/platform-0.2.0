@@ -28,8 +28,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.bffb03ef.js",
-    "./web": "./dist/web/assets/index.bffb03ef.js"
+    ".": "./dist/web/assets/index.1fae9ba5.js",
+    "./web": "./dist/web/assets/index.1fae9ba5.js"
   },
   "typesVersions": {
     "*": {

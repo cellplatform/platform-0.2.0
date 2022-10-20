@@ -5,7 +5,7 @@ export const MarkdownUtil = {
   /**
    * Code-Split
    */
-  async parseMarkdown(input: string) {
+  async parseMarkdown(input: string = '') {
     const Text = await Fetch.module.Text(); // <== NB: Code Splitting
     const transform = Text.Processor.markdown();
     const { info, markdown } = await transform.toMarkdown(input);
