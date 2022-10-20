@@ -1,3 +1,3 @@
-export const Data = {
+export const data = {
   msg: 'hello world',
 };

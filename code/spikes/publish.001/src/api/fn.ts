@@ -1,4 +1,4 @@
-import { Data } from './fn.data';
+import { data } from './fn.data';
 
 export const config = {
   runtime: 'experimental-edge',
@@ -21,5 +21,9 @@ export const config = {
  */
 
 export default (req: Request) => {
-  return new Response(Data.msg);
+  // Sample.
+  const url = req.url;
+  const json = JSON.stringify({ url, data });
+
+  return new Response(json, { status: 200, headers: [['content-type', 'application/json']] });
 };
