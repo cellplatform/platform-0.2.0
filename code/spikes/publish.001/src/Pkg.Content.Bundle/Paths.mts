@@ -7,6 +7,6 @@ export const BundlePaths: T = {
   },
   data: {
     md: 'data/md/',
-    log: 'data/.log.json',
+    log: 'data/log.json',
   },
 };
