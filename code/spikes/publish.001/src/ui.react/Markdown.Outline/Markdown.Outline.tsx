@@ -26,8 +26,8 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
     base: css({
       boxSizing: 'border-box',
       Padding: [40, 50],
-      minWidth: 500,
-      maxWidth: 600,
+      minWidth: 550,
+      maxWidth: 680,
     }),
   };
 

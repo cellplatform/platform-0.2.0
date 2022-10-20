@@ -29,14 +29,6 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
 
   function handleEditorDidMount(editor: MonacoEditor, monaco: Monaco) {
     editorRef.current = editor;
-
-    console.log('editor', editor);
-    console.log('monaco', monaco);
-
-    /**
-     * TODO 🐷
-     * - Focus: make optional
-     */
     if (focusOnLoad) editor.focus();
   }
 
