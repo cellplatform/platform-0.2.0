@@ -1,12 +1,12 @@
 export type UrlPathString = string;
 
-import { Fetch as FetchLogic } from './logic.mjs';
+import { Fetch as Base } from '../ui.logic/Fetch.mjs';
 
 /**
  * Tools for fetching things.
  */
 export const Fetch = {
-  ...FetchLogic,
+  ...Base,
 
   /**
    * Dynamic imports (code-splitting).
