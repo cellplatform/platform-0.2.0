@@ -617,6 +617,11 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
 
+"@vercel/edge@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.0.5.tgz#1fdd4697924268ac1f1cfd5ff27eaeff3c45e7e8"
+  integrity sha512-qlEPzfgbW3ph5SRTBH2cbamHc4AiENxMZXTyelp3SnNih1VOq+v/2F71/pwJzbCoSmyz8GVSAbm+JQms5GoH4Q==
+
 "@vitejs/plugin-react@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-2.1.0.tgz#4c99df15e71d2630601bd3018093bdc787d40e55"
