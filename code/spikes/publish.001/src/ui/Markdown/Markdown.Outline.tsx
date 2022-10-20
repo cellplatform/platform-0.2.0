@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
-import { Fetch } from '../Fetch.Util.mjs';
+
+import { COLORS, css, FC, t } from '../common.mjs';
 import { MarkdownUtil } from './Markdown.Util.mjs';
+import { MarkdownOutlineRootSection } from './Markdown.Outline.RootSection';
 
 export type MarkdownOutlineProps = {
   markdown?: string;
@@ -9,7 +10,6 @@ export type MarkdownOutlineProps = {
 };
 
 export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
-  // const { markdown = '' } = props;
   const [ast, setAst] = useState<t.MdastRoot | undefined>();
 
   useEffect(() => {
@@ -23,7 +23,9 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({}),
+    base: css({
+      boxSizing: 'border-box',
+    }),
     header: css({
       marginBottom: 50,
       overflow: 'hidden',
@@ -42,19 +44,19 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
     blockHeader: css({ fontSize: 32 }),
   };
 
+  const children = ast?.children ?? [];
   const elBlocks = ast?.children
     .filter((node) => node.type === 'heading')
-
     .map((node, i) => {
       const heading = node as t.MdastHeading;
-      const child = heading.children[0] as t.MdastText;
-      const text = child?.value ?? '<unknown>';
+      const prev = children[i - 0] as t.MdastHeading;
+      const next = children[i + 1] as t.MdastHeading;
+      const siblings = { prev, next };
 
-      return (
-        <div key={i} {...styles.block}>
-          <div {...styles.blockHeader}>{text}</div>
-        </div>
+      const el = (
+        <MarkdownOutlineRootSection key={i} index={i} node={heading} siblings={siblings} />
       );
+      return el;
     });
 
   return (

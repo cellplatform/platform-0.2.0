@@ -9,4 +9,8 @@ export const State = {
    * TODO 🐷
    * Centralise all state tree changes here (remove from UI components)
    */
+
+  get location() {
+    return new URL(location.href);
+  },
 };
