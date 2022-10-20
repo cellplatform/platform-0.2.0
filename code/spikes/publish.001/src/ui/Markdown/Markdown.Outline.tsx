@@ -25,6 +25,7 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
   const styles = {
     base: css({
       boxSizing: 'border-box',
+      Padding: [40, 50],
     }),
     header: css({
       marginBottom: 50,

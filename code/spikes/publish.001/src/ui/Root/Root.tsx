@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { COLORS, css, t, Color } from '../common.mjs';
+import { Color, COLORS, css, t } from '../common.mjs';
 import { Fetch } from '../Fetch.Util.mjs';
 import { History } from '../History/index.mjs';
 import { State } from '../state/index.mjs';
+
+export type ShowMarkdownComponent = 'editor' | 'outline';
 
 export type AppProps = {
   style?: t.CssValue;
@@ -12,7 +14,7 @@ export type AppProps = {
 export const App: React.FC<AppProps> = (props) => {
   const [elBody, setElBody] = useState<JSX.Element>();
   const [log, setLog] = useState<t.PublicLogSummary>();
-  const [url, setUrl] = useState<URL>();
+  // const [url, setUrl] = useState<URL>();
 
   useEffect(() => {
     (async () => {
@@ -30,14 +32,10 @@ export const App: React.FC<AppProps> = (props) => {
       /**
        * Load <Markdown> component (code-splitting)
        */
+      const location = State.location;
       const Markdown = await Fetch.component.Markdown();
-      const el = <Markdown markdown={md.markdown} style={{ Absolute: 0 }} />;
+      const el = <Markdown markdown={md.markdown} location={location} style={{ Absolute: 0 }} />;
       setElBody(el);
-
-      /**
-       * State controller.
-       */
-      setUrl(State.location);
     })();
   }, []);
 

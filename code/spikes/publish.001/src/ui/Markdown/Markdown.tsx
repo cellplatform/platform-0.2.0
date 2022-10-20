@@ -3,15 +3,34 @@ import React, { useEffect, useState } from 'react';
 import { css, t } from '../common.mjs';
 import { MarkdownEditor } from './Markdown.Editor';
 import { MarkdownOutline } from './Markdown.Outline';
+import { State } from '../state/index.mjs';
 
-export type MarkdownProps = { markdown: string; style?: t.CssValue };
+export type ShowMarkdownComponent = 'editor' | 'outline';
+
+export type MarkdownProps = {
+  location: URL;
+  markdown: string;
+  style?: t.CssValue;
+};
 
 export const Markdown: React.FC<MarkdownProps> = (props) => {
+  const { location } = props;
+  const show = State.QueryString.show(location);
   const [markdown, setMarkdown] = useState('');
 
+  /**
+   * Lifecycle.
+   */
   useEffect(() => {
     setMarkdown(props.markdown);
   }, [props.markdown]);
+
+  /**
+   * Handlers
+   */
+  const onEditorChange = (e: { text: string }) => {
+    setMarkdown(e.text);
+  };
 
   /**
    * [Render]
@@ -22,20 +41,23 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       Flex: 'x-stretch-stretch',
       fontSize: 16,
     }),
-    left: css({ flex: 1 }),
-    right: css({
-      flex: 1,
-      padding: 60,
-    }),
+    column: css({ flex: 1 }),
   };
 
-  const elEditor = <MarkdownEditor md={markdown} onChange={(e) => setMarkdown(e.text)} />;
-  const elOutline = <MarkdownOutline markdown={markdown} />;
+  const elements = show.map((kind, i) => {
+    let el: JSX.Element | null = null;
+    if (kind === 'editor') {
+      el = <MarkdownEditor key={i} md={markdown} onChange={onEditorChange} />;
+    }
+    if (kind === 'outline') {
+      el = <MarkdownOutline markdown={markdown} />;
+    }
+    return (
+      <div key={i} {...styles.column}>
+        {el ?? null}
+      </div>
+    );
+  });
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>{elEditor}</div>
-      <div {...styles.right}>{elOutline}</div>
-    </div>
-  );
+  return <div {...css(styles.base, props.style)}>{elements}</div>;
 };

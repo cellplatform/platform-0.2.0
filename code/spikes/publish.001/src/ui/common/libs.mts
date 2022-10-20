@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { groupBy, groupWith} from 'ramda';
-export const R = { groupBy };
+import { groupBy, uniq } from 'ramda';
+export const R = { groupBy, uniq };
 
 /**
  * @system

@@ -28,6 +28,8 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
 
   /**
    * TODO 🐷
+   * - Numbering of subsequent non-zero items
+   * - Intended sub-sections
    */
   console.log('isZero (prefix)', isZero);
 
@@ -36,8 +38,6 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-
       ':first-child': { marginTop: 0 },
     }),
     block: css({
