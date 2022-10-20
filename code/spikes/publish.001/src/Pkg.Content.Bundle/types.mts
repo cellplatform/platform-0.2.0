@@ -3,7 +3,10 @@ type Size = { total: S; assets: S; data: { md: S } };
 
 export type BundlePaths = {
   app: { base: string; assets: string };
-  data: { md: string };
+  data: {
+    md: string;
+    log: string;
+  };
 };
 
 export type BundleLogEntry = {

@@ -23,9 +23,9 @@ export const Fetch = {
   /**
    * Fetch the JSON at the given URL path.
    */
-  async json(path: UrlPathString) {
+  async json<T>(path: UrlPathString) {
     const text = await (await fetch(path)).text();
-    return JSON.parse(text);
+    return JSON.parse(text) as T;
   },
 
   /**

@@ -2,6 +2,7 @@ import { t, Path } from '../common/index.mjs';
 import { MarkdownFile } from '../Markdown.File/index.mjs';
 import { Filesize } from 'sys.fs';
 import { ContentLog } from '../Pkg.Content.Log/ContentLog.mjs';
+import { BundlePaths } from './Paths.mjs';
 
 type Sources = {
   app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
@@ -34,16 +35,6 @@ export async function ContentBundle(args: Args) {
 
   const version = README.props.version;
 
-  const paths: t.BundlePaths = {
-    app: {
-      base: 'app/',
-      assets: 'app/assets/',
-    },
-    data: {
-      md: 'data.md/',
-    },
-  };
-
   const write = {
     /**
      * Write the content to the given filesystem location.
@@ -52,7 +43,7 @@ export async function ContentBundle(args: Args) {
       const { logdir } = options;
       const source = await src.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
-      const appfs = target.dir(Path.join(base, paths.app.base));
+      const appfs = target.dir(Path.join(base, BundlePaths.app.base));
 
       /**
        * Root README.
@@ -104,7 +95,7 @@ export async function ContentBundle(args: Args) {
         version,
 
         dir: {
-          app: paths.app.base,
+          app: BundlePaths.app.base,
         },
 
         get manifest() {
@@ -123,9 +114,11 @@ export async function ContentBundle(args: Args) {
           const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => match(path, paths.app.assets)),
+            assets: toSize(manifest, (path) => match(path, BundlePaths.app.assets)),
             data: {
-              md: toSize(manifest, (path) => match(path, paths.app.base, paths.data.md)),
+              md: toSize(manifest, (path) =>
+                match(path, BundlePaths.app.base, BundlePaths.data.md),
+              ),
             },
           };
         },
@@ -136,6 +129,7 @@ export async function ContentBundle(args: Args) {
         toObject(): t.BundleLogEntry {
           const { size } = api;
           const kind = 'pkg:content-bundle';
+          const paths = BundlePaths;
           return { kind, version, size, paths };
         },
       };
@@ -164,7 +158,7 @@ export async function ContentBundle(args: Args) {
         source.files.map(async (file) => {
           const data = await src.content.read(file.path);
           const md = await MD.toHtml(data);
-          const path = Path.join(paths.data.md, file.path);
+          const path = Path.join(BundlePaths.data.md, file.path);
           await target.write(path, md.markdown);
         }),
       );
@@ -182,7 +176,7 @@ export async function ContentBundle(args: Args) {
         const logger = ContentLog.log(options.logdir);
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });
-        await target.write('log.public.json', log);
+        await target.write(BundlePaths.data.log, log);
       }
 
       /**

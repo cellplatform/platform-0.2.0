@@ -5,6 +5,7 @@ import { Fetch } from '../Fetch.Util.mjs';
 import { History } from '../History/index.mjs';
 import { State } from '../state/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
+import { BundlePaths } from '../../Pkg.Content.Bundle/Paths.mjs';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
@@ -26,7 +27,7 @@ export const App: React.FC<AppProps> = (props) => {
       /**
        * Load log (history)
        */
-      const publicLog = (await Fetch.json('/log.public.json')) as t.PublicLogSummary;
+      const publicLog = await Fetch.json<t.PublicLogSummary>(State.BundlePaths.data.log);
       setLog(publicLog);
 
       /**
