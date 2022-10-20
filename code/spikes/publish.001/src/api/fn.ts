@@ -1,3 +1,5 @@
+import { Data } from './fn.data';
+
 export const config = {
   runtime: 'experimental-edge',
 };
@@ -18,12 +20,6 @@ export const config = {
  *   https://vercel.com/docs/build-output-api/v3
  */
 
-export default async (req: any) => {
-  const url = 'https://undp.db.team/log.public.json';
-  const res = await fetch(url);
-
-  return {
-    source: url,
-    current: res,
-  };
+export default (req: Request) => {
+  return new Response(Data.msg);
 };

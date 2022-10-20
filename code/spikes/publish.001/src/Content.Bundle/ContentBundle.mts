@@ -79,11 +79,17 @@ export async function ContentBundle(args: Args) {
        * Used for vercel edge functions.
        */
       if (options.srcdir) {
-        const fs = options.srcdir;
-        const m = await fs.manifest({ dir: '/api/' });
+        const src = options.srcdir;
+        const m = await src.manifest({ dir: '/api/' });
         for (const { path } of m.files) {
-          await target.write(path, await fs.read(path));
+          const data = await src.read(path);
+          await appfs.write(path, data);
         }
+        await appfs.write('middleware.ts', await src.read('middleware.ts'));
+
+        // Used by edge/middleware functions on Vercel.
+        const pkg = { dependencies: { '@vercel/edge': '0.0.5' } };
+        await appfs.write('package.json', pkg);
       }
 
       /**
@@ -193,11 +199,16 @@ export async function ContentBundle(args: Args) {
         const redirects: Redirect[] = [];
         const rewrites: Rewrite[] = [];
 
+        /**
+         * TODO 🐷
+         * Handle version rewrites within middleware
+         */
+
         // Display root renderer from any version match.
-        rewrites.push({ source: '/:version', destination: '/' });
+        // rewrites.push({ source: '/:version', destination: '/' });
 
         // Redirect to latest version.
-        redirects.push({ source: '/', destination: `/${version}` });
+        // redirects.push({ source: '/', destination: `/${version}` });
 
         const config: VercelConfig = {
           cleanUrls: true,
