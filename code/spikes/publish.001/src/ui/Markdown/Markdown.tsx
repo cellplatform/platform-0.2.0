@@ -5,17 +5,14 @@ import { MarkdownEditor } from './Markdown.Editor';
 import { MarkdownOutline } from './Markdown.Outline';
 import { State } from '../state/index.mjs';
 
-export type ShowMarkdownComponent = 'editor' | 'outline';
-
 export type MarkdownProps = {
-  location: URL;
+  location: string;
   markdown: string;
   style?: t.CssValue;
 };
 
 export const Markdown: React.FC<MarkdownProps> = (props) => {
-  const { location } = props;
-  const show = State.QueryString.show(location);
+  const show = State.QueryString.show(props.location);
   const [markdown, setMarkdown] = useState('');
 
   /**
@@ -41,13 +38,18 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       Flex: 'x-stretch-stretch',
       fontSize: 16,
     }),
-    column: css({ flex: 1 }),
+    column: css({
+      flex: 1,
+      display: 'flex',
+    }),
   };
 
   const elements = show.map((kind, i) => {
     let el: JSX.Element | null = null;
     if (kind === 'editor') {
-      el = <MarkdownEditor key={i} md={markdown} onChange={onEditorChange} />;
+      el = (
+        <MarkdownEditor key={i} markdown={markdown} onChange={onEditorChange} focusOnLoad={true} />
+      );
     }
     if (kind === 'outline') {
       el = <MarkdownOutline markdown={markdown} />;

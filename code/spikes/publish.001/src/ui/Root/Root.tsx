@@ -4,6 +4,7 @@ import { Color, COLORS, css, t } from '../common.mjs';
 import { Fetch } from '../Fetch.Util.mjs';
 import { History } from '../History/index.mjs';
 import { State } from '../state/index.mjs';
+import { MarkdownUtil } from '../Markdown/index.mjs';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
@@ -14,7 +15,6 @@ export type AppProps = {
 export const App: React.FC<AppProps> = (props) => {
   const [elBody, setElBody] = useState<JSX.Element>();
   const [log, setLog] = useState<t.PublicLogSummary>();
-  // const [url, setUrl] = useState<URL>();
 
   useEffect(() => {
     (async () => {
@@ -34,7 +34,9 @@ export const App: React.FC<AppProps> = (props) => {
        */
       const location = State.location;
       const Markdown = await Fetch.component.Markdown();
-      const el = <Markdown markdown={md.markdown} location={location} style={{ Absolute: 0 }} />;
+      const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
+
+      const el = <Markdown markdown={markdown} location={location} style={{ Absolute: 0 }} />;
       setElBody(el);
     })();
   }, []);
@@ -63,7 +65,7 @@ export const App: React.FC<AppProps> = (props) => {
     },
 
     body: css({
-      Absolute: [100, 200, 0, 0],
+      Absolute: [90, 200, 0, 0],
       borderTop: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
     }),
     bodyInner: css({
