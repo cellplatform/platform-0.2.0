@@ -12,7 +12,7 @@ export type PublicLogSummary = {
 export type PublicLogHistoryItem = {
   timestamp: number;
   version: string;
-  urls?: { inspect: string; public: string[] };
+  urls: string[];
   error?: string;
 };
 

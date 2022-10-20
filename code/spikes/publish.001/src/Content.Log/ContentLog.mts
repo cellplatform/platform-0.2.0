@@ -48,7 +48,7 @@ export const ContentLog = {
           const timestamp = entry.timestamp;
           const version = entry.bundle.version;
           const { success, error } = entry.deployment;
-          const urls = success?.urls;
+          const urls = success?.urls.public ?? [];
           const item: t.PublicLogHistoryItem = { timestamp, version, urls, error };
           return item;
         });
