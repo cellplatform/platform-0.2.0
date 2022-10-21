@@ -154,6 +154,8 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 **Note:** the system currently uses [`node.js`](https://nodejs.org/) for build-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a primary dependency.  
 
+#### Evolution Strategy
+
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long run-ramp, where the "idea" itself remains consistent, but the implementation
