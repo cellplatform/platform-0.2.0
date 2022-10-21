@@ -36,12 +36,9 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     base: css({
       Absolute: 0,
       Flex: 'x-stretch-stretch',
-      fontSize: 16,
+      overflow: 'hidden',
     }),
-    column: css({
-      flex: 1,
-      display: 'flex',
-    }),
+    column: css({ flex: 1, display: 'flex' }),
   };
 
   const elements = show.map((kind, i) => {

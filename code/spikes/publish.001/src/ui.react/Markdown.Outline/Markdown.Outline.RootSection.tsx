@@ -10,6 +10,7 @@ export type MarkdownOutlineRootSectionProps = {
 
 export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProps> = (props) => {
   const { node, siblings } = props;
+  const { next } = siblings;
   const child = node.children[0] as t.MdastText;
 
   /**
@@ -27,14 +28,17 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
    * - Intended sub-sections
    * - Move this AST walking logic into a specialized Parser helper.
    */
-  console.log('isZero (prefix)', isZero);
+  // console.log('isZero (prefix)', isZero);
 
+  /**
+   * Interpret child blocks
+   */
   const childBlocks: { text: string }[] = [];
-  const { next } = siblings;
+
   if (next?.type === 'list') {
     const list = next as t.MdastList;
     const first = list.children[0];
-    if (first.children[0].type === 'heading' && first.children[1].type === 'list') {
+    if (first?.children[0]?.type === 'heading' && first?.children[1]?.type === 'list') {
       const childList = first.children[1] as t.MdastList;
 
       childList.children.forEach((item) => {

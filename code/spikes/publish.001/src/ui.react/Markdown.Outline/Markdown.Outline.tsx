@@ -25,30 +25,39 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
   const styles = {
     base: css({
       boxSizing: 'border-box',
+      Scroll: true,
       Padding: [40, 50],
-      minWidth: 550,
-      maxWidth: 680,
+      flex: 1,
+    }),
+    body: css({
+      minWidth: 450,
+      maxWidth: 550,
     }),
   };
 
   const children = ast?.children ?? [];
-  const elBlocks = ast?.children
-    .filter((node) => node.type === 'heading')
-    .map((node, i) => {
+  const elBlocks: JSX.Element[] = [];
+
+  let i = -1;
+  for (const node of ast?.children || []) {
+    i++;
+    if (node.type === 'heading') {
       const heading = node as t.MdastHeading;
       const prev = children[i - 0] as t.MdastHeading;
       const next = children[i + 1] as t.MdastHeading;
       const siblings = { prev, next };
-
       const el = (
         <MarkdownOutlineRootSection key={i} index={i} node={heading} siblings={siblings} />
       );
-      return el;
-    });
+      elBlocks.push(el);
+    }
+  }
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{elBlocks}</div>
+      <div {...styles.body}>
+        <div>{elBlocks}</div>
+      </div>
     </div>
   );
 };
