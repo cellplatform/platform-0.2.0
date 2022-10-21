@@ -59,7 +59,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
    */
   const styles = {
     base: css({
-      marginTop: 20,
+      marginTop: 30,
       ':first-child': { marginTop: 0 },
       Flex: 'x-stretch-stretch',
     }),
@@ -93,7 +93,13 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
         ':hover': { backgroundColor: Color.darken(COLORS.MAGENTA, 20) },
       }),
 
-      gray: css({
+      dark: css({
+        color: COLORS.WHITE,
+        background: COLORS.DARK,
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
+      }),
+
+      silver: css({
         color: COLORS.DARK,
         border: `solid 1px ${Color.format(-0.1)}`,
         background: Color.alpha(COLORS.DARK, 0.1),
@@ -120,7 +126,12 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
     <div {...styles.children}>
       {childBlocks.map((child, i) => {
         const { depth, text } = child;
-        const colors = depth === 1 ? styles.block.magenta : styles.block.gray;
+
+        let colors: t.CssValue | undefined;
+        if (depth === 1) colors = styles.block.magenta;
+        if (depth === 2) colors = styles.block.silver;
+        if (depth === 3) colors = styles.block.dark;
+
         return (
           <div key={i} {...css(styles.block.base, styles.block.child, colors)}>
             {text}
