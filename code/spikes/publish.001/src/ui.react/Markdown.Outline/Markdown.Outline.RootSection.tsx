@@ -28,17 +28,17 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
    * - Intended sub-sections
    * - Move this AST walking logic into a specialized Parser helper.
    */
-  // console.log('isZero (prefix)', isZero);
 
   /**
    * Interpret child blocks
    */
-  const childBlocks: { text: string }[] = [];
+  const childBlocks: { text: string; depth: number }[] = [];
 
   if (next?.type === 'list') {
     const list = next as t.MdastList;
     const first = list.children[0];
     if (first?.children[0]?.type === 'heading' && first?.children[1]?.type === 'list') {
+      const childHeading = first.children[0] as t.MdastHeading;
       const childList = first.children[1] as t.MdastList;
 
       childList.children.forEach((item) => {
@@ -48,7 +48,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
         if (paragraph) {
           const firstText = paragraph.children.find(({ type }) => type === 'text') as T;
           const text = firstText.value;
-          childBlocks.push({ text });
+          childBlocks.push({ text, depth: childHeading.depth });
         }
       });
     }
@@ -68,12 +68,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
       base: css({
         flex: 1,
         boxSizing: 'border-box',
-        color: COLORS.WHITE,
-        background: COLORS.MAGENTA,
         cursor: 'default',
-        ':hover': {
-          backgroundColor: Color.lighten(COLORS.MAGENTA, 10),
-        },
       }),
       root: css({
         padding: 30,
@@ -91,16 +86,32 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
         marginTop: 10,
         ':first-child': { marginTop: 0 },
       }),
+
+      magenta: css({
+        color: COLORS.WHITE,
+        background: COLORS.MAGENTA,
+        ':hover': { backgroundColor: Color.darken(COLORS.MAGENTA, 20) },
+      }),
+
+      gray: css({
+        color: COLORS.DARK,
+        border: `solid 1px ${Color.format(-0.1)}`,
+        background: Color.alpha(COLORS.DARK, 0.1),
+        ':hover': {
+          backgroundColor: COLORS.DARK,
+          color: COLORS.WHITE,
+        },
+      }),
     },
 
     children: css({
-      flex: 1,
+      flex: 2,
       Flex: 'y-stretch-stretch',
     }),
   };
 
   const elRootBlock = (
-    <div {...css(styles.block.base, styles.block.root)}>
+    <div {...css(styles.block.base, styles.block.root, styles.block.magenta)}>
       <div>{_text}</div>
     </div>
   );
@@ -108,9 +119,11 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
   const elChildBlocks = childBlocks.length > 0 && (
     <div {...styles.children}>
       {childBlocks.map((child, i) => {
+        const { depth, text } = child;
+        const colors = depth === 1 ? styles.block.magenta : styles.block.gray;
         return (
-          <div key={i} {...css(styles.block.base, styles.block.child)}>
-            {child.text}
+          <div key={i} {...css(styles.block.base, styles.block.child, colors)}>
+            {text}
           </div>
         );
       })}
