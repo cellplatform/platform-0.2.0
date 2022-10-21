@@ -63,7 +63,7 @@ export const Pipeline = {
       pipeline,
       get info(): t.MarkdownInfo {
         return {
-          get root() {
+          get ast() {
             if (!_root) throw new Error(`The root of the markdown has not been parsed`);
             return _root;
           },

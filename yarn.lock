@@ -527,10 +527,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.3.tgz#ce750ab4017effa51aed6a7230651778d54e327c"
   integrity sha512-0os9vz6BpGwxGe9LOhgP/ncvYN5Tx1fNcd2TM3rD/aCGBkysb+ZWpXEocG24h6ZzOi13+VB8HndAQFezsSOw1w==
 
-"@types/node@^18.8.5":
-  version "18.8.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.8.5.tgz#6a31f820c1077c3f8ce44f9e203e68a176e8f59e"
-  integrity sha512-Bq7G3AErwe5A/Zki5fdD3O6+0zDChhg671NfPjtIcbtzDNZTv4NPKMRFr7gtYPG7y+B8uTiNK4Ngd9T0FTar6Q==
+"@types/node@^18.11.2":
+  version "18.11.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.2.tgz#c59b7641832531264fda3f1ba610362dc9a7dfc8"
+  integrity sha512-BWN3M23gLO2jVG8g/XHIRFWiiV4/GckeFIqbU/C4V3xpoBBWSMk4OZomouN0wCkfQFPqgZikyLr7DOYDysIkkw==
 
 "@types/pako@^1.0.2":
   version "1.0.4"
@@ -547,10 +547,10 @@
   resolved "https://registry.yarnpkg.com/@types/pug/-/pug-2.0.6.tgz#f830323c88172e66826d0bde413498b61054b5a6"
   integrity sha512-SnHmG9wN1UVmagJOnyo/qkk0Z7gejYxOYYmaAwr5u2yFYfsupN3sg10kyzN8Hep/2zbHxCnsumxOoRIRMBwKCg==
 
-"@types/ramda@^0.28.15":
-  version "0.28.15"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.28.15.tgz#36bb4c8de430e3bbcd29590537569aef64409716"
-  integrity sha512-FCaLNVZry65jW8x/FDnKgjgkCNQxgc5AYMQwdNn6yW5M+62R+0nt2Y36U43dTNora9hcquemfrY5gxhE5pcilQ==
+"@types/ramda@^0.28.16":
+  version "0.28.16"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.28.16.tgz#b8c4e76ec74e1b68f044b1179c3a6aacb938d3e5"
+  integrity sha512-dxx0V3/thotNhkHjBL5ifkXm9Cj3aANnAcEjMuGq2i5OaznWaiyGAQR9CicO7fJrFXg6KSoeuKmc+akItd0Fww==
   dependencies:
     ts-toolbelt "^6.15.1"
 
@@ -616,6 +616,11 @@
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
+
+"@vercel/edge@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.0.5.tgz#1fdd4697924268ac1f1cfd5ff27eaeff3c45e7e8"
+  integrity sha512-qlEPzfgbW3ph5SRTBH2cbamHc4AiENxMZXTyelp3SnNih1VOq+v/2F71/pwJzbCoSmyz8GVSAbm+JQms5GoH4Q==
 
 "@vitejs/plugin-react@^2.1.0":
   version "2.1.0"
@@ -2938,6 +2943,11 @@ monaco-editor@^0.34.0:
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.34.0.tgz#b1749870a1f795dbfc4dc03d8e9b646ddcbeefa7"
   integrity sha512-VF+S5zG8wxfinLKLrWcl4WUizMx+LeJrG4PM/M78OhcwocpV0jiyhX/pG6Q9jIOhrb/ckYi6nHnaR5OojlOZCQ==
 
+monaco-editor@^0.34.1:
+  version "0.34.1"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.34.1.tgz#1b75c4ad6bc4c1f9da656d740d98e0b850a22f87"
+  integrity sha512-FKc80TyiMaruhJKKPz5SpJPIjL+dflGvz4CpuThaPMc94AyN7SeC9HQ8hrvaxX7EyHdJcUY5i4D0gNyJj1vSZQ==
+
 monotone-chain-convex-hull@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/monotone-chain-convex-hull/-/monotone-chain-convex-hull-1.1.0.tgz#43526be183e5fb9e0071e1caa1cce85f183d6bab"
@@ -3727,10 +3737,10 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.10.7:
     sorcery "^0.10.0"
     strip-indent "^3.0.0"
 
-svelte@^3.51.0:
-  version "3.51.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.51.0.tgz#a1a0afb25dc518217f353dd73ea6471c128ddf84"
-  integrity sha512-PBITYIrsNOuW+Dtds00gSY68raNZQn7i59Dg/fjgf6WwyawPKeBwle692coO7ILZqSO+UJe9899aDn9sMdeOHA==
+svelte@^3.52.0:
+  version "3.52.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.52.0.tgz#08259eff20904c63882b66a5d409a55e8c6743b8"
+  integrity sha512-FxcnEUOAVfr10vDU5dVgJN19IvqeHQCS1zfe8vayTfis9A2t5Fhx+JDe5uv/C3j//bB1umpLJ6quhgs9xyUbCQ==
 
 symbol-observable@^1.1.0:
   version "1.2.0"
@@ -4095,10 +4105,10 @@ vite@^3.1.8:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vitest@^0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.24.1.tgz#4b4ceb3d9c6710e8fb7a3b936b740f9c9f9cde10"
-  integrity sha512-NKkK1xnDIOOr42pKBfGQQl6b6IWdFVBpG6ZS1T+nUlJuqcOiZ7lxjVwHy9wrtTYpJ0BWww9y6bSGYXubD29Nag==
+vitest@^0.24.3:
+  version "0.24.3"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.24.3.tgz#d91c7e2d557877d5270033efdf18add6063f0c97"
+  integrity sha512-aM0auuPPgMSstWvr851hB74g/LKaKBzSxcG3da7ejfZbx08Y21JpZmbmDYrMTCGhVZKqTGwzcnLMwyfz2WzkhQ==
   dependencies:
     "@types/chai" "^4.3.3"
     "@types/chai-subset" "^1.3.3"

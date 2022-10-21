@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { t } from '../common.mjs';
 import { MarkdownProcessor as markdown } from '../Markdown.Processor/index.mjs';
 
 /**

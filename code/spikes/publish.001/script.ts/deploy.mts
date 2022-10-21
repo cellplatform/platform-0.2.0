@@ -1,8 +1,9 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, slug, Time } from 'sys.util';
+import { rx, Time } from 'sys.util';
 
-import { ContentBundle } from '../src/ContentBundle/index.mjs';
+import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
+
 import { pushToVercel } from './deploy.vercel.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
@@ -14,7 +15,7 @@ const toFs = async (dir: string) => {
   return store.fs;
 };
 
-const content = await ContentBundle({
+const bundler = await ContentBundle({
   Text,
   throwError: true,
   src: {
@@ -23,34 +24,50 @@ const content = await ContentBundle({
   },
 });
 
-const targetfs = await toFs('./dist.deploy');
-const logfs = await toFs('./dist.deploy/.log');
+const targetdir = await toFs('./dist.deploy/');
+const logdir = await toFs('./dist.deploy/.log/');
+const srcdir = await toFs('./src/');
+const publicfs = await toFs('./public/');
 
-console.log('content', content);
-const bundle = await content.write(targetfs);
-const version = content.version;
+console.log('content', bundler);
+
+const logger = ContentLog.log(logdir);
+const version = bundler.version;
+const bundle = await bundler.write.bundle(targetdir, { logdir, srcdir });
+
+/**
+ * Store the data in /public (for local dev usage)
+ */
+await bundler.write.data(publicfs, { logdir });
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
 
+// 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 // process.exit(0); // TEMP 🐷
+// 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
+/**
+ * Deploy
+ */
 const deployed = await pushToVercel({
   fs: bundle.fs,
   token,
   version,
-  source: bundle.dir.app.base,
+  source: bundle.dir.app,
 });
 
 console.log('-------------------------------------------');
 console.log('deployed', deployed.status);
 
-// Write deployment to the file-log.
-const filename = `${Time.now.timestamp}-${slug()}.log.json`;
-const logentry = {
+/**
+ * Log results.
+ */
+
+await logger.writeDeployment({
+  timestamp: Time.now.timestamp,
   bundle: bundle.toObject(),
   deployment: deployed.toObject(),
-};
-await logfs.write(filename, JSON.stringify(logentry));
+});
