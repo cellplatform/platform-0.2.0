@@ -12,7 +12,6 @@
 
 - [compilation](/code/compiler/) toolchain
 - [system](/code/system/) modules
-  - [sys.text](/code/system/sys.text/)
 
 ---
 
