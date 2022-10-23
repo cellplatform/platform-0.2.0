@@ -5,7 +5,6 @@ import { Fetch } from '../Fetch.mjs';
 import { History } from '../History/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
 import { State, BundlePaths } from '../../ui.logic/index.mjs';
-import { RootTitle } from './Root.Title';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
@@ -47,40 +46,42 @@ export const Root: React.FC<RootProps> = (props) => {
    * [Render]
    */
   const styles = {
-    normalize: css({
-      fontFamily: 'sans-serif',
-      color: COLORS.DARK,
-    }),
     base: css({
       Absolute: 0,
-      Flex: 'x-stretch-stretch',
-      boxSizing: 'border-box',
-    }),
-    left: css({
-      flex: 1,
-      Flex: 'y-stretch-stretch',
-    }),
-    right: css({
-      width: 200,
-      borderLeft: `solid 1px ${Color.format(-0.1)}`,
+      fontFamily: 'sans-serif',
+      color: COLORS.DARK,
     }),
 
     /**
      * Content
      */
-    history: { flex: 1 },
-    body: css({ position: 'relative', flex: 1 }),
+    title: css({
+      Absolute: [30, 240, null, 30],
+      fontSize: 30,
+    }),
+
+    history: {
+      Absolute: [0, 0, 0, null],
+      width: 200,
+    },
+
+    body: css({
+      Absolute: [90, 200, 0, 0],
+      borderTop: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
+    }),
+    bodyInner: css({
+      Absolute: 0,
+      Flex: 'x-stretch-stretch',
+    }),
   };
 
   return (
-    <div {...css(styles.base, styles.normalize, props.style)}>
-      <div {...styles.left}>
-        <RootTitle text={'Report'} />
-        <div {...styles.body}>{elBody}</div>
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.title}>Report</div>
+      <div {...styles.body}>
+        <div {...styles.bodyInner}>{elBody}</div>
       </div>
-      <div {...styles.right}>
-        <History style={styles.history} data={log} />
-      </div>
+      <History style={styles.history} data={log} />
     </div>
   );
 };
