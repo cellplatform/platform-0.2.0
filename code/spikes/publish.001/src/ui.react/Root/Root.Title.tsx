@@ -22,7 +22,7 @@ export const RootTitle: React.FC<RootTitleProps> = (props) => {
     }),
     text: css({
       fontSize: 30,
-      paddingLeft: 30,
+      paddingLeft: 40,
     }),
   };
 

@@ -5,6 +5,7 @@ import { HeadingTile } from './Tile.Heading';
 
 export type MarkdownOutlineProps = {
   markdown?: string;
+  scroll?: boolean;
   style?: t.CssValue;
 };
 
@@ -24,9 +25,8 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
   const styles = {
     base: css({
       boxSizing: 'border-box',
-      Scroll: true,
-      Padding: [40, 50],
-      flex: 1,
+      Scroll: props.scroll,
+      Padding: [40, 40],
     }),
     body: css({
       minWidth: 450,

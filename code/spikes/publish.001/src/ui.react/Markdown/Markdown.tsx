@@ -45,11 +45,17 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     let el: JSX.Element | null = null;
     if (kind === 'editor') {
       el = (
-        <MarkdownEditor key={i} markdown={markdown} onChange={onEditorChange} focusOnLoad={true} />
+        <MarkdownEditor
+          key={i}
+          markdown={markdown}
+          onChange={onEditorChange}
+          focusOnLoad={true}
+          style={{ flex: 1 }}
+        />
       );
     }
     if (kind === 'outline') {
-      el = <MarkdownOutline markdown={markdown} />;
+      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1 }} />;
     }
     return (
       <div key={i} {...styles.column}>

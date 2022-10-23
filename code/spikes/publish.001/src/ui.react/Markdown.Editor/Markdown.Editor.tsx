@@ -49,7 +49,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', flex: 1 }),
+    base: css({ position: 'relative' }),
     inner: css({ Absolute: 0 }),
   };
 
