@@ -1,13 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
 import { HistoryUtil } from './HistoryUtil.mjs';
+import { HistoryItem } from './History.Item';
+
+const DEFAULT = {
+  TITLE: 'Deployment History',
+};
 
 export type HistoryProps = {
+  title?: string;
   data?: t.PublicLogSummary;
   style?: t.CssValue;
 };
 
 export const History: React.FC<HistoryProps> = (props) => {
+  const { title = DEFAULT.TITLE } = props;
   const data = HistoryUtil.format(props.data);
 
   /**
@@ -31,6 +38,7 @@ export const History: React.FC<HistoryProps> = (props) => {
 
     list: css({
       lineHeight: '1.6em',
+      paddingRight: 8,
     }),
 
     item: {
@@ -45,26 +53,15 @@ export const History: React.FC<HistoryProps> = (props) => {
 
   const elBody = data && (
     <div {...styles.body}>
-      <div {...styles.title} onClick={() => console.info('history', data)}>
-        History
+      <div {...styles.title} onClick={() => console.info('version:history', data)}>
+        {title}
       </div>
 
       <div {...css(styles.item.base, styles.item.latest)}>{data.latest.version}</div>
 
       <div {...styles.list}>
         {data.history.map((item, i) => {
-          const isLatest = item.version === data.latest?.version;
-          const onClick = () => console.info(item);
-          return (
-            <div
-              key={i}
-              {...styles.item.base}
-              style={{ opacity: isLatest ? 1 : 0.3 }}
-              onClick={onClick}
-            >
-              {item.version}
-            </div>
-          );
+          return <HistoryItem key={i} data={item} latest={data.latest?.version} />;
         })}
       </div>
     </div>

@@ -29,7 +29,7 @@ const logdir = await toFs('./dist.deploy/.log/');
 const srcdir = await toFs('./src/');
 const publicfs = await toFs('./public/');
 
-console.log('content', bundler);
+console.log('content:bundler:', bundler);
 
 const logger = ContentLog.log(logdir);
 const version = bundler.version;
