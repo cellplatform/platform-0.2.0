@@ -82,7 +82,6 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
         fontSize: 18,
         marginLeft: 8,
         borderRadius: 8,
-
         marginTop: 10,
         ':first-child': { marginTop: 0 },
       }),
@@ -90,7 +89,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
       magenta: css({
         color: COLORS.WHITE,
         background: COLORS.MAGENTA,
-        ':hover': { backgroundColor: Color.darken(COLORS.MAGENTA, 20) },
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
       }),
 
       dark: css({
@@ -104,7 +103,7 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
         border: `solid 1px ${Color.format(-0.1)}`,
         background: Color.alpha(COLORS.DARK, 0.1),
         ':hover': {
-          backgroundColor: COLORS.DARK,
+          backgroundColor: Color.lighten(COLORS.DARK, 5),
           color: COLORS.WHITE,
         },
       }),
