@@ -51,11 +51,12 @@ export const Config = {
       const build: BuildOptions = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
+        assetsDir: 'lib',
       };
 
       let config: UserConfig = {
-        plugins: [],
         build,
+        plugins: [],
         worker: { format: 'es' },
       };
 
