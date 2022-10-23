@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Color, COLORS, css, t } from './common.mjs';
 import { TileUtil } from './TileUtil.mjs';
 

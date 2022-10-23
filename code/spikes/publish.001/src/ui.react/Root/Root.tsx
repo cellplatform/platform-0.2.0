@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Color, COLORS, css, t } from '../common.mjs';
 import { Fetch } from '../Fetch.mjs';

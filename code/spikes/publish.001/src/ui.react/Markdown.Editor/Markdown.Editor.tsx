@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
-
-import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
-import type { OnChange } from '@monaco-editor/react';
-
+import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { useRef } from 'react';
+
+import { css, FC, t } from '../common.mjs';
+
+import type { OnChange } from '@monaco-editor/react';
 
 /**
  * REF: https://github.com/suren-atoyan/monaco-react
