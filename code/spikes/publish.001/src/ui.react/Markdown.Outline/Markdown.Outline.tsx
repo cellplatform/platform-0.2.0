@@ -24,14 +24,13 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
    */
   const styles = {
     base: css({
-      boxSizing: 'border-box',
       Scroll: props.scroll,
-      Padding: [40, 40],
-    }),
-    body: css({
+      boxSizing: 'border-box',
+      Padding: 40,
       minWidth: 450,
       maxWidth: 550,
     }),
+    body: css({}),
   };
 
   const children = ast?.children ?? [];

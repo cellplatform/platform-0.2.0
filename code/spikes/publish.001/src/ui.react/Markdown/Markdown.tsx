@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { css, t } from '../common.mjs';
+import { Color, css, t } from '../common.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 import { State } from '../../ui.logic/index.mjs';
+import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 
 export type MarkdownProps = {
   location: string;
@@ -38,12 +39,26 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       Flex: 'x-stretch-stretch',
       overflow: 'hidden',
     }),
-    column: css({ flex: 1, display: 'flex' }),
+    column: css({ display: 'flex' }),
   };
 
   const elements = show.map((kind, i) => {
     let el: JSX.Element | null = null;
+
+    let flex: undefined | number;
+
+    if (kind === 'outline') {
+      flex = undefined;
+      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+    }
+
+    if (kind === 'doc') {
+      flex = 1;
+      el = <MarkdownDoc markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+    }
+
     if (kind === 'editor') {
+      flex = 1;
       el = (
         <MarkdownEditor
           key={i}
@@ -54,11 +69,9 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
         />
       );
     }
-    if (kind === 'outline') {
-      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1 }} />;
-    }
+
     return (
-      <div key={i} {...styles.column}>
+      <div key={i} {...css(styles.column, { flex })}>
         {el ?? null}
       </div>
     );

@@ -1,9 +1,13 @@
 import { R } from './common.mjs';
 
-export type ShowMarkdownComponent = 'editor' | 'outline';
+export type ShowMarkdownComponent = 'outline' | 'doc' | 'editor';
 
 const DEFAULT = {
   show: ['outline'] as ShowMarkdownComponent[],
+};
+
+const ALL = {
+  show: ['outline', 'doc', 'editor'] as ShowMarkdownComponent[],
 };
 
 /**
@@ -23,8 +27,7 @@ export const QueryString = {
     if (!url || !url.searchParams.has(key)) return DEFAULT.show;
 
     const values = url.searchParams.getAll(key).map((v) => v.toLowerCase());
-    const all: ShowMarkdownComponent[] = ['editor', 'outline'];
-    return uniq<ShowMarkdownComponent>(values, all);
+    return uniq<ShowMarkdownComponent>(values, ALL.show);
   },
 };
 
