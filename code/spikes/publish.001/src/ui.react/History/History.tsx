@@ -38,7 +38,7 @@ export const History: React.FC<HistoryProps> = (props) => {
 
     list: css({
       lineHeight: '1.6em',
-      paddingRight: 8,
+      paddingRight: 12,
     }),
 
     item: {
@@ -53,7 +53,12 @@ export const History: React.FC<HistoryProps> = (props) => {
 
   const elBody = data && (
     <div {...styles.body}>
-      <div {...styles.title} onClick={() => console.info('version:history', data)}>
+      <div
+        {...styles.title}
+        onClick={() => {
+          console.info('version:history', data); // TEMP 🐷
+        }}
+      >
         {title}
       </div>
 
