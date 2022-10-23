@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { COLORS, css, FC, t, MarkdownUtil } from './common.mjs';
-
-import { MarkdownOutlineRootSection } from './Markdown.Outline.RootSection';
+import { css, FC, MarkdownUtil, t } from './common.mjs';
+import { HeadingTile } from './Tile.Heading';
 
 export type MarkdownOutlineProps = {
   markdown?: string;
@@ -47,7 +46,15 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
       const next = children[i + 1] as t.MdastHeading;
       const siblings = { prev, next };
       const el = (
-        <MarkdownOutlineRootSection key={i} index={i} node={heading} siblings={siblings} />
+        <HeadingTile
+          key={i}
+          index={i}
+          node={heading}
+          siblings={siblings}
+          onClick={(e) => {
+            console.log('HeadingTile/click:', e); // TEMP 🐷
+          }}
+        />
       );
       elBlocks.push(el);
     }

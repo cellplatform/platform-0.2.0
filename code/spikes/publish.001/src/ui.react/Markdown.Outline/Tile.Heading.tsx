@@ -1,58 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, MarkdownUtil } from './common.mjs';
+import React from 'react';
 
-export type MarkdownOutlineRootSectionProps = {
+import { Color, COLORS, css, t } from './common.mjs';
+import { TileUtil } from './TileUtil.mjs';
+
+export type HeadingTileClickHandler = (e: HeadingTileClickHandlerArgs) => void;
+export type HeadingTileClickHandlerArgs = { node: t.MdastHeading };
+
+export type HeadingTileProps = {
   index: number;
   node: t.MdastHeading;
   siblings: { prev?: t.AstNode; next?: t.AstNode };
   style?: t.CssValue;
+  onClick?: HeadingTileClickHandler;
 };
 
-export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProps> = (props) => {
+export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
   const { node, siblings } = props;
-  const { next } = siblings;
-  const child = node.children[0] as t.MdastText;
+  const { title, children } = TileUtil.heading({ node, siblings });
 
   /**
-   * Derive the text label.
+   * Handlers
    */
-  let _text = child?.value ?? '<Unnamed>';
-
-  const regexZeroPrefix = new RegExp(/^\.\d\./);
-  const isZero = Boolean(_text.match(regexZeroPrefix));
-  _text = _text.replace(regexZeroPrefix, '');
-
-  /**
-   * TODO 🐷
-   * - Numbering of subsequent non-zero items
-   * - Intended sub-sections
-   * - Move this AST walking logic into a specialized Parser helper.
-   */
-
-  /**
-   * Interpret child blocks
-   */
-  const childBlocks: { text: string; depth: number }[] = [];
-
-  if (next?.type === 'list') {
-    const list = next as t.MdastList;
-    const first = list.children[0];
-    if (first?.children[0]?.type === 'heading' && first?.children[1]?.type === 'list') {
-      const childHeading = first.children[0] as t.MdastHeading;
-      const childList = first.children[1] as t.MdastList;
-
-      childList.children.forEach((item) => {
-        type P = t.MdastParagraph;
-        type T = t.MdastText;
-        const paragraph = item.children.find(({ type }) => type === 'paragraph') as P;
-        if (paragraph) {
-          const firstText = paragraph.children.find(({ type }) => type === 'text') as T;
-          const text = firstText.value;
-          childBlocks.push({ text, depth: childHeading.depth });
-        }
-      });
-    }
-  }
+  const onRootClick: React.MouseEventHandler = (e) => {
+    e.preventDefault();
+    props.onClick?.({ node });
+  };
 
   /**
    * [Render]
@@ -117,13 +89,13 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
 
   const elRootBlock = (
     <div {...css(styles.block.base, styles.block.root, styles.block.magenta)}>
-      <div>{_text}</div>
+      <div>{title}</div>
     </div>
   );
 
-  const elChildBlocks = childBlocks.length > 0 && (
+  const elChildren = children.length > 0 && (
     <div {...styles.children}>
-      {childBlocks.map((child, i) => {
+      {children.map((child, i) => {
         const { depth, text } = child;
 
         let colors: t.CssValue | undefined;
@@ -141,9 +113,9 @@ export const MarkdownOutlineRootSection: React.FC<MarkdownOutlineRootSectionProp
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onClick={onRootClick}>
       {elRootBlock}
-      {elChildBlocks}
+      {elChildren}
     </div>
   );
 };
