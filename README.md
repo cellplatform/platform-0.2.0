@@ -156,7 +156,7 @@ primary dependency.
 
 In particular a loose coupling is strongly retained around any one  "user interface rendering library" as distinct to pure functional "logic" libraries, as UI tends towards the most valatility in an architecutre over time.  Any form of "interface" (the `I` in `API`) tends toward messiness and complex noise - the one involving "humans" is especially prone.   
 
-Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, eg 
+Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, for example:
 
 
 ```
