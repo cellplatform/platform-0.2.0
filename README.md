@@ -169,7 +169,7 @@ Organizing for this is expressed within the distinct `/system/` and `/system.ui/
 
 
 
-#### Evolution Strategy
+#### Evolving Strategy
 
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
@@ -192,7 +192,7 @@ Development machine [environment setup](docs/env.setup.md) suggestions.
 
 The system (platform) lives as an "open commons" shared resource of the world's peoples. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
 
-In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through reearched refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
+In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through considered refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
 
 To run a "licence analysis" and validate the module depenency graph against this principle run:
 
