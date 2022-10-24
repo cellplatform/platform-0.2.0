@@ -163,8 +163,8 @@ Organizing for this is expressed within the distinct `/system/` and `/system.ui/
 /code/
   |- system/
   |- system.ui/
-              |- web.react/*  <== libraries
-              |- web.svelte/*  <== libraries
+              |- web.react/*   <== (libraries)
+              |- web.svelte/*  <== (libraries)
 ```
 
 
