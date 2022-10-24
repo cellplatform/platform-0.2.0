@@ -169,7 +169,7 @@ Organizing for this is expressed within the distinct `/system/` and `/system.ui/
 
 
 
-#### Evolving Strategy
+#### Evolving Architectural Strategy
 
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
