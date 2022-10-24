@@ -152,6 +152,8 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 
 **Note:** the system currently uses [`node.js`](https://nodejs.org/) for build-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a primary dependency.  
+In particular a loose coupling is strongly retained around any one particular "user interface rendering library" as distinct to pure functional "logic" libraries, as tend towards the most valatility over time.  This is expressed within the `/system` and `/system.ui` folder structure (and its sub-folder structure isolating and nameing the core UI rendering technology of the libraries contained within.
+
 
 #### Evolution Strategy
 
