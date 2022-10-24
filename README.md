@@ -158,8 +158,15 @@ In particular a loose coupling is strongly retained around any one  "user interf
 
 Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, eg 
 
-- system.ui/web.react/`<libname>/`
-- system.ui/web.svelte/`<libname>/`
+
+```
+/code/
+  |- system/
+  |- system.ui/
+              |- web.react/*  <== libraries
+              |- web.svelte/*  <== libraries
+```
+
 
 
 #### Evolution Strategy
