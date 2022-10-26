@@ -7,5 +7,5 @@ const path = url.pathname;
 if (path.startsWith('/web3/')) {
   import('./Root/entry');
 } else {
-  import('./Root.Holding/entry');
+  import('./Root.HoldingPattern/entry');
 }
