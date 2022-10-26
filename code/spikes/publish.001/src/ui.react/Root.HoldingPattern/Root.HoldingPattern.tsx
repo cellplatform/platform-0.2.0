@@ -21,10 +21,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
    * [Render]
    */
   const styles = {
-    normalize: css({
-      fontFamily: 'sans-serif',
-      color: COLORS.DARK,
-    }),
+    normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
     base: css({
       Absolute: 0,
       Flex: 'y-center-center',
@@ -51,10 +48,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       base: css({ lineHeight: 1.7, fontSize: 18 }),
     },
 
-    a: css({
-      color: COLORS.CYAN,
-      textDecoration: 'none',
-    }),
+    a: css({ color: COLORS.CYAN, textDecoration: 'none' }),
   };
 
   const slash = (char = '/') => <span {...styles.slash}>{char}</span>;

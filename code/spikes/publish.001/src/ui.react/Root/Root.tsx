@@ -61,10 +61,7 @@ export const Root: React.FC<RootProps> = (props) => {
    * [Render]
    */
   const styles = {
-    normalize: css({
-      fontFamily: 'sans-serif',
-      color: COLORS.DARK,
-    }),
+    normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
     base: css({
       Absolute: 0,
       Flex: 'x-stretch-stretch',
