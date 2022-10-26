@@ -58,6 +58,7 @@ export const Config = {
         build,
         plugins: [],
         worker: { format: 'es' },
+        base: './',
       };
 
       /**
