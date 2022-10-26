@@ -13,6 +13,7 @@ export const R = { groupBy, prop, sortBy, uniq };
 export { rx, slug } from 'sys.util';
 export { FC } from 'sys.util.react';
 export { css, Color, Style } from 'sys.util.css';
+export { Patch } from 'sys.data.json';
 
 /**
  * WARNING - be careful these external references do not blow-up the bundle size.

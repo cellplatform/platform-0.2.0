@@ -4,7 +4,14 @@
 export type { NetworkMessageEvent } from 'sys.net';
 export type { Event, EventBus, WorkerGlobal, DirManifest, ManifestFile } from 'sys.types';
 export type { Fs } from 'sys.fs/src/types.mjs';
-export type { Text, MdastRoot, MdastHeading, MdastCode, MdastText } from 'sys.text/src/types.mjs';
+export type {
+  Text,
+  MdastRoot,
+  MdastHeading,
+  MdastCode,
+  MdastText,
+  MarkdownInfo,
+} from 'sys.text/src/types.mjs';
 
 /**
  * @local

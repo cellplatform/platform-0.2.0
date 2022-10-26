@@ -1,5 +1,5 @@
 import { QueryString } from './QueryString.mjs';
-import { BundlePaths } from './common.mjs';
+import { t, BundlePaths } from './common.mjs';
 export { BundlePaths };
 
 /**
