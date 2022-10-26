@@ -92,7 +92,7 @@ A note[^1]
     });
   });
 
-  describe('input (string, Uint8Array, undefined)', () => {
+  describe('input (string, Uint8Array, <undefined>)', () => {
     it('Uint8Array', async () => {
       const input = new TextEncoder().encode('# Hello\n');
       const res1 = await MarkdownProcessor().toMarkdown(input);
