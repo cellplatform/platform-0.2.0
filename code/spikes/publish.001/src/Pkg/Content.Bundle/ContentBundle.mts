@@ -4,6 +4,13 @@ import { Filesize } from 'sys.fs';
 import { ContentLog } from '../Content.Log/ContentLog.mjs';
 import { BundlePaths } from '../Paths.mjs';
 
+import {
+  VercelConfigFile,
+  VercelConfigRedirect,
+  VercelConfigRewrite,
+  VercelConfigHeader,
+} from 'cloud.vercel/src/types.mjs';
+
 type Sources = {
   app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
   content: t.Fs; // The source markdown content, and other assorted "author(s) generated" content.
@@ -186,25 +193,15 @@ export async function ContentBundle(args: Args) {
        *  - https://vercel.com/docs/project-configuration#project-configuration/rewrites
        */
       if (options.vercelConfig) {
-        type VercelConfig = { cleanUrls?: boolean; redirects?: Redirect[]; rewrites?: Rewrite[] };
-        type Redirect = { source: string; destination: string };
-        type Rewrite = { source: string; destination: string };
-
-        const redirects: Redirect[] = [];
-        const rewrites: Rewrite[] = [];
+        const redirects: VercelConfigRedirect[] = [];
+        const rewrites: VercelConfigRewrite[] = [];
 
         /**
          * TODO 🐷
          * Handle version rewrites within middleware
          */
 
-        // Display root renderer from any version match.
-        // rewrites.push({ source: '/:version', destination: '/' });
-
-        // Redirect to latest version.
-        // redirects.push({ source: '/', destination: `/${version}` });
-
-        const config: VercelConfig = {
+        const config: VercelConfigFile = {
           cleanUrls: true,
           redirects,
           rewrites,
