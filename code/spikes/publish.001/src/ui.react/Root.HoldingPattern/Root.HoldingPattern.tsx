@@ -22,17 +22,13 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
    */
   const styles = {
     normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
-    base: css({
-      Absolute: 0,
-      Flex: 'y-center-center',
-    }),
+    base: css({ Absolute: 0, Flex: 'y-center-center' }),
     body: {
       base: css({ Flex: 'x-center-center' }),
       inner: css({ width: 600 }),
     },
     slash: css({ color: COLORS.DARK, MarginX: 7, opacity: 0.12 }),
     cyan: css({ color: COLORS.CYAN }),
-
     title: {
       base: css({
         Flex: 'x-spaceBetween-stretch',
@@ -43,11 +39,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       path: css({ fontSize: 32, fontWeight: 'bold' }),
       version: css({ fontSize: 32 }),
     },
-
-    detail: {
-      base: css({ lineHeight: 1.7, fontSize: 18 }),
-    },
-
+    detail: css({ lineHeight: 1.7, fontSize: 18 }),
     a: css({ color: COLORS.CYAN, textDecoration: 'none' }),
   };
 
@@ -67,14 +59,16 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
     </div>
   );
 
+  const elCC = (
+    <a {...styles.a} href={licence.link}>
+      {licence.title}
+    </a>
+  );
+
   const elDetail = (
-    <div {...styles.detail.base}>
+    <div {...styles.detail}>
       <p>{detail}</p>
-      <p>
-        <a {...styles.a} href={licence.link}>
-          {licence.title}
-        </a>
-      </p>
+      <p>Open Commons ({elCC})</p>
     </div>
   );
 
