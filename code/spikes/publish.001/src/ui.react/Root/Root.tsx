@@ -37,8 +37,22 @@ export const Root: React.FC<RootProps> = (props) => {
       const location = State.location;
       const Markdown = await Fetch.component.Markdown();
       const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
+      const { info } = await MarkdownUtil.parseMarkdown(markdown);
 
-      const el = <Markdown markdown={markdown} location={location.href} style={{ Absolute: 0 }} />;
+      // TODO 🐷 move to [State]
+      const data: t.StateMarkdown = {
+        markdown,
+        info,
+      };
+
+      const el = (
+        <Markdown
+          data={data}
+          markdown={markdown}
+          location={location.href}
+          style={{ Absolute: 0 }}
+        />
+      );
       setElBody(el);
     })();
   }, []);

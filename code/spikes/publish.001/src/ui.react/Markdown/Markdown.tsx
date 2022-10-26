@@ -9,6 +9,7 @@ import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 export type MarkdownProps = {
   location: string;
   markdown: string;
+  data: t.StateMarkdown;
   style?: t.CssValue;
 };
 

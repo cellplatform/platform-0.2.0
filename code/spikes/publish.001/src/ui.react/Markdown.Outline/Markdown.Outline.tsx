@@ -14,8 +14,8 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
 
   useEffect(() => {
     (async () => {
-      const { ast } = await MarkdownUtil.parseMarkdown(props.markdown);
-      setAst(ast);
+      const { info } = await MarkdownUtil.parseMarkdown(props.markdown);
+      setAst(info.ast);
     })();
   }, [props.markdown]);
 
