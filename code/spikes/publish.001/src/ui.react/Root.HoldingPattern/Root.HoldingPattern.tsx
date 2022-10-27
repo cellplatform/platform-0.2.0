@@ -7,7 +7,7 @@ export type RootHoldingProps = {
 
 export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   const detail = `
-    This report is in the final stages of review and edits for its 1.0 release.
+    This report is in the final stages of edits and review for its 1.0 release.
     After the initial 1.0 release it will reamin on a regular update cycle reflecting
     emerging changes within this nascent and fast evolving space.
   `;
@@ -24,8 +24,11 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
     normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
     base: css({ Absolute: 0, Flex: 'y-center-center' }),
     body: {
-      base: css({ Flex: 'x-center-center' }),
-      inner: css({ width: 600 }),
+      base: css({ Flex: 'x-center-center', marginBottom: '5%' }),
+      inner: css({
+        width: 600,
+        '@media (max-width: 600px)': { width: 350 },
+      }),
     },
     slash: css({ color: COLORS.DARK, MarginX: 7, opacity: 0.12 }),
     cyan: css({ color: COLORS.CYAN }),
@@ -33,13 +36,13 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       base: css({
         Flex: 'x-spaceBetween-stretch',
         borderBottom: `solid 6px ${COLORS.CYAN}`,
-        paddingBottom: 20,
-        marginBottom: 25,
+        paddingBottom: 50,
+        '@media (max-width: 600px)': { Flex: 'y-stretch-stretch' },
       }),
       path: css({ fontSize: 32, fontWeight: 'bold' }),
       version: css({ fontSize: 32 }),
     },
-    detail: css({ lineHeight: 1.7, fontSize: 18 }),
+    detail: css({ lineHeight: 1.7, fontSize: 16 }),
     a: css({ color: COLORS.CYAN, textDecoration: 'none' }),
   };
 
@@ -68,7 +71,9 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   const elDetail = (
     <div {...styles.detail}>
       <p>{detail}</p>
-      <p>Open Commons ({elCC})</p>
+      <p>
+        {elCC} {'(Open Commons)'}
+      </p>
     </div>
   );
 

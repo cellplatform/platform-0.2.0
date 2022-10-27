@@ -203,6 +203,7 @@ export async function ContentBundle(args: Args) {
 
         const config: VercelConfigFile = {
           cleanUrls: true,
+          trailingSlash: true,
           redirects,
           rewrites,
         };
