@@ -59,6 +59,7 @@ export const Config = {
         plugins: [],
         worker: { format: 'es' },
         base: './',
+        server: { port: 1234 },
       };
 
       /**
