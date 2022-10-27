@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { css, FC, t } from '../common.mjs';
 import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
@@ -37,12 +37,10 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       marginTop: 30,
       textAlign: 'center',
       opacity: 0.3,
-      fontSize: 13,
+      fontSize: 14,
       fontStyle: 'italic',
     }),
-    html: css({
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    html: css({}),
   };
 
   const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
