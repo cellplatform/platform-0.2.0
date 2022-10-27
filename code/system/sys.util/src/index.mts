@@ -5,6 +5,7 @@ export { Id, slug, cuid } from './Id/index.mjs';
 export { Is } from './Is/index.mjs';
 export { Json } from './Json/index.mjs';
 export { Mime } from './Mime/index.mjs';
+export { Path } from './Path/index.mjs';
 export { Rx, rx } from './Rx/index.mjs';
 export { Sort } from './Sort/index.mjs';
 export { Stream } from './Stream/index.mjs';

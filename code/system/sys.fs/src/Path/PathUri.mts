@@ -1,14 +1,6 @@
-import {
-  trim,
-  trimSlashesStart,
-  trimSlashesEnd,
-  ensureSlashStart,
-  ensureSlashEnd,
-} from '../Path/Path.trim.mjs';
-import { join } from '../Path/Path.join.mjs';
-import { isWithin } from '../Path/Path.within.mjs';
-import { toAbsoluteLocation } from '../Path/Path.to.mjs';
 import { t } from '../common/index.mjs';
+
+import { Path } from 'sys.util';
 
 type UriString = string;
 type DirPath = string;
@@ -29,7 +21,7 @@ export const PathUri = {
    * Determines if the given string is a "path:" URI.
    */
   isPathUri(input?: UriString) {
-    return trim(input).startsWith('path:');
+    return Path.trim(input).startsWith('path:');
   },
 
   /**
@@ -59,7 +51,7 @@ export const PathUri = {
    * Removes the "path:" prefix from the given string.
    */
   trimUriPrefix(input: UriString) {
-    const path = trim(input);
+    const path = Path.trim(input);
     return path ? path.replace(/^path:/, '').trim() : '';
   },
 
@@ -83,7 +75,8 @@ export const PathUri = {
    * Unpacks a URI into constituent parts.
    */
   unpack(uri: UriString, options: { root?: DirPath } = {}) {
-    const root = (options.root && trim(options.root) ? formatRootDir(options.root) : '/') || '/';
+    const root =
+      (options.root && Path.trim(options.root) ? formatRootDir(options.root) : '/') || '/';
 
     uri = (uri || '').trim();
     if (!PathUri.isPathUri(uri)) {
@@ -98,7 +91,7 @@ export const PathUri = {
 
     const fullpath = error ? '' : resolved.path;
     const path = error ? '' : fullpath.substring(root.length - 1); // NB: hide full path up to root of driver scope.
-    const location = error ? '' : toAbsoluteLocation(path, { root });
+    const location = error ? '' : Path.toAbsoluteLocation(path, { root });
 
     return { uri, root, path, fullpath, rawpath, location, withinScope, error };
   },
@@ -120,19 +113,19 @@ function cleanPath(path: string): string {
 
   path = path.trim();
   path = PathUri.trimUriPrefix(path);
-  if (path === '' || trimSlashesEnd(path) === '.') path = '/';
+  if (path === '' || Path.trimSlashesEnd(path) === '.') path = '/';
   if (path.startsWith('./')) path = path.substring(2);
-  if (path.startsWith('/')) path = `/${trimSlashesStart(path)}`; // Ensure single leading slash.
+  if (path.startsWith('/')) path = `/${Path.trimSlashesStart(path)}`; // Ensure single leading slash.
   path = path.replace(/^\.{3,}/, '..'); // Clean up 3 or more "..." (eg: "..../foo")
-  path = join(path); // NB: The "join" call passes the path through a "../.." resolver.
+  path = Path.join(path); // NB: The "join" call passes the path through a "../.." resolver.
 
   return path;
 }
 
 function formatRootDir(path: string) {
-  path = trim(path);
-  path = ensureSlashStart(path);
-  path = ensureSlashEnd(path);
+  path = Path.trim(path);
+  path = Path.ensureSlashStart(path);
+  path = Path.ensureSlashEnd(path);
   return path;
 }
 
@@ -145,7 +138,7 @@ function resolve(root: DirPath, uri: UriString) {
     error: undefined,
   };
 
-  if (!trim(root)) {
+  if (!Path.trim(root)) {
     res.error = `Path resolver must have root directory`;
     return res;
   }
@@ -157,7 +150,7 @@ function resolve(root: DirPath, uri: UriString) {
     return res;
   }
 
-  const withinScope = isWithin('/', PathUri.trimUriPrefix(uri));
+  const withinScope = Path.isWithin('/', PathUri.trimUriPrefix(uri));
   if (!withinScope) {
     res.error = `Path out of scope of root directory "${root}"`;
     res.withinScope = false;
@@ -171,7 +164,7 @@ function resolve(root: DirPath, uri: UriString) {
   }
 
   if (withinScope && path) {
-    res.path = join(root, path);
+    res.path = Path.join(root, path);
   }
 
   return res;
