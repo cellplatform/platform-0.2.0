@@ -1,5 +1,7 @@
 import { t } from './common.mjs';
 
+import { visit } from 'unist-util-visit';
+
 export const TileUtil = {
   /**
    * Interpret a heading node.
@@ -24,7 +26,7 @@ export const TileUtil = {
     /**
      * Interpret child blocks
      */
-    const children: { text: string; depth: number }[] = [];
+    const children: { text: string; depth: number; node: t.MdastListItem }[] = [];
 
     if (next?.type === 'list') {
       const list = next as t.MdastList;
@@ -33,23 +35,20 @@ export const TileUtil = {
         const childHeading = first.children[0] as t.MdastHeading;
         const childList = first.children[1] as t.MdastList;
 
-        childList.children.forEach((item) => {
+        childList.children.forEach((node) => {
           type P = t.MdastParagraph;
           type T = t.MdastText;
-          const paragraph = item.children.find(({ type }) => type === 'paragraph') as P;
+          const paragraph = node.children.find(({ type }) => type === 'paragraph') as P;
           if (paragraph) {
-            const firstText = paragraph.children.find(({ type }) => type === 'text') as T;
-            const text = firstText.value;
-            children.push({ text, depth: childHeading.depth });
+            const first = paragraph.children.find(({ type }) => type === 'text') as T;
+            const text = first?.value ?? '<Empty>';
+            const depth = childHeading.depth;
+            children.push({ text, depth, node });
           }
         });
       }
     }
 
-    return {
-      title,
-      isZero,
-      children,
-    };
+    return { title, children, isZero };
   },
 };

@@ -1,27 +1,49 @@
-import { Color, COLORS, css, t } from './common.mjs';
-import { TileUtil } from './TileUtil.mjs';
+import { Color, COLORS, css, t, MarkdownUtil } from './common.mjs';
+import { TileUtil } from './Tile.Util.mjs';
 
 export type HeadingTileClickHandler = (e: HeadingTileClickHandlerArgs) => void;
-export type HeadingTileClickHandlerArgs = { node: t.MdastHeading };
+export type HeadingTileClickHandlerArgs = {
+  ref?: { text: string; url: string };
+  heading: { node: t.MdastHeading; title: string };
+  child?: {
+    node: t.MdastListItem;
+    title: string;
+  };
+};
 
 export type HeadingTileProps = {
   index: number;
   node: t.MdastHeading;
   siblings: { prev?: t.AstNode; next?: t.AstNode };
   style?: t.CssValue;
+  width?: number;
   onClick?: HeadingTileClickHandler;
 };
 
 export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
-  const { node, siblings } = props;
+  const { node, siblings, width } = props;
   const { title, children } = TileUtil.heading({ node, siblings });
+
+  type A = HeadingTileClickHandlerArgs;
+  const fireClick = (heading: A['heading'], child?: A['child']) => {
+    let ref: A['ref'];
+    const toRef = (node: t.MdastNode): A['ref'] => {
+      const match = MarkdownUtil.find.refLinks(node)[0];
+      return match ? { text: match.text, url: match.url } : undefined;
+    };
+    if (child) ref = toRef(child.node);
+    if (!child) ref = toRef(heading.node);
+
+    props.onClick?.({ heading, child, ref });
+  };
 
   /**
    * Handlers
    */
   const onRootClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
-    props.onClick?.({ node });
+    e.stopPropagation();
+    fireClick({ node, title });
   };
 
   /**
@@ -39,6 +61,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         flex: 1,
         boxSizing: 'border-box',
         cursor: 'default',
+        width,
       }),
       root: css({
         padding: 30,
@@ -46,6 +69,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         borderRadius: 10,
         fontSize: 24,
       }),
+      title: css({}),
 
       child: css({
         padding: 30,
@@ -87,7 +111,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
 
   const elRootBlock = (
     <div {...css(styles.block.base, styles.block.root, styles.block.magenta)}>
-      <div>{title}</div>
+      <div {...styles.block.title}>{title}</div>
     </div>
   );
 
@@ -101,8 +125,19 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         if (depth === 2) colors = styles.block.silver;
         if (depth === 3) colors = styles.block.dark;
 
+        const onChildClick: React.MouseEventHandler = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const heading = { node, title };
+          fireClick(heading, { node: child.node, title: child.text });
+        };
+
         return (
-          <div key={i} {...css(styles.block.base, styles.block.child, colors)}>
+          <div
+            key={i}
+            {...css(styles.block.base, styles.block.child, colors)}
+            onClick={onChildClick}
+          >
             {text}
           </div>
         );
