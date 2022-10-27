@@ -10,7 +10,7 @@ export const R = { groupBy, prop, sortBy, uniq };
 /**
  * @system
  */
-export { rx, slug } from 'sys.util';
+export { rx, slug, Path } from 'sys.util';
 export { FC } from 'sys.util.react';
 export { css, Color, Style } from 'sys.util.css';
 export { Patch } from 'sys.data.json';

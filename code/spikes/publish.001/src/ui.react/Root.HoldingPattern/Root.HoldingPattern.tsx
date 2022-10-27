@@ -8,7 +8,7 @@ export type RootHoldingProps = {
 export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   const detail = `
     This report is in the final stages of edits and review for its 1.0 release.
-    After the initial 1.0 release it will reamin on a regular update cycle reflecting
+    After the initial 1.0 release it will remain on a regular update cycle reflecting
     emerging changes within this nascent and fast evolving space.
   `;
 
@@ -24,10 +24,17 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
     normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
     base: css({ Absolute: 0, Flex: 'y-center-center' }),
     body: {
-      base: css({ Flex: 'x-center-center', marginBottom: '5%' }),
+      base: css({
+        Flex: 'x-center-center',
+        marginBottom: '5%',
+      }),
       inner: css({
+        PaddingY: 50,
         width: 600,
-        '@media (max-width: 600px)': { width: 350 },
+        border: `solid 1px ${Color.alpha(COLORS.DARK, 0.06)}`,
+        borderTop: 'none',
+        borderBottom: 'none',
+        '@media (max-width: 660px)': { width: 335 },
       }),
     },
     slash: css({ color: COLORS.DARK, MarginX: 7, opacity: 0.12 }),
@@ -37,7 +44,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
         Flex: 'x-spaceBetween-stretch',
         borderBottom: `solid 6px ${COLORS.CYAN}`,
         paddingBottom: 50,
-        '@media (max-width: 600px)': { Flex: 'y-stretch-stretch' },
+        '@media (max-width: 660px)': { Flex: 'y-stretch-stretch' },
       }),
       path: css({ fontSize: 32, fontWeight: 'bold' }),
       version: css({ fontSize: 32 }),

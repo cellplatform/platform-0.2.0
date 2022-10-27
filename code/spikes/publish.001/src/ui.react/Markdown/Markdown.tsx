@@ -48,13 +48,15 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     let flex: undefined | number;
 
+    // if (kind === 'outline' || kind ===)
+
     if (kind === 'outline') {
       flex = undefined;
-      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1, padding: 40 }} />;
     }
 
     if (kind === 'doc') {
-      flex = 1;
+      flex = 2;
       el = <MarkdownDoc markdown={markdown} scroll={true} style={{ flex: 1 }} />;
     }
 
@@ -63,10 +65,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       el = (
         <MarkdownEditor
           key={i}
+          style={{ flex: 1 }}
           markdown={markdown}
           onChange={onEditorChange}
           focusOnLoad={true}
-          style={{ flex: 1 }}
         />
       );
     }

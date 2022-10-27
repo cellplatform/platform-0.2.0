@@ -26,7 +26,7 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
     base: css({
       Scroll: props.scroll,
       boxSizing: 'border-box',
-      Padding: 40,
+      // Padding: 40,
       minWidth: 450,
       maxWidth: 550,
     }),

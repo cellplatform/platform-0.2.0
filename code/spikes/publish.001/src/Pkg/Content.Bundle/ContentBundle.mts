@@ -86,7 +86,11 @@ export async function ContentBundle(args: Args) {
         await appfs.write('middleware.ts', await src.read('middleware.ts'));
 
         // Used by edge/middleware functions on Vercel.
-        const pkg = { dependencies: { '@vercel/edge': '0.0.5' } };
+        const pkg = {
+          dependencies: { '@vercel/edge': '0.0.5' },
+          devDependencies: { typescript: '4.8.4' },
+          licence: 'MIT',
+        };
         await appfs.write('package.json', pkg);
       }
 

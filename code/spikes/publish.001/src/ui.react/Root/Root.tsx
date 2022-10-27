@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, t } from '../common.mjs';
+import { Color, COLORS, css, t, Path } from '../common.mjs';
 import { Fetch } from '../Fetch.mjs';
 import { History } from '../History/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
@@ -22,12 +22,14 @@ export const Root: React.FC<RootProps> = (props) => {
       /**
        * Load markdown data
        */
-      const md = await Fetch.markdown(BundlePaths.data.md + 'outline.md');
+
+      const mdpath = Path.toAbsolutePath(Path.join(BundlePaths.data.md, 'outline.md'));
+      const md = await Fetch.markdown(mdpath);
 
       /**
        * Load log (history)
        */
-      const logdir = BundlePaths.data.log;
+      const logdir = Path.toAbsolutePath(BundlePaths.data.log);
       const log = await Fetch.json<t.PublicLogSummary>(logdir);
       setLog(log);
 
