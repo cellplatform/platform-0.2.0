@@ -4,6 +4,7 @@ import { HistoryItem } from './History.Item';
 
 const DEFAULT = {
   TITLE: 'History',
+  V0: '0.0.0',
 };
 
 export type HistoryProps = {
@@ -15,6 +16,7 @@ export type HistoryProps = {
 export const History: React.FC<HistoryProps> = (props) => {
   const { title = DEFAULT.TITLE } = props;
   const data = HistoryUtil.format(props.data);
+  const isVZero = data.latest.version === DEFAULT.V0;
 
   /**
    * [Render]
@@ -35,7 +37,7 @@ export const History: React.FC<HistoryProps> = (props) => {
     }),
 
     list: css({
-      lineHeight: '1.6em',
+      lineHeight: '1.3em',
       paddingRight: 12,
     }),
 
@@ -60,7 +62,9 @@ export const History: React.FC<HistoryProps> = (props) => {
         {title}
       </div>
 
-      <div {...css(styles.item.base, styles.item.latest)}>{data.latest.version}</div>
+      <div {...css(styles.item.base, styles.item.latest)}>
+        {isVZero ? '-' : data.latest.version}
+      </div>
 
       <div {...styles.list}>
         {data.history.map((item, i) => {

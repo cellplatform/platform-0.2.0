@@ -29,6 +29,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = (props) => {
       opacity: isLatest ? 1 : 0.3,
       cursor: 'pointer',
       Flex: 'x-spaceBetween-stretch',
+      fontSize: 14,
     }),
   };
   return (
