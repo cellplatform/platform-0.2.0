@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, Path } from '../common.mjs';
-import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
+
+import { BundlePaths, css, FC, Fetch, Path, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { State, BundlePaths } from '../../ui.logic/index.mjs';
-import { Fetch } from '../Fetch.mjs';
+import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 
 export type MarkdownLayoutProps = {
   markdown?: string;

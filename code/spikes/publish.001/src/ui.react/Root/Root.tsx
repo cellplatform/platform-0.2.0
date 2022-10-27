@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, t, Path } from '../common.mjs';
-import { Fetch } from '../Fetch.mjs';
+import { BundlePaths, State } from '../../ui.logic/index.mjs';
+import { Color, COLORS, css, Fetch, Path, t } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
-import { State, BundlePaths } from '../../ui.logic/index.mjs';
 import { RootTitle } from './Root.Title';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';

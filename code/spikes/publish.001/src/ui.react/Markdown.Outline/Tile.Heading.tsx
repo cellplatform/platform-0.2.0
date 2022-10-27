@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, MarkdownUtil } from './common.mjs';
+import { Color, COLORS, css, MarkdownUtil, t } from './common.mjs';
 import { TileUtil } from './Tile.Util.mjs';
 
 export type HeadingTileClickHandler = (e: HeadingTileClickHandlerArgs) => void;

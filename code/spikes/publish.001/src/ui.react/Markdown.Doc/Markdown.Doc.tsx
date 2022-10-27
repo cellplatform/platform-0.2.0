@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
+
+import { css, FC, t } from '../common.mjs';
 import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
 export type MarkdownDocProps = {

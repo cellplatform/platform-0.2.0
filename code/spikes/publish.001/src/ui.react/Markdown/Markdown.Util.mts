@@ -1,4 +1,4 @@
-import { Fetch } from '../Fetch.mjs';
+import { Fetch } from '../common.mjs';
 import { MarkdownFind as find } from './Markdown.Util.Find.mjs';
 
 export const MarkdownUtil = {

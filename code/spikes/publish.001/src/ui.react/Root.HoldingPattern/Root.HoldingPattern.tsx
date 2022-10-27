@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, Time } from '../common.mjs';
-import { Fetch } from '../Fetch.mjs';
+import { useEffect, useState } from 'react';
+import { Color, COLORS, css, FC, Fetch, t, Time } from '../common.mjs';
 
 const DEFAULT = {
   V0: '0.0.0',

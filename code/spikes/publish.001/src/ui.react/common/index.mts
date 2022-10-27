@@ -4,6 +4,7 @@ export * from '../../ui.logic/common.mjs';
 export { State, QueryString } from '../../ui.logic/index.mjs';
 
 export { t };
+export { Fetch } from '../Fetch.mjs';
 
 export const COLORS = {
   BLACK: '#000',
