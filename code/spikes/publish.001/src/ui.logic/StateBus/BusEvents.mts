@@ -1,6 +1,6 @@
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { rx, slug, t } from './common.mjs';
+import { rx, slug, t, DEFAULTS } from './common.mjs';
 
 type Id = string;
 
@@ -8,14 +8,14 @@ type Id = string;
  * Event API.
  */
 export function BusEvents(args: {
-  instance: { bus: t.EventBus<any>; id: Id };
+  instance: { bus: t.EventBus<any>; id?: Id };
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.StateEvents {
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
 
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
-  const instance = args.instance.id;
+  const instance = args.instance.id || DEFAULTS.instance;
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(

@@ -1,5 +1,5 @@
 import { BusEvents } from './BusEvents.mjs';
-import { Pkg, rx, t } from './common.mjs';
+import { Pkg, rx, t, DEFAULTS } from './common.mjs';
 
 type Id = string;
 
@@ -7,14 +7,14 @@ type Id = string;
  * Event controller.
  */
 export function BusController(args: {
-  instance: { bus: t.EventBus<any>; id: Id };
+  instance: { bus: t.EventBus<any>; id?: Id };
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.StateEvents {
   const { filter } = args;
 
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
-  const instance = args.instance.id;
+  const instance = args.instance.id || DEFAULTS.instance;
 
   const events = BusEvents({
     instance: args.instance,
