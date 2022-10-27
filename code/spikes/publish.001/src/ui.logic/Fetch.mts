@@ -1,3 +1,4 @@
+import { Path, BundlePaths, t } from './common.mjs';
 export type UrlPathString = string;
 
 /**
@@ -18,7 +19,15 @@ export const Fetch = {
    * Fetch the JSON at the given URL path.
    */
   async json<T>(path: UrlPathString) {
-    const text = await (await fetch(path)).text();
+    const res = await fetch(path);
+
+    const ok = res.status.toString().startsWith('2');
+    if (!ok) {
+      console.warn(`[Fetch.json:${res.status}] failed to load: ${path}`);
+      return undefined;
+    }
+
+    const text = await res.text();
     return JSON.parse(text) as T;
   },
 
@@ -26,10 +35,36 @@ export const Fetch = {
    * Fetch the "text/markdown" from the given URL path.
    */
   async markdown(path: UrlPathString) {
-    const Text = await Fetch.module.Text();
-    const processor = Text.Processor.markdown();
-    const res = await fetch(path);
-    const text = await res.text();
+    const { text, processor } = await fetchTextAndProcessor(path);
+    return processor.toMarkdown(text);
+  },
+
+  /**
+   * Fetch the "text/markdown" from the given URL path.
+   */
+  async markdownAsHtml(path: UrlPathString) {
+    const { text, processor } = await fetchTextAndProcessor(path);
     return processor.toHtml(text);
   },
+
+  /**
+   * Log
+   */
+  async log() {
+    const path = Path.toAbsolutePath(BundlePaths.data.log);
+    const log = await Fetch.json<t.PublicLogSummary>(path);
+    return log;
+  },
 };
+
+/**
+ * Helpers
+ */
+
+async function fetchTextAndProcessor(path: string) {
+  const Text = await Fetch.module.Text();
+  const processor = Text.Processor.markdown();
+  const res = await fetch(path);
+  const text = await res.text();
+  return { text, processor };
+}
