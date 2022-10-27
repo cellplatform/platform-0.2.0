@@ -6,7 +6,7 @@ export { Is } from './Is/index.mjs';
 export { Json } from './Json/index.mjs';
 export { Mime } from './Mime/index.mjs';
 export { Path } from './Path/index.mjs';
-export { Rx, rx, takeUntil } from './Rx/index.mjs';
+export { Rx, rx } from './Rx/index.mjs';
 export { Sort } from './Sort/index.mjs';
 export { Stream } from './Stream/index.mjs';
 export { Time } from './Time/index.mjs';

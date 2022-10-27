@@ -1,4 +1,4 @@
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { rx, slug, t } from './common.mjs';
 
@@ -19,9 +19,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, instance)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, instance)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**

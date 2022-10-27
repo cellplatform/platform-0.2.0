@@ -4,7 +4,7 @@ export { t };
 /**
  * @system
  */
-export { rx, slug, Path, Time, takeUntil } from 'sys.util';
+export { rx, slug, Path, Time } from 'sys.util';
 
 /**
  * @local
