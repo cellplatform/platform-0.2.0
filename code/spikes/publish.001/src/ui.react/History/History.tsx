@@ -3,7 +3,7 @@ import { HistoryUtil } from './HistoryUtil.mjs';
 import { HistoryItem } from './History.Item';
 
 const DEFAULT = {
-  TITLE: 'Deployment History',
+  TITLE: 'History',
 };
 
 export type HistoryProps = {
