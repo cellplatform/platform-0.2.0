@@ -3,6 +3,7 @@
  */
 export type {
   AstNode,
+  MdastNode,
   MdastRoot,
   MdastHeading,
   MdastCode,
@@ -10,6 +11,7 @@ export type {
   MdastList,
   MdastListItem,
   MdastParagraph,
+  MdastLink,
 } from 'sys.text/src/types.mjs';
 export type { Text, MarkdownProcessor } from 'sys.text/src/types.mjs';
 

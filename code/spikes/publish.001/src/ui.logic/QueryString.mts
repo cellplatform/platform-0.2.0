@@ -1,13 +1,13 @@
 import { R } from './common.mjs';
 
-export type ShowMarkdownComponent = 'outline' | 'doc' | 'editor';
+export type ShowMarkdownComponent = 'outline' | 'doc' | 'outline|doc' | 'editor';
 
 const DEFAULT = {
-  show: ['outline'] as ShowMarkdownComponent[],
+  show: ['outline|doc'] as ShowMarkdownComponent[],
 };
 
 const ALL = {
-  show: ['outline', 'doc', 'editor'] as ShowMarkdownComponent[],
+  show: ['outline', 'doc', 'outline|doc', 'editor'] as ShowMarkdownComponent[],
 };
 
 /**
