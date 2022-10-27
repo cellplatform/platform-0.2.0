@@ -19,3 +19,8 @@ export { Patch } from 'sys.data.json';
  * WARNING - be careful these external references do not blow-up the bundle size.
  */
 export { BundlePaths } from '../../Pkg/Paths.mjs';
+
+/**
+ * @local
+ */
+export { Pkg } from '../../index.pkg.mjs';

@@ -1,6 +1,12 @@
 /**
+ * @external
+ */
+export type { Observable } from 'rxjs';
+
+/**
  * @system
  */
+export type { EventBus, Event, Disposable } from 'sys.types';
 export type {
   AstNode,
   MdastNode,

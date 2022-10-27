@@ -1,7 +1,10 @@
 import * as t from '../common/types.mjs';
 
-export {};
+export * from './StateBus/types.mjs';
 
+/**
+ * State Tree
+ */
 export type State = {
   ast?: t.MdastRoot;
 };
