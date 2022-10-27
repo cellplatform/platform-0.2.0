@@ -3,11 +3,14 @@ export * from './Text.Processor/types.mjs';
 export * from './Markdown.Processor/types.mjs';
 
 /**
- * Unified.js (ASTs)
+ * 💦💦
+ *  @external Unified.js (ASTs)
+ * 💦
  */
 export type { Node as AstNode } from 'unist';
 export type { Root as HastRoot, Element as HastElement, Text as HastText } from 'hast';
-export type {
+
+import type {
   Root as MdastRoot,
   Code as MdastCode,
   Heading as MdastHeading,
@@ -15,4 +18,26 @@ export type {
   List as MdastList,
   ListItem as MdastListItem,
   Paragraph as MdastParagraph,
+  Link as MdastLink,
 } from 'mdast';
+
+export {
+  MdastRoot,
+  MdastCode,
+  MdastHeading,
+  MdastText,
+  MdastList,
+  MdastListItem,
+  MdastParagraph,
+  MdastLink,
+};
+
+export type MdastNode =
+  | MdastRoot
+  | MdastCode
+  | MdastHeading
+  | MdastText
+  | MdastList
+  | MdastListItem
+  | MdastParagraph
+  | MdastLink;
