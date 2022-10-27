@@ -3,7 +3,7 @@ import type { BundlePaths as T } from './Content.Bundle/types.mjs';
 export const BundlePaths: T = {
   app: {
     base: 'app/',
-    assets: 'app/assets/',
+    lib: 'app/lib/',
   },
   data: {
     md: 'data/md/',
