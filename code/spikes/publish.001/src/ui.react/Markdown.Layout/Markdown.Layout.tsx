@@ -71,7 +71,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
       <div {...styles.body.left}>
         <MarkdownOutline
           style={styles.outline}
-          widths={{ root: 280, child: 280 }}
+          widths={{ root: 250, child: 300 }}
           markdown={markdown}
           onClick={(e) => {
             const ref = e.ref;
