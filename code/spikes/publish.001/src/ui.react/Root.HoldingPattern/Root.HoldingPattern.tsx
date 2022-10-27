@@ -37,6 +37,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       const version = log?.latest.version || DEFAULT.V0;
       setVersion(version);
 
+      // NB: delays for dramatic reveal only.
       Time.delay(800, () => setVersionVisible(true));
     })();
   }, []);
@@ -102,7 +103,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   const elTitle = (
     <div {...styles.title.base}>
       <div {...styles.title.path}>
-        {'db.team'}
+        <span>{'db.team'}</span>
         {slash('/')}
         {cyan('undp')}
         {slash('/')}
