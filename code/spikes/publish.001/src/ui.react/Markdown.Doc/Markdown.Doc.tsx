@@ -30,15 +30,13 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      Scroll: props.scroll,
-    }),
+    base: css({ Scroll: props.scroll }),
     empty: css({
       marginTop: 30,
-      textAlign: 'center',
-      opacity: 0.3,
       fontSize: 14,
       fontStyle: 'italic',
+      textAlign: 'center',
+      opacity: 0.3,
     }),
     html: css({}),
   };
