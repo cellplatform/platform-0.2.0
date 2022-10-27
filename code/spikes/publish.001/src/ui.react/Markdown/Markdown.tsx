@@ -5,6 +5,7 @@ import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 import { State } from '../../ui.logic/index.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
+import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
 
 export type MarkdownProps = {
   location: string;
@@ -48,16 +49,19 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     let flex: undefined | number;
 
-    // if (kind === 'outline' || kind ===)
-
     if (kind === 'outline') {
       flex = undefined;
       el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1, padding: 40 }} />;
     }
 
     if (kind === 'doc') {
-      flex = 2;
+      flex = 1;
       el = <MarkdownDoc markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+    }
+
+    if (kind === 'outline|doc') {
+      flex = 2;
+      el = <MarkdownLayout markdown={markdown} scroll={true} style={{ flex: 1 }} />;
     }
 
     if (kind === 'editor') {
