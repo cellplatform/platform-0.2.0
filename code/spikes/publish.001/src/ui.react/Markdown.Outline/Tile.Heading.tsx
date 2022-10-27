@@ -16,12 +16,12 @@ export type HeadingTileProps = {
   node: t.MdastHeading;
   siblings: { prev?: t.AstNode; next?: t.AstNode };
   style?: t.CssValue;
-  width?: number;
+  widths?: { root?: number; child?: number };
   onClick?: HeadingTileClickHandler;
 };
 
 export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
-  const { node, siblings, width } = props;
+  const { node, siblings, widths = {} } = props;
   const { title, children } = TileUtil.heading({ node, siblings });
 
   type A = HeadingTileClickHandlerArgs;
@@ -61,7 +61,8 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         flex: 1,
         boxSizing: 'border-box',
         cursor: 'default',
-        width,
+        overflow: 'hidden',
+        width: widths.root,
       }),
       root: css({
         padding: 30,
@@ -77,9 +78,14 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         marginLeft: 8,
         borderRadius: 8,
         marginTop: 10,
+        overflow: 'hidden',
+        width: widths.child,
         ':first-child': { marginTop: 0 },
       }),
 
+      /**
+       * Block colors.
+       */
       magenta: css({
         color: COLORS.WHITE,
         background: COLORS.MAGENTA,

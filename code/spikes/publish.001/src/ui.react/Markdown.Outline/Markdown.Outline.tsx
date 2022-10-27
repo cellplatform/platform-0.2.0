@@ -3,10 +3,14 @@ import { useEffect, useState } from 'react';
 import { css, FC, MarkdownUtil, t } from './common.mjs';
 import { HeadingTile } from './Tile.Heading';
 
+import type { HeadingTileClickHandler } from './Tile.Heading';
+
 export type MarkdownOutlineProps = {
   markdown?: string;
   scroll?: boolean;
+  widths?: { root?: number; child?: number };
   style?: t.CssValue;
+  onClick?: HeadingTileClickHandler;
 };
 
 export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
@@ -23,13 +27,7 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      Scroll: props.scroll,
-      boxSizing: 'border-box',
-      // Padding: 40,
-      minWidth: 450,
-      maxWidth: 550,
-    }),
+    base: css({ Scroll: props.scroll }),
     body: css({}),
   };
 
@@ -50,9 +48,8 @@ export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
           index={i}
           node={heading}
           siblings={siblings}
-          onClick={(e) => {
-            console.log('HeadingTile/click:', e); // TEMP 🐷
-          }}
+          onClick={props.onClick}
+          widths={props.widths}
         />
       );
       elBlocks.push(el);
