@@ -18,19 +18,24 @@ export const Root: React.FC<RootProps> = (props) => {
   const [log, setLog] = useState<t.PublicLogSummary>();
 
   useEffect(() => {
+    /**
+     * 💦💦
+     *
+     *    STATE Data Fetching
+     *
+     * 💦
+     */
     (async () => {
       /**
        * Load markdown data
        */
-
       const mdpath = Path.toAbsolutePath(Path.join(BundlePaths.data.md, 'outline.md'));
-      const md = await Fetch.markdown(mdpath);
+      const md = await Fetch.markdownAsHtml(mdpath);
 
       /**
        * Load log (history)
        */
-      const logdir = Path.toAbsolutePath(BundlePaths.data.log);
-      const log = await Fetch.json<t.PublicLogSummary>(logdir);
+      const log = await Fetch.log();
       setLog(log);
 
       /**
