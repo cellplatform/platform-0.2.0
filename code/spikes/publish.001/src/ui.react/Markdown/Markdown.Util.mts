@@ -1,15 +1,22 @@
-import { t } from '../common.mjs';
 import { Fetch } from '../Fetch.mjs';
+import { MarkdownFind as find } from './Markdown.Util.Find.mjs';
 
 export const MarkdownUtil = {
+  find,
+
   /**
-   * Code-Split
+   * Language Parser/Transformations.
    */
   async parseMarkdown(input: string = '') {
-    const Text = await Fetch.module.Text(); // <== NB: Code Splitting
-    const transform = Text.Processor.markdown();
-    const { info, markdown } = await transform.toMarkdown(input);
+    const processor = await fetchTextProcessor();
+    const { info, markdown } = await processor.toMarkdown(input);
     return { info, markdown };
+  },
+
+  async parseHtml(input: string = '') {
+    const processor = await fetchTextProcessor();
+    const { info, markdown, html } = await processor.toHtml(input);
+    return { info, markdown, html };
   },
 
   /**
@@ -21,3 +28,13 @@ export const MarkdownUtil = {
     return input;
   },
 };
+
+/**
+ * Helpers
+ */
+
+async function fetchTextProcessor() {
+  const Text = await Fetch.module.Text(); // <== NB: Code Splitting
+  const processor = Text.Processor.markdown();
+  return processor;
+}
