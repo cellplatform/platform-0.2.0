@@ -16,9 +16,9 @@ export type StateEvents = t.Disposable & {
   instance: { bus: Id; id: Id };
   is: { base(input: any): boolean };
   info: {
-    req$: t.Observable<t.MyInfoReq>;
-    res$: t.Observable<t.MyInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
+    req$: t.Observable<t.StateInfoReq>;
+    res$: t.Observable<t.StateInfoRes>;
+    get(options?: { timeout?: Milliseconds }): Promise<StateInfoRes>;
   };
 };
 
@@ -32,15 +32,15 @@ export type StateEvent = StateReqEvent | StateResEvent;
  */
 export type StateReqEvent = {
   type: 'app.state/info:req';
-  payload: MyInfoReq;
+  payload: StateInfoReq;
 };
-export type MyInfoReq = { tx: string; instance: Id };
+export type StateInfoReq = { tx: string; instance: Id };
 
 export type StateResEvent = {
   type: 'app.state/info:res';
-  payload: MyInfoRes;
+  payload: StateInfoRes;
 };
-export type MyInfoRes = {
+export type StateInfoRes = {
   tx: string;
   instance: Id;
   info?: StateInfo;

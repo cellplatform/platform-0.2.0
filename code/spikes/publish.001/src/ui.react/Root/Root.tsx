@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
-import { BundlePaths, State } from '../../ui.logic/index.mjs';
-import { Color, COLORS, css, Fetch, Path, t } from '../common.mjs';
+import { Color, COLORS, css, Fetch, Path, t, State, rx } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { MarkdownUtil } from '../Markdown/index.mjs';
 import { RootTitle } from './Root.Title';
@@ -15,6 +14,7 @@ export type RootProps = {
 export const Root: React.FC<RootProps> = (props) => {
   const [elBody, setElBody] = useState<JSX.Element>();
   const [log, setLog] = useState<t.PublicLogSummary>();
+  const busRef = useRef(rx.bus());
 
   useEffect(() => {
     /**
@@ -25,10 +25,17 @@ export const Root: React.FC<RootProps> = (props) => {
      * 💦
      */
     (async () => {
+      // const bus = rx.bus();
+      const bus = busRef.current;
+      const controller = State.Bus.Controller({ instance: { bus } });
+
+      const res = await controller.info.get();
+      console.log('res', res);
+
       /**
        * Load markdown data
        */
-      const mdpath = Path.toAbsolutePath(Path.join(BundlePaths.data.md, 'outline.md'));
+      const mdpath = Path.toAbsolutePath(Path.join(State.BundlePaths.data.md, 'outline.md'));
       const md = await Fetch.markdownAsHtml(mdpath);
 
       /**
@@ -40,7 +47,7 @@ export const Root: React.FC<RootProps> = (props) => {
       /**
        * Load <Markdown> component (code-splitting)
        */
-      const location = State.location;
+      const location = State.location___;
       const Markdown = await Fetch.component.Markdown();
       const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
       const { info } = await MarkdownUtil.parseMarkdown(markdown);
