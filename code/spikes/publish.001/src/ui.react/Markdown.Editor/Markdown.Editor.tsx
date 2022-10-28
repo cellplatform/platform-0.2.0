@@ -28,8 +28,8 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
    */
   useEffect(() => {
     const editor = editorRef.current;
-    if (editor) {
-      if (markdown !== editor.getValue()) editor.setValue(markdown);
+    if (editor && markdown !== editor.getValue()) {
+      editor.setValue(markdown);
     }
   }, [markdown]);
 
