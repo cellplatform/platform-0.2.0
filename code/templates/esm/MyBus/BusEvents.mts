@@ -1,5 +1,3 @@
-import { filter } from 'rxjs/operators';
-
 import { rx, slug, t } from './common.mjs';
 
 type Id = string;
@@ -33,9 +31,8 @@ export function BusEvents(args: {
     async get(options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
-
       const op = 'info';
-      const res$ = info.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.MyInfoResEvent>(res$, { op, timeout });
 
       bus.fire({
