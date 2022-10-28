@@ -3,6 +3,7 @@ import * as t from '../common/types.mjs';
 type Id = string;
 type Milliseconds = number;
 type Semver = string;
+type UrlString = string;
 
 export type StateInstance = { bus: t.EventBus<any>; id?: Id };
 export type StateFetchTarget = 'Outline';
@@ -19,6 +20,7 @@ export type StateEvents = t.Disposable & {
   $: t.Observable<t.StateEvent>;
   instance: { bus: Id; id: Id };
   is: { base(input: any): boolean };
+  init(): Promise<void>;
   info: {
     req$: t.Observable<t.StateInfoReq>;
     res$: t.Observable<t.StateInfoRes>;
@@ -36,6 +38,10 @@ export type StateEvents = t.Disposable & {
     $: t.Observable<t.StateChanged>;
     fire(): Promise<void>;
   };
+  select: {
+    $: t.Observable<t.StateSelect>;
+    fire(selected?: UrlString): Promise<void>;
+  };
 };
 
 /**
@@ -46,7 +52,8 @@ export type StateEvent =
   | StateResEvent
   | StateFetchReqEvent
   | StateFetchResEvent
-  | StateChangedEvent;
+  | StateChangedEvent
+  | StateSelectEvent;
 
 /**
  * Module info.
@@ -100,3 +107,12 @@ export type StateChangedEvent = {
   payload: StateChanged;
 };
 export type StateChanged = { instance: Id; current: t.StateTree };
+
+/**
+ * Change selection
+ */
+export type StateSelectEvent = {
+  type: 'app.state/select';
+  payload: StateSelect;
+};
+export type StateSelect = { instance: Id; selected?: UrlString };

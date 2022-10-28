@@ -1,4 +1,3 @@
-import { info } from 'console';
 import { rx, slug, t, DEFAULTS } from './common.mjs';
 
 type Id = string;
@@ -22,6 +21,13 @@ export function BusEvents(args: {
     rx.filter((e) => is.instance(e, instance)),
     rx.filter((e) => args.filter?.(e) ?? true),
   );
+
+  /**
+   * Initialization upon load.
+   */
+  const init = async () => {
+    await fetch.outline();
+  };
 
   /**
    * Base information about the module.
@@ -90,15 +96,30 @@ export function BusEvents(args: {
     },
   };
 
+  /**
+   * Select
+   */
+  const select: t.StateEvents['select'] = {
+    $: rx.payload<t.StateSelectEvent>($, 'app.state/select'),
+    async fire(selected) {
+      bus.fire({
+        type: 'app.state/select',
+        payload: { instance, selected },
+      });
+    },
+  };
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
     dispose,
     dispose$,
     is,
+    init,
     info,
     fetch,
     changed,
+    select,
   };
 }
 

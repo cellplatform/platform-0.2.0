@@ -6,13 +6,10 @@ import { rx, t } from './common.mjs';
 
 export type Id = string;
 
-type OnChange = (e: OnChangeArgs) => void;
-type OnChangeArgs = { current: t.StateTree };
-
 /**
  * React hook for working with the state bus.
  */
-export function useEvents(instance: t.StateInstance, onChange?: OnChange) {
+export function useEvents(instance: t.StateInstance) {
   const busid = rx.bus.instance(instance.bus);
   const [current, setCurrent] = useState<t.StateTree>();
 
@@ -22,11 +19,11 @@ export function useEvents(instance: t.StateInstance, onChange?: OnChange) {
   useEffect(() => {
     const events = BusEvents({ instance });
 
-    events.changed.$.pipe(debounceTime(10)).subscribe((e) => {
-      const { current } = e;
-      onChange?.({ current });
-      setCurrent(current);
-    });
+    // Initial load.
+    events.info.get().then((e) => setCurrent(e.info?.current ?? {}));
+
+    // Change updates.
+    events.changed.$.pipe(debounceTime(10)).subscribe((e) => setCurrent(e.current));
 
     return () => events.dispose();
   }, [busid, instance.id]);

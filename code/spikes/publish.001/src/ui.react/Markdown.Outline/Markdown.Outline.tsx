@@ -4,6 +4,7 @@ import { css, FC, MarkdownUtil, t } from './common.mjs';
 import { HeadingTile } from './Tile.Heading';
 
 import type { HeadingTileClickHandler } from './Tile.Heading';
+export type { HeadingTileClickHandler };
 
 export type MarkdownOutlineProps = {
   markdown?: string;

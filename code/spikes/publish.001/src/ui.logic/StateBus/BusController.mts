@@ -17,6 +17,7 @@ export function BusController(args: {
   const instance = args.instance.id || DEFAULTS.instance;
 
   let _current: t.StateTree = {};
+  const fireChanged = () => Time.delay(0, () => events.changed.fire());
 
   const events = BusEvents({
     instance: args.instance,
@@ -46,7 +47,7 @@ export function BusController(args: {
   events.fetch.req$.subscribe(async (e) => {
     const { tx, target = TARGETS } = e;
     let error: undefined | string = undefined;
-    let fireChanged = false;
+    let _fireChanged = false;
 
     if (!error && target.includes('Outline')) {
       /**
@@ -60,7 +61,7 @@ export function BusController(args: {
       if (!res.error) {
         const { markdown, info } = res;
         _current = { ..._current, outline: { markdown, info } };
-        fireChanged = true;
+        _fireChanged = true;
       }
     }
 
@@ -70,9 +71,22 @@ export function BusController(args: {
       payload: { tx, instance, current, error },
     });
 
-    if (fireChanged) {
-      Time.delay(0, () => events.changed.fire());
+    if (_fireChanged) fireChanged();
+  });
+
+  /**
+   * Selection Change.
+   */
+  events.select.$.subscribe(async (e) => {
+    let _fireChanged = false;
+
+    const selected = e.selected;
+    if (selected !== e.selected) {
+      _current = { ..._current, selected: selected };
+      _fireChanged = true;
     }
+
+    if (_fireChanged) fireChanged();
   });
 
   /**
