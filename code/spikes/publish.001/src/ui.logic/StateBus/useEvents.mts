@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { debounceTime } from 'rxjs/operators';
 
 import { BusEvents } from './BusEvents.mjs';
 import { rx, t } from './common.mjs';
@@ -21,7 +22,7 @@ export function useEvents(instance: t.StateInstance, onChange?: OnChange) {
   useEffect(() => {
     const events = BusEvents({ instance });
 
-    events.changed.$.pipe().subscribe((e) => {
+    events.changed.$.pipe(debounceTime(10)).subscribe((e) => {
       const { current } = e;
       onChange?.({ current });
       setCurrent(current);

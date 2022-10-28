@@ -1,8 +1,8 @@
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
-import { css, FC, t } from '../common.mjs';
+import { css, t } from '../common.mjs';
 
 import type { OnChange } from '@monaco-editor/react';
 
@@ -24,24 +24,24 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
   const editorRef = useRef<MonacoEditor>();
 
   /**
-   * Lifecycle/handlers
+   * [Lifecycle]
    */
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (editor) {
+      if (markdown !== editor.getValue()) editor.setValue(markdown);
+    }
+  }, [markdown]);
 
+  /**
+   * [Handlers]
+   */
   function handleEditorDidMount(editor: MonacoEditor, monaco: Monaco) {
     editorRef.current = editor;
     if (focusOnLoad) editor.focus();
   }
 
-  function getValue() {
-    const value = editorRef.current?.getValue();
-    return value ?? '';
-  }
-
   const handleChange: OnChange = (text = '') => {
-    /**
-     * TODO 🐷
-     */
-    // const value = getValue();
     props.onChange?.({ text });
   };
 
