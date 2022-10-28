@@ -58,8 +58,8 @@ export const Config = {
         build,
         plugins: [],
         worker: { format: 'es' },
-        base: './',
         server: { port: 1234 },
+        base: './',
       };
 
       /**
