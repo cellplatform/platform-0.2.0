@@ -2,7 +2,7 @@ import { StateBus } from './index.mjs';
 import { describe, it, expect, Pkg, rx, slug } from '../../test/index.mjs';
 import { DEFAULTS } from './common.mjs';
 
-describe('MyBus', (e) => {
+describe('StateBus', (e) => {
   const Create = {
     instance: () => ({ bus: rx.bus(), id: `foo.${slug()}` }),
   };

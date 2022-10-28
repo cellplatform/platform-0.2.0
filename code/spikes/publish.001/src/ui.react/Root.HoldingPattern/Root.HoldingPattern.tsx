@@ -32,7 +32,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       /**
        * 💦 FETCH Version (Data)
        */
-      const log = await Fetch.log();
+      const log = await Fetch.logHistory();
       const version = log?.latest.version || DEFAULT.V0;
       setVersion(version);
 

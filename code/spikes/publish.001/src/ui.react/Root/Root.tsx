@@ -1,8 +1,8 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Color, COLORS, css, Fetch, Path, t, State, rx } from '../common.mjs';
+import { Color, COLORS, css, Fetch, rx, State, t } from '../common.mjs';
 import { History } from '../History/index.mjs';
-import { MarkdownUtil } from '../Markdown/index.mjs';
+import { Markdown } from '../Markdown/index.mjs';
 import { RootTitle } from './Root.Title';
 
 export type ShowMarkdownComponent = 'editor' | 'outline';
@@ -12,61 +12,30 @@ export type RootProps = {
 };
 
 export const Root: React.FC<RootProps> = (props) => {
-  const [elBody, setElBody] = useState<JSX.Element>();
   const [log, setLog] = useState<t.PublicLogSummary>();
+
   const busRef = useRef(rx.bus());
+  const bus = busRef.current;
+  const instance: t.StateInstance = { bus };
 
   useEffect(() => {
     /**
      * 💦💦
      *
-     *    STATE Data Fetching
+     *    Initialize controller and fetch report [Outline].
      *
      * 💦
      */
+    const controller = State.Bus.Controller({ instance });
+    controller.fetch.outline();
+
     (async () => {
-      // const bus = rx.bus();
-      const bus = busRef.current;
-      const controller = State.Bus.Controller({ instance: { bus } });
-
-      const res = await controller.info.get();
-      console.log('res', res);
-
       /**
-       * Load markdown data
+       * TODO 🐷
+       * - move Log fetch into State contorller.
        */
-      const mdpath = Path.toAbsolutePath(Path.join(State.BundlePaths.data.md, 'outline.md'));
-      const md = await Fetch.markdownAsHtml(mdpath);
-
-      /**
-       * Load log (history)
-       */
-      const log = await Fetch.log();
+      const log = await Fetch.logHistory();
       setLog(log);
-
-      /**
-       * Load <Markdown> component (code-splitting)
-       */
-      const location = State.location___;
-      const Markdown = await Fetch.component.Markdown();
-      const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
-      const { info } = await MarkdownUtil.parseMarkdown(markdown);
-
-      // TODO 🐷 move to [State]
-      const data: t.StateMarkdown = {
-        markdown,
-        info,
-      };
-
-      const el = (
-        <Markdown
-          data={data}
-          markdown={markdown}
-          location={location.href}
-          style={{ Absolute: 0 }}
-        />
-      );
-      setElBody(el);
     })();
   }, []);
 
@@ -100,10 +69,12 @@ export const Root: React.FC<RootProps> = (props) => {
     <div {...css(styles.base, styles.normalize, props.style)}>
       <div {...styles.left}>
         <RootTitle text={'Report'} />
-        <div {...styles.body}>{elBody}</div>
+        <div {...styles.body}>
+          <Markdown instance={instance} location={location.href} style={{ Absolute: 0 }} />
+        </div>
       </div>
       <div {...styles.right}>
-        <History style={styles.history} data={log} />
+        <History instance={instance} style={styles.history} data={log} />
       </div>
     </div>
   );

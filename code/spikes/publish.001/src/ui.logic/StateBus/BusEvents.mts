@@ -1,5 +1,4 @@
-import { filter, takeUntil } from 'rxjs/operators';
-
+import { info } from 'console';
 import { rx, slug, t, DEFAULTS } from './common.mjs';
 
 type Id = string;
@@ -8,7 +7,7 @@ type Id = string;
  * Event API.
  */
 export function BusEvents(args: {
-  instance: { bus: t.EventBus<any>; id?: Id };
+  instance: t.StateInstance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.StateEvents {
@@ -19,9 +18,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, instance)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, instance)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**
@@ -33,9 +32,8 @@ export function BusEvents(args: {
     async get(options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
-
       const op = 'info';
-      const res$ = info.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.StateResEvent>(res$, { op, timeout });
 
       bus.fire({
@@ -51,6 +49,47 @@ export function BusEvents(args: {
     },
   };
 
+  /**
+   * Fetch
+   */
+  const fetch: t.StateEvents['fetch'] = {
+    req$: rx.payload<t.StateFetchReqEvent>($, 'app.state/fetch:req'),
+    res$: rx.payload<t.StateFetchResEvent>($, 'app.state/fetch:res'),
+    async outline(options = {}) {
+      const { timeout = 3000, target } = options;
+      const tx = slug();
+      const op = 'info';
+      const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.StateFetchResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'app.state/fetch:req',
+        payload: { tx, instance, target },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      return { tx, instance, current: {}, error };
+    },
+  };
+
+  /**
+   * Changed
+   */
+  const changed: t.StateEvents['changed'] = {
+    $: rx.payload<t.StateChangedEvent>($, 'app.state/changed'),
+    async fire() {
+      const res = await info.get();
+      const current = res.info?.current ?? {};
+      bus.fire({
+        type: 'app.state/changed',
+        payload: { instance, current },
+      });
+    },
+  };
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
@@ -58,6 +97,8 @@ export function BusEvents(args: {
     dispose$,
     is,
     info,
+    fetch,
+    changed,
   };
 }
 

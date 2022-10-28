@@ -5,11 +5,8 @@ export * from './StateBus/types.mjs';
 /**
  * State Tree
  */
-export type State = {
-  ast?: t.MdastRoot;
+export type StateTree = {
+  outline?: StateMarkdown;
 };
 
-export type StateMarkdown = {
-  markdown: string;
-  info: t.MarkdownInfo;
-};
+export type StateMarkdown = { markdown: string; info: t.MarkdownInfo };

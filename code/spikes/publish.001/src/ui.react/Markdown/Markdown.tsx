@@ -1,35 +1,29 @@
-import { useEffect, useState } from 'react';
-
-import { Color, css, t } from '../common.mjs';
-import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
-import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 import { State } from '../../ui.logic/index.mjs';
+import { css, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
+import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
+import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 
 export type MarkdownProps = {
-  location: string;
-  markdown: string;
-  data: t.StateMarkdown;
+  instance: t.StateInstance;
+  location: string; // TEMP 🐷 GET FROM STATE
   style?: t.CssValue;
 };
 
 export const Markdown: React.FC<MarkdownProps> = (props) => {
   const show = State.QueryString.show(props.location);
-  const [markdown, setMarkdown] = useState('');
-
-  /**
-   * Lifecycle.
-   */
-  useEffect(() => {
-    setMarkdown(props.markdown);
-  }, [props.markdown]);
+  const state = State.Bus.useEvents(props.instance);
 
   /**
    * Handlers
    */
   const onEditorChange = (e: { text: string }) => {
-    setMarkdown(e.text);
+    // setMarkdown(e.text);
+    /**
+     * TODO 🐷
+     * update markdown via State
+     */
   };
 
   /**
@@ -46,8 +40,8 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
   const elements = show.map((kind, i) => {
     let el: JSX.Element | null = null;
-
     let flex: undefined | number;
+    const markdown = state.current?.outline?.markdown ?? '';
 
     if (kind === 'outline') {
       flex = undefined;

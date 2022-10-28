@@ -35,22 +35,24 @@ export const Fetch = {
    * Fetch the "text/markdown" from the given URL path.
    */
   async markdown(path: UrlPathString) {
-    const { text, processor } = await fetchTextAndProcessor(path);
-    return processor.toMarkdown(text);
+    const { text, processor, error } = await fetchTextAndProcessor(path);
+    const res = await processor.toMarkdown(text);
+    return { ...res, error };
   },
 
   /**
    * Fetch the "text/markdown" from the given URL path.
    */
   async markdownAsHtml(path: UrlPathString) {
-    const { text, processor } = await fetchTextAndProcessor(path);
-    return processor.toHtml(text);
+    const { text, processor, error } = await fetchTextAndProcessor(path);
+    const res = await processor.toHtml(text);
+    return { ...res, error };
   },
 
   /**
    * Log
    */
-  async log() {
+  async logHistory() {
     const path = Path.toAbsolutePath(BundlePaths.data.log);
     const log = await Fetch.json<t.PublicLogSummary>(path);
     return log;
@@ -65,6 +67,9 @@ async function fetchTextAndProcessor(path: string) {
   const Text = await Fetch.module.Text();
   const processor = Text.Processor.markdown();
   const res = await fetch(path);
-  const text = await res.text();
-  return { text, processor };
+  const { status } = res;
+  const ok = res.status.toString().startsWith('2');
+  const text = ok ? await res.text() : '';
+  const error = ok ? undefined : `${status} Failed to fetch: ${path}`;
+  return { ok, status, text, processor, error };
 }
