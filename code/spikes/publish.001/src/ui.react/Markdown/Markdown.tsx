@@ -3,7 +3,7 @@ import { css, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
-import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
+import { TileOutline } from '../Tile.Outline/index.mjs';
 
 export type MarkdownProps = {
   instance: t.StateInstance;
@@ -54,7 +54,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     if (kind === 'outline') {
       flex = undefined;
-      el = <MarkdownOutline markdown={outline} scroll={true} style={{ flex: 1, padding: 40 }} />;
+      el = <TileOutline markdown={outline} scroll={true} style={{ flex: 1, padding: 40 }} />;
     }
 
     if (kind === 'doc') {

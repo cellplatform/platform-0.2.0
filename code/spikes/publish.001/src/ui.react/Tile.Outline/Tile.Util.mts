@@ -1,7 +1,5 @@
 import { t } from './common.mjs';
 
-import { visit } from 'unist-util-visit';
-
 export const TileUtil = {
   /**
    * Interpret a heading node.

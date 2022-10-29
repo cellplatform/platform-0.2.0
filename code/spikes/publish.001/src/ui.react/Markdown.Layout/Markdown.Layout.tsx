@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { BundlePaths, css, FC, Fetch, Path, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { MarkdownOutline, HeadingTileClickHandler } from '../Markdown.Outline/index.mjs';
+import { TileOutline, HeadingTileClickHandler } from '../Tile.Outline/index.mjs';
 
 export type MarkdownLayoutProps = {
   markdown?: string;
@@ -71,7 +71,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
   const elBody = (
     <div {...styles.body.base}>
       <div {...styles.body.left}>
-        <MarkdownOutline
+        <TileOutline
           style={styles.outline}
           widths={{ root: 250, child: 300 }}
           markdown={markdown}

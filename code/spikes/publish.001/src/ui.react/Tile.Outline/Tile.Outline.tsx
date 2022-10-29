@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import { css, FC, MarkdownUtil, t } from './common.mjs';
+import { css, MarkdownUtil, t } from './common.mjs';
 import { HeadingTile } from './Tile.Heading';
 
 import type { HeadingTileClickHandler } from './Tile.Heading';
 export type { HeadingTileClickHandler };
 
-export type MarkdownOutlineProps = {
+export type TileOutlineProps = {
   markdown?: string;
   scroll?: boolean;
   widths?: { root?: number; child?: number };
@@ -14,7 +14,7 @@ export type MarkdownOutlineProps = {
   onClick?: HeadingTileClickHandler;
 };
 
-export const MarkdownOutline: React.FC<MarkdownOutlineProps> = (props) => {
+export const TileOutline: React.FC<TileOutlineProps> = (props) => {
   const [ast, setAst] = useState<t.MdastRoot | undefined>();
 
   useEffect(() => {
