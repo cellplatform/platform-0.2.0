@@ -1,12 +1,18 @@
-import { Color, COLORS, css, t } from '../common.mjs';
+import { State, Color, COLORS, css, t } from '../common.mjs';
 
 export type RootTitleProps = {
   text?: string;
   style?: t.CssValue;
+  onClick?: (e?: {}) => void;
+  onTitleClick?: (e?: {}) => void;
 };
 
 export const RootTitle: React.FC<RootTitleProps> = (props) => {
   const { text = 'Untitled' } = props;
+
+  /**
+   * Handlers
+   */
 
   /**
    * [Render]
@@ -19,6 +25,7 @@ export const RootTitle: React.FC<RootTitleProps> = (props) => {
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center',
+      userSelect: 'none',
     }),
     text: css({
       fontSize: 30,
@@ -27,8 +34,10 @@ export const RootTitle: React.FC<RootTitleProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.text}>{text}</div>
+    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+      <div {...styles.text} onClick={props.onTitleClick}>
+        {text}
+      </div>
     </div>
   );
 };

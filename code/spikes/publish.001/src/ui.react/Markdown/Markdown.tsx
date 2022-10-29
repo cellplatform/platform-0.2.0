@@ -12,8 +12,12 @@ export type MarkdownProps = {
 };
 
 export const Markdown: React.FC<MarkdownProps> = (props) => {
+  const { instance } = props;
+
   const show = State.QueryString.show(props.location);
   const state = State.Bus.useEvents(props.instance);
+
+  console.log('state', state);
 
   /**
    * Handlers
@@ -24,6 +28,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
      * TODO 🐷
      * update markdown via State
      */
+    console.log(' 💦  TODO - update state to latest "local editor" change //', e.text);
   };
 
   /**
@@ -55,7 +60,18 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     if (kind === 'outline|doc') {
       flex = 2;
-      el = <MarkdownLayout markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+      el = (
+        <MarkdownLayout
+          markdown={markdown}
+          scroll={true}
+          style={{ flex: 1 }}
+          onSelectClick={(e) => {
+            const events = State.Bus.Events({ instance });
+            events.select.fire(e.ref?.url);
+            events.dispose();
+          }}
+        />
+      );
     }
 
     if (kind === 'editor') {

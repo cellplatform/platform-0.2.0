@@ -1,14 +1,17 @@
+import { BundlePaths } from './common.mjs';
 import { QueryString } from './QueryString.mjs';
-import { t, BundlePaths } from './common.mjs';
-export { BundlePaths };
 import { StateBus as Bus } from './StateBus/index.mjs';
+
+export { BundlePaths };
+const { useEvents, fire } = Bus;
 
 /**
  * UI State Manager
  */
 export const State = {
   Bus,
-  useEvents: Bus.useEvents,
+  useEvents,
+  fire,
 
   BundlePaths,
   QueryString,

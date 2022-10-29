@@ -1,10 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Color, COLORS, css, Fetch, rx, State, t, Time } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { RootTitle } from './Root.Title';
 
+/**
+ * TODO 🐷
+ * - Put state/controller management somewhere sensible.
+ */
+
+/**
+ * 💦💦
+ *
+ *    State: Initialize controller.
+ *
+ * 💦
+ */
+const instance: t.StateInstance = { bus: rx.bus() };
+const controller = State.Bus.Controller({ instance });
+
+/**
+ * Keyboard events
+ */
+document.addEventListener('keydown', async (e) => {
+  // CMD+S:
+  // Cancel browser "save" HTML page save.
+  if (e.key === 's' && e.metaKey) {
+    e.preventDefault();
+
+    // Debug (log state):
+    const { info } = await controller.info.get();
+    console.info('[CMD+S] state:', info?.current);
+  }
+});
+
+/**
+ * Component
+ */
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
 export type RootProps = {
@@ -12,40 +45,28 @@ export type RootProps = {
 };
 
 export const Root: React.FC<RootProps> = (props) => {
-  const [log, setLog] = useState<t.PublicLogSummary>();
+  const state = State.useEvents(instance);
 
-  const busRef = useRef(rx.bus());
-  const bus = busRef.current;
-  const instance: t.StateInstance = { bus };
-
+  /**
+   * Lifecycle.
+   */
   useEffect(() => {
     /**
-     * 💦💦
-     *
-     *    Initialize controller and fetch report [Outline].
-     *
-     * 💦
+     * TODO 🐷
+     * - Have the state instance passed in somehow
+     *   Not as implicity in the environment (as a singleton which it is now [DEV-MODE])
      */
-    const controller = State.Bus.Controller({ instance });
-    controller.init();
+    const events = State.Bus.Events({ instance });
+    events.init();
 
     /**
      * Ensure state is retained between HMR (relaods).
      * Ref:
      *    https://vitejs.dev/guide/api-hmr.html#hmr-api
      */
-    import.meta.hot?.on('vite:beforeUpdate', (e) => {
-      Time.delay(0, () => controller.init());
-    });
+    // import.meta.hot?.on('vite:beforeUpdate', () => Time.delay(0, () => events.init()));
 
-    (async () => {
-      /**
-       * TODO 🐷
-       * - move Log fetch into State contorller.
-       */
-      const log = await Fetch.logHistory();
-      setLog(log);
-    })();
+    return events.dispose();
   }, []);
 
   /**
@@ -83,7 +104,7 @@ export const Root: React.FC<RootProps> = (props) => {
         </div>
       </div>
       <div {...styles.right}>
-        <History instance={instance} style={styles.history} data={log} />
+        <History instance={instance} style={styles.history} data={state.current?.log} />
       </div>
     </div>
   );

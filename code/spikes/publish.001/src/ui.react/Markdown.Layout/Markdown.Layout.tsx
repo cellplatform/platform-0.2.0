@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 
 import { BundlePaths, css, FC, Fetch, Path, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
+import { MarkdownOutline, HeadingTileClickHandler } from '../Markdown.Outline/index.mjs';
 
 export type MarkdownLayoutProps = {
   markdown?: string;
   scroll?: boolean;
   style?: t.CssValue;
+  onSelectClick?: HeadingTileClickHandler;
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
@@ -75,8 +76,13 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
           markdown={markdown}
           onClick={(e) => {
             const ref = e.ref;
+            // e.ref.
+
+            // TEMP 🐷
             if (ref?.url) loadChild({ url: ref.url });
             if (!ref?.url) setSelectedMarkdown('');
+
+            props.onSelectClick?.(e);
           }}
         />
       </div>
