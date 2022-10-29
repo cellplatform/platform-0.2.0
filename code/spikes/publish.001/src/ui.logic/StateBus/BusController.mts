@@ -1,8 +1,9 @@
-import { BusEvents } from './BusEvents.mjs';
-import { Pkg, Path, rx, t, DEFAULTS, BundlePaths, Time } from './common.mjs';
 import { Fetch } from '../Fetch.mjs';
+import { BusEvents } from './BusEvents.mjs';
+import { BusMemoryState } from './BusMemoryState.mjs';
+import { BundlePaths, DEFAULTS, Path, Pkg, rx, t, Time } from './common.mjs';
 
-const TARGETS: t.StateFetchTarget[] = ['Outline'];
+const ALL_TARGETS: t.StateFetchTopic[] = ['Outline'];
 
 /**
  * Event controller.
@@ -15,8 +16,8 @@ export function BusController(args: {
   const { filter } = args;
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
   const instance = args.instance.id || DEFAULTS.instance;
+  const state = BusMemoryState();
 
-  let _current: t.StateTree = {};
   const fireChanged = () => Time.delay(0, () => events.changed.fire());
 
   const events = BusEvents({
@@ -31,10 +32,12 @@ export function BusController(args: {
   events.info.req$.subscribe(async (e) => {
     const { tx } = e;
     const { name = '', version = '' } = Pkg;
+
     const info: t.StateInfo = {
       module: { name, version },
-      current: { ..._current },
+      current: state.current,
     };
+
     bus.fire({
       type: 'app.state/info:res',
       payload: { tx, instance, info },
@@ -45,14 +48,15 @@ export function BusController(args: {
    * Fetch Data
    */
   events.fetch.req$.subscribe(async (e) => {
-    const { tx, target = TARGETS } = e;
+    const { tx, target = ALL_TARGETS } = e;
     let error: undefined | string = undefined;
-    let _fireChanged = false;
+    let _fireChanged_ = false;
 
     if (!error && target.includes('Outline')) {
       /**
        * TODO 🐷
        * - Figure out how to not hard-code this path.
+       *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
       const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, 'outline.md'));
       const res = await Fetch.markdown(path);
@@ -60,29 +64,38 @@ export function BusController(args: {
       if (res.error) error = res.error;
       if (!res.error) {
         const { markdown, info } = res;
-        _current = { ..._current, outline: { markdown, info } };
-        _fireChanged = true;
+        state.change((tree) => (tree.outline = { markdown, info }));
+        _fireChanged_ = true;
       }
     }
 
-    const current = { ..._current };
+    if (!error && target.includes('Log')) {
+      const history = await Fetch.logHistory();
+      if (history) {
+        state.change((draft) => (draft.log = history));
+      }
+    }
+
+    const current = state.current;
     bus.fire({
       type: 'app.state/fetch:res',
       payload: { tx, instance, current, error },
     });
 
-    if (_fireChanged) fireChanged();
+    if (_fireChanged_) fireChanged();
   });
 
   /**
-   * Selection Change.
+   * Selection Change
    */
   events.select.$.subscribe(async (e) => {
     let _fireChanged = false;
 
     const selected = e.selected;
-    if (selected !== e.selected) {
-      _current = { ..._current, selected: selected };
+    if (selected !== state.current.selected) {
+      state.change((draft) => {
+        draft.selected = selected;
+      });
       _fireChanged = true;
     }
 

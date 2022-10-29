@@ -8,6 +8,8 @@ import { StateBus as Bus } from './StateBus/index.mjs';
  */
 export const State = {
   Bus,
+  useEvents: Bus.useEvents,
+
   BundlePaths,
   QueryString,
 

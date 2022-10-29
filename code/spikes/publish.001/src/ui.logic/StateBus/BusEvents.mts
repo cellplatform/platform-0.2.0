@@ -26,7 +26,9 @@ export function BusEvents(args: {
    * Initialization upon load.
    */
   const init = async () => {
-    await fetch.outline();
+    await fetch.fire({
+      topic: ['Outline', 'Log'],
+    });
   };
 
   /**
@@ -61,8 +63,8 @@ export function BusEvents(args: {
   const fetch: t.StateEvents['fetch'] = {
     req$: rx.payload<t.StateFetchReqEvent>($, 'app.state/fetch:req'),
     res$: rx.payload<t.StateFetchResEvent>($, 'app.state/fetch:res'),
-    async outline(options = {}) {
-      const { timeout = 3000, target } = options;
+    async fire(options = {}) {
+      const { timeout = 3000, topic: target } = options;
       const tx = slug();
       const op = 'info';
       const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));

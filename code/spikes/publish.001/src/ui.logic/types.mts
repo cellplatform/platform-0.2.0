@@ -1,5 +1,4 @@
 import * as t from '../common/types.mjs';
-
 export * from './StateBus/types.mjs';
 
 type UrlString = string;
@@ -8,8 +7,9 @@ type UrlString = string;
  * State Tree
  */
 export type StateTree = {
-  outline?: StateMarkdown;
   selected?: UrlString;
+  outline?: StateMarkdown;
+  log?: t.PublicLogSummary;
 };
 
 export type StateMarkdown = { markdown: string; info: t.MarkdownInfo };

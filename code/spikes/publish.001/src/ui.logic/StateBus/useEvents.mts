@@ -19,11 +19,16 @@ export function useEvents(instance: t.StateInstance) {
   useEffect(() => {
     const events = BusEvents({ instance });
 
+    async function updateCurrent() {
+      const { info } = await events.info.get();
+      setCurrent(info?.current);
+    }
+
     // Initial load.
-    events.info.get().then((e) => setCurrent(e.info?.current ?? {}));
+    updateCurrent();
 
     // Change updates.
-    events.changed.$.pipe(debounceTime(10)).subscribe((e) => setCurrent(e.current));
+    events.changed.$.pipe(debounceTime(30)).subscribe((e) => updateCurrent());
 
     return () => events.dispose();
   }, [busid, instance.id]);

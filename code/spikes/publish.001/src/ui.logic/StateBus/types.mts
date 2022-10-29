@@ -6,7 +6,7 @@ type Semver = string;
 type UrlString = string;
 
 export type StateInstance = { bus: t.EventBus<any>; id?: Id };
-export type StateFetchTarget = 'Outline';
+export type StateFetchTopic = 'Outline' | 'Log';
 
 export type StateInfo = {
   module: { name: string; version: Semver };
@@ -29,10 +29,7 @@ export type StateEvents = t.Disposable & {
   fetch: {
     req$: t.Observable<t.StateFetchReq>;
     res$: t.Observable<t.StateFetchRes>;
-    outline(options?: {
-      timeout?: Milliseconds;
-      target?: StateFetchTarget[];
-    }): Promise<StateFetchRes>;
+    fire(options?: { timeout?: Milliseconds; topic?: StateFetchTopic[] }): Promise<StateFetchRes>;
   };
   changed: {
     $: t.Observable<t.StateChanged>;
@@ -85,7 +82,7 @@ export type StateFetchReqEvent = {
 export type StateFetchReq = {
   tx: string;
   instance: Id;
-  target?: StateFetchTarget[];
+  target?: StateFetchTopic[];
 };
 
 export type StateFetchResEvent = {
