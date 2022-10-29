@@ -19,10 +19,8 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
   useEffect(() => {
     (async () => {
       const markdown = (props.markdown || '').trim();
-      if (markdown) {
-        const res = await MarkdownUtil.parseHtml(markdown);
-        setSafeHtml(res.html.trim());
-      }
+      const html = markdown ? (await MarkdownUtil.parseHtml(markdown)).html : '';
+      setSafeHtml(html);
     })();
   }, [props.markdown]);
 

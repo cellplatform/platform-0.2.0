@@ -13,7 +13,7 @@ export type Monaco = typeof monaco;
 export type MonacoEditor = monaco.editor.IStandaloneCodeEditor;
 
 export type MarkdownEditorProps = {
-  markdown: string;
+  markdown?: string;
   focusOnLoad?: boolean;
   style?: t.CssValue;
   onChange?: (e: { text: string }) => void;
@@ -29,7 +29,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
   useEffect(() => {
     const editor = editorRef.current;
     if (editor && markdown !== editor.getValue()) {
-      editor.setValue(markdown);
+      editor.setValue(markdown ?? '');
     }
   }, [markdown]);
 

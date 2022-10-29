@@ -13,7 +13,7 @@ export function BusMemoryState(initial: { location?: UrlString } = {}) {
    * Initial settings.
    */
   if (initial.location) {
-    _current_.location = { href: initial.location };
+    _current_.location = { url: initial.location };
   }
 
   /**

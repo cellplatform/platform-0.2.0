@@ -1,10 +1,11 @@
+import { distinctUntilChanged } from 'rxjs/operators';
+
 import { Fetch } from '../Fetch.mjs';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { BundlePaths, DEFAULTS, Path, Pkg, rx, t, Time } from './common.mjs';
+import { BundlePaths, DEFAULTS, Path, Pkg, R, rx, t, Time } from './common.mjs';
 
 export type UrlString = string;
-const ALL_TARGETS: t.StateFetchTopic[] = ['Outline'];
 
 /**
  * Event controller.
@@ -52,31 +53,41 @@ export function BusController(args: {
    * Fetch Data
    */
   events.fetch.req$.subscribe(async (e) => {
-    const { tx, target = ALL_TARGETS } = e;
+    const { tx, target = [] } = e;
+
     let error: undefined | string = undefined;
     let _fireChanged_ = false;
 
+    /**
+     * FETCH: Outline (Markdown)
+     */
     if (!error && target.includes('Outline')) {
       /**
        * TODO 🐷
        * - Figure out how to not hard-code this path.
        *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
-      const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, 'outline.md'));
-      const res = await Fetch.markdown(path);
+      const path = toDataPath('outline.md');
+      const res = await Fetch.textAndProcessor(path);
 
       if (res.error) error = res.error;
       if (!res.error) {
-        const { markdown, info } = res;
-        state.change((tree) => (tree.outline = { markdown, info }));
+        state.change((tree) => {
+          const markdown = tree.markdown || (tree.markdown = {});
+          markdown.outline = res.text;
+        });
         _fireChanged_ = true;
       }
     }
 
+    /**
+     * FETCH: Log (JSON)
+     */
     if (!error && target.includes('Log')) {
       const history = await Fetch.logHistory();
       if (history) {
         state.change((draft) => (draft.log = history));
+        _fireChanged_ = true;
       }
     }
 
@@ -93,21 +104,46 @@ export function BusController(args: {
    * Selection Change
    */
   events.select.$.subscribe(async (e) => {
-    let _fireChanged = false;
-
-    const selected = e.selected;
-    if (selected !== state.current.selected) {
-      state.change((draft) => {
-        draft.selected = selected;
-      });
-      _fireChanged = true;
+    const url = e.selected;
+    const next = url ? { url } : undefined;
+    if (!R.equals(next, state.current.selected)) {
+      state.change((draft) => (draft.selected = next));
+      fireChanged();
     }
+  });
 
-    if (_fireChanged) fireChanged();
+  /**
+   * Monitor: Load document upon selection change.
+   */
+  events.changed.$.pipe(
+    distinctUntilChanged((prev, next) => prev.current.selected?.url === next.current.selected?.url),
+  ).subscribe(async (e) => {
+    const selectedRef = e.current.selected?.url;
+    state.change(async (draft) => {
+      const markdown = draft.markdown ?? (draft.markdown = {});
+      const before = markdown.document;
+      if (!selectedRef) {
+        markdown.document = undefined;
+      } else {
+        const path = toDataPath(selectedRef);
+        const { text, error } = await Fetch.textAndProcessor(path);
+        markdown.document = error ? undefined : text;
+      }
+      if (markdown.document !== before) fireChanged();
+    });
   });
 
   /**
    * API
    */
   return events;
+}
+
+/**
+ * Helpers
+ */
+
+function toDataPath(input: string) {
+  const path = Path.join(BundlePaths.data.md, input);
+  return Path.toAbsolutePath(path);
 }

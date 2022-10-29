@@ -14,7 +14,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const { instance } = props;
 
   const state = State.Bus.useEvents(props.instance);
-  const show = QueryString.show(state.current?.location?.href);
+  const show = QueryString.show(state.current?.location?.url);
 
   if (!state.current) return null;
 
@@ -25,7 +25,6 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
    * Handlers
    */
   const onEditorChange = (e: { text: string }) => {
-    // setMarkdown(e.text);
     /**
      * TODO 🐷
      * update markdown via State
@@ -48,9 +47,12 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const elements = show.map((kind, i) => {
     let el: JSX.Element | null = null;
     let flex: undefined | number;
-    const outline = state.current?.outline?.markdown ?? '';
 
-    console.log(' > ', i);
+    const markdown = state.current?.markdown;
+    const outline = markdown?.outline;
+    const document = markdown?.document;
+
+    console.log(' > ', i); // TEMP 🐷
 
     if (kind === 'outline') {
       flex = undefined;
@@ -59,14 +61,14 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     if (kind === 'doc') {
       flex = 1;
-      el = <MarkdownDoc markdown={outline} scroll={true} style={{ flex: 1 }} />;
+      el = <MarkdownDoc markdown={document} scroll={true} style={{ flex: 1 }} />;
     }
 
     if (kind === 'outline|doc') {
       flex = 2;
       el = (
         <MarkdownLayout
-          markdown={outline}
+          markdown={{ outline, document }}
           scroll={true}
           style={{ flex: 1 }}
           onSelectClick={(e) => {

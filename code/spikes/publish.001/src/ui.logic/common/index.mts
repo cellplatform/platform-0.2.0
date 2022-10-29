@@ -4,8 +4,8 @@ export { t };
 /**
  * @external
  */
-import { groupBy, prop, sortBy, uniq, clone } from 'ramda';
-export const R = { groupBy, prop, sortBy, uniq, clone };
+import { clone, equals, groupBy, prop, sortBy, uniq } from 'ramda';
+export const R = { clone, equals, groupBy, prop, sortBy, uniq };
 
 /**
  * @system

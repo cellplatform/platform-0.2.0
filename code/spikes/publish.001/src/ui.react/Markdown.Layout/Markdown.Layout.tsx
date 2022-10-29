@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { BundlePaths, css, FC, Fetch, Path, t } from '../common.mjs';
+import { css, FC, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { TileOutline, HeadingTileClickHandler } from '../Tile.Outline/index.mjs';
+import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
 
 export type MarkdownLayoutProps = {
-  markdown?: string;
+  markdown?: { outline?: string; document?: string };
   selectedUrl?: string;
   scroll?: boolean;
   style?: t.CssValue;
@@ -13,31 +11,6 @@ export type MarkdownLayoutProps = {
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
-  const { markdown } = props;
-
-  /**
-   * TODO 🐷
-   * - Move to root [ui.logic:State]
-   */
-  const [selectedMarkdown, setSelectedMarkdown] = useState('');
-
-  const loadChild = async (args: { url: string }) => {
-    /**
-     * 💦💦
-     *
-     *    STATE LOADING
-     *
-     * 💦
-     */
-
-    /**
-     * TODO 🐷 - move into root state.
-     */
-    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, args.url));
-    const md = await Fetch.markdown(path);
-    setSelectedMarkdown(md.markdown);
-  };
-
   /**
    * [Render]
    */
@@ -74,21 +47,12 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         <TileOutline
           style={styles.outline}
           widths={{ root: 250, child: 300 }}
-          markdown={markdown}
-          onClick={(e) => {
-            const ref = e.ref;
-            // e.ref.
-
-            // TEMP 🐷
-            // if (ref?.url) loadChild({ url: ref.url });
-            // if (!ref?.url) setSelectedMarkdown('');
-
-            props.onSelectClick?.(e);
-          }}
+          markdown={props.markdown?.outline}
+          onClick={props.onSelectClick}
         />
       </div>
       <div {...styles.body.main}>
-        <MarkdownDoc markdown={selectedMarkdown} />
+        <MarkdownDoc markdown={props.markdown?.document} />
       </div>
     </div>
   );
