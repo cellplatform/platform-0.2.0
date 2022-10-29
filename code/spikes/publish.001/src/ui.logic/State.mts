@@ -16,7 +16,6 @@ export const State = {
   BundlePaths,
   QueryString,
 
-  //
   /**
    * TODO 🐷
    * Centralise all state tree changes here (remove from UI components)

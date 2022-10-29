@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, Fetch, rx, State, t, Time } from '../common.mjs';
+import { Color, COLORS, css, rx, State, t } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { RootTitle } from './Root.Title';
@@ -58,13 +58,6 @@ export const Root: React.FC<RootProps> = (props) => {
      */
     const events = State.Bus.Events({ instance });
     events.init();
-
-    /**
-     * Ensure state is retained between HMR (relaods).
-     * Ref:
-     *    https://vitejs.dev/guide/api-hmr.html#hmr-api
-     */
-    // import.meta.hot?.on('vite:beforeUpdate', () => Time.delay(0, () => events.init()));
 
     return events.dispose();
   }, []);
