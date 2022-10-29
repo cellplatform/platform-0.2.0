@@ -17,7 +17,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const show = State.QueryString.show(props.location);
   const state = State.Bus.useEvents(props.instance);
 
-  console.log('state', state);
+  console.log('state', state.current);
 
   /**
    * Handlers
@@ -46,29 +46,29 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const elements = show.map((kind, i) => {
     let el: JSX.Element | null = null;
     let flex: undefined | number;
-    const markdown = state.current?.outline?.markdown ?? '';
+    const outline = state.current?.outline?.markdown ?? '';
+
+    console.log(' > ', i);
 
     if (kind === 'outline') {
       flex = undefined;
-      el = <MarkdownOutline markdown={markdown} scroll={true} style={{ flex: 1, padding: 40 }} />;
+      el = <MarkdownOutline markdown={outline} scroll={true} style={{ flex: 1, padding: 40 }} />;
     }
 
     if (kind === 'doc') {
       flex = 1;
-      el = <MarkdownDoc markdown={markdown} scroll={true} style={{ flex: 1 }} />;
+      el = <MarkdownDoc markdown={outline} scroll={true} style={{ flex: 1 }} />;
     }
 
     if (kind === 'outline|doc') {
       flex = 2;
       el = (
         <MarkdownLayout
-          markdown={markdown}
+          markdown={outline}
           scroll={true}
           style={{ flex: 1 }}
           onSelectClick={(e) => {
-            const events = State.Bus.Events({ instance });
-            events.select.fire(e.ref?.url);
-            events.dispose();
+            State.fire(instance, (state) => state.select.fire(e.ref?.url));
           }}
         />
       );
@@ -80,7 +80,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
         <MarkdownEditor
           key={i}
           style={{ flex: 1 }}
-          markdown={markdown}
+          markdown={outline}
           onChange={onEditorChange}
           focusOnLoad={true}
         />

@@ -1,39 +1,12 @@
 import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, rx, State, t } from '../common.mjs';
+import { Color, COLORS, css, State, t } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
+import { env } from './Root.env.mjs';
 import { RootTitle } from './Root.Title';
 
-/**
- * TODO 🐷
- * - Put state/controller management somewhere sensible.
- */
-
-/**
- * 💦💦
- *
- *    State: Initialize controller.
- *
- * 💦
- */
-const instance: t.StateInstance = { bus: rx.bus() };
-const controller = State.Bus.Controller({ instance });
-
-/**
- * Keyboard events
- */
-document.addEventListener('keydown', async (e) => {
-  // CMD+S:
-  // Cancel browser "save" HTML page save.
-  if (e.key === 's' && e.metaKey) {
-    e.preventDefault();
-
-    // Debug (log state):
-    const { info } = await controller.info.get();
-    console.info('[CMD+S] state:', info?.current);
-  }
-});
+const { instance } = env;
 
 /**
  * Component
@@ -59,6 +32,9 @@ export const Root: React.FC<RootProps> = (props) => {
     const events = State.Bus.Events({ instance });
     events.init();
 
+    /**
+     * End of life.
+     */
     return events.dispose();
   }, []);
 

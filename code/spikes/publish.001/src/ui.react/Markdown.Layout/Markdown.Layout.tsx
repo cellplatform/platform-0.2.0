@@ -6,6 +6,7 @@ import { MarkdownOutline, HeadingTileClickHandler } from '../Markdown.Outline/in
 
 export type MarkdownLayoutProps = {
   markdown?: string;
+  selectedUrl?: string;
   scroll?: boolean;
   style?: t.CssValue;
   onSelectClick?: HeadingTileClickHandler;
@@ -79,8 +80,8 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
             // e.ref.
 
             // TEMP 🐷
-            if (ref?.url) loadChild({ url: ref.url });
-            if (!ref?.url) setSelectedMarkdown('');
+            // if (ref?.url) loadChild({ url: ref.url });
+            // if (!ref?.url) setSelectedMarkdown('');
 
             props.onSelectClick?.(e);
           }}
