@@ -1,4 +1,4 @@
-import { State } from '../../ui.logic/index.mjs';
+import { State, QueryString } from '../../ui.logic/index.mjs';
 import { css, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
@@ -7,17 +7,19 @@ import { MarkdownOutline } from '../Markdown.Outline/index.mjs';
 
 export type MarkdownProps = {
   instance: t.StateInstance;
-  location: string; // TEMP 🐷 GET FROM STATE
   style?: t.CssValue;
 };
 
 export const Markdown: React.FC<MarkdownProps> = (props) => {
   const { instance } = props;
 
-  const show = State.QueryString.show(props.location);
   const state = State.Bus.useEvents(props.instance);
+  const show = QueryString.show(state.current?.location?.href);
 
-  console.log('state', state.current);
+  if (!state.current) return null;
+
+  console.log('-------------------------------------------');
+  console.log('Markdown/state:', state.current);
 
   /**
    * Handlers
@@ -28,7 +30,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
      * TODO 🐷
      * update markdown via State
      */
-    console.log(' 💦  TODO - update state to latest "local editor" change //', e.text);
+    console.log(' 🐷🐷  TODO EDITOR - update state to latest "local editor" change //');
   };
 
   /**

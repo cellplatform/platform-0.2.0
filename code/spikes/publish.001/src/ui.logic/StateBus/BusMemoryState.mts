@@ -1,12 +1,24 @@
 import { R, t } from './common.mjs';
 
+export type UrlString = string;
+
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState() {
-  let _current_: t.StateTree = {};
+export function BusMemoryState(initial: { location?: UrlString } = {}) {
   let _revision_ = 0;
+  let _current_: t.StateTree = {};
 
+  /**
+   * Initial settings.
+   */
+  if (initial.location) {
+    _current_.location = { href: initial.location };
+  }
+
+  /**
+   * API
+   */
   return {
     get revision() {
       return _revision_;

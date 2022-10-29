@@ -3,6 +3,7 @@ import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
 import { BundlePaths, DEFAULTS, Path, Pkg, rx, t, Time } from './common.mjs';
 
+export type UrlString = string;
 const ALL_TARGETS: t.StateFetchTopic[] = ['Outline'];
 
 /**
@@ -12,11 +13,14 @@ export function BusController(args: {
   instance: t.StateInstance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
+  initial?: {
+    location?: UrlString;
+  };
 }): t.StateEvents {
-  const { filter } = args;
+  const { filter, initial = {} } = args;
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
   const instance = args.instance.id || DEFAULTS.instance;
-  const state = BusMemoryState();
+  const state = BusMemoryState({ location: initial.location });
 
   const fireChanged = () => Time.delay(0, () => events.changed.fire());
 

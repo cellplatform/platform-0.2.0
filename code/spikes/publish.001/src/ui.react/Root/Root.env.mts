@@ -15,7 +15,7 @@ import { rx, State, t } from '../common.mjs';
  * 💦
  */
 const instance: t.StateInstance = { bus: rx.bus() };
-const controller = State.Bus.Controller({ instance });
+const controller = State.Bus.Controller({ instance, initial: { location: location.href } });
 
 /**
  * Keyboard events

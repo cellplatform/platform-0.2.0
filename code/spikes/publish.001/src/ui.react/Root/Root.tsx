@@ -69,7 +69,7 @@ export const Root: React.FC<RootProps> = (props) => {
       <div {...styles.left}>
         <RootTitle text={'Report'} />
         <div {...styles.body}>
-          <Markdown instance={instance} location={location.href} style={{ Absolute: 0 }} />
+          <Markdown instance={instance} style={{ Absolute: 0 }} />
         </div>
       </div>
       <div {...styles.right}>
