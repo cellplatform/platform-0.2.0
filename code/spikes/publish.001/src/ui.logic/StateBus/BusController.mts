@@ -55,7 +55,7 @@ export function BusController(args: {
   events.fetch.req$.subscribe(async (e) => {
     const { tx, target = [] } = e;
 
-    let error: undefined | string = undefined;
+    let error: string | undefined;
     let _fireChanged_ = false;
 
     /**
@@ -72,7 +72,7 @@ export function BusController(args: {
 
       if (res.error) error = res.error;
       if (!res.error) {
-        state.change((tree) => {
+        await state.change((tree) => {
           const markdown = tree.markdown || (tree.markdown = {});
           markdown.outline = res.text;
         });
@@ -86,15 +86,14 @@ export function BusController(args: {
     if (!error && target.includes('Log')) {
       const history = await Fetch.logHistory();
       if (history) {
-        state.change((draft) => (draft.log = history));
+        await state.change((draft) => (draft.log = history));
         _fireChanged_ = true;
       }
     }
 
-    const current = state.current;
     bus.fire({
       type: 'app.state/fetch:res',
-      payload: { tx, instance, current, error },
+      payload: { tx, instance, current: state.current, error },
     });
 
     if (_fireChanged_) fireChanged();
@@ -107,19 +106,39 @@ export function BusController(args: {
     const url = e.selected;
     const next = url ? { url } : undefined;
     if (!R.equals(next, state.current.selected)) {
-      state.change((draft) => (draft.selected = next));
+      await state.change((draft) => (draft.selected = next));
       fireChanged();
     }
   });
 
   /**
-   * Monitor: Load document upon selection change.
+   * Change (Update)
+   */
+  events.change.req$.subscribe(async (e) => {
+    const { tx } = e;
+    let error: string | undefined;
+
+    try {
+      await state.change(e.handler);
+      fireChanged();
+    } catch (err: any) {
+      error = err.message;
+    }
+
+    bus.fire({
+      type: 'app.state/change:res',
+      payload: { tx, instance, current: state.current, error },
+    });
+  });
+
+  /**
+   * [LISTEN] Load document upon selection change.
    */
   events.changed.$.pipe(
     distinctUntilChanged((prev, next) => prev.current.selected?.url === next.current.selected?.url),
   ).subscribe(async (e) => {
     const selectedRef = e.current.selected?.url;
-    state.change(async (draft) => {
+    await state.change(async (draft) => {
       const markdown = draft.markdown ?? (draft.markdown = {});
       const before = markdown.document;
       if (!selectedRef) {

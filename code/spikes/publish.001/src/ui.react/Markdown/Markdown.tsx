@@ -25,11 +25,12 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
    * Handlers
    */
   const onEditorChange = (e: { text: string }) => {
-    /**
-     * TODO 🐷
-     * update markdown via State
-     */
-    console.log(' 🐷🐷  TODO EDITOR - update state to latest "local editor" change //');
+    State.events(instance, async (events) => {
+      await events.change.fire((state) => {
+        const markdown = state.markdown ?? (state.markdown = {});
+        markdown.outline = e.text;
+      });
+    });
   };
 
   /**
@@ -72,7 +73,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
           scroll={true}
           style={{ flex: 1 }}
           onSelectClick={(e) => {
-            State.fire(instance, (state) => state.select.fire(e.ref?.url));
+            State.events(instance, (state) => state.select.fire(e.ref?.url));
           }}
         />
       );

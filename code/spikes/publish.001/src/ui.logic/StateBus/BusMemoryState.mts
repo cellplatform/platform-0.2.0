@@ -26,14 +26,14 @@ export function BusMemoryState(initial: { location?: UrlString } = {}) {
     get current() {
       return { ..._current_ };
     },
-    change(fn: (draft: t.StateTree) => void) {
+    async change(fn: t.StateMutateHandler) {
       /**
        * TODO 🐷
        *   Do this with either
        *    - [JsonPatch] or
        *    - [Automerge]
        */
-      const clone = R.clone(_current_); // TEMP | (Potentially) SLOW 🐷
+      const clone = R.clone(_current_); // TEMP | SLOW (potentially too slow)  🐷
       fn(clone);
       _revision_++;
       _current_ = clone;

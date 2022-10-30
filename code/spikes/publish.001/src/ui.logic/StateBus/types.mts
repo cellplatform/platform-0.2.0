@@ -13,6 +13,8 @@ export type StateInfo = {
   current: t.StateTree;
 };
 
+export type StateMutateHandler = (draft: t.StateTree) => any | Promise<any>;
+
 /**
  * EVENT (API)
  */
@@ -34,6 +36,11 @@ export type StateEvents = t.Disposable & {
       topic?: StateFetchKnownTopic[];
     }): Promise<StateFetchRes>;
   };
+  change: {
+    req$: t.Observable<t.StateChangeReq>;
+    res$: t.Observable<t.StateChangeRes>;
+    fire(fn: StateMutateHandler, options?: { timeout?: Milliseconds }): Promise<StateChangeRes>;
+  };
   changed: {
     $: t.Observable<t.StateChanged>;
     fire(): Promise<void>;
@@ -52,6 +59,8 @@ export type StateEvent =
   | StateResEvent
   | StateFetchReqEvent
   | StateFetchResEvent
+  | StateChangeReqEvent
+  | StateChangeResEvent
   | StateChangedEvent
   | StateSelectEvent;
 
@@ -93,6 +102,30 @@ export type StateFetchResEvent = {
   payload: StateFetchRes;
 };
 export type StateFetchRes = {
+  tx: string;
+  instance: Id;
+  current: t.StateTree;
+  error?: string;
+};
+
+/**
+ * (Immutable) Change State
+ */
+export type StateChangeReqEvent = {
+  type: 'app.state/change:req';
+  payload: StateChangeReq;
+};
+export type StateChangeReq = {
+  tx: string;
+  instance: Id;
+  handler: t.StateMutateHandler;
+};
+
+export type StateChangeResEvent = {
+  type: 'app.state/change:res';
+  payload: StateChangeRes;
+};
+export type StateChangeRes = {
   tx: string;
   instance: Id;
   current: t.StateTree;

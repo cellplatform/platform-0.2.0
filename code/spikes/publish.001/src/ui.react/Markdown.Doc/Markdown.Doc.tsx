@@ -6,10 +6,13 @@ import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 export type MarkdownDocProps = {
   markdown?: string;
   scroll?: boolean;
+  maxWidth?: number;
   style?: t.CssValue;
 };
 
 export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
+  const { maxWidth = 960 } = props;
+
   const [safeHtml, setSafeHtml] = useState('');
   const isEmpty = !Boolean(safeHtml);
 
@@ -28,7 +31,10 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Scroll: props.scroll }),
+    base: css({
+      Scroll: props.scroll,
+      maxWidth,
+    }),
     empty: css({
       marginTop: 30,
       fontSize: 14,
