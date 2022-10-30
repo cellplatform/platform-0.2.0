@@ -11,33 +11,47 @@ export const RootTitle: React.FC<RootTitleProps> = (props) => {
   const { text = 'Untitled' } = props;
 
   /**
-   * Handlers
-   */
-
-  /**
    * [Render]
    */
   const styles = {
     base: css({
       height: 90,
-      borderBottom: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
-      boxSizing: 'border-box',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
       userSelect: 'none',
+      borderBottom: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
+      Flex: 'x-spaceBetween-stretch',
     }),
     text: css({
       fontSize: 30,
       paddingLeft: 40,
     }),
+    edge: css({
+      display: 'flex',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    }),
+    left: css({}),
+    right: css({}),
+    title: css({}),
   };
 
-  return (
-    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+  const elLeft = (
+    <div {...css(styles.edge, styles.left)}>
       <div {...styles.text} onClick={props.onTitleClick}>
         {text}
       </div>
+    </div>
+  );
+
+  const elRight = (
+    <div {...css(styles.edge, styles.right)}>
+      <div></div>
+    </div>
+  );
+
+  return (
+    <div {...css(styles.base, props.style)} onClick={props.onClick} data-tauri-drag-region>
+      {elLeft}
+      {elRight}
     </div>
   );
 };

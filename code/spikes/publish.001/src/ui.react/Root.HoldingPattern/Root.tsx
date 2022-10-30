@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Color, COLORS, css, FC, Fetch, t, Time } from '../common.mjs';
+import { RootTitle } from './Root.Tile';
 
 const DEFAULT = {
   V0: '0.0.0',
@@ -131,10 +132,12 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   return (
     <div {...css(styles.base, styles.normalize, props.style)}>
       <div {...styles.body.base}>
-        <div {...styles.body.inner}>
-          {elTitle}
-          {elDetail}
-        </div>
+        <RootTitle>
+          <div {...styles.body.inner}>
+            {elTitle}
+            {elDetail}
+          </div>
+        </RootTitle>
       </div>
     </div>
   );
