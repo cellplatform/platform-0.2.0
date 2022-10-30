@@ -12,7 +12,6 @@ export const R = { clone, equals, groupBy, prop, sortBy, uniq };
  */
 export { rx, slug, Path, Time, Is } from 'sys.util';
 export { FC } from 'sys.util.react';
-export { css, Color, Style } from 'sys.util.css';
 export { Patch } from 'sys.data.json';
 export { Json } from 'sys.data.json';
 
