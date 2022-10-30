@@ -1,6 +1,11 @@
-import React, { useEffect } from 'react';
-
 import { rx, State, t } from '../common.mjs';
+
+const isTauri = typeof (window as any).__TAURI__ === 'object';
+const url = new URL(window.location.href);
+
+if (isTauri) {
+  url.searchParams.set('show', 'outline|doc,editor');
+}
 
 /**
  * TODO 🐷
@@ -14,8 +19,9 @@ import { rx, State, t } from '../common.mjs';
  *
  * 💦
  */
-const instance: t.StateInstance = { bus: rx.bus() };
-const controller = State.Bus.Controller({ instance, initial: { location: location.href } });
+const bus = rx.bus();
+const instance: t.StateInstance = { bus };
+const controller = State.Bus.Controller({ instance, initial: { location: url.href } });
 
 /**
  * Keyboard events

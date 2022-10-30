@@ -1,6 +1,6 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, Time } from 'sys.util';
+import { rx, Time, Path } from 'sys.util';
 
 import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
@@ -44,9 +44,19 @@ console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
 
+/**
+ * Make a copy the latest bundle to a stable "latest" folder.
+ */
+for (const file of (await bundle.fs.manifest()).files) {
+  const path = Path.join('.latest', file.path);
+  const data = await bundle.fs.read(file.path);
+  console.log(' > ', path);
+  await targetdir.write(path, data);
+}
+
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
