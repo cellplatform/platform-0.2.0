@@ -9,6 +9,7 @@ type ContinuationDirectives = { SKIP: SKIP; CONTINUE: CONTINUE; EXIT: EXIT };
 type ContinuationResponse = SKIP | CONTINUE | EXIT;
 
 /**
+ * 💦
  * MARKDOWN
  */
 export type MutateMdast = {
@@ -20,16 +21,28 @@ export type MutateMdast = {
   tree: MutateMdastTree;
 
   /**
-   * TODO 🐷
-   * - visit
+   * Helper for running a 'unist-util-visit' across the MARKDOWN tree
+   * with a set of helper tools passed in as arguments.
    */
+  visit: MutateMdastVisitor;
 };
 
 export type MutateMdastTree = (fn: MutateMdastTreeFn) => void;
 export type MutateMdastTreeFn = (tree: t.MdastRoot) => void;
 
+export type MutateMdastVisitor = (fn: MutateMdastVisitorFn) => void;
+export type MutateMdastVisitorFn = (e: MutateMdastVisitorArgs) => ContinuationResponse | any;
+export type MutateMdastVisitorArgs = {
+  node: t.HastNode;
+  index: number;
+  parent: t.HastRoot | t.HastElement | null;
+  data<T extends O>(): T;
+  hProperties<T extends O>(): T;
+} & ContinuationDirectives;
+
 /**
- * HTML.
+ * 💦
+ * HTML
  */
 export type MutateHast = {
   /**
@@ -41,7 +54,7 @@ export type MutateHast = {
 
   /**
    * Helper for running a 'unist-util-visit' across the HTML tree
-   * with a modified set of helper tools.
+   * with a set of helper tools passed in as arguments.
    */
   visit: MutateHastVisitor;
 };
