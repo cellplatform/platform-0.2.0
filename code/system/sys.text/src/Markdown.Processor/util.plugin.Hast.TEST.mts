@@ -5,24 +5,32 @@ import { t } from './common.mjs';
 describe('HTML mutation (H-AST)', () => {
   const processor = MarkdownProcessor();
 
-  it('option parameter: { hast:ƒ }', async () => {
+  it('.tree', async () => {
+    const INPUT = '![image](file.png)';
     let _tree: t.HastRoot | undefined;
-    const _visit: t.MutateHastVisitorArgs[] = [];
-
-    const input = '![image](file.png)';
-    await processor.toHtml(input, {
+    await processor.toHtml(INPUT, {
       hast(e) {
         e.tree((tree) => (_tree = tree));
-        e.visit((e) => _visit.push(e));
       },
     });
 
     expect(_tree?.type).to.eql('root');
     expect(_tree?.children[1].type).to.eql('element');
+  });
+
+  it('.visit', async () => {
+    const INPUT = '![image](file.png)';
+    const _visit: t.MutateHastVisitorArgs[] = [];
+    await processor.toHtml(INPUT, {
+      hast(e) {
+        e.visit((e) => _visit.push(e));
+      },
+    });
+
     expect(_visit.length).to.eql(7);
   });
 
-  it('helper: data (added to node)', async () => {
+  it('.visit: data (added to node)', async () => {
     type T = { count?: number; msg?: string };
     let _node: t.HastElement | undefined;
     let _data: T | undefined;
@@ -47,7 +55,7 @@ describe('HTML mutation (H-AST)', () => {
     expect(_node?.data).to.equal(_data);
   });
 
-  it('helper: hProperties (added to node.data)', async () => {
+  it('.visit: hProperties (added to node.data)', async () => {
     type T = { className?: string; srcset?: string };
     let _node: t.HastElement | undefined;
     let _hProperties: T | undefined;

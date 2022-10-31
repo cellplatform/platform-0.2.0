@@ -8,8 +8,10 @@ export * from './Markdown.Processor/types.mjs';
  * 💦
  */
 export type { Node as AstNode } from 'unist';
-export type { Root as HastRoot, Element as HastElement, Text as HastText } from 'hast';
 
+/**
+ * MDAST (Markdown)
+ */
 import type {
   Root as MdastRoot,
   Code as MdastCode,
@@ -31,7 +33,6 @@ export {
   MdastParagraph,
   MdastLink,
 };
-
 export type MdastNode =
   | MdastRoot
   | MdastCode
@@ -41,3 +42,18 @@ export type MdastNode =
   | MdastListItem
   | MdastParagraph
   | MdastLink;
+
+/**
+ * HAST (HTML)
+ */
+import type {
+  Root as HastRoot,
+  Element as HastElement,
+  Text as HastText,
+  Comment as HastComment,
+  DocType as HastDocType,
+} from 'hast';
+import type { Raw as HastRaw } from 'mdast-util-to-hast';
+
+export { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
+export type HastNode = HastRoot | HastElement | HastText | HastComment | HastDocType | HastRaw;
