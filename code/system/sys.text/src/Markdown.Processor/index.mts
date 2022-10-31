@@ -1,1 +1,1 @@
-export { MarkdownProcessor } from './MarkdownProcessor.mjs';
+export { MarkdownProcessor } from './Processor.mjs';

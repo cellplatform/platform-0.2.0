@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { describe, expect, it } from '../test/index.mjs';
 import { MarkdownProcessor } from './index.mjs';
 
 describe('TextProcessor.md', () => {
@@ -23,7 +23,47 @@ describe('TextProcessor.md', () => {
     });
   });
 
-  describe('option: GFM (Github Flavored Markdown)', () => {
+  describe('input types (string, Uint8Array, <undefined>)', () => {
+    it('Uint8Array', async () => {
+      const input = new TextEncoder().encode('# Hello\n');
+      const res1 = await MarkdownProcessor().toMarkdown(input);
+      const res2 = await MarkdownProcessor().toHtml(input);
+
+      expect(res1.markdown).to.eql('# Hello');
+      expect(res2.markdown).to.eql('# Hello');
+      expect(res2.html).to.eql('<h1>Hello</h1>');
+    });
+
+    it('string', async () => {
+      const input = '# Hello\n';
+      const res1 = await MarkdownProcessor().toMarkdown(input);
+      const res2 = await MarkdownProcessor().toHtml(input);
+
+      expect(res1.markdown).to.eql('# Hello');
+      expect(res2.markdown).to.eql('# Hello');
+      expect(res2.html).to.eql('<h1>Hello</h1>');
+    });
+
+    it('nothing | non-standard type', async () => {
+      const test = async (input?: any) => {
+        const res1 = await MarkdownProcessor().toMarkdown(input);
+        const res2 = await MarkdownProcessor().toHtml(input);
+
+        expect(res1.markdown).to.eql('');
+        expect(res2.markdown).to.eql('');
+        expect(res2.html).to.eql('');
+      };
+
+      await test();
+      await test(null);
+      await test(true);
+      await test(1234);
+      await test({});
+      await test([{ count: 123 }]);
+    });
+  });
+
+  describe('GFM (Github Flavored Markdown)', () => {
     console.info(`
     Examples of GFM variants covered by the parser:
     
@@ -82,53 +122,13 @@ A note[^1]
     });
   });
 
-  describe('santizing input', () => {
+  describe('html sanitizer', () => {
     it('santized input', async () => {
       const res1 = await MarkdownProcessor().toHtml('# Hello');
-      const res2 = await MarkdownProcessor().toHtml('<div>hello</div>');
+      const res2 = await MarkdownProcessor().toHtml('<script>eval("danger();")</script>');
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res2.html).to.eql('');
-    });
-  });
-
-  describe('input (string, Uint8Array, <undefined>)', () => {
-    it('Uint8Array', async () => {
-      const input = new TextEncoder().encode('# Hello\n');
-      const res1 = await MarkdownProcessor().toMarkdown(input);
-      const res2 = await MarkdownProcessor().toHtml(input);
-
-      expect(res1.markdown).to.eql('# Hello');
-      expect(res2.markdown).to.eql('# Hello');
-      expect(res2.html).to.eql('<h1>Hello</h1>');
-    });
-
-    it('string', async () => {
-      const input = '# Hello\n';
-      const res1 = await MarkdownProcessor().toMarkdown(input);
-      const res2 = await MarkdownProcessor().toHtml(input);
-
-      expect(res1.markdown).to.eql('# Hello');
-      expect(res2.markdown).to.eql('# Hello');
-      expect(res2.html).to.eql('<h1>Hello</h1>');
-    });
-
-    it('nothing | non-standard type', async () => {
-      const test = async (input?: any) => {
-        const res1 = await MarkdownProcessor().toMarkdown(input);
-        const res2 = await MarkdownProcessor().toHtml(input);
-
-        expect(res1.markdown).to.eql('');
-        expect(res2.markdown).to.eql('');
-        expect(res2.html).to.eql('');
-      };
-
-      await test();
-      await test(null);
-      await test(true);
-      await test(1234);
-      await test({});
-      await test([{ count: 123 }]);
     });
   });
 });
