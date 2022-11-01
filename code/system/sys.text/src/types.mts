@@ -7,7 +7,7 @@ export * from './Markdown.Processor/types.mjs';
  *  @external Unified.js (ASTs)
  * 💦
  */
-export type { Node as AstNode } from 'unist';
+export type { Node as AstNode, Position as AstPosition } from 'unist';
 
 /**
  * MDAST (Markdown)

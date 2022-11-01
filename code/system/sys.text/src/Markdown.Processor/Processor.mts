@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t, trimToPosition } from './common.mjs';
 import { Pipeline } from './util.Pipeline.mjs';
 
 /**
@@ -16,11 +16,18 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       const vfile = await builder.pipeline.process(text);
       const markdown = Format.text(vfile?.toString());
       const info = builder.info;
-      return {
+
+      const res: t.ProcessedMdast = {
         info,
         markdown,
-        toString: () => markdown,
+        toString(options = {}) {
+          const { kind = 'md', position } = options;
+          const text = markdown;
+          return trimToPosition(text, position);
+        },
       };
+
+      return res;
     },
 
     /**
@@ -33,12 +40,18 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       const html = Format.text(vfile?.toString());
       const markdown = Format.text(text);
       const info = builder.info;
-      return {
+      const res: t.ProcessedHast = {
         info,
         html,
         markdown,
-        toString: () => html,
+        toString(options = {}) {
+          const { kind = 'md', position } = options;
+          const text = kind === 'html' ? html : markdown;
+          return trimToPosition(text, position);
+        },
       };
+
+      return res;
     },
   };
 }

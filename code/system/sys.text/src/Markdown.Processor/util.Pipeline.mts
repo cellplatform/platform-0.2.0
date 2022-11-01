@@ -40,9 +40,9 @@ export const Pipeline = {
      */
     pipeline.use(remarkParse);
     if (gfm) pipeline.use(remarkGfm);
-    pipeline.use(CodeBlock.plugin.markdown, { onMatch: handleCodeBlock });
     pipeline.use(DocStructure.plugin, { onParse: (e) => (_root = e.tree) });
     pipeline.use(Mdast.optionPlugin, options);
+    pipeline.use(CodeBlock.plugin.markdown, { onMatch: handleCodeBlock });
     if (kind === 'md:only') pipeline.use(remarkStringify);
 
     /**

@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../test/index.mjs';
+import { describe, expect, it, t } from '../test/index.mjs';
 import { MarkdownProcessor } from './index.mjs';
 
 describe('TextProcessor.md', () => {
@@ -16,10 +16,10 @@ describe('TextProcessor.md', () => {
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res1.markdown).to.eql('# Hello');
-      expect(res1.toString()).to.eql(res1.html);
+      expect(res1.toString()).to.eql(res1.markdown);
 
       expect(res2.markdown).to.eql('# Hello');
-      expect(res2.toString()).to.eql(res2.markdown);
+      expect(res2.toString()).to.eql(res2.markdown); // NB: Without modifier, always returns source "markdown"
     });
   });
 
@@ -129,6 +129,93 @@ A note[^1]
 
       expect(res1.html).to.eql('<h1>Hello</h1>');
       expect(res2.html).to.eql('');
+    });
+  });
+
+  describe('toString( kind?, position? )', async () => {
+    const INPUT = `
+# Hello
+
+- Foo
+    `.substring(1);
+
+    const processor = MarkdownProcessor();
+
+    it('{ kind }', async () => {
+      const m = await processor.toMarkdown(INPUT);
+      const h = await processor.toHtml(INPUT);
+
+      expect(m.toString()).to.eql(m.markdown); // NB: Default.
+      expect(m.toString({ kind: 'md' })).to.eql(m.markdown);
+
+      expect(h.toString()).to.eql(h.markdown);
+      expect(h.toString({ kind: 'md' })).to.eql(h.markdown);
+      expect(h.toString({ kind: 'html' })).to.eql(h.html);
+    });
+
+    it('{ position }: MARKDOWN', async () => {
+      const m = await processor.toMarkdown(INPUT);
+      const title = m.info.mdast.children[0];
+      const li = m.info.mdast.children[1];
+
+      const res1 = m.toString({ position: title.position });
+      const res2 = m.toString({ position: li.position });
+
+      expect(res1).to.eql('# Hello');
+      expect(res2).to.eql('*   Foo'); // NB: "-" formatted to standard "*" (https://commonmark.org)
+    });
+
+    it('{ position }: HTML', async () => {
+      // const m = await processor.toMarkdown(INPUT);
+      const h = await processor.toHtml(INPUT);
+
+      /**
+       * TODO 🐷
+       * - Return the [hast] on the root info (after process)
+       * - Use the hast {position} to pass into toString.
+       */
+
+      const title = h.info.mdast.children[0];
+      const li = h.info.mdast.children[1];
+
+      console.log('title', title);
+
+      const res1a = h.toString({ position: title.position });
+      const res1b = h.toString({ position: title.position, kind: 'html' });
+
+      console.log('-----------------------------------------');
+      console.log('res1', res1a);
+      console.log('res1b', res1b);
+
+      /**
+       * TODO 🐷
+       */
+    });
+
+    it.skip('__________no position________', async () => {
+      const res = await processor.toHtml(INPUT);
+
+      // expect(res.toString()).to.eql(INPUT);
+
+      function positionToString(text: string, position?: t.AstPosition) {
+        //
+        if (!position) return text;
+
+        console.log('position', position);
+
+        return text;
+      }
+
+      const title = res.info.mdast.children[0];
+      const pos = title.position;
+
+      // console.log('res', res.info.mdast);
+      // console.log('h', title);
+
+      const r = positionToString(res.markdown, title.position);
+
+      console.log('----------------------------------');
+      console.log('r', r);
     });
   });
 });
