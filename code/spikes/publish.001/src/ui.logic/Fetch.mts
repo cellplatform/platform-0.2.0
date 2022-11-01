@@ -6,7 +6,7 @@ export type UrlPathString = string;
  */
 export const Fetch = {
   /**
-   * Dynamic imports (code-splitting).
+   * Dynamic imports (Code Splitting) <== 🌳
    */
   module: {
     async Text() {
@@ -18,12 +18,12 @@ export const Fetch = {
   /**
    * Fetch the JSON at the given URL path.
    */
-  async json<T>(path: UrlPathString) {
-    const res = await fetch(path);
+  async json<T>(sourcePath: UrlPathString) {
+    const res = await fetch(sourcePath);
 
     const ok = res.status.toString().startsWith('2');
     if (!ok) {
-      console.warn(`[Fetch.json:${res.status}] failed to load: ${path}`);
+      console.warn(`[Fetch.json:${res.status}] failed to load: ${sourcePath}`);
       return undefined;
     }
 
@@ -34,8 +34,8 @@ export const Fetch = {
   /**
    * Fetch the "text/markdown" from the given URL path.
    */
-  async markdown(path: UrlPathString) {
-    const { text, processor, error } = await Fetch.textAndProcessor(path);
+  async markdown(sourcePath: UrlPathString) {
+    const { text, processor, error } = await Fetch.textAndProcessor(sourcePath);
     const res = await processor.toMarkdown(text);
     return { ...res, error };
   },
@@ -43,8 +43,8 @@ export const Fetch = {
   /**
    * Fetch the "text/markdown" from the given URL path.
    */
-  async markdownAsHtml(path: UrlPathString) {
-    const { text, processor, error } = await Fetch.textAndProcessor(path);
+  async markdownAsHtml(sourcePath: UrlPathString) {
+    const { text, processor, error } = await Fetch.textAndProcessor(sourcePath);
     const res = await processor.toHtml(text);
     return { ...res, error };
   },
@@ -59,16 +59,24 @@ export const Fetch = {
   },
 
   /**
-   * Fetch the Text module, processor and data.
+   * Fetch text from the given path.
    */
-  async textAndProcessor(path: UrlPathString) {
-    const Text = await Fetch.module.Text();
-    const processor = Text.Processor.markdown();
-    const res = await fetch(path);
+  async text(sourcePath: UrlPathString) {
+    const res = await fetch(sourcePath);
     const { status } = res;
     const ok = res.status.toString().startsWith('2');
     const text = ok ? await res.text() : '';
-    const error = ok ? undefined : `${status} Failed to fetch: ${path}`;
-    return { ok, status, text, processor, error };
+    const error = ok ? undefined : `${status} Failed to fetch: ${sourcePath}`;
+    return { ok, status, text, error };
+  },
+
+  /**
+   * Fetch the Text module, processor and data.
+   */
+  async textAndProcessor(sourcePath: UrlPathString) {
+    const Text = await Fetch.module.Text();
+    const processor = Text.Processor.markdown();
+    const res = await Fetch.text(sourcePath);
+    return { ...res, processor };
   },
 };
