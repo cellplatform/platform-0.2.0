@@ -64,40 +64,24 @@ describe('HTML mutation (H-AST)', () => {
     expect(fired).to.eql(true);
   });
 
-  it.skip('sample: adjust image size (resolved into HTML string)', async () => {
+  it('sample: adjust image size (resolved into HTML string)', async () => {
     type T = { className?: string; srcset?: string };
 
     const INPUT = '![image](file.png)';
     const res = await processor.toHtml(INPUT, {
-      hast(e) {
+      mdast(e) {
         e.visit((e) => {
-          if (e.node.type === 'element' && e.node.tagName === 'img') {
-            // const props = e.hProperties______<T>();
-
-            // TODO 🐷 hProperties should be within MD processor.
-
-            // props.className = 'foo';
-            // props.srcset = 'foo.png 1x, foo@2x.png 2x';
-
-            console.log('e.node', e.node);
-
-            const p = e.node.properties || (e.node.properties = {});
-            p.srcset = 'foo.png x1';
+          if (e.node.type === 'image') {
+            const props = e.hProperties<T>();
+            props.className = 'foobar';
+            props.srcset = 'foo.png 1x, foo@2x.png 2x';
           }
         });
       },
     });
 
-    /**
-     * TODO 🐷
-     * ENSURE properties make it into the final HTML
-     */
-
-    console.log('-------------------------------');
-    console.log('res', res);
-    console.log('res', res.html);
-    // expect(_tree?.type).to.eql('root');
-    // expect(_tree?.children[1].type).to.eql('element');
-    // expect(_visit.length).to.eql(7);
+    expect(res.html).to.include(
+      '<img alt="image" class="foobar" srcset="foo.png 1x, foo@2x.png 2x">',
+    );
   });
 });

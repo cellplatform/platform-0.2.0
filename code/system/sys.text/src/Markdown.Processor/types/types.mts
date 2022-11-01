@@ -10,13 +10,13 @@ export type MarkdownProcessor = {
 };
 
 export type MarkdownProcessedMd = {
-  readonly info: MarkdownInfo;
+  readonly info: t.MarkdownInfo;
   readonly markdown: string;
   toString(): string;
 };
 
 export type MarkdownProcessedHtml = {
-  readonly info: MarkdownInfo;
+  readonly info: t.MarkdownHtmlInfo;
   readonly html: string;
   readonly markdown: string;
   toString(): string;
@@ -56,17 +56,4 @@ export type HtmlOptions = MarkdownOptions & {
    * as the final step prior to "stringifying" to text.
    */
   hast?: (fn: t.MutateHast) => void;
-};
-
-/**
- * Derived information about the structure of some markdown
- * resulting from the markdown text-processor running.
- */
-export type MarkdownInfo = {
-  ast: t.MdastRoot;
-  code: {
-    all: CodeBlock[];
-    typed: CodeBlock[]; //     Code blocks with a "type" meta-data suffix, (eg. ```yaml my.typename).
-    untyped: CodeBlock[]; //   Code blocks without a "type" meta-data suffix.
-  };
 };

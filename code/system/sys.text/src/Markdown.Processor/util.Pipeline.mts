@@ -78,11 +78,11 @@ export const Pipeline = {
         };
 
         return {
-          get ast() {
+          code,
+          get mdast() {
             if (!_root) throw new Error(`The root of the markdown has not been parsed`);
             return _root;
           },
-          code,
         };
       },
     };

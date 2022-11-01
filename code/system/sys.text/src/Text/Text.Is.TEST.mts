@@ -8,7 +8,7 @@ describe('Text.Is (flags)', () => {
 
   it('node (AST)', async () => {
     const md = await Text.Processor.markdown().toHtml('# Heading');
-    const ast = md.info.ast;
+    const ast = md.info.mdast;
 
     const test = (input: any, expected: boolean) => {
       expect(Is.node(input)).to.eql(expected);

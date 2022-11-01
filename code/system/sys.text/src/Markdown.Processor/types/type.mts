@@ -46,6 +46,7 @@ export type HtmlOptions = MarkdownOptions & {
  * resulting from the markdown text-processor running.
  */
 export type MarkdownInfo = {
-  ast: t.MdastRoot;
+  mdast: t.MdastRoot;
   code: t.CodeInfo;
 };
+export type MarkdownHtmlInfo = MarkdownInfo & {};
