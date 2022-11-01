@@ -18,14 +18,13 @@ export type ProcessedMdastStringOptions = {
 };
 
 export type ProcessedHast = {
-  readonly info: MarkdownInfo;
+  readonly info: MarkdownHtmlInfo;
   readonly html: string;
   readonly markdown: string;
   toString(options?: ProcessedHastStringOptions): string;
 };
 export type ProcessedHastStringOptions = {
-  kind?: 'html' | 'md' | 'foo';
-  position?: t.AstPosition;
+  kind?: 'html' | 'md';
 };
 
 /**
@@ -57,4 +56,4 @@ export type MarkdownInfo = {
   mdast: t.MdastRoot;
   code: t.CodeInfo;
 };
-export type MarkdownHtmlInfo = MarkdownInfo & {};
+export type MarkdownHtmlInfo = MarkdownInfo & { hast: t.HastRoot };

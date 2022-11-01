@@ -15,7 +15,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       const text = Format.input(input);
       const vfile = await builder.pipeline.process(text);
       const markdown = Format.text(vfile?.toString());
-      const info = builder.info;
+      const info = builder.info.markdown;
 
       const res: t.ProcessedMdast = {
         info,
@@ -39,15 +39,14 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       const vfile = await builder.pipeline.process(text);
       const html = Format.text(vfile?.toString());
       const markdown = Format.text(text);
-      const info = builder.info;
+      const info = builder.info.html;
       const res: t.ProcessedHast = {
         info,
         html,
         markdown,
         toString(options = {}) {
-          const { kind = 'md', position } = options;
-          const text = kind === 'html' ? html : markdown;
-          return trimToPosition(text, position);
+          const { kind = 'md' } = options;
+          return kind === 'html' ? html : markdown;
         },
       };
 

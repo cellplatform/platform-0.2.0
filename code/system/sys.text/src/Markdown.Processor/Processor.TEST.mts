@@ -1,4 +1,4 @@
-import { describe, expect, it, t } from '../test/index.mjs';
+import { describe, expect, it } from '../test/index.mjs';
 import { MarkdownProcessor } from './index.mjs';
 
 describe('TextProcessor.md', () => {
@@ -153,7 +153,7 @@ A note[^1]
       expect(h.toString({ kind: 'html' })).to.eql(h.html);
     });
 
-    it('{ position }: MARKDOWN', async () => {
+    it('{ position }: within MARKDOWN', async () => {
       const m = await processor.toMarkdown(INPUT);
       const title = m.info.mdast.children[0];
       const li = m.info.mdast.children[1];
@@ -163,59 +163,6 @@ A note[^1]
 
       expect(res1).to.eql('# Hello');
       expect(res2).to.eql('*   Foo'); // NB: "-" formatted to standard "*" (https://commonmark.org)
-    });
-
-    it('{ position }: HTML', async () => {
-      // const m = await processor.toMarkdown(INPUT);
-      const h = await processor.toHtml(INPUT);
-
-      /**
-       * TODO 🐷
-       * - Return the [hast] on the root info (after process)
-       * - Use the hast {position} to pass into toString.
-       */
-
-      const title = h.info.mdast.children[0];
-      const li = h.info.mdast.children[1];
-
-      console.log('title', title);
-
-      const res1a = h.toString({ position: title.position });
-      const res1b = h.toString({ position: title.position, kind: 'html' });
-
-      console.log('-----------------------------------------');
-      console.log('res1', res1a);
-      console.log('res1b', res1b);
-
-      /**
-       * TODO 🐷
-       */
-    });
-
-    it.skip('__________no position________', async () => {
-      const res = await processor.toHtml(INPUT);
-
-      // expect(res.toString()).to.eql(INPUT);
-
-      function positionToString(text: string, position?: t.AstPosition) {
-        //
-        if (!position) return text;
-
-        console.log('position', position);
-
-        return text;
-      }
-
-      const title = res.info.mdast.children[0];
-      const pos = title.position;
-
-      // console.log('res', res.info.mdast);
-      // console.log('h', title);
-
-      const r = positionToString(res.markdown, title.position);
-
-      console.log('----------------------------------');
-      console.log('r', r);
     });
   });
 });
