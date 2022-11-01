@@ -162,7 +162,6 @@ A note[^1]
 
     it('sceanrio: parse markdown and convert a single element into HTML', async () => {
       const m = await processor.toMarkdown(INPUT);
-
       const title = m.info.mdast.children[0];
       const list = m.info.mdast.children[1];
 
