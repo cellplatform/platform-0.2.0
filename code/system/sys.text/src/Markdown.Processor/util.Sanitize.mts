@@ -17,7 +17,7 @@ export const Sanatize = {
       attributes: {
         ...ATTR,
         code: attr('code', ['className', 'language-ts', 'language-yaml']),
-        img: attr('image', ['className', 'srcset']),
+        img: attr('image', ['className', 'src', 'srcset']),
       },
     };
   },

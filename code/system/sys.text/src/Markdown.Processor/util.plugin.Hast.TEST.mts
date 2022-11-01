@@ -67,7 +67,7 @@ describe('HTML mutation (H-AST)', () => {
   it('sample: adjust image size (resolved into HTML string)', async () => {
     type T = { className?: string; srcset?: string };
 
-    const INPUT = '![image](file.png)';
+    const INPUT = '![my-image](file.png)';
     const res = await processor.toHtml(INPUT, {
       mdast(e) {
         e.visit((e) => {
@@ -80,8 +80,12 @@ describe('HTML mutation (H-AST)', () => {
       },
     });
 
-    expect(res.html).to.include(
-      '<img alt="image" class="foobar" srcset="foo.png 1x, foo@2x.png 2x">',
-    );
+    expect(res.html.startsWith('<p>')).to.eql(true);
+    expect(res.html.endsWith('</p>')).to.eql(true);
+    expect(res.html).to.include('<img');
+    expect(res.html).to.include('src="file.png"');
+    expect(res.html).to.include('alt="my-image"');
+    expect(res.html).to.include('class="foobar"');
+    expect(res.html).to.include('srcset="foo.png 1x, foo@2x.png 2x"');
   });
 });
