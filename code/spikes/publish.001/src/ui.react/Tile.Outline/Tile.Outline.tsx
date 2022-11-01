@@ -20,7 +20,7 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
   useEffect(() => {
     (async () => {
       const { info } = await MarkdownUtil.parseMarkdown(props.markdown);
-      setAst(info.ast);
+      setAst(info.mdast);
     })();
   }, [props.markdown]);
 
