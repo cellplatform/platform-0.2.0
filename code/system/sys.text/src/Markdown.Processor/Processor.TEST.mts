@@ -160,7 +160,7 @@ A note[^1]
       expect(res2b).to.eql(res1b);
     });
 
-    it('sceanrio: parse markdown and convert a single element into HTML', async () => {
+    it('sceanrio: parse markdown and convert a single MD element into HTML', async () => {
       const m = await processor.toMarkdown(INPUT);
       const title = m.info.mdast.children[0];
       const list = m.info.mdast.children[1];
