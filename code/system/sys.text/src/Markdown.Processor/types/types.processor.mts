@@ -34,19 +34,12 @@ export type HtmlOptions = MarkdownOptions & {
 export type ProcessedMdast = {
   readonly info: t.MarkdownInfo;
   readonly markdown: string;
-  toString(options?: ProcessedMdastStringOptions): string;
-};
-export type ProcessedMdastStringOptions = {
-  kind?: 'md';
-  position?: t.AstPosition;
+  toString(position?: t.AstPosition): string;
 };
 
 export type ProcessedHast = {
   readonly info: t.MarkdownHtmlInfo;
   readonly html: string;
   readonly markdown: string;
-  toString(options?: ProcessedHastStringOptions): string;
-};
-export type ProcessedHastStringOptions = {
-  kind?: 'html' | 'md';
+  toString(position?: t.AstPosition): string;
 };

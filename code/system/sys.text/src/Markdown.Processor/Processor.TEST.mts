@@ -132,37 +132,49 @@ A note[^1]
     });
   });
 
-  describe('toString( kind?, position? )', async () => {
+  describe('toString( position? )', async () => {
     const INPUT = `
 # Hello
 
 - Foo
-    `.substring(1);
+`.substring(1);
 
     const processor = MarkdownProcessor();
 
-    it('{ kind }', async () => {
-      const m = await processor.toMarkdown(INPUT);
-      const h = await processor.toHtml(INPUT);
-
-      expect(m.toString()).to.eql(m.markdown); // NB: Default.
-      expect(m.toString({ kind: 'md' })).to.eql(m.markdown);
-
-      expect(h.toString()).to.eql(h.markdown);
-      expect(h.toString({ kind: 'md' })).to.eql(h.markdown);
-      expect(h.toString({ kind: 'html' })).to.eql(h.html);
-    });
-
     it('{ position }: within MARKDOWN', async () => {
       const m = await processor.toMarkdown(INPUT);
+      const h = await processor.toHtml(INPUT);
       const title = m.info.mdast.children[0];
-      const li = m.info.mdast.children[1];
+      const list = m.info.mdast.children[1];
 
-      const res1 = m.toString({ position: title.position });
-      const res2 = m.toString({ position: li.position });
+      const res1a = m.toString(title.position);
+      const res1b = m.toString(list.position);
 
-      expect(res1).to.eql('# Hello');
-      expect(res2).to.eql('*   Foo'); // NB: "-" formatted to standard "*" (https://commonmark.org)
+      const res2a = h.toString(title.position);
+      const res2b = h.toString(list.position);
+
+      expect(res1a).to.eql('# Hello');
+      expect(res1b).to.eql('- Foo');
+
+      expect(res2a).to.eql(res1a);
+      expect(res2b).to.eql(res1b);
+    });
+
+    it('sceanrio: parse markdown and convert a single element into HTML', async () => {
+      const m = await processor.toMarkdown(INPUT);
+
+      const title = m.info.mdast.children[0];
+      const list = m.info.mdast.children[1];
+
+      const titleMd = m.toString(title.position);
+      const listMd = m.toString(list.position);
+
+      const hTitle = await processor.toHtml(titleMd);
+      const hList = await processor.toHtml(listMd);
+
+      expect(hTitle.html).to.eql('<h1>Hello</h1>');
+      expect(hList.html.startsWith('<ul>')).to.eql(true);
+      expect(hList.html.endsWith('</ul>')).to.eql(true);
     });
   });
 });

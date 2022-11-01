@@ -13,17 +13,14 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
     async toMarkdown(input, options = {}) {
       const builder = Pipeline.compose('md:only', { ...base, ...options });
       const text = Format.input(input);
-      const vfile = await builder.pipeline.process(text);
-      const markdown = Format.text(vfile?.toString());
+      await builder.pipeline.process(text);
+      const markdown = Format.text(text);
       const info = builder.info.markdown;
-
       const res: t.ProcessedMdast = {
         info,
         markdown,
-        toString(options = {}) {
-          const { kind = 'md', position } = options;
-          const text = markdown;
-          return trimToPosition(text, position);
+        toString(position) {
+          return trimToPosition(markdown, position);
         },
       };
 
@@ -44,9 +41,8 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
         info,
         html,
         markdown,
-        toString(options = {}) {
-          const { kind = 'md' } = options;
-          return kind === 'html' ? html : markdown;
+        toString(position) {
+          return trimToPosition(markdown, position);
         },
       };
 
