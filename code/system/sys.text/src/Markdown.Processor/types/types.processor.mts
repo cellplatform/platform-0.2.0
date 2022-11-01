@@ -7,26 +7,6 @@ export type MarkdownProcessor = {
   toHtml(input: MarkdownInput, options?: HtmlOptions): Promise<ProcessedHast>;
 };
 
-export type ProcessedMdast = {
-  readonly info: MarkdownInfo;
-  readonly markdown: string;
-  toString(options?: ProcessedMdastStringOptions): string;
-};
-export type ProcessedMdastStringOptions = {
-  kind?: 'md';
-  position?: t.AstPosition;
-};
-
-export type ProcessedHast = {
-  readonly info: MarkdownHtmlInfo;
-  readonly html: string;
-  readonly markdown: string;
-  toString(options?: ProcessedHastStringOptions): string;
-};
-export type ProcessedHastStringOptions = {
-  kind?: 'html' | 'md';
-};
-
 /**
  * Options for a markdown converter.
  */
@@ -49,11 +29,24 @@ export type HtmlOptions = MarkdownOptions & {
 };
 
 /**
- * Derived information about the structure of some markdown
- * resulting from the markdown text-processor running.
+ * Processed responses.
  */
-export type MarkdownInfo = {
-  mdast: t.MdastRoot;
-  code: t.CodeInfo;
+export type ProcessedMdast = {
+  readonly info: t.MarkdownInfo;
+  readonly markdown: string;
+  toString(options?: ProcessedMdastStringOptions): string;
 };
-export type MarkdownHtmlInfo = MarkdownInfo & { hast: t.HastRoot };
+export type ProcessedMdastStringOptions = {
+  kind?: 'md';
+  position?: t.AstPosition;
+};
+
+export type ProcessedHast = {
+  readonly info: t.MarkdownHtmlInfo;
+  readonly html: string;
+  readonly markdown: string;
+  toString(options?: ProcessedHastStringOptions): string;
+};
+export type ProcessedHastStringOptions = {
+  kind?: 'html' | 'md';
+};
