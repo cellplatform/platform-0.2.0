@@ -21,6 +21,7 @@ import type {
   ListItem as MdastListItem,
   Paragraph as MdastParagraph,
   Link as MdastLink,
+  Image as MdastImage,
 } from 'mdast';
 
 export {
@@ -32,6 +33,7 @@ export {
   MdastListItem,
   MdastParagraph,
   MdastLink,
+  MdastImage,
 };
 export type MdastNode =
   | MdastRoot
@@ -41,7 +43,8 @@ export type MdastNode =
   | MdastList
   | MdastListItem
   | MdastParagraph
-  | MdastLink;
+  | MdastLink
+  | MdastImage;
 
 /**
  * HAST (HTML)

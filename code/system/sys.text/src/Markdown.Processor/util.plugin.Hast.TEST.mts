@@ -6,77 +6,62 @@ describe('HTML mutation (H-AST)', () => {
   const processor = MarkdownProcessor();
 
   it('.tree', async () => {
+    let fired = false;
+
     const INPUT = '![image](file.png)';
-    let _tree: t.HastRoot | undefined;
     await processor.toHtml(INPUT, {
       hast(e) {
-        e.tree((tree) => (_tree = tree));
+        e.tree((tree) => {
+          fired = true;
+          expect(tree?.type).to.eql('root');
+          expect(tree?.children[1].type).to.eql('element');
+        });
       },
     });
 
-    expect(_tree?.type).to.eql('root');
-    expect(_tree?.children[1].type).to.eql('element');
+    expect(fired).to.eql(true);
   });
 
   it('.visit', async () => {
-    const INPUT = '![image](file.png)';
-    const _visit: t.MutateHastVisitorArgs[] = [];
-    await processor.toHtml(INPUT, {
-      hast(e) {
-        e.visit((e) => _visit.push(e));
-      },
-    });
-
-    expect(_visit.length).to.eql(7);
-  });
-
-  it('.visit: data (added to node)', async () => {
-    type T = { count?: number; msg?: string };
-    let _node: t.HastElement | undefined;
-    let _data: T | undefined;
+    let count = 0;
 
     const INPUT = '![image](file.png)';
     await processor.toHtml(INPUT, {
       hast(e) {
         e.visit((e) => {
+          count++;
+        });
+      },
+    });
+
+    expect(count).to.eql(7);
+  });
+
+  it('.visit: e.data() - node added to tree', async () => {
+    type T = { count?: number; msg?: string };
+    let fired = false;
+
+    const INPUT = '![image](file.png)';
+    await processor.toHtml(INPUT, {
+      hast(e) {
+        e.visit((e) => {
+          fired = true;
           if (e.node.type === 'element' && e.node.tagName === 'img') {
-            _node = e.node;
-            _data = e.data<T>();
+            expect(e.node?.type).to.eql('element');
+            expect(e.node?.tagName).to.eql('img');
+
             e.data<T>().count = 1234;
             e.data<T>().msg = 'hello'; // NB: second call is additive, does not destroy prior setting.
+
+            const data = e.data<T>();
+            expect(data).to.eql({ count: 1234, msg: 'hello' });
+            expect(e.node.data).to.equal(data);
           }
         });
       },
     });
-    expect(_node?.type).to.eql('element');
-    expect(_node?.tagName).to.eql('img');
 
-    expect(_data).to.eql({ count: 1234, msg: 'hello' });
-    expect(_node?.data).to.equal(_data);
-  });
-
-  it('.visit: hProperties (added to node.data)', async () => {
-    type T = { className?: string; srcset?: string };
-    let _node: t.HastElement | undefined;
-    let _hProperties: T | undefined;
-
-    const INPUT = '![image](file.png)';
-    await processor.toHtml(INPUT, {
-      hast(e) {
-        e.visit((e) => {
-          if (e.node.type === 'element' && e.node.tagName === 'img') {
-            _node = e.node;
-            _hProperties = e.hProperties<T>();
-            e.hProperties<T>().className = 'foo';
-            e.hProperties<T>().srcset = 'foo.png 1x, foo@2x.png 2x'; // NB: second call is additive, does not destroy prior setting.
-          }
-        });
-      },
-    });
-    expect(_node?.type).to.eql('element');
-    expect(_node?.tagName).to.eql('img');
-    expect(_hProperties).to.eql({ className: 'foo', srcset: 'foo.png 1x, foo@2x.png 2x' });
-    expect(_node?.data?.hProperties).to.equal(_hProperties);
+    expect(fired).to.eql(true);
   });
 
   it.skip('sample: adjust image size (resolved into HTML string)', async () => {
@@ -87,12 +72,12 @@ describe('HTML mutation (H-AST)', () => {
       hast(e) {
         e.visit((e) => {
           if (e.node.type === 'element' && e.node.tagName === 'img') {
-            const props = e.hProperties<T>();
+            // const props = e.hProperties______<T>();
 
             // TODO 🐷 hProperties should be within MD processor.
 
-            props.className = 'foo';
-            props.srcset = 'foo.png 1x, foo@2x.png 2x';
+            // props.className = 'foo';
+            // props.srcset = 'foo.png 1x, foo@2x.png 2x';
 
             console.log('e.node', e.node);
 

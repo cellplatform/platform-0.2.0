@@ -1,5 +1,4 @@
 import { visit } from 'unist-util-visit';
-
 import { CONTINUATION, isContinuation, t } from './common.mjs';
 
 /**
@@ -13,7 +12,7 @@ export const Hast = {
         /**
          * Basic reveal of the root tree.
          *    Use this with standard unified.js tools
-         *    (like 'unist-util-visit') like you would in a plugin.
+         *    (like 'unist-util-visit') like you would within a plugin.
          */
         tree: (fn) => fn(tree),
 
@@ -32,12 +31,6 @@ export const Hast = {
               data<T>() {
                 const data = e.node.data || (e.node.data = {});
                 return data as T;
-              },
-
-              hProperties<T>() {
-                const data = e.data<{ hProperties: T }>();
-                const props = data.hProperties || (data.hProperties = {} as T);
-                return props;
               },
             };
 

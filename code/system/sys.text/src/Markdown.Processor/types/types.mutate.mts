@@ -16,7 +16,7 @@ export type MutateMdast = {
   /**
    * Basic reveal of the root tree.
    *    Use this with standard unified.js tools
-   *    (like 'unist-util-visit') like you would in a plugin.
+   *    (like 'unist-util-visit') like you would within a plugin.
    */
   tree: MutateMdastTree;
 
@@ -33,9 +33,9 @@ export type MutateMdastTreeFn = (tree: t.MdastRoot) => void;
 export type MutateMdastVisitor = (fn: MutateMdastVisitorFn) => void;
 export type MutateMdastVisitorFn = (e: MutateMdastVisitorArgs) => ContinuationResponse | any;
 export type MutateMdastVisitorArgs = {
-  node: t.HastNode;
+  node: t.MdastNode;
   index: number;
-  parent: t.HastRoot | t.HastElement | null;
+  parent: t.MdastNode | null;
   data<T extends O>(): T;
   hProperties<T extends O>(): T;
 } & ContinuationDirectives;
@@ -48,7 +48,7 @@ export type MutateHast = {
   /**
    * Basic reveal of the root tree.
    *    Use this with standard unified.js tools
-   *    (like 'unist-util-visit') like you would in a plugin.
+   *    (like 'unist-util-visit') like you would within a plugin.
    */
   tree: MutateHastTree;
 
@@ -69,5 +69,4 @@ export type MutateHastVisitorArgs = {
   index: number;
   parent: t.HastRoot | t.HastElement | null;
   data<T extends O>(): T;
-  hProperties<T extends O>(): T;
 } & ContinuationDirectives;
