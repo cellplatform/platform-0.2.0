@@ -7,12 +7,11 @@ import { BundlePaths } from '../Paths.mjs';
 
 import type { VercelConfigFile } from 'cloud.vercel/src/types.mjs';
 
-type DirString = string;
-
 type Sources = {
-  app: t.Fs; //       The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; //   The source markdown content, and other assorted "author(s) generated" content.
-  src?: t.Fs; //      (optional) The "/src" source code folder (containing known "*.ts" files).
+  app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
+  content: t.Fs; //               The source markdown content, and other assorted "author(s) generated" content.
+  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files).
+  log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
 type Args = {
@@ -21,10 +20,6 @@ type Args = {
   propsType?: string;
   throwError?: boolean;
 };
-
-function wrangleDir(base: t.Fs, dir: t.Fs | DirString) {
-  return typeof dir === 'string' ? base.dir(dir) : dir;
-}
 
 /**
  * All paths related to content bundling.
@@ -61,11 +56,9 @@ export async function ContentBundle(args: Args) {
       target: t.Fs,
       options: {
         dir?: string;
-        logdir?: t.Fs | DirString;
         latest?: boolean;
       } = {},
     ) {
-      const { logdir } = options;
       const source = await sources.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
       const appfs = target.dir(Path.join(base, Paths.Bundle.app.base));
@@ -93,6 +86,7 @@ export async function ContentBundle(args: Args) {
       /**
        * Copy and process source content (data).
        */
+      const logdir = sources.log;
       await write.data(appfs, { logdir, manifest: false, vercelConfig: true });
       await appfs.write('index.json', await appfs.manifest());
 
@@ -195,7 +189,7 @@ export async function ContentBundle(args: Args) {
     async data(
       target: t.Fs,
       options: {
-        logdir?: t.Fs | DirString;
+        logdir?: t.Fs;
         manifest?: boolean;
         vercelConfig?: boolean;
       } = {},
@@ -225,7 +219,7 @@ export async function ContentBundle(args: Args) {
        */
       let log: t.PublicLogSummary | undefined;
       if (options.logdir) {
-        const fs = wrangleDir(target, options.logdir);
+        const fs = options.logdir;
         const logger = ContentLog.log(fs);
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });

@@ -14,6 +14,10 @@ const toFs = async (dir: string) => {
   return store.fs;
 };
 
+const targetdir = await toFs('./dist.deploy/');
+const logdir = await toFs('./dist.deploy/.log/');
+const publicfs = await toFs('./public/');
+
 const bundler = await ContentBundle({
   Text,
   throwError: true,
@@ -21,17 +25,14 @@ const bundler = await ContentBundle({
     app: await toFs('./dist/web'),
     src: await toFs('./src/'),
     content: await toFs('../../../../../live-state/tdb.meeting/undp'),
+    log: logdir,
   },
 });
-
-const targetdir = await toFs('./dist.deploy/');
-const logdir = './.log/';
-const publicfs = await toFs('./public/');
 
 console.log('content:bundler:', bundler);
 
 const version = bundler.version;
-const bundle = await bundler.write.bundle(targetdir, { logdir });
+const bundle = await bundler.write.bundle(targetdir, {});
 
 /**
  * Store the data in /public (for local dev usage)
@@ -45,7 +46,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
@@ -66,7 +67,7 @@ console.log('deployed', deployed.status);
  * Log results.
  */
 
-const logger = ContentLog.log(targetdir.dir(logdir));
+const logger = ContentLog.log(logdir);
 await logger.writeDeployment({
   timestamp: Time.now.timestamp,
   bundle: bundle.toObject(),
