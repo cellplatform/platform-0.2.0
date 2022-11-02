@@ -17,22 +17,21 @@ const toFs = async (dir: string) => {
 const bundler = await ContentBundle({
   Text,
   throwError: true,
-  src: {
+  sources: {
     app: await toFs('./dist/web'),
+    src: await toFs('./src/'),
     content: await toFs('../../../../../live-state/tdb.meeting/undp'),
   },
 });
 
 const targetdir = await toFs('./dist.deploy/');
-const logdir = await toFs('./dist.deploy/.log/');
-const srcdir = await toFs('./src/');
+const logdir = './.log/';
 const publicfs = await toFs('./public/');
 
 console.log('content:bundler:', bundler);
 
-const logger = ContentLog.log(logdir);
 const version = bundler.version;
-const bundle = await bundler.write.bundle(targetdir, { logdir, srcdir });
+const bundle = await bundler.write.bundle(targetdir, { logdir });
 
 /**
  * Store the data in /public (for local dev usage)
@@ -43,16 +42,6 @@ console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
 console.log();
 console.log('sizes:', bundle.size);
-
-/**
- * Make a copy the latest bundle to a stable "latest" folder.
- */
-for (const file of (await bundle.fs.manifest()).files) {
-  const path = Path.join('.latest', file.path);
-  const data = await bundle.fs.read(file.path);
-  console.log(' > ', path);
-  await targetdir.write(path, data);
-}
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
@@ -77,6 +66,7 @@ console.log('deployed', deployed.status);
  * Log results.
  */
 
+const logger = ContentLog.log(targetdir.dir(logdir));
 await logger.writeDeployment({
   timestamp: Time.now.timestamp,
   bundle: bundle.toObject(),

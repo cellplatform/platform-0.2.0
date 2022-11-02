@@ -13,12 +13,6 @@ export const MarkdownUtil = {
     return { info, markdown };
   },
 
-  async parseHtml(input: string = '') {
-    const processor = await MarkdownUtil.markdownProcessor();
-    const { info, markdown, html } = await processor.toHtml(input);
-    return { info, markdown, html };
-  },
-
   /**
    * Ensure the given string ends in a `\n` character.
    */

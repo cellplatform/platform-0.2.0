@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { css, FC, t } from '../common.mjs';
+import { Color, css, FC, t } from '../common.mjs';
 import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
+import { Text } from 'sys.text';
+
+const Markdown = Text.Markdown;
+// const Is = Text.Markdown.Is;
 
 export type MarkdownDocProps = {
   markdown?: string;
@@ -13,17 +17,41 @@ export type MarkdownDocProps = {
 export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
   const { maxWidth = 960 } = props;
 
-  const [safeHtml, setSafeHtml] = useState('');
+  const [safeHtml, setSafeHtml] = useState<(string | JSX.Element)[]>([]);
   const isEmpty = !Boolean(safeHtml);
+
+  const reset = () => setSafeHtml([]);
 
   /**
    * Lifecycle
    */
   useEffect(() => {
     (async () => {
-      const markdown = (props.markdown || '').trim();
-      const html = markdown ? (await MarkdownUtil.parseHtml(markdown)).html : '';
-      setSafeHtml(html);
+      const Processor = await MarkdownUtil.markdownProcessor();
+      const text = (props.markdown || '').trim();
+      const md = await Processor.toMarkdown(text);
+
+      reset();
+      const blocks: (string | JSX.Element)[] = [];
+      const children = md.info.mdast.children;
+
+      let i = -1;
+      for (const child of children) {
+        i++;
+
+        const image = Markdown.Find.image(child);
+        if (image) {
+          const el = <img {...styles.img} src={image.url} alt={image.alt ?? ''} />;
+          blocks.push(el);
+          continue;
+        }
+
+        const text = md.toString(child.position);
+        const h = await Processor.toHtml(text);
+        blocks.push(h.html);
+      }
+
+      setSafeHtml(blocks);
     })();
   }, [props.markdown]);
 
@@ -43,10 +71,35 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       opacity: 0.3,
     }),
     html: css({}),
+    jsxElementBlock: css({}),
+
+    img: css({
+      border: `solid 5px ${Color.format(-0.1)}`,
+      maxWidth: 550,
+    }),
   };
 
   const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
-  const elHtml = <div {...styles.html} dangerouslySetInnerHTML={{ __html: safeHtml }} />;
+  const elHtml = (
+    <div>
+      {safeHtml.map((safeHtmlOrElement, i) => {
+        if (typeof safeHtmlOrElement === 'string') {
+          return (
+            <div key={i} {...styles.html} dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }} />
+          );
+        }
+
+        if (typeof safeHtmlOrElement === 'object')
+          return (
+            <div key={i} {...styles.jsxElementBlock}>
+              {safeHtmlOrElement}
+            </div>
+          );
+
+        return null;
+      })}
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>

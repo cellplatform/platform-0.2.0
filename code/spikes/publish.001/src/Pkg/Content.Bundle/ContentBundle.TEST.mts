@@ -19,31 +19,31 @@ version: 0.1.2
     const app = TestFilesystem.memory().events.fs();
     const content = TestFilesystem.memory().events.fs();
     const target = TestFilesystem.memory().events.fs();
-    const src = { app, content };
+    const sources = { app, content };
 
     if (prefillWithData) {
-      await src.content.write('README.md', README);
+      await sources.content.write('README.md', README);
     }
 
-    return { src, target };
+    return { sources, target };
   };
 
   it('throw: file does not exist', async () => {
-    const { src } = await setup();
-    await src.content.delete('README.md'); // Remove the README that will cause the error to throw.
+    const { sources } = await setup();
+    await sources.content.delete('README.md'); // Remove the README that will cause the error to throw.
 
     // Error thrown.
-    const fn = () => ContentBundle({ Text, src, throwError: true });
+    const fn = () => ContentBundle({ Text, sources, throwError: true });
     await expectError(fn, 'File not found');
 
     // Error reported (silently).
-    const pipeline = await ContentBundle({ Text, src, throwError: false }); // NB: default.
+    const pipeline = await ContentBundle({ Text, sources, throwError: false }); // NB: default.
     expect(pipeline.README.error).to.include('File not found');
   });
 
   it('load (default dir <none>)', async () => {
-    const { src, target } = await setup();
-    const pipeline = await ContentBundle({ Text, src });
+    const { sources, target } = await setup();
+    const pipeline = await ContentBundle({ Text, sources });
     await pipeline.README.write(target);
 
     const m = await target.manifest();
@@ -52,8 +52,8 @@ version: 0.1.2
   });
 
   it.skip('write: default dir (none)', async () => {
-    const { src, target } = await setup();
-    const pipeline = await ContentBundle({ Text, src });
+    const { sources, target } = await setup();
+    const pipeline = await ContentBundle({ Text, sources });
     await pipeline.write.bundle(target);
 
     const m = await target.manifest();
@@ -66,8 +66,8 @@ version: 0.1.2
   });
 
   it.skip('write: custom dir', async () => {
-    const { src, target } = await setup();
-    const pipeline = await ContentBundle({ Text, src });
+    const { sources, target } = await setup();
+    const pipeline = await ContentBundle({ Text, sources });
     await pipeline.write.bundle(target, { dir: '/foo/bar/' });
 
     const m = await target.manifest();
