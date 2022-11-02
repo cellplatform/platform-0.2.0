@@ -4,7 +4,8 @@ import { Pipeline } from './util.Pipeline.mjs';
 /**
  * Markdown transformer.
  */
-export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownProcessor {
+
+export const MarkdownProcessor: t.MarkdownProcessorFactory = (options = {}) => {
   const base = options;
   return {
     /**
@@ -16,9 +17,11 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       await builder.pipeline.process(text);
       const markdown = Format.text(text);
       const info = builder.info.markdown;
+      const { mdast } = info;
       const res: t.ProcessedMdast = {
         info,
         markdown,
+        mdast,
         toString(position) {
           return trimToPosition(markdown, position);
         },
@@ -37,10 +40,13 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       const html = Format.text(vfile?.toString());
       const markdown = Format.text(text);
       const info = builder.info.html;
+      const { mdast, hast } = info;
       const res: t.ProcessedHast = {
         info,
         html,
         markdown,
+        mdast,
+        hast,
         toString(position) {
           return trimToPosition(markdown, position);
         },
@@ -49,7 +55,7 @@ export function MarkdownProcessor(options: t.MarkdownOptions = {}): t.MarkdownPr
       return res;
     },
   };
-}
+};
 
 /**
  * Helpers

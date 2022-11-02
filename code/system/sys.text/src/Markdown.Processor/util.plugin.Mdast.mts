@@ -5,7 +5,7 @@ import { CONTINUATION, isContinuation, t } from './common.mjs';
  * Tools for manipulating an MARKDOWN (MD-AST) tree.
  */
 export const Mdast = {
-  optionPlugin(options?: t.MarkdownOptions) {
+  optionPlugin(options?: t.MarkdownProcessorOptions) {
     return (tree: t.MdastRoot) => {
       const fn = options?.mdast;
       fn?.({

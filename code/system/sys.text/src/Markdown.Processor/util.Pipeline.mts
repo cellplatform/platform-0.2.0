@@ -17,7 +17,7 @@ export const Pipeline = {
   /**
    * Compose together a pipeline of text transformation plugins.
    */
-  compose(kind: 'md:only' | 'md > html', options: t.MarkdownOptions & t.HtmlOptions = {}) {
+  compose(kind: 'md:only' | 'md > html', options: t.MarkdownProcessorOptions & t.HtmlOptions = {}) {
     const { gfm = true } = options;
     const pipeline = unified();
     const _code: t.CodeBlock[] = [];
