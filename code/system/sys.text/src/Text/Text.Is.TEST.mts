@@ -6,7 +6,7 @@ describe('Text.Is (flags)', () => {
     expect(Text.Is).to.equal(Is);
   });
 
-  it('node (AST)', async () => {
+  it('Is.node (AST)', async () => {
     const md = await Text.Processor.markdown().toHtml('# Heading');
     const ast = md.info.mdast;
 
