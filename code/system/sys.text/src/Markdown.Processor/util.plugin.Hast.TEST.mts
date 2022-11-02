@@ -65,7 +65,7 @@ describe('HTML mutation (H-AST)', () => {
   });
 
   it('sample: adjust image size (resolved into HTML string)', async () => {
-    type T = { className?: string; srcset?: string };
+    type T = { className?: string; srcset?: string; width?: number; height?: number };
 
     const INPUT = '![my-image](file.png)';
     const res = await processor.toHtml(INPUT, {
@@ -75,6 +75,8 @@ describe('HTML mutation (H-AST)', () => {
             const props = e.hProperties<T>();
             props.className = 'foobar';
             props.srcset = 'foo.png 1x, foo@2x.png 2x';
+            props.width = 600;
+            props.height = 300;
           }
         });
       },
@@ -87,5 +89,7 @@ describe('HTML mutation (H-AST)', () => {
     expect(res.html).to.include('alt="my-image"');
     expect(res.html).to.include('class="foobar"');
     expect(res.html).to.include('srcset="foo.png 1x, foo@2x.png 2x"');
+    expect(res.html).to.include('width="600"');
+    expect(res.html).to.include('height="300"');
   });
 });
