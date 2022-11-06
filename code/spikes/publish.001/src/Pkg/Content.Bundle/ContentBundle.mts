@@ -1,33 +1,46 @@
-import { t, Path } from '../common.mjs';
-import { MarkdownFile } from '../../Markdown.File/index.mjs';
 import { Filesize } from 'sys.fs';
+
+import { MarkdownFile } from '../../Markdown.File/index.mjs';
+import { Path, t } from '../common.mjs';
 import { ContentLog } from '../Content.Log/ContentLog.mjs';
 import { BundlePaths } from '../Paths.mjs';
 
+import type { VercelConfigFile } from 'cloud.vercel/src/types.mjs';
+
 type Sources = {
-  app: t.Fs; //     The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; // The source markdown content, and other assorted "author(s) generated" content.
+  app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
+  content: t.Fs; //               The source markdown content, and other assorted "author(s) generated" content.
+  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files).
+  log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
 type Args = {
   Text: t.Text;
-  src: Sources;
+  sources: Sources;
   propsType?: string;
   throwError?: boolean;
+};
+
+/**
+ * All paths related to content bundling.
+ */
+const Paths = {
+  Bundle: BundlePaths,
+  latestDir: '.latest',
 };
 
 /**
  * Setup a deployment.
  */
 export async function ContentBundle(args: Args) {
-  const { Text, src, throwError, propsType = 'project.props' } = args;
+  const { Text, sources, throwError, propsType = 'project.props' } = args;
 
   /**
    * Load and parse the README file.
    */
   const README = await MarkdownFile({
     Text,
-    src: src.content,
+    src: sources.content,
     path: 'README.md',
     propsType,
     throwError,
@@ -39,11 +52,21 @@ export async function ContentBundle(args: Args) {
     /**
      * Write the content to the given filesystem location.
      */
-    async bundle(target: t.Fs, options: { dir?: string; logdir?: t.Fs; srcdir?: t.Fs } = {}) {
-      const { logdir } = options;
-      const source = await src.app.manifest();
+    async bundle(
+      target: t.Fs,
+      options: {
+        dir?: string;
+        latest?: boolean;
+      } = {},
+    ) {
+      const source = await sources.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
-      const appfs = target.dir(Path.join(base, BundlePaths.app.base));
+      const appfs = target.dir(Path.join(base, Paths.Bundle.app.base));
+
+      /**
+       * Delete existing bundle (if any).
+       */
+      await target.delete(base);
 
       /**
        * Root README.
@@ -55,31 +78,41 @@ export async function ContentBundle(args: Args) {
        */
       await Promise.all(
         source.files.map(async (file) => {
-          await appfs.write(file.path, await src.app.read(file.path));
+          const data = await sources.app.read(file.path);
+          await appfs.write(file.path, data);
         }),
       );
 
       /**
        * Copy and process source content (data).
        */
+      const logdir = sources.log;
       await write.data(appfs, { logdir, manifest: false, vercelConfig: true });
       await appfs.write('index.json', await appfs.manifest());
 
       /**
-       * Copy in source (.ts files) from "/src"
+       * Copy in known source (.ts) files from "/src"
        * Used for vercel edge functions.
        */
-      if (options.srcdir) {
-        const src = options.srcdir;
-        const m = await src.manifest({ dir: '/api/' });
+      if (sources.src) {
+        const m = await sources.src.manifest({ dir: '/api/' });
         for (const { path } of m.files) {
-          const data = await src.read(path);
+          const data = await sources.src.read(path);
           await appfs.write(path, data);
         }
-        await appfs.write('middleware.ts', await src.read('middleware.ts'));
+
+        const middlewareFile = 'middleware.ts';
+        if (await sources.src.exists(middlewareFile)) {
+          await appfs.write(middlewareFile, await sources.src.read(middlewareFile));
+        }
 
         // Used by edge/middleware functions on Vercel.
-        const pkg = { dependencies: { '@vercel/edge': '0.0.5' } };
+        const pkg = {
+          dependencies: { '@vercel/edge': '0.0.5' },
+          devDependencies: { typescript: '4.8.4' },
+          licence: 'MIT',
+        };
+
         await appfs.write('package.json', pkg);
       }
 
@@ -90,12 +123,25 @@ export async function ContentBundle(args: Args) {
       const manifest = await fs.manifest();
       await fs.write('index.json', manifest);
 
+      /**
+       * Make a copy to ".latest" in the output directory.
+       */
+      if (options.latest !== false) {
+        await target.delete(Paths.latestDir); // Clear away existing.
+        const from = target.dir(base);
+        const to = target.dir(Paths.latestDir);
+        for (const file of (await from.manifest()).files) {
+          const data = await from.read(file.path);
+          await to.write(file.path, data);
+        }
+      }
+
       // Finish up.
       const api = {
         version,
 
         dir: {
-          app: BundlePaths.app.base,
+          app: Paths.Bundle.app.base,
         },
 
         get manifest() {
@@ -114,10 +160,10 @@ export async function ContentBundle(args: Args) {
           const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => match(path, BundlePaths.app.assets)),
+            assets: toSize(manifest, (path) => match(path, Paths.Bundle.app.lib)),
             data: {
               md: toSize(manifest, (path) =>
-                match(path, BundlePaths.app.base, BundlePaths.data.md),
+                match(path, Paths.Bundle.app.base, Paths.Bundle.data.md),
               ),
             },
           };
@@ -149,16 +195,16 @@ export async function ContentBundle(args: Args) {
       } = {},
     ) {
       const MD = Text.Processor.markdown();
-      const source = await src.content.manifest();
+      const source = await sources.content.manifest();
 
       /**
-       * Copy source content files.
+       * Copy source "content" files.
        */
       await Promise.all(
         source.files.map(async (file) => {
-          const data = await src.content.read(file.path);
+          const data = await sources.content.read(file.path);
           const md = await MD.toHtml(data);
-          const path = Path.join(BundlePaths.data.md, file.path);
+          const path = Path.join(Paths.Bundle.data.md, file.path);
           await target.write(path, md.markdown);
         }),
       );
@@ -173,42 +219,22 @@ export async function ContentBundle(args: Args) {
        */
       let log: t.PublicLogSummary | undefined;
       if (options.logdir) {
-        const logger = ContentLog.log(options.logdir);
+        const fs = options.logdir;
+        const logger = ContentLog.log(fs);
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });
-        await target.write(BundlePaths.data.log, log);
+        await target.write(Paths.Bundle.data.log, log);
       }
 
       /**
        * Write a [vercel.json] configuration file.
-       * Ref:
-       *  - https://vercel.com/docs/project-configuration#project-configuration/redirects
-       *  - https://vercel.com/docs/project-configuration#project-configuration/rewrites
+       * NOTE:
+       *    Most of the routing will probably handled within a [src.middleware.ts] file.
+       * REF:
+       *  - https://vercel.com/docs/project-configuration#project-configuration
        */
       if (options.vercelConfig) {
-        type VercelConfig = { cleanUrls?: boolean; redirects?: Redirect[]; rewrites?: Rewrite[] };
-        type Redirect = { source: string; destination: string };
-        type Rewrite = { source: string; destination: string };
-
-        const redirects: Redirect[] = [];
-        const rewrites: Rewrite[] = [];
-
-        /**
-         * TODO 🐷
-         * Handle version rewrites within middleware
-         */
-
-        // Display root renderer from any version match.
-        // rewrites.push({ source: '/:version', destination: '/' });
-
-        // Redirect to latest version.
-        // redirects.push({ source: '/', destination: `/${version}` });
-
-        const config: VercelConfig = {
-          cleanUrls: true,
-          redirects,
-          rewrites,
-        };
+        const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
         await target.write('vercel.json', config);
       }
     },

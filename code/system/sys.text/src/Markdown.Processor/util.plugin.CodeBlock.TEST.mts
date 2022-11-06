@@ -29,7 +29,7 @@ export default { foo: 123 }
 ---
 
 The End.
-`;
+`.substring(1);
 
 describe('Markdown: code-block (```) procesing', () => {
   describe('typed code-blocks: ```<lang> <type>', () => {

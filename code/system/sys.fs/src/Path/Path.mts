@@ -1,15 +1,7 @@
-import { parts } from './Path.parts.mjs';
 import { PathUri as Uri } from './PathUri.mjs';
-import * as Within from './Path.within.mjs';
-import * as Join from './Path.join.mjs';
-import * as Trim from './Path.trim.mjs';
-import * as To from './Path.to.mjs';
+import { Path as Base } from 'sys.util';
 
 export const Path = {
+  ...Base,
   Uri,
-  parts,
-  ...Join,
-  ...Trim,
-  ...To,
-  ...Within,
 };

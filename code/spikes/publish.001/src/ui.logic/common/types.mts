@@ -1,19 +1,14 @@
 /**
+ * @external
+ */
+export type { Observable } from 'rxjs';
+
+/**
  * @system
  */
-export type {
-  AstNode,
-  MdastRoot,
-  MdastHeading,
-  MdastCode,
-  MdastText,
-  MdastList,
-  MdastListItem,
-  MdastParagraph,
-} from 'sys.text/src/types.mjs';
-export type { Text, MarkdownProcessor } from 'sys.text/src/types.mjs';
+export type { EventBus, Event, Disposable } from 'sys.types';
 
 /**
  * @local
  */
-export * from '../../types.mjs';
+export * from '../../common/types.mjs';

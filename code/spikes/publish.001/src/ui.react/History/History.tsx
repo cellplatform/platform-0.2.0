@@ -1,14 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
 import { HistoryUtil } from './HistoryUtil.mjs';
+import { HistoryItem } from './History.Item';
+
+const DEFAULT = {
+  TITLE: 'History',
+  V0: '0.0.0',
+};
 
 export type HistoryProps = {
+  instance: t.StateInstance;
+  title?: string;
   data?: t.PublicLogSummary;
   style?: t.CssValue;
 };
 
 export const History: React.FC<HistoryProps> = (props) => {
+  const { title = DEFAULT.TITLE } = props;
   const data = HistoryUtil.format(props.data);
+  const isVZero = data.latest.version === DEFAULT.V0;
 
   /**
    * [Render]
@@ -17,8 +26,8 @@ export const History: React.FC<HistoryProps> = (props) => {
     base: css({
       padding: 15,
       paddingRight: 0,
-      borderLeft: `solid 1px ${Color.format(-0.1)}`,
       boxSizing: 'border-box',
+      userSelect: 'none',
     }),
     body: css({}),
     title: css({
@@ -30,7 +39,8 @@ export const History: React.FC<HistoryProps> = (props) => {
     }),
 
     list: css({
-      lineHeight: '1.6em',
+      lineHeight: '1.3em',
+      paddingRight: 12,
     }),
 
     item: {
@@ -45,26 +55,22 @@ export const History: React.FC<HistoryProps> = (props) => {
 
   const elBody = data && (
     <div {...styles.body}>
-      <div {...styles.title} onClick={() => console.info('history', data)}>
-        History
+      <div
+        {...styles.title}
+        onClick={() => {
+          console.info('version:history', data); // TEMP 🐷
+        }}
+      >
+        {title}
       </div>
 
-      <div {...css(styles.item.base, styles.item.latest)}>{data.latest.version}</div>
+      <div {...css(styles.item.base, styles.item.latest)}>
+        {isVZero ? '-' : data.latest.version}
+      </div>
 
       <div {...styles.list}>
         {data.history.map((item, i) => {
-          const isLatest = item.version === data.latest?.version;
-          const onClick = () => console.info(item);
-          return (
-            <div
-              key={i}
-              {...styles.item.base}
-              style={{ opacity: isLatest ? 1 : 0.3 }}
-              onClick={onClick}
-            >
-              {item.version}
-            </div>
-          );
+          return <HistoryItem key={i} data={item} latest={data.latest?.version} />;
         })}
       </div>
     </div>

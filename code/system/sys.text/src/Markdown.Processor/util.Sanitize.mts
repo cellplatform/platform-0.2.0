@@ -1,4 +1,4 @@
-import { defaultSchema } from 'rehype-sanitize';
+import { defaultSchema as base } from 'rehype-sanitize';
 import type { Schema } from 'hast-util-sanitize';
 
 /**
@@ -9,14 +9,15 @@ export const Sanatize = {
    *  REF: https://github.com/rehypejs/rehype-sanitize
    */
   schema(): Schema {
+    const ATTR = base.attributes || {};
+    const attr = (key: string, value: string[]) => [...(ATTR[key] || []), ...value];
+
     return {
-      ...defaultSchema,
+      ...base,
       attributes: {
-        ...defaultSchema.attributes,
-        code: [
-          ...((defaultSchema.attributes || {}).code || []),
-          ['className', 'language-ts', 'language-yaml'],
-        ],
+        ...ATTR,
+        code: attr('code', ['className', 'language-ts', 'language-yaml']),
+        img: attr('image', ['className', 'src', 'srcset', 'width', 'height']),
       },
     };
   },

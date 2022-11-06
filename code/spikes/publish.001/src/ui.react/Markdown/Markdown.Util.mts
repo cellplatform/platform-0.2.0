@@ -1,16 +1,16 @@
-import { t } from '../common.mjs';
-import { Fetch } from '../Fetch.mjs';
+import { Fetch } from '../common.mjs';
+import { MarkdownFind as find } from './Markdown.Util.Find.mjs';
 
 export const MarkdownUtil = {
+  find,
+
   /**
-   * Code-Split
+   * Language Parser/Transformations.
    */
   async parseMarkdown(input: string = '') {
-    const Text = await Fetch.module.Text(); // <== NB: Code Splitting
-    const transform = Text.Processor.markdown();
-    const { info, markdown } = await transform.toMarkdown(input);
-    const { ast } = info;
-    return { info, markdown, ast };
+    const processor = await MarkdownUtil.markdownProcessor();
+    const { info, markdown } = await processor.toMarkdown(input);
+    return { info, markdown };
   },
 
   /**
@@ -20,5 +20,13 @@ export const MarkdownUtil = {
     input = input || '';
     if (input[input.length - 1] !== '\n') input = `${input}\n`;
     return input;
+  },
+
+  /**
+   * Pull the [Text] module and initialize a new markdown processor.
+   */
+  async markdownProcessor() {
+    const Text = await Fetch.module.Text(); // <== NB: Dynamic module load | (Code Split) 🌳
+    return Text.Processor.markdown();
   },
 };

@@ -1,9 +1,8 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, Time } from 'sys.util';
+import { rx, Time, Path } from 'sys.util';
 
 import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
-
 import { pushToVercel } from './deploy.vercel.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
@@ -15,25 +14,25 @@ const toFs = async (dir: string) => {
   return store.fs;
 };
 
+const targetdir = await toFs('./dist.deploy/');
+const logdir = await toFs('./dist.deploy/.log/');
+const publicfs = await toFs('./public/');
+
 const bundler = await ContentBundle({
   Text,
   throwError: true,
-  src: {
+  sources: {
     app: await toFs('./dist/web'),
+    src: await toFs('./src/'),
     content: await toFs('../../../../../live-state/tdb.meeting/undp'),
+    log: logdir,
   },
 });
 
-const targetdir = await toFs('./dist.deploy/');
-const logdir = await toFs('./dist.deploy/.log/');
-const srcdir = await toFs('./src/');
-const publicfs = await toFs('./public/');
+console.log('content:bundler:', bundler);
 
-console.log('content', bundler);
-
-const logger = ContentLog.log(logdir);
 const version = bundler.version;
-const bundle = await bundler.write.bundle(targetdir, { logdir, srcdir });
+const bundle = await bundler.write.bundle(targetdir, {});
 
 /**
  * Store the data in /public (for local dev usage)
@@ -46,7 +45,9 @@ console.log();
 console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
+
 // process.exit(0); // TEMP 🐷
+
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
 /**
@@ -66,6 +67,7 @@ console.log('deployed', deployed.status);
  * Log results.
  */
 
+const logger = ContentLog.log(logdir);
 await logger.writeDeployment({
   timestamp: Time.now.timestamp,
   bundle: bundle.toObject(),

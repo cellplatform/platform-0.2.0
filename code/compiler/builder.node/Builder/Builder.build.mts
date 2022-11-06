@@ -49,13 +49,15 @@ export async function build(
 
   // Finish up.
   if (!silent) {
+    const typedir = `/${Paths.types.dirname}/`;
     const size = await Util.folderSize(fs.join(dir, 'dist'));
-    const totalBundle = size.paths.filter((p) => !p.includes('/types.d/')).length;
-    const totalTypes = size.paths.filter((p) => p.includes('/types.d/')).length;
+    const types = size.paths.filter((p) => p.includes(typedir));
+    const bundle = size.paths.filter((p) => !p.includes(typedir));
+    const typesSize = await Util.folderSize(fs.join(dir, Paths.types.dist));
 
     const prefix = pc.bgCyan(pc.bold(' dist '));
     const filesize = pc.bold(pc.white(size.toString()));
-    const total = `${totalBundle} files, ${totalTypes} typefiles`;
+    const total = `${bundle.length} files, ${types.length} typefiles(${typesSize.toString()})`;
 
     console.info(``);
     console.info(pc.gray(`${prefix} ${filesize}`));

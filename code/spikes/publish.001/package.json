@@ -4,14 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "yarn serve-tmp",
-    "serve-tmp": "cd tmp/dist && serve",
-    "serve-dist": "cd dist && serve",
+    "serve": "cd dist/web && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "prepare": "yarn build && yarn test --run --reporter=verbose",
-    "deploy": "yarn prepare && yarn tmp",
+    "deploy": "yarn audit && yarn prepare && yarn tmp",
     "tmp": "ts-node-esm -T  ./script.ts/tmp.mts"
   },
   "dependencies": {
@@ -28,8 +26,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.9cb46ac4.js",
-    "./web": "./dist/web/assets/index.9cb46ac4.js"
+    ".": "./dist/web/lib/index.b0342bcb.js",
+    "./web": "./dist/web/lib/index.b0342bcb.js"
   },
   "typesVersions": {
     "*": {

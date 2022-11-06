@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
-
-import Editor, { DiffEditor, useMonaco, loader } from '@monaco-editor/react';
-import type { OnChange } from '@monaco-editor/react';
-
+import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { useRef, useEffect } from 'react';
+
+import { css, t } from '../common.mjs';
+
+import type { OnChange } from '@monaco-editor/react';
 
 /**
  * REF: https://github.com/suren-atoyan/monaco-react
@@ -13,7 +13,7 @@ export type Monaco = typeof monaco;
 export type MonacoEditor = monaco.editor.IStandaloneCodeEditor;
 
 export type MarkdownEditorProps = {
-  markdown: string;
+  markdown?: string;
   focusOnLoad?: boolean;
   style?: t.CssValue;
   onChange?: (e: { text: string }) => void;
@@ -24,24 +24,24 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
   const editorRef = useRef<MonacoEditor>();
 
   /**
-   * Lifecycle/handlers
+   * [Lifecycle]
    */
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (editor && markdown !== editor.getValue()) {
+      editor.setValue(markdown ?? '');
+    }
+  }, [markdown]);
 
+  /**
+   * [Handlers]
+   */
   function handleEditorDidMount(editor: MonacoEditor, monaco: Monaco) {
     editorRef.current = editor;
     if (focusOnLoad) editor.focus();
   }
 
-  function getValue() {
-    const value = editorRef.current?.getValue();
-    return value ?? '';
-  }
-
   const handleChange: OnChange = (text = '') => {
-    /**
-     * TODO 🐷
-     */
-    // const value = getValue();
     props.onChange?.({ text });
   };
 
@@ -49,7 +49,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', flex: 1 }),
+    base: css({ position: 'relative' }),
     inner: css({ Absolute: 0 }),
   };
 

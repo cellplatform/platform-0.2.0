@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, t } from '../common.mjs';
-import { Fetch } from '../Fetch.mjs';
+import { Color, COLORS, css, State, t } from '../common.mjs';
 import { History } from '../History/index.mjs';
-import { MarkdownUtil } from '../Markdown/index.mjs';
-import { State, BundlePaths } from '../../ui.logic/index.mjs';
+import { Markdown } from '../Markdown/index.mjs';
+import { env } from './Root.env.mjs';
+import { RootTitle } from './Root.Title';
 
+const { instance } = env;
+
+/**
+ * Component
+ */
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
 export type RootProps = {
@@ -13,75 +18,63 @@ export type RootProps = {
 };
 
 export const Root: React.FC<RootProps> = (props) => {
-  const [elBody, setElBody] = useState<JSX.Element>();
-  const [log, setLog] = useState<t.PublicLogSummary>();
+  const state = State.useEvents(instance);
 
+  /**
+   * Lifecycle.
+   */
   useEffect(() => {
-    (async () => {
-      /**
-       * Load markdown data
-       */
-      const md = await Fetch.markdown(BundlePaths.data.md + 'outline.md');
+    /**
+     * TODO 🐷
+     * - Have the state instance passed in somehow
+     *   Not as implicity in the environment (as a singleton which it is now [DEV-MODE])
+     */
+    const events = State.Bus.Events({ instance });
+    events.init();
 
-      /**
-       * Load log (history)
-       */
-      const logdir = BundlePaths.data.log;
-      const log = await Fetch.json<t.PublicLogSummary>(logdir);
-      setLog(log);
-
-      /**
-       * Load <Markdown> component (code-splitting)
-       */
-      const location = State.location;
-      const Markdown = await Fetch.component.Markdown();
-      const markdown = MarkdownUtil.ensureTrailingNewline(md.markdown);
-
-      const el = <Markdown markdown={markdown} location={location.href} style={{ Absolute: 0 }} />;
-      setElBody(el);
-    })();
+    /**
+     * End of life.
+     */
+    return events.dispose();
   }, []);
 
   /**
    * [Render]
    */
   const styles = {
+    normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
     base: css({
       Absolute: 0,
-      fontFamily: 'sans-serif',
-      color: COLORS.DARK,
+      Flex: 'x-stretch-stretch',
+      boxSizing: 'border-box',
+    }),
+    left: css({
+      flex: 1,
+      Flex: 'y-stretch-stretch',
+    }),
+    right: css({
+      width: 200,
+      borderLeft: `solid 1px ${Color.format(-0.1)}`,
     }),
 
     /**
      * Content
      */
-    title: css({
-      Absolute: [30, 240, null, 30],
-      fontSize: 30,
-    }),
-
-    history: {
-      Absolute: [0, 0, 0, null],
-      width: 200,
-    },
-
-    body: css({
-      Absolute: [90, 200, 0, 0],
-      borderTop: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
-    }),
-    bodyInner: css({
-      Absolute: 0,
-      Flex: 'x-stretch-stretch',
-    }),
+    history: { flex: 1 },
+    body: css({ position: 'relative', flex: 1 }),
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.title}>Report</div>
-      <div {...styles.body}>
-        <div {...styles.bodyInner}>{elBody}</div>
+    <div {...css(styles.base, styles.normalize, props.style)}>
+      <div {...styles.left}>
+        <RootTitle text={'Report'} />
+        <div {...styles.body}>
+          <Markdown instance={instance} style={{ Absolute: 0 }} />
+        </div>
       </div>
-      <History style={styles.history} data={log} />
+      <div {...styles.right}>
+        <History instance={instance} style={styles.history} data={state.current?.log} />
+      </div>
     </div>
   );
 };

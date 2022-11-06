@@ -35,7 +35,7 @@ export const CodeBlock = {
         visit(tree, 'element', (el) => {
           /**
            * - Find the adjusted MD element placeholder.
-           * - Mutate into the final shape of the epement (updating ID attributes etc).
+           * - Mutate into the final shape of the HTML element (updating ID attributes etc).
            */
           if (getBlocks) {
             const blocks = getBlocks().filter((block) => Boolean(block.type));

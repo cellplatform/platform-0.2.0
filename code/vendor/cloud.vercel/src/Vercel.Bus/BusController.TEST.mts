@@ -2,14 +2,14 @@ import { describe, expect, it, rx, t, TestFilesystem } from '../test/index.mjs';
 import { DEFAULT } from './common.mjs';
 import { BusController, BusEvents } from './index.mjs';
 
-describe('BusController', () => {
+describe('BusController', (e) => {
   const token = process.env.VERCEL_TEST_TOKEN || '';
   const bus = rx.bus<t.VercelEvent>();
   const busid = rx.bus.instance(bus);
   const fs = TestFilesystem.memory().fs;
 
   describe('Info', () => {
-    it('defaults', async () => {
+    it('defaults', async (e) => {
       const controller = BusController({ bus, token, fs });
       const events = BusEvents({ bus });
 
@@ -57,5 +57,5 @@ describe('BusController', () => {
       expect(res1.error).to.eql(undefined);
       expect(res2.error).to.include('timed out');
     });
-  });
+  }, 9000);
 });

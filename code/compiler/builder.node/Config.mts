@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 import { fileURLToPath } from 'url';
-import { BuildOptions, defineConfig, UserConfigExport, UserConfig, LibraryOptions } from 'vite';
+import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
@@ -51,12 +51,15 @@ export const Config = {
       const build: BuildOptions = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
+        assetsDir: 'lib',
       };
 
       let config: UserConfig = {
-        plugins: [],
         build,
+        plugins: [],
         worker: { format: 'es' },
+        server: { port: 1234 },
+        base: './',
       };
 
       /**
