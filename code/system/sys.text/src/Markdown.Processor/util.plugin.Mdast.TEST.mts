@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { MarkdownProcessor } from './index.mjs';
+import { expect, describe, it } from '../test';
+import { MarkdownProcessor } from '.';
 
 describe('MARKDOWN mutation (MD-AST)', () => {
   const processor = MarkdownProcessor();

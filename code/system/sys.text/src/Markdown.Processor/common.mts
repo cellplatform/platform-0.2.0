@@ -1,6 +1,6 @@
 import { CONTINUE, EXIT, SKIP } from 'unist-util-visit';
 
-export * from '../common.mjs';
+export * from '../common';
 
 /**
  * Helpers

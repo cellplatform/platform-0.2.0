@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { t } from '../common';
 import { is as node } from 'unist-util-is';
 
 /**

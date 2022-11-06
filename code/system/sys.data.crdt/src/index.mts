@@ -1,4 +1,4 @@
-export { Crdt } from './Crdt/index.mjs';
-export { CrdtPath } from './Crdt.Path/index.mjs';
-export { CrdtBus } from './Crdt.Bus/index.mjs';
-export { rx } from './common/index.mjs';
+export { Crdt } from './Crdt';
+export { CrdtPath } from './Crdt.Path';
+export { CrdtBus } from './Crdt.Bus';
+export { rx } from './common';

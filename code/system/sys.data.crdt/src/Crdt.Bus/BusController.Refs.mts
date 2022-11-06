@@ -1,4 +1,4 @@
-import { Automerge, Is, rx, t } from '../common/index.mjs';
+import { Automerge, Is, rx, t } from '../common/';
 import { CrdtFilesystem } from './BusController.fs.mjs';
 
 type O = Record<string, unknown>;

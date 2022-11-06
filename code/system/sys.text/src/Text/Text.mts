@@ -1,5 +1,5 @@
-import { t, Yaml } from '../common.mjs';
-import { TextProcessor as Processor } from '../Text.Processor/index.mjs';
+import { t, Yaml } from '../common';
+import { TextProcessor as Processor } from '../Text.Processor';
 import { Is } from './Text.Is.mjs';
 import { Markdown } from '../Markdown';
 

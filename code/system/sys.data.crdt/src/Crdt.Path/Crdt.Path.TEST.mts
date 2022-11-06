@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../test/index.mjs';
-import { CrdtPath } from './index.mjs';
+import { describe, it, expect } from '../test/';
+import { CrdtPath } from './';
 
 describe('Crdt.Path', () => {
   describe('format', () => {

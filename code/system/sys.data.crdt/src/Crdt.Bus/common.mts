@@ -1,5 +1,5 @@
-export * from '../common/index.mjs';
-export { CrdtPath } from '../Crdt.Path/index.mjs';
+export * from '../common';
+export { CrdtPath } from '../Crdt.Path';
 
 export const DEFAULT = {
   id: 'default-instance',

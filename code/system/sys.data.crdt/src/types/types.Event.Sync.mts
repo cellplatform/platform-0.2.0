@@ -1,5 +1,3 @@
-import { t } from './common.mjs';
-
 type DocumentId = string;
 type PeerId = string;
 

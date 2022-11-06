@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../test/index.mjs';
-import { Text, Is } from './index.mjs';
+import { describe, it, expect } from '../test';
+import { Text, Is } from '.';
 
 describe('Text.Is (flags)', () => {
   it('exposed from root index', async () => {

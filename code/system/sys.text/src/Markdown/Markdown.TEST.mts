@@ -1,4 +1,4 @@
-import { describe, it, expect, t } from '../test/index.mjs';
+import { describe, it, expect, t } from '../test';
 import { Markdown } from '.';
 
 const processor = Markdown.processor();

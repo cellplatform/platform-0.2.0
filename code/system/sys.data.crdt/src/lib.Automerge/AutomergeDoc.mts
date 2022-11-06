@@ -1,4 +1,4 @@
-import { Automerge } from '../common/index.mjs';
+import { Automerge } from '../common/';
 
 /**
  * Tools for working with an [Automerge] document.

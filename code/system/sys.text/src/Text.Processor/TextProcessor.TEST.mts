@@ -1,6 +1,6 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { TextProcessor } from './index.mjs';
-import { MarkdownProcessor } from '../Markdown.Processor/index.mjs';
+import { expect, describe, it } from '../test';
+import { TextProcessor } from '.';
+import { MarkdownProcessor } from '../Markdown.Processor';
 
 describe('TextProcessor', () => {
   it('MarkdownProcessor', () => {

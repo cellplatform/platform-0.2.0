@@ -3,7 +3,7 @@ import retextStringify from 'retext-stringify';
 import { unified } from 'unified';
 import { selectAll } from 'unist-util-select';
 
-import { describe, expect, it } from '../test/index.mjs';
+import { describe, expect, it } from '../test';
 
 import type { Root, Text } from 'nlcst';
 

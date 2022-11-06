@@ -1,6 +1,6 @@
-import { describe, expect, Is, it, TestFilesystem } from '../test/index.mjs';
+import { describe, expect, Is, it, TestFilesystem } from '../test/';
 import { Automerge, Pkg, rx, slug, t } from './common.mjs';
-import { CrdtBus } from './index.mjs';
+import { CrdtBus } from './';
 
 type Doc = { count: number; msg?: string };
 
