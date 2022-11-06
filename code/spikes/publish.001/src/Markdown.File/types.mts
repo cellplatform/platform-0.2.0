@@ -23,7 +23,7 @@ export type MarkdownFile<P> = {
   props: P;
   error?: string;
   content: { html: string; markdown: string };
-  write(fs: t.Fs, options?: { dir?: string; html?: boolean; md?: boolean }): Promise<void>;
+  write(target: t.Fs, options?: { dir?: string; html?: boolean; md?: boolean }): Promise<void>;
 };
 
 /**
