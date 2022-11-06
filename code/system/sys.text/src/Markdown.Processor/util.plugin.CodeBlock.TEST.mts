@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../test/index.mjs';
-import { MarkdownProcessor } from './index.mjs';
+import { describe, it, expect } from '../test';
+import { MarkdownProcessor } from '.';
 
 const SAMPLE = `
 # My Title

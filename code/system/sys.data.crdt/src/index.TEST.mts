@@ -1,4 +1,4 @@
-import { describe, it, expect } from './test/index.mjs';
+import { describe, it, expect } from './test';
 import { Crdt, CrdtPath, CrdtBus } from './index.mjs';
 
 describe('Root Mdule API', () => {

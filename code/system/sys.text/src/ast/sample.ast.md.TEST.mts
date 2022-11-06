@@ -5,7 +5,7 @@ import { selectAll, select } from 'unist-util-select';
 import { visit } from 'unist-util-visit';
 import { visitParents } from 'unist-util-visit-parents';
 
-import { describe, expect, it } from '../test/index.mjs';
+import { describe, expect, it } from '../test';
 
 import type { Root, Heading, Text } from 'mdast';
 import type { Parent, Node, Data } from 'unist';

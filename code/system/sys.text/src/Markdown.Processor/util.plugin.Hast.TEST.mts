@@ -1,6 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { MarkdownProcessor } from './index.mjs';
-import { t } from './common.mjs';
+import { expect, describe, it } from '../test';
+import { MarkdownProcessor } from '.';
 
 describe('HTML mutation (H-AST)', () => {
   const processor = MarkdownProcessor();

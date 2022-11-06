@@ -1,4 +1,4 @@
-import { Path } from '../common/index.mjs';
+import { Path } from '../common/';
 
 export const CrdtPath = {
   format(input: string) {

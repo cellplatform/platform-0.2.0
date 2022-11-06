@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t } from './common';
 
 export type MarkdownInput = string | Uint8Array | undefined;
 

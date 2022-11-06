@@ -1,1 +1,1 @@
-export * from './types/index.mjs';
+export * from './types';

@@ -1,5 +1,5 @@
-import { CrdtPath as Path } from '../Crdt.Path/index.mjs';
-import { CrdtBus as Bus } from '../Crdt.Bus/index.mjs';
+import { CrdtPath as Path } from '../Crdt.Path';
+import { CrdtBus as Bus } from '../Crdt.Bus';
 
 export const Crdt = {
   Bus,

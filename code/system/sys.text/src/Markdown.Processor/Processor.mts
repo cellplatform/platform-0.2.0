@@ -1,4 +1,4 @@
-import { t, trimToPosition } from './common.mjs';
+import { t, trimToPosition } from './common';
 import { Pipeline } from './util.Pipeline.mjs';
 
 /**

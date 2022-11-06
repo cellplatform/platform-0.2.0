@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import { CONTINUATION, isContinuation, t } from './common.mjs';
+import { CONTINUATION, isContinuation, t } from './common';
 
 /**
  * Tools for manipulating an HTML (H-AST) tree.

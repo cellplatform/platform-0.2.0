@@ -1,5 +1,5 @@
-import { t } from '../common.mjs';
-import { MarkdownProcessor as markdown } from '../Markdown.Processor/index.mjs';
+import { t } from '../common';
+import { MarkdownProcessor as markdown } from '../Markdown.Processor';
 
 /**
  * Namespace: Plugin Processing Content extracting metatadata.

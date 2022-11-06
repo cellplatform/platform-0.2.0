@@ -1,5 +1,5 @@
-import { describe, expect, it } from '../test/index.mjs';
-import { MarkdownProcessor } from './index.mjs';
+import { describe, expect, it } from '../test';
+import { MarkdownProcessor } from '.';
 
 describe('TextProcessor.md', () => {
   describe('markdown formatting', () => {

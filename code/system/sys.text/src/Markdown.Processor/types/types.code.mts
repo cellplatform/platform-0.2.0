@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { t } from './common';
 
 /**
  * Represents a code-block within Markdown.
