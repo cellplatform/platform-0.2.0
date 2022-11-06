@@ -15,31 +15,35 @@ export type HeadingTileProps = {
   index: number;
   node: t.MdastHeading;
   siblings: { prev?: t.AstNode; next?: t.AstNode };
+  selectedUrl?: string;
   style?: t.CssValue;
   widths?: { root?: number; child?: number };
   onClick?: HeadingTileClickHandler;
 };
 
+const toRef = (node: t.MdastNode): HeadingTileClickHandlerArgs['ref'] => {
+  const match = MarkdownUtil.find.refLinks(node)[0];
+  return match ? { text: match.text, url: match.url } : undefined;
+};
+
 export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
-  const { node, siblings, widths = {} } = props;
+  const { node, siblings, widths = {}, selectedUrl = '' } = props;
   const { title, children } = TileUtil.heading({ node, siblings });
-
-  type A = HeadingTileClickHandlerArgs;
-  const fireClick = (heading: A['heading'], child?: A['child']) => {
-    let ref: A['ref'];
-    const toRef = (node: t.MdastNode): A['ref'] => {
-      const match = MarkdownUtil.find.refLinks(node)[0];
-      return match ? { text: match.text, url: match.url } : undefined;
-    };
-    if (child) ref = toRef(child.node);
-    if (!child) ref = toRef(heading.node);
-
-    props.onClick?.({ heading, child, ref });
-  };
+  const isRootSelected = toRef(node)?.url === selectedUrl;
 
   /**
    * Handlers
    */
+  const fireClick = (
+    heading: HeadingTileClickHandlerArgs['heading'],
+    child?: HeadingTileClickHandlerArgs['child'],
+  ) => {
+    let ref: HeadingTileClickHandlerArgs['ref'];
+    if (child) ref = toRef(child.node);
+    if (!child) ref = toRef(heading.node);
+    props.onClick?.({ heading, child, ref });
+  };
+
   const onRootClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -92,12 +96,6 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
       }),
 
-      dark: css({
-        color: COLORS.WHITE,
-        background: COLORS.DARK,
-        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
-      }),
-
       silver: css({
         color: COLORS.DARK,
         border: `solid 1px ${Color.format(-0.1)}`,
@@ -106,6 +104,18 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
           backgroundColor: Color.lighten(COLORS.DARK, 5),
           color: COLORS.WHITE,
         },
+      }),
+
+      dark: css({
+        color: COLORS.WHITE,
+        background: COLORS.DARK,
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
+      }),
+
+      selected: css({
+        color: COLORS.WHITE,
+        background: COLORS.DARK,
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
       }),
     },
 
@@ -116,7 +126,14 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
   };
 
   const elRootBlock = (
-    <div {...css(styles.block.base, styles.block.root, styles.block.magenta)}>
+    <div
+      {...css(
+        styles.block.base,
+        styles.block.root,
+        styles.block.magenta,
+        isRootSelected ? styles.block.selected : undefined,
+      )}
+    >
       <div {...styles.block.title}>{title}</div>
     </div>
   );
@@ -131,6 +148,9 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         if (depth === 2) colors = styles.block.silver;
         if (depth === 3) colors = styles.block.dark;
 
+        const isChildSelected = toRef(child.node)?.url === selectedUrl;
+        const selected = isChildSelected ? styles.block.selected : undefined;
+
         const onChildClick: React.MouseEventHandler = (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -141,7 +161,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         return (
           <div
             key={i}
-            {...css(styles.block.base, styles.block.child, colors)}
+            {...css(styles.block.base, styles.block.child, colors, selected)}
             onClick={onChildClick}
           >
             {text}

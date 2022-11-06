@@ -14,9 +14,9 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const { instance } = props;
 
   const state = State.Bus.useEvents(props.instance);
-  const show = QueryString.show(state.current?.location?.url);
 
   if (!state.current) return null;
+  const show = QueryString.show(state.current.location?.url);
 
   console.log('-------------------------------------------');
   console.log('Markdown/state:', state.current);
@@ -52,12 +52,18 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     const markdown = state.current?.markdown;
     const outline = markdown?.outline;
     const document = markdown?.document;
-
-    console.log(' > ', i); // TEMP 🐷
+    const selectedUrl = state.current?.selected?.url;
 
     if (kind === 'outline') {
       flex = undefined;
-      el = <TileOutline markdown={outline} scroll={true} style={{ flex: 1, padding: 40 }} />;
+      el = (
+        <TileOutline
+          selectedUrl={selectedUrl}
+          markdown={outline}
+          scroll={true}
+          style={{ flex: 1, padding: 40 }}
+        />
+      );
     }
 
     if (kind === 'doc') {
@@ -69,11 +75,13 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       flex = 2;
       el = (
         <MarkdownLayout
-          markdown={{ outline, document }}
           scroll={true}
           style={{ flex: 1 }}
+          markdown={{ outline, document }}
+          selectedUrl={selectedUrl}
           onSelectClick={(e) => {
-            State.events(instance, (state) => state.select.fire(e.ref?.url));
+            const url = e.ref?.url;
+            State.events(instance, (state) => state.select.fire(url));
           }}
         />
       );

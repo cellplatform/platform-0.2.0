@@ -55,11 +55,8 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
 
           if (def && def.lang === 'yaml') {
             const o = Text.Yaml.parse(def.text);
-            console.log('o', o);
             style.maxWidth = o.maxWidth;
           }
-
-          console.log('def', def);
 
           const el = <img {...styles.img} style={style} src={image.url} alt={image.alt ?? ''} />;
           blocks.push(el);

@@ -8,6 +8,7 @@ export type { HeadingTileClickHandler };
 
 export type TileOutlineProps = {
   markdown?: string;
+  selectedUrl?: string;
   scroll?: boolean;
   widths?: { root?: number; child?: number };
   style?: t.CssValue;
@@ -32,7 +33,6 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
       Scroll: props.scroll,
       userSelect: 'none',
     }),
-    body: css({}),
   };
 
   const children = ast?.children ?? [];
@@ -52,6 +52,7 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
           index={i}
           node={heading}
           siblings={siblings}
+          selectedUrl={props.selectedUrl}
           onClick={props.onClick}
           widths={props.widths}
         />
@@ -60,11 +61,5 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
     }
   }
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.body}>
-        <div>{elBlocks}</div>
-      </div>
-    </div>
-  );
+  return <div {...css(styles.base, props.style)}>{elBlocks}</div>;
 };

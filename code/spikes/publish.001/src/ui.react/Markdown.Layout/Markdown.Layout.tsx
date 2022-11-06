@@ -48,6 +48,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
           style={styles.outline}
           widths={{ root: 250, child: 300 }}
           markdown={props.markdown?.outline}
+          selectedUrl={props.selectedUrl}
           onClick={props.onSelectClick}
         />
       </div>
