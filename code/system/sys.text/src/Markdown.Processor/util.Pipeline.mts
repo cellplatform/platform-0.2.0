@@ -7,7 +7,7 @@ import remarkToRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 
-import { t } from './common';
+import { t } from './common.mjs';
 import { CodeBlock } from './util.plugin.CodeBlock.mjs';
 import { Hast } from './util.plugin.Hast.mjs';
 import { Mdast } from './util.plugin.Mdast.mjs';
