@@ -28,7 +28,10 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Scroll: props.scroll }),
+    base: css({
+      Scroll: props.scroll,
+      userSelect: 'none',
+    }),
     body: css({}),
   };
 

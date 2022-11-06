@@ -27,6 +27,7 @@ export const History: React.FC<HistoryProps> = (props) => {
       padding: 15,
       paddingRight: 0,
       boxSizing: 'border-box',
+      userSelect: 'none',
     }),
     body: css({}),
     title: css({
