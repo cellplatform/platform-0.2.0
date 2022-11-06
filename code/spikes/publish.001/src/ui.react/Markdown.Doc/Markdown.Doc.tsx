@@ -17,10 +17,10 @@ export type MarkdownDocProps = {
 export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
   const { maxWidth = 960 } = props;
 
-  const [safeHtml, setSafeHtml] = useState<(string | JSX.Element)[]>([]);
-  const isEmpty = !Boolean(safeHtml);
+  const [safeBlocks, setSafeBlocks] = useState<(string | JSX.Element)[]>([]);
+  const isEmpty = !Boolean(safeBlocks);
 
-  const reset = () => setSafeHtml([]);
+  const reset = () => setSafeBlocks([]);
 
   /**
    * Lifecycle
@@ -38,20 +38,43 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       let i = -1;
       for (const child of children) {
         i++;
+        /**
+         * TODO 🐷 - REFACTOR
+         */
 
+        /**
+         * Process <Image> with Component.
+         */
         const image = Markdown.Find.image(child);
         if (image) {
-          const el = <img {...styles.img} src={image.url} alt={image.alt ?? ''} />;
+          const def = md.info.code.typed.find((c) => {
+            return c.type.startsWith('doc.image') && c.type.includes(' id:');
+          });
+
+          const style: React.CSSProperties = {};
+
+          if (def && def.lang === 'yaml') {
+            const o = Text.Yaml.parse(def.text);
+            console.log('o', o);
+            style.maxWidth = o.maxWidth;
+          }
+
+          console.log('def', def);
+
+          const el = <img {...styles.img} style={style} src={image.url} alt={image.alt ?? ''} />;
           blocks.push(el);
           continue;
         }
 
+        /**
+         * Process raw HTML.
+         */
         const text = md.toString(child.position);
         const h = await Processor.toHtml(text);
         blocks.push(h.html);
       }
 
-      setSafeHtml(blocks);
+      setSafeBlocks(blocks);
     })();
   }, [props.markdown]);
 
@@ -75,14 +98,14 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
 
     img: css({
       border: `solid 5px ${Color.format(-0.1)}`,
-      maxWidth: 550,
+      // maxWidth: 550,
     }),
   };
 
   const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
   const elHtml = (
     <div>
-      {safeHtml.map((safeHtmlOrElement, i) => {
+      {safeBlocks.map((safeHtmlOrElement, i) => {
         if (typeof safeHtmlOrElement === 'string') {
           return (
             <div key={i} {...styles.html} dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }} />
