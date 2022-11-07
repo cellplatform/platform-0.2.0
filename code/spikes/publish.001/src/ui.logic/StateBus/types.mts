@@ -39,11 +39,15 @@ export type StateEvents = t.Disposable & {
   change: {
     req$: t.Observable<t.StateChangeReq>;
     res$: t.Observable<t.StateChangeRes>;
-    fire(fn: StateMutateHandler, options?: { timeout?: Milliseconds }): Promise<StateChangeRes>;
+    fire(
+      message: string,
+      fn: StateMutateHandler,
+      options?: { timeout?: Milliseconds },
+    ): Promise<StateChangeRes>;
   };
   changed: {
     $: t.Observable<t.StateChanged>;
-    fire(): Promise<void>;
+    fire(...messages: string[]): Promise<void>;
   };
   select: {
     $: t.Observable<t.StateSelect>;
@@ -118,6 +122,7 @@ export type StateChangeReqEvent = {
 export type StateChangeReq = {
   tx: string;
   instance: Id;
+  message: string; // Commit message.
   handler: t.StateMutateHandler;
 };
 
@@ -129,6 +134,7 @@ export type StateChangeRes = {
   tx: string;
   instance: Id;
   current: t.StateTree;
+  message: string; // Commit message.
   error?: string;
 };
 
@@ -139,7 +145,11 @@ export type StateChangedEvent = {
   type: 'app.state/changed';
   payload: StateChanged;
 };
-export type StateChanged = { instance: Id; current: t.StateTree };
+export type StateChanged = {
+  instance: Id;
+  current: t.StateTree;
+  messages: string[]; // Commit message.
+};
 
 /**
  * Change selection

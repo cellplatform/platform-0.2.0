@@ -7,8 +7,8 @@ export const Processor = Text.Markdown.processor();
 /**
  * @external
  */
-import { clone, equals, groupBy, prop, sortBy, uniq } from 'ramda';
-export const R = { clone, equals, groupBy, prop, sortBy, uniq };
+import { clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight } from 'ramda';
+export const R = { clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight };
 
 /**
  * @system

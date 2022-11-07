@@ -87,23 +87,23 @@ export function BusEvents(args: {
   const change: t.StateEvents['change'] = {
     req$: rx.payload<t.StateChangeReqEvent>($, 'app.state/change:req'),
     res$: rx.payload<t.StateChangeResEvent>($, 'app.state/change:res'),
-    async fire(handler, options = {}) {
+    async fire(message, handler, options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
       const op = 'change';
-      const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));
+      const res$ = change.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.StateChangeResEvent>(res$, { op, timeout });
 
       bus.fire({
         type: 'app.state/change:req',
-        payload: { tx, instance, handler },
+        payload: { tx, instance, message, handler },
       });
 
       const res = await first;
       if (res.payload) return res.payload;
 
       const error = res.error?.message ?? 'Failed';
-      return { tx, instance, current: {}, error };
+      return { tx, instance, current: {}, message: '', error };
     },
   };
 
@@ -112,12 +112,12 @@ export function BusEvents(args: {
    */
   const changed: t.StateEvents['changed'] = {
     $: rx.payload<t.StateChangedEvent>($, 'app.state/changed'),
-    async fire() {
+    async fire(...messages) {
       const res = await info.get();
       const current = res.info?.current ?? {};
       bus.fire({
         type: 'app.state/changed',
-        payload: { instance, current },
+        payload: { instance, current, messages },
       });
     },
   };
