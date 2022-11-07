@@ -1,20 +1,11 @@
-import { Path, BundlePaths, t } from './common.mjs';
+import { BundlePaths, Path, t } from './common.mjs';
+
 export type UrlPathString = string;
 
 /**
  * Tools for fetching things.
  */
 export const Fetch = {
-  /**
-   * Dynamic imports (Code Splitting) <== 🌳
-   */
-  module: {
-    async Text() {
-      const { Text } = await import('sys.text');
-      return Text;
-    },
-  },
-
   /**
    * Fetch the JSON at the given URL path.
    */
@@ -32,33 +23,6 @@ export const Fetch = {
   },
 
   /**
-   * Fetch the "text/markdown" from the given URL path.
-   */
-  async markdown(sourcePath: UrlPathString) {
-    const { text, processor, error } = await Fetch.textAndProcessor(sourcePath);
-    const res = await processor.toMarkdown(text);
-    return { ...res, error };
-  },
-
-  /**
-   * Fetch the "text/markdown" from the given URL path.
-   */
-  async markdownAsHtml(sourcePath: UrlPathString) {
-    const { text, processor, error } = await Fetch.textAndProcessor(sourcePath);
-    const res = await processor.toHtml(text);
-    return { ...res, error };
-  },
-
-  /**
-   * Log
-   */
-  async logHistory() {
-    const path = Path.toAbsolutePath(BundlePaths.data.log);
-    const log = await Fetch.json<t.PublicLogSummary>(path);
-    return log;
-  },
-
-  /**
    * Fetch text from the given path.
    */
   async text(sourcePath: UrlPathString) {
@@ -71,12 +35,11 @@ export const Fetch = {
   },
 
   /**
-   * Fetch the Text module, processor and data.
+   * Log
    */
-  async textAndProcessor(sourcePath: UrlPathString) {
-    const Text = await Fetch.module.Text();
-    const processor = Text.Processor.markdown();
-    const res = await Fetch.text(sourcePath);
-    return { ...res, processor };
+  async logHistory() {
+    const path = Path.toAbsolutePath(BundlePaths.data.log);
+    const log = await Fetch.json<t.PublicLogSummary>(path);
+    return log;
   },
 };

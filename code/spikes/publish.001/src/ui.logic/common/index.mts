@@ -1,5 +1,8 @@
+import { Text } from 'sys.text';
 import type * as t from './types.mjs';
-export { t };
+export { t, Text };
+
+export const Processor = Text.Markdown.processor();
 
 /**
  * @external
@@ -16,7 +19,6 @@ export { Patch, Json } from 'sys.data.json';
 
 export { Filesystem } from 'sys.fs.indexeddb';
 export { TestFilesystem } from 'sys.fs';
-export { Text } from 'sys.text';
 
 /**
  * WARNING - be careful these external references do not blow-up the bundle size.

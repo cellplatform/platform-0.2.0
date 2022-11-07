@@ -111,7 +111,7 @@ export function BusController(args: {
         const text = data ? new TextDecoder().decode(data) : '';
         await updateOutlineInState(text);
       } else {
-        const res = await Fetch.textAndProcessor(path);
+        const res = await Fetch.text(path);
         if (res.error) error = res.error;
         if (!error) {
           await updateOutlineInState(res.text);
@@ -199,7 +199,7 @@ export function BusController(args: {
         markdown.document = undefined;
       } else {
         const path = Paths.toDataPath(selectedRef);
-        const { text, error } = await Fetch.textAndProcessor(path);
+        const { text, error } = await Fetch.text(path);
         markdown.document = error ? undefined : text;
       }
       if (markdown.document !== before) fireChanged();
