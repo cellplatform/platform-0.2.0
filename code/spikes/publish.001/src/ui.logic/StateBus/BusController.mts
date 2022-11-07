@@ -3,7 +3,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Fetch } from '../Fetch.mjs';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { BundlePaths, DEFAULTS, Path, Pkg, R, rx, t, Time } from './common.mjs';
+import { BundlePaths, DEFAULTS, Path, Pkg, R, rx, t, Time, Filesystem } from './common.mjs';
 
 export type UrlString = string;
 
@@ -14,9 +14,7 @@ export function BusController(args: {
   instance: t.StateInstance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
-  initial?: {
-    location?: UrlString;
-  };
+  initial?: { location?: UrlString };
 }): t.StateEvents {
   const { filter, initial = {} } = args;
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
@@ -24,6 +22,7 @@ export function BusController(args: {
   const state = BusMemoryState({ location: initial.location });
 
   const fireChanged = () => Time.delay(0, () => events.changed.fire());
+  const getLocalFilesystem = async () => (await Filesystem.client({ bus: args.instance.bus })).fs;
 
   const events = BusEvents({
     instance: args.instance,
@@ -63,20 +62,43 @@ export function BusController(args: {
      */
     if (!error && target.includes('Outline')) {
       /**
-       * TODO 🐷
-       * - Figure out how to not hard-code this path.
+       * TODO
+       *  - Figure out how to not hard-code this path.
        *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
       const path = toDataPath('outline.md');
-      const res = await Fetch.textAndProcessor(path);
 
-      if (res.error) error = res.error;
-      if (!res.error) {
+      const updateOutlineInState = async (text: string) => {
         await state.change((tree) => {
           const markdown = tree.markdown || (tree.markdown = {});
-          markdown.outline = res.text;
+          markdown.outline = text;
         });
         _fireChanged_ = true;
+      };
+
+      /**
+       * TEMP HACK 🐷
+       * Future Refactor:
+       *    Notes:
+       *      - Reads to the local filesystem (IndexedDb).
+       *      - If not in local file-system FETCH from the corresponding "data.md" file in the remote data store.
+       *      - The write (local fs update) is below in the "changed" handler.
+       * TODO:
+       *  - reset local store (fs) to read remote (concept maybe: "sync:remote:pull" <=> "sync:remote:push")
+       *  -
+       */
+      const fs = await getLocalFilesystem();
+
+      if (await fs.exists(path)) {
+        const data = await fs.read(path);
+        const text = data ? new TextDecoder().decode(data) : '';
+        await updateOutlineInState(text);
+      } else {
+        const res = await Fetch.textAndProcessor(path);
+        if (res.error) error = res.error;
+        if (!error) {
+          await updateOutlineInState(res.text);
+        }
       }
     }
 
@@ -121,6 +143,11 @@ export function BusController(args: {
     try {
       await state.change(e.handler);
       fireChanged();
+
+      // HACK 🐷
+      const path = toDataPath('outline.md');
+      const fs = await getLocalFilesystem();
+      await fs.write(path, state.current.markdown?.outline ?? '');
     } catch (err: any) {
       error = err.message;
     }
