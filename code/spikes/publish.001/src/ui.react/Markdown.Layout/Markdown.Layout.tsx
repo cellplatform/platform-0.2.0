@@ -26,9 +26,10 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         flex: 2,
         position: 'relative',
         padding: 20,
-        paddingLeft: 20,
+        paddingLeft: 80,
         paddingRight: 40,
         boxSizing: 'border-box',
+        // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       }),
     },
     footer: {
