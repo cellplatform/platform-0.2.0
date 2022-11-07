@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../../test/index.mjs';
-import { DevFrame } from './index.mjs';
+import { describe, it, expect } from '../../test';
+import { DevFrame } from '.';
 
 describe('Dev', () => {
   it('exists', () => {

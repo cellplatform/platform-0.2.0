@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
+import { Color, COLORS, css, t, rx, FC } from '../common';
 
 export type DevFrameProps = {
   style?: t.CssValue;

@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Pkg } from '../common.mjs';
+import { Pkg } from '../common';
 
 /**
  * User Interface

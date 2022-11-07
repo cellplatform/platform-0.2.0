@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../../test/index.mjs';
-import { Dev } from './index.mjs';
+import { describe, it, expect } from '../../test';
+import { Dev } from '.';
 
 describe('Dev', () => {
   it('exists', () => {
