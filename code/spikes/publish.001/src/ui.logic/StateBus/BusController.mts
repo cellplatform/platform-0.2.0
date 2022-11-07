@@ -132,9 +132,10 @@ export function BusController(args: {
       }
     }
 
+    const current = state.current;
     bus.fire({
       type: 'app.state/fetch:res',
-      payload: { tx, instance, current: state.current, error },
+      payload: { tx, instance, current, error },
     });
 
     if (commits.length > 0) fireChanged(commits);

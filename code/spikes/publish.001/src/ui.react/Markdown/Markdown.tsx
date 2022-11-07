@@ -18,9 +18,6 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   if (!state.current) return null;
   const show = QueryString.show(state.current.location?.url);
 
-  console.log('-------------------------------------------');
-  console.log('Markdown/state:', state.current);
-
   /**
    * Handlers
    */
@@ -30,8 +27,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
        * TODO 🐷
        * - Move behind a common "UiState.markdown" static object (eg. UiState.UpdateFromEditor(...))
        */
-      const message = 'editor changed';
-      await events.change.fire(message, (state) => {
+      await events.change.fire('editor changed by user', (state) => {
         const markdown = state.markdown ?? (state.markdown = {});
         markdown.outline = e.text;
       });
