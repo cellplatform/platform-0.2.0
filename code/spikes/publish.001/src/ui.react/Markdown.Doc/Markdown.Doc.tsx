@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-
-import { Color, css, FC, t } from '../common.mjs';
-import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 import { Text } from 'sys.text';
 
+import { Color, css, FC, Style, t } from '../common.mjs';
+import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
+import { DocStyles } from './Styles.mjs';
+
 const Markdown = Text.Markdown;
-// const Is = Text.Markdown.Is;
+
+const DEFAULT = {
+  CSS: {
+    ROOT: 'sys-md-doc',
+    BLOCK: 'sys-md-block',
+  },
+};
 
 export type MarkdownDocProps = {
   markdown?: string;
@@ -15,7 +22,7 @@ export type MarkdownDocProps = {
 };
 
 export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
-  const { maxWidth = 960 } = props;
+  const { maxWidth = 692 } = props;
 
   const [safeBlocks, setSafeBlocks] = useState<(string | JSX.Element)[]>([]);
   const isEmpty = !Boolean(safeBlocks);
@@ -26,6 +33,21 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
+    /**
+     * Initial Load.
+     */
+    const prefix = `.${DEFAULT.CSS.ROOT} .${DEFAULT.CSS.BLOCK}`;
+    Style.global(DocStyles, { prefix });
+  }, []);
+
+  useEffect(() => {
+    /**
+     * TODO 🐷 - REFACTOR (Move to pure ContentRenderer function)
+     */
+
+    /**
+     * Prepare Content to Render.
+     */
     (async () => {
       const Processor = await MarkdownUtil.markdownProcessor();
       const text = (props.markdown || '').trim();
@@ -35,12 +57,12 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       const blocks: (string | JSX.Element)[] = [];
       const children = md.info.mdast.children;
 
+      /**
+       * Render Markdown Elements
+       */
       let i = -1;
       for (const child of children) {
         i++;
-        /**
-         * TODO 🐷 - REFACTOR
-         */
 
         /**
          * Process <Image> with Component.
@@ -90,12 +112,12 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       textAlign: 'center',
       opacity: 0.3,
     }),
+
     html: css({}),
     jsxElementBlock: css({}),
 
     img: css({
       border: `solid 5px ${Color.format(-0.1)}`,
-      // maxWidth: 550,
     }),
   };
 
@@ -105,7 +127,12 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
       {safeBlocks.map((safeHtmlOrElement, i) => {
         if (typeof safeHtmlOrElement === 'string') {
           return (
-            <div key={i} {...styles.html} dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }} />
+            <div
+              key={i}
+              {...styles.html}
+              className={DEFAULT.CSS.BLOCK}
+              dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
+            />
           );
         }
 
@@ -122,7 +149,7 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} className={DEFAULT.CSS.ROOT}>
       {elEmpty}
       {elHtml}
     </div>
