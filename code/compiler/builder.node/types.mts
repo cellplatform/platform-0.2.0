@@ -52,7 +52,7 @@ export type ModifyViteConfigArgs = {
   target(...target: ViteTarget[]): void;
   plugin(...kind: VitePlugin[]): void;
   externalDependency(moduleName: string | string[]): void;
-  chunk(alias: string, moduleName: string | string[]): void;
+  chunk(alias: string, moduleName?: string | string[]): void;
   lib(options?: { entry?: string; outname?: string }): void;
 };
 export type ModifyViteConfigCtx = {

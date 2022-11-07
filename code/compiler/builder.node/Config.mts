@@ -87,7 +87,7 @@ export const Config = {
             .forEach((name) => external.push(name));
         },
         chunk(alias, moduleName) {
-          manualChunks[alias] = R.uniq(asArray(moduleName));
+          manualChunks[alias] = R.uniq(asArray(moduleName ?? alias));
         },
         lib(options = {}) {
           const { outname: fileName = 'index' } = options;
