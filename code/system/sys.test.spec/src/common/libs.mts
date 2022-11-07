@@ -1,1 +1,10 @@
-export { rx } from 'sys.util';
+/**
+ * @external
+ */
+import { equals, clone, clamp, uniq } from 'ramda';
+export const R = { equals, clone, clamp, uniq };
+
+/**
+ * @system
+ */
+export { rx, slug, Time, Is, Delete } from 'sys.util';
