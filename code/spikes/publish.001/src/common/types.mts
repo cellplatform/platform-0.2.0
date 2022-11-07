@@ -16,6 +16,7 @@ export type {
   MdastListItem,
   MdastParagraph,
   MdastLink,
+  ProcessedMdast,
 } from 'sys.text/src/types.mjs';
 
 export type { Text, MarkdownProcessor, MarkdownInfo } from 'sys.text/src/types.mjs';
