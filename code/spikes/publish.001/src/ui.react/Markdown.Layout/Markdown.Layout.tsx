@@ -1,6 +1,7 @@
 import { css, FC, t } from '../common.mjs';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
+import { Center } from './Center';
 
 export type MarkdownLayoutProps = {
   markdown?: { outline?: string; document?: string };
@@ -17,10 +18,13 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
   const styles = {
     base: css({
       Scroll: props.scroll,
-      Flex: 'y-stretch-stretch',
+      // Flex: 'y-stretch-stretch',
     }),
     body: {
-      base: css({ flex: 1, Flex: 'x-stretch-stretch' }),
+      base: css({
+        flex: 1,
+        Flex: 'x-stretch-stretch',
+      }),
       left: { position: 'relative' },
       main: css({
         flex: 2,
@@ -29,17 +33,13 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         paddingLeft: 80,
         paddingRight: 40,
         boxSizing: 'border-box',
-        // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       }),
     },
     footer: {
       base: css({}),
       inner: css({ height: 100 }),
     },
-    outline: css({
-      marginTop: 20,
-      marginLeft: 20,
-    }),
+    outline: css({ marginTop: 20, marginLeft: 20 }),
   };
 
   const elBody = (
@@ -67,7 +67,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elBody}
+      <Center>{elBody}</Center>
       {elFooter}
     </div>
   );

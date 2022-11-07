@@ -5,7 +5,7 @@ import { DocStyles } from './Styles.mjs';
 import { useBlockRenderer } from './useBlockRenderer';
 
 const DEFAULT = {
-  MAX_WIDTH: 692,
+  WIDTH: 692,
   CSS: {
     ROOT: 'sys-md-doc',
     BLOCK: 'sys-md-block',
@@ -15,13 +15,13 @@ const DEFAULT = {
 export type MarkdownDocProps = {
   markdown?: string;
   scroll?: boolean;
-  maxWidth?: number;
+  // maxWidth?: number;
   renderer?: t.MarkdownDocBlockRenderer;
   style?: t.CssValue;
 };
 
 const View: React.FC<MarkdownDocProps> = (props) => {
-  const { maxWidth = DEFAULT.MAX_WIDTH, markdown, renderer } = props;
+  const { markdown, renderer } = props;
 
   const { safeBlocks, isEmpty } = useBlockRenderer({ markdown, renderer });
 
@@ -42,7 +42,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   const styles = {
     base: css({
       Scroll: props.scroll,
-      maxWidth,
+      width: DEFAULT.WIDTH,
     }),
     empty: css({
       marginTop: 30,
