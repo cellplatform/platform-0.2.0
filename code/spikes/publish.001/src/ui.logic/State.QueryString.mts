@@ -38,8 +38,8 @@ export const QueryString = {
     const query = asQuery(input);
     if (!query) return false;
 
-    const dev = query.get('dev');
-    return dev && dev !== 'false';
+    const KEY = 'dev';
+    return query.has(KEY) && query.get('dev') !== 'false';
   },
 };
 
