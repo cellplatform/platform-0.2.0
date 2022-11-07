@@ -36,7 +36,10 @@ export const QueryString = {
    */
   isDev(input?: string | URL) {
     const query = asQuery(input);
-    return !query ? false : query.has('dev') || query.has('d');
+    if (!query) return false;
+
+    const dev = query.get('dev');
+    return dev && dev !== 'false';
   },
 };
 
