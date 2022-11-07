@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, State, t } from '../common.mjs';
+import { Color, COLORS, css, State, t, QueryString } from '../common.mjs';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { env } from './Root.env.mjs';
@@ -19,6 +19,9 @@ export type RootProps = {
 
 export const Root: React.FC<RootProps> = (props) => {
   const state = State.useEvents(instance);
+
+  const url = state.current?.location?.url;
+  const isDev = QueryString.isDev(url);
 
   /**
    * Lifecycle.
@@ -64,17 +67,25 @@ export const Root: React.FC<RootProps> = (props) => {
     body: css({ position: 'relative', flex: 1 }),
   };
 
+  const elLeft = (
+    <div {...styles.left}>
+      {isDev && <RootTitle text={'Report'} />}
+      <div {...styles.body}>
+        <Markdown instance={instance} style={{ Absolute: 0 }} />
+      </div>
+    </div>
+  );
+
+  const elRight = isDev && (
+    <div {...styles.right}>
+      <History instance={instance} style={styles.history} data={state.current?.log} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, styles.normalize, props.style)}>
-      <div {...styles.left}>
-        <RootTitle text={'Report'} />
-        <div {...styles.body}>
-          <Markdown instance={instance} style={{ Absolute: 0 }} />
-        </div>
-      </div>
-      <div {...styles.right}>
-        <History instance={instance} style={styles.history} data={state.current?.log} />
-      </div>
+      {elLeft}
+      {elRight}
     </div>
   );
 };

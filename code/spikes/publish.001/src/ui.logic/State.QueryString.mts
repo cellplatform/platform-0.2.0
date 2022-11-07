@@ -20,14 +20,23 @@ export const QueryString = {
    * /?show=
    */
   show(input?: string | URL): ShowMarkdownComponent[] {
-    if (!input) return DEFAULT.show;
+    const query = asQuery(input);
+    if (!query) return DEFAULT.show;
 
-    const key = 'show';
-    const url = typeof input === 'string' ? new URL(input) : input;
-    if (!url || !url.searchParams.has(key)) return DEFAULT.show;
+    const KEY = 'show';
+    if (!query.has(KEY)) return DEFAULT.show;
 
-    const values = url.searchParams.getAll(key).map((v) => v.toLowerCase());
+    const values = query.getAll(KEY).map((v) => v.toLowerCase());
     return uniq<ShowMarkdownComponent>(values, ALL.show);
+  },
+
+  /**
+   * /?dev
+   * /?d
+   */
+  isDev(input?: string | URL) {
+    const query = asQuery(input);
+    return !query ? false : query.has('dev') || query.has('d');
   },
 };
 
@@ -48,4 +57,14 @@ function uniq<T extends string>(input: string[], all?: T[]): T[] {
   _res = R.uniq(_res);
   if (Array.isArray(all)) _res = _res.filter((value) => all.includes(value));
   return _res;
+}
+
+function asUrl(input?: string | URL) {
+  if (!input) return;
+  return typeof input === 'string' ? new URL(input) : input;
+}
+
+function asQuery(input?: string | URL) {
+  const url = asUrl(input);
+  return url ? url.searchParams : undefined;
 }

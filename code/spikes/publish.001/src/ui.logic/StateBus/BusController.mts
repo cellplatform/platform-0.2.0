@@ -22,15 +22,17 @@ export function BusController(args: {
   const { filter, initial = {} } = args;
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
   const instance = args.instance.id || DEFAULTS.instance;
+
   const state = BusMemoryState({ location: initial.location });
 
-  const fireChanged = (messages: string[]) => Time.delay(0, () => events.changed.fire(...messages));
+  const fireChanged = (messages: string[]) => {
+    Time.delay(0, () => events.changed.fire(...messages));
+  };
 
   const getLocalFilesystem = async () => {
     if (typeof window?.indexedDB === 'object') {
       const bus = args.instance.bus;
-      const store = await Filesystem.client({ bus });
-      return store.fs;
+      return (await Filesystem.client({ bus })).fs;
     } else {
       // NB: Running on non-server runtime (probably within tests).
       return TestFilesystem.memory().fs;
