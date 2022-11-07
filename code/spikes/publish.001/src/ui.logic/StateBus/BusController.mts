@@ -3,9 +3,12 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Fetch } from '../Fetch.mjs';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { BundlePaths, DEFAULTS, Path, Pkg, R, rx, t, Time, Filesystem } from './common.mjs';
+import { DEFAULTS, Filesystem, Pkg, R, rx, t, TestFilesystem, Time } from './common.mjs';
+import { Paths } from './Paths.mjs';
 
-export type UrlString = string;
+type UrlString = string;
+
+export type LocalFsTransientUiState = { selection: { url: string } };
 
 /**
  * Event controller.
@@ -22,7 +25,21 @@ export function BusController(args: {
   const state = BusMemoryState({ location: initial.location });
 
   const fireChanged = () => Time.delay(0, () => events.changed.fire());
-  const getLocalFilesystem = async () => (await Filesystem.client({ bus: args.instance.bus })).fs;
+
+  const getLocalFilesystem = async () => {
+    if (typeof window?.indexedDB === 'object') {
+      const bus = args.instance.bus;
+      const store = await Filesystem.client({ bus });
+      return store.fs;
+    } else {
+      // NB: Running on non-server runtime (probably within tests).
+      return TestFilesystem.memory().fs;
+    }
+  };
+
+  const DEFAULT = {
+    Selection: { selection: { url: '' } },
+  };
 
   const events = BusEvents({
     instance: args.instance,
@@ -66,7 +83,7 @@ export function BusController(args: {
        *  - Figure out how to not hard-code this path.
        *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
-      const path = toDataPath('outline.md');
+      const path = Paths.outline;
 
       const updateOutlineInState = async (text: string) => {
         await state.change((tree) => {
@@ -77,15 +94,15 @@ export function BusController(args: {
       };
 
       /**
-       * TEMP HACK 🐷
+       * TEMP HACK:DESIGN placeholder locic 🐷
        * Future Refactor:
        *    Notes:
        *      - Reads to the local filesystem (IndexedDb).
        *      - If not in local file-system FETCH from the corresponding "data.md" file in the remote data store.
        *      - The write (local fs update) is below in the "changed" handler.
        * TODO:
-       *  - reset local store (fs) to read remote (concept maybe: "sync:remote:pull" <=> "sync:remote:push")
-       *  -
+       *  - reset local store (fs) to read remote (concept perhaps: "sync:remote:pull" <=> "sync:remote:push")
+       *  - fs: fetch/pull from URL.
        */
       const fs = await getLocalFilesystem();
 
@@ -128,8 +145,18 @@ export function BusController(args: {
     const url = e.selected;
     const next = url ? { url } : undefined;
     if (!R.equals(next, state.current.selected)) {
+      /**
+       * Update local state.
+       */
       await state.change((draft) => (draft.selected = next));
       fireChanged();
+
+      /**
+       * Persiste in local file-system.
+       */
+      const fs = await getLocalFilesystem();
+      const data: LocalFsTransientUiState = { selection: next ?? { url: '' } };
+      fs.json.write(Paths.Ui.selection, data);
     }
   });
 
@@ -145,9 +172,9 @@ export function BusController(args: {
       fireChanged();
 
       // HACK 🐷
-      const path = toDataPath('outline.md');
       const fs = await getLocalFilesystem();
-      await fs.write(path, state.current.markdown?.outline ?? '');
+      const data = state.current.markdown?.outline ?? '';
+      await fs.write(Paths.outline, data);
     } catch (err: any) {
       error = err.message;
     }
@@ -171,7 +198,7 @@ export function BusController(args: {
       if (!selectedRef) {
         markdown.document = undefined;
       } else {
-        const path = toDataPath(selectedRef);
+        const path = Paths.toDataPath(selectedRef);
         const { text, error } = await Fetch.textAndProcessor(path);
         markdown.document = error ? undefined : text;
       }
@@ -180,16 +207,35 @@ export function BusController(args: {
   });
 
   /**
+   * Initialize
+   */
+  const init = async () => {
+    /**
+     * TODO (Refactor)
+     * - write an "Init:Ready" event, and force the UI to
+     *    1. Hide before "ready"
+     *    2. Redraws with new state
+     *
+     */
+
+    const fs = await getLocalFilesystem();
+    const selectionData: LocalFsTransientUiState =
+      (await fs.json.read(Paths.Ui.selection)) ?? DEFAULT.Selection;
+
+    const data = { ...selectionData };
+
+    console.group('🌳 UI/Controller: init (local filesystem)');
+    console.log('data:', data);
+    console.log('data.selection.url', data.selection.url);
+    console.groupEnd();
+
+    events.select.fire(data.selection.url || undefined);
+  };
+
+  init();
+
+  /**
    * API
    */
   return events;
-}
-
-/**
- * Helpers
- */
-
-function toDataPath(input: string) {
-  const path = Path.join(BundlePaths.data.md, input);
-  return Path.toAbsolutePath(path);
 }

@@ -26,6 +26,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
    */
   const onEditorChange = (e: { text: string }) => {
     State.events(instance, async (events) => {
+      /**
+       * TODO 🐷
+       * - Move behind a common "UiState.markdown" static object (eg. UiState.UpdateFromEditor(...))
+       */
       await events.change.fire((state) => {
         const markdown = state.markdown ?? (state.markdown = {});
         markdown.outline = e.text;
