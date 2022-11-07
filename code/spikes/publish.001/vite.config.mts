@@ -7,4 +7,5 @@ export const tsconfig = Config.ts((e) => {
 export default Config.vite(import.meta.url, (e) => {
   e.target('web');
   e.plugin('web:react');
+  e.chunk('sys.fs', ['sys.fs', 'sys.fs.indexeddb']);
 });

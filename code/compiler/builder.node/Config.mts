@@ -5,7 +5,7 @@ import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExpor
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
-import type { RollupOptions } from 'rollup';
+import type { RollupOptions, GetManualChunk, ManualChunksOption } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -47,7 +47,11 @@ export const Config = {
        * Vite configuration.
        */
       const external: string[] = [];
-      const rollupOptions: RollupOptions = { external };
+      const manualChunks: ManualChunksOption = {};
+      const rollupOptions: RollupOptions = {
+        external,
+        output: { manualChunks },
+      };
       const build: BuildOptions = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
@@ -81,6 +85,9 @@ export const Config = {
           R.uniq(asArray(moduleName))
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
+        },
+        chunk(alias, moduleName) {
+          manualChunks[alias] = R.uniq(asArray(moduleName));
         },
         lib(options = {}) {
           const { outname: fileName = 'index' } = options;
