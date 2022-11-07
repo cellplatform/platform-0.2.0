@@ -15,6 +15,8 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.text': '0.0.0',
+    'sys.fs': '0.0.0',
+    'sys.fs.indexeddb': '0.0.0',
     'sys.util': '0.0.0',
     '@monaco-editor/react': '4.4.6',
     'monaco-editor': '0.34.1',
