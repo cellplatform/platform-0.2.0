@@ -15,7 +15,6 @@ const DEFAULT = {
 export type MarkdownDocProps = {
   markdown?: string;
   scroll?: boolean;
-  // maxWidth?: number;
   renderer?: t.MarkdownDocBlockRenderer;
   style?: t.CssValue;
 };
@@ -41,8 +40,10 @@ const View: React.FC<MarkdownDocProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       Scroll: props.scroll,
       width: DEFAULT.WIDTH,
+      paddingBottom: 80,
     }),
     empty: css({
       marginTop: 30,
