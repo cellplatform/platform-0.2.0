@@ -2,9 +2,9 @@ type Id = string;
 type Anything = void | any;
 type Milliseconds = number;
 type Description = string;
-type BundleImport = TestSuiteModel | Promise<any>;
 type Ctx = Record<string, unknown>;
 
+export type BundleImport = TestSuiteModel | Promise<any>;
 export type TestModifier = 'skip' | 'only';
 
 /**
