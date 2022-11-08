@@ -29,7 +29,7 @@ export const Test: t.Test = {
     if (suites.length === 1) {
       // Single suite only.
       const root = suites[0];
-      root.state.description = name; // NB: Ensure any explicit name passed to bundle are used on the singlular root.
+      root.state.description = name; // NB: Ensure any explicit name passed to bundle is used on the singlular root.
       return root;
     } else {
       // Multiple suites.
