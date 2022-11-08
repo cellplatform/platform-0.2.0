@@ -238,11 +238,10 @@ export function BusController(args: {
      */
     events.select.fire(local.selection.url || undefined);
   };
-
   init();
 
   /**
-   * API
+   * Finish up
    */
   return events;
 }
