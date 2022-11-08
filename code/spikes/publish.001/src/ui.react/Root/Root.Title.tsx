@@ -15,9 +15,10 @@ export const RootTitle: React.FC<RootTitleProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       height: 90,
       userSelect: 'none',
-      borderBottom: `solid 15px ${Color.alpha(COLORS.DARK, 0.06)}`,
+      borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
       Flex: 'x-spaceBetween-stretch',
     }),
     text: css({
