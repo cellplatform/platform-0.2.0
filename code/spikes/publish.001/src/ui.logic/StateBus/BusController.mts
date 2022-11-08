@@ -4,7 +4,7 @@ import { Fetch } from '../Fetch.mjs';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
 import { DEFAULTS, Filesystem, Pkg, R, rx, t, TestFilesystem, Time } from './common.mjs';
-import { LocalStorage } from './LocalStorage.mjs';
+import { Storage } from '../Storage';
 import { Paths } from './Paths.mjs';
 
 type UrlString = string;
@@ -25,7 +25,9 @@ export function BusController(args: {
   const instance = args.instance.id || DEFAULTS.instance;
 
   const state = BusMemoryState({ location: initial.location });
-  const localstate = LocalStorage.object<LocalStorageState>('ui.state', { selection: { url: '' } });
+  const localstate = Storage.Local.object<LocalStorageState>('ui.state', {
+    selection: { url: '' },
+  });
 
   const fireChanged = (messages: string[]) => {
     Time.delay(0, () => {
@@ -85,7 +87,6 @@ export function BusController(args: {
        *  - Figure out how to not hard-code this path.
        *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
-      const path = Paths.outline;
 
       const updateOutlineInState = async (text: string) => {
         const message = 'Fetched outline';
@@ -108,6 +109,7 @@ export function BusController(args: {
        *  - fs: fetch/pull from URL.
        */
       const fs = await getLocalFilesystem();
+      const path = Paths.schema.outline;
 
       if (await fs.exists(path)) {
         const data = await fs.read(path);
@@ -159,7 +161,7 @@ export function BusController(args: {
       fireChanged([message]);
 
       /**
-       * Persist in localstorage
+       * Persist in local-storage
        */
       const data: LocalStorageState = { selection: next ?? { url: '' } };
       localstate.set(data);
@@ -180,7 +182,7 @@ export function BusController(args: {
       // HACK 🐷
       const fs = await getLocalFilesystem();
       const data = state.current.markdown?.outline ?? '';
-      await fs.write(Paths.outline, data);
+      await fs.write(Paths.schema.outline, data);
     } catch (err: any) {
       error = err.message;
     }

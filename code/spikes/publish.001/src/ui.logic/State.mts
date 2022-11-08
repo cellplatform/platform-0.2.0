@@ -1,4 +1,4 @@
-import { BundlePaths } from './common.mjs';
+import { BundlePaths } from './common';
 import { StateBus as Bus } from './StateBus/index.mjs';
 
 export { BundlePaths };

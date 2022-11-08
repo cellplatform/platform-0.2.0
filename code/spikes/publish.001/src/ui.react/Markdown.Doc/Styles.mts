@@ -1,7 +1,7 @@
 import { Color, COLORS } from '../common.mjs';
 
 const BASE = {
-  FONT_SIZE: 20,
+  FONT_SIZE: 18,
 };
 
 export const DocStyles = {
@@ -11,7 +11,7 @@ export const DocStyles = {
 
   p: {
     fontSize: BASE.FONT_SIZE,
-    lineHeight: '1.4em',
+    lineHeight: '1.5em',
     marginBlockStart: '2em',
     marginBlockEnd: '2em',
   },

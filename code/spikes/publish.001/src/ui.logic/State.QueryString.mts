@@ -1,4 +1,4 @@
-import { R } from './common.mjs';
+import { R } from './common';
 
 export type ShowMarkdownComponent = 'outline' | 'doc' | 'outline|doc' | 'editor';
 

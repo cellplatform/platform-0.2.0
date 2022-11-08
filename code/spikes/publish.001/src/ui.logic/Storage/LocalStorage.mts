@@ -1,4 +1,4 @@
-import { R } from '../common.mjs';
+import { R } from '../common';
 
 type O = Record<string, unknown>;
 

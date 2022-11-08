@@ -1,7 +1,7 @@
 import type * as t from './types.mjs';
 
 export { t };
-export * from '../../ui.logic/common.mjs';
+export * from '../../ui.logic/common';
 export { State, QueryString, Fetch } from '../../ui.logic/index.mjs';
 export { css, Color, Style } from 'sys.util.css';
 

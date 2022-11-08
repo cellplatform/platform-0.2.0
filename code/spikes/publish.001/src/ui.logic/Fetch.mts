@@ -1,4 +1,4 @@
-import { BundlePaths, Path, t } from './common.mjs';
+import { BundlePaths, Path, t } from './common';
 
 export type UrlPathString = string;
 
