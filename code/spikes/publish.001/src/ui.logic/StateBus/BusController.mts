@@ -4,11 +4,12 @@ import { Fetch } from '../Fetch.mjs';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
 import { DEFAULTS, Filesystem, Pkg, R, rx, t, TestFilesystem, Time } from './common.mjs';
+import { LocalStorage } from './LocalStorage.mjs';
 import { Paths } from './Paths.mjs';
 
 type UrlString = string;
 
-export type LocalFsTransientUiState = { selection: { url: string } };
+export type LocalStorageState = { selection: { url: string } };
 
 /**
  * Event controller.
@@ -24,9 +25,12 @@ export function BusController(args: {
   const instance = args.instance.id || DEFAULTS.instance;
 
   const state = BusMemoryState({ location: initial.location });
+  const localstate = LocalStorage.object<LocalStorageState>('ui.state', { selection: { url: '' } });
 
   const fireChanged = (messages: string[]) => {
-    Time.delay(0, () => events.changed.fire(...messages));
+    Time.delay(0, () => {
+      events.changed.fire(...messages);
+    });
   };
 
   const getLocalFilesystem = async () => {
@@ -37,10 +41,6 @@ export function BusController(args: {
       // NB: Running on non-server runtime (probably within tests).
       return TestFilesystem.memory().fs;
     }
-  };
-
-  const DEFAULT = {
-    Selection: { selection: { url: '' } },
   };
 
   const events = BusEvents({
@@ -149,6 +149,7 @@ export function BusController(args: {
   events.select.$.subscribe(async (e) => {
     const url = e.selected;
     const next = url ? { url } : undefined;
+
     if (!R.equals(next, state.current.selected)) {
       /**
        * Update local state.
@@ -158,11 +159,10 @@ export function BusController(args: {
       fireChanged([message]);
 
       /**
-       * Persiste in local file-system.
+       * Persist in localstorage
        */
-      const fs = await getLocalFilesystem();
-      const data: LocalFsTransientUiState = { selection: next ?? { url: '' } };
-      fs.json.write(Paths.Ui.selection, data);
+      const data: LocalStorageState = { selection: next ?? { url: '' } };
+      localstate.set(data);
     }
   });
 
@@ -225,19 +225,16 @@ export function BusController(args: {
      *    2. Redraws with new state
      *
      */
-
-    const fs = await getLocalFilesystem();
-    const selectionData: LocalFsTransientUiState =
-      (await fs.json.read(Paths.Ui.selection)) ?? DEFAULT.Selection;
-
-    const data = { ...selectionData };
+    const local = localstate.get();
 
     console.group('🌳 UI/Controller: init (local filesystem)');
-    console.log('data:', data);
-    console.log('data.selection.url', data.selection.url);
+    console.log('local state:', local);
     console.groupEnd();
 
-    events.select.fire(data.selection.url || undefined);
+    /**
+     * Setup initial state.
+     */
+    events.select.fire(local.selection.url || undefined);
   };
 
   init();
