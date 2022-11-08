@@ -1,4 +1,4 @@
-import { css, t, State, QueryString } from '../common.mjs';
+import { COLORS, Color, css, t, State, QueryString } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
@@ -13,9 +13,12 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const { instance } = props;
 
   const state = State.Bus.useEvents(props.instance);
+  const current = state.current;
 
-  if (!state.current) return null;
-  const show = QueryString.show(state.current.location?.url);
+  if (!current) return null;
+  const url = current.location?.url;
+  const version = current.log?.latest.version;
+  const show = QueryString.show(url);
 
   /**
    * Handlers
@@ -75,9 +78,9 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       flex = 2;
       el = (
         <MarkdownLayout
-          scroll={true}
           style={{ flex: 1 }}
           markdown={{ outline, document }}
+          version={version}
           selectedUrl={selectedUrl}
           onSelectClick={(e) => {
             const url = e.ref?.url;
@@ -92,7 +95,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       el = (
         <MarkdownEditor
           key={i}
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          }}
           markdown={outline}
           onChange={onEditorChange}
           focusOnLoad={true}

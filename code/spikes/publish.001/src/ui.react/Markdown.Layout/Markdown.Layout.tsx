@@ -1,12 +1,12 @@
-import { css, FC, t } from '../common.mjs';
+import { Color, COLORS, css, FC, t } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
-import { Center } from './Center';
+import { TooSmall } from './TooSmall';
 
 export type MarkdownLayoutProps = {
   markdown?: { outline?: string; document?: string };
   selectedUrl?: string;
-  scroll?: boolean;
+  version?: string;
   style?: t.CssValue;
   onSelectClick?: HeadingTileClickHandler;
 };
@@ -16,22 +16,34 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      Scroll: props.scroll,
-      // Flex: 'y-stretch-stretch',
+    base: css({ position: 'relative' }),
+
+    content: css({
+      Absolute: 0,
+      Flex: 'x-start-stretch',
     }),
+
     body: {
       base: css({
-        flex: 1,
         Flex: 'x-stretch-stretch',
+        backgroundColor: COLORS.WHITE,
+        borderRight: `solid 1px ${Color.format(-0.1)}`,
+        '@media (max-width: 1100px)': { opacity: 0.1, pointerEvents: 'none' },
       }),
-      left: { position: 'relative' },
-      main: css({
-        flex: 2,
+      left: css({
         position: 'relative',
+        Scroll: true,
+        paddingLeft: 20,
+        paddingTop: 20,
+        paddingRight: 30,
+        paddingBottom: 50,
+      }),
+      main: css({
+        position: 'relative',
+        Scroll: true,
         padding: 20,
-        paddingLeft: 80,
-        paddingRight: 40,
+        paddingLeft: 30,
+        paddingRight: 60,
         boxSizing: 'border-box',
       }),
     },
@@ -39,14 +51,18 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
       base: css({}),
       inner: css({ height: 100 }),
     },
-    outline: css({ marginTop: 20, marginLeft: 20 }),
+
+    tooSmall: css({
+      '@media (min-width: 1100px)': { display: 'none' },
+      pointerEvents: 'none',
+      Absolute: 0,
+    }),
   };
 
   const elBody = (
     <div {...styles.body.base}>
       <div {...styles.body.left}>
         <TileOutline
-          style={styles.outline}
           widths={{ root: 250, child: 300 }}
           markdown={props.markdown?.outline}
           selectedUrl={props.selectedUrl}
@@ -65,10 +81,21 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
     </div>
   );
 
+  const elTooSmall = <TooSmall style={styles.tooSmall} />;
+
+  const elContent = (
+    <div {...styles.content}>
+      {elBody}
+      {elFooter}
+    </div>
+  );
+
+  const elOverlays = <div>{elTooSmall}</div>;
+
   return (
     <div {...css(styles.base, props.style)}>
-      <Center>{elBody}</Center>
-      {elFooter}
+      {elContent}
+      {elOverlays}
     </div>
   );
 };
