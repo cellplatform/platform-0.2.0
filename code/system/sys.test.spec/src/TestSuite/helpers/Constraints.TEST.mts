@@ -1,7 +1,7 @@
 import { Test } from '..';
 import { expect, t, describe, it } from '../../test';
-import { Tree } from './Tree';
-import { Constraints } from './Constraints';
+import { Tree } from './Tree.mjs';
+import { Constraints } from './Constraints.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 

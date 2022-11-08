@@ -1,6 +1,6 @@
 import { Test } from '..';
 import { describe, expect, it, t } from '../../test';
-import { Tree, WalkDownArgs, WalkUpArgs } from './Tree';
+import { Tree, WalkDownArgs, WalkUpArgs } from './Tree.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 

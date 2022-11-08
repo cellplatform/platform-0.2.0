@@ -1,8 +1,8 @@
 import { Test } from '.';
 import { expect, t, Time, describe, it } from '../test';
-import { Is } from './common';
-import { Tree } from './helpers/Tree';
-import { TestModel } from './TestModel';
+import { Is } from './common.mjs';
+import { Tree } from './helpers/Tree.mjs';
+import { TestModel } from './TestModel.mjs';
 
 describe('TestSuiteModel', () => {
   describe('model', () => {

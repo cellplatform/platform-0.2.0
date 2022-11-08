@@ -1,7 +1,7 @@
 import { t, Time, expect, describe, it } from '../test';
 import { Test } from '.';
-import { TestModel } from './TestModel';
-import { DEFAULT, Is } from './common';
+import { TestModel } from './TestModel.mjs';
+import { DEFAULT, Is } from './common.mjs';
 
 describe('TestModel', () => {
   const description = 'foo';

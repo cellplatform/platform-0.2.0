@@ -1,5 +1,5 @@
-import { t, Is } from '../common';
-import { Tree, WalkUpArgs } from './Tree';
+import { t, Is } from '../common.mjs';
+import { Tree, WalkUpArgs } from './Tree.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 type M = t.TestModifier;

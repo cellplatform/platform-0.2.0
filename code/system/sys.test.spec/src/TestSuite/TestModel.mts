@@ -1,4 +1,4 @@
-import { DEFAULT, Delete, Is, slug, t, Time, R } from './common';
+import { DEFAULT, Delete, Is, slug, t, Time, R } from './common.mjs';
 
 /**
  * A single test.
@@ -28,8 +28,10 @@ export const TestModel = (args: {
         excluded,
       };
 
+      let _stopTimeout: () => void = () => null;
+
       const done = (options: { error?: Error } = {}) => {
-        stopTimeout?.();
+        _stopTimeout?.();
         response.elapsed = timer.elapsed.msec;
         response.error = options.error;
         response.ok = !Boolean(response.error);
@@ -37,14 +39,13 @@ export const TestModel = (args: {
       };
       if (!handler || excluded) return done();
 
-      let stopTimeout: undefined | (() => void);
       const startTimeout = (msecs: number) => {
-        stopTimeout?.();
+        _stopTimeout?.();
         const res = Time.delay(msecs, () => {
           const error = new Error(`Test timed out after ${msecs} msecs`);
           return done({ error });
         });
-        stopTimeout = res.cancel;
+        _stopTimeout = res.cancel;
       };
 
       const args: t.TestHandlerArgs = {

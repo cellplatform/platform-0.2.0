@@ -1,5 +1,5 @@
-import { Is, t } from './common';
-import { Def } from './TestSuiteModel';
+import { Is, t } from './common.mjs';
+import { Def } from './TestSuiteModel.mjs';
 
 /**
  * Entry point to the unit-testing system.

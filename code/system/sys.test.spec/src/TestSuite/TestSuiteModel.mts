@@ -1,6 +1,6 @@
-import { DEFAULT, slug, t, Time } from './common';
-import { Constraints } from './helpers/Constraints';
-import { TestModel } from './TestModel';
+import { DEFAULT, slug, t, Time } from './common.mjs';
+import { Constraints } from './helpers/Constraints.mjs';
+import { TestModel } from './TestModel.mjs';
 
 type LazyParent = () => t.TestSuiteModel;
 
