@@ -36,4 +36,11 @@ export const DocStyles = {
     marginTop: '2em',
     marginBottom: '2em',
   },
+
+  pre: {
+    paddingLeft: 30,
+    opacity: 0.6,
+    fontWeight: '600',
+    fontSize: 14,
+  },
 };
