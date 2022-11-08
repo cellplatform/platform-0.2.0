@@ -1,4 +1,4 @@
-import { Color, css, t, Text } from '../common.mjs';
+import { Color, css, t, Text } from '../common';
 
 const Processor = Text.Processor.markdown();
 

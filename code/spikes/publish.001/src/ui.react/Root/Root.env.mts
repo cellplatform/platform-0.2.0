@@ -1,4 +1,4 @@
-import { rx, State, t } from '../common.mjs';
+import { rx, State, t } from '../common';
 
 const isTauri = typeof (window as any).__TAURI__ === 'object';
 const url = new URL(window.location.href);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, State, t, QueryString } from '../common.mjs';
+import { Color, COLORS, css, State, t, QueryString } from '../common';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { env } from './Root.env.mjs';

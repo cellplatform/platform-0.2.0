@@ -1,4 +1,4 @@
-import { Color, COLORS } from '../common.mjs';
+import { Color, COLORS } from '../common';
 
 const BASE = {
   FONT_SIZE: 18,

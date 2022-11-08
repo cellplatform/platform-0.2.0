@@ -1,4 +1,4 @@
-import { State, Color, COLORS, css, t } from '../common.mjs';
+import { State, Color, COLORS, css, t } from '../common';
 
 export type RootTitleProps = {
   text?: string;

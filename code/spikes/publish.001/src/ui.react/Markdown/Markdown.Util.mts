@@ -1,4 +1,4 @@
-import { Processor } from '../common.mjs';
+import { Processor } from '../common';
 import { MarkdownFind as find } from './Markdown.Util.Find.mjs';
 
 export const MarkdownUtil = {

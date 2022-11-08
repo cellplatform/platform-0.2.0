@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Color, COLORS, css, FC, Fetch, t, Time } from '../common.mjs';
+import { Color, COLORS, css, FC, Fetch, t, Time } from '../common';
 import { RootTitle } from './Root.Tile';
 
 const DEFAULT = {

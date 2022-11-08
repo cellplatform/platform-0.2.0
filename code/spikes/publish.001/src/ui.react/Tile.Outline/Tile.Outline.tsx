@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { css, MarkdownUtil, t } from './common.mjs';
+import { css, MarkdownUtil, t } from './common';
 import { HeadingTile } from './Tile.Heading';
 
 import type { HeadingTileClickHandler } from './Tile.Heading';

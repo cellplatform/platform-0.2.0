@@ -1,4 +1,4 @@
-import { css, t } from '../common.mjs';
+import { css, t } from '../common';
 
 export type CenterProps = {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { t, Text } from '../common.mjs';
+import { t, Text } from '../common';
 
 import { renderer as defaultRenderer } from './Renderer';
 

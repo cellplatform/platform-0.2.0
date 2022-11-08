@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { css, FC, Style, t } from '../common.mjs';
+import { css, FC, Style, t } from '../common';
 import { DocStyles } from './Styles.mjs';
 import { useBlockRenderer } from './useBlockRenderer';
 

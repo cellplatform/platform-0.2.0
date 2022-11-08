@@ -1,4 +1,4 @@
-import { t } from '../common.mjs';
+import { t } from '../common';
 import { visit } from 'unist-util-visit';
 
 type LinkMatch = { node: t.MdastLink; text: string; url: string };
