@@ -20,7 +20,19 @@ export const QueryString = {
    * /?show=
    */
   show(input?: string | URL): ShowMarkdownComponent[] {
-    const query = asQuery(input);
+    const url = asUrl(input);
+    if (!url) return DEFAULT.show;
+
+    if (QueryString.isDev(input)) {
+      /**
+       * Behavior Decision Rule: 🌳
+       *    Force editor visible in "Dev" mode.
+       */
+      url.search = '?dev&show=outline|doc,editor';
+    }
+
+    // const query = asQuery(input);
+    const query = url.searchParams;
     if (!query) return DEFAULT.show;
 
     const KEY = 'show';
