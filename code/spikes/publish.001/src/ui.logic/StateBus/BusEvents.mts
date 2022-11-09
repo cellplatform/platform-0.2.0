@@ -62,7 +62,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.StateFetchReqEvent>($, 'app.state/fetch:req'),
     res$: rx.payload<t.StateFetchResEvent>($, 'app.state/fetch:res'),
     async fire(options = {}) {
-      const { timeout = 3000, topic: target } = options;
+      const { timeout = 3000, topic } = options;
       const tx = slug();
       const op = 'fetch';
       const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -70,7 +70,7 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'app.state/fetch:req',
-        payload: { tx, instance, target },
+        payload: { tx, instance, topic },
       });
 
       const res = await first;

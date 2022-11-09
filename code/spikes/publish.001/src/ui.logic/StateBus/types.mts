@@ -98,7 +98,7 @@ export type StateFetchReqEvent = {
 export type StateFetchReq = {
   tx: string;
   instance: Id;
-  target?: StateFetchKnownTopic[];
+  topic?: StateFetchKnownTopic[];
 };
 
 export type StateFetchResEvent = {

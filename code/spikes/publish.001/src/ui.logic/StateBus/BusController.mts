@@ -73,7 +73,7 @@ export function BusController(args: {
    * Fetch Data
    */
   events.fetch.req$.subscribe(async (e) => {
-    const { tx, target = [] } = e;
+    const { tx, topic = [] } = e;
 
     let error: string | undefined;
     const commits: string[] = [];
@@ -81,7 +81,7 @@ export function BusController(args: {
     /**
      * FETCH: Outline (Markdown)
      */
-    if (!error && target.includes('RootIndex')) {
+    if (!error && topic.includes('RootIndex')) {
       /**
        * TODO
        *  - Figure out how to not hard-code this path.
@@ -127,7 +127,7 @@ export function BusController(args: {
     /**
      * FETCH: Log (JSON)
      */
-    if (!error && target.includes('Log')) {
+    if (!error && topic.includes('Log')) {
       const history = await Fetch.logHistory();
       if (history) {
         const message = 'Fetched log history';
@@ -158,12 +158,13 @@ export function BusController(args: {
        */
       const message = 'Selection changed';
       await state.change(message, (draft) => {
-        draft.selection = next ? next : DEFAULTS.state.selection;
+        const selection = next ? next : DEFAULTS.state.selection;
+        draft.selection = selection;
       });
       fireChanged([message]);
 
       /**
-       * Persist in local-storage
+       * Persist in local-storage.
        */
       const data: LocalStorageState = { selection: next ?? DEFAULTS.state.selection };
       localstorage.set(data);
