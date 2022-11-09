@@ -13,3 +13,7 @@ export const COLORS = {
   MAGENTA: '#FE0064',
   BLUE: '#4D7EF7',
 };
+
+export const DEFAULTS = {
+  DOC: { width: 692 },
+};

@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 
-import { css, FC, Style, t } from '../common';
+import { css, FC, Style, t, DEFAULTS } from '../common';
 import { DocStyles } from './Styles.mjs';
 import { useBlockRenderer } from './useBlockRenderer';
 
-const DEFAULT = {
-  WIDTH: 692,
+const LOCAL = {
   CSS: {
     ROOT: 'sys-md-doc',
     BLOCK: 'sys-md-block',
@@ -21,7 +20,6 @@ export type MarkdownDocProps = {
 
 const View: React.FC<MarkdownDocProps> = (props) => {
   const { markdown, renderer } = props;
-
   const { safeBlocks, isEmpty } = useBlockRenderer({ markdown, renderer });
 
   /**
@@ -31,7 +29,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     /**
      * Initial Load.
      */
-    const prefix = `.${DEFAULT.CSS.ROOT} .${DEFAULT.CSS.BLOCK}`;
+    const prefix = `.${LOCAL.CSS.ROOT} .${LOCAL.CSS.BLOCK}`;
     Style.global(DocStyles, { prefix });
   }, []);
 
@@ -42,7 +40,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     base: css({
       position: 'relative',
       Scroll: props.scroll,
-      width: DEFAULT.WIDTH,
+      width: DEFAULTS.DOC.width,
       paddingBottom: 80,
     }),
     empty: css({
@@ -67,7 +65,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
             <div
               key={i}
               {...styles.html}
-              className={DEFAULT.CSS.BLOCK}
+              className={LOCAL.CSS.BLOCK}
               dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
             />
           );
@@ -86,7 +84,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} className={DEFAULT.CSS.ROOT}>
+    <div {...css(styles.base, props.style)} className={LOCAL.CSS.ROOT}>
       {elEmpty}
       {elHtml}
     </div>
@@ -98,11 +96,11 @@ const View: React.FC<MarkdownDocProps> = (props) => {
  */
 
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULT: typeof LOCAL;
 };
 
 export const MarkdownDoc = FC.decorate<MarkdownDocProps, Fields>(
   View,
-  { DEFAULT },
+  { DEFAULT: LOCAL },
   { displayName: 'MarkdownDoc' },
 );

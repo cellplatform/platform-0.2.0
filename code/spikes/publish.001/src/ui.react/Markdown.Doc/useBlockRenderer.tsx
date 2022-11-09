@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { t, Text } from '../common';
+import { t, Processor } from '../common';
 
-import { renderer as defaultRenderer } from './Renderer';
-
-const Processor = Text.Processor.markdown();
+import { defaultRenderer as defaultRenderer } from './Renderer';
 
 /**
  * Hook that isolates the markdown to display rendering.

@@ -43,4 +43,16 @@ export const DocStyles = {
     fontWeight: '600',
     fontSize: 14,
   },
+
+  'p code': {
+    fontFamily: 'monospace',
+    fontWeight: 600,
+    fontSize: BASE.FONT_SIZE - 2,
+    paddingLeft: 5,
+    paddingRight: 5,
+    backgroundColor: Color.alpha(COLORS.DARK, 0.06),
+    border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+    borderRadius: 3,
+    color: COLORS.MAGENTA,
+  },
 };

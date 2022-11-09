@@ -13,6 +13,7 @@ export type {
   MdastCode,
   MdastText,
   MdastList,
+  MdastImage,
   MdastListItem,
   MdastParagraph,
   MdastLink,

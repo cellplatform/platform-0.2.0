@@ -1,39 +1,48 @@
-import { Color, css, t, Text } from '../common';
+import { Color, css, t, Text, Processor } from '../common';
+import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
-const Processor = Text.Processor.markdown();
-
-const styles = {
-  image: css({ border: `solid 5px ${Color.format(-0.1)}` }),
+const Imports = {
+  Image: () => import('../Markdown.Doc.Components/Doc.Image'),
+  Error: () => import('../Markdown.Doc.Components/Doc.Error'),
 };
 
 /**
  * Default markdown to display (HTML, Component) renderer.
  */
-export const renderer: t.MarkdownDocBlockRenderer = async (e) => {
+export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
   const { md } = e;
   const Markdown = Text.Markdown;
 
   /**
    * Process <Image> with Component.
    */
-  const image = Markdown.Find.image(e.node);
-  if (image) {
-    const def = md.info.code.typed.find((c) => {
+  const imageNode = Markdown.Find.image(e.node);
+  if (imageNode) {
+    const { DocImage } = await Imports.Image();
+
+    const codeNode = md.info.code.typed.find((c) => {
       return c.type.startsWith('doc.image') && c.type.includes(' id:');
     });
 
-    const style: React.CSSProperties = {};
+    // const style: React.CSSProperties = {};
+    let def: t.DocImageDef | undefined;
 
     /**
      * TODO 🐷
      */
-    if (def && def.lang === 'yaml') {
-      const o = Text.Yaml.parse(def.text);
-      style.maxWidth = o.maxWidth;
+    if (codeNode && codeNode.lang === 'yaml') {
+      try {
+        def = Text.Yaml.parse(codeNode.text);
+      } catch (error: any) {
+        console.error(error);
+        const { DocError } = await Imports.Error();
+        const msg = `Failed while parsing YAML within block \`${codeNode.type}\``;
+        console.log('codeNode', codeNode);
+        return <DocError message={msg} error={error} />;
+      }
     }
 
-    const el = <img {...styles.image} style={style} src={image.url} alt={image.alt ?? ''} />;
-    return el;
+    return <DocImage node={imageNode} def={def} />;
   }
 
   /**
