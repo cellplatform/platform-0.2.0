@@ -4,11 +4,13 @@ export type DocImageDef = {
   align?: DocImageAlign;
   width?: number;
   border?: number;
+  radius?: number;
   margin?: { top?: number; bottom?: number };
-  title?: string;
+  offset?: { x?: number; y?: number };
+  caption?: string;
 };
 
-export type DocImageTitle = {
+export type DocImageCaption = {
   text: string;
   align?: DocImageAlign;
 };

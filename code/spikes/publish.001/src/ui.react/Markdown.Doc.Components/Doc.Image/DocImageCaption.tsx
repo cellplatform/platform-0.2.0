@@ -19,10 +19,8 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
 
   const width = def?.width;
   const border = def?.border;
-
   const margin = def?.margin;
   const title = Wrangle.title(def);
-  const offset = Wrangle.offset(def);
 
   /**
    * [Render]
@@ -38,14 +36,13 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
       base: css({
         Flex: Util.getFlexAlignment(def?.align),
         visibility: loaded ? 'visible' : 'hidden',
-        transform: Util.getOffsetTransform(offset),
       }),
-      imgElement: css({
+      img: css({
         width,
         maxWidth: DEFAULTS.MD.DOC.width,
         boxSizing: 'border-box',
-        border: border ? `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` : undefined,
-        borderRadius: def?.radius,
+        border:
+          typeof border !== 'number' ? undefined : `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       }),
     },
   };
@@ -56,7 +53,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
 
   const elImage = !loadError && (
     <img
-      {...styles.image.imgElement}
+      {...styles.image.img}
       src={src}
       alt={node.alt || undefined}
       onLoad={(e) => setLoaded(true)}
@@ -80,6 +77,16 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
 /**
  * Helpers
  */
+
+// const getAlignmentFlex = (align?: t.DocImageAlign) => {
+//   if (align === 'Center') return 'x-center-center';
+//   if (align === 'Right') return 'x-center-end';
+//   return;
+// };
+
+/**
+ * Helpers
+ */
 const Wrangle = {
   title(def?: t.DocImageDef): t.DocImageCaption | undefined {
     if (!def) return undefined;
@@ -88,14 +95,5 @@ const Wrangle = {
 
     const { text = 'Untitled', align = 'Center' } = def.caption;
     return { text, align };
-  },
-
-  offset(def?: t.DocImageDef) {
-    if (typeof def?.offset === 'object') {
-      const { x, y } = def?.offset;
-      return { x, y };
-    }
-
-    return undefined;
   },
 };
