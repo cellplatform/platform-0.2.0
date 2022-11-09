@@ -1,10 +1,10 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { Fetch } from '../Fetch.mjs';
+import { FetchFile, Storage } from '../Storage';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { DEFAULTS, Filesystem, Pkg, R, rx, t, TestFilesystem, Time } from './common.mjs';
-import { Storage } from '../Storage';
+import { DEFAULTS, Pkg, R, rx, t, Time } from './common.mjs';
 import { Paths } from './Paths.mjs';
 
 type UrlString = string;
@@ -29,27 +29,21 @@ export function BusController(args: {
     selection: DEFAULTS.state.selection,
   });
 
+  const events = BusEvents({
+    instance: args.instance,
+    dispose$: args.dispose$,
+    filter,
+  });
+  const { dispose$ } = events;
+
   const fireChanged = (messages: string[]) => {
     Time.delay(0, () => {
       events.changed.fire(...messages);
     });
   };
 
-  const getLocalFilesystem = async () => {
-    if (typeof window?.indexedDB === 'object') {
-      const bus = args.instance.bus;
-      return (await Filesystem.client({ bus })).fs;
-    } else {
-      // NB: Running on non-server runtime (probably within tests).
-      return TestFilesystem.memory().fs;
-    }
-  };
-
-  const events = BusEvents({
-    instance: args.instance,
-    dispose$: args.dispose$,
-    filter,
-  });
+  let _fs: t.Fs | undefined;
+  const getLocalFilesystem = async () => _fs ?? (_fs = await FetchFile.fs({ bus, dispose$ }));
 
   /**
    * Info (Module)
@@ -107,6 +101,7 @@ export function BusController(args: {
        * TODO:
        *  - reset local store (fs) to read remote (concept perhaps: "sync:remote:pull" <=> "sync:remote:push")
        *  - fs: fetch/pull from URL.
+       *
        */
       const fs = await getLocalFilesystem();
       const path = Paths.schema.index;
