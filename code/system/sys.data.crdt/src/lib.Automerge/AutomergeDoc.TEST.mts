@@ -2,7 +2,7 @@ import { Automerge } from '../common/';
 import { describe, expect, it } from '../test/';
 import { AutomergeDoc } from './';
 
-describe('AutomergeDoc (helpers)', () => {
+describe.skip('AutomergeDoc (helpers)', () => {
   describe('init', (e) => {
     type D = { count: Automerge.Counter; msg?: string };
 

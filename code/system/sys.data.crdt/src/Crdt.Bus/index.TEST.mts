@@ -4,7 +4,7 @@ import { CrdtBus } from './';
 
 type Doc = { count: number; msg?: string };
 
-describe('CrdtBus', (e) => {
+describe.skip('CrdtBus', (e) => {
   const bus = rx.bus();
 
   describe('is', () => {
