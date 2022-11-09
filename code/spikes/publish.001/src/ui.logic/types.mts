@@ -10,7 +10,7 @@ type MdString = string;
 export type StateTree = {
   location?: StateLocation;
   markdown?: StateMarkdown;
-  selected?: StateSelection;
+  selection: StateSelection;
   log?: t.PublicLogSummary;
 };
 
@@ -21,5 +21,5 @@ export type StateLocation = {
 };
 
 export type StateSelection = {
-  url: UrlString;
+  index?: { url: UrlString };
 };

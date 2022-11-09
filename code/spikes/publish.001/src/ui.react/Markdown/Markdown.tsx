@@ -55,7 +55,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     const markdown = state.current?.markdown;
     const outline = markdown?.outline;
     const document = markdown?.document;
-    const selectedUrl = state.current?.selected?.url;
+    const selectedUrl = state.current?.selection.index?.url;
 
     if (kind === 'outline') {
       flex = undefined;

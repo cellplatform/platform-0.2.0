@@ -77,7 +77,7 @@ export function BusEvents(args: {
       if (res.payload) return res.payload;
 
       const error = res.error?.message ?? 'Failed';
-      return { tx, instance, current: {}, error };
+      return { tx, instance, current: DEFAULTS.state, error };
     },
   };
 
@@ -103,7 +103,7 @@ export function BusEvents(args: {
       if (res.payload) return res.payload;
 
       const error = res.error?.message ?? 'Failed';
-      return { tx, instance, current: {}, message: '', error };
+      return { tx, instance, current: DEFAULTS.state, message: '', error };
     },
   };
 
@@ -114,7 +114,7 @@ export function BusEvents(args: {
     $: rx.payload<t.StateChangedEvent>($, 'app.state/changed'),
     async fire(...messages) {
       const res = await info.get();
-      const current = res.info?.current ?? {};
+      const current = res.info?.current ?? DEFAULTS.state;
       bus.fire({
         type: 'app.state/changed',
         payload: { instance, current, messages },

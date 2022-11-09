@@ -1,4 +1,4 @@
-import { R, t, Is } from './common.mjs';
+import { R, t, Is, DEFAULTS } from './common.mjs';
 
 type UrlString = string;
 type Revision = { number: number; message: string };
@@ -8,7 +8,7 @@ type Revision = { number: number; message: string };
  */
 export function BusMemoryState(initial: { location?: UrlString } = {}) {
   let _revision: Revision = { number: 0, message: 'initial' };
-  let _current: t.StateTree = {};
+  let _current: t.StateTree = DEFAULTS.state;
 
   /**
    * Initial settings.
@@ -40,7 +40,7 @@ export function BusMemoryState(initial: { location?: UrlString } = {}) {
       const res = fn(clone);
       if (Is.promise(res)) await res;
 
-      // NB: Merging here is a "poor man's CRDT (automerge)".
+      // NB: Merging here is a "poor man's CRDT" strategy (use Automerge).
       const changedByAnotherProcess = before.number !== _revision.number;
       _current = changedByAnotherProcess
         ? (R.mergeDeepRight(_current, clone) as t.StateTree)

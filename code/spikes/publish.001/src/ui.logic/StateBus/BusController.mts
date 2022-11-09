@@ -9,7 +9,7 @@ import { Paths } from './Paths.mjs';
 
 type UrlString = string;
 
-export type LocalStorageState = { selection: { url: string } };
+export type LocalStorageState = { selection: t.StateSelection };
 
 /**
  * Event controller.
@@ -26,7 +26,7 @@ export function BusController(args: {
 
   const state = BusMemoryState({ location: initial.location });
   const localstorage = Storage.Local.object<LocalStorageState>('ui.state', {
-    selection: { url: '' },
+    selection: DEFAULTS.state.selection,
   });
 
   const fireChanged = (messages: string[]) => {
@@ -150,20 +150,22 @@ export function BusController(args: {
    */
   events.select.$.subscribe(async (e) => {
     const url = e.selected;
-    const next = url ? { url } : undefined;
+    const next = url ? { index: { url } } : undefined;
 
-    if (!R.equals(next, state.current.selected)) {
+    if (!R.equals(next, state.current.selection)) {
       /**
        * Update local state.
        */
       const message = 'Selection changed';
-      await state.change(message, (draft) => (draft.selected = next));
+      await state.change(message, (draft) => {
+        draft.selection = next ? next : DEFAULTS.state.selection;
+      });
       fireChanged([message]);
 
       /**
        * Persist in local-storage
        */
-      const data: LocalStorageState = { selection: next ?? { url: '' } };
+      const data: LocalStorageState = { selection: next ?? DEFAULTS.state.selection };
       localstorage.set(data);
     }
   });
@@ -197,11 +199,13 @@ export function BusController(args: {
    * [LISTEN] Load document upon selection change.
    */
   events.changed.$.pipe(
-    distinctUntilChanged((prev, next) => prev.current.selected?.url === next.current.selected?.url),
+    distinctUntilChanged(
+      (prev, next) => prev.current.selection.index?.url === next.current.selection.index?.url,
+    ),
   ).subscribe(async (e) => {
-    const url = e.current.selected?.url;
+    const url = e.current.selection.index?.url;
 
-    const message = 'Load document after selection (url) change';
+    const message = 'Load document after URL selection change';
     await state.change(message, async (draft) => {
       const markdown = draft.markdown ?? (draft.markdown = {});
       const before = markdown.document;
@@ -219,7 +223,7 @@ export function BusController(args: {
   /**
    * Initialize
    */
-  events.select.fire(localstorage.get()?.selection?.url);
+  events.select.fire(localstorage.get()?.selection.index?.url);
 
   /**
    * Finish up
