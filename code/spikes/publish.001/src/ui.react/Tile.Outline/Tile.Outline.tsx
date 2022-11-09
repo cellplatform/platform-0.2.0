@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { css, MarkdownUtil, t } from './common';
+import { css, Processor, t } from './common';
 import { HeadingTile } from './Tile.Heading';
 
 import type { HeadingTileClickHandler } from './Tile.Heading';
@@ -16,13 +16,10 @@ export type TileOutlineProps = {
 };
 
 export const TileOutline: React.FC<TileOutlineProps> = (props) => {
-  const [ast, setAst] = useState<t.MdastRoot | undefined>();
+  const [mdast, setMdast] = useState<t.MdastRoot | undefined>();
 
   useEffect(() => {
-    (async () => {
-      const { info } = await MarkdownUtil.parseMarkdown(props.markdown);
-      setAst(info.mdast);
-    })();
+    Processor.toMarkdown(props.markdown).then((md) => setMdast(md.mdast));
   }, [props.markdown]);
 
   /**
@@ -35,11 +32,11 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
     }),
   };
 
-  const children = ast?.children ?? [];
+  const children = mdast?.children ?? [];
   const elBlocks: JSX.Element[] = [];
 
   let i = -1;
-  for (const node of ast?.children || []) {
+  for (const node of mdast?.children || []) {
     i++;
     if (node.type === 'heading') {
       const heading = node as t.MdastHeading;
