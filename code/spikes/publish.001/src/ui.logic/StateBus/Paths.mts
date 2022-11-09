@@ -1,18 +1,19 @@
-import { BundlePaths, Path } from './common.mjs';
+import { BundlePaths as Bundle, Path } from './common.mjs';
 
 function toDataPath(input: string) {
-  const path = Path.join(BundlePaths.data.md, input);
+  const path = Path.join(Bundle.data.md, input);
   return Path.toAbsolutePath(path);
 }
 
 export const Paths = {
-  BundlePaths,
+  Bundle,
   toDataPath,
 
   /**
    * Data Stores (Schema)
    */
   schema: {
-    index: toDataPath('index.md'), // TODO: Declare as part of a "Package Data Schema".
+    index: toDataPath('index.md'),
+    README: toDataPath('README.md'),
   },
 };
