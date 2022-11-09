@@ -6,7 +6,7 @@ type Semver = string;
 type UrlString = string;
 
 export type StateInstance = { bus: t.EventBus<any>; id?: Id };
-export type StateFetchKnownTopic = 'Outline' | 'Log';
+export type StateFetchKnownTopic = 'RootIndex' | 'Log';
 
 export type StateInfo = {
   module: { name: string; version: Semver };

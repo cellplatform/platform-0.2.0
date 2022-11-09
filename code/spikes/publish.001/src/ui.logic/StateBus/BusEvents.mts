@@ -26,7 +26,7 @@ export function BusEvents(args: {
    * Initialization upon load.
    */
   const init = async () => {
-    await fetch.fire({ topic: ['Outline', 'Log'] });
+    await fetch.fire({ topic: ['RootIndex', 'Log'] });
   };
 
   /**

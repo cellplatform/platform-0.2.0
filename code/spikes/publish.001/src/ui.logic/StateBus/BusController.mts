@@ -81,7 +81,7 @@ export function BusController(args: {
     /**
      * FETCH: Outline (Markdown)
      */
-    if (!error && target.includes('Outline')) {
+    if (!error && target.includes('RootIndex')) {
       /**
        * TODO
        *  - Figure out how to not hard-code this path.
@@ -219,15 +219,7 @@ export function BusController(args: {
   /**
    * Initialize
    */
-  const init = async () => {
-    const local = localstorage.get();
-
-    /**
-     * Setup initial state.
-     */
-    events.select.fire(local.selection.url || undefined);
-  };
-  init();
+  events.select.fire(localstorage.get()?.selection?.url);
 
   /**
    * Finish up
