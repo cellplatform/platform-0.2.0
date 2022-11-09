@@ -31,8 +31,6 @@ document.addEventListener('keydown', async (e) => {
   if (e.key === 's' && e.metaKey) {
     // Cancel "save" HTML page action (browser default).
     e.preventDefault();
-
-    // Debug (log state):
   }
 
   // CMD+P
@@ -41,13 +39,15 @@ document.addEventListener('keydown', async (e) => {
     e.preventDefault();
 
     // PRINT state/bundle information
+
     console.info('');
+    console.group('💦'.repeat(20));
     const { info } = await controller.info.get();
-    console.info('💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦💦');
     console.info('[CMD+P]');
     console.info('Current State:', info?.current);
     console.info('Package:', Pkg);
     console.info('BundlePaths:', BundlePaths);
+    console.groupEnd();
     console.info('');
   }
 });
