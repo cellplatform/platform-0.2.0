@@ -109,7 +109,7 @@ export function BusController(args: {
        *  - fs: fetch/pull from URL.
        */
       const fs = await getLocalFilesystem();
-      const path = Paths.schema.outline;
+      const path = Paths.schema.index;
 
       if (await fs.exists(path)) {
         const data = await fs.read(path);
@@ -182,7 +182,7 @@ export function BusController(args: {
       // HACK 🐷
       const fs = await getLocalFilesystem();
       const data = state.current.markdown?.outline ?? '';
-      await fs.write(Paths.schema.outline, data);
+      await fs.write(Paths.schema.index, data);
     } catch (err: any) {
       error = err.message;
     }

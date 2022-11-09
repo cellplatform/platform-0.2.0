@@ -13,6 +13,6 @@ export const Paths = {
    * Data Stores (Schema)
    */
   schema: {
-    outline: toDataPath('outline.md'), // TODO: Declare as part of a "Package Data Schema".
+    index: toDataPath('index.md'), // TODO: Declare as part of a "Package Data Schema".
   },
 };
