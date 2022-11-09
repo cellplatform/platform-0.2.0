@@ -43,7 +43,7 @@ export function BusController(args: {
   };
 
   let _fs: t.Fs | undefined;
-  const getLocalFilesystem = async () => _fs ?? (_fs = await FetchFile.fs({ bus, dispose$ }));
+  const getFilesystem = async () => _fs ?? (_fs = await FetchFile.fs({ bus, dispose$ }));
 
   /**
    * Info (Module)
@@ -51,10 +51,11 @@ export function BusController(args: {
   events.info.req$.subscribe(async (e) => {
     const { tx } = e;
     const { name = '', version = '' } = Pkg;
+    const current = state.current;
 
     const info: t.StateInfo = {
       module: { name, version },
-      current: state.current,
+      current,
     };
 
     bus.fire({
@@ -82,13 +83,13 @@ export function BusController(args: {
        *   by looking it up in some kind of "semi-strongly typed" content-manifest.
        */
 
-      const updateOutlineInState = async (text: string) => {
-        const message = 'Fetched outline';
-        await state.change(message, (tree) => {
+      const updateState = async (text: string) => {
+        const commit = 'Fetched outline';
+        await state.change(commit, (tree) => {
           const markdown = tree.markdown || (tree.markdown = {});
           markdown.outline = text;
         });
-        commits.push(message);
+        commits.push(commit);
       };
 
       /**
@@ -103,18 +104,18 @@ export function BusController(args: {
        *  - fs: fetch/pull from URL.
        *
        */
-      const fs = await getLocalFilesystem();
+      const fs = await getFilesystem();
       const path = Paths.schema.index;
 
       if (await fs.exists(path)) {
         const data = await fs.read(path);
         const text = data ? new TextDecoder().decode(data) : '';
-        await updateOutlineInState(text);
+        await updateState(text);
       } else {
         const res = await Fetch.text(path);
         if (res.error) error = res.error;
         if (!error) {
-          await updateOutlineInState(res.text);
+          await updateState(res.text);
         }
       }
     }
@@ -125,9 +126,9 @@ export function BusController(args: {
     if (!error && topic.includes('Log')) {
       const history = await Fetch.logHistory();
       if (history) {
-        const message = 'Fetched log history';
-        await state.change(message, (draft) => (draft.log = history));
-        commits.push(message);
+        const commit = 'Fetched log history';
+        await state.change(commit, (draft) => (draft.log = history));
+        commits.push(commit);
       }
     }
 
@@ -151,12 +152,12 @@ export function BusController(args: {
       /**
        * Update local state.
        */
-      const message = 'Selection changed';
-      await state.change(message, (draft) => {
+      const commit = 'Selection changed';
+      await state.change(commit, (draft) => {
         const selection = next ? next : DEFAULTS.state.selection;
         draft.selection = selection;
       });
-      fireChanged([message]);
+      fireChanged([commit]);
 
       /**
        * Persist in local-storage.
@@ -177,19 +178,28 @@ export function BusController(args: {
       await state.change(e.message, e.handler);
       fireChanged([message]);
 
-      // HACK 🐷
-      const fs = await getLocalFilesystem();
-      const data = state.current.markdown?.outline ?? '';
+      /**
+       * HACK 🐷
+       * Temporary filesystem store
+       */
+      const fs = await getFilesystem();
+
+      const markdown = state.current.markdown;
+      const url = state.current.selection.index?.url;
+      const hasSelection = Boolean(url);
+      const data = (hasSelection ? markdown?.document : markdown?.outline) ?? '';
       if (data) {
-        await fs.write(Paths.schema.index, data);
+        const path = hasSelection ? Paths.toDataPath(url ?? '') : Paths.schema.index;
+        await fs.write(path, data);
       }
     } catch (err: any) {
       error = err.message;
     }
 
+    const current = state.current;
     bus.fire({
       type: 'app.state/change:res',
-      payload: { tx, instance, current: state.current, message, error },
+      payload: { tx, instance, current, message, error },
     });
   });
 
@@ -203,8 +213,8 @@ export function BusController(args: {
   ).subscribe(async (e) => {
     const url = e.current.selection.index?.url;
 
-    const message = 'Load document after URL selection change';
-    await state.change(message, async (draft) => {
+    const commit = 'Load document after URL selection change';
+    await state.change(commit, async (draft) => {
       const markdown = draft.markdown ?? (draft.markdown = {});
       const before = markdown.document;
       if (!url) {
@@ -214,7 +224,7 @@ export function BusController(args: {
         const { text, error } = await Fetch.text(path);
         markdown.document = error ? undefined : text;
       }
-      if (markdown.document !== before) fireChanged([message]);
+      if (markdown.document !== before) fireChanged([commit]);
     });
   });
 
