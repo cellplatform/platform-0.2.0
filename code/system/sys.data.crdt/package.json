@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "test__": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
+    "test": "echo skip",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
