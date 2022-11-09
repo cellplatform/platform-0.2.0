@@ -38,15 +38,20 @@ document.addEventListener('keydown', async (e) => {
     // Cancel "print" HTML page action (browser default).
     e.preventDefault();
 
-    // PRINT state/bundle information
-
+    /**
+     * PRINT info.
+     */
+    const { info } = await controller.info.get();
     console.info('');
     console.group('💦'.repeat(20));
-    const { info } = await controller.info.get();
     console.info('[CMD+P]');
     console.info('Current State:', info?.current);
     console.info('Package:', Pkg);
     console.info('BundlePaths:', BundlePaths);
+    console.info('');
+
+    console.log('selection', info?.current.selection);
+
     console.groupEnd();
     console.info('');
   }

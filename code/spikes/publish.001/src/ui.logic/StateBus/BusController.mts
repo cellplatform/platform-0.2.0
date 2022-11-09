@@ -180,7 +180,9 @@ export function BusController(args: {
       // HACK 🐷
       const fs = await getLocalFilesystem();
       const data = state.current.markdown?.outline ?? '';
-      await fs.write(Paths.schema.index, data);
+      if (data) {
+        await fs.write(Paths.schema.index, data);
+      }
     } catch (err: any) {
       error = err.message;
     }

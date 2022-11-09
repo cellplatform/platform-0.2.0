@@ -5,6 +5,6 @@ export const DEFAULTS = {
   instance: 'singleton',
 
   get state(): t.StateTree {
-    return { selection: {} };
+    return { selection: { index: { url: '' } } };
   },
 };
