@@ -23,15 +23,21 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   /**
    * Handlers
    */
-  const onEditorChange = (e: { text: string }) => {
+  const handleEditorChange = (e: { text: string }) => {
     State.events(instance, async (events) => {
       /**
        * TODO 🐷
        * - Move behind a common "UiState.markdown" static object (eg. UiState.UpdateFromEditor(...))
        */
-      await events.change.fire('editor changed by user', (state) => {
-        const markdown = state.markdown ?? (state.markdown = {});
-        markdown.outline = e.text;
+      await events.change.fire('Editor changed by user', (draft) => {
+        const markdown = draft.markdown ?? (draft.markdown = {});
+        const hasSelection = Boolean(draft.selection.index?.url);
+
+        if (hasSelection) {
+          markdown.document = e.text;
+        } else {
+          markdown.outline = e.text;
+        }
       });
     });
   };
@@ -92,6 +98,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
     if (kind === 'editor') {
       flex = 1;
+      const text = selectedUrl ? markdown?.document : markdown?.outline;
       el = (
         <MarkdownEditor
           key={i}
@@ -99,8 +106,8 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
             flex: 1,
             borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
           }}
-          markdown={outline}
-          onChange={onEditorChange}
+          markdown={text}
+          onChange={handleEditorChange}
           focusOnLoad={true}
         />
       );
