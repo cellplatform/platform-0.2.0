@@ -5,6 +5,7 @@ import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { env } from './Root.env.mjs';
 import { RootTitle } from './Root.Title';
+import { OverlayFrame } from '../Overlay';
 
 const { instance } = env;
 
@@ -72,6 +73,9 @@ export const Root: React.FC<RootProps> = (props) => {
       {isDev && <RootTitle text={'Report'} />}
       <div {...styles.body}>
         <Markdown instance={instance} style={{ Absolute: 0 }} />
+
+        {/* TEMP 🐷 */}
+        {/* <OverlayFrame style={{ Absolute: 0 }} /> */}
       </div>
     </div>
   );
