@@ -17,6 +17,7 @@ export type {
   MdastListItem,
   MdastParagraph,
   MdastLink,
+  MdastBlockquote,
   ProcessedMdast,
 } from 'sys.text/src/types.mjs';
 

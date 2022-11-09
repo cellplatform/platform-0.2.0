@@ -5,30 +5,11 @@ const BASE = {
 };
 
 export const DocStyles = {
-  h1: {
-    fontSize: 40,
-  },
-
-  p: {
-    fontSize: BASE.FONT_SIZE,
-    lineHeight: '1.5em',
-    marginBlockStart: '2em',
-    marginBlockEnd: '2em',
-  },
-
-  'ul,ol p': {
-    marginBlock: 0,
-    marginBottom: '1.1em',
-  },
-
-  'ul,ol': {
-    fontSize: BASE.FONT_SIZE,
-    margin: 0,
-  },
-
-  li: {
-    marginBottom: '0.6em',
-  },
+  /**
+   * Headings and Sections
+   */
+  h1: { fontSize: 46 },
+  'h1:first-of-type': { marginBottom: 60 },
 
   hr: {
     border: 'none',
@@ -37,6 +18,32 @@ export const DocStyles = {
     marginBottom: '2em',
   },
 
+  /**
+   * Body Content
+   */
+  p: {
+    fontSize: BASE.FONT_SIZE,
+    lineHeight: '1.5em',
+    marginBlockStart: '2em',
+    marginBlockEnd: '2em',
+  },
+
+  /**
+   * Lists
+   */
+  'ul,ol p': {
+    marginBlock: 0,
+    marginBottom: '1.1em',
+  },
+  'ul,ol': {
+    fontSize: BASE.FONT_SIZE,
+    margin: 0,
+  },
+  li: { marginBottom: '0.6em' },
+
+  /**
+   * Code (Monospaced)
+   */
   pre: {
     paddingLeft: 30,
     opacity: 0.6,
@@ -54,5 +61,14 @@ export const DocStyles = {
     border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     borderRadius: 3,
     color: COLORS.MAGENTA,
+  },
+
+  /**
+   * Quotes
+   */
+  'blockquote p': { fontSize: 26 },
+  'blockquote p em': {
+    color: '#E21B22', // RED
+    fontStyle: 'normal',
   },
 };

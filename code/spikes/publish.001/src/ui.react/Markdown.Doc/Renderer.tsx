@@ -24,11 +24,11 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
       return c.type.startsWith('doc.image') && c.type.includes(' id:');
     });
 
-    // const style: React.CSSProperties = {};
     let def: t.DocImageDef | undefined;
 
     /**
      * TODO 🐷
+     * - Refactor
      */
     if (codeNode && codeNode.lang === 'yaml') {
       try {
@@ -43,6 +43,15 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
     }
 
     return <DocImage node={imageNode} def={def} />;
+  }
+
+  /**
+   * Blockquote.
+   */
+  if (e.node.type === 'blockquote') {
+    const { DocQuote } = await import('../Markdown.Doc.Components/Doc.Quote');
+    const text = md.toString(e.node.position);
+    return <DocQuote markdown={text} node={e.node} />;
   }
 
   /**

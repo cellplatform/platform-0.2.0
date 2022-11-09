@@ -25,7 +25,7 @@ export function BusController(args: {
   const instance = args.instance.id || DEFAULTS.instance;
 
   const state = BusMemoryState({ location: initial.location });
-  const localstate = Storage.Local.object<LocalStorageState>('ui.state', {
+  const localstorage = Storage.Local.object<LocalStorageState>('ui.state', {
     selection: { url: '' },
   });
 
@@ -164,7 +164,7 @@ export function BusController(args: {
        * Persist in local-storage
        */
       const data: LocalStorageState = { selection: next ?? { url: '' } };
-      localstate.set(data);
+      localstorage.set(data);
     }
   });
 
@@ -220,18 +220,7 @@ export function BusController(args: {
    * Initialize
    */
   const init = async () => {
-    /**
-     * TODO (Refactor)
-     * - write an "Init:Ready" event, and force the UI to
-     *    1. Hide before "ready"
-     *    2. Redraws with new state
-     *
-     */
-    const local = localstate.get();
-
-    console.group('🌳 UI/Controller: init (local filesystem)');
-    console.log('local state:', local);
-    console.groupEnd();
+    const local = localstorage.get();
 
     /**
      * Setup initial state.

@@ -19,6 +19,7 @@ import type {
   Link as MdastLink,
   Image as MdastImage,
   Content as MdastContent,
+  Blockquote as MdastBlockquote,
 } from 'mdast';
 
 export {
@@ -32,6 +33,7 @@ export {
   MdastLink,
   MdastImage,
   MdastContent,
+  MdastBlockquote,
 };
 export type MdastNode =
   | MdastRoot
@@ -43,7 +45,8 @@ export type MdastNode =
   | MdastParagraph
   | MdastLink
   | MdastImage
-  | MdastContent;
+  | MdastContent
+  | MdastBlockquote;
 
 /**
  * HAST (HTML)

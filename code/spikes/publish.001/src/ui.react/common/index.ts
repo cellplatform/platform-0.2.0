@@ -15,5 +15,11 @@ export const COLORS = {
 };
 
 export const DEFAULTS = {
-  DOC: { width: 692 },
+  MD: {
+    DOC: { width: 692 },
+    CLASS: {
+      ROOT: 'sys-md-doc',
+      BLOCK: 'sys-md-block',
+    },
+  },
 };

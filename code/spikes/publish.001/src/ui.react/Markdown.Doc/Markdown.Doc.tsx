@@ -1,15 +1,8 @@
 import React, { useEffect } from 'react';
 
 import { css, FC, Style, t, DEFAULTS } from '../common';
-import { DocStyles } from './Styles.mjs';
+import { DocStyles } from './Global.Styles.mjs';
 import { useBlockRenderer } from './useBlockRenderer';
-
-const LOCAL = {
-  CSS: {
-    ROOT: 'sys-md-doc',
-    BLOCK: 'sys-md-block',
-  },
-};
 
 export type MarkdownDocProps = {
   markdown?: string;
@@ -21,6 +14,7 @@ export type MarkdownDocProps = {
 const View: React.FC<MarkdownDocProps> = (props) => {
   const { markdown, renderer } = props;
   const { safeBlocks, isEmpty } = useBlockRenderer({ markdown, renderer });
+  const CLASS = DEFAULTS.MD.CLASS;
 
   /**
    * Lifecycle
@@ -29,7 +23,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     /**
      * Initial Load.
      */
-    const prefix = `.${LOCAL.CSS.ROOT} .${LOCAL.CSS.BLOCK}`;
+    const prefix = `.${CLASS.ROOT} .${CLASS.BLOCK}`;
     Style.global(DocStyles, { prefix });
   }, []);
 
@@ -40,7 +34,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     base: css({
       position: 'relative',
       Scroll: props.scroll,
-      width: DEFAULTS.DOC.width,
+      width: DEFAULTS.MD.DOC.width,
       paddingBottom: 80,
     }),
     empty: css({
@@ -65,7 +59,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
             <div
               key={i}
               {...styles.html}
-              className={LOCAL.CSS.BLOCK}
+              className={CLASS.BLOCK}
               dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
             />
           );
@@ -84,7 +78,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} className={LOCAL.CSS.ROOT}>
+    <div {...css(styles.base, props.style)} className={CLASS.ROOT}>
       {elEmpty}
       {elHtml}
     </div>
@@ -95,12 +89,10 @@ const View: React.FC<MarkdownDocProps> = (props) => {
  * Export
  */
 
-type Fields = {
-  DEFAULT: typeof LOCAL;
-};
+type Fields = {};
 
 export const MarkdownDoc = FC.decorate<MarkdownDocProps, Fields>(
   View,
-  { DEFAULT: LOCAL },
+  {},
   { displayName: 'MarkdownDoc' },
 );

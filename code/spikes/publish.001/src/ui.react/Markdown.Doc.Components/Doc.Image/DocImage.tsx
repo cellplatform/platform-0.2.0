@@ -26,7 +26,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      maxWidth: DEFAULTS.DOC.width,
+      maxWidth: DEFAULTS.MD.DOC.width,
       marginTop: margin?.top,
       marginBottom: margin?.bottom,
     }),
@@ -37,7 +37,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
       }),
       img: css({
         width,
-        maxWidth: DEFAULTS.DOC.width,
+        maxWidth: DEFAULTS.MD.DOC.width,
         boxSizing: 'border-box',
         border:
           typeof border !== 'number' ? undefined : `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
@@ -71,7 +71,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} className={DEFAULTS.MD.CLASS.BLOCK}>
       <div {...styles.image.base}>{elImage}</div>
 
       {elError}
