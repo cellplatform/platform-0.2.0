@@ -29,7 +29,9 @@ const toRef = (node: t.MdastNode): HeadingTileClickHandlerArgs['ref'] => {
 export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
   const { node, siblings, widths = {}, selectedUrl = '' } = props;
   const { title, children } = TileUtil.heading({ node, siblings });
-  const isRootSelected = toRef(node)?.url === selectedUrl;
+
+  let isRootSelected = toRef(node)?.url === selectedUrl;
+  if (!selectedUrl && props.index === 0) isRootSelected = true;
 
   /**
    * Handlers
@@ -148,7 +150,8 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         if (depth === 2) colors = styles.block.silver;
         if (depth === 3) colors = styles.block.dark;
 
-        const isChildSelected = toRef(child.node)?.url === selectedUrl;
+        const url = toRef(child.node)?.url;
+        const isChildSelected = url === selectedUrl;
         const selected = isChildSelected ? styles.block.selected : undefined;
 
         const onChildClick: React.MouseEventHandler = (e) => {
@@ -160,8 +163,8 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
 
         return (
           <div
-            key={i}
             {...css(styles.block.base, styles.block.child, colors, selected)}
+            key={i}
             onClick={onChildClick}
           >
             {text}
