@@ -15,6 +15,8 @@
   "dependencies": {
     "sys.types": "0.0.0",
     "sys.text": "0.0.0",
+    "sys.fs": "0.0.0",
+    "sys.fs.indexeddb": "0.0.0",
     "sys.util": "0.0.0",
     "@monaco-editor/react": "^4.4.6",
     "monaco-editor": "^0.34.1"
@@ -26,8 +28,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.b0342bcb.js",
-    "./web": "./dist/web/lib/index.b0342bcb.js"
+    ".": "./dist/web/lib/index.4467c634.js",
+    "./web": "./dist/web/lib/index.4467c634.js"
   },
   "typesVersions": {
     "*": {
