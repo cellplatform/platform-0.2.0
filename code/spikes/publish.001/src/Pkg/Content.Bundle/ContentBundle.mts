@@ -117,6 +117,16 @@ export async function ContentBundle(args: Args) {
       }
 
       /**
+       * Write a [vercel.json] configuration file.
+       * NOTE:
+       *    Most of the routing will probably handled within a [src.middleware.ts] file.
+       * REF:
+       *  - https://vercel.com/docs/project-configuration#project-configuration
+       */
+      const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
+      await appfs.write('vercel.json', config);
+
+      /**
        * Write root level README.
        */
       const fs = target.dir(base);
@@ -186,14 +196,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write content
      */
-    async data(
-      target: t.Fs,
-      options: {
-        logdir?: t.Fs;
-        manifest?: boolean;
-        vercelConfig?: boolean;
-      } = {},
-    ) {
+    async data(target: t.Fs, options: { logdir?: t.Fs; manifest?: boolean } = {}) {
       const MD = Text.Processor.markdown();
       const source = await sources.content.manifest();
 
@@ -224,18 +227,6 @@ export async function ContentBundle(args: Args) {
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });
         await target.write(Paths.Bundle.data.log, log);
-      }
-
-      /**
-       * Write a [vercel.json] configuration file.
-       * NOTE:
-       *    Most of the routing will probably handled within a [src.middleware.ts] file.
-       * REF:
-       *  - https://vercel.com/docs/project-configuration#project-configuration
-       */
-      if (options.vercelConfig) {
-        const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
-        await target.write('vercel.json', config);
       }
     },
   };
