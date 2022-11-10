@@ -3,6 +3,7 @@ import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
 import { TileOutline } from '../Tile.Outline/index.mjs';
+import { useEditorChangeHandler } from './useEditorChangeHandler.mjs';
 
 export type MarkdownProps = {
   instance: t.StateInstance;
@@ -12,35 +13,20 @@ export type MarkdownProps = {
 export const Markdown: React.FC<MarkdownProps> = (props) => {
   const { instance } = props;
 
-  const state = State.Bus.useEvents(props.instance);
-  const current = state.current;
+  const changeMonitor = useEditorChangeHandler(props.instance);
+  const state = changeMonitor.state;
 
-  if (!current) return null;
-  const url = current.location?.url;
-  const version = current.log?.latest.version;
-  const show = QueryString.show(url);
+  if (!state) return null;
+
+  const url = state.location?.url;
+  const version = state.log?.latest.version;
 
   /**
-   * Handlers
+   * TODO 🐷
+   * - remove this concept of "show" (from the query-string)
+   * - only need `isDev` to show/hide dev-env (and editor).
    */
-  const handleEditorChange = (e: { text: string }) => {
-    State.events(instance, async (events) => {
-      /**
-       * TODO 🐷
-       * - Move behind a common "UiState.markdown" static object (eg. UiState.UpdateFromEditor(...))
-       */
-      await events.change.fire('Editor changed by user', (draft) => {
-        const markdown = draft.markdown ?? (draft.markdown = {});
-        const hasSelection = Boolean(draft.selection.index?.url);
-
-        if (hasSelection) {
-          markdown.document = e.text;
-        } else {
-          markdown.outline = e.text;
-        }
-      });
-    });
-  };
+  const show = QueryString.show(url);
 
   /**
    * [Render]
@@ -58,10 +44,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
     let el: JSX.Element | null = null;
     let flex: undefined | number;
 
-    const markdown = state.current?.markdown;
+    const selectedUrl = state?.selection.index?.path;
+    const markdown = state?.markdown;
     const outline = markdown?.outline;
     const document = markdown?.document;
-    const selectedUrl = state.current?.selection.index?.url;
 
     if (kind === 'outline') {
       flex = undefined;
@@ -107,7 +93,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
             borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
           }}
           markdown={text}
-          onChange={handleEditorChange}
+          onChange={changeMonitor.changeHandler}
           focusOnLoad={true}
         />
       );
