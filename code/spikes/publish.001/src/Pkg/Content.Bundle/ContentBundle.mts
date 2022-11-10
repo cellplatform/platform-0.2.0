@@ -170,7 +170,7 @@ export async function ContentBundle(args: Args) {
           const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => match(path, Paths.Bundle.app.lib)),
+            lib: toSize(manifest, (path) => match(path, Paths.Bundle.app.lib)),
             data: {
               md: toSize(manifest, (path) =>
                 match(path, Paths.Bundle.app.base, Paths.Bundle.data.md),
