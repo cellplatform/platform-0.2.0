@@ -1,5 +1,4 @@
-import { Color, css, t, Text, Processor } from '../common';
-import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
+import { Processor, t, Text } from '../common';
 
 const Imports = {
   Image: () => import('../Markdown.Doc.Components/Doc.Image'),
@@ -12,6 +11,8 @@ const Imports = {
 export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
   const { md } = e;
   const Markdown = Text.Markdown;
+
+  const asCtx = <T extends t.MdastNode>(node: T): t.DocBlockCtx<T> => ({ node, md });
 
   /**
    * Process <Image> with Component.
@@ -28,7 +29,7 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
 
     /**
      * TODO 🐷
-     * - Refactor
+     * - Refactor: Image parsing.
      */
     if (codeNode && codeNode.lang === 'yaml') {
       try {
@@ -37,21 +38,28 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
         console.error(error);
         const { DocError } = await Imports.Error();
         const msg = `Failed while parsing YAML within block \`${codeNode.type}\``;
-        console.log('codeNode', codeNode);
         return <DocError message={msg} error={error} />;
       }
     }
 
-    return <DocImage node={imageNode} def={def} />;
+    return <DocImage ctx={asCtx(imageNode)} def={def} />;
   }
 
   /**
    * Blockquote.
    */
   if (e.node.type === 'blockquote') {
-    const { DocQuote } = await import('../Markdown.Doc.Components/Doc.Quote');
+    const { DocQuote } = await import('../Markdown.Doc.Components/Doc.Quote/DocQuote');
     const text = md.toString(e.node.position);
-    return <DocQuote markdown={text} node={e.node} />;
+    return <DocQuote markdown={text} ctx={asCtx(e.node)} />;
+  }
+
+  /**
+   * HR (Horizontal Rule).
+   */
+  if (e.node.type === 'thematicBreak') {
+    const { DocHr } = await import('../Markdown.Doc.Components/Doc.HR/DocHr');
+    return <DocHr ctx={asCtx(e.node)} />;
   }
 
   /**

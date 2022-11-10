@@ -11,13 +11,6 @@ export const DocStyles = {
   h1: { fontSize: 46 },
   'h1:first-of-type': { marginBottom: 60 },
 
-  hr: {
-    border: 'none',
-    borderBottom: `solid 6px ${Color.alpha(COLORS.DARK, 0.1)}`,
-    marginTop: '2em',
-    marginBottom: '2em',
-  },
-
   /**
    * Body Content
    */
@@ -47,8 +40,8 @@ export const DocStyles = {
   pre: {
     paddingLeft: 30,
     opacity: 0.6,
-    fontWeight: '600',
     fontSize: 14,
+    fontWeight: '600',
   },
 
   'p code': {
