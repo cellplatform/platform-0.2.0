@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { Color, COLORS, css, QueryString, State, t } from '../common';
 import { History } from '../History/index.mjs';
