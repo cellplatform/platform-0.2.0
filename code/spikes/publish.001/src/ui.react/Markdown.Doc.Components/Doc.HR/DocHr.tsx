@@ -14,7 +14,11 @@ export const DocHr: React.FC<DocHrProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ border: 'none', borderBottom }),
+    base: css({
+      border: 'none',
+      borderBottom,
+      ...Wrangle.margin(md),
+    }),
   };
 
   return <hr {...css(styles.base, props.style)} />;
