@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-
-import { css, FC, Style, t, DEFAULTS } from '../common';
-import { DocStyles } from './Global.Styles.mjs';
-import { useBlockRenderer } from './useBlockRenderer';
+import { css, DEFAULTS, FC, t } from '../common';
+import { useBlockRenderer } from './useBlockRenderer.mjs';
+import { useGlobalStyles } from './useGlobalStyles.mjs';
 
 export type MarkdownDocProps = {
   markdown?: string;
@@ -11,21 +9,12 @@ export type MarkdownDocProps = {
   style?: t.CssValue;
 };
 
+const CLASS = DEFAULTS.MD.CLASS;
+
 const View: React.FC<MarkdownDocProps> = (props) => {
   const { markdown, renderer } = props;
   const { safeBlocks, isEmpty } = useBlockRenderer({ markdown, renderer });
-  const CLASS = DEFAULTS.MD.CLASS;
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    /**
-     * Initial Load.
-     */
-    const prefix = `.${CLASS.ROOT} .${CLASS.BLOCK}`;
-    Style.global(DocStyles, { prefix });
-  }, []);
+  useGlobalStyles();
 
   /**
    * [Render]
@@ -44,7 +33,6 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       textAlign: 'center',
       opacity: 0.3,
     }),
-
     html: css({}),
     jsxElementBlock: css({}),
   };
@@ -67,7 +55,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
 
         if (typeof safeHtmlOrElement === 'object')
           return (
-            <div key={i} {...styles.jsxElementBlock}>
+            <div key={i} {...styles.jsxElementBlock} className={CLASS.BLOCK}>
               {safeHtmlOrElement}
             </div>
           );
