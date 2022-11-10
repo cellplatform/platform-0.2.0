@@ -70,7 +70,7 @@ export const Root: React.FC<RootProps> = (props) => {
 
   const elLeft = (
     <div {...styles.left}>
-      {isDev && <RootTitle text={'Report'} />}
+      {isDev && <RootTitle text={'Report (Content Bundle)'} />}
       <div {...styles.body}>
         <Markdown instance={instance} style={{ Absolute: 0 }} />
 

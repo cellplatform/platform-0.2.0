@@ -45,9 +45,9 @@ document.addEventListener('keydown', async (e) => {
     console.info('');
     console.group('💦'.repeat(20));
     console.info('[CMD+P]');
-    console.info('Current State:', info?.current);
     console.info('Package:', Pkg);
     console.info('BundlePaths:', BundlePaths);
+    console.info('Current State:', info?.current);
     console.info('');
 
     console.log('selection', info?.current.selection);
