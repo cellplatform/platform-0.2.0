@@ -33,6 +33,11 @@ document.addEventListener('keydown', async (e) => {
     e.preventDefault();
   }
 
+  // CMD+K:
+  if (e.key === 'k' && e.metaKey) {
+    console.clear();
+  }
+
   // CMD+P
   if (e.key === 'p' && e.metaKey) {
     // Cancel "print" HTML page action (browser default).
@@ -47,11 +52,8 @@ document.addEventListener('keydown', async (e) => {
     console.info('[CMD+P]');
     console.info('Package:', Pkg);
     console.info('BundlePaths:', BundlePaths);
-    console.info('Current State:', info?.current);
     console.info('');
-
-    console.log('selection', info?.current.selection);
-
+    console.info('State:', info?.current);
     console.groupEnd();
     console.info('');
   }
