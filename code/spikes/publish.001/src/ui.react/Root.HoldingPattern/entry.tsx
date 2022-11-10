@@ -1,3 +1,4 @@
+import 'symbol-observable'; // Ponyfill observable symbols.
 import { createRoot } from 'react-dom/client';
 import { RootHolding } from './index.mjs';
 

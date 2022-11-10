@@ -1,3 +1,5 @@
+import 'symbol-observable'; // Ponyfill observable symbols.
+
 import * as Rx from './Rx.mjs';
 
 export { Rx, Rx as rx };
