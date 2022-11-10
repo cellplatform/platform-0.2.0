@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, FC, Processor, DEFAULTS } from '../../common';
 
 export type DocQuoteProps = {
-  node: t.MdastNode;
+  ctx: t.DocBlockCtx<t.MdastBlockquote>;
   markdown: string;
   style?: t.CssValue;
 };
@@ -44,7 +44,7 @@ export const DocQuote: React.FC<DocQuoteProps> = (props) => {
   if (!safeHtml) return null;
 
   return (
-    <div {...css(styles.base, props.style)} className={DEFAULTS.MD.CLASS.BLOCK}>
+    <div {...css(styles.base, props.style)}>
       <div {...styles.quoteMark}>{'“'}</div>
       {safeHtml && <div dangerouslySetInnerHTML={{ __html: safeHtml }} />}
     </div>

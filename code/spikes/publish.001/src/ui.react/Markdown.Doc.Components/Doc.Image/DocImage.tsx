@@ -1,18 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, Color, COLORS, css, t, rx, FC } from '../../common';
+import { useState } from 'react';
+
+import { Color, COLORS, css, DEFAULTS, FC, t } from '../../common';
 import { DocError } from '../Doc.Error';
 import { DocImageCaption } from './DocImage.Caption';
 import { Util } from './Util.mjs';
 
 export type DocImageProps = {
-  node: t.MdastImage;
+  ctx: t.DocBlockCtx<t.MdastImage>;
   def?: t.DocImageDef;
   style?: t.CssValue;
 };
 
 export const DocImage: React.FC<DocImageProps> = (props) => {
-  const { node, def } = props;
-  const src = node.url;
+  const { ctx, def } = props;
+  const src = ctx.node.url;
 
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -58,7 +59,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
     <img
       {...styles.image.imgElement}
       src={src}
-      alt={node.alt || undefined}
+      alt={ctx.node.alt || undefined}
       onLoad={(e) => setLoaded(true)}
       onError={(e) => {
         setLoaded(true);
@@ -70,7 +71,6 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} className={DEFAULTS.MD.CLASS.BLOCK}>
       <div {...styles.image.base}>{elImage}</div>
-
       {elError}
       {elTitle}
     </div>
