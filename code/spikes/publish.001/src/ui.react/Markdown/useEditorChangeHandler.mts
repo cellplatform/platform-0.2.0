@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
-import { rx, State, t } from '../common';
+import { State, t } from '../common';
 
 export function useEditorChangeHandler(instance: t.StateInstance) {
   const change$Ref = useRef(new Subject<string>());
@@ -13,14 +13,14 @@ export function useEditorChangeHandler(instance: t.StateInstance) {
    * Lifecycle.
    */
   useEffect(() => {
-    const life = rx.disposable();
+    const dispose$ = new Subject<void>();
     const $ = change$Ref.current;
 
-    $.pipe(takeUntil(life.dispose$), debounceTime(300)).subscribe(async (code) => {
+    $.pipe(takeUntil(dispose$), debounceTime(300)).subscribe(async (code) => {
       await updateStateWithValue(instance, code);
     });
 
-    return () => life.dispose();
+    return () => dispose$.next();
   }, []);
 
   /**

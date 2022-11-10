@@ -1,4 +1,4 @@
-import { COLORS, Color, css, t, State, QueryString } from '../common';
+import { Color, COLORS, css, QueryString, State, t } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';

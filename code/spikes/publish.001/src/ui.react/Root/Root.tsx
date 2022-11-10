@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 
-import { Color, COLORS, css, State, t, QueryString } from '../common';
+import { Color, COLORS, css, QueryString, State, t } from '../common';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { env } from './Root.env.mjs';
 import { RootTitle } from './Root.Title';
-import { OverlayFrame } from '../Overlay';
 
 const { instance } = env;
 
@@ -70,12 +69,9 @@ export const Root: React.FC<RootProps> = (props) => {
 
   const elLeft = (
     <div {...styles.left}>
-      {isDev && <RootTitle text={'Report (Content Bundle)'} />}
+      {isDev && <RootTitle text={'Content Bundle (Report)'} />}
       <div {...styles.body}>
         <Markdown instance={instance} style={{ Absolute: 0 }} />
-
-        {/* TEMP 🐷 */}
-        {/* <OverlayFrame style={{ Absolute: 0 }} /> */}
       </div>
     </div>
   );

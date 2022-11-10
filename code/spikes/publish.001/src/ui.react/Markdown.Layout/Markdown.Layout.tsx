@@ -2,6 +2,7 @@ import { Color, COLORS, css, FC, t } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
 import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
 import { TooSmall } from './TooSmall';
+import { OverlayFrame } from '../Overlay';
 
 export type MarkdownLayoutProps = {
   markdown?: { outline?: string; document?: string };
@@ -90,7 +91,14 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
     </div>
   );
 
-  const elOverlays = <div>{elTooSmall}</div>;
+  const elOverlays = (
+    <div>
+      {elTooSmall}
+
+      {/* TEMP 🐷 */}
+      {/* <OverlayFrame style={{ Absolute: 0 }} /> */}
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
