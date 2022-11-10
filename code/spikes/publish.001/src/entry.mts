@@ -1,3 +1,5 @@
+import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
+
 const url = new URL(location.href);
 const path = url.pathname;
 const isTauri = typeof (window as any).__TAURI__ === 'object';
