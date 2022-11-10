@@ -23,7 +23,7 @@ import type {
   ThematicBreak as MdastThematicBreak,
 } from 'mdast';
 
-export {
+export type {
   MdastRoot,
   MdastCode,
   MdastHeading,
@@ -62,5 +62,5 @@ import type {
 } from 'hast';
 import type { Raw as HastRaw } from 'mdast-util-to-hast';
 
-export { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
+export type { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
 export type HastNode = HastRoot | HastElement | HastText | HastComment | HastDocType | HastRaw;
