@@ -1,4 +1,5 @@
-import 'symbol-observable'; // Ponyfill observable symbols.
+import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
+
 import { createRoot } from 'react-dom/client';
 import { RootHolding } from './index.mjs';
 
