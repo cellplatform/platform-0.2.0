@@ -145,8 +145,16 @@ export function BusController(args: {
    * Selection Change
    */
   events.select.$.subscribe(async (e) => {
-    const url = e.selected;
-    const next = url ? { index: { url } } : undefined;
+    const path = e.selected;
+
+    const getEditorPath = () => {
+      return path ? Paths.toDataPath(path) : Paths.schema.index;
+    };
+
+    const next: t.StateSelection = {};
+    if (path) next.index = { path };
+
+    next.editorPath = getEditorPath();
 
     if (!R.equals(next, state.current.selection)) {
       /**
@@ -185,7 +193,7 @@ export function BusController(args: {
       const fs = await getFilesystem();
 
       const markdown = state.current.markdown;
-      const url = state.current.selection.index?.url;
+      const url = state.current.selection.index?.path;
       const hasSelection = Boolean(url);
       const data = (hasSelection ? markdown?.document : markdown?.outline) ?? '';
       if (data) {
@@ -208,10 +216,10 @@ export function BusController(args: {
    */
   events.changed.$.pipe(
     distinctUntilChanged(
-      (prev, next) => prev.current.selection.index?.url === next.current.selection.index?.url,
+      (prev, next) => prev.current.selection.index?.path === next.current.selection.index?.path,
     ),
   ).subscribe(async (e) => {
-    const url = e.current.selection.index?.url;
+    const url = e.current.selection.index?.path;
 
     const commit = 'Load document after URL selection change';
     await state.change(commit, async (draft) => {
@@ -231,7 +239,16 @@ export function BusController(args: {
   /**
    * Initialize
    */
-  events.select.fire(localstorage.get()?.selection.index?.url);
+  const init = async () => {
+    events.select.fire(localstorage.get()?.selection.index?.path);
+
+    /**
+     * TODO 🐷
+     * - store "ready state" when asyncronously complete.
+     * - fire "ready state changed" event.
+     */
+  };
+  init();
 
   /**
    * Finish up

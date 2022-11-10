@@ -4,6 +4,7 @@ type Id = string;
 type Milliseconds = number;
 type Semver = string;
 type UrlString = string;
+type UrlOrPathString = string;
 
 export type StateInstance = { bus: t.EventBus<any>; id?: Id };
 export type StateFetchKnownTopic = 'RootIndex' | 'Log';
@@ -158,4 +159,4 @@ export type StateSelectEvent = {
   type: 'app.state/select';
   payload: StateSelect;
 };
-export type StateSelect = { instance: Id; selected?: UrlString };
+export type StateSelect = { instance: Id; selected?: UrlOrPathString };

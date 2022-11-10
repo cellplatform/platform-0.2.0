@@ -1,7 +1,7 @@
 import * as t from '../common/types.mjs';
 export * from './StateBus/types.mjs';
 
-type UrlString = string;
+type DirPath = string;
 type MdString = string;
 
 /**
@@ -17,9 +17,10 @@ export type StateTree = {
 export type StateMarkdown = { outline?: MdString; document?: MdString };
 
 export type StateLocation = {
-  url: UrlString;
+  url: DirPath;
 };
 
 export type StateSelection = {
-  index?: { url: UrlString };
+  index?: { path: DirPath };
+  editorPath?: string;
 };
