@@ -1,0 +1,16 @@
+export type {
+  AstNode,
+  MdastNode,
+  MdastRoot,
+  MdastHeading,
+  MdastCode,
+  MdastText,
+  MdastList,
+  MdastImage,
+  MdastListItem,
+  MdastParagraph,
+  MdastLink,
+  MdastBlockquote,
+  ProcessedMdast,
+  MdastThematicBreak,
+} from 'sys.text/src/types.mjs';

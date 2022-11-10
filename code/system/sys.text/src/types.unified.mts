@@ -20,6 +20,7 @@ import type {
   Image as MdastImage,
   Content as MdastContent,
   Blockquote as MdastBlockquote,
+  ThematicBreak as MdastThematicBreak,
 } from 'mdast';
 
 export {
@@ -34,6 +35,7 @@ export {
   MdastImage,
   MdastContent,
   MdastBlockquote,
+  MdastThematicBreak,
 };
 export type MdastNode =
   | MdastRoot
