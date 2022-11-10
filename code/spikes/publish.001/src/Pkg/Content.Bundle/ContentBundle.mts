@@ -87,8 +87,7 @@ export async function ContentBundle(args: Args) {
        * Copy and process source content (data).
        */
       const logdir = sources.log;
-      await write.data(appfs, { logdir, manifest: false, vercelConfig: true });
-      await appfs.write('index.json', await appfs.manifest());
+      await write.data(appfs, { logdir });
 
       /**
        * Copy in known source (.ts) files from "/src"
@@ -127,11 +126,12 @@ export async function ContentBundle(args: Args) {
       await appfs.write('vercel.json', config);
 
       /**
-       * Write root level README.
+       * Write [index.json] manifests.
        */
       const fs = target.dir(base);
       const manifest = await fs.manifest();
       await fs.write('index.json', manifest);
+      await appfs.write('index.json', await appfs.manifest());
 
       /**
        * Make a copy to ".latest" in the output directory.
@@ -196,7 +196,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write content
      */
-    async data(target: t.Fs, options: { logdir?: t.Fs; manifest?: boolean } = {}) {
+    async data(target: t.Fs, options: { logdir?: t.Fs } = {}) {
       const MD = Text.Processor.markdown();
       const source = await sources.content.manifest();
 
@@ -206,16 +206,11 @@ export async function ContentBundle(args: Args) {
       await Promise.all(
         source.files.map(async (file) => {
           const data = await sources.content.read(file.path);
-          const md = await MD.toHtml(data);
+          const md = await MD.toMarkdown(data);
           const path = Path.join(Paths.Bundle.data.md, file.path);
           await target.write(path, md.markdown);
         }),
       );
-
-      if (options.manifest) {
-        const manifest = await target.manifest();
-        await target.write('index.json', manifest);
-      }
 
       /**
        * Copy in a summary of the log (latest n-items).
@@ -228,6 +223,12 @@ export async function ContentBundle(args: Args) {
         log = await logger.publicSummary({ max: 50, latest });
         await target.write(Paths.Bundle.data.log, log);
       }
+
+      /**
+       * Data folder [index.json] manfiest
+       */
+      const datafs = target.dir(Paths.Bundle.data.base);
+      await datafs.write('index.json', await datafs.manifest());
     },
   };
 

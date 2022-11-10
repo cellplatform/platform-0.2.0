@@ -6,6 +6,7 @@ export const BundlePaths: T = {
     lib: 'app/lib/',
   },
   data: {
+    base: 'data/',
     md: 'data/md/',
     log: 'data/log.json',
   },
