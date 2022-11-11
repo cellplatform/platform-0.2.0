@@ -1,3 +1,5 @@
-export { expect, expectError } from 'sys.test';
+/**
+ * @external
+ */
 export { describe, it } from 'vitest';
-export * from '../common';
+export * from '../test.spec';
