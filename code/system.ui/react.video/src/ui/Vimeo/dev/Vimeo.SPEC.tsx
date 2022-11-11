@@ -1,4 +1,4 @@
-import { Spec } from '../../test.ui';
+import { Spec } from '../../../test.ui';
 
 export default Spec.describe('Vimeo Player', (e) => {
   /**
