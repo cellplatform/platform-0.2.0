@@ -5,7 +5,7 @@ import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExpor
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
-import type { RollupOptions, GetManualChunk, ManualChunksOption } from 'rollup';
+import type { RollupOptions, ManualChunksOption } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -111,7 +111,13 @@ export const Config = {
 
       if (hasPlugin('web:react')) {
         const react = (await import('@vitejs/plugin-react')).default;
-        config.plugins?.push(react());
+        config.plugins?.push(
+          react({
+            // NB: "classic" (rather than the default) supresses a build warning:
+            // Message: "[@vitejs/plugin-react] You should stop using "vite:react-jsx" since this plugin conflicts with it"
+            jsxRuntime: 'classic',
+          }),
+        );
       }
 
       if (hasPlugin('web:svelte')) {
