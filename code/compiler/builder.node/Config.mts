@@ -19,7 +19,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['**/*.{TEST,SPEC}.{mts,tsx}'],
+        include: ['**/*.TEST.{mts,tsx}'],
         environment: 'node',
       };
     },
