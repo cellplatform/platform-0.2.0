@@ -1,9 +1,11 @@
-import { t } from '../common';
+import { t, Test } from '../common';
 
 /**
  * Root API to the UI Spec Runner system.
  */
 export const Spec = {
+  describe: Test.describe,
+
   /**
    * Pluck and type-cast the [SpecCtx] context object from the standard
    * arguments passed into a test ("it") via the spec runner.

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Color, COLORS, css, t, rx, FC } from '../common';
 
 export type HarnessSpecsProps = {

@@ -1,3 +1,3 @@
 export { Pkg } from './index.pkg.mjs';
-export { Harness } from './ui.Harness';
+export { Dev } from './Dev.mjs';
 export { Spec } from './Spec';

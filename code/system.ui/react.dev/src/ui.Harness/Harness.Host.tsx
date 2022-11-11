@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common';
+import React from 'react';
+import { Color, COLORS, css, t } from '../common';
 
 export type HarnessHostProps = {
   component?: t.SpecRenderProps;
