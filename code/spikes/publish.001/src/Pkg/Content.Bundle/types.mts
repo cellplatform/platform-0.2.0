@@ -1,5 +1,5 @@
 type S = { bytes: number; size: string };
-type Size = { total: S; assets: S; data: { md: S } };
+type Size = { total: S; lib: S; data: { md: S } };
 
 export type BundlePaths = {
   app: {
