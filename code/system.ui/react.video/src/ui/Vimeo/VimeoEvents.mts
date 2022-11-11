@@ -1,5 +1,5 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
-import { catchError, filter, takeUntil, take } from 'rxjs/operators';
+import { catchError, filter, take } from 'rxjs/operators';
 
 import { rx, slug, t } from './common.mjs';
 
@@ -21,10 +21,10 @@ function Events(args: {
   const instance = args.instance.id;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => isEnabled),
-    filter((e) => is.base(e)),
-    filter((e) => e.payload.instance === instance),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => isEnabled),
+    rx.filter((e) => is.base(e)),
+    rx.filter((e) => e.payload.instance === instance),
   );
 
   const load: t.VimeoEvents['load'] = {

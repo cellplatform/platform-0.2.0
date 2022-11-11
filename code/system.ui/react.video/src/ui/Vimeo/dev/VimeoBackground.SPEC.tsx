@@ -20,9 +20,9 @@ export default Spec.describe('VimeoBackground Player', (e) => {
       <VimeoBackground
         instance={instance}
         video={VIDEO['app/tubes']}
-        blur={0}
         opacity={1}
         opacityTransition={300}
+        blur={0}
       />
     );
 
