@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Icons } from '../../Icons';
-import { Spinner } from '../../primitives';
+// import { Spinner } from '../../primitives';
 import { Color, COLORS, css, t } from '../common.mjs';
 
 export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
@@ -44,13 +44,13 @@ export const IconOverlay: React.FC<IconOverlayProps> = (props) => {
   })();
 
   const elIcon = Icon && <Icon size={iconSize} color={COLORS.DARK} opacity={0.6} />;
-  const elSpinner = icon === 'spinner' && <Spinner size={32} color={COLORS.DARK} />;
+  // const elSpinner = icon === 'spinner' && <Spinner size={32} color={COLORS.DARK} />;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} onClick={() => props.onClick?.({ icon })}>
         {elIcon}
-        {elSpinner}
+        {/* {elSpinner} */}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import 'symbol-observable';
 import { createRoot } from 'react-dom/client';
 import { Dev } from '.';
 
