@@ -383,7 +383,7 @@
     magic-string "^0.26.7"
     svelte-hmr "^0.15.0"
 
-"@tauri-apps/api@1.2.0":
+"@tauri-apps/api@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.2.0.tgz#1f196b3e012971227f41b98214c846430a4eb477"
   integrity sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==
@@ -636,7 +636,7 @@
   resolved "https://registry.yarnpkg.com/@types/vimeo__player/-/vimeo__player-2.16.3.tgz#66e36eb0b220ba25f21f48a3a0f03114c5b7a97c"
   integrity sha512-hsOe6CZFTNyfjRjQUrNHBF4LDmjvjcU2yQIPWp5AglKeGxt11JYGToQhKUPM876gBXggqR6rMQ0/sNI06ec2Rg==
 
-"@vercel/edge@0.1.1":
+"@vercel/edge@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.1.1.tgz#5d4919815525e98b7d58c25411625807642bcdd7"
   integrity sha512-yISmGBQ8SSYBjuUCZHJPeuTGpIfT9HiEMiPy8wcUWCZWbknS0sXWoJE3ubAmyEJVmYe5JPH6dt9A7nzK9oT/dg==
@@ -2939,6 +2939,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-icons@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.6.0.tgz#f83eda179af5d02c047449a20b702c858653d397"
+  integrity sha512-rR/L9m9340yO8yv1QT1QurxWQvWpbNHqVX0fzMln2HEb9TEIrQRGsqiNFQfiv9/JEUbyHmHPlNTB2LWm2Ttz0g==
+
 react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -2991,7 +2996,7 @@ regenerator-runtime@^0.13.4:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
   integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
 
-rehype-format@4.0.1:
+rehype-format@4.0.1, rehype-format@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/rehype-format/-/rehype-format-4.0.1.tgz#0d4ad47733699dd8e3fcd9f73d04f210246b39e1"
   integrity sha512-HA92WeqFri00yiClrz54IIpM9no2DH9Mgy5aFmInNODoAYn+hN42a6oqJTIie2nj0HwFyV7JvOYx5YHBphN8mw==
