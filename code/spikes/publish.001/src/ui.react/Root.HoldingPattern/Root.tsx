@@ -12,9 +12,14 @@ After the initial 1.0 release it will remain on a regular update cycle reflectin
 the emerging changes within this nascent yet fast evolving space.
 `;
 
-const LICENCE = {
+const COPYRIGHT = {
   title: 'CC BY 4.0',
   link: 'https://creativecommons.org/licenses/by/4.0/',
+};
+
+const LICENCE = {
+  title: 'MIT',
+  link: 'https://github.com/cellplatform/platform-0.2.0/blob/main/Licence',
 };
 
 export type RootHoldingProps = {
@@ -94,7 +99,10 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       '@media (max-height: 550px)': { display: 'none' },
     }),
     a: css({ color: COLORS.CYAN }),
-    p: css({ marginTop: 0 }),
+    p: css({
+      marginTop: 0,
+      marginBottom: 18,
+    }),
   };
 
   const slash = (char = '/') => <span {...styles.slash}>{char}</span>;
@@ -114,6 +122,12 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
   );
 
   const elCC = (
+    <a {...styles.a} href={COPYRIGHT.link}>
+      {COPYRIGHT.title}
+    </a>
+  );
+
+  const elMIT = (
     <a {...styles.a} href={LICENCE.link}>
       {LICENCE.title}
     </a>
@@ -124,7 +138,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       <div {...styles.detailTitle}>{'STATUS'}</div>
       <p {...styles.p}>{DETAIL}</p>
       <p {...styles.p}>
-        Content {elCC} {'(Open Commons)'}
+        Open commons (content {elCC}, source {elMIT}).
       </p>
     </div>
   );
