@@ -1,9 +1,9 @@
-import { Vimeo } from '..';
+import { VimeoBackground } from '..';
 import { Spec } from '../../../test.ui';
 import { rx, slug, t } from '../common.mjs';
 import { VIDEO } from './sample.mjs';
 
-export default Spec.describe('Vimeo Player', (e) => {
+export default Spec.describe('VimeoBackground Player', (e) => {
   let events: t.VimeoEvents;
 
   /**
@@ -13,28 +13,20 @@ export default Spec.describe('Vimeo Player', (e) => {
     const id = `foo.${slug()}`;
     const bus = rx.bus<t.VimeoEvent>();
     const instance = { bus, id };
-    events = Vimeo.Events({ instance });
+    events = VimeoBackground.Events({ instance });
 
     const ctx = Spec.ctx(e);
-    const elPlayer = (
-      <Vimeo
+    const el = (
+      <VimeoBackground
         instance={instance}
-        video={VIDEO['stock/running']}
-        borderRadius={20}
-        onIconClick={(e) => console.info(`⚡️ icon click`, e)}
+        video={VIDEO['app/tubes']}
+        blur={0}
+        opacity={1}
+        opacityTransition={300}
       />
     );
 
-    const el = (
-      <div>
-        {elPlayer}
-        <div>
-          <div onClick={() => events.play.fire()}>play</div>
-        </div>
-      </div>
-    );
-
-    ctx.render(el);
+    ctx.render(el).size(800, 600);
   });
 
   e.describe.skip('controls', (e) => {

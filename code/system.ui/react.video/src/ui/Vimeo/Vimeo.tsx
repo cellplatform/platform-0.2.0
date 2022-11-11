@@ -1,11 +1,11 @@
-import VimeoPlayer from '@vimeo/player';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
 
-import { css, t, FC } from './common.mjs';
+import { css, FC, t } from './common.mjs';
 import { IconOverlay, VimeoIconClickArgs } from './components/IconOverlay';
 import { ThumbnailOverlay } from './components/ThumbnailOverlay';
 import { useIconController, usePlayerController } from './hooks';
+import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './VimeoEvents.mjs';
 
 type Url = string;

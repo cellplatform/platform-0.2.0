@@ -1,9 +1,9 @@
-import VimeoPlayer from '@vimeo/player';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { css, FC, defaultValue, t } from './common';
-import { usePlayerController } from './hooks/usePlayerController';
-import { VimeoEvents } from './VimeoEvents';
+import { css, FC, t } from './common.mjs';
+import { usePlayerController } from './hooks';
+import { VimeoPlayer } from './libs.mjs';
+import { VimeoEvents } from './VimeoEvents.mjs';
 
 export type VimeoBackgroundProps = {
   instance: t.VimeoInstance;
@@ -19,8 +19,8 @@ export type VimeoBackgroundProps = {
 const View: React.FC<VimeoBackgroundProps> = (props) => {
   const { instance, video } = props;
   const { bus, id } = instance;
-  const blur = defaultValue(props.blur, 0);
-  const opacityTransition = defaultValue(props.opacityTransition, 300);
+  const blur = props.blur ?? 0;
+  const opacityTransition = props.opacityTransition ?? 300;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [player, setPlayer] = useState<VimeoPlayer>();
