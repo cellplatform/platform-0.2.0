@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { Test, Color, COLORS, css, t, rx, FC } from '../common';
+import { Color, COLORS, css, t } from '../common';
 import { HarnessHost } from './Harness.Host';
+import { HarnessSpecs } from './Harness.Specs';
+import { useSpecRunner } from './useSpecRunner.mjs';
 
 export type HarnessProps = {
   spec?: t.BundleImport;
@@ -8,30 +9,7 @@ export type HarnessProps = {
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const [el, setEl] = useState<JSX.Element>();
-  const [spec, setSpec] = useState<t.TestSuiteModel>();
-  const id = spec?.id;
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    (async () => {
-      const spec = props.spec ? await Test.bundle(props.spec) : undefined;
-      setSpec(spec);
-
-      if (spec) {
-        const ctx = {
-          render(el: JSX.Element) {
-            //
-            setEl(el);
-          },
-        };
-        const res = await spec.run({ ctx });
-        console.log('res', res);
-      }
-    })();
-  }, [id]);
+  const runner = useSpecRunner(props.spec);
 
   /**
    * [Render]
@@ -64,10 +42,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
       <div {...styles.left}>
-        <HarnessHost>{el}</HarnessHost>
+        <HarnessHost component={runner.props} />
       </div>
       <div {...styles.right}>
-        <div>right</div>
+        <HarnessSpecs results={runner.results} />
       </div>
     </div>
   );

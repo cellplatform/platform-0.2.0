@@ -1,4 +1,5 @@
-import { Test, Time } from '../common';
+import { css, Test } from '../common';
+import { Spec } from '../Spec';
 
 export default Test.describe('MyComponent', (e) => {
   console.log('describe', e);
@@ -9,8 +10,18 @@ export default Test.describe('MyComponent', (e) => {
     console.log('e.ctx', e.ctx);
     console.groupEnd();
 
-    const ctx: any = e.ctx;
-    const el = <div>My element from test 🌳</div>;
-    ctx.render(el);
+    const ctx = Spec.ctx(e);
+
+    const styles = {
+      base: css({ flex: 1 }),
+    };
+
+    const el = <div {...styles.base}>Rendered from spec 🌳</div>;
+    ctx
+      //
+      .render(el)
+      .size(300, 220)
+      .display('flex')
+      .backgroundColor(1);
   });
 });
