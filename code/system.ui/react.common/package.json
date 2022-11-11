@@ -19,7 +19,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "sys.ui.react.dev": "0.0.0"
   },
   "license": "MIT",
   "private": true,
