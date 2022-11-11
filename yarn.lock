@@ -631,10 +631,23 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
 
+"@types/vimeo__player@^2.16.3":
+  version "2.16.3"
+  resolved "https://registry.yarnpkg.com/@types/vimeo__player/-/vimeo__player-2.16.3.tgz#66e36eb0b220ba25f21f48a3a0f03114c5b7a97c"
+  integrity sha512-hsOe6CZFTNyfjRjQUrNHBF4LDmjvjcU2yQIPWp5AglKeGxt11JYGToQhKUPM876gBXggqR6rMQ0/sNI06ec2Rg==
+
 "@vercel/edge@0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.1.1.tgz#5d4919815525e98b7d58c25411625807642bcdd7"
   integrity sha512-yISmGBQ8SSYBjuUCZHJPeuTGpIfT9HiEMiPy8wcUWCZWbknS0sXWoJE3ubAmyEJVmYe5JPH6dt9A7nzK9oT/dg==
+
+"@vimeo/player@^2.18.0":
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/@vimeo/player/-/player-2.18.0.tgz#74c2b9f21c28da768baa8e39131e0eec07d43d6e"
+  integrity sha512-AJ8LQJ0WQXoPO6GBiMRmcBpdpUMnNm12blG/H80BgKD75w/+pLw0t1vzDHCE915O2OlFau6u1Q0QVw2HS1eRvg==
+  dependencies:
+    native-promise-only "0.8.1"
+    weakmap-polyfill "2.0.4"
 
 "@vitejs/plugin-react@^2.2.0":
   version "2.2.0"
@@ -2658,6 +2671,11 @@ nanoid@^4.0.0:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.0.tgz#6e144dee117609232c3f415c34b0e550e64999a5"
   integrity sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==
 
+native-promise-only@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/native-promise-only/-/native-promise-only-0.8.1.tgz#20a318c30cb45f71fe7adfbf7b21c99c1472ef11"
+  integrity sha512-zkVhZUA3y8mbz652WrL5x0fB0ehrBkulWT3TomAQ9iDtyXZvzKeEA6GPxAItBYeNYl5yngKRX612qHOhvMkDeg==
+
 next-tick@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"
@@ -3769,6 +3787,11 @@ wcwidth@^1.0.1:
   integrity sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==
   dependencies:
     defaults "^1.0.3"
+
+weakmap-polyfill@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/weakmap-polyfill/-/weakmap-polyfill-2.0.4.tgz#bcc301e4c8eb4eda3e406f08f1a691093e407884"
+  integrity sha512-ZzxBf288iALJseijWelmECm/1x7ZwQn3sMYIkDr2VvZp7r6SEKuT8D0O9Wiq6L9Nl5mazrOMcmiZE/2NCenaxw==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
