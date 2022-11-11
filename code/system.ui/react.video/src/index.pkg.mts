@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
+    '@vimeo/player': '2.18.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

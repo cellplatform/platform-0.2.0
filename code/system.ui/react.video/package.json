@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "@vimeo/player": "^2.18.0"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "@types/vimeo__player": "^2.16.3"
   },
   "license": "MIT",
   "private": true,
