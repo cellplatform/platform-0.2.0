@@ -14,14 +14,19 @@ export const DocHr: React.FC<DocHrProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
+    base: css({ position: 'relative' }),
+    hr: css({
       border: 'none',
       borderBottom,
       ...Wrangle.margin(md),
     }),
   };
 
-  return <hr {...css(styles.base, props.style)} />;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <hr {...styles.hr} />
+    </div>
+  );
 };
 
 /**
@@ -36,8 +41,8 @@ const Wrangle = {
     const length = markdown.length;
     if (length === 3) return 1;
     if (length === 4) return 1;
-
-    return 6;
+    if (length < 8) return 6;
+    return 20;
   },
 
   color(markdown: string) {
