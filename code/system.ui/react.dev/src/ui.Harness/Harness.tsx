@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Color, COLORS, css, t } from '../common';
 import { HarnessHost } from './Harness.Host';
 import { HarnessSpecs } from './Harness.Specs';

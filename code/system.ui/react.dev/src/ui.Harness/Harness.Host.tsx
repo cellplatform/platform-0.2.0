@@ -1,4 +1,3 @@
-import React from 'react';
 import { Color, COLORS, css, t } from '../common';
 
 export type HarnessHostProps = {
