@@ -71,6 +71,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         width: widths.root,
       }),
       root: css({
+        position: 'relative',
         padding: 30,
         paddingRight: 60,
         borderRadius: 10,
@@ -79,14 +80,15 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
       title: css({}),
 
       child: css({
+        marginTop: 10,
+        ':first-child': { marginTop: 0 },
         padding: 30,
         fontSize: 18,
         marginLeft: 8,
         borderRadius: 8,
-        marginTop: 10,
         overflow: 'hidden',
         width: widths.child,
-        ':first-child': { marginTop: 0 },
+        Flex: 'y-start-center',
       }),
 
       /**
