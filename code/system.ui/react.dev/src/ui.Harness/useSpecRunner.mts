@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { t, Test } from '../common';
-import { Context } from './Context.mjs';
+import { Context } from '../Spec';
 
 export function useSpecRunner(bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();
@@ -19,10 +19,12 @@ export function useSpecRunner(bundle?: t.BundleImport) {
       setSpec(spec);
 
       if (spec) {
-        const { ctx, mutable } = Context.args();
+        const args = Context.args();
+        const { ctx } = args;
+
         const res = await spec.run({ ctx });
         setResults(res);
-        setProps((prev) => ({ ...prev, ...mutable.props }));
+        setProps((prev) => ({ ...prev, ...args.props }));
       }
     })();
   }, [id, bundle]);

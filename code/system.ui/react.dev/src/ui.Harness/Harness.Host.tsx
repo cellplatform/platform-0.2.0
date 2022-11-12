@@ -20,7 +20,10 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       overflow: 'hidden',
       pointerEvents: 'none',
       userSelect: 'none',
-      backgroundColor: Color.alpha(COLORS.DARK, 0.02),
+      backgroundColor:
+        component.backdropColor === undefined
+          ? Color.alpha(COLORS.DARK, 0.02)
+          : Color.format(component.backdropColor),
     }),
     grid: {
       base: css({
