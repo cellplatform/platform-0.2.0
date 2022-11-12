@@ -8,6 +8,8 @@ export type HarnessHostProps = {
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { component = {} } = props;
 
+  const guide = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+
   /**
    * [Render]
    */
@@ -21,51 +23,73 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       backgroundColor: Color.alpha(COLORS.DARK, 0.02),
     }),
     grid: {
-      fill: css({
+      base: css({
         Absolute: 0,
         display: 'grid',
+      }),
+      fill: css({
         gridTemplateColumns: `[left] 40px [body-x] 1fr [right] 40px`,
         gridTemplateRows: `[top] 40px [body-y] 1fr [bottom] 40px`,
       }),
       center: css({
-        Absolute: 0,
-        display: 'grid',
         gridTemplateColumns: `[left] 1fr [body-x] auto [right] 1fr`,
         gridTemplateRows: `[top] 1fr [body-y] auto [bottom] 1fr`,
       }),
     },
-    block: css({
-      boxSizing: 'border-box',
-      border: `solid 1px ${Color.format(-0.03)}`,
-      margin: 1,
-      padding: 5,
-    }),
-    component: css({
-      position: 'relative',
-      pointerEvents: 'auto',
-      userSelect: 'text',
-      display: component.display,
-      width: component.width,
-      height: component.height,
-      backgroundColor: Color.format(component.backgroundColor),
-    }),
+    block: {
+      base: css({ boxSizing: 'border-box', padding: 5 }),
+    },
+    component: {
+      outer: css({ border: guide }),
+      container: css({
+        position: 'relative',
+        pointerEvents: 'auto',
+        userSelect: 'text',
+        display: component.display,
+        width: component.width,
+        height: component.height,
+        backgroundColor: Color.format(component.backgroundColor),
+      }),
+    },
   };
 
-  const elBlock = <div {...styles.block}></div>;
-  const elComponent = <div {...styles.component}>{component.element}</div>;
+  const elComponent = (
+    <div {...styles.component.outer}>
+      <div {...styles.component.container}>{component.element}</div>
+    </div>
+  );
 
   const elGrid = (
-    <div {...styles.grid.center}>
-      <div {...styles.block}>{'🎾 Harness.Host'}</div>
-      {/* {elBlock} */}
-      {elBlock}
-      {elBlock}
-      {elBlock}
+    <div {...css(styles.grid.base, styles.grid.center)}>
+      <div {...styles.block.base}>{'🎾 Harness.Host'}</div>
+      <div
+        {...css(styles.block.base, {
+          borderLeft: guide,
+          borderRight: guide,
+        })}
+      ></div>
+      <div {...css(styles.block.base)}></div>
+      <div
+        {...css(styles.block.base, {
+          borderTop: guide,
+          borderBottom: guide,
+        })}
+      ></div>
       {elComponent}
-      {elBlock}
-      {elBlock}
-      {elBlock}
-      {elBlock}
+      <div
+        {...css(styles.block.base, {
+          borderTop: guide,
+          borderBottom: guide,
+        })}
+      ></div>
+      <div {...css(styles.block.base)}></div>
+      <div
+        {...css(styles.block.base, {
+          borderLeft: guide,
+          borderRight: guide,
+        })}
+      ></div>
+      <div {...css(styles.block.base)}></div>
     </div>
   );
 

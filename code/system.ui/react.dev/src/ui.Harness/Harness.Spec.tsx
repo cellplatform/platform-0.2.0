@@ -1,11 +1,11 @@
 import { Color, COLORS, css, t, rx, FC } from '../common';
 
-export type HarnessSpecsProps = {
+export type HarnessSpecProps = {
   results?: t.TestSuiteRunResponse;
   style?: t.CssValue;
 };
 
-export const HarnessSpecs: React.FC<HarnessSpecsProps> = (props) => {
+export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
   const { results } = props;
 
   /**
