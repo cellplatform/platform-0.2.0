@@ -24,7 +24,7 @@ const bundler = await ContentBundle({
   sources: {
     app: await toFs('./dist/web'),
     src: await toFs('./src/'),
-    content: await toFs('../../../../../live-state/tdb.meeting/undp'),
+    content: await toFs('../../../../../org.team-db/tdb.undp/undp'),
     log: logdir,
   },
 });
@@ -46,7 +46,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
