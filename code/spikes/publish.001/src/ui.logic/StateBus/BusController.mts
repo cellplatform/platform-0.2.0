@@ -92,6 +92,14 @@ export function BusController(args: {
         commits.push(commit);
       };
 
+      const fetchRemote = async () => {
+        const res = await Fetch.text(path);
+        if (res.error) error = res.error;
+        if (!error) {
+          await updateState(res.text);
+        }
+      };
+
       /**
        * TEMP HACK:DESIGN placeholder locic 🐷
        * Future Refactor:
@@ -108,16 +116,17 @@ export function BusController(args: {
       const path = Paths.schema.index;
 
       if (await fs.exists(path)) {
-        const data = await fs.read(path);
-        const text = data ? new TextDecoder().decode(data) : '';
-        await updateState(text);
+        /**
+         * SAVE
+         */
+        // const data = await fs.read(path);
+        // const text = data ? new TextDecoder().decode(data) : '';
+        // await updateState(text);
       } else {
-        const res = await Fetch.text(path);
-        if (res.error) error = res.error;
-        if (!error) {
-          await updateState(res.text);
-        }
+        // await fetchRemote();
       }
+
+      await fetchRemote();
     }
 
     /**
