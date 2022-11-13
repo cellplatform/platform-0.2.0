@@ -21,6 +21,7 @@ import type {
   Content as MdastContent,
   Blockquote as MdastBlockquote,
   ThematicBreak as MdastThematicBreak,
+  Table as MdastTable,
 } from 'mdast';
 
 export type {
@@ -36,6 +37,7 @@ export type {
   MdastContent,
   MdastBlockquote,
   MdastThematicBreak,
+  MdastTable,
 };
 export type MdastNode =
   | MdastRoot
@@ -48,7 +50,8 @@ export type MdastNode =
   | MdastLink
   | MdastImage
   | MdastContent
-  | MdastBlockquote;
+  | MdastBlockquote
+  | MdastTable;
 
 /**
  * HAST (HTML)
