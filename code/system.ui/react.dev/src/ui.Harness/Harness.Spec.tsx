@@ -1,3 +1,4 @@
+import { createGunzip } from 'zlib';
 import { Color, COLORS, css, t, rx, FC } from '../common';
 
 export type HarnessSpecProps = {
@@ -8,6 +9,10 @@ export type HarnessSpecProps = {
 export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
   const { results } = props;
 
+  const print = () => {
+    console.info(`Spec (Results Data):`, results);
+  };
+
   /**
    * [Render]
    */
@@ -17,19 +22,23 @@ export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       overflow: 'hidden',
     }),
-
+    body: css({
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+    }),
     pre: css({
       fontSize: 12,
     }),
   };
 
   const json = props.results ? JSON.stringify(props.results, null, '..') : '';
-  const elPre = json && <pre {...styles.pre}>{json} </pre>;
+  const elPre = json && <pre {...styles.pre}>{json}</pre>;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{'🎾 Harness.Specs'}</div>
-      <div>{elPre}</div>
+      <div {...styles.body} onClick={print}>
+        <div>{'🎾 Harness.Specs'}</div>
+        <div>{elPre}</div>
+      </div>
     </div>
   );
 };

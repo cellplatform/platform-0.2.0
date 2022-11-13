@@ -7,8 +7,7 @@ export type HarnessHostProps = {
 
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { component = {} } = props;
-
-  const guide = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
 
   /**
    * [Render]
@@ -43,7 +42,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       base: css({ boxSizing: 'border-box', padding: 5 }),
     },
     component: {
-      outer: css({ border: guide }),
+      outer: css({ border: cropmark }),
       container: css({
         position: 'relative',
         pointerEvents: 'auto',
@@ -67,29 +66,29 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       <div {...styles.block.base}>{'🎾 Harness.Host'}</div>
       <div
         {...css(styles.block.base, {
-          borderLeft: guide,
-          borderRight: guide,
+          borderLeft: cropmark,
+          borderRight: cropmark,
         })}
       ></div>
       <div {...css(styles.block.base)}></div>
       <div
         {...css(styles.block.base, {
-          borderTop: guide,
-          borderBottom: guide,
+          borderTop: cropmark,
+          borderBottom: cropmark,
         })}
       ></div>
       {elComponent}
       <div
         {...css(styles.block.base, {
-          borderTop: guide,
-          borderBottom: guide,
+          borderTop: cropmark,
+          borderBottom: cropmark,
         })}
       ></div>
       <div {...css(styles.block.base)}></div>
       <div
         {...css(styles.block.base, {
-          borderLeft: guide,
-          borderRight: guide,
+          borderLeft: cropmark,
+          borderRight: cropmark,
         })}
       ></div>
       <div {...css(styles.block.base)}></div>
