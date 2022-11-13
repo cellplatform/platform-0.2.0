@@ -1,24 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, Processor, DEFAULTS } from '../../common';
+import { useEffect, useState } from 'react';
+import { css, Processor, t } from '../common';
 
 export type DocQuoteProps = {
   ctx: t.DocBlockCtx<t.MdastBlockquote>;
-  markdown: string;
   style?: t.CssValue;
 };
 
 export const DocQuote: React.FC<DocQuoteProps> = (props) => {
+  const { ctx } = props;
+  const markdown = ctx.md.toString(ctx.node.position);
+
   const [safeHtml, setSafeHtml] = useState('');
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    (async () => {
-      const res = await Processor.toHtml(props.markdown);
-      setSafeHtml(res.html);
-    })();
-  }, [props.markdown]);
+    Processor.toHtml(markdown).then(({ html }) => setSafeHtml(html));
+  }, [markdown]);
 
   /**
    * [Render]

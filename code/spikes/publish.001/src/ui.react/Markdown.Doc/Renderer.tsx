@@ -3,6 +3,9 @@ import { Processor, t, Text } from '../common';
 const Imports = {
   Image: () => import('../Markdown.Doc.Components/Doc.Image'),
   Error: () => import('../Markdown.Doc.Components/Doc.Error'),
+  Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
+  Quote: () => import('../Markdown.Doc.Components/Doc.Quote'),
+  Table: () => import('../Markdown.Doc.Components/Doc.Table'),
 };
 
 /**
@@ -49,17 +52,24 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
    * Blockquote.
    */
   if (e.node.type === 'blockquote') {
-    const { DocQuote } = await import('../Markdown.Doc.Components/Doc.Quote/DocQuote');
-    const text = md.toString(e.node.position);
-    return <DocQuote markdown={text} ctx={asCtx(e.node)} />;
+    const { DocQuote } = await Imports.Quote();
+    return <DocQuote ctx={asCtx(e.node)} />;
   }
 
   /**
    * HR (Horizontal Rule).
    */
   if (e.node.type === 'thematicBreak') {
-    const { DocHr } = await import('../Markdown.Doc.Components/Doc.HR/DocHr');
+    const { DocHr } = await Imports.Hr();
     return <DocHr ctx={asCtx(e.node)} />;
+  }
+
+  /**
+   * Table
+   */
+  if (e.node.type === 'table') {
+    const { DocTable } = await Imports.Table();
+    return <DocTable ctx={asCtx(e.node)} />;
   }
 
   /**

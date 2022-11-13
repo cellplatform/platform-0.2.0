@@ -1,8 +1,6 @@
 import { Color, COLORS } from '../common';
 
-const BASE = {
-  FONT_SIZE: 18,
-};
+const BASE = { FONT_SIZE: 18 };
 
 export const DocStyles = {
   /**
@@ -58,10 +56,28 @@ export const DocStyles = {
 
   /**
    * Quotes
+   * See: /component/<Doc.Quote>
    */
   'blockquote p': { fontSize: 26 },
   'blockquote p em': {
     color: '#E21B22', // RED
     fontStyle: 'normal',
+  },
+
+  /**
+   * Table
+   * See: /component/<Doc.Table>
+   */
+  table: {
+    width: '100%',
+  },
+  'table thead tr': {
+    backgroundColor: Color.alpha(COLORS.DARK, 0.06),
+  },
+  'table th': {
+    padding: 10,
+  },
+  'table td': {
+    padding: 10,
   },
 };

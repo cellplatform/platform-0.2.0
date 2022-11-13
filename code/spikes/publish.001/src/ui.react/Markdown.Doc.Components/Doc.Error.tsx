@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../../common';
+import { css, t } from '../common';
 
 export type DocErrorProps = {
   title?: string;

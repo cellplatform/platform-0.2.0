@@ -26,6 +26,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       width: DEFAULTS.MD.DOC.width,
       paddingBottom: 80,
     }),
+
     empty: css({
       marginTop: 30,
       fontSize: 14,
@@ -33,20 +34,27 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       textAlign: 'center',
       opacity: 0.3,
     }),
-    html: css({}),
-    jsxElementBlock: css({}),
+
+    blocks: css({
+      // Flex: 'y-stretch-stretch',
+    }),
+
+    element: {
+      htmlBlock: css({}),
+      jsxBlock: css({}),
+    },
   };
 
   const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
 
   const elHtml = (
-    <div>
+    <div {...styles.blocks}>
       {safeBlocks.map((safeHtmlOrElement, i) => {
         if (typeof safeHtmlOrElement === 'string') {
           return (
             <div
               key={i}
-              {...styles.html}
+              {...styles.element.htmlBlock}
               className={CLASS.BLOCK}
               dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
             />
@@ -55,7 +63,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
 
         if (typeof safeHtmlOrElement === 'object')
           return (
-            <div key={i} {...styles.jsxElementBlock} className={CLASS.BLOCK}>
+            <div key={i} {...styles.element.jsxBlock} className={CLASS.BLOCK}>
               {safeHtmlOrElement}
             </div>
           );
