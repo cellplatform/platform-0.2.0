@@ -13,8 +13,9 @@ export function useGlobalStyles() {
     if (!_isAdded) {
       _isAdded = true;
       const CLASS = DEFAULTS.MD.CLASS;
-      const prefix = `.${CLASS.ROOT} .${CLASS.BLOCK}`;
-      Style.global(DocStyles, { prefix });
+      Style.global(DocStyles, {
+        prefix: `.${CLASS.ROOT} .${CLASS.BLOCK}`,
+      });
     }
   }, []);
 }
