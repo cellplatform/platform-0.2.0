@@ -33,11 +33,11 @@ export const DocQuote: React.FC<DocQuoteProps> = (props) => {
       letterSpacing: '-0.02em',
     }),
     quoteMark: css({
-      Absolute: [25, null, null, 22],
-      fontSize: 140,
+      Absolute: [45, null, null, 0],
+      fontSize: 260,
       pointerEvents: 'none',
       userSelect: 'none',
-      opacity: 0.1,
+      opacity: 0.06,
     }),
   };
 
