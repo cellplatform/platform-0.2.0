@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { DEFAULTS, Style } from '../common';
-import { DocStyles } from './GlobalStyles.mjs';
+import { DocStyles } from './Global.Styles.mjs';
 
 let _isAdded = false;
 

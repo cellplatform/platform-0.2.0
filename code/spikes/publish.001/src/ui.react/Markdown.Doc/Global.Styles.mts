@@ -68,16 +68,8 @@ export const DocStyles = {
    * Table
    * See: /component/<Doc.Table>
    */
-  table: {
-    width: '100%',
-  },
-  'table thead tr': {
-    backgroundColor: Color.alpha(COLORS.DARK, 0.06),
-  },
-  'table th': {
-    padding: 10,
-  },
-  'table td': {
-    padding: 10,
-  },
+  table: { width: '100%' },
+  'table thead tr': { backgroundColor: Color.alpha(COLORS.DARK, 0.06) },
+  'table th': { padding: 10 },
+  'table td': { padding: 10 },
 };
