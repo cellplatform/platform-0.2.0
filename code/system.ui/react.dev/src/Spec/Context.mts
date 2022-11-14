@@ -1,13 +1,22 @@
-import { t } from '../common';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
+import { rx, slug, t } from '../common';
+
+type Id = string;
 type Margin = number | [number, number] | [number, number, number, number];
 
 /**
  * Information object passed as the {ctx} to tests.
  */
 export const Context = {
-  args() {
-    const _props: t.SpecRenderProps = {};
+  args(options: { dispose$?: t.Observable<any> } = {}) {
+    const { dispose$, dispose } = rx.disposable(options.dispose$);
+    const rerun$ = new Subject<void>();
+    const _props: t.SpecRenderProps = {
+      instance: { id: slug() },
+      rerun$: rerun$.pipe(takeUntil(dispose$)),
+    };
 
     const ctx: t.SpecCtx = {
       render(el) {
@@ -39,9 +48,14 @@ export const Context = {
         _props.backdropColor = color;
         return ctx;
       },
+
+      rerun() {
+        rerun$.next();
+      },
     };
 
     return {
+      dispose,
       ctx,
       get props() {
         return { ..._props };

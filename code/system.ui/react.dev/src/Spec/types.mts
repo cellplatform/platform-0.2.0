@@ -10,11 +10,15 @@ export type SpecCtx = {
   display(value: SpecPropDisplay): SpecCtx;
   backgroundColor(value: Color): SpecCtx;
   backdropColor(value: Color): SpecCtx;
+  rerun(): void;
 };
 
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
 export type SpecRenderProps = {
+  instance: { id: string };
+  rerun$: t.Observable<void>;
+
   size?: SpecRenderSize;
   element?: JSX.Element;
   display?: t.SpecPropDisplay;

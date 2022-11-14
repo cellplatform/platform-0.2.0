@@ -1,10 +1,13 @@
 import { css, Test } from '../common';
 import { Spec } from '../Spec';
+import { MySample } from './MySample';
 
-export default Test.describe('MyComponent', (e) => {
-  console.log('describe', e);
+let _count = 0;
 
+export default Test.describe('MySample', (e) => {
   e.it('init', async (e) => {
+    _count++;
+
     console.group('🌳 within spec');
     console.log('e', e);
     console.log('e.ctx', e.ctx);
@@ -12,17 +15,22 @@ export default Test.describe('MyComponent', (e) => {
 
     const ctx = Spec.ctx(e);
 
-    const styles = {
-      base: css({ flex: 1 }),
-    };
+    const el = (
+      <MySample
+        text={`MySample-${_count}`}
+        style={{ flex: 1 }}
+        onClick={() => {
+          ctx.rerun();
+        }}
+      />
+    );
 
-    const el = <div {...styles.base}>Rendered from spec 🌳</div>;
     ctx
       //
-      .render(el)
       .size(300, 140)
       // .size('fill')
       .display('flex')
-      .backgroundColor(1);
+      .backgroundColor(1)
+      .render(el);
   });
 });
