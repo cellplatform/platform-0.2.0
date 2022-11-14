@@ -8,9 +8,10 @@ const url = new URL(location.href);
 const query = url.searchParams;
 
 const Imports = {
-  'spike.ui.root.dev': () => import('./dev/Root.DevEnv.SPEC'),
-  'spike.ui.root': () => import('./dev/Root.SPEC'),
-  'spike.ui.outline': () => import('../Tile.Outline/Tile.Outline.SPEC'),
+  'spike.ui.Root.dev': () => import('./dev/Root.DevEnv.SPEC'),
+  'spike.ui.Root': () => import('./dev/Root.SPEC'),
+  'spike.ui.Outline': () => import('../Tile.Outline/Tile.Outline.SPEC'),
+  'spike.ui.VideoDiagram': () => import('../VideoDiagram/VideoDiagram.SPEC'),
 };
 
 /**
