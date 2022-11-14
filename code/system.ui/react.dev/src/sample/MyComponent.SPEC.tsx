@@ -20,7 +20,8 @@ export default Test.describe('MyComponent', (e) => {
     ctx
       //
       .render(el)
-      .size(300, 220)
+      .size(300, 140)
+      // .size('fill')
       .display('flex')
       .backgroundColor(1);
   });

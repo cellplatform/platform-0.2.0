@@ -2,6 +2,8 @@ import { t } from '../common';
 import { SpecList } from '../ui.SpecList';
 import { Harness } from '../ui.Harness';
 
+const KEY = { DEV: 'dev' };
+
 export const Entry = {
   /**
    * Render a harness with the selected `dev=namespace` import or an
@@ -41,7 +43,6 @@ const Wrangle = {
    * Derive and load the module from the given URL.
    */
   async module(url: URL, specs: t.Imports) {
-    const KEY = { DEV: 'dev' };
     const params = url.searchParams;
     if (!params.has(KEY.DEV)) return undefined;
 
