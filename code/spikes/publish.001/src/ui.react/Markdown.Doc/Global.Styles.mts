@@ -18,6 +18,9 @@ export const DocStyles = {
     marginBlockStart: '2em',
     marginBlockEnd: '2em',
   },
+  'p del': {
+    opacity: 0.3,
+  },
 
   /**
    * Lists

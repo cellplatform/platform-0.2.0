@@ -91,18 +91,19 @@ describe('TextProcessor.md', () => {
       const SAMPLE = `
 A note[^1]
 
-[^1]: My note...
+[^1]: My note [link](./path.md)
       `;
       const res1 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: false });
       const res2 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: true });
 
       expect(res1.html).to.include(`<p>A note[^1]</p>`);
 
-      expect(res2.html).to.include('<p>A note');
-      expect(res2.html).to.include('<sup><a href="#');
-      expect(res2.html).to.include('Footnotes</h2>');
-      expect(res2.html).to.include('<ol>');
-      expect(res2.html).to.include('<p>My note...');
+      const html = res2.html;
+      expect(html).to.include('<p>A note');
+      expect(html).to.include('<sup><a href="#');
+      expect(html).to.include('Footnotes</h2>');
+      expect(html).to.include('<ol>');
+      expect(html).to.include('<p>My note <a href="./path.md">link</a>');
     });
 
     it('table', async () => {
