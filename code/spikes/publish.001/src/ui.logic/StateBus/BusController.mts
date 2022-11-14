@@ -42,8 +42,8 @@ export function BusController(args: {
     });
   };
 
-  let _fs: t.Fs | undefined;
-  const getFilesystem = async () => _fs ?? (_fs = await FetchFile.fs({ bus, dispose$ }));
+  // let _fs: t.Fs | undefined;
+  // const getFilesystem = async () => _fs ?? (_fs = await FetchFile.fs({ bus, dispose$ }));
 
   /**
    * Info (Module)
@@ -112,19 +112,19 @@ export function BusController(args: {
        *  - fs: fetch/pull from URL.
        *
        */
-      const fs = await getFilesystem();
+      // const fs = await getFilesystem();
       const path = Paths.schema.index;
 
-      if (await fs.exists(path)) {
-        /**
-         * SAVE
-         */
-        // const data = await fs.read(path);
-        // const text = data ? new TextDecoder().decode(data) : '';
-        // await updateState(text);
-      } else {
-        // await fetchRemote();
-      }
+      // if (await fs.exists(path)) {
+      /**
+       * SAVE
+       */
+      // const data = await fs.read(path);
+      // const text = data ? new TextDecoder().decode(data) : '';
+      // await updateState(text);
+      // } else {
+      //   // await fetchRemote();
+      // }
 
       await fetchRemote();
     }
@@ -199,16 +199,15 @@ export function BusController(args: {
        * HACK 🐷
        * Temporary filesystem store
        */
-      const fs = await getFilesystem();
-
-      const markdown = state.current.markdown;
-      const url = state.current.selection.index?.path;
-      const hasSelection = Boolean(url);
-      const data = (hasSelection ? markdown?.document : markdown?.outline) ?? '';
-      if (data) {
-        const path = hasSelection ? Paths.toDataPath(url ?? '') : Paths.schema.index;
-        await fs.write(path, data);
-      }
+      // const fs = await getFilesystem();
+      // const markdown = state.current.markdown;
+      // const url = state.current.selection.index?.path;
+      // const hasSelection = Boolean(url);
+      // const data = (hasSelection ? markdown?.document : markdown?.outline) ?? '';
+      // if (data) {
+      //   const path = hasSelection ? Paths.toDataPath(url ?? '') : Paths.schema.index;
+      //   await fs.write(path, data);
+      // }
     } catch (err: any) {
       error = err.message;
     }
