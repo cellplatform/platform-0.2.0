@@ -1,6 +1,6 @@
 import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
 
-import { describe, expect, expectError, it, TestFilesystem } from '../test/index.mjs';
+import { describe, expect, expectError, it, TestFilesystem } from '../test';
 import { Text } from 'sys.text';
 import { MarkdownFile } from './index.mjs';
 

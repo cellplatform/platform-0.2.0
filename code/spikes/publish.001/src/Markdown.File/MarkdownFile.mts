@@ -1,4 +1,4 @@
-import { t, Path } from '../common/index.mjs';
+import { t, Path } from '../common.mjs';
 
 type B = t.MarkdownPropsBase;
 
