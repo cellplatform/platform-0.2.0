@@ -9,6 +9,9 @@ export type HarnessSpecProps = {
 export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
   const { results } = props;
 
+  const desc = results?.description;
+  const title = desc ? `Spec: ${desc}` : 'Spec';
+
   const print = () => {
     console.info(`Spec (Results Data):`, results);
   };
@@ -36,7 +39,7 @@ export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body} onClick={print}>
-        <div>{'🎾 Harness.Specs'}</div>
+        <div>{title}</div>
         <div>{elPre}</div>
       </div>
     </div>
