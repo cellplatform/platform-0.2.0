@@ -1,7 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { Dev } from '../index.mjs';
+import { Pkg } from '../index.pkg.mjs';
 
-const spec = import('../sample/MyComponent.SPEC');
-const el = <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
-const root = createRoot(document.getElementById('root')!);
-root.render(el);
+const Imports = {
+  ['sample.MyComponent']: () => import('../sample/MyComponent.SPEC'),
+};
+
+(async () => {
+  const el = await Dev.render(Pkg, Imports);
+  const root = createRoot(document.getElementById('root')!);
+  root.render(el);
+})();
