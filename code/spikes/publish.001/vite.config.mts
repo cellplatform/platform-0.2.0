@@ -18,4 +18,5 @@ export default Config.vite(import.meta.url, (e) => {
   e.chunk('runtime.sys.data.json', 'sys.data.json');
   e.chunk('runtime.sys.fs', ['sys.fs', 'sys.fs.indexeddb']);
   e.chunk('runtime.sys.dev', ['sys.ui.react.dev', 'sys.test.spec']);
+  e.chunk('runtime.sys.ui.react.video', 'sys.ui.react.video');
 });
