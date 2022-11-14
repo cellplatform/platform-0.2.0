@@ -1,16 +1,6 @@
 import { Color, COLORS, css, MarkdownUtil, t } from './common';
 import { TileUtil } from './Tile.Util.mjs';
 
-export type HeadingTileClickHandler = (e: HeadingTileClickHandlerArgs) => void;
-export type HeadingTileClickHandlerArgs = {
-  ref?: { text: string; url: string };
-  heading: { node: t.MdastHeading; title: string };
-  child?: {
-    node: t.MdastListItem;
-    title: string;
-  };
-};
-
 export type HeadingTileProps = {
   index: number;
   node: t.MdastHeading;
@@ -18,29 +8,35 @@ export type HeadingTileProps = {
   selectedUrl?: string;
   style?: t.CssValue;
   widths?: { root?: number; child?: number };
-  onClick?: HeadingTileClickHandler;
+  onClick?: t.TileClickHandler;
+  renderInner?: t.RenderTileInner;
 };
 
-const toRef = (node: t.MdastNode): HeadingTileClickHandlerArgs['ref'] => {
+const toRef = (node: t.MdastNode): t.TileClickHandlerArgs['ref'] => {
   const match = MarkdownUtil.find.refLinks(node)[0];
   return match ? { text: match.text, url: match.url } : undefined;
 };
 
 export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
-  const { node, siblings, widths = {}, selectedUrl = '' } = props;
+  const { index, node, siblings, widths = {}, selectedUrl = '' } = props;
   const { title, children } = TileUtil.heading({ node, siblings });
 
   let isRootSelected = toRef(node)?.url === selectedUrl;
   if (!selectedUrl && props.index === 0) isRootSelected = true;
 
+  const inner = (text: string, node: t.MdastNode) => {
+    const res = props.renderInner?.({ index, text, node });
+    return res ?? <div>{text}</div>;
+  };
+
   /**
    * Handlers
    */
   const fireClick = (
-    heading: HeadingTileClickHandlerArgs['heading'],
-    child?: HeadingTileClickHandlerArgs['child'],
+    heading: t.TileClickHandlerArgs['heading'],
+    child?: t.TileClickHandlerArgs['child'],
   ) => {
-    let ref: HeadingTileClickHandlerArgs['ref'];
+    let ref: t.TileClickHandlerArgs['ref'];
     if (child) ref = toRef(child.node);
     if (!child) ref = toRef(heading.node);
     props.onClick?.({ heading, child, ref });
@@ -65,13 +61,14 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
     block: {
       base: css({
         flex: 1,
+        position: 'relative',
         boxSizing: 'border-box',
         cursor: 'default',
-        overflow: 'hidden',
         width: widths.root,
       }),
       root: css({
         position: 'relative',
+        overflow: 'hidden',
         padding: 30,
         paddingRight: 60,
         borderRadius: 10,
@@ -138,7 +135,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         isRootSelected ? styles.block.selected : undefined,
       )}
     >
-      <div {...styles.block.title}>{title}</div>
+      <div {...styles.block.title}>{inner(title, node)}</div>
     </div>
   );
 
@@ -169,7 +166,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
             key={i}
             onClick={onChildClick}
           >
-            {text}
+            {inner(text, child.node)}
           </div>
         );
       })}

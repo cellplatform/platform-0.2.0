@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { css, Processor, t } from './common';
-import { HeadingTile } from './Tile.Heading';
-
-import type { HeadingTileClickHandler } from './Tile.Heading';
-export type { HeadingTileClickHandler };
+import { HeadingTile } from './Tile';
 
 export type TileOutlineProps = {
   markdown?: string;
@@ -12,7 +9,8 @@ export type TileOutlineProps = {
   scroll?: boolean;
   widths?: { root?: number; child?: number };
   style?: t.CssValue;
-  onClick?: HeadingTileClickHandler;
+  onClick?: t.TileClickHandler;
+  renderInner?: t.RenderTileInner;
 };
 
 export const TileOutline: React.FC<TileOutlineProps> = (props) => {
@@ -52,6 +50,7 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
           selectedUrl={props.selectedUrl}
           onClick={props.onClick}
           widths={props.widths}
+          renderInner={props.renderInner}
         />
       );
       elBlocks.push(el);

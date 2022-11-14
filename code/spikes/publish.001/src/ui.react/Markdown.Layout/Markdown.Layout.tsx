@@ -1,15 +1,15 @@
-import { Color, COLORS, css, FC, t } from '../common';
+import { Color, COLORS, css, t } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
 import { TooSmall } from './TooSmall';
 import { OverlayFrame } from '../Overlay';
+import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 
 export type MarkdownLayoutProps = {
   markdown?: { outline?: string; document?: string };
   selectedUrl?: string;
   version?: string;
   style?: t.CssValue;
-  onSelectClick?: HeadingTileClickHandler;
+  onSelectClick?: t.TileClickHandler;
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
@@ -48,10 +48,6 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         boxSizing: 'border-box',
       }),
     },
-    footer: {
-      base: css({}),
-      inner: css({ height: 100 }),
-    },
 
     tooSmall: css({
       '@media (min-width: 1100px)': { display: 'none' },
@@ -63,11 +59,10 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
   const elBody = (
     <div {...styles.body.base}>
       <div {...styles.body.left}>
-        <TileOutline
-          widths={{ root: 250, child: 300 }}
+        <MarkdownLayoutOutline
           markdown={props.markdown?.outline}
           selectedUrl={props.selectedUrl}
-          onClick={props.onSelectClick}
+          onSelectClick={props.onSelectClick}
         />
       </div>
       <div {...styles.body.main}>
@@ -76,20 +71,8 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
     </div>
   );
 
-  const elFooter = (
-    <div {...styles.footer.base}>
-      <div {...styles.footer.inner} />
-    </div>
-  );
-
   const elTooSmall = <TooSmall style={styles.tooSmall} />;
-
-  const elContent = (
-    <div {...styles.content}>
-      {elBody}
-      {elFooter}
-    </div>
-  );
+  const elContent = <div {...styles.content}>{elBody}</div>;
 
   const elOverlays = (
     <div>
