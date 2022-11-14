@@ -1,6 +1,8 @@
+import 'symbol-observable';
+
 import { useEffect } from 'react';
 
-import { Color, COLORS, css, QueryString, State, t } from '../common';
+import { Color, COLORS, css, State, t } from '../common';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
 import { env } from './Root.env.mjs';
@@ -14,14 +16,13 @@ const { instance } = env;
 export type ShowMarkdownComponent = 'editor' | 'outline';
 
 export type RootProps = {
+  showEditor?: boolean;
   style?: t.CssValue;
 };
 
 export const Root: React.FC<RootProps> = (props) => {
+  const { showEditor = false } = props;
   const state = State.useEvents(instance);
-
-  const url = state.current?.location?.url;
-  const isDev = QueryString.isDev(url);
 
   /**
    * Lifecycle.
@@ -69,14 +70,14 @@ export const Root: React.FC<RootProps> = (props) => {
 
   const elLeft = (
     <div {...styles.left}>
-      {isDev && <RootTitle text={'Content Bundle (Report)'} />}
+      {showEditor && <RootTitle text={'Content Bundle (Report)'} />}
       <div {...styles.body}>
-        <Markdown instance={instance} style={{ Absolute: 0 }} />
+        <Markdown instance={instance} showEditor={showEditor} style={{ Absolute: 0 }} />
       </div>
     </div>
   );
 
-  const elRight = isDev && (
+  const elRight = showEditor && (
     <div {...styles.right}>
       <History instance={instance} style={styles.history} data={state.current?.log} />
     </div>

@@ -6,7 +6,10 @@ export const DocStyles = {
   /**
    * Headings and Sections
    */
-  h1: { fontSize: 46 },
+  h1: {
+    fontSize: 46,
+    letterSpacing: `-0.01em`,
+  },
   'h1:first-of-type': { marginBottom: 60 },
 
   /**
@@ -71,7 +74,11 @@ export const DocStyles = {
    * Table
    * See: /component/<Doc.Table>
    */
-  table: { width: '100%' },
+  table: {
+    width: '100%',
+    marginTop: '2em',
+    marginBottom: '2em',
+  },
   'table thead tr': { backgroundColor: Color.alpha(COLORS.DARK, 0.06) },
   'table th': { padding: 10 },
   'table td': { padding: 10 },
