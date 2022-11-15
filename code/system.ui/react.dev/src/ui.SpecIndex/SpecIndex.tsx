@@ -6,6 +6,7 @@ export type Imports = { [namespace: string]: () => Promise<any> };
 
 export type SpecIndexProps = {
   title?: string;
+  version?: string;
   imports?: Imports;
   style?: t.CssValue;
 };
@@ -13,6 +14,7 @@ export type SpecIndexProps = {
 export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
   const { imports = {} } = props;
   const url = new URL(window.location.href);
+  const hasDevParam = url.searchParams.has(KEY.DEV);
 
   /**
    * [Render]
@@ -25,6 +27,10 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
       color: COLORS.DARK,
     }),
     title: css({ fontWeight: 'bold' }),
+    version: css({
+      color: Color.alpha(COLORS.DARK, 0.3),
+      marginLeft: 3,
+    }),
     ul: css({}),
     hr: css({
       border: 'none',
@@ -50,12 +56,18 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
     );
   };
 
-  const elTitle = props.title && <div {...styles.title}>{props.title}</div>;
+  const elTitle = props.title && (
+    <div {...styles.title}>
+      <span>{props.title}</span>
+      {props.version && <span {...styles.version}>{`@${props.version}`}</span>}
+    </div>
+  );
+
   const elList = (
     <ul {...styles.ul}>
       {Object.keys(imports).map((key, i) => createItem(i, key))}
-      <hr {...styles.hr} />
-      {url.searchParams.has(KEY.DEV) && createItem(-1, undefined, 'clear - ?dev')}
+      {hasDevParam && <hr {...styles.hr} />}
+      {hasDevParam && createItem(-1, undefined, 'clear - ?dev')}
     </ul>
   );
 

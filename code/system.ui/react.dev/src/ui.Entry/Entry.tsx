@@ -21,7 +21,7 @@ export const Entry = {
     if (spec) {
       return <Harness spec={spec} style={style} />;
     } else {
-      return <SpecIndex title={pkg.name} imports={specs} style={style} />;
+      return <SpecIndex title={pkg.name} version={pkg.version} imports={specs} style={style} />;
     }
   },
 };
