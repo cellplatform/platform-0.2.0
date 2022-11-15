@@ -11,7 +11,7 @@ export default Spec.describe('Vimeo Player', (e) => {
    */
   e.it('init', async (e) => {
     const id = `foo.${slug()}`;
-    const bus = rx.bus<t.VimeoEvent>();
+    const bus = rx.bus();
     const instance = { bus, id };
     events = Vimeo.Events({ instance });
 
