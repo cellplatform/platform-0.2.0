@@ -1,4 +1,4 @@
-import { COLORS, css, t } from '../common';
+import { Color, COLORS, css, t } from '../common';
 
 const KEY = { DEV: 'dev' };
 
@@ -25,6 +25,11 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
       color: COLORS.DARK,
     }),
     title: css({ fontWeight: 'bold' }),
+    ul: css({}),
+    hr: css({
+      border: 'none',
+      borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,
+    }),
     a: css({
       color: COLORS.BLUE,
       textDecoration: 'none',
@@ -47,9 +52,10 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
 
   const elTitle = props.title && <div {...styles.title}>{props.title}</div>;
   const elList = (
-    <ul>
+    <ul {...styles.ul}>
       {Object.keys(imports).map((key, i) => createItem(i, key))}
-      {url.searchParams.has(KEY.DEV) && createItem(-1, undefined, '(clear)')}
+      <hr {...styles.hr} />
+      {url.searchParams.has(KEY.DEV) && createItem(-1, undefined, 'clear - ?dev')}
     </ul>
   );
 
