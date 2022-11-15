@@ -11,6 +11,7 @@ export type {
   MarkdownInfo,
   ProcessedMdast,
   ProcessedHast,
+  CodeBlock,
 } from 'sys.text/src/types.mjs';
 export * from 'sys.text/src/types.unified.mjs';
 
