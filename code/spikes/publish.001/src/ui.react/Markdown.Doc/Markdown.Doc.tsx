@@ -3,6 +3,7 @@ import { useBlockRenderer } from './useBlockRenderer.mjs';
 import { useGlobalStyles } from './useGlobalStyles.mjs';
 
 export type MarkdownDocProps = {
+  instance: t.StateInstance;
   markdown?: string;
   scroll?: boolean;
   renderer?: t.MarkdownDocBlockRenderer;
@@ -12,8 +13,8 @@ export type MarkdownDocProps = {
 const CLASS = DEFAULTS.MD.CLASS;
 
 const View: React.FC<MarkdownDocProps> = (props) => {
-  const { markdown, renderer } = props;
-  const { safeBlocks, isEmpty } = useBlockRenderer({ markdown, renderer });
+  const { instance, markdown, renderer } = props;
+  const { safeBlocks, isEmpty } = useBlockRenderer({ instance, markdown, renderer });
   useGlobalStyles();
 
   /**

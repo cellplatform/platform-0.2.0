@@ -15,7 +15,7 @@ const Imports = {
  * Default markdown to display (HTML, Component) renderer.
  */
 export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
-  const { md } = e;
+  const { md, instance } = e;
 
   const asCtx = <T extends t.MdastNode>(node: T): t.DocBlockCtx<T> => ({ node, md });
 
@@ -61,10 +61,10 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
      * Popout overlay triggers.
      */
     if (e.node.meta.startsWith('doc.overlay')) {
-      const res = await parseYamlOrError<t.DocOverlayDef>(e.node.value);
+      const res = await parseYamlOrError<t.OverlayDef>(e.node.value);
       if (res.error) return res.error.element;
       const { OverlayTriggerPanel } = await Imports.OverlayTrigger();
-      return <OverlayTriggerPanel def={res.data} />;
+      return <OverlayTriggerPanel instance={instance} def={res.data} />;
     }
 
     /**

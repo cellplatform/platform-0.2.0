@@ -7,9 +7,12 @@ import { defaultRenderer as defaultRenderer } from './Renderer';
  * Hook that isolates the markdown to display rendering.
  */
 export function useBlockRenderer(props: {
+  instance: t.StateInstance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
 }) {
+  const { instance } = props;
+
   const [safeBlocks, setSafeBlocks] = useState<(string | JSX.Element)[]>([]);
   const reset = () => setSafeBlocks([]);
 
@@ -24,7 +27,7 @@ export function useBlockRenderer(props: {
       let index = -1;
       for (const node of md.mdast.children) {
         index++;
-        const args: t.MarkdownDocBlockRendererArgs = { index, node, md };
+        const args: t.MarkdownDocBlockRendererArgs = { index, node, md, instance };
 
         /**
          * Supplied renderer.

@@ -7,6 +7,7 @@ export type MarkdownDocBlockRenderer = (
 ) => Promise<HtmlString | JSX.Element | null>;
 
 export type MarkdownDocBlockRendererArgs = {
+  instance: t.StateInstance;
   index: number;
   node: t.MdastNode;
   md: t.ProcessedMdast;

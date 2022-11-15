@@ -5,7 +5,9 @@ import { OverlayFrame } from '../Overlay';
 import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 
 export type MarkdownLayoutProps = {
+  instance: t.StateInstance;
   markdown?: { outline?: string; document?: string };
+  overlay?: t.OverlayDef;
   selectedUrl?: string;
   version?: string;
   style?: t.CssValue;
@@ -13,6 +15,8 @@ export type MarkdownLayoutProps = {
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
+  const { instance } = props;
+
   /**
    * [Render]
    */
@@ -66,20 +70,16 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         />
       </div>
       <div {...styles.body.main}>
-        <MarkdownDoc markdown={props.markdown?.document} />
+        <MarkdownDoc instance={instance} markdown={props.markdown?.document} />
       </div>
     </div>
   );
 
-  const elTooSmall = <TooSmall style={styles.tooSmall} />;
   const elContent = <div {...styles.content}>{elBody}</div>;
-
   const elOverlays = (
     <div>
-      {elTooSmall}
-
-      {/* TEMP 🐷 */}
-      {/* <OverlayFrame style={{ Absolute: 0 }} /> */}
+      {props.overlay && <OverlayFrame instance={instance} style={{ Absolute: 0 }} />}
+      <TooSmall style={styles.tooSmall} />
     </div>
   );
 
