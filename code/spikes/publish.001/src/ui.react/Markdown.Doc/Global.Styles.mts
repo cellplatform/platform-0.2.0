@@ -13,7 +13,8 @@ export const DocStyles = {
   'h1:first-of-type': { marginBottom: 60 },
 
   /**
-   * Body Content
+   * Paragraphs
+   * See: /component/<Doc.Paragraph>
    */
   p: {
     fontSize: BASE.FONT_SIZE,
@@ -21,9 +22,7 @@ export const DocStyles = {
     marginBlockStart: '2em',
     marginBlockEnd: '2em',
   },
-  'p del': {
-    opacity: 0.3,
-  },
+  'p del': { opacity: 0.3 },
 
   /**
    * Lists

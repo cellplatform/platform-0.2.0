@@ -16,12 +16,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     const bus = rx.bus();
     const instance = { bus, id };
     const events = Vimeo.Events({ instance });
-
     setInstance(instance);
-
-    return () => {
-      events.dispose();
-    };
+    return () => events.dispose();
   }, []);
 
   /**
@@ -30,14 +26,16 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      // backgroundColor: Color.alpha(COLORS.DARK, 0.03),
       backgroundColor: Color.format(1),
     }),
+    zoom: css({
+      Absolute: 0,
+    }),
     video: css({
-      Absolute: [30, null, null, 30],
-      border: `solid 1px ${Color.format(-0.2)}`,
+      Absolute: [null, null, 30, 30],
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.3)}`,
+      boxShadow: `0 0px 16px 0 ${Color.alpha(COLORS.DARK, 0.06)}`,
       borderRadius: 10,
-      boxShadow: `0 0px 14px 0 ${Color.format(-0.1)}`,
     }),
   };
 
@@ -46,10 +44,5 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     <Vimeo instance={instance} width={300} video={videoId} style={styles.video} />
   );
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      {elVimeo}
-      <div></div>
-    </div>
-  );
+  return <div {...css(styles.base, props.style)}>{elVimeo}</div>;
 };

@@ -1,11 +1,14 @@
 import { Processor, t, Text } from '../common';
+import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
 const Imports = {
+  Paragraph: () => import('../Markdown.Doc.Components/Doc.Paragraph'),
   Image: () => import('../Markdown.Doc.Components/Doc.Image'),
   Error: () => import('../Markdown.Doc.Components/Doc.Error'),
-  Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
   Quote: () => import('../Markdown.Doc.Components/Doc.Quote'),
   Table: () => import('../Markdown.Doc.Components/Doc.Table'),
+  Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
+  OverlayTrigger: () => import('../Overlay/Overlay.TriggerPanel'),
 };
 
 /**
@@ -13,39 +16,70 @@ const Imports = {
  */
 export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
   const { md } = e;
-  const Markdown = Text.Markdown;
 
   const asCtx = <T extends t.MdastNode>(node: T): t.DocBlockCtx<T> => ({ node, md });
+
+  async function parseYamlOrError<T>(text: string) {
+    try {
+      const data = Text.Yaml.parse(text) as T;
+      return { data };
+    } catch (error: any) {
+      console.error(error);
+      const { DocError } = await Imports.Error();
+      const msg = `Failed while parsing YAML within code block`;
+      const element = <DocError message={msg} error={error} />;
+      return { error: { element } };
+    }
+  }
 
   /**
    * Process <Image> with Component.
    */
-  const imageNode = Markdown.Find.image(e.node);
+  const imageNode = MarkdownUtil.find.image(e.node);
   if (imageNode) {
     const { DocImage } = await Imports.Image();
 
-    const codeNode = md.info.code.typed.find((c) => {
-      return c.type.startsWith('doc.image') && c.type.includes(' id:');
-    });
+    const code = md.info.code.typed
+      .filter((c) => c.type.startsWith('doc.image'))
+      .filter((c) => c.type.includes(' id:'))[0];
 
     let def: t.DocImageDef | undefined;
-
-    /**
-     * TODO 🐷
-     * - Refactor: Image parsing.
-     */
-    if (codeNode && codeNode.lang === 'yaml') {
-      try {
-        def = Text.Yaml.parse(codeNode.text);
-      } catch (error: any) {
-        console.error(error);
-        const { DocError } = await Imports.Error();
-        const msg = `Failed while parsing YAML within block \`${codeNode.type}\``;
-        return <DocError message={msg} error={error} />;
-      }
+    if (code && code.lang === 'yaml') {
+      const res = await parseYamlOrError<t.DocImageDef>(code.text);
+      if (res.error) return res.error.element;
+      def = res.data;
     }
 
     return <DocImage ctx={asCtx(imageNode)} def={def} />;
+  }
+
+  /**
+   * Code Block
+   */
+  if (e.node.type === 'code' && e.node.meta) {
+    /**
+     * Popout overlay triggers.
+     */
+    if (e.node.meta.startsWith('doc.overlay')) {
+      const res = await parseYamlOrError<t.DocOverlayDef>(e.node.value);
+      if (res.error) return res.error.element;
+      const { OverlayTriggerPanel } = await Imports.OverlayTrigger();
+      return <OverlayTriggerPanel def={res.data} />;
+    }
+
+    /**
+     * No match on code-block
+     * NB: Typed meta-code blocks not shown.
+     */
+    return null;
+  }
+
+  /**
+   * Simple paragraph.
+   */
+  if (e.node.type === 'paragraph') {
+    const { DocParagraph } = await Imports.Paragraph();
+    return <DocParagraph ctx={asCtx(e.node)} />;
   }
 
   /**
