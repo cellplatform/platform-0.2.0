@@ -1,5 +1,5 @@
 import { t } from '../common';
-import { SpecList } from '../ui.SpecList';
+import { SpecIndex } from '../ui.SpecIndex';
 import { Harness } from '../ui.Harness';
 
 const KEY = { DEV: 'dev' };
@@ -21,7 +21,7 @@ export const Entry = {
     if (spec) {
       return <Harness spec={spec} style={style} />;
     } else {
-      return <SpecList title={pkg.name} imports={specs} style={style} />;
+      return <SpecIndex title={pkg.name} imports={specs} style={style} />;
     }
   },
 };
@@ -46,25 +46,27 @@ const Wrangle = {
     const params = url.searchParams;
     if (!params.has(KEY.DEV)) return undefined;
 
-    const dev = params.get(KEY.DEV) ?? '';
-    if (dev && Object.keys(specs).includes(dev)) {
-      const matches = Object.keys(specs)
-        .filter((namespace) => namespace === dev)
-        .map((namespace) => ({ namespace, fn: (specs as any)[namespace] }))
-        .filter((item) => typeof item.fn === 'function');
+    const namespace = params.get(KEY.DEV) ?? '';
+    const matches = Wrangle.matches(namespace, specs);
 
-      if (matches[0]) {
-        const res = await matches[0].fn();
-        if (typeof res === 'object') {
-          if (res.default.kind === 'TestSuite') {
-            return res.default;
-          } else {
-            console.warn(`Imported default is not of kind "TestSuite"`);
-          }
-        }
-      }
+    if (matches[0]) {
+      const res = await matches[0].fn();
+      if (typeof res !== 'object') return undefined;
+      if (res.default?.kind === 'TestSuite') return res.default;
+      console.warn(`Imported default from field "${namespace}" is not of kind "TestSuite"`);
     }
 
     return undefined;
+  },
+
+  /**
+   * Match fields on the spec {Imports} object with the given query-string key name.
+   */
+  matches(field: string, specs: t.Imports) {
+    if (!field) return [];
+    return Object.keys(specs)
+      .filter((key) => key === field)
+      .map((namespace) => ({ namespace, fn: (specs as any)[namespace] }))
+      .filter(({ fn }) => typeof fn === 'function');
   },
 };

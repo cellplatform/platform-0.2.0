@@ -1,15 +1,18 @@
-import { COLORS, css, FC, t } from '../common';
+import { COLORS, css, t } from '../common';
+
+const KEY = { DEV: 'dev' };
 
 export type Imports = { [namespace: string]: () => Promise<any> };
 
-export type SpecListProps = {
+export type SpecIndexProps = {
   title?: string;
   imports?: Imports;
   style?: t.CssValue;
 };
 
-export const SpecList: React.FC<SpecListProps> = (props) => {
+export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
   const { imports = {} } = props;
+  const url = new URL(window.location.href);
 
   /**
    * [Render]
@@ -21,34 +24,39 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       padding: 30,
       color: COLORS.DARK,
     }),
-    title: css({
-      fontWeight: 'bold',
-    }),
+    title: css({ fontWeight: 'bold' }),
     a: css({
       color: COLORS.BLUE,
       textDecoration: 'none',
     }),
   };
 
-  const elItems = Object.keys(imports).map((key, i) => {
+  const createItem = (i: number, address: string | undefined, title?: string) => {
     const url = new URL(window.location.href);
-    url.searchParams.set('dev', key);
-
+    const params = url.searchParams;
+    if (address) params.set(KEY.DEV, address);
+    if (!address) params.delete(KEY.DEV);
     return (
       <li key={i}>
         <a href={url.href} {...styles.a}>
-          {key}
+          {address ?? title}
         </a>
       </li>
     );
-  });
+  };
 
   const elTitle = props.title && <div {...styles.title}>{props.title}</div>;
+  const elList = (
+    <ul>
+      {Object.keys(imports).map((key, i) => createItem(i, key))}
+      {url.searchParams.has(KEY.DEV) && createItem(-1, undefined, '(clear)')}
+    </ul>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
       {elTitle}
-      <ul>{elItems}</ul>
+      {elList}
     </div>
   );
 };
