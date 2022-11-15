@@ -35,7 +35,7 @@ export const TooSmall: React.FC<TooSmallProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <div {...styles.title}>{'Screen too small'}</div>
+        <div {...styles.title}>{'Screen too small.'}</div>
         <div {...styles.detail}>{'Please expand or view on your laptop/desktop.'}</div>
       </div>
     </div>

@@ -25,6 +25,15 @@ export const DocStyles = {
   'p del': { opacity: 0.3 },
 
   /**
+   * Links (anchor)
+   */
+  a: {
+    color: COLORS.BLUE,
+    textDecoration: 'none',
+    ':hover': { textDecoration: 'underline' },
+  },
+
+  /**
    * Lists
    */
   'ul,ol p': {
