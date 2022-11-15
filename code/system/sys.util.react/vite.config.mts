@@ -8,5 +8,5 @@ export default Config.vite(import.meta.url, (e) => {
   e.lib();
   e.target('web');
   e.plugin('web:react');
-  e.externalDependency(e.ctx.deps.filter((d) => d.name !== 'react').map((d) => d.name));
+  e.externalDependency(e.ctx.deps.map((d) => d.name));
 });
