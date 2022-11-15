@@ -54,6 +54,10 @@ export type StateEvents = t.Disposable & {
     $: t.Observable<t.StateSelect>;
     fire(selected?: UrlString): Promise<void>;
   };
+  overlay: {
+    $: t.Observable<t.StateOverlay>;
+    fire(def: t.OverlayDef | null): Promise<void>;
+  };
 };
 
 /**
@@ -67,7 +71,8 @@ export type StateEvent =
   | StateChangeReqEvent
   | StateChangeResEvent
   | StateChangedEvent
-  | StateSelectEvent;
+  | StateSelectEvent
+  | StateOverlayEvent;
 
 /**
  * Module info.
@@ -160,3 +165,15 @@ export type StateSelectEvent = {
   payload: StateSelect;
 };
 export type StateSelect = { instance: Id; selected?: UrlOrPathString };
+
+/**
+ * Overlay
+ */
+export type StateOverlayEvent = {
+  type: 'app.state/overlay';
+  payload: StateOverlay;
+};
+export type StateOverlay = {
+  instance: Id;
+  def?: t.OverlayDef;
+};

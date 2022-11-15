@@ -135,6 +135,19 @@ export function BusEvents(args: {
     },
   };
 
+  /**
+   * Overlay
+   */
+  const overlay: t.StateEvents['overlay'] = {
+    $: rx.payload<t.StateOverlayEvent>($, 'app.state/overlay'),
+    async fire(def) {
+      bus.fire({
+        type: 'app.state/overlay',
+        payload: { instance, def: def ?? undefined },
+      });
+    },
+  };
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
@@ -147,6 +160,7 @@ export function BusEvents(args: {
     change,
     changed,
     select,
+    overlay,
   };
 }
 

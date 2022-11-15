@@ -245,6 +245,15 @@ export function BusController(args: {
   });
 
   /**
+   * Overlay
+   */
+  events.overlay.$.subscribe(async (e) => {
+    const commit = e.def ? `Showing overlay` : 'Removing overlay';
+    await state.change(commit, (tree) => (tree.overlay = e.def));
+    fireChanged([commit]);
+  });
+
+  /**
    * Initialize
    */
   const init = async () => {
