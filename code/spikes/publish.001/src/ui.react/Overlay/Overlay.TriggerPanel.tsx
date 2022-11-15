@@ -90,7 +90,6 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       position: 'relative',
       overflow: 'hidden',
       PaddingX: 50,
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     iconWatermark: css({
       Absolute: [-250, null, null, -250],

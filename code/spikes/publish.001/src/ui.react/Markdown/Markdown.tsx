@@ -14,11 +14,9 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
 
   const changeMonitor = useEditorChangeHandler(props.instance);
   const state = changeMonitor.state;
-
   if (!state) return null;
 
   const version = state.log?.latest.version;
-
   const selectedUrl = state?.selection.index?.path;
   const markdown = state?.markdown;
   const outline = markdown?.outline;
@@ -39,12 +37,14 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   const elLayout = (
     <MarkdownLayout
       style={{ flex: 1 }}
+      instance={instance}
       markdown={{ outline, document }}
+      overlay={state.overlay}
       version={version}
       selectedUrl={selectedUrl}
       onSelectClick={(e) => {
         const url = e.ref?.url;
-        State.events(instance, (state) => state.select.fire(url));
+        State.withEvents(instance, (state) => state.select.fire(url));
       }}
     />
   );

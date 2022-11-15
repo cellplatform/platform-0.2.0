@@ -51,7 +51,7 @@ const updateStateWithValue = async (instance: t.StateInstance, code: string) => 
 
   const commit = 'Changed by user via code-editor.';
 
-  return State.events(instance, async (events) => {
+  return State.withEvents(instance, async (events) => {
     await events.change.fire(commit, (draft) => {
       const markdown = draft.markdown ?? (draft.markdown = {});
       const hasSelection = Boolean(draft.selection.index?.path);
