@@ -1,5 +1,5 @@
 import { Color, COLORS, css, MarkdownUtil, t } from './common';
-import { TileUtil } from './Tile.Util.mjs';
+import { TileUtil } from './Util.mjs';
 
 export type HeadingTileProps = {
   index: number;
@@ -75,7 +75,6 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         fontSize: 24,
       }),
       title: css({}),
-
       child: css({
         marginTop: 10,
         ':first-child': { marginTop: 0 },
@@ -94,7 +93,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
       magenta: css({
         color: COLORS.WHITE,
         background: COLORS.MAGENTA,
-        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 15) },
       }),
 
       silver: css({
@@ -102,21 +101,21 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         border: `solid 1px ${Color.format(-0.1)}`,
         background: Color.alpha(COLORS.DARK, 0.1),
         ':hover': {
-          backgroundColor: Color.lighten(COLORS.DARK, 5),
+          backgroundColor: Color.lighten(COLORS.DARK, 15),
           color: COLORS.WHITE,
         },
       }),
 
       dark: css({
         color: COLORS.WHITE,
-        background: COLORS.DARK,
-        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
+        background: Color.lighten(COLORS.DARK, 5),
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 15) },
       }),
 
       selected: css({
         color: COLORS.WHITE,
-        background: COLORS.DARK,
-        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 5) },
+        background: Color.lighten(COLORS.DARK, 5),
+        ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 15) },
       }),
     },
 

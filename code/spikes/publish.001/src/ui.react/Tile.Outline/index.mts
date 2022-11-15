@@ -1,1 +1,1 @@
-export * from './Tile.Outline';
+export * from './TileOutline';
