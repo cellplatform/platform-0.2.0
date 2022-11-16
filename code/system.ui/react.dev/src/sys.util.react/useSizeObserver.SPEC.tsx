@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { Spec } from '../test.ui';
-import { useSizeObserver } from './useSizeObserver.mjs';
+import { useSizeObserver } from 'sys.util.react';
 
 export default Spec.describe('hook.useSizeObserver', (e) => {
   e.it('init', async (e) => {

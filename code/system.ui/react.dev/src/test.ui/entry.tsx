@@ -5,7 +5,8 @@ import { Dev } from '../index.mjs';
 import { Pkg } from '../index.pkg.mjs';
 
 const Imports = {
-  ['sample.MyComponent']: () => import('../sample/MySample.SPEC'),
+  'sample.MyComponent': () => import('../sample/MySample.SPEC'),
+  'sys.util.react.useSizeObserver': () => import('../sys.util.react/useSizeObserver.SPEC'),
 };
 
 (async () => {
