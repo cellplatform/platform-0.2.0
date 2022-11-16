@@ -46,10 +46,12 @@ function Events(args: {
     },
   };
 
+  const status$ = rx.payload<t.VimeoStatusEvent>($, 'Vimeo/status');
   const status: t.VimeoEvents['status'] = {
-    $: rx.payload<t.VimeoStatusEvent>($, 'Vimeo/status'),
+    $: status$,
     req$: rx.payload<t.VimeoStatusReqEvent>($, 'Vimeo/status:req'),
     res$: rx.payload<t.VimeoStatusResEvent>($, 'Vimeo/status:res'),
+    loaded$: status$.pipe(filter((e) => e.action === 'loaded')),
     async get(options = {}) {
       const tx = slug();
       const { timeout: msecs = 1000 } = options;

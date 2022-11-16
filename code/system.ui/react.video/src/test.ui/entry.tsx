@@ -1,10 +1,16 @@
 import 'symbol-observable';
+
 import { createRoot } from 'react-dom/client';
 import { Dev } from '.';
+import { Pkg } from '../index.pkg.mjs';
 
-// const spec = import('../ui/Vimeo/dev/Vimeo.SPEC');
-const spec = import('../ui/Vimeo/dev/VimeoBackground.SPEC');
+const Imports = {
+  'video.Vimeo': () => import('../ui/Vimeo/dev/Vimeo.SPEC'),
+  'video.VimeoBackground': () => import('../ui/Vimeo/dev/VimeoBackground.SPEC'),
+};
 
-const el = <Dev.Harness spec={spec} style={{ Absolute: 0 }} />;
-const root = createRoot(document.getElementById('root')!);
-root.render(el);
+(async () => {
+  const el = await Dev.render(Pkg, Imports);
+  const root = createRoot(document.getElementById('root')!);
+  root.render(el);
+})();

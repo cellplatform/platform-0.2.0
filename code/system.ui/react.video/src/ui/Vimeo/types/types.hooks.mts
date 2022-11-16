@@ -1,4 +1,4 @@
-import { EventBus, t } from './common.mjs';
+import { t } from './common.mjs';
 
 /**
  * Hook: Icon Controller

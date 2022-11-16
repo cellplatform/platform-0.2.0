@@ -1,4 +1,4 @@
-import { Disposable, Observable, t } from './common.mjs';
+import { t } from './common.mjs';
 
 type Id = string;
 type Seconds = number;
@@ -11,20 +11,20 @@ export type VimeoEventsFactory = {
   (args: {
     instance: t.VimeoInstance;
     isEnabled?: boolean;
-    dispose$?: Observable<any>;
+    dispose$?: t.Observable<any>;
   }): VimeoEvents;
   is: VimeoEvents['is'];
 };
 
-export type VimeoEvents = Disposable & {
-  $: Observable<VimeoEvent>;
+export type VimeoEvents = t.Disposable & {
+  $: t.Observable<VimeoEvent>;
 
   instance: { bus: Id; id: Id };
   is: { base(input: any): boolean };
 
   load: {
-    req$: Observable<VimeoLoadReq>;
-    res$: Observable<VimeoLoadRes>;
+    req$: t.Observable<VimeoLoadReq>;
+    res$: t.Observable<VimeoLoadRes>;
     fire(
       video: t.VimeoId,
       options?: { muted?: boolean; timeout?: Milliseconds },
@@ -32,27 +32,28 @@ export type VimeoEvents = Disposable & {
   };
 
   status: {
-    $: Observable<t.VimeoStatus>;
-    req$: Observable<VimeoStatusReq>;
-    res$: Observable<VimeoStatusRes>;
+    $: t.Observable<t.VimeoStatus>;
+    req$: t.Observable<VimeoStatusReq>;
+    res$: t.Observable<VimeoStatusRes>;
+    loaded$: t.Observable<t.VimeoStatus>;
     get(options?: { timeout?: Milliseconds }): Promise<VimeoStatusRes>;
   };
 
   play: {
-    req$: Observable<VimeoPlayReq>;
-    res$: Observable<VimeoPlayRes>;
+    req$: t.Observable<VimeoPlayReq>;
+    res$: t.Observable<VimeoPlayRes>;
     fire(options?: { timeout?: Milliseconds }): Promise<VimeoPlayRes>;
   };
 
   pause: {
-    req$: Observable<VimeoPauseReq>;
-    res$: Observable<VimeoPauseRes>;
+    req$: t.Observable<VimeoPauseReq>;
+    res$: t.Observable<VimeoPauseRes>;
     fire(options?: { timeout?: Milliseconds }): Promise<VimeoPauseRes>;
   };
 
   seek: {
-    req$: Observable<VimeoSeekReq>;
-    res$: Observable<VimeoSeekRes>;
+    req$: t.Observable<VimeoSeekReq>;
+    res$: t.Observable<VimeoSeekRes>;
     fire(seconds: Seconds, options?: { timeout?: Milliseconds }): Promise<VimeoSeekRes>;
   };
 };

@@ -1,5 +1,2 @@
-import * as t from './index';
-
+import * as t from '../../../common/types.mjs';
 export { t };
-export type { Observable } from 'rxjs';
-export type { Disposable, EventBus } from 'sys.types';
