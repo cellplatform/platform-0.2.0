@@ -20,11 +20,11 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
    * Handlers
    */
   const handleClick = () => {
-    State.withEvents(instance, (e) => {
+    State.withEvents(instance, async (e) => {
       /**
        * Open Overlay.
        */
-      e.overlay.fire(def);
+      await e.overlay.fire(def);
     });
   };
 
@@ -58,7 +58,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       userSelect: 'none',
       Padding: [12, 15, 12, 18],
       backgroundColor: Color.format(0.7),
-      borderBottom: `solid 6px ${Color.format(-0.08)}`,
+      borderBottom: `solid 1px ${Color.format(-0.12)}`,
       Flex: 'x-spaceBetween-stretch',
     }),
     headerLeft: css({}),
@@ -80,10 +80,9 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       Padding: [6, 40, 4, 40],
       fontSize: 11,
       fontWeight: 600,
-      border: `solid 1px ${isOver ? COLORS.WHITE : Color.alpha(COLORS.DARK, 0.2)}`,
-      backgroundColor: isOver ? COLORS.BLUE : COLORS.WHITE,
-      color: isOver ? COLORS.WHITE : Color.alpha(COLORS.DARK, 0.8),
-      transition: `background-color 350ms, color 280ms`,
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      color: COLORS.WHITE,
+      backgroundColor: COLORS.BLUE,
     }),
     body: css({
       flex: 1,
@@ -92,7 +91,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       PaddingX: 50,
     }),
     iconWatermark: css({
-      Absolute: [-250, null, null, -250],
+      Absolute: [-260, null, null, -250],
+      transform: `rotate(8deg)`,
     }),
     html: css({
       //
