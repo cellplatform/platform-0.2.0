@@ -11,8 +11,8 @@ export type OverlayTriggerPanelProps = {
 export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) => {
   const { def, instance } = props;
   const { margin = {} } = def;
-  const [detailHtml, setDetailHtml] = useState('');
 
+  const [detailHtml, setDetailHtml] = useState('');
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 

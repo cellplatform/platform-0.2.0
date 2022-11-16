@@ -18,4 +18,22 @@ export const StateChange = {
     const commit = `Toggle media volume mute (to ${next ? 'muted' : 'unmuted'})`;
     await state.change.fire(commit, (state) => (state.env.media.muted = next));
   },
+
+  /**
+   * Update when user changes markdown within the editor.
+   */
+  async updateMarkdownFromEditor(state: t.StateEvents, code: string) {
+    const commit = 'Changed by user via code-editor';
+
+    await state.change.fire(commit, (draft) => {
+      const markdown = draft.markdown ?? (draft.markdown = {});
+      const hasSelection = Boolean(draft.selection.index?.path);
+
+      if (hasSelection) {
+        markdown.document = code;
+      } else {
+        markdown.outline = code;
+      }
+    });
+  },
 };
