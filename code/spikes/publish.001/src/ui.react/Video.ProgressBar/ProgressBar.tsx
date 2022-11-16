@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { R, Color, COLORS, css, t, rx } from '../common';
+import { useState } from 'react';
+import { Color, COLORS, css, R, t } from '../common';
 
 export type ProgressBarProps = {
   percent?: number;
@@ -33,7 +33,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       height: isOver ? 6 : 2,
       transition: `height 200ms, background-color 200ms, border-color 200ms`,
     }),
-
     thumb: css({
       borderRadius: 10,
       width: `${percent * 100}%`,
