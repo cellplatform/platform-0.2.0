@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Color, css, State, t, useClickOutside } from '../common';
-import { VideoDiagram } from '../VideoDiagram';
+import { VideoDiagram } from '../Video.Diagram';
 
 export type OverlayFrameProps = {
   instance: t.StateInstance;
@@ -46,6 +46,10 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
     }),
   };
 
+  /**
+   * TODO 🐷
+   * LOAD THIS from a the def/data pulled from the Markdown YAML.
+   */
   const elTmp = <VideoDiagram isDimmed={isOverGutter} style={{ Absolute: 0 }} />;
 
   return (

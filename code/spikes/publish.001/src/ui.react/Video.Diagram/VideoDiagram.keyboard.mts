@@ -5,8 +5,8 @@ export const KeyboardMonitor = {
     const { vimeo, setMuted } = args;
 
     const handler = async (e: KeyboardEvent) => {
+      // "M" key command - Mute|Unmute
       if (e.key === 'm') {
-        // COMMAND: Mute|Unmute
         e.preventDefault();
         setMuted((prev) => !prev);
       }

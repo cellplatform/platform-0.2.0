@@ -43,6 +43,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       transition: `background-color 200ms`,
     }),
   };
+
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
       <div {...styles.groove}>

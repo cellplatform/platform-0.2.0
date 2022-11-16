@@ -3,7 +3,7 @@ import { Color, COLORS, css, t, rx, slug, Vimeo, Time, useSizeObserver } from '.
 import { KeyboardMonitor } from './VideoDiagram.keyboard.mjs';
 import { Icons } from '../Icons.mjs';
 import { TooSmall } from '../TooSmall';
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '../Video.ProgressBar';
 
 const SAMPLE = {
   video: 727951677, // TEMP 🐷
