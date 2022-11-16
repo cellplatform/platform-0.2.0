@@ -247,10 +247,33 @@ export function BusController(args: {
   /**
    * Overlay
    */
-  events.overlay.$.subscribe(async (e) => {
-    const commit = e.def ? `Showing overlay` : 'Removing overlay';
-    await state.change(commit, (tree) => (tree.overlay = e.def));
+  events.overlay.req$.subscribe(async (e) => {
+    const { tx, def } = e;
+    const commit = `Showing overlay`;
+    await state.change(commit, (draft) => (draft.overlay = { tx, def }));
     fireChanged([commit]);
+  });
+
+  events.overlay.close$.subscribe(async (e) => {
+    const errors = [...(e.errors ?? [])];
+    const current = state.current;
+
+    if (!current.overlay) {
+      const error = `Cannot close overlay as one is not present on controller instance '${instance}'.`;
+      errors.push(error);
+    }
+
+    if (current.overlay) {
+      const commit = `Closing overlay`;
+      await state.change(commit, (draft) => (draft.overlay = undefined));
+      fireChanged([commit]);
+    }
+
+    const tx = current.overlay?.tx ?? '';
+    bus.fire({
+      type: 'app.state/overlay:res',
+      payload: { tx, instance, errors },
+    });
   });
 
   /**

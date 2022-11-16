@@ -39,7 +39,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       style={{ flex: 1 }}
       instance={instance}
       markdown={{ outline, document }}
-      overlay={state.overlay}
+      overlay={state.overlay?.def}
       version={version}
       selectedUrl={selectedUrl}
       onSelectClick={(e) => {

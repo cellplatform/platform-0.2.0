@@ -1,6 +1,7 @@
 import * as t from '../common/types.mjs';
 export * from './StateBus/types.mjs';
 
+type Id = string;
 type IndexPath = string;
 type DirPath = string;
 type MdString = string;
@@ -13,7 +14,7 @@ export type StateTree = {
   markdown?: StateMarkdown;
   selection: StateSelection;
   log?: t.PublicLogSummary;
-  overlay?: t.OverlayDef;
+  overlay?: { tx: Id; def: t.OverlayDef };
 };
 
 export type StateMarkdown = { outline?: MdString; document?: MdString };

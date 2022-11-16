@@ -139,11 +139,32 @@ export function BusEvents(args: {
    * Overlay
    */
   const overlay: t.StateEvents['overlay'] = {
-    $: rx.payload<t.StateOverlayEvent>($, 'app.state/overlay'),
+    req$: rx.payload<t.StateOverlayReqEvent>($, 'app.state/overlay:req'),
+    res$: rx.payload<t.StateOverlayResEvent>($, 'app.state/overlay:res'),
+    close$: rx.payload<t.StateOverlayCloseEvent>($, 'app.state/overlay:close'),
     async fire(def) {
+      const tx = slug();
+      const op = 'overaly';
+      const res$ = overlay.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.StateOverlayResEvent>(res$, { op });
+
       bus.fire({
-        type: 'app.state/overlay',
-        payload: { instance, def: def ?? undefined },
+        type: 'app.state/overlay:req',
+        payload: { tx, instance, def },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const errors = [res.error?.message ?? 'Failed'];
+      return { tx, instance, errors };
+    },
+
+    async close(options = {}) {
+      const { errors = [] } = options;
+      bus.fire({
+        type: 'app.state/overlay:close',
+        payload: { instance, errors },
       });
     },
   };
