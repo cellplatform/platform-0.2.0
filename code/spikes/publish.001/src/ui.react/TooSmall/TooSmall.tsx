@@ -1,12 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { Color, css, t } from '../common';
 
-import { css, FC, t } from '../common';
+type Pixels = number;
+type Color = string | number;
 
 export type TooSmallProps = {
+  backdropBlur?: Pixels;
+  backgroundColor?: Color;
   style?: t.CssValue;
 };
 
 export const TooSmall: React.FC<TooSmallProps> = (props) => {
+  const { backdropBlur = 18, backgroundColor = 0.3 } = props;
+
   /**
    * [Render]
    */
@@ -14,8 +19,8 @@ export const TooSmall: React.FC<TooSmallProps> = (props) => {
     base: css({
       Absolute: 0,
       Flex: 'center-center',
-      backgroundColor: 0.3,
-      backdropFilter: 'blur(18px)',
+      backgroundColor: Color.format(backgroundColor),
+      backdropFilter: `blur(${backdropBlur}px)`,
       userSelect: 'none',
     }),
     body: css({
