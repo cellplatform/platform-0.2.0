@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Color, COLORS, css, t } from '../common';
 
 const KEY = { DEV: 'dev' };
@@ -36,21 +38,26 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
       border: 'none',
       borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,
     }),
-    a: css({
+    link: css({
       color: COLORS.BLUE,
       textDecoration: 'none',
     }),
+    linkDimmed: {
+      color: Color.alpha(COLORS.DARK, 0.4),
+      ':hover': { color: COLORS.BLUE },
+    },
   };
 
-  const createItem = (i: number, address: string | undefined, title?: string) => {
+  const createItem = (i: number, address: string | undefined, title?: string, dimmed?: boolean) => {
     const url = new URL(window.location.href);
     const params = url.searchParams;
     if (address) params.set(KEY.DEV, address);
     if (!address) params.delete(KEY.DEV);
+
     return (
       <li key={i}>
-        <a href={url.href} {...styles.a}>
-          {address ?? title}
+        <a href={url.href} {...css(styles.link, dimmed ? styles.linkDimmed : undefined)}>
+          {title ?? address}
         </a>
       </li>
     );
@@ -66,8 +73,9 @@ export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
   const elList = (
     <ul {...styles.ul}>
       {Object.keys(imports).map((key, i) => createItem(i, key))}
-      {hasDevParam && <hr {...styles.hr} />}
-      {hasDevParam && createItem(-1, undefined, 'clear - ?dev')}
+      <hr {...styles.hr} />
+      {hasDevParam && createItem(-1, undefined, '?dev - remove param', true)}
+      {!hasDevParam && createItem(-1, 'true', '?dev - add param', true)}
     </ul>
   );
 
