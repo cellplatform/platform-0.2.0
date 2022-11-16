@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, rx, slug, State, t, Time, useSizeObserver, Vimeo } from '../common';
-import { Icons } from '../Icons.mjs';
+import { Color, css, State, t, useSizeObserver } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
-import { KeyboardMonitor } from './VideoDiagram.keyboard.mjs';
+import { VideoDiagramVimeo } from './VideoDiagram.Vimeo';
 
+/**
+ * TODO 🐷 TEMP
+ */
 const SAMPLE = {
-  video: 727951677, // TEMP 🐷
+  video: 727951677,
   diagram:
     'https://user-images.githubusercontent.com/185555/201820392-e66aa287-3df9-4d8f-a480-d15382f62c17.png',
 };
@@ -26,7 +28,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const state = State.useState(props.instance);
   const muted = state.current?.env.media.muted ?? false;
 
-  const [vimeoInstance, setVimeoInstance] = useState<t.VimeoInstance>();
+  const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const [percent, setPercent] = useState(0);
 
   const size = useSizeObserver();
@@ -38,26 +40,10 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const id = `foo.${slug()}`;
-    const bus = rx.bus();
-    const instance = { bus, id };
-    const vimeo = Vimeo.Events({ instance });
-    setVimeoInstance(instance);
-
-    const keyboard = KeyboardMonitor.listen({ vimeo });
-
-    vimeo.status.$.subscribe((e) => {
-      setPercent(e.percent);
-    });
-
-    // TEMP 🐷
-    Time.delay(100, () => vimeo.play.fire());
-
-    return () => {
-      vimeo.dispose();
-      keyboard.dispose();
-    };
-  }, []);
+    if (vimeo) {
+      vimeo.status.$.subscribe((e) => setPercent(e.percent));
+    }
+  }, [vimeo?.instance.id]);
 
   /**
    * [Render]
@@ -74,21 +60,9 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: size.ready ? 1 : 0,
       transition: 'opacity 150ms',
     }),
-    video: {
-      base: css({
-        Absolute: [null, null, 30, 30],
-        Flex: 'x-stretch-stretch',
-      }),
-      vimeo: css({
-        border: `solid 1px ${Color.alpha(COLORS.DARK, 0.3)}`,
-        boxShadow: `0 0px 16px 0 ${Color.alpha(COLORS.DARK, 0.06)}`,
-        borderRadius: 10,
-      }),
-      icons: css({
-        Absolute: [7, 7, null, null],
-        Flex: 'x-center-center',
-      }),
-    },
+    video: css({
+      Absolute: [null, null, 30, 30],
+    }),
     image: {
       base: css({
         Absolute: [100, 100, 150, 100],
@@ -103,21 +77,22 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         backgroundPosition: 'center center',
       }),
     },
+    progressBar: css({
+      Absolute: [null, 50, 0, 50],
+      opacity: dimmed ? 0 : 1,
+      transition: `opacity 300ms`,
+    }),
   };
 
-  const elVimeo = vimeoInstance && (
-    <div {...styles.video.base}>
-      <Vimeo
-        instance={vimeoInstance}
-        width={300}
-        muted={muted}
-        video={SAMPLE.video}
-        style={styles.video.vimeo}
-      />
-      <div {...styles.video.icons}>
-        <div>{muted && <Icons.Muted size={36} />}</div>
-      </div>
-    </div>
+  const elVimeo = (
+    <VideoDiagramVimeo
+      dimmed={dimmed}
+      muted={muted}
+      video={SAMPLE.video}
+      style={styles.video}
+      autoStart={true}
+      onReady={(vimeo) => setVimeo(vimeo)}
+    />
   );
 
   const elImage = (
@@ -126,16 +101,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     </div>
   );
 
-  const elProgressBar = (
-    <ProgressBar
-      percent={percent}
-      style={{
-        Absolute: [null, 50, 0, 50],
-        opacity: dimmed ? 0 : 1,
-        transition: `opacity 300ms`,
-      }}
-    />
-  );
+  const elProgressBar = vimeo && <ProgressBar percent={percent} style={styles.progressBar} />;
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
 
   return (
