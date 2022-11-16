@@ -1,10 +1,12 @@
-import { Spec } from '../../test.ui';
 import { VideoDiagram } from '.';
+import { Spec } from '../../test.ui';
 
 export default Spec.describe('VideoDiagram', (e) => {
   e.it('init', async (e) => {
+    const { env } = await import('../Root.env'); // NB: Setup global environment
+
     const ctx = Spec.ctx(e);
-    const el = <VideoDiagram style={{ Absolute: 0 }} />;
+    const el = <VideoDiagram instance={env.instance} style={{ Absolute: 0 }} />;
     ctx.size('fill').render(el);
   });
 });

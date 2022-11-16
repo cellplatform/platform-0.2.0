@@ -1,16 +1,10 @@
 import { t } from '../common';
 
 export const KeyboardMonitor = {
-  listen(args: { vimeo: t.VimeoEvents; setMuted: React.Dispatch<React.SetStateAction<boolean>> }) {
-    const { vimeo, setMuted } = args;
+  listen(args: { vimeo: t.VimeoEvents }) {
+    const { vimeo } = args;
 
-    const handler = async (e: KeyboardEvent) => {
-      // "M" key command - Mute|Unmute
-      if (e.key === 'm') {
-        e.preventDefault();
-        setMuted((prev) => !prev);
-      }
-    };
+    const handler = async (e: KeyboardEvent) => {};
 
     document.addEventListener('keydown', handler);
     return {

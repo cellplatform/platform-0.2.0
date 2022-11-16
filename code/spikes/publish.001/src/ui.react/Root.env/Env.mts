@@ -1,12 +1,8 @@
 import { rx, State, t } from '../common';
-import { KeyboardMonitor } from './Root.env.keyboard.mjs';
+import { KeyboardMonitor } from './Env.keyboard.mjs';
 
 const isTauri = typeof (window as any).__TAURI__ === 'object';
 const url = new URL(window.location.href);
-
-if (isTauri) {
-  url.searchParams.set('show', 'outline|doc,editor');
-}
 
 /**
  * TODO 🐷

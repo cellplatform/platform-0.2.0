@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Color, COLORS, css, t, rx, slug, Vimeo, Time, useSizeObserver } from '../common';
-import { KeyboardMonitor } from './VideoDiagram.keyboard.mjs';
+
+import { Color, COLORS, css, rx, slug, State, t, Time, useSizeObserver, Vimeo } from '../common';
 import { Icons } from '../Icons.mjs';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
+import { KeyboardMonitor } from './VideoDiagram.keyboard.mjs';
 
 const SAMPLE = {
   video: 727951677, // TEMP 🐷
@@ -12,17 +13,20 @@ const SAMPLE = {
 };
 
 export type VideoDiagramProps = {
-  isDimmed?: boolean;
+  instance: t.StateInstance;
+  dimmed?: boolean;
   minHeight?: number;
   minWidth?: number;
   style?: t.CssValue;
 };
 
 export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { isDimmed = false, minWidth = 550, minHeight = 550 } = props;
+  const { dimmed = false, minWidth = 550, minHeight = 550 } = props;
 
-  const [instance, setInstance] = useState<t.VimeoInstance>();
-  const [muted, setMuted] = useState(false);
+  const state = State.useState(props.instance);
+  const muted = state.current?.env.media.muted ?? false;
+
+  const [vimeoInstance, setVimeoInstance] = useState<t.VimeoInstance>();
   const [percent, setPercent] = useState(0);
 
   const size = useSizeObserver();
@@ -38,9 +42,9 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     const bus = rx.bus();
     const instance = { bus, id };
     const vimeo = Vimeo.Events({ instance });
-    setInstance(instance);
+    setVimeoInstance(instance);
 
-    const keyboard = KeyboardMonitor.listen({ vimeo, setMuted });
+    const keyboard = KeyboardMonitor.listen({ vimeo });
 
     vimeo.status.$.subscribe((e) => {
       setPercent(e.percent);
@@ -61,7 +65,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.format(isDimmed ? 0.1 : 1),
+      backgroundColor: Color.format(dimmed ? 0.1 : 1),
       transition: `background-color 300ms`,
       overflow: 'hidden',
     }),
@@ -88,7 +92,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     image: {
       base: css({
         Absolute: [100, 100, 150, 100],
-        opacity: isDimmed ? 0.4 : 1,
+        opacity: dimmed ? 0.4 : 1,
         transition: `opacity 300ms`,
       }),
       inner: css({
@@ -101,10 +105,10 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     },
   };
 
-  const elVimeo = instance && (
+  const elVimeo = vimeoInstance && (
     <div {...styles.video.base}>
       <Vimeo
-        instance={instance}
+        instance={vimeoInstance}
         width={300}
         muted={muted}
         video={SAMPLE.video}
@@ -127,7 +131,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       percent={percent}
       style={{
         Absolute: [null, 50, 0, 50],
-        opacity: isDimmed ? 0 : 1,
+        opacity: dimmed ? 0 : 1,
         transition: `opacity 300ms`,
       }}
     />

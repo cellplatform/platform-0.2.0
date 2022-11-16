@@ -9,7 +9,7 @@ export type Id = string;
 /**
  * React hook for working with the state bus.
  */
-export function useEvents(instance: t.StateInstance) {
+export function useStateEvents(instance: t.StateInstance) {
   const busid = rx.bus.instance(instance.bus);
   const [current, setCurrent] = useState<t.StateTree>();
 

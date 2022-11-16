@@ -6,16 +6,15 @@ type Revision = { number: number; message: string };
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState(initial: { location?: UrlString } = {}) {
+export function BusMemoryState(initial: { location?: UrlString; env?: t.StateEnvironment } = {}) {
   let _revision: Revision = { number: 0, message: 'initial' };
   let _current: t.StateTree = DEFAULTS.state;
 
   /**
    * Initial settings.
    */
-  if (initial.location) {
-    _current.location = { url: initial.location };
-  }
+  if (initial.location) _current.location = { url: initial.location };
+  if (initial.env) _current.env = initial.env;
 
   /**
    * API

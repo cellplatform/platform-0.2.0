@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Color, COLORS, css, State, t } from '../common';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
-import { env } from './Root.env.mjs';
+import { env } from '../Root.env';
 import { RootTitle } from './Root.Title';
 
 const { instance } = env;
@@ -22,7 +22,7 @@ export type RootProps = {
 
 export const Root: React.FC<RootProps> = (props) => {
   const { showEditor = false } = props;
-  const state = State.useEvents(instance);
+  const state = State.useState(instance);
 
   /**
    * Lifecycle.

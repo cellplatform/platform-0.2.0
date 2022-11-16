@@ -10,6 +10,7 @@ type MdString = string;
  * State Tree
  */
 export type StateTree = {
+  env: StateEnvironment;
   location?: StateLocation;
   markdown?: StateMarkdown;
   selection: StateSelection;
@@ -22,7 +23,10 @@ export type StateLocation = { url: DirPath };
 
 export type StateSelection = {
   index?: { path: DirPath };
-  editorPath?: string;
+};
+
+export type StateEnvironment = {
+  media: { muted?: boolean };
 };
 
 /**
@@ -33,4 +37,12 @@ export type OverlayDef = {
   title?: string;
   detail?: string;
   margin?: { top?: number; bottom?: number };
+};
+
+/**
+ * Subset of the state that is persisted to local-storage.
+ */
+export type LocalStorageState = {
+  selection: t.StateSelection;
+  env: StateEnvironment;
 };

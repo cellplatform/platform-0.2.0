@@ -9,8 +9,6 @@ import { Paths } from './Paths.mjs';
 
 type UrlString = string;
 
-export type LocalStorageState = { selection: t.StateSelection };
-
 /**
  * Event controller.
  */
@@ -24,9 +22,14 @@ export function BusController(args: {
   const bus = rx.busAsType<t.StateEvent>(args.instance.bus);
   const instance = args.instance.id || DEFAULTS.instance;
 
-  const state = BusMemoryState({ location: initial.location });
-  const localstorage = Storage.Local.object<LocalStorageState>('ui.state', {
+  const localstorage = Storage.Local.object<t.LocalStorageState>('ui.state', {
     selection: DEFAULTS.state.selection,
+    env: DEFAULTS.state.env,
+  });
+
+  const state = BusMemoryState({
+    location: initial.location,
+    env: localstorage.current.env,
   });
 
   const events = BusEvents({
@@ -163,8 +166,6 @@ export function BusController(args: {
     const next: t.StateSelection = {};
     if (path) next.index = { path };
 
-    next.editorPath = getEditorPath();
-
     if (!R.equals(next, state.current.selection)) {
       /**
        * Update local state.
@@ -175,12 +176,6 @@ export function BusController(args: {
         draft.selection = selection;
       });
       fireChanged([commit]);
-
-      /**
-       * Persist in local-storage.
-       */
-      const data: LocalStorageState = { selection: next ?? DEFAULTS.state.selection };
-      localstorage.set(data);
     }
   });
 
@@ -220,7 +215,25 @@ export function BusController(args: {
   });
 
   /**
-   * [LISTEN] Load document upon selection change.
+   * MONITOR: Save changes to local-storage.
+   */
+  const isLocalStorageChange = (p: t.StateChanged, n: t.StateChanged) => {
+    const prev = p.current;
+    const next = n.current;
+    if (prev.selection.index?.path !== next.selection.index?.path) return false;
+    if (!R.equals(prev.env, next.env)) return false;
+    return true;
+  };
+  events.changed.$.pipe(distinctUntilChanged(isLocalStorageChange)).subscribe(async (e) => {
+    const current = e.current;
+    localstorage.merge({
+      selection: current.selection,
+      env: current.env,
+    });
+  });
+
+  /**
+   * MONITOR: Load document upon selection change.
    */
   events.changed.$.pipe(
     distinctUntilChanged(
@@ -280,7 +293,9 @@ export function BusController(args: {
    * Initialize
    */
   const init = async () => {
-    events.select.fire(localstorage.get()?.selection.index?.path);
+    const local = localstorage.current;
+
+    events.select.fire(local.selection.index?.path);
 
     /**
      * TODO 🐷

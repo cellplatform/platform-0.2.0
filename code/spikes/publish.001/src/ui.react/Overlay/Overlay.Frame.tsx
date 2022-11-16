@@ -14,11 +14,9 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
   const outside = useClickOutside((e) => State.withEvents(instance, (e) => e.overlay.close()));
 
   const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
-
   const [isOverBody, setOverBody] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
   const overBody = (isOver: boolean) => () => setOverBody(isOver);
-
   const isOverGutter = isOver && !isOverBody;
 
   /**
@@ -50,7 +48,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
    * TODO 🐷
    * LOAD THIS from a the def/data pulled from the Markdown YAML.
    */
-  const elTmp = <VideoDiagram isDimmed={isOverGutter} style={{ Absolute: 0 }} />;
+  const elTmp = <VideoDiagram instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />;
 
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>

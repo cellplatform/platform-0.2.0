@@ -6,7 +6,7 @@ import { State, t } from '../common';
 
 export function useEditorChangeHandler(instance: t.StateInstance) {
   const change$Ref = useRef(new Subject<string>());
-  const state = State.useEvents(instance);
+  const state = State.useState(instance);
   const current = state.current;
 
   /**
