@@ -122,7 +122,16 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     </div>
   );
 
-  const elProgressBar = <ProgressBar percent={percent} style={{ Absolute: [null, 50, 0, 50] }} />;
+  const elProgressBar = (
+    <ProgressBar
+      percent={percent}
+      style={{
+        Absolute: [null, 50, 0, 50],
+        opacity: isDimmed ? 0 : 1,
+        transition: `opacity 300ms`,
+      }}
+    />
+  );
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
 
   return (
