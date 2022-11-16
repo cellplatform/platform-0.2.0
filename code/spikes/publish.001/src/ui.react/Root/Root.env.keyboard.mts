@@ -1,11 +1,8 @@
-import { rx, State, t, BundlePaths, Pkg } from '../common';
+import { BundlePaths, Pkg, t } from '../common';
 
 export const KeyboardMonitor = {
   listen(state: t.StateEvents) {
-    /**
-     * Keyboard events
-     */
-    document.addEventListener('keydown', async (e) => {
+    const handler = async (e: KeyboardEvent) => {
       // CMD+S:
       if (e.key === 's' && e.metaKey) {
         // Cancel "save" HTML page (default browser action).
@@ -27,7 +24,12 @@ export const KeyboardMonitor = {
          */
         await logOutput(state);
       }
-    });
+    };
+
+    document.addEventListener('keydown', handler);
+    return {
+      dispose: () => document.removeEventListener('keydown', handler),
+    };
   },
 };
 

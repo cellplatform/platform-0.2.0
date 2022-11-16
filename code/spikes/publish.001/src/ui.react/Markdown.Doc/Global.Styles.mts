@@ -1,6 +1,10 @@
 import { Color, COLORS } from '../common';
 
-const BASE = { FONT_SIZE: 18 };
+export const DEFAULT = {
+  FONT_SIZE: 18,
+  COLOR: Color.lighten(COLORS.DARK, 10),
+  HEADING_COLOR: Color.lighten(COLORS.DARK, 15),
+};
 
 export const DocStyles = {
   /**
@@ -11,16 +15,18 @@ export const DocStyles = {
     letterSpacing: `-0.01em`,
   },
   'h1:first-of-type': { marginBottom: 60 },
+  'h1, h2': { color: DEFAULT.HEADING_COLOR },
 
   /**
    * Paragraphs
    * See: /component/<Doc.Paragraph>
    */
   p: {
-    fontSize: BASE.FONT_SIZE,
+    fontSize: DEFAULT.FONT_SIZE,
     lineHeight: '1.5em',
     marginBlockStart: '2em',
     marginBlockEnd: '2em',
+    color: DEFAULT.COLOR,
   },
   'p del': { opacity: 0.3 },
 
@@ -41,7 +47,7 @@ export const DocStyles = {
     marginBottom: '1.1em',
   },
   'ul,ol': {
-    fontSize: BASE.FONT_SIZE,
+    fontSize: DEFAULT.FONT_SIZE,
     margin: 0,
   },
   li: { marginBottom: '0.6em' },
@@ -59,7 +65,7 @@ export const DocStyles = {
   'p code': {
     fontFamily: 'monospace',
     fontWeight: 600,
-    fontSize: BASE.FONT_SIZE - 2,
+    fontSize: DEFAULT.FONT_SIZE - 2,
     paddingLeft: 5,
     paddingRight: 5,
     backgroundColor: Color.alpha(COLORS.DARK, 0.06),

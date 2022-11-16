@@ -3,7 +3,7 @@
  */
 export { css, Color, Style } from 'sys.util.css';
 export { Vimeo } from 'sys.ui.react.video';
-export { useClickOutside, useClickInside } from 'sys.util.react';
+export { useClickOutside, useClickInside, useSizeObserver } from 'sys.util.react';
 
 /**
  * @local

@@ -15,7 +15,7 @@ const CLASS = DEFAULTS.MD.CLASS;
 const View: React.FC<MarkdownDocProps> = (props) => {
   const { instance, markdown, renderer } = props;
   const { safeBlocks, isEmpty } = useBlockRenderer({ instance, markdown, renderer });
-  useGlobalStyles();
+  const globalStyles = useGlobalStyles();
 
   /**
    * [Render]
@@ -25,6 +25,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       position: 'relative',
       Scroll: props.scroll,
       width: DEFAULTS.MD.DOC.width,
+      color: globalStyles.DocStyles.p.color,
       paddingBottom: 80,
     }),
 

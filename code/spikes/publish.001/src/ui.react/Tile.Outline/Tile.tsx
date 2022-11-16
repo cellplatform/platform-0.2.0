@@ -120,7 +120,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
 
       selected: css({
         color: COLORS.WHITE,
-        background: Color.lighten(COLORS.DARK, 5),
+        background: Color.lighten(COLORS.DARK, 15),
         ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 15) },
       }),
     },

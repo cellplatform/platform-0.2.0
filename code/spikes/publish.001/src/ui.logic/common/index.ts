@@ -1,18 +1,18 @@
-import { Text } from 'sys.text';
 import type * as t from './types.mjs';
-export { t, Text };
-
-export const Processor = Text.Markdown.processor();
+import { Text } from 'sys.text';
+export { t };
 
 /**
  * @external
  */
-import { clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight } from 'ramda';
-export const R = { clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight };
+import { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight } from 'ramda';
+export const R = { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight };
 
 /**
  * @system
  */
+export const Processor = Text.Markdown.processor();
+export { Text };
 export { rx, slug, Path, Time, Is } from 'sys.util';
 export { FC } from 'sys.util.react';
 export { Patch, Json } from 'sys.data.json';
