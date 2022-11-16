@@ -3,6 +3,18 @@ import { t } from '../common/index.mjs';
 
 type E = HTMLElement;
 
+const RECT: t.DomRect = {
+  x: -1,
+  y: -1,
+  width: -1,
+  height: -1,
+  top: -1,
+  right: -1,
+  bottom: -1,
+  left: -1,
+};
+export const DEFAULT = { RECT };
+
 type Args<T extends E> = { ref?: RefObject<T> };
 
 /**
@@ -18,7 +30,7 @@ export function useSizeObserver<T extends E = HTMLDivElement>(args?: Args<T>) {
   const ref = args?.ref ?? useRef<T>(null);
   const ready = Boolean(ref.current);
 
-  const [rect, setRect] = useState<t.DomRect>();
+  const [rect, setRect] = useState<t.DomRect>({ ...DEFAULT.RECT });
 
   /**
    * Lifecycle
