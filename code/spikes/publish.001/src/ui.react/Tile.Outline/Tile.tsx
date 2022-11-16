@@ -53,9 +53,15 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
    */
   const styles = {
     base: css({
-      marginTop: 30,
       ':first-child': { marginTop: 0 },
+      marginTop: 30,
       Flex: 'x-stretch-stretch',
+    }),
+
+    children: css({
+      flex: 2,
+      Flex: 'y-stretch-stretch',
+      width: widths.child,
     }),
 
     block: {
@@ -64,7 +70,6 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         position: 'relative',
         boxSizing: 'border-box',
         cursor: 'default',
-        width: widths.root,
       }),
       root: css({
         position: 'relative',
@@ -73,6 +78,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         paddingRight: 60,
         borderRadius: 10,
         fontSize: 24,
+        width: widths.root,
       }),
       title: css({}),
       child: css({
@@ -83,7 +89,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         marginLeft: 8,
         borderRadius: 8,
         overflow: 'hidden',
-        width: widths.child,
+        lineHeight: '1.4em',
         Flex: 'y-start-center',
       }),
 
@@ -118,11 +124,6 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         ':hover': { backgroundColor: Color.lighten(COLORS.DARK, 15) },
       }),
     },
-
-    children: css({
-      flex: 2,
-      Flex: 'y-stretch-stretch',
-    }),
   };
 
   const elRootBlock = (
@@ -139,7 +140,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
   );
 
   const elChildren = children.length > 0 && (
-    <div {...styles.children}>
+    <div {...styles.children} className={'children'}>
       {children.map((child, i) => {
         const { depth, text } = child;
 
@@ -162,6 +163,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
         return (
           <div
             {...css(styles.block.base, styles.block.child, colors, selected)}
+            className={'child-block'}
             key={i}
             onClick={onChildClick}
           >

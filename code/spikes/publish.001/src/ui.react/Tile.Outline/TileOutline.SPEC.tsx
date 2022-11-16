@@ -29,7 +29,7 @@ export default Spec.describe('Spinner', (e) => {
         markdown={markdown}
         widths={{ root: 250, child: 300 }}
         onClick={(e) => {
-          // console.log('e', e);
+          console.log('⚡️ TileOutline.onClick:', e);
         }}
         renderInner={(e) => {
           const isRoot = R.equals(e.node, md.mdast.children[0]);
