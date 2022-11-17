@@ -24,6 +24,7 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const isPlayComplete = percent === 1;
+  const isPlayerVisible = isPlaying || !isPlayComplete;
 
   /**
    * Lifecycle
@@ -101,7 +102,7 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
     }),
     player: css({
       pointerEvents: isPlaying ? 'all' : 'none',
-      opacity: isPlaying || !isPlayComplete ? 1 : 0,
+      opacity: isPlayerVisible ? 1 : 0,
       transition: `opacity 300ms`,
     }),
     vimeo: css({
@@ -120,6 +121,8 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
       backdropFilter: `blur(8)`,
       borderRadius: 10,
       border: `dashed 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
+      opacity: isPlayerVisible ? 0 : 1,
+      transition: `opacity 300ms`,
       display: 'flex',
     }),
   };

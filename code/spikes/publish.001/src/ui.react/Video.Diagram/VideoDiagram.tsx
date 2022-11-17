@@ -70,9 +70,6 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: size.ready ? 1 : 0,
       transition: 'opacity 150ms',
     }),
-    video: css({
-      Absolute: [null, null, 30, 30],
-    }),
     image: {
       base: css({
         Absolute: [100, 100, 150, 100],
@@ -89,8 +86,12 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         backgroundPosition: 'center center',
       }),
     },
+
+    video: css({
+      Absolute: [null, null, 30, 30],
+    }),
     progressBar: css({
-      Absolute: [null, 50, 0, 50],
+      Absolute: [null, 45, 0, 45],
       opacity: dimmed ? 0 : 1,
       transition: `opacity 300ms`,
     }),
