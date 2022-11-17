@@ -7,11 +7,13 @@ export type ProgressBarClickHandlerArgs = { progress: Percent };
 
 export type ProgressBarProps = {
   percent?: number;
+  isPlaying?: boolean;
   style?: t.CssValue;
   onClick?: ProgressBarClickHandler;
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
+  const { isPlaying = false } = props;
   const percent = R.clamp(0, 1, props.percent ?? 0);
 
   const size = useSizeObserver();
@@ -56,7 +58,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       width: `${percent * 100}%`,
       height: '100%',
       minWidth: 10,
-      backgroundColor: isOver ? COLORS.RED : Color.alpha(COLORS.DARK, 0.3),
+      backgroundColor: isOver || !isPlaying ? COLORS.RED : Color.alpha(COLORS.DARK, 0.3),
       transition: `background-color 200ms`,
     }),
   };

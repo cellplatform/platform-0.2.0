@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, rx, slug, t, Vimeo, KeyListener, Center } from '../common';
+import { Center, Color, COLORS, css, rx, slug, t, Vimeo } from '../common';
 import { Icons } from '../Icons.mjs';
+import { VideoKeyboard } from './Keyboard.mjs';
 
 export type VideoDiagramVimeoProps = {
   video: t.VimeoId;
@@ -10,6 +11,7 @@ export type VideoDiagramVimeoProps = {
   autoStart?: boolean;
   style?: t.CssValue;
   onReady?: (e: t.VimeoEvents) => void;
+  onPlayingChange?: (e: { isPlaying: boolean; isComplete: boolean; percent: number }) => void;
 };
 
 export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
@@ -44,7 +46,13 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
      * Playing.
      */
     vimeo.status.$.subscribe((e) => setPercent(e.percent));
-    vimeo.status.playing$.subscribe((e) => setIsPlaying(e.playing));
+    vimeo.status.playing$.subscribe((e) => {
+      const percent = e.percent;
+      const isPlaying = e.playing;
+      const isComplete = e.percent === 1;
+      setIsPlaying(e.playing);
+      props.onPlayingChange?.({ percent, isPlaying, isComplete });
+    });
 
     /**
      * TODO 🐷
@@ -55,17 +63,7 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
     /**
      * Keyboard Behavior
      */
-    const keydown = KeyListener.keydown(async (e) => {
-      if (e.key === ' ') {
-        const info = await getCurrent();
-        const isPlaying = info?.playing;
-        if (isPlaying) {
-          vimeo.pause.fire();
-        } else {
-          vimeo.play.fire();
-        }
-      }
-    });
+    const keyboard = VideoKeyboard.listen(vimeo);
 
     /**
      * Start.
@@ -77,7 +75,7 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
      */
     return () => {
       vimeo.dispose();
-      keydown.dispose();
+      keyboard.dispose();
     };
   }, []);
 

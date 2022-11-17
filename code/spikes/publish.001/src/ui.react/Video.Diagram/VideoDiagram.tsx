@@ -28,6 +28,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const state = State.useState(props.instance);
   const muted = state.current?.env.media.muted ?? false;
 
+  const [isPlaying, setIsPlaying] = useState(false);
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const [percent, setPercent] = useState(0);
 
@@ -103,6 +104,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       style={styles.video}
       autoStart={true}
       onReady={(vimeo) => setVimeo(vimeo)}
+      onPlayingChange={(e) => setIsPlaying(e.isPlaying)}
     />
   );
 
@@ -117,6 +119,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     <ProgressBar
       percent={percent}
       style={styles.progressBar}
+      isPlaying={isPlaying}
       onClick={(e) => jumpToPercent(e.progress)}
     />
   );
