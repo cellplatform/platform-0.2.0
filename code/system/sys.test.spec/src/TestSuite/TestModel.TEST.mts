@@ -115,7 +115,7 @@ describe('TestModel', () => {
       expect(res.id).to.eql(test.id);
       expect(res.ok).to.eql(true);
       expect(res.timeout).to.eql(DEFAULT.TIMEOUT);
-      expect(res.elapsed).to.greaterThan(49);
+      expect(res.elapsed).to.greaterThan(40); // NB: 10ms window (around 50ms) to prevent test fragility.
       expect(res.error).to.eql(undefined);
     });
 
