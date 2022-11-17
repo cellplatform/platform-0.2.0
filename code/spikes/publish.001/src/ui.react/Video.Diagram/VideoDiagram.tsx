@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Color, css, State, t, useSizeObserver } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
-import { VideoDiagramVimeo } from './VideoDiagram.Vimeo';
+import { VideoDiagramVimeo } from './Vimeo';
 
 /**
  * TODO 🐷 TEMP
