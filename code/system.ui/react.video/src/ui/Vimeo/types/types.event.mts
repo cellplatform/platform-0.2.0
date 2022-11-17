@@ -44,6 +44,7 @@ export type VimeoEvents = t.Disposable & {
     req$: t.Observable<VimeoPlayReq>;
     res$: t.Observable<VimeoPlayRes>;
     fire(options?: { timeout?: Milliseconds }): Promise<VimeoPlayRes>;
+    toggle(): Promise<{ isPlaying: boolean }>;
   };
 
   pause: {
@@ -56,6 +57,7 @@ export type VimeoEvents = t.Disposable & {
     req$: t.Observable<VimeoSeekReq>;
     res$: t.Observable<VimeoSeekRes>;
     fire(seconds: Seconds, options?: { timeout?: Milliseconds }): Promise<VimeoSeekRes>;
+    offset(by: Seconds): Promise<{ seconds: number }>;
   };
 };
 

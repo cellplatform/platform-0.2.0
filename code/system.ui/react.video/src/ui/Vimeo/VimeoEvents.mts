@@ -1,7 +1,7 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
-import { catchError, filter, take, distinctUntilChanged } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, filter, take } from 'rxjs/operators';
 
-import { rx, slug, t } from './common.mjs';
+import { R, rx, slug, t } from './common.mjs';
 
 /**
  * Event API.
@@ -86,6 +86,13 @@ function Events(args: {
       const res = await first;
       return typeof res === 'string' ? { tx, instance, error: res } : res;
     },
+    async toggle() {
+      const info = (await status.get()).status;
+      const isPlaying = info?.playing ?? false;
+      if (isPlaying) pause.fire();
+      if (!isPlaying) play.fire();
+      return { isPlaying };
+    },
   };
 
   const pause: t.VimeoEvents['pause'] = {
@@ -123,6 +130,13 @@ function Events(args: {
       bus.fire({ type: 'Vimeo/seek:req', payload: { tx, instance, seconds } });
       const res = await first;
       return typeof res === 'string' ? { tx, instance, error: res } : res;
+    },
+    async offset(by) {
+      const info = (await status.get()).status;
+      if (!info) return { seconds: 0 };
+      const seconds = R.clamp(0, info.duration, info.seconds + by);
+      await seek.fire(seconds);
+      return { seconds };
     },
   };
 
