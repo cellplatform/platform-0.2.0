@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import PuffLoader from 'react-spinners/PuffLoader';
 
 import { COLORS, css, FC, t } from '../common';
@@ -12,6 +13,7 @@ const View: React.FC<SpinnerProps> = (props) => {
   const { size = 48 } = props;
   const isLoading = true;
   const color = COLORS.DARK;
+  const cssOverride: CSSProperties = {};
 
   /**
    * [Render]
@@ -27,7 +29,7 @@ const View: React.FC<SpinnerProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.inner}>
-        <PuffLoader color={color} loading={isLoading} size={size} />
+        <PuffLoader color={color} loading={isLoading} size={size} cssOverride={cssOverride} />
       </div>
     </div>
   );
