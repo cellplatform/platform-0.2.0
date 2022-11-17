@@ -15,7 +15,7 @@ export type MarkdownLayoutProps = {
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
-  const { instance } = props;
+  const { instance, overlay } = props;
 
   /**
    * [Render]
@@ -53,11 +53,15 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
       }),
     },
 
-    tooSmall: css({
-      '@media (min-width: 1100px)': { display: 'none' },
-      pointerEvents: 'none',
-      Absolute: 0,
-    }),
+    overlay: {
+      base: css({}),
+      frame: css({ Absolute: 0 }),
+      tooSmall: css({
+        '@media (min-width: 1100px)': { display: 'none' },
+        pointerEvents: 'none',
+        Absolute: 0,
+      }),
+    },
   };
 
   const elBody = (
@@ -77,9 +81,9 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
 
   const elContent = <div {...styles.content}>{elBody}</div>;
   const elOverlays = (
-    <div>
-      {props.overlay && <OverlayFrame instance={instance} style={{ Absolute: 0 }} />}
-      <TooSmall style={styles.tooSmall} />
+    <div {...styles.overlay.base}>
+      {overlay && <OverlayFrame def={overlay} instance={instance} style={styles.overlay.frame} />}
+      <TooSmall style={styles.overlay.tooSmall} />
     </div>
   );
 

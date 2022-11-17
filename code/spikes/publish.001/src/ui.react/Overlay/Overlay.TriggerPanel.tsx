@@ -117,8 +117,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const elBody = (
     <div {...styles.body}>
       <Icons.Support
-        style={styles.iconWatermark}
         size={620}
+        style={styles.iconWatermark}
         color={Color.alpha(COLORS.DARK, 0.04)}
       />
       <div {...styles.html} dangerouslySetInnerHTML={{ __html: detailHtml }} />

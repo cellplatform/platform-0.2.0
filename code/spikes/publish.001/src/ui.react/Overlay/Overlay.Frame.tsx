@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
-import { Color, css, State, t, useClickOutside } from '../common';
+import { Color, css, State, t, useClickOutside, Spinner } from '../common';
 import { VideoDiagram } from '../Video.Diagram';
+import { useOverlayDef } from './useOverlayDef.mjs';
 
 export type OverlayFrameProps = {
   instance: t.StateInstance;
+  def: t.OverlayDef;
   style?: t.CssValue;
 };
 
@@ -12,6 +14,8 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
   const { instance } = props;
 
   const outside = useClickOutside((e) => State.withEvents(instance, (e) => e.overlay.close()));
+
+  const def = useOverlayDef(instance, props.def);
 
   const [isOver, setOver] = useState(false);
   const [isOverBody, setOverBody] = useState(false);
@@ -44,11 +48,19 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
     }),
   };
 
+  const elSpinner = !def.ready && (
+    <Spinner.Center style={{ Absolute: 0 }}>
+      <Spinner size={64} />
+    </Spinner.Center>
+  );
+
   /**
    * TODO 🐷
    * LOAD THIS from a the def/data pulled from the Markdown YAML.
    */
-  const elTmp = <VideoDiagram instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />;
+  const elTmp = def.ready && (
+    <VideoDiagram instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />
+  );
 
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
@@ -59,6 +71,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
         onMouseLeave={overBody(false)}
       >
         {elTmp}
+        {elSpinner}
       </div>
     </div>
   );

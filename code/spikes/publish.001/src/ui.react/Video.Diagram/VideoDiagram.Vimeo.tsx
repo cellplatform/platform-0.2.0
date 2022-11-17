@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, rx, slug, t, Vimeo } from '../common';
+import { Color, COLORS, css, rx, slug, t, Vimeo, KeyListener } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type VideoDiagramVimeoProps = {
@@ -36,7 +36,16 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
       if (props.autoStart) vimeo.play.fire();
     });
 
-    return () => vimeo.dispose();
+    const keydown = KeyListener.keydown((e) => {
+      if (e.key === ' ') {
+        console.log('space : start/stop');
+      }
+    });
+
+    return () => {
+      vimeo.dispose();
+      keydown.dispose();
+    };
   }, []);
 
   if (!instance || !props.video) return null;

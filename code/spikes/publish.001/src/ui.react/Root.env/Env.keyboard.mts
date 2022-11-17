@@ -1,9 +1,9 @@
-import { State, t } from '../common';
+import { KeyListener, State, t } from '../common';
 import { EnvLog } from './Env.log.mjs';
 
 export const KeyboardMonitor = {
   listen(state: t.StateEvents) {
-    const handler = async (e: KeyboardEvent) => {
+    return KeyListener.keydown(async (e) => {
       const handled = () => e.preventDefault();
 
       // CMD+S:
@@ -26,14 +26,6 @@ export const KeyboardMonitor = {
       if (e.key === 'm') {
         if (!State.Is.inputSelected) await State.Change.toggleMute(state);
       }
-    };
-
-    /**
-     * Lifecycle.
-     */
-    document.addEventListener('keydown', handler);
-    return {
-      dispose: () => document.removeEventListener('keydown', handler),
-    };
+    });
   },
 };

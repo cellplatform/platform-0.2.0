@@ -33,10 +33,10 @@ export type StateEnvironment = {
  * Popup overlay
  */
 export type OverlayDef = {
-  source: IndexPath;
   title?: string;
   detail?: string;
   margin?: { top?: number; bottom?: number };
+  source: IndexPath;
 };
 
 /**
