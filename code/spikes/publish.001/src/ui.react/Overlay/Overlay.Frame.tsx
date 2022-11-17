@@ -50,7 +50,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
 
   const elSpinner = !def.ready && (
     <Spinner.Center style={{ Absolute: 0 }}>
-      <Spinner size={64} />
+      <Spinner size={54} />
     </Spinner.Center>
   );
 
