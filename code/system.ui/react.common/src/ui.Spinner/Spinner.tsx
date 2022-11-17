@@ -1,15 +1,14 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common';
-
-// import ClipLoader from 'react-spinners/ClipLoader';
 import PuffLoader from 'react-spinners/PuffLoader';
+
+import { COLORS, css, FC, t } from '../common';
+import { Center } from '../ui.Center';
 
 export type SpinnerProps = {
   size?: number;
   style?: t.CssValue;
 };
 
-export const Spinner: React.FC<SpinnerProps> = (props) => {
+const View: React.FC<SpinnerProps> = (props) => {
   const { size = 48 } = props;
   const isLoading = true;
   const color = COLORS.DARK;
@@ -18,10 +17,7 @@ export const Spinner: React.FC<SpinnerProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    base: css({ position: 'relative' }),
     inner: css({
       position: 'relative',
       top: -5,
@@ -31,13 +27,21 @@ export const Spinner: React.FC<SpinnerProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.inner}>
-        <PuffLoader
-          //
-          color={color}
-          loading={isLoading}
-          size={size}
-        />
+        <PuffLoader color={color} loading={isLoading} size={size} />
       </div>
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  Center: typeof Center;
+};
+
+export const Spinner = FC.decorate<SpinnerProps, Fields>(
+  View,
+  { Center },
+  { displayName: 'Spinner' },
+);
