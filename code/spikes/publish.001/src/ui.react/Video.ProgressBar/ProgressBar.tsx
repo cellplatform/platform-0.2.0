@@ -1,16 +1,34 @@
 import { useState } from 'react';
-import { Color, COLORS, css, R, t } from '../common';
+import { Color, COLORS, css, R, t, useSizeObserver, Value } from '../common';
+
+type Percent = number; // 0..1
+export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
+export type ProgressBarClickHandlerArgs = { progress: Percent };
 
 export type ProgressBarProps = {
   percent?: number;
   style?: t.CssValue;
+  onClick?: ProgressBarClickHandler;
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
   const percent = R.clamp(0, 1, props.percent ?? 0);
 
+  const size = useSizeObserver();
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
+
+  /**
+   * Handlers
+   */
+  const handleMouseDown: React.MouseEventHandler = async (e) => {
+    const width = size.rect.width;
+    if (!size.ready || width <= 0) return;
+
+    const { offsetX } = e.nativeEvent;
+    const progress: Percent = Value.round(R.clamp(0, 1, offsetX / width), 3);
+    props.onClick?.({ progress });
+  };
 
   /**
    * [Render]
@@ -44,7 +62,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
+    <div
+      ref={size.ref}
+      {...css(styles.base, props.style)}
+      onMouseEnter={over(true)}
+      onMouseLeave={over(false)}
+      onMouseDown={handleMouseDown}
+    >
       <div {...styles.groove}>
         <div {...styles.thumb} />
       </div>

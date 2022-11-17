@@ -37,13 +37,22 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     : size.rect.width < minHeight || size.rect.height < minWidth;
 
   /**
-   * Lifecycle
+   * [Lifecycle]
    */
   useEffect(() => {
-    if (vimeo) {
-      vimeo.status.$.subscribe((e) => setPercent(e.percent));
-    }
+    vimeo?.status.$.subscribe((e) => setPercent(e.percent));
   }, [vimeo?.instance.id]);
+
+  /**
+   * [Handlers]
+   */
+
+  const jumpToPercent = async (percent: number) => {
+    if (!vimeo) return;
+    const duration = (await vimeo.status.get()).status?.duration ?? 0;
+    const secs = duration * percent;
+    vimeo.seek.fire(secs);
+  };
 
   /**
    * [Render]
@@ -103,8 +112,14 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     </div>
   );
 
-  const elProgressBar = vimeo && <ProgressBar percent={percent} style={styles.progressBar} />;
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
+  const elProgressBar = vimeo && (
+    <ProgressBar
+      percent={percent}
+      style={styles.progressBar}
+      onClick={(e) => jumpToPercent(e.progress)}
+    />
+  );
 
   return (
     <div {...css(styles.base, props.style)} ref={size.ref}>
