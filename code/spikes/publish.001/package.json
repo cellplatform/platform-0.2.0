@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist/web && serve",
+    "serve": "cd dist.deploy/.latest/app && serve --config vercel.json",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
@@ -19,7 +19,9 @@
     "sys.fs.indexeddb": "0.0.0",
     "sys.util": "0.0.0",
     "@monaco-editor/react": "^4.4.6",
-    "monaco-editor": "^0.34.1"
+    "monaco-editor": "^0.34.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -28,8 +30,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.98846bb2.js",
-    "./web": "./dist/web/lib/index.98846bb2.js"
+    ".": "./dist/web/lib/index.a6f8f1ee.js",
+    "./web": "./dist/web/lib/index.a6f8f1ee.js"
   },
   "typesVersions": {
     "*": {
