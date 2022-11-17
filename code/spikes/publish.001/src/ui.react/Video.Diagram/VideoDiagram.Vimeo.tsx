@@ -27,21 +27,27 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
     const vimeo = Vimeo.Events({ instance });
     setInstance(instance);
 
-    vimeo.status.loaded$.subscribe((e) => {
-      /**
-       * READY
-       */
-      setOpacity(1);
-      props.onReady?.(vimeo);
-      if (props.autoStart) vimeo.play.fire();
-    });
+    const getCurrent = async () => (await vimeo.status.get()).status;
 
-    const keydown = KeyListener.keydown((e) => {
+    const onReady = () => {
+      setOpacity(1);
+      if (props.autoStart) vimeo.play.fire();
+      props.onReady?.(vimeo);
+    };
+
+    const keydown = KeyListener.keydown(async (e) => {
       if (e.key === ' ') {
-        console.log('space : start/stop');
+        const current = await getCurrent();
+        const isPlaying = current?.playing;
+        if (isPlaying) {
+          vimeo.pause.fire();
+        } else {
+          vimeo.play.fire();
+        }
       }
     });
 
+    vimeo.status.loaded$.subscribe((e) => onReady());
     return () => {
       vimeo.dispose();
       keydown.dispose();
