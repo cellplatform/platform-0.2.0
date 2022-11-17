@@ -13,8 +13,10 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { margin = {} } = def;
 
   const [detailHtml, setDetailHtml] = useState('');
+  const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
+  const down = (isDown: boolean) => () => setDown(isDown);
 
   /**
    * Handlers
@@ -53,6 +55,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       borderColor: `${Color.alpha(COLORS.DARK, isOver ? 0.2 : 0.1)}`,
       boxShadow: `0 0 10px 0 ${Color.alpha(COLORS.DARK, isOver ? 0.02 : 0)}`,
       transition: `border-color 500ms, box-shadow 300ms`,
+
+      transform: `translateY(${isDown ? 1 : 0}px)`,
     }),
     header: css({
       userSelect: 'none',
@@ -82,7 +86,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       fontWeight: 600,
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       color: COLORS.WHITE,
-      backgroundColor: COLORS.BLUE,
+      background: `linear-gradient(180deg, #4C94FF 100%, #1761E4 0%)`,
+      boxShadow: isOver ? `0 2px 4px 0 ${Color.format(-0.05)}` : undefined,
     }),
     body: css({
       flex: 1,
@@ -131,6 +136,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       onClick={handleClick}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
+      onMouseDown={down(true)}
+      onMouseUp={down(false)}
     >
       {elHeader}
       {elBody}
