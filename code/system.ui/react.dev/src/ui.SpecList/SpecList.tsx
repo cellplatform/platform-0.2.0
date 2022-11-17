@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react';
-
 import { Color, COLORS, css, t } from '../common';
 
 const KEY = { DEV: 'dev' };
 
 export type Imports = { [namespace: string]: () => Promise<any> };
 
-export type SpecIndexProps = {
+export type SpecListProps = {
   title?: string;
   version?: string;
   imports?: Imports;
   style?: t.CssValue;
 };
 
-export const SpecIndex: React.FC<SpecIndexProps> = (props) => {
+export const SpecList: React.FC<SpecListProps> = (props) => {
   const { imports = {} } = props;
   const url = new URL(window.location.href);
   const hasDevParam = url.searchParams.has(KEY.DEV);

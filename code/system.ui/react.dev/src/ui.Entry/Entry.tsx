@@ -1,5 +1,5 @@
 import { t } from '../common';
-import { SpecIndex } from '../ui.SpecIndex';
+import { SpecList } from '../ui.SpecList';
 import { Harness } from '../ui.Harness';
 
 const KEY = { DEV: 'dev' };
@@ -21,7 +21,7 @@ export const Entry = {
     if (spec) {
       return <Harness spec={spec} style={style} />;
     } else {
-      return <SpecIndex title={pkg.name} version={pkg.version} imports={specs} style={style} />;
+      return <SpecList title={pkg.name} version={pkg.version} imports={specs} style={style} />;
     }
   },
 };
