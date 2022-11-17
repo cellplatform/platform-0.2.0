@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { takeUntil } from 'rxjs/operators';
 
-import { rx, t, Test } from '../common';
-import { Context } from '../Spec';
+import { rx, t, Test, Context } from '../common';
 
 export function useSpecRunner(bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();

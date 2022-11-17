@@ -3,9 +3,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { rx, slug, t } from '../common';
 
-type Id = string;
-type Margin = number | [number, number] | [number, number, number, number];
-
 /**
  * Information object passed as the {ctx} to tests.
  */
@@ -69,7 +66,7 @@ export const Context = {
  */
 
 const Wrangle = {
-  margin(input?: Margin, defaultMargin?: number): [number, number, number, number] {
+  margin(input?: t.Margin, defaultMargin?: number): [number, number, number, number] {
     if (input === undefined) return Wrangle.asMargin(defaultMargin ?? 0);
     if (typeof input === 'number') return Wrangle.asMargin(input);
     if (input.length === 2) return [input[0], input[1], input[0], input[1]];

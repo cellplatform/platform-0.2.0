@@ -1,6 +1,6 @@
 import { t } from '../common';
-import { SpecList } from '../ui.SpecList';
-import { Harness } from '../ui.Harness';
+import { SpecList } from '../SpecList';
+import { Harness } from '../Harness';
 
 const KEY = { DEV: 'dev' };
 

@@ -1,6 +1,6 @@
-import { Harness } from './ui.Harness';
 import { Spec } from './Spec';
-import { Entry } from './ui.Entry';
+import { Harness } from './ui/Harness';
+import { Entry } from './ui/Entry';
 
 const { render } = Entry;
 
