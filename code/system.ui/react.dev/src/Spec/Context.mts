@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { rx, slug, t } from '../common';
+import { rx, slug, t, Margin } from '../common';
 
 /**
  * Information object passed as the {ctx} to tests.
@@ -27,7 +27,7 @@ export const Context = {
           _props.size = { mode: 'center', width: args[0], height: args[1] };
         }
         if (args[0] === 'fill') {
-          const margin = Wrangle.margin(args[1] ?? 50);
+          const margin = Margin.wrangle(args[1] ?? 50);
           _props.size = { mode: 'fill', margin };
         }
 
@@ -64,16 +64,3 @@ export const Context = {
 /**
  * Helpers
  */
-
-const Wrangle = {
-  margin(input?: t.Margin, defaultMargin?: number): [number, number, number, number] {
-    if (input === undefined) return Wrangle.asMargin(defaultMargin ?? 0);
-    if (typeof input === 'number') return Wrangle.asMargin(input);
-    if (input.length === 2) return [input[0], input[1], input[0], input[1]];
-    return [input[0], input[1], input[2], input[3]];
-  },
-
-  asMargin(value: number): [number, number, number, number] {
-    return [value, value, value, value];
-  },
-};

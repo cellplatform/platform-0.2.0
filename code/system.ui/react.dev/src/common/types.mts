@@ -19,6 +19,5 @@ export type {
  */
 export * from '../types.mjs';
 
-type Spacing = number | [number, number] | [number, number, number, number];
-export type Margin = Spacing;
-export type Padding = Spacing;
+export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
+export type Margin = [number, number, number, number];

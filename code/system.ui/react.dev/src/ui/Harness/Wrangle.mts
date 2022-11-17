@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { t, Margin } from '../common';
 
 export const Wrangle = {
   componentSize(value?: t.SpecRenderSize) {
@@ -20,7 +20,7 @@ export const Wrangle = {
     return value.margin;
   },
 
-  asMargin(value: number): [number, number, number, number] {
-    return [value, value, value, value];
+  asMargin(value: number): t.Margin {
+    return Margin.toArray(value);
   },
 };

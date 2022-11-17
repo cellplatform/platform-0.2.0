@@ -9,7 +9,7 @@ export type SpecCtx = {
   backdropColor(value: Color): SpecCtx;
 
   size(width: number | undefined, height: number | undefined): SpecCtx;
-  size(mode: FillMode, margin?: t.Margin): SpecCtx;
+  size(mode: FillMode, margin?: t.MarginInput): SpecCtx;
 
   render(el: JSX.Element | undefined): SpecCtx;
   rerun(): void;
@@ -38,5 +38,5 @@ export type SpecRenderSizeCenter = {
 
 export type SpecRenderSizeFill = {
   mode: 'fill';
-  margin: [number, number, number, number];
+  margin: t.Margin;
 };
