@@ -1,4 +1,6 @@
-import { rx, slug, t, DEFAULTS } from './common.mjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+
+import { DEFAULTS, rx, slug, t } from './common.mjs';
 
 type Id = string;
 
@@ -142,7 +144,17 @@ export function BusEvents(args: {
     req$: rx.payload<t.StateOverlayReqEvent>($, 'app.state/overlay:req'),
     res$: rx.payload<t.StateOverlayResEvent>($, 'app.state/overlay:res'),
     close$: rx.payload<t.StateOverlayCloseEvent>($, 'app.state/overlay:close'),
-    async fire(def) {
+    content$: changed.$.pipe(
+      filter((e) => Boolean(e.current.overlay)),
+      map((e) => e.current.overlay!),
+      distinctUntilChanged((prev, next) => {
+        if (prev.tx !== next.tx) return false;
+        if (Boolean(prev.content) !== Boolean(next.content)) return false;
+        if (prev.content?.md.markdown !== next.content?.md.markdown) return false;
+        return true;
+      }),
+    ),
+    async def(def) {
       const tx = slug();
       const op = 'overaly';
       const res$ = overlay.res$.pipe(rx.filter((e) => e.tx === tx));

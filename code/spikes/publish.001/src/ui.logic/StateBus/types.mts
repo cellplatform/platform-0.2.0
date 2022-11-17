@@ -57,8 +57,9 @@ export type StateEvents = t.Disposable & {
   overlay: {
     req$: t.Observable<t.StateOverlayReq>;
     res$: t.Observable<t.StateOverlayRes>;
+    content$: t.Observable<t.StateOverlay>;
     close$: t.Observable<t.StateOverlayClose>;
-    fire(def: t.OverlayDef): Promise<StateOverlayRes>;
+    def(def: t.OverlayDef): Promise<StateOverlayRes>;
     close(options?: { errors?: string[] }): Promise<void>;
   };
 };
@@ -175,19 +176,19 @@ export type StateSelect = { instance: Id; selected?: UrlOrPathString };
  * Overlay
  */
 export type StateOverlayReqEvent = {
-  type: 'app.state/overlay:req';
+  type: 'app.state/overlay:req'; // Open overlay.
   payload: StateOverlayReq;
 };
 export type StateOverlayReq = { tx: Id; instance: Id; def: t.OverlayDef };
 
 export type StateOverlayResEvent = {
-  type: 'app.state/overlay:res';
+  type: 'app.state/overlay:res'; // Complete (overlay has been closed - long running, no timeout)
   payload: StateOverlayRes;
 };
 export type StateOverlayRes = { tx: Id; instance: Id; errors: string[] };
 
 export type StateOverlayCloseEvent = {
-  type: 'app.state/overlay:close';
+  type: 'app.state/overlay:close'; // Request to close overlay.
   payload: StateOverlayClose;
 };
 export type StateOverlayClose = { instance: Id; errors: string[] };

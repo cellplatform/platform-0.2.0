@@ -15,7 +15,7 @@ export type StateTree = {
   markdown?: StateMarkdown;
   selection: StateSelection;
   log?: t.PublicLogSummary;
-  overlay?: { tx: Id; def: t.OverlayDef };
+  overlay?: StateOverlay;
 };
 
 export type StateMarkdown = { outline?: MdString; document?: MdString };
@@ -32,6 +32,15 @@ export type StateEnvironment = {
 /**
  * Popup overlay
  */
+export type StateOverlay = {
+  tx: Id;
+  def: t.OverlayDef;
+  content?: StateOverlayContent;
+  error?: string;
+};
+
+export type StateOverlayContent = { md: t.ProcessedMdast };
+
 export type OverlayDef = {
   title?: string;
   detail?: string;

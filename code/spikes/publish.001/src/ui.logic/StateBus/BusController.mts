@@ -4,7 +4,7 @@ import { Fetch } from '../Fetch.mjs';
 import { FetchFile, Storage } from '../Storage';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { DEFAULTS, Pkg, R, rx, t, Time } from './common.mjs';
+import { Processor, DEFAULTS, Pkg, R, rx, t, Time, Path, BundlePaths } from './common.mjs';
 import { Paths } from './Paths.mjs';
 
 type UrlString = string;
@@ -217,56 +217,81 @@ export function BusController(args: {
   /**
    * MONITOR: Save changes to local-storage.
    */
-  const isLocalStorageChange = (p: t.StateChanged, n: t.StateChanged) => {
+  const localStorageDiff = (p: t.StateChanged, n: t.StateChanged) => {
     const prev = p.current;
     const next = n.current;
     if (prev.selection.index?.path !== next.selection.index?.path) return false;
     if (!R.equals(prev.env, next.env)) return false;
     return true;
   };
-  events.changed.$.pipe(distinctUntilChanged(isLocalStorageChange)).subscribe(async (e) => {
-    const current = e.current;
-    localstorage.merge({
-      selection: current.selection,
-      env: current.env,
+  events.changed.$
+    //
+    .pipe(distinctUntilChanged(localStorageDiff))
+    .subscribe(async (e) => {
+      const { selection, env } = e.current;
+      localstorage.merge({ selection, env });
     });
-  });
 
   /**
    * MONITOR: Load document upon selection change.
    */
-  events.changed.$.pipe(
-    distinctUntilChanged(
-      (prev, next) => prev.current.selection.index?.path === next.current.selection.index?.path,
-    ),
-  ).subscribe(async (e) => {
-    const url = e.current.selection.index?.path;
 
-    const commit = 'Load document after URL selection change';
-    await state.change(commit, async (draft) => {
-      const markdown = draft.markdown ?? (draft.markdown = {});
-      const before = markdown.document;
-      if (!url) {
-        markdown.document = undefined;
-      } else {
-        const path = Paths.toDataPath(url);
-        const { text, error } = await Fetch.text(path);
-        markdown.document = error ? undefined : text;
-      }
-      if (markdown.document !== before) fireChanged([commit]);
+  const selectionDiff = (prev: t.StateChanged, next: t.StateChanged) => {
+    return prev.current.selection.index?.path === next.current.selection.index?.path;
+  };
+  events.changed.$
+    //
+    .pipe(distinctUntilChanged(selectionDiff))
+    .subscribe(async (e) => {
+      const url = e.current.selection.index?.path;
+      const commit = 'Load document after URL selection change';
+
+      await state.change(commit, async (draft) => {
+        const markdown = draft.markdown ?? (draft.markdown = {});
+        const before = markdown.document;
+        if (!url) {
+          markdown.document = undefined;
+        } else {
+          const path = Paths.toDataPath(url);
+          const { text, error } = await Fetch.text(path);
+          markdown.document = error ? undefined : text;
+        }
+        if (markdown.document !== before) fireChanged([commit]);
+      });
     });
-  });
 
   /**
-   * Overlay
+   * Overlay: Initiate
    */
   events.overlay.req$.subscribe(async (e) => {
     const { tx, def } = e;
-    const commit = `Showing overlay`;
-    await state.change(commit, (draft) => (draft.overlay = { tx, def }));
-    fireChanged([commit]);
+
+    // Initial setup.
+    const commit1 = `Initiate showing overlay`;
+    await state.change(commit1, (draft) => (draft.overlay = { tx, def }));
+    fireChanged([commit1]);
+
+    // Attempt to load content.
+    let md: t.ProcessedMdast | undefined;
+    let error: string | undefined;
+    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, def.source));
+    const fetched = await Fetch.text(path);
+    if (fetched.error) error = `Failed while loading overlay. ${fetched.error}`;
+    if (!fetched.error) md = await Processor.toMarkdown(fetched.text);
+
+    // Write content into state.
+    const commit2 = `Update overlay with loaded content ${error ? '(failed)' : ''}`.trim();
+    await state.change(commit2, (draft) => {
+      const overlay = draft.overlay || (draft.overlay = { tx, def });
+      overlay.content = md ? { md } : undefined;
+      overlay.error = error;
+    });
+    fireChanged([commit2]);
   });
 
+  /**
+   * Overlay: Close.
+   */
   events.overlay.close$.subscribe(async (e) => {
     const errors = [...(e.errors ?? [])];
     const current = state.current;

@@ -26,7 +26,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       /**
        * Open Overlay.
        */
-      await e.overlay.fire(def);
+      await e.overlay.def(def);
     });
   };
 

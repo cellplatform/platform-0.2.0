@@ -29,8 +29,8 @@ export const VideoDiagramKeyboard = {
 
 const Wrangle = {
   offset(e: KeyboardEvent) {
-    if (e.altKey && e.shiftKey) return 30;
-    if (e.altKey) return 10;
+    if (e.shiftKey && e.altKey) return 30;
+    if (e.shiftKey) return 10;
     return 3;
   },
 };
