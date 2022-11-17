@@ -1,7 +1,7 @@
 import * as t from '../common/types.mjs';
 
 type Color = string | number | undefined;
-type FillMode = 'fill';
+export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 
 export type SpecCtx = {
   display(value: SpecPropDisplay): SpecCtx;
@@ -9,7 +9,7 @@ export type SpecCtx = {
   backdropColor(value: Color): SpecCtx;
 
   size(width: number | undefined, height: number | undefined): SpecCtx;
-  size(mode: FillMode, margin?: t.MarginInput): SpecCtx;
+  size(mode: SpecFillMode, margin?: t.MarginInput): SpecCtx;
 
   render(el: JSX.Element | undefined): SpecCtx;
   rerun(): void;
@@ -38,5 +38,7 @@ export type SpecRenderSizeCenter = {
 
 export type SpecRenderSizeFill = {
   mode: 'fill';
+  x: boolean;
+  y: boolean;
   margin: t.Margin;
 };

@@ -17,6 +17,20 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 
+  const isFillX = size?.mode === 'fill' && size.x && !size.y;
+  const isFillY = size?.mode === 'fill' && !size.x && size.y;
+
+  const GRID = {
+    FILL: {
+      COLUMNS: `[left] ${fillMargin[3]}px [body-x] 1fr [right] ${fillMargin[1]}px`,
+      ROWS: `[top] ${fillMargin[0]}px [body-y] 1fr [bottom] ${fillMargin[2]}px`,
+    },
+    CENTER: {
+      COLUMNS: `[left] 1fr [body-x] auto [right] 1fr`,
+      ROWS: `[top] 1fr [body-y] auto [bottom] 1fr`,
+    },
+  };
+
   /**
    * [Render]
    */
@@ -25,12 +39,12 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
 
     grid: {
       fill: css({
-        gridTemplateColumns: `[left] ${fillMargin[3]}px [body-x] 1fr [right] ${fillMargin[1]}px`,
-        gridTemplateRows: `[top] ${fillMargin[0]}px [body-y] 1fr [bottom] ${fillMargin[2]}px`,
+        gridTemplateColumns: isFillY ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,
+        gridTemplateRows: isFillX ? GRID.CENTER.ROWS : GRID.FILL.ROWS,
       }),
       center: css({
-        gridTemplateColumns: `[left] 1fr [body-x] auto [right] 1fr`,
-        gridTemplateRows: `[top] 1fr [body-y] auto [bottom] 1fr`,
+        gridTemplateColumns: GRID.CENTER.COLUMNS,
+        gridTemplateRows: GRID.CENTER.ROWS,
       }),
     },
 

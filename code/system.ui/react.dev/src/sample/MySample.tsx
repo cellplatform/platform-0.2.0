@@ -9,6 +9,7 @@ export type MySampleProps = {
 export const MySample: React.FC<MySampleProps> = (props) => {
   const styles = {
     base: css({
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       position: 'relative',
       padding: [5, 8],
     }),

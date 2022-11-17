@@ -9,13 +9,10 @@ export type HarnessHostComponentProps = {
 
 export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
   const { renderProps } = props;
-  const hasRenderProps = Boolean(renderProps);
-
   if (!renderProps) return null;
 
   const { size } = renderProps;
   const componentSize = Wrangle.componentSize(size);
-  const sizeMode = size?.mode ?? 'center';
 
   /**
    * [Render]
@@ -24,12 +21,14 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
     base: css({
       position: 'relative',
       border: props.border,
+      display: 'flex',
     }),
     container: css({
+      flex: 1,
       position: 'relative',
-      Absolute: sizeMode === 'fill' ? 0 : undefined,
       pointerEvents: 'auto',
-      userSelect: 'text',
+      userSelect: 'auto',
+
       display: renderProps.display,
       width: componentSize.width,
       height: componentSize.height,

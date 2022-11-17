@@ -29,6 +29,9 @@ export default Test.describe('MySample', (e) => {
       //
       .size(300, 140)
       // .size('fill')
+      // .size('fill-x')
+      // .size('fill-y')
+
       .display('flex')
       .backgroundColor(1)
       .render(el);
