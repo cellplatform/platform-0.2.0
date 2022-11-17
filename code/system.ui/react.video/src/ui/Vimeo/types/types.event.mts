@@ -36,6 +36,7 @@ export type VimeoEvents = t.Disposable & {
     req$: t.Observable<VimeoStatusReq>;
     res$: t.Observable<VimeoStatusRes>;
     loaded$: t.Observable<t.VimeoStatus>;
+    playing$: t.Observable<t.VimeoStatus>;
     get(options?: { timeout?: Milliseconds }): Promise<VimeoStatusRes>;
   };
 

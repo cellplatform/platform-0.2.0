@@ -1,5 +1,5 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
-import { catchError, filter, take } from 'rxjs/operators';
+import { catchError, filter, take, distinctUntilChanged } from 'rxjs/operators';
 
 import { rx, slug, t } from './common.mjs';
 
@@ -52,6 +52,7 @@ function Events(args: {
     req$: rx.payload<t.VimeoStatusReqEvent>($, 'Vimeo/status:req'),
     res$: rx.payload<t.VimeoStatusResEvent>($, 'Vimeo/status:res'),
     loaded$: status$.pipe(filter((e) => e.action === 'loaded')),
+    playing$: status$.pipe(distinctUntilChanged((prev, next) => prev.playing === next.playing)),
     async get(options = {}) {
       const tx = slug();
       const { timeout: msecs = 1000 } = options;
