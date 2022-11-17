@@ -26,6 +26,12 @@ export const KeyboardMonitor = {
       if (e.key === 'm') {
         if (!State.Is.inputSelected) await State.Change.toggleMute(state);
       }
+
+      // CMD+ArrowKey:
+      if (e.key === 'ArrowLeft' || (e.key === 'ArrowRight' && e.metaKey)) {
+        // NB: Suppress browser action - Forward/Back buttons
+        handled();
+      }
     });
   },
 };
