@@ -68,6 +68,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         Absolute: [100, 100, 150, 100],
         opacity: dimmed ? 0.4 : 1,
         transition: `opacity 300ms`,
+        userSelect: 'none',
+        pointerEvents: 'none',
       }),
       inner: css({
         Absolute: 0,
