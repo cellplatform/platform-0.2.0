@@ -1,6 +1,9 @@
+import type React from 'react';
+
 import { css, t } from '../common';
 
 export type CenterProps = {
+  flex?: number;
   children?: JSX.Element;
   style?: t.CssValue;
 };
@@ -9,8 +12,11 @@ export type CenterProps = {
  * Horizontal and verical alignmnet of children.
  */
 export const Center: React.FC<CenterProps> = (props) => {
+  const { flex } = props;
+
   const styles = {
     base: css({
+      flex,
       position: 'relative',
       display: 'grid',
       justifyContent: 'center',
