@@ -10,7 +10,7 @@ export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
   const { results } = props;
 
   const desc = results?.description;
-  const title = desc ? `Spec: ${desc}` : 'Spec';
+  const title = desc ? `🐷 Spec: ${desc}` : 'Spec';
 
   const print = () => {
     console.info(`Spec (Results Data):`, results);
