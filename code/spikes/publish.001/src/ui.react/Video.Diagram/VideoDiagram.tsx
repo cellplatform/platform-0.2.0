@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { Color, css, State, t, useSizeObserver } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
-import { VideoDiagramVimeo } from './Vimeo';
+import { VideoDiagramVimeo } from './ui.Vimeo';
+import { VideoDiagramContent } from './ui.Content';
 
 /**
  * TODO 🐷 TEMP
@@ -70,22 +71,10 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: size.ready ? 1 : 0,
       transition: 'opacity 150ms',
     }),
-    image: {
-      base: css({
-        Absolute: [100, 100, 150, 100],
-        opacity: dimmed ? 0.4 : 1,
-        transition: `opacity 300ms`,
-        userSelect: 'none',
-        pointerEvents: 'none',
-      }),
-      inner: css({
-        Absolute: 0,
-        backgroundSize: 'contain',
-        backgroundImage: `url(${SAMPLE.diagram})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center center',
-      }),
-    },
+
+    content: css({
+      Absolute: [100, 100, 150, 100],
+    }),
 
     video: css({
       Absolute: [null, null, 30, 30],
@@ -109,10 +98,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     />
   );
 
-  const elImage = (
-    <div {...styles.image.base}>
-      <div {...styles.image.inner} />
-    </div>
+  const elContent = (
+    <VideoDiagramContent src={SAMPLE.diagram} dimmed={dimmed} style={styles.content} />
   );
 
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
@@ -128,7 +115,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} ref={size.ref}>
       <div {...styles.body}>
-        {elImage}
+        {elContent}
         {elVimeo}
         {elProgressBar}
         {elTooSmall}
