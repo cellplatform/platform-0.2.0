@@ -26,7 +26,7 @@ export function useOverlayDef(instance: t.StateInstance, def: t.OverlayDef) {
       const res = await State.Fetch.text(path);
       console.log('res', res);
 
-      Time.delay(1200, () => setReady(true));
+      Time.delay(500, () => setReady(true));
     })();
 
     return () => undefined;
