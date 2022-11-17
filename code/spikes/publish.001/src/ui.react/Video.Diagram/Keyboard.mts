@@ -1,6 +1,6 @@
-import { R, t, KeyListener } from '../common';
+import { t, KeyListener } from '../common';
 
-export const VideoKeyboard = {
+export const VideoDiagramKeyboard = {
   listen(vimeo: t.VimeoEvents) {
     return KeyListener.keydown(async (e) => {
       /**
@@ -14,13 +14,23 @@ export const VideoKeyboard = {
        * Arrow Keys  |->  Skip
        */
       if (e.key === 'ArrowLeft') {
-        const offset = e.metaKey ? -20 : -5;
-        await vimeo.seek.offset(offset);
+        await (e.metaKey ? vimeo.seek.start() : vimeo.seek.offset(0 - Wrangle.offset(e)));
       }
       if (e.key === 'ArrowRight') {
-        const offset = e.metaKey ? 20 : 5;
-        await vimeo.seek.offset(offset);
+        await (e.metaKey ? vimeo.seek.end() : vimeo.seek.offset(Wrangle.offset(e)));
       }
     });
+  },
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  offset(e: KeyboardEvent) {
+    if (e.altKey && e.shiftKey) return 30;
+    if (e.altKey) return 10;
+    return 3;
   },
 };
