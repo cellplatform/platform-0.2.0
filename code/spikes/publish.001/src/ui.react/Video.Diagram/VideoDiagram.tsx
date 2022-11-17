@@ -4,7 +4,7 @@ import { Color, css, State, t, useSizeObserver } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
 import { VideoDiagramVimeo } from './ui.Vimeo';
-import { VideoDiagramContent } from './ui.Content';
+import { VideoDiagramImage } from './ui.Image';
 
 /**
  * TODO 🐷 TEMP
@@ -99,7 +99,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   );
 
   const elContent = (
-    <VideoDiagramContent src={SAMPLE.diagram} dimmed={dimmed} style={styles.content} />
+    <VideoDiagramImage src={SAMPLE.diagram} dimmed={dimmed} style={styles.content} />
   );
 
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
