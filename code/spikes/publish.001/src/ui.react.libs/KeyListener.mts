@@ -6,9 +6,9 @@ export const KeyListener = {
 };
 
 /**
- * Helpers
+ * Produces an event-binding factory for a keyboard event
+ * that is "disposable" (remove event binding).
  */
-
 function listener(event: 'keydown' | 'keyup') {
   return (handler: KeyHandler) => {
     document?.addEventListener(event, handler);
