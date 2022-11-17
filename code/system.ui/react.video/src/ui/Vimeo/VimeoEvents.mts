@@ -138,6 +138,13 @@ function Events(args: {
       await seek.fire(seconds);
       return { seconds };
     },
+    async start() {
+      await seek.fire(0);
+    },
+    async end() {
+      const info = (await status.get()).status;
+      await seek.fire(info?.duration ?? 0);
+    },
   };
 
   return {

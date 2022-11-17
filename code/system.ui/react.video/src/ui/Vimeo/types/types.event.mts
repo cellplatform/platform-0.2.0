@@ -58,6 +58,8 @@ export type VimeoEvents = t.Disposable & {
     res$: t.Observable<VimeoSeekRes>;
     fire(seconds: Seconds, options?: { timeout?: Milliseconds }): Promise<VimeoSeekRes>;
     offset(by: Seconds): Promise<{ seconds: number }>;
+    start(): Promise<void>;
+    end(): Promise<void>;
   };
 };
 
