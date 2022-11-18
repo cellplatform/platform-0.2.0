@@ -20,9 +20,9 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
   const [instance, setInstance] = useState<t.VimeoInstance>();
   const [baseOpacity, setBaseOpacity] = useState(0);
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
-  const [percent, setPercent] = useState(0);
-
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [vimeoStatus, setVimeoStatus] = useState<t.VimeoStatus | undefined>();
+  const percent = vimeoStatus?.percent ?? 0;
+  const isPlaying = vimeoStatus?.playing ?? false;
   const isPlayComplete = percent === 1;
   const isPlayerVisible = isPlaying || !isPlayComplete;
 
@@ -45,20 +45,13 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
     /**
      * Playing.
      */
-    vimeo.status.$.subscribe((e) => setPercent(e.percent));
+    vimeo.status.$.subscribe((e) => setVimeoStatus(e));
     vimeo.status.playing$.subscribe((e) => {
       const percent = e.percent;
       const isPlaying = e.playing;
       const isComplete = e.percent === 1;
-      setIsPlaying(e.playing);
       props.onPlayingChange?.({ percent, isPlaying, isComplete });
     });
-
-    /**
-     * TODO 🐷
-     * - Vimeo: have a ".seek.fire(-5)"
-     *   Where the negative number is interpreted to mena "from end" (duration - value).
-     */
 
     /**
      * Keyboard Behavior
@@ -85,8 +78,13 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
    * Handlers
    */
   const replay = () => {
+    if (isPlayerVisible) return;
     vimeo?.seek.fire(0);
     vimeo?.play.fire();
+  };
+
+  const togglePlaying = async () => {
+    vimeo?.play.toggle();
   };
 
   /**
@@ -105,10 +103,15 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
       opacity: isPlayerVisible ? 1 : 0,
       transition: `opacity 300ms`,
     }),
-    vimeo: css({
+    playerClickTarget: css({
+      Absolute: 0,
+      pointerEvents: 'all',
+    }),
+    video: css({
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.3)}`,
       boxShadow: `0 0px 16px 0 ${Color.alpha(COLORS.DARK, 0.06)}`,
       borderRadius: 10,
+      overflow: 'hidden',
     }),
     icons: css({
       Absolute: [7, 7, null, null],
@@ -128,7 +131,10 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
   };
 
   const elVimeo = (
-    <Vimeo instance={instance} width={300} muted={muted} video={props.video} style={styles.vimeo} />
+    <div onClick={togglePlaying} {...styles.video}>
+      <Vimeo instance={instance} width={300} muted={muted} video={props.video} />
+      <div {...styles.playerClickTarget} />
+    </div>
   );
 
   const elIcons = (
