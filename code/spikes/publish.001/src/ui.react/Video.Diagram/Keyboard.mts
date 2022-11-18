@@ -17,7 +17,12 @@ export const VideoDiagramKeyboard = {
         await (e.metaKey ? vimeo.seek.start() : vimeo.seek.offset(0 - Wrangle.offset(e)));
       }
       if (e.key === 'ArrowRight') {
-        await (e.metaKey ? vimeo.seek.end() : vimeo.seek.offset(Wrangle.offset(e)));
+        /**
+         * NOTE: 🐷 Supress the "To End" (META+[→]) action.
+         * Until it can be instantly (eager ui-rendering) of the end-state on the progress bar
+         */
+        // await (e.metaKey ? vimeo.seek.end() : vimeo.seek.offset(Wrangle.offset(e)));
+        await vimeo.seek.offset(Wrangle.offset(e));
       }
     });
   },
