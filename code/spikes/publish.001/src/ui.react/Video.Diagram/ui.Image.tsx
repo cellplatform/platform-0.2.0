@@ -59,6 +59,8 @@ export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
    */
   const styles = {
     base: css({
+      flex: 1,
+      position: 'relative',
       opacity: dimmed ? 0.4 : 1,
       transition: `opacity 300ms`,
       userSelect: 'none',
