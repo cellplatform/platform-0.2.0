@@ -68,10 +68,10 @@ export const DocStyles = {
     fontSize: DEFAULT.FONT_SIZE - 2,
     paddingLeft: 5,
     paddingRight: 5,
+    color: Color.darken(COLORS.MAGENTA, 8),
     backgroundColor: Color.alpha(COLORS.DARK, 0.06),
     border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     borderRadius: 3,
-    color: COLORS.MAGENTA,
   },
 
   /**

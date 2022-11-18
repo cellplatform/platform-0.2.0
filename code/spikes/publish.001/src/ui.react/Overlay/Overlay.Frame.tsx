@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { Color, css, State, t, useClickOutside, Spinner } from '../common';
-import { VideoDiagram } from '../Video.Diagram';
+import { Color, css, Spinner, State, t, useClickOutside } from '../common';
 import { useOverlayState } from './useOverlayState.mjs';
 
 export type OverlayFrameProps = {
@@ -42,7 +41,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
       '@media (max-width: 1100px)': { opacity: 0, pointerEvents: 'none' },
 
       borderColor: Color.format(1),
-      backgroundColor: Color.format(isOverGutter ? 0.2 : 1),
+      backgroundColor: Color.format(isOverGutter ? 0.15 : 1),
       transition: `background-color 350ms, border-color 150ms`,
     }),
   };
