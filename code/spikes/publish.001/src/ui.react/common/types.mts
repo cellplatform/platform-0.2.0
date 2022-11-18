@@ -2,7 +2,12 @@
  * @system
  */
 export type { CssValue } from 'sys.util.css';
-export type { VimeoInstance, VimeoEvents, VimeoId } from 'sys.ui.react.video/src/types.mjs';
+export type {
+  VimeoInstance,
+  VimeoStatus,
+  VimeoEvents,
+  VimeoId,
+} from 'sys.ui.react.video/src/types.mjs';
 
 /**
  * @local
