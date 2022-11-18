@@ -8,7 +8,7 @@ export const Imports = {
   'spike.ui.Root': () => import('../ui.react/Root/dev/Root.SPEC'),
   'spike.ui.Root.dev': () => import('../ui.react/Root/dev/Root.DevEnv.SPEC'),
   'spike.ui.TileOutline': () => import('../ui.react/Tile.Outline/TileOutline.SPEC'),
-  'spike.ui.Video.Diagram': () => import('../ui.react/Video.Diagram/VideoDiagram.SPEC'),
+  'spike.ui.Video.Diagram': () => import('../ui.react/Video.Diagram/ui.VideoDiagram.SPEC'),
   'spike.ui.Video.ProgressBar': () => import('../ui.react/Video.ProgressBar/ProgressBar.SPEC'),
 };
 
