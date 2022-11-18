@@ -53,15 +53,14 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
     </Spinner.Center>
   );
 
-  /**
-   * TODO 🐷
-   * LOAD THIS from a the def/data pulled from the Markdown YAML.
-   */
-  const elTmp = state.ready && (
-    <VideoDiagram instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />
+  const el = state.ready && state.Component && state.content?.md && (
+    <state.Component
+      instance={instance}
+      md={state.content?.md}
+      dimmed={isOverGutter}
+      style={{ Absolute: 0 }}
+    />
   );
-
-  console.log('state.content', state.content);
 
   return (
     <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
@@ -71,7 +70,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
         onMouseEnter={overBody(true)}
         onMouseLeave={overBody(false)}
       >
-        {elTmp}
+        {el}
         {elSpinner}
       </div>
     </div>

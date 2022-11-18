@@ -40,7 +40,7 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
     const { DocImage } = await Imports.Image();
 
     const code = md.info.code.typed
-      .filter((c) => c.type.startsWith('doc.image'))
+      .filter((c) => c.type.toLowerCase().startsWith('doc.image'))
       .filter((c) => c.type.includes(' id:'))[0];
 
     let def: t.DocImageDef | undefined;

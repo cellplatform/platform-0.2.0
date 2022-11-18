@@ -10,22 +10,21 @@ import { VideoDiagramImage } from './ui.Image';
  * TODO 🐷 TEMP
  */
 const SAMPLE = {
-  // video: 727951677,
-  // diagram:
-  //   'https://user-images.githubusercontent.com/185555/201820392-e66aa287-3df9-4d8f-a480-d15382f62c17.png',
+  video: 727951677,
+  diagram:
+    'https://user-images.githubusercontent.com/185555/201820392-e66aa287-3df9-4d8f-a480-d15382f62c17.png',
 };
 
-export type VideoDiagramProps = {
+export type VideoDiagramLayoutProps = {
   instance: t.StateInstance;
-  md?: t.ProcessedMdast;
   dimmed?: boolean;
   minHeight?: number;
   minWidth?: number;
   style?: t.CssValue;
 };
 
-export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { dimmed = false, minWidth = 550, minHeight = 550, md } = props;
+export const VideoDiagramLayout: React.FC<VideoDiagramLayoutProps> = (props) => {
+  const { dimmed = false, minWidth = 550, minHeight = 550 } = props;
 
   const state = State.useState(props.instance);
   const muted = state.current?.env.media.muted ?? false;
@@ -33,9 +32,6 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const [percent, setPercent] = useState(0);
-
-  const [videoId, setVideoId] = useState<t.VimeoId | undefined>();
-  const [diagramSrc, setDiagramSrc] = useState('');
 
   const size = useSizeObserver();
   const isTooSmall = !size.ready
@@ -48,26 +44,6 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   useEffect(() => {
     vimeo?.status.$.subscribe((e) => setPercent(e.percent));
   }, [vimeo?.instance.id]);
-
-  useEffect(() => {
-    /**
-     * TODO 🐷
-     * Refactor into non-UI location.
-     */
-    const def = md?.info.code.typed.find((e) => e.type.toLowerCase().startsWith('doc.diagram'));
-    if (def) {
-      const yaml = Text.Yaml.parse(def?.text);
-      if (typeof yaml.video === 'number') {
-        setVideoId(yaml.video);
-      }
-
-      if (Array.isArray(yaml.images)) {
-        const d = yaml.images[0];
-        console.log('d', d);
-        if (typeof d?.src === 'string') setDiagramSrc(d.src);
-      }
-    }
-  }, [md?.markdown]);
 
   /**
    * [Handlers]
@@ -95,8 +71,14 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: size.ready ? 1 : 0,
       transition: 'opacity 150ms',
     }),
-    content: css({ Absolute: [100, 100, 150, 100] }),
-    video: css({ Absolute: [null, null, 30, 30] }),
+
+    content: css({
+      Absolute: [100, 100, 150, 100],
+    }),
+
+    video: css({
+      Absolute: [null, null, 30, 30],
+    }),
     progressBar: css({
       Absolute: [null, 45, 0, 45],
       opacity: dimmed ? 0 : 1,
@@ -104,20 +86,20 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     }),
   };
 
-  const elVimeo = videoId !== undefined && (
+  const elVimeo = (
     <VideoDiagramVimeo
-      style={styles.video}
       dimmed={dimmed}
       muted={muted}
-      video={videoId}
+      video={SAMPLE.video}
+      style={styles.video}
       autoStart={true}
       onReady={(vimeo) => setVimeo(vimeo)}
       onPlayingChange={(e) => setIsPlaying(e.isPlaying)}
     />
   );
 
-  const elContent = diagramSrc && (
-    <VideoDiagramImage src={diagramSrc} dimmed={dimmed} style={styles.content} />
+  const elContent = (
+    <VideoDiagramImage src={SAMPLE.diagram} dimmed={dimmed} style={styles.content} />
   );
 
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
