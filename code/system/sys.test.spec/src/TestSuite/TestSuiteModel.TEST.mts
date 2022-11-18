@@ -460,7 +460,7 @@ describe('TestSuiteModel', () => {
         const res = await root.run({ timeout: 10 });
 
         expect(res.elapsed).to.greaterThan(9);
-        expect(res.elapsed).to.lessThan(30);
+        expect(res.elapsed).to.lessThan(40);
 
         expect(count).to.eql(2); // NB: failing test never increments counter.
         expect(res.ok).to.eql(false);
