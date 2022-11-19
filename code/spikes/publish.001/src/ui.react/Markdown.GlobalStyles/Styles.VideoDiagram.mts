@@ -4,7 +4,7 @@ export const VideoDiagramStyles = {
   h1: {
     fontSize: 120,
     letterSpacing: -2,
-    lineHeight: '0.9em',
+    lineHeight: '1em',
   },
 
   'blockquote p': {
