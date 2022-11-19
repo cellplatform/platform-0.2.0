@@ -1,17 +1,17 @@
-import { expect, describe, it } from '../../test';
+import { describe, expect, it } from '../../test';
 import { t } from '../common';
 import { TimeMap } from './TimeMap.mjs';
 
 describe('TimeMap', () => {
   describe('sorting', () => {
-    it('sorted(): no change in order', () => {
+    it('sortedMedia: no change in order', () => {
       const list: t.DocDiagramMedia[] = [
         { start: 0, end: 7, image: 'foo' },
         { start: 10, markdown: '# Hello' },
         { start: 15, end: null, image: 'bar' },
       ];
 
-      const res = TimeMap.sorted(list);
+      const res = TimeMap.sortedMedia(list);
       expect(res.length).to.eql(3);
 
       expect(res[0].indexRef).to.eql(0);
@@ -23,13 +23,13 @@ describe('TimeMap', () => {
       expect(res[2].kind).to.eql('media.image');
     });
 
-    it('sorted(): change in order with original order details retained (indexRef)', () => {
+    it('sortedMedia: change in order with original order detail retained (indexRef)', () => {
       const list: t.DocDiagramMedia[] = [
         { title: 'A', image: 'foo', start: 15 },
         { title: 'B', markdown: '# Hello', start: 0 },
       ];
 
-      const res = TimeMap.sorted(list);
+      const res = TimeMap.sortedMedia(list);
 
       expect(res.length).to.eql(2);
       expect(res[0].indexRef).to.eql(1); // NB: Out of order compared wtih original input list.
@@ -37,6 +37,19 @@ describe('TimeMap', () => {
 
       expect(res[0].kind).to.eql('media.markdown');
       expect(res[1].kind).to.eql('media.image');
+    });
+
+    it('sortedTimeMap', () => {
+      const list: (t.DocTimeWindow & { foo: number })[] = [
+        { foo: 1, start: 15 },
+        { foo: 2, start: 0 },
+      ];
+
+      const res = TimeMap.sortedTimeMap(list);
+
+      expect(res.length).to.eql(2);
+      expect(res[0].start).to.eql(0); // NB: Out of order compared wtih original input list.
+      expect(res[1].start).to.eql(15);
     });
   });
 
