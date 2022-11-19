@@ -4,7 +4,7 @@ export * from './StateBus/types.mjs';
 type Id = string;
 type IndexPath = string;
 type DirPath = string;
-type MdString = string;
+type MarkdownString = string;
 
 /**
  * State Tree
@@ -18,7 +18,7 @@ export type StateTree = {
   overlay?: StateOverlay;
 };
 
-export type StateMarkdown = { outline?: MdString; document?: MdString };
+export type StateMarkdown = { outline?: MarkdownString; document?: MarkdownString };
 export type StateLocation = { url: DirPath };
 
 export type StateSelection = {
@@ -43,7 +43,7 @@ export type StateOverlayContent = { md: t.ProcessedMdast };
 
 export type OverlayDef = {
   title?: string;
-  detail?: string;
+  detail?: MarkdownString;
   margin?: { top?: number; bottom?: number };
   source: IndexPath;
 };

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Color, COLORS, css, Processor, State, t } from '../common';
+
+import { Color, COLORS, css, DEFAULTS, State, t } from '../common';
 import { Icons } from '../Icons.mjs';
+import { MarkdownDoc } from '../Markdown.Doc';
+
+const CLASS = DEFAULTS.MD.CLASS;
 
 export type OverlayTriggerPanelProps = {
   instance: t.Instance;
@@ -9,10 +13,9 @@ export type OverlayTriggerPanelProps = {
 };
 
 export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) => {
-  const { def, instance } = props;
+  const { instance, def } = props;
   const { margin = {} } = def;
 
-  const [safeDetailHtml, setSafeDetailHtml] = useState('');
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
@@ -22,20 +25,11 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
    * Handlers
    */
   const handleClick = () => {
-    State.withEvents(instance, async (e) => {
-      /**
-       * Open Overlay.
-       */
-      await e.overlay.def(def);
-    });
+    /**
+     * OPEN the pop-up overlay.
+     */
+    State.withEvents(instance, (e) => e.overlay.def(def));
   };
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    Processor.toHtml(def.detail).then((e) => setSafeDetailHtml(e.html));
-  }, [def.detail]);
 
   /**
    * [Render]
@@ -126,7 +120,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         style={styles.iconWatermark}
         color={Color.alpha(COLORS.DARK, 0.04)}
       />
-      <div {...styles.html} dangerouslySetInnerHTML={{ __html: safeDetailHtml }} />
+      <MarkdownDoc instance={instance} markdown={def.detail} className={CLASS.TIGGER_PANEL} />
     </div>
   );
 

@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t } from '../common';
+import { Color, COLORS, css, t, DEFAULTS } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc';
 import { TooSmall } from '../TooSmall';
 import { OverlayFrame } from '../Overlay';
@@ -74,7 +74,12 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         />
       </div>
       <div {...styles.body.main}>
-        <MarkdownDoc instance={instance} markdown={props.markdown?.document} paddingBottom={120} />
+        <MarkdownDoc
+          instance={instance}
+          markdown={props.markdown?.document}
+          width={DEFAULTS.MD.DOC.width}
+          paddingBottom={120}
+        />
       </div>
     </div>
   );

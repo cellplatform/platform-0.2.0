@@ -6,9 +6,10 @@ export type MarkdownDocProps = {
   instance: t.Instance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
-  paddingBottom?: number;
   className?: string;
   style?: t.CssValue;
+  paddingBottom?: number;
+  width?: number;
 };
 
 const CLASS = DEFAULTS.MD.CLASS;
@@ -24,7 +25,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      width: DEFAULTS.MD.DOC.width,
+      width: props.width,
       color: globalStyles.DocStyles.p.color,
     }),
 

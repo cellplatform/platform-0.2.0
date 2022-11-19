@@ -16,6 +16,7 @@ export const DEFAULTS = {
       ROOT: 'sys-md-Doc',
       BLOCK: 'sys-md-Block',
       VIDEO_DIAGRAM: 'sys-md-VideoDiagram',
+      TIGGER_PANEL: 'sys-md-TriggerPanel',
     },
   },
 };
