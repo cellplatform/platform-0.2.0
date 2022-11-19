@@ -47,7 +47,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     }),
   };
 
-  const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
+  const elEmpty = isEmpty && <div {...styles.empty}>{'Nothing to display'}</div>;
 
   const elHtml = (
     <div {...styles.blocks}>
