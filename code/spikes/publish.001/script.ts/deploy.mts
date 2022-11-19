@@ -46,7 +46,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
