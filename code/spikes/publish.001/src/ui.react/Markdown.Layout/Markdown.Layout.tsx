@@ -74,7 +74,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         />
       </div>
       <div {...styles.body.main}>
-        <MarkdownDoc instance={instance} markdown={props.markdown?.document} />
+        <MarkdownDoc instance={instance} markdown={props.markdown?.document} paddingBottom={120} />
       </div>
     </div>
   );

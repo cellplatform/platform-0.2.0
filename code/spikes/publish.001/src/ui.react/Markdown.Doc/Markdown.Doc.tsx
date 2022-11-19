@@ -5,8 +5,8 @@ import { useGlobalStyles } from '../Markdown.GlobalStyles';
 export type MarkdownDocProps = {
   instance: t.StateInstance;
   markdown?: string;
-  scroll?: boolean;
   renderer?: t.MarkdownDocBlockRenderer;
+  paddingBottom?: number;
   style?: t.CssValue;
 };
 
@@ -23,10 +23,8 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      Scroll: props.scroll,
       width: DEFAULTS.MD.DOC.width,
       color: globalStyles.DocStyles.p.color,
-      paddingBottom: props.scroll ? 80 : undefined,
     }),
 
     empty: css({
@@ -43,6 +41,10 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       htmlBlock: css({}),
       jsxBlock: css({}),
     },
+
+    footerSpacer: css({
+      height: props.paddingBottom,
+    }),
   };
 
   const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
@@ -77,6 +79,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     <div {...css(styles.base, props.style)} className={CLASS.ROOT}>
       {elEmpty}
       {elHtml}
+      {props.paddingBottom && <div {...styles.footerSpacer} />}
     </div>
   );
 };
