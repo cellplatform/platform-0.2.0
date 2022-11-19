@@ -1,6 +1,6 @@
 import { css, DEFAULTS, FC, t } from '../common';
 import { useBlockRenderer } from './useBlockRenderer.mjs';
-import { useGlobalStyles } from './useGlobalStyles.mjs';
+import { useGlobalStyles } from '../Markdown.GlobalStyles';
 
 export type MarkdownDocProps = {
   instance: t.StateInstance;
@@ -37,9 +37,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       opacity: 0.3,
     }),
 
-    blocks: css({
-      // Flex: 'y-stretch-stretch',
-    }),
+    blocks: css({}),
 
     element: {
       htmlBlock: css({}),
