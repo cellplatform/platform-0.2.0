@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { DEFAULTS, Style } from '../common';
-import { DocStyles, DEFAULT } from './Global.Styles.mjs';
+import { DocStyles, DEFAULT } from './DocStyles.mjs';
 
 const CLASS = DEFAULTS.MD.CLASS;
 let _isAdded = false;
