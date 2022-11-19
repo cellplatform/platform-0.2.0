@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { DEFAULTS, Style } from '../common';
 import { DocStyles, DEFAULT } from './Global.Styles.mjs';
 
+const CLASS = DEFAULTS.MD.CLASS;
 let _isAdded = false;
 
 /**
@@ -12,7 +13,6 @@ export function useGlobalStyles() {
   useEffect(() => {
     if (!_isAdded) {
       _isAdded = true;
-      const CLASS = DEFAULTS.MD.CLASS;
       Style.global(DocStyles, {
         prefix: `.${CLASS.ROOT} .${CLASS.BLOCK}`,
       });
