@@ -1,6 +1,6 @@
 import { Color, COLORS } from '../common';
 
-export const DEFAULT = {
+const DEFAULT = {
   FONT_SIZE: 18,
   COLOR: Color.lighten(COLORS.DARK, 10),
   HEADING_COLOR: Color.lighten(COLORS.DARK, 15),

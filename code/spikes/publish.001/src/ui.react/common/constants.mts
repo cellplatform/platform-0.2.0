@@ -13,9 +13,9 @@ export const DEFAULTS = {
   MD: {
     DOC: { width: 692 },
     CLASS: {
-      ROOT: 'sys-md-doc',
-      BLOCK: 'sys-md-block',
-      NOT_BLOCK: 'sys-md-not-block',
+      ROOT: 'sys-md-Doc',
+      BLOCK: 'sys-md-Block',
+      VIDEO_DIAGRAM: 'sys-md-VideoDiagram',
     },
   },
 };

@@ -175,7 +175,9 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const elContent = (
     <div {...styles.content}>
       {diagramSrc && <VideoDiagramImage src={diagramSrc} dimmed={dimmed} />}
-      {markdown && <VideoDiagramMarkdown />}
+      {markdown && (
+        <VideoDiagramMarkdown markdown={markdown} dimmed={dimmed} style={{ MarginX: 30 }} />
+      )}
     </div>
   );
 

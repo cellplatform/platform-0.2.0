@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
 import { DEFAULTS, Style } from '../common';
-import { DocStyles, DEFAULT } from './DocStyles.mjs';
+import { DocStyles } from './Styles.Doc.mjs';
+import { VideoDiagramStyles } from './Styles.VideoDiagram.mjs';
 
 const CLASS = DEFAULTS.MD.CLASS;
 let _isAdded = false;
@@ -13,11 +14,16 @@ export function useGlobalStyles() {
   useEffect(() => {
     if (!_isAdded) {
       _isAdded = true;
+
       Style.global(DocStyles, {
         prefix: `.${CLASS.ROOT} .${CLASS.BLOCK}`,
+      });
+
+      Style.global(VideoDiagramStyles, {
+        prefix: `.${CLASS.ROOT} .${CLASS.BLOCK} .${CLASS.VIDEO_DIAGRAM}`,
       });
     }
   }, []);
 
-  return { DEFAULT, DocStyles };
+  return { DocStyles };
 }
