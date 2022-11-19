@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Color, COLORS, css, DEFAULTS, State, t } from '../common';
 import { Icons } from '../Icons.mjs';
@@ -16,20 +16,43 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { instance, def } = props;
   const { margin = {} } = def;
 
-  const [isDown, setDown] = useState(false);
+  const baseRef = useRef<HTMLDivElement>(null);
+
+  const [md, setMd] = useState<t.ProcessedMdast | undefined>();
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
-  const down = (isDown: boolean) => () => setDown(isDown);
 
   /**
-   * Handlers
+   * [Lifecycle]
    */
-  const handleClick = () => {
+  useEffect(() => {
+    const events = State.Bus.Events({ instance });
+
     /**
-     * OPEN the pop-up overlay.
+     * Intercept node click events looking for
+     * activation links to open the popup with.
      */
-    State.withEvents(instance, (e) => e.overlay.def(def));
-  };
+    const handler = (e: MouseEvent) => {
+      const el = e.target as HTMLAnchorElement;
+      if (!baseRef.current || el === null || !md) return;
+      if (!baseRef.current.contains(el)) return;
+      if (el.tagName.toUpperCase() !== 'A') return;
+      e.preventDefault();
+
+      const base = location.pathname;
+      const source = el.pathname.substring(base.length);
+      events.overlay.def(def, source);
+    };
+
+    /**
+     * Init/Dispose.
+     */
+    document.addEventListener('click', handler);
+    return () => {
+      document.removeEventListener('click', handler);
+      events.dispose();
+    };
+  }, [md?.markdown]);
 
   /**
    * [Render]
@@ -43,14 +66,11 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       MarginX: 60,
       marginTop: margin.top,
       marginBottom: margin.bottom,
-      cursor: 'pointer',
 
       border: `solid 1px`,
       borderColor: `${Color.alpha(COLORS.DARK, isOver ? 0.2 : 0.1)}`,
       boxShadow: `0 0 10px 0 ${Color.alpha(COLORS.DARK, isOver ? 0.02 : 0)}`,
       transition: `border-color 500ms, box-shadow 300ms`,
-
-      transform: `translateY(${isDown ? 1 : 0}px)`,
     }),
     header: css({
       userSelect: 'none',
@@ -72,17 +92,6 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       marginRight: 8,
     }),
 
-    button: css({
-      userSelect: 'none',
-      borderRadius: 5,
-      Padding: [6, 40, 4, 40],
-      fontSize: 11,
-      fontWeight: 600,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      color: COLORS.WHITE,
-      background: `linear-gradient(180deg, #4C94FF 100%, #1761E4 0%)`,
-      boxShadow: isOver ? `0 2px 4px 0 ${Color.format(-0.05)}` : undefined,
-    }),
     body: css({
       flex: 1,
       position: 'relative',
@@ -106,9 +115,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         </div>
       </div>
       <div {...styles.headerRight}>
-        <div {...styles.button}>
-          <span>{'OPEN'}</span>
-        </div>
+        <div>{/* RIGHT */}</div>
       </div>
     </div>
   );
@@ -120,18 +127,21 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         style={styles.iconWatermark}
         color={Color.alpha(COLORS.DARK, 0.04)}
       />
-      <MarkdownDoc instance={instance} markdown={def.detail} className={CLASS.TIGGER_PANEL} />
+      <MarkdownDoc
+        instance={instance}
+        markdown={def.detail}
+        className={CLASS.TIGGER_PANEL}
+        onParsed={(e) => setMd(e.md)}
+      />
     </div>
   );
 
   return (
     <div
       {...css(styles.base, props.style)}
-      onClick={handleClick}
+      ref={baseRef}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
-      onMouseDown={down(true)}
-      onMouseUp={down(false)}
     >
       {elHeader}
       {elBody}
