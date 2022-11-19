@@ -5,6 +5,7 @@ import { css, t } from '../common';
 export type CenterProps = {
   flex?: number;
   children?: JSX.Element;
+  className?: string;
   style?: t.CssValue;
 };
 
@@ -23,5 +24,9 @@ export const Center: React.FC<CenterProps> = (props) => {
       alignContent: 'center',
     }),
   };
-  return <div {...css(styles.base, props.style)}>{props.children}</div>;
+  return (
+    <div {...css(styles.base, props.style)} className={props.className}>
+      {props.children}
+    </div>
+  );
 };
