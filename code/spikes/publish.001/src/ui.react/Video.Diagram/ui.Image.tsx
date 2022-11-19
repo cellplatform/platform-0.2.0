@@ -8,6 +8,7 @@ export type VideoDiagramImageReadyHandler = (e: VideoDiagramImageReadyHandlerArg
 export type VideoDiagramImageReadyHandlerArgs = { ok: boolean };
 
 export type VideoDiagramImageProps = {
+  instance: t.Instance;
   src?: UrlString;
   dimmed?: boolean;
   style?: t.CssValue;

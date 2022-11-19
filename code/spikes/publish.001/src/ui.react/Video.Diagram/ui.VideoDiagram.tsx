@@ -20,7 +20,7 @@ export type VideoDiagramProps = {
 };
 
 export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { dimmed = false, minWidth = 550, minHeight = 550, md } = props;
+  const { instance, dimmed = false, minWidth = 550, minHeight = 550, md } = props;
 
   const state = State.useState(props.instance);
   const muted = state.current?.env.media.muted ?? false;
@@ -174,9 +174,14 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
   const elContent = (
     <div {...styles.content}>
-      {diagramSrc && <VideoDiagramImage src={diagramSrc} dimmed={dimmed} />}
+      {diagramSrc && <VideoDiagramImage instance={instance} src={diagramSrc} dimmed={dimmed} />}
       {markdown && (
-        <VideoDiagramMarkdown markdown={markdown} dimmed={dimmed} style={{ MarginX: 30 }} />
+        <VideoDiagramMarkdown
+          instance={instance}
+          markdown={markdown}
+          dimmed={dimmed}
+          style={{ MarginX: 30 }}
+        />
       )}
     </div>
   );

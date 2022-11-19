@@ -7,6 +7,7 @@ export type MarkdownDocProps = {
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
   paddingBottom?: number;
+  className?: string;
   style?: t.CssValue;
 };
 
@@ -75,8 +76,9 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     </div>
   );
 
+  const className = `${CLASS.ROOT} ${props.className ?? ''}`.trim();
   return (
-    <div {...css(styles.base, props.style)} className={CLASS.ROOT}>
+    <div {...css(styles.base, props.style)} className={className}>
       {elEmpty}
       {elHtml}
       {props.paddingBottom && <div {...styles.footerSpacer} />}

@@ -1,29 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Center, css, DEFAULTS, Processor, t } from '../common';
+import { Center, css, DEFAULTS, t } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc';
 
 const CLASS = DEFAULTS.MD.CLASS;
 
 export type VideoDiagramMarkdownProps = {
+  instance: t.Instance;
   dimmed?: boolean;
   markdown?: string;
   style?: t.CssValue;
 };
 
 export const VideoDiagramMarkdown: React.FC<VideoDiagramMarkdownProps> = (props) => {
-  const { dimmed } = props;
-  const [safeHtml, setSafeHtml] = useState('');
-
-  /**
-   * [Lifecycle]
-   */
-  useEffect(() => {
-    if (props.markdown) {
-      Processor.toHtml(props.markdown).then((e) => setSafeHtml(e.html));
-    } else {
-      setSafeHtml(''); // Reset.
-    }
-  }, [props.markdown]);
+  const { instance, dimmed } = props;
 
   /**
    * [Render]
@@ -39,7 +27,11 @@ export const VideoDiagramMarkdown: React.FC<VideoDiagramMarkdownProps> = (props)
   return (
     <div {...css(styles.base, props.style)} className={CLASS.ROOT}>
       <Center style={{ Absolute: 0 }} className={CLASS.BLOCK}>
-        <div dangerouslySetInnerHTML={{ __html: safeHtml }} className={CLASS.VIDEO_DIAGRAM} />
+        <MarkdownDoc
+          instance={instance}
+          markdown={props.markdown}
+          className={CLASS.VIDEO_DIAGRAM}
+        />
       </Center>
     </div>
   );
