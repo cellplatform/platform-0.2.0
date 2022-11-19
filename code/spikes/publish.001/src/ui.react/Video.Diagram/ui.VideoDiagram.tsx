@@ -30,6 +30,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const [vimeoStatus, setVimeoStatus] = useState<t.VimeoStatus | undefined>();
   const percent = vimeoStatus?.percent ?? 0;
 
+  const [timemap, setTimeMap] = useState<t.DocTimeWindow[]>([]);
+
   const [videoId, setVideoId] = useState<t.VimeoId | undefined>();
   const [diagramSrc, setDiagramSrc] = useState('');
   const [markdown, setMarkdown] = useState('');
@@ -55,6 +57,9 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     const { dispose, dispose$ } = rx.disposable();
     const def = md?.info.code.typed.find((e) => e.type.toLowerCase().startsWith('doc.diagram'));
     const yaml = !def ? undefined : (Text.Yaml.parse(def?.text) as t.DocDiagram);
+
+    const timemap = TimeMap.sortedMedia(yaml?.media);
+    setTimeMap(timemap);
 
     const resetContent = () => {
       setMarkdown('');
@@ -177,8 +182,10 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
   const elProgressBar = vimeo && (
     <ProgressBar
-      percent={percent}
       style={styles.progressBar}
+      percent={percent}
+      timemap={timemap}
+      duration={vimeoStatus?.duration}
       isPlaying={isPlaying}
       onClick={(e) => jumpToPercent(e.progress)}
     />

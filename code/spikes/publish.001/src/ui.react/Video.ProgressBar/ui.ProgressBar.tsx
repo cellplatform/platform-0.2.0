@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Color, COLORS, css, R, t, useSizeObserver, Value } from '../common';
+import { TimeMap } from './ui.TimeMap';
 
 type Color = string | number;
 type Percent = number; // 0..1
@@ -7,8 +8,10 @@ export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
 export type ProgressBarClickHandlerArgs = { progress: Percent };
 
 export type ProgressBarProps = {
+  timemap?: t.DocTimeWindow[];
   percent?: number;
   isPlaying?: boolean;
+  duration?: number;
   style?: t.CssValue;
   highlightColor?: Color;
   onClick?: ProgressBarClickHandler;
@@ -64,6 +67,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       backgroundColor: isOver || !isPlaying ? highlightColor : Color.alpha(COLORS.DARK, 0.3),
       transition: `background-color 200ms`,
     }),
+    timemap: css({
+      Absolute: isOver ? [7, 0, 7, 0] : [10, 0, 10, 0],
+      transition: `top 200ms, bottom 200ms`,
+    }),
   };
 
   return (
@@ -77,6 +84,14 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       <div {...styles.groove}>
         <div {...styles.thumb} />
       </div>
+      {props.timemap && (
+        <TimeMap
+          timemap={props.timemap}
+          duration={props.duration}
+          isOver={isOver}
+          style={styles.timemap}
+        />
+      )}
     </div>
   );
 };
