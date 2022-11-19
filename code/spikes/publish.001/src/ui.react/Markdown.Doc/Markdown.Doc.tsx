@@ -26,7 +26,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       Scroll: props.scroll,
       width: DEFAULTS.MD.DOC.width,
       color: globalStyles.DocStyles.p.color,
-      paddingBottom: 80,
+      paddingBottom: props.scroll ? 80 : undefined,
     }),
 
     empty: css({

@@ -1,5 +1,5 @@
 import { Color, COLORS, css, t } from '../common';
-import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
+import { MarkdownDoc } from '../Markdown.Doc';
 import { TooSmall } from '../TooSmall';
 import { OverlayFrame } from '../Overlay';
 import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Center, css, DEFAULTS, Processor, t } from '../common';
+import { MarkdownDoc } from '../Markdown.Doc';
 
 const CLASS = DEFAULTS.MD.CLASS;
 
