@@ -11,7 +11,7 @@ import { VideoDiagramVimeo } from './ui.Vimeo';
 import { Wrangle } from './Wrangle.mjs';
 
 export type VideoDiagramProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   md?: t.ProcessedMdast;
   dimmed?: boolean;
   minHeight?: number;

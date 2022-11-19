@@ -8,7 +8,7 @@ type Id = string;
  * Event API.
  */
 export function BusEvents(args: {
-  instance: t.StateInstance;
+  instance: t.Instance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.StateEvents {

@@ -7,7 +7,7 @@ import { defaultRenderer as defaultRenderer } from './Renderer';
  * Hook that isolates the markdown to display rendering.
  */
 export function useBlockRenderer(props: {
-  instance: t.StateInstance;
+  instance: t.Instance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
 }) {

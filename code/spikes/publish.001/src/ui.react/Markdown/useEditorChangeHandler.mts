@@ -4,7 +4,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { State, t } from '../common';
 
-export function useEditorChangeHandler(instance: t.StateInstance) {
+export function useEditorChangeHandler(instance: t.Instance) {
   const changeRef$ = useRef(new Subject<string>());
   const state = State.useState(instance);
 

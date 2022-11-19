@@ -6,7 +6,7 @@ type Semver = string;
 type UrlString = string;
 type UrlOrPathString = string;
 
-export type StateInstance = { bus: t.EventBus<any>; id?: Id };
+export type Instance = { bus: t.EventBus<any>; id?: Id };
 export type StateFetchKnownTopic = 'RootIndex' | 'Log';
 
 export type StateInfo = {

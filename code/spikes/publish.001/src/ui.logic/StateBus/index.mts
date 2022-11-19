@@ -15,7 +15,7 @@ export const StateBus = {
   /**
    * Helper for one-off interactions with the [Bus.Events] API.
    */
-  async withEvents(instance: t.StateInstance, fn: F) {
+  async withEvents(instance: t.Instance, fn: F) {
     const events = Events({ instance });
     const res = fn(events);
     if (Is.promise(res)) await res;

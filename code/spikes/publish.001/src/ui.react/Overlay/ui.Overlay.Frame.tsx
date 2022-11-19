@@ -4,7 +4,7 @@ import { Color, css, Spinner, State, t, useClickOutside } from '../common';
 import { useOverlayState } from './useOverlayState.mjs';
 
 export type OverlayFrameProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   def: t.OverlayDef;
   style?: t.CssValue;
 };

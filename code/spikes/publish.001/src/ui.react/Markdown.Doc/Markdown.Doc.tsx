@@ -3,7 +3,7 @@ import { useBlockRenderer } from './useBlockRenderer.mjs';
 import { useGlobalStyles } from '../Markdown.GlobalStyles';
 
 export type MarkdownDocProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
   paddingBottom?: number;

@@ -13,7 +13,7 @@ type UrlString = string;
  * Event controller.
  */
 export function BusController(args: {
-  instance: t.StateInstance;
+  instance: t.Instance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
   initial?: { location?: UrlString };

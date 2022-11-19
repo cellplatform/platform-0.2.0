@@ -5,7 +5,7 @@ import { OverlayFrame } from '../Overlay';
 import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 
 export type MarkdownLayoutProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   markdown?: { outline?: string; document?: string };
   overlay?: t.OverlayDef;
   selectedUrl?: string;

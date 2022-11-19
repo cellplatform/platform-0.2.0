@@ -3,7 +3,7 @@ import { Color, COLORS, css, Processor, State, t } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type OverlayTriggerPanelProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   def: t.OverlayDef;
   style?: t.CssValue;
 };
@@ -12,7 +12,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { def, instance } = props;
   const { margin = {} } = def;
 
-  const [detailHtml, setDetailHtml] = useState('');
+  const [safeDetailHtml, setSafeDetailHtml] = useState('');
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
@@ -34,7 +34,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
    * Lifecycle
    */
   useEffect(() => {
-    Processor.toHtml(def.detail).then((e) => setDetailHtml(e.html));
+    Processor.toHtml(def.detail).then((e) => setSafeDetailHtml(e.html));
   }, [def.detail]);
 
   /**
@@ -126,7 +126,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         style={styles.iconWatermark}
         color={Color.alpha(COLORS.DARK, 0.04)}
       />
-      <div {...styles.html} dangerouslySetInnerHTML={{ __html: detailHtml }} />
+      <div {...styles.html} dangerouslySetInnerHTML={{ __html: safeDetailHtml }} />
     </div>
   );
 

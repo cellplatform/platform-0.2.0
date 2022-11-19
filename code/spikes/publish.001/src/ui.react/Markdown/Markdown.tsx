@@ -4,7 +4,7 @@ import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
 import { useEditorChangeHandler } from './useEditorChangeHandler.mjs';
 
 export type MarkdownProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   showEditor?: boolean;
   style?: t.CssValue;
 };

@@ -8,7 +8,7 @@ const ViewerImports = {
 export type DocDef = { viewer: string };
 
 export type CommonProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   md: t.ProcessedMdast;
   dimmed?: boolean;
   style?: t.CssValue;
@@ -17,7 +17,7 @@ export type CommonProps = {
 /**
  * Hook for managing the loading data derived from an [OverlayDef].
  */
-export function useOverlayState(instance: t.StateInstance, def: t.OverlayDef) {
+export function useOverlayState(instance: t.Instance, def: t.OverlayDef) {
   const [ready, setReady] = useState(false);
   const [content, setContent] = useState<t.StateOverlayContent | undefined>();
   const [Component, setComponent] = useState<React.FC<CommonProps> | undefined>();

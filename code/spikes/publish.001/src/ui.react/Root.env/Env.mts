@@ -17,7 +17,7 @@ const url = new URL(window.location.href);
  * 💦
  */
 const bus = rx.bus();
-const instance: t.StateInstance = { bus };
+const instance: t.Instance = { bus };
 const controller = State.Bus.Controller({ instance, initial: { location: url.href } });
 
 KeyboardMonitor.listen(controller);

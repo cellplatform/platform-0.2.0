@@ -8,7 +8,7 @@ const DEFAULT = {
 };
 
 export type HistoryProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   title?: string;
   data?: t.PublicLogSummary;
   style?: t.CssValue;
