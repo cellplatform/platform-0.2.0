@@ -1,5 +1,5 @@
-import { Spec, expect } from '../../test.ui';
-import { ProgressBar } from './ProgressBar';
+import { Spec } from '../../test.ui';
+import { ProgressBar } from './ui.ProgressBar';
 
 export default Spec.describe('Video.ProbressBar', (e) => {
   e.it('init', async (e) => {
