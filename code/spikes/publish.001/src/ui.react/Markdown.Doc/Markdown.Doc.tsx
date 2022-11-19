@@ -57,9 +57,9 @@ const View: React.FC<MarkdownDocProps> = (props) => {
           return (
             <div
               key={i}
-              {...styles.element.htmlBlock}
-              className={CLASS.BLOCK}
               dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
+              className={CLASS.BLOCK}
+              {...styles.element.htmlBlock}
             />
           );
         }
