@@ -3,6 +3,9 @@ import { t, Processor } from '../common';
 
 import { defaultRenderer as defaultRenderer } from './Renderer';
 
+export type MarkdownParsedHandler = (e: MarkdownParsedHandlerArgs) => void;
+export type MarkdownParsedHandlerArgs = { md: t.ProcessedMdast };
+
 /**
  * Hook that isolates the markdown to display rendering.
  */
@@ -10,6 +13,7 @@ export function useBlockRenderer(props: {
   instance: t.Instance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
+  onParsed?: MarkdownParsedHandler;
 }) {
   const { instance } = props;
 
@@ -20,6 +24,7 @@ export function useBlockRenderer(props: {
     (async () => {
       const text = (props.markdown || '').trim();
       const md = await Processor.toMarkdown(text);
+      props.onParsed?.({ md });
 
       reset();
       const blocks: (string | JSX.Element)[] = [];

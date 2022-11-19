@@ -1,5 +1,5 @@
 import { css, DEFAULTS, FC, t } from '../common';
-import { useBlockRenderer } from './useBlockRenderer.mjs';
+import { useBlockRenderer, MarkdownParsedHandler } from './useBlockRenderer.mjs';
 import { useGlobalStyles } from '../Markdown.GlobalStyles';
 
 export type MarkdownDocProps = {
@@ -10,13 +10,14 @@ export type MarkdownDocProps = {
   style?: t.CssValue;
   paddingBottom?: number;
   width?: number;
+  onParsed?: MarkdownParsedHandler;
 };
 
 const CLASS = DEFAULTS.MD.CLASS;
 
 const View: React.FC<MarkdownDocProps> = (props) => {
-  const { instance, markdown, renderer } = props;
-  const { safeBlocks, isEmpty } = useBlockRenderer({ instance, markdown, renderer });
+  const { instance, markdown, renderer, onParsed } = props;
+  const { safeBlocks, isEmpty } = useBlockRenderer({ instance, markdown, renderer, onParsed });
   const globalStyles = useGlobalStyles();
 
   /**
