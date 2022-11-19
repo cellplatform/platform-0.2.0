@@ -8,7 +8,7 @@ const Imports = {
   Quote: () => import('../Markdown.Doc.Components/Doc.Quote'),
   Table: () => import('../Markdown.Doc.Components/Doc.Table'),
   Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
-  OverlayTrigger: () => import('../Overlay/Overlay.TriggerPanel'),
+  OverlayTrigger: () => import('../Overlay/ui.Overlay.TriggerPanel'),
 };
 
 /**
