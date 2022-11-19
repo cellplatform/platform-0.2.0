@@ -274,7 +274,7 @@ export function BusController(args: {
     // Attempt to load content.
     let md: t.ProcessedMdast | undefined;
     let error: string | undefined;
-    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, def.source));
+    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, e.source));
     const fetched = await Fetch.text(path);
     if (fetched.error) error = `Failed while loading overlay. ${fetched.error}`;
     if (!fetched.error) md = await Processor.toMarkdown(fetched.text);

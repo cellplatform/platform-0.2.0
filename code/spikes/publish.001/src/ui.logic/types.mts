@@ -45,7 +45,7 @@ export type OverlayDef = {
   title?: string;
   detail?: MarkdownString;
   margin?: { top?: number; bottom?: number };
-  source: IndexPath;
+  source?: IndexPath;
 };
 
 /**
