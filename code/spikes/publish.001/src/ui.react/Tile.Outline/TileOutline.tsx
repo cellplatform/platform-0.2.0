@@ -6,14 +6,16 @@ import { HeadingTile } from './Tile';
 export type TileOutlineProps = {
   markdown?: string;
   selectedUrl?: string;
-  scroll?: boolean;
   widths?: { root?: number; child?: number };
   style?: t.CssValue;
   onClick?: t.TileClickHandler;
-  renderInner?: t.RenderTileInner;
+  renderTile?: t.RenderTileInner;
 };
 
 export const TileOutline: React.FC<TileOutlineProps> = (props) => {
+  const rootWidth = props.widths?.root ?? 0;
+  const childWidth = props.widths?.child ?? 0;
+
   const [mdast, setMdast] = useState<t.MdastRoot | undefined>();
 
   useEffect(() => {
@@ -25,8 +27,8 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
    */
   const styles = {
     base: css({
-      Scroll: props.scroll,
       userSelect: 'none',
+      width: props.widths ? rootWidth + childWidth : undefined,
     }),
   };
 
@@ -50,12 +52,16 @@ export const TileOutline: React.FC<TileOutlineProps> = (props) => {
           selectedUrl={props.selectedUrl}
           onClick={props.onClick}
           widths={props.widths}
-          renderInner={props.renderInner}
+          renderTile={props.renderTile}
         />
       );
       elBlocks.push(el);
     }
   }
 
-  return <div {...css(styles.base, props.style)}>{elBlocks}</div>;
+  return (
+    <div className={'TileOutline'} {...css(styles.base, props.style)}>
+      {elBlocks}
+    </div>
+  );
 };

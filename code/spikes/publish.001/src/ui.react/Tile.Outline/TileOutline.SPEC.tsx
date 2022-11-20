@@ -31,7 +31,7 @@ export default Spec.describe('Spinner', (e) => {
         onClick={(e) => {
           console.log('⚡️ TileOutline.onClick:', e);
         }}
-        renderInner={(e) => {
+        renderTile={(e) => {
           const isRoot = R.equals(e.node, md.mdast.children[0]);
           if (!isRoot) return null;
 

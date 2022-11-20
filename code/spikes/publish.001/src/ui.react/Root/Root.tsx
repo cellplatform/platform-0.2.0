@@ -13,8 +13,6 @@ const { instance } = env;
 /**
  * Component
  */
-export type ShowMarkdownComponent = 'editor' | 'outline';
-
 export type RootProps = {
   showEditor?: boolean;
   style?: t.CssValue;

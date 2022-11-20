@@ -42,6 +42,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         paddingTop: 20,
         paddingRight: 30,
         paddingBottom: 50,
+        display: 'flex',
       }),
       main: css({
         position: 'relative',

@@ -9,7 +9,7 @@ export type HeadingTileProps = {
   style?: t.CssValue;
   widths?: { root?: number; child?: number };
   onClick?: t.TileClickHandler;
-  renderInner?: t.RenderTileInner;
+  renderTile?: t.RenderTileInner;
 };
 
 const toRef = (node: t.MdastNode): t.TileClickHandlerArgs['ref'] => {
@@ -25,7 +25,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
   if (!selectedUrl && props.index === 0) isRootSelected = true;
 
   const inner = (text: string, node: t.MdastNode) => {
-    const res = props.renderInner?.({ index, text, node });
+    const res = props.renderTile?.({ index, text, node });
     return res ?? <div>{text}</div>;
   };
 
