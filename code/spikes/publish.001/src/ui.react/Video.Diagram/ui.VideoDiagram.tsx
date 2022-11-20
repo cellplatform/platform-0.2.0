@@ -177,7 +177,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
           instance={instance}
           markdown={markdown}
           dimmed={dimmed}
-          style={{ MarginX: 80, marginBottom: '5%' }}
+          style={{ MarginX: 80, marginBottom: '3%' }}
         />
       )}
     </div>

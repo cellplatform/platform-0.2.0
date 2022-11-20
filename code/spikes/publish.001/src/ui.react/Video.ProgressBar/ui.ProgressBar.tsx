@@ -77,7 +77,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
         Absolute: [0, -10, 0, null],
         pointerEvents: 'none',
         width: 0,
-        opacity: isOver ? 1 : 0,
+        opacity: isOver || !isPlaying ? 1 : 0,
         transition: `opacity 200ms`,
       }),
       inner: css({

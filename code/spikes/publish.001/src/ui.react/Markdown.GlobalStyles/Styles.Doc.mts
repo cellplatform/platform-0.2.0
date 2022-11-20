@@ -4,6 +4,12 @@ const DEFAULT = {
   FONT_SIZE: 18,
   COLOR: Color.lighten(COLORS.DARK, 10),
   HEADING_COLOR: Color.lighten(COLORS.DARK, 15),
+  CSS: {
+    EM_HIGHLIGHT: {
+      color: '#E21B22', // RED
+      fontStyle: 'normal',
+    },
+  },
 };
 
 export const DocStyles = {
@@ -16,6 +22,9 @@ export const DocStyles = {
   },
   'h1:first-of-type': { marginBottom: 60 },
   'h1, h2': { color: DEFAULT.HEADING_COLOR },
+
+  'h1 em': DEFAULT.CSS.EM_HIGHLIGHT,
+  'h2 em': DEFAULT.CSS.EM_HIGHLIGHT,
 
   /**
    * Paragraphs
@@ -79,10 +88,7 @@ export const DocStyles = {
    * See: /component/<Doc.Quote>
    */
   'blockquote p': { fontSize: 26 },
-  'blockquote p em': {
-    color: '#E21B22', // RED
-    fontStyle: 'normal',
-  },
+  'blockquote p em': DEFAULT.CSS.EM_HIGHLIGHT,
 
   /**
    * Table
