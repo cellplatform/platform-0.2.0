@@ -126,7 +126,9 @@ const Wrangle = {
     if (!status) return '';
     const seconds = Value.round(status.seconds, 0);
     const duration = Value.round(status.duration, 0);
-    return `${seconds}s of ${Wrangle.secondsToString(duration)}`;
+    return status.percent === 1
+      ? `${seconds}s`
+      : `${seconds}s of ${Wrangle.secondsToString(duration)}`;
   },
 
   secondsToString(value: Seconds) {
