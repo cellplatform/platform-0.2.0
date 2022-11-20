@@ -53,9 +53,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       Flex: 'x-center-center',
     }),
 
-    footerSpacer: css({
-      height: props.paddingBottom,
-    }),
+    footerSpacer: css({ height: props.paddingBottom }),
   };
 
   const elSpinner = isLoading && (

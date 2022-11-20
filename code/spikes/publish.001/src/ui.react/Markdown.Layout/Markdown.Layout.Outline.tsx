@@ -10,18 +10,25 @@ export type MarkdownLayoutOutlineProps = {
 };
 
 export const MarkdownLayoutOutline: React.FC<MarkdownLayoutOutlineProps> = (props) => {
+  const styles = {
+    footerSpacer: css({ height: 40 }),
+  };
+
   return (
-    <TileOutline
-      style={props.style}
-      widths={{ root: 250, child: 300 }}
-      markdown={props.markdown}
-      selectedUrl={props.selectedUrl}
-      onClick={props.onSelectClick}
-      renderTile={(e) => {
-        const isRoot = !e.text && e.index === 0 && e.node.type === 'heading';
-        return isRoot ? <RootInner /> : null;
-      }}
-    />
+    <div>
+      <TileOutline
+        style={props.style}
+        widths={{ root: 250, child: 300 }}
+        markdown={props.markdown}
+        selectedUrl={props.selectedUrl}
+        onClick={props.onSelectClick}
+        renderTile={(e) => {
+          const isRoot = !e.text && e.index === 0 && e.node.type === 'heading';
+          return isRoot ? <RootInner /> : null;
+        }}
+      />
+      <div {...styles.footerSpacer}> </div>
+    </div>
   );
 };
 
