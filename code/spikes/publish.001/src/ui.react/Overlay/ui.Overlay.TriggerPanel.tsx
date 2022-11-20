@@ -67,9 +67,10 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       marginBottom: margin.bottom,
 
       border: `solid 1px`,
-      borderColor: `${Color.alpha(COLORS.DARK, isOver ? 0.2 : 0.1)}`,
-      boxShadow: `0 0 10px 0 ${Color.alpha(COLORS.DARK, isOver ? 0.02 : 0)}`,
-      transition: `border-color 500ms, box-shadow 300ms`,
+      borderColor: `${Color.alpha(COLORS.DARK, 0.15)}`,
+      // borderColor: `${Color.alpha(COLORS.DARK, isOver ? 0.2 : 0.1)}`,
+      // boxShadow: `0 0 10px 0 ${Color.alpha(COLORS.DARK, isOver ? 0.02 : 0)}`,
+      // transition: `border-color 500ms, box-shadow 300ms`,
     }),
     header: css({
       userSelect: 'none',
