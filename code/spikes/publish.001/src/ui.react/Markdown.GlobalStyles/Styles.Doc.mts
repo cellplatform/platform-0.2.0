@@ -6,7 +6,8 @@ const DEFAULT = {
   HEADING_COLOR: Color.lighten(COLORS.DARK, 15),
   CSS: {
     EM_HIGHLIGHT: {
-      color: '#E21B22', // RED
+      // color: '#E21B22', // RED
+      color: COLORS.MAGENTA,
       fontStyle: 'normal',
     },
   },
@@ -17,11 +18,11 @@ export const DocStyles = {
    * Headings and Sections
    */
   h1: {
-    fontSize: 46,
+    fontSize: 50,
     letterSpacing: `-0.01em`,
   },
-  'h1:first-of-type': { marginBottom: 60 },
-  'h1, h2': { color: DEFAULT.HEADING_COLOR },
+  // 'h1:first-of-type': { marginBottom: 60 },
+  // 'h1, h2': { color: DEFAULT.HEADING_COLOR },
 
   'h1 em': DEFAULT.CSS.EM_HIGHLIGHT,
   'h2 em': DEFAULT.CSS.EM_HIGHLIGHT,
@@ -32,12 +33,18 @@ export const DocStyles = {
    */
   p: {
     fontSize: DEFAULT.FONT_SIZE,
-    lineHeight: '1.5em',
+    lineHeight: '1.8em',
     marginBlockStart: '2em',
     marginBlockEnd: '2em',
     color: DEFAULT.COLOR,
   },
   'p del': { opacity: 0.3 },
+  'p em': {
+    opacity: 1,
+    fontStyle: 'normal',
+    color: COLORS.DARK,
+    backgroundColor: Color.alpha(COLORS.MAGENTA, 0.1),
+  },
 
   /**
    * Links (anchor)
