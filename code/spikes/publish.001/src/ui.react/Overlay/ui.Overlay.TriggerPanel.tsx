@@ -36,6 +36,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       border: `solid 1px`,
       borderColor: `${Color.alpha(COLORS.DARK, 0.15)}`,
     }),
+
     header: css({
       userSelect: 'none',
       Padding: [12, 15, 12, 18],
@@ -45,6 +46,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
     }),
     headerLeft: css({}),
     headerRight: css({}),
+
     title: css({
       Flex: 'x-center-center',
       paddingTop: 4,
