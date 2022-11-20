@@ -39,6 +39,7 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       style={{ flex: 1 }}
       instance={instance}
       markdown={{ outline, document }}
+      loading={{ document: Boolean(state.loading.document) }}
       overlay={state.overlay?.def}
       version={version}
       selectedUrl={selectedUrl}

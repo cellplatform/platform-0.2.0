@@ -6,6 +6,7 @@ export const DEFAULTS = {
   get state(): t.StateTree {
     return {
       env: { media: { muted: false } },
+      loading: { document: undefined },
       selection: { index: { path: '' } },
     };
   },

@@ -4,7 +4,7 @@ import { Fetch } from '../Fetch.mjs';
 import { FetchFile, Storage } from '../Storage';
 import { BusEvents } from './BusEvents.mjs';
 import { BusMemoryState } from './BusMemoryState.mjs';
-import { Processor, DEFAULTS, Pkg, R, rx, t, Time, Path, BundlePaths } from './common.mjs';
+import { slug, Processor, DEFAULTS, Pkg, R, rx, t, Time, Path, BundlePaths } from './common.mjs';
 import { Paths } from './Paths.mjs';
 
 type UrlString = string;
@@ -243,21 +243,37 @@ export function BusController(args: {
     //
     .pipe(distinctUntilChanged(selectionDiff))
     .subscribe(async (e) => {
+      const tx = slug();
       const url = e.current.selection.index?.path;
-      const commit = 'Load document after URL selection change';
 
-      await state.change(commit, async (draft) => {
-        const markdown = draft.markdown ?? (draft.markdown = {});
-        const before = markdown.document;
-        if (!url) {
-          markdown.document = undefined;
-        } else {
-          const path = Paths.toDataPath(url);
-          const { text, error } = await Fetch.text(path);
-          markdown.document = error ? undefined : text;
+      const get = (draft: t.StateTree) => draft.markdown ?? (draft.markdown = {});
+
+      if (!url) {
+        const commit = 'document load: cleared';
+        await state.change(commit, (draft) => {
+          get(draft).document = undefined;
+          draft.loading.document = undefined;
+        });
+        fireChanged([commit]);
+      }
+
+      if (url) {
+        const commit = 'load document (selection): start';
+        await state.change(commit, (draft) => (draft.loading.document = tx));
+        fireChanged([commit]);
+
+        const path = Paths.toDataPath(url);
+        const { text, error } = await Fetch.text(path);
+
+        if (state.current.loading.document === tx) {
+          const commit = 'load document (selection): complete';
+          await state.change(commit, (draft) => {
+            get(draft).document = error ? undefined : text;
+            draft.loading.document = undefined;
+          });
+          fireChanged([commit]);
         }
-        if (markdown.document !== before) fireChanged([commit]);
-      });
+      }
     });
 
   /**

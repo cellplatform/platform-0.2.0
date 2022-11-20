@@ -1,11 +1,12 @@
-import { css, DEFAULTS, FC, t } from '../common';
-import { useBlockRenderer, MarkdownParsedHandler } from './useBlockRenderer.mjs';
+import { css, DEFAULTS, FC, Spinner, t } from '../common';
 import { useGlobalStyles } from '../Markdown.GlobalStyles';
+import { MarkdownParsedHandler, useBlockRenderer } from './useBlockRenderer.mjs';
 
 export type MarkdownDocProps = {
   instance: t.Instance;
   markdown?: string;
   renderer?: t.MarkdownDocBlockRenderer;
+  isLoading?: boolean;
   className?: string;
   style?: t.CssValue;
   paddingBottom?: number;
@@ -16,8 +17,8 @@ export type MarkdownDocProps = {
 const CLASS = DEFAULTS.MD.CLASS;
 
 const View: React.FC<MarkdownDocProps> = (props) => {
-  const { instance, markdown, renderer, onParsed } = props;
-  const { safeBlocks, isEmpty } = useBlockRenderer({ instance, markdown, renderer, onParsed });
+  const { instance, markdown, renderer, onParsed, isLoading } = props;
+  const { safeBlocks } = useBlockRenderer({ instance, markdown, renderer, onParsed });
   const globalStyles = useGlobalStyles();
 
   /**
@@ -26,31 +27,40 @@ const View: React.FC<MarkdownDocProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      width: props.width,
+      overflow: 'hidden',
       color: globalStyles.DocStyles.p.color,
+      width: props.width,
+    }),
+    body: css({
+      position: 'relative',
     }),
 
-    empty: css({
-      marginTop: 30,
-      fontSize: 14,
-      fontStyle: 'italic',
-      textAlign: 'center',
-      opacity: 0.3,
+    blocks: css({
+      userSelect: 'text',
+      opacity: isLoading ? 0.1 : 1,
+      transition: `300ms`,
     }),
-
-    blocks: css({}),
 
     element: {
       htmlBlock: css({}),
       jsxBlock: css({}),
     },
 
+    spinner: css({
+      Absolute: [38, 0, null, 0],
+      Flex: 'x-center-center',
+    }),
+
     footerSpacer: css({
       height: props.paddingBottom,
     }),
   };
 
-  const elEmpty = isEmpty && <div {...styles.empty}>{'Nothing to display'}</div>;
+  const elSpinner = isLoading && (
+    <div {...styles.spinner}>
+      <Spinner />
+    </div>
+  );
 
   const elHtml = (
     <div {...styles.blocks}>
@@ -78,12 +88,18 @@ const View: React.FC<MarkdownDocProps> = (props) => {
     </div>
   );
 
+  const elBody = (
+    <div {...styles.body}>
+      {elHtml}
+      {props.paddingBottom && <div {...styles.footerSpacer} />}
+    </div>
+  );
+
   const className = `${CLASS.ROOT} ${props.className ?? ''}`.trim();
   return (
     <div {...css(styles.base, props.style)} className={className}>
-      {elEmpty}
-      {elHtml}
-      {props.paddingBottom && <div {...styles.footerSpacer} />}
+      {elBody}
+      {elSpinner}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 export type MarkdownLayoutProps = {
   instance: t.Instance;
   markdown?: { outline?: string; document?: string };
+  loading?: { document?: boolean };
   overlay?: t.OverlayDef;
   selectedUrl?: string;
   version?: string;
@@ -15,7 +16,7 @@ export type MarkdownLayoutProps = {
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
-  const { instance, overlay } = props;
+  const { instance, overlay, loading = {} } = props;
 
   /**
    * [Render]
@@ -78,6 +79,7 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         <MarkdownDoc
           instance={instance}
           markdown={props.markdown?.document}
+          isLoading={Boolean(loading.document)}
           width={DEFAULTS.MD.DOC.width}
           paddingBottom={120}
         />

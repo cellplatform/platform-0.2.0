@@ -1,7 +1,7 @@
 import * as t from '../common/types.mjs';
 export * from './StateBus/types.mjs';
 
-type Id = string;
+type Tx = string;
 type IndexPath = string;
 type DirPath = string;
 type MarkdownString = string;
@@ -11,6 +11,7 @@ type MarkdownString = string;
  */
 export type StateTree = {
   env: StateEnvironment;
+  loading: { document?: Tx };
   location?: StateLocation;
   markdown?: StateMarkdown;
   selection: StateSelection;
@@ -33,7 +34,7 @@ export type StateEnvironment = {
  * Popup overlay
  */
 export type StateOverlay = {
-  tx: Id;
+  tx: Tx;
   def: t.OverlayDef;
   content?: StateOverlayContent;
   error?: string;
