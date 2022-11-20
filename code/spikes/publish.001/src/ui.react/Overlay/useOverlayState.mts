@@ -9,7 +9,6 @@ export type DocDef = { viewer: string };
 
 export type CommonProps = {
   instance: t.Instance;
-  md: t.ProcessedMdast;
   dimmed?: boolean;
   style?: t.CssValue;
 };
@@ -84,7 +83,7 @@ export function useOverlayState(instance: t.Instance, def: t.OverlayDef) {
      * Dispose.
      */
     return () => state.dispose();
-  }, [instance.id, def.source]);
+  }, [instance.id, def.path]);
 
   /**
    * API

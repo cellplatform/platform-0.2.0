@@ -280,7 +280,7 @@ export function BusController(args: {
    * Overlay: Initiate
    */
   events.overlay.req$.subscribe(async (e) => {
-    const { tx, def } = e;
+    const { tx, def, context } = e;
 
     // Initial setup.
     const commit1 = `Initiate showing overlay`;
@@ -290,7 +290,7 @@ export function BusController(args: {
     // Attempt to load content.
     let md: t.ProcessedMdast | undefined;
     let error: string | undefined;
-    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, e.source));
+    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.md, e.path));
     const fetched = await Fetch.text(path);
     if (fetched.error) error = `Failed while loading overlay. ${fetched.error}`;
     if (!fetched.error) md = await Processor.toMarkdown(fetched.text);
@@ -299,7 +299,8 @@ export function BusController(args: {
     const commit2 = `Update overlay with loaded content ${error ? '(failed)' : ''}`.trim();
     await state.change(commit2, (draft) => {
       const overlay = draft.overlay || (draft.overlay = { tx, def });
-      overlay.content = md ? { md } : undefined;
+      overlay.content = md ? { md, path: e.path } : undefined;
+      overlay.context = context;
       overlay.error = error;
     });
     fireChanged([commit2]);

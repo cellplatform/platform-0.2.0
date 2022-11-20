@@ -4,7 +4,7 @@ type Id = string;
 type Milliseconds = number;
 type Semver = string;
 type UrlString = string;
-type UrlOrPathString = string;
+type PathString = string;
 
 export type Instance = { bus: t.EventBus<any>; id?: Id };
 export type StateFetchKnownTopic = 'RootIndex' | 'Log';
@@ -59,7 +59,11 @@ export type StateEvents = t.Disposable & {
     res$: t.Observable<t.StateOverlayRes>;
     content$: t.Observable<t.StateOverlay>;
     close$: t.Observable<t.StateOverlayClose>;
-    def(def: t.OverlayDef, source: UrlOrPathString): Promise<StateOverlayRes>;
+    def(
+      def: t.OverlayDef,
+      path: PathString,
+      options?: { context?: t.StateOverlayContext[] },
+    ): Promise<StateOverlayRes>;
     close(options?: { errors?: string[] }): Promise<void>;
   };
 };
@@ -170,7 +174,7 @@ export type StateSelectEvent = {
   type: 'app.state/select';
   payload: StateSelect;
 };
-export type StateSelect = { instance: Id; selected?: UrlOrPathString };
+export type StateSelect = { instance: Id; selected?: PathString };
 
 /**
  * Overlay
@@ -183,7 +187,8 @@ export type StateOverlayReq = {
   tx: Id;
   instance: Id;
   def: t.OverlayDef;
-  source: UrlOrPathString;
+  path: PathString;
+  context?: t.StateOverlayContext[];
 };
 
 export type StateOverlayResEvent = {

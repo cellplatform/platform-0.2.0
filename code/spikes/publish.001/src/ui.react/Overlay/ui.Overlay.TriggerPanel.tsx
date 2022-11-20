@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { SKIP, visit } from 'unist-util-visit';
 
-import { Color, COLORS, css, DEFAULTS, State, t } from '../common';
+import { Color, COLORS, css, DEFAULTS, State, t, Path } from '../common';
 import { Icons } from '../Icons.mjs';
 import { MarkdownDoc } from '../Markdown.Doc';
 
@@ -18,14 +19,27 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
 
   const baseRef = useRef<HTMLDivElement>(null);
   const [md, setMd] = useState<t.ProcessedMdast | undefined>();
-  const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
 
   /**
    * [Lifecycle]
    */
   useEffect(() => {
     const events = State.Bus.Events({ instance });
+
+    type T = { title: string; path: string };
+    const getLinks = (mdast?: t.MdastRoot): T[] => {
+      if (!mdast) return [];
+
+      const res: T[] = [];
+      visit(mdast, 'link', (node) => {
+        const path = node.url.replace(/^\.\//, '');
+        let title = 'Untitled';
+        if (node.children[0].type === 'text') title = node.children[0].value;
+        res.push({ title, path });
+      });
+
+      return res;
+    };
 
     /**
      * Intercept node click events looking for
@@ -40,7 +54,9 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
 
       const base = location.pathname;
       const source = el.pathname.substring(base.length);
-      events.overlay.def(def, source);
+      const context = getLinks(md?.mdast);
+
+      events.overlay.def(def, source, { context });
     };
 
     /**
@@ -48,8 +64,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
      */
     document.addEventListener('click', handler);
     return () => {
-      document.removeEventListener('click', handler);
       events.dispose();
+      document.removeEventListener('click', handler);
     };
   }, [md?.markdown]);
 
@@ -68,9 +84,6 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
 
       border: `solid 1px`,
       borderColor: `${Color.alpha(COLORS.DARK, 0.15)}`,
-      // borderColor: `${Color.alpha(COLORS.DARK, isOver ? 0.2 : 0.1)}`,
-      // boxShadow: `0 0 10px 0 ${Color.alpha(COLORS.DARK, isOver ? 0.02 : 0)}`,
-      // transition: `border-color 500ms, box-shadow 300ms`,
     }),
     header: css({
       userSelect: 'none',
@@ -138,12 +151,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   );
 
   return (
-    <div
-      {...css(styles.base, props.style)}
-      ref={baseRef}
-      onMouseEnter={over(true)}
-      onMouseLeave={over(false)}
-    >
+    <div {...css(styles.base, props.style)} ref={baseRef}>
       {elHeader}
       {elBody}
     </div>

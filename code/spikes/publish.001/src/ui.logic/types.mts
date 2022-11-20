@@ -2,7 +2,7 @@ import * as t from '../common/types.mjs';
 export * from './StateBus/types.mjs';
 
 type Tx = string;
-type IndexPath = string;
+type FilePath = string;
 type DirPath = string;
 type MarkdownString = string;
 
@@ -37,16 +37,18 @@ export type StateOverlay = {
   tx: Tx;
   def: t.OverlayDef;
   content?: StateOverlayContent;
+  context?: StateOverlayContext[];
   error?: string;
 };
 
-export type StateOverlayContent = { md: t.ProcessedMdast };
+export type StateOverlayContent = { md: t.ProcessedMdast; path: FilePath };
+export type StateOverlayContext = { title: string; path: FilePath };
 
 export type OverlayDef = {
   title?: string;
   detail?: MarkdownString;
   margin?: { top?: number; bottom?: number };
-  source?: IndexPath;
+  path?: FilePath;
 };
 
 /**

@@ -53,12 +53,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
   );
 
   const el = state.ready && state.Component && state.content?.md && (
-    <state.Component
-      instance={instance}
-      md={state.content?.md}
-      dimmed={isOverGutter}
-      style={{ Absolute: 0 }}
-    />
+    <state.Component instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />
   );
 
   return (

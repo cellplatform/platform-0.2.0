@@ -154,7 +154,8 @@ export function BusEvents(args: {
         return true;
       }),
     ),
-    async def(def, source) {
+    async def(def, path, options = {}) {
+      const { context } = options;
       const tx = slug();
       const op = 'overaly';
       const res$ = overlay.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -162,7 +163,7 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'app.state/overlay:req',
-        payload: { tx, instance, def, source },
+        payload: { tx, instance, def, path, context },
       });
 
       const res = await first;

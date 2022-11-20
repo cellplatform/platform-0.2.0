@@ -12,7 +12,6 @@ import { Wrangle } from './Wrangle.mjs';
 
 export type VideoDiagramProps = {
   instance: t.Instance;
-  md?: t.ProcessedMdast;
   dimmed?: boolean;
   minHeight?: number;
   minWidth?: number;
@@ -20,10 +19,11 @@ export type VideoDiagramProps = {
 };
 
 export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { instance, dimmed = false, minWidth = 550, minHeight = 550, md } = props;
+  const { instance, dimmed = false, minWidth = 550, minHeight = 550 } = props;
 
   const state = State.useState(props.instance);
   const muted = state.current?.env.media.muted ?? false;
+  const md = state.current?.overlay?.content?.md;
 
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const [vimeoStatus, setVimeoStatus] = useState<t.VimeoStatus | undefined>();
@@ -66,6 +66,11 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
     const updateState = (status?: t.VimeoStatus) => {
       if (!def || !yaml) return;
+
+      const context = state.current?.overlay?.context ?? [];
+      console.log('-------------------------------------------');
+      console.log('def', def);
+      console.log('context', context);
 
       /**
        * TODO 🐷
@@ -113,7 +118,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
     if (vimeo) {
       const vimeoStatus$ = vimeo?.status.$.pipe(takeUntil(dispose$));
-      vimeoStatus$.subscribe((e) => updateState(e));
+      vimeoStatus$.subscribe((status) => updateState(status));
     }
 
     updateState();
