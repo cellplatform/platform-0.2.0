@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { SKIP, visit } from 'unist-util-visit';
+import { useState } from 'react';
 
-import { Color, COLORS, css, DEFAULTS, State, t, Path } from '../common';
+import { Color, COLORS, css, DEFAULTS, t } from '../common';
 import { Icons } from '../Icons.mjs';
 import { MarkdownDoc } from '../Markdown.Doc';
+import { useTriggerClickHandler } from './useTriggerClickHandler.mjs';
 
 const CLASS = DEFAULTS.MD.CLASS;
 
@@ -17,57 +17,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { instance, def } = props;
   const { margin = {} } = def;
 
-  const baseRef = useRef<HTMLDivElement>(null);
   const [md, setMd] = useState<t.ProcessedMdast | undefined>();
-
-  /**
-   * [Lifecycle]
-   */
-  useEffect(() => {
-    const events = State.Bus.Events({ instance });
-
-    type T = { title: string; path: string };
-    const getLinks = (mdast?: t.MdastRoot): T[] => {
-      if (!mdast) return [];
-
-      const res: T[] = [];
-      visit(mdast, 'link', (node) => {
-        const path = node.url.replace(/^\.\//, '');
-        let title = 'Untitled';
-        if (node.children[0].type === 'text') title = node.children[0].value;
-        res.push({ title, path });
-      });
-
-      return res;
-    };
-
-    /**
-     * Intercept node click events looking for
-     * activation links to open the popup with.
-     */
-    const handler = (e: MouseEvent) => {
-      const el = e.target as HTMLAnchorElement;
-      if (!baseRef.current || el === null || !md) return;
-      if (!baseRef.current.contains(el)) return;
-      if (el.tagName.toUpperCase() !== 'A') return;
-      e.preventDefault();
-
-      const base = location.pathname;
-      const source = el.pathname.substring(base.length);
-      const context = getLinks(md?.mdast);
-
-      events.overlay.def(def, source, { context });
-    };
-
-    /**
-     * Init/Dispose.
-     */
-    document.addEventListener('click', handler);
-    return () => {
-      events.dispose();
-      document.removeEventListener('click', handler);
-    };
-  }, [md?.markdown]);
+  const click = useTriggerClickHandler({ instance, def, md });
 
   /**
    * [Render]
@@ -151,7 +102,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   );
 
   return (
-    <div {...css(styles.base, props.style)} ref={baseRef}>
+    <div {...css(styles.base, props.style)} ref={click.ref}>
       {elHeader}
       {elBody}
     </div>
