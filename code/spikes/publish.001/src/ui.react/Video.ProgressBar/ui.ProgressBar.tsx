@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Color, COLORS, css, R, t, useSizeObserver, Value } from '../common';
+import { Color, COLORS, css, R, t, useSizeObserver, Value, Time } from '../common';
 import { TimeMap } from './ui.TimeMap';
 
 type Color = string | number;
@@ -9,17 +9,18 @@ export type ProgressBarClickHandlerArgs = { progress: Percent };
 
 export type ProgressBarProps = {
   timemap?: t.DocTimeWindow[];
-  percent?: number;
-  isPlaying?: boolean;
-  duration?: number;
+  status?: t.VimeoStatus;
   style?: t.CssValue;
   highlightColor?: Color;
   onClick?: ProgressBarClickHandler;
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
-  const { isPlaying = false } = props;
-  const percent = R.clamp(0, 1, props.percent ?? 0);
+  const { status } = props;
+
+  const isPlaying = status?.playing ?? false;
+  const duration = status?.duration ?? 0;
+  const percent = R.clamp(0, 1, status?.percent ?? 0);
   const highlightColor = Color.format(props.highlightColor ?? COLORS.RED);
 
   const size = useSizeObserver();
@@ -67,11 +68,36 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       backgroundColor: isOver || !isPlaying ? highlightColor : Color.alpha(COLORS.DARK, 0.3),
       transition: `background-color 200ms`,
     }),
-    timemap: css({
+    timeMap: css({
       Absolute: isOver ? [7, 0, 7, 0] : [10, 0, 10, 0],
       transition: `top 200ms, bottom 200ms`,
     }),
+    timeStatus: {
+      base: css({
+        Absolute: [0, -10, 0, null],
+        pointerEvents: 'none',
+        width: 0,
+        opacity: isOver ? 1 : 0,
+        transition: `opacity 200ms`,
+      }),
+      inner: css({
+        Absolute: [0, null, 0, 0],
+        width: 120,
+        fontSize: 13,
+        Flex: 'y-center-center',
+      }),
+    },
   };
+
+  const elTimeMap = props.timemap && (
+    <TimeMap timemap={props.timemap} duration={duration} isOver={isOver} style={styles.timeMap} />
+  );
+
+  const elTimeStatus = status && (
+    <div {...styles.timeStatus.base}>
+      <div {...styles.timeStatus.inner}>{Wrangle.toTimeStatusString(status)}</div>
+    </div>
+  );
 
   return (
     <div
@@ -84,14 +110,21 @@ export const ProgressBar: React.FC<ProgressBarProps> = (props) => {
       <div {...styles.groove}>
         <div {...styles.thumb} />
       </div>
-      {props.timemap && (
-        <TimeMap
-          timemap={props.timemap}
-          duration={props.duration}
-          isOver={isOver}
-          style={styles.timemap}
-        />
-      )}
+      {elTimeMap}
+      {elTimeStatus}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  toTimeStatusString(status?: t.VimeoStatus) {
+    if (!status) return '';
+    const seconds = Value.round(status.seconds, 0);
+    const duration = Value.round(status.duration, 0);
+    return `${seconds}s of ${Time.duration(duration * 1000).toString()}`;
+  },
 };
