@@ -17,7 +17,6 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { margin = {} } = def;
 
   const baseRef = useRef<HTMLDivElement>(null);
-
   const [md, setMd] = useState<t.ProcessedMdast | undefined>();
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
@@ -97,6 +96,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       position: 'relative',
       overflow: 'hidden',
       PaddingX: 50,
+      paddingBottom: 40,
     }),
     iconWatermark: css({
       Absolute: [-260, null, null, -250],
