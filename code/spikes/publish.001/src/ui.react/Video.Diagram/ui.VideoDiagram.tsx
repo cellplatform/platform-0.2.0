@@ -36,7 +36,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
   const size = useSizeObserver();
   const isTooSmall = !size.ready
-    ? undefined
+    ? false
     : size.rect.width < minHeight || size.rect.height < minWidth;
 
   /**
