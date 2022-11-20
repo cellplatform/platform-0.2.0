@@ -43,7 +43,7 @@ export const DocStyles = {
     opacity: 1,
     fontStyle: 'normal',
     color: COLORS.DARK,
-    backgroundColor: Color.alpha(COLORS.YELLOW, 0.1),
+    backgroundColor: Color.alpha(COLORS.CYAN, 0.1),
   },
 
   /**
