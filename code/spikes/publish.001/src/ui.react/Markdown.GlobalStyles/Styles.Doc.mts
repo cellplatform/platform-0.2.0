@@ -6,9 +6,9 @@ const DEFAULT = {
   HEADING_COLOR: Color.lighten(COLORS.DARK, 15),
   CSS: {
     EM_HIGHLIGHT: {
+      fontStyle: 'normal',
       // color: '#E21B22', // RED
       color: COLORS.MAGENTA,
-      fontStyle: 'normal',
     },
   },
 };
@@ -43,7 +43,7 @@ export const DocStyles = {
     opacity: 1,
     fontStyle: 'normal',
     color: COLORS.DARK,
-    backgroundColor: Color.alpha(COLORS.MAGENTA, 0.1),
+    backgroundColor: Color.alpha(COLORS.YELLOW, 0.1),
   },
 
   /**
@@ -95,7 +95,11 @@ export const DocStyles = {
    * See: /component/<Doc.Quote>
    */
   'blockquote p': { fontSize: 26 },
-  'blockquote p em': DEFAULT.CSS.EM_HIGHLIGHT,
+  'blockquote em': {
+    fontStyle: 'normal',
+    color: '#E21B22', // RED
+    backgroundColor: 'transparent',
+  },
 
   /**
    * Table
