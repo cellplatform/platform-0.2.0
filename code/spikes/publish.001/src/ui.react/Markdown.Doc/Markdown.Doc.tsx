@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { css, DEFAULTS, FC, Spinner, t } from '../common';
 import { useGlobalStyles } from '../Markdown.GlobalStyles';
 import { MarkdownParsedHandler, useBlockRenderer } from './useBlockRenderer.mjs';
