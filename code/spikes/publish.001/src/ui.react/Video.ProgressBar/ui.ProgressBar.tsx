@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Color, COLORS, css, R, t, useSizeObserver, Value, Time } from '../common';
 import { TimeMap } from './ui.TimeMap';
 
+type Seconds = number;
 type Color = string | number;
 type Percent = number; // 0..1
 export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
@@ -125,6 +126,10 @@ const Wrangle = {
     if (!status) return '';
     const seconds = Value.round(status.seconds, 0);
     const duration = Value.round(status.duration, 0);
-    return `${seconds}s of ${Time.duration(duration * 1000).toString()}`;
+    return `${seconds}s of ${Wrangle.secondsToString(duration)}`;
+  },
+
+  secondsToString(value: Seconds) {
+    return Time.duration(value * 1000).toString();
   },
 };
