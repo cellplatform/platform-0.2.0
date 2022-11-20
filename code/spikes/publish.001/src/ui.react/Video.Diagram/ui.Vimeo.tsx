@@ -11,7 +11,6 @@ export type VideoDiagramVimeoProps = {
   autoStart?: boolean;
   style?: t.CssValue;
   onReady?: (e: t.VimeoEvents) => void;
-  onPlayingChange?: (e: { isPlaying: boolean; isComplete: boolean; percent: number }) => void;
 };
 
 export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
@@ -46,12 +45,6 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
      * Playing.
      */
     vimeo.status.$.subscribe((e) => setVimeoStatus(e));
-    vimeo.status.playing$.subscribe((e) => {
-      const percent = e.percent;
-      const isPlaying = e.playing;
-      const isComplete = e.percent === 1;
-      props.onPlayingChange?.({ percent, isPlaying, isComplete });
-    });
 
     /**
      * Keyboard Behavior
