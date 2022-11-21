@@ -18,7 +18,7 @@ export type VideoDiagramProps = {
 };
 
 export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { instance, dimmed = false, minWidth = 550, minHeight = 550, status } = props;
+  const { instance, dimmed = false, minWidth = 550, minHeight = 550 } = props;
 
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const diagram = useDiagramState({ instance, vimeo });

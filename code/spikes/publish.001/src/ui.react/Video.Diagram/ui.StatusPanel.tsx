@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Center } from '../common';
+import { useState } from 'react';
+
+import { Color, COLORS, css, t } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type StatusPanelProps = {
@@ -41,6 +42,7 @@ export const StatusPanel: React.FC<StatusPanelProps> = (props) => {
     }),
 
     rightButton: css({
+      cursor: 'pointer',
       transform: `translateY(${isDown ? 2 : 0}px)`,
     }),
   };
@@ -49,7 +51,6 @@ export const StatusPanel: React.FC<StatusPanelProps> = (props) => {
     <Icons.Arrow.Right
       style={styles.rightButton}
       size={140}
-      // color={Color.alpha(COLORS.DARK, 0.5)}
       color={COLORS.RED}
       onClick={props.onRightClick}
       onMouseDown={down(true)}
