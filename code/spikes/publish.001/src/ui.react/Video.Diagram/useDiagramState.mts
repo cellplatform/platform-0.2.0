@@ -17,6 +17,8 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
   const [markdown, setMarkdown] = useState('');
   const [timemap, setTimeMap] = useState<t.DocTimeWindow[]>([]);
   const [vimeo, setVimeo] = useState<t.VimeoStatus | undefined>();
+  const [context, setContext] = useState<t.StateOverlayContext[]>([]);
+  const [index, setIndex] = useState(-1);
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -36,10 +38,10 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
       if (!def || !yaml) return;
 
       const context = state.current?.overlay?.context ?? [];
-      // console.log('-------------------------------------------');
-      // console.log('def', def);
-      // console.log('context', context);
-      // console.log('isComplete', isComplete);
+      const path = state.current?.overlay?.content?.path;
+      const index = context.findIndex((item) => item.path === path);
+      setIndex(index);
+      setContext(context);
 
       /**
        * TODO 🐷
@@ -98,11 +100,17 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
    * API
    */
   return {
+    state: state.current,
     video,
     image,
     markdown,
     timemap,
     muted,
     vimeo,
+    context,
+    index,
+    get isLast() {
+      return index < 0 ? false : index < context.length - 1;
+    },
   };
 }

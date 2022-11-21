@@ -43,9 +43,9 @@ export function useTriggerClickHandler(args: {
       e.preventDefault();
 
       const base = location.pathname;
-      const source = el.pathname.substring(base.length);
+      const path = el.pathname.substring(base.length);
       const context = getLinks(md?.mdast);
-      events.overlay.def(def, source, { context });
+      events.overlay.def(def, path, { context });
     };
 
     /**

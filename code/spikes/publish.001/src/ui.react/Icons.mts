@@ -1,4 +1,6 @@
 import {
+  MdArrowBack,
+  MdArrowForward,
   MdAutoStories,
   MdFace,
   MdOpenInFull,
@@ -20,4 +22,5 @@ export const Icons = {
   Support: icon(MdSupport),
   Muted: icon(MdVolumeOff),
   Replay: icon(MdReplay),
+  Arrow: { Left: icon(MdArrowBack), Right: icon(MdArrowForward) },
 };

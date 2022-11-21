@@ -1,12 +1,13 @@
 import { useState } from 'react';
 
-import { Color, css, t, useSizeObserver } from '../common';
+import { Color, css, t, useSizeObserver, State } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
 import { VideoDiagramImage } from './ui.Image';
 import { VideoDiagramMarkdown } from './ui.Markdown';
 import { VideoDiagramVimeo } from './ui.Vimeo';
 import { useDiagramState } from './useDiagramState.mjs';
+import { StatusPanel } from './ui.StatusPanel';
 
 export type VideoDiagramProps = {
   instance: t.Instance;
@@ -17,14 +18,14 @@ export type VideoDiagramProps = {
 };
 
 export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
-  const { instance, dimmed = false, minWidth = 550, minHeight = 550 } = props;
+  const { instance, dimmed = false, minWidth = 550, minHeight = 550, status } = props;
 
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const diagram = useDiagramState({ instance, vimeo });
 
   const size = useSizeObserver();
   const isTooSmall = !size.ready
-    ? false
+    ? undefined
     : size.rect.width < minHeight || size.rect.height < minWidth;
 
   /**
@@ -35,6 +36,16 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     const duration = (await vimeo.status.get()).status?.duration ?? 0;
     const secs = duration * percent;
     vimeo.seek.fire(secs);
+  };
+
+  const loadNext = async () => {
+    const { state, context, index } = diagram;
+    const def = state?.overlay?.def;
+    const next = context[index + 1];
+    if (!def || !next) return;
+    State.withEvents(instance, (events) => {
+      events.overlay.def(def, next.path, { context });
+    });
   };
 
   /**
@@ -56,7 +67,14 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       Absolute: [100, 100, 150, 100],
       display: 'flex',
     }),
-    video: css({ Absolute: [null, null, 30, 30] }),
+    statusBar: css({
+      marginLeft: 5,
+      flex: 1,
+    }),
+    videoBar: css({
+      Absolute: [null, 30, 30, 30],
+      Flex: 'x-spaceBetween-stretch',
+    }),
     progressBar: css({
       Absolute: [null, 150, 0, 150],
       opacity: dimmed ? 0 : 1,
@@ -64,21 +82,17 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     }),
   };
 
-  const elVimeo = diagram.video !== undefined && (
-    <VideoDiagramVimeo
-      style={styles.video}
-      dimmed={dimmed}
-      muted={diagram.muted}
-      video={diagram.video}
-      autoStart={true}
-      onReady={(vimeo) => setVimeo(vimeo)}
-    />
-  );
+  const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
 
   const elContent = (
     <div {...styles.content}>
       {diagram.image && (
-        <VideoDiagramImage instance={instance} src={diagram.image} dimmed={dimmed} />
+        <VideoDiagramImage
+          instance={instance}
+          src={diagram.image}
+          status={diagram.vimeo}
+          dimmed={dimmed}
+        />
       )}
       {diagram.markdown && (
         <VideoDiagramMarkdown
@@ -91,7 +105,29 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     </div>
   );
 
-  const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
+  const elVimeo = diagram.video !== undefined && (
+    <VideoDiagramVimeo
+      dimmed={dimmed}
+      muted={diagram.muted}
+      video={diagram.video}
+      autoStart={true}
+      onReady={(vimeo) => setVimeo(vimeo)}
+    />
+  );
+
+  const elVideoBar = (
+    <div {...styles.videoBar}>
+      {elVimeo}
+      <StatusPanel
+        style={styles.statusBar}
+        dimmed={dimmed}
+        isLast={diagram.isLast}
+        status={diagram.vimeo}
+        onRightClick={loadNext}
+      />
+    </div>
+  );
+
   const elProgressBar = vimeo && (
     <ProgressBar
       style={styles.progressBar}
@@ -105,7 +141,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     <div {...css(styles.base, props.style)} ref={size.ref}>
       <div {...styles.body}>
         {elContent}
-        {elVimeo}
+        {elVideoBar}
         {elProgressBar}
         {elTooSmall}
       </div>

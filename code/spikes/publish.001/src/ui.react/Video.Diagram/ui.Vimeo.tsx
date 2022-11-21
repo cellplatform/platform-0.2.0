@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { Center, Color, COLORS, css, rx, slug, t, Vimeo } from '../common';
+import { Center, Color, COLORS, css, rx, slug, t, Vimeo, FC } from '../common';
 import { Icons } from '../Icons.mjs';
 import { VideoDiagramKeyboard } from './Keyboard.mjs';
+
+const HEIGHT = 170;
 
 export type VideoDiagramVimeoProps = {
   video: t.VimeoId;
@@ -13,7 +15,7 @@ export type VideoDiagramVimeoProps = {
   onReady?: (e: t.VimeoEvents) => void;
 };
 
-export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
+const View: React.FC<VideoDiagramVimeoProps> = (props) => {
   const { dimmed = false, muted = false } = props;
 
   const [instance, setInstance] = useState<t.VimeoInstance>();
@@ -125,7 +127,7 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
 
   const elVimeo = (
     <div onClick={togglePlaying} {...styles.video}>
-      <Vimeo instance={instance} width={300} muted={muted} video={props.video} />
+      <Vimeo instance={instance} height={HEIGHT} muted={muted} video={props.video} />
       <div {...styles.playerClickTarget} />
     </div>
   );
@@ -154,3 +156,16 @@ export const VideoDiagramVimeo: React.FC<VideoDiagramVimeoProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+
+type Fields = {
+  HEIGHT: number;
+};
+export const VideoDiagramVimeo = FC.decorate<VideoDiagramVimeoProps, Fields>(
+  View,
+  { HEIGHT },
+  { displayName: 'VideoDiagramVimeo' },
+);

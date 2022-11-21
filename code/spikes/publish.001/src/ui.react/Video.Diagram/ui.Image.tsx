@@ -11,12 +11,14 @@ export type VideoDiagramImageProps = {
   instance: t.Instance;
   src?: UrlString;
   dimmed?: boolean;
+  status?: t.VimeoStatus;
   style?: t.CssValue;
   onReady?: VideoDiagramImageReadyHandler;
 };
 
 export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
-  const { dimmed = false, src } = props;
+  const { dimmed = false, src, status } = props;
+  const isComplete = status?.percent === 1 ?? false;
 
   const [isReady, setIsReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -62,7 +64,7 @@ export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
     base: css({
       flex: 1,
       position: 'relative',
-      opacity: dimmed ? 0.4 : 1,
+      opacity: dimmed || isComplete ? 0.2 : 1,
       transition: `opacity 300ms`,
       userSelect: 'none',
       pointerEvents: 'none',
