@@ -35,23 +35,24 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
   /**
    * Process <Image> with Component.
    */
-  const imageNode = MarkdownUtil.find.image(e.node);
-  if (imageNode) {
-    const { DocImage } = await Imports.Image();
-
-    const code = md.info.code.typed
-      .filter((c) => c.type.toLowerCase().startsWith('doc.image'))
-      .filter((c) => c.type.includes(' id:'))[0];
-
-    let def: t.DocImageDef | undefined;
-    if (code && code.lang === 'yaml') {
-      const res = await parseYamlOrError<t.DocImageDef>(code.text);
-      if (res.error) return res.error.element;
-      def = res.data;
-    }
-
-    return <DocImage ctx={asCtx(imageNode)} def={def} />;
-  }
+  //   const imageNode = MarkdownUtil.find.image(e.node);
+  //   if (imageNode) {
+  //     const { DocImage } = await Imports.Image();
+  //
+  //     // Lookup matching "![image](...)" markdown node.
+  //     const code = md.info.code.typed
+  //       .filter((c) => c.type.toLowerCase().startsWith('doc.image'))
+  //       .filter((c) => c.type.includes(' id:'))[0];
+  //
+  //     let def: t.DocImageDef | undefined;
+  //     if (code && code.lang === 'yaml') {
+  //       const res = await parseYamlOrError<t.DocImageDef>(code.text);
+  //       if (res.error) return res.error.element;
+  //       def = res.data;
+  //     }
+  //
+  //     return <DocImage ctx={asCtx(imageNode)} def={def} />;
+  //   }
 
   /**
    * Code Block
@@ -65,6 +66,26 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
       if (res.error) return res.error.element;
       const { OverlayTriggerPanel } = await Imports.OverlayTrigger();
       return <OverlayTriggerPanel instance={instance} def={res.data} />;
+    }
+
+    /**
+     * Image (not associated with a markdown entry
+     */
+    if (e.node.meta.toLowerCase().startsWith('doc.image')) {
+      if (e.node.lang === 'yaml') {
+        const res = await parseYamlOrError<t.DocImageDef>(e.node.value);
+        if (res.error) return res.error.element;
+
+        const def = res.data;
+        if (typeof def.src !== 'string') {
+          const { DocError } = await Imports.Error();
+          const msg = `The YAML [doc.Image] does not contain a "src" path`;
+          return <DocError message={msg} />;
+        }
+
+        const { DocImage } = await Imports.Image();
+        return <DocImage def={def} />;
+      }
     }
 
     /**

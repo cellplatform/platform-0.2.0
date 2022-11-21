@@ -1,19 +1,17 @@
 import { useState } from 'react';
 
-import { Color, COLORS, css, DEFAULTS, FC, t } from '../../common';
+import { Color, COLORS, css, DEFAULTS, t } from '../../common';
 import { DocError } from '../Doc.Error';
 import { DocImageCaption } from './DocImage.Caption';
 import { Util } from './Util.mjs';
 
 export type DocImageProps = {
-  ctx: t.DocBlockCtx<t.MdastImage>;
-  def?: t.DocImageDef;
+  def: t.DocImageDef;
   style?: t.CssValue;
 };
 
 export const DocImage: React.FC<DocImageProps> = (props) => {
-  const { ctx, def } = props;
-  const src = ctx.node.url;
+  const { def } = props;
 
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -58,12 +56,12 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
   const elImage = !loadError && (
     <img
       {...styles.image.imgElement}
-      src={src}
-      alt={ctx.node.alt || undefined}
+      src={def.src}
+      alt={def.alt}
       onLoad={(e) => setLoaded(true)}
       onError={(e) => {
         setLoaded(true);
-        setLoadError(`Failed to load image at location: \`${src}\``);
+        setLoadError(`Failed to load image at location: \`${def.src}\``);
       }}
     />
   );

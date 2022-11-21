@@ -1,6 +1,8 @@
 export type DocImageAlign = 'Left' | 'Center' | 'Right';
 
 export type DocImageDef = {
+  src?: string;
+  alt?: string;
   align?: DocImageAlign;
   width?: number;
   border?: number;
