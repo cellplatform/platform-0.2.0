@@ -95,8 +95,10 @@ A note[^1]
       `;
       const res1 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: false });
       const res2 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: true });
+      const res3 = await MarkdownProcessor().toHtml(SAMPLE, {});
 
       expect(res1.html).to.include(`<p>A note[^1]</p>`);
+      expect(res2.html).to.eql(res3.html); // NB: Default is to use [gfm].
 
       const html = res2.html;
       expect(html).to.include('<p>A note');
