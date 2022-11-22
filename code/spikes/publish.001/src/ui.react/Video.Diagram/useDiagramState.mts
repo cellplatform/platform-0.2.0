@@ -5,6 +5,8 @@ import { rx, State, t, Text } from '../common';
 import { TimeMap } from './TimeMap.mjs';
 import { Wrangle } from './Wrangle.mjs';
 
+type O = { context: t.StateOverlayContext[]; index: number };
+
 export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEvents }) {
   const { instance } = args;
 
@@ -13,12 +15,11 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
   const md = state.current?.overlay?.content?.md;
 
   const [video, setVideo] = useState<t.VimeoId | undefined>();
-  const [image, setImage] = useState('');
-  const [markdown, setMarkdown] = useState('');
   const [timemap, setTimeMap] = useState<t.DocTimeWindow[]>([]);
   const [vimeo, setVimeo] = useState<t.VimeoStatus | undefined>();
-  const [context, setContext] = useState<t.StateOverlayContext[]>([]);
-  const [index, setIndex] = useState(-1);
+  const [overlay, setOverlay] = useState<O>({ context: [], index: -1 });
+
+  const [media, setMedia] = useState<t.DocDiagramMediaType | undefined>();
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -29,19 +30,17 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
     setTimeMap(timemap);
 
     const resetContent = () => {
-      setMarkdown('');
-      setImage('');
+      setMedia(undefined);
     };
 
     const updateState = (status?: t.VimeoStatus) => {
       setVimeo(status);
       if (!def || !yaml) return;
 
-      const context = state.current?.overlay?.context ?? [];
       const path = state.current?.overlay?.content?.path;
+      const context = state.current?.overlay?.context ?? [];
       const index = context.findIndex((item) => item.path === path);
-      setIndex(index);
-      setContext(context);
+      setOverlay({ context, index });
 
       /**
        * TODO 🐷
@@ -73,8 +72,8 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
          * Image.
          */
         if (Wrangle.isImage(media)) {
-          const imageMedia = media as t.DocDiagramImage;
-          setImage(imageMedia.image);
+          const image = media as t.DocDiagramImage;
+          setMedia({ ...image, kind: 'media.image' });
         }
 
         /**
@@ -82,7 +81,7 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
          */
         if (Wrangle.isMarkdown(media)) {
           const md = media as t.DocDiagramMarkdown;
-          setMarkdown(md.markdown ?? '');
+          setMedia({ ...md, kind: 'media.markdown' });
         }
       }
     };
@@ -101,16 +100,20 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
    */
   return {
     state: state.current,
+
     video,
-    image,
-    markdown,
+    media,
     timemap,
     muted,
     vimeo,
-    context,
-    index,
+    overlay,
+
+    get isFirst() {
+      return overlay.index === 0;
+    },
     get isLast() {
-      return index < 0 ? false : index < context.length - 1;
+      const { index, context } = overlay;
+      return index < 0 ? false : index >= context.length - 1;
     },
   };
 }

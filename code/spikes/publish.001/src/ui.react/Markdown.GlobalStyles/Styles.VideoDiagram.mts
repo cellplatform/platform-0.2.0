@@ -9,7 +9,7 @@ export const VideoDiagramStyles = {
   h2: {
     fontSize: 80,
     letterSpacing: '-0.04em',
-    lineHeight: '1em',
+    lineHeight: '1.15em',
   },
 
   'blockquote p': {
@@ -24,4 +24,11 @@ export const VideoDiagramStyles = {
   p: {
     fontSize: 50,
   },
+};
+
+export const VideoDiagramRefsStyles = {
+  h1: { color: COLORS.DARK },
+  h2: { color: COLORS.DARK },
+  h3: { color: COLORS.DARK },
+  ul: { paddingLeft: 25 },
 };

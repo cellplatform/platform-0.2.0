@@ -2,13 +2,16 @@ import { Processor, t, Text } from '../common';
 import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
 const Imports = {
+  OverlayTrigger: () => import('../Overlay/ui.Overlay.TriggerPanel'),
+
+  Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
   Paragraph: () => import('../Markdown.Doc.Components/Doc.Paragraph'),
   Image: () => import('../Markdown.Doc.Components/Doc.Image'),
   Error: () => import('../Markdown.Doc.Components/Doc.Error'),
   Quote: () => import('../Markdown.Doc.Components/Doc.Quote'),
   Table: () => import('../Markdown.Doc.Components/Doc.Table'),
-  Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
-  OverlayTrigger: () => import('../Overlay/ui.Overlay.TriggerPanel'),
+
+  Sidebar: () => import('../Markdown.Doc.Components/Doc.Sidebar'),
 };
 
 /**
@@ -61,7 +64,7 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
     /**
      * Popout overlay triggers.
      */
-    if (e.node.meta.startsWith('doc.overlay')) {
+    if (e.node.meta.toLowerCase().startsWith('doc.overlay')) {
       const res = await parseYamlOrError<t.OverlayDef>(e.node.value);
       if (res.error) return res.error.element;
       const { OverlayTriggerPanel } = await Imports.OverlayTrigger();
@@ -69,11 +72,11 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
     }
 
     /**
-     * Image (not associated with a markdown entry
+     * Image (not associated with a markdown entry.
      */
     if (e.node.meta.toLowerCase().startsWith('doc.image')) {
       if (e.node.lang === 'yaml') {
-        const res = await parseYamlOrError<t.DocImageDef>(e.node.value);
+        const res = await parseYamlOrError<t.DocImageYaml>(e.node.value);
         if (res.error) return res.error.element;
 
         const def = res.data;
@@ -85,6 +88,20 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
 
         const { DocImage } = await Imports.Image();
         return <DocImage def={def} />;
+      }
+    }
+
+    /**
+     * Sidebar.
+     */
+    if (e.node.meta.toLowerCase().startsWith('doc.sidebar')) {
+      if (e.node.lang === 'yaml') {
+        const res = await parseYamlOrError<t.DocSidebarYaml>(e.node.value);
+        if (res.error) return res.error.element;
+
+        const def = res.data;
+        const { DocSidebar } = await Imports.Sidebar();
+        return <DocSidebar def={def} />;
       }
     }
 

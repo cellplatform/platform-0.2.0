@@ -7,6 +7,8 @@ import {
   MdReplay,
   MdSupport,
   MdVolumeOff,
+  MdFactCheck,
+  MdVideoLibrary,
 } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
@@ -23,4 +25,6 @@ export const Icons = {
   Muted: icon(MdVolumeOff),
   Replay: icon(MdReplay),
   Arrow: { Left: icon(MdArrowBack), Right: icon(MdArrowForward) },
+  Complete: icon(MdFactCheck),
+  Video: { Library: icon(MdVideoLibrary) },
 };

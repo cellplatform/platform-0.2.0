@@ -44,12 +44,19 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       borderBottom: `solid 1px ${Color.format(-0.12)}`,
       Flex: 'x-spaceBetween-stretch',
     }),
-    headerLeft: css({}),
-    headerRight: css({}),
+    headerLeft: css({
+      display: 'grid',
+      alignContent: 'center',
+      justifyContent: 'start',
+    }),
+    headerRight: css({
+      display: 'grid',
+      alignContent: 'center',
+      justifyContent: 'start',
+    }),
 
     title: css({
       Flex: 'x-center-center',
-      paddingTop: 4,
       fontWeight: 'bold',
     }),
     icon: css({
@@ -62,7 +69,8 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
       flex: 1,
       position: 'relative',
       overflow: 'hidden',
-      PaddingX: 50,
+      paddingTop: 0,
+      PaddingX: 20,
       paddingBottom: 40,
     }),
     iconWatermark: css({
@@ -82,7 +90,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         </div>
       </div>
       <div {...styles.headerRight}>
-        <div>{/* RIGHT */}</div>
+        <Icons.Video.Library size={26} color={Color.alpha(COLORS.DARK, 0.6)} />
       </div>
     </div>
   );

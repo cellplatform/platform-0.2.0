@@ -336,7 +336,6 @@ export function BusController(args: {
    */
   const init = async () => {
     const local = localstorage.current;
-
     events.select.fire(local.selection.index?.path);
 
     /**

@@ -16,7 +16,9 @@ export const DEFAULTS = {
       ROOT: 'sys-md-Doc',
       BLOCK: 'sys-md-Block',
       VIDEO_DIAGRAM: 'sys-md-VideoDiagram',
+      VIDEO_DIAGRAM_REFS: 'sys-md-VideoDiagram-Refs',
       TIGGER_PANEL: 'sys-md-TriggerPanel',
+      SIDEBAR: 'sys-md-Sidebar',
     },
   },
 };

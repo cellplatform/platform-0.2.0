@@ -12,7 +12,7 @@ export type StatusPanelProps = {
 };
 
 export const StatusPanel: React.FC<StatusPanelProps> = (props) => {
-  const { dimmed = false, status } = props;
+  const { dimmed = false, status, isLast } = props;
   const isComplete = status?.percent === 1 ?? false;
 
   const [isDown, setDown] = useState(false);
@@ -47,8 +47,10 @@ export const StatusPanel: React.FC<StatusPanelProps> = (props) => {
     }),
   };
 
+  const Icon = isLast ? Icons.Complete : Icons.Arrow.Right;
+
   const elNext = isComplete && (
-    <Icons.Arrow.Right
+    <Icon
       style={styles.rightButton}
       size={140}
       color={COLORS.RED}
@@ -57,6 +59,8 @@ export const StatusPanel: React.FC<StatusPanelProps> = (props) => {
       onMouseUp={down(false)}
     />
   );
+
+  if (!elNext) return null;
 
   return (
     <div {...css(styles.base, props.style)}>

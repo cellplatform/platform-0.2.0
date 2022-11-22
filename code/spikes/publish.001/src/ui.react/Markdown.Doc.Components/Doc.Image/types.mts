@@ -1,6 +1,10 @@
 export type DocImageAlign = 'Left' | 'Center' | 'Right';
 
-export type DocImageDef = {
+export type DocImageType = DocImageYaml & {
+  kind: 'doc.Image';
+};
+
+export type DocImageYaml = {
   src?: string;
   alt?: string;
   align?: DocImageAlign;

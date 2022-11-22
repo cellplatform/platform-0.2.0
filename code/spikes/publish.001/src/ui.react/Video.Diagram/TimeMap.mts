@@ -11,7 +11,7 @@ export const TimeMap = {
   /**
    * Time events sorted by `start` second (ascending).
    */
-  sortedMedia(input?: t.DocDiagramMedia[]): t.DocDiagramMediaType[] {
+  sortedMedia(input?: t.DocDiagramMedia[]): t.DocDiagramMediaTimeRef[] {
     const res = (input || [])
       .map((media, indexRef) => {
         const { start, end } = media;
@@ -20,7 +20,7 @@ export const TimeMap = {
         return res;
       })
       .filter(Boolean)
-      .map((e) => e as t.DocDiagramMediaType);
+      .map((e) => e as t.DocDiagramMediaTimeRef);
 
     return TimeMap.sortedTimeMap(res);
   },

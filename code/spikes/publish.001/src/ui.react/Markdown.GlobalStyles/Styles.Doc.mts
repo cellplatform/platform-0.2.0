@@ -1,14 +1,26 @@
 import { Color, COLORS } from '../common';
 
+const DEFAULT_FONT_SIZE = 18;
+
 const DEFAULT = {
-  FONT_SIZE: 18,
+  FONT_SIZE: DEFAULT_FONT_SIZE,
   COLOR: Color.lighten(COLORS.DARK, 10),
   HEADING_COLOR: Color.lighten(COLORS.DARK, 15),
   CSS: {
     EM_HIGHLIGHT: {
       fontStyle: 'normal',
-      // color: '#E21B22', // RED
       color: COLORS.MAGENTA,
+    },
+    CODE: {
+      fontFamily: 'monospace',
+      fontWeight: 600,
+      fontSize: DEFAULT_FONT_SIZE - 2,
+      paddingLeft: 5,
+      paddingRight: 5,
+      color: Color.darken(COLORS.MAGENTA, 8),
+      backgroundColor: Color.alpha(COLORS.DARK, 0.06),
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      borderRadius: 3,
     },
   },
 };
@@ -21,6 +33,31 @@ export const DocStyles = {
     fontSize: 50,
     letterSpacing: `-0.01em`,
   },
+
+  h2: {
+    fontSize: 32,
+    letterSpacing: `-0.01em`,
+  },
+
+  h3: {
+    fontSize: 20,
+    letterSpacing: `0em`,
+    color: COLORS.MAGENTA,
+    textTransform: 'uppercase',
+    marginTop: '3em',
+  },
+
+  h4: {
+    fontSize: DEFAULT.FONT_SIZE,
+    letterSpacing: `0em`,
+    color: COLORS.MAGENTA,
+    textTransform: 'uppercase',
+    marginTop: '3em',
+  },
+
+  'h3:first-child': { marginTop: 0 },
+  'h4:first-child': { marginTop: 0 },
+
   // 'h1:first-of-type': { marginBottom: 60 },
   // 'h1, h2': { color: DEFAULT.HEADING_COLOR },
 
@@ -52,7 +89,9 @@ export const DocStyles = {
   a: {
     color: COLORS.BLUE,
     textDecoration: 'none',
-    ':hover': { textDecoration: 'underline' },
+    ':hover': {
+      textDecoration: 'underline',
+    },
   },
 
   /**
@@ -60,13 +99,16 @@ export const DocStyles = {
    */
   'ul,ol p': {
     marginBlock: 0,
-    marginBottom: '1.1em',
+    marginBottom: '2em',
   },
   'ul,ol': {
     fontSize: DEFAULT.FONT_SIZE,
     margin: 0,
   },
-  li: { marginBottom: '0.6em' },
+  li: {
+    marginBottom: '0.6em',
+    lineHeight: '1.3em',
+  },
 
   /**
    * Code (Monospaced)
@@ -78,23 +120,21 @@ export const DocStyles = {
     fontWeight: '600',
   },
 
-  'p code': {
-    fontFamily: 'monospace',
-    fontWeight: 600,
-    fontSize: DEFAULT.FONT_SIZE - 2,
-    paddingLeft: 5,
-    paddingRight: 5,
-    color: Color.darken(COLORS.MAGENTA, 8),
-    backgroundColor: Color.alpha(COLORS.DARK, 0.06),
-    border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-    borderRadius: 3,
-  },
+  'p code': DEFAULT.CSS.CODE,
+  'li code': DEFAULT.CSS.CODE,
 
   /**
    * Quotes
    * See: /component/<Doc.Quote>
    */
-  'blockquote p': { fontSize: 26 },
+  blockquote: {
+    margin: 0,
+    padding: 0,
+  },
+  'blockquote p': {
+    fontSize: 26,
+    lineHeight: '1.4em',
+  },
   'blockquote em': {
     fontStyle: 'normal',
     color: '#E21B22', // RED
@@ -109,6 +149,7 @@ export const DocStyles = {
     width: '100%',
     marginTop: '2em',
     marginBottom: '2em',
+    lineHeight: '1.1em',
   },
   'table thead tr': { backgroundColor: Color.alpha(COLORS.DARK, 0.06) },
   'table th': { padding: 10 },

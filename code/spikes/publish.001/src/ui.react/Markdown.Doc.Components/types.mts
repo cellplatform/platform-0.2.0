@@ -1,6 +1,7 @@
 import * as t from '../common/types.mjs';
 
 export * from './Doc.Image/types.mjs';
+export * from './Doc.Sidebar/types.mjs';
 
 /**
  * Common context passed to each block.

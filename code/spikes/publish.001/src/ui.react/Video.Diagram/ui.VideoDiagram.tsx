@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-import { Color, css, t, useSizeObserver, State } from '../common';
+import { Color, css, State, t, useSizeObserver } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
 import { VideoDiagramImage } from './ui.Image';
 import { VideoDiagramMarkdown } from './ui.Markdown';
+import { StatusPanel } from './ui.StatusPanel';
 import { VideoDiagramVimeo } from './ui.Vimeo';
 import { useDiagramState } from './useDiagramState.mjs';
-import { StatusPanel } from './ui.StatusPanel';
 
 export type VideoDiagramProps = {
   instance: t.Instance;
@@ -38,13 +38,20 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     vimeo.seek.fire(secs);
   };
 
-  const loadNext = async () => {
-    const { state, context, index } = diagram;
+  const handleNextClick = async () => {
+    const { state, overlay } = diagram;
+    const { context, index } = overlay;
     const def = state?.overlay?.def;
     const next = context[index + 1];
-    if (!def || !next) return;
+    if (!def) return;
     State.withEvents(instance, (events) => {
-      events.overlay.def(def, next.path, { context });
+      if (!next) {
+        // End of video sequence.
+        events.overlay.close();
+      } else {
+        // Move to the next.
+        events.overlay.def(def, next.path, { context });
+      }
     });
   };
 
@@ -64,7 +71,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       transition: 'opacity 150ms',
     }),
     content: css({
-      Absolute: [100, 100, 150, 100],
+      Absolute: 0,
       display: 'flex',
     }),
     statusBar: css({
@@ -86,20 +93,20 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
   const elContent = (
     <div {...styles.content}>
-      {diagram.image && (
+      {diagram.media?.kind === 'media.image' && (
         <VideoDiagramImage
           instance={instance}
-          src={diagram.image}
+          def={diagram.media}
           status={diagram.vimeo}
           dimmed={dimmed}
         />
       )}
-      {diagram.markdown && (
+      {diagram.media?.kind === 'media.markdown' && (
         <VideoDiagramMarkdown
           instance={instance}
-          markdown={diagram.markdown}
+          def={diagram.media}
+          status={diagram.vimeo}
           dimmed={dimmed}
-          style={{ MarginX: 80, marginBottom: '3%' }}
         />
       )}
     </div>
@@ -123,7 +130,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         dimmed={dimmed}
         isLast={diagram.isLast}
         status={diagram.vimeo}
-        onRightClick={loadNext}
+        onRightClick={handleNextClick}
       />
     </div>
   );

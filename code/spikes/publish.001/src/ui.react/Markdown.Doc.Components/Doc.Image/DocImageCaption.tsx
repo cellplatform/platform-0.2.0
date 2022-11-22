@@ -6,7 +6,7 @@ import { Util } from './Util.mjs';
 
 export type DocImageProps = {
   node: t.MdastImage;
-  def?: t.DocImageDef;
+  def?: t.DocImageYaml;
   style?: t.CssValue;
 };
 
@@ -88,7 +88,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  title(def?: t.DocImageDef): t.DocImageCaption | undefined {
+  title(def?: t.DocImageYaml): t.DocImageCaption | undefined {
     if (!def) return undefined;
     if (!def.caption) return undefined;
     if (typeof def.caption === 'string') return { text: def.caption, align: 'Center' };

@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
-
 import { css, t } from '../common';
-
-type UrlString = string;
 
 export type VideoDiagramImageReadyHandler = (e: VideoDiagramImageReadyHandlerArgs) => void;
 export type VideoDiagramImageReadyHandlerArgs = { ok: boolean };
 
 export type VideoDiagramImageProps = {
   instance: t.Instance;
-  src?: UrlString;
+  def: t.DocDiagramImageType;
   dimmed?: boolean;
   status?: t.VimeoStatus;
   style?: t.CssValue;
@@ -17,7 +14,7 @@ export type VideoDiagramImageProps = {
 };
 
 export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
-  const { dimmed = false, src, status } = props;
+  const { dimmed = false, def, status } = props;
   const isComplete = status?.percent === 1 ?? false;
 
   const [isReady, setIsReady] = useState(false);
@@ -49,13 +46,13 @@ export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
     image.addEventListener('load', handleLoad);
     image.addEventListener('error', handleError);
 
-    if (src) image.src = src;
+    if (def.image) image.src = def.image;
 
     return () => {
       image.removeEventListener('load', handleLoad);
       image.removeEventListener('error', handleError);
     };
-  }, [src]);
+  }, [def.image]);
 
   /**
    * [Render]
@@ -69,10 +66,13 @@ export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
       userSelect: 'none',
       pointerEvents: 'none',
     }),
+    body: css({
+      Absolute: [50, 120, 100, 120],
+    }),
     image: css({
       Absolute: 0,
       backgroundSize: 'contain',
-      backgroundImage: `url(${src})`,
+      backgroundImage: `url(${def.image})`,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center center',
       opacity: isReady && !failed ? 1 : 0,
@@ -81,8 +81,10 @@ export const VideoDiagramImage: React.FC<VideoDiagramImageProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div {...styles.image} />
+    <div {...css(styles.base, props.style)} className={'VideoDiagram-Image'}>
+      <div {...styles.body}>
+        <div {...styles.image} />
+      </div>
     </div>
   );
 };

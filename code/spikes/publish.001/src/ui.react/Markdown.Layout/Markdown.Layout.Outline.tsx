@@ -23,7 +23,7 @@ export const MarkdownLayoutOutline: React.FC<MarkdownLayoutOutlineProps> = (prop
         selectedUrl={props.selectedUrl}
         onClick={props.onSelectClick}
         renderTile={(e) => {
-          const isRoot = !e.text && e.index === 0 && e.node.type === 'heading';
+          const isRoot = !e.text.trim() && e.index === 0 && e.node.type === 'heading';
           return isRoot ? <RootInner /> : null;
         }}
       />
