@@ -49,4 +49,27 @@ describe('MARKDOWN mutation (MD-AST)', () => {
       },
     });
   });
+
+  describe('option: { externalLinksInNewTab }', () => {
+    it('transforms external links open new tab (default: true)', async () => {
+      const INTERNAL = '[link](./foo.png)';
+      const EXTERNAL = '[link](https://domain.com/)';
+
+      const res1 = await processor.toHtml(INTERNAL);
+      const res2 = await processor.toHtml(EXTERNAL);
+
+      expect(res1.html).to.not.include('target="_blank"');
+      expect(res1.html).to.not.include('rel="noopener"');
+
+      expect(res2.html).to.include('target="_blank"');
+      expect(res2.html).to.include('rel="noopener"');
+    });
+
+    it('does not transform external links (option: false)', async () => {
+      const EXTERNAL = '[link](https://domain.com/)';
+      const res = await processor.toHtml(EXTERNAL, { externalLinksInNewTab: false });
+      expect(res.html).to.not.include('target="_blank"');
+      expect(res.html).to.not.include('rel="noopener"');
+    });
+  });
 });

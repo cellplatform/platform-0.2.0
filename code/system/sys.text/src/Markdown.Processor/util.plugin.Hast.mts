@@ -5,7 +5,7 @@ import { CONTINUATION, isContinuation, t } from './common.mjs';
  * Tools for manipulating an HTML (H-AST) tree.
  */
 export const Hast = {
-  optionPlugin(options?: t.HtmlOptions) {
+  optionPlugin(options: t.HtmlOptions = {}) {
     return (tree: t.HastRoot) => {
       const fn = options?.hast;
       fn?.({

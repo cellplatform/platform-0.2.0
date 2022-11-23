@@ -5,10 +5,11 @@ import { CONTINUATION, isContinuation, t } from './common.mjs';
  * Tools for manipulating an MARKDOWN (MD-AST) tree.
  */
 export const Mdast = {
-  optionPlugin(options?: t.MarkdownProcessorOptions) {
+  optionPlugin(options: t.MarkdownProcessorOptions = {}) {
+    const { externalLinksInNewTab = true } = options;
+
     return (tree: t.MdastRoot) => {
-      const fn = options?.mdast;
-      fn?.({
+      const mutate: t.MutateMdast = {
         /**
          * Basic reveal of the root tree.
          *    Use this with standard unified.js tools
@@ -44,7 +45,38 @@ export const Mdast = {
             return isContinuation(res) ? res : undefined;
           });
         },
-      });
+      };
+
+      /**
+       * Option: ensure external links open in new tab.
+       */
+      if (externalLinksInNewTab === true) {
+        mutate.visit((e) => {
+          if (e.node.type === 'link' && Is.externalLink(e.node.url)) {
+            type T = { target?: '_blank'; rel?: 'noopener' };
+            const props = e.hProperties<T>();
+            props.target = '_blank';
+            props.rel = 'noopener'; // NB: Security - https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types/noopener
+          }
+        });
+      }
+
+      /**
+       * Invole the callback handler (if present).
+       */
+      const fn = options?.mdast;
+      fn?.(mutate);
     };
+  },
+};
+
+/**
+ * [Helpers]
+ */
+
+const Is = {
+  externalLink(input: string) {
+    const link = (input || '').trim();
+    return link.startsWith('https://') || link.startsWith('http://');
   },
 };
