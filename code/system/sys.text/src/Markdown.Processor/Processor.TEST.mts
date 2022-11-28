@@ -91,34 +91,46 @@ describe('TextProcessor.md', () => {
       const SAMPLE = `
 A note[^1]
 
-[^1]: My note...
+[^1]: My note [link](./path.md)
       `;
       const res1 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: false });
       const res2 = await MarkdownProcessor().toHtml(SAMPLE, { gfm: true });
+      const res3 = await MarkdownProcessor().toHtml(SAMPLE, {});
 
       expect(res1.html).to.include(`<p>A note[^1]</p>`);
+      expect(res2.html).to.eql(res3.html); // NB: Default is to use [gfm].
 
-      expect(res2.html).to.include('<p>A note');
-      expect(res2.html).to.include('<sup><a href="#');
-      expect(res2.html).to.include('Footnotes</h2>');
-      expect(res2.html).to.include('<ol>');
-      expect(res2.html).to.include('<p>My note...');
+      const html = res2.html;
+      expect(html).to.include('<p>A note');
+      expect(html).to.include('<sup><a href="#');
+      expect(html).to.include('Footnotes</h2>');
+      expect(html).to.include('<ol>');
+      expect(html).to.include('<p>My note <a href="./path.md">link</a>');
     });
 
     it('table', async () => {
       const SAMPLE = `
-| a | b  |  c |  d  |
+| A | B  |  C |  D  |
 | - | :- | -: | :-: |
+| a | b  |  c |  d  |
       `;
       const res1 = await MarkdownProcessor({ gfm: false }).toHtml(SAMPLE);
       const res2 = await MarkdownProcessor({ gfm: true }).toHtml(SAMPLE);
 
-      expect(res1.html).to.include('| a | b');
-      expect(res2.html).to.include('<table>');
-      expect(res2.html).to.include('<th>a</th>');
-      expect(res2.html).to.include('<th align="left">b</th>');
-      expect(res2.html).to.include('<th align="right">c</th>');
-      expect(res2.html).to.include('<th align="center">d</th>');
+      expect(res1.html).to.include('| A | B');
+
+      const html = res2.html;
+      expect(html).to.include('<table>');
+
+      expect(html).to.include('<th>A</th>');
+      expect(html).to.include('<th align="left">B</th>');
+      expect(html).to.include('<th align="right">C</th>');
+      expect(html).to.include('<th align="center">D</th>');
+
+      expect(html).to.include('<td>a</td>');
+      expect(html).to.include('<td align="left">b</td>');
+      expect(html).to.include('<td align="right">c</td>');
+      expect(html).to.include('<td align="center">d</td>');
     });
   });
 

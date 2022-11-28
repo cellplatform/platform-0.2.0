@@ -1,6 +1,6 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, Time, Path } from 'sys.util';
+import { rx, Time } from 'sys.util';
 
 import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
@@ -24,7 +24,7 @@ const bundler = await ContentBundle({
   sources: {
     app: await toFs('./dist/web'),
     src: await toFs('./src/'),
-    content: await toFs('../../../../../live-state/tdb.meeting/undp'),
+    content: await toFs('../../../../../org.team-db/tdb.undp/undp'),
     log: logdir,
   },
 });

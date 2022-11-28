@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
+import { Color, COLORS, css, t, rx, FC } from '../common';
 
 type SemverString = string;
 

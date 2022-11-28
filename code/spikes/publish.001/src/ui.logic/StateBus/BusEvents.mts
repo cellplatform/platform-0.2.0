@@ -1,4 +1,6 @@
-import { rx, slug, t, DEFAULTS } from './common.mjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+
+import { DEFAULTS, rx, slug, t } from './common.mjs';
 
 type Id = string;
 
@@ -6,7 +8,7 @@ type Id = string;
  * Event API.
  */
 export function BusEvents(args: {
-  instance: t.StateInstance;
+  instance: t.Instance;
   filter?: (e: t.StateEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.StateEvents {
@@ -26,7 +28,18 @@ export function BusEvents(args: {
    * Initialization upon load.
    */
   const init = async () => {
-    await fetch.fire({ topic: ['Outline', 'Log'] });
+    await fetch.fire({ topic: ['RootIndex', 'Log'] });
+
+    const current = (await info.get()).info?.current;
+
+    /**
+     * TODO 🐷 TMP HACK!!!
+     * Do not hard code the initial path.  Derive it from the root [index.md]
+     */
+    if (!current?.selection.index?.path) {
+      const FOREWORD = './0/foreword.md';
+      await select.fire(FOREWORD);
+    }
   };
 
   /**
@@ -62,7 +75,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.StateFetchReqEvent>($, 'app.state/fetch:req'),
     res$: rx.payload<t.StateFetchResEvent>($, 'app.state/fetch:res'),
     async fire(options = {}) {
-      const { timeout = 3000, topic: target } = options;
+      const { timeout = 3000, topic } = options;
       const tx = slug();
       const op = 'fetch';
       const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -70,14 +83,14 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'app.state/fetch:req',
-        payload: { tx, instance, target },
+        payload: { tx, instance, topic },
       });
 
       const res = await first;
       if (res.payload) return res.payload;
 
       const error = res.error?.message ?? 'Failed';
-      return { tx, instance, current: {}, error };
+      return { tx, instance, current: DEFAULTS.state, error };
     },
   };
 
@@ -87,23 +100,23 @@ export function BusEvents(args: {
   const change: t.StateEvents['change'] = {
     req$: rx.payload<t.StateChangeReqEvent>($, 'app.state/change:req'),
     res$: rx.payload<t.StateChangeResEvent>($, 'app.state/change:res'),
-    async fire(handler, options = {}) {
+    async fire(message, handler, options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
       const op = 'change';
-      const res$ = fetch.res$.pipe(rx.filter((e) => e.tx === tx));
+      const res$ = change.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.StateChangeResEvent>(res$, { op, timeout });
 
       bus.fire({
         type: 'app.state/change:req',
-        payload: { tx, instance, handler },
+        payload: { tx, instance, message, handler },
       });
 
       const res = await first;
       if (res.payload) return res.payload;
 
       const error = res.error?.message ?? 'Failed';
-      return { tx, instance, current: {}, error };
+      return { tx, instance, current: DEFAULTS.state, message: '', error };
     },
   };
 
@@ -112,12 +125,12 @@ export function BusEvents(args: {
    */
   const changed: t.StateEvents['changed'] = {
     $: rx.payload<t.StateChangedEvent>($, 'app.state/changed'),
-    async fire() {
+    async fire(...messages) {
       const res = await info.get();
-      const current = res.info?.current ?? {};
+      const current = res.info?.current ?? DEFAULTS.state;
       bus.fire({
         type: 'app.state/changed',
-        payload: { instance, current },
+        payload: { instance, current, messages },
       });
     },
   };
@@ -135,6 +148,51 @@ export function BusEvents(args: {
     },
   };
 
+  /**
+   * Overlay
+   */
+  const overlay: t.StateEvents['overlay'] = {
+    req$: rx.payload<t.StateOverlayReqEvent>($, 'app.state/overlay:req'),
+    res$: rx.payload<t.StateOverlayResEvent>($, 'app.state/overlay:res'),
+    close$: rx.payload<t.StateOverlayCloseEvent>($, 'app.state/overlay:close'),
+    content$: changed.$.pipe(
+      filter((e) => Boolean(e.current.overlay)),
+      map((e) => e.current.overlay!),
+      distinctUntilChanged((prev, next) => {
+        if (prev.tx !== next.tx) return false;
+        if (Boolean(prev.content) !== Boolean(next.content)) return false;
+        if (prev.content?.md.markdown !== next.content?.md.markdown) return false;
+        return true;
+      }),
+    ),
+    async def(def, path, options = {}) {
+      const { context } = options;
+      const tx = slug();
+      const op = 'overaly';
+      const res$ = overlay.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.StateOverlayResEvent>(res$, { op });
+
+      bus.fire({
+        type: 'app.state/overlay:req',
+        payload: { tx, instance, def, path, context },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const errors = [res.error?.message ?? 'Failed'];
+      return { tx, instance, errors };
+    },
+
+    async close(options = {}) {
+      const { errors = [] } = options;
+      bus.fire({
+        type: 'app.state/overlay:close',
+        payload: { instance, errors },
+      });
+    },
+  };
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
@@ -147,6 +205,7 @@ export function BusEvents(args: {
     change,
     changed,
     select,
+    overlay,
   };
 }
 

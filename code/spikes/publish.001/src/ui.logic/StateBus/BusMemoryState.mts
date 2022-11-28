@@ -1,42 +1,53 @@
-import { R, t } from './common.mjs';
+import { R, t, Is, DEFAULTS } from './common.mjs';
 
-export type UrlString = string;
+type UrlString = string;
+type Revision = { number: number; message: string };
 
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState(initial: { location?: UrlString } = {}) {
-  let _revision_ = 0;
-  let _current_: t.StateTree = {};
+export function BusMemoryState(initial: { location?: UrlString; env?: t.StateEnvironment } = {}) {
+  let _revision: Revision = { number: 0, message: 'initial' };
+  let _current: t.StateTree = DEFAULTS.state;
 
   /**
    * Initial settings.
    */
-  if (initial.location) {
-    _current_.location = { url: initial.location };
-  }
+  if (initial.location) _current.location = { url: initial.location };
+  if (initial.env) _current.env = initial.env;
 
   /**
    * API
    */
-  return {
+  const api = {
     get revision() {
-      return _revision_;
+      return { ..._revision };
     },
     get current() {
-      return { ..._current_ };
+      return { ..._current };
     },
-    async change(fn: t.StateMutateHandler) {
+    async change(message: string, fn: t.StateMutateHandler) {
       /**
        * TODO 🐷
        *   Do this with either
        *    - [JsonPatch] or
        *    - [Automerge]
        */
-      const clone = R.clone(_current_); // TEMP | SLOW (potentially too slow)  🐷
-      fn(clone);
-      _revision_++;
-      _current_ = clone;
+      const before = api.revision;
+      const clone = R.clone(_current); // TEMP | SLOW (potentially too slow)  🐷
+
+      const res = fn(clone);
+      if (Is.promise(res)) await res;
+
+      // NB: Merging here is a "poor man's CRDT" strategy (use Automerge).
+      const changedByAnotherProcess = before.number !== _revision.number;
+      _current = changedByAnotherProcess
+        ? (R.mergeDeepRight(_current, clone) as t.StateTree)
+        : clone;
+
+      _revision = { number: before.number + 1, message };
     },
   };
+
+  return api;
 }

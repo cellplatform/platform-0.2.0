@@ -15,6 +15,7 @@ export function BusController(args: {
   id?: FilesystemId;
   filter?: (e: t.FsBusEvent) => boolean;
   timeout?: Milliseconds;
+  dispose$?: t.Observable<any>;
 }): t.SysFsController {
   const { driver, timeout, filter } = args;
   const { io } = driver;
@@ -23,7 +24,7 @@ export function BusController(args: {
   const dir = Path.ensureSlashStart(driver.io.dir);
 
   const bus = rx.busAsType<t.FsBusEvent>(args.bus);
-  const events = BusEvents({ id, bus, timeout, filter });
+  const events = BusEvents({ id, bus, timeout, filter, dispose$: args.dispose$ });
   const { fs, dispose, dispose$ } = events;
 
   /**

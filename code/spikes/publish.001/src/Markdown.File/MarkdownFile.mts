@@ -1,4 +1,4 @@
-import { t, Path } from '../common/index.mjs';
+import { t, Path } from '../common.mjs';
 
 type B = t.MarkdownPropsBase;
 
@@ -39,16 +39,16 @@ export async function MarkdownFile<T extends B = B>(args: t.MarkdownFileFactoryA
     },
 
     /**
-     * Write the README's to the given file-storage location.
+     * Write to the given file-storage location.
      */
-    async write(fs: t.Fs, options: { dir?: string; html?: boolean; md?: boolean } = {}) {
+    async write(target: t.Fs, options: { dir?: string; html?: boolean; md?: boolean } = {}) {
       const { html = true, md = true } = options;
       const base = options.dir ?? '';
       const path = (ext: string) =>
         Path.join(...[base, file.dir, `${file.name}${ext}`].filter(Boolean));
 
-      if (md) await fs.write(path('.md'), content.markdown); //   Raw Markdown
-      if (html) await fs.write(path('.md.html'), content.html); //  Markdown as HTML
+      if (md) await target.write(path('.md'), content.markdown); //   Raw Markdown
+      if (html) await target.write(path('.md.html'), content.html); //  Markdown as HTML
     },
   };
 

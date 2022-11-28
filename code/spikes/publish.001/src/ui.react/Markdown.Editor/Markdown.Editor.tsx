@@ -1,8 +1,8 @@
-import Editor from '@monaco-editor/react';
+import EditorReact from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { css, t } from '../common.mjs';
+import { css, t } from '../common';
 
 import type { OnChange } from '@monaco-editor/react';
 
@@ -28,8 +28,10 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
    */
   useEffect(() => {
     const editor = editorRef.current;
-    if (editor && markdown !== editor.getValue()) {
-      editor.setValue(markdown ?? '');
+    if (editor) {
+      if (markdown !== editor.getValue()) {
+        editor.setValue(markdown ?? '');
+      }
     }
   }, [markdown]);
 
@@ -56,7 +58,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.inner}>
-        <Editor
+        <EditorReact
           defaultLanguage={'markdown'}
           defaultValue={markdown}
           onMount={handleEditorDidMount}

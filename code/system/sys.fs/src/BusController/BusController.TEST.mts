@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { BusEvents } from '../BusEvents/index.mjs';
 import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../test/index.mjs';
 import { BusController } from './index.mjs';
@@ -137,6 +138,29 @@ describe('BusController', function () {
       mock.events.dispose();
       mock.events.dispose();
       expect(count).to.eql(1);
+    });
+
+    it('dispose from {dispose$} parameter passed to controller', () => {
+      const { driver } = TestPrep();
+      const id = 'foo';
+      const bus = rx.bus();
+
+      const dispose$ = new Subject<void>();
+
+      const controller = BusController({ id, bus, driver, dispose$ });
+      const events = controller.events;
+
+      let _events = 0;
+      let _controller = 0;
+      events.dispose$.subscribe(() => _events++);
+      controller.dispose$.subscribe(() => _controller++);
+
+      dispose$.next();
+      dispose$.next();
+      dispose$.next();
+
+      expect(_events).to.eql(1);
+      expect(_controller).to.eql(1);
     });
   });
 });

@@ -1,25 +1,60 @@
 import * as t from '../common/types.mjs';
 export * from './StateBus/types.mjs';
 
-type UrlString = string;
-type MdString = string;
+type Tx = string;
+type FilePath = string;
+type DirPath = string;
+type MarkdownString = string;
 
 /**
  * State Tree
  */
 export type StateTree = {
+  env: StateEnvironment;
+  loading: { document?: Tx };
   location?: StateLocation;
   markdown?: StateMarkdown;
-  selected?: StateSelection;
+  selection: StateSelection;
   log?: t.PublicLogSummary;
+  overlay?: StateOverlay;
 };
 
-export type StateMarkdown = { outline?: MdString; document?: MdString };
-
-export type StateLocation = {
-  url: UrlString;
-};
+export type StateMarkdown = { outline?: MarkdownString; document?: MarkdownString };
+export type StateLocation = { url: DirPath };
 
 export type StateSelection = {
-  url: UrlString;
+  index?: { path: DirPath };
+};
+
+export type StateEnvironment = {
+  media: { muted?: boolean };
+};
+
+/**
+ * Popup overlay
+ */
+export type StateOverlay = {
+  tx: Tx;
+  def: t.OverlayDef;
+  content?: StateOverlayContent;
+  context?: StateOverlayContext[];
+  error?: string;
+};
+
+export type StateOverlayContent = { md: t.ProcessedMdast; path: FilePath };
+export type StateOverlayContext = { title: string; path: FilePath };
+
+export type OverlayDef = {
+  title?: string;
+  detail?: MarkdownString;
+  margin?: { top?: number; bottom?: number };
+  path?: FilePath;
+};
+
+/**
+ * Subset of the state that is persisted to local-storage.
+ */
+export type LocalStorageState = {
+  selection: t.StateSelection;
+  env: StateEnvironment;
 };

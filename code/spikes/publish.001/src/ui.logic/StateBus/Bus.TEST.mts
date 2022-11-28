@@ -1,5 +1,5 @@
 import { StateBus } from './index.mjs';
-import { describe, it, expect, Pkg, rx, slug } from '../../test/index.mjs';
+import { describe, it, expect, Pkg, rx, slug } from '../../test';
 import { DEFAULTS } from './common.mjs';
 
 describe('StateBus', (e) => {

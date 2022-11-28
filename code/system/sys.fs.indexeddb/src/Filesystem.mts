@@ -15,10 +15,17 @@ export const Filesystem = {
    * Initialize an event-bus driven client API
    * to the node filesystem.
    */
-  async client(options: { dir?: DirPath; bus?: t.EventBus; id?: FilesystemId } = {}) {
-    const { bus = rx.bus(), id = `fs.node.${slug()}`, dir } = options;
+  async client(
+    options: {
+      dir?: DirPath;
+      bus?: t.EventBus;
+      id?: FilesystemId;
+      dispose$?: t.Observable<any>;
+    } = {},
+  ) {
+    const { bus = rx.bus(), id = `fs.indexeddb.${slug()}`, dir, dispose$ } = options;
     const driver = (await IndexedDbDriver({ dir })).driver;
-    const controller = Bus.Controller({ bus, id, driver });
+    const controller = Bus.Controller({ bus, id, driver, dispose$ });
     const { events, dispose } = controller;
     const fs = events.fs();
     const ready = await events.ready();

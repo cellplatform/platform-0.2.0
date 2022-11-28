@@ -1,6 +1,8 @@
+import { Spec } from 'sys.fs.spec';
+
 import { Filesystem, NodeDriver } from './index.mjs';
 import { NodeFs } from './node/index.mjs';
-import { describe, expect, it, MemoryMock, Path } from './test/index.mjs';
+import { t, describe, expect, it, MemoryMock, Path } from './test/index.mjs';
 
 describe('Filesystem (Node)', () => {
   it('Filesystem.Driver', () => {
@@ -30,4 +32,19 @@ describe('Filesystem (Node)', () => {
     const m = await fs.manifest();
     expect(m.files.find((file) => file.path === path)?.filehash).to.eql(file.hash);
   });
+});
+
+/**
+ * Baseline functional specifications from [sys.fs].
+ */
+describe('Filesystem: Functional Specification (Node.js)', () => {
+  const root = NodeFs.resolve('tmp/spec');
+
+  const factory: t.FsDriverFactory = async (dir) => {
+    await NodeFs.remove(root); // NB: reset test state.
+    dir = Path.join(root, Path.trim(dir));
+    return NodeDriver({ dir });
+  };
+
+  Spec.every({ root, factory, describe, it });
 });

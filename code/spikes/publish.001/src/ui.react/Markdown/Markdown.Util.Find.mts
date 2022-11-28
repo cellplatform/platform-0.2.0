@@ -1,9 +1,11 @@
-import { t } from '../common.mjs';
+import { t, Text } from '../common';
 import { visit } from 'unist-util-visit';
 
 type LinkMatch = { node: t.MdastLink; text: string; url: string };
 
 export const MarkdownFind = {
+  image: Text.Markdown.Find.image,
+
   /**
    * Looks for any links within the given node.
    */

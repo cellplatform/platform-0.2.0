@@ -1,6 +1,8 @@
+import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
+
 import { Text } from 'sys.text';
 
-import { describe, expect, expectError, it, TestFilesystem } from '../../test/index.mjs';
+import { describe, expect, expectError, it, TestFilesystem } from '../../test';
 import { ContentBundle } from './index.mjs';
 
 describe('ContentPipeline.README', () => {

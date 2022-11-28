@@ -6,7 +6,7 @@ import { AutomergeDoc } from './';
  * https://github.com/automerge/automerge
  * https://github.com/automerge/automerge/blob/main/SYNC.md
  */
-describe('Automerge (CRDT)', () => {
+describe.skip('Automerge (CRDT)', () => {
   const DEFAULT_CARD: Card = { title: 'hello', done: false, count: 0 };
   type Card = { title: string; done: boolean; count: number };
   type Doc = {

@@ -19,9 +19,12 @@ import type {
   Link as MdastLink,
   Image as MdastImage,
   Content as MdastContent,
+  Blockquote as MdastBlockquote,
+  ThematicBreak as MdastThematicBreak,
+  Table as MdastTable,
 } from 'mdast';
 
-export {
+export type {
   MdastRoot,
   MdastCode,
   MdastHeading,
@@ -32,6 +35,9 @@ export {
   MdastLink,
   MdastImage,
   MdastContent,
+  MdastBlockquote,
+  MdastThematicBreak,
+  MdastTable,
 };
 export type MdastNode =
   | MdastRoot
@@ -43,7 +49,9 @@ export type MdastNode =
   | MdastParagraph
   | MdastLink
   | MdastImage
-  | MdastContent;
+  | MdastContent
+  | MdastBlockquote
+  | MdastTable;
 
 /**
  * HAST (HTML)
@@ -57,5 +65,5 @@ import type {
 } from 'hast';
 import type { Raw as HastRaw } from 'mdast-util-to-hast';
 
-export { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
+export type { HastRoot, HastElement, HastText, HastComment, HastDocType, HastRaw };
 export type HastNode = HastRoot | HastElement | HastText | HastComment | HastDocType | HastRaw;

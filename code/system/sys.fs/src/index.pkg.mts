@@ -15,7 +15,6 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'image-js': '0.35.2',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

@@ -87,8 +87,7 @@ export async function ContentBundle(args: Args) {
        * Copy and process source content (data).
        */
       const logdir = sources.log;
-      await write.data(appfs, { logdir, manifest: false, vercelConfig: true });
-      await appfs.write('index.json', await appfs.manifest());
+      await write.data(appfs, { logdir });
 
       /**
        * Copy in known source (.ts) files from "/src"
@@ -117,11 +116,22 @@ export async function ContentBundle(args: Args) {
       }
 
       /**
-       * Write root level README.
+       * Write a [vercel.json] configuration file.
+       * NOTE:
+       *    Most of the routing will probably handled within a [src.middleware.ts] file.
+       * REF:
+       *  - https://vercel.com/docs/project-configuration#project-configuration
+       */
+      const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
+      await appfs.write('vercel.json', config);
+
+      /**
+       * Write [index.json] manifests.
        */
       const fs = target.dir(base);
       const manifest = await fs.manifest();
       await fs.write('index.json', manifest);
+      await appfs.write('index.json', await appfs.manifest());
 
       /**
        * Make a copy to ".latest" in the output directory.
@@ -160,7 +170,7 @@ export async function ContentBundle(args: Args) {
           const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
           return {
             total: toSize(manifest, () => true),
-            assets: toSize(manifest, (path) => match(path, Paths.Bundle.app.lib)),
+            lib: toSize(manifest, (path) => match(path, Paths.Bundle.app.lib)),
             data: {
               md: toSize(manifest, (path) =>
                 match(path, Paths.Bundle.app.base, Paths.Bundle.data.md),
@@ -186,14 +196,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write content
      */
-    async data(
-      target: t.Fs,
-      options: {
-        logdir?: t.Fs;
-        manifest?: boolean;
-        vercelConfig?: boolean;
-      } = {},
-    ) {
+    async data(target: t.Fs, options: { logdir?: t.Fs } = {}) {
       const MD = Text.Processor.markdown();
       const source = await sources.content.manifest();
 
@@ -203,16 +206,11 @@ export async function ContentBundle(args: Args) {
       await Promise.all(
         source.files.map(async (file) => {
           const data = await sources.content.read(file.path);
-          const md = await MD.toHtml(data);
+          const md = await MD.toMarkdown(data);
           const path = Path.join(Paths.Bundle.data.md, file.path);
           await target.write(path, md.markdown);
         }),
       );
-
-      if (options.manifest) {
-        const manifest = await target.manifest();
-        await target.write('index.json', manifest);
-      }
 
       /**
        * Copy in a summary of the log (latest n-items).
@@ -227,16 +225,10 @@ export async function ContentBundle(args: Args) {
       }
 
       /**
-       * Write a [vercel.json] configuration file.
-       * NOTE:
-       *    Most of the routing will probably handled within a [src.middleware.ts] file.
-       * REF:
-       *  - https://vercel.com/docs/project-configuration#project-configuration
+       * Data folder [index.json] manfiest
        */
-      if (options.vercelConfig) {
-        const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
-        await target.write('vercel.json', config);
-      }
+      const datafs = target.dir(Paths.Bundle.data.base);
+      await datafs.write('index.json', await datafs.manifest());
     },
   };
 

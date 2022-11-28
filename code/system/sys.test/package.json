@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "sys.types": "0.0.0",
-    "chai": "^4.3.6"
+    "chai": "^4.3.7"
   },
   "license": "MIT",
   "private": true,

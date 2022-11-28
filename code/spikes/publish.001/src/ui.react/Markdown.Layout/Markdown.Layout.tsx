@@ -1,72 +1,129 @@
-import { css, FC, t } from '../common.mjs';
-import { MarkdownDoc } from '../Markdown.Doc/index.mjs';
-import { HeadingTileClickHandler, TileOutline } from '../Tile.Outline/index.mjs';
+import { useEffect, useRef } from 'react';
+
+import { Color, COLORS, css, DEFAULTS, t, useSizeObserver } from '../common';
+import { MarkdownDoc } from '../Markdown.Doc';
+import { OverlayFrame } from '../Overlay';
+import { TooSmall } from '../TooSmall';
+import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 
 export type MarkdownLayoutProps = {
+  instance: t.Instance;
   markdown?: { outline?: string; document?: string };
+  loading?: { document?: boolean };
+  overlay?: t.OverlayDef;
   selectedUrl?: string;
-  scroll?: boolean;
+  version?: string;
   style?: t.CssValue;
-  onSelectClick?: HeadingTileClickHandler;
+  onSelectClick?: t.TileClickHandler;
 };
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
+  const { instance, overlay, loading = {} } = props;
+
+  const size = useSizeObserver();
+  const docRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    const el = docRef.current;
+    if (el) el.scrollTop = 0;
+  }, [props.markdown?.document]);
+
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      Scroll: props.scroll,
-      Flex: 'y-stretch-stretch',
+    base: css({ position: 'relative' }),
+
+    content: css({
+      Absolute: 0,
+      Flex: 'x-start-stretch',
     }),
+
     body: {
-      base: css({ flex: 1, Flex: 'x-stretch-stretch' }),
-      left: { position: 'relative' },
-      main: css({
-        flex: 2,
+      base: css({
+        Flex: 'x-stretch-stretch',
+        backgroundColor: COLORS.WHITE,
+        borderRight: `solid 1px ${Color.format(-0.1)}`,
+        '@media (max-width: 1100px)': { opacity: 0.1, pointerEvents: 'none' },
+      }),
+      left: css({
         position: 'relative',
-        padding: 20,
+        Scroll: true,
         paddingLeft: 20,
-        paddingRight: 40,
+        paddingTop: 20,
+        paddingRight: Wrangle.paddingSpacing(size.rect.width),
+        display: 'flex',
+      }),
+      doc: css({
+        position: 'relative',
+        Scroll: true,
+        padding: 20,
+        paddingLeft: Wrangle.paddingSpacing(size.rect.width),
+        paddingRight: 60,
         boxSizing: 'border-box',
       }),
     },
-    footer: {
+
+    overlay: {
       base: css({}),
-      inner: css({ height: 100 }),
+      frame: css({ Absolute: 0 }),
+      tooSmall: css({
+        '@media (min-width: 1100px)': { display: 'none' },
+        pointerEvents: 'none',
+        Absolute: 0,
+      }),
     },
-    outline: css({
-      marginTop: 20,
-      marginLeft: 20,
-    }),
   };
 
   const elBody = (
     <div {...styles.body.base}>
       <div {...styles.body.left}>
-        <TileOutline
-          style={styles.outline}
-          widths={{ root: 250, child: 300 }}
+        <MarkdownLayoutOutline
+          parentSize={size.rect}
           markdown={props.markdown?.outline}
-          onClick={props.onSelectClick}
+          selectedUrl={props.selectedUrl}
+          onSelectClick={props.onSelectClick}
         />
       </div>
-      <div {...styles.body.main}>
-        <MarkdownDoc markdown={props.markdown?.document} />
+      <div ref={docRef} {...styles.body.doc}>
+        <MarkdownDoc
+          instance={instance}
+          markdown={props.markdown?.document}
+          isLoading={Boolean(loading.document)}
+          width={DEFAULTS.MD.DOC.width}
+          paddingBottom={120}
+        />
       </div>
     </div>
   );
 
-  const elFooter = (
-    <div {...styles.footer.base}>
-      <div {...styles.footer.inner} />
+  const elContent = <div {...styles.content}>{elBody}</div>;
+  const elOverlays = (
+    <div {...styles.overlay.base}>
+      {overlay && <OverlayFrame def={overlay} instance={instance} style={styles.overlay.frame} />}
+      <TooSmall style={styles.overlay.tooSmall} />
     </div>
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
-      {elBody}
-      {elFooter}
+    <div ref={size.ref} {...css(styles.base, props.style)}>
+      {elContent}
+      {elOverlays}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  paddingSpacing(width?: number) {
+    if (typeof width !== 'number' || width <= 0) return 30;
+    if (width > 1280) return 30;
+    return 20;
+  },
 };

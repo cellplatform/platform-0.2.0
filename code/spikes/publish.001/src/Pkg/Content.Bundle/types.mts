@@ -1,9 +1,13 @@
 type S = { bytes: number; size: string };
-type Size = { total: S; assets: S; data: { md: S } };
+type Size = { total: S; lib: S; data: { md: S } };
 
 export type BundlePaths = {
-  app: { base: string; lib: string };
+  app: {
+    base: string;
+    lib: string;
+  };
   data: {
+    base: string;
     md: string;
     log: string;
   };

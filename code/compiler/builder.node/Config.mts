@@ -5,7 +5,7 @@ import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExpor
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
-import type { RollupOptions } from 'rollup';
+import type { RollupOptions, ManualChunksOption } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -19,7 +19,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['**/*.{TEST,SPEC}.{mts,tsx}'],
+        include: ['**/*.TEST.{mts,tsx}'],
         environment: 'node',
       };
     },
@@ -47,7 +47,11 @@ export const Config = {
        * Vite configuration.
        */
       const external: string[] = [];
-      const rollupOptions: RollupOptions = { external };
+      const manualChunks: ManualChunksOption = {};
+      const rollupOptions: RollupOptions = {
+        external,
+        output: { manualChunks },
+      };
       const build: BuildOptions = {
         rollupOptions,
         manifest: Paths.viteBuildManifest,
@@ -82,6 +86,9 @@ export const Config = {
             .filter((name) => !external.includes(name))
             .forEach((name) => external.push(name));
         },
+        chunk(alias, moduleName) {
+          manualChunks[alias] = R.uniq(asArray(moduleName ?? alias));
+        },
         lib(options = {}) {
           const { outname: fileName = 'index' } = options;
           const entry = fs.join(dir, options.entry ?? '/src/index.mts');
@@ -104,7 +111,13 @@ export const Config = {
 
       if (hasPlugin('web:react')) {
         const react = (await import('@vitejs/plugin-react')).default;
-        config.plugins?.push(react());
+        config.plugins?.push(
+          react({
+            // NB: "classic" (rather than the default) supresses a build warning:
+            // Message: "[@vitejs/plugin-react] You should stop using "vite:react-jsx" since this plugin conflicts with it"
+            jsxRuntime: 'classic',
+          }),
+        );
       }
 
       if (hasPlugin('web:svelte')) {

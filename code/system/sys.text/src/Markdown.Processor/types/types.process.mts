@@ -20,6 +20,12 @@ export type MarkdownProcessorOptions = {
    * as the final step prior to "stringifying" to text.
    */
   mdast?: (fn: t.MutateMdast) => void;
+
+  /**
+   * Flag that adjust external URL links to (safely) open in a new tab.
+   * Default: true
+   */
+  externalLinksInNewTab?: boolean;
 };
 
 export type HtmlOptions = MarkdownProcessorOptions & {

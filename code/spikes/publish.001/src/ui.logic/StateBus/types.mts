@@ -4,9 +4,10 @@ type Id = string;
 type Milliseconds = number;
 type Semver = string;
 type UrlString = string;
+type PathString = string;
 
-export type StateInstance = { bus: t.EventBus<any>; id?: Id };
-export type StateFetchKnownTopic = 'Outline' | 'Log';
+export type Instance = { bus: t.EventBus<any>; id?: Id };
+export type StateFetchKnownTopic = 'RootIndex' | 'Log';
 
 export type StateInfo = {
   module: { name: string; version: Semver };
@@ -39,15 +40,31 @@ export type StateEvents = t.Disposable & {
   change: {
     req$: t.Observable<t.StateChangeReq>;
     res$: t.Observable<t.StateChangeRes>;
-    fire(fn: StateMutateHandler, options?: { timeout?: Milliseconds }): Promise<StateChangeRes>;
+    fire(
+      message: string,
+      fn: StateMutateHandler,
+      options?: { timeout?: Milliseconds },
+    ): Promise<StateChangeRes>;
   };
   changed: {
     $: t.Observable<t.StateChanged>;
-    fire(): Promise<void>;
+    fire(...messages: string[]): Promise<void>;
   };
   select: {
     $: t.Observable<t.StateSelect>;
     fire(selected?: UrlString): Promise<void>;
+  };
+  overlay: {
+    req$: t.Observable<t.StateOverlayReq>;
+    res$: t.Observable<t.StateOverlayRes>;
+    content$: t.Observable<t.StateOverlay>;
+    close$: t.Observable<t.StateOverlayClose>;
+    def(
+      def: t.OverlayDef,
+      path: PathString,
+      options?: { context?: t.StateOverlayContext[] },
+    ): Promise<StateOverlayRes>;
+    close(options?: { errors?: string[] }): Promise<void>;
   };
 };
 
@@ -62,7 +79,10 @@ export type StateEvent =
   | StateChangeReqEvent
   | StateChangeResEvent
   | StateChangedEvent
-  | StateSelectEvent;
+  | StateSelectEvent
+  | StateOverlayReqEvent
+  | StateOverlayResEvent
+  | StateOverlayCloseEvent;
 
 /**
  * Module info.
@@ -71,14 +91,14 @@ export type StateReqEvent = {
   type: 'app.state/info:req';
   payload: StateInfoReq;
 };
-export type StateInfoReq = { tx: string; instance: Id };
+export type StateInfoReq = { tx: Id; instance: Id };
 
 export type StateResEvent = {
   type: 'app.state/info:res';
   payload: StateInfoRes;
 };
 export type StateInfoRes = {
-  tx: string;
+  tx: Id;
   instance: Id;
   info?: StateInfo;
   error?: string;
@@ -92,9 +112,9 @@ export type StateFetchReqEvent = {
   payload: StateFetchReq;
 };
 export type StateFetchReq = {
-  tx: string;
+  tx: Id;
   instance: Id;
-  target?: StateFetchKnownTopic[];
+  topic?: StateFetchKnownTopic[];
 };
 
 export type StateFetchResEvent = {
@@ -102,7 +122,7 @@ export type StateFetchResEvent = {
   payload: StateFetchRes;
 };
 export type StateFetchRes = {
-  tx: string;
+  tx: Id;
   instance: Id;
   current: t.StateTree;
   error?: string;
@@ -116,8 +136,9 @@ export type StateChangeReqEvent = {
   payload: StateChangeReq;
 };
 export type StateChangeReq = {
-  tx: string;
+  tx: Id;
   instance: Id;
+  message: string; // Commit message.
   handler: t.StateMutateHandler;
 };
 
@@ -126,9 +147,10 @@ export type StateChangeResEvent = {
   payload: StateChangeRes;
 };
 export type StateChangeRes = {
-  tx: string;
+  tx: Id;
   instance: Id;
   current: t.StateTree;
+  message: string; // Commit message.
   error?: string;
 };
 
@@ -139,7 +161,11 @@ export type StateChangedEvent = {
   type: 'app.state/changed';
   payload: StateChanged;
 };
-export type StateChanged = { instance: Id; current: t.StateTree };
+export type StateChanged = {
+  instance: Id;
+  current: t.StateTree;
+  messages: string[]; // Commit message.
+};
 
 /**
  * Change selection
@@ -148,4 +174,31 @@ export type StateSelectEvent = {
   type: 'app.state/select';
   payload: StateSelect;
 };
-export type StateSelect = { instance: Id; selected?: UrlString };
+export type StateSelect = { instance: Id; selected?: PathString };
+
+/**
+ * Overlay
+ */
+export type StateOverlayReqEvent = {
+  type: 'app.state/overlay:req'; // Open overlay.
+  payload: StateOverlayReq;
+};
+export type StateOverlayReq = {
+  tx: Id;
+  instance: Id;
+  def: t.OverlayDef;
+  path: PathString;
+  context?: t.StateOverlayContext[];
+};
+
+export type StateOverlayResEvent = {
+  type: 'app.state/overlay:res'; // Complete (overlay has been closed - long running, no timeout)
+  payload: StateOverlayRes;
+};
+export type StateOverlayRes = { tx: Id; instance: Id; errors: string[] };
+
+export type StateOverlayCloseEvent = {
+  type: 'app.state/overlay:close'; // Request to close overlay.
+  payload: StateOverlayClose;
+};
+export type StateOverlayClose = { instance: Id; errors: string[] };

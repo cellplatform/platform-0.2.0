@@ -1,16 +1,21 @@
-import { BundlePaths } from './common.mjs';
+import { BundlePaths } from './common';
 import { StateBus as Bus } from './StateBus/index.mjs';
+import { StateChange as Change } from './State.Change.mjs';
+import { StateIs as Is } from './State.Is.mjs';
+import { Fetch } from './Fetch.mjs';
 
 export { BundlePaths };
-const { useEvents, events } = Bus;
+const { useState, withEvents } = Bus;
 
 /**
  * UI State Manager
  */
 export const State = {
+  Is,
   BundlePaths,
-
+  Fetch,
+  Change,
   Bus,
-  events,
-  useEvents,
+  withEvents,
+  useState,
 };

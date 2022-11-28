@@ -17,10 +17,13 @@ export const Filesystem = {
    * Initialize an event-bus driven client API
    * to the node filesystem.
    */
-  async client(dir: DirPath, options: { bus?: t.EventBus; id?: FilesystemId } = {}) {
-    const { bus = rx.bus(), id = `fs.node.${slug()}` } = options;
+  async client(
+    dir: DirPath,
+    options: { bus?: t.EventBus; id?: FilesystemId; dispose$?: t.Observable<any> } = {},
+  ) {
+    const { bus = rx.bus(), id = `fs.node.${slug()}`, dispose$ } = options;
     const driver = NodeDriver({ dir });
-    const controller = Bus.Controller({ bus, id, driver });
+    const controller = Bus.Controller({ bus, id, driver, dispose$ });
     const { events, dispose } = controller;
     const fs = events.fs();
     const ready = await events.ready();

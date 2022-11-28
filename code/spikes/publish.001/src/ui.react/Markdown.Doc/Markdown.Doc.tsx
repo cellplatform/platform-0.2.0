@@ -1,120 +1,82 @@
-import React, { useEffect, useState } from 'react';
-
-import { Color, css, FC, t } from '../common.mjs';
-import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
-import { Text } from 'sys.text';
-
-const Markdown = Text.Markdown;
-// const Is = Text.Markdown.Is;
+import { css, DEFAULTS, FC, Spinner, t } from '../common';
+import { useGlobalStyles } from '../Markdown.GlobalStyles';
+import { MarkdownParsedHandler, useBlockRenderer } from './useBlockRenderer.mjs';
 
 export type MarkdownDocProps = {
+  instance: t.Instance;
   markdown?: string;
-  scroll?: boolean;
-  maxWidth?: number;
+  renderer?: t.MarkdownDocBlockRenderer;
+  isLoading?: boolean;
+  className?: string;
   style?: t.CssValue;
+  paddingBottom?: number;
+  width?: number;
+  onParsed?: MarkdownParsedHandler;
 };
 
-export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
-  const { maxWidth = 960 } = props;
+const CLASS = DEFAULTS.MD.CLASS;
 
-  const [safeBlocks, setSafeBlocks] = useState<(string | JSX.Element)[]>([]);
-  const isEmpty = !Boolean(safeBlocks);
-
-  const reset = () => setSafeBlocks([]);
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    (async () => {
-      const Processor = await MarkdownUtil.markdownProcessor();
-      const text = (props.markdown || '').trim();
-      const md = await Processor.toMarkdown(text);
-
-      reset();
-      const blocks: (string | JSX.Element)[] = [];
-      const children = md.info.mdast.children;
-
-      let i = -1;
-      for (const child of children) {
-        i++;
-        /**
-         * TODO 🐷 - REFACTOR
-         */
-
-        /**
-         * Process <Image> with Component.
-         */
-        const image = Markdown.Find.image(child);
-        if (image) {
-          const def = md.info.code.typed.find((c) => {
-            return c.type.startsWith('doc.image') && c.type.includes(' id:');
-          });
-
-          const style: React.CSSProperties = {};
-
-          if (def && def.lang === 'yaml') {
-            const o = Text.Yaml.parse(def.text);
-            console.log('o', o);
-            style.maxWidth = o.maxWidth;
-          }
-
-          console.log('def', def);
-
-          const el = <img {...styles.img} style={style} src={image.url} alt={image.alt ?? ''} />;
-          blocks.push(el);
-          continue;
-        }
-
-        /**
-         * Process raw HTML.
-         */
-        const text = md.toString(child.position);
-        const h = await Processor.toHtml(text);
-        blocks.push(h.html);
-      }
-
-      setSafeBlocks(blocks);
-    })();
-  }, [props.markdown]);
+const View: React.FC<MarkdownDocProps> = (props) => {
+  const { instance, markdown, renderer, onParsed, isLoading } = props;
+  const { safeBlocks } = useBlockRenderer({ instance, markdown, renderer, onParsed });
+  const globalStyles = useGlobalStyles();
 
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      Scroll: props.scroll,
-      maxWidth,
+      position: 'relative',
+      overflow: 'hidden',
+      color: globalStyles.DocStyles.p.color,
+      width: props.width,
     }),
-    empty: css({
-      marginTop: 30,
-      fontSize: 14,
-      fontStyle: 'italic',
-      textAlign: 'center',
-      opacity: 0.3,
+    body: css({
+      position: 'relative',
     }),
-    html: css({}),
-    jsxElementBlock: css({}),
 
-    img: css({
-      border: `solid 5px ${Color.format(-0.1)}`,
-      // maxWidth: 550,
+    blocks: css({
+      userSelect: 'text',
+      opacity: isLoading ? 0.1 : 1,
+      transition: `300ms`,
     }),
+
+    element: {
+      htmlBlock: css({}),
+      jsxBlock: css({}),
+    },
+
+    spinner: css({
+      Absolute: [38, 0, null, 0],
+      Flex: 'x-center-center',
+    }),
+
+    footerSpacer: css({ height: props.paddingBottom }),
   };
 
-  const elEmpty = isEmpty && <div {...styles.empty}>Nothing to display</div>;
+  const elSpinner = isLoading && (
+    <div {...styles.spinner}>
+      <Spinner />
+    </div>
+  );
+
   const elHtml = (
-    <div>
+    <div {...styles.blocks}>
       {safeBlocks.map((safeHtmlOrElement, i) => {
         if (typeof safeHtmlOrElement === 'string') {
           return (
-            <div key={i} {...styles.html} dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }} />
+            <div
+              key={i}
+              dangerouslySetInnerHTML={{ __html: safeHtmlOrElement }}
+              className={CLASS.BLOCK}
+              {...styles.element.htmlBlock}
+            />
           );
         }
 
         if (typeof safeHtmlOrElement === 'object')
           return (
-            <div key={i} {...styles.jsxElementBlock}>
+            <div key={i} {...styles.element.jsxBlock} className={CLASS.BLOCK}>
               {safeHtmlOrElement}
             </div>
           );
@@ -124,10 +86,30 @@ export const MarkdownDoc: React.FC<MarkdownDocProps> = (props) => {
     </div>
   );
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      {elEmpty}
+  const elBody = (
+    <div {...styles.body}>
       {elHtml}
+      {props.paddingBottom && <div {...styles.footerSpacer} />}
+    </div>
+  );
+
+  const className = `${CLASS.ROOT} ${props.className ?? ''}`.trim();
+  return (
+    <div {...css(styles.base, props.style)} className={className}>
+      {elBody}
+      {elSpinner}
     </div>
   );
 };
+
+/**
+ * Export
+ */
+
+type Fields = {};
+
+export const MarkdownDoc = FC.decorate<MarkdownDocProps, Fields>(
+  View,
+  {},
+  { displayName: 'MarkdownDoc' },
+);

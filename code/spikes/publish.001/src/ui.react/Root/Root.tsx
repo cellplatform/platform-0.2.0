@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import 'symbol-observable';
 
-import { Color, COLORS, css, State, t } from '../common.mjs';
+import { useEffect } from 'react';
+
+import { Color, COLORS, css, State, t } from '../common';
 import { History } from '../History/index.mjs';
 import { Markdown } from '../Markdown/index.mjs';
-import { env } from './Root.env.mjs';
+import { env } from '../Root.env';
 import { RootTitle } from './Root.Title';
 
 const { instance } = env;
@@ -11,14 +13,14 @@ const { instance } = env;
 /**
  * Component
  */
-export type ShowMarkdownComponent = 'editor' | 'outline';
-
 export type RootProps = {
+  showEditor?: boolean;
   style?: t.CssValue;
 };
 
 export const Root: React.FC<RootProps> = (props) => {
-  const state = State.useEvents(instance);
+  const { showEditor = false } = props;
+  const state = State.useState(instance);
 
   /**
    * Lifecycle.
@@ -64,17 +66,25 @@ export const Root: React.FC<RootProps> = (props) => {
     body: css({ position: 'relative', flex: 1 }),
   };
 
+  const elLeft = (
+    <div {...styles.left}>
+      {showEditor && <RootTitle text={'Content Bundle (Report)'} />}
+      <div {...styles.body}>
+        <Markdown instance={instance} showEditor={showEditor} style={{ Absolute: 0 }} />
+      </div>
+    </div>
+  );
+
+  const elRight = showEditor && (
+    <div {...styles.right}>
+      <History instance={instance} style={styles.history} data={state.current?.log} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, styles.normalize, props.style)}>
-      <div {...styles.left}>
-        <RootTitle text={'Report'} />
-        <div {...styles.body}>
-          <Markdown instance={instance} style={{ Absolute: 0 }} />
-        </div>
-      </div>
-      <div {...styles.right}>
-        <History instance={instance} style={styles.history} data={state.current?.log} />
-      </div>
+      {elLeft}
+      {elRight}
     </div>
   );
 };

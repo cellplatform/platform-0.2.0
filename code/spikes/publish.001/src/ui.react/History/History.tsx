@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, FC } from '../common.mjs';
+import { Color, COLORS, css, t, rx, FC } from '../common';
 import { HistoryUtil } from './HistoryUtil.mjs';
 import { HistoryItem } from './History.Item';
 
@@ -8,7 +8,7 @@ const DEFAULT = {
 };
 
 export type HistoryProps = {
-  instance: t.StateInstance;
+  instance: t.Instance;
   title?: string;
   data?: t.PublicLogSummary;
   style?: t.CssValue;

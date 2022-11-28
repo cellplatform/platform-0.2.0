@@ -1,5 +1,2 @@
-export * from '../common.mjs';
-
-export const DEFAULTS = {
-  instance: 'singleton',
-};
+export * from '../common';
+export * from './DEFAULTS.mjs';

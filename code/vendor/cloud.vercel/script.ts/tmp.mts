@@ -1,1 +1,2 @@
-console.info(`tmp 🐷`);
+// console.info(`tmp 🐷`);
+import './deploy.tmp.mjs';
