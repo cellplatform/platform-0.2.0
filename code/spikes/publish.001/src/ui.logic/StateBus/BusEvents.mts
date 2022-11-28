@@ -29,6 +29,17 @@ export function BusEvents(args: {
    */
   const init = async () => {
     await fetch.fire({ topic: ['RootIndex', 'Log'] });
+
+    const current = (await info.get()).info?.current;
+
+    /**
+     * TODO 🐷 TMP HACK!!!
+     * Do not hard code the initial path.  Derive it from the root [index.md]
+     */
+    if (!current?.selection.index?.path) {
+      const FOREWORD = './0/foreword.md';
+      await select.fire(FOREWORD);
+    }
   };
 
   /**

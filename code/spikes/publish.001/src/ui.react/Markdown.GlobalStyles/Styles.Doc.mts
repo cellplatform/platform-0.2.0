@@ -48,18 +48,12 @@ export const DocStyles = {
   },
 
   h4: {
-    fontSize: DEFAULT.FONT_SIZE,
+    fontSize: 20,
     letterSpacing: `0em`,
-    color: COLORS.MAGENTA,
+    color: DEFAULT.COLOR,
     textTransform: 'uppercase',
     marginTop: '3em',
   },
-
-  'h3:first-child': { marginTop: 0 },
-  'h4:first-child': { marginTop: 0 },
-
-  // 'h1:first-of-type': { marginBottom: 60 },
-  // 'h1, h2': { color: DEFAULT.HEADING_COLOR },
 
   'h1 em': DEFAULT.CSS.EM_HIGHLIGHT,
   'h2 em': DEFAULT.CSS.EM_HIGHLIGHT,
@@ -80,7 +74,9 @@ export const DocStyles = {
     opacity: 1,
     fontStyle: 'normal',
     color: COLORS.DARK,
-    backgroundColor: Color.alpha(COLORS.CYAN, 0.1),
+    backgroundColor: Color.alpha(COLORS.CYAN, 0.3),
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 
   /**
@@ -120,6 +116,7 @@ export const DocStyles = {
     fontWeight: '600',
   },
 
+  'table code': DEFAULT.CSS.CODE,
   'p code': DEFAULT.CSS.CODE,
   'li code': DEFAULT.CSS.CODE,
 

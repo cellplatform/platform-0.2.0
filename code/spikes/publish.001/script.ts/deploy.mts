@@ -1,6 +1,6 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text/node';
-import { rx, Time, Path } from 'sys.util';
+import { rx, Time } from 'sys.util';
 
 import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
@@ -46,7 +46,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
