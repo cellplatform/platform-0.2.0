@@ -35,12 +35,19 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
 
       border: `solid 1px`,
       borderColor: `${Color.alpha(COLORS.DARK, 0.15)}`,
+      overflow: 'hidden',
+    }),
+
+    main: css({
+      Absolute: 0,
+      borderRadius: 6,
     }),
 
     header: css({
       userSelect: 'none',
       Padding: [12, 15, 12, 18],
-      backgroundColor: Color.format(0.7),
+      backgroundColor: Color.format(0.4),
+      backdropFilter: `blur(10px)`,
       borderBottom: `solid 1px ${Color.format(-0.12)}`,
       Flex: 'x-spaceBetween-stretch',
     }),
@@ -68,12 +75,11 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
     body: css({
       flex: 1,
       position: 'relative',
-      overflow: 'hidden',
       paddingTop: 0,
       PaddingX: 20,
       paddingBottom: 40,
     }),
-    iconWatermark: css({
+    watermark: css({
       Absolute: [-260, null, null, -250],
       transform: `rotate(8deg)`,
     }),
@@ -90,18 +96,17 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
         </div>
       </div>
       <div {...styles.headerRight}>
-        <Icons.Video.Library size={26} color={Color.alpha(COLORS.DARK, 0.6)} />
+        <Icons.Video.Library size={26} color={Color.darken(COLORS.RED, 2)} />
       </div>
     </div>
   );
 
+  const elWatermark = (
+    <Icons.Support size={620} style={styles.watermark} color={Color.alpha(COLORS.DARK, 0.04)} />
+  );
+
   const elBody = (
     <div {...styles.body}>
-      <Icons.Support
-        size={620}
-        style={styles.iconWatermark}
-        color={Color.alpha(COLORS.DARK, 0.04)}
-      />
       <MarkdownDoc
         instance={instance}
         markdown={def.detail}
@@ -113,6 +118,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
 
   return (
     <div {...css(styles.base, props.style)} ref={click.ref}>
+      {elWatermark}
       {elHeader}
       {elBody}
     </div>

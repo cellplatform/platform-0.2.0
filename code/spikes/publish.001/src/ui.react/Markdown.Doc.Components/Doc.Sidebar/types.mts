@@ -3,7 +3,14 @@ export type DocSidebarType = DocSidebarYaml & {
 };
 
 export type DocSidebarYaml = {
-  title?: string;
+  title?: DocSidebarTitle;
   markdown?: string;
   margin: { top?: number; bottom?: number };
+};
+
+export type DocSidebarTitle = {
+  topLeft?: string;
+  topRight?: string;
+  bottomLeft?: string;
+  bottomRight?: string;
 };

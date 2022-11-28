@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Color, css, State, t, useSizeObserver } from '../common';
+import { Color, css, State, t, useSizeObserver, Time } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
 import { VideoDiagramImage } from './ui.Image';
@@ -23,10 +23,21 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const [vimeo, setVimeo] = useState<t.VimeoEvents>();
   const diagram = useDiagramState({ instance, vimeo });
 
+  const [ready, setReady] = useState(false);
+
   const size = useSizeObserver();
   const isTooSmall = !size.ready
     ? undefined
     : size.rect.width < minHeight || size.rect.height < minWidth;
+
+  /**
+   * [Lifecycle]
+   */
+  useEffect(() => {
+    if (size.ready) {
+      Time.delay(10, () => setReady(true));
+    }
+  }, [size.ready]);
 
   /**
    * [Handlers]
@@ -89,7 +100,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     }),
   };
 
-  const elTooSmall = isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
+  const elTooSmall = ready && isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
 
   const elContent = (
     <div {...styles.content}>

@@ -1,7 +1,9 @@
-import { Color, COLORS, css, t, DEFAULTS } from '../common';
+import { useEffect, useRef } from 'react';
+
+import { Color, COLORS, css, DEFAULTS, t, useSizeObserver } from '../common';
 import { MarkdownDoc } from '../Markdown.Doc';
-import { TooSmall } from '../TooSmall';
 import { OverlayFrame } from '../Overlay';
+import { TooSmall } from '../TooSmall';
 import { MarkdownLayoutOutline } from './Markdown.Layout.Outline';
 
 export type MarkdownLayoutProps = {
@@ -17,6 +19,17 @@ export type MarkdownLayoutProps = {
 
 export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
   const { instance, overlay, loading = {} } = props;
+
+  const size = useSizeObserver();
+  const docRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    const el = docRef.current;
+    if (el) el.scrollTop = 0;
+  }, [props.markdown?.document]);
 
   /**
    * [Render]
@@ -41,15 +54,14 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
         Scroll: true,
         paddingLeft: 20,
         paddingTop: 20,
-        paddingRight: 30,
-        paddingBottom: 50,
+        paddingRight: Wrangle.paddingSpacing(size.rect.width),
         display: 'flex',
       }),
-      main: css({
+      doc: css({
         position: 'relative',
         Scroll: true,
         padding: 20,
-        paddingLeft: 30,
+        paddingLeft: Wrangle.paddingSpacing(size.rect.width),
         paddingRight: 60,
         boxSizing: 'border-box',
       }),
@@ -70,12 +82,13 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
     <div {...styles.body.base}>
       <div {...styles.body.left}>
         <MarkdownLayoutOutline
+          parentSize={size.rect}
           markdown={props.markdown?.outline}
           selectedUrl={props.selectedUrl}
           onSelectClick={props.onSelectClick}
         />
       </div>
-      <div {...styles.body.main}>
+      <div ref={docRef} {...styles.body.doc}>
         <MarkdownDoc
           instance={instance}
           markdown={props.markdown?.document}
@@ -96,9 +109,21 @@ export const MarkdownLayout: React.FC<MarkdownLayoutProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div ref={size.ref} {...css(styles.base, props.style)}>
       {elContent}
       {elOverlays}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  paddingSpacing(width?: number) {
+    if (typeof width !== 'number' || width <= 0) return 30;
+    if (width > 1280) return 30;
+    return 20;
+  },
 };

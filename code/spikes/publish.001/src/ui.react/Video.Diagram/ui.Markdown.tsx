@@ -21,7 +21,8 @@ export const VideoDiagramMarkdown: React.FC<VideoDiagramMarkdownProps> = (props)
     base: css({
       flex: 1,
       position: 'relative',
-      opacity: dimmed ? 0.4 : 1,
+      opacity: dimmed ? 0.1 : 1,
+      transition: `opacity 300ms`,
       Flex: 'x-stretch-stretch',
     }),
 
@@ -55,7 +56,7 @@ export const VideoDiagramMarkdown: React.FC<VideoDiagramMarkdownProps> = (props)
 
   const elMarkdown = (
     <div {...styles.markdown} className={CLASS.ROOT}>
-      <Center className={CLASS.BLOCK} style={{ Absolute: [0, 120] }}>
+      <Center className={CLASS.BLOCK} style={{ Absolute: [0, 120], paddingBottom: '6%' }}>
         <MarkdownDoc instance={instance} markdown={def.markdown} className={CLASS.VIDEO_DIAGRAM} />
       </Center>
     </div>

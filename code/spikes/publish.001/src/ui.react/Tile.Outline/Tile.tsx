@@ -48,6 +48,8 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
     fireClick({ node, title });
   };
 
+  // console.log('Wrangle.root.fontSize(widths.root)', Wrangle.root.fontSize(widths.root));
+
   /**
    * [Render]
    */
@@ -66,7 +68,7 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
 
     block: {
       base: css({
-        flex: 1,
+        flex: children.length === 0 ? 1 : undefined,
         position: 'relative',
         boxSizing: 'border-box',
         cursor: 'default',
@@ -74,18 +76,19 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
       root: css({
         position: 'relative',
         overflow: 'hidden',
-        padding: 30,
+        boxSizing: 'border-box',
+        width: widths.root,
+        fontSize: Wrangle.root.fontSize(widths.root),
+        padding: Wrangle.root.padding(widths.root),
         paddingRight: 60,
         borderRadius: 10,
-        fontSize: 24,
-        width: widths.root,
       }),
       title: css({}),
       child: css({
         marginTop: 10,
         ':first-child': { marginTop: 0 },
-        padding: 30,
-        fontSize: 18,
+        padding: Wrangle.child.padding(widths.root),
+        fontSize: Wrangle.child.fontSize(widths.root),
         marginLeft: 8,
         borderRadius: 8,
         overflow: 'hidden',
@@ -180,4 +183,37 @@ export const HeadingTile: React.FC<HeadingTileProps> = (props) => {
       {elChildren}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  root: {
+    fontSize(width?: number) {
+      if (typeof width !== 'number') return 24;
+      if (width >= 250) return 24;
+      if (width >= 220) return 20;
+      return 18;
+    },
+    padding(width?: number) {
+      if (typeof width !== 'number') return 30;
+      if (width >= 250) return 30;
+      return 20;
+    },
+  },
+  child: {
+    fontSize(width?: number) {
+      if (typeof width !== 'number') return 18;
+      if (width >= 250) return 18;
+      if (width >= 220) return 16;
+      return 14;
+    },
+    padding(width?: number) {
+      if (typeof width !== 'number') return 30;
+      if (width >= 250) return 30;
+      return 20;
+    },
+  },
 };

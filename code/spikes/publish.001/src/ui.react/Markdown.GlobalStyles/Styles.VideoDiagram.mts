@@ -27,8 +27,11 @@ export const VideoDiagramStyles = {
 };
 
 export const VideoDiagramRefsStyles = {
+  ul: { paddingLeft: 25 },
   h1: { color: COLORS.DARK },
   h2: { color: COLORS.DARK },
   h3: { color: COLORS.DARK },
-  ul: { paddingLeft: 25 },
+
+  'h3:first-child': { marginTop: 0 },
+  'h4:first-child': { marginTop: 0 },
 };
