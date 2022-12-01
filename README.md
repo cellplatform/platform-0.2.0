@@ -36,7 +36,6 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 >> Open System.  
    Open Commons.  
-   Open DSLs.
 
 ---
 
