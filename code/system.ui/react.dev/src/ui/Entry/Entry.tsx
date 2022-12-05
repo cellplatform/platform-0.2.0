@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { t, COLORS } from '../common';
 import { SpecList } from '../SpecList';
 import { Harness } from '../Harness';
 
@@ -16,7 +16,7 @@ export const Entry = {
   ) {
     const url = Wrangle.location(options.location);
     const spec = await Wrangle.module(url, specs);
-    const style = options.style ?? { Absolute: 0 };
+    const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
     if (spec) {
       return <Harness spec={spec} style={style} />;
