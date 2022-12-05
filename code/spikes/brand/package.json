@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",
-    "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
-    "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
-    "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "test": "ts-node-esm    -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm   -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm   -T ../../../script.ts/cmd.clean.mts",
+    "deploy": "ts-node-esm  -T ./script.ts/deploy.vercel.mts",
+    "tmp": "ts-node-esm     -T ./script.ts/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
@@ -21,8 +22,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.e4efecb9.js",
-    "./web": "./dist/web/lib/index.e4efecb9.js"
+    ".": "./dist/web/lib/index.74839675.js",
+    "./web": "./dist/web/lib/index.74839675.js"
   },
   "typesVersions": {
     "*": {
