@@ -51,7 +51,10 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
    * [Render]
    */
   const styles = {
-    normalize: css({ fontFamily: 'sans-serif', color: COLORS.DARK }),
+    normalize: css({
+      fontFamily: 'sans-serif',
+      color: COLORS.DARK,
+    }),
     base: css({
       Absolute: 0,
       Flex: 'y-center-center',
@@ -85,6 +88,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
         fontSize: 32,
         opacity: versionVisible ? 1 : 0,
         transition: 'opacity 3000ms',
+        color: COLORS.INK,
       }),
     },
     detailTitle: css({
@@ -99,6 +103,7 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
       '@media (max-height: 550px)': { display: 'none' },
     }),
     a: css({ color: COLORS.CYAN }),
+    cleanLink: css({ textDecoration: 'none' }),
     p: css({
       marginTop: 0,
       marginBottom: 18,
@@ -110,13 +115,15 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
 
   const elTitle = (
     <div {...styles.title.base}>
-      <div {...styles.title.path}>
-        <span>{'db.team'}</span>
-        {slash('/')}
-        {cyan('undp')}
-        {slash('/')}
-        {cyan('web3')}
-      </div>
+      <a href={'/web3/'} {...styles.cleanLink}>
+        <div {...styles.title.path}>
+          <span>{'db.team'}</span>
+          {slash('/')}
+          {cyan('undp')}
+          {slash('/')}
+          {cyan('web3')}
+        </div>
+      </a>
       <div {...styles.title.version}>{version}</div>
     </div>
   );
