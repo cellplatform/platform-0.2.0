@@ -1,1 +1,1 @@
-export * from './ResizeObserver/types.mjs';
+export {};
