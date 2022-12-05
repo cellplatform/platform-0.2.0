@@ -88,7 +88,6 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
         fontSize: 32,
         opacity: versionVisible ? 1 : 0,
         transition: 'opacity 3000ms',
-        color: COLORS.INK,
       }),
     },
     detailTitle: css({
