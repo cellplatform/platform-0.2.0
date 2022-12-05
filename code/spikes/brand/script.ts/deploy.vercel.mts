@@ -1,12 +1,10 @@
 #!/usr/bin/env ts-node
 import { Vercel } from 'cloud.vercel';
 import { Filesystem } from 'sys.fs.node';
-import { Time, rx, Path } from 'sys.util';
+import { Time, rx } from 'sys.util';
 import { Pkg } from '../src/index.pkg.mjs';
 
 import type { VercelConfigFile } from 'cloud.vercel/src/types.mjs';
-
-// import { Util } from './common.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
@@ -22,7 +20,14 @@ const { fs } = await Filesystem.client(dir, { bus }); // <═══╗
 const now = Time.now.format('hh:mm');
 console.info('now:', now);
 
-const vercelJson: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
+const vercelJson: VercelConfigFile = {
+  cleanUrls: true,
+  trailingSlash: true,
+  rewrites: [
+    { source: '/brand/', destination: '/' },
+    { source: '/brand/lib/:path', destination: '/lib/:path' },
+  ],
+};
 await fs.write('dist/web/vercel.json', vercelJson);
 
 /**
