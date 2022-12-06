@@ -7,7 +7,7 @@ const isTauri = typeof (window as any).__TAURI__ === 'object';
 /**
  * Code-split at primary entry point.
  */
-if (isTauri || path.startsWith('/web3/')) {
+if (isTauri || path.startsWith('/web3/') || url.searchParams.has('dev')) {
   import('./test.ui/entry');
 } else {
   import('./ui.react/Root.HoldingPattern/entry');
