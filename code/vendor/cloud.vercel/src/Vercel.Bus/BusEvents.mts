@@ -62,6 +62,7 @@ export function BusEvents(args: {
     async fire(args) {
       const { source, team, project, ensureProject, timeout: msecs = 10000 } = args;
       const { name, env, buildEnv, functions, routes, target, alias, regions } = args;
+      const { vercelJson } = args;
       const config = {
         name,
         env,
@@ -72,6 +73,7 @@ export function BusEvents(args: {
         alias,
         regions,
         public: args.public,
+        vercelJson,
       };
 
       const tx = slug();

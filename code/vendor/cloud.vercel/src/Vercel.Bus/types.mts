@@ -57,6 +57,12 @@ export type VercelEventsDeployArgs = {
   timeout?: Milliseconds;
 
   /**
+   * Save as [vercel.json] configuration file.
+   * https://vercel.com/docs/project-configuration
+   */
+  vercelJson?: t.VercelConfigFile;
+
+  /**
    * Vercel configuration options.
    * https://vercel.com/docs/rest-api#endpoints/deployments/create-a-new-deployment
    */
