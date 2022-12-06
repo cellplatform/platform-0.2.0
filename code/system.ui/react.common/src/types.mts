@@ -1,1 +1,1 @@
-export * from './ui.Icon/types.mjs';
+export * from './ui/Icon/types.mjs';

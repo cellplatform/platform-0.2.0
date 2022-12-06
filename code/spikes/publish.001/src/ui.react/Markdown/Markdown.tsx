@@ -1,5 +1,6 @@
 import { Color, COLORS, css, State, t } from '../common';
-import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
+import { MonacoEditor } from 'sys.ui.react.monaco';
+// import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
 import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
 import { useEditorChangeHandler } from './useEditorChangeHandler.mjs';
 
@@ -32,6 +33,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
       overflow: 'hidden',
     }),
     column: css({ display: 'flex' }),
+    editor: css({
+      flex: 1,
+      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+    }),
   };
 
   const elLayout = (
@@ -51,12 +56,10 @@ export const Markdown: React.FC<MarkdownProps> = (props) => {
   );
 
   const elEditor = showEditor && (
-    <MarkdownEditor
-      style={{
-        flex: 1,
-        borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      }}
-      markdown={selectedUrl ? markdown?.document : markdown?.outline}
+    <MonacoEditor
+      style={styles.editor}
+      text={selectedUrl ? markdown?.document : markdown?.outline}
+      language={'markdown'}
       onChange={changeMonitor.changeHandler}
       focusOnLoad={true}
     />

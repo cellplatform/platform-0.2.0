@@ -3,10 +3,7 @@ import { Dev } from '.';
 import { Pkg } from '../index.pkg.mjs';
 
 const Imports = {
-  'ui.Icon': () => import('../ui/Icon/dev/Icon.SPEC'),
-  'ui.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
-  'ui.Center': () => import('../ui/Center/Center.SPEC'),
-  'hook.useSizeObserver': () => import('./specs/useSizeObserver.SPEC'),
+  'ui.MonacoEditor': () => import('../ui/MonacoEditor/MonacoEditor.SPEC'),
 };
 
 (async () => {
