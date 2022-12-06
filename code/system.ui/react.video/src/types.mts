@@ -1,1 +1,1 @@
-export * from './ui.components/Vimeo/types';
+export * from './ui/Vimeo/types';

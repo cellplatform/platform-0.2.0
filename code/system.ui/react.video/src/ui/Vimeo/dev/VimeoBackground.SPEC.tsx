@@ -1,5 +1,5 @@
 import { VimeoBackground } from '..';
-import { Spec } from '../../../ui.test';
+import { Spec } from '../../../test.ui';
 import { rx, slug, t } from '../common.mjs';
 import { VIDEO } from './sample.mjs';
 
