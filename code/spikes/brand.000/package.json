@@ -1,6 +1,6 @@
 {
   "name": "spike.brand",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,8 +22,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.69c48fa2.js",
-    "./web": "./dist/web/lib/index.69c48fa2.js"
+    ".": "./dist/web/lib/index.8e07ff1f.js",
+    "./web": "./dist/web/lib/index.8e07ff1f.js"
   },
   "typesVersions": {
     "*": {
