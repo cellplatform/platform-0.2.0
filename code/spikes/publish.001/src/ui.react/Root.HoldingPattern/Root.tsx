@@ -78,12 +78,17 @@ export const RootHolding: React.FC<RootHoldingProps> = (props) => {
     cyan: css({ color: COLORS.CYAN }),
     title: {
       base: css({
+        color: COLORS.DARK,
         Flex: 'x-spaceBetween-stretch',
         borderBottom: `solid 6px ${COLORS.CYAN}`,
         paddingBottom: 15,
         '@media (max-width: 660px)': { Flex: 'y-stretch-stretch' },
       }),
-      path: css({ fontSize: 32, fontWeight: 'bold' }),
+      path: css({
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: COLORS.DARK,
+      }),
       version: css({
         fontSize: 32,
         opacity: versionVisible ? 1 : 0,
