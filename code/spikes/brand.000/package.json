@@ -1,0 +1,35 @@
+{
+  "name": "spike.brand",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist/web && serve",
+    "test": "ts-node-esm    -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm   -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm   -T ../../../script.ts/cmd.clean.mts",
+    "deploy": "yarn audit && yarn build && ts-node-esm  -T ./script.ts/deploy.vercel.mts",
+    "tmp": "ts-node-esm     -T ./script.ts/tmp.mts"
+  },
+  "dependencies": {
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.html.d.html",
+  "exports": {
+    ".": "./dist/web/lib/index.daf47c1c.js",
+    "./web": "./dist/web/lib/index.daf47c1c.js"
+  },
+  "typesVersions": {
+    "*": {
+      "web": [
+        "./dist/types.d/index.html.d.html"
+      ]
+    }
+  }
+}

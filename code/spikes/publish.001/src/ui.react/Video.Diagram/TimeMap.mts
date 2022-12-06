@@ -26,7 +26,8 @@ export const TimeMap = {
   },
 
   sortedTimeMap<T extends t.DocTimeWindow>(input?: T[]): T[] {
-    return R.sortBy(R.prop('start'), input ?? []);
+    const prop = R.prop('start');
+    return R.sortBy(prop as any, input ?? []); // HACK 🐷: type issue (any).
   },
 
   /**

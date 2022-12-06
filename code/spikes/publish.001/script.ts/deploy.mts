@@ -24,7 +24,7 @@ const bundler = await ContentBundle({
   sources: {
     app: await toFs('./dist/web'),
     src: await toFs('./src/'),
-    content: await toFs('../../../../../org.team-db/tdb.undp/undp'),
+    content: await toFs('../../../../../org.team-db/tdb.working/undp'),
     log: logdir,
   },
 });

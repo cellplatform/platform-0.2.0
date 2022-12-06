@@ -65,6 +65,11 @@ export function VercelHttpTeamProject(args: {
     async deploy(args) {
       if (!(await api.exists())) await api.create();
 
+      if (args.vercelJson && typeof args.source === 'string') {
+        const root = ctx.fs.dir(args.source);
+        root.json.write('vercel.json', args.vercelJson);
+      }
+
       const projectInfo = await api.info();
       if (projectInfo.error) {
         const error = projectInfo.error;

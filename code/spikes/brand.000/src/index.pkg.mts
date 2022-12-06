@@ -10,17 +10,11 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react.common',
-  version: '0.0.0',
+  name: 'spike.brand',
+  version: '0.0.1',
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.util.react': '0.0.0',
-    'sys.util.css': '0.0.0',
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
-    'react-icons': '4.7.1',
-    'react-spinners': '0.13.7',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

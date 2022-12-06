@@ -260,6 +260,7 @@ export type VercelHttpDeployConfig = {
   public?: boolean; // A boolean representing if the deployment is public or not. By default this is false.
   target?: VercelTargetFlag;
   alias?: string | string[];
+  vercelJson?: t.VercelConfigFile;
 };
 
 export type VercelHttpDeployResponse = VercelHttpResponse & {
