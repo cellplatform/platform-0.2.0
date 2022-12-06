@@ -5,8 +5,8 @@ import { Dev } from '.';
 import { Pkg } from '../index.pkg.mjs';
 
 const Imports = {
-  'video.Vimeo': () => import('../ui/Vimeo/dev/Vimeo.SPEC'),
-  'video.VimeoBackground': () => import('../ui/Vimeo/dev/VimeoBackground.SPEC'),
+  'video.Vimeo': () => import('../ui.components/Vimeo/dev/Vimeo.SPEC'),
+  'video.VimeoBackground': () => import('../ui.components/Vimeo/dev/VimeoBackground.SPEC'),
 };
 
 (async () => {
