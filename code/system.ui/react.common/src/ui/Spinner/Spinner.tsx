@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 import PuffLoader from 'react-spinners/PuffLoader';
 
-import { COLORS, css, FC, t } from '../common';
-import { Center } from '../ui.Center';
+import { COLORS, css, FC, t } from '../../common';
+import { Center } from '../Center';
 
 export type SpinnerProps = {
   size?: number;

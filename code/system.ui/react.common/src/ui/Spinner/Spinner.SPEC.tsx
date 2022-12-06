@@ -1,4 +1,4 @@
-import { Spec } from '../test.ui';
+import { Spec } from '../../test.ui';
 import { Spinner } from '.';
 
 export default Spec.describe('Spinner', (e) => {

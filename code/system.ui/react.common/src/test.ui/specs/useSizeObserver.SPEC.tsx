@@ -1,4 +1,4 @@
-import { Spec } from '../test.ui';
+import { Spec } from '..';
 import { useSizeObserver } from 'sys.util.react';
 
 export default Spec.describe('hook.useSizeObserver', (e) => {

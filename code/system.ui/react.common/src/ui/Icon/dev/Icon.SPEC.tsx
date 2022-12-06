@@ -1,4 +1,4 @@
-import { Spec } from '../../test.ui';
+import { Spec } from '../../../test.ui';
 import { Icons } from './sample';
 
 export default Spec.describe('Icon', (e) => {

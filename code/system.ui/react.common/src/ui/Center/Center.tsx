@@ -1,6 +1,4 @@
-import type React from 'react';
-
-import { css, t } from '../common';
+import { css, t } from '../../common';
 
 export type CenterProps = {
   flex?: number;
@@ -24,6 +22,7 @@ export const Center: React.FC<CenterProps> = (props) => {
       alignContent: 'center',
     }),
   };
+
   return (
     <div {...css(styles.base, props.style)} className={props.className}>
       {props.children}

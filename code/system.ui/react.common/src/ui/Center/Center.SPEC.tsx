@@ -1,4 +1,4 @@
-import { Spec, css } from '../test.ui';
+import { Spec, css } from '../../test.ui';
 import { Center } from '.';
 
 export default Spec.describe('Spinner', (e) => {
