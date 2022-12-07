@@ -1,4 +1,4 @@
-import { Spec } from '../../ui.test';
+import { Spec } from '../../test.ui';
 import { BrandLayout } from '.';
 
 export default Spec.describe('BrandLayout', (e) => {

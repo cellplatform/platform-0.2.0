@@ -1,4 +1,4 @@
-import { Spec } from '../../ui.test';
+import { Spec } from '../../test.ui';
 import { Root } from '.';
 
 export default Spec.describe('Root', (e) => {

@@ -1,2 +1,2 @@
-export { rx, slug, Time } from 'sys.util';
-export { css, Color, Style } from 'sys.util.css';
+export { rx, Time, slug } from 'sys.util';
+export { css, Style, Css, Color } from 'sys.util.css';

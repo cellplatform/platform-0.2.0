@@ -4,8 +4,8 @@ import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 
 export const Imports = {
-  'ui.Root': () => import('../ui.react/Root/Root.SPEC'),
-  'ui.BrandLayout': () => import('../ui.react/BrandLayout/BrandLayout.SPEC'),
+  'ui.Root': () => import('../ui/Root/Root.SPEC'),
+  'ui.BrandLayout': () => import('../ui/BrandLayout/BrandLayout.SPEC'),
 };
 
 const url = new URL(location.href);
@@ -24,12 +24,12 @@ const query = url.searchParams;
     root.render(el);
   } else {
     if (query.has('brand') || url.pathname === '/brand/') {
-      const { BrandLayout } = await import('../ui.react/BrandLayout');
+      const { BrandLayout } = await import('../ui/BrandLayout');
       root.render(<BrandLayout />);
       return;
     }
 
-    const { Root } = await import('../ui.react/Root');
+    const { Root } = await import('../ui/Root');
     root.render(<Root />);
   }
 })();
