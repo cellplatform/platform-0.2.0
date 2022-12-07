@@ -50,8 +50,8 @@ process.exit(0); // TEMP 🐷
  * Deploy
  */
 const deployment = await pushToVercel({
-  fs: bundle.fs,
   version,
+  fs: bundle.fs,
   source: bundle.dir.app,
 });
 
