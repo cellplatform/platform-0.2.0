@@ -1,36 +1,33 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
-import { Text } from 'sys.text/node';
-import { rx, Time } from 'sys.util';
-
-// import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
 import { ContentBundle, ContentLog } from 'sys.pkg';
+import { Text } from 'sys.text/node';
+import { rx } from 'sys.util';
+
 import { pushToVercel } from './deploy.vercel.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
 
-const toFs = async (dir: string) => {
+const dir = async (dir: string) => {
   dir = NodeFs.resolve(dir);
   const store = await Filesystem.client(dir, { bus });
   return store.fs;
 };
 
-const logdir = await toFs('./dist.deploy/.log/');
-const publicdir = await toFs('./public/');
-const targetdir = await toFs('./dist.deploy/');
+const logdir = await dir('./dist.deploy/.log/');
+const publicdir = await dir('./public/');
+const targetdir = await dir('./dist.deploy/');
 
 const bundler = await ContentBundle({
   Text,
   throwError: true,
   sources: {
-    app: await toFs('./dist/web'),
-    src: await toFs('./src/'),
-    content: await toFs('../../../../../org.team-db/tdb.working/undp'),
+    app: await dir('./dist/web'),
+    src: await dir('./src/'),
+    content: await dir('../../../../../org.team-db/tdb.working/undp'),
     log: logdir,
   },
 });
-
-console.log('content:bundler:', bundler);
 
 const version = bundler.version;
 const bundle = await bundler.write.bundle(targetdir, {});
@@ -54,7 +51,7 @@ console.log('sizes:', bundle.size);
 /**
  * Deploy
  */
-const deployed = await pushToVercel({
+const deployment = await pushToVercel({
   fs: bundle.fs,
   token,
   version,
@@ -62,15 +59,10 @@ const deployed = await pushToVercel({
 });
 
 console.log('-------------------------------------------');
-console.log('deployed', deployed.status);
+console.log('deployed', deployment.status);
 
 /**
  * Log results.
  */
-
 const logger = ContentLog.log(logdir);
-await logger.write({
-  timestamp: Time.now.timestamp,
-  bundle: bundle.toObject(),
-  deployment: deployed,
-});
+await logger.write({ bundle: bundle.toObject(), deployment });

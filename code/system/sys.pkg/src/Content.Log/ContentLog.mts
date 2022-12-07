@@ -1,5 +1,6 @@
-import { R, t } from '../common';
+import { R, t, Time } from '../common';
 import { ContentLogFilename as Filename } from './ContentLog.Filename.mjs';
+import { Pkg } from '../index.pkg.mjs';
 
 type VersionString = string;
 
@@ -17,9 +18,17 @@ export const ContentLog = {
       /**
        * Write the results of a deployment to the log.
        */
-      async write(data: t.LogEntry) {
-        const version = data.bundle.version;
+      async write(args: {
+        bundle: t.BundleLogEntry;
+        timestamp?: number;
+        deployment?: t.DeploymentLogEntry;
+      }) {
+        const { bundle, deployment } = args;
+        const timestamp = args.timestamp ?? Time.now.timestamp;
+        const version = args.bundle.version;
         const filename = ContentLog.Filename.create(version);
+        const packagedBy = Pkg.toString();
+        const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
         await fs.write(filename, JSON.stringify(data));
       },
 

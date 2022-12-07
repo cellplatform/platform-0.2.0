@@ -6,6 +6,7 @@ type UnixEpoch = number;
  * Entry in the log.
  */
 export type LogEntry = {
+  packagedBy: string;
   timestamp: UnixEpoch;
   bundle: t.BundleLogEntry;
   deployment?: DeploymentLogEntry;
