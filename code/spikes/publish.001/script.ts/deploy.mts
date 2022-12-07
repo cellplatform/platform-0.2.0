@@ -5,12 +5,10 @@ import { rx } from 'sys.util';
 
 import { pushToVercel } from './deploy.vercel.mjs';
 
-const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
 
 const dir = async (dir: string) => {
-  dir = NodeFs.resolve(dir);
-  const store = await Filesystem.client(dir, { bus });
+  const store = await Filesystem.client(NodeFs.resolve(dir), { bus });
   return store.fs;
 };
 
@@ -53,7 +51,6 @@ process.exit(0); // TEMP 🐷
  */
 const deployment = await pushToVercel({
   fs: bundle.fs,
-  token,
   version,
   source: bundle.dir.app,
 });
