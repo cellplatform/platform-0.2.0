@@ -1,35 +1,31 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
+import { ContentBundle, ContentLog } from 'sys.pkg';
 import { Text } from 'sys.text/node';
-import { rx, Time } from 'sys.util';
+import { rx } from 'sys.util';
 
-import { ContentBundle, ContentLog } from '../src/Pkg/index.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
 
-const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();
 
-const toFs = async (dir: string) => {
-  dir = NodeFs.resolve(dir);
-  const store = await Filesystem.client(dir, { bus });
+const dir = async (dir: string) => {
+  const store = await Filesystem.client(NodeFs.resolve(dir), { bus });
   return store.fs;
 };
 
-const targetdir = await toFs('./dist.deploy/');
-const logdir = await toFs('./dist.deploy/.log/');
-const publicfs = await toFs('./public/');
+const logdir = await dir('./dist.deploy/.log/');
+const publicdir = await dir('./public/');
+const targetdir = await dir('./dist.deploy/');
 
 const bundler = await ContentBundle({
   Text,
   throwError: true,
   sources: {
-    app: await toFs('./dist/web'),
-    src: await toFs('./src/'),
-    content: await toFs('../../../../../org.team-db/tdb.working/undp'),
+    app: await dir('./dist/web'),
+    src: await dir('./src/'),
+    content: await dir('../../../../../org.team-db/tdb.working/project.undp/'),
     log: logdir,
   },
 });
-
-console.log('content:bundler:', bundler);
 
 const version = bundler.version;
 const bundle = await bundler.write.bundle(targetdir, {});
@@ -37,7 +33,7 @@ const bundle = await bundler.write.bundle(targetdir, {});
 /**
  * Store the data in /public (for local dev usage)
  */
-await bundler.write.data(publicfs, { logdir });
+await bundler.write.data(publicdir);
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
@@ -53,23 +49,17 @@ console.log('sizes:', bundle.size);
 /**
  * Deploy
  */
-const deployed = await pushToVercel({
-  fs: bundle.fs,
-  token,
+const deployment = await pushToVercel({
   version,
+  fs: bundle.fs,
   source: bundle.dir.app,
 });
 
 console.log('-------------------------------------------');
-console.log('deployed', deployed.status);
+console.log('deployed', deployment.status);
 
 /**
  * Log results.
  */
-
 const logger = ContentLog.log(logdir);
-await logger.writeDeployment({
-  timestamp: Time.now.timestamp,
-  bundle: bundle.toObject(),
-  deployment: deployed.toObject(),
-});
+await logger.write({ bundle: bundle.toObject(), deployment });

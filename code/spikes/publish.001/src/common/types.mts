@@ -10,7 +10,14 @@ export type {
   ManifestFile,
   PartialDeep,
 } from 'sys.types';
+
 export type { Fs } from 'sys.fs/src/types.mjs';
+
+export type {
+  PublicLogSummary,
+  PublicLogHistoryItem,
+  DeploymentLogEntry,
+} from 'sys.pkg/src/types.mjs';
 
 export type {
   Text,

@@ -10,9 +10,11 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.brand',
-  version: '0.0.2-alpha.0',
+  name: 'sys.pkg',
+  version: '0.0.0',
   dependencies: {
+    'sys.fs': '0.0.0',
+    'sys.text': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },

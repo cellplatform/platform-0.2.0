@@ -4,17 +4,18 @@ import { rx } from 'sys.util';
 import { t } from '../src/common/index.mjs';
 import pc from 'picocolors';
 
+const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
+
 export async function pushToVercel(args: {
   fs: t.Fs;
-  token: string;
   version: string;
   source: string;
   bus?: t.EventBus<any>;
-}) {
-  const { fs, token, version, source } = args;
+}): Promise<t.DeploymentLogEntry> {
+  const { fs, version, source } = args;
   const bus = args.bus ?? rx.bus();
-
   const vercel = Vercel.client({ bus, token, fs });
+
   const res = await vercel.deploy({
     team: 'tdb',
     name: `tdb.undp.v${version}`,
@@ -31,18 +32,9 @@ export async function pushToVercel(args: {
   console.info(pc.bold(pc.green(`version: ${pc.white(version)}`)));
 
   return {
-    ...res,
-
-    /**
-     * Data about the deployment to be written to a log.
-     */
-    toObject() {
-      const obj: t.DeploymentLogEntry = {
-        kind: 'vercel:deployment',
-        success: res.deployment,
-        error: res.error,
-      };
-      return obj;
-    },
+    kind: 'vercel:deployment',
+    status: res.status,
+    success: res.deployment,
+    error: res.error,
   };
 }

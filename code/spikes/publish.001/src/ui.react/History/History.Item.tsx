@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, FC } from '../common';
+import { css, t } from '../common';
 
 type SemverString = string;
 
@@ -10,7 +10,6 @@ export type HistoryItemProps = {
 
 export const HistoryItem: React.FC<HistoryItemProps> = (props) => {
   const { data, latest = '' } = props;
-
   const isLatest = data.version === latest;
 
   /**

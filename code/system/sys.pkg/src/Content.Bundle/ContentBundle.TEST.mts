@@ -1,9 +1,7 @@
-import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
-
 import { Text } from 'sys.text';
 
-import { describe, expect, expectError, it, TestFilesystem } from '../../test';
-import { ContentBundle } from './index.mjs';
+import { Path, describe, expect, expectError, it, TestFilesystem } from '../test';
+import { ContentBundle } from '.';
 
 describe('ContentPipeline.README', () => {
   const README = `
@@ -21,7 +19,9 @@ version: 0.1.2
     const app = TestFilesystem.memory().events.fs();
     const content = TestFilesystem.memory().events.fs();
     const target = TestFilesystem.memory().events.fs();
-    const sources = { app, content };
+    const log = TestFilesystem.memory().events.fs();
+    const src = TestFilesystem.memory().events.fs();
+    const sources = { app, src, content, log };
 
     if (prefillWithData) {
       await sources.content.write('README.md', README);
@@ -53,7 +53,7 @@ version: 0.1.2
     expect(m.files.map((f) => f.path)).to.eql(['README.md', 'README.md.html']);
   });
 
-  it.skip('write: default dir (none)', async () => {
+  it('write: default dir (none)', async () => {
     const { sources, target } = await setup();
     const pipeline = await ContentBundle({ Text, sources });
     await pipeline.write.bundle(target);
@@ -61,13 +61,20 @@ version: 0.1.2
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);
 
-    expect(files).to.includes('0.1.2/app/README.md');
-    expect(files).to.includes('0.1.2/app/README.md.html');
+    const expected = [
+      'README.md',
+      'app/data/index.json',
+      'app/data/md/README.md',
+      'app/index.json',
+      'app/vercel.json',
+      'index.json',
+    ];
 
-    console.log('files', files);
+    expected.forEach((path) => expect(files).to.include(Path.join('0.1.2', path)));
+    expected.forEach((path) => expect(files).to.include(Path.join('.latest', path)));
   });
 
-  it.skip('write: custom dir', async () => {
+  it('write: custom dir', async () => {
     const { sources, target } = await setup();
     const pipeline = await ContentBundle({ Text, sources });
     await pipeline.write.bundle(target, { dir: '/foo/bar/' });
@@ -75,7 +82,10 @@ version: 0.1.2
     const m = await target.manifest();
     const files = m.files.map((f) => f.path);
 
-    expect(files).to.includes('foo/bar/0.1.2/app/README.md');
-    expect(files).to.includes('foo/bar/0.1.2/app/README.md.html');
+    expect(files).to.include('foo/bar/README.md');
+    expect(files).to.include('foo/bar/app/index.json');
+
+    expect(files).to.include('.latest/README.md');
+    expect(files).to.include('.latest/app/index.json');
   });
 });

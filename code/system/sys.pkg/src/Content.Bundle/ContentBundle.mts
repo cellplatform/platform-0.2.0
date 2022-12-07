@@ -1,16 +1,14 @@
 import { Filesize } from 'sys.fs';
 
-import { MarkdownFile } from '../../Markdown.File/index.mjs';
-import { Path, t } from '../common.mjs';
+import { MarkdownFile } from '../Markdown.File';
+import { Path, t } from '../common';
 import { ContentLog } from '../Content.Log/ContentLog.mjs';
 import { BundlePaths } from '../Paths.mjs';
 
-import type { VercelConfigFile } from 'cloud.vercel/src/types.mjs';
-
 type Sources = {
   app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; //               The source markdown content, and other assorted "author(s) generated" content.
-  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files).
+  content: t.Fs; //               The author generated content data.
+  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
   log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
@@ -33,7 +31,7 @@ const Paths = {
  * Setup a deployment.
  */
 export async function ContentBundle(args: Args) {
-  const { Text, sources, throwError, propsType = 'project.props' } = args;
+  const { Text, sources, throwError = true, propsType = 'project.props' } = args;
 
   /**
    * Load and parse the README file.
@@ -52,13 +50,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write the content to the given filesystem location.
      */
-    async bundle(
-      target: t.Fs,
-      options: {
-        dir?: string;
-        latest?: boolean;
-      } = {},
-    ) {
+    async bundle(target: t.Fs, options: { dir?: string; latest?: boolean } = {}) {
       const source = await sources.app.manifest();
       const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
       const appfs = target.dir(Path.join(base, Paths.Bundle.app.base));
@@ -86,8 +78,7 @@ export async function ContentBundle(args: Args) {
       /**
        * Copy and process source content (data).
        */
-      const logdir = sources.log;
-      await write.data(appfs, { logdir });
+      await write.data(appfs);
 
       /**
        * Copy in known source (.ts) files from "/src"
@@ -122,7 +113,7 @@ export async function ContentBundle(args: Args) {
        * REF:
        *  - https://vercel.com/docs/project-configuration#project-configuration
        */
-      const config: VercelConfigFile = { cleanUrls: true, trailingSlash: true };
+      const config: t.VercelConfigFile = { cleanUrls: true, trailingSlash: true };
       await appfs.write('vercel.json', config);
 
       /**
@@ -196,7 +187,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write content
      */
-    async data(target: t.Fs, options: { logdir?: t.Fs } = {}) {
+    async data(target: t.Fs) {
       const MD = Text.Processor.markdown();
       const source = await sources.content.manifest();
 
@@ -216,8 +207,8 @@ export async function ContentBundle(args: Args) {
        * Copy in a summary of the log (latest n-items).
        */
       let log: t.PublicLogSummary | undefined;
-      if (options.logdir) {
-        const fs = options.logdir;
+      if (sources.log) {
+        const fs = sources.log;
         const logger = ContentLog.log(fs);
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });

@@ -1,18 +1,14 @@
-import { slug, t, Time, R } from '../common.mjs';
+import { R, t, Time } from '../common';
+import { ContentLogFilename as Filename } from './ContentLog.Filename.mjs';
+import { Pkg } from '../index.pkg.mjs';
 
 type VersionString = string;
-
-const ContentLogFilename = {
-  ext: '.log.json',
-  isMatch: (path: string) => String(path).trim().endsWith(ContentLogFilename.ext),
-  create: () => `${Time.now.timestamp}-${slug()}${ContentLogFilename.ext}`,
-};
 
 /**
  * Tools for working with a content log.
  */
 export const ContentLog = {
-  Filename: ContentLogFilename,
+  Filename,
 
   /**
    * Write deployment to the file-log.
@@ -22,8 +18,17 @@ export const ContentLog = {
       /**
        * Write the results of a deployment to the log.
        */
-      async writeDeployment(data: t.LogEntry) {
-        const filename = ContentLog.Filename.create();
+      async write(args: {
+        bundle: t.BundleLogEntry;
+        timestamp?: number;
+        deployment?: t.DeploymentLogEntry;
+      }) {
+        const { bundle, deployment } = args;
+        const timestamp = args.timestamp ?? Time.now.timestamp;
+        const version = args.bundle.version;
+        const filename = ContentLog.Filename.create(version);
+        const packagedBy = `${Pkg.name}@${Pkg.version}`;
+        const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
         await fs.write(filename, JSON.stringify(data));
       },
 
@@ -40,14 +45,17 @@ export const ContentLog = {
         const wait = paths.map((path) => fs.json.read<t.LogEntry>(path));
         const items = (await Promise.all(wait)) as t.LogEntry[];
 
-        let history = items.map((entry) => {
-          const timestamp = entry.timestamp;
-          const version = entry.bundle.version;
-          const { success, error } = entry.deployment;
-          const urls = success?.urls.public ?? [];
-          const item: t.PublicLogHistoryItem = { timestamp, version, urls, error };
-          return item;
-        });
+        let history: t.PublicLogHistoryItem[] = items
+          .filter((entry) => Boolean(entry.deployment))
+          .map((entry) => {
+            const timestamp = entry.timestamp;
+            const version = entry.bundle.version;
+            const deployment = entry.deployment!;
+            const { success, error } = deployment;
+            const urls = success?.urls.public ?? [];
+            const item: t.PublicLogHistoryItem = { timestamp, version, urls, error };
+            return item;
+          });
         history = dedupeVersionsToLatest(history);
         if (options.max) {
           history = history.slice(0, options.max);
