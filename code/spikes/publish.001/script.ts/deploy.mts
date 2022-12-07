@@ -1,5 +1,5 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
-import { ContentBundle, ContentLog } from 'sys.pkg';
+import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';
 import { rx } from 'sys.util';
 
@@ -16,7 +16,7 @@ const logdir = await dir('./dist.deploy/.log/');
 const publicdir = await dir('./public/');
 const targetdir = await dir('./dist.deploy/');
 
-const bundler = await ContentBundle({
+const bundler = await Content.bundler({
   Text,
   throwError: true,
   sources: {
@@ -61,5 +61,5 @@ console.log('deployed', deployment.status);
 /**
  * Log results.
  */
-const logger = ContentLog.log(logdir);
+const logger = Content.logger(logdir);
 await logger.write({ bundle: bundle.toObject(), deployment });

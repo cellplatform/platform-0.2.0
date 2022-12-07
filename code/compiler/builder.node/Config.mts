@@ -20,7 +20,7 @@ export const Config = {
       return {
         globals: false,
         include: ['**/*.TEST.{mts,tsx}'],
-        environment: 'node',
+        environment: 'node', // NB: Default, makes JSDOM available.
       };
     },
   },
@@ -29,15 +29,15 @@ export const Config = {
    * Build configuration generator (with standard defaults).
    */
   vite(modulePath: t.ImportMetaUrl, modify?: t.ModifyViteConfig): UserConfigExport {
-    const dir = toDirname(modulePath);
+    const dir = Wrangle.dirname(modulePath);
 
     return defineConfig(async (e) => {
       const { command, mode } = e;
       const pkg = await Util.PackageJson.load(dir);
       const name = pkg.name;
       const deps = [
-        ...toDepsList(false, pkg.dependencies),
-        ...toDepsList(true, pkg.devDependencies),
+        ...Wrangle.depsList(false, pkg.dependencies),
+        ...Wrangle.depsList(true, pkg.devDependencies),
       ];
 
       const targets: t.ViteTarget[] = [];
@@ -90,13 +90,9 @@ export const Config = {
           manualChunks[alias] = R.uniq(asArray(moduleName ?? alias));
         },
         lib(options = {}) {
-          const { outname: fileName = 'index' } = options;
-          const entry = fs.join(dir, options.entry ?? '/src/index.mts');
-          const lib: LibraryOptions = {
-            entry,
-            fileName,
-            formats: ['es'],
-          };
+          const entry = Wrangle.libEntry(options.entry);
+          Object.keys(entry).forEach((key) => (entry[key] = fs.join(dir, entry[key])));
+          const lib: LibraryOptions = { entry, formats: ['es'] };
           build.lib = lib;
         },
       };
@@ -114,7 +110,7 @@ export const Config = {
         config.plugins?.push(
           react({
             // NB: "classic" (rather than the default) supresses a build warning:
-            // Message: "[@vitejs/plugin-react] You should stop using "vite:react-jsx" since this plugin conflicts with it"
+            //    Message: "[@vitejs/plugin-react] You should stop using "vite:react-jsx" since this plugin conflicts with it"
             jsxRuntime: 'classic',
           }),
         );
@@ -233,15 +229,24 @@ export const Config = {
  * Helpers
  */
 
-function toDepsList(isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] {
-  return Object.keys(deps).map((name) => ({ name, version: deps[name], isDev }));
-}
-
-function toDirname(modulePath: t.ImportMetaUrl) {
-  return fs.dirname(fileURLToPath(modulePath));
-}
-
 function getAndAssignTest(config: UserConfig): TestConfig {
   const test = (config as any).test || ((config as any).test = Config.defaults.test());
   return test;
 }
+
+const Wrangle = {
+  depsList(isDev: boolean, deps: t.PkgDeps = {}): t.PkgDep[] {
+    return Object.keys(deps).map((name) => ({ name, version: deps[name], isDev }));
+  },
+
+  dirname(modulePath: t.ImportMetaUrl) {
+    return fs.dirname(fileURLToPath(modulePath));
+  },
+
+  libEntry(entry?: string | t.ViteLibEntry): t.ViteLibEntry {
+    const DEFAULT = '/src/index.mts';
+    if (typeof entry === 'string') return { index: entry };
+    if (typeof entry === 'object') return entry;
+    return { index: DEFAULT };
+  },
+};

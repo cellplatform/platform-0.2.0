@@ -7,4 +7,4 @@ export { Dev, Spec } from 'sys.ui.react.dev';
 /**
  * @local
  */
-export * from '../ui.react/common';
+export * from '../ui/common';

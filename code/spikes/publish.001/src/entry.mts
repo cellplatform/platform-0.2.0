@@ -10,5 +10,5 @@ const isTauri = typeof (window as any).__TAURI__ === 'object';
 if (isTauri || path.startsWith('/web3/') || url.searchParams.has('dev')) {
   import('./test.ui/entry');
 } else {
-  import('./ui.react/Root.HoldingPattern/entry');
+  import('./ui/Root.HoldingPattern/entry');
 }

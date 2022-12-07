@@ -6,7 +6,7 @@ const Imports = {
   'ui.Icon': () => import('../ui/Icon/dev/Icon.SPEC'),
   'ui.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
   'ui.Center': () => import('../ui/Center/Center.SPEC'),
-  'hook.useSizeObserver': () => import('./specs/useSizeObserver.SPEC'),
+  'hook.useSizeObserver': () => import('./test.util.specs/useSizeObserver.SPEC'),
 };
 
 (async () => {

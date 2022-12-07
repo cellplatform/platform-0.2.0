@@ -21,11 +21,3 @@ export const Builder = {
   test,
   clean,
 };
-
-/**
- * TODO 🐷
- * - Workers
- * - BUG: Ensure [Rollup:Manifest] generates with Web.Worker
- * - manifest (Cell, Hash, TypeRefs)
- *
- */
