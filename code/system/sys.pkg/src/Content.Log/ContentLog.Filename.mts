@@ -11,6 +11,7 @@ export const ContentLogFilename = {
 
   create(version: string = '0.0.0') {
     const now = Time.now.timestamp;
-    return `${now}-${version}-${slug()}${ext}`;
+    const tx = slug();
+    return `${now}.${tx}-${version}${ext}`;
   },
 };
