@@ -7,8 +7,8 @@ import { BundlePaths } from '../Paths.mjs';
 
 type Sources = {
   app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; //               The source markdown content, and other assorted "author(s) generated" content.
-  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files).
+  content: t.Fs; //               The author generated content data.
+  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
   log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
@@ -78,8 +78,7 @@ export async function ContentBundle(args: Args) {
       /**
        * Copy and process source content (data).
        */
-      const logdir = sources.log;
-      await write.data(appfs, { logdir });
+      await write.data(appfs);
 
       /**
        * Copy in known source (.ts) files from "/src"
@@ -188,7 +187,7 @@ export async function ContentBundle(args: Args) {
     /**
      * Write content
      */
-    async data(target: t.Fs, options: { logdir?: t.Fs } = {}) {
+    async data(target: t.Fs) {
       const MD = Text.Processor.markdown();
       const source = await sources.content.manifest();
 
@@ -208,8 +207,8 @@ export async function ContentBundle(args: Args) {
        * Copy in a summary of the log (latest n-items).
        */
       let log: t.PublicLogSummary | undefined;
-      if (options.logdir) {
-        const fs = options.logdir;
+      if (sources.log) {
+        const fs = sources.log;
         const logger = ContentLog.log(fs);
         const latest = version;
         log = await logger.publicSummary({ max: 50, latest });

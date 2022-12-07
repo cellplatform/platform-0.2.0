@@ -35,7 +35,7 @@ const bundle = await bundler.write.bundle(targetdir, {});
 /**
  * Store the data in /public (for local dev usage)
  */
-await bundler.write.data(publicdir, { logdir });
+await bundler.write.data(publicdir);
 
 console.log('-------------------------------------------');
 console.log('bundle (write response):', bundle);
@@ -44,7 +44,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-// process.exit(0); // TEMP 🐷
+process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
