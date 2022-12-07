@@ -10,7 +10,7 @@ export async function pushToVercel(args: {
   version: string;
   source: string;
   bus?: t.EventBus<any>;
-}) {
+}): Promise<t.DeploymentLogEntry> {
   const { fs, token, version, source } = args;
   const bus = args.bus ?? rx.bus();
 
@@ -31,18 +31,9 @@ export async function pushToVercel(args: {
   console.info(pc.bold(pc.green(`version: ${pc.white(version)}`)));
 
   return {
-    ...res,
-
-    /**
-     * Data about the deployment to be written to a log.
-     */
-    toObject() {
-      const obj: t.DeploymentLogEntry = {
-        kind: 'vercel:deployment',
-        success: res.deployment,
-        error: res.error,
-      };
-      return obj;
-    },
+    kind: 'vercel:deployment',
+    status: res.status,
+    success: res.deployment,
+    error: res.error,
   };
 }

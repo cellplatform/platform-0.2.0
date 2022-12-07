@@ -23,7 +23,7 @@ export { TestFilesystem } from 'sys.fs';
 /**
  * WARNING - be careful these external references do not blow-up the bundle size.
  */
-export { BundlePaths } from '../../Pkg/Paths.mjs';
+export { BundlePaths } from 'sys.pkg';
 
 /**
  * @local
