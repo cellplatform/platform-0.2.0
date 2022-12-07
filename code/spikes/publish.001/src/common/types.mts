@@ -13,7 +13,11 @@ export type {
 
 export type { Fs } from 'sys.fs/src/types.mjs';
 
-export type { PublicLogSummary, PublicLogHistoryItem } from 'sys.pkg/src/types.mjs';
+export type {
+  PublicLogSummary,
+  PublicLogHistoryItem,
+  DeploymentLogEntry,
+} from 'sys.pkg/src/types.mjs';
 
 export type {
   Text,

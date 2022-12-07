@@ -17,6 +17,7 @@ export type LogEntry = {
 export type DeploymentLogEntry = DeploymentLogEntryVercel;
 export type DeploymentLogEntryVercel = {
   kind: 'vercel:deployment';
+  status: number;
   success?: t.VercelHttpDeployResponse['deployment'];
   error?: string;
 };
