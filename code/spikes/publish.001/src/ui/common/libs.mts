@@ -5,6 +5,7 @@ export { css, Color, Style } from 'sys.util.css';
 export { useClickOutside, useClickInside, useSizeObserver } from 'sys.util.react';
 export { Vimeo } from 'sys.ui.react.video';
 export { Spinner, Center } from 'sys.ui.react.common';
+export { KeyListener } from 'sys.ui.react.common';
 
 /**
  * @local
