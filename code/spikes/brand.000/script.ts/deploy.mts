@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 import { Filesystem, NodeFs } from 'sys.fs.node';
-import { ContentBundle, ContentLog } from 'sys.pkg';
+import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';
 import { rx } from 'sys.util';
 
@@ -17,7 +17,7 @@ const dir = async (dir: string) => {
 const logdir = await dir('./dist.deploy/.log/');
 const targetdir = await dir('./dist.deploy/');
 
-const bundler = await ContentBundle({
+const bundler = await Content.bundler({
   Text,
   sources: {
     app: await dir('./dist/web'),
@@ -35,7 +35,7 @@ const deployment = await pushToVercel({
   source: bundle.dir.app,
 });
 
-const logger = ContentLog.log(logdir);
+const logger = Content.logger(logdir);
 logger.write({
   bundle: bundle.toObject(),
   deployment,

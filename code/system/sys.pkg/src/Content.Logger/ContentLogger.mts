@@ -1,13 +1,13 @@
 import { R, t, Time } from '../common';
 import { Pkg } from '../index.pkg.mjs';
-import { ContentLogFilename as Filename } from './ContentLog.Filename.mjs';
+import { ContentLogFilename as Filename } from './ContentLogger.Filename.mjs';
 
 type VersionString = string;
 
 /**
  * Tools for working with a content log.
  */
-export const ContentLog = {
+export const ContentLogger = {
   Filename,
 
   /**
@@ -26,7 +26,7 @@ export const ContentLog = {
         const { bundle, deployment } = args;
         const timestamp = args.timestamp ?? Time.now.timestamp;
         const version = args.bundle.version;
-        const filename = ContentLog.Filename.create(version);
+        const filename = ContentLogger.Filename.create(version);
         const packagedBy = `${Pkg.name}@${Pkg.version}`;
         const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
         await fs.write(filename, JSON.stringify(data));
@@ -38,7 +38,7 @@ export const ContentLog = {
       async publicSummary(options: { max?: number; latest?: VersionString } = {}) {
         const m = await fs.manifest({});
         let paths = m.files
-          .filter((item) => ContentLog.Filename.isMatch(item.path))
+          .filter((item) => ContentLogger.Filename.isMatch(item.path))
           .map((item) => item.path)
           .reverse();
 

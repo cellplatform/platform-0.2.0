@@ -1,16 +1,16 @@
 import { describe, it, expect, t } from '../test';
-import { ContentBundle } from '../Content.Bundle';
-import { ContentLog } from '../Content.Log';
+import { ContentBundler } from '../Content.Bundler';
+import { ContentLogger } from '../Content.Logger';
 import { Content } from '.';
 
 describe('Content', () => {
   it('bundler', () => {
-    expect(Content.Bundle).to.equal(ContentBundle);
-    expect(Content.bundle).to.equal(ContentBundle.create);
+    expect(Content.Bundler).to.equal(ContentBundler);
+    expect(Content.bundler).to.equal(ContentBundler.create);
   });
 
   it('log', () => {
-    expect(Content.Log).to.equal(ContentLog);
-    expect(Content.log).to.equal(ContentLog.create);
+    expect(Content.Logger).to.equal(ContentLogger);
+    expect(Content.logger).to.equal(ContentLogger.create);
   });
 });

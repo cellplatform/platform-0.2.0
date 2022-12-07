@@ -2,8 +2,8 @@ import { Filesize } from 'sys.fs';
 
 import { MarkdownFile } from '../Markdown.File';
 import { Path, t } from '../common';
-import { ContentLog } from '../Content.Log/ContentLog.mjs';
-import { BundlePaths as Paths } from './Bundle.Paths.mjs';
+import { ContentLogger } from '../Content.Logger';
+import { BundlePaths } from './Paths.mjs';
 
 type Sources = {
   app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
@@ -22,8 +22,8 @@ type CreateArgs = {
 /**
  * Content bundler.
  */
-export const ContentBundle = {
-  Paths,
+export const ContentBundler = {
+  Paths: BundlePaths,
 
   /**
    * Create an instance of the content bundler.
@@ -51,7 +51,7 @@ export const ContentBundle = {
       async bundle(target: t.Fs, options: { dir?: string; latest?: boolean } = {}) {
         const source = await sources.app.manifest();
         const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
-        const appfs = target.dir(Path.join(base, Paths.app.base));
+        const appfs = target.dir(Path.join(base, BundlePaths.app.base));
 
         /**
          * Delete existing bundle (if any).
@@ -126,9 +126,9 @@ export const ContentBundle = {
          * Make a copy to ".latest" in the output directory.
          */
         if (options.latest !== false) {
-          await target.delete(Paths.latest); // Clear away existing.
+          await target.delete(BundlePaths.latest); // Clear away existing.
           const from = target.dir(base);
-          const to = target.dir(Paths.latest);
+          const to = target.dir(BundlePaths.latest);
           for (const file of (await from.manifest()).files) {
             const data = await from.read(file.path);
             await to.write(file.path, data);
@@ -139,7 +139,7 @@ export const ContentBundle = {
         const api = {
           version,
 
-          dir: { app: Paths.app.base },
+          dir: { app: BundlePaths.app.base },
 
           get manifest() {
             return manifest;
@@ -157,9 +157,11 @@ export const ContentBundle = {
             const match = (subj: string, ...path: string[]) => subj.startsWith(Path.join(...path));
             return {
               total: toSize(manifest, () => true),
-              lib: toSize(manifest, (path) => match(path, Paths.app.lib)),
+              lib: toSize(manifest, (path) => match(path, BundlePaths.app.lib)),
               data: {
-                md: toSize(manifest, (path) => match(path, Paths.app.base, Paths.data.md)),
+                md: toSize(manifest, (path) =>
+                  match(path, BundlePaths.app.base, BundlePaths.data.md),
+                ),
               },
             };
           },
@@ -170,7 +172,7 @@ export const ContentBundle = {
           toObject(): t.BundleLogEntry {
             const { size } = api;
             const kind = 'pkg:content-bundle';
-            const paths = Paths;
+            const paths = BundlePaths;
             return { kind, version, size, paths };
           },
         };
@@ -192,7 +194,7 @@ export const ContentBundle = {
           source.files.map(async (file) => {
             const data = await sources.content.read(file.path);
             const md = await MD.toMarkdown(data);
-            const path = Path.join(Paths.data.md, file.path);
+            const path = Path.join(BundlePaths.data.md, file.path);
             await target.write(path, md.markdown);
           }),
         );
@@ -203,16 +205,16 @@ export const ContentBundle = {
         let log: t.PublicLogSummary | undefined;
         if (sources.log) {
           const fs = sources.log;
-          const logger = ContentLog.create(fs);
+          const logger = ContentLogger.create(fs);
           const latest = version;
           log = await logger.publicSummary({ max: 50, latest });
-          await target.write(Paths.data.log, log);
+          await target.write(BundlePaths.data.log, log);
         }
 
         /**
          * Data folder [index.json] manfiest
          */
-        const datafs = target.dir(Paths.data.base);
+        const datafs = target.dir(BundlePaths.data.base);
         await datafs.write('index.json', await datafs.manifest());
       },
     };

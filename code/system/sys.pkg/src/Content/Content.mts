@@ -1,10 +1,10 @@
-import { ContentBundle as Bundle } from '../Content.Bundle';
-import { ContentLog as Log } from '../Content.Log';
+import { ContentBundler as Bundler } from '../Content.Bundler';
+import { ContentLogger as Logger } from '../Content.Logger';
 
 export const Content = {
-  Bundle,
-  Log,
+  Bundler,
+  Logger,
 
-  bundle: Bundle.create,
-  log: Log.create,
+  bundler: Bundler.create,
+  logger: Logger.create,
 };

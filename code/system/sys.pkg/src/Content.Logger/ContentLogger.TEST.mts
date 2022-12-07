@@ -1,9 +1,9 @@
 import { describe, it, expect, t } from '../test';
-import { ContentLog } from '.';
+import { ContentLogger } from '.';
 
 describe('ContentLog', () => {
   describe('Filename', () => {
-    const Filename = ContentLog.Filename;
+    const Filename = ContentLogger.Filename;
 
     it('extension', () => {
       expect(Filename.ext).to.eql('.log.json');
