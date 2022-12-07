@@ -22,7 +22,7 @@ const bundler = await ContentBundle({
   sources: {
     app: await dir('./dist/web'),
     src: await dir('./src/'),
-    content: await dir('../../../../../org.team-db/tdb.working/undp'),
+    content: await dir('../../../../../org.team-db/tdb.working/project.undp/'),
     log: logdir,
   },
 });
@@ -42,7 +42,7 @@ console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
-process.exit(0); // TEMP 🐷
+// process.exit(0); // TEMP 🐷
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
