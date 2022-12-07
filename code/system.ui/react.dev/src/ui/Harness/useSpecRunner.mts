@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { takeUntil } from 'rxjs/operators';
 
-import { rx, t, Test, Context } from '../common';
+import { rx, t, Test, SpecContext } from '../common';
 
 export function useSpecRunner(bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();
@@ -21,7 +21,7 @@ export function useSpecRunner(bundle?: t.BundleImport) {
       setSpec(spec);
 
       if (spec) {
-        const instance = Context.args({ dispose$ });
+        const instance = SpecContext.args({ dispose$ });
         const { ctx } = instance;
         const res = await spec.run({ ctx });
 
