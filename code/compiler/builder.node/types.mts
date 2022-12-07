@@ -43,6 +43,8 @@ export type ViteManifestFile = {
   isEntry?: boolean;
 };
 
+export type ViteLibEntry = { index: PathString; [name: string]: PathString };
+
 /**
  * Modify the vite config programatically from within the subject module.
  */
@@ -53,7 +55,7 @@ export type ModifyViteConfigArgs = {
   plugin(...kind: VitePlugin[]): void;
   externalDependency(moduleName: string | string[]): void;
   chunk(alias: string, moduleName?: string | string[]): void;
-  lib(options?: { entry?: string; outname?: string }): void;
+  lib(options?: { entry?: string | ViteLibEntry }): void;
 };
 export type ModifyViteConfigCtx = {
   readonly name: PkgJson['name'];
