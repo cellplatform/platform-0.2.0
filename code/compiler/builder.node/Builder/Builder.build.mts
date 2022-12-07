@@ -42,11 +42,6 @@ export async function build(
   await Package.generate(dir);
   await Vite.deleteBuildManifests(dir);
 
-  /**
-   * TODO 🐷
-   */
-  // await BuildManifest.generate(dir);
-
   // Finish up.
   if (!silent) {
     const typedir = `/${Paths.types.dirname}/`;
