@@ -1,1 +1,1 @@
-export { ContentBundle } from './ContentBundle.mjs';
+export { ContentBundle } from './Bundle.mjs';

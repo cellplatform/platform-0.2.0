@@ -1,6 +1,6 @@
 import { R, t, Time } from '../common';
-import { ContentLogFilename as Filename } from './ContentLog.Filename.mjs';
 import { Pkg } from '../index.pkg.mjs';
+import { ContentLogFilename as Filename } from './ContentLog.Filename.mjs';
 
 type VersionString = string;
 
@@ -13,7 +13,7 @@ export const ContentLog = {
   /**
    * Write deployment to the file-log.
    */
-  log(fs: t.Fs) {
+  create(fs: t.Fs) {
     return {
       /**
        * Write the results of a deployment to the log.
@@ -76,7 +76,7 @@ export const ContentLog = {
 };
 
 /**
- * Helpers
+ * [Helpers]
  */
 
 /**

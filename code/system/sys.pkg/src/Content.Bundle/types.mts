@@ -1,15 +1,17 @@
+type DirPath = string;
 type S = { bytes: number; size: string };
 type Size = { total: S; lib: S; data: { md: S } };
 
 export type BundlePaths = {
+  latest: DirPath;
   app: {
-    base: string;
-    lib: string;
+    base: DirPath;
+    lib: DirPath;
   };
   data: {
-    base: string;
-    md: string;
-    log: string;
+    base: DirPath;
+    md: DirPath;
+    log: DirPath;
   };
 };
 
