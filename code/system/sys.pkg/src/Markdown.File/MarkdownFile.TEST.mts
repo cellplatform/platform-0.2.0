@@ -1,6 +1,6 @@
 import { describe, expect, expectError, it, TestFilesystem } from '../test';
 import { Text } from 'sys.text';
-import { MarkdownFile } from './index.mjs';
+import { MarkdownFile } from '.';
 
 describe.only('MarkdownFile', () => {
   const README = `
