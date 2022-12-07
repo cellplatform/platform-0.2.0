@@ -27,7 +27,7 @@ export const ContentLog = {
         const timestamp = args.timestamp ?? Time.now.timestamp;
         const version = args.bundle.version;
         const filename = ContentLog.Filename.create(version);
-        const packagedBy = Pkg.toString();
+        const packagedBy = `${Pkg.name}@${Pkg.version}`;
         const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
         await fs.write(filename, JSON.stringify(data));
       },

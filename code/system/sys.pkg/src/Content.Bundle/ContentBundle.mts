@@ -31,7 +31,7 @@ const Paths = {
  * Setup a deployment.
  */
 export async function ContentBundle(args: Args) {
-  const { Text, sources, throwError, propsType = 'project.props' } = args;
+  const { Text, sources, throwError = true, propsType = 'project.props' } = args;
 
   /**
    * Load and parse the README file.
