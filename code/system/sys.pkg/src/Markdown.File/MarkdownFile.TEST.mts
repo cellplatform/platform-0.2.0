@@ -2,7 +2,7 @@ import { describe, expect, expectError, it, TestFilesystem } from '../test';
 import { Text } from 'sys.text';
 import { MarkdownFile } from '.';
 
-describe.only('MarkdownFile', () => {
+describe('MarkdownFile', () => {
   const README = `
 # My Report
 
