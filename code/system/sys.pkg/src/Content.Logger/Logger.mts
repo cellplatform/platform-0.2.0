@@ -1,6 +1,6 @@
 import { R, t, Time } from '../common';
 import { Pkg } from '../index.pkg.mjs';
-import { ContentLogFilename as Filename } from './ContentLogger.Filename.mjs';
+import { ContentLogFilename as Filename } from './Filename.mjs';
 
 type VersionString = string;
 
