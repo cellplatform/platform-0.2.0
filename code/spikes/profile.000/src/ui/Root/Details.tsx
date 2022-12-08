@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx } from '../common';
 
 export type DetailsProps = {
@@ -12,8 +11,6 @@ export const Details: React.FC<DetailsProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      width: 360,
       fontSize: 22,
     }),
     titleName: css({
@@ -28,7 +25,7 @@ export const Details: React.FC<DetailsProps> = (props) => {
     body: css({
       display: 'grid',
       gridTemplateColumns: `repeat(2, 1fr)`,
-      MarginX: 60,
+      lineHeight: '1.35em',
     }),
     bodyLeft: css({ textAlign: 'right' }),
     bodyRight: css({ textAlign: 'left' }),

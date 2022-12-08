@@ -19,11 +19,11 @@ export async function pushToVercel(args: {
   const vercel = Vercel.client({ bus, token, fs });
 
   const res = await vercel.deploy({
-    name: `profile.v${Pkg.version}`,
+    name: `identity.profile.v${Pkg.version}`,
     source,
     team: 'tdb',
-    project: 'tdb-tmp',
-    alias: 'tmp.db.team',
+    project: 'tdb-identity',
+    alias: 'id.db.team',
     ensureProject: true,
     regions: ['sfo1'],
     target: 'production', // NB: required to be "production" for the DNS alias to be applied.
@@ -33,8 +33,8 @@ export async function pushToVercel(args: {
       cleanUrls: true,
       trailingSlash: true,
       rewrites: [
-        // { source: '/brand/', destination: '/' },
-        // { source: '/brand/lib/:path', destination: '/lib/:path' },
+        { source: '/:root/', destination: '/' },
+        { source: '/:root/lib/:path', destination: '/lib/:path' },
       ],
     },
   });

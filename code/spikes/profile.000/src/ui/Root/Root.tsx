@@ -1,5 +1,6 @@
 import { Color, COLORS, css, t } from '../common';
 import { Details } from './Details';
+import { Image } from './Image';
 
 const URL = {
   FACE_1:
@@ -29,18 +30,19 @@ export const Root: React.FC<RootProps> = (props) => {
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'center',
-      backgroundColor: Color.alpha(COLORS.DARK, 0.02),
+      backgroundColor: Color.alpha(COLORS.DARK, 0.03),
     }),
     columns: css({
       display: 'grid',
-      // gridTemplateColumns: `repeat(2, 1fr)`,
-      // columnGap: 20,
-    }),
-    logo: css({
-      width: 360,
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+      backgroundColor: COLORS.WHITE,
+      Padding: [80, 50],
       borderRadius: 20,
+      border: `solid 1px ${Color.format(-0.06)}`,
     }),
     details: css({
+      boxSizing: 'border-box',
       marginTop: 20,
     }),
   };
@@ -48,8 +50,10 @@ export const Root: React.FC<RootProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         <div {...styles.columns}>
-          <img src={URL.FACE_1} {...styles.logo} />
-          <Details style={styles.details} />
+          <Image width={360} />
+          <div {...styles.details}>
+            <Details />
+          </div>
         </div>
       </div>
     </div>

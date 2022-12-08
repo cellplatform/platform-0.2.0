@@ -1,6 +1,6 @@
 {
   "name": "spike.profile",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -22,8 +22,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.03ca3e92.js",
-    "./web": "./dist/web/lib/index.03ca3e92.js"
+    ".": "./dist/web/lib/index.b1ebe2fa.js",
+    "./web": "./dist/web/lib/index.b1ebe2fa.js"
   },
   "typesVersions": {
     "*": {
