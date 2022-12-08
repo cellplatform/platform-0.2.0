@@ -1,8 +1,6 @@
-import { Filesize } from 'sys.fs';
-
-import { MarkdownFile } from '../Markdown.File';
-import { Path, t } from '../common';
+import { Filesize, Path, t } from '../common';
 import { ContentLogger } from '../Content.Logger';
+import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';
 
 type Sources = {

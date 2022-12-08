@@ -8,4 +8,4 @@ export const R = { groupBy, prop, sortBy, uniq };
  * @system
  */
 export { rx, Time, slug } from 'sys.util';
-export { Path } from 'sys.fs';
+export { Path, Filesize } from 'sys.fs';
