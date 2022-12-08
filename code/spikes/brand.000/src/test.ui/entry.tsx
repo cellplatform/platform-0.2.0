@@ -8,22 +8,21 @@ export const Imports = {
   'ui.BrandLayout': () => import('../ui/BrandLayout/BrandLayout.SPEC'),
 };
 
-const url = new URL(location.href);
-const query = url.searchParams;
-
 /**
  * User Interface
  */
 
 (async () => {
+  const url = new URL(location.href);
+  const params = url.searchParams;
   const root = createRoot(document.getElementById('root')!);
 
-  if (query.has('dev')) {
+  if (params.has('d') || params.has('dev')) {
     const { Dev } = await import('./index');
     const el = await Dev.render(Pkg, Imports);
     root.render(el);
   } else {
-    if (query.has('brand') || url.pathname === '/brand/') {
+    if (params.has('brand') || url.pathname === '/brand/') {
       const { BrandLayout } = await import('../ui/BrandLayout');
       root.render(<BrandLayout />);
       return;

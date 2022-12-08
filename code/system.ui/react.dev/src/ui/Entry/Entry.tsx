@@ -2,9 +2,17 @@ import { t, COLORS } from '../common';
 import { SpecList } from '../SpecList';
 import { Harness } from '../Harness';
 
-const KEY = { DEV: 'dev' };
+const KEY = {
+  D: 'd', // NB: alias for "?dev"
+  DEV: 'dev',
+};
 
 export const Entry = {
+  isDev(location?: string | URL | Location) {
+    const params = Wrangle.location(location).searchParams;
+    return params.has(KEY.D) || params.has(KEY.DEV);
+  },
+
   /**
    * Render a harness with the selected `dev=namespace` import or an
    * index list of available specs.
@@ -15,6 +23,14 @@ export const Entry = {
     options: { location?: string | URL | Location; style?: t.CssValue } = {},
   ) {
     const url = Wrangle.location(options.location);
+
+    if (!options.location && url.searchParams.has(KEY.D)) {
+      const value = url.searchParams.get(KEY.D) || 'true';
+      url.searchParams.delete(KEY.D);
+      url.searchParams.set(KEY.DEV, value);
+      window.location.search = url.searchParams.toString();
+    }
+
     const spec = await Wrangle.module(url, specs);
     const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
