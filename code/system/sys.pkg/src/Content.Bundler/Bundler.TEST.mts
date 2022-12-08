@@ -16,14 +16,14 @@ describe('ContentBundler', () => {
     const { prefillWithData = true } = options;
 
     const app = TestFilesystem.memory().events.fs();
-    const content = TestFilesystem.memory().events.fs();
+    const data = TestFilesystem.memory().events.fs();
     const target = TestFilesystem.memory().events.fs();
     const log = TestFilesystem.memory().events.fs();
     const src = TestFilesystem.memory().events.fs();
-    const sources = { app, src, content, log };
+    const sources = { app, src, data, log };
 
     if (prefillWithData) {
-      await sources.content.write('README.md', README);
+      await sources.data.write('README.md', README);
     }
 
     return { sources, target };
@@ -32,7 +32,7 @@ describe('ContentBundler', () => {
   describe('README', () => {
     it('throw: file does not exist', async () => {
       const { sources } = await setup();
-      await sources.content.delete('README.md'); // Remove the README that will cause the error to throw.
+      await sources.data.delete('README.md'); // Remove the README that will cause the error to throw.
 
       // Error thrown.
       const fn = () => ContentBundler.create({ Text, sources, throwError: true });

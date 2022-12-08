@@ -22,7 +22,7 @@ const bundler = await Content.bundler({
   sources: {
     app: await dir('./dist/web'),
     src: await dir('./src/'),
-    content: await dir('../../../../../org.team-db/tdb.working/project.undp/'),
+    data: await dir('../../../../../org.team-db/tdb.working/project.undp/'),
     log: logdir,
   },
 });

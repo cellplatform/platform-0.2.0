@@ -4,10 +4,10 @@ import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';
 
 type Sources = {
-  app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; //               The author generated content data.
-  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
-  log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
+  app: t.Fs; //                The compiled bundle of the content rendering "app" (application).
+  data: t.Fs; //               The author generated content data.
+  src?: t.Fs; //   (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
+  log?: t.Fs; //   (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
 type CreateArgs = {
@@ -34,7 +34,7 @@ export const ContentBundler = {
      */
     const README = await MarkdownFile({
       Text,
-      src: sources.content,
+      src: sources.data,
       path: 'README.md',
       propsType,
       throwError,
@@ -183,14 +183,14 @@ export const ContentBundler = {
        */
       async data(target: t.Fs) {
         const MD = Text.Processor.markdown();
-        const source = await sources.content.manifest();
+        const source = await sources.data.manifest();
 
         /**
          * Copy source "content" files.
          */
         await Promise.all(
           source.files.map(async (file) => {
-            const data = await sources.content.read(file.path);
+            const data = await sources.data.read(file.path);
             const md = await MD.toMarkdown(data);
             const path = Path.join(BundlePaths.data.md, file.path);
             await target.write(path, md.markdown);

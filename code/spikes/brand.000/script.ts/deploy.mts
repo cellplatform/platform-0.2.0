@@ -22,7 +22,7 @@ const bundler = await Content.bundler({
   sources: {
     app: await dir('./dist/web'),
     src: await dir('./src/'),
-    content: await dir('./src.content'),
+    data: await dir('./src.data'),
     log: logdir,
   },
 });
