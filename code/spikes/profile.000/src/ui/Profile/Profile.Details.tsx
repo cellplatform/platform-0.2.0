@@ -53,15 +53,16 @@ export const Details: React.FC<DetailsProps> = (props) => {
           </div>
           <div>{silver('db.team')}</div>
           <div>{silver('db.team')}</div>
+          <div>{silver('db.team')}</div>
         </div>
         <div {...styles.bodyRight}>
           <div>{hidden('.')}</div>
           <div>{dark('/ro')}</div>
           <div>{dark('/web3')}</div>
+          <div>{dark('/undp')}</div>
         </div>
       </div>
-      {hr}
-      <div>{'@yeoro'}</div>
+      {/* {hr} */}
     </div>
   );
 };
