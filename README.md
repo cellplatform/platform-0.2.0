@@ -153,7 +153,11 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a 
 fundamental dependency (although it is not going away anytime soon). There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser, (ref [WinterCG](https://wintercg.org/))).
 
-In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to pure functional "logic" libraries, as UI tends towards the much higher volatility in an architecutre over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.   
+
+In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons[ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (eg. [WinterCG](https://wintercg.org/))).
+
+
+In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to the `pure functional` "logic only" libraries.  This is because UI tends towards much higher volatility in a technical architecutre over time, and tends to be swapped our more repeatedly over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.
 
 Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, for example:
 
@@ -162,9 +166,9 @@ Organizing for this is expressed within the distinct `/system/` and `/system.ui/
 /code/
   |- system/
   |- system.ui/
-              |- <type>.*    <== prefix calls out library/technology being "ring fenced."
-              |- react.*     <== (libs)
-              |- svelte.*    <== (libs)
+              |- <type>.*/  <== prefix calls out the particular tech/library being "ring fenced."
+              |- react.*/   <== (libs)
+              |- svelte.*/  <== (libs)
 ```
 
 
