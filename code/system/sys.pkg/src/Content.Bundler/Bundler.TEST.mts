@@ -120,28 +120,24 @@ describe('ContentBundler', () => {
       expect(publicLog?.history).to.eql([]); // NB: Public history.
     });
 
-    it.skip('write: has prior history', async () => {
-      //       const sample1 = await TestSample.bundler({ version: '1.0.0' });
-      //       const sample2 = await TestSample.bundler({ version: '2.0.0' });
-      //
-      //       const bundle1 = await sample1.bundler.write.bundle(sample1.target);
-      //       const bundle2 = await sample2.bundler.write.bundle(sample2.target);
-      //
-      //       await sample1.bundler.logger.write({ bundle: bundle1.toObject() });
-      //       await sample2.bundler.logger.write({ bundle: bundle2.toObject() });
-      //
-      //       const latest1 = sample1.target.dir(ContentBundler.Paths.latest);
-      //       const latest2 = sample2.target.dir(ContentBundler.Paths.latest);
-      //
-      //       const file1 = await latest1.json.read<t.LogPublicHistory>('app/data/log.json');
-      //       const file2 = await latest2.json.read<t.LogPublicHistory>('app/data/log.json');
-      //       // expect(file?.latest.version).to.eql(bundle.version);
-      //       // expect(file?.history).to.eql([]);
-      //
-      //       console.log('-----------------------------------------');
-      //       console.log('file1', file1);
-      //       console.log('file2', file2);
-      //
+    it('write: has prior history', async () => {
+      const { target, bundler } = await TestSample.bundler();
+
+      const bundle = await bundler.write.bundle(target, '1.0.0');
+      await bundler.logger.write({
+        bundle: bundle.toObject(),
+        deployment: { kind: 'vercel:deployment', status: 200 },
+      });
+
+      await bundler.write.bundle(target, '1.0.1');
+
+      const latest = target.dir(ContentBundler.Paths.latest);
+      const logfile = await latest.json.read<t.LogPublicHistory>('app/data/log.json');
+      const history = logfile?.history ?? [];
+
+      expect(logfile?.latest.version).to.eql('1.0.1');
+      expect(history.length).to.eql(1);
+      expect(history[0].version).to.eql('1.0.0');
     });
   });
 });

@@ -51,16 +51,14 @@ export const ContentLogger = {
           .map((entry) => {
             const timestamp = entry.timestamp;
             const version = entry.bundle.version;
-            const deployment = entry.deployment!;
+            const deployment = entry.deployment ?? { success: undefined, error: undefined };
             const { success, error } = deployment;
             const urls = success?.urls.public ?? [];
             const item: t.LogPublicHistoryItem = { timestamp, version, urls, error };
             return item;
           });
         history = dedupeVersionsToLatest(history);
-        if (options.max) {
-          history = history.slice(0, options.max);
-        }
+        if (options.max) history = history.slice(0, options.max);
 
         /**
          * Finish up.
