@@ -1,4 +1,4 @@
-import { Filesize, Path, t } from '../common';
+import { Filesize, Path, t, TestFilesystem } from '../common';
 import { ContentLogger } from '../Content.Logger';
 import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';
@@ -13,7 +13,8 @@ type Sources = {
 type CreateArgs = {
   Text: t.Text;
   sources: Sources;
-  propsType?: string;
+  readmePropsType?: string; // The name of the YAML block within the README that represents the props for the content-data.
+  version?: string;
   throwError?: boolean;
 };
 
@@ -27,7 +28,8 @@ export const ContentBundler = {
    * Create an instance of the content bundler.
    */
   async create(args: CreateArgs) {
-    const { Text, sources, throwError = true, propsType = 'project.props' } = args;
+    const { Text, sources, throwError = true, readmePropsType: propsType = 'project.props' } = args;
+    const logger = ContentLogger.create(args.sources.log ?? TestFilesystem.memory().fs);
 
     /**
      * Load and parse the README file.
@@ -40,7 +42,7 @@ export const ContentBundler = {
       throwError,
     });
 
-    const version = README.props.version;
+    const version = args.version ?? README.props.version;
 
     const write = {
       /**
@@ -50,6 +52,7 @@ export const ContentBundler = {
         const source = await sources.app.manifest();
         const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
         const appfs = target.dir(Path.join(base, BundlePaths.app.base));
+        const datafs = target.dir(Path.join(base, BundlePaths.app.data));
 
         /**
          * Delete existing bundle (if any).
@@ -74,7 +77,7 @@ export const ContentBundler = {
         /**
          * Copy and process source content (data).
          */
-        await write.data(appfs);
+        await write.data(datafs);
 
         /**
          * Copy in known source (.ts) files from "/src"
@@ -135,20 +138,12 @@ export const ContentBundler = {
 
         // Finish up.
         const api = {
+          fs,
           version,
-
           dir: { app: BundlePaths.app.base },
 
           get manifest() {
             return manifest;
-          },
-
-          /**
-           * Scoped filesystem that was written to.
-           * Example usage: passed into the `deploy` pipeline.
-           */
-          get fs() {
-            return fs;
           },
 
           get size() {
@@ -158,7 +153,7 @@ export const ContentBundler = {
               lib: toSize(manifest, (path) => match(path, BundlePaths.app.lib)),
               data: {
                 md: toSize(manifest, (path) =>
-                  match(path, BundlePaths.app.base, BundlePaths.data.md),
+                  match(path, BundlePaths.app.data, BundlePaths.data.md),
                 ),
               },
             };
@@ -181,8 +176,8 @@ export const ContentBundler = {
       /**
        * Write content
        */
-      async data(target: t.Fs) {
-        const MD = Text.Processor.markdown();
+      async data(datafs: t.Fs) {
+        const processor = Text.Processor.markdown();
         const source = await sources.data.manifest();
 
         /**
@@ -190,29 +185,26 @@ export const ContentBundler = {
          */
         await Promise.all(
           source.files.map(async (file) => {
+            const Paths = BundlePaths;
             const data = await sources.data.read(file.path);
-            const md = await MD.toMarkdown(data);
-            const path = Path.join(BundlePaths.data.md, file.path);
-            await target.write(path, md.markdown);
+            const md = await processor.toMarkdown(data);
+            const path = Path.join(Paths.data.md, file.path);
+            await datafs.write(path, md.markdown);
           }),
         );
 
         /**
          * Copy in a summary of the log (latest n-items).
          */
-        let log: t.PublicLogSummary | undefined;
-        if (sources.log) {
-          const fs = sources.log;
-          const logger = ContentLogger.create(fs);
+        if (logger) {
           const latest = version;
-          log = await logger.publicSummary({ max: 50, latest });
-          await target.write(BundlePaths.data.log, log);
+          const summary = await logger.publicSummary({ max: 50, latest });
+          await datafs.write(BundlePaths.data.logfile, summary);
         }
 
         /**
          * Data folder [index.json] manfiest
          */
-        const datafs = target.dir(BundlePaths.data.base);
         await datafs.write('index.json', await datafs.manifest());
       },
     };
@@ -220,6 +212,7 @@ export const ContentBundler = {
     return {
       version,
       write,
+      logger,
       get README() {
         return README;
       },

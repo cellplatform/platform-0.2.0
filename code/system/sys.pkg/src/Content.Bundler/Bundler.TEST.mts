@@ -1,37 +1,14 @@
+import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text';
 
-import { Path, describe, expect, expectError, it, TestFilesystem } from '../test';
+import { Pkg } from '../index.pkg.mjs';
 import { ContentBundler } from '.';
-
-const README = `
-# My Report
-
-\`\`\`yaml project.props
-version: 0.1.2
-\`\`\`
-`;
+import { describe, expect, expectError, it, Path, TestSample, t, Time } from '../test';
 
 describe('ContentBundler', () => {
-  const setup = async (options: { prefillWithData?: boolean } = {}) => {
-    const { prefillWithData = true } = options;
-
-    const app = TestFilesystem.memory().events.fs();
-    const data = TestFilesystem.memory().events.fs();
-    const target = TestFilesystem.memory().events.fs();
-    const log = TestFilesystem.memory().events.fs();
-    const src = TestFilesystem.memory().events.fs();
-    const sources = { app, src, data, log };
-
-    if (prefillWithData) {
-      await sources.data.write('README.md', README);
-    }
-
-    return { sources, target };
-  };
-
   describe('README', () => {
     it('throw: file does not exist', async () => {
-      const { sources } = await setup();
+      const { sources } = await TestSample.filesystems();
       await sources.data.delete('README.md'); // Remove the README that will cause the error to throw.
 
       // Error thrown.
@@ -39,14 +16,15 @@ describe('ContentBundler', () => {
       await expectError(fn, 'File not found');
 
       // Error reported (silently).
-      const pipeline = await ContentBundler.create({ Text, sources, throwError: false }); // NB: default.
-      expect(pipeline.README.error).to.include('File not found');
+      const bundler = await ContentBundler.create({ Text, sources, throwError: false }); // NB: default.
+      expect(bundler.README.error).to.include('File not found');
     });
 
     it('load (default dir <none>)', async () => {
-      const { sources, target } = await setup();
-      const pipeline = await ContentBundler.create({ Text, sources });
-      await pipeline.README.write(target);
+      await TestSample.reset();
+      const { sources, target } = await TestSample.filesystems();
+      const bundler = await ContentBundler.create({ Text, sources });
+      await bundler.README.write(target);
 
       const m = await target.manifest();
       expect(m.files.length).to.eql(2);
@@ -54,39 +32,109 @@ describe('ContentBundler', () => {
     });
   });
 
-  it('write: default dir (none)', async () => {
-    const { sources, target } = await setup();
-    const pipeline = await ContentBundler.create({ Text, sources });
-    await pipeline.write.bundle(target);
+  describe('version', () => {
+    it('version from README', async () => {
+      const { sources } = await TestSample.filesystems();
+      const bundler = await ContentBundler.create({ Text, sources });
+      expect(bundler.version).to.eql('0.1.2');
+      expect(bundler.README.props.version).to.eql('0.1.2');
+    });
 
-    const m = await target.manifest();
-    const files = m.files.map((f) => f.path);
-
-    const expected = [
-      'README.md',
-      'app/data/index.json',
-      'app/data/md/README.md',
-      'app/index.json',
-      'app/vercel.json',
-      'index.json',
-    ];
-
-    expected.forEach((path) => expect(files).to.include(Path.join('0.1.2', path)));
-    expected.forEach((path) => expect(files).to.include(Path.join('.latest', path)));
+    it('version from param', async () => {
+      const { sources } = await TestSample.filesystems();
+      const bundler = await ContentBundler.create({ Text, sources, version: '9.0.0' });
+      expect(bundler.version).to.eql('9.0.0');
+      expect(bundler.README.props.version).to.eql('0.1.2');
+    });
   });
 
-  it('write: custom dir', async () => {
-    const { sources, target } = await setup();
-    const pipeline = await ContentBundler.create({ Text, sources });
-    await pipeline.write.bundle(target, { dir: '/foo/bar/' });
+  describe('write: bundle', () => {
+    it('write: default dir (none)', async () => {
+      await TestSample.reset();
 
-    const m = await target.manifest();
-    const files = m.files.map((f) => f.path);
+      const { sources, target } = await TestSample.filesystems();
+      const bundler = await ContentBundler.create({ Text, sources });
+      await bundler.write.bundle(target);
 
-    expect(files).to.include('foo/bar/README.md');
-    expect(files).to.include('foo/bar/app/index.json');
+      await Time.wait(100);
 
-    expect(files).to.include('.latest/README.md');
-    expect(files).to.include('.latest/app/index.json');
+      const m = await target.manifest();
+      const files = m.files.map((f) => f.path);
+
+      const expected = [
+        'README.md',
+        'app/data/index.json',
+        'app/data/md/README.md',
+        'app/index.json',
+        'app/vercel.json',
+        'index.json',
+      ];
+
+      expected.forEach((path) => expect(files).to.include(Path.join('0.1.2', path)));
+      expected.forEach((path) => expect(files).to.include(Path.join('.latest', path)));
+    });
+
+    it('write: custom dir', async () => {
+      const { sources, target } = await TestSample.filesystems();
+      const bundler = await ContentBundler.create({ Text, sources });
+      await bundler.write.bundle(target, { dir: '/foo/bar/' });
+
+      const m = await target.manifest();
+      const files = m.files.map((f) => f.path);
+
+      expect(files).to.include('foo/bar/README.md');
+      expect(files).to.include('foo/bar/app/index.json');
+
+      expect(files).to.include('.latest/README.md');
+      expect(files).to.include('.latest/app/index.json');
+    });
+  });
+
+  describe('logging', () => {
+    it('write: no prior history', async () => {
+      const { sources, target, bundler } = await TestSample.bundler();
+
+      const bundle = await bundler.write.bundle(target);
+      await bundler.logger.write({ bundle: bundle.toObject() });
+
+      const logs = await sources.log.manifest();
+      const logfile = await sources.log.json.read<t.LogEntry>(logs.files[0].path);
+
+      expect(logs.files.length).to.eql(1);
+      expect(logfile?.packagedBy).to.eql(`${Pkg.name}@${Pkg.version}`);
+      expect(logfile?.bundle).to.eql(bundle.toObject());
+      expect(logfile?.deployment).to.eql(undefined);
+
+      // NB: Derived from the actual logs, and packaged as data within the bundle.
+      const latest = target.dir(ContentBundler.Paths.latest);
+      const publicLog = await latest.json.read<t.LogPublicHistory>('app/data/log.json');
+      expect(publicLog?.latest.version).to.eql(bundle.version);
+      expect(publicLog?.history).to.eql([]); // NB: Public history.
+    });
+
+    it.skip('write: has prior history', async () => {
+      const sample1 = await TestSample.bundler({ version: '1.0.0' });
+      const sample2 = await TestSample.bundler({ version: '2.0.0' });
+
+      const bundle1 = await sample1.bundler.write.bundle(sample1.target);
+      const bundle2 = await sample2.bundler.write.bundle(sample2.target);
+
+      await sample1.bundler.logger.write({ bundle: bundle1.toObject() });
+      await sample2.bundler.logger.write({ bundle: bundle2.toObject() });
+
+      const latest1 = sample1.target.dir(ContentBundler.Paths.latest);
+      const latest2 = sample2.target.dir(ContentBundler.Paths.latest);
+
+      const file1 = await latest1.json.read<t.LogPublicHistory>('app/data/log.json');
+      const file2 = await latest2.json.read<t.LogPublicHistory>('app/data/log.json');
+      // expect(file?.latest.version).to.eql(bundle.version);
+      // expect(file?.history).to.eql([]);
+
+      console.log('-----------------------------------------');
+      console.log('file1', file1);
+      console.log('file2', file2);
+
+      //
+    });
   });
 });

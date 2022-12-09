@@ -18,7 +18,7 @@ export type FilePathParts = {
 /**
  * File Structure
  */
-export type MarkdownFile<P> = {
+export type MarkdownFile<P extends B = B> = {
   file: FilePathParts;
   props: P;
   error?: string;
