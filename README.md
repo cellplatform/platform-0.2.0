@@ -151,7 +151,9 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 
 **Note:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a 
-fundamental dependency (although it is not going away anytime soon). There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser, (ref [WinterCG](https://wintercg.org/))).
+fundamental dependency (although `node-js` is not going away anytime soon of course). 
+
+There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser, (ref [WinterCG](https://wintercg.org/))).
 
 
 In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons[ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (eg. [WinterCG](https://wintercg.org/))).
