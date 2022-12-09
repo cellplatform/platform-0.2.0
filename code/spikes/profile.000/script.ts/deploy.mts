@@ -14,7 +14,6 @@ const dir = async (dir: string) => {
   return store.fs;
 };
 
-const logdir = await dir('./dist.deploy/.log/');
 const targetdir = await dir('./dist.deploy/');
 
 const bundler = await Content.bundler({
@@ -23,20 +22,19 @@ const bundler = await Content.bundler({
     app: await dir('./dist/web'),
     src: await dir('./src/'),
     data: await dir('./src.data'),
-    log: logdir,
+    log: await dir('./dist.deploy/.log/'),
   },
 });
 
 const version = Pkg.version;
-const bundle = await bundler.write.bundle(targetdir);
+const bundle = await bundler.write.bundle(targetdir, version);
 const deployment = await pushToVercel({
   version,
   fs: bundle.fs,
   source: bundle.dir.app,
 });
 
-const logger = Content.logger(logdir);
-logger.write({
+bundler.logger.write({
   bundle: bundle.toObject(),
   deployment,
 });

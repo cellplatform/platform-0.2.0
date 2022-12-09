@@ -13,7 +13,7 @@ const dir = async (dir: string) => {
 };
 
 const logdir = await dir('./dist.deploy/.log/');
-const publicdir = await dir('./public/');
+const publicdir = await dir('./public/data');
 const targetdir = await dir('./dist.deploy/');
 
 const bundler = await Content.bundler({
@@ -27,18 +27,17 @@ const bundler = await Content.bundler({
   },
 });
 
-const version = bundler.version;
-const bundle = await bundler.write.bundle(targetdir, {});
+const version = bundler.README.props.version;
+const bundle = await bundler.write.bundle(targetdir, version);
 
 /**
  * Store the data in /public (for local dev usage)
  */
-await bundler.write.data(publicdir);
+await bundler.write.data(publicdir, version);
 
 console.log('-------------------------------------------');
-console.log('bundle (write response):', bundle);
+console.log('bundle (write response):', bundle.toObject());
 console.log();
-console.log('sizes:', bundle.size);
 
 // 🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷🐷
 
