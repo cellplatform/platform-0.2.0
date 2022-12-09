@@ -10,7 +10,7 @@ const DEFAULT = {
 export type HistoryProps = {
   instance: t.Instance;
   title?: string;
-  data?: t.PublicLogSummary;
+  data?: t.LogPublicHistory;
   style?: t.CssValue;
 };
 

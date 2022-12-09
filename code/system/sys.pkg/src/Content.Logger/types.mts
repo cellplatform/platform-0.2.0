@@ -9,14 +9,14 @@ export type LogEntry = {
   packagedBy: string;
   timestamp: UnixEpoch;
   bundle: t.BundleLogEntry;
-  deployment?: DeploymentLogEntry;
+  deployment?: LogDeploymentEntry;
 };
 
 /**
  * Deployment
  */
-export type DeploymentLogEntry = DeploymentLogEntryVercel;
-export type DeploymentLogEntryVercel = {
+export type LogDeploymentEntry = LogDeploymentEntryVercel;
+export type LogDeploymentEntryVercel = {
   kind: 'vercel:deployment';
   status: number;
   success?: t.VercelHttpDeployResponse['deployment'];

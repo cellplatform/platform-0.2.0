@@ -12,7 +12,7 @@ export async function pushToVercel(args: {
   version: string;
   source: string;
   bus?: t.EventBus<any>;
-}): Promise<t.DeploymentLogEntry> {
+}): Promise<t.LogDeploymentEntry> {
   //
   const { fs, version, source } = args;
   const bus = args.bus ?? rx.bus();

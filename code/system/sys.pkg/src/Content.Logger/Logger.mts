@@ -22,7 +22,7 @@ export const ContentLogger = {
       async write(args: {
         bundle: t.BundleLogEntry;
         timestamp?: UnixEpoch;
-        deployment?: t.DeploymentLogEntry;
+        deployment?: t.LogDeploymentEntry;
       }) {
         const { bundle, deployment } = args;
         const timestamp = args.timestamp ?? Time.now.timestamp;
