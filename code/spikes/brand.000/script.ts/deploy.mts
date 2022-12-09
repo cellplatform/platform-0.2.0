@@ -33,7 +33,4 @@ const deployment = await pushToVercel({
   source: bundle.dir.app,
 });
 
-bundler.logger.write({
-  bundle: bundle.toObject(),
-  deployment,
-});
+bundler.logger.write({ bundle, deployment });
