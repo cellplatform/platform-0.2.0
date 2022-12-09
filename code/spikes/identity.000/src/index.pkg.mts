@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.profile',
+  name: 'spike.identity',
   version: '0.0.4',
   dependencies: {
     'sys.types': '0.0.0',
