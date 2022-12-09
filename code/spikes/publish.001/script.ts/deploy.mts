@@ -2,6 +2,7 @@ import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';
 import { rx } from 'sys.util';
+import { Pkg } from '../src/index.pkg.mjs';
 
 import { pushToVercel } from './deploy.vercel.mjs';
 
@@ -27,7 +28,9 @@ const bundler = await Content.bundler({
   },
 });
 
-const version = bundler.README.props.version;
+// const version = bundler.README.props.version;
+const version = Pkg.version;
+
 const bundle = await bundler.write.bundle(targetdir, version);
 
 /**
@@ -61,4 +64,4 @@ console.log('deployed', deployment.status);
  * Log results.
  */
 const logger = Content.logger(logdir);
-await logger.write({ bundle: bundle.toObject(), deployment });
+await logger.write({ bundle, deployment });
