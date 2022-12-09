@@ -1,14 +1,8 @@
-import { Text } from 'sys.text';
-
-import { Pkg } from '../index.pkg.mjs';
 import { ContentBundler } from '.';
-import { describe, expect, expectError, it, Path, TestSample, t, Time, afterAll } from '../test';
+import { Pkg } from '../index.pkg.mjs';
+import { describe, expect, expectError, it, Path, t, TestSample, Text, Time } from '../test';
 
 describe('ContentBundler', () => {
-  afterAll(async () => {
-    await TestSample.deleteAll();
-  });
-
   describe('README', () => {
     it('throw: file does not exist', async () => {
       const { sources } = await TestSample.filesystems();

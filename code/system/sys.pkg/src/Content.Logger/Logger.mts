@@ -20,13 +20,14 @@ export const ContentLogger = {
        * Write the results of a deployment to the log.
        */
       async write(args: {
-        bundle: t.BundleLogEntry;
-        timestamp?: UnixEpoch;
+        bundle: t.BundleLogEntry | { toObject(): t.BundleLogEntry };
         deployment?: t.LogDeploymentEntry;
+        timestamp?: UnixEpoch;
       }) {
-        const { bundle, deployment } = args;
+        const { deployment } = args;
+        const bundle = Wrangle.bundle(args.bundle);
         const timestamp = args.timestamp ?? Time.now.timestamp;
-        const version = args.bundle.version;
+        const version = bundle.version;
         const filename = ContentLogger.Filename.create(version);
         const packagedBy = `${Pkg.name}@${Pkg.version}`;
         const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
@@ -95,3 +96,11 @@ function dedupeVersionsToLatest(list: t.LogHistoryPublicItem[]) {
 
   return history;
 }
+
+const Wrangle = {
+  bundle(input: t.BundleLogEntry | { toObject(): t.BundleLogEntry }): t.BundleLogEntry {
+    if (typeof input !== 'object') throw new Error(`Expected an object.`);
+    if (typeof (input as any).toObject === 'function') return (input as any).toObject();
+    return input as t.BundleLogEntry;
+  },
+};
