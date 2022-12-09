@@ -23,7 +23,9 @@ export function FsIndexer(args: { dir: DirPath }) {
 
       const base = options.dir ? Path.join(root, Path.ensureSlashes(options.dir)) : root;
       const pattern = Path.join(base, '**/*');
-      const paths = (await NodeFs.glob(pattern, { nodir: true })).map(formatPath).filter(filter);
+      const paths = (await NodeFs.glob(pattern, { nodir: true, dot: true }))
+        .map(formatPath)
+        .filter(filter);
 
       const toFile = async (path: string): Promise<t.ManifestFile> => {
         const buffer = await NodeFs.readFile(Path.join(root, path));

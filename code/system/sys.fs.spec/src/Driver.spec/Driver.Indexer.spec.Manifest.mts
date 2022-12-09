@@ -35,6 +35,23 @@ export const ManifestSpec = (ctx: t.SpecContext) => {
       expect(m2.files[1].path).to.eql('foo/b');
     });
 
+    it('dot files (eg. ".hidden")', async () => {
+      const driver = await factory();
+      const file1 = MemoryMock.randomFile();
+      const file2 = MemoryMock.randomFile();
+
+      const m1 = await driver.indexer.manifest();
+      expect(m1.files).to.eql([]);
+
+      await driver.io.write('path:/.hidden-file', file1.data);
+      await driver.io.write('path:foo/.hidden-dir/file', file2.data);
+
+      const m2 = await driver.indexer.manifest();
+      expect(m2.files.length).to.eql(2);
+      expect(m2.files[0].path).to.eql('.hidden-file');
+      expect(m2.files[1].path).to.eql('foo/.hidden-dir/file');
+    });
+
     describe('sub-directory: manifest({ dir })', () => {
       it('filter on directory', async () => {
         const driver = await factory();
