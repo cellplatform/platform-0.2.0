@@ -6,7 +6,7 @@ export const ContentLogFilename = {
   ext,
 
   isMatch(path: string) {
-    return String(path).trim().endsWith(ContentLogFilename.ext);
+    return String(path).trim().endsWith(ext);
   },
 
   create(version: string = '0.0.0') {

@@ -1,7 +1,7 @@
 import { BundlePaths as Bundle, Path } from './common.mjs';
 
 function toDataPath(input: string) {
-  const path = Path.join(Bundle.data.md, input);
+  const path = Path.join(Bundle.data.base, Bundle.data.md, input);
   return Path.toAbsolutePath(path);
 }
 

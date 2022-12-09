@@ -9,14 +9,14 @@ export type LogEntry = {
   packagedBy: string;
   timestamp: UnixEpoch;
   bundle: t.BundleLogEntry;
-  deployment?: DeploymentLogEntry;
+  deployment?: LogDeploymentEntry;
 };
 
 /**
  * Deployment
  */
-export type DeploymentLogEntry = DeploymentLogEntryVercel;
-export type DeploymentLogEntryVercel = {
+export type LogDeploymentEntry = LogDeploymentEntryVercel;
+export type LogDeploymentEntryVercel = {
   kind: 'vercel:deployment';
   status: number;
   success?: t.VercelHttpDeployResponse['deployment'];
@@ -26,12 +26,12 @@ export type DeploymentLogEntryVercel = {
 /**
  * A sanatised version of the log sent to the client.
  */
-export type PublicLogSummary = {
+export type LogPublicHistory = {
   latest: { version: string };
-  history: PublicLogHistoryItem[];
+  history: LogPublicHistoryItem[];
 };
 
-export type PublicLogHistoryItem = {
+export type LogPublicHistoryItem = {
   timestamp: number;
   version: string;
   urls: string[];

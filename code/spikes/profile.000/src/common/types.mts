@@ -6,4 +6,4 @@ export * from '../types.mjs';
 export type { EventBus, Event, DomRect } from 'sys.types';
 export type { CssValue } from 'sys.util.css';
 export type { Fs } from 'sys.fs/src/types.mjs';
-export type { DeploymentLogEntry } from 'sys.pkg/src/types.mjs';
+export type { LogDeploymentEntry } from 'sys.pkg/src/types.mjs';

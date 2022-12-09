@@ -1,21 +1,21 @@
-import { Filesize } from 'sys.fs';
-
-import { MarkdownFile } from '../Markdown.File';
-import { Path, t } from '../common';
+import { Filesize, Path, t, TestFilesystem } from '../common';
 import { ContentLogger } from '../Content.Logger';
+import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';
 
+type SemVer = string;
+
 type Sources = {
-  app: t.Fs; //                   The compiled bundle of the content rendering "app" (application).
-  content: t.Fs; //               The author generated content data.
-  src?: t.Fs; //      (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
-  log?: t.Fs; //      (optinoal)  The place to read/write logs (overwritable in method calls)
+  app: t.Fs; //                The compiled bundle of the content rendering "app" (application).
+  data: t.Fs; //               The author generated content data.
+  src?: t.Fs; //   (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
+  log?: t.Fs; //   (optinoal)  The place to read/write logs (overwritable in method calls)
 };
 
 type CreateArgs = {
   Text: t.Text;
   sources: Sources;
-  propsType?: string;
+  readmePropsType?: string; // The name of the YAML block within the README that represents the props for the content-data.
   throwError?: boolean;
 };
 
@@ -29,29 +29,35 @@ export const ContentBundler = {
    * Create an instance of the content bundler.
    */
   async create(args: CreateArgs) {
-    const { Text, sources, throwError = true, propsType = 'project.props' } = args;
+    const { Text, sources, throwError = true, readmePropsType: propsType = 'project.props' } = args;
+    const logger = ContentLogger.create(args.sources.log ?? TestFilesystem.memory().fs);
 
     /**
      * Load and parse the README file.
      */
     const README = await MarkdownFile({
       Text,
-      src: sources.content,
+      src: sources.data,
       path: 'README.md',
       propsType,
       throwError,
     });
 
-    const version = README.props.version;
+    // const version = args.version ?? README.props.version;
 
     const write = {
       /**
        * Write the content to the given filesystem location.
        */
-      async bundle(target: t.Fs, options: { dir?: string; latest?: boolean } = {}) {
+      async bundle(
+        target: t.Fs,
+        version: SemVer,
+        options: { dir?: string; latest?: boolean } = {},
+      ) {
         const source = await sources.app.manifest();
         const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
         const appfs = target.dir(Path.join(base, BundlePaths.app.base));
+        const datafs = target.dir(Path.join(base, BundlePaths.app.data));
 
         /**
          * Delete existing bundle (if any).
@@ -76,7 +82,7 @@ export const ContentBundler = {
         /**
          * Copy and process source content (data).
          */
-        await write.data(appfs);
+        await write.data(datafs, version);
 
         /**
          * Copy in known source (.ts) files from "/src"
@@ -96,8 +102,8 @@ export const ContentBundler = {
 
           // Used by edge/middleware functions on Vercel.
           const pkg = {
-            dependencies: { '@vercel/edge': '0.0.5' },
-            devDependencies: { typescript: '4.8.4' },
+            dependencies: { '@vercel/edge': '0.1.2' },
+            devDependencies: { typescript: '4.9.4' },
             licence: 'MIT',
           };
 
@@ -137,20 +143,12 @@ export const ContentBundler = {
 
         // Finish up.
         const api = {
+          fs,
           version,
-
           dir: { app: BundlePaths.app.base },
 
           get manifest() {
             return manifest;
-          },
-
-          /**
-           * Scoped filesystem that was written to.
-           * Example usage: passed into the `deploy` pipeline.
-           */
-          get fs() {
-            return fs;
           },
 
           get size() {
@@ -160,7 +158,7 @@ export const ContentBundler = {
               lib: toSize(manifest, (path) => match(path, BundlePaths.app.lib)),
               data: {
                 md: toSize(manifest, (path) =>
-                  match(path, BundlePaths.app.base, BundlePaths.data.md),
+                  match(path, BundlePaths.app.data, BundlePaths.data.md),
                 ),
               },
             };
@@ -183,48 +181,43 @@ export const ContentBundler = {
       /**
        * Write content
        */
-      async data(target: t.Fs) {
-        const MD = Text.Processor.markdown();
-        const source = await sources.content.manifest();
+      async data(datafs: t.Fs, version: SemVer) {
+        const processor = Text.Processor.markdown();
+        const source = await sources.data.manifest();
 
         /**
          * Copy source "content" files.
          */
         await Promise.all(
           source.files.map(async (file) => {
-            const data = await sources.content.read(file.path);
-            const md = await MD.toMarkdown(data);
-            const path = Path.join(BundlePaths.data.md, file.path);
-            await target.write(path, md.markdown);
+            const Paths = BundlePaths;
+            const data = await sources.data.read(file.path);
+            const md = await processor.toMarkdown(data);
+            const path = Path.join(Paths.data.md, file.path);
+            await datafs.write(path, md.markdown);
           }),
         );
 
         /**
          * Copy in a summary of the log (latest n-items).
          */
-        let log: t.PublicLogSummary | undefined;
-        if (sources.log) {
-          const fs = sources.log;
-          const logger = ContentLogger.create(fs);
+        if (logger) {
           const latest = version;
-          log = await logger.publicSummary({ max: 50, latest });
-          await target.write(BundlePaths.data.log, log);
+          const summary = await logger.publicSummary({ max: 50, latest });
+          await datafs.write(BundlePaths.data.logfile, summary);
         }
 
         /**
          * Data folder [index.json] manfiest
          */
-        const datafs = target.dir(BundlePaths.data.base);
         await datafs.write('index.json', await datafs.manifest());
       },
     };
 
     return {
-      version,
       write,
-      get README() {
-        return README;
-      },
+      logger,
+      README,
     };
   },
 };

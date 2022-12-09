@@ -1,2 +1,1 @@
-export * from './Markdown.File/types.mjs';
 export * from './ui.logic/types.mjs';

@@ -12,6 +12,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       position: 'relative',
       padding: [5, 8],
+      fontFamily: 'sans-serif',
     }),
   };
 

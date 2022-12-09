@@ -1,5 +1,5 @@
 import { Color, COLORS, css, t } from '../common';
-import { HarnessHost } from './Harness.Host';
+import { HarnessHost } from '../Harness.Host';
 import { HarnessSpec } from './Harness.Spec';
 import { useSpecRunner } from './useSpecRunner.mjs';
 

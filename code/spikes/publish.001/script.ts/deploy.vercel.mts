@@ -11,7 +11,7 @@ export async function pushToVercel(args: {
   version: string;
   source: string;
   bus?: t.EventBus<any>;
-}): Promise<t.DeploymentLogEntry> {
+}): Promise<t.LogDeploymentEntry> {
   const { fs, version, source } = args;
   const bus = args.bus ?? rx.bus();
   const vercel = Vercel.client({ bus, token, fs });
@@ -20,8 +20,10 @@ export async function pushToVercel(args: {
     team: 'tdb',
     name: `tdb.undp.v${version}`,
     project: 'tdb-undp',
-    source,
     alias: 'undp.db.team',
+    // project: 'tdb-tmp',
+    // alias: 'tmp.db.team',
+    source,
     ensureProject: true,
     regions: ['sfo1'],
     target: 'production', // NB: required to be "production" for the DNS alias to be applied.

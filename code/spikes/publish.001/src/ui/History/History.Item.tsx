@@ -4,7 +4,7 @@ type SemverString = string;
 
 export type HistoryItemProps = {
   latest?: SemverString;
-  data: t.PublicLogHistoryItem;
+  data: t.LogPublicHistoryItem;
   style?: t.CssValue;
 };
 

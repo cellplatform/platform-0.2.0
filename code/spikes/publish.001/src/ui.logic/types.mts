@@ -15,7 +15,7 @@ export type StateTree = {
   location?: StateLocation;
   markdown?: StateMarkdown;
   selection: StateSelection;
-  log?: t.PublicLogSummary;
+  log?: t.LogPublicHistory;
   overlay?: StateOverlay;
 };
 

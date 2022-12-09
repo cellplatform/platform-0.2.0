@@ -1,8 +1,9 @@
 import { R, t, Time } from '../common';
 import { Pkg } from '../index.pkg.mjs';
-import { ContentLogFilename as Filename } from './ContentLogger.Filename.mjs';
+import { ContentLogFilename as Filename } from './Filename.mjs';
 
 type VersionString = string;
+type UnixEpoch = number;
 
 /**
  * Tools for working with a content log.
@@ -20,8 +21,8 @@ export const ContentLogger = {
        */
       async write(args: {
         bundle: t.BundleLogEntry;
-        timestamp?: number;
-        deployment?: t.DeploymentLogEntry;
+        timestamp?: UnixEpoch;
+        deployment?: t.LogDeploymentEntry;
       }) {
         const { bundle, deployment } = args;
         const timestamp = args.timestamp ?? Time.now.timestamp;
@@ -45,21 +46,19 @@ export const ContentLogger = {
         const wait = paths.map((path) => fs.json.read<t.LogEntry>(path));
         const items = (await Promise.all(wait)) as t.LogEntry[];
 
-        let history: t.PublicLogHistoryItem[] = items
+        let history: t.LogPublicHistoryItem[] = items
           .filter((entry) => Boolean(entry.deployment))
           .map((entry) => {
             const timestamp = entry.timestamp;
             const version = entry.bundle.version;
-            const deployment = entry.deployment!;
+            const deployment = entry.deployment ?? { success: undefined, error: undefined };
             const { success, error } = deployment;
             const urls = success?.urls.public ?? [];
-            const item: t.PublicLogHistoryItem = { timestamp, version, urls, error };
+            const item: t.LogPublicHistoryItem = { timestamp, version, urls, error };
             return item;
           });
         history = dedupeVersionsToLatest(history);
-        if (options.max) {
-          history = history.slice(0, options.max);
-        }
+        if (options.max) history = history.slice(0, options.max);
 
         /**
          * Finish up.
@@ -68,7 +67,7 @@ export const ContentLogger = {
           ? { version: options.latest }
           : { version: history[0].version };
 
-        const res: t.PublicLogSummary = { latest, history };
+        const res: t.LogPublicHistory = { latest, history };
         return res;
       },
     };
@@ -84,8 +83,8 @@ export const ContentLogger = {
  * Each deployment also has a timestamp associated with it (Unix Epoch).
  * Collapse the list to only include each version once with the latest deployment it has.
  */
-function dedupeVersionsToLatest(list: t.PublicLogHistoryItem[]) {
-  const byVersion = R.groupBy((item: t.PublicLogHistoryItem) => item.version);
+function dedupeVersionsToLatest(list: t.LogPublicHistoryItem[]) {
+  const byVersion = R.groupBy((item: t.LogPublicHistoryItem) => item.version);
   const grouped = byVersion(list);
 
   const history = Object.keys(grouped).map((version) => {

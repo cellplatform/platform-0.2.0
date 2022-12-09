@@ -5,10 +5,11 @@ export const BundlePaths: t.BundlePaths = {
   app: {
     base: 'app/',
     lib: 'app/lib/',
+    data: 'app/data/',
   },
   data: {
     base: 'data/',
-    md: 'data/md/',
-    log: 'data/log.json',
+    md: 'md/',
+    logfile: 'log.json',
   },
 };

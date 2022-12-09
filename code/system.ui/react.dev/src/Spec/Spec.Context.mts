@@ -6,7 +6,7 @@ import { rx, slug, t, Margin } from '../common';
 /**
  * Information object passed as the {ctx} to tests.
  */
-export const Context = {
+export const SpecContext = {
   args(options: { dispose$?: t.Observable<any> } = {}) {
     const { dispose$, dispose } = rx.disposable(options.dispose$);
     const rerun$ = new Subject<void>();

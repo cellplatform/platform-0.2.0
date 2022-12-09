@@ -118,7 +118,7 @@ A security audit on the up-stream dependencies is performed on each CI cycle.
 
 ```bash
 
-$ yarn audit
+$ yarn audit     <= security checks
 $ yarn build
 $ yarn test
 
@@ -149,11 +149,11 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 
 <p>&nbsp;</p>
 
-**Note:** the system currently uses [`node.js`](https://nodejs.org/) for build-chain bootstrapping only. Once the Typescript compiler 
+**Note:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a 
-primary dependency.  
+fundamental dependency (although it is not going away anytime soon). There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser, (ref [WinterCG](https://wintercg.org/))).
 
-In particular a loose coupling is strongly retained around any one  "user interface rendering library" as distinct to pure functional "logic" libraries, as UI tends towards the most valatility in an architecutre over time.  Any form of "interface" (the `I` in `API`) tends toward messiness and complex noise - the one involving "humans" is especially prone.   
+In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to pure functional "logic" libraries, as UI tends towards the much higher volatility in an architecutre over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.   
 
 Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, for example:
 
@@ -162,8 +162,9 @@ Organizing for this is expressed within the distinct `/system/` and `/system.ui/
 /code/
   |- system/
   |- system.ui/
-              |- web.react/*   <== (libraries)
-              |- web.svelte/*  <== (libraries)
+              |- <type>.*    <== prefix calls out library/technology being "ring fenced."
+              |- react.*     <== (libs)
+              |- svelte.*    <== (libs)
 ```
 
 

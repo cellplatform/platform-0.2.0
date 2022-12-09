@@ -38,8 +38,8 @@ export const Fetch = {
    * Log
    */
   async logHistory() {
-    const path = Path.toAbsolutePath(BundlePaths.data.log);
-    const log = await Fetch.json<t.PublicLogSummary>(path);
+    const path = Path.toAbsolutePath(Path.join(BundlePaths.data.base, BundlePaths.data.logfile));
+    const log = await Fetch.json<t.LogPublicHistory>(path);
     return log;
   },
 };

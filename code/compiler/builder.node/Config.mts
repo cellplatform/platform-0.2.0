@@ -20,6 +20,7 @@ export const Config = {
       return {
         globals: false,
         include: ['**/*.TEST.{mts,tsx}'],
+        watchExclude: ['**/node_modules/**', '**/dist/**', '**/dist.deploy/**', '**/tmp/**'],
         environment: 'node', // NB: Default, makes JSDOM available.
       };
     },

@@ -13,7 +13,7 @@ export const Imports = {
 };
 
 const url = new URL(location.href);
-const query = url.searchParams;
+const params = url.searchParams;
 
 /**
  * User Interface
@@ -21,7 +21,7 @@ const query = url.searchParams;
 
 (async () => {
   const root = createRoot(document.getElementById('root')!);
-  if (query.has('dev')) {
+  if (params.has('d') || params.has('dev')) {
     const { Dev } = await import('./index');
     const el = await Dev.render(Pkg, Imports);
     root.render(el);
