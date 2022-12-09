@@ -39,14 +39,21 @@ export const Root: React.FC<RootProps> = (props) => {
       marginTop: 20,
     }),
   };
+
+  const elAvatar = <Image width={360} />;
+
+  const elDetails = (
+    <div {...styles.details}>
+      <Details />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         <div {...styles.columns}>
-          <Image width={360} />
-          <div {...styles.details}>
-            <Details />
-          </div>
+          {elAvatar}
+          {elDetails}
         </div>
       </div>
     </div>
