@@ -75,7 +75,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 
 >> **"libraries not frameworks"**  
->> Orient toward framework agnosticism (by default).
+>> Orient toward framework agnosticism (as the default, extendible via driver plugins).
 
 <p>&nbsp;</p>
 
