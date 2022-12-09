@@ -4,7 +4,7 @@ import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 
 export const Specs = {
-  'ui.Root': () => import('../ui/Root/Root.SPEC'),
+  'ui.Profile': () => import('../ui/Profile/Profile.SPEC'),
 };
 
 const url = new URL(location.href);
@@ -23,7 +23,7 @@ const isDev = params.has('dev') || params.has('d');
     const el = await Dev.render(Pkg, Specs);
     root.render(el);
   } else {
-    const { Root } = await import('../ui/Root');
+    const { Root } = await import('../ui/Profile');
     root.render(<Root />);
   }
 })();

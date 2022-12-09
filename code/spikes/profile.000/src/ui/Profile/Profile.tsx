@@ -37,7 +37,7 @@ export const Root: React.FC<RootProps> = (props) => {
       boxSizing: 'border-box',
       overflow: 'hidden',
       backgroundColor: COLORS.WHITE,
-      Padding: [80, 50],
+      Padding: [70, 50, 80, 50],
       borderRadius: 20,
       border: `solid 1px ${Color.format(-0.06)}`,
     }),

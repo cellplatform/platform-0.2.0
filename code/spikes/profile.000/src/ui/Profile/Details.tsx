@@ -26,6 +26,7 @@ export const Details: React.FC<DetailsProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: `repeat(2, 1fr)`,
       lineHeight: '1.35em',
+      paddingLeft: 20,
     }),
     bodyLeft: css({ textAlign: 'right' }),
     bodyRight: css({ textAlign: 'left' }),
