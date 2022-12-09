@@ -24,8 +24,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.f9179fbe.js",
-    "./web": "./dist/web/assets/index.f9179fbe.js"
+    ".": "./dist/web/lib/index.bb4dacd5.js",
+    "./web": "./dist/web/lib/index.bb4dacd5.js"
   },
   "typesVersions": {
     "*": {

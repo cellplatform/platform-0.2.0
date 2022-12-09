@@ -1,5 +1,5 @@
 {
-  "name": "spike.profile",
+  "name": "spike.identity",
   "version": "0.0.4",
   "type": "module",
   "scripts": {
@@ -22,8 +22,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.988830e1.js",
-    "./web": "./dist/web/lib/index.988830e1.js"
+    ".": "./dist/web/lib/index.275611e1.js",
+    "./web": "./dist/web/lib/index.275611e1.js"
   },
   "typesVersions": {
     "*": {

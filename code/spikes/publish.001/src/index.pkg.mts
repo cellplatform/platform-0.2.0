@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'spike.publish.react',
-  version: '0.0.7',
+  version: '1.2.1',
   dependencies: {
     'sys.types': '0.0.0',
     'sys.text': '0.0.0',
