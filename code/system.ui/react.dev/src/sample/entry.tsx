@@ -7,15 +7,17 @@ const Imports = {
   'sample.MyComponent': () => import('./MySample.SPEC'),
 };
 
+const url = new URL(location.href);
+const params = url.searchParams;
+const isDev = params.has('dev') || params.has('d');
+
 /**
  * Sample entry logic.
  */
 (async () => {
-  const url = new URL(location.href);
-  const params = url.searchParams;
   const root = createRoot(document.getElementById('root')!);
 
-  if (params.has('d') || params.has('dev')) {
+  if (isDev) {
     /**
      * NOTE:
      *    The import of the [Dev] module happens dynamically here AFTER
