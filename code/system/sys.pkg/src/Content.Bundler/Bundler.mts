@@ -217,9 +217,7 @@ export const ContentBundler = {
     return {
       write,
       logger,
-      get README() {
-        return README;
-      },
+      README,
     };
   },
 };
