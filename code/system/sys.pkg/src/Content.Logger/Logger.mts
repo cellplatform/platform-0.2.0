@@ -46,7 +46,7 @@ export const ContentLogger = {
         const wait = paths.map((path) => fs.json.read<t.LogEntry>(path));
         const items = (await Promise.all(wait)) as t.LogEntry[];
 
-        let history: t.LogPublicHistoryItem[] = items
+        let history: t.LogHistoryPublicItem[] = items
           .filter((entry) => Boolean(entry.deployment))
           .map((entry) => {
             const timestamp = entry.timestamp;
@@ -54,7 +54,7 @@ export const ContentLogger = {
             const deployment = entry.deployment ?? { success: undefined, error: undefined };
             const { success, error } = deployment;
             const urls = success?.urls.public ?? [];
-            const item: t.LogPublicHistoryItem = { timestamp, version, urls, error };
+            const item: t.LogHistoryPublicItem = { timestamp, version, urls, error };
             return item;
           });
         history = dedupeVersionsToLatest(history);
@@ -67,7 +67,7 @@ export const ContentLogger = {
           ? { version: options.latest }
           : { version: history[0].version };
 
-        const res: t.LogPublicHistory = { latest, history };
+        const res: t.LogHistoryPublic = { latest, history };
         return res;
       },
     };
@@ -83,8 +83,8 @@ export const ContentLogger = {
  * Each deployment also has a timestamp associated with it (Unix Epoch).
  * Collapse the list to only include each version once with the latest deployment it has.
  */
-function dedupeVersionsToLatest(list: t.LogPublicHistoryItem[]) {
-  const byVersion = R.groupBy((item: t.LogPublicHistoryItem) => item.version);
+function dedupeVersionsToLatest(list: t.LogHistoryPublicItem[]) {
+  const byVersion = R.groupBy((item: t.LogHistoryPublicItem) => item.version);
   const grouped = byVersion(list);
 
   const history = Object.keys(grouped).map((version) => {
