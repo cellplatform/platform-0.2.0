@@ -161,7 +161,7 @@ In the arena of remote code-module execution on either user-controlled machines,
 
 In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to the `pure functional` "logic only" libraries.  This is because UI tends towards much higher volatility in a technical architecutre over time, and tends to be swapped our more repeatedly over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.
 
-Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, for example:
+Organizing for this is expressed within the distinct folders `/system/` and `/system.ui/` in the root. The `system.ui` sub-folder structure's purpose is to isolatie and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
 
 
 ```
