@@ -3,6 +3,8 @@ import { ContentLogger } from '../Content.Logger';
 import { MarkdownFile } from '../File';
 import { BundlePaths } from './Paths.mjs';
 
+type SemVer = string;
+
 type Sources = {
   app: t.Fs; //                The compiled bundle of the content rendering "app" (application).
   data: t.Fs; //               The author generated content data.
@@ -14,7 +16,6 @@ type CreateArgs = {
   Text: t.Text;
   sources: Sources;
   readmePropsType?: string; // The name of the YAML block within the README that represents the props for the content-data.
-  version?: string;
   throwError?: boolean;
 };
 
@@ -42,13 +43,17 @@ export const ContentBundler = {
       throwError,
     });
 
-    const version = args.version ?? README.props.version;
+    // const version = args.version ?? README.props.version;
 
     const write = {
       /**
        * Write the content to the given filesystem location.
        */
-      async bundle(target: t.Fs, options: { dir?: string; latest?: boolean } = {}) {
+      async bundle(
+        target: t.Fs,
+        version: SemVer,
+        options: { dir?: string; latest?: boolean } = {},
+      ) {
         const source = await sources.app.manifest();
         const base = `${Path.trimSlashesEnd(options.dir ?? version)}/`;
         const appfs = target.dir(Path.join(base, BundlePaths.app.base));
@@ -77,7 +82,7 @@ export const ContentBundler = {
         /**
          * Copy and process source content (data).
          */
-        await write.data(datafs);
+        await write.data(datafs, version);
 
         /**
          * Copy in known source (.ts) files from "/src"
@@ -97,8 +102,8 @@ export const ContentBundler = {
 
           // Used by edge/middleware functions on Vercel.
           const pkg = {
-            dependencies: { '@vercel/edge': '0.0.5' },
-            devDependencies: { typescript: '4.8.4' },
+            dependencies: { '@vercel/edge': '0.1.2' },
+            devDependencies: { typescript: '4.9.4' },
             licence: 'MIT',
           };
 
@@ -176,7 +181,7 @@ export const ContentBundler = {
       /**
        * Write content
        */
-      async data(datafs: t.Fs) {
+      async data(datafs: t.Fs, version: SemVer) {
         const processor = Text.Processor.markdown();
         const source = await sources.data.manifest();
 
@@ -210,7 +215,6 @@ export const ContentBundler = {
     };
 
     return {
-      version,
       write,
       logger,
       get README() {

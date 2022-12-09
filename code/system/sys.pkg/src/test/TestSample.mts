@@ -19,10 +19,13 @@ type Options = { prefillWithData?: boolean };
 export const TestSample = {
   README,
 
-  async reset() {
+  async deleteAll() {
     await NodeFs.remove(NodeFs.resolve(TMP));
   },
 
+  /**
+   * A set of sample filesystem references.
+   */
   async filesystems(options: Options = {}) {
     const { prefillWithData = true } = options;
 
@@ -45,10 +48,12 @@ export const TestSample = {
     return { sources, target, rootdir };
   },
 
-  async bundler(options: Options & { version?: string } = {}) {
-    const { version } = options;
+  /**
+   * A bundler made with a set of sample filesystem references.
+   */
+  async bundler(options: Options = {}) {
     const { sources, target, rootdir } = await TestSample.filesystems(options);
-    const bundler = await Content.bundler({ Text, sources, version });
+    const bundler = await Content.bundler({ Text, sources });
     return { sources, target, bundler, rootdir };
   },
 };

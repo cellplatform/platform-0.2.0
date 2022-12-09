@@ -1,11 +1,14 @@
-import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text';
 
 import { Pkg } from '../index.pkg.mjs';
 import { ContentBundler } from '.';
-import { describe, expect, expectError, it, Path, TestSample, t, Time } from '../test';
+import { describe, expect, expectError, it, Path, TestSample, t, Time, afterAll } from '../test';
 
 describe('ContentBundler', () => {
+  afterAll(async () => {
+    await TestSample.deleteAll();
+  });
+
   describe('README', () => {
     it('throw: file does not exist', async () => {
       const { sources } = await TestSample.filesystems();
@@ -21,40 +24,23 @@ describe('ContentBundler', () => {
     });
 
     it('load (default dir <none>)', async () => {
-      await TestSample.reset();
       const { sources, target } = await TestSample.filesystems();
       const bundler = await ContentBundler.create({ Text, sources });
-      await bundler.README.write(target);
+      expect(bundler.README.props.version).to.eql('0.1.2');
 
+      await bundler.README.write(target);
       const m = await target.manifest();
+
       expect(m.files.length).to.eql(2);
       expect(m.files.map((f) => f.path)).to.eql(['README.md', 'README.md.html']);
     });
   });
 
-  describe('version', () => {
-    it('version from README', async () => {
-      const { sources } = await TestSample.filesystems();
-      const bundler = await ContentBundler.create({ Text, sources });
-      expect(bundler.version).to.eql('0.1.2');
-      expect(bundler.README.props.version).to.eql('0.1.2');
-    });
-
-    it('version from param', async () => {
-      const { sources } = await TestSample.filesystems();
-      const bundler = await ContentBundler.create({ Text, sources, version: '9.0.0' });
-      expect(bundler.version).to.eql('9.0.0');
-      expect(bundler.README.props.version).to.eql('0.1.2');
-    });
-  });
-
   describe('write: bundle', () => {
     it('write: default dir (none)', async () => {
-      await TestSample.reset();
-
       const { sources, target } = await TestSample.filesystems();
       const bundler = await ContentBundler.create({ Text, sources });
-      await bundler.write.bundle(target);
+      await bundler.write.bundle(target, '1.2.3');
 
       await Time.wait(100);
 
@@ -70,14 +56,14 @@ describe('ContentBundler', () => {
         'index.json',
       ];
 
-      expected.forEach((path) => expect(files).to.include(Path.join('0.1.2', path)));
+      expected.forEach((path) => expect(files).to.include(Path.join('1.2.3', path)));
       expected.forEach((path) => expect(files).to.include(Path.join('.latest', path)));
     });
 
     it('write: custom dir', async () => {
       const { sources, target } = await TestSample.filesystems();
       const bundler = await ContentBundler.create({ Text, sources });
-      await bundler.write.bundle(target, { dir: '/foo/bar/' });
+      await bundler.write.bundle(target, '1.2.3', { dir: '/foo/bar/' });
 
       const m = await target.manifest();
       const files = m.files.map((f) => f.path);
@@ -88,13 +74,35 @@ describe('ContentBundler', () => {
       expect(files).to.include('.latest/README.md');
       expect(files).to.include('.latest/app/index.json');
     });
+
+    it('write: version', async () => {
+      const { target, bundler } = await TestSample.bundler();
+
+      const bundle1 = await bundler.write.bundle(target, '0.1.2');
+      const bundle2 = await bundler.write.bundle(target, '0.1.3');
+
+      expect(bundle1.version).to.eql('0.1.2');
+      expect(bundle2.version).to.eql('0.1.3');
+
+      const m = await target.manifest();
+      const files = m.files.map((f) => f.path);
+
+      const expectToInclude = (prefix: string) => {
+        const exists = files.some((path) => path.startsWith(prefix));
+        expect(exists).to.eql(true, prefix);
+      };
+
+      expectToInclude('.latest/');
+      expectToInclude('0.1.2/');
+      expectToInclude('0.1.3/');
+    });
   });
 
   describe('logging', () => {
     it('write: no prior history', async () => {
       const { sources, target, bundler } = await TestSample.bundler();
 
-      const bundle = await bundler.write.bundle(target);
+      const bundle = await bundler.write.bundle(target, '1.2.3');
       await bundler.logger.write({ bundle: bundle.toObject() });
 
       const logs = await sources.log.manifest();
@@ -113,27 +121,26 @@ describe('ContentBundler', () => {
     });
 
     it.skip('write: has prior history', async () => {
-      const sample1 = await TestSample.bundler({ version: '1.0.0' });
-      const sample2 = await TestSample.bundler({ version: '2.0.0' });
-
-      const bundle1 = await sample1.bundler.write.bundle(sample1.target);
-      const bundle2 = await sample2.bundler.write.bundle(sample2.target);
-
-      await sample1.bundler.logger.write({ bundle: bundle1.toObject() });
-      await sample2.bundler.logger.write({ bundle: bundle2.toObject() });
-
-      const latest1 = sample1.target.dir(ContentBundler.Paths.latest);
-      const latest2 = sample2.target.dir(ContentBundler.Paths.latest);
-
-      const file1 = await latest1.json.read<t.LogPublicHistory>('app/data/log.json');
-      const file2 = await latest2.json.read<t.LogPublicHistory>('app/data/log.json');
-      // expect(file?.latest.version).to.eql(bundle.version);
-      // expect(file?.history).to.eql([]);
-
-      console.log('-----------------------------------------');
-      console.log('file1', file1);
-      console.log('file2', file2);
-
+      //       const sample1 = await TestSample.bundler({ version: '1.0.0' });
+      //       const sample2 = await TestSample.bundler({ version: '2.0.0' });
+      //
+      //       const bundle1 = await sample1.bundler.write.bundle(sample1.target);
+      //       const bundle2 = await sample2.bundler.write.bundle(sample2.target);
+      //
+      //       await sample1.bundler.logger.write({ bundle: bundle1.toObject() });
+      //       await sample2.bundler.logger.write({ bundle: bundle2.toObject() });
+      //
+      //       const latest1 = sample1.target.dir(ContentBundler.Paths.latest);
+      //       const latest2 = sample2.target.dir(ContentBundler.Paths.latest);
+      //
+      //       const file1 = await latest1.json.read<t.LogPublicHistory>('app/data/log.json');
+      //       const file2 = await latest2.json.read<t.LogPublicHistory>('app/data/log.json');
+      //       // expect(file?.latest.version).to.eql(bundle.version);
+      //       // expect(file?.history).to.eql([]);
+      //
+      //       console.log('-----------------------------------------');
+      //       console.log('file1', file1);
+      //       console.log('file2', file2);
       //
     });
   });
