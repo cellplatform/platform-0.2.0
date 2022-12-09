@@ -1,5 +1,5 @@
-import { describe, expect, expectError, it, TestFilesystem } from '../test';
-import { Text } from 'sys.text';
+import { describe, expect, expectError, it, TestFilesystem, Text } from '../test';
+
 import { MarkdownFile } from '.';
 
 describe('MarkdownFile', () => {
@@ -14,13 +14,13 @@ count: 42
 `;
 
   const setup = async () => {
-    const target = TestFilesystem.memory().events.fs();
-    const src = TestFilesystem.memory().events.fs();
+    const target = TestFilesystem.memory().fs;
+    const src = TestFilesystem.memory().fs;
     return { src, target };
   };
 
   it('no file', async () => {
-    const { src, target } = await setup();
+    const { src } = await setup();
 
     const path = 'foo/README.md';
     const res = await MarkdownFile({ Text, src, path });

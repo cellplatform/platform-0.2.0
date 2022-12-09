@@ -1,10 +1,11 @@
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Text } from 'sys.text';
-import { rx, TestFilesystem, slug } from '../common';
+
+import { rx, slug } from '../common';
 import { Content } from '../Content';
 
 const bus = rx.bus();
-const TMP = 'tmp/tests';
+const TMPDIR = 'tmp/tests';
 
 const README = `
 # My Report
@@ -20,7 +21,7 @@ export const TestSample = {
   README,
 
   async deleteAll() {
-    await NodeFs.remove(NodeFs.resolve(TMP));
+    await NodeFs.remove(NodeFs.resolve(TMPDIR));
   },
 
   /**
@@ -28,8 +29,8 @@ export const TestSample = {
    */
   async filesystems(options: Options = {}) {
     const { prefillWithData = true } = options;
+    const rootdir = NodeFs.resolve(TMPDIR, `test.${slug()}`);
 
-    const rootdir = NodeFs.resolve(TMP, `test.${slug()}`);
     const dir = async (dir: string) => {
       const path = NodeFs.join(rootdir, dir);
       const store = await Filesystem.client(path, { bus });
