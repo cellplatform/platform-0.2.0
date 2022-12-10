@@ -1,12 +1,12 @@
 import { createGunzip } from 'zlib';
 import { Color, COLORS, css, t, rx, FC } from '../common';
 
-export type HarnessSpecProps = {
+export type HarnessSpecColumnProps = {
   results?: t.TestSuiteRunResponse;
   style?: t.CssValue;
 };
 
-export const HarnessSpec: React.FC<HarnessSpecProps> = (props) => {
+export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   const { results } = props;
 
   const desc = results?.description;

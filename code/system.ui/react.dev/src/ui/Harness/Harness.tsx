@@ -1,6 +1,6 @@
 import { Color, COLORS, css, t } from '../common';
 import { HarnessHost } from '../Harness.Host';
-import { HarnessSpec } from './Harness.Spec';
+import { HarnessSpecColumn } from '../Harness.SpecColumn';
 import { useSpecRunner } from './useSpecRunner.mjs';
 
 export type HarnessProps = {
@@ -45,7 +45,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
         <HarnessHost renderProps={runner.props} />
       </div>
       <div {...styles.right}>
-        <HarnessSpec results={runner.results} />
+        <HarnessSpecColumn results={runner.results} />
       </div>
     </div>
   );
