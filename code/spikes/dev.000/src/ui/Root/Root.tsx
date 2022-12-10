@@ -25,6 +25,9 @@ export const Root: React.FC<RootProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div>{Pkg.toString()}</div>
       <div>{`🐷 <Root>`}</div>
+      <div>
+        <a href="?dev">?dev</a>
+      </div>
     </div>
   );
 };
