@@ -1,5 +1,5 @@
 import { t, COLORS } from '../common';
-import { SpecList } from '../SpecList';
+import { SpecList } from '../Entry.SpecList';
 import { Harness } from '../Harness';
 
 const KEY = {
