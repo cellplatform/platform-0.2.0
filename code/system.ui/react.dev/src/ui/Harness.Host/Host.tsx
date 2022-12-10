@@ -1,6 +1,6 @@
 import { Color, COLORS, css, t } from '../common';
-import { HarnessHostComponent } from './Harness.Host.Component';
-import { HarnessHostGrid } from './Harness.Host.Grid';
+import { HarnessHostComponent } from './Host.Component';
+import { HarnessHostGrid } from './Host.Grid';
 
 export type HarnessHostProps = {
   renderProps?: t.SpecRenderProps;
