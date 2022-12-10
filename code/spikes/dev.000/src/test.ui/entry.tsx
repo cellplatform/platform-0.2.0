@@ -2,10 +2,7 @@ import 'symbol-observable';
 
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
-
-export const Specs = {
-  'ui.Root': () => import('../ui/Root/Root.SPEC'),
-};
+import { Specs } from './entry.Specs.mjs';
 
 const url = new URL(location.href);
 const params = url.searchParams;
@@ -23,7 +20,7 @@ const isDev = params.has('dev') || params.has('d');
     const el = await Dev.render(Pkg, Specs);
     root.render(el);
   } else {
-    const { Root } = await import('../ui/Root');
-    root.render(<Root />);
+    const { RootFill } = await import('../ui/Root');
+    root.render(<RootFill />);
   }
 })();
