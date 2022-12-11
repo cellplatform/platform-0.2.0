@@ -1,18 +1,20 @@
 import { createGunzip } from 'zlib';
 import { Color, COLORS, css, t, rx, FC } from '../common';
+import { SpecColumnMain } from './Column.Main';
 
 export type HarnessSpecColumnProps = {
   results?: t.TestSuiteRunResponse;
+  renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
-  const { results } = props;
+  const { results, renderArgs } = props;
 
   const desc = results?.description;
   const title = desc ? `🐷 Spec: ${desc}` : 'Spec';
 
-  const print = () => {
+  const tmpPrint = () => {
     console.info(`Spec (Results Data):`, results);
   };
 
@@ -28,19 +30,12 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
     body: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
-    pre: css({
-      fontSize: 12,
-    }),
   };
-
-  const json = props.results ? JSON.stringify(props.results, null, '..') : '';
-  const elPre = json && <pre {...styles.pre}>{json}</pre>;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.body} onClick={print}>
-        <div>{title}</div>
-        <div>{elPre}</div>
+      <div {...styles.body} onClick={tmpPrint}>
+        <SpecColumnMain results={results} renderArgs={renderArgs} />
       </div>
     </div>
   );

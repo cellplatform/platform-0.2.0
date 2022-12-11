@@ -14,9 +14,9 @@ export const SpecContext = {
     const _args: t.SpecRenderArgs = {
       instance: { id: slug() },
       rerun$: rerun$.pipe(takeUntil(dispose$)),
-      component: {},
       host: {},
-      debug: {},
+      component: {},
+      debug: { main: { elements: [] } },
     };
 
     const component: t.SpecCtxComponent = {
@@ -58,7 +58,12 @@ export const SpecContext = {
       },
     };
 
-    const debug: t.SpecCtxDebug = {};
+    const debug: t.SpecCtxDebug = {
+      TEMP(el) {
+        _args.debug.main.elements.push(el);
+        return debug;
+      },
+    };
 
     const ctx: t.SpecCtx = {
       component,
@@ -69,8 +74,8 @@ export const SpecContext = {
       },
       toObject() {
         return {
-          component: { ..._args.component },
           host: { ..._args.host },
+          component: { ..._args.component },
           debug: { ..._args.debug },
         };
       },
@@ -80,7 +85,7 @@ export const SpecContext = {
       dispose,
       ctx,
       get args() {
-        return { ..._args };
+        return _args;
       },
     };
   },

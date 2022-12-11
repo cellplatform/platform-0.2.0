@@ -11,6 +11,8 @@ export type HarnessProps = {
 export const Harness: React.FC<HarnessProps> = (props) => {
   const runner = useSpecRunner(props.spec);
 
+  console.log('runner.results', runner.results);
+
   /**
    * [Render]
    */
@@ -45,7 +47,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
         <HarnessHost renderArgs={runner.args} />
       </div>
       <div {...styles.right}>
-        <HarnessSpecColumn results={runner.results} />
+        <HarnessSpecColumn results={runner.results} renderArgs={runner.args} />
       </div>
     </div>
   );

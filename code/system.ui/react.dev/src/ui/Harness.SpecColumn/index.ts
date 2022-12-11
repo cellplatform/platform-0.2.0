@@ -1,1 +1,1 @@
-export * from './SpecColumn';
+export * from './Column';

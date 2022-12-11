@@ -1,0 +1,46 @@
+import { useEffect, useRef, useState } from 'react';
+import { Color, COLORS, css, t, rx } from '../common';
+
+export type SpecColumnMainProps = {
+  results?: t.TestSuiteRunResponse;
+  renderArgs?: t.SpecRenderArgs;
+  style?: t.CssValue;
+};
+
+let _count = 0;
+
+export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
+  const { renderArgs } = props;
+  _count++;
+
+  /**
+   * [Render]
+   */
+  const styles = {
+    base: css({
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+    }),
+    item: css({
+      position: 'relative',
+    }),
+  };
+
+  const list = renderArgs?.debug.main.elements ?? [];
+
+  console.log('list', list);
+
+  const elList = list.filter(Boolean).map((el, i) => {
+    return (
+      <div key={i} {...styles.item}>
+        {el}
+        <div>count: {_count}</div>
+      </div>
+    );
+  });
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div>{elList}</div>
+    </div>
+  );
+};

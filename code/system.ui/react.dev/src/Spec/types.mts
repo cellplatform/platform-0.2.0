@@ -9,10 +9,10 @@ export type SpecPropDisplay = 'flex' | 'grid' | undefined;
  * Context API.
  */
 export type SpecCtx = {
-  rerun(): void;
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
   readonly debug: SpecCtxDebug;
+  rerun(): void;
   toObject(): SpecCtxObject;
 };
 
@@ -34,7 +34,9 @@ export type SpecCtxHost = {
   backgroundColor(value?: Color): SpecCtxHost;
 };
 
-export type SpecCtxDebug = {};
+export type SpecCtxDebug = {
+  TEMP(el: JSX.Element): SpecCtxDebug;
+};
 
 /**
  * Rendering Argument State
@@ -48,8 +50,8 @@ export type SpecRenderArgs = {
 };
 
 export type SpecRenderArgsComponent = {
-  size?: SpecRenderSize;
   element?: JSX.Element;
+  size?: SpecRenderSize;
   display?: t.SpecPropDisplay;
   backgroundColor?: Color;
 };
@@ -58,7 +60,9 @@ export type SpecRenderArgsHost = {
   backgroundColor?: Color;
 };
 
-export type SpecRenderArgsDebug = {};
+export type SpecRenderArgsDebug = {
+  main: { elements: JSX.Element[] };
+};
 
 export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;
 export type SpecRenderSizeCenter = {

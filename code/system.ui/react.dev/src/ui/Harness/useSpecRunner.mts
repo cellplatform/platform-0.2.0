@@ -7,7 +7,6 @@ export function useSpecRunner(bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();
   const [results, setResults] = useState<t.TestSuiteRunResponse>();
   const [args, setArgs] = useState<t.SpecRenderArgs | undefined>();
-
   const id = spec?.id;
 
   /**
