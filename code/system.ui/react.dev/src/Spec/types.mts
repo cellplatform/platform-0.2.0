@@ -22,11 +22,16 @@ export type SpecRenderArgs = {
   instance: { id: string };
   rerun$: t.Observable<void>;
 
-  size?: SpecRenderSize;
-  element?: JSX.Element;
-  display?: t.SpecPropDisplay;
-  backgroundColor?: Color;
-  backdropColor?: Color;
+  component: {
+    size?: SpecRenderSize;
+    element?: JSX.Element;
+    display?: t.SpecPropDisplay;
+    backgroundColor?: Color;
+  };
+
+  host: {
+    backgroundColor?: Color;
+  };
 };
 
 export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;

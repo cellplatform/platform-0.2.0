@@ -11,8 +11,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const { renderArgs } = props;
   if (!renderArgs) return null;
 
-  const { size } = renderArgs;
-  const componentSize = Wrangle.componentSize(size);
+  const componentSize = Wrangle.componentSize(renderArgs.component.size);
 
   /**
    * [Render]
@@ -29,16 +28,16 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       pointerEvents: 'auto',
       userSelect: 'auto',
 
-      display: renderArgs.display,
+      display: renderArgs.component.display,
       width: componentSize.width,
       height: componentSize.height,
-      backgroundColor: Color.format(renderArgs.backgroundColor),
+      backgroundColor: Color.format(renderArgs.component.backgroundColor),
     }),
   };
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderArgs.element}
+        {renderArgs.component.element}
       </div>
     </div>
   );

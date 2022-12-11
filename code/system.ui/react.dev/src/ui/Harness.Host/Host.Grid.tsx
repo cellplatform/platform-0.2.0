@@ -13,7 +13,7 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
 
   if (!renderArgs) return null;
 
-  const { size } = renderArgs;
+  const { size } = renderArgs.component;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 

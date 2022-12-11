@@ -24,9 +24,9 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       pointerEvents: 'none',
       userSelect: 'none',
       backgroundColor:
-        renderArgs.backdropColor === undefined
+        renderArgs.host.backgroundColor === undefined
           ? Color.alpha(COLORS.DARK, 0.02)
-          : Color.format(renderArgs.backdropColor),
+          : Color.format(renderArgs.host.backgroundColor),
     }),
   };
 
