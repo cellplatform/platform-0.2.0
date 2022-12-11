@@ -18,10 +18,10 @@ export const SpecContext = {
       host: {},
     };
 
-    const ctx: t.SpecCtx = {
+    const component: t.SpecCtxComponent = {
       render(el) {
         _args.component.element = el;
-        return ctx;
+        return component;
       },
 
       size(...args) {
@@ -38,24 +38,29 @@ export const SpecContext = {
           if (args[0] === 'fill-y') _args.component.size.x = false;
         }
 
-        return ctx;
+        return component;
       },
       display(value) {
         _args.component.display = value;
-        return ctx;
+        return component;
       },
       backgroundColor(value) {
         _args.component.backgroundColor = value;
-        return ctx;
+        return component;
       },
-      backdropColor(color) {
-        _args.host.backgroundColor = color;
-        return ctx;
-      },
+    };
 
-      rerun() {
-        rerun$.next();
+    const host: t.SpecCtxHost = {
+      backgroundColor(color) {
+        _args.host.backgroundColor = color;
+        return host;
       },
+    };
+
+    const ctx: t.SpecCtx = {
+      component,
+      host,
+      rerun: () => rerun$.next(),
     };
 
     return {

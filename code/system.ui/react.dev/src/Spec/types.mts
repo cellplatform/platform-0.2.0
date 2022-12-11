@@ -3,20 +3,25 @@ import * as t from '../common/types.mjs';
 type Color = string | number;
 
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
+export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
 export type SpecCtx = {
-  display(value: SpecPropDisplay): SpecCtx;
-  backgroundColor(value: Color): SpecCtx;
-  backdropColor(value: Color): SpecCtx;
-
-  size(width: number | undefined, height: number | undefined): SpecCtx;
-  size(mode: SpecFillMode, margin?: t.MarginInput): SpecCtx;
-
-  render(el: JSX.Element | undefined): SpecCtx;
   rerun(): void;
+  readonly component: SpecCtxComponent;
+  readonly host: SpecCtxHost;
 };
 
-export type SpecPropDisplay = 'flex' | 'grid' | undefined;
+export type SpecCtxComponent = {
+  render(el: JSX.Element | undefined): SpecCtxComponent;
+  display(value: SpecPropDisplay): SpecCtxComponent;
+  backgroundColor(value?: Color): SpecCtxComponent;
+  size(width: number | undefined, height: number | undefined): SpecCtxComponent;
+  size(mode: SpecFillMode, margin?: t.MarginInput): SpecCtxComponent;
+};
+
+export type SpecCtxHost = {
+  backgroundColor(value?: Color): SpecCtxHost;
+};
 
 export type SpecRenderArgs = {
   instance: { id: string };
