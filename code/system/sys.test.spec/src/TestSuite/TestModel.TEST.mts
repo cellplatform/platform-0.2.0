@@ -119,7 +119,20 @@ describe('TestModel', () => {
       expect(res.error).to.eql(undefined);
     });
 
-    it('with context (e.ctx)', async () => {
+    it('handler params: (e)', async () => {
+      const args: t.TestHandlerArgs[] = [];
+      const handler: t.TestHandler = (e) => args.push(e);
+      const test = TestModel({ parent, description, handler });
+
+      await test.run();
+
+      expect(args.length).to.eql(1);
+      expect(args[0].id).to.eql(test.id);
+      expect(args[0].ctx).to.eql(undefined);
+      expect(typeof args[0].timeout).to.eql('function');
+    });
+
+    it('with handler params: context (e.ctx)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const handler: t.TestHandler = (e) => args.push(e);
       const test = TestModel({ parent, description, handler });
@@ -128,6 +141,7 @@ describe('TestModel', () => {
       await test.run(); // NB: no context.
       await test.run({ ctx });
 
+      expect(args.length).to.eql(2);
       expect(args[0].ctx).to.eql(undefined);
       expect(args[1].ctx).to.eql(ctx);
     });

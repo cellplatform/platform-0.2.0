@@ -279,7 +279,7 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
-    it('with context {ctx}', async () => {
+    it('with handler params: context (e.ctx)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => args.push(e));
@@ -289,6 +289,7 @@ describe('TestSuiteModel', () => {
       await root.run(); // NB: no context.
       await root.run({ ctx });
 
+      expect(args.length).to.eql(2);
       expect(args[0].ctx).to.eql(undefined);
       expect(args[1].ctx).to.eql(ctx);
     });

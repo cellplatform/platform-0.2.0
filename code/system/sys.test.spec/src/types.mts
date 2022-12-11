@@ -43,6 +43,7 @@ export type TestSuiteItDef = (description: Description, handler?: TestHandler) =
 export type TestSuiteHandler = (e: TestSuite) => Anything | Promise<Anything>;
 export type TestHandler = (e: TestHandlerArgs) => Anything | Promise<Anything>;
 export type TestHandlerArgs = {
+  id: Id;
   timeout(value: Milliseconds): TestHandlerArgs;
   ctx?: Ctx;
 };
