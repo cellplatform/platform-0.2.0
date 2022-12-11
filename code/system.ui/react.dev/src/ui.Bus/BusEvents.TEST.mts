@@ -1,4 +1,4 @@
-import { DevBus } from './index.mjs';
+import { DevBus } from '.';
 import { describe, it, expect, Pkg, rx, slug } from '../test';
 
 describe('MyBus', (e) => {

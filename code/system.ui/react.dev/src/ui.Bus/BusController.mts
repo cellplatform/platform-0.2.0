@@ -1,4 +1,4 @@
-import { DevBusEvents } from './BusEvents.mjs';
+import { BusEvents } from './BusEvents.mjs';
 import { Pkg, rx, t } from './common';
 
 type Id = string;
@@ -6,7 +6,7 @@ type Id = string;
 /**
  * Event controller.
  */
-export function DevBusController(args: {
+export function BusController(args: {
   instance: { bus: t.EventBus<any>; id: Id };
   filter?: (e: t.MyEvent) => boolean;
   dispose$?: t.Observable<any>;
@@ -16,7 +16,7 @@ export function DevBusController(args: {
   const bus = rx.busAsType<t.MyEvent>(args.instance.bus);
   const instance = args.instance.id;
 
-  const events = DevBusEvents({
+  const events = BusEvents({
     instance: args.instance,
     dispose$: args.dispose$,
     filter,

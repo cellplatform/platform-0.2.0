@@ -5,7 +5,7 @@ type Id = string;
 /**
  * Event API.
  */
-export function DevBusEvents(args: {
+export function BusEvents(args: {
   instance: { bus: t.EventBus<any>; id: Id };
   filter?: (e: t.MyEvent) => boolean;
   dispose$?: t.Observable<any>;
@@ -14,7 +14,7 @@ export function DevBusEvents(args: {
 
   const bus = rx.busAsType<t.MyEvent>(args.instance.bus);
   const instance = args.instance.id;
-  const is = DevBusEvents.is;
+  const is = BusEvents.is;
 
   const $ = bus.$.pipe(
     rx.takeUntil(dispose$),
@@ -62,8 +62,7 @@ export function DevBusEvents(args: {
  * Event matching.
  */
 const matcher = (startsWith: string) => (input: any) => rx.isEvent(input, { startsWith });
-DevBusEvents.is = {
+BusEvents.is = {
   base: matcher('sys.dev/'),
-  instance: (e: t.Event, instance: Id) =>
-    DevBusEvents.is.base(e) && e.payload?.instance === instance,
+  instance: (e: t.Event, instance: Id) => BusEvents.is.base(e) && e.payload?.instance === instance,
 };
