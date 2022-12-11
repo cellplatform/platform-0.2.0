@@ -26,7 +26,7 @@ export default Spec.describe('VimeoBackground Player', (e) => {
       />
     );
 
-    ctx.render(el).size(800, 600);
+    ctx.component.render(el).size(800, 600);
   });
 
   e.describe.skip('controls', (e) => {

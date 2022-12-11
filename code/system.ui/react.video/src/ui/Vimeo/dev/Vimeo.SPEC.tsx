@@ -34,7 +34,7 @@ export default Spec.describe('Vimeo Player', (e) => {
       </div>
     );
 
-    ctx.render(el);
+    ctx.component.render(el);
   });
 
   e.describe.skip('controls', (e) => {
