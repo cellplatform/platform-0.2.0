@@ -23,7 +23,7 @@ export function useSpecRunner(bundle?: t.BundleImport) {
       if (spec) {
         const instance = SpecContext.args({ dispose$ });
         const { ctx } = instance;
-        const res = await spec.run({ ctx });
+        const results = await spec.run({ ctx });
 
         const rerun$ = instance.args.rerun$.pipe(takeUntil(dispose$));
         rerun$.subscribe(() => {
@@ -31,7 +31,7 @@ export function useSpecRunner(bundle?: t.BundleImport) {
           run(); // <== RECURSION 🌳
         });
 
-        setResults(res);
+        setResults(results);
         setArgs((prev) => ({
           ...prev,
           ...instance.args,

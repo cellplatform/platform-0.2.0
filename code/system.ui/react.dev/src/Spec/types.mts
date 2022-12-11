@@ -5,10 +5,21 @@ type Color = string | number;
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
+/**
+ * Context API.
+ */
 export type SpecCtx = {
   rerun(): void;
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
+  readonly debug: SpecCtxDebug;
+  toObject(): SpecCtxObject;
+};
+
+export type SpecCtxObject = {
+  component: SpecRenderArgsComponent;
+  host: SpecRenderArgsHost;
+  debug: SpecRenderArgsDebug;
 };
 
 export type SpecCtxComponent = {
@@ -23,21 +34,31 @@ export type SpecCtxHost = {
   backgroundColor(value?: Color): SpecCtxHost;
 };
 
+export type SpecCtxDebug = {};
+
+/**
+ * Rendering Argument State
+ */
 export type SpecRenderArgs = {
   instance: { id: string };
   rerun$: t.Observable<void>;
-
-  component: {
-    size?: SpecRenderSize;
-    element?: JSX.Element;
-    display?: t.SpecPropDisplay;
-    backgroundColor?: Color;
-  };
-
-  host: {
-    backgroundColor?: Color;
-  };
+  component: SpecRenderArgsComponent;
+  host: SpecRenderArgsHost;
+  debug: SpecRenderArgsDebug;
 };
+
+export type SpecRenderArgsComponent = {
+  size?: SpecRenderSize;
+  element?: JSX.Element;
+  display?: t.SpecPropDisplay;
+  backgroundColor?: Color;
+};
+
+export type SpecRenderArgsHost = {
+  backgroundColor?: Color;
+};
+
+export type SpecRenderArgsDebug = {};
 
 export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;
 export type SpecRenderSizeCenter = {

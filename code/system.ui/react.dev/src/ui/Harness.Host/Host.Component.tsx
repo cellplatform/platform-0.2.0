@@ -34,6 +34,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       backgroundColor: Color.format(renderArgs.component.backgroundColor),
     }),
   };
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>

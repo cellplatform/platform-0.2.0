@@ -16,6 +16,7 @@ export const SpecContext = {
       rerun$: rerun$.pipe(takeUntil(dispose$)),
       component: {},
       host: {},
+      debug: {},
     };
 
     const component: t.SpecCtxComponent = {
@@ -57,21 +58,29 @@ export const SpecContext = {
       },
     };
 
+    const debug: t.SpecCtxDebug = {};
+
     const ctx: t.SpecCtx = {
       component,
       host,
-      rerun: () => rerun$.next(),
+      debug,
+      rerun() {
+        rerun$.next();
+      },
+      toObject() {
+        return {
+          component: { ..._args.component },
+          host: { ..._args.host },
+          debug: { ..._args.debug },
+        };
+      },
     };
 
     return {
       dispose,
       ctx,
       get args() {
-        return {
-          ..._args,
-          component: { ..._args.component },
-          host: { ..._args.host },
-        };
+        return { ..._args };
       },
     };
   },
