@@ -8,12 +8,12 @@ type Id = string;
  */
 export function BusController(args: {
   instance: { bus: t.EventBus<any>; id: Id };
-  filter?: (e: t.MyEvent) => boolean;
+  filter?: (e: t.DevEvent) => boolean;
   dispose$?: t.Observable<any>;
-}): t.MyEvents {
+}): t.DevEvents {
   const { filter } = args;
 
-  const bus = rx.busAsType<t.MyEvent>(args.instance.bus);
+  const bus = rx.busAsType<t.DevEvent>(args.instance.bus);
   const instance = args.instance.id;
 
   const events = BusEvents({
@@ -29,7 +29,7 @@ export function BusController(args: {
   events.info.req$.subscribe(async (e) => {
     const { tx } = e;
     const { name = '', version = '' } = Pkg;
-    const info: t.MyInfo = { module: { name, version } };
+    const info: t.DevInfo = { module: { name, version } };
     bus.fire({
       type: 'sys.dev/info:res',
       payload: { tx, instance, info },

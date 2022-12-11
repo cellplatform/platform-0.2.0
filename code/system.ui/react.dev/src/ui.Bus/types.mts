@@ -4,45 +4,45 @@ type Id = string;
 type Milliseconds = number;
 type Semver = string;
 
-export type MyInfo = {
+export type DevInfo = {
   module: { name: string; version: Semver };
 };
 
 /**
  * EVENT (API)
  */
-export type MyEvents = t.Disposable & {
-  $: t.Observable<t.MyEvent>;
+export type DevEvents = t.Disposable & {
+  $: t.Observable<t.DevEvent>;
   instance: { bus: Id; id: Id };
   is: { base(input: any): boolean };
   info: {
-    req$: t.Observable<t.MyInfoReq>;
-    res$: t.Observable<t.MyInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
+    req$: t.Observable<t.DevInfoReq>;
+    res$: t.Observable<t.DevInfoRes>;
+    get(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
   };
 };
 
 /**
  * EVENT (DEFINITIONS)
  */
-export type MyEvent = MyInfoReqEvent | MyInfoResEvent;
+export type DevEvent = DevInfoReqEvent | DevInfoResEvent;
 
 /**
  * Module info.
  */
-export type MyInfoReqEvent = {
+export type DevInfoReqEvent = {
   type: 'sys.dev/info:req';
-  payload: MyInfoReq;
+  payload: DevInfoReq;
 };
-export type MyInfoReq = { tx: string; instance: Id };
+export type DevInfoReq = { tx: string; instance: Id };
 
-export type MyInfoResEvent = {
+export type DevInfoResEvent = {
   type: 'sys.dev/info:res';
-  payload: MyInfoRes;
+  payload: DevInfoRes;
 };
-export type MyInfoRes = {
+export type DevInfoRes = {
   tx: string;
   instance: Id;
-  info?: MyInfo;
+  info?: DevInfo;
   error?: string;
 };

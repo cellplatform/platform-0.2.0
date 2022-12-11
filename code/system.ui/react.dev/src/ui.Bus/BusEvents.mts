@@ -7,12 +7,12 @@ type Id = string;
  */
 export function BusEvents(args: {
   instance: { bus: t.EventBus<any>; id: Id };
-  filter?: (e: t.MyEvent) => boolean;
+  filter?: (e: t.DevEvent) => boolean;
   dispose$?: t.Observable<any>;
-}): t.MyEvents {
+}): t.DevEvents {
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
 
-  const bus = rx.busAsType<t.MyEvent>(args.instance.bus);
+  const bus = rx.busAsType<t.DevEvent>(args.instance.bus);
   const instance = args.instance.id;
   const is = BusEvents.is;
 
@@ -25,15 +25,15 @@ export function BusEvents(args: {
   /**
    * Base information about the module.
    */
-  const info: t.MyEvents['info'] = {
-    req$: rx.payload<t.MyInfoReqEvent>($, 'sys.dev/info:req'),
-    res$: rx.payload<t.MyInfoResEvent>($, 'sys.dev/info:res'),
+  const info: t.DevEvents['info'] = {
+    req$: rx.payload<t.DevInfoReqEvent>($, 'sys.dev/info:req'),
+    res$: rx.payload<t.DevInfoResEvent>($, 'sys.dev/info:res'),
     async get(options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
       const op = 'info';
       const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
-      const first = rx.asPromise.first<t.MyInfoResEvent>(res$, { op, timeout });
+      const first = rx.asPromise.first<t.DevInfoResEvent>(res$, { op, timeout });
 
       bus.fire({
         type: 'sys.dev/info:req',
