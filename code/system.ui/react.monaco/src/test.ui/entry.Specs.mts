@@ -1,3 +1,3 @@
 export const Specs = {
-  'sys.ui.MonacoEditor': () => import('../ui/MonacoEditor/MonacoEditor.SPEC'),
+  'sys.ui.code.MonacoEditor': () => import('../ui/MonacoEditor/MonacoEditor.SPEC'),
 };
