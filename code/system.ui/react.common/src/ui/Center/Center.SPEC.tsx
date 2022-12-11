@@ -20,6 +20,6 @@ export default Spec.describe('Spinner', (e) => {
       </Center>
     );
 
-    ctx.size('fill').display('flex').render(el);
+    ctx.component.size('fill').display('flex').render(el);
   });
 });
