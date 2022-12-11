@@ -24,8 +24,8 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   const styles = {
     base: css({
       flex: 1,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       overflow: 'hidden',
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     body: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
