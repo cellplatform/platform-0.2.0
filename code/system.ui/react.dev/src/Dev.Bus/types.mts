@@ -1,0 +1,48 @@
+import * as t from '../common/types.mjs';
+
+type Id = string;
+type Milliseconds = number;
+type Semver = string;
+
+export type MyInfo = {
+  module: { name: string; version: Semver };
+};
+
+/**
+ * EVENT (API)
+ */
+export type MyEvents = t.Disposable & {
+  $: t.Observable<t.MyEvent>;
+  instance: { bus: Id; id: Id };
+  is: { base(input: any): boolean };
+  info: {
+    req$: t.Observable<t.MyInfoReq>;
+    res$: t.Observable<t.MyInfoRes>;
+    get(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
+  };
+};
+
+/**
+ * EVENT (DEFINITIONS)
+ */
+export type MyEvent = MyInfoReqEvent | MyInfoResEvent;
+
+/**
+ * Module info.
+ */
+export type MyInfoReqEvent = {
+  type: 'sys.dev/info:req';
+  payload: MyInfoReq;
+};
+export type MyInfoReq = { tx: string; instance: Id };
+
+export type MyInfoResEvent = {
+  type: 'sys.dev/info:res';
+  payload: MyInfoRes;
+};
+export type MyInfoRes = {
+  tx: string;
+  instance: Id;
+  info?: MyInfo;
+  error?: string;
+};

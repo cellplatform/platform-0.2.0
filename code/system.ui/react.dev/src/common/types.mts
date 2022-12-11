@@ -6,6 +6,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
+export type { EventBus, Event, Disposable } from 'sys.types';
 export type { CssValue } from 'sys.util.css';
 export type {
   TestSuiteModel,
