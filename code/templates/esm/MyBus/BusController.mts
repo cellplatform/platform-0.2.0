@@ -1,5 +1,5 @@
 import { BusEvents } from './BusEvents.mjs';
-import { Pkg, rx, t } from './common.mjs';
+import { Pkg, rx, t } from './common';
 
 type Id = string;
 

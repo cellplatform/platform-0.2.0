@@ -1,5 +1,5 @@
 import { MyBus } from './index.mjs';
-import { describe, it, expect, Pkg, rx, slug } from '../test/index.mjs';
+import { describe, it, expect, Pkg, rx, slug } from '../test';
 
 describe('MyBus', (e) => {
   const Create = {

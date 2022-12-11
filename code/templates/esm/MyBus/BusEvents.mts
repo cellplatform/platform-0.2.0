@@ -1,4 +1,4 @@
-import { rx, slug, t } from './common.mjs';
+import { rx, slug, t } from './common';
 
 type Id = string;
 
