@@ -6,7 +6,7 @@ import { rx, t, Test, SpecContext } from '../common';
 export function useSpecRunner(bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();
   const [results, setResults] = useState<t.TestSuiteRunResponse>();
-  const [props, setProps] = useState<t.SpecRenderProps | undefined>();
+  const [args, setArgs] = useState<t.SpecRenderArgs | undefined>();
 
   const id = spec?.id;
 
@@ -25,16 +25,16 @@ export function useSpecRunner(bundle?: t.BundleImport) {
         const { ctx } = instance;
         const res = await spec.run({ ctx });
 
-        const rerun$ = instance.props.rerun$.pipe(takeUntil(dispose$));
+        const rerun$ = instance.args.rerun$.pipe(takeUntil(dispose$));
         rerun$.subscribe(() => {
           instance.dispose();
           run(); // <== RECURSION 🌳
         });
 
         setResults(res);
-        setProps((prev) => ({
+        setArgs((prev) => ({
           ...prev,
-          ...instance.props,
+          ...instance.args,
         }));
       }
     };
@@ -50,6 +50,6 @@ export function useSpecRunner(bundle?: t.BundleImport) {
     id,
     spec,
     results,
-    props,
+    args,
   };
 }

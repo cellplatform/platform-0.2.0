@@ -4,16 +4,16 @@ import { Wrangle } from './Wrangle.mjs';
 export type HarnessHostGridProps = {
   children?: JSX.Element;
   border: string;
-  renderProps?: t.SpecRenderProps;
+  renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
-  const { renderProps, border } = props;
+  const { renderArgs, border } = props;
 
-  if (!renderProps) return null;
+  if (!renderArgs) return null;
 
-  const { size } = renderProps;
+  const { size } = renderArgs;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 

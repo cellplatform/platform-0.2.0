@@ -1,6 +1,7 @@
 import * as t from '../common/types.mjs';
 
-type Color = string | number | undefined;
+type Color = string | number;
+
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 
 export type SpecCtx = {
@@ -17,7 +18,7 @@ export type SpecCtx = {
 
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
-export type SpecRenderProps = {
+export type SpecRenderArgs = {
   instance: { id: string };
   rerun$: t.Observable<void>;
 
@@ -29,13 +30,11 @@ export type SpecRenderProps = {
 };
 
 export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;
-
 export type SpecRenderSizeCenter = {
   mode: 'center';
   width?: number;
   height?: number;
 };
-
 export type SpecRenderSizeFill = {
   mode: 'fill';
   x: boolean;

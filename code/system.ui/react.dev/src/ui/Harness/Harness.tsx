@@ -42,7 +42,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
       <div {...styles.left}>
-        <HarnessHost renderProps={runner.props} />
+        <HarnessHost renderArgs={runner.args} />
       </div>
       <div {...styles.right}>
         <HarnessSpecColumn results={runner.results} />
