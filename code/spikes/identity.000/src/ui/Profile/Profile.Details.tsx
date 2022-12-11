@@ -1,10 +1,13 @@
 import { Color, COLORS, css, t, rx } from '../common';
+import { Wrangle } from './Wrangle.mjs';
 
 export type DetailsProps = {
   style?: t.CssValue;
 };
 
 export const Details: React.FC<DetailsProps> = (props) => {
+  const media = Wrangle.mediaFromUrl(location.href);
+
   /**
    * [Render]
    */
@@ -42,7 +45,7 @@ export const Details: React.FC<DetailsProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.titleName}>{'Rowan Yeoman'}</div>
+      <div {...styles.titleName}>{media.name}</div>
       {hr}
       <div {...styles.body}>
         <div {...styles.bodyLeft}>

@@ -1,6 +1,7 @@
 import { Color, COLORS, css, t } from '../common';
 import { Details } from './Profile.Details';
 import { Image } from './Profile.Image';
+import { Wrangle } from './Wrangle.mjs';
 
 export type RootProps = {
   style?: t.CssValue;
