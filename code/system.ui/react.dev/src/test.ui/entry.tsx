@@ -2,9 +2,10 @@ import 'symbol-observable';
 
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
+import { SampleSpecs } from './entry.Specs.mjs';
 
-const Imports = {
-  'sample.MyComponent': () => import('./MySample.SPEC'),
+const Specs = {
+  ...SampleSpecs,
 };
 
 const url = new URL(location.href);
@@ -26,7 +27,7 @@ const isDev = params.has('dev') || params.has('d');
      *    never gets sent in the normal useage payload.
      */
     const { Dev } = await import('../index.mjs');
-    const el = await Dev.render(Pkg, Imports);
+    const el = await Dev.render(Pkg, Specs);
     root.render(el);
   } else {
     const { MySample } = await import('../sample/MySample');
