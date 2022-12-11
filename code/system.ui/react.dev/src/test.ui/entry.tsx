@@ -30,7 +30,7 @@ const isDev = params.has('dev') || params.has('d');
     const el = await Dev.render(Pkg, Specs);
     root.render(el);
   } else {
-    const { MySample } = await import('../sample/MySample');
+    const { MySample } = await import('../test.sample/MySample');
     const el = <MySample style={{ Absolute: 0 }} />;
     root.render(el);
   }

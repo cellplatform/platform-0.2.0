@@ -1,3 +1,3 @@
 export const SampleSpecs = {
-  'sample.MyComponent': () => import('../sample/MySample.SPEC'),
+  'sample.MyComponent': () => import('../test.sample/MySample.SPEC'),
 };
