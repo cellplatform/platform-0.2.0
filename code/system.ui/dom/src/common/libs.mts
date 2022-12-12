@@ -1,1 +1,1 @@
-export { Time } from 'sys.util';
+export { Time, Path } from 'sys.util';
