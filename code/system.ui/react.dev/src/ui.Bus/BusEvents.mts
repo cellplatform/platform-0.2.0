@@ -48,6 +48,34 @@ export function BusEvents(args: {
     },
   };
 
+  /**
+   * Load.
+   */
+  const load: t.DevEvents['load'] = {
+    req$: rx.payload<t.DevLoadReqEvent>($, 'sys.dev/load:req'),
+    res$: rx.payload<t.DevLoadResEvent>($, 'sys.dev/load:res'),
+    async fire(bundle, options = {}) {
+      const { timeout = 3000 } = options;
+      const tx = slug();
+      const op = 'load';
+      const res$ = load.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.DevInfoResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.dev/load:req',
+        payload: { tx, instance, bundle },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      return { tx, instance, error };
+    },
+  };
+
+  const unload: t.DevEvents['unload'] = (options) => load.fire(undefined, options);
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
@@ -55,6 +83,8 @@ export function BusEvents(args: {
     dispose$,
     is,
     info,
+    load,
+    unload,
   };
 }
 

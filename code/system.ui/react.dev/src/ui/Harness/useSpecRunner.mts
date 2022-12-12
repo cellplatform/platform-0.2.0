@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { rx, t, Test, SpecContext } from '../common';
 
-export function useSpecRunner(bundle?: t.BundleImport) {
+export function useSpecRunner(instance: t.DevInstance, bundle?: t.BundleImport) {
   const [spec, setSpec] = useState<t.TestSuiteModel>();
   const [results, setResults] = useState<t.TestSuiteRunResponse>();
   const [args, setArgs] = useState<t.SpecRenderArgs | undefined>();
@@ -20,20 +20,20 @@ export function useSpecRunner(bundle?: t.BundleImport) {
       setSpec(spec);
 
       if (spec) {
-        const instance = SpecContext.args({ dispose$ });
-        const { ctx } = instance;
+        const args = SpecContext.args({ dispose$ });
+        const { ctx } = args;
         const results = await spec.run({ ctx });
 
-        const rerun$ = instance.args.rerun$.pipe(takeUntil(dispose$));
+        const rerun$ = args.args.rerun$.pipe(takeUntil(dispose$));
         rerun$.subscribe(() => {
-          instance.dispose();
+          args.dispose();
           run(); // <== RECURSION 🌳
         });
 
         setResults(results);
         setArgs((prev) => ({
           ...prev,
-          ...instance.args,
+          ...args.args,
         }));
       }
     };
