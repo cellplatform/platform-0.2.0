@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx } from '../common';
 
 export type SpecColumnMainProps = {
+  instance: t.DevInstance;
   results?: t.TestSuiteRunResponse;
   renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
@@ -10,7 +11,7 @@ export type SpecColumnMainProps = {
 let _count = 0;
 
 export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
-  const { renderArgs } = props;
+  const { instance, renderArgs } = props;
   _count++;
 
   /**

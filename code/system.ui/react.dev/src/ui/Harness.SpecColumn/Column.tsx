@@ -3,13 +3,14 @@ import { Color, COLORS, css, t, rx, FC } from '../common';
 import { SpecColumnMain } from './Column.Main';
 
 export type HarnessSpecColumnProps = {
+  instance: t.DevInstance;
   results?: t.TestSuiteRunResponse;
   renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
-  const { results, renderArgs } = props;
+  const { instance, results, renderArgs } = props;
 
   const desc = results?.description;
   const title = desc ? `🐷 Spec: ${desc}` : 'Spec';
@@ -35,7 +36,7 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body} onClick={tmpPrint}>
-        <SpecColumnMain results={results} renderArgs={renderArgs} />
+        <SpecColumnMain instance={instance} results={results} renderArgs={renderArgs} />
       </div>
     </div>
   );

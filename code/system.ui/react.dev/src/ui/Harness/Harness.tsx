@@ -1,19 +1,25 @@
 import { Color, COLORS, css, t } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { HarnessSpecColumn } from '../Harness.SpecColumn';
-import { useSpecRunner } from './useSpecRunner.mjs';
+import { useSpecRunner } from './__useSpecRunner.mjs';
 import { useBusController } from './useBusController.mjs';
 
 export type HarnessProps = {
+  instance?: t.DevInstance;
   spec?: t.BundleImport;
   style?: t.CssValue;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const controller = useBusController({ bundle: props.spec });
+  const controller = useBusController({
+    bundle: props.spec,
+    bus: props.instance?.bus,
+    id: props.instance?.id,
+  });
+
   const runner = useSpecRunner(controller.instance, props.spec);
 
-  const { info } = controller;
+  const { instance, info } = controller;
 
   console.log('info', info);
 
@@ -48,10 +54,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
       <div {...styles.left}>
-        <HarnessHost renderArgs={runner.args} />
+        <HarnessHost instance={instance} renderArgs={runner.args} />
       </div>
       <div {...styles.right}>
-        <HarnessSpecColumn results={runner.results} renderArgs={runner.args} />
+        <HarnessSpecColumn instance={instance} results={runner.results} renderArgs={runner.args} />
       </div>
     </div>
   );

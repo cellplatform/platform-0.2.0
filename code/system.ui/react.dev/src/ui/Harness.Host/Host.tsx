@@ -3,12 +3,13 @@ import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
 export type HarnessHostProps = {
+  instance: t.DevInstance;
   renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
-  const { renderArgs } = props;
+  const { instance, renderArgs } = props;
   if (!renderArgs) return null;
 
   const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
@@ -32,8 +33,8 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <HarnessHostGrid renderArgs={renderArgs} border={cropmark}>
-        <HarnessHostComponent renderArgs={renderArgs} border={cropmark} />
+      <HarnessHostGrid instance={instance} renderArgs={renderArgs} border={cropmark}>
+        <HarnessHostComponent instance={instance} renderArgs={renderArgs} border={cropmark} />
       </HarnessHostGrid>
     </div>
   );

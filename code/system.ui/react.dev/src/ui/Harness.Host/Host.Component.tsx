@@ -2,6 +2,7 @@ import { Color, css, t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type HarnessHostComponentProps = {
+  instance: t.DevInstance;
   border: string;
   renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
