@@ -18,7 +18,7 @@ export type MyEvents = t.Disposable & {
   info: {
     req$: t.Observable<t.MyInfoReq>;
     res$: t.Observable<t.MyInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
   };
 };
 

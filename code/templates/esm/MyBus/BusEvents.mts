@@ -28,7 +28,7 @@ export function BusEvents(args: {
   const info: t.MyEvents['info'] = {
     req$: rx.payload<t.MyInfoReqEvent>($, 'my.namespace/info:req'),
     res$: rx.payload<t.MyInfoResEvent>($, 'my.namespace/info:res'),
-    async get(options = {}) {
+    async fire(options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();
       const op = 'info';

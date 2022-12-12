@@ -35,12 +35,13 @@ describe('MyBus', (e) => {
     it('info', async () => {
       const instance = Create.instance();
       const events = MyBus.Controller({ instance });
-      const res = await events.info.get();
-      events.dispose();
+      const res = await events.info.fire();
 
       expect(res.instance).to.eql(instance.id);
       expect(res.info?.module.name).to.eql(Pkg.name);
       expect(res.info?.module.version).to.eql(Pkg.version);
+
+      events.dispose();
     });
   });
 });
