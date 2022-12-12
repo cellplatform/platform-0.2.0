@@ -6,4 +6,4 @@ export const DEFAULT = {
     const info: t.MyInfo = { module: { name, version } };
     return info;
   },
-};
+} as const;
