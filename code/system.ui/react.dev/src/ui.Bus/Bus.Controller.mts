@@ -1,6 +1,6 @@
-import { BusEvents } from './BusEvents.mjs';
-import { Pkg, rx, t, Test } from './common';
-import { BusMemoryState } from './BusMemoryState.mjs';
+import { BusEvents } from './Bus.Events.mjs';
+import { BusMemoryState } from './Bus.MemoryState.mjs';
+import { rx, t, Test } from './common';
 
 type Id = string;
 

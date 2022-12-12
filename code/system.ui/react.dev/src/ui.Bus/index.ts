@@ -1,7 +1,7 @@
-import { BusEvents as Events } from './BusEvents.mjs';
-import { BusController as Controller } from './BusController.mjs';
+import { BusEvents as Events } from './Bus.Events.mjs';
+import { BusController as Controller } from './Bus.Controller.mjs';
 
-export * from './BusEvents.mjs';
+export * from './Bus.Events.mjs';
 
 export const DevBus = {
   Events,
