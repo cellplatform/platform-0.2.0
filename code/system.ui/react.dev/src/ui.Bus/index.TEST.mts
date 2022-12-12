@@ -38,7 +38,7 @@ describe('MyBus', (e) => {
       it('read', async () => {
         const instance = Create.instance();
         const events = DevBus.Controller({ instance });
-        const res = await events.info.get();
+        const res = await events.info.fire();
         events.dispose();
 
         expect(res.instance).to.eql(instance.id);
@@ -61,7 +61,7 @@ describe('MyBus', (e) => {
         expect(res.info?.root).to.not.eql(undefined);
         expect(res.info?.root).to.eql(root);
 
-        const current = await events.info.get();
+        const current = await events.info.fire();
         expect(current.info?.root).to.eql(root);
 
         expect(fired.length).to.eql(1);
@@ -90,7 +90,7 @@ describe('MyBus', (e) => {
         expect(fired[1].message).to.eql('action:unload');
         expect(fired[1].info.root).to.eql(undefined);
 
-        const info = (await events.info.get()).info;
+        const info = (await events.info.fire()).info;
         expect(info?.root).to.eql(undefined);
 
         events.dispose();
@@ -134,7 +134,7 @@ describe('MyBus', (e) => {
         expect(info1?.run.results).to.not.eql(undefined);
 
         await events.unload.fire();
-        const info2 = (await events.info.get()).info;
+        const info2 = (await events.info.fire()).info;
         expect(info2?.run.count).to.eql(0);
         expect(info2?.run.results).to.eql(undefined);
 

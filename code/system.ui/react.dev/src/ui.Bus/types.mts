@@ -23,7 +23,7 @@ export type DevEvents = t.Disposable & {
     req$: t.Observable<t.DevInfoReq>;
     res$: t.Observable<t.DevInfoRes>;
     changed$: t.Observable<t.DevInfoChanged>;
-    get(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
