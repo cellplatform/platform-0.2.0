@@ -1,5 +1,5 @@
 import { DevBus } from '.';
-import { t, describe, it, expect, Pkg, rx, slug, Test } from '../test';
+import { describe, expect, it, rx, slug, t, Test } from '../test';
 
 const SAMPLE_IMPORT = import('../test.sample/MySample.SPEC');
 

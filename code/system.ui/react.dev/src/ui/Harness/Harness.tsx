@@ -10,8 +10,12 @@ export type HarnessProps = {
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const { instance } = useBusController();
-  const runner = useSpecRunner(instance, props.spec);
+  const controller = useBusController({ bundle: props.spec });
+  const runner = useSpecRunner(controller.instance, props.spec);
+
+  const { info } = controller;
+
+  console.log('info', info);
 
   /**
    * [Render]
