@@ -17,6 +17,7 @@ describe('WrangleUrl', () => {
       const fn = () => WrangleUrl.asUrl(input);
       expect(fn).to.throw(/Invalid URL/);
     };
+
     test('');
     test('.');
     test(undefined);

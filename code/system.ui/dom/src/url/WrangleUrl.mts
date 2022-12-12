@@ -16,8 +16,8 @@ export const WrangleUrl = {
    *    with paths but do not want to setup a whole server-side routing
    *    structure.
    */
-  matchAsPathOrQuery(location: URL | string, ...paths: string[]) {
-    const url = WrangleUrl.asUrl(location);
+  matchAsPathOrQuery(input: URL | string, ...paths: string[]) {
+    const url = WrangleUrl.asUrl(input);
     const params = url.searchParams;
 
     for (const item of paths) {
