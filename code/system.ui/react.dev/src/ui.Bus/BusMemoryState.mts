@@ -2,10 +2,13 @@ import { R, t, Is } from './common';
 
 type Revision = { number: number; message: string };
 
+export type ChangedHandler = (e: ChangedHandlerArgs) => void;
+export type ChangedHandlerArgs = { message: string; info: t.DevInfo };
+
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState() {
+export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
   let _revision: Revision = { number: 0, message: 'initial' };
   let _current: t.DevInfo = {};
 
@@ -36,6 +39,8 @@ export function BusMemoryState() {
       const changedByAnotherProcess = before.number !== _revision.number;
       _current = changedByAnotherProcess ? (R.mergeDeepRight(_current, clone) as t.DevInfo) : clone;
       _revision = { number: before.number + 1, message };
+
+      args.onChanged?.({ message, info: _current });
     },
   };
 

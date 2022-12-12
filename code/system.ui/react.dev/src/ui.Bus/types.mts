@@ -21,6 +21,7 @@ export type DevEvents = t.Disposable & {
   info: {
     req$: t.Observable<t.DevInfoReq>;
     res$: t.Observable<t.DevInfoRes>;
+    changed$: t.Observable<t.DevInfoChanged>;
     get(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
   };
   load: {
@@ -34,7 +35,12 @@ export type DevEvents = t.Disposable & {
 /**
  * EVENT (DEFINITIONS)
  */
-export type DevEvent = DevInfoReqEvent | DevInfoResEvent | DevLoadReqEvent | DevLoadResEvent;
+export type DevEvent =
+  | DevInfoReqEvent
+  | DevInfoResEvent
+  | DevInfoChangedEvent
+  | DevLoadReqEvent
+  | DevLoadResEvent;
 
 /**
  * Module info.
@@ -50,6 +56,12 @@ export type DevInfoResEvent = {
   payload: DevInfoRes;
 };
 export type DevInfoRes = { tx: string; instance: Id; info?: DevInfo; error?: string };
+
+export type DevInfoChangedEvent = {
+  type: 'sys.dev/info:changed';
+  payload: DevInfoChanged;
+};
+export type DevInfoChanged = { instance: Id; info: DevInfo; message: string };
 
 /**
  * Initialize (with Spec)

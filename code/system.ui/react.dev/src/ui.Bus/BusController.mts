@@ -16,7 +16,15 @@ export function BusController(args: {
 
   const bus = rx.busAsType<t.DevEvent>(args.instance.bus);
   const instance = args.instance.id;
-  const state = BusMemoryState();
+  const state = BusMemoryState({
+    onChanged(e) {
+      const { message, info } = e;
+      bus.fire({
+        type: 'sys.dev/info:changed',
+        payload: { instance, message, info },
+      });
+    },
+  });
 
   const events = BusEvents({
     instance: args.instance,
@@ -46,7 +54,8 @@ export function BusController(args: {
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      await state.change('load', (draft) => (draft.root = root));
+      const message = e.bundle ? 'action:load' : 'action:unload';
+      await state.change(message, (draft) => (draft.root = root));
     } catch (err: any) {
       error = err.message;
     }

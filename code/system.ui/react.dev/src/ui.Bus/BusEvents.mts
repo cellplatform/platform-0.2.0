@@ -28,6 +28,7 @@ export function BusEvents(args: {
   const info: t.DevEvents['info'] = {
     req$: rx.payload<t.DevInfoReqEvent>($, 'sys.dev/info:req'),
     res$: rx.payload<t.DevInfoResEvent>($, 'sys.dev/info:res'),
+    changed$: rx.payload<t.DevInfoChangedEvent>($, 'sys.dev/info:changed'),
     async get(options = {}) {
       const { timeout = 3000 } = options;
       const tx = slug();

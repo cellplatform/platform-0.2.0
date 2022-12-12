@@ -1,5 +1,5 @@
 import { DevBus } from '.';
-import { describe, it, expect, Pkg, rx, slug, Test } from '../test';
+import { t, describe, it, expect, Pkg, rx, slug, Test } from '../test';
 
 const SAMPLE_IMPORT = import('../test.sample/MySample.SPEC');
 
@@ -48,6 +48,9 @@ describe('MyBus', (e) => {
       const instance = Create.instance();
       const events = DevBus.Controller({ instance });
 
+      const fired: t.DevInfoChanged[] = [];
+      events.info.changed$.subscribe((e) => fired.push(e));
+
       const res = await events.load.fire(SAMPLE_IMPORT);
       const root = await Test.bundle(SAMPLE_IMPORT);
 
@@ -58,6 +61,10 @@ describe('MyBus', (e) => {
       const current = await events.info.get();
       expect(current.info?.root).to.eql(root);
 
+      expect(fired.length).to.eql(1);
+      expect(fired[0].message).to.eql('action:load');
+      expect(fired[0].info.root).to.eql(current.info?.root);
+
       events.dispose();
     });
 
@@ -65,14 +72,23 @@ describe('MyBus', (e) => {
       const instance = Create.instance();
       const events = DevBus.Controller({ instance });
 
+      const fired: t.DevInfoChanged[] = [];
+      events.info.changed$.subscribe((e) => fired.push(e));
+
       const res1 = await events.load.fire(SAMPLE_IMPORT);
       const root = await Test.bundle(SAMPLE_IMPORT);
       expect(res1.info?.root).to.eql(root);
 
-      await events.unload();
       const res2 = await events.unload();
       expect(res2.info?.root).to.eql(undefined);
       expect((await events.info.get()).info?.root).to.eql(undefined);
+
+      expect(fired.length).to.eql(2);
+      expect(fired[0].message).to.eql('action:load');
+      expect(fired[1].message).to.eql('action:unload');
+      expect(fired[1].info.root).to.eql(undefined);
+
+      events.dispose();
     });
   });
 });
