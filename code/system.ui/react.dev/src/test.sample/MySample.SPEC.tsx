@@ -9,11 +9,11 @@ export default Test.describe('MySample', (e) => {
     _count++;
     const ctx = Spec.ctx(e);
 
-    console.group('🌳 init');
-    console.log('e', e);
-    console.log('e.ctx', e.ctx);
-    console.log('ctx.toObject()', ctx.toObject());
-    console.groupEnd();
+    // console.group('🌳 init');
+    // console.log('e', e);
+    // console.log('e.ctx', e.ctx);
+    // console.log('ctx.toObject()', ctx.toObject());
+    // console.groupEnd();
 
     const el = (
       <MySample
@@ -45,7 +45,7 @@ export default Test.describe('MySample', (e) => {
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
 
-    console.log('it.foo', ctx.toObject());
+    // console.log('it.foo', ctx.toObject());
 
     const el = <div>it-foo: {e.id}</div>;
     ctx.debug.TEMP(el);

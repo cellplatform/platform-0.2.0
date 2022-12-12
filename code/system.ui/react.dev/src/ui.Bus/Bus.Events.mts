@@ -75,7 +75,37 @@ export function BusEvents(args: {
     },
   };
 
-  const unload: t.DevEvents['unload'] = (options) => load.fire(undefined, options);
+  const unload: t.DevEvents['unload'] = {
+    fire(options) {
+      return load.fire(undefined, options);
+    },
+  };
+
+  /**
+   * Run.
+   */
+  const run: t.DevEvents['run'] = {
+    req$: rx.payload<t.DevRunReqEvent>($, 'sys.dev/run:req'),
+    res$: rx.payload<t.DevRunResEvent>($, 'sys.dev/run:res'),
+    async fire(options = {}) {
+      const { timeout = 3000 } = options;
+      const tx = slug();
+      const op = 'run';
+      const res$ = run.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.DevInfoResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.dev/run:req',
+        payload: { tx, instance },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      return { tx, instance, error };
+    },
+  };
 
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
@@ -86,6 +116,7 @@ export function BusEvents(args: {
     info,
     load,
     unload,
+    run,
   };
 }
 

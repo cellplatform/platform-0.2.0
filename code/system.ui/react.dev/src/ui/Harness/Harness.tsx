@@ -15,10 +15,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     bundle: props.spec,
     bus: props.instance?.bus,
     id: props.instance?.id,
+    runOnLoad: true,
   });
 
   const runner = useSpecRunner(controller.instance, props.spec);
-
   const { instance, info } = controller;
 
   console.log('info', info);

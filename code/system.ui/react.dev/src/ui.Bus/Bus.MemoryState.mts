@@ -1,4 +1,5 @@
 import { R, t, Is } from './common';
+import { DEFAULT } from './DEFAULT.mjs';
 
 type Revision = { number: number; message: string };
 
@@ -10,7 +11,7 @@ export type ChangedHandlerArgs = { message: string; info: t.DevInfo };
  */
 export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
   let _revision: Revision = { number: 0, message: 'initial' };
-  let _current: t.DevInfo = {};
+  let _current: t.DevInfo = DEFAULT.INFO;
 
   /**
    * API

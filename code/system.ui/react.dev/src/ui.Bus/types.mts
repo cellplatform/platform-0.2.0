@@ -7,6 +7,7 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 
 export type DevInfo = {
   root?: t.TestSuiteModel;
+  run: { results?: t.TestSuiteRunResponse; count: number };
 };
 
 export type DevStateMutateHandler = (draft: t.DevInfo) => any | Promise<any>;
@@ -29,7 +30,14 @@ export type DevEvents = t.Disposable & {
     res$: t.Observable<t.DevLoadRes>;
     fire(bundle?: t.BundleImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
   };
-  unload(options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
+  unload: {
+    fire(options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
+  };
+  run: {
+    req$: t.Observable<t.DevRunReq>;
+    res$: t.Observable<t.DevRunRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<t.DevRunRes>;
+  };
 };
 
 /**
@@ -40,7 +48,9 @@ export type DevEvent =
   | DevInfoResEvent
   | DevInfoChangedEvent
   | DevLoadReqEvent
-  | DevLoadResEvent;
+  | DevLoadResEvent
+  | DevRunReqEvent
+  | DevRunResEvent;
 
 /**
  * Module info.
@@ -66,7 +76,6 @@ export type DevInfoChanged = { instance: Id; info: DevInfo; message: string };
 /**
  * Initialize (with Spec)
  */
-
 export type DevLoadReqEvent = {
   type: 'sys.dev/load:req';
   payload: DevLoadReq;
@@ -78,3 +87,12 @@ export type DevLoadResEvent = {
   payload: DevLoadRes;
 };
 export type DevLoadRes = { tx: string; instance: Id; info?: t.DevInfo; error?: string };
+
+/**
+ * Run the suite of tests.
+ */
+export type DevRunReqEvent = { type: 'sys.dev/run:req'; payload: DevRunReq };
+export type DevRunReq = { tx: string; instance: Id };
+
+export type DevRunResEvent = { type: 'sys.dev/run:res'; payload: DevRunRes };
+export type DevRunRes = { tx: string; instance: Id; info?: t.DevInfo; error?: string };
