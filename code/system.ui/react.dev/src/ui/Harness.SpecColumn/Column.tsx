@@ -1,21 +1,43 @@
-import { createGunzip } from 'zlib';
-import { Color, COLORS, css, t, rx, FC } from '../common';
+import { useEffect, useState } from 'react';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+import { css, DevBus, FC, t } from '../common';
 import { SpecColumnMain } from './Column.Main';
 
 export type HarnessSpecColumnProps = {
   instance: t.DevInstance;
-  results?: t.TestSuiteRunResponse;
   renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
-  const { instance, results, renderArgs } = props;
+  const { instance, renderArgs } = props;
 
-  const desc = results?.description;
-  const title = desc ? `🐷 Spec: ${desc}` : 'Spec';
+  const [results, setResults] = useState<t.TestSuiteRunResponse>();
 
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    const events = DevBus.Events({ instance });
+    events.info.changed$
+      .pipe(
+        distinctUntilChanged(
+          (prev, next) => prev.info.run.results?.tx === next.info.run.results?.tx,
+        ),
+      )
+      .subscribe((e) => {
+        setResults(e.info.run.results);
+      });
+
+    return () => events.dispose();
+  }, [instance.id]);
+
+  /**
+   * Handlers
+   */
   const tmpPrint = () => {
+    // TEMP 🐷
     console.info(`Spec (Results Data):`, results);
   };
 

@@ -57,7 +57,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
         <HarnessHost instance={instance} renderArgs={runner.args} />
       </div>
       <div {...styles.right}>
-        <HarnessSpecColumn instance={instance} results={runner.results} renderArgs={runner.args} />
+        <HarnessSpecColumn instance={instance} renderArgs={runner.args} />
       </div>
     </div>
   );

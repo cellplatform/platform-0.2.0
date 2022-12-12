@@ -32,9 +32,7 @@ export function useBusController(
      */
     Time.delay(0, async () => {
       await controller.load.fire(options.bundle);
-      if (options.runOnLoad) {
-        controller.run.fire();
-      }
+      if (options.runOnLoad) controller.run.fire();
     });
 
     return () => controller.dispose();
