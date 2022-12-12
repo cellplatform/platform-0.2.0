@@ -1,5 +1,6 @@
-import { BusEvents } from './BusEvents.mjs';
-import { Pkg, rx, t } from './common';
+import { BusEvents } from './Bus.Events.mjs';
+import { rx, t } from './common';
+import { DEFAULT } from './DEFAULT.mjs';
 
 type Id = string;
 
@@ -28,8 +29,7 @@ export function BusController(args: {
    */
   events.info.req$.subscribe(async (e) => {
     const { tx } = e;
-    const { name = '', version = '' } = Pkg;
-    const info: t.MyInfo = { module: { name, version } };
+    const info = DEFAULT.info;
     bus.fire({
       type: 'my.namespace/info:res',
       payload: { tx, instance, info },

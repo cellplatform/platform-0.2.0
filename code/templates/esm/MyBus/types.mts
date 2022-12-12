@@ -8,6 +8,8 @@ export type MyInfo = {
   module: { name: string; version: Semver };
 };
 
+export type MyStateMutateHandler = (draft: t.MyInfo) => any | Promise<any>;
+
 /**
  * EVENT (API)
  */
