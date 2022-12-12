@@ -1,4 +1,4 @@
-import { t, R } from './common';
+import { t } from './common';
 
 export const DEFAULT = {
   get INFO(): t.DevInfo {

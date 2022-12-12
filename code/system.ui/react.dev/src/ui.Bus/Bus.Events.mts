@@ -47,6 +47,13 @@ export function BusEvents(args: {
       const error = res.error?.message ?? 'Failed';
       return { tx, instance, error };
     },
+
+    async get(options) {
+      const res = await info.fire(options);
+      if (res.error) throw new Error(res.error);
+      if (!res.info) throw new Error(`Dev info status not available`);
+      return res.info;
+    },
   };
 
   /**
