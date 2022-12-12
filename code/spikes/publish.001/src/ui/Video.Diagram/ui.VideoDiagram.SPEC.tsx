@@ -7,6 +7,6 @@ export default Spec.describe('VideoDiagram', (e) => {
 
     const ctx = Spec.ctx(e);
     const el = <VideoDiagram instance={env.instance} style={{ Absolute: 0 }} />;
-    ctx.size('fill').render(el);
+    ctx.component.size('fill').render(el);
   });
 });

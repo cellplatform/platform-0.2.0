@@ -6,6 +6,6 @@ export default Spec.describe('Root', (e) => {
     const ctx = Spec.ctx(e);
 
     const el = <Root />;
-    ctx.render(el).size('fill');
+    ctx.component.render(el).size('fill');
   });
 });

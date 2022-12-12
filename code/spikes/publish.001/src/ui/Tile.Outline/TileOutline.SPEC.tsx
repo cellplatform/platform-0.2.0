@@ -50,6 +50,6 @@ export default Spec.describe('Spinner', (e) => {
       />
     );
 
-    ctx.render(el);
+    ctx.component.render(el);
   });
 });

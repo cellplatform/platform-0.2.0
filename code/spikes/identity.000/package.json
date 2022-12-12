@@ -22,8 +22,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.5ee2cb14.js",
-    "./web": "./dist/web/lib/index.5ee2cb14.js"
+    ".": "./dist/web/lib/index.e8f078df.js",
+    "./web": "./dist/web/lib/index.e8f078df.js"
   },
   "typesVersions": {
     "*": {
