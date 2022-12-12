@@ -279,6 +279,20 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
+    it('unique "tx" identifier for each suite run operation', async () => {
+      let count = 0;
+      const root = Test.describe('root', (e) => {
+        e.it('foo', () => count++);
+      });
+
+      const res1 = await root.run();
+      const res2 = await root.run();
+
+      expect(res1.tx.length).to.greaterThan(0);
+      expect(res1.id).to.eql(res2.id); // NB: The same suite being run.
+      expect(res1.tx).to.not.eql(res2.tx); // NB: Run response ID differs.
+    });
+
     it('with handler params: context (e.ctx)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const root = Test.describe('root', (e) => {

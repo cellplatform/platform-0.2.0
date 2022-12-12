@@ -71,6 +71,7 @@ export type TestRunOptions = {
 };
 export type TestRunResponse = {
   id: Id;
+  tx: Id; // Unique ID for the individual test run operation.
   ok: boolean;
   description: Description;
   elapsed: Milliseconds;
@@ -112,6 +113,7 @@ export type TestSuiteRunOptions = {
 };
 export type TestSuiteRunResponse = {
   id: Id;
+  tx: Id; // Unique ID for the individual suite run operation.
   ok: boolean;
   description: Description;
   elapsed: Milliseconds;

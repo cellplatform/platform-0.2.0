@@ -49,7 +49,8 @@ export const TestSuiteModel = (args: {
 
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
-      const res: R = { id, ok: true, description, elapsed: -1, tests: [], children: [] };
+      const tx = `run-${slug()}`;
+      const res: R = { id, tx, ok: true, description, elapsed: -1, tests: [], children: [] };
 
       await init(model);
       const tests = model.state.tests;

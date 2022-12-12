@@ -119,6 +119,19 @@ describe('TestModel', () => {
       expect(res.error).to.eql(undefined);
     });
 
+    it('unique "tx" identifier for each test run operation', async () => {
+      let count = 0;
+      const handler: t.TestHandler = () => count++;
+      const test = TestModel({ parent, description, handler });
+
+      const res1 = await test.run();
+      const res2 = await test.run();
+
+      expect(res1.tx.length).to.greaterThan(0);
+      expect(res1.id).to.eql(res2.id); // NB: The same test being run.
+      expect(res1.tx).to.not.eql(res2.tx); // NB: Run response ID differs.
+    });
+
     it('handler params: (e)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const handler: t.TestHandler = (e) => args.push(e);

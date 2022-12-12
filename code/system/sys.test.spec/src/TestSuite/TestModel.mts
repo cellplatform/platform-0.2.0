@@ -16,11 +16,13 @@ export const TestModel = (args: {
     type R = t.TestRunResponse;
 
     return new Promise<R>(async (resolve) => {
+      const tx = `run-${slug()}`;
       const timer = Time.timer();
       const excluded = toExcluded({ modifier, excluded: options.excluded });
 
       const response: R = {
         id,
+        tx,
         ok: true,
         description,
         elapsed: -1,
