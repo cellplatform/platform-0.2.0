@@ -6,35 +6,22 @@ import { DevBus } from '../ui.Bus';
 let _count = 0;
 
 export default Spec.describe('MySample', (e) => {
+  console.log('e', e);
+
   e.it('init', async (e) => {
     _count++;
     const ctx = Spec.ctx(e);
-
-    // console.group('🌳 init');
-    // console.log('e', e);
-    // console.log('e.ctx', e.ctx);
-    // console.log('ctx.toObject()', ctx.toObject());
-    // console.groupEnd();
-
-    // console.log('ctx', ctx);
+    const instance = ctx.toObject().instance;
 
     const el = (
       <MySample
         text={`MySample-${_count}`}
         style={{ flex: 1 }}
         onClick={() => {
-          // ctx.component.size(50, 500);
-          // console.log('ctx.toObject()', ctx.toObject());
-
-          // const events = setInfo(e.info)
-          // console.log('ctx', ctx);
-          // console.log('e', e);
-          // console.log('e.ctx.toObject()', ctx.toObject());
-
-          const instance = ctx.toObject().instance;
-          const events = DevBus.Events({ instance });
-          events.run.fire();
-          events.dispose();
+          DevBus.withEvents(instance, (events) => {
+            // TEMP 🐷
+            events.run.fire();
+          });
         }}
       />
     );
@@ -53,12 +40,13 @@ export default Spec.describe('MySample', (e) => {
 
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
+    const instance = ctx.toObject().instance;
 
     const styles = {
       base: css({
         // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
         border: `solid 1px ${Color.format(-0.3)}`,
-        borderRadius: 12,
+        borderRadius: 5,
         padding: 20,
         margin: 5,
       }),
@@ -68,7 +56,23 @@ export default Spec.describe('MySample', (e) => {
     // console.log('o', o);
     // const { width, height } = o.component.size;
 
-    const el = <div {...styles.base}>from foo: {e.id}</div>;
+    const el = (
+      <div
+        {...styles.base}
+        onClick={() => {
+          //
+
+          console.log('e', e);
+
+          console.log('foo', 123);
+          DevBus.withEvents(instance, (events) => {
+            events.run.fire();
+          });
+        }}
+      >
+        {`Hello Foo!`}
+      </div>
+    );
     ctx.debug.TEMP(el);
   });
 });

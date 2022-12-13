@@ -14,17 +14,6 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   const renderProps = current.info?.run.props;
 
   /**
-   * [Handlers]
-   */
-  const tmpPrint = () => {
-    // TEMP 🐷
-    console.info(`Info (Run Results):`, results);
-    console.log('results.tests', results?.tests);
-  };
-
-  console.log('results', results);
-
-  /**
    * [Render]
    */
   const styles = {
@@ -40,7 +29,7 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.body} onClick={tmpPrint}>
+      <div {...styles.body}>
         <SpecColumnMain results={results} renderProps={renderProps} />
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { Margin, rx, slug, t } from '../common';
+import { Margin, slug, t } from '../common';
+import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
 
 /**
  * Information object passed as the {ctx} to tests.
@@ -9,7 +10,8 @@ export const SpecContext = {
    */
   create(args: { instance: t.DevInstance; dispose$?: t.Observable<any> }) {
     const { instance } = args;
-    const { dispose } = rx.disposable(args.dispose$);
+    const events = BusEvents({ instance, dispose$: args.dispose$ });
+    const { dispose } = events;
 
     const _props: t.SpecRenderProps = {
       id: `render.${slug()}`,
