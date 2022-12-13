@@ -22,8 +22,13 @@ export async function pushToVercel(args: {
     name: `brand.tribe.v${Pkg.version}`,
     source,
     team: 'tdb',
-    project: 'trailtribe',
-    alias: 'trailtribe.nz',
+
+    project: 'tdb-design',
+    alias: 'd.db.team',
+
+    // project: 'trailtribe', // SAMPLE BRAND
+    // alias: 'trailtribe.nz',
+
     ensureProject: true,
     regions: ['sfo1'],
     target: 'production', // NB: required to be "production" for the DNS alias to be applied.
@@ -33,8 +38,8 @@ export async function pushToVercel(args: {
       cleanUrls: true,
       trailingSlash: true,
       rewrites: [
-        { source: '/brand/', destination: '/' },
-        { source: '/brand/lib/:path', destination: '/lib/:path' },
+        { source: '/:section/', destination: '/' },
+        { source: '/:section/lib/:path', destination: '/lib/:path' },
       ],
     },
   });
