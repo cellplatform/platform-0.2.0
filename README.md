@@ -176,7 +176,7 @@ Organizing for this is expressed within the distinct folders `/system/` and `/sy
 
 #### Evolving Architectural Strategy
 
-This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
+This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking a way as possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long-term time runway, where the "idea" itself remains consistent, but the implementation
 choices can be swapped out and evolved over time.  This is the ideal at least; `AND` "reality is a bitch!" and engineering tends to throw up "hard problems" on a consistent basis.  Yet, "evolution" is a messy thing, and we find spontaneosly emerging self-cleaning, self-maintaing ecosystems right across nature - so this is a feature of reality that can be coaxed (encouraged) into stable existence.
