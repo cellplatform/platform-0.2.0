@@ -7,13 +7,12 @@ export type BrandLayoutProps = {
 };
 
 export const BrandLayout: React.FC<BrandLayoutProps> = (props) => {
-  const GAP = 60;
-
   const media = SAMPLE_DATA.tempDeriveMedia();
 
   /**
    * [Render]
    */
+  const GAP = 80;
   const styles = {
     base: css({
       Absolute: 0,

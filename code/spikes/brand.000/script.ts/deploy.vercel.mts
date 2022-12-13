@@ -2,10 +2,23 @@ import { Vercel } from 'cloud.vercel';
 import pc from 'picocolors';
 import { rx } from 'sys.util';
 
+import dotenv from 'dotenv';
+
 import { t } from '../src/common';
 import { Pkg } from '../src/index.pkg.mjs';
 
-const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
+dotenv.config();
+
+type DOTENV = {
+  VERCEL_TEST_TOKEN: string;
+  DEPLOY_PROJECT: string;
+  DEPLOY_ALIAS: string;
+};
+const env = process.env as DOTENV;
+
+const token = env.VERCEL_TEST_TOKEN; // Secure API token (secret).
+const project = env.DEPLOY_PROJECT;
+const alias = env.DEPLOY_ALIAS;
 
 export async function pushToVercel(args: {
   fs: t.Fs;
@@ -23,11 +36,8 @@ export async function pushToVercel(args: {
     source,
     team: 'tdb',
 
-    project: 'tdb-design',
-    alias: 'd.db.team',
-
-    // project: 'trailtribe', // SAMPLE BRAND
-    // alias: 'trailtribe.nz',
+    project,
+    alias,
 
     ensureProject: true,
     regions: ['sfo1'],
