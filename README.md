@@ -90,13 +90,13 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 ---
 
-References (conceptual context, history):
+Conceptual context, design history:
 
 - [video](https://www.youtube.com/watch?v=Ud8WRAdihPg) Alan Kay, Learning and Computer Science, 1970s, [video](https://www.youtube.com/watch?v=YyIQKBzIuBY) Alan Kay, 2011, Programming and Scaling
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
   "But what's interesting, is once the engineers got a hold, the visionaries went away ([timestamp](https://www.youtube.com/watch?v=cmi-AXKvx30&t=253s))"
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersection of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
-- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only two primitive (concepts). Everything is an object*, everything is a message, be as extremely late-bound as possible. Build everything else out of that (LISP-ey).
+- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a message, be as extremely late-bound as possible. Build everything else out of that (LISP-ey).
 
 
 *NB: "object" meaning the SmallTalk original concept of "object," not the later "OOP" conceptions ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
