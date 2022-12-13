@@ -20,12 +20,9 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
    */
   useEffect(() => {
     const events = DevBus.Events({ instance });
+    const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;
     events.info.changed$
-      .pipe(
-        distinctUntilChanged(
-          (prev, next) => prev.info.run.results?.tx === next.info.run.results?.tx,
-        ),
-      )
+      .pipe(distinctUntilChanged((prev, next) => tx(prev) === tx(next)))
       .subscribe((e) => {
         setResults(e.info.run.results);
       });

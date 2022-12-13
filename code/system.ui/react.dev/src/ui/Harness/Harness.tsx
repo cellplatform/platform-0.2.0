@@ -2,7 +2,7 @@ import { Color, COLORS, css, t } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { HarnessSpecColumn } from '../Harness.SpecColumn';
 import { useSpecRunner } from './__useSpecRunner.mjs';
-import { useBusController } from './useBusController.mjs';
+import { useBusController } from '../../ui.Bus.hooks';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
@@ -19,9 +19,11 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   });
 
   const runner = useSpecRunner(controller.instance, props.spec);
-  const { instance, info } = controller;
+  const { instance } = controller;
 
-  console.log('info', info);
+  console.log('-------------------------------------------');
+  console.log('info', controller.info);
+  console.log('runner.args', runner.args);
 
   /**
    * [Render]

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { filter } from 'rxjs/operators';
 
-import { DevBus } from '../../ui.Bus';
-import { rx, slug, t, Time, R } from '../common';
+import { DevBus } from '../ui.Bus';
+import { rx, slug, t, Time } from '../common';
 
 type Id = string;
 
@@ -16,7 +16,6 @@ export function useBusController(
   const bus = options.bus ?? useRef(rx.bus()).current;
   const instance = { bus, id };
   const busid = rx.bus.instance(bus);
-  const hasBundle = Boolean(options.bundle);
 
   const [info, setInfo] = useState<t.DevInfo>(DevBus.DEFAULT.INFO);
 
@@ -36,7 +35,7 @@ export function useBusController(
     });
 
     return () => controller.dispose();
-  }, [id, busid, hasBundle]);
+  }, [id, busid, Boolean(options.bundle)]);
 
   /**
    * API
