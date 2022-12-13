@@ -79,7 +79,7 @@ describe('DevBus', (e) => {
         expect(current.root).to.eql(root);
 
         expect(fired.length).to.eql(1);
-        expect(fired[0].message).to.eql('action:load');
+        expect(fired[0].message).to.eql('spec:load');
         expect(fired[0].info.root).to.eql(current.root);
 
         events.dispose();
@@ -100,8 +100,8 @@ describe('DevBus', (e) => {
         expect(res2.info?.root).to.eql(undefined);
 
         expect(fired.length).to.eql(2);
-        expect(fired[0].message).to.eql('action:load');
-        expect(fired[1].message).to.eql('action:unload');
+        expect(fired[0].message).to.eql('spec:load');
+        expect(fired[1].message).to.eql('spec:unload');
         expect(fired[1].info.root).to.eql(undefined);
 
         const info = await events.info.get();
@@ -119,10 +119,15 @@ describe('DevBus', (e) => {
 
         const info1 = (await events.run.fire()).info;
         const info2 = (await events.run.fire()).info;
+        const info3 = (await events.run.fire()).info;
 
         expect(info1?.run.count).to.eql(1);
         expect(info2?.run.count).to.eql(2);
-        expect(info2?.run.results?.description).to.eql('MySample');
+        expect(info3?.run.count).to.eql(3);
+
+        const run = info3?.run;
+        expect(run?.results?.description).to.eql('MySample');
+        expect(run?.args?.component.backgroundColor).to.eql(1);
 
         events.dispose();
       });
@@ -134,6 +139,7 @@ describe('DevBus', (e) => {
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(0);
         expect(info1?.run.results).to.eql(undefined);
+        expect(info1?.run.args).to.eql(undefined);
 
         events.dispose();
       });
@@ -151,6 +157,7 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(info2?.run.count).to.eql(0);
         expect(info2?.run.results).to.eql(undefined);
+        expect(info2?.run.args).to.eql(undefined);
 
         events.dispose();
       });

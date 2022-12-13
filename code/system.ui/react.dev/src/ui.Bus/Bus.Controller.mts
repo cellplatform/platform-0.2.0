@@ -1,6 +1,3 @@
-import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { rx, SpecContext, t, Test } from './common';
@@ -58,12 +55,14 @@ export function BusController(args: {
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      const message = e.bundle ? 'action:load' : 'action:unload';
+      const message = e.bundle ? 'spec:load' : 'spec:unload';
       await state.change(message, (draft) => {
         draft.root = root;
         if (!root) {
-          draft.run.results = undefined;
+          // Reset (when unloaded):
           draft.run.count = 0;
+          draft.run.results = undefined;
+          draft.run.args = undefined;
         }
       });
     } catch (err: any) {
@@ -88,8 +87,7 @@ export function BusController(args: {
       const spec = state.current.root;
 
       if (spec) {
-        const args = SpecContext.args({ dispose$ });
-        const { ctx } = args;
+        const { ctx, args } = SpecContext.args({ dispose$ });
         const results = await spec.run({ ctx });
 
         /**
@@ -102,18 +100,13 @@ export function BusController(args: {
         //   run(); // <== RECURSION 🌳
         // });
 
-        const message = 'run:root-suite';
+        const message = 'run:root';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
           run.count++;
+          run.args = args;
           run.results = results;
         });
-
-        // setResults(results);
-        // setArgs((prev) => ({
-        //   ...prev,
-        //   ...args.args,
-        // }));
       }
     };
 
@@ -123,10 +116,9 @@ export function BusController(args: {
       error = err.message;
     }
 
-    const info = state.current;
     bus.fire({
       type: 'sys.dev/run:res',
-      payload: { tx, instance, info, error },
+      payload: { tx, instance, info: state.current, error },
     });
   });
 

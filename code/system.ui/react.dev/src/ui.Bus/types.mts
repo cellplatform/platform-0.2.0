@@ -7,10 +7,14 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 
 export type DevInfo = {
   root?: t.TestSuiteModel;
-  run: { results?: t.TestSuiteRunResponse; count: number };
+  run: {
+    count: number;
+    results?: t.TestSuiteRunResponse;
+    args?: t.SpecRenderArgs;
+  };
 };
 
-export type DevStateMutateHandler = (draft: t.DevInfo) => any | Promise<any>;
+export type DevMutateHandler = (draft: t.DevInfo) => any | Promise<any>;
 
 /**
  * EVENT (API)
