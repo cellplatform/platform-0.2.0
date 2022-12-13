@@ -38,7 +38,8 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
    */
   const tmpPrint = () => {
     // TEMP 🐷
-    console.info(`Spec (Results Data):`, results);
+    console.info(`Info (Run Results):`, results);
+    console.log('results.tests', results?.tests);
   };
 
   /**
