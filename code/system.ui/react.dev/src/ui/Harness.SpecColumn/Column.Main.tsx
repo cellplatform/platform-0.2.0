@@ -27,21 +27,18 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
   };
 
   const list = renderArgs?.debug.main.elements ?? [];
-
-  console.log('list', list);
-
-  const elList = list.filter(Boolean).map((el, i) => {
+  const elements = list.filter(Boolean).map((el, i) => {
     return (
       <div key={i} {...styles.item}>
         {el}
-        <div>count: {_count}</div>
+        <div>render count: {_count}</div>
       </div>
     );
   });
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{elList}</div>
+      <div>{elements}</div>
     </div>
   );
 };
