@@ -1,14 +1,6 @@
 import { Color, COLORS, css, t } from '../common';
 import { Image } from '../Image';
-
-const URL = {
-  SKETCH_1:
-    'https://user-images.githubusercontent.com/185555/205549096-48cd9707-bca1-4561-aa68-8df60e61f37f.jpg',
-  SKETCH_2:
-    'https://user-images.githubusercontent.com/185555/205729992-44c68a14-db0f-4c5b-b511-6b6774030166.jpg',
-  SHARP_DARK:
-    'https://user-images.githubusercontent.com/185555/205815437-fddd3691-1a5b-4113-8bdc-68944e4e153e.png',
-};
+import { SAMPLE_DATA } from './DATA.mjs';
 
 export type BrandLayoutProps = {
   style?: t.CssValue;
@@ -16,6 +8,9 @@ export type BrandLayoutProps = {
 
 export const BrandLayout: React.FC<BrandLayoutProps> = (props) => {
   const GAP = 60;
+
+  const media = SAMPLE_DATA.tempDeriveMedia();
+
   /**
    * [Render]
    */
@@ -43,7 +38,7 @@ export const BrandLayout: React.FC<BrandLayoutProps> = (props) => {
       }),
       image: css({
         Absolute: '30%',
-        backgroundImage: `url(${URL.SHARP_DARK})`,
+        backgroundImage: `url(${SAMPLE_DATA.URLS.TRAIL_TRIBE.SHARP_DARK})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
         backgroundSize: 'contain',
@@ -55,10 +50,10 @@ export const BrandLayout: React.FC<BrandLayoutProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.columns}>
         <div {...styles.outer}>
-          <Image.Cover url={URL.SKETCH_1} style={{ Absolute: 0 }} />
+          <Image.Cover url={media.left} style={{ Absolute: 0 }} />
         </div>
         <div {...styles.outer}>
-          <Image.Cover url={URL.SKETCH_2} style={{ Absolute: 0 }} />
+          <Image.Cover url={media.right} style={{ Absolute: 0 }} />
         </div>
       </div>
     </div>
