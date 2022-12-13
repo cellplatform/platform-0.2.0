@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { filter } from 'rxjs/operators';
 
-import { DevBus } from '../ui.Bus';
-import { rx, slug, t, Time } from '../common';
+import { DevBus, rx, slug, t, Time } from './common';
 
 type Id = string;
 
 /**
- * Hook: UI Controller setup and lifecycle.
+ * Hook: Setup and lifecycle of the event-bus controller.
  */
 export function useBusController(
   options: { bus?: t.EventBus; id?: Id; bundle?: t.BundleImport; runOnLoad?: boolean } = {},

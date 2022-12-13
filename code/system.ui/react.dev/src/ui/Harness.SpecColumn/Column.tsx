@@ -1,43 +1,28 @@
-import { useEffect, useState } from 'react';
-import { distinctUntilChanged } from 'rxjs/operators';
-
-import { css, DevBus, FC, t } from '../common';
+import { css, t, useCurrentState } from '../common';
 import { SpecColumnMain } from './Column.Main';
 
 export type HarnessSpecColumnProps = {
   instance: t.DevInstance;
-  renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
-  const { instance, renderArgs } = props;
+  const { instance } = props;
 
-  const [results, setResults] = useState<t.TestSuiteRunResponse>();
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    const events = DevBus.Events({ instance });
-    const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;
-    events.info.changed$
-      .pipe(distinctUntilChanged((prev, next) => tx(prev) === tx(next)))
-      .subscribe((e) => {
-        setResults(e.info.run.results);
-      });
-
-    return () => events.dispose();
-  }, [instance.id]);
+  const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
+  const results = current.info?.run.results;
+  const renderArgs = current.info?.run.args;
 
   /**
-   * Handlers
+   * [Handlers]
    */
   const tmpPrint = () => {
     // TEMP 🐷
     console.info(`Info (Run Results):`, results);
     console.log('results.tests', results?.tests);
   };
+
+  console.log('results', results);
 
   /**
    * [Render]
@@ -61,3 +46,8 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;

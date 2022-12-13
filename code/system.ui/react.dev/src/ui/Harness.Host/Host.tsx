@@ -1,22 +1,23 @@
-import { Color, COLORS, css, t } from '../common';
+import { Color, COLORS, css, t, useCurrentState } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
 export type HarnessHostProps = {
   instance: t.DevInstance;
-  renderArgs?: t.SpecRenderArgs;
   style?: t.CssValue;
 };
 
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
-  const { instance, renderArgs } = props;
-  if (!renderArgs) return null;
+  const { instance } = props;
 
-  const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
+  const renderArgs = current.info?.run.args;
+  if (!renderArgs) return null;
 
   /**
    * [Render]
    */
+  const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
       flex: 1,
@@ -39,3 +40,8 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;
