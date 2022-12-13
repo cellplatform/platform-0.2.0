@@ -75,7 +75,8 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 
 >> **"libraries not frameworks"**  
->> Orient toward framework agnosticism (as the default, extendible via driver plugins).
+>> An orientation toward framework agnosticism (which is the choise **default** in most circumstances). 
+>> Then levered by a simple/strict extensino pattern, (eg. "drivers") as appropriate to the module's domain, technology, and constraints.
 
 <p>&nbsp;</p>
 
@@ -95,6 +96,10 @@ References (conceptual context, history):
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
   "But what's interesting, is once the engineers got a hold, the visionaries went away ([timestamp](https://www.youtube.com/watch?v=cmi-AXKvx30&t=253s))"
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersection of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
+- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only two primitive (concepts). Everything is an object*, everything is a message, be extremely late bound. Everything else built up from there.
+
+
+*NB: "object": the SmallTalk original concept of "object" not the later "OOP" movement.
 
 ---
 
@@ -195,7 +200,7 @@ Development machine [environment setup](docs/env.setup.md) suggestions.
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-The system (platform) lives as an "open commons" shared resource of the world's peoples. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
+The system (platform) lives as an "open commons" shared resource for the world. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
 
 In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through considered refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
 
