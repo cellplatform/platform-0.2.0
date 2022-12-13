@@ -1,7 +1,6 @@
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { HarnessSpecColumn } from '../Harness.SpecColumn';
-import { useSpecRunner } from './__useSpecRunner.mjs';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
@@ -17,12 +16,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     runOnLoad: true,
   });
 
-  const runner = useSpecRunner(controller.instance, props.spec);
   const { instance } = controller;
 
   console.log('-------------------------------------------');
   console.log('info', controller.info);
-  console.log('runner.args', runner.args);
 
   /**
    * [Render]

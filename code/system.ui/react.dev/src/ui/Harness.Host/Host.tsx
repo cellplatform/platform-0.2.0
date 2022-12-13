@@ -11,8 +11,8 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
-  const renderArgs = current.info?.run.args;
-  if (!renderArgs) return null;
+  const renderProps = current.info?.run.props;
+  if (!renderProps) return null;
 
   /**
    * [Render]
@@ -26,16 +26,16 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       pointerEvents: 'none',
       userSelect: 'none',
       backgroundColor:
-        renderArgs.host.backgroundColor === undefined
+        renderProps.host.backgroundColor === undefined
           ? Color.alpha(COLORS.DARK, 0.02)
-          : Color.format(renderArgs.host.backgroundColor),
+          : Color.format(renderProps.host.backgroundColor),
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <HarnessHostGrid instance={instance} renderArgs={renderArgs} border={cropmark}>
-        <HarnessHostComponent instance={instance} renderArgs={renderArgs} border={cropmark} />
+      <HarnessHostGrid instance={instance} renderProps={renderProps} border={cropmark}>
+        <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>
     </div>
   );

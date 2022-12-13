@@ -12,14 +12,12 @@ export type SpecCtx = {
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
   readonly debug: SpecCtxDebug;
-  rerun(): void;
   toObject(): SpecCtxObject;
 };
 
 export type SpecCtxObject = {
-  component: SpecRenderArgsComponent;
-  host: SpecRenderArgsHost;
-  debug: SpecRenderArgsDebug;
+  instance: t.DevInstance;
+  props: SpecRenderProps;
 };
 
 export type SpecCtxComponent = {
@@ -44,26 +42,25 @@ export type SpecCtxDebug = {
 /**
  * Rendering Argument State
  */
-export type SpecRenderArgs = {
-  instance: { id: string };
-  rerun$: t.Observable<void>;
-  component: SpecRenderArgsComponent;
-  host: SpecRenderArgsHost;
-  debug: SpecRenderArgsDebug;
+export type SpecRenderProps = {
+  id: string;
+  component: SpecRenderPropsComponent;
+  host: SpecRenderPropsHost;
+  debug: SpecRenderPropsDebug;
 };
 
-export type SpecRenderArgsComponent = {
+export type SpecRenderPropsComponent = {
   element?: JSX.Element;
   size?: SpecRenderSize;
   display?: t.SpecPropDisplay;
   backgroundColor?: Color;
 };
 
-export type SpecRenderArgsHost = {
+export type SpecRenderPropsHost = {
   backgroundColor?: Color;
 };
 
-export type SpecRenderArgsDebug = {
+export type SpecRenderPropsDebug = {
   main: { elements: JSX.Element[] };
 };
 

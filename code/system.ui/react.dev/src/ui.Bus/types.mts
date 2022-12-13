@@ -10,7 +10,7 @@ export type DevInfo = {
   run: {
     count: number;
     results?: t.TestSuiteRunResponse;
-    args?: t.SpecRenderArgs;
+    props?: t.SpecRenderProps;
   };
 };
 

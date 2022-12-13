@@ -2,16 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx } from '../common';
 
 export type SpecColumnMainProps = {
-  instance: t.DevInstance;
   results?: t.TestSuiteRunResponse;
-  renderArgs?: t.SpecRenderArgs;
+  renderProps?: t.SpecRenderProps;
   style?: t.CssValue;
 };
 
 let _count = 0;
 
 export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
-  const { instance, renderArgs } = props;
+  const { renderProps } = props;
   _count++;
 
   /**
@@ -26,7 +25,7 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     }),
   };
 
-  const list = renderArgs?.debug.main.elements ?? [];
+  const list = renderProps?.debug.main.elements ?? [];
   const elements = list.filter(Boolean).map((el, i) => {
     return (
       <div key={i} {...styles.item}>

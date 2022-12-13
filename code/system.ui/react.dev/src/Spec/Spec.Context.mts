@@ -1,6 +1,3 @@
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-
 import { Margin, rx, slug, t } from '../common';
 
 /**
@@ -10,13 +7,12 @@ export const SpecContext = {
   /**
    * Generate a new set of arguments used to render a spec/component.
    */
-  args(options: { dispose$?: t.Observable<any> } = {}) {
-    const { dispose$, dispose } = rx.disposable(options.dispose$);
-    const rerun$ = new Subject<void>();
+  create(args: { instance: t.DevInstance; dispose$?: t.Observable<any> }) {
+    const { instance } = args;
+    const { dispose } = rx.disposable(args.dispose$);
 
-    const _args: t.SpecRenderArgs = {
-      instance: { id: `render.${slug()}` },
-      rerun$: rerun$.pipe(takeUntil(dispose$)),
+    const _props: t.SpecRenderProps = {
+      id: `render.${slug()}`,
       host: {},
       component: {},
       debug: { main: { elements: [] } },
@@ -27,32 +23,34 @@ export const SpecContext = {
      */
     const component: t.SpecCtxComponent = {
       render(el) {
-        _args.component.element = el;
+        _props.component.element = el;
         return component;
       },
 
       size(...args) {
-        _args.component.size = undefined;
+        _props.component.size = undefined;
 
         if (args.length === 2 && typeof args[0] === 'number' && typeof args[1] === 'number') {
-          _args.component.size = { mode: 'center', width: args[0], height: args[1] };
+          _props.component.size = { mode: 'center', width: args[0], height: args[1] };
         }
 
         if (args[0] === 'fill' || args[0] === 'fill-x' || args[0] === 'fill-y') {
           const margin = Margin.wrangle(args[1] ?? 50);
-          _args.component.size = { mode: 'fill', margin, x: true, y: true };
-          if (args[0] === 'fill-x') _args.component.size.y = false;
-          if (args[0] === 'fill-y') _args.component.size.x = false;
+          _props.component.size = { mode: 'fill', margin, x: true, y: true };
+          if (args[0] === 'fill-x') _props.component.size.y = false;
+          if (args[0] === 'fill-y') _props.component.size.x = false;
         }
 
         return component;
       },
+
       display(value) {
-        _args.component.display = value;
+        _props.component.display = value;
         return component;
       },
+
       backgroundColor(value) {
-        _args.component.backgroundColor = value;
+        _props.component.backgroundColor = value;
         return component;
       },
     };
@@ -62,7 +60,7 @@ export const SpecContext = {
      */
     const host: t.SpecCtxHost = {
       backgroundColor(color) {
-        _args.host.backgroundColor = color;
+        _props.host.backgroundColor = color;
         return host;
       },
     };
@@ -73,7 +71,7 @@ export const SpecContext = {
      */
     const debug: t.SpecCtxDebug = {
       TEMP(el) {
-        _args.debug.main.elements.push(el);
+        _props.debug.main.elements.push(el);
         return debug;
       },
     };
@@ -85,15 +83,8 @@ export const SpecContext = {
       component,
       host,
       debug,
-      rerun() {
-        rerun$.next();
-      },
       toObject() {
-        return {
-          host: { ..._args.host },
-          component: { ..._args.component },
-          debug: { ..._args.debug },
-        };
+        return { instance, props: { ..._props } };
       },
     };
 
@@ -103,8 +94,8 @@ export const SpecContext = {
     return {
       dispose,
       ctx,
-      get args() {
-        return _args;
+      get props() {
+        return _props;
       },
     };
   },

@@ -127,7 +127,7 @@ describe('DevBus', (e) => {
 
         const run = info3?.run;
         expect(run?.results?.description).to.eql('MySample');
-        expect(run?.args?.component.backgroundColor).to.eql(1);
+        expect(run?.props?.component.backgroundColor).to.eql(1);
 
         events.dispose();
       });
@@ -139,7 +139,7 @@ describe('DevBus', (e) => {
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(0);
         expect(info1?.run.results).to.eql(undefined);
-        expect(info1?.run.args).to.eql(undefined);
+        expect(info1?.run.props).to.eql(undefined);
 
         events.dispose();
       });
@@ -157,7 +157,7 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(info2?.run.count).to.eql(0);
         expect(info2?.run.results).to.eql(undefined);
-        expect(info2?.run.args).to.eql(undefined);
+        expect(info2?.run.props).to.eql(undefined);
 
         events.dispose();
       });

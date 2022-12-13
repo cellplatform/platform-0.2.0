@@ -62,7 +62,7 @@ export function BusController(args: {
           // Reset (when unloaded):
           draft.run.count = 0;
           draft.run.results = undefined;
-          draft.run.args = undefined;
+          draft.run.props = undefined;
         }
       });
     } catch (err: any) {
@@ -87,24 +87,15 @@ export function BusController(args: {
       const spec = state.current.root;
 
       if (spec) {
-        const { ctx, args } = SpecContext.args({ dispose$ });
+        const instance = args.instance;
+        const { ctx, props } = SpecContext.create({ instance, dispose$ });
         const results = await spec.run({ ctx });
-
-        /**
-         * TODO 🐷
-         */
-
-        // const rerun$ = args.args.rerun$.pipe(takeUntil(dispose$));
-        // rerun$.subscribe(() => {
-        //   args.dispose();
-        //   run(); // <== RECURSION 🌳
-        // });
 
         const message = 'run:root';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
           run.count++;
-          run.args = args;
+          run.props = props;
           run.results = results;
         });
       }

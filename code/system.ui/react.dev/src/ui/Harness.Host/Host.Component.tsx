@@ -4,15 +4,15 @@ import { Wrangle } from './Wrangle.mjs';
 export type HarnessHostComponentProps = {
   instance: t.DevInstance;
   border: string;
-  renderArgs?: t.SpecRenderArgs;
+  renderProps?: t.SpecRenderProps;
   style?: t.CssValue;
 };
 
 export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
-  const { renderArgs } = props;
-  if (!renderArgs) return null;
+  const { renderProps } = props;
+  if (!renderProps) return null;
 
-  const componentSize = Wrangle.componentSize(renderArgs.component.size);
+  const componentSize = Wrangle.componentSize(renderProps.component.size);
 
   /**
    * [Render]
@@ -29,17 +29,17 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       pointerEvents: 'auto',
       userSelect: 'auto',
 
-      display: renderArgs.component.display,
+      display: renderProps.component.display,
       width: componentSize.width,
       height: componentSize.height,
-      backgroundColor: Color.format(renderArgs.component.backgroundColor),
+      backgroundColor: Color.format(renderProps.component.backgroundColor),
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderArgs.component.element}
+        {renderProps.component.element}
       </div>
     </div>
   );
