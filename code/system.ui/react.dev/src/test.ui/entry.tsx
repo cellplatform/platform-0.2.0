@@ -2,10 +2,11 @@ import 'symbol-observable';
 
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
-import { SampleSpecs } from './entry.Specs.mjs';
+import { SelfDevSpecs, SampleSpecs } from './entry.Specs.mjs';
 
 const Specs = {
   ...SampleSpecs,
+  ...SelfDevSpecs,
 };
 
 const url = new URL(location.href);
