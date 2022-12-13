@@ -16,7 +16,7 @@ export const TestModel = (args: {
     type R = t.TestRunResponse;
 
     return new Promise<R>(async (resolve) => {
-      const tx = `run.${slug()}`;
+      const tx = `run.tx.${slug()}`;
       const timer = Time.timer();
       const excluded = toExcluded({ modifier, excluded: options.excluded });
 
