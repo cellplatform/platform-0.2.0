@@ -20,29 +20,14 @@ export const BrandLayout: React.FC<BrandLayoutProps> = (props) => {
     }),
     columns: css({
       Absolute: GAP,
+      columnGap: GAP,
       display: 'grid',
       gridTemplateColumns: `repeat(2, 1fr)`,
-      columnGap: GAP,
     }),
     outer: css({
       position: 'relative',
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.8)}`,
     }),
-    sharp: {
-      outer: css({
-        position: 'relative',
-        display: 'grid',
-        justifyContent: 'center',
-        alignContent: 'center',
-      }),
-      image: css({
-        Absolute: '30%',
-        backgroundImage: `url(${SAMPLE_DATA.URLS.TRAIL_TRIBE.SHARP_DARK})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center center',
-        backgroundSize: 'contain',
-      }),
-    },
   };
 
   return (
