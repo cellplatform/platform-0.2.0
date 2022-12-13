@@ -19,7 +19,7 @@ export async function pushToVercel(args: {
   const vercel = Vercel.client({ bus, token, fs });
 
   const res = await vercel.deploy({
-    name: `identity.profile.v${Pkg.version}`,
+    name: `${Pkg.name}.v${Pkg.version}`,
     source,
     team: 'tdb',
     project: 'tdb-dev',

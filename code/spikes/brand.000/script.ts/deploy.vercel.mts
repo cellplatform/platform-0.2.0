@@ -32,7 +32,7 @@ export async function pushToVercel(args: {
   const vercel = Vercel.client({ bus, token, fs });
 
   const res = await vercel.deploy({
-    name: `brand.tribe.v${Pkg.version}`,
+    name: `${Pkg.name}.v${Pkg.version}`,
     source,
     team: 'tdb',
 
