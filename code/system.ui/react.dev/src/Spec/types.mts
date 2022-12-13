@@ -35,6 +35,9 @@ export type SpecCtxHost = {
 };
 
 export type SpecCtxDebug = {
+  /**
+   * TODO 🐷
+   */
   TEMP(el: JSX.Element): SpecCtxDebug;
 };
 

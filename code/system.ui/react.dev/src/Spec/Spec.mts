@@ -4,6 +4,15 @@ import { t, Test } from '../common';
  * Root API to the UI Spec Runner system.
  */
 export const Spec = {
+  /**
+   * Spec (root test suite) creator.
+   * Usage:
+   *
+   *    export default Spec.describe('My Thing', (e) => {
+   *      ...
+   *    });
+   *
+   */
   describe: Test.describe,
 
   /**
