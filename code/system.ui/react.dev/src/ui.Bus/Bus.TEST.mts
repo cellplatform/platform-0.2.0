@@ -3,7 +3,7 @@ import { describe, expect, it, rx, slug, t, Test } from '../test';
 
 const SAMPLE_IMPORT = import('../test.sample/MySample.SPEC');
 
-describe('MyBus', (e) => {
+describe('DevBus', (e) => {
   const Create = {
     instance: () => ({ bus: rx.bus(), id: `foo.${slug()}` }),
   };
