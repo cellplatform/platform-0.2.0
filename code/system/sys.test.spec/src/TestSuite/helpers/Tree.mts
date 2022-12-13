@@ -1,4 +1,5 @@
-import { t, Is } from '../common.mjs';
+import { t } from '../common.mjs';
+import { Is } from '../Test.Is.mjs';
 
 export type FindArgs = { suite: t.TestSuiteModel; test?: t.TestModel };
 export type WalkDownArgs = { suite: t.TestSuiteModel; test?: t.TestModel; stop(): void };

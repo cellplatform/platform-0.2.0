@@ -1,4 +1,5 @@
-import { DEFAULT, Delete, Is, slug, t, Time, R } from './common.mjs';
+import { DEFAULT, Delete, slug, t, Time, R } from './common.mjs';
+import { Is } from './Test.Is.mjs';
 
 /**
  * A single test.

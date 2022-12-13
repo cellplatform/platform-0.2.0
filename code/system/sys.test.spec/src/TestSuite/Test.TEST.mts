@@ -1,8 +1,13 @@
 import { Test } from '.';
 import { describe, expect, it, t } from '../test';
 import { Tree } from './helpers/Tree.mjs';
+import { Is } from './Test.Is.mjs';
 
 describe('Test (Root/Entry)', () => {
+  it('Is', () => {
+    expect(Test.Is).to.equal(Is);
+  });
+
   describe('Test.bundle', () => {
     it('nothing [<empty>]', async () => {
       const bundle = await Test.bundle([]);

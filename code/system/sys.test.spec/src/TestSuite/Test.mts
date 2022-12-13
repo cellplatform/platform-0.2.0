@@ -1,10 +1,12 @@
-import { Is, t } from './common.mjs';
+import { t } from './common.mjs';
 import { Def } from './TestSuiteModel.mjs';
+import { Is } from './Test.Is.mjs';
 
 /**
  * Entry point to the unit-testing system.
  */
 export const Test: t.Test = {
+  Is,
   describe: Def.variants(),
 
   /**

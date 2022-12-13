@@ -11,11 +11,18 @@ export type TestModifier = 'skip' | 'only';
  * BDD ("behavior driven develoment") style test configuration API.
  */
 export type Test = {
+  Is: TestIs;
   describe: TestSuiteDescribe;
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
   run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
+};
+
+export type TestIs = {
+  promise(input?: any): boolean;
+  test(input?: any): boolean;
+  suite(input?: any): boolean;
 };
 
 /**

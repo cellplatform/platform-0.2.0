@@ -1,7 +1,7 @@
 import { t, Time, expect, describe, it } from '../test';
 import { Test } from '.';
 import { TestModel } from './TestModel.mjs';
-import { DEFAULT, Is } from './common.mjs';
+import { DEFAULT } from './common.mjs';
 
 describe('TestModel', () => {
   const description = 'foo';
@@ -39,24 +39,6 @@ describe('TestModel', () => {
       expect(model1.modifier).to.eql(undefined);
       expect(model2.modifier).to.eql('skip');
       expect(model3.modifier).to.eql('only');
-    });
-
-    it('Is.test', () => {
-      const test = (input: any, expected: boolean) => {
-        expect(Is.test(input)).to.eql(expected);
-      };
-
-      test(undefined, false);
-      test(null, false);
-      test('', false);
-      test(true, false);
-      test(123, false);
-      test([123], false);
-      test({}, false);
-      test(Test.describe('foo'), false);
-
-      test('Test.1234', true);
-      test(TestModel({ parent, description }), true);
     });
 
     it('clone', async () => {

@@ -1,8 +1,6 @@
 import { Test } from '.';
 import { describe, expect, it, t, Time } from '../test';
-import { Is } from './common.mjs';
 import { Tree } from './helpers/Tree.mjs';
-import { TestModel } from './TestModel.mjs';
 
 describe('TestSuiteModel', () => {
   describe('model', () => {
@@ -17,24 +15,6 @@ describe('TestSuiteModel', () => {
       expect(model2.kind).to.eql('TestSuite');
 
       expect(model1).to.not.equal(model2); // NB: Different instance.
-    });
-
-    it('Is.suite', () => {
-      const test = (input: any, expected: boolean) => {
-        expect(Is.suite(input)).to.eql(expected);
-      };
-
-      test(undefined, false);
-      test(null, false);
-      test('', false);
-      test(true, false);
-      test(123, false);
-      test([123], false);
-      test({}, false);
-      test(TestModel({ parent: Test.describe('foo'), description: 'name' }), false);
-
-      test('TestSuite.1234', true);
-      test(Test.describe('foo'), true);
     });
 
     it('empty (no handler)', () => {
