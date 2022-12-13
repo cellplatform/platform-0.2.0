@@ -1,24 +1,30 @@
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { rx, slug, t, Margin } from '../common';
+import { Margin, rx, slug, t } from '../common';
 
 /**
  * Information object passed as the {ctx} to tests.
  */
 export const SpecContext = {
+  /**
+   * Generate a new set of arguments used to render a spec/component.
+   */
   args(options: { dispose$?: t.Observable<any> } = {}) {
     const { dispose$, dispose } = rx.disposable(options.dispose$);
     const rerun$ = new Subject<void>();
 
     const _args: t.SpecRenderArgs = {
-      instance: { id: slug() },
+      instance: { id: `render.${slug()}` },
       rerun$: rerun$.pipe(takeUntil(dispose$)),
       host: {},
       component: {},
       debug: { main: { elements: [] } },
     };
 
+    /**
+     * The component subject (being controlled by the spec).
+     */
     const component: t.SpecCtxComponent = {
       render(el) {
         _args.component.element = el;
@@ -51,6 +57,9 @@ export const SpecContext = {
       },
     };
 
+    /**
+     * The host container of the subject component.
+     */
     const host: t.SpecCtxHost = {
       backgroundColor(color) {
         _args.host.backgroundColor = color;
@@ -58,6 +67,10 @@ export const SpecContext = {
       },
     };
 
+    /**
+     * The debug panel containing UI reporting the state of the
+     * component and controls for live manipulation of the compoonent.
+     */
     const debug: t.SpecCtxDebug = {
       TEMP(el) {
         _args.debug.main.elements.push(el);
@@ -65,6 +78,9 @@ export const SpecContext = {
       },
     };
 
+    /**
+     * The context object passed into the spec.
+     */
     const ctx: t.SpecCtx = {
       component,
       host,
@@ -81,6 +97,9 @@ export const SpecContext = {
       },
     };
 
+    /**
+     * API.
+     */
     return {
       dispose,
       ctx,
