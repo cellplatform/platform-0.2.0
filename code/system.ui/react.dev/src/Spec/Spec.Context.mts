@@ -8,10 +8,9 @@ export const SpecContext = {
   /**
    * Generate a new set of arguments used to render a spec/component.
    */
-  create(args: { instance: t.DevInstance; dispose$?: t.Observable<any> }) {
-    const { instance } = args;
-    const events = BusEvents({ instance, dispose$: args.dispose$ });
-    const { dispose } = events;
+  create(instance: t.DevInstance, options: { dispose$?: t.Observable<any> } = {}): t.SpecContext {
+    const events = BusEvents({ instance, dispose$: options.dispose$ });
+    const { dispose, dispose$ } = events;
 
     const _props: t.SpecRenderProps = {
       id: `render.${slug()}`,
@@ -88,6 +87,11 @@ export const SpecContext = {
       toObject() {
         return { instance, props: { ..._props } };
       },
+      async run(target) {
+        const res = await events.run.fire({ target });
+        const info = res.info ?? (await events.info.get());
+        return info;
+      },
     };
 
     /**
@@ -95,6 +99,7 @@ export const SpecContext = {
      */
     return {
       dispose,
+      dispose$,
       ctx,
       get props() {
         return _props;

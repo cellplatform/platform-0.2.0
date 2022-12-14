@@ -1,20 +1,18 @@
 import * as t from '../common/types.mjs';
 
-type Id = string;
 type Milliseconds = number;
+type Id = string;
+type TestId = Id;
+type SuiteId = Id;
 
 export type DevInstance = { bus: t.EventBus<any>; id: Id };
 
 export type DevInfo = {
   root?: t.TestSuiteModel;
-  run: {
-    count: number;
-    results?: t.TestSuiteRunResponse;
-    props?: t.SpecRenderProps;
-  };
+  run: { count: number; results?: t.TestSuiteRunResponse; props?: t.SpecRenderProps };
 };
 
-export type DevMutateHandler = (draft: t.DevInfo) => any | Promise<any>;
+export type DevMutate = (draft: t.DevInfo) => any | Promise<any>;
 
 /**
  * EVENT (API)
@@ -41,7 +39,10 @@ export type DevEvents = t.Disposable & {
   run: {
     req$: t.Observable<t.DevRunReq>;
     res$: t.Observable<t.DevRunRes>;
-    fire(options?: { timeout?: Milliseconds }): Promise<t.DevRunRes>;
+    fire(options?: {
+      target?: TestId | SuiteId | (TestId | SuiteId)[];
+      timeout?: Milliseconds;
+    }): Promise<t.DevRunRes>;
   };
 };
 
@@ -97,7 +98,11 @@ export type DevLoadRes = { tx: string; instance: Id; info?: t.DevInfo; error?: s
  * Run the suite of tests.
  */
 export type DevRunReqEvent = { type: 'sys.dev/run:req'; payload: DevRunReq };
-export type DevRunReq = { tx: string; instance: Id };
+export type DevRunReq = {
+  tx: string;
+  instance: Id;
+  target?: (TestId | SuiteId)[];
+};
 
 export type DevRunResEvent = { type: 'sys.dev/run:res'; payload: DevRunRes };
 export type DevRunRes = { tx: string; instance: Id; info?: t.DevInfo; error?: string };

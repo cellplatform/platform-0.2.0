@@ -23,7 +23,7 @@ export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
     get current() {
       return { ..._current };
     },
-    async change(message: string, fn: t.DevMutateHandler) {
+    async change(message: string, fn: t.DevMutate) {
       /**
        * TODO 🐷
        *   Do this with either

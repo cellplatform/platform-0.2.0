@@ -1,5 +1,8 @@
 import * as t from '../common/types.mjs';
 
+type Id = string;
+type TestId = Id;
+type SuiteId = Id;
 type Color = string | number;
 
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
@@ -8,11 +11,17 @@ export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 /**
  * Context API.
  */
+export type SpecContext = t.Disposable & {
+  ctx: SpecCtx;
+  props: SpecRenderProps;
+};
+
 export type SpecCtx = {
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
   readonly debug: SpecCtxDebug;
   toObject(): SpecCtxObject;
+  run(target?: TestId | SuiteId | (TestId | SuiteId)[]): Promise<t.DevInfo>;
 };
 
 export type SpecCtxObject = {

@@ -1,3 +1,4 @@
+import { run } from './Bus.Controller.run.mjs';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { rx, SpecContext, t, Test } from './common';
@@ -13,10 +14,17 @@ export function BusController(args: {
   filter?: (e: t.DevEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.DevEvents {
-  const { filter } = args;
-
   const bus = rx.busAsType<t.DevEvent>(args.instance.bus);
   const instance = args.instance.id;
+
+  const events = BusEvents({
+    instance: args.instance,
+    dispose$: args.dispose$,
+    filter: args.filter,
+  });
+  const { dispose, dispose$ } = events;
+
+  let _context: t.SpecContext = SpecContext.create(args.instance, { dispose$ });
   const state = BusMemoryState({
     onChanged(e) {
       const { message, info } = e;
@@ -26,13 +34,6 @@ export function BusController(args: {
       });
     },
   });
-
-  const events = BusEvents({
-    instance: args.instance,
-    dispose$: args.dispose$,
-    filter,
-  });
-  const { dispose, dispose$ } = events;
 
   /**
    * Info (Module)
@@ -52,6 +53,7 @@ export function BusController(args: {
   events.load.req$.subscribe(async (e) => {
     const { tx } = e;
     let error: string | undefined;
+    _context = SpecContext.create(args.instance, { dispose$ });
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
@@ -59,7 +61,7 @@ export function BusController(args: {
       await state.change(message, (draft) => {
         draft.root = root;
         if (!root) {
-          // Reset (when unloaded):
+          // Reset (unloaded):
           draft.run.count = 0;
           draft.run.results = undefined;
           draft.run.props = undefined;
@@ -80,29 +82,22 @@ export function BusController(args: {
    * Run the test suite.
    */
   events.run.req$.subscribe(async (e) => {
-    const { tx } = e;
+    const { tx, target } = e;
+
+    const spec = state.current.root;
     let error: string | undefined;
 
-    const run = async () => {
-      const spec = state.current.root;
-
+    try {
       if (spec) {
-        const instance = args.instance;
-        const { ctx, props } = SpecContext.create({ instance, dispose$ });
-        const results = await spec.run({ ctx });
-
+        const res = await run(_context, spec, { target });
         const message = 'run:root';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
           run.count++;
-          run.props = props;
-          run.results = results;
+          run.props = res.props;
+          run.results = res.results;
         });
       }
-    };
-
-    try {
-      await run();
     } catch (err: any) {
       error = err.message;
     }

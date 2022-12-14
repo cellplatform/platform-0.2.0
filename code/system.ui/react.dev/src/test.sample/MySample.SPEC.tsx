@@ -6,8 +6,6 @@ import { DevBus } from '../ui.Bus';
 let _count = 0;
 
 export default Spec.describe('MySample', (e) => {
-  console.log('e', e);
-
   e.it('init', async (e) => {
     _count++;
     const ctx = Spec.ctx(e);
@@ -18,10 +16,7 @@ export default Spec.describe('MySample', (e) => {
         text={`MySample-${_count}`}
         style={{ flex: 1 }}
         onClick={() => {
-          DevBus.withEvents(instance, (events) => {
-            // TEMP 🐷
-            events.run.fire();
-          });
+          ctx.run(); // Re-run all.
         }}
       />
     );
@@ -62,12 +57,15 @@ export default Spec.describe('MySample', (e) => {
         onClick={() => {
           //
 
-          console.log('e', e);
+          // console.log('e', e);
 
-          console.log('foo', 123);
-          DevBus.withEvents(instance, (events) => {
-            events.run.fire();
-          });
+          console.log('e.id', e.id);
+          console.log('ctx', ctx);
+
+          ctx.run(e.id);
+          // DevBus.withEvents(instance, (events) => {
+          //   events.run.fire();
+          // });
         }}
       >
         {`Hello Foo!`}

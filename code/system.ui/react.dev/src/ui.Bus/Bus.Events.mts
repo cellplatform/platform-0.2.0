@@ -1,4 +1,4 @@
-import { rx, slug, t } from './common';
+import { rx, slug, t, asArray } from './common';
 
 type Id = string;
 
@@ -96,6 +96,7 @@ export function BusEvents(args: {
     res$: rx.payload<t.DevRunResEvent>($, 'sys.dev/run:res'),
     async fire(options = {}) {
       const { timeout = 3000 } = options;
+      const target = options.target ? asArray(options.target) : undefined;
       const tx = slug();
       const op = 'run';
       const res$ = run.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -103,7 +104,7 @@ export function BusEvents(args: {
 
       bus.fire({
         type: 'sys.dev/run:req',
-        payload: { tx, instance },
+        payload: { tx, instance, target },
       });
 
       const res = await first;
