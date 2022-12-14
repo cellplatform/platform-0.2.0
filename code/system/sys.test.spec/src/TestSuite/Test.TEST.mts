@@ -36,8 +36,8 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('dynamic imports("...")', async () => {
-      const root1 = import('./test.samples/One.TEST');
-      const root2 = import('./test.samples/Two.TEST');
+      const root1 = import('../test/samples/One.TEST');
+      const root2 = import('../test/samples/Two.TEST');
 
       const bundle = await Test.bundle([root1, root2]);
 
@@ -57,13 +57,13 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('dynamic: with no export (ignore)', async () => {
-      const bundle1 = await Test.bundle([import('./test.samples/NoExport.TEST')]);
+      const bundle1 = await Test.bundle([import('../test/samples/NoExport.TEST')]);
       expect(bundle1.state.children).to.eql([]);
 
       const bundle2 = await Test.bundle([
-        import('./test.samples/NoExport.TEST'), // NB: Will not merge anything (no default export)
-        import('./test.samples/One.TEST'),
-        import('./test.samples/Two.TEST'),
+        import('../test/samples/NoExport.TEST'), // NB: Will not merge anything (no default export)
+        import('../test/samples/One.TEST'),
+        import('../test/samples/Two.TEST'),
       ]);
       const children = bundle2.state.children;
       expect(children.length).to.eql(2);
@@ -72,13 +72,13 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('dynamic: default export not a test-suite (ignore)', async () => {
-      const bundle = await Test.bundle([import('./test.samples/ExportNonSuite.TEST')]);
+      const bundle = await Test.bundle([import('../test/samples/ExportNonSuite.TEST')]);
       expect(bundle.state.children).to.eql([]);
     });
 
     it('mixed import (dynamic/static) with explicit root "description"', async () => {
       const root1 = Test.describe('One');
-      const root2 = import('./test.samples/Two.TEST');
+      const root2 = import('../test/samples/Two.TEST');
 
       const bundle = await Test.bundle('MySuite', [root1, root2]);
       const children = bundle.state.children;
@@ -91,7 +91,7 @@ describe('Test (Root/Entry)', () => {
 
     it('single item bundle (no array)', async () => {
       const root1 = Test.describe('One');
-      const root2 = import('./test.samples/Two.TEST');
+      const root2 = import('../test/samples/Two.TEST');
 
       const bundle1 = await Test.bundle(root1);
       const bundle2 = await Test.bundle(root2);
@@ -132,8 +132,8 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('dynamic imports("...")', async () => {
-      const root1 = import('./test.samples/One.TEST');
-      const root2 = import('./test.samples/Two.TEST');
+      const root1 = import('../test/samples/One.TEST');
+      const root2 = import('../test/samples/Two.TEST');
 
       const res = await Test.run([root1, root2]);
       expect(res.ok).to.eql(true);
@@ -145,7 +145,7 @@ describe('Test (Root/Entry)', () => {
 
     it('mixed import (dynamic/static) with explicit root "description"', async () => {
       const root1 = Test.describe('One');
-      const root2 = import('./test.samples/Two.TEST');
+      const root2 = import('../test/samples/Two.TEST');
 
       const res = await Test.run('MySuite', [root1, root2]);
       expect(res.ok).to.eql(true);

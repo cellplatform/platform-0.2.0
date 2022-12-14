@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Test } from '..';
+import { Test } from '../../index.mjs';
 
 export default Test.describe('One', (e) => {
   e.it('one.foo', () => {
