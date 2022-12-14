@@ -1,4 +1,4 @@
-import { Spec } from '../test.ui';
+import { Spec, css } from '../test.ui';
 import { useSizeObserver } from 'sys.util.react';
 
 export default Spec.describe('hook.useSizeObserver', (e) => {
@@ -17,8 +17,17 @@ export default Spec.describe('hook.useSizeObserver', (e) => {
  */
 export const Sample = () => {
   const size = useSizeObserver();
+
+  const styles = {
+    base: css({
+      flex: 1,
+      paddingTop: 20,
+      paddingLeft: 40,
+    }),
+  };
+
   return (
-    <div style={{ flex: 1, paddingTop: 20, paddingLeft: 40 }} ref={size.ref}>
+    <div {...styles.base} ref={size.ref}>
       <pre>{JSON.stringify(size.rect, null, '..')}</pre>
     </div>
   );

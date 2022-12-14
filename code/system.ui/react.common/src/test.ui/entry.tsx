@@ -4,7 +4,7 @@ import { Pkg } from '../index.pkg.mjs';
 import { Specs } from './entry.Specs.mjs';
 
 (async () => {
-  const el = await Dev.render(Pkg, Specs);
   const root = createRoot(document.getElementById('root')!);
+  const el = await Dev.render(Pkg, Specs);
   root.render(el);
 })();
