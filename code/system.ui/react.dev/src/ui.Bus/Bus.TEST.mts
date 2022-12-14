@@ -43,7 +43,7 @@ describe('DevBus', (e) => {
   });
 
   describe('Controller/Events', (e) => {
-    it('dispose', async () => {
+    it('dispose', () => {
       const instance = Sample.instance();
       const events = DevBus.Controller({ instance });
       expect(events.disposed).to.eql(false);
