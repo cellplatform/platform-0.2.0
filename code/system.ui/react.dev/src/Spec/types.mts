@@ -1,9 +1,10 @@
 import * as t from '../common/types.mjs';
 
 type Id = string;
-type TestId = Id;
-type SuiteId = Id;
+type SpecId = Id;
 type Color = string | number;
+type O = Record<string, unknown>;
+type IgnoredResponse = any | Promise<any>;
 
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
@@ -11,9 +12,11 @@ export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 /**
  * Context API.
  */
-export type SpecContext = t.Disposable & {
-  ctx: SpecCtx;
-  props: SpecRenderProps;
+export type SpecCtxWrapper = t.Disposable & {
+  readonly id: Id;
+  readonly instance: t.DevInstance;
+  readonly ctx: SpecCtx;
+  readonly props: SpecRenderProps;
 };
 
 export type SpecCtx = {
@@ -21,7 +24,15 @@ export type SpecCtx = {
   readonly host: SpecCtxHost;
   readonly debug: SpecCtxDebug;
   toObject(): SpecCtxObject;
-  run(target?: TestId | SuiteId | (TestId | SuiteId)[]): Promise<t.DevInfo>;
+  run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
+  reset(): Promise<t.DevInfo>;
+  state<T extends O>(initial: T): SpecCtxState<T>;
+};
+
+export type SpecCtxState<T extends O> = {
+  initial: T;
+  current: T;
+  change(fn: (draft: T) => IgnoredResponse): Promise<T>;
 };
 
 export type SpecCtxObject = {

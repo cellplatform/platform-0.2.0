@@ -1,5 +1,19 @@
 import { Margin, slug, t } from '../common';
 import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
+import { State } from './Spec.Context.state.mjs';
+
+type O = Record<string, unknown>;
+
+const DEFAULT = {
+  get props(): t.SpecRenderProps {
+    return {
+      id: `render.${slug()}`,
+      host: {},
+      component: {},
+      debug: { main: { elements: [] } },
+    };
+  },
+};
 
 /**
  * Information object passed as the {ctx} to tests.
@@ -8,16 +22,15 @@ export const SpecContext = {
   /**
    * Generate a new set of arguments used to render a spec/component.
    */
-  create(instance: t.DevInstance, options: { dispose$?: t.Observable<any> } = {}): t.SpecContext {
+  create(
+    instance: t.DevInstance,
+    options: { dispose$?: t.Observable<any> } = {},
+  ): t.SpecCtxWrapper {
+    const id = `dev.ctx.${slug()}`;
     const events = BusEvents({ instance, dispose$: options.dispose$ });
     const { dispose, dispose$ } = events;
 
-    const _props: t.SpecRenderProps = {
-      id: `render.${slug()}`,
-      host: {},
-      component: {},
-      debug: { main: { elements: [] } },
-    };
+    let _props = DEFAULT.props;
 
     /**
      * The component subject (being controlled by the spec).
@@ -71,6 +84,9 @@ export const SpecContext = {
      * component and controls for live manipulation of the compoonent.
      */
     const debug: t.SpecCtxDebug = {
+      /**
+       * TODO 🐷
+       */
       TEMP(el) {
         _props.debug.main.elements.push(el);
         return debug;
@@ -84,13 +100,28 @@ export const SpecContext = {
       component,
       host,
       debug,
+
       toObject() {
-        return { instance, props: { ..._props } };
+        return {
+          instance,
+          props: { ..._props },
+        };
       },
-      async run(target) {
-        const res = await events.run.fire({ target });
-        const info = res.info ?? (await events.info.get());
-        return info;
+
+      async run(options = {}) {
+        const { only } = options;
+        if (options.reset) await events.reset.fire();
+        const res = await events.run.fire({ only });
+        return res.info ?? (await events.info.get());
+      },
+
+      async reset() {
+        const res = await events.reset.fire();
+        return res.info ?? (await events.info.get());
+      },
+
+      state<T extends O>(initial: T) {
+        return State.create<T>({ initial, events });
       },
     };
 
@@ -98,6 +129,8 @@ export const SpecContext = {
      * API.
      */
     return {
+      id,
+      instance,
       dispose,
       dispose$,
       ctx,
