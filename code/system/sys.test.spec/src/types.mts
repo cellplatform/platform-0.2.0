@@ -117,6 +117,7 @@ export type TestSuiteRunOptions = {
   timeout?: number;
   deep?: boolean;
   ctx?: Ctx;
+  only?: TestModel['id'][]; // Override: a set of spec IDs to filter on, excluding all others.
 };
 export type TestSuiteRunResponse = {
   id: Id;

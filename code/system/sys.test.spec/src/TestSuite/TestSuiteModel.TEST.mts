@@ -259,6 +259,39 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
+    it('run with {only} subset of IDs option', async () => {
+      let _fired: string[] = [];
+      const root = Test.describe('root', (e) => {
+        e.it('one', () => _fired.push('one'));
+        e.it('two', () => _fired.push('two'));
+        e.describe('child', (e) => {
+          e.it('three', () => _fired.push('three'));
+        });
+      });
+
+      await root.init();
+
+      const test1 = root.state.tests[0];
+      const test2 = root.state.tests[1];
+      const test3 = root.state.children[0].state.tests[0];
+
+      const run = async (options?: t.TestSuiteRunOptions) => {
+        _fired = [];
+        await root.run(options);
+        return _fired;
+      };
+
+      const res1 = await run();
+      const res2 = await run({ only: [test2.id] });
+      const res3 = await run({ only: [test3.id, test2.id] });
+      const res4 = await run({ only: [] });
+
+      expect(res1).to.eql(['one', 'two', 'three']);
+      expect(res2).to.eql(['two']);
+      expect(res3).to.eql(['two', 'three']);
+      expect(res4).to.eql([]);
+    });
+
     it('unique "tx" identifier for each suite run operation', async () => {
       let count = 0;
       const root = Test.describe('root', (e) => {

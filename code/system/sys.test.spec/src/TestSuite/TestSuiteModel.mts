@@ -67,6 +67,7 @@ export const TestSuiteModel = (args: {
       };
 
       for (const test of tests) {
+        if (options.only && !options.only.includes(test.id)) continue;
         const timeout = getTimeout();
         const excluded = Constraints.exclusionModifiers(test);
         res.tests.push(await test.run({ timeout, excluded, ctx }));
@@ -74,8 +75,9 @@ export const TestSuiteModel = (args: {
 
       if (deep && childSuites.length > 0) {
         for (const childSuite of childSuites) {
+          const { only } = options;
           const timeout = childSuite.state.timeout ?? getTimeout();
-          res.children.push(await childSuite.run({ timeout })); // <== RECURSION 🌳
+          res.children.push(await childSuite.run({ timeout, only })); // <== RECURSION 🌳
         }
       }
 
@@ -128,8 +130,8 @@ export const TestSuiteModel = (args: {
     },
 
     init: () => init(model),
-    async run(args) {
-      return runSuite(model, args);
+    async run(options) {
+      return runSuite(model, options);
     },
 
     async merge(...suites) {
