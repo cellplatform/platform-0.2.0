@@ -1,7 +1,6 @@
-import { Test } from '..';
-import { expect, t, describe, it } from '../../test';
-import { Tree } from './Tree.mjs';
-import { Constraints } from './Constraints.mjs';
+import { Test } from '../index.mjs';
+import { expect, t, describe, it } from '../test';
+import { TestTree, Constraints } from '.';
 
 type T = t.TestSuiteModel | t.TestModel;
 
@@ -13,10 +12,10 @@ describe('Test Constraints (".skip", ".only")', () => {
   };
 
   const findSuite = (root: t.TestSuiteModel, description: string) =>
-    Tree.findOne(root, (e) => e.suite.toString() === description).suite;
+    TestTree.findOne(root, (e) => e.suite.toString() === description).suite;
 
   const findTest = (root: t.TestSuiteModel, description: string) =>
-    Tree.findOne(root, (e) => e.test?.toString() === description).test;
+    TestTree.findOne(root, (e) => e.test?.toString() === description).test;
 
   describe('Constraints.scan', () => {
     it('none', async () => {

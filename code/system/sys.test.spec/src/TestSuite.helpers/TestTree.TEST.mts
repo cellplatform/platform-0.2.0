@@ -1,10 +1,10 @@
-import { Test } from '..';
-import { describe, expect, it, t } from '../../test';
-import { Tree, WalkDownArgs, WalkUpArgs } from './Tree.mjs';
+import { Test } from '../index.mjs';
+import { describe, expect, it, t } from '../test';
+import { TestTree, WalkDownArgs, WalkUpArgs } from '.';
 
 type T = t.TestSuiteModel | t.TestModel;
 
-describe('Test Tree ("Hierarchy")', () => {
+describe('TestTree ("Hierarchy")', () => {
   const createRoot = async () => {
     const root = await Test.describe('root', (e) => {
       e.it('1', (e) => null);
@@ -21,10 +21,10 @@ describe('Test Tree ("Hierarchy")', () => {
     }).init();
 
     const findSuite = (description: string) =>
-      Tree.findOne(root, (e) => e.suite.toString() === description).suite;
+      TestTree.findOne(root, (e) => e.suite.toString() === description).suite;
 
     const findTest = (description: string) =>
-      Tree.findOne(root, (e) => e.test?.toString() === description).test;
+      TestTree.findOne(root, (e) => e.test?.toString() === description).test;
 
     return { root, findSuite, findTest };
   };
@@ -32,17 +32,17 @@ describe('Test Tree ("Hierarchy")', () => {
   it('parent', async () => {
     const { root, findTest, findSuite } = await createRoot();
 
-    expect(Tree.parent(findTest('2.1'))?.state.description).to.eql('2');
-    expect(Tree.parent(findSuite('2'))).to.eql(root);
-    expect(Tree.parent(root)).to.eql(undefined);
-    expect(Tree.parent()).to.eql(undefined);
+    expect(TestTree.parent(findTest('2.1'))?.state.description).to.eql('2');
+    expect(TestTree.parent(findSuite('2'))).to.eql(root);
+    expect(TestTree.parent(root)).to.eql(undefined);
+    expect(TestTree.parent()).to.eql(undefined);
   });
 
   it('root', async () => {
     const { root, findTest, findSuite } = await createRoot();
 
     const test = (child: T | undefined, expected: t.TestSuiteModel | undefined) => {
-      expect(Tree.root(child)).to.equal(expected);
+      expect(TestTree.root(child)).to.equal(expected);
     };
 
     test(undefined, undefined);
@@ -58,7 +58,7 @@ describe('Test Tree ("Hierarchy")', () => {
     const { root } = await createRoot();
 
     const list: WalkDownArgs[] = [];
-    Tree.walkDown(root, (e) => list.push(e));
+    TestTree.walkDown(root, (e) => list.push(e));
 
     const flat = list.map((item) => item.test?.toString() || item.suite.toString());
     expect(flat).to.eql(['root', '1', '3', '2', '2.1', '2.2', '2.2.1', '2.2.1.1', '2.2.1.2']);
@@ -69,7 +69,7 @@ describe('Test Tree ("Hierarchy")', () => {
     const from = findTest('2.2.1.2');
 
     const list: WalkUpArgs[] = [];
-    Tree.walkUp(from, (e) => list.push(e));
+    TestTree.walkUp(from, (e) => list.push(e));
 
     const flat = list.map((item) => item.suite.toString());
     expect(flat).to.eql(['2.2.1', '2.2', '2', 'root']);
@@ -78,10 +78,10 @@ describe('Test Tree ("Hierarchy")', () => {
 
   it('find', async () => {
     const { root } = await createRoot();
-    const res1 = Tree.find(root, (e) => e.test?.toString() === '2.2.1.1');
-    const res2 = Tree.find(root, (e) => e.test?.toString() === '404');
-    const res3 = Tree.find(root, (e) => e.suite.toString() === '2.2.1');
-    const res4 = Tree.find(root, (e) => e.suite.toString() === '2.2.1', { limit: 1 });
+    const res1 = TestTree.find(root, (e) => e.test?.toString() === '2.2.1.1');
+    const res2 = TestTree.find(root, (e) => e.test?.toString() === '404');
+    const res3 = TestTree.find(root, (e) => e.suite.toString() === '2.2.1');
+    const res4 = TestTree.find(root, (e) => e.suite.toString() === '2.2.1', { limit: 1 });
 
     expect(res1[0]?.test?.toString()).to.eql('2.2.1.1');
     expect(res2).to.eql([]);
@@ -94,9 +94,9 @@ describe('Test Tree ("Hierarchy")', () => {
 
   it('findOne', async () => {
     const { root } = await createRoot();
-    const res1 = Tree.findOne(root, (e) => e.test?.toString() === '2.2.1.1');
-    const res2 = Tree.findOne(root, (e) => e.test?.toString() === '404');
-    const res3 = Tree.findOne(root, (e) => e.suite.toString() === '2.2.1');
+    const res1 = TestTree.findOne(root, (e) => e.test?.toString() === '2.2.1.1');
+    const res2 = TestTree.findOne(root, (e) => e.test?.toString() === '404');
+    const res3 = TestTree.findOne(root, (e) => e.suite.toString() === '2.2.1');
 
     expect(res1?.test?.toString()).to.eql('2.2.1.1');
     expect(res2).to.eql(undefined);
@@ -107,7 +107,7 @@ describe('Test Tree ("Hierarchy")', () => {
     const { findTest, findSuite } = await createRoot();
 
     const test = (item: T | undefined, expected: string[]) => {
-      const siblings = Tree.siblings(item);
+      const siblings = TestTree.siblings(item);
       const descriptions = siblings.map((item) => item.toString());
       expect(descriptions).to.eql(expected);
     };

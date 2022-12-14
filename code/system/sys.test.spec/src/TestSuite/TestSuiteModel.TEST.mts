@@ -1,6 +1,6 @@
 import { Test } from '.';
 import { describe, expect, it, t, Time } from '../test';
-import { Tree } from './helpers/Tree.mjs';
+import { TestTree } from '../TestSuite.helpers';
 
 describe('TestSuiteModel', () => {
   describe('model', () => {
@@ -225,8 +225,8 @@ describe('TestSuiteModel', () => {
       expect(root1.state.children[0].id).to.not.eql(root2.state.children[0].id);
 
       // Parent hierarchy correctly re-referenced to the clone.
-      expect(Tree.root(test1)).to.equal(root1);
-      expect(Tree.root(test2)).to.equal(root2);
+      expect(TestTree.root(test1)).to.equal(root1);
+      expect(TestTree.root(test2)).to.equal(root2);
     });
   });
 
@@ -413,8 +413,8 @@ describe('TestSuiteModel', () => {
         const test1 = children[0].state.tests[0];
         const test2 = children[1].state.tests[0];
 
-        expect(Tree.root(test1)).to.equal(bundle);
-        expect(Tree.root(test2)).to.equal(bundle);
+        expect(TestTree.root(test1)).to.equal(bundle);
+        expect(TestTree.root(test2)).to.equal(bundle);
 
         expect(test1).to.not.equal(root1.state.tests[0]);
         expect(test2).to.not.equal(root2.state.tests[0]);
@@ -498,9 +498,9 @@ describe('TestSuiteModel', () => {
       expect(root.state.children[1]).to.not.equal(child2);
       expect(root.state.children[2]).to.not.equal(child3);
 
-      expect(Tree.root(root.state.children[0])).to.equal(root);
-      expect(Tree.root(root.state.children[1])).to.equal(root);
-      expect(Tree.root(root.state.children[2])).to.equal(root);
+      expect(TestTree.root(root.state.children[0])).to.equal(root);
+      expect(TestTree.root(root.state.children[1])).to.equal(root);
+      expect(TestTree.root(root.state.children[2])).to.equal(root);
     });
   });
 });

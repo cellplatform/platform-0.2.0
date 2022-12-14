@@ -1,6 +1,6 @@
-import { t } from '../common.mjs';
-import { Is } from '../Test.Is.mjs';
-import { Tree, WalkUpArgs } from './Tree.mjs';
+import { t } from '../common';
+import { Is } from './Is.mjs';
+import { TestTree, WalkUpArgs } from './TestTree.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 type M = t.TestModifier;
@@ -24,7 +24,7 @@ export const Constraints = {
       if (item && !exists(list, item)) list.push(item);
     };
 
-    Tree.walkDown(root, (e) => {
+    TestTree.walkDown(root, (e) => {
       if (includes(e.suite.state.modifier)) add(e.suite);
       if (includes(e.test?.modifier)) add(e.test);
     });
@@ -62,7 +62,7 @@ export const Constraints = {
    */
   exclusionModifiers(item?: T) {
     const exclusions: t.TestModifier[] = [];
-    const treeContainsOnlyFlag = Constraints.scan(Tree.root(item), 'only').length > 0;
+    const treeContainsOnlyFlag = Constraints.scan(TestTree.root(item), 'only').length > 0;
     if (Constraints.isSkipped(item)) exclusions.push('skip');
     if (treeContainsOnlyFlag && !Constraints.isWithinOnlySet(item)) exclusions.push('only');
     return exclusions;
@@ -89,7 +89,7 @@ function withinParentModifier(
   options: { rejectMatchWhen?: (e: WalkUpArgs) => boolean } = {},
 ) {
   let result = false;
-  Tree.walkUp(item, (e) => {
+  TestTree.walkUp(item, (e) => {
     const rejected = options.rejectMatchWhen?.(e);
     if (rejected) return e.stop();
     if (e.suite.state.modifier === modifier) {
@@ -101,6 +101,6 @@ function withinParentModifier(
 }
 
 function hasSiblingWithModifer(item: T, modifier: t.TestModifier) {
-  const siblings = Tree.siblings(item);
+  const siblings = TestTree.siblings(item);
   return siblings.some((item) => toModifier(item) === modifier);
 }

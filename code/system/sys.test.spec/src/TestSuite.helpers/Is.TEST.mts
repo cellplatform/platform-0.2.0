@@ -1,7 +1,7 @@
-import { Test } from '.';
+import { Test } from '../index.mjs';
 import { describe, expect, it } from '../test';
-import { Is } from './Test.Is.mjs';
-import { TestModel } from './TestModel.mjs';
+import { TestModel } from '../TestSuite/TestModel.mjs';
+import { Is } from './Is.mjs';
 
 describe('Is (flags)', () => {
   it('Test.Is', () => {

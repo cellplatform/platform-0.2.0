@@ -1,7 +1,6 @@
 import { Test } from '.';
 import { describe, expect, it, t } from '../test';
-import { Tree } from './helpers/Tree.mjs';
-import { Is } from './Test.Is.mjs';
+import { TestTree, Is } from '../TestSuite.helpers';
 
 describe('Test (Root/Entry)', () => {
   it('Is', () => {
@@ -32,8 +31,8 @@ describe('Test (Root/Entry)', () => {
       expect(children[0].state.parent?.id).to.eql(bundle.id);
       expect(children[1].state.parent?.id).to.eql(bundle.id);
 
-      expect(Tree.root(test1)).to.equal(bundle);
-      expect(Tree.root(test2)).to.equal(bundle);
+      expect(TestTree.root(test1)).to.equal(bundle);
+      expect(TestTree.root(test2)).to.equal(bundle);
     });
 
     it('dynamic imports("...")', async () => {
@@ -53,8 +52,8 @@ describe('Test (Root/Entry)', () => {
       expect(children[0].state.parent?.id).to.eql(bundle.id);
       expect(children[0].state.parent?.id).to.eql(bundle.id);
 
-      expect(Tree.root(test1)).to.equal(bundle);
-      expect(Tree.root(test2)).to.equal(bundle);
+      expect(TestTree.root(test1)).to.equal(bundle);
+      expect(TestTree.root(test2)).to.equal(bundle);
     });
 
     it('dynamic: with no export (ignore)', async () => {

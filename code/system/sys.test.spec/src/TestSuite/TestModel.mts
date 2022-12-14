@@ -1,5 +1,5 @@
-import { DEFAULT, Delete, slug, t, Time, R } from './common.mjs';
-import { Is } from './Test.Is.mjs';
+import { DEFAULT, Delete, slug, t, Time, R } from './common';
+import { Is } from '../TestSuite.helpers';
 
 /**
  * A single test.

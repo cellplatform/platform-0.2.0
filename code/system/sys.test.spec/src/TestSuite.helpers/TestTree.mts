@@ -1,5 +1,5 @@
-import { t } from '../common.mjs';
-import { Is } from '../Test.Is.mjs';
+import { t } from '../common';
+import { Is } from './Is.mjs';
 
 export type FindArgs = { suite: t.TestSuiteModel; test?: t.TestModel };
 export type WalkDownArgs = { suite: t.TestSuiteModel; test?: t.TestModel; stop(): void };
@@ -10,7 +10,7 @@ type T = t.TestSuiteModel | t.TestModel;
 /**
  * Helpers for walking a hierarchical tree of tests.
  */
-export const Tree = {
+export const TestTree = {
   parent(child?: T): t.TestSuiteModel | undefined {
     if (Is.test(child)) return (child as t.TestModel).parent;
     if (Is.suite(child)) return (child as t.TestSuiteModel).state.parent;
@@ -20,7 +20,7 @@ export const Tree = {
   root(child?: T): t.TestSuiteModel | undefined {
     if (!child) return undefined;
     let root: t.TestSuiteModel | undefined;
-    Tree.walkUp(child, (e) => {
+    TestTree.walkUp(child, (e) => {
       if (e.isRoot) root = e.suite;
     });
     return root;
@@ -44,14 +44,14 @@ export const Tree = {
     }
 
     // Walk down into child suites.
-    from.state.children.forEach((child) => Tree.walkDown(child, handler)); // <== RECURSION 🌳
+    from.state.children.forEach((child) => TestTree.walkDown(child, handler)); // <== RECURSION 🌳
   },
 
   walkUp(from: T | undefined, handler: (e: WalkUpArgs) => void) {
     if (!from) return;
     if (Is.test(from)) {
-      const suite = Tree.parent(from);
-      if (suite) Tree.walkUp(suite, handler); // <== RECURSION 🌳
+      const suite = TestTree.parent(from);
+      if (suite) TestTree.walkUp(suite, handler); // <== RECURSION 🌳
       return;
     }
 
@@ -60,7 +60,7 @@ export const Tree = {
 
     while (suite) {
       let stop = false;
-      const parent = Tree.parent(suite);
+      const parent = TestTree.parent(suite);
       handler({ isRoot: !Boolean(parent), suite, stop: () => (stop = true) });
       if (!parent || stop) return;
       suite = parent;
@@ -74,7 +74,7 @@ export const Tree = {
   ) {
     const { limit } = options;
     const result: FindArgs[] = [];
-    Tree.walkDown(within, (e) => {
+    TestTree.walkDown(within, (e) => {
       const { suite, test } = e;
       if (match({ suite, test })) {
         result.push({ suite, test });
@@ -85,13 +85,13 @@ export const Tree = {
   },
 
   findOne(within: t.TestSuiteModel, match: (e: FindArgs) => boolean) {
-    return Tree.find(within, match, { limit: 1 })[0];
+    return TestTree.find(within, match, { limit: 1 })[0];
   },
 
   siblings(item?: T): T[] {
     if (!item) return [];
 
-    const parent = Tree.parent(item);
+    const parent = TestTree.parent(item);
     if (!parent) return [];
 
     const suites = parent.state.children.filter(({ id }) => id !== item.id);
