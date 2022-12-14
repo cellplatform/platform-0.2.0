@@ -1,9 +1,10 @@
-import { Color, css } from '../common';
-import { Spec } from '../Spec';
+import { Color, css } from '../../common';
+import { Spec } from '../../Spec';
 import { MySample } from './MySample';
-import { DevBus } from '../ui.Bus';
 
 let _count = 0;
+
+type T = { count: number; msg?: string };
 
 export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
@@ -11,19 +12,23 @@ export default Spec.describe('MySample', (e) => {
     const ctx = Spec.ctx(e);
     const instance = ctx.toObject().instance;
 
+    const state = ctx.state<T>({ count: 0 });
+
     const el = (
       <MySample
-        text={`MySample-${_count}`}
+        text={`MySample-${_count} | state.count: ${state.current.count}`}
         style={{ flex: 1 }}
         onClick={() => {
-          ctx.run(); // Re-run all.
+          // ctx.reset
+          ctx.run({ reset: true }); // Re-run all.
+          state.change((draft) => draft.count++);
         }}
       />
     );
 
     ctx.component
-      //
       .size(300, 140)
+
       // .size('fill')
       // .size('fill-x')
       // .size('fill-y')
@@ -62,7 +67,8 @@ export default Spec.describe('MySample', (e) => {
           console.log('e.id', e.id);
           console.log('ctx', ctx);
 
-          ctx.run(e.id);
+          const target = e.id;
+          ctx.run({ only: target });
           // DevBus.withEvents(instance, (events) => {
           //   events.run.fire();
           // });

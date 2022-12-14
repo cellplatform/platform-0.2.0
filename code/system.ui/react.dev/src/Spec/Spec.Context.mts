@@ -1,6 +1,6 @@
 import { Margin, slug, t } from '../common';
 import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
-import { State } from './Spec.Context.state.mjs';
+import { State } from './Spec.Context.State.mjs';
 
 type O = Record<string, unknown>;
 

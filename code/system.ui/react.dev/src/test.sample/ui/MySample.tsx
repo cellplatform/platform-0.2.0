@@ -1,4 +1,6 @@
-import { css, t } from '../common';
+import { useEffect, useState } from 'react';
+
+import { css, t } from '../../common';
 
 export type MySampleProps = {
   text?: string;
