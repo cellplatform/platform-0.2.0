@@ -1,31 +1,37 @@
-import { BusEvents } from './Bus.Events.mjs';
-import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { rx, SpecContext, t, Test, TestTree } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { t, TestTree } from './common';
 
 type Id = string;
 
 export async function run(
-  context: t.SpecContext,
-  spec: t.TestSuiteModel,
-  options: { target?: Id[] } = {},
+  context: t.SpecCtxWrapper,
+  root: t.TestSuiteModel,
+  options: { only?: Id[] } = {},
 ) {
-  const { target } = options;
+  const { only } = options;
 
-  if (target) {
-    const match = TestTree.find(spec, (e) => {
-      /**
-       * TODO 🐷
-       */
+  /**
+   * TODO 🐷
+   *
+   *   - Run from root if prior test run has never happened.
+   *   - Patch the existing results with just the results from the targetted sub-set.
+   *   - Do not run the whole sweet (below)
+   *
+   *   - add flag to ctx:
+   *      ctx.initial (boolean)
+   *          - repeat runs of the spec will be false.
+   *          - allows for conditional initial setup within spec.
+   *
+   */
 
-      if (target.includes(e.suite.id)) return true;
-      if (e.test && target.includes(e.test.id)) return true;
-      return false;
-    });
-  }
+  /**
+   * Run.
+   */
+  const { ctx } = context;
+  const results = await root.run({ ctx, only });
 
-  const { ctx, props } = context;
-  const results = await spec.run({ ctx });
-
+  /**
+   * Response.
+   */
+  const props = context.props;
   return { results, props };
 }

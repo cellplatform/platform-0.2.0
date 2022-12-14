@@ -1,7 +1,7 @@
 import { DevBus } from '.';
 import { describe, expect, it, rx, slug, t, Test } from '../test';
 
-const SAMPLE_IMPORT = import('../test.sample/ui/MySample.SPEC');
+import { SAMPLES } from '../test.sample/unit';
 
 describe('DevBus', (e) => {
   const Sample = {
@@ -10,9 +10,9 @@ describe('DevBus', (e) => {
       const instance = Sample.instance();
       return DevBus.Controller({ instance });
     },
-    async createPreloaded() {
+    async preloaded() {
       const events = await Sample.create();
-      await events.load.fire(SAMPLE_IMPORT);
+      await events.load.fire(SAMPLES.Sample1);
       return events;
     },
   };
@@ -79,22 +79,22 @@ describe('DevBus', (e) => {
     });
 
     describe('load', () => {
-      it('load', async () => {
+      it('load (import bundle)', async () => {
         const instance = Sample.instance();
         const events = DevBus.Controller({ instance });
 
         const fired: t.DevInfoChanged[] = [];
         events.info.changed$.subscribe((e) => fired.push(e));
 
-        const res = await events.load.fire(SAMPLE_IMPORT);
-        const root = await Test.bundle(SAMPLE_IMPORT);
+        const res = await events.load.fire(SAMPLES.Sample1);
+        const root = await Test.bundle(SAMPLES.Sample1);
 
         expect(res.error).to.eql(undefined);
         expect(res.info?.root).to.not.eql(undefined);
         expect(res.info?.root).to.eql(root);
 
-        const current = await events.info.get();
-        expect(current.root).to.eql(root);
+        const info = await events.info.get();
+        expect(info.root).to.eql(root);
 
         expect(fired.length).to.eql(2);
 
@@ -102,7 +102,23 @@ describe('DevBus', (e) => {
         expect(fired[0].info.root).to.eql(undefined);
 
         expect(fired[1].message).to.eql('spec:load');
-        expect(fired[1].info.root).to.eql(current.root);
+        expect(fired[1].info.root).to.eql(info.root);
+
+        events.dispose();
+      });
+
+      it('load (direct spec)', async () => {
+        const instance = Sample.instance();
+        const events = DevBus.Controller({ instance });
+
+        const { root } = await SAMPLES.Sample1;
+        const res = await events.load.fire(root);
+        const info = await events.info.get();
+
+        expect(res.error).to.eql(undefined);
+        expect(res.info?.root).to.not.eql(undefined);
+        expect(res.info?.root).to.eql(root);
+        expect(info.root).to.eql(root);
 
         events.dispose();
       });
@@ -110,12 +126,12 @@ describe('DevBus', (e) => {
       it('unload', async () => {
         const instance = Sample.instance();
         const events = DevBus.Controller({ instance });
-        const root = await Test.bundle(SAMPLE_IMPORT);
+        const root = await Test.bundle(SAMPLES.Sample1);
 
         const fired: t.DevInfoChanged[] = [];
         events.info.changed$.subscribe((e) => fired.push(e));
 
-        const res1 = await events.load.fire(SAMPLE_IMPORT);
+        const res1 = await events.load.fire(SAMPLES.Sample1);
         expect(res1.info?.root).to.eql(root);
 
         type T = { count: number };
@@ -139,7 +155,7 @@ describe('DevBus', (e) => {
         const getId = async () => (await events.info.get()).run.props?.id;
         const id1 = await getId();
 
-        await events.load.fire(SAMPLE_IMPORT);
+        await events.load.fire(SAMPLES.Sample1);
         const id2 = await getId();
 
         await events.run.fire();
@@ -149,7 +165,7 @@ describe('DevBus', (e) => {
         const id4 = await getId();
 
         await events.unload.fire();
-        await events.load.fire(SAMPLE_IMPORT);
+        await events.load.fire(SAMPLES.Sample1);
         await events.run.fire();
         const id5 = await getId();
 
@@ -166,7 +182,7 @@ describe('DevBus', (e) => {
 
     describe('run', () => {
       it('run', async () => {
-        const events = await Sample.createPreloaded();
+        const events = await Sample.preloaded();
 
         const info1 = (await events.run.fire()).info;
         const info2 = (await events.run.fire()).info;
@@ -194,8 +210,8 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('run: unload clears results', async () => {
-        const events = await Sample.createPreloaded();
+      it('run: unload clears "run results"', async () => {
+        const events = await Sample.preloaded();
 
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(1);
@@ -211,23 +227,31 @@ describe('DevBus', (e) => {
       });
     });
 
-    describe('run ({only} specific specs)', () => {
+    describe('run ({ only } specific specs)', () => {
       it('target single spec (from initial run)', async () => {
-        const events = await Sample.createPreloaded();
+        const { Wrapper } = await SAMPLES.Sample2;
+        const sample = Wrapper();
+        const events = await Sample.create();
+
+        await sample.root.init();
+        await events.load.fire(sample.root);
+        expect(sample.log.count).to.eql(0);
 
         /**
          * TODO 🐷
          *
          * - Move (copy) the BUNDLE_IMPORT to a "test/samples" directory
-         * - details on ctx:
+         * - Details on ctx:
          *    - parent
          *    - siblings ("its" and "describes")
          */
 
         const info1 = await events.info.get();
         const root = info1.root;
-        const test = root?.state.tests[0];
-        expect(test).to.exist;
+        const test1 = root?.state.tests[0];
+        const test2 = root?.state.tests[1];
+        expect(test1).to.exist;
+        expect(test2).to.exist;
         expect(info1.run.props?.id).to.eql(undefined);
 
         /**
@@ -235,23 +259,30 @@ describe('DevBus', (e) => {
          * There is no prior context.
          * All tests should run.
          */
-        const target = test?.id;
-        await events.run.fire({ only: target });
+        await events.run.fire({ only: test1?.id });
 
         const info2 = await events.info.get();
         expect(info2.instance.context).to.eql(info1.instance.context);
         expect(info2.run.props?.id).to.exist;
         expect(info2.run.count).to.eql(1);
+        expect(sample.log.count).to.eql(1);
+        expect(sample.log.items[0].text).to.eql('init');
+
+        sample.log.reset();
 
         /**
          * Run for a second time, the context (instance state) should NOT change
          * when a target ("filter on subset") is used.
          */
-        await events.run.fire({ only: target });
+        await events.run.fire({ only: [test2?.id] as string[] });
         const info3 = await events.info.get();
         expect(info3.instance.context).to.eql(info2.instance.context);
         expect(info3.run.props?.id).to.eql(info2.run.props?.id); // NB: No change to the context (instance/state).
         expect(info3.run.count).to.eql(2);
+        expect(sample.log.count).to.eql(1);
+        expect(sample.log.items[0].text).to.eql('foo-1');
+
+        sample.log.reset();
 
         /**
          * Run for a third time, but with NO target ("filter on subset") value provided.
@@ -261,12 +292,14 @@ describe('DevBus', (e) => {
         const info4 = await events.info.get();
         expect(info4.run.props?.id).to.eql(info3.run.props?.id); // NB: No change to the context (instance/state).
         expect(info4.run.count).to.eql(3);
+        expect(sample.log.count).to.eql(3);
+        expect(sample.log.items.map((e) => e.text)).to.eql(['init', 'foo-1', 'foo-2']);
 
         events.dispose();
       });
 
       it('reset (context/state)', async () => {
-        const events = await Sample.createPreloaded();
+        const events = await Sample.preloaded();
 
         /**
          * No change to context/state.
@@ -294,7 +327,7 @@ describe('DevBus', (e) => {
       type T = { msg?: string; count: number };
 
       it('updates state', async () => {
-        const events = await Sample.createPreloaded();
+        const events = await Sample.preloaded();
         const info1 = await events.info.get();
         expect(info1.state).to.eql(undefined);
 
@@ -317,7 +350,7 @@ describe('DevBus', (e) => {
       });
 
       it('reset state (remove)', async () => {
-        const events = await Sample.createPreloaded();
+        const events = await Sample.preloaded();
 
         const initial: T = { count: 0 };
         await events.state.change.fire<T>({ initial, mutate: (draft) => draft.count++ });
