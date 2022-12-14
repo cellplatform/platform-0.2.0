@@ -17,15 +17,9 @@ export default Spec.describe('hook.useSizeObserver', (e) => {
  */
 export const Sample = () => {
   const size = useSizeObserver();
-
   const styles = {
-    base: css({
-      flex: 1,
-      paddingTop: 20,
-      paddingLeft: 40,
-    }),
+    base: css({ flex: 1, paddingTop: 20, paddingLeft: 40 }),
   };
-
   return (
     <div {...styles.base} ref={size.ref}>
       <pre>{JSON.stringify(size.rect, null, '..')}</pre>
