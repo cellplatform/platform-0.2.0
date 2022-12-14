@@ -2,22 +2,35 @@ import * as t from '../common/types.mjs';
 
 type Milliseconds = number;
 type Id = string;
-type TestId = Id;
-type SuiteId = Id;
+type SpecId = Id;
+type O = Record<string, unknown>;
+type IgnoredResponse = any | Promise<any>;
 
 export type DevInstance = { bus: t.EventBus<any>; id: Id };
 
 export type DevInfo = {
+  instance: { context: Id };
   root?: t.TestSuiteModel;
+  state?: O;
   run: { count: number; results?: t.TestSuiteRunResponse; props?: t.SpecRenderProps };
 };
 
-export type DevMutate = (draft: t.DevInfo) => any | Promise<any>;
+export type DevInfoMutater = (draft: t.DevInfo) => IgnoredResponse;
+export type DevInfoStateMutater<T extends O> = (draft: T) => IgnoredResponse;
+
+export type DevInfoChangeMessage =
+  | 'state:write'
+  | 'context:init'
+  | 'spec:load'
+  | 'spec:unload'
+  | 'run:all'
+  | 'run:subset';
 
 /**
  * EVENT (API)
  */
 export type DevEvents = t.Disposable & {
+  disposed: boolean;
   $: t.Observable<t.DevEvent>;
   instance: { bus: Id; id: Id };
   is: { base(input: any): boolean };
@@ -39,10 +52,24 @@ export type DevEvents = t.Disposable & {
   run: {
     req$: t.Observable<t.DevRunReq>;
     res$: t.Observable<t.DevRunRes>;
-    fire(options?: {
-      target?: TestId | SuiteId | (TestId | SuiteId)[];
-      timeout?: Milliseconds;
-    }): Promise<t.DevRunRes>;
+    fire(options?: { only?: SpecId | SpecId[]; timeout?: Milliseconds }): Promise<t.DevRunRes>;
+  };
+  reset: {
+    req$: t.Observable<t.DevResetReq>;
+    res$: t.Observable<t.DevResetRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<DevResetRes>;
+  };
+  state: {
+    changed$: t.Observable<t.DevInfoChanged>;
+    change: {
+      req$: t.Observable<t.DevStateChangeReq>;
+      res$: t.Observable<t.DevStateChangeRes>;
+      fire<T extends O>(args: {
+        mutate: t.DevInfoStateMutater<T>;
+        initial: T;
+        timeout?: Milliseconds;
+      }): Promise<DevStateChangeRes>;
+    };
   };
 };
 
@@ -56,7 +83,11 @@ export type DevEvent =
   | DevLoadReqEvent
   | DevLoadResEvent
   | DevRunReqEvent
-  | DevRunResEvent;
+  | DevRunResEvent
+  | DevResetReqEvent
+  | DevResetResEvent
+  | DevStateChangeReqEvent
+  | DevStateChangeResEvent;
 
 /**
  * Module info.
@@ -77,7 +108,7 @@ export type DevInfoChangedEvent = {
   type: 'sys.dev/info:changed';
   payload: DevInfoChanged;
 };
-export type DevInfoChanged = { instance: Id; info: DevInfo; message: string };
+export type DevInfoChanged = { instance: Id; info: DevInfo; message: DevInfoChangeMessage };
 
 /**
  * Initialize (with Spec)
@@ -101,8 +132,42 @@ export type DevRunReqEvent = { type: 'sys.dev/run:req'; payload: DevRunReq };
 export type DevRunReq = {
   tx: string;
   instance: Id;
-  target?: (TestId | SuiteId)[];
+  only?: SpecId[];
 };
 
 export type DevRunResEvent = { type: 'sys.dev/run:res'; payload: DevRunRes };
 export type DevRunRes = { tx: string; instance: Id; info?: t.DevInfo; error?: string };
+
+/**
+ * Reset context/state.
+ */
+export type DevResetReqEvent = { type: 'sys.dev/reset:req'; payload: DevResetReq };
+export type DevResetReq = { tx: string; instance: Id };
+
+export type DevResetResEvent = { type: 'sys.dev/reset:res'; payload: DevResetRes };
+export type DevResetRes = { tx: string; instance: Id; info?: t.DevInfo; error?: string };
+
+/**
+ * State, mutation
+ */
+export type DevStateChangeReqEvent = {
+  type: 'sys.dev/state/change:req';
+  payload: DevStateChangeReq;
+};
+export type DevStateChangeReq = {
+  tx: string;
+  instance: Id;
+  mutate: t.DevInfoStateMutater<any>;
+  initial: O;
+};
+
+export type DevStateChangeResEvent = {
+  type: 'sys.dev/state/change:res';
+  payload: DevStateChangeRes;
+};
+export type DevStateChangeRes = {
+  tx: string;
+  instance: Id;
+  info?: t.DevInfo;
+  error?: string;
+};

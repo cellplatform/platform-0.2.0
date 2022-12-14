@@ -2,6 +2,9 @@ import { t } from './common';
 
 export const DEFAULT = {
   get INFO(): t.DevInfo {
-    return { run: { count: 0 } };
+    return {
+      instance: { context: '' },
+      run: { count: 0 },
+    };
   },
 };

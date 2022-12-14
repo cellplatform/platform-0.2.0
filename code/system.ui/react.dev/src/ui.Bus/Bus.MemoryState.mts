@@ -4,7 +4,7 @@ import { DEFAULT } from './DEFAULT.mjs';
 type Revision = { number: number; message: string };
 
 export type ChangedHandler = (e: ChangedHandlerArgs) => void;
-export type ChangedHandlerArgs = { message: string; info: t.DevInfo };
+export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevInfo };
 
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
@@ -23,7 +23,7 @@ export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
     get current() {
       return { ..._current };
     },
-    async change(message: string, fn: t.DevMutate) {
+    async change(message: t.DevInfoChangeMessage, fn: t.DevInfoMutater) {
       /**
        * TODO 🐷
        *   Do this with either

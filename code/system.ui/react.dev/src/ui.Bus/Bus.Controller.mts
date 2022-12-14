@@ -1,7 +1,7 @@
 import { run } from './Bus.Controller.run.mjs';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { rx, SpecContext, t, Test } from './common';
+import { Is, rx, SpecContext, t, Test } from './common';
 import { DEFAULT } from './DEFAULT.mjs';
 
 type Id = string;
@@ -22,9 +22,24 @@ export function BusController(args: {
     dispose$: args.dispose$,
     filter: args.filter,
   });
-  const { dispose, dispose$ } = events;
+  const { dispose$ } = events;
 
-  let _context: t.SpecContext = SpecContext.create(args.instance, { dispose$ });
+  let _context: t.SpecCtxWrapper;
+  const Context = {
+    create() {
+      _context = SpecContext.create(args.instance, { dispose$ });
+      state.change('context:init', (draft) => {
+        draft.instance.context = _context.id;
+        draft.state = undefined;
+        Mutate.resetRunInfo(draft);
+      });
+      return _context;
+    },
+    get current() {
+      return _context || (_context = Context.create());
+    },
+  };
+
   const state = BusMemoryState({
     onChanged(e) {
       const { message, info } = e;
@@ -53,18 +68,16 @@ export function BusController(args: {
   events.load.req$.subscribe(async (e) => {
     const { tx } = e;
     let error: string | undefined;
-    _context = SpecContext.create(args.instance, { dispose$ });
+    Context.create();
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      const message = e.bundle ? 'spec:load' : 'spec:unload';
+      const message: t.DevInfoChangeMessage = e.bundle ? 'spec:load' : 'spec:unload';
       await state.change(message, (draft) => {
         draft.root = root;
         if (!root) {
           // Reset (unloaded):
-          draft.run.count = 0;
-          draft.run.results = undefined;
-          draft.run.props = undefined;
+          Mutate.resetRunInfo(draft);
         }
       });
     } catch (err: any) {
@@ -82,15 +95,14 @@ export function BusController(args: {
    * Run the test suite.
    */
   events.run.req$.subscribe(async (e) => {
-    const { tx, target } = e;
-
-    const spec = state.current.root;
+    const { tx, only } = e;
+    const rootSpec = state.current.root;
     let error: string | undefined;
 
     try {
-      if (spec) {
-        const res = await run(_context, spec, { target });
-        const message = 'run:root';
+      if (rootSpec) {
+        const res = await run(_context, rootSpec, { only });
+        const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
           run.count++;
@@ -109,7 +121,48 @@ export function BusController(args: {
   });
 
   /**
+   * Context: Reset.
+   */
+  events.reset.req$.subscribe(async (e) => {
+    const { tx } = e;
+    Context.create();
+    bus.fire({
+      type: 'sys.dev/reset:res',
+      payload: { tx, instance, info: state.current },
+    });
+  });
+
+  /**
+   * State: Write.
+   */
+  events.state.change.req$.subscribe(async (e) => {
+    const { tx } = e;
+    let error: string | undefined;
+
+    state.change('state:write', async (draft) => {
+      const state = draft.state || (draft.state = { ...e.initial });
+      const res = e.mutate(state);
+      if (Is.promise(res)) await res;
+    });
+
+    bus.fire({
+      type: 'sys.dev/state/change:res',
+      payload: { tx, instance, info: state.current, error },
+    });
+  });
+
+  /**
    * API
    */
   return events;
 }
+
+/**
+ * [Helpers]
+ */
+
+const Mutate = {
+  resetRunInfo(info: t.DevInfo) {
+    info.run = DEFAULT.INFO.run;
+  },
+};
