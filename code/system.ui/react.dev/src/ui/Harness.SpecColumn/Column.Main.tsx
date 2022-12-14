@@ -23,6 +23,10 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     item: css({
       position: 'relative',
     }),
+
+    DEBUG_JSON: css({
+      fontSize: 13,
+    }),
   };
 
   const list = renderProps?.debug.main.elements ?? [];
@@ -38,6 +42,10 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div>{elements}</div>
+
+      <div {...styles.DEBUG_JSON}>
+        {/* <pre>renderProps: {JSON.stringify(renderProps, null, '..')}</pre> */}
+      </div>
     </div>
   );
 };

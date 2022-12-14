@@ -18,9 +18,6 @@ export const Harness: React.FC<HarnessProps> = (props) => {
 
   const { instance } = controller;
 
-  console.log('-------------------------------------------');
-  console.log('info', controller.info);
-
   /**
    * [Render]
    */
