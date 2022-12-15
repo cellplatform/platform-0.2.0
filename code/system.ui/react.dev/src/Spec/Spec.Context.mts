@@ -40,7 +40,7 @@ export const SpecContext = {
      */
     const component: t.SpecCtxComponent = {
       render(el) {
-        _props.component.element = el;
+        _props.component.renderer = el;
         return component;
       },
 

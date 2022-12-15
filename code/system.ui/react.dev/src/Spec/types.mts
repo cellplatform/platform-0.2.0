@@ -45,7 +45,7 @@ export type SpecCtxObject = {
 };
 
 export type SpecCtxComponent = {
-  render(el: JSX.Element | undefined): SpecCtxComponent;
+  render(fn: SubjectRenderer): SpecCtxComponent;
   display(value: SpecPropDisplay): SpecCtxComponent;
   backgroundColor(value?: Color): SpecCtxComponent;
   size(width: number | undefined, height: number | undefined): SpecCtxComponent;
@@ -74,7 +74,7 @@ export type SpecRenderProps = {
 };
 
 export type SpecRenderPropsComponent = {
-  element?: JSX.Element;
+  renderer?: SubjectRenderer;
   size?: SpecRenderSize;
   display?: t.SpecPropDisplay;
   backgroundColor?: Color;
@@ -100,3 +100,11 @@ export type SpecRenderSizeFill = {
   y: boolean;
   margin: t.Margin;
 };
+
+/**
+ * Function that returns a renderable element.
+ */
+export type SubjectRenderer<T extends O = O> = (
+  args: SubjectRendererArgs<T>,
+) => JSX.Element | undefined;
+export type SubjectRendererArgs<T extends O> = { state: T };

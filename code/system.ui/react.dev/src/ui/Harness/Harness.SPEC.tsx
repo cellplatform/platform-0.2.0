@@ -7,11 +7,11 @@ export default Spec.describe('Harness', (e) => {
 
     const bundle = import('../../test.sample/ui/MySample.SPEC');
 
-    const el = <Harness style={{ flex: 1 }} spec={bundle} />;
-
-    // const { Dev } = await import('../index.mjs');
-    // const el = await Dev.render(Pkg, Specs);
-
-    ctx.component.size('fill').display('flex').render(el);
+    ctx.component
+      .size('fill')
+      .display('flex')
+      .render((e) => {
+        return <Harness style={{ flex: 1 }} spec={bundle} />;
+      });
   });
 });

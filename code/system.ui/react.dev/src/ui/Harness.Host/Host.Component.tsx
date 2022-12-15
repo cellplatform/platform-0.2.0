@@ -12,7 +12,8 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const { renderProps } = props;
   if (!renderProps) return null;
 
-  const componentSize = Wrangle.componentSize(renderProps.component.size);
+  const p = renderProps.component;
+  const size = Wrangle.componentSize(p.size);
 
   /**
    * [Render]
@@ -29,17 +30,20 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       pointerEvents: 'auto',
       userSelect: 'auto',
 
-      display: renderProps.component.display,
-      width: componentSize.width,
-      height: componentSize.height,
-      backgroundColor: Color.format(renderProps.component.backgroundColor),
+      display: p.display,
+      width: size.width,
+      height: size.height,
+      backgroundColor: Color.format(p.backgroundColor),
     }),
   };
+
+  const el = <div>TMP</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderProps.component.element}
+        {/* {p.renderer} */}
+        {el}
       </div>
     </div>
   );

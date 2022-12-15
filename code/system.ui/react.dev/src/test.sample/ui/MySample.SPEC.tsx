@@ -38,7 +38,7 @@ export default Spec.describe('MySample', (e) => {
 
       .display('flex')
       .backgroundColor(1)
-      .render(el);
+      .render((e) => el);
   });
 
   e.it('foo', async (e) => {
