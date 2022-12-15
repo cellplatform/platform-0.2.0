@@ -126,8 +126,12 @@ export const SpecContext = {
         return res.info ?? (await events.info.get());
       },
 
-      state<T extends O>(initial: T) {
-        return State.create<T>({ initial, events });
+      async state<T extends O>(initial: T) {
+        const info = await events.info.get();
+        return State.create<T>({
+          initial: (info.state ?? initial) as T,
+          events,
+        });
       },
     };
 

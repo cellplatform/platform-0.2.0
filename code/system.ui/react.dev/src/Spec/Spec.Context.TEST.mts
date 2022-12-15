@@ -55,8 +55,7 @@ describe('SpecContext', () => {
     it('read state', async () => {
       const { ctx, dispose } = Sample.ctx();
       const initial: T = { count: 0 };
-      const state = ctx.state<T>(initial);
-      expect(state.initial).to.eql(initial);
+      const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
       dispose();
     });
@@ -64,7 +63,7 @@ describe('SpecContext', () => {
     it('write state (change)', async () => {
       const { ctx, dispose } = Sample.ctx();
       const initial: T = { count: 0 };
-      const state = ctx.state<T>(initial);
+      const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
 
       const res = await state.change((draft) => draft.count++);
@@ -80,7 +79,7 @@ describe('SpecContext', () => {
       const fired: t.DevInfoChanged[] = [];
       events.state.changed$.subscribe((e) => fired.push(e));
 
-      const state = ctx.state<T>({ count: 0 });
+      const state = await ctx.state<T>({ count: 0 });
       await state.change((draft) => draft.count++);
 
       expect(fired.length).to.eql(1);
@@ -93,7 +92,7 @@ describe('SpecContext', () => {
     it('revert to initial after reset', async () => {
       const { ctx, events, dispose } = Sample.ctx();
       const initial: T = { count: 0 };
-      const state = ctx.state<T>(initial);
+      const state = await ctx.state<T>(initial);
 
       await state.change((draft) => draft.count++);
       expect(state.current).to.eql({ count: 1 });
@@ -103,6 +102,21 @@ describe('SpecContext', () => {
       const info = await events.info.get();
       expect(state.current).to.eql(initial);
       expect(info.state).to.eql(undefined);
+
+      dispose();
+    });
+
+    it('live updates (via event listeners)', async () => {
+      const { ctx, dispose } = Sample.ctx();
+      const initial: T = { count: 0 };
+      const state1 = await ctx.state<T>(initial);
+      const state2 = await ctx.state<T>(initial);
+
+      await state1.change((draft) => (draft.msg = 'hello'));
+      expect(state2.current).to.eql({ count: 0, msg: 'hello' });
+
+      await state2.change((draft) => (draft.count = 1234));
+      expect(state1.current).to.eql({ count: 1234, msg: 'hello' });
 
       dispose();
     });

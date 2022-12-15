@@ -28,11 +28,10 @@ export type SpecCtx = {
   toObject(): SpecCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;
-  state<T extends O>(initial: T): SpecCtxState<T>;
+  state<T extends O>(initial: T): Promise<SpecCtxState<T>>;
 };
 
 export type SpecCtxState<T extends O> = {
-  initial: T;
   current: T;
   change(fn: (draft: T) => IgnoredResponse): Promise<T>;
 };

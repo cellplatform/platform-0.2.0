@@ -13,7 +13,6 @@ export const State = {
     events.state.changed$.subscribe((e) => (_current = (e.info.state ?? initial) as T));
 
     const state: t.SpecCtxState<T> = {
-      initial,
       get current() {
         return _current ?? initial;
       },
