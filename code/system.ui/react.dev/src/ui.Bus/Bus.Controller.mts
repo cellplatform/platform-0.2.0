@@ -105,8 +105,8 @@ export function BusController(args: {
         const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
+          draft.props = res.props;
           run.count++;
-          run.props = res.props;
           run.results = res.results;
         });
       }

@@ -11,7 +11,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
-  const renderProps = current.info?.run.props;
+  const renderProps = current.info?.props;
   if (!renderProps) return null;
 
   /**

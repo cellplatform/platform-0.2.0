@@ -12,7 +12,8 @@ export type DevInfo = {
   instance: { context: Id };
   root?: t.TestSuiteModel;
   state?: O;
-  run: { count: number; results?: t.TestSuiteRunResponse; props?: t.SpecRenderProps };
+  props?: t.SpecRenderProps;
+  run: { count: number; results?: t.TestSuiteRunResponse };
 };
 
 export type DevInfoMutater = (draft: t.DevInfo) => IgnoredResponse;

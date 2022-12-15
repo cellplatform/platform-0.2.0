@@ -11,7 +11,7 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
 
   const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
   const results = current.info?.run.results;
-  const renderProps = current.info?.run.props;
+  const renderProps = current.info?.props;
 
   /**
    * [Render]

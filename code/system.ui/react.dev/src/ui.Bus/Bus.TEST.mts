@@ -152,7 +152,7 @@ describe('DevBus', (e) => {
       it('render context changes between load/unload', async () => {
         const events = await Sample.create();
 
-        const getId = async () => (await events.info.get()).run.props?.id;
+        const getId = async () => (await events.info.get()).props?.id;
         const id1 = await getId();
 
         await events.load.fire(SAMPLES.Sample1);
@@ -192,9 +192,8 @@ describe('DevBus', (e) => {
         expect(info2?.run.count).to.eql(2);
         expect(info3?.run.count).to.eql(3);
 
-        const run = info3?.run;
-        expect(run?.results?.description).to.eql('MySample');
-        expect(run?.props?.component.backgroundColor).to.eql(1);
+        expect(info3?.run?.results?.description).to.eql('MySample');
+        expect(info3?.props?.component.backgroundColor).to.eql(1);
 
         events.dispose();
       });
@@ -205,7 +204,7 @@ describe('DevBus', (e) => {
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(0);
         expect(info1?.run.results).to.eql(undefined);
-        expect(info1?.run.props).to.eql(undefined);
+        expect(info1?.props).to.eql(undefined);
 
         events.dispose();
       });
@@ -221,7 +220,7 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(info2?.run.count).to.eql(0);
         expect(info2?.run.results).to.eql(undefined);
-        expect(info2?.run.props).to.eql(undefined);
+        expect(info2?.props).to.eql(undefined);
 
         events.dispose();
       });
@@ -270,7 +269,7 @@ describe('DevBus', (e) => {
         const test2 = root?.state.tests[1];
         expect(test1).to.exist;
         expect(test2).to.exist;
-        expect(info1.run.props?.id).to.eql(undefined);
+        expect(info1.props?.id).to.eql(undefined);
 
         /**
          * Run for the first time with a target ("filter on subset") value provided.
@@ -281,7 +280,7 @@ describe('DevBus', (e) => {
 
         const info2 = await events.info.get();
         expect(info2.instance.context).to.eql(info1.instance.context);
-        expect(info2.run.props?.id).to.exist;
+        expect(info2.props?.id).to.exist;
         expect(info2.run.count).to.eql(1);
         expect(sample.log.count).to.eql(1);
         expect(sample.log.items[0].args.description).to.eql('init');
@@ -295,7 +294,7 @@ describe('DevBus', (e) => {
         await events.run.fire({ only: [test2?.id] as string[] });
         const info3 = await events.info.get();
         expect(info3.instance.context).to.eql(info2.instance.context);
-        expect(info3.run.props?.id).to.eql(info2.run.props?.id); // NB: No change to the context (instance/state).
+        expect(info3.props?.id).to.eql(info2.props?.id); // NB: No change to the context (instance/state).
         expect(info3.run.count).to.eql(2);
         expect(sample.log.count).to.eql(1);
         expect(sample.log.items[0].args.description).to.eql('foo-1');
@@ -308,7 +307,7 @@ describe('DevBus', (e) => {
          */
         await events.run.fire({});
         const info4 = await events.info.get();
-        expect(info4.run.props?.id).to.eql(info3.run.props?.id); // NB: No change to the context (instance/state).
+        expect(info4.props?.id).to.eql(info3.props?.id); // NB: No change to the context (instance/state).
         expect(info4.run.count).to.eql(3);
         expect(sample.log.count).to.eql(3);
         expect(sample.log.items.map((e) => e.args.description)).to.eql(['init', 'foo-1', 'foo-2']);
@@ -328,14 +327,14 @@ describe('DevBus', (e) => {
         await events.run.fire({});
         const info2 = await events.info.get();
         expect(info2.instance.context).to.eql(info1.instance.context);
-        expect(info2.run.props?.id).to.eql(info1.run.props?.id); // NB: No change to the context (instance/state).
+        expect(info2.props?.id).to.eql(info1.props?.id); // NB: No change to the context (instance/state).
 
         events.reset.fire();
 
         // NB: instances changed.
         const info3 = await events.info.get();
         expect(info3.instance.context).to.not.eql(info2.instance.context);
-        expect(info3.run.props?.id).to.not.eql(info2.run.props?.id);
+        expect(info3.props?.id).to.not.eql(info2.props?.id);
 
         events.dispose();
       });
