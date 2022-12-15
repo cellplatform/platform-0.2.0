@@ -8,8 +8,8 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "deploy": "sh script/deploy.sh",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "deploy": "yarn version --patch && yarn audit && yarn build && ts-node-esm -T ./script/deploy.mts",
+    "tmp": "ts-node-esm -T   ./script/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
