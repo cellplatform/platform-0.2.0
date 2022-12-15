@@ -1,4 +1,4 @@
-import { Color, css, t } from '../common';
+import { Color, css, t, useCurrentState } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type HarnessHostComponentProps = {
@@ -9,15 +9,18 @@ export type HarnessHostComponentProps = {
 };
 
 export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
-  const { renderProps } = props;
-  if (!renderProps) return null;
+  const { instance } = props;
+  const component = props.renderProps?.component;
+  const renderer = component?.renderer;
+  const current = useCurrentState(instance);
 
-  const p = renderProps.component;
-  const size = Wrangle.componentSize(p.size);
+  if (!component || !renderer) return null;
+  const state = current.info?.state ?? {};
 
   /**
    * [Render]
    */
+  const size = Wrangle.componentSize(component?.size);
   const styles = {
     base: css({
       position: 'relative',
@@ -30,20 +33,17 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       pointerEvents: 'auto',
       userSelect: 'auto',
 
-      display: p.display,
+      display: component.display,
       width: size.width,
       height: size.height,
-      backgroundColor: Color.format(p.backgroundColor),
+      backgroundColor: Color.format(component.backgroundColor),
     }),
   };
-
-  const el = <div>TMP</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {/* {p.renderer} */}
-        {el}
+        {renderer({ state })}
       </div>
     </div>
   );
