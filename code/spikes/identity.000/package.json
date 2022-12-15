@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist.deploy/.latest/app && serve --config vercel.json",
+    "serve": "cd dist.deploy/.latest/app && serve",
     "test": "ts-node-esm    -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm   -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm   -T ../../../script.ts/cmd.clean.mts",
