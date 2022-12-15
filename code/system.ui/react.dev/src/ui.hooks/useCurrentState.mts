@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { filter, distinctUntilChanged } from 'rxjs/operators';
 
 import { DevBus, rx, t } from './common';
 
 type C = t.DevInfoChanged;
-type Changed = (prev: C, next: C) => boolean;
+type Unchanged = (prev: C, next: C) => boolean;
+type Filter = (e: C) => boolean;
 
 /**
  * HOOK: monitors change in the current state.
  */
-export function useCurrentState(instance: t.DevInstance, distinctUntil?: Changed) {
+export function useCurrentState(
+  instance: t.DevInstance,
+  options: { distinctUntil?: Unchanged; filter?: Filter } = {},
+) {
+  const { distinctUntil } = options;
   const busid = rx.bus.instance(instance.bus);
   const [info, setInfo] = useState<t.DevInfo>();
 
@@ -20,7 +25,11 @@ export function useCurrentState(instance: t.DevInstance, distinctUntil?: Changed
     const events = DevBus.Events({ instance });
 
     events.info.changed$
-      .pipe(distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)))
+
+      .pipe(
+        filter((e) => (options.filter ? options.filter(e) : true)),
+        distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)),
+      )
       .subscribe((e) => setInfo(e.info));
 
     return () => events.dispose();
