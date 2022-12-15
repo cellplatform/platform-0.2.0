@@ -31,7 +31,7 @@ export function BusController(args: {
       state.change('context:init', (draft) => {
         draft.instance.context = _context.id;
         draft.state = undefined;
-        Mutate.resetRunInfo(draft);
+        Mutate.resetInfo(draft);
       });
       return _context;
     },
@@ -77,7 +77,7 @@ export function BusController(args: {
         draft.root = root;
         if (!root) {
           // Reset (unloaded):
-          Mutate.resetRunInfo(draft);
+          Mutate.resetInfo(draft);
         }
       });
     } catch (err: any) {
@@ -162,7 +162,8 @@ export function BusController(args: {
  */
 
 const Mutate = {
-  resetRunInfo(info: t.DevInfo) {
+  resetInfo(info: t.DevInfo) {
     info.run = DEFAULT.INFO.run;
+    info.props = undefined;
   },
 };
