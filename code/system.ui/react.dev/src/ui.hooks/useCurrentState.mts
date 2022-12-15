@@ -20,7 +20,7 @@ export function useCurrentState(instance: t.DevInstance, distinctUntil?: Changed
     const events = DevBus.Events({ instance });
 
     events.info.changed$
-      .pipe(distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : true)))
+      .pipe(distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)))
       .subscribe((e) => setInfo(e.info));
 
     return () => events.dispose();
