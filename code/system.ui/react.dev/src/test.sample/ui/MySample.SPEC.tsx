@@ -1,5 +1,6 @@
 import { Color, css, Spec } from '../common';
 import { MySample } from './MySample';
+import { Dev } from '../../Dev.mjs';
 
 let _count = 0;
 
@@ -11,15 +12,18 @@ export default Spec.describe('MySample', (e) => {
     const ctx = Spec.ctx(e);
     const instance = ctx.toObject().instance;
 
-    const state = ctx.state<T>({ count: 0 });
+    const state = await ctx.state<T>({ count: 0 });
+    const text = `MySample-${_count} | state.count: ${state.current.count}`;
 
     const el = (
       <MySample
-        text={`MySample-${_count} | state.count: ${state.current.count}`}
         style={{ flex: 1 }}
+        text={text}
+        state={state.current}
         onClick={() => {
           // ctx.reset
-          ctx.run({ reset: true }); // Re-run all.
+          ctx.component.backgroundColor(-0.3);
+          // ctx.run({ reset: true }); // Re-run all.
           state.change((draft) => draft.count++);
         }}
       />
@@ -58,19 +62,24 @@ export default Spec.describe('MySample', (e) => {
     const el = (
       <div
         {...styles.base}
-        onClick={() => {
-          //
-
-          // console.log('e', e);
-
+        onClick={async () => {
+          console.log('-------------------------------------------');
           console.log('e.id', e.id);
           console.log('ctx', ctx);
 
-          const target = e.id;
-          ctx.run({ only: target });
-          // DevBus.withEvents(instance, (events) => {
-          //   events.run.fire();
-          // });
+          const state = await ctx.state<T>({ count: 0 });
+          console.log('before', state.current);
+
+          await state.change((draft) => draft.count++);
+
+          // ctx.run({ only: e.id });
+          Dev.Bus.withEvents(instance, async (events) => {
+            //
+            const info = await events.info.get();
+            console.log('info', info);
+            console.log('info.state', info.state);
+            console.log('state.current', state.current);
+          });
         }}
       >
         {`Hello Foo!`}

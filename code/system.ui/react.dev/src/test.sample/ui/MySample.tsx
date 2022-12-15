@@ -2,6 +2,7 @@ import { css, t } from '../../common';
 
 export type MySampleProps = {
   text?: string;
+  state?: t.Json;
   style?: t.CssValue;
   onClick?: () => void;
 };
@@ -19,6 +20,9 @@ export const MySample: React.FC<MySampleProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
       <div>{props.text ?? 'MyComponent'} 🐷</div>
+      <div>
+        <pre>{props.state && JSON.stringify(props.state)}</pre>
+      </div>
     </div>
   );
 };
