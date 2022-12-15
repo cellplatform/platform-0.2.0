@@ -8,7 +8,7 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "deploy": "yarn audit && yarn build && ts-node-esm  -T ./script.ts/deploy.mts",
+    "deploy": "sh script/deploy.sh",
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
