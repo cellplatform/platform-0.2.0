@@ -10,7 +10,7 @@ export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
 /**
- * Context API.
+ * Context Wrapper (Manager)
  */
 export type SpecCtxWrapper = t.Disposable & {
   readonly id: Id;
@@ -20,6 +20,9 @@ export type SpecCtxWrapper = t.Disposable & {
   refresh(): Promise<void>;
 };
 
+/**
+ * Context passed into specs.
+ */
 export type SpecCtx = {
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
@@ -61,7 +64,7 @@ export type SpecCtxDebug = {
 };
 
 /**
- * Rendering Argument State
+ * Rendering state produced by the props
  */
 export type SpecRenderProps = {
   id: string;
