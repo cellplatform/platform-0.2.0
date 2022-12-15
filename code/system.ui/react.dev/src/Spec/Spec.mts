@@ -9,7 +9,9 @@ export const Spec = {
    * Usage:
    *
    *    export default Spec.describe('My Thing', (e) => {
-   *      ...
+   *      e.it('name', (e) => {
+   *        cont ctx = Spec.ctx(e);
+   *      });
    *    });
    *
    */
