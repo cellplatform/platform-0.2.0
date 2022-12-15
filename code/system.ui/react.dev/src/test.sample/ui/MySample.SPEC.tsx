@@ -1,5 +1,4 @@
-import { Color, css } from '../../common';
-import { Spec } from '../../Spec';
+import { Color, css, Spec } from '../common';
 import { MySample } from './MySample';
 
 let _count = 0;

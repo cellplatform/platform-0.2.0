@@ -225,6 +225,25 @@ describe('DevBus', (e) => {
 
         events.dispose();
       });
+
+      it('run: { ctx.initial } flag', async () => {
+        const { Wrapper } = await SAMPLES.Sample2;
+        const sample = Wrapper();
+        const events = await Sample.create();
+
+        await sample.root.init();
+        await events.load.fire(sample.root);
+
+        await events.run.fire();
+        expect(sample.log.items.every(({ ctx }) => ctx.initial)).to.eql(true);
+
+        sample.log.reset();
+
+        await events.run.fire();
+        expect(sample.log.items.every(({ ctx }) => ctx.initial)).to.eql(false);
+
+        events.dispose();
+      });
     });
 
     describe('run ({ only } specific specs)', () => {
@@ -240,7 +259,6 @@ describe('DevBus', (e) => {
         /**
          * TODO 🐷
          *
-         * - Move (copy) the BUNDLE_IMPORT to a "test/samples" directory
          * - Details on ctx:
          *    - parent
          *    - siblings ("its" and "describes")
@@ -266,7 +284,7 @@ describe('DevBus', (e) => {
         expect(info2.run.props?.id).to.exist;
         expect(info2.run.count).to.eql(1);
         expect(sample.log.count).to.eql(1);
-        expect(sample.log.items[0].text).to.eql('init');
+        expect(sample.log.items[0].args.description).to.eql('init');
 
         sample.log.reset();
 
@@ -280,7 +298,7 @@ describe('DevBus', (e) => {
         expect(info3.run.props?.id).to.eql(info2.run.props?.id); // NB: No change to the context (instance/state).
         expect(info3.run.count).to.eql(2);
         expect(sample.log.count).to.eql(1);
-        expect(sample.log.items[0].text).to.eql('foo-1');
+        expect(sample.log.items[0].args.description).to.eql('foo-1');
 
         sample.log.reset();
 
@@ -293,7 +311,7 @@ describe('DevBus', (e) => {
         expect(info4.run.props?.id).to.eql(info3.run.props?.id); // NB: No change to the context (instance/state).
         expect(info4.run.count).to.eql(3);
         expect(sample.log.count).to.eql(3);
-        expect(sample.log.items.map((e) => e.text)).to.eql(['init', 'foo-1', 'foo-2']);
+        expect(sample.log.items.map((e) => e.args.description)).to.eql(['init', 'foo-1', 'foo-2']);
 
         events.dispose();
       });

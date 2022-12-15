@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { Margin, slug, t } from '../common';
 import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
 import { State } from './Spec.Context.State.mjs';
@@ -31,6 +33,7 @@ export const SpecContext = {
     const { dispose, dispose$ } = events;
 
     let _props = DEFAULT.props;
+    let _initial = true;
 
     /**
      * The component subject (being controlled by the spec).
@@ -100,6 +103,9 @@ export const SpecContext = {
       component,
       host,
       debug,
+      get initial() {
+        return _initial;
+      },
 
       toObject() {
         return {
@@ -136,6 +142,10 @@ export const SpecContext = {
       ctx,
       get props() {
         return _props;
+      },
+      async refresh() {
+        const info = await events.info.get();
+        _initial = info.run.count === 0;
       },
     };
   },

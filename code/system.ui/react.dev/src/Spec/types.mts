@@ -17,12 +17,14 @@ export type SpecCtxWrapper = t.Disposable & {
   readonly instance: t.DevInstance;
   readonly ctx: SpecCtx;
   readonly props: SpecRenderProps;
+  refresh(): Promise<void>;
 };
 
 export type SpecCtx = {
   readonly component: SpecCtxComponent;
   readonly host: SpecCtxHost;
   readonly debug: SpecCtxDebug;
+  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
   toObject(): SpecCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;

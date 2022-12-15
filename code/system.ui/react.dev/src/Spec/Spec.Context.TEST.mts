@@ -1,7 +1,7 @@
 import { Spec } from '.';
-import { rx, describe, expect, it, slug, t } from '../test';
-import { SpecContext } from './Spec.Context.mjs';
+import { describe, expect, it, rx, slug, t } from '../test';
 import { DevBus } from '../ui.Bus';
+import { SpecContext } from './Spec.Context.mjs';
 
 const bus = rx.bus();
 
@@ -16,7 +16,7 @@ describe('SpecContext', () => {
       const events = DevBus.Controller({ instance });
       const { dispose, dispose$ } = events;
       const wrapper = SpecContext.create(instance, { dispose$ });
-      const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout });
+      const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout, description: 'MyFoo' });
       return { ctx, wrapper, dispose, events };
     },
   };
@@ -24,7 +24,7 @@ describe('SpecContext', () => {
   it('e.ctx(e)', () => {
     const instance = Sample.instance();
     const wrapper = SpecContext.create(instance);
-    const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout });
+    const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout, description: 'MyFoo' });
 
     expect(typeof ctx.component.render).to.eql('function');
     expect(typeof ctx.toObject).to.eql('function');
