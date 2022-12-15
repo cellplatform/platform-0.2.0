@@ -10,7 +10,7 @@ export type HarnessHostProps = {
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
-  const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
+  const current = useCurrentState(instance, distinctUntil);
   const renderProps = current.info?.props;
   if (!renderProps) return null;
 
@@ -44,4 +44,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 /**
  * Helpers
  */
-const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;
+const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
+const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
+  return tx(prev) === tx(next);
+};
