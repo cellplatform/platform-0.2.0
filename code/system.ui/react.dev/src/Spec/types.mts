@@ -1,9 +1,10 @@
 import * as t from '../common/types.mjs';
 
+type O = Record<string, unknown>;
+
 type Id = string;
 type SpecId = Id;
 type Color = string | number;
-type O = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
 export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
@@ -45,7 +46,7 @@ export type SpecCtxObject = {
 };
 
 export type SpecCtxComponent = {
-  render(fn: SubjectRenderer): SpecCtxComponent;
+  render<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxComponent;
   display(value: SpecPropDisplay): SpecCtxComponent;
   backgroundColor(value?: Color): SpecCtxComponent;
   size(width: number | undefined, height: number | undefined): SpecCtxComponent;
@@ -107,4 +108,4 @@ export type SpecRenderSizeFill = {
 export type SubjectRenderer<T extends O = O> = (
   args: SubjectRendererArgs<T>,
 ) => JSX.Element | undefined;
-export type SubjectRendererArgs<T extends O> = { state: T };
+export type SubjectRendererArgs<T extends O = O> = { state: T };
