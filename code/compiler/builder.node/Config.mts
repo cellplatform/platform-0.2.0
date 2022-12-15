@@ -107,8 +107,14 @@ export const Config = {
       const hasPlugin = (...items: t.VitePlugin[]) => items.some((name) => plugins.includes(name));
 
       if (hasPlugin('web:react')) {
-        const react = (await import('@vitejs/plugin-react-swc')).default;
-        config.plugins?.push(react());
+        const react = (await import('@vitejs/plugin-react')).default;
+        config.plugins?.push(
+          react({
+            // NB: "classic" (rather than the default) supresses a build warning:
+            //    Message: "[@vitejs/plugin-react] You should stop using "vite:react-jsx" since this plugin conflicts with it"
+            jsxRuntime: 'classic',
+          }),
+        );
       }
 
       if (hasPlugin('web:svelte')) {
