@@ -1,7 +1,6 @@
 type Id = string;
 type Anything = void | any;
 type Milliseconds = number;
-type Description = string;
 type Ctx = Record<string, unknown>;
 
 export type BundleImport = TestSuiteModel | Promise<any>;
@@ -40,17 +39,18 @@ export type TestSuiteDescribe = TestSuiteDescribeDef & {
   only: TestSuiteDescribeDef;
 };
 export type TestSuiteDescribeDef = (
-  description: Description,
+  description: string,
   handler?: TestSuiteHandler,
 ) => TestSuiteModel;
 
 export type TestSuiteIt = TestSuiteItDef & { skip: TestSuiteItDef; only: TestSuiteItDef };
-export type TestSuiteItDef = (description: Description, handler?: TestHandler) => TestModel;
+export type TestSuiteItDef = (description: string, handler?: TestHandler) => TestModel;
 
 export type TestSuiteHandler = (e: TestSuite) => Anything | Promise<Anything>;
 export type TestHandler = (e: TestHandlerArgs) => Anything | Promise<Anything>;
 export type TestHandlerArgs = {
   id: Id;
+  description: string;
   timeout(value: Milliseconds): TestHandlerArgs;
   ctx?: Ctx;
 };
@@ -63,7 +63,7 @@ export type TestModel = {
   parent: TestSuiteModel;
   id: Id;
   run: TestRun;
-  description: Description;
+  description: string;
   handler?: TestHandler;
   modifier?: TestModifier;
   clone(): TestModel;
@@ -80,7 +80,7 @@ export type TestRunResponse = {
   id: Id;
   tx: Id; // Unique ID for the individual test run operation.
   ok: boolean;
-  description: Description;
+  description: string;
   elapsed: Milliseconds;
   timeout: Milliseconds;
   excluded?: TestModifier[];
@@ -104,7 +104,7 @@ export type TestSuiteModel = TestSuite & {
 export type TestSuiteModelState = {
   parent?: TestSuiteModel;
   ready: boolean; // true after [init] has been run.
-  description: Description;
+  description: string;
   handler?: TestSuiteHandler;
   tests: TestModel[];
   children: TestSuiteModel[];
@@ -123,7 +123,7 @@ export type TestSuiteRunResponse = {
   id: Id;
   tx: Id; // Unique ID for the individual suite run operation.
   ok: boolean;
-  description: Description;
+  description: string;
   elapsed: Milliseconds;
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];

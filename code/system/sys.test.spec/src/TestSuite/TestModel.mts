@@ -53,6 +53,7 @@ export const TestModel = (args: {
 
       const args: t.TestHandlerArgs = {
         id,
+        description,
         ctx: options.ctx,
         timeout(value) {
           response.timeout = Math.max(0, value);

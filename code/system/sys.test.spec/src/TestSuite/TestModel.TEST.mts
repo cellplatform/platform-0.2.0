@@ -124,6 +124,7 @@ describe('TestModel', () => {
       expect(args.length).to.eql(1);
       expect(args[0].id).to.eql(test.id);
       expect(args[0].ctx).to.eql(undefined);
+      expect(args[0].description).to.eql(description);
       expect(typeof args[0].timeout).to.eql('function');
     });
 
