@@ -1,6 +1,6 @@
 {
   "name": "spike.publish.react",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,19 +10,19 @@
     "clean": "ts-node-esm  -T ../../../script.ts/cmd.clean.mts",
     "bundle": "ts-node-esm -T ./script.ts/bundle.mts",
     "prepare": "yarn build && yarn test --run --reporter=verbose",
-    "deploy": "yarn audit && yarn prepare && yarn tmp",
-    "tmp": "ts-node-esm -T ./script.ts/tmp.mts"
+    "deploy": "sh script/deploy.sh",
+    "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
-    "sys.types": "0.0.0",
-    "sys.text": "0.0.0",
-    "sys.fs": "0.0.0",
-    "sys.fs.indexeddb": "0.0.0",
-    "sys.util": "0.0.0",
     "@monaco-editor/react": "^4.4.6",
     "monaco-editor": "^0.34.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sys.fs": "0.0.0",
+    "sys.fs.indexeddb": "0.0.0",
+    "sys.text": "0.0.0",
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -31,8 +31,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.c2f40750.js",
-    "./web": "./dist/web/lib/index.c2f40750.js"
+    ".": "./dist/web/lib/index.571a9938.js",
+    "./web": "./dist/web/lib/index.571a9938.js"
   },
   "typesVersions": {
     "*": {
