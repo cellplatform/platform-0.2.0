@@ -76,6 +76,9 @@ export default Spec.describe('MySample', (e) => {
         {`Hello Foo!`}
       </div>
     );
-    ctx.debug.TEMP(el);
+
+    if (ctx.initial) {
+      ctx.debug.TEMP(el);
+    }
   });
 });
