@@ -9,7 +9,7 @@ export type HarnessSpecColumnProps = {
 export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   const { instance } = props;
 
-  const current = useCurrentState(instance, (prev, next) => tx(prev) === tx(next));
+  const current = useCurrentState(instance, { distinctUntil });
   const results = current.info?.run.results;
   const renderProps = current.info?.props;
 
@@ -39,4 +39,10 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
 /**
  * Helpers
  */
-const tx = (changed: t.DevInfoChanged) => changed.info.run.results?.tx;
+/**
+ * Helpers
+ */
+const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
+const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
+  return tx(prev) === tx(next);
+};

@@ -7,11 +7,8 @@ export type SpecColumnMainProps = {
   style?: t.CssValue;
 };
 
-let _count = 0;
-
 export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
   const { renderProps } = props;
-  _count++;
 
   /**
    * [Render]
@@ -34,7 +31,6 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     return (
       <div key={i} {...styles.item}>
         {el}
-        <div>render count: {_count}</div>
       </div>
     );
   });
