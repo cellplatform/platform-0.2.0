@@ -154,7 +154,7 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 
 <p>&nbsp;</p>
 
-**Note:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
+**NOTES:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away.  Put another way, `node.js` is intentionally not a fundamental dependency (although `node-js` is not going away anytime soon of course). It bootstraps us into the W3C/JS runtime standard.
 
 There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser (ref [WinterCG](https://wintercg.org/))).
@@ -163,9 +163,9 @@ There is much healthy innovation emerging around the eco-system of Web standards
 In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (eg. [WinterCG](https://wintercg.org/))).
 
 
-In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to the `pure functional` "logic only" libraries.  This is because UI tends towards much higher volatility in a technical architecutre over time, and tends to be swapped our more repeatedly over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.
+**UI Framework Agnostic:** In the arena of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI modules (`system.ui`) are partitioned clearly as distinct to the `pure functional` "logic only" libraries (`system`).  This is because UI invariably tends towards a much higher volatility in technical architecutre over time, and is generally swapped out more frequently over the software lifecycle. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone. And down at the straight forward engineering level, much hidden complexity is often lurking in and around UI code.
 
-Organizing for this is expressed within the distinct folders `/system/` and `/system.ui/` in the root. The `system.ui` sub-folder structure's purpose is to isolatie and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
+Organizing for all this is expressed within the distinct folders `/system/` and `/system.ui/` in the code root. The purpose of the `system.ui`'s child-folder structure is to isolate and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
 
 
 ```
