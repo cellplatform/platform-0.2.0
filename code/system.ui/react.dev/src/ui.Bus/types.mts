@@ -11,10 +11,7 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 export type DevInfo = {
   instance: { context: Id };
   root?: t.TestSuiteModel;
-  props?: t.SpecRenderProps;
-  render: {
-    state?: O;
-  };
+  render: { state?: O; props?: t.SpecRenderProps };
   run: { count: number; results?: t.TestSuiteRunResponse };
 };
 

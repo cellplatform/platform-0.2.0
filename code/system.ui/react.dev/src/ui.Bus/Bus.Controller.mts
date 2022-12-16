@@ -30,8 +30,7 @@ export function BusController(args: {
       _context = SpecContext.create(args.instance, { dispose$ });
       state.change('context:init', (draft) => {
         draft.instance.context = _context.id;
-        draft.render.state = undefined;
-        Mutate.resetInfo(draft);
+        Reset.info(draft);
       });
       return _context;
     },
@@ -77,7 +76,7 @@ export function BusController(args: {
         draft.root = root;
         if (!root) {
           // Reset (unloaded):
-          Mutate.resetInfo(draft);
+          Reset.info(draft);
         }
       });
     } catch (err: any) {
@@ -105,7 +104,7 @@ export function BusController(args: {
         const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
-          draft.props = res.props;
+          draft.render.props = res.props;
           run.count++;
           run.results = res.results;
         });
@@ -161,9 +160,10 @@ export function BusController(args: {
  * [Helpers]
  */
 
-const Mutate = {
-  resetInfo(info: t.DevInfo) {
+const Reset = {
+  info(info: t.DevInfo) {
     info.run = DEFAULT.INFO.run;
-    info.props = undefined;
+    info.render.props = undefined;
+    info.render.state = undefined;
   },
 };

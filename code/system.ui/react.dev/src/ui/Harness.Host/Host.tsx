@@ -11,7 +11,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
-  const renderProps = current.info?.props;
+  const renderProps = current.info?.render.props;
   if (!renderProps) return null;
 
   /**
