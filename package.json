@@ -7,7 +7,7 @@
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
     "clean": "ts-node-esm  -T script.ts/cmd.all.clean.mts",
     "ls": "ts-node-esm  -T script.ts/cmd.all.list.mts",
-    "ci": "yarn build && yarn test",
+    "ci": "yarn audit && yarn build && yarn test",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
@@ -20,7 +20,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
     "@tauri-apps/api": "^1.2.0",
-    "@vercel/edge": "^0.1.2",
+    "@vercel/edge": "^0.2.0",
     "@vimeo/player": "^2.18.0",
     "asmcrypto.js": "^2.3.2",
     "automerge": "^1.0.1-preview.7",
@@ -46,7 +46,7 @@
     "react-icons": "^4.7.1",
     "react-spinners": "^0.13.7",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.6.0",
+    "rxjs": "^7.8.0",
     "tinycolor2": "^1.4.2",
     "rehype-sanitize": "^5.0.1",
     "rehype-stringify": "^9.0.3",
