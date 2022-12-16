@@ -24,7 +24,7 @@ export default Spec.describe('Spinner', (e) => {
     const ctx = Spec.ctx(e);
     const md = await Processor.toMarkdown(markdown);
 
-    const el = (
+    ctx.component.render(() => (
       <TileOutline
         markdown={markdown}
         widths={{ root: 250, child: 300 }}
@@ -48,8 +48,6 @@ export default Spec.describe('Spinner', (e) => {
           );
         }}
       />
-    );
-
-    ctx.component.render(el);
+    ));
   });
 });

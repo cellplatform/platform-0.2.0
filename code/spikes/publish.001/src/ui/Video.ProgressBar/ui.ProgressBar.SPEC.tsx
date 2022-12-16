@@ -4,7 +4,10 @@ import { ProgressBar } from './ui.ProgressBar';
 export default Spec.describe('Video.ProbressBar', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
-    const el = <ProgressBar />;
-    ctx.component.backgroundColor(1).size('fill-x').render(el);
+
+    ctx.component
+      .backgroundColor(1)
+      .size('fill-x')
+      .render(() => <ProgressBar />);
   });
 });
