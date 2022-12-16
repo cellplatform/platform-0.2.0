@@ -30,7 +30,7 @@ export function BusController(args: {
       _context = SpecContext.create(args.instance, { dispose$ });
       state.change('context:init', (draft) => {
         draft.instance.context = _context.id;
-        draft.state = undefined;
+        draft.render.state = undefined;
         Mutate.resetInfo(draft);
       });
       return _context;
@@ -140,7 +140,7 @@ export function BusController(args: {
     let error: string | undefined;
 
     state.change('state:write', async (draft) => {
-      const state = draft.state || (draft.state = { ...e.initial });
+      const state = draft.render.state || (draft.render.state = { ...e.initial });
       const res = e.mutate(state);
       if (Is.promise(res)) await res;
     });

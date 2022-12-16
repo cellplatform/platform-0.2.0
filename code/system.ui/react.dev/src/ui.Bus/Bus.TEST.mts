@@ -137,14 +137,14 @@ describe('DevBus', (e) => {
         type T = { count: number };
         await events.state.change.fire<T>({ initial: { count: 0 }, mutate: (d) => d.count++ });
         const info1 = await events.info.get();
-        expect(info1.state).to.eql({ count: 1 });
+        expect(info1.render.state).to.eql({ count: 1 });
 
         const res2 = await events.unload.fire();
         expect(res2.info?.root).to.eql(undefined);
 
         const info2 = await events.info.get();
         expect(info2?.root).to.eql(undefined);
-        expect(info2.state).to.eql(undefined);
+        expect(info2.render.state).to.eql(undefined);
 
         events.dispose();
       });
@@ -346,7 +346,7 @@ describe('DevBus', (e) => {
       it('updates state', async () => {
         const events = await Sample.preloaded();
         const info1 = await events.info.get();
-        expect(info1.state).to.eql(undefined);
+        expect(info1.render.state).to.eql(undefined);
 
         let _initial: T | undefined;
 
@@ -361,7 +361,7 @@ describe('DevBus', (e) => {
 
         const info2 = await events.info.get();
         expect(_initial).to.eql({ count: 0 });
-        expect(info2.state).to.eql({ count: 1, msg: 'hello' });
+        expect(info2.render.state).to.eql({ count: 1, msg: 'hello' });
 
         events.dispose();
       });
@@ -372,12 +372,12 @@ describe('DevBus', (e) => {
         const initial: T = { count: 0 };
         await events.state.change.fire<T>({ initial, mutate: (draft) => draft.count++ });
         const info1 = await events.info.get();
-        expect(info1.state).to.eql({ count: 1 });
+        expect(info1.render.state).to.eql({ count: 1 });
 
         await events.reset.fire();
 
         const info2 = await events.info.get();
-        expect(info2.state).to.eql(undefined);
+        expect(info2.render.state).to.eql(undefined);
 
         events.dispose();
       });

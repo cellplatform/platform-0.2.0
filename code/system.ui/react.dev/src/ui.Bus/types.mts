@@ -11,8 +11,10 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 export type DevInfo = {
   instance: { context: Id };
   root?: t.TestSuiteModel;
-  state?: O;
   props?: t.SpecRenderProps;
+  render: {
+    state?: O;
+  };
   run: { count: number; results?: t.TestSuiteRunResponse };
 };
 
@@ -31,9 +33,9 @@ export type DevInfoChangeMessage =
  * EVENT (API)
  */
 export type DevEvents = t.Disposable & {
-  disposed: boolean;
   $: t.Observable<t.DevEvent>;
   instance: { bus: Id; id: Id };
+  disposed: boolean;
   is: { base(input: any): boolean };
   info: {
     req$: t.Observable<t.DevInfoReq>;

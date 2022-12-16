@@ -84,7 +84,7 @@ describe('SpecContext', () => {
 
       expect(fired.length).to.eql(1);
       expect(fired[0].message).to.eql('state:write');
-      expect(fired[0].info.state).to.eql({ count: 1 });
+      expect(fired[0].info.render.state).to.eql({ count: 1 });
 
       events.dispose();
     });
@@ -101,7 +101,7 @@ describe('SpecContext', () => {
 
       const info = await events.info.get();
       expect(state.current).to.eql(initial);
-      expect(info.state).to.eql(undefined);
+      expect(info.render.state).to.eql(undefined);
 
       dispose();
     });

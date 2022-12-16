@@ -16,7 +16,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const current = useCurrentState(instance, { filter: (e) => e.message === 'state:write' });
 
   if (!component || !renderer) return null;
-  const state = current.info?.state ?? {};
+  const state = current.info?.render.state ?? {};
 
   /**
    * [Render]

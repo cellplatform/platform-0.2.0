@@ -10,7 +10,7 @@ export const State = {
     const { events, initial } = args;
 
     let _current: T | undefined;
-    events.state.changed$.subscribe((e) => (_current = (e.info.state ?? initial) as T));
+    events.state.changed$.subscribe((e) => (_current = (e.info.render.state ?? initial) as T));
 
     const state: t.SpecCtxState<T> = {
       get current() {
