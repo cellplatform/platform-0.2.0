@@ -5,7 +5,7 @@ export default Spec.describe('Harness', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
 
-    const bundle = import('../../test.sample/ui/MySample.SPEC');
+    const bundle = import('../../test.sample/specs/MySample.SPEC');
 
     ctx.component
       .size('fill')

@@ -1,5 +1,5 @@
 export const SampleSpecs = {
-  'sample.MyComponent': () => import('../test.sample/ui/MySample.SPEC'),
+  'sample.MyComponent': () => import('../test.sample/specs/MySample.SPEC'),
 };
 
 export const SelfDevSpecs = {
