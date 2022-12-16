@@ -1,7 +1,7 @@
 import { DevBus } from '.';
 import { describe, expect, it, rx, slug, t, Test } from '../test';
 
-import { SAMPLES } from '../test.sample/unit';
+import { SAMPLES } from '../test.sample/unit-test';
 
 describe('DevBus', (e) => {
   const Sample = {
