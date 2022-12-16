@@ -11,7 +11,7 @@ const pkg = await Builder.PackageJson.load(fs.resolve('.'));
 
 const filter = (path: string) => {
   if (path.includes('code/compiler.samples/')) return false;
-  if (path.includes('code/spikes/')) return false;
+  // if (path.includes('code/spikes/')) return false;
   return true;
 };
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological' });
