@@ -75,7 +75,7 @@ export type SpecRenderProps = {
 };
 
 export type SpecRenderPropsComponent = {
-  renderer?: SubjectRenderer;
+  renderer?: SubjectRenderer<any>;
   size?: SpecRenderSize;
   display?: t.SpecPropDisplay;
   backgroundColor?: Color;
