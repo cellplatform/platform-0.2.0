@@ -8,7 +8,7 @@ export default Spec.describe('hook.useSizeObserver', (e) => {
       .size('fill', 150)
       .display('flex')
       .backgroundColor(1)
-      .render(<Sample />);
+      .render(() => <Sample />);
   });
 });
 

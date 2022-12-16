@@ -39,8 +39,8 @@ export const SpecContext = {
      * The component subject (being controlled by the spec).
      */
     const component: t.SpecCtxComponent = {
-      render(el) {
-        _props.component.renderer = el;
+      render(fn) {
+        _props.component.renderer = fn;
         return component;
       },
 
