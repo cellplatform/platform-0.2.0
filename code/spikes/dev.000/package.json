@@ -23,8 +23,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-bff6637e.js",
-    "./web": "./dist/web/lib/index-bff6637e.js"
+    ".": "./dist/web/lib/index-1849319e.js",
+    "./web": "./dist/web/lib/index-1849319e.js"
   },
   "typesVersions": {
     "*": {

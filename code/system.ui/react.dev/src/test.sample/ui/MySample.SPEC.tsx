@@ -22,7 +22,7 @@ export default Spec.describe('MySample', (e) => {
       .display('flex')
       .backgroundColor(1)
       .render<t.JsonMap>((e) => {
-        const text = `MySample-${_count} | state.count: ${state.current.count}`;
+        const text = `MySample-${_count}`;
         return (
           <MySample
             style={{ flex: 1 }}
