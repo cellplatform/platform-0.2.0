@@ -1,8 +1,8 @@
 import { t } from '../common';
-import { Is as core } from 'sys.util';
+import { Is as base } from 'sys.util';
 
 export const Is = {
-  promise: core.promise,
+  promise: base.promise,
 
   suite(input: any | t.TestSuiteModel): boolean {
     if (typeof input === 'string' && input.startsWith('TestSuite.')) return true;
