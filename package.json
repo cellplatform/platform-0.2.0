@@ -8,6 +8,7 @@
     "clean": "ts-node-esm  -T script.ts/cmd.all.clean.mts",
     "ls": "ts-node-esm  -T script.ts/cmd.all.list.mts",
     "ci": "yarn audit && yarn build && yarn test",
+    "mit": "fossa analyze --debug",
     "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm   -T script.ts/tmp.mts",
     "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
