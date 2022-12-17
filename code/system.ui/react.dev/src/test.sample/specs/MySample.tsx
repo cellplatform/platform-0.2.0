@@ -1,4 +1,4 @@
-import { css, t } from '../../common';
+import { css, t } from '../common';
 
 export type MySampleProps = {
   text?: string;

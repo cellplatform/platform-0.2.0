@@ -16,8 +16,7 @@ export function Wrapper() {
 
     e.it('foo-1', async (e) => {
       const ctx = Spec.ctx(e);
-      const el = <div>{`Hello Foo!`}</div>;
-      ctx.debug.TEMP(el);
+      ctx.debug.body(() => <div>{`Hello Foo!`}</div>);
       log.push(e, ctx);
     });
 

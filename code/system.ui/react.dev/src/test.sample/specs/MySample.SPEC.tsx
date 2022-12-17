@@ -1,5 +1,6 @@
 import { t, Color, css, Spec } from '../common';
 import { MySample } from './MySample';
+import { SampleDevTools } from '../tools';
 
 let _count = 0;
 
@@ -41,6 +42,7 @@ export default Spec.describe('MySample', (e) => {
 
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
+    const state = await ctx.state<T>({ count: 0 });
 
     const styles = {
       base: css({
@@ -51,42 +53,37 @@ export default Spec.describe('MySample', (e) => {
       }),
     };
 
-    const el = (
-      <div
-        {...styles.base}
-        onClick={async () => {
-          const state = await ctx.state<T>({ count: 0 });
-          // console.log('before', state.current);
-
-          await state.change((draft) => draft.count++);
-
-          // ctx.run({ only: e.id });
-        }}
-      >
-        {`Increment Count!`}
-      </div>
-    );
-
     if (ctx.initial) {
-      ctx.debug.TEMP(el);
+      ctx.debug.body(() => {
+        return (
+          <div
+            {...styles.base}
+            onClick={async () => {
+              await state.change((draft) => draft.count++);
+            }}
+          >
+            {`Increment Count!`}
+          </div>
+        );
+      });
     }
   });
 
   e.it('rerun (all, reset)', async (e) => {
     const ctx = Spec.ctx(e);
 
-    const el = (
-      <div
-        onClick={() => {
-          ctx.run({ reset: true });
-        }}
-      >
-        Rerun
-      </div>
-    );
-
     if (ctx.initial) {
-      ctx.debug.TEMP(el);
+      ctx.debug.body(() => {
+        return (
+          <div
+            onClick={() => {
+              ctx.run({ reset: true });
+            }}
+          >
+            Rerun
+          </div>
+        );
+      });
     }
   });
 });
