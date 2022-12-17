@@ -1,4 +1,4 @@
-import { Is as base } from 'sys.util';
+import { Is as base } from 'sys.test.spec';
 
 export const Is = {
   ...base,

@@ -9,6 +9,7 @@ export type { Observable } from 'rxjs';
 export type { EventBus, Event, Disposable, Json, JsonMap } from 'sys.types';
 export type { CssValue } from 'sys.util.css';
 export type {
+  TestModel,
   TestSuiteModel,
   BundleImport,
   TestSuiteRunResponse,
