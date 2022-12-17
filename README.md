@@ -1,7 +1,7 @@
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![unsplash.com/photos/HLhvZ9HRAwo](https://user-images.githubusercontent.com/185555/190844133-653f7611-c382-40df-b2b0-ea423555e675.png)
+![banner](https://user-images.githubusercontent.com/185555/208219106-55dcf113-9209-4427-a428-4d6db3e8aa1d.png)
 
 
 
