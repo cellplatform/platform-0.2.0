@@ -13,7 +13,7 @@ describe('Is (flags)', () => {
       expect(Is.suite(input)).to.eql(expected);
     };
 
-    [undefined, null, '', true, 123, [], {}].forEach((value) => test(value, false));
+    [undefined, null, '', true, 123, [], {}, () => null].forEach((value) => test(value, false));
     test(TestModel({ parent: Test.describe('foo'), description: 'name' }), false);
 
     test('TestSuite.1234', true);
@@ -28,7 +28,7 @@ describe('Is (flags)', () => {
       expect(Is.test(input)).to.eql(expected);
     };
 
-    [undefined, null, '', true, 123, [], {}].forEach((value) => test(value, false));
+    [undefined, null, '', true, 123, [], {}, () => null].forEach((value) => test(value, false));
     test(Test.describe('foo'), false);
 
     test('Test.1234', true);
@@ -40,14 +40,13 @@ describe('Is (flags)', () => {
     const suite = Test.describe('root', (e) => {
       e.it('test', (e) => (_args = e));
     });
-
     await suite.run();
 
     const test = (input: any, expected: boolean) => {
       expect(Is.testArgs(input)).to.eql(expected);
     };
 
-    [undefined, null, '', true, 123, [], {}].forEach((value) => test(value, false));
+    [undefined, null, '', true, 123, [], {}, () => null].forEach((value) => test(value, false));
     test(_args, true);
   });
 });
