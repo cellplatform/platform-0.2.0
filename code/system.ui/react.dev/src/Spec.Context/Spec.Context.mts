@@ -1,5 +1,5 @@
 import { create } from './Spec.Context.create.mjs';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from '../Spec/Wrangle.mjs';
 
 /**
  * Information object passed as the {ctx} to tests.
