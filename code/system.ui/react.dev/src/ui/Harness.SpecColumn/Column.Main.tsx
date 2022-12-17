@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Color, COLORS, css, t, rx, useCurrentState } from '../common';
 
 export type SpecColumnMainProps = {
-  results?: t.TestSuiteRunResponse;
-  renderProps?: t.SpecRenderProps;
+  instance: t.DevInstance;
   style?: t.CssValue;
 };
 
 export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
-  const { renderProps } = props;
+  const { instance } = props;
+
+  const current = useCurrentState(instance, { distinctUntil });
+  const render = current.info?.render;
+  if (!render) return null;
+
+  const state = render.state;
+  const renderers = render.props?.debug.main.renderers ?? [];
 
   /**
    * [Render]
@@ -20,28 +26,25 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     item: css({
       position: 'relative',
     }),
-
-    DEBUG_JSON: css({
-      fontSize: 13,
-    }),
   };
 
-  const list = renderProps?.debug.main.elements ?? [];
-  const elements = list.filter(Boolean).map((el, i) => {
+  const elements = renderers.filter(Boolean).map((renderer, i) => {
     return (
       <div key={i} {...styles.item}>
-        {el}
+        {renderer({ state })}
       </div>
     );
   });
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{elements}</div>
+  return <div {...css(styles.base, props.style)}>{elements}</div>;
+};
 
-      <div {...styles.DEBUG_JSON}>
-        {/* <pre>renderProps: {JSON.stringify(renderProps, null, '..')}</pre> */}
-      </div>
-    </div>
-  );
+/**
+ * [Helpers]
+ */
+
+const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
+const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
+  if (tx(prev) !== tx(next)) return false;
+  return true;
 };
