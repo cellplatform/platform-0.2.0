@@ -21,8 +21,9 @@ describe('Is (flags)', () => {
     [undefined, null, {}, [], 123, 'foo', true].forEach((value) => test(value, false));
   });
 
-  it('suite (spec)', () => {
+  it('suite (spec)', async () => {
     const suite = Spec.describe('foo');
+    await suite.init();
 
     const test = (input: any, expected: boolean) => {
       expect(Is.suite(input)).to.eql(expected);
@@ -32,20 +33,35 @@ describe('Is (flags)', () => {
     [undefined, null, {}, [], 123, 'foo', true].forEach((value) => test(value, false));
   });
 
-  it('test (it/spec)', () => {
+  it('test (it/spec)', async () => {
     let _test: t.TestModel;
-    const suite = Spec.describe('foo', (e) => {
-      _test = e.it('bar');
-    });
+    const suite = Spec.describe('foo', (e) => (_test = e.it('bar')));
+    await suite.init();
 
     const test = (input: any, expected: boolean) => {
       expect(Is.test(input)).to.eql(expected);
     };
 
-    suite.init();
-
     test(_test!, true);
     test(suite, false);
     [undefined, null, {}, [], 123, 'foo', true].forEach((value) => test(value, false));
+  });
+
+  it('test | test-args', async () => {
+    let _test: t.TestModel;
+    let _args: t.TestHandlerArgs;
+    const suite = Spec.describe('foo', (e) => {
+      _test = e.it('bar', (e) => (_args = e));
+    });
+    await suite.run();
+
+    [undefined, null, {}, [], 123, 'foo', true, () => null].forEach((value) => {
+      expect(Is.test(value)).to.eql(false);
+      expect(Is.testArgs(value)).to.eql(false);
+    });
+
+    expect(Is.test(suite)).to.eql(false);
+    expect(Is.test(_test!)).to.eql(true);
+    expect(Is.testArgs(_args!)).to.eql(true);
   });
 });
