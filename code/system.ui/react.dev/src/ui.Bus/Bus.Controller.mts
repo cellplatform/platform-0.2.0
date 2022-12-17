@@ -24,12 +24,12 @@ export function BusController(args: {
   });
   const { dispose$ } = events;
 
-  let _context: t.SpecCtxWrapper;
+  let _context: t.SpecCtxWrapper | undefined;
   const Context = {
     create() {
-      _context = SpecContext.create(args.instance, { dispose$ });
+      const wrapper = (_context = SpecContext.create(args.instance, { dispose$ }));
       state.change('context:init', (draft) => {
-        draft.instance.context = _context.id;
+        draft.instance.context = wrapper.id;
         Reset.info(draft);
       });
       return _context;
@@ -71,14 +71,8 @@ export function BusController(args: {
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      const message: t.DevInfoChangeMessage = e.bundle ? 'spec:load' : 'spec:unload';
-      await state.change(message, (draft) => {
-        draft.root = root;
-        if (!root) {
-          // Reset (unloaded):
-          Reset.info(draft);
-        }
-      });
+      const message: t.DevInfoChangeMessage = root ? 'spec:load' : 'spec:unload';
+      await state.change(message, (draft) => (draft.root = root));
     } catch (err: any) {
       error = err.message;
     }
@@ -100,7 +94,7 @@ export function BusController(args: {
 
     try {
       if (rootSpec) {
-        const res = await run(_context, rootSpec, { only });
+        const res = await run(Context.current, rootSpec, { only });
         const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);

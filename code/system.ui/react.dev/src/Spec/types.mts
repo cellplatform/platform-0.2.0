@@ -58,10 +58,7 @@ export type SpecCtxHost = {
 };
 
 export type SpecCtxDebug = {
-  /**
-   * TODO 🐷
-   */
-  TEMP(el: JSX.Element): SpecCtxDebug;
+  body<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxDebug;
 };
 
 /**
@@ -86,7 +83,7 @@ export type SpecRenderPropsHost = {
 };
 
 export type SpecRenderPropsDebug = {
-  main: { elements: JSX.Element[] };
+  main: { renderers: SubjectRenderer<any>[] };
 };
 
 export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;

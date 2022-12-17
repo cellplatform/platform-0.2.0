@@ -12,7 +12,7 @@ const DEFAULT = {
       id: `render.${slug()}`,
       host: {},
       component: {},
-      debug: { main: { elements: [] } },
+      debug: { main: { renderers: [] } },
     };
   },
 };
@@ -87,11 +87,8 @@ export const SpecContext = {
      * component and controls for live manipulation of the compoonent.
      */
     const debug: t.SpecCtxDebug = {
-      /**
-       * TODO 🐷
-       */
-      TEMP(el) {
-        _props.debug.main.elements.push(el);
+      body(renderer) {
+        _props.debug.main.renderers.push(renderer);
         return debug;
       },
     };
@@ -138,7 +135,7 @@ export const SpecContext = {
     /**
      * API.
      */
-    return {
+    const api: t.SpecCtxWrapper = {
       id,
       instance,
       dispose,
@@ -152,5 +149,7 @@ export const SpecContext = {
         _initial = info.run.count === 0;
       },
     };
+
+    return api;
   },
 };

@@ -25,7 +25,6 @@ describe('SpecContext', () => {
     const instance = Sample.instance();
     const wrapper = SpecContext.create(instance);
     const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout, description: 'MyFoo' });
-
     expect(typeof ctx.component.render).to.eql('function');
     expect(typeof ctx.toObject).to.eql('function');
   });
@@ -51,10 +50,10 @@ describe('SpecContext', () => {
 
   describe('state', () => {
     type T = { count: number; msg?: string };
+    const initial: T = { count: 0 };
 
     it('read state', async () => {
       const { ctx, dispose } = Sample.ctx();
-      const initial: T = { count: 0 };
       const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
       dispose();
@@ -62,7 +61,6 @@ describe('SpecContext', () => {
 
     it('write state (change)', async () => {
       const { ctx, dispose } = Sample.ctx();
-      const initial: T = { count: 0 };
       const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
 
@@ -117,6 +115,45 @@ describe('SpecContext', () => {
 
       await state2.change((draft) => (draft.count = 1234));
       expect(state1.current).to.eql({ count: 1234, msg: 'hello' });
+
+      dispose();
+    });
+  });
+
+  describe('debug (panel)', () => {
+    it('no renderers', async () => {
+      const { dispose, wrapper } = Sample.ctx();
+      expect(wrapper.props.debug.main.renderers).to.eql([]);
+      dispose();
+    });
+
+    it('append renderer', async () => {
+      const { ctx, dispose, wrapper } = Sample.ctx();
+      const { renderers } = wrapper.props.debug.main;
+
+      const fn: t.SubjectRenderer = (e) => undefined;
+      ctx.debug.body(fn);
+
+      expect(renderers.length).to.eql(1);
+      expect(renderers[0]).to.equal(fn);
+
+      dispose();
+    });
+
+    it.skip('reset clears renderers', async () => {
+      const { ctx, dispose, wrapper, events } = Sample.ctx();
+      const { renderers } = wrapper.props.debug.main;
+
+      const fn: t.SubjectRenderer = (e) => undefined;
+
+      ctx.debug.body(fn);
+      expect(renderers.length).to.eql(1);
+
+      await events.reset.fire();
+      expect(renderers.length).to.eql(0);
+
+      console.log('-------------------------------------');
+      console.log('wrapper.props.debug.main', wrapper.props.debug.main);
 
       dispose();
     });
