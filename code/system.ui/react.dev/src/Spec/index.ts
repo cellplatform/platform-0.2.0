@@ -1,2 +1,2 @@
-export * from './Spec.mjs';
-export * from './Spec.Context.mjs';
+export { Spec } from './Spec.mjs';
+export { SpecContext } from '../Spec.Context';

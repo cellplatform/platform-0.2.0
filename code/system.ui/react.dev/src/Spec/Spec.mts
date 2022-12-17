@@ -23,8 +23,7 @@ export const Spec = {
    */
   ctx(e: t.TestHandlerArgs) {
     if (typeof e.ctx !== 'object') {
-      const msg = `Expected a {ctx} object. Make sure to pass it into the runner.`;
-      throw new Error(msg);
+      throw new Error(`Expected a {ctx} object. Make sure to pass it into the runner.`);
     }
     return e.ctx as t.SpecCtx;
   },

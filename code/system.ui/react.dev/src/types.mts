@@ -1,4 +1,5 @@
 export * from './Spec/types.mjs';
+export * from './Spec.Context/types.mjs';
 
 export * from './ui.Bus/types.mjs';
 

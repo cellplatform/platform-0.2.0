@@ -1,11 +1,10 @@
-import { Spec } from '.';
+import { Spec } from '../Spec';
 import { describe, expect, it, rx, slug, t } from '../test';
 import { DevBus } from '../ui.Bus';
 import { SpecContext } from './Spec.Context.mjs';
 
-const bus = rx.bus();
-
 describe('SpecContext', () => {
+  const bus = rx.bus();
   const timeout = () => null as any;
 
   const Sample = {
@@ -20,19 +19,6 @@ describe('SpecContext', () => {
       return { ctx, wrapper, dispose, events };
     },
   };
-
-  it('e.ctx(e)', () => {
-    const instance = Sample.instance();
-    const wrapper = SpecContext.create(instance);
-    const ctx = Spec.ctx({ id: 'foo', ctx: wrapper.ctx, timeout, description: 'MyFoo' });
-    expect(typeof ctx.component.render).to.eql('function');
-    expect(typeof ctx.toObject).to.eql('function');
-  });
-
-  it('e.ctx(e): throw', () => {
-    const fn = () => Spec.ctx({} as any);
-    expect(fn).to.throw(/Expected a {ctx} object/);
-  });
 
   it('unique {props.id}', () => {
     const instance = Sample.instance();
