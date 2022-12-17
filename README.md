@@ -1,4 +1,4 @@
-![banner](https://user-images.githubusercontent.com/185555/208219171-abb4ad92-fdf4-4857-8e70-5452627bce1c.png)
+![banner](https://user-images.githubusercontent.com/185555/208219269-35270ebc-f655-4a21-a462-bf67e6183f11.png)
 
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
