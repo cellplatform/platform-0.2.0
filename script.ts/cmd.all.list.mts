@@ -37,7 +37,7 @@ const arrow = pc.green('↓');
 const sortOrderPrint =
   sortOrder === 'Alpha'
     ? ` ${arrow} sorted alphabetically (use --topo for build order)`
-    : ` ${arrow} sorted topologically on dependency graph`;
+    : ` ${arrow} sorted topologically over the dependency graph`;
 
 console.log('');
 console.log(pc.green(`${paths.length} modules:`));
