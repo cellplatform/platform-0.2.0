@@ -43,6 +43,7 @@ export default Spec.describe('MySample', (e) => {
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
+    if (!ctx.initial) return;
 
     const styles = {
       base: css({
@@ -53,37 +54,27 @@ export default Spec.describe('MySample', (e) => {
       }),
     };
 
-    if (ctx.initial) {
-      ctx.debug.body(() => {
-        return (
-          <div
-            {...styles.base}
-            onClick={async () => {
-              await state.change((draft) => draft.count++);
-            }}
-          >
-            {`Increment Count!`}
-          </div>
-        );
-      });
-    }
+    ctx.debug.body(() => {
+      return (
+        <div {...styles.base} onClick={() => state.change((draft) => draft.count++)}>
+          {`Increment Count!`}
+        </div>
+      );
+    });
   });
 
   e.it('rerun (all, reset)', async (e) => {
     const ctx = Spec.ctx(e);
-
     if (ctx.initial) {
       ctx.debug.body(() => {
-        return (
-          <div
-            onClick={() => {
-              ctx.run({ reset: true });
-            }}
-          >
-            Rerun
-          </div>
-        );
+        return <div onClick={() => ctx.run({ reset: true })}>Rerun</div>;
       });
     }
+  });
+
+  e.it('SampleDevTools', async (e) => {
+    const m = SampleDevTools.button(e);
+
+    console.log('m', m);
   });
 });
