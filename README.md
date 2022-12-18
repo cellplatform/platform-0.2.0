@@ -91,7 +91,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 ---
 
-Conceptual context, design history:
+Ideas, history, context:
 
 - [video](https://www.youtube.com/watch?v=Ud8WRAdihPg) Alan Kay, Learning and Computer Science, 1970s, [video](https://www.youtube.com/watch?v=YyIQKBzIuBY) Alan Kay, 2011, Programming and Scaling
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
