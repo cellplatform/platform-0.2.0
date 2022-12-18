@@ -107,7 +107,7 @@ Conceptual context, design history:
 <p>&nbsp;</p>
 
 ## Human Systems 
-(aka. the "all of us"). Social/relational networks and people, scale.
+(aka. the "all of us"). Social/relational networks and people, scale. "People" not "users."
 
 <p>&nbsp;</p>
 
