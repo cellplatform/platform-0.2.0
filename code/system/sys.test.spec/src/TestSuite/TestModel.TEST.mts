@@ -1,7 +1,7 @@
 import { t, Time, expect, describe, it } from '../test';
 import { Test } from '.';
 import { TestModel } from './TestModel.mjs';
-import { DEFAULT, Is } from './common.mjs';
+import { DEFAULT } from './common';
 
 describe('TestModel', () => {
   const description = 'foo';
@@ -39,24 +39,6 @@ describe('TestModel', () => {
       expect(model1.modifier).to.eql(undefined);
       expect(model2.modifier).to.eql('skip');
       expect(model3.modifier).to.eql('only');
-    });
-
-    it('Is.test', () => {
-      const test = (input: any, expected: boolean) => {
-        expect(Is.test(input)).to.eql(expected);
-      };
-
-      test(undefined, false);
-      test(null, false);
-      test('', false);
-      test(true, false);
-      test(123, false);
-      test([123], false);
-      test({}, false);
-      test(Test.describe('foo'), false);
-
-      test('Test.1234', true);
-      test(TestModel({ parent, description }), true);
     });
 
     it('clone', async () => {
@@ -119,7 +101,34 @@ describe('TestModel', () => {
       expect(res.error).to.eql(undefined);
     });
 
-    it('with context (e.ctx)', async () => {
+    it('unique "tx" identifier for each test run operation', async () => {
+      let count = 0;
+      const handler: t.TestHandler = () => count++;
+      const test = TestModel({ parent, description, handler });
+
+      const res1 = await test.run();
+      const res2 = await test.run();
+
+      expect(res1.tx.length).to.greaterThan(0);
+      expect(res1.id).to.eql(res2.id); // NB: The same test being run.
+      expect(res1.tx).to.not.eql(res2.tx); // NB: Run response ID differs.
+    });
+
+    it('handler params: (e)', async () => {
+      const args: t.TestHandlerArgs[] = [];
+      const handler: t.TestHandler = (e) => args.push(e);
+      const test = TestModel({ parent, description, handler });
+
+      await test.run();
+
+      expect(args.length).to.eql(1);
+      expect(args[0].id).to.eql(test.id);
+      expect(args[0].ctx).to.eql(undefined);
+      expect(args[0].description).to.eql(description);
+      expect(typeof args[0].timeout).to.eql('function');
+    });
+
+    it('with handler params: context (e.ctx)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const handler: t.TestHandler = (e) => args.push(e);
       const test = TestModel({ parent, description, handler });
@@ -128,6 +137,7 @@ describe('TestModel', () => {
       await test.run(); // NB: no context.
       await test.run({ ctx });
 
+      expect(args.length).to.eql(2);
       expect(args[0].ctx).to.eql(undefined);
       expect(args[1].ctx).to.eql(ctx);
     });

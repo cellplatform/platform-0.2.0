@@ -8,6 +8,8 @@ export type MyInfo = {
   module: { name: string; version: Semver };
 };
 
+export type MyStateMutateHandler = (draft: t.MyInfo) => any | Promise<any>;
+
 /**
  * EVENT (API)
  */
@@ -18,7 +20,7 @@ export type MyEvents = t.Disposable & {
   info: {
     req$: t.Observable<t.MyInfoReq>;
     res$: t.Observable<t.MyInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<MyInfoRes>;
   };
 };
 

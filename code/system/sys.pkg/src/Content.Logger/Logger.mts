@@ -20,13 +20,14 @@ export const ContentLogger = {
        * Write the results of a deployment to the log.
        */
       async write(args: {
-        bundle: t.BundleLogEntry;
-        timestamp?: UnixEpoch;
+        bundle: t.BundleLogEntry | { toObject(): t.BundleLogEntry };
         deployment?: t.LogDeploymentEntry;
+        timestamp?: UnixEpoch;
       }) {
-        const { bundle, deployment } = args;
+        const { deployment } = args;
+        const bundle = Wrangle.bundle(args.bundle);
         const timestamp = args.timestamp ?? Time.now.timestamp;
-        const version = args.bundle.version;
+        const version = bundle.version;
         const filename = ContentLogger.Filename.create(version);
         const packagedBy = `${Pkg.name}@${Pkg.version}`;
         const data: t.LogEntry = { packagedBy, timestamp, bundle, deployment };
@@ -46,7 +47,7 @@ export const ContentLogger = {
         const wait = paths.map((path) => fs.json.read<t.LogEntry>(path));
         const items = (await Promise.all(wait)) as t.LogEntry[];
 
-        let history: t.LogPublicHistoryItem[] = items
+        let history: t.LogHistoryPublicItem[] = items
           .filter((entry) => Boolean(entry.deployment))
           .map((entry) => {
             const timestamp = entry.timestamp;
@@ -54,7 +55,7 @@ export const ContentLogger = {
             const deployment = entry.deployment ?? { success: undefined, error: undefined };
             const { success, error } = deployment;
             const urls = success?.urls.public ?? [];
-            const item: t.LogPublicHistoryItem = { timestamp, version, urls, error };
+            const item: t.LogHistoryPublicItem = { timestamp, version, urls, error };
             return item;
           });
         history = dedupeVersionsToLatest(history);
@@ -67,7 +68,7 @@ export const ContentLogger = {
           ? { version: options.latest }
           : { version: history[0].version };
 
-        const res: t.LogPublicHistory = { latest, history };
+        const res: t.LogHistoryPublic = { latest, history };
         return res;
       },
     };
@@ -83,8 +84,8 @@ export const ContentLogger = {
  * Each deployment also has a timestamp associated with it (Unix Epoch).
  * Collapse the list to only include each version once with the latest deployment it has.
  */
-function dedupeVersionsToLatest(list: t.LogPublicHistoryItem[]) {
-  const byVersion = R.groupBy((item: t.LogPublicHistoryItem) => item.version);
+function dedupeVersionsToLatest(list: t.LogHistoryPublicItem[]) {
+  const byVersion = R.groupBy((item: t.LogHistoryPublicItem) => item.version);
   const grouped = byVersion(list);
 
   const history = Object.keys(grouped).map((version) => {
@@ -95,3 +96,11 @@ function dedupeVersionsToLatest(list: t.LogPublicHistoryItem[]) {
 
   return history;
 }
+
+const Wrangle = {
+  bundle(input: t.BundleLogEntry | { toObject(): t.BundleLogEntry }): t.BundleLogEntry {
+    if (typeof input !== 'object') throw new Error(`Expected an object.`);
+    if (typeof (input as any).toObject === 'function') return (input as any).toObject();
+    return input as t.BundleLogEntry;
+  },
+};

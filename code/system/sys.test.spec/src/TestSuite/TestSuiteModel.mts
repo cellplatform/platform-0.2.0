@@ -1,5 +1,5 @@
-import { DEFAULT, slug, t, Time } from './common.mjs';
-import { Constraints } from './helpers/Constraints.mjs';
+import { DEFAULT, slug, t, Time } from './common';
+import { Constraints } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
 
 type LazyParent = () => t.TestSuiteModel;
@@ -49,7 +49,8 @@ export const TestSuiteModel = (args: {
 
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
-      const res: R = { id, ok: true, description, elapsed: -1, tests: [], children: [] };
+      const tx = `run.tx.${slug()}`;
+      const res: R = { id, tx, ok: true, description, elapsed: -1, tests: [], children: [] };
 
       await init(model);
       const tests = model.state.tests;
@@ -66,6 +67,7 @@ export const TestSuiteModel = (args: {
       };
 
       for (const test of tests) {
+        if (options.only && !options.only.includes(test.id)) continue;
         const timeout = getTimeout();
         const excluded = Constraints.exclusionModifiers(test);
         res.tests.push(await test.run({ timeout, excluded, ctx }));
@@ -73,8 +75,9 @@ export const TestSuiteModel = (args: {
 
       if (deep && childSuites.length > 0) {
         for (const childSuite of childSuites) {
+          const { only } = options;
           const timeout = childSuite.state.timeout ?? getTimeout();
-          res.children.push(await childSuite.run({ timeout })); // <== RECURSION 🌳
+          res.children.push(await childSuite.run({ timeout, only })); // <== RECURSION 🌳
         }
       }
 
@@ -127,8 +130,8 @@ export const TestSuiteModel = (args: {
     },
 
     init: () => init(model),
-    async run(args) {
-      return runSuite(model, args);
+    async run(options) {
+      return runSuite(model, options);
     },
 
     async merge(...suites) {

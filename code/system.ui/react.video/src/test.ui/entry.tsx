@@ -3,14 +3,10 @@ import 'symbol-observable';
 import { createRoot } from 'react-dom/client';
 import { Dev } from '.';
 import { Pkg } from '../index.pkg.mjs';
-
-const Imports = {
-  'video.Vimeo': () => import('../ui/Vimeo/dev/Vimeo.SPEC'),
-  'video.VimeoBackground': () => import('../ui/Vimeo/dev/VimeoBackground.SPEC'),
-};
+import { Specs } from './entry.Specs.mjs';
 
 (async () => {
-  const el = await Dev.render(Pkg, Imports);
+  const el = await Dev.render(Pkg, Specs);
   const root = createRoot(document.getElementById('root')!);
   root.render(el);
 })();

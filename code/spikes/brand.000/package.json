@@ -1,15 +1,16 @@
 {
   "name": "spike.brand",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist.deploy/.latest/app && serve --config vercel.json",
+    "serve": "cd dist.cell/.latest/app && serve --config vercel.json",
     "test": "ts-node-esm    -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm   -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm   -T ../../../script.ts/cmd.clean.mts",
-    "deploy": "yarn audit && yarn build && ts-node-esm  -T ./script.ts/deploy.mts",
-    "tmp": "ts-node-esm     -T ./script.ts/tmp.mts"
+    "prepare": "yarn build && yarn test --run --reporter=verbose",
+    "deploy": "sh script/deploy.sh",
+    "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
     "sys.types": "0.0.0",
@@ -22,8 +23,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index.7564bc58.js",
-    "./web": "./dist/web/lib/index.7564bc58.js"
+    ".": "./dist/web/lib/index-d71c4d9f.js",
+    "./web": "./dist/web/lib/index-d71c4d9f.js"
   },
   "typesVersions": {
     "*": {

@@ -1,8 +1,6 @@
 import { Test } from '.';
 import { describe, expect, it, t, Time } from '../test';
-import { Is } from './common.mjs';
-import { Tree } from './helpers/Tree.mjs';
-import { TestModel } from './TestModel.mjs';
+import { TestTree } from '../TestSuite.helpers';
 
 describe('TestSuiteModel', () => {
   describe('model', () => {
@@ -17,24 +15,6 @@ describe('TestSuiteModel', () => {
       expect(model2.kind).to.eql('TestSuite');
 
       expect(model1).to.not.equal(model2); // NB: Different instance.
-    });
-
-    it('Is.suite', () => {
-      const test = (input: any, expected: boolean) => {
-        expect(Is.suite(input)).to.eql(expected);
-      };
-
-      test(undefined, false);
-      test(null, false);
-      test('', false);
-      test(true, false);
-      test(123, false);
-      test([123], false);
-      test({}, false);
-      test(TestModel({ parent: Test.describe('foo'), description: 'name' }), false);
-
-      test('TestSuite.1234', true);
-      test(Test.describe('foo'), true);
     });
 
     it('empty (no handler)', () => {
@@ -245,8 +225,8 @@ describe('TestSuiteModel', () => {
       expect(root1.state.children[0].id).to.not.eql(root2.state.children[0].id);
 
       // Parent hierarchy correctly re-referenced to the clone.
-      expect(Tree.root(test1)).to.equal(root1);
-      expect(Tree.root(test2)).to.equal(root2);
+      expect(TestTree.root(test1)).to.equal(root1);
+      expect(TestTree.root(test2)).to.equal(root2);
     });
   });
 
@@ -279,7 +259,54 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
-    it('with context {ctx}', async () => {
+    it('run with {only} subset of IDs option', async () => {
+      let _fired: string[] = [];
+      const root = Test.describe('root', (e) => {
+        e.it('one', () => _fired.push('one'));
+        e.it('two', () => _fired.push('two'));
+        e.describe('child', (e) => {
+          e.it('three', () => _fired.push('three'));
+        });
+      });
+
+      await root.init();
+
+      const test1 = root.state.tests[0];
+      const test2 = root.state.tests[1];
+      const test3 = root.state.children[0].state.tests[0];
+
+      const run = async (options?: t.TestSuiteRunOptions) => {
+        _fired = [];
+        await root.run(options);
+        return _fired;
+      };
+
+      const res1 = await run();
+      const res2 = await run({ only: [test2.id] });
+      const res3 = await run({ only: [test3.id, test2.id] });
+      const res4 = await run({ only: [] });
+
+      expect(res1).to.eql(['one', 'two', 'three']);
+      expect(res2).to.eql(['two']);
+      expect(res3).to.eql(['two', 'three']);
+      expect(res4).to.eql([]);
+    });
+
+    it('unique "tx" identifier for each suite run operation', async () => {
+      let count = 0;
+      const root = Test.describe('root', (e) => {
+        e.it('foo', () => count++);
+      });
+
+      const res1 = await root.run();
+      const res2 = await root.run();
+
+      expect(res1.tx.length).to.greaterThan(0);
+      expect(res1.id).to.eql(res2.id); // NB: The same suite being run.
+      expect(res1.tx).to.not.eql(res2.tx); // NB: Run response ID differs.
+    });
+
+    it('with handler params: context (e.ctx)', async () => {
       const args: t.TestHandlerArgs[] = [];
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => args.push(e));
@@ -289,6 +316,7 @@ describe('TestSuiteModel', () => {
       await root.run(); // NB: no context.
       await root.run({ ctx });
 
+      expect(args.length).to.eql(2);
       expect(args[0].ctx).to.eql(undefined);
       expect(args[1].ctx).to.eql(ctx);
     });
@@ -418,8 +446,8 @@ describe('TestSuiteModel', () => {
         const test1 = children[0].state.tests[0];
         const test2 = children[1].state.tests[0];
 
-        expect(Tree.root(test1)).to.equal(bundle);
-        expect(Tree.root(test2)).to.equal(bundle);
+        expect(TestTree.root(test1)).to.equal(bundle);
+        expect(TestTree.root(test2)).to.equal(bundle);
 
         expect(test1).to.not.equal(root1.state.tests[0]);
         expect(test2).to.not.equal(root2.state.tests[0]);
@@ -503,9 +531,9 @@ describe('TestSuiteModel', () => {
       expect(root.state.children[1]).to.not.equal(child2);
       expect(root.state.children[2]).to.not.equal(child3);
 
-      expect(Tree.root(root.state.children[0])).to.equal(root);
-      expect(Tree.root(root.state.children[1])).to.equal(root);
-      expect(Tree.root(root.state.children[2])).to.equal(root);
+      expect(TestTree.root(root.state.children[0])).to.equal(root);
+      expect(TestTree.root(root.state.children[1])).to.equal(root);
+      expect(TestTree.root(root.state.children[2])).to.equal(root);
     });
   });
 });

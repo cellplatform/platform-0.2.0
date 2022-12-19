@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { EventBus } from 'sys.types';
+export type { EventBus, Disposable } from 'sys.types';
 
 /**
  * @local

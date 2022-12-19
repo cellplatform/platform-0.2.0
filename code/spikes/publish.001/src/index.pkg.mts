@@ -11,17 +11,17 @@
 
 export const Pkg: ModuleDef = {
   name: 'spike.publish.react',
-  version: '0.0.7',
+  version: '1.2.4',
   dependencies: {
-    'sys.types': '0.0.0',
-    'sys.text': '0.0.0',
-    'sys.fs': '0.0.0',
-    'sys.fs.indexeddb': '0.0.0',
-    'sys.util': '0.0.0',
     '@monaco-editor/react': '4.4.6',
     'monaco-editor': '0.34.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'sys.fs': '0.0.0',
+    'sys.fs.indexeddb': '0.0.0',
+    'sys.text': '0.0.0',
+    'sys.types': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

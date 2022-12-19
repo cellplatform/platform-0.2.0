@@ -1,4 +1,5 @@
-import { DEFAULT, Delete, Is, slug, t, Time, R } from './common.mjs';
+import { DEFAULT, Delete, slug, t, Time, R } from './common';
+import { Is } from '../TestSuite.helpers';
 
 /**
  * A single test.
@@ -16,11 +17,13 @@ export const TestModel = (args: {
     type R = t.TestRunResponse;
 
     return new Promise<R>(async (resolve) => {
+      const tx = `run.tx.${slug()}`;
       const timer = Time.timer();
       const excluded = toExcluded({ modifier, excluded: options.excluded });
 
       const response: R = {
         id,
+        tx,
         ok: true,
         description,
         elapsed: -1,
@@ -49,6 +52,8 @@ export const TestModel = (args: {
       };
 
       const args: t.TestHandlerArgs = {
+        id,
+        description,
         ctx: options.ctx,
         timeout(value) {
           response.timeout = Math.max(0, value);

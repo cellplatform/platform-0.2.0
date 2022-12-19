@@ -26,12 +26,12 @@ export type LogDeploymentEntryVercel = {
 /**
  * A sanatised version of the log sent to the client.
  */
-export type LogPublicHistory = {
+export type LogHistoryPublic = {
   latest: { version: string };
-  history: LogPublicHistoryItem[];
+  history: LogHistoryPublicItem[];
 };
 
-export type LogPublicHistoryItem = {
+export type LogHistoryPublicItem = {
   timestamp: number;
   version: string;
   urls: string[];

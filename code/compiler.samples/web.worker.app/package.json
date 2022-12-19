@@ -21,8 +21,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/assets/index.dc5955cf.js",
-    "./web": "./dist/web/assets/index.dc5955cf.js"
+    ".": "./dist/web/lib/index-79097824.js",
+    "./web": "./dist/web/lib/index-79097824.js"
   },
   "typesVersions": {
     "*": {

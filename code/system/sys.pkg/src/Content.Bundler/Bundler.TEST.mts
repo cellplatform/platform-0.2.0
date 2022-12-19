@@ -1,14 +1,8 @@
-import { Text } from 'sys.text';
-
-import { Pkg } from '../index.pkg.mjs';
 import { ContentBundler } from '.';
-import { describe, expect, expectError, it, Path, TestSample, t, Time, afterAll } from '../test';
+import { Pkg } from '../index.pkg.mjs';
+import { describe, expect, expectError, it, Path, t, TestSample, Text, Time } from '../test';
 
 describe('ContentBundler', () => {
-  afterAll(async () => {
-    await TestSample.deleteAll();
-  });
-
   describe('README', () => {
     it('throw: file does not exist', async () => {
       const { sources } = await TestSample.filesystems();
@@ -115,7 +109,7 @@ describe('ContentBundler', () => {
 
       // NB: Derived from the actual logs, and packaged as data within the bundle.
       const latest = target.dir(ContentBundler.Paths.latest);
-      const publicLog = await latest.json.read<t.LogPublicHistory>('app/data/log.json');
+      const publicLog = await latest.json.read<t.LogHistoryPublic>('app/data/log.json');
       expect(publicLog?.latest.version).to.eql(bundle.version);
       expect(publicLog?.history).to.eql([]); // NB: Public history.
     });
@@ -132,7 +126,7 @@ describe('ContentBundler', () => {
       await bundler.write.bundle(target, '1.0.1');
 
       const latest = target.dir(ContentBundler.Paths.latest);
-      const logfile = await latest.json.read<t.LogPublicHistory>('app/data/log.json');
+      const logfile = await latest.json.read<t.LogHistoryPublic>('app/data/log.json');
       const history = logfile?.history ?? [];
 
       expect(logfile?.latest.version).to.eql('1.0.1');

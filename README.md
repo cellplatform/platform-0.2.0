@@ -1,7 +1,8 @@
+![banner](https://user-images.githubusercontent.com/185555/208219269-35270ebc-f655-4a21-a462-bf67e6183f11.png)
+
 [![ci(esm)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg)](https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![unsplash.com/photos/HLhvZ9HRAwo](https://user-images.githubusercontent.com/185555/190844133-653f7611-c382-40df-b2b0-ea423555e675.png)
 
 
 
@@ -75,7 +76,8 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 
 >> **"libraries not frameworks"**  
->> Orient toward framework agnosticism (by default).
+>> An orientation toward framework agnosticism (which is the choise **default** in most circumstances). 
+>> Then levered by a simple/strict extensino pattern, (eg. "drivers") as appropriate to the module's domain, technology, and constraints.
 
 <p>&nbsp;</p>
 
@@ -89,12 +91,29 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 ---
 
-References (conceptual context, history):
+Ideas, history, context:
 
 - [video](https://www.youtube.com/watch?v=Ud8WRAdihPg) Alan Kay, Learning and Computer Science, 1970s, [video](https://www.youtube.com/watch?v=YyIQKBzIuBY) Alan Kay, 2011, Programming and Scaling
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
   "But what's interesting, is once the engineers got a hold, the visionaries went away ([timestamp](https://www.youtube.com/watch?v=cmi-AXKvx30&t=253s))"
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersection of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
+- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a message, be as extremely late-bound as possible. Build everything else out of that (LISP-ey).
+
+
+*NB: "object" meaning the original SmallTalk conception of "object," not the following "OOP" notions that emerged later ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
+
+---
+
+<p>&nbsp;</p>
+
+## Human Systems 
+(aka. "all of us"). Social/relational networks and people, across scales. "People" not "users."
+
+<p>&nbsp;</p>
+
+![group-scape](https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png)
+
+<p>&nbsp;</p>
 
 ---
 
@@ -149,29 +168,34 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 
 <p>&nbsp;</p>
 
-**Note:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
-and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away, or put another way, `node.js` is not a 
-fundamental dependency (although it is not going away anytime soon). There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser, (ref [WinterCG](https://wintercg.org/))).
+**NOTES:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
+and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away.  Put another way, `node.js` is intentionally not a fundamental dependency (although `node.js` is not going away anytime soon of course). It bootstraps us into the W3C/JS runtimes standard.
 
-In the area of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI is partitioned clearly as distinct to pure functional "logic" libraries, as UI tends towards the much higher volatility in an architecutre over time. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone.   
+There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser (ref [WinterCG](https://wintercg.org/))). Particularly around runtime security properties, and isolated/safe code execution (with pathways to being able to make auditable claims about the security of what code ran, and where, under what contexts).
 
-Organizing for this is expressed within the distinct `/system/` and `/system.ui/` root folder structure (and the `system.ui` sub-folder structure isolating and nameing each core UI rendering technology of the libraries contained within: `<platform-name>.<library-name>`, for example:
+
+In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (eg. [WinterCG](https://wintercg.org/))).
+
+
+**UI Framework Agnostic:** In the arena of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI modules (`system.ui`) are partitioned clearly as distinct to the `pure functional` "logic only" libraries (`system`).  This is because UI invariably tends towards a much higher volatility in technical architecutre over time, and is generally swapped out more frequently over the software lifecycle. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone. And down at the straight forward engineering level, much hidden complexity is often lurking in and around UI code.
+
+Organizing for all this is expressed within the distinct folders `/system/` and `/system.ui/` in the code root. The purpose of the `system.ui`'s child-folder structure is to isolate and callout by name each core UI rendering technology of the libraries contained within: `<technology-name>.<lib-name>`, for example:
 
 
 ```
 /code/
   |- system/
   |- system.ui/
-              |- <type>.*    <== prefix calls out library/technology being "ring fenced."
-              |- react.*     <== (libs)
-              |- svelte.*    <== (libs)
+              |- <type>.*/  <== prefix calls out the particular tech/lib being "ring fenced."
+              |- react.*/   <== (libs)
+              |- svelte.*/  <== (libs)
 ```
 
 
 
 #### Evolving Architectural Strategy
 
-This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking way possible.
+This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking a way as possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long-term time runway, where the "idea" itself remains consistent, but the implementation
 choices can be swapped out and evolved over time.  This is the ideal at least; `AND` "reality is a bitch!" and engineering tends to throw up "hard problems" on a consistent basis.  Yet, "evolution" is a messy thing, and we find spontaneosly emerging self-cleaning, self-maintaing ecosystems right across nature - so this is a feature of reality that can be coaxed (encouraged) into stable existence.
@@ -190,14 +214,14 @@ Development machine [environment setup](docs/env.setup.md) suggestions.
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0.svg?type=shield)](https://app.fossa.com/projects/custom%2B8499%2Fgithub.com%2Fcellplatform%2Fplatform-0.2.0?ref=badge_shield)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-The system (platform) lives as an "open commons" shared resource of the world's peoples. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
+The system (platform) lives as an "open commons" shared resource for the world. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
 
 In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through considered refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
 
 To run a "licence analysis" and validate the module depenency graph against this principle run:
 
 ```bash
-$ fossa analyze
+$ yarn mit
 ```
 
 ref: [fossa](https://docs.fossa.com/docs/importing-a-project) configuration docs

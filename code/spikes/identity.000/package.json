@@ -1,0 +1,36 @@
+{
+  "name": "spike.identity",
+  "version": "0.0.6",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "cd dist.cell/.latest/app && serve",
+    "test": "ts-node-esm    -T ../../../script.ts/cmd.test.mts",
+    "build": "ts-node-esm   -T ../../../script.ts/cmd.build.mts",
+    "clean": "ts-node-esm   -T ../../../script.ts/cmd.clean.mts",
+    "prepare": "yarn build && yarn test --run --reporter=verbose",
+    "deploy": "sh script/deploy.sh",
+    "tmp": "ts-node-esm -T ./script/tmp.mts"
+  },
+  "dependencies": {
+    "sys.types": "0.0.0",
+    "sys.util": "0.0.0"
+  },
+  "devDependencies": {
+    "sys.test": "0.0.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "types": "./dist/types.d/index.html.d.html",
+  "exports": {
+    ".": "./dist/web/lib/index-6095755d.js",
+    "./web": "./dist/web/lib/index-6095755d.js"
+  },
+  "typesVersions": {
+    "*": {
+      "web": [
+        "./dist/types.d/index.html.d.html"
+      ]
+    }
+  }
+}

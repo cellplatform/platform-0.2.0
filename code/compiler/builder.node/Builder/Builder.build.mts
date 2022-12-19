@@ -52,7 +52,7 @@ export async function build(
 
     const prefix = pc.bgCyan(pc.bold(' dist '));
     const filesize = pc.bold(pc.white(size.toString()));
-    const total = `${bundle.length} files, ${types.length} typefiles(${typesSize.toString()})`;
+    const total = `${bundle.length} files, ${types.length} typefiles (${typesSize.toString()})`;
 
     console.info(``);
     console.info(pc.gray(`${prefix} ${filesize}`));

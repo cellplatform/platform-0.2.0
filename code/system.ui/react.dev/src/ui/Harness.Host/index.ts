@@ -1,1 +1,1 @@
-export * from './Harness.Host';
+export * from './Host';

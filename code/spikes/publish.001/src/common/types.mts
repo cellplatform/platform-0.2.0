@@ -14,8 +14,8 @@ export type {
 export type { Fs } from 'sys.fs/src/types.mjs';
 
 export type {
-  LogPublicHistory,
-  LogPublicHistoryItem,
+  LogHistoryPublic as LogPublicHistory,
+  LogHistoryPublicItem as LogPublicHistoryItem,
   LogDeploymentEntry,
 } from 'sys.pkg/src/types.mjs';
 
