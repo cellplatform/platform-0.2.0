@@ -26,7 +26,7 @@ export function BusController(args: {
 
   let _context: t.SpecCtxWrapper | undefined;
   const Context = {
-    create() {
+    async create() {
       const wrapper = (_context = SpecContext.create(args.instance, { dispose$ }));
       state.change('context:init', (draft) => {
         draft.instance.context = wrapper.id;
@@ -34,8 +34,8 @@ export function BusController(args: {
       });
       return _context;
     },
-    get current() {
-      return _context || (_context = Context.create());
+    async current() {
+      return _context || (_context = await Context.create());
     },
   };
 
@@ -67,7 +67,7 @@ export function BusController(args: {
   events.load.req$.subscribe(async (e) => {
     const { tx } = e;
     let error: string | undefined;
-    Context.create();
+    await Context.create();
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
@@ -94,7 +94,7 @@ export function BusController(args: {
 
     try {
       if (rootSpec) {
-        const res = await run(Context.current, rootSpec, { only });
+        const res = await run(await Context.current(), rootSpec, { only });
         const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
           const run = draft.run || (draft.run = DEFAULT.INFO.run);
@@ -118,7 +118,7 @@ export function BusController(args: {
    */
   events.reset.req$.subscribe(async (e) => {
     const { tx } = e;
-    Context.create();
+    await Context.create();
     bus.fire({
       type: 'sys.dev/reset:res',
       payload: { tx, instance, info: state.current },
