@@ -138,6 +138,11 @@ describe('SpecContext', () => {
       await events.reset.fire();
       expect(renderers.length).to.eql(0);
 
+      /**
+       * TODO 🐷
+       * - Within the BusController
+       *    - Move the [Context] completely into the [Bus.MemoryState]
+       */
       console.log('-------------------------------------');
       console.log('wrapper.props.debug.main', wrapper.props.debug.main);
 
