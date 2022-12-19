@@ -14,7 +14,7 @@ const dir = async (dir: string) => {
   return store.fs;
 };
 
-const targetdir = await dir('./dist.deploy/');
+const targetdir = await dir('./dist.cell/');
 
 const bundler = await Content.bundler({
   Text,
@@ -22,7 +22,7 @@ const bundler = await Content.bundler({
     app: await dir('./dist/web'),
     src: await dir('./src/'),
     data: await dir('./src.data'),
-    log: await dir('./dist.deploy/.log/'),
+    log: await dir('./dist.cell/.log/'),
   },
 });
 
