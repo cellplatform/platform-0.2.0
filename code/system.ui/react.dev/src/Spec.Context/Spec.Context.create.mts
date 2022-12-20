@@ -1,5 +1,5 @@
 import { Margin, t } from '../common';
-import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
+import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
 import { DEFAULT } from './DEFAULT.mjs';
 import { State } from './Spec.Context.State.mjs';
 

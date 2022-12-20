@@ -1,6 +1,6 @@
 import { Spec } from '../Spec';
 import { describe, expect, it, rx, slug, t, R } from '../test';
-import { DevBus } from '../ui.Bus';
+import { DevBus } from '../logic.Bus';
 import { SpecContext } from './Spec.Context.mjs';
 
 describe('SpecContext', () => {
