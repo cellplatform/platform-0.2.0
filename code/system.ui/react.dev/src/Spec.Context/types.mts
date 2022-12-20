@@ -11,7 +11,7 @@ export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 
 /**
- * Context Wrapper (Manager)
+ * Context Wrapper (Manager).
  */
 export type SpecContext = t.Disposable & {
   readonly id: Id;
@@ -33,6 +33,11 @@ export type SpecCtx = {
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;
   state<T extends O>(initial: T): Promise<SpecCtxState<T>>;
+};
+
+export type SpecCtx2 = {
+  readonly component: SpecCtxComponent;
+  toObject(): SpecCtxObject;
 };
 
 export type SpecCtxState<T extends O> = {
@@ -62,13 +67,17 @@ export type SpecCtxDebug = {
 };
 
 /**
- * Rendering state produced by the props
+ * Rendering state produced by the props.
  */
 export type SpecRenderProps = {
-  readonly id: string;
-  readonly component: SpecRenderPropsComponent;
-  readonly host: SpecRenderPropsHost;
-  readonly debug: SpecRenderPropsDebug;
+  /**
+   * TODO 🐷
+   * REMOVE {id}
+   */
+  id: string;
+  component: SpecRenderPropsComponent;
+  host: SpecRenderPropsHost;
+  debug: SpecRenderPropsDebug;
 };
 
 export type SpecRenderPropsComponent = {

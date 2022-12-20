@@ -1,4 +1,4 @@
-import { rx, slug } from '../common';
+import { t, rx, slug } from '../common';
 import { DevBus } from '../logic.Bus';
 import { SAMPLES } from '../test.sample/specs.unit-test';
 
