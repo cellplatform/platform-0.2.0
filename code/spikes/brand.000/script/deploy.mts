@@ -30,7 +30,7 @@ const bundle = await bundler.write.bundle(targetdir, version);
 const deployment = await pushToVercel({
   version,
   fs: bundle.fs,
-  source: bundle.dir.app,
+  source: bundle.dirs.app,
 });
 
 bundler.logger.write({ bundle, deployment });
