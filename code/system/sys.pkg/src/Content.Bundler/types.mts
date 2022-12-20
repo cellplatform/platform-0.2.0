@@ -11,6 +11,7 @@ export type BundlePaths = {
     data: DirPath;
   };
   data: {
+    parent: DirPath;
     base: DirPath;
     md: DirPath;
     logfile: DirPath;

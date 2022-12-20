@@ -6,10 +6,10 @@ import { BundlePaths } from './Paths.mjs';
 type SemVer = string;
 
 type Sources = {
-  app: t.Fs; //                The compiled bundle of the content rendering "app" (application).
-  data: t.Fs; //               The author generated content data.
+  app: t.Fs; //                The compiled bundle of the rendering "app" (eg. the "/dist" folder).
+  data: t.Fs; //               Content data.
   src?: t.Fs; //   (optional)  The "/src" source code folder (containing known "*.ts" files, such as [middleware.ts] etc).
-  log?: t.Fs; //   (optinoal)  The place to read/write logs (overwritable in method calls)
+  log?: t.Fs; //   (optional)  The place to read/write logs (overwritable in method calls)
 };
 
 type CreateArgs = {
@@ -42,8 +42,6 @@ export const ContentBundler = {
       propsType,
       throwError,
     });
-
-    // const version = args.version ?? README.props.version;
 
     const write = {
       /**
@@ -143,9 +141,10 @@ export const ContentBundler = {
 
         // Finish up.
         const api = {
-          fs,
           version,
-          dir: { app: BundlePaths.app.base },
+          fs,
+          dirs: { app: BundlePaths.app.base },
+          logger,
 
           get manifest() {
             return manifest;
