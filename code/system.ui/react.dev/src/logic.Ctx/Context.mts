@@ -37,14 +37,16 @@ export const Context = {
       },
 
       async flush() {
+        if (api.disposed) throw new Error('Context has been disposed');
         if (!api.pending) return api;
-        //
+
         await events.props.change.fire({
           mutate(draft) {
             /**
              * TODO 🐷
              * - pass mutate as first arg (not in {object})
              * - Rename [SpecCtx2]
+             * - Integrate into harness runner.
              */
 
             //

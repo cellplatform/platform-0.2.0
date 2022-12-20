@@ -1,5 +1,5 @@
-import { describe, it, expect, t, TestSample } from '../test';
 import { Context } from '.';
+import { describe, expect, expectError, it, TestSample } from '../test';
 
 describe('Context', () => {
   const Sample = {
@@ -41,42 +41,51 @@ describe('Context', () => {
     });
   });
 
-  it('update => flush', async () => {
-    const { events, context, dispose } = await Sample.create();
+  describe('state modification', () => {
+    it('update => flush', async () => {
+      const { events, context, dispose } = await Sample.create();
 
-    const info1 = await events.info.get();
-    expect(info1.render.props).to.eql(undefined); // NB: Initially no render-props data.
-    expect(context.pending).to.eql(false);
+      const info1 = await events.info.get();
+      expect(info1.render.props).to.eql(undefined); // NB: Initially no render-props data.
+      expect(context.pending).to.eql(false);
 
-    const ctx = context.ctx;
-    ctx.component.backgroundColor(-0.3);
+      const ctx = context.ctx;
+      ctx.component.backgroundColor(-0.3);
 
-    const info2 = await events.info.get();
-    expect(info2.render.props).to.eql(undefined); // NB: Not flushed yet.
-    expect(context.pending).to.eql(true);
+      const info2 = await events.info.get();
+      expect(info2.render.props).to.eql(undefined); // NB: Not flushed yet.
+      expect(context.pending).to.eql(true);
 
-    await context.flush();
+      await context.flush();
 
-    const info3 = await events.info.get();
-    expect(info3.render.props?.component.backgroundColor).to.eql(-0.3);
-    expect(context.pending).to.eql(false);
+      const info3 = await events.info.get();
+      expect(info3.render.props?.component.backgroundColor).to.eql(-0.3);
+      expect(context.pending).to.eql(false);
 
-    dispose();
-  });
+      dispose();
+    });
 
-  it('synced between instances on same bus (single source of truth)', async () => {
-    const { instance } = await TestSample.create();
-    const context1 = await Context.init(instance);
-    const context2 = await Context.init(instance);
+    it('synced between instances on same bus (single source of truth)', async () => {
+      const { instance } = await TestSample.create();
+      const context1 = await Context.init(instance);
+      const context2 = await Context.init(instance);
 
-    context1.ctx.component.backgroundColor(-0.1);
-    await context1.flush();
+      context1.ctx.component.backgroundColor(-0.1);
+      await context1.flush();
 
-    // NB: Only one of the context has been flushed. Both yield the same updated data.
-    expect(context1.toObject().props.component.backgroundColor).to.eql(-0.1);
-    expect(context2.toObject().props.component.backgroundColor).to.eql(-0.1);
+      // NB: Only one of the context has been flushed. Both yield the same updated data.
+      expect(context1.toObject().props.component.backgroundColor).to.eql(-0.1);
+      expect(context2.toObject().props.component.backgroundColor).to.eql(-0.1);
 
-    context1.dispose();
-    context2.dispose();
+      context1.dispose();
+      context2.dispose();
+    });
+
+    it('throw: when disposed', async () => {
+      const { context, dispose } = await Sample.create();
+      context.dispose();
+      await expectError(() => context.flush(), 'Context has been disposed');
+      dispose();
+    });
   });
 });
