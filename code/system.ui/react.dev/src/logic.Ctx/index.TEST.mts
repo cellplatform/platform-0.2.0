@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { describe, expect, expectError, it, TestSample } from '../test';
+import { t, describe, expect, expectError, it, TestSample } from '../test';
 
 describe('Context', () => {
   const Sample = {
@@ -85,6 +85,61 @@ describe('Context', () => {
       const { context, dispose } = await Sample.create();
       context.dispose();
       await expectError(() => context.flush(), 'Context has been disposed');
+      dispose();
+    });
+  });
+
+  describe('props', () => {
+    it('component', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+
+      const fn = () => undefined;
+      ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
+      await context.flush();
+
+      const info = await events.info.get();
+      const o = info.render.props?.component!;
+
+      expect(o.backgroundColor).to.eql(-0.2);
+      expect(o.display).to.eql('flex');
+      expect(o.renderer).to.eql(fn);
+      expect(o.size).to.eql({ mode: 'center', width: 10, height: 20 });
+
+      dispose();
+    });
+
+    it('component.size', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+
+      const test = async (
+        expected: t.SpecRenderSize,
+        modify: (size: t.SpecCtxComponent['size']) => void,
+      ) => {
+        modify(ctx.component.size);
+        await context.flush();
+        const info = await events.info.get();
+        expect(info.render.props?.component.size).to.eql(expected);
+      };
+
+      await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
+      await test({ mode: 'center', width: undefined, height: 20 }, (size) => size(undefined, 20));
+      await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
+
+      const margin = [50, 50, 50, 50] as t.Margin;
+      await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));
+      await test({ mode: 'fill', x: true, y: false, margin }, (size) => size('fill-x'));
+      await test({ mode: 'fill', x: false, y: true, margin }, (size) => size('fill-y'));
+
+      await test({ mode: 'fill', x: true, y: true, margin: [10, 10, 10, 10] }, (size) =>
+        size('fill', 10),
+      );
+
+      await test({ mode: 'fill', x: true, y: true, margin: [1, 2, 3, 4] }, (size) =>
+        size('fill', [1, 2, 3, 4]),
+      );
+
       dispose();
     });
   });

@@ -127,7 +127,7 @@ describe('SpecContext', () => {
 
       const info = await events.info.get();
 
-      console.log('info', info);
+      // console.log('info', info);
       //
       //       expect(renderers.length).to.eql(1);
       //       expect(renderers[0]).to.equal(fn);

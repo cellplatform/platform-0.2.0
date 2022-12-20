@@ -25,9 +25,6 @@ export async function CtxProps(events: t.DevEvents) {
     get current() {
       return _current;
     },
-    get revision() {
-      return _revision;
-    },
     get pending() {
       return _revision > 0;
     },
