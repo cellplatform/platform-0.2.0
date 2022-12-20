@@ -1,8 +1,7 @@
 import { run } from './Bus.Controller.run.mjs';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { Is, rx, SpecContext, t, Test } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { DEFAULT, Is, rx, SpecContext, t, Test } from './common';
 
 type Id = string;
 
@@ -25,7 +24,7 @@ export function BusController(args: {
   const { dispose$ } = events;
 
   const Context = {
-    _: undefined as t.SpecCtxWrapper | undefined,
+    _: undefined as t.SpecContext | undefined,
 
     async create() {
       const wrapper = (Context._ = SpecContext.create(args.instance, { dispose$ }));

@@ -1,5 +1,4 @@
-import { R, t, Is } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { R, t, Is, DEFAULT } from './common';
 
 type Revision = { number: number; message: string };
 

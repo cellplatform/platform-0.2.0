@@ -3,7 +3,7 @@ import { t } from './common';
 type Id = string;
 
 export async function run(
-  context: t.SpecCtxWrapper,
+  context: t.SpecContext,
   root: t.TestSuiteModel,
   options: { only?: Id[] } = {},
 ) {

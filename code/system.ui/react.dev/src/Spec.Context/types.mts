@@ -13,7 +13,7 @@ export type SpecPropDisplay = 'flex' | 'grid' | undefined;
 /**
  * Context Wrapper (Manager)
  */
-export type SpecCtxWrapper = t.Disposable & {
+export type SpecContext = t.Disposable & {
   readonly id: Id;
   readonly instance: t.DevInstance;
   readonly ctx: SpecCtx;

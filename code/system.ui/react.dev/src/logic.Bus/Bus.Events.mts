@@ -1,8 +1,6 @@
-import { Observable, timeout } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { asArray, rx, slug, t } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
 
 type Id = string;
 

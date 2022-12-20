@@ -1,6 +1,6 @@
 import { Margin, t } from '../common';
 import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
-import { DEFAULT } from './DEFAULT.mjs';
+import { DEFAULT } from '../DEFAULT.mjs';
 import { State } from './Spec.Context.State.mjs';
 
 type O = Record<string, unknown>;
@@ -113,7 +113,7 @@ export function create(instance: t.DevInstance, options: { dispose$?: t.Observab
   /**
    * API.
    */
-  const api: t.SpecCtxWrapper = {
+  const api: t.SpecContext = {
     // (🐷)
     //   ISSUE: This will get out of sync over time.
     //          We should not be doing this here - this problem will disappear
