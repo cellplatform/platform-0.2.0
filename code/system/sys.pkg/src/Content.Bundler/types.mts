@@ -1,5 +1,3 @@
-import * as t from '../common/types.mjs';
-
 type DirPath = string;
 type Size = { bytes: number; size: string };
 
@@ -20,7 +18,7 @@ export type BundlePaths = {
 
 export type BundleSize = { total: Size; lib: Size; data: { md: Size } };
 export type BundleLogEntry = {
-  kind: 'pkg:content-bundle';
+  kind: 'pkg:bundle';
   version: string;
   paths: BundlePaths;
   size: BundleSize;

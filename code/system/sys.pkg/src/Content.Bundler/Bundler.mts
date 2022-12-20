@@ -168,9 +168,13 @@ export const ContentBundler = {
            */
           toObject(): t.BundleLogEntry {
             const { size } = api;
-            const kind = 'pkg:content-bundle';
             const paths = BundlePaths;
-            return { kind, version, size, paths };
+            return {
+              kind: 'pkg:bundle',
+              version,
+              size,
+              paths,
+            };
           },
         };
 
