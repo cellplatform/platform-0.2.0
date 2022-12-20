@@ -11,7 +11,7 @@ export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevI
  */
 export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
   let _revision: Revision = { number: 0, message: 'initial' };
-  let _current: t.DevInfo = DEFAULT.INFO;
+  let _current: t.DevInfo = DEFAULT.info();
 
   /**
    * API

@@ -1,6 +1,6 @@
 {
   "name": "spike.dev",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -8,8 +8,10 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "prepare": "yarn build && yarn test --run --reporter=verbose",
-    "deploy": "sh script/deploy.sh",
+    "bundle": "ts-node-esm -T ./script/bundle.mts",
+    "patch": "yarn version --patch --no-git-tag-version",
+    "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
+    "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
@@ -23,8 +25,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-c3881e44.js",
-    "./web": "./dist/web/lib/index-c3881e44.js"
+    ".": "./dist/web/lib/index-de0860f3.js",
+    "./web": "./dist/web/lib/index-de0860f3.js"
   },
   "typesVersions": {
     "*": {

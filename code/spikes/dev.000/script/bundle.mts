@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import { Filesystem, NodeFs } from 'sys.fs.node';
 import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';
@@ -16,11 +17,10 @@ const publicdir = await dir('./public/data');
 const targetdir = await dir('./dist.cell/');
 const bundler = await Content.bundler({
   Text,
-  throwError: true,
   sources: {
     app: await dir('./dist/web'),
     src: await dir('./src/'),
-    data: await dir('../../../../../org.team-db/tdb.working/project.undp/'),
+    data: await dir('./src.data'),
     log: await dir('./dist.cell/.log/'),
   },
 });

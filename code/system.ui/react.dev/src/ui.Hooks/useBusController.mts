@@ -16,7 +16,7 @@ export function useBusController(
   const instance = { bus, id };
   const busid = rx.bus.instance(bus);
 
-  const [info, setInfo] = useState<t.DevInfo>(DevBus.DEFAULT.INFO);
+  const [info, setInfo] = useState<t.DevInfo>(DevBus.DEFAULT.info);
 
   /**
    * Lifecycle

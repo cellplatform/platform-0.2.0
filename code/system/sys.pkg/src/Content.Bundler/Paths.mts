@@ -8,6 +8,7 @@ export const BundlePaths: t.BundlePaths = {
     data: 'app/data/',
   },
   data: {
+    parent: 'app/',
     base: 'data/',
     md: 'md/',
     logfile: 'log.json',
