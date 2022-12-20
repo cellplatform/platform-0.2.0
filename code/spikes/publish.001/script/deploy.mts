@@ -1,4 +1,5 @@
-import { bus, bundle } from './bundle.mjs';
+#!/usr/bin/env ts-node
+import { bundle, bus } from './bundle.mjs';
 import { pushToVercel } from './deploy.vercel.mjs';
 
 /**
