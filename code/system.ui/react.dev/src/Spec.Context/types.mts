@@ -65,10 +65,10 @@ export type SpecCtxDebug = {
  * Rendering state produced by the props
  */
 export type SpecRenderProps = {
-  id: string;
-  component: SpecRenderPropsComponent;
-  host: SpecRenderPropsHost;
-  debug: SpecRenderPropsDebug;
+  readonly id: string;
+  readonly component: SpecRenderPropsComponent;
+  readonly host: SpecRenderPropsHost;
+  readonly debug: SpecRenderPropsDebug;
 };
 
 export type SpecRenderPropsComponent = {

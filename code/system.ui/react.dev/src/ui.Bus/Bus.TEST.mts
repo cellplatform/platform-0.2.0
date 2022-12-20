@@ -1,6 +1,5 @@
 import { DevBus } from '.';
 import { describe, expect, it, rx, slug, t, Test } from '../test';
-
 import { SAMPLES } from '../test.sample/specs.unit-test';
 
 describe('DevBus', (e) => {
@@ -57,9 +56,19 @@ describe('DevBus', (e) => {
         const instance = Sample.instance();
         const events = DevBus.Controller({ instance });
         const res = await events.info.fire();
+        const info = res.info!;
+        const ctx = res.ctx!;
+        const ctxObject = ctx.toObject();
 
         expect(res.instance).to.eql(instance.id);
-        expect(res.info?.root).to.eql(undefined);
+        expect(info.root).to.eql(undefined);
+
+        expect(info.instance.kind).to.eql('dev:harness');
+        expect(info.instance.context).to.match(/^dev:session\.ctx\./);
+        expect(info.instance.bus).to.match(/^bus\./);
+
+        expect(ctx).to.exist;
+        expect(ctxObject.props.id).to.eql(info.instance.context);
 
         events.dispose();
       });
@@ -73,6 +82,23 @@ describe('DevBus', (e) => {
         expect(info1.run.count).to.eql(0);
         expect(info1).to.eql(info2);
         expect(info1).to.not.equal(info2);
+
+        events.dispose();
+      });
+
+      it('ctx', async () => {
+        const instance = Sample.instance();
+        const events = DevBus.Controller({ instance });
+        const ctx1 = await events.info.ctx();
+        const ctx2 = await events.info.ctx();
+
+        expect(ctx1).to.equal(ctx2);
+
+        events.reset.fire();
+
+        const ctx3 = await events.info.ctx();
+        expect(ctx3).to.not.equal(ctx2);
+        expect(ctx3.toObject().props.id).to.not.equal(ctx2.toObject().props.id);
 
         events.dispose();
       });
@@ -171,11 +197,11 @@ describe('DevBus', (e) => {
 
         expect(id1).to.eql(undefined);
         expect(id2).to.eql(undefined);
-        expect(id3).to.match(/^render\./);
+        expect(id3).to.match(/^dev:session\.ctx\./);
         expect(id4).to.eql(id3);
 
         // NB: changed after loading of new bundle.
-        expect(id5).to.match(/^render\./);
+        expect(id5).to.match(/^dev:session\.ctx\./);
         expect(id5).to.not.eql(id4);
       });
     });
@@ -217,6 +243,7 @@ describe('DevBus', (e) => {
         expect(info1?.run.results).to.not.eql(undefined);
 
         await events.unload.fire();
+
         const info2 = await events.info.get();
         expect(info2?.run.count).to.eql(0);
         expect(info2?.run.results).to.eql(undefined);
@@ -340,10 +367,10 @@ describe('DevBus', (e) => {
       });
     });
 
-    describe('state (context)', () => {
+    describe('context:state (read/write)', () => {
       type T = { msg?: string; count: number };
 
-      it('updates state', async () => {
+      it('write state', async () => {
         const events = await Sample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql(undefined);
@@ -380,6 +407,38 @@ describe('DevBus', (e) => {
         expect(info2.render.state).to.eql(undefined);
 
         events.dispose();
+      });
+    });
+
+    describe('context:props (read/write)', () => {
+      it('write props', async () => {
+        const events = await Sample.preloaded();
+        const info1 = await events.info.get();
+        expect(info1.render.props).to.eql(undefined);
+
+        await events.props.change.fire({
+          mutate: (draft) => {
+            draft.component.backgroundColor = -0.3;
+          },
+        });
+
+        const info2 = await events.info.get();
+        expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
+
+        events.dispose();
+      });
+
+      it.skip('mutate from {ctx} object (eg. passed into spec/"it")', async () => {
+        /**
+         * TODO 🐷
+         * - make a batch of changes, then flush, eg.
+         *
+         *       ctx.component
+         *        .backgroundColor(-0.3)
+         *        .size(10, 20)
+         *        .flush();
+         *
+         */
       });
     });
   });

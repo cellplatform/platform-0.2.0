@@ -1,29 +1,18 @@
-import { Margin, slug, t } from '../common';
+import { Margin, t } from '../common';
 import { BusEvents } from '../ui.Bus/Bus.Events.mjs';
+import { DEFAULT } from './DEFAULT.mjs';
 import { State } from './Spec.Context.State.mjs';
 
 type O = Record<string, unknown>;
-
-const DEFAULT = {
-  get props(): t.SpecRenderProps {
-    return {
-      id: `render.${slug()}`,
-      host: {},
-      component: {},
-      debug: { main: { renderers: [] } },
-    };
-  },
-};
 
 /**
  * Generate a new set of arguments used to render a spec/component.
  */
 export function create(instance: t.DevInstance, options: { dispose$?: t.Observable<any> } = {}) {
-  const id = `dev.ctx.${slug()}`;
   const events = BusEvents({ instance, dispose$: options.dispose$ });
   const { dispose, dispose$ } = events;
 
-  let _props = DEFAULT.props;
+  let _props = DEFAULT.props();
   let _initial = true;
 
   /**
@@ -91,6 +80,7 @@ export function create(instance: t.DevInstance, options: { dispose$?: t.Observab
     component,
     host,
     debug,
+
     get initial() {
       return _initial;
     },
@@ -116,10 +106,7 @@ export function create(instance: t.DevInstance, options: { dispose$?: t.Observab
 
     async state<T extends O>(initial: T) {
       const info = await events.info.get();
-      return State.create<T>({
-        initial: (info.render.state ?? initial) as T,
-        events,
-      });
+      return State.create<T>({ initial: (info.render.state ?? initial) as T, events });
     },
   };
 
@@ -127,7 +114,12 @@ export function create(instance: t.DevInstance, options: { dispose$?: t.Observab
    * API.
    */
   const api: t.SpecCtxWrapper = {
-    id,
+    // (🐷)
+    //   ISSUE: This will get out of sync over time.
+    //          We should not be doing this here - this problem will disappear
+    //          when the {ctx} is refactord into the [logic.Bus].
+
+    id: _props.id, // <== ISSUE (🐷)
     instance,
     dispose,
     dispose$,
