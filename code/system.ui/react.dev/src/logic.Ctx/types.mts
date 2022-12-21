@@ -65,11 +65,6 @@ export type DevCtxDebug = {
  * Rendering state produced by the props.
  */
 export type DevRenderProps = {
-  /**
-   * TODO 🐷
-   * REMOVE {id}
-   */
-  id: string;
   component: DevRenderPropsComponent;
   host: DevRenderPropsHost;
   debug: DevRenderPropsDebug;

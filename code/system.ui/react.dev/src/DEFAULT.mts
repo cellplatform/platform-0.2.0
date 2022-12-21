@@ -5,9 +5,8 @@ export const DEFAULT = {
     return `dev:session.ctx.${slug()}`;
   },
 
-  props(id?: string): t.DevRenderProps {
+  props(): t.DevRenderProps {
     return {
-      id: id ?? DEFAULT.ctxId(),
       host: {},
       component: {},
       debug: { main: { renderers: [] } },
