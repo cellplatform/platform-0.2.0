@@ -29,6 +29,7 @@ export const Context = {
       dispose,
       dispose$,
       toObject,
+
       get disposed() {
         return events.disposed;
       },
@@ -40,20 +41,19 @@ export const Context = {
         if (api.disposed) throw new Error('Context has been disposed');
         if (!api.pending) return api;
 
-        await events.props.change.fire({
-          mutate(draft) {
-            /**
-             * TODO 🐷
-             * - pass mutate as first arg (not in {object})
-             * - Rename [SpecCtx2]
-             * - Integrate into harness runner.
-             */
+        /**
+         * TODO 🐷
+         * - pass mutate as first arg (not in {object})
+         * - Rename [SpecCtx2]
+         * - Integrate into harness runner.
+         * - Remove ID from deeper in the state tree (only on {instance}).
+         */
 
-            const current = props.current;
-            draft.component = current.component;
-            draft.host = current.host;
-            draft.debug = current.debug;
-          },
+        await events.props.change.fire((draft) => {
+          const current = props.current;
+          draft.component = current.component;
+          draft.host = current.host;
+          draft.debug = current.debug;
         });
 
         return api;

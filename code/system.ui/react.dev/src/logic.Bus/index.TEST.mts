@@ -405,10 +405,8 @@ describe('DevBus', (e) => {
         const info1 = await events.info.get();
         expect(info1.render.props).to.eql(undefined);
 
-        await events.props.change.fire({
-          mutate: (draft) => {
-            draft.component.backgroundColor = -0.3;
-          },
+        await events.props.change.fire((draft) => {
+          draft.component.backgroundColor = -0.3;
         });
 
         const info2 = await events.info.get();

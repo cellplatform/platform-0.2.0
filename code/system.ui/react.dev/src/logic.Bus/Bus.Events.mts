@@ -205,8 +205,8 @@ export function BusEvents(args: {
     change: {
       req$: rx.payload<t.DevPropsChangeReqEvent>($, 'sys.dev/props/change:req'),
       res$: rx.payload<t.DevPropsChangeResEvent>($, 'sys.dev/props/change:res'),
-      async fire(args) {
-        const { mutate, timeout = 3000 } = args;
+      async fire(mutate, options = {}) {
+        const { timeout = 3000 } = options;
         const tx = slug();
         const op = 'props.change';
         const res$ = props.change.res$.pipe(rx.filter((e) => e.tx === tx));
