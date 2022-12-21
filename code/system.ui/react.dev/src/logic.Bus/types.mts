@@ -69,6 +69,7 @@ export type DevEvents = t.Disposable & {
         options?: { timeout?: Milliseconds },
       ): Promise<DevStateChangeRes>;
     };
+    object<T extends O>(initial: T): t.DevCtxState<T>;
   };
   props: {
     changed$: t.Observable<t.DevInfoChanged>;

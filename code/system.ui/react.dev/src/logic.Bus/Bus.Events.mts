@@ -1,7 +1,9 @@
 import { filter } from 'rxjs/operators';
 
 import { asArray, rx, slug, t } from './common';
+import { ContextState } from '../logic.Ctx/Context.State.mjs';
 
+type O = Record<string, unknown>;
 type Id = string;
 
 /**
@@ -171,6 +173,9 @@ export function BusEvents(args: {
         return { tx, instance, error };
       },
     },
+    object<T extends O = O>(initial: T) {
+      return ContextState({ events, initial });
+    },
   };
 
   /**
@@ -208,7 +213,10 @@ export function BusEvents(args: {
     },
   };
 
-  return {
+  /**
+   * API.
+   */
+  const events: t.DevEvents = {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
     dispose,
@@ -224,6 +232,8 @@ export function BusEvents(args: {
     state,
     props,
   };
+
+  return events;
 }
 
 /**

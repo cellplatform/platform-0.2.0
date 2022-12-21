@@ -345,7 +345,7 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('reset state (remove)', async () => {
+      it('reset state', async () => {
         const { events } = await TestSample.preloaded();
 
         const initial: T = { count: 0 };
@@ -359,6 +359,15 @@ describe('DevBus', (e) => {
         expect(info2.render.state).to.eql(undefined);
 
         events.dispose();
+      });
+
+      it.skip('state object (API)', async () => {
+        const { events } = await TestSample.preloaded();
+
+        // const state = events.state.object()
+
+        events.dispose();
+        //
       });
     });
 
