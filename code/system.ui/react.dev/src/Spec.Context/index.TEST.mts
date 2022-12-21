@@ -123,7 +123,7 @@ describe('SpecContext', () => {
       const ctx = await events.info.ctx();
       //
       const fn: t.SubjectRenderer = (e) => undefined;
-      ctx.debug.body(fn);
+      ctx.debug.render(fn);
 
       const info = await events.info.get();
 

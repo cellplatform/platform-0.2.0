@@ -4,7 +4,7 @@ import type { PropArgs } from './common';
 
 export function CtxPropsDebug(props: PropArgs) {
   const api: t.SpecCtxDebug = {
-    body(renderer) {
+    render(renderer) {
       props.current().debug.main.renderers.push(renderer);
       props.changed();
       return api;

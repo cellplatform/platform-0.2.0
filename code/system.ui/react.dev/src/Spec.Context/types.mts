@@ -65,7 +65,7 @@ export type SpecCtxHost = {
 };
 
 export type SpecCtxDebug = {
-  body<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxDebug;
+  render<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxDebug;
 };
 
 /**

@@ -67,7 +67,7 @@ export function create(instance: t.DevInstance, options: { dispose$?: t.Observab
    * component and controls for live manipulation of the compoonent.
    */
   const debug: t.SpecCtxDebug = {
-    body(renderer) {
+    render(renderer) {
       _props.debug.main.renderers.push(renderer);
       return debug;
     },

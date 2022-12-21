@@ -47,7 +47,6 @@ export const Context = {
              * - pass mutate as first arg (not in {object})
              * - Rename [SpecCtx2]
              * - Integrate into harness runner.
-             * - Rename ctx.debug.body => ctx.debug.render(fn)
              */
 
             const current = props.current;

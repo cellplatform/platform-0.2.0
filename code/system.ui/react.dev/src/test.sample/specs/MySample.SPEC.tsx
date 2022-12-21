@@ -54,7 +54,7 @@ export default Spec.describe('MySample', (e) => {
       }),
     };
 
-    ctx.debug.body(() => {
+    ctx.debug.render(() => {
       return (
         <div {...styles.base} onClick={() => state.change((draft) => draft.count++)}>
           {`Increment Count!`}
@@ -66,7 +66,7 @@ export default Spec.describe('MySample', (e) => {
   e.it('rerun (all, reset)', async (e) => {
     const ctx = Spec.ctx(e);
     if (ctx.initial) {
-      ctx.debug.body(() => {
+      ctx.debug.render(() => {
         return <div onClick={() => ctx.run({ reset: true })}>Rerun</div>;
       });
     }

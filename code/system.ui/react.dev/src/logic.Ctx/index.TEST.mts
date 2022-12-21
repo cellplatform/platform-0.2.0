@@ -167,7 +167,7 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => undefined;
-      ctx.debug.body(fn);
+      ctx.debug.render(fn);
 
       expect(context.pending).to.eql(true);
       await context.flush();
