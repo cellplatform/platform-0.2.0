@@ -21,7 +21,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
       <div>{props.text ?? 'MyComponent'} 🐷</div>
       <div>
-        <pre>{props.state && JSON.stringify(props.state)}</pre>
+        <pre>state: {props.state && JSON.stringify(props.state)}</pre>
       </div>
     </div>
   );

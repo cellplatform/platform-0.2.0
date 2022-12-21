@@ -1,4 +1,5 @@
 import * as t from '../common/types.mjs';
+export * from './types.spec.mjs';
 
 type Milliseconds = number;
 type Id = string;

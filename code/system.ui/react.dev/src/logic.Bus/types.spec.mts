@@ -43,6 +43,7 @@ export type SpecCtxState<T extends O> = {
 export type SpecCtxObject = {
   instance: t.DevInstance;
   props: SpecRenderProps;
+  run: { count: number; initial: boolean };
 };
 
 export type SpecCtxComponent = {
