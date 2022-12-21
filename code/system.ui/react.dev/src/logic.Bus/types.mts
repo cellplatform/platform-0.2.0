@@ -24,7 +24,6 @@ export type DevInfoChangeMessage =
   | 'props:write'
   | 'context:init'
   | 'spec:load'
-  | 'spec:unload'
   | 'run:all'
   | 'run:subset'
   | 'reset';
@@ -48,9 +47,6 @@ export type DevEvents = t.Disposable & {
     req$: t.Observable<t.DevLoadReq>;
     res$: t.Observable<t.DevLoadRes>;
     fire(bundle?: t.BundleImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
-  };
-  unload: {
-    fire(options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
   };
   run: {
     req$: t.Observable<t.DevRunReq>;

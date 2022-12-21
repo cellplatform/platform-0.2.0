@@ -70,12 +70,10 @@ export function BusController(args: {
     const { tx } = e;
     let error: string | undefined;
 
-    await events.reset.fire();
-
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      const message: t.DevInfoChangeMessage = root ? 'spec:load' : 'spec:unload';
-      await state.change(message, (draft) => (draft.root = root));
+      await events.reset.fire();
+      await state.change('spec:load', (draft) => (draft.root = root));
     } catch (err: any) {
       error = err.message;
     }

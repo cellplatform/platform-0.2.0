@@ -2,6 +2,8 @@ import { DevBus } from '.';
 import { describe, expect, it, t, Test, TestSample } from '../test';
 import { SAMPLES } from '../test.sample/specs.unit-test';
 
+const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
+
 describe('DevBus', (e) => {
   describe('is', (e) => {
     const is = DevBus.Events.is;
@@ -118,36 +120,9 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      //       it('unload', async () => {
-      //         const instance = TestSample.instance();
-      //         const events = DevBus.Controller({ instance });
-      //         const root = await Test.bundle(SAMPLES.Sample1);
-      //
-      //         const fired: t.DevInfoChanged[] = [];
-      //         events.info.changed$.subscribe((e) => fired.push(e));
-      //
-      //         const res1 = await events.load.fire(SAMPLES.Sample1);
-      //         expect(res1.info?.root).to.eql(root);
-      //
-      //         type T = { count: number };
-      //         await events.state.change.fire<T>({ count: 0 }, (d) => d.count++);
-      //         const info1 = await events.info.get();
-      //         expect(info1.render.state).to.eql({ count: 1 });
-      //
-      //         const res2 = await events.unload.fire();
-      //         expect(res2.info?.root).to.eql(undefined);
-      //
-      //         const info2 = await events.info.get();
-      //         expect(info2?.root).to.eql(undefined);
-      //         expect(info2.render.state).to.eql(undefined);
-      //
-      //         events.dispose();
-      //       });
-
-      it('render context changes between load/unload', async () => {
+      it('render context changes between load/reset', async () => {
         const { events } = await TestSample.create();
 
-        const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
         const getId = async () => (await events.info.get()).instance.context;
 
         const id1 = await getId();
@@ -217,14 +192,14 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('run: unload clears "run results"', async () => {
+      it('run: reset clears "run results"', async () => {
         const { events } = await TestSample.preloaded();
 
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(1);
         expect(info1?.run.results).to.not.eql(undefined);
 
-        await events.unload.fire();
+        await events.reset.fire();
 
         const info2 = await events.info.get();
         expect(info2?.run.count).to.eql(0);

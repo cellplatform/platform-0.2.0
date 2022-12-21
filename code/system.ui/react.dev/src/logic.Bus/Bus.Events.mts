@@ -86,12 +86,6 @@ export function BusEvents(args: {
     },
   };
 
-  const unload: t.DevEvents['unload'] = {
-    fire(options) {
-      return load.fire(undefined, options);
-    },
-  };
-
   /**
    * Run.
    */
@@ -225,12 +219,6 @@ export function BusEvents(args: {
     is,
     info,
     load,
-
-    /**
-     * TODO 🐷
-     * remove unload
-     */
-    unload,
     run,
     reset,
     state,
