@@ -186,13 +186,8 @@ export function BusEvents(args: {
   const props: t.DevEvents['props'] = {
     changed$: info.changed$.pipe(
       filter((e) => {
-        // const match: t.DevInfoChangeMessage[] = ['state:write', 'context:init'];
-        // return match.includes(e.message);
-        /**
-         * TODO 🐷
-         */
-
-        return true;
+        const match: t.DevInfoChangeMessage[] = ['props:write', 'reset', 'context:init'];
+        return match.includes(e.message);
       }),
     ),
     change: {
@@ -230,6 +225,11 @@ export function BusEvents(args: {
     is,
     info,
     load,
+
+    /**
+     * TODO 🐷
+     * remove unload
+     */
     unload,
     run,
     reset,

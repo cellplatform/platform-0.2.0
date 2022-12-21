@@ -402,6 +402,34 @@ describe('DevBus', (e) => {
 
         events.dispose();
       });
+
+      it('props.changed$', async () => {
+        const { events } = await TestSample.preloaded();
+
+        const fired: t.DevInfoChanged[] = [];
+        events.props.changed$.subscribe((e) => fired.push(e));
+
+        type T = { count: number };
+        events.state.change.fire<T>({ count: 0 }, (draft) => draft.count++);
+        expect(fired).to.eql([]); // NB: State changes does not trigger the props.
+
+        await events.props.change.fire((draft) => (draft.host.backgroundColor = -1));
+        expect(fired.length).to.eql(1);
+        expect(fired[0].message === 'props:write').to.eql(true);
+
+        const { Wrapper } = await SAMPLES.Sample2;
+        const sample = Wrapper();
+        await events.load.fire(sample.root);
+
+        expect(fired.length).to.eql(2);
+        expect(fired[1].message === 'reset').to.eql(true);
+
+        await events.reset.fire();
+        expect(fired.length).to.eql(3);
+        expect(fired[2].message === 'reset').to.eql(true);
+
+        events.dispose();
+      });
     });
   });
 });
