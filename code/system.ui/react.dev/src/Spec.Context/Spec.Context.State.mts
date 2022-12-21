@@ -17,7 +17,7 @@ export const State = {
         return _current ?? initial;
       },
       async change(mutate) {
-        await events.state.change.fire({ initial, mutate });
+        await events.state.change.fire(initial, mutate);
         return state.current;
       },
     };

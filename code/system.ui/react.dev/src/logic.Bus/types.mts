@@ -67,11 +67,11 @@ export type DevEvents = t.Disposable & {
     change: {
       req$: t.Observable<t.DevStateChangeReq>;
       res$: t.Observable<t.DevStateChangeRes>;
-      fire<T extends O>(args: {
-        mutate: t.DevInfoStateMutater<T>;
-        initial: T;
-        timeout?: Milliseconds;
-      }): Promise<DevStateChangeRes>;
+      fire<T extends O>(
+        initial: T,
+        mutate: t.DevInfoStateMutater<T>,
+        options?: { timeout?: Milliseconds },
+      ): Promise<DevStateChangeRes>;
     };
   };
   props: {

@@ -148,7 +148,7 @@ describe('DevBus', (e) => {
         expect(res1.info?.root).to.eql(root);
 
         type T = { count: number };
-        await events.state.change.fire<T>({ initial: { count: 0 }, mutate: (d) => d.count++ });
+        await events.state.change.fire<T>({ count: 0 }, (d) => d.count++);
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql({ count: 1 });
 
@@ -366,13 +366,10 @@ describe('DevBus', (e) => {
 
         let _initial: T | undefined;
 
-        await events.state.change.fire<T>({
-          initial: { count: 0 },
-          mutate: (draft) => {
-            _initial = { ...draft };
-            draft.msg = 'hello';
-            draft.count++;
-          },
+        await events.state.change.fire<T>({ count: 0 }, (draft) => {
+          _initial = { ...draft };
+          draft.msg = 'hello';
+          draft.count++;
         });
 
         const info2 = await events.info.get();
@@ -386,7 +383,7 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.preloaded();
 
         const initial: T = { count: 0 };
-        await events.state.change.fire<T>({ initial, mutate: (draft) => draft.count++ });
+        await events.state.change.fire<T>(initial, (draft) => draft.count++);
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql({ count: 1 });
 
