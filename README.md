@@ -35,7 +35,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 # Philosophy: Dev
 
->> Open System.  
+>> Open Systems.  
    Open Commons.  
 
 ---
