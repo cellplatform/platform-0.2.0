@@ -6,5 +6,6 @@ export type DevContext = t.Disposable & {
   readonly pending: boolean;
   readonly ctx: t.SpecCtx;
   flush(): Promise<DevContext>;
+  refresh(): Promise<DevContext>;
   toObject(): t.SpecCtxObject;
 };

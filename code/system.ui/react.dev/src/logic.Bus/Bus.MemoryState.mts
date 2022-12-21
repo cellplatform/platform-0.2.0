@@ -1,4 +1,4 @@
-import { R, t, Is, DEFAULT, rx } from './common';
+import { DEFAULT, Is, R, rx, t } from './common';
 
 type Revision = { number: number; message: string };
 

@@ -114,9 +114,8 @@ export function BusController(args: {
 
     try {
       if (rootSpec) {
-        const runCount = state.current.run.count;
         const context = await Ctx.current();
-        await context.update({ runCount });
+        await context.refresh();
 
         const ctx = context.ctx;
         const results = await rootSpec.run({ ctx, only });

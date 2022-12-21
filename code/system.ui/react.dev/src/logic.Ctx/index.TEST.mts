@@ -2,16 +2,6 @@ import { Context } from '.';
 import { t, describe, expect, expectError, it, TestSample } from '../test';
 
 describe('Context', () => {
-  const Sample = {
-    async create() {
-      const { instance, events } = await TestSample.create();
-      const context = await Context.init(instance);
-      context.dispose$.subscribe(() => events.dispose());
-      const dispose = () => context.dispose();
-      return { context, instance, events, dispose };
-    },
-  };
-
   describe('lifecycle', () => {
     it('init', async () => {
       const { events, instance } = await TestSample.create();
@@ -29,7 +19,7 @@ describe('Context', () => {
     });
 
     it('dispose', async () => {
-      const { dispose, context, events } = await Sample.create();
+      const { dispose, context, events } = await TestSample.context();
 
       let fired = 0;
       events.dispose$.subscribe(() => fired++);
@@ -43,7 +33,7 @@ describe('Context', () => {
 
   describe('modify => flush', () => {
     it('updates appear in bus/tree after flush', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
 
       const info1 = await events.info.get();
       expect(info1.render.props).to.eql(undefined); // NB: Initially no render-props data.
@@ -82,7 +72,7 @@ describe('Context', () => {
     });
 
     it('throw: when disposed', async () => {
-      const { context, dispose } = await Sample.create();
+      const { context, dispose } = await TestSample.context();
       context.dispose();
       await expectError(() => context.flush(), 'Context has been disposed');
       dispose();
@@ -91,7 +81,7 @@ describe('Context', () => {
 
   describe('props', () => {
     it('component', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const fn = () => undefined;
@@ -112,7 +102,7 @@ describe('Context', () => {
     });
 
     it('component.size', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const test = async (
@@ -146,7 +136,7 @@ describe('Context', () => {
     });
 
     it('host', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       ctx.host.backgroundColor(-0.22);
@@ -163,7 +153,7 @@ describe('Context', () => {
     });
 
     it('debug', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const fn = () => undefined;
@@ -186,7 +176,7 @@ describe('Context', () => {
     const initial: T = { count: 0 };
 
     it('read state', async () => {
-      const { context, dispose } = await Sample.create();
+      const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
@@ -194,7 +184,7 @@ describe('Context', () => {
     });
 
     it('write state (change)', async () => {
-      const { context, dispose } = await Sample.create();
+      const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);
       expect(state.current).to.eql(initial);
@@ -207,7 +197,7 @@ describe('Context', () => {
     });
 
     it('causes [events.state.changed$] to fire', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>({ count: 0 });
 
@@ -224,7 +214,7 @@ describe('Context', () => {
     });
 
     it('revert to initial after reset', async () => {
-      const { events, context, dispose } = await Sample.create();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);
 
@@ -241,7 +231,7 @@ describe('Context', () => {
     });
 
     it('live updates (via event listeners)', async () => {
-      const { context, dispose } = await Sample.create();
+      const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state1 = await ctx.state<T>(initial);
       const state2 = await ctx.state<T>(initial);

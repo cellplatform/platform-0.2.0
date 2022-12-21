@@ -14,9 +14,20 @@ export const Context = {
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
 
+    const Local = {
+      runCount: 0,
+      reset() {
+        Local.runCount = 0;
+      },
+    };
+    events.reset.res$.subscribe(() => Local.reset());
+
     const toObject = (): t.SpecCtxObject => {
+      const count = Local.runCount;
+      const initial = ctx.initial;
       return {
         instance,
+        run: { count, initial },
         props: { ...props.current },
       };
     };
@@ -26,10 +37,7 @@ export const Context = {
       toObject,
 
       get initial() {
-        /**
-         * TODO 🐷
-         */
-        return true;
+        return Local.runCount === 0;
       },
 
       async run(options = {}) {
@@ -64,16 +72,15 @@ export const Context = {
         return props.pending;
       },
 
+      async refresh() {
+        const info = await events.info.get();
+        Local.runCount = info.run.count ?? 0;
+        return api;
+      },
+
       async flush() {
         if (api.disposed) throw new Error('Context has been disposed');
         if (!api.pending) return api;
-
-        /**
-         * TODO 🐷
-         * - Integrate into harness runner.
-         * - Remove ID from deeper in the state tree (only on {instance}).
-         */
-
         await events.props.change.fire((draft) => {
           const current = props.current;
           draft.component = current.component;
