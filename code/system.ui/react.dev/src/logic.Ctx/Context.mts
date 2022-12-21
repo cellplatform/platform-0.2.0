@@ -1,6 +1,9 @@
 import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
 import { t } from './common';
+import { ContextState } from './Context.State.mjs';
 import { CtxProps } from './Ctx.Props.mjs';
+
+type O = Record<string, unknown>;
 
 export const Context = {
   /**
@@ -21,6 +24,23 @@ export const Context = {
     const ctx: t.SpecCtx2 = {
       ...props.setters,
       toObject,
+
+      get initial() {
+        /**
+         * TODO 🐷
+         */
+        return true;
+      },
+
+      async reset() {
+        const res = await events.reset.fire();
+        return res.info ?? (await events.info.get());
+      },
+
+      async state<T extends O>(initial: T) {
+        const info = await events.info.get();
+        return ContextState<T>({ initial: (info.render.state ?? initial) as T, events });
+      },
     };
 
     const api: t.DevContext = {
@@ -43,7 +63,6 @@ export const Context = {
 
         /**
          * TODO 🐷
-         * - pass mutate as first arg (not in {object})
          * - Rename [SpecCtx2]
          * - Integrate into harness runner.
          * - Remove ID from deeper in the state tree (only on {instance}).

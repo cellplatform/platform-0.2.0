@@ -41,8 +41,8 @@ describe('Context', () => {
     });
   });
 
-  describe('state modification', () => {
-    it('update => flush', async () => {
+  describe('modify => flush', () => {
+    it('updates appear in bus/tree after flush', async () => {
       const { events, context, dispose } = await Sample.create();
 
       const info1 = await events.info.get();
@@ -177,6 +177,81 @@ describe('Context', () => {
       const debug = info.render.props?.debug!;
 
       expect(debug.main.renderers).to.eql([fn]);
+      dispose();
+    });
+  });
+
+  describe('state', () => {
+    type T = { count: number; msg?: string };
+    const initial: T = { count: 0 };
+
+    it('read state', async () => {
+      const { context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+      const state = await ctx.state<T>(initial);
+      expect(state.current).to.eql(initial);
+      dispose();
+    });
+
+    it('write state (change)', async () => {
+      const { context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+      const state = await ctx.state<T>(initial);
+      expect(state.current).to.eql(initial);
+
+      const res = await state.change((draft) => draft.count++);
+      expect(res).to.eql({ count: 1 });
+      expect(state.current).to.eql({ count: 1 });
+
+      dispose();
+    });
+
+    it('causes [events.state.changed$] to fire', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+      const state = await ctx.state<T>({ count: 0 });
+
+      const fired: t.DevInfoChanged[] = [];
+      events.state.changed$.subscribe((e) => fired.push(e));
+
+      await state.change((draft) => draft.count++);
+
+      expect(fired.length).to.eql(1);
+      expect(fired[0].message).to.eql('state:write');
+      expect(fired[0].info.render.state).to.eql({ count: 1 });
+
+      dispose();
+    });
+
+    it('revert to initial after reset', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+      const state = await ctx.state<T>(initial);
+
+      await state.change((draft) => draft.count++);
+      expect(state.current).to.eql({ count: 1 });
+
+      await ctx.reset();
+
+      const info = await events.info.get();
+      expect(state.current).to.eql(initial);
+      expect(info.render.state).to.eql(undefined);
+
+      dispose();
+    });
+
+    it('live updates (via event listeners)', async () => {
+      const { context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+      const state1 = await ctx.state<T>(initial);
+      const state2 = await ctx.state<T>(initial);
+
+      await state1.change((draft) => (draft.msg = 'hello'));
+      expect(state2.current).to.eql({ count: 0, msg: 'hello' });
+
+      await state2.change((draft) => (draft.count = 1234));
+      expect(state1.current).to.eql({ count: 1234, msg: 'hello' });
+
       dispose();
     });
   });
