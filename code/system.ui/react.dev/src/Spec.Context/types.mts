@@ -35,16 +35,6 @@ export type SpecCtx = {
   state<T extends O>(initial: T): Promise<SpecCtxState<T>>;
 };
 
-export type SpecCtx2 = {
-  readonly component: SpecCtxComponent;
-  readonly host: SpecCtxHost;
-  readonly debug: SpecCtxDebug;
-  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
-  toObject(): SpecCtxObject;
-  reset(): Promise<t.DevInfo>;
-  state<T extends O>(initial: T): Promise<SpecCtxState<T>>;
-};
-
 export type SpecCtxState<T extends O> = {
   current: T;
   change(fn: (draft: T) => IgnoredResponse): Promise<T>;

@@ -21,7 +21,7 @@ export const Context = {
       };
     };
 
-    const ctx: t.SpecCtx2 = {
+    const ctx: t.SpecCtx = {
       ...props.setters,
       toObject,
 
@@ -30,6 +30,13 @@ export const Context = {
          * TODO 🐷
          */
         return true;
+      },
+
+      async run(options = {}) {
+        const { only } = options;
+        if (options.reset) await events.reset.fire();
+        const res = await events.run.fire({ only });
+        return res.info ?? (await events.info.get());
       },
 
       async reset() {
@@ -63,7 +70,6 @@ export const Context = {
 
         /**
          * TODO 🐷
-         * - Rename [SpecCtx2]
          * - Integrate into harness runner.
          * - Remove ID from deeper in the state tree (only on {instance}).
          */
