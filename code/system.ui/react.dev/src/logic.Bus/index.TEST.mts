@@ -88,13 +88,16 @@ describe('DevBus', (e) => {
         const info = await events.info.get();
         expect(info.root).to.eql(root);
 
-        expect(fired.length).to.eql(2);
+        expect(fired.length).to.eql(3);
 
-        expect(fired[0].message).to.eql('context:init');
+        expect(fired[0].message).to.eql('reset');
         expect(fired[0].info.root).to.eql(undefined);
 
-        expect(fired[1].message).to.eql('spec:load');
-        expect(fired[1].info.root).to.eql(info.root);
+        expect(fired[1].message).to.eql('context:init');
+        expect(fired[1].info.root).to.eql(undefined);
+
+        expect(fired[2].message).to.eql('spec:load');
+        expect(fired[2].info.root).to.eql(info.root);
 
         events.dispose();
       });
@@ -115,36 +118,38 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('unload', async () => {
-        const instance = TestSample.instance();
-        const events = DevBus.Controller({ instance });
-        const root = await Test.bundle(SAMPLES.Sample1);
-
-        const fired: t.DevInfoChanged[] = [];
-        events.info.changed$.subscribe((e) => fired.push(e));
-
-        const res1 = await events.load.fire(SAMPLES.Sample1);
-        expect(res1.info?.root).to.eql(root);
-
-        type T = { count: number };
-        await events.state.change.fire<T>({ count: 0 }, (d) => d.count++);
-        const info1 = await events.info.get();
-        expect(info1.render.state).to.eql({ count: 1 });
-
-        const res2 = await events.unload.fire();
-        expect(res2.info?.root).to.eql(undefined);
-
-        const info2 = await events.info.get();
-        expect(info2?.root).to.eql(undefined);
-        expect(info2.render.state).to.eql(undefined);
-
-        events.dispose();
-      });
+      //       it('unload', async () => {
+      //         const instance = TestSample.instance();
+      //         const events = DevBus.Controller({ instance });
+      //         const root = await Test.bundle(SAMPLES.Sample1);
+      //
+      //         const fired: t.DevInfoChanged[] = [];
+      //         events.info.changed$.subscribe((e) => fired.push(e));
+      //
+      //         const res1 = await events.load.fire(SAMPLES.Sample1);
+      //         expect(res1.info?.root).to.eql(root);
+      //
+      //         type T = { count: number };
+      //         await events.state.change.fire<T>({ count: 0 }, (d) => d.count++);
+      //         const info1 = await events.info.get();
+      //         expect(info1.render.state).to.eql({ count: 1 });
+      //
+      //         const res2 = await events.unload.fire();
+      //         expect(res2.info?.root).to.eql(undefined);
+      //
+      //         const info2 = await events.info.get();
+      //         expect(info2?.root).to.eql(undefined);
+      //         expect(info2.render.state).to.eql(undefined);
+      //
+      //         events.dispose();
+      //       });
 
       it('render context changes between load/unload', async () => {
         const { events } = await TestSample.create();
 
-        const getId = async () => (await events.info.get()).render.props?.id;
+        const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
+        const getId = async () => (await events.info.get()).instance.context;
+
         const id1 = await getId();
 
         await events.load.fire(SAMPLES.Sample1);
@@ -156,19 +161,28 @@ describe('DevBus', (e) => {
         await events.run.fire(); // NB: Second run
         const id4 = await getId();
 
-        await events.unload.fire();
-        await events.load.fire(SAMPLES.Sample1);
-        await events.run.fire();
+        await events.reset.fire();
         const id5 = await getId();
 
-        expect(id1).to.eql(undefined);
-        expect(id2).to.eql(undefined);
-        expect(id3).to.match(/^dev:session\.ctx\./);
+        await events.load.fire(SAMPLES.Sample1);
+        await events.run.fire();
+        await events.run.fire();
+        await events.run.fire();
+        const id6 = await getId();
+
+        exepctSessionId(id1);
+
+        expect(id2).to.not.eql(id1);
+        exepctSessionId(id2);
+
+        expect(id3).to.eql(id2);
         expect(id4).to.eql(id3);
 
-        // NB: changed after loading of new bundle.
-        expect(id5).to.match(/^dev:session\.ctx\./);
         expect(id5).to.not.eql(id4);
+        exepctSessionId(id5);
+
+        expect(id6).to.not.eql(id5);
+        exepctSessionId(id6);
 
         events.dispose();
       });

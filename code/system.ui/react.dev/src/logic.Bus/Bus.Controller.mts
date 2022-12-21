@@ -70,7 +70,7 @@ export function BusController(args: {
     const { tx } = e;
     let error: string | undefined;
 
-    await Ctx.init();
+    await events.reset.fire();
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
