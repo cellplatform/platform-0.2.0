@@ -1,9 +1,8 @@
 import * as t from '../common/types.mjs';
-export * from './types.spec.mjs';
 
-type Milliseconds = number;
 type Id = string;
 type SpecId = Id;
+type Milliseconds = number;
 type O = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
