@@ -115,6 +115,16 @@ Ideas, history, context:
 
 <p>&nbsp;</p>
 
+### Gall's Law
+
+>> A ***complex*** system that *works* is invariably found to have evolved from a ***simple*** system that *worked*. - [ref](https://en.wikipedia.org/wiki/John_Gall_(author))
+
+The inverse proposition also appears to be true:
+
+>> A complex system designed from scratch *never works* ***and cannot be made to work.***  You have to start over, beginning with a *simple system that works.*
+
+<p>&nbsp;</p>
+
 ---
 
 <p>&nbsp;</p>
