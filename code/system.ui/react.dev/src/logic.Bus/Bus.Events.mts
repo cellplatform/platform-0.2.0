@@ -58,13 +58,6 @@ export function BusEvents(args: {
       if (!res.info) throw new Error(`Status: info not available`);
       return res.info;
     },
-
-    async ctx(options) {
-      const res = await info.fire(options);
-      if (res.error) throw new Error(res.error);
-      if (!res.ctx) throw new Error(`Status: ctx not available`);
-      return res.ctx;
-    },
   };
 
   /**

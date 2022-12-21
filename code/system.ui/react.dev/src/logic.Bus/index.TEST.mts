@@ -42,10 +42,9 @@ describe('DevBus', (e) => {
       it('fire (read)', async () => {
         const instance = TestSample.instance();
         const events = DevBus.Controller({ instance });
+
         const res = await events.info.fire();
         const info = res.info!;
-        const ctx = res.ctx!;
-        const ctxObject = ctx.toObject();
 
         expect(res.instance).to.eql(instance.id);
         expect(info.root).to.eql(undefined);
@@ -53,9 +52,6 @@ describe('DevBus', (e) => {
         expect(info.instance.kind).to.eql('dev:harness');
         expect(info.instance.context).to.match(/^dev:session\.ctx\./);
         expect(info.instance.bus).to.match(/^bus\./);
-
-        expect(ctx).to.exist;
-        expect(ctxObject.props.id).to.eql(info.instance.context);
 
         events.dispose();
       });
@@ -69,23 +65,6 @@ describe('DevBus', (e) => {
         expect(info1.run.count).to.eql(0);
         expect(info1).to.eql(info2);
         expect(info1).to.not.equal(info2);
-
-        events.dispose();
-      });
-
-      it('ctx', async () => {
-        const instance = TestSample.instance();
-        const events = DevBus.Controller({ instance });
-        const ctx1 = await events.info.ctx();
-        const ctx2 = await events.info.ctx();
-
-        expect(ctx1).to.equal(ctx2);
-
-        events.reset.fire();
-
-        const ctx3 = await events.info.ctx();
-        expect(ctx3).to.not.equal(ctx2);
-        expect(ctx3.toObject().props.id).to.not.equal(ctx2.toObject().props.id);
 
         events.dispose();
       });
@@ -250,12 +229,12 @@ describe('DevBus', (e) => {
         await events.load.fire(sample.root);
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.initial)).to.eql(true);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.initial)).to.eql(true);
 
         sample.log.reset();
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.initial)).to.eql(false);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.initial)).to.eql(false);
 
         events.dispose();
       });
@@ -349,6 +328,7 @@ describe('DevBus', (e) => {
 
         // NB: instances changed.
         const info3 = await events.info.get();
+
         expect(info3.instance.context).to.not.eql(info2.instance.context);
         expect(info3.render.props?.id).to.not.eql(info2.render.props?.id);
 
@@ -410,19 +390,6 @@ describe('DevBus', (e) => {
         expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
 
         events.dispose();
-      });
-
-      it.skip('mutate from {ctx} object (eg. passed into spec/"it")', async () => {
-        /**
-         * TODO 🐷
-         * - make a batch of changes, then flush, eg.
-         *
-         *       ctx.component
-         *        .backgroundColor(-0.3)
-         *        .size(10, 20)
-         *        .flush();
-         *
-         */
       });
     });
   });

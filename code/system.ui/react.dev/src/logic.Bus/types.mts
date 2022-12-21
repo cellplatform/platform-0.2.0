@@ -26,7 +26,8 @@ export type DevInfoChangeMessage =
   | 'spec:load'
   | 'spec:unload'
   | 'run:all'
-  | 'run:subset';
+  | 'run:subset'
+  | 'reset';
 
 /**
  * EVENT (API)
@@ -42,7 +43,6 @@ export type DevEvents = t.Disposable & {
     changed$: t.Observable<t.DevInfoChanged>;
     fire(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
     get(options?: { timeout?: Milliseconds }): Promise<DevInfo>;
-    ctx(options?: { timeout?: Milliseconds }): Promise<t.SpecCtx>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
@@ -122,7 +122,6 @@ export type DevInfoRes = {
   tx: string;
   instance: Id;
   info?: DevInfo;
-  ctx?: t.SpecCtx;
   error?: string;
 };
 
