@@ -106,8 +106,8 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const test = async (
-        expected: t.SpecRenderSize,
-        modify: (size: t.SpecCtxComponent['size']) => void,
+        expected: t.DevRenderSize,
+        modify: (size: t.DevCtxComponent['size']) => void,
       ) => {
         modify(ctx.component.size);
         await context.flush();

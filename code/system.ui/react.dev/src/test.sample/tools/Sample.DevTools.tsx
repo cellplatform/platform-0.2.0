@@ -4,7 +4,7 @@ export const SampleDevTools = {
   /**
    * Render an user-invokable test button.
    */
-  button(input: t.SpecCtx | t.TestHandlerArgs) {
+  button(input: t.DevCtx | t.TestHandlerArgs) {
     /**
      * TODO 🐷
      *   Standard button visual.

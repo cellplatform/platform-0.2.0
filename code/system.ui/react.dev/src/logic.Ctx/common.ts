@@ -6,6 +6,6 @@ export { DEFAULT } from '../DEFAULT.mjs';
  * Internal types.
  */
 export type PropArgs = {
-  current: () => t.SpecRenderProps;
+  current: () => t.DevRenderProps;
   changed: () => void;
 };

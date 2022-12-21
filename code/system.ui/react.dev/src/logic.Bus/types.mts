@@ -11,13 +11,13 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 export type DevInfo = {
   instance: { kind: 'dev:harness'; context: Id; bus: Id };
   root?: t.TestSuiteModel;
-  render: { state?: O; props?: t.SpecRenderProps };
+  render: { state?: O; props?: t.DevRenderProps };
   run: { count: number; results?: t.TestSuiteRunResponse };
 };
 
 export type DevInfoMutater = (draft: t.DevInfo) => IgnoredResponse;
 export type DevInfoStateMutater<T extends O> = (draft: T) => IgnoredResponse;
-export type DevInfoPropsMutater = (draft: t.SpecRenderProps) => IgnoredResponse;
+export type DevInfoPropsMutater = (draft: t.DevRenderProps) => IgnoredResponse;
 
 export type DevInfoChangeMessage =
   | 'state:write'

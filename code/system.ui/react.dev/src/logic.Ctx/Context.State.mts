@@ -12,7 +12,7 @@ export function ContextState<T extends O>(args: { events: t.DevEvents; initial: 
   let _current: T | undefined;
   events.state.changed$.subscribe((e) => (_current = (e.info.render.state ?? initial) as T));
 
-  const state: t.SpecCtxState<T> = {
+  const state: t.DevCtxState<T> = {
     get current() {
       return _current ?? initial;
     },
@@ -35,7 +35,7 @@ export const State = {
     let _current: T | undefined;
     events.state.changed$.subscribe((e) => (_current = (e.info.render.state ?? initial) as T));
 
-    const state: t.SpecCtxState<T> = {
+    const state: t.DevCtxState<T> = {
       get current() {
         return _current ?? initial;
       },

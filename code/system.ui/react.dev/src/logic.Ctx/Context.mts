@@ -22,7 +22,7 @@ export const Context = {
     };
     events.reset.res$.subscribe(() => Local.reset());
 
-    const toObject = (): t.SpecCtxObject => {
+    const toObject = (): t.DevCtxObject => {
       const count = Local.runCount;
       const initial = ctx.initial;
       return {
@@ -32,7 +32,7 @@ export const Context = {
       };
     };
 
-    const ctx: t.SpecCtx = {
+    const ctx: t.DevCtx = {
       ...props.setters,
       toObject,
 

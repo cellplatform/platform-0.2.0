@@ -4,10 +4,10 @@ export type DevContext = t.Disposable & {
   readonly instance: t.DevInstance;
   readonly disposed: boolean;
   readonly pending: boolean;
-  readonly ctx: t.SpecCtx;
+  readonly ctx: t.DevCtx;
   flush(): Promise<DevContext>;
   refresh(): Promise<DevContext>;
-  toObject(): t.SpecCtxObject;
+  toObject(): t.DevCtxObject;
 };
 
 type O = Record<string, unknown>;
@@ -17,97 +17,86 @@ type SpecId = Id;
 type Color = string | number;
 type IgnoredResponse = any | Promise<any>;
 
-export type SpecFillMode = 'fill' | 'fill-x' | 'fill-y';
-export type SpecPropDisplay = 'flex' | 'grid' | undefined;
-
-/**
- * Context Wrapper (Manager).
- */
-export type SpecContext = t.Disposable & {
-  readonly id: Id;
-  readonly instance: t.DevInstance;
-  readonly ctx: SpecCtx;
-  readonly props: SpecRenderProps;
-  refresh(): Promise<void>;
-};
+export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
+export type DevPropDisplay = 'flex' | 'grid' | undefined;
 
 /**
  * The context {ctx} interface passed into specs.
  */
-export type SpecCtx = {
-  readonly component: SpecCtxComponent;
-  readonly host: SpecCtxHost;
-  readonly debug: SpecCtxDebug;
+export type DevCtx = {
+  readonly component: DevCtxComponent;
+  readonly host: DevCtxHost;
+  readonly debug: DevCtxDebug;
   readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
-  toObject(): SpecCtxObject;
+  toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;
-  state<T extends O>(initial: T): Promise<SpecCtxState<T>>;
+  state<T extends O>(initial: T): Promise<DevCtxState<T>>;
 };
 
-export type SpecCtxState<T extends O> = {
+export type DevCtxState<T extends O> = {
   current: T;
   change(fn: (draft: T) => IgnoredResponse): Promise<T>;
 };
 
-export type SpecCtxObject = {
+export type DevCtxObject = {
   instance: t.DevInstance;
-  props: SpecRenderProps;
+  props: DevRenderProps;
   run: { count: number; initial: boolean };
 };
 
-export type SpecCtxComponent = {
-  render<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxComponent;
-  display(value: SpecPropDisplay): SpecCtxComponent;
-  backgroundColor(value?: Color): SpecCtxComponent;
-  size(width: number | undefined, height: number | undefined): SpecCtxComponent;
-  size(mode: SpecFillMode, margin?: t.MarginInput): SpecCtxComponent;
+export type DevCtxComponent = {
+  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxComponent;
+  display(value: DevPropDisplay): DevCtxComponent;
+  backgroundColor(value?: Color): DevCtxComponent;
+  size(width: number | undefined, height: number | undefined): DevCtxComponent;
+  size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
 };
 
-export type SpecCtxHost = {
-  backgroundColor(value?: Color): SpecCtxHost;
+export type DevCtxHost = {
+  backgroundColor(value?: Color): DevCtxHost;
 };
 
-export type SpecCtxDebug = {
-  render<T extends O = O>(fn: SubjectRenderer<T>): SpecCtxDebug;
+export type DevCtxDebug = {
+  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxDebug;
 };
 
 /**
  * Rendering state produced by the props.
  */
-export type SpecRenderProps = {
+export type DevRenderProps = {
   /**
    * TODO 🐷
    * REMOVE {id}
    */
   id: string;
-  component: SpecRenderPropsComponent;
-  host: SpecRenderPropsHost;
-  debug: SpecRenderPropsDebug;
+  component: DevRenderPropsComponent;
+  host: DevRenderPropsHost;
+  debug: DevRenderPropsDebug;
 };
 
-export type SpecRenderPropsComponent = {
-  renderer?: SubjectRenderer<any>;
-  size?: SpecRenderSize;
-  display?: t.SpecPropDisplay;
+export type DevRenderPropsComponent = {
+  renderer?: DevSubjectRenderer<any>;
+  size?: DevRenderSize;
+  display?: t.DevPropDisplay;
   backgroundColor?: Color;
 };
 
-export type SpecRenderPropsHost = {
+export type DevRenderPropsHost = {
   backgroundColor?: Color;
 };
 
-export type SpecRenderPropsDebug = {
-  main: { renderers: SubjectRenderer<any>[] };
+export type DevRenderPropsDebug = {
+  main: { renderers: DevSubjectRenderer<any>[] };
 };
 
-export type SpecRenderSize = SpecRenderSizeCenter | SpecRenderSizeFill;
-export type SpecRenderSizeCenter = {
+export type DevRenderSize = DevRenderSizeCenter | DevRenderSizeFill;
+export type DevRenderSizeCenter = {
   mode: 'center';
   width?: number;
   height?: number;
 };
-export type SpecRenderSizeFill = {
+export type DevRenderSizeFill = {
   mode: 'fill';
   x: boolean;
   y: boolean;
@@ -117,7 +106,7 @@ export type SpecRenderSizeFill = {
 /**
  * Function that returns a renderable element.
  */
-export type SubjectRenderer<T extends O = O> = (
-  args: SubjectRendererArgs<T>,
+export type DevSubjectRenderer<T extends O = O> = (
+  args: DevSubjectRendererArgs<T>,
 ) => JSX.Element | undefined;
-export type SubjectRendererArgs<T extends O = O> = { state: T };
+export type DevSubjectRendererArgs<T extends O = O> = { state: T };

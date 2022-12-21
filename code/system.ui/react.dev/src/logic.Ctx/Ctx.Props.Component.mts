@@ -3,7 +3,7 @@ import { Margin, t } from './common';
 import type { PropArgs } from './common';
 
 export function CtxPropsComponent(props: PropArgs) {
-  const api: t.SpecCtxComponent = {
+  const api: t.DevCtxComponent = {
     render(fn) {
       props.current().component.renderer = fn;
       props.changed();
