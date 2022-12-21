@@ -21,6 +21,7 @@ describe('Is (flags)', () => {
     };
 
     test(ctx, true);
+    test(ctx.toObject(), false);
     [undefined, null, {}, [], 123, 'foo', true].forEach((value) => test(value, false));
 
     events.dispose();
