@@ -35,7 +35,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 # Philosophy: Dev
 
->> Open System.  
+>> Open Systems.  
    Open Commons.  
 
 ---
@@ -112,6 +112,16 @@ Ideas, history, context:
 <p>&nbsp;</p>
 
 ![group-scape](https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png)
+
+<p>&nbsp;</p>
+
+### Gall's Law
+
+>> A ***complex*** system that *works* is invariably found to have evolved from a ***simple*** system that *worked*. - [ref](https://en.wikipedia.org/wiki/John_Gall_(author))
+
+The inverse proposition also appears to be true:
+
+>> A complex system designed from scratch *never works* ***and cannot be made to work.***  You have to start over, beginning with a *simple system that works.*
 
 <p>&nbsp;</p>
 

@@ -6,6 +6,7 @@ export function Wrapper() {
   const root = Spec.describe('MySample', (e) => {
     e.it('init', async (e) => {
       const ctx = Spec.ctx(e);
+
       ctx.component
         .size(300, 140)
         .display('flex')
@@ -16,7 +17,7 @@ export function Wrapper() {
 
     e.it('foo-1', async (e) => {
       const ctx = Spec.ctx(e);
-      ctx.debug.body(() => <div>{`Hello Foo!`}</div>);
+      ctx.debug.render(() => <div>{`Hello Foo!`}</div>);
       log.push(e, ctx);
     });
 

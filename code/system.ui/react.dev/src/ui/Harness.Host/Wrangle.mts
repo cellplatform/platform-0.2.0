@@ -1,7 +1,7 @@
 import { t, Margin } from '../common';
 
 export const Wrangle = {
-  componentSize(value?: t.SpecRenderSize) {
+  componentSize(value?: t.DevRenderSize) {
     let width: number | undefined;
     let height: number | undefined;
 
@@ -13,7 +13,7 @@ export const Wrangle = {
     return { width, height };
   },
 
-  fillMargin(value?: t.SpecRenderSize) {
+  fillMargin(value?: t.DevRenderSize) {
     const DEFAULT = 40;
     if (!value) return Wrangle.asMargin(DEFAULT);
     if (value.mode !== 'fill') return Wrangle.asMargin(DEFAULT);

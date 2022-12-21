@@ -1,8 +1,8 @@
 import * as t from '../common/types.mjs';
 
-type Milliseconds = number;
 type Id = string;
 type SpecId = Id;
+type Milliseconds = number;
 type O = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
@@ -11,22 +11,22 @@ export type DevInstance = { bus: t.EventBus<any>; id: Id };
 export type DevInfo = {
   instance: { kind: 'dev:harness'; context: Id; bus: Id };
   root?: t.TestSuiteModel;
-  render: { state?: O; props?: t.SpecRenderProps };
+  render: { state?: O; props?: t.DevRenderProps };
   run: { count: number; results?: t.TestSuiteRunResponse };
 };
 
 export type DevInfoMutater = (draft: t.DevInfo) => IgnoredResponse;
 export type DevInfoStateMutater<T extends O> = (draft: T) => IgnoredResponse;
-export type DevInfoPropsMutater = (draft: t.SpecRenderProps) => IgnoredResponse;
+export type DevInfoPropsMutater = (draft: t.DevRenderProps) => IgnoredResponse;
 
 export type DevInfoChangeMessage =
   | 'state:write'
   | 'props:write'
   | 'context:init'
   | 'spec:load'
-  | 'spec:unload'
   | 'run:all'
-  | 'run:subset';
+  | 'run:subset'
+  | 'reset';
 
 /**
  * EVENT (API)
@@ -42,15 +42,11 @@ export type DevEvents = t.Disposable & {
     changed$: t.Observable<t.DevInfoChanged>;
     fire(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
     get(options?: { timeout?: Milliseconds }): Promise<DevInfo>;
-    ctx(options?: { timeout?: Milliseconds }): Promise<t.SpecCtx>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
     res$: t.Observable<t.DevLoadRes>;
     fire(bundle?: t.BundleImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
-  };
-  unload: {
-    fire(options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
   };
   run: {
     req$: t.Observable<t.DevRunReq>;
@@ -67,22 +63,23 @@ export type DevEvents = t.Disposable & {
     change: {
       req$: t.Observable<t.DevStateChangeReq>;
       res$: t.Observable<t.DevStateChangeRes>;
-      fire<T extends O>(args: {
-        mutate: t.DevInfoStateMutater<T>;
-        initial: T;
-        timeout?: Milliseconds;
-      }): Promise<DevStateChangeRes>;
+      fire<T extends O>(
+        initial: T,
+        mutate: t.DevInfoStateMutater<T>,
+        options?: { timeout?: Milliseconds },
+      ): Promise<DevStateChangeRes>;
     };
+    object<T extends O>(initial: T): t.DevCtxState<T>;
   };
   props: {
     changed$: t.Observable<t.DevInfoChanged>;
     change: {
       req$: t.Observable<t.DevPropsChangeReq>;
       res$: t.Observable<t.DevPropsChangeRes>;
-      fire(args: {
-        mutate: t.DevInfoPropsMutater;
-        timeout?: Milliseconds;
-      }): Promise<DevStateChangeRes>;
+      fire(
+        mutate: t.DevInfoPropsMutater,
+        options?: { timeout?: Milliseconds },
+      ): Promise<DevStateChangeRes>;
     };
   };
 };
@@ -122,7 +119,6 @@ export type DevInfoRes = {
   tx: string;
   instance: Id;
   info?: DevInfo;
-  ctx?: t.SpecCtx;
   error?: string;
 };
 

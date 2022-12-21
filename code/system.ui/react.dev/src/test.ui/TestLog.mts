@@ -1,13 +1,16 @@
-import { t } from '../common';
+import { t, Is } from '../common';
 
-type T = { args: t.TestHandlerArgs; ctx: t.SpecCtx };
+type T = { args: t.TestHandlerArgs; ctx: t.DevCtxObject };
 
 export const TestLog = {
   create() {
     const logger = {
       items: [] as T[],
       reset: () => (logger.items = []),
-      push(args: t.TestHandlerArgs, ctx: t.SpecCtx) {
+      push(args: t.TestHandlerArgs, ctxInput: t.DevCtxObject | t.DevCtx) {
+        const ctx = Is.ctx(ctxInput)
+          ? (ctxInput as unknown as t.DevCtx).toObject()
+          : (ctxInput as t.DevCtxObject);
         logger.items.push({ args, ctx });
       },
       get count() {

@@ -5,7 +5,7 @@ export type HarnessHostGridProps = {
   instance: t.DevInstance;
   children?: JSX.Element;
   border: string;
-  renderProps?: t.SpecRenderProps;
+  renderProps?: t.DevRenderProps;
   style?: t.CssValue;
 };
 

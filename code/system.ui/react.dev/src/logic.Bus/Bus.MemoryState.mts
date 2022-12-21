@@ -1,5 +1,4 @@
-import { R, t, Is } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { DEFAULT, Is, R, rx, t } from './common';
 
 type Revision = { number: number; message: string };
 
@@ -9,9 +8,12 @@ export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevI
 /**
  * Helper/wrapper for managing an in-memory version of the root state tree.
  */
-export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
+export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: ChangedHandler }) {
   let _revision: Revision = { number: 0, message: 'initial' };
   let _current: t.DevInfo = DEFAULT.info();
+
+  _current.instance.context = DEFAULT.ctxId();
+  _current.instance.bus = rx.bus.instance(args.instance.bus);
 
   /**
    * API
@@ -20,7 +22,7 @@ export function BusMemoryState(args: { onChanged?: ChangedHandler } = {}) {
     get revision() {
       return { ..._revision };
     },
-    get current() {
+    get current(): t.DevInfo {
       return { ..._current };
     },
     async change(message: t.DevInfoChangeMessage, fn: t.DevInfoMutater) {

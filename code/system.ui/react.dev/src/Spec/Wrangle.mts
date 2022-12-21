@@ -2,9 +2,9 @@ import { t, Is } from '../common';
 
 export const Wrangle = {
   ctx(
-    input: any | t.TestHandlerArgs | t.SpecCtx,
+    input: any | t.TestHandlerArgs | t.DevCtx,
     options: { throw?: boolean } = {},
-  ): t.SpecCtx | undefined {
+  ): t.DevCtx | undefined {
     if (Is.ctx(input)) return input;
 
     if (typeof input === 'object' && input !== null) {

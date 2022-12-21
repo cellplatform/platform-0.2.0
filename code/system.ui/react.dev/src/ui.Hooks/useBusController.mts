@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { filter } from 'rxjs/operators';
 
-import { DevBus, rx, slug, t, Time } from './common';
+import { DevBus, rx, slug, t, Time, DEFAULT } from './common';
 
 type Id = string;
 
@@ -16,7 +16,7 @@ export function useBusController(
   const instance = { bus, id };
   const busid = rx.bus.instance(bus);
 
-  const [info, setInfo] = useState<t.DevInfo>(DevBus.DEFAULT.info);
+  const [info, setInfo] = useState<t.DevInfo>(DEFAULT.info);
 
   /**
    * Lifecycle

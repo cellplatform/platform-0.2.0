@@ -12,7 +12,7 @@ export const root = Spec.describe('MySample', (e) => {
 
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
-    ctx.debug.body(() => <div>{`Hello Foo!`}</div>);
+    ctx.debug.render(() => <div>{`Hello Foo!`}</div>);
   });
 });
 
