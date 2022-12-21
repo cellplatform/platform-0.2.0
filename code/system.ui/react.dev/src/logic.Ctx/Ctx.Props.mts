@@ -1,7 +1,9 @@
 import { filter } from 'rxjs/operators';
 
 import { DEFAULT, t } from './common';
-import { CtxComponent } from './Ctx.Props.Component.mjs';
+import { CtxPropsComponent } from './Ctx.Props.Component.mjs';
+import { CtxPropsDebug } from './Ctx.Props.Debug.mjs';
+import { CtxPropsHost } from './Ctx.Props.Host.mjs';
 
 import type { PropArgs } from './common';
 
@@ -14,12 +16,10 @@ export async function CtxProps(events: t.DevEvents) {
     _revision = 0;
   });
 
-  const props: PropArgs = {
+  const propArgs: PropArgs = {
     current: () => _current,
     changed: () => _revision++,
   };
-
-  const component = CtxComponent(props);
 
   return {
     get current() {
@@ -29,7 +29,9 @@ export async function CtxProps(events: t.DevEvents) {
       return _revision > 0;
     },
     setters: {
-      component,
+      component: CtxPropsComponent(propArgs),
+      host: CtxPropsHost(propArgs),
+      debug: CtxPropsDebug(propArgs),
     },
   };
 }

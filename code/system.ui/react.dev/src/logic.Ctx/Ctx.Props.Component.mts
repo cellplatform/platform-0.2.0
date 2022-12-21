@@ -2,7 +2,7 @@ import { Margin, t } from './common';
 
 import type { PropArgs } from './common';
 
-export const CtxComponent = (props: PropArgs) => {
+export function CtxPropsComponent(props: PropArgs) {
   const api: t.SpecCtxComponent = {
     render(fn) {
       props.current().component.renderer = fn;
@@ -48,4 +48,4 @@ export const CtxComponent = (props: PropArgs) => {
   };
 
   return api;
-};
+}

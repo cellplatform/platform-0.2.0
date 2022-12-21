@@ -96,16 +96,18 @@ describe('Context', () => {
 
       const fn = () => undefined;
       ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
+
+      expect(context.pending).to.eql(true);
       await context.flush();
+      expect(context.pending).to.eql(false);
 
       const info = await events.info.get();
-      const o = info.render.props?.component!;
+      const component = info.render.props?.component!;
 
-      expect(o.backgroundColor).to.eql(-0.2);
-      expect(o.display).to.eql('flex');
-      expect(o.renderer).to.eql(fn);
-      expect(o.size).to.eql({ mode: 'center', width: 10, height: 20 });
-
+      expect(component.backgroundColor).to.eql(-0.2);
+      expect(component.display).to.eql('flex');
+      expect(component.renderer).to.eql(fn);
+      expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
       dispose();
     });
 
@@ -140,6 +142,41 @@ describe('Context', () => {
         size('fill', [1, 2, 3, 4]),
       );
 
+      dispose();
+    });
+
+    it('host', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+
+      ctx.host.backgroundColor(-0.22);
+
+      expect(context.pending).to.eql(true);
+      await context.flush();
+      expect(context.pending).to.eql(false);
+
+      const info = await events.info.get();
+      const host = info.render.props?.host!;
+
+      expect(host.backgroundColor).to.eql(-0.22);
+      dispose();
+    });
+
+    it('debug', async () => {
+      const { events, context, dispose } = await Sample.create();
+      const ctx = context.ctx;
+
+      const fn = () => undefined;
+      ctx.debug.body(fn);
+
+      expect(context.pending).to.eql(true);
+      await context.flush();
+      expect(context.pending).to.eql(false);
+
+      const info = await events.info.get();
+      const debug = info.render.props?.debug!;
+
+      expect(debug.main.renderers).to.eql([fn]);
       dispose();
     });
   });

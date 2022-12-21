@@ -37,6 +37,8 @@ export type SpecCtx = {
 
 export type SpecCtx2 = {
   readonly component: SpecCtxComponent;
+  readonly host: SpecCtxHost;
+  readonly debug: SpecCtxDebug;
   toObject(): SpecCtxObject;
 };
 
