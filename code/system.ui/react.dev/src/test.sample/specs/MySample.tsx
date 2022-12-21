@@ -19,9 +19,9 @@ export const MySample: React.FC<MySampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
-      <div>{props.text ?? 'MyComponent'} 🐷</div>
+      <div>{props.text ?? 'MySample'} 🐷</div>
       <div>
-        <pre>state: {props.state && JSON.stringify(props.state)}</pre>
+        <pre>state: {props.state ? JSON.stringify(props.state) : 'undefined'} </pre>
       </div>
     </div>
   );
