@@ -12,3 +12,4 @@ export { Stream } from './Stream/index.mjs';
 export { Time } from './Time/index.mjs';
 export { Value, asArray } from './Value/index.mjs';
 export { WorkerMemoryStub } from './WorkerMemoryStub/index.mjs';
+export { Promise, maybeWait } from './Promise/index.mjs';
