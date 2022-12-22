@@ -3,7 +3,6 @@ import { Content } from 'sys.pkg';
 import { Text } from 'sys.text/node';
 import { rx } from 'sys.util';
 
-//
 import { Pkg } from '../src/index.pkg.mjs';
 
 const bus = rx.bus();
