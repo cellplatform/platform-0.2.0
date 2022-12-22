@@ -1,9 +1,9 @@
-import { Observable, timeout } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { asArray, rx, slug, t } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { ContextState } from '../logic.Ctx/Context.State.mjs';
 
+type O = Record<string, unknown>;
 type Id = string;
 
 /**
@@ -60,13 +60,6 @@ export function BusEvents(args: {
       if (!res.info) throw new Error(`Status: info not available`);
       return res.info;
     },
-
-    async ctx(options) {
-      const res = await info.fire(options);
-      if (res.error) throw new Error(res.error);
-      if (!res.ctx) throw new Error(`Status: ctx not available`);
-      return res.ctx;
-    },
   };
 
   /**
@@ -92,12 +85,6 @@ export function BusEvents(args: {
 
       const error = res.error?.message ?? 'Failed';
       return { tx, instance, error };
-    },
-  };
-
-  const unload: t.DevEvents['unload'] = {
-    fire(options) {
-      return load.fire(undefined, options);
     },
   };
 
@@ -167,8 +154,8 @@ export function BusEvents(args: {
     change: {
       req$: rx.payload<t.DevStateChangeReqEvent>($, 'sys.dev/state/change:req'),
       res$: rx.payload<t.DevStateChangeResEvent>($, 'sys.dev/state/change:res'),
-      async fire(args) {
-        const { initial, mutate, timeout = 3000 } = args;
+      async fire(initial, mutate, options = {}) {
+        const { timeout = 3000 } = options;
         const tx = slug();
         const op = 'state.change';
         const res$ = state.change.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -186,6 +173,9 @@ export function BusEvents(args: {
         return { tx, instance, error };
       },
     },
+    object<T extends O = O>(initial: T) {
+      return ContextState({ events, initial });
+    },
   };
 
   /**
@@ -195,20 +185,15 @@ export function BusEvents(args: {
   const props: t.DevEvents['props'] = {
     changed$: info.changed$.pipe(
       filter((e) => {
-        // const match: t.DevInfoChangeMessage[] = ['state:write', 'context:init'];
-        // return match.includes(e.message);
-        /**
-         * TODO 🐷
-         */
-
-        return true;
+        const match: t.DevInfoChangeMessage[] = ['props:write', 'reset', 'context:init'];
+        return match.includes(e.message);
       }),
     ),
     change: {
       req$: rx.payload<t.DevPropsChangeReqEvent>($, 'sys.dev/props/change:req'),
       res$: rx.payload<t.DevPropsChangeResEvent>($, 'sys.dev/props/change:res'),
-      async fire(args) {
-        const { mutate, timeout = 3000 } = args;
+      async fire(mutate, options = {}) {
+        const { timeout = 3000 } = options;
         const tx = slug();
         const op = 'props.change';
         const res$ = props.change.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -228,7 +213,10 @@ export function BusEvents(args: {
     },
   };
 
-  return {
+  /**
+   * API.
+   */
+  const events: t.DevEvents = {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
     dispose,
@@ -239,12 +227,13 @@ export function BusEvents(args: {
     is,
     info,
     load,
-    unload,
     run,
     reset,
     state,
     props,
   };
+
+  return events;
 }
 
 /**

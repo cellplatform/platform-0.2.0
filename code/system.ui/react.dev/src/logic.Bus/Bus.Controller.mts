@@ -1,8 +1,7 @@
-import { run } from './Bus.Controller.run.mjs';
+import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { Is, rx, SpecContext, t, Test } from './common';
-import { DEFAULT } from './DEFAULT.mjs';
+import { DEFAULT, Is, rx, t, Test } from './common';
 
 type Id = string;
 
@@ -24,27 +23,8 @@ export function BusController(args: {
   });
   const { dispose$ } = events;
 
-  const Context = {
-    _: undefined as t.SpecCtxWrapper | undefined,
-
-    async create() {
-      const wrapper = (Context._ = SpecContext.create(args.instance, { dispose$ }));
-      await state.change('context:init', (draft) => {
-        draft.instance.context = wrapper.id;
-        draft.instance.bus = rx.bus.instance(bus);
-        draft.root = undefined;
-        draft.render.props = undefined;
-        draft.render.state = undefined;
-        draft.run = { count: 0 };
-      });
-      return Context._;
-    },
-    async current() {
-      return Context._ || (Context._ = await Context.create());
-    },
-  };
-
   const state = BusMemoryState({
+    instance: args.instance,
     onChanged(e) {
       const { message, info } = e;
       bus.fire({
@@ -54,16 +34,32 @@ export function BusController(args: {
     },
   });
 
+  const Ctx = {
+    _: undefined as t.DevContext | undefined,
+    async current() {
+      return Ctx._ || (Ctx._ = await Ctx.init());
+    },
+    async init() {
+      const context = await Context.init(args.instance, { dispose$ });
+      await state.change('context:init', (draft) => Ctx.reset(draft));
+      return context;
+    },
+    reset(draft: t.DevInfo) {
+      draft.render.props = undefined;
+      draft.render.state = undefined;
+      draft.run = { count: 0 };
+    },
+  };
+
   /**
    * Info (Module)
    */
   events.info.req$.subscribe(async (e) => {
     const { tx } = e;
-    const ctx = (await Context.current()).ctx;
     const info = state.current;
     bus.fire({
       type: 'sys.dev/info:res',
-      payload: { tx, instance, info, ctx },
+      payload: { tx, instance, info },
     });
   });
 
@@ -73,12 +69,11 @@ export function BusController(args: {
   events.load.req$.subscribe(async (e) => {
     const { tx } = e;
     let error: string | undefined;
-    await Context.create();
 
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
-      const message: t.DevInfoChangeMessage = root ? 'spec:load' : 'spec:unload';
-      await state.change(message, (draft) => (draft.root = root));
+      await events.reset.fire();
+      await state.change('spec:load', (draft) => (draft.root = root));
     } catch (err: any) {
       error = err.message;
     }
@@ -94,7 +89,13 @@ export function BusController(args: {
    */
   events.reset.req$.subscribe(async (e) => {
     const { tx } = e;
-    await Context.create();
+
+    await state.change('reset', (draft) => {
+      draft.instance.context = DEFAULT.ctxId();
+      Ctx.reset(draft);
+    });
+    await Ctx.current();
+
     bus.fire({
       type: 'sys.dev/reset:res',
       payload: { tx, instance, info: state.current },
@@ -111,13 +112,20 @@ export function BusController(args: {
 
     try {
       if (rootSpec) {
-        const res = await run(await Context.current(), rootSpec, { only });
+        const context = await Ctx.current();
+        await context.refresh();
+
+        const ctx = context.ctx;
+        const results = await rootSpec.run({ ctx, only });
+        await context.flush(); // Flush the results from the {ctx} into the state tree: {render.props}.
+
+        /**
+         * Update the state tree with the run results.
+         */
         const message: t.DevInfoChangeMessage = only ? 'run:subset' : 'run:all';
         await state.change(message, (draft) => {
-          const run = draft.run || (draft.run = DEFAULT.info().run);
-          draft.render.props = res.props;
-          run.count++;
-          run.results = res.results;
+          draft.run.count++;
+          draft.run.results = results;
         });
       }
     } catch (err: any) {
@@ -157,9 +165,6 @@ export function BusController(args: {
     let error: string | undefined;
 
     state.change('props:write', async (draft) => {
-      /**
-       * TODO 🐷
-       */
       const props = draft.render.props || (draft.render.props = DEFAULT.props());
       const res = e.mutate(props);
       if (Is.promise(res)) await res;

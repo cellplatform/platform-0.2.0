@@ -1,4 +1,6 @@
-import { Spec, SpecContext } from '../Spec';
+import { DevBus } from '../logic.Bus';
+import { Context } from '../logic.Ctx';
+import { Spec } from '../Spec';
 import { describe, expect, it, rx, t } from '../test';
 import { Is } from './Is.mjs';
 
@@ -11,14 +13,18 @@ describe('Is (flags)', () => {
   });
 
   it('ctx', async () => {
-    const { ctx } = SpecContext.create(instance);
+    const events = DevBus.Controller({ instance });
+    const { ctx } = await Context.init(instance);
 
     const test = (input: any, expected: boolean) => {
       expect(Is.ctx(input)).to.eql(expected);
     };
 
     test(ctx, true);
+    test(ctx.toObject(), false);
     [undefined, null, {}, [], 123, 'foo', true].forEach((value) => test(value, false));
+
+    events.dispose();
   });
 
   it('suite (spec)', async () => {

@@ -4,7 +4,7 @@ import { Wrangle } from './Wrangle.mjs';
 export type HarnessHostComponentProps = {
   instance: t.DevInstance;
   border: string;
-  renderProps?: t.SpecRenderProps;
+  renderProps?: t.DevRenderProps;
   style?: t.CssValue;
 };
 

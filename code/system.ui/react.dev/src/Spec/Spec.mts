@@ -26,6 +26,6 @@ export const Spec = {
    */
   ctx(e: t.TestHandlerArgs) {
     Wrangle.ctx(e, { throw: true });
-    return e.ctx as t.SpecCtx;
+    return e.ctx as t.DevCtx;
   },
 };
