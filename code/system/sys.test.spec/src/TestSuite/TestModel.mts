@@ -62,10 +62,33 @@ export const TestModel = (args: {
         },
       };
 
+      const maybeWait = async (value: any | Promise<any>) => {
+        if (Is.promise(value)) await value;
+        return value;
+      };
+
       try {
+        /**
+         * Before handler.
+         */
+        if (options.before) {
+          await maybeWait(options.before({ id, description }));
+        }
+
+        /**
+         * Test handler.
+         */
         startTimeout(response.timeout);
-        const wait = handler(args);
-        if (Is.promise(wait)) await wait;
+        await maybeWait(handler(args));
+
+        /**
+         * After handler.
+         */
+        if (options.after) {
+          const elapsed = timer.elapsed.msec;
+          await maybeWait(options.after({ id, description, elapsed }));
+        }
+
         return done();
       } catch (error: any) {
         done({ error });

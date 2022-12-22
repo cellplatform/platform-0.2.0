@@ -259,6 +259,30 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
+    it('{beforeEach, afterEach} parameter', async () => {
+      const root = Test.describe('root', (e) => {
+        e.it('foo', (e) => {});
+        e.it('bar', async (e) => {
+          await Time.wait(5);
+        });
+      });
+
+      const beforeEach: t.BeforeRunTestArgs[] = [];
+      const afterEach: t.AfterRunTestArgs[] = [];
+      await root.run({
+        beforeEach: (e) => beforeEach.push(e),
+        afterEach: (e) => afterEach.push(e),
+      });
+
+      expect(beforeEach.length).to.eql(2);
+      expect(beforeEach[0].description).to.eql('foo');
+      expect(beforeEach[1].description).to.eql('bar');
+
+      expect(afterEach.length).to.eql(2);
+      expect(afterEach[0].description).to.eql('foo');
+      expect(afterEach[1].description).to.eql('bar');
+    });
+
     it('run with {only} subset of IDs option', async () => {
       let _fired: string[] = [];
       const root = Test.describe('root', (e) => {
