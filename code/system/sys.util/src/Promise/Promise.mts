@@ -7,4 +7,5 @@ export async function maybeWait<T>(value: T | Promise<T>) {
 
 export const Promise = {
   maybeWait,
+  isPromise: Is.promise,
 };

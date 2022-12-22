@@ -21,4 +21,16 @@ describe('Promise', () => {
       expect(Promise.maybeWait).to.equal(maybeWait);
     });
   });
+
+  it('isPromise', async () => {
+    const test = (input: any, expected: boolean) => {
+      expect(Promise.isPromise(input)).to.eql(expected);
+    };
+
+    const wait = async () => null;
+
+    test({ then: () => null }, true);
+    test(wait(), true);
+    [undefined, null, 123, 'a', [], {}, true].forEach((value) => test(value, false));
+  });
 });
