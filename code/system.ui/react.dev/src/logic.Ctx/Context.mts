@@ -24,10 +24,10 @@ export const Context = {
 
     const toObject = (): t.DevCtxObject => {
       const count = Local.runCount;
-      const initial = ctx.initial;
+      const initial = ctx.isInitial;
       return {
         instance,
-        run: { count, initial },
+        run: { count, isInitial: initial },
         props: { ...props.current },
       };
     };
@@ -36,7 +36,7 @@ export const Context = {
       ...props.setters,
       toObject,
 
-      get initial() {
+      get isInitial() {
         return Local.runCount === 0;
       },
 
@@ -79,7 +79,7 @@ export const Context = {
       },
 
       async flush() {
-        if (api.disposed) throw new Error('Context has been disposed');
+        if (api.disposed) throw new Error('Cannot flush, context has been disposed');
         if (!api.pending) return api;
         await events.props.change.fire((draft) => {
           const current = props.current;
@@ -92,7 +92,6 @@ export const Context = {
       },
     };
 
-    // _ctx = createCtx();
     return api;
   },
 };

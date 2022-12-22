@@ -6,8 +6,8 @@ describe('Context', () => {
     it('init', async () => {
       const { events, instance } = await TestSample.create();
 
-      const info1 = await events.info.get();
-      expect(info1.render.props).to.eql(undefined); // Initially no render-props data.
+      const info = await events.info.get();
+      expect(info.render.props).to.eql(undefined); // Initially no render-props data.
 
       const context = await Context.init(instance);
       expect(context.instance).to.equal(instance);
@@ -74,7 +74,7 @@ describe('Context', () => {
     it('throw: when disposed', async () => {
       const { context, dispose } = await TestSample.context();
       context.dispose();
-      await expectError(() => context.flush(), 'Context has been disposed');
+      await expectError(() => context.flush(), 'Cannot flush, context has been disposed');
       dispose();
     });
   });
