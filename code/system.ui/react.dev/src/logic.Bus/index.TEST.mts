@@ -1,7 +1,7 @@
 import { DevBus } from '.';
-import { describe, expect, it, t, Test, TestSample, Time, maybeWait } from '../test';
-import { SAMPLES } from '../test.sample/specs.unit';
 import { Spec } from '../index.mjs';
+import { describe, expect, it, t, Test, TestSample, Time } from '../test';
+import { SAMPLES } from '../test.sample/specs.unit';
 
 const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
 
@@ -306,7 +306,6 @@ describe('DevBus', (e) => {
       });
     });
 
-
     describe('ctx.run', () => {
       it('ctx.run()', async () => {
         const { events } = await TestSample.create();
@@ -439,13 +438,24 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it.skip('state object (API)', async () => {
+      it('state object (API)', async () => {
+        type T = { count: number };
         const { events } = await TestSample.preloaded();
 
-        // const state = events.state.object()
+        const initial: T = { count: 0 };
+        const state = events.state.object(initial);
+
+        const info1 = await events.info.get();
+        expect(state.current.count).to.eql(0);
+        expect(info1.render.state).to.eql(undefined);
+
+        await state.change((draft) => draft.count++);
+
+        const info2 = await events.info.get();
+        expect(state.current.count).to.eql(1);
+        expect(info2.render.state).to.eql({ count: 1 });
 
         events.dispose();
-        //
       });
     });
 
