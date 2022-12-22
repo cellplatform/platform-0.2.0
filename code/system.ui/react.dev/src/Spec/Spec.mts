@@ -1,4 +1,4 @@
-import { t, Test } from '../common';
+import { t, Test, maybeWait } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 /**
@@ -21,11 +21,21 @@ export const Spec = {
   describe: Test.describe,
 
   /**
-   * Pluck and type-cast the [SpecCtx] context object from the standard
+   * Pluck and type-cast the {ctx} context object from the standard
    * arguments passed into a test ("it") via the spec runner.
    */
   ctx(e: t.TestHandlerArgs) {
     Wrangle.ctx(e, { throw: true });
     return e.ctx as t.DevCtx;
+  },
+
+  /**
+   * Pluck the {ctx} and run the given handler if this is the
+   * initial test run within the session.
+   */
+  async initial(e: t.TestHandlerArgs, fn: (ctx: t.DevCtx) => any) {
+    const ctx = Spec.ctx(e);
+    if (ctx.isInitial) await maybeWait(fn(ctx));
+    return ctx;
   },
 };
