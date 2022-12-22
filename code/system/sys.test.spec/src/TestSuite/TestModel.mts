@@ -1,5 +1,4 @@
-import { DEFAULT, Delete, slug, t, Time, R } from './common';
-import { Is } from '../TestSuite.helpers';
+import { maybeWait, DEFAULT, Delete, slug, t, Time, R } from './common';
 
 /**
  * A single test.
@@ -60,11 +59,6 @@ export const TestModel = (args: {
           startTimeout(response.timeout);
           return args;
         },
-      };
-
-      const maybeWait = async (value: any | Promise<any>) => {
-        if (Is.promise(value)) await value;
-        return value;
       };
 
       try {
