@@ -43,7 +43,7 @@ export default Spec.describe('MySample', (e) => {
   e.it('foo', async (e) => {
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
-    if (!ctx.initial) return;
+    if (!ctx.isInitial) return;
 
     const styles = {
       base: css({
@@ -64,12 +64,11 @@ export default Spec.describe('MySample', (e) => {
   });
 
   e.it('rerun (all, reset)', async (e) => {
-    const ctx = Spec.ctx(e);
-    if (ctx.initial) {
+    return Spec.initial(e, (ctx) => {
       ctx.debug.render(() => {
         return <div onClick={() => ctx.run({ reset: true })}>Rerun</div>;
       });
-    }
+    });
   });
 
   e.it('SampleDevTools', async (e) => {
