@@ -27,7 +27,7 @@ export type DevCtx = {
   readonly component: DevCtxComponent;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
-  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
+  readonly isInitial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;
@@ -42,7 +42,7 @@ export type DevCtxState<T extends O> = {
 export type DevCtxObject = {
   instance: t.DevInstance;
   props: DevRenderProps;
-  run: { count: number; initial: boolean };
+  run: { count: number; isInitial: boolean };
 };
 
 export type DevCtxComponent = {
@@ -103,5 +103,5 @@ export type DevRenderSizeFill = {
  */
 export type DevSubjectRenderer<T extends O = O> = (
   args: DevSubjectRendererArgs<T>,
-) => JSX.Element | undefined;
+) => JSX.Element | undefined | null;
 export type DevSubjectRendererArgs<T extends O = O> = { state: T };
