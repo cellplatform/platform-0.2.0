@@ -1,6 +1,6 @@
 import { t, rx, slug } from '../common';
 import { DevBus } from '../logic.Bus';
-import { SAMPLES } from '../test.sample/specs.unit-test';
+import { SAMPLES } from '../test.sample/specs.unit';
 import { Context } from '../logic.Ctx';
 
 export const TestSample = {

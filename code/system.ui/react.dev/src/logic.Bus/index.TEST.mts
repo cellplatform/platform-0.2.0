@@ -1,6 +1,6 @@
 import { DevBus } from '.';
 import { describe, expect, it, t, Test, TestSample } from '../test';
-import { SAMPLES } from '../test.sample/specs.unit-test';
+import { SAMPLES } from '../test.sample/specs.unit';
 
 const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
 
