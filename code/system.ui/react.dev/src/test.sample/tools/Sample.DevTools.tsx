@@ -9,11 +9,7 @@ export const SampleDevTools = {
      * TODO 🐷
      *   Standard button visual.
      */
-
     const ctx = Spec.Wrangle.ctx(input, { throw: true });
-
-    console.log('ctx', ctx);
-
     return ctx;
   },
 };
