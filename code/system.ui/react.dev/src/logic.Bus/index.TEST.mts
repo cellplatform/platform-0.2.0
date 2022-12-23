@@ -202,12 +202,12 @@ describe('DevBus', (e) => {
         await events.load.fire(sample.root);
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.run.isInitial)).to.eql(true);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.is.initial)).to.eql(true);
 
         sample.log.reset();
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.run.isInitial)).to.eql(false);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.is.initial)).to.eql(false);
 
         events.dispose();
       });
@@ -311,12 +311,11 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.create();
 
         const root = Spec.describe('root', (e) => {
-          e.it('foo', async (e) => {
-            const ctx = Spec.ctx(e);
-            if (ctx.isInitial) {
+          e.it('foo', async (e) =>
+            Spec.initial(e, (ctx) => {
               Time.delay(10, () => ctx.run()); // NB: Simulate a "re-run" activated by say a UI click handler.
-            }
-          });
+            }),
+          );
         });
 
         await events.load.fire(root);
@@ -361,7 +360,7 @@ describe('DevBus', (e) => {
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
             const ctx = Spec.ctx(e);
-            log.push(ctx.isInitial);
+            log.push(ctx.is.initial);
           });
         });
 

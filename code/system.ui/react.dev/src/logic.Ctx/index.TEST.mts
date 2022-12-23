@@ -29,6 +29,20 @@ describe('Context', () => {
       expect(fired).to.eql(2);
       expect(context.disposed).to.eql(true);
     });
+
+    it('toObject', async () => {
+      const { dispose, context, events } = await TestSample.context();
+
+      const obj = context.toObject();
+      const info = await events.info.get();
+
+      expect(obj).to.eql(context.ctx.toObject());
+      expect(obj).to.not.equal(context.ctx.toObject());
+      expect(obj.id).to.eql(info.instance.context);
+      expect(obj.instance).to.equal(context.instance);
+
+      dispose();
+    });
   });
 
   describe('modify => flush', () => {

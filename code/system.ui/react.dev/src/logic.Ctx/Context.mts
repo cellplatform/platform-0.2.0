@@ -15,19 +15,17 @@ export const Context = {
     const { dispose, dispose$ } = events;
 
     const Local = {
-      runCount: 0,
-      reset() {
-        Local.runCount = 0;
-      },
+      id: '',
+      count: 0,
     };
-    events.reset.res$.subscribe(() => Local.reset());
 
     const toObject = (): t.DevCtxObject => {
-      const count = Local.runCount;
-      const initial = ctx.isInitial;
+      const { id, count } = Local;
+      const is = ctx.is;
       return {
+        id,
         instance,
-        run: { count, isInitial: initial },
+        run: { count, is },
         props: { ...props.current },
       };
     };
@@ -36,8 +34,9 @@ export const Context = {
       ...props.setters,
       toObject,
 
-      get isInitial() {
-        return Local.runCount === 0;
+      get is() {
+        const initial = Local.count === 0;
+        return { initial };
       },
 
       async run(options = {}) {
@@ -54,7 +53,10 @@ export const Context = {
 
       async state<T extends O>(initial: T) {
         const info = await events.info.get();
-        return ContextState<T>({ initial: (info.render.state ?? initial) as T, events });
+        return ContextState<T>({
+          initial: (info.render.state ?? initial) as T,
+          events,
+        });
       },
     };
 
@@ -74,7 +76,8 @@ export const Context = {
 
       async refresh() {
         const info = await events.info.get();
-        Local.runCount = info.run.count ?? 0;
+        Local.id = info.instance.context;
+        Local.count = info.run.count ?? 0;
         return api;
       },
 
@@ -92,6 +95,7 @@ export const Context = {
       },
     };
 
+    await api.refresh();
     return api;
   },
 };

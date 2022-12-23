@@ -27,11 +27,15 @@ export type DevCtx = {
   readonly component: DevCtxComponent;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
-  readonly isInitial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
+  readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   reset(): Promise<t.DevInfo>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
+};
+
+export type DevCtxIs = {
+  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
 };
 
 export type DevCtxState<T extends O> = {
@@ -40,9 +44,10 @@ export type DevCtxState<T extends O> = {
 };
 
 export type DevCtxObject = {
-  instance: t.DevInstance;
-  props: DevRenderProps;
-  run: { count: number; isInitial: boolean };
+  readonly id: Id;
+  readonly instance: t.DevInstance;
+  readonly props: DevRenderProps;
+  readonly run: { count: number; is: DevCtxIs };
 };
 
 export type DevCtxComponent = {

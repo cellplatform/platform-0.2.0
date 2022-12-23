@@ -35,7 +35,7 @@ export const Spec = {
    */
   async initial(e: t.TestHandlerArgs, fn: (ctx: t.DevCtx) => any) {
     const ctx = Spec.ctx(e);
-    if (ctx.isInitial) await maybeWait(fn(ctx));
+    if (ctx.is.initial) await maybeWait(fn(ctx));
     return ctx;
   },
 };

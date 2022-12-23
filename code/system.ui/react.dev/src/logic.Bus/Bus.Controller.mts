@@ -41,10 +41,10 @@ export function BusController(args: {
     },
     async init() {
       const context = await Context.init(args.instance, { dispose$ });
-      await state.change('context:init', (draft) => Ctx.reset(draft));
+      await state.change('context:init', (draft) => Ctx.resetInfo(draft));
       return context;
     },
-    reset(draft: t.DevInfo) {
+    resetInfo(draft: t.DevInfo) {
       draft.render.props = undefined;
       draft.render.state = undefined;
       draft.run = { count: 0 };
@@ -92,7 +92,7 @@ export function BusController(args: {
 
     await state.change('reset', (draft) => {
       draft.instance.context = DEFAULT.ctxId();
-      Ctx.reset(draft);
+      Ctx.resetInfo(draft);
     });
     await Ctx.current();
 
