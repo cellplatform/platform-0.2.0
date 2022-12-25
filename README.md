@@ -125,8 +125,10 @@ The inverse proposition also appears to be true:
 
 <p>&nbsp;</p>
 
----
 
+![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/209463236-17165d60-b70a-4b3c-a413-a68fa6fd61c4.png)
+
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
