@@ -205,7 +205,7 @@ Organizing for all this is expressed within the distinct folders `/system/` and 
 
 
 
-#### Evolving Architectural Strategy
+#### Evolution and Architectural Strategy
 
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking a way as possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
