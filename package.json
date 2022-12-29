@@ -38,6 +38,7 @@
     "minimist": "^1.2.7",
     "monaco-editor": "^0.34.1",
     "nanoid": "^4.0.0",
+    "openai": "^3.1.0",
     "ora": "^6.1.2",
     "pretty-bytes": "^6.0.0",
     "picocolors": "^1.0.0",

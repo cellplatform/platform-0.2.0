@@ -9,5 +9,3 @@ type DotEnv = {
 
 const env = process.env as DotEnv;
 const API_KEY = env.OPENAI_SECRET_KEY;
-
-console.log('API_KEY', API_KEY);
