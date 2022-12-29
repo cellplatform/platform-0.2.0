@@ -3,7 +3,7 @@
   "version": "0.2.0-alpha.5",
   "type": "module",
   "scripts": {
-    "build": "yarn audit && ts-node-esm -T script.ts/cmd.all.build.mts",
+    "build": "ts-node-esm -T script.ts/cmd.all.build.mts",
     "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
     "clean": "ts-node-esm  -T script.ts/cmd.all.clean.mts",
     "ls": "ts-node-esm  -T script.ts/cmd.all.list.mts",
