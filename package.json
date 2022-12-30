@@ -96,6 +96,9 @@
     "vitest": "^0.26.2",
     "chai": "^4.3.7"
   },
+  "resolutions": {
+    "json5": "^2.2.2"
+  },
   "license": "MIT",
   "private": true
 }
