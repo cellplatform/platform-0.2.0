@@ -1,3 +1,6 @@
+import { StrictMode } from 'react';
+
+import { isDepsOptimizerEnabled } from 'vite';
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { HarnessSpecColumn } from '../Harness.SpecColumn';
@@ -47,13 +50,15 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.reset, styles.base, props.style)}>
-      <div {...styles.left}>
-        <HarnessHost instance={instance} />
+    <StrictMode>
+      <div {...css(styles.reset, styles.base, props.style)}>
+        <div {...styles.left}>
+          <HarnessHost instance={instance} />
+        </div>
+        <div {...styles.right}>
+          <HarnessSpecColumn instance={instance} />
+        </div>
       </div>
-      <div {...styles.right}>
-        <HarnessSpecColumn instance={instance} />
-      </div>
-    </div>
+    </StrictMode>
   );
 };

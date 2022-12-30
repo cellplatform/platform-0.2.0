@@ -1,3 +1,5 @@
+import { StrictMode } from 'react';
+
 import { Color, css, t, useCurrentState } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
@@ -44,7 +46,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderer({ state })}
+        <StrictMode>{renderer({ state })}</StrictMode>
       </div>
     </div>
   );
