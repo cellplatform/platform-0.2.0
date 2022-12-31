@@ -23,10 +23,15 @@ res.data.data.map((item, i) => {
 });
 console.info();
 
-// try {
-//   const prompt = 'hello world';
-//   const completion = await openai.createCompletion({ model: 'text-davinci-003', prompt });
-//   console.log('completion.data', completion.status);
-// } catch (error: any) {
-//   console.log('error', error.message);
-// }
+try {
+  const prompt = "make a list of 5 members of the ARPA community from the 1960's";
+  const completion = await openai.createCompletion({
+    model: 'davinci',
+    prompt,
+    stream: false,
+    max_tokens: 100,
+  });
+  console.log('completion.data', completion.data);
+} catch (error: any) {
+  console.log('error', error.message);
+}
