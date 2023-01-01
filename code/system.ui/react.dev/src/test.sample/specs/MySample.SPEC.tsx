@@ -94,11 +94,6 @@ export default Spec.describe('MySample', (e) => {
   });
 
   e.it.skip('info', async (e) => {
-    const m = SampleDevTools.button(e);
-    // console.log('m', m);
-
-    const ctx = Spec.ctx(e);
-
     Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => {
