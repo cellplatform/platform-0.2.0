@@ -23,6 +23,9 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       <div>
         <pre>state: {props.state ? JSON.stringify(props.state) : 'undefined'} </pre>
       </div>
+      <div>
+        <a href={'?dev'}>?dev</a>
+      </div>
     </div>
   );
 };

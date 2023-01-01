@@ -1,6 +1,5 @@
 import { StrictMode } from 'react';
 
-import { isDepsOptimizerEnabled } from 'vite';
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { HarnessSpecColumn } from '../Harness.SpecColumn';
