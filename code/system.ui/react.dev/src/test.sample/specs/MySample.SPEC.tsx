@@ -1,6 +1,6 @@
 import { t, Color, css, Spec } from '../common';
 import { MySample } from './MySample';
-import { SampleDevTools } from '../tools';
+import { SampleDevTools } from '../sample.ui.DevTools';
 import { DevBus } from '../../logic.Bus';
 
 let _count = 0;
@@ -11,7 +11,6 @@ export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
     _count++;
     const ctx = Spec.ctx(e);
-
     const state = await ctx.state<T>({ count: 0 });
 
     ctx.component
@@ -41,7 +40,7 @@ export default Spec.describe('MySample', (e) => {
       });
   });
 
-  e.it('foo', async (e) => {
+  e.it('increment count', async (e) => {
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
     if (!ctx.is.initial) return;
@@ -50,30 +49,34 @@ export default Spec.describe('MySample', (e) => {
       base: css({
         border: `solid 1px ${Color.format(-0.3)}`,
         borderRadius: 5,
-        padding: 20,
+        padding: 10,
         margin: 5,
       }),
     };
 
+    const onClick = () => {
+      state.change((draft) => draft.count++);
+    };
+
     ctx.debug.render(() => {
       return (
-        <div {...styles.base} onClick={() => state.change((draft) => draft.count++)}>
-          {`Increment Count!`}
+        <div {...styles.base} onClick={onClick}>
+          {e.description}
         </div>
       );
     });
   });
 
   e.it('rerun (reset)', (e) =>
-    Spec.initial(e, (ctx) => {
+    Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
-        return <div onClick={() => ctx.run({ reset: true })}>{`Rerun (reset)`}</div>;
+        return <div onClick={() => ctx.run({ reset: true })}>{e.description}</div>;
       });
     }),
   );
 
   e.it('rerun', (e) =>
-    Spec.initial(e, (ctx) => {
+    Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         return <div onClick={() => ctx.run({})}>{`Rerun`}</div>;
       });
@@ -81,13 +84,13 @@ export default Spec.describe('MySample', (e) => {
   );
 
   e.it('SampleDevTools', async (e) => {
-    const m = SampleDevTools.button(e);
-    // console.log('m', m);
-
-    const ctx = Spec.ctx(e);
-    ctx.debug.render(() => {
-      return <div>foo</div>;
+    const ctx = await SampleDevTools.button(e, (e) => {
+      console.log('Inside Spec - BUTTON', e);
+      e.onClick(() => {});
     });
+
+    console.log('-------------------------------------------');
+    console.log('button', ctx);
   });
 
   e.it.skip('info', async (e) => {
@@ -96,11 +99,10 @@ export default Spec.describe('MySample', (e) => {
 
     const ctx = Spec.ctx(e);
 
-    Spec.initial(e, (ctx) => {
+    Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => {
           DevBus.withEvents(ctx.toObject().instance, async (events) => {
-            //
             const info = await events.info.get();
             console.log('info', info);
             console.log('render.props?.debug', info.render.props?.debug.main);
