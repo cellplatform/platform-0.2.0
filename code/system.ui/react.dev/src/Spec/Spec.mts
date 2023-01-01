@@ -24,16 +24,15 @@ export const Spec = {
    * Pluck and type-cast the {ctx} context object from the standard
    * arguments passed into a test ("it") via the spec runner.
    */
-  ctx(e: t.TestHandlerArgs) {
-    Wrangle.ctx(e, { throw: true });
-    return e.ctx as t.DevCtx;
+  ctx(e: t.TestHandlerArgs | t.DevCtx) {
+    return Wrangle.ctx(e, { throw: true })!;
   },
 
   /**
    * Pluck the {ctx} and run the given handler if this is the
    * initial test run within the session.
    */
-  async initial(e: t.TestHandlerArgs, fn: (ctx: t.DevCtx) => any) {
+  async once(e: t.DevCtxInput, fn: (ctx: t.DevCtx) => any) {
     const ctx = Spec.ctx(e);
     if (ctx.is.initial) await maybeWait(fn(ctx));
     return ctx;

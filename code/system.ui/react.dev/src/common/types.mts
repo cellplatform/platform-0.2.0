@@ -23,3 +23,5 @@ export * from '../types.mjs';
 
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];
+
+export type IgnoredResponse = any | Promise<any>;

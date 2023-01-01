@@ -312,7 +312,7 @@ describe('DevBus', (e) => {
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) =>
-            Spec.initial(e, (ctx) => {
+            Spec.once(e, (ctx) => {
               Time.delay(10, () => ctx.run()); // NB: Simulate a "re-run" activated by say a UI click handler.
             }),
           );
@@ -334,7 +334,7 @@ describe('DevBus', (e) => {
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
-            Spec.initial(e, (ctx) => {
+            Spec.once(e, (ctx) => {
               Time.delay(10, () => ctx.run({ reset: true })); // NB: Simulate a "re-run" activated by say a UI click handler.
             });
           });

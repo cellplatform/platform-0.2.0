@@ -20,6 +20,8 @@ type IgnoredResponse = any | Promise<any>;
 export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type DevPropDisplay = 'flex' | 'grid' | undefined;
 
+export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
+
 /**
  * The context {ctx} interface passed into specs.
  */

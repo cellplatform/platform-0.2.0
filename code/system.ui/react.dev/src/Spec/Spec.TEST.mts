@@ -27,7 +27,7 @@ describe('Spec', () => {
 
       const root = Spec.describe('root', (e) => {
         e.it('foo', async (e) => {
-          _resCtx = await Spec.initial(e, (ctx) => (_paramCtx = ctx));
+          _resCtx = await Spec.once(e, (ctx) => (_paramCtx = ctx));
         });
       });
 
@@ -50,7 +50,7 @@ describe('Spec', () => {
       const root = Spec.describe('root', (e) => {
         e.it('foo', (e) => {
           _every++;
-          Spec.initial(e, (ctx) => _initial++);
+          Spec.once(e, (ctx) => _initial++);
         });
       });
 
@@ -79,7 +79,7 @@ describe('Spec', () => {
       const root = Spec.describe('root', (e) => {
         e.it('foo', async (e) => {
           _every++;
-          return Spec.initial(e, async (ctx) => {
+          return Spec.once(e, async (ctx) => {
             await Time.delay(10);
             _initial++;
           });
