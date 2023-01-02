@@ -75,7 +75,7 @@ export type DevRenderProps = {
 };
 
 export type DevRenderPropsComponent = {
-  renderer?: DevSubjectRenderer<any>;
+  renderer?: { id: Id; fn: DevSubjectRenderer<any> };
   size?: DevRenderSize;
   display?: t.DevPropDisplay;
   backgroundColor?: Color;

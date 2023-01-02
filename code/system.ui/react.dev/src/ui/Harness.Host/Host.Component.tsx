@@ -44,7 +44,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderer({ state })}
+        {renderer.fn({ state })}
       </div>
     </div>
   );

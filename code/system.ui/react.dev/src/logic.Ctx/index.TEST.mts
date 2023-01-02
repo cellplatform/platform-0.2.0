@@ -110,7 +110,8 @@ describe('Context', () => {
 
       expect(component.backgroundColor).to.eql(-0.2);
       expect(component.display).to.eql('flex');
-      expect(component.renderer).to.eql(fn);
+      expect(component.renderer?.fn).to.eql(fn);
+      expect(component.renderer?.id.startsWith(Id.renderer.prefix)).to.eql(true);
       expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
       dispose();
     });
