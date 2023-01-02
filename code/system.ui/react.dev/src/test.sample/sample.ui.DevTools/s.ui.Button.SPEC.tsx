@@ -25,10 +25,7 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
 
   e.it('Buttons', (e) => {
     DevTools.button(e, (btn) => {
-      btn.label('hello').onClick(async (e) => {
-        console.log('-------------------------------------------');
-        console.log('onClick', e);
-
+      btn.label('change state').onClick(async (e) => {
         type T = { count: number };
         const state = await e.ctx.state<T>({ count: 0 });
         await state.change((s) => s.count++);
@@ -36,8 +33,17 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
         console.log('e.ctx.toObject()', e.ctx.toObject());
         console.log('e.ctx.toObject().props', e.ctx.toObject().props);
         console.log('state.current', state.current);
-        btn.label(`hello-${state.current.count}`);
+        btn.label(`state | count: ${state.current.count}`);
+      });
+    });
+
+    DevTools.button(e, (btn) => {
+      btn.label('change label').onClick(async (e) => {
+        _count++;
+        btn.label(`hello-${_count}`);
       });
     });
   });
 });
+
+let _count = 0;

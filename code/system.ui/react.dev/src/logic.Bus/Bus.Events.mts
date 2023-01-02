@@ -218,15 +218,16 @@ export function BusEvents(args: {
    */
   const redraw: t.DevEvents['redraw'] = {
     $: rx.payload<t.DevRedrawEvent>($, 'sys.dev/redraw'),
-    async fire(renderers) {
+    fire(...renderers) {
       bus.fire({
         type: 'sys.dev/redraw',
         payload: { instance, renderers },
       });
     },
     async component() {
-      const renderer = (await info.get()).render.props?.component.renderer;
-      if (renderer) redraw.fire([renderer.id]);
+      const id = (await info.get()).render.props?.component.renderer?.id;
+      if (id) redraw.fire(id);
+      return id;
     },
   };
 

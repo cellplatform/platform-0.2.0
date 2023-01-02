@@ -3,13 +3,13 @@ import { MySample } from './MySample';
 import { DevToolsSample } from '../sample.ui.DevTools';
 import { DevBus } from '../../logic.Bus';
 
-let _count = 0;
+let _renderCount = 0;
 
 type T = { count: number; msg?: string };
 
 export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
-    _count++;
+    _renderCount++;
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
 
@@ -23,14 +23,13 @@ export default Spec.describe('MySample', (e) => {
       .display('flex')
       .backgroundColor(1)
       .render<t.JsonMap>((e) => {
-        const text = `MySample-${_count}`;
+        const text = `MySample-${_renderCount}`;
         return (
           <MySample
             style={{ flex: 1 }}
             text={text}
             state={e.state}
             onClick={() => {
-              // ctx.reset
               ctx.component.backgroundColor(-0.3);
               // ctx.run({ reset: true }); // Re-run all.
               state.change((draft) => draft.count++);

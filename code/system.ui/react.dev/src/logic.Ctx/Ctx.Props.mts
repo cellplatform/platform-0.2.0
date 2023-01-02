@@ -5,7 +5,7 @@ import { CtxPropsComponent } from './Ctx.Props.Component.mjs';
 import { CtxPropsDebug } from './Ctx.Props.Debug.mjs';
 import { CtxPropsHost } from './Ctx.Props.Host.mjs';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export async function CtxProps(events: t.DevEvents) {
   let _revision = 0;
@@ -18,6 +18,7 @@ export async function CtxProps(events: t.DevEvents) {
   });
 
   const propArgs: PropArgs = {
+    events,
     current: () => _current,
     changed: () => _revision++,
   };

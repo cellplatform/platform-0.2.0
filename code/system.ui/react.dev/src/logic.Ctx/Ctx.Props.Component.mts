@@ -1,6 +1,6 @@
 import { Margin, t, Id } from './common';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export function CtxPropsComponent(props: PropArgs) {
   const api: t.DevCtxComponent = {

@@ -10,7 +10,7 @@ export type DebugColumnMainRowProps = {
 
 export const DebugColumnMainRow: React.FC<DebugColumnMainRowProps> = (props) => {
   const { instance, renderer, state = {} } = props;
-  useRedraw(instance, [renderer.id]);
+  useRedraw(instance, [renderer]);
 
   /**
    * [Render]

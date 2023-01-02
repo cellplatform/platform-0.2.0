@@ -23,10 +23,15 @@ export const DevToolsSample = {
     return Spec.once(input, (ctx) => {
       const clickHandlers: ButtonSampleClickHandler[] = [];
 
+      const props = {
+        label: '',
+      };
+
       const args: ButtonHandlerArgs = {
         ctx,
         label(value) {
-          console.log('label', value);
+          props.label = value;
+          ref.redraw();
           return args;
         },
         onClick(handler) {
@@ -35,11 +40,17 @@ export const DevToolsSample = {
         },
       };
 
-      fn?.(args);
-      ctx.debug.render((e) => {
-        console.log('render button');
-        return <ButtonSample ctx={ctx} onClick={(e) => clickHandlers.forEach((fn) => fn(e))} />;
+      const ref = ctx.debug.render((e) => {
+        return (
+          <ButtonSample
+            ctx={ctx}
+            label={props.label}
+            onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+          />
+        );
       });
+
+      fn?.(args);
     });
   },
 };

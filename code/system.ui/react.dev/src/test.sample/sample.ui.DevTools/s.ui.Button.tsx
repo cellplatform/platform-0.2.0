@@ -11,7 +11,7 @@ export type ButtonProps = {
   onClick?: ButtonSampleClickHandler;
 };
 
-let _count = 0;
+let _renderCount = 0;
 
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
   const { ctx, label = 'Unnamed' } = props;
@@ -25,17 +25,17 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
     if (isOver === false) setDown(false);
   };
 
-  _count++;
-
   /**
    * [Render]
    */
   const styles = {
     base: css({
+      position: 'relative',
       color: COLORS.DARK,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       userSelect: 'none',
       transform: `translateY(${isDown ? 1 : 0}px)`,
+      cursor: 'pointer',
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
       columnGap: 4,
@@ -61,7 +61,11 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',
-      gridTemplateColumns: '1fr auto',
+    }),
+    render: css({
+      Absolute: [2, 4, null, null],
+      fontSize: 11,
+      opacity: 0.6,
     }),
   };
 
@@ -77,10 +81,8 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       <div {...styles.icon.base}>
         <div {...styles.icon.image} />
       </div>
-      <div {...styles.body}>
-        <div>{label}</div>
-        <div>{`r-${_count}`}</div>
-      </div>
+      <div {...styles.body}>{label}</div>
+      <div {...styles.render}>render-{_renderCount++}</div>
     </div>
   );
 };

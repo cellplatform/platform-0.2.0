@@ -13,7 +13,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const component = props.renderProps?.component;
   const renderer = component?.renderer;
 
-  useRedraw(instance, [renderer?.id]);
+  useRedraw(instance, [renderer]);
   const current = useCurrentState(instance, { filter: (e) => e.message === 'state:write' });
 
   if (!component || !renderer) return null;

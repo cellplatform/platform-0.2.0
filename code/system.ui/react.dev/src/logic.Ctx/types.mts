@@ -114,5 +114,5 @@ export type DevRendererArgs<T extends O = O> = { state: T };
  * Response to the assignment of a renderer that provides
  * hooks for re-drawing the component.
  */
-export type DevRenderRef = { id: Id };
+export type DevRenderRef = { id: Id; redraw(): void };
 export type DevRendererRef<T extends O = O> = { id: Id; fn: DevRenderer<T> };
