@@ -53,11 +53,11 @@ export type DevCtxObject = {
 };
 
 export type DevCtxComponent = {
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxComponent;
   display(value: DevPropDisplay): DevCtxComponent;
   backgroundColor(value?: Color): DevCtxComponent;
   size(width: number | undefined, height: number | undefined): DevCtxComponent;
   size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
+  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxComponent;
 };
 
 export type DevCtxHost = {

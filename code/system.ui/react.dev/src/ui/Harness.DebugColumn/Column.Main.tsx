@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, useCurrentState } from '../common';
+import { css, t, useCurrentState } from '../common';
 
-export type SpecColumnMainProps = {
+export type DebugColumnMainProps = {
   instance: t.DevInstance;
   style?: t.CssValue;
 };
 
-export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
+export const DebugColumnMain: React.FC<DebugColumnMainProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
@@ -25,6 +25,7 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     }),
     item: css({
       position: 'relative',
+      display: 'grid',
     }),
   };
 
