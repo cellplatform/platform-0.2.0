@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { t, describe, expect, expectError, it, TestSample } from '../test';
+import { Id, t, describe, expect, expectError, it, TestSample } from '../test';
 
 describe('Context', () => {
   describe('lifecycle', () => {
@@ -171,7 +171,8 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => undefined;
-      ctx.debug.render(fn);
+      const res = ctx.debug.render(fn);
+      expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
 
       expect(context.pending).to.eql(true);
       await context.flush();
@@ -180,7 +181,9 @@ describe('Context', () => {
       const info = await events.info.get();
       const debug = info.render.props?.debug!;
 
-      expect(debug.main.renderers).to.eql([fn]);
+      expect(debug.main.renderers.length).to.eql(1);
+      expect(debug.main.renderers[0].fn).to.eql(fn);
+      expect(debug.main.renderers[0].id).to.eql(res.id);
       dispose();
     });
   });

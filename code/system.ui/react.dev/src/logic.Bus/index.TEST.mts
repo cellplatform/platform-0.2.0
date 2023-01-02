@@ -3,7 +3,7 @@ import { Spec } from '../index.mjs';
 import { describe, expect, it, t, Test, TestSample, Time } from '../test';
 import { SAMPLES } from '../test.sample/specs.unit';
 
-const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
+const exepctSessionId = (value: string) => expect(value).to.match(/^dev:ctx\./);
 
 describe('DevBus', (e) => {
   describe('is', (e) => {
@@ -53,8 +53,8 @@ describe('DevBus', (e) => {
         expect(info.root).to.eql(undefined);
 
         expect(info.instance.kind).to.eql('dev:harness');
-        expect(info.instance.context).to.match(/^dev:session\.ctx\./);
         expect(info.instance.bus).to.match(/^bus\./);
+        exepctSessionId(info.instance.context);
 
         events.dispose();
       });

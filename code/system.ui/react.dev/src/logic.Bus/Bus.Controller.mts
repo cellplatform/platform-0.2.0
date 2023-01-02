@@ -1,7 +1,7 @@
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { DEFAULT, Is, rx, t, Test } from './common';
+import { DEFAULT, Is, rx, t, Test, Id } from './common';
 
 type Id = string;
 
@@ -91,7 +91,7 @@ export function BusController(args: {
     const { tx } = e;
 
     await state.change('reset', (draft) => {
-      draft.instance.context = DEFAULT.ctxId();
+      draft.instance.context = Id.ctx.create();
       Ctx.resetInfo(draft);
     });
     await Ctx.current();

@@ -1,10 +1,6 @@
-import { t, slug } from './common';
+import { t } from './common';
 
 export const DEFAULT = {
-  ctxId() {
-    return `dev:session.ctx.${slug()}`;
-  },
-
   props(): t.DevRenderProps {
     return {
       host: {},

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { css, t, useCurrentState } from '../common';
 
 export type DebugColumnMainProps = {
@@ -31,8 +30,8 @@ export const DebugColumnMain: React.FC<DebugColumnMainProps> = (props) => {
 
   const elements = renderers.filter(Boolean).map((renderer, i) => {
     return (
-      <div key={i} {...styles.item}>
-        {renderer({ state })}
+      <div key={renderer.id} {...styles.item}>
+        {renderer.fn({ state })}
       </div>
     );
   });

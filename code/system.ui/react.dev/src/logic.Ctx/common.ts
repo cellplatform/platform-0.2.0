@@ -1,4 +1,5 @@
 import { t } from '../common';
+
 export * from '../common';
 export { DEFAULT } from '../DEFAULT.mjs';
 

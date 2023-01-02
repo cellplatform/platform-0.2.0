@@ -62,7 +62,7 @@ export type DevCtxHost = {
 };
 
 export type DevCtxDebug = {
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxDebug;
+  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevRenderRef;
 };
 
 /**
@@ -86,7 +86,7 @@ export type DevRenderPropsHost = {
 };
 
 export type DevRenderPropsDebug = {
-  main: { renderers: DevSubjectRenderer<any>[] };
+  main: { renderers: { id: Id; fn: DevSubjectRenderer<any> }[] };
 };
 
 export type DevRenderSize = DevRenderSizeCenter | DevRenderSizeFill;
@@ -109,3 +109,9 @@ export type DevSubjectRenderer<T extends O = O> = (
   args: DevSubjectRendererArgs<T>,
 ) => JSX.Element | undefined | null;
 export type DevSubjectRendererArgs<T extends O = O> = { state: T };
+
+/**
+ * Response to the assignment of a renderer that provides
+ * hooks for re-drawing the component.
+ */
+export type DevRenderRef = { id: Id };
