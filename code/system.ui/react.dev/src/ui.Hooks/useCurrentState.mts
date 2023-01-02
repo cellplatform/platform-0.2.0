@@ -25,7 +25,6 @@ export function useCurrentState(
     const events = DevBus.Events({ instance });
 
     events.info.changed$
-
       .pipe(
         filter((e) => (options.filter ? options.filter(e) : true)),
         distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)),

@@ -97,14 +97,22 @@ export default Spec.describe('MySample', (e) => {
     Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => {
-          DevBus.withEvents(ctx.toObject().instance, async (events) => {
+          DevBus.withEvents(ctx, async (events) => {
             const info = await events.info.get();
             console.log('info', info);
             console.log('render.props?.debug', info.render.props?.debug.main);
           });
         };
-
         return <div onClick={onClick}>Get Info</div>;
+      });
+    });
+  });
+
+  e.it('redraw: component', async (e) => {
+    Spec.once(e, (ctx) => {
+      ctx.debug.render(() => {
+        const onClick = () => DevBus.withEvents(ctx, (events) => events.redraw.component());
+        return <div onClick={onClick}>{e.description}</div>;
       });
     });
   });

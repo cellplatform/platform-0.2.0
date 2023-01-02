@@ -8,7 +8,10 @@ export const DevBus = {
   Controller,
   Events,
 
-  async withEvents(instance: t.DevInstance, handler: (events: t.DevEvents) => any) {
+  async withEvents(input: t.DevInstance | t.DevCtx, handler: (events: t.DevEvents) => any) {
+    const instance = Is.ctx(input)
+      ? (input as t.DevCtx).toObject().instance
+      : (input as t.DevInstance);
     const events = DevBus.Events({ instance });
     const res = handler(events);
     if (Is.promise(res)) await res;

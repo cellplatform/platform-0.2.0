@@ -7,6 +7,8 @@ export type MySampleProps = {
   onClick?: () => void;
 };
 
+let _count = 0;
+
 export const MySample: React.FC<MySampleProps> = (props) => {
   const styles = {
     base: css({
@@ -15,7 +17,15 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       padding: [5, 8],
       fontFamily: 'sans-serif',
     }),
+    render: css({
+      Absolute: [4, 5, null, null],
+      fontSize: 11,
+      opacity: 0.6,
+    }),
   };
+
+  _count++;
+  const elRender = <div {...styles.render}>render-{_count}</div>;
 
   return (
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
@@ -26,6 +36,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       <div>
         <a href={'?dev'}>?dev</a>
       </div>
+      {elRender}
     </div>
   );
 };
