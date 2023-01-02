@@ -54,7 +54,7 @@ export type DevCtxComponent = {
   backgroundColor(value?: Color): DevCtxComponent;
   size(width: number | undefined, height: number | undefined): DevCtxComponent;
   size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxComponent;
+  render<T extends O = O>(fn: DevRenderer<T>): DevCtxComponent;
 };
 
 export type DevCtxHost = {
@@ -62,7 +62,7 @@ export type DevCtxHost = {
 };
 
 export type DevCtxDebug = {
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevRenderRef;
+  render<T extends O = O>(fn: DevRenderer<T>): DevRenderRef;
 };
 
 /**
@@ -75,7 +75,7 @@ export type DevRenderProps = {
 };
 
 export type DevRenderPropsComponent = {
-  renderer?: { id: Id; fn: DevSubjectRenderer<any> };
+  renderer?: DevRendererRef<any>;
   size?: DevRenderSize;
   display?: t.DevPropDisplay;
   backgroundColor?: Color;
@@ -86,7 +86,7 @@ export type DevRenderPropsHost = {
 };
 
 export type DevRenderPropsDebug = {
-  main: { renderers: { id: Id; fn: DevSubjectRenderer<any> }[] };
+  main: { renderers: DevRendererRef<any>[] };
 };
 
 export type DevRenderSize = DevRenderSizeCenter | DevRenderSizeFill;
@@ -105,13 +105,14 @@ export type DevRenderSizeFill = {
 /**
  * Function that returns a renderable element.
  */
-export type DevSubjectRenderer<T extends O = O> = (
-  args: DevSubjectRendererArgs<T>,
+export type DevRenderer<T extends O = O> = (
+  args: DevRendererArgs<T>,
 ) => JSX.Element | undefined | null;
-export type DevSubjectRendererArgs<T extends O = O> = { state: T };
+export type DevRendererArgs<T extends O = O> = { state: T };
 
 /**
  * Response to the assignment of a renderer that provides
  * hooks for re-drawing the component.
  */
 export type DevRenderRef = { id: Id };
+export type DevRendererRef<T extends O = O> = { id: Id; fn: DevRenderer<T> };
