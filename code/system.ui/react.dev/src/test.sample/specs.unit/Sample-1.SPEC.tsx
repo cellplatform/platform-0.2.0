@@ -7,7 +7,7 @@ export const root = Spec.describe('MySample', (e) => {
       .size(300, 140)
       .display('flex')
       .backgroundColor(1)
-      .render((e) => <div>Hello</div>);
+      .render((e) => <div>Hello Component</div>);
   });
 
   e.it('foo', async (e) => {
