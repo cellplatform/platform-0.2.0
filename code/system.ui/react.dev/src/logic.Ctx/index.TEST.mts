@@ -227,23 +227,6 @@ describe('Context', () => {
       dispose();
     });
 
-    it('revert to initial after reset', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
-      const state = await ctx.state<T>(initial);
-
-      await state.change((draft) => draft.count++);
-      expect(state.current).to.eql({ count: 1 });
-
-      await ctx.reset();
-
-      const info = await events.info.get();
-      expect(state.current).to.eql(initial);
-      expect(info.render.state).to.eql(undefined);
-
-      dispose();
-    });
-
     it('live updates (via event listeners)', async () => {
       const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;

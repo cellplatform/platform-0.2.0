@@ -1,5 +1,11 @@
 import * as t from '../common/types.mjs';
 
+type O = Record<string, unknown>;
+type Id = string;
+type SpecId = Id;
+type Color = string | number;
+type IgnoredResponse = any | Promise<any>;
+
 export type DevContext = t.Disposable & {
   readonly instance: t.DevInstance;
   readonly disposed: boolean;
@@ -9,13 +15,6 @@ export type DevContext = t.Disposable & {
   refresh(): Promise<DevContext>;
   toObject(): t.DevCtxObject;
 };
-
-type O = Record<string, unknown>;
-
-type Id = string;
-type SpecId = Id;
-type Color = string | number;
-type IgnoredResponse = any | Promise<any>;
 
 export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type DevPropDisplay = 'flex' | 'grid' | undefined;
@@ -32,7 +31,6 @@ export type DevCtx = {
   readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
-  reset(): Promise<t.DevInfo>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
 };
 

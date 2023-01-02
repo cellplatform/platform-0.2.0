@@ -46,11 +46,6 @@ export const Context = {
         return res.info ?? (await events.info.get());
       },
 
-      async reset() {
-        const res = await events.reset.fire();
-        return res.info ?? (await events.info.get());
-      },
-
       async state<T extends O>(initial: T) {
         const info = await events.info.get();
         return ContextState<T>({
