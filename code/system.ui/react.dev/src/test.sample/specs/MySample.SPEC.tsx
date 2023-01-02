@@ -1,6 +1,6 @@
 import { t, Color, css, Spec } from '../common';
 import { MySample } from './MySample';
-import { SampleDevTools } from '../sample.ui.DevTools';
+import { DevToolsSample } from '../sample.ui.DevTools';
 import { DevBus } from '../../logic.Bus';
 
 let _count = 0;
@@ -84,7 +84,7 @@ export default Spec.describe('MySample', (e) => {
   );
 
   e.it('SampleDevTools', async (e) => {
-    const ctx = await SampleDevTools.button(e, (e) => {
+    const ctx = await DevToolsSample.button(e, (e) => {
       console.log('Inside Spec - BUTTON', e);
       e.onClick(() => {});
     });
@@ -93,7 +93,7 @@ export default Spec.describe('MySample', (e) => {
     console.log('button', ctx);
   });
 
-  e.it.skip('info', async (e) => {
+  e.it('info', async (e) => {
     Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => {
