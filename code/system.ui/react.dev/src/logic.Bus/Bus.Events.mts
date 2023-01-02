@@ -214,6 +214,19 @@ export function BusEvents(args: {
   };
 
   /**
+   * Redraw
+   */
+  const redraw: t.DevEvents['redraw'] = {
+    $: rx.payload<t.DevRedrawEvent>($, 'sys.dev/redraw'),
+    fire(renderer) {
+      bus.fire({
+        type: 'sys.dev/redraw',
+        payload: { instance, renderer },
+      });
+    },
+  };
+
+  /**
    * API.
    */
   const events: t.DevEvents = {
@@ -231,6 +244,7 @@ export function BusEvents(args: {
     reset,
     state,
     props,
+    redraw,
   };
 
   return events;
