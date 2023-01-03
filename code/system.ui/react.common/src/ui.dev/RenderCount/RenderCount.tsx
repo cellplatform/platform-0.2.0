@@ -4,22 +4,20 @@ import { COLORS, css, t } from '../common';
 type N = number | null;
 
 export type RenderCountProps = {
-  absolute?: [N, N, N, N];
+  absolute?: [N, N] | [N, N, N, N];
   style?: t.CssValue;
 };
 
 export const RenderCount: React.FC<RenderCountProps> = (props) => {
   const countRef = useRef(0);
-
   countRef.current++;
-  const text = `render-${countRef.current}`;
 
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      Absolute: props.absolute ?? [3, 4, null, null],
+      Absolute: Wrangle.absolute(props.absolute),
       pointerEvents: 'none',
       color: COLORS.DARK,
       fontSize: 11,
@@ -27,5 +25,17 @@ export const RenderCount: React.FC<RenderCountProps> = (props) => {
     }),
   };
 
+  const text = `render-${countRef.current}`;
   return <div {...css(styles.base, props.style)}>{text}</div>;
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  absolute(input: RenderCountProps['absolute']) {
+    if (!input || !Array.isArray(input)) return [3, 4, null, null];
+    if (input.length === 2) return [input[0], input[1], null, null];
+    return input.slice(0, 3);
+  },
 };
