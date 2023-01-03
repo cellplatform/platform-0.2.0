@@ -17,6 +17,13 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const mouse = useMouseState();
 
   /**
+   * [Handlers]
+   */
+  const onClick = () => {
+    props.onClick?.({ ctx });
+  };
+
+  /**
    * [Render]
    */
   const styles = {
@@ -46,11 +53,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <div
-      {...css(styles.base, props.style)}
-      {...mouse.handlers}
-      onClick={() => props.onClick?.({ ctx })}
-    >
+    <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={onClick}>
       <ButtonIcon isDown={mouse.isDown} isOver={mouse.isOver} style={styles.icon} />
       <div {...styles.body}>
         {label}
