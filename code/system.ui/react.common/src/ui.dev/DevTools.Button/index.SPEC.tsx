@@ -7,9 +7,16 @@ export default Spec.describe('Button', (e) => {
     ctx.component
       .display('grid')
       .size(250, undefined)
-      .render(() => {
+      .render((e) => {
         const right = <div>123</div>;
-        return <Button ctx={ctx} label={'My Button'} right={right} />;
+        return (
+          <Button
+            ctx={ctx}
+            label={'My Button'}
+            right={right}
+            onClick={(e) => console.info(`⚡️ onClick:`, e)}
+          />
+        );
       });
   });
 });

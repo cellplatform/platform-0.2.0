@@ -4,4 +4,5 @@ export { Specs } from './test.ui/entry.Specs.mjs';
 export { Icon } from './ui/Icon';
 export { Spinner } from './ui/Spinner';
 export { Center } from './ui/Center';
-export { RenderCount } from './ui/RenderCount';
+
+export { RenderCount } from './ui.dev/RenderCount';

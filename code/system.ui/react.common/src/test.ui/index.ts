@@ -8,3 +8,4 @@ export { Dev, Spec } from 'sys.ui.react.dev';
  * @local
  */
 export * from '../common';
+export { RenderCount } from '../ui.dev/RenderCount';
