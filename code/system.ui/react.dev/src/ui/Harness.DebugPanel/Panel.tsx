@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { Color, css, t } from '../common';
 import { DebugPanelMain } from './Panel.Main';
 
 export type DebugPanelProps = {
@@ -17,6 +17,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       flex: 1,
       overflow: 'hidden',
       backgroundColor: 'rgba(255, 0, 0, 0.01)' /* RED */,
+      border: `dashed 1px ${Color.format(-0.1)}`,
     }),
     body: css({}),
   };
