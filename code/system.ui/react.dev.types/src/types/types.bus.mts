@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import { t } from './common';
 
 type Id = string;
 type SpecId = Id;

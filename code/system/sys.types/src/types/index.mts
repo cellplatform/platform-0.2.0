@@ -1,3 +1,4 @@
+export * from './types.mjs';
 export * from './types.dispose.mjs';
 export * from './types.dom.mjs';
 export * from './types.event.mjs';
