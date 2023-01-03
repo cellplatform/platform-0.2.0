@@ -1,6 +1,5 @@
 import { Color, css, t, useCurrentState, useRedraw } from '../common';
 import { Wrangle } from './Wrangle.mjs';
-import { RenderCount } from '../RenderCount';
 
 export type HarnessHostComponentProps = {
   instance: t.DevInstance;
@@ -46,7 +45,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderer.fn({ state })}
+        {renderer.fn({ id: renderer.id, state })}
       </div>
     </div>
   );

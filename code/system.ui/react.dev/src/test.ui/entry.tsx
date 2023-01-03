@@ -1,5 +1,6 @@
 import 'symbol-observable';
 
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
 import { SelfDevSpecs, SampleSpecs } from './entry.Specs.mjs';
@@ -29,10 +30,10 @@ const isDev = params.has('dev') || params.has('d');
      */
     const { Dev } = await import('../index.mjs');
     const el = await Dev.render(Pkg, Specs);
-    root.render(el);
+    root.render(<StrictMode>{el}</StrictMode>);
   } else {
     const { MySample } = await import('../test.sample/specs/MySample');
     const el = <MySample style={{ Absolute: 0 }} />;
-    root.render(el);
+    root.render(<StrictMode>{el}</StrictMode>);
   }
 })();

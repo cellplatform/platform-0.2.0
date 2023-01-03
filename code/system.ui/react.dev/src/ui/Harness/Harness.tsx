@@ -1,5 +1,3 @@
-import { StrictMode } from 'react';
-
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { DebugPanel } from '../Harness.DebugPanel';
@@ -48,15 +46,13 @@ export const Harness: React.FC<HarnessProps> = (props) => {
   };
 
   return (
-    <StrictMode>
-      <div {...css(styles.reset, styles.base, props.style)}>
-        <div {...styles.left}>
-          <HarnessHost instance={instance} />
-        </div>
-        <div {...styles.right}>
-          <DebugPanel instance={instance} />
-        </div>
+    <div {...css(styles.reset, styles.base, props.style)}>
+      <div {...styles.left}>
+        <HarnessHost instance={instance} />
       </div>
-    </StrictMode>
+      <div {...styles.right}>
+        <DebugPanel instance={instance} />
+      </div>
+    </div>
   );
 };

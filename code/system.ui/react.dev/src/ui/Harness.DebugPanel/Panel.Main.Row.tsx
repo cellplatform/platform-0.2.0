@@ -22,5 +22,5 @@ export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
     }),
   };
 
-  return <div {...styles.base}>{renderer.fn({ state })}</div>;
+  return <div {...styles.base}>{renderer.fn({ id: renderer.id, state })}</div>;
 };

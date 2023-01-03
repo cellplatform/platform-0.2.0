@@ -1,6 +1,7 @@
 import { t } from './common';
 
 type Id = string;
+type RendererId = Id;
 type Color = string | number;
 type O = Record<string, unknown>;
 
@@ -10,14 +11,14 @@ type O = Record<string, unknown>;
 export type DevRenderer<T extends O = O> = (
   args: DevRendererArgs<T>,
 ) => JSX.Element | undefined | null;
-export type DevRendererArgs<T extends O = O> = { state: T };
+export type DevRendererArgs<T extends O = O> = { id: RendererId; state: T };
 
 /**
  * Response to the assignment of a renderer that provides
  * hooks for re-drawing the component.
  */
 export type DevRenderRef = { id: Id; redraw(): void };
-export type DevRendererRef<T extends O = O> = { id: Id; fn: DevRenderer<T> };
+export type DevRendererRef<T extends O = O> = { id: RendererId; fn: DevRenderer<T> };
 
 /**
  * Rendering state produced by the props.
