@@ -16,9 +16,7 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
               ctx={ctx}
               style={{ flex: 1 }}
               label={'My Button'}
-              onClick={() => {
-                console.info('init/onClick', e);
-              }}
+              onClick={() => console.info('init/onClick', e)}
             />
           );
         });
