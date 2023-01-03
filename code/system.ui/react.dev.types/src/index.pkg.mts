@@ -13,7 +13,6 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.dev.types',
   version: '0.0.0',
   dependencies: {
-    'sys.types': '0.0.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
