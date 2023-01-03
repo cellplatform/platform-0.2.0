@@ -1,6 +1,6 @@
 import { t, Color, css, Spec } from '../common';
 import { MySample } from './MySample';
-import { DevToolsSample } from '../sample.ui.DevTools';
+import { DevToolsSample } from '../sample.DevTools';
 import { DevBus } from '../../logic.Bus';
 
 let _renderCount = 0;
