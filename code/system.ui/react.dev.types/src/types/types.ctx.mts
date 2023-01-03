@@ -1,9 +1,9 @@
 import { t } from './common';
 
-type O = Record<string, unknown>;
 type Id = string;
 type SpecId = Id;
 type Color = string | number;
+type O = Record<string, unknown>;
 
 /**
  * Context wrapper that manages a {ctx} object passed
@@ -48,7 +48,7 @@ export type DevCtxState<T extends O> = {
 export type DevCtxObject = {
   readonly id: Id;
   readonly instance: t.DevInstance;
-  readonly props: DevRenderProps;
+  readonly props: t.DevRenderProps;
   readonly run: { count: number; is: DevCtxIs };
 };
 
@@ -57,7 +57,7 @@ export type DevCtxComponent = {
   backgroundColor(value?: Color): DevCtxComponent;
   size(width: number | undefined, height: number | undefined): DevCtxComponent;
   size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
-  render<T extends O = O>(fn: DevRenderer<T>): DevCtxComponent;
+  render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
 };
 
 export type DevCtxHost = {
@@ -65,57 +65,5 @@ export type DevCtxHost = {
 };
 
 export type DevCtxDebug = {
-  render<T extends O = O>(fn: DevRenderer<T>): DevRenderRef;
+  render<T extends O = O>(fn: t.DevRenderer<T>): t.DevRenderRef;
 };
-
-/**
- * Rendering state produced by the props.
- */
-export type DevRenderProps = {
-  component: DevRenderPropsComponent;
-  host: DevRenderPropsHost;
-  debug: DevRenderPropsDebug;
-};
-
-export type DevRenderPropsComponent = {
-  renderer?: DevRendererRef<any>;
-  size?: DevRenderSize;
-  display?: t.DevPropDisplay;
-  backgroundColor?: Color;
-};
-
-export type DevRenderPropsHost = {
-  backgroundColor?: Color;
-};
-
-export type DevRenderPropsDebug = {
-  main: { renderers: DevRendererRef<any>[] };
-};
-
-export type DevRenderSize = DevRenderSizeCenter | DevRenderSizeFill;
-export type DevRenderSizeCenter = {
-  mode: 'center';
-  width?: number;
-  height?: number;
-};
-export type DevRenderSizeFill = {
-  mode: 'fill';
-  x: boolean;
-  y: boolean;
-  margin: t.Margin;
-};
-
-/**
- * Function that returns a renderable element.
- */
-export type DevRenderer<T extends O = O> = (
-  args: DevRendererArgs<T>,
-) => JSX.Element | undefined | null;
-export type DevRendererArgs<T extends O = O> = { state: T };
-
-/**
- * Response to the assignment of a renderer that provides
- * hooks for re-drawing the component.
- */
-export type DevRenderRef = { id: Id; redraw(): void };
-export type DevRendererRef<T extends O = O> = { id: Id; fn: DevRenderer<T> };
