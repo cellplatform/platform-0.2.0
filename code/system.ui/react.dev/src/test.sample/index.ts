@@ -1,2 +1,2 @@
 export * from './specs';
-export * from './sample.ui.DevTools';
+export * from './sample.DevTools';

@@ -1,6 +1,6 @@
 import { t, Color, css, Spec } from '../common';
 import { MySample } from './MySample';
-import { DevToolsSample } from '../sample.DevTools';
+import { SampleDevTools as DevTools } from '../sample.DevTools';
 import { DevBus } from '../../logic.Bus';
 
 let _renderCount = 0;
@@ -83,7 +83,9 @@ export default Spec.describe('MySample', (e) => {
   );
 
   e.it('SampleDevTools', async (e) => {
-    const ctx = await DevToolsSample.button(e, (e) => {
+    const dev = DevTools(e);
+
+    const ctx = await dev.button((e) => {
       console.log('Inside Spec - BUTTON', e);
       e.onClick(() => {});
     });

@@ -12,8 +12,6 @@ export type ButtonProps = {
   onClick?: ButtonSampleClickHandler;
 };
 
-let _renderCount = 0;
-
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
   const { ctx, label = 'Unnamed' } = props;
 

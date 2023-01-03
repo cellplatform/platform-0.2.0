@@ -1,6 +1,8 @@
 import { Spec } from '../../test.ui';
 import { ButtonSample } from '.';
-import { DevToolsSample as DevTools } from './s.DevTools';
+import { SampleDevTools as DevTools } from './s.DevTools';
+
+let _count = 0;
 
 export default Spec.describe('sys.dev.sample.Button', (e) => {
   e.it('init', (e) =>
@@ -24,7 +26,9 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
   );
 
   e.it('Buttons', (e) => {
-    DevTools.button(e, (btn) => {
+    const dev = DevTools(e);
+
+    dev.button((btn) => {
       btn.label('change state').onClick(async (e) => {
         type T = { count: number };
         const state = await e.ctx.state<T>({ count: 0 });
@@ -38,7 +42,7 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
       });
     });
 
-    DevTools.button(e, (btn) => {
+    dev.button((btn) => {
       btn.label('change label').onClick(async (e) => {
         _count++;
         btn.label(`hello-${_count}`);
@@ -46,5 +50,3 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
     });
   });
 });
-
-let _count = 0;

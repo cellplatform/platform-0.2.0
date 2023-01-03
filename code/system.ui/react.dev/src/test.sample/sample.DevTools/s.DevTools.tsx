@@ -15,42 +15,41 @@ type ButtonHandlerArgs = {
  *    low-level ciruclar dependencies where the `sys.ui.dev` module
  *    becomes impossible not to bundle with all other components.
  */
-export const DevToolsSample = {
-  /**
-   * Render an user-invokable button.
-   */
-  button(input: t.DevCtxInput, fn?: ButtonHandler) {
-    return Spec.once(input, (ctx) => {
-      const clickHandlers: ButtonSampleClickHandler[] = [];
+export const SampleDevTools = (input: t.DevCtxInput) => {
+  return {
+    button(fn?: ButtonHandler) {
+      return Spec.once(input, (ctx) => {
+        const clickHandlers: ButtonSampleClickHandler[] = [];
 
-      const props = {
-        label: '',
-      };
+        const props = {
+          label: '',
+        };
 
-      const args: ButtonHandlerArgs = {
-        ctx,
-        label(value) {
-          props.label = value;
-          ref.redraw();
-          return args;
-        },
-        onClick(handler) {
-          clickHandlers.push(handler);
-          return args;
-        },
-      };
+        const args: ButtonHandlerArgs = {
+          ctx,
+          label(value) {
+            props.label = value;
+            ref.redraw();
+            return args;
+          },
+          onClick(handler) {
+            clickHandlers.push(handler);
+            return args;
+          },
+        };
 
-      const ref = ctx.debug.render((e) => {
-        return (
-          <ButtonSample
-            ctx={ctx}
-            label={props.label}
-            onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
-          />
-        );
+        const ref = ctx.debug.render((e) => {
+          return (
+            <ButtonSample
+              ctx={ctx}
+              label={props.label}
+              onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+            />
+          );
+        });
+
+        fn?.(args);
       });
-
-      fn?.(args);
-    });
-  },
+    },
+  };
 };
