@@ -32,7 +32,7 @@ const isDev = params.has('dev') || params.has('d');
     const el = await Dev.render(Pkg, Specs);
     root.render(<StrictMode>{el}</StrictMode>);
   } else {
-    const { MySample } = await import('../test.sample/specs/MySample');
+    const { MySample } = await import('../test.ui/sample.specs/MySample');
     const el = <MySample style={{ Absolute: 0 }} />;
     root.render(<StrictMode>{el}</StrictMode>);
   }

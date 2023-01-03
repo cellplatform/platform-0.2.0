@@ -1,4 +1,4 @@
-import { Spec } from '../../test.ui';
+import { Spec } from '../common';
 import { ButtonSample } from '.';
 import { SampleDevTools as DevTools } from './s.DevTools';
 

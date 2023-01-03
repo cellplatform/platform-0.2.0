@@ -5,7 +5,7 @@ import { describe, expect, it } from '../../test';
 
 describe('<Dev.Harness>', () => {
   it('root: DevHarness', async () => {
-    const spec = import('../../test.sample/specs.unit/Sample-1.SPEC');
+    const spec = import('../../test.ui/sample.specs.unit/Sample-1.SPEC');
     render(<Harness spec={spec} />);
 
     await waitFor(() => {
