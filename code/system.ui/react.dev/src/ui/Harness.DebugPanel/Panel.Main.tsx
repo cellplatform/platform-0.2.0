@@ -1,12 +1,12 @@
 import { css, t, useCurrentState } from '../common';
-import { DebugColumnMainRow as Row } from './Column.Main.Row';
+import { DebugPanelMainRow as Row } from './Panel.Main.Row';
 
-export type DebugColumnMainProps = {
+export type DebugPanelMainProps = {
   instance: t.DevInstance;
   style?: t.CssValue;
 };
 
-export const DebugColumnMain: React.FC<DebugColumnMainProps> = (props) => {
+export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });

@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
-import { HarnessDebugColumn } from '../Harness.DebugColumn';
+import { DebugPanel } from '../Harness.DebugPanel';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
@@ -55,7 +55,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
           <HarnessHost instance={instance} />
         </div>
         <div {...styles.right}>
-          <HarnessDebugColumn instance={instance} />
+          <DebugPanel instance={instance} />
         </div>
       </div>
     </StrictMode>

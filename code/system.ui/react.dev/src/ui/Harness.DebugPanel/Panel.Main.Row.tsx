@@ -2,13 +2,13 @@ import { css, t, useRedraw } from '../common';
 
 type O = Record<string, unknown>;
 
-export type DebugColumnMainRowProps = {
+export type DebugPanelMainRow = {
   instance: t.DevInstance;
   renderer: t.DevRendererRef;
   state?: O;
 };
 
-export const DebugColumnMainRow: React.FC<DebugColumnMainRowProps> = (props) => {
+export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
   const { instance, renderer, state = {} } = props;
   useRedraw(instance, [renderer]);
 
