@@ -6,12 +6,11 @@ export type HarnessHostComponentProps = {
   instance: t.DevInstance;
   border: string;
   renderProps?: t.DevRenderProps;
-  renderCount?: boolean;
   style?: t.CssValue;
 };
 
 export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
-  const { instance, renderCount = true } = props;
+  const { instance } = props;
   const component = props.renderProps?.component;
   const renderer = component?.renderer;
 
@@ -49,7 +48,6 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
       <div {...styles.container} className={'ComponentHost'}>
         {renderer.fn({ state })}
       </div>
-      {renderCount && <RenderCount absolute={[-17, 3, null, null]} />}
     </div>
   );
 };
