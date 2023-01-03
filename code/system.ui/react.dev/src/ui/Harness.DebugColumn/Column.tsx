@@ -16,7 +16,7 @@ export const HarnessDebugColumn: React.FC<HarnessDebugColumnProps> = (props) => 
     base: css({
       flex: 1,
       overflow: 'hidden',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      backgroundColor: 'rgba(255, 0, 0, 0.01)' /* RED */,
     }),
     body: css({}),
   };
