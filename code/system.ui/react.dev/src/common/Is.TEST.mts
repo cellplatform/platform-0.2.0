@@ -1,6 +1,6 @@
 import { DevBus } from '../logic.Bus';
 import { Context } from '../logic.Ctx';
-import { Spec } from '../Spec';
+import { Spec } from '../logic.Spec';
 import { describe, expect, it, rx, t } from '../test';
 import { Is } from './Is.mjs';
 
