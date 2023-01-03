@@ -1,1 +1,5 @@
-export const DevTools = {};
+export const DevTools = () => {
+  const DevTools = {};
+
+  return DevTools;
+};
