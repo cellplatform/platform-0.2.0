@@ -107,11 +107,17 @@ Ideas, history, context:
 <p>&nbsp;</p>
 
 ## Human Systems 
-(aka. "all of us"). Social/relational networks and people, across scales. "People" not "users."
+(aka. "all of us"). Social/relational networks and people, across scales. "People" not "users." 
 
 <p>&nbsp;</p>
 
 ![group-scape](https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png)
+
+<p>&nbsp;</p>
+
+Identity is not a simple reductive thing...we, each of us, inhabit many contexturally dependent and diverse identities.  
+“I am large, I contain multitudes” - [1892, Walt Whitman](https://en.wikipedia.org/wiki/Song_of_Myself)  
+
 
 <p>&nbsp;</p>
 
