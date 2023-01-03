@@ -12,7 +12,7 @@ export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: Chan
   let _revision: Revision = { number: 0, message: 'initial' };
   let _current: t.DevInfo = DEFAULT.info();
 
-  _current.instance.context = Id.ctx.create();
+  _current.instance.session = Id.ctx.create();
   _current.instance.bus = rx.bus.instance(args.instance.bus);
 
   /**

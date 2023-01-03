@@ -91,7 +91,7 @@ export function BusController(args: {
     const { tx } = e;
 
     await state.change('reset', (draft) => {
-      draft.instance.context = Id.ctx.create();
+      draft.instance.session = Id.ctx.create();
       Ctx.resetInfo(draft);
     });
     await Ctx.current();

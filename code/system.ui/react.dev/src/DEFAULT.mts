@@ -11,7 +11,7 @@ export const DEFAULT = {
 
   info(): t.DevInfo {
     return {
-      instance: { kind: 'dev:harness', context: '', bus: '' },
+      instance: { kind: 'dev:harness', session: '', bus: '' },
       render: {},
       run: { count: 0 },
     };

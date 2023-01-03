@@ -4,7 +4,7 @@ type Id = string;
 type O = Record<string, unknown>;
 
 export type DevInfo = {
-  instance: { kind: 'dev:harness'; context: Id; bus: Id };
+  instance: { kind: 'dev:harness'; session: Id; bus: Id };
   spec?: t.TestSuiteModel;
   render: { state?: O; props?: t.DevRenderProps };
   run: { count: number; results?: t.TestSuiteRunResponse };

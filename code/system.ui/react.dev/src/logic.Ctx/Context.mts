@@ -14,13 +14,13 @@ export const Context = {
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
 
-    const Local = {
+    const Session = {
       id: '',
       count: 0,
     };
 
     const toObject = (): t.DevCtxObject => {
-      const { id, count } = Local;
+      const { id, count } = Session;
       const is = ctx.is;
       return {
         id,
@@ -35,7 +35,7 @@ export const Context = {
       toObject,
 
       get is() {
-        const initial = Local.count === 0;
+        const initial = Session.count === 0;
         return { initial };
       },
 
@@ -71,8 +71,8 @@ export const Context = {
 
       async refresh() {
         const info = await events.info.get();
-        Local.id = info.instance.context;
-        Local.count = info.run.count ?? 0;
+        Session.id = info.instance.session;
+        Session.count = info.run.count ?? 0;
         return api;
       },
 

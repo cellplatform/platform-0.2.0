@@ -54,7 +54,7 @@ describe('DevBus', (e) => {
 
         expect(info.instance.kind).to.eql('dev:harness');
         expect(info.instance.bus).to.match(/^bus\./);
-        exepctSessionId(info.instance.context);
+        exepctSessionId(info.instance.session);
 
         events.dispose();
       });
@@ -124,7 +124,7 @@ describe('DevBus', (e) => {
       it('render context changes between load/reset', async () => {
         const { events } = await TestSample.create();
 
-        const getId = async () => (await events.info.get()).instance.context;
+        const getId = async () => (await events.info.get()).instance.session;
 
         const id1 = await getId();
 
@@ -248,7 +248,7 @@ describe('DevBus', (e) => {
         await events.run.fire({ only: test1?.id });
 
         const info2 = await events.info.get();
-        expect(info2.instance.context).to.eql(info1.instance.context);
+        expect(info2.instance.session).to.eql(info1.instance.session);
         expect(info2.render.props).to.exist;
         expect(info2.run.count).to.eql(1);
         expect(sample.log.count).to.eql(1);
@@ -262,7 +262,7 @@ describe('DevBus', (e) => {
          */
         await events.run.fire({ only: [test2?.id] as string[] });
         const info3 = await events.info.get();
-        expect(info3.instance.context).to.eql(info2.instance.context);
+        expect(info3.instance.session).to.eql(info2.instance.session);
         expect(info3.run.count).to.eql(2);
         expect(sample.log.count).to.eql(1);
         expect(sample.log.items[0].args.description).to.eql('foo-1');
@@ -275,7 +275,7 @@ describe('DevBus', (e) => {
          */
         await events.run.fire({});
         const info4 = await events.info.get();
-        expect(info4.instance.context).to.eql(info3.instance.context); // NB: No change to the context (instance/state).
+        expect(info4.instance.session).to.eql(info3.instance.session); // NB: No change to the context (instance/state).
         expect(info4.run.count).to.eql(3);
         expect(sample.log.count).to.eql(3);
         expect(sample.log.items.map((e) => e.args.description)).to.eql(['init', 'foo-1', 'foo-2']);
@@ -283,7 +283,7 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('reset (context/state)', async () => {
+      it('reset (session context/state)', async () => {
         const { events } = await TestSample.preloaded();
 
         /**
@@ -294,13 +294,13 @@ describe('DevBus', (e) => {
 
         await events.run.fire({});
         const info2 = await events.info.get();
-        expect(info2.instance.context).to.eql(info1.instance.context); // NB: No change to the context (instance/state).
+        expect(info2.instance.session).to.eql(info1.instance.session); // NB: No change to the context (instance/state).
 
         events.reset.fire();
 
         // NB: instances changed.
         const info3 = await events.info.get();
-        expect(info3.instance.context).to.not.eql(info2.instance.context); // NB: New session ID created.
+        expect(info3.instance.session).to.not.eql(info2.instance.session); // NB: New session ID created.
 
         events.dispose();
       });

@@ -38,7 +38,7 @@ describe('Context', () => {
 
       expect(obj).to.eql(context.ctx.toObject());
       expect(obj).to.not.equal(context.ctx.toObject());
-      expect(obj.id).to.eql(info.instance.context);
+      expect(obj.id).to.eql(info.instance.session);
       expect(obj.instance).to.equal(context.instance);
 
       dispose();
