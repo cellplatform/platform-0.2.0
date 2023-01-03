@@ -77,7 +77,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
         <div {...styles.icon.image} />
       </div>
       <div {...styles.body}>{label}</div>
-      <RenderCount absolute={[3, 4, null, null]} />
+      <RenderCount />
     </div>
   );
 };

@@ -5,10 +5,12 @@ type N = number | null;
 
 export type RenderCountProps = {
   absolute?: [N, N] | [N, N, N, N];
+  prefix?: string;
   style?: t.CssValue;
 };
 
 export const RenderCount: React.FC<RenderCountProps> = (props) => {
+  const { prefix = 'render-' } = props;
   const countRef = useRef(0);
   countRef.current++;
 
@@ -25,13 +27,14 @@ export const RenderCount: React.FC<RenderCountProps> = (props) => {
     }),
   };
 
-  const text = `render-${countRef.current}`;
+  const text = `${prefix}${countRef.current}`;
   return <div {...css(styles.base, props.style)}>{text}</div>;
 };
 
 /**
- * Helpers
+ * [Helpers]
  */
+
 const Wrangle = {
   absolute(input: RenderCountProps['absolute']) {
     if (!input || !Array.isArray(input)) return [3, 4, null, null];

@@ -1,4 +1,4 @@
-import { Spec, t } from '../common';
+import { Spec, t, R } from '../common';
 import { ButtonSample, ButtonSampleClickHandler } from './s.ui.Button';
 
 type ButtonHandler = (e: ButtonHandlerArgs) => t.IgnoredResponse;
@@ -21,46 +21,48 @@ type ButtonHandlerArgs = {
  *    where the `sys.ui.dev` module becomes impossible not to bundle
  *    with all other components.
  */
-export const SampleDevTools = (input: t.DevCtxInput) => {
-  const DevTools = {
-    /**
-     * A simple clickable text button implementation.
-     */
-    button(fn?: ButtonHandler) {
-      return Spec.once(input, (ctx) => {
-        const clickHandlers: ButtonSampleClickHandler[] = [];
+export const DevTools = {
+  curry(input: t.DevCtxInput) {
+    return {
+      button: R.partial(DevTools.button, [input]),
+    };
+  },
 
-        const props = {
-          label: '',
-        };
+  /**
+   * A simple clickable text button implementation.
+   */
+  button(input: t.DevCtxInput, fn?: ButtonHandler) {
+    return Spec.once(input, (ctx) => {
+      const clickHandlers: ButtonSampleClickHandler[] = [];
 
-        const args: ButtonHandlerArgs = {
-          ctx,
-          label(value) {
-            props.label = value;
-            ref.redraw();
-            return args;
-          },
-          onClick(handler) {
-            clickHandlers.push(handler);
-            return args;
-          },
-        };
+      const props = {
+        label: '',
+      };
 
-        const ref = ctx.debug.render((e) => {
-          return (
-            <ButtonSample
-              ctx={ctx}
-              label={props.label}
-              onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
-            />
-          );
-        });
+      const args: ButtonHandlerArgs = {
+        ctx,
+        label(value) {
+          props.label = value;
+          ref.redraw();
+          return args;
+        },
+        onClick(handler) {
+          clickHandlers.push(handler);
+          return args;
+        },
+      };
 
-        fn?.(args);
+      const ref = ctx.debug.render((e) => {
+        return (
+          <ButtonSample
+            ctx={ctx}
+            label={props.label}
+            onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+          />
+        );
       });
-    },
-  };
 
-  return DevTools;
+      fn?.(args);
+    });
+  },
 };

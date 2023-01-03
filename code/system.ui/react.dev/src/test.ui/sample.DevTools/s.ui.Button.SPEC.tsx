@@ -1,20 +1,19 @@
-import { Spec } from '../common';
 import { ButtonSample } from '.';
-import { SampleDevTools as DevTools } from './s.DevTools';
+import { Spec } from '../common';
+import { DevTools } from './s.DevTools';
 
 let _count = 0;
 
-export default Spec.describe('sys.dev.sample.Button', (e) => {
+export default Spec.describe('sample.DevTools.Button', (e) => {
   e.it('init', (e) =>
     Spec.once(e, (ctx) => {
       ctx.component
-        .display('flex')
+        .display('grid')
         .size(200, undefined)
         .render((e) => {
           return (
             <ButtonSample
               ctx={ctx}
-              style={{ flex: 1 }}
               label={'My Button'}
               onClick={() => console.info('init/onClick', e)}
             />
@@ -24,7 +23,7 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
   );
 
   e.it('Buttons', (e) => {
-    const dev = DevTools(e);
+    const dev = DevTools.curry(e);
 
     dev.button((btn) => {
       btn.label('change state').onClick(async (e) => {
