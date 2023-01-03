@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Color, COLORS, css, t } from '../common';
+import { RenderCount } from '../../ui/RenderCount';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
 export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx; label: string };
@@ -56,16 +57,12 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       }),
     },
     body: css({
+      position: 'relative',
       margin: 1,
       color: isOver ? COLORS.BLUE : COLORS.DARK,
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',
-    }),
-    render: css({
-      Absolute: [2, 4, null, null],
-      fontSize: 11,
-      opacity: 0.6,
     }),
   };
 
@@ -82,7 +79,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
         <div {...styles.icon.image} />
       </div>
       <div {...styles.body}>{label}</div>
-      <div {...styles.render}>render-{_renderCount++}</div>
+      <RenderCount absolute={[3, 4, null, null]} />
     </div>
   );
 };

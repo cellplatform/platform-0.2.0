@@ -30,6 +30,7 @@ export default Spec.describe('sys.dev.sample.Button', (e) => {
         const state = await e.ctx.state<T>({ count: 0 });
         await state.change((s) => s.count++);
 
+        console.log('-------------------------------------------');
         console.log('e.ctx.toObject()', e.ctx.toObject());
         console.log('e.ctx.toObject().props', e.ctx.toObject().props);
         console.log('state.current', state.current);
