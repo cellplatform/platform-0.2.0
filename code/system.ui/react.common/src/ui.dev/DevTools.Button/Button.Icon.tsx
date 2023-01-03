@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Color, COLORS, css, t } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type ButtonIconProps = {
