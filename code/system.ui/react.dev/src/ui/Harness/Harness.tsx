@@ -11,14 +11,12 @@ export type HarnessProps = {
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const controller = useBusController({
+  const { instance } = useBusController({
     bundle: props.spec,
     bus: props.instance?.bus,
     id: props.instance?.id,
     runOnLoad: true,
   });
-
-  const { instance } = controller;
 
   /**
    * [Render]
@@ -31,20 +29,21 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     }),
     base: css({
       position: 'relative',
-      Flex: 'x-stretch-stretch',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
     }),
     left: css({
-      flex: 1,
       position: 'relative',
-      display: 'flex',
+      display: 'grid',
     }),
     right: css({
       boxSizing: 'border-box',
       position: 'relative',
       display: 'flex',
       borderLeft: `solid 1px ${Color.format(-0.1)}`,
-      padding: 20, // TEMP 🐷
       width: 400,
+
+      padding: 20, // TEMP 🐷
     }),
   };
 

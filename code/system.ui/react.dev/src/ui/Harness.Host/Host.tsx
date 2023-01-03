@@ -20,7 +20,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
-      flex: 1,
       position: 'relative',
       overflow: 'hidden',
       pointerEvents: 'none',
