@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { COLORS, css, t } from '../common';
+import { COLORS, css, t, useMouseState } from '../common';
 import { ButtonIcon } from './Button.Icon';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
@@ -15,15 +14,7 @@ export type ButtonProps = {
 
 export const Button: React.FC<ButtonProps> = (props) => {
   const { ctx, label = 'Unnamed' } = props;
-
-  const [isDown, setDown] = useState(false);
-  const down = (isDown: boolean) => () => setDown(isDown);
-
-  const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => {
-    setOver(isOver);
-    if (isOver === false) setDown(false);
-  };
+  const mouse = useMouseState();
 
   /**
    * [Render]
@@ -36,7 +27,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
       color: COLORS.DARK,
       fontSize: 14,
 
-      transform: `translateY(${isDown ? 1 : 0}px)`,
+      transform: `translateY(${mouse.isDown ? 1 : 0}px)`,
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
       columnGap: 4,
@@ -46,7 +37,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
     }),
     body: css({
       position: 'relative',
-      color: isOver ? COLORS.BLUE : COLORS.DARK,
+      color: mouse.isOver ? COLORS.BLUE : COLORS.DARK,
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',
@@ -55,15 +46,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <div
-      {...css(styles.base, props.style)}
-      onClick={() => props.onClick?.({ ctx })}
-      onMouseDown={down(true)}
-      onMouseUp={down(false)}
-      onMouseEnter={over(true)}
-      onMouseLeave={over(false)}
-    >
-      <ButtonIcon isDown={isDown} isOver={isOver} style={styles.icon} />
+    <div {...css(styles.base, props.style)} {...mouse.on} onClick={() => props.onClick?.({ ctx })}>
+      <ButtonIcon isDown={mouse.isDown} isOver={mouse.isOver} style={styles.icon} />
       <div {...styles.body}>
         {label}
         {props.right}

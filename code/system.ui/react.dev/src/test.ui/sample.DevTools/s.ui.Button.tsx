@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Color, COLORS, css, t } from '../common';
+import { Color, COLORS, css, t, useMouseState } from '../common';
 import { RenderCount } from '../../ui/RenderCount';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
@@ -14,15 +13,7 @@ export type ButtonProps = {
 
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
   const { ctx, label = 'Unnamed' } = props;
-
-  const [isDown, setDown] = useState(false);
-  const down = (isDown: boolean) => () => setDown(isDown);
-
-  const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => {
-    setOver(isOver);
-    if (isOver === false) setDown(false);
-  };
+  const mouse = useMouseState();
 
   /**
    * [Render]
@@ -33,7 +24,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       color: COLORS.DARK,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       userSelect: 'none',
-      transform: `translateY(${isDown ? 1 : 0}px)`,
+      transform: `translateY(${mouse.isDown ? 1 : 0}px)`,
       cursor: 'pointer',
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
@@ -57,7 +48,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
     body: css({
       position: 'relative',
       margin: 1,
-      color: isOver ? COLORS.BLUE : COLORS.DARK,
+      color: mouse.isOver ? COLORS.BLUE : COLORS.DARK,
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',
@@ -67,11 +58,8 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
   return (
     <div
       {...css(styles.base, props.style)}
+      {...mouse.on}
       onClick={() => props.onClick?.({ ctx, label })}
-      onMouseDown={down(true)}
-      onMouseUp={down(false)}
-      onMouseEnter={over(true)}
-      onMouseLeave={over(false)}
     >
       <div {...styles.icon.base}>
         <div {...styles.icon.image} />
