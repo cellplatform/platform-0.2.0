@@ -15,7 +15,7 @@ export default Spec.describe('hook.useSizeObserver', (e) => {
 /**
  * Component
  */
-export const Sample = () => {
+const Sample = () => {
   const size = useSizeObserver();
   const styles = {
     base: css({ flex: 1, paddingTop: 20, paddingLeft: 40 }),
