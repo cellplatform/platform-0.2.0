@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, useCurrentState } from '../common';
+import { css, t, useCurrentState } from '../common';
+import { DebugColumnMainRow as Row } from './Column.Main.Row';
 
-export type SpecColumnMainProps = {
+export type DebugColumnMainProps = {
   instance: t.DevInstance;
   style?: t.CssValue;
 };
 
-export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
+export const DebugColumnMain: React.FC<DebugColumnMainProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
@@ -23,17 +23,10 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
-    item: css({
-      position: 'relative',
-    }),
   };
 
-  const elements = renderers.filter(Boolean).map((renderer, i) => {
-    return (
-      <div key={i} {...styles.item}>
-        {renderer({ state })}
-      </div>
-    );
+  const elements = renderers.filter(Boolean).map((renderer) => {
+    return <Row key={renderer.id} instance={instance} renderer={renderer} state={state} />;
   });
 
   return <div {...css(styles.base, props.style)}>{elements}</div>;
@@ -42,7 +35,6 @@ export const SpecColumnMain: React.FC<SpecColumnMainProps> = (props) => {
 /**
  * [Helpers]
  */
-
 const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
 const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
   if (tx(prev) !== tx(next)) return false;

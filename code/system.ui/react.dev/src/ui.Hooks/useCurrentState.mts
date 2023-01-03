@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { filter, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { DevBus, rx, t } from './common';
 
@@ -25,7 +25,6 @@ export function useCurrentState(
     const events = DevBus.Events({ instance });
 
     events.info.changed$
-
       .pipe(
         filter((e) => (options.filter ? options.filter(e) : true)),
         distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)),

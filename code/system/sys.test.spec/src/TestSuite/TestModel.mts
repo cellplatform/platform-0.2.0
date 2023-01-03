@@ -1,5 +1,4 @@
-import { DEFAULT, Delete, slug, t, Time, R } from './common';
-import { Is } from '../TestSuite.helpers';
+import { maybeWait, DEFAULT, Delete, slug, t, Time, R } from './common';
 
 /**
  * A single test.
@@ -63,9 +62,27 @@ export const TestModel = (args: {
       };
 
       try {
+        /**
+         * Before handler.
+         */
+        if (options.before) {
+          await maybeWait(options.before({ id, description }));
+        }
+
+        /**
+         * Test handler.
+         */
         startTimeout(response.timeout);
-        const wait = handler(args);
-        if (Is.promise(wait)) await wait;
+        await maybeWait(handler(args));
+
+        /**
+         * After handler.
+         */
+        if (options.after) {
+          const elapsed = timer.elapsed.msec;
+          await maybeWait(options.after({ id, description, elapsed }));
+        }
+
         return done();
       } catch (error: any) {
         done({ error });

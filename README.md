@@ -97,7 +97,7 @@ Ideas, history, context:
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
   "But what's interesting, is once the engineers got a hold, the visionaries went away ([timestamp](https://www.youtube.com/watch?v=cmi-AXKvx30&t=253s))"
 - [video](https://www.youtube.com/watch?v=-C-JoyNuQJs) Crockford (2011) - "JSON [as the] intersection of all modern programming languages ([timestamp](https://youtu.be/-C-JoyNuQJs?t=741))"
-- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a message, be as extremely late-bound as possible. Build everything else out of that (LISP-ey).
+- [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a "message", be as extremely late-bound as possible. Build everything else up and out of that (aka. LISP-ey).
 
 
 *NB: "object" meaning the original SmallTalk conception of "object," not the following "OOP" notions that emerged later ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
@@ -205,12 +205,12 @@ Organizing for all this is expressed within the distinct folders `/system/` and 
 
 
 
-#### Evolving Architectural Strategy
+#### Evolution and Architectural Strategy
 
 This is a general theme of the system, to think of commitments to technology choices in as abstract and forward looking a way as possible.
 Obviously to pragamaitcally achieve anything, committments to certain technologies do need to be made in any given moment.  But careful, and sustained
 attention while making these kinds of calls can also ensure the long-term time runway, where the "idea" itself remains consistent, but the implementation
-choices can be swapped out and evolved over time.  This is the ideal at least; `AND` "reality is a bitch!" and engineering tends to throw up "hard problems" on a consistent basis.  Yet, "evolution" is a messy thing, and we find spontaneosly emerging self-cleaning, self-maintaing ecosystems right across nature - so this is a feature of reality that can be coaxed (encouraged) into stable existence.
+choices can be swapped out and evolved over time.  This is the ideal at least; `AND` "reality is a bitch!" and engineering tends to throw up "gnarly problems" on an all too regular basis.  Yet, "evolution" is a messy process, and we find spontaneosly emerging self-cleaning, self-maintaing creative ecosystems right across nature - so this is a feature of reality that can totally be coaxed (encouraged) into stable forms of existence.
 
 
 <p>&nbsp;</p>
@@ -228,7 +228,7 @@ Development machine [environment setup](docs/env.setup.md) suggestions.
 
 The system (platform) lives as an "open commons" shared resource for the world. As such the core modules of the system are [open source](https://en.wikipedia.org/wiki/Open-source_software) (OSS) and all up-stream dependencies conform with transitively equivalent OSS licences.
 
-In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through considered refinement over time, will move toward the attractor of "more free" as in "individual freedoms" ([libre](https://en.wiktionary.org/wiki/libre)) free.
+In the case of this repo the baseline is the [MIT Licence](LICENSE), and when evolving the licencing strategy through considered refinement over time, will move toward the attractor of "more free" as in individual freedoms ("[libre](https://en.wiktionary.org/wiki/libre)") kind of free.
 
 To run a "licence analysis" and validate the module depenency graph against this principle run:
 

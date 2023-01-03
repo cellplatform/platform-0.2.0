@@ -1,4 +1,4 @@
-import { DEFAULT, Is, R, rx, t } from './common';
+import { Id, DEFAULT, Is, R, rx, t } from './common';
 
 type Revision = { number: number; message: string };
 
@@ -12,7 +12,7 @@ export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: Chan
   let _revision: Revision = { number: 0, message: 'initial' };
   let _current: t.DevInfo = DEFAULT.info();
 
-  _current.instance.context = DEFAULT.ctxId();
+  _current.instance.context = Id.ctx.create();
   _current.instance.bus = rx.bus.instance(args.instance.bus);
 
   /**

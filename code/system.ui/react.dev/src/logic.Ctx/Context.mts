@@ -15,19 +15,17 @@ export const Context = {
     const { dispose, dispose$ } = events;
 
     const Local = {
-      runCount: 0,
-      reset() {
-        Local.runCount = 0;
-      },
+      id: '',
+      count: 0,
     };
-    events.reset.res$.subscribe(() => Local.reset());
 
     const toObject = (): t.DevCtxObject => {
-      const count = Local.runCount;
-      const initial = ctx.initial;
+      const { id, count } = Local;
+      const is = ctx.is;
       return {
+        id,
         instance,
-        run: { count, initial },
+        run: { count, is },
         props: { ...props.current },
       };
     };
@@ -36,8 +34,9 @@ export const Context = {
       ...props.setters,
       toObject,
 
-      get initial() {
-        return Local.runCount === 0;
+      get is() {
+        const initial = Local.count === 0;
+        return { initial };
       },
 
       async run(options = {}) {
@@ -47,14 +46,12 @@ export const Context = {
         return res.info ?? (await events.info.get());
       },
 
-      async reset() {
-        const res = await events.reset.fire();
-        return res.info ?? (await events.info.get());
-      },
-
       async state<T extends O>(initial: T) {
         const info = await events.info.get();
-        return ContextState<T>({ initial: (info.render.state ?? initial) as T, events });
+        return ContextState<T>({
+          initial: (info.render.state ?? initial) as T,
+          events,
+        });
       },
     };
 
@@ -74,12 +71,13 @@ export const Context = {
 
       async refresh() {
         const info = await events.info.get();
-        Local.runCount = info.run.count ?? 0;
+        Local.id = info.instance.context;
+        Local.count = info.run.count ?? 0;
         return api;
       },
 
       async flush() {
-        if (api.disposed) throw new Error('Context has been disposed');
+        if (api.disposed) throw new Error('Cannot flush, context has been disposed');
         if (!api.pending) return api;
         await events.props.change.fire((draft) => {
           const current = props.current;
@@ -92,7 +90,7 @@ export const Context = {
       },
     };
 
-    // _ctx = createCtx();
+    await api.refresh();
     return api;
   },
 };

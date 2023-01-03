@@ -1,11 +1,12 @@
-import { Margin, t } from './common';
+import { Margin, t, Id } from './common';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export function CtxPropsComponent(props: PropArgs) {
   const api: t.DevCtxComponent = {
     render(fn) {
-      props.current().component.renderer = fn;
+      const id = Id.renderer.create();
+      props.current().component.renderer = { id, fn };
       props.changed();
       return api;
     },

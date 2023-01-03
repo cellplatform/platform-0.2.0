@@ -1,8 +1,9 @@
 import { DevBus } from '.';
-import { describe, expect, it, t, Test, TestSample } from '../test';
-import { SAMPLES } from '../test.sample/specs.unit-test';
+import { Spec } from '../index.mjs';
+import { describe, expect, it, t, Test, TestSample, Time } from '../test';
+import { SAMPLES } from '../test.sample/specs.unit';
 
-const exepctSessionId = (value: string) => expect(value).to.match(/^dev:session\.ctx\./);
+const exepctSessionId = (value: string) => expect(value).to.match(/^dev:ctx\./);
 
 describe('DevBus', (e) => {
   describe('is', (e) => {
@@ -52,8 +53,8 @@ describe('DevBus', (e) => {
         expect(info.root).to.eql(undefined);
 
         expect(info.instance.kind).to.eql('dev:harness');
-        expect(info.instance.context).to.match(/^dev:session\.ctx\./);
         expect(info.instance.bus).to.match(/^bus\./);
+        exepctSessionId(info.instance.context);
 
         events.dispose();
       });
@@ -192,24 +193,7 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('run: reset clears "run results"', async () => {
-        const { events } = await TestSample.preloaded();
-
-        const info1 = (await events.run.fire()).info;
-        expect(info1?.run.count).to.eql(1);
-        expect(info1?.run.results).to.not.eql(undefined);
-
-        await events.reset.fire();
-
-        const info2 = await events.info.get();
-        expect(info2?.run.count).to.eql(0);
-        expect(info2?.run.results).to.eql(undefined);
-        expect(info2?.render.props).to.eql(undefined);
-
-        events.dispose();
-      });
-
-      it('run: { ctx.initial } flag', async () => {
+      it('run: { ctx.isInitial } flag', async () => {
         const { Wrapper } = await SAMPLES.Sample2;
         const sample = Wrapper();
         const { events } = await TestSample.create();
@@ -218,12 +202,12 @@ describe('DevBus', (e) => {
         await events.load.fire(sample.root);
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.run.initial)).to.eql(true);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.is.initial)).to.eql(true);
 
         sample.log.reset();
 
         await events.run.fire();
-        expect(sample.log.items.every(({ ctx }) => ctx.run.initial)).to.eql(false);
+        expect(sample.log.items.every(({ ctx }) => ctx.run.is.initial)).to.eql(false);
 
         events.dispose();
       });
@@ -322,6 +306,98 @@ describe('DevBus', (e) => {
       });
     });
 
+    describe('ctx.run', () => {
+      it('ctx.run()', async () => {
+        const { events } = await TestSample.create();
+
+        const root = Spec.describe('root', (e) => {
+          e.it('foo', async (e) =>
+            Spec.once(e, (ctx) => {
+              Time.delay(10, () => ctx.run()); // NB: Simulate a "re-run" activated by say a UI click handler.
+            }),
+          );
+        });
+
+        await events.load.fire(root);
+        const res = await events.run.fire();
+        expect(res.info?.run.count).to.eql(1);
+
+        await Time.wait(30);
+        const info = await events.info.get();
+        expect(info.run.count).to.eql(2);
+
+        events.dispose();
+      });
+
+      it('ctx.run({ reset })', async () => {
+        const { events } = await TestSample.create();
+
+        const root = Spec.describe('root', (e) => {
+          e.it('foo', async (e) => {
+            Spec.once(e, (ctx) => {
+              Time.delay(10, () => ctx.run({ reset: true })); // NB: Simulate a "re-run" activated by say a UI click handler.
+            });
+          });
+        });
+
+        await events.load.fire(root);
+        await events.run.fire();
+        await events.run.fire();
+
+        const info1 = await events.info.get();
+        expect(info1?.run.count).to.eql(2);
+
+        await Time.wait(30);
+        const info2 = await events.info.get();
+        expect(info2.run.count).to.eql(1);
+
+        events.dispose();
+      });
+
+      it('ctx.isInitial', async () => {
+        const { events } = await TestSample.create();
+        const log: boolean[] = [];
+        const root = Spec.describe('root', (e) => {
+          e.it('foo', async (e) => {
+            const ctx = Spec.ctx(e);
+            log.push(ctx.is.initial);
+          });
+        });
+
+        await events.load.fire(root);
+        await events.run.fire();
+        await events.run.fire();
+        await events.run.fire();
+
+        expect(log.length).to.eql(3);
+
+        expect(log[0]).to.eql(true);
+        expect(log[1]).to.eql(false);
+        expect(log[2]).to.eql(false);
+
+        events.dispose();
+      });
+    });
+
+    describe('reset', () => {
+      it('reset clears props', async () => {
+        const { events } = await TestSample.preloaded();
+
+        const info1 = (await events.run.fire()).info;
+        expect(info1?.run.count).to.eql(1);
+        expect(info1?.run.results).to.not.eql(undefined);
+
+        await events.reset.fire();
+
+        const info2 = await events.info.get();
+        expect(info2?.run).to.eql({ count: 0 });
+        expect(info2?.run.results).to.eql(undefined);
+        expect(info2?.render.props).to.eql(undefined);
+
+        events.dispose();
+      });
+    });
+
     describe('context:state (read/write)', () => {
       type T = { msg?: string; count: number };
 
@@ -361,13 +437,24 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it.skip('state object (API)', async () => {
+      it('state object (API)', async () => {
+        type T = { count: number };
         const { events } = await TestSample.preloaded();
 
-        // const state = events.state.object()
+        const initial: T = { count: 0 };
+        const state = events.state.object(initial);
+
+        const info1 = await events.info.get();
+        expect(state.current.count).to.eql(0);
+        expect(info1.render.state).to.eql(undefined);
+
+        await state.change((draft) => draft.count++);
+
+        const info2 = await events.info.get();
+        expect(state.current.count).to.eql(1);
+        expect(info2.render.state).to.eql({ count: 1 });
 
         events.dispose();
-        //
       });
     });
 

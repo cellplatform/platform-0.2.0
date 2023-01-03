@@ -5,18 +5,20 @@ import { CtxPropsComponent } from './Ctx.Props.Component.mjs';
 import { CtxPropsDebug } from './Ctx.Props.Debug.mjs';
 import { CtxPropsHost } from './Ctx.Props.Host.mjs';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export async function CtxProps(events: t.DevEvents) {
   let _revision = 0;
   let _current = (await events.info.get()).render.props ?? DEFAULT.props();
 
-  events.props.changed$.pipe(filter((e) => e.message === 'props:write')).subscribe((e) => {
+  const CHANGED: t.DevInfoChangeMessage[] = ['props:write', 'reset'];
+  events.props.changed$.pipe(filter((e) => CHANGED.includes(e.message))).subscribe((e) => {
     _current = e.info.render.props ?? DEFAULT.props();
     _revision = 0;
   });
 
   const propArgs: PropArgs = {
+    events,
     current: () => _current,
     changed: () => _revision++,
   };

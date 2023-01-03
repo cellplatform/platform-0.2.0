@@ -1,12 +1,12 @@
 import { css, t } from '../common';
-import { SpecColumnMain } from './Column.Main';
+import { DebugColumnMain } from './Column.Main';
 
-export type HarnessSpecColumnProps = {
+export type HarnessDebugColumnProps = {
   instance: t.DevInstance;
   style?: t.CssValue;
 };
 
-export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
+export const HarnessDebugColumn: React.FC<HarnessDebugColumnProps> = (props) => {
   const { instance } = props;
 
   /**
@@ -24,7 +24,7 @@ export const HarnessSpecColumn: React.FC<HarnessSpecColumnProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <SpecColumnMain instance={instance} />
+        <DebugColumnMain instance={instance} />
       </div>
     </div>
   );

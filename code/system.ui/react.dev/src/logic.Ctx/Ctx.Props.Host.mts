@@ -1,6 +1,6 @@
 import { t } from './common';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export function CtxPropsHost(props: PropArgs) {
   const api: t.DevCtxHost = {

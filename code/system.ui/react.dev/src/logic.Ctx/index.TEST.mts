@@ -1,13 +1,13 @@
 import { Context } from '.';
-import { t, describe, expect, expectError, it, TestSample } from '../test';
+import { Id, t, describe, expect, expectError, it, TestSample } from '../test';
 
 describe('Context', () => {
   describe('lifecycle', () => {
     it('init', async () => {
       const { events, instance } = await TestSample.create();
 
-      const info1 = await events.info.get();
-      expect(info1.render.props).to.eql(undefined); // Initially no render-props data.
+      const info = await events.info.get();
+      expect(info.render.props).to.eql(undefined); // Initially no render-props data.
 
       const context = await Context.init(instance);
       expect(context.instance).to.equal(instance);
@@ -28,6 +28,20 @@ describe('Context', () => {
       dispose();
       expect(fired).to.eql(2);
       expect(context.disposed).to.eql(true);
+    });
+
+    it('toObject', async () => {
+      const { dispose, context, events } = await TestSample.context();
+
+      const obj = context.toObject();
+      const info = await events.info.get();
+
+      expect(obj).to.eql(context.ctx.toObject());
+      expect(obj).to.not.equal(context.ctx.toObject());
+      expect(obj.id).to.eql(info.instance.context);
+      expect(obj.instance).to.equal(context.instance);
+
+      dispose();
     });
   });
 
@@ -74,7 +88,7 @@ describe('Context', () => {
     it('throw: when disposed', async () => {
       const { context, dispose } = await TestSample.context();
       context.dispose();
-      await expectError(() => context.flush(), 'Context has been disposed');
+      await expectError(() => context.flush(), 'Cannot flush, context has been disposed');
       dispose();
     });
   });
@@ -96,7 +110,8 @@ describe('Context', () => {
 
       expect(component.backgroundColor).to.eql(-0.2);
       expect(component.display).to.eql('flex');
-      expect(component.renderer).to.eql(fn);
+      expect(component.renderer?.fn).to.eql(fn);
+      expect(component.renderer?.id.startsWith(Id.renderer.prefix)).to.eql(true);
       expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
       dispose();
     });
@@ -157,7 +172,8 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => undefined;
-      ctx.debug.render(fn);
+      const res = ctx.debug.render(fn);
+      expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
 
       expect(context.pending).to.eql(true);
       await context.flush();
@@ -166,7 +182,9 @@ describe('Context', () => {
       const info = await events.info.get();
       const debug = info.render.props?.debug!;
 
-      expect(debug.main.renderers).to.eql([fn]);
+      expect(debug.main.renderers.length).to.eql(1);
+      expect(debug.main.renderers[0].fn).to.eql(fn);
+      expect(debug.main.renderers[0].id).to.eql(res.id);
       dispose();
     });
   });
@@ -209,23 +227,6 @@ describe('Context', () => {
       expect(fired.length).to.eql(1);
       expect(fired[0].message).to.eql('state:write');
       expect(fired[0].info.render.state).to.eql({ count: 1 });
-
-      dispose();
-    });
-
-    it('revert to initial after reset', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
-      const state = await ctx.state<T>(initial);
-
-      await state.change((draft) => draft.count++);
-      expect(state.current).to.eql({ count: 1 });
-
-      await ctx.reset();
-
-      const info = await events.info.get();
-      expect(state.current).to.eql(initial);
-      expect(info.render.state).to.eql(undefined);
 
       dispose();
     });

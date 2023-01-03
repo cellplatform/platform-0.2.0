@@ -1,5 +1,11 @@
 import * as t from '../common/types.mjs';
 
+type O = Record<string, unknown>;
+type Id = string;
+type SpecId = Id;
+type Color = string | number;
+type IgnoredResponse = any | Promise<any>;
+
 export type DevContext = t.Disposable & {
   readonly instance: t.DevInstance;
   readonly disposed: boolean;
@@ -10,15 +16,9 @@ export type DevContext = t.Disposable & {
   toObject(): t.DevCtxObject;
 };
 
-type O = Record<string, unknown>;
-
-type Id = string;
-type SpecId = Id;
-type Color = string | number;
-type IgnoredResponse = any | Promise<any>;
-
 export type DevFillMode = 'fill' | 'fill-x' | 'fill-y';
 export type DevPropDisplay = 'flex' | 'grid' | undefined;
+export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
 
 /**
  * The context {ctx} interface passed into specs.
@@ -27,11 +27,14 @@ export type DevCtx = {
   readonly component: DevCtxComponent;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
-  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
+  readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
-  reset(): Promise<t.DevInfo>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
+};
+
+export type DevCtxIs = {
+  readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
 };
 
 export type DevCtxState<T extends O> = {
@@ -40,17 +43,18 @@ export type DevCtxState<T extends O> = {
 };
 
 export type DevCtxObject = {
-  instance: t.DevInstance;
-  props: DevRenderProps;
-  run: { count: number; initial: boolean };
+  readonly id: Id;
+  readonly instance: t.DevInstance;
+  readonly props: DevRenderProps;
+  readonly run: { count: number; is: DevCtxIs };
 };
 
 export type DevCtxComponent = {
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxComponent;
   display(value: DevPropDisplay): DevCtxComponent;
   backgroundColor(value?: Color): DevCtxComponent;
   size(width: number | undefined, height: number | undefined): DevCtxComponent;
   size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
+  render<T extends O = O>(fn: DevRenderer<T>): DevCtxComponent;
 };
 
 export type DevCtxHost = {
@@ -58,7 +62,7 @@ export type DevCtxHost = {
 };
 
 export type DevCtxDebug = {
-  render<T extends O = O>(fn: DevSubjectRenderer<T>): DevCtxDebug;
+  render<T extends O = O>(fn: DevRenderer<T>): DevRenderRef;
 };
 
 /**
@@ -71,7 +75,7 @@ export type DevRenderProps = {
 };
 
 export type DevRenderPropsComponent = {
-  renderer?: DevSubjectRenderer<any>;
+  renderer?: DevRendererRef<any>;
   size?: DevRenderSize;
   display?: t.DevPropDisplay;
   backgroundColor?: Color;
@@ -82,7 +86,7 @@ export type DevRenderPropsHost = {
 };
 
 export type DevRenderPropsDebug = {
-  main: { renderers: DevSubjectRenderer<any>[] };
+  main: { renderers: DevRendererRef<any>[] };
 };
 
 export type DevRenderSize = DevRenderSizeCenter | DevRenderSizeFill;
@@ -101,7 +105,14 @@ export type DevRenderSizeFill = {
 /**
  * Function that returns a renderable element.
  */
-export type DevSubjectRenderer<T extends O = O> = (
-  args: DevSubjectRendererArgs<T>,
-) => JSX.Element | undefined;
-export type DevSubjectRendererArgs<T extends O = O> = { state: T };
+export type DevRenderer<T extends O = O> = (
+  args: DevRendererArgs<T>,
+) => JSX.Element | undefined | null;
+export type DevRendererArgs<T extends O = O> = { state: T };
+
+/**
+ * Response to the assignment of a renderer that provides
+ * hooks for re-drawing the component.
+ */
+export type DevRenderRef = { id: Id; redraw(): void };
+export type DevRendererRef<T extends O = O> = { id: Id; fn: DevRenderer<T> };

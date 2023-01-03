@@ -2,6 +2,7 @@ type Id = string;
 type Anything = void | any;
 type Milliseconds = number;
 type Ctx = Record<string, unknown>;
+type IgnoredResponse = any | Promise<any>;
 
 export type BundleImport = TestSuiteModel | Promise<any>;
 export type TestModifier = 'skip' | 'only';
@@ -75,6 +76,8 @@ export type TestRunOptions = {
   timeout?: Milliseconds;
   excluded?: TestModifier[];
   ctx?: Ctx;
+  before?: BeforeRunTest;
+  after?: AfterRunTest;
 };
 export type TestRunResponse = {
   id: Id;
@@ -118,6 +121,8 @@ export type TestSuiteRunOptions = {
   deep?: boolean;
   ctx?: Ctx;
   only?: TestModel['id'][]; // Override: a set of spec IDs to filter on, excluding all others.
+  beforeEach?: BeforeRunTest;
+  afterEach?: AfterRunTest;
 };
 export type TestSuiteRunResponse = {
   id: Id;
@@ -127,4 +132,20 @@ export type TestSuiteRunResponse = {
   elapsed: Milliseconds;
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
+};
+
+/**
+ * Handler that runs before/after a test is run.
+ */
+export type BeforeRunTest = (e: BeforeRunTestArgs) => IgnoredResponse;
+export type BeforeRunTestArgs = {
+  id: Id;
+  description: string;
+};
+
+export type AfterRunTest = (e: AfterRunTestArgs) => IgnoredResponse;
+export type AfterRunTestArgs = {
+  id: Id;
+  description: string;
+  elapsed: Milliseconds;
 };

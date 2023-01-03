@@ -82,6 +82,11 @@ export type DevEvents = t.Disposable & {
       ): Promise<DevStateChangeRes>;
     };
   };
+  redraw: {
+    $: t.Observable<t.DevRedraw>;
+    fire(...renderers: Id[]): void;
+    component(): Promise<Id | undefined>;
+  };
 };
 
 /**
@@ -100,7 +105,8 @@ export type DevEvent =
   | DevStateChangeReqEvent
   | DevStateChangeResEvent
   | DevPropsChangeReqEvent
-  | DevPropsChangeResEvent;
+  | DevPropsChangeResEvent
+  | DevRedrawEvent;
 
 /**
  * Module info.
@@ -214,4 +220,16 @@ export type DevStateChangeRes = {
   instance: Id;
   info?: t.DevInfo;
   error?: string;
+};
+
+/**
+ * Redraw
+ */
+export type DevRedrawEvent = {
+  type: 'sys.dev/redraw';
+  payload: DevRedraw;
+};
+export type DevRedraw = {
+  instance: Id;
+  renderers: Id[];
 };

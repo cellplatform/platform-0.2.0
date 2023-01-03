@@ -1,7 +1,7 @@
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { DEFAULT, Is, rx, t, Test } from './common';
+import { DEFAULT, Is, rx, t, Test, Id } from './common';
 
 type Id = string;
 
@@ -41,10 +41,10 @@ export function BusController(args: {
     },
     async init() {
       const context = await Context.init(args.instance, { dispose$ });
-      await state.change('context:init', (draft) => Ctx.reset(draft));
+      await state.change('context:init', (draft) => Ctx.resetInfo(draft));
       return context;
     },
-    reset(draft: t.DevInfo) {
+    resetInfo(draft: t.DevInfo) {
       draft.render.props = undefined;
       draft.render.state = undefined;
       draft.run = { count: 0 };
@@ -91,8 +91,8 @@ export function BusController(args: {
     const { tx } = e;
 
     await state.change('reset', (draft) => {
-      draft.instance.context = DEFAULT.ctxId();
-      Ctx.reset(draft);
+      draft.instance.context = Id.ctx.create();
+      Ctx.resetInfo(draft);
     });
     await Ctx.current();
 

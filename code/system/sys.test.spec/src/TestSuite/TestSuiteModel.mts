@@ -45,7 +45,7 @@ export const TestSuiteModel = (args: {
   };
 
   const runSuite = (model: t.TestSuiteModel, options: t.TestSuiteRunOptions = {}) => {
-    const { deep = true, ctx } = options;
+    const { deep = true, ctx, beforeEach, afterEach } = options;
 
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
@@ -70,7 +70,9 @@ export const TestSuiteModel = (args: {
         if (options.only && !options.only.includes(test.id)) continue;
         const timeout = getTimeout();
         const excluded = Constraints.exclusionModifiers(test);
-        res.tests.push(await test.run({ timeout, excluded, ctx }));
+        const before = beforeEach;
+        const after = afterEach;
+        res.tests.push(await test.run({ timeout, excluded, ctx, before, after }));
       }
 
       if (deep && childSuites.length > 0) {

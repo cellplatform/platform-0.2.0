@@ -1,14 +1,19 @@
-import { t } from './common';
+import { t, Id } from './common';
 
-import type { PropArgs } from './common';
+import type { PropArgs } from './common.types';
 
 export function CtxPropsDebug(props: PropArgs) {
+  const { events } = props;
+
   const api: t.DevCtxDebug = {
-    render(renderer) {
-      props.current().debug.main.renderers.push(renderer);
+    render(fn) {
+      const id = Id.renderer.create();
+      const redraw = () => events.redraw.fire(id);
+      props.current().debug.main.renderers.push({ id, fn });
       props.changed();
-      return api;
+      return { id, redraw };
     },
   };
+
   return api;
 }
