@@ -1,6 +1,6 @@
 import { ButtonSample } from '.';
 import { Spec } from '../common';
-import { DevTools } from './s.DevTools';
+import { DevTools } from './DevTools';
 
 let _count = 0;
 

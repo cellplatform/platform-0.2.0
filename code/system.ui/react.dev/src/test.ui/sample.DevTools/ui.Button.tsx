@@ -38,11 +38,11 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
         alignContent: 'start',
       }),
       image: css({
-        Size: 22,
+        Size: 18,
+        margin: 5,
         backgroundColor: Color.alpha(COLORS.MAGENTA, 0.2),
         border: `dashed 1px ${Color.format(-0.3)}`,
         borderRadius: 3,
-        margin: 2,
       }),
     },
     body: css({
@@ -58,7 +58,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
   return (
     <div
       {...css(styles.base, props.style)}
-      {...mouse.on}
+      {...mouse.handlers}
       onClick={() => props.onClick?.({ ctx, label })}
     >
       <div {...styles.icon.base}>

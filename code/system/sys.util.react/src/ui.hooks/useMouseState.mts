@@ -13,10 +13,10 @@ export function useMouseState() {
     if (isOver === false) setDown(false);
   };
 
-  const onMouseDown = () => down(true);
-  const onMouseUp = () => down(false);
-  const onMouseEnter = () => over(true);
-  const onMouseLeave = () => over(false);
+  const onMouseDown = down(true);
+  const onMouseUp = down(false);
+  const onMouseEnter = over(true);
+  const onMouseLeave = over(false);
 
   /**
    * API
@@ -30,6 +30,6 @@ export function useMouseState() {
     onMouseEnter,
     onMouseLeave,
 
-    on: [onMouseDown, onMouseUp, onMouseEnter, onMouseLeave] as const,
+    handlers: { onMouseDown, onMouseUp, onMouseEnter, onMouseLeave },
   };
 }

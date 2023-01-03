@@ -46,7 +46,11 @@ export const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} {...mouse.on} onClick={() => props.onClick?.({ ctx })}>
+    <div
+      {...css(styles.base, props.style)}
+      {...mouse.handlers}
+      onClick={() => props.onClick?.({ ctx })}
+    >
       <ButtonIcon isDown={mouse.isDown} isOver={mouse.isOver} style={styles.icon} />
       <div {...styles.body}>
         {label}

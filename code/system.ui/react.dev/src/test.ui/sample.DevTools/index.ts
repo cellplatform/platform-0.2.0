@@ -1,2 +1,2 @@
-export * from './s.DevTools';
-export * from './s.ui.Button';
+export * from './DevTools';
+export * from './ui.Button';

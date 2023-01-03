@@ -1,5 +1,5 @@
 import { Spec, t, R } from '../common';
-import { ButtonSample, ButtonSampleClickHandler } from './s.ui.Button';
+import { ButtonSample, ButtonSampleClickHandler } from './ui.Button';
 
 type ButtonHandler = (e: ButtonHandlerArgs) => t.IgnoredResponse;
 type ButtonHandlerArgs = {
