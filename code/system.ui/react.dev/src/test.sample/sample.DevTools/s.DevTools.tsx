@@ -10,10 +10,16 @@ type ButtonHandlerArgs = {
 
 /**
  * Sample [DevTools].
- *    See 'sys.ui.react.common' for baseline tools.
- *    These tools are seperated out into the 'common' lib to prevent
- *    low-level ciruclar dependencies where the `sys.ui.dev` module
- *    becomes impossible not to bundle with all other components.
+ *
+ * NOTES:
+ *
+ *    See the [sys.ui.react.common/dev] module for the implementatino of baseline
+ *    DebugPanel UI widgets, aka. "DevTools"
+ *
+ *    These UI tools (such as buttons etc) are seperated out into
+ *    the 'common' lib to prevent low-level ciruclar dependencies
+ *    where the `sys.ui.dev` module becomes impossible not to bundle
+ *    with all other components.
  */
 export const SampleDevTools = (input: t.DevCtxInput) => {
   return {
