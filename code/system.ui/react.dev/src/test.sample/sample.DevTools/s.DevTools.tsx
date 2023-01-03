@@ -22,7 +22,10 @@ type ButtonHandlerArgs = {
  *    with all other components.
  */
 export const SampleDevTools = (input: t.DevCtxInput) => {
-  return {
+  const DevTools = {
+    /**
+     * A simple clickable text button implementation.
+     */
     button(fn?: ButtonHandler) {
       return Spec.once(input, (ctx) => {
         const clickHandlers: ButtonSampleClickHandler[] = [];
@@ -58,4 +61,6 @@ export const SampleDevTools = (input: t.DevCtxInput) => {
       });
     },
   };
+
+  return DevTools;
 };
