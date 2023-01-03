@@ -4,8 +4,11 @@ type O = Record<string, unknown>;
 type Id = string;
 type SpecId = Id;
 type Color = string | number;
-type IgnoredResponse = any | Promise<any>;
 
+/**
+ * Context wrapper that manages a {ctx} object passed
+ * into running spec.
+ */
 export type DevContext = t.Disposable & {
   readonly instance: t.DevInstance;
   readonly disposed: boolean;
@@ -39,7 +42,7 @@ export type DevCtxIs = {
 
 export type DevCtxState<T extends O> = {
   current: T;
-  change(fn: (draft: T) => IgnoredResponse): Promise<T>;
+  change(fn: (draft: T) => t.IgnoredResponse): Promise<T>;
 };
 
 export type DevCtxObject = {

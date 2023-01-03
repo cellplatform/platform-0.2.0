@@ -4,29 +4,8 @@ type Id = string;
 type SpecId = Id;
 type Milliseconds = number;
 type O = Record<string, unknown>;
-type IgnoredResponse = any | Promise<any>;
 
 export type DevInstance = { bus: t.EventBus<any>; id: Id };
-
-export type DevInfo = {
-  instance: { kind: 'dev:harness'; context: Id; bus: Id };
-  root?: t.TestSuiteModel;
-  render: { state?: O; props?: t.DevRenderProps };
-  run: { count: number; results?: t.TestSuiteRunResponse };
-};
-
-export type DevInfoMutater = (draft: t.DevInfo) => IgnoredResponse;
-export type DevInfoStateMutater<T extends O> = (draft: T) => IgnoredResponse;
-export type DevInfoPropsMutater = (draft: t.DevRenderProps) => IgnoredResponse;
-
-export type DevInfoChangeMessage =
-  | 'state:write'
-  | 'props:write'
-  | 'context:init'
-  | 'spec:load'
-  | 'run:all'
-  | 'run:subset'
-  | 'reset';
 
 /**
  * EVENT (API)
@@ -41,7 +20,7 @@ export type DevEvents = t.Disposable & {
     res$: t.Observable<t.DevInfoRes>;
     changed$: t.Observable<t.DevInfoChanged>;
     fire(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
-    get(options?: { timeout?: Milliseconds }): Promise<DevInfo>;
+    get(options?: { timeout?: Milliseconds }): Promise<t.DevInfo>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
@@ -124,7 +103,7 @@ export type DevInfoResEvent = {
 export type DevInfoRes = {
   tx: string;
   instance: Id;
-  info?: DevInfo;
+  info?: t.DevInfo;
   error?: string;
 };
 
@@ -132,7 +111,7 @@ export type DevInfoChangedEvent = {
   type: 'sys.dev/info:changed';
   payload: DevInfoChanged;
 };
-export type DevInfoChanged = { instance: Id; info: DevInfo; message: DevInfoChangeMessage };
+export type DevInfoChanged = { instance: Id; info: t.DevInfo; message: t.DevInfoChangeMessage };
 
 /**
  * Initialize (with Spec)
