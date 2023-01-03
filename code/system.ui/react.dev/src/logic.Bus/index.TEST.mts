@@ -50,7 +50,7 @@ describe('DevBus', (e) => {
         const info = res.info!;
 
         expect(res.instance).to.eql(instance.id);
-        expect(info.root).to.eql(undefined);
+        expect(info.spec).to.eql(undefined);
 
         expect(info.instance.kind).to.eql('dev:harness');
         expect(info.instance.bus).to.match(/^bus\./);
@@ -85,22 +85,22 @@ describe('DevBus', (e) => {
         const root = await Test.bundle(SAMPLES.Sample1);
 
         expect(res.error).to.eql(undefined);
-        expect(res.info?.root).to.not.eql(undefined);
-        expect(res.info?.root).to.eql(root);
+        expect(res.info?.spec).to.not.eql(undefined);
+        expect(res.info?.spec).to.eql(root);
 
         const info = await events.info.get();
-        expect(info.root).to.eql(root);
+        expect(info.spec).to.eql(root);
 
         expect(fired.length).to.eql(3);
 
         expect(fired[0].message).to.eql('reset');
-        expect(fired[0].info.root).to.eql(undefined);
+        expect(fired[0].info.spec).to.eql(undefined);
 
         expect(fired[1].message).to.eql('context:init');
-        expect(fired[1].info.root).to.eql(undefined);
+        expect(fired[1].info.spec).to.eql(undefined);
 
         expect(fired[2].message).to.eql('spec:load');
-        expect(fired[2].info.root).to.eql(info.root);
+        expect(fired[2].info.spec).to.eql(info.spec);
 
         events.dispose();
       });
@@ -114,9 +114,9 @@ describe('DevBus', (e) => {
         const info = await events.info.get();
 
         expect(res.error).to.eql(undefined);
-        expect(res.info?.root).to.not.eql(undefined);
-        expect(res.info?.root).to.eql(root);
-        expect(info.root).to.eql(root);
+        expect(res.info?.spec).to.not.eql(undefined);
+        expect(res.info?.spec).to.eql(root);
+        expect(info.spec).to.eql(root);
 
         events.dispose();
       });
@@ -234,7 +234,7 @@ describe('DevBus', (e) => {
         const info1 = await events.info.get();
         expect(info1.render.props).to.not.exist;
 
-        const root = info1.root;
+        const root = info1.spec;
         const test1 = root?.state.tests[0];
         const test2 = root?.state.tests[1];
         expect(test1).to.exist;

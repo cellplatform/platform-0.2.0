@@ -73,7 +73,7 @@ export function BusController(args: {
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
       await events.reset.fire();
-      await state.change('spec:load', (draft) => (draft.root = root));
+      await state.change('spec:load', (draft) => (draft.spec = root));
     } catch (err: any) {
       error = err.message;
     }
@@ -107,16 +107,16 @@ export function BusController(args: {
    */
   events.run.req$.subscribe(async (e) => {
     const { tx, only } = e;
-    const rootSpec = state.current.root;
+    const spec = state.current.spec;
     let error: string | undefined;
 
     try {
-      if (rootSpec) {
+      if (spec) {
         const context = await Ctx.current();
         await context.refresh();
 
         const ctx = context.ctx;
-        const results = await rootSpec.run({ ctx, only });
+        const results = await spec.run({ ctx, only });
         await context.flush(); // Flush the results from the {ctx} into the state tree: {render.props}.
 
         /**
