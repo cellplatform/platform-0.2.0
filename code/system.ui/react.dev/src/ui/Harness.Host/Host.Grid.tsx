@@ -7,11 +7,11 @@ export type HarnessHostGridProps = {
   border: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
+  onDoubleClick?: React.MouseEventHandler;
 };
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
-  const { renderProps, border } = props;
-
+  const { renderProps, border, onDoubleClick } = props;
   if (!renderProps) return null;
 
   const { size } = renderProps.component;
@@ -54,6 +54,8 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
     },
   };
 
+  const handlers = { onDoubleClick };
+
   return (
     <div
       {...css(
@@ -63,35 +65,39 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
         props.style,
       )}
     >
-      <div {...styles.block.base}></div>
+      <div {...handlers} {...styles.block.base} />
       <div
+        {...handlers}
         {...css(styles.block.base, {
           borderLeft: border,
           borderRight: border,
         })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
+      />
+      <div {...handlers} {...css(styles.block.base)} />
       <div
+        {...handlers}
         {...css(styles.block.base, {
           borderTop: border,
           borderBottom: border,
         })}
-      ></div>
+      />
       {props.children}
       <div
+        {...handlers}
         {...css(styles.block.base, {
           borderTop: border,
           borderBottom: border,
         })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
+      />
+      <div {...handlers} {...css(styles.block.base)} />
       <div
+        {...handlers}
         {...css(styles.block.base, {
           borderLeft: border,
           borderRight: border,
         })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
+      />
+      <div {...handlers} {...css(styles.block.base)} />
     </div>
   );
 };

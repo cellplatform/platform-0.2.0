@@ -1,4 +1,4 @@
-import { t } from './common';
+import * as t from './common/types.mjs';
 
 export const DEFAULT = {
   props(): t.DevRenderProps {
@@ -15,5 +15,13 @@ export const DEFAULT = {
       render: {},
       run: { count: 0 },
     };
+  },
+
+  /**
+   * URL query-string keys.
+   */
+  QS: {
+    D: 'd', // NB: alias for "?dev"
+    DEV: 'dev',
   },
 };

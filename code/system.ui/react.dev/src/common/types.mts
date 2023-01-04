@@ -17,3 +17,4 @@ export type { TestModel, BundleImport, TestHandlerArgs } from 'sys.test.spec/src
 export * from '../types.mjs';
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];
+export type UrlInput = string | URL | Location;

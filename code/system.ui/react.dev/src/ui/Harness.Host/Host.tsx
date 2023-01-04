@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, useCurrentState } from '../common';
+import { Color, COLORS, css, t, useCurrentState, WrangleUrl } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
@@ -11,8 +11,17 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
+
   const renderProps = current.info?.render.props;
   if (!renderProps) return null;
+
+  /**
+   * [Handlers]
+   */
+  const navigateToIndex = (e: React.MouseEvent) => {
+    if (!e.metaKey) return;
+    WrangleUrl.params.ensureIndexDevFlag();
+  };
 
   /**
    * [Render]
@@ -22,7 +31,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     base: css({
       position: 'relative',
       overflow: 'hidden',
-      pointerEvents: 'none',
       userSelect: 'none',
       backgroundColor:
         renderProps.host.backgroundColor === undefined
@@ -33,7 +41,12 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <HarnessHostGrid instance={instance} renderProps={renderProps} border={cropmark}>
+      <HarnessHostGrid
+        instance={instance}
+        renderProps={renderProps}
+        border={cropmark}
+        onDoubleClick={navigateToIndex}
+      >
         <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>
     </div>
