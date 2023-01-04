@@ -1,6 +1,6 @@
 import { DevTools } from '.';
-import { Spec, RenderCount } from '../../test.ui';
-import { css, t } from '../common';
+import { RenderCount, Spec } from '../../test.ui';
+import { css } from '../common';
 
 const initial = { count: 0 };
 type T = typeof initial;
@@ -15,8 +15,9 @@ export default Spec.describe('DevTools', (e) => {
       .render<T>((e) => <Sample state={e.state} />);
   });
 
-  e.it('debug', async (e) => {
+  e.it('debug panel', async (e) => {
     const dev = DevTools.curry<T>(e, initial);
+
     dev.button((btn) =>
       btn.label('My Button').onClick(async (e) => {
         await e.state.change((draft) => draft.count++);
