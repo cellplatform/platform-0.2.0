@@ -54,7 +54,7 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
     },
   };
 
-  const handlers = { onDoubleClick };
+  const mouse = { onDoubleClick };
 
   return (
     <div
@@ -65,39 +65,15 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
         props.style,
       )}
     >
-      <div {...handlers} {...styles.block.base} />
-      <div
-        {...handlers}
-        {...css(styles.block.base, {
-          borderLeft: border,
-          borderRight: border,
-        })}
-      />
-      <div {...handlers} {...css(styles.block.base)} />
-      <div
-        {...handlers}
-        {...css(styles.block.base, {
-          borderTop: border,
-          borderBottom: border,
-        })}
-      />
+      <div {...mouse} {...styles.block.base} />
+      <div {...mouse} {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...mouse} {...css(styles.block.base)} />
+      <div {...mouse} {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
       {props.children}
-      <div
-        {...handlers}
-        {...css(styles.block.base, {
-          borderTop: border,
-          borderBottom: border,
-        })}
-      />
-      <div {...handlers} {...css(styles.block.base)} />
-      <div
-        {...handlers}
-        {...css(styles.block.base, {
-          borderLeft: border,
-          borderRight: border,
-        })}
-      />
-      <div {...handlers} {...css(styles.block.base)} />
+      <div {...mouse} {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
+      <div {...mouse} {...css(styles.block.base)} />
+      <div {...mouse} {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...mouse} {...css(styles.block.base)} />
     </div>
   );
 };

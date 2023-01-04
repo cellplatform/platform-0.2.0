@@ -11,7 +11,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
-
   const renderProps = current.info?.render.props;
   if (!renderProps) return null;
 
@@ -19,8 +18,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
    * [Handlers]
    */
   const navigateToIndex = (e: React.MouseEvent) => {
-    if (!e.metaKey) return;
-    WrangleUrl.params.ensureIndexDevFlag();
+    if (e.metaKey) WrangleUrl.params.ensureIndexDevFlag();
   };
 
   /**
