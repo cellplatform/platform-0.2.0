@@ -6,7 +6,7 @@ export const Specs = {
 };
 
 export const DevSpecs = {
-  'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/index.SPEC'),
-  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/index.SPEC'),
+  'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
+  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/ui.Button.SPEC'),
   'sys.ui.dev.RenderCount': () => import('../ui.dev/RenderCount/RenderCount.SPEC'),
 };

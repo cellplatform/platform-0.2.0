@@ -1,4 +1,10 @@
 /**
+ * @external
+ */
+import { partial } from 'ramda';
+export const R = { partial };
+
+/**
  * @system
  */
 export { FC, useMouseState } from 'sys.util.react';

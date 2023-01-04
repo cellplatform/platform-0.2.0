@@ -1,4 +1,4 @@
-import { Button } from '.';
+import { Button } from './ui.Button';
 import { Spec } from '../../test.ui';
 
 export default Spec.describe('Button', (e) => {

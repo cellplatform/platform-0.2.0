@@ -1,64 +1,47 @@
-import { COLORS, css, t, useMouseState } from '../common';
-import { ButtonIcon } from './Button.Icon';
+import { Spec, t } from '../common';
+import { Button, ButtonClickHandler } from './ui.Button';
 
-export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
-export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx };
-
-export type ButtonProps = {
+export type DevButtonHandler = (e: DevButtonHandlerArgs) => t.IgnoredResponse;
+export type DevButtonHandlerArgs = {
   ctx: t.DevCtx;
-  label?: string | JSX.Element;
-  right?: JSX.Element;
-  style?: t.CssValue;
-  onClick?: ButtonSampleClickHandler;
+  label(value: string): DevButtonHandlerArgs;
+  onClick(fn: ButtonClickHandler): DevButtonHandlerArgs;
 };
 
-export const Button: React.FC<ButtonProps> = (props) => {
-  const { ctx, label = 'Unnamed' } = props;
-  const mouse = useMouseState();
+/**
+ * A simple clickable text button implementation.
+ */
+export function button(input: t.DevCtxInput, fn?: DevButtonHandler) {
+  return Spec.once(input, (ctx) => {
+    const clickHandlers: ButtonClickHandler[] = [];
 
-  /**
-   * [Handlers]
-   */
-  const onClick = () => {
-    props.onClick?.({ ctx });
-  };
+    const props = {
+      label: '',
+    };
 
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      position: 'relative',
-      userSelect: 'none',
-      cursor: 'pointer',
-      color: COLORS.DARK,
-      fontSize: 14,
+    const args: DevButtonHandlerArgs = {
+      ctx,
+      label(value) {
+        props.label = value;
+        ref.redraw();
+        return args;
+      },
+      onClick(handler) {
+        clickHandlers.push(handler);
+        return args;
+      },
+    };
 
-      transform: `translateY(${mouse.isDown ? 1 : 0}px)`,
-      display: 'inline-grid',
-      gridTemplateColumns: 'auto 1fr',
-      columnGap: 4,
-    }),
-    icon: css({
-      marginRight: 4,
-    }),
-    body: css({
-      position: 'relative',
-      color: mouse.isOver ? COLORS.BLUE : COLORS.DARK,
-      display: 'grid',
-      alignContent: 'center',
-      justifyContent: 'start',
-      gridTemplateColumns: '1fr auto',
-    }),
-  };
+    const ref = ctx.debug.render((e) => {
+      return (
+        <Button
+          ctx={ctx}
+          label={props.label}
+          onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+        />
+      );
+    });
 
-  return (
-    <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={onClick}>
-      <ButtonIcon isDown={mouse.isDown} isOver={mouse.isOver} style={styles.icon} />
-      <div {...styles.body}>
-        {label}
-        {props.right}
-      </div>
-    </div>
-  );
-};
+    fn?.(args);
+  });
+}

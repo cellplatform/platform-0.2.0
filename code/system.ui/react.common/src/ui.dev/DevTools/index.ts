@@ -1,1 +1,1 @@
-export * from './DevTools.mjs';
+export * from './DevTools';
