@@ -7,6 +7,7 @@ export default Spec.describe('Root', (e) => {
     ctx.component
       .size('fill')
       .display('flex')
+      .backgroundColor(1)
       .render(() => {
         return <Root style={{ flex: 1 }} />;
       });

@@ -4,7 +4,7 @@ import { Specs as MonacoSpecs } from 'sys.ui.react.monaco';
 import { Specs as VideoSpecs } from 'sys.ui.react.video';
 
 export const Specs = {
-  ModuleRoot: () => import('../ui/Root/Root.SPEC'),
+  Root: () => import('../ui/Root/Root.SPEC'),
   ...CommonSpecs,
   ...ComonDevSpecs,
   ...DevSpecs,

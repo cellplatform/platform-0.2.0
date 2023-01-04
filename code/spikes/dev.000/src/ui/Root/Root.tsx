@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx } from '../common';
 import { Pkg } from '../../index.pkg.mjs';
+import { Footer } from './Root.Footer';
 
 export type RootProps = {
   fill?: boolean;
@@ -8,26 +9,43 @@ export type RootProps = {
 };
 
 export const Root: React.FC<RootProps> = (props) => {
+  const href = '?dev';
+
   /**
    * [Render]
    */
   const styles = {
     base: css({
       Absolute: props.fill ? 0 : undefined,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 20,
       fontFamily: 'sans-serif',
-      fontSize: 22,
+      color: COLORS.DARK,
+      fontSize: 14,
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
+    }),
+    body: css({
+      display: 'grid',
+      justifyContent: 'center',
+      alignContent: 'center',
+      fontSize: 80,
+    }),
+    a: css({
+      color: COLORS.CYAN,
+      fontWeight: 'bold',
+      textDecoration: 'none',
+      ':hover': { textDecoration: 'underline' },
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{Pkg.toString()}</div>
-      <div>{`🐷 <Root>`}</div>
-      <div>
-        <a href="?dev">?dev</a>
+      <div {...styles.body}>
+        <a {...styles.a} href={href}>
+          {href}
+        </a>
       </div>
+
+      <Footer />
     </div>
   );
 };
