@@ -6,16 +6,24 @@ import type { DevButtonHandler } from '../DevTools.Button/types.mjs';
 type O = Record<string, unknown>;
 
 export const DevTools = {
-  curry,
   button,
+
+  /**
+   * Curried initializtation.
+   */
+  init,
 };
 
 /**
  * [Helpers]
  */
-export function curry<S extends O = O>(input: t.DevCtxInput, initial?: S) {
+
+function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   return {
+    /**
+     * Simple action button.
+     */
     button: (fn: DevButtonHandler<S>) => button<S>(input, state, fn),
   };
 }

@@ -1,3 +1,3 @@
 export * from '../common';
+export * from './libs.mjs';
 export { Icon } from '../ui/Icon';
-export { Spec } from 'sys.ui.react.dev';
