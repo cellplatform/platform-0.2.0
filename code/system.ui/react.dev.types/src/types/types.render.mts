@@ -4,13 +4,14 @@ type Id = string;
 type RendererId = Id;
 type Color = string | number;
 type O = Record<string, unknown>;
+type RenderedResult = JSX.Element | undefined | null;
 
 /**
  * Function that returns a renderable element.
  */
 export type DevRenderer<T extends O = O> = (
   args: DevRendererArgs<T>,
-) => JSX.Element | undefined | null;
+) => RenderedResult | Promise<RenderedResult>;
 export type DevRendererArgs<T extends O = O> = { id: RendererId; state: T };
 
 /**

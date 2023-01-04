@@ -1,4 +1,4 @@
-import { Color, css, t, useCurrentState, useRedraw } from '../common';
+import { Color, css, t, useRenderer } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type HarnessHostComponentProps = {
@@ -13,11 +13,9 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const component = props.renderProps?.component;
   const renderer = component?.renderer;
 
-  useRedraw(instance, [renderer]);
-  const current = useCurrentState(instance, { filter: (e) => e.message === 'state:write' });
+  const { element } = useRenderer(instance, renderer);
 
-  if (!component || !renderer) return null;
-  const state = current.info?.render.state ?? {};
+  if (!component || !element) return null;
 
   /**
    * [Render]
@@ -45,7 +43,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.container} className={'ComponentHost'}>
-        {renderer.fn({ id: renderer.id, state })}
+        {element}
       </div>
     </div>
   );

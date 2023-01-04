@@ -87,7 +87,7 @@ export default Spec.describe('MySample', (e) => {
 
     const ctx = await dev.button((e) => {
       console.log('Inside Spec - BUTTON', e);
-      e.onClick(() => {});
+      e.label('Hello').onClick(() => {});
     });
 
     console.log('-------------------------------------------');

@@ -2,7 +2,7 @@ import { Color, COLORS, css, t, useMouseState } from '../common';
 import { RenderCount } from '../../ui/RenderCount';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
-export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx; label: string };
+export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx };
 
 export type ButtonProps = {
   ctx: t.DevCtx;
@@ -12,7 +12,7 @@ export type ButtonProps = {
 };
 
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
-  const { ctx, label = 'Unnamed' } = props;
+  const { ctx } = props;
   const mouse = useMouseState();
 
   /**
@@ -59,12 +59,12 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
     <div
       {...css(styles.base, props.style)}
       {...mouse.handlers}
-      onClick={() => props.onClick?.({ ctx, label })}
+      onClick={() => props.onClick?.({ ctx })}
     >
       <div {...styles.icon.base}>
         <div {...styles.icon.image} />
       </div>
-      <div {...styles.body}>{label}</div>
+      <div {...styles.body}>{props.label || 'Unnamed'}</div>
       <RenderCount />
     </div>
   );

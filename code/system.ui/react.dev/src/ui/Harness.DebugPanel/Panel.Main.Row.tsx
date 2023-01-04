@@ -1,16 +1,17 @@
-import { css, t, useRedraw } from '../common';
+import { css, t, useRedrawEvent } from '../common';
+import { useRenderer } from '../common';
 
 type O = Record<string, unknown>;
 
 export type DebugPanelMainRow = {
   instance: t.DevInstance;
   renderer: t.DevRendererRef;
-  state?: O;
 };
 
 export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
-  const { instance, renderer, state = {} } = props;
-  useRedraw(instance, [renderer]);
+  const { instance, renderer } = props;
+  const { element } = useRenderer(instance, renderer);
+  useRedrawEvent(instance, [props.renderer]);
 
   /**
    * [Render]
@@ -22,5 +23,5 @@ export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
     }),
   };
 
-  return <div {...styles.base}>{renderer.fn({ id: renderer.id, state })}</div>;
+  return <div {...styles.base}>{element}</div>;
 };

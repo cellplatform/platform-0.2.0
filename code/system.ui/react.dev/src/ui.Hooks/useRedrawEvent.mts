@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { filter } from 'rxjs/operators';
-
 import { DevBus, t } from './common';
 
 type Id = string;
@@ -8,7 +7,7 @@ type Id = string;
 /**
  * Monitors the "redraw" event and causes a re-render when matched.
  */
-export function useRedraw(
+export function useRedrawEvent(
   instance: t.DevInstance,
   renderers: (Id | t.DevRendererRef | t.DevRenderRef | undefined)[],
 ) {

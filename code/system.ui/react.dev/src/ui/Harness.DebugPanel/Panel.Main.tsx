@@ -10,11 +10,7 @@ export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
-  const render = current.info?.render;
-  if (!render) return null;
-
-  const state = render.state;
-  const renderers = render.props?.debug.main.renderers ?? [];
+  const renderers = current.info?.render?.props?.debug.main.renderers ?? [];
 
   /**
    * [Render]
@@ -26,7 +22,7 @@ export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
   };
 
   const elements = renderers.filter(Boolean).map((renderer) => {
-    return <Row key={renderer.id} instance={instance} renderer={renderer} state={state} />;
+    return <Row key={renderer.id} instance={instance} renderer={renderer} />;
   });
 
   return <div {...css(styles.base, props.style)}>{elements}</div>;
