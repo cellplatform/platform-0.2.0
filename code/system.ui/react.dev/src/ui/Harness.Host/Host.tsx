@@ -18,7 +18,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
    * [Handlers]
    */
   const navigateToIndex = (e: React.MouseEvent) => {
-    if (e.metaKey) WrangleUrl.params.ensureIndexDevFlag();
+    WrangleUrl.navigate.ensureIndexDevFlag();
   };
 
   /**
@@ -43,7 +43,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
         instance={instance}
         renderProps={renderProps}
         border={cropmark}
-        onDoubleClick={navigateToIndex}
+        onGridDoubleClick={navigateToIndex}
       >
         <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>

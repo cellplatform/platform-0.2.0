@@ -83,7 +83,7 @@ export default Spec.describe('MySample', (e) => {
   );
 
   e.it('SampleDevTools', async (e) => {
-    const dev = DevTools.curry(e);
+    const dev = DevTools.init(e);
 
     const ctx = await dev.button((e) => {
       console.log('Inside Spec - BUTTON', e);

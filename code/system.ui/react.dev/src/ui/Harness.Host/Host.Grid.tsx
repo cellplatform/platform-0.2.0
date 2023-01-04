@@ -7,11 +7,11 @@ export type HarnessHostGridProps = {
   border: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
-  onDoubleClick?: React.MouseEventHandler;
+  onGridDoubleClick?: React.MouseEventHandler;
 };
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
-  const { renderProps, border, onDoubleClick } = props;
+  const { renderProps, border, onGridDoubleClick: onDoubleClick } = props;
   if (!renderProps) return null;
 
   const { size } = renderProps.component;

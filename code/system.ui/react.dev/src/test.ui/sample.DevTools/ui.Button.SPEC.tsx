@@ -23,7 +23,7 @@ export default Spec.describe('sample.DevTools.Button', (e) => {
   );
 
   e.it('Buttons', (e) => {
-    const dev = DevTools.curry(e);
+    const dev = DevTools.init(e);
 
     dev.button((btn) => {
       btn.label('change state').onClick(async (e) => {

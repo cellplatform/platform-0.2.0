@@ -3,7 +3,7 @@ import { SpecList } from '../Entry.SpecList';
 import { Harness } from '../Harness';
 
 export const Entry = {
-  isDev: WrangleUrl.params.isDev,
+  isDev: WrangleUrl.navigate.isDev,
 
   /**
    * Render a harness with the selected `dev=namespace` import
@@ -14,7 +14,7 @@ export const Entry = {
     specs: t.Imports,
     options: { location?: t.UrlInput; style?: t.CssValue } = {},
   ) {
-    const url = WrangleUrl.params.formatDevFlag(options);
+    const url = WrangleUrl.navigate.formatDevFlag(options);
     const spec = await WrangleUrl.module(url, specs);
     const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 

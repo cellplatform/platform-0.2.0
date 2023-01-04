@@ -22,8 +22,11 @@ type ButtonHandlerArgs = {
  *    with all other components.
  */
 export const DevTools = {
-  curry(input: t.DevCtxInput) {
+  init(input: t.DevCtxInput) {
     return {
+      /**
+       * Simple action button.
+       */
       button: R.partial(DevTools.button, [input]),
     };
   },

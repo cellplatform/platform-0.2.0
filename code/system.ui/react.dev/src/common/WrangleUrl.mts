@@ -41,7 +41,7 @@ export const WrangleUrlParams = {
 };
 
 export const WrangleUrl = {
-  params: WrangleUrlParams,
+  navigate: WrangleUrlParams,
 
   /**
    * Convert an input location into a standard [URL] object.
