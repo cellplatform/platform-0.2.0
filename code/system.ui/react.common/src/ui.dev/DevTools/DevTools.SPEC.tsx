@@ -15,13 +15,12 @@ export default Spec.describe('DevTools', (e) => {
       .render<T>((e) => <Sample state={e.state} />);
   });
 
-  e.it('buttons', async (e) => {
-    const dev = DevTools.curry(e);
-
-    dev.button((e) =>
-      e.label('My Button').onClick(async (e) => {
-        const state = await e.ctx.state({ count: 0 });
-        await state.change((draft) => draft.count++);
+  e.it('debug', async (e) => {
+    const dev = DevTools.curry<T>(e, initial);
+    dev.button((btn) =>
+      btn.label('My Button').onClick(async (e) => {
+        await e.state.change((draft) => draft.count++);
+        btn.label(`count-${e.state.current.count}`);
       }),
     );
   });

@@ -1,27 +1,15 @@
 import { COLORS, css, t, useMouseState } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
-export type ButtonClickHandler = (e: ButtonClickHandlerArgs) => void;
-export type ButtonClickHandlerArgs = { ctx: t.DevCtx };
-
 export type ButtonProps = {
-  ctx: t.DevCtx;
   label?: string | JSX.Element;
   right?: JSX.Element;
   style?: t.CssValue;
-  onClick?: ButtonClickHandler;
+  onClick?: () => void;
 };
 
 export const Button: React.FC<ButtonProps> = (props) => {
-  const { ctx } = props;
   const mouse = useMouseState();
-
-  /**
-   * [Handlers]
-   */
-  const onClick = () => {
-    props.onClick?.({ ctx });
-  };
 
   /**
    * [Render]
@@ -55,7 +43,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={onClick}>
+    <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={props.onClick}>
       <ButtonIcon isDown={mouse.isDown} isOver={mouse.isOver} style={styles.icon} />
       <div {...styles.body}>
         {props.label || 'Unnamed'}

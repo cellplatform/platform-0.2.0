@@ -1,25 +1,22 @@
 import { Spec, t } from '../common';
-import { Button, ButtonClickHandler } from './ui.Button';
+import { Button } from './ui.Button';
 
-export type DevButtonHandler = (e: DevButtonHandlerArgs) => t.IgnoredResponse;
-export type DevButtonHandlerArgs = {
-  ctx: t.DevCtx;
-  label(value: string): DevButtonHandlerArgs;
-  onClick(fn: ButtonClickHandler): DevButtonHandlerArgs;
-};
+type O = Record<string, unknown>;
+
+import type { DevButtonHandler, DevButtonClickHandler, DevButtonHandlerArgs } from './types.mjs';
 
 /**
  * A simple clickable text button implementation.
  */
-export function button(input: t.DevCtxInput, fn?: DevButtonHandler) {
+export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: DevButtonHandler<S>) {
   return Spec.once(input, (ctx) => {
-    const clickHandlers: ButtonClickHandler[] = [];
+    const clickHandlers: DevButtonClickHandler<S>[] = [];
 
     const props = {
       label: '',
     };
 
-    const args: DevButtonHandlerArgs = {
+    const args: DevButtonHandlerArgs<S> = {
       ctx,
       label(value) {
         props.label = value;
@@ -32,12 +29,14 @@ export function button(input: t.DevCtxInput, fn?: DevButtonHandler) {
       },
     };
 
-    const ref = ctx.debug.render((e) => {
+    const ref = ctx.debug.render(async (e) => {
       return (
         <Button
-          ctx={ctx}
           label={props.label}
-          onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+          onClick={async () => {
+            const state = await ctx.state<S>(initial);
+            clickHandlers.forEach((fn) => fn({ ctx, state }));
+          }}
         />
       );
     });

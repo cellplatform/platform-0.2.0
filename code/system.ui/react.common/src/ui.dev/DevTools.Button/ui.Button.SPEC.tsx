@@ -10,12 +10,7 @@ export default Spec.describe('Button', (e) => {
       .render((e) => {
         const right = <div>123</div>;
         return (
-          <Button
-            ctx={ctx}
-            label={'My Button'}
-            right={right}
-            onClick={(e) => console.info(`⚡️ onClick:`, e)}
-          />
+          <Button label={'My Button'} right={right} onClick={() => console.info(`⚡️ onClick`)} />
         );
       });
   });

@@ -1,15 +1,21 @@
-import { R, t } from '../common';
+import { t } from '../common';
 import { button } from '../DevTools.Button';
 
-export const DevTools = {
-  curry(input: t.DevCtxInput) {
-    return {
-      button: R.partial(DevTools.button, [input]),
-    };
-  },
+import type { DevButtonHandler } from '../DevTools.Button/types.mjs';
 
-  /**
-   * A simple clickable text button implementation.
-   */
+type O = Record<string, unknown>;
+
+export const DevTools = {
+  curry,
   button,
 };
+
+/**
+ * [Helpers]
+ */
+export function curry<S extends O = O>(input: t.DevCtxInput, initial?: S) {
+  const state = initial ?? ({} as S);
+  return {
+    button: (fn: DevButtonHandler<S>) => button<S>(input, state, fn),
+  };
+}
