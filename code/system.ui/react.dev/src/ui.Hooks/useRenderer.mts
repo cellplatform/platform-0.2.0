@@ -9,9 +9,9 @@ type O = Record<string, unknown>;
 export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef) {
   const id = renderer?.id ?? '';
 
-  useRedrawEvent(instance, [renderer]);
   const [element, setElement] = useState<JSX.Element | null>(null);
   const current = useCurrentState(instance, { filter: (e) => e.message === 'state:write' });
+  const redraw = useRedrawEvent(instance, [renderer]);
 
   /**
    * [Lifecycle]
@@ -25,7 +25,7 @@ export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef
     return () => {
       isDisposed = true;
     };
-  }, [id, current.count]);
+  }, [id, current.count, redraw.count]);
 
   /**
    * API.

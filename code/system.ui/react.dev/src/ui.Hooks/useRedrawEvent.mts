@@ -15,7 +15,7 @@ export function useRedrawEvent(
     .filter(Boolean)
     .map((item) => (typeof item === 'object' ? item.id : item) as Id);
 
-  const [_, setCount] = useState(0);
+  const [count, setCount] = useState(0);
   const forceRedraw = () => setCount((prev) => prev + 1);
 
   /**
@@ -31,5 +31,5 @@ export function useRedrawEvent(
   /**
    * API
    */
-  return { ids };
+  return { count, ids };
 }

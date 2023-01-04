@@ -1,7 +1,4 @@
-import { css, t, useRedrawEvent } from '../common';
-import { useRenderer } from '../common';
-
-type O = Record<string, unknown>;
+import { css, t, useRenderer } from '../common';
 
 export type DebugPanelMainRow = {
   instance: t.DevInstance;
@@ -11,7 +8,6 @@ export type DebugPanelMainRow = {
 export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
   const { instance, renderer } = props;
   const { element } = useRenderer(instance, renderer);
-  useRedrawEvent(instance, [props.renderer]);
 
   /**
    * [Render]
