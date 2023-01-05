@@ -5,7 +5,8 @@ import { DevBus } from '../../logic.Bus';
 
 let _renderCount = 0;
 
-type T = { count: number; msg?: string };
+const initial = { count: 0 };
+type T = typeof initial;
 
 export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
@@ -31,7 +32,7 @@ export default Spec.describe('MySample', (e) => {
             state={e.state}
             onClick={() => {
               ctx.component.backgroundColor(-0.3);
-              // ctx.run({ reset: true }); // Re-run all.
+
               state.change((draft) => draft.count++);
             }}
           />
@@ -39,10 +40,22 @@ export default Spec.describe('MySample', (e) => {
       });
   });
 
+  e.it('debug panel', async (e) => {
+    const ctx = Spec.ctx(e);
+    const debug = ctx.debug;
+    const state = await ctx.state<T>(initial);
+    if (!ctx.is.initial) return;
+
+    debug.render(() => <DebugComponentSample />);
+
+    //
+  });
+
   e.it('increment count', async (e) => {
     const ctx = Spec.ctx(e);
-    const state = await ctx.state<T>({ count: 0 });
     if (!ctx.is.initial) return;
+
+    const state = await ctx.state<T>({ count: 0 });
 
     const styles = {
       base: css({
@@ -66,19 +79,12 @@ export default Spec.describe('MySample', (e) => {
     });
   });
 
-  e.it('rerun (reset)', (e) =>
-    Spec.once(e, (ctx) => {
-      ctx.debug.render(() => {
-        return <div onClick={() => ctx.run({ reset: true })}>{e.description}</div>;
-      });
-    }),
-  );
-
   e.it('rerun', (e) =>
     Spec.once(e, (ctx) => {
-      ctx.debug.render(() => {
-        return <div onClick={() => ctx.run({})}>{`Rerun`}</div>;
-      });
+      const debug = ctx.debug;
+      debug.render(() => <div onClick={() => ctx.run({ reset: true })}>{'Rerun (reset)'}</div>);
+      debug.render(() => <div onClick={() => ctx.run({})}>{`Rerun`}</div>);
+      debug.render(() => <Hr />);
     }),
   );
 
@@ -94,7 +100,7 @@ export default Spec.describe('MySample', (e) => {
     console.log('button', ctx);
   });
 
-  e.it('info', async (e) => {
+  e.it('info', (e) =>
     Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => {
@@ -106,15 +112,40 @@ export default Spec.describe('MySample', (e) => {
         };
         return <div onClick={onClick}>Get Info</div>;
       });
-    });
-  });
+    }),
+  );
 
-  e.it('redraw: component', async (e) => {
+  e.it('redraw: component', (e) =>
     Spec.once(e, (ctx) => {
       ctx.debug.render(() => {
         const onClick = () => DevBus.withEvents(ctx, (events) => events.redraw.component());
         return <div onClick={onClick}>{e.description}</div>;
       });
-    });
-  });
+    }),
+  );
 });
+
+/**
+ * Helpers
+ */
+
+const Hr = () => {
+  const styles = {
+    base: css({
+      border: 'none',
+      borderTop: `solid 1px ${Color.format(-0.1)}`,
+      MarginY: 10,
+    }),
+  };
+  return <div {...styles.base} />;
+};
+
+const DebugComponentSample = () => {
+  const styles = {
+    base: css({
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      // border: `solid 1px ${Color.format(-0.1)}`,
+    }),
+  };
+  return <div {...styles.base}>Component</div>;
+};
