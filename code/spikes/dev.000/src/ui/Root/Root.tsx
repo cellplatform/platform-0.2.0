@@ -32,6 +32,7 @@ export const Root: React.FC<RootProps> = (props) => {
     a: css({
       color: COLORS.CYAN,
       fontWeight: 'bold',
+      letterSpacing: '-0.03em',
       textDecoration: 'none',
       ':hover': { textDecoration: 'underline' },
     }),
