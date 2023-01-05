@@ -172,7 +172,7 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => undefined;
-      const res = ctx.debug.render(fn);
+      const res = ctx.debug.row(fn);
       expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
 
       expect(context.pending).to.eql(true);

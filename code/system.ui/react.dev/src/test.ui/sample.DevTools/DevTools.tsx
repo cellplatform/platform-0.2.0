@@ -55,7 +55,7 @@ export const DevTools = {
         },
       };
 
-      const ref = ctx.debug.render((e) => {
+      const ref = ctx.debug.row((e) => {
         return (
           <ButtonSample
             ctx={ctx}

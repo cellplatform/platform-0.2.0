@@ -46,7 +46,7 @@ export default Spec.describe('MySample', (e) => {
     const state = await ctx.state<T>(initial);
     if (!ctx.is.initial) return;
 
-    debug.render(() => <DebugComponentSample />);
+    debug.row(() => <DebugComponentSample />);
 
     //
   });
@@ -70,7 +70,7 @@ export default Spec.describe('MySample', (e) => {
       state.change((draft) => draft.count++);
     };
 
-    ctx.debug.render(() => {
+    ctx.debug.row(() => {
       return (
         <div {...styles.base} onClick={onClick}>
           {e.description}
@@ -82,9 +82,9 @@ export default Spec.describe('MySample', (e) => {
   e.it('rerun', (e) =>
     Spec.once(e, (ctx) => {
       const debug = ctx.debug;
-      debug.render(() => <div onClick={() => ctx.run({ reset: true })}>{'Rerun (reset)'}</div>);
-      debug.render(() => <div onClick={() => ctx.run({})}>{`Rerun`}</div>);
-      debug.render(() => <Hr />);
+      debug.row(() => <div onClick={() => ctx.run({ reset: true })}>{'Rerun (reset)'}</div>);
+      debug.row(() => <div onClick={() => ctx.run({})}>{`Rerun`}</div>);
+      debug.row(() => <Hr />);
     }),
   );
 
@@ -102,7 +102,7 @@ export default Spec.describe('MySample', (e) => {
 
   e.it('info', (e) =>
     Spec.once(e, (ctx) => {
-      ctx.debug.render(() => {
+      ctx.debug.row(() => {
         const onClick = () => {
           DevBus.withEvents(ctx, async (events) => {
             const info = await events.info.get();
@@ -117,7 +117,7 @@ export default Spec.describe('MySample', (e) => {
 
   e.it('redraw: component', (e) =>
     Spec.once(e, (ctx) => {
-      ctx.debug.render(() => {
+      ctx.debug.row(() => {
         const onClick = () => DevBus.withEvents(ctx, (events) => events.redraw.component());
         return <div onClick={onClick}>{e.description}</div>;
       });

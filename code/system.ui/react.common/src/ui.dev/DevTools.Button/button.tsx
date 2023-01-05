@@ -29,7 +29,7 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
       },
     };
 
-    const ref = ctx.debug.render(async (e) => {
+    const ref = ctx.debug.row(async (e) => {
       return (
         <Button
           label={props.label}

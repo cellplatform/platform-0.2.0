@@ -6,7 +6,7 @@ export function CtxPropsDebug(props: PropArgs) {
   const { events } = props;
 
   const api: t.DevCtxDebug = {
-    render(fn) {
+    row(fn) {
       const id = Id.renderer.create();
       const redraw = () => events.redraw.fire(id);
       props.current().debug.main.renderers.push({ id, fn });

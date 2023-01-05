@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { Spec } from '../../test.ui';
 import { css, t } from '../common';
 import { RenderCount } from '.';
@@ -32,11 +30,13 @@ export const Sample: React.FC<SampleProps> = (props) => {
       paddingLeft: 5,
       position: 'relative',
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      display: 'grid',
+      alignContent: 'center',
     }),
   };
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`Sample 🐷`}</div>
+      <div>{`🐷`}</div>
       {props.children}
     </div>
   );

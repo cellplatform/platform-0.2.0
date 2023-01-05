@@ -65,5 +65,5 @@ export type DevCtxHost = {
 };
 
 export type DevCtxDebug = {
-  render<T extends O = O>(fn: t.DevRenderer<T>): t.DevRenderRef;
+  row<T extends O = O>(fn: t.DevRenderer<T>): t.DevRenderRef;
 };
