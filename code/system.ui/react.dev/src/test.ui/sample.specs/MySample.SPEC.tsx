@@ -32,7 +32,6 @@ export default Spec.describe('MySample', (e) => {
             state={e.state}
             onClick={() => {
               ctx.component.backgroundColor(-0.3);
-
               state.change((draft) => draft.count++);
             }}
           />
@@ -41,111 +40,61 @@ export default Spec.describe('MySample', (e) => {
   });
 
   e.it('debug panel', async (e) => {
+    const dev = DevTools.init(e);
     const ctx = Spec.ctx(e);
     const debug = ctx.debug;
     const state = await ctx.state<T>(initial);
+    const events = DevBus.events(e);
+
     if (!ctx.is.initial) return;
 
-    debug.row(() => <DebugComponentSample />);
+    debug.row(<DebugComponentSample />);
+    dev.hr();
 
-    //
-  });
+    dev.button((btn) => btn.label('rerun').onClick((e) => ctx.run()));
+    dev.button((btn) => btn.label('rerun (reset)').onClick((e) => ctx.run({ reset: true })));
+    dev.hr();
 
-  e.it('increment count', async (e) => {
-    const ctx = Spec.ctx(e);
-    if (!ctx.is.initial) return;
-
-    const state = await ctx.state<T>({ count: 0 });
-
-    const styles = {
-      base: css({
-        border: `solid 1px ${Color.format(-0.3)}`,
-        borderRadius: 5,
-        padding: 10,
-        margin: 5,
-      }),
-    };
-
-    const onClick = () => {
-      state.change((draft) => draft.count++);
-    };
-
-    ctx.debug.row(() => {
-      return (
-        <div {...styles.base} onClick={onClick}>
-          {e.description}
-        </div>
-      );
+    dev.button((btn) => {
+      let _count = 0;
+      btn.label('my button').onClick((e) => {
+        _count++;
+        e.label(`my button-${_count}`);
+      });
     });
-  });
+    dev.hr();
 
-  e.it('rerun', (e) =>
-    Spec.once(e, (ctx) => {
-      const debug = ctx.debug;
-      debug.row(() => <div onClick={() => ctx.run({ reset: true })}>{'Rerun (reset)'}</div>);
-      debug.row(() => <div onClick={() => ctx.run({})}>{`Rerun`}</div>);
-      debug.row(() => <Hr />);
-    }),
-  );
+    debug.row(<div>State</div>);
+    dev.button((btn) => btn.label('increment').onClick((e) => state.change((d) => d.count++)));
+    dev.button((btn) => btn.label('decrement').onClick((e) => state.change((d) => d.count--)));
+    dev.hr();
 
-  e.it('SampleDevTools', async (e) => {
-    const dev = DevTools.init(e);
-
-    const ctx = await dev.button((e) => {
-      console.log('Inside Spec - BUTTON', e);
-      e.label('Hello').onClick(() => {});
+    dev.button((btn) => {
+      let _count = 0;
+      btn.label('get info').onClick(async (e) => {
+        _count++;
+        const info = await events.info.get();
+        console.info('info', info);
+        e.label(`get info-${_count}`);
+      });
     });
 
-    console.log('-------------------------------------------');
-    console.log('button', ctx);
+    dev.button((btn) => {
+      btn.label('redraw: component').onClick((e) => events.redraw.component());
+    });
   });
-
-  e.it('info', (e) =>
-    Spec.once(e, (ctx) => {
-      ctx.debug.row(() => {
-        const onClick = () => {
-          DevBus.withEvents(ctx, async (events) => {
-            const info = await events.info.get();
-            console.log('info', info);
-            console.log('render.props?.debug', info.render.props?.debug.main);
-          });
-        };
-        return <div onClick={onClick}>Get Info</div>;
-      });
-    }),
-  );
-
-  e.it('redraw: component', (e) =>
-    Spec.once(e, (ctx) => {
-      ctx.debug.row(() => {
-        const onClick = () => DevBus.withEvents(ctx, (events) => events.redraw.component());
-        return <div onClick={onClick}>{e.description}</div>;
-      });
-    }),
-  );
 });
 
 /**
  * Helpers
  */
 
-const Hr = () => {
-  const styles = {
-    base: css({
-      border: 'none',
-      borderTop: `solid 1px ${Color.format(-0.1)}`,
-      MarginY: 10,
-    }),
-  };
-  return <div {...styles.base} />;
-};
-
 const DebugComponentSample = () => {
   const styles = {
     base: css({
+      padding: 4,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      // border: `solid 1px ${Color.format(-0.1)}`,
     }),
   };
-  return <div {...styles.base}>Component</div>;
+  return <div {...styles.base}>Plain Component</div>;
 };

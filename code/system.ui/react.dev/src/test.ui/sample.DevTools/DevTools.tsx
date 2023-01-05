@@ -1,11 +1,13 @@
 import { Spec, t, R } from '../common';
-import { ButtonSample, ButtonSampleClickHandler } from './ui.Button';
+import { ButtonSample } from './ui.Button';
+import { Hr } from './ui.Hr';
 
+type ButtonClickHandler = (e: ButtonHandlerArgs) => void;
 type ButtonHandler = (e: ButtonHandlerArgs) => t.IgnoredResponse;
 type ButtonHandlerArgs = {
   ctx: t.DevCtx;
   label(value: string): ButtonHandlerArgs;
-  onClick(fn: ButtonSampleClickHandler): ButtonHandlerArgs;
+  onClick(fn: ButtonClickHandler): ButtonHandlerArgs;
 };
 
 /**
@@ -23,11 +25,11 @@ type ButtonHandlerArgs = {
  */
 export const DevTools = {
   init(input: t.DevCtxInput) {
+    const ctx = Spec.ctx(input);
     return {
-      /**
-       * Simple action button.
-       */
+      ctx,
       button: R.partial(DevTools.button, [input]),
+      hr: () => DevTools.hr(input),
     };
   },
 
@@ -36,11 +38,8 @@ export const DevTools = {
    */
   button(input: t.DevCtxInput, fn?: ButtonHandler) {
     return Spec.once(input, (ctx) => {
-      const clickHandlers: ButtonSampleClickHandler[] = [];
-
-      const props = {
-        label: '',
-      };
+      const clickHandlers: ButtonClickHandler[] = [];
+      const props = { label: '' };
 
       const args: ButtonHandlerArgs = {
         ctx,
@@ -60,12 +59,19 @@ export const DevTools = {
           <ButtonSample
             ctx={ctx}
             label={props.label}
-            onClick={(e) => clickHandlers.forEach((fn) => fn(e))}
+            onClick={() => clickHandlers.forEach((fn) => fn(args))}
           />
         );
       });
 
       fn?.(args);
     });
+  },
+
+  /**
+   * A horizontal rule (visual divider).
+   */
+  hr(input: t.DevCtxInput) {
+    return Spec.once(input, (ctx) => ctx.debug.row(<Hr />));
   },
 };

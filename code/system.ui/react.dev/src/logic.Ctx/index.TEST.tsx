@@ -94,98 +94,125 @@ describe('Context', () => {
   });
 
   describe('props', () => {
-    it('component', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
+    describe('component', () => {
+      it('component', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
 
-      const fn = () => undefined;
-      ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
+        const fn = () => undefined;
+        ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
 
-      expect(context.pending).to.eql(true);
-      await context.flush();
-      expect(context.pending).to.eql(false);
-
-      const info = await events.info.get();
-      const component = info.render.props?.component!;
-
-      expect(component.backgroundColor).to.eql(-0.2);
-      expect(component.display).to.eql('flex');
-      expect(component.renderer?.fn).to.eql(fn);
-      expect(component.renderer?.id.startsWith(Id.renderer.prefix)).to.eql(true);
-      expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
-      dispose();
-    });
-
-    it('component.size', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
-
-      const test = async (
-        expected: t.DevRenderSize,
-        modify: (size: t.DevCtxComponent['size']) => void,
-      ) => {
-        modify(ctx.component.size);
+        expect(context.pending).to.eql(true);
         await context.flush();
+        expect(context.pending).to.eql(false);
+
         const info = await events.info.get();
-        expect(info.render.props?.component.size).to.eql(expected);
-      };
+        const component = info.render.props?.component!;
 
-      await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
-      await test({ mode: 'center', width: undefined, height: 20 }, (size) => size(undefined, 20));
-      await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
+        expect(component.backgroundColor).to.eql(-0.2);
+        expect(component.display).to.eql('flex');
+        expect(component.renderer?.fn).to.eql(fn);
+        expect(component.renderer?.id.startsWith(Id.renderer.prefix)).to.eql(true);
+        expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
+        dispose();
+      });
 
-      const margin = [50, 50, 50, 50] as t.Margin;
-      await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));
-      await test({ mode: 'fill', x: true, y: false, margin }, (size) => size('fill-x'));
-      await test({ mode: 'fill', x: false, y: true, margin }, (size) => size('fill-y'));
+      it('component.size', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
 
-      await test({ mode: 'fill', x: true, y: true, margin: [10, 10, 10, 10] }, (size) =>
-        size('fill', 10),
-      );
+        const test = async (
+          expected: t.DevRenderSize,
+          modify: (size: t.DevCtxComponent['size']) => void,
+        ) => {
+          modify(ctx.component.size);
+          await context.flush();
+          const info = await events.info.get();
+          expect(info.render.props?.component.size).to.eql(expected);
+        };
 
-      await test({ mode: 'fill', x: true, y: true, margin: [1, 2, 3, 4] }, (size) =>
-        size('fill', [1, 2, 3, 4]),
-      );
+        await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
+        await test({ mode: 'center', width: undefined, height: 20 }, (size) => size(undefined, 20));
+        await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
 
-      dispose();
+        const margin = [50, 50, 50, 50] as t.Margin;
+        await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));
+        await test({ mode: 'fill', x: true, y: false, margin }, (size) => size('fill-x'));
+        await test({ mode: 'fill', x: false, y: true, margin }, (size) => size('fill-y'));
+
+        await test({ mode: 'fill', x: true, y: true, margin: [10, 10, 10, 10] }, (size) =>
+          size('fill', 10),
+        );
+
+        await test({ mode: 'fill', x: true, y: true, margin: [1, 2, 3, 4] }, (size) =>
+          size('fill', [1, 2, 3, 4]),
+        );
+
+        dispose();
+      });
     });
 
-    it('host', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
+    describe('host', () => {
+      it('host', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
 
-      ctx.host.backgroundColor(-0.22);
+        ctx.host.backgroundColor(-0.22);
 
-      expect(context.pending).to.eql(true);
-      await context.flush();
-      expect(context.pending).to.eql(false);
+        expect(context.pending).to.eql(true);
+        await context.flush();
+        expect(context.pending).to.eql(false);
 
-      const info = await events.info.get();
-      const host = info.render.props?.host!;
+        const info = await events.info.get();
+        const host = info.render.props?.host!;
 
-      expect(host.backgroundColor).to.eql(-0.22);
-      dispose();
+        expect(host.backgroundColor).to.eql(-0.22);
+        dispose();
+      });
     });
 
-    it('debug', async () => {
-      const { events, context, dispose } = await TestSample.context();
-      const ctx = context.ctx;
+    describe('debug', () => {
+      it('row: renderer (fn)', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
 
-      const fn = () => undefined;
-      const res = ctx.debug.row(fn);
-      expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
+        const fn = () => undefined;
+        const res = ctx.debug.row(fn);
+        expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
 
-      expect(context.pending).to.eql(true);
-      await context.flush();
-      expect(context.pending).to.eql(false);
+        expect(context.pending).to.eql(true);
+        await context.flush();
+        expect(context.pending).to.eql(false);
 
-      const info = await events.info.get();
-      const debug = info.render.props?.debug!;
+        const info = await events.info.get();
+        const debug = info.render.props?.debug!;
 
-      expect(debug.main.renderers.length).to.eql(1);
-      expect(debug.main.renderers[0].fn).to.eql(fn);
-      expect(debug.main.renderers[0].id).to.eql(res.id);
-      dispose();
+        expect(debug.main.renderers.length).to.eql(1);
+        expect(debug.main.renderers[0].id).to.eql(res.id);
+        expect(debug.main.renderers[0].fn).to.eql(fn);
+        dispose();
+      });
+
+      it('row: <Element>', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+
+        const el = <div>Foo</div>;
+        const res = ctx.debug.row(el);
+        expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
+
+        await context.flush();
+
+        const info = await events.info.get();
+        const debug = info.render.props?.debug!;
+        const fn = debug.main.renderers[0].fn;
+
+        expect(debug.main.renderers.length).to.eql(1);
+        expect(debug.main.renderers[0].id).to.eql(res.id);
+        expect(fn).to.be.a('function');
+        expect(fn({} as any)).to.equal(el);
+        dispose();
+      });
     });
   });
 
