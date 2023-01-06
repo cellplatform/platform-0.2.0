@@ -170,7 +170,7 @@ export function BusController(args: {
     let error: string | undefined;
 
     state.change('props:write', async (draft) => {
-      const props = draft.render.props || (draft.render.props = DEFAULT.props());
+      const props = draft.render.props || (draft.render.props = DEFAULT.props);
       const res = e.mutate(props);
       if (Is.promise(res)) await res;
       draft.render.revision.props += 1;

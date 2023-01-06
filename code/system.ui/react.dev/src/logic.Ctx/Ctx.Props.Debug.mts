@@ -4,7 +4,7 @@ import type { PropArgs } from './common.types';
 
 export function CtxPropsDebug(props: PropArgs) {
   const { events } = props;
-  const DEBUG = DEFAULT.props().debug;
+  const DEBUG = DEFAULT.props.debug;
 
   const api: t.DevCtxDebug = {
     row(input) {

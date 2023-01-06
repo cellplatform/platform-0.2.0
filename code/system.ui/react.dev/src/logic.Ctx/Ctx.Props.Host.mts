@@ -3,7 +3,7 @@ import { DEFAULT, t } from './common';
 import type { PropArgs } from './common.types';
 
 export function CtxPropsHost(props: PropArgs) {
-  const HOST = DEFAULT.props().host;
+  const HOST = DEFAULT.props.host;
 
   const api: t.DevCtxHost = {
     backgroundColor(value) {

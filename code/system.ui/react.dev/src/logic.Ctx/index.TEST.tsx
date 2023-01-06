@@ -169,7 +169,7 @@ describe('Context', () => {
       await context.flush();
 
       const info2 = await getHost();
-      expect(info2.backgroundColor).to.eql(DEFAULT.props().host.backgroundColor);
+      expect(info2.backgroundColor).to.eql(DEFAULT.props.host.backgroundColor);
 
       dispose();
     });
@@ -251,7 +251,7 @@ describe('Context', () => {
         expect(info.render.props?.debug.body.padding).to.eql(expected);
       };
 
-      const DEBUG = DEFAULT.props().debug.body;
+      const DEBUG = DEFAULT.props.debug.body;
 
       await expectValue(undefined, DEBUG.padding);
       await expectValue(null, DEBUG.padding);

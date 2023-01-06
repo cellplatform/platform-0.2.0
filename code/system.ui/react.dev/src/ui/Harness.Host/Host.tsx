@@ -30,7 +30,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       overflow: 'hidden',
       backgroundColor:
         renderProps?.host.backgroundColor === undefined
-          ? DEFAULT.props().host.backgroundColor
+          ? DEFAULT.props.host.backgroundColor
           : Color.format(renderProps.host.backgroundColor),
     }),
   };

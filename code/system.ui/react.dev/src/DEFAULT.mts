@@ -2,7 +2,7 @@ import * as t from './common/types.mjs';
 import { Color, COLORS } from './common';
 
 export const DEFAULT = {
-  props(): t.DevRenderProps {
+  get props(): t.DevRenderProps {
     return {
       host: {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
@@ -20,7 +20,7 @@ export const DEFAULT = {
     };
   },
 
-  info(): t.DevInfo {
+  get info(): t.DevInfo {
     return {
       instance: { kind: 'dev:harness', session: '', bus: '' },
       render: { revision: { props: 0, state: 0 } },
