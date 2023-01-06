@@ -55,7 +55,7 @@ export type DevCtxObject = {
 export type DevCtxComponent = {
   display(value: DevPropDisplay): DevCtxComponent;
   backgroundColor(value?: Color): DevCtxComponent;
-  size(width: number | undefined, height: number | undefined): DevCtxComponent;
+  size(width?: number | null, height?: number | null): DevCtxComponent;
   size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
 };

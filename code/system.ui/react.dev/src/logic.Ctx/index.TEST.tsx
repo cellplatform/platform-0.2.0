@@ -134,6 +134,8 @@ describe('Context', () => {
         await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
         await test({ mode: 'center', width: undefined, height: 20 }, (size) => size(undefined, 20));
         await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
+        await test({ mode: 'center', width: undefined, height: 100 }, (size) => size(null, 100));
+        await test({ mode: 'center', width: 200, height: undefined }, (size) => size(200, null));
 
         const margin = [50, 50, 50, 50] as t.Margin;
         await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));

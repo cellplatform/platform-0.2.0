@@ -9,7 +9,7 @@ export default Spec.describe('sample.DevTools.Button', (e) => {
     Spec.once(e, (ctx) => {
       ctx.component
         .display('grid')
-        .size(200, undefined)
+        .size(200, null)
         .render((e) => {
           return (
             <ButtonSample
