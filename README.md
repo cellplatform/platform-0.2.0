@@ -132,7 +132,8 @@ The inverse proposition also appears to be true:
 <p>&nbsp;</p>
 
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/210310789-cd6e95be-1696-44e7-9806-4d1d75090e3f.png)
+![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/210956712-77585b3b-ba46-4552-81af-c15c802c3317.png)
+
 
 
 <p>&nbsp;</p>
