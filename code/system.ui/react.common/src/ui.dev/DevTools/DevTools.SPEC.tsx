@@ -20,7 +20,7 @@ export default Spec.describe('DevTools', (e) => {
     dev.button((btn) =>
       btn.label('My Button').onClick(async (e) => {
         await e.state.change((draft) => draft.count++);
-        btn.label(`count-${e.state.current.count}`);
+        e.label(`count-${e.state.current.count}`);
       }),
     );
   });
