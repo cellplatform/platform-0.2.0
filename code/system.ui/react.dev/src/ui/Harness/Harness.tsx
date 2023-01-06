@@ -35,13 +35,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
       display: 'grid',
     }),
     right: css({
-      boxSizing: 'border-box',
       position: 'relative',
-      display: 'flex',
+
       borderLeft: `solid 1px ${Color.format(-0.1)}`,
       width: 400,
-
-      padding: 20, // TEMP 🐷
     }),
   };
 
@@ -51,7 +48,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
         <HarnessHost instance={instance} />
       </div>
       <div {...styles.right}>
-        <DebugPanel instance={instance} />
+        <DebugPanel instance={instance} style={{ Absolute: 0 }} />
       </div>
     </div>
   );

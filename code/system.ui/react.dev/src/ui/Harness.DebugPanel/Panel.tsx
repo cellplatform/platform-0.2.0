@@ -14,19 +14,25 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
    */
   const styles = {
     base: css({
-      flex: 1,
       overflow: 'hidden',
-      backgroundColor: 'rgba(255, 0, 0, 0.01)' /* RED */,
-      border: `dashed 1px ${Color.format(-0.1)}`,
+      justifySelf: 'stretch',
+
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr auto',
     }),
-    body: css({}),
+    body: css({
+      Scroll: true,
+      padding: 20, // TEMP 🐷
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
+      <div>Header</div>
       <div {...styles.body}>
         <DebugPanelMain instance={instance} />
       </div>
+      <div>Footer</div>
     </div>
   );
 };
