@@ -26,6 +26,8 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       userSelect: 'none',
       transform: `translateY(${mouse.isDown ? 1 : 0}px)`,
       cursor: 'pointer',
+      marginBottom: 1,
+
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
       columnGap: 4,
