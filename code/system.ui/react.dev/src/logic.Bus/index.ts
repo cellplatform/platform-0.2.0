@@ -1,10 +1,10 @@
 import { BusEvents as Events } from './Bus.Events.mjs';
 import { BusController as Controller } from './Bus.Controller.mjs';
-import { t, Is } from './common';
+import { t, Is, Spec } from './common';
 
 export * from './Bus.Events.mjs';
 
-type InstanceInput = t.DevInstance | t.DevCtx | TestHandlerArgs;
+type InstanceInput = t.DevInstance | t.DevCtx | t.TestHandlerArgs;
 
 export const DevBus = {
   Controller,
@@ -29,7 +29,7 @@ export const DevBus = {
 
 const Wrangle = {
   instance(input: InstanceInput) {
-    if (Is.testArgs(input)) input = (input as t.TestHandlerArgs).ctx;
+    if (Is.testArgs(input)) input = Spec.ctx(input as t.TestHandlerArgs);
     if (Is.ctx(input)) return (input as t.DevCtx).toObject().instance;
     return input as t.DevInstance;
   },

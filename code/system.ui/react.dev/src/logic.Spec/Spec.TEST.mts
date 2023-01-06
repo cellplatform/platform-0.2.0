@@ -1,3 +1,4 @@
+import { isExternal } from 'util/types';
 import { Spec } from '.';
 import { describe, expect, it, t, TestSample, Time, Is } from '../test';
 
@@ -18,7 +19,7 @@ describe('Spec', () => {
     });
   });
 
-  describe('Spec.initial(e, () => ...)', () => {
+  describe('Spec.once(e, () => ...)', () => {
     it('passes and returns {ctx}', async () => {
       const { events } = await TestSample.create();
 
