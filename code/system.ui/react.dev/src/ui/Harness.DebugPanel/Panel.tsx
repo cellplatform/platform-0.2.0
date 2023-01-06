@@ -1,5 +1,7 @@
-import { COLORS, css, R, t, useCurrentState } from '../common';
-import { DebugPanelMain } from './Panel.Main';
+import { css, R, t, useCurrentState } from '../common';
+import { DebugPanelFooter as Footer } from './Panel.Footer';
+import { DebugPanelHeader as Header } from './Panel.Header';
+import { DebugPanelMain as Main } from './Panel.Main';
 
 export type DebugPanelProps = {
   instance: t.DevInstance;
@@ -27,21 +29,15 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       Scroll: debug?.body.scroll,
       padding: debug?.body.padding,
     }),
-
-    TMP: css({
-      color: COLORS.MAGENTA, // TEMP 🐷
-      padding: 5,
-      opacity: 0.3,
-    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.TMP}>Header</div>
+      <Header instance={instance} current={current.info} />
       <div {...styles.body}>
-        <DebugPanelMain instance={instance} current={current.info} />
+        <Main instance={instance} current={current.info} />
       </div>
-      <div {...styles.TMP}>Footer</div>
+      <Footer instance={instance} current={current.info} />
     </div>
   );
 };

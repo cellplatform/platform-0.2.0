@@ -35,16 +35,18 @@ export default Spec.describe('MySample', (e) => {
   });
 
   e.it('debug panel', async (e) => {
-    const dev = DevTools.init(e);
     const ctx = Spec.ctx(e);
-    const debug = ctx.debug;
-    const state = await ctx.state<T>(initial);
-
     if (!ctx.is.initial) return;
 
+    const dev = DevTools.init(e);
+    const debug = ctx.debug;
+    const state = await ctx.state<T>(initial);
     const events = DevBus.events(ctx);
 
-    debug.row(<DebugComponentSample />);
+    debug.header.render(<ComponentSample title={'header'} />);
+    debug.footer.render(<ComponentSample title={'footer'} />);
+
+    debug.row(<ComponentSample />);
     dev.hr();
 
     dev.button((btn) => btn.label('run specs').onClick((e) => ctx.run()));
@@ -93,13 +95,15 @@ export default Spec.describe('MySample', (e) => {
       .hr();
 
     /**
+     * TODO 🐷
+     * - title (in DevTools)
      */
     debug.row(<div>Debug Panel</div>);
     dev
       .button((btn) => btn.label('scroll: true').onClick((e) => ctx.debug.scroll(true)))
       .button((btn) => btn.label('scroll: false').onClick((e) => ctx.debug.scroll(false)))
       .button((btn) => btn.label('padding: 0').onClick((e) => ctx.debug.padding(0)))
-      .button((btn) => btn.label('scroll: [default]').onClick((e) => ctx.debug.padding(null)));
+      .button((btn) => btn.label('padding: [default]').onClick((e) => ctx.debug.padding(null)));
   });
 });
 
@@ -107,21 +111,23 @@ export default Spec.describe('MySample', (e) => {
  * Helpers
  */
 
-const DebugComponentSample = () => {
+type P = { title?: string };
+const ComponentSample = (props: P = {}) => {
+  const { title = 'Plain Component' } = props;
   const styles = {
     base: css({
-      padding: 10,
+      padding: 7,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     inner: css({
-      Padding: [10, 12],
-      border: `dashed 1px ${Color.format(-0.2)}`,
-      borderRadius: 5,
+      Padding: [5, 10],
+      border: `dashed 1px ${Color.format(-0.25)}`,
+      borderRadius: 7,
     }),
   };
   return (
     <div {...styles.base}>
-      <div {...styles.inner}>Plain Component</div>
+      <div {...styles.inner}>{title}</div>
     </div>
   );
 };

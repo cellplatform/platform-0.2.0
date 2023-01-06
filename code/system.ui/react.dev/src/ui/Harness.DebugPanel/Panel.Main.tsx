@@ -15,9 +15,7 @@ export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    base: css({}),
   };
 
   const elements = renderers.filter(Boolean).map((renderer) => {
