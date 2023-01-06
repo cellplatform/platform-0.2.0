@@ -30,7 +30,7 @@ export default Dev.describe('ObjectView', (e) => {
       .hr()
       .button((btn) =>
         btn.label('Light').onClick((e) => {
-          e.ctx.host.backgroundColor(1).gridColor(null);
+          e.ctx.host.backgroundColor(null).gridColor(null);
           e.state.change((draft) => (draft.theme = 'Light'));
         }),
       )
