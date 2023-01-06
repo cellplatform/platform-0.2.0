@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { Id, t, describe, expect, expectError, it, TestSample } from '../test';
+import { describe, expect, Id, it, t, TestSample } from '../test';
 
 describe('Context', () => {
   describe('lifecycle', () => {
@@ -83,13 +83,6 @@ describe('Context', () => {
 
       context1.dispose();
       context2.dispose();
-    });
-
-    it('throw: when disposed', async () => {
-      const { context, dispose } = await TestSample.context();
-      context.dispose();
-      await expectError(() => context.flush(), 'Cannot flush, context has been disposed');
-      dispose();
     });
   });
 

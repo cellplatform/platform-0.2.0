@@ -66,6 +66,7 @@ export const Context = {
         return events.disposed;
       },
       get pending() {
+        if (api.disposed) return false;
         return props.pending;
       },
 
@@ -77,15 +78,13 @@ export const Context = {
       },
 
       async flush() {
-        if (api.disposed) throw new Error('Cannot flush, context has been disposed');
-        if (!api.pending) return api;
+        if (!api.pending || api.disposed) return api;
         await events.props.change.fire((draft) => {
           const current = props.current;
           draft.component = current.component;
           draft.host = current.host;
           draft.debug = current.debug;
         });
-
         return api;
       },
     };

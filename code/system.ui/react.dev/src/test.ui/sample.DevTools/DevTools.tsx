@@ -72,7 +72,7 @@ export const DevTools = {
         <ButtonSample
           ctx={ctx}
           label={props.label}
-          onClick={() => clickHandlers.forEach((fn) => fn(args))}
+          onClick={() => clickHandlers.map((fn) => fn(args))}
         />
       );
     });

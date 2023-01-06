@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, useCurrentState, WrangleUrl } from '../common';
+import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
@@ -38,7 +38,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
-      <HarnessHostGrid instance={instance} renderProps={renderProps} border={cropmark}>
+      <HarnessHostGrid renderProps={renderProps} border={cropmark}>
         <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>
     </div>
@@ -48,7 +48,10 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 /**
  * Helpers
  */
-const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
-const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
-  return tx(prev) === tx(next);
+const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
+  const prev = p.info;
+  const next = n.info;
+  if (prev.run.results?.tx !== next.run.results?.tx) return false;
+  if (!R.equals(prev.render.revision, next.render.revision)) return false;
+  return true;
 };

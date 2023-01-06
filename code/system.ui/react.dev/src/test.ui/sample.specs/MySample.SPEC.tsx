@@ -1,7 +1,7 @@
-import { t, Color, css, Spec } from '../common';
-import { MySample } from './MySample';
-import { DevTools } from '../sample.DevTools';
 import { DevBus } from '../../logic.Bus';
+import { css, Spec, t } from '../common';
+import { DevTools } from '../sample.DevTools';
+import { MySample } from './MySample';
 
 let _renderCount = 0;
 
@@ -16,11 +16,7 @@ export default Spec.describe('MySample', (e) => {
 
     ctx.component
       .size(300, 140)
-
       // .size('fill')
-      // .size('fill-x')
-      // .size('fill-y')
-
       .display('flex')
       .backgroundColor(1)
       .render<t.JsonMap>((e) => {
@@ -44,9 +40,10 @@ export default Spec.describe('MySample', (e) => {
     const ctx = Spec.ctx(e);
     const debug = ctx.debug;
     const state = await ctx.state<T>(initial);
-    const events = DevBus.events(e);
 
     if (!ctx.is.initial) return;
+
+    const events = DevBus.events(ctx);
 
     debug.row(<DebugComponentSample />);
     dev.hr();
@@ -75,6 +72,7 @@ export default Spec.describe('MySample', (e) => {
         _count++;
         const info = await events.info.get();
         console.info('info', info);
+        console.info('info (component render props)', info.render.props?.component);
         e.label(`get info-${_count}`);
       });
     });
@@ -82,6 +80,17 @@ export default Spec.describe('MySample', (e) => {
     dev.button((btn) => {
       btn.label('redraw: component').onClick((e) => events.redraw.component());
     });
+
+    /**
+     * TODO 🐷
+     * - size change not updating on click.
+     */
+    dev
+      .hr()
+      .button((btn) => btn.label('size: 300, 140').onClick((e) => e.ctx.component.size(300, 140)))
+      .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.component.size('fill')))
+      .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.component.size('fill-x')))
+      .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')));
   });
 });
 

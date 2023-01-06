@@ -2,7 +2,6 @@ import { css, t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type HarnessHostGridProps = {
-  instance: t.DevInstance;
   children?: JSX.Element;
   border: string;
   renderProps?: t.DevRenderProps;

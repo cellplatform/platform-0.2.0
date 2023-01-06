@@ -405,6 +405,7 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql(undefined);
+        expect(info1.render.revision.state).to.eql(0);
 
         let _initial: T | undefined;
 
@@ -417,6 +418,7 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(_initial).to.eql({ count: 0 });
         expect(info2.render.state).to.eql({ count: 1, msg: 'hello' });
+        expect(info2.render.revision.state).to.eql(1);
 
         events.dispose();
       });
@@ -463,6 +465,7 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.props).to.eql(undefined);
+        expect(info1.render.revision.props).to.eql(0);
 
         await events.props.change.fire((draft) => {
           draft.component.backgroundColor = -0.3;
@@ -470,6 +473,7 @@ describe('DevBus', (e) => {
 
         const info2 = await events.info.get();
         expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
+        expect(info2.render.revision.props).to.eql(1);
 
         events.dispose();
       });
