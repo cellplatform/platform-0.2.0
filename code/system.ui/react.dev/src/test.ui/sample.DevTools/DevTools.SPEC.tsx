@@ -45,5 +45,9 @@ export default Spec.describe('sample.DevTools.Button', (e) => {
         btn.label(`hello-${_count}`);
       });
     });
+
+    dev.hr();
+
+    dev.button((btn) => btn.label('👋'));
   });
 });
