@@ -11,6 +11,10 @@ const root = Dev.describe('root', (e) => {
   e.it('foo', async (e) => {
     expect(123).to.eql(123);
   });
+
+  e.it('fail', async (e) => {
+    expect(123).to.eql(5);
+  });
 });
 
 export default Dev.describe('TestRunner', (e) => {
