@@ -5,7 +5,7 @@ export const DEFAULT = {
     return {
       host: {},
       component: {},
-      debug: { main: { renderers: [] } },
+      debug: { body: { renderers: [] } },
     };
   },
 

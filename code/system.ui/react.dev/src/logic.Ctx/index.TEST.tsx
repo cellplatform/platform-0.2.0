@@ -182,9 +182,9 @@ describe('Context', () => {
         const info = await events.info.get();
         const debug = info.render.props?.debug!;
 
-        expect(debug.main.renderers.length).to.eql(1);
-        expect(debug.main.renderers[0].id).to.eql(res.id);
-        expect(debug.main.renderers[0].fn).to.eql(fn);
+        expect(debug.body.renderers.length).to.eql(1);
+        expect(debug.body.renderers[0].id).to.eql(res.id);
+        expect(debug.body.renderers[0].fn).to.eql(fn);
         dispose();
       });
 
@@ -200,10 +200,10 @@ describe('Context', () => {
 
         const info = await events.info.get();
         const debug = info.render.props?.debug!;
-        const fn = debug.main.renderers[0].fn;
+        const fn = debug.body.renderers[0].fn;
 
-        expect(debug.main.renderers.length).to.eql(1);
-        expect(debug.main.renderers[0].id).to.eql(res.id);
+        expect(debug.body.renderers.length).to.eql(1);
+        expect(debug.body.renderers[0].id).to.eql(res.id);
         expect(fn).to.be.a('function');
         expect(fn({} as any)).to.equal(el);
         dispose();

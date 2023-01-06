@@ -10,7 +10,7 @@ export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
   const { instance } = props;
 
   const current = useCurrentState(instance, { distinctUntil });
-  const renderers = current.info?.render?.props?.debug.main.renderers ?? [];
+  const renderers = current.info?.render?.props?.debug.body.renderers ?? [];
 
   /**
    * [Render]
