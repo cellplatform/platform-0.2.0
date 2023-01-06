@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { describe, expect, Id, it, t, TestSample } from '../test';
+import { describe, expect, Id, it, t, TestSample, DEFAULT } from '../test';
 
 describe('Context', () => {
   describe('lifecycle', () => {
@@ -212,19 +212,44 @@ describe('Context', () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
-      const expectScrollValue = async (expected: boolean | undefined) => {
+      const expectValue = async (expected: boolean | undefined) => {
         await context.flush();
         const info = await events.info.get();
         expect(info.render.props?.debug.body.scroll).to.eql(expected);
       };
 
-      await expectScrollValue(undefined);
+      await expectValue(undefined);
 
       ctx.debug.scroll(true);
-      await expectScrollValue(true);
+      await expectValue(true);
 
       ctx.debug.scroll(false);
-      await expectScrollValue(false);
+      await expectValue(false);
+
+      dispose();
+    });
+
+    it('padding', async () => {
+      const { events, context, dispose } = await TestSample.context();
+      const ctx = context.ctx;
+
+      type T = t.MarginInput | undefined | null;
+      const expectValue = async (value: T, expected: t.Margin) => {
+        ctx.debug.padding(value);
+        await context.flush();
+        const info = await events.info.get();
+        expect(info.render.props?.debug.body.padding).to.eql(expected);
+      };
+
+      const DEBUG = DEFAULT.props().debug.body;
+
+      await expectValue(undefined, DEBUG.padding);
+      await expectValue(null, DEBUG.padding);
+
+      await expectValue(10, [10, 10, 10, 10]);
+      await expectValue([10], [10, 10, 10, 10]);
+      await expectValue([10, 99], [10, 99, 10, 99]);
+      await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
 
       dispose();
     });

@@ -36,6 +36,7 @@ export type DevRenderPropsDebug = {
   body: {
     scroll: boolean;
     renderers: t.DevRendererRef<any>[];
+    padding: t.Margin;
   };
   footer: {};
 };

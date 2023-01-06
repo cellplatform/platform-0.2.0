@@ -7,7 +7,11 @@ export const DEFAULT = {
       component: {},
       debug: {
         header: {},
-        body: { renderers: [], scroll: true },
+        body: {
+          renderers: [],
+          scroll: true,
+          padding: [0, 10, 0, 10],
+        },
         footer: {},
       },
     };

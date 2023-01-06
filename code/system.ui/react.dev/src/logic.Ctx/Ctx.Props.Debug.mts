@@ -1,9 +1,10 @@
-import { t, Id } from './common';
+import { t, Id, Margin, DEFAULT } from './common';
 
 import type { PropArgs } from './common.types';
 
 export function CtxPropsDebug(props: PropArgs) {
   const { events } = props;
+  const DEBUG = DEFAULT.props().debug;
 
   const api: t.DevCtxDebug = {
     row(input) {
@@ -17,6 +18,13 @@ export function CtxPropsDebug(props: PropArgs) {
 
     scroll(value) {
       props.current().debug.body.scroll = value;
+      props.changed();
+      return api;
+    },
+
+    padding(input) {
+      const value = Margin.wrangle(input ?? DEBUG.body.padding);
+      props.current().debug.body.padding = value;
       props.changed();
       return api;
     },
