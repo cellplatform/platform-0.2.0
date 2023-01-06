@@ -14,6 +14,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
+  const host = renderProps?.host;
 
   /**
    * [Handlers]
@@ -25,15 +26,15 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${HOST.gridColor}`;
+  const cropmark = `solid 1px ${Color.format(host?.gridColor ?? HOST.gridColor)}`;
   const styles = {
     base: css({
       position: 'relative',
       overflow: 'hidden',
       backgroundColor:
-        renderProps?.host.backgroundColor === undefined
+        host?.backgroundColor === undefined
           ? HOST.backgroundColor
-          : Color.format(renderProps.host.backgroundColor),
+          : Color.format(host.backgroundColor),
     }),
   };
 

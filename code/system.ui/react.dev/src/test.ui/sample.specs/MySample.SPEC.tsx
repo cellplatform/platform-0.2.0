@@ -1,5 +1,5 @@
 import { DevBus } from '../../logic.Bus';
-import { Color, css, Spec, t } from '../common';
+import { COLORS, Color, css, Spec, t } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
 
@@ -92,6 +92,18 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.component.size('fill')))
       .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.component.size('fill-x')))
       .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')))
+      .hr();
+
+    debug.row(<div>Host</div>);
+    dev.button((btn) =>
+      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).gridColor(null)),
+    );
+    dev
+      .button((btn) =>
+        btn
+          .label('theme: dark')
+          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).gridColor(0.1)),
+      )
       .hr();
 
     debug.row(<div>Debug Panel</div>);
