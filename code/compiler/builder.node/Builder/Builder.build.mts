@@ -1,4 +1,4 @@
-import { fs, t, pc, Util } from '../common/index.mjs';
+import { fs, t, pc, Util, LogTable } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
 import { Package } from '../op/Package.mjs';
 import { Typescript } from '../op/Typescript.mjs';
@@ -56,10 +56,13 @@ export async function build(
     const prefix = pc.bgCyan(pc.bold(' dist '));
     const filesize = pc.bold(pc.white(size.toString()));
 
+    const table = LogTable();
+    table.push([' '.repeat(6), 'bundle', `  ${bundle.length} files  `, bundleSize]);
+    table.push([' '.repeat(6), 'types.d', `  ${types.length} files  `, typesSize]);
+
     console.info(``);
     console.info(pc.gray(`${prefix} ${filesize}`));
-    console.info(pc.gray(`       bundle   ${bundle.length} files (${bundleSize})`));
-    console.info(pc.gray(`       types.d  ${types.length} files (${typesSize})`));
+    console.info(pc.gray(table.toString()));
     console.info('');
   }
 

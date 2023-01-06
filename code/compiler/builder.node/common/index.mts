@@ -7,3 +7,4 @@ export * from './libs.mjs';
 export { Util, asArray } from './util.mjs';
 export { FindUtil } from './util.Find.mjs';
 export { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
+export { LogTable } from './util.LogTable.mjs';
