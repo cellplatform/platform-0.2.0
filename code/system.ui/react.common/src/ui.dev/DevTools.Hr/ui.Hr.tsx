@@ -2,6 +2,9 @@ import { Color, css } from '../common';
 
 export type HrProps = { marginY?: number };
 export const Hr: React.FC<HrProps> = (props) => {
+  /**
+   * [Render]
+   */
   const styles = {
     base: css({
       border: 'none',

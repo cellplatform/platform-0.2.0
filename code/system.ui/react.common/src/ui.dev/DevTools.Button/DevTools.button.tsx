@@ -11,10 +11,8 @@ import type { DevButtonHandler, DevButtonClickHandler, DevButtonHandlerArgs } fr
 export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: DevButtonHandler<S>) {
   return Spec.once(input, (ctx) => {
     const clickHandlers: DevButtonClickHandler<S>[] = [];
-
-    const props = {
-      label: '',
-    };
+    const props = { label: '' };
+    let _state: t.DevCtxState<S> | undefined;
 
     const args: DevButtonHandlerArgs<S> = {
       ctx,
@@ -34,7 +32,7 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
         <Button
           label={props.label}
           onClick={async () => {
-            const state = await ctx.state<S>(initial);
+            const state = _state || (_state = await ctx.state<S>(initial));
             clickHandlers.forEach((fn) => fn({ ...args, state }));
           }}
         />
