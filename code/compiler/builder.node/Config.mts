@@ -245,9 +245,8 @@ const Wrangle = {
   },
 
   libEntry(entry?: string | t.ViteLibEntry): t.ViteLibEntry {
-    const DEFAULT = '/src/index.mts';
     if (typeof entry === 'string') return { index: entry };
     if (typeof entry === 'object') return entry;
-    return { index: DEFAULT };
+    return { index: '/src/index.mts' };
   },
 };
