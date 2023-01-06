@@ -94,10 +94,6 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')))
       .hr();
 
-    /**
-     * TODO 🐷
-     * - title (in DevTools)
-     */
     debug.row(<div>Debug Panel</div>);
     dev
       .button((btn) => btn.label('scroll: true').onClick((e) => ctx.debug.scroll(true)))
