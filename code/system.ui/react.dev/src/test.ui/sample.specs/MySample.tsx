@@ -12,7 +12,6 @@ let _count = 0;
 export const MySample: React.FC<MySampleProps> = (props) => {
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       position: 'relative',
       padding: [5, 8],
       fontFamily: 'sans-serif',
@@ -29,7 +28,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
-      <div>{props.text ?? 'MySample'} 🐷</div>
+      <div>🐷 {props.text ?? 'MySample'}</div>
       <div>
         <pre>state: {props.state ? JSON.stringify(props.state) : 'undefined'} </pre>
       </div>

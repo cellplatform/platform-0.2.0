@@ -16,9 +16,8 @@ export default Spec.describe('MySample', (e) => {
 
     ctx.component
       .size(300, 140)
-      // .size('fill')
       .display('flex')
-      .backgroundColor(1)
+      .backgroundColor('rgba(255, 0, 0, 0.1)' /* RED */)
       .render<t.JsonMap>((e) => {
         const text = `MySample-${_renderCount}`;
         return (
@@ -27,7 +26,7 @@ export default Spec.describe('MySample', (e) => {
             text={text}
             state={e.state}
             onClick={() => {
-              ctx.component.backgroundColor(-0.3);
+              ctx.component.backgroundColor(1);
               state.change((draft) => draft.count++);
             }}
           />
@@ -48,8 +47,8 @@ export default Spec.describe('MySample', (e) => {
     debug.row(<DebugComponentSample />);
     dev.hr();
 
-    dev.button((btn) => btn.label('rerun').onClick((e) => ctx.run()));
-    dev.button((btn) => btn.label('rerun (reset)').onClick((e) => ctx.run({ reset: true })));
+    dev.button((btn) => btn.label('run specs').onClick((e) => ctx.run()));
+    dev.button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })));
     dev.hr();
 
     dev.button((btn) => {
@@ -66,6 +65,7 @@ export default Spec.describe('MySample', (e) => {
     dev.button((btn) => btn.label('decrement').onClick((e) => state.change((d) => d.count--)));
     dev.hr();
 
+    debug.row(<div>Harness</div>);
     dev.button((btn) => {
       let _count = 0;
       btn.label('get info').onClick(async (e) => {
