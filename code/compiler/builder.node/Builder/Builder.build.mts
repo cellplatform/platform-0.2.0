@@ -46,18 +46,22 @@ export async function build(
   if (!silent) {
     const typedir = `/${Paths.types.dirname}/`;
     const size = await Util.folderSize(fs.join(dir, 'dist'));
-    const types = size.paths.filter((p) => p.includes(typedir));
-    const bundle = size.paths.filter((p) => !p.includes(typedir));
-    const typesSize = await Util.folderSize(fs.join(dir, Paths.types.dist));
+
+    const bundle = size.filter(({ path }) => !path.includes(typedir));
+    const types = size.filter(({ path }) => path.includes(typedir));
+
+    const bundleSize = pc.bold(pc.white(bundle.toString()));
+    const typesSize = types.toString();
 
     const prefix = pc.bgCyan(pc.bold(' dist '));
     const filesize = pc.bold(pc.white(size.toString()));
-    const total = `${bundle.length} files, ${types.length} typefiles (${typesSize.toString()})`;
 
     console.info(``);
     console.info(pc.gray(`${prefix} ${filesize}`));
-    console.info(pc.gray(`       ${total}`));
-    console.info(``);
+    console.info(pc.gray(`       bundle   ${bundle.length} files (${bundleSize})`));
+    console.info(pc.gray(`       types.d  ${types.length} files (${typesSize})`));
+    console.info('');
   }
+
   return { ok: true, errorCode: 0 };
 }
