@@ -10,7 +10,7 @@ export const DEFAULT = {
         body: {
           renderers: [],
           scroll: true,
-          padding: [0, 10, 0, 10],
+          padding: [0, 15, 0, 15],
         },
         footer: {},
       },

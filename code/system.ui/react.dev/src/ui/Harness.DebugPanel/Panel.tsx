@@ -1,4 +1,4 @@
-import { Color, css, t } from '../common';
+import { css, R, t, useCurrentState } from '../common';
 import { DebugPanelMain } from './Panel.Main';
 
 export type DebugPanelProps = {
@@ -8,6 +8,9 @@ export type DebugPanelProps = {
 
 export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
   const { instance } = props;
+
+  const current = useCurrentState(instance, { distinctUntil });
+  const debug = current.info?.render.props?.debug;
 
   /**
    * [Render]
@@ -21,8 +24,8 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       gridTemplateRows: 'auto 1fr auto',
     }),
     body: css({
-      Scroll: true,
-      padding: 20, // TEMP 🐷
+      Scroll: debug?.body.scroll,
+      padding: debug?.body.padding,
     }),
   };
 
@@ -30,9 +33,20 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div>Header</div>
       <div {...styles.body}>
-        <DebugPanelMain instance={instance} />
+        <DebugPanelMain instance={instance} current={current.info} />
       </div>
       <div>Footer</div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
+  const prev = p.info;
+  const next = n.info;
+  if (prev.run.results?.tx !== next.run.results?.tx) return false;
+  if (!R.equals(prev.render.revision, next.render.revision)) return false;
+  return true;
 };

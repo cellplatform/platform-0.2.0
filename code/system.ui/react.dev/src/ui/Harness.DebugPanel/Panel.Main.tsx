@@ -1,16 +1,15 @@
-import { css, t, useCurrentState } from '../common';
+import { css, t } from '../common';
 import { DebugPanelMainRow as Row } from './Panel.Main.Row';
 
 export type DebugPanelMainProps = {
   instance: t.DevInstance;
+  current?: t.DevInfo;
   style?: t.CssValue;
 };
 
 export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
-  const { instance } = props;
-
-  const current = useCurrentState(instance, { distinctUntil });
-  const renderers = current.info?.render?.props?.debug.body.renderers ?? [];
+  const { instance, current } = props;
+  const renderers = current?.render?.props?.debug.body.renderers ?? [];
 
   /**
    * [Render]
@@ -26,13 +25,4 @@ export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
   });
 
   return <div {...css(styles.base, props.style)}>{elements}</div>;
-};
-
-/**
- * [Helpers]
- */
-const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
-const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
-  if (tx(prev) !== tx(next)) return false;
-  return true;
 };

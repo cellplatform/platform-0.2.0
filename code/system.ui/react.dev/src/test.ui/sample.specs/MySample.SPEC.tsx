@@ -71,9 +71,12 @@ export default Spec.describe('MySample', (e) => {
       btn.label('get info').onClick(async (e) => {
         _count++;
         const info = await events.info.get();
+        console.group('🌳 info');
         console.info('info', info);
-        console.info('info (component render props)', info.render.props?.component);
+        console.info('info.render.props:', info.render.props);
+        console.info('info.render.props.debug:', info.render.props?.debug);
         e.label(`get info-${_count}`);
+        console.groupEnd();
       });
     });
 
@@ -81,16 +84,22 @@ export default Spec.describe('MySample', (e) => {
       btn.label('redraw: component').onClick((e) => events.redraw.component());
     });
 
-    /**
-     * TODO 🐷
-     * - size change not updating on click.
-     */
     dev
       .hr()
       .button((btn) => btn.label('size: 300, 140').onClick((e) => e.ctx.component.size(300, 140)))
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.component.size('fill')))
       .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.component.size('fill-x')))
-      .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')));
+      .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')))
+      .hr();
+
+    /**
+     */
+    debug.row(<div>Debug Panel</div>);
+    dev
+      .button((btn) => btn.label('scroll: true').onClick((e) => ctx.debug.scroll(true)))
+      .button((btn) => btn.label('scroll: false').onClick((e) => ctx.debug.scroll(false)))
+      .button((btn) => btn.label('padding: 0').onClick((e) => ctx.debug.padding(0)))
+      .button((btn) => btn.label('scroll: [default]').onClick((e) => ctx.debug.padding(null)));
   });
 });
 
