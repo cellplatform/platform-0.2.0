@@ -40,7 +40,7 @@ export default Spec.describe('sample.DevTools.Button', (e) => {
     });
 
     dev.button((btn) => {
-      btn.label('change label').onClick(async (e) => {
+      btn.label('change button label').onClick(async (e) => {
         _count++;
         btn.label(`hello-${_count}`);
       });
