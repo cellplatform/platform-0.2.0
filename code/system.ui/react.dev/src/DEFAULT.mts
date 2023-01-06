@@ -5,7 +5,11 @@ export const DEFAULT = {
     return {
       host: {},
       component: {},
-      debug: { body: { renderers: [] } },
+      debug: {
+        header: {},
+        body: { renderers: [], scroll: true },
+        footer: {},
+      },
     };
   },
 

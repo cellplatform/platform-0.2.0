@@ -14,6 +14,12 @@ export function CtxPropsDebug(props: PropArgs) {
       props.changed();
       return { id, redraw };
     },
+
+    scroll(value) {
+      props.current().debug.body.scroll = value;
+      props.changed();
+      return api;
+    },
   };
 
   return api;

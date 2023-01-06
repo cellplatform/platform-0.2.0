@@ -32,9 +32,12 @@ export type DevRenderPropsHost = {
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
+  header: {};
   body: {
+    scroll: boolean;
     renderers: t.DevRendererRef<any>[];
   };
+  footer: {};
 };
 
 /**
