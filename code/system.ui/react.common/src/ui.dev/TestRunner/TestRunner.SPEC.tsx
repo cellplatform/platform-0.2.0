@@ -1,8 +1,6 @@
 import { Dev } from '..';
-import { TestRunner } from '.';
-import { Color, css, t } from '../common';
 import { expect } from '../../test.ui';
-
+import { Color, css, t } from '../common';
 import { Results } from './Results';
 
 type T = { results?: t.TestSuiteRunResponse };
