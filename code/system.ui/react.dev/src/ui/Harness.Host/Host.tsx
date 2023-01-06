@@ -28,7 +28,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     base: css({
       position: 'relative',
       overflow: 'hidden',
-      userSelect: 'none',
       backgroundColor:
         renderProps?.host.backgroundColor === undefined
           ? Color.alpha(COLORS.DARK, 0.02)
