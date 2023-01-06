@@ -20,7 +20,10 @@ export async function CtxProps(events: t.DevEvents) {
   const propArgs: PropArgs = {
     events,
     current: () => _current,
-    changed: () => _revision++,
+    changed: () => {
+      _revision++;
+      events.props.flush.pending(_revision);
+    },
   };
 
   return {

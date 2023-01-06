@@ -1,21 +1,24 @@
 import { VimeoBackground } from '..';
-import { Spec } from '../../../test.ui';
+import { Dev } from '../../../test.ui';
 import { rx, slug, t } from '../common.mjs';
-import { VIDEO } from './sample.mjs';
+import { VIDEO } from './SAMPLES.mjs';
 
-export default Spec.describe('VimeoBackground Player', (e) => {
+const initial = { count: 0 };
+type S = typeof initial;
+
+export default Dev.describe('VimeoBackground Player', (e) => {
   let events: t.VimeoEvents;
 
   /**
    * Initialize
    */
   e.it('init', async (e) => {
-    const id = `foo.${slug()}`;
+    const ctx = Dev.ctx(e);
+
     const bus = rx.bus<t.VimeoEvent>();
-    const instance = { bus, id };
+    const instance = { bus, id: `foo.${slug()}` };
     events = VimeoBackground.Events({ instance });
 
-    const ctx = Spec.ctx(e);
     const el = (
       <VimeoBackground
         instance={instance}
@@ -29,9 +32,9 @@ export default Spec.describe('VimeoBackground Player', (e) => {
     ctx.component.size(800, 600).render(() => el);
   });
 
-  e.describe.skip('controls', (e) => {
-    e.it('play', () => {
-      console.log('events', events);
-    });
+  e.it('debug panel', (e) => {
+    const dev = Dev.tools<S>(e, initial);
+    dev.button((btn) => btn.label('Play').onClick((e) => events.play.fire()));
+    dev.button((btn) => btn.label('Pause').onClick((e) => events.pause.fire()));
   });
 });

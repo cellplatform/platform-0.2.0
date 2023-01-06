@@ -1,45 +1,39 @@
 import { Vimeo } from '..';
-import { Spec } from '../../../test.ui';
+import { Dev } from '../../../test.ui';
 import { rx, slug, t } from '../common.mjs';
-import { VIDEO } from './sample.mjs';
+import { VIDEO } from './SAMPLES.mjs';
 
-export default Spec.describe('Vimeo Player', (e) => {
+const initial = { count: 0 };
+type S = typeof initial;
+
+export default Dev.describe('Vimeo Player', (e) => {
   let events: t.VimeoEvents;
 
   /**
    * Initialize
    */
   e.it('init', async (e) => {
-    const id = `foo.${slug()}`;
+    const ctx = Dev.ctx(e);
+
     const bus = rx.bus();
-    const instance = { bus, id };
+    const instance = { bus, id: `foo.${slug()}` };
     events = Vimeo.Events({ instance });
 
-    const ctx = Spec.ctx(e);
-    const elPlayer = (
-      <Vimeo
-        instance={instance}
-        video={VIDEO['stock/running']}
-        borderRadius={20}
-        onIconClick={(e) => console.info(`⚡️ icon click`, e)}
-      />
-    );
-
-    const el = (
-      <div>
-        {elPlayer}
-        <div>
-          <div onClick={() => events.play.fire()}>play</div>
-        </div>
-      </div>
-    );
-
-    ctx.component.render(() => el);
+    ctx.component.render(() => {
+      return (
+        <Vimeo
+          instance={instance}
+          video={VIDEO['stock/running']}
+          borderRadius={20}
+          onIconClick={(e) => console.info(`⚡️ icon click`, e)}
+        />
+      );
+    });
   });
 
-  e.describe.skip('controls', (e) => {
-    e.it('play', () => {
-      console.log('events', events);
-    });
+  e.it('debug panel', (e) => {
+    const dev = Dev.tools<S>(e, initial);
+    dev.button((btn) => btn.label('Play').onClick((e) => events.play.fire()));
+    dev.button((btn) => btn.label('Pause').onClick((e) => events.pause.fire()));
   });
 });

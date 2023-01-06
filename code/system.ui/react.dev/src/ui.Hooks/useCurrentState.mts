@@ -16,6 +16,8 @@ export function useCurrentState(
 ) {
   const { distinctUntil } = options;
   const busid = rx.bus.instance(instance.bus);
+
+  const [count, setCount] = useState(0);
   const [info, setInfo] = useState<t.DevInfo>();
 
   /**
@@ -29,7 +31,10 @@ export function useCurrentState(
         filter((e) => (options.filter ? options.filter(e) : true)),
         distinctUntilChanged((p, n) => (distinctUntil ? distinctUntil(p, n) : false)),
       )
-      .subscribe((e) => setInfo(e.info));
+      .subscribe((e) => {
+        setInfo(e.info);
+        setCount((prev) => prev + 1);
+      });
 
     return () => events.dispose();
   }, [busid, instance.id]);
@@ -37,5 +42,5 @@ export function useCurrentState(
   /**
    * [API]
    */
-  return { info };
+  return { count, info };
 }

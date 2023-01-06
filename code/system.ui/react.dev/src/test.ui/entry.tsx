@@ -1,13 +1,8 @@
 import 'symbol-observable';
 
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
-import { SelfDevSpecs, SampleSpecs } from './entry.Specs.mjs';
-
-const Specs = {
-  ...SampleSpecs,
-  ...SelfDevSpecs,
-};
 
 const url = new URL(location.href);
 const params = url.searchParams;
@@ -28,11 +23,18 @@ const isDev = params.has('dev') || params.has('d');
      *    never gets sent in the normal useage payload.
      */
     const { Dev } = await import('../index.mjs');
+    const { ModuleSpecs, SampleSpecs } = await import('./entry.Specs.mjs');
+
+    const Specs = {
+      ...SampleSpecs,
+      ...ModuleSpecs,
+    };
+
     const el = await Dev.render(Pkg, Specs);
-    root.render(el);
+    root.render(<StrictMode>{el}</StrictMode>);
   } else {
-    const { MySample } = await import('../test.sample/specs/MySample');
+    const { MySample } = await import('../test.ui/sample.specs/MySample');
     const el = <MySample style={{ Absolute: 0 }} />;
-    root.render(el);
+    root.render(<StrictMode>{el}</StrictMode>);
   }
 })();

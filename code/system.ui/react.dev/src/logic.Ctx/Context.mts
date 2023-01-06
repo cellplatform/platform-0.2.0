@@ -14,13 +14,13 @@ export const Context = {
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
 
-    const Local = {
+    const Session = {
       id: '',
       count: 0,
     };
 
     const toObject = (): t.DevCtxObject => {
-      const { id, count } = Local;
+      const { id, count } = Session;
       const is = ctx.is;
       return {
         id,
@@ -35,7 +35,7 @@ export const Context = {
       toObject,
 
       get is() {
-        const initial = Local.count === 0;
+        const initial = Session.count === 0;
         return { initial };
       },
 
@@ -66,26 +66,25 @@ export const Context = {
         return events.disposed;
       },
       get pending() {
+        if (api.disposed) return false;
         return props.pending;
       },
 
       async refresh() {
         const info = await events.info.get();
-        Local.id = info.instance.context;
-        Local.count = info.run.count ?? 0;
+        Session.id = info.instance.session;
+        Session.count = info.run.count ?? 0;
         return api;
       },
 
       async flush() {
-        if (api.disposed) throw new Error('Cannot flush, context has been disposed');
-        if (!api.pending) return api;
+        if (!api.pending || api.disposed) return api;
         await events.props.change.fire((draft) => {
           const current = props.current;
           draft.component = current.component;
           draft.host = current.host;
           draft.debug = current.debug;
         });
-
         return api;
       },
     };

@@ -1,7 +1,9 @@
+import { debounceTime } from 'rxjs/operators';
+
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { DEFAULT, Is, rx, t, Test, Id } from './common';
+import { DEFAULT, Id, Is, rx, t, Test } from './common';
 
 type Id = string;
 
@@ -47,6 +49,7 @@ export function BusController(args: {
     resetInfo(draft: t.DevInfo) {
       draft.render.props = undefined;
       draft.render.state = undefined;
+      draft.render.revision = { props: 0, state: 0 };
       draft.run = { count: 0 };
     },
   };
@@ -73,7 +76,7 @@ export function BusController(args: {
     try {
       const root = e.bundle ? await Test.bundle(e.bundle) : undefined;
       await events.reset.fire();
-      await state.change('spec:load', (draft) => (draft.root = root));
+      await state.change('spec:load', (draft) => (draft.spec = root));
     } catch (err: any) {
       error = err.message;
     }
@@ -84,6 +87,7 @@ export function BusController(args: {
       payload: { tx, instance, info, error },
     });
   });
+
   /**
    * Context: Reset.
    */
@@ -91,7 +95,7 @@ export function BusController(args: {
     const { tx } = e;
 
     await state.change('reset', (draft) => {
-      draft.instance.context = Id.ctx.create();
+      draft.instance.session = Id.ctx.create();
       Ctx.resetInfo(draft);
     });
     await Ctx.current();
@@ -107,16 +111,16 @@ export function BusController(args: {
    */
   events.run.req$.subscribe(async (e) => {
     const { tx, only } = e;
-    const rootSpec = state.current.root;
+    const spec = state.current.spec;
     let error: string | undefined;
 
     try {
-      if (rootSpec) {
+      if (spec) {
         const context = await Ctx.current();
         await context.refresh();
 
         const ctx = context.ctx;
-        const results = await rootSpec.run({ ctx, only });
+        const results = await spec.run({ ctx, only });
         await context.flush(); // Flush the results from the {ctx} into the state tree: {render.props}.
 
         /**
@@ -149,6 +153,7 @@ export function BusController(args: {
       const state = draft.render.state || (draft.render.state = { ...e.initial });
       const res = e.mutate(state);
       if (Is.promise(res)) await res;
+      draft.render.revision.state += 1;
     });
 
     bus.fire({
@@ -168,12 +173,20 @@ export function BusController(args: {
       const props = draft.render.props || (draft.render.props = DEFAULT.props());
       const res = e.mutate(props);
       if (Is.promise(res)) await res;
+      draft.render.revision.props += 1;
     });
 
     bus.fire({
       type: 'sys.dev/props/change:res',
       payload: { tx, instance, info: state.current, error },
     });
+  });
+
+  /**
+   * Props: Ensure props changes flushed.
+   */
+  events.props.flush.pending$.pipe(debounceTime(10)).subscribe(async (e) => {
+    await (await Ctx.current()).flush();
   });
 
   /**

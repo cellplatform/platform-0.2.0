@@ -1,6 +1,6 @@
 {
   "name": "spike.dev",
-  "version": "0.0.17",
+  "version": "0.0.28",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,8 +25,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-2096ed82.js",
-    "./web": "./dist/web/lib/index-2096ed82.js"
+    ".": "./dist/web/lib/index-74f046bf.js",
+    "./web": "./dist/web/lib/index-74f046bf.js"
   },
   "typesVersions": {
     "*": {

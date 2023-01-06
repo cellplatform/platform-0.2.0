@@ -211,6 +211,15 @@ export function BusEvents(args: {
         return { tx, instance, error };
       },
     },
+    flush: {
+      pending$: rx.payload<t.DevPropsFlushPendingEvent>($, 'sys.dev/props/flush:pending'),
+      pending(revision) {
+        bus.fire({
+          type: 'sys.dev/props/flush:pending',
+          payload: { instance, revision },
+        });
+      },
+    },
   };
 
   /**

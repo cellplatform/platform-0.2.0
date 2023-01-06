@@ -1,7 +1,7 @@
 import { DevBus } from '.';
 import { Spec } from '../index.mjs';
 import { describe, expect, it, t, Test, TestSample, Time } from '../test';
-import { SAMPLES } from '../test.sample/specs.unit';
+import { SAMPLES } from '../test.ui/sample.specs.unit';
 
 const exepctSessionId = (value: string) => expect(value).to.match(/^dev:ctx\./);
 
@@ -50,11 +50,11 @@ describe('DevBus', (e) => {
         const info = res.info!;
 
         expect(res.instance).to.eql(instance.id);
-        expect(info.root).to.eql(undefined);
+        expect(info.spec).to.eql(undefined);
 
         expect(info.instance.kind).to.eql('dev:harness');
         expect(info.instance.bus).to.match(/^bus\./);
-        exepctSessionId(info.instance.context);
+        exepctSessionId(info.instance.session);
 
         events.dispose();
       });
@@ -85,22 +85,22 @@ describe('DevBus', (e) => {
         const root = await Test.bundle(SAMPLES.Sample1);
 
         expect(res.error).to.eql(undefined);
-        expect(res.info?.root).to.not.eql(undefined);
-        expect(res.info?.root).to.eql(root);
+        expect(res.info?.spec).to.not.eql(undefined);
+        expect(res.info?.spec).to.eql(root);
 
         const info = await events.info.get();
-        expect(info.root).to.eql(root);
+        expect(info.spec).to.eql(root);
 
         expect(fired.length).to.eql(3);
 
         expect(fired[0].message).to.eql('reset');
-        expect(fired[0].info.root).to.eql(undefined);
+        expect(fired[0].info.spec).to.eql(undefined);
 
         expect(fired[1].message).to.eql('context:init');
-        expect(fired[1].info.root).to.eql(undefined);
+        expect(fired[1].info.spec).to.eql(undefined);
 
         expect(fired[2].message).to.eql('spec:load');
-        expect(fired[2].info.root).to.eql(info.root);
+        expect(fired[2].info.spec).to.eql(info.spec);
 
         events.dispose();
       });
@@ -114,9 +114,9 @@ describe('DevBus', (e) => {
         const info = await events.info.get();
 
         expect(res.error).to.eql(undefined);
-        expect(res.info?.root).to.not.eql(undefined);
-        expect(res.info?.root).to.eql(root);
-        expect(info.root).to.eql(root);
+        expect(res.info?.spec).to.not.eql(undefined);
+        expect(res.info?.spec).to.eql(root);
+        expect(info.spec).to.eql(root);
 
         events.dispose();
       });
@@ -124,7 +124,7 @@ describe('DevBus', (e) => {
       it('render context changes between load/reset', async () => {
         const { events } = await TestSample.create();
 
-        const getId = async () => (await events.info.get()).instance.context;
+        const getId = async () => (await events.info.get()).instance.session;
 
         const id1 = await getId();
 
@@ -234,7 +234,7 @@ describe('DevBus', (e) => {
         const info1 = await events.info.get();
         expect(info1.render.props).to.not.exist;
 
-        const root = info1.root;
+        const root = info1.spec;
         const test1 = root?.state.tests[0];
         const test2 = root?.state.tests[1];
         expect(test1).to.exist;
@@ -248,7 +248,7 @@ describe('DevBus', (e) => {
         await events.run.fire({ only: test1?.id });
 
         const info2 = await events.info.get();
-        expect(info2.instance.context).to.eql(info1.instance.context);
+        expect(info2.instance.session).to.eql(info1.instance.session);
         expect(info2.render.props).to.exist;
         expect(info2.run.count).to.eql(1);
         expect(sample.log.count).to.eql(1);
@@ -262,7 +262,7 @@ describe('DevBus', (e) => {
          */
         await events.run.fire({ only: [test2?.id] as string[] });
         const info3 = await events.info.get();
-        expect(info3.instance.context).to.eql(info2.instance.context);
+        expect(info3.instance.session).to.eql(info2.instance.session);
         expect(info3.run.count).to.eql(2);
         expect(sample.log.count).to.eql(1);
         expect(sample.log.items[0].args.description).to.eql('foo-1');
@@ -275,7 +275,7 @@ describe('DevBus', (e) => {
          */
         await events.run.fire({});
         const info4 = await events.info.get();
-        expect(info4.instance.context).to.eql(info3.instance.context); // NB: No change to the context (instance/state).
+        expect(info4.instance.session).to.eql(info3.instance.session); // NB: No change to the context (instance/state).
         expect(info4.run.count).to.eql(3);
         expect(sample.log.count).to.eql(3);
         expect(sample.log.items.map((e) => e.args.description)).to.eql(['init', 'foo-1', 'foo-2']);
@@ -283,7 +283,7 @@ describe('DevBus', (e) => {
         events.dispose();
       });
 
-      it('reset (context/state)', async () => {
+      it('reset (session context/state)', async () => {
         const { events } = await TestSample.preloaded();
 
         /**
@@ -294,13 +294,13 @@ describe('DevBus', (e) => {
 
         await events.run.fire({});
         const info2 = await events.info.get();
-        expect(info2.instance.context).to.eql(info1.instance.context); // NB: No change to the context (instance/state).
+        expect(info2.instance.session).to.eql(info1.instance.session); // NB: No change to the context (instance/state).
 
         events.reset.fire();
 
         // NB: instances changed.
         const info3 = await events.info.get();
-        expect(info3.instance.context).to.not.eql(info2.instance.context); // NB: New session ID created.
+        expect(info3.instance.session).to.not.eql(info2.instance.session); // NB: New session ID created.
 
         events.dispose();
       });
@@ -405,6 +405,7 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql(undefined);
+        expect(info1.render.revision.state).to.eql(0);
 
         let _initial: T | undefined;
 
@@ -417,6 +418,7 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(_initial).to.eql({ count: 0 });
         expect(info2.render.state).to.eql({ count: 1, msg: 'hello' });
+        expect(info2.render.revision.state).to.eql(1);
 
         events.dispose();
       });
@@ -463,6 +465,7 @@ describe('DevBus', (e) => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.props).to.eql(undefined);
+        expect(info1.render.revision.props).to.eql(0);
 
         await events.props.change.fire((draft) => {
           draft.component.backgroundColor = -0.3;
@@ -470,6 +473,7 @@ describe('DevBus', (e) => {
 
         const info2 = await events.info.get();
         expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
+        expect(info2.render.revision.props).to.eql(1);
 
         events.dispose();
       });

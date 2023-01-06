@@ -1,4 +1,4 @@
-import { Spec } from './Spec';
+import { Spec } from './logic.Spec';
 import { Harness } from './ui/Harness';
 import { Entry } from './ui/Entry';
 import { DevBus as Bus } from './logic.Bus';

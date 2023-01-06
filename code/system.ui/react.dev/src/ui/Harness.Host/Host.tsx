@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, useCurrentState } from '../common';
+import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
@@ -12,7 +12,13 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
-  if (!renderProps) return null;
+
+  /**
+   * [Handlers]
+   */
+  const navigateToIndex = (e: React.MouseEvent) => {
+    WrangleUrl.navigate.ensureIndexDevFlag();
+  };
 
   /**
    * [Render]
@@ -20,21 +26,19 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const styles = {
     base: css({
-      flex: 1,
       position: 'relative',
       overflow: 'hidden',
-      pointerEvents: 'none',
       userSelect: 'none',
       backgroundColor:
-        renderProps.host.backgroundColor === undefined
+        renderProps?.host.backgroundColor === undefined
           ? Color.alpha(COLORS.DARK, 0.02)
           : Color.format(renderProps.host.backgroundColor),
     }),
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <HarnessHostGrid instance={instance} renderProps={renderProps} border={cropmark}>
+    <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
+      <HarnessHostGrid renderProps={renderProps} border={cropmark}>
         <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>
     </div>
@@ -44,7 +48,10 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 /**
  * Helpers
  */
-const tx = (e: t.DevInfoChanged) => e.info.run.results?.tx;
-const distinctUntil = (prev: t.DevInfoChanged, next: t.DevInfoChanged) => {
-  return tx(prev) === tx(next);
+const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
+  const prev = p.info;
+  const next = n.info;
+  if (prev.run.results?.tx !== next.run.results?.tx) return false;
+  if (!R.equals(prev.render.revision, next.render.revision)) return false;
+  return true;
 };

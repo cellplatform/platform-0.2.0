@@ -38,16 +38,32 @@ export const Util = {
   /**
    * Calculate the size of a folder
    */
-  async folderSize(dir: string) {
-    const paths = await fs.glob(fs.join(dir, '**/*'));
-    let bytes = 0;
-    await Promise.all(
-      paths.map(async (path) => {
-        const stats = await fs.stat(path);
-        bytes += stats.size;
+  async folderSize(dir: string, options: { dot?: boolean } = {}) {
+    type P = { path: string; bytes: number };
+    const sum = (list: P[]) => list.reduce((acc, next) => acc + next.bytes, 0);
+
+    const pathnames = await fs.glob(fs.join(dir, '**/*'), { nodir: true, dot: options.dot });
+    const paths: P[] = await Promise.all(
+      pathnames.map(async (path) => {
+        const bytes = (await fs.stat(path)).size;
+        return { path, bytes };
       }),
     );
-    return { dir, paths, bytes, toString: () => prettybytes(bytes) };
+
+    const api = {
+      dir,
+      paths,
+      bytes: sum(paths),
+      length: paths.length,
+      filter(fn: (item: P) => boolean) {
+        const paths = api.paths.filter(fn);
+        const bytes = sum(paths);
+        const length = paths.length;
+        return { paths, bytes, length, toString: () => prettybytes(bytes) };
+      },
+      toString: () => prettybytes(api.bytes),
+    };
+    return api;
   },
 };
 

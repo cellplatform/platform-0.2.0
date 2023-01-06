@@ -2,7 +2,6 @@ import { css, t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type HarnessHostGridProps = {
-  instance: t.DevInstance;
   children?: JSX.Element;
   border: string;
   renderProps?: t.DevRenderProps;
@@ -11,8 +10,7 @@ export type HarnessHostGridProps = {
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
   const { renderProps, border } = props;
-
-  if (!renderProps) return null;
+  if (!renderProps?.component.renderer) return null;
 
   const { size } = renderProps.component;
   const fillMargin = Wrangle.fillMargin(size);
@@ -36,7 +34,10 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Absolute: 0, display: 'grid' }),
+    base: css({
+      Absolute: 0,
+      display: 'grid',
+    }),
 
     grid: {
       fill: css({
@@ -63,35 +64,15 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
         props.style,
       )}
     >
-      <div {...styles.block.base}></div>
-      <div
-        {...css(styles.block.base, {
-          borderLeft: border,
-          borderRight: border,
-        })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
-      <div
-        {...css(styles.block.base, {
-          borderTop: border,
-          borderBottom: border,
-        })}
-      ></div>
+      <div {...styles.block.base} />
+      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...css(styles.block.base)} />
+      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
       {props.children}
-      <div
-        {...css(styles.block.base, {
-          borderTop: border,
-          borderBottom: border,
-        })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
-      <div
-        {...css(styles.block.base, {
-          borderLeft: border,
-          borderRight: border,
-        })}
-      ></div>
-      <div {...css(styles.block.base)}></div>
+      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
+      <div {...css(styles.block.base)} />
+      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...css(styles.block.base)} />
     </div>
   );
 };

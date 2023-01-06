@@ -2,7 +2,7 @@ import EditorReact from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useEffect, useRef } from 'react';
 
-import { css, t } from '../../common';
+import { css, t } from '../common';
 
 import type { OnChange } from '@monaco-editor/react';
 

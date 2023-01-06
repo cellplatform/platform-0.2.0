@@ -1,8 +1,9 @@
-export const SampleSpecs = {
-  'sample.MySample': () => import('../test.sample/specs/MySample.SPEC'),
-  'sample.DevTools.Button': () => import('../test.sample/sample.ui.DevTools/s.ui.Button.SPEC'),
+export const ModuleSpecs = {
+  'sys.ui.dev.Harness': () => import('../ui/Harness/Harness.SPEC'),
 };
 
-export const SelfDevSpecs = {
-  'sys.ui.dev.Harness': () => import('../ui/Harness/Harness.SPEC'),
+export const SampleSpecs = {
+  'sample.Empty': () => import('../test.ui/sample.specs/Empty.SPEC'),
+  'sample.MySample': () => import('../test.ui/sample.specs/MySample.SPEC'),
+  'sample.DevTools': () => import('../test.ui/sample.DevTools/DevTools.SPEC'),
 };

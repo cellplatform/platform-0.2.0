@@ -1,5 +1,5 @@
 import { Spec } from '../../../test.ui';
-import { Icons } from './sample';
+import { Icons } from './Icons.sample.mjs';
 
 export default Spec.describe('Icon', (e) => {
   e.it('init', (e) => {
