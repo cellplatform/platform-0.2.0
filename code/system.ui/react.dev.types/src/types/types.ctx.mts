@@ -68,6 +68,7 @@ export type DevCtxComponent = {
  */
 export type DevCtxHost = {
   backgroundColor(value: Color | null): DevCtxHost;
+  gridColor(value: Color | null): DevCtxHost;
 };
 
 /**

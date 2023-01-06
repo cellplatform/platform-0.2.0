@@ -6,6 +6,7 @@ export const DEFAULT = {
     return {
       host: {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
+        gridColor: Color.alpha(COLORS.DARK, 0.01),
       },
       component: {},
       debug: {

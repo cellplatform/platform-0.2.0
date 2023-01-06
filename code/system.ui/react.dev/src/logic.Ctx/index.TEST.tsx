@@ -151,25 +151,31 @@ describe('Context', () => {
   });
 
   describe('props.host', () => {
-    it('host', async () => {
+    const HOST = DEFAULT.props.host;
+
+    it('color', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const getHost = async () => (await events.info.get()).render?.props?.host!;
 
       ctx.host.backgroundColor(-0.123);
+      ctx.host.gridColor(-0.456);
       expect(context.pending).to.eql(true);
       await context.flush();
       expect(context.pending).to.eql(false);
 
       const info1 = await getHost();
       expect(info1.backgroundColor).to.eql(-0.123);
+      expect(info1.gridColor).to.eql(-0.456);
 
       ctx.host.backgroundColor(null);
+      ctx.host.gridColor(null);
       await context.flush();
 
       const info2 = await getHost();
-      expect(info2.backgroundColor).to.eql(DEFAULT.props.host.backgroundColor);
+      expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
+      expect(info2.gridColor).to.eql(HOST.gridColor);
 
       dispose();
     });

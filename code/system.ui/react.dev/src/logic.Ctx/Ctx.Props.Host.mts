@@ -12,6 +12,12 @@ export function CtxPropsHost(props: PropArgs) {
       props.changed();
       return api;
     },
+    gridColor(value) {
+      if (value === null) value = HOST.gridColor!;
+      props.current().host.gridColor = value;
+      props.changed();
+      return api;
+    },
   };
   return api;
 }
