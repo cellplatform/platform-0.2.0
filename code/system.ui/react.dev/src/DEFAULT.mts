@@ -1,9 +1,12 @@
 import * as t from './common/types.mjs';
+import { Color, COLORS } from './common';
 
 export const DEFAULT = {
   props(): t.DevRenderProps {
     return {
-      host: {},
+      host: {
+        backgroundColor: Color.alpha(COLORS.DARK, 0.02),
+      },
       component: {},
       debug: {
         header: {},

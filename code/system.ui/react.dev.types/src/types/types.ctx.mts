@@ -67,7 +67,7 @@ export type DevCtxComponent = {
  * Component Host ("Harness")
  */
 export type DevCtxHost = {
-  backgroundColor(value?: Color): DevCtxHost;
+  backgroundColor(value: Color | null): DevCtxHost;
 };
 
 /**

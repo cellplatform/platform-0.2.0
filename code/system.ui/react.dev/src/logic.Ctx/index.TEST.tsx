@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { describe, expect, Id, it, t, TestSample, DEFAULT } from '../test';
+import { DEFAULT, describe, expect, Id, it, t, TestSample } from '../test';
 
 export function expectRendererId(value?: string) {
   expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);
@@ -155,16 +155,22 @@ describe('Context', () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
-      ctx.host.backgroundColor(-0.22);
+      const getHost = async () => (await events.info.get()).render?.props?.host!;
 
+      ctx.host.backgroundColor(-0.123);
       expect(context.pending).to.eql(true);
       await context.flush();
       expect(context.pending).to.eql(false);
 
-      const info = await events.info.get();
-      const host = info.render.props?.host!;
+      const info1 = await getHost();
+      expect(info1.backgroundColor).to.eql(-0.123);
 
-      expect(host.backgroundColor).to.eql(-0.22);
+      ctx.host.backgroundColor(null);
+      await context.flush();
+
+      const info2 = await getHost();
+      expect(info2.backgroundColor).to.eql(DEFAULT.props().host.backgroundColor);
+
       dispose();
     });
   });

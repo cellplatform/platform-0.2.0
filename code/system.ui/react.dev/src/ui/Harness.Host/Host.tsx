@@ -1,4 +1,4 @@
-import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl } from '../common';
+import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
@@ -30,7 +30,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       overflow: 'hidden',
       backgroundColor:
         renderProps?.host.backgroundColor === undefined
-          ? Color.alpha(COLORS.DARK, 0.02)
+          ? DEFAULT.props().host.backgroundColor
           : Color.format(renderProps.host.backgroundColor),
     }),
   };
