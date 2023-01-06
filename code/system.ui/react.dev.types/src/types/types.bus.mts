@@ -60,6 +60,10 @@ export type DevEvents = t.Disposable & {
         options?: { timeout?: Milliseconds },
       ): Promise<DevStateChangeRes>;
     };
+    flush: {
+      pending$: t.Observable<t.DevPropsFlushPending>;
+      pending(revision: number): void;
+    };
   };
   redraw: {
     $: t.Observable<t.DevRedraw>;
@@ -85,6 +89,7 @@ export type DevEvent =
   | DevStateChangeResEvent
   | DevPropsChangeReqEvent
   | DevPropsChangeResEvent
+  | DevPropsFlushPendingEvent
   | DevRedrawEvent;
 
 /**
@@ -175,6 +180,12 @@ export type DevPropsChangeRes = {
   info?: t.DevInfo;
   error?: string;
 };
+
+export type DevPropsFlushPendingEvent = {
+  type: 'sys.dev/props/flush:pending';
+  payload: DevPropsFlushPending;
+};
+export type DevPropsFlushPending = { instance: Id; revision: number };
 
 /**
  * State mutation.
