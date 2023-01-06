@@ -19,13 +19,19 @@ export default Spec.describe('DevTools', (e) => {
     const dev = DevTools.init<S>(e, initial);
     dev
       .button((btn) =>
-        btn.label('My Button').onClick(async (e) => {
+        btn.label('update state').onClick(async (e) => {
           await e.state.change((draft) => draft.count++);
-          e.label(`count-${e.state.current.count}`);
+          e.label(`state: count-${e.state.current.count}`);
         }),
       )
       .hr()
-      .button((btn) => btn.label('Hello'));
+      .button((btn) => {
+        let count = 0;
+        btn.label('rename').onClick((e) => {
+          count++;
+          e.label(`button label renamed-${count}`);
+        });
+      });
   });
 });
 

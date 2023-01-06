@@ -1,9 +1,8 @@
-import { Spec } from '../../test.ui';
 import { Dev } from '..';
 
-export default Spec.describe('Button', (e) => {
+export default Dev.describe('Button', (e) => {
   e.it('debug panel', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .display('grid')
       .size(250, undefined)

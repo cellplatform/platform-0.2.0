@@ -1,13 +1,12 @@
 import { Button } from './ui.Button';
-import { Spec } from '../../test.ui';
 import { Dev } from '..';
 
 const initial = { count: 0 };
 type S = typeof initial;
 
-export default Spec.describe('Button', (e) => {
+export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .display('grid')
       .size(250, undefined)
