@@ -33,7 +33,7 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.title.base}>
         <Description text={data.description} style={styles.title.description} />
-        <div {...styles.title.elapsed}>{data.elapsed}ms</div>
+        <div {...styles.title.elapsed}>{`${data.elapsed} ms`}</div>
       </div>
       <div {...styles.body}>
         {elTests}
