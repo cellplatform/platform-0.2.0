@@ -12,7 +12,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
-  if (!renderProps) return null;
 
   /**
    * [Handlers]
@@ -31,7 +30,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       overflow: 'hidden',
       userSelect: 'none',
       backgroundColor:
-        renderProps.host.backgroundColor === undefined
+        renderProps?.host.backgroundColor === undefined
           ? Color.alpha(COLORS.DARK, 0.02)
           : Color.format(renderProps.host.backgroundColor),
     }),

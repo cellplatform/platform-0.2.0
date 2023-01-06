@@ -12,7 +12,7 @@ export type HarnessHostGridProps = {
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
   const { renderProps, border, onGridDoubleClick: onDoubleClick } = props;
-  if (!renderProps) return null;
+  if (!renderProps?.component.renderer) return null;
 
   const { size } = renderProps.component;
   const fillMargin = Wrangle.fillMargin(size);
