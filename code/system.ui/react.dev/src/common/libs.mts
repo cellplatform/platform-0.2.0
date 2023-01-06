@@ -1,5 +1,5 @@
-import { mergeDeepRight, clone, partial } from 'ramda';
-export const R = { mergeDeepRight, clone, partial };
+import { mergeDeepRight, clone } from 'ramda';
+export const R = { mergeDeepRight, clone };
 
 /**
  * @system

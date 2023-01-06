@@ -17,12 +17,15 @@ export default Spec.describe('DevTools', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = DevTools.init<S>(e, initial);
-    dev.button((btn) =>
-      btn.label('My Button').onClick(async (e) => {
-        await e.state.change((draft) => draft.count++);
-        e.label(`count-${e.state.current.count}`);
-      }),
-    );
+    dev
+      .button((btn) =>
+        btn.label('My Button').onClick(async (e) => {
+          await e.state.change((draft) => draft.count++);
+          e.label(`count-${e.state.current.count}`);
+        }),
+      )
+      .hr()
+      .button((btn) => btn.label('Hello'));
   });
 });
 

@@ -7,25 +7,41 @@ import type { DevButtonHandler } from '../DevTools.Button/types.mjs';
 type O = Record<string, unknown>;
 
 export const DevTools = {
-  button,
-  hr,
-
   /**
    * Curried initializtation.
    */
-  init,
+  init: curried,
+
+  /**
+   * Widgets
+   */
+  button,
+  hr,
 };
 
 /**
  * [Helpers]
  */
 
-function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
+function curried<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   const ctx = Spec.ctx(input);
-  return {
+  const api = {
     ctx,
-    button: (fn: DevButtonHandler<S>) => button<S>(input, state, fn),
-    hr: () => DevTools.hr(input),
+
+    /**
+     * Widgets.
+     */
+    button(fn: DevButtonHandler<S>) {
+      DevTools.button<S>(ctx, state, fn);
+      return api;
+    },
+
+    hr() {
+      DevTools.hr(ctx);
+      return api;
+    },
   };
+
+  return api;
 }

@@ -1,4 +1,4 @@
-import { Spec, t, R } from '../common';
+import { Spec, t } from '../common';
 import { ButtonSample } from './ui.Button';
 import { Hr } from './ui.Hr';
 
@@ -26,52 +26,65 @@ type ButtonHandlerArgs = {
 export const DevTools = {
   init(input: t.DevCtxInput) {
     const ctx = Spec.ctx(input);
-    return {
+    const api = {
       ctx,
-      button: R.partial(DevTools.button, [input]),
-      hr: () => DevTools.hr(input),
+
+      /**
+       * Widgets.
+       */
+      button(fn?: ButtonHandler) {
+        DevTools.button(input, fn);
+        return api;
+      },
+      hr() {
+        DevTools.hr(input);
+        return api;
+      },
     };
+    return api;
   },
 
   /**
    * A simple clickable text button implementation.
    */
   button(input: t.DevCtxInput, fn?: ButtonHandler) {
-    return Spec.once(input, (ctx) => {
-      const clickHandlers: ButtonClickHandler[] = [];
-      const props = { label: '' };
+    const ctx = Spec.ctx(input);
+    if (!ctx.is.initial) return;
 
-      const args: ButtonHandlerArgs = {
-        ctx,
-        label(value) {
-          props.label = value;
-          ref.redraw();
-          return args;
-        },
-        onClick(handler) {
-          clickHandlers.push(handler);
-          return args;
-        },
-      };
+    const clickHandlers: ButtonClickHandler[] = [];
+    const props = { label: '' };
 
-      const ref = ctx.debug.row((e) => {
-        return (
-          <ButtonSample
-            ctx={ctx}
-            label={props.label}
-            onClick={() => clickHandlers.forEach((fn) => fn(args))}
-          />
-        );
-      });
+    const args: ButtonHandlerArgs = {
+      ctx,
+      label(value) {
+        props.label = value;
+        ref.redraw();
+        return args;
+      },
+      onClick(handler) {
+        clickHandlers.push(handler);
+        return args;
+      },
+    };
 
-      fn?.(args);
+    const ref = ctx.debug.row((e) => {
+      return (
+        <ButtonSample
+          ctx={ctx}
+          label={props.label}
+          onClick={() => clickHandlers.forEach((fn) => fn(args))}
+        />
+      );
     });
+
+    fn?.(args);
   },
 
   /**
    * A horizontal rule (visual divider).
    */
   hr(input: t.DevCtxInput) {
-    return Spec.once(input, (ctx) => ctx.debug.row(<Hr />));
+    const ctx = Spec.ctx(input);
+    if (ctx.is.initial) ctx.debug.row(<Hr />);
   },
 };
