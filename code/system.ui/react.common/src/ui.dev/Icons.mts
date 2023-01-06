@@ -1,5 +1,8 @@
+import { MdCheck, MdClose, MdDoNotDisturb } from 'react-icons/md';
 import { VscSymbolVariable } from 'react-icons/vsc';
-import { Icon } from './common';
+
+import { Icon } from '../ui/Icon';
+export { Icon };
 
 const icon = Icon.renderer;
 
@@ -8,4 +11,7 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Method: icon(VscSymbolVariable),
+  Close: icon(MdClose),
+  Tick: icon(MdCheck),
+  Skip: icon(MdDoNotDisturb),
 };

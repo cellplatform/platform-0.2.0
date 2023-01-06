@@ -11,4 +11,5 @@ export const COLORS = {
   CYAN: '#00C2FF',
   MAGENTA: '#FE0064',
   BLUE: '#4D7EF7',
+  LIME: '#A6E130',
 };
