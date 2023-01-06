@@ -52,6 +52,9 @@ export type DevCtxObject = {
   readonly run: { count: number; is: DevCtxIs };
 };
 
+/**
+ * Main Component ("Subject")
+ */
 export type DevCtxComponent = {
   display(value: DevPropDisplay): DevCtxComponent;
   backgroundColor(value?: Color): DevCtxComponent;
@@ -60,12 +63,28 @@ export type DevCtxComponent = {
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
 };
 
+/**
+ * Component Host ("Harness")
+ */
 export type DevCtxHost = {
   backgroundColor(value?: Color): DevCtxHost;
 };
 
+/**
+ * Debug Panel
+ */
 export type DevCtxDebug = {
   row<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
   scroll(value: boolean): DevCtxDebug;
   padding(value: t.MarginInput | undefined | null): DevCtxDebug;
+  header: DevCtxDebugHeader;
+  footer: DevCtxDebugFooter;
+};
+
+export type DevCtxDebugHeader = {
+  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
+};
+
+export type DevCtxDebugFooter = {
+  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
 };

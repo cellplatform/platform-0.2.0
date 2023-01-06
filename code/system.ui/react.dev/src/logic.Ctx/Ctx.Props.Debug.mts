@@ -28,6 +28,32 @@ export function CtxPropsDebug(props: PropArgs) {
       props.changed();
       return api;
     },
+
+    /**
+     * Header
+     */
+    header: {
+      render(input) {
+        const id = Id.renderer.create();
+        const fn = typeof input === 'function' ? input : () => input;
+        props.current().debug.header.renderer = { id, fn };
+        props.changed();
+        return api.header;
+      },
+    },
+
+    /**
+     * Footer
+     */
+    footer: {
+      render(input) {
+        const id = Id.renderer.create();
+        const fn = typeof input === 'function' ? input : () => input;
+        props.current().debug.footer.renderer = { id, fn };
+        props.changed();
+        return api.footer;
+      },
+    },
   };
 
   return api;

@@ -1,6 +1,10 @@
 import { Context } from '.';
 import { describe, expect, Id, it, t, TestSample, DEFAULT } from '../test';
 
+export function expectRendererId(value?: string) {
+  expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);
+}
+
 describe('Context', () => {
   describe('lifecycle', () => {
     it('init', async () => {
@@ -91,7 +95,7 @@ describe('Context', () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
-      const fn = () => undefined;
+      const fn = () => null;
       ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
 
       expect(context.pending).to.eql(true);
@@ -104,7 +108,7 @@ describe('Context', () => {
       expect(component.backgroundColor).to.eql(-0.2);
       expect(component.display).to.eql('flex');
       expect(component.renderer?.fn).to.eql(fn);
-      expect(component.renderer?.id.startsWith(Id.renderer.prefix)).to.eql(true);
+      expectRendererId(component.renderer?.id);
       expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
       dispose();
     });
@@ -172,7 +176,7 @@ describe('Context', () => {
 
       const fn = () => undefined;
       const res = ctx.debug.row(fn);
-      expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
+      expectRendererId(res.id);
 
       expect(context.pending).to.eql(true);
       await context.flush();
@@ -193,7 +197,7 @@ describe('Context', () => {
 
       const el = <div>Foo</div>;
       const res = ctx.debug.row(el);
-      expect(res.id.startsWith(Id.renderer.prefix)).to.eql(true);
+      expectRendererId(res.id);
 
       await context.flush();
 
@@ -252,6 +256,64 @@ describe('Context', () => {
       await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
 
       dispose();
+    });
+
+    describe('header', () => {
+      it('header.render', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+        const el = <div>Hello</div>;
+        const fn = () => el;
+        const getHeader = async () => (await events.info.get()).render.props?.debug.header;
+
+        const info1 = await getHeader();
+        expect(info1?.renderer).to.eql(undefined);
+
+        ctx.debug.header.render(fn);
+        await context.flush();
+
+        const info2 = await getHeader();
+        expectRendererId(info2?.renderer?.id);
+        expect(info2?.renderer?.fn).to.equal(fn);
+
+        ctx.debug.header.render(el);
+        await context.flush();
+
+        const info3 = await getHeader();
+        expectRendererId(info3?.renderer?.id);
+        expect(info3?.renderer?.fn({} as any)).to.equal(el);
+
+        dispose();
+      });
+    });
+
+    describe('footer', () => {
+      it('footer.render', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+        const el = <div>Hello</div>;
+        const fn = () => el;
+        const getFooter = async () => (await events.info.get()).render.props?.debug.footer;
+
+        const info1 = await getFooter();
+        expect(info1?.renderer).to.eql(undefined);
+
+        ctx.debug.footer.render(fn);
+        await context.flush();
+
+        const info2 = await getFooter();
+        expectRendererId(info2?.renderer?.id);
+        expect(info2?.renderer?.fn).to.equal(fn);
+
+        ctx.debug.footer.render(el);
+        await context.flush();
+
+        const info3 = await getFooter();
+        expectRendererId(info3?.renderer?.id);
+        expect(info3?.renderer?.fn({} as any)).to.equal(el);
+
+        dispose();
+      });
     });
   });
 
