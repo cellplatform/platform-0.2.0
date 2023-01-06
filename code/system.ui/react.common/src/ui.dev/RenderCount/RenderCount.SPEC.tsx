@@ -1,10 +1,10 @@
-import { Spec } from '../../test.ui';
+import { Dev } from '../../test.ui';
 import { css, t } from '../common';
 import { RenderCount } from '.';
 
-export default Spec.describe('RenderCount', (e) => {
+export default Dev.describe('RenderCount', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .display('grid')
       .size(250, 30)

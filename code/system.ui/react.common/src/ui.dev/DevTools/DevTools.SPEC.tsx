@@ -1,13 +1,13 @@
 import { DevTools } from '.';
-import { RenderCount, Spec } from '../../test.ui';
+import { RenderCount, Dev } from '../../test.ui';
 import { css } from '../common';
 
 const initial = { count: 0 };
 type S = typeof initial;
 
-export default Spec.describe('DevTools', (e) => {
+export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .display('grid')
       .size(350, undefined)

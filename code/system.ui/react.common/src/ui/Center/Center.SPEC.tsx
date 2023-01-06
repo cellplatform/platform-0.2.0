@@ -1,9 +1,9 @@
-import { Spec, css } from '../../test.ui';
+import { Dev, css } from '../../test.ui';
 import { Center } from '.';
 
-export default Spec.describe('Spinner', (e) => {
+export default Dev.describe('Spinner', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
 
     const styles = {
       base: css({
