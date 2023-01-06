@@ -1,5 +1,5 @@
 import { DevBus } from '../../logic.Bus';
-import { css, Spec, t } from '../common';
+import { Color, css, Spec, t } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
 
@@ -101,9 +101,18 @@ export default Spec.describe('MySample', (e) => {
 const DebugComponentSample = () => {
   const styles = {
     base: css({
-      padding: 4,
+      padding: 10,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
+    inner: css({
+      Padding: [10, 12],
+      border: `dashed 1px ${Color.format(-0.2)}`,
+      borderRadius: 5,
+    }),
   };
-  return <div {...styles.base}>Plain Component</div>;
+  return (
+    <div {...styles.base}>
+      <div {...styles.inner}>Plain Component</div>
+    </div>
+  );
 };
