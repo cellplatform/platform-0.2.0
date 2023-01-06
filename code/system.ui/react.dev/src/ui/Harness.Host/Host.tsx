@@ -37,13 +37,8 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <HarnessHostGrid
-        instance={instance}
-        renderProps={renderProps}
-        border={cropmark}
-        onGridDoubleClick={navigateToIndex}
-      >
+    <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
+      <HarnessHostGrid instance={instance} renderProps={renderProps} border={cropmark}>
         <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
       </HarnessHostGrid>
     </div>

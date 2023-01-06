@@ -41,7 +41,7 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onDoubleClick={(e) => e.stopPropagation()}>
       <div {...styles.container} className={'ComponentHost'}>
         {element}
       </div>

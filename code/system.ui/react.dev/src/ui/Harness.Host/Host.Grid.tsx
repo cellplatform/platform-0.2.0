@@ -7,11 +7,10 @@ export type HarnessHostGridProps = {
   border: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
-  onGridDoubleClick?: React.MouseEventHandler;
 };
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
-  const { renderProps, border, onGridDoubleClick: onDoubleClick } = props;
+  const { renderProps, border } = props;
   if (!renderProps?.component.renderer) return null;
 
   const { size } = renderProps.component;
@@ -36,7 +35,10 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Absolute: 0, display: 'grid' }),
+    base: css({
+      Absolute: 0,
+      display: 'grid',
+    }),
 
     grid: {
       fill: css({
@@ -54,8 +56,6 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
     },
   };
 
-  const mouse = { onDoubleClick };
-
   return (
     <div
       {...css(
@@ -65,15 +65,15 @@ export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
         props.style,
       )}
     >
-      <div {...mouse} {...styles.block.base} />
-      <div {...mouse} {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
-      <div {...mouse} {...css(styles.block.base)} />
-      <div {...mouse} {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
+      <div {...styles.block.base} />
+      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...css(styles.block.base)} />
+      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
       {props.children}
-      <div {...mouse} {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
-      <div {...mouse} {...css(styles.block.base)} />
-      <div {...mouse} {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
-      <div {...mouse} {...css(styles.block.base)} />
+      <div {...css(styles.block.base, { borderTop: border, borderBottom: border })} />
+      <div {...css(styles.block.base)} />
+      <div {...css(styles.block.base, { borderLeft: border, borderRight: border })} />
+      <div {...css(styles.block.base)} />
     </div>
   );
 };
