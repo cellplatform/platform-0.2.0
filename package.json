@@ -50,6 +50,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.8.0",
     "tinycolor2": "^1.5.1",
+    "react-inspector": "^6.0.1",
     "rehype-sanitize": "^5.0.1",
     "rehype-stringify": "^9.0.3",
     "rehype-format": "^4.0.1",

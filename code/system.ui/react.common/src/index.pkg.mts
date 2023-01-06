@@ -21,6 +21,7 @@ export const Pkg: ModuleDef = {
     'react-dom': '18.2.0',
     'react-icons': '4.7.1',
     'react-spinners': '0.13.7',
+    'react-inspector': '6.0.1',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
