@@ -1,5 +1,6 @@
 import { map } from 'rxjs/operators';
-import { PeerEvents, NetworkBus, t, UriUtil } from './common';
+import { PeerEvents, t, UriUtil } from './common';
+import { NetworkBus } from '../NetworkBus';
 
 /**
  * An [event-bus] distributed across a number of

@@ -1,11 +1,8 @@
-import { expect } from 'chai';
-import { WebRuntime } from 'sys.runtime.web';
-import { Test } from 'sys.ui.dev';
-
 import { PeerNetbus } from '.';
-import { cuid, rx, t, time } from '../common';
+import { cuid, Dev, expect, rx, t, Time } from '../test.ui';
+import { WebRuntimeBus } from '../web.RuntimeBus';
 
-export default Test.describe('PeerNetbus', (e) => {
+export default Dev.describe('PeerNetbus', (e) => {
   e.it('init (default)', () => {
     const self = cuid();
     const bus = rx.bus();
@@ -26,7 +23,7 @@ export default Test.describe('PeerNetbus', (e) => {
     const event: t.Event = { type: 'foo', payload: { count: 0 } };
     netbus.fire(event);
 
-    await time.wait(0);
+    await Time.wait(0);
     expect(fired).to.eql([event]);
   });
 
@@ -36,8 +33,8 @@ export default Test.describe('PeerNetbus', (e) => {
       const netbus = PeerNetbus({ bus, self: cuid() });
 
       const instance = { bus };
-      const runtime = WebRuntime.Bus.Controller({ instance, netbus });
-      const events = WebRuntime.Bus.Events({ instance });
+      const runtime = WebRuntimeBus.Controller({ instance, netbus });
+      const events = WebRuntimeBus.Events({ instance });
 
       const res1 = await runtime.netbus.get({});
       const res2 = await events.netbus.get();
