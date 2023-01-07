@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 
 import { css, t } from '../../common';
-import { useAudioAnalyser } from './useAudioAnalyser';
-import { useDrawWaveform } from './useDrawWaveform';
+import { useAudioAnalyser } from './useAudioAnalyser.mjs';
+import { useDrawWaveform } from './useDrawWaveform.mjs';
 
 export type AudioWaveformProps = {
   stream?: MediaStream;
