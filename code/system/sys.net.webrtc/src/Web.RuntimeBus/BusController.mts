@@ -1,7 +1,7 @@
 import { delay } from 'rxjs/operators';
 
-import { BusEvents } from './BusEvents';
-import { DEFAULT, rx, t, Module } from './common';
+import { BusEvents } from './BusEvents.mjs';
+import { DEFAULT, Module, rx, t } from './common';
 
 /**
  * Event controller.

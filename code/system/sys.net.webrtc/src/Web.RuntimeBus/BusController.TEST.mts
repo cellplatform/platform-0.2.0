@@ -1,10 +1,10 @@
 import { WebRuntimeBus } from '.';
-import { expect, rx, Dev, slug, NetworkBusMock } from '../test.ui';
+import { describe, expect, it, NetworkBusMock, Pkg, rx, slug } from '../test';
 import { DEFAULT } from './common';
 
-export default Dev.describe('Web.RuntimeBus', (e) => {
-  e.describe('controller/events', (e) => {
-    e.it('instance', async () => {
+describe('Web.RuntimeBus', (e) => {
+  describe('controller/events', (e) => {
+    it('instance', async () => {
       const bus = rx.bus();
       const id = `foo.${slug()}`;
 
@@ -18,7 +18,7 @@ export default Dev.describe('Web.RuntimeBus', (e) => {
       expect(env2.instance.id).to.eql(id);
     });
 
-    e.it('info', async () => {
+    it('info', async () => {
       const instance = { bus: rx.bus() };
       const controller = WebRuntimeBus.Controller({ instance });
       const events = WebRuntimeBus.Events({ instance });
@@ -28,11 +28,12 @@ export default Dev.describe('Web.RuntimeBus', (e) => {
       events.dispose();
 
       expect(res.exists).to.eql(true);
-      expect(res.info?.module.name).to.eql('sys.runtime.web');
+      expect(res.info?.module.name).to.eql(Pkg.name);
+      expect(res.info?.module.version).to.eql(Pkg.version);
     });
 
-    e.describe('netbus', (e) => {
-      e.it('exists: false', async () => {
+    describe('netbus', (e) => {
+      it('exists: false', async () => {
         const instance = { bus: rx.bus() };
         const runtime = WebRuntimeBus.Controller({ instance });
 
@@ -44,7 +45,7 @@ export default Dev.describe('Web.RuntimeBus', (e) => {
         expect(res.error).to.eql(undefined);
       });
 
-      e.it('exists: true', async () => {
+      it('exists: true', async () => {
         const instance = { bus: rx.bus() };
         const netbus = NetworkBusMock();
         const runtime = WebRuntimeBus.Controller({ instance, netbus });

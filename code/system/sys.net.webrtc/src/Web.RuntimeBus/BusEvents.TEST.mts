@@ -1,17 +1,17 @@
-import { expect, rx, Dev } from '../test.ui';
 import { WebRuntimeBus } from '.';
+import { describe, expect, it, rx } from '../test';
 
-export default Dev.describe('Web.RuntimeBus (Events)', (e) => {
-  e.describe('is', (e) => {
+describe('Web.RuntimeBus (Events)', (e) => {
+  describe('is', (e) => {
     const is = WebRuntimeBus.Events.is;
 
-    e.it('is (static/instance)', () => {
+    it('is (static/instance)', () => {
       const instance = { bus: rx.bus() };
       const events = WebRuntimeBus.Events({ instance });
       expect(events.is).to.equal(is);
     });
 
-    e.it('is.base', () => {
+    it('is.base', () => {
       const test = (type: string, expected: boolean) => {
         expect(is.base({ type, payload: {} })).to.eql(expected);
       };
@@ -19,7 +19,7 @@ export default Dev.describe('Web.RuntimeBus (Events)', (e) => {
       test('sys.runtime.web/', true);
     });
 
-    e.it('is.instance', () => {
+    it('is.instance', () => {
       const type = 'sys.runtime.web/';
       expect(is.instance({ type, payload: { instance: 'abc' } }, 'abc')).to.eql(true);
       expect(is.instance({ type, payload: { instance: 'abc' } }, '123')).to.eql(false);
@@ -27,8 +27,8 @@ export default Dev.describe('Web.RuntimeBus (Events)', (e) => {
     });
   });
 
-  e.describe('dispose/clone', (e) => {
-    e.it('dispose', () => {
+  describe('dispose/clone', (e) => {
+    it('dispose', () => {
       const instance = { bus: rx.bus() };
       const events = WebRuntimeBus.Events({ instance });
 
@@ -42,7 +42,7 @@ export default Dev.describe('Web.RuntimeBus (Events)', (e) => {
       expect(count).to.eql(1);
     });
 
-    e.it('clone', () => {
+    it('clone', () => {
       const instance = { bus: rx.bus() };
       const events1 = WebRuntimeBus.Events({ instance });
       const events2 = events1.clone();

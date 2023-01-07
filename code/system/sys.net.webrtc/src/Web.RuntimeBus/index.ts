@@ -1,7 +1,7 @@
-import { BusEvents as Events } from './BusEvents';
-import { BusController as Controller } from './BusController';
+import { BusEvents as Events } from './BusEvents.mjs';
+import { BusController as Controller } from './BusController.mjs';
 
-export * from './BusEvents';
+export * from './BusEvents.mjs';
 
 export const WebRuntimeBus = {
   Events,

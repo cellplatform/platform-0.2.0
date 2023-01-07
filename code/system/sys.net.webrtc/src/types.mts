@@ -1,4 +1,4 @@
 export * from './types.Bus';
 export * from './web.PeerNetwork.types';
-export * from './web.PeerNetbus/types';
-export * from './Web.RuntimeBus/types';
+export * from './web.PeerNetbus/types.mjs';
+export * from './Web.RuntimeBus/types.mjs';
