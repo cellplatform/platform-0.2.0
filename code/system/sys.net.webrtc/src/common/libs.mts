@@ -1,1 +1,1 @@
-export { rx } from 'sys.util';
+export { rx, slug, cuid } from 'sys.util';
