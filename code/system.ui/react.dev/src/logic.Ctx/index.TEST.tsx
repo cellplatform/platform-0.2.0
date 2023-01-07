@@ -271,7 +271,9 @@ describe('Context', () => {
     });
 
     describe('header', () => {
-      it('header.render', async () => {
+      const HEADER = DEFAULT.props.debug.header;
+
+      it('header (props}', async () => {
         const { events, context, dispose } = await TestSample.context();
         const ctx = context.ctx;
         const el = <div>Hello</div>;
@@ -280,27 +282,32 @@ describe('Context', () => {
 
         const info1 = await getHeader();
         expect(info1?.renderer).to.eql(undefined);
+        expect(info1?.border.color).to.eql(HEADER.border.color);
 
-        ctx.debug.header.render(fn);
+        ctx.debug.header.render(fn).border(1);
         await context.flush();
 
         const info2 = await getHeader();
         expectRendererId(info2?.renderer?.id);
         expect(info2?.renderer?.fn).to.equal(fn);
+        expect(info2?.border.color).to.equal(1);
 
-        ctx.debug.header.render(el);
+        ctx.debug.header.render(el).border(null);
         await context.flush();
 
         const info3 = await getHeader();
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
+        expect(info3?.border.color).to.eql(HEADER.border.color);
 
         dispose();
       });
     });
 
     describe('footer', () => {
-      it('footer.render', async () => {
+      const FOOTER = DEFAULT.props.debug.footer;
+
+      it('footer (props)', async () => {
         const { events, context, dispose } = await TestSample.context();
         const ctx = context.ctx;
         const el = <div>Hello</div>;
@@ -309,20 +316,23 @@ describe('Context', () => {
 
         const info1 = await getFooter();
         expect(info1?.renderer).to.eql(undefined);
+        expect(info1?.border.color).to.eql(FOOTER.border.color);
 
-        ctx.debug.footer.render(fn);
+        ctx.debug.footer.render(fn).border(1);
         await context.flush();
 
         const info2 = await getFooter();
         expectRendererId(info2?.renderer?.id);
         expect(info2?.renderer?.fn).to.equal(fn);
+        expect(info2?.border.color).to.equal(1);
 
-        ctx.debug.footer.render(el);
+        ctx.debug.footer.render(el).border(null);
         await context.flush();
 
         const info3 = await getFooter();
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
+        expect(info3?.border.color).to.eql(FOOTER.border.color);
 
         dispose();
       });

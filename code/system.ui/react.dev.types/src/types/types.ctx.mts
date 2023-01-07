@@ -84,8 +84,10 @@ export type DevCtxDebug = {
 
 export type DevCtxDebugHeader = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
+  border(color: Color | null): DevCtxDebugHeader;
 };
 
 export type DevCtxDebugFooter = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
+  border(color: Color | null): DevCtxDebugFooter;
 };

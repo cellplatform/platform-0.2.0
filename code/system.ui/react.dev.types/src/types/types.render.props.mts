@@ -33,13 +33,19 @@ export type DevRenderPropsHost = {
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
-  header: { renderer?: t.DevRendererRef<any> };
+  header: {
+    renderer?: t.DevRendererRef<any>;
+    border: { color?: Color };
+  };
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
     padding: t.Margin;
   };
-  footer: { renderer?: t.DevRendererRef<any> };
+  footer: {
+    renderer?: t.DevRendererRef<any>;
+    border: { color?: Color };
+  };
 };
 
 /**

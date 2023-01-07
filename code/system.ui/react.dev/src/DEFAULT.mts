@@ -10,13 +10,13 @@ export const DEFAULT = {
       },
       component: {},
       debug: {
-        header: {},
+        header: { border: {} },
         body: {
           renderers: [],
           scroll: true,
           padding: [15, 15, 15, 15],
         },
-        footer: {},
+        footer: { border: {} },
       },
     };
   },

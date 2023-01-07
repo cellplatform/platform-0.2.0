@@ -40,6 +40,12 @@ export function CtxPropsDebug(props: PropArgs) {
         props.changed();
         return api.header;
       },
+      border(color) {
+        if (color === null) color = DEBUG.header.border.color!;
+        props.current().debug.header.border.color = color;
+        props.changed();
+        return api.header;
+      },
     },
 
     /**
@@ -50,6 +56,12 @@ export function CtxPropsDebug(props: PropArgs) {
         const id = Id.renderer.create();
         const fn = typeof input === 'function' ? input : () => input;
         props.current().debug.footer.renderer = { id, fn };
+        props.changed();
+        return api.footer;
+      },
+      border(color) {
+        if (color === null) color = DEBUG.footer.border.color!;
+        props.current().debug.footer.border.color = color;
         props.changed();
         return api.footer;
       },
