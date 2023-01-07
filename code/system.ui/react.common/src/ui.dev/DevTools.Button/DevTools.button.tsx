@@ -35,7 +35,8 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
         label={props.label}
         onClick={async () => {
           const state = _state || (_state = await ctx.state<S>(initial));
-          clickHandlers.forEach((fn) => fn({ ...args, state }));
+          const change = state.change;
+          clickHandlers.forEach((fn) => fn({ ...args, state, change }));
         }}
       />
     );
