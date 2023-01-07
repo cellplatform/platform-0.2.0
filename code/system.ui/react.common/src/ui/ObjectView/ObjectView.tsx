@@ -1,7 +1,7 @@
 import { chromeDark, chromeLight, ObjectInspector } from 'react-inspector';
 
 import { css, FC, t } from '../common';
-import { DEFAULTS } from './DEFAULTS.mjs';
+import { DEFAULTS } from './DEFAULT.mjs';
 
 import type { ObjectViewTheme } from './types.mjs';
 
