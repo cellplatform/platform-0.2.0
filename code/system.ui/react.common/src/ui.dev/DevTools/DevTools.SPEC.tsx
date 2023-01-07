@@ -1,6 +1,6 @@
 import { DevTools } from '.';
 import { RenderCount, Dev } from '../../test.ui';
-import { css } from '../common';
+import { css, ObjectView } from '../common';
 
 const initial = { count: 0 };
 type S = typeof initial;
@@ -27,9 +27,9 @@ export default Dev.describe('DevTools', (e) => {
       .hr()
       .button((btn) => {
         let count = 0;
-        btn.label('rename').onClick((e) => {
+        btn.label('rename (self)').onClick((e) => {
           count++;
-          e.label(`button label renamed-${count}`);
+          e.label(`renamed-${count}`);
         });
       });
   });
@@ -38,15 +38,15 @@ export default Dev.describe('DevTools', (e) => {
 /**
  * Sample
  */
+
 export type SampleProps = { state: S };
 export const Sample: React.FC<SampleProps> = (props) => {
-  const json = JSON.stringify(props.state, null, '  ');
   const styles = {
     base: css({ Padding: [5, 12], fontSize: 14 }),
   };
   return (
     <div {...styles.base}>
-      <pre>state: {json}</pre>
+      <ObjectView name={'state'} data={props.state} />
       <RenderCount />
     </div>
   );

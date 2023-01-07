@@ -35,7 +35,7 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, {});
 
     dev.button((btn) =>
-      btn.label('🐷').onClick(async (e) => {
+      btn.label('run tests').onClick(async (e) => {
         const results = await root.run();
         await e.state.change((draft) => (draft.results = results));
       }),
