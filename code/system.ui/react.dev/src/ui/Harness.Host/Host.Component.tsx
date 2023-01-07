@@ -12,7 +12,6 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
   const { instance } = props;
   const component = props.renderProps?.component;
   const renderer = component?.renderer;
-
   const { element } = useRenderer(instance, renderer);
 
   if (!component || !element) return null;
@@ -30,9 +29,6 @@ export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props)
     container: css({
       flex: 1,
       position: 'relative',
-      pointerEvents: 'auto',
-      userSelect: 'auto',
-
       display: component.display,
       width: size.width,
       height: size.height,

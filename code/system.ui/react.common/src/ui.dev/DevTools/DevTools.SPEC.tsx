@@ -1,13 +1,13 @@
 import { DevTools } from '.';
-import { RenderCount, Spec } from '../../test.ui';
-import { css } from '../common';
+import { RenderCount, Dev } from '../../test.ui';
+import { css, ObjectView } from '../common';
 
 const initial = { count: 0 };
 type S = typeof initial;
 
-export default Spec.describe('DevTools', (e) => {
+export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .display('grid')
       .size(350, undefined)
@@ -17,6 +17,10 @@ export default Spec.describe('DevTools', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = DevTools.init<S>(e, initial);
+    const debug = dev.ctx.debug;
+
+    debug.footer.border(-0.15).render((e) => <ObjectView data={e.state} style={{ margin: 8 }} />);
+
     dev
       .button((btn) =>
         btn.label('update state').onClick(async (e) => {
@@ -27,9 +31,9 @@ export default Spec.describe('DevTools', (e) => {
       .hr()
       .button((btn) => {
         let count = 0;
-        btn.label('rename').onClick((e) => {
+        btn.label('rename (self)').onClick((e) => {
           count++;
-          e.label(`button label renamed-${count}`);
+          e.label(`renamed-${count}`);
         });
       });
   });
@@ -38,15 +42,15 @@ export default Spec.describe('DevTools', (e) => {
 /**
  * Sample
  */
+
 export type SampleProps = { state: S };
 export const Sample: React.FC<SampleProps> = (props) => {
-  const json = JSON.stringify(props.state, null, '  ');
   const styles = {
     base: css({ Padding: [5, 12], fontSize: 14 }),
   };
   return (
     <div {...styles.base}>
-      <pre>state: {json}</pre>
+      <ObjectView name={'state'} data={props.state} />
       <RenderCount />
     </div>
   );

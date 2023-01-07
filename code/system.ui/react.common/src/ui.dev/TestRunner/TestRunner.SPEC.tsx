@@ -1,8 +1,19 @@
 import { Dev } from '..';
-import { TestRunner } from '.';
-import { Color, css } from '../common';
-
+import { expect } from '../../test.ui';
+import { Color, css, t } from '../common';
 import { Results } from './Results';
+
+type T = { results?: t.TestSuiteRunResponse };
+
+const root = Dev.describe('root', (e) => {
+  e.it('foo', async (e) => {
+    expect(123).to.eql(123);
+  });
+
+  e.it('fail', async (e) => {
+    expect(123).to.eql(5);
+  });
+});
 
 export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
@@ -10,13 +21,25 @@ export default Dev.describe('TestRunner', (e) => {
     ctx.component
       .size('fill')
       .display('grid')
-      .render(() => <Results />);
+      .backgroundColor(1)
+      .render<T>((e) => {
+        return (
+          <div style={{ padding: 10 }}>
+            <Results data={e.state.results} />
+          </div>
+        );
+      });
   });
 
   e.it('debug panel', async (e) => {
-    const dev = Dev.tools(e);
+    const dev = Dev.tools<T>(e, {});
 
-    dev.button((btn) => btn.label('🐷').onClick((e) => null));
+    dev.button((btn) =>
+      btn.label('run tests').onClick(async (e) => {
+        const results = await root.run();
+        await e.state.change((draft) => (draft.results = results));
+      }),
+    );
     dev.hr();
 
     dev.ctx.debug.row((e) => {

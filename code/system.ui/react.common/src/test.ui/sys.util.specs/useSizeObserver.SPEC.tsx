@@ -1,9 +1,9 @@
-import { Spec, css } from '..';
+import { Dev, css } from '..';
 import { useSizeObserver } from 'sys.util.react';
 
-export default Spec.describe('hook.useSizeObserver', (e) => {
+export default Dev.describe('hook.useSizeObserver', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component
       .size('fill', 150)
       .display('flex')

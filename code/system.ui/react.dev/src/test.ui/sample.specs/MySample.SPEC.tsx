@@ -1,5 +1,5 @@
 import { DevBus } from '../../logic.Bus';
-import { Color, css, Spec, t } from '../common';
+import { COLORS, Color, css, Spec, t } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
 
@@ -44,28 +44,31 @@ export default Spec.describe('MySample', (e) => {
     const events = DevBus.events(ctx);
 
     debug.header.render(<ComponentSample title={'header'} />);
-    debug.footer.render(<ComponentSample title={'footer'} />);
+    debug.footer.render(<ComponentSample title={'footer'} />).border(-0.15);
 
     debug.row(<ComponentSample />);
     dev.hr();
 
-    dev.button((btn) => btn.label('run specs').onClick((e) => ctx.run()));
-    dev.button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })));
-    dev.hr();
+    dev
+      .button((btn) => {
+        let _count = 0;
+        btn.label('rename (self)').onClick((e) => {
+          _count++;
+          e.label(`renamed-${_count}`);
+        });
+      })
+      .hr();
 
-    dev.button((btn) => {
-      let _count = 0;
-      btn.label('my button').onClick((e) => {
-        _count++;
-        e.label(`my button-${_count}`);
-      });
-    });
-    dev.hr();
+    dev
+      .button((btn) => btn.label('run specs').onClick((e) => ctx.run()))
+      .button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })))
+      .hr();
 
     debug.row(<div>State</div>);
-    dev.button((btn) => btn.label('increment').onClick((e) => state.change((d) => d.count++)));
-    dev.button((btn) => btn.label('decrement').onClick((e) => state.change((d) => d.count--)));
-    dev.hr();
+    dev
+      .button((btn) => btn.label('increment (+)').onClick((e) => state.change((d) => d.count++)))
+      .button((btn) => btn.label('decrement (-)').onClick((e) => state.change((d) => d.count--)))
+      .hr();
 
     debug.row(<div>Harness</div>);
     dev.button((btn) => {
@@ -92,6 +95,18 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.component.size('fill')))
       .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.component.size('fill-x')))
       .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')))
+      .hr();
+
+    debug.row(<div>Host</div>);
+    dev.button((btn) =>
+      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).gridColor(null)),
+    );
+    dev
+      .button((btn) =>
+        btn
+          .label('theme: dark')
+          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).gridColor(0.1)),
+      )
       .hr();
 
     debug.row(<div>Debug Panel</div>);

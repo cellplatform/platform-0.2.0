@@ -67,7 +67,8 @@ export type DevCtxComponent = {
  * Component Host ("Harness")
  */
 export type DevCtxHost = {
-  backgroundColor(value?: Color): DevCtxHost;
+  backgroundColor(value: Color | null): DevCtxHost;
+  gridColor(value: Color | null): DevCtxHost;
 };
 
 /**
@@ -83,8 +84,10 @@ export type DevCtxDebug = {
 
 export type DevCtxDebugHeader = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
+  border(color: Color | null): DevCtxDebugHeader;
 };
 
 export type DevCtxDebugFooter = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
+  border(color: Color | null): DevCtxDebugFooter;
 };

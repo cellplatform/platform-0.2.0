@@ -1,9 +1,9 @@
-import { Spec } from '../../test.ui';
+import { Dev } from '../../test.ui';
 import { Spinner } from '.';
 
-export default Spec.describe('Spinner', (e) => {
+export default Dev.describe('Spinner', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component.render(() => {
       return <Spinner size={32} />;
     });

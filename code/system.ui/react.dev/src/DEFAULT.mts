@@ -1,23 +1,27 @@
 import * as t from './common/types.mjs';
+import { Color, COLORS } from './common';
 
 export const DEFAULT = {
-  props(): t.DevRenderProps {
+  get props(): t.DevRenderProps {
     return {
-      host: {},
+      host: {
+        backgroundColor: Color.alpha(COLORS.DARK, 0.02),
+        gridColor: Color.alpha(COLORS.DARK, 0.1),
+      },
       component: {},
       debug: {
-        header: {},
+        header: { border: {} },
         body: {
           renderers: [],
           scroll: true,
           padding: [15, 15, 15, 15],
         },
-        footer: {},
+        footer: { border: {} },
       },
     };
   },
 
-  info(): t.DevInfo {
+  get info(): t.DevInfo {
     return {
       instance: { kind: 'dev:harness', session: '', bus: '' },
       render: { revision: { props: 0, state: 0 } },

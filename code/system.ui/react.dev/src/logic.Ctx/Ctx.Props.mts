@@ -9,11 +9,11 @@ import type { PropArgs } from './common.types';
 
 export async function CtxProps(events: t.DevEvents) {
   let _revision = 0;
-  let _current = (await events.info.get()).render.props ?? DEFAULT.props();
+  let _current = (await events.info.get()).render.props ?? DEFAULT.props;
 
   const CHANGED: t.DevInfoChangeMessage[] = ['props:write', 'reset'];
   events.props.changed$.pipe(filter((e) => CHANGED.includes(e.message))).subscribe((e) => {
-    _current = e.info.render.props ?? DEFAULT.props();
+    _current = e.info.render.props ?? DEFAULT.props;
     _revision = 0;
   });
 

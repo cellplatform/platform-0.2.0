@@ -28,7 +28,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
       opacity: 0.4,
       Flex: 'center-center',
       userSelect: 'none',
-      padding: 8,
+      fontStyle: 'italic',
     }),
   };
 

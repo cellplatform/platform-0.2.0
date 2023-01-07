@@ -1,6 +1,8 @@
-import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl } from '../common';
+import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
+
+const HOST = DEFAULT.props.host;
 
 export type HarnessHostProps = {
   instance: t.DevInstance;
@@ -12,6 +14,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
+  const host = renderProps?.host;
 
   /**
    * [Handlers]
@@ -23,16 +26,15 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  const cropmark = `solid 1px ${Color.format(host?.gridColor ?? HOST.gridColor)}`;
   const styles = {
     base: css({
       position: 'relative',
       overflow: 'hidden',
-      userSelect: 'none',
       backgroundColor:
-        renderProps?.host.backgroundColor === undefined
-          ? Color.alpha(COLORS.DARK, 0.02)
-          : Color.format(renderProps.host.backgroundColor),
+        host?.backgroundColor === undefined
+          ? HOST.backgroundColor
+          : Color.format(host.backgroundColor),
     }),
   };
 

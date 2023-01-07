@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { describe, expect, Id, it, t, TestSample, DEFAULT } from '../test';
+import { DEFAULT, describe, expect, Id, it, t, TestSample } from '../test';
 
 export function expectRendererId(value?: string) {
   expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);
@@ -151,20 +151,32 @@ describe('Context', () => {
   });
 
   describe('props.host', () => {
-    it('host', async () => {
+    const HOST = DEFAULT.props.host;
+
+    it('color', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
-      ctx.host.backgroundColor(-0.22);
+      const getHost = async () => (await events.info.get()).render?.props?.host!;
 
+      ctx.host.backgroundColor(-0.123);
+      ctx.host.gridColor(-0.456);
       expect(context.pending).to.eql(true);
       await context.flush();
       expect(context.pending).to.eql(false);
 
-      const info = await events.info.get();
-      const host = info.render.props?.host!;
+      const info1 = await getHost();
+      expect(info1.backgroundColor).to.eql(-0.123);
+      expect(info1.gridColor).to.eql(-0.456);
 
-      expect(host.backgroundColor).to.eql(-0.22);
+      ctx.host.backgroundColor(null);
+      ctx.host.gridColor(null);
+      await context.flush();
+
+      const info2 = await getHost();
+      expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
+      expect(info2.gridColor).to.eql(HOST.gridColor);
+
       dispose();
     });
   });
@@ -245,7 +257,7 @@ describe('Context', () => {
         expect(info.render.props?.debug.body.padding).to.eql(expected);
       };
 
-      const DEBUG = DEFAULT.props().debug.body;
+      const DEBUG = DEFAULT.props.debug.body;
 
       await expectValue(undefined, DEBUG.padding);
       await expectValue(null, DEBUG.padding);
@@ -259,7 +271,9 @@ describe('Context', () => {
     });
 
     describe('header', () => {
-      it('header.render', async () => {
+      const HEADER = DEFAULT.props.debug.header;
+
+      it('header (props}', async () => {
         const { events, context, dispose } = await TestSample.context();
         const ctx = context.ctx;
         const el = <div>Hello</div>;
@@ -268,27 +282,32 @@ describe('Context', () => {
 
         const info1 = await getHeader();
         expect(info1?.renderer).to.eql(undefined);
+        expect(info1?.border.color).to.eql(HEADER.border.color);
 
-        ctx.debug.header.render(fn);
+        ctx.debug.header.render(fn).border(1);
         await context.flush();
 
         const info2 = await getHeader();
         expectRendererId(info2?.renderer?.id);
         expect(info2?.renderer?.fn).to.equal(fn);
+        expect(info2?.border.color).to.equal(1);
 
-        ctx.debug.header.render(el);
+        ctx.debug.header.render(el).border(null);
         await context.flush();
 
         const info3 = await getHeader();
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
+        expect(info3?.border.color).to.eql(HEADER.border.color);
 
         dispose();
       });
     });
 
     describe('footer', () => {
-      it('footer.render', async () => {
+      const FOOTER = DEFAULT.props.debug.footer;
+
+      it('footer (props)', async () => {
         const { events, context, dispose } = await TestSample.context();
         const ctx = context.ctx;
         const el = <div>Hello</div>;
@@ -297,20 +316,23 @@ describe('Context', () => {
 
         const info1 = await getFooter();
         expect(info1?.renderer).to.eql(undefined);
+        expect(info1?.border.color).to.eql(FOOTER.border.color);
 
-        ctx.debug.footer.render(fn);
+        ctx.debug.footer.render(fn).border(1);
         await context.flush();
 
         const info2 = await getFooter();
         expectRendererId(info2?.renderer?.id);
         expect(info2?.renderer?.fn).to.equal(fn);
+        expect(info2?.border.color).to.equal(1);
 
-        ctx.debug.footer.render(el);
+        ctx.debug.footer.render(el).border(null);
         await context.flush();
 
         const info3 = await getFooter();
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
+        expect(info3?.border.color).to.eql(FOOTER.border.color);
 
         dispose();
       });

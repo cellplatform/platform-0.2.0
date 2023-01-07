@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, useRenderer } from '../common';
+import { Wrangle } from './Wrangle.mjs';
 
 export type DebugPanelHeaderProps = {
   instance: t.DevInstance;
@@ -9,14 +9,18 @@ export type DebugPanelHeaderProps = {
 
 export const DebugPanelHeader: React.FC<DebugPanelHeaderProps> = (props) => {
   const { instance, current } = props;
-  const renderer = current?.render?.props?.debug.header.renderer;
+  const header = current?.render?.props?.debug.header;
+  const renderer = header?.renderer;
+
   const { element } = useRenderer(instance, renderer);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({}),
+    base: css({
+      borderBottom: Wrangle.borderStyle(header?.border),
+    }),
   };
 
   return <div {...css(styles.base, props.style)}>{element}</div>;

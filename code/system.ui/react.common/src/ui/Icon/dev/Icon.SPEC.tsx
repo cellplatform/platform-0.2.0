@@ -1,9 +1,9 @@
-import { Spec } from '../../../test.ui';
+import { Dev } from '../../../test.ui';
 import { Icons } from './Icons.sample.mjs';
 
-export default Spec.describe('Icon', (e) => {
+export default Dev.describe('Icon', (e) => {
   e.it('init', (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
     ctx.component.render(() => {
       return <Icons.Face size={150} />;
     });

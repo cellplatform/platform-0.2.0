@@ -26,20 +26,29 @@ export type DevRenderPropsComponent = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
+  gridColor?: Color;
 };
 
 /**
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
-  header: { renderer?: t.DevRendererRef<any> };
+  header: {
+    renderer?: t.DevRendererRef<any>;
+    border: DevRenderPropsDebugBorder;
+  };
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
     padding: t.Margin;
   };
-  footer: { renderer?: t.DevRendererRef<any> };
+  footer: {
+    renderer?: t.DevRendererRef<any>;
+    border: DevRenderPropsDebugBorder;
+  };
 };
+
+export type DevRenderPropsDebugBorder = { color?: Color };
 
 /**
  * Size
