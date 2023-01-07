@@ -17,6 +17,10 @@ export default Dev.describe('DevTools', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = DevTools.init<S>(e, initial);
+    const debug = dev.ctx.debug;
+
+    debug.footer.border(-0.15).render((e) => <ObjectView data={e.state} style={{ margin: 8 }} />);
+
     dev
       .button((btn) =>
         btn.label('update state').onClick(async (e) => {
