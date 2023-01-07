@@ -14,6 +14,11 @@ type ButtonHandlerArgs = {
  * Sample [DevTools].
  *
  * NOTES:
+ *    THIS A "THROW_AWAY" SAMPLE IMPLEMENTSTION.
+ *
+ *    One initial (base/real) implementation can be found is: sys.ui.react.common/dev
+ *
+ *    ============================================================================
  *
  *    See the [sys.ui.react.common/dev] module for the implementatino of baseline
  *    DebugPanel UI widgets, aka. "DevTools"
@@ -22,6 +27,7 @@ type ButtonHandlerArgs = {
  *    the 'common' lib to prevent low-level ciruclar dependencies
  *    where the `sys.ui.dev` module becomes impossible not to bundle
  *    with all other components.
+ *
  */
 export const DevTools = {
   init(input: t.DevCtxInput) {
