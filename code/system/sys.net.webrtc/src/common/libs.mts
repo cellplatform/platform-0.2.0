@@ -10,4 +10,4 @@ export { PeerJS };
 /**
  * @system
  */
-export { rx, slug, cuid, Time, Is } from 'sys.util';
+export { rx, slug, cuid, Time, Is, Delete } from 'sys.util';

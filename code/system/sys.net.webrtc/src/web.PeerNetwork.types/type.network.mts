@@ -10,10 +10,6 @@ export type PeerNetwork = {
   self: t.PeerId;
   bus: t.EventBus;
   netbus: t.PeerNetbus;
-  events: {
-    peer: t.PeerEvents;
-    group: t.GroupEvents;
-    // runtime: t.WebRuntimeEvents;
-  };
+  events: { peer: t.PeerEvents; group: t.GroupEvents; runtime: t.WebRuntimeEvents };
   status: t.PeerStatusObject;
 };

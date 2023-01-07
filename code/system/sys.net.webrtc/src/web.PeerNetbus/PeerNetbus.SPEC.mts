@@ -1,6 +1,5 @@
 import { PeerNetbus } from '.';
-import { cuid, Dev, expect, rx, t, Time } from '../test.ui';
-import { WebRuntimeBus } from '../web.RuntimeBus';
+import { cuid, Dev, expect, rx, t, Time, WebRuntimeBus } from '../test.ui';
 
 export default Dev.describe('PeerNetbus', (e) => {
   e.it('init (default)', () => {
