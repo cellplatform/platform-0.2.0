@@ -1,13 +1,7 @@
 import type * as t from './types.mjs';
 export { reset } from './reset/index.mjs';
 
-export type {
-  CssProps,
-  CssValue,
-  CssEdgesInput,
-  CssPropsMap,
-  CssPropsMapObject,
-} from './types.mjs';
+export * from './types.mjs';
 
 /**
  * Color helpers.
