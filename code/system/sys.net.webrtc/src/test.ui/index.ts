@@ -8,3 +8,4 @@ export { Dev } from 'sys.ui.react.common';
  * @local
  */
 export * from '../common';
+export { NetworkBusMock } from '../NetworkBus';

@@ -1,10 +1,12 @@
 import { t } from './common';
 
+type SemVer = string;
+
 export type PeerId = string; // An identifier of a network peer.
 export type PeerConnectionId = string;
 export type PeerMediaConstraints = t.PartialDeep<MediaStreamConstraints>;
 export type PeerError = { message: string };
-export type PeerModule = { name: string; version: string };
+export type PeerModule = { name: string; version: SemVer };
 
 /**
  * Status

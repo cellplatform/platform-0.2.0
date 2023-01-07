@@ -1,7 +1,7 @@
 import { firstValueFrom, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
-import { rx, slug, t, Pkg } from '../common';
+import { Module, rx, slug, t } from '../common';
 import { EventNamespace as ns } from './ns.mjs';
 
 type P = t.GroupPeer;
@@ -11,7 +11,7 @@ type C = t.GroupPeerConnection;
  * Helpers for working with group (mesh) related events.
  */
 export function GroupEvents(eventbus: t.PeerNetbus<any>): t.GroupEvents {
-  const module = { name: Pkg.name, version: Pkg.version };
+  const module = Module.info;
   const netbus = eventbus as t.PeerNetbus<t.GroupEvent>;
   const source = netbus.self;
   const dispose$ = new Subject<void>();
