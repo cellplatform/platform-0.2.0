@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, useRenderer } from '../common';
+import { Wrangle } from './Wrangle.mjs';
 
 export type DebugPanelFooterProps = {
   instance: t.DevInstance;
@@ -9,14 +9,18 @@ export type DebugPanelFooterProps = {
 
 export const DebugPanelFooter: React.FC<DebugPanelFooterProps> = (props) => {
   const { instance, current } = props;
-  const renderer = current?.render?.props?.debug.footer.renderer;
+  const footer = current?.render?.props?.debug.footer;
+  const renderer = footer?.renderer;
+
   const { element } = useRenderer(instance, renderer);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({}),
+    base: css({
+      borderTop: Wrangle.borderStyle(footer?.border),
+    }),
   };
 
   return <div {...css(styles.base, props.style)}>{element}</div>;
