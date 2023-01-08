@@ -46,6 +46,12 @@ export function CtxPropsDebug(props: PropArgs) {
         props.changed();
         return api.header;
       },
+      padding(input) {
+        const value = Margin.wrangle(input ?? DEBUG.header.padding);
+        props.current().debug.header.padding = value;
+        props.changed();
+        return api.header;
+      },
     },
 
     /**
@@ -62,6 +68,12 @@ export function CtxPropsDebug(props: PropArgs) {
       border(color) {
         if (color === null) color = DEBUG.footer.border.color!;
         props.current().debug.footer.border.color = color;
+        props.changed();
+        return api.footer;
+      },
+      padding(input) {
+        const value = Margin.wrangle(input ?? DEBUG.footer.padding);
+        props.current().debug.footer.padding = value;
         props.changed();
         return api.footer;
       },

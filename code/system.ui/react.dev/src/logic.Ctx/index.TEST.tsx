@@ -302,6 +302,31 @@ describe('Context', () => {
 
         dispose();
       });
+
+      it('padding', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+
+        type T = t.MarginInput | undefined | null;
+        const expectValue = async (value: T, expected: t.Margin) => {
+          ctx.debug.header.padding(value);
+          await context.flush();
+          const info = await events.info.get();
+          expect(info.render.props?.debug.header.padding).to.eql(expected);
+        };
+
+        const DEBUG = DEFAULT.props.debug.header;
+
+        await expectValue(undefined, DEBUG.padding);
+        await expectValue(null, DEBUG.padding);
+
+        await expectValue(10, [10, 10, 10, 10]);
+        await expectValue([10], [10, 10, 10, 10]);
+        await expectValue([10, 99], [10, 99, 10, 99]);
+        await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
+
+        dispose();
+      });
     });
 
     describe('footer', () => {
@@ -333,6 +358,31 @@ describe('Context', () => {
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
         expect(info3?.border.color).to.eql(FOOTER.border.color);
+
+        dispose();
+      });
+
+      it('padding', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+
+        type T = t.MarginInput | undefined | null;
+        const expectValue = async (value: T, expected: t.Margin) => {
+          ctx.debug.footer.padding(value);
+          await context.flush();
+          const info = await events.info.get();
+          expect(info.render.props?.debug.footer.padding).to.eql(expected);
+        };
+
+        const DEBUG = DEFAULT.props.debug.footer;
+
+        await expectValue(undefined, DEBUG.padding);
+        await expectValue(null, DEBUG.padding);
+
+        await expectValue(10, [10, 10, 10, 10]);
+        await expectValue([10], [10, 10, 10, 10]);
+        await expectValue([10, 99], [10, 99, 10, 99]);
+        await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
 
         dispose();
       });

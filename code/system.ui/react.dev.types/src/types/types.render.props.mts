@@ -36,6 +36,7 @@ export type DevRenderPropsDebug = {
   header: {
     renderer?: t.DevRendererRef<any>;
     border: DevRenderPropsDebugBorder;
+    padding: t.Margin;
   };
   body: {
     renderers: t.DevRendererRef<any>[];
@@ -45,6 +46,7 @@ export type DevRenderPropsDebug = {
   footer: {
     renderer?: t.DevRendererRef<any>;
     border: DevRenderPropsDebugBorder;
+    padding: t.Margin;
   };
 };
 
