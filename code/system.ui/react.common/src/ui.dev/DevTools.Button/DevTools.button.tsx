@@ -30,16 +30,12 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
   };
 
   const ref = ctx.debug.row(async (e) => {
-    return (
-      <Button
-        label={props.label}
-        onClick={async () => {
-          const state = _state || (_state = await ctx.state<S>(initial));
-          const change = state.change;
-          clickHandlers.forEach((fn) => fn({ ...args, state, change }));
-        }}
-      />
-    );
+    const onClick = async () => {
+      const state = _state || (_state = await ctx.state<S>(initial));
+      const change = state.change;
+      clickHandlers.forEach((fn) => fn({ ...args, state, change }));
+    };
+    return <Button label={props.label} onClick={clickHandlers.length > 0 ? onClick : undefined} />;
   });
 
   fn?.(args);

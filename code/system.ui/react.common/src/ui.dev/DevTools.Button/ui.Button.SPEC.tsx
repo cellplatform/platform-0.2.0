@@ -1,8 +1,14 @@
 import { Button } from './ui.Button';
 import { Dev } from '..';
+import { ObjectView } from '../common';
 
-const initial = { count: 0 };
-type S = typeof initial;
+import type { ButtonProps } from './ui.Button';
+
+type S = { props: ButtonProps; count: number };
+const initial: S = {
+  props: { right: <div>123</div> },
+  count: 0,
+};
 
 export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
@@ -10,21 +16,26 @@ export default Dev.describe('Button', (e) => {
     ctx.component
       .display('grid')
       .size(250, undefined)
-      .render((e) => {
-        const right = <div>123</div>;
-        return (
-          <Button label={'My Button'} right={right} onClick={() => console.info(`⚡️ onClick`)} />
-        );
+      .render<S>((e) => {
+        return <Button {...e.state.props} onClick={() => console.info(`⚡️ onClick`)} />;
       });
   });
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<S>(e, initial);
-    dev.button((btn) =>
-      btn.label('My Button').onClick(async (e) => {
-        await e.state.change((draft) => draft.count++);
-        e.label(`count-${e.state.current.count}`);
-      }),
-    );
+
+    dev.ctx.debug.footer
+      .border(-0.1)
+      .render<S>((e) => <ObjectView name={'props'} data={e.state.props} />);
+
+    dev
+      .button('rename (self)', async (e) => {
+        await e.change((draft) => draft.count++);
+        e.label(`renamed-${e.state.current.count}`);
+      })
+      .hr()
+      .button('right: `<Switch>`')
+      .button('right: 123', (e) => e.change(({ props }) => (props.right = <div>123</div>)))
+      .button('right: (clear)', (e) => e.change(({ props }) => (props.right = undefined)));
   });
 });
