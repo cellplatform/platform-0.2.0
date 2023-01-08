@@ -17,9 +17,7 @@ export default Dev.describe('Button', (e) => {
     ctx.component
       .display('grid')
       .size(250, null)
-      .render<T>((e) => {
-        return <Button {...e.state.props} />;
-      });
+      .render<T>((e) => <Button {...e.state.props} />);
   });
 
   e.it('debug panel', async (e) => {
@@ -30,10 +28,18 @@ export default Dev.describe('Button', (e) => {
       .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
 
     dev
-      .button('rename (self)', async (e) => {
-        await e.change((draft) => draft.count++);
-        e.label(`renamed-${e.state.current.count}`);
-      })
+      .button((btn) =>
+        /**
+         * NOTE: primary (full) functional declaration.
+         */
+        btn.label('rename (self)').onClick(async (e) => {
+          await e.change((draft) => draft.count++);
+          e.label(`renamed-${e.state.current.count}`);
+        }),
+      )
+      /**
+       * Shorthand: "label", "onClick" parameter declaration.
+       */
       .button('remove `onClick`', (e) => e.change(({ props }) => (props.onClick = undefined)))
       .hr()
       .button('right: clear', (e) => e.change(({ props }) => (props.right = undefined)))

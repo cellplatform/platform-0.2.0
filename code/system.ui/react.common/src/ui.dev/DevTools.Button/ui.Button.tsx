@@ -7,7 +7,7 @@ export type ButtonProps = {
 
   style?: t.CssValue;
   labelOpacity?: number;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const Button: React.FC<ButtonProps> = (props) => {
@@ -19,8 +19,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handlerClick = () => {
-    if (isActive) props.onClick?.();
+  const handlerClick: React.MouseEventHandler = (e) => {
+    if (isActive) props.onClick?.(e);
   };
 
   /**
