@@ -1,2 +1,2 @@
 export * from './Switch';
-export * from './SwitchTheme';
+export * from './theme.mjs';

@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { css, t } from '../common';
+import { css, FC, t } from '../common';
 import { SwitchThumb } from './Switch.Thumb';
 import { SwitchTrack } from './Switch.Track';
-import { SwitchTheme } from './SwitchTheme';
+import { SwitchTheme } from './theme.mjs';
 
 export type SwitchProps = {
-  id?: string;
   value?: boolean;
   width?: number;
   height?: number;
@@ -25,11 +24,7 @@ export type SwitchProps = {
   onMouseLeave?: React.MouseEventHandler;
 };
 
-export const Switch: React.FC<SwitchProps> = (props) => {
-  const [isDown, setIsDown] = useState<boolean>(false);
-  const [isOver, setIsOver] = useState<boolean>(false);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
+const View: React.FC<SwitchProps> = (props) => {
   const { track = {}, thumb = {} } = props;
   const theme = toTheme(props.theme);
   const height = props.height ?? 32;
@@ -37,6 +32,10 @@ export const Switch: React.FC<SwitchProps> = (props) => {
   const transitionSpeed = props.transitionSpeed ?? 200;
   const isEnabled = props.isEnabled ?? true;
   const value = Boolean(props.value);
+
+  const [isDown, setIsDown] = useState<boolean>(false);
+  const [isOver, setIsOver] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const args = {
     isLoaded,
@@ -56,7 +55,6 @@ export const Switch: React.FC<SwitchProps> = (props) => {
     base: css({
       position: 'relative',
       boxSizing: 'border-box',
-      display: 'inline-block',
       width,
       height,
       opacity: isEnabled ? 1 : theme.disabledOpacity,
@@ -116,3 +114,16 @@ function toTheme(input?: t.SwitchThemeName | Partial<t.SwitchTheme>): t.SwitchTh
     typeof theme === 'string' ? SwitchTheme.fromString(theme as t.SwitchThemeName).green : theme;
   return theme as t.SwitchTheme;
 }
+
+/**
+ * [Export]
+ */
+
+type Fields = {
+  Theme: typeof SwitchTheme;
+};
+export const Switch = FC.decorate<SwitchProps, Fields>(
+  View,
+  { Theme: SwitchTheme },
+  { displayName: 'Switch' },
+);
