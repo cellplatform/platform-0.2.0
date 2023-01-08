@@ -13,8 +13,8 @@ export function CtxPropsHost(props: PropArgs) {
       return api;
     },
     tracelineColor(value) {
-      if (value === null) value = HOST.gridColor!;
-      props.current().host.gridColor = value;
+      if (value === null) value = HOST.tracelineColor!;
+      props.current().host.tracelineColor = value;
       props.changed();
       return api;
     },

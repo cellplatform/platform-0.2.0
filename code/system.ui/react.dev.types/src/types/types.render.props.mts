@@ -26,7 +26,7 @@ export type DevRenderPropsComponent = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
-  gridColor?: Color;
+  tracelineColor?: Color;
 };
 
 /**

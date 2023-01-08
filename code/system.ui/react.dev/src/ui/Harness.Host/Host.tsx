@@ -26,7 +26,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${Color.format(host?.gridColor ?? HOST.gridColor)}`;
+  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? HOST.tracelineColor)}`;
   const styles = {
     base: css({
       position: 'relative',

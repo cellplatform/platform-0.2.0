@@ -167,7 +167,7 @@ describe('Context', () => {
 
       const info1 = await getHost();
       expect(info1.backgroundColor).to.eql(-0.123);
-      expect(info1.gridColor).to.eql(-0.456);
+      expect(info1.tracelineColor).to.eql(-0.456);
 
       ctx.host.backgroundColor(null);
       ctx.host.tracelineColor(null);
@@ -175,7 +175,7 @@ describe('Context', () => {
 
       const info2 = await getHost();
       expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
-      expect(info2.gridColor).to.eql(HOST.gridColor);
+      expect(info2.tracelineColor).to.eql(HOST.tracelineColor);
 
       dispose();
     });
