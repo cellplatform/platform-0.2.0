@@ -1,6 +1,6 @@
 import { css, R, t, useCurrentState } from '../common';
 import { DebugPanelFooter as Footer, DebugPanelHeader as Header } from './Panel.Bar';
-import { DebugPanelMain as Main } from './Panel.Main';
+import { DebugPanelBody as Body } from './Panel.Body';
 
 export type DebugPanelProps = {
   instance: t.DevInstance;
@@ -34,7 +34,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Header instance={instance} current={debug?.header} />
       <div {...styles.body}>
-        <Main instance={instance} current={current.info} />
+        <Body instance={instance} current={current.info} />
       </div>
       <Footer instance={instance} current={debug?.footer} />
     </div>

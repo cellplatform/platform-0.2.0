@@ -1,19 +1,16 @@
 import { css, t } from '../common';
-import { DebugPanelMainRow as Row } from './Panel.Main.Row';
+import { DebugPanelBodyRow as Row } from './Panel.Body.Row';
 
-export type DebugPanelMainProps = {
+export type DebugPanelBodyrops = {
   instance: t.DevInstance;
   current?: t.DevInfo;
   style?: t.CssValue;
 };
 
-export const DebugPanelMain: React.FC<DebugPanelMainProps> = (props) => {
+export const DebugPanelBody: React.FC<DebugPanelBodyrops> = (props) => {
   const { instance, current } = props;
   const renderers = current?.render?.props?.debug.body.renderers ?? [];
 
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({}),
   };

@@ -1,11 +1,11 @@
 import { css, t, useRenderer } from '../common';
 
-export type DebugPanelMainRow = {
+export type DebugPanelBodyRow = {
   instance: t.DevInstance;
   renderer: t.DevRendererRef;
 };
 
-export const DebugPanelMainRow: React.FC<DebugPanelMainRow> = (props) => {
+export const DebugPanelBodyRow: React.FC<DebugPanelBodyRow> = (props) => {
   const { instance, renderer } = props;
   const { element } = useRenderer(instance, renderer);
 
