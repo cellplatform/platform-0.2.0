@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, useRenderer } from '../common';
+import { css, t, useRenderer } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type DebugPanelHeaderProps = {
@@ -19,6 +19,8 @@ export const DebugPanelHeader: React.FC<DebugPanelHeaderProps> = (props) => {
    */
   const styles = {
     base: css({
+      boxSizing: 'border-box',
+      padding: header?.padding,
       borderBottom: Wrangle.borderStyle(header?.border),
     }),
   };

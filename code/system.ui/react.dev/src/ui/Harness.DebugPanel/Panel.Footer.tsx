@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, useRenderer } from '../common';
+import { css, t, useRenderer } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 export type DebugPanelFooterProps = {
@@ -19,6 +19,8 @@ export const DebugPanelFooter: React.FC<DebugPanelFooterProps> = (props) => {
    */
   const styles = {
     base: css({
+      boxSizing: 'border-box',
+      padding: footer?.padding,
       borderTop: Wrangle.borderStyle(footer?.border),
     }),
   };
