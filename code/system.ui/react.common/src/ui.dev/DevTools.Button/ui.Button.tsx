@@ -3,6 +3,7 @@ import { ButtonIcon } from './ui.Button.Icon';
 
 const DEFAULT = {
   isEnabled: true,
+  label: 'Unnamed',
 };
 
 export type ButtonProps = {
@@ -16,7 +17,7 @@ export type ButtonProps = {
 };
 
 const View: React.FC<ButtonProps> = (props) => {
-  const { label = 'Unnamed' } = props;
+  const { label = DEFAULT.label } = props;
 
   const mouse = useMouseState();
   const isActive = Wrangle.isActive(props);

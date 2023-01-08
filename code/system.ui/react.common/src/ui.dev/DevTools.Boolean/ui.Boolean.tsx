@@ -3,9 +3,6 @@ import { Button } from '../DevTools.Button';
 
 const DEFAULT = { ...Button.DEFAULT, value: false };
 
-export type BooleanClickHandler = (e: BooleanClickHandlerArgs) => void;
-export type BooleanClickHandlerArgs = { prev: boolean; next: boolean };
-
 export type BooleanProps = {
   isEnabled?: boolean;
   label?: string | JSX.Element;
@@ -13,7 +10,7 @@ export type BooleanProps = {
 
   style?: t.CssValue;
   labelOpacity?: number;
-  onClick?: BooleanClickHandler;
+  onClick?: React.MouseEventHandler;
 };
 
 const View: React.FC<BooleanProps> = (props) => {
@@ -26,9 +23,7 @@ const View: React.FC<BooleanProps> = (props) => {
   const handleClick: React.MouseEventHandler = (e) => {
     if (isActive) {
       e.preventDefault();
-      const prev = value;
-      const next = !value;
-      props.onClick?.({ prev, next });
+      props.onClick?.(e);
     }
   };
 
@@ -72,10 +67,11 @@ const Wrangle = {
  * Export
  */
 type Fields = {
+  DEFAULT: typeof DEFAULT;
   isActive: typeof Wrangle.isActive;
 };
 export const Boolean = FC.decorate<BooleanProps, Fields>(
   View,
-  { isActive: Wrangle.isActive },
+  { DEFAULT, isActive: Wrangle.isActive },
   { displayName: 'Button' },
 );

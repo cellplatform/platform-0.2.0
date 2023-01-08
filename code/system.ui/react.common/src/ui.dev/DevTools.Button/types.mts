@@ -3,7 +3,7 @@ import * as t from '../../common/types.mjs';
 type O = Record<string, unknown>;
 
 /**
- * Button.
+ * Button
  */
 export type DevButtonHandler<S extends O = O> = (e: DevButtonHandlerArgs<S>) => t.IgnoredResponse;
 export type DevButtonHandlerArgs<S extends O = O> = {
@@ -13,7 +13,7 @@ export type DevButtonHandlerArgs<S extends O = O> = {
 };
 
 /**
- * Button click.
+ * Button Click
  */
 export type DevButtonClickHandler<S extends O = O> = (e: DevButtonClickHandlerArgs<S>) => void;
 export type DevButtonClickHandlerArgs<S extends O = O> = DevButtonHandlerArgs<S> & {

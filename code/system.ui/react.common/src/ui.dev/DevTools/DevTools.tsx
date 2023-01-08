@@ -1,8 +1,7 @@
-import { t, Spec } from '../common';
+import { Spec, t } from '../common';
 import { button } from '../DevTools.Button';
+import { boolean } from '../DevTools.Boolean';
 import { hr } from '../DevTools.Hr';
-
-import type { DevButtonHandler } from '../DevTools.Button/types.mjs';
 
 type O = Record<string, unknown>;
 
@@ -16,6 +15,7 @@ export const DevTools = {
    * Widgets.
    */
   button,
+  boolean,
   hr,
 };
 
@@ -42,6 +42,14 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
           btn.label(args[0]);
           if (typeof args[1] === 'function') btn.onClick(args[1]);
         });
+      }
+
+      return api;
+    },
+
+    boolean(...args: any[]) {
+      if (typeof args[0] === 'function') {
+        DevTools.boolean<S>(ctx, state, args[0]);
       }
 
       return api;

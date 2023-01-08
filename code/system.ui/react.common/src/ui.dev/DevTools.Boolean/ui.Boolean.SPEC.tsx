@@ -12,23 +12,18 @@ export default Dev.describe('Boolean', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    const onClick = () => {
+      state.change(({ props }) => {
+        props.value = !props.value;
+        props.label = props.value ? 'On' : 'Off';
+      });
+    };
+
     ctx.component
       .display('grid')
       .size(250, null)
-      .render<T>((e) => {
-        return (
-          <Boolean
-            {...e.state.props}
-            onClick={(e) => {
-              console.info(`⚡️ onClick:`, e);
-              state.change(({ props }) => {
-                props.value = e.next;
-                props.label = e.next ? 'On' : 'Off';
-              });
-            }}
-          />
-        );
-      });
+      .render<T>((e) => <Boolean {...e.state.props} onClick={onClick} />);
   });
 
   e.it('debug panel', async (e) => {

@@ -2,8 +2,8 @@ import { DevTools } from '.';
 import { RenderCount, Dev } from '../../test.ui';
 import { css, ObjectView } from '../common';
 
-const initial = { count: 0 };
-type S = typeof initial;
+const initial = { count: 0, boolean: true };
+type T = typeof initial;
 
 export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
@@ -12,11 +12,11 @@ export default Dev.describe('DevTools', (e) => {
       .display('grid')
       .size(350, undefined)
       .backgroundColor(1)
-      .render<S>((e) => <Sample state={e.state} />);
+      .render<T>((e) => <Sample state={e.state} />);
   });
 
   e.it('debug panel', async (e) => {
-    const dev = DevTools.init<S>(e, initial);
+    const dev = DevTools.init<T>(e, initial);
     const debug = dev.ctx.debug;
 
     debug.footer.border(-0.15).render((e) => <ObjectView data={e.state} style={{ margin: 8 }} />);
@@ -35,6 +35,16 @@ export default Dev.describe('DevTools', (e) => {
           count++;
           e.label(`renamed-${count}`);
         });
+      })
+      .boolean(async (btn) => {
+        const state = await btn.ctx.state<T>(initial);
+        btn
+          .label('my boolean')
+          .value(state.current.boolean)
+          .onClick((e) => {
+            console.log('e', e);
+            e.value(!e.current);
+          });
       });
   });
 });
@@ -43,7 +53,7 @@ export default Dev.describe('DevTools', (e) => {
  * Sample
  */
 
-export type SampleProps = { state: S };
+export type SampleProps = { state: T };
 export const Sample: React.FC<SampleProps> = (props) => {
   const styles = {
     base: css({ Padding: [5, 12], fontSize: 14 }),

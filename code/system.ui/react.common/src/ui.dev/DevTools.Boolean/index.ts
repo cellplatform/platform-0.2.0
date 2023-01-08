@@ -1,1 +1,2 @@
-export { Boolean } from './ui.Boolean';
+export * from './fn.boolean';
+export * from './ui.Boolean';

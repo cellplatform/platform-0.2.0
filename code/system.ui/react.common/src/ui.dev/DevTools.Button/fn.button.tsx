@@ -2,8 +2,9 @@ import { Spec, t } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
-
 import type { DevButtonHandler, DevButtonClickHandler, DevButtonHandlerArgs } from './types.mjs';
+
+const DEFAULT = Button.DEFAULT;
 
 /**
  * A simple clickable text button implementation.
@@ -13,8 +14,9 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
   if (!ctx.is.initial) return;
 
   const clickHandlers: DevButtonClickHandler<S>[] = [];
-  const props = { label: '' };
-  let _state: t.DevCtxState<S> | undefined;
+  const props = {
+    label: DEFAULT.label,
+  };
 
   const args: DevButtonHandlerArgs<S> = {
     ctx,
@@ -31,7 +33,7 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
 
   const ref = ctx.debug.row(async (e) => {
     const onClick = async () => {
-      const state = _state || (_state = await ctx.state<S>(initial));
+      const state = await ctx.state<S>(initial);
       const change = state.change;
       clickHandlers.forEach((fn) => fn({ ...args, state, change }));
     };

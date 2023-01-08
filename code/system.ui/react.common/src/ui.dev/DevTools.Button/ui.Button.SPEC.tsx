@@ -6,7 +6,7 @@ import type { ButtonProps } from './ui.Button';
 
 type T = { props: ButtonProps; count: number };
 const initial: T = {
-  props: { rightElement: <div>123</div>, onClick: (e) => console.info(`⚡️ onClick:`, e) },
+  props: { rightElement: <div>123</div>, onClick: (e) => console.info(`⚡️ onClick`) },
   count: 0,
 };
 
