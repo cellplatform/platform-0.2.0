@@ -13,7 +13,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      padding: [5, 8],
+      padding: 8,
       fontFamily: 'sans-serif',
     }),
     render: css({ Absolute: [4, 5, null, null], fontSize: 11, opacity: 0.6 }),
