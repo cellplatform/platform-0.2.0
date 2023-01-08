@@ -19,8 +19,14 @@ export default Dev.describe('DevTools', (e) => {
     const dev = DevTools.init<T>(e, initial);
     const debug = dev.ctx.debug;
 
+    /**
+     * Header/Footer bars.
+     */
     debug.footer.border(-0.15).render((e) => <ObjectView data={e.state} style={{ margin: 8 }} />);
 
+    /**
+     * Buttons
+     */
     dev
       .button((btn) =>
         btn.label('update state').onClick(async (e) => {
@@ -35,17 +41,21 @@ export default Dev.describe('DevTools', (e) => {
           count++;
           e.label(`renamed-${count}`);
         });
-      })
-      .boolean(async (btn) => {
-        const state = await btn.ctx.state<T>(initial);
-        btn
-          .label('my boolean')
-          .value(state.current.boolean)
-          .onClick((e) => {
-            console.log('e', e);
-            e.value(!e.current);
-          });
       });
+
+    /**
+     * Booleaan
+     */
+    dev.boolean(async (btn) => {
+      const state = await btn.ctx.state<T>(initial);
+      btn
+        .label('my boolean')
+        .value(state.current.boolean)
+        .onClick((e) => {
+          console.log('e', e);
+          e.value(!e.current);
+        });
+    });
   });
 });
 
