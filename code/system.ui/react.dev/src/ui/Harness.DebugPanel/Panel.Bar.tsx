@@ -10,7 +10,10 @@ export type DebugPanelBarProps = {
 
 export const DebugPanelBar: React.FC<DebugPanelBarProps> = (props) => {
   const { instance, current, edge } = props;
-  const { element } = useRenderer(instance, current?.renderer);
+  const renderer = current?.renderer;
+  const { element } = useRenderer(instance, renderer);
+
+  if (!renderer) return <div />;
 
   const styles = {
     base: css({
