@@ -396,11 +396,14 @@ describe('Context', () => {
     it('read state', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
-      const state = await ctx.state<T>(initial);
+
+      const state1 = await ctx.state<T>(initial);
+      const state2 = await ctx.state<T>(initial);
       const info = await events.info.get();
 
-      expect(state.current).to.eql(initial);
       expect(info.render.state).to.eql(initial);
+      expect(state1.current).to.eql(initial);
+      expect(state1).to.equal(state2); // NB: Same instance (on repeat calls).
 
       dispose();
     });
