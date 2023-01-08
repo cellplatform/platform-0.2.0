@@ -1,3 +1,5 @@
+export * from './types.mjs';
+
 export { Filesystem, Filesystem as default } from './Filesystem.mjs';
 
 export { Wrangle } from './Wrangle.mjs';

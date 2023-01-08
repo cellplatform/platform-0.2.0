@@ -1,7 +1,7 @@
 import type * as t from './types.mjs';
-export { reset } from './reset/index.mjs';
 
 export * from './types.mjs';
+export { reset } from './reset/index.mjs';
 
 /**
  * Color helpers.

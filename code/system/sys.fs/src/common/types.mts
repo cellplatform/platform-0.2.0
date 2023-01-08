@@ -1,3 +1,6 @@
+/**
+ * @external
+ */
 export type { Observable } from 'rxjs';
 
 /**
@@ -8,4 +11,4 @@ export type { EventBus, Event, Json, Disposable } from 'sys.types';
 /**
  * @local
  */
-export * from '../types/index.mjs';
+export * from '../types.mjs';

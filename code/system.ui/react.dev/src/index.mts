@@ -1,3 +1,4 @@
+export * from './types.mjs';
 export { Pkg } from './index.pkg.mjs';
 
 export { Dev } from './Dev.mjs';
