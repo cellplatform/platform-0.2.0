@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, rx, Switch, FC } from '../common';
+import { FC, Switch, t } from '../common';
 import { Button } from '../DevTools.Button';
 
 const DEFAULT = { ...Button.DEFAULT, value: false };
