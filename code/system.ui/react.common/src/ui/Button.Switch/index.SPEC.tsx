@@ -20,17 +20,12 @@ export default Dev.describe('Switch (Button)', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
     dev
-      .button((btn) =>
-        btn
-          .label('toggle `isEnabled`')
-          .onClick((e) => e.change(({ props }) => (props.isEnabled = !props.isEnabled))),
-      )
-      .button((btn) =>
-        btn
-          .label('toggle `value`')
-          .onClick((e) => e.change(({ props }) => (props.value = !props.value))),
-      );
+      .button('toggle: `isEnabled`', (e) => {
+        e.change(({ props }) => (props.isEnabled = !props.isEnabled));
+      })
+      .button('toggle: `value`', (e) => {
+        e.change(({ props }) => (props.value = !props.value));
+      });
   });
 });
