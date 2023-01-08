@@ -3,7 +3,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { DEFAULT, Id, Is, rx, t, Test } from './common';
+import { R, DEFAULT, Id, Is, rx, t, Test } from './common';
 
 type Id = string;
 
@@ -149,10 +149,18 @@ export function BusController(args: {
     const { tx } = e;
     let error: string | undefined;
 
-    state.change('state:write', async (draft) => {
+    await state.change('state:write', async (draft) => {
       const state = draft.render.state || (draft.render.state = { ...e.initial });
-      const res = e.mutate(state);
-      if (Is.promise(res)) await res;
+
+      if (typeof e.mutate === 'function') {
+        const res = e.mutate(state);
+        if (Is.promise(res)) await res;
+      }
+
+      if (typeof e.mutate === 'object') {
+        draft.render.state = R.clone(e.mutate); // 🐷 TEMP | SLOW (potentially too slow). Not needed when using immutability plugin.
+      }
+
       draft.render.revision.state += 1;
     });
 

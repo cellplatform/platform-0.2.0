@@ -401,7 +401,7 @@ describe('DevBus', (e) => {
     describe('context:state (read/write)', () => {
       type T = { msg?: string; count: number };
 
-      it('write state', async () => {
+      it('write state (fn)', async () => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql(undefined);
@@ -418,6 +418,24 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(_initial).to.eql({ count: 0 });
         expect(info2.render.state).to.eql({ count: 1, msg: 'hello' });
+        expect(info2.render.revision.state).to.eql(1);
+
+        events.dispose();
+      });
+
+      it('write {object} (replace)', async () => {
+        const { events } = await TestSample.preloaded();
+        const info1 = await events.info.get();
+        expect(info1.render.state).to.eql(undefined);
+        expect(info1.render.revision.state).to.eql(0);
+
+        const initial: T = { count: 0 };
+        const replace: T = { count: 1234 };
+        await events.state.change.fire<T>(initial, replace);
+
+        const info2 = await events.info.get();
+        expect(info2.render.state).to.eql(replace);
+        expect(info2.render.state).to.not.equal(replace); // NB: Immutable replacement.
         expect(info2.render.revision.state).to.eql(1);
 
         events.dispose();

@@ -154,7 +154,7 @@ export function BusEvents(args: {
     change: {
       req$: rx.payload<t.DevStateChangeReqEvent>($, 'sys.dev/state/change:req'),
       res$: rx.payload<t.DevStateChangeResEvent>($, 'sys.dev/state/change:res'),
-      async fire(initial, mutate, options = {}) {
+      async fire(initial, change, options = {}) {
         const { timeout = 3000 } = options;
         const tx = slug();
         const op = 'state.change';
@@ -163,7 +163,7 @@ export function BusEvents(args: {
 
         bus.fire({
           type: 'sys.dev/state/change:req',
-          payload: { tx, instance, mutate, initial },
+          payload: { tx, instance, mutate: change as any, initial },
         });
 
         const res = await first;

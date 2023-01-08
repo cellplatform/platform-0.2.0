@@ -44,7 +44,7 @@ export type DevEvents = t.Disposable & {
       res$: t.Observable<t.DevStateChangeRes>;
       fire<T extends O>(
         initial: T,
-        mutate: t.DevInfoStateMutater<T>,
+        mutate: t.DevInfoStateMutater<T> | T,
         options?: { timeout?: Milliseconds },
       ): Promise<DevStateChangeRes>;
     };
@@ -197,7 +197,7 @@ export type DevStateChangeReqEvent = {
 export type DevStateChangeReq = {
   tx: string;
   instance: Id;
-  mutate: t.DevInfoStateMutater<any>;
+  mutate: t.DevInfoStateMutater<O> | O;
   initial: O;
 };
 
