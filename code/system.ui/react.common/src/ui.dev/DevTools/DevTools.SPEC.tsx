@@ -34,14 +34,14 @@ export default Dev.describe('DevTools', (e) => {
           e.label(`state: count-${e.state.current.count}`);
         }),
       )
-      .hr()
-      .button('rename (self)', (btn) => {
+      .button((btn) => {
         let count = 0;
         btn.label('rename (self)').onClick((e) => {
           count++;
-          e.label(`renamed-${count}`);
+          e.label(`renamed-${count} (within closure)`);
         });
-      });
+      })
+      .hr();
 
     /**
      * Booleaan

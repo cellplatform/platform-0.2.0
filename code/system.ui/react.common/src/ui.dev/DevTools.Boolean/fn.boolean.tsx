@@ -52,6 +52,7 @@ export function boolean<S extends O = O>(
       <Boolean
         value={props.value}
         label={props.label}
+        isEnabled={clickHandlers.length > 0}
         onClick={clickHandlers.length > 0 ? onClick : undefined}
       />
     );

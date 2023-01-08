@@ -32,5 +32,7 @@ export default Dev.describe('Boolean', (e) => {
     dev.ctx.debug.footer
       .border(-0.1)
       .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
+
+    dev.boolean((btn) => btn.label('no `onClick`').value(true));
   });
 });

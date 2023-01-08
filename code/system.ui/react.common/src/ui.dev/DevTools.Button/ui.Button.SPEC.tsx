@@ -34,13 +34,13 @@ export default Dev.describe('Button', (e) => {
          */
         btn.label('rename (self)').onClick(async (e) => {
           await e.change((draft) => draft.count++);
-          e.label(`renamed-${e.state.current.count}`);
+          e.label(`renamed-${e.state.current.count} (within closure)`);
         }),
       )
       /**
        * Shorthand: "label", "onClick" parameter declaration.
        */
-      .button('remove `onClick`', (e) => e.change(({ props }) => (props.onClick = undefined)))
+      .button('no `onClick`')
       .hr()
       .button('right: clear', (e) => e.change(({ props }) => (props.rightElement = undefined)))
       .button('right: `<Switch>`', (e) =>

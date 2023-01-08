@@ -37,7 +37,13 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
       const change = state.change;
       clickHandlers.forEach((fn) => fn({ ...args, state, change }));
     };
-    return <Button label={props.label} onClick={clickHandlers.length > 0 ? onClick : undefined} />;
+    return (
+      <Button
+        label={props.label}
+        isEnabled={clickHandlers.length > 0}
+        onClick={clickHandlers.length > 0 ? onClick : undefined}
+      />
+    );
   });
 
   fn?.(args);
