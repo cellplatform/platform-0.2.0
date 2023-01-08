@@ -38,13 +38,13 @@ export default Dev.describe('ObjectView', (e) => {
     dev
       .button((btn) =>
         btn.label('theme: Light').onClick((e) => {
-          e.ctx.host.backgroundColor(null).gridColor(null);
+          e.ctx.host.backgroundColor(null).tracelineColor(null);
           e.change((draft) => (draft.theme = 'Light'));
         }),
       )
       .button((btn) =>
         btn.label('theme: Dark').onClick((e) => {
-          e.ctx.host.backgroundColor(COLORS.DARK).gridColor(0.06);
+          e.ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.06);
           e.change((draft) => (draft.theme = 'Dark'));
         }),
       )
