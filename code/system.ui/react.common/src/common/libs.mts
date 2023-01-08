@@ -1,4 +1,10 @@
 /**
+ * @external
+ */
+import { mergeDeepRight, clone } from 'ramda';
+export const R = { mergeDeepRight, clone };
+
+/**
  * @system
  */
 export { FC, useMouseState } from 'sys.util.react';

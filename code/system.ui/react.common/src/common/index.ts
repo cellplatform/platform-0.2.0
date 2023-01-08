@@ -12,4 +12,5 @@ export const COLORS = {
   MAGENTA: '#FE0064',
   BLUE: '#4D7EF7',
   LIME: '#A6E130',
+  GREEN: '#00BB47',
 };
