@@ -40,9 +40,10 @@ export type DevCtxIs = {
   readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
 };
 
+export type DevCtxStateMutator<T extends O> = (draft: T) => t.IgnoredResponse;
 export type DevCtxState<T extends O> = {
   current: T;
-  change(fn: (draft: T) => t.IgnoredResponse): Promise<T>;
+  change(fn: DevCtxStateMutator<T>): Promise<T>;
 };
 
 export type DevCtxObject = {
