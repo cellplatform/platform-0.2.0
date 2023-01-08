@@ -13,7 +13,7 @@ export const DevTools = {
   init,
 
   /**
-   * Widgets
+   * Widgets.
    */
   button,
   hr,
@@ -26,14 +26,24 @@ export const DevTools = {
 function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   const ctx = Spec.ctx(input);
-  const api = {
+  const api: t.DevTools<S> = {
     ctx,
 
     /**
      * Widgets.
      */
-    button(fn: DevButtonHandler<S>) {
-      DevTools.button<S>(ctx, state, fn);
+    button(...args: any[]) {
+      if (typeof args[0] === 'function') {
+        DevTools.button<S>(ctx, state, args[0]);
+      }
+
+      if (typeof args[0] === 'string') {
+        DevTools.button<S>(ctx, state, (btn) => {
+          btn.label(args[0]);
+          if (typeof args[1] === 'function') btn.onClick(args[1]);
+        });
+      }
+
       return api;
     },
 

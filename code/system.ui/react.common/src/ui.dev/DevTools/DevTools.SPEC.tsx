@@ -29,7 +29,7 @@ export default Dev.describe('DevTools', (e) => {
         }),
       )
       .hr()
-      .button((btn) => {
+      .button('rename (self)', (btn) => {
         let count = 0;
         btn.label('rename (self)').onClick((e) => {
           count++;
