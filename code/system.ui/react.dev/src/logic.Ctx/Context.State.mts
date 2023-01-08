@@ -5,7 +5,6 @@ type O = Record<string, unknown>;
 /**
  * Helper API for interacting with the state mutation event-API.
  */
-
 export function ContextState<T extends O>(args: { events: t.DevEvents; initial: T }) {
   const { events, initial } = args;
 

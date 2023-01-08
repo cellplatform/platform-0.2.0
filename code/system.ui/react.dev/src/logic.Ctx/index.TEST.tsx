@@ -344,14 +344,18 @@ describe('Context', () => {
     const initial: T = { count: 0 };
 
     it('read state', async () => {
-      const { context, dispose } = await TestSample.context();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);
+      const info = await events.info.get();
+
       expect(state.current).to.eql(initial);
+      expect(info.render.state).to.eql(initial);
+
       dispose();
     });
 
-    it('write state (change)', async () => {
+    it('write state (via mutator function)', async () => {
       const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);

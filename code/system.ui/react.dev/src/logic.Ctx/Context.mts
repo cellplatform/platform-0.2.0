@@ -48,6 +48,11 @@ export const Context = {
 
       async state<T extends O>(initial: T) {
         const info = await events.info.get();
+
+        if (info.render.state === undefined) {
+          await events.state.change.fire(initial, initial);
+        }
+
         return ContextState<T>({
           initial: (info.render.state ?? initial) as T,
           events,
