@@ -37,10 +37,12 @@ export default Dev.describe('Button', (e) => {
       })
       .button('remove `onClick`', (e) => e.change(({ props }) => (props.onClick = undefined)))
       .hr()
+      .button('right: clear', (e) => e.change(({ props }) => (props.right = undefined)))
       .button('right: `<Switch>`', (e) =>
         e.change(({ props }) => (props.right = <Switch height={16} />)),
       )
-      .button('right: 123', (e) => e.change(({ props }) => (props.right = <div>123</div>)))
-      .button('right: (clear)', (e) => e.change(({ props }) => (props.right = undefined)));
+      .button('right: `<div>123</div>`', (e) =>
+        e.change(({ props }) => (props.right = <div>123</div>)),
+      );
   });
 });
