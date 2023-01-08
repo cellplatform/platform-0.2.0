@@ -2,8 +2,8 @@ import { Dev } from '../../test.ui';
 import { css, t } from '../common';
 import { RenderCount } from '.';
 
-type S = { count: number };
-const initial: S = { count: 0 };
+type T = { count: number };
+const initial: T = { count: 0 };
 
 export default Dev.describe('RenderCount', (e) => {
   e.it('init', async (e) => {
@@ -11,7 +11,7 @@ export default Dev.describe('RenderCount', (e) => {
     ctx.component
       .display('grid')
       .size(250, 30)
-      .render<S>(() => (
+      .render<T>(() => (
         <Sample>
           <RenderCount />
         </Sample>
@@ -19,7 +19,7 @@ export default Dev.describe('RenderCount', (e) => {
   });
 
   e.it('debug panel', async (e) => {
-    const dev = Dev.tools<S>(e, initial);
+    const dev = Dev.tools<T>(e, initial);
     dev.button('redraw', (e) => e.change((d) => d.count++));
   });
 });
