@@ -1,4 +1,4 @@
-import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
+import { Color, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
