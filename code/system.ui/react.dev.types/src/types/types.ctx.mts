@@ -69,7 +69,7 @@ export type DevCtxComponent = {
  */
 export type DevCtxHost = {
   backgroundColor(value: Color | null): DevCtxHost;
-  gridColor(value: Color | null): DevCtxHost;
+  tracelineColor(value: Color | null): DevCtxHost;
 };
 
 /**

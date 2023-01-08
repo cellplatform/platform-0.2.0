@@ -160,7 +160,7 @@ describe('Context', () => {
       const getHost = async () => (await events.info.get()).render?.props?.host!;
 
       ctx.host.backgroundColor(-0.123);
-      ctx.host.gridColor(-0.456);
+      ctx.host.tracelineColor(-0.456);
       expect(context.pending).to.eql(true);
       await context.flush();
       expect(context.pending).to.eql(false);
@@ -170,7 +170,7 @@ describe('Context', () => {
       expect(info1.gridColor).to.eql(-0.456);
 
       ctx.host.backgroundColor(null);
-      ctx.host.gridColor(null);
+      ctx.host.tracelineColor(null);
       await context.flush();
 
       const info2 = await getHost();

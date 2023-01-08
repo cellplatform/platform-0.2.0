@@ -99,13 +99,13 @@ export default Spec.describe('MySample', (e) => {
 
     debug.row(<div>Host</div>);
     dev.button((btn) =>
-      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).gridColor(null)),
+      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
     );
     dev
       .button((btn) =>
         btn
           .label('theme: dark')
-          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).gridColor(0.1)),
+          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1)),
       )
       .hr();
 
