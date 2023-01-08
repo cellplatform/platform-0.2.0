@@ -1,14 +1,21 @@
 import { Dev } from '../../test.ui';
 import { Switch, SwitchProps } from '.';
 
-type T = SwitchProps;
-const initial: T = { value: true };
+type T = { props: SwitchProps };
+const initial: T = { props: { value: true } };
 
 export default Dev.describe('Switch (Button)', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
-    ctx.component.render<T>((e) => <Switch {...e.state} />);
+    const state = await ctx.state<T>(initial);
+    ctx.component.render<T>((e) => {
+      return (
+        <Switch
+          {...e.state.props}
+          onClick={(e) => state.change(({ props }) => (props.value = !props.value))}
+        />
+      );
+    });
   });
 
   e.it('debug panel', async (e) => {
@@ -18,12 +25,12 @@ export default Dev.describe('Switch (Button)', (e) => {
       .button((btn) =>
         btn
           .label('toggle `isEnabled`')
-          .onClick((e) => e.change((draft) => (draft.isEnabled = !draft.isEnabled))),
+          .onClick((e) => e.change(({ props }) => (props.isEnabled = !props.isEnabled))),
       )
       .button((btn) =>
         btn
           .label('toggle `value`')
-          .onClick((e) => e.change((draft) => (draft.value = !draft.value))),
+          .onClick((e) => e.change(({ props }) => (props.value = !props.value))),
       );
   });
 });
