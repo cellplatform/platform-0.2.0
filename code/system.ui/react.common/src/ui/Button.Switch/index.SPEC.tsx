@@ -2,11 +2,14 @@ import { Dev } from '../../test.ui';
 import { Switch, SwitchProps } from '.';
 
 type T = SwitchProps;
-const initial: T = {};
+const initial: T = { value: true };
 
 export default Dev.describe('Switch (Button)', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
+
+    await ctx.state<T>(initial);
+
     ctx.component.render<T>((e) => {
       return <Switch {...e.state} />;
     });
