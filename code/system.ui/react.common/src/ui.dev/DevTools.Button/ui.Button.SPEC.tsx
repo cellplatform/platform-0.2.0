@@ -28,6 +28,10 @@ export default Dev.describe('Button', (e) => {
       .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
 
     dev
+      .button('update state', async (e) => {
+        await e.change((d) => d.count++);
+        e.label(`state: count-${e.state.current.count}`);
+      })
       .button((btn) =>
         /**
          * NOTE: primary (full) functional declaration.
