@@ -16,11 +16,8 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       padding: [5, 8],
       fontFamily: 'sans-serif',
     }),
-    render: css({
-      Absolute: [4, 5, null, null],
-      fontSize: 11,
-      opacity: 0.6,
-    }),
+    render: css({ Absolute: [4, 5, null, null], fontSize: 11, opacity: 0.6 }),
+    link: css({ Absolute: [null, 10, 10, null] }),
   };
 
   _count++;
@@ -32,9 +29,9 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       <div>
         <pre>state: {props.state ? JSON.stringify(props.state) : 'undefined'} </pre>
       </div>
-      <div>
-        <a href={'?dev'}>?dev</a>
-      </div>
+      <a href={'?dev'} {...styles.link}>
+        ?dev
+      </a>
       {elRender}
     </div>
   );
