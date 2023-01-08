@@ -1,6 +1,5 @@
 import { css, R, t, useCurrentState } from '../common';
-import { DebugPanelFooter as Footer } from './Panel.Footer';
-import { DebugPanelHeader as Header } from './Panel.Header';
+import { DebugPanelFooter as Footer, DebugPanelHeader as Header } from './Panel.Bar';
 import { DebugPanelMain as Main } from './Panel.Main';
 
 export type DebugPanelProps = {
@@ -33,11 +32,11 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Header instance={instance} current={current.info} />
+      <Header instance={instance} current={debug?.header} />
       <div {...styles.body}>
         <Main instance={instance} current={current.info} />
       </div>
-      <Footer instance={instance} current={current.info} />
+      <Footer instance={instance} current={debug?.footer} />
     </div>
   );
 };

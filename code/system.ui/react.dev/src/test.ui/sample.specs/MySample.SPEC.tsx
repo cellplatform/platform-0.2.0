@@ -44,7 +44,7 @@ export default Spec.describe('MySample', (e) => {
     const events = DevBus.events(ctx);
 
     debug.header.padding(0).render(<ComponentSample title={'header'} />);
-    debug.footer.render(<ComponentSample title={'footer'} />).border(-0.15);
+    debug.footer.border(-0.15).render(<ComponentSample title={'footer'} />);
 
     debug.row(<ComponentSample />);
     dev.hr();
