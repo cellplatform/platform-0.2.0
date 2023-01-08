@@ -10,7 +10,7 @@ export const DevTools = {
   /**
    * Curried initializtation.
    */
-  init: curried,
+  init,
 
   /**
    * Widgets
@@ -23,7 +23,7 @@ export const DevTools = {
  * [Helpers]
  */
 
-function curried<S extends O = O>(input: t.DevCtxInput, initial?: S) {
+function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   const ctx = Spec.ctx(input);
   const api = {

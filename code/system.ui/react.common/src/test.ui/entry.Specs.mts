@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.ui.Button.Switch': () => import('../ui/Button.Switch/Switch.SPEC'),
+  'sys.ui.Button.Switch': () => import('../ui/Button.Switch/index.SPEC'),
   'sys.ui.Icon': () => import('../ui/Icon/dev/Icon.SPEC'),
   'sys.ui.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
   'sys.ui.Center': () => import('../ui/Center/Center.SPEC'),
