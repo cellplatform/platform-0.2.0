@@ -1,11 +1,11 @@
 import { Button } from './ui.Button';
-import { Dev } from '..';
-import { ObjectView, Switch } from '../common';
+import { Dev, ObjectView } from '../../test.ui';
+import { Switch } from '../common';
 
 import type { ButtonProps } from './ui.Button';
 
-type S = { props: ButtonProps; count: number };
-const initial: S = {
+type T = { props: ButtonProps; count: number };
+const initial: T = {
   props: { right: <div>123</div>, onClick: () => console.info(`⚡️ onClick`) },
   count: 0,
 };
@@ -13,22 +13,21 @@ const initial: S = {
 export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<S>(initial);
+    await ctx.state<T>(initial);
     ctx.component
       .display('grid')
-      .size(250, undefined)
-      .render<S>((e) => {
+      .size(250, null)
+      .render<T>((e) => {
         return <Button {...e.state.props} />;
       });
   });
 
   e.it('debug panel', async (e) => {
-    const dev = Dev.tools<S>(e, initial);
+    const dev = Dev.tools<T>(e, initial);
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .padding([12, 10])
-      .render<S>((e) => <ObjectView name={'props'} data={e.state.props} />);
+      .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
 
     dev
       .button('rename (self)', async (e) => {

@@ -11,5 +11,6 @@ export const DevSpecs = {
   'sys.ui.dev.RenderCount': () => import('../ui.dev/RenderCount/RenderCount.SPEC'),
   'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/TestRunner.SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
-  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/ui.Button.SPEC'),
+  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/index.SPEC'),
+  'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/index.SPEC'),
 };
