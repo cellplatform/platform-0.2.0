@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { DevBus } from '../logic.Bus';
 import { Is, t } from './common';
 import { useCurrentState } from './useCurrentState.mjs';
 import { useRedrawEvent } from './useRedrawEvent.mjs';
-
-type O = Record<string, unknown>;
 
 export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef) {
   const id = renderer?.id ?? '';
@@ -17,14 +16,11 @@ export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef
    * [Lifecycle]
    */
   useEffect(() => {
-    let isDisposed = false;
-    const state = current.info?.render.state ?? {};
-    render(renderer, state).then((el) => {
-      if (!isDisposed) setElement(el);
+    const events = DevBus.events(instance);
+    render(events, renderer).then(async (el) => {
+      if (!events.disposed) setElement(el);
     });
-    return () => {
-      isDisposed = true;
-    };
+    return () => events.dispose();
   }, [id, current.count, redraw.count]);
 
   /**
@@ -37,11 +33,12 @@ export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef
  * Helpers
  */
 
-async function render(renderer?: t.DevRendererRef, state?: O) {
+async function render(events: t.DevEvents, renderer?: t.DevRendererRef) {
   if (!renderer) return null;
 
   const id = renderer?.id ?? '';
-  const res = renderer.fn({ id, state: state ?? {} });
+  const state = (await events.info.get()).render.state ?? {};
+  const res = renderer.fn({ id, state });
   if (Is.promise(res)) await res;
 
   return (res as JSX.Element) ?? null;
