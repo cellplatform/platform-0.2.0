@@ -1,20 +1,25 @@
-import { COLORS, css, t, useMouseState } from '../common';
+import { FC, COLORS, css, t, useMouseState } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
+const DEFAULT = {
+  isEnabled: true,
+};
+
 export type ButtonProps = {
+  isEnabled?: boolean;
   label?: string | JSX.Element;
-  right?: JSX.Element;
+  rightElement?: JSX.Element;
 
   style?: t.CssValue;
   labelOpacity?: number;
   onClick?: React.MouseEventHandler;
 };
 
-export const Button: React.FC<ButtonProps> = (props) => {
+const View: React.FC<ButtonProps> = (props) => {
   const { label = 'Unnamed' } = props;
 
   const mouse = useMouseState();
-  const isActive = Boolean(props.onClick);
+  const isActive = Wrangle.isActive(props);
 
   /**
    * [Handlers]
@@ -26,16 +31,15 @@ export const Button: React.FC<ButtonProps> = (props) => {
   /**
    * [Render]
    */
-
   const pressedTransform = `translateY(${isActive && mouse.isDown ? 1 : 0}px)`;
-
   const styles = {
     base: css({
       position: 'relative',
       userSelect: 'none',
-      cursor: isActive ? 'pointer' : 'default',
       color: COLORS.DARK,
       fontSize: 14,
+      cursor: isActive ? 'pointer' : 'default',
+      pointerEvents: isActive ? 'default' : 'none',
 
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
@@ -57,9 +61,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
     }),
     left: css({ transform: pressedTransform }),
     right: css({}),
-    label: css({
-      opacity: Wrangle.labelOpacity(props),
-    }),
+    label: css({ opacity: Wrangle.labelOpacity(props) }),
   };
 
   return (
@@ -72,7 +74,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
       />
       <div {...styles.body}>
         <div {...css(styles.left, styles.label)}>{label}</div>
-        <div {...styles.right}>{props.right}</div>
+        <div {...styles.right}>{props.rightElement}</div>
       </div>
     </div>
   );
@@ -85,7 +87,24 @@ export const Button: React.FC<ButtonProps> = (props) => {
 const Wrangle = {
   labelOpacity(props: ButtonProps) {
     const { labelOpacity } = props;
-    if (!props.onClick) return 0.3;
+    if (!Wrangle.isActive(props)) return 0.3;
     return labelOpacity === undefined ? 1 : labelOpacity;
   },
+  isActive(props: ButtonProps): boolean {
+    const { isEnabled = DEFAULT.isEnabled } = props;
+    return isEnabled && Boolean(props.onClick);
+  },
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULT: typeof DEFAULT;
+  isActive: typeof Wrangle.isActive;
+};
+export const Button = FC.decorate<ButtonProps, Fields>(
+  View,
+  { DEFAULT, isActive: Wrangle.isActive },
+  { displayName: 'Button' },
+);
