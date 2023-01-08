@@ -11,6 +11,8 @@ export type ButtonProps = {
 };
 
 export const Button: React.FC<ButtonProps> = (props) => {
+  const { label = 'Unnamed' } = props;
+
   const mouse = useMouseState();
   const isActive = Boolean(props.onClick);
 
@@ -24,6 +26,9 @@ export const Button: React.FC<ButtonProps> = (props) => {
   /**
    * [Render]
    */
+
+  const pressedTransform = `translateY(${isActive && mouse.isDown ? 1 : 0}px)`;
+
   const styles = {
     base: css({
       position: 'relative',
@@ -32,7 +37,6 @@ export const Button: React.FC<ButtonProps> = (props) => {
       color: COLORS.DARK,
       fontSize: 14,
 
-      transform: `translateY(${isActive && mouse.isDown ? 1 : 0}px)`,
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',
       columnGap: 4,
@@ -41,6 +45,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
       position: 'relative',
       top: -1,
       marginRight: 4,
+      transform: pressedTransform,
     }),
     body: css({
       position: 'relative',
@@ -50,6 +55,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
       justifyContent: 'start',
       gridTemplateColumns: '1fr auto',
     }),
+    left: css({ transform: pressedTransform }),
+    right: css({}),
     label: css({
       opacity: Wrangle.labelOpacity(props),
     }),
@@ -64,8 +71,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
         style={styles.icon}
       />
       <div {...styles.body}>
-        <div {...styles.label}>{props.label || 'Unnamed'}</div>
-        {props.right}
+        <div {...css(styles.left, styles.label)}>{label}</div>
+        <div {...styles.right}>{props.right}</div>
       </div>
     </div>
   );
