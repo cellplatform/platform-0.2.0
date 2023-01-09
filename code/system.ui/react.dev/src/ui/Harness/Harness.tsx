@@ -41,26 +41,12 @@ export const Harness: React.FC<HarnessProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
-    left: css({
-      position: 'relative',
-      display: 'grid',
-    }),
-    right: css({
-      position: 'relative',
-
-      borderLeft: `solid 1px ${Color.format(-0.1)}`,
-      width: 400,
-    }),
   };
 
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
-      <div {...styles.left}>
-        <HarnessHost instance={instance} />
-      </div>
-      <div {...styles.right}>
-        <DebugPanel instance={instance} style={{ Absolute: 0 }} />
-      </div>
+      <HarnessHost instance={instance} />
+      <DebugPanel instance={instance} />
     </div>
   );
 };

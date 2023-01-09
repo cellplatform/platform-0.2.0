@@ -33,6 +33,7 @@ export type DevRenderPropsHost = {
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
+  width?: number;
   header: DevRenderPropsDebugBar;
   body: {
     renderers: t.DevRendererRef<any>[];

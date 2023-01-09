@@ -1,4 +1,4 @@
-import { css, R, t, useCurrentState } from '../common';
+import { Color, css, R, t, useCurrentState } from '../common';
 import { DebugPanelFooter as Footer, DebugPanelHeader as Header } from './Panel.Bar';
 import { DebugPanelBody as Body } from './Panel.Body';
 
@@ -12,6 +12,9 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
 
   const current = useCurrentState(instance, { distinctUntil });
   const debug = current.info?.render.props?.debug;
+  const width = Wrangle.width(debug);
+
+  if (width <= 0) return null;
 
   /**
    * [Render]
@@ -20,6 +23,8 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
     base: css({
       overflow: 'hidden',
       justifySelf: 'stretch',
+      borderLeft: `solid 1px ${Color.format(-0.1)}`,
+      width,
 
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
@@ -50,4 +55,11 @@ const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
   if (prev.run.results?.tx !== next.run.results?.tx) return false;
   if (!R.equals(prev.render.revision, next.render.revision)) return false;
   return true;
+};
+
+const Wrangle = {
+  width(debug?: t.DevRenderPropsDebug) {
+    if (!debug?.width) return 0;
+    return Math.max(0, debug.width ?? 0);
+  },
 };

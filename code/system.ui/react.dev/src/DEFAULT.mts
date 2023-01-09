@@ -10,6 +10,7 @@ export const DEFAULT = {
       },
       component: {},
       debug: {
+        width: 400,
         header: { border: {}, padding: [8, 8, 8, 8] },
         body: {
           renderers: [],
