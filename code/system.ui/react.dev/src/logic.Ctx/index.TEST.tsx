@@ -22,12 +22,25 @@ describe('Context', () => {
       events.dispose();
     });
 
-    it('dispose', async () => {
+    it('dispose (context)', async () => {
       const { dispose, context, events } = await TestSample.context();
 
       let fired = 0;
       events.dispose$.subscribe(() => fired++);
       context.dispose$.subscribe(() => fired++);
+
+      dispose();
+      expect(fired).to.eql(2);
+      expect(context.disposed).to.eql(true);
+    });
+
+    it('dispose (ctx)', async () => {
+      const { dispose, context, events } = await TestSample.context();
+      const ctx = context.ctx;
+
+      let fired = 0;
+      events.dispose$.subscribe(() => fired++);
+      ctx.dispose$.subscribe(() => fired++);
 
       dispose();
       expect(fired).to.eql(2);

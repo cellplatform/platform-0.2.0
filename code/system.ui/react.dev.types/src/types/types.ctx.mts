@@ -27,6 +27,7 @@ export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
  * The context {ctx} interface passed into specs.
  */
 export type DevCtx = {
+  readonly dispose$: t.Observable<any>;
   readonly component: DevCtxComponent;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;

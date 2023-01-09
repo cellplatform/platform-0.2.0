@@ -33,6 +33,7 @@ export const Context = {
 
     const ctx: t.DevCtx = {
       ...props.setters,
+      dispose$,
       toObject,
 
       get is() {
