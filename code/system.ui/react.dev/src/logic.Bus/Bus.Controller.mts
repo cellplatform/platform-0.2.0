@@ -71,7 +71,7 @@ export function BusController(args: {
    */
   events.ctx.req$.subscribe(async (e) => {
     const { tx } = e;
-    const ctx = await Ctx.current();
+    const { ctx } = await Ctx.current();
     bus.fire({
       type: 'sys.dev/ctx:res',
       payload: { tx, instance, ctx },
