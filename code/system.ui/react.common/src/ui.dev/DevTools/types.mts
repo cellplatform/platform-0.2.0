@@ -11,7 +11,7 @@ export type DevTools<S extends O = O> = {
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
   button(fn: t.DevButtonHandler<S>): DevTools<S>;
 
-  boolean(label: string, onClick?: t.DevBooleanClickHandler<S>): DevTools<S>;
+  boolean(label: string, initial: boolean, onClick?: t.DevBooleanClickHandler<S>): DevTools<S>;
   boolean(fn: t.DevBooleanHandler<S>): DevTools<S>;
 
   hr(): DevTools<S>;

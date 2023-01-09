@@ -54,10 +54,10 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
         DevTools.boolean<S>(events, ctx, state, args[0]);
       }
 
-      if (typeof args[0] === 'string') {
+      if (typeof args[0] === 'string' && typeof args[1] === 'boolean') {
         DevTools.boolean<S>(events, ctx, state, (btn) => {
-          btn.label(args[0]);
-          if (typeof args[1] === 'function') btn.onClick(args[1]);
+          btn.label(args[0]).value(args[1]);
+          if (typeof args[2] === 'function') btn.onClick(args[2]);
         });
       }
 

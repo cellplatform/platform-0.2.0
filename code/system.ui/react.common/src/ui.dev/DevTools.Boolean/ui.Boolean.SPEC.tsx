@@ -46,6 +46,8 @@ export default Dev.describe('Boolean', (e) => {
           .onClick((e) => e.change((d) => d.count++)),
       )
       .hr()
-      .boolean('label shorthand', () => true);
+      .boolean('label shorthand', true, (btn) => {
+        btn.value(false).label('turned off');
+      });
   });
 });
