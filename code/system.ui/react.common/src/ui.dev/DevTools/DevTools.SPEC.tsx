@@ -2,7 +2,7 @@ import { DevTools } from '.';
 import { RenderCount, Dev } from '../../test.ui';
 import { css, ObjectView } from '../common';
 
-const initial = { count: 0, boolean: true };
+const initial = { count: 0, on: true };
 type T = typeof initial;
 
 export default Dev.describe('DevTools', (e) => {
@@ -27,33 +27,34 @@ export default Dev.describe('DevTools', (e) => {
     /**
      * Buttons
      */
-    dev
-      .button((btn) =>
-        btn.label('update state').onClick(async (e) => {
-          await e.state.change((draft) => draft.count++);
-          e.label(`state: count-${e.state.current.count}`);
-        }),
-      )
-      .button((btn) => {
-        let count = 0;
-        btn.label('rename (self)').onClick((e) => {
-          count++;
-          e.label(`renamed-${count} (within closure)`);
-        });
-      })
-      .hr();
+    dev.button((btn) =>
+      btn.label('update state').onClick(async (e) => {
+        await e.state.change((draft) => draft.count++);
+        e.label(`state: count-${e.state.current.count}`);
+      }),
+    );
+
+    dev.hr();
 
     /**
      * Booleaan
      */
     dev.boolean(async (btn) => {
-      const state = await btn.ctx.state<T>(initial);
       btn
-        .label('my boolean')
-        .value(state.current.boolean)
+        .label('toggle (within closure)')
+        .value(true)
         .onClick((e) => {
           console.log('e', e);
           e.value(!e.current);
+        });
+    });
+
+    dev.boolean(async (btn) => {
+      btn
+        .label((e) => `state: ${e.state.on ? 'on' : 'off'}`)
+        .value((e) => e.state.on)
+        .onClick((e) => {
+          e.change((d) => (d.on = !e.current));
         });
     });
   });
