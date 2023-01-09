@@ -57,12 +57,24 @@ export function BusController(args: {
   /**
    * Info (Module)
    */
-  events.info.req$.subscribe(async (e) => {
+  events.info.req$.subscribe((e) => {
     const { tx } = e;
     const info = state.current;
     bus.fire({
       type: 'sys.dev/info:res',
       payload: { tx, instance, info },
+    });
+  });
+
+  /**
+   * Context: {ctx}
+   */
+  events.ctx.req$.subscribe(async (e) => {
+    const { tx } = e;
+    const ctx = await Ctx.current();
+    bus.fire({
+      type: 'sys.dev/ctx:res',
+      payload: { tx, instance, ctx },
     });
   });
 

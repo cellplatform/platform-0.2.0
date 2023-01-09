@@ -86,6 +86,22 @@ describe('DevBus', (e) => {
       });
     });
 
+    describe('ctx (get)', () => {
+      it('fire (read)', async () => {
+        const { events } = await TestSample.controller();
+        const res = await events.ctx.fire();
+        expect(res.ctx?.toObject().instance.id).to.eql(events.instance.id);
+        events.dispose();
+      });
+
+      it('get', async () => {
+        const { events } = await TestSample.controller();
+        const ctx = await events.ctx.get();
+        expect(ctx.toObject().instance.id).to.eql(events.instance.id);
+        events.dispose();
+      });
+    });
+
     describe('load', () => {
       it('load (import bundle)', async () => {
         const instance = TestSample.instance();

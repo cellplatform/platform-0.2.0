@@ -3,6 +3,8 @@ import { filter } from 'rxjs/operators';
 import { asArray, rx, slug, t } from './common';
 import { ContextState } from '../logic.Ctx/Context.State.mjs';
 
+const DEFAULT = { TIMEOUT: 1000 };
+
 type O = Record<string, unknown>;
 type Id = string;
 
@@ -36,7 +38,7 @@ export function BusEvents(args: {
     res$: rx.payload<t.DevInfoResEvent>($, 'sys.dev/info:res'),
     changed$: rx.payload<t.DevInfoChangedEvent>($, 'sys.dev/info:changed'),
     async fire(options = {}) {
-      const { timeout = 3000 } = options;
+      const { timeout = DEFAULT.TIMEOUT } = options;
       const tx = slug();
       const op = 'info';
       const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -62,6 +64,36 @@ export function BusEvents(args: {
     },
   };
 
+  const ctx: t.DevEvents['ctx'] = {
+    req$: rx.payload<t.DevCtxReqEvent>($, 'sys.dev/ctx:req'),
+    res$: rx.payload<t.DevCtxResEvent>($, 'sys.dev/ctx:res'),
+    async fire(options = {}) {
+      const { timeout = DEFAULT.TIMEOUT } = options;
+      const tx = slug();
+      const op = 'ctx';
+      const res$ = ctx.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.DevCtxResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.dev/ctx:req',
+        payload: { tx, instance },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      return { tx, instance, error };
+    },
+
+    async get(options) {
+      const res = await ctx.fire(options);
+      if (res.error) throw new Error(res.error);
+      if (!res.ctx) throw new Error(`Status: {ctx} not available`);
+      return res.ctx;
+    },
+  };
+
   /**
    * Load ("describe/it" specification bundle).
    */
@@ -69,7 +101,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.DevLoadReqEvent>($, 'sys.dev/load:req'),
     res$: rx.payload<t.DevLoadResEvent>($, 'sys.dev/load:res'),
     async fire(bundle, options = {}) {
-      const { timeout = 3000 } = options;
+      const { timeout = DEFAULT.TIMEOUT } = options;
       const tx = slug();
       const op = 'load';
       const res$ = load.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -95,7 +127,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.DevRunReqEvent>($, 'sys.dev/run:req'),
     res$: rx.payload<t.DevRunResEvent>($, 'sys.dev/run:res'),
     async fire(options = {}) {
-      const { timeout = 3000 } = options;
+      const { timeout = DEFAULT.TIMEOUT } = options;
       const only = options.only ? asArray(options.only) : undefined;
       const tx = slug();
       const op = 'run';
@@ -122,7 +154,7 @@ export function BusEvents(args: {
     req$: rx.payload<t.DevResetReqEvent>($, 'sys.dev/reset:req'),
     res$: rx.payload<t.DevResetResEvent>($, 'sys.dev/reset:res'),
     async fire(options = {}) {
-      const { timeout = 3000 } = options;
+      const { timeout = DEFAULT.TIMEOUT } = options;
       const tx = slug();
       const op = 'reset';
       const res$ = reset.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -155,7 +187,7 @@ export function BusEvents(args: {
       req$: rx.payload<t.DevStateChangeReqEvent>($, 'sys.dev/state/change:req'),
       res$: rx.payload<t.DevStateChangeResEvent>($, 'sys.dev/state/change:res'),
       async fire(initial, change, options = {}) {
-        const { timeout = 3000 } = options;
+        const { timeout = DEFAULT.TIMEOUT } = options;
         const tx = slug();
         const op = 'state.change';
         const res$ = state.change.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -193,7 +225,7 @@ export function BusEvents(args: {
       req$: rx.payload<t.DevPropsChangeReqEvent>($, 'sys.dev/props/change:req'),
       res$: rx.payload<t.DevPropsChangeResEvent>($, 'sys.dev/props/change:res'),
       async fire(mutate, options = {}) {
-        const { timeout = 3000 } = options;
+        const { timeout = DEFAULT.TIMEOUT } = options;
         const tx = slug();
         const op = 'props.change';
         const res$ = props.change.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -253,6 +285,7 @@ export function BusEvents(args: {
     },
     is,
     info,
+    ctx,
     load,
     run,
     reset,
