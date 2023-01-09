@@ -8,8 +8,8 @@ type O = Record<string, unknown>;
  * A simple clickable text-busson that represents a boolean value.
  */
 export function boolean<S extends O = O>(
-  ctx: t.DevCtx,
   events: t.DevEvents,
+  ctx: t.DevCtx,
   initial: S,
   fn: t.DevBooleanHandler<S>,
 ) {
@@ -17,7 +17,7 @@ export function boolean<S extends O = O>(
 
   const label = ValueHandler<string, S>(events);
   const value = ValueHandler<boolean, S>(events);
-  const clickHandlers: t.DevBooleanClickHandler<S>[] = [];
+  const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {
     ctx,
@@ -30,7 +30,7 @@ export function boolean<S extends O = O>(
       return args;
     },
     onClick(handler) {
-      clickHandlers.push(handler);
+      clickHandlers.add(handler);
       return args;
     },
   };
@@ -46,8 +46,8 @@ export function boolean<S extends O = O>(
       <Boolean
         value={await value.current()}
         label={await label.current()}
-        isEnabled={clickHandlers.length > 0}
-        onClick={clickHandlers.length > 0 ? onClick : undefined}
+        isEnabled={clickHandlers.size > 0}
+        onClick={clickHandlers.size > 0 ? onClick : undefined}
       />
     );
   });

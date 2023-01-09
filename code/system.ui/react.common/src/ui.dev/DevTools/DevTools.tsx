@@ -32,15 +32,15 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
     ctx,
 
     /**
-     * Widgets.
+     * Widgets: Argument Wrangling.
      */
     button(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.button<S>(ctx, events, state, args[0]);
+        DevTools.button<S>(events, ctx, state, args[0]);
       }
 
       if (typeof args[0] === 'string') {
-        DevTools.button<S>(ctx, events, state, (btn) => {
+        DevTools.button<S>(events, ctx, state, (btn) => {
           btn.label(args[0]);
           if (typeof args[1] === 'function') btn.onClick(args[1]);
         });
@@ -51,7 +51,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
 
     boolean(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.boolean<S>(ctx, events, state, args[0]);
+        DevTools.boolean<S>(events, ctx, state, args[0]);
       }
 
       return api;

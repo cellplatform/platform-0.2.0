@@ -8,15 +8,15 @@ type O = Record<string, unknown>;
  * A simple clickable text button implementation.
  */
 export function button<S extends O = O>(
-  ctx: t.DevCtx,
   events: t.DevEvents,
+  ctx: t.DevCtx,
   initial: S,
   fn: t.DevButtonHandler<S>,
 ) {
   if (!ctx.is.initial) return;
 
   const label = ValueHandler<string, S>(events);
-  const clickHandlers: t.DevButtonClickHandler<S>[] = [];
+  const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
     ctx,
@@ -25,7 +25,7 @@ export function button<S extends O = O>(
       return args;
     },
     onClick(handler) {
-      clickHandlers.push(handler);
+      clickHandlers.add(handler);
       return args;
     },
   };
@@ -37,8 +37,8 @@ export function button<S extends O = O>(
     return (
       <Button
         label={await label.current()}
-        isEnabled={clickHandlers.length > 0}
-        onClick={clickHandlers.length > 0 ? onClick : undefined}
+        isEnabled={clickHandlers.size > 0}
+        onClick={clickHandlers.size > 0 ? onClick : undefined}
       />
     );
   });
