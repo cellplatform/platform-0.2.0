@@ -33,7 +33,7 @@
     "fs-extra": "^11.1.0",
     "glamor-jss": "1.4.1",
     "glob": "^8.0.3",
-    "immer": "^9.0.16",
+    "immer": "^9.0.17",
     "jss-plugin-global": "^10.9.2",
     "minimist": "^1.2.7",
     "monaco-editor": "^0.34.1",
@@ -62,15 +62,15 @@
     "retext-english": "^4.1.0",
     "retext-stringify": "^3.1.0",
     "symbol-observable": "^4.0.0",
-    "tinycolor2": "^1.5.1",
+    "tinycolor2": "^1.5.2",
     "unified": "^10.1.2",
-    "unist-util-select": "^4.0.1",
-    "yaml": "^2.2.0"
+    "unist-util-select": "^4.0.2",
+    "yaml": "^2.2.1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@tsconfig/svelte": "^3.0.0",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.0",
     "@types/glob": "^8.0.0",
     "@types/jsdom": "^20.0.1",
     "@types/minimist": "^1.2.2",
@@ -84,9 +84,9 @@
     "@types/tinycolor2": "^1.4.3",
     "@types/vimeo__player": "^2.16.3",
     "@testing-library/react": "^13.4.0",
-    "@vitejs/plugin-react": "^3.0.0",
+    "@vitejs/plugin-react": "^3.0.1",
     "dotenv": "^16.0.3",
-    "jsdom": "^20.0.3",
+    "jsdom": "^21.0.0",
     "semver": "7.3.8",
     "svelte": "^3.53.1",
     "svelte-check": "^3.0.1",
@@ -94,13 +94,11 @@
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
     "typescript": "^4.9.3",
-    "vite": "^4.0.3",
-    "vitest": "^0.26.2",
+    "vite": "^4.0.4",
+    "vitest": "^0.26.3",
     "chai": "^4.3.7"
   },
-  "resolutions": {
-    "json5": "^2.2.2"
-  },
+  "resolutions": {},
   "license": "MIT",
   "private": true
 }
