@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Color, COLORS, css, t, useBusController } from '../common';
 import { HarnessHost } from '../Harness.Host';
 import { DebugPanel } from '../Harness.DebugPanel';
@@ -6,6 +8,7 @@ export type HarnessProps = {
   instance?: t.DevInstance;
   spec?: t.BundleImport;
   style?: t.CssValue;
+  allowRubberband?: boolean;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
@@ -15,6 +18,14 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     id: props.instance?.id,
     runOnLoad: true,
   });
+
+  /**
+   * [Lifecycle]
+   */
+  useEffect(() => {
+    const allow = props.allowRubberband ?? false;
+    document.body.style.overflow = allow ? 'auto' : 'hidden';
+  }, [props.allowRubberband]);
 
   /**
    * [Render]
