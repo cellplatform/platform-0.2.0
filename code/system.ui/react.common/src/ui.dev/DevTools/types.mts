@@ -15,10 +15,3 @@ export type DevTools<S extends O = O> = {
 
   hr(): DevTools<S>;
 };
-
-/**
- * Dynamic value.
- * A value is recalculated for the employing widget each time the state/props updates.
- */
-export type DevValueHandler<R, S extends O = O> = (e: DevValueHandlerArgs<S>) => R;
-export type DevValueHandlerArgs<S extends O = O> = { state: S };

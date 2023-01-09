@@ -1,5 +1,4 @@
-import { t } from '../common';
-import { ValueHandler } from '../DevTools/ValueHandler.mjs';
+import { Dev, t } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
@@ -15,7 +14,7 @@ export function button<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = ValueHandler<string, S>(events);
+  const label = Dev.ValueHandler<string, S>(events);
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {

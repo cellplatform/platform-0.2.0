@@ -41,7 +41,11 @@ export default Dev.describe('Button', (e) => {
       })
       .button((btn) => {
         return btn
-          .label((e) => `change props (derived): count-${e.state.count}`)
+          .label((e) => {
+            const bg = e.props.component.backgroundColor ?? 0;
+            const count = e.state.count;
+            return `change props: (props-${bg}) / state-${count}`;
+          })
           .onClick((e) => e.ctx.component.backgroundColor(1));
       })
       /**
