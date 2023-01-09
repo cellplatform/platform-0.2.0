@@ -44,6 +44,8 @@ export default Dev.describe('Boolean', (e) => {
           .label((e) => `dynamic label and value (count: ${e.state.count})`)
           .value((e) => e.state.count % 2 === 0)
           .onClick((e) => e.change((d) => d.count++)),
-      );
+      )
+      .hr()
+      .boolean('label shorthand', () => true);
   });
 });
