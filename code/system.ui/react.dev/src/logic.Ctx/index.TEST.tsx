@@ -35,16 +35,13 @@ describe('Context', () => {
     });
 
     it('dispose (ctx)', async () => {
-      const { dispose, context, events } = await TestSample.context();
-      const ctx = context.ctx;
+      const { dispose, ctx } = await TestSample.context();
 
       let fired = 0;
-      events.dispose$.subscribe(() => fired++);
       ctx.dispose$.subscribe(() => fired++);
 
       dispose();
-      expect(fired).to.eql(2);
-      expect(context.disposed).to.eql(true);
+      expect(fired).to.eql(1);
     });
 
     it('toObject', async () => {

@@ -38,7 +38,20 @@ describe('DevBus', (e) => {
       expect(events.disposed).to.eql(false);
 
       events.dispose();
+      events.dispose();
       expect(events.disposed).to.eql(true);
+    });
+
+    it('dispose (implicit attaching to dispose$)', async () => {
+      const { dispose, ctx } = await TestSample.context();
+      const events = DevBus.events(ctx);
+
+      let fired = 0;
+      events.dispose$.subscribe(() => fired++);
+
+      dispose();
+      dispose();
+      expect(fired).to.eql(1);
     });
 
     describe('info', () => {
