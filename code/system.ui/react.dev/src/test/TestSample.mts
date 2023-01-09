@@ -26,7 +26,10 @@ export const TestSample = {
     const context = await Context.init(instance);
     const ctx = context.ctx;
     context.dispose$.subscribe(() => events.dispose());
-    const dispose = () => context.dispose();
+    const dispose = () => {
+      context.dispose();
+      events.dispose();
+    };
     return { context, ctx, instance, events, dispose };
   },
 };
