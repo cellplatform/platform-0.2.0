@@ -15,7 +15,7 @@ export function boolean<S extends O = O>(
   if (!ctx.is.initial) return;
 
   const label = Dev.ValueHandler<string, S>(events);
-  const value = Dev.ValueHandler<boolean, S>(events);
+  const value = Dev.ValueHandler<boolean | undefined, S>(events);
   const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {

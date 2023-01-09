@@ -41,13 +41,16 @@ export default Dev.describe('Boolean', (e) => {
       .boolean((btn) => btn.label('no `onClick` - disabled').value(true))
       .boolean((btn) =>
         btn
+          .label('value: `undefined`')
+          .value(() => undefined)
+          .onClick((e) => e.change((d) => d.count++)),
+      )
+      .boolean((btn) =>
+        btn
           .label((e) => `dynamic label and value (count: ${e.state.count})`)
           .value((e) => e.state.count % 2 === 0)
           .onClick((e) => e.change((d) => d.count++)),
       )
-      .hr()
-      .boolean('label shorthand', true, (btn) => {
-        btn.value(false).label('turned off');
-      });
+      .hr();
   });
 });

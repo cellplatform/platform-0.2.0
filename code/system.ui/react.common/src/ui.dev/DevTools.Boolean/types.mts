@@ -1,6 +1,7 @@
 import * as t from '../../common/types.mjs';
 
 type O = Record<string, unknown>;
+type BoolOrUndefined = boolean | undefined;
 
 /**
  * Boolean
@@ -9,7 +10,7 @@ export type DevBooleanHandler<S extends O = O> = (e: DevBooleanHandlerArgs<S>) =
 export type DevBooleanHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
   label(value: string | t.DevValueHandler<string, S>): DevBooleanHandlerArgs<S>;
-  value(value: boolean | t.DevValueHandler<boolean, S>): DevBooleanHandlerArgs<S>;
+  value(value: BoolOrUndefined | t.DevValueHandler<BoolOrUndefined, S>): DevBooleanHandlerArgs<S>;
   onClick(fn: DevBooleanClickHandler<S>): DevBooleanHandlerArgs<S>;
 };
 
