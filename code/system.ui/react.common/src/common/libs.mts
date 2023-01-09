@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { mergeDeepRight, clone } from 'ramda';
-export const R = { mergeDeepRight, clone };
+import { mergeDeepRight, clone, equals } from 'ramda';
+export const R = { mergeDeepRight, clone, equals };
 
 /**
  * @system
