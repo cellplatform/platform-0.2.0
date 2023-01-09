@@ -1,28 +1,27 @@
-import { Spec, t } from '../common';
+import { t } from '../common';
+import { ValueHandler } from '../DevTools/ValueHandler.mjs';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
-import type { DevButtonHandler, DevButtonClickHandler, DevButtonHandlerArgs } from './types.mjs';
-
-const DEFAULT = Button.DEFAULT;
 
 /**
  * A simple clickable text button implementation.
  */
-export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: DevButtonHandler<S>) {
-  const ctx = Spec.ctx(input);
+export function button<S extends O = O>(
+  ctx: t.DevCtx,
+  events: t.DevEvents,
+  initial: S,
+  fn: t.DevButtonHandler<S>,
+) {
   if (!ctx.is.initial) return;
 
-  const clickHandlers: DevButtonClickHandler<S>[] = [];
-  const props = {
-    label: DEFAULT.label,
-  };
+  const label = ValueHandler<string, S>(events);
+  const clickHandlers: t.DevButtonClickHandler<S>[] = [];
 
-  const args: DevButtonHandlerArgs<S> = {
+  const args: t.DevButtonHandlerArgs<S> = {
     ctx,
     label(value) {
-      props.label = value;
-      ref.redraw();
+      label.handler(value);
       return args;
     },
     onClick(handler) {
@@ -32,19 +31,19 @@ export function button<S extends O = O>(input: t.DevCtxInput, initial: S, fn: De
   };
 
   const ref = ctx.debug.row(async (e) => {
-    const onClick = async () => {
-      const state = await ctx.state<S>(initial);
-      const change = state.change;
-      clickHandlers.forEach((fn) => fn({ ...args, state, change }));
-    };
+    const state = await ctx.state<S>(initial);
+    const change = state.change;
+    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, state, change }));
     return (
       <Button
-        label={props.label}
+        label={await label.current()}
         isEnabled={clickHandlers.length > 0}
         onClick={clickHandlers.length > 0 ? onClick : undefined}
       />
     );
   });
+
+  label.subscribe(ref.redraw);
 
   fn?.(args);
 }

@@ -1,4 +1,4 @@
-import { Spec, t } from '../common';
+import { Spec, t, Dev } from '../common';
 import { button } from '../DevTools.Button';
 import { boolean } from '../DevTools.Boolean';
 import { hr } from '../DevTools.Hr';
@@ -26,6 +26,8 @@ export const DevTools = {
 function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   const ctx = Spec.ctx(input);
+  const events = Dev.Bus.events(input);
+
   const api: t.DevTools<S> = {
     ctx,
 
@@ -34,11 +36,11 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
      */
     button(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.button<S>(ctx, state, args[0]);
+        DevTools.button<S>(ctx, events, state, args[0]);
       }
 
       if (typeof args[0] === 'string') {
-        DevTools.button<S>(ctx, state, (btn) => {
+        DevTools.button<S>(ctx, events, state, (btn) => {
           btn.label(args[0]);
           if (typeof args[1] === 'function') btn.onClick(args[1]);
         });
@@ -49,7 +51,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
 
     boolean(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.boolean<S>(ctx, state, args[0]);
+        DevTools.boolean<S>(ctx, events, state, args[0]);
       }
 
       return api;

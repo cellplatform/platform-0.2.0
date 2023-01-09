@@ -32,15 +32,18 @@ export default Dev.describe('Button', (e) => {
         await e.change((d) => d.count++);
         e.label(`state: count-${e.state.current.count}`);
       })
-      .button((btn) =>
-        /**
-         * NOTE: primary (full) functional declaration.
-         */
-        btn.label('rename (self)').onClick(async (e) => {
-          await e.change((draft) => draft.count++);
-          e.label(`renamed-${e.state.current.count} (within closure)`);
-        }),
-      )
+      .button((btn) => {
+        let count = 0;
+        return btn.label('rename (self)').onClick((e) => {
+          count++;
+          e.label(`renamed-${count} (within closure)`);
+        });
+      })
+      .button((btn) => {
+        return btn
+          .label((e) => `change props (derived) : count-${e.state.count}`)
+          .onClick((e) => e.ctx.component.backgroundColor(1));
+      })
       /**
        * Shorthand: "label", "onClick" parameter declaration.
        */
