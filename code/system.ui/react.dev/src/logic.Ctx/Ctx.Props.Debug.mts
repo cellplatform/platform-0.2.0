@@ -29,6 +29,13 @@ export function CtxPropsDebug(props: PropArgs) {
       return api;
     },
 
+    width(input) {
+      const value = Wrangle.width(input, DEFAULT.props.debug.width);
+      props.current().debug.width = value;
+      props.changed();
+      return api;
+    },
+
     /**
      * Header
      */
@@ -82,3 +89,14 @@ export function CtxPropsDebug(props: PropArgs) {
 
   return api;
 }
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  width(value: number | undefined, defaultValue?: number) {
+    if (typeof value !== 'number') return defaultValue;
+    return Math.max(0, value);
+  },
+};

@@ -25,7 +25,6 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       justifySelf: 'stretch',
       borderLeft: `solid 1px ${Color.format(-0.1)}`,
       width,
-
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
     }),

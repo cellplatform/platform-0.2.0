@@ -280,6 +280,29 @@ describe('Context', () => {
       dispose();
     });
 
+    it('width', async () => {
+      const { events, context, dispose } = await TestSample.context();
+      const ctx = context.ctx;
+
+      const expectValue = async (value: any, expected?: number) => {
+        ctx.debug.width(value);
+        await context.flush();
+        const info = await events.info.get();
+        expect(info.render.props?.debug.width).to.eql(expected);
+      };
+
+      const DEBUG = DEFAULT.props.debug;
+
+      await expectValue(undefined, DEBUG.width);
+      await expectValue(null, DEBUG.width);
+
+      await expectValue(0, 0);
+      await expectValue(-1, 0);
+      await expectValue(200, 200);
+
+      dispose();
+    });
+
     describe('header', () => {
       const HEADER = DEFAULT.props.debug.header;
 
