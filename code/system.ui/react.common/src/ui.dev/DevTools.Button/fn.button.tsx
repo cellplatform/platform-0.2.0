@@ -36,7 +36,7 @@ export function button<S extends O = O>(
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, state, change }));
     return (
       <Button
-        label={await label.current()}
+        label={label.current}
         isEnabled={clickHandlers.size > 0}
         onClick={clickHandlers.size > 0 ? onClick : undefined}
       />

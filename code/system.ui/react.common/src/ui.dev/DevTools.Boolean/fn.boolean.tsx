@@ -39,13 +39,13 @@ export function boolean<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const onClick = async () => {
-      const current = (await value.current()) ?? false;
+      const current = value.current ?? false;
       clickHandlers.forEach((fn) => fn({ ...args, current, state, change }));
     };
     return (
       <Boolean
-        value={await value.current()}
-        label={await label.current()}
+        value={value.current}
+        label={label.current}
         isEnabled={clickHandlers.size > 0}
         onClick={clickHandlers.size > 0 ? onClick : undefined}
       />

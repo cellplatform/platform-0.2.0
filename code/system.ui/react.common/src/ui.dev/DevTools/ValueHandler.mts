@@ -22,8 +22,14 @@ export function ValueHandler<V, S extends O = O>(
   const subscribers = new Set<Subscriber>();
 
   const getState = async () => ((await events.info.get()).render.state ?? {}) as S;
+  const getCurrent = async (info?: t.DevInfo) => {
+    const state = (info?.render.state ?? (await getState())) as S;
+    const res = _handler?.({ state });
+    return res;
+  };
+
   const handleChanged = async (info?: t.DevInfo) => {
-    const value = await api.current(info);
+    const value = await getCurrent(info);
     if (!R.equals(value, _latest)) subscribers.forEach((fn) => fn());
     _latest = value;
   };
@@ -32,10 +38,8 @@ export function ValueHandler<V, S extends O = O>(
   events.props.changed$.pipe(debounceTime(debounce)).subscribe((e) => handleChanged(e.info));
 
   const api = {
-    async current(info?: t.DevInfo) {
-      const state = (info?.render.state ?? (await getState())) as S;
-      const res = _handler?.({ state });
-      return res;
+    get current() {
+      return _latest;
     },
     handler(input: V | Handler) {
       _handler = (typeof input === 'function' ? input : () => input as V) as Handler;
@@ -49,5 +53,6 @@ export function ValueHandler<V, S extends O = O>(
       subscribers.clear();
     },
   };
+
   return api;
 }
