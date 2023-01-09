@@ -3,9 +3,10 @@ import { Dev, ObjectView } from '../../test.ui';
 
 import type { BooleanProps } from './ui.Boolean';
 
-type T = { props: BooleanProps };
+type T = { props: BooleanProps; count: number };
 const initial: T = {
   props: { value: true },
+  count: 0,
 };
 
 export default Dev.describe('Boolean', (e) => {
@@ -31,8 +32,18 @@ export default Dev.describe('Boolean', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
+      .render<T>((e) => <ObjectView name={'state'} data={e.state} />);
 
-    dev.boolean((btn) => btn.label('no `onClick`').value(true));
+    dev
+      .button('state: increment count', (e) => e.change((d) => d.count++))
+      .button('toggle value', (e) => e.change(({ props }) => (props.value = !props.value)))
+      .hr()
+      .boolean((btn) => btn.label('no `onClick`').value(true))
+      .boolean((btn) =>
+        btn
+          .label((e) => `dynamic label and value (count: ${e.state.count})`)
+          .value((e) => e.state.count % 2 == 0)
+          .onClick((e) => e.change((d) => d.count++)),
+      );
   });
 });

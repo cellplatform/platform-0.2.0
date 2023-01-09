@@ -1,4 +1,4 @@
-import { FC, COLORS, css, t, useMouseState, RenderCount } from '../common';
+import { COLORS, css, FC, t, useMouseState } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
 const DEFAULT = {
@@ -77,7 +77,6 @@ const View: React.FC<ButtonProps> = (props) => {
         <div {...css(styles.left, styles.label)}>{label}</div>
         <div {...styles.right}>{props.rightElement}</div>
       </div>
-      {/* <RenderCount /> */}
     </div>
   );
 };

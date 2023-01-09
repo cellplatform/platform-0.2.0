@@ -8,8 +8,8 @@ type O = Record<string, unknown>;
 export type DevBooleanHandler<S extends O = O> = (e: DevBooleanHandlerArgs<S>) => t.IgnoredResponse;
 export type DevBooleanHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
-  label(value: string): DevBooleanHandlerArgs<S>;
-  value(value: boolean): DevBooleanHandlerArgs<S>;
+  label(value: string | t.DevValueHandler<string, S>): DevBooleanHandlerArgs<S>;
+  value(value: boolean | t.DevValueHandler<boolean, S>): DevBooleanHandlerArgs<S>;
   onClick(fn: DevBooleanClickHandler<S>): DevBooleanHandlerArgs<S>;
 };
 
