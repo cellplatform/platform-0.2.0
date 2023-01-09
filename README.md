@@ -132,8 +132,8 @@ The inverse proposition also appears to be true:
 <p>&nbsp;</p>
 
 
+<img width="2651" alt="crdt-dog-phil" src="https://user-images.githubusercontent.com/185555/211253122-54f9268f-92d9-4866-b938-71545daa50b6.png">
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/211239547-79b3428f-22a6-4055-8a1f-6067b1c38534.png)
 
 
 
