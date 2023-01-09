@@ -38,11 +38,11 @@ export default Dev.describe('Boolean', (e) => {
       .button('state: increment count', (e) => e.change((d) => d.count++))
       .button('toggle value', (e) => e.change(({ props }) => (props.value = !props.value)))
       .hr()
-      .boolean((btn) => btn.label('no `onClick`').value(true))
+      .boolean((btn) => btn.label('no `onClick` - disabled').value(true))
       .boolean((btn) =>
         btn
           .label((e) => `dynamic label and value (count: ${e.state.count})`)
-          .value((e) => e.state.count % 2 == 0)
+          .value((e) => e.state.count % 2 === 0)
           .onClick((e) => e.change((d) => d.count++)),
       );
   });
