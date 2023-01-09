@@ -8,7 +8,7 @@ export function expectRendererId(value?: string) {
 describe('Context', () => {
   describe('lifecycle', () => {
     it('init', async () => {
-      const { events, instance } = await TestSample.create();
+      const { events, instance } = await TestSample.controller();
 
       const info = await events.info.get();
       expect(info.render.props).to.eql(undefined); // Initially no render-props data.
@@ -84,7 +84,7 @@ describe('Context', () => {
     });
 
     it('synced between instances on same bus (single source of truth)', async () => {
-      const { instance } = await TestSample.create();
+      const { instance } = await TestSample.controller();
       const context1 = await Context.init(instance);
       const context2 = await Context.init(instance);
 

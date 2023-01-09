@@ -135,7 +135,7 @@ describe('DevBus', (e) => {
       });
 
       it('render context changes between load/reset', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const getId = async () => (await events.info.get()).instance.session;
 
@@ -196,7 +196,7 @@ describe('DevBus', (e) => {
       });
 
       it('run: suite not loaded', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(0);
@@ -209,7 +209,7 @@ describe('DevBus', (e) => {
       it('run: { ctx.isInitial } flag', async () => {
         const { Wrapper } = await SAMPLES.Sample2;
         const sample = Wrapper();
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         await sample.root.init();
         await events.load.fire(sample.root);
@@ -230,7 +230,7 @@ describe('DevBus', (e) => {
       it('target single spec (from initial run)', async () => {
         const { Wrapper } = await SAMPLES.Sample2;
         const sample = Wrapper();
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         await sample.root.init();
         await events.load.fire(sample.root);
@@ -321,7 +321,7 @@ describe('DevBus', (e) => {
 
     describe('ctx.run', () => {
       it('ctx.run()', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) =>
@@ -343,7 +343,7 @@ describe('DevBus', (e) => {
       });
 
       it('ctx.run({ reset })', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
@@ -368,7 +368,7 @@ describe('DevBus', (e) => {
       });
 
       it('ctx.isInitial', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
         const log: boolean[] = [];
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
