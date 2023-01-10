@@ -30,9 +30,9 @@ export default Dev.describe('DevTools', (e) => {
      * Buttons
      */
     dev.button((btn) =>
-      btn.label('update state').onClick(async (e) => {
+      btn.label('state: increment (+)').onClick(async (e) => {
         await e.state.change((draft) => draft.count++);
-        e.label(`state: count-${e.state.current.count}`);
+        e.label(`state: increment (+): count-${e.state.current.count}`);
       }),
     );
 
