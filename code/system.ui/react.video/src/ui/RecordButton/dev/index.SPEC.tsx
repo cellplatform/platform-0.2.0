@@ -34,9 +34,8 @@ export default Dev.describe('RecordButton', (e) => {
     await ctx.state<T>(initial);
 
     ctx.component
+      //
       .display('grid')
-      // .backgroundColor(1)
-      // .size(250, null)
       .render<T>((e) => {
         return <RecordButton {...e.state.props} />;
       });
