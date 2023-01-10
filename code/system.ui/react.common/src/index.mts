@@ -2,6 +2,8 @@ export * from './types.mjs';
 export { Pkg } from './index.pkg.mjs';
 export { Specs, DevSpecs } from './test.ui/entry.Specs.mjs';
 
+export { LocalStorage } from './tools/LocalStorage';
+
 export { Icon } from './ui/Icon';
 export { Spinner } from './ui/Spinner';
 export { Center } from './ui/Center';
