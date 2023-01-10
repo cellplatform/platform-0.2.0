@@ -1,6 +1,6 @@
 import { DevTools } from '.';
 import { RenderCount, Dev } from '../../test.ui';
-import { css, ObjectView } from '../common';
+import { css } from '../common';
 
 const initial = { count: 0, on: true };
 type T = typeof initial;
@@ -22,7 +22,9 @@ export default Dev.describe('DevTools', (e) => {
     /**
      * Header/Footer bars.
      */
-    debug.footer.border(-0.15).render((e) => <ObjectView data={e.state} style={{ margin: 8 }} />);
+    debug.footer
+      .border(-0.15)
+      .render((e) => <Dev.ObjectView data={e.state} style={{ margin: 8 }} />);
 
     /**
      * Buttons

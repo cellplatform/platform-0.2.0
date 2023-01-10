@@ -1,4 +1,4 @@
-import { Dev, ObjectView } from '../../test.ui';
+import { Dev } from '../../test.ui';
 import { Button, ButtonProps } from './Button';
 
 type T = { count: number; props: ButtonProps };
@@ -26,7 +26,7 @@ export default Dev.describe('Button', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'state'} data={e.state} />);
+      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
 
     dev
       .boolean((btn) =>

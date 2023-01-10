@@ -1,4 +1,4 @@
-import { Dev, ObjectView, expect, rx, LocalStorage, t } from '../../../test.ui';
+import { Dev, expect, rx, t } from '../../../test.ui';
 import { DevDialog } from './Dialog';
 import { RecordButton, RecordButtonStates } from '..';
 
@@ -17,7 +17,8 @@ type CtxStorage = {
 };
 
 export default Dev.describe('RecordButton', (e) => {
-  const local = LocalStorage<CtxStorage>(`dev:sys.ui.video/RecordButton`);
+  const local = Dev.LocalStorage<CtxStorage>(`dev:sys.ui.video/RecordButton`);
+
   const storage = local.object({
     state: 'default',
     size: 45,
@@ -46,7 +47,7 @@ export default Dev.describe('RecordButton', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'state'} data={e.state} />);
+      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
 
     dev.boolean((btn) =>
       btn

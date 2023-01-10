@@ -1,5 +1,5 @@
 import { Boolean } from '.';
-import { Dev, ObjectView } from '../../test.ui';
+import { Dev } from '../../test.ui';
 
 import type { BooleanProps } from './ui.Boolean';
 
@@ -32,7 +32,7 @@ export default Dev.describe('Boolean', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'state'} data={e.state} />);
+      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
 
     dev
       .button('state: increment count', (e) => e.change((d) => d.count++))

@@ -1,5 +1,5 @@
-import { Dev, ObjectView } from '../../test.ui';
 import { Switch, SwitchProps } from '.';
+import { Dev } from '../../test.ui';
 
 type T = { props: SwitchProps };
 const initial: T = { props: { value: true } };
@@ -23,7 +23,7 @@ export default Dev.describe('Switch (Button)', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'state'} data={e.state} />);
+      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
 
     dev
       .button('toggle: `isEnabled`', (e) => {

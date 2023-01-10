@@ -1,6 +1,6 @@
-import { Button } from './ui.Button';
-import { Dev, ObjectView } from '../../test.ui';
+import { Dev } from '../../test.ui';
 import { Switch } from '../common';
+import { Button } from './ui.Button';
 
 import type { ButtonProps } from './ui.Button';
 
@@ -25,7 +25,7 @@ export default Dev.describe('Button', (e) => {
 
     dev.ctx.debug.footer
       .border(-0.1)
-      .render<T>((e) => <ObjectView name={'props'} data={e.state.props} />);
+      .render<T>((e) => <Dev.ObjectView name={'props'} data={e.state.props} />);
 
     dev
       .button('state: increment count', async (e) => {
