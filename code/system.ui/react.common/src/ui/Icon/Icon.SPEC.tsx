@@ -1,5 +1,5 @@
-import { Dev } from '../../../test.ui';
-import { Icons } from './Icons.sample.mjs';
+import { Dev } from '../../test.ui';
+import { Icons } from '../Icons.mjs';
 
 export default Dev.describe('Icon', (e) => {
   e.it('init', (e) => {

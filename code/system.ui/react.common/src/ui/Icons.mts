@@ -1,5 +1,5 @@
 import { MdFace, MdPortableWifiOff, MdWifi } from 'react-icons/md';
-import { Icon } from '..';
+import { Icon } from './Icon';
 
 const icon = Icon.renderer;
 
