@@ -1,5 +1,3 @@
-import { transform } from './Css/css.mjs';
-
 export class CssValue {}
 export type Falsy = undefined | null | false;
 export type CssProps = React.CSSProperties;
@@ -23,7 +21,7 @@ export type CssTransform = (style?: CssProps | CssValue | Falsy) => CssProps | C
 export type CssFormat = (...styles: Array<CssProps | CssValue | Falsy>) => CssValue;
 
 export type CssStyle = {
-  transform: typeof transform;
+  transform: CssTransform;
   format: CssFormat;
   global: CssGlobal;
   head: CssHead;
