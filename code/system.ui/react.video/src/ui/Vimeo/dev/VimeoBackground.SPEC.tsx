@@ -34,7 +34,9 @@ export default Dev.describe('VimeoBackground Player', (e) => {
 
   e.it('debug panel', (e) => {
     const dev = Dev.tools<S>(e, initial);
-    dev.button((btn) => btn.label('Play').onClick((e) => events.play.fire()));
-    dev.button((btn) => btn.label('Pause').onClick((e) => events.pause.fire()));
+    dev
+      .button((btn) => btn.label('Play').onClick((e) => events.play.fire()))
+      .button((btn) => btn.label('Pause').onClick((e) => events.pause.fire()))
+      .hr();
   });
 });
