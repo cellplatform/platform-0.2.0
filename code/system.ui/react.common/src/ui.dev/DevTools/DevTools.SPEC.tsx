@@ -73,7 +73,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
   };
   return (
     <div {...styles.base}>
-      <ObjectView name={'state'} data={props.state} />
+      <Dev.ObjectView name={'state'} data={props.state} />
       <RenderCount />
     </div>
   );
