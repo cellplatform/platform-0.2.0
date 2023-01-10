@@ -1,4 +1,4 @@
-import * as t from '../../common/types.mjs';
+import { t } from '../common.t';
 
 export type LocalStorageChange<T extends t.JsonMapU> =
   | LocalStoragePut<T>

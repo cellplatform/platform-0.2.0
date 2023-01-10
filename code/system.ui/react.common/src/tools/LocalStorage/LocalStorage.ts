@@ -1,5 +1,4 @@
-import { Subject } from 'rxjs';
-import { t } from '../../common';
+import { t, Subject } from '../common';
 
 /**
  * Helper for working with a strongly typed local-storage object.

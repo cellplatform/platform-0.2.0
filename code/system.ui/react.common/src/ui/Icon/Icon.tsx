@@ -1,6 +1,5 @@
 import { t } from '../../common';
 import { IconView as View } from './Icon.View';
-
 import type { IconComponent } from './Icon.View';
 
 export const Icon = {
