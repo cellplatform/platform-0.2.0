@@ -74,7 +74,7 @@ const View: React.FC<ButtonProps> = (props) => {
       opacity: isEnabled ? 1 : disabledOpacity,
       cursor: isEnabled ? 'pointer' : 'default',
       color: Wrangle.color({ isEnabled, isOver }),
-      userSelect: userSelect ? 'default' : 'none',
+      userSelect: userSelect ? 'auto' : 'none',
       transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
     }),
     label: css({}),

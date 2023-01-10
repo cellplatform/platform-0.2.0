@@ -40,7 +40,7 @@ const View: React.FC<ButtonProps> = (props) => {
       color: COLORS.DARK,
       fontSize: 14,
       cursor: isActive ? 'pointer' : 'default',
-      pointerEvents: isActive ? 'default' : 'none',
+      pointerEvents: isActive ? 'auto' : 'none',
 
       display: 'inline-grid',
       gridTemplateColumns: 'auto 1fr',

@@ -18,10 +18,14 @@ export const DebugPanelBar: React.FC<DebugPanelBarProps> = (props) => {
   const styles = {
     base: css({
       boxSizing: 'border-box',
-      padding: current?.padding,
-      borderTop: edge === 'Bottom' && Wrangle.borderStyle(current),
-      borderBottom: edge === 'Top' && Wrangle.borderStyle(current),
+      Padding: current?.padding,
+      borderTop: edge === 'Bottom' ? Wrangle.borderStyle(current) : undefined,
+      borderBottom: edge === 'Top' ? Wrangle.borderStyle(current) : undefined,
     }),
+  };
+
+  const f: React.CSSProperties = {
+    borderTop: '',
   };
 
   return <div {...css(styles.base, props.style)}>{element}</div>;

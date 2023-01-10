@@ -30,7 +30,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
     }),
     body: css({
       Scroll: debug?.body.scroll,
-      padding: debug?.body.padding,
+      Padding: debug?.body.padding,
     }),
   };
 

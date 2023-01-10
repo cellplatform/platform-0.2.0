@@ -191,7 +191,7 @@ function formatFlexPosition(key: string, value: string, target: t.CssProps) {
   let mainAlignment: string | undefined;
   let crossAlignment: string | undefined;
 
-  // Tokenize string
+  // Tokenize string.
   const tokens: string[] = value.split('-').map((token) => token.trim());
 
   tokens.map((token) => {

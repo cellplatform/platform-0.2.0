@@ -36,7 +36,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       color: COLORS.DARK,
       backgroundColor:
         host?.backgroundColor === undefined
-          ? HOST.backgroundColor
+          ? Color.format(HOST.backgroundColor)
           : Color.format(host.backgroundColor),
     }),
     empty: {

@@ -1,5 +1,6 @@
 import { t } from './common.t';
 
+type O = Record<string, unknown>;
 export type CssProps = React.CSSProperties;
 
 export type CssValue = CssProps & {
@@ -12,8 +13,13 @@ export type CssValue = CssProps & {
   PaddingX?: N | [N] | [N, N];
   PaddingY?: N | [N] | [N, N];
   Size?: number | string | [number | string, number | string] | t.Falsy;
+  Scroll?: boolean;
   Flex?: string | t.Falsy;
   Image?: [string, string, number, number];
+
+  ':last-child'?: t.CssProps;
+  ':first-child'?: t.CssProps;
+  ':hover'?: t.CssProps;
 };
 
 export type CssPropsMap = { [selector: string]: CssPropsMapObject };
@@ -27,12 +33,12 @@ export type CssPropsMapObject = CssProps & {
 
 export type CssClassName = (...styles: Array<CssProps | undefined>) => string;
 export type CssMergeRules = (...rules: any[]) => CssProps;
-export type CssTransform = (style?: CssValue | t.Falsy) => CssProps | CssValue;
+export type CssTransform = (style?: CssProps | CssValue | t.Falsy) => CssProps;
 
 /**
  * API
  */
-export type CssFormat = (...styles: Array<CssProps | CssValue | t.Falsy>) => CssValue;
+export type CssFormat = (...styles: Array<CssProps | CssValue | t.Falsy>) => O;
 
 export type CssStyle = {
   transform: CssTransform;
