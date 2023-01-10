@@ -62,56 +62,6 @@ describe('React: transformStyle - positioning', () => {
     });
   });
 
-  describe('AbsoluteCenter', function () {
-    it('converts `x`', () => {
-      const res = Style.transform({ AbsoluteCenter: 'x' }) as any;
-      expect(res.position).to.equal('absolute');
-      expect(res.left).to.equal('50%');
-      expect(res.top).to.equal(undefined);
-      expect(res.transform).to.equal('translateX(-50%)');
-    });
-
-    it('converts `y`', () => {
-      const res = Style.transform({ AbsoluteCenter: 'y' }) as any;
-      expect(res.position).to.equal('absolute');
-      expect(res.left).to.equal(undefined);
-      expect(res.top).to.equal('50%');
-      expect(res.transform).to.equal('translateY(-50%)');
-    });
-
-    it('converts `xy`', () => {
-      const res = Style.transform({ AbsoluteCenter: 'xy' }) as any;
-      expect(res.position).to.equal('absolute');
-      expect(res.left).to.equal('50%');
-      expect(res.top).to.equal('50%');
-      expect(res.transform).to.equal('translate(-50%, -50%)');
-    });
-
-    it('retains top value (x)', () => {
-      const res = Style.transform({
-        left: 0,
-        top: 0,
-        AbsoluteCenter: 'x',
-      }) as any;
-      expect(res.position).to.equal('absolute');
-      expect(res.left).to.equal('50%');
-      expect(res.top).to.equal(0);
-      expect(res.transform).to.equal('translateX(-50%)');
-    });
-
-    it('retains left value (y)', () => {
-      const res = Style.transform({
-        left: 0,
-        top: 0,
-        AbsoluteCenter: 'y',
-      }) as any;
-      expect(res.position).to.equal('absolute');
-      expect(res.left).to.equal(0);
-      expect(res.top).to.equal('50%');
-      expect(res.transform).to.equal('translateY(-50%)');
-    });
-  });
-
   describe('toPositionEdges', () => {
     it('all edges from string', () => {
       const res = toPositionEdges('Absolute', '10 20 30em 40') as any;

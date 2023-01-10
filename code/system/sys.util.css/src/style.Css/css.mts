@@ -82,51 +82,6 @@ export const formatPositionEdges = (key: string, target: any) => {
 };
 
 /**
- * AbsoluteCenter
- *      - x
- *      - y
- *      - xy
- */
-const formatAbsoluteCenter = (key: string, value: string | boolean | number, target: any) => {
-  if (value === true) {
-    value = 'xy';
-  }
-  if (value === false || value === undefined || value === null) {
-    return;
-  }
-  const styles = {
-    position: 'absolute',
-    left: target.left,
-    top: target.top,
-    transform: '',
-  };
-  const stringValue = value.toString().trim().toLowerCase();
-  if (stringValue.includes('x')) {
-    styles.left = '50%';
-  }
-  if (stringValue.includes('y')) {
-    styles.top = '50%';
-  }
-  let transform: string;
-  switch (value) {
-    case 'yx':
-    case 'xy':
-      transform = 'translate(-50%, -50%)';
-      break;
-    case 'x':
-      transform = 'translateX(-50%)';
-      break;
-    case 'y':
-      transform = 'translateY(-50%)';
-      break;
-    default:
-      throw new Error(`AbsoluteCenter value '${value}' not supported.`);
-  }
-  styles.transform = `${target.transform || ''} ${transform}`.trim();
-  mergeAndReplace(key, styles, target);
-};
-
-/**
  * Spacing on the X:Y plane.
  */
 function formatSpacingPlane(
