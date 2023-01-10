@@ -79,6 +79,26 @@ export const Is: t.Is = {
   },
 
   /**
+   * Determines whether the given value is a number, or can be
+   * parsed into a number.
+   *
+   * NOTE: Examines string values to see if they are numeric.
+   */
+  numeric(value: any | string | number) {
+    if (Is.blank(value)) {
+      return false;
+    }
+    const num = parseFloat(value);
+    if (num === undefined) {
+      return false;
+    }
+    if (num.toString().length !== value.toString().length) {
+      return false;
+    }
+    return !Number.isNaN(num);
+  },
+
+  /**
    * Determines whether the given value is a JSON string.
    */
   json(value?: any) {
