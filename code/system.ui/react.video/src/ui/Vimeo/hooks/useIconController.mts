@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { distinctUntilChanged, filter, take } from 'rxjs/operators';
 
-import { rx, t } from '../common.mjs';
+import { t } from '../common.mjs';
 import { VimeoEvents } from '../VimeoEvents.mjs';
 
 /**

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { css, t } from '../common.mjs';
 
 export type ThumbnailOverlayProps = {

@@ -1,8 +1,4 @@
-import React from 'react';
-
-import { Icons } from '../../Icons';
-// import { Spinner } from '../../primitives';
-import { Color, COLORS, css, t } from '../common.mjs';
+import { Color, COLORS, css, t, Icons } from '../common.mjs';
 
 export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
 

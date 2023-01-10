@@ -1,4 +1,4 @@
-export * from '../../common';
+export * from '../common';
 
 export const COLORS = {
   BLACK: '#000',
