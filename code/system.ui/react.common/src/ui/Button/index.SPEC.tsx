@@ -48,9 +48,8 @@ export default Dev.describe('Button', (e) => {
         .label('use label')
         .value((e) => Boolean(e.state.props.label))
         .onClick((e) => {
-          const hasLabel = Boolean(e.state.current.props.label);
           e.change(({ props }) => {
-            if (hasLabel) {
+            if (Boolean(e.state.current.props.label)) {
               props.label = undefined;
               props.children = <div>Hello Child Element</div>;
             } else {
