@@ -1,7 +1,12 @@
 /**
+ * @external
+ */
+export { Observable } from 'rxjs';
+
+/**
  * @system
  */
-export type { DomRect } from 'sys.types';
+export type { DomRect, JsonU, JsonMapU } from 'sys.types';
 
 /**
  * @local
