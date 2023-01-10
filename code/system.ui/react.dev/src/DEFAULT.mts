@@ -1,4 +1,4 @@
-import * as t from './common/types.mjs';
+import type * as t from './common/types.mjs';
 import { Color, COLORS } from './common';
 
 export const DEFAULT = {

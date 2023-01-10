@@ -1,4 +1,4 @@
-import { t, Is } from '../common.mjs';
+import { t, Is } from '../common';
 
 export const head: t.CssHead = {
   importStylesheet(url: string) {

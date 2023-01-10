@@ -1,5 +1,5 @@
-import { expect, describe, it, afterEach } from '../test/index.mjs';
-import { MEDIA_QUERY_RETINA, image } from '../Css/index.mjs';
+import { expect, describe, it, afterEach } from '../test';
+import { MEDIA_QUERY_RETINA, image } from '../Css';
 import { Style } from '../index.mjs';
 
 const browserWindow: any = global;

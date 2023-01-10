@@ -1,5 +1,5 @@
 import PluginGlobal from 'jss-plugin-global';
-import { glamor, R, t } from '../common.mjs';
+import { glamor, R, t } from '../common';
 
 glamor.jss.use(PluginGlobal);
 

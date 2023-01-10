@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import type * as t from '../common/types.mjs';
 
 /**
  * An event-bus distributed across a number of peers.

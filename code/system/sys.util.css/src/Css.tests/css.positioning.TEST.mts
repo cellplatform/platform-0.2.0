@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { toPositionEdges } from '../Css/index.mjs';
+import { expect, describe, it } from '../test';
+import { toPositionEdges } from '../Css';
 import { Style } from '../index.mjs';
 
 describe('React: transformStyle - positioning', () => {

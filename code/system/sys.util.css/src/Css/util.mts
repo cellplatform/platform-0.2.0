@@ -1,5 +1,5 @@
-import { Value, t, Is } from '../common.mjs';
-import { Color } from '../Color/index.mjs';
+import { Value, t, Is } from '../common';
+import { Color } from '../Color';
 
 /**
  * Takes an array of input CSS values and converts them to

@@ -1,12 +1,12 @@
 import type * as t from './types.mjs';
 
 export * from './types.mjs';
-export { reset } from './reset/index.mjs';
+export { reset } from './reset';
 
 /**
  * Color helpers.
  */
-import { Color } from './Color/index.mjs';
+import { Color } from './Color';
 export { Color };
 export const formatColor = Color.format;
 

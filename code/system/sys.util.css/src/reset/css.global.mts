@@ -1,4 +1,4 @@
-import { t } from '../common.mjs';
+import { t } from '../common.t';
 
 /**
  * Source: css/global.css

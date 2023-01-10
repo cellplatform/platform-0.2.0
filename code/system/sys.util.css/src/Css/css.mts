@@ -1,5 +1,5 @@
-import { glamor, t, Is } from '../common.mjs';
-import * as util from './util.mjs';
+import { glamor, t, Is } from '../common';
+import * as Util from './util.mjs';
 
 export * from './util.mjs';
 export const MEDIA_QUERY_RETINA = `@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)`;
@@ -70,7 +70,7 @@ export const toPositionEdges = (
   value: any = undefined,
 ): t.CssEdgePosition | undefined => {
   const position = key.toLowerCase() as t.CssPosition;
-  const res = util.toPosition(position, value);
+  const res = Util.toPosition(position, value);
   const edges: (keyof t.CssEdges)[] = ['top', 'right', 'bottom', 'left'];
   const isEmpty = edges.every((edge) => res[edge] === undefined);
   return isEmpty ? undefined : res;
@@ -137,7 +137,7 @@ function formatSpacingPlane(
   target: any,
 ) {
   const styles = {} as any;
-  const edges = util.toEdges(value);
+  const edges = Util.toEdges(value);
   if (edges && plane.includes('x')) {
     styles[`${prefix}Left`] = edges.left;
     styles[`${prefix}Right`] = edges.right;
