@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
-
-import { Color, COLORS, css, t, useBusController } from '../common';
-import { HarnessHost } from '../Harness.Host';
+import { COLORS, css, t, useBusController, useRubberband } from '../common';
 import { DebugPanel } from '../Harness.DebugPanel';
+import { HarnessHost } from '../Harness.Host';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
@@ -12,20 +10,15 @@ export type HarnessProps = {
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const { instance } = useBusController({
+  useRubberband(props.allowRubberband ?? false);
+  const controller = useBusController({
     bundle: props.spec,
     bus: props.instance?.bus,
     id: props.instance?.id,
     runOnLoad: true,
   });
 
-  /**
-   * [Lifecycle]
-   */
-  useEffect(() => {
-    const allow = props.allowRubberband ?? false;
-    document.body.style.overflow = allow ? 'auto' : 'hidden';
-  }, [props.allowRubberband]);
+  const { instance } = controller;
 
   /**
    * [Render]
