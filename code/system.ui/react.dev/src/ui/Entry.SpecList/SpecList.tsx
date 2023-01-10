@@ -1,18 +1,20 @@
 import { Color, COLORS, css, t } from '../common';
 
 const KEY = { DEV: 'dev' };
+type Url = string;
 
 export type Imports = { [namespace: string]: () => Promise<any> };
-
+export type SpecListBadge = { image: Url; href: Url };
 export type SpecListProps = {
   title?: string;
   version?: string;
   imports?: Imports;
+  badge?: SpecListBadge;
   style?: t.CssValue;
 };
 
 export const SpecList: React.FC<SpecListProps> = (props) => {
-  const { imports = {} } = props;
+  const { imports = {}, badge } = props;
   const url = new URL(window.location.href);
   const hasDevParam = url.searchParams.has(KEY.DEV);
 
@@ -25,6 +27,10 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       lineHeight: '2em',
       padding: 30,
       color: COLORS.DARK,
+      cursor: 'default',
+    }),
+    body: css({
+      position: 'relative',
     }),
     title: css({ fontWeight: 'bold' }),
     version: css({
@@ -44,6 +50,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       color: Color.alpha(COLORS.DARK, 0.4),
       ':hover': { color: COLORS.BLUE },
     },
+    badge: css({ Absolute: [0, 0, null, null] }),
   };
 
   const createItem = (i: number, address: string | undefined, title?: string, dimmed?: boolean) => {
@@ -77,10 +84,19 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     </ul>
   );
 
+  const elBadge = props.badge && (
+    <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
+      <img src={badge?.image} {...styles.badge} />
+    </a>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      {elTitle}
-      {elList}
+      <div {...styles.body}>
+        {elBadge}
+        {elTitle}
+        {elList}
+      </div>
     </div>
   );
 };
