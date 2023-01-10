@@ -1,7 +1,20 @@
 import { t } from './common.t';
 
-export class CssValue {}
 export type CssProps = React.CSSProperties;
+
+export type CssValue = CssProps & {
+  Fixed?: CssEdgesInput;
+  Absolute?: CssEdgesInput;
+  Margin?: CssEdgesInput;
+  MarginX?: N | [N] | [N, N];
+  MarginY?: N | [N] | [N, N];
+  Padding?: CssEdgesInput;
+  PaddingX?: N | [N] | [N, N];
+  PaddingY?: N | [N] | [N, N];
+  Size?: number | string | [number | string, number | string] | t.Falsy;
+  Flex?: string | t.Falsy;
+  Image?: [string, string, number, number];
+};
 
 export type CssPropsMap = { [selector: string]: CssPropsMapObject };
 export type CssPropsMapObject = CssProps & {
@@ -14,7 +27,7 @@ export type CssPropsMapObject = CssProps & {
 
 export type CssClassName = (...styles: Array<CssProps | undefined>) => string;
 export type CssMergeRules = (...rules: any[]) => CssProps;
-export type CssTransform = (style?: CssProps | CssValue | t.Falsy) => CssProps | CssValue;
+export type CssTransform = (style?: CssValue | t.Falsy) => CssProps | CssValue;
 
 /**
  * API
