@@ -5,11 +5,7 @@ type Stage = 'down' | 'up';
 type EventName = 'mousedown' | 'mouseup';
 
 type Callback = (e: MouseEvent) => void;
-type Args<T extends E> = {
-  stage?: Stage;
-  ref?: RefObject<T>;
-  callback?: Callback;
-};
+type Args<T extends E> = { stage?: Stage; ref?: RefObject<T>; callback?: Callback };
 
 const DEFAULT_STAGE: Stage = 'down';
 
