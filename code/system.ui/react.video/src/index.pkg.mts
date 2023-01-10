@@ -13,14 +13,15 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.video',
   version: '0.0.0',
   dependencies: {
+    '@vimeo/player': '2.18.0',
+    'framer-motion': '8.3.3',
+    'react': '18.2.0',
+    'react-dom': '18.2.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.util.css': '0.0.0',
     'sys.util.react': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    '@vimeo/player': '2.18.0',
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
