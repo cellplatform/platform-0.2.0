@@ -8,4 +8,4 @@ type O = Record<string, unknown>;
  *    when the value needs to be re-calculated upon state/prop updates.
  */
 export type DevValueHandler<R, S extends O = O> = (e: DevValueHandlerArgs<S>) => R;
-export type DevValueHandlerArgs<S extends O = O> = { state: S; props: t.DevRenderProps };
+export type DevValueHandlerArgs<S extends O = O> = { state: S; dev: t.DevRenderProps };
