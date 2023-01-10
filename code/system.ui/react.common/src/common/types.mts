@@ -6,9 +6,16 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { DomRect, IgnoredResponse, JsonU, JsonMapU, EventBus, Disposable } from 'sys.types';
-export type { CssValue, CssEdgesInput, CssShadow } from 'sys.util.css';
-export type { TestSuiteRunResponse, TestRunResponse } from 'sys.test.spec';
+export type {
+  DomRect,
+  IgnoredResponse,
+  JsonU,
+  JsonMapU,
+  EventBus,
+  Disposable,
+} from 'sys.types/src/types.mjs';
+export type { CssValue, CssEdgesInput, CssShadow } from 'sys.util.css/src/types.mjs';
+export type { TestSuiteRunResponse, TestRunResponse } from 'sys.test.spec/src/types.mjs';
 export type {
   DevCtx,
   DevCtxInput,
@@ -16,7 +23,7 @@ export type {
   DevEvents,
   DevInfo,
   DevValueHandler,
-} from 'sys.ui.react.dev.types';
+} from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**
  * @local

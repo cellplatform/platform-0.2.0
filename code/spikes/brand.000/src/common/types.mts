@@ -1,9 +1,12 @@
-export * from '../types.mjs';
-
 /**
  * @system
  */
-export type { EventBus, Event, DomRect } from 'sys.types';
-export type { CssValue } from 'sys.util.css';
-export type { Fs } from 'sys.fs/src/types.mjs';
+export type { EventBus, Event, DomRect } from 'sys.types/src/types.mjs';
+export type { CssValue } from 'sys.util.css/src/types.mjs';
 export type { LogDeploymentEntry } from 'sys.pkg/src/types.mjs';
+export type { Fs } from 'sys.fs/src/types.mjs';
+
+/**
+ * @local
+ */
+export * from '../types.mjs';

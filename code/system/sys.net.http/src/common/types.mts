@@ -1,7 +1,14 @@
 import type { HttpEvent } from '../types.mjs';
 
+/**
+ * @system
+ */
+export type { Json } from 'sys.types/src/types.mjs';
+
+/**
+ * @local
+ */
 export * from '../types.mjs';
-export type { Json } from 'sys.types';
 
 /**
  * Fire an HTTP event.

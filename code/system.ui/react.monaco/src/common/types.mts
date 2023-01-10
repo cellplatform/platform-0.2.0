@@ -1,8 +1,8 @@
 /**
  * @system
  */
-export type { EventBus } from 'sys.types';
-export type { CssValue } from 'sys.util.css';
+export type { EventBus } from 'sys.types/src/types.mjs';
+export type { CssValue } from 'sys.util.css/src/types.mjs';
 
 /**
  * @local
