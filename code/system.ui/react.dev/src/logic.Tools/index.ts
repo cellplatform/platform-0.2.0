@@ -1,1 +1,1 @@
-export { ValueHandler } from './ValueHandler.mjs';
+export * from './ValueHandler';

@@ -1,4 +1,4 @@
-import { describe, expect, it, t, TestSample, Time } from '../test';
+import { describe, expect, it, t, TestSample, Time } from '../../test';
 import { ValueHandler } from './ValueHandler.mjs';
 
 describe('ValueHandler', () => {
@@ -60,7 +60,7 @@ describe('ValueHandler', () => {
     const ctx = await events.ctx.get();
 
     const value = ValueHandler<string, S>(events, { debounce: 0 }).handler((e) => {
-      return `display-${e.props.component.display ?? 'unknown'}`;
+      return `display-${e.dev.component.display ?? 'unknown'}`;
     });
 
     await Time.wait(0);

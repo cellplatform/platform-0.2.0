@@ -1,6 +1,6 @@
 import { debounceTime } from 'rxjs/operators';
 
-import { R, t, DEFAULT } from '../common';
+import { R, t, DEFAULT } from '../../common';
 
 type O = Record<string, unknown>;
 type Milliseconds = number;
@@ -28,8 +28,8 @@ export function ValueHandler<V, State extends O>(
   const getCurrent = async (data?: t.DevInfo) => {
     const info = data ?? (await events.info.get());
     const state = (info.render.state ?? {}) as State;
-    const props = (info.render.props ?? DEFAULT.props) as t.DevRenderProps;
-    const res = _handler?.({ state, props });
+    const dev = (info.render.props ?? DEFAULT.props) as t.DevRenderProps;
+    const res = _handler?.({ state, dev });
     return res;
   };
 
