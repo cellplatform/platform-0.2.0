@@ -11,7 +11,7 @@ export default Spec.describe('Harness', (e) => {
       .size('fill')
       .display('flex')
       .render((e) => {
-        return <Harness style={{ flex: 1 }} spec={bundle} />;
+        return <Harness style={{ Absolute: 0 }} spec={bundle} />;
       });
   });
 });
