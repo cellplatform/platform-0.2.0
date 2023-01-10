@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { t } from '../common.t';
 
 /**
  * Source: css/normalize.css

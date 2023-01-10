@@ -1,5 +1,6 @@
+import { t } from './common.t';
+
 export class CssValue {}
-export type Falsy = undefined | null | false;
 export type CssProps = React.CSSProperties;
 
 export type CssPropsMap = { [selector: string]: CssPropsMapObject };
@@ -13,12 +14,12 @@ export type CssPropsMapObject = CssProps & {
 
 export type CssClassName = (...styles: Array<CssProps | undefined>) => string;
 export type CssMergeRules = (...rules: any[]) => CssProps;
-export type CssTransform = (style?: CssProps | CssValue | Falsy) => CssProps | CssValue;
+export type CssTransform = (style?: CssProps | CssValue | t.Falsy) => CssProps | CssValue;
 
 /**
  * API
  */
-export type CssFormat = (...styles: Array<CssProps | CssValue | Falsy>) => CssValue;
+export type CssFormat = (...styles: Array<CssProps | CssValue | t.Falsy>) => CssValue;
 
 export type CssStyle = {
   transform: CssTransform;

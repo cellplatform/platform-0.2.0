@@ -1,2 +1,2 @@
-import type * as t from './types.mjs';
+import type * as t from './common/types.mjs';
 export { t };
