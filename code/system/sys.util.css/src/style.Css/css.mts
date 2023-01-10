@@ -127,10 +127,26 @@ function formatScroll(key: string, value: any, target: any) {
   }
 }
 
-function formatSize(key: string, value: any, target: any) {
-  if (typeof value === 'number' || typeof value === 'string') {
-    const styles = { width: value, height: value };
-    mergeAndReplace(key, styles, target);
+function formatSize(key: string, input: any, target: any) {
+  type V = string | number | undefined;
+  const format = (input: any): V => {
+    if (!(typeof input === 'number' || typeof input === 'string')) return;
+    if (typeof input === 'string' && !input.trim()) return;
+    return input;
+  };
+  if (Array.isArray(input)) {
+    const width = format(input[0]);
+    const height = format(input[1]);
+    if (width !== undefined && height !== undefined) {
+      const styles = { width, height };
+      mergeAndReplace(key, styles, target);
+    }
+  } else {
+    const value = format(input);
+    if (value !== undefined) {
+      const styles = { width: value, height: value };
+      mergeAndReplace(key, styles, target);
+    }
   }
 }
 
@@ -231,7 +247,7 @@ export const transform: t.CssTransform = (style) => {
   };
 
   Object.keys(obj).forEach((key) => {
-    const value = obj[key];
+    const value = obj[key] as any;
 
     if (value === false || value === null || value === undefined) {
       delete obj[key];
@@ -248,9 +264,6 @@ export const transform: t.CssTransform = (style) => {
           break;
         case 'Fixed':
           formatPositionEdges(key, style);
-          break;
-        case 'AbsoluteCenter':
-          formatAbsoluteCenter(key, value as any, style);
           break;
         case 'Margin':
           formatSpacingPlane('xy', 'margin', key, value, style);
@@ -308,7 +321,7 @@ const flattenJss = (input: S[]) => {
   return output;
 };
 
-type S = t.CssProps | t.CssValue | t.Falsy;
+type S = t.CssValue | t.Falsy;
 const formatCss = (...styles: S[]): t.CssValue => glamor.css(...flattenJss(styles));
 
 /**

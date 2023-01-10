@@ -23,7 +23,7 @@ describe('Style', () => {
     });
 
     it('removes undefined values', () => {
-      const input = { color: undefined, background: null };
+      const input = { color: undefined, background: undefined };
       expect(Style.transform(input)).to.eql({});
     });
   });
