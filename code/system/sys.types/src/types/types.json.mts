@@ -5,3 +5,9 @@
  */
 export type Json = string | number | boolean | null | JsonMap | Json[];
 export type JsonMap = { [property: string]: Json };
+
+/**
+ * An extended version of JSON that supports [undefined].
+ */
+export type JsonU = string | number | boolean | null | JsonMapU | JsonU[] | undefined;
+export type JsonMapU = { [property: string]: JsonU };
