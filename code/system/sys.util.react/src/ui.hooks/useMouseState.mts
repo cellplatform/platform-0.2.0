@@ -5,9 +5,9 @@ import { useState } from 'react';
  */
 export function useMouseState() {
   const [isDown, setDown] = useState(false);
-  const down = (isDown: boolean) => () => setDown(isDown);
-
   const [isOver, setOver] = useState(false);
+
+  const down = (isDown: boolean) => () => setDown(isDown);
   const over = (isOver: boolean) => () => {
     setOver(isOver);
     if (isOver === false) setDown(false);
