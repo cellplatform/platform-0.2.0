@@ -1,5 +1,5 @@
 import { Value, t, Is } from '../common';
-import { Color } from '../Color';
+import { Color } from '../style.Color';
 
 /**
  * Takes an array of input CSS values and converts them to

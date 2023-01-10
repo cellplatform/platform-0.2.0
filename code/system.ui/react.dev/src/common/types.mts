@@ -15,7 +15,7 @@ export type {
   JsonMap,
   IgnoredResponse,
 } from 'sys.types/src/types.mjs';
-export type { CssValue } from 'sys.util.css';
+export type { CssValue } from 'sys.util.css/src/types.mjs';
 export type { TestModel, BundleImport, TestHandlerArgs } from 'sys.test.spec/src/types.mjs';
 
 /**

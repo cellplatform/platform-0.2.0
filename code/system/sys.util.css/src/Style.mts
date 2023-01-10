@@ -3,8 +3,8 @@ import type * as t from './types.mjs';
 export type CssProps = t.CssProps;
 export type CssValue = t.CssValue;
 
-export { Global } from './Css/global.mjs';
-export { format, transform, image, head } from './Css';
+export { Global } from './style.Css/global.mjs';
+export { format, transform, image, head } from './style.Css';
 export {
   toEdges,
   toMargins,
@@ -13,4 +13,4 @@ export {
   toPosition,
   toAbsolute,
   toRadius,
-} from './Css/util.mjs';
+} from './style.Css/util.mjs';
