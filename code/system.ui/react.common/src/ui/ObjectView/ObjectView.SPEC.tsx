@@ -31,8 +31,13 @@ export default Dev.describe('ObjectView', (e) => {
     value('`true`', true);
     value('`123`', 123);
     value('`"Hello"`', 'Hello');
-    value('`{object}`', { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123 });
-    value('`[array]`', [1, 'two', { id: 'abc' }]);
+    value('`{object}`', {
+      msg: '👋',
+      list: [1, [{ msg: 'two' }], 'three'],
+      count: 123,
+      foo: false,
+    });
+    value('`[array]`', [1, 'two', { id: 'three' }, true]);
     dev.hr();
 
     dev
