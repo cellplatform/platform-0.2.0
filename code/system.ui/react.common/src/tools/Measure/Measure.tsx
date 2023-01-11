@@ -13,6 +13,7 @@ export const Measure = {
   size(props: t.MeasureSizeProps) {
     return new Promise<t.Size>((resolve) => {
       const div = document.createElement('DIV') as HTMLDivElement;
+      div.className = '__tmp.MeasureSize';
       document.body.appendChild(div);
 
       const dispose = () => {

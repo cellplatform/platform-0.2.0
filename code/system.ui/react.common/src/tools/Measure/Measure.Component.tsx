@@ -30,19 +30,10 @@ export const Component: React.FC<ComponentProps> = (props) => {
    */
   const styles = {
     base: css({ Absolute: [-999999, null, null, -999999] }),
-    inner: css({
-      display: 'inline-block',
-      fontFamily,
-      fontSize,
-      fontWeight,
-      fontStyle,
-      lineHeight,
-      letterSpacing,
-      width,
-    }),
+    inner: css({ fontFamily, fontSize, fontWeight, fontStyle, lineHeight, letterSpacing, width }),
   };
   return (
-    <div ref={baseRef} {...css(styles.base, props.style)} className={'tmp.MeasureSize'}>
+    <div ref={baseRef} {...css(styles.base, props.style)}>
       <div {...styles.inner}>{props.content}</div>
     </div>
   );
