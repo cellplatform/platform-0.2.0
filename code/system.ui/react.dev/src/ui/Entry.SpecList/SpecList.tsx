@@ -1,20 +1,19 @@
 import { Color, COLORS, css, t } from '../common';
+import { SpecListTitle } from './SpecList.Title';
 
 const KEY = { DEV: 'dev' };
-type Url = string;
 
 export type Imports = { [namespace: string]: () => Promise<any> };
-export type SpecListBadge = { image: Url; href: Url };
 export type SpecListProps = {
   title?: string;
   version?: string;
   imports?: Imports;
-  badge?: SpecListBadge;
+  badge?: t.SpecListBadge;
   style?: t.CssValue;
 };
 
 export const SpecList: React.FC<SpecListProps> = (props) => {
-  const { imports = {}, badge } = props;
+  const { imports = {} } = props;
   const url = new URL(window.location.href);
   const hasDevParam = url.searchParams.has(KEY.DEV);
 
@@ -29,14 +28,6 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       color: COLORS.DARK,
       cursor: 'default',
     }),
-    body: css({
-      position: 'relative',
-    }),
-    title: css({ fontWeight: 'bold' }),
-    version: css({
-      color: Color.alpha(COLORS.DARK, 0.3),
-      marginLeft: 3,
-    }),
     ul: css({}),
     hr: css({
       border: 'none',
@@ -50,7 +41,6 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       color: Color.alpha(COLORS.DARK, 0.4),
       ':hover': { color: COLORS.BLUE },
     },
-    badge: css({ Absolute: [0, 0, null, null] }),
   };
 
   const createItem = (i: number, address: string | undefined, title?: string, dimmed?: boolean) => {
@@ -68,13 +58,6 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     );
   };
 
-  const elTitle = props.title && (
-    <div {...styles.title}>
-      <span>{props.title}</span>
-      {props.version && <span {...styles.version}>{`@${props.version}`}</span>}
-    </div>
-  );
-
   const elList = (
     <ul {...styles.ul}>
       {Object.keys(imports).map((key, i) => createItem(i, key))}
@@ -84,19 +67,10 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     </ul>
   );
 
-  const elBadge = props.badge && (
-    <a href={badge?.href} target={'_blank'} rel={'noopener noreferrer'}>
-      <img src={badge?.image} {...styles.badge} />
-    </a>
-  );
-
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.body}>
-        {elBadge}
-        {elTitle}
-        {elList}
-      </div>
+      <SpecListTitle title={props.title} version={props.version} badge={props.badge} />
+      {elList}
     </div>
   );
 };
