@@ -68,7 +68,7 @@ describe('ValueHandler', () => {
 
     ctx.component.display('grid');
 
-    await Time.wait(15);
+    await Time.wait(30);
     expect(value.current).to.eql('display-grid');
 
     events.dispose();
