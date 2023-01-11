@@ -24,8 +24,8 @@ export default Dev.describe('MeasureSize', (e) => {
       });
     };
 
-    dev.button('measure: "hello"', (e) => measure({ content: 'hello' }));
-    dev.button('measure: "hello" (big)', (e) => measure({ content: 'hello', fontSize: 90 }));
+    dev.button('measure: "hello"', () => measure({ content: 'hello' }));
+    dev.button('measure: "hello" (big)', () => measure({ content: 'hello', fontSize: 90 }));
     dev.hr();
   });
 });
