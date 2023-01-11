@@ -61,7 +61,7 @@ export type DevCtxComponent = {
   display(value: DevPropDisplay): DevCtxComponent;
   backgroundColor(value?: Color): DevCtxComponent;
   size(width?: number | null, height?: number | null): DevCtxComponent;
-  size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
+  size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxComponent;
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
 };
 
@@ -79,7 +79,7 @@ export type DevCtxHost = {
 export type DevCtxDebug = {
   row<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
   scroll(value: boolean): DevCtxDebug;
-  padding(value: t.MarginInput | undefined | null): DevCtxDebug;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
   width(value: number): DevCtxDebug;
   header: DevCtxDebugHeader;
   footer: DevCtxDebugFooter;
@@ -88,11 +88,11 @@ export type DevCtxDebug = {
 export type DevCtxDebugHeader = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
   border(color: Color | null): DevCtxDebugHeader;
-  padding(value: t.MarginInput | undefined | null): DevCtxDebugHeader;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugHeader;
 };
 
 export type DevCtxDebugFooter = {
   render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
   border(color: Color | null): DevCtxDebugFooter;
-  padding(value: t.MarginInput | undefined | null): DevCtxDebugFooter;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugFooter;
 };

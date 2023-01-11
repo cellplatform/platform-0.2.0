@@ -35,6 +35,7 @@ export default Dev.describe('Test.syntax', (e) => {
     await ctx.state<T>(initial);
     ctx.component.display('grid').render<T>((e) => {
       const { props, debug } = e.state;
+      Dev.theme(ctx, props.theme);
 
       const styles = {
         base: css({ width: debug.fixedWidth ? 300 : undefined }),
@@ -43,13 +44,6 @@ export default Dev.describe('Test.syntax', (e) => {
           ':last-child': { marginRight: 0 },
         }),
       };
-
-      if (props.theme === 'Light') {
-        ctx.host.backgroundColor(null).tracelineColor(null);
-      }
-      if (props.theme === 'Dark') {
-        ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1);
-      }
 
       const elements = Array.from({ length: debug.repeat }).map((v, i) => {
         const style = css(styles.base, debug.repeat > 1 ? styles.multi : undefined);

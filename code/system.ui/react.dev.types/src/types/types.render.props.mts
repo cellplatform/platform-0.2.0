@@ -38,7 +38,7 @@ export type DevRenderPropsDebug = {
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
-    padding: t.Margin;
+    padding: t.DevMargin;
   };
   footer: DevRenderPropsDebugBar;
 };
@@ -46,7 +46,7 @@ export type DevRenderPropsDebug = {
 export type DevRenderPropsDebugBar = {
   renderer?: t.DevRendererRef<any>;
   border: { color?: Color };
-  padding: t.Margin;
+  padding: t.DevMargin;
 };
 
 /**
@@ -62,5 +62,5 @@ export type DevRenderSizeFill = {
   mode: 'fill';
   x: boolean;
   y: boolean;
-  margin: t.Margin;
+  margin: t.DevMargin;
 };
