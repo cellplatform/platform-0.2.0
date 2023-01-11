@@ -7,6 +7,7 @@ export const Specs = {
   'sys.ui.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
   'sys.ui.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
   // 'sys.ui.PropList': () => import('../ui/PropList/PropList.SPEC'),
+  'sys.ui.Text.Syntax': () => import('../ui/Text.Syntax/index.SPEC'),
   'sys.ui.MeasureSize': () => import('../ui.tools/Measure/index.SPEC'),
 };
 

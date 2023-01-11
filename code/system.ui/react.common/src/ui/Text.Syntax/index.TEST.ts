@@ -1,8 +1,8 @@
-import { Test, expect } from 'sys.ui.dev';
+import { Dev, expect } from '../../test.ui';
 import { DefaultTokenizer } from './logic/Tokenizer';
 import * as k from './types.mjs';
 
-export default Test.describe('Text.Syntax', (e) => {
+export default Dev.describe('Text.Syntax', (e) => {
   e.describe('Tokenizer', (e) => {
     e.describe('DefaultTokenizer', (e) => {
       e.it('<Component>', () => {
