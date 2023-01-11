@@ -5,6 +5,8 @@ import { HarnessHost } from '../Harness.Host';
 export type HarnessProps = {
   instance?: t.DevInstance;
   spec?: t.BundleImport;
+  index?: { badge?: t.SpecListBadge };
+
   style?: t.CssValue;
   allowRubberband?: boolean;
 };

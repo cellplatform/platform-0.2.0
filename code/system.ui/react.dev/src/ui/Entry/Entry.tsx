@@ -12,7 +12,11 @@ export const Entry = {
   async render(
     pkg: { name: string; version: string },
     specs: t.Imports,
-    options: { location?: t.UrlInput; style?: t.CssValue } = {},
+    options: {
+      location?: t.UrlInput;
+      badge?: t.SpecListBadge;
+      style?: t.CssValue;
+    } = {},
   ) {
     const url = WrangleUrl.navigate.formatDevFlag(options);
     const spec = await WrangleUrl.module(url, specs);
@@ -21,7 +25,15 @@ export const Entry = {
     if (spec) {
       return <Harness spec={spec} style={style} />;
     } else {
-      return <SpecList title={pkg.name} version={pkg.version} imports={specs} style={style} />;
+      return (
+        <SpecList
+          title={pkg.name}
+          version={pkg.version}
+          imports={specs}
+          badge={options.badge}
+          style={style}
+        />
+      );
     }
   },
 };
