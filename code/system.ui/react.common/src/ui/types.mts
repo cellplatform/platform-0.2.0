@@ -9,4 +9,4 @@ export * from './Spinner/types.mjs';
 // export * from './Text.Copy/types.mjs';
 // export * from './Text.Input/types.mjs';
 // export * from './Text.Secret/types.mjs';
-// export * from './Text.Syntax/types.mjs';
+export * from './Text.Syntax/types.mjs';
