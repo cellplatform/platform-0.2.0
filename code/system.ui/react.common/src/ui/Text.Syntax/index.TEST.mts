@@ -1,11 +1,10 @@
-import { Dev, expect } from '../../test.ui';
+import { describe, it, expect, t } from '../../test';
 import { DefaultTokenizer } from './logic/Tokenizer';
-import * as k from './types.mjs';
 
-export default Dev.describe('Text.Syntax', (e) => {
-  e.describe('Tokenizer', (e) => {
-    e.describe('DefaultTokenizer', (e) => {
-      e.it('<Component>', () => {
+describe('Text.Syntax', (e) => {
+  describe('Tokenizer', (e) => {
+    describe('DefaultTokenizer', (e) => {
+      it('<Component>', () => {
         const res = DefaultTokenizer('<Component>');
         expect(res.text).to.eql('<Component>');
         expect(res.parts.length).to.eql(3);
@@ -19,7 +18,7 @@ export default Dev.describe('Text.Syntax', (e) => {
         expect(res.parts[2].text).to.eql('>');
       });
 
-      e.it('predicate:value', () => {
+      it('predicate:value', () => {
         const res = DefaultTokenizer('foo:bar');
 
         expect(res.text).to.eql('foo:bar');
@@ -30,8 +29,8 @@ export default Dev.describe('Text.Syntax', (e) => {
         expect(res.parts[2].kind).to.eql('Word');
       });
 
-      e.describe('kinds of (contained) element words', (e) => {
-        const test = (input: string, within: k.TextSyntaxBraceKind) => {
+      describe('kinds of (contained) element words', (e) => {
+        const test = (input: string, within: t.TextSyntaxBraceKind) => {
           const res = DefaultTokenizer(input);
           expect(res.text).to.eql(input);
           const parts = res.parts;
@@ -39,24 +38,24 @@ export default Dev.describe('Text.Syntax', (e) => {
           expect(parts[1].within).to.eql(within);
         };
 
-        e.it('<Component>', () => {
+        it('<Component>', () => {
           test('<Component>', '<>');
           test('< Component >', '<>');
         });
 
-        e.it('[List]', () => {
+        it('[List]', () => {
           test('[List]', '[]');
           test('[ List ]', '[]');
         });
 
-        e.it('{Object}', () => {
+        it('{Object}', () => {
           test('{Object}', '{}');
           test('{ Object }', '{}');
         });
       });
 
-      e.describe('within "<>" | "{}" | "[]" (element)', (e) => {
-        e.it('not within brace', () => {
+      describe('within "<>" | "{}" | "[]" (element)', (e) => {
+        it('not within brace', () => {
           const test = (input: string) => {
             const res = DefaultTokenizer(input);
             expect(res.parts.every((part) => !part.within)).to.eql(true);
@@ -68,8 +67,8 @@ export default Dev.describe('Text.Syntax', (e) => {
           test('foo:bar');
         });
 
-        e.it('is within brace', () => {
-          const test = (input: string, kind: k.TextSyntaxBraceKind) => {
+        it('is within brace', () => {
+          const test = (input: string, kind: t.TextSyntaxBraceKind) => {
             const res = DefaultTokenizer(input);
             const parts = res.parts;
 
