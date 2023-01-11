@@ -1,8 +1,8 @@
-import { Measure } from '.';
+import { Measure, type MeasureSizeProps } from '.';
 import { Dev, t } from '../../test.ui';
 
 type T = {
-  props?: t.MeasureSizeProps;
+  props?: MeasureSizeProps;
   size?: t.Size;
 };
 const initial: T = {};
