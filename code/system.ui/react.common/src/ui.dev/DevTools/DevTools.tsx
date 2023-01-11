@@ -23,27 +23,32 @@ export const DevTools = {
  * [Helpers]
  */
 
-function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
-  const state = initial ?? ({} as S);
+function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
+  const initial = initialState ?? ({} as S);
   const ctx = Spec.ctx(input);
   const debug = ctx.debug;
   const events = Dev.Bus.events(input);
+  let _state: t.DevCtxState<S> | undefined;
 
   const api: t.DevTools<S> = {
     ctx,
     header: debug.header,
     footer: debug.footer,
+    async change(fn) {
+      const state = _state || (_state = await ctx.state(initial));
+      return state.change(fn);
+    },
 
     /**
      * Widgets: Argument Wrangling.
      */
     button(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.button<S>(events, ctx, state, args[0]);
+        DevTools.button<S>(events, ctx, initial, args[0]);
       }
 
       if (typeof args[0] === 'string') {
-        DevTools.button<S>(events, ctx, state, (btn) => {
+        DevTools.button<S>(events, ctx, initial, (btn) => {
           btn.label(args[0]);
           if (typeof args[1] === 'function') btn.onClick(args[1]);
         });
@@ -54,7 +59,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
 
     boolean(...args: any[]) {
       if (typeof args[0] === 'function') {
-        DevTools.boolean<S>(events, ctx, state, args[0]);
+        DevTools.boolean<S>(events, ctx, initial, args[0]);
       }
       return api;
     },
