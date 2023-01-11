@@ -43,10 +43,9 @@ export default Dev.describe('RecordButton', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
-    dev.ctx.debug.footer
+    dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
+      .render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} expand={3} />);
 
     dev.boolean((btn) =>
       btn

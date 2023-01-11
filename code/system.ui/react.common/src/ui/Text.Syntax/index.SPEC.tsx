@@ -17,8 +17,9 @@ export default Dev.describe('Test.syntax', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
-    dev.footer.border(-0.1).render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} expand={3} />);
 
     dev.button('tmp', (e) => e.change((d) => d.count++));
   });

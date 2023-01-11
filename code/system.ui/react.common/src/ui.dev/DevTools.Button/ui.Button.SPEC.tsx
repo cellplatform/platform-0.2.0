@@ -23,7 +23,7 @@ export default Dev.describe('Button', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.ctx.debug.footer
+    dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.ObjectView name={'props'} data={e.state.props} />);
 
