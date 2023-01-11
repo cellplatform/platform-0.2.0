@@ -14,7 +14,7 @@ export type {
   EventBus,
   Disposable,
 } from 'sys.types/src/types.mjs';
-export type { CssValue, CssEdgesInput, CssShadow } from 'sys.util.css/src/types.mjs';
+export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
 export type { TestSuiteRunResponse, TestRunResponse } from 'sys.test.spec/src/types.mjs';
 export type {
   DevCtx,
