@@ -1,7 +1,13 @@
 import { useState } from 'react';
-
 import { COLORS, css, FC, Style, t } from '../common';
-import { DEFAULT } from './DEFAULT.mjs';
+
+const DEFAULT = {
+  isEnabled: true,
+  block: false,
+  disabledOpacity: 0.3,
+  userSelect: false,
+  pressedOffset: [0, 1] as [number, number],
+};
 
 export type ButtonProps = {
   children?: JSX.Element | string | number;
