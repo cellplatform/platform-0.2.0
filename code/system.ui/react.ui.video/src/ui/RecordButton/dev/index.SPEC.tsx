@@ -32,13 +32,10 @@ export default Dev.describe('RecordButton', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-
     ctx.component
       //
       .display('grid')
-      .render<T>((e) => {
-        return <RecordButton {...e.state.props} />;
-      });
+      .render<T>((e) => <RecordButton {...e.state.props} />);
   });
 
   e.it('debug panel', async (e) => {
