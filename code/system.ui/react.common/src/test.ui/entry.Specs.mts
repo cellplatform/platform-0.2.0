@@ -11,7 +11,7 @@ export const Specs = {
 };
 
 export const ExternalSpecs = {
-  'sys.ui.useSizeObserver': () => import('./external/react.util.useSizeObserver.SPEC'),
+  'sys.ui.useSizeObserver': () => import('./react.util/useSizeObserver.SPEC'),
 };
 
 export const DevSpecs = {
