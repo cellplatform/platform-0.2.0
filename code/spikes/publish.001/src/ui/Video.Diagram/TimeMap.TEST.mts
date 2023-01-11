@@ -1,5 +1,5 @@
 import { describe, expect, it } from '../../test';
-import { t } from '../common';
+import { type t } from '../common';
 import { TimeMap } from './TimeMap.mjs';
 
 describe('TimeMap', () => {

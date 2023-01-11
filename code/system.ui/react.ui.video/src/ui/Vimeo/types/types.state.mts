@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { type t } from './common.mjs';
 
 type Id = string;
 type Seconds = number;

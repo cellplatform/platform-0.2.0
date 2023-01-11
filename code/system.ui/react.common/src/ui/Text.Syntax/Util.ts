@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 export const Util = {
   toColor(colors: t.TextSyntaxColors, tokens: t.TextSyntaxToken[], index: number) {

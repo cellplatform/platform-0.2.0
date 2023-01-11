@@ -1,4 +1,4 @@
-import { t } from '../../common.t';
+import { type t } from '../../common.t';
 
 export type MarkdownInput = string | Uint8Array | undefined;
 

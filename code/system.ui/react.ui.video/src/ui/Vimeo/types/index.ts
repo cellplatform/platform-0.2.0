@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { type t } from './common.mjs';
 
 export * from './types.event.mjs';
 export * from './types.hooks.mjs';

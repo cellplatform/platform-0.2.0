@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 export * from './types.events.record';
 export * from './types.events.stream';

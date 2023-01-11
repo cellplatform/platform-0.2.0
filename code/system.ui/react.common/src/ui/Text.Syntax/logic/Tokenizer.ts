@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 
 type K = t.TextSyntaxTokenKind;
 type B = t.TextSyntaxBraceKind;

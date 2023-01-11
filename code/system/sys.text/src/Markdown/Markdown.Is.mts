@@ -1,6 +1,6 @@
 import { is as node } from 'unist-util-is';
 
-import { t } from '../common';
+import { type t } from '../common';
 import { MarkdownFind as Find } from './Markdown.Find.mjs';
 
 /**

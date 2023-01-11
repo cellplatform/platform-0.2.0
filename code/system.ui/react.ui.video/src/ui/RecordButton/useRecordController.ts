@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { t } from './common';
+import { type t } from './common';
 import { RecordButtonClickEventHandler, RecordButtonState } from './types';
 import { MediaStream } from '../MediaStream';
 

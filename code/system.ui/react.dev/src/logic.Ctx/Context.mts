@@ -1,5 +1,5 @@
 import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
-import { t } from './common';
+import { type t } from './common';
 import { ContextState } from './Context.State.mjs';
 import { CtxProps } from './Ctx.Props.mjs';
 

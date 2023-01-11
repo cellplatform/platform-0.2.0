@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 export type PeerConnectionKind = PeerConnectionKindData | PeerConnectionKindMedia;
 export type PeerConnectionKindData = 'data';

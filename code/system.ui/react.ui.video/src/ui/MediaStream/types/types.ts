@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 export type MediaStreamMimetype = 'video/webm';
 export type MediaStreamKind = 'video' | 'screen';

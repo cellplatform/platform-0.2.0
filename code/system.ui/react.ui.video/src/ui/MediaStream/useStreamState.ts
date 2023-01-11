@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MediaStreamEvents } from './MediaStream.Events';
-import { t } from '../../common';
+import { type t } from '../../common';
 
 /**
  * Monitors for the start of a referenced stream

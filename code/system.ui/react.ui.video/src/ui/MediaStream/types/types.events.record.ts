@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 export type MediaStreamRecordOnData = (e: MediaStreamRecordOnDataArgs) => void;
 export type MediaStreamRecordOnDataArgs = {

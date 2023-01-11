@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../test';
-import { t } from '../common';
+import { type t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
 describe('DocDiagram: Wrangle', () => {

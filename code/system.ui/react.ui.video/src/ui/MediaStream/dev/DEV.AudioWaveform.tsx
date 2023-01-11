@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useStreamState } from '..';
 import { AudioWaveform } from '../../AudioWaveform';
-import { t } from './common';
+import { type t } from './common';
 
 export type DevAudioWaveformProps = {
   streamRef?: string; // MediaStream ID.
