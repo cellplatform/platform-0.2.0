@@ -29,10 +29,9 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
    */
   useEffect(() => {
     const editor = editorRef.current;
-    if (editor) {
-      if (text !== editor.getValue()) {
-        editor.setValue(text ?? '');
-      }
+    if (!editor) return;
+    if (text !== editor.getValue()) {
+      editor.setValue(text ?? '');
     }
   }, [text]);
 
@@ -61,6 +60,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
       <div {...styles.inner}>
         <EditorReact
           defaultLanguage={language}
+          language={language}
           defaultValue={text}
           onMount={handleEditorDidMount}
           onChange={handleChange}
