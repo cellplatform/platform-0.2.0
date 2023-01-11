@@ -2,8 +2,9 @@ import { Dev } from '..';
 import { COLORS } from '../common';
 import { Title, TitleProps } from './ui.Title';
 
-type T = { props: TitleProps };
+type T = { count: number; props: TitleProps };
 const initial: T = {
+  count: 0,
   props: { style: { ...Title.DEFAULT.style, margin: 0 } },
 };
 
@@ -28,8 +29,12 @@ export default Dev.describe('Title', (e) => {
       .render<T>((e) => <Dev.ObjectView name={'props'} data={e.state.props} expand={2} />);
 
     dev
-      .title((title) => title.text('Hello Title').onClick((e) => console.info('⚡️ onClick')))
-      .button('sample button')
+      .title((title) =>
+        title
+          .text((e) => `Hello Title ${e.state.count}`)
+          .onClick((e) => console.info('⚡️ onClick')),
+      )
+      .button('increment (+)', (e) => e.change((d) => d.count++))
       .hr()
       .title((title) => title.style({ margin: [30, 40], color: COLORS.MAGENTA }))
       .hr();
