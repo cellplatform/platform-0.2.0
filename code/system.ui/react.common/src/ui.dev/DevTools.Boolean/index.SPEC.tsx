@@ -34,6 +34,7 @@ export default Dev.describe('Boolean', (e) => {
     dev
       .button('state: increment count', (e) => e.change((d) => d.count++))
       .button('toggle value', (e) => e.change(({ props }) => (props.value = !props.value)))
+      .button('toggle value (via helper)', (e) => e.change((e) => Dev.toggle(e.props, 'value')))
       .hr()
       .boolean((btn) => btn.label('no `onClick` - disabled').value(true))
       .boolean((btn) =>
