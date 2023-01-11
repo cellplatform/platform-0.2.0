@@ -9,4 +9,4 @@ export const R = { clamp, mergeDeepRight };
  */
 export { rx, slug, cuid, Time, Delete } from 'sys.util';
 export { css, Color, Style } from 'sys.ui.react.css';
-export { FC } from 'sys.util.react';
+export { FC } from 'sys.ui.react';

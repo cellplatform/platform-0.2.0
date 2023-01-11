@@ -3,7 +3,7 @@
  */
 export { KeyListener } from 'sys.ui.dom';
 export { css, Color, Style } from 'sys.ui.react.css';
-export { useClickOutside, useClickInside, useSizeObserver } from 'sys.util.react';
+export { useClickOutside, useClickInside, useSizeObserver } from 'sys.ui.react';
 export { Vimeo } from 'sys.ui.react.video';
 export { Spinner, Center } from 'sys.ui.react.common';
 

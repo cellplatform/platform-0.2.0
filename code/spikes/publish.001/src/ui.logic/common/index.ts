@@ -14,7 +14,7 @@ export const R = { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepR
 export const Processor = Text.Markdown.processor();
 export { Text };
 export { rx, slug, Path, Time, Is, Value } from 'sys.util';
-export { FC } from 'sys.util.react';
+export { FC } from 'sys.ui.react';
 export { Patch, Json } from 'sys.data.json';
 
 export { Filesystem } from 'sys.fs.indexeddb';

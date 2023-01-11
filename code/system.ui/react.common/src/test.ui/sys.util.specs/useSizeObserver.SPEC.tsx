@@ -1,4 +1,4 @@
-import { useSizeObserver } from 'sys.util.react';
+import { useSizeObserver } from 'sys.ui.react';
 
 import { css, Dev } from '..';
 
