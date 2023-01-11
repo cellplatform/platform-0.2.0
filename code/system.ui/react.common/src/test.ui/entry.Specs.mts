@@ -20,4 +20,6 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/index.SPEC'),
   'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/index.SPEC'),
+  'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/index.SPEC'),
+  'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/index.SPEC'),
 };

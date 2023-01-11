@@ -24,7 +24,7 @@ export function button<S extends O = O>(
       return args;
     },
     onClick(handler) {
-      clickHandlers.add(handler);
+      if (typeof handler === 'function') clickHandlers.add(handler);
       return args;
     },
   };
