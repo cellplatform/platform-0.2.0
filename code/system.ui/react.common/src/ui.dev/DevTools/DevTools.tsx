@@ -1,7 +1,8 @@
-import { Spec, t, Dev } from '../common';
-import { button } from '../DevTools.Button';
+import { Dev, Spec, t } from '../common';
 import { boolean } from '../DevTools.Boolean';
+import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
+import { title } from '../DevTools.Title';
 
 type O = Record<string, unknown>;
 
@@ -16,6 +17,7 @@ export const DevTools = {
    */
   button,
   boolean,
+  title,
   hr,
 };
 
@@ -46,20 +48,25 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       if (typeof args[0] === 'function') {
         DevTools.button<S>(events, ctx, initial, args[0]);
       }
-
       if (typeof args[0] === 'string') {
-        DevTools.button<S>(events, ctx, initial, (btn) => {
-          btn.label(args[0]);
-          if (typeof args[1] === 'function') btn.onClick(args[1]);
-        });
+        api.button((btn) => btn.label(args[0]).onClick(args[1]));
       }
-
       return api;
     },
 
     boolean(...args: any[]) {
       if (typeof args[0] === 'function') {
         DevTools.boolean<S>(events, ctx, initial, args[0]);
+      }
+      return api;
+    },
+
+    title(...args: any[]) {
+      if (typeof args[0] === 'function') {
+        DevTools.title<S>(events, ctx, initial, args[0]);
+      }
+      if (typeof args[0] === 'string') {
+        api.title((title) => title.text(args[0]).style(args[1]));
       }
       return api;
     },

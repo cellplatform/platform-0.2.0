@@ -1,4 +1,4 @@
-import type * as t from '../../common/types.mjs';
+import { t } from '../../common.t';
 
 type O = Record<string, unknown>;
 
@@ -13,6 +13,11 @@ export type DevTools<S extends O = O> = {
 
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
   button(fn: t.DevButtonHandler<S>): DevTools<S>;
+
   boolean(fn: t.DevBooleanHandler<S>): DevTools<S>;
+
+  title(text: string, style?: t.DevTitleStyle): DevTools<S>;
+  title(fn: t.DevTitleHandler<S>): DevTools<S>;
+
   hr(): DevTools<S>;
 };
