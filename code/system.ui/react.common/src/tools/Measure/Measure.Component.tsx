@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { css, t } from '../../common';
 
-type Size = { width: number; height: number };
-
 export type ComponentProps = t.MeasureSizeStyle & {
   content?: React.ReactNode;
   style?: t.CssValue;
-  onReady?: (size: Size) => void;
+  onReady?: (size: t.Size) => void;
 };
 
+/**
+ * Renders a component off screen and measures the
+ * offset size of the result.
+ */
 export const Component: React.FC<ComponentProps> = (props) => {
   const { fontFamily, fontSize, fontWeight, fontStyle } = props;
   const { lineHeight, letterSpacing, width } = props;
@@ -32,6 +34,7 @@ export const Component: React.FC<ComponentProps> = (props) => {
     base: css({ Absolute: [-999999, null, null, -999999] }),
     inner: css({ fontFamily, fontSize, fontWeight, fontStyle, lineHeight, letterSpacing, width }),
   };
+
   return (
     <div ref={baseRef} {...css(styles.base, props.style)}>
       <div {...styles.inner}>{props.content}</div>

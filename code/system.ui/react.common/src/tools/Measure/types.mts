@@ -1,7 +1,5 @@
 import { t } from '../../common.t';
 
-export type Size = { width: number; height: number };
-
 export type MeasureSizeStyle = {
   width?: number;
   fontFamily?: string;

@@ -7,6 +7,7 @@ export type { Observable } from 'rxjs';
  * @system
  */
 export type {
+  Size,
   DomRect,
   IgnoredResponse,
   JsonU,
