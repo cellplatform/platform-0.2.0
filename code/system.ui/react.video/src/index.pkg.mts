@@ -21,7 +21,7 @@ export const Pkg: ModuleDef = {
     'sys.types': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.util.css': '0.0.0',
+    'sys.ui.react.css': '0.0.0',
     'sys.util.react': '0.0.0',
   },
   toString() {
