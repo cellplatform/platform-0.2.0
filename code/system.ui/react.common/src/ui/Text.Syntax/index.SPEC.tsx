@@ -51,8 +51,6 @@ export default Dev.describe('Test.syntax', (e) => {
         ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1);
       }
 
-      // ctx.host.backgroundColor(COLORS.DARK);
-
       const elements = Array.from({ length: debug.repeat }).map((v, i) => {
         const style = css(styles.base, debug.repeat > 1 ? styles.multi : undefined);
         const colors = debug.customColors ? { Brace: 'orange' } : undefined;
@@ -128,6 +126,22 @@ export default Dev.describe('Test.syntax', (e) => {
           .label('ellipsis')
           .value((e) => e.state.props.ellipsis)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'ellipsis'))),
+      )
+      .boolean((btn) =>
+        btn
+          .label('monospace')
+          .value((e) => e.state.props.monospace)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'monospace'))),
+      )
+      .boolean((btn) =>
+        btn
+          .label('bold')
+          .value((e) => e.state.props.fontWeight === 'bold')
+          .onClick((e) =>
+            e.change(({ props }) => {
+              props.fontWeight = props.fontWeight === 'bold' ? 'normal' : 'bold';
+            }),
+          ),
       );
 
     dev.hr().title('Text');

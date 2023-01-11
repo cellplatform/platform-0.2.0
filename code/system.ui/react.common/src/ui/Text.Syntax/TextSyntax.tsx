@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { Color, css, FC, Style } from './common';
-import { THEMES, DEFAULT } from './common.const';
+import { DEFAULT, THEMES } from './common.const';
 import { DefaultTokenizer } from './logic/Tokenizer';
 import { TextSyntaxProps } from './types.mjs';
 import { Util } from './Util';
