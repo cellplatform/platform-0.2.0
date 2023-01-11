@@ -309,7 +309,7 @@ export const transform: t.CssTransform = (style) => {
 const isJss = (input: any) =>
   typeof input === 'object' && typeof input.hash === 'number' && Array.isArray(input.values);
 
-const flattenJss = (input: S[]) => {
+const flattenJss = (input: t.CssFormatInput[]) => {
   const output: any[] = [];
   input.forEach((item) => {
     if (isJss(item)) {
@@ -321,8 +321,7 @@ const flattenJss = (input: S[]) => {
   return output;
 };
 
-type S = t.CssValue | t.Falsy;
-const formatCss = (...styles: S[]): t.CssValue => glamor.css(...flattenJss(styles));
+const formatCss = (...styles: t.CssFormatInput[]): t.CssValue => glamor.css(...flattenJss(styles));
 
 /**
  * Export.

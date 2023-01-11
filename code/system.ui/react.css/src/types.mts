@@ -16,10 +16,6 @@ export type CssValue = CssProps & {
   Scroll?: boolean;
   Flex?: string | t.Falsy;
   Image?: [string, string, number, number];
-
-  ':last-child'?: t.CssProps;
-  ':first-child'?: t.CssProps;
-  ':hover'?: t.CssProps;
 };
 
 export type CssPropsMap = { [selector: string]: CssPropsMapObject };
@@ -38,7 +34,9 @@ export type CssTransform = (style?: CssProps | CssValue | t.Falsy) => CssProps;
 /**
  * API
  */
-export type CssFormat = (...styles: Array<CssProps | CssValue | t.Falsy>) => O;
+type T = { [key: string]: CssValue }; // NB: Allows for CSS psudo-classes, eg: "":hover".
+export type CssFormatInput = CssProps | CssValue | t.Falsy | T;
+export type CssFormat = (...styles: CssFormatInput[]) => O;
 
 export type CssStyle = {
   transform: CssTransform;

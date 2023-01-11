@@ -14,7 +14,7 @@ export default Config.vite(import.meta.url, (e) => {
 
   e.chunk('sys.text', 'sys.text');
   e.chunk('sys.util', ['sys.util', 'sys.ui.dom']);
-  e.chunk('sys.css', 'sys.util.css');
+  e.chunk('sys.css', 'sys.ui.react.css');
   e.chunk('sys.json', 'sys.data.json');
   e.chunk('sys.fs', ['sys.fs', 'sys.fs.indexeddb']);
   e.chunk('sys.dev', ['sys.ui.react.dev', 'sys.test.spec']);

@@ -8,4 +8,10 @@ describe('JSX', () => {
     const el = <div {...style}>Hello</div>;
     expect(React.isValidElement(el)).to.eql(true);
   });
+
+  it('media queries', () => {
+    const style = css({ '@media (max-width: 1100px)': { opacity: 0.1 } });
+    const el = <div {...style}>Hello</div>;
+    expect(React.isValidElement(el)).to.eql(true);
+  });
 });

@@ -1,7 +1,7 @@
 export * from './types.mjs';
 
 export { Pkg } from './index.pkg.mjs';
-export { Specs, DevSpecs } from './test.ui/entry.Specs.mjs';
+export { Specs, DevSpecs, ExternalSpecs } from './test.ui/entry.Specs.mjs';
 
 export { Icon } from './ui/Icon';
 export { Spinner } from './ui/Spinner';

@@ -37,7 +37,7 @@ export const Details: React.FC<DetailsProps> = (props) => {
 
   const hr = <hr {...styles.hr} />;
 
-  const span = (text: string, color: string | number) => <span {...css({ color })}>{text}</span>;
+  const span = (text: string, color: string) => <span {...css({ color })}>{text}</span>;
   const dark = (text: string) => span(text, COLORS.DARK);
   const hidden = (text: string) => span(text, Color.alpha(COLORS.DARK, 0));
   const silver = (text: string) => span(text, Color.alpha(COLORS.DARK, 0.3));

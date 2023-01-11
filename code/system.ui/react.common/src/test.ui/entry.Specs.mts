@@ -7,6 +7,9 @@ export const Specs = {
   'sys.ui.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
   'sys.ui.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
   // 'sys.ui.PropList': () => import('../ui/PropList/PropList.SPEC'),
+};
+
+export const ExternalSpecs = {
   'sys.ui.useSizeObserver': () => import('./external/sys.ui.react.useSizeObserver.SPEC'),
 };
 
