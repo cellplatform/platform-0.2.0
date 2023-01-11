@@ -1,1 +1,1 @@
-export * from './MeasureSize/types.mjs';
+export * from './Measure/types.mjs';

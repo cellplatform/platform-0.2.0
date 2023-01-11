@@ -1,1 +1,1 @@
-export * from './MeasureSize';
+export * from './Measure';
