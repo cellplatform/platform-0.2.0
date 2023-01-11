@@ -16,8 +16,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const renderProps = current.info?.render.props;
   const host = renderProps?.host;
 
-  console.log('renderProps', renderProps);
-
   /**
    * [Handlers]
    */

@@ -1,5 +1,4 @@
 import { useSizeObserver } from 'sys.ui.react';
-
 import { css, Dev } from '..';
 
 export default Dev.describe('hook.useSizeObserver', (e) => {
