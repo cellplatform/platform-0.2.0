@@ -138,9 +138,9 @@ export default Dev.describe('Test.syntax', (e) => {
           .label('bold')
           .value((e) => e.state.props.fontWeight === 'bold')
           .onClick((e) =>
-            e.change(({ props }) => {
-              props.fontWeight = props.fontWeight === 'bold' ? 'normal' : 'bold';
-            }),
+            e.change(
+              ({ props }) => (props.fontWeight = props.fontWeight === 'bold' ? 'normal' : 'bold'),
+            ),
           ),
       );
 
