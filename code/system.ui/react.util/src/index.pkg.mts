@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react',
+  name: 'sys.ui.react.util',
   version: '0.0.0',
   dependencies: {
     'sys.types': '0.0.0',

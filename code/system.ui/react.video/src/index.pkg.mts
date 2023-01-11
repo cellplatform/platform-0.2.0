@@ -22,7 +22,7 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.common': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
-    'sys.ui.react': '0.0.0',
+    'sys.ui.react.util': '0.0.0',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;

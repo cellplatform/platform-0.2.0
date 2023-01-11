@@ -26,10 +26,13 @@ export const DevTools = {
 function init<S extends O = O>(input: t.DevCtxInput, initial?: S) {
   const state = initial ?? ({} as S);
   const ctx = Spec.ctx(input);
+  const debug = ctx.debug;
   const events = Dev.Bus.events(input);
 
   const api: t.DevTools<S> = {
     ctx,
+    header: debug.header,
+    footer: debug.footer,
 
     /**
      * Widgets: Argument Wrangling.

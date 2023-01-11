@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     '@monaco-editor/react': '4.4.6',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'sys.ui.react': '0.0.0',
+    'sys.ui.react.util': '0.0.0',
     'monaco-editor': '0.34.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',

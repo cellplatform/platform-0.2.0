@@ -12,7 +12,7 @@ export default Dev.describe('MeasureSize', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
 
-    dev.ctx.debug.footer
+    dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.ObjectView name={'result'} data={e.state} expand={5} />);
 

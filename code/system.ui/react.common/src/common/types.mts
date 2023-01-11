@@ -24,6 +24,8 @@ export type {
   DevEvents,
   DevInfo,
   DevValueHandler,
+  DevCtxDebugHeader,
+  DevCtxDebugFooter,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**
