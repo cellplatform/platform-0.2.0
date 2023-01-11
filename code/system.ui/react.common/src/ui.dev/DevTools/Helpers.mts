@@ -1,9 +1,11 @@
+import { t, COLORS } from '../common';
+
 type O = Record<string, unknown>;
 
 /**
- * Simple helpers useful when workling with the DevTools.
+ * Simple helpers useful when workling with the [DevTools].
  */
-export const DevToolHelpers = {
+export const Helpers = {
   /**
    * Toggle the value of a boolean {object} key.
    * WARNING:
@@ -19,5 +21,17 @@ export const DevToolHelpers = {
     const next = current === undefined ? true : !current;
     object[key] = next as T[keyof T];
     return next;
+  },
+
+  /**
+   * Adjust the theme of the DevHarness.
+   */
+  theme(ctx: t.DevCtx, theme?: t.DevTheme) {
+    if (theme === 'Light') {
+      ctx.host.backgroundColor(null).tracelineColor(null);
+    }
+    if (theme === 'Dark') {
+      ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.08);
+    }
   },
 };

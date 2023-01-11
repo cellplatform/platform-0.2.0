@@ -3,6 +3,7 @@ import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
 import { title } from '../DevTools.Title';
+import { Helpers } from './Helpers.mjs';
 
 type O = Record<string, unknown>;
 
@@ -36,9 +37,15 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     ctx,
     header: debug.header,
     footer: debug.footer,
+
     async change(fn) {
       const state = _state || (_state = await ctx.state(initial));
       return state.change(fn);
+    },
+
+    theme(value) {
+      Helpers.theme(ctx, value);
+      return api;
     },
 
     /**

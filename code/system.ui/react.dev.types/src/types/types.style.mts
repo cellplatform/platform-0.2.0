@@ -1,2 +1,8 @@
-export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
-export type Margin = [number, number, number, number];
+export type DevTheme = 'Light' | 'Dark';
+
+export type DevMarginInput =
+  | number
+  | [number]
+  | [number, number]
+  | [number, number, number, number];
+export type DevMargin = [number, number, number, number];

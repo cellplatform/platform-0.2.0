@@ -26,6 +26,7 @@ export type {
   DevValueHandler,
   DevCtxDebugHeader,
   DevCtxDebugFooter,
+  DevTheme,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**

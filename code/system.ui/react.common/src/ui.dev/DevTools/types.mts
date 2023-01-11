@@ -7,10 +7,19 @@ type O = Record<string, unknown>;
  */
 export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
-  header: t.DevCtxDebugHeader;
-  footer: t.DevCtxDebugFooter;
   change: t.DevCtxState<S>['change'];
 
+  header: t.DevCtxDebugHeader;
+  footer: t.DevCtxDebugFooter;
+
+  /**
+   * Helpers.
+   */
+  theme(value: t.DevTheme): DevTools<S>;
+
+  /**
+   * Widgets.
+   */
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
   button(fn: t.DevButtonHandler<S>): DevTools<S>;
 
