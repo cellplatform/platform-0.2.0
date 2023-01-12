@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { type t } from '../common/index.mjs';
 import { Is } from '../Is/index.mjs';
 
 /**

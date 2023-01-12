@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { NetworkMessageEvent } from 'sys.net';
+export type { NetworkMessageEvent } from 'sys.net/src/types.mjs';
 export type {
   Event,
   EventBus,

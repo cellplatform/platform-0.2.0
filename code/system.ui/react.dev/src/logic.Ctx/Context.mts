@@ -1,5 +1,5 @@
 import { BusEvents } from '../logic.Bus/Bus.Events.mjs';
-import { t } from './common';
+import { type t } from './common';
 import { ContextState } from './Context.State.mjs';
 import { CtxProps } from './Ctx.Props.mjs';
 
@@ -14,6 +14,7 @@ export const Context = {
     const props = await CtxProps(events);
     const { dispose, dispose$ } = events;
 
+    let _state: t.DevCtxState<O> | undefined;
     const Session = {
       id: '',
       count: 0,
@@ -32,6 +33,7 @@ export const Context = {
 
     const ctx: t.DevCtx = {
       ...props.setters,
+      dispose$,
       toObject,
 
       get is() {
@@ -47,11 +49,21 @@ export const Context = {
       },
 
       async state<T extends O>(initial: T) {
+        type S = t.DevCtxState<T>;
+        if (_state) return _state as S;
+
         const info = await events.info.get();
-        return ContextState<T>({
+
+        if (info.render.state === undefined) {
+          await events.state.change.fire(initial, initial);
+        }
+
+        _state = ContextState<T>({
           initial: (info.render.state ?? initial) as T,
           events,
         });
+
+        return _state as S;
       },
     };
 

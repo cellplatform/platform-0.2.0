@@ -1,13 +1,14 @@
 import { Color, COLORS, css, t } from '../common';
+import { SpecListTitle } from './SpecList.Title';
 
 const KEY = { DEV: 'dev' };
 
 export type Imports = { [namespace: string]: () => Promise<any> };
-
 export type SpecListProps = {
   title?: string;
   version?: string;
   imports?: Imports;
+  badge?: t.SpecListBadge;
   style?: t.CssValue;
 };
 
@@ -25,11 +26,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       lineHeight: '2em',
       padding: 30,
       color: COLORS.DARK,
-    }),
-    title: css({ fontWeight: 'bold' }),
-    version: css({
-      color: Color.alpha(COLORS.DARK, 0.3),
-      marginLeft: 3,
+      cursor: 'default',
     }),
     ul: css({}),
     hr: css({
@@ -61,13 +58,6 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     );
   };
 
-  const elTitle = props.title && (
-    <div {...styles.title}>
-      <span>{props.title}</span>
-      {props.version && <span {...styles.version}>{`@${props.version}`}</span>}
-    </div>
-  );
-
   const elList = (
     <ul {...styles.ul}>
       {Object.keys(imports).map((key, i) => createItem(i, key))}
@@ -79,7 +69,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elTitle}
+      <SpecListTitle title={props.title} version={props.version} badge={props.badge} />
       {elList}
     </div>
   );

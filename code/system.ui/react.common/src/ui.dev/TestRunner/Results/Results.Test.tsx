@@ -1,4 +1,4 @@
-import { COLORS, css, Icons, t } from '../../common';
+import { COLORS, css, Icons, t } from '../common';
 import { TestError } from './Results.Test.Error';
 import { Description } from './Result.Description';
 

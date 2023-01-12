@@ -15,7 +15,7 @@ export type {
   DirManifest,
   Event,
   EventBus,
-} from 'sys.types';
+} from 'sys.types/src/types.mjs';
 export type { Fs } from 'sys.fs/src/types.mjs';
 export type { Http } from 'sys.net.http/src/types.mjs';
 

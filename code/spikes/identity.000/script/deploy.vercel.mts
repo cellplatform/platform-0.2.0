@@ -2,7 +2,7 @@ import { Vercel } from 'cloud.vercel';
 import pc from 'picocolors';
 import { rx } from 'sys.util';
 
-import { t } from '../src/common';
+import { type t } from '../src/common';
 import { Pkg } from '../src/index.pkg.mjs';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).

@@ -14,7 +14,7 @@ export type {
   EventBus,
   EventPump,
   Disposable,
-} from 'sys.types';
+} from 'sys.types/src/types.mjs';
 
 /**
  * @local

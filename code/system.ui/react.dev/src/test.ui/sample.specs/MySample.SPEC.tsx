@@ -43,8 +43,8 @@ export default Spec.describe('MySample', (e) => {
     const state = await ctx.state<T>(initial);
     const events = DevBus.events(ctx);
 
-    debug.header.render(<ComponentSample title={'header'} />);
-    debug.footer.render(<ComponentSample title={'footer'} />).border(-0.15);
+    debug.header.padding(0).render(<ComponentSample title={'header'} />);
+    debug.footer.border(-0.15).render(<ComponentSample title={'footer'} />);
 
     debug.row(<ComponentSample />);
     dev.hr();
@@ -99,13 +99,13 @@ export default Spec.describe('MySample', (e) => {
 
     debug.row(<div>Host</div>);
     dev.button((btn) =>
-      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).gridColor(null)),
+      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
     );
     dev
       .button((btn) =>
         btn
           .label('theme: dark')
-          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).gridColor(0.1)),
+          .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1)),
       )
       .hr();
 

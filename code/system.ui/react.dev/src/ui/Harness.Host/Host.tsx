@@ -1,4 +1,4 @@
-import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
+import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
 import { HarnessHostComponent } from './Host.Component';
 import { HarnessHostGrid } from './Host.Grid';
 
@@ -26,23 +26,45 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${Color.format(host?.gridColor ?? HOST.gridColor)}`;
+  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? HOST.tracelineColor)}`;
   const styles = {
     base: css({
       position: 'relative',
       overflow: 'hidden',
+      color: COLORS.DARK,
       backgroundColor:
         host?.backgroundColor === undefined
-          ? HOST.backgroundColor
+          ? Color.format(HOST.backgroundColor)
           : Color.format(host.backgroundColor),
     }),
+    empty: {
+      base: css({
+        Absolute: 0,
+        display: 'grid',
+        alignContent: 'center',
+        justifyContent: 'center',
+        userSelect: 'none',
+      }),
+      label: css({ opacity: 0.3, fontStyle: 'italic', fontSize: 14 }),
+    },
   };
+
+  const elGrid = renderProps && (
+    <HarnessHostGrid renderProps={renderProps} border={cropmark}>
+      <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
+    </HarnessHostGrid>
+  );
+
+  const elEmpty = !renderProps && (
+    <div {...styles.empty.base}>
+      <div {...styles.empty.label}>{'Nothing to display.'}</div>
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
-      <HarnessHostGrid renderProps={renderProps} border={cropmark}>
-        <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
-      </HarnessHostGrid>
+      {elGrid}
+      {elEmpty}
     </div>
   );
 };

@@ -31,21 +31,26 @@ export default Dev.describe('ObjectView', (e) => {
     value('`true`', true);
     value('`123`', 123);
     value('`"Hello"`', 'Hello');
-    value('`{object}`', { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123 });
-    value('`[array]`', [1, 'two', { id: 'abc' }]);
+    value('`{object}`', {
+      msg: '👋',
+      list: [1, [{ msg: 'two' }], 'three'],
+      count: 123,
+      foo: false,
+    });
+    value('`[array]`', [1, 'two', { id: 'three' }, true]);
     dev.hr();
 
     dev
       .button((btn) =>
         btn.label('theme: Light').onClick((e) => {
-          e.ctx.host.backgroundColor(null).gridColor(null);
-          e.change((draft) => (draft.theme = 'Light'));
+          e.change((d) => (d.theme = 'Light'));
+          dev.theme('Light');
         }),
       )
       .button((btn) =>
         btn.label('theme: Dark').onClick((e) => {
-          e.ctx.host.backgroundColor(COLORS.DARK).gridColor(0.06);
           e.change((draft) => (draft.theme = 'Dark'));
+          dev.theme('Dark');
         }),
       )
       .hr();

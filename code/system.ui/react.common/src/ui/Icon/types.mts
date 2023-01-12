@@ -1,4 +1,4 @@
-import type { CssValue } from 'sys.util.css';
+import { type t } from '../common.t';
 
 /**
  * An <Icon> component function.
@@ -12,7 +12,7 @@ export type IconProps = {
   size?: number;
   color?: number | string;
   opacity?: number;
-  style?: CssValue;
+  style?: t.CssValue;
   onClick?: React.MouseEventHandler;
   onDoubleClick?: React.MouseEventHandler;
   onMouseDown?: React.MouseEventHandler;

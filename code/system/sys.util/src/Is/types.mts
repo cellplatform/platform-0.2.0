@@ -12,5 +12,6 @@ export type IsMethods = {
   promise(input?: any): boolean;
   plainObject(input?: any): boolean;
   blank(input?: any): boolean;
+  numeric(input?: any): boolean;
   json(input?: any): boolean;
 };

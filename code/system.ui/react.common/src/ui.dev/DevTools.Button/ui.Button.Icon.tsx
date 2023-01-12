@@ -2,6 +2,7 @@ import { Color, COLORS, css, t } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type ButtonIconProps = {
+  isActive?: boolean;
   isDown?: boolean;
   isOver?: boolean;
   icon?: t.IconRenderer;
@@ -9,9 +10,9 @@ export type ButtonIconProps = {
 };
 
 export const ButtonIcon: React.FC<ButtonIconProps> = (props) => {
-  const { isOver } = props;
+  const { isOver, isActive = true } = props;
   const Size = 22;
-  const color = isOver ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.6);
+  const color = isOver && isActive ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.6);
   const Icon = props.icon ?? Icons.Method;
 
   /**
@@ -23,6 +24,7 @@ export const ButtonIcon: React.FC<ButtonIconProps> = (props) => {
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'start',
+      opacity: isActive ? 1 : 0.3,
     }),
   };
 

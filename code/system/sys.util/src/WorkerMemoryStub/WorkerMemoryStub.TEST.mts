@@ -1,6 +1,6 @@
 import { describe, it, expect } from '../test/index.mjs';
 
-import { t } from '../common/index.mjs';
+import { type t } from '../common/index.mjs';
 import { Time } from '../Time/index.mjs';
 import { WorkerMemoryStub } from './index.mjs';
 

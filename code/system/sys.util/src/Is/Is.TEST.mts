@@ -143,6 +143,33 @@ describe('Is', () => {
     });
   });
 
+  describe('Is.numeric', () => {
+    it('from (number)', () => {
+      expect(Is.numeric(0)).to.equal(true);
+      expect(Is.numeric(1)).to.equal(true);
+      expect(Is.numeric(-1)).to.equal(true);
+      expect(Is.numeric(0.5)).to.equal(true);
+      expect(Is.numeric(123456.123456)).to.equal(true);
+    });
+
+    it('from (string)', () => {
+      expect(Is.numeric('0')).to.equal(true);
+      expect(Is.numeric('1')).to.equal(true);
+      expect(Is.numeric('-1')).to.equal(true);
+      expect(Is.numeric('0.5')).to.equal(true);
+      expect(Is.numeric('123456.123456')).to.equal(true);
+    });
+
+    it('is not numeric', () => {
+      expect(Is.numeric(null)).to.equal(false);
+      expect(Is.numeric(undefined)).to.equal(false);
+      expect(Is.numeric('string')).to.equal(false);
+      expect(Is.numeric('123px')).to.equal(false);
+      expect(Is.numeric({})).to.equal(false);
+      expect(Is.numeric(new Date())).to.equal(false);
+    });
+  });
+
   describe('isJson', () => {
     it('is not JSON', () => {
       expect(Is.json()).to.eql(false);

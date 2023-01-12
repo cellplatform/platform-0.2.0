@@ -2,8 +2,8 @@
  * @system
  */
 export { KeyListener } from 'sys.ui.dom';
-export { css, Color, Style } from 'sys.util.css';
-export { useClickOutside, useClickInside, useSizeObserver } from 'sys.util.react';
+export { css, Color, Style } from 'sys.ui.react.css';
+export { useClickOutside, useClickInside, useSizeObserver } from 'sys.ui.react.util';
 export { Vimeo } from 'sys.ui.react.video';
 export { Spinner, Center } from 'sys.ui.react.common';
 

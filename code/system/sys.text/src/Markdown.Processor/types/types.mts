@@ -1,6 +1,4 @@
-import * as t from '../../common/types.mjs';
-
-type O = Record<string, unknown>;
+import { type t } from '../../common.t';
 
 export type MarkdownInput = string | Uint8Array | undefined;
 

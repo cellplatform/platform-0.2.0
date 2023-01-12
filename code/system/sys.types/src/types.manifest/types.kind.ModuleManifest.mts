@@ -1,4 +1,4 @@
-import { t } from '../common.mjs';
+import { type t } from '../common.mjs';
 
 type Url = string;
 type FilePath = string;

@@ -1,4 +1,4 @@
-import { css, Style, t, COLORS } from '../../common';
+import { css, Style, t, COLORS } from '../common';
 import { SuiteResults } from './Results.Suite';
 
 export type ResultsProps = {

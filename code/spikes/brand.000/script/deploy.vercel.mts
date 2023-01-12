@@ -4,7 +4,7 @@ import { rx } from 'sys.util';
 
 import dotenv from 'dotenv';
 
-import { t } from '../src/common';
+import { type t } from '../src/common';
 import { Pkg } from '../src/index.pkg.mjs';
 
 dotenv.config();

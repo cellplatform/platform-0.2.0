@@ -8,7 +8,7 @@ export function expectRendererId(value?: string) {
 describe('Context', () => {
   describe('lifecycle', () => {
     it('init', async () => {
-      const { events, instance } = await TestSample.create();
+      const { events, instance } = await TestSample.controller();
 
       const info = await events.info.get();
       expect(info.render.props).to.eql(undefined); // Initially no render-props data.
@@ -22,7 +22,7 @@ describe('Context', () => {
       events.dispose();
     });
 
-    it('dispose', async () => {
+    it('dispose (context)', async () => {
       const { dispose, context, events } = await TestSample.context();
 
       let fired = 0;
@@ -32,6 +32,16 @@ describe('Context', () => {
       dispose();
       expect(fired).to.eql(2);
       expect(context.disposed).to.eql(true);
+    });
+
+    it('dispose (ctx)', async () => {
+      const { dispose, ctx } = await TestSample.context();
+
+      let fired = 0;
+      ctx.dispose$.subscribe(() => fired++);
+
+      dispose();
+      expect(fired).to.eql(1);
     });
 
     it('toObject', async () => {
@@ -74,7 +84,7 @@ describe('Context', () => {
     });
 
     it('synced between instances on same bus (single source of truth)', async () => {
-      const { instance } = await TestSample.create();
+      const { instance } = await TestSample.controller();
       const context1 = await Context.init(instance);
       const context2 = await Context.init(instance);
 
@@ -160,22 +170,22 @@ describe('Context', () => {
       const getHost = async () => (await events.info.get()).render?.props?.host!;
 
       ctx.host.backgroundColor(-0.123);
-      ctx.host.gridColor(-0.456);
+      ctx.host.tracelineColor(-0.456);
       expect(context.pending).to.eql(true);
       await context.flush();
       expect(context.pending).to.eql(false);
 
       const info1 = await getHost();
       expect(info1.backgroundColor).to.eql(-0.123);
-      expect(info1.gridColor).to.eql(-0.456);
+      expect(info1.tracelineColor).to.eql(-0.456);
 
       ctx.host.backgroundColor(null);
-      ctx.host.gridColor(null);
+      ctx.host.tracelineColor(null);
       await context.flush();
 
       const info2 = await getHost();
       expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
-      expect(info2.gridColor).to.eql(HOST.gridColor);
+      expect(info2.tracelineColor).to.eql(HOST.tracelineColor);
 
       dispose();
     });
@@ -270,6 +280,29 @@ describe('Context', () => {
       dispose();
     });
 
+    it('width', async () => {
+      const { events, context, dispose } = await TestSample.context();
+      const ctx = context.ctx;
+
+      const expectValue = async (value: any, expected?: number) => {
+        ctx.debug.width(value);
+        await context.flush();
+        const info = await events.info.get();
+        expect(info.render.props?.debug.width).to.eql(expected);
+      };
+
+      const DEBUG = DEFAULT.props.debug;
+
+      await expectValue(undefined, DEBUG.width);
+      await expectValue(null, DEBUG.width);
+
+      await expectValue(0, 0);
+      await expectValue(-1, 0);
+      await expectValue(200, 200);
+
+      dispose();
+    });
+
     describe('header', () => {
       const HEADER = DEFAULT.props.debug.header;
 
@@ -299,6 +332,31 @@ describe('Context', () => {
         expectRendererId(info3?.renderer?.id);
         expect(info3?.renderer?.fn({} as any)).to.equal(el);
         expect(info3?.border.color).to.eql(HEADER.border.color);
+
+        dispose();
+      });
+
+      it('padding', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+
+        type T = t.MarginInput | undefined | null;
+        const expectValue = async (value: T, expected: t.Margin) => {
+          ctx.debug.header.padding(value);
+          await context.flush();
+          const info = await events.info.get();
+          expect(info.render.props?.debug.header.padding).to.eql(expected);
+        };
+
+        const DEBUG = DEFAULT.props.debug.header;
+
+        await expectValue(undefined, DEBUG.padding);
+        await expectValue(null, DEBUG.padding);
+
+        await expectValue(10, [10, 10, 10, 10]);
+        await expectValue([10], [10, 10, 10, 10]);
+        await expectValue([10, 99], [10, 99, 10, 99]);
+        await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
 
         dispose();
       });
@@ -336,6 +394,31 @@ describe('Context', () => {
 
         dispose();
       });
+
+      it('padding', async () => {
+        const { events, context, dispose } = await TestSample.context();
+        const ctx = context.ctx;
+
+        type T = t.MarginInput | undefined | null;
+        const expectValue = async (value: T, expected: t.Margin) => {
+          ctx.debug.footer.padding(value);
+          await context.flush();
+          const info = await events.info.get();
+          expect(info.render.props?.debug.footer.padding).to.eql(expected);
+        };
+
+        const DEBUG = DEFAULT.props.debug.footer;
+
+        await expectValue(undefined, DEBUG.padding);
+        await expectValue(null, DEBUG.padding);
+
+        await expectValue(10, [10, 10, 10, 10]);
+        await expectValue([10], [10, 10, 10, 10]);
+        await expectValue([10, 99], [10, 99, 10, 99]);
+        await expectValue([10, 20, 30, 40], [10, 20, 30, 40]);
+
+        dispose();
+      });
     });
   });
 
@@ -344,14 +427,21 @@ describe('Context', () => {
     const initial: T = { count: 0 };
 
     it('read state', async () => {
-      const { context, dispose } = await TestSample.context();
+      const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
-      const state = await ctx.state<T>(initial);
-      expect(state.current).to.eql(initial);
+
+      const state1 = await ctx.state<T>(initial);
+      const state2 = await ctx.state<T>(initial);
+      const info = await events.info.get();
+
+      expect(info.render.state).to.eql(initial);
+      expect(state1.current).to.eql(initial);
+      expect(state1).to.equal(state2); // NB: Same instance (on repeat calls).
+
       dispose();
     });
 
-    it('write state (change)', async () => {
+    it('write state (via mutator function)', async () => {
       const { context, dispose } = await TestSample.context();
       const ctx = context.ctx;
       const state = await ctx.state<T>(initial);

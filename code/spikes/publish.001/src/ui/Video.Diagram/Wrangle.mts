@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 
 export const Wrangle = {
   isImage(media?: t.DocDiagramMedia) {

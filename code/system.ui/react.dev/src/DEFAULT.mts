@@ -1,4 +1,4 @@
-import * as t from './common/types.mjs';
+import type * as t from './common/types.mjs';
 import { Color, COLORS } from './common';
 
 export const DEFAULT = {
@@ -6,17 +6,18 @@ export const DEFAULT = {
     return {
       host: {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
-        gridColor: Color.alpha(COLORS.DARK, 0.1),
+        tracelineColor: Color.alpha(COLORS.DARK, 0.1),
       },
       component: {},
       debug: {
-        header: { border: {} },
+        width: 400,
+        header: { border: {}, padding: [8, 8, 8, 8] },
         body: {
           renderers: [],
           scroll: true,
           padding: [15, 15, 15, 15],
         },
-        footer: { border: {} },
+        footer: { border: {}, padding: [8, 8, 8, 8] },
       },
     };
   },

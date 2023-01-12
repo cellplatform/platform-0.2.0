@@ -1,4 +1,4 @@
-import { t } from '../common.mjs';
+import { type t } from '../common.mjs';
 
 type Timestamp = number; // UTC: milliseconds since the UNIX epoch.
 type Sha256 = string;

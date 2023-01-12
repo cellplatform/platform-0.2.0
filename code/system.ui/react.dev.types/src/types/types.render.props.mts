@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 type Color = string | number;
 
@@ -26,29 +26,28 @@ export type DevRenderPropsComponent = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
-  gridColor?: Color;
+  tracelineColor?: Color;
 };
 
 /**
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
-  header: {
-    renderer?: t.DevRendererRef<any>;
-    border: DevRenderPropsDebugBorder;
-  };
+  width?: number;
+  header: DevRenderPropsDebugBar;
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
-    padding: t.Margin;
+    padding: t.DevMargin;
   };
-  footer: {
-    renderer?: t.DevRendererRef<any>;
-    border: DevRenderPropsDebugBorder;
-  };
+  footer: DevRenderPropsDebugBar;
 };
 
-export type DevRenderPropsDebugBorder = { color?: Color };
+export type DevRenderPropsDebugBar = {
+  renderer?: t.DevRendererRef<any>;
+  border: { color?: Color };
+  padding: t.DevMargin;
+};
 
 /**
  * Size
@@ -63,5 +62,5 @@ export type DevRenderSizeFill = {
   mode: 'fill';
   x: boolean;
   y: boolean;
-  margin: t.Margin;
+  margin: t.DevMargin;
 };

@@ -1,6 +1,6 @@
 import { expect, describe, it } from '../test/index.mjs';
 import { Observable, Subject } from 'rxjs';
-import { t } from '../common/index.mjs';
+import { type t } from '../common/index.mjs';
 
 import { rx } from './index.mjs';
 

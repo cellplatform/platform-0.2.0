@@ -1,4 +1,4 @@
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 export { t };
 
 export type { Observable } from 'rxjs';
