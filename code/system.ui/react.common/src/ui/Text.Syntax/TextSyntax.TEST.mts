@@ -1,5 +1,5 @@
-import { describe, it, expect, t } from '../../../test';
-import { DefaultTokenizer } from '../logic/Tokenizer';
+import { describe, it, expect, t } from '../../test';
+import { DefaultTokenizer } from './logic/Tokenizer';
 
 describe('Text.Syntax', (e) => {
   describe('Tokenizer', (e) => {

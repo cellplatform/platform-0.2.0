@@ -1,5 +1,5 @@
-import { TextSyntax, TextSyntaxProps } from '..';
-import { css, Dev } from '../../../test.ui';
+import { TextSyntax, TextSyntaxProps } from '.';
+import { css, Dev } from '../../test.ui';
 
 type T = {
   debug: {
@@ -68,9 +68,7 @@ export default Dev.describe('Test.syntax', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => (
-        <Dev.ObjectView name={'info'} data={e.state} expand={{ paths: ['$', '$.props'] }} />
-      ));
+      .render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} expand={1} />);
 
     dev
       .title('Test Options')

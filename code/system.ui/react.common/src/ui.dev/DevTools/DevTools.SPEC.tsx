@@ -26,6 +26,8 @@ export default Dev.describe('DevTools', (e) => {
       .border(-0.15)
       .render((e) => <Dev.ObjectView data={e.state} style={{ margin: 8 }} />);
 
+    dev.title('DevTools', { margin: 0 }).hr();
+
     /**
      * Buttons
      */
