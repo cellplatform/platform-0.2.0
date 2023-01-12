@@ -15,6 +15,7 @@ export type DevTools<S extends O = O> = {
   /**
    * Helpers.
    */
+  lorem(words?: number, endWith?: string): string;
   theme(value: t.DevTheme): DevTools<S>;
 
   /**

@@ -4,6 +4,7 @@ import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
 import { title } from '../DevTools.Title';
 import { Helpers } from './Helpers.mjs';
+import { Lorem } from '../../ui.tools';
 
 type O = Record<string, unknown>;
 
@@ -38,9 +39,16 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     header: debug.header,
     footer: debug.footer,
 
+    /**
+     * Helpers
+     */
     async change(fn) {
       const state = _state || (_state = await ctx.state(initial));
       return state.change(fn);
+    },
+
+    lorem(words, endWith) {
+      return Lorem.words(words, endWith);
     },
 
     theme(value) {
