@@ -1,2 +1,2 @@
-export * from './fn.title';
+export * from './DevTools.Title';
 export * from './ui.Title';

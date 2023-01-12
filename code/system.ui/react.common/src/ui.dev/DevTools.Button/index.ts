@@ -1,2 +1,2 @@
-export * from './fn.button';
+export * from './DevTools.Button';
 export * from './ui.Button';

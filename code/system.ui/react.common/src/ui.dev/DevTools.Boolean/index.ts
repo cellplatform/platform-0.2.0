@@ -1,2 +1,2 @@
-export * from './fn.boolean';
+export * from './DevTools.Boolean';
 export * from './ui.Boolean';
