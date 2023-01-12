@@ -1,4 +1,4 @@
-import { t } from '../common.t';
+import type { t } from '../common.t';
 
 export type TextStyle = {
   align?: 'Left' | 'Center' | 'Right';

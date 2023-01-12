@@ -1,4 +1,4 @@
-import { t } from '../../common.t';
+import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
 type BoolOrUndefined = boolean | undefined;
