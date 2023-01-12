@@ -1,9 +1,9 @@
-import type * as t from '../../common/types.mjs';
+import type { t } from '../common.t';
 
 /**
  * Component: <PropList>
  */
-export type PropListTheme = 'Dark' | 'Light';
+export type PropListTheme = t.CommonTheme;
 
 export type PropListTitleProps = {
   title?: string | JSX.Element | null;
