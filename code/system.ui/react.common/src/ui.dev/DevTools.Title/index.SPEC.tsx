@@ -5,7 +5,10 @@ import { Title, TitleProps } from './ui.Title';
 type T = { count: number; props: TitleProps };
 const initial: T = {
   count: 0,
-  props: { style: { ...Title.DEFAULT.style, margin: 0 } },
+  props: {
+    text: '👋 Hello, Doug',
+    style: { ...Title.DEFAULT.style, margin: 0 },
+  },
 };
 
 export default Dev.describe('Title', (e) => {
@@ -43,15 +46,15 @@ export default Dev.describe('Title', (e) => {
       .title('Properties')
       .boolean((btn) =>
         btn
-          .label('ellipsis')
-          .value((e) => Boolean(e.state.props.style?.ellipsis))
-          .onClick((e) => e.change((e) => Dev.toggle(e.props.style!, 'ellipsis'))),
-      )
-      .boolean((btn) =>
-        btn
           .label('bold')
           .value((e) => Boolean(e.state.props.style?.bold))
           .onClick((e) => e.change((e) => Dev.toggle(e.props.style!, 'bold'))),
+      )
+      .boolean((btn) =>
+        btn
+          .label('ellipsis')
+          .value((e) => Boolean(e.state.props.style?.ellipsis))
+          .onClick((e) => e.change((e) => Dev.toggle(e.props.style!, 'ellipsis'))),
       )
       .title((title) =>
         title.text(LOREM).style((e) => {
