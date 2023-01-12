@@ -5,7 +5,8 @@ import { Hr } from './ui.Hr';
  * A horizontal-rule (visual divider).
  */
 export function hr(input: t.DevCtxInput) {
-  return Spec.once(input, (ctx) => {
-    ctx.debug.row(<Hr />);
-  });
+  const ctx = Spec.ctx(input);
+  if (!ctx.is.initial) return;
+
+  ctx.debug.row(<Hr />);
 }

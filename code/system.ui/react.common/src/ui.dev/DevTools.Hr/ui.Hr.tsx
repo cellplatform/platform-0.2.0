@@ -1,6 +1,9 @@
-import { Color, css } from '../common';
+import { Color, css, t } from '../common';
 
-export type HrProps = { marginY?: number };
+export type HrProps = {
+  marginY?: number;
+  style?: t.CssValue;
+};
 export const Hr: React.FC<HrProps> = (props) => {
   /**
    * [Render]
@@ -12,5 +15,5 @@ export const Hr: React.FC<HrProps> = (props) => {
       MarginY: props.marginY ?? 10,
     }),
   };
-  return <div {...styles.base} />;
+  return <div {...css(styles.base, props.style)} />;
 };

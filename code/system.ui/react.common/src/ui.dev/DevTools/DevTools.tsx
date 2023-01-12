@@ -1,10 +1,11 @@
+import { Lorem } from '../../ui.tools';
 import { Dev, Spec, t } from '../common';
 import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
 import { title } from '../DevTools.Title';
+import { todo } from '../DevTools.Todo';
 import { Helpers } from './Helpers.mjs';
-import { Lorem } from '../../ui.tools';
 
 type O = Record<string, unknown>;
 
@@ -20,6 +21,7 @@ export const DevTools = {
   button,
   boolean,
   title,
+  todo,
   hr,
 };
 
@@ -60,11 +62,11 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
      * Widgets: Argument Wrangling.
      */
     button(...args: any[]) {
-      if (typeof args[0] === 'function') {
-        DevTools.button<S>(events, ctx, initial, args[0]);
-      }
       if (typeof args[0] === 'string') {
         api.button((btn) => btn.label(args[0]).onClick(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        DevTools.button<S>(events, ctx, initial, args[0]);
       }
       return api;
     },
@@ -77,11 +79,24 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     },
 
     title(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.title((title) => title.text(args[0]).style(args[1]));
+      }
       if (typeof args[0] === 'function') {
         DevTools.title<S>(events, ctx, initial, args[0]);
       }
+      return api;
+    },
+
+    todo(...args: any[]) {
+      if (args.length === 0) {
+        return api.todo('');
+      }
       if (typeof args[0] === 'string') {
-        api.title((title) => title.text(args[0]).style(args[1]));
+        api.todo((title) => title.text(args[0]).style(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        DevTools.todo<S>(events, ctx, initial, args[0]);
       }
       return api;
     },
