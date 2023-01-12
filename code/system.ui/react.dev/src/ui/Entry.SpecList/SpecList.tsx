@@ -28,7 +28,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       color: COLORS.DARK,
       cursor: 'default',
     }),
-    ul: css({}),
+    ul: css({ marginBottom: 80 }),
     hr: css({
       border: 'none',
       borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,

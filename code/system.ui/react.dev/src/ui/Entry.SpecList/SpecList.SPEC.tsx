@@ -1,7 +1,7 @@
 import { SpecList } from '.';
-import { Pkg, Spec } from '../../test.ui';
+import { css, Pkg, Spec } from '../../test.ui';
 
-const CI = {
+const ci = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
@@ -12,15 +12,20 @@ export default Spec.describe('SpecList', (e) => {
 
     ctx.component
       .size('fill')
-      .display('grid')
       .backgroundColor(1)
       .render(async (e) => {
         const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs.mjs');
+
         const specs = {
           ...SampleSpecs,
           ...ModuleSpecs,
         };
-        return <SpecList title={Pkg.name} version={Pkg.version} imports={specs} badge={CI} />;
+
+        return (
+          <div {...css({ Absolute: 0, Scroll: true })}>
+            <SpecList title={Pkg.name} version={Pkg.version} imports={specs} badge={ci} />
+          </div>
+        );
       });
   });
 });
