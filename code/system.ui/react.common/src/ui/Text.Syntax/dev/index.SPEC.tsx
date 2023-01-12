@@ -1,6 +1,5 @@
-import { TextSyntax, TextSyntaxProps } from '.';
-import { css, Dev } from '../../test.ui';
-import { COLORS } from '../common';
+import { TextSyntax, TextSyntaxProps } from '..';
+import { css, Dev } from '../../../test.ui';
 
 type T = {
   debug: {
