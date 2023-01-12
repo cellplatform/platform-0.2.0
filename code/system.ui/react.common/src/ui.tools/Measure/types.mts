@@ -1,7 +1,7 @@
 import type { t } from '../../common.t';
 
 export type MeasureSizeStyle = {
-  width?: number;
+  width?: t.CssValue['width'];
   fontFamily?: t.CssValue['fontFamily'];
   fontSize?: t.CssValue['fontSize'];
   fontWeight?: t.CssValue['fontWeight'];
