@@ -43,14 +43,14 @@ export default Dev.describe('ObjectView', (e) => {
     dev
       .button((btn) =>
         btn.label('theme: Light').onClick((e) => {
-          dev.theme('Light');
           e.change((d) => (d.theme = 'Light'));
+          dev.theme('Light');
         }),
       )
       .button((btn) =>
         btn.label('theme: Dark').onClick((e) => {
-          dev.theme('Dark');
           e.change((draft) => (draft.theme = 'Dark'));
+          dev.theme('Dark');
         }),
       )
       .hr();
