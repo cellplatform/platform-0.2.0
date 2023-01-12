@@ -1,17 +1,18 @@
 import { t } from '../common.t';
 
 export type TextStyle = {
-  color?: number | string;
-  fontSize?: number;
-  fontWeight?: 'Light' | 'Normal' | 'Bold';
-  fontFamily?: string;
   align?: 'Left' | 'Center' | 'Right';
+  fontWeight?: 'Light' | 'Normal' | 'Bold';
   italic?: boolean;
-  letterSpacing?: number | string;
-  lineHeight?: number | string;
-  opacity?: number;
   textShadow?: string | Array<number | string>; // [0:offset-y, 1:color.format()]
   uppercase?: boolean;
+
+  color?: t.CssValue['color'];
+  fontSize?: t.CssValue['fontSize'];
+  fontFamily?: t.CssValue['fontFamily'];
+  letterSpacing?: t.CssValue['letterSpacing'];
+  lineHeight?: t.CssValue['lineHeight'];
+  opacity?: t.CssValue['opacity'];
 };
 
 export type TextProps = TextStyle & {
