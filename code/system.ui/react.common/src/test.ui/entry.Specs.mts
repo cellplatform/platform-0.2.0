@@ -1,19 +1,19 @@
 export const Specs = {
-  'sys.ui.Card': () => import('../ui/Card/index.SPEC'),
-  'sys.ui.Button': () => import('../ui/Button/index.SPEC'),
-  'sys.ui.Button.Switch': () => import('../ui/Button.Switch/index.SPEC'),
-  'sys.ui.Icon': () => import('../ui/Icon/Icon.SPEC'),
-  'sys.ui.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
-  'sys.ui.Center': () => import('../ui/Center/Center.SPEC'),
-  'sys.ui.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
-  'sys.ui.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
-  // 'sys.ui.PropList': () => import('../ui/PropList/PropList.SPEC'),
-  'sys.ui.Text.Syntax': () => import('../ui/Text.Syntax/dev/index.SPEC'),
-  'sys.ui.MeasureSize': () => import('../ui.tools/Measure/index.SPEC'),
+  'sys.ui.common.Card': () => import('../ui/Card/index.SPEC'),
+  'sys.ui.common.Button': () => import('../ui/Button/index.SPEC'),
+  'sys.ui.common.Button.Switch': () => import('../ui/Button.Switch/index.SPEC'),
+  'sys.ui.common.Icon': () => import('../ui/Icon/Icon.SPEC'),
+  'sys.ui.common.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
+  'sys.ui.common.Center': () => import('../ui/Center/Center.SPEC'),
+  'sys.ui.common.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
+  'sys.ui.common.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
+  // 'sys.ui.common.PropList': () => import('../ui/PropList/PropList.SPEC'),
+  'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/dev/index.SPEC'),
+  'sys.ui.common.Measure': () => import('../ui.tools/Measure/index.SPEC'),
 };
 
 export const ExternalSpecs = {
-  'sys.ui.useSizeObserver': () => import('./react.util/useSizeObserver.SPEC'),
+  'sys.ui.util.useSizeObserver': () => import('./react.util/useSizeObserver.SPEC'),
 };
 
 export const DevSpecs = {
