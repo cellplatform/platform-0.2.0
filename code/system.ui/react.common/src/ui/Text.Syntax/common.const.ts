@@ -16,10 +16,10 @@ const DARK: t.TextSyntaxColors = {
   Word: { Base: COLORS.WHITE, Element: COLORS.CYAN },
 };
 
-export const THEMES: t.PropListTheme[] = ['Light', 'Dark'];
-export const THEME: t.PropListTheme = 'Light';
+export const THEMES: t.CommonTheme[] = ['Light', 'Dark'];
+export const THEME: t.CommonTheme = 'Light';
 
 /**
  * Constants
  */
-export const DEFAULT = { THEME, LIGHT, DARK };
+export const DEFAULT = { THEME, LIGHT, DARK } as const;

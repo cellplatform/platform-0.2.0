@@ -4,4 +4,4 @@ export { Manifest } from '../Manifest/index.mjs';
 
 export const DEFAULT = {
   rootdir: '/mock/',
-};
+} as const;

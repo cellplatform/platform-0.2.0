@@ -7,7 +7,7 @@ export const DEFAULT = {
   get RECT(): t.DomRect {
     return { x: -1, y: -1, width: -1, height: -1, top: -1, right: -1, bottom: -1, left: -1 };
   },
-};
+} as const;
 
 type Args<T extends E> = { ref?: RefObject<T> };
 

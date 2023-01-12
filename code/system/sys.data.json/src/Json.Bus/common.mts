@@ -7,4 +7,4 @@ export { Patch } from '../Json.Patch/index.mjs';
 export const DEFAULT = {
   KEY: 'default',
   TIMEOUT: 500,
-};
+} as const;

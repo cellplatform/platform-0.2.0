@@ -11,4 +11,4 @@ export const COLORS = {
   BLUE: '#4B89FF',
   CYAN: '#00C2FF',
   MAGENTA: '#FE0064',
-};
+} as const;

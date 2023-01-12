@@ -10,4 +10,4 @@ export const DEFAULTS = {
       selection: { index: { path: '' } },
     };
   },
-};
+} as const;

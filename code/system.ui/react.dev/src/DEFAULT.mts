@@ -37,4 +37,4 @@ export const DEFAULT = {
     D: 'd', // NB: alias for "?dev"
     DEV: 'dev',
   },
-};
+} as const;

@@ -8,4 +8,4 @@ export const COLORS = {
   LIME: '#A6E130',
   GREEN: '#00BB47',
   PURPLE: '#A11D8E',
-};
+} as const;

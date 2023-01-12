@@ -5,4 +5,4 @@ export * from './libs.mjs';
 
 export const DEFAULT = {
   ROOT_DIR: '/mock/',
-};
+} as const;

@@ -10,4 +10,4 @@ const style: Required<t.DevTitleStyle> = {
 export const DEFAULT = {
   title: 'Untitled',
   style,
-};
+} as const;
