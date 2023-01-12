@@ -1,5 +1,5 @@
-import { Dev, css, expect, Lorem } from '../../test.ui';
 import { Card, CardProps } from '.';
+import { css, Dev } from '../../test.ui';
 
 type T = { props: CardProps };
 const initial: T = {
@@ -31,7 +31,7 @@ export default Dev.describe('Card', (e) => {
           }),
         };
 
-        const elBody = <div {...styles.body}>{Lorem.toString()}</div>;
+        const elBody = <div {...styles.body}>{Dev.Lorem.toString()}</div>;
         return (
           <Card {...props} onClick={() => console.info('⚡️ onClick')}>
             {elBody}
