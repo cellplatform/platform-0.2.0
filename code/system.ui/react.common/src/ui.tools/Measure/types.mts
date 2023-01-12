@@ -1,13 +1,13 @@
-import { type t } from '../../common.t';
+import type { t } from '../../common.t';
 
 export type MeasureSizeStyle = {
   width?: number;
-  fontFamily?: string;
-  fontSize?: string | number;
-  fontWeight?: string | number;
-  fontStyle?: string;
-  lineHeight?: string | number;
-  letterSpacing?: string | number;
+  fontFamily?: t.CssValue['fontFamily'];
+  fontSize?: t.CssValue['fontSize'];
+  fontWeight?: t.CssValue['fontWeight'];
+  fontStyle?: t.CssValue['fontStyle'];
+  lineHeight?: t.CssValue['lineHeight'];
+  letterSpacing?: t.CssValue['letterSpacing'];
 };
 
 export type MeasureSizeProps = MeasureSizeStyle & {

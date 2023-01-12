@@ -1,10 +1,11 @@
-/**
- * Fonts
- */
-export const MONOSPACE = { FAMILY: 'monospace' };
-export const SANS = { FAMILY: 'sans-serif' };
-export const SYSTEM_FONT = {
-  WEIGHTS: { THIN: 100, LIGHT: 300, NORMAL: 400, BOLD: 900 },
-  MONOSPACE,
-  SANS,
+export const COLORS = {
+  BLACK: '#000',
+  WHITE: '#fff',
+  DARK: '#293042', // Inky blue/black.
+  CYAN: '#00C2FF',
+  MAGENTA: '#FE0064',
+  BLUE: '#4D7EF7',
+  LIME: '#A6E130',
+  GREEN: '#00BB47',
+  PURPLE: '#A11D8E',
 };
