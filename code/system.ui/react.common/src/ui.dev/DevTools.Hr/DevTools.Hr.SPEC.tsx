@@ -9,6 +9,6 @@ export default Dev.describe('Hr', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools(e);
-    dev.hr();
+    dev.title('Horizontal Rule').hr();
   });
 });
