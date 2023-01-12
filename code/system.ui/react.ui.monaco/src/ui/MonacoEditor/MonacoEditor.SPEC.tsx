@@ -32,11 +32,10 @@ export default Dev.describe('MonacoEditor', (e) => {
       .render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} expand={3} />);
 
     const language = (value: MonacoEditorProps['language']) => {
-      dev.button(`language: ${value}`, (e) => {
-        dev.change((d) => (d.props.language = value));
-      });
+      dev.button(`${value}`, (e) => e.change((d) => (d.props.language = value)));
     };
 
+    dev.title('Language');
     language('markdown');
     language('typescript');
     language('javascript');
