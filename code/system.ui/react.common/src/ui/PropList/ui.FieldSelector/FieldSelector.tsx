@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { css, FC, t, Button, DEFAULT } from './common';
 import { FieldBuilder } from '../FieldBuilder.mjs';
 import { PropList } from '../PropList.View';

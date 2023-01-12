@@ -1,1 +1,1 @@
-export * from './PropList';
+export * from './PropList.mjs';

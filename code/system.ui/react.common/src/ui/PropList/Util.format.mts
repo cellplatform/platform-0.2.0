@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { isValidElement } from 'react';
 import { t } from './common';
 
 export function format(item: t.PropListItem) {
@@ -14,7 +13,7 @@ export function format(item: t.PropListItem) {
     get value(): t.PropListValue {
       if (_value === undefined) {
         if (typeof item.value !== 'object') return { data: item.value };
-        if (React.isValidElement(item.value)) return { data: item.value };
+        if (isValidElement(item.value)) return { data: item.value };
         _value = item.value as t.PropListValue;
       }
       return _value;
@@ -33,7 +32,7 @@ export function format(item: t.PropListItem) {
     },
 
     get isComponent() {
-      return React.isValidElement(res.value.data);
+      return isValidElement(res.value.data);
     },
 
     get isSimple() {
@@ -50,7 +49,7 @@ export function format(item: t.PropListItem) {
       if (data === null) return 'null';
       if (data === undefined) return 'undefined';
 
-      if (typeof data === 'object' && !React.isValidElement(data)) {
+      if (typeof data === 'object' && !isValidElement(data)) {
         return JSON.stringify(data, null, '  ');
       }
 

@@ -1,7 +1,7 @@
-import React from 'react';
+import { Fragment } from 'react';
 
 import { t, css, Color, COLORS } from './common';
-import { Util } from './Util';
+import { Util } from './Util.mjs';
 
 export type FieldSelectorLabelProps = {
   all: string[];
@@ -41,10 +41,10 @@ export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => 
     const isLast = i === parts.length - 1;
     const style = !isLast && isSubField ? styles.subpart : undefined;
     return (
-      <React.Fragment key={i}>
+      <Fragment key={i}>
         <span {...style}>{part}</span>
         {!isLast && <span>{'.'}</span>}
-      </React.Fragment>
+      </Fragment>
     );
   });
 
