@@ -1,5 +1,5 @@
 import { ObjectView } from '.';
-import { COLORS, Dev } from '../../test.ui';
+import { Dev } from '../../test.ui';
 
 import type { ObjectViewProps } from '.';
 
