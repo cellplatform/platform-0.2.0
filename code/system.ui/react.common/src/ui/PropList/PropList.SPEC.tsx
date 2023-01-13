@@ -50,47 +50,53 @@ export default Dev.describe('PropList', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'info'} data={e.state} />);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
-    dev
-      .title('Properties')
-      .boolean((btn) =>
-        btn
-          .label('defaults.clipboard')
-          .value((e) => e.state.props.defaults?.clipboard)
-          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
-      )
-      .boolean((btn) =>
-        btn
-          .label('defaults.monospace')
-          .value((e) => e.state.props.defaults?.monospace)
-          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
-      )
-      .boolean((btn) =>
-        btn
-          .label((e) => `theme: "${e.state.props.theme}"`)
-          .value((e) => e.state.props.theme === 'Light')
-          .onClick((e) =>
-            e.change((d) => {
-              d.props.theme = e.current ? 'Dark' : 'Light';
-              dev.theme(d.props.theme);
-            }),
-          ),
-      )
-      .hr();
+    dev.section('Properties', (dev) => {
+      dev
+        .boolean((btn) =>
+          btn
+            .label('defaults.clipboard')
+            .value((e) => e.state.props.defaults?.clipboard)
+            .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
+        )
+        .boolean((btn) =>
+          btn
+            .label('defaults.monospace')
+            .value((e) => e.state.props.defaults?.monospace)
+            .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
+        )
+        .boolean((btn) =>
+          btn
+            .label((e) => `theme: "${e.state.props.theme}"`)
+            .value((e) => e.state.props.theme === 'Light')
+            .onClick((e) =>
+              e.change((d) => {
+                d.props.theme = e.current ? 'Dark' : 'Light';
+                dev.theme(d.props.theme);
+              }),
+            ),
+        )
+        .hr();
+    });
 
-    dev.title('Title').TODO().hr();
+    dev.section('Title', (dev) => {
+      dev.TODO().hr();
+    });
 
-    const items = (kind: SampleKind) => {
-      dev.button(`items: ${kind}`, (e) => Util.setSample(e.ctx, kind));
-    };
-    dev.title('Debug');
-    items('Empty');
-    items('Samples');
-    items('Builder');
-    dev.hr();
+    dev.section('Debug', (dev) => {
+      const items = (kind: SampleKind) => {
+        dev.button(`items: ${kind}`, (e) => Util.setSample(e.ctx, kind));
+      };
+      items('Empty');
+      items('Samples');
+      items('Builder');
+      dev.hr();
+    });
 
-    dev.title('FieldSelector');
+    dev.section('FieldSelector');
   });
 });
 

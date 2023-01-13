@@ -38,6 +38,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
 
   const api: t.DevTools<S> = {
     ctx,
+
     header: debug.header,
     footer: debug.footer,
     row: debug.row,
@@ -45,6 +46,21 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     /**
      * Helpers
      */
+    section(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.title(args[0]);
+        if (typeof args[1] === 'function') {
+          api.section(args[1]);
+        } else {
+          api.TODO();
+        }
+      }
+      if (typeof args[0] === 'function') {
+        args[0](api);
+      }
+      return api;
+    },
+
     async change(fn) {
       const state = _state || (_state = await ctx.state(initial));
       return state.change(fn);

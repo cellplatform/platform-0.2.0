@@ -1,6 +1,7 @@
 import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
+type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
 
 /**
  * Index of development tools (UI widgets).
@@ -18,6 +19,10 @@ export type DevTools<S extends O = O> = {
    */
   lorem(words?: number, endWith?: string): string;
   theme(value: t.DevTheme): DevTools<S>;
+
+  // NB: Useful for logically grouping blocks.
+  section(title: string, fn?: SectionHandler<S>): DevTools<S>;
+  section(fn: SectionHandler<S>): DevTools<S>;
 
   /**
    * Widgets.
