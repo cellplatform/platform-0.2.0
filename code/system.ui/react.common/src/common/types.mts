@@ -23,10 +23,11 @@ export type {
   DevCtxState,
   DevEvents,
   DevInfo,
-  DevValueHandler,
+  DevCtxDebug,
   DevCtxDebugHeader,
   DevCtxDebugFooter,
   DevTheme,
+  DevValueHandler,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**

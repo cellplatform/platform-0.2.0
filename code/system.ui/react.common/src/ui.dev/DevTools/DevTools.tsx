@@ -40,6 +40,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     ctx,
     header: debug.header,
     footer: debug.footer,
+    row: debug.row,
 
     /**
      * Helpers

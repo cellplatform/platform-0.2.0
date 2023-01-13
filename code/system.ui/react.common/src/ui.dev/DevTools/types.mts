@@ -11,6 +11,7 @@ export type DevTools<S extends O = O> = {
 
   header: t.DevCtxDebugHeader;
   footer: t.DevCtxDebugFooter;
+  row: t.DevCtxDebug['row'];
 
   /**
    * Helpers.

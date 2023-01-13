@@ -43,7 +43,7 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.hr();
 
-    dev.ctx.debug.row((e) => {
+    dev.row((e) => {
       return <RunnerCompact />;
     });
   });
