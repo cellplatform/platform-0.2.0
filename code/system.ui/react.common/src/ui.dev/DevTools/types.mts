@@ -29,8 +29,8 @@ export type DevTools<S extends O = O> = {
   title(text: string, style?: t.DevTitleStyle): DevTools<S>;
   title(fn: t.DevTitleHandler<S>): DevTools<S>;
 
-  todo(text?: string, style?: t.DevTodoStyle): DevTools<S>;
-  todo(fn: t.DevTodoHandler<S>): DevTools<S>;
+  TODO(text?: string, style?: t.DevTodoStyle): DevTools<S>;
+  TODO(fn: t.DevTodoHandler<S>): DevTools<S>;
 
   hr(): DevTools<S>;
 };

@@ -35,7 +35,8 @@ const View: React.FC<TodoProps> = (props) => {
 
   const elMessage = (
     <div>
-      <span {...styles.todo}>TODO:</span> <span {...styles.text}>{text}</span>
+      <span {...styles.todo}>{isEmpty ? 'TODO' : 'TODO:'}</span>{' '}
+      <span {...styles.text}>{text}</span>
     </div>
   );
 
@@ -52,8 +53,7 @@ const View: React.FC<TodoProps> = (props) => {
  */
 const Wrangle = {
   text(props: TodoProps) {
-    const text = (props.text || '').trim();
-    return text || DEFAULT.text;
+    return (props.text || '').trim();
   },
   isEmpty(props: TodoProps) {
     return !Boolean((props.text || '').trim());

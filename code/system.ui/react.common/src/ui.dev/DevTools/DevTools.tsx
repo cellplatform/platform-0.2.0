@@ -88,12 +88,12 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
-    todo(...args: any[]) {
+    TODO(...args: any[]) {
       if (args.length === 0) {
-        return api.todo('');
+        return api.TODO('');
       }
       if (typeof args[0] === 'string') {
-        api.todo((title) => title.text(args[0]).style(args[1]));
+        api.TODO((title) => title.text(args[0]).style(args[1]));
       }
       if (typeof args[0] === 'function') {
         DevTools.todo<S>(events, ctx, initial, args[0]);

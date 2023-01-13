@@ -5,7 +5,4 @@ const style: Required<t.DevTodoStyle> = {
   margin: [6, 0, 6, 0],
 };
 
-export const DEFAULT = {
-  text: 'empty',
-  style,
-} as const;
+export const DEFAULT = { style } as const;

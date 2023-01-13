@@ -9,6 +9,6 @@ export default Dev.describe('Todo', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools(e);
-    dev.title('TODO (Placeholder)').hr().todo('Do this thing').todo();
+    dev.title('TODO (Placeholder)').hr().TODO('Do this thing').TODO();
   });
 });
