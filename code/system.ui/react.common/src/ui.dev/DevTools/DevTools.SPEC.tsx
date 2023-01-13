@@ -82,6 +82,8 @@ export default Dev.describe('DevTools', (e) => {
         );
 
       dev.hr();
+
+      dev.section('Section (Pending)');
     });
   });
 });
