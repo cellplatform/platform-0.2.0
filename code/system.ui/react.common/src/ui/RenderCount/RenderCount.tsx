@@ -6,11 +6,12 @@ type N = number | null;
 export type RenderCountProps = {
   absolute?: [N, N] | [N, N, N, N];
   prefix?: string;
+  theme?: t.CommonTheme;
   style?: t.CssValue;
 };
 
 export const RenderCount: React.FC<RenderCountProps> = (props) => {
-  const { prefix = 'render-' } = props;
+  const { prefix = 'render-', theme = 'Light' } = props;
   const countRef = useRef(0);
   countRef.current++;
 
@@ -21,8 +22,8 @@ export const RenderCount: React.FC<RenderCountProps> = (props) => {
     base: css({
       Absolute: Wrangle.absolute(props.absolute),
       pointerEvents: 'none',
-      color: COLORS.DARK,
       fontSize: 11,
+      color: theme === 'Dark' ? COLORS.WHITE : COLORS.DARK,
       opacity: 0.6,
     }),
   };

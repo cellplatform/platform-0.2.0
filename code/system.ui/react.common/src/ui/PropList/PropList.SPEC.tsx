@@ -87,12 +87,12 @@ export default Dev.describe('PropList', (e) => {
     });
 
     dev.section('Debug', (dev) => {
-      const items = (kind: SampleKind) => {
+      const button = (kind: SampleKind) => {
         dev.button(`items: ${kind}`, (e) => Util.setSample(e.ctx, kind));
       };
-      items('Empty');
-      items('Samples');
-      items('Builder');
+      button('Empty');
+      button('Samples');
+      button('Builder');
       dev.hr();
     });
 
