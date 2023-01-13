@@ -61,7 +61,7 @@ export default Dev.describe('Text', (e) => {
           if (utterance.text) await utter(utterance.text);
         };
 
-        const BY = 0.25;
+        const BY = 0.1;
         dev.button('increment (+)', (e) => adjustPitch(BY));
         dev.button('increment (-)', (e) => adjustPitch(0 - BY));
       });
