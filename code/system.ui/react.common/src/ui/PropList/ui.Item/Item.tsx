@@ -25,7 +25,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       PaddingY: 4,
       fontSize: DEFAULTS.fontSize,
       borderBottom: `solid 1px ${theme.color.alpha(isLast ? 0 : 0.1)}`,
-      ':last-child': { border: 'none' },
+      ':last-child': { border: 'none', paddingBottom: 0 },
     }),
   };
 

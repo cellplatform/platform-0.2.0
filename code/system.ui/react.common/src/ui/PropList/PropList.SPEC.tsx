@@ -1,9 +1,10 @@
-import { t, Dev } from '../../test.ui';
 import { PropList } from '.';
-import { sampleItems, BuilderSample } from './dev';
+import { Dev, t } from '../../test.ui';
+import { BuilderSample, sampleItems } from './dev';
+
 import type { MyFields } from './dev';
 
-type SampleKind = 'Samples' | 'Builder';
+type SampleKind = 'Samples' | 'Builder' | 'Empty';
 type T = {
   props: t.PropListProps;
   debug: {
@@ -23,11 +24,9 @@ const initial: T = {
     titleEllipsis: true,
     defaults: { clipboard: false },
     theme: 'Light',
-    // theme: 'Dark',
   },
   debug: {
     source: 'Samples',
-    // source: 'Builder',
     fieldSelector: {
       title: true,
       resettable: PropList.FieldSelector.DEFAULT.resettable,
@@ -39,38 +38,59 @@ const initial: T = {
 export default Dev.describe('PropList', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
+    await Util.setSample(ctx, state.current.debug.source);
+
     ctx.component
       .display('grid')
-      .backgroundColor(1)
       .size(250, null)
-      .render<T>((e) => <PropList />);
+      .render<T>((e) => <PropList {...e.state.props} />);
   });
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.ctx.debug.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.ObjectView name={'state'} data={e.state} />);
+    dev.footer.border(-0.1).render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} />);
 
     dev
-      .title('Defaults')
+      .title('Properties')
       .boolean((btn) =>
         btn
-          .label('clipboard')
+          .label('defaults.clipboard')
           .value((e) => e.state.props.defaults?.clipboard)
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
       )
       .boolean((btn) =>
         btn
-          .label('monospace')
+          .label('defaults.monospace')
           .value((e) => e.state.props.defaults?.monospace)
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
       )
+      .boolean((btn) =>
+        btn
+          .label((e) => `theme: "${e.state.props.theme}"`)
+          .value((e) => e.state.props.theme === 'Light')
+          .onClick((e) =>
+            e.change((d) => {
+              d.props.theme = e.current ? 'Dark' : 'Light';
+              dev.theme(d.props.theme);
+            }),
+          ),
+      )
       .hr();
 
-    dev.title('Title').hr();
+    dev.title('Title').TODO().hr();
+
+    const items = (kind: SampleKind) => {
+      dev.button(`items: ${kind}`, (e) => Util.setSample(e.ctx, kind));
+    };
+    dev.title('Debug');
+    items('Empty');
+    items('Samples');
+    items('Builder');
+    dev.hr();
+
+    dev.title('FieldSelector');
   });
 });
 
@@ -79,8 +99,17 @@ export default Dev.describe('PropList', (e) => {
  */
 
 const Util = {
-  toItems(ctx: T) {
-    const { source, fields } = ctx.debug;
+  async setSample(ctx: t.DevCtx, source: SampleKind) {
+    const state = await ctx.state<T>(initial);
+    state.change((d) => {
+      d.debug.source = source;
+      d.props.items = Util.toItems(d);
+    });
+  },
+
+  toItems(state: T) {
+    const { source, fields } = state.debug;
+    if (source === 'Empty') return [];
     if (source === 'Samples') return sampleItems;
     if (source === 'Builder') return BuilderSample.toItems({ fields });
     return [];
