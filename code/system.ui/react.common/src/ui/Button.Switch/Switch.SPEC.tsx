@@ -20,7 +20,7 @@ export default Dev.describe('Switch (Button)', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => <Dev.ObjectView name={'info'} data={e.state} />);
+    dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'info'} data={e.state} />);
 
     dev
       .button('toggle: `isEnabled`', (e) => {

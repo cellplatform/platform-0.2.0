@@ -14,7 +14,7 @@ export default Dev.describe('MeasureSize', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.ObjectView name={'result'} data={e.state} expand={5} />);
+      .render<T>((e) => <Dev.Object name={'result'} data={e.state} expand={5} />);
 
     const measure = async (props: t.MeasureSizeProps) => {
       const size = await Measure.size(props);

@@ -22,9 +22,7 @@ export default Dev.describe('DevTools', (e) => {
     /**
      * Header/Footer bars.
      */
-    debug.footer
-      .border(-0.15)
-      .render((e) => <Dev.ObjectView data={e.state} style={{ margin: 8 }} />);
+    debug.footer.border(-0.15).render((e) => <Dev.Object data={e.state} style={{ margin: 8 }} />);
 
     dev.title('DevTools', { margin: 0 }).hr();
 
@@ -75,7 +73,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
   };
   return (
     <div {...styles.base}>
-      <Dev.ObjectView name={'state'} data={props.state} />
+      <Dev.Object name={'state'} data={props.state} />
       <RenderCount />
     </div>
   );

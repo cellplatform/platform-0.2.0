@@ -29,7 +29,7 @@ export default Dev.describe('Title', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.ObjectView name={'props'} data={e.state.props} expand={2} />);
+      .render<T>((e) => <Dev.Object name={'props'} data={e.state.props} expand={2} />);
 
     dev
       .title((title) =>
