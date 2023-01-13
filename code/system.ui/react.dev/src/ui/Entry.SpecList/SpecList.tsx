@@ -1,5 +1,6 @@
 import { Color, COLORS, css, t } from '../common';
 import { SpecListTitle } from './SpecList.Title';
+import { SpecListFooter } from './SpecList.Footer';
 
 const KEY = { DEV: 'dev' };
 
@@ -22,13 +23,13 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       fontFamily: 'sans-serif',
       lineHeight: '2em',
-      padding: 30,
       color: COLORS.DARK,
       cursor: 'default',
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      paddingBottom: 80,
+      padding: 30,
     }),
     ul: css({}),
     hr: css({
@@ -73,6 +74,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <SpecListTitle title={props.title} version={props.version} badge={props.badge} />
       {elList}
+      <SpecListFooter />
     </div>
   );
 };
