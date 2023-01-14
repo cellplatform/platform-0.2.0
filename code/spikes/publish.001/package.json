@@ -9,6 +9,7 @@
     "build": "ts-node-esm  -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm  -T ../../../script.ts/cmd.clean.mts",
     "bundle": "ts-node-esm -T ./script/bundle.mts",
+    "bundle.clean": "rm -rf public/data",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
     "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
