@@ -1,6 +1,9 @@
-import { css, Processor, R, Spec } from '../../test.ui';
+import { Dev, css, Processor, R } from '../../test.ui';
 import { Icons } from '../Icons.mjs';
 import { TileOutline } from './index.mjs';
+
+type T = { count: number };
+const initial: T = { count: 0 };
 
 const markdown = `
 
@@ -19,9 +22,10 @@ const markdown = `
 
 `;
 
-export default Spec.describe('Spinner', (e) => {
+export default Dev.describe('TileOutline', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
+    const ctx = Dev.ctx(e);
+    await ctx.state<T>(initial);
     const md = await Processor.toMarkdown(markdown);
 
     ctx.component.render(() => (
@@ -49,5 +53,14 @@ export default Spec.describe('Spinner', (e) => {
         }}
       />
     ));
+  });
+
+  e.it('debug panel', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
+
+    dev.section('TileOutine');
   });
 });
