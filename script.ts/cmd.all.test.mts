@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, fs, pc, Util, LogTable, Time, R, ora } from './common';
+import { Builder, fs, pc, Util, LogTable, Time, R, ora } from './common/index.mjs';
 
 type Milliseconds = number;
 
