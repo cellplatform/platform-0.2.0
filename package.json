@@ -3,15 +3,16 @@
   "version": "0.2.1-alpha",
   "type": "module",
   "scripts": {
-    "build": "ts-node-esm -T script.ts/cmd.all.build.mts",
-    "test": "ts-node-esm  -T script.ts/cmd.all.test.mts",
-    "clean": "ts-node-esm  -T script.ts/cmd.all.clean.mts",
-    "ls": "ts-node-esm  -T script.ts/cmd.all.list.mts",
-    "ci": "yarn audit && yarn build && yarn test",
+    "build": "ts-node-esm   -T script.ts/cmd.all.build.mts",
+    "test": "ts-node-esm    -T script.ts/cmd.all.test.mts",
+    "clean": "ts-node-esm   -T script.ts/cmd.all.clean.mts",
+    "ls": "ts-node-esm      -T script.ts/cmd.all.list.mts",
+    "count": "ts-node-esm   -T script.ts/cmd.count.mts",
+    "nuke": "ts-node-esm    -T script.ts/cmd.nuke.mts",
+    "tmp": "ts-node-esm     -T script.ts/tmp.mts",
+    "ext": "ts-node-esm     -T script.ts/tmp.ext.mts",
     "mit": "fossa analyze --debug",
-    "nuke": "ts-node-esm  -T script.ts/cmd.nuke.mts",
-    "tmp": "ts-node-esm   -T script.ts/tmp.mts",
-    "ext": "ts-node-esm -T script.ts/tmp.ext.mts"
+    "ci": "yarn audit && yarn build && yarn test"
   },
   "workspaces": {
     "packages": [
