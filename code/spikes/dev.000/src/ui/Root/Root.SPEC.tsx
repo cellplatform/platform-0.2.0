@@ -21,6 +21,6 @@ export default Dev.describe('suite', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
 
-    dev.title('dev.spike: Root (Entry)').hr();
+    dev.title('Root (Entry)').hr();
   });
 });
