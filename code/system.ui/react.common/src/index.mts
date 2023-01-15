@@ -11,7 +11,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Button } from './ui/Button';
 export { Switch } from './ui/Button.Switch';
 
-export { Dev, DevTools } from './ui.dev';
+export { Dev, DevTools, Spec } from './ui.dev';
 
 /**
  * Common up-stream modules.
