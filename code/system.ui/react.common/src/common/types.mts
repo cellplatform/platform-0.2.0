@@ -28,6 +28,8 @@ export type {
   DevCtxDebugFooter,
   DevTheme,
   DevValueHandler,
+  DevRenderRef,
+  DevRenderer,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**

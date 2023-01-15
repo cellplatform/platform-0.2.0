@@ -1,6 +1,6 @@
 import { PropList } from '.';
 import { Dev, t } from '../../test.ui';
-import { BuilderSample, sampleItems } from './dev';
+import { BuilderSample, sampleItems, SampleFields } from './dev';
 
 import type { MyFields } from './dev';
 
@@ -49,6 +49,7 @@ export default Dev.describe('PropList', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const ctx = dev.ctx;
 
     dev.footer
       .border(-0.1)
@@ -90,7 +91,8 @@ export default Dev.describe('PropList', (e) => {
 
     dev.section('Debug', (dev) => {
       const button = (kind: SampleKind) => {
-        dev.button(`items: ${kind}`, (e) => Util.setSample(e.ctx, kind));
+        const label = `items: ${kind}`;
+        dev.button(label, (e) => Util.setSample(e.ctx, kind));
       };
       button('Empty');
       button('Samples');
@@ -98,7 +100,36 @@ export default Dev.describe('PropList', (e) => {
       dev.hr();
     });
 
-    dev.section('FieldSelector');
+    dev.section((dev) => {
+      const bool = (key: keyof T['debug']['fieldSelector']) =>
+        dev.boolean((btn) => {
+          btn
+            .label(`FieldSelector.${key}`)
+            .value((e) => e.state.debug.fieldSelector[key])
+            .onClick((e) => e.change((d) => (d.debug.fieldSelector[key] = !e.current)));
+        });
+      bool('title');
+      bool('showIndexes');
+      bool('resettable');
+
+      dev.row((e) => {
+        const debug = e.state.debug;
+        const fieldSelector = debug.fieldSelector;
+        const props: t.PropListFieldSelectorProps<MyFields> = {
+          all: SampleFields.all,
+          selected: debug.fields,
+          title: fieldSelector.title ? 'Field Selector' : undefined,
+          resettable: fieldSelector.resettable,
+          showIndexes: fieldSelector.showIndexes,
+          onClick(ev) {
+            console.log('⚡️ FieldSelector.onClick:', ev);
+            dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
+          },
+        };
+
+        return <PropList.FieldSelector {...props} style={{ Margin: [25, 25, 25, 38] }} />;
+      });
+    });
   });
 });
 
