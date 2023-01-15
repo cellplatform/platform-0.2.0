@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { fs, rimraf } from './common/index.mjs';
+import { fs, rimraf } from './common';
 
 function remove(path: string) {
   return new Promise<void>((resolve, reject) => {

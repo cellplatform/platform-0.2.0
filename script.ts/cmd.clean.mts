@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Builder, minimist } from './common/index.mjs';
+import { Builder, minimist } from './common';
 
 const dir = process.cwd();
 const argv = minimist(process.argv.slice(2));
