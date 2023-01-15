@@ -76,23 +76,23 @@ export type DevCtxHost = {
 /**
  * Debug Panel
  */
-export type DevCtxDebug = {
-  row<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
+export type DevCtxDebug<S extends O = O> = {
+  row<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
   scroll(value: boolean): DevCtxDebug;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
   width(value: number): DevCtxDebug;
-  header: DevCtxDebugHeader;
-  footer: DevCtxDebugFooter;
+  header: DevCtxDebugHeader<S>;
+  footer: DevCtxDebugFooter<S>;
 };
 
-export type DevCtxDebugHeader = {
-  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
+export type DevCtxDebugHeader<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
   border(color: Color | null): DevCtxDebugHeader;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebugHeader;
 };
 
-export type DevCtxDebugFooter = {
-  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
+export type DevCtxDebugFooter<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
   border(color: Color | null): DevCtxDebugFooter;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebugFooter;
 };
