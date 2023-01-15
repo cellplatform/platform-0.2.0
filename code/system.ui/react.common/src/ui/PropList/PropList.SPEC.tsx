@@ -41,7 +41,7 @@ export default Dev.describe('PropList', (e) => {
     const state = await ctx.state<T>(initial);
     await Util.setSample(ctx, state.current.debug.source);
 
-    ctx.component
+    ctx.subject
       .display('grid')
       .size(250, null)
       .render<T>((e) => <PropList {...e.state.props} />);

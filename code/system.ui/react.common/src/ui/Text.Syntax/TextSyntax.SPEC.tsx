@@ -32,7 +32,7 @@ export default Dev.describe('Test.syntax', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component.display('grid').render<T>((e) => {
+    ctx.subject.display('grid').render<T>((e) => {
       const { props, debug } = e.state;
       Dev.theme(ctx, props.theme);
 

@@ -28,7 +28,7 @@ export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
  */
 export type DevCtx = {
   readonly dispose$: t.Observable<any>;
-  readonly component: DevCtxComponent;
+  readonly subject: DevCtxSubject;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
   readonly is: DevCtxIs;
@@ -55,14 +55,14 @@ export type DevCtxObject = {
 };
 
 /**
- * Main Component ("Subject")
+ * Main Component (aka. "the Subject")
  */
-export type DevCtxComponent = {
-  display(value: DevPropDisplay): DevCtxComponent;
-  backgroundColor(value?: Color): DevCtxComponent;
-  size(width?: number | null, height?: number | null): DevCtxComponent;
-  size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxComponent;
-  render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
+export type DevCtxSubject = {
+  display(value: DevPropDisplay): DevCtxSubject;
+  backgroundColor(value?: Color): DevCtxSubject;
+  size(width?: number | null, height?: number | null): DevCtxSubject;
+  size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxSubject;
+  render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxSubject;
 };
 
 /**

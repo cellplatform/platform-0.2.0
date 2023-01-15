@@ -11,7 +11,7 @@ export default Dev.describe('DevTools', (e) => {
 
     const state = await ctx.state<T>(initial);
 
-    ctx.component
+    ctx.subject
       .display('grid')
       .size(400, undefined)
       .backgroundColor(1)
@@ -76,7 +76,7 @@ export default Dev.describe('DevTools', (e) => {
               e.change((d) => {
                 d.theme = e.current ? 'Dark' : 'Light';
                 dev.theme(d.theme);
-                e.ctx.component.backgroundColor(d.theme === 'Dark' ? 0 : 1);
+                e.ctx.subject.backgroundColor(d.theme === 'Dark' ? 0 : 1);
               }),
             ),
         );

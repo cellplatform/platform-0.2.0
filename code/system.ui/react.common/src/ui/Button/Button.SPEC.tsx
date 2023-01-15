@@ -16,7 +16,7 @@ export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component
+    ctx.subject
       .display('grid')
       .render<T>((e) => <Button {...e.state.props} onClick={(e) => console.info('⚡️ onClick')} />);
   });

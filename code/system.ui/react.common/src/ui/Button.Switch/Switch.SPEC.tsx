@@ -8,7 +8,7 @@ export default Dev.describe('Switch (Button)', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    ctx.component.render<T>((e) => {
+    ctx.subject.render<T>((e) => {
       return (
         <Switch
           {...e.state.props}

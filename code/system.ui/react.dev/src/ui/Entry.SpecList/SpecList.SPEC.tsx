@@ -10,7 +10,7 @@ export default Spec.describe('SpecList', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
 
-    ctx.component
+    ctx.subject
       .size('fill')
       .backgroundColor(1)
       .render(async (e) => {

@@ -14,7 +14,7 @@ export default Dev.describe('Button', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component
+    ctx.subject
       .display('grid')
       .size(250, null)
       .render<T>((e) => <Button {...e.state.props} />);
@@ -44,7 +44,7 @@ export default Dev.describe('Button', (e) => {
             const count = e.state.count;
             return `change props: (props-${bg}) / state-${count}`;
           })
-          .onClick((e) => e.ctx.component.backgroundColor(1));
+          .onClick((e) => e.ctx.subject.backgroundColor(1));
       })
       /**
        * Shorthand: "label", "onClick" parameter declaration.

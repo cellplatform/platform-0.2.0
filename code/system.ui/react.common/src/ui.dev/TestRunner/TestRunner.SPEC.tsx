@@ -18,7 +18,7 @@ const root = Dev.describe('root spec', (e) => {
 export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    ctx.component
+    ctx.subject
       .size('fill')
       .display('grid')
       .backgroundColor(1)

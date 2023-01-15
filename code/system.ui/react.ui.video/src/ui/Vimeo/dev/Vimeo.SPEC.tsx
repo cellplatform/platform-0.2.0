@@ -19,7 +19,7 @@ export default Dev.describe('Vimeo Player', (e) => {
     const instance = { bus, id: `foo.${slug()}` };
     events = Vimeo.Events({ instance });
 
-    ctx.component.render(() => {
+    ctx.subject.render(() => {
       return (
         <Vimeo
           instance={instance}

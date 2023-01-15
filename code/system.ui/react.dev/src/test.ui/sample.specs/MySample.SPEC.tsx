@@ -14,7 +14,7 @@ export default Spec.describe('MySample', (e) => {
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
 
-    ctx.component
+    ctx.subject
       .size(300, 140)
       .display('flex')
       .backgroundColor('rgba(255, 0, 0, 0.1)' /* RED */)
@@ -26,7 +26,7 @@ export default Spec.describe('MySample', (e) => {
             text={text}
             state={e.state}
             onClick={() => {
-              ctx.component.backgroundColor(1);
+              ctx.subject.backgroundColor(1);
               state.change((draft) => draft.count++);
             }}
           />
@@ -91,10 +91,10 @@ export default Spec.describe('MySample', (e) => {
 
     dev
       .hr()
-      .button((btn) => btn.label('size: 300, 140').onClick((e) => e.ctx.component.size(300, 140)))
-      .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.component.size('fill')))
-      .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.component.size('fill-x')))
-      .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.component.size('fill-y')))
+      .button((btn) => btn.label('size: 300, 140').onClick((e) => e.ctx.subject.size(300, 140)))
+      .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.subject.size('fill')))
+      .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.subject.size('fill-x')))
+      .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.subject.size('fill-y')))
       .hr();
 
     debug.row(<div>Host</div>);

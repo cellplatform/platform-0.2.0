@@ -4,7 +4,7 @@ import { css, Dev } from '..';
 export default Dev.describe('hook.useSizeObserver', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    ctx.component
+    ctx.subject
       .size('fill', 150)
       .display('flex')
       .backgroundColor(1)

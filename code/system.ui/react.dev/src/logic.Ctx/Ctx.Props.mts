@@ -34,7 +34,7 @@ export async function CtxProps(events: t.DevEvents) {
       return _revision > 0;
     },
     setters: {
-      component: CtxPropsComponent(propArgs),
+      subject: CtxPropsComponent(propArgs),
       host: CtxPropsHost(propArgs),
       debug: CtxPropsDebug(propArgs),
     },

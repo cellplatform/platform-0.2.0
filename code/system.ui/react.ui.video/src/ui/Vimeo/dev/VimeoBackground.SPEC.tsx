@@ -29,7 +29,7 @@ export default Dev.describe('VimeoBackground Player', (e) => {
       />
     );
 
-    ctx.component.size(800, 600).render(() => el);
+    ctx.subject.size(800, 600).render(() => el);
   });
 
   e.it('debug panel', (e) => {

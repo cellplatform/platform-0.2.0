@@ -66,7 +66,7 @@ describe('ValueHandler', () => {
     await Time.wait(0);
     expect(value.current).to.eql('display-unknown');
 
-    ctx.component.display('grid');
+    ctx.subject.display('grid');
     await Time.wait(30);
     expect(value.current).to.eql('display-grid');
 

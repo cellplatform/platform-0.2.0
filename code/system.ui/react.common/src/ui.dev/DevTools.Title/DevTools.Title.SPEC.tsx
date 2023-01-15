@@ -18,7 +18,7 @@ export default Dev.describe('Title', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component
+    ctx.subject
       .display('grid')
       .size(250, undefined)
       .render<T>((e) => <Title {...e.state.props} />);

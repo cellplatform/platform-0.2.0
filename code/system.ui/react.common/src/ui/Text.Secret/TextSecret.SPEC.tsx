@@ -14,7 +14,7 @@ export default Dev.describe('TextSecret', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component
+    ctx.subject
       .backgroundColor(1)
       .size(250, null)
       .render<T>((e) => <TextSecret {...e.state.props} />);

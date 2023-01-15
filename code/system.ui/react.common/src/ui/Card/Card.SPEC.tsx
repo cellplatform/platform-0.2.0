@@ -17,7 +17,7 @@ export default Dev.describe('Card', (e) => {
     await ctx.state<T>(initial);
 
     ctx.host.tracelineColor(-0.05);
-    ctx.component
+    ctx.subject
       .display('grid')
       .size(450, null)
       .render<T>((e) => {

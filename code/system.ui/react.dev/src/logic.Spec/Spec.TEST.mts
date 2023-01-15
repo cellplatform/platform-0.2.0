@@ -7,7 +7,7 @@ describe('Spec', () => {
     it('retrieve {ctx} from test args', async () => {
       const { ctx, dispose } = await TestSample.context();
 
-      expect(typeof ctx.component.render).to.eql('function');
+      expect(typeof ctx.subject.render).to.eql('function');
       expect(typeof ctx.toObject).to.eql('function');
 
       dispose();

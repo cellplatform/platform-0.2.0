@@ -9,7 +9,6 @@ describe('Context', () => {
   describe('lifecycle', () => {
     it('init', async () => {
       const { events, instance } = await TestSample.controller();
-
       const info = await events.info.get();
       expect(info.render.props).to.eql(undefined); // Initially no render-props data.
 
@@ -68,7 +67,7 @@ describe('Context', () => {
       expect(context.pending).to.eql(false);
 
       const ctx = context.ctx;
-      ctx.component.backgroundColor(-0.3);
+      ctx.subject.backgroundColor(-0.3);
 
       const info2 = await events.info.get();
       expect(info2.render.props).to.eql(undefined); // NB: Not flushed yet.
@@ -88,7 +87,7 @@ describe('Context', () => {
       const context1 = await Context.init(instance);
       const context2 = await Context.init(instance);
 
-      context1.ctx.component.backgroundColor(-0.1);
+      context1.ctx.subject.backgroundColor(-0.1);
       await context1.flush();
 
       // NB: Only one of the context has been flushed. Both yield the same updated data.
@@ -106,7 +105,7 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => null;
-      ctx.component.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
+      ctx.subject.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
 
       expect(context.pending).to.eql(true);
       await context.flush();
@@ -129,9 +128,9 @@ describe('Context', () => {
 
       const test = async (
         expected: t.DevRenderSize,
-        modify: (size: t.DevCtxComponent['size']) => void,
+        modify: (size: t.DevCtxSubject['size']) => void,
       ) => {
-        modify(ctx.component.size);
+        modify(ctx.subject.size);
         await context.flush();
         const info = await events.info.get();
         expect(info.render.props?.component.size).to.eql(expected);

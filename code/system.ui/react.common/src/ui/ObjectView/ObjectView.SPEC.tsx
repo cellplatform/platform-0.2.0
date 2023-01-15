@@ -9,7 +9,7 @@ const initial = {};
 export default Dev.describe('ObjectView', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    ctx.component.size(350, null).render<T>((e) => {
+    ctx.subject.size(350, null).render<T>((e) => {
       const props = e.state;
       return <ObjectView {...props} />;
     });

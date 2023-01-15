@@ -7,7 +7,7 @@ export function Wrapper() {
     e.it('init', async (e) => {
       const ctx = Spec.ctx(e);
 
-      ctx.component
+      ctx.subject
         .size(300, 140)
         .display('flex')
         .backgroundColor(1)
