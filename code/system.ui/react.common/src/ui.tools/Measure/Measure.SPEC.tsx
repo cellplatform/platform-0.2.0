@@ -1,4 +1,4 @@
-import { Measure, type MeasureSizeProps } from '.';
+import { Measure, MeasureSizeProps } from '.';
 import { Dev, t } from '../../test.ui';
 
 type T = {
@@ -8,6 +8,11 @@ type T = {
 const initial: T = {};
 
 export default Dev.describe('MeasureSize', (e) => {
+  e.it('init', async (e) => {
+    const ctx = Dev.ctx(e);
+    await ctx.state<T>(initial);
+  });
+
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
@@ -24,6 +29,7 @@ export default Dev.describe('MeasureSize', (e) => {
       });
     };
 
+    dev.title('Measure <Component> Size').hr();
     dev.button('measure: "hello"', () => measure({ content: 'hello' }));
     dev.button('measure: "hello" (big)', () => measure({ content: 'hello', fontSize: 90 }));
     dev.hr();
