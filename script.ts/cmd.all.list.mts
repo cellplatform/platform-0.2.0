@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { fs, LogTable, pc, Util, Builder, minimist } from './common';
+import { fs, LogTable, pc, Util, Builder, minimist } from './common/index.mjs';
 
 const argv = minimist(process.argv.slice(2));
 const sortOrder = argv.topo ? 'Topological' : 'Alpha';

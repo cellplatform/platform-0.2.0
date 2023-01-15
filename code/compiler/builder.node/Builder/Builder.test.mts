@@ -1,4 +1,4 @@
-import { execa, t } from '../common';
+import { execa, t } from '../common/index.mjs';
 
 /**
  * Execute unit-tests within the target module directory.

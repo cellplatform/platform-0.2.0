@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { t, fs } from './common';
+import { t, fs } from './common/index.mjs';
 
 /**
  * Paths.

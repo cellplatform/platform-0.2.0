@@ -1,4 +1,4 @@
-import { fs, t } from './common';
+import { fs, t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 type TemplateKind = 'config' | 'esm.json' | 'entry:src' | 'entry:html';

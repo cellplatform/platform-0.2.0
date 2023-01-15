@@ -2,7 +2,7 @@
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
-import { asArray, fs, R, t, Util } from './common';
+import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 import type { RollupOptions, ManualChunksOption } from 'rollup';
