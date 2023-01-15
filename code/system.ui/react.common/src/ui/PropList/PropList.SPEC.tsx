@@ -55,31 +55,33 @@ export default Dev.describe('PropList', (e) => {
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
     dev.section('Properties', (dev) => {
-      dev
-        .boolean((btn) =>
-          btn
-            .label('defaults.clipboard')
-            .value((e) => e.state.props.defaults?.clipboard)
-            .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
-        )
-        .boolean((btn) =>
-          btn
-            .label('defaults.monospace')
-            .value((e) => e.state.props.defaults?.monospace)
-            .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
-        )
-        .boolean((btn) =>
-          btn
-            .label((e) => `theme: "${e.state.props.theme}"`)
-            .value((e) => e.state.props.theme === 'Light')
-            .onClick((e) =>
-              e.change((d) => {
-                d.props.theme = e.current ? 'Dark' : 'Light';
-                dev.theme(d.props.theme);
-              }),
-            ),
-        )
-        .hr();
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `theme: "${e.state.props.theme}"`)
+          .value((e) => e.state.props.theme === 'Light')
+          .onClick((e) =>
+            e.change((d) => {
+              d.props.theme = e.current ? 'Dark' : 'Light';
+              dev.theme(d.props.theme);
+            }),
+          ),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('defaults.clipboard')
+          .value((e) => e.state.props.defaults?.clipboard)
+          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'clipboard'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('defaults.monospace')
+          .value((e) => e.state.props.defaults?.monospace)
+          .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
+      );
+
+      dev.hr();
     });
 
     dev.section('Title', (dev) => {
