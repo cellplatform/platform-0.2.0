@@ -9,6 +9,20 @@ export default Dev.describe('Todo', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools(e);
-    dev.title('TODO (Placeholder)').hr().TODO('Do this thing').TODO();
+    dev
+      //
+      .title('TODO (Placeholder)')
+      .hr()
+      .TODO()
+      .TODO('Do this single-line thing')
+      .TODO(`Long single-line thing ${Dev.Lorem.toString()}`).TODO(`
+
+      Multiline markdown comments:
+
+      - one
+      - two
+      - three
+    
+    `);
   });
 });
