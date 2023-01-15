@@ -1,4 +1,4 @@
-import { fs, t } from '../common/index.mjs';
+import { fs, t } from '../common';
 import { Paths } from '../Paths.mjs';
 
 /**

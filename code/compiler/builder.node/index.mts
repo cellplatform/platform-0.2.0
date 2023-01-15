@@ -1,2 +1,2 @@
-export { fs } from './common/index.mjs';
+export { fs } from './common';
 export { Builder } from './Builder/index.mjs';

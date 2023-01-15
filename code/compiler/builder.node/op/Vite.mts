@@ -1,7 +1,7 @@
 import { build } from 'vite';
 import type { UserConfigFn, ConfigEnv } from 'vite';
 
-import { fs, t, Util, R } from '../common/index.mjs';
+import { fs, t, Util, R } from '../common';
 import { Template } from '../Template.mjs';
 import { Paths } from '../Paths.mjs';
 import { Config } from '../Config.mjs';

@@ -1,4 +1,4 @@
-import { fs, t, Util } from '../common/index.mjs';
+import { fs, t, Util } from '../common';
 import { Paths } from '../Paths.mjs';
 import { Vite } from './Vite.mjs';
 

@@ -1,4 +1,4 @@
-import { R, t, Util } from '../common/index.mjs';
+import { R, t, Util } from '../common';
 import { Paths } from '../Paths.mjs';
 
 const PackageJson = Util.PackageJson;

@@ -1,4 +1,4 @@
-import { FindUtil as Find, PackageJsonUtil as PackageJson } from '../common/index.mjs';
+import { FindUtil as Find, PackageJsonUtil as PackageJson } from '../common';
 import { Dependencies } from '../op/Dependencies.mjs';
 import { Paths } from '../Paths.mjs';
 import { build } from './Builder.build.mjs';
