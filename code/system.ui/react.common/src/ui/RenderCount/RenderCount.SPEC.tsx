@@ -2,25 +2,45 @@ import { Dev } from '../../test.ui';
 import { css, t } from '../common';
 import { RenderCount } from '.';
 
-type T = { count: number };
-const initial: T = { count: 0 };
+import type { RenderCountProps } from '.';
+
+type T = { count: number; props: RenderCountProps };
+const initial: T = { count: 0, props: {} };
 
 export default Dev.describe('RenderCount', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
+    await ctx.state<T>(initial);
     ctx.component
       .display('grid')
       .size(250, 30)
-      .render<T>(() => (
+      .render<T>((e) => (
         <Sample>
-          <RenderCount />
+          <RenderCount {...e.state.props} />
         </Sample>
       ));
   });
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.button('redraw', (e) => e.change((d) => d.count++));
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+
+    dev.section('Actions', (dev) => {
+      dev.button('redraw', (e) => e.change((d) => d.count++));
+      dev.hr();
+    });
+
+    dev.section('Properties', (dev) => {
+      const absolute = (value?: RenderCountProps['absolute']) => {
+        const label = `absolute: \`${value ?? 'undefined'}\``;
+        dev.button(label, (e) => e.change((d) => (d.props.absolute = value)));
+      };
+      absolute(undefined);
+      absolute([-20, 5]);
+      dev.hr();
+    });
   });
 });
 
