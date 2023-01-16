@@ -22,7 +22,7 @@ const badge = {
 
   if (isDev) {
     const { Dev } = await import('./index');
-    const el = await Dev.render(Pkg, Specs, { badge });
+    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
     root.render(el);
   } else {
     const { RootFill } = await import('../ui/Root');
