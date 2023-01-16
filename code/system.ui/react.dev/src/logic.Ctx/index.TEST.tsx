@@ -76,7 +76,7 @@ describe('Context', () => {
       await context.flush();
 
       const info3 = await events.info.get();
-      expect(info3.render.props?.component.backgroundColor).to.eql(-0.3);
+      expect(info3.render.props?.subject.backgroundColor).to.eql(-0.3);
       expect(context.pending).to.eql(false);
 
       dispose();
@@ -91,8 +91,8 @@ describe('Context', () => {
       await context1.flush();
 
       // NB: Only one of the context has been flushed. Both yield the same updated data.
-      expect(context1.toObject().props.component.backgroundColor).to.eql(-0.1);
-      expect(context2.toObject().props.component.backgroundColor).to.eql(-0.1);
+      expect(context1.toObject().props.subject.backgroundColor).to.eql(-0.1);
+      expect(context2.toObject().props.subject.backgroundColor).to.eql(-0.1);
 
       context1.dispose();
       context2.dispose();
@@ -112,13 +112,13 @@ describe('Context', () => {
       expect(context.pending).to.eql(false);
 
       const info = await events.info.get();
-      const component = info.render.props?.component!;
+      const subject = info.render.props?.subject!;
 
-      expect(component.backgroundColor).to.eql(-0.2);
-      expect(component.display).to.eql('flex');
-      expect(component.renderer?.fn).to.eql(fn);
-      expectRendererId(component.renderer?.id);
-      expect(component.size).to.eql({ mode: 'center', width: 10, height: 20 });
+      expect(subject.backgroundColor).to.eql(-0.2);
+      expect(subject.display).to.eql('flex');
+      expect(subject.renderer?.fn).to.eql(fn);
+      expectRendererId(subject.renderer?.id);
+      expect(subject.size).to.eql({ mode: 'center', width: 10, height: 20 });
       dispose();
     });
 
@@ -133,7 +133,7 @@ describe('Context', () => {
         modify(ctx.subject.size);
         await context.flush();
         const info = await events.info.get();
-        expect(info.render.props?.component.size).to.eql(expected);
+        expect(info.render.props?.subject.size).to.eql(expected);
       };
 
       await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));

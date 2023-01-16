@@ -6,7 +6,7 @@ type Color = string | number;
  * Rendering state produced by the props.
  */
 export type DevRenderProps = {
-  component: DevRenderPropsComponent;
+  subject: DevRenderPropsSubject;
   host: DevRenderPropsHost;
   debug: DevRenderPropsDebug;
 };
@@ -14,7 +14,7 @@ export type DevRenderProps = {
 /**
  * Main Component ("Subject")
  */
-export type DevRenderPropsComponent = {
+export type DevRenderPropsSubject = {
   renderer?: t.DevRendererRef<any>;
   size?: DevRenderSize;
   display?: t.DevPropDisplay;

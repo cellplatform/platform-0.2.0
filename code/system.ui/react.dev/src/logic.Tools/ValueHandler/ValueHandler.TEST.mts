@@ -60,7 +60,7 @@ describe('ValueHandler', () => {
     const ctx = await events.ctx.get();
 
     const value = ValueHandler<string, S>(events, { debounce: 0 }).handler((e) => {
-      return `display-${e.dev.component.display ?? 'unknown'}`;
+      return `display-${e.dev.subject.display ?? 'unknown'}`;
     });
 
     await Time.wait(0);

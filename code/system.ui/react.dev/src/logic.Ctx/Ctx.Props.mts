@@ -1,7 +1,7 @@
 import { filter } from 'rxjs/operators';
 
 import { DEFAULT, t } from './common';
-import { CtxPropsComponent } from './Ctx.Props.Component.mjs';
+import { CtxPropsSubject } from './Ctx.Props.Subject.mjs';
 import { CtxPropsDebug } from './Ctx.Props.Debug.mjs';
 import { CtxPropsHost } from './Ctx.Props.Host.mjs';
 
@@ -34,7 +34,7 @@ export async function CtxProps(events: t.DevEvents) {
       return _revision > 0;
     },
     setters: {
-      subject: CtxPropsComponent(propArgs),
+      subject: CtxPropsSubject(propArgs),
       host: CtxPropsHost(propArgs),
       debug: CtxPropsDebug(propArgs),
     },

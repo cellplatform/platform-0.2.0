@@ -2,17 +2,17 @@ import { Margin, t, Id } from './common';
 
 import type { PropArgs } from './common.types';
 
-export function CtxPropsComponent(props: PropArgs) {
+export function CtxPropsSubject(props: PropArgs) {
   const api: t.DevCtxSubject = {
     render(fn) {
       const id = Id.renderer.create();
-      props.current().component.renderer = { id, fn };
+      props.current().subject.renderer = { id, fn };
       props.changed();
       return api;
     },
 
     size(...args) {
-      const current = props.current().component;
+      const current = props.current().subject;
       current.size = undefined;
 
       if (args.length === 2 && (typeof args[0] === 'number' || typeof args[1] === 'number')) {
@@ -36,13 +36,13 @@ export function CtxPropsComponent(props: PropArgs) {
     },
 
     display(value) {
-      props.current().component.display = value;
+      props.current().subject.display = value;
       props.changed();
       return api;
     },
 
     backgroundColor(value) {
-      props.current().component.backgroundColor = value;
+      props.current().subject.backgroundColor = value;
       props.changed();
       return api;
     },

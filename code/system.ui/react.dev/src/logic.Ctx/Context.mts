@@ -93,7 +93,7 @@ export const Context = {
         if (!api.pending || api.disposed) return api;
         await events.props.change.fire((draft) => {
           const current = props.current;
-          draft.component = current.component;
+          draft.subject = current.subject;
           draft.host = current.host;
           draft.debug = current.debug;
         });

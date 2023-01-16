@@ -266,7 +266,7 @@ export function BusEvents(args: {
       });
     },
     async subject() {
-      const id = (await info.get()).render.props?.component.renderer?.id;
+      const id = (await info.get()).render.props?.subject.renderer?.id;
       if (id) redraw.fire(id);
       return id;
     },

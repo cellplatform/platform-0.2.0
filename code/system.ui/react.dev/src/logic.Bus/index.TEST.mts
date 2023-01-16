@@ -206,7 +206,7 @@ describe('DevBus', (e) => {
         expect(info3?.run.count).to.eql(3);
 
         expect(info3?.run?.results?.description).to.eql('MySample');
-        expect(info3?.render.props?.component.backgroundColor).to.eql(1);
+        expect(info3?.render.props?.subject.backgroundColor).to.eql(1);
 
         events.dispose();
       });
@@ -515,11 +515,11 @@ describe('DevBus', (e) => {
         expect(info1.render.revision.props).to.eql(0);
 
         await events.props.change.fire((draft) => {
-          draft.component.backgroundColor = -0.3;
+          draft.subject.backgroundColor = -0.3;
         });
 
         const info2 = await events.info.get();
-        expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
+        expect(info2.render.props?.subject.backgroundColor).to.eql(-0.3);
         expect(info2.render.revision.props).to.eql(1);
 
         events.dispose();

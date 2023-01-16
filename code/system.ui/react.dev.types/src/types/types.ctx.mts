@@ -55,7 +55,7 @@ export type DevCtxObject = {
 };
 
 /**
- * Main Component (aka. "the Subject")
+ * Component (aka. "the main Subject")
  */
 export type DevCtxSubject = {
   display(value: DevPropDisplay): DevCtxSubject;
@@ -66,7 +66,7 @@ export type DevCtxSubject = {
 };
 
 /**
- * Component Host ("Harness")
+ * Subject Component Host ("Harness")
  */
 export type DevCtxHost = {
   backgroundColor(value: Color | null): DevCtxHost;

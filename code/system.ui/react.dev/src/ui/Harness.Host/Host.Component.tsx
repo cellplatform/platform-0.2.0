@@ -10,7 +10,7 @@ export type HarnessHostComponentProps = {
 
 export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
   const { instance } = props;
-  const component = props.renderProps?.component;
+  const component = props.renderProps?.subject;
   const renderer = component?.renderer;
   const { element } = useRenderer(instance, renderer);
 

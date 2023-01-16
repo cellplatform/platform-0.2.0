@@ -10,9 +10,9 @@ export type HarnessHostGridProps = {
 
 export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
   const { renderProps, border } = props;
-  if (!renderProps?.component.renderer) return null;
+  if (!renderProps?.subject.renderer) return null;
 
-  const { size } = renderProps.component;
+  const { size } = renderProps.subject;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 

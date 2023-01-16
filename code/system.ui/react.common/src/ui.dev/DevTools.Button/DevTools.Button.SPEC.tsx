@@ -40,7 +40,7 @@ export default Dev.describe('Button', (e) => {
       .button((btn) => {
         return btn
           .label((e) => {
-            const bg = e.dev.component.backgroundColor ?? 0;
+            const bg = e.dev.subject.backgroundColor ?? 0;
             const count = e.state.count;
             return `change props: (props-${bg}) / state-${count}`;
           })

@@ -8,7 +8,7 @@ export const DEFAULT = {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
         tracelineColor: Color.alpha(COLORS.DARK, 0.1),
       },
-      component: {},
+      subject: {},
       debug: {
         width: 400,
         header: { border: {}, padding: [8, 8, 8, 8] },
