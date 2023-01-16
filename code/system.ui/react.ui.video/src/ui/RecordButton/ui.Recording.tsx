@@ -3,13 +3,12 @@ import { m } from 'framer-motion';
 import { AudioWaveform } from '../AudioWaveform';
 import { Icons } from '../Icons';
 import { Color, COLORS, css, t, transition } from './common';
-import { RecordButtonState } from './types';
 
 export type RecordingProps = {
   isEnabled: boolean;
   stream?: MediaStream;
   width: number;
-  state: RecordButtonState;
+  state: t.RecordButtonState;
   style?: t.CssValue;
   onClick?: () => void;
 };

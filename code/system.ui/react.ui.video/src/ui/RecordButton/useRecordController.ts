@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-
-import { type t } from './common';
-import { RecordButtonClickEventHandler, RecordButtonState } from './types';
 import { MediaStream } from '../MediaStream';
+
+import type { t } from './common';
 
 /**
  * Handles binding the process of recording a MediaStream to
@@ -17,14 +16,14 @@ export function useRecordController(args: {
   const { stream, filename } = args;
   const bus = args.bus as t.EventBus<t.MediaEvent>;
 
-  const [onClick, setOnClick] = useState<RecordButtonClickEventHandler>();
-  const [state, setState] = useState<RecordButtonState>('default');
+  const [onClick, setOnClick] = useState<t.RecordButtonClickEventHandler>();
+  const [state, setState] = useState<t.RecordButtonState>('default');
 
   useEffect(() => {
     const recorder = stream ? MediaStream.RecordController({ bus, stream }) : undefined;
     const events = MediaStream.Events(bus);
 
-    const handleClick: RecordButtonClickEventHandler = (e) => {
+    const handleClick: t.RecordButtonClickEventHandler = (e) => {
       if (!stream) return;
 
       const recordEvents = events.record(stream);

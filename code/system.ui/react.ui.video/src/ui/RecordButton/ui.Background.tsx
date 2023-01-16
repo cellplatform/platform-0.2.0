@@ -1,12 +1,11 @@
 import { m } from 'framer-motion';
 
 import { Color, COLORS, css, t, transition } from './common';
-import { RecordButtonState } from './types';
 
 export type BackgroundProps = {
   isEnabled: boolean;
   borderRadius: { root: number; inner: number };
-  state: RecordButtonState;
+  state: t.RecordButtonState;
   width: number;
   height: number;
   blur?: number;

@@ -1,15 +1,14 @@
 import { m } from 'framer-motion';
 
 import { COLORS, css, t, transition } from './common';
-import { RecordButtonAction, RecordButtonState } from './types';
 
 export type PausedProps = {
   isEnabled: boolean;
   width: number;
   height: number;
-  state: RecordButtonState;
+  state: t.RecordButtonState;
   style?: t.CssValue;
-  onClick?: (e: { action: RecordButtonAction }) => void;
+  onClick?: (e: { action: t.RecordButtonAction }) => void;
 };
 
 export const Paused: React.FC<PausedProps> = (props) => {
@@ -51,7 +50,7 @@ export const Paused: React.FC<PausedProps> = (props) => {
     },
   };
 
-  const clickHandler = (action: RecordButtonAction) => {
+  const clickHandler = (action: t.RecordButtonAction) => {
     return () => props.onClick?.({ action });
   };
 
@@ -64,7 +63,7 @@ export const Paused: React.FC<PausedProps> = (props) => {
   };
 
   const edgeButtonOuter = (
-    action: RecordButtonAction,
+    action: t.RecordButtonAction,
     style: t.CssValue,
     x: number,
     children: React.ReactNode,

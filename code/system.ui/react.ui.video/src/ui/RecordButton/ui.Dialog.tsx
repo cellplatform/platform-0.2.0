@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-
 import { css, t } from './common';
-import { RecordButtonDialog, RecordButtonState } from './types';
 
 export type DialogProps = {
-  data?: RecordButtonDialog;
+  data?: t.RecordButtonDialog;
   isEnabled: boolean;
-  state: RecordButtonState;
+  state: t.RecordButtonState;
   borderRadius: number;
   style?: t.CssValue;
 };

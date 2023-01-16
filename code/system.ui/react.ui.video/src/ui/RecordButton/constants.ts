@@ -1,4 +1,4 @@
-import type * as t from './types';
+import { t } from '../common.t';
 
 export const RecordButtonStates: t.RecordButtonState[] = [
   'default',

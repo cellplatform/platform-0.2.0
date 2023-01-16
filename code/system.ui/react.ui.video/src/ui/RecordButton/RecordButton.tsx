@@ -1,26 +1,20 @@
 import { domAnimation, LazyMotion } from 'framer-motion';
 
 import { css, t } from './common';
-import { Background } from './RecordButton.Background';
-import { Paused } from './RecordButton.Paused';
-import { Recording } from './RecordButton.Recording';
-import { Dialog } from './RecordButton.Dialog';
-import {
-  RecordButtonAction,
-  RecordButtonClickEventHandler,
-  RecordButtonState,
-  RecordButtonDialog,
-} from './types';
+import { Background } from './ui.Background';
+import { Paused } from './ui.Paused';
+import { Recording } from './ui.Recording';
+import { Dialog } from './ui.Dialog';
 
 export type RecordButtonProps = {
   bus: t.EventBus<any>;
   stream?: MediaStream;
   size?: 45;
-  state?: RecordButtonState;
+  state?: t.RecordButtonState;
   isEnabled?: boolean;
   style?: t.CssValue;
-  dialog?: RecordButtonDialog;
-  onClick?: RecordButtonClickEventHandler;
+  dialog?: t.RecordButtonDialog;
+  onClick?: t.RecordButtonClickEventHandler;
 };
 
 export const RecordButton: React.FC<RecordButtonProps> = (props) => {
@@ -51,10 +45,10 @@ export const RecordButton: React.FC<RecordButtonProps> = (props) => {
     }),
   };
 
-  const fireClick = (action?: RecordButtonAction) => {
+  const fireClick = (action?: t.RecordButtonAction) => {
     if (isEnabled) props.onClick?.({ current, action });
   };
-  const handleClick = (state: RecordButtonState[], action?: RecordButtonAction) => {
+  const handleClick = (state: t.RecordButtonState[], action?: t.RecordButtonAction) => {
     if (state.includes(current)) fireClick(action);
   };
 
