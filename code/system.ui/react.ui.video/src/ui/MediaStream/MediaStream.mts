@@ -1,9 +1,8 @@
-import { MediaStreamEvents } from './MediaStream.Events';
-import { MediaStreamController } from './MediaStream.Controller';
-import { MediaStreamRecordController } from './MediaStream.RecordController';
+import { MediaStreamEvents, MediaStreamController, MediaStreamRecordController } from './logic';
 import { useVideoStreamState, useOfflineState } from './hook';
-import { VideoStream, VideoStreamProps } from './VideoStream';
+import { VideoStream } from './ui.VideoStream';
 
+export type { VideoStreamProps } from './ui.VideoStream';
 export * from './types';
 
 export const MediaStream = {
@@ -24,5 +23,3 @@ export {
   useVideoStreamState,
   useOfflineState,
 };
-
-export type { VideoStreamProps };
