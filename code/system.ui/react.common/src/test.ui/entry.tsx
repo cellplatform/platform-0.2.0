@@ -13,6 +13,6 @@ import { Specs, DevSpecs, ExternalSpecs } from './entry.Specs.mjs';
     ...ExternalSpecs,
     ...DevSpecs,
   };
-  const el = await Dev.render(Pkg, specs);
+  const el = await Dev.render(Pkg, specs, { hrDepth: 3 });
   root.render(<StrictMode>{el}</StrictMode>);
 })();
