@@ -74,7 +74,7 @@ export type DevEvents = t.Disposable & {
   redraw: {
     $: t.Observable<t.DevRedraw>;
     fire(...renderers: Id[]): void;
-    component(): Promise<Id | undefined>;
+    subject(): Promise<Id | undefined>;
   };
 };
 

@@ -86,7 +86,7 @@ export default Spec.describe('MySample', (e) => {
     });
 
     dev.button((btn) => {
-      btn.label('redraw: component').onClick((e) => events.redraw.component());
+      btn.label('redraw: subject').onClick((e) => events.redraw.subject());
     });
 
     dev

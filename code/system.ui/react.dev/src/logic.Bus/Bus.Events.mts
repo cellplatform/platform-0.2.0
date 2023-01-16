@@ -265,7 +265,7 @@ export function BusEvents(args: {
         payload: { instance, renderers },
       });
     },
-    async component() {
+    async subject() {
       const id = (await info.get()).render.props?.component.renderer?.id;
       if (id) redraw.fire(id);
       return id;
