@@ -8,3 +8,5 @@ export const SampleSpecs = {
   'sample.DevTools': () => import('../test.ui/sample.DevTools/DevTools.SPEC'),
   'sample.Empty': () => import('../test.ui/sample.specs/Empty.SPEC'),
 };
+
+export default { ...ModuleSpecs, ...SampleSpecs };
