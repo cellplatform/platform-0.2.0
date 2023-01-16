@@ -24,6 +24,8 @@ export default Dev.describe('Text', (e) => {
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
 
     dev.section('Speech Synthesis Utterance 🤖 (W3C)', (dev) => {
+      if (typeof window.speechSynthesis !== 'object') return;
+
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance();
 

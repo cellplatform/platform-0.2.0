@@ -5,7 +5,7 @@ import Specs from './entry.Specs.mjs';
 /**
  * Run specs (headless)
  */
-describe('Specs', () => {
+describe('visual specs', () => {
   /**
    * Sample of testing the visual UI specs headlessly on the server.
    *

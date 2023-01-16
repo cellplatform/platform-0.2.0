@@ -1,25 +1,21 @@
 import { t, slug, rx, Time } from '../common';
 import { DevBus } from '../logic.Bus';
 
-type SpecResults = {
-  ok: boolean;
-  name: string;
-  results?: t.TestSuiteRunResponse;
-};
-
 type Milliseconds = number;
-type Response = { ok: boolean; elapsed: Milliseconds; specs: SpecResults[] };
+type Results = { ok: boolean; elapsed: Milliseconds; specs: ModuleResults[] };
+type ModuleResults = { ok: boolean; name: string; results?: t.TestSuiteRunResponse };
+type Imports = { [key: string]: () => t.BundleImport };
 
 /**
  * Run a set of tests headlessly.
  * Useful for running within a server-side test suite.
  */
-export async function headless(input: { [key: string]: () => t.BundleImport }) {
+export async function headless(input: Imports): Promise<Results> {
   const timer = Time.timer();
   const imports = Object.values(input);
 
-  const specs: SpecResults[] = [];
-  const response: Response = {
+  const specs: ModuleResults[] = [];
+  const response: Results = {
     ok: true,
     elapsed: 0,
     get specs() {
@@ -39,6 +35,11 @@ export async function headless(input: { [key: string]: () => t.BundleImport }) {
 
     const results = res.info?.run.results;
     const ok = results?.ok ?? false;
+
+    if (!ok) {
+      results;
+    }
+
     specs.push({ ok, name, results });
   });
 
