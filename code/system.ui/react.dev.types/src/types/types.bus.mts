@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 type Id = string;
 type SpecId = Id;
@@ -19,8 +19,14 @@ export type DevEvents = t.Disposable & {
     req$: t.Observable<t.DevInfoReq>;
     res$: t.Observable<t.DevInfoRes>;
     changed$: t.Observable<t.DevInfoChanged>;
-    fire(options?: { timeout?: Milliseconds }): Promise<DevInfoRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<t.DevInfoRes>;
     get(options?: { timeout?: Milliseconds }): Promise<t.DevInfo>;
+  };
+  ctx: {
+    req$: t.Observable<t.DevCtxReq>;
+    res$: t.Observable<t.DevCtxRes>;
+    fire(options?: { timeout?: Milliseconds }): Promise<t.DevCtxRes>;
+    get(options?: { timeout?: Milliseconds }): Promise<t.DevCtx>;
   };
   load: {
     req$: t.Observable<t.DevLoadReq>;
@@ -44,7 +50,7 @@ export type DevEvents = t.Disposable & {
       res$: t.Observable<t.DevStateChangeRes>;
       fire<T extends O>(
         initial: T,
-        mutate: t.DevInfoStateMutater<T>,
+        mutate: t.DevInfoStateMutater<T> | T,
         options?: { timeout?: Milliseconds },
       ): Promise<DevStateChangeRes>;
     };
@@ -68,7 +74,7 @@ export type DevEvents = t.Disposable & {
   redraw: {
     $: t.Observable<t.DevRedraw>;
     fire(...renderers: Id[]): void;
-    component(): Promise<Id | undefined>;
+    subject(): Promise<Id | undefined>;
   };
 };
 
@@ -78,6 +84,8 @@ export type DevEvents = t.Disposable & {
 export type DevEvent =
   | DevInfoReqEvent
   | DevInfoResEvent
+  | DevCtxReqEvent
+  | DevCtxResEvent
   | DevInfoChangedEvent
   | DevLoadReqEvent
   | DevLoadResEvent
@@ -117,6 +125,21 @@ export type DevInfoChangedEvent = {
   payload: DevInfoChanged;
 };
 export type DevInfoChanged = { instance: Id; info: t.DevInfo; message: t.DevInfoChangeMessage };
+
+/**
+ * Context: {ctx}
+ */
+export type DevCtxReqEvent = {
+  type: 'sys.dev/ctx:req';
+  payload: DevCtxReq;
+};
+export type DevCtxReq = { tx: string; instance: Id };
+
+export type DevCtxResEvent = {
+  type: 'sys.dev/ctx:res';
+  payload: DevCtxRes;
+};
+export type DevCtxRes = { tx: string; instance: Id; ctx?: t.DevCtx; error?: string };
 
 /**
  * Initialize (with Spec)
@@ -197,7 +220,7 @@ export type DevStateChangeReqEvent = {
 export type DevStateChangeReq = {
   tx: string;
   instance: Id;
-  mutate: t.DevInfoStateMutater<any>;
+  mutate: t.DevInfoStateMutater<O> | O;
   initial: O;
 };
 

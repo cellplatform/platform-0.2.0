@@ -1,4 +1,4 @@
-import { t } from './common/index.mjs';
+import { type t } from './common/index.mjs';
 import { FsDriverSpec as Driver } from './Driver.spec/index.mjs';
 
 export const Spec = {

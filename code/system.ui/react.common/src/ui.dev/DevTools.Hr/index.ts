@@ -1,2 +1,2 @@
 export * from './ui.Hr';
-export * from './DevTools.hr';
+export * from './DevTools.Hr';

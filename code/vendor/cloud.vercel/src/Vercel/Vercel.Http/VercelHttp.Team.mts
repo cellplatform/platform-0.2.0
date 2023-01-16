@@ -1,4 +1,4 @@
-import { t } from './common/index.mjs';
+import { type t } from './common/index.mjs';
 import { VercelHttpTeamDeployment } from './VercelHttp.Team.Deployment.mjs';
 import { VercelHttpTeamProject } from './VercelHttp.Team.Project.mjs';
 

@@ -1,8 +1,11 @@
-import { t, Spec } from '../common';
+import { Lorem } from '../../ui.tools';
+import { Dev, Spec, t } from '../common';
+import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
-
-import type { DevButtonHandler } from '../DevTools.Button/types.mjs';
+import { title } from '../DevTools.Title';
+import { todo } from '../DevTools.Todo';
+import { Helpers } from './Helpers.mjs';
 
 type O = Record<string, unknown>;
 
@@ -10,12 +13,15 @@ export const DevTools = {
   /**
    * Curried initializtation.
    */
-  init: curried,
+  init,
 
   /**
-   * Widgets
+   * Widgets.
    */
   button,
+  boolean,
+  title,
+  todo,
   hr,
 };
 
@@ -23,17 +29,92 @@ export const DevTools = {
  * [Helpers]
  */
 
-function curried<S extends O = O>(input: t.DevCtxInput, initial?: S) {
-  const state = initial ?? ({} as S);
+function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
+  const initial = initialState ?? ({} as S);
   const ctx = Spec.ctx(input);
-  const api = {
+  const debug = ctx.debug;
+  const events = Dev.Bus.events(input);
+  let _state: t.DevCtxState<S> | undefined;
+
+  const api: t.DevTools<S> = {
     ctx,
 
+    header: debug.header,
+    footer: debug.footer,
+    row: debug.row,
+
     /**
-     * Widgets.
+     * Helpers
      */
-    button(fn: DevButtonHandler<S>) {
-      DevTools.button<S>(ctx, state, fn);
+    section(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.title(args[0]);
+        if (typeof args[1] === 'function') {
+          api.section(args[1]);
+        } else {
+          api.TODO();
+        }
+      }
+      if (typeof args[0] === 'function') {
+        args[0](api);
+      }
+      return api;
+    },
+
+    async change(fn) {
+      const state = _state || (_state = await ctx.state(initial));
+      return state.change(fn);
+    },
+
+    lorem(words, endWith) {
+      return Lorem.words(words, endWith);
+    },
+
+    theme(value) {
+      Helpers.theme(ctx, value);
+      return api;
+    },
+
+    /**
+     * Widgets: Argument Wrangling.
+     */
+    button(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.button((btn) => btn.label(args[0]).onClick(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        DevTools.button<S>(events, ctx, initial, args[0]);
+      }
+      return api;
+    },
+
+    boolean(...args: any[]) {
+      if (typeof args[0] === 'function') {
+        DevTools.boolean<S>(events, ctx, initial, args[0]);
+      }
+      return api;
+    },
+
+    title(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.title((title) => title.text(args[0]).style(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        DevTools.title<S>(events, ctx, initial, args[0]);
+      }
+      return api;
+    },
+
+    TODO(...args: any[]) {
+      if (args.length === 0) {
+        return api.TODO('');
+      }
+      if (typeof args[0] === 'string') {
+        api.TODO((title) => title.text(args[0]).style(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        DevTools.todo<S>(events, ctx, initial, args[0]);
+      }
       return api;
     },
 

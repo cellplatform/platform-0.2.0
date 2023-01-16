@@ -1,4 +1,4 @@
-import { css, t } from '../../common';
+import { css, t } from '../common';
 import { TestResult } from './Results.Test';
 import { Description } from './Result.Description';
 

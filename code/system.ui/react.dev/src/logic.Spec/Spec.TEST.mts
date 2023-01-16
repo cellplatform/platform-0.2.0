@@ -7,7 +7,7 @@ describe('Spec', () => {
     it('retrieve {ctx} from test args', async () => {
       const { ctx, dispose } = await TestSample.context();
 
-      expect(typeof ctx.component.render).to.eql('function');
+      expect(typeof ctx.subject.render).to.eql('function');
       expect(typeof ctx.toObject).to.eql('function');
 
       dispose();
@@ -21,7 +21,7 @@ describe('Spec', () => {
 
   describe('Spec.once(e, () => ...)', () => {
     it('passes and returns {ctx}', async () => {
-      const { events } = await TestSample.create();
+      const { events } = await TestSample.controller();
 
       let _resCtx: t.DevCtx | undefined;
       let _paramCtx: t.DevCtx | undefined;
@@ -43,7 +43,7 @@ describe('Spec', () => {
     });
 
     it('runs initial (sync)', async () => {
-      const { events } = await TestSample.create();
+      const { events } = await TestSample.controller();
 
       let _every = 0;
       let _initial = 0;
@@ -72,7 +72,7 @@ describe('Spec', () => {
     });
 
     it('runs initial (async)', async () => {
-      const { events } = await TestSample.create();
+      const { events } = await TestSample.controller();
 
       let _every = 0;
       let _initial = 0;

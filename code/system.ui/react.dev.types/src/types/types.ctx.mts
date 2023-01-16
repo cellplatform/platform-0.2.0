@@ -1,4 +1,4 @@
-import { t } from './common';
+import { type t } from './common';
 
 type Id = string;
 type SpecId = Id;
@@ -27,12 +27,14 @@ export type DevCtxInput = t.DevCtx | t.TestHandlerArgs;
  * The context {ctx} interface passed into specs.
  */
 export type DevCtx = {
-  readonly component: DevCtxComponent;
+  readonly dispose$: t.Observable<any>;
+  readonly subject: DevCtxSubject;
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
   readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
+  redraw(): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
 };
 
@@ -40,9 +42,10 @@ export type DevCtxIs = {
   readonly initial: boolean; // Flag indicating if this is the initial run (or first run after a reset).
 };
 
+export type DevCtxStateMutator<T extends O> = (draft: T) => t.IgnoredResponse;
 export type DevCtxState<T extends O> = {
   current: T;
-  change(fn: (draft: T) => t.IgnoredResponse): Promise<T>;
+  change(fn: DevCtxStateMutator<T>): Promise<T>;
 };
 
 export type DevCtxObject = {
@@ -53,41 +56,45 @@ export type DevCtxObject = {
 };
 
 /**
- * Main Component ("Subject")
+ * Component (aka. "the main Subject")
  */
-export type DevCtxComponent = {
-  display(value: DevPropDisplay): DevCtxComponent;
-  backgroundColor(value?: Color): DevCtxComponent;
-  size(width?: number | null, height?: number | null): DevCtxComponent;
-  size(mode: DevFillMode, margin?: t.MarginInput): DevCtxComponent;
-  render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxComponent;
+export type DevCtxSubject = {
+  display(value: DevPropDisplay): DevCtxSubject;
+  backgroundColor(value?: Color): DevCtxSubject;
+  size(width?: number | null, height?: number | null): DevCtxSubject;
+  size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxSubject;
+  render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxSubject;
 };
 
 /**
- * Component Host ("Harness")
+ * Subject Component Host ("Harness")
  */
 export type DevCtxHost = {
   backgroundColor(value: Color | null): DevCtxHost;
-  gridColor(value: Color | null): DevCtxHost;
+  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost;
+  tracelineColor(value: Color | null): DevCtxHost;
 };
 
 /**
  * Debug Panel
  */
-export type DevCtxDebug = {
-  row<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
+export type DevCtxDebug<S extends O = O> = {
+  row<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
   scroll(value: boolean): DevCtxDebug;
-  padding(value: t.MarginInput | undefined | null): DevCtxDebug;
-  header: DevCtxDebugHeader;
-  footer: DevCtxDebugFooter;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
+  width(value: number): DevCtxDebug;
+  header: DevCtxDebugHeader<S>;
+  footer: DevCtxDebugFooter<S>;
 };
 
-export type DevCtxDebugHeader = {
-  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
+export type DevCtxDebugHeader<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
   border(color: Color | null): DevCtxDebugHeader;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugHeader;
 };
 
-export type DevCtxDebugFooter = {
-  render<T extends O = O>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
+export type DevCtxDebugFooter<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
   border(color: Color | null): DevCtxDebugFooter;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugFooter;
 };

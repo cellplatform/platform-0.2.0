@@ -1,15 +1,26 @@
-import { Spec } from '../../test.ui';
+import { Dev } from '../../test.ui';
 import { Root } from '.';
 
-export default Spec.describe('Root', (e) => {
+type T = { count: number };
+const initial: T = { count: 0 };
+
+export default Dev.describe('suite', (e) => {
   e.it('init', async (e) => {
-    const ctx = Spec.ctx(e);
-    ctx.component
-      .size('fill')
-      .display('flex')
+    const ctx = Dev.ctx(e);
+    await ctx.state<T>(initial);
+    ctx.subject
+      .display('grid')
       .backgroundColor(1)
-      .render(() => {
-        return <Root style={{ flex: 1 }} />;
-      });
+      .size('fill')
+      .render<T>((e) => <Root />);
+  });
+
+  e.it('debug panel', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
+
+    dev.title('Root (Entry)').hr();
   });
 });

@@ -1,16 +1,16 @@
 import { Color, css, t, useRenderer } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
-export type HarnessHostComponentProps = {
+export type HostComponentProps = {
   instance: t.DevInstance;
   border: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
 };
 
-export const HarnessHostComponent: React.FC<HarnessHostComponentProps> = (props) => {
+export const HostComponent: React.FC<HostComponentProps> = (props) => {
   const { instance } = props;
-  const component = props.renderProps?.component;
+  const component = props.renderProps?.subject;
   const renderer = component?.renderer;
   const { element } = useRenderer(instance, renderer);
 

@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { type t } from '../common/index.mjs';
 
 export const deleteAll = async (fs: t.FsIndexedDb) => {
   const manifest = await fs.driver.indexer.manifest();

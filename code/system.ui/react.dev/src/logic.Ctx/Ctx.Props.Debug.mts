@@ -29,6 +29,13 @@ export function CtxPropsDebug(props: PropArgs) {
       return api;
     },
 
+    width(input) {
+      const value = Wrangle.width(input, DEFAULT.props.debug.width);
+      props.current().debug.width = value;
+      props.changed();
+      return api;
+    },
+
     /**
      * Header
      */
@@ -43,6 +50,12 @@ export function CtxPropsDebug(props: PropArgs) {
       border(color) {
         if (color === null) color = DEBUG.header.border.color!;
         props.current().debug.header.border.color = color;
+        props.changed();
+        return api.header;
+      },
+      padding(input) {
+        const value = Margin.wrangle(input ?? DEBUG.header.padding);
+        props.current().debug.header.padding = value;
         props.changed();
         return api.header;
       },
@@ -65,8 +78,25 @@ export function CtxPropsDebug(props: PropArgs) {
         props.changed();
         return api.footer;
       },
+      padding(input) {
+        const value = Margin.wrangle(input ?? DEBUG.footer.padding);
+        props.current().debug.footer.padding = value;
+        props.changed();
+        return api.footer;
+      },
     },
   };
 
   return api;
 }
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  width(value: number | undefined, defaultValue?: number) {
+    if (typeof value !== 'number') return defaultValue;
+    return Math.max(0, value);
+  },
+};

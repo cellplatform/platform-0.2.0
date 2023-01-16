@@ -8,7 +8,7 @@ import {
   produceWithPatches,
 } from 'immer';
 
-import { t } from '../common/index.mjs';
+import { type t } from '../common/index.mjs';
 
 type O = Record<string, unknown>;
 

@@ -1,12 +1,17 @@
-import { t } from './common';
+import { type t } from './common';
 
 type Color = string | number;
+
+type Img = { url: string; size?: DevBackgroundImageSize; opacity?: number };
+export type DevBackgroundImageSize = 'cover' | 'fill';
+export type DevBackgroundImage = Img & { margin?: t.DevMargin };
+export type DevBackgroundImageInput = Img & { margin?: t.DevMarginInput };
 
 /**
  * Rendering state produced by the props.
  */
 export type DevRenderProps = {
-  component: DevRenderPropsComponent;
+  subject: DevRenderPropsSubject;
   host: DevRenderPropsHost;
   debug: DevRenderPropsDebug;
 };
@@ -14,7 +19,7 @@ export type DevRenderProps = {
 /**
  * Main Component ("Subject")
  */
-export type DevRenderPropsComponent = {
+export type DevRenderPropsSubject = {
   renderer?: t.DevRendererRef<any>;
   size?: DevRenderSize;
   display?: t.DevPropDisplay;
@@ -26,29 +31,29 @@ export type DevRenderPropsComponent = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
-  gridColor?: Color;
+  backgroundImage?: DevBackgroundImage;
+  tracelineColor?: Color;
 };
 
 /**
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
-  header: {
-    renderer?: t.DevRendererRef<any>;
-    border: DevRenderPropsDebugBorder;
-  };
+  width?: number;
+  header: DevRenderPropsDebugBar;
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
-    padding: t.Margin;
+    padding: t.DevMargin;
   };
-  footer: {
-    renderer?: t.DevRendererRef<any>;
-    border: DevRenderPropsDebugBorder;
-  };
+  footer: DevRenderPropsDebugBar;
 };
 
-export type DevRenderPropsDebugBorder = { color?: Color };
+export type DevRenderPropsDebugBar = {
+  renderer?: t.DevRendererRef<any>;
+  border: { color?: Color };
+  padding: t.DevMargin;
+};
 
 /**
  * Size
@@ -63,5 +68,5 @@ export type DevRenderSizeFill = {
   mode: 'fill';
   x: boolean;
   y: boolean;
-  margin: t.Margin;
+  margin: t.DevMargin;
 };

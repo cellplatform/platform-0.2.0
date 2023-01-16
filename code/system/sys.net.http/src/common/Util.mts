@@ -1,6 +1,6 @@
 import { IS_PROD } from './constants.mjs';
 import { Headers, Is, Mime, Value } from './libs.mjs';
-import * as t from './types.mjs';
+import type * as t from './types.mjs';
 
 /**
  * Safely serializes data to a JSON string.

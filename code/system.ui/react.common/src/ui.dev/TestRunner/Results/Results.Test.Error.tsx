@@ -1,4 +1,4 @@
-import { css, t, ObjectView } from '../../common';
+import { css, t, ObjectView } from '../common';
 
 export type TestErrorProps = { data: t.TestRunResponse; style?: t.CssValue };
 

@@ -11,8 +11,10 @@ export const DevBus = {
   Events,
 
   events(input: InstanceInput) {
+    const ctx = Wrangle.ctx(input);
+    const dispose$ = ctx ? ctx.dispose$ : undefined;
     const instance = Wrangle.instance(input);
-    return DevBus.Events({ instance });
+    return DevBus.Events({ instance, dispose$ });
   },
 
   async withEvents(input: InstanceInput, handler: (events: t.DevEvents) => any) {
@@ -32,5 +34,9 @@ const Wrangle = {
     if (Is.testArgs(input)) input = Spec.ctx(input as t.TestHandlerArgs);
     if (Is.ctx(input)) return (input as t.DevCtx).toObject().instance;
     return input as t.DevInstance;
+  },
+  ctx(input: InstanceInput) {
+    if (Is.testArgs(input)) input = Spec.ctx(input as t.TestHandlerArgs);
+    return Is.ctx(input) ? (input as t.DevCtx) : undefined;
   },
 };

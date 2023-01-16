@@ -1,0 +1,74 @@
+import  { useState } from 'react';
+import { Color, COLORS, css, t, Filesystem, Button } from './common';
+import { FileUtil } from '../util';
+
+export type DevFilesystemProps = {
+  instance: t.FsViewInstance;
+  style?: t.CssValue;
+};
+
+export const DevFilesystem: React.FC<DevFilesystemProps> = (props) => {
+  const { instance } = props;
+  const [selection, setSelection] = useState<t.ListSelectionState | undefined>();
+
+  /**
+   * [Handlers]
+   */
+  const handleDownloadClick = async () => {
+    const index = selection?.indexes[0];
+    if (index === undefined) return;
+
+    const store = Filesystem.Events({ bus: instance.bus, id: instance.fs });
+    const fs = store.fs();
+    const file = (await fs.manifest()).files[index];
+    const data = await fs.read(file.path);
+    if (data) {
+      const parts = file.path.split('/');
+      const filename = parts[parts.length - 1];
+      FileUtil.download(filename, new Blob([data], { type: 'video/webm' }));
+    }
+
+    store.dispose();
+  };
+
+  /**
+   * [Render]
+   */
+  const styles = {
+    base: css({ position: 'relative', pointerEvents: 'auto', Flex: 'y-stretch-stretch' }),
+    top: css({
+      flex: 1,
+      position: 'relative',
+      padding: 3,
+      borderRadius: 5,
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
+      backgroundColor: Color.format(0.4),
+      display: 'flex',
+    }),
+    bottom: css({ marginTop: 8, Flex: 'x-spaceBetween-center' }),
+  };
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.top}>
+        <Filesystem.PathList.Stateful
+          instance={instance}
+          selectable={{ multi: false, keyboard: true, allowEmpty: false, clearOnBlur: false }}
+          style={{ flex: 1 }}
+          onStateChanged={(e) => {
+            if (e.kind === 'Selection') setSelection(e.to.selection);
+          }}
+        />
+      </div>
+      <div {...styles.bottom}>
+        <div />
+        <div>
+          <Button isEnabled={Boolean(selection)} onClick={handleDownloadClick}>
+            Download
+          </Button>
+        </div>
+        <div />
+      </div>
+    </div>
+  );
+};

@@ -1,7 +1,11 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# This workflow will do a clean installation of node dependencies, cache/restore them,
+# build the source code and run tests across different versions of node
+#
+# For more information see:
+#     https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+#
 
-name: ci(esm)
+name: CI
 
 env:
   VERCEL_TEST_TOKEN: ${{ secrets.VERCEL_TEST_TOKEN }}
@@ -17,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [16.x, 18.x, 19.x]
 
     steps:
       - uses: actions/checkout@v3

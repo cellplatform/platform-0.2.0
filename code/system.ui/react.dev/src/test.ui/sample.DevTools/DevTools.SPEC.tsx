@@ -7,7 +7,7 @@ let _count = 0;
 export default Spec.describe('sample.DevTools.Button', (e) => {
   e.it('init', (e) =>
     Spec.once(e, (ctx) => {
-      ctx.component
+      ctx.subject
         .display('grid')
         .size(200, null)
         .render((e) => {

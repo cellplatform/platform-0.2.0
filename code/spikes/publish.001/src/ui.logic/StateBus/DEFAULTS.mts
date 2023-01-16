@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 
 export const DEFAULTS = {
   instance: 'singleton',
@@ -10,4 +10,4 @@ export const DEFAULTS = {
       selection: { index: { path: '' } },
     };
   },
-};
+} as const;

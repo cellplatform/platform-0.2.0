@@ -7,9 +7,21 @@ export type { Observable } from 'rxjs';
  * @system
  */
 export * from 'sys.ui.react.dev.types';
-export type { EventBus, Event, Disposable, Json, JsonMap, IgnoredResponse } from 'sys.types';
-export type { CssValue } from 'sys.util.css';
-export type { TestModel, BundleImport, TestHandlerArgs } from 'sys.test.spec/src/types.mjs';
+export type {
+  EventBus,
+  Event,
+  Disposable,
+  Json,
+  JsonMap,
+  IgnoredResponse,
+} from 'sys.types/src/types.mjs';
+export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
+export type {
+  TestModel,
+  BundleImport,
+  TestHandlerArgs,
+  TestSuiteRunResponse,
+} from 'sys.test.spec/src/types.mjs';
 
 /**
  * @local

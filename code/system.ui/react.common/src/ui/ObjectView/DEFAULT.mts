@@ -5,4 +5,4 @@ const THEME: ObjectViewTheme = 'Light';
 export const DEFAULTS = {
   FONT: { SIZE: 12 },
   THEME,
-};
+} as const;

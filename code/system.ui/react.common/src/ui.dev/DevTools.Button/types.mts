@@ -1,19 +1,19 @@
-import { t } from '../common';
+import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
 
 /**
- * Button.
+ * Button
  */
 export type DevButtonHandler<S extends O = O> = (e: DevButtonHandlerArgs<S>) => t.IgnoredResponse;
 export type DevButtonHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
-  label(value: string): DevButtonHandlerArgs<S>;
+  label(value: string | t.DevValueHandler<string, S>): DevButtonHandlerArgs<S>;
   onClick(fn: DevButtonClickHandler<S>): DevButtonHandlerArgs<S>;
 };
 
 /**
- * Button click.
+ * Button Click
  */
 export type DevButtonClickHandler<S extends O = O> = (e: DevButtonClickHandlerArgs<S>) => void;
 export type DevButtonClickHandlerArgs<S extends O = O> = DevButtonHandlerArgs<S> & {

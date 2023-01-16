@@ -1,4 +1,4 @@
-import * as t from '../common/types.mjs';
+import { type t } from '../common.t';
 import type { is } from 'unist-util-is';
 
 export type Text = {

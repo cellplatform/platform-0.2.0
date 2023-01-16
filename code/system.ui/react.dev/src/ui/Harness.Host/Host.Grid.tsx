@@ -1,18 +1,18 @@
 import { css, t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 
-export type HarnessHostGridProps = {
+export type HostGridProps = {
   children?: JSX.Element;
   border: string;
   renderProps?: t.DevRenderProps;
   style?: t.CssValue;
 };
 
-export const HarnessHostGrid: React.FC<HarnessHostGridProps> = (props) => {
+export const HostGrid: React.FC<HostGridProps> = (props) => {
   const { renderProps, border } = props;
-  if (!renderProps?.component.renderer) return null;
+  if (!renderProps?.subject.renderer) return null;
 
-  const { size } = renderProps.component;
+  const { size } = renderProps.subject;
   const fillMargin = Wrangle.fillMargin(size);
   const sizeMode = size?.mode ?? 'center';
 

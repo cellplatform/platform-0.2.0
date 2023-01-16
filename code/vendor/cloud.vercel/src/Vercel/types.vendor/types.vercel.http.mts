@@ -1,4 +1,4 @@
-import * as t from '../../common/types.mjs';
+import type * as t from '../../common/types.mjs';
 
 type Id = string;
 type Timestamp = number; // An integer representing a date in milliseconds since the UNIX epoch.

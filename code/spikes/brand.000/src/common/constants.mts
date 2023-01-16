@@ -7,4 +7,4 @@ export const COLORS = {
   BLUE: '#4D7EF7',
   YELLOW: '#FFC803',
   RED: '#E21B22',
-};
+} as const;

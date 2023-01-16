@@ -6,7 +6,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { Disposable, Json, EventBus } from 'sys.types';
+export type { Disposable, Json, EventBus } from 'sys.types/src/types.mjs';
 export type {
   FsDriver,
   FsIO,

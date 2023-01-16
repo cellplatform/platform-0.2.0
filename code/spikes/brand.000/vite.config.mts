@@ -11,6 +11,6 @@ export default Config.vite(import.meta.url, (e) => {
   e.chunk('ext.rx', ['rxjs', 'symbol-observable']);
   e.chunk('ext.react', ['react', 'react-dom']);
   e.chunk('sys.util', 'sys.util');
-  e.chunk('sys.css', 'sys.util.css');
+  e.chunk('sys.css', 'sys.ui.react.css');
   e.chunk('sys.dev', ['sys.ui.react.dev', 'sys.test.spec']);
 });

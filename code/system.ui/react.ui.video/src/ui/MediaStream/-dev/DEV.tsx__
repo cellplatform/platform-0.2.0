@@ -1,0 +1,327 @@
+import { filter } from 'rxjs/operators';
+import { DevActions, ObjectView } from 'sys.ui.dev';
+import { PositioningLayout } from 'sys.ui.primitives/lib/ui/PositioningLayout';
+
+import { DevFilesystem } from './DEV.Filesystem';
+import { MediaStream, VideoStreamProps } from '..';
+import { FileUtil } from '../util';
+import { Button, css, cuid, Delete, Filesystem, log, MinSize, rx, t } from './common';
+import { DevAudioWaveform } from './DEV.AudioWaveform';
+import { DevLayoutMediaComponents } from './DEV.Layout.MediaComponents';
+import { DevRecordButton } from './DEV.RecordButton';
+import { Sample } from './DEV.Sample';
+
+type SaveTarget = 'Fs.IndexedDb' | 'Download';
+
+type Events = ReturnType<typeof MediaStream.Events>;
+type Ctx = {
+  ref: string;
+  bus: t.EventBus<t.MediaEvent>;
+  fsid: string;
+  events: Events;
+  props: VideoStreamProps;
+  muted: { video: boolean; audio: boolean };
+  filesystem: {
+    instance: t.FsViewInstance;
+    store(): Promise<t.Fs>;
+  };
+  debug: {
+    save: { target: SaveTarget };
+  };
+  action: {
+    startVideoStream(): Promise<void>;
+    saveVideo(path: string, data: Uint8Array): Promise<void>;
+  };
+};
+
+async function updateMute(ctx: Ctx) {
+  const { stream } = await ctx.events.status(ctx.ref).get();
+  if (stream) {
+    stream.media.getAudioTracks().forEach((track) => (track.enabled = !ctx.muted.audio));
+    stream.media.getVideoTracks().forEach((track) => (track.enabled = !ctx.muted.video));
+  }
+}
+
+/**
+ * Actions
+ */
+export const actions = DevActions<Ctx>()
+  .namespace('ui.video.MediaStream')
+  .context((e) => {
+    if (e.prev) return e.prev;
+
+    const ref = cuid();
+    const bus = rx.bus<t.MediaEvent>();
+    const events = MediaStream.Events(bus);
+
+    MediaStream.Controller({ bus });
+    // MediaStream.RecordController({ ref, bus });
+
+    rx.payload<t.MediaStreamErrorEvent>(bus.$, 'MediaStream/error')
+      .pipe(filter((e) => e.ref === ref))
+      .subscribe((e) => {
+        log.info('MediaStream/error:', e);
+      });
+
+    let fs: t.Fs | undefined;
+    const fsid = 'fs.video.sample';
+    const store = async () => {
+      if (fs) return fs;
+      const res = await Filesystem.IndexedDb.create({ bus, fs: fsid }).ready();
+      return (fs = res.fs);
+    };
+
+    const ctx: Ctx = {
+      ref,
+      bus,
+      events,
+      fsid,
+      props: { isMuted: true },
+      muted: { video: false, audio: false },
+      filesystem: {
+        instance: { bus, id: ref, fs: fsid },
+        store,
+      },
+
+      debug: {
+        save: { target: 'Fs.IndexedDb' },
+      },
+
+      action: {
+        async startVideoStream() {
+          await events.stop(ref).fire();
+          await events.start(ref).video();
+          await updateMute(ctx);
+        },
+
+        async saveVideo(path, data) {
+          try {
+            const fs = await store();
+            await fs.write(path, data);
+            console.group('🌳 Saved Video to Filesystem (IndexedDb)');
+            console.log(' - fs(id):', fsid);
+            console.log(' - path:', path);
+            console.log(' - data', data);
+            console.groupEnd();
+          } catch (error) {
+            console.log('error', error);
+          }
+        },
+      },
+    };
+
+    store();
+    return ctx;
+  })
+
+  .items((e) => {
+    e.title('Props');
+
+    e.boolean('video: muted', (e) => {
+      if (e.changing) e.ctx.muted.video = e.changing.next;
+      e.boolean.current = e.ctx.muted.video;
+      updateMute(e.ctx);
+    });
+
+    e.boolean('audio: muted', (e) => {
+      if (e.changing) e.ctx.muted.audio = e.changing.next;
+      e.boolean.current = e.ctx.muted.audio;
+      updateMute(e.ctx);
+    });
+
+    e.hr(1, 0.1);
+
+    e.button('update mute', (e) => updateMute(e.ctx));
+
+    e.hr();
+  })
+
+  .items((e) => {
+    e.title('Get Started');
+
+    e.hr(1, 0.1);
+
+    e.button('fire ⚡️ MediaStream/start (video)', async (e) => {
+      const ref = e.ctx.ref;
+      await e.ctx.events.stop(ref).fire();
+      await e.ctx.events.start(ref).video();
+      await updateMute(e.ctx);
+    });
+
+    e.button('fire ⚡️ MediaStream/start (screen)', async (e) => {
+      e.ctx.action.startVideoStream();
+      const ref = e.ctx.ref;
+      await e.ctx.events.stop(ref).fire();
+      await e.ctx.events.start(ref).screen();
+      await updateMute(e.ctx);
+    });
+
+    e.button('fire ⚡️ MediaStream/stop', (e) => {
+      const ref = e.ctx.ref;
+      e.ctx.bus.fire({ type: 'MediaStream/stop', payload: { ref } });
+    });
+
+    e.hr(1, 0.1);
+
+    e.button('fire ⚡️ MediaStream/status:req', async (e) => {
+      const ref = e.ctx.ref;
+      const data = Delete.undefined(await e.ctx.events.status(ref).get());
+      const name = 'response: status';
+      e.button.description = <ObjectView name={name} data={data} fontSize={10} expandLevel={3} />;
+    });
+
+    e.button('fire ⚡️ MediaStreams/status:req (all)', async (e) => {
+      const data = Delete.undefined(await e.ctx.events.all.status().get());
+      const name = 'response: status (all)';
+      e.button.description = <ObjectView name={name} data={data} fontSize={10} expandLevel={3} />;
+    });
+
+    e.hr(1, 0.1);
+
+    e.button('fire ⚡️ MediaStreams/record/status:req', async (e) => {
+      const ref = e.ctx.ref;
+      const data = Delete.undefined(await e.ctx.events.record(ref).status.get());
+      const name = 'response: recording';
+      e.button.description = <ObjectView name={name} data={data} fontSize={10} expandLevel={3} />;
+    });
+
+    e.hr();
+  })
+
+  .items((e) => {
+    e.title('Filesystem (IndexedDB)');
+
+    e.select((config) => {
+      const targets: SaveTarget[] = ['Fs.IndexedDb', 'Download'];
+      config
+        .title('After recording complete save to:')
+        .initial(config.ctx.debug.save.target)
+        .view('buttons')
+        .items(targets)
+        .pipe((e) => {
+          const current = e.select.current[0]; // NB: always first.
+          e.ctx.debug.save.target = current.value;
+        });
+    });
+
+    e.button('delete all', async (e) => {
+      const fs = await e.ctx.filesystem.store();
+      const files = (await fs.manifest()).files;
+      for (const file of files) {
+        await fs.delete(file.path);
+      }
+    });
+
+    e.hr();
+  })
+
+  .subject((e) => {
+    const { ref, bus } = e.ctx;
+    const { width = 300 } = e.ctx.props;
+    const styles = {
+      streamRef: css({}),
+      flowH: css({ Flex: 'horizontal-center-center' }),
+    };
+
+    const getNextPath = async () => {
+      const fs = await e.ctx.filesystem.store();
+      const files = (await fs.manifest()).files.filter((e) => e.path.match(/project\/.*\.webm$/));
+      const total = files.length;
+      return `project/video-${total + 1}.webm`;
+    };
+
+    const elStartMediastreamButton = (
+      <Button onClick={() => e.ctx.action.startVideoStream()}>⚡️ Start</Button>
+    );
+
+    const topLeft = (
+      <div {...styles.flowH}>
+        <div {...css({ marginRight: 6 })}>{'<VideoStream>'}</div>
+        {elStartMediastreamButton}
+      </div>
+    );
+
+    e.settings({
+      host: { background: -0.04 },
+      layout: {
+        cropmarks: -0.2,
+        position: [150, 80, 150, 80],
+        label: {
+          topLeft,
+          topRight: `media/stream-ref:${ref}`,
+        },
+      },
+      actions: { width: 350 },
+    });
+
+    /**
+     * Video Stream.
+     */
+    const elVideoStream = <Sample {...e.ctx.props} streamRef={ref} bus={bus} />;
+
+    /**
+     * Audio Waveform.
+     */
+    const elAudioWaveform = (
+      <DevAudioWaveform bus={bus} streamRef={ref} width={width} height={30} />
+    );
+
+    /**
+     * Record button.
+     */
+    const elRecordButton = (
+      <DevRecordButton
+        bus={bus}
+        streamRef={ref}
+        onFileReady={async ({ data }) => {
+          const path = await getNextPath();
+          e.ctx.action.saveVideo(path, data);
+        }}
+      />
+    );
+
+    const WIDTH = 350;
+
+    const mediaComponentsLayer: t.PositioningLayer = {
+      id: 'media.components',
+      position: { x: 'left', y: 'stretch' },
+      render(args) {
+        const elements = [elVideoStream, elRecordButton, elAudioWaveform];
+        return <DevLayoutMediaComponents elements={elements} width={WIDTH} />;
+      },
+    };
+
+    const filesystemLayer: t.PositioningLayer = {
+      id: 'fs',
+      position: { x: 'stretch', y: 'stretch' },
+      render(args) {
+        const styles = {
+          base: css({
+            flex: 1,
+            display: 'flex',
+            position: 'relative',
+            marginLeft: WIDTH + 30,
+          }),
+        };
+        return (
+          <div {...styles.base}>
+            <DevFilesystem instance={e.ctx.filesystem.instance} style={{ flex: 1 }} />
+          </div>
+        );
+      },
+    };
+
+    const elTooSmall = <div {...css({ flex: 1, Flex: 'center-center' })}>Too Small</div>;
+
+    e.render(
+      <MinSize style={{ flex: 1 }} minWidth={675} minHeight={390} warningElement={elTooSmall}>
+        <PositioningLayout
+          layers={[mediaComponentsLayer, filesystemLayer]}
+          childPointerEvents={'none'}
+          style={{ Absolute: 0 }}
+        />
+      </MinSize>,
+    );
+  });
+
+export default actions;

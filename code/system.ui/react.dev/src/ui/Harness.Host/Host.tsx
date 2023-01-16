@@ -1,6 +1,7 @@
-import { Color, COLORS, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
-import { HarnessHostComponent } from './Host.Component';
-import { HarnessHostGrid } from './Host.Grid';
+import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
+import { HostComponent } from './Host.Component';
+import { HostGrid } from './Host.Grid';
+import { HostBackground } from './Host.Background';
 
 const HOST = DEFAULT.props.host;
 
@@ -26,23 +27,47 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${Color.format(host?.gridColor ?? HOST.gridColor)}`;
+  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? HOST.tracelineColor)}`;
   const styles = {
     base: css({
       position: 'relative',
       overflow: 'hidden',
+      color: COLORS.DARK,
       backgroundColor:
         host?.backgroundColor === undefined
-          ? HOST.backgroundColor
+          ? Color.format(HOST.backgroundColor)
           : Color.format(host.backgroundColor),
     }),
+    empty: {
+      base: css({
+        Absolute: 0,
+        display: 'grid',
+        placeContent: 'center',
+        userSelect: 'none',
+      }),
+      label: css({ opacity: 0.3, fontStyle: 'italic', fontSize: 14 }),
+    },
   };
+
+  const elBackground = renderProps && <HostBackground renderProps={renderProps} />;
+
+  const elGrid = renderProps && (
+    <HostGrid renderProps={renderProps} border={cropmark}>
+      <HostComponent instance={instance} renderProps={renderProps} border={cropmark} />
+    </HostGrid>
+  );
+
+  const elEmpty = !renderProps && (
+    <div {...styles.empty.base}>
+      <div {...styles.empty.label}>{'Nothing to display.'}</div>
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
-      <HarnessHostGrid renderProps={renderProps} border={cropmark}>
-        <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
-      </HarnessHostGrid>
+      {elBackground}
+      {elGrid}
+      {elEmpty}
     </div>
   );
 };

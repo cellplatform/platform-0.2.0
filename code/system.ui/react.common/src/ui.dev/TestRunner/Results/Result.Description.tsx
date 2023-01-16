@@ -1,4 +1,4 @@
-import { COLORS, css, t } from '../../common';
+import { COLORS, css, t } from '../common';
 
 export type DescriptionProps = {
   text: string;

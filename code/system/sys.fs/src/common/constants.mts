@@ -14,4 +14,4 @@ export const DEFAULT = {
   ERROR_MANIFEST,
   CACHE_FILENAME: '.manifest.json',
   FILESYSTEM_ID: 'fs',
-};
+} as const;

@@ -1,4 +1,4 @@
-import { t } from '../common.mjs';
+import { type t } from '../common.mjs';
 
 /**
  * The result of performing a Manifest validation whereby the

@@ -18,4 +18,6 @@ export type {
 /**
  * @local
  */
-export * from './types.mjs';
+export * from './index';
+
+export type UrlString = string;

@@ -1,20 +1,27 @@
-import { Color, COLORS, css, t, useBusController } from '../common';
-import { HarnessHost } from '../Harness.Host';
+import { COLORS, css, t, useBusController, useRubberband } from '../common';
 import { DebugPanel } from '../Harness.DebugPanel';
+import { HarnessHost } from '../Harness.Host';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
   spec?: t.BundleImport;
+  keyboard?: boolean;
+
   style?: t.CssValue;
+  allowRubberband?: boolean;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
-  const { instance } = useBusController({
+  useRubberband(props.allowRubberband ?? false);
+
+  const controller = useBusController({
     bundle: props.spec,
     bus: props.instance?.bus,
     id: props.instance?.id,
     runOnLoad: true,
   });
+
+  const { instance } = controller;
 
   /**
    * [Render]
@@ -30,26 +37,12 @@ export const Harness: React.FC<HarnessProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
-    left: css({
-      position: 'relative',
-      display: 'grid',
-    }),
-    right: css({
-      position: 'relative',
-
-      borderLeft: `solid 1px ${Color.format(-0.1)}`,
-      width: 400,
-    }),
   };
 
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
-      <div {...styles.left}>
-        <HarnessHost instance={instance} />
-      </div>
-      <div {...styles.right}>
-        <DebugPanel instance={instance} style={{ Absolute: 0 }} />
-      </div>
+      <HarnessHost instance={instance} />
+      <DebugPanel instance={instance} />
     </div>
   );
 };

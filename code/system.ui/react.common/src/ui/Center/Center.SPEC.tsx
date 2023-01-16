@@ -20,7 +20,7 @@ export default Dev.describe('Spinner', (e) => {
       </Center>
     );
 
-    ctx.component
+    ctx.subject
       .size('fill')
       .display('flex')
       .render(() => el);

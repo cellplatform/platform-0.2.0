@@ -38,7 +38,20 @@ describe('DevBus', (e) => {
       expect(events.disposed).to.eql(false);
 
       events.dispose();
+      events.dispose();
       expect(events.disposed).to.eql(true);
+    });
+
+    it('dispose (implicit attaching to dispose$)', async () => {
+      const { dispose, ctx } = await TestSample.context();
+      const events = DevBus.events(ctx);
+
+      let fired = 0;
+      events.dispose$.subscribe(() => fired++);
+
+      dispose();
+      dispose();
+      expect(fired).to.eql(1);
     });
 
     describe('info', () => {
@@ -69,6 +82,22 @@ describe('DevBus', (e) => {
         expect(info1).to.eql(info2);
         expect(info1).to.not.equal(info2);
 
+        events.dispose();
+      });
+    });
+
+    describe('ctx (get)', () => {
+      it('fire (read)', async () => {
+        const { events } = await TestSample.controller();
+        const res = await events.ctx.fire();
+        expect(res.ctx?.toObject().instance.id).to.eql(events.instance.id);
+        events.dispose();
+      });
+
+      it('get', async () => {
+        const { events } = await TestSample.controller();
+        const ctx = await events.ctx.get();
+        expect(ctx.toObject().instance.id).to.eql(events.instance.id);
         events.dispose();
       });
     });
@@ -122,7 +151,7 @@ describe('DevBus', (e) => {
       });
 
       it('render context changes between load/reset', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const getId = async () => (await events.info.get()).instance.session;
 
@@ -177,13 +206,13 @@ describe('DevBus', (e) => {
         expect(info3?.run.count).to.eql(3);
 
         expect(info3?.run?.results?.description).to.eql('MySample');
-        expect(info3?.render.props?.component.backgroundColor).to.eql(1);
+        expect(info3?.render.props?.subject.backgroundColor).to.eql(1);
 
         events.dispose();
       });
 
       it('run: suite not loaded', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const info1 = (await events.run.fire()).info;
         expect(info1?.run.count).to.eql(0);
@@ -196,7 +225,7 @@ describe('DevBus', (e) => {
       it('run: { ctx.isInitial } flag', async () => {
         const { Wrapper } = await SAMPLES.Sample2;
         const sample = Wrapper();
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         await sample.root.init();
         await events.load.fire(sample.root);
@@ -217,7 +246,7 @@ describe('DevBus', (e) => {
       it('target single spec (from initial run)', async () => {
         const { Wrapper } = await SAMPLES.Sample2;
         const sample = Wrapper();
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         await sample.root.init();
         await events.load.fire(sample.root);
@@ -308,7 +337,7 @@ describe('DevBus', (e) => {
 
     describe('ctx.run', () => {
       it('ctx.run()', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) =>
@@ -330,7 +359,7 @@ describe('DevBus', (e) => {
       });
 
       it('ctx.run({ reset })', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
 
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
@@ -355,7 +384,7 @@ describe('DevBus', (e) => {
       });
 
       it('ctx.isInitial', async () => {
-        const { events } = await TestSample.create();
+        const { events } = await TestSample.controller();
         const log: boolean[] = [];
         const root = Spec.describe('root', (e) => {
           e.it('foo', async (e) => {
@@ -401,7 +430,7 @@ describe('DevBus', (e) => {
     describe('context:state (read/write)', () => {
       type T = { msg?: string; count: number };
 
-      it('write state', async () => {
+      it('write state (fn)', async () => {
         const { events } = await TestSample.preloaded();
         const info1 = await events.info.get();
         expect(info1.render.state).to.eql(undefined);
@@ -418,6 +447,24 @@ describe('DevBus', (e) => {
         const info2 = await events.info.get();
         expect(_initial).to.eql({ count: 0 });
         expect(info2.render.state).to.eql({ count: 1, msg: 'hello' });
+        expect(info2.render.revision.state).to.eql(1);
+
+        events.dispose();
+      });
+
+      it('write {object} (replace)', async () => {
+        const { events } = await TestSample.preloaded();
+        const info1 = await events.info.get();
+        expect(info1.render.state).to.eql(undefined);
+        expect(info1.render.revision.state).to.eql(0);
+
+        const initial: T = { count: 0 };
+        const replace: T = { count: 1234 };
+        await events.state.change.fire<T>(initial, replace);
+
+        const info2 = await events.info.get();
+        expect(info2.render.state).to.eql(replace);
+        expect(info2.render.state).to.not.equal(replace); // NB: Immutable replacement.
         expect(info2.render.revision.state).to.eql(1);
 
         events.dispose();
@@ -468,11 +515,11 @@ describe('DevBus', (e) => {
         expect(info1.render.revision.props).to.eql(0);
 
         await events.props.change.fire((draft) => {
-          draft.component.backgroundColor = -0.3;
+          draft.subject.backgroundColor = -0.3;
         });
 
         const info2 = await events.info.get();
-        expect(info2.render.props?.component.backgroundColor).to.eql(-0.3);
+        expect(info2.render.props?.subject.backgroundColor).to.eql(-0.3);
         expect(info2.render.revision.props).to.eql(1);
 
         events.dispose();

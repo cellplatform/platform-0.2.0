@@ -1,4 +1,4 @@
-import { t } from './common.mjs';
+import { type t } from './common.mjs';
 
 type FilePath = string; //      Path to a file, eg: "foo/bar.txt"
 type FilesystemId = string; //  Unique identifier of the file-system store.

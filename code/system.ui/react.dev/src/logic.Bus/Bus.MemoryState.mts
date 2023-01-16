@@ -1,5 +1,6 @@
 import { Id, DEFAULT, Is, R, rx, t } from './common';
 
+type O = Record<string, unknown>;
 type Revision = { number: number; message: string };
 
 export type ChangedHandler = (e: ChangedHandlerArgs) => void;
@@ -25,20 +26,24 @@ export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: Chan
     get current(): t.DevInfo {
       return { ..._current };
     },
-    async change(message: t.DevInfoChangeMessage, fn: t.DevInfoMutater) {
+    async change(message: t.DevInfoChangeMessage, change: t.DevInfoMutater | t.DevInfo) {
       /**
        * TODO 🐷
        *   Do this with either
        *    - [JsonPatch] or
-       *    - [Automerge]
+       *    - [Automerge]....etc.
+       *
+       *   Make these options available as an injected plugin (IoC).
        */
       const before = api.revision;
       const clone = R.clone(_current); // TEMP | SLOW (potentially too slow)  🐷
 
-      const res = fn(clone);
-      if (Is.promise(res)) await res;
+      if (typeof change === 'function') {
+        const res = change(clone);
+        if (Is.promise(res)) await res;
+      }
 
-      // NB: Merging here is a "poor man's CRDT" strategy (use Automerge).
+      // NB: Merging here is a "poor man's CRDT" strategy (use Automerge or JsonPatch plugin).
       const changedByAnotherProcess = before.number !== _revision.number;
       _current = changedByAnotherProcess ? (R.mergeDeepRight(_current, clone) as t.DevInfo) : clone;
       _revision = { number: before.number + 1, message };
