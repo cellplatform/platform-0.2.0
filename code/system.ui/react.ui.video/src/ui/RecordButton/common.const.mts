@@ -6,3 +6,9 @@ export const RecordButtonStates: t.RecordButtonState[] = [
   'paused',
   'dialog',
 ];
+
+export const TRANSITION = {
+  type: 'tween',
+  easing: 'easeInOut',
+  duration: 0.25,
+} as const;

@@ -1,5 +1,5 @@
 export * from './types.mjs';
 
-export * from './constants';
+export { RecordButtonStates } from './common';
 export * from './RecordButton';
 export * from './useRecordController';

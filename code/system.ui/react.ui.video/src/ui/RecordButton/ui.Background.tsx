@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 
-import { Color, COLORS, css, t, transition } from './common';
+import { Color, COLORS, css, t, TRANSITION } from './common';
 
 export type BackgroundProps = {
   isEnabled: boolean;
@@ -52,7 +52,7 @@ export const Background: React.FC<BackgroundProps> = (props) => {
       {...css(styles.base, props.style)}
       style={{ borderColor, width, height }}
       animate={{ width, height, borderColor }}
-      transition={transition}
+      transition={TRANSITION}
     >
       <m.div
         {...styles.inner}

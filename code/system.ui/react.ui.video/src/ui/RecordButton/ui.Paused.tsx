@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 
-import { COLORS, css, t, transition } from './common';
+import { COLORS, css, t, TRANSITION } from './common';
 
 export type PausedProps = {
   isEnabled: boolean;
@@ -94,7 +94,7 @@ export const Paused: React.FC<PausedProps> = (props) => {
       {...css(styles.base, props.style)}
       style={{ opacity }}
       animate={{ opacity }}
-      transition={transition}
+      transition={TRANSITION}
     >
       {elLeft}
       {elRight}

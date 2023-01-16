@@ -2,7 +2,7 @@ import { m } from 'framer-motion';
 
 import { AudioWaveform } from '../AudioWaveform';
 import { Icons } from '../Icons';
-import { Color, COLORS, css, t, transition } from './common';
+import { Color, COLORS, css, t, TRANSITION } from './common';
 
 export type RecordingProps = {
   isEnabled: boolean;
@@ -64,7 +64,7 @@ export const Recording: React.FC<RecordingProps> = (props) => {
       {...css(styles.base, props.style)}
       style={{ opacity }}
       animate={{ opacity }}
-      transition={transition}
+      transition={TRANSITION}
     >
       <div {...styles.waveform}>
         {isEnabled && stream && (
