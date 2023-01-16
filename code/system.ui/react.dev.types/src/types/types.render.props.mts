@@ -2,17 +2,10 @@ import { type t } from './common';
 
 type Color = string | number;
 
-export type DevBackgroundImageSize = 'Cover' | 'Fill';
-export type DevBackgroundImage = {
-  url: string;
-  size?: DevBackgroundImageSize;
-  margin?: t.DevMargin;
-};
-export type DevBackgroundImageInput = {
-  url: string;
-  size?: DevBackgroundImageSize;
-  margin?: t.DevMarginInput;
-};
+type Img = { url: string; size?: DevBackgroundImageSize; opacity?: number };
+export type DevBackgroundImageSize = 'cover' | 'fill';
+export type DevBackgroundImage = Img & { margin?: t.DevMargin };
+export type DevBackgroundImageInput = Img & { margin?: t.DevMarginInput };
 
 /**
  * Rendering state produced by the props.

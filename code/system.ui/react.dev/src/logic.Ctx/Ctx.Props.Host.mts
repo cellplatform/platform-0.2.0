@@ -50,7 +50,8 @@ const Wrangle = {
     const url = (input.url || '').trim();
     const margin = Margin.wrangle(input.margin);
     const size = input.size ?? HOST.backgroundImage?.size;
+    const opacity = input.opacity;
 
-    return { url, margin, size };
+    return { url, margin, size, opacity };
   },
 };

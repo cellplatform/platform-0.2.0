@@ -7,7 +7,7 @@ export const DEFAULT = {
       host: {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
         tracelineColor: Color.alpha(COLORS.DARK, 0.1),
-        backgroundImage: { url: '', size: 'Cover', margin: [0, 0, 0, 0] },
+        backgroundImage: { url: '', size: 'cover', margin: [0, 0, 0, 0] },
       },
       subject: {},
       debug: {

@@ -203,40 +203,43 @@ describe('Context', () => {
 
       const info1 = await getHost();
       expect(info1.backgroundImage?.url).to.eql('https://image.com/1.png');
-      expect(info1.backgroundImage?.size).to.eql('Cover');
+
+      expect(info1.backgroundImage?.size).to.eql('cover');
       expect(info1.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
 
       ctx.host.backgroundImage('https://image.com/2.png');
       await context.flush();
       const info2 = await getHost();
       expect(info2.backgroundImage?.url).to.eql('https://image.com/2.png');
-      expect(info2.backgroundImage?.size).to.eql('Cover');
+      expect(info2.backgroundImage?.size).to.eql('cover');
       expect(info2.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
 
-      ctx.host.backgroundImage({ url: 'https://image.com/3.png', size: 'Fill' });
+      ctx.host.backgroundImage({ url: 'https://image.com/3.png', size: 'fill' });
       await context.flush();
       const info3 = await getHost();
       expect(info3.backgroundImage?.url).to.eql('https://image.com/3.png');
-      expect(info3.backgroundImage?.size).to.eql('Fill');
+      expect(info3.backgroundImage?.size).to.eql('fill');
       expect(info3.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
 
       ctx.host.backgroundImage({ url: 'https://image.com/4.png', margin: [30] });
       await context.flush();
       const info4 = await getHost();
       expect(info2.backgroundImage?.url).to.eql('https://image.com/4.png');
-      expect(info4.backgroundImage?.size).to.eql('Cover');
+      expect(info4.backgroundImage?.size).to.eql('cover');
       expect(info4.backgroundImage?.margin).to.eql([30, 30, 30, 30]);
 
       ctx.host.backgroundImage({
         url: 'https://image.com/5.png',
-        size: 'Fill',
+        size: 'fill',
         margin: [1, 2, 3, 4],
+        opacity: 0.3,
       });
       await context.flush();
       const info5 = await getHost();
       expect(info5.backgroundImage?.url).to.eql('https://image.com/5.png');
-      expect(info5.backgroundImage?.size).to.eql('Fill');
+      expect(info5.backgroundImage?.size).to.eql('fill');
       expect(info5.backgroundImage?.margin).to.eql([1, 2, 3, 4]);
+      expect(info5.backgroundImage?.opacity).to.eql(0.3);
 
       ctx.host.backgroundImage(null);
       await context.flush();

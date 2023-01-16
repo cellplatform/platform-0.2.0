@@ -1,6 +1,7 @@
 import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
-import { HarnessHostComponent } from './Host.Component';
-import { HarnessHostGrid } from './Host.Grid';
+import { HostComponent } from './Host.Component';
+import { HostGrid } from './Host.Grid';
+import { HostBackground } from './Host.Background';
 
 const HOST = DEFAULT.props.host;
 
@@ -41,18 +42,19 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       base: css({
         Absolute: 0,
         display: 'grid',
-        alignContent: 'center',
-        justifyContent: 'center',
+        placeContent: 'center',
         userSelect: 'none',
       }),
       label: css({ opacity: 0.3, fontStyle: 'italic', fontSize: 14 }),
     },
   };
 
+  const elBackground = renderProps && <HostBackground renderProps={renderProps} />;
+
   const elGrid = renderProps && (
-    <HarnessHostGrid renderProps={renderProps} border={cropmark}>
-      <HarnessHostComponent instance={instance} renderProps={renderProps} border={cropmark} />
-    </HarnessHostGrid>
+    <HostGrid renderProps={renderProps} border={cropmark}>
+      <HostComponent instance={instance} renderProps={renderProps} border={cropmark} />
+    </HostGrid>
   );
 
   const elEmpty = !renderProps && (
@@ -63,6 +65,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
+      {elBackground}
       {elGrid}
       {elEmpty}
     </div>

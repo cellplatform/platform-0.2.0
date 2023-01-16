@@ -102,14 +102,27 @@ export default Spec.describe('MySample', (e) => {
       .hr();
 
     debug.row(<div>Host</div>);
-    dev.button((btn) =>
-      btn.label('theme: light').onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
-    );
     dev
+      .button((btn) =>
+        btn
+          .label('theme: light')
+          .onClick((e) => ctx.host.backgroundColor(null).tracelineColor(null)),
+      )
+
       .button((btn) =>
         btn
           .label('theme: dark')
           .onClick((e) => ctx.host.backgroundColor(COLORS.DARK).tracelineColor(0.1)),
+      )
+      .button((btn) =>
+        btn.label('background image: "url"').onClick((e) => {
+          const url =
+            'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80';
+          ctx.host.backgroundImage({ url, margin: 60, opacity: 0.3 });
+        }),
+      )
+      .button((btn) =>
+        btn.label('background image: null').onClick((e) => ctx.host.backgroundImage(null)),
       )
       .hr();
 
