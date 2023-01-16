@@ -1,8 +1,16 @@
-import { COLORS, Color, css, t } from './common';
+import { COLORS, Color, css, t, PropList } from './common';
+
+export const DialogKinds = ['hello', 'dev/dialog'] as const;
+export type DialogKind = typeof DialogKinds[number];
 
 export type DevDialogProps = {
-  children?: React.ReactNode;
+  children?: JSX.Element;
   style?: t.CssValue;
+};
+
+export const HelloDialog = () => {
+  const style: t.CssValue = { flex: 1, padding: 15 };
+  return <div style={style}>Hello! 👋</div>;
 };
 
 export const DevDialog: React.FC<DevDialogProps> = (props) => {
@@ -42,4 +50,31 @@ export const DevDialog: React.FC<DevDialogProps> = (props) => {
       </div>
     </div>
   );
+};
+
+export const dialogFactory = (kind: DialogKind) => {
+  const style: t.CssValue = { flex: 1, padding: 15 };
+  const elHello = <div style={style}>Hello! 👋</div>;
+
+  if (kind === 'hello') {
+    return elHello;
+  }
+
+  if (kind === 'dev/dialog') {
+    return (
+      <DevDialog>
+        <PropList
+          margin={[10, 12]}
+          title={'PropList'}
+          items={[
+            { label: 'foo', value: 123 },
+            { label: 'bar', value: 456 },
+            { label: 'baz', value: 'Hello! 👋' },
+          ]}
+        />
+      </DevDialog>
+    );
+  }
+
+  return undefined;
 };

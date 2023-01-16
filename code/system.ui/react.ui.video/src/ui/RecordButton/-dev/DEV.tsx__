@@ -109,7 +109,6 @@ export const actions = DevActions<Ctx>()
 
     const dialogFactory = () => {
       const kind = e.ctx.toStorage().dialog;
-
       const style: CssProps = {
         flex: 1,
         padding: 15,

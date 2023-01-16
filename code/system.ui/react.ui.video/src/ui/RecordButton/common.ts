@@ -1,6 +1,6 @@
 export * from '../common';
 
-export const COLORS = {
+export const BUTTON_COLORS = {
   BLACK: '#000',
   WHITE: '#fff',
   RED: '#EC4838',
