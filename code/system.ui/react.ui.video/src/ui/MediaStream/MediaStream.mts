@@ -1,5 +1,5 @@
 import { MediaStreamEvents, MediaStreamController, MediaStreamRecordController } from './logic';
-import { useVideoStreamState, useOfflineState } from './hook';
+import { useVideoStreamState, useOfflineState } from './use';
 import { VideoStream } from './ui.VideoStream';
 
 export type { VideoStreamProps } from './ui.VideoStream';

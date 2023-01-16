@@ -1,2 +1,2 @@
 export * from './MediaStream.mjs';
-export { useStreamState } from './hook';
+export { useStreamState } from './use';
