@@ -6,7 +6,7 @@ export default Spec.describe('VideoDiagram', (e) => {
     const { env } = await import('../Root.env'); // NB: Initiate the global environment.
     const ctx = Spec.ctx(e);
 
-    ctx.component
+    ctx.subject
       .size('fill')
       .render(() => <VideoDiagram instance={env.instance} style={{ Absolute: 0 }} />);
   });

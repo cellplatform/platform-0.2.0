@@ -28,7 +28,7 @@ export default Dev.describe('TileOutline', (e) => {
     await ctx.state<T>(initial);
     const md = await Processor.toMarkdown(markdown);
 
-    ctx.component.render(() => (
+    ctx.subject.render(() => (
       <TileOutline
         markdown={markdown}
         widths={{ root: 250, child: 300 }}

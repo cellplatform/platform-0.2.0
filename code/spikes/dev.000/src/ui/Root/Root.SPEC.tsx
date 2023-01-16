@@ -8,7 +8,7 @@ export default Dev.describe('suite', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
-    ctx.component
+    ctx.subject
       .display('grid')
       .backgroundColor(1)
       .size('fill')
