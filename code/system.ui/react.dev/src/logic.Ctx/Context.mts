@@ -48,6 +48,10 @@ export const Context = {
         return res.info ?? (await events.info.get());
       },
 
+      async redraw() {
+        await events.redraw.subject();
+      },
+
       async state<T extends O>(initial: T) {
         type S = t.DevCtxState<T>;
         if (_state) return _state as S;

@@ -62,6 +62,7 @@ export default Spec.describe('MySample', (e) => {
     dev
       .button((btn) => btn.label('run specs').onClick((e) => ctx.run()))
       .button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })))
+      .button((btn) => btn.label('ctx.redraw').onClick(() => ctx.redraw()))
       .hr();
 
     debug.row(<div>State</div>);
