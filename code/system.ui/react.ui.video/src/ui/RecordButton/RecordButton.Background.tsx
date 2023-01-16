@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 
-import { Color, BUTTON_COLORS, css, t, transition } from './common';
+import { Color, COLORS, css, t, transition } from './common';
 import { RecordButtonState } from './types';
 
 export type BackgroundProps = {
@@ -20,12 +20,12 @@ export const Background: React.FC<BackgroundProps> = (props) => {
   let borderColor = Color.format(-0.2);
 
   const inner = {
-    bg: isEnabled ? BUTTON_COLORS.RED : Color.format(-0.2),
+    bg: isEnabled ? COLORS.RED : Color.format(-0.2),
   };
 
   if (isEnabled) {
-    if (['recording', 'paused'].includes(state)) borderColor = BUTTON_COLORS.RED;
-    if (['recording', 'paused'].includes(state)) inner.bg = Color.alpha(BUTTON_COLORS.RED, 0.1);
+    if (['recording', 'paused'].includes(state)) borderColor = COLORS.RED;
+    if (['recording', 'paused'].includes(state)) inner.bg = Color.alpha(COLORS.RED, 0.1);
     if (['dialog'].includes(state)) inner.bg = Color.format(0);
   }
 

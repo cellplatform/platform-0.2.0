@@ -1,4 +1,4 @@
 /**
  * @system
  */
-export { PropList } from 'sys.ui.react.common';
+export { PropList, Button } from 'sys.ui.react.common';

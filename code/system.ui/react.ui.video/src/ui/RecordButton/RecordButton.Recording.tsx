@@ -2,7 +2,7 @@ import { m } from 'framer-motion';
 
 import { AudioWaveform } from '../AudioWaveform';
 import { Icons } from '../Icons';
-import { Color, BUTTON_COLORS, css, t, transition } from './common';
+import { Color, COLORS, css, t, transition } from './common';
 import { RecordButtonState } from './types';
 
 export type RecordingProps = {
@@ -30,7 +30,7 @@ export const Recording: React.FC<RecordingProps> = (props) => {
       display: 'flex',
       overflow: 'hidden',
       borderRadius: width,
-      color: BUTTON_COLORS.WHITE,
+      color: COLORS.WHITE,
     }),
     waveform: css({
       Absolute: 0,
@@ -48,7 +48,7 @@ export const Recording: React.FC<RecordingProps> = (props) => {
         Absolute: 0,
         fontSize: 8,
         fontWeight: 900,
-        color: BUTTON_COLORS.RED,
+        color: COLORS.RED,
         PaddingX: 8,
         opacity: 0.7,
         pointerEvents: 'none',
@@ -71,7 +71,7 @@ export const Recording: React.FC<RecordingProps> = (props) => {
             width={width}
             height={40}
             stream={stream}
-            lineColor={Color.alpha(BUTTON_COLORS.RED, 0.3)}
+            lineColor={Color.alpha(COLORS.RED, 0.3)}
             lineWidth={2}
           />
         )}
@@ -82,7 +82,7 @@ export const Recording: React.FC<RecordingProps> = (props) => {
           animate={{ scale }}
           transition={{ type: 'spring', stiffness: 150 }}
         >
-          <Icons.Player.Pause color={BUTTON_COLORS.RED} size={28} />
+          <Icons.Player.Pause color={COLORS.RED} size={28} />
         </m.div>
       </div>
       <div {...styles.labels.base}>

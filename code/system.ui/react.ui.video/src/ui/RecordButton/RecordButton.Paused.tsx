@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 
-import { BUTTON_COLORS, css, t, transition } from './common';
+import { COLORS, css, t, transition } from './common';
 import { RecordButtonAction, RecordButtonState } from './types';
 
 export type PausedProps = {
@@ -22,7 +22,7 @@ export const Paused: React.FC<PausedProps> = (props) => {
       Flex: 'horizontal-stretch-stretch',
       display: 'flex',
       overflow: 'hidden',
-      color: BUTTON_COLORS.WHITE,
+      color: COLORS.WHITE,
       borderRadius: height,
     }),
     button: {
@@ -36,8 +36,8 @@ export const Paused: React.FC<PausedProps> = (props) => {
         overflow: 'hidden',
         Flex: 'horizontal-stretch-stretch',
       }),
-      left: css({ backgroundColor: BUTTON_COLORS.RED, marginLeft: -10 }),
-      right: css({ backgroundColor: BUTTON_COLORS.BLACK, marginRight: -10 }),
+      left: css({ backgroundColor: COLORS.RED, marginLeft: -10 }),
+      right: css({ backgroundColor: COLORS.DARK, marginRight: -10 }),
       body: {
         base: css({ flex: 1, Flex: 'center-center', paddingBottom: 2 }),
         left: css({ Absolute: [0, 0, 0, 10] }),
