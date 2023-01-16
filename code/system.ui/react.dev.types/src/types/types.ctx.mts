@@ -71,6 +71,7 @@ export type DevCtxSubject = {
  */
 export type DevCtxHost = {
   backgroundColor(value: Color | null): DevCtxHost;
+  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost;
   tracelineColor(value: Color | null): DevCtxHost;
 };
 

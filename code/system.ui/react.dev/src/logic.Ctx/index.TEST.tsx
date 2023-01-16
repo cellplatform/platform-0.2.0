@@ -162,7 +162,7 @@ describe('Context', () => {
   describe('props.host', () => {
     const HOST = DEFAULT.props.host;
 
-    it('color', async () => {
+    it('backgroundColor | tracelineColor', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
@@ -185,6 +185,63 @@ describe('Context', () => {
       const info2 = await getHost();
       expect(info2.backgroundColor).to.eql(HOST.backgroundColor);
       expect(info2.tracelineColor).to.eql(HOST.tracelineColor);
+
+      dispose();
+    });
+
+    it('backgroundImage', async () => {
+      const { events, context, dispose } = await TestSample.context();
+      const ctx = context.ctx;
+
+      const getHost = async () => (await events.info.get()).render?.props?.host!;
+
+      const info0 = await getHost();
+      expect(info0).to.eql(undefined);
+
+      ctx.host.backgroundImage({ url: 'https://image.com/1.png' });
+      await context.flush();
+
+      const info1 = await getHost();
+      expect(info1.backgroundImage?.url).to.eql('https://image.com/1.png');
+      expect(info1.backgroundImage?.position).to.eql('Cover');
+      expect(info1.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
+
+      ctx.host.backgroundImage('https://image.com/2.png');
+      await context.flush();
+      const info2 = await getHost();
+      expect(info2.backgroundImage?.url).to.eql('https://image.com/2.png');
+      expect(info2.backgroundImage?.position).to.eql('Cover');
+      expect(info2.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
+
+      ctx.host.backgroundImage({ url: 'https://image.com/3.png', position: 'Fill' });
+      await context.flush();
+      const info3 = await getHost();
+      expect(info3.backgroundImage?.url).to.eql('https://image.com/3.png');
+      expect(info3.backgroundImage?.position).to.eql('Fill');
+      expect(info3.backgroundImage?.margin).to.eql([0, 0, 0, 0]);
+
+      ctx.host.backgroundImage({ url: 'https://image.com/4.png', margin: [30] });
+      await context.flush();
+      const info4 = await getHost();
+      expect(info2.backgroundImage?.url).to.eql('https://image.com/4.png');
+      expect(info4.backgroundImage?.position).to.eql('Cover');
+      expect(info4.backgroundImage?.margin).to.eql([30, 30, 30, 30]);
+
+      ctx.host.backgroundImage({
+        url: 'https://image.com/5.png',
+        position: 'Fill',
+        margin: [1, 2, 3, 4],
+      });
+      await context.flush();
+      const info5 = await getHost();
+      expect(info5.backgroundImage?.url).to.eql('https://image.com/5.png');
+      expect(info5.backgroundImage?.position).to.eql('Fill');
+      expect(info5.backgroundImage?.margin).to.eql([1, 2, 3, 4]);
+
+      ctx.host.backgroundImage(null);
+      await context.flush();
+      const info6 = await getHost();
+      expect(info6.backgroundImage).to.eql(undefined);
 
       dispose();
     });

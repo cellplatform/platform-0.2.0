@@ -1,6 +1,12 @@
 import { type t } from './common';
 
 type Color = string | number;
+export type DevBackgroundImage = { url: string; position?: 'Cover' | 'Fill'; margin?: t.DevMargin };
+export type DevBackgroundImageInput = {
+  url: string;
+  position?: 'Cover' | 'Fill';
+  margin?: t.DevMarginInput;
+};
 
 /**
  * Rendering state produced by the props.
@@ -26,6 +32,7 @@ export type DevRenderPropsSubject = {
  */
 export type DevRenderPropsHost = {
   backgroundColor?: Color;
+  backgroundImage?: DevBackgroundImage;
   tracelineColor?: Color;
 };
 

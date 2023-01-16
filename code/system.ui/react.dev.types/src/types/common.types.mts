@@ -19,3 +19,5 @@ export type {
  * @local
  */
 export * from './index';
+
+export type UrlString = string;
