@@ -20,7 +20,7 @@ export default Dev.describe('RecordButton', (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
 
-    ctx.subject.display('grid').render<T>((e) => {
+    ctx.subject.render<T>((e) => {
       return (
         <RecordButton
           {...e.state.props}

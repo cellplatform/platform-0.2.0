@@ -32,19 +32,29 @@ export const Recording: React.FC<RecordingProps> = (props) => {
       borderRadius: width,
       color: BUTTON_COLORS.WHITE,
     }),
-    waveform: css({ Absolute: 0, Flex: 'horizontal-center-center' }),
-    icon: css({ Absolute: 0, Flex: 'horizontal-center-center', paddingTop: 3 }),
+    waveform: css({
+      Absolute: 0,
+      Flex: 'horizontal-center-center',
+    }),
+    icon: css({
+      Absolute: 0,
+      paddingTop: 3,
+      display: 'grid',
+      justifyContent: 'center',
+      alignContent: 'center',
+    }),
     labels: {
       base: css({
         Absolute: 0,
-        Flex: 'horizontal-spaceBetween-center',
-        boxSizing: 'border-box',
         fontSize: 8,
         fontWeight: 900,
         color: BUTTON_COLORS.RED,
         PaddingX: 8,
         opacity: 0.7,
         pointerEvents: 'none',
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto',
+        alignContent: 'center',
       }),
     },
   };
@@ -76,8 +86,9 @@ export const Recording: React.FC<RecordingProps> = (props) => {
         </m.div>
       </div>
       <div {...styles.labels.base}>
-        <div>REC</div>
-        <div>0.0.00</div>
+        <div>{'REC'}</div>
+        <div />
+        <div>{'0.0.00'}</div>
       </div>
     </m.div>
   );
