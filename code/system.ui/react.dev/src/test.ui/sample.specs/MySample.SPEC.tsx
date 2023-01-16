@@ -2,6 +2,7 @@ import { DevBus } from '../../logic.Bus';
 import { COLORS, Color, css, Spec, t } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
+import { expect } from 'chai';
 
 let _renderCount = 0;
 
@@ -14,8 +15,10 @@ export default Spec.describe('MySample', (e) => {
     const ctx = Spec.ctx(e);
     const state = await ctx.state<T>({ count: 0 });
 
+    expect(state.current.count).to.eql(0); // NB: assertions will be run within CI.
+
     ctx.subject
-      .size(300, 140)
+      .size(300, 200)
       .display('flex')
       .backgroundColor('rgba(255, 0, 0, 0.1)' /* RED */)
       .render<t.JsonMap>((e) => {
@@ -92,7 +95,7 @@ export default Spec.describe('MySample', (e) => {
 
     dev
       .hr()
-      .button((btn) => btn.label('size: 300, 140').onClick((e) => e.ctx.subject.size(300, 140)))
+      .button((btn) => btn.label('size: 300, 200').onClick((e) => e.ctx.subject.size(300, 140)))
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.subject.size('fill')))
       .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.subject.size('fill-x')))
       .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.subject.size('fill-y')))
