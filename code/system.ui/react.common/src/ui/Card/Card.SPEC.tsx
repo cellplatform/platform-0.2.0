@@ -26,7 +26,7 @@ export default Dev.describe('Card', (e) => {
         const styles = {
           base: css({}),
           body: css({
-            backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */,
+            backgroundColor: 'rgba(255, 0, 0, 0.03)' /* RED */,
             lineHeight: 1.3,
           }),
         };
@@ -44,7 +44,7 @@ export default Dev.describe('Card', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
     dev
       .title('Properties')
@@ -77,6 +77,16 @@ export default Dev.describe('Card', (e) => {
           ),
       )
       .hr()
+
+      .button('load background', async (e) => {
+        const url =
+          'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80';
+        const host = e.ctx.toObject().props.host;
+        const current = host.backgroundImage?.url;
+        e.ctx.host.backgroundImage(current ? null : { url, opacity: 0.8 });
+        e.label(current ? 'load background' : 'unload background');
+      })
+
       .boolean((btn) =>
         btn
           .label('background.color (opacity: 0.5)')
@@ -89,11 +99,11 @@ export default Dev.describe('Card', (e) => {
       )
       .boolean((btn) =>
         btn
-          .label('background.blur (8px)')
-          .value((e) => e.state.props.background?.blur === 8)
+          .label('background.blur (4px)')
+          .value((e) => e.state.props.background?.blur === 4)
           .onClick((e) =>
             e.change(({ props }) => {
-              props.background = { ...Util.toBackground(props), blur: e.current ? 8 : undefined };
+              props.background = { ...Util.toBackground(props), blur: e.current ? undefined : 4 };
             }),
           ),
       );
