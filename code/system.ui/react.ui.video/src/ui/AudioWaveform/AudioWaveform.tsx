@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import { css, t } from '../../common';
 import { useAudioAnalyser } from './useAudioAnalyser.mjs';

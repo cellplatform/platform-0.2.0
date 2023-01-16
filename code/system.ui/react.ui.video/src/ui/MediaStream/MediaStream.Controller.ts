@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { R, rx, t, slug } from '../../common';
+import { R, rx, t, slug } from '../common';
 import { StreamUtil } from './util';
 
 type Refs = { [ref: string]: Ref };

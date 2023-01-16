@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MediaStream, VideoStream, VideoStreamProps } from '..';
 import { Icons } from '../../Icons';
 import { Color, css, t } from './common';

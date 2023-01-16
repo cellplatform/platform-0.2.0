@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useStreamState } from '..';
 import { AudioWaveform } from '../../AudioWaveform';
 import { type t } from './common';

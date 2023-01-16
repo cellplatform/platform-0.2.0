@@ -1,8 +1,9 @@
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { rx, t, Time } from '../../common';
+import { rx, t, Time } from './common';
 import { FileUtil } from './util';
+
 type M = 'video/webm';
 
 /**

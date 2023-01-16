@@ -1,4 +1,4 @@
-import { Time } from '../../common';
+import { Time } from '../common';
 
 /**
  * MediaStream helpers.

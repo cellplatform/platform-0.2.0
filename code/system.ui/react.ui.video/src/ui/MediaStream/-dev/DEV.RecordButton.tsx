@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useStreamState } from '..';
 import { RecordButton, useRecordController } from '../../RecordButton';
 import { css, t } from './common';

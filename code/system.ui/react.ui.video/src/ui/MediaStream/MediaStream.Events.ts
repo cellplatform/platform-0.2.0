@@ -1,7 +1,7 @@
 import { Subject, firstValueFrom } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
-import { rx, slug, t } from '../../common';
+import { rx, slug, t } from '../common';
 
 /**
  * Helpers for working with <VideoStream> events.
