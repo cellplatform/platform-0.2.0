@@ -1,10 +1,16 @@
 import { type t } from './common';
 
 type Color = string | number;
-export type DevBackgroundImage = { url: string; position?: 'Cover' | 'Fill'; margin?: t.DevMargin };
+
+export type DevBackgroundImageSize = 'Cover' | 'Fill';
+export type DevBackgroundImage = {
+  url: string;
+  size?: DevBackgroundImageSize;
+  margin?: t.DevMargin;
+};
 export type DevBackgroundImageInput = {
   url: string;
-  position?: 'Cover' | 'Fill';
+  size?: DevBackgroundImageSize;
   margin?: t.DevMarginInput;
 };
 

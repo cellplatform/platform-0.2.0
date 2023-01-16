@@ -42,15 +42,15 @@ const Wrangle = {
       if (!url) return;
       return {
         url,
-        position: HOST.backgroundImage?.position,
+        size: HOST.backgroundImage?.size,
         margin: HOST.backgroundImage?.margin,
       };
     }
 
     const url = (input.url || '').trim();
     const margin = Margin.wrangle(input.margin);
-    const position = input.position ?? HOST.backgroundImage?.position;
+    const size = input.size ?? HOST.backgroundImage?.size;
 
-    return { url, margin, position };
+    return { url, margin, size };
   },
 };
