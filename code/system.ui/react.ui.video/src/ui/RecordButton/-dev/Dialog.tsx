@@ -17,8 +17,8 @@ export const DevDialog: React.FC<DevDialogProps> = (props) => {
   const border = `solid 1px ${Color.format(-0.15)}`;
 
   const styles = {
-    base: css({ flex: 1, Flex: 'vertical-stretch-stretch' }),
-    body: css({ flex: 1, display: 'flex' }),
+    base: css({ flex: 1, display: 'grid', gridTemplateRows: '1fr auto' }),
+    body: css({ display: 'grid' }),
     footer: {
       base: css({
         borderTop: border,
