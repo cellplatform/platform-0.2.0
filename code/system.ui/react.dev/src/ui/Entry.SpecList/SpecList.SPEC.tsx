@@ -2,8 +2,8 @@ import { SpecList } from '.';
 import { css, Pkg, Spec } from '../../test.ui';
 
 const ci = {
-  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
-  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+  badge: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
+  info: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
 
 export default Spec.describe('SpecList', (e) => {
@@ -23,7 +23,16 @@ export default Spec.describe('SpecList', (e) => {
 
         return (
           <div {...css({ Absolute: 0, Scroll: true })}>
-            <SpecList title={Pkg.name} version={Pkg.version} imports={specs} badge={ci} />
+            <SpecList
+              title={Pkg.name}
+              version={Pkg.version}
+              imports={specs}
+              hrDepth={2}
+              badge={{
+                image: ci.badge,
+                href: ci.info,
+              }}
+            />
           </div>
         );
       });

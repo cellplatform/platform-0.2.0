@@ -16,6 +16,7 @@ export const Entry = {
     options: {
       location?: t.UrlInput;
       badge?: t.SpecListBadge;
+      hrDepth?: number;
       keyboard?: boolean;
       style?: t.CssValue;
     } = {},
@@ -36,6 +37,7 @@ export const Entry = {
           version={pkg.version}
           imports={specs}
           badge={options.badge}
+          hrDepth={options.hrDepth}
           style={style}
         />
       );

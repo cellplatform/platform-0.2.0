@@ -5,7 +5,6 @@ import { HarnessHost } from '../Harness.Host';
 export type HarnessProps = {
   instance?: t.DevInstance;
   spec?: t.BundleImport;
-  index?: { badge?: t.SpecListBadge };
   keyboard?: boolean;
 
   style?: t.CssValue;
@@ -14,6 +13,7 @@ export type HarnessProps = {
 
 export const Harness: React.FC<HarnessProps> = (props) => {
   useRubberband(props.allowRubberband ?? false);
+
   const controller = useBusController({
     bundle: props.spec,
     bus: props.instance?.bus,
