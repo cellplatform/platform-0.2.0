@@ -33,8 +33,10 @@ export const Recording: React.FC<RecordingProps> = (props) => {
       color: COLORS.WHITE,
     }),
     waveform: css({
-      Absolute: 0,
-      Flex: 'horizontal-center-center',
+      Absolute: [0, 0, 0, 0],
+      display: 'grid',
+      justifyContent: 'center',
+      alignContent: 'center',
     }),
     icon: css({
       Absolute: 0,

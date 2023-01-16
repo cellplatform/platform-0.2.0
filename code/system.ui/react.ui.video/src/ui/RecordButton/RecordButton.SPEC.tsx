@@ -12,7 +12,7 @@ type T = {
 export default Dev.describe('RecordButton', (e) => {
   const bus = rx.bus();
   const initial: T = {
-    props: { bus, isEnabled: true, size: 45 },
+    props: { bus, isEnabled: true, size: 45, state: undefined },
     debug: { dialog: 'hello' },
   };
 

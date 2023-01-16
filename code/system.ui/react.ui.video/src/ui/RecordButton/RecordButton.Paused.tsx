@@ -19,11 +19,11 @@ export const Paused: React.FC<PausedProps> = (props) => {
   const styles = {
     base: css({
       Absolute: 0,
-      Flex: 'horizontal-stretch-stretch',
-      display: 'flex',
       overflow: 'hidden',
       color: COLORS.WHITE,
       borderRadius: height,
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
     }),
     button: {
       base: css({
@@ -34,14 +34,19 @@ export const Paused: React.FC<PausedProps> = (props) => {
         paddingBottom: 2,
         cursor: isEnabled ? 'pointer' : 'default',
         overflow: 'hidden',
-        Flex: 'horizontal-stretch-stretch',
       }),
       left: css({ backgroundColor: COLORS.RED, marginLeft: -10 }),
       right: css({ backgroundColor: COLORS.DARK, marginRight: -10 }),
       body: {
-        base: css({ flex: 1, Flex: 'center-center', paddingBottom: 2 }),
+        base: css({
+          position: 'relative',
+          paddingBottom: 2,
+          display: 'grid',
+          justifyContent: 'center',
+          alignContent: 'center',
+        }),
         left: css({ Absolute: [0, 0, 0, 10] }),
-        right: css({ Absolute: [0, 10, 0, 0], textAlign: 'right' }),
+        right: css({ Absolute: [0, 10, 0, 0] }),
       },
     },
   };
