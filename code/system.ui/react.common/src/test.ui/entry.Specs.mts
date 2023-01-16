@@ -12,6 +12,7 @@ export const Specs = {
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/TextSecret.SPEC'),
   'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/TextSyntax.SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/Measure.SPEC'),
+  'sys.ui.common.useFocus': () => import('../ui.hooks/Focus/useFocus.SPEC'),
 };
 
 export const ExternalSpecs = {
