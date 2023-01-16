@@ -156,33 +156,30 @@ export default Dev.describe('MediaStream', (e) => {
       };
 
       events.status(ref).res$.subscribe(async (e) => {
-        //
-        console.log('e', e);
-        // e.stream
-        const res = await events.all.status().get();
-        draw('status', res);
+        const info = await events.all.status().get();
+        draw('status', info);
       });
 
       dev
-        .button('fire ⚡️ MediaStream/start (video)', async (e) => {
+        .button('⚡️ MediaStream/start (video)', async (e) => {
           await startVideoStream(e.state.current);
         })
-        .button('fire ⚡️ MediaStream/start (screen)', async (e) => {
+        .button('⚡️ MediaStream/start (screen)', async (e) => {
           await events.stop(ref).fire();
           await events.start(ref).screen();
           await updateMute(state.current);
         })
         .hr()
-        .button('fire ⚡️ MediaStream/status:req', async (e) => {
+        .button('⚡️ MediaStream/status:req', async (e) => {
           const res = await events.status(ref).get();
           draw('status', res);
         })
-        .button('fire ⚡️ MediaStreams/status:req (all)', async (e) => {
+        .button('⚡️ MediaStreams/status:req (all)', async (e) => {
           const res = await events.all.status().get();
           draw('status.all', res);
         })
         .hr()
-        .button('fire ⚡️ MediaStreams/record/status:req', async (e) => {
+        .button('⚡️ MediaStreams/record/status:req', async (e) => {
           const res = await events.record(ref).status.get();
           draw('status.record', res);
         })
