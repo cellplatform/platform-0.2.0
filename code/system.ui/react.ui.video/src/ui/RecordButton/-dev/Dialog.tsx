@@ -1,4 +1,5 @@
-import { COLORS, Color, css, t, PropList } from './common';
+import { COLORS, Color, css, t } from '../common';
+import { PropList } from '../../../test.ui';
 
 export const DialogKinds = ['hello', 'dev/dialog'] as const;
 export type DialogKind = typeof DialogKinds[number];
