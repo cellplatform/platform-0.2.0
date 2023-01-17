@@ -1,4 +1,5 @@
-import type * as t from '../common/types.mjs';
+import { t } from '../common.t';
+
 export * from './StateBus/types.mjs';
 
 type Tx = string;

@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type { t } from '../common.t';
 
 export * from './Doc.Image/types.mjs';
 export * from './Doc.Sidebar/types.mjs';
