@@ -48,8 +48,8 @@ export type StateOverlayContext = { title: string; path: FilePath };
 export type OverlayDef = {
   title?: string;
   margin?: { top?: number; bottom?: number };
-} & {
   markdown?: MarkdownString;
+  image?: t.DocImageYaml;
 };
 
 /**

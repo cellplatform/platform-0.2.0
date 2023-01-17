@@ -3,16 +3,17 @@ import { visit } from 'unist-util-visit';
 
 import { State, t } from '../common';
 
-export function useTriggerClickHandler(args: {
+export function useMarkdownLinkClick(args: {
   instance: t.Instance;
   def: t.OverlayDef;
   md?: t.ProcessedMdast;
 }) {
   const { instance, def, md } = args;
+  const markdown = md?.markdown;
   const ref = useRef<HTMLDivElement>(null);
 
   /**
-   * [Lifecycle]
+   * Markdown.
    */
   useEffect(() => {
     const events = State.Bus.Events({ instance });
@@ -51,12 +52,12 @@ export function useTriggerClickHandler(args: {
     /**
      * Init/Dispose.
      */
-    document.addEventListener('click', handler);
+    if (markdown) document.addEventListener('click', handler);
     return () => {
-      events.dispose();
       document.removeEventListener('click', handler);
+      events.dispose();
     };
-  }, [md?.markdown]);
+  }, [markdown]);
 
   /**
    * API

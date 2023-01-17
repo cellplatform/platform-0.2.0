@@ -2,7 +2,10 @@ import { Processor, t, Text } from '../common';
 import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
 const Imports = {
-  OverlayTrigger: () => import('../Overlay/ui.Overlay.TriggerPanel'),
+  OverlayTrigger: {
+    MarkdownPanel: () => import('../Overlay/ui.Trigger.MarkdownPanel'),
+    Image: () => import('../Overlay/ui.Trigger.Image'),
+  },
 
   Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
   Paragraph: () => import('../Markdown.Doc.Components/Doc.Paragraph'),
@@ -67,8 +70,16 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
     if (e.node.meta.toLowerCase().startsWith('doc.overlay')) {
       const res = await parseYamlOrError<t.OverlayDef>(e.node.value);
       if (res.error) return res.error.element;
-      const { OverlayTriggerPanel } = await Imports.OverlayTrigger();
-      return <OverlayTriggerPanel instance={instance} def={res.data} />;
+      const def = res.data;
+      if (def.markdown) {
+        const { OverlayTriggerPanel } = await Imports.OverlayTrigger.MarkdownPanel();
+        return <OverlayTriggerPanel instance={instance} def={res.data} />;
+      }
+
+      if (def.image) {
+        const { OverlayTriggerImage } = await Imports.OverlayTrigger.Image();
+        return <OverlayTriggerImage instance={instance} def={res.data} />;
+      }
     }
 
     /**
