@@ -47,9 +47,9 @@ export type StateOverlayContext = { title: string; path: FilePath };
 
 export type OverlayDef = {
   title?: string;
-  detail?: MarkdownString;
   margin?: { top?: number; bottom?: number };
-  path?: FilePath;
+} & {
+  markdown?: MarkdownString;
 };
 
 /**
