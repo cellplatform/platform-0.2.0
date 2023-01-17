@@ -18,6 +18,7 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
 
   const width = def?.width;
   const border = def?.border;
+  const href = def?.link;
 
   const margin = def?.margin;
   const title = Wrangle.title(def);
@@ -66,9 +67,15 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
     />
   );
 
+  const elImageLink = !loadError && href && (
+    <a href={href} target={'_blank'} rel={'noopener'}>
+      {elImage}
+    </a>
+  );
+
   return (
     <div {...css(styles.base, props.style)} className={DEFAULTS.MD.CLASS.BLOCK}>
-      <div {...styles.image.base}>{elImage}</div>
+      <div {...styles.image.base}>{href ? elImageLink : elImage}</div>
       {elError}
       {elTitle}
     </div>

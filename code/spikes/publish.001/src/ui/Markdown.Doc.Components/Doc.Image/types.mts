@@ -14,6 +14,7 @@ export type DocImageYaml = {
   margin?: { top?: number; bottom?: number };
   offset?: { x?: number; y?: number };
   caption?: string;
+  link?: string;
 };
 
 export type DocImageCaption = {
