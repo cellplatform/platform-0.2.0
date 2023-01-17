@@ -52,17 +52,22 @@ describe('MARKDOWN mutation (MD-AST)', () => {
 
   describe('option: { externalLinksInNewTab }', () => {
     it('transforms external links open new tab (default: true)', async () => {
-      const INTERNAL = '[link](./foo.png)';
-      const EXTERNAL = '[link](https://domain.com/)';
+      const LINK_INTERNAL = '[link](./foo.png)';
+      const LINK_EXTERNAL = '[link](https://domain.com/)';
+      const LINK_EMAIL = '[name@foo.com](mailto:name@foo.com)';
 
-      const res1 = await processor.toHtml(INTERNAL);
-      const res2 = await processor.toHtml(EXTERNAL);
+      const res1 = await processor.toHtml(LINK_INTERNAL);
+      const res2 = await processor.toHtml(LINK_EXTERNAL);
+      const res3 = await processor.toHtml(LINK_EMAIL);
 
       expect(res1.html).to.not.include('target="_blank"');
       expect(res1.html).to.not.include('rel="noopener"');
 
       expect(res2.html).to.include('target="_blank"');
       expect(res2.html).to.include('rel="noopener"');
+
+      expect(res3.html).to.include('target="_blank"');
+      expect(res3.html).to.include('rel="noopener"');
     });
 
     it('does not transform external links (option: false)', async () => {
