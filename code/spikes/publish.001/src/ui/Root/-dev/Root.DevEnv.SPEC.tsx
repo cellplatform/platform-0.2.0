@@ -1,5 +1,5 @@
 import { Dev } from '../../../test.ui';
-import { Root, RootProps } from '../index.mjs';
+import { Root, RootProps } from '..';
 
 type T = { props: RootProps };
 const initial: T = { props: {} };

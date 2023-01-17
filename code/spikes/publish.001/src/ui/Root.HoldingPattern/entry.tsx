@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { RootHolding } from './index.mjs';
+import { RootHolding } from '.';
 
 /**
  * User Interface

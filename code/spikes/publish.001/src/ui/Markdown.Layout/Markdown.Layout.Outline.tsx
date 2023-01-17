@@ -1,6 +1,6 @@
 import { css, t } from '../common';
 import { Icons } from '../Icons.mjs';
-import { TileOutline } from '../Tile.Outline/index.mjs';
+import { TileOutline } from '../Tile.Outline';
 
 export type MarkdownLayoutOutlineProps = {
   parentSize?: t.DomRect;

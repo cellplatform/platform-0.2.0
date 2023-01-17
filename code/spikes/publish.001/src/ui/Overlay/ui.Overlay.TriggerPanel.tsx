@@ -109,7 +109,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
     <div {...styles.body}>
       <MarkdownDoc
         instance={instance}
-        markdown={def.detail}
+        markdown={def.markdown}
         className={CLASS.TIGGER_PANEL}
         onParsed={(e) => setMd(e.md)}
       />

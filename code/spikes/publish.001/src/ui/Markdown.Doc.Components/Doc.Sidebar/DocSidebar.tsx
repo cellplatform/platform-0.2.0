@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Processor, Color, COLORS, css, t, rx, DEFAULTS } from '../../common';
+import { useEffect, useState } from 'react';
+import { Color, COLORS, css, DEFAULTS, Processor, t } from '../../common';
 
 export type DocSidebarProps = {
   def: t.DocSidebarYaml;
@@ -24,7 +24,7 @@ export const DocSidebar: React.FC<DocSidebarProps> = (props) => {
   /**
    * [Render]
    */
-  const titleBorder = `dashed 2px ${Color.alpha(COLORS.MAGENTA, 0.4)}`;
+  const titleBorder = `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`;
 
   const styles = {
     base: css({

@@ -11,5 +11,5 @@ export { Spinner, Center } from 'sys.ui.react.common';
  * @local
  */
 export * from '../../ui.logic/common';
-export { State, Fetch } from '../../ui.logic/index.mjs';
+export { State, Fetch } from '../../ui.logic';
 export * from './constants.mjs';

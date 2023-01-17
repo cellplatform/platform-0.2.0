@@ -2,7 +2,7 @@ import 'symbol-observable';
 
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
-import { Root } from '../ui/Root/index.mjs';
+import { Root } from '../ui/Root';
 import { Spec } from './entry.Spec.mjs';
 
 const url = new URL(location.href);

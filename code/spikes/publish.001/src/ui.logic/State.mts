@@ -1,5 +1,5 @@
 import { BundlePaths } from './common';
-import { StateBus as Bus } from './StateBus/index.mjs';
+import { StateBus as Bus } from './StateBus';
 import { StateChange as Change } from './State.Change.mjs';
 import { StateIs as Is } from './State.Is.mjs';
 import { Fetch } from './Fetch.mjs';
