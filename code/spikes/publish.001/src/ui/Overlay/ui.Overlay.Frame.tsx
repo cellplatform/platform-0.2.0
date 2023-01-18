@@ -1,4 +1,15 @@
-import { Color, css, Spinner, State, t, useClickOutside, useMouseState } from '../common';
+import {
+  Button,
+  Color,
+  COLORS,
+  css,
+  Spinner,
+  State,
+  t,
+  useClickOutside,
+  useMouseState,
+} from '../common';
+import { Icons } from '../Icons.mjs';
 import { useOverlayState } from './useOverlayState.mjs';
 
 export type OverlayFrameProps = {
@@ -42,6 +53,11 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
       backgroundColor: Color.format(isOverGutter ? 0.15 : 1),
       transition: `background-color 350ms, border-color 150ms`,
     }),
+    close: css({
+      Absolute: [12, 12, null, null],
+      opacity: isOverGutter ? 1 : 0.1,
+      transition: `opacity 200ms`,
+    }),
   };
 
   const elSpinner = !state.ready && (
@@ -54,12 +70,19 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
     <state.Component instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />
   );
 
+  const elClose = (
+    <Button style={styles.close}>
+      <Icons.Close size={60} color={COLORS.DARK} />
+    </Button>
+  );
+
   return (
     <div {...css(styles.base, props.style)} {...mouse.root.handlers}>
       <div ref={outside.ref} {...styles.body} {...mouse.body.handlers}>
         {el}
         {elSpinner}
       </div>
+      {elClose}
     </div>
   );
 };
