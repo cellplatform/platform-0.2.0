@@ -2,7 +2,7 @@ import { Vercel } from 'cloud.vercel';
 import { rx } from 'sys.util';
 
 import { Pkg } from '../src/index.pkg.mjs';
-import { type t } from '../src/common/index.mjs';
+import { type t } from '../src/common';
 import pc from 'picocolors';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
@@ -21,8 +21,11 @@ export async function pushToVercel(args: {
     team: 'tdb',
     name: `${Pkg.name}.v${Pkg.version}`,
 
-    project: 'tdb-undp',
-    alias: 'undp.db.team',
+    // project: 'tdb-undp',
+    // alias: 'undp.db.team',
+
+    project: 'tdb-tmp',
+    alias: 'tmp.db.team',
 
     source,
     ensureProject: true,
