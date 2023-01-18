@@ -11,12 +11,13 @@
 
 export const Pkg: ModuleDef = {
   name: 'spike.publish.react',
-  version: '1.2.9',
+  version: '1.2.24',
   dependencies: {
     '@monaco-editor/react': '4.4.6',
     'monaco-editor': '0.34.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'symbol-observable': '4.0.0',
     'sys.fs': '0.0.0',
     'sys.fs.indexeddb': '0.0.0',
     'sys.text': '0.0.0',

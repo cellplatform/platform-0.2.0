@@ -1,3 +1,5 @@
+import 'symbol-observable';
+
 /**
  * @external
  */
