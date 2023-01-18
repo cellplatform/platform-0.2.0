@@ -76,5 +76,17 @@ describe('MARKDOWN mutation (MD-AST)', () => {
       expect(res.html).to.not.include('target="_blank"');
       expect(res.html).to.not.include('rel="noopener"');
     });
+
+    it('converts raw email to "mailto:..." format', async () => {
+      const res1 = await processor.toHtml('[link](name@domain.com)');
+      const res2 = await processor.toHtml('[link](mailto:name@domain.com)');
+
+      expect(res1.html).to.include('target="_blank"');
+      expect(res1.html).to.include('rel="noopener"');
+      expect(res1.html).to.include('mailto:name@domain.com');
+      expect(res2.html).to.include('mailto:name@domain.com');
+
+      expect(res1.markdown).to.eql('[link](name@domain.com)'); // NB: unchanged.
+    });
   });
 });
