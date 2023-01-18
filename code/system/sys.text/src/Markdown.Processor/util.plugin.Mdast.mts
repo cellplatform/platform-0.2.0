@@ -65,7 +65,7 @@ export const Mdast = {
       }
 
       /**
-       * Invole the callback handler (if present).
+       * Invoke the callback handler (if present).
        */
       const fn = options?.mdast;
       fn?.(mutate);
