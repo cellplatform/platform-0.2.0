@@ -3,7 +3,7 @@ import 'symbol-observable';
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 import { Root } from '../ui/Root';
-import { Spec } from './entry.Spec.mjs';
+import { Specs } from './entry.Specs.mjs';
 
 const url = new URL(location.href);
 const params = url.searchParams;
@@ -22,7 +22,7 @@ const BADGE_CI = {
   const root = createRoot(document.getElementById('root')!);
   if (isDev) {
     const { Dev } = await import('./index');
-    const el = await Dev.render(Pkg, Spec, { badge: BADGE_CI, hrDepth: 2 });
+    const el = await Dev.render(Pkg, Specs, { badge: BADGE_CI, hrDepth: 2 });
     root.render(el);
   } else {
     root.render(<Root />);

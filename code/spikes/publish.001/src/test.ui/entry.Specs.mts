@@ -1,6 +1,6 @@
 import { Specs as VideoSpecs } from 'sys.ui.react.video';
 
-export const Spec = {
+export const Specs = {
   'spike.dev': () => import('../ui/Root/-dev/Root.SPEC.devenv'),
   'spike.ui.Root.entry': () => import('../ui/Root/-dev/Root.SPEC'),
   'spike.ui.Root.holding': () => import('../ui/Root.HoldingPattern/Root.SPEC'),
@@ -11,3 +11,5 @@ export const Spec = {
 
   ...VideoSpecs,
 };
+
+export default Specs;
