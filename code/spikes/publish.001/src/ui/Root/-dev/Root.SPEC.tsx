@@ -28,7 +28,14 @@ export default Dev.describe('Root', (e) => {
       .TODO('"Start Here" video banner')
       .TODO('Video Index (make more like spotify "album/playlist" card view)')
       .TODO('Update CHANGELOG')
+      .TODO('Get Rowans machine building again (revert platform-0.2.0 branch)')
       .TODO('Deploy')
-      .TODO('Close out old issues');
+      .TODO('Close out old issues')
+      .TODO('Commitment Badge')
+      .TODO('Timestamps addressable URL (searchParams)')
+      .TODO('"Group Scale" diagram and video - as sample for "Diagram Builder" UI (SPEC)')
+      .TODO(
+        'Pull out "Programme" as data type (pogrammaticaly from "executing/parsing" the MD files',
+      );
   });
 });
