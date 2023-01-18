@@ -3,7 +3,7 @@ import { Harness } from './ui/Harness';
 import { Entry } from './ui/Entry';
 import { DevBus as Bus } from './logic.Bus';
 import { ValueHandler } from './logic.Tools';
-import { headless } from './test.ui/headless.mjs';
+import { headless } from './test.ui/headless';
 
 export const Dev = {
   Bus,

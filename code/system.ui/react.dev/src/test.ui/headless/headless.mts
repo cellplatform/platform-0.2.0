@@ -1,5 +1,5 @@
 import { t, slug, rx, Time } from '../common';
-import { DevBus } from '../logic.Bus';
+import { DevBus } from '../../logic.Bus';
 
 type Milliseconds = number;
 type Results = { ok: boolean; elapsed: Milliseconds; total: number; specs: ModuleResults[] };
@@ -17,8 +17,8 @@ export async function headless(input: Imports): Promise<Results> {
   const specs: ModuleResults[] = [];
   const response: Results = {
     ok: true,
-    elapsed: 0,
     total: 0,
+    elapsed: 0,
     get specs() {
       return specs;
     },
@@ -37,18 +37,14 @@ export async function headless(input: Imports): Promise<Results> {
     const results = res.info?.run.results;
     const ok = results?.ok ?? false;
 
-    if (!ok) {
-      results;
-    }
-
     specs.push({ ok, name, results });
   });
 
   await Promise.all(wait);
 
+  response.ok = specs.every((item) => item.ok);
   response.total = specs.length;
   response.elapsed = timer.elapsed.msec;
-  response.ok = specs.every((item) => item.ok);
 
   return response;
 }
