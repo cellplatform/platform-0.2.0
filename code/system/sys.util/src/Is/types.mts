@@ -1,8 +1,10 @@
 export type Is = IsFlags & IsMethods;
 
 export type IsFlags = {
-  browser: boolean;
-  node: boolean;
+  env: {
+    browser: boolean;
+    nodejs: boolean;
+  };
 };
 
 export type IsMethods = {

@@ -4,14 +4,16 @@ import type * as t from './types.mjs';
  * Environment flags.
  */
 export const Is: t.Is = {
-  get browser() {
-    return typeof window !== 'undefined';
-  },
+  env: {
+    get browser() {
+      return typeof window !== 'undefined';
+    },
 
-  get node() {
-    return (
-      typeof process !== 'undefined' && process.versions != null && process.versions.node != null
-    );
+    get nodejs() {
+      return (
+        typeof process !== 'undefined' && process.versions != null && process.versions.node != null
+      );
+    },
   },
 
   /**
