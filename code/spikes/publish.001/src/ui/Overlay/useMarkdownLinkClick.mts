@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { visit } from 'unist-util-visit';
+import { getLinks } from './util.mjs';
 
 import { State, t } from '../common';
 
@@ -18,20 +18,6 @@ export function useMarkdownLinkClick(args: {
   useEffect(() => {
     const events = State.Bus.Events({ instance });
 
-    const getLinks = (mdast?: t.MdastRoot): t.StateOverlayContext[] => {
-      if (!mdast) return [];
-
-      const res: t.StateOverlayContext[] = [];
-      visit(mdast, 'link', (node) => {
-        const path = node.url.replace(/^\.\//, '');
-        let title = 'Untitled';
-        if (node.children[0].type === 'text') title = node.children[0].value;
-        res.push({ title, path });
-      });
-
-      return res;
-    };
-
     /**
      * Intercept node click events looking for
      * activation links to open the popup with.
@@ -46,6 +32,7 @@ export function useMarkdownLinkClick(args: {
       const base = location.pathname;
       const path = el.pathname.substring(base.length);
       const context = getLinks(md?.mdast);
+
       events.overlay.def(def, path, { context });
     };
 

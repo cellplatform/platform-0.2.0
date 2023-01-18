@@ -14,7 +14,10 @@ export const OverlayTriggerImage: React.FC<OverlayTriggerImageProps> = (props) =
   if (!def.image) return null;
 
   const handleClick: React.MouseEventHandler = (e) => {
-    const path = def?.image?.link;
+    let path = def?.image?.link ?? '';
+    path = path.replace(/^\./, '');
+    path = path.replace(/^\//, '');
+    path = path.trim();
     if (path) {
       e.preventDefault();
       State.withEvents(instance, (events) => events.overlay.def(def, path));
