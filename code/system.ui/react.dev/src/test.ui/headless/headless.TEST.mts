@@ -19,5 +19,7 @@ describe('headless (test runner)', () => {
     };
     const res = await Dev.headless(Specs);
     expect(res.ok).to.eql(false);
+    expect(res.total).to.eql(1);
+    expect(res.elapsed).to.greaterThan(0);
   });
 });
