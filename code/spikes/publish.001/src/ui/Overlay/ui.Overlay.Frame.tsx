@@ -31,7 +31,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
       backdropFilter: `blur(${isOverGutter ? 8 : 40}px)`,
     }),
     body: css({
-      Absolute: 30,
+      Absolute: 80,
       borderRadius: 8,
       boxSizing: 'border-box',
       padding: 30,
