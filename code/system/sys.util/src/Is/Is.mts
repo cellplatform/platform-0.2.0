@@ -10,9 +10,7 @@ export const Is: t.Is = {
     },
 
     get nodejs() {
-      return (
-        typeof process !== 'undefined' && process.versions != null && process.versions.node != null
-      );
+      return typeof process !== 'undefined' && typeof process?.versions?.node === 'string';
     },
   },
 
