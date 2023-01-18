@@ -170,7 +170,7 @@ describe('Is', () => {
     });
   });
 
-  describe('isJson', () => {
+  describe('Is.json', () => {
     it('is not JSON', () => {
       expect(Is.json()).to.eql(false);
       expect(Is.json(null)).to.eql(false);
@@ -195,6 +195,33 @@ describe('Is', () => {
     it('is JSON (trimmed string)', () => {
       expect(Is.json('  {} ')).to.eql(true);
       expect(Is.json(' []  ')).to.eql(true);
+    });
+  });
+
+  describe('Is.email', () => {
+    it('is an email', () => {
+      const test = (input: any) => expect(Is.email(input)).to.eql(true);
+
+      test('name@domain.com');
+      test('123@456.com');
+    });
+
+    it('is not email', () => {
+      const test = (input: any) => expect(Is.email(input)).to.eql(false);
+
+      [undefined, null, 123, true, false, [], {}].forEach((value) => test(value));
+      test('');
+      test('  ');
+
+      test('foo');
+      test('foo@');
+      test('@domain.com');
+      test('domain.com');
+      test('foo@domain');
+
+      test('  name@domain.com  '); // NB: Whitespace
+      test('name@domain.com ');
+      test(' name@domain.com');
     });
   });
 });

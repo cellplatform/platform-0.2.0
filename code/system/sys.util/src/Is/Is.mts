@@ -1,5 +1,10 @@
 import type * as t from './types.mjs';
 
+const REGEX = {
+  EMAIL:
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+} as const;
+
 /**
  * Environment flags.
  */
@@ -105,5 +110,16 @@ export const Is: t.Is = {
     if (typeof value !== 'string') return false;
     value = value.trim();
     return value.startsWith('{') || value.startsWith('[');
+  },
+
+  /**
+   * Determind if the given value represents an email address.
+   * NOTES:
+   *    General Email Regex (RFC 5322 Official Standard)
+   *    Source: https://www.emailregex.com/ (Jan 2023)
+   */
+  email(value?: any) {
+    if (typeof value !== 'string') return false;
+    return Boolean(value.match(REGEX.EMAIL));
   },
 };
