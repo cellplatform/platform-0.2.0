@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-import { Color, css, Spinner, State, t, useClickOutside } from '../common';
+import { Color, css, Spinner, State, t, useClickOutside, useMouseState } from '../common';
 import { useOverlayState } from './useOverlayState.mjs';
 
 export type OverlayFrameProps = {
@@ -14,12 +12,12 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
 
   const outside = useClickOutside((e) => State.withEvents(instance, (e) => e.overlay.close()));
   const state = useOverlayState(instance, props.def);
+  const mouse = {
+    root: useMouseState(),
+    body: useMouseState(),
+  };
 
-  const [isOver, setOver] = useState(false);
-  const [isOverBody, setOverBody] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
-  const overBody = (isOver: boolean) => () => setOverBody(isOver);
-  const isOverGutter = isOver && !isOverBody;
+  const isOverGutter = mouse.root.isOver && !mouse.body.isOver;
 
   /**
    * [Render]
@@ -57,13 +55,8 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
-      <div
-        {...styles.body}
-        ref={outside.ref}
-        onMouseEnter={overBody(true)}
-        onMouseLeave={overBody(false)}
-      >
+    <div {...css(styles.base, props.style)} {...mouse.root.handlers}>
+      <div ref={outside.ref} {...styles.body} {...mouse.body.handlers}>
         {el}
         {elSpinner}
       </div>
