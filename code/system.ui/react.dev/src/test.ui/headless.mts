@@ -2,7 +2,7 @@ import { t, slug, rx, Time } from '../common';
 import { DevBus } from '../logic.Bus';
 
 type Milliseconds = number;
-type Results = { ok: boolean; elapsed: Milliseconds; specs: ModuleResults[] };
+type Results = { ok: boolean; elapsed: Milliseconds; total: number; specs: ModuleResults[] };
 type ModuleResults = { ok: boolean; name: string; results?: t.TestSuiteRunResponse };
 type Imports = { [key: string]: () => t.BundleImport };
 
@@ -18,6 +18,7 @@ export async function headless(input: Imports): Promise<Results> {
   const response: Results = {
     ok: true,
     elapsed: 0,
+    total: 0,
     get specs() {
       return specs;
     },
@@ -45,7 +46,9 @@ export async function headless(input: Imports): Promise<Results> {
 
   await Promise.all(wait);
 
+  response.total = specs.length;
   response.elapsed = timer.elapsed.msec;
   response.ok = specs.every((item) => item.ok);
+
   return response;
 }
