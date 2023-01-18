@@ -201,7 +201,6 @@ describe('Is', () => {
   describe('Is.email', () => {
     it('is an email', () => {
       const test = (input: any) => expect(Is.email(input)).to.eql(true);
-
       test('name@domain.com');
       test('123@456.com');
     });
@@ -222,6 +221,8 @@ describe('Is', () => {
       test('  name@domain.com  '); // NB: Whitespace
       test('name@domain.com ');
       test(' name@domain.com');
+
+      test('mailto:name@domain.com');
     });
   });
 });
