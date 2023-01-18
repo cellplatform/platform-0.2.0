@@ -72,7 +72,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.format(dimmed ? 0.1 : 1),
+      backgroundColor: Color.format(dimmed ? 0.03 : 1),
       transition: `background-color 300ms`,
       overflow: 'hidden',
     }),
@@ -84,6 +84,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     content: css({
       Absolute: 0,
       display: 'flex',
+      opacity: dimmed ? 0.5 : 1,
+      filter: `blur(${dimmed ? 3 : 0}px)`,
     }),
     statusBar: css({
       marginLeft: 5,
@@ -98,6 +100,18 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: dimmed ? 0 : 1,
       transition: `opacity 300ms`,
     }),
+    close: {
+      base: css({
+        Absolute: 0,
+        display: 'grid',
+        placeItems: 'center',
+      }),
+      label: css({
+        fontSize: 80,
+        opacity: 0.3,
+        letterSpacing: '-0.018em',
+      }),
+    },
   };
 
   const elTooSmall = ready && isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
@@ -155,6 +169,12 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     />
   );
 
+  const elCloseLabel = dimmed && (
+    <div {...styles.close.base}>
+      <div {...styles.close.label}>(close)</div>
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} ref={size.ref}>
       <div {...styles.body}>
@@ -162,6 +182,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         {elVideoBar}
         {elProgressBar}
         {elTooSmall}
+        {elCloseLabel}
       </div>
     </div>
   );
