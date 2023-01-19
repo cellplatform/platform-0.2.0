@@ -21,4 +21,11 @@ export const DEFAULTS = {
       SIDEBAR: 'sys-md-Sidebar',
     },
   },
+  PLAYLIST: {
+    preview: {
+      title: 'Programme',
+      image:
+        'https://user-images.githubusercontent.com/185555/213319665-8128314b-5d8e-4a19-b7f5-2469f09d6690.png',
+    },
+  },
 } as const;
