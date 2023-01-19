@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Color, css, State, t, useSizeObserver, Time } from '../common';
 import { TooSmall } from '../TooSmall';
 import { ProgressBar } from '../Video.ProgressBar';
+import { Color, css, State, t, Time, useSizeObserver } from './common';
 import { VideoDiagramImage } from './ui.Image';
 import { VideoDiagramMarkdown } from './ui.Markdown';
 import { StatusPanel } from './ui.StatusPanel';
@@ -72,7 +72,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.format(dimmed ? 0.1 : 1),
+      backgroundColor: Color.format(dimmed ? 0.6 : 1),
       transition: `background-color 300ms`,
       overflow: 'hidden',
     }),
@@ -84,6 +84,9 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     content: css({
       Absolute: 0,
       display: 'flex',
+      filter: `blur(${dimmed ? 4 : 0}px)`,
+      opacity: dimmed ? 0.6 : 1,
+      transition: `opacity 300ms`,
     }),
     statusBar: css({
       marginLeft: 5,
@@ -98,6 +101,23 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
       opacity: dimmed ? 0 : 1,
       transition: `opacity 300ms`,
     }),
+    close: {
+      base: css({
+        Absolute: 0,
+        display: 'grid',
+        placeItems: 'center',
+        userSelect: 'none',
+      }),
+      label: css({
+        fontSize: 80,
+        opacity: 0.8,
+        letterSpacing: '-0.018em',
+      }),
+      icon: css({
+        Absolute: [-30, 5, null, null],
+        backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      }),
+    },
   };
 
   const elTooSmall = ready && isTooSmall && <TooSmall backgroundColor={0.3} backdropBlur={22} />;
@@ -155,6 +175,12 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     />
   );
 
+  const elCloseLabel = dimmed && (
+    <div {...styles.close.base}>
+      <div {...styles.close.label}>{/* {`(close)`} */}</div>
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} ref={size.ref}>
       <div {...styles.body}>
@@ -162,6 +188,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
         {elVideoBar}
         {elProgressBar}
         {elTooSmall}
+        {elCloseLabel}
       </div>
     </div>
   );

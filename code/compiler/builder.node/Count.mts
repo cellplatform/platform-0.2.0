@@ -97,10 +97,10 @@ export const Count = {
 
     const add = (dir: string, files: number, lines: number, bytes: number) => {
       if (base && dir.startsWith(base)) dir = dir.substring(base.length);
-      const path = ` • ${fs.dirname(dir)}/${pc.white(fs.basename(dir))}`;
+      const path = `  • ${fs.dirname(dir)}/${pc.white(fs.basename(dir))}`;
       const totalSize = `  ${prettybytes(bytes)}`;
-      const totalFiles = `  ${files} files`;
-      const totalLines = `  ${pc.green(lines.toLocaleString())}`;
+      const totalFiles = `      ${files}`;
+      const totalLines = `  ${pc.gray(lines.toLocaleString())}`;
       table.push([path, totalSize, totalFiles, totalLines]);
     };
 
@@ -110,14 +110,15 @@ export const Count = {
     });
 
     const total = Sum.dir(dirs);
-    const totalFiles = `  ${total.files} files`;
-    const totalBytes = `  ${prettybytes(total.bytes)}`;
-    const totalLines = `  ${pc.bold(pc.white(total.lines.toLocaleString()))} lines-of-code`;
+    const totalBytes = `  ${pc.white(prettybytes(total.bytes))}`;
+    const totalFiles = `  ${pc.white(total.files.toLocaleString())} files`;
+    const totalLines = `  ${pc.bold(pc.green(total.lines.toLocaleString()))} lines-of-code`;
     table.push([]);
     table.push(['', totalBytes, totalFiles, totalLines]);
 
     console.info();
-    console.info(pc.gray(`Modules:`));
+    console.info(`${pc.bold('  Modules ')}`);
+    console.info();
     console.info(pc.gray(table.toString()));
     console.info();
   },

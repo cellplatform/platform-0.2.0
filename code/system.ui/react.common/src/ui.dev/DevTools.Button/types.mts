@@ -17,6 +17,7 @@ export type DevButtonHandlerArgs<S extends O = O> = {
  */
 export type DevButtonClickHandler<S extends O = O> = (e: DevButtonClickHandlerArgs<S>) => void;
 export type DevButtonClickHandlerArgs<S extends O = O> = DevButtonHandlerArgs<S> & {
+  dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
 };

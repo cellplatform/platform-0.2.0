@@ -83,7 +83,7 @@ export function useOverlayState(instance: t.Instance, def: t.OverlayDef) {
      * Dispose.
      */
     return () => state.dispose();
-  }, [instance.id, def.path]);
+  }, [instance.id]);
 
   /**
    * API

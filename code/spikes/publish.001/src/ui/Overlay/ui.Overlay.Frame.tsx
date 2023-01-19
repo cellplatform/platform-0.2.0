@@ -1,6 +1,15 @@
-import { useState } from 'react';
-
-import { Color, css, Spinner, State, t, useClickOutside } from '../common';
+import {
+  Button,
+  Color,
+  COLORS,
+  css,
+  Spinner,
+  State,
+  t,
+  useClickOutside,
+  useMouseState,
+} from '../common';
+import { Icons } from '../Icons.mjs';
 import { useOverlayState } from './useOverlayState.mjs';
 
 export type OverlayFrameProps = {
@@ -14,12 +23,12 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
 
   const outside = useClickOutside((e) => State.withEvents(instance, (e) => e.overlay.close()));
   const state = useOverlayState(instance, props.def);
+  const mouse = {
+    root: useMouseState(),
+    body: useMouseState(),
+  };
 
-  const [isOver, setOver] = useState(false);
-  const [isOverBody, setOverBody] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
-  const overBody = (isOver: boolean) => () => setOverBody(isOver);
-  const isOverGutter = isOver && !isOverBody;
+  const isOverGutter = mouse.root.isOver && !mouse.body.isOver;
 
   /**
    * [Render]
@@ -31,7 +40,7 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
       backdropFilter: `blur(${isOverGutter ? 8 : 40}px)`,
     }),
     body: css({
-      Absolute: 30,
+      Absolute: 80,
       borderRadius: 8,
       boxSizing: 'border-box',
       padding: 30,
@@ -43,6 +52,11 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
       borderColor: Color.format(1),
       backgroundColor: Color.format(isOverGutter ? 0.15 : 1),
       transition: `background-color 350ms, border-color 150ms`,
+    }),
+    close: css({
+      Absolute: [12, 12, null, null],
+      opacity: isOverGutter ? 1 : 0.1,
+      transition: `opacity 200ms`,
     }),
   };
 
@@ -56,17 +70,19 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
     <state.Component instance={instance} dimmed={isOverGutter} style={{ Absolute: 0 }} />
   );
 
+  const elClose = (
+    <Button style={styles.close}>
+      <Icons.Close size={60} color={COLORS.DARK} />
+    </Button>
+  );
+
   return (
-    <div {...css(styles.base, props.style)} onMouseEnter={over(true)} onMouseLeave={over(false)}>
-      <div
-        {...styles.body}
-        ref={outside.ref}
-        onMouseEnter={overBody(true)}
-        onMouseLeave={overBody(false)}
-      >
+    <div {...css(styles.base, props.style)} {...mouse.root.handlers}>
+      <div ref={outside.ref} {...styles.body} {...mouse.body.handlers}>
         {el}
         {elSpinner}
       </div>
+      {elClose}
     </div>
   );
 };

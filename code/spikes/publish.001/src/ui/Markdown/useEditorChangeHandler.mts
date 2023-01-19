@@ -33,7 +33,9 @@ export function useEditorChangeHandler(instance: t.Instance) {
    * API
    */
   return {
-    state: state.current,
     changeHandler,
+    get state() {
+      return state.current;
+    },
   };
 }

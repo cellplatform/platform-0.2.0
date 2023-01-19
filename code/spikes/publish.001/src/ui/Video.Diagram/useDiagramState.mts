@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { takeUntil } from 'rxjs';
 
 import { rx, State, t, Text } from '../common';
 import { TimeMap } from './TimeMap.mjs';
@@ -87,7 +86,7 @@ export function useDiagramState(args: { instance: t.Instance; vimeo?: t.VimeoEve
     };
 
     if (args.vimeo) {
-      const status$ = args.vimeo?.status.$.pipe(takeUntil(dispose$));
+      const status$ = args.vimeo?.status.$.pipe(rx.takeUntil(dispose$));
       status$.subscribe((status) => updateState(status));
     }
 

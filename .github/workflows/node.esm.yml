@@ -5,7 +5,7 @@
 #     https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 #
 
-name: CI
+name: ci
 
 env:
   VERCEL_TEST_TOKEN: ${{ secrets.VERCEL_TEST_TOKEN }}

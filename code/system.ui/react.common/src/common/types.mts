@@ -30,6 +30,7 @@ export type {
   DevValueHandler,
   DevRenderRef,
   DevRenderer,
+  DevRenderProps,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 /**

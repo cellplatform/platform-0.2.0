@@ -1,7 +1,7 @@
-import { Color, COLORS, css, State, t } from '../common';
 import { MonacoEditor } from 'sys.ui.react.monaco';
-// import { MarkdownEditor } from '../Markdown.Editor/index.mjs';
-import { MarkdownLayout } from '../Markdown.Layout/index.mjs';
+
+import { Color, COLORS, css, State, t } from '../common';
+import { MarkdownLayout } from '../Markdown.Layout';
 import { useEditorChangeHandler } from './useEditorChangeHandler.mjs';
 
 export type MarkdownProps = {

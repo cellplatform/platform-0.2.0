@@ -8,16 +8,18 @@ import { Util } from './Util.mjs';
 export type DocImageProps = {
   def: t.DocImageYaml;
   style?: t.CssValue;
+  onLinkClick?: React.MouseEventHandler;
 };
 
 export const DocImage: React.FC<DocImageProps> = (props) => {
-  const { def } = props;
+  const { def, onLinkClick } = props;
 
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState('');
 
   const width = def?.width;
   const border = def?.border;
+  const href = def?.link;
 
   const margin = def?.margin;
   const title = Wrangle.title(def);
@@ -63,12 +65,19 @@ export const DocImage: React.FC<DocImageProps> = (props) => {
         setLoaded(true);
         setLoadError(`Failed to load image at location: \`${def.src}\``);
       }}
+      onClick={props.onLinkClick}
     />
+  );
+
+  const elImageLink = !loadError && href && !onLinkClick && (
+    <a href={href} target={'_blank'} rel={'noopener'}>
+      {elImage}
+    </a>
   );
 
   return (
     <div {...css(styles.base, props.style)} className={DEFAULTS.MD.CLASS.BLOCK}>
-      <div {...styles.image.base}>{elImage}</div>
+      <div {...styles.image.base}>{elImageLink || elImage}</div>
       {elError}
       {elTitle}
     </div>

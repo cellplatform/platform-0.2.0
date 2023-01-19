@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, t } from '../common';
 import { Icons } from '../Icons.mjs';
 import { MarkdownDoc } from '../Markdown.Doc';
-import { useTriggerClickHandler } from './useTriggerClickHandler.mjs';
+import { useMarkdownLinkClick } from './useMarkdownLinkClick.mjs';
 
 const CLASS = DEFAULTS.MD.CLASS;
 
@@ -18,7 +18,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
   const { margin = {} } = def;
 
   const [md, setMd] = useState<t.ProcessedMdast | undefined>();
-  const click = useTriggerClickHandler({ instance, def, md });
+  const click = useMarkdownLinkClick({ instance, def, md });
 
   /**
    * [Render]
@@ -109,7 +109,7 @@ export const OverlayTriggerPanel: React.FC<OverlayTriggerPanelProps> = (props) =
     <div {...styles.body}>
       <MarkdownDoc
         instance={instance}
-        markdown={def.detail}
+        markdown={def.markdown}
         className={CLASS.TIGGER_PANEL}
         onParsed={(e) => setMd(e.md)}
       />

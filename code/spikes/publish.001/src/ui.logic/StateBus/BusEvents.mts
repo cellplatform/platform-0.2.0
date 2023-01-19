@@ -37,7 +37,7 @@ export function BusEvents(args: {
      * Do not hard code the initial path.  Derive it from the root [index.md]
      */
     if (!current?.selection.index?.path) {
-      const FOREWORD = './0/foreword.md';
+      const FOREWORD = './0/root.md';
       await select.fire(FOREWORD);
     }
   };

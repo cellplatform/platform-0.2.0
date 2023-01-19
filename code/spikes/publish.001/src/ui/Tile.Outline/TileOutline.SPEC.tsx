@@ -1,6 +1,6 @@
 import { Dev, css, Processor, R } from '../../test.ui';
 import { Icons } from '../Icons.mjs';
-import { TileOutline } from './index.mjs';
+import { TileOutline } from '.';
 
 type T = { count: number };
 const initial: T = { count: 0 };

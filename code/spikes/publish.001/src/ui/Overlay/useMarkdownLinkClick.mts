@@ -3,33 +3,20 @@ import { visit } from 'unist-util-visit';
 
 import { State, t } from '../common';
 
-export function useTriggerClickHandler(args: {
+export function useMarkdownLinkClick(args: {
   instance: t.Instance;
   def: t.OverlayDef;
   md?: t.ProcessedMdast;
 }) {
   const { instance, def, md } = args;
+  const markdown = md?.markdown;
   const ref = useRef<HTMLDivElement>(null);
 
   /**
-   * [Lifecycle]
+   * Markdown.
    */
   useEffect(() => {
     const events = State.Bus.Events({ instance });
-
-    const getLinks = (mdast?: t.MdastRoot): t.StateOverlayContext[] => {
-      if (!mdast) return [];
-
-      const res: t.StateOverlayContext[] = [];
-      visit(mdast, 'link', (node) => {
-        const path = node.url.replace(/^\.\//, '');
-        let title = 'Untitled';
-        if (node.children[0].type === 'text') title = node.children[0].value;
-        res.push({ title, path });
-      });
-
-      return res;
-    };
 
     /**
      * Intercept node click events looking for
@@ -45,21 +32,40 @@ export function useTriggerClickHandler(args: {
       const base = location.pathname;
       const path = el.pathname.substring(base.length);
       const context = getLinks(md?.mdast);
+
       events.overlay.def(def, path, { context });
     };
 
     /**
      * Init/Dispose.
      */
-    document.addEventListener('click', handler);
+    if (markdown) document.addEventListener('click', handler);
     return () => {
-      events.dispose();
       document.removeEventListener('click', handler);
+      events.dispose();
     };
-  }, [md?.markdown]);
+  }, [markdown]);
 
   /**
    * API
    */
   return { ref };
+}
+
+/**
+ * Helpers
+ */
+
+export function getLinks(mdast?: t.MdastRoot): t.StateOverlayContext[] {
+  if (!mdast) return [];
+  const res: t.StateOverlayContext[] = [];
+
+  visit(mdast, 'link', (node) => {
+    const path = node.url.replace(/^\.\//, '');
+    let title = 'Untitled';
+    if (node.children[0].type === 'text') title = node.children[0].value;
+    res.push({ title, path });
+  });
+
+  return res;
 }

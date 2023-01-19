@@ -39,7 +39,8 @@ export function boolean<S extends O = O>(
     const change = state.change;
     const onClick = async () => {
       const current = value.current ?? false;
-      clickHandlers.forEach((fn) => fn({ ...args, current, state, change }));
+      const dev = ctx.toObject().props;
+      clickHandlers.forEach((fn) => fn({ ...args, dev, current, state, change }));
     };
     return (
       <Boolean

@@ -1,6 +1,7 @@
-import type * as t from './types.mjs';
 import { Text } from 'sys.text';
-export { t };
+import type { t } from '../common.t';
+
+export type { t };
 
 /**
  * @external

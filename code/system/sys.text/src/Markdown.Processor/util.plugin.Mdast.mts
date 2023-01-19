@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import { CONTINUATION, isContinuation, t } from './common.mjs';
+import { CONTINUATION, isContinuation, t, Is } from './common.mjs';
 
 /**
  * Tools for manipulating an MARKDOWN (MD-AST) tree.
@@ -52,17 +52,25 @@ export const Mdast = {
        */
       if (externalLinksInNewTab === true) {
         mutate.visit((e) => {
-          if (e.node.type === 'link' && Is.externalLink(e.node.url)) {
-            type T = { target?: '_blank'; rel?: 'noopener' };
-            const props = e.hProperties<T>();
-            props.target = '_blank';
-            props.rel = 'noopener'; // NB: Security - https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types/noopener
+          if (e.node.type === 'link') {
+            let url = e.node.url || ''.trim();
+
+            if (Is.email(url)) {
+              e.node.url = url = `mailto:${url}`;
+            }
+
+            if (Link.isExternal(url) || Link.isMailTo(url)) {
+              type T = { target?: '_blank'; rel?: 'noopener' };
+              const props = e.hProperties<T>();
+              props.target = '_blank';
+              props.rel = 'noopener'; // NB: Security - https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types/noopener
+            }
           }
         });
       }
 
       /**
-       * Invole the callback handler (if present).
+       * Invoke the callback handler (if present).
        */
       const fn = options?.mdast;
       fn?.(mutate);
@@ -74,9 +82,14 @@ export const Mdast = {
  * [Helpers]
  */
 
-const Is = {
-  externalLink(input: string) {
-    const link = (input || '').trim();
+const Link = {
+  isExternal(url: string) {
+    const link = (url || '').trim();
     return link.startsWith('https://') || link.startsWith('http://');
+  },
+
+  isMailTo(url: string) {
+    const link = (url || '').trim();
+    return link.startsWith('mailto:');
   },
 };

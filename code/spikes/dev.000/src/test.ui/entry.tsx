@@ -8,7 +8,7 @@ const url = new URL(location.href);
 const params = url.searchParams;
 const isDev = params.has('dev') || params.has('d');
 
-const badge = {
+const BADGE_CI = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
@@ -22,7 +22,7 @@ const badge = {
 
   if (isDev) {
     const { Dev } = await import('./index');
-    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
+    const el = await Dev.render(Pkg, Specs, { badge: BADGE_CI, hrDepth: 3 });
     root.render(el);
   } else {
     const { RootFill } = await import('../ui/Root');

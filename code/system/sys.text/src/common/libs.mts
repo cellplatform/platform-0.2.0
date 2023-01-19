@@ -7,4 +7,4 @@ export { Yaml };
 /**
  * @system
  */
-export { rx, Time, slug } from 'sys.util';
+export { rx, Time, slug, Is } from 'sys.util';

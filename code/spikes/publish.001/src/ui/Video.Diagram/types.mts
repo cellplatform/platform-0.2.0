@@ -1,4 +1,4 @@
-import type * as t from '../common/types.mjs';
+import type { t } from '../common.t';
 
 type Seconds = number;
 type MarkdownString = string;

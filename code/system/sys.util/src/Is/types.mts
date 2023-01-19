@@ -1,8 +1,10 @@
 export type Is = IsFlags & IsMethods;
 
 export type IsFlags = {
-  browser: boolean;
-  node: boolean;
+  env: {
+    browser: boolean;
+    nodejs: boolean;
+  };
 };
 
 export type IsMethods = {
@@ -14,4 +16,5 @@ export type IsMethods = {
   blank(input?: any): boolean;
   numeric(input?: any): boolean;
   json(input?: any): boolean;
+  email(input?: any): boolean;
 };

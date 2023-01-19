@@ -1,1 +1,1 @@
-export type EditorLanguage = 'markdown' | 'typescript' | 'javascript';
+export type EditorLanguage = 'markdown' | 'typescript' | 'javascript' | 'yaml';

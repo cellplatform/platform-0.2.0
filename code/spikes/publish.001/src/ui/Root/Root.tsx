@@ -3,8 +3,8 @@ import 'symbol-observable';
 import { useEffect } from 'react';
 
 import { Color, COLORS, css, State, t } from '../common';
-import { History } from '../History/index.mjs';
-import { Markdown } from '../Markdown/index.mjs';
+import { History } from '../History';
+import { Markdown } from '../Markdown';
 import { env } from '../Root.env';
 import { RootTitle } from './Root.Title';
 

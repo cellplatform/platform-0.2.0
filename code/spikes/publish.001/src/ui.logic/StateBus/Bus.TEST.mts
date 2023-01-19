@@ -1,4 +1,4 @@
-import { StateBus } from './index.mjs';
+import { StateBus } from '.';
 import { describe, it, expect, Pkg, rx, slug } from '../../test';
 import { DEFAULTS } from './common.mjs';
 

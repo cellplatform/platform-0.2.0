@@ -21,7 +21,7 @@ export default Spec.describe('MySample', (e) => {
       .size(300, 200)
       .display('flex')
       .backgroundColor('rgba(255, 0, 0, 0.1)' /* RED */)
-      .render<t.JsonMap>((e) => {
+      .render<T>((e) => {
         const text = `MySample-${_renderCount}`;
         return (
           <MySample

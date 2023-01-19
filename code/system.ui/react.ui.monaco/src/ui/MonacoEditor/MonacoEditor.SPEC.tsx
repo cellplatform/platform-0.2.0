@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { t, Dev } from '../../test.ui';
 import { MonacoEditor, MonacoEditorProps } from '.';
 
 type T = { count: number; props: MonacoEditorProps };
@@ -29,9 +29,9 @@ export default Dev.describe('MonacoEditor', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={3} />);
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
-    const language = (value: MonacoEditorProps['language']) => {
+    const language = (value: t.EditorLanguage) => {
       dev.button(`${value}`, (e) => e.change((d) => (d.props.language = value)));
     };
 
@@ -39,5 +39,6 @@ export default Dev.describe('MonacoEditor', (e) => {
     language('markdown');
     language('typescript');
     language('javascript');
+    language('yaml');
   });
 });

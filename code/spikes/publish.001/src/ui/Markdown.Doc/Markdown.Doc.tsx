@@ -31,9 +31,8 @@ const View: React.FC<MarkdownDocProps> = (props) => {
       color: globalStyles.DocStyles.p.color,
       width: props.width,
     }),
-    body: css({
-      position: 'relative',
-    }),
+
+    body: css({ position: 'relative' }),
 
     blocks: css({
       userSelect: 'text',

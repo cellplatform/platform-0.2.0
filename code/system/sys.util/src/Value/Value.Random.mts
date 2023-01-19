@@ -12,7 +12,7 @@ import { Is } from '../Is/index.mjs';
  *    if random numbers when running on node-js.
  *
  */
-if (Is.node && !(global as any).crypto?.getRandomValues) {
+if (Is.env.nodejs && !(global as any).crypto?.getRandomValues) {
   (global as any).crypto = {
     getRandomValues(buffer: Uint8Array) {
       const length = buffer.length;
