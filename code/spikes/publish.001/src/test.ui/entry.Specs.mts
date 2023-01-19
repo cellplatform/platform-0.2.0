@@ -7,7 +7,7 @@ export const Specs = {
   'spike.ui.TileOutline': () => import('../ui/Tile.Outline/TileOutline.SPEC'),
   'spike.ui.Video.Diagram': () => import('../ui/Video.Diagram/ui.VideoDiagram.SPEC'),
   'spike.ui.Video.ProgressBar': () => import('../ui/Video.ProgressBar/ui.ProgressBar.SPEC'),
-  'spike.ui.Video.Playlist': () => import('../ui/Video.Playlist/Playlist.SPEC'),
+  'spike.ui.Concept.Playlist': () => import('../ui/Concept.Playlist/Playlist.SPEC'),
 
   ...VideoSpecs,
 };
