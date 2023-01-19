@@ -1,1 +1,1 @@
-export * from './ui.Playlist';
+export * from './Playlist';
