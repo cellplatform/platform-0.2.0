@@ -50,6 +50,7 @@ export type OverlayDef = {
   margin?: { top?: number; bottom?: number };
   markdown?: MarkdownString;
   image?: t.DocImageYaml;
+  playlist?: t.DocPlaylistYaml;
 };
 
 /**
