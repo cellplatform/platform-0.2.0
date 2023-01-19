@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Value, COLORS, css, t, Time } from '../common';
+
+type Milliseconds = number;
 
 export type FooterProps = {
-  footerRight?: string | JSX.Element;
+  totalDuration?: Milliseconds;
   style?: t.CssValue;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
-  const { footerRight } = props;
+  const bottomRight = Wrangle.duration(props);
 
   /**
    * [Render]
@@ -36,8 +37,21 @@ export const Footer: React.FC<FooterProps> = (props) => {
       <div></div>
       <div {...styles.bottom}>
         <div {...styles.bottomLeft} />
-        {footerRight && <div {...styles.bottomRight}>{footerRight}</div>}
+        {bottomRight && <div {...styles.bottomRight}>{bottomRight}</div>}
       </div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  duration(props: FooterProps) {
+    const duration = props.totalDuration ? Time.duration(props.totalDuration) : undefined;
+    if (!duration) return '';
+
+    const mins = Value.round(duration.min, 0);
+    return `${mins} ${Value.plural(mins, 'min', 'mins')} (total)`;
+  },
 };

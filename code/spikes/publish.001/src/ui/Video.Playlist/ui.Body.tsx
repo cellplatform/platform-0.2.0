@@ -26,6 +26,7 @@ export const Body: React.FC<BodyProps> = (props) => {
     }),
     empty: css({
       Absolute: 0,
+      userSelect: 'none',
       display: 'grid',
       placeItems: 'center',
       fontStyle: 'italic',

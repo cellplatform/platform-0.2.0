@@ -10,6 +10,8 @@ export type {
   VimeoId,
 } from 'sys.ui.react.video/src/types.mjs';
 
+export type { ButtonMouseHandler } from 'sys.ui.react.common/src/types.mjs';
+
 /**
  * @local
  */

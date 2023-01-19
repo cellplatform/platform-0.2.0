@@ -1,4 +1,6 @@
-import { Color, COLORS, css, t, rx, Button, Time, Value } from '../common';
+import { useState } from 'react';
+
+import { Button, Color, COLORS, css, t, Time } from '../common';
 import { Icons } from '../Icons.mjs';
 
 export type RowProps = {
@@ -12,8 +14,14 @@ export const Row: React.FC<RowProps> = (props) => {
   const { item, index } = props;
   const duration = item.duration ? Time.duration(item.duration) : undefined;
 
+  const [isOver, setOver] = useState(false);
+
   const handleClick = () => {
     props.onClick?.({ item, index });
+  };
+
+  const handleMouse: t.ButtonMouseHandler = (e) => {
+    setOver(e.isOver);
   };
 
   /**
@@ -22,6 +30,7 @@ export const Row: React.FC<RowProps> = (props) => {
   const CYAN = COLORS.CYAN;
   const styles = {
     base: css({
+      backgroundColor: Color.alpha(CYAN, isOver ? 0.12 : 0),
       borderBottom: `dashed 1px ${Color.alpha(CYAN, 0.3)}`,
       ':last-child': { borderBottom: 'none' },
     }),
@@ -32,6 +41,7 @@ export const Row: React.FC<RowProps> = (props) => {
       PaddingY: 6,
       paddingLeft: 20,
       paddingRight: 25,
+      color: COLORS.DARK,
     }),
     icon: css({}),
     text: css({
@@ -44,16 +54,19 @@ export const Row: React.FC<RowProps> = (props) => {
       width: 150,
       display: 'grid',
       placeItems: 'center',
-      color: Color.alpha(CYAN, 0.7),
+      color: Color.alpha(CYAN, isOver ? 1 : 0.7),
       fontSize: 18,
     }),
   };
+
+  const Icon = isOver ? Icons.Play.Filled : Icons.Play.Outline;
+
   return (
     <div {...css(styles.base, props.style)}>
-      <Button style={styles.body} onClick={handleClick}>
+      <Button style={styles.body} onClick={handleClick} onMouse={handleMouse}>
         <>
           <div {...styles.icon}>
-            <Icons.Play.Outline size={40} color={CYAN} />
+            <Icon size={40} color={CYAN} />
           </div>
           <div {...styles.text}>{item.text}</div>
           <div {...styles.status}>{duration?.toString()}</div>

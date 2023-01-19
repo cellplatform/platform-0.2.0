@@ -9,7 +9,6 @@ export type PlaylistProps = {
   title?: string;
   previewImage?: Url;
   previewTitle?: string;
-  footerRight?: string | JSX.Element;
   items?: t.PlaylistItem[];
   style?: t.CssValue;
   onClick?: t.PlaylistItemClickHandler;
@@ -33,7 +32,18 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Header title={title} previewTitle={props.previewTitle} previewImage={props.previewImage} />
       <Body items={props.items} onClick={props.onClick} />
-      <Footer footerRight={props.footerRight} />
+      <Footer totalDuration={Wrangle.totalDuration(props)} />
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  totalDuration(props: PlaylistProps) {
+    const { items = [] } = props;
+    return items.reduce((acc, next) => acc + (next.duration ?? 0), 0);
+  },
 };

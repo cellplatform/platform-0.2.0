@@ -1,5 +1,5 @@
-import { t, COLORS, Dev } from '../../test.ui';
 import { Playlist, PlaylistProps } from '.';
+import { Dev, t } from '../../test.ui';
 
 const msecs = (seconds: number) => seconds * 1000;
 
@@ -17,7 +17,6 @@ const initial: T = {
   props: {
     title: 'Deep dive into decentralization',
     previewTitle: 'programme',
-    footerRight: '4 mins (total)',
     items: [],
     previewImage:
       'https://user-images.githubusercontent.com/185555/213319665-8128314b-5d8e-4a19-b7f5-2469f09d6690.png',
@@ -74,7 +73,7 @@ export default Dev.describe('Video.Playlist', (e) => {
         e.change((d) => {
           /**
            * TODO 🐷
-           * Block object update in `sys.dev`
+           * return value as "REPLACE" object update in `sys.dev`
            */
 
           type K = keyof PlaylistProps;
@@ -87,7 +86,6 @@ export default Dev.describe('Video.Playlist', (e) => {
         e.change(({ props }) => {
           props.title = undefined;
           props.previewTitle = undefined;
-          props.footerRight = undefined;
           props.items = undefined;
           props.previewImage = undefined;
         });
