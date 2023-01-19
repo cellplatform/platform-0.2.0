@@ -18,7 +18,13 @@ export default Dev.describe('Button', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .render<T>((e) => <Button {...e.state.props} onClick={(e) => console.info('⚡️ onClick')} />);
+      .render<T>((e) => (
+        <Button
+          {...e.state.props}
+          onClick={(e) => console.info('⚡️ onClick', e)}
+          onMouse={(e) => console.info(`⚡️ onMouse`, e)}
+        />
+      ));
   });
 
   e.it('debug panel', async (e) => {

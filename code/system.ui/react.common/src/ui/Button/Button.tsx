@@ -31,6 +31,7 @@ export type ButtonProps = {
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
   onDoubleClick?: React.MouseEventHandler;
+  onMouse?: t.ButtonMouseHandler;
 };
 
 const View: React.FC<ButtonProps> = (props) => {
@@ -53,6 +54,13 @@ const View: React.FC<ButtonProps> = (props) => {
         if (isOver && props.onMouseEnter) props.onMouseEnter(e);
         if (!isOver && props.onMouseLeave) props.onMouseLeave(e);
       }
+      props.onMouse?.({
+        event: e,
+        isOver,
+        isDown: !isOver ? false : isDown,
+        isEnabled,
+        action: isOver ? 'MouseEnter' : 'MouseLeave',
+      });
     };
   };
 
@@ -64,6 +72,13 @@ const View: React.FC<ButtonProps> = (props) => {
         if (!isDown && props.onMouseUp) props.onMouseUp(e);
         if (!isDown && props.onClick) props.onClick(e);
       }
+      props.onMouse?.({
+        event: e,
+        isOver,
+        isDown,
+        isEnabled,
+        action: isDown ? 'MouseDown' : 'MouseUp',
+      });
     };
   };
 
