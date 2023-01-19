@@ -1,5 +1,5 @@
 import { Color, COLORS, css, t } from '../common';
-import { Row } from './ui.List.Row';
+import { Row } from './ui.Row';
 
 export type BodyProps = {
   items?: t.PlaylistItem[];

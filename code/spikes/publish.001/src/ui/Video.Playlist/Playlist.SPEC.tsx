@@ -110,10 +110,17 @@ export default Dev.describe('Video.Playlist', (e) => {
 
       dev.hr();
 
-      dev.button(`add: ${ITEMS.length} items`, (e) => e.change((d) => (d.props.items = ITEMS)));
+      dev.button(`add: items (${ITEMS.length})`, (e) => e.change((d) => (d.props.items = ITEMS)));
       dev.button('remove: first', (e) =>
         e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
       );
+      dev.button('remove: last', (e) =>
+        e.change((d) => {
+          const items = d.props.items || [];
+          d.props.items = items.slice(0, items.length - 1);
+        }),
+      );
+      dev.button('(clear)', (e) => e.change((d) => (d.props.items = undefined)));
     });
 
     dev.hr();

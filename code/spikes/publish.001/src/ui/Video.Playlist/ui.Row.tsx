@@ -40,7 +40,7 @@ export const Row: React.FC<RowProps> = (props) => {
       columnGap: 20,
       PaddingY: 6,
       paddingLeft: 20,
-      paddingRight: 25,
+      paddingRight: 60,
       color: COLORS.DARK,
     }),
     icon: css({}),
@@ -51,7 +51,7 @@ export const Row: React.FC<RowProps> = (props) => {
       paddingBottom: 3,
     }),
     status: css({
-      width: 150,
+      width: 80,
       display: 'grid',
       placeItems: 'center',
       color: Color.alpha(CYAN, isOver ? 1 : 0.7),
