@@ -35,6 +35,7 @@ export const Row: React.FC<RowProps> = (props) => {
       ':last-child': { borderBottom: 'none' },
     }),
     body: css({
+      boxSizing: 'border-box',
       display: 'grid',
       gridTemplateColumns: `auto 1fr auto`,
       columnGap: 20,
@@ -43,7 +44,10 @@ export const Row: React.FC<RowProps> = (props) => {
       paddingRight: 60,
       color: COLORS.DARK,
     }),
-    icon: css({}),
+    icon: css({
+      display: 'grid',
+      placeItems: 'center',
+    }),
     text: css({
       boxSizing: 'border-box',
       display: 'grid',
