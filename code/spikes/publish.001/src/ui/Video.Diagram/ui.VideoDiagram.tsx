@@ -177,7 +177,7 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
 
   const elCloseLabel = dimmed && (
     <div {...styles.close.base}>
-      <div {...styles.close.label}>{`(close)`}</div>
+      <div {...styles.close.label}>{/* {`(close)`} */}</div>
     </div>
   );
 
