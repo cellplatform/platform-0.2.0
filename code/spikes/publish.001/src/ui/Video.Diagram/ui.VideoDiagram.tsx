@@ -84,8 +84,8 @@ export const VideoDiagram: React.FC<VideoDiagramProps> = (props) => {
     content: css({
       Absolute: 0,
       display: 'flex',
-      filter: `blur(${dimmed ? 5 : 0}px)`,
-      opacity: dimmed ? 0.4 : 1,
+      filter: `blur(${dimmed ? 4 : 0}px)`,
+      opacity: dimmed ? 0.6 : 1,
       transition: `opacity 300ms`,
     }),
     statusBar: css({
