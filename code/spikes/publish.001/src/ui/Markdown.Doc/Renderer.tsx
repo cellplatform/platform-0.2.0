@@ -1,10 +1,10 @@
 import { Processor, t, Text } from '../common';
-import { MarkdownUtil } from '../Markdown/Markdown.Util.mjs';
 
 const Imports = {
   OverlayTrigger: {
     MarkdownPanel: () => import('../Overlay/ui.Trigger.MarkdownPanel'),
     Image: () => import('../Overlay/ui.Trigger.Image'),
+    Playlist: () => import('../Overlay/ui.Trigger.Playlist'),
   },
 
   Hr: () => import('../Markdown.Doc.Components/Doc.Hr'),
@@ -71,15 +71,27 @@ export const defaultRenderer: t.MarkdownDocBlockRenderer = async (e) => {
       const res = await parseYamlOrError<t.OverlayDef>(e.node.value);
       if (res.error) return res.error.element;
       const def = res.data;
+      const elements: JSX.Element[] = [];
+
       if (def.markdown) {
         const { OverlayTriggerPanel } = await Imports.OverlayTrigger.MarkdownPanel();
-        return <OverlayTriggerPanel instance={instance} def={res.data} />;
+        const el = <OverlayTriggerPanel instance={instance} def={res.data} />;
+        elements.push(el);
       }
 
       if (def.image) {
         const { OverlayTriggerImage } = await Imports.OverlayTrigger.Image();
-        return <OverlayTriggerImage instance={instance} def={res.data} />;
+        const el = <OverlayTriggerImage instance={instance} def={res.data} />;
+        elements.push(el);
       }
+
+      if (def.playlist) {
+        const { OverlayTriggerPlaylist } = await Imports.OverlayTrigger.Playlist();
+        const el = <OverlayTriggerPlaylist instance={instance} def={res.data} />;
+        elements.push(el);
+      }
+
+      return <>{...elements}</>;
     }
 
     /**
