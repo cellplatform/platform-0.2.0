@@ -1,3 +1,5 @@
+import type { t } from '../../common.t';
+
 export type DocImageAlign = 'Left' | 'Center' | 'Right';
 
 export type DocImageType = DocImageYaml & {
@@ -20,4 +22,8 @@ export type DocImageYaml = {
 export type DocImageCaption = {
   text: string;
   align?: DocImageAlign;
+};
+
+export type DocPlaylistYaml = {
+  items?: t.PlaylistItem[];
 };
