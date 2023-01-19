@@ -19,7 +19,8 @@ export type DevBooleanHandlerArgs<S extends O = O> = {
  */
 export type DevBooleanClickHandler<S extends O = O> = (e: DevBooleanClickHandlerArgs<S>) => void;
 export type DevBooleanClickHandlerArgs<S extends O = O> = DevBooleanHandlerArgs<S> & {
-  current: boolean;
+  dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
+  current: boolean;
 };

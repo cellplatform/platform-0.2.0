@@ -32,7 +32,8 @@ export function button<S extends O = O>(
   const ref = ctx.debug.row(async (e) => {
     const state = await ctx.state<S>(initial);
     const change = state.change;
-    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, state, change }));
+    const dev = ctx.toObject().props;
+    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
     return (
       <Button
         label={label.current}
