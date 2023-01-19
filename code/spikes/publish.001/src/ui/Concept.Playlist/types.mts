@@ -1,14 +1,15 @@
 import type { t } from '../../common.t';
 
-type Milliseconds = number;
+type Seconds = number;
 
 export type PlaylistItem = {
   text: string | JSX.Element;
-  duration?: Milliseconds;
+  link?: string;
+  secs?: Seconds;
 };
 
 export type PlaylistItemClickHandler = (e: PlaylistItemClickHandlerArgs) => void;
 export type PlaylistItemClickHandlerArgs = {
-  item: PlaylistItem;
   index: number;
+  data: PlaylistItem;
 };

@@ -12,12 +12,12 @@ export type RowProps = {
 
 export const Row: React.FC<RowProps> = (props) => {
   const { item, index } = props;
-  const duration = item.duration ? Time.duration(item.duration) : undefined;
+  const duration = item.secs ? Time.duration(item.secs * 1000) : undefined;
 
   const [isOver, setOver] = useState(false);
 
   const handleClick = () => {
-    props.onClick?.({ item, index });
+    props.onClick?.({ data: item, index });
   };
 
   const handleMouse: t.ButtonMouseHandler = (e) => {

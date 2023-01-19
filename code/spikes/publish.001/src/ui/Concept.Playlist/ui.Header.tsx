@@ -12,6 +12,8 @@ export type HeaderProps = {
 export const Header: React.FC<HeaderProps> = (props) => {
   const { previewTitle, previewImage } = props;
 
+  console.log('previewImage', previewImage);
+
   /**
    * [Render]
    */
@@ -21,6 +23,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
       PaddingX: 25,
       paddingBottom: 25,
       display: 'grid',
+      userSelect: 'none',
       gridTemplateColumns: '1fr auto',
       columnGap: 25,
     }),
@@ -35,16 +38,19 @@ export const Header: React.FC<HeaderProps> = (props) => {
     }),
     title: css({
       fontSize: 28,
+      userSelect: 'text',
     }),
     preview: css({
       backgroundColor: COLORS.WHITE,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.25)}`,
+      border: `1px ${Color.alpha(COLORS.DARK, Boolean(previewImage) ? 0.25 : 0.12)}`,
+      borderStyle: `${previewImage ? 'solid' : 'dashed'}`,
       borderRadius: 8,
       height: 90,
       backgroundImage: previewImage ? `url(${previewImage})` : undefined,
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'bottom center',
+      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     categoryTitle: css({
       textTransform: 'uppercase',

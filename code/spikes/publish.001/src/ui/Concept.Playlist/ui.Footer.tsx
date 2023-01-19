@@ -1,14 +1,14 @@
 import { Value, COLORS, css, t, Time } from '../common';
 
-type Milliseconds = number;
+type Seconds = number;
 
 export type FooterProps = {
-  totalDuration?: Milliseconds;
+  totalSecs?: Seconds;
   style?: t.CssValue;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
-  const bottomRight = Wrangle.duration(props);
+  const duration = Wrangle.duration(props);
 
   /**
    * [Render]
@@ -18,6 +18,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
       minHeight: 60,
       display: 'grid',
       gridTemplateRows: '1fr auto',
+      userSelect: 'none',
     }),
     bottom: css({
       display: 'grid',
@@ -28,6 +29,10 @@ export const Footer: React.FC<FooterProps> = (props) => {
     }),
     bottomRight: css({
       PaddingX: 35,
+    }),
+    duration: css({
+      position: 'relative',
+      bottom: -5,
       fontSize: 22,
     }),
   };
@@ -37,7 +42,11 @@ export const Footer: React.FC<FooterProps> = (props) => {
       <div></div>
       <div {...styles.bottom}>
         <div {...styles.bottomLeft} />
-        {bottomRight && <div {...styles.bottomRight}>{bottomRight}</div>}
+        {
+          <div {...styles.bottomRight}>
+            <div {...styles.duration}>{duration ? duration.toString() : '(empty)'}</div>
+          </div>
+        }
       </div>
     </div>
   );
@@ -48,10 +57,14 @@ export const Footer: React.FC<FooterProps> = (props) => {
  */
 const Wrangle = {
   duration(props: FooterProps) {
-    const duration = props.totalDuration ? Time.duration(props.totalDuration) : undefined;
-    if (!duration) return '';
-
-    const mins = Value.round(duration.min, 0);
-    return `${mins} ${Value.plural(mins, 'min', 'mins')} (total)`;
+    const duration = props.totalSecs ? Time.duration(props.totalSecs * 1000) : undefined;
+    return {
+      toString() {
+        const minutes = Value.round(duration?.min ?? 0, 0);
+        return minutes < 1
+          ? `(under a minute)`
+          : `${minutes} ${Value.plural(minutes, 'min', 'mins')} (total)`;
+      },
+    };
   },
 };

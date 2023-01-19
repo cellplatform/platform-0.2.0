@@ -3,19 +3,19 @@ import { Body } from './ui.Body';
 import { Footer } from './ui.Footer';
 import { Header } from './ui.Header';
 
-type Url = string;
+type UrlString = string;
 
 export type PlaylistProps = {
   title?: string;
-  previewImage?: Url;
-  previewTitle?: string;
+  preview?: { image?: UrlString; title?: string };
   items?: t.PlaylistItem[];
   style?: t.CssValue;
   onClick?: t.PlaylistItemClickHandler;
 };
 
 export const Playlist: React.FC<PlaylistProps> = (props) => {
-  const { title = 'Untitled Playlist' } = props;
+  const { title = 'Untitled Playlist', preview = {} } = props;
+  const totalSecs = Wrangle.totalSeconds(props.items);
 
   /**
    * [Render]
@@ -30,9 +30,9 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
   };
   return (
     <div {...css(styles.base, props.style)}>
-      <Header title={title} previewTitle={props.previewTitle} previewImage={props.previewImage} />
+      <Header title={title} previewTitle={preview.title} previewImage={preview.image} />
       <Body items={props.items} onClick={props.onClick} />
-      <Footer totalDuration={Wrangle.totalDuration(props)} />
+      <Footer totalSecs={totalSecs} />
     </div>
   );
 };
@@ -42,8 +42,7 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
  */
 
 const Wrangle = {
-  totalDuration(props: PlaylistProps) {
-    const { items = [] } = props;
-    return items.reduce((acc, next) => acc + (next.duration ?? 0), 0);
+  totalSeconds(items?: t.PlaylistItem[]) {
+    return (items ?? []).reduce((acc, next) => acc + (next.secs ?? 0), 0);
   },
 };

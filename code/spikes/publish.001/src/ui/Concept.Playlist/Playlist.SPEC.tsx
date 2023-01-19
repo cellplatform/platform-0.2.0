@@ -1,25 +1,25 @@
 import { Playlist, PlaylistProps } from '.';
 import { Dev, t } from '../../test.ui';
 
-const msecs = (seconds: number) => seconds * 1000;
-
 const ITEMS: t.PlaylistItem[] = [
-  { text: 'Credibly neutral protocols as public goods.', duration: msecs(120) },
-  { text: 'Why did "web2" (centralization) happen?', duration: msecs(62) },
-  { text: 'The blockchain trilemma.', duration: msecs(530) },
-  { text: 'Blockchain trade-offs.', duration: msecs(125) },
-  { text: 'Self-sovereign identity.', duration: msecs(624) },
-  { text: 'Individual control.', duration: msecs(342) },
+  { text: 'Credibly neutral protocols as public goods.', secs: 120 },
+  { text: 'Why did "web2" (centralization) happen?', secs: 62 },
+  { text: 'The blockchain trilemma.', secs: 530 },
+  { text: 'Blockchain trade-offs.', secs: 125 },
+  { text: 'Self-sovereign identity.', secs: 624 },
+  { text: 'Individual control.', secs: 342 },
 ];
 
 type T = { props: PlaylistProps };
 const initial: T = {
   props: {
     title: 'Deep dive into decentralization',
-    previewTitle: 'programme',
     items: [],
-    previewImage:
-      'https://user-images.githubusercontent.com/185555/213319665-8128314b-5d8e-4a19-b7f5-2469f09d6690.png',
+    preview: {
+      title: 'programme',
+      image:
+        'https://user-images.githubusercontent.com/185555/213319665-8128314b-5d8e-4a19-b7f5-2469f09d6690.png',
+    },
   },
 };
 
@@ -45,7 +45,7 @@ export default Dev.describe('Video.Playlist', (e) => {
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
     dev
-      .section('Environment', (dev) => {
+      .section('Host', (dev) => {
         dev.boolean((btn) =>
           btn
             .label('white background')
@@ -58,6 +58,8 @@ export default Dev.describe('Video.Playlist', (e) => {
             }),
         );
 
+        dev.hr();
+
         const width = (value: number) => {
           dev.button(`width: ${value}px`, (e) => e.ctx.subject.size(value, null));
         };
@@ -69,7 +71,7 @@ export default Dev.describe('Video.Playlist', (e) => {
       .hr();
 
     dev.section('Configurations', (e) => {
-      dev.button('reset: initial', (e) => {
+      dev.button('reset: `{initial}`', (e) => {
         e.change((d) => {
           /**
            * TODO 🐷
@@ -82,12 +84,11 @@ export default Dev.describe('Video.Playlist', (e) => {
         });
       });
 
-      dev.button('reset: empty', (e) => {
+      dev.button('reset: <empty>', (e) => {
         e.change(({ props }) => {
           props.title = undefined;
-          props.previewTitle = undefined;
+          props.preview = undefined;
           props.items = undefined;
-          props.previewImage = undefined;
         });
       });
 
@@ -95,32 +96,43 @@ export default Dev.describe('Video.Playlist', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label('previewTitle')
-          .value((e) => Boolean(e.state.props.previewTitle))
+          .label(`preview.title: "${initial.props.preview?.title}"`)
+          .value((e) => Boolean(e.state.props.preview?.title))
           .onClick((e) => {
             e.change((d) => {
-              const next = d.props.previewTitle ? undefined : initial.props.previewTitle;
-              d.props.previewTitle = next;
+              const preview = d.props.preview ?? (d.props.preview = {});
+              const next = preview.title ? undefined : initial.props.preview?.title;
+              preview.title = next;
+              e.label(`preview.title: ${next ? `"${next}"` : '<undefined>'}`);
             });
           }),
       );
 
+      dev.hr();
+
       dev.button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
-      dev.button('title: short', (e) => e.change((d) => (d.props.title = 'Hello world')));
+      dev.button('title: short - "Hello world"', (e) =>
+        e.change((d) => (d.props.title = 'Hello world.')),
+      );
 
       dev.hr();
 
-      dev.button(`add: items (${ITEMS.length})`, (e) => e.change((d) => (d.props.items = ITEMS)));
-      dev.button('remove: first', (e) =>
-        e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
-      );
-      dev.button('remove: last', (e) =>
-        e.change((d) => {
-          const items = d.props.items || [];
-          d.props.items = items.slice(0, items.length - 1);
-        }),
-      );
-      dev.button('(clear)', (e) => e.change((d) => (d.props.items = undefined)));
+      dev.title('Items');
+      dev
+        .button(`set: items (0)`, (e) => e.change((d) => (d.props.items = [])))
+        .button(`set: items (1)`, (e) => e.change((d) => (d.props.items = [ITEMS[0]])))
+        .button(`set: items (..${ITEMS.length})`, (e) => e.change((d) => (d.props.items = ITEMS)))
+        .hr()
+        .button('remove: first', (e) =>
+          e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
+        )
+        .button('remove: last', (e) =>
+          e.change((d) => {
+            const items = d.props.items || [];
+            d.props.items = items.slice(0, items.length - 1);
+          }),
+        )
+        .button('(clear)', (e) => e.change((d) => (d.props.items = undefined)));
     });
 
     dev.hr();
