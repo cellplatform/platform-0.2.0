@@ -1,18 +1,13 @@
-import { Color, COLORS, css, t, rx } from '../common';
-
-type Url = string;
+import { Color, COLORS, css, t } from '../common';
 
 export type HeaderProps = {
   title: string;
-  previewImage?: Url;
-  previewTitle?: string;
+  preview?: t.PlaylistPreview;
   style?: t.CssValue;
 };
 
 export const Header: React.FC<HeaderProps> = (props) => {
-  const { previewTitle, previewImage } = props;
-
-  console.log('previewImage', previewImage);
+  const { preview = {} } = props;
 
   /**
    * [Render]
@@ -40,35 +35,40 @@ export const Header: React.FC<HeaderProps> = (props) => {
       fontSize: 28,
       userSelect: 'text',
     }),
-    preview: css({
-      backgroundColor: COLORS.WHITE,
-      border: `1px ${Color.alpha(COLORS.DARK, Boolean(previewImage) ? 0.25 : 0.12)}`,
-      borderStyle: `${previewImage ? 'solid' : 'dashed'}`,
-      borderRadius: 8,
-      height: 90,
-      backgroundImage: previewImage ? `url(${previewImage})` : undefined,
-      backgroundSize: 'contain',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'bottom center',
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-    categoryTitle: css({
-      textTransform: 'uppercase',
-      Absolute: [-23, 0, 0, 0],
-      textAlign: 'center',
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: COLORS.CYAN,
-    }),
+    preview: {
+      image: css({
+        backgroundColor: COLORS.WHITE,
+        borderWidth: 1,
+        borderColor: Boolean(preview.image)
+          ? Color.alpha(COLORS.DARK, 0.3)
+          : Color.alpha(COLORS.CYAN, 0.8),
+        borderStyle: `${preview.image ? 'solid' : 'dashed'}`,
+        borderRadius: 8,
+        height: 90,
+        backgroundImage: preview.image ? `url(${preview.image})` : undefined,
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'bottom center',
+      }),
+      title: css({
+        textTransform: 'uppercase',
+        Absolute: [-23, 0, 0, 0],
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: COLORS.CYAN,
+      }),
+    },
   };
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
         <div {...styles.title}>{props.title}</div>
       </div>
       <div {...styles.right}>
-        <div {...styles.preview}></div>
-        {previewTitle && <div {...styles.categoryTitle}>{previewTitle}</div>}
+        <div {...styles.preview.image}></div>
+        {preview.title && <div {...styles.preview.title}>{preview.title}</div>}
       </div>
     </div>
   );

@@ -3,18 +3,16 @@ import { Body } from './ui.Body';
 import { Footer } from './ui.Footer';
 import { Header } from './ui.Header';
 
-type UrlString = string;
-
 export type PlaylistProps = {
   title?: string;
-  preview?: { image?: UrlString; title?: string };
+  preview?: t.PlaylistPreview;
   items?: t.PlaylistItem[];
   style?: t.CssValue;
   onClick?: t.PlaylistItemClickHandler;
 };
 
 export const Playlist: React.FC<PlaylistProps> = (props) => {
-  const { title = 'Untitled Playlist', preview = {} } = props;
+  const { title = 'Untitled Playlist' } = props;
   const totalSecs = Wrangle.totalSeconds(props.items);
 
   /**
@@ -28,9 +26,10 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
       color: COLORS.DARK,
     }),
   };
+
   return (
     <div {...css(styles.base, props.style)}>
-      <Header title={title} previewTitle={preview.title} previewImage={preview.image} />
+      <Header title={title} preview={props.preview} />
       <Body items={props.items} onClick={props.onClick} />
       <Footer totalSecs={totalSecs} />
     </div>
