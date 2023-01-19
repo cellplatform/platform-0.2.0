@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
-import { Header } from './ui.Header';
-import { Footer } from './ui.Footer';
+import { COLORS, css, t } from '../common';
 import { Body } from './ui.Body';
+import { Footer } from './ui.Footer';
+import { Header } from './ui.Header';
 
 type Url = string;
 
@@ -20,10 +19,11 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
   /**
    * [Render]
    */
+  const BORDER = `solid 5px ${COLORS.CYAN}`;
   const styles = {
     base: css({
-      borderLeft: `solid 5px ${COLORS.CYAN}`,
-      borderRight: `solid 5px ${COLORS.CYAN}`,
+      borderLeft: BORDER,
+      borderRight: BORDER,
       color: COLORS.DARK,
     }),
   };

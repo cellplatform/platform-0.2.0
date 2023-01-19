@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { COLORS, Dev } from '../../test.ui';
 import { Playlist, PlaylistProps } from '.';
 
 type T = { props: PlaylistProps };
@@ -16,6 +16,9 @@ export default Dev.describe('Video.Playlist', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
+
+    ctx.host.tracelineColor(-0.05).backgroundColor(1);
+
     ctx.subject
       .display('grid')
       .size(690, null)
@@ -32,6 +35,18 @@ export default Dev.describe('Video.Playlist', (e) => {
 
     dev
       .section('Environment', (dev) => {
+        dev.boolean((btn) =>
+          btn
+            .label('white background')
+            .value((e) => Boolean(e.dev.host.backgroundColor === 1))
+            .onClick((e) => {
+              const isWhite = e.dev.host.backgroundColor === 1;
+              e.ctx.host
+                .backgroundColor(isWhite ? -0.03 : 1)
+                .tracelineColor(isWhite ? -0.05 : -0.02);
+            }),
+        );
+
         const width = (value: number) => {
           dev.button(`width: ${value}px`, (e) => e.ctx.subject.size(value, null));
         };
