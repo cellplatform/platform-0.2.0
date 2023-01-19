@@ -6,6 +6,8 @@ import {
   MdFace,
   MdFactCheck,
   MdOpenInFull,
+  MdPlayCircle,
+  MdPlayCircleOutline,
   MdReplay,
   MdSupport,
   MdVideoLibrary,
@@ -19,6 +21,7 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Play: { Filled: icon(MdPlayCircle), Outline: icon(MdPlayCircleOutline) },
   Close: icon(MdClose),
   Face: icon(MdFace),
   Book: icon(MdAutoStories),

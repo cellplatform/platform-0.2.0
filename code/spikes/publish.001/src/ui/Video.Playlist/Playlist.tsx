@@ -10,7 +10,9 @@ export type PlaylistProps = {
   previewImage?: Url;
   previewTitle?: string;
   footerRight?: string | JSX.Element;
+  items?: t.PlaylistItem[];
   style?: t.CssValue;
+  onClick?: t.PlaylistItemClickHandler;
 };
 
 export const Playlist: React.FC<PlaylistProps> = (props) => {
@@ -30,7 +32,7 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <Header title={title} previewTitle={props.previewTitle} previewImage={props.previewImage} />
-      <Body />
+      <Body items={props.items} onClick={props.onClick} />
       <Footer footerRight={props.footerRight} />
     </div>
   );

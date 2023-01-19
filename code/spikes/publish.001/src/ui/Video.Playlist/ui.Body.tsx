@@ -1,22 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Color, COLORS, css, t } from '../common';
+import { Row } from './ui.List.Row';
 
 export type BodyProps = {
+  items?: t.PlaylistItem[];
   style?: t.CssValue;
+  onClick?: t.PlaylistItemClickHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
-  const CYAN = COLORS.CYAN;
+  const { items = [] } = props;
+  const isEmpty = items.length === 0;
 
   /**
    * [Render]
    */
+  const CYAN = COLORS.CYAN;
   const EDGE_BORDER = `solid 1px ${Color.alpha(CYAN, 0.3)}`;
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.alpha(CYAN, 0.06),
-      minHeight: 90,
+      backgroundColor: Color.alpha(CYAN, 0.03),
+      minHeight: isEmpty ? 90 : undefined,
       borderTop: EDGE_BORDER,
       borderBottom: EDGE_BORDER,
     }),
@@ -28,9 +32,23 @@ export const Body: React.FC<BodyProps> = (props) => {
       fontSize: 14,
       color: Color.alpha(CYAN, 0.7),
     }),
+    rows: css({}),
   };
 
-  const elEmpty = <div {...styles.empty}>{`Nothing to display`}</div>;
+  const elEmpty = isEmpty && <div {...styles.empty}>{`Nothing to display`}</div>;
 
-  return <div {...css(styles.base, props.style)}>{elEmpty}</div>;
+  const elRows = !isEmpty && (
+    <div {...styles.rows}>
+      {items.map((item, i) => {
+        return <Row key={`row-${i}`} item={item} index={i} onClick={props.onClick} />;
+      })}
+    </div>
+  );
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      {elEmpty}
+      {elRows}
+    </div>
+  );
 };

@@ -1,5 +1,16 @@
-import { COLORS, Dev } from '../../test.ui';
+import { t, COLORS, Dev } from '../../test.ui';
 import { Playlist, PlaylistProps } from '.';
+
+const msecs = (seconds: number) => seconds * 1000;
+
+const ITEMS: t.PlaylistItem[] = [
+  { text: 'Credibly neutral protocols as public goods.', duration: msecs(120) },
+  { text: 'Why did "web2" (centralization) happen?', duration: msecs(62) },
+  { text: 'The blockchain trilemma.', duration: msecs(530) },
+  { text: 'Blockchain trade-offs.', duration: msecs(125) },
+  { text: 'Self-sovereign identity.', duration: msecs(624) },
+  { text: 'Individual control.', duration: msecs(342) },
+];
 
 type T = { props: PlaylistProps };
 const initial: T = {
@@ -7,6 +18,7 @@ const initial: T = {
     title: 'Deep dive into decentralization',
     previewTitle: 'programme',
     footerRight: '4 mins (total)',
+    items: [],
     previewImage:
       'https://user-images.githubusercontent.com/185555/213319665-8128314b-5d8e-4a19-b7f5-2469f09d6690.png',
   },
@@ -23,7 +35,7 @@ export default Dev.describe('Video.Playlist', (e) => {
       .display('grid')
       .size(690, null)
       .render<T>((e) => {
-        return <Playlist {...e.state.props} />;
+        return <Playlist {...e.state.props} onClick={(e) => console.info(`⚡️ onClick`, e)} />;
       });
   });
 
@@ -73,10 +85,15 @@ export default Dev.describe('Video.Playlist', (e) => {
 
       dev.button('reset: empty', (e) => {
         e.change(({ props }) => {
-          props.footerRight = undefined;
           props.title = undefined;
+          props.previewTitle = undefined;
+          props.footerRight = undefined;
+          props.items = undefined;
+          props.previewImage = undefined;
         });
       });
+
+      dev.hr();
 
       dev.boolean((btn) =>
         btn
@@ -90,9 +107,15 @@ export default Dev.describe('Video.Playlist', (e) => {
           }),
       );
 
-      dev.hr();
       dev.button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
       dev.button('title: short', (e) => e.change((d) => (d.props.title = 'Hello world')));
+
+      dev.hr();
+
+      dev.button(`add: ${ITEMS.length} items`, (e) => e.change((d) => (d.props.items = ITEMS)));
+      dev.button('remove: first', (e) =>
+        e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
+      );
     });
 
     dev.hr();

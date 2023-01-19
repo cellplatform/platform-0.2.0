@@ -21,7 +21,6 @@ export const Header: React.FC<HeaderProps> = (props) => {
       boxSizing: 'border-box',
       PaddingX: 25,
       paddingBottom: 25,
-
       display: 'grid',
       gridTemplateColumns: '1fr auto',
       columnGap: 25,
