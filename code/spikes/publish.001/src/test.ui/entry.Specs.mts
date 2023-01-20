@@ -1,4 +1,5 @@
 import { Specs as VideoSpecs } from 'sys.ui.react.video';
+import { Specs as CodeEditorSpecs } from 'sys.ui.react.monaco';
 
 export const Specs = {
   'spike.dev': () => import('../ui/Root/-dev/Root.SPEC.devenv'),
@@ -10,6 +11,7 @@ export const Specs = {
   'spike.ui.Concept.Playlist': () => import('../ui/Concept.Playlist/Playlist.SPEC'),
 
   ...VideoSpecs,
+  ...CodeEditorSpecs,
 };
 
 export default Specs;
