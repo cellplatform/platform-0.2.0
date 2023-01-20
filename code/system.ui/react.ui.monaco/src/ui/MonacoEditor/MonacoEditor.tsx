@@ -2,7 +2,8 @@ import EditorReact from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useEffect, useRef } from 'react';
 
-import { css, t } from '../common';
+import { css, t, FC } from '../common';
+import { LANGUAGES } from './const.mjs';
 
 import type { OnChange } from '@monaco-editor/react';
 
@@ -20,7 +21,7 @@ export type MonacoEditorProps = {
   onChange?: (e: { text: string }) => void;
 };
 
-export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
+const View: React.FC<MonacoEditorProps> = (props) => {
   const { text, language = 'markdown' } = props;
   const editorRef = useRef<MonacoEditor>();
 
@@ -69,3 +70,15 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  languages: typeof LANGUAGES;
+};
+export const MonacoEditor = FC.decorate<MonacoEditorProps, Fields>(
+  View,
+  { languages: LANGUAGES },
+  { displayName: 'MonacoEditor' },
+);
