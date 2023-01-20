@@ -1,6 +1,6 @@
 {
   "name": "spike.publish",
-  "version": "1.2.38",
+  "version": "1.2.39",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -34,8 +34,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-64558837.js",
-    "./web": "./dist/web/lib/index-64558837.js"
+    ".": "./dist/web/lib/index-ac21a1de.js",
+    "./web": "./dist/web/lib/index-ac21a1de.js"
   },
   "typesVersions": {
     "*": {
