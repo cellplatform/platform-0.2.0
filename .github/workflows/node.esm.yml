@@ -35,3 +35,4 @@ jobs:
       - run: yarn audit
       - run: yarn build
       - run: yarn test
+      - run: yarn count

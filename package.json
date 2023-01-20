@@ -12,7 +12,7 @@
     "tmp": "ts-node-esm     -T script.ts/tmp.mts",
     "ext": "ts-node-esm     -T script.ts/tmp.ext.mts",
     "mit": "fossa analyze --debug",
-    "ci": "yarn audit && yarn build && yarn test"
+    "ci": "yarn audit && yarn build && yarn test && yarn count"
   },
   "workspaces": {
     "packages": [
