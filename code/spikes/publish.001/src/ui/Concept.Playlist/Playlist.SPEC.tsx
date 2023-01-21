@@ -2,9 +2,9 @@ import { Playlist, PlaylistProps } from '.';
 import { Dev, t } from '../../test.ui';
 
 const ITEMS: t.PlaylistItem[] = [
-  { text: 'Credibly neutral protocols as public goods.', secs: 120 },
-  { text: 'Why did "web2" (centralization) happen?', secs: 62 },
-  { text: 'The blockchain trilemma.', secs: 530 },
+  { text: 'Credibly neutral protocols as public goods.', secs: 32 },
+  { text: 'Why did "web2" (centralization) happen?', secs: 45 },
+  { text: 'The blockchain trilemma.', secs: 345 },
   { text: 'Blockchain trade-offs.', secs: 125 },
   { text: 'Self-sovereign identity.', secs: 624 },
   { text: 'Individual control.', secs: 342 },
