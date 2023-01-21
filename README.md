@@ -111,7 +111,7 @@ Ideas, history, context:
 <p>&nbsp;</p>
 
 ## Human Systems 
-(aka. "all of us"). Social/relational networks and people, across scales. "People" not "users." 
+(aka. the "all of us"). Social/relational networks and people, across scales. "People" not "users." 
 
 <p>&nbsp;</p>
 
