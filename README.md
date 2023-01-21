@@ -85,6 +85,9 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 "Extracting energy from the [turing tarpit](https://en.wikipedia.org/wiki/Turing_tarpit)" ([Alan Kay](https://www.youtube.com/watch?v=Vt8jyPqsmxE&t=8s))
 
 ![kay-pure-relationships](https://user-images.githubusercontent.com/185555/186360463-cfd81f46-3429-4741-bbb3-b32015a388ac.png)
+
+"Architecture can transcend architecture" - (Turing ← [Alan Kay](https://youtu.be/Vt8jyPqsmxE?t=555))
+
 ![func](https://user-images.githubusercontent.com/185555/185738258-68e54981-0eb8-49b8-b8a8-a64b1ac45023.png)
 
 <p>&nbsp;</p>
