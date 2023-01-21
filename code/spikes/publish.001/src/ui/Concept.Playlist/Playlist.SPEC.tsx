@@ -96,6 +96,19 @@ export default Dev.describe('Video.Playlist', (e) => {
 
       dev.boolean((btn) =>
         btn
+          .label(`subtitle`)
+          .value((e) => Boolean(e.state.props.subtitle))
+          .onClick((e) => {
+            e.change((d) => {
+              const current = d.props.subtitle;
+              const next = current ? undefined : Dev.Lorem.words(18, '.');
+              d.props.subtitle = next;
+            });
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
           .label(`preview.title: "${initial.props.preview?.title}"`)
           .value((e) => Boolean(e.state.props.preview?.title))
           .onClick((e) => {

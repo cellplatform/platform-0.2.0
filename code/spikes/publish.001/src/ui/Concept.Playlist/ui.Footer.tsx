@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
    */
   const styles = {
     base: css({
-      minHeight: 60,
+      minHeight: 70,
       display: 'grid',
       gridTemplateRows: '1fr auto',
       userSelect: 'none',
