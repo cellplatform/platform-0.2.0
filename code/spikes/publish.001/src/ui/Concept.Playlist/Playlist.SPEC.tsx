@@ -71,6 +71,14 @@ export default Dev.describe('Video.Playlist', (e) => {
       .hr();
 
     dev.section('Configurations', (e) => {
+      dev.button('reset: <empty>', (e) => {
+        e.change(({ props }) => {
+          props.title = undefined;
+          props.preview = undefined;
+          props.items = undefined;
+        });
+      });
+
       dev.button('reset: `{initial}`', (e) => {
         e.change((d) => {
           /**
@@ -81,14 +89,6 @@ export default Dev.describe('Video.Playlist', (e) => {
           type K = keyof PlaylistProps;
           const keys = Object.keys(initial.props) as K[];
           keys.forEach((key) => ((d.props as any)[key] = initial.props[key]));
-        });
-      });
-
-      dev.button('reset: <empty>', (e) => {
-        e.change(({ props }) => {
-          props.title = undefined;
-          props.preview = undefined;
-          props.items = undefined;
         });
       });
 
@@ -110,18 +110,29 @@ export default Dev.describe('Video.Playlist', (e) => {
 
       dev.hr();
 
-      dev.button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
-      dev.button('title: short - "Hello world"', (e) =>
-        e.change((d) => (d.props.title = 'Hello world.')),
-      );
+      dev
+        .button('title: <undefined>', (e) => e.change((d) => (d.props.title = undefined)))
+        .button('title: short - "Hello world"', (e) => {
+          e.change((d) => (d.props.title = 'Hello world.'));
+        })
+        .button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
 
       dev.hr();
 
       dev.title('Items');
+
+      dev.section((dev) => {
+        const set = (items: T['props']['items']) => {
+          const total = items?.length ?? 0;
+          const label = `set: items (${total > 1 ? '..' : ''}${total})`;
+          dev.button(label, (e) => e.change((d) => (d.props.items = items)));
+        };
+        set([]);
+        set([ITEMS[0]]);
+        set(ITEMS);
+      });
+
       dev
-        .button(`set: items (0)`, (e) => e.change((d) => (d.props.items = [])))
-        .button(`set: items (1)`, (e) => e.change((d) => (d.props.items = [ITEMS[0]])))
-        .button(`set: items (..${ITEMS.length})`, (e) => e.change((d) => (d.props.items = ITEMS)))
         .hr()
         .button('remove: first', (e) =>
           e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
