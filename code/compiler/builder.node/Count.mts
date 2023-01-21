@@ -99,7 +99,7 @@ export const Count = {
 
     const add = (dir: string, files: number, lines: number, bytes: number) => {
       if (base && dir.startsWith(base)) dir = dir.substring(base.length);
-      const path = `   ${fs.dirname(dir)}/${pc.white(fs.basename(dir))}`;
+      const path = `   ${fs.dirname(dir.substring(1))}/${pc.white(fs.basename(dir))}`;
       const totalSize = `   ${prettybytes(bytes)}`;
       const totalFiles = `   ${files}`;
       const totalLines = `   ${pc.gray(lines.toLocaleString())}`;
