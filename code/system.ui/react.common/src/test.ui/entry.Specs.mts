@@ -3,6 +3,7 @@ export const Specs = {
   'sys.ui.common.Button': () => import('../ui/Button/Button.SPEC'),
   'sys.ui.common.Button.Switch': () => import('../ui/Button.Switch/Switch.SPEC'),
   'sys.ui.common.Icon': () => import('../ui/Icon/Icon.SPEC'),
+  'sys.ui.common.IFrame': () => import('../ui/IFrame/IFrame.SPEC'),
   'sys.ui.common.Spinner': () => import('../ui/Spinner/Spinner.SPEC'),
   'sys.ui.common.Center': () => import('../ui/Center/Center.SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
