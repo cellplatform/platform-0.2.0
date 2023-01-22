@@ -106,7 +106,7 @@ export const Count = {
     const add = (dir: string, files: number, lines: number, bytes: number) => {
       if (base && dir.startsWith(base)) dir = dir.substring(base.length);
       const path = `   ${fs.dirname(dir.substring(1))}/${pc.white(fs.basename(dir))}`;
-      const totalSize = `   ${prettybytes(bytes)}`;
+      const totalSize = `   /src ${prettybytes(bytes)}  `;
       const totalFiles = `   ${files}`;
       const totalLines = `   ${pc.gray(lines.toLocaleString())}`;
       table.push([path, totalSize, totalFiles, totalLines]);
@@ -118,7 +118,7 @@ export const Count = {
     });
 
     const total = Sum.dir(dirs);
-    const totalBytes = `  ${pc.white(prettybytes(total.bytes))}`;
+    const totalBytes = `   ${pc.white(prettybytes(total.bytes))}`;
     const totalFiles = `  ${pc.white(total.files.toLocaleString())}`;
     const totalLines = `  ${pc.bold(pc.green(total.lines.toLocaleString()))}`;
     table.push([]);
