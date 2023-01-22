@@ -19,6 +19,7 @@ export type MonacoEditorProps = {
   focusOnLoad?: boolean;
   style?: t.CssValue;
   onChange?: (e: { text: string }) => void;
+  onReady?: (e: { editor: MonacoEditor; monaco: Monaco }) => void;
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
@@ -42,6 +43,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
   function handleEditorDidMount(editor: MonacoEditor, monaco: Monaco) {
     editorRef.current = editor;
     if (props.focusOnLoad) editor.focus();
+    props.onReady?.({ editor, monaco });
   }
 
   const handleChange: OnChange = (text = '') => {

@@ -18,8 +18,7 @@ export default Dev.describe('MonacoEditor', (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = e.state.props;
-        console.log('render', props);
-        return <MonacoEditor {...props} />;
+        return <MonacoEditor {...props} onReady={(e) => console.info(`⚡️ onReady:`, e)} />;
       });
   });
 
