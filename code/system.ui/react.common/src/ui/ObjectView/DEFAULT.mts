@@ -1,8 +1,10 @@
 import type { ObjectViewTheme } from './types.mjs';
 
-const THEME: ObjectViewTheme = 'Light';
+const theme: ObjectViewTheme = 'Light';
 
 export const DEFAULTS = {
-  FONT: { SIZE: 12 },
-  THEME,
+  theme,
+  font: { size: 12 },
+  showRootSummary: true,
+  showNonenumerable: false,
 } as const;
