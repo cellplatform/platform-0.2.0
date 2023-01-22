@@ -100,7 +100,7 @@ export const Count = {
     const dirs = Array.isArray(input) ? input : [input];
     const table = LogTable();
 
-    table.push([' Module', '  Size', '  Files', '  Lines'].map(pc.white));
+    table.push([' Module (Source Code)', `  Size`, '  Files', '  Lines'].map(pc.white));
     table.push([]);
 
     const add = (dir: string, files: number, lines: number, bytes: number) => {
@@ -125,8 +125,8 @@ export const Count = {
     table.push(['', totalBytes, totalFiles, totalLines]);
 
     console.info();
-    console.info(pc.gray(`pattern:   ${pc.green(pattern)}`));
-    console.info(pc.gray(`excluding: ${exclude.join('  ')}`));
+    console.info(pc.gray(`match:   ${pc.green(pattern)}`));
+    console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));
     console.info();
 
     console.info(pc.gray(table.toString()));
