@@ -37,5 +37,6 @@ export default Dev.describe('MonacoEditor', (e) => {
 
     dev.title('Language');
     MonacoEditor.languages.forEach((name) => language(name));
+    dev.hr();
   });
 });
