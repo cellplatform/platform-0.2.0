@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'spike.publish',
-  version: '1.2.40',
+  version: '1.2.41',
   dependencies: {
     '@monaco-editor/react': '4.4.6',
     'monaco-editor': '0.34.1',
