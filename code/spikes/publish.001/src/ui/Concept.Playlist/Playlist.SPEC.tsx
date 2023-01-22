@@ -124,8 +124,8 @@ export default Dev.describe('Video.Playlist', (e) => {
       dev.hr();
 
       dev
-        .button('title: <undefined>', (e) => e.change((d) => (d.props.title = undefined)))
-        .button('title: short - "Hello world"', (e) => {
+        .button('title: `undefined`', (e) => e.change((d) => (d.props.title = undefined)))
+        .button('title: short ("Hello world")', (e) => {
           e.change((d) => (d.props.title = 'Hello world.'));
         })
         .button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
