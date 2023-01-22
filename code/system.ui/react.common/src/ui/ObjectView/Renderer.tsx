@@ -13,17 +13,17 @@ export function renderer(props: { showRootSummary: boolean }): NodeRenderer {
   return (args) => {
     const { depth, isNonenumerable, name, expanded } = args;
 
-    if (
-      args.data === null ||
-      args.data === undefined ||
-      typeof args.data === 'boolean' ||
-      typeof args.data === 'number' ||
-      typeof args.data === 'string'
-    ) {
-      return <ObjectPreview data={args.data} />;
-    }
-
     if (depth === 0) {
+      if (
+        args.data === null ||
+        args.data === undefined ||
+        typeof args.data === 'boolean' ||
+        typeof args.data === 'number' ||
+        typeof args.data === 'string'
+      ) {
+        return <ObjectPreview data={args.data} />;
+      }
+
       const data = expanded || !props.showRootSummary ? {} : args.data;
       return <ObjectRootLabel name={args.name} data={data} />;
     } else {
