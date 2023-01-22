@@ -7,3 +7,8 @@ export const LANGUAGES: t.EditorLanguage[] = [
   'json',
   'yaml',
 ];
+
+export const DEFAULTS = {
+  tabSize: 2,
+  language: LANGUAGES[2],
+} as const;
