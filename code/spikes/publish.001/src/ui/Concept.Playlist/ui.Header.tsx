@@ -39,10 +39,10 @@ export const Header: React.FC<HeaderProps> = (props) => {
       userSelect: 'text',
     }),
     subtitle: css({
-      fontSize: 28,
-      userSelect: 'text',
-      opacity: 0.3,
       marginTop: 20,
+      fontSize: 28,
+      color: Color.alpha(COLORS.DARK, 0.3),
+      userSelect: 'text',
     }),
 
     preview: {
