@@ -1,5 +1,10 @@
 import { t, pc, fs, LogTable, prettybytes } from './common/index.mjs';
 
+const DEFAULT = {
+  pattern: 'src/**/*.{mts,ts,tsx}',
+  exclude: ['/node_modules/', '/dist/', '/tmp/', '/.tmp/'],
+};
+
 export type Total = { lines: number; bytes: number };
 export type PathCount = { path: t.PathString } & Total;
 export type DirCount = {
@@ -66,8 +71,8 @@ export const Count = {
     const count: DirCount = {
       paths: [],
       dir,
-      pattern: options.pattern ?? 'src/**/*.{mts,ts,tsx}',
-      exclude: options.exclude ?? ['/node_modules/', '/dist/', '/tmp/', '/.tmp/'],
+      pattern: options.pattern ?? DEFAULT.pattern,
+      exclude: options.exclude ?? DEFAULT.exclude,
     };
 
     const exclude = Filter.exclude(count.exclude);
@@ -90,12 +95,13 @@ export const Count = {
   /**
    * Logging helpers
    */
-  log(input: DirCount | DirCount[], options: { base?: t.DirString } = {}) {
-    const { base = '' } = options;
+  log(input: DirCount | DirCount[], options: { base?: t.DirString } & Options = {}) {
+    const { base = '', exclude = DEFAULT.exclude, pattern = DEFAULT.pattern } = options;
     const dirs = Array.isArray(input) ? input : [input];
     const table = LogTable();
 
-    table.push([pc.white(' Module'), '  Size', '  Files', '  Lines']);
+    table.push([' Module', '  Size', '  Files', '  Lines'].map(pc.white));
+    table.push([]);
 
     const add = (dir: string, files: number, lines: number, bytes: number) => {
       if (base && dir.startsWith(base)) dir = dir.substring(base.length);
@@ -119,6 +125,10 @@ export const Count = {
     table.push(['', totalBytes, totalFiles, totalLines]);
 
     console.info();
+    console.info(pc.gray(`pattern:   ${pc.green(pattern)}`));
+    console.info(pc.gray(`excluding: ${exclude.join('  ')}`));
+    console.info();
+
     console.info(pc.gray(table.toString()));
     console.info();
   },
