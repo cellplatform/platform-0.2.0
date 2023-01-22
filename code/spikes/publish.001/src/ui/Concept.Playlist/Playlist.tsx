@@ -13,7 +13,7 @@ export type PlaylistProps = {
 };
 
 export const Playlist: React.FC<PlaylistProps> = (props) => {
-  const { title = 'Untitled Playlist' } = props;
+  const { title = 'Untitled List' } = props;
   const totalSecs = Wrangle.totalSeconds(props.items);
 
   /**
