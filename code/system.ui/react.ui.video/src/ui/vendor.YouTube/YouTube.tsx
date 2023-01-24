@@ -1,4 +1,5 @@
-import { Color, COLORS, css, t, rx, IFrame } from '../common';
+import { IFrame, t } from '../common';
+import { usePlayerApi } from './usePlayerApi.mjs';
 
 type Seconds = number;
 
@@ -15,6 +16,8 @@ export const YouTube: React.FC<YouTubeProps> = (props) => {
   const url = Wrangle.src(props);
   const allow =
     'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+
+  const player = usePlayerApi();
 
   if (!url) return null;
 
