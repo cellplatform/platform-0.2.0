@@ -1,7 +1,7 @@
 export const ServiceSpecs = {
   'sys.ui.video.Vimeo': () => import('../ui/vendor.Vimeo/dev/Vimeo.SPEC'),
   'sys.ui.video.VimeoBackground': () => import('../ui/vendor.Vimeo/dev/VimeoBackground.SPEC'),
-  'sys.ui.video.YouTube': () => import('../ui/service.YouTube/YouTube.SPEC'),
+  'sys.ui.video.YouTube': () => import('../ui/vendor.YouTube/YouTube.SPEC'),
 };
 
 export const Specs = {

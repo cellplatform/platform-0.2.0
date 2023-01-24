@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, IFrame } from '../common';
 
 type Seconds = number;
