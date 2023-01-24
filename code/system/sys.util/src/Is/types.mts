@@ -17,4 +17,5 @@ export type IsMethods = {
   numeric(input?: any): boolean;
   json(input?: any): boolean;
   email(input?: any): boolean;
+  url(input?: any): boolean;
 };

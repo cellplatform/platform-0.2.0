@@ -225,4 +225,21 @@ describe('Is', () => {
       test('mailto:name@domain.com');
     });
   });
+
+  describe('Is.url', () => {
+    it('is a URL', () => {
+      const test = (input: any) => expect(Is.url(input)).to.eql(true, input);
+      test('http://foo.com');
+      test('https://foo.com/path?s=123');
+      test('   https://foo.com  ');
+    });
+
+    it('is not a URL', () => {
+      const test = (input: any) => expect(Is.url(input)).to.eql(false);
+      [undefined, null, 123, true, false, [], {}].forEach((value) => test(value));
+      test('');
+      test('  ');
+      test('foo.com');
+    });
+  });
 });

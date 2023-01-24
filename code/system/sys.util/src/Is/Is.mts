@@ -122,4 +122,17 @@ export const Is: t.Is = {
     if (typeof value !== 'string') return false;
     return Boolean(value.match(REGEX.EMAIL));
   },
+
+  /**
+   * Determine if the given string is a URL value.
+   */
+  url(value?: any) {
+    if (typeof value !== 'string') return false;
+    try {
+      new URL(value);
+    } catch (error) {
+      return !(error instanceof TypeError);
+    }
+    return true;
+  },
 };
