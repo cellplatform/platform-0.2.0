@@ -125,8 +125,8 @@ export const Count = {
     table.push(['', totalBytes, totalFiles, totalLines]);
 
     console.info();
-    console.info(pc.gray(`match:   ${pc.green(pattern)}`));
     console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));
+    console.info(pc.gray(`match:   ${pc.green(pattern)}`));
     console.info();
 
     console.info(pc.gray(table.toString()));
