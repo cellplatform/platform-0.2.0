@@ -4,3 +4,4 @@ export { Pkg } from './index.pkg.mjs';
 export { Specs } from './test.ui/entry.Specs.mjs';
 
 export { Vimeo, VimeoBackground, VimeoEvents } from './ui/Vimeo';
+export { YouTube } from './ui/service.YouTube';

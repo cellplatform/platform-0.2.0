@@ -2,19 +2,34 @@ import { Dev } from '../../test.ui';
 import { YouTube, YouTubeProps } from '.';
 
 type T = { props: YouTubeProps };
-const initial: T = { props: {} };
+const initial: T = {
+  props: {
+    width: 550,
+    height: 315,
+  },
+};
 
 export default Dev.describe('YouTube', (e) => {
+  type Local = { autoLoad: boolean };
+  const local = Dev.LocalStorage<Local>('dev:sys.ui.video').object({ autoLoad: false });
+
+  const load = (props: YouTubeProps) => {
+    props.id = 'URUJD5NEXC8';
+    props.start = 39;
+  };
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
+
+    if (local.autoLoad) {
+      await state.change((d) => load(d.props));
+    }
+
     ctx.subject
+      //
       .display('grid')
-      .backgroundColor(1)
-      // .size(250, null)
-      .render<T>((e) => {
-        return <YouTube {...e.state.props} />;
-      });
+      .render<T>((e) => <YouTube {...e.state.props} />);
   });
 
   e.it('debug panel', async (e) => {
@@ -22,5 +37,21 @@ export default Dev.describe('YouTube', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+
+    dev.boolean((btn) =>
+      btn
+        .label('auto load')
+        .value(() => local.autoLoad)
+        .onClick((e) => {
+          local.autoLoad = !local.autoLoad;
+          e.value(local.autoLoad);
+        }),
+    );
+
+    dev.hr();
+
+    dev.button('load', (e) => {
+      e.change(({ props }) => load(props));
+    });
   });
 });

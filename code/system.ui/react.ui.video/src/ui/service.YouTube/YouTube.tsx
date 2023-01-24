@@ -1,35 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, IFrame } from '../common';
 
+type Seconds = number;
+
 export type YouTubeProps = {
+  id?: string;
+  start?: Seconds;
+  width?: number;
+  height?: number;
+  allowFullScreen?: boolean;
   style?: t.CssValue;
 };
 
 export const YouTube: React.FC<YouTubeProps> = (props) => {
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-  };
+  const url = Wrangle.src(props);
+  const allow =
+    'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
 
-  {
-    /* <iframe 
-    width="560" \
-    height="315" 
-    src="https://www.youtube.com/embed/URUJD5NEXC8" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-    </iframe> */
-  }
+  if (!url) return null;
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`YouTube 🐷`}</div>
-    </div>
+    <IFrame
+      title={'YouTube'}
+      style={props.style}
+      width={props.width}
+      height={props.height}
+      src={url}
+      allow={allow}
+      allowfullscreen={props.allowFullScreen}
+    />
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  src(props: YouTubeProps) {
+    const { id, start } = props;
+    if (!id) return undefined;
+    const url = `https://www.youtube.com/embed/${id.trim()}`;
+    return typeof start === 'number' ? `${url}?start=${start}` : url;
+  },
 };
