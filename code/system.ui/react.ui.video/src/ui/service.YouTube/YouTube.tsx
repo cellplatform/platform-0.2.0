@@ -27,7 +27,7 @@ export const YouTube: React.FC<YouTubeProps> = (props) => {
       height={props.height}
       src={url}
       allow={allow}
-      allowfullscreen={props.allowFullScreen}
+      allowFullScreen={props.allowFullScreen}
     />
   );
 };
