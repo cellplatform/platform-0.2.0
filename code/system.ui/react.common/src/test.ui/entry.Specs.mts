@@ -12,10 +12,10 @@ export const Specs = {
   'sys.ui.common.Text': () => import('../ui/Text/Text.SPEC'),
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/TextSecret.SPEC'),
   'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/TextSyntax.SPEC'),
+  'sys.ui.common.Text.Input': () => import('../ui/Text.Input/TextInput.SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/Measure.SPEC'),
   'sys.ui.common.useFocus': () => import('../ui/useFocus/useFocus.SPEC'),
   'sys.ui.common.useSizeObserver': () => import('../ui/useSizeObserver/useSizeObserver.SPEC'),
-  'sys.ui.common.UIEvent': () => import('../ui/Event.UIEvent/UIEvent.SPEC'),
 };
 
 export const DevSpecs = {
