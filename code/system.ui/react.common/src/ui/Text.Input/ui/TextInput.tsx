@@ -99,12 +99,15 @@ const View: React.FC<t.TextInputProps> = (props) => {
       Absolute: 0,
       opacity: isEnabled ? 1 : disabledOpacity,
       transition: `opacity 200ms`,
-      Flex: 'x-center-start',
+
       paddingLeft: 2, // Ensure the placeholder does not bump into the input-caret.
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       userSelect: 'none',
       pointerEvents: 'none',
+
+      display: 'grid',
+      alignContent: 'center',
     } as const,
     readonly: { userSelect: 'auto' } as const,
     input: {

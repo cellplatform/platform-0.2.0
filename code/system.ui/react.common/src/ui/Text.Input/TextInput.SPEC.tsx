@@ -14,7 +14,9 @@ type T = {
 };
 
 const initial: T = {
-  props: { placeholder: 'foobar' },
+  props: {
+    placeholder: 'my placeholder',
+  },
   debug: {
     render: true,
     isNumericMask: false,
