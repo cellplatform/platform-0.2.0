@@ -39,7 +39,6 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     isPassword,
     maxLength,
     selectionBackground,
-    valueStyle = DEFAULTS.text.style,
   } = props;
 
   const instance = props.instance.id;
@@ -276,11 +275,17 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     styles.base = {
       ...styles.base,
       '::selection': { backgroundColor: Color.format(selectionBackground) },
-    } as any;
+    } as t.CssValue;
   }
 
-  styles.base = R.mergeDeepRight(styles.base, Util.css.toTextInput(isEnabled, valueStyle) as any);
-  styles.base.opacity = isEnabled ? 1 : disabledOpacity;
+  styles.base = R.mergeDeepRight(
+    styles.base,
+    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.text.style) as {},
+  );
+  styles.base = {
+    ...styles.base,
+    opacity: isEnabled ? 1 : disabledOpacity,
+  };
 
   return (
     <input
