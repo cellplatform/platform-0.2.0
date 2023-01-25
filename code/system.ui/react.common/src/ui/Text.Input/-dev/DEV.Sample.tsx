@@ -31,10 +31,10 @@ export const DevSample: React.FC<DevSampleProps> = (args) => {
         console.info('⚡️ onEscape');
       }}
       onChange={(e) => {
-        if (debug.updateHandlerEnabled) {
-          setValue(e.to);
-          if (debug.hint) setHint(Util.lookupHint(e.to ?? ''));
-        }
+        if (!debug.updateHandlerEnabled) return;
+
+        setValue(e.to);
+        if (debug.hint) setHint(DevUtil.lookupHint(e.to ?? ''));
       }}
     />
   );
@@ -54,7 +54,7 @@ const HINTS = [
   'heretofore',
 ].sort();
 
-const Util = {
+const DevUtil = {
   lookupHint(value: string) {
     const hint = HINTS.find((item) => item.startsWith(value.toLowerCase()));
     return hint ? hint.substring(value.length) : undefined;
