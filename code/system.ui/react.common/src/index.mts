@@ -11,6 +11,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Button } from './ui/Button';
 export { Switch } from './ui/Button.Switch';
 export { PropList } from './ui/PropList';
+export { IFrame } from './ui/IFrame';
 
 export { Dev, DevTools, Spec } from './ui.dev';
 
