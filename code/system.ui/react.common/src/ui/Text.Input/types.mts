@@ -45,21 +45,25 @@ export type TextInputProps = t.TextInputFocusAction &
     isEnabled?: boolean;
     isPassword?: boolean;
     isReadOnly?: boolean;
+
     disabledOpacity?: number;
     width?: number | string;
     minWidth?: number;
     maxWidth?: number;
-    autoSize?: boolean;
-    placeholder?: string | React.ReactElement;
-    valueStyle?: t.TextInputStyle;
-    placeholderStyle?: t.TextInputStyle;
+    placeholder?: string | JSX.Element;
+
     spellCheck?: boolean;
     autoCapitalize?: boolean;
     autoCorrect?: boolean;
     autoComplete?: boolean;
+    autoSize?: boolean;
     selectionBackground?: number | string;
-    className?: string;
+
     style?: t.CssValue;
+    valueStyle?: t.TextInputStyle;
+    placeholderStyle?: t.TextInputStyle;
+    className?: string;
+
     onClick?: MouseEventHandler;
     onDoubleClick?: MouseEventHandler;
     onMouseDown?: MouseEventHandler;
