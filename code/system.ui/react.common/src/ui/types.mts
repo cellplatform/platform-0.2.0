@@ -9,6 +9,9 @@ export * from './PropList/types.mjs';
 export * from './Spinner/types.mjs';
 
 export * from './Event/types.mjs';
+export * from './Event.UIEvent/types.mjs';
+
+// export * from './Keyboard/types.mjs';
 
 export * from './useFocus/types.mjs';
 export * from './useSizeObserver/types.mjs';

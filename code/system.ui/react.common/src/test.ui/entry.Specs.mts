@@ -15,6 +15,7 @@ export const Specs = {
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/Measure.SPEC'),
   'sys.ui.common.useFocus': () => import('../ui/useFocus/useFocus.SPEC'),
   'sys.ui.common.useSizeObserver': () => import('../ui/useSizeObserver/useSizeObserver.SPEC'),
+  'sys.ui.common.UIEvent': () => import('../ui/Event.UIEvent/UIEvent.SPEC'),
 };
 
 export const DevSpecs = {
