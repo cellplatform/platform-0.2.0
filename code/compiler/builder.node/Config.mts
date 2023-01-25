@@ -19,8 +19,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['**/*.TEST.{mts,tsx}'],
-        watchExclude: ['**/node_modules/**', '**/dist/**', '**/dist.deploy/**', '**/tmp/**'],
+        include: ['src/**/*.TEST.{mts,tsx}'],
         environment: 'node', // NB: Default, makes JSDOM available.
       };
     },
