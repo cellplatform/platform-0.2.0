@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { type t } from '../common';
+import type { t } from '../../common.t';
 
 type E = HTMLElement;
 
