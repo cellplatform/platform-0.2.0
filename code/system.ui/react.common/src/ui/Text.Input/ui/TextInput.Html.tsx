@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { takeUntil } from 'rxjs/operators';
 
+import { Event } from '../common';
 import { useFocus } from '../../useFocus';
 import { Color, css, DEFAULTS, R, rx, t, Time } from '../common';
 import { Util } from '../util.mjs';
+import { TextInputEvents } from '../logic';
 
 /**
  * Types
@@ -12,7 +14,6 @@ export type HtmlInputProps = t.TextInputFocusAction &
   t.TextInputEventHandlers &
   t.TextInputValue & {
     instance: t.TextInputInstance;
-    events: t.TextInputEvents;
     className?: string;
     isEnabled?: boolean;
     isPassword?: boolean;
@@ -33,18 +34,19 @@ export type HtmlInputProps = t.TextInputFocusAction &
 export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const {
     value = '',
-    events,
-    isEnabled = true,
-    disabledOpacity = 0.2,
+    isEnabled = DEFAULTS.props.isEnabled ?? true,
+    disabledOpacity = DEFAULTS.disabledOpacity,
     isPassword,
     maxLength,
     selectionBackground,
   } = props;
 
+  const busid = rx.bus.instance(props.instance.bus);
   const instance = props.instance.id;
-
   const inputRef = useRef<HTMLInputElement>(null);
   const focusState = useFocus(inputRef, { redraw: false });
+
+  const events = Event.useRef(() => TextInputEvents({ instance: props.instance }));
 
   // const keyboard = Keyboard.useKeyboardState({ bus: props.instance.bus, instance });
   // const cloneModifierKeys = () => ({ ...keyboard.state.current.modifiers });
@@ -65,26 +67,29 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
    * [Lifecycle]: Cursor/focus controller
    */
   useEffect(() => {
+    // const { dispose, events } = Wrangle.events(props);
     const { dispose, dispose$ } = rx.disposable();
 
-    events.focus.$.pipe(takeUntil(dispose$)).subscribe((e) => {
+    // const ee = eventsRef.
+
+    events.focus.$.subscribe((e) => {
       if (e.focus) focus();
       if (!e.focus) blur();
     });
 
-    events.cursor.$.pipe(takeUntil(dispose$)).subscribe((e) => {
+    events.cursor.$.subscribe((e) => {
       if (e.action === 'Cursor:Start') cursorToStart();
       if (e.action === 'Cursor:End') cursorToEnd();
     });
 
-    events.select.$.pipe(takeUntil(dispose$)).subscribe((e) => {
+    events.select.$.subscribe((e) => {
       selectAll();
     });
 
     if (props.focusOnLoad) Time.delay(0, () => focus());
 
     return dispose;
-  }, []); // eslint-disable-line
+  }, [busid, instance]); // eslint-disable-line
 
   /**
    * [Lifecycle]: Status response controller.
@@ -106,7 +111,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
       };
     };
 
-    events.status.req$.pipe(takeUntil(dispose$)).subscribe((e) => {
+    events.status.req$.subscribe((e) => {
+      console.log('------lkjlkj-------------------------------------');
       const { tx } = e;
       fire({
         type: 'sys.ui.TextInput/Status:res',
@@ -115,7 +121,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     });
 
     return dispose;
-  }, [value]); // eslint-disable-line
+  }, [busid, instance, value]); // eslint-disable-line
 
   /**
    * [Handlers]
@@ -280,7 +286,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
   styles.base = R.mergeDeepRight(
     styles.base,
-    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.text.style) as {},
+    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.textStyle) as {},
   );
   styles.base = {
     ...styles.base,

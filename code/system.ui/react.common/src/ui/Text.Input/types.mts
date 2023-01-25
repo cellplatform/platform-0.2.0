@@ -87,7 +87,9 @@ export type TextInputMaskHandler = (e: TextInputMask) => boolean; // True - OK, 
 type E = TextInputEvents;
 export type TextInputEventsDisposable = t.Disposable & E & { clone(): E };
 export type TextInputEvents = {
+  toString(): string;
   instance: { bus: Id; id: Id };
+
   $: t.Observable<t.TextInputEvent>;
   dispose$: t.Observable<void>;
 

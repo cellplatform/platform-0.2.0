@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { Event } from '../../Event';
 import { css, DEFAULTS, FC, rx, t, Time } from '../common';
 import { TextInputEvents, TextInputMasks } from '../logic';
 import { TextInputHint } from './TextInput.Hint';
@@ -18,7 +17,7 @@ const View: React.FC<t.TextInputProps> = (props) => {
     isReadOnly = false,
     isEnabled = true,
     placeholder,
-    valueStyle = DEFAULTS.text.style,
+    valueStyle = DEFAULTS.textStyle,
     disabledOpacity = DEFAULTS.disabledOpacity,
     maxLength,
   } = props;
@@ -26,7 +25,6 @@ const View: React.FC<t.TextInputProps> = (props) => {
   const instance: t.TextInputInstance = props.instance ?? { bus: rx.bus(), id: 'default' };
   const [width, setWidth] = useState<string | number | undefined>();
 
-  const events = Event.useEventsRef(() => TextInputEvents({ instance }));
   const value = Util.value.format(props.value, maxLength);
   const hasValue = value.length > 0;
 
@@ -141,7 +139,6 @@ const View: React.FC<t.TextInputProps> = (props) => {
   const elInput = (
     <HtmlInput
       instance={instance}
-      events={events}
       style={styles.input}
       className={props.className}
       isEnabled={isEnabled}

@@ -2,13 +2,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 
 import { rx, t, slug } from '../common';
 
-type Id = string;
 type E = t.TextInputEvents;
-
-export type TextInputInstance = {
-  bus: t.EventBus<any>;
-  id: Id;
-};
 
 export type TextInputEventsArgs = {
   instance: t.TextInputInstance;
@@ -112,6 +106,9 @@ export function TextInputEvents(args: TextInputEventsArgs) {
     cursor,
     clone() {
       return { ...api, dispose: undefined };
+    },
+    toString() {
+      return `${api.instance.bus}/instance:${api.instance.id}`;
     },
   };
   return api;
