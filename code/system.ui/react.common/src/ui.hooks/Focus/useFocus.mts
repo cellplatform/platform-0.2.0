@@ -1,9 +1,8 @@
-import { useRef, RefObject, useEffect, useState } from 'react';
-import { containsFocus, withinFocus } from './util.mjs';
-import type { t } from '../common';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
-export type FocusHandler = (e: FocusHandlerArgs) => void;
-export type FocusHandlerArgs = { focus: boolean; blur: boolean };
+import { R, t } from '../common';
+import { ActiveElement } from './ActiveElement.mjs';
+import { containsFocus, withinFocus, Wrangle } from './util.mjs';
 
 /**
  * Monitors focus state for an element,
@@ -11,35 +10,50 @@ export type FocusHandlerArgs = { focus: boolean; blur: boolean };
  */
 export function useFocus<H extends HTMLElement>(
   input?: RefObject<H>,
-  options: { redraw?: boolean; onFocus?: FocusHandler } = {},
+  options: { redraw?: boolean; onFocus?: t.FocusHandler } = {},
 ): t.FocusHook<H> {
   const _ref = useRef<H>(null);
   const ref = input || _ref;
 
   const [, setCount] = useState(0);
-  const redraw = () => setCount((prev) => prev + 1);
+  const increment = () => setCount((prev) => prev + 1);
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    const onChange = (focus: boolean) => {
-      return () => {
-        options.onFocus?.({ focus, blur: !focus });
-        if (options.redraw ?? true) redraw();
-      };
+    const maybeRedraw = () => {
+      if (options.redraw ?? true) increment();
     };
 
-    const onFocus = onChange(true);
-    const onBlur = onChange(false);
+    let _last: t.FocusHandlerArgs | undefined;
+    const onFocus = (focus: boolean) => {
+      const args = Wrangle.args(focus);
+      if (options.onFocus && !R.equals(args, _last)) options.onFocus(args);
+      _last = args;
+    };
+
+    const changeHandler = (focus: boolean) => {
+      return () => {
+        onFocus(focus);
+        maybeRedraw();
+      };
+    };
+    const focusHandler = changeHandler(true);
+    const blurHandler = changeHandler(false);
 
     const el = ref.current;
-    el?.addEventListener('focus', onFocus);
-    el?.addEventListener('blur', onBlur);
+    el?.addEventListener('focus', focusHandler);
+    el?.addEventListener('blur', blurHandler);
+    const monitor = ActiveElement.listen((e) => {
+      onFocus(e.focus);
+      maybeRedraw();
+    });
 
     return () => {
-      el?.removeEventListener('focus', onFocus);
-      el?.removeEventListener('blur', onBlur);
+      el?.removeEventListener('focus', focusHandler);
+      el?.removeEventListener('blur', blurHandler);
+      monitor.dispose();
     };
   }, [ref, options.redraw]);
 
@@ -53,6 +67,9 @@ export function useFocus<H extends HTMLElement>(
     },
     get withinFocus() {
       return withinFocus(ref);
+    },
+    get directlyFocused() {
+      return containsFocus(ref) && withinFocus(ref);
     },
   };
 }
