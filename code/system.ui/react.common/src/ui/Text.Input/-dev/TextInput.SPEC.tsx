@@ -1,5 +1,5 @@
 import { TextInput } from '..';
-import { Dev, t, rx, slug } from '../../../test.ui';
+import { Dev, t } from '../../../test.ui';
 import { DevSample } from './DEV.Sample';
 
 type T = {
@@ -30,13 +30,9 @@ const initial: T = {
 };
 
 export default Dev.describe('TextInput', (e) => {
-  const bus = rx.bus();
-  const instance = { bus, id: `foo.${slug()}` };
-
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    await state.change((d) => (d.props.instance = instance));
+    await ctx.state<T>(initial);
 
     ctx.subject
       .display('grid')
@@ -104,30 +100,30 @@ export default Dev.describe('TextInput', (e) => {
 
     dev.hr();
 
-    dev.section('Events', (dev) => {
-      const events = TextInput.Events({ instance });
-
-      dev.button('⚡️ Status', async (e) => {
-        console.log('⚡️ Status | events:', events.instance);
-        const status = await events.status.get();
-        await e.change((d) => (d.output.status = status));
-
-        console.log('status', status);
-      });
-
-      dev.hr();
-
-      dev.button('⚡️ Focus', (e) => events.focus.fire());
-      dev.button('⚡️ Blur', (e) => events.focus.fire(false));
-
-      dev.hr();
-
-      dev.button('⚡️ Select (All)', (e) => events.select.fire());
-      dev.button('⚡️ Cursor: Start', (e) => events.cursor.start());
-      dev.button('⚡️ Cursor: End', (e) => events.cursor.end());
-
-      dev.hr();
-    });
+    //     dev.section('Events', (dev) => {
+    //       const events = TextInput.Events({ instance });
+    //
+    //       dev.button('⚡️ Status', async (e) => {
+    //         console.log('⚡️ Status | events:', events.instance);
+    //         const status = await events.status.get();
+    //         await e.change((d) => (d.output.status = status));
+    //
+    //         console.log('status', status);
+    //       });
+    //
+    //       dev.hr();
+    //
+    //       dev.button('⚡️ Focus', (e) => events.focus.fire());
+    //       dev.button('⚡️ Blur', (e) => events.focus.fire(false));
+    //
+    //       dev.hr();
+    //
+    //       dev.button('⚡️ Select (All)', (e) => events.select.fire());
+    //       dev.button('⚡️ Cursor: Start', (e) => events.cursor.start());
+    //       dev.button('⚡️ Cursor: End', (e) => events.cursor.end());
+    //
+    //       dev.hr();
+    //     });
 
     dev.hr();
 

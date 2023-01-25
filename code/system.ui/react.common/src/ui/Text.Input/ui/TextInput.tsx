@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react';
 
-import { css, DEFAULTS, FC, rx, t, Time } from '../common';
-import { TextInputEvents, TextInputMasks } from '../logic';
+import { css, DEFAULTS, FC, t, Time } from '../common';
+import { Masks } from '../logic';
 import { Util } from '../util.mjs';
 import { TextInputHint } from './TextInput.Hint';
 import { HtmlInput } from './TextInput.Html';
 
 import type { TextInputProps } from '../types.mjs';
+export type { TextInputProps };
 
 /**
  * Component
  */
 const View: React.FC<t.TextInputProps> = (props) => {
   const {
-    isPassword = false,
-    isReadOnly = false,
-    isEnabled = true,
     placeholder,
+    isPassword = DEFAULTS.prop.isPassword,
+    isReadOnly = DEFAULTS.prop.isReadOnly,
+    isEnabled = DEFAULTS.prop.isEnabled,
     valueStyle = DEFAULTS.prop.valueStyle,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
     maxLength,
   } = props;
 
-  const instance: t.TextInputInstance = props.instance ?? { bus: rx.bus(), id: 'default' };
   const [width, setWidth] = useState<string | number | undefined>();
 
   const value = Util.value.format(props.value, maxLength);
@@ -40,29 +40,9 @@ const View: React.FC<t.TextInputProps> = (props) => {
   /**
    * [Handlers]
    */
-  const fire = (e: t.TextInputEvent) => instance.bus.fire(e);
 
   const handleChange = (e: t.TextInputChangeEvent) => {
-    // Fire the BEFORE event.
-    let isCancelled = false;
-    fire({
-      type: 'sys.ui.TextInput/Changing',
-      payload: {
-        ...e,
-        get isCancelled() {
-          return isCancelled;
-        },
-        cancel() {
-          isCancelled = true;
-        },
-      },
-    });
-
-    if (isCancelled) return;
-
-    // Fire AFTER event.
-    fire({ type: 'sys.ui.TextInput/Changed', payload: e });
-    props.onChange?.(e);
+    props.onChanged?.(e);
   };
 
   const handleInputDblClick = (e: React.MouseEvent) => {
@@ -73,18 +53,16 @@ const View: React.FC<t.TextInputProps> = (props) => {
 
   const labelDoubleClickHandler = (target: t.TextInputLabelDoubleClicked['target']) => {
     return (e: React.MouseEvent) => {
-      const button = e.button === 2 ? 'Left' : 'Right';
-      fire({
-        type: 'sys.ui.TextInput/Label/DoubleClicked',
-        payload: { instance: instance.id, target, button },
-      });
+      const LEFT = 0;
+      if (e.button === LEFT) {
+        props.onLabelDoubleClick?.({ target });
+      }
     };
   };
 
   /**
    * [Render]
    */
-
   const styles = {
     base: {
       position: 'relative',
@@ -107,7 +85,10 @@ const View: React.FC<t.TextInputProps> = (props) => {
       display: 'grid',
       alignContent: 'center',
     } as const,
-    readonly: { userSelect: 'auto' } as const,
+    readonly: {
+      userSelect: 'auto',
+      pointerEvents: 'auto',
+    } as const,
     input: {
       visibility: isReadOnly ? 'hidden' : 'visible',
       pointerEvents: isReadOnly ? 'none' : 'auto',
@@ -138,7 +119,6 @@ const View: React.FC<t.TextInputProps> = (props) => {
 
   const elInput = (
     <HtmlInput
-      instance={instance}
       style={styles.input}
       className={props.className}
       isEnabled={isEnabled}
@@ -154,7 +134,7 @@ const View: React.FC<t.TextInputProps> = (props) => {
       onKeyUp={props.onKeyUp}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
-      onChange={handleChange}
+      onChanged={handleChange}
       onEnter={props.onEnter}
       onEscape={props.onEscape}
       onTab={props.onTab}
@@ -190,12 +170,11 @@ const View: React.FC<t.TextInputProps> = (props) => {
  * Export
  */
 type Fields = {
-  Events: typeof TextInputEvents;
-  Masks: typeof TextInputMasks;
+  Masks: typeof Masks;
   DEFAULTS: typeof DEFAULTS;
 };
 export const TextInput = FC.decorate<TextInputProps, Fields>(
   View,
-  { Events: TextInputEvents, Masks: TextInputMasks, DEFAULTS },
+  { Masks, DEFAULTS },
   { displayName: 'TextInput' },
 );

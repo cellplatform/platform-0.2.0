@@ -13,7 +13,6 @@ export type KeyboardModifierFlags = {
   meta: boolean;
 };
 
-export type TextInputInstance = { bus: t.EventBus<any>; id: Id };
 export type TextInputCursorAction = 'Cursor:Start' | 'Cursor:End';
 
 export type TextInputStatus = {
@@ -23,6 +22,11 @@ export type TextInputStatus = {
   value: string;
   size: { width: Pixels; height: Pixels };
   selection: { start: number; end: number };
+};
+
+export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
+export type TextInputLabelDoubleClickHandlerArgs = {
+  target: 'ReadOnly' | 'Placeholder';
 };
 
 /**
@@ -38,7 +42,6 @@ export type TextInputValue = {
 export type TextInputProps = t.TextInputFocusAction &
   t.TextInputEventHandlers &
   TextInputValue & {
-    instance?: TextInputInstance;
     isEnabled?: boolean;
     isPassword?: boolean;
     isReadOnly?: boolean;
@@ -63,6 +66,7 @@ export type TextInputProps = t.TextInputFocusAction &
     onMouseUp?: MouseEventHandler;
     onMouseEnter?: MouseEventHandler;
     onMouseLeave?: MouseEventHandler;
+    onLabelDoubleClick?: TextInputLabelDoubleClickHandler;
   };
 
 /**
@@ -130,7 +134,6 @@ export type TextInputEvents = {
 export type TextInputChangeEventHandler = (e: TextInputChangeEvent) => void;
 
 export type TextInputTabEvent = {
-  instance: Id;
   modifierKeys: t.KeyboardModifierFlags;
   isCancelled: boolean;
   cancel(): void;
@@ -138,13 +141,12 @@ export type TextInputTabEvent = {
 export type TextInputTabEventHandler = (e: TextInputTabEvent) => void;
 
 export type TextInputKeyEvent = React.KeyboardEvent<HTMLInputElement> & {
-  instance: Id;
   modifierKeys: t.KeyboardModifierFlags;
 };
 export type TextInputKeyEventHandler = (e: TextInputKeyEvent) => void;
 
 export type TextInputEventHandlers = {
-  onChange?: TextInputChangeEventHandler;
+  onChanged?: TextInputChangeEventHandler;
   onKeyDown?: TextInputKeyEventHandler;
   onKeyUp?: TextInputKeyEventHandler;
   onEnter?: TextInputKeyEventHandler;
@@ -208,7 +210,6 @@ export type TextInputChangedEvent = {
 export type TextInputChanged = TextInputChangeEvent;
 
 export type TextInputChangeEvent = {
-  instance: Id;
   from: string;
   to: string;
   char: string;

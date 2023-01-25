@@ -25,16 +25,19 @@ export const DevSample: React.FC<DevSampleProps> = (args) => {
       value={value}
       hint={debug.hint ? hint : undefined}
       onEnter={(e) => {
-        console.info('⚡️ onEnter');
+        console.info('⚡️ onEnter', e);
       }}
       onEscape={(e) => {
-        console.info('⚡️ onEscape');
+        console.info('⚡️ onEscape', e);
       }}
-      onChange={(e) => {
+      onChanged={(e) => {
         if (!debug.updateHandlerEnabled) return;
 
         setValue(e.to);
         if (debug.hint) setHint(DevUtil.lookupHint(e.to ?? ''));
+      }}
+      onLabelDoubleClick={(e) => {
+        console.info('⚡️ onLabelDoubleClick', e);
       }}
     />
   );

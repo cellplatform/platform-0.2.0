@@ -1,11 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { takeUntil } from 'rxjs/operators';
+import { useRef } from 'react';
 
-import { Event } from '../common';
 import { useFocus } from '../../useFocus';
-import { Color, css, DEFAULTS, R, rx, t, Time } from '../common';
+import { Color, css, DEFAULTS, R, t } from '../common';
 import { Util } from '../util.mjs';
-import { TextInputEvents } from '../logic';
 
 /**
  * Types
@@ -13,7 +10,6 @@ import { TextInputEvents } from '../logic';
 export type HtmlInputProps = t.TextInputFocusAction &
   t.TextInputEventHandlers &
   t.TextInputValue & {
-    instance: t.TextInputInstance;
     className?: string;
     isEnabled?: boolean;
     isPassword?: boolean;
@@ -36,17 +32,13 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     value = '',
     isEnabled = DEFAULTS.prop.isEnabled,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
-    isPassword,
+    isPassword = DEFAULTS.prop.isPassword,
     maxLength,
     selectionBackground,
   } = props;
 
-  const busid = rx.bus.instance(props.instance.bus);
-  const instance = props.instance.id;
   const inputRef = useRef<HTMLInputElement>(null);
   const focusState = useFocus(inputRef, { redraw: false });
-
-  const events = Event.useRef(() => TextInputEvents({ instance: props.instance }));
 
   // const keyboard = Keyboard.useKeyboardState({ bus: props.instance.bus, instance });
   // const cloneModifierKeys = () => ({ ...keyboard.state.current.modifiers });
@@ -64,70 +56,10 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   };
 
   /**
-   * [Lifecycle]: Cursor/focus controller
-   */
-  useEffect(() => {
-    // const { dispose, events } = Wrangle.events(props);
-    const { dispose, dispose$ } = rx.disposable();
-
-    // const ee = eventsRef.
-
-    events.focus.$.subscribe((e) => {
-      if (e.focus) focus();
-      if (!e.focus) blur();
-    });
-
-    events.cursor.$.subscribe((e) => {
-      if (e.action === 'Cursor:Start') cursorToStart();
-      if (e.action === 'Cursor:End') cursorToEnd();
-    });
-
-    events.select.$.subscribe((e) => {
-      selectAll();
-    });
-
-    if (props.focusOnLoad) Time.delay(0, () => focus());
-
-    return dispose;
-  }, [busid, instance]); // eslint-disable-line
-
-  /**
-   * [Lifecycle]: Status response controller.
-   */
-  useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-
-    const toStatus = (): t.TextInputStatus => {
-      const input = inputRef.current;
-      const size = { width: input?.offsetWidth ?? -1, height: input?.offsetHeight ?? -1 };
-      const selection = { start: input?.selectionStart ?? -1, end: input?.selectionEnd ?? -1 };
-      return {
-        instance: events.instance,
-        focused: focusState.withinFocus,
-        empty: value.length === 0,
-        value,
-        size,
-        selection,
-      };
-    };
-
-    events.status.req$.subscribe((e) => {
-      console.log('------lkjlkj-------------------------------------');
-      const { tx } = e;
-      fire({
-        type: 'sys.ui.TextInput/Status:res',
-        payload: { tx, instance, status: toStatus() },
-      });
-    });
-
-    return dispose;
-  }, [busid, instance, value]); // eslint-disable-line
-
-  /**
    * [Handlers]
    */
   const handleChange = (e: React.ChangeEvent) => {
-    const { onChange, maxLength, mask } = props;
+    const { onChanged, maxLength, mask } = props;
 
     // Derive values.
     const from = value;
@@ -143,7 +75,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
     // Update state and alert listeners.
     if (from !== to) {
-      onChange?.({ instance, from, to, isMax, char, modifierKeys: cloneModifierKeys() });
+      const modifierKeys = cloneModifierKeys();
+      onChanged?.({ from, to, isMax, char, modifierKeys });
     }
   };
 
@@ -151,13 +84,12 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     const { onKeyDown, onEscape, onTab } = props;
     const event = toKeyboardEvent(e);
 
-    if (onKeyDown) onKeyDown(event);
+    onKeyDown?.(event);
     if (onEscape && e.key === 'Escape') onEscape(event);
 
     if (onTab && e.key === 'Tab') {
       let isCancelled = false;
       onTab({
-        instance,
         modifierKeys: cloneModifierKeys(),
         get isCancelled() {
           return isCancelled;
@@ -168,15 +100,12 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
         },
       });
     }
-
-    fireKeyboard(event, true);
   };
 
   const handleKeyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const event = toKeyboardEvent(e);
     if (e.key === 'Enter') props.onEnter?.(event);
     props.onKeyUp?.(event);
-    fireKeyboard(event, false);
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -187,18 +116,10 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (focusAction === 'Cursor:End') cursorToEnd();
 
     onFocus?.(e);
-    fire({
-      type: 'sys.ui.TextInput/Focus',
-      payload: { instance, focus: true },
-    });
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     props.onBlur?.(e);
-    fire({
-      type: 'sys.ui.TextInput/Focus',
-      payload: { instance, focus: false },
-    });
   };
 
   /**
@@ -208,21 +129,12 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyEvent => {
     return {
       ...e,
-      instance,
       modifierKeys: cloneModifierKeys(),
       preventDefault: () => e.preventDefault(),
       stopPropagation: () => e.stopPropagation(),
     };
   };
 
-  const fireKeyboard = (event: t.TextInputKeyEvent, isPressed: boolean) => {
-    fire({
-      type: 'sys.ui.TextInput/Keypress',
-      payload: { instance, key: event.key, pressed: isPressed, event },
-    });
-  };
-
-  const fire = (event: t.TextInputEvent) => props.instance.bus.fire(event);
   const focus = () => inputRef.current?.focus();
   const blur = () => inputRef.current?.blur();
   const selectAll = () => inputRef.current?.select();

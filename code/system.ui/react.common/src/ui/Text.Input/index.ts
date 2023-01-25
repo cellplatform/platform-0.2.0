@@ -1,2 +1,7 @@
-export type { TextInputProps } from './types.mjs';
-export * from './TextInput.mjs';
+export * from './ui/TextInput';
+
+/**
+ * TODO 🐷
+ * - focus / blur
+ * - select
+ */
