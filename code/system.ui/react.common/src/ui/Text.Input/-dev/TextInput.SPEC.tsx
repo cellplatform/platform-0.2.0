@@ -100,33 +100,6 @@ export default Dev.describe('TextInput', (e) => {
 
     dev.hr();
 
-    //     dev.section('Events', (dev) => {
-    //       const events = TextInput.Events({ instance });
-    //
-    //       dev.button('⚡️ Status', async (e) => {
-    //         console.log('⚡️ Status | events:', events.instance);
-    //         const status = await events.status.get();
-    //         await e.change((d) => (d.output.status = status));
-    //
-    //         console.log('status', status);
-    //       });
-    //
-    //       dev.hr();
-    //
-    //       dev.button('⚡️ Focus', (e) => events.focus.fire());
-    //       dev.button('⚡️ Blur', (e) => events.focus.fire(false));
-    //
-    //       dev.hr();
-    //
-    //       dev.button('⚡️ Select (All)', (e) => events.select.fire());
-    //       dev.button('⚡️ Cursor: Start', (e) => events.cursor.start());
-    //       dev.button('⚡️ Cursor: End', (e) => events.cursor.end());
-    //
-    //       dev.hr();
-    //     });
-
-    dev.hr();
-
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
