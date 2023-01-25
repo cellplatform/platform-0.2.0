@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Event } from '../../Event';
-import { css, DEFAULT, FC, rx, t, Time } from '../common';
+import { css, DEFAULTS, FC, rx, t, Time } from '../common';
 import { TextInputEvents, TextInputMasks } from '../logic';
 import { TextInputHint } from './TextInput.Hint';
 import { HtmlInput } from './TextInput.Html';
@@ -18,8 +18,8 @@ const View: React.FC<t.TextInputProps> = (props) => {
     isReadOnly = false,
     isEnabled = true,
     placeholder,
-    valueStyle = DEFAULT.TEXT.STYLE,
-    disabledOpacity = DEFAULT.DISABLED_OPACITY,
+    valueStyle = DEFAULTS.text.style,
+    disabledOpacity = DEFAULTS.disabledOpacity,
     maxLength,
   } = props;
 

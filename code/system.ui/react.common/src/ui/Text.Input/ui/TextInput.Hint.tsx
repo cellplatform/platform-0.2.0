@@ -23,16 +23,18 @@ export const TextInputHint: React.FC<TextInputHintProps> = (props) => {
     base: css({
       Absolute: 0,
       pointerEvents: 'none',
-      boxSizing: 'border-box',
-      Flex: 'x-center-start',
+      display: 'grid',
+      alignContent: 'center',
     }),
     value: css({
       ...fontProps,
+      boxSizing: 'border-box',
       paddingLeft: 2,
       opacity: 0, // NB: Hidden (placeholder that pushes out the "hint" to the right)
     }),
     hint: css({
       ...fontProps,
+      boxSizing: 'border-box',
       marginLeft: 1,
       opacity: isString ? 0.3 : 1,
     }),

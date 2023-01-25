@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { takeUntil } from 'rxjs/operators';
 
 import { useFocus } from '../../useFocus';
-import { Color, css, DEFAULT, R, rx, t, Time } from '../common';
+import { Color, css, DEFAULTS, R, rx, t, Time } from '../common';
 import { Util } from '../util.mjs';
 
 /**
@@ -39,7 +39,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     isPassword,
     maxLength,
     selectionBackground,
-    valueStyle = DEFAULT.TEXT.STYLE,
+    valueStyle = DEFAULTS.text.style,
   } = props;
 
   const instance = props.instance.id;

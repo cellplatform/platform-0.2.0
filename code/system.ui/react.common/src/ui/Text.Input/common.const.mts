@@ -3,19 +3,19 @@ import { t, COLORS } from '../common';
 /**
  * [CONSTANTS]
  */
-export const MONOSPACE = { FAMILY: 'monospace' } as const;
-export const SANS = { FAMILY: 'sans-serif' } as const;
+export const monospace = { FAMILY: 'monospace' } as const;
+export const sans = { FAMILY: 'sans-serif' } as const;
 export const SYSTEM_FONT = {
-  WEIGHTS: { thin: 100, light: 300, normal: 400, bold: 900 },
-  MONOSPACE,
-  SANS,
+  weights: { thin: 100, light: 300, normal: 400, bold: 900 },
+  monospace,
+  sans,
 } as const;
 
 /**
  * [Defaults]
  */
 
-export const TEXT_STYLE: t.TextInputStyle = {
+const TEXT_STYLE: t.TextInputStyle = {
   opacity: 1,
   color: COLORS.DARK,
   disabledColor: COLORS.DARK,
@@ -27,7 +27,7 @@ export const TEXT_STYLE: t.TextInputStyle = {
   lineHeight: undefined,
 };
 
-export const DEFAULT = {
-  TEXT: { STYLE: TEXT_STYLE },
-  DISABLED_OPACITY: 0.2,
+export const DEFAULTS = {
+  text: { style: TEXT_STYLE },
+  disabledOpacity: 0.2,
 };

@@ -1,4 +1,4 @@
-import { Color, DEFAULT, Measure, R, SYSTEM_FONT, t } from './common';
+import { Color, DEFAULTS, Measure, R, SYSTEM_FONT, t } from './common';
 import { TextInputStyle } from './types.mjs';
 
 /**
@@ -37,7 +37,7 @@ export const Util = {
    */
   measure: {
     input(props: t.TextInputProps) {
-      const { value: content, valueStyle = DEFAULT.TEXT.STYLE } = props;
+      const { value: content, valueStyle = DEFAULTS.text.style } = props;
       const style = Util.css.toText(valueStyle);
       return Measure.size({ content, ...style });
     },
@@ -87,7 +87,7 @@ export const Util = {
      * Convert TextInput props to placeholder style.
      */
     toPlaceholder(props: t.TextInputProps) {
-      const { isEnabled = true, valueStyle = DEFAULT.TEXT.STYLE, placeholderStyle } = props;
+      const { isEnabled = true, valueStyle = DEFAULTS.text.style, placeholderStyle } = props;
       const styles = { ...R.clone(valueStyle), ...placeholderStyle };
       return Util.css.toTextInput(isEnabled, styles);
     },
@@ -124,7 +124,7 @@ export const Util = {
         color: Color.format(color),
         fontFamily,
         fontSize: fontSize,
-        fontWeight: SYSTEM_FONT.WEIGHTS[fontWeight],
+        fontWeight: SYSTEM_FONT.weights[fontWeight],
         fontStyle: italic ? 'italic' : undefined,
         textAlign: align,
         opacity,
@@ -162,7 +162,7 @@ export const Util = {
       const {
         fontSize,
         fontWeight = 'normal',
-        fontFamily = SYSTEM_FONT.SANS.FAMILY,
+        fontFamily = SYSTEM_FONT.sans.FAMILY,
         letterSpacing,
         lineHeight,
       } = props;
