@@ -23,13 +23,12 @@ export const DevSample: React.FC<DevSampleProps> = (args) => {
     <TextInput
       {...props}
       value={value}
-      hint={hint}
-      // style={{ flex: 1 }}
+      hint={debug.hint ? hint : undefined}
       onEnter={(e) => {
-        console.info('OnEnter');
+        console.info('⚡️ onEnter');
       }}
       onEscape={(e) => {
-        console.info('OnEscape');
+        console.info('⚡️ onEscape');
       }}
       onChange={(e) => {
         if (debug.updateHandlerEnabled) {
