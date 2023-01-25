@@ -10,6 +10,9 @@ export * from './Spinner/types.mjs';
 
 export * from './Event/types.mjs';
 
+export * from './useFocus/types.mjs';
+export * from './useSizeObserver/types.mjs';
+
 export * from './Text/types.mjs';
 // export * from './Text.Copy/types.mjs';
 // export * from './Text.Input/types.mjs';

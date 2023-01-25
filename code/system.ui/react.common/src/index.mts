@@ -22,7 +22,8 @@ export { IFrame } from './ui/IFrame';
 /**
  * Hooks
  */
-export { useFocus, useSizeObserver } from './ui.hooks';
+export { useFocus } from './ui/useFocus';
+export { useSizeObserver } from './ui/useSizeObserver';
 
 /**
  * Development
