@@ -1,4 +1,8 @@
 import { t, pc, fs, LogTable, prettybytes } from './common/index.mjs';
+// import * as PkgJson from '../../../package.json' assert { type: 'json' };
+
+// const Pkg = PkgJson as t.PkgJson;
+const Pkg = (await fs.readJson(fs.resolve('./package.json'))) as t.PkgJson;
 
 const DEFAULT = {
   pattern: 'src/**/*.{mts,ts,tsx}',
@@ -16,7 +20,7 @@ export type DirCount = {
 
 const Find = {
   async moduleDirs(within: t.DirString) {
-    const excludeDirs = Filter.exclude(['/node_modules/', '/dist/', '/tmp']);
+    const excludeDirs = Filter.exclude(['/node_modules/', '/dist/', '/dist.cell/', '/tmp']);
     const pattern = fs.join(within, '**/package.json');
     const paths = (await fs.glob(pattern)).filter(excludeDirs);
     return paths.map((path) => fs.dirname(path));
@@ -130,6 +134,10 @@ export const Count = {
     console.info();
 
     console.info(pc.gray(table.toString()));
+    console.info();
+
+    console.info(pc.gray(`repository: ${pc.cyan(Pkg.name)}`));
+    console.info(pc.gray(`   version: ${pc.white(pc.bold(Pkg.version))}`));
     console.info();
   },
 };
