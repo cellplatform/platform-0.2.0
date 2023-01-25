@@ -6,8 +6,8 @@ import { t } from '../common';
  * Lifecycle manager for managing an [Events] API within a react component
  * disposing of the [Events] object when the component unmounts.
  */
-export function useEventsRef<Events extends t.Disposable>(factory: () => Events) {
-  const eventsRef = useRef<Events>(factory());
+export function useEventsRef<E extends t.Disposable>(factory: () => E) {
+  const eventsRef = useRef<E>(factory());
 
   useEffect(() => {
     const events = eventsRef.current;

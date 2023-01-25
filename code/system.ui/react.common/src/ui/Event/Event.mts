@@ -1,17 +1,8 @@
-// import { useEventHistory, EventHistory as History } from '../Event.History';
-// import { EventList as List } from '../Event.List';
-import { useEventsRef } from './useEventsRef.mjs';
-
-/**
- * TODO 🐷
- */
+import { useEventsRef as useRef } from './useEventsRef.mjs';
 
 /**
  * Index to [Event] related tools.
  */
 export const Event = {
-  // List,
-  // History,
-  // useEventHistory,
-  useEventsRef,
+  useRef,
 };
