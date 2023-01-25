@@ -37,7 +37,7 @@ export const Util = {
    */
   measure: {
     input(props: t.TextInputProps) {
-      const { value: content, valueStyle = DEFAULTS.text.style } = props;
+      const { value: content, valueStyle = DEFAULTS.textStyle } = props;
       const style = Util.css.toText(valueStyle);
       return Measure.size({ content, ...style });
     },
@@ -87,7 +87,7 @@ export const Util = {
      * Convert TextInput props to placeholder style.
      */
     toPlaceholder(props: t.TextInputProps) {
-      const { isEnabled = true, valueStyle = DEFAULTS.text.style, placeholderStyle } = props;
+      const { isEnabled = true, valueStyle = DEFAULTS.textStyle, placeholderStyle } = props;
       const styles = { ...R.clone(valueStyle), ...placeholderStyle };
       return Util.css.toTextInput(isEnabled, styles);
     },
@@ -160,7 +160,7 @@ export const Util = {
 
     pluckFont(props: t.TextStyle) {
       const {
-        fontSize = DEFAULTS.fontsize,
+        fontSize = DEFAULTS.textStyle.fontSize,
         fontWeight = 'normal',
         fontFamily = SYSTEM_FONT.sans.family,
         letterSpacing,

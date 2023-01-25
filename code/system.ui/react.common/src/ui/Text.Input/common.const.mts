@@ -13,7 +13,13 @@ export const SYSTEM_FONT = {
  * [Defaults]
  */
 
-const TEXT_STYLE: t.TextInputStyle = {
+const focusActions: t.TextInputFocusAction['focusAction'][] = [
+  'Select',
+  'Cursor:Start',
+  'Cursor:End',
+];
+
+const textStyle: t.TextInputStyle = {
   opacity: 1,
   color: COLORS.DARK,
   disabledColor: COLORS.DARK,
@@ -39,7 +45,8 @@ const props: t.TextInputProps = {
 };
 
 export const DEFAULTS = {
-  text: { style: TEXT_STYLE },
+  textStyle,
   disabledOpacity: 0.2,
+  focusActions,
   props,
 };
