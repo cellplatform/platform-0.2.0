@@ -3,12 +3,10 @@ import { t, COLORS } from '../common';
 /**
  * [CONSTANTS]
  */
-export const monospace = { FAMILY: 'monospace' } as const;
-export const sans = { FAMILY: 'sans-serif' } as const;
 export const SYSTEM_FONT = {
   weights: { thin: 100, light: 300, normal: 400, bold: 900 },
-  monospace,
-  sans,
+  monospace: { family: 'monospace' },
+  sans: { family: 'sans-serif' },
 } as const;
 
 /**
@@ -20,14 +18,28 @@ const TEXT_STYLE: t.TextInputStyle = {
   color: COLORS.DARK,
   disabledColor: COLORS.DARK,
   italic: false,
-  fontSize: undefined,
+  fontSize: 16,
   fontWeight: undefined,
   fontFamily: undefined,
   letterSpacing: undefined,
   lineHeight: undefined,
 };
 
+const props: t.TextInputProps = {
+  isEnabled: true,
+  isReadOnly: false,
+  isPassword: false,
+  autoCapitalize: false,
+  autoComplete: false,
+  autoCorrect: false,
+  autoSize: false,
+  spellCheck: false,
+  focusOnLoad: false,
+  placeholderStyle: { italic: true, opacity: 0.3 },
+};
+
 export const DEFAULTS = {
   text: { style: TEXT_STYLE },
   disabledOpacity: 0.2,
+  props,
 };

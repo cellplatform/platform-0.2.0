@@ -195,9 +195,10 @@ const View: React.FC<t.TextInputProps> = (props) => {
 type Fields = {
   Events: typeof TextInputEvents;
   Masks: typeof TextInputMasks;
+  DEFAULTS: typeof DEFAULTS;
 };
 export const TextInput = FC.decorate<TextInputProps, Fields>(
   View,
-  { Events: TextInputEvents, Masks: TextInputMasks },
+  { Events: TextInputEvents, Masks: TextInputMasks, DEFAULTS },
   { displayName: 'TextInput' },
 );

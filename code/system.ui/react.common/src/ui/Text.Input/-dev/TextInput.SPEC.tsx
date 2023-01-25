@@ -1,6 +1,6 @@
-import { TextInput } from '.';
-import { Dev, t } from '../../test.ui';
-import { DevSample } from './-dev/DEV.Sample';
+import { TextInput } from '..';
+import { Dev, t } from '../../../test.ui';
+import { DevSample } from './DEV.Sample';
 
 type T = {
   props: t.TextInputProps;
@@ -15,12 +15,14 @@ type T = {
 
 const initial: T = {
   props: {
+    ...TextInput.DEFAULTS.props,
     placeholder: 'my placeholder',
+    focusOnLoad: true,
   },
   debug: {
+    hint: true,
     render: true,
     isNumericMask: false,
-    hint: true,
     updateHandlerEnabled: true,
   },
 };
@@ -48,5 +50,37 @@ export default Dev.describe('TextInput', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec.TextInput'} data={e.state} expand={1} />);
+
+    dev.section('Configurations', (dev) => {
+      //
+      const value = (value: string, label?: string) => {
+        dev.button(`text: ${label ?? value}`, (e) => e.change((d) => (d.props.value = value)));
+      };
+
+      value('hello 👋');
+      value(dev.lorem(50), 'long (lorem)');
+    });
+
+    dev.hr();
+
+    dev.section('Properties', (dev) => {
+      function boolean(key: keyof T['props']) {
+        dev.boolean((btn) =>
+          btn
+            .label(key)
+            .value((e) => Boolean(e.state.props[key]))
+            .onClick((e) => e.change((d) => Dev.toggle(d.props, key))),
+        );
+      }
+
+      boolean('isEnabled');
+      boolean('isReadOnly');
+      boolean('isPassword');
+      boolean('autoCapitalize');
+      boolean('autoCorrect');
+      boolean('autoComplete');
+      boolean('spellCheck');
+      boolean('focusOnLoad');
+    });
   });
 });

@@ -123,7 +123,7 @@ export const Util = {
       return {
         color: Color.format(color),
         fontFamily,
-        fontSize: fontSize,
+        fontSize,
         fontWeight: SYSTEM_FONT.weights[fontWeight],
         fontStyle: italic ? 'italic' : undefined,
         textAlign: align,
@@ -160,9 +160,9 @@ export const Util = {
 
     pluckFont(props: t.TextStyle) {
       const {
-        fontSize,
+        fontSize = DEFAULTS.fontsize,
         fontWeight = 'normal',
-        fontFamily = SYSTEM_FONT.sans.FAMILY,
+        fontFamily = SYSTEM_FONT.sans.family,
         letterSpacing,
         lineHeight,
       } = props;
