@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { takeUntil } from 'rxjs/operators';
 
-import { useFocus } from '../useFocus';
-import { Color, css, DEFAULT, R, rx, t, Time } from './common';
-import { Util } from './Util';
+import { useFocus } from '../../useFocus';
+import { Color, css, DEFAULT, R, rx, t, Time } from '../common';
+import { Util } from '../util.mjs';
 
 /**
  * Types

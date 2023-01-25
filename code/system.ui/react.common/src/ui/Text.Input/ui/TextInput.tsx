@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { Event } from '../Event';
-import { css, DEFAULT, FC, rx, t, Time } from './common';
-import { TextInputEvents, TextInputMasks } from './logic';
+import { Event } from '../../Event';
+import { css, DEFAULT, FC, rx, t, Time } from '../common';
+import { TextInputEvents, TextInputMasks } from '../logic';
 import { TextInputHint } from './TextInput.Hint';
 import { HtmlInput } from './TextInput.Html';
-import { Util } from './Util';
+import { Util } from '../util.mjs';
 
-import type { TextInputProps } from './types.mjs';
-export { TextInputProps };
+import type { TextInputProps } from '../types.mjs';
 
 /**
  * Component

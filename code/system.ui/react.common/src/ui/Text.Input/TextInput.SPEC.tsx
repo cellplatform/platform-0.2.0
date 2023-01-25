@@ -1,9 +1,9 @@
-import { TextInput, TextInputProps } from '.';
+import { TextInput } from '.';
 import { Dev, t } from '../../test.ui';
 import { DevSample } from './-dev/DEV.Sample';
 
 type T = {
-  props: TextInputProps;
+  props: t.TextInputProps;
   debug: {
     render: boolean;
     isNumericMask: boolean;
@@ -45,6 +45,6 @@ export default Dev.describe('TextInput', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'TextInput'} data={e.state} expand={1} />);
   });
 });
