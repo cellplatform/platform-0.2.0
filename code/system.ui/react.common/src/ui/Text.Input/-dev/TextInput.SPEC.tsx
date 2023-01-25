@@ -16,7 +16,7 @@ type T = {
 
 const initial: T = {
   props: {
-    ...TextInput.DEFAULTS.props,
+    ...TextInput.DEFAULTS.prop,
     placeholder: 'my placeholder',
     focusOnLoad: true,
   },

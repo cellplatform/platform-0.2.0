@@ -1,17 +1,10 @@
 import { t, COLORS } from '../common';
 
-/**
- * [CONSTANTS]
- */
-export const SYSTEM_FONT = {
+const systemFont = {
   weights: { thin: 100, light: 300, normal: 400, bold: 900 },
   monospace: { family: 'monospace' },
   sans: { family: 'sans-serif' },
 } as const;
-
-/**
- * [Defaults]
- */
 
 const focusActions: t.TextInputFocusAction['focusAction'][] = [
   'Select',
@@ -19,7 +12,7 @@ const focusActions: t.TextInputFocusAction['focusAction'][] = [
   'Cursor:End',
 ];
 
-const textStyle: t.TextInputStyle = {
+const valueStyle: t.TextInputStyle = {
   opacity: 1,
   color: COLORS.DARK,
   disabledColor: COLORS.DARK,
@@ -31,7 +24,7 @@ const textStyle: t.TextInputStyle = {
   lineHeight: undefined,
 };
 
-const props: t.TextInputProps = {
+const prop = {
   isEnabled: true,
   isReadOnly: false,
   isPassword: false,
@@ -42,11 +35,12 @@ const props: t.TextInputProps = {
   spellCheck: false,
   focusOnLoad: false,
   placeholderStyle: { italic: true, opacity: 0.3 },
-};
+  disabledOpacity: 0.2,
+  valueStyle,
+} as const;
 
 export const DEFAULTS = {
-  textStyle,
-  disabledOpacity: 0.2,
+  prop,
   focusActions,
-  props,
+  systemFont,
 };

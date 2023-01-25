@@ -34,8 +34,8 @@ export type HtmlInputProps = t.TextInputFocusAction &
 export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const {
     value = '',
-    isEnabled = DEFAULTS.props.isEnabled ?? true,
-    disabledOpacity = DEFAULTS.disabledOpacity,
+    isEnabled = DEFAULTS.prop.isEnabled,
+    disabledOpacity = DEFAULTS.prop.disabledOpacity,
     isPassword,
     maxLength,
     selectionBackground,
@@ -286,7 +286,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
   styles.base = R.mergeDeepRight(
     styles.base,
-    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.textStyle) as {},
+    Util.css.toTextInput(isEnabled, props.valueStyle ?? DEFAULTS.prop.valueStyle) as {},
   );
   styles.base = {
     ...styles.base,
