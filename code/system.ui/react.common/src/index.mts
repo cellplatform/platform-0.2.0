@@ -1,8 +1,14 @@
 export * from './types.mjs';
 
+/**
+ * Meta
+ */
 export { Pkg } from './index.pkg.mjs';
-export { Specs, DevSpecs, ExternalSpecs } from './test.ui/entry.Specs.mjs';
+export { Specs, DevSpecs } from './test.ui/entry.Specs.mjs';
 
+/**
+ * Components
+ */
 export { Icon } from './ui/Icon';
 export { Spinner } from './ui/Spinner';
 export { Center } from './ui/Center';
@@ -13,6 +19,14 @@ export { Switch } from './ui/Button.Switch';
 export { PropList } from './ui/PropList';
 export { IFrame } from './ui/IFrame';
 
+/**
+ * Hooks
+ */
+export { useFocus, useSizeObserver } from './ui.hooks';
+
+/**
+ * Development
+ */
 export { Dev, DevTools, Spec } from './ui.dev';
 
 /**

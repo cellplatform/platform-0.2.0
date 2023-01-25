@@ -14,10 +14,7 @@ export const Specs = {
   'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/TextSyntax.SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/Measure.SPEC'),
   'sys.ui.common.useFocus': () => import('../ui.hooks/Focus/useFocus.SPEC'),
-};
-
-export const ExternalSpecs = {
-  'sys.ui.util.useSizeObserver': () => import('./react.util/useSizeObserver.SPEC'),
+  'sys.ui.common.useSizeObserver': () => import('../ui.hooks/Size/useSizeObserver.SPEC'),
 };
 
 export const DevSpecs = {
@@ -30,4 +27,4 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/DevTools.Todo.SPEC'),
 };
 
-export default { ...Specs, ...ExternalSpecs, ...DevSpecs };
+export default { ...Specs, ...DevSpecs };
