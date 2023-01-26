@@ -1,0 +1,79 @@
+import { slug, t } from './common';
+
+export const Match = {
+  /**
+   * Generate a keyboard pattern matcher.
+   */
+  pattern(input: t.KeyPattern) {
+    const pattern = parsePattern(input);
+    return {
+      /**
+       * Parsed key-map pattern, eg "CMD + P" or "META + SHIFT + LK"
+       */
+      pattern,
+
+      /**
+       * Determine if the given keys match the pattern.
+       */
+      isMatch(pressed: t.KeyboardKey['key'][], modifiers: Partial<t.KeyboardModifierFlags>) {
+        if (!containsModifiers(pattern, modifiers)) return false;
+        if (!containsKeys(pattern, pressed)) return false;
+        return true;
+      },
+    };
+  },
+};
+
+/**
+ * [Helpers]
+ */
+
+function parsePattern(pattern: t.KeyPattern): string[] {
+  if (typeof pattern !== 'string') pattern = '';
+  pattern = pattern.trim();
+
+  // Handle an escaped ("+") character as a value rather than the divider.
+  const placeholder = `|${slug()}|`;
+  pattern = pattern.replace(/\\\+/g, placeholder);
+
+  return pattern
+    .split('+')
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => {
+      if (value === placeholder) return '+';
+      if (value.toUpperCase() === 'CMD') value = 'META';
+      if (value.toUpperCase() === 'META') return 'META';
+      if (value.toUpperCase() === 'SHIFT') return 'SHIFT';
+      if (value.toUpperCase() === 'CTRL') return 'CTRL';
+      if (value.toUpperCase() === 'ALT') return 'ALT';
+      return value;
+    });
+}
+
+const isModifier = (value: string) => {
+  value = (value || '').trim();
+  return value === 'META' || value === 'ALT' || value === 'SHIFT' || value === 'CTRL';
+};
+
+function containsModifiers(pattern: string[], modifiers: Partial<t.KeyboardModifierFlags>) {
+  pattern = pattern.filter(isModifier);
+
+  const flags = Object.entries(modifiers)
+    .filter(([key, value]) => Boolean(value))
+    .map(([key, value]) => key.toUpperCase());
+
+  if (!pattern.every((modifier) => flags.includes(modifier))) return false;
+  if (flags.some((modifier) => !pattern.includes(modifier))) return false;
+  return true;
+}
+
+function containsKeys(pattern: string[], pressed: string[]) {
+  pressed = pressed.map((value) => value.toUpperCase());
+  pattern = pattern
+    .filter((value) => !isModifier(value))
+    .map((value) => value.toUpperCase())
+    .map((value) => (value.length > 1 ? value.split('') : value))
+    .flat();
+  return pattern.every((value) => pressed.includes(value));
+}
