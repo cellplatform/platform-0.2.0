@@ -53,7 +53,7 @@ export default Dev.describe('PropList', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'PropList.spec'} data={e.state} expand={1} />);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
