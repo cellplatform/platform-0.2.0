@@ -68,7 +68,7 @@ export default Dev.describe('Test.syntax', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'TextSyntax.spec'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'spec.TextSyntax'} data={e.state} expand={1} />);
 
     dev
       .title('Test Options')

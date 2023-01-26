@@ -27,12 +27,12 @@ export default Dev.describe('KeyboardMonitor', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => (
-        <Dev.Object name={'KeyboardMonitor.spec'} data={e.state.keyboard} expand={1} />
+        <Dev.Object name={'spec.KeyboardMonitor'} data={e.state.keyboard} expand={1} />
       ));
 
     dev.row((e) => {
       const event = e.state.keyboard.last;
-      return <Keyboard.ui.EventProps event={event} style={{ MarginX: 15 }} />;
+      return <Keyboard.ui.EventProps event={event} style={{ MarginX: 15, marginTop: 5 }} />;
     });
   });
 });

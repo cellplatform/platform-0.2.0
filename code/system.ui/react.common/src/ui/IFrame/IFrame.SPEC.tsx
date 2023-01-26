@@ -26,7 +26,7 @@ export default Dev.describe('IFrame', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'IFrame.spec'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'spec.IFrame'} data={e.state} expand={1} />);
 
     dev.boolean((btn) =>
       btn
