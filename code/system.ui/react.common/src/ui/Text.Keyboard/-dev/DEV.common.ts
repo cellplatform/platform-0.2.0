@@ -1,4 +1,4 @@
-export * from '../../common';
+export * from '../common';
 
 export { Card } from '../../Card';
 export { TextSyntax } from '../../Text.Syntax';

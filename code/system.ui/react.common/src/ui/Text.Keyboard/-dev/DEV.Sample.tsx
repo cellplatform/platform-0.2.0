@@ -1,64 +1,38 @@
-import { useEffect } from 'react';
-
-// import { Keyboard } from '..';
-import { Color, COLORS, css, Icons, t, rx } from './DEV.common';
+import { Color, COLORS, css, Icons, t } from './DEV.common';
 import { DevModifierKeys } from './DEV.ModifierKeys';
 
-export type EventCtx = { index: number; message: string };
-
 export type DevSampleProps = {
-  // hook: t.KeyboardPipeHookArgs;
+  state: t.KeyboardState;
   style?: t.CssValue;
 };
 
 export const DevSample: React.FC<DevSampleProps> = (props) => {
-  // const keyboard = Keyboard.useKeyboardState(props.hook);
-
-  /**
-   * NOTE: Test multiple instances of the hook initiated.
-   *       Should not duplicate keyboard events.
-   */
-  // Keyboard.useEventPipe(props.hook);
-  // Keyboard.useEventPipe(props.hook);
-
-  useEffect(() => {
-    const { dispose$, dispose } = rx.disposable();
-    // const events = keyboard.events({ dispose$ });
-
-    //     events.$.subscribe((e) => {
-    //       console.log('keyboard (inside hook)', e);
-    //     });
-    //
-    //     // events.down.
-    //     events.up.escape((e) => {
-    //       console.log('Escape', e);
-    //     });
-
-    // events.down.enter((e) => {
-    //   console.log('Enter', e);
-    // });
-
-    // events.up.enter().$.subscribe((e) => {
-    //   console.log('$.Enter(up):', e);
-    // });
-
-    // events.down.code('KeyK', (e) => {
-    //   console.log('k', e);
-    // });
-
-    return () => dispose();
-  }, []);
+  const { state } = props;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', Flex: 'y-stretch-stretch', boxSizing: 'border-box' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
+    }),
     body: {
-      base: css({ flex: 1, position: 'relative' }),
-      inner: css({ Absolute: 0, Flex: 'center-center', overflow: 'hidden' }),
+      base: css({ position: 'relative' }),
+      inner: css({
+        Absolute: 0,
+        overflow: 'hidden',
+        display: 'grid',
+        placeItems: 'center',
+      }),
     },
-    footer: css({ Flex: 'x-spaceBetween-center', padding: 10 }),
+    footer: css({
+      padding: 10,
+      boxSizing: 'border-box',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+    }),
     icon: css({ Absolute: [0, null, null, 12] }),
     keys: css({ Flex: 'x-center-center' }),
     key: {
@@ -70,8 +44,6 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
         PaddingX: 10,
         padding: 3,
         boxSizing: 'border-box',
-        marginRight: 10,
-        ':last-child': { margin: 0 },
       }),
       label: css({ fontSize: 50 }),
       code: css({ fontSize: 9, paddingTop: 5 }),
@@ -90,7 +62,7 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
 
   const elKeys = (
     <div {...styles.keys}>
-      {/* {keyboard.state.current.pressed.map((e, i) => {
+      {state.current.pressed.map((e, i) => {
         return (
           <div key={`${e.code}.${i}`} {...styles.key.base}>
             <div {...styles.key.label}>{e.key}</div>
@@ -98,16 +70,9 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
             <div {...styles.key.traceline} />
           </div>
         );
-      })} */}
+      })}
     </div>
   );
-
-  // const last = keyboard.state.last;
-  // const elEventProps = last && (
-  //   <div {...css({ Absolute: [15, 0 - Keyboard.UI.EventProps.minWidth - 15, null, null] })}>
-  //     <Keyboard.UI.EventProps event={last} />
-  //   </div>
-  // );
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -116,11 +81,10 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
           {elKeys}
           {elIcon}
         </div>
-        {/* {elEventProps} */}
       </div>
       <div {...styles.footer}>
-        {/* <DevModifierKeys edge={'Left'} state={keyboard.state} />
-        <DevModifierKeys edge={'Right'} state={keyboard.state} /> */}
+        <DevModifierKeys edge={'Left'} state={state} />
+        <DevModifierKeys edge={'Right'} state={state} />
       </div>
     </div>
   );

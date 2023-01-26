@@ -38,7 +38,7 @@ export const DevKey: React.FC<DevKeyProps> = (props) => {
     }),
     body: css({
       position: 'relative',
-      Padding: [5, paddingX, 7, paddingX],
+      Padding: [7, paddingX, 5, paddingX],
     }),
     label: css({
       fontFamily: 'monospace',

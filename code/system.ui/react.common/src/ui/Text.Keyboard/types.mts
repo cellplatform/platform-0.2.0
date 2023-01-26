@@ -19,13 +19,15 @@ export type KeyboardKeyFlags = {
  */
 export type KeyboardKey = { key: string; code: string; is: KeyboardKeyFlags };
 export type KeyboardState = {
-  current: {
-    modified: boolean;
-    modifierKeys: KeyboardModifierKeys;
-    modifiers: KeyboardModifierFlags;
-    pressed: KeyboardKey[];
-  };
-  last?: t.KeyboardKeypress;
+  current: KeyboardStateCurrent;
+  last?: KeyboardKeypress;
+};
+
+export type KeyboardStateCurrent = {
+  modified: boolean;
+  modifierKeys: KeyboardModifierKeys;
+  modifiers: KeyboardModifierFlags;
+  pressed: KeyboardKey[];
 };
 
 export type KeyboardModifierKeys = {

@@ -52,7 +52,3 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
     />
   );
 };
-
-/**
- * Helpers
- */
