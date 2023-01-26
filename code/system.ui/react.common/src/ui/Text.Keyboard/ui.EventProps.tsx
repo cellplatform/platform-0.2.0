@@ -2,11 +2,13 @@ import { css, FC, t } from '../common';
 import { PropList } from '../PropList';
 
 export type EventPropsProps = {
-  event: t.KeyboardKeypress;
+  event?: t.KeyboardKeypress;
   style?: t.CssValue;
 };
 
 const View: React.FC<EventPropsProps> = (props) => {
+  if (!props.event) return null;
+
   const { event } = props;
   const { keypress, is } = event;
 
