@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
-import { css, DEFAULTS, FC, t, Time } from '../common';
-import { Masks } from '../logic';
+import { css, DEFAULTS, t, Time } from '../common';
 import { Util } from '../util.mjs';
 import { TextInputHint } from './TextInput.Hint';
 import { HtmlInput } from './TextInput.Html';
@@ -9,24 +8,27 @@ import { HtmlInput } from './TextInput.Html';
 import type { TextInputProps } from '../types.mjs';
 export type { TextInputProps };
 
+type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
+
 /**
  * Component
  */
-const View: React.FC<t.TextInputProps> = (props) => {
+export const TextInput: React.FC<Props> = (props) => {
   const {
+    inputRef,
     placeholder,
+    maxLength,
     isPassword = DEFAULTS.prop.isPassword,
     isReadOnly = DEFAULTS.prop.isReadOnly,
     isEnabled = DEFAULTS.prop.isEnabled,
     valueStyle = DEFAULTS.prop.valueStyle,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
-    maxLength,
   } = props;
-
-  const [width, setWidth] = useState<string | number | undefined>();
 
   const value = Util.value.format(props.value, maxLength);
   const hasValue = value.length > 0;
+
+  const [width, setWidth] = useState<string | number>();
 
   /**
    * [Lifecycle]
@@ -41,23 +43,13 @@ const View: React.FC<t.TextInputProps> = (props) => {
    * [Handlers]
    */
 
-  const handleChange = (e: t.TextInputChangeEvent) => {
-    props.onChanged?.(e);
-  };
-
-  const handleInputDblClick = (e: React.MouseEvent) => {
+  const handleDoubleClick = (e: React.MouseEvent) => {
     // NB: When the <input> is dbl-clicked and there is no value
     //     it is deduced that the placeholder was clicked.
-    if (!hasValue) labelDoubleClickHandler('Placeholder')(e);
-  };
-
-  const labelDoubleClickHandler = (target: t.TextInputLabelDoubleClicked['target']) => {
-    return (e: React.MouseEvent) => {
-      const LEFT = 0;
-      if (e.button === LEFT) {
-        props.onLabelDoubleClick?.({ target });
-      }
-    };
+    if (!hasValue) {
+      const handler = Wrangle.labelDoubleClickHandler(props, 'Placeholder');
+      handler(e);
+    }
   };
 
   /**
@@ -98,7 +90,7 @@ const View: React.FC<t.TextInputProps> = (props) => {
   const elPlaceholder = !hasValue && placeholder && (
     <div
       {...css(styles.placeholder, Util.css.toPlaceholder(props))}
-      onDoubleClick={labelDoubleClickHandler('Placeholder')}
+      onDoubleClick={Wrangle.labelDoubleClickHandler(props, 'Placeholder')}
     >
       {placeholder}
     </div>
@@ -107,7 +99,7 @@ const View: React.FC<t.TextInputProps> = (props) => {
   const elReadOnly = isReadOnly && !elPlaceholder && (
     <div
       {...css(valueStyle as t.CssValue, styles.placeholder, styles.readonly)}
-      onDoubleClick={labelDoubleClickHandler('ReadOnly')}
+      onDoubleClick={Wrangle.labelDoubleClickHandler(props, 'ReadOnly')}
     >
       {value}
     </div>
@@ -120,6 +112,7 @@ const View: React.FC<t.TextInputProps> = (props) => {
   const elInput = (
     <HtmlInput
       style={styles.input}
+      inputRef={inputRef}
       className={props.className}
       isEnabled={isEnabled}
       isPassword={isPassword}
@@ -134,11 +127,11 @@ const View: React.FC<t.TextInputProps> = (props) => {
       onKeyUp={props.onKeyUp}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
-      onChanged={handleChange}
+      onChanged={(e) => props.onChanged?.(e)}
       onEnter={props.onEnter}
       onEscape={props.onEscape}
       onTab={props.onTab}
-      onDoubleClick={handleInputDblClick}
+      onDoubleClick={handleDoubleClick}
       spellCheck={props.spellCheck}
       autoCapitalize={props.autoCapitalize}
       autoCorrect={props.autoCorrect}
@@ -167,14 +160,16 @@ const View: React.FC<t.TextInputProps> = (props) => {
 };
 
 /**
- * Export
+ * [Helpers]
  */
-type Fields = {
-  Masks: typeof Masks;
-  DEFAULTS: typeof DEFAULTS;
+
+const Wrangle = {
+  labelDoubleClickHandler(props: Props, target: t.TextInputLabelKind) {
+    return (e: React.MouseEvent) => {
+      const LEFT = 0;
+      if (e.button === LEFT) {
+        props.onLabelDoubleClick?.({ target });
+      }
+    };
+  },
 };
-export const TextInput = FC.decorate<TextInputProps, Fields>(
-  View,
-  { Masks, DEFAULTS },
-  { displayName: 'TextInput' },
-);

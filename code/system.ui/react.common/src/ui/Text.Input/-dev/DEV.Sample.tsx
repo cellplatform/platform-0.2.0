@@ -1,29 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { TextInput } from '..';
 import { t } from '../common';
+import { Hints } from './DEV.Hints.mjs';
 
 export type DevSampleProps = {
   props: t.TextInputProps;
-  debug: { hint: boolean; updateHandlerEnabled: boolean };
+  debug: { isHintEnabled: boolean; isUpdateEnabled: boolean };
+  onReady?: t.TextInputReadyHandler;
 };
 
-export const DevSample: React.FC<DevSampleProps> = (args) => {
-  const { props, debug } = args;
+export const DevSample: React.FC<DevSampleProps> = (dev) => {
+  const { debug } = dev;
 
-  const [value, setValue] = useState(props.value);
-  const [hint, setHint] = useState(props.hint);
+  const inputRef = useRef<t.TextInputRef>(null);
+  const [value, setValue] = useState(dev.props.value);
+  const [hint, setHint] = useState(dev.props.hint);
 
-  useEffect(() => setValue(props.value), [props.value]);
+  /**
+   * Lifecycle
+   */
+  useEffect(() => setValue(dev.props.value), [dev.props.value]);
 
   /**
    * [Render]
    */
   return (
     <TextInput
-      {...props}
+      {...dev.props}
+      ref={inputRef}
       value={value}
-      hint={debug.hint ? hint : undefined}
+      hint={debug.isHintEnabled ? hint : undefined}
+      onReady={dev.onReady}
       onEnter={(e) => {
         console.info('⚡️ onEnter', e);
       }}
@@ -31,10 +39,12 @@ export const DevSample: React.FC<DevSampleProps> = (args) => {
         console.info('⚡️ onEscape', e);
       }}
       onChanged={(e) => {
-        if (!debug.updateHandlerEnabled) return;
-
-        setValue(e.to);
-        if (debug.hint) setHint(DevUtil.lookupHint(e.to ?? ''));
+        if (debug.isUpdateEnabled) {
+          setValue(e.to);
+          if (debug.isHintEnabled) setHint(Hints.lookup(e.to ?? ''));
+        } else {
+          setHint('');
+        }
       }}
       onLabelDoubleClick={(e) => {
         console.info('⚡️ onLabelDoubleClick', e);
@@ -46,20 +56,3 @@ export const DevSample: React.FC<DevSampleProps> = (args) => {
 /**
  * Helpers
  */
-
-const HINTS = [
-  'cartography',
-  'catamaran',
-  'sovereign',
-  'soul',
-  'hellacious',
-  'helpful',
-  'heretofore',
-].sort();
-
-const DevUtil = {
-  lookupHint(value: string) {
-    const hint = HINTS.find((item) => item.startsWith(value.toLowerCase()));
-    return hint ? hint.substring(value.length) : undefined;
-  },
-};

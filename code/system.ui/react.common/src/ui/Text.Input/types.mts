@@ -1,18 +1,19 @@
 import type { MouseEventHandler } from 'react';
-import { t } from '../common.t';
+import type { t } from '../common.t';
 
 type Id = string;
 type Milliseconds = number;
 type Pixels = number;
 
-// TODO 🐷 MOVE to Keyboard specific place
-export type KeyboardModifierFlags = {
-  shift: boolean;
-  ctrl: boolean;
-  alt: boolean;
-  meta: boolean;
+export type TextInputRef = {
+  focus(): void;
+  blur(): void;
+  cursorToStart(): void;
+  cursorToEnd(): void;
+  selectAll(): void;
 };
 
+export type TextInputLabelKind = 'ReadOnly' | 'Placeholder';
 export type TextInputCursorAction = 'Cursor:Start' | 'Cursor:End';
 
 export type TextInputStatus = {
@@ -25,9 +26,10 @@ export type TextInputStatus = {
 };
 
 export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
-export type TextInputLabelDoubleClickHandlerArgs = {
-  target: 'ReadOnly' | 'Placeholder';
-};
+export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
+
+export type TextInputReadyHandler = (e: TextInputReadyHandlerArgs) => void;
+export type TextInputReadyHandlerArgs = TextInputRef;
 
 /**
  * Component
@@ -64,6 +66,7 @@ export type TextInputProps = t.TextInputFocusAction &
     placeholderStyle?: t.TextInputStyle;
     className?: string;
 
+    onReady?: TextInputReadyHandler;
     onClick?: MouseEventHandler;
     onDoubleClick?: MouseEventHandler;
     onMouseDown?: MouseEventHandler;

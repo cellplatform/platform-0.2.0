@@ -1,7 +1,8 @@
-export * from './ui/TextInput';
+export * from './TextInput';
+export * from './TextInput.Masks.mjs';
 
 /**
  * TODO 🐷
- * - focus / blur
- * - select
+ * - KeyboardModifierFlags (fired on event), Meta, Alt, Shift etc.
+ *
  */

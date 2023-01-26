@@ -1,30 +1,32 @@
-import { TextInput } from '..';
+import { TextInputMasks } from '..';
 import { Dev, t } from '../../../test.ui';
+import { Time, DEFAULTS } from '../common';
 import { DevSample } from './DEV.Sample';
 
 type T = {
   props: t.TextInputProps;
   debug: {
     render: boolean;
-    isNumericMask: boolean;
     status?: t.TextInputStatus;
-    hint: boolean;
-    updateHandlerEnabled: boolean;
+    isHintEnabled: boolean;
+    isUpdateEnabled: boolean;
+    isNumericMask: boolean;
   };
   output: Record<string, any>;
+  ref?: t.TextInputRef;
 };
 
 const initial: T = {
   props: {
-    ...TextInput.DEFAULTS.prop,
+    ...DEFAULTS.prop,
     placeholder: 'my placeholder',
     focusOnLoad: true,
   },
   debug: {
-    hint: true,
+    isHintEnabled: true,
     render: true,
     isNumericMask: false,
-    updateHandlerEnabled: true,
+    isUpdateEnabled: true,
   },
   output: {},
 };
@@ -32,7 +34,7 @@ const initial: T = {
 export default Dev.describe('TextInput', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
 
     ctx.subject
       .display('grid')
@@ -45,9 +47,18 @@ export default Dev.describe('TextInput', (e) => {
         if (autoSize) ctx.subject.size('fill-x');
         if (!autoSize) ctx.subject.size(300, null);
 
-        const mask = debug.isNumericMask ? TextInput.Masks.isNumeric : undefined;
+        const mask = debug.isNumericMask ? TextInputMasks.isNumeric : undefined;
         const props = { ...e.state.props, mask };
-        return <DevSample props={props} debug={debug} />;
+        return (
+          <DevSample
+            props={props}
+            debug={debug}
+            onReady={(ref) => {
+              console.log('⚡️ onReady:', ref);
+              state.change((d) => (d.ref = ref));
+            }}
+          />
+        );
       });
   });
 
@@ -55,13 +66,7 @@ export default Dev.describe('TextInput', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => (
-        <Dev.Object
-          name={'spec.TextInput'}
-          data={e.state}
-          expand={{ level: 1, paths: ['$', '$.output', '$.output.status'] }}
-        />
-      ));
+      .render<T>((e) => <Dev.Object name={'spec.TextInput'} data={e.state} expand={1} />);
 
     dev.section('Configurations', (dev) => {
       const value = (value: string, label?: string) => {
@@ -96,7 +101,28 @@ export default Dev.describe('TextInput', (e) => {
       boolean('focusOnLoad');
     });
 
-    dev.TODO(`focusActions: ${TextInput.DEFAULTS.focusActions.join()}`);
+    dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
+
+    dev.hr();
+
+    dev.section('Actions', (dev) => {
+      type F = (ref: t.TextInputRef) => void;
+      const focusThen = (ref: t.TextInputRef, fn: F) => {
+        ref.focus();
+        Time.delay(150, () => fn(ref));
+      };
+      const action = (label: string, fn: F) => {
+        dev.button(label, (e) => {
+          const ref = e.state.current.ref;
+          if (ref) fn(ref);
+        });
+      };
+      action('focus', (ref) => ref.focus());
+      action('blur', (ref) => focusThen(ref, () => ref.blur()));
+      action('selectAll', (ref) => focusThen(ref, () => ref.selectAll()));
+      action('cursorToStart', (ref) => focusThen(ref, () => ref.cursorToStart()));
+      action('cursorToEnd', (ref) => focusThen(ref, () => ref.cursorToEnd()));
+    });
 
     dev.hr();
 
@@ -117,17 +143,17 @@ export default Dev.describe('TextInput', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `hint list (auto-complete)`)
-          .value((e) => e.state.debug.hint)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'hint'))),
+          .label((e) => `hinting (auto-complete)`)
+          .value((e) => e.state.debug.isHintEnabled)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isHintEnabled'))),
       );
 
       dev.boolean((btn) => {
-        const current = (state: T) => (state.debug.updateHandlerEnabled ? 'enabled' : 'disabled');
+        const current = (state: T) => (state.debug.isUpdateEnabled ? 'enabled' : 'disabled');
         btn
           .label((e) => `update handler: ${current(e.state)}`)
-          .value((e) => e.state.debug.updateHandlerEnabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'updateHandlerEnabled')));
+          .value((e) => e.state.debug.isUpdateEnabled)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isUpdateEnabled')));
       });
     });
 

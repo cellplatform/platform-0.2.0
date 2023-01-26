@@ -1,6 +1,6 @@
 import { Is, t } from '../common';
 
-export const Masks = {
+export const TextInputMasks = {
   /**
    * Ensure entered text is only a number.
    */

@@ -1,7 +1,8 @@
-import { useRef } from 'react';
+import { RefObject } from 'react';
 
 import { useFocus } from '../../useFocus';
 import { Color, css, DEFAULTS, R, t } from '../common';
+import { TextInputRef } from '../TextInput.Ref.mjs';
 import { Util } from '../util.mjs';
 
 /**
@@ -10,6 +11,7 @@ import { Util } from '../util.mjs';
 export type HtmlInputProps = t.TextInputFocusAction &
   t.TextInputEventHandlers &
   t.TextInputValue & {
+    inputRef: RefObject<HTMLInputElement>;
     className?: string;
     isEnabled?: boolean;
     isPassword?: boolean;
@@ -29,6 +31,7 @@ export type HtmlInputProps = t.TextInputFocusAction &
  */
 export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const {
+    inputRef,
     value = '',
     isEnabled = DEFAULTS.prop.isEnabled,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
@@ -37,7 +40,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     selectionBackground,
   } = props;
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<HTMLInputElement>(null);
+  const ref = TextInputRef(inputRef);
   const focusState = useFocus(inputRef, { redraw: false });
 
   // const keyboard = Keyboard.useKeyboardState({ bus: props.instance.bus, instance });
@@ -108,24 +112,18 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     props.onKeyUp?.(event);
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => props.onBlur?.(e);
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { focusAction, onFocus } = props;
-
-    if (focusAction === 'Select') selectAll();
-    if (focusAction === 'Cursor:Start') cursorToStart();
-    if (focusAction === 'Cursor:End') cursorToEnd();
-
-    onFocus?.(e);
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    props.onBlur?.(e);
+    const { focusAction } = props;
+    if (focusAction === 'Select') ref.selectAll();
+    if (focusAction === 'Cursor:Start') ref.cursorToStart();
+    if (focusAction === 'Cursor:End') ref.cursorToEnd();
+    props.onFocus?.(e);
   };
 
   /**
    * [Utility]
    */
-
   const toKeyboardEvent = (e: React.KeyboardEvent<HTMLInputElement>): t.TextInputKeyEvent => {
     return {
       ...e,
@@ -135,47 +133,9 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     };
   };
 
-  const focus = () => inputRef.current?.focus();
-  const blur = () => inputRef.current?.blur();
-  const selectAll = () => inputRef.current?.select();
-
-  const cursorToStart = () => {
-    const el = inputRef.current as any;
-
-    if (el) {
-      el.focus();
-      if (el.setSelectionRange) {
-        // Modern browsers.
-        el.setSelectionRange(0, 0);
-      } else if (el.createTextRange) {
-        // IE8 and below.
-        const range = el.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', 0);
-        range.moveStart('character', 0);
-        range.select();
-      }
-    }
-  };
-
-  const cursorToEnd = () => {
-    const el = inputRef.current as any;
-    if (el) {
-      el.focus();
-      if (typeof el.selectionStart === 'number') {
-        el.selectionStart = el.selectionEnd = el.value.length;
-      } else if (typeof el.createTextRange !== 'undefined') {
-        const range = el.createTextRange();
-        range.collapse(false);
-        range.select();
-      }
-    }
-  };
-
   /**
    * [Render]
    */
-
   const styles = {
     base: {
       position: 'relative',
