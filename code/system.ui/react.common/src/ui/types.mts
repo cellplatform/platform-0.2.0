@@ -14,6 +14,8 @@ export * from './useFocus/types.mjs';
 export * from './useSizeObserver/types.mjs';
 
 export * from './Text/types.mjs';
+export * from './Text.Keyboard/types.mjs';
+
 // export * from './Text.Copy/types.mjs';
 export * from './Text.Input/types.mjs';
 export * from './Text.Secret/types.mjs';

@@ -49,7 +49,7 @@ export const Util = {
   },
 
   /**
-   * CSS helpers
+   * CSS helpers.
    */
   css: {
     async toWidth(props: t.TextInputProps) {
