@@ -1,7 +1,7 @@
 import { COLORS, t, WrangleUrl } from '../common';
 import { SpecList } from '../Entry.SpecList';
 import { Harness } from '../Harness';
-import { KeyboardMonitor } from '../Keyboard';
+import { DevKeyboard } from '../Keyboard';
 
 export const Entry = {
   isDev: WrangleUrl.navigate.isDev,
@@ -26,7 +26,7 @@ export const Entry = {
     const spec = await WrangleUrl.module(url, specs);
     const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
-    if (keyboard) KeyboardMonitor.listen();
+    if (keyboard) DevKeyboard.listen();
 
     if (spec) {
       return <Harness spec={spec} style={style} />;
