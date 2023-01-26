@@ -4,7 +4,7 @@ import { Keyboard } from '.';
 
 type T = { keyboard: t.KeyboardState };
 const initial: T = {
-  keyboard: Keyboard.Monitor.current,
+  keyboard: Keyboard.Monitor.state,
 };
 
 export default Dev.describe('KeyboardMonitor', (e) => {

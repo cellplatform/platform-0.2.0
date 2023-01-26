@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { DEFAULT, R, t } from './common';
 import { Util } from './util.mjs';
 
+type Subscriber = (e: t.KeyboardState) => void;
+
 let _isListening = false;
 let _current: t.KeyboardState = R.clone(DEFAULT.STATE);
 const $ = new BehaviorSubject<t.KeyboardState>(_current);
@@ -16,12 +18,12 @@ export const KeyboardMonitor = {
     return $.asObservable();
   },
 
-  get current() {
+  get state() {
     if (!_isListening) KeyboardMonitor.start();
     return _current;
   },
 
-  subscribe(fn: (e: t.KeyboardState) => void) {
+  subscribe(fn: Subscriber) {
     KeyboardMonitor.$.subscribe(fn);
   },
 
