@@ -13,6 +13,10 @@ const $ = new BehaviorSubject<t.KeyboardState>(_current);
  * Global keyboard monitor.
  */
 export const KeyboardMonitor = {
+  get isSupported() {
+    return typeof document === 'object';
+  },
+
   get $() {
     if (!_isListening) KeyboardMonitor.start();
     return $.asObservable();
@@ -33,7 +37,7 @@ export const KeyboardMonitor = {
    *       to the global keyboard events.
    */
   start() {
-    if (typeof document !== 'object') return;
+    if (!KeyboardMonitor.isSupported) return;
     if (!_isListening) {
       document.addEventListener('keydown', keypressHandler);
       document.addEventListener('keyup', keypressHandler);
@@ -46,7 +50,7 @@ export const KeyboardMonitor = {
    * Detach event listeners.
    */
   stop() {
-    if (typeof document !== 'object') return;
+    if (!KeyboardMonitor.isSupported) return;
     if (_isListening) {
       document.removeEventListener('keydown', keypressHandler);
       document.removeEventListener('keyup', keypressHandler);
@@ -88,11 +92,10 @@ function change(fn: (state: t.KeyboardState) => void) {
 function reset(options: { hard?: boolean } = {}) {
   const clone = R.clone(DEFAULT.STATE);
   if (options.hard) {
-    // NB: Hard reset, drop everything.
-    _current = clone;
+    _current = clone; // NB: A hard reset 💥. Drop all existing state.
   } else {
-    // NB: Retain the "last" event history item.
-    _current = { ...clone, last: _current.last };
+    const last = _current.last;
+    _current = { ...clone, last }; // NB: Retain the "last" event history item.
   }
   fireNext();
 }
