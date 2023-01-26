@@ -18,6 +18,11 @@ export { Button } from './ui/Button';
 export { Switch } from './ui/Button.Switch';
 export { PropList } from './ui/PropList';
 export { IFrame } from './ui/IFrame';
+export { Text } from './ui/Text';
+export { TextInput } from './ui/Text.Input';
+export { TextSecret } from './ui/Text.Secret';
+export { TextSyntax } from './ui/Text.Syntax';
+export { Keyboard } from './ui/Text.Keyboard';
 
 /**
  * Hooks
