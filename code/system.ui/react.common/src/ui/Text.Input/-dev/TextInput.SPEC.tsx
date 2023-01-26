@@ -107,9 +107,9 @@ export default Dev.describe('TextInput', (e) => {
 
     dev.section('Actions', (dev) => {
       type F = (ref: t.TextInputRef) => void;
-      const focusThen = (ref: t.TextInputRef, fn: F) => {
+      const focusThen = (msecs: number, ref: t.TextInputRef, fn: F) => {
         ref.focus();
-        Time.delay(150, () => fn(ref));
+        Time.delay(msecs, () => fn(ref));
       };
       const action = (label: string, fn: F) => {
         dev.button(label, (e) => {
@@ -118,10 +118,10 @@ export default Dev.describe('TextInput', (e) => {
         });
       };
       action('focus', (ref) => ref.focus());
-      action('blur', (ref) => focusThen(ref, () => ref.blur()));
-      action('selectAll', (ref) => focusThen(ref, () => ref.selectAll()));
-      action('cursorToStart', (ref) => focusThen(ref, () => ref.cursorToStart()));
-      action('cursorToEnd', (ref) => focusThen(ref, () => ref.cursorToEnd()));
+      action('focus → blur', (ref) => focusThen(500, ref, () => ref.blur()));
+      action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));
+      action('cursorToStart', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
+      action('cursorToEnd', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
     });
 
     dev.hr();

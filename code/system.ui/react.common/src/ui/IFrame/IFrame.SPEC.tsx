@@ -49,9 +49,9 @@ export default Dev.describe('IFrame', (e) => {
       };
 
       load('Wikipedia', 'https://en.wikipedia.org/wiki/World_Wide_Web_Consortium');
-      load('Google (blocked)', 'https://google.com');
+      load('Google (← blocked)', 'https://google.com');
       dev.hr();
-      dev.button('HTML (srcDoc)', (e) =>
+      dev.button('srcDoc (← <html>)', (e) =>
         e.change((d) => (d.props.src = { html: '<h1>Hello 👋<h1>' })),
       );
       dev.hr();
