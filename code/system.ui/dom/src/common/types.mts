@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export { Observable } from 'rxjs';
+export type { Observable } from 'rxjs';
 
 /**
  * @system

@@ -1,10 +1,9 @@
-import { KeyboardMonitor as Monitor } from './KeyboardMonitor.mjs';
-import { Match } from './Match.mjs';
 import { EventProps } from './ui.EventProps';
-import { DEFAULTS } from './common';
+import { Keyboard as Base, KeyboardMonitor } from 'sys.ui.dom';
 
 export const Keyboard = {
-  Monitor,
-  Match,
+  ...Base,
   ui: { EventProps },
 };
+
+export { KeyboardMonitor };

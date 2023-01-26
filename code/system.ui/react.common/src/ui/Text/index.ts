@@ -1,13 +1,11 @@
-export * from './types.mjs';
-
-// import { TextCopy as Copy } from '../Text.Copy';
 import { TextSyntax as Syntax } from '../Text.Syntax';
-// import { TextInput as Input } from '../Text.Input';
+import { TextInput as Input } from '../Text.Input';
 import { TextSecret as Secret } from '../Text.Secret';
+import { Keyboard } from '../Text.Keyboard';
 
 export const Text = {
-  // Copy,
   Syntax,
-  // Input,
+  Input,
   Secret,
+  Keyboard,
 };
