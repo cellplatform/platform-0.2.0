@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 
 import { useFocus } from '../../useFocus';
-import { Color, css, DEFAULTS, R, t } from '../common';
+import { Color, css, DEFAULTS, R, t, KeyboardMonitor } from '../common';
 import { TextInputRef } from '../TextInput.Ref.mjs';
 import { Util } from '../util.mjs';
 
@@ -43,21 +43,6 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   // const inputRef = useRef<HTMLInputElement>(null);
   const ref = TextInputRef(inputRef);
   const focusState = useFocus(inputRef, { redraw: false });
-
-  // const keyboard = Keyboard.useKeyboardState({ bus: props.instance.bus, instance });
-  // const cloneModifierKeys = () => ({ ...keyboard.state.current.modifiers });
-  const cloneModifierKeys = () => {
-    /**
-     * TODO 🐷
-     */
-    console.warn('cloneModifierKeys');
-    return {
-      shift: false,
-      ctrl: false,
-      alt: false,
-      meta: false,
-    };
-  };
 
   /**
    * [Handlers]
@@ -186,4 +171,12 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
       onDoubleClick={props.onDoubleClick}
     />
   );
+};
+
+/**
+ * Helpers
+ */
+
+const cloneModifierKeys = () => {
+  return { ...KeyboardMonitor.state.current.modifiers };
 };

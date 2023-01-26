@@ -7,7 +7,7 @@ import { Hints } from './DEV.Hints.mjs';
 export type DevSampleProps = {
   props: t.TextInputProps;
   debug: { isHintEnabled: boolean; isUpdateEnabled: boolean };
-  onReady?: t.TextInputReadyHandler;
+  onReady: t.TextInputReadyHandler;
 };
 
 export const DevSample: React.FC<DevSampleProps> = (dev) => {
