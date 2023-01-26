@@ -1,6 +1,6 @@
+import { Keyboard } from '.';
 import { Dev, t } from '../../test.ui';
 import { DevSample } from './-dev/DEV.Sample';
-import { Keyboard } from '.';
 
 type T = { keyboard: t.KeyboardState };
 const initial: T = {
@@ -14,12 +14,16 @@ export default Dev.describe('KeyboardMonitor', (e) => {
 
     Keyboard.Monitor.subscribe((current) => state.change((d) => (d.keyboard = current)));
 
+    const pattern = 'CMD + L';
+    Keyboard.Monitor.on(pattern, (e) => {
+      console.info(`match pattern: "${pattern}"`);
+      e.cancel();
+    });
+
     ctx.subject
       .display('grid')
       .size(540, 300)
-      .render<T>((e) => {
-        return <DevSample state={e.state.keyboard} />;
-      });
+      .render<T>((e) => <DevSample state={e.state.keyboard} />);
   });
 
   e.it('debug panel', async (e) => {
@@ -27,7 +31,11 @@ export default Dev.describe('KeyboardMonitor', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => (
-        <Dev.Object name={'spec.KeyboardMonitor'} data={e.state.keyboard} expand={1} />
+        <Dev.Object
+          name={'spec.KeyboardMonitor'}
+          data={e.state.keyboard}
+          expand={{ level: 1, paths: ['$.current.pressed', '$.current.pressed.*'] }}
+        />
       ));
 
     dev.row((e) => {

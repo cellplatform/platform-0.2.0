@@ -1,7 +1,9 @@
 import type { t } from '../common.t';
 
+export type KeyPattern = string; // eg. "CMD + K"
 export type KeyboardStage = 'Down' | 'Up';
 export type KeyboardModifierEdges = [] | ['Left'] | ['Right'] | ['Left' | 'Right'];
+export type KeyboardModifierKey = 'SHIFT' | 'CTRL' | 'ALT' | 'META';
 
 export type KeyboardKeyFlags = {
   readonly down: boolean;
@@ -46,13 +48,12 @@ export type KeyboardModifierFlags = {
 /**
  * Keypress
  */
-
 export type KeyboardKeypress = {
-  readonly name: 'onKeydown' | 'onKeyup';
+  readonly stage: KeyboardStage;
   readonly key: string;
   readonly keypress: KeyboardKeypressProps;
   readonly is: KeyboardKeyFlags;
-  readonly stage: KeyboardStage;
+  cancel(): void;
 };
 
 export type KeyboardKeypressProps = t.UIEventBase &

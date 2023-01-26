@@ -1,18 +1,28 @@
 import type { t } from '../common.t';
+import { R } from '../common';
 
 export * from '../common';
 
 /**
  * Defaults
  */
-const STATE: t.KeyboardState = {
+const modifiers: t.KeyboardModifierFlags = { shift: false, ctrl: false, alt: false, meta: false };
+
+const state: t.KeyboardState = {
   last: undefined,
   current: {
     modified: false,
     modifierKeys: { shift: [], ctrl: [], alt: [], meta: [] },
-    modifiers: { shift: false, ctrl: false, alt: false, meta: false },
+    modifiers,
     pressed: [],
   },
 };
 
-export const DEFAULT = { STATE };
+export const DEFAULTS = {
+  get state() {
+    return R.clone(state);
+  },
+  get modifiers() {
+    return R.clone(modifiers);
+  },
+};

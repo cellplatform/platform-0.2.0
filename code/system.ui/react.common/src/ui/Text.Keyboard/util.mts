@@ -32,18 +32,17 @@ export const Util = {
 
   toKeypress(e: KeyboardEvent): t.KeyboardKeypress {
     const { key } = e;
-    const name = e.type === 'keydown' ? 'onKeydown' : 'onKeyup';
-    const stage = e.type === 'keydown' ? 'Down' : 'Up';
-
     return {
-      name,
+      stage: e.type === 'keydown' ? 'Down' : 'Up',
       key,
-      stage,
       get keypress() {
         return Util.toKeypressProps(e);
       },
       get is() {
         return Util.toFlags(e);
+      },
+      cancel() {
+        e.preventDefault();
       },
     };
   },

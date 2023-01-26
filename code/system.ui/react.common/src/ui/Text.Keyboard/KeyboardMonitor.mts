@@ -1,12 +1,20 @@
 import { BehaviorSubject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-import { DEFAULT, R, t } from './common';
+import { DEFAULTS, R, rx, t } from './common';
 import { Util } from './util.mjs';
+import { Match } from './Match.mjs';
 
-type Subscriber = (e: t.KeyboardState) => void;
+export type KeyMatchSubscriberHandler = (e: KeyMatchSubscriberHandlerArgs) => void;
+export type KeyMatchSubscriberHandlerArgs = {
+  state: t.KeyboardStateCurrent;
+  event: t.KeyboardKeypress;
+  cancel(): void;
+};
 
 let _isListening = false;
-let _current: t.KeyboardState = R.clone(DEFAULT.STATE);
+let _current: t.KeyboardState = R.clone(DEFAULTS.state);
+const { dispose, dispose$ } = rx.disposable();
 const $ = new BehaviorSubject<t.KeyboardState>(_current);
 
 /**
@@ -14,21 +22,42 @@ const $ = new BehaviorSubject<t.KeyboardState>(_current);
  */
 export const KeyboardMonitor = {
   get isSupported() {
-    return typeof document === 'object';
+    return typeof window === 'object';
   },
 
   get $() {
-    if (!_isListening) KeyboardMonitor.start();
+    ensureStarted();
     return $.asObservable();
   },
 
   get state() {
-    if (!_isListening) KeyboardMonitor.start();
+    ensureStarted();
     return _current;
   },
 
-  subscribe(fn: Subscriber) {
-    KeyboardMonitor.$.subscribe(fn);
+  subscribe(fn: (e: t.KeyboardState) => void) {
+    ensureStarted();
+    $.pipe(takeUntil(dispose$)).subscribe(fn);
+  },
+
+  on(pattern: t.KeyPattern, fn: KeyMatchSubscriberHandler) {
+    ensureStarted();
+    const matcher = Match.pattern(pattern);
+    $.pipe(
+      takeUntil(dispose$),
+      filter((e) => Boolean(e.last)),
+      filter((e) => e.current.pressed.length > 0),
+    ).subscribe((e) => {
+      const pressed = e.current.pressed.map(({ key }) => key);
+      const modifiers = e.current.modifiers;
+      if (matcher.isMatch(pressed, modifiers)) {
+        fn({
+          state: e.current,
+          event: e.last!,
+          cancel: () => e.last!.cancel(),
+        });
+      }
+    });
   },
 
   /**
@@ -39,8 +68,8 @@ export const KeyboardMonitor = {
   start() {
     if (!KeyboardMonitor.isSupported) return;
     if (!_isListening) {
-      document.addEventListener('keydown', keypressHandler);
-      document.addEventListener('keyup', keypressHandler);
+      window.addEventListener('keydown', keypressHandler);
+      window.addEventListener('keyup', keypressHandler);
       window.addEventListener('blur', blurHandler);
       _isListening = true;
     }
@@ -52,10 +81,11 @@ export const KeyboardMonitor = {
   stop() {
     if (!KeyboardMonitor.isSupported) return;
     if (_isListening) {
-      document.removeEventListener('keydown', keypressHandler);
-      document.removeEventListener('keyup', keypressHandler);
+      window.removeEventListener('keydown', keypressHandler);
+      window.removeEventListener('keyup', keypressHandler);
       window.removeEventListener('blur', blurHandler);
       reset({ hard: true });
+      dispose();
       _isListening = false;
     }
   },
@@ -64,6 +94,11 @@ export const KeyboardMonitor = {
 /**
  * Helpers
  */
+
+function ensureStarted() {
+  if (!_isListening) KeyboardMonitor.start();
+}
+
 function blurHandler() {
   reset();
 }
@@ -90,7 +125,7 @@ function change(fn: (state: t.KeyboardState) => void) {
 }
 
 function reset(options: { hard?: boolean } = {}) {
-  const clone = R.clone(DEFAULT.STATE);
+  const clone = R.clone(DEFAULTS.state);
   if (options.hard) {
     _current = clone; // NB: A hard reset 💥. Drop all existing state.
   } else {
