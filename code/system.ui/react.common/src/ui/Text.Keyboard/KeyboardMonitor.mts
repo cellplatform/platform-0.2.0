@@ -35,8 +35,8 @@ export const KeyboardMonitor = {
   start() {
     if (typeof document !== 'object') return;
     if (!_isListening) {
-      document.addEventListener('keydown', keyHandler);
-      document.addEventListener('keyup', keyHandler);
+      document.addEventListener('keydown', keypressHandler);
+      document.addEventListener('keyup', keypressHandler);
       window.addEventListener('blur', blurHandler);
       _isListening = true;
     }
@@ -48,8 +48,8 @@ export const KeyboardMonitor = {
   stop() {
     if (typeof document !== 'object') return;
     if (_isListening) {
-      document.removeEventListener('keydown', keyHandler);
-      document.removeEventListener('keyup', keyHandler);
+      document.removeEventListener('keydown', keypressHandler);
+      document.removeEventListener('keyup', keypressHandler);
       window.removeEventListener('blur', blurHandler);
       reset({ hard: true });
       _isListening = false;
@@ -64,11 +64,13 @@ function blurHandler() {
   reset();
 }
 
-function keyHandler(event: KeyboardEvent) {
+function keypressHandler(event: KeyboardEvent) {
   if (!_isListening) return;
+
   const e = Util.toKeypress(event);
   updateModifierKeys(e);
   updatePressedKeys(e);
+
   change((state) => (state.last = e));
   fireNext();
 }
