@@ -6,6 +6,7 @@ import { ListItem } from './ui.List.Item';
 export type ListProps = {
   imports: t.Imports;
   url: URL;
+  hrDepth?: number;
   style?: t.CssValue;
 };
 
@@ -37,7 +38,7 @@ export const List: React.FC<ListProps> = (props) => {
     address: string | undefined,
     options: {
       title?: string;
-      dimmed?: boolean;
+      ns?: boolean;
       Icon?: t.IconType;
     } = {},
   ) => {
@@ -49,20 +50,21 @@ export const List: React.FC<ListProps> = (props) => {
         imports={imports}
         address={address}
         title={options.title}
-        dimmed={options.dimmed}
+        ns={options.ns}
         Icon={options.Icon}
+        hrDepth={props.hrDepth}
       />
     );
   };
 
   return (
     <ul {...css(styles.base, props.style)}>
-      {importsKeys.map((key, i) => item(i, key, { Icon: VscSymbolClass }))}
+      {importsKeys.map((key, i) => item(i, key, { Icon: VscSymbolClass, ns: true }))}
 
       <hr {...styles.hrDashed} />
 
-      {hasDevParam && item(-1, undefined, { title: '?dev - remove param', dimmed: true })}
-      {!hasDevParam && item(-1, 'true', { title: '?dev - add param', dimmed: true })}
+      {hasDevParam && item(-1, undefined, { title: '?dev - remove param' })}
+      {!hasDevParam && item(-1, 'true', { title: '?dev - add param' })}
     </ul>
   );
 };

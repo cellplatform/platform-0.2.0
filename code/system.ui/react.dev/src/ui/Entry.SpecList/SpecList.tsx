@@ -36,7 +36,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
-      <List imports={imports} url={url} />
+      <List imports={imports} url={url} hrDepth={props.hrDepth} />
       <Footer />
     </div>
   );

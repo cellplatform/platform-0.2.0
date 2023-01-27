@@ -9,13 +9,13 @@ export type ListItemProps = {
   title?: string;
   Icon?: t.IconType;
 
-  dimmed?: boolean;
+  ns?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
-  const { index, Icon, hrDepth = -1, dimmed, title, imports, address, url } = props;
+  const { index, Icon, hrDepth = -1, ns, title, imports, address, url } = props;
   const importsKeys = Object.keys(imports);
 
   const isLast = index >= importsKeys.length - 1;
@@ -59,7 +59,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   return (
     <li {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
-      <a href={url.href} {...css(styles.link, dimmed ? styles.linkDimmed : undefined)}>
+      <a href={url.href} {...css(styles.link, !ns ? styles.linkDimmed : undefined)}>
         <div {...styles.row.base}>
           <div {...styles.row.icon}>{Icon && <VscSymbolClass />}</div>
           <div {...styles.row.label}>{title ?? address}</div>
