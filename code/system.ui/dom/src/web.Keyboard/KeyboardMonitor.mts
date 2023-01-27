@@ -35,16 +35,23 @@ export const KeyboardMonitor = {
   subscribe(fn: (e: t.KeyboardState) => void) {
     if (!isSupported()) return;
     ensureStarted();
-    $.pipe(rx.takeUntil(dispose$)).subscribe(fn);
+    const disposable = rx.disposable();
+    $.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
+    return {
+      dispose: disposable.dispose,
+    };
   },
 
   on(pattern: t.KeyPattern, fn: KeyMatchSubscriberHandler) {
     if (!isSupported()) return;
-    ensureStarted();
 
+    ensureStarted();
+    const disposable = rx.disposable();
     const matcher = Match.pattern(pattern);
+
     $.pipe(
       rx.takeUntil(dispose$),
+      rx.takeUntil(disposable.dispose$),
       rx.filter((e) => Boolean(e.last)),
       rx.filter((e) => e.current.pressed.length > 0),
     ).subscribe((e) => {
@@ -59,6 +66,11 @@ export const KeyboardMonitor = {
         });
       }
     });
+
+    return {
+      pattern,
+      dispose: disposable.dispose,
+    };
   },
 
   /**
