@@ -119,7 +119,7 @@ Ideas, history, context:
 
 <p>&nbsp;</p>
 
-Identity is not a simple reductive thing...we, each of us, inhabit many contexturally dependent and diverse identities.  
+**Identity** is not one simple reductive thing (or a "rented" database ID owned by some vendor).  Each and every one of us inhabit many contexturally dependent and diverse identities.  Overall system design must ultimately bridge all the way to that complexity if it is to be of enduring value.    
 “I am large, I contain multitudes” - [1892, Walt Whitman](https://en.wikipedia.org/wiki/Song_of_Myself)  
 
 
@@ -136,7 +136,7 @@ The inverse proposition also appears to be true:
 <p>&nbsp;</p>
 
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/213848354-429f9174-6171-4f3c-a2db-b65966edb095.png)
+![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/215009487-dd1209a3-495b-483d-836c-829b2abfeebd.png)
 
 
 <p>&nbsp;</p>
@@ -194,10 +194,10 @@ Here the usage of the term "compiler" flexibly maps to any kind of code transpil
 **NOTES:** the system currently uses [`node.js`](https://nodejs.org/) for build tool-chain bootstrapping only. Once the Typescript compiler 
 and ESM module bundler is bootstrapped into existence, the dependency on `node.js` falls away.  Put another way, `node.js` is intentionally not a fundamental dependency (although `node.js` is not going away anytime soon of course). It bootstraps us into the W3C/JS runtimes standard.
 
-There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser (ref [WinterCG](https://wintercg.org/))). Particularly around runtime security properties, and isolated/safe code execution (with pathways to being able to make auditable claims about the security of what code ran, and where, under what contexts).
+There is much healthy innovation emerging around the eco-system of Web standards runtimes outside of the browser (ref [WinterCG](https://wintercg.org/)). Particularly around runtime security properties, and isolated/safe code execution (with pathways to being able to make auditable claims about the security of what code ran, and where, under what contexts).
 
 
-In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (eg. [WinterCG](https://wintercg.org/))).
+In the arena of remote code-module execution on either user-controlled machines, or in cloud-like environments, within the runtime context of [Web Standards](https://www.w3.org/standards/) JavaScript/WASM, `deno` has some interesting and important security characteristics that makes it preferable to `node.js`.  In any event, the [module](https://en.wikipedia.org/wiki/Modular_programming)/packaging structure of the system conforms with the open-commons [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript) "ESM [Module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)" standard keeping it flexible to any and all future runtimes that may proliferate around web-standards (see [WinterCG](https://wintercg.org/)).
 
 
 **UI Framework Agnostic:** In the arena of user-interface, particular attention is placed on maintaining a loose coupling with any one UI rendering library.  And UI modules (`system.ui`) are partitioned clearly as distinct to the `pure functional` "logic only" libraries (`system`).  This is because UI invariably tends towards a much higher volatility in technical architecutre over time, and is generally swapped out more frequently over the software lifecycle. Any form of "interface" (the `I` in `API`) tends toward messiness, noise, and complexity - the one involving the "humans" (UI) is especially prone. And down at the straight forward engineering level, much hidden complexity is often lurking in and around UI code.
