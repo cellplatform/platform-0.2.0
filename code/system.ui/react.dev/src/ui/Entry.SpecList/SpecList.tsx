@@ -6,7 +6,7 @@ import { Title } from './ui.Title';
 export type SpecListProps = {
   title?: string;
   version?: string;
-  imports?: t.Imports;
+  imports?: t.SpecImports;
   href?: string;
   hrDepth?: number;
   badge?: t.SpecListBadge;
