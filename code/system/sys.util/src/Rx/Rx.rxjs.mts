@@ -1,7 +1,7 @@
 /**
  * Common RXJS
  */
-export { Observable, Subject } from 'rxjs';
+export { Observable, Subject, BehaviorSubject } from 'rxjs';
 export { filter } from 'rxjs/operators';
 
 /**

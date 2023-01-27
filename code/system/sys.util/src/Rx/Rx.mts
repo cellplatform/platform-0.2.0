@@ -1,3 +1,5 @@
+import 'symbol-observable';
+
 export { Pump as pump } from './Rx.Pump.mjs';
 
 export * from './Rx.rxjs.mjs';
