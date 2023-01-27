@@ -6,7 +6,8 @@ type IgnoredResponse = any | Promise<any>;
 
 export type TestModifier = 'skip' | 'only';
 
-export type SpecImport = TestSuiteModel | Promise<any>;
+export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
+export type SpecImport = Promise<{ default: any }>;
 export type SpecImports = {
   [namespace: string]: () => SpecImport;
 };
@@ -17,10 +18,10 @@ export type SpecImports = {
 export type Test = {
   Is: TestIs;
   describe: TestSuiteDescribe;
-  bundle(items: SpecImport | SpecImport[]): Promise<TestSuiteModel>;
-  bundle(description: string, items: SpecImport | SpecImport[]): Promise<TestSuiteModel>;
-  run(items: SpecImport | SpecImport[]): Promise<TestSuiteRunResponse>;
-  run(description: string, items: SpecImport | SpecImport[]): Promise<TestSuiteRunResponse>;
+  bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
+  bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
+  run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
+  run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
 };
 
 export type TestIs = {
