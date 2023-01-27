@@ -50,16 +50,9 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     }),
     li: css({}),
     row: {
-      base: css({
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-      }),
-      icon: css({
-        marginRight: 10,
-        display: 'grid',
-        placeItems: 'center',
-      }),
-      label: css({}),
+      base: css({ display: 'grid', gridTemplateColumns: 'auto 1fr' }),
+      icon: css({ marginRight: 10, display: 'grid', placeItems: 'center' }),
+      label: css({ ':hover': { textDecoration: 'underline' } }),
     },
     hr: css({
       border: 'none',
