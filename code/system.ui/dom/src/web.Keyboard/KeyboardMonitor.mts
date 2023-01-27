@@ -10,9 +10,9 @@ export type KeyMatchSubscriberHandlerArgs = {
 };
 
 let _isListening = false;
-let _current: t.KeyboardState = R.clone(DEFAULTS.state);
+let _state: t.KeyboardState = R.clone(DEFAULTS.state);
 const { dispose, dispose$ } = rx.disposable();
-const $ = new rx.BehaviorSubject<t.KeyboardState>(_current);
+const $ = new rx.BehaviorSubject<t.KeyboardState>(_state);
 
 /**
  * Global keyboard monitor.
@@ -29,7 +29,7 @@ export const KeyboardMonitor = {
 
   get state() {
     ensureStarted();
-    return _current;
+    return _state;
   },
 
   subscribe(fn: (e: t.KeyboardState) => void) {
@@ -130,22 +130,22 @@ function keypressHandler(event: KeyboardEvent) {
 }
 
 function fireNext() {
-  if (_isListening) $.next(_current);
+  if (_isListening) $.next(_state);
 }
 
 function change(fn: (state: t.KeyboardState) => void) {
-  const state = R.clone(_current);
+  const state = R.clone(_state);
   fn(state);
-  _current = state;
+  _state = state;
 }
 
 function reset(options: { hard?: boolean } = {}) {
   const clone = R.clone(DEFAULTS.state);
   if (options.hard) {
-    _current = clone; // NB: A hard reset 💥. Drop all existing state.
+    _state = clone; // NB: A hard reset 💥. Drop all existing state.
   } else {
-    const last = _current.last;
-    _current = { ...clone, last }; // NB: Retain the "last" event history item.
+    const last = _state.last;
+    _state = { ...clone, last }; // NB: Retain the "last" event history item.
   }
   fireNext();
 }
@@ -193,7 +193,17 @@ function updateModifierKeys(e: t.KeyboardKeypress) {
 function updatePressedKeys(e: t.KeyboardKeypress) {
   const { keypress, is } = e;
   const { code } = keypress;
-  if (is.modifier) return;
+
+  if (is.modifier && is.down) return;
+  if (is.modifier && is.up) {
+    const hasModifiers = Object.values(_state.current.modifiers).some((v) => Boolean(v));
+    if (!hasModifiers) {
+      // NB: The last modifier-key has been released, clear any down keys.
+      //     These pressed keys will not have been reporting their "on keyup" updates while the modifier-keys are in use.
+      reset();
+    }
+    return;
+  }
 
   change((state) => {
     const next = state.current;
