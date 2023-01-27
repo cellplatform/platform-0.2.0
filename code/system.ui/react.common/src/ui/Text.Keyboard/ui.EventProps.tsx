@@ -1,4 +1,4 @@
-import { css, FC, t } from '../common';
+import { css, FC, t } from './common';
 import { PropList } from '../PropList';
 
 export type EventPropsProps = {
@@ -53,3 +53,5 @@ export const EventProps = FC.decorate<EventPropsProps, Fields>(
   { minWidth: 150 },
   { displayName: 'EventProps' },
 );
+
+export default EventProps;

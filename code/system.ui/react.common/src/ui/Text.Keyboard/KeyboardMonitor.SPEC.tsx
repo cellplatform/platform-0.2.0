@@ -38,9 +38,10 @@ export default Dev.describe('KeyboardMonitor', (e) => {
         />
       ));
 
-    dev.row((e) => {
+    dev.row(async (e) => {
+      const { EventProps } = await Keyboard.ui.EventProps();
       const event = e.state.keyboard.last;
-      return <Keyboard.ui.EventProps event={event} style={{ MarginX: 15, marginTop: 5 }} />;
+      return <EventProps event={event} style={{ MarginX: 15, marginTop: 5 }} />;
     });
   });
 });
