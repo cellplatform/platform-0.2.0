@@ -1,5 +1,5 @@
-import { IndexedDb } from '../IndexedDb/index.mjs';
-import { t, NAME } from '../common/index.mjs';
+import { IndexedDb } from '../IndexedDb';
+import { t, NAME } from '../common';
 
 type T = {
   name: string;

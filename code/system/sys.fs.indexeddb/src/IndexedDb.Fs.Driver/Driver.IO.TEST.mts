@@ -1,7 +1,7 @@
-import { Hash, Path, slug, Stream, t } from '../common/index.mjs';
-import { describe, expect, it, MemoryMock, TestIndexedDb } from '../test/index.mjs';
+import { Hash, Path, slug, Stream, t } from '../common';
+import { describe, expect, it, MemoryMock, TestIndexedDb } from '../test';
 import { IndexedDbDriver } from '../index.mjs';
-import { DbLookup } from '../IndexedDb/index.mjs';
+import { DbLookup } from '../IndexedDb';
 
 describe('FsIO (IndexedDB)', () => {
   const testCreate = async (options: { dir?: string } = {}) => {

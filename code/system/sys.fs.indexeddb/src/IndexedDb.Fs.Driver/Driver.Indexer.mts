@@ -1,5 +1,5 @@
-import { Delete, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
-import { DbLookup } from '../IndexedDb/index.mjs';
+import { Delete, ManifestFiles, ManifestHash, Path, t, Time } from '../common';
+import { DbLookup } from '../IndexedDb';
 
 type DirPath = string;
 

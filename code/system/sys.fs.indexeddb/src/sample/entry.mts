@@ -1,4 +1,4 @@
-import { rx } from '../common/index.mjs';
+import { rx } from '../common';
 import { Filesystem } from '../index.mjs';
 
 /**

@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 
-import { NAME, ROOT_DIR, t } from '../common/index.mjs';
-import { IndexedDb } from '../IndexedDb/index.mjs';
+import { NAME, ROOT_DIR, t } from '../common';
+import { IndexedDb } from '../IndexedDb';
 import { FsIO } from './Driver.IO.mjs';
 import { FsIndexer } from './Driver.Indexer.mjs';
 

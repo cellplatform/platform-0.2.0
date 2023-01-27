@@ -1,4 +1,4 @@
-import { describe, it, expect, MemoryMock, Path, slug, t } from './test/index.mjs';
+import { describe, it, expect, MemoryMock, Path, slug, t } from './test';
 import { Filesystem } from './Filesystem.mjs';
 import { IndexedDbDriver } from './index.mjs';
 import { Spec } from 'sys.fs.spec';
