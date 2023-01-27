@@ -1,8 +1,11 @@
+import { expect } from 'chai';
+
 import { DevBus } from '../../logic.Bus';
-import { COLORS, Color, css, Spec, t } from '../common';
+import { Color, COLORS, css, Spec } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
-import { expect } from 'chai';
+
+import { Keyboard } from 'sys.ui.dom';
 
 let _renderCount = 0;
 
@@ -16,6 +19,11 @@ export default Spec.describe('MySample', (e) => {
     const state = await ctx.state<T>({ count: 0 });
 
     expect(state.current.count).to.eql(0); // NB: assertions will be run within CI.
+
+    Keyboard.on('CMD + K', (e) => {
+      // NB: Test helpful to ensure errors don't occur on headless (server) run.
+      console.log('CMD + K', e);
+    });
 
     ctx.subject
       .size(300, 200)
