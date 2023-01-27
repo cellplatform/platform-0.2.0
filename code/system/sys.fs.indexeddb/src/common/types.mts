@@ -7,6 +7,7 @@ export type { Observable } from 'rxjs';
  * @system
  */
 export type { Disposable, EventBus } from 'sys.types/src/types.mjs';
+
 export type {
   FsDriver,
   FsIO,
@@ -20,6 +21,8 @@ export type {
   DirManifest,
   DirManifestInfo,
 } from 'sys.fs/src/types.mjs';
+
+export type { TestSuiteRunResponse, SpecImport } from 'sys.test.spec/src/types.mjs';
 
 /**
  * @local
