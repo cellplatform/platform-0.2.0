@@ -1,7 +1,6 @@
 import { Dev } from '..';
 import { expect } from '../../test.ui';
-import { Color, css, t, Button } from '../common';
-import { Results, RunnerCompact } from '.';
+import { t } from '../common';
 
 type T = { results?: t.TestSuiteRunResponse };
 
@@ -19,13 +18,13 @@ export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     ctx.subject
-      .size('fill')
       .display('grid')
       .backgroundColor(1)
+      .size('fill')
       .render<T>((e) => {
         return (
           <div style={{ padding: 10 }}>
-            <Results data={e.state.results} />
+            <Dev.TestRunner.Results data={e.state.results} />
           </div>
         );
       });
@@ -34,17 +33,16 @@ export default Dev.describe('TestRunner', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, {});
 
-    dev
-      .button('run test', async (e) => {
-        const results = await root.run();
-        await e.change((d) => (d.results = results));
-      })
-      .button('clear', (e) => e.change((d) => (d.results = undefined)));
+    dev.button('run test', async (e) => {
+      const results = await root.run();
+      await e.change((d) => (d.results = results));
+    });
+
+    dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
 
     dev.hr();
-
     dev.row((e) => {
-      return <RunnerCompact />;
+      return <Dev.TestRunner.Compact />;
     });
   });
 });
