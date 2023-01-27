@@ -6,23 +6,19 @@ describe('padding', function () {
     const res = Style.transform({
       PaddingX: 14,
       paddingLeft: 1234, // Overwritten.
-    }) as any;
+    });
     expect(res.paddingLeft).to.equal(14);
     expect(res.paddingRight).to.equal(14);
   });
 
   it('PaddingY', () => {
-    const res = Style.transform({
-      PaddingY: 20,
-    }) as any;
+    const res = Style.transform({ PaddingY: 20 });
     expect(res.paddingTop).to.equal(20);
     expect(res.paddingBottom).to.equal(20);
   });
 
   it('Padding (10)', () => {
-    const res = Style.transform({
-      Padding: 20,
-    }) as any;
+    const res = Style.transform({ Padding: 20 });
     expect(res.paddingTop).to.equal(20);
     expect(res.paddingRight).to.equal(20);
     expect(res.paddingBottom).to.equal(20);
@@ -32,7 +28,7 @@ describe('padding', function () {
   it('Padding ([10, null, "5em", "30px"])', () => {
     const res = Style.transform({
       Padding: [10, null, '5em', '30px'],
-    }) as any;
+    });
     expect(res.paddingTop).to.equal(10);
     expect(res.paddingRight).to.equal(undefined);
     expect(res.paddingBottom).to.equal('5em');
@@ -45,23 +41,19 @@ describe('margin', function () {
     const res = Style.transform({
       MarginX: 14,
       marginLeft: 1234, // Overwritten.
-    }) as any;
+    });
     expect(res.marginLeft).to.equal(14);
     expect(res.marginRight).to.equal(14);
   });
 
   it('MarginY', () => {
-    const res = Style.transform({
-      MarginY: 20,
-    }) as any;
+    const res = Style.transform({ MarginY: 20 });
     expect(res.marginTop).to.equal(20);
     expect(res.marginBottom).to.equal(20);
   });
 
   it('Margin (10)', () => {
-    const res = Style.transform({
-      Margin: 20,
-    }) as any;
+    const res = Style.transform({ Margin: 20 });
     expect(res.marginTop).to.equal(20);
     expect(res.marginRight).to.equal(20);
     expect(res.marginBottom).to.equal(20);
@@ -69,9 +61,7 @@ describe('margin', function () {
   });
 
   it('Margin ([10, null, "5em", "30px"])', () => {
-    const res = Style.transform({
-      Margin: [10, null, '5em', '30px'],
-    }) as any;
+    const res = Style.transform({ Margin: [10, null, '5em', '30px'] });
     expect(res.marginTop).to.equal(10);
     expect(res.marginRight).to.equal(undefined);
     expect(res.marginBottom).to.equal('5em');
