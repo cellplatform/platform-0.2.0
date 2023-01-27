@@ -1,6 +1,6 @@
 import { TextInputMasks } from '..';
 import { Dev, t } from '../../../test.ui';
-import { Time, DEFAULTS } from '../common';
+import { Time, DEFAULTS, KeyboardMonitor } from '../common';
 import { DevSample } from './DEV.Sample';
 
 type T = {
@@ -35,6 +35,11 @@ export default Dev.describe('TextInput', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    KeyboardMonitor.on('CMD + P', async (e) => {
+      e.cancel();
+      state.current.ref?.focus();
+    });
 
     ctx.subject
       .display('grid')
