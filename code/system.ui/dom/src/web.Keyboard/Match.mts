@@ -1,4 +1,5 @@
 import { slug, t } from './common';
+import { Util } from './util.mjs';
 
 export const Match = {
   /**
@@ -51,13 +52,8 @@ function parsePattern(pattern: t.KeyPattern): string[] {
     });
 }
 
-const isModifier = (value: string) => {
-  value = (value || '').trim();
-  return value === 'META' || value === 'ALT' || value === 'SHIFT' || value === 'CTRL';
-};
-
 function containsAllModifiers(pattern: string[], modifiers: Partial<t.KeyboardModifierFlags>) {
-  pattern = pattern.filter(isModifier);
+  pattern = pattern.filter(Util.isModifier);
 
   const flags = Object.entries(modifiers)
     .filter(([key, value]) => Boolean(value))
@@ -71,7 +67,7 @@ function containsAllModifiers(pattern: string[], modifiers: Partial<t.KeyboardMo
 function containsAllKeys(pattern: string[], pressed: string[]) {
   pressed = pressed.map((value) => value.toUpperCase());
   pattern = pattern
-    .filter((value) => !isModifier(value))
+    .filter((value) => !Util.isModifier(value))
     .map((value) => value.toUpperCase())
     .map((value) => (value.length > 1 ? value.split('') : value))
     .flat();

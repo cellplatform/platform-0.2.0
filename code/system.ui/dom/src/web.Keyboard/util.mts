@@ -1,6 +1,11 @@
 import { t } from './common';
 
 export const Util = {
+  isModifier(value: string) {
+    value = (value || '').trim();
+    return value === 'META' || value === 'ALT' || value === 'SHIFT' || value === 'CTRL';
+  },
+
   toModifierFlags(input: t.KeyboardModifierKeys): t.KeyboardModifierFlags {
     const flag = (value: t.KeyboardModifierEdges) => (value || []).length > 0;
     return {
