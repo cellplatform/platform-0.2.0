@@ -36,7 +36,16 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       padding: 30,
       paddingTop: 20,
     }),
-    ul: css({}),
+    title: css({
+      marginBottom: 20,
+    }),
+    ul: css({
+      listStyleType: 'none',
+      padding: 0,
+      margin: 0,
+      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
+    }),
+    li: css({}),
     hr: css({
       border: 'none',
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
@@ -74,9 +83,14 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     if (address) params.set(KEY.DEV, address);
     if (!address) params.delete(KEY.DEV);
 
+    const style: t.CssValue = {
+      paddingLeft: beyondBounds ? 0 : 30,
+      paddingRight: beyondBounds ? 0 : 50,
+    };
+
     return (
       <Fragment key={`item-${i}`}>
-        <li>
+        <li {...css(styles.li, style)}>
           {showHr && <hr {...styles.hr} />}
           <a href={url.href} {...css(styles.link, isDimmed ? styles.linkDimmed : undefined)}>
             {title ?? address}
@@ -89,7 +103,7 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
   const elList = (
     <ul {...styles.ul}>
       {importsKeys.map((key, i) => createItem(i, key))}
-      <hr {...styles.hrDashed} />
+      <hr {...css(styles.hrDashed, { marginTop: 30 })} />
       {hasDevParam && createItem(-1, undefined, '?dev - remove param', true)}
       {!hasDevParam && createItem(-1, 'true', '?dev - add param', true)}
     </ul>
@@ -97,7 +111,12 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <SpecListTitle title={props.title} version={props.version} badge={props.badge} />
+      <SpecListTitle
+        title={props.title}
+        version={props.version}
+        badge={props.badge}
+        style={styles.title}
+      />
       {elList}
       <SpecListFooter />
     </div>
