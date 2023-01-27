@@ -3,6 +3,7 @@ import { Specs as CommonSpecs, DevSpecs as ComonDevSpecs } from 'sys.ui.react.co
 import { Specs as MonacoSpecs } from 'sys.ui.react.monaco';
 import { Specs as VideoSpecs } from 'sys.ui.react.video';
 import { Specs as WebRtcSpecs } from 'sys.net.webrtc';
+import { Specs as FsIndexedDbSpecs } from 'sys.fs.indexeddb';
 
 export const Specs = {
   Root: () => import('../ui/Root/Root.SPEC'),
@@ -12,4 +13,5 @@ export const Specs = {
   ...MonacoSpecs,
   ...VideoSpecs,
   ...WebRtcSpecs,
+  ...FsIndexedDbSpecs,
 };
