@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { IconType } from 'react-icons';
 
 /**
  * @system

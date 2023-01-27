@@ -1,13 +1,13 @@
 import { Color, COLORS, css, t } from '../common';
 
-export type SpecListTitleProps = {
+export type TitleProps = {
   title?: string;
   version?: string;
   badge?: t.SpecListBadge;
   style?: t.CssValue;
 };
 
-export const SpecListTitle: React.FC<SpecListTitleProps> = (props) => {
+export const Title: React.FC<TitleProps> = (props) => {
   if (!props.title?.trim()) return null;
 
   /**

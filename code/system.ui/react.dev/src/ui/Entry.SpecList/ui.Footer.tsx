@@ -1,10 +1,14 @@
 import { css, t } from '../common';
 
-export type SpecListFooterProps = {
+export type FooterProps = {
   style?: t.CssValue;
 };
 
-export const SpecListFooter: React.FC<SpecListFooterProps> = (props) => {
+/**
+ * NOTE:
+ *    Acts as a spacer for the bottom of the list for scrolling.
+ */
+export const Footer: React.FC<FooterProps> = (props) => {
   const styles = {
     base: css({ height: 80 }),
   };
