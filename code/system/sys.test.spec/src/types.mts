@@ -4,8 +4,12 @@ type Milliseconds = number;
 type Ctx = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
-export type BundleImport = TestSuiteModel | Promise<any>;
 export type TestModifier = 'skip' | 'only';
+
+export type SpecImport = TestSuiteModel | Promise<any>;
+export type SpecImports = {
+  [namespace: string]: () => SpecImport;
+};
 
 /**
  * BDD ("behavior driven develoment") style test configuration API.
@@ -13,10 +17,10 @@ export type TestModifier = 'skip' | 'only';
 export type Test = {
   Is: TestIs;
   describe: TestSuiteDescribe;
-  bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
-  bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
-  run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
-  run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
+  bundle(items: SpecImport | SpecImport[]): Promise<TestSuiteModel>;
+  bundle(description: string, items: SpecImport | SpecImport[]): Promise<TestSuiteModel>;
+  run(items: SpecImport | SpecImport[]): Promise<TestSuiteRunResponse>;
+  run(description: string, items: SpecImport | SpecImport[]): Promise<TestSuiteRunResponse>;
 };
 
 export type TestIs = {
