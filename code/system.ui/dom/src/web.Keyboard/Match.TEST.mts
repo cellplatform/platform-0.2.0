@@ -29,7 +29,7 @@ describe('Keyboard.Match', () => {
     ) => {
       const pattern = Keyboard.Match.pattern(input);
       const res = pattern.isMatch(pressed, modifiers);
-      expect(res).to.eql(expected);
+      expect(res).to.eql(expected, input);
     };
 
     test('cmd + p', ['p'], {}, false);
@@ -38,6 +38,10 @@ describe('Keyboard.Match', () => {
     test('cmd + p', ['P'], { meta: true }, true); // NB: case-insensitive.
     test('cmd + p', ['p'], { meta: true, shift: true }, false);
     test('cmd + Shift + p', ['p'], { meta: true, shift: true }, true);
+
+    test('cmd + P', ['A'], { meta: true }, false);
+    test('cmd + P', [], { meta: true }, false);
+    test('cmd + P', ['P'], { meta: true }, true);
 
     test('Cmd', [], { meta: true }, true);
     test('Cmd', [], { meta: true, shift: false }, true);
@@ -50,6 +54,7 @@ describe('Keyboard.Match', () => {
     test('Cmd + SHIFT', [], { meta: true, shift: true, alt: true }, false);
 
     test('k', ['k'], {}, true);
+    test('k', [], {}, false);
     test('k + P', ['k'], {}, false);
     test('k + P', ['k', 'p'], {}, true);
     test('k + P', ['k', 'p', 'F'], {}, true);

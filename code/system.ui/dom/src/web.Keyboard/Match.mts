@@ -16,8 +16,8 @@ export const Match = {
        * Determine if the given keys match the pattern.
        */
       isMatch(pressed: t.KeyboardKey['key'][], modifiers: Partial<t.KeyboardModifierFlags>) {
-        if (!containsModifiers(pattern, modifiers)) return false;
-        if (!containsKeys(pattern, pressed)) return false;
+        if (!containsAllModifiers(pattern, modifiers)) return false;
+        if (!containsAllKeys(pattern, pressed)) return false;
         return true;
       },
     };
@@ -56,7 +56,7 @@ const isModifier = (value: string) => {
   return value === 'META' || value === 'ALT' || value === 'SHIFT' || value === 'CTRL';
 };
 
-function containsModifiers(pattern: string[], modifiers: Partial<t.KeyboardModifierFlags>) {
+function containsAllModifiers(pattern: string[], modifiers: Partial<t.KeyboardModifierFlags>) {
   pattern = pattern.filter(isModifier);
 
   const flags = Object.entries(modifiers)
@@ -68,7 +68,7 @@ function containsModifiers(pattern: string[], modifiers: Partial<t.KeyboardModif
   return true;
 }
 
-function containsKeys(pattern: string[], pressed: string[]) {
+function containsAllKeys(pattern: string[], pressed: string[]) {
   pressed = pressed.map((value) => value.toUpperCase());
   pattern = pattern
     .filter((value) => !isModifier(value))
