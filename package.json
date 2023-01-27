@@ -1,6 +1,6 @@
 {
   "name": "platform-0.2.0",
-  "version": "0.2.2-alpha",
+  "version": "0.2.3-alpha",
   "type": "module",
   "scripts": {
     "build": "ts-node-esm   -T script.ts/cmd.all.build.mts",
