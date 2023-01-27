@@ -1,6 +1,3 @@
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-
 import { rx, t, Time } from './common';
 import { FileUtil } from './util';
 
@@ -11,9 +8,9 @@ type M = 'video/webm';
  */
 export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream: MediaStream }) {
   const { stream } = args;
-  const dispose$ = new Subject<void>();
+  const dispose$ = new rx.Subject<void>();
   const bus = rx.busAsType<t.MediaEvent>(args.bus);
-  const $ = bus.$.pipe(takeUntil(dispose$));
+  const $ = bus.$.pipe(rx.takeUntil(dispose$));
   const ref = stream.id;
 
   let recorder: ReturnType<typeof Recorder> | undefined;
@@ -29,7 +26,7 @@ export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream
    * Recording status.
    */
   rx.payload<t.MediaStreamRecordStatusReqEvent>($, 'MediaStream/record/status:req')
-    .pipe(filter((e) => e.ref === ref))
+    .pipe(rx.filter((e) => e.ref === ref))
     .subscribe((e) => {
       const { ref, tx } = e;
       const status = recorder ? recorder.toStatus() : undefined;
@@ -43,7 +40,7 @@ export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream
    * Start recording.
    */
   rx.payload<t.MediaStreamRecordStartEvent>($, 'MediaStream/record/start')
-    .pipe(filter((e) => e.ref === ref))
+    .pipe(rx.filter((e) => e.ref === ref))
     .subscribe((e) => {
       if (!stream) {
         const message = `Cannot start recording as a media stream has not been created yet.`;
@@ -67,7 +64,7 @@ export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream
    * Pause/resume recording.
    */
   rx.payload<t.MediaStreamRecordInterruptEvent>($, 'MediaStream/record/interrupt')
-    .pipe(filter((e) => e.ref === ref))
+    .pipe(rx.filter((e) => e.ref === ref))
     .subscribe(async (e) => {
       if (!recorder) {
         return error(`Cannot ${e.action} recording as it has not yet been started.`);
@@ -86,7 +83,7 @@ export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream
    * Stop recording.
    */
   rx.payload<t.MediaStreamRecordStopEvent>($, 'MediaStream/record/stop')
-    .pipe(filter((e) => e.ref === ref))
+    .pipe(rx.filter((e) => e.ref === ref))
     .subscribe(async (e) => {
       const { ref } = e;
 

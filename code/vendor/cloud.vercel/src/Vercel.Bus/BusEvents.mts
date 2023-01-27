@@ -80,7 +80,7 @@ export function BusEvents(args: {
 
       const first = firstValueFrom(
         deploy.res$.pipe(
-          filter((e) => e.tx === tx),
+          rx.filter((e) => e.tx === tx),
           timeout(msecs),
           catchError(() => of(`Deploy request timed out after ${msecs} msecs`)),
         ),

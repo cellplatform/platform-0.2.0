@@ -1,7 +1,4 @@
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-
-import { R, rx, t, slug } from '../common';
+import { R, rx, slug, t } from '../common';
 import { StreamUtil } from './util';
 
 type Refs = { [ref: string]: Ref };
@@ -16,9 +13,9 @@ type Ref = {
  * Manages an event bus dealing with a MediaStream.
  */
 export function MediaStreamController(args: { bus: t.EventBus<any> }) {
-  const dispose$ = new Subject<void>();
+  const dispose$ = new rx.Subject<void>();
   const bus = args.bus as t.EventBus<t.MediaEvent>;
-  const $ = bus.$.pipe(takeUntil(dispose$));
+  const $ = bus.$.pipe(rx.takeUntil(dispose$));
   const refs: Refs = {};
 
   const error = (ref: string, error: string) => {
@@ -80,7 +77,7 @@ export function MediaStreamController(args: { bus: t.EventBus<any> }) {
    * Connect to local-device media (camera/audio).
    */
   rx.payload<t.MediaStreamStartEvent>($, 'MediaStream/start')
-    .pipe(filter((e) => e.kind === 'video'))
+    .pipe(rx.filter((e) => e.kind === 'video'))
     .subscribe(async (e) => {
       const { ref } = e;
       const tx = e.tx || slug();
@@ -137,7 +134,7 @@ export function MediaStreamController(args: { bus: t.EventBus<any> }) {
    * Start a screen capture of the local screen.
    */
   rx.payload<t.MediaStreamStartEvent>($, 'MediaStream/start')
-    .pipe(filter((e) => e.kind === 'screen'))
+    .pipe(rx.filter((e) => e.kind === 'screen'))
     .subscribe(async (e) => {
       const { ref } = e;
       const tx = e.tx || slug();

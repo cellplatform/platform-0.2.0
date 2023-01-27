@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
-import { State, t } from '../common';
+import { State, t, rx } from '../common';
 
 export function useEditorChangeHandler(instance: t.Instance) {
-  const changeRef$ = useRef(new Subject<string>());
+  const changeRef$ = useRef(new rx.Subject<string>());
   const state = State.useState(instance);
 
   /**
@@ -13,7 +12,7 @@ export function useEditorChangeHandler(instance: t.Instance) {
    */
   useEffect(() => {
     const events = State.Bus.Events({ instance });
-    const $ = changeRef$.current.pipe(takeUntil(events.dispose$));
+    const $ = changeRef$.current.pipe(rx.takeUntil(events.dispose$));
 
     $.pipe(debounceTime(300)).subscribe(async (code) => {
       State.Change.updateMarkdownFromEditor(events, code);
