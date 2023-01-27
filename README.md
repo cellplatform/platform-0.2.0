@@ -119,7 +119,7 @@ Ideas, history, context:
 
 <p>&nbsp;</p>
 
-Identity is not a simple reductive thing...we, each of us, inhabit many contexturally dependent and diverse identities.  
+**Identity** is not one simple reductive thing (or a "rented" database ID owned by some vendor).  Each and every one of us inhabit many contexturally dependent and diverse identities.  Overall system design must ultimately bridge all the way to that complexity if it is to be of enduring value.    
 “I am large, I contain multitudes” - [1892, Walt Whitman](https://en.wikipedia.org/wiki/Song_of_Myself)  
 
 
