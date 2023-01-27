@@ -1,7 +1,7 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 
-import { rx, slug, t, Wrangle, asArray } from './common.mjs';
+import { rx, slug, t, Wrangle, asArray } from './common';
 
 type FilesystemId = string;
 

@@ -1,5 +1,5 @@
-import { describe, expect, Filesystem, it, MemoryMock, TestPrep } from '../test/index.mjs';
-import { rx } from './common.mjs';
+import { describe, expect, Filesystem, it, MemoryMock, TestPrep } from '../test';
+import { rx } from './common';
 
 describe('BusController.IO', function () {
   describe('info', function () {

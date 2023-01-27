@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import { pipeline, Writable } from 'stream';
 import { promisify } from 'util';
 
-import { Json, t, fsextra } from '../common/index.mjs';
+import { Json, t, fsextra } from '../common';
 
 /**
  * References:

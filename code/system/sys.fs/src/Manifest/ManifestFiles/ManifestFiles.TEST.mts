@@ -1,8 +1,8 @@
-import { expect, describe, it } from '../../test/index.mjs';
+import { expect, describe, it } from '../../test';
 
 import { t, Hash, Sort } from '../common.mjs';
-import { ManifestFiles } from './index.mjs';
-import { ManifestHash } from '../index.mjs';
+import { ManifestFiles } from '.';
+import { ManifestHash } from '..';
 
 describe('ManifestFiles', () => {
   const testFile = (path: string, text?: string): t.ManifestFile => {

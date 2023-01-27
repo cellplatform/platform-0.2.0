@@ -1,5 +1,5 @@
 import { BusController as Controller } from './BusController.mjs';
-import { BusEvents as Events } from '../BusEvents/index.mjs';
+import { BusEvents as Events } from '../BusEvents';
 
 export { BusController } from './BusController.mjs';
 

@@ -1,4 +1,4 @@
-import { asArray, t, Path } from './common.mjs';
+import { asArray, t, Path } from './common';
 
 type FilesystemId = string;
 type FilePath = string;

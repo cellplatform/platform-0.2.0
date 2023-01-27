@@ -1,4 +1,4 @@
-import { ManifestFiles, ManifestHash } from '../Manifest/index.mjs';
+import { ManifestFiles, ManifestHash } from '../Manifest';
 import { DEFAULT, Path, t, Time } from './common.mjs';
 import { MockState } from './MockState.mjs';
 

@@ -1,4 +1,4 @@
-import { expect, MemoryMock, t } from './common.mjs';
+import { expect, MemoryMock, t } from './common';
 
 export const ExceptionsSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory } = ctx;

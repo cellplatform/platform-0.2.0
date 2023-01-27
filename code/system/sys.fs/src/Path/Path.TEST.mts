@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { Path, PathUri } from './index.mjs';
+import { expect, describe, it } from '../test';
+import { Path, PathUri } from '.';
 
 /**
  * Remaining tests for [Path] found in [sys.util]

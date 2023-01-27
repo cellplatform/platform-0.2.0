@@ -1,6 +1,6 @@
-import { rx, slug, t } from './common/index.mjs';
+import { rx, slug, t } from './common';
 import { Filesystem } from './Filesystem.mjs';
-import { MemoryMock } from './MemoryMock/index.mjs';
+import { MemoryMock } from './MemoryMock';
 
 type FilesystemId = string;
 type DirPath = string;

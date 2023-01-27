@@ -1,6 +1,6 @@
-export * from '../common/index.mjs';
-export { Path } from '../Path/index.mjs';
-export { Manifest } from '../Manifest/index.mjs';
+export * from '../common';
+export { Path } from '../Path';
+export { Manifest } from '../Manifest';
 
 export const DEFAULT = {
   rootdir: '/mock/',

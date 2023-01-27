@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
-import { BusEvents } from '../BusEvents/index.mjs';
-import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../test/index.mjs';
-import { BusController } from './index.mjs';
+import { BusEvents } from '../BusEvents';
+import { DEFAULT, describe, expect, MemoryMock, it, rx, TestPrep, t } from '../test';
+import { BusController } from '.';
 
 describe('BusController', function () {
   it('id (specified)', () => {

@@ -1,4 +1,4 @@
-import { t, ManifestHash, expect, MemoryMock } from './common.mjs';
+import { t, ManifestHash, expect, MemoryMock } from './common';
 
 export const ManifestSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory } = ctx;

@@ -1,15 +1,15 @@
-export * from './types.mjs';
+export * from './types';
 
 export { Filesystem, Filesystem as default } from './Filesystem.mjs';
 
 export { Wrangle } from './Wrangle.mjs';
-export { MemoryMock } from './MemoryMock/index.mjs';
+export { MemoryMock } from './MemoryMock';
 export { TestFilesystem } from './TestFilesystem.mjs';
 
-export { Filesize } from './Filesize/index.mjs';
-export { Manifest, ManifestHash, ManifestFiles } from './Manifest/index.mjs';
-export { Path } from './Path/index.mjs';
-export { Image } from './Image/index.mjs';
+export { Filesize } from './Filesize';
+export { Manifest, ManifestHash, ManifestFiles } from './Manifest';
+export { Path } from './Path';
+export { Image } from './Image';
 
-export { Bus, BusController } from './BusController/index.mjs';
-export { BusEvents } from './BusEvents/index.mjs';
+export { Bus, BusController } from './BusController';
+export { BusEvents } from './BusEvents';

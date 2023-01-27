@@ -1,8 +1,8 @@
 import { Spec } from 'sys.fs.spec';
 
 import { Filesystem, NodeDriver } from './index.mjs';
-import { NodeFs } from './node/index.mjs';
-import { t, describe, expect, it, MemoryMock, Path } from './test/index.mjs';
+import { NodeFs } from './node';
+import { t, describe, expect, it, MemoryMock, Path } from './test';
 
 describe('Filesystem (Node)', () => {
   it('Filesystem.Driver', () => {

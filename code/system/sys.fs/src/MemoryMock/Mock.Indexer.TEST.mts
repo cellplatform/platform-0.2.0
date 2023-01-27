@@ -1,5 +1,5 @@
-import { describe, expect, it } from '../test/index.mjs';
-import { MemoryMock } from './index.mjs';
+import { describe, expect, it } from '../test';
+import { MemoryMock } from '.';
 
 /**
  * NOTE: The remainder of the mock is deeply tested via the

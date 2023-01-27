@@ -1,5 +1,5 @@
-import { describe, it, expect } from '../test/index.mjs';
-import { Image } from './index.mjs';
+import { describe, it, expect } from '../test';
+import { Image } from '.';
 
 describe('Image', () => {
   it('isImagePath: true', () => {

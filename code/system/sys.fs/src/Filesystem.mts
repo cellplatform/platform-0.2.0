@@ -1,6 +1,6 @@
-import { Bus } from './BusController/index.mjs';
-import { Filesize } from './Filesize/index.mjs';
-import { Path } from './Path/index.mjs';
+import { Bus } from './BusController';
+import { Filesize } from './Filesize';
+import { Path } from './Path';
 
 export const Filesystem = {
   Bus,

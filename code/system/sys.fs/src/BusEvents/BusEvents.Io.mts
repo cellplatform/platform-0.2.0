@@ -1,6 +1,6 @@
 import { filter } from 'rxjs/operators';
 
-import { rx, slug, t, Wrangle } from './common.mjs';
+import { rx, slug, t, Wrangle } from './common';
 
 type FilesystemId = string;
 

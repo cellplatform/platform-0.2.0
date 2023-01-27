@@ -1,4 +1,4 @@
-import { expect, MemoryMock, t, Path } from './common.mjs';
+import { expect, MemoryMock, t, Path } from './common';
 
 export const InfoSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory, root } = ctx;

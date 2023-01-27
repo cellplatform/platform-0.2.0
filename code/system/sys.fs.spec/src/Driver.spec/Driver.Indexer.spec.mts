@@ -1,4 +1,4 @@
-import { type t } from './common.mjs';
+import { type t } from './common';
 import { DirSpec } from './Driver.Indexer.spec.Dir.mjs';
 import { ManifestSpec } from './Driver.Indexer.spec.Manifest.mjs';
 

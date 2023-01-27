@@ -1,5 +1,5 @@
-import { Delete, Image, Path, t, Wrangle, Hash } from '../common/index.mjs';
-import { NodeFs } from '../node/index.mjs';
+import { Hash, Path, t, Wrangle } from '../common';
+import { NodeFs } from '../node';
 
 type DirPath = string;
 

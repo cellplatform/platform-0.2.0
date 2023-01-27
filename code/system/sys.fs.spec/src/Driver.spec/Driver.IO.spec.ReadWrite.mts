@@ -1,4 +1,4 @@
-import { expect, expectError, MemoryMock, t, Path } from './common.mjs';
+import { expect, expectError, MemoryMock, t, Path } from './common';
 
 export const ReadWriteSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory, root } = ctx;

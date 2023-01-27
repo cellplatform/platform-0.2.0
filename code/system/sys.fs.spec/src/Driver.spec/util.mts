@@ -1,4 +1,4 @@
-import { Hash } from '../common/index.mjs';
+import { Hash } from '../common';
 
 /**
  * Generate a Uint8Array containing random data.

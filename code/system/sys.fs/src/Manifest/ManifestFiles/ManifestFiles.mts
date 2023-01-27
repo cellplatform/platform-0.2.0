@@ -1,5 +1,5 @@
 import { t, Sort } from '../common.mjs';
-import { ManifestHash } from '../ManifestHash/index.mjs';
+import { ManifestHash } from '../ManifestHash';
 
 /**
  * Standard operations on a set of files represented by a manifest.

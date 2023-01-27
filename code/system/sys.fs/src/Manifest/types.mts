@@ -1,1 +1,8 @@
-export * from 'sys.types/src/types.manifest/index.mjs';
+export type {
+  Manifest,
+  ManifestFile,
+  DirManifest,
+  DirManifestInfo,
+  ModuleManifestHash,
+  ModuleManifestInfo,
+} from 'sys.types/src/types.mjs';

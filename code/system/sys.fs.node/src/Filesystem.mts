@@ -1,6 +1,6 @@
-import { t, slug, rx } from './common/index.mjs';
+import { t, slug, rx } from './common';
 import { Path, Filesize, Bus } from 'sys.fs';
-import { NodeDriver, NodeDriver as Node } from './Node.Fs.Driver/index.mjs';
+import { NodeDriver, NodeDriver as Node } from './Node.Fs.Driver';
 
 export { Path, Filesize, MemoryMock } from 'sys.fs';
 

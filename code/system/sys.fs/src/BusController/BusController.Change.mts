@@ -1,5 +1,5 @@
 import { filter } from 'rxjs/operators';
-import { type t } from './common.mjs';
+import { type t } from './common';
 
 type FilesystemId = string;
 

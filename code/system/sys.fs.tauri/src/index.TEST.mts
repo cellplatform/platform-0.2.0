@@ -1,4 +1,4 @@
-import { TestTauri, describe, expect, it, Pkg, TestFilesystem } from './test/index.mjs';
+import { TestTauri, describe, expect, it, Pkg, TestFilesystem } from './test';
 
 import * as tfs from '@tauri-apps/api/fs';
 

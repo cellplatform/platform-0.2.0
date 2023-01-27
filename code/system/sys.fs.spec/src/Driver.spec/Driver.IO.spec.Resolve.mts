@@ -1,4 +1,4 @@
-import { expect, t, Path } from './common.mjs';
+import { expect, t, Path } from './common';
 
 export const ResolveSpec = (ctx: t.SpecContext) => {
   const { describe, it, factory, root } = ctx;

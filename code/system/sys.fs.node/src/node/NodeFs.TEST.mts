@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { NodeGlob, NodeFs, NodeStream } from './index.mjs';
+import { expect, describe, it } from '../test';
+import { NodeGlob, NodeFs, NodeStream } from '.';
 
 describe('NodeFs', () => {
   const methodExists = (method: keyof typeof NodeFs) => {

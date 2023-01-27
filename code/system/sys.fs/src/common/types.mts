@@ -11,4 +11,4 @@ export type { EventBus, Event, Json, Disposable } from 'sys.types/src/types.mjs'
 /**
  * @local
  */
-export * from '../types.mjs';
+export * from '../types';
