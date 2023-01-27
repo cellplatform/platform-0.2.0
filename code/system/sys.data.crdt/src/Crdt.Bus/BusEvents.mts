@@ -1,5 +1,3 @@
-import { map, filter, takeUntil } from 'rxjs/operators';
-
 import { DEFAULT, rx, slug, t } from './common.mjs';
 import { CrdtDocEvents } from './BusEvents.Doc.mjs';
 
@@ -22,9 +20,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, id)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, id)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**
@@ -37,7 +35,7 @@ export function BusEvents(args: {
       const { timeout = 3000 } = options;
       const tx = slug();
       const op = 'info';
-      const res$ = info.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.CrdtInfoResEvent>(res$, { op, timeout });
 
       bus.fire({
@@ -62,8 +60,8 @@ export function BusEvents(args: {
     changed$: rx.payload<t.CrdtRefChangedEvent>($, 'sys.crdt/ref/changed'),
 
     created$: rx.payload<t.CrdtRefResEvent>($, 'sys.crdt/ref:res').pipe(
-      filter((e) => e.created),
-      map(({ id, doc }) => ({ id, doc } as t.CrdtRefCreated)),
+      rx.filter((e) => e.created),
+      rx.map(({ id, doc }) => ({ id, doc } as t.CrdtRefCreated)),
     ),
 
     async fire<T extends O>(args: {
@@ -76,7 +74,7 @@ export function BusEvents(args: {
       const { timeout = 3000, load, save } = args;
       const tx = slug();
       const op = 'ref.get';
-      const res$ = state.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = state.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.CrdtRefResEvent>(res$, { op, timeout });
 
       const doc = { id: args.id };
@@ -99,7 +97,7 @@ export function BusEvents(args: {
         const { timeout = 3000 } = options;
         const tx = slug();
         const op = 'ref.exists';
-        const res$ = state.exists.res$.pipe(filter((e) => e.tx === tx));
+        const res$ = state.exists.res$.pipe(rx.filter((e) => e.tx === tx));
         const first = rx.asPromise.first<t.CrdtRefExistsResEvent>(res$, { op, timeout });
 
         bus.fire({

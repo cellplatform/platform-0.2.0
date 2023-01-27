@@ -39,7 +39,7 @@ export const Row: React.FC<RowProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: `auto 1fr auto`,
       columnGap: 20,
-      PaddingY: 6,
+      PaddingY: 8,
       paddingLeft: 20,
       paddingRight: 60,
       color: COLORS.DARK,

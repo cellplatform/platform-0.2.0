@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-
 import { rx, t } from '../common';
 
 /**
@@ -17,8 +14,8 @@ export function useVideoStreamState(args: {
   const [stream, setStream] = useState<MediaStream | undefined>();
 
   useEffect(() => {
-    const dispose$ = new Subject<void>();
-    const $ = bus.$.pipe(takeUntil(dispose$));
+    const dispose$ = new rx.Subject<void>();
+    const $ = bus.$.pipe(rx.takeUntil(dispose$));
 
     const handleChange = (stream?: MediaStream) => {
       setStream(stream);
@@ -26,11 +23,11 @@ export function useVideoStreamState(args: {
     };
 
     rx.payload<t.MediaStreamStartedEvent>($, 'MediaStream/started')
-      .pipe(filter((e) => e.ref === ref))
+      .pipe(rx.filter((e) => e.ref === ref))
       .subscribe((e) => handleChange(e.stream));
 
     rx.payload<t.MediaStreamStopEvent>($, 'MediaStream/stop')
-      .pipe(filter((e) => e.ref === ref))
+      .pipe(rx.filter((e) => e.ref === ref))
       .subscribe((e) => handleChange(undefined));
 
     return () => dispose$.next();

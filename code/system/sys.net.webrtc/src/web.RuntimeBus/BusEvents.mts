@@ -1,4 +1,3 @@
-import { filter, takeUntil } from 'rxjs/operators';
 import { DEFAULT, rx, slug, t } from './common';
 
 type Id = string;
@@ -16,9 +15,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, instance)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, instance)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**
@@ -31,7 +30,7 @@ export function BusEvents(args: {
       const { timeout = 90000 } = options;
       const tx = slug();
       const op = 'info';
-      const res$ = info.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.WebRuntimeInfoResEvent>(res$, { op, timeout });
 
       bus.fire({
@@ -57,7 +56,7 @@ export function BusEvents(args: {
       const { timeout = 500 } = options;
       const tx = slug();
       const op = 'netbus';
-      const res$ = netbus.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = netbus.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.WebRuntimeNetbusResEvent>(res$, { op, timeout });
 
       bus.fire({

@@ -1,10 +1,11 @@
 /**
  * @external
  */
+
 export { Observable, Subject } from 'rxjs';
 
-import { mergeDeepRight, clone, equals } from 'ramda';
-export const R = { mergeDeepRight, clone, equals };
+import { clone, equals, mergeDeepRight, uniq } from 'ramda';
+export const R = { clone, equals, mergeDeepRight, uniq };
 
 /**
  * @system

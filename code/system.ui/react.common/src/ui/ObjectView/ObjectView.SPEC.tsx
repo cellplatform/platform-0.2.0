@@ -4,7 +4,10 @@ import { Dev } from '../../test.ui';
 import type { ObjectViewProps } from '.';
 
 type T = ObjectViewProps;
-const initial = {};
+const initial: T = {
+  name: 'Foo',
+  data: { msg: '👋', list: [1, [{ msg: 'two' }], 'three'], count: 123, foo: false },
+};
 
 export default Dev.describe('ObjectView', (e) => {
   e.it('init', async (e) => {
@@ -18,44 +21,78 @@ export default Dev.describe('ObjectView', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    const value = (label: string, value: any) => {
-      dev.button((btn) => {
-        btn.label(label).onClick((e) => {
-          e.change((draft) => (draft.data = value));
-        });
-      });
-    };
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label('showNonenumerable')
+          .value((e) => e.state.showNonenumerable ?? ObjectView.DEFAULTS.showNonenumerable)
+          .onClick((e) => e.change((d) => Dev.toggle(d, 'showNonenumerable'))),
+      );
 
-    value('`undefined`', undefined);
-    value('`null`', null);
-    value('`true`', true);
-    value('`123`', 123);
-    value('`"Hello"`', 'Hello');
-    value('`{object}`', {
-      msg: '👋',
-      list: [1, [{ msg: 'two' }], 'three'],
-      count: 123,
-      foo: false,
+      dev.boolean((btn) =>
+        btn
+          .label('showRootSummary')
+          .value((e) => e.state.showRootSummary ?? ObjectView.DEFAULTS.showRootSummary)
+          .onClick((e) => e.change((d) => Dev.toggle(d, 'showRootSummary'))),
+      );
     });
-    value('`[array]`', [1, 'two', { id: 'three' }, true]);
+
     dev.hr();
 
-    dev
-      .button((btn) =>
+    dev.section('Configurations', (e) => {
+      dev.boolean((btn) =>
+        btn
+          .label('name')
+          .value((e) => Boolean(e.state.name))
+          .onClick((e) => {
+            const next = e.state.current.name ? undefined : initial.name;
+            e.change((d) => (d.name = next));
+          }),
+      );
+
+      dev.hr();
+
+      dev.button((btn) =>
         btn.label('theme: Light').onClick((e) => {
           e.change((d) => (d.theme = 'Light'));
           dev.theme('Light');
         }),
-      )
-      .button((btn) =>
+      );
+      dev.button((btn) =>
         btn.label('theme: Dark').onClick((e) => {
           e.change((draft) => (draft.theme = 'Dark'));
           dev.theme('Dark');
         }),
-      )
-      .hr();
+      );
 
-    dev.button((btn) => btn.label('expand = 99').onClick((e) => e.change((e) => (e.expand = 99))));
-    dev.button((btn) => btn.label('expand = 1').onClick((e) => e.change((e) => (e.expand = 1))));
+      dev.hr();
+
+      dev
+        .button((btn) => {
+          btn.label('expand = 99').onClick((e) => e.change((e) => (e.expand = 99)));
+        })
+        .button((btn) => {
+          btn.label('expand = 1').onClick((e) => e.change((e) => (e.expand = 1)));
+        });
+    });
+
+    dev.hr();
+
+    dev.section('Data', (dev) => {
+      const value = (label: string, data: any) => {
+        dev.button(label, (e) => e.change((d) => (d.data = data)));
+      };
+      value('`undefined`', undefined);
+      value('`null`', null);
+      dev.hr();
+      value('`true`', true);
+      value('`123`', 123);
+      value('`"Hello"`', 'Hello');
+      dev.hr();
+      value('`{object}`', initial.data);
+      value('`[array]`', [1, 'two', { id: 'three' }, [true, 'four', () => null]]);
+    });
+
+    dev.hr();
   });
 });

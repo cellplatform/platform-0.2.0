@@ -52,7 +52,7 @@ function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
         if (typeof args[1] === 'function') {
           api.section(args[1]);
         } else {
-          api.TODO();
+          api.TODO(`"${args[0] ?? 'Unnamed'}" section`);
         }
       }
       if (typeof args[0] === 'function') {

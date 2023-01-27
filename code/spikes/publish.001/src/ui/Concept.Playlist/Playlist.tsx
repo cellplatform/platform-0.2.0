@@ -5,6 +5,7 @@ import { Header } from './ui.Header';
 
 export type PlaylistProps = {
   title?: string;
+  subtitle?: string;
   preview?: t.PlaylistPreview;
   items?: t.PlaylistItem[];
   style?: t.CssValue;
@@ -12,7 +13,7 @@ export type PlaylistProps = {
 };
 
 export const Playlist: React.FC<PlaylistProps> = (props) => {
-  const { title = 'Untitled Playlist' } = props;
+  const { title = 'Untitled List' } = props;
   const totalSecs = Wrangle.totalSeconds(props.items);
 
   /**
@@ -29,7 +30,7 @@ export const Playlist: React.FC<PlaylistProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Header title={title} preview={props.preview} />
+      <Header title={title} subtitle={props.subtitle} preview={props.preview} />
       <Body items={props.items} onClick={props.onClick} />
       <Footer totalSecs={totalSecs} />
     </div>

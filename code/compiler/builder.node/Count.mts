@@ -1,4 +1,13 @@
 import { t, pc, fs, LogTable, prettybytes } from './common/index.mjs';
+// import * as PkgJson from '../../../package.json' assert { type: 'json' };
+
+// const Pkg = PkgJson as t.PkgJson;
+const Pkg = (await fs.readJson(fs.resolve('./package.json'))) as t.PkgJson;
+
+const DEFAULT = {
+  pattern: 'src/**/*.{mts,ts,tsx}',
+  exclude: ['/node_modules/', '/dist/', '/tmp/', '/.tmp/'],
+};
 
 export type Total = { lines: number; bytes: number };
 export type PathCount = { path: t.PathString } & Total;
@@ -11,7 +20,7 @@ export type DirCount = {
 
 const Find = {
   async moduleDirs(within: t.DirString) {
-    const excludeDirs = Filter.exclude(['/node_modules/', '/dist/', '/tmp']);
+    const excludeDirs = Filter.exclude(['/node_modules/', '/dist/', '/dist.cell/', '/tmp']);
     const pattern = fs.join(within, '**/package.json');
     const paths = (await fs.glob(pattern)).filter(excludeDirs);
     return paths.map((path) => fs.dirname(path));
@@ -66,8 +75,8 @@ export const Count = {
     const count: DirCount = {
       paths: [],
       dir,
-      pattern: options.pattern ?? 'src/**/*.{mts,ts,tsx}',
-      exclude: options.exclude ?? ['/node_modules/', '/dist/', '/tmp/', '/.tmp/'],
+      pattern: options.pattern ?? DEFAULT.pattern,
+      exclude: options.exclude ?? DEFAULT.exclude,
     };
 
     const exclude = Filter.exclude(count.exclude);
@@ -90,17 +99,20 @@ export const Count = {
   /**
    * Logging helpers
    */
-  log(input: DirCount | DirCount[], options: { base?: t.DirString } = {}) {
-    const { base = '' } = options;
+  log(input: DirCount | DirCount[], options: { base?: t.DirString } & Options = {}) {
+    const { base = '', exclude = DEFAULT.exclude, pattern = DEFAULT.pattern } = options;
     const dirs = Array.isArray(input) ? input : [input];
     const table = LogTable();
 
+    table.push([' Module (Source Code)', `  Size`, '  Files', '  Lines'].map(pc.white));
+    table.push([]);
+
     const add = (dir: string, files: number, lines: number, bytes: number) => {
       if (base && dir.startsWith(base)) dir = dir.substring(base.length);
-      const path = `  • ${fs.dirname(dir)}/${pc.white(fs.basename(dir))}`;
-      const totalSize = `  ${prettybytes(bytes)}`;
-      const totalFiles = `      ${files}`;
-      const totalLines = `  ${pc.gray(lines.toLocaleString())}`;
+      const path = `   ${fs.dirname(dir.substring(1))}/${pc.white(fs.basename(dir))}`;
+      const totalSize = `   /src ${prettybytes(bytes)}  `;
+      const totalFiles = `   ${files}`;
+      const totalLines = `   ${pc.gray(lines.toLocaleString())}`;
       table.push([path, totalSize, totalFiles, totalLines]);
     };
 
@@ -110,16 +122,22 @@ export const Count = {
     });
 
     const total = Sum.dir(dirs);
-    const totalBytes = `  ${pc.white(prettybytes(total.bytes))}`;
-    const totalFiles = `  ${pc.white(total.files.toLocaleString())} files`;
-    const totalLines = `  ${pc.bold(pc.green(total.lines.toLocaleString()))} lines-of-code`;
+    const totalBytes = `   ${pc.white(prettybytes(total.bytes))}`;
+    const totalFiles = `  ${pc.white(total.files.toLocaleString())}`;
+    const totalLines = `  ${pc.bold(pc.green(total.lines.toLocaleString()))}`;
     table.push([]);
     table.push(['', totalBytes, totalFiles, totalLines]);
 
     console.info();
-    console.info(`${pc.bold('  Modules ')}`);
+    console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));
+    console.info(pc.gray(`match:   ${pc.green(pattern)}`));
     console.info();
+
     console.info(pc.gray(table.toString()));
+    console.info();
+
+    console.info(pc.gray(`repository: ${pc.cyan(Pkg.name)}`));
+    console.info(pc.gray(`   version: ${pc.white(pc.bold(Pkg.version))}`));
     console.info();
   },
 };

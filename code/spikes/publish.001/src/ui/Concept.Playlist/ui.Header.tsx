@@ -2,6 +2,7 @@ import { Color, COLORS, css, t } from '../common';
 
 export type HeaderProps = {
   title: string;
+  subtitle?: string;
   preview?: t.PlaylistPreview;
   style?: t.CssValue;
 };
@@ -17,6 +18,8 @@ export const Header: React.FC<HeaderProps> = (props) => {
       boxSizing: 'border-box',
       PaddingX: 25,
       paddingBottom: 25,
+    }),
+    top: css({
       display: 'grid',
       userSelect: 'none',
       gridTemplateColumns: '1fr auto',
@@ -35,6 +38,13 @@ export const Header: React.FC<HeaderProps> = (props) => {
       fontSize: 28,
       userSelect: 'text',
     }),
+    subtitle: css({
+      marginTop: 20,
+      fontSize: 28,
+      color: Color.alpha(COLORS.DARK, 0.3),
+      userSelect: 'text',
+    }),
+
     preview: {
       image: css({
         backgroundColor: COLORS.WHITE,
@@ -63,13 +73,16 @@ export const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>
-        <div {...styles.title}>{props.title}</div>
+      <div {...styles.top}>
+        <div {...styles.left}>
+          <div {...styles.title}>{props.title}</div>
+        </div>
+        <div {...styles.right}>
+          <div {...styles.preview.image}></div>
+          {preview.title && <div {...styles.preview.title}>{preview.title}</div>}
+        </div>
       </div>
-      <div {...styles.right}>
-        <div {...styles.preview.image}></div>
-        {preview.title && <div {...styles.preview.title}>{preview.title}</div>}
-      </div>
+      {props.subtitle && <div {...styles.subtitle}>{props.subtitle}</div>}
     </div>
   );
 };

@@ -1,6 +1,3 @@
-import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-
 import { rx, slug, t } from '../common/index.mjs';
 import { Is } from './Is.mjs';
 
@@ -29,7 +26,7 @@ export const WorkerPump = {
   }): t.WorkerPump {
     const { worker, bus, dispose$ } = args;
     const id = DEFAULTS.MAIN;
-    const message$ = new Subject<MessageEvent>();
+    const message$ = new rx.Subject<MessageEvent>();
     const originalOnMessage = args.worker.onmessage;
     args.worker.onmessage = (e) => {
       if (originalOnMessage) originalOnMessage.call(worker as any, e);
@@ -53,7 +50,7 @@ export const WorkerPump = {
     if (!id) throw new Error(`Workers must have an id (no "name" value found)`);
     if (id === DEFAULTS.MAIN) throw new Error(`Worker name (id) cannot be "Main"`);
 
-    const message$ = new Subject<MessageEvent>();
+    const message$ = new rx.Subject<MessageEvent>();
     ctx.addEventListener('message', (message) => message$.next(message));
     return monitor({ id, bus, dispose$, message$, post: (e) => ctx.postMessage(e) });
   },
@@ -85,10 +82,10 @@ function monitor(args: {
    */
   args.message$
     .pipe(
-      takeUntil(dispose$),
-      map((e) => e.data as t.NetworkMessageEvent),
-      filter((e) => Is.messageEvent(e)),
-      filter((e) => (typeof e.payload.target === 'string' ? e.payload.target === id : true)),
+      rx.takeUntil(dispose$),
+      rx.map((e) => e.data as t.NetworkMessageEvent),
+      rx.filter((e) => Is.messageEvent(e)),
+      rx.filter((e) => (typeof e.payload.target === 'string' ? e.payload.target === id : true)),
     )
     .subscribe((e) => {
       bus.fire(e);
@@ -99,8 +96,8 @@ function monitor(args: {
    */
   rx.event<t.NetworkMessageEvent>(bus.$, 'sys.net/msg')
     .pipe(
-      takeUntil(dispose$),
-      filter((e) => e.payload.sender === id), // NB: Ensure only sending messages from this events originating on this context.
+      rx.takeUntil(dispose$),
+      rx.filter((e) => e.payload.sender === id), // NB: Ensure only sending messages from this events originating on this context.
     )
     .subscribe((e) => {
       args.post(e);

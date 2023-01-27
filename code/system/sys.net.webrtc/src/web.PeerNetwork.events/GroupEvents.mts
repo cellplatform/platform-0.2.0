@@ -1,5 +1,4 @@
-import { firstValueFrom, Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 
 import { Module, rx, slug, t } from '../common';
 import { EventNamespace as ns } from './ns.mjs';
@@ -14,13 +13,13 @@ export function GroupEvents(eventbus: t.PeerNetbus<any>): t.GroupEvents {
   const module = Module.info;
   const netbus = eventbus as t.PeerNetbus<t.GroupEvent>;
   const source = netbus.self;
-  const dispose$ = new Subject<void>();
+  const dispose$ = new rx.Subject<void>();
   const dispose = () => dispose$.next();
 
   const event$ = netbus.$.pipe(
-    takeUntil(dispose$),
-    filter(ns.is.group.base),
-    map((e) => e as t.GroupEvent),
+    rx.takeUntil(dispose$),
+    rx.filter(ns.is.group.base),
+    rx.map((e) => e as t.GroupEvent),
   );
 
   const connections = {
@@ -45,7 +44,7 @@ export function GroupEvents(eventbus: t.PeerNetbus<any>): t.GroupEvents {
       if (total === 0) return { local, remote: [], pending: [] };
 
       const tx = slug();
-      const res = firstValueFrom(connections.res$.pipe(filter((e) => e.tx === tx)));
+      const res = firstValueFrom(connections.res$.pipe(rx.filter((e) => e.tx === tx)));
       netbus.target.local({
         type: 'sys.net/group/connections:req',
         payload: { source, targets, tx },

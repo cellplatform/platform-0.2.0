@@ -89,7 +89,7 @@ const View: React.FC<VideoDiagramVimeoProps> = (props) => {
     base: css({
       position: 'relative',
       Flex: 'x-stretch-stretch',
-      opacity: baseOpacity,
+      opacity: dimmed ? 0.4 : baseOpacity,
       transition: `opacity 300ms`,
       overflow: 'hidden',
     }),

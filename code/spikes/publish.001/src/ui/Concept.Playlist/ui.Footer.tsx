@@ -15,7 +15,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
    */
   const styles = {
     base: css({
-      minHeight: 60,
+      minHeight: 70,
       display: 'grid',
       gridTemplateRows: '1fr auto',
       userSelect: 'none',
@@ -42,11 +42,11 @@ export const Footer: React.FC<FooterProps> = (props) => {
       <div></div>
       <div {...styles.bottom}>
         <div {...styles.bottomLeft} />
-        {
+        {duration.secs > 0 && (
           <div {...styles.bottomRight}>
             <div {...styles.duration}>{duration ? duration.toString() : '(empty)'}</div>
           </div>
-        }
+        )}
       </div>
     </div>
   );
@@ -57,13 +57,15 @@ export const Footer: React.FC<FooterProps> = (props) => {
  */
 const Wrangle = {
   duration(props: FooterProps) {
-    const duration = props.totalSecs ? Time.duration(props.totalSecs * 1000) : undefined;
+    const secs = props.totalSecs ?? 0;
+    const duration = secs ? Time.duration(secs * 1000) : undefined;
     return {
+      secs,
       toString() {
-        const minutes = Value.round(duration?.min ?? 0, 0);
-        return minutes < 1
-          ? `(under a minute)`
-          : `${minutes} ${Value.plural(minutes, 'min', 'mins')} (total)`;
+        const mins = Value.round(duration?.min ?? 0, 0);
+        return secs < 60
+          ? `${secs} ${Value.plural(secs, 'sec', 'secs')} (total)`
+          : `${mins} ${Value.plural(mins, 'min', 'mins')} (total)`;
       },
     };
   },

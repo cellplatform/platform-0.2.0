@@ -2,7 +2,8 @@ import EditorReact from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useEffect, useRef } from 'react';
 
-import { css, t } from '../common';
+import { css, t, FC } from '../common';
+import { LANGUAGES, DEFAULTS } from './const.mjs';
 
 import type { OnChange } from '@monaco-editor/react';
 
@@ -16,12 +17,14 @@ export type MonacoEditorProps = {
   text?: string;
   language?: t.EditorLanguage;
   focusOnLoad?: boolean;
+  tabSize?: number;
   style?: t.CssValue;
   onChange?: (e: { text: string }) => void;
+  onReady?: (e: { editor: MonacoEditor; monaco: Monaco }) => void;
 };
 
-export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
-  const { text, language = 'markdown' } = props;
+const View: React.FC<MonacoEditorProps> = (props) => {
+  const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize } = props;
   const editorRef = useRef<MonacoEditor>();
 
   /**
@@ -35,12 +38,20 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
     }
   }, [text]);
 
+  useEffect(() => {
+    editorRef.current?.getModel()?.updateOptions({ tabSize });
+  }, [tabSize]);
+
   /**
    * [Handlers]
    */
   function handleEditorDidMount(editor: MonacoEditor, monaco: Monaco) {
     editorRef.current = editor;
+
+    editor.getModel()?.updateOptions({ tabSize });
+
     if (props.focusOnLoad) editor.focus();
+    props.onReady?.({ editor, monaco });
   }
 
   const handleChange: OnChange = (text = '') => {
@@ -69,3 +80,16 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  languages: typeof LANGUAGES;
+};
+export const MonacoEditor = FC.decorate<MonacoEditorProps, Fields>(
+  View,
+  { DEFAULTS, languages: LANGUAGES },
+  { displayName: 'MonacoEditor' },
+);

@@ -1,5 +1,5 @@
-import { useSizeObserver } from 'sys.ui.react.util';
-import { css, Dev } from '..';
+import { useSizeObserver } from '.';
+import { css, Dev } from '../../test.ui';
 
 export default Dev.describe('hook.useSizeObserver', (e) => {
   e.it('init', async (e) => {

@@ -1,3 +1,4 @@
+import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 import { MdFace, MdPortableWifiOff, MdVisibility, MdVisibilityOff, MdWifi } from 'react-icons/md';
 import { RiFileCopyFill } from 'react-icons/ri';
 
@@ -13,4 +14,5 @@ export const Icons = {
   Face: icon(MdFace),
   Copy: icon(RiFileCopyFill),
   Visibility: { On: icon(MdVisibility), Off: icon(MdVisibilityOff) },
+  Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
 };

@@ -1,6 +1,3 @@
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-
 import { DEFAULT, Patch, Pkg, rx, t } from './common.mjs';
 import { JsonBusEvents } from './JsonBus.Events.mjs';
 
@@ -18,7 +15,7 @@ type Cache = { [key: string]: any };
 export function JsonBusController(args: {
   instance: t.JsonBusInstance;
   filter?: t.JsonEventFilter;
-  dispose$?: Observable<any>;
+  dispose$?: t.Observable<any>;
 }) {
   const bus = rx.busAsType<t.JsonEvent>(args.instance.bus);
   const instance = args.instance.id;
@@ -30,8 +27,8 @@ export function JsonBusController(args: {
   });
   const { dispose, dispose$ } = events;
 
-  const _changed$ = new Subject<t.JsonStateChange>();
-  const changed$ = _changed$.pipe(takeUntil(dispose$));
+  const _changed$ = new rx.Subject<t.JsonStateChange>();
+  const changed$ = _changed$.pipe(rx.takeUntil(dispose$));
   changed$.subscribe((change) =>
     bus.fire({
       type: 'sys.json/state:changed',

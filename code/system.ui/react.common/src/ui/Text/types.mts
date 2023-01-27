@@ -1,10 +1,12 @@
 import type { t } from '../common.t';
 
+type StringOrNumber = number | string;
+
 export type TextStyle = {
-  align?: 'Left' | 'Center' | 'Right';
-  fontWeight?: 'Light' | 'Normal' | 'Bold';
+  align?: 'left' | 'center' | 'right';
+  fontWeight?: 'light' | 'normal' | 'bold';
   italic?: boolean;
-  textShadow?: string | Array<number | string>; // [0:offset-y, 1:color.format()]
+  textShadow?: string | [StringOrNumber, StringOrNumber]; // [0:offset-y, 1:color.format()]
   uppercase?: boolean;
 
   color?: t.CssValue['color'];

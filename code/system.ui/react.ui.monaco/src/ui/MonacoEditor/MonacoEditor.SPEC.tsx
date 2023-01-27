@@ -1,11 +1,13 @@
 import { t, Dev } from '../../test.ui';
 import { MonacoEditor, MonacoEditorProps } from '.';
 
-type T = { count: number; props: MonacoEditorProps };
+const DEFAULTS = MonacoEditor.DEFAULTS;
+
+type T = { props: MonacoEditorProps };
 const initial: T = {
-  count: 0,
   props: {
-    language: 'markdown',
+    language: DEFAULTS.language,
+    tabSize: DEFAULTS.tabSize,
     focusOnLoad: true,
   },
 };
@@ -19,8 +21,7 @@ export default Dev.describe('MonacoEditor', (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = e.state.props;
-        console.log('render', props);
-        return <MonacoEditor {...props} />;
+        return <MonacoEditor {...props} onReady={(e) => console.info(`⚡️ onReady:`, e)} />;
       });
   });
 
@@ -31,14 +32,22 @@ export default Dev.describe('MonacoEditor', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
 
-    const language = (value: t.EditorLanguage) => {
-      dev.button(`${value}`, (e) => e.change((d) => (d.props.language = value)));
-    };
+    dev.section('Language', (dev) => {
+      const language = (name: t.EditorLanguage) => {
+        dev.button(`${name}`, (e) => e.change((d) => (d.props.language = name)));
+      };
 
-    dev.title('Language');
-    language('markdown');
-    language('typescript');
-    language('javascript');
-    language('yaml');
+      MonacoEditor.languages.forEach((name) => language(name));
+      dev.hr();
+    });
+
+    dev.section('Options', (dev) => {
+      const tabSize = (size: number) =>
+        dev.button(`tabSize: ${size}`, (e) => {
+          e.change((d) => (d.props.tabSize = size));
+        });
+      tabSize(2);
+      tabSize(4);
+    });
   });
 });

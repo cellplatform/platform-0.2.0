@@ -2,9 +2,9 @@ import { Playlist, PlaylistProps } from '.';
 import { Dev, t } from '../../test.ui';
 
 const ITEMS: t.PlaylistItem[] = [
-  { text: 'Credibly neutral protocols as public goods.', secs: 120 },
-  { text: 'Why did "web2" (centralization) happen?', secs: 62 },
-  { text: 'The blockchain trilemma.', secs: 530 },
+  { text: 'Credibly neutral protocols as public goods.', secs: 32 },
+  { text: 'Why did "web2" (centralization) happen?', secs: 45 },
+  { text: 'The blockchain trilemma.', secs: 345 },
   { text: 'Blockchain trade-offs.', secs: 125 },
   { text: 'Self-sovereign identity.', secs: 624 },
   { text: 'Individual control.', secs: 342 },
@@ -71,6 +71,14 @@ export default Dev.describe('Video.Playlist', (e) => {
       .hr();
 
     dev.section('Configurations', (e) => {
+      dev.button('reset: <empty>', (e) => {
+        e.change(({ props }) => {
+          props.title = undefined;
+          props.preview = undefined;
+          props.items = undefined;
+        });
+      });
+
       dev.button('reset: `{initial}`', (e) => {
         e.change((d) => {
           /**
@@ -84,57 +92,82 @@ export default Dev.describe('Video.Playlist', (e) => {
         });
       });
 
-      dev.button('reset: <empty>', (e) => {
-        e.change(({ props }) => {
-          props.title = undefined;
-          props.preview = undefined;
-          props.items = undefined;
+      dev.hr();
+
+      dev.section('Titles', (dev) => {
+        dev.boolean((btn) =>
+          btn
+            .label(`preview.title: "${initial.props.preview?.title}"`)
+            .value((e) => Boolean(e.state.props.preview?.title))
+            .onClick((e) => {
+              e.change((d) => {
+                const preview = d.props.preview ?? (d.props.preview = {});
+                const next = preview.title ? undefined : initial.props.preview?.title;
+                preview.title = next;
+                e.label(`preview.title: ${next ? `"${next}"` : '<undefined>'}`);
+              });
+            }),
+        );
+
+        dev.hr();
+
+        dev
+          .button('title: `undefined`', (e) => {
+            e.change((d) => (d.props.title = undefined));
+          })
+          .button('title: short ("Hello world")', (e) => {
+            e.change((d) => (d.props.title = 'Hello world.'));
+          })
+          .button('title: short ("👋")', (e) => {
+            e.change((d) => (d.props.title = 'Hello 👋'));
+          })
+          .button('title: long', (e) => {
+            e.change((d) => (d.props.title = dev.lorem(20, '.')));
+          });
+
+        dev.boolean((btn) =>
+          btn
+            .label(`subtitle`)
+            .value((e) => Boolean(e.state.props.subtitle))
+            .onClick((e) => {
+              e.change((d) => {
+                const current = d.props.subtitle;
+                const next = current ? undefined : Dev.Lorem.words(18, '.');
+                d.props.subtitle = next;
+              });
+            }),
+        );
+
+        dev.hr();
+      });
+
+      dev.section('Items', () => {
+        dev.section((dev) => {
+          const set = (items: T['props']['items']) => {
+            const total = items?.length ?? 0;
+            const label = `set: items (${total > 1 ? '..' : ''}${total})`;
+            dev.button(label, (e) => e.change((d) => (d.props.items = items)));
+          };
+          set([]);
+          set([ITEMS[0]]);
+          set(ITEMS);
         });
+
+        dev
+          .hr()
+          .button('remove: first', (e) =>
+            e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
+          )
+          .button('remove: last', (e) =>
+            e.change((d) => {
+              const items = d.props.items || [];
+              d.props.items = items.slice(0, items.length - 1);
+            }),
+          )
+          .button('(clear)', (e) => e.change((d) => (d.props.items = undefined)));
       });
 
       dev.hr();
-
-      dev.boolean((btn) =>
-        btn
-          .label(`preview.title: "${initial.props.preview?.title}"`)
-          .value((e) => Boolean(e.state.props.preview?.title))
-          .onClick((e) => {
-            e.change((d) => {
-              const preview = d.props.preview ?? (d.props.preview = {});
-              const next = preview.title ? undefined : initial.props.preview?.title;
-              preview.title = next;
-              e.label(`preview.title: ${next ? `"${next}"` : '<undefined>'}`);
-            });
-          }),
-      );
-
-      dev.hr();
-
-      dev.button('title: long', (e) => e.change((d) => (d.props.title = dev.lorem(20, '.'))));
-      dev.button('title: short - "Hello world"', (e) =>
-        e.change((d) => (d.props.title = 'Hello world.')),
-      );
-
-      dev.hr();
-
-      dev.title('Items');
-      dev
-        .button(`set: items (0)`, (e) => e.change((d) => (d.props.items = [])))
-        .button(`set: items (1)`, (e) => e.change((d) => (d.props.items = [ITEMS[0]])))
-        .button(`set: items (..${ITEMS.length})`, (e) => e.change((d) => (d.props.items = ITEMS)))
-        .hr()
-        .button('remove: first', (e) =>
-          e.change((d) => (d.props.items = (d.props.items || []).slice(1))),
-        )
-        .button('remove: last', (e) =>
-          e.change((d) => {
-            const items = d.props.items || [];
-            d.props.items = items.slice(0, items.length - 1);
-          }),
-        )
-        .button('(clear)', (e) => e.change((d) => (d.props.items = undefined)));
     });
-
-    dev.hr();
   });
 });

@@ -14,7 +14,7 @@ export const HostComponent: React.FC<HostComponentProps> = (props) => {
   const renderer = component?.renderer;
   const { element } = useRenderer(instance, renderer);
 
-  if (!component || !element) return null;
+  if (!component || !element) return <div />;
 
   /**
    * [Render]
