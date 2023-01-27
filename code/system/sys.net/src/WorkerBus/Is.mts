@@ -1,7 +1,4 @@
-import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-
-import { rx, slug, t } from '../common/index.mjs';
+import { rx, t } from '../common/index.mjs';
 
 /**
  * Boolean checks (flags).

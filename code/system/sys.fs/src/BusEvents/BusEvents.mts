@@ -1,5 +1,3 @@
-import { filter, takeUntil } from 'rxjs/operators';
-
 import { BusEventsFs } from './BusEvents.Fs.mjs';
 import { BusEventsIndexer } from './BusEvents.Indexer.mjs';
 import { BusEventsIo } from './BusEvents.Io.mjs';
@@ -29,9 +27,9 @@ export function BusEvents(args: {
   const timeout = toTimeout();
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, id)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, id)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   const changed$ = rx.payload<t.FsBusChangedEvent>($, 'sys.fs/changed');

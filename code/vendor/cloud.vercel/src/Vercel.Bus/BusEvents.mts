@@ -1,5 +1,5 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
-import { catchError, filter, takeUntil } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { rx, slug, t, DEFAULT } from './common.mjs';
 
@@ -20,9 +20,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, instance)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, instance)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**
@@ -37,7 +37,7 @@ export function BusEvents(args: {
 
       const first = firstValueFrom(
         info.res$.pipe(
-          filter((e) => e.tx === tx),
+          rx.filter((e) => e.tx === tx),
           timeout(msecs),
           catchError(() => of(`ModuleInfo request timed out after ${msecs} msecs`)),
         ),

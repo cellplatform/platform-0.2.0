@@ -22,9 +22,9 @@ export function BusEvents(args: {
   const is = BusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, id)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, id)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   /**

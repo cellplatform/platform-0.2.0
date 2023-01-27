@@ -1,5 +1,3 @@
-import { filter, map, takeUntil } from 'rxjs/operators';
-
 import { DEFAULT, Patch, rx, slug, t } from './common.mjs';
 
 type J = Record<string, unknown>;
@@ -29,14 +27,14 @@ export function JsonBusEvents(args: {
   const is = JsonBusEvents.is;
 
   const $ = bus.$.pipe(
-    takeUntil(dispose$),
-    filter((e) => is.instance(e, instance)),
-    filter((e) => args.filter?.(e) ?? true),
+    rx.takeUntil(dispose$),
+    rx.filter((e) => is.instance(e, instance)),
+    rx.filter((e) => args.filter?.(e) ?? true),
   );
 
   const changed$ = rx
     .payload<t.JsonStateChangedEvent>($, 'sys.json/state:changed')
-    .pipe(map((e) => e.change));
+    .pipe(rx.map((e) => e.change));
 
   /**
    * Base information about the module.
@@ -49,7 +47,7 @@ export function JsonBusEvents(args: {
       const tx = slug();
 
       const op = 'info';
-      const res$ = info.res$.pipe(filter((e) => e.tx === tx));
+      const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
       const first = rx.asPromise.first<t.JsonInfoResEvent>(res$, { op, timeout });
 
       bus.fire({
@@ -80,7 +78,7 @@ export function JsonBusEvents(args: {
 
       const fire = async (): Promise<R> => {
         const op = 'state.get';
-        const res$ = get.res$.pipe(filter((e) => e.tx === tx && e.key === key));
+        const res$ = get.res$.pipe(rx.filter((e) => e.tx === tx && e.key === key));
         const first = rx.asPromise.first<t.JsonStateGetResEvent>(res$, { op, timeout });
         bus.fire({
           type: 'sys.json/state.get:req',
@@ -123,7 +121,7 @@ export function JsonBusEvents(args: {
       const { timeout = DEFAULT.TIMEOUT, key = DEFAULT.KEY, tx = slug() } = options;
 
       const op = 'state.put';
-      const res$ = put.res$.pipe(filter((e) => e.tx === tx && e.key === key));
+      const res$ = put.res$.pipe(rx.filter((e) => e.tx === tx && e.key === key));
       const first = rx.asPromise.first<t.JsonStatePutResEvent>(res$, { op, timeout });
 
       bus.fire({
@@ -165,7 +163,7 @@ export function JsonBusEvents(args: {
       }
 
       const op = 'state.patch';
-      const res$ = patch.res$.pipe(filter((e) => e.tx === tx && e.key === key));
+      const res$ = patch.res$.pipe(rx.filter((e) => e.tx === tx && e.key === key));
       const first = rx.asPromise.first<t.JsonStatePatchResEvent>(res$, { op, timeout });
 
       const change = await Patch.changeAsync<T>(value as any, fn);
@@ -200,7 +198,7 @@ export function JsonBusEvents(args: {
     const nil = (value: any) => typeof value !== 'object' || value === null;
 
     const lens: t.JsonLens<L> = {
-      $: args.root.$.pipe(map((e) => args.target(e.value))),
+      $: args.root.$.pipe(rx.map((e) => args.target(e.value))),
 
       get current() {
         return args.target(args.root.current);
@@ -237,8 +235,8 @@ export function JsonBusEvents(args: {
     const { key = DEFAULT.KEY } = args;
 
     const $ = changed$.pipe(
-      filter((e) => e.key === key),
-      map((e) => e as t.JsonStateChange<T>),
+      rx.filter((e) => e.key === key),
+      rx.map((e) => e as t.JsonStateChange<T>),
     );
 
     let _current: T | undefined;
