@@ -5,6 +5,9 @@ import { SpecListTitle } from './SpecList.Title';
 import { SpecListFooter } from './SpecList.Footer';
 import { shouldShowHr } from './calc.mjs';
 
+import type { IconType } from 'react-icons';
+import { VscSymbolClass } from 'react-icons/vsc';
+
 const KEY = { DEV: 'dev' };
 
 export type Imports = { [namespace: string]: () => Promise<any> };
@@ -46,6 +49,18 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
     }),
     li: css({}),
+    row: {
+      base: css({
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+      }),
+      icon: css({
+        marginRight: 10,
+        display: 'grid',
+        placeItems: 'center',
+      }),
+      label: css({}),
+    },
     hr: css({
       border: 'none',
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
@@ -68,9 +83,13 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
   const createItem = (
     i: number,
     address: string | undefined,
-    title?: string,
-    isDimmed?: boolean,
+    options: {
+      title?: string;
+      isDimmed?: boolean;
+      icon?: IconType;
+    } = {},
   ) => {
+    const { isDimmed, title, icon: Icon } = options;
     const isLast = i >= importsKeys.length - 1;
     const beyondBounds = i === -1 ? true : i > importsKeys.length - 1;
     const url = new URL(window.location.href);
@@ -88,12 +107,17 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
       paddingRight: beyondBounds ? 0 : 50,
     };
 
+    const elIcon = Icon && <Icon />;
+
     return (
       <Fragment key={`item-${i}`}>
         <li {...css(styles.li, style)}>
           {showHr && <hr {...styles.hr} />}
           <a href={url.href} {...css(styles.link, isDimmed ? styles.linkDimmed : undefined)}>
-            {title ?? address}
+            <div {...styles.row.base}>
+              <div {...styles.row.icon}>{elIcon}</div>
+              <div {...styles.row.label}>{title ?? address}</div>
+            </div>
           </a>
         </li>
       </Fragment>
@@ -102,10 +126,10 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
 
   const elList = (
     <ul {...styles.ul}>
-      {importsKeys.map((key, i) => createItem(i, key))}
+      {importsKeys.map((key, i) => createItem(i, key, { icon: VscSymbolClass }))}
       <hr {...css(styles.hrDashed, { marginTop: 30 })} />
-      {hasDevParam && createItem(-1, undefined, '?dev - remove param', true)}
-      {!hasDevParam && createItem(-1, 'true', '?dev - add param', true)}
+      {hasDevParam && createItem(-1, undefined, { title: '?dev - remove param', isDimmed: true })}
+      {!hasDevParam && createItem(-1, 'true', { title: '?dev - add param', isDimmed: true })}
     </ul>
   );
 
