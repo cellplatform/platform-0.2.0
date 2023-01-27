@@ -1,7 +1,5 @@
 import { t, pc, fs, LogTable, prettybytes } from './common/index.mjs';
-// import * as PkgJson from '../../../package.json' assert { type: 'json' };
 
-// const Pkg = PkgJson as t.PkgJson;
 const Pkg = (await fs.readJson(fs.resolve('./package.json'))) as t.PkgJson;
 
 const DEFAULT = {
