@@ -31,7 +31,7 @@ export type DevEvents = t.Disposable & {
   load: {
     req$: t.Observable<t.DevLoadReq>;
     res$: t.Observable<t.DevLoadRes>;
-    fire(bundle?: t.SpecImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
+    fire(bundle?: t.BundleImport, options?: { timeout?: Milliseconds }): Promise<t.DevLoadRes>;
   };
   run: {
     req$: t.Observable<t.DevRunReq>;
@@ -148,7 +148,7 @@ export type DevLoadReqEvent = {
   type: 'sys.dev/load:req';
   payload: DevLoadReq;
 };
-export type DevLoadReq = { tx: string; instance: Id; bundle?: t.SpecImport };
+export type DevLoadReq = { tx: string; instance: Id; bundle?: t.BundleImport };
 
 export type DevLoadResEvent = {
   type: 'sys.dev/load:res';

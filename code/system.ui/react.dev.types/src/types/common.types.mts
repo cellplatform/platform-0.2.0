@@ -10,7 +10,7 @@ export type { EventBus, Event, Disposable, Json, JsonMap, IgnoredResponse } from
 export type {
   TestModel,
   TestSuiteModel,
-  SpecImport,
+  BundleImport,
   TestSuiteRunResponse,
   TestHandlerArgs,
 } from 'sys.test.spec/src/types.mjs';

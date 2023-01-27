@@ -6,13 +6,12 @@ import { DevBus } from '../../logic.Bus';
 type Milliseconds = number;
 type Results = { ok: boolean; elapsed: Milliseconds; total: number; specs: ModuleResults[] };
 type ModuleResults = { ok: boolean; name: string; results?: t.TestSuiteRunResponse };
-type Imports = { [key: string]: () => t.SpecImport };
 
 /**
  * Run a set of tests headlessly.
  * Useful for running within a server-side test suite.
  */
-export async function headless(input: Imports): Promise<Results> {
+export async function headless(input: t.SpecImports): Promise<Results> {
   const timer = Time.timer();
   const imports = Object.values(input);
 

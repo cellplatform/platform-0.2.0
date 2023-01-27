@@ -54,7 +54,7 @@ export const WrangleUrl = {
   /**
    * Derive and load the module from the given URL.
    */
-  async module(url: URL, specs: t.Imports) {
+  async module(url: URL, specs: t.SpecImports) {
     const params = url.searchParams;
     if (!params.has(QS.DEV)) return undefined;
 
@@ -74,7 +74,7 @@ export const WrangleUrl = {
   /**
    * Match fields on the spec {Imports} object with the given query-string key name.
    */
-  moduleMatches(field: string, specs: t.Imports) {
+  moduleMatches(field: string, specs: t.SpecImports) {
     if (!field) return [];
     return Object.keys(specs)
       .filter((key) => key === field)

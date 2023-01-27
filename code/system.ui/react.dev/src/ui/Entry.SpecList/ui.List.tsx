@@ -4,7 +4,7 @@ import { Color, COLORS, css, KEY, t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
-  imports: t.Imports;
+  imports: t.SpecImports;
   url: URL;
   hrDepth?: number;
   style?: t.CssValue;
