@@ -9,7 +9,7 @@ type Id = string;
  * Hook: Setup and lifecycle of the event-bus controller.
  */
 export function useBusController(
-  options: { bus?: t.EventBus; id?: Id; bundle?: t.BundleImport; runOnLoad?: boolean } = {},
+  options: { bus?: t.EventBus; id?: Id; bundle?: t.SpecImport; runOnLoad?: boolean } = {},
 ) {
   const id = options.id ?? useRef(`dev.instance.${slug()}`).current;
   const bus = options.bus ?? useRef(rx.bus()).current;
