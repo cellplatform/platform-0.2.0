@@ -25,5 +25,14 @@ describe('YouTube', () => {
 
     test(' https://www.youtube.com/embed/abc?start=5 ', 'abc', 5);
     test(' https://youtu.be/URUJD5NEXC8?t=40 ', 'URUJD5NEXC8', 40);
+
+    test('https://www.youtube.com/watch?v=abc&t=39s', 'abc', 39);
+    test('https://www.youtube.com/watch?v=abc', 'abc');
+
+    test('', '');
+    test('https://www.youtube.com/watch?v=', '');
+    test('https://www.youtube.com/watch', '');
+    test('https://www.youtube.com/embed/', '');
+    test('https://youtu.be/', '');
   });
 });

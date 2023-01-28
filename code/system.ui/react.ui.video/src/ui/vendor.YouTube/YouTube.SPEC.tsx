@@ -1,12 +1,13 @@
-import { Dev } from '../../test.ui';
+import { css, Color, COLORS, Dev, TextInput } from '../../test.ui';
 import { YouTube, YouTubeProps } from '.';
 
-type T = { props: YouTubeProps };
+type T = { props: YouTubeProps; debug: { url?: string } };
 const initial: T = {
   props: {
     width: 550,
     height: 315,
   },
+  debug: {},
 };
 
 export default Dev.describe('YouTube', (e) => {
@@ -52,6 +53,37 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.button('load', (e) => {
       e.change(({ props }) => load(props));
+    });
+
+    dev.hr();
+
+    dev.title('Paste URL');
+    dev.row((e) => {
+      const styles = {
+        base: css({}),
+      };
+
+      const processUrl = async () => {
+        const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
+        if (id) {
+          await dev.change((d) => {
+            d.props.id = id;
+            d.props.start = start;
+          });
+        }
+      };
+
+      return (
+        <div {...styles.base}>
+          <TextInput
+            value={e.state.debug.url}
+            placeholder={'url'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
+            onEnter={processUrl}
+          />
+        </div>
+      );
     });
   });
 });

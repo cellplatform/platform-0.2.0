@@ -1,5 +1,6 @@
 export const DEFAULTS = {
   url: {
+    watch: 'https://www.youtube.com/watch?',
     embed: 'https://www.youtube.com/embed/',
     share: 'https://youtu.be/',
   },
