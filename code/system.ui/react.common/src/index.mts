@@ -39,5 +39,6 @@ export { Dev, DevTools, Spec } from './ui.dev';
  * Common up-stream modules.
  */
 export { FC } from 'sys.ui.react.util';
-export { css, Color, COLORS, rx } from './common';
+export { css, Style, Color, COLORS, rx } from './common';
+
 export type { CssValue } from './common/types.mjs';
