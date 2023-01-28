@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export { css, Color, COLORS, rx, Dev } from 'sys.ui.react.common';
+export { css, Color, COLORS, rx, Dev, IFrame } from 'sys.ui.react.common';
 export { RecordButton } from 'sys.ui.react.video';
 
 /**
