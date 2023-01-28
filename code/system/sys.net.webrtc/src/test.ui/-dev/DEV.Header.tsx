@@ -9,7 +9,7 @@ export type DevHeaderProps = {
 };
 
 export const DevHeader: React.FC<DevHeaderProps> = (props) => {
-  const { bus, recordButton = {} } = props;
+  const { bus, recordButton } = props;
 
   /**
    * [Render]
@@ -41,9 +41,11 @@ export const DevHeader: React.FC<DevHeaderProps> = (props) => {
         <div {...styles.screen}>
           <Icons.Cube size={80} color={Color.alpha(COLORS.DARK, 0.06)} />
         </div>
-        <div {...styles.recordButton}>
-          <RecordButton bus={bus} state={recordButton.state} />
-        </div>
+        {recordButton && (
+          <div {...styles.recordButton}>
+            <RecordButton bus={bus} state={recordButton?.state} />
+          </div>
+        )}{' '}
       </div>
     </div>
   );
