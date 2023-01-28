@@ -3,13 +3,11 @@ import { t, rx, Dev } from './common';
 
 type T = {
   results?: t.TestSuiteRunResponse;
-  dev: {
-    recordButton: {
-      state?: t.RecordButtonState;
-    };
+  local: {
+    recordButton?: { state?: t.RecordButtonState };
   };
 };
-const initial: T = { dev: { recordButton: {} } };
+const initial: T = { local: { recordButton: {} } };
 
 export default Dev.describe('TestRunner', (e) => {
   const bus = rx.bus();
@@ -24,8 +22,10 @@ export default Dev.describe('TestRunner', (e) => {
       .size('fill')
       .render<T>((e) => {
         return (
-          <div style={{ padding: 10 }}>
-            <Dev.TestRunner.Results data={e.state.results} />
+          <div>
+            <div style={{ padding: 10 }}>
+              <Dev.TestRunner.Results data={e.state.results} />
+            </div>
           </div>
         );
       });
@@ -38,7 +38,7 @@ export default Dev.describe('TestRunner', (e) => {
       .border(-0.1)
       .padding(0)
       .render<T>((e) => {
-        return <DevHeader bus={bus} recordButton={e.state.dev.recordButton} />;
+        return <DevHeader bus={bus} recordButton={e.state.local.recordButton} />;
       });
 
     dev.footer
@@ -53,7 +53,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
     };
 
-    dev.title('Specs');
+    dev.title('Test Suites');
     run('PeerNetbus', import('../web.PeerNetbus/PeerNetbus.SPEC.mjs'));
     run('PeerEvents', import('../web.PeerNetwork.events/PeerEvents.SPEC.mjs'));
 
@@ -61,10 +61,28 @@ export default Dev.describe('TestRunner', (e) => {
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
     dev.hr();
 
-    dev.section('Record Button (🐷)', () => {
+    dev.section('Record Button', (dev) => {
+      dev.TODO();
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (Boolean(e.state.local.recordButton) ? 'showing' : 'hidden'))
+          .value((e) => Boolean(e.state.local.recordButton))
+          .onClick((e) => {
+            e.change((d) => {
+              d.local.recordButton = e.current ? undefined : {};
+            });
+          }),
+      );
+
+      dev.hr();
+
       const rec = (state: t.RecordButtonState) => {
-        dev.button(`rec: ${state}`, async (e) => {
-          e.change((d) => (d.dev.recordButton.state = state));
+        dev.button(`state: ${state}`, async (e) => {
+          e.change((d) => {
+            const rec = d.local.recordButton || (d.local.recordButton = {});
+            rec.state = state;
+          });
         });
       };
       rec('default');
