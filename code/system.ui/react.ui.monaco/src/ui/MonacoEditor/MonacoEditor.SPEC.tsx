@@ -37,7 +37,14 @@ export default Dev.describe('MonacoEditor', (e) => {
         dev.button(`${name}`, (e) => e.change((d) => (d.props.language = name)));
       };
 
-      MonacoEditor.languages.forEach((name) => language(name));
+      language('typescript');
+      language('javascript');
+      dev.hr();
+      language('json');
+      language('yaml');
+      dev.hr();
+      language('markdown');
+
       dev.hr();
     });
 
