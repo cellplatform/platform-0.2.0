@@ -79,11 +79,15 @@ export default Dev.describe('TestRunner', (e) => {
       });
     };
 
+    dev.title('Filesystem');
+
+    dev.hr();
+
     // run('PeerNetbus', import('../web.PeerNetbus/PeerNetbus.SPEC.mjs'));
     // run('PeerEvents', import('../web.PeerNetwork.events/PeerEvents.SPEC.mjs'));
 
     // dev.hr();
-    dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
+    dev.button('clear (specs)', (e) => e.change((d) => (d.results = undefined)));
     dev.hr();
   });
 });
