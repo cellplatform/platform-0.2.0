@@ -3,13 +3,13 @@ import { t, rx, Dev } from './common';
 
 type T = {
   results?: t.TestSuiteRunResponse;
-  env: {
+  dev: {
     recordButton: {
       state?: t.RecordButtonState;
     };
   };
 };
-const initial: T = { env: { recordButton: {} } };
+const initial: T = { dev: { recordButton: {} } };
 
 export default Dev.describe('TestRunner', (e) => {
   const bus = rx.bus();
@@ -38,7 +38,7 @@ export default Dev.describe('TestRunner', (e) => {
       .border(-0.1)
       .padding(0)
       .render<T>((e) => {
-        return <DevHeader bus={bus} recordButton={e.state.env.recordButton} />;
+        return <DevHeader bus={bus} recordButton={e.state.dev.recordButton} />;
       });
 
     dev.footer
@@ -61,10 +61,10 @@ export default Dev.describe('TestRunner', (e) => {
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
     dev.hr();
 
-    dev.section('Record Button (TMP)', () => {
+    dev.section('Record Button (🐷)', () => {
       const rec = (state: t.RecordButtonState) => {
         dev.button(`rec: ${state}`, async (e) => {
-          e.change((d) => (d.env.recordButton.state = state));
+          e.change((d) => (d.dev.recordButton.state = state));
         });
       };
       rec('default');
