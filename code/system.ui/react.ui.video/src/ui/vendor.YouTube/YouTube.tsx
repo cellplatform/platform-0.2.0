@@ -1,5 +1,7 @@
-import { IFrame, t } from '../common';
+import { IFrame, t, FC } from '../common';
 import { usePlayerApi } from './usePlayerApi.mjs';
+import { Wrangle } from './util.mjs';
+import { DEFAULTS } from './const.mjs';
 
 type Seconds = number;
 
@@ -12,10 +14,9 @@ export type YouTubeProps = {
   style?: t.CssValue;
 };
 
-export const YouTube: React.FC<YouTubeProps> = (props) => {
-  const url = Wrangle.src(props);
-  const allow =
-    'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+const View: React.FC<YouTubeProps> = (props) => {
+  const url = Wrangle.toEmbedUrl(props);
+  const allow = DEFAULTS.allow;
 
   const player = usePlayerApi();
 
@@ -35,14 +36,14 @@ export const YouTube: React.FC<YouTubeProps> = (props) => {
 };
 
 /**
- * [Helpers]
+ * Export
  */
-
-const Wrangle = {
-  src(props: YouTubeProps) {
-    const { id, start } = props;
-    if (!id) return undefined;
-    const url = `https://www.youtube.com/embed/${id.trim()}`;
-    return typeof start === 'number' ? `${url}?start=${start}` : url;
-  },
+type Fields = {
+  Wrangle: typeof Wrangle;
+  DEFAULTS: typeof DEFAULTS;
 };
+export const YouTube = FC.decorate<YouTubeProps, Fields>(
+  View,
+  { Wrangle, DEFAULTS },
+  { displayName: 'YouTube' },
+);
