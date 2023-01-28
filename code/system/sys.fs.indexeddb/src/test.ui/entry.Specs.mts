@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.fs': () => import('./FsIndexedDB.root.SPEC'),
+  'sys.fs': () => import('./-dev/root.SPEC'),
 };
 
 export default Specs;
