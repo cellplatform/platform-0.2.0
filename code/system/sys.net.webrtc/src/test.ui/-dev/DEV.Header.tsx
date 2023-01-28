@@ -1,33 +1,49 @@
-import { Color, COLORS, css, Icons, t } from '../common';
+import { RecordButton, Color, COLORS, css, Icons, t } from '../common';
 
 export type DevHeaderProps = {
+  bus: t.EventBus;
+  recordButton?: {
+    state?: t.RecordButtonState;
+  };
   style?: t.CssValue;
 };
 
 export const DevHeader: React.FC<DevHeaderProps> = (props) => {
+  const { bus, recordButton = {} } = props;
+
   /**
    * [Render]
    */
   const styles = {
     base: css({
       position: 'relative',
-      padding: 30,
+      Padding: [18, 25],
+    }),
+    body: css({
+      display: 'grid',
+      gridTemplateRows: 'auto auto',
+      gap: '10px',
     }),
     screen: css({
       backgroundColor: Color.alpha(COLORS.DARK, 0.03),
       height: 200,
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       borderRadius: 12,
-
       display: 'grid',
       placeItems: 'center',
     }),
+    recordButton: css({ display: 'grid', placeItems: 'center' }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.screen}>
-        <Icons.Cube size={80} color={Color.alpha(COLORS.DARK, 0.1)} />
+      <div {...styles.body}>
+        <div {...styles.screen}>
+          <Icons.Cube size={80} color={Color.alpha(COLORS.DARK, 0.06)} />
+        </div>
+        <div {...styles.recordButton}>
+          <RecordButton bus={bus} state={recordButton.state} />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.net.webrtc.TestRunner': () => import('./WebRTC.TestRunner.SPEC'),
+  'sys.net.webrtc': () => import('./WebRTC.SPEC'),
 };
 
 export default Specs;

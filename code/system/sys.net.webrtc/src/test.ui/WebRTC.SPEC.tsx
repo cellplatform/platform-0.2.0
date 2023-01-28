@@ -1,10 +1,19 @@
-import { Dev, t } from '../test.ui';
 import { DevHeader } from './-dev/DEV.Header';
+import { t, rx, Dev } from './common';
 
-type T = { results?: t.TestSuiteRunResponse };
-const initial: T = {};
+type T = {
+  results?: t.TestSuiteRunResponse;
+  env: {
+    recordButton: {
+      state?: t.RecordButtonState;
+    };
+  };
+};
+const initial: T = { env: { recordButton: {} } };
 
 export default Dev.describe('TestRunner', (e) => {
+  const bus = rx.bus();
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -29,7 +38,7 @@ export default Dev.describe('TestRunner', (e) => {
       .border(-0.1)
       .padding(0)
       .render<T>((e) => {
-        return <DevHeader />;
+        return <DevHeader bus={bus} recordButton={e.state.env.recordButton} />;
       });
 
     dev.footer
@@ -51,5 +60,16 @@ export default Dev.describe('TestRunner', (e) => {
     dev.hr();
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
     dev.hr();
+
+    dev.section('Record Button (TMP)', () => {
+      const rec = (state: t.RecordButtonState) => {
+        dev.button(`rec: ${state}`, async (e) => {
+          e.change((d) => (d.env.recordButton.state = state));
+        });
+      };
+      rec('default');
+      rec('recording');
+      rec('paused');
+    });
   });
 });

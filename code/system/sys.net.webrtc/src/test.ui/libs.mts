@@ -20,8 +20,7 @@
  * @system
  */
 export { expect, expectError } from 'sys.test';
-export { Dev, ObjectView } from 'sys.ui.react.common';
-// export { MediaStream } from 'sys.ui.react.video'
+export { Dev } from 'sys.ui.react.common';
 
 /**
  * @local
