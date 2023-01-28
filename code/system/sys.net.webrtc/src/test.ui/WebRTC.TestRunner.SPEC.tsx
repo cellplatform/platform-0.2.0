@@ -1,4 +1,5 @@
 import { Dev, t } from '../test.ui';
+import { DevHeader } from './-dev/DEV.Header';
 
 type T = { results?: t.TestSuiteRunResponse };
 const initial: T = {};
@@ -23,9 +24,17 @@ export default Dev.describe('TestRunner', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.header
+      .border(-0.1)
+      .padding(0)
+      .render<T>((e) => {
+        return <DevHeader />;
+      });
+
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'sys.net.webrtc'} data={e.state} expand={1} />);
 
     const run = (label: string, module: t.SpecImport) => {
       dev.button(`run: ${label}`, async (e) => {
@@ -35,6 +44,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
     };
 
+    dev.title('Specs');
     run('PeerNetbus', import('../web.PeerNetbus/PeerNetbus.SPEC.mjs'));
     run('PeerEvents', import('../web.PeerNetwork.events/PeerEvents.SPEC.mjs'));
 
