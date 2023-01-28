@@ -69,7 +69,7 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'sys.fs.indexeddb'} data={e.state} expand={1} />);
 
     const run = (label: string, module: t.SpecImport) => {
       dev.button(`run: ${label}`, async (e) => {
