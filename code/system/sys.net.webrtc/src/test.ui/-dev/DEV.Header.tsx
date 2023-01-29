@@ -4,6 +4,7 @@ export type DevHeaderProps = {
   bus: t.EventBus;
   recordButton?: {
     state?: t.RecordButtonState;
+    enabled?: boolean;
   };
   style?: t.CssValue;
 };
@@ -43,7 +44,11 @@ export const DevHeader: React.FC<DevHeaderProps> = (props) => {
         </div>
         {recordButton && (
           <div {...styles.recordButton}>
-            <RecordButton bus={bus} state={recordButton?.state} />
+            <RecordButton
+              bus={bus}
+              isEnabled={recordButton.enabled ?? false}
+              state={recordButton?.state}
+            />
           </div>
         )}{' '}
       </div>
