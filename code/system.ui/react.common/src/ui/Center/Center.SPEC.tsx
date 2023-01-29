@@ -25,4 +25,9 @@ export default Dev.describe('Spinner', (e) => {
       .display('flex')
       .render(() => el);
   });
+
+  e.it('debug panel', async (e) => {
+    const dev = Dev.tools(e);
+    dev.title('Center');
+  });
 });
