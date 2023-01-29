@@ -4,7 +4,7 @@ import { t, rx, Dev } from './common';
 type T = {
   results?: t.TestSuiteRunResponse;
   local: {
-    recordButton?: { state?: t.RecordButtonState };
+    recordButton?: { state?: t.RecordButtonState; enabled?: boolean };
   };
 };
 const initial: T = { local: { recordButton: {} } };
@@ -64,13 +64,30 @@ export default Dev.describe('TestRunner', (e) => {
     dev.section('Record Button', (dev) => {
       dev.TODO();
 
+      const isRecVisible = (state: T) => {
+        return Boolean(state.local.recordButton);
+      };
+
       dev.boolean((btn) =>
         btn
-          .label((e) => (Boolean(e.state.local.recordButton) ? 'showing' : 'hidden'))
-          .value((e) => Boolean(e.state.local.recordButton))
+          .label((e) => (isRecVisible(e.state) ? 'visible' : 'hidden'))
+          .value((e) => isRecVisible(e.state))
           .onClick((e) => {
             e.change((d) => {
               d.local.recordButton = e.current ? undefined : {};
+            });
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'isEnabled')
+          .value((e) => Boolean(e.state.local.recordButton?.enabled ?? false))
+          .onClick((e) => {
+            e.change((d) => {
+              if (!isRecVisible(d)) return;
+              const rec = d.local.recordButton || (d.local.recordButton = {});
+              rec.enabled = !e.current;
             });
           }),
       );
@@ -81,6 +98,7 @@ export default Dev.describe('TestRunner', (e) => {
         dev.button(`state: ${state}`, async (e) => {
           e.change((d) => {
             const rec = d.local.recordButton || (d.local.recordButton = {});
+            rec.enabled = true;
             rec.state = state;
           });
         });
