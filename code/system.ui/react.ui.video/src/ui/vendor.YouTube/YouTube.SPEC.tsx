@@ -1,12 +1,11 @@
-import { css, Color, COLORS, Dev, TextInput } from '../../test.ui';
 import { YouTube, YouTubeProps } from '.';
+import { css, Dev, TextInput } from '../../test.ui';
+
+const Wrangle = YouTube.Wrangle;
 
 type T = { props: YouTubeProps; debug: { url?: string } };
 const initial: T = {
-  props: {
-    width: 550,
-    height: 315,
-  },
+  props: { width: 550, height: 315 },
   debug: {},
 };
 
@@ -51,13 +50,24 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.hr();
 
-    dev.button('load', (e) => {
-      e.change(({ props }) => load(props));
-    });
+    dev.title('Load');
+
+    const loadUrl = (title: string, url: string) => {
+      dev.button(`load: ${title}`, async (e) => {
+        const { id, start } = Wrangle.fromUrl(url);
+        dev.change((d) => {
+          d.props.id = id;
+          d.props.start = start;
+        });
+      });
+    };
+
+    loadUrl('"cell" at `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+    loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
 
     dev.hr();
 
-    dev.title('Paste URL');
+    dev.title('Paste Address');
     dev.row((e) => {
       const styles = {
         base: css({}),
@@ -77,7 +87,7 @@ export default Dev.describe('YouTube', (e) => {
         <div {...styles.base}>
           <TextInput
             value={e.state.debug.url}
-            placeholder={'url'}
+            placeholder={'YouTube (url)'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
             onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
             onEnter={processUrl}
