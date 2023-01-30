@@ -1,5 +1,6 @@
 import { t, Dev } from '../../test.ui';
-import { MonacoEditor, MonacoEditorProps } from '.';
+import { MonacoEditor } from '.';
+import type { MonacoEditorProps } from '.';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -21,40 +22,41 @@ export default Dev.describe('MonacoEditor', (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = e.state.props;
-        return <MonacoEditor {...props} onReady={(e) => console.info(`⚡️ onReady:`, e)} />;
+        // return <MonacoEditor {...props} onReady={(e) => console.info(`⚡️ onReady:`, e)} />;
+        return null;
       });
   });
 
-  e.it('debug panel', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
-
-    dev.section('Language', (dev) => {
-      const language = (name: t.EditorLanguage) => {
-        dev.button(`${name}`, (e) => e.change((d) => (d.props.language = name)));
-      };
-
-      language('typescript');
-      language('javascript');
-      dev.hr();
-      language('json');
-      language('yaml');
-      dev.hr();
-      language('markdown');
-
-      dev.hr();
-    });
-
-    dev.section('Options', (dev) => {
-      const tabSize = (size: number) =>
-        dev.button(`tabSize: ${size}`, (e) => {
-          e.change((d) => (d.props.tabSize = size));
-        });
-      tabSize(2);
-      tabSize(4);
-    });
-  });
+  //   e.it('debug panel', async (e) => {
+  //     const dev = Dev.tools<T>(e, initial);
+  //
+  //     dev.footer
+  //       .border(-0.1)
+  //       .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+  //
+  //     dev.section('Language', (dev) => {
+  //       const language = (name: t.EditorLanguage) => {
+  //         dev.button(`${name}`, (e) => e.change((d) => (d.props.language = name)));
+  //       };
+  //
+  //       language('typescript');
+  //       language('javascript');
+  //       dev.hr();
+  //       language('json');
+  //       language('yaml');
+  //       dev.hr();
+  //       language('markdown');
+  //
+  //       dev.hr();
+  //     });
+  //
+  //     dev.section('Options', (dev) => {
+  //       const tabSize = (size: number) =>
+  //         dev.button(`tabSize: ${size}`, (e) => {
+  //           e.change((d) => (d.props.tabSize = size));
+  //         });
+  //       tabSize(2);
+  //       tabSize(4);
+  //     });
+  //   });
 });

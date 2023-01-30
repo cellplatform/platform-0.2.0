@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "sys.types": "0.0.0",
-    "sys.util": "0.0.0"
+    "sys.util": "0.0.0",
+    "sys.text": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -25,8 +26,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-ffc9b108.js",
-    "./web": "./dist/web/lib/index-ffc9b108.js"
+    ".": "./dist/web/lib/index-f2e0847c.js",
+    "./web": "./dist/web/lib/index-f2e0847c.js"
   },
   "typesVersions": {
     "*": {
