@@ -53,8 +53,8 @@ export async function build(
     const bundleSize = pc.bold(pc.white(bundle.toString()));
     const typesSize = types.toString();
 
-    const prefix = pc.bgCyan(pc.bold(' dist '));
-    const filesize = pc.bold(pc.white(size.toString()));
+    const prefix = pc.bgCyan(pc.bold(' DIST '));
+    const filesize = pc.bold(size.toString());
 
     const table = LogTable();
     table.push([' '.repeat(6), 'bundle', `  ${bundle.length} files  `, bundleSize]);

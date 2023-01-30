@@ -4,7 +4,6 @@ import { Builder, pc, Util } from './common/index.mjs';
 /**
  * Run
  */
-
 const filter = (path: string) => true;
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 
@@ -13,11 +12,11 @@ if (paths.length === 0) {
   process.exit(1);
 }
 
-// Log complete build list.
-console.log();
-console.log(pc.green('clean:'));
-paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
-console.log();
+// Log complete clean list.
+console.info();
+console.info(pc.cyan('clean:'));
+paths.forEach((path) => console.info(pc.gray(` • ${Util.formatPath(path)}`)));
+console.info();
 
 for (const path of paths) {
   await Builder.clean(path);
