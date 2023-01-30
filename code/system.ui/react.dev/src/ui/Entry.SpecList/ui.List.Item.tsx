@@ -24,7 +24,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
 
   const prev = importsKeys[index - 1];
   const next = importsKeys[index];
-  const showHr = !isLast && !beyondBounds && Calc.showHr(hrDepth, prev, next);
+  const showHr = !beyondBounds && Calc.showHr(hrDepth, prev, next);
 
   if (address) params.set(KEY.DEV, address);
   if (!address) params.delete(KEY.DEV);
