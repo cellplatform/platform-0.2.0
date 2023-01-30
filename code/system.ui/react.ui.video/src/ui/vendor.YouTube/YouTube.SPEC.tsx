@@ -87,7 +87,7 @@ export default Dev.describe('YouTube', (e) => {
         <div {...styles.base}>
           <TextInput
             value={e.state.debug.url}
-            placeholder={'YouTube (url)'}
+            placeholder={'YouTube (URL)'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
             onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
             onEnter={processUrl}
