@@ -124,3 +124,29 @@ export type TestStats = {
   suites: { total: number; passed: number; failed: number; pending: number };
   tests: { total: number; passed: number; failed: number; pending: number; todo: number };
 };
+
+export type VitestResultsData = {
+  numTotalTestSuites: number;
+  numPassedTestSuites: number;
+  numFailedTestSuites: number;
+  numPendingTestSuites: number;
+  numTotalTests: number;
+  numPassedTests: number;
+  numFailedTests: number;
+  numPendingTests: number;
+  numTodoTests: number;
+  startTime: number;
+  success: boolean;
+  testResults: Array<{
+    assertionResults: {
+      fullname: string;
+      status: 'passed' | 'failed';
+      location: { line: number; column: number };
+    }[];
+    startTime: number;
+    endTime: number;
+    status: 'passed' | 'failed';
+    message: string;
+    name: string;
+  }>;
+};

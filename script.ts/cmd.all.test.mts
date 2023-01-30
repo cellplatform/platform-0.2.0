@@ -1,14 +1,23 @@
 #!/usr/bin/env ts-node
-import { Builder, fs, pc, Util, LogTable, Time, R, ora } from './common/index.mjs';
+import { Builder, fs, pc, Util, LogTable, Time, R, ora, t } from './common/index.mjs';
 
 type Milliseconds = number;
+
+const parseError = (err?: string) => {
+  const error = err ?? '';
+  const text = error.substring(error.indexOf('\n'));
+  try {
+    return text ? (JSON.parse(text) as t.VitestResultsData) : undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
 
 /**
  * Run
  */
 type Pkg = { name: string; version: string };
 const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
-
 const timer = Time.timer();
 
 const filter = (path: string) => {
@@ -19,36 +28,51 @@ const filter = (path: string) => {
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 
 if (paths.length === 0) {
-  console.warn(pc.yellow('no paths'));
+  console.warn(pc.yellow('No module paths to test'));
   process.exit(1);
 }
 
 // Log module list.
 console.info(' ');
-console.info(pc.green('test list:'));
+console.info(pc.cyan('Test list:'));
 paths.forEach((path) => console.info(pc.gray(` • ${Util.formatPath(path)}`)));
 console.info(' ');
 
-type R = { path: string; elapsed: Milliseconds; error?: string };
+type S = t.TestStats['tests'];
+type R = { path: string; elapsed: Milliseconds; error?: string; stats?: S };
 const results: R[] = [];
-const pushResult = (path: string, elapsed: Milliseconds, options: { error?: string } = {}) => {
-  const { error } = options;
-  results.push({ path, elapsed, error });
+const pushResult = (
+  path: string,
+  elapsed: Milliseconds,
+  options: { error?: string; stats?: S } = {},
+) => {
+  const { error, stats } = options;
+  results.push({ path, elapsed, stats, error });
 };
 
 const runTests = async (path: string, options: { silent?: boolean } = {}) => {
   const { silent } = options;
   const timer = Time.timer();
   try {
-    await Builder.test(path, {
+    const res = await Builder.test(path, {
       run: true,
+      reporter: 'json',
       silentTestConsole: true,
       silent,
     });
-    pushResult(path, timer.elapsed.msec);
+    const stats = res.stats?.tests;
+    pushResult(path, timer.elapsed.msec, { stats });
   } catch (err: any) {
     const error = err.message;
-    pushResult(path, timer.elapsed.msec, { error });
+    const obj = parseError(error);
+    const stats: S = {
+      total: obj?.numTotalTests ?? 0,
+      passed: obj?.numPassedTests ?? 0,
+      failed: obj?.numFailedTests ?? 0,
+      pending: obj?.numPendingTests ?? 0,
+      todo: obj?.numTodoTests ?? 0,
+    };
+    pushResult(path, timer.elapsed.msec, { error, stats });
   }
 };
 
@@ -67,40 +91,83 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
     const wait = Promise.all(batch.map((path) => runTests(path, { silent: true })));
     await wait;
     spinner.stop();
-    console.log(' ');
+    console.info(' ');
   }
 
   const failed = results.filter((item) => Boolean(item.error));
   failed.forEach((item) => {
-    console.info(pc.yellow(`Failed: ${Util.formatPath(item.path)}`));
-    console.info(pc.gray(item.error));
-    console.info(` `);
+    const obj = parseError(item.error);
+    if (obj) {
+      const base = fs.resolve('.');
+      const { numFailedTests: totalFailed, numTotalTests: total } = obj;
+
+      const summary = pc.yellow(`${pc.yellow(totalFailed)} of ${total} tests failed`);
+      console.info(pc.yellow(`${pc.bold('Failed:')} ${Util.formatPath(item.path)} (${summary})`));
+
+      obj.testResults
+        .filter((item) => item.status === 'failed')
+        .forEach((item) => {
+          const { assertionResults } = item;
+          const filename = item.name.substring(base.length + 1);
+          assertionResults
+            .filter((item) => item.status === 'failed')
+            .forEach((item) => {
+              const { line, column } = item.location;
+              const address = `${filename}:${line}:${column}`;
+              console.info(pc.yellow(pc.dim(`        ${address}`)));
+            });
+        });
+    }
   });
 };
 
 await runInParallel({ paths, batch: 5 });
 
-const failed = results.filter((item) => Boolean(item.error));
+const failed = results.filter((item) => (item.stats?.total === 0 ? false : Boolean(item.error)));
 const ok = failed.length === 0;
 
 const statusColor = (ok: boolean, text: string) => (ok ? pc.green(text) : pc.red(text));
 const pathOK = (path: string) => !failed.some((error) => error.path === path);
-const bullet = (path: string) => statusColor(pathOK(path), '●');
+const icon = (path: string) => {
+  const ok = pathOK(path);
+  const char = ok ? '✓' : '×';
+  return pc.bold(statusColor(ok, char));
+};
 
 const table = LogTable();
 for (const result of results) {
-  const { path } = result;
+  const { path, stats } = result;
+  const noTests = stats?.total === 0;
 
   const column = {
-    path: pc.gray(` ${bullet(path)} ${Util.formatPath(path)}`),
+    path: pc.gray(` ${noTests ? '-' : icon(path)} ${Util.formatPath(path)}`),
     time: pc.gray(`  ${Time.duration(result.elapsed).toString()} `),
+    status: '',
   };
 
-  table.push([column.path, column.time]);
+  if (stats && stats.total > 0) {
+    const { total, passed, failed, pending } = stats;
+    const add = (text: string) => {
+      if (column.status) column.status += pc.dim(pc.gray(` | `));
+      column.status += text;
+    };
+
+    if (failed > 0) add(pc.red(`${failed} failed`));
+    add(pc.green(`${passed} passed`));
+    if (pending > 0) add(pc.yellow(`${pending} skipped`));
+    column.status = ` ${column.status}`;
+    if (failed > 0 || pending > 0) column.status += pc.gray(` (${total})`);
+  }
+
+  if (stats?.total === 0) {
+    column.status = pc.gray(` ${pc.dim('(no tests)')}`);
+  }
+
+  table.push([column.path, column.time, column.status]);
 }
 
 console.info();
-console.info(statusColor(ok, ok ? 'all tests passed' : 'some tests failured'));
+console.info(pc.bold(statusColor(ok, ok ? `Success` : `Unsuccessful`)));
 console.info(table.toString());
 console.info();
 console.info(pc.gray(`elapsed ${timer.elapsed.toString()}`));
