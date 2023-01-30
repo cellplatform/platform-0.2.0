@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
-import { Vercel } from 'cloud.vercel';
+import { Vercel } from 'vendor.vercel';
 import { Filesystem } from 'sys.fs.node';
-import { Time, rx } from 'sys.util';
+import { Time, rx, Path } from 'sys.util';
 
 import { Util } from './common.mjs';
 
@@ -22,10 +22,10 @@ console.info('now:', now);
 /**
  * Copy source content (local)
  */
-await fs.delete('tmp');
-const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
-
-await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
+// await fs.delete('tmp');
+// const copy = async (sourceDir: string) => Util.copy(fs, sourceDir, 'tmp/dist');
+//
+// await fs.write('tmp/dist/index.html', `<h1>Hello World - ${now}</h1>\n`);
 // await copy('../../compiler.samples/web.react/dist');
 // await copy('../../compiler.samples/web.svelte/dist');
 // await copy('../../tmp/phil.cockfield.net/dist');
@@ -40,7 +40,7 @@ const vercel = Vercel.client({ bus, fs, token }); // <═══╗
 
 await vercel.deploy({
   name: 'my-tmp',
-  source: 'tmp/dist',
+  source: 'tmp/sys.video',
   team: 'tdb',
   project: 'tdb-tmp',
   alias: 'tmp.db.team',
@@ -48,4 +48,5 @@ await vercel.deploy({
   regions: ['sfo1'],
   target: 'production', // NB: required to be "production" for the DNS alias to be applied.
   silent: false, // Standard BEFORE and AFTER deploy logging to console.
+  timeout: 99999,
 });

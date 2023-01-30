@@ -15,9 +15,15 @@
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
+    "sys.net.webrtc": "0.0.0",
     "sys.types": "0.0.0",
+    "sys.text": "0.0.0",
+    "sys.ui.react.common": "0.0.0",
+    "sys.ui.react.dev": "0.0.0",
+    "sys.ui.react.monaco": "0.0.0",
+    "sys.ui.react.video": "0.0.0",
     "sys.util": "0.0.0",
-    "sys.text": "0.0.0"
+    "vendor.stripe": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0"
@@ -26,8 +32,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-f2e0847c.js",
-    "./web": "./dist/web/lib/index-f2e0847c.js"
+    ".": "./dist/web/lib/index-07b47a77.js",
+    "./web": "./dist/web/lib/index-07b47a77.js"
   },
   "typesVersions": {
     "*": {

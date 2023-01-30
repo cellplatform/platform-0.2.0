@@ -1,5 +1,5 @@
 {
-  "name": "cloud.vercel",
+  "name": "vendor.vercel",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
