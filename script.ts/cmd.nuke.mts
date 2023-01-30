@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { fs, rimraf, Builder, pc, Util } from './common/index.mjs';
+import { Builder, fs, pc, rimraf, Util } from './common/index.mjs';
 
 async function remove(path: string) {
   path = fs.resolve(path);
