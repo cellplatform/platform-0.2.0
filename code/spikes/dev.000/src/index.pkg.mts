@@ -10,8 +10,8 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.sys.dev',
-  version: '0.0.88',
+  name: 'sys.dev',
+  version: '0.0.90',
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
