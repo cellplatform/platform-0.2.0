@@ -36,6 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
     };
 
     run('Health Check', import('./spec.HealthCheck.mjs'));
+    run('Complete Functional Specification', import('./spec.Functional.mjs'));
 
     dev.hr();
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
