@@ -15,9 +15,9 @@ export default Dev.describe('Todo', (e) => {
       .hr()
       .TODO()
       .TODO('Do this single-line thing')
-      .TODO(`Long single-line thing ${Dev.Lorem.toString()}`).TODO(`
+      .TODO(`**Long** single-line \`thing\`. ${Dev.Lorem.toString()}`).TODO(`
 
-      Multiline markdown comments:
+      Multiline *markdown* comments:
 
       - one
       - two
