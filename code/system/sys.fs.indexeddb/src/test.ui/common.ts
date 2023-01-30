@@ -1,6 +1,7 @@
 /**
  * @system
  */
+export { expect } from 'sys.test';
 export { Dev } from 'sys.ui.react.common';
 
 /**
