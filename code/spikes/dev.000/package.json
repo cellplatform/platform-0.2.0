@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.91",
+  "version": "0.0.92",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -32,8 +32,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-e1dae69a.js",
-    "./web": "./dist/web/lib/index-e1dae69a.js"
+    ".": "./dist/web/lib/index-a55c79b3.js",
+    "./web": "./dist/web/lib/index-a55c79b3.js"
   },
   "typesVersions": {
     "*": {
