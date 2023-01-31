@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from '../common.t';
 
 /**
  * Event API for interacting with a group of networked peers.

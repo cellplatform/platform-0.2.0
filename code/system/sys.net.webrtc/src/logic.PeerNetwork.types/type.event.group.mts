@@ -1,4 +1,4 @@
-import { type t } from './common';
+import type { t } from '../common.t';
 
 /**
  * NOTE: These events are fired over the "network bus" to
