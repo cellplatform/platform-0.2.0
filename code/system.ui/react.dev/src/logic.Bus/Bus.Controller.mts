@@ -135,6 +135,12 @@ export function BusController(args: {
         const results = await spec.run({ ctx, only });
         await context.flush(); // Flush the results from the {ctx} into the state tree: {render.props}.
 
+        results.tests
+          .filter((test) => test.error)
+          .forEach((test) => {
+            console.error(test.error);
+          });
+
         /**
          * Update the state tree with the run results.
          */
