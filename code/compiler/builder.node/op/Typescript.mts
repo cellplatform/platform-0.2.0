@@ -23,7 +23,7 @@ export const Typescript = {
     const tsVersion = await Typescript.version();
 
     if (!silent) {
-      const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} linting...`);
+      const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} type checking...`);
       console.info(msg);
     }
 
