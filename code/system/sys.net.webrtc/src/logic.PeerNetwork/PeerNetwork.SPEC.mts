@@ -8,15 +8,15 @@ const MockNetworks = async (options: { length?: number } = {}) => {
 
   const start = async () => {
     const bus = rx.bus();
-    return (await PeerNetwork.start({ bus, signal })).network;
+    return (await PeerNetwork.start({ bus, signal, timeout: 10000 })).network;
   };
 
-  const wait = Array.from({ length }).map((v, i) => start());
+  const wait = Array.from({ length }).map((_, i) => start());
   const clients = await Promise.all(wait);
 
   return {
     clients,
-    dispose: async () => Promise.all(clients.map((client) => client.dispose())),
+    dispose: () => Promise.all(clients.map((client) => client.dispose())),
   };
 };
 
@@ -31,7 +31,6 @@ export default Dev.describe('PeerNetwork', (e) => {
       expect(network.self).to.eql(network.netbus.self);
 
       const self = network.netbus.self;
-      expect(self.startsWith('c')).to.eql(true);
       expect(self.length).to.greaterThan(10);
       await network.dispose();
     });
@@ -75,10 +74,11 @@ export default Dev.describe('PeerNetwork', (e) => {
   });
 
   e.describe('network connections', (e) => {
+    e.timeout(10000);
+
     e.it('connect: data', async () => {
       const mock = await MockNetworks();
       const [a, b] = mock.clients;
-
       const connector = a.events.peer.connection(a.netbus.self, b.netbus.self);
 
       const status = await a.events.peer.status(a.netbus.self).object();

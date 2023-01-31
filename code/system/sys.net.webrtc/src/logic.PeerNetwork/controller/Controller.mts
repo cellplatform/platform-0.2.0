@@ -362,7 +362,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
         });
 
         // Listen for a connection error.
-        // Will happen on timeout (remote peer not found on the network)
+        // Will happen on timeout (remote-peer not found on the network)
         errorMonitor.$.pipe(
           filter((err) => err.type === 'peer-unavailable'),
           filter((err) => err.message.includes(`peer ${remote}`)),
