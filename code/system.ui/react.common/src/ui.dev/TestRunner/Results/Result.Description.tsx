@@ -2,27 +2,36 @@ import { COLORS, css, t } from '../common';
 
 export type DescriptionProps = {
   text: string;
+  isSkipped?: boolean;
   style?: t.CssValue;
 };
 
 export const Description: React.FC<DescriptionProps> = (props) => {
+  const { isSkipped = false } = props;
   const desc = parseDescription(props.text);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ Flex: 'horizontal-center-start' }),
+    base: css({
+      opacity: isSkipped ? 0.3 : 1,
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+    }),
     todo: css({
       backgroundColor: COLORS.MAGENTA,
       marginRight: 6,
       PaddingX: 5,
-      paddingTop: 1,
-      paddingBottom: 1,
+      paddingTop: 4,
       fontSize: 10,
       fontWeight: 600,
       color: COLORS.WHITE,
       borderRadius: 3,
+    }),
+    text: css({
+      display: 'grid',
+      alignContent: 'center',
     }),
   };
 
@@ -31,7 +40,7 @@ export const Description: React.FC<DescriptionProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elTodo}
-      <div>{desc.text}</div>
+      <div {...styles.text}>{desc.text}</div>
     </div>
   );
 };

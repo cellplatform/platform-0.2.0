@@ -12,6 +12,10 @@ const root = Dev.describe('root spec', (e) => {
   e.it('fail', async (e) => {
     expect(123).to.eql(5);
   });
+
+  e.it.skip('skipped test', async (e) => {});
+  e.it(`TODO: ${Dev.Lorem.toString()}`, async (e) => {});
+  e.it(`TODO: short`, async (e) => {});
 });
 
 export default Dev.describe('TestRunner', (e) => {
