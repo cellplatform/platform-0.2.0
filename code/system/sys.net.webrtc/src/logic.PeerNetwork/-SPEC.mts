@@ -1,5 +1,5 @@
 import { PeerNetwork } from '.';
-import { cuid, expect, rx, TEST, Dev, Time } from '../test.ui';
+import { slug, cuid, expect, rx, TEST, Dev, Time } from '../test.ui';
 
 const signal = TEST.signal;
 const timeout = 1000 * 15;
@@ -120,15 +120,15 @@ export default Dev.describe('PeerNetwork', (e) => {
       expect(first.peer.self).to.eql(a.self);
       expect(first.peer.remote.id).to.eql(b.self);
 
+      const msg = `hello-${slug()}`;
+      const fired: string[] = [];
       b.netbus.$.pipe().subscribe((e) => {
-        console.log('b', e);
+        fired.push(e.payload.msg);
       });
 
-      console.log('res', res);
-
-      await a.netbus.target.remote({ type: 'foo', payload: { msg: 'from a' } });
-
-      await Time.wait(200);
+      await a.netbus.target.remote({ type: 'foo', payload: { msg } });
+      await Time.wait(500);
+      expect(fired).to.eql([msg]);
 
       await mock.dispose();
     });
