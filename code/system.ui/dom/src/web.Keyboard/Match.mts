@@ -9,14 +9,14 @@ export const Match = {
     const pattern = parsePattern(input);
     return {
       /**
-       * Parsed key-map pattern, eg "CMD + P" or "META + SHIFT + LK"
+       * Parsed key-map pattern, eg "CMD + KeyP" or "META + SHIFT + KeyL + KeyK"
        */
       pattern,
 
       /**
        * Determine if the given keys match the pattern.
        */
-      isMatch(pressed: t.KeyboardKey['key'][], modifiers: Partial<t.KeyboardModifierFlags>) {
+      isMatch(pressed: t.KeyboardKey['code'][], modifiers: Partial<t.KeyboardModifierFlags>) {
         if (!containsAllModifiers(pattern, modifiers)) return false;
         if (!containsAllKeys(pattern, pressed)) return false;
         return true;
@@ -66,10 +66,6 @@ function containsAllModifiers(pattern: string[], modifiers: Partial<t.KeyboardMo
 
 function containsAllKeys(pattern: string[], pressed: string[]) {
   pressed = pressed.map((value) => value.toUpperCase());
-  pattern = pattern
-    .filter((value) => !Util.isModifier(value))
-    .map((value) => value.toUpperCase())
-    .map((value) => (value.length > 1 ? value.split('') : value))
-    .flat();
+  pattern = pattern.filter((value) => !Util.isModifier(value)).map((value) => value.toUpperCase());
   return pattern.every((value) => pressed.includes(value));
 }
