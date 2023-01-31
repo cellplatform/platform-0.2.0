@@ -49,6 +49,7 @@ export type {
   KeyboardKeypressProps,
   KeyboardModifierEdges,
   KeyboardModifierFlags,
+  KeyMatchSubscriberHandlerArgs,
 } from 'sys.ui.dom/src/types.mjs';
 
 /**
