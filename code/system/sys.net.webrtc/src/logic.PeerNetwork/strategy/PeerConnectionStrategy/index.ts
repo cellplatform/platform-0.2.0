@@ -1,1 +1,1 @@
-export * from './PeerConnectionStrategy';
+export * from './PeerConnectionStrategy.mjs';

@@ -16,8 +16,8 @@ import {
   Time,
   UriUtil,
 } from '../common';
-import { MemoryRefs, SelfRef } from './Refs';
-import { Status } from './Status';
+import { MemoryRefs, SelfRef } from './Refs.mjs';
+import { Status } from './Status.mjs';
 
 type ConnectionKind = t.PeerConnectRes['kind'];
 

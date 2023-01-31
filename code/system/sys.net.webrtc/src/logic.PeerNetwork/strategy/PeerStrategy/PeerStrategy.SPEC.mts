@@ -1,5 +1,3 @@
-// import { expect } from 'chai';
-// import { Test } from 'sys.ui.dev';
 import { Dev, expect } from '../../../test.ui';
 
 import { PeerStrategy } from '.';

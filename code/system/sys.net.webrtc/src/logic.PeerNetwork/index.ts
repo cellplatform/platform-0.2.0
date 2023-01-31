@@ -1,2 +1,2 @@
-export { PeerNetwork } from './PeerNetwork';
+export { PeerNetwork } from './PeerNetwork.mjs';
 export { UriUtil } from './common';

@@ -1,6 +1,6 @@
 import { t, PeerEvents } from '../common';
-import { AutoPergeStrategy } from './AutoPergeStrategy';
-import { EnsureClosedStrategy } from './EnsureClosedStrategy';
+import { AutoPergeStrategy } from './AutoPergeStrategy.mjs';
+import { EnsureClosedStrategy } from './EnsureClosedStrategy.mjs';
 
 /**
  * Handles strategies for connecting and disconnecting peers.

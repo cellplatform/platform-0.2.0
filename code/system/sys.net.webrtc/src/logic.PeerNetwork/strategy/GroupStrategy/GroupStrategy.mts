@@ -1,5 +1,5 @@
 import { PeerEvents, GroupEvents, t } from '../common';
-import { GroupConnectionsStrategy } from './GroupConnectionsStrategy';
+import { GroupConnectionsStrategy } from './GroupConnectionsStrategy.mjs';
 
 /**
  * Handles strategies for working with a group of peers ("mesh" network).
@@ -19,7 +19,11 @@ export function GroupStrategy(args: {
   /**
    * Initialize sub-strategies.
    */
-  GroupConnectionsStrategy({ netbus, events, isEnabled: () => strategy.connections });
+  GroupConnectionsStrategy({
+    netbus,
+    events,
+    isEnabled: () => strategy.connections,
+  });
 
   /**
    * API

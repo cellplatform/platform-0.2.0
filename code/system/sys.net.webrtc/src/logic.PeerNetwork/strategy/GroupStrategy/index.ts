@@ -1,1 +1,1 @@
-export * from './GroupStrategy';
+export * from './GroupStrategy.mjs';

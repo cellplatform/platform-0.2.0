@@ -1,1 +1,1 @@
-export * from './PeerStrategy';
+export * from './PeerStrategy.mjs';

@@ -1,5 +1,5 @@
 import { PeerJS, t, Delete } from '../common';
-import { ConnectionRef, SelfRef } from './Refs';
+import { ConnectionRef, SelfRef } from './Refs.mjs';
 
 export const Status = {
   /**
