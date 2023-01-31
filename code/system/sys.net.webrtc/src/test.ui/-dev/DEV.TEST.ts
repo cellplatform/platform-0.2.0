@@ -1,4 +1,4 @@
-import { rx, MediaStream, PeerNetwork, t } from './DEV.libs';
+import { MediaStream, PeerNetwork, rx, t } from '../libs.mjs';
 import { EventBridge } from './DEV.EventBridge';
 
 export const TEST = {

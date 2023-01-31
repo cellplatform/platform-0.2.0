@@ -1,5 +1,4 @@
-import { map } from 'rxjs/operators';
-import { PeerEvents, t, UriUtil } from './common';
+import { PeerEvents, t, UriUtil, rx } from './common';
 import { NetworkBus } from '../logic.NetworkBus';
 
 /**
@@ -15,7 +14,7 @@ export function PeerNetbus<E extends t.Event>(args: {
   const data = events.data(self);
 
   const pump: t.NetworkPump<E> = {
-    in: (fn) => data.in$.pipe(map((e) => e.data as E)).subscribe(fn),
+    in: (fn) => data.in$.pipe(rx.map((e) => e.data as E)).subscribe(fn),
     out: (e) => data.send(e.event, { targets: e.targets }),
   };
 

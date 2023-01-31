@@ -21,10 +21,12 @@
  */
 export { expect, expectError } from 'sys.test';
 export { Dev } from 'sys.ui.react.common';
+export { MediaStream } from 'sys.ui.react.video';
 
 /**
  * @local
  */
 export * from '../common';
 export { NetworkBusMock } from '../logic.NetworkBus';
-export { WebRuntimeBus } from '../logic.RuntimeBus';
+export { WebRuntimeBus } from '../logic.WebRuntimeBus';
+export { PeerNetwork } from '../logic.PeerNetwork';

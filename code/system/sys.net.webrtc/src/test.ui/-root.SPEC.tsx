@@ -1,5 +1,5 @@
-import { DevHeader } from './DEV.Header';
-import { t, rx, Dev } from '../common';
+import { DevHeader } from './-dev/DEV.ui.Header';
+import { t, rx, Dev } from './common';
 
 type T = {
   results?: t.TestSuiteRunResponse;
@@ -54,8 +54,10 @@ export default Dev.describe('TestRunner', (e) => {
     };
 
     dev.title('Test Suites');
-    run('PeerNetbus', import('../../logic.PeerNetbus/PeerNetbus.SPEC.mjs'));
-    run('PeerEvents', import('../../logic.PeerNetwork.events/PeerEvents.SPEC.mjs'));
+    run('PeerNetbus', import('../logic.PeerNetbus/PeerNetbus.SPEC.mjs'));
+    run('PeerEvents', import('../logic.PeerNetwork.events/PeerEvents.SPEC.mjs'));
+    run('PeerStrategy', import('../logic.PeerNetwork/strategy/PeerStrategy/PeerStrategy.SPEC'));
+    run('PeerNetwork', import('../logic.PeerNetwork/PeerNetwork.SPEC'));
 
     dev.hr();
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));

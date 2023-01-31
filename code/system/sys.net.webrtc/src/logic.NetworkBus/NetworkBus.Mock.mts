@@ -1,6 +1,3 @@
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-
 import { t, Time, rx } from './common';
 import { NetworkBus } from './NetworkBus.mjs';
 
@@ -13,7 +10,7 @@ export function NetworkBusMock<E extends t.Event = t.Event>(
   options: { local?: t.NetworkBusUri; remotes?: t.NetworkBusUri[]; memorylog?: boolean } = {},
 ): t.NetworkBusMock<E> {
   const { memorylog } = options;
-  const in$ = new Subject<E>();
+  const in$ = new rx.Subject<E>();
 
   const mock: t.NetworkBusMock<E>['mock'] = {
     fired: [],
@@ -25,7 +22,7 @@ export function NetworkBusMock<E extends t.Event = t.Event>(
       type R = t.NetworkBusMockRemote<E>;
       const item: R = { uri, bus: netbus ?? NetworkBusMock(), fired: [] };
       mock.remotes.push(item);
-      item.bus.$.pipe(filter(() => Boolean(memorylog))).subscribe((e) => item.fired.push(e));
+      item.bus.$.pipe(rx.filter(() => Boolean(memorylog))).subscribe((e) => item.fired.push(e));
       return item;
     },
   };
