@@ -1,6 +1,6 @@
-import { Keyboard } from '..';
-import { Dev, t } from '../../../test.ui';
-import { DevSample } from './DEV.Sample';
+import { Keyboard } from '.';
+import { Dev, t } from '../../test.ui';
+import { DevSample } from './-dev/DEV.Sample';
 
 type T = { keyboard: t.KeyboardState };
 const initial: T = {
@@ -39,6 +39,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
         log(e);
       },
       'SHIFT + ALT + KeyP': (e) => log(e),
+      Escape: (e) => log(e),
     });
 
     ctx.subject
