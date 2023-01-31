@@ -43,10 +43,16 @@ export const KeyboardMonitor = {
   },
 
   on(pattern: t.KeyPattern, fn: KeyMatchSubscriberHandler) {
-    if (!isSupported()) return;
+    const disposable = rx.disposable();
+    const res = {
+      pattern,
+      dispose$: disposable.dispose$,
+      dispose: disposable.dispose,
+    };
+
+    if (!isSupported()) return res;
 
     ensureStarted();
-    const disposable = rx.disposable();
     const matcher = Match.pattern(pattern);
 
     $.pipe(
@@ -67,10 +73,7 @@ export const KeyboardMonitor = {
       }
     });
 
-    return {
-      pattern,
-      dispose: disposable.dispose,
-    };
+    return res;
   },
 
   /**
