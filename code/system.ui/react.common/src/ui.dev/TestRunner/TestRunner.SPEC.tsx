@@ -48,8 +48,8 @@ export default Dev.describe('TestRunner', (e) => {
     dev.boolean((btn) =>
       btn
         .label('isSpinning')
-        .value((e) => e.state.props.isSpinning)
-        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isSpinning'))),
+        .value((e) => e.state.props.spinning)
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
     );
 
     dev.hr();

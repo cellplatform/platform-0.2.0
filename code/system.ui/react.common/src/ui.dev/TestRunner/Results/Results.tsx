@@ -5,13 +5,13 @@ import { Spinner } from '../../../ui/Spinner';
 export type ResultsProps = {
   data?: t.TestSuiteRunResponse;
   padding?: t.CssEdgesInput;
-  isSpinning?: boolean;
+  spinning?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
 };
 
 export const Results: React.FC<ResultsProps> = (props) => {
-  const { data, isSpinning = false } = props;
+  const { data, spinning = false } = props;
 
   /**
    * [Render]
@@ -39,18 +39,20 @@ export const Results: React.FC<ResultsProps> = (props) => {
       placeItems: 'center',
     }),
     results: css({
-      opacity: isSpinning ? 0.15 : 1,
-      filter: `grayscale(${isSpinning ? 100 : 0}%) blur(${isSpinning ? 1 : 0}px)`,
+      opacity: spinning ? 0.15 : 1,
+      filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
     }),
   };
 
-  const elSpinner = isSpinning && (
+  const elSpinner = spinning && (
     <div {...styles.spinner}>
       <Spinner size={22} />
     </div>
   );
 
-  const elEmpty = !data && !isSpinning && <div {...styles.empty}>No test results to display.</div>;
+  const elEmpty = !data && !spinning && (
+    <div {...styles.empty}>{'No test results to display.'}</div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
