@@ -13,6 +13,7 @@ describe('Keyboard.Match', () => {
     test('  ', []);
     test('KeyP', ['KeyP']);
     test('p', ['p']);
+    test('P', ['P']);
 
     test('=', ['=']);
     test('\\+', ['+']); // NB: escape character on divider.
