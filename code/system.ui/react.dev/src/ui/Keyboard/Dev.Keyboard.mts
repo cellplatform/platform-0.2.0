@@ -2,14 +2,16 @@ import { Keyboard } from '../common';
 
 export const DevKeyboard = {
   listen() {
-    /**
-     * ACTION: Cancel "save" HTML page (default browser action).
-     */
-    Keyboard.on('CMD + S', (e) => e.cancel());
+    Keyboard.on({
+      /**
+       * ACTION: Cancel "save" HTML page (default browser action).
+       */
+      'CMD + KeyS': (e) => e.cancel(),
 
-    /**
-     * ACTION: Clear "developer-tools" console.
-     */
-    Keyboard.on('CMD + K', () => console.clear());
+      /**
+       * ACTION: Clear "developer-tools" console.
+       */
+      'CMD + KeyK': (e) => console.clear(),
+    });
   },
 };

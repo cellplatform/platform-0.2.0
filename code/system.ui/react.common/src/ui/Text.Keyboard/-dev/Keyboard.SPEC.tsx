@@ -14,14 +14,31 @@ export default Dev.describe('KeyboardMonitor', (e) => {
 
     Keyboard.Monitor.subscribe((current) => state.change((d) => (d.keyboard = current)));
 
-    const pattern = 'CMD + L';
-    Keyboard.Monitor.on(pattern, (e) => {
-      e.cancel();
+    const log = (e: t.KeyMatchSubscriberHandlerArgs) => {
       console.group('🌳 ');
-      console.info(`match pattern: "${pattern}"`);
+      console.info(`match pattern: "${e.pattern}"`);
       console.info(`pressed:`, e.state.pressed);
       console.log('e', e);
       console.groupEnd();
+    };
+
+    /**
+     * Single pattern registration
+     */
+    Keyboard.Monitor.on('CMD + KeyL', (e) => {
+      e.cancel();
+      log(e);
+    });
+
+    /**
+     * Regsiter an object-map of patterns.
+     */
+    Keyboard.Monitor.on({
+      'CMD + KeyP'(e) {
+        e.cancel();
+        log(e);
+      },
+      'SHIFT + ALT + KeyP': (e) => log(e),
     });
 
     ctx.subject

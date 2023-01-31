@@ -20,9 +20,9 @@ export default Spec.describe('MySample', (e) => {
 
     expect(state.current.count).to.eql(0); // NB: assertions will be run within CI.
 
-    Keyboard.on('CMD + K', (e) => {
+    Keyboard.on('CMD + KeyK', (e) => {
       // NB: Test helpful to ensure errors don't occur on headless (server) run.
-      console.log('CMD + K', e);
+      console.log('keyboard', e.pattern);
     });
 
     ctx.subject
