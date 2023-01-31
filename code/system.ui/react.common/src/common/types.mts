@@ -18,6 +18,8 @@ export type {
 
 export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
 
+export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
+
 export type {
   TestSuiteRunResponse,
   TestRunResponse,
