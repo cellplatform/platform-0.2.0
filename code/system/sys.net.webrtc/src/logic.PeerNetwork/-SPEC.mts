@@ -1,14 +1,15 @@
 import { PeerNetwork } from '.';
-import { cuid, expect, rx, TEST, Dev } from '../test.ui';
+import { cuid, expect, rx, TEST, Dev, Time } from '../test.ui';
 
-const signal = TEST.SIGNAL;
+const signal = TEST.signal;
+const timeout = 1000 * 15;
 
 const MockNetworks = async (options: { length?: number } = {}) => {
   const { length = 2 } = options;
 
   const start = async () => {
     const bus = rx.bus();
-    return (await PeerNetwork.start({ bus, signal, timeout: 10000 })).network;
+    return (await PeerNetwork.start({ bus, signal, timeout })).network;
   };
 
   const wait = Array.from({ length }).map((_, i) => start());
@@ -21,6 +22,8 @@ const MockNetworks = async (options: { length?: number } = {}) => {
 };
 
 export default Dev.describe('PeerNetwork', (e) => {
+  e.timeout(timeout);
+
   e.describe('`PeerNetwork.start()` - initialize network client "peer"', (e) => {
     e.it('generate "self" <peer-id>', async () => {
       const bus = rx.bus();
@@ -73,10 +76,22 @@ export default Dev.describe('PeerNetwork', (e) => {
     });
   });
 
-  e.describe('network connections', (e) => {
-    e.timeout(10000);
+  e.it('TMP', async (e) => {
+    const bus = rx.bus();
+    const { dispose$ } = rx.disposable();
 
-    e.it('connect: data', async () => {
+    bus.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+      console.log('bus', e.payload);
+    });
+
+    bus.fire({
+      type: 'foo',
+      payload: { foo: 'bar' },
+    });
+  });
+
+  e.describe('network connections', (e) => {
+    e.it('data (connect → talk over EventBus)', async () => {
       const mock = await MockNetworks();
       const [a, b] = mock.clients;
       const connector = a.events.peer.connection(a.netbus.self, b.netbus.self);
@@ -105,10 +120,20 @@ export default Dev.describe('PeerNetwork', (e) => {
       expect(first.peer.self).to.eql(a.self);
       expect(first.peer.remote.id).to.eql(b.self);
 
+      b.netbus.$.pipe().subscribe((e) => {
+        console.log('b', e);
+      });
+
+      console.log('res', res);
+
+      await a.netbus.target.remote({ type: 'foo', payload: { msg: 'from a' } });
+
+      await Time.wait(200);
+
       await mock.dispose();
     });
 
-    e.it.skip('connect: media', async () => {
+    e.it.skip('media connection', async () => {
       const mock = await MockNetworks();
       const [a, b] = mock.clients;
 

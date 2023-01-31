@@ -2,14 +2,14 @@ import { MediaStream, PeerNetwork, rx, t } from '../libs.mjs';
 import { EventBridge } from './DEV.EventBridge';
 
 export const TEST = {
-  SIGNAL: 'rtc.cellfs.com', // WebRTC "signal server" connection coordination end-point.
+  signal: 'rtc.cellfs.com', // WebRTC "signal server" connection coordination end-point.
 
   /**
    * Establish a test network connection.
    */
   async createNetwork(options: { bus?: t.EventBus<any> } = {}) {
     const bus = options.bus ?? rx.bus();
-    const signal = TEST.SIGNAL;
+    const signal = TEST.signal;
     const { network } = await PeerNetwork.start({ bus, signal });
     const self = network.netbus.self;
 
@@ -18,4 +18,4 @@ export const TEST = {
 
     return network;
   },
-};
+} as const;
