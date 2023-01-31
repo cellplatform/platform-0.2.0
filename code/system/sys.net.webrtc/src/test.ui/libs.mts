@@ -11,7 +11,7 @@
 /**
  * @local
  */
-// export { PeerNetwork } from '../web.PeerNetwork';
+// export { PeerNetwork } from '../logic.PeerNetwork';
 // export { useLocalPeer } from '../ui.hooks';
 // export { CardBody } from '../ui/primitives';
 // export { LocalPeerCard } from '../ui/LocalPeer.Card';
@@ -27,4 +27,4 @@ export { Dev } from 'sys.ui.react.common';
  */
 export * from '../common';
 export { NetworkBusMock } from '../logic.NetworkBus';
-export { WebRuntimeBus } from '../web.RuntimeBus';
+export { WebRuntimeBus } from '../logic.RuntimeBus';

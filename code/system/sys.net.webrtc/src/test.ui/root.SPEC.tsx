@@ -54,8 +54,8 @@ export default Dev.describe('TestRunner', (e) => {
     };
 
     dev.title('Test Suites');
-    run('PeerNetbus', import('../web.PeerNetbus/PeerNetbus.SPEC.mjs'));
-    run('PeerEvents', import('../web.PeerNetwork.events/PeerEvents.SPEC.mjs'));
+    run('PeerNetbus', import('../logic.PeerNetbus/PeerNetbus.SPEC.mjs'));
+    run('PeerEvents', import('../logic.PeerNetwork.events/PeerEvents.SPEC.mjs'));
 
     dev.hr();
     dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
