@@ -1,8 +1,13 @@
+import type { t } from './common';
+
 type KeyHandler = (e: KeyboardEvent) => any;
 
 export const KeyListener = {
   keydown: listener('keydown'),
   keyup: listener('keyup'),
+  get isSupported() {
+    return typeof window === 'object';
+  },
 };
 
 /**
@@ -10,11 +15,11 @@ export const KeyListener = {
  * that is "disposable" (remove event binding).
  */
 function listener(event: 'keydown' | 'keyup') {
-  return (handler: KeyHandler) => {
-    document?.addEventListener(event, handler);
+  return (handler: KeyHandler): t.KeyListenerHandle => {
+    window?.addEventListener(event, handler);
     return {
       dispose() {
-        document?.removeEventListener(event, handler);
+        window?.removeEventListener(event, handler);
       },
     };
   };

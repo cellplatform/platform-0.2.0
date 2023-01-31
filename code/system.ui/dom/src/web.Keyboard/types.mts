@@ -1,5 +1,7 @@
 import type { t } from '../common.t';
 
+export type KeyListenerHandle = { dispose(): void };
+
 export type KeyPattern = string; // eg. "CMD + K"
 export type KeyboardStage = 'Down' | 'Up';
 export type KeyboardModifierEdges = [] | ['Left'] | ['Right'] | ['Left' | 'Right'];

@@ -19,7 +19,11 @@ const $ = new rx.BehaviorSubject<t.KeyboardState>(_state);
  */
 export const KeyboardMonitor = {
   get isSupported() {
-    return isSupported();
+    return typeof window === 'object';
+  },
+
+  get isListening() {
+    return _isListening;
   },
 
   get $() {
@@ -33,7 +37,7 @@ export const KeyboardMonitor = {
   },
 
   subscribe(fn: (e: t.KeyboardState) => void) {
-    if (!isSupported()) return;
+    if (KeyboardMonitor.isSupported) return;
     ensureStarted();
     const disposable = rx.disposable();
     $.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
@@ -50,7 +54,7 @@ export const KeyboardMonitor = {
       dispose: disposable.dispose,
     };
 
-    if (!isSupported()) return res;
+    if (KeyboardMonitor.isSupported) return res;
 
     ensureStarted();
     const matcher = Match.pattern(pattern);
@@ -82,7 +86,7 @@ export const KeyboardMonitor = {
    *       to the global keyboard events.
    */
   start() {
-    if (!isSupported()) return;
+    if (KeyboardMonitor.isSupported) return;
     if (!_isListening) {
       window.addEventListener('keydown', keypressHandler);
       window.addEventListener('keyup', keypressHandler);
@@ -95,7 +99,7 @@ export const KeyboardMonitor = {
    * Detach event listeners.
    */
   stop() {
-    if (!isSupported()) return;
+    if (KeyboardMonitor.isSupported) return;
     if (_isListening) {
       window.removeEventListener('keydown', keypressHandler);
       window.removeEventListener('keyup', keypressHandler);
@@ -110,10 +114,9 @@ export const KeyboardMonitor = {
 /**
  * Helpers
  */
-const isSupported = () => typeof window === 'object';
 
 function ensureStarted() {
-  if (!isSupported) return;
+  if (KeyboardMonitor.isSupported) return;
   if (!_isListening) KeyboardMonitor.start();
 }
 
