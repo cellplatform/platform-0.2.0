@@ -36,7 +36,7 @@ export default Dev.describe('TextInput', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    KeyboardMonitor.on('CMD + P', async (e) => {
+    KeyboardMonitor.on('CMD + KeyP', async (e) => {
       e.cancel();
       state.current.ref?.focus();
     });
