@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Keyboard, Color, COLORS, css, t, rx, Dev } from './common';
-import { CmdBar } from './ui/CmdBar';
+import { CmdBar } from './ui.CmdBar';
 
 export type CmdHostProps = {
   specs?: t.SpecImports;

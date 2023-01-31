@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, Color, COLORS, css, t, rx, TextInput, DevIcons } from '../common';
+import { Keyboard, Color, COLORS, css, t, rx, TextInput, DevIcons } from './common';
+
+import { useKeyboard } from './useKeyboard.mjs';
 
 export type CmdBarProps = {
   text?: string;
@@ -11,16 +13,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
   const [isFocused, setFocused] = useState(false);
 
-  /**
-   * [Handlers]
-   */
-  useEffect(() => {
-    const handler = Keyboard.on('CMD + P', (e) => {
-      e.cancel();
-      textboxRef?.focus();
-    });
-    return () => handler.dispose();
-  }, [textboxRef]);
+  useKeyboard(textboxRef);
 
   /**
    * [Render]
