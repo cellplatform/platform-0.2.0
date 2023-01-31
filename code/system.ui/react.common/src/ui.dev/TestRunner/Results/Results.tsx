@@ -11,7 +11,7 @@ export type ResultsProps = {
 };
 
 export const Results: React.FC<ResultsProps> = (props) => {
-  const { data, spinning = false } = props;
+  const { data, spinning = false, scroll = true } = props;
 
   /**
    * [Render]
@@ -23,7 +23,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
       fontSize: 13,
       color: COLORS.DARK,
       cursor: 'default',
-      Scroll: props.scroll,
+      Scroll: scroll,
       ...Style.toPadding(props.padding),
     }),
     empty: css({
