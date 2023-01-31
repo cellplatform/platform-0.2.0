@@ -2,13 +2,6 @@ import { DEFAULTS, R, rx, t } from './common';
 import { Match } from './Match.mjs';
 import { Util } from './util.mjs';
 
-export type KeyMatchSubscriberHandler = (e: KeyMatchSubscriberHandlerArgs) => void;
-export type KeyMatchSubscriberHandlerArgs = {
-  state: t.KeyboardStateCurrent;
-  event: t.KeyboardKeypress;
-  cancel(): void;
-};
-
 let _isListening = false;
 let _state: t.KeyboardState = R.clone(DEFAULTS.state);
 const { dispose, dispose$ } = rx.disposable();
@@ -17,9 +10,9 @@ const $ = new rx.BehaviorSubject<t.KeyboardState>(_state);
 /**
  * Global keyboard monitor.
  */
-export const KeyboardMonitor = {
+export const KeyboardMonitor: t.KeyboardMonitor = {
   get isSupported() {
-    return typeof window === 'object';
+    return typeof document === 'object';
   },
 
   get isListening() {
@@ -37,47 +30,28 @@ export const KeyboardMonitor = {
   },
 
   subscribe(fn: (e: t.KeyboardState) => void) {
-    if (KeyboardMonitor.isSupported) return;
-    ensureStarted();
     const disposable = rx.disposable();
-    $.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
-    return {
-      dispose: disposable.dispose,
-    };
+    if (KeyboardMonitor.isSupported) {
+      ensureStarted();
+      $.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
+    }
+    return disposable;
   },
 
-  on(pattern: t.KeyPattern, fn: KeyMatchSubscriberHandler) {
-    const disposable = rx.disposable();
-    const res = {
-      pattern,
-      dispose$: disposable.dispose$,
-      dispose: disposable.dispose,
-    };
+  on(...args: any[]) {
+    if (typeof args[0] === 'object') {
+      const disposable = rx.disposable();
+      const { dispose$ } = disposable;
+      const patterns = args[0] as t.KeyMatchPatterns;
+      Object.entries(patterns).forEach(([pattern, fn]) => on(pattern, fn, { dispose$ }));
+      return disposable;
+    }
 
-    if (KeyboardMonitor.isSupported) return res;
+    if (typeof args[0] === 'string' && typeof args[1] === 'function') {
+      return on(args[0], args[1]);
+    }
 
-    ensureStarted();
-    const matcher = Match.pattern(pattern);
-
-    $.pipe(
-      rx.takeUntil(dispose$),
-      rx.takeUntil(disposable.dispose$),
-      rx.filter((e) => Boolean(e.last)),
-      rx.filter((e) => e.current.pressed.length > 0),
-    ).subscribe((e) => {
-      const pressed = e.current.pressed.map(({ key }) => key);
-      const modifiers = e.current.modifiers;
-
-      if (matcher.isMatch(pressed, modifiers)) {
-        fn({
-          state: e.current,
-          event: e.last!,
-          cancel: () => e.last!.cancel(),
-        });
-      }
-    });
-
-    return res;
+    throw new Error('Input paramters for [Keyboard.on] not matched.');
   },
 
   /**
@@ -86,23 +60,24 @@ export const KeyboardMonitor = {
    *       to the global keyboard events.
    */
   start() {
-    if (KeyboardMonitor.isSupported) return;
+    if (!KeyboardMonitor.isSupported) return KeyboardMonitor;
     if (!_isListening) {
-      window.addEventListener('keydown', keypressHandler);
-      window.addEventListener('keyup', keypressHandler);
+      document.addEventListener('keydown', keypressHandler);
+      document.addEventListener('keyup', keypressHandler);
       window.addEventListener('blur', blurHandler);
       _isListening = true;
     }
+    return KeyboardMonitor;
   },
 
   /**
    * Detach event listeners.
    */
   stop() {
-    if (KeyboardMonitor.isSupported) return;
+    if (!KeyboardMonitor.isSupported) return;
     if (_isListening) {
-      window.removeEventListener('keydown', keypressHandler);
-      window.removeEventListener('keyup', keypressHandler);
+      document.removeEventListener('keydown', keypressHandler);
+      document.removeEventListener('keyup', keypressHandler);
       window.removeEventListener('blur', blurHandler);
       reset({ hard: true });
       dispose();
@@ -116,7 +91,7 @@ export const KeyboardMonitor = {
  */
 
 function ensureStarted() {
-  if (KeyboardMonitor.isSupported) return;
+  if (!KeyboardMonitor.isSupported) return;
   if (!_isListening) KeyboardMonitor.start();
 }
 
@@ -222,4 +197,37 @@ function updatePressedKeys(e: t.KeyboardKeypress) {
       next.pressed = next.pressed.filter((k) => k.code !== code);
     }
   });
+}
+
+function on(
+  pattern: t.KeyPattern,
+  fn: t.KeyMatchSubscriberHandler,
+  options: { dispose$?: t.Observable<any> } = {},
+) {
+  const disposable = rx.disposable(options.dispose$);
+  if (!KeyboardMonitor.isSupported) return disposable;
+
+  ensureStarted();
+  const matcher = Match.pattern(pattern);
+
+  $.pipe(
+    rx.takeUntil(dispose$),
+    rx.takeUntil(disposable.dispose$),
+    rx.filter((e) => Boolean(e.last)),
+    rx.filter((e) => e.current.pressed.length > 0),
+  ).subscribe((e) => {
+    const pressed = e.current.pressed.map((e) => e.code);
+    const modifiers = e.current.modifiers;
+
+    if (matcher.isMatch(pressed, modifiers)) {
+      fn({
+        pattern,
+        state: e.current,
+        event: e.last!,
+        cancel: () => e.last!.cancel(),
+      });
+    }
+  });
+
+  return disposable;
 }
