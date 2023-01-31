@@ -1,8 +1,10 @@
 import { Dev } from '..';
 import { expect } from '../../test.ui';
-import { t } from '../common';
 
-type T = { results?: t.TestSuiteRunResponse };
+import type { ResultsProps } from './Results';
+
+type T = { props: ResultsProps };
+const initial: T = { props: {} };
 
 const root = Dev.describe('root spec', (e) => {
   e.it('foo', async (e) => {
@@ -21,31 +23,37 @@ const root = Dev.describe('root spec', (e) => {
 export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
+    await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
-        return (
-          <div style={{ padding: 10 }}>
-            <Dev.TestRunner.Results data={e.state.results} />
-          </div>
-        );
+        return <Dev.TestRunner.Results {...e.state.props} padding={10} />;
       });
   });
 
   e.it('debug panel', async (e) => {
-    const dev = Dev.tools<T>(e, {});
+    const dev = Dev.tools<T>(e, initial);
 
     dev.button('run test', async (e) => {
       const results = await root.run();
-      await e.change((d) => (d.results = results));
+      await e.change((d) => (d.props.data = results));
     });
 
-    dev.button('clear', (e) => e.change((d) => (d.results = undefined)));
+    dev.button('clear', (e) => e.change((d) => (d.props.data = undefined)));
 
     dev.hr();
-    dev.row((e) => {
+
+    dev.boolean((btn) =>
+      btn
+        .label('isSpinning')
+        .value((e) => e.state.props.isSpinning)
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isSpinning'))),
+    );
+
+    dev.hr();
+    dev.footer.render((e) => {
       return <Dev.TestRunner.Compact />;
     });
   });
