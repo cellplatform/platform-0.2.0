@@ -1,5 +1,5 @@
 import { Color, COLORS, css, t } from '../common';
-import { Icons } from '../Icons.mjs';
+import { DevIcons } from '../Icons.mjs';
 
 export type ButtonIconProps = {
   isActive?: boolean;
@@ -13,7 +13,7 @@ export const ButtonIcon: React.FC<ButtonIconProps> = (props) => {
   const { isOver, isActive = true } = props;
   const Size = 22;
   const color = isOver && isActive ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.6);
-  const Icon = props.icon ?? Icons.Method;
+  const Icon = props.icon ?? DevIcons.Method;
 
   /**
    * [Render]

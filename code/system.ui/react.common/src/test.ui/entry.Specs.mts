@@ -21,6 +21,7 @@ export const Specs = {
 
 export const DevSpecs = {
   'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/TestRunner.SPEC'),
+  'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/CmdHost.SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
   'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/DevTools.Hr.SPEC'),
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/DevTools.Button.SPEC'),
