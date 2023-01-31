@@ -166,11 +166,14 @@ for (const result of results) {
   table.push([column.path, column.time, column.status]);
 }
 
+const totalTests = results.reduce((acc, next) => acc + (next.stats?.total ?? 0), 0);
+const totalDisplay = pc.white(pc.bold(totalTests.toLocaleString()));
+
 console.info();
 console.info(pc.bold(statusColor(ok, ok ? `Success` : `Unsuccessful`)));
 console.info(table.toString());
 console.info();
-console.info(pc.gray(`elapsed ${timer.elapsed.toString()}`));
+console.info(pc.gray(`${totalDisplay} tests run in ${timer.elapsed.toString()}`));
 console.info(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
 if (!ok) process.exit(1);
