@@ -1,10 +1,10 @@
 {
   "name": "sys.dev",
-  "version": "0.0.90",
+  "version": "0.0.91",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist.cell/.latest/app && serve",
+    "serve": "cd dist/web && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "sys.net.webrtc": "0.0.0",
-    "sys.types": "0.0.0",
     "sys.text": "0.0.0",
+    "sys.types": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.dev": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
@@ -32,8 +32,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-07b47a77.js",
-    "./web": "./dist/web/lib/index-07b47a77.js"
+    ".": "./dist/web/lib/index-e1dae69a.js",
+    "./web": "./dist/web/lib/index-e1dae69a.js"
   },
   "typesVersions": {
     "*": {
