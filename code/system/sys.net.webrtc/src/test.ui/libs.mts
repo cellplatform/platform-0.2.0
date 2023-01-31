@@ -26,5 +26,5 @@ export { Dev } from 'sys.ui.react.common';
  * @local
  */
 export * from '../common';
-export { NetworkBusMock } from '../NetworkBus';
+export { NetworkBusMock } from '../logic.NetworkBus';
 export { WebRuntimeBus } from '../web.RuntimeBus';

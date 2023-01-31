@@ -1,6 +1,6 @@
 import { map } from 'rxjs/operators';
 import { PeerEvents, t, UriUtil } from './common';
-import { NetworkBus } from '../NetworkBus';
+import { NetworkBus } from '../logic.NetworkBus';
 
 /**
  * An [event-bus] distributed across a number of
