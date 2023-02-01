@@ -136,10 +136,8 @@ export function BusController(args: {
         await context.flush(); // Flush the results from the {ctx} into the state tree: {render.props}.
 
         results.tests
-          .filter((test) => test.error)
-          .forEach((test) => {
-            console.error(test.error);
-          });
+          .filter((test) => Boolean(test.error))
+          .forEach((test) => console.error(test.error));
 
         /**
          * Update the state tree with the run results.
