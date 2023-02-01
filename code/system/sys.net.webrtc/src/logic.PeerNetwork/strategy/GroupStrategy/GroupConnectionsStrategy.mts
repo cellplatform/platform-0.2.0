@@ -1,7 +1,4 @@
-import { firstValueFrom } from 'rxjs';
-import { filter, timeout } from 'rxjs/operators';
-
-import { slug, t, Module, UriUtil } from '../common';
+import { slug, t, Module, UriUtil, rx } from '../common';
 
 /**
  * Strategy for retrieving peer/connection details for members of the network.
@@ -14,8 +11,8 @@ export async function GroupConnectionsStrategy(args: {
   const { netbus, events } = args;
   const module = Module.info;
   const self = netbus.self;
-  const req$ = events.group.connections.req$.pipe(filter(() => args.isEnabled()));
-  const res$ = events.group.connections.res$.pipe(filter(() => args.isEnabled()));
+  const req$ = events.group.connections.req$.pipe(rx.filter(() => args.isEnabled()));
+  const res$ = events.group.connections.res$.pipe(rx.filter(() => args.isEnabled()));
 
   const toConnectionUri = (input: string) => UriUtil.connection.parse(input, { throw: true });
 
@@ -23,7 +20,7 @@ export async function GroupConnectionsStrategy(args: {
    * Listen for local requests,
    * then broadcast event out to all connected peers.
    */
-  req$.pipe(filter((e) => e.source === self)).subscribe(async (payload) => {
+  req$.pipe(rx.filter((e) => e.source === self)).subscribe(async (payload) => {
     const tx = slug();
     const targets = netbus.connections.map((conn) => conn.peer.remote.id);
     const { targetted } = await netbus.target.remote({
@@ -32,11 +29,11 @@ export async function GroupConnectionsStrategy(args: {
     });
 
     const waitFor = targetted.map((uri) =>
-      firstValueFrom(
+      rx.firstValueFrom(
         res$.pipe(
-          filter((e) => e.tx === tx),
-          filter((e) => e.source === toConnectionUri(uri)?.peer),
-          timeout(5000),
+          rx.filter((e) => e.tx === tx),
+          rx.filter((e) => e.source === toConnectionUri(uri)?.peer),
+          rx.timeout(5000),
         ),
       ),
     );
@@ -53,7 +50,7 @@ export async function GroupConnectionsStrategy(args: {
   /**
    * Listen for remote requests.
    */
-  req$.pipe(filter((e) => e.source !== self)).subscribe(async (payload) => {
+  req$.pipe(rx.filter((e) => e.source !== self)).subscribe(async (payload) => {
     const tx = payload.tx || slug();
     const connections = netbus.connections.map(({ id, kind, parent }) => ({
       id,

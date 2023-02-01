@@ -1,5 +1,3 @@
-import { filter } from 'rxjs/operators';
-
 import { rx, t } from '../common';
 
 /**
@@ -21,8 +19,8 @@ export function EnsureClosedStrategy(args: {
    */
   connections.disconnect.req$
     .pipe(
-      filter(() => args.isEnabled()),
-      filter((e) => e.self === self),
+      rx.filter(() => args.isEnabled()),
+      rx.filter((e) => e.self === self),
     )
     .subscribe(({ connection }) => {
       if (connection) {
@@ -38,8 +36,8 @@ export function EnsureClosedStrategy(args: {
    */
   rx.payload<t.GroupEnsureConnectionClosedEvent>(netbus.$, 'sys.net/group/conn/ensure:closed')
     .pipe(
-      filter(() => args.isEnabled()),
-      filter((e) => e.source !== self),
+      rx.filter(() => args.isEnabled()),
+      rx.filter((e) => e.source !== self),
     )
     .subscribe(async (e) => {
       const { peer } = await events.status(self).get();

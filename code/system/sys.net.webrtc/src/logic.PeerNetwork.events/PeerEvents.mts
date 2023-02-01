@@ -1,5 +1,4 @@
-import { firstValueFrom, Observable, of, timeout } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
+import type { Observable } from 'rxjs';
 
 import { cuid, rx, slug, t, UriUtil } from '../common';
 import { EventNamespace } from './ns.mjs';
@@ -17,9 +16,9 @@ export function PeerEvents(
   const { dispose, dispose$ } = disposable;
   const bus = rx.busAsType<t.PeerEvent>(eventbus);
 
-  const clone = (dispose$?: t.Observable<any>) => {
+  const clone = (dispose$?: Observable<any>) => {
     const events = PeerEvents(eventbus, { dispose$ });
-    disposable?.dispose$.pipe(take(1)).subscribe(events.dispose);
+    disposable?.dispose$.pipe(rx.take(1)).subscribe(events.dispose);
     return events;
   };
 
@@ -35,7 +34,7 @@ export function PeerEvents(
   const create: t.PeerEvents['create'] = (signal, options = {}) => {
     const self = options.self || cuid();
     const { timeout } = options;
-    const res = firstValueFrom(created(self).$);
+    const res = rx.firstValueFrom(created(self).$);
     bus.fire({
       type: 'sys.net/peer/local/init:req',
       payload: { self, signal, timeout },
@@ -72,7 +71,7 @@ export function PeerEvents(
 
     const get = () => {
       const tx = slug();
-      const res = firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({ type: 'sys.net/peer/local/status:req', payload: { self, tx } });
       return res;
     };
@@ -110,7 +109,7 @@ export function PeerEvents(
 
     const fire = (select?: t.PeerLocalPurgeReq['select']) => {
       const tx = slug();
-      const res = firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({ type: 'sys.net/peer/local/purge:req', payload: { self, tx, select } });
       return res;
     };
@@ -144,7 +143,7 @@ export function PeerEvents(
     }) => {
       const { kind, constraints } = args;
       const tx = args.tx || slug();
-      const res = firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(res$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({
         type: 'sys.net/peer/local/media:req',
         payload: { self, tx, kind, constraints },
@@ -187,7 +186,7 @@ export function PeerEvents(
       data(options: { isReliable?: boolean; parent?: t.PeerConnectionId } = {}) {
         const { isReliable, parent } = options;
         const tx = slug();
-        const res = firstValueFrom(connected$.pipe(rx.filter((e) => e.tx === tx)));
+        const res = rx.firstValueFrom(connected$.pipe(rx.filter((e) => e.tx === tx)));
         bus.fire({
           type: 'sys.net/peer/conn/connect:req',
           payload: { self, tx, remote, kind: 'data', direction: 'outgoing', isReliable, parent },
@@ -201,7 +200,7 @@ export function PeerEvents(
       ) {
         const { constraints, parent } = options;
         const tx = slug();
-        const res = firstValueFrom(connected$.pipe(rx.filter((e) => e.tx === tx)));
+        const res = rx.firstValueFrom(connected$.pipe(rx.filter((e) => e.tx === tx)));
         bus.fire({
           type: 'sys.net/peer/conn/connect:req',
           payload: { self, tx, remote, kind, direction: 'outgoing', constraints, parent },
@@ -212,7 +211,7 @@ export function PeerEvents(
 
     const close = (connection: t.PeerConnectionId) => {
       const tx = slug();
-      const res = firstValueFrom(disconnected$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(disconnected$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({
         type: 'sys.net/peer/conn/disconnect:req',
         payload: { self, tx, remote, connection },
@@ -283,7 +282,7 @@ export function PeerEvents(
     const send = (data: any, options: { targets?: t.PeerConnectionUriString[] } = {}) => {
       const { targets } = options;
       const tx = slug();
-      const res = firstValueFrom(out.res$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(out.res$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({
         type: 'sys.net/peer/data/out:req',
         payload: { tx, self, data, targets },
@@ -307,11 +306,11 @@ export function PeerEvents(
 
         const tx = slug();
         const msecs = args.timeout ?? 10000;
-        const first = firstValueFrom(
+        const first = rx.firstValueFrom(
           remote.exists.res$.pipe(
             rx.filter((e) => e.tx === tx),
-            timeout(msecs),
-            catchError(() => of(`[remote.exists] timed out after ${msecs} msecs`)),
+            rx.timeout(msecs),
+            rx.catchError(() => rx.of(`[remote.exists] timed out after ${msecs} msecs`)),
           ),
         );
 
@@ -339,7 +338,7 @@ export function PeerEvents(
     instance: { bus: rx.bus.instance(bus) },
     $: bus$,
     dispose,
-    dispose$: dispose$.pipe(take(1)),
+    dispose$: dispose$.pipe(rx.take(1)),
     clone,
 
     create,

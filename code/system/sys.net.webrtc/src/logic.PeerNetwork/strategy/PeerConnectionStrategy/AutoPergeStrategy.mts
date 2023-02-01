@@ -1,6 +1,4 @@
-import { debounceTime, filter } from 'rxjs/operators';
-
-import { t } from '../common';
+import { t, rx } from '../common';
 
 /**
  * Strategy for auto-purging connections when closed.
@@ -17,9 +15,9 @@ export function AutoPergeStrategy(args: {
 
   connections.disconnect.res$
     .pipe(
-      filter((e) => e.self === self),
-      filter(() => args.isEnabled()),
-      debounceTime(10),
+      rx.filter((e) => e.self === self),
+      rx.filter(() => args.isEnabled()),
+      rx.debounceTime(10),
     )
     .subscribe((e) => events.purge(self).fire());
 }

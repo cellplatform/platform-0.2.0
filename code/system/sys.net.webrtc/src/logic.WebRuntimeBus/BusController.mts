@@ -1,5 +1,3 @@
-import { delay } from 'rxjs/operators';
-
 import { BusEvents } from './BusEvents.mjs';
 import { DEFAULT, Module, rx, t } from './common';
 
@@ -20,7 +18,7 @@ export function BusController(args: {
   /**
    * Info (Module)
    */
-  events.info.req$.pipe(delay(0)).subscribe(async (e) => {
+  events.info.req$.pipe(rx.delay(0)).subscribe(async (e) => {
     const { tx } = e;
     const module = Module.info;
     const info: t.WebRuntimeInfo = { module };
@@ -34,7 +32,7 @@ export function BusController(args: {
   /**
    * Netbus
    */
-  events.netbus.req$.pipe(delay(0)).subscribe((e) => {
+  events.netbus.req$.pipe(rx.delay(0)).subscribe((e) => {
     const { tx } = e;
     const exists = Boolean(netbus);
     bus.fire({

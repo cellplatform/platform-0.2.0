@@ -1,5 +1,3 @@
-import { firstValueFrom } from 'rxjs';
-
 import { Module, rx, slug, t } from '../common';
 import { EventNamespace as ns } from './ns.mjs';
 
@@ -44,7 +42,7 @@ export function GroupEvents(eventbus: t.PeerNetbus<any>): t.GroupEvents {
       if (total === 0) return { local, remote: [], pending: [] };
 
       const tx = slug();
-      const res = firstValueFrom(connections.res$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(connections.res$.pipe(rx.filter((e) => e.tx === tx)));
       netbus.target.local({
         type: 'sys.net/group/connections:req',
         payload: { source, targets, tx },

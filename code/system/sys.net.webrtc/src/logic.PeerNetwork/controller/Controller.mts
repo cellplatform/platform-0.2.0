@@ -1,6 +1,3 @@
-import { merge } from 'rxjs';
-import { delay, distinctUntilChanged, filter, map, take } from 'rxjs/operators';
-
 import { PeerEvents } from '../../logic.PeerNetwork.events';
 import {
   Module,
@@ -177,7 +174,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
    * CREATE a new network client.
    */
   rx.payload<t.PeerLocalInitReqEvent>($, 'sys.net/peer/local/init:req')
-    .pipe(delay(0))
+    .pipe(rx.delay(0))
     .subscribe(async (e) => {
       const id = e.self;
       let error: undefined | t.PeerError;
@@ -204,7 +201,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
    * STATUS
    */
   rx.payload<t.PeerLocalStatusReqEvent>($, 'sys.net/peer/local/status:req')
-    .pipe(delay(0))
+    .pipe(rx.delay(0))
     .subscribe((e) => {
       const tx = e.tx || slug();
       const self = refs.self[e.self];
@@ -219,25 +216,27 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
   /**
    * STATUS CHANGE
    */
-  const statusChanged$ = merge(
-    $.pipe(
-      filter((e) => {
-        const types: t.PeerEvent['type'][] = [
-          'sys.net/peer/local/init:res',
-          'sys.net/peer/local/purge:res',
-          'sys.net/peer/local/online:changed',
-          'sys.net/peer/conn/connect:res',
-          'sys.net/peer/conn/disconnect:res',
-        ];
-        return types.includes(e.type);
-      }),
-    ),
-  ).pipe(
-    map((event) => ({ selfRef: refs.self[event.payload.self], event })),
-    filter((e) => Boolean(e.selfRef)),
-    map((e) => ({ event: e.event, status: Status.refToSelf(e.selfRef) })),
-    distinctUntilChanged((prev, next) => R.equals(prev.status, next.status)),
-  );
+  const statusChanged$ = rx
+    .merge(
+      $.pipe(
+        rx.filter((e) => {
+          const types: t.PeerEvent['type'][] = [
+            'sys.net/peer/local/init:res',
+            'sys.net/peer/local/purge:res',
+            'sys.net/peer/local/online:changed',
+            'sys.net/peer/conn/connect:res',
+            'sys.net/peer/conn/disconnect:res',
+          ];
+          return types.includes(e.type);
+        }),
+      ),
+    )
+    .pipe(
+      rx.map((event) => ({ selfRef: refs.self[event.payload.self], event })),
+      rx.filter((e) => Boolean(e.selfRef)),
+      rx.map((e) => ({ event: e.event, status: Status.refToSelf(e.selfRef) })),
+      rx.distinctUntilChanged((prev, next) => R.equals(prev.status, next.status)),
+    );
 
   statusChanged$.subscribe((e) => {
     bus.fire({
@@ -307,7 +306,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
    * CONNECT: Outgoing
    */
   rx.payload<t.PeerConnectReqEvent>($, 'sys.net/peer/conn/connect:req')
-    .pipe(filter((e) => e.direction === 'outgoing'))
+    .pipe(rx.filter((e) => e.direction === 'outgoing'))
     .subscribe(async (e) => {
       const self = refs.self[e.self];
       const tx = e.tx || slug();
@@ -364,9 +363,9 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
         // Listen for a connection error.
         // Will happen on timeout (remote-peer not found on the network)
         errorMonitor.$.pipe(
-          filter((err) => err.type === 'peer-unavailable'),
-          filter((err) => err.message.includes(`peer ${remote}`)),
-          take(1),
+          rx.filter((err) => err.type === 'peer-unavailable'),
+          rx.filter((err) => err.message.includes(`peer ${remote}`)),
+          rx.take(1),
         ).subscribe((err) => {
           // FAIL
           errorMonitor.dispose();
@@ -443,7 +442,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
    * DISCONNECT from a remote peer.
    */
   rx.payload<t.PeerDisconnectReqEvent>($, 'sys.net/peer/conn/disconnect:req')
-    .pipe(filter((e) => Boolean(refs.self[e.self])))
+    .pipe(rx.filter((e) => Boolean(refs.self[e.self])))
     .subscribe(async (e) => {
       const selfRef = refs.self[e.self];
       const tx = e.tx || slug();
@@ -486,7 +485,7 @@ export function Controller(args: { bus: t.EventBus<any> }): t.PeerController {
    * DATA:OUT: Send
    */
   rx.payload<t.PeerDataOutReqEvent>($, 'sys.net/peer/data/out:req')
-    .pipe(filter((e) => Boolean(refs.self[e.self])))
+    .pipe(rx.filter((e) => Boolean(refs.self[e.self])))
     .subscribe((e) => {
       const selfRef = refs.self[e.self];
       const tx = e.tx || slug();
