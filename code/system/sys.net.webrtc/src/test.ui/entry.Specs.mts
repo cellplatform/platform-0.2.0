@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.net.webrtc': () => import('./-root.SPEC'),
+  'sys.net.webrtc': () => import('./-SPEC'),
 };
 
 export default Specs;

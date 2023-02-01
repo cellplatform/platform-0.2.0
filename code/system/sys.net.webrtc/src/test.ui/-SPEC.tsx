@@ -15,7 +15,7 @@ const initial: T = {
   debug: { recordButton: {} },
 };
 
-export default Dev.describe('TestRunner', (e) => {
+export default Dev.describe('Root', (e) => {
   const bus = rx.bus();
   const signal = TEST.signal;
   const timeout = 1000 * 15;
