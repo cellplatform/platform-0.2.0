@@ -11,7 +11,6 @@
 /**
  * @local
  */
-// export { PeerNetwork } from '../logic.PeerNetwork';
 // export { useLocalPeer } from '../ui.hooks';
 // export { CardBody } from '../ui/primitives';
 // export { LocalPeerCard } from '../ui/LocalPeer.Card';
@@ -27,6 +26,6 @@ export { MediaStream } from 'sys.ui.react.video';
  * @local
  */
 export * from '../common';
-export { NetworkBusMock } from '../logic.NetworkBus';
-export { WebRuntimeBus } from '../logic.WebRuntimeBus';
-export { PeerNetwork } from '../logic.PeerNetwork';
+export { NetworkBusMock } from '../web.NetworkBus';
+export { WebRuntimeBus } from '../web.WebRuntimeBus';
+export { PeerNetwork } from '../web.PeerNetwork';

@@ -1,4 +1,4 @@
-import { PeerEvents } from '../../logic.PeerNetwork.events';
+import { PeerEvents } from '../../web.PeerNetwork.events';
 import {
   Module,
   DEFAULT,

@@ -80,10 +80,10 @@ export default Dev.describe('TestRunner', (e) => {
         });
       };
 
-      run('PeerNetbus', import('../logic.PeerNetbus/-SPEC.mjs'));
-      run('PeerEvents', import('../logic.PeerNetwork.events/-SPEC.mjs'));
-      run('PeerStrategy', import('../logic.PeerNetwork/strategy/PeerStrategy/-SPEC.mjs'));
-      run('PeerNetwork', import('../logic.PeerNetwork/-SPEC.mjs'));
+      run('PeerNetbus', import('../web.PeerNetbus/-SPEC.mjs'));
+      run('PeerEvents', import('../web.PeerNetwork.events/-SPEC.mjs'));
+      run('PeerStrategy', import('../web.PeerNetwork/strategy/PeerStrategy/-SPEC.mjs'));
+      run('PeerNetwork', import('../web.PeerNetwork/-SPEC.mjs'));
     });
 
     dev.hr();

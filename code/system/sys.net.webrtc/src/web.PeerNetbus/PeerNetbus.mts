@@ -1,5 +1,5 @@
 import { PeerEvents, t, UriUtil, rx } from './common';
-import { NetworkBus } from '../logic.NetworkBus';
+import { NetworkBus } from '../web.NetworkBus';
 
 /**
  * An [event-bus] distributed across a number of

@@ -1,8 +1,8 @@
-import { PeerNetbus } from '../logic.PeerNetbus';
-import { GroupEvents, PeerEvents } from '../logic.PeerNetwork.events';
+import { PeerNetbus } from '../web.PeerNetbus';
+import { GroupEvents, PeerEvents } from '../web.PeerNetwork.events';
+import { WebRuntimeBus } from '../web.WebRuntimeBus';
 import { cuid, t } from './common';
 import { Controller } from './controller';
-import { WebRuntimeBus } from '../logic.WebRuntimeBus';
 
 type Milliseconds = number;
 type DomainEndpoint = string; // eg "rtc.foo.org"
