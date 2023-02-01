@@ -2,7 +2,7 @@
  * Common RXJS
  */
 export { Observable, Subject, BehaviorSubject } from 'rxjs';
-export { filter, map } from 'rxjs/operators';
+export { filter, map, debounceTime, take, distinctUntilChanged, delay } from 'rxjs/operators';
 
 /**
  * 💦💦
@@ -25,4 +25,5 @@ export { filter, map } from 'rxjs/operators';
  * the check RXJS makes of the observable that is passed into the [takeUtil] function.
  *
  */
+export { merge } from 'rxjs';
 export { takeUntil } from 'rxjs/operators';
