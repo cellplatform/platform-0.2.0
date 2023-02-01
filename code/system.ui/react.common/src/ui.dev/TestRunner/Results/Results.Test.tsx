@@ -1,6 +1,6 @@
-import { Color, COLORS, css, Icons, t } from '../common';
-import { TestError } from './Results.Test.Error';
+import { Color, COLORS, css, Icons, t, Time } from '../common';
 import { Description } from './Result.Description';
+import { TestError } from './Results.Test.Error';
 
 export type TestResultProps = {
   data: t.TestRunResponse;
@@ -44,6 +44,8 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
 
   const elError = data.error && <TestError data={data} style={styles.error} />;
 
+  const elapsed = Time.duration(data.elapsed).toString();
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.line.base}>
@@ -53,7 +55,7 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
           {elIconSkipped}
         </div>
         <Description text={data.description} isSkipped={isSkipped} />
-        {<div {...styles.line.elapsed}>{isSkipped ? '-' : `${data.elapsed} ms`}</div>}
+        {<div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>}
       </div>
       {elError}
     </div>

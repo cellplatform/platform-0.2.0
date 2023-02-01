@@ -1,6 +1,6 @@
-import { css, t } from '../common';
-import { TestResult } from './Results.Test';
+import { css, t, Time } from '../common';
 import { Description } from './Result.Description';
+import { TestResult } from './Results.Test';
 
 export type SuiteResultsProps = {
   data: t.TestSuiteRunResponse;
@@ -9,6 +9,7 @@ export type SuiteResultsProps = {
 
 export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
   const { data } = props;
+  const elapsed = Time.duration(data.elapsed).toString();
 
   /**
    * [Render]
@@ -18,7 +19,7 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
     title: {
       base: css({ Flex: 'horizontal-stretch-stretch', marginBottom: 4 }),
       description: css({ flex: 1 }),
-      elapsed: css({ opacity: 0.4, userSelect: 'none' }),
+      elapsed: css({ opacity: 1, userSelect: 'none' }),
     },
     body: css({
       position: 'relative',
@@ -33,7 +34,7 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.title.base}>
         <Description text={data.description} style={styles.title.description} />
-        <div {...styles.title.elapsed}>{`${data.elapsed} ms`}</div>
+        <div {...styles.title.elapsed}>{elapsed}</div>
       </div>
       <div {...styles.body}>
         {elTests}
