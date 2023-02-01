@@ -1,8 +1,17 @@
 /**
  * Common RXJS
  */
-export { Observable, Subject, BehaviorSubject } from 'rxjs';
-export { filter, map, debounceTime, take, distinctUntilChanged, delay } from 'rxjs/operators';
+export { Observable, Subject, BehaviorSubject, firstValueFrom, of } from 'rxjs';
+export {
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  filter,
+  map,
+  take,
+  timeout,
+  catchError,
+} from 'rxjs/operators';
 
 /**
  * 💦💦
