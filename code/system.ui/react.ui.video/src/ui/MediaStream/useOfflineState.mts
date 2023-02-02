@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 /**
- * State that monitors the environments online/offline status.
+ * State that monitors the environments [online/offline] status.
  */
 export function useOfflineState() {
   const [online, setOnline] = useState<boolean>(navigator.onLine);
