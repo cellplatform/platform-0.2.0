@@ -5,8 +5,9 @@ type Id = string;
 
 type T = {
   debug: {
-    remotePeer?: Id;
+    remote?: Id;
     testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
+    muted: boolean;
   };
   peer?: t.Peer;
   connections: t.PeerConnection[];
@@ -14,7 +15,10 @@ type T = {
 const initial: T = {
   connections: [],
   peer: undefined,
-  debug: { testrunner: {} },
+  debug: {
+    muted: location.hostname === 'localhost',
+    testrunner: {},
+  },
 };
 
 export default Dev.describe('WebRTC', (e) => {
@@ -41,10 +45,13 @@ export default Dev.describe('WebRTC', (e) => {
     await state.change((d) => (d.peer = self));
     self.connections$.subscribe((e) => {
       console.log('self.connections$', self.connections$);
-      state.change((d) => (d.connections = e.connections));
+      state.change((d) => {
+        d.connections = e.connections;
+        d.peer = self;
+      });
     });
 
-    // Media (Video/Audio/Screen).
+    // Media (video/audio/screen).
     MediaStream.Controller({ bus });
   });
 
@@ -71,7 +78,7 @@ export default Dev.describe('WebRTC', (e) => {
           <div {...styles.base}>
             <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
             <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} text={'// hello world!'} />
+              <MonacoEditor language={'typescript'} text={'// 👋 Hello Rowan!'} />
             </div>
           </div>
         );
@@ -80,15 +87,38 @@ export default Dev.describe('WebRTC', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.header
+      .padding(0)
+      .border(-0.1)
+      .render<T>((e) => {
+        const media = e.state.peer?.mediaConnections[0]; // TEMP 🐷
+        if (!media) return null;
+        return (
+          <MediaStream.Video
+            stream={media.stream.remote}
+            muted={e.state.debug.muted}
+            height={250}
+          />
+        );
+      });
+
     dev.footer.border(-0.1).render<T>((e) => {
       const { peer, connections } = e.state;
       const data = { connections, peer };
       return <Dev.Object name={'spec.WebRTC'} data={data} expand={1} />;
     });
 
+    dev.boolean((btn) =>
+      btn
+        .label('video.muted')
+        .value((e) => e.state.debug.muted)
+        .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'muted'))),
+    );
+
     dev.button((btn) =>
       btn
-        .label('copy peer-id (self)')
+        .label('copy id (self)')
         .right((e) => {
           const id = self.id;
           const left = id.substring(0, 5);
@@ -98,47 +128,47 @@ export default Dev.describe('WebRTC', (e) => {
         .onClick(async (e) => navigator.clipboard.writeText(`peer:${self.id}`)),
     );
 
-    dev.hr();
+    dev.section((dev) => {
+      dev.hr();
+      dev.row((e) => {
+        return (
+          <TextInput
+            value={e.state.debug.remote}
+            valueStyle={{ fontSize: 14 }}
+            placeholder={'connect to remote (peer-id)'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            focusAction={'Select'}
+            spellCheck={false}
+            onChanged={(e) => dev.change((d) => (d.debug.remote = e.to))}
+          />
+        );
+      });
+      dev.hr();
 
-    dev.row((e) => {
-      return (
-        <TextInput
-          value={e.state.debug.remotePeer}
-          valueStyle={{ fontSize: 14 }}
-          placeholder={'connect to remote (peer-id)'}
-          placeholderStyle={{ opacity: 0.3, italic: true }}
-          focusAction={'Select'}
-          spellCheck={false}
-          onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
-          onEnter={async () => {
-            const remote = e.state.debug.remotePeer ?? '';
-            const data = await self.data(remote);
-            console.log('⚡️ connected:', data);
-          }}
-        />
-      );
+      dev.button('connect: data', async (e) => {
+        const remote = e.state.current.debug.remote ?? '';
+        const res = await self.data(remote);
+        console.log('⚡️ peer.data (response):', res);
+      });
+
+      dev.button('connect: video', async (e) => {
+        await media.stop(streamRef).fire();
+        await media.start(streamRef).video();
+        const { stream } = await media.status(streamRef).get();
+
+        const remote = e.state.current.debug.remote ?? '';
+        const localStream = stream?.media;
+
+        if (remote && localStream) {
+          const res = await self.media(remote, localStream);
+          console.log('⚡️ peer.media (response):', res);
+        }
+      });
     });
 
     dev.hr();
 
-    dev.button('🐷 tmp', async (e) => {
-      await media.stop(streamRef).fire();
-      await media.start(streamRef).video();
-      const { stream } = await media.status(streamRef).get();
-
-      const remotePeer = e.state.current.debug.remotePeer ?? '';
-      const localStream = stream?.media;
-
-      console.log('remotePeer', remotePeer);
-      console.log('local stream', stream);
-
-      if (remotePeer && localStream) {
-        const res = await self.media(remotePeer, localStream);
-        console.log('res', res);
-      }
-    });
-
-    dev.button('kill all connections', (e) => {
+    dev.button('close all connections', (e) => {
       self.connections.forEach((conn) => conn.dispose());
     });
 
@@ -162,5 +192,6 @@ export default Dev.describe('WebRTC', (e) => {
 
       run('WebRTC (spec)', import('./WebRTC.SPEC.mjs'), false);
     });
+    dev.hr();
   });
 });
