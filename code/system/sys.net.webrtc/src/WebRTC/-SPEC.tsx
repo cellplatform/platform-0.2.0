@@ -5,11 +5,11 @@ import { cuid, slug } from './common';
 type Id = string;
 
 type T = {
-  self: Id;
   testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
   debug: { remotePeer?: Id };
+  'peer(self)'?: t.Peer;
 };
-const initial: T = { self: cuid(), testrunner: {}, debug: {} };
+const initial: T = { testrunner: {}, debug: {} };
 
 export default Dev.describe('WebRTC', (e) => {
   const host = 'https://rtc.cellfs.com';
@@ -17,10 +17,11 @@ export default Dev.describe('WebRTC', (e) => {
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
 
-    const id = initial.self;
+    const id = cuid();
     self = await WebRTC.peer(host, { id });
+    await state.change((d) => (d['peer(self)'] = self));
 
     self.connections$.subscribe((e) => {
       //
@@ -47,8 +48,15 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.button((btn) =>
       btn
-        .label((e) => `peer:${e.state.self}`)
-        .onClick(async (e) => navigator.clipboard.writeText(`peer:${e.state.current.self}`)),
+        .label('copy peer-id (self)')
+        .right((e) => {
+          const id = self.id;
+          const left = id.substring(0, 5);
+          const right = id.substring(id.length - 5);
+          return `("${left} .. ${right}")`;
+        })
+
+        .onClick(async (e) => navigator.clipboard.writeText(`peer:${self.id}`)),
     );
 
     dev.hr();
@@ -58,7 +66,7 @@ export default Dev.describe('WebRTC', (e) => {
         <TextInput
           value={e.state.debug.remotePeer}
           valueStyle={{ fontSize: 14 }}
-          placeholder={'remote peer (id)'}
+          placeholder={'connect to remote (peer-id)'}
           placeholderStyle={{ opacity: 0.3, italic: true }}
           focusAction={'Select'}
           spellCheck={false}
@@ -66,7 +74,7 @@ export default Dev.describe('WebRTC', (e) => {
           onEnter={async () => {
             const remote = e.state.debug.remotePeer ?? '';
             const data = await self.data(remote);
-            console.log('data', data);
+            console.log('connected:', data);
             // await dev.change((d) => (d.connections.data = data));
           }}
         />
@@ -83,10 +91,6 @@ export default Dev.describe('WebRTC', (e) => {
       const res = await peer1.data(peer2.id);
 
       console.log('res', res);
-
-      //
-      // const data = e.state.current.connections.data;
-      // data?.send({ type: 'foo', payload: { msg: 'hello' } });
     });
 
     dev.hr();
