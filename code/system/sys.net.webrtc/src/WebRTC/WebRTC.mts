@@ -3,7 +3,6 @@ import { PeerDataConnection } from './Peer.Data.mjs';
 import { Util } from './util.mjs';
 
 type HostName = string;
-export type DataPeer = ReturnType<typeof PeerDataConnection>;
 
 /**
  * Library for working with WebRTC peer-to-peer connections.
@@ -16,7 +15,6 @@ export const WebRTC = {
    */
   peer(signal: HostName, options: { id?: t.PeerId } = {}): Promise<t.Peer> {
     return new Promise<t.Peer>((resolve, reject) => {
-      signal = Path.trimHttpPrefix(signal);
       const id = Util.toId(options.id ?? Util.randomPeerId());
       const rtc = new PeerJS(id, {
         key: 'conn',
@@ -24,7 +22,7 @@ export const WebRTC = {
         secure: true,
         port: 443,
         debug: 2,
-        host: signal,
+        host: Path.trimHttpPrefix(signal),
       });
 
       const { dispose, dispose$ } = rx.disposable();
@@ -78,7 +76,7 @@ export const WebRTC = {
          * Start a data connection.
          */
         data(connectTo: t.PeerId) {
-          return new Promise<DataPeer>((resolve, reject) => {
+          return new Promise<t.PeerDataConnection>((resolve, reject) => {
             const id = Util.toId(connectTo);
             const conn = rtc.connect(id, { reliable: true });
             conn.on('error', (err) => reject(err));
