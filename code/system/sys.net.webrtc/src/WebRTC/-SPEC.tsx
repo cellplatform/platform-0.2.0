@@ -1,15 +1,17 @@
 import { WebRTC } from '.';
-import { Dev, t, TextInput, Time } from '../test.ui';
+import { Color, css, Dev, t, TextInput, Time } from '../test.ui';
 
 type Id = string;
 
 type T = {
-  testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
-  debug: { remotePeer?: Id };
+  debug: {
+    remotePeer?: Id;
+    testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
+  };
   'peer(self)'?: t.Peer;
   connections: t.PeerConnection[];
 };
-const initial: T = { testrunner: {}, debug: {}, connections: [] };
+const initial: T = { debug: { testrunner: {} }, connections: [] };
 
 export default Dev.describe('WebRTC', (e) => {
   const host = 'https://rtc.cellfs.com';
@@ -33,9 +35,27 @@ export default Dev.describe('WebRTC', (e) => {
       .backgroundColor(1)
       .backgroundColor(1)
       .size('fill')
-      .render<T>((e) => {
+      .render<T>(async (e) => {
+        const { MonacoEditor } = await import('sys.ui.react.monaco');
+
+        const styles = {
+          base: css({
+            display: 'grid',
+            gridTemplateRows: '2fr 1fr',
+          }),
+          footer: css({
+            borderTop: `solid 1px ${Color.format(-0.2)}`,
+            display: 'grid',
+          }),
+        };
+
         return (
-          <Dev.TestRunner.Results {...e.state.testrunner} padding={10} style={{ Absolute: 0 }} />
+          <div {...styles.base}>
+            <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
+            <div {...styles.footer}>
+              <MonacoEditor language={'typescript'} />
+            </div>
+          </div>
         );
       });
   });
@@ -85,7 +105,7 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.button('🐷 tmp', async (e) => {});
 
-    dev.button('dispose of all connections', async (e) => {
+    dev.button('kill all connections', (e) => {
       self.connections.forEach((conn) => conn.dispose());
     });
 
@@ -93,12 +113,12 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.section('Test Suites', (dev) => {
       const invoke = async (module: t.SpecImport) => {
-        await dev.change((d) => (d.testrunner.spinning = true));
+        await dev.change((d) => (d.debug.testrunner.spinning = true));
         const spec = (await module).default;
         const results = await spec.run();
         await dev.change((d) => {
-          d.testrunner.data = results;
-          d.testrunner.spinning = false;
+          d.debug.testrunner.data = results;
+          d.debug.testrunner.spinning = false;
         });
       };
 
