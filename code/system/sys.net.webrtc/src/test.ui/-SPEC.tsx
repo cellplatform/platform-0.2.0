@@ -1,6 +1,9 @@
+import { PeerNetwork, TEST } from '.';
 import { DevHeader } from './-dev/DEV.ui.Header';
-import { TEST, PeerNetwork } from '.';
-import { TextInput, t, rx, Dev, css } from './common';
+import { EventBridge } from './-dev/DEV.EventBridge';
+import { Time, css, Dev, rx, t, TextInput, MediaStream, cuid } from './common';
+import { PeerNetbus } from '../web.PeerNetbus';
+import { WebRuntimeBus } from '../web.WebRuntimeBus';
 
 type T = {
   testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
@@ -16,23 +19,59 @@ const initial: T = {
 };
 
 export default Dev.describe('Root', (e) => {
+  const timeout = 1000 * 15;
+  e.timeout(timeout);
+
   const bus = rx.bus();
   const signal = TEST.signal;
-  const timeout = 1000 * 15;
-
   let network: t.PeerNetwork;
-  let self = '';
-
-  e.timeout(timeout);
+  let self = cuid();
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
 
-    const started = await PeerNetwork.start({ bus, signal, timeout });
+    const instance = { bus };
+
+    PeerNetwork.Controller({ bus });
+    MediaStream.Controller({ bus });
+    EventBridge.startEventBridge({ bus, self });
+
+    const netbus = PeerNetbus({ bus, self });
+    const runtime = WebRuntimeBus.Controller({ instance, netbus });
+
+    const events = {
+      media: MediaStream.Events(bus),
+      peer: PeerNetwork.PeerEvents(bus),
+      // group: PeerNetwork.GroupEvents(netbus),
+      runtime,
+    };
+
+    // const strategy = {
+    //   peer: PeerNetwork.PeerStrategy({ bus, netbus }),
+    //   group: PeerNetwork.GroupStrategy({ bus, netbus }),
+    // };
+
+    const init = () => {
+      events.media.start(EventBridge.videoRef(self)).video();
+      // events.peer.create(signal, { self });
+      // events.peer.media(self).video();
+    };
+    // Time.delay(100, init);
+    // init();
+
+    // events.peer.status(self).changed$.subscribe((e) => {
+    //   console.log('NET/CHANGED', e);
+    // });
+
+    const started = await PeerNetwork.start({ self, bus, signal, timeout });
     network = started.network;
-    self = network.self;
-
+    console.log('network', network);
+    //     const self = network.self;
+    //
+    //     await state.change((d) => (d.debug.self = self));
+    //
+    //     // TEMP 🐷
     network.events.peer.data(self).in$.subscribe((e) => {
       console.log('data', e);
     });
@@ -91,10 +130,11 @@ export default Dev.describe('Root', (e) => {
 
     dev.hr();
     dev.section('Network', (dev) => {
-      dev.button('copy local peer (id)', async (e) => {
-        const peer = `peer:${self}`;
-        await navigator.clipboard.writeText(peer);
-      });
+      dev.button((btn) =>
+        btn
+          .label((e) => `copy \`peer:${self}\``)
+          .onClick(async (e) => navigator.clipboard.writeText(`peer:${self}`)),
+      );
 
       dev.button('⚡️ read status', async (e) => {
         const res = await network.events.peer.status(self).get();
@@ -119,9 +159,21 @@ export default Dev.describe('Root', (e) => {
               onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
               onEnter={async () => {
                 const remote = e.state.debug.remotePeer ?? '';
+
+                // const events = network.events;
+
                 const connector = network.events.peer.connection(self, remote);
                 const res = await connector.open.data({ isReliable: true });
                 console.log('data connection:', res);
+
+                // const media = connector.open.media('media/video');
+
+                //                 const media = network.events.peer.media(self).video();
+                //                 console.log('media', media);
+                //                 //
+                //                 await media;
+                //
+                //                 console.log('media', media);
               }}
             />
           </div>

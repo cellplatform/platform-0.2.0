@@ -11,7 +11,7 @@ export const TEST = {
     const bus = options.bus ?? rx.bus();
     const signal = TEST.signal;
     const { network } = await PeerNetwork.start({ bus, signal });
-    const self = network.netbus.self;
+    const self = network.self;
 
     MediaStream.Controller({ bus });
     EventBridge.startEventBridge({ self, bus });
