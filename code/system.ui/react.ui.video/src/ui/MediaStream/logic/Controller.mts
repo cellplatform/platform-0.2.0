@@ -1,5 +1,5 @@
 import { R, rx, slug, t } from '../common';
-import { StreamUtil } from './util';
+import { StreamUtil } from '../util';
 
 type Refs = { [ref: string]: Ref };
 type Ref = {

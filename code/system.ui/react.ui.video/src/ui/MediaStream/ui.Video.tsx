@@ -3,7 +3,7 @@ import { css, t, Style, Color } from './common';
 
 type ClickHandler = React.MouseEventHandler<HTMLDivElement>;
 
-export type VideoStreamProps = {
+export type VideoProps = {
   stream?: MediaStream;
   width?: number;
   height?: number;
@@ -18,7 +18,7 @@ export type VideoStreamProps = {
   onMouseLeave?: ClickHandler;
 };
 
-export const VideoStream: React.FC<VideoStreamProps> = (props) => {
+export const Video: React.FC<VideoProps> = (props) => {
   const { stream, isMuted = false, width = 300, height = 200, borderRadius = 20 } = props;
   const videoRef = useRef<HTMLVideoElement>(null);
 

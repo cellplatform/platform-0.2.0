@@ -1,7 +1,6 @@
-export type { VideoStreamProps } from './ui.VideoStream';
+export type { VideoProps } from './ui.Video';
 
 export { MediaStream } from './MediaStream.mjs';
-
 export { MediaStreamEvents, MediaStreamController, MediaStreamRecordController } from './logic';
-export { VideoStream } from './ui.VideoStream';
+export { Video } from './ui.Video';
 export { useStreamState } from './use';

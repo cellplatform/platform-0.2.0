@@ -1,8 +1,8 @@
-import { MediaStream, VideoStream, VideoStreamProps } from '..';
+import { MediaStream, Video, VideoProps } from '..';
 import { Icons } from '../../Icons';
 import { Color, css, t } from './common';
 
-export type SampleProps = VideoStreamProps & { streamRef: string; bus: t.EventBus<any> };
+export type SampleProps = VideoProps & { streamRef: string; bus: t.EventBus<any> };
 
 export const Sample: React.FC<SampleProps> = (props) => {
   const { streamRef, bus } = props;
@@ -34,7 +34,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...styles.base}>
-      <VideoStream {...props} stream={stream} borderRadius={borderRadius} style={styles.video} />
+      <Video {...props} stream={stream} borderRadius={borderRadius} style={styles.video} />
       {elOffline}
     </div>
   );

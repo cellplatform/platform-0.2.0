@@ -5,10 +5,10 @@ import { DevLayoutMediaComponents } from './-dev/DEV.Layout.MediaComponents';
 import { DevRecordButton } from './-dev/DEV.RecordButton';
 import { Sample } from './-dev/DEV.Sample';
 
-import type { VideoStreamProps } from './ui.VideoStream';
+import type { VideoProps } from './ui.Video';
 
 type T = {
-  props: VideoStreamProps;
+  props: VideoProps;
   muted: { video: boolean; audio: boolean };
 };
 const initial: T = {

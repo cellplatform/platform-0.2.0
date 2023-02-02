@@ -1,5 +1,5 @@
-import { rx, t, Time } from './common';
-import { FileUtil } from './util';
+import { rx, t, Time } from '../common';
+import { FileUtil } from '../util';
 
 type M = 'video/webm';
 
