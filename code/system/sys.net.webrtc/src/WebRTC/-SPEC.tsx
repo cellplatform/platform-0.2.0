@@ -11,7 +11,11 @@ type T = {
   'peer(self)'?: t.Peer;
   connections: t.PeerConnection[];
 };
-const initial: T = { debug: { testrunner: {} }, connections: [] };
+const initial: T = {
+  connections: [],
+  'peer(self)': undefined,
+  debug: { testrunner: {} },
+};
 
 export default Dev.describe('WebRTC', (e) => {
   const host = 'https://rtc.cellfs.com';
@@ -94,8 +98,7 @@ export default Dev.describe('WebRTC', (e) => {
           onEnter={async () => {
             const remote = e.state.debug.remotePeer ?? '';
             const data = await self.data(remote);
-            console.log('connected:', data);
-            // await dev.change((d) => (d.connections.data = data));
+            console.log('⚡️ connected:', data);
           }}
         />
       );
