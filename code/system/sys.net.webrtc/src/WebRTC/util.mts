@@ -5,14 +5,14 @@ export const Util = {
     return `p${cuid()}`;
   },
 
-  toId(input: string) {
+  cleanId(input: string) {
     input = (input || '').trim();
     input = input.replace(/^peer\:/, '');
     return input.trim();
   },
 
-  toUri(input: string) {
-    return `peer:${Util.toId(input)}`;
+  asUri(id: string) {
+    return `peer:${Util.cleanId(id)}`;
   },
 
   isType: {

@@ -9,9 +9,9 @@ describe('WebRTC.Util', () => {
     expect(id1[0]).to.eql('p');
   });
 
-  it('toId', () => {
+  it('cleanId', () => {
     const test = (input: string, expected: string) => {
-      const res = Util.toId(input);
+      const res = Util.cleanId(input);
       expect(res).to.eql(expected);
     };
 
@@ -21,9 +21,9 @@ describe('WebRTC.Util', () => {
     test('  peer: myid  ', 'myid');
   });
 
-  it('toUri', () => {
+  it('asUri', () => {
     const test = (input: string, expected: string) => {
-      const res = Util.toUri(input);
+      const res = Util.asUri(input);
       expect(res).to.eql(expected);
     };
 

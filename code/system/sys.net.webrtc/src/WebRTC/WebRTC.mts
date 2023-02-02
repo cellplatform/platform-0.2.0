@@ -15,7 +15,7 @@ export const WebRTC = {
    */
   peer(signal: HostName, options: { id?: t.PeerId } = {}): Promise<t.Peer> {
     return new Promise<t.Peer>((resolve, reject) => {
-      const id = Util.toId(options.id ?? Util.randomPeerId());
+      const id = Util.cleanId(options.id ?? Util.randomPeerId());
       const rtc = new PeerJS(id, {
         key: 'conn',
         path: '/',
@@ -77,7 +77,7 @@ export const WebRTC = {
          */
         data(connectTo: t.PeerId) {
           return new Promise<t.PeerDataConnection>((resolve, reject) => {
-            const id = Util.toId(connectTo);
+            const id = Util.cleanId(connectTo);
             const conn = rtc.connect(id, { reliable: true });
             conn.on('error', (err) => reject(err));
             conn.on('open', () => resolve(Initialize.data(conn)));
