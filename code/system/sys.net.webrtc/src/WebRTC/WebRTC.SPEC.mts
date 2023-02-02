@@ -122,8 +122,11 @@ export default Dev.describe('WebRTC', (e) => {
       connA.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingA.push(e));
       connB.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
 
-      connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
-      connB.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
+      const payloadA = connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
+      const payloadB = connB.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
+
+      expect(WebRTC.Util.isType.PeerDataPayload(payloadA)).to.eql(true);
+      expect(WebRTC.Util.isType.PeerDataPayload(payloadB)).to.eql(true);
 
       await Time.wait(500);
 
@@ -133,7 +136,7 @@ export default Dev.describe('WebRTC', (e) => {
       expect(incomingA[0].event.payload.msg).to.eql('from-B');
       expect(incomingB[0].event.payload.msg).to.eql('from-A');
 
-      // Close the connection on the initiating (A) side.
+      // Close the connection on the initiating side (A).
       connA.dispose();
       expect(connA.disposed).to.eql(true);
       await Time.wait(500);

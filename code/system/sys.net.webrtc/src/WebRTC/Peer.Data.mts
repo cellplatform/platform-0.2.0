@@ -41,6 +41,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
       const connection = api.id;
       const payload: t.PeerDataPayload = { source: { peer, connection }, event };
       conn.send(payload);
+      return payload;
     },
 
     dispose,

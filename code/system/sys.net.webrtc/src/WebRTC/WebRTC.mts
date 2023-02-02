@@ -16,13 +16,14 @@ export const WebRTC = {
   peer(signal: HostName, options: { id?: t.PeerId } = {}): Promise<t.Peer> {
     return new Promise<t.Peer>((resolve, reject) => {
       const id = Util.cleanId(options.id ?? Util.randomPeerId());
+      const host = Path.trimHttpPrefix(signal);
       const rtc = new PeerJS(id, {
         key: 'conn',
         path: '/',
         secure: true,
         port: 443,
         debug: 2,
-        host: Path.trimHttpPrefix(signal),
+        host,
       });
 
       const { dispose, dispose$ } = rx.disposable();

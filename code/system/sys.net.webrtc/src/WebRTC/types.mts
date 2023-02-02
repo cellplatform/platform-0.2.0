@@ -29,7 +29,7 @@ export type PeerDataConnection = t.Disposable & {
   readonly open: boolean;
   readonly in$: t.Observable<t.PeerDataPayload>;
   readonly disposed: boolean;
-  send<E extends t.Event>(event: E): void;
+  send<E extends t.Event>(event: E): PeerDataPayload;
 };
 
 export type PeerDataPayload = {
