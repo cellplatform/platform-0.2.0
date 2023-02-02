@@ -63,7 +63,7 @@ export default Dev.describe('WebRTC', (e) => {
       return { a, b };
     };
 
-    e.it('lifecycle: establish data connection between peers and then dispose', async (e) => {
+    e.it('lifecycle: open data connection between peers, share data, and dispose', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const firedA: t.PeerConnectionChange[] = [];
