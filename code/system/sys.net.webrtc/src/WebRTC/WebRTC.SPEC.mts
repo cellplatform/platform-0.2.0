@@ -78,7 +78,7 @@ export default Dev.describe('WebRTC', (e) => {
       expect(connA).to.eql(peerA.dataConnections[0]);
 
       expect(peerA.connections.length).to.eql(1);
-      await Time.wait(300);
+      await Time.wait(500);
       expect(peerB.connections.length).to.eql(1);
       expect(peerA.dataConnections.length).to.eql(1);
       expect(peerB.dataConnections.length).to.eql(1);
@@ -103,10 +103,10 @@ export default Dev.describe('WebRTC', (e) => {
       connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
       connB.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
 
-      await Time.wait(300);
+      await Time.wait(500);
 
-      expect(incomingA.length).to.eql(1);
-      expect(incomingB.length).to.eql(1);
+      expect(incomingA.length).to.eql(1, 'message received by A');
+      expect(incomingB.length).to.eql(1, 'message received by B');
 
       expect(incomingA[0].event.payload.msg).to.eql('from-B');
       expect(incomingB[0].event.payload.msg).to.eql('from-A');
@@ -114,7 +114,7 @@ export default Dev.describe('WebRTC', (e) => {
       // Close the connection on the initiating (A) side.
       connA.dispose();
       expect(connA.disposed).to.eql(true);
-      await Time.wait(300);
+      await Time.wait(500);
 
       expect(firedA.length).to.eql(2);
       expect(firedB.length).to.eql(2);
@@ -126,7 +126,7 @@ export default Dev.describe('WebRTC', (e) => {
       // Will no-longer transmit data after being disposed.
       connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
       await Time.wait(300);
-      expect(incomingB.length).to.eql(1);
+      expect(incomingB.length).to.eql(1, 'no longer transmits data');
 
       dispose();
     });
