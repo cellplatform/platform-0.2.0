@@ -76,20 +76,6 @@ export default Dev.describe('PeerNetwork', (e) => {
     });
   });
 
-  e.it('TMP', async (e) => {
-    const bus = rx.bus();
-    const { dispose$ } = rx.disposable();
-
-    bus.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-      console.log('bus', e.payload);
-    });
-
-    bus.fire({
-      type: 'foo',
-      payload: { foo: 'bar' },
-    });
-  });
-
   e.describe('network connections', (e) => {
     e.it('data (connect → talk over EventBus)', async () => {
       const mock = await MockNetworks();
