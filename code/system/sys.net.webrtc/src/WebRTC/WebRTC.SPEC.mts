@@ -1,35 +1,37 @@
 import { t, rx, Time, Dev, cuid, expect } from '../test.ui';
 import { WebRTC } from '.';
 
-const host = 'rtc.cellfs.com';
+const hostname = 'rtc.cellfs.com';
 
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(10 * 10000);
 
-  e.describe('initial state (self)', (e) => {
+  e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
-      const peer1 = await WebRTC.peer(`  http://${host}  `);
-      const peer2 = await WebRTC.peer(`  https://${host}  `);
+      const peer1 = await WebRTC.peer(`  http://${hostname}  `);
+      const peer2 = await WebRTC.peer(`  https://${hostname}  `);
 
-      expect(peer1.host).to.eql(host);
-      expect(peer2.host).to.eql(host);
+      expect(peer1.signal).to.eql(hostname);
+      expect(peer2.signal).to.eql(hostname);
 
       peer1.dispose();
       peer2.dispose();
     });
 
     e.it('generates peer id', async (e) => {
-      const peer = await WebRTC.peer(host);
+      const peer = await WebRTC.peer(hostname);
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
+      expect(peer.kind).to.eql('local:peer');
+      expect(peer.signal).to.eql(hostname);
       peer.dispose();
     });
 
     e.it('specify peer id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
-      const peer1 = await WebRTC.peer(host, { id: id1 });
-      const peer2 = await WebRTC.peer(host, { id: `peer:${id2}` });
+      const peer1 = await WebRTC.peer(hostname, { id: id1 });
+      const peer2 = await WebRTC.peer(hostname, { id: `peer:${id2}` });
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2); // NB: Trims the "peer:" URI prefix.
@@ -39,7 +41,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('immutable connections list', async (e) => {
-      const peer = await WebRTC.peer(host);
+      const peer = await WebRTC.peer(hostname);
       expect(peer.connections).to.eql([]);
       expect(peer.dataConnections).to.eql([]);
       expect(peer.mediaConnections).to.eql([]);
@@ -50,11 +52,18 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('data', async (e) => {
-    const peerA = await WebRTC.peer(host);
-    const peerB = await WebRTC.peer(host);
+  e.describe('peer.data', async (e) => {
+    const peerA = await WebRTC.peer(hostname);
+    const peerB = await WebRTC.peer(hostname);
 
-    e.it('establish data connection between peers', async (e) => {
+    const connect = async () => {
+      const a = await peerA.data(peerB.id);
+      await Time.wait(500);
+      const b = peerB.dataConnections.find((e) => e.id === a.id)!;
+      return { a, b };
+    };
+
+    e.it('lifecycle: establish data connection between peers and then dispose', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const firedA: t.PeerConnectionChange[] = [];
@@ -129,6 +138,17 @@ export default Dev.describe('WebRTC', (e) => {
       expect(incomingB.length).to.eql(1, 'no longer transmits data');
 
       dispose();
+    });
+
+    e.it('send binary data between peers [Uint8Array]', async (e) => {
+      type E = { type: 'Foo'; payload: { data: Uint8Array } };
+      const { a, b } = await connect();
+
+      const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      a.send<E>({ type: 'Foo', payload: { data } });
+
+      const received = (await rx.firstValueFrom(b.in$)).event as E;
+      expect(new Uint8Array(received.payload.data)).to.eql(data);
     });
   });
 });
