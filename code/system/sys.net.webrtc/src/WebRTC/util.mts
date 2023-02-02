@@ -1,18 +1,22 @@
-import { t } from './common';
+import { t, cuid } from './common';
 
 export const Util = {
+  randomPeerId() {
+    return `p${cuid()}`;
+  },
+
   toId(input: string) {
     input = (input || '').trim();
     input = input.replace(/^peer\:/, '');
-    return input;
+    return input.trim();
   },
 
   toUri(input: string) {
     return `peer:${Util.toId(input)}`;
   },
 
-  is: {
-    dataPayload(input: any) {
+  isType: {
+    PeerDataPayload(input: any) {
       if (typeof input !== 'object') return false;
 
       const data = input as t.PeerDataPayload;
