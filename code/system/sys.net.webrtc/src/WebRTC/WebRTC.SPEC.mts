@@ -18,7 +18,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer2.dispose();
     });
 
-    e.it('generates peer id', async (e) => {
+    e.it('generates peer-id', async (e) => {
       const peer = await WebRTC.peer(hostname);
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
@@ -27,7 +27,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer.dispose();
     });
 
-    e.it('specify peer id', async (e) => {
+    e.it('specific peer-id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
       const peer1 = await WebRTC.peer(hostname, { id: id1 });
@@ -40,21 +40,28 @@ export default Dev.describe('WebRTC', (e) => {
       peer2.dispose();
     });
 
-    e.it('immutable connections list', async (e) => {
+    e.it('immutable lists', async (e) => {
       const peer = await WebRTC.peer(hostname);
+
       expect(peer.connections).to.eql([]);
       expect(peer.dataConnections).to.eql([]);
       expect(peer.mediaConnections).to.eql([]);
+
       expect(peer.connections).to.not.equal(peer.connections);
       expect(peer.dataConnections).to.not.equal(peer.dataConnections);
       expect(peer.mediaConnections).to.not.equal(peer.mediaConnections);
+
       peer.dispose();
     });
   });
 
   e.describe('peer.data', async (e) => {
-    const peerA = await WebRTC.peer(hostname);
-    const peerB = await WebRTC.peer(hostname);
+    let peerA: t.Peer;
+    let peerB: t.Peer;
+
+    const peers = async (length: number) => {
+      return await Promise.all(Array.from({ length }).map(() => WebRTC.peer(hostname)));
+    };
 
     const connect = async () => {
       const a = await peerA.data(peerB.id);
@@ -62,6 +69,12 @@ export default Dev.describe('WebRTC', (e) => {
       const b = peerB.dataConnections.find((e) => e.id === a.id)!;
       return { a, b };
     };
+
+    e.it('init', async (e) => {
+      const [a, b] = await peers(2);
+      peerA = a;
+      peerB = b;
+    });
 
     e.it('lifecycle: open data connection between peers, share data, and dispose', async (e) => {
       const { dispose, dispose$ } = rx.disposable();

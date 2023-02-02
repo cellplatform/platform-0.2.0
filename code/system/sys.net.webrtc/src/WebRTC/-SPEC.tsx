@@ -1,6 +1,5 @@
-import { Time, css, t, Dev, TextInput } from '../test.ui';
 import { WebRTC } from '.';
-import { cuid, slug } from './common';
+import { Dev, t, TextInput, Time } from '../test.ui';
 
 type Id = string;
 
@@ -8,8 +7,9 @@ type T = {
   testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
   debug: { remotePeer?: Id };
   'peer(self)'?: t.Peer;
+  connections: t.PeerConnection[];
 };
-const initial: T = { testrunner: {}, debug: {} };
+const initial: T = { testrunner: {}, debug: {}, connections: [] };
 
 export default Dev.describe('WebRTC', (e) => {
   const host = 'https://rtc.cellfs.com';
@@ -19,13 +19,13 @@ export default Dev.describe('WebRTC', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    const id = cuid();
+    const id = WebRTC.Util.randomPeerId();
     self = await WebRTC.peer(host, { id });
     await state.change((d) => (d['peer(self)'] = self));
 
-    self.connections$.subscribe((e) => {
-      //
+    self.connections$.subscribe(async (e) => {
       console.log('self.connections$', e);
+      await state.change((d) => (d.connections = e.connections));
     });
 
     ctx.subject
@@ -83,14 +83,10 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.hr();
 
-    dev.button('tmp', async (e) => {
-      const peer1 = await WebRTC.peer(host);
-      const peer2 = await WebRTC.peer(host);
+    dev.button('🐷 tmp', async (e) => {});
 
-      await Time.wait(500);
-      const res = await peer1.data(peer2.id);
-
-      console.log('res', res);
+    dev.button('dispose of all connections', async (e) => {
+      self.connections.forEach((conn) => conn.dispose());
     });
 
     dev.hr();
@@ -111,7 +107,7 @@ export default Dev.describe('WebRTC', (e) => {
         if (immediate) invoke(module);
       };
 
-      run('WebRTC.SPEC', import('./WebRTC.SPEC.mjs'), false);
+      run('WebRTC (spec)', import('./WebRTC.SPEC.mjs'), false);
     });
   });
 });
