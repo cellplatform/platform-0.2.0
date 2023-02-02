@@ -1,5 +1,5 @@
 import { WebRTC } from '.';
-import { Color, css, Dev, t, TextInput } from '../test.ui';
+import { Color, css, Dev, MediaStream, rx, slug, t, TextInput } from '../test.ui';
 
 type Id = string;
 
@@ -8,31 +8,48 @@ type T = {
     remotePeer?: Id;
     testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
   };
-  'peer(self)'?: t.Peer;
+  peer?: t.Peer;
   connections: t.PeerConnection[];
 };
 const initial: T = {
   connections: [],
-  'peer(self)': undefined,
+  peer: undefined,
   debug: { testrunner: {} },
 };
 
 export default Dev.describe('WebRTC', (e) => {
-  const host = 'https://rtc.cellfs.com';
+  const signal = 'rtc.cellfs.com';
   let self: t.Peer;
 
-  e.it('init', async (e) => {
+  const bus = rx.bus();
+  const media = MediaStream.Events(bus);
+  const streamRef = `sample.${slug()}`;
+
+  const getVideoStream = async () => {
+    await media.stop(streamRef).fire();
+    await media.start(streamRef).video();
+    const { stream } = await media.status(streamRef).get();
+    return stream?.media;
+  };
+
+  e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    const id = WebRTC.Util.randomPeerId();
-    self = await WebRTC.peer(host, { id });
-    await state.change((d) => (d['peer(self)'] = self));
-
-    self.connections$.subscribe(async (e) => {
-      console.log('self.connections$', e);
-      await state.change((d) => (d.connections = e.connections));
+    // WebRTC (Peer)
+    self = await WebRTC.peer({ signal, getLocalStream: getVideoStream });
+    await state.change((d) => (d.peer = self));
+    self.connections$.subscribe((e) => {
+      console.log('self.connections$', self.connections$);
+      state.change((d) => (d.connections = e.connections));
     });
+
+    // Media (Video/Audio/Screen).
+    MediaStream.Controller({ bus });
+  });
+
+  e.it('init:ui', async (e) => {
+    const ctx = Dev.ctx(e);
 
     ctx.subject
       .display('grid')
@@ -43,10 +60,7 @@ export default Dev.describe('WebRTC', (e) => {
         const { MonacoEditor } = await import('sys.ui.react.monaco');
 
         const styles = {
-          base: css({
-            display: 'grid',
-            gridTemplateRows: '2fr 1fr',
-          }),
+          base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
           footer: css({
             borderTop: `solid 1px ${Color.format(-0.2)}`,
             display: 'grid',
@@ -57,7 +71,7 @@ export default Dev.describe('WebRTC', (e) => {
           <div {...styles.base}>
             <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
             <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} />
+              <MonacoEditor language={'typescript'} text={'// hello world!'} />
             </div>
           </div>
         );
@@ -66,9 +80,11 @@ export default Dev.describe('WebRTC', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.WebRTC'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const { peer, connections } = e.state;
+      const data = { connections, peer };
+      return <Dev.Object name={'spec.WebRTC'} data={data} expand={1} />;
+    });
 
     dev.button((btn) =>
       btn
@@ -77,9 +93,8 @@ export default Dev.describe('WebRTC', (e) => {
           const id = self.id;
           const left = id.substring(0, 5);
           const right = id.substring(id.length - 5);
-          return `("${left} .. ${right}")`;
+          return `("peer:${left} .. ${right}")`;
         })
-
         .onClick(async (e) => navigator.clipboard.writeText(`peer:${self.id}`)),
     );
 
@@ -106,7 +121,22 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.hr();
 
-    dev.button('🐷 tmp', async (e) => {});
+    dev.button('🐷 tmp', async (e) => {
+      await media.stop(streamRef).fire();
+      await media.start(streamRef).video();
+      const { stream } = await media.status(streamRef).get();
+
+      const remotePeer = e.state.current.debug.remotePeer ?? '';
+      const localStream = stream?.media;
+
+      console.log('remotePeer', remotePeer);
+      console.log('local stream', stream);
+
+      if (remotePeer && localStream) {
+        const res = await self.media(remotePeer, localStream);
+        console.log('res', res);
+      }
+    });
 
     dev.button('kill all connections', (e) => {
       self.connections.forEach((conn) => conn.dispose());

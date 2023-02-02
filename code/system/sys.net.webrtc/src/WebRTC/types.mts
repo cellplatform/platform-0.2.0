@@ -15,20 +15,24 @@ export type Peer = t.Disposable & {
   readonly dataConnections: PeerDataConnection[];
   readonly mediaConnections: PeerMediaConnection[];
   data(connectTo: Id): Promise<PeerDataConnection>;
+  media(connectTo: Id, local: MediaStream): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
 
-/**
- * A [Data] connection with a remote peer.
- */
-export type PeerDataConnection = t.Disposable & {
-  readonly kind: 'data';
+type Connection = t.Disposable & {
   readonly id: Id;
   readonly peer: { local: Id; remote: Id };
   readonly open: boolean;
-  readonly in$: t.Observable<t.PeerDataPayload>;
   readonly disposed: boolean;
+};
+
+/**
+ * A [Data] connection with a remote peer.
+ */
+export type PeerDataConnection = Connection & {
+  readonly kind: 'data';
+  readonly in$: t.Observable<t.PeerDataPayload>;
   send<E extends t.Event>(event: E): PeerDataPayload;
 };
 
@@ -40,11 +44,12 @@ export type PeerDataPayload = {
 /**
  * A [Media] connection with a remote peer.
  */
-export type PeerMediaConnection = t.Disposable & {
+export type PeerMediaConnection = Connection & {
   readonly kind: 'media';
-  readonly id: Id;
-  readonly peer: { local: Id; remote: Id };
+  readonly stream: PeerMediaStreams;
 };
+
+export type PeerMediaStreams = { local: MediaStream; remote: MediaStream };
 
 /**
  * Peer connection change

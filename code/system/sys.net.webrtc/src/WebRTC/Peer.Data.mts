@@ -15,7 +15,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
     conn.close();
   });
 
-  conn.on('close', () => dispose());
+  conn.on('close', dispose);
   conn.on('data', (data: any) => {
     if (Util.isType.PeerDataPayload(data)) in$.next(data);
   });

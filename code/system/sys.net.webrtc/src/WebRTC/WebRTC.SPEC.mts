@@ -1,37 +1,37 @@
 import { t, rx, Time, Dev, cuid, expect } from '../test.ui';
 import { WebRTC } from '.';
 
-const hostname = 'rtc.cellfs.com';
+const signal = 'rtc.cellfs.com'; // hostname of the signalling server.
 
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(10 * 10000);
 
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
-      const peer1 = await WebRTC.peer(`  http://${hostname}  `);
-      const peer2 = await WebRTC.peer(`  https://${hostname}  `);
+      const peer1 = await WebRTC.peer({ signal: `  http://${signal}  ` });
+      const peer2 = await WebRTC.peer({ signal: `  https://${signal}  ` });
 
-      expect(peer1.signal).to.eql(hostname);
-      expect(peer2.signal).to.eql(hostname);
+      expect(peer1.signal).to.eql(signal);
+      expect(peer2.signal).to.eql(signal);
 
       peer1.dispose();
       peer2.dispose();
     });
 
     e.it('generates peer-id', async (e) => {
-      const peer = await WebRTC.peer(hostname);
+      const peer = await WebRTC.peer({ signal });
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
       expect(peer.kind).to.eql('local:peer');
-      expect(peer.signal).to.eql(hostname);
+      expect(peer.signal).to.eql(signal);
       peer.dispose();
     });
 
     e.it('specific peer-id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
-      const peer1 = await WebRTC.peer(hostname, { id: id1 });
-      const peer2 = await WebRTC.peer(hostname, { id: `peer:${id2}` });
+      const peer1 = await WebRTC.peer({ signal, id: id1 });
+      const peer2 = await WebRTC.peer({ signal, id: `peer:${id2}` });
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2); // NB: Trims the "peer:" URI prefix.
@@ -41,7 +41,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('immutable lists', async (e) => {
-      const peer = await WebRTC.peer(hostname);
+      const peer = await WebRTC.peer({ signal });
 
       expect(peer.connections).to.eql([]);
       expect(peer.dataConnections).to.eql([]);
@@ -60,7 +60,7 @@ export default Dev.describe('WebRTC', (e) => {
     let peerB: t.Peer;
 
     const peers = async (length: number) => {
-      return await Promise.all(Array.from({ length }).map(() => WebRTC.peer(hostname)));
+      return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal })));
     };
 
     const connect = async () => {
