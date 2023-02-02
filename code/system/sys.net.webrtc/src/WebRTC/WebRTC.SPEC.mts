@@ -124,7 +124,6 @@ export default Dev.describe('WebRTC', (e) => {
 
       const payloadA = connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
       const payloadB = connB.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
-
       expect(WebRTC.Util.isType.PeerDataPayload(payloadA)).to.eql(true);
       expect(WebRTC.Util.isType.PeerDataPayload(payloadB)).to.eql(true);
 

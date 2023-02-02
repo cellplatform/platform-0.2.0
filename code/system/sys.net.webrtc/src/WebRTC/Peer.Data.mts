@@ -2,7 +2,7 @@ import { rx, t } from './common';
 import { Util } from './util.mjs';
 
 /**
- * Manage a P2P data connection.
+ * Represents a P2P data connection.
  */
 export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection {
   const { dispose, dispose$ } = rx.disposable();
