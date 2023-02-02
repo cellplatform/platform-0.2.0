@@ -15,8 +15,6 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'peerjs': '1.4.7',
     'sys.types': '0.0.0',
-    'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.video': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {
