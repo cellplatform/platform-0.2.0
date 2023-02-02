@@ -1,5 +1,5 @@
 import { WebRTC } from '.';
-import { Color, css, Dev, t, TextInput, Time } from '../test.ui';
+import { Color, css, Dev, t, TextInput } from '../test.ui';
 
 type Id = string;
 
