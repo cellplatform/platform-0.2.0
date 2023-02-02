@@ -1,4 +1,4 @@
-import { t, rx } from './common';
+import { rx, t } from './common';
 import { Util } from './util.mjs';
 
 /**
@@ -6,6 +6,7 @@ import { Util } from './util.mjs';
  */
 export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection {
   const { dispose, dispose$ } = rx.disposable();
+  const in$ = new rx.Subject<t.PeerDataPayload>();
 
   let _disposed = false;
   dispose$.subscribe(() => {
@@ -15,21 +16,14 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
   });
 
   conn.on('close', () => dispose());
-
   conn.on('data', (data: any) => {
     if (Util.isType.PeerDataPayload(data)) in$.next(data);
   });
 
-  const in$ = new rx.Subject<t.PeerDataPayload>();
-
   const api: t.PeerDataConnection = {
     kind: 'data',
-
-    dispose,
-    dispose$,
     id: conn.connectionId,
     in$: in$.pipe(rx.takeUntil(dispose$)),
-
     peer: {
       local: (conn.provider as any)._id as string,
       remote: conn.peer,
@@ -37,10 +31,6 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
 
     get open() {
       return conn.open;
-    },
-
-    get disposed() {
-      return _disposed;
     },
 
     /**
@@ -51,6 +41,12 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
       const connection = api.id;
       const payload: t.PeerDataPayload = { source: { peer, connection }, event };
       conn.send(payload);
+    },
+
+    dispose,
+    dispose$,
+    get disposed() {
+      return _disposed;
     },
   };
 
