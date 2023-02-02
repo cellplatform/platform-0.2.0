@@ -6,6 +6,7 @@ describe('WebRTC.Util', () => {
     const id1 = Util.randomPeerId();
     const id2 = Util.randomPeerId();
     expect(id1).to.not.eql(id2);
+    expect(id1[0]).to.eql('p');
   });
 
   it('toId', () => {
