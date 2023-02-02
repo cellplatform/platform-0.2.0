@@ -1,11 +1,11 @@
-import { filter } from 'rxjs/operators';
-
-import { MediaStream, VideoStreamProps } from '.';
+import { MediaStream } from '.';
 import { Delete, Dev, rx, slug, t, css, Button } from '../../test.ui';
 import { DevAudioWaveform } from './-dev/DEV.AudioWaveform';
 import { DevLayoutMediaComponents } from './-dev/DEV.Layout.MediaComponents';
 import { DevRecordButton } from './-dev/DEV.RecordButton';
 import { Sample } from './-dev/DEV.Sample';
+
+import type { VideoStreamProps } from './ui.VideoStream';
 
 type T = {
   props: VideoStreamProps;
@@ -37,12 +37,12 @@ export default Dev.describe('MediaStream', (e) => {
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
+    await ctx.state<T>(initial);
 
     MediaStream.Controller({ bus });
 
     rx.payload<t.MediaStreamErrorEvent>(bus.$, 'MediaStream/error')
-      .pipe(filter((e) => e.ref === ref))
+      .pipe(rx.filter((e) => e.ref === ref))
       .subscribe((e) => {
         console.info('MediaStream/error:', e);
       });

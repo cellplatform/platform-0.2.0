@@ -1,16 +1,13 @@
-import { firstValueFrom } from 'rxjs';
-
 import { rx, slug, t } from '../common';
+
+type E = t.MediaStreamEvent | t.MediaStreamsEvent | t.MediaStreamRecordEvent;
 
 /**
  * Helpers for working with <VideoStream> events.
  */
 export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvents {
-  const dispose$ = new rx.Subject<void>();
-  const dispose = () => dispose$.next();
-  const bus = eventbus as t.EventBus<
-    t.MediaStreamEvent | t.MediaStreamsEvent | t.MediaStreamRecordEvent
-  >;
+  const { dispose, dispose$ } = rx.disposable();
+  const bus = rx.busAsType<E>(eventbus);
   const event$ = bus.$.pipe(rx.takeUntil(dispose$));
 
   /**
@@ -26,7 +23,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
 
     const fire = (kind: t.MediaStreamStart['kind']) => {
       const tx = slug();
-      const res = firstValueFrom(started(ref).$.pipe(rx.filter((e) => e.tx === tx)));
+      const res = rx.firstValueFrom(started(ref).$.pipe(rx.filter((e) => e.tx === tx)));
       bus.fire({ type: 'MediaStream/start', payload: { kind, tx, ref } });
       return res;
     };
@@ -57,7 +54,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
       .pipe(rx.filter((e) => e.ref === ref));
 
     const fire = () => {
-      const res = firstValueFrom(stopped(ref).$);
+      const res = rx.firstValueFrom(stopped(ref).$);
       bus.fire({ type: 'MediaStream/stop', payload: { ref } });
       return res;
     };
@@ -85,7 +82,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
       .pipe(rx.filter((e) => e.ref === ref));
 
     const get = () => {
-      const res = firstValueFrom(res$);
+      const res = rx.firstValueFrom(res$);
       bus.fire({ type: 'MediaStream/status:req', payload: { ref } });
       return res;
     };
@@ -103,7 +100,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
         .pipe();
 
       const get = (kind?: t.MediaStreamKind) => {
-        const res = firstValueFrom(res$);
+        const res = rx.firstValueFrom(res$);
         bus.fire({ type: 'MediaStreams/status:req', payload: { kind } });
         return res;
       };
@@ -139,7 +136,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
       .pipe(rx.filter((e) => e.ref === ref));
 
     const start = () => {
-      const res = firstValueFrom(started$);
+      const res = rx.firstValueFrom(started$);
       bus.fire({ type: 'MediaStream/record/start', payload: { ref } });
       return res;
     };
@@ -151,7 +148,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
       } = {},
     ) => {
       const { download, onData } = args;
-      const res = firstValueFrom(stopped$);
+      const res = rx.firstValueFrom(stopped$);
       bus.fire({
         type: 'MediaStream/record/stop',
         payload: { ref, download, onData },
@@ -162,7 +159,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
     const pause = () => interrupt('pause');
     const resume = () => interrupt('resume');
     const interrupt = (action: t.MediaStreamRecordInterruptAction) => {
-      const res = firstValueFrom(interrupted$.pipe(rx.filter((e) => e.action === action)));
+      const res = rx.firstValueFrom(interrupted$.pipe(rx.filter((e) => e.action === action)));
       bus.fire({ type: 'MediaStream/record/interrupt', payload: { ref, action } });
       return res;
     };
@@ -177,7 +174,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
 
       async get() {
         const tx = slug();
-        const res = firstValueFrom(status.res$.pipe(rx.filter((e) => e.tx === tx)));
+        const res = rx.firstValueFrom(status.res$.pipe(rx.filter((e) => e.tx === tx)));
         bus.fire({ type: 'MediaStream/record/status:req', payload: { ref, tx } });
         return res;
       },
@@ -206,7 +203,7 @@ export function MediaStreamEvents(eventbus: t.EventBus<any>): t.MediaStreamEvent
 
   return {
     dispose,
-    dispose$: dispose$.asObservable(),
+    dispose$,
     start,
     started,
     stop,
