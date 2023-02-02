@@ -1,8 +1,8 @@
-import { rx, cuid, t, PeerJS, Path } from './common';
-import { Util } from './util.mjs';
+import { Path, PeerJS, rx, t } from './common';
 import { PeerDataConnection } from './Peer.Data.mjs';
+import { Util } from './util.mjs';
 
-type UrlString = string;
+type HostName = string;
 export type DataPeer = ReturnType<typeof PeerDataConnection>;
 
 /**
@@ -14,17 +14,17 @@ export const WebRTC = {
   /**
    * Start a new local peer.
    */
-  peer(host: UrlString, options: { id?: t.PeerId } = {}): Promise<t.Peer> {
+  peer(signal: HostName, options: { id?: t.PeerId } = {}): Promise<t.Peer> {
     return new Promise<t.Peer>((resolve, reject) => {
-      host = Path.trimHttpPrefix(host);
-      const id = Util.toId(options.id ?? cuid());
+      signal = Path.trimHttpPrefix(signal);
+      const id = Util.toId(options.id ?? Util.randomPeerId());
       const rtc = new PeerJS(id, {
         key: 'conn',
         path: '/',
         secure: true,
         port: 443,
         debug: 2,
-        host,
+        host: signal,
       });
 
       const { dispose, dispose$ } = rx.disposable();
@@ -57,10 +57,9 @@ export const WebRTC = {
       };
 
       const api: t.Peer = {
-        dispose,
-        dispose$,
+        kind: 'local:peer',
+        signal,
         id,
-        host,
 
         connections$: connections$.asObservable(),
         get connections() {
@@ -86,6 +85,9 @@ export const WebRTC = {
             conn.on('open', () => resolve(Initialize.data(conn)));
           });
         },
+
+        dispose,
+        dispose$,
       };
 
       rtc.on('open', () => resolve(api));

@@ -1,13 +1,15 @@
 import type { t } from '../common.t';
 
 type Id = string;
+type Hostname = string;
 
 /**
  * The local peer.
  */
 export type Peer = t.Disposable & {
+  readonly kind: 'local:peer';
   readonly id: Id;
-  readonly host: string;
+  readonly signal: Hostname;
   readonly connections$: t.Observable<PeerConnectionChange>;
   readonly connections: PeerConnection[];
   readonly dataConnections: PeerDataConnection[];
@@ -26,7 +28,6 @@ export type PeerDataConnection = t.Disposable & {
   readonly peer: { local: Id; remote: Id };
   readonly open: boolean;
   readonly in$: t.Observable<t.PeerDataPayload>;
-  readonly out$: t.Observable<t.PeerDataPayload>;
   readonly disposed: boolean;
   send<E extends t.Event>(event: E): void;
 };
