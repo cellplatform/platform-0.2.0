@@ -1,3 +1,5 @@
+import { Video } from './ui.Video';
+
 import {
   MediaStreamEvents as Events,
   MediaStreamController as Controller,
@@ -12,4 +14,5 @@ export const MediaStream = {
 
   useVideoStreamState,
   useOfflineState,
+  Video,
 };

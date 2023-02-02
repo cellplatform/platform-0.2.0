@@ -1,4 +1,4 @@
-import { MediaStream, Video, VideoProps } from '..';
+import { MediaStream, VideoProps } from '..';
 import { Icons } from '../../Icons';
 import { Color, css, t } from './common';
 
@@ -34,7 +34,14 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...styles.base}>
-      <Video {...props} stream={stream} borderRadius={borderRadius} style={styles.video} />
+      <MediaStream.Video
+        {...props}
+        stream={stream}
+        borderRadius={borderRadius}
+        style={styles.video}
+        width={300}
+        height={200}
+      />
       {elOffline}
     </div>
   );

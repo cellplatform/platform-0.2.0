@@ -12,7 +12,7 @@ type T = {
   muted: { video: boolean; audio: boolean };
 };
 const initial: T = {
-  props: { isMuted: true },
+  props: { muted: true },
   muted: { video: false, audio: false },
 };
 
@@ -123,9 +123,9 @@ export default Dev.describe('MediaStream', (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('isMuted')
-          .value((e) => e.state.props.isMuted)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isMuted'))),
+          .label('muted')
+          .value((e) => e.state.props.muted)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'muted'))),
       );
     });
 
