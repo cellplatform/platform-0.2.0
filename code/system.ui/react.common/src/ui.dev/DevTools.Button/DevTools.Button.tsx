@@ -2,6 +2,7 @@ import { Dev, t } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
+type RightInput = string | JSX.Element;
 
 /**
  * A simple clickable text button implementation.
@@ -15,12 +16,17 @@ export function button<S extends O = O>(
   if (!ctx.is.initial) return;
 
   const label = Dev.ValueHandler<string, S>(events);
+  const right = Dev.ValueHandler<RightInput, S>(events);
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
     ctx,
     label(value) {
       label.handler(value);
+      return args;
+    },
+    right(value) {
+      right.handler(value);
       return args;
     },
     onClick(handler) {
@@ -34,9 +40,12 @@ export function button<S extends O = O>(
     const change = state.change;
     const dev = ctx.toObject().props;
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
+
+    const elRight = typeof right.current === 'string' ? <div>{right.current}</div> : right.current;
     return (
       <Button
         label={label.current}
+        rightElement={elRight}
         isEnabled={clickHandlers.size > 0}
         onClick={clickHandlers.size > 0 ? onClick : undefined}
       />

@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { Dev, css } from '../../test.ui';
 import { Switch } from '../common';
 import { Button } from './ui.Button';
 
@@ -58,5 +58,26 @@ export default Dev.describe('Button', (e) => {
       .button('right: `<div>123</div>`', (e) =>
         e.change(({ props }) => (props.rightElement = <div>123</div>)),
       );
+
+    dev.hr();
+
+    dev.button((btn) =>
+      btn
+        .label((e) => `sample left`)
+        .right((e) => {
+          const style = css({
+            PaddingX: 10,
+            PaddingY: 2,
+            borderRadius: 10,
+            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+          });
+          return <div {...style}>right element</div>;
+        })
+        .onClick((e) => {
+          console.log('click');
+        }),
+    );
+
+    dev.button((btn) => btn.label('sample left').right('"right string"'));
   });
 });
