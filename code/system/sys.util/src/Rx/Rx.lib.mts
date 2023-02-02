@@ -1,7 +1,17 @@
 /**
  * Common RXJS
  */
-export { Observable, Subject, BehaviorSubject, firstValueFrom, of } from 'rxjs';
+export {
+  Observable,
+  Subject,
+  BehaviorSubject,
+  of,
+
+  // ref:  https://rxjs.dev/deprecations/to-promise
+  firstValueFrom,
+  lastValueFrom,
+} from 'rxjs';
+
 export {
   debounceTime,
   delay,
