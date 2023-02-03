@@ -8,7 +8,7 @@ export default Dev.describe('WebRTC', (e) => {
 
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
-      const peer1 = await WebRTC.peer({ signal: `  http://${signal}  ` });
+      const peer1 = await WebRTC.peer({ signal: `  http://${signal}  ` }); // NB: Trims the HTTP prefix.
       const peer2 = await WebRTC.peer({ signal: `  https://${signal}  ` });
 
       expect(peer1.signal).to.eql(signal);
