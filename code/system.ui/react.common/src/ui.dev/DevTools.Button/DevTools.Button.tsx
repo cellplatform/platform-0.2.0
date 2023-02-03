@@ -17,6 +17,7 @@ export function button<S extends O = O>(
 
   const label = Dev.ValueHandler<string, S>(events);
   const right = Dev.ValueHandler<RightInput, S>(events);
+  const enabled = Dev.ValueHandler<boolean, S>(events);
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
@@ -29,6 +30,10 @@ export function button<S extends O = O>(
       right.handler(value);
       return args;
     },
+    enabled(value) {
+      enabled.handler(value);
+      return args;
+    },
     onClick(handler) {
       if (typeof handler === 'function') clickHandlers.add(handler);
       return args;
@@ -39,15 +44,18 @@ export function button<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const dev = ctx.toObject().props;
+    const elRight = typeof right.current === 'string' ? <div>{right.current}</div> : right.current;
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
 
-    const elRight = typeof right.current === 'string' ? <div>{right.current}</div> : right.current;
+    const hasHandlers = clickHandlers.size > 0;
+    const isEnabled = hasHandlers && enabled.current !== false;
+
     return (
       <Button
         label={label.current}
         rightElement={elRight}
-        isEnabled={clickHandlers.size > 0}
-        onClick={clickHandlers.size > 0 ? onClick : undefined}
+        isEnabled={isEnabled}
+        onClick={hasHandlers ? onClick : undefined}
       />
     );
   });

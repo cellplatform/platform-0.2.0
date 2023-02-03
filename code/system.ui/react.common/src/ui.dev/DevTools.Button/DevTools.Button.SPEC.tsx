@@ -1,13 +1,14 @@
-import { Dev, css } from '../../test.ui';
+import { css, Dev } from '../../test.ui';
 import { Switch } from '../common';
 import { Button } from './ui.Button';
 
 import type { ButtonProps } from './ui.Button';
 
-type T = { props: ButtonProps; count: number };
+type T = { count: number; props: ButtonProps; debug: { enabled: boolean } };
 const initial: T = {
-  props: { rightElement: <div>123</div>, onClick: (e) => console.info(`⚡️ onClick`) },
   count: 0,
+  props: { rightElement: <div>123</div>, onClick: (e) => console.info(`⚡️ onClick`) },
+  debug: { enabled: true },
 };
 
 export default Dev.describe('Button', (e) => {
@@ -23,7 +24,9 @@ export default Dev.describe('Button', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'props'} data={e.state.props} />);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'props'} data={e.state.props} expand={1} />);
 
     dev
       .button('state: increment count', async (e) => {
@@ -79,5 +82,23 @@ export default Dev.describe('Button', (e) => {
     );
 
     dev.button((btn) => btn.label('sample left').right('"right string"'));
+
+    dev.hr();
+
+    dev.boolean((btn) =>
+      btn
+        .label('debug.enabled')
+        .value((e) => e.state.debug.enabled)
+        .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'enabled'))),
+    );
+
+    dev.button((btn) =>
+      btn
+        .label((e) => `my button (${e.state.debug.enabled ? 'enabled' : 'disabled'})`)
+        .enabled((e) => e.state.debug.enabled)
+        .onClick((e) => console.info('click')),
+    );
+
+    dev.hr();
   });
 });
