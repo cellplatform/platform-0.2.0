@@ -118,7 +118,7 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.button((btn) =>
       btn
-        .label('copy id (self)')
+        .label('copy peer-id')
         .right((e) => {
           const id = self.id;
           const left = id.substring(0, 5);
@@ -147,11 +147,22 @@ export default Dev.describe('WebRTC', (e) => {
       });
       dev.hr();
 
+      const isSelf = (state: T) => {
+        const remote = WebRTC.Util.cleanId(state.debug.remote ?? '');
+        return remote === self.id;
+      };
+
+      const canConnect = (state: T) => {
+        const remote = state.debug.remote ?? '';
+        return Boolean(remote) && !isSelf(state);
+      };
+
       const connect = (label: string, fn: t.DevButtonClickHandler<T>) => {
         dev.button((btn) =>
           btn
             .label(`connect: ${label}`)
-            .enabled((e) => Boolean(e.state.debug.remote))
+            .right((e) => (isSelf(e.state) ? 'self ⚠️' : ''))
+            .enabled((e) => canConnect(e.state))
             .onClick(fn),
         );
       };
@@ -185,7 +196,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
     dev.hr();
 
-    dev.section('Test Suites', (dev) => {
+    dev.section('Debug', (dev) => {
       const invoke = async (module: t.SpecImport) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
         const spec = (await module).default;
@@ -196,12 +207,7 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      const run = (label: string, module: t.SpecImport, immediate?: boolean) => {
-        dev.button(`run: ${label}`, (e) => invoke(module));
-        if (immediate) invoke(module);
-      };
-
-      run('WebRTC (spec)', import('./WebRTC.SPEC.mjs'), false);
+      dev.button('run: unit-tests', (e) => invoke(import('./WebRTC.SPEC.mjs')));
     });
     dev.hr();
   });
