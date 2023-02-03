@@ -76,7 +76,7 @@ export default Dev.describe('WebRTC', (e) => {
       peerB = b;
     });
 
-    e.it('lifecycle: open data connection between peers, share data, and dispose', async (e) => {
+    e.it('lifecycle: open data connection between 2 peers, share data, and dispose', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const firedA: t.PeerConnectionChange[] = [];
@@ -155,7 +155,7 @@ export default Dev.describe('WebRTC', (e) => {
       dispose();
     });
 
-    e.it('send binary data between peers [Uint8Array]', async (e) => {
+    e.it('send binary data between 2 peers [Uint8Array]', async (e) => {
       type E = { type: 'Foo'; payload: { data: Uint8Array } };
       const { a, b } = await connect();
 

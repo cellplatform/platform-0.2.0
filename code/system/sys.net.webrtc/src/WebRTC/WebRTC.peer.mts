@@ -59,14 +59,18 @@ export function peer(args: {
          * This work-around checks all media-connections connected to the
          * remote peer if there are no other data-connections open.
          */
-        console.log('🐷 ensure closed', data);
+        const isLastData = !api.dataConnections
+          .filter((item) => item.peer.remote === data.peer.remote)
+          .some((item) => item.id !== data.id);
 
-        /**
-         * TODO 🐷
-         */
+        if (isLastData) {
+          api.mediaConnections
+            .filter((item) => item.peer.remote === data.peer.remote)
+            .forEach((item) => item.dispose());
+        }
       },
 
-      data(conn: t.DataConnection) {
+      async storeData(conn: t.DataConnection) {
         const subject = PeerDataConnection(conn);
         memory.connections.push(subject);
         State.handleDispose(subject);
@@ -74,7 +78,7 @@ export function peer(args: {
         return subject;
       },
 
-      async media(conn: t.MediaConnection, stream: t.PeerMediaStreams) {
+      async storeMedia(conn: t.MediaConnection, stream: t.PeerMediaStreams) {
         const existing = api.mediaConnections.find((item) => item.id === conn.connectionId);
         if (existing) return existing;
 
@@ -112,7 +116,7 @@ export function peer(args: {
           const id = Util.cleanId(connectTo);
           const conn = rtc.connect(id, { reliable: true });
           conn.on('error', (err) => reject(err));
-          conn.on('open', () => resolve(State.data(conn)));
+          conn.on('open', async () => resolve(await State.storeData(conn)));
         });
       },
 
@@ -124,7 +128,7 @@ export function peer(args: {
           const id = Util.cleanId(connectTo);
           const conn = rtc.call(id, local);
           conn.on('error', (err) => reject(err));
-          conn.on('stream', (remote) => resolve(State.media(conn, { local, remote })));
+          conn.on('stream', (remote) => resolve(State.storeMedia(conn, { local, remote })));
         });
       },
 
@@ -138,13 +142,13 @@ export function peer(args: {
     /**
      * Handle incoming connections.
      */
-    rtc.on('connection', (conn) => conn.on('open', () => State.data(conn)));
+    rtc.on('connection', (conn) => conn.on('open', () => State.storeData(conn)));
     rtc.on('call', async (conn) => {
       const local = await args.getLocalStream?.();
       if (!local) {
         console.warn(`[WebRTC] No local media-stream available. Incoming call rejected.`);
       } else {
-        conn.on('stream', (remote) => State.media(conn, { local, remote }));
+        conn.on('stream', (remote) => State.storeMedia(conn, { local, remote }));
         conn.answer(local);
       }
     });
