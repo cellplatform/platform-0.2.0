@@ -2,12 +2,12 @@ import { COLORS, css, FC, t, useMouseState } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
 const DEFAULT = {
-  isEnabled: true,
+  enabled: true,
   label: 'Unnamed',
 };
 
 export type ButtonProps = {
-  isEnabled?: boolean;
+  enabled?: boolean;
   label?: string | JSX.Element;
   rightElement?: JSX.Element;
 
@@ -92,8 +92,7 @@ const Wrangle = {
     return labelOpacity === undefined ? 1 : labelOpacity;
   },
   isActive(props: ButtonProps): boolean {
-    const { isEnabled = DEFAULT.isEnabled } = props;
-    return isEnabled && Boolean(props.onClick);
+    return (props.enabled ?? DEFAULT.enabled) && Boolean(props.onClick);
   },
 };
 

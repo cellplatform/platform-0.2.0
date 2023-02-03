@@ -54,7 +54,7 @@ export function button<S extends O = O>(
       <Button
         label={label.current}
         rightElement={elRight}
-        isEnabled={isEnabled}
+        enabled={isEnabled}
         onClick={hasHandlers ? onClick : undefined}
       />
     );

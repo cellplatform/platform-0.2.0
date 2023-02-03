@@ -43,7 +43,7 @@ const View: React.FC<BooleanProps> = (props) => {
     <Button
       {...props}
       style={props.style}
-      isEnabled={isActive}
+      enabled={isActive}
       rightElement={elRight}
       onClick={handleClick}
     />
@@ -56,7 +56,7 @@ const View: React.FC<BooleanProps> = (props) => {
 
 const Wrangle = {
   isActive(props: BooleanProps): boolean {
-    const { isEnabled = DEFAULT.isEnabled } = props;
+    const { isEnabled = DEFAULT.enabled } = props;
     if (!isEnabled) return false;
     if (!props.onClick) return false;
     return true;
