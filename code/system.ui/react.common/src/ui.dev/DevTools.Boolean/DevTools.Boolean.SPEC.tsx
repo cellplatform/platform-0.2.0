@@ -3,10 +3,15 @@ import { Dev } from '../../test.ui';
 
 import type { BooleanProps } from './ui.Boolean';
 
-type T = { props: BooleanProps; count: number };
+type T = {
+  count: number;
+  props: BooleanProps;
+  debug: { enabled: boolean };
+};
 const initial: T = {
-  props: { value: true },
   count: 0,
+  props: { value: true },
+  debug: { enabled: true },
 };
 
 export default Dev.describe('Boolean', (e) => {
@@ -29,26 +34,51 @@ export default Dev.describe('Boolean', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'DevTools.spec'} data={e.state} />);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'DevTools.spec'} data={e.state} expand={1} />);
 
-    dev
-      .button('state: increment count', (e) => e.change((d) => d.count++))
-      .button('toggle value', (e) => e.change(({ props }) => (props.value = !props.value)))
-      .button('toggle value (via helper)', (e) => e.change((e) => Dev.toggle(e.props, 'value')))
-      .hr()
-      .boolean((btn) => btn.label('no `onClick` - disabled').value(true))
-      .boolean((btn) =>
+    dev.section((dev) => {
+      dev
+        .button('state: increment count', (e) => e.change((d) => d.count++))
+        .button('toggle value', (e) => e.change(({ props }) => (props.value = !props.value)))
+        .button('toggle value (via helper)', (e) => e.change((e) => Dev.toggle(e.props, 'value')))
+        .hr()
+        .boolean((btn) => btn.label('no `onClick` - disabled').value(true))
+        .boolean((btn) =>
+          btn
+            .label('value: `undefined`')
+            .value(() => undefined)
+            .onClick((e) => e.change((d) => d.count++)),
+        )
+        .boolean((btn) =>
+          btn
+            .label((e) => `dynamic label and value (count: ${e.state.count})`)
+            .value((e) => e.state.count % 2 === 0)
+            .onClick((e) => e.change((d) => d.count++)),
+        );
+    });
+
+    dev.hr();
+
+    dev.section((dev) => {
+      dev.boolean((btn) =>
         btn
-          .label('value: `undefined`')
-          .value(() => undefined)
-          .onClick((e) => e.change((d) => d.count++)),
-      )
-      .boolean((btn) =>
+          .label('debug.enabled')
+          .value((e) => e.state.debug.enabled)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'enabled'))),
+      );
+
+      dev.boolean((btn) =>
         btn
-          .label((e) => `dynamic label and value (count: ${e.state.count})`)
-          .value((e) => e.state.count % 2 === 0)
-          .onClick((e) => e.change((d) => d.count++)),
-      )
-      .hr();
+          .label((e) => `my switch (${e.state.debug.enabled ? 'enabled' : 'disabled'})`)
+          .enabled((e) => e.state.debug.enabled)
+          .onClick((e) => {
+            console.log('onClick');
+          }),
+      );
+    });
+
+    dev.hr();
   });
 });

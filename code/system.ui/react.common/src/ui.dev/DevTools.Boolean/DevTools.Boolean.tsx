@@ -16,6 +16,7 @@ export function boolean<S extends O = O>(
 
   const label = Dev.ValueHandler<string, S>(events);
   const value = Dev.ValueHandler<boolean | undefined, S>(events);
+  const enabled = Dev.ValueHandler<boolean, S>(events);
   const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {
@@ -26,6 +27,10 @@ export function boolean<S extends O = O>(
     },
     value(input) {
       value.handler(input);
+      return args;
+    },
+    enabled(input) {
+      enabled.handler(input);
       return args;
     },
     onClick(handler) {
@@ -42,12 +47,16 @@ export function boolean<S extends O = O>(
       const dev = ctx.toObject().props;
       clickHandlers.forEach((fn) => fn({ ...args, dev, current, state, change }));
     };
+
+    const hasHandlers = clickHandlers.size > 0;
+    const isEnabled = hasHandlers && enabled.current !== false;
+
     return (
       <Boolean
         value={value.current}
         label={label.current}
-        isEnabled={clickHandlers.size > 0}
-        onClick={clickHandlers.size > 0 ? onClick : undefined}
+        isEnabled={isEnabled}
+        onClick={hasHandlers ? onClick : undefined}
       />
     );
   });
