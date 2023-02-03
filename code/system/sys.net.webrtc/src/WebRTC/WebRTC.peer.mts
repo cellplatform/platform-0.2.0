@@ -59,11 +59,11 @@ export function peer(args: {
          * This work-around checks all media-connections connected to the
          * remote peer if there are no other data-connections open.
          */
-        const isLastData = !api.dataConnections
+        const isLastDataConnection = !api.dataConnections
           .filter((item) => item.peer.remote === data.peer.remote)
           .some((item) => item.id !== data.id);
 
-        if (isLastData) {
+        if (isLastDataConnection) {
           api.mediaConnections
             .filter((item) => item.peer.remote === data.peer.remote)
             .forEach((item) => item.dispose());
