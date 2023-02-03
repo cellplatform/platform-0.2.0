@@ -78,7 +78,7 @@ export default Dev.describe('WebRTC', (e) => {
           <div {...styles.base}>
             <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
             <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} text={'// 👋 Hello Rowan!'} />
+              <MonacoEditor language={'typescript'} text={'// 👋 Hello World!'} />
             </div>
           </div>
         );
@@ -128,14 +128,16 @@ export default Dev.describe('WebRTC', (e) => {
         .onClick(async (e) => navigator.clipboard.writeText(`peer:${self.id}`)),
     );
 
-    dev.section((dev) => {
+    dev.hr();
+
+    dev.section('Connections', (dev) => {
       dev.hr();
       dev.row((e) => {
         return (
           <TextInput
             value={e.state.debug.remote}
             valueStyle={{ fontSize: 14 }}
-            placeholder={'connect to remote (peer-id)'}
+            placeholder={'remote peer-id'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
             focusAction={'Select'}
             spellCheck={false}
@@ -145,13 +147,22 @@ export default Dev.describe('WebRTC', (e) => {
       });
       dev.hr();
 
-      dev.button('connect: data', async (e) => {
+      const connect = (label: string, fn: t.DevButtonClickHandler<T>) => {
+        dev.button((btn) =>
+          btn
+            .label(`connect: ${label}`)
+            .enabled((e) => Boolean(e.state.debug.remote))
+            .onClick(fn),
+        );
+      };
+
+      connect('data', async (e) => {
         const remote = e.state.current.debug.remote ?? '';
         const res = await self.data(remote);
         console.log('⚡️ peer.data (response):', res);
       });
 
-      dev.button('connect: video', async (e) => {
+      connect('video', async (e) => {
         await media.stop(streamRef).fire();
         await media.start(streamRef).video();
         const { stream } = await media.status(streamRef).get();
@@ -164,14 +175,14 @@ export default Dev.describe('WebRTC', (e) => {
           console.log('⚡️ peer.media (response):', res);
         }
       });
+
+      dev.button((btn) =>
+        btn
+          .label('close all')
+          .enabled((e) => Boolean(e.state.connections.length > 0))
+          .onClick((e) => self.connections.forEach((conn) => conn.dispose())),
+      );
     });
-
-    dev.hr();
-
-    dev.button('close all connections', (e) => {
-      self.connections.forEach((conn) => conn.dispose());
-    });
-
     dev.hr();
 
     dev.section('Test Suites', (dev) => {
