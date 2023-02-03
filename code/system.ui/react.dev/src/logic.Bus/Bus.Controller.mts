@@ -1,17 +1,13 @@
-import { debounceTime } from 'rxjs/operators';
-
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
 import { R, DEFAULT, Id, Is, rx, t, Test } from './common';
 
-type Id = string;
-
 /**
  * Event controller.
  */
 export function BusController(args: {
-  instance: { bus: t.EventBus<any>; id: Id };
+  instance: t.DevInstance;
   filter?: (e: t.DevEvent) => boolean;
   dispose$?: t.Observable<any>;
 }): t.DevEvents {
@@ -209,7 +205,7 @@ export function BusController(args: {
   /**
    * Props: Ensure props changes flushed.
    */
-  events.props.flush.pending$.pipe(debounceTime(10)).subscribe(async (e) => {
+  events.props.flush.pending$.pipe(rx.debounceTime(10)).subscribe(async (e) => {
     await (await Ctx.current()).flush();
   });
 
