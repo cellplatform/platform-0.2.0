@@ -1,14 +1,14 @@
 import { PeerNetwork, TEST } from '.';
-import { DevHeader } from './-dev/DEV.ui.Header';
-import { EventBridge } from './-dev/DEV.EventBridge';
-import { Time, css, Dev, rx, t, TextInput, MediaStream, cuid } from './common';
 import { PeerNetbus } from '../web.PeerNetbus';
 import { WebRuntimeBus } from '../web.WebRuntimeBus';
+import { EventBridge } from './-dev/DEV.EventBridge';
+import { DevHeader } from './-dev/DEV.ui.Header';
+import { css, cuid, Dev, MediaStream, rx, t, TextInput } from './common';
 
 type T = {
   testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
   debug: {
-    remotePeer?: t.PeerId;
+    remote?: t.PeerId;
     recordButton?: { state?: t.RecordButtonState; enabled?: boolean };
   };
   status?: t.PeerStatus;
@@ -151,14 +151,14 @@ export default Dev.describe('Root', (e) => {
         return (
           <div {...styles.base}>
             <TextInput
-              value={e.state.debug.remotePeer}
+              value={e.state.debug.remote}
               placeholder={'remote peer (id)'}
               placeholderStyle={{ opacity: 0.3, italic: true }}
               valueStyle={{ fontSize: 14 }}
               spellCheck={false}
-              onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
+              onChanged={(e) => dev.change((d) => (d.debug.remote = e.to))}
               onEnter={async () => {
-                const remote = e.state.debug.remotePeer ?? '';
+                const remote = e.state.debug.remote ?? '';
 
                 // const events = network.events;
 
