@@ -1,6 +1,6 @@
 import { Path, PeerJS, rx, t } from './common';
-import { PeerDataConnection } from './Peer.Data.mjs';
-import { PeerMediaConnection } from './Peer.Media.mjs';
+import { PeerDataConnection } from './Connection.Data.mjs';
+import { PeerMediaConnection } from './Connection.Media.mjs';
 import { Util } from './util.mjs';
 
 type HostName = string;
