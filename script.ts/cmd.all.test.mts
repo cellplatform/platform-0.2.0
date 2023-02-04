@@ -167,13 +167,14 @@ for (const result of results) {
 }
 
 const totalTests = results.reduce((acc, next) => acc + (next.stats?.total ?? 0), 0);
-const totalDisplay = pc.white(pc.bold(totalTests.toLocaleString()));
+const totalTestsDisplay = pc.white(pc.bold(`${totalTests.toLocaleString()} tests`));
+const totalTimeDisplay = pc.white(pc.bold(timer.elapsed.toString()));
 
 console.info();
 console.info(pc.bold(statusColor(ok, ok ? `Success` : `Unsuccessful`)));
 console.info(table.toString());
 console.info();
-console.info(pc.gray(`${totalDisplay} tests run in ${timer.elapsed.toString()}`));
+console.info(pc.gray(`${totalTestsDisplay} run in ${totalTimeDisplay}`));
 console.info(pc.gray(`platform/builder ${pc.cyan(`v${pkg.version}`)}`));
 
 if (!ok) process.exit(1);
