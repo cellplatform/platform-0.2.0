@@ -1,4 +1,6 @@
-import { MdPortableWifiOff, MdWifi, MdOutlineViewInAr } from 'react-icons/md';
+import { icons } from 'react-icons';
+import { MdPortableWifiOff, MdWifi, MdOutlineViewInAr, MdSupportAgent } from 'react-icons/md';
+
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -8,4 +10,5 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Cube: icon(MdOutlineViewInAr),
+  Face: { Call: icon(MdSupportAgent) },
 };
