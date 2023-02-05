@@ -27,7 +27,9 @@ export function peer(args: {
     });
 
     const { dispose, dispose$ } = rx.disposable();
+    let _disposed = false;
     dispose$.subscribe(() => {
+      _disposed = true;
       memory.connections.forEach((conn) => conn.dispose());
       rtc.destroy();
     });
@@ -134,6 +136,9 @@ export function peer(args: {
 
       dispose,
       dispose$,
+      get disposed() {
+        return _disposed;
+      },
     };
 
     rtc.on('open', () => resolve(api));

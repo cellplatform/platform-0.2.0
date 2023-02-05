@@ -63,20 +63,13 @@ export default Dev.describe('WebRTC', (e) => {
       return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal })));
     };
 
-    const connect = async () => {
-      const a = await peerA.data(peerB.id);
-      await Time.wait(500);
-      const b = peerB.dataConnections.find((e) => e.id === a.id)!;
-      return { a, b };
-    };
-
-    e.it('init', async (e) => {
+    e.it('initialize: create peers A ⇔ B', async (e) => {
       const [a, b] = await peers(2);
       peerA = a;
       peerB = b;
     });
 
-    e.it('lifecycle: open data connection between 2 peers, share data, and dispose', async (e) => {
+    e.it('open data connection between two peers', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const firedA: t.PeerConnectionChange[] = [];
@@ -89,10 +82,7 @@ export default Dev.describe('WebRTC', (e) => {
         firedB.push(e);
       });
 
-      expect(peerA.connections).to.eql([]);
-      expect(peerB.connections).to.eql([]);
-
-      // Establish the connection.
+      // Open the connection.
       const connA = await peerA.data(peerB.id);
       expect(connA.kind).to.eql('data');
       expect(connA.peer.local).to.eql(peerA.id);
@@ -113,17 +103,24 @@ export default Dev.describe('WebRTC', (e) => {
       expect(firedA[0].action).to.eql('added');
       expect(firedB[0].action).to.eql('added');
 
-      // Send data between peers.
-      type E = { type: 'foo'; payload: { msg: string } };
-      const connB = peerB.dataConnections[0];
+      dispose();
+    });
+
+    e.it('send JSON between peers', async (e) => {
+      const { dispose, dispose$ } = rx.disposable();
+
+      const a = peerA.dataConnections[0];
+      const b = peerB.dataConnections[0];
 
       const incomingA: t.PeerDataPayload[] = [];
       const incomingB: t.PeerDataPayload[] = [];
-      connA.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingA.push(e));
-      connB.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
+      a.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingA.push(e));
+      b.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
 
-      const payloadA = connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
-      const payloadB = connB.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
+      type E = { type: 'foo'; payload: { msg: string } };
+      const payloadA = a.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
+      const payloadB = b.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
+
       expect(WebRTC.Util.isType.PeerDataPayload(payloadA)).to.eql(true);
       expect(WebRTC.Util.isType.PeerDataPayload(payloadB)).to.eql(true);
 
@@ -135,35 +132,71 @@ export default Dev.describe('WebRTC', (e) => {
       expect(incomingA[0].event.payload.msg).to.eql('from-B');
       expect(incomingB[0].event.payload.msg).to.eql('from-A');
 
+      dispose();
+    });
+
+    e.it('send binary data [Uint8Array] between peers', async (e) => {
+      const a = peerA.dataConnections[0];
+      const b = peerB.dataConnections[0];
+
+      type E = { type: 'foo'; payload: { data: Uint8Array } };
+      const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      a.send<E>({ type: 'foo', payload: { data } });
+
+      const received = (await rx.firstValueFrom(b.in$)).event as E;
+      expect(new Uint8Array(received.payload.data)).to.eql(data);
+    });
+
+    e.it('dispose: data connections (close A.data | B.data)', async (e) => {
+      type E = { type: 'foo'; payload: { msg: string } };
+      const { dispose, dispose$ } = rx.disposable();
+
+      const a = peerA.dataConnections[0];
+      const b = peerB.dataConnections[0];
+
+      const changedA: t.PeerConnectionChange[] = [];
+      const changedB: t.PeerConnectionChange[] = [];
+
+      peerA.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+        changedA.push(e);
+      });
+      peerB.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+        changedB.push(e);
+      });
+
+      const incomingB: t.PeerDataPayload[] = [];
+      b.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
+
       // Close the connection on the initiating side (A).
-      connA.dispose();
-      expect(connA.disposed).to.eql(true);
+      a.dispose();
+      expect(a.disposed).to.eql(true);
       await Time.wait(500);
 
-      expect(firedA.length).to.eql(2);
-      expect(firedB.length).to.eql(2);
-      expect(firedA[1].action).to.eql('removed');
-      expect(firedB[1].action).to.eql('removed');
+      expect(changedA.length).to.eql(1);
+      expect(changedB.length).to.eql(1);
+      expect(changedA[0].action).to.eql('removed');
+      expect(changedB[0].action).to.eql('removed');
       expect(peerA.connections.length).to.eql(0);
       expect(peerB.connections.length).to.eql(0);
 
       // Will no-longer transmit data after being disposed.
-      connA.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
+      a.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
       await Time.wait(300);
-      expect(incomingB.length).to.eql(1, 'no longer transmits data');
+      expect(incomingB.length).to.eql(0, 'no longer transmits data');
 
+      b.dispose();
       dispose();
     });
 
-    e.it('send binary data between 2 peers [Uint8Array]', async (e) => {
-      type E = { type: 'Foo'; payload: { data: Uint8Array } };
-      const { a, b } = await connect();
+    e.it('dispose: peers (A | B)', async (e) => {
+      expect(peerA.disposed).to.eql(false);
+      expect(peerB.disposed).to.eql(false);
 
-      const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-      a.send<E>({ type: 'Foo', payload: { data } });
+      peerA.dispose();
+      peerB.dispose();
 
-      const received = (await rx.firstValueFrom(b.in$)).event as E;
-      expect(new Uint8Array(received.payload.data)).to.eql(data);
+      expect(peerA.disposed).to.eql(true);
+      expect(peerB.disposed).to.eql(true);
     });
   });
 });

@@ -14,6 +14,7 @@ export type Peer = t.Disposable & {
   readonly connections: PeerConnection[];
   readonly dataConnections: PeerDataConnection[];
   readonly mediaConnections: PeerMediaConnection[];
+  readonly disposed: boolean;
   data(connectTo: Id): Promise<PeerDataConnection>;
   media(connectTo: Id, local: MediaStream): Promise<PeerMediaConnection>;
 };
