@@ -83,11 +83,11 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       // Open the connection.
-      const connA = await peerA.data(peerB.id);
-      expect(connA.kind).to.eql('data');
-      expect(connA.peer.local).to.eql(peerA.id);
-      expect(connA.peer.remote).to.eql(peerB.id);
-      expect(connA).to.eql(peerA.dataConnections[0]);
+      const a = await peerA.data(peerB.id);
+      expect(a.kind).to.eql('data');
+      expect(a.peer.local).to.eql(peerA.id);
+      expect(a.peer.remote).to.eql(peerB.id);
+      expect(a).to.eql(peerA.dataConnections[0]);
 
       expect(peerA.connections.length).to.eql(1);
       await Time.wait(500);
