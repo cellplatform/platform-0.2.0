@@ -40,10 +40,12 @@ const vercel = Vercel.client({ bus, fs, token }); // <═══╗
 
 await vercel.deploy({
   name: 'my-tmp',
+
   source: 'tmp/sys.video',
   team: 'tdb',
   project: 'tdb-tmp',
   alias: 'tmp.db.team',
+
   ensureProject: true,
   regions: ['sfo1'],
   target: 'production', // NB: required to be "production" for the DNS alias to be applied.
