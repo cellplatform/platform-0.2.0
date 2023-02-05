@@ -10,8 +10,8 @@ const initial: T = {
 };
 
 export default Dev.describe('YouTube', (e) => {
-  type Local = { autoLoad: boolean };
-  const local = Dev.LocalStorage<Local>('dev:sys.ui.video').object({ autoLoad: false });
+  type LocalStore = { autoLoad: boolean };
+  const local = Dev.LocalStorage<LocalStore>('dev:sys.ui.video').object({ autoLoad: true });
 
   const load = (props: YouTubeProps) => {
     props.id = 'URUJD5NEXC8';
