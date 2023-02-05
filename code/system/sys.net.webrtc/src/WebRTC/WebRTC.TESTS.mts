@@ -6,6 +6,10 @@ const signal = 'rtc.cellfs.com'; // hostname of the signalling server.
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(10 * 10000);
 
+  const peers = async (length: number) => {
+    return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal })));
+  };
+
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
       const peer1 = await WebRTC.peer({ signal: `  http://${signal}  ` }); // NB: Trims the HTTP prefix.
@@ -58,10 +62,6 @@ export default Dev.describe('WebRTC', (e) => {
   e.describe('peer.data', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
-
-    const peers = async (length: number) => {
-      return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal })));
-    };
 
     e.it('initialize: create peers A ⇔ B', async (e) => {
       const [a, b] = await peers(2);
@@ -195,6 +195,24 @@ export default Dev.describe('WebRTC', (e) => {
       peerA.dispose();
       peerB.dispose();
 
+      expect(peerA.disposed).to.eql(true);
+      expect(peerB.disposed).to.eql(true);
+    });
+  });
+
+  e.describe.only('peer.media', async (e) => {
+    let peerA: t.Peer;
+    let peerB: t.Peer;
+
+    e.it('initialize: create peers A ⇔ B', async (e) => {
+      const [a, b] = await peers(2);
+      peerA = a;
+      peerB = b;
+    });
+
+    e.it('dispose: peers (A | B)', async (e) => {
+      peerA.dispose();
+      peerB.dispose();
       expect(peerA.disposed).to.eql(true);
       expect(peerB.disposed).to.eql(true);
     });

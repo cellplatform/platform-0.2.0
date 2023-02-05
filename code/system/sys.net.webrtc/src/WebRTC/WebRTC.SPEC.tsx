@@ -283,7 +283,6 @@ export default Dev.describe('WebRTC', (e) => {
         );
       });
     });
-    dev.hr();
 
     dev.section('Debug', (dev) => {
       const invoke = async (module: t.SpecImport) => {
@@ -296,7 +295,7 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run: unit-tests', (e) => invoke(import('./WebRTC.SPEC.mjs')));
+      dev.button('integration tests', (e) => invoke(import('./WebRTC.TESTS.mjs')));
     });
 
     dev.hr();
