@@ -1,6 +1,7 @@
 import { WebRTC } from '.';
 import {
   Color,
+  COLORS,
   css,
   Dev,
   MediaStream,
@@ -10,6 +11,7 @@ import {
   TextInput,
   TextSyntax,
   Button,
+  Icons,
 } from '../test.ui';
 
 type Id = string;
@@ -89,11 +91,13 @@ export default Dev.describe('WebRTC', (e) => {
           }),
         };
 
+        const code = `// 👋 Hello World!\n`;
+
         return (
           <div {...styles.base}>
             <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
             <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} text={'// 👋 Hello World!'} />
+              <MonacoEditor language={'typescript'} text={code} />
             </div>
           </div>
         );
@@ -111,9 +115,32 @@ export default Dev.describe('WebRTC', (e) => {
         const media = e.state.peer?.mediaConnections[0]; // TEMP - from selection 🐷
         const peerId = WebRTC.Util.asUri(self.id);
         const copyPeer = () => navigator.clipboard.writeText(peerId);
+        const height = 250;
+
+        const PROFILE =
+          'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png';
 
         const styles = {
-          base: css({}),
+          base: css({ position: 'relative' }),
+          video: {
+            base: css({
+              height,
+              position: 'relative',
+              // backgroundColor: Color.alpha(COLORS.DARK, 0.05),
+              borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+
+              backgroundImage: `url(${PROFILE})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }),
+            bg: css({
+              Absolute: 0,
+              pointerEvents: 'none',
+              display: 'grid',
+              placeItems: 'center',
+            }),
+          },
           peer: css({ display: 'grid', justifyContent: 'center', padding: 5 }),
         };
 
@@ -125,13 +152,19 @@ export default Dev.describe('WebRTC', (e) => {
 
         return (
           <div {...styles.base}>
-            {media && (
-              <MediaStream.Video
-                stream={media.stream.remote}
-                muted={e.state.debug.muted}
-                height={250}
-              />
-            )}
+            <div {...styles.video.base}>
+              <div {...styles.video.bg}>
+                <Icons.Face.Call size={80} opacity={0.2} />
+                {/* <Icons.Cube size={80} opacity={0.3} /> */}
+              </div>
+              {media && (
+                <MediaStream.Video
+                  stream={media.stream.remote}
+                  muted={e.state.debug.muted}
+                  height={height}
+                />
+              )}
+            </div>
             <div {...styles.peer}>{elPeer}</div>
           </div>
         );
