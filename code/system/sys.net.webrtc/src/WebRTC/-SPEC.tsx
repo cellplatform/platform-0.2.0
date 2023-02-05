@@ -12,6 +12,7 @@ import {
   TextSyntax,
   Button,
   Icons,
+  TEST,
 } from '../test.ui';
 
 type Id = string;
@@ -35,7 +36,7 @@ const initial: T = {
 };
 
 export default Dev.describe('WebRTC', (e) => {
-  const signal = 'rtc.cellfs.com';
+  const signal = TEST.signal;
   let self: t.Peer;
 
   const bus = rx.bus();

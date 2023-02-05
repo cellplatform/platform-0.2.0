@@ -2,6 +2,10 @@ import type { t } from '../common.t';
 
 type Id = string;
 type Hostname = string;
+type Semver = string;
+
+export type PeerId = string;
+export type PeerModule = { name: string; version: Semver };
 
 /**
  * The local peer.

@@ -21,3 +21,10 @@ export type { t } from './common.t';
 
 export * from '../common';
 export { Icons } from './Icons.mjs';
+
+/**
+ * Test constants
+ */
+export const TEST = {
+  signal: 'rtc.cellfs.com', // WebRTC "signal server" connection coordination end-point.
+} as const;
