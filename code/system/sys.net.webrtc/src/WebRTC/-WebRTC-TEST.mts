@@ -97,6 +97,9 @@ export default Dev.describe('WebRTC', (e) => {
       expect(peerA.dataConnections[0].open).to.eql(true);
       expect(peerB.dataConnections[0].open).to.eql(true);
 
+      expect(peerA.connectionsByPeer[0].peer).to.eql(peerB.id);
+      expect(peerB.connectionsByPeer[0].peer).to.eql(peerA.id);
+
       expect(firedA.length).to.eql(1);
       expect(firedB.length).to.eql(1);
       expect(firedA[0].action).to.eql('added');
@@ -215,7 +218,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it(
-      'open media/data connection → close (last) data-connection → auto closes media-connection',
+      'open [media/data] connection → close (last) data-connection → auto closes media-connection',
       async (e) => {
         const status1 = await getMediaStatus();
         expect(status1.stream).to.eql(undefined);
