@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Button, COLORS, css, Icons, MediaStream, Spinner, t } from './common';
+import {
+  AudioWaveform,
+  Button,
+  Color,
+  COLORS,
+  css,
+  Icons,
+  MediaStream,
+  Spinner,
+  t,
+} from './common';
 
 export type PeerRowProps = {
   connections: t.PeerConnectionSet;
@@ -14,6 +24,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   const [isCloseOver, setCloseOver] = useState(false);
 
   const media = connections.media.find((item) => item.stream)?.stream;
+  const video = media?.remote;
 
   /**
    * [Handlers]
@@ -33,10 +44,13 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       gridTemplateColumns: 'auto 1fr auto',
     }),
     left: css({
-      marginRight: 5,
+      marginRight: 10,
       Size: thumbnailSize,
     }),
-    body: css({}),
+    body: css({
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
+    }),
     right: css({}),
     peerid: css({ fontSize: 10, opacity: 0.3 }),
     thumbnail: {
@@ -61,9 +75,9 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
               <Spinner.Orbit size={20} style={styles.thumbnail.spinner} />
             </div>
           )}
-          {media && (
+          {video && (
             <MediaStream.Video
-              stream={media?.remote}
+              stream={video}
               muted={true}
               width={thumbnailSize}
               height={thumbnailSize}
@@ -75,10 +89,19 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       </div>
       <div {...styles.body}>
         <div {...styles.peerid}>{`peer:${peerid}`}</div>
+        <AudioWaveform height={20} stream={video} style={{ position: 'relative', bottom: -7 }} />
       </div>
       <div {...styles.right}>
-        <Button onClick={close} onMouse={(e) => setCloseOver(e.isOver)}>
-          <Icons.Close size={22} color={isCloseOver ? COLORS.BLUE : COLORS.DARK} />
+        <Button
+          onClick={close}
+          onMouse={(e) => setCloseOver(e.isOver)}
+          tooltip={'Close Connection'}
+        >
+          <Icons.Close
+            size={22}
+            color={isCloseOver ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.7)}
+            style={{ position: 'relative', top: -4, right: -4 }}
+          />
         </Button>
       </div>
     </div>

@@ -16,11 +16,11 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
-    list: css({}),
+    list: css({ marginTop: 10 }),
     hrBottom: css({
       borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      marginTop: 10,
-      marginBottom: 10,
+      marginTop: 20,
+      marginBottom: 20,
     }),
   };
 
