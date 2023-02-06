@@ -7,6 +7,12 @@ type Semver = string;
 export type PeerId = string;
 export type PeerModule = { name: string; version: Semver };
 
+export type PeerGetMediaStream = () => Promise<PeerGetMediaStreamResponse>;
+export type PeerGetMediaStreamResponse = {
+  media: MediaStream | undefined;
+  done(): Promise<void>;
+};
+
 /**
  * The local peer.
  */
@@ -20,7 +26,7 @@ export type Peer = t.Disposable & {
   readonly mediaConnections: PeerMediaConnection[];
   readonly disposed: boolean;
   data(connectTo: Id): Promise<PeerDataConnection>;
-  media(connectTo: Id, local: MediaStream): Promise<PeerMediaConnection>;
+  media(connectTo: Id): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;

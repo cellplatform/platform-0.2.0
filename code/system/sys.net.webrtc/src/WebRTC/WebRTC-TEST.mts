@@ -1,13 +1,12 @@
 import { WebRTC } from '.';
-import { cuid, Dev, expect, rx, t, Time } from '../test.ui';
-
-const signal = 'rtc.cellfs.com'; // hostname of the signalling server.
+import { TEST, cuid, Dev, expect, rx, t, Time } from '../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(10 * 10000);
+  const signal = TEST.signal;
 
-  const peers = async (length: number) => {
-    return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal })));
+  const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
+    return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal, getStream })));
   };
 
   e.describe('peer: initial state', (e) => {
@@ -197,6 +196,8 @@ export default Dev.describe('WebRTC', (e) => {
 
       expect(peerA.disposed).to.eql(true);
       expect(peerB.disposed).to.eql(true);
+
+      await Time.wait(500);
     });
   });
 
@@ -204,17 +205,65 @@ export default Dev.describe('WebRTC', (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
+    const Media = WebRTC.Media.singleton();
+    const getMediaStatus = async () => Media.events.status(Media.ref).get();
+
     e.it('initialize: create peers A ⇔ B', async (e) => {
-      const [a, b] = await peers(2);
+      const [a, b] = await peers(2, Media.getStream);
       peerA = a;
       peerB = b;
     });
 
-    e.it('open media connection', async (e) => {
-      /**
-       * TODO 🐷
-       */
-    });
+    e.it(
+      'open media/data connection → closing data-connection auto closes media-connection',
+      async (e) => {
+        const status1 = await getMediaStatus();
+        expect(status1.stream).to.eql(undefined);
+
+        const data1 = await peerA.data(peerB.id);
+        const data2 = await peerA.data(peerB.id);
+        const media = await peerA.media(peerB.id);
+
+        await Time.wait(300);
+
+        expect(data1.open).to.eql(true);
+        expect(data2.open).to.eql(true);
+        expect(media.open).to.eql(true);
+
+        const status2 = await getMediaStatus();
+        expect(status2.stream?.media instanceof MediaStream).to.eql(true);
+
+        expect(peerA.dataConnections.length).to.eql(2);
+        expect(peerB.dataConnections.length).to.eql(2);
+
+        expect(peerA.mediaConnections.length).to.eql(1);
+        expect(peerB.mediaConnections.length).to.eql(1);
+
+        /**
+         * Close the first data-connection.
+         * This should have no effect on the media connection.
+         */
+        data1.dispose();
+        await Time.wait(300);
+        const status3 = await getMediaStatus();
+
+        expect(status3.stream?.media instanceof MediaStream).to.eql(true);
+        expect(peerA.mediaConnections.length).to.eql(1);
+        expect(peerB.mediaConnections.length).to.eql(1);
+
+        /**
+         * Close the first data-connection.
+         * This should auto-close the media connection.
+         */
+        data2.dispose();
+        await Time.wait(300);
+        const status4 = await getMediaStatus();
+
+        expect(status4.stream?.media).to.eql(undefined);
+        expect(peerA.connections.length).to.eql(0);
+        expect(peerB.connections.length).to.eql(0);
+      },
+    );
 
     e.it('dispose: peers (A | B)', async (e) => {
       peerA.dispose();

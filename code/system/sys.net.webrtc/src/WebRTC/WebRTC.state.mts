@@ -35,11 +35,11 @@ export function MemoryState() {
       subject.dispose$.subscribe(() => {
         memory.connections = memory.connections.filter((item) => item.id !== subject.id);
         api.fireChanged('removed', subject);
-        if (subject.kind === 'data') api.ensureClosed(subject);
+        if (subject.kind === 'data') api.ensureMediaClosed(subject);
       });
     },
 
-    ensureClosed(data: t.PeerDataConnection) {
+    ensureMediaClosed(data: t.PeerDataConnection) {
       /**
        * NOTE:
        * The close event is not being fired for [Media] connections.

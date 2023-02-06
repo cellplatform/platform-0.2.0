@@ -43,21 +43,15 @@ export default Dev.describe('WebRTC', (e) => {
   const media = MediaStream.Events(bus);
   const streamRef = `sample.${slug()}`;
 
-  const getVideoStream = async () => {
-    await media.stop(streamRef).fire();
-    await media.start(streamRef).video();
-    const { stream } = await media.status(streamRef).get();
-    return stream?.media;
-  };
-
   e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+    const { getStream } = WebRTC.Media.singleton();
 
     /**
      * WebRTC (network)
      */
-    self = await WebRTC.peer({ signal, getLocalStream: getVideoStream });
+    self = await WebRTC.peer({ signal, getStream });
     await state.change((d) => (d.peer = self));
     self.connections$.subscribe((e) => {
       console.log('self.connections$', self.connections$);
@@ -225,15 +219,8 @@ export default Dev.describe('WebRTC', (e) => {
       };
 
       const connectVideo = async (remote: t.PeerId = '') => {
-        await media.stop(streamRef).fire();
-        await media.start(streamRef).video();
-        const { stream } = await media.status(streamRef).get();
-        const localStream = stream?.media;
-
-        if (remote && localStream) {
-          const res = await self.media(remote, localStream);
-          console.log('⚡️ peer.media (response):', res);
-        }
+        const res = await self.media(remote);
+        console.log('⚡️ peer.media (response):', res);
       };
 
       const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
@@ -284,7 +271,7 @@ export default Dev.describe('WebRTC', (e) => {
       });
     });
 
-    dev.section('Debug', (dev) => {
+    dev.section('Health Check', (dev) => {
       const invoke = async (module: t.SpecImport) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
         const spec = (await module).default;
@@ -295,7 +282,8 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run integration tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
+      dev.button('run WebRTC tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
+      dev.button('run MediaStream tests', (e) => invoke(import('./Media-TEST.mjs')));
     });
 
     dev.hr();

@@ -3,7 +3,6 @@ import { Util } from './util.mjs';
 import { MemoryState } from './WebRTC.state.mjs';
 
 type HostName = string;
-type GetMediaStream = () => Promise<MediaStream | undefined>;
 
 /**
  * Start a new local peer.
@@ -11,9 +10,10 @@ type GetMediaStream = () => Promise<MediaStream | undefined>;
 export function peer(args: {
   signal: HostName;
   id?: t.PeerId;
-  getLocalStream?: GetMediaStream;
+  getStream?: t.PeerGetMediaStream;
 }): Promise<t.Peer> {
   return new Promise<t.Peer>((resolve, reject) => {
+    const { getStream } = args;
     const state = MemoryState();
     const id = Util.cleanId(args.id ?? Util.randomPeerId());
     const signal = Path.trimHttpPrefix(args.signal);
@@ -65,12 +65,33 @@ export function peer(args: {
       /**
        * Start a media connection (video/audio/screen).
        */
-      media(connectTo, local) {
-        return new Promise<t.PeerMediaConnection>((resolve, reject) => {
+      media(connectTo) {
+        return new Promise<t.PeerMediaConnection>(async (resolve, reject) => {
+          if (!getStream) {
+            const err = Error(`Media connections require a "getStream" function to be provided.`);
+            return reject(err);
+          }
+
           const id = Util.cleanId(connectTo);
+          const stream = await getStream();
+          const local = stream?.media;
+
+          if (!local) {
+            const err = Error(`No local media-stream available. Unable to make call.`);
+            return reject(err);
+          }
+
           const conn = rtc.call(id, local);
           conn.on('error', (err) => reject(err));
-          conn.on('stream', (remote) => resolve(state.storeMedia(conn, { local, remote })));
+          conn.on('stream', async (remote) => {
+            const res = await state.storeMedia(conn, { local, remote });
+
+            res.dispose$
+              .pipe(rx.filter(() => api.mediaConnections.length === 0))
+              .subscribe(() => stream.done());
+
+            resolve(res);
+          });
         });
       },
 
@@ -89,10 +110,11 @@ export function peer(args: {
      */
     rtc.on('connection', (conn) => conn.on('open', () => state.storeData(conn)));
     rtc.on('call', async (conn) => {
-      const local = await args.getLocalStream?.();
-      if (!local) {
+      const stream = await getStream?.();
+      if (!stream?.media) {
         console.warn(`[WebRTC] No local media-stream available. Incoming call rejected.`);
       } else {
+        const local = stream.media;
         conn.on('stream', (remote) => state.storeMedia(conn, { local, remote }));
         conn.answer(local);
       }
