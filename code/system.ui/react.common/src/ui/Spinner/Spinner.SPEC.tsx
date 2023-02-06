@@ -40,6 +40,7 @@ export default Dev.describe('Spinner', (e) => {
     dev.hr();
 
     dev.section('Bar', (dev) => {
+      dev.button('width: 20px', (e) => bar(dev, { width: 20 }));
       dev.button('width: 30px', (e) => bar(dev, { width: 30 }));
       dev.button('width: 100px (default)', (e) => bar(dev, {}));
       dev.button('width: 256px', (e) => bar(dev, { width: 256 }));
