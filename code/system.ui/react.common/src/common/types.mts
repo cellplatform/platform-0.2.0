@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { CSSProperties } from 'react';
 
 /**
  * @system
