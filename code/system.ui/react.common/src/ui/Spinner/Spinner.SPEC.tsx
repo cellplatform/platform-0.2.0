@@ -9,8 +9,12 @@ export default Dev.describe('Spinner', (e) => {
     return dev.change((d) => (d.el = <Spinner.Puff {...props} />));
   };
 
-  const barLoader = async (dev: t.DevTools<T>, props?: t.SpinnerBarLoaderProps) => {
+  const bar = async (dev: t.DevTools<T>, props?: t.SpinnerBarProps) => {
     return dev.change((d) => (d.el = <Spinner.Bar {...props} />));
+  };
+
+  const orbit = async (dev: t.DevTools<T>, props?: t.SpinnerOrbitProps) => {
+    return dev.change((d) => (d.el = <Spinner.Orbit {...props} />));
   };
 
   e.it('init', async (e) => {
@@ -32,12 +36,23 @@ export default Dev.describe('Spinner', (e) => {
       dev.button('size: 32px (default)', (e) => puff(dev, {}));
       dev.button('size: 48px', (e) => puff(dev, { size: 48 }));
     });
+
     dev.hr();
 
-    dev.section('BarLoader', (dev) => {
-      dev.button('width: 30px', (e) => barLoader(dev, { width: 30 }));
-      dev.button('width: 100px (default)', (e) => barLoader(dev, {}));
-      dev.button('width: 256px', (e) => barLoader(dev, { width: 256 }));
+    dev.section('Bar', (dev) => {
+      dev.button('width: 30px', (e) => bar(dev, { width: 30 }));
+      dev.button('width: 100px (default)', (e) => bar(dev, {}));
+      dev.button('width: 256px', (e) => bar(dev, { width: 256 }));
     });
+
+    dev.hr();
+
+    dev.section('Orbit', (dev) => {
+      dev.button('size: 16px', (e) => orbit(dev, { size: 16 }));
+      dev.button('size: 32px (default)', (e) => orbit(dev, {}));
+      dev.button('size: 48px', (e) => orbit(dev, { size: 48 }));
+    });
+
+    dev.hr();
   });
 });
