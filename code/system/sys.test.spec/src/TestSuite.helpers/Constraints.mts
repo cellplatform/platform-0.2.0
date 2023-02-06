@@ -1,6 +1,6 @@
 import { type t } from '../common';
 import { Is } from './Is.mjs';
-import { TestTree, WalkUpArgs } from './TestTree.mjs';
+import { TestTree, SuiteWalkUpArgs } from './TestTree.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 type M = t.TestModifier;
@@ -86,7 +86,7 @@ function toModifier(item: T): t.TestModifier | undefined {
 function withinParentModifier(
   item: T,
   modifier: t.TestModifier,
-  options: { rejectMatchWhen?: (e: WalkUpArgs) => boolean } = {},
+  options: { rejectMatchWhen?: (e: SuiteWalkUpArgs) => boolean } = {},
 ) {
   let result = false;
   TestTree.walkUp(item, (e) => {

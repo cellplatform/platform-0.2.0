@@ -1,6 +1,6 @@
 import { Test } from '../index.mjs';
 import { describe, expect, it, t } from '../test';
-import { TestTree, WalkDownArgs, WalkUpArgs } from '.';
+import { TestTree, SuiteWalkDownArgs, SuiteWalkUpArgs } from '.';
 
 type T = t.TestSuiteModel | t.TestModel;
 
@@ -57,7 +57,7 @@ describe('TestTree ("Hierarchy")', () => {
   it('walkDown', async () => {
     const { root } = await createRoot();
 
-    const list: WalkDownArgs[] = [];
+    const list: SuiteWalkDownArgs[] = [];
     TestTree.walkDown(root, (e) => list.push(e));
 
     const flat = list.map((item) => item.test?.toString() || item.suite.toString());
@@ -68,7 +68,7 @@ describe('TestTree ("Hierarchy")', () => {
     const { findTest } = await createRoot();
     const from = findTest('2.2.1.2');
 
-    const list: WalkUpArgs[] = [];
+    const list: SuiteWalkUpArgs[] = [];
     TestTree.walkUp(from, (e) => list.push(e));
 
     const flat = list.map((item) => item.suite.toString());
