@@ -1,4 +1,5 @@
 export * from './TestSuite.helpers/types.mjs';
+import type { Tree } from './TestSuite.helpers/Tree.mjs';
 
 type Id = string;
 type Anything = void | any;
@@ -17,6 +18,7 @@ export type SpecImports = { [namespace: string]: () => SpecImport };
  */
 export type Test = {
   Is: TestIs;
+  Tree: typeof Tree;
   describe: TestSuiteDescribe;
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
