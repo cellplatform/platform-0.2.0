@@ -41,11 +41,11 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
     base: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      gridTemplateColumns: 'auto 10px 1fr auto',
+      boxSizing: 'border-box',
     }),
     left: css({
-      marginRight: 10,
-      Size: thumbnailSize,
+      height: thumbnailSize,
     }),
     body: css({
       display: 'grid',
@@ -67,29 +67,34 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onClick={() => console.info(connections)}>
       <div {...styles.left}>
-        <div>
-          {!ready && (
-            <div {...styles.thumbnail.bg}>
-              <Spinner.Orbit size={20} style={styles.thumbnail.spinner} />
-            </div>
-          )}
-          {video && (
-            <MediaStream.Video
-              stream={video}
-              muted={true}
-              width={thumbnailSize}
-              height={thumbnailSize}
-              borderRadius={3}
-              onLoadedData={() => setReady(true)}
-            />
-          )}
-        </div>
+        {!ready && (
+          <div {...styles.thumbnail.bg}>
+            <Spinner.Orbit size={20} style={styles.thumbnail.spinner} />
+          </div>
+        )}
+        {video && (
+          <MediaStream.Video
+            stream={video}
+            muted={true}
+            width={thumbnailSize}
+            height={thumbnailSize}
+            borderRadius={3}
+            onLoadedData={() => setReady(true)}
+          />
+        )}
       </div>
+      <div />
       <div {...styles.body}>
         <div {...styles.peerid}>{`peer:${peerid}`}</div>
-        <AudioWaveform height={20} stream={video} style={{ position: 'relative', bottom: -7 }} />
+        <AudioWaveform
+          height={20}
+          stream={video}
+          lineWidth={0.5}
+          lineColor={Color.alpha(COLORS.DARK, 0.3)}
+          style={{ position: 'relative', bottom: -7 }}
+        />
       </div>
       <div {...styles.right}>
         <Button

@@ -15,7 +15,9 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+    }),
     list: css({ marginTop: 10 }),
     hrBottom: css({
       borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
