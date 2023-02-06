@@ -14,6 +14,7 @@ import {
   TextInput,
   TextSyntax,
 } from '../test.ui';
+import { PeerRow } from './-dev/ui.PeerRow';
 
 type Id = string;
 
@@ -54,7 +55,6 @@ export default Dev.describe('WebRTC', (e) => {
     self = await WebRTC.peer({ signal, getStream });
     await state.change((d) => (d.peer = self));
     self.connections$.subscribe((e) => {
-      console.log('self.connections$', self.connections$);
       state.change((d) => {
         d.connections = e.connections;
         d.peer = self;
@@ -86,11 +86,20 @@ export default Dev.describe('WebRTC', (e) => {
           }),
         };
 
-        const code = `// 👋 Hello World!\n`;
+        const code = `
+/**
+ * sys.net.webrtc
+ * 
+ * Peer-to-peer system network tools 
+ * (data/video/audio realtime streaming connections).
+ * 
+ * Target Runtime: "browser"
+ */        
+`;
 
         return (
           <div {...styles.base}>
-            <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} />
+            <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} scroll={true} />
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={code} />
             </div>
@@ -149,8 +158,7 @@ export default Dev.describe('WebRTC', (e) => {
           <div {...styles.base}>
             <div {...styles.video.base}>
               <div {...styles.video.bg}>
-                <Icons.Face.Call size={80} opacity={0.2} />
-                {/* <Icons.Cube size={80} opacity={0.3} /> */}
+                <Icons.Face.Caller size={80} opacity={0.2} />
               </div>
               {media && (
                 <MediaStream.Video
@@ -178,9 +186,7 @@ export default Dev.describe('WebRTC', (e) => {
         .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'muted'))),
     );
 
-    dev.hr();
-
-    dev.section('Connections', (dev) => {
+    dev.section((dev) => {
       dev.hr();
       dev.row((e) => {
         return (
@@ -249,23 +255,27 @@ export default Dev.describe('WebRTC', (e) => {
       dev.hr();
 
       dev.row((e) => {
+        if (self.connections.length === 0) return null;
+
         const styles = {
           base: css({}),
           item: css({
             display: 'grid',
             gridTemplateColumns: '1fr auto',
           }),
+          hrBottom: css({
+            borderBottom: `solid 6px ${Color.alpha(COLORS.DARK, 0.06)}`,
+            marginTop: 10,
+            marginBottom: 25,
+          }),
         };
+
         return (
           <div {...styles.base}>
-            {self.connections.map((conn, i) => {
-              return (
-                <div key={conn.id} {...styles.item}>
-                  <div>{conn.kind}</div>
-                  <Button onClick={conn.dispose}>close</Button>
-                </div>
-              );
+            {self.connectionsByPeer.map((item) => {
+              return <PeerRow key={`item.peer:${item.peer}`} connections={item} />;
             })}
+            <div {...styles.hrBottom} />
           </div>
         );
       });
@@ -287,5 +297,12 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     dev.hr();
+
+    dev.button('🐷 tmp', () => {
+      /**
+       * TODO: TEMP
+       */
+      console.log('self.peerConnections', self.connectionsByPeer);
+    });
   });
 });
