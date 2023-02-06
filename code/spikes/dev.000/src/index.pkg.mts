@@ -11,8 +11,10 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.116',
+  version: '0.0.120',
   dependencies: {
+    'react': '18.2.0',
+    'react-dom': '18.2.0',
     'sys.net.webrtc': '0.0.0',
     'sys.text': '0.0.0',
     'sys.types': '0.0.0',
