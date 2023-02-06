@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.110',
+  version: '0.0.111',
   dependencies: {
     'sys.net.webrtc': '0.0.0',
     'sys.text': '0.0.0',
