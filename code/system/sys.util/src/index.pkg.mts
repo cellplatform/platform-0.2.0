@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'asmcrypto.js': '2.3.2',
-    'nanoid': '4.0.0',
+    'nanoid': '4.0.1',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
