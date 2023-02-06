@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { expect } from 'chai';
 
@@ -11,8 +11,8 @@ import { Keyboard } from 'sys.ui.dom';
 
 let _renderCount = 0;
 
+type T = { count: number; throwError?: boolean };
 const initial = { count: 0 };
-type T = typeof initial;
 
 export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
@@ -37,7 +37,8 @@ export default Spec.describe('MySample', (e) => {
           <MySample
             style={{ flex: 1 }}
             text={text}
-            state={e.state}
+            data={{ count: e.state.count }}
+            throwError={e.state.throwError}
             onClick={() => {
               ctx.subject.backgroundColor(1);
               state.change((draft) => draft.count++);
@@ -77,6 +78,11 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('run specs').onClick((e) => ctx.run()))
       .button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })))
       .button((btn) => btn.label('ctx.redraw').onClick(() => ctx.redraw()))
+      .button((btn) =>
+        btn.label('throw error').onClick((e) => {
+          state.change((d) => (d.throwError = true));
+        }),
+      )
       .hr();
 
     debug.row(<div>State</div>);
