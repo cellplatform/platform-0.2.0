@@ -10,13 +10,12 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.data.crdt',
+  name: 'sys.data.crdt.__legacy',
   version: '0.0.0',
   dependencies: {
     'sys.fs': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'automerge': '1.0.1-preview.7',
   },
   toString() {
     return `💦 module: ${Pkg.name} (v${Pkg.version})`;
