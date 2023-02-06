@@ -210,6 +210,12 @@ export default Dev.describe('WebRTC', (e) => {
       peerB = b;
     });
 
+    e.it.skip('open media connection', async (e) => {
+      /**
+       * TODO 🐷
+       */
+    });
+
     e.it('dispose: peers (A | B)', async (e) => {
       peerA.dispose();
       peerB.dispose();

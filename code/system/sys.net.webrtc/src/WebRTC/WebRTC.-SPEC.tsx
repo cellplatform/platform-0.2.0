@@ -295,7 +295,7 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('integration tests', (e) => invoke(import('./WebRTC.TESTS.mjs')));
+      dev.button('run integration tests', (e) => invoke(import('./WebRTC.-TEST.mjs')));
     });
 
     dev.hr();
