@@ -1,4 +1,4 @@
-import { Video } from './ui.Video';
+import { Video } from '../MediaStream.Video';
 
 import {
   MediaStreamEvents as Events,

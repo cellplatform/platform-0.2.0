@@ -1,6 +1,8 @@
-import { MediaStream, VideoProps } from '..';
+import { MediaStream } from '..';
 import { Icons } from '../../Icons';
 import { Color, css, t } from './common';
+
+import type { VideoProps } from '../../MediaStream.Video';
 
 export type SampleProps = VideoProps & { streamRef: string; bus: t.EventBus<any> };
 

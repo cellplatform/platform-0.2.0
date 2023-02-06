@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { css, t, Style, Color } from './common';
+import { css, t, Style, Color } from '../common';
 
 type ClickHandler = React.MouseEventHandler<HTMLDivElement>;
 
@@ -16,6 +16,7 @@ export type VideoProps = {
   onMouseUp?: ClickHandler;
   onMouseEnter?: ClickHandler;
   onMouseLeave?: ClickHandler;
+  onLoadedData?: React.ReactEventHandler<HTMLVideoElement>;
 };
 
 export const Video: React.FC<VideoProps> = (props) => {
@@ -52,7 +53,13 @@ export const Video: React.FC<VideoProps> = (props) => {
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
-      <video {...styles.video} ref={videoRef} autoPlay={true} muted={isMuted} />
+      <video
+        {...styles.video}
+        ref={videoRef}
+        autoPlay={true}
+        muted={isMuted}
+        onLoadedData={props.onLoadedData}
+      />
     </div>
   );
 };
