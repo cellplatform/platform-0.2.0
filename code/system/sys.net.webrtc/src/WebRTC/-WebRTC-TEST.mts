@@ -215,7 +215,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it(
-      'open media/data connection → closing data-connection auto closes media-connection',
+      'open media/data connection → close (last) data-connection → auto closes media-connection',
       async (e) => {
         const status1 = await getMediaStatus();
         expect(status1.stream).to.eql(undefined);
