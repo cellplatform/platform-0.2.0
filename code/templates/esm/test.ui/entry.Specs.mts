@@ -1,5 +1,5 @@
 export const Specs = {
-  'ns.root.SAMPLE': () => import('./root.SPEC'),
+  'ns.root.SAMPLE': () => import('./-root.SPEC'),
 };
 
 export default Specs;
