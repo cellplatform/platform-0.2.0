@@ -2,8 +2,9 @@ import { WebRTC } from '.';
 import { TEST, cuid, Dev, expect, rx, t, Time } from '../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
-  e.timeout(10 * 10000);
   const signal = TEST.signal;
+  const SECOND = 1000;
+  e.timeout(15 * SECOND);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
     return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal, getStream })));

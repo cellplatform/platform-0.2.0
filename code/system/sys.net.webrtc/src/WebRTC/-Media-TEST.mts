@@ -2,6 +2,9 @@ import { Dev, rx, expect } from '../test.ui';
 import { Media } from './Media.mjs';
 
 export default Dev.describe('WebRTC.Media', (e) => {
+  const SECOND = 1000;
+  e.timeout(15 * SECOND);
+
   e.it('singleton (default bus)', async (e) => {
     const res1 = Media.singleton();
     const res2 = Media.singleton();
