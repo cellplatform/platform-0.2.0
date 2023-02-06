@@ -43,6 +43,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: 'auto 10px 1fr auto',
       boxSizing: 'border-box',
+      height: thumbnailSize,
     }),
     left: css({
       height: thumbnailSize,
