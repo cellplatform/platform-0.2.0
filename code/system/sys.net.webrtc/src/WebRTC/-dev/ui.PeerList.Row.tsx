@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Icons, Button, MediaStream, Spinner } from './common';
+import { useState } from 'react';
+import { Button, COLORS, css, Icons, MediaStream, Spinner, t } from './common';
 
 export type PeerRowProps = {
   connections: t.PeerConnectionSet;
@@ -10,10 +10,10 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   const { connections } = props;
   const { peer: peerid } = connections;
 
-  const media = connections.media.find((item) => item.stream)?.stream;
-
   const [ready, setReady] = useState(false);
   const [isCloseOver, setCloseOver] = useState(false);
+
+  const media = connections.media.find((item) => item.stream)?.stream;
 
   /**
    * [Handlers]
@@ -63,7 +63,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
           )}
           {media && (
             <MediaStream.Video
-              stream={media.remote}
+              stream={media?.remote}
               muted={true}
               width={thumbnailSize}
               height={thumbnailSize}

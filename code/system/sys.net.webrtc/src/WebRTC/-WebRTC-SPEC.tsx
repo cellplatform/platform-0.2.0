@@ -14,7 +14,7 @@ import {
   TextInput,
   TextSyntax,
 } from '../test.ui';
-import { PeerRow } from './-dev/ui.PeerRow';
+import { PeerList } from './-dev/ui.PeerList';
 
 type Id = string;
 
@@ -77,21 +77,17 @@ export default Dev.describe('WebRTC', (e) => {
       .size('fill')
       .render<T>(async (e) => {
         const { MonacoEditor } = await import('sys.ui.react.monaco');
-
         const styles = {
           base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
-          footer: css({
-            borderTop: `solid 1px ${Color.format(-0.2)}`,
-            display: 'grid',
-          }),
+          footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
         };
 
         const code = `
 /**
  * system.network.webrtc
  * 
- * Peer-to-peer system network tools 
- * (data/video/audio realtime streaming connections).
+ * Peer-to-peer network connection tooling
+ * (data/video/audio realtime network streams).
  * 
  * Runtime:  browser
  * Standard: https://www.w3.org/TR/webrtc/
@@ -131,9 +127,7 @@ export default Dev.describe('WebRTC', (e) => {
             base: css({
               height,
               position: 'relative',
-              // backgroundColor: Color.alpha(COLORS.DARK, 0.05),
               borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-
               backgroundImage: `url(${PROFILE})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -254,32 +248,7 @@ export default Dev.describe('WebRTC', (e) => {
       );
 
       dev.hr();
-
-      dev.row((e) => {
-        if (self.connections.length === 0) return null;
-
-        const styles = {
-          base: css({}),
-          item: css({
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-          }),
-          hrBottom: css({
-            borderBottom: `solid 6px ${Color.alpha(COLORS.DARK, 0.06)}`,
-            marginTop: 10,
-            marginBottom: 25,
-          }),
-        };
-
-        return (
-          <div {...styles.base}>
-            {self.connectionsByPeer.map((item) => {
-              return <PeerRow key={`item.peer:${item.peer}`} connections={item} />;
-            })}
-            <div {...styles.hrBottom} />
-          </div>
-        );
-      });
+      dev.row(() => <PeerList peer={self} />);
     });
 
     dev.section('Health Check', (dev) => {
@@ -298,12 +267,5 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     dev.hr();
-
-    dev.button('🐷 tmp', () => {
-      /**
-       * TODO: TEMP
-       */
-      console.log('self.peerConnections', self.connectionsByPeer);
-    });
   });
 });
