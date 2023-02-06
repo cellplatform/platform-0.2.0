@@ -88,14 +88,15 @@ export default Dev.describe('WebRTC', (e) => {
 
         const code = `
 /**
- * sys.net.webrtc
+ * system.network.webrtc
  * 
  * Peer-to-peer system network tools 
  * (data/video/audio realtime streaming connections).
  * 
- * Target Runtime: "browser"
+ * Runtime:  browser
+ * Standard: https://www.w3.org/TR/webrtc/
  */        
-`;
+`.substring(1);
 
         return (
           <div {...styles.base}>
