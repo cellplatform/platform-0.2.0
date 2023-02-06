@@ -1,5 +1,7 @@
+import { useState } from 'react';
+
 import { DevTools } from '.';
-import { t, RenderCount, Dev } from '../../test.ui';
+import { Dev, RenderCount, t } from '../../test.ui';
 import { css } from '../common';
 
 type T = { count: number; on: boolean; theme: t.CommonTheme };
@@ -8,8 +10,7 @@ const initial: T = { count: 0, on: true, theme: 'Light' };
 export default Dev.describe('DevTools', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-
-    const state = await ctx.state<T>(initial);
+    await ctx.state<T>(initial);
 
     ctx.subject
       .display('grid')
@@ -85,6 +86,8 @@ export default Dev.describe('DevTools', (e) => {
 
       dev.section('Section (Pending)');
     });
+
+    dev.row((e) => <Sample state={e.state} theme={'Light'} />);
   });
 });
 
@@ -92,15 +95,21 @@ export default Dev.describe('DevTools', (e) => {
  * Sample
  */
 
-export type SampleProps = { state: T };
+export type SampleProps = { state: T; theme?: t.CommonTheme };
 export const Sample: React.FC<SampleProps> = (props) => {
-  const theme = props.state.theme;
-  const styles = {
-    base: css({ Padding: [5, 12], fontSize: 14 }),
-  };
+  /**
+   * NOTE: ensuring hooks behave as expected.
+   */
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
+  const theme = props.theme ?? props.state.theme;
+  const styles = { base: css({ Padding: [5, 12], fontSize: 14 }) };
+  const data = { state: props.state, isOver };
+
   return (
-    <div {...styles.base}>
-      <Dev.Object name={'state'} data={props.state} theme={theme} />
+    <div {...styles.base} onMouseEnter={over(true)} onMouseLeave={over(false)}>
+      <Dev.Object name={'state'} data={data} theme={theme} />
       <RenderCount absolute={[-20, 5]} theme={theme} />
     </div>
   );
