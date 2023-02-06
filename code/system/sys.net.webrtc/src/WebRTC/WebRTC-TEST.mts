@@ -1,5 +1,5 @@
-import { t, rx, Time, Dev, cuid, expect } from '../test.ui';
 import { WebRTC } from '.';
+import { cuid, Dev, expect, rx, t, Time } from '../test.ui';
 
 const signal = 'rtc.cellfs.com'; // hostname of the signalling server.
 
@@ -200,7 +200,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe.only('peer.media', async (e) => {
+  e.describe('peer.media', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
@@ -210,7 +210,7 @@ export default Dev.describe('WebRTC', (e) => {
       peerB = b;
     });
 
-    e.it.skip('open media connection', async (e) => {
+    e.it('open media connection', async (e) => {
       /**
        * TODO 🐷
        */

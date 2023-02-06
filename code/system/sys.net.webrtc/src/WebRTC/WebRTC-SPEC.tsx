@@ -1,18 +1,18 @@
 import { WebRTC } from '.';
 import {
+  Button,
   Color,
   COLORS,
   css,
   Dev,
+  Icons,
   MediaStream,
   rx,
   slug,
   t,
+  TEST,
   TextInput,
   TextSyntax,
-  Button,
-  Icons,
-  TEST,
 } from '../test.ui';
 
 type Id = string;
@@ -295,7 +295,7 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run integration tests', (e) => invoke(import('./WebRTC.-TEST.mjs')));
+      dev.button('run integration tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
     });
 
     dev.hr();

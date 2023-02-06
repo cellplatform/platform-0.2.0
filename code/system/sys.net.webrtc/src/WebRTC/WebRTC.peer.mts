@@ -1,7 +1,6 @@
 import { Path, PeerJS, rx, t } from './common';
-import { PeerDataConnection } from './Connection.Data.mjs';
-import { PeerMediaConnection } from './Connection.Media.mjs';
 import { Util } from './util.mjs';
+import { MemoryState } from './WebRTC.state.mjs';
 
 type HostName = string;
 type GetMediaStream = () => Promise<MediaStream | undefined>;
@@ -15,6 +14,7 @@ export function peer(args: {
   getLocalStream?: GetMediaStream;
 }): Promise<t.Peer> {
   return new Promise<t.Peer>((resolve, reject) => {
+    const state = MemoryState();
     const id = Util.cleanId(args.id ?? Util.randomPeerId());
     const signal = Path.trimHttpPrefix(args.signal);
     const rtc = new PeerJS(id, {
@@ -29,85 +29,25 @@ export function peer(args: {
     const { dispose, dispose$ } = rx.disposable();
     let _disposed = false;
     dispose$.subscribe(() => {
-      _disposed = true;
-      memory.connections.forEach((conn) => conn.dispose());
       rtc.destroy();
+      api.connections.forEach((conn) => conn.dispose());
+      _disposed = true;
     });
-
-    const memory = { connections: [] as t.PeerConnection[] };
-    const connections$ = new rx.Subject<t.PeerConnectionChange>();
-
-    const State = {
-      fireChanged<P extends t.PeerConnectionChange>(action: P['action'], subject: P['subject']) {
-        const kind = subject.kind;
-        const connections = api.connections;
-        connections$.next({ kind, action, connections, subject } as P);
-      },
-
-      handleDispose(subject: t.PeerConnection) {
-        subject.dispose$.subscribe(() => {
-          memory.connections = memory.connections.filter((item) => item.id !== subject.id);
-          State.fireChanged('removed', subject);
-          if (subject.kind === 'data') State.ensureClosed(subject);
-        });
-      },
-
-      ensureClosed(data: t.PeerDataConnection) {
-        /**
-         * NOTE:
-         * The close event is not being fired for [Media] connections.
-         * Issue: https://github.com/peers/peerjs/issues/780
-         *
-         * This work-around checks all media-connections connected to the
-         * remote peer if there are no other data-connections open.
-         */
-        const isLastDataConnection = !api.dataConnections
-          .filter((item) => item.peer.remote === data.peer.remote)
-          .some((item) => item.id !== data.id);
-
-        if (isLastDataConnection) {
-          api.mediaConnections
-            .filter((item) => item.peer.remote === data.peer.remote)
-            .forEach((item) => item.dispose());
-        }
-      },
-
-      async storeData(conn: t.DataConnection) {
-        const subject = PeerDataConnection(conn);
-        memory.connections.push(subject);
-        State.handleDispose(subject);
-        State.fireChanged('added', subject);
-        return subject;
-      },
-
-      async storeMedia(conn: t.MediaConnection, stream: t.PeerMediaStreams) {
-        const existing = api.mediaConnections.find((item) => item.id === conn.connectionId);
-        if (existing) return existing;
-
-        const subject = PeerMediaConnection(conn, stream);
-        memory.connections.push(subject);
-        State.handleDispose(subject);
-        State.fireChanged('added', subject);
-        return subject;
-      },
-    };
 
     const api: t.Peer = {
       kind: 'local:peer',
       signal,
       id,
 
-      connections$: connections$.asObservable(),
+      connections$: state.connections.$,
       get connections() {
-        return [...memory.connections];
+        return state.connections.all;
       },
       get dataConnections() {
-        const list = memory.connections;
-        return list.filter(({ kind }) => kind === 'data') as t.PeerDataConnection[];
+        return state.connections.data;
       },
       get mediaConnections() {
-        const list = memory.connections;
-        return list.filter(({ kind }) => kind === 'media') as t.PeerMediaConnection[];
+        return state.connections.media;
       },
 
       /**
@@ -118,7 +58,7 @@ export function peer(args: {
           const id = Util.cleanId(connectTo);
           const conn = rtc.connect(id, { reliable: true });
           conn.on('error', (err) => reject(err));
-          conn.on('open', async () => resolve(await State.storeData(conn)));
+          conn.on('open', async () => resolve(await state.storeData(conn)));
         });
       },
 
@@ -130,7 +70,7 @@ export function peer(args: {
           const id = Util.cleanId(connectTo);
           const conn = rtc.call(id, local);
           conn.on('error', (err) => reject(err));
-          conn.on('stream', (remote) => resolve(State.storeMedia(conn, { local, remote })));
+          conn.on('stream', (remote) => resolve(state.storeMedia(conn, { local, remote })));
         });
       },
 
@@ -147,13 +87,13 @@ export function peer(args: {
     /**
      * Handle incoming connections.
      */
-    rtc.on('connection', (conn) => conn.on('open', () => State.storeData(conn)));
+    rtc.on('connection', (conn) => conn.on('open', () => state.storeData(conn)));
     rtc.on('call', async (conn) => {
       const local = await args.getLocalStream?.();
       if (!local) {
         console.warn(`[WebRTC] No local media-stream available. Incoming call rejected.`);
       } else {
-        conn.on('stream', (remote) => State.storeMedia(conn, { local, remote }));
+        conn.on('stream', (remote) => state.storeMedia(conn, { local, remote }));
         conn.answer(local);
       }
     });
