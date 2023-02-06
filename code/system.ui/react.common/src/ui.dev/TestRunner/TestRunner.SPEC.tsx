@@ -24,6 +24,11 @@ const root = Dev.describe('root spec', (e) => {
       e.it('hello', async (e) => {});
     });
   });
+
+  e.describe('child', (e) => {
+    e.it('foo', async (e) => {});
+    e.it.skip('bar', async (e) => {});
+  });
 });
 
 export default Dev.describe('TestRunner', (e) => {
