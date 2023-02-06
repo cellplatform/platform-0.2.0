@@ -1,4 +1,6 @@
-import { css, t, Time } from '../common';
+import { useMemo } from 'react';
+
+import { css, t, Time, Tree } from '../common';
 import { Description } from './Result.Description';
 import { TestResult } from './Results.Test';
 
@@ -11,6 +13,9 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
   const { data } = props;
   const elapsed = Time.duration(data.elapsed).toString();
 
+  const isEmpty = useMemo(() => Tree.Results.isEmpty(data), [data.id]);
+  if (isEmpty) return null;
+
   /**
    * [Render]
    */
@@ -21,10 +26,7 @@ export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
       description: css({ flex: 1 }),
       elapsed: css({ opacity: 1, userSelect: 'none' }),
     },
-    body: css({
-      position: 'relative',
-      paddingLeft: 10,
-    }),
+    body: css({ position: 'relative', paddingLeft: 10 }),
   };
 
   const elTests = data.tests.map((test) => <TestResult key={test.id} data={test} />);

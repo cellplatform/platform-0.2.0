@@ -1,6 +1,5 @@
-import { css, Style, t, COLORS } from '../common';
+import { css, Style, t, COLORS, Spinner } from '../common';
 import { SuiteResults } from './Results.Suite';
-import { Spinner } from '../../../ui/Spinner';
 
 export type ResultsProps = {
   data?: t.TestSuiteRunResponse;
