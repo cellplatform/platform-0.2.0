@@ -1,7 +1,7 @@
 import { SpinnerPuff as Puff } from './ui.Puff';
-import { SpinnerBarLoader as BarLoader } from './ui.BarLoader';
+import { SpinnerBar as Bar } from './ui.Bar';
 
 export const Spinner = {
   Puff,
-  BarLoader,
+  Bar,
 };

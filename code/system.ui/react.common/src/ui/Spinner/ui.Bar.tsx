@@ -1,7 +1,7 @@
 import { Color, COLORS, css, t } from '../common';
 import { useImporter } from './useImporter.mjs';
 
-export type SpinnerBarLoaderProps = {
+export type SpinnerBarProps = {
   width?: number;
   color?: string | number;
   style?: t.CssValue;
@@ -14,7 +14,7 @@ type P = {
   cssOverride?: t.CSSProperties;
 };
 
-export const SpinnerBarLoader: React.FC<SpinnerBarLoaderProps> = (props) => {
+export const SpinnerBar: React.FC<SpinnerBarProps> = (props) => {
   const { width = 100 } = props;
   const color = props.color ? Color.format(props.color) : COLORS.DARK;
 

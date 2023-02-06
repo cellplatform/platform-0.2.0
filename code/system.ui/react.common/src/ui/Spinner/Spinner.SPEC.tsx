@@ -10,7 +10,7 @@ export default Dev.describe('Spinner', (e) => {
   };
 
   const barLoader = async (dev: t.DevTools<T>, props?: t.SpinnerBarLoaderProps) => {
-    return dev.change((d) => (d.el = <Spinner.BarLoader {...props} />));
+    return dev.change((d) => (d.el = <Spinner.Bar {...props} />));
   };
 
   e.it('init', async (e) => {
