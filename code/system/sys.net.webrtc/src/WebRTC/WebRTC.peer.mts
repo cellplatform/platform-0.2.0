@@ -1,4 +1,4 @@
-import { Path, PeerJS, rx, t } from './common';
+import { Path, PeerJS, rx, t, R } from './common';
 import { Util } from './util.mjs';
 import { MemoryState } from './WebRTC.state.mjs';
 
@@ -48,6 +48,22 @@ export function peer(args: {
       },
       get mediaConnections() {
         return state.connections.media;
+      },
+      get connectionsByPeer() {
+        const byPeer = R.groupBy((item) => item.peer.remote, api.connections);
+        return Object.entries(byPeer).map(([peer, all]) => {
+          const item: t.PeerConnectionSet = {
+            peer,
+            all,
+            get data() {
+              return Util.filterOnDataConnection(all);
+            },
+            get media() {
+              return Util.filterOnMediaConnection(all);
+            },
+          };
+          return item;
+        });
       },
 
       /**

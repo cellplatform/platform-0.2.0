@@ -1,6 +1,7 @@
 import { rx, t } from './common';
 import { PeerDataConnection } from './Connection.Data.mjs';
 import { PeerMediaConnection } from './Connection.Media.mjs';
+import { Util } from './util.mjs';
 
 /**
  * State management of current WebRTC session - peers/connections.
@@ -16,12 +17,10 @@ export function MemoryState() {
         return [...memory.connections];
       },
       get data() {
-        const list = memory.connections;
-        return list.filter(({ kind }) => kind === 'data') as t.PeerDataConnection[];
+        return Util.filterOnDataConnection(memory.connections);
       },
       get media() {
-        const list = memory.connections;
-        return list.filter(({ kind }) => kind === 'media') as t.PeerMediaConnection[];
+        return Util.filterOnMediaConnection(memory.connections);
       },
     },
 

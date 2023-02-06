@@ -31,4 +31,11 @@ export const Util = {
       return true;
     },
   },
+
+  filterOnDataConnection(source: t.PeerConnection[]) {
+    return source.filter(({ kind }) => kind === 'data') as t.PeerDataConnection[];
+  },
+  filterOnMediaConnection(source: t.PeerConnection[]) {
+    return source.filter(({ kind }) => kind === 'media') as t.PeerMediaConnection[];
+  },
 };

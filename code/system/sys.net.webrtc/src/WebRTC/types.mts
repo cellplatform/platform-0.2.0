@@ -24,12 +24,20 @@ export type Peer = t.Disposable & {
   readonly connections: PeerConnection[];
   readonly dataConnections: PeerDataConnection[];
   readonly mediaConnections: PeerMediaConnection[];
+  readonly connectionsByPeer: PeerConnectionSet[];
   readonly disposed: boolean;
   data(connectTo: Id): Promise<PeerDataConnection>;
   media(connectTo: Id): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
+
+export type PeerConnectionSet = {
+  peer: Id;
+  all: PeerConnection[];
+  data: PeerDataConnection[];
+  media: PeerMediaConnection[];
+};
 
 type Connection = t.Disposable & {
   readonly id: Id;
