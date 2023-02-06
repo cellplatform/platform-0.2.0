@@ -1,7 +1,7 @@
 import path from 'path';
 
-import { describe, expect, it } from '../test/index.mjs';
-import { NodeGlob } from './index.mjs';
+import { describe, expect, it } from '../test';
+import { NodeGlob } from '.';
 
 describe('NodeGlob', () => {
   it('matches file pattern', async () => {

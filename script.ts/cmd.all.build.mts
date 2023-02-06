@@ -18,7 +18,7 @@ let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological' });
 
 // Log module list.
 console.log();
-console.log(pc.green('build list:'));
+console.log(pc.cyan('Build list:'));
 paths.forEach((path) => console.log(pc.gray(` • ${Util.formatPath(path)}`)));
 console.log();
 console.log();

@@ -53,15 +53,19 @@ export async function build(
     const bundleSize = pc.bold(pc.white(bundle.toString()));
     const typesSize = types.toString();
 
-    const prefix = pc.bgCyan(pc.bold(' dist '));
-    const filesize = pc.bold(pc.white(size.toString()));
+    const prefix = pc.bgCyan(pc.bold(' DIST '));
+    const pkg = await Util.importPkgMeta(dir);
+    const moduleName = pkg?.name || 'unknown';
 
     const table = LogTable();
-    table.push([' '.repeat(6), 'bundle', `  ${bundle.length} files  `, bundleSize]);
-    table.push([' '.repeat(6), 'types.d', `  ${types.length} files  `, typesSize]);
+    const indent = ' '.repeat(6);
+    table.push([indent, 'bundle', `  ${bundle.length} files  `, bundleSize]);
+    table.push([indent, 'types.d', `  ${types.length} files  `, typesSize]);
+    table.push([indent, '', '', '-'.repeat(10)]);
+    table.push([indent, '', '', size.toString()]);
 
     console.info(``);
-    console.info(pc.gray(`${prefix} ${filesize}`));
+    console.info(pc.gray(`${prefix} ${pc.cyan(pc.bold(moduleName))}`));
     console.info(pc.gray(table.toString()));
     console.info('');
   }

@@ -40,7 +40,7 @@ describe('ValueHandler', () => {
     const { events } = await TestSample.controller();
 
     const fired: t.DevValueHandlerArgs<S>[] = [];
-    const value = ValueHandler<string, S>(events, { debounce: 0 }).handler((e) => {
+    const value = ValueHandler<string, S>(events).handler((e) => {
       fired.push(e);
       return `count-${e.state.count ?? 0}`;
     });
@@ -59,7 +59,7 @@ describe('ValueHandler', () => {
     const { events } = await TestSample.controller();
     const ctx = await events.ctx.get();
 
-    const value = ValueHandler<string, S>(events, { debounce: 0 }).handler((e) => {
+    const value = ValueHandler<string, S>(events).handler((e) => {
       return `display-${e.dev.subject.display ?? 'unknown'}`;
     });
 
@@ -75,7 +75,7 @@ describe('ValueHandler', () => {
 
   it('replace handler', async () => {
     const { events } = await TestSample.controller();
-    const value = ValueHandler<string, S>(events, { debounce: 0 });
+    const value = ValueHandler<string, S>(events);
 
     value.handler((e) => 'foo');
     value.handler((e) => `bar-${e.state.count ?? 0}`);
@@ -93,7 +93,7 @@ describe('ValueHandler', () => {
 
   it('subscribe', async () => {
     const { events } = await TestSample.controller();
-    const value = ValueHandler<string, S>(events, { debounce: 0 });
+    const value = ValueHandler<string, S>(events);
     value.handler((e) => `foo-${e.state.count ?? 0}`);
 
     const fired: { value: string }[] = [];
@@ -113,7 +113,7 @@ describe('ValueHandler', () => {
 
   it('subscribe => unsubscribe', async () => {
     const { events } = await TestSample.controller();
-    const value = ValueHandler<string, S>(events, { debounce: 0 });
+    const value = ValueHandler<string, S>(events);
     value.handler((e) => `foo-${e.state.count ?? 0}`);
 
     const fired: { value: string }[] = [];
@@ -133,7 +133,7 @@ describe('ValueHandler', () => {
 
   it('dispose', async () => {
     const { events } = await TestSample.controller();
-    const value = ValueHandler<string, S>(events, { debounce: 0 }).handler(() => 'foo');
+    const value = ValueHandler<string, S>(events).handler(() => 'foo');
 
     expect(value.disposed).to.eql(false);
     value.dispose();

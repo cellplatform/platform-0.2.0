@@ -1,6 +1,6 @@
-import { expect, describe, it } from '../../test/index.mjs';
+import { expect, describe, it } from '../../test';
 import { Hash, t } from '../common.mjs';
-import { ManifestHash } from './index.mjs';
+import { ManifestHash } from '.';
 
 describe('ManifestHash', () => {
   const EMPTY = Hash.sha256([]);

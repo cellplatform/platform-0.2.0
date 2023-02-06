@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
+    'sys.text': '0.0.0',
     'sys.ui.dom': '0.0.0',
     'sys.ui.react.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',

@@ -1,25 +1,18 @@
-import { MediaStreamEvents, MediaStreamController, MediaStreamRecordController } from './logic';
-import { useVideoStreamState, useOfflineState } from './use';
-import { VideoStream } from './ui.VideoStream';
+import { Video } from '../MediaStream.Video';
 
-export type { VideoStreamProps } from './ui.VideoStream';
-export * from './types';
+import {
+  MediaStreamEvents as Events,
+  MediaStreamController as Controller,
+  MediaStreamRecordController as RecordController,
+} from './logic';
+import { useVideoStreamState, useOfflineState } from './use';
 
 export const MediaStream = {
-  Events: MediaStreamEvents,
-
-  Controller: MediaStreamController,
-  RecordController: MediaStreamRecordController,
+  Events,
+  Controller,
+  RecordController,
 
   useVideoStreamState,
   useOfflineState,
-};
-
-export {
-  MediaStreamEvents,
-  MediaStreamController,
-  MediaStreamRecordController,
-  VideoStream,
-  useVideoStreamState,
-  useOfflineState,
+  Video,
 };

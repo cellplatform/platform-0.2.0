@@ -1,4 +1,4 @@
-import { DEFAULT, Path, t } from './common.mjs';
+import { DEFAULT, Path, t } from './common';
 
 /**
  * Helpers for working with file-caching a directory.

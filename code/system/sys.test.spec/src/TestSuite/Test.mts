@@ -1,6 +1,6 @@
 import { type t } from './common';
 import { Def } from './TestSuiteModel.mjs';
-import { Is } from '../TestSuite.helpers';
+import { Is, Tree } from '../TestSuite.helpers';
 import { bundle } from './Test.bundle.mjs';
 
 const describe = Def.variants();
@@ -10,6 +10,7 @@ const describe = Def.variants();
  */
 export const Test: t.Test = {
   Is,
+  Tree,
   describe,
   bundle,
 

@@ -1,6 +1,6 @@
-import { COLORS, css, Icons, t } from '../common';
-import { TestError } from './Results.Test.Error';
+import { Color, COLORS, css, Icons, t, Time } from '../common';
 import { Description } from './Result.Description';
+import { TestError } from './Results.Test.Error';
 
 export type TestResultProps = {
   data: t.TestRunResponse;
@@ -22,18 +22,29 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   const styles = {
     base: css({ position: 'relative', marginBottom: 4 }),
     line: {
-      base: css({ Flex: 'horizontal-stretch-stretch' }),
+      base: css({
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto',
+      }),
       icon: css({ marginRight: 6 }),
-      elapsed: css({ opacity: 0.2, userSelect: 'none' }),
+      elapsed: css({ marginLeft: 20, opacity: 0.2, userSelect: 'none' }),
     },
     error: css({ marginLeft: 25 }),
   };
 
   const elIconSuccess = !isSkipped && data.ok && <Icons.Tick size={16} color={COLORS.LIME} />;
   const elIconFail = !isSkipped && !data.ok && <Icons.Close size={16} color={COLORS.MAGENTA} />;
-  const elIconSkipped = isSkipped && <Icons.Skip size={16} color={COLORS.CYAN} />;
+  const elIconSkipped = isSkipped && (
+    <Icons.Skip
+      size={16}
+      color={Color.alpha(COLORS.DARK, 0.3)}
+      style={{ position: 'relative', top: 2 }}
+    />
+  );
 
   const elError = data.error && <TestError data={data} style={styles.error} />;
+
+  const elapsed = Time.duration(data.elapsed).toString();
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -43,8 +54,8 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
           {elIconFail}
           {elIconSkipped}
         </div>
-        <Description text={data.description} style={{ flex: 1 }} />
-        {<div {...styles.line.elapsed}>{isSkipped ? '-' : `${data.elapsed} ms`}</div>}
+        <Description text={data.description} isSkipped={isSkipped} />
+        {<div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>}
       </div>
       {elError}
     </div>

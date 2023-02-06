@@ -1,27 +1,21 @@
-import { Fragment } from 'react';
+import { COLORS, css, t } from './common';
+import { Footer } from './ui.Footer';
+import { List } from './ui.List';
+import { Title } from './ui.Title';
 
-import { Color, COLORS, css, t } from '../common';
-import { SpecListTitle } from './SpecList.Title';
-import { SpecListFooter } from './SpecList.Footer';
-import { shouldShowHr } from './calc.mjs';
-
-const KEY = { DEV: 'dev' };
-
-export type Imports = { [namespace: string]: () => Promise<any> };
 export type SpecListProps = {
   title?: string;
   version?: string;
-  imports?: Imports;
+  imports?: t.SpecImports;
+  href?: string;
   hrDepth?: number;
   badge?: t.SpecListBadge;
   style?: t.CssValue;
 };
 
 export const SpecList: React.FC<SpecListProps> = (props) => {
-  const { imports = {}, hrDepth = -1 } = props;
-  const url = new URL(window.location.href);
-  const hasDevParam = url.searchParams.has(KEY.DEV);
-  const importsKeys = Object.keys(imports);
+  const { imports = {} } = props;
+  const url = new URL(props.href ?? window.location.href);
 
   /**
    * [Render]
@@ -29,77 +23,21 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      cursor: 'default',
       fontFamily: 'sans-serif',
       lineHeight: '2em',
       color: COLORS.DARK,
-      cursor: 'default',
       padding: 30,
       paddingTop: 20,
     }),
-    ul: css({}),
-    hr: css({
-      border: 'none',
-      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
-    }),
-    hrDashed: css({
-      border: 'none',
-      borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,
-      MarginY: 10,
-    }),
-    link: css({
-      color: COLORS.BLUE,
-      textDecoration: 'none',
-    }),
-    linkDimmed: {
-      color: Color.alpha(COLORS.DARK, 0.4),
-      ':hover': { color: COLORS.BLUE },
-    },
+    title: css({ marginBottom: 20 }),
   };
-
-  const createItem = (
-    i: number,
-    address: string | undefined,
-    title?: string,
-    isDimmed?: boolean,
-  ) => {
-    const isLast = i >= importsKeys.length - 1;
-    const beyondBounds = i === -1 ? true : i > importsKeys.length - 1;
-    const url = new URL(window.location.href);
-    const params = url.searchParams;
-
-    const prev = importsKeys[i - 1];
-    const next = importsKeys[i];
-    const showHr = !isLast && !beyondBounds && shouldShowHr(hrDepth, prev, next);
-
-    if (address) params.set(KEY.DEV, address);
-    if (!address) params.delete(KEY.DEV);
-
-    return (
-      <Fragment key={`item-${i}`}>
-        <li>
-          {showHr && <hr {...styles.hr} />}
-          <a href={url.href} {...css(styles.link, isDimmed ? styles.linkDimmed : undefined)}>
-            {title ?? address}
-          </a>
-        </li>
-      </Fragment>
-    );
-  };
-
-  const elList = (
-    <ul {...styles.ul}>
-      {importsKeys.map((key, i) => createItem(i, key))}
-      <hr {...styles.hrDashed} />
-      {hasDevParam && createItem(-1, undefined, '?dev - remove param', true)}
-      {!hasDevParam && createItem(-1, 'true', '?dev - add param', true)}
-    </ul>
-  );
 
   return (
     <div {...css(styles.base, props.style)}>
-      <SpecListTitle title={props.title} version={props.version} badge={props.badge} />
-      {elList}
-      <SpecListFooter />
+      <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
+      <List imports={imports} url={url} hrDepth={props.hrDepth} />
+      <Footer />
     </div>
   );
 };

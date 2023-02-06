@@ -1,4 +1,4 @@
-import { asArray, Path, t, R, DEFAULT } from './common.mjs';
+import { asArray, Path, t, R, DEFAULT } from './common';
 import { ManifestCache } from './ManifestCache.mjs';
 
 type FilesystemId = string;

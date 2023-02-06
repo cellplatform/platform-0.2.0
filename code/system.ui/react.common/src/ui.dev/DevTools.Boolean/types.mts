@@ -11,6 +11,7 @@ export type DevBooleanHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
   label(value: string | t.DevValueHandler<string, S>): DevBooleanHandlerArgs<S>;
   value(value: BoolOrUndefined | t.DevValueHandler<BoolOrUndefined, S>): DevBooleanHandlerArgs<S>;
+  enabled(value: boolean | t.DevValueHandler<boolean, S>): DevBooleanHandlerArgs<S>;
   onClick(fn: DevBooleanClickHandler<S>): DevBooleanHandlerArgs<S>;
 };
 

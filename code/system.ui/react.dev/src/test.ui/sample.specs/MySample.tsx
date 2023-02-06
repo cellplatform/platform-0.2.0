@@ -2,7 +2,8 @@ import { Color, css, t } from '../common';
 
 export type MySampleProps = {
   text?: string;
-  state?: t.Json;
+  data?: t.Json;
+  throwError?: boolean;
   style?: t.CssValue;
   onClick?: () => void;
 };
@@ -10,6 +11,10 @@ export type MySampleProps = {
 let _count = 0;
 
 export const MySample: React.FC<MySampleProps> = (props) => {
+  if (props.throwError) {
+    throw new Error('MySample: Intentional error');
+  }
+
   const styles = {
     base: css({
       position: 'relative',
@@ -30,14 +35,14 @@ export const MySample: React.FC<MySampleProps> = (props) => {
   };
 
   _count++;
-  const elRender = <div {...styles.render}>render-{_count}</div>;
+  const elRender = <div {...styles.render}>{`render-${_count}`}</div>;
 
   return (
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
       <div {...styles.body}>
         <div>🐷 {props.text ?? 'MySample'}</div>
         <div>
-          <pre>state: {props.state ? JSON.stringify(props.state) : 'undefined'} </pre>
+          <pre>state: {props.data ? JSON.stringify(props.data) : 'undefined'} </pre>
         </div>
         <a href={'?dev'} {...styles.link}>
           ?dev

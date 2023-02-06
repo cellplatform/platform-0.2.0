@@ -1,4 +1,4 @@
-import { fsextra, path, t } from '../common/index.mjs';
+import { fsextra, path, t } from '../common';
 import { NodeGlob } from './NodeGlob.mjs';
 import { NodeStream } from './NodeStream.mjs';
 

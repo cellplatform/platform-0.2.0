@@ -51,7 +51,7 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
     },
 
     block: {
-      base: css({ boxSizing: 'border-box', padding: 5 }),
+      base: css({ boxSizing: 'border-box', padding: 1 }),
     },
   };
 

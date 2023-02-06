@@ -1,7 +1,7 @@
 /**
  * @vendor
  */
-export type { VercelConfigFile, VercelHttpDeployResponse } from 'cloud.vercel/src/types.mjs';
+export type { VercelConfigFile, VercelHttpDeployResponse } from 'vendor.vercel/src/types.mjs';
 
 /**
  * @system

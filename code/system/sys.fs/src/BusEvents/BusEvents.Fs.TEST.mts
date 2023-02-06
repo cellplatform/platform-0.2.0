@@ -1,6 +1,6 @@
-import { ManifestFiles } from '../Manifest/index.mjs';
-import { describe, expect, expectError, it, MemoryMock, TestPrep } from '../test/index.mjs';
-import { DEFAULT, Hash, Json, t } from './common.mjs';
+import { ManifestFiles } from '../Manifest';
+import { describe, expect, expectError, it, MemoryMock, TestPrep } from '../test';
+import { DEFAULT, Hash, Json, t } from './common';
 
 describe('BusEvents.Fs', () => {
   describe('sub-directory', () => {

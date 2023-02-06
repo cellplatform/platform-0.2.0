@@ -1,8 +1,8 @@
-import { expect, describe, it } from './test/index.mjs';
+import { expect, describe, it } from './test';
 
-import { Filesize } from './Filesize/index.mjs';
+import { Filesize } from './Filesize';
 import { Filesystem } from './Filesystem.mjs';
-import { Path } from './Path/index.mjs';
+import { Path } from './Path';
 
 describe('Filesystem', () => {
   it('exposes index of sub-modules', () => {

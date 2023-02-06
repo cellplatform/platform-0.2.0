@@ -1,8 +1,8 @@
+import { fs } from './fs.mjs';
 import { FindUtil } from './util.Find.mjs';
+import { folderSize } from './util.FolderSize.mjs';
 import { JsonUtil, PackageJsonUtil } from './util.Json.mjs';
 import { VersionUtil } from './util.Version.mjs';
-import { fs } from './fs.mjs';
-import { prettybytes } from './libs.mjs';
 
 import type * as t from '../types.mjs';
 
@@ -16,6 +16,7 @@ export const Util = {
   Find: FindUtil,
 
   asArray,
+  folderSize,
 
   stripRelativeRoot(input: t.PathString) {
     return trim(input).replace(/^\.\//, '');
@@ -35,35 +36,16 @@ export const Util = {
     return list.filter((_, index) => results[index]);
   },
 
-  /**
-   * Calculate the size of a folder
-   */
-  async folderSize(dir: string, options: { dot?: boolean } = {}) {
-    type P = { path: string; bytes: number };
-    const sum = (list: P[]) => list.reduce((acc, next) => acc + next.bytes, 0);
-
-    const pathnames = await fs.glob(fs.join(dir, '**/*'), { nodir: true, dot: options.dot });
-    const paths: P[] = await Promise.all(
-      pathnames.map(async (path) => {
-        const bytes = (await fs.stat(path)).size;
-        return { path, bytes };
-      }),
-    );
-
-    const api = {
-      dir,
-      paths,
-      bytes: sum(paths),
-      length: paths.length,
-      filter(fn: (item: P) => boolean) {
-        const paths = api.paths.filter(fn);
-        const bytes = sum(paths);
-        const length = paths.length;
-        return { paths, bytes, length, toString: () => prettybytes(bytes) };
-      },
-      toString: () => prettybytes(api.bytes),
+  async importPkgMeta(dir: string) {
+    type T = {
+      name: string;
+      version: string;
+      dependencies: { [name: string]: string };
+      toString(): string;
     };
-    return api;
+    const path = fs.join(dir, 'src/index.pkg.mts');
+    const exists = await fs.pathExists(path);
+    return exists ? ((await import(path)).Pkg as T) : undefined;
   },
 };
 

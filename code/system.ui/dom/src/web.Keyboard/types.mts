@@ -1,5 +1,7 @@
 import type { t } from '../common.t';
 
+export type KeyListenerHandle = t.Disposable;
+
 export type KeyPattern = string; // eg. "CMD + K"
 export type KeyboardStage = 'Down' | 'Up';
 export type KeyboardModifierEdges = [] | ['Left'] | ['Right'] | ['Left' | 'Right'];
@@ -14,6 +16,36 @@ export type KeyboardKeyFlags = {
   readonly enter: boolean;
   readonly escape: boolean;
   readonly arrow: boolean;
+};
+
+/**
+ * Keyboard Monitor.
+ */
+export type KeyboardMonitor = {
+  readonly isSupported: boolean;
+  readonly isListening: boolean;
+  readonly $: t.Observable<t.KeyboardState>;
+  readonly state: t.KeyboardState;
+  start(): KeyboardMonitor;
+  stop(): void;
+  subscribe(fn: (e: t.KeyboardState) => void): KeyListenerHandle;
+  on(pattern: t.KeyPattern, fn: t.KeyMatchSubscriberHandler): KeyListenerHandle;
+  on(patterns: KeyMatchPatterns): KeyListenerHandle;
+};
+
+/**
+ * Key pattern matching.
+ */
+export type KeyMatchSubscriberHandler = (e: KeyMatchSubscriberHandlerArgs) => void;
+export type KeyMatchSubscriberHandlerArgs = {
+  readonly pattern: t.KeyPattern;
+  readonly state: t.KeyboardStateCurrent;
+  readonly event: t.KeyboardKeypress;
+  cancel(): void;
+};
+
+export type KeyMatchPatterns = {
+  readonly [pattern: t.KeyPattern]: t.KeyMatchSubscriberHandler;
 };
 
 /**

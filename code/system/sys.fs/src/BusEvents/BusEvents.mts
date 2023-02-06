@@ -1,7 +1,7 @@
 import { BusEventsFs } from './BusEvents.Fs.mjs';
 import { BusEventsIndexer } from './BusEvents.Indexer.mjs';
 import { BusEventsIo } from './BusEvents.Io.mjs';
-import { rx, t, Wrangle, Stream } from './common.mjs';
+import { rx, t, Wrangle, Stream } from './common';
 
 type FilesystemId = string;
 type Milliseconds = number;

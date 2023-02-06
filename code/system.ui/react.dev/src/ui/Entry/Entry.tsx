@@ -12,7 +12,7 @@ export const Entry = {
    */
   async render(
     pkg: { name: string; version: string },
-    specs: t.Imports,
+    specs: t.SpecImports,
     options: {
       location?: t.UrlInput;
       badge?: t.SpecListBadge;

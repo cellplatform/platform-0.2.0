@@ -1,5 +1,5 @@
-import { describe, expect, it } from '../test/index.mjs';
-import { PathUri } from './index.mjs';
+import { describe, expect, it } from '../test';
+import { PathUri } from '.';
 
 describe('PathUri', () => {
   it('prefix', () => {

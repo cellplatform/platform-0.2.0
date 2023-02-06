@@ -1,4 +1,4 @@
-import { Hash, Path, t, Json } from './common.mjs';
+import { Hash, Path, t, Json } from './common';
 
 /**
  * High level [Fs] interface for programming against the filesystem.

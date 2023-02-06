@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { expect } from 'chai';
 
 import { DevBus } from '../../logic.Bus';
@@ -9,8 +11,8 @@ import { Keyboard } from 'sys.ui.dom';
 
 let _renderCount = 0;
 
+type T = { count: number; throwError?: boolean };
 const initial = { count: 0 };
-type T = typeof initial;
 
 export default Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
@@ -20,9 +22,9 @@ export default Spec.describe('MySample', (e) => {
 
     expect(state.current.count).to.eql(0); // NB: assertions will be run within CI.
 
-    Keyboard.on('CMD + K', (e) => {
-      // NB: Test helpful to ensure errors don't occur on headless (server) run.
-      console.log('CMD + K', e);
+    Keyboard.on('CMD + KeyK', (e) => {
+      // NB: Test helpful to ensure errors don't occur on headless run (aka. server/CI).
+      console.log('keyboard', e.pattern);
     });
 
     ctx.subject
@@ -35,7 +37,8 @@ export default Spec.describe('MySample', (e) => {
           <MySample
             style={{ flex: 1 }}
             text={text}
-            state={e.state}
+            data={{ count: e.state.count }}
+            throwError={e.state.throwError}
             onClick={() => {
               ctx.subject.backgroundColor(1);
               state.change((draft) => draft.count++);
@@ -57,7 +60,8 @@ export default Spec.describe('MySample', (e) => {
     debug.header.padding(0).render(<ComponentSample title={'header'} />);
     debug.footer.border(-0.15).render(<ComponentSample title={'footer'} />);
 
-    debug.row(<ComponentSample />);
+    debug.row(<ComponentSample title={'simple element'} />);
+    debug.row(() => <ComponentSample title={'via function'} />);
     dev.hr();
 
     dev
@@ -74,6 +78,11 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('run specs').onClick((e) => ctx.run()))
       .button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })))
       .button((btn) => btn.label('ctx.redraw').onClick(() => ctx.redraw()))
+      .button((btn) =>
+        btn.label('throw error').onClick((e) => {
+          state.change((d) => (d.throwError = true));
+        }),
+      )
       .hr();
 
     debug.row(<div>State</div>);
@@ -149,11 +158,18 @@ export default Spec.describe('MySample', (e) => {
 
 type P = { title?: string };
 const ComponentSample = (props: P = {}) => {
+  /**
+   * NOTE: ensuring hooks behave as expected.
+   */
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
   const { title = 'Plain Component' } = props;
   const styles = {
     base: css({
       padding: 7,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      cursor: 'default',
     }),
     inner: css({
       Padding: [5, 10],
@@ -163,7 +179,10 @@ const ComponentSample = (props: P = {}) => {
   };
   return (
     <div {...styles.base}>
-      <div {...styles.inner}>{title}</div>
+      <div {...styles.inner} onMouseEnter={over(true)} onMouseLeave={over(false)}>
+        {title}
+        {isOver ? ' - over' : ''}
+      </div>
     </div>
   );
 };

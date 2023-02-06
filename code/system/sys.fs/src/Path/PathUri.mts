@@ -1,4 +1,4 @@
-import { type t } from '../common/index.mjs';
+import { type t } from '../common';
 
 import { Path } from 'sys.util';
 

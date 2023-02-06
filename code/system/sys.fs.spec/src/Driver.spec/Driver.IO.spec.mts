@@ -1,4 +1,4 @@
-import { type t } from './common.mjs';
+import { type t } from './common';
 import { CopySpec } from './Driver.IO.spec.Copy.mjs';
 import { DeleteSpec } from './Driver.IO.spec.Delete.mjs';
 import { ExceptionsSpec } from './Driver.IO.spec.Exceptions.mjs';

@@ -19,6 +19,7 @@ export default Spec.describe('SpecList', (e) => {
         const specs = {
           ...SampleSpecs,
           ...ModuleSpecs,
+          foo: () => import('../../test.ui/sample.specs/MySample.SPEC'),
         };
 
         return (

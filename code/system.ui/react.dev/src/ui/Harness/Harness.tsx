@@ -4,7 +4,7 @@ import { HarnessHost } from '../Harness.Host';
 
 export type HarnessProps = {
   instance?: t.DevInstance;
-  spec?: t.BundleImport;
+  spec?: t.SpecImport;
   keyboard?: boolean;
 
   style?: t.CssValue;

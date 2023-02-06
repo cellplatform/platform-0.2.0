@@ -1,4 +1,4 @@
-import { NAME, Path, t } from '../common/index.mjs';
+import { NAME, Path, t } from '../common';
 import { IndexedDb } from './IndexedDb.mjs';
 
 /**

@@ -1,23 +1,16 @@
-import { debounceTime } from 'rxjs/operators';
-
-import { R, t, DEFAULT } from '../../common';
+import { DEFAULT, R, t } from '../../common';
 
 type O = Record<string, unknown>;
-type Milliseconds = number;
 
 /**
  * Dynamic value.
  *    Used within the definitions of [DevTools] implementations
  *    when the value needs to be re-calculated upon state/prop updates.
  */
-export function ValueHandler<V, State extends O>(
-  events: t.DevEvents,
-  options: { debounce?: Milliseconds } = {},
-) {
+export function ValueHandler<V, State extends O>(events: t.DevEvents) {
   type Handler = t.DevValueHandler<V, State>;
   type Subscriber = (e: { value: V }) => void;
 
-  const { debounce = 10 } = options;
   events.dispose$.subscribe(() => api.dispose());
 
   let _isDisposed = false;
@@ -41,8 +34,8 @@ export function ValueHandler<V, State extends O>(
     _latest = value;
   };
 
-  events.state.changed$.pipe(debounceTime(debounce)).subscribe((e) => onChanged(e.info));
-  events.props.changed$.pipe(debounceTime(debounce)).subscribe((e) => onChanged(e.info));
+  events.state.changed$.subscribe((e) => onChanged(e.info));
+  events.props.changed$.subscribe((e) => onChanged(e.info));
 
   const api = {
     get current() {

@@ -2,6 +2,7 @@
  * @external
  */
 export type { Observable } from 'rxjs';
+export type { CSSProperties } from 'react';
 
 /**
  * @system
@@ -17,7 +18,15 @@ export type {
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
-export type { TestSuiteRunResponse, TestRunResponse } from 'sys.test.spec/src/types.mjs';
+
+export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
+
+export type {
+  TestSuiteRunResponse,
+  TestRunResponse,
+  SpecImports,
+  SpecImport,
+} from 'sys.test.spec/src/types.mjs';
 
 export type {
   DevCtx,
@@ -43,6 +52,7 @@ export type {
   KeyboardKeypressProps,
   KeyboardModifierEdges,
   KeyboardModifierFlags,
+  KeyMatchSubscriberHandlerArgs,
 } from 'sys.ui.dom/src/types.mjs';
 
 /**

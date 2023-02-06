@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest';
 
-import { MemoryMock, t, Path } from './common/index.mjs';
+import { MemoryMock, t, Path } from './common';
 import { Spec } from './Spec.mjs';
 
 describe('Run specification (against sys.fs::MemoryMock)', () => {

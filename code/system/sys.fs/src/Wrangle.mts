@@ -1,5 +1,5 @@
-import { Hash, Stream, t } from './common/index.mjs';
-import { Path } from './Path/index.mjs';
+import { Hash, Stream, t } from './common';
+import { Path } from './Path';
 
 type DirString = string;
 type UriString = string;

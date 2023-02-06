@@ -1,4 +1,4 @@
-import { expect, expectError, t, Json, describe, beforeEach, it } from '../test/index.mjs';
+import { expect, expectError, t, Json, describe, beforeEach, it } from '../test';
 import { NodeFs } from '../index.mjs';
 
 import { NodeStream } from './NodeStream.mjs';

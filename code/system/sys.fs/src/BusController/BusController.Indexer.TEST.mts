@@ -1,7 +1,7 @@
-import { describe, it, DEFAULT, expect, Hash, t, TestPrep, MemoryMock } from '../test/index.mjs';
+import { describe, it, DEFAULT, expect, Hash, t, TestPrep, MemoryMock } from '../test';
 
-import { ManifestFiles } from '../Manifest/index.mjs';
-import { Path } from './common.mjs';
+import { ManifestFiles } from '../Manifest';
+import { Path } from './common';
 
 describe('BusController.Indexer', function () {
   type R = t.FsBusManifestDirResponse;

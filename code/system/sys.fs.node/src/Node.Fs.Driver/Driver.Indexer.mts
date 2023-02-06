@@ -1,5 +1,5 @@
-import { Hash, ManifestFiles, ManifestHash, Path, t, Time } from '../common/index.mjs';
-import { NodeFs } from '../node/index.mjs';
+import { Hash, ManifestFiles, ManifestHash, Path, t, Time } from '../common';
+import { NodeFs } from '../node';
 
 type DirPath = string;
 

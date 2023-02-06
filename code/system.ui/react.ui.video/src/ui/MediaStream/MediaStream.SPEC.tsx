@@ -1,18 +1,17 @@
-import { filter } from 'rxjs/operators';
-
-import { MediaStream, VideoStreamProps } from '.';
-import { Delete, Dev, rx, slug, t, css, Button } from '../../test.ui';
+import { MediaStream } from '.';
+import { Button, css, Delete, Dev, rx, slug, t } from '../../test.ui';
 import { DevAudioWaveform } from './-dev/DEV.AudioWaveform';
-import { DevLayoutMediaComponents } from './-dev/DEV.Layout.MediaComponents';
 import { DevRecordButton } from './-dev/DEV.RecordButton';
 import { Sample } from './-dev/DEV.Sample';
 
+import type { VideoProps } from '../MediaStream.Video';
+
 type T = {
-  props: VideoStreamProps;
+  props: VideoProps;
   muted: { video: boolean; audio: boolean };
 };
 const initial: T = {
-  props: { isMuted: true },
+  props: { muted: true },
   muted: { video: false, audio: false },
 };
 
@@ -37,12 +36,12 @@ export default Dev.describe('MediaStream', (e) => {
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
+    await ctx.state<T>(initial);
 
     MediaStream.Controller({ bus });
 
     rx.payload<t.MediaStreamErrorEvent>(bus.$, 'MediaStream/error')
-      .pipe(filter((e) => e.ref === ref))
+      .pipe(rx.filter((e) => e.ref === ref))
       .subscribe((e) => {
         console.info('MediaStream/error:', e);
       });
@@ -123,9 +122,9 @@ export default Dev.describe('MediaStream', (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('isMuted')
-          .value((e) => e.state.props.isMuted)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isMuted'))),
+          .label('muted')
+          .value((e) => e.state.props.muted)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'muted'))),
       );
     });
 

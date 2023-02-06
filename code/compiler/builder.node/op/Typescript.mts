@@ -23,7 +23,7 @@ export const Typescript = {
     const tsVersion = await Typescript.version();
 
     if (!silent) {
-      const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} building for production...`);
+      const msg = pc.green(`${pc.cyan(`tsc  v${tsVersion}`)} checking types...`);
       console.info(msg);
     }
 

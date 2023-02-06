@@ -90,7 +90,10 @@ export default Dev.describe('ObjectView', (e) => {
       value('`"Hello"`', 'Hello');
       dev.hr();
       value('`{object}`', initial.data);
+      value('`{ }`', {});
+      dev.hr();
       value('`[array]`', [1, 'two', { id: 'three' }, [true, 'four', () => null]]);
+      value('`[ ]`', []);
     });
 
     dev.hr();

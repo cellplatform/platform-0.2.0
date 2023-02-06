@@ -1,4 +1,4 @@
-import { glob, t } from '../common/index.mjs';
+import { glob, t } from '../common';
 
 /**
  * Reference:

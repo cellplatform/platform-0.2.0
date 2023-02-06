@@ -11,7 +11,7 @@ export const Specs = {
   'sys.ui.common.PropList': () => import('../ui/PropList/PropList.SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/Text.SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/TextInput.SPEC'),
-  'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/-dev/Keyboard.SPEC'),
+  'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/Keyboard.SPEC'),
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/TextSecret.SPEC'),
   'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/TextSyntax.SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/Measure.SPEC'),
@@ -21,10 +21,11 @@ export const Specs = {
 
 export const DevSpecs = {
   'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/TestRunner.SPEC'),
+  'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/CmdHost.SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
   'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/DevTools.Hr.SPEC'),
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/DevTools.Button.SPEC'),
-  'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Button/DevTools.Button.SPEC'),
+  'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/DevTools.Boolean.SPEC'),
   'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/DevTools.Title.SPEC'),
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/DevTools.Todo.SPEC'),
 };

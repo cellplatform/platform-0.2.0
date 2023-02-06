@@ -1,5 +1,4 @@
 import { t, Hash } from '../common.mjs';
-import { ManifestFiles } from '../ManifestFiles/index.mjs';
 
 const sha256 = Hash.sha256;
 

@@ -1,6 +1,6 @@
-import { describe, expect, it } from '../test/index.mjs';
+import { describe, expect, it } from '../test';
 import { Filesystem } from '../index.mjs';
-import { Filesize } from './index.mjs';
+import { Filesize } from '.';
 
 describe('Filesize', () => {
   it('default', () => {

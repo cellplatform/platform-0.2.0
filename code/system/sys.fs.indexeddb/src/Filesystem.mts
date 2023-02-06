@@ -1,5 +1,5 @@
-import { rx, slug, t } from './common/index.mjs';
-import { IndexedDbDriver, IndexedDbDriver as IndexedDb } from './IndexedDb.Fs.Driver/index.mjs';
+import { rx, slug, t } from './common';
+import { IndexedDbDriver, IndexedDbDriver as IndexedDb } from './IndexedDb.Fs.Driver';
 import { Path, Filesize, Bus } from 'sys.fs';
 
 type FilesystemId = string;

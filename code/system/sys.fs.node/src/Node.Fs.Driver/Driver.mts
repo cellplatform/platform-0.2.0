@@ -1,4 +1,4 @@
-import { Path, t } from '../common/index.mjs';
+import { Path, t } from '../common';
 import { FsIndexer } from './Driver.Indexer.mjs';
 import { FsIO } from './Driver.IO.mjs';
 

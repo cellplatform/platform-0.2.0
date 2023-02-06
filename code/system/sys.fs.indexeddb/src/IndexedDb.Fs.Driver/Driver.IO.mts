@@ -1,5 +1,5 @@
-import { Delete, NAME, Path, t, Wrangle } from '../common/index.mjs';
-import { DbLookup, IndexedDb } from '../IndexedDb/index.mjs';
+import { Delete, NAME, Path, t, Wrangle } from '../common';
+import { DbLookup, IndexedDb } from '../IndexedDb';
 
 type DirPath = string;
 

@@ -11,11 +11,14 @@ describe('Keyboard.Match', () => {
     [undefined, null, {}, [], 123, true].forEach((value) => test(value as any, []));
     test('', []);
     test('  ', []);
-    test('aBc', ['aBc']);
+    test('KeyP', ['KeyP']);
+    test('p', ['p']);
+    test('P', ['P']);
+
     test('=', ['=']);
     test('\\+', ['+']); // NB: escape character on divider.
     test('ALT + \\+', ['ALT', '+']);
-    test(' SHIFT  +ALT    + P + aBc ', ['SHIFT', 'ALT', 'P', 'aBc']);
+    test(' SHIFT  +ALT    + P + KeyL ', ['SHIFT', 'ALT', 'P', 'KeyL']);
     test('shift + alt + ctrl + meta + K', ['SHIFT', 'ALT', 'CTRL', 'META', 'K']);
     test('cmd + K', ['META', 'K']); // NB: CMD converted to META.
   });
@@ -34,6 +37,7 @@ describe('Keyboard.Match', () => {
 
     test('cmd + p', ['p'], {}, false);
     test('cmd + p', ['p'], { meta: true }, true);
+    test('cmd + KeyP', ['KeyP'], { meta: true }, true);
     test('cmd + P', ['p'], { meta: true }, true); // NB: case-insensitive.
     test('cmd + p', ['P'], { meta: true }, true); // NB: case-insensitive.
     test('cmd + p', ['p'], { meta: true, shift: true }, false);
@@ -59,7 +63,7 @@ describe('Keyboard.Match', () => {
     test('k + P', ['k', 'p'], {}, true);
     test('k + P', ['k', 'p', 'F'], {}, true);
 
-    test('ko', ['k', 'o'], {}, true);
-    test('koO', ['k', 'o'], {}, true);
+    test('KeyP', ['KeyP'], {}, true);
+    test('KeyP + NumpadAdd', ['KeyP', 'NumpadAdd'], {}, true);
   });
 });

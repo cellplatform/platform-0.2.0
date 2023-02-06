@@ -1,17 +1,17 @@
-import { Dev } from '../../test.ui';
 import { YouTube, YouTubeProps } from '.';
+import { css, Dev, TextInput } from '../../test.ui';
 
-type T = { props: YouTubeProps };
+const Wrangle = YouTube.Wrangle;
+
+type T = { props: YouTubeProps; debug: { url?: string } };
 const initial: T = {
-  props: {
-    width: 550,
-    height: 315,
-  },
+  props: { width: 550, height: 315 },
+  debug: {},
 };
 
 export default Dev.describe('YouTube', (e) => {
-  type Local = { autoLoad: boolean };
-  const local = Dev.LocalStorage<Local>('dev:sys.ui.video').object({ autoLoad: false });
+  type LocalStore = { autoLoad: boolean };
+  const local = Dev.LocalStorage<LocalStore>('dev:sys.ui.video').object({ autoLoad: true });
 
   const load = (props: YouTubeProps) => {
     props.id = 'URUJD5NEXC8';
@@ -50,8 +50,50 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.hr();
 
-    dev.button('load', (e) => {
-      e.change(({ props }) => load(props));
+    dev.title('Load');
+
+    const loadUrl = (title: string, url: string) => {
+      dev.button(`load: ${title}`, async (e) => {
+        const { id, start } = Wrangle.fromUrl(url);
+        dev.change((d) => {
+          d.props.id = id;
+          d.props.start = start;
+        });
+      });
+    };
+
+    loadUrl('"cell" at `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+    loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+
+    dev.hr();
+
+    dev.title('Paste Address');
+    dev.row((e) => {
+      const styles = {
+        base: css({}),
+      };
+
+      const processUrl = async () => {
+        const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
+        if (id) {
+          await dev.change((d) => {
+            d.props.id = id;
+            d.props.start = start;
+          });
+        }
+      };
+
+      return (
+        <div {...styles.base}>
+          <TextInput
+            value={e.state.debug.url}
+            placeholder={'YouTube (URL)'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
+            onEnter={processUrl}
+          />
+        </div>
+      );
     });
   });
 });

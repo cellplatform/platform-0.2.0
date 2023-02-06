@@ -2,6 +2,7 @@ import { Dev, t } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
+type RightInput = string | JSX.Element;
 
 /**
  * A simple clickable text button implementation.
@@ -15,12 +16,22 @@ export function button<S extends O = O>(
   if (!ctx.is.initial) return;
 
   const label = Dev.ValueHandler<string, S>(events);
+  const right = Dev.ValueHandler<RightInput, S>(events);
+  const enabled = Dev.ValueHandler<boolean, S>(events);
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
     ctx,
     label(value) {
       label.handler(value);
+      return args;
+    },
+    right(value) {
+      right.handler(value);
+      return args;
+    },
+    enabled(value) {
+      enabled.handler(value);
       return args;
     },
     onClick(handler) {
@@ -33,12 +44,18 @@ export function button<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const dev = ctx.toObject().props;
+    const elRight = typeof right.current === 'string' ? <div>{right.current}</div> : right.current;
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
+
+    const hasHandlers = clickHandlers.size > 0;
+    const isEnabled = hasHandlers && enabled.current !== false;
+
     return (
       <Button
         label={label.current}
-        isEnabled={clickHandlers.size > 0}
-        onClick={clickHandlers.size > 0 ? onClick : undefined}
+        rightElement={elRight}
+        enabled={isEnabled}
+        onClick={hasHandlers ? onClick : undefined}
       />
     );
   });

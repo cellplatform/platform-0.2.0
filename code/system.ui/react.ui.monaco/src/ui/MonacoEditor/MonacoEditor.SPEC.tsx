@@ -1,5 +1,6 @@
 import { t, Dev } from '../../test.ui';
-import { MonacoEditor, MonacoEditorProps } from '.';
+import { MonacoEditor } from '.';
+import type { MonacoEditorProps } from '.';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -37,15 +38,19 @@ export default Dev.describe('MonacoEditor', (e) => {
         dev.button(`${name}`, (e) => e.change((d) => (d.props.language = name)));
       };
 
-      MonacoEditor.languages.forEach((name) => language(name));
+      language('typescript');
+      language('javascript');
+      dev.hr();
+      language('json');
+      language('yaml');
+      dev.hr();
+      language('markdown');
       dev.hr();
     });
 
     dev.section('Options', (dev) => {
       const tabSize = (size: number) =>
-        dev.button(`tabSize: ${size}`, (e) => {
-          e.change((d) => (d.props.tabSize = size));
-        });
+        dev.button(`tabSize: ${size}`, (e) => e.change((d) => (d.props.tabSize = size)));
       tabSize(2);
       tabSize(4);
     });

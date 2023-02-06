@@ -1,8 +1,8 @@
-import 'symbol-observable'; // Ponyfill observable symbols Rxjs looks for.
 export * from './types.mjs';
 
-export { Filesystem, Filesystem as default } from './Filesystem.mjs';
-export { Path, Filesize, Bus, MemoryMock } from 'sys.fs';
+export { Pkg } from './index.pkg.mjs';
+export { Specs } from './test.ui/entry.Specs.mjs';
 
-export { IndexedDbDriver } from './IndexedDb.Fs.Driver/index.mjs';
-export { rx } from './common/index.mjs';
+export { Path, Filesize, Bus, MemoryMock } from 'sys.fs';
+export { IndexedDbDriver } from './IndexedDb.Fs.Driver';
+export { Filesystem, Filesystem as default } from './Filesystem.mjs';

@@ -1,9 +1,9 @@
 import { type t } from '../common';
 import { Is } from './Is.mjs';
 
-export type FindArgs = { suite: t.TestSuiteModel; test?: t.TestModel };
-export type WalkDownArgs = { suite: t.TestSuiteModel; test?: t.TestModel; stop(): void };
-export type WalkUpArgs = { suite: t.TestSuiteModel; isRoot: boolean; stop(): void };
+export type SuiteFindArgs = { suite: t.TestSuiteModel; test?: t.TestModel };
+export type SuiteWalkDownArgs = { suite: t.TestSuiteModel; test?: t.TestModel; stop(): void };
+export type SuiteWalkUpArgs = { suite: t.TestSuiteModel; isRoot: boolean; stop(): void };
 
 type T = t.TestSuiteModel | t.TestModel;
 
@@ -26,7 +26,7 @@ export const TestTree = {
     return root;
   },
 
-  walkDown(from: t.TestSuiteModel | undefined, handler: (e: WalkDownArgs) => void) {
+  walkDown(from: t.TestSuiteModel | undefined, handler: (e: SuiteWalkDownArgs) => void) {
     if (!from) return;
 
     const invoke = (suite: t.TestSuiteModel, test?: t.TestModel) => {
@@ -47,7 +47,7 @@ export const TestTree = {
     from.state.children.forEach((child) => TestTree.walkDown(child, handler)); // <== RECURSION 🌳
   },
 
-  walkUp(from: T | undefined, handler: (e: WalkUpArgs) => void) {
+  walkUp(from: T | undefined, handler: (e: SuiteWalkUpArgs) => void) {
     if (!from) return;
     if (Is.test(from)) {
       const suite = TestTree.parent(from);
@@ -69,11 +69,11 @@ export const TestTree = {
 
   find(
     within: t.TestSuiteModel,
-    match: (e: FindArgs) => boolean,
+    match: (e: SuiteFindArgs) => boolean,
     options: { limit?: number } = {},
   ) {
     const { limit } = options;
-    const result: FindArgs[] = [];
+    const result: SuiteFindArgs[] = [];
     TestTree.walkDown(within, (e) => {
       const { suite, test } = e;
       if (match({ suite, test })) {
@@ -84,7 +84,7 @@ export const TestTree = {
     return result;
   },
 
-  findOne(within: t.TestSuiteModel, match: (e: FindArgs) => boolean) {
+  findOne(within: t.TestSuiteModel, match: (e: SuiteFindArgs) => boolean) {
     return TestTree.find(within, match, { limit: 1 })[0];
   },
 

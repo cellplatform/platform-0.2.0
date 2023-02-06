@@ -4,10 +4,10 @@
 import { uniq, equals, uniqBy, groupBy } from 'ramda';
 export const R = { uniq, equals, uniqBy, groupBy };
 
-import * as PeerJS from './libs.peerjs.mjs';
-export { PeerJS };
+export { Peer as PeerJS } from 'peerjs';
 
 /**
  * @system
  */
-export { rx, slug, cuid, Time, Is, Delete } from 'sys.util';
+export { rx, slug, cuid, Time, Is, Delete, Path } from 'sys.util';
+export { MediaStream } from 'sys.ui.react.video';

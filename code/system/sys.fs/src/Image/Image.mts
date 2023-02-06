@@ -1,4 +1,4 @@
-import { Mime } from '../common/index.mjs';
+import { Mime } from '../common';
 
 /**
  * Helpers for operating on image files.

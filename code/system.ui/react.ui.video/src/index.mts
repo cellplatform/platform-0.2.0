@@ -5,3 +5,6 @@ export { Specs } from './test.ui/entry.Specs.mjs';
 
 export { Vimeo, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
 export { YouTube } from './ui/vendor.YouTube';
+export { RecordButton } from './ui/RecordButton';
+export { AudioWaveform } from './ui/AudioWaveform';
+export { MediaStream } from './ui/MediaStream';

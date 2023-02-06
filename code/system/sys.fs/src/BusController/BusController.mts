@@ -1,7 +1,7 @@
 import { BusControllerChange } from './BusController.Change.mjs';
 import { BusControllerIndexer } from './BusController.Indexer.mjs';
 import { BusControllerIo } from './BusController.Io.mjs';
-import { BusEvents, DEFAULT, Path, rx, t } from './common.mjs';
+import { BusEvents, DEFAULT, Path, rx, t } from './common';
 
 type FilesystemId = string;
 type Milliseconds = number;

@@ -1,17 +1,24 @@
+export * from './TestSuite.helpers/types.mjs';
+import type { Tree } from './TestSuite.helpers/Tree.mjs';
+
 type Id = string;
 type Anything = void | any;
 type Milliseconds = number;
 type Ctx = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
-export type BundleImport = TestSuiteModel | Promise<any>;
 export type TestModifier = 'skip' | 'only';
+
+export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
+export type SpecImport = Promise<{ default: any }>;
+export type SpecImports = { [namespace: string]: () => SpecImport };
 
 /**
  * BDD ("behavior driven develoment") style test configuration API.
  */
 export type Test = {
   Is: TestIs;
+  Tree: typeof Tree;
   describe: TestSuiteDescribe;
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;

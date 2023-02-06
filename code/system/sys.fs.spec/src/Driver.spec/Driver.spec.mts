@@ -1,4 +1,4 @@
-import { type t } from './common.mjs';
+import { type t } from './common';
 import { IOSpec as IO } from './Driver.IO.spec.mjs';
 import { IndexerSpec as Indexer } from './Driver.Indexer.spec.mjs';
 
