@@ -46,7 +46,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner size={22} />
+      <Spinner.Puff size={22} />
     </div>
   );
 
