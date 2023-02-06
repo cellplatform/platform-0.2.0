@@ -56,22 +56,53 @@ describe('ResultTree', () => {
           e.it('foo-2', (e) => {});
         });
       });
-      const results = await suite.run();
-      const res = ResultTree.isEmpty(results);
+      const res = ResultTree.isEmpty(await suite.run());
       expect(res).to.eql(false);
     });
 
-    it('is empty', async () => {
+    it('empty: tests skipped', async () => {
       const suite = Test.describe('root', (e) => {
         e.it.skip('foo-1', (e) => {});
         e.describe('child', (e) => {
           e.it.skip('foo-2', (e) => {});
         });
       });
-      const results = await suite.run();
-      const res = ResultTree.isEmpty(results);
-
+      const res = ResultTree.isEmpty(await suite.run());
       expect(res).to.eql(true);
+    });
+
+    it('empty: root skipped', async () => {
+      const suite = Test.describe.skip('root', (e) => {
+        e.it('foo-1', (e) => {});
+        e.describe('child', (e) => {
+          e.it('foo-2', (e) => {});
+        });
+      });
+
+      const res = ResultTree.isEmpty(await suite.run());
+      expect(res).to.eql(true);
+    });
+
+    it('not empty: descendent .only', async () => {
+      const suite1 = Test.describe('root', (e) => {
+        e.it('foo-1', (e) => {});
+        e.describe.only('child', (e) => {
+          e.it('foo-2', (e) => {});
+        });
+      });
+
+      const suite2 = Test.describe('root', (e) => {
+        e.it('foo-1', (e) => {});
+        e.describe('child', (e) => {
+          e.it.only('foo-2', (e) => {});
+        });
+      });
+
+      const res1 = ResultTree.isEmpty(await suite1.run());
+      const res2 = ResultTree.isEmpty(await suite2.run());
+
+      expect(res1).to.eql(false);
+      expect(res2).to.eql(false);
     });
   });
 });
