@@ -27,8 +27,5 @@ const isDev = params.has('dev') || params.has('d');
     }
     const { BrandLayout } = await import('../ui/BrandLayout');
     return root.render(<BrandLayout />);
-
-    // const { Root } = await import('../ui/Root');
-    // root.render(<Root />);
   }
 })();
