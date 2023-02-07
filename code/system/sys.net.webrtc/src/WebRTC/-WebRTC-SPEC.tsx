@@ -93,8 +93,8 @@ export default Dev.describe('WebRTC', (e) => {
  * Standard: https://www.w3.org/TR/webrtc/
  * 
  * Concepts: 
- *  - Distributed EventBus
-  * - Stream types: Data/Media
+ *  - distributed EventBus
+  * - stream types: Data/Media
  */        
 `.substring(1);
 
