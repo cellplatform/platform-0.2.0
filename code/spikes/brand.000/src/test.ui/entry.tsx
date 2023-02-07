@@ -6,7 +6,7 @@ import { Pkg } from '../index.pkg.mjs';
 import { Specs } from './entry.SPECS.mjs';
 
 const url = new URL(location.href);
-const params = url.searchParams;
+const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
 
 /**
