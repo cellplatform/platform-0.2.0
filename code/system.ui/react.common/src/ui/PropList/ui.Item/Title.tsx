@@ -1,4 +1,4 @@
-import { css, DEFAULTS, t, Util } from './common';
+import { css, DEFAULTS, t, toTheme } from './common';
 
 export type PropListTitleProps = {
   children?: React.ReactNode;
@@ -10,7 +10,7 @@ export type PropListTitleProps = {
 
 export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
   const ellipsis = props.ellipsis ?? true;
-  const theme = Util.theme(props.theme);
+  const theme = toTheme(props.theme);
 
   const styles = {
     base: css({

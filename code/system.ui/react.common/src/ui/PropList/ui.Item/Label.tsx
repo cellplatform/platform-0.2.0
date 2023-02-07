@@ -1,4 +1,4 @@
-import { css, t, Util } from './common';
+import { css, t, toTheme } from './common';
 
 export type PropListLabelProps = {
   data: t.PropListItem;
@@ -8,11 +8,8 @@ export type PropListLabelProps = {
 };
 
 export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
-  const theme = Util.theme(props.theme);
+  const theme = toTheme(props.theme);
 
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({
       userSelect: 'none',
@@ -22,5 +19,6 @@ export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
       color: theme.color.alpha(0.4),
     }),
   };
+
   return <div {...css(styles.base, props.style)}>{props.data.label}</div>;
 };

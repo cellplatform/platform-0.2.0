@@ -1,9 +1,5 @@
 import { COLORS, css, Icons } from './common';
 
-export { Util } from '../Util.mjs';
-export { Text } from '../../Text';
-export { Switch } from '../../Button.Switch';
-
 /**
  * Copy icon.
  */

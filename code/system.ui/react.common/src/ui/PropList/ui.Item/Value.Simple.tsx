@@ -1,13 +1,12 @@
-import { CSSProperties } from 'react';
-
-import { Color, COLORS, css, t, Util } from './common';
-import { CopyIcon } from './Value.common';
+import { Color, COLORS, css, t } from './common';
+import { CopyIcon } from './CopyIcon';
+import { toTheme } from '../Util.theme.mjs';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
   value: t.PropListValue;
-  message?: React.ReactNode;
-  cursor?: CSSProperties['cursor'];
+  message?: string | JSX.Element;
+  cursor?: t.CSSProperties['cursor'];
   isOver?: boolean;
   isCopyable?: boolean;
   theme?: t.PropListTheme;
@@ -61,7 +60,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 function toTextColor(props: SimpleValueProps) {
   if (props.value.color !== undefined) return Color.format(props.value.color);
 
-  const theme = Util.theme(props.theme);
+  const theme = toTheme(props.theme);
   if (props.message) return theme.color.alpha(0.3);
 
   const is = toFlags(props);

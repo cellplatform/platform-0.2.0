@@ -100,5 +100,5 @@ export type PropListValueSwitch = ValueBase & {
 export type PropListValueEventArgs = {
   item: PropListItem;
   value: PropListValue;
-  message: (value: React.ReactNode, delay?: number) => void;
+  message: (value: JSX.Element | string, delay?: number) => void;
 };

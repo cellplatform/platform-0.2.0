@@ -1,2 +1,2 @@
 export * from '../common';
-export { Util } from '../Util.mjs';
+export { toTheme } from '../Util.theme.mjs';
