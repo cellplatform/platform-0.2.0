@@ -26,7 +26,7 @@ export const Pkg: ModuleDef = {
     'react-inspector': '6.0.1',
   },
   toString() {
-    return `${Pkg.name}$${Pkg.version}`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

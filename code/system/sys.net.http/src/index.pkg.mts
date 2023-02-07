@@ -18,7 +18,7 @@ export const Pkg: ModuleDef = {
     'cross-fetch': '3.1.5',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

@@ -19,7 +19,7 @@ export const Pkg: ModuleDef = {
     '@automerge/automerge': '2.0.1',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 
