@@ -1,6 +1,7 @@
 import { DEFAULT, slug, t, Time } from './common';
 import { Constraints } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
+import { TestTree } from '../TestSuite.helpers/TestTree.mjs';
 
 type LazyParent = () => t.TestSuiteModel;
 
@@ -126,6 +127,10 @@ export const TestSuiteModel = (args: {
     describe: describe as t.TestSuiteDescribe,
     it: it as t.TestSuiteIt,
 
+    get description() {
+      return state.description;
+    },
+
     timeout(value) {
       state.timeout = Math.max(0, value);
       return model;
@@ -151,6 +156,10 @@ export const TestSuiteModel = (args: {
       const clone = TestSuiteModel({ ...args });
       await init(clone);
       return clone;
+    },
+
+    walk(handler) {
+      TestTree.walkDown(model, handler);
     },
 
     toString: () => state.description,

@@ -1,3 +1,4 @@
+import { t } from './common.t';
 export * from './TestSuite.helpers/types.mjs';
 import type { Tree } from './TestSuite.helpers/Tree.mjs';
 
@@ -102,12 +103,14 @@ export type TestRunResponse = {
  */
 
 export type TestSuiteModel = TestSuite & {
-  kind: 'TestSuite';
-  state: TestSuiteModelState;
+  readonly kind: 'TestSuite';
+  readonly state: TestSuiteModelState;
+  readonly description: string;
   run: TestSuiteRun;
   merge(...suites: TestSuiteModel[]): Promise<TestSuiteModel>;
   init(): Promise<TestSuiteModel>;
   clone(): Promise<TestSuiteModel>;
+  walk(handler: (e: t.SuiteWalkDownArgs) => void): void;
   toString(): string;
 };
 

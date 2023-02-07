@@ -67,6 +67,7 @@ describe('TestSuiteModel', () => {
         test = e.it('foo', handler);
       });
 
+      expect(root.description).to.eql('root');
       expect(root.state.description).to.eql('root');
       expect(root.state.ready).to.eql(false);
       expect(count).to.eql(0);
@@ -227,6 +228,27 @@ describe('TestSuiteModel', () => {
       // Parent hierarchy correctly re-referenced to the clone.
       expect(TestTree.root(test1)).to.equal(root1);
       expect(TestTree.root(test2)).to.equal(root2);
+    });
+
+    it('walk (down)', async () => {
+      const root = await Test.describe('root', (e) => {
+        e.describe('child-1', (e) => {
+          e.describe('child-2', (e) => {
+            e.it('foo', (e) => {
+              expect(123).to.eql(123);
+            });
+          });
+        });
+      }).init();
+
+      const walked: string[] = [];
+      root.walk((e) => {
+        const suite = e.suite.description;
+        const v = e.test ? `${suite} > ${e.test.description}` : suite;
+        walked.push(v);
+      });
+
+      expect(walked).to.eql(['root', 'child-1', 'child-2', 'child-2 > foo']);
     });
   });
 
