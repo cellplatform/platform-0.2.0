@@ -5,6 +5,9 @@ import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExpor
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
+
 import type { RollupOptions, ManualChunksOption } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
@@ -60,8 +63,22 @@ export const Config = {
 
       let config: UserConfig = {
         build,
-        plugins: [],
-        worker: { format: 'es' },
+        plugins: [topLevelAwait(), wasm()],
+        worker: {
+          format: 'es',
+          plugins: [topLevelAwait(), wasm()],
+        },
+        optimizeDeps: {
+          /**
+           * REF: https://automerge.org/docs/quickstart
+           * Automerge
+           *    This is necessary otherwise `vite dev` includes two separate
+           *    versions of the JS wrapper. This causes problems because the JS
+           *    wrapper has a module level variable to track JS side heap
+           *    allocations, initializing this twice causes horrible breakage
+           */
+          exclude: ['@automerge/automerge-wasm'],
+        },
         server: { port: 1234 },
         base: './',
       };
