@@ -22,7 +22,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer2.dispose();
     });
 
-    e.it('generates peer-id', async (e) => {
+    e.it('generates a unique peer-id', async (e) => {
       const peer = await WebRTC.peer({ signal });
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
@@ -31,7 +31,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer.dispose();
     });
 
-    e.it('specific peer-id', async (e) => {
+    e.it('uses a specific peer-id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
       const peer1 = await WebRTC.peer({ signal, id: id1 });
@@ -44,7 +44,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer2.dispose();
     });
 
-    e.it('immutable lists', async (e) => {
+    e.it('exposes immutable lists (only)', async (e) => {
       const peer = await WebRTC.peer({ signal });
 
       expect(peer.connections).to.eql([]);
@@ -59,7 +59,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('peer.data', async (e) => {
+  e.describe('connection: peer.data', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
@@ -205,7 +205,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('peer.media', async (e) => {
+  e.describe('connection: peer.media', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 

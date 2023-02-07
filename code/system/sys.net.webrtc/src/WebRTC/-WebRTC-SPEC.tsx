@@ -86,11 +86,15 @@ export default Dev.describe('WebRTC', (e) => {
 /**
  * system.network.webrtc
  * 
- * Peer-to-peer network connection tooling
- * (data/video/audio realtime network streams).
+ * Peer-to-peer network tooling
+ * (realtime network streams: data/video/audio realtime).
  * 
  * Runtime:  browser
  * Standard: https://www.w3.org/TR/webrtc/
+ * 
+ * Concepts: 
+ *  - Distributed EventBus
+  * - Stream types: Data/Media
  */        
 `.substring(1);
 
@@ -262,8 +266,8 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run WebRTC tests', (e) => invoke(import('./-WebRTC-TEST.mjs')));
-      dev.button('run MediaStream tests', (e) => invoke(import('./-Media-TEST.mjs')));
+      dev.button('WebRTC tests', (e) => invoke(import('./-WebRTC-TEST.mjs')));
+      dev.button('MediaStream tests', (e) => invoke(import('./-Media-TEST.mjs')));
     });
 
     dev.hr();
