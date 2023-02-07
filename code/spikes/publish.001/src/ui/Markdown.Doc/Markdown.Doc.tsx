@@ -47,7 +47,8 @@ const View: React.FC<MarkdownDocProps> = (props) => {
 
     spinner: css({
       Absolute: [38, 0, null, 0],
-      Flex: 'x-center-center',
+      display: 'grid',
+      placeItems: 'center',
     }),
 
     footerSpacer: css({ height: props.paddingBottom }),
@@ -55,7 +56,7 @@ const View: React.FC<MarkdownDocProps> = (props) => {
 
   const elSpinner = isLoading && (
     <div {...styles.spinner}>
-      <Spinner />
+      <Spinner.Puff />
     </div>
   );
 
