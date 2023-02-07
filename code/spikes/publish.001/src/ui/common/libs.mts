@@ -10,6 +10,6 @@ export { Spinner, Center, Button, useSizeObserver } from 'sys.ui.react.common';
 /**
  * @local
  */
-export * from '../../ui.logic/common';
 export { State, Fetch } from '../../ui.logic';
+export * from '../../ui.logic/common';
 export * from './constants.mjs';
