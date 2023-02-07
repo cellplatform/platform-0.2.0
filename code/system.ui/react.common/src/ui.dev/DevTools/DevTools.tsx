@@ -1,5 +1,6 @@
 import { Lorem } from '../../ui.tools';
-import { Dev, Spec, t } from '../common';
+import { Spec, t } from '../common';
+import { Dev } from '../Dev.mjs';
 import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
