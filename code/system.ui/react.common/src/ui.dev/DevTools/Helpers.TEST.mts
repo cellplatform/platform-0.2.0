@@ -1,4 +1,4 @@
-import { Helpers as Helpers } from '.';
+import { Helpers } from '.';
 import { describe, expect, it } from '../../test';
 
 describe('Helpers (DevTools)', () => {
