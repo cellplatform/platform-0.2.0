@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { COLORS, css, DEFAULTS, FC, Style, t, TextProcessor } from '../common';
+import { Color, COLORS, css, DEFAULTS, FC, Style, t, TextProcessor } from '../common';
 import { DEFAULT } from './ui.Todo.DEFAULT.mjs';
+import { useGlobalStyles } from '../DevTools.GlobalStyles';
+import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 
 export type TodoProps = {
   text?: string;
@@ -12,7 +14,13 @@ const View: React.FC<TodoProps> = (props) => {
   const style = { ...DEFAULT.style, ...props.style };
   const text = Wrangle.text(props);
   const isEmpty = Wrangle.isEmpty(props);
+  const isSingleline = isEmpty || !text.includes('\n');
 
+  console.log('-------------------------------------------');
+  console.log('isSingleline', isSingleline);
+  console.log('text', text.substring(0, 20));
+
+  useGlobalStyles();
   const [safeHtml, setSafeHtml] = useState('');
 
   /**
@@ -30,25 +38,31 @@ const View: React.FC<TodoProps> = (props) => {
   const styles = {
     base: css({
       ...Style.toMargins(style.margin),
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       color: style.color,
-      padding: 8,
+      backgroundColor: 'rgba(255, 0, 0, 0.08)' /* RED */,
+      border: `dashed 1px ${Color.alpha(COLORS.MAGENTA, 0.1)}`,
+      borderRadius: 3,
+
+      padding: 10,
+      position: 'relative',
       display: 'grid',
-      gridTemplateColumns: `auto 1fr`,
     }),
-    left: css({ marginRight: 6 }),
-    right: css({ fontSize: 13, display: 'grid', alignContent: 'center' }),
-    todo: css({ fontWeight: 'bold', color: COLORS.MAGENTA }),
-    text: css({
-      fontStyle: 'italic',
-      color: isEmpty ? COLORS.MAGENTA : undefined,
-      opacity: isEmpty ? 0.4 : 1,
-    }),
+    emoji: css({ Absolute: [-8, null, null, -8] }),
+    body: css({ fontSize: 13, display: 'grid', alignContent: 'center' }),
+
+    message: {
+      base: css({}),
+      prefix: css({ fontWeight: 'bold', color: COLORS.MAGENTA }),
+      text: css({
+        color: isEmpty ? COLORS.MAGENTA : undefined,
+        opacity: isEmpty ? 0.4 : 1,
+      }),
+    },
     html: css({}),
   };
 
   const elHtml = safeHtml && (
-    <div
+    <span
       {...styles.html}
       className={DEFAULTS.MD.CLASS.TODO}
       dangerouslySetInnerHTML={{ __html: safeHtml }}
@@ -56,16 +70,16 @@ const View: React.FC<TodoProps> = (props) => {
   );
 
   const elMessage = (
-    <div>
-      <span {...styles.todo}>{isEmpty ? 'TODO' : 'TODO:'}</span>{' '}
-      <span {...styles.text}>{elHtml}</span>
+    <div {...styles.message.base}>
+      <span {...styles.message.prefix}>{isEmpty ? 'TODO' : 'TODO:'}</span>{' '}
+      <span {...styles.message.text}>{elHtml}</span>
     </div>
   );
 
   return (
     <div {...styles.base}>
-      <div {...styles.left}>{'🐷'}</div>
-      <div {...styles.right}>{elMessage}</div>
+      <div {...styles.emoji}>{'🐷'}</div>
+      <div {...styles.body}>{elMessage}</div>
     </div>
   );
 };

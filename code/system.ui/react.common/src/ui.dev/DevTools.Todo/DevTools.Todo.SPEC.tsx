@@ -24,5 +24,7 @@ export default Dev.describe('Todo', (e) => {
       - three
     
     `);
+
+    dev.TODO((todo) => todo.style({ color: 'blue' }).text('hello blue (via function)'));
   });
 });
