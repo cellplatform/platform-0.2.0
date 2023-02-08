@@ -35,7 +35,7 @@ export default Dev.describe('Root', (e) => {
         });
       };
 
-      dev.button('Automerge (library) tests', (e) => invoke(import('./Automerge.lib.SPEC.mjs')));
+      dev.button('Automerge (lib)', (e) => invoke(import('./Automerge.lib.SPEC.mjs')));
 
       // Auto.run
       invoke(import('./Automerge.lib.SPEC.mjs'));
