@@ -6,7 +6,7 @@ export default Dev.describe('Automerge (lib)', (e) => {
    * REF:
    *   https://automerge.org/docs/quickstart
    */
-  e.describe('Getting Started tutorial (with assertions)', (e) => {
+  e.describe('Getting started tutorial', (e) => {
     type Card = { title: string; done: boolean };
     type T = { cards: Card[] };
     type Doc = Automerge.unstable.Doc<T>;
