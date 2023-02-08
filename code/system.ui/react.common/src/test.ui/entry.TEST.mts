@@ -1,10 +1,11 @@
 import { describe, expect, it } from '../test';
 import { Dev } from '../test.ui';
-import Specs from './entry.Specs.mjs';
+
+const { All } = await import('./entry.Specs.mjs');
 
 describe('visual specs', () => {
   it('run', async () => {
-    const res = await Dev.headless(Specs);
+    const res = await Dev.headless(All);
     expect(res.ok).to.eql(true);
   });
 });

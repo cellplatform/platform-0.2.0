@@ -29,3 +29,8 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/DevTools.Title.SPEC'),
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/DevTools.Todo.SPEC'),
 };
+
+export const All = {
+  ...Specs,
+  ...DevSpecs,
+};
