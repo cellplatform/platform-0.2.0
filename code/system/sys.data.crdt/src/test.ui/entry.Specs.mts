@@ -1,5 +1,5 @@
 export const Specs = {
-  'ns.root.SAMPLE': () => import('./-root.SPEC'),
+  'sys.crdt.lib.Automerge': () => import('../lib.Automerge/-SPEC'),
 };
 
 export default Specs;
