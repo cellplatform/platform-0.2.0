@@ -20,9 +20,9 @@ export const Pkg: ModuleDef = {
     'sys.fs': '0.0.0',
     'sys.types': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'sys.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
     'sys.ui.react.util': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
