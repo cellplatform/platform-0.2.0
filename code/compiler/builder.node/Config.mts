@@ -22,7 +22,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['src/**/*.TEST.{mts,tsx}'],
+        include: ['src/**/*.v.{mts,tsx}'],
         environment: 'node', // NB: Default, makes JSDOM available.
       };
     },
