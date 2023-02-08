@@ -4,7 +4,7 @@ import { Transform } from './Transform.mjs';
 
 const output: string[] = [];
 
-const root = await Test.describe('root(A)', (e) => {
+const root = Test.describe('root(A)', (e) => {
   e.it('root-1', (e) => {
     expect(123).to.eql(123);
     output.push('root-1');
@@ -29,12 +29,12 @@ const root = await Test.describe('root(A)', (e) => {
       output.push('child-3a'); // NB: skipped via parent [describe.skip].
     });
   });
-}).init();
+});
 
 /**
  * Prepare the test suite for execution.
  */
-Transform(describe, it).suite(root);
+await Transform(describe, it).suite(root);
 
 /**
  * Examine the transformed test suite (that has just been run).

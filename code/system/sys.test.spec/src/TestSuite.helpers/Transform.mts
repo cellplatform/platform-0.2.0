@@ -23,7 +23,8 @@ export function Transform(describe: Suite, it: Test) {
     /**
      * Prepare suite.
      */
-    suite(suite: t.TestSuiteModel) {
+    async suite(suite: t.TestSuiteModel) {
+      if (!suite.state.ready) await suite.init();
       if (suite.state.modifier?.includes('skip')) return;
 
       const handler = (test: t.TestModel) => {

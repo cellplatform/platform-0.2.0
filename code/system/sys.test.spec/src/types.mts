@@ -1,6 +1,7 @@
 import { t } from './common.t';
 export * from './TestSuite.helpers/types.mjs';
 import type { Tree } from './TestSuite.helpers/Tree.mjs';
+import type { Transform } from './TestSuite.helpers/Transform.mjs';
 
 type Id = string;
 type Anything = void | any;
@@ -25,6 +26,7 @@ export type Test = {
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
   run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
+  using: typeof Transform;
 };
 
 export type TestIs = {
