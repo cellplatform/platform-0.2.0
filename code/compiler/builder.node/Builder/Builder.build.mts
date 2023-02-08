@@ -53,7 +53,7 @@ export async function build(
     const bundleSize = pc.bold(pc.white(bundle.toString()));
     const typesSize = types.toString();
 
-    const prefix = pc.bgCyan(pc.bold(' DIST '));
+    const prefix = pc.bgCyan(pc.black(pc.bold(' DIST ')));
     const pkg = await Util.importPkgMeta(dir);
     const moduleName = pkg?.name || 'unknown';
 
