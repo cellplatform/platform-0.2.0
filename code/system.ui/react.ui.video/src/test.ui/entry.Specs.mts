@@ -5,9 +5,9 @@ export const ServiceSpecs = {
 };
 
 export const Specs = {
-  ...ServiceSpecs,
-  'sys.ui.video.RecordButton': () => import('../ui/RecordButton/RecordButton.SPEC'),
   'sys.ui.video.MediaStream': () => import('../ui/MediaStream/MediaStream.SPEC'),
+  'sys.ui.video.RecordButton': () => import('../ui/RecordButton/RecordButton.SPEC'),
+  ...ServiceSpecs,
 };
 
 export default Specs;
