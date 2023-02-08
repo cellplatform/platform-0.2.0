@@ -64,6 +64,7 @@ export default Dev.describe('YouTube', (e) => {
 
     loadUrl('"cell" at `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
     loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+    loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
 
     dev.hr();
 
@@ -87,7 +88,7 @@ export default Dev.describe('YouTube', (e) => {
         <div {...styles.base}>
           <TextInput
             value={e.state.debug.url}
-            placeholder={'YouTube (URL)'}
+            placeholder={'YouTube URL'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
             onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
             onEnter={processUrl}
