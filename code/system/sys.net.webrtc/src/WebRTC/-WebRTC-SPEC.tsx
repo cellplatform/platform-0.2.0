@@ -267,7 +267,7 @@ export default Dev.describe('WebRTC', (e) => {
       };
 
       dev.button('WebRTC tests', (e) => invoke(import('./-WebRTC-TEST.mjs')));
-      dev.button('MediaStream tests', (e) => invoke(import('./-Media-TEST.mjs')));
+      dev.button('MediaStream tests', (e) => invoke(import('./-WebRTC.Media-TEST.mjs')));
     });
 
     dev.hr();
