@@ -62,39 +62,47 @@ export default Dev.describe('YouTube', (e) => {
       });
     };
 
-    loadUrl('"cell" at `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+    loadUrl('"cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
     loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
     loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
 
     dev.hr();
 
-    dev.title('Paste Address');
-    dev.row((e) => {
-      const styles = {
-        base: css({}),
-      };
+    dev.section('Paste Address', (dev) => {
+      dev.row((e) => {
+        const styles = {
+          base: css({}),
+        };
 
-      const processUrl = async () => {
-        const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
-        if (id) {
-          await dev.change((d) => {
-            d.props.id = id;
-            d.props.start = start;
-          });
-        }
-      };
+        const processUrl = async () => {
+          const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
+          if (id) {
+            await dev.change((d) => {
+              d.props.id = id;
+              d.props.start = start;
+            });
+          }
+        };
 
-      return (
-        <div {...styles.base}>
-          <TextInput
-            value={e.state.debug.url}
-            placeholder={'YouTube URL'}
-            placeholderStyle={{ opacity: 0.3, italic: true }}
-            onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
-            onEnter={processUrl}
-          />
-        </div>
-      );
+        return (
+          <div {...styles.base}>
+            <TextInput
+              value={e.state.debug.url}
+              placeholder={'YouTube URL'}
+              placeholderStyle={{ opacity: 0.3, italic: true }}
+              onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
+              onEnter={processUrl}
+            />
+          </div>
+        );
+      });
     });
+
+    dev.hr();
+
+    dev.TODO(`
+- [ ] Player JS API (play/pause/seek/status events)
+- [ ] Copy URL (at timestamp)    
+    `);
   });
 });
