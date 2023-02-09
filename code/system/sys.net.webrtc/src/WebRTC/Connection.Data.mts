@@ -29,7 +29,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
       remote: conn.peer,
     },
 
-    get open() {
+    get isOpen() {
       return conn.open;
     },
 
@@ -46,7 +46,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
 
     dispose,
     dispose$,
-    get disposed() {
+    get isDisposed() {
       return _disposed;
     },
   };

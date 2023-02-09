@@ -95,8 +95,8 @@ export default Dev.describe('WebRTC', (e) => {
       expect(peerA.dataConnections.length).to.eql(1);
       expect(peerB.dataConnections.length).to.eql(1);
 
-      expect(peerA.dataConnections[0].open).to.eql(true);
-      expect(peerB.dataConnections[0].open).to.eql(true);
+      expect(peerA.dataConnections[0].isOpen).to.eql(true);
+      expect(peerB.dataConnections[0].isOpen).to.eql(true);
 
       expect(peerA.connectionsByPeer[0].peer).to.eql(peerB.id);
       expect(peerB.connectionsByPeer[0].peer).to.eql(peerA.id);
@@ -172,7 +172,7 @@ export default Dev.describe('WebRTC', (e) => {
 
       // Close the connection on the initiating side (A).
       a.dispose();
-      expect(a.disposed).to.eql(true);
+      expect(a.isDisposed).to.eql(true);
       await Time.wait(500);
 
       expect(changedA.length).to.eql(1);
@@ -230,9 +230,9 @@ export default Dev.describe('WebRTC', (e) => {
 
         await Time.wait(300);
 
-        expect(data1.open).to.eql(true);
-        expect(data2.open).to.eql(true);
-        expect(media.open).to.eql(true);
+        expect(data1.isOpen).to.eql(true);
+        expect(data2.isOpen).to.eql(true);
+        expect(media.isOpen).to.eql(true);
 
         const status2 = await getMediaStatus();
         expect(status2.stream?.media instanceof MediaStream).to.eql(true);

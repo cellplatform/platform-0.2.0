@@ -27,13 +27,13 @@ export function PeerMediaConnection(
       remote: conn.peer,
     },
 
-    get open() {
+    get isOpen() {
       return conn.open;
     },
 
     dispose,
     dispose$,
-    get disposed() {
+    get isDisposed() {
       return _disposed;
     },
   };
