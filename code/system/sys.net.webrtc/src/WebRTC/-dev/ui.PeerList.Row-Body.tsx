@@ -1,13 +1,17 @@
+import { WebRTC } from '..';
 import { AudioWaveform, Button, Color, COLORS, css, Icons, t, useSizeObserver } from './common';
 
 export type RowBodyProps = {
   peerConnections: t.PeerConnectionSet;
   debug?: boolean;
   style?: t.CssValue;
+  onConnectRequest?: t.OnPeerConnectRequestHandler;
 };
 
 export const RowBody: React.FC<RowBodyProps> = (props) => {
   const { peerConnections, debug } = props;
+  const peerid = peerConnections.peer;
+  const peerUri = WebRTC.Util.asUri(peerid);
 
   const media = peerConnections.media.find((item) => item.stream)?.stream;
   const video = media?.remote;
@@ -19,9 +23,12 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
   const startScreenShare = () => {
     /**
      * TODO 🐷
-     * - [ ] Fire event through bus API.
+     * - [ ] Fire event through bus API (??)
      */
-    console.log('peerConnections', peerConnections);
+    props.onConnectRequest?.({
+      peer: peerid,
+      kind: 'media', // TODO - add concepts: "media:screen" | "media:camera"
+    });
   };
 
   /**
@@ -65,7 +72,7 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
     </Button>
   );
 
-  const elPeerId = debug && <div {...styles.peerid}>{`peer:${peerConnections.peer}`}</div>;
+  const elPeerId = debug && <div {...styles.peerid}>{peerUri}</div>;
 
   return (
     <div ref={size.ref} {...css(styles.base, props.style)}>

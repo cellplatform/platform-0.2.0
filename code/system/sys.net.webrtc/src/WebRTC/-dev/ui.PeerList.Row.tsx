@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { css, t } from './common';
-import { ActionBar } from './ui.PeerList.Row.ActionBar';
-import { RowBody } from './ui.PeerList.Row.Body';
-import { RowThumbnail } from './ui.PeerList.Row.Thumbnail';
+import { ActionBar } from './ui.PeerList.Row-ActionBar';
+import { RowBody } from './ui.PeerList.Row-Body';
+import { RowThumbnail } from './ui.PeerList.Row-Thumbnail';
 
 export type RowProps = {
   peerConnections: t.PeerConnectionSet;
   debug?: boolean;
   style?: t.CssValue;
+  onConnectRequest?: t.OnPeerConnectRequestHandler;
 };
 
 export const Row: React.FC<RowProps> = (props) => {
@@ -17,7 +16,7 @@ export const Row: React.FC<RowProps> = (props) => {
   /**
    * [Handlers]
    */
-  const onRowClick = () => {
+  const printDebug = () => {
     console.debug('peer(connections):', peerConnections);
   };
 
@@ -31,16 +30,20 @@ export const Row: React.FC<RowProps> = (props) => {
     }),
     body: css({
       display: 'grid',
-      gridTemplateColumns: '40px 15px 1fr 30px',
+      gridTemplateColumns: '45px 15px 1fr 30px',
     }),
   };
 
   return (
-    <div {...css(styles.base, props.style)} onClick={onRowClick}>
+    <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <RowThumbnail peerConnections={peerConnections} />
+        <RowThumbnail peerConnections={peerConnections} onClick={printDebug} />
         <div className={'gap'} />
-        <RowBody peerConnections={peerConnections} debug={debug} />
+        <RowBody
+          peerConnections={peerConnections}
+          debug={debug}
+          onConnectRequest={props.onConnectRequest}
+        />
         <ActionBar peerConnections={peerConnections} />
       </div>
     </div>

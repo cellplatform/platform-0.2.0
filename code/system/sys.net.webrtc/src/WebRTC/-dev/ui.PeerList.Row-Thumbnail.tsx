@@ -5,6 +5,7 @@ import { css, MediaStream, Spinner, t } from './common';
 export type RowThumbnailProps = {
   peerConnections: t.PeerConnectionSet;
   style?: t.CssValue;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
@@ -51,7 +52,7 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} onClick={props.onClick}>
       {elBackground}
       {elVideo}
     </div>
