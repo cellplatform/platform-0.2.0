@@ -7,6 +7,7 @@ import { Util } from './util.mjs';
 export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection {
   const { dispose, dispose$ } = rx.disposable();
   const in$ = new rx.Subject<t.PeerDataPayload>();
+  const metadata: t.PeerMetaData = conn.metadata || { name: 'Unnamed' };
 
   let _disposed = false;
   dispose$.subscribe(() => {
@@ -22,6 +23,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
 
   const api: t.PeerDataConnection = {
     kind: 'data',
+    metadata,
     id: conn.connectionId,
     in$: in$.pipe(rx.takeUntil(dispose$)),
     peer: {

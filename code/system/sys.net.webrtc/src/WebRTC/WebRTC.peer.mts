@@ -69,10 +69,12 @@ export function peer(args: {
       /**
        * Start a data connection.
        */
-      data(connectTo) {
+      data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
           const id = Util.asId(connectTo);
-          const conn = rtc.connect(id, { reliable: true });
+          const name = options.name ?? 'Unnamed';
+          const metadata: t.PeerMetaData = { name };
+          const conn = rtc.connect(id, { reliable: true, metadata });
           conn.on('error', (err) => reject(err));
           conn.on('open', async () => resolve(await state.storeData(conn)));
         });

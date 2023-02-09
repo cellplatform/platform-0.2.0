@@ -83,8 +83,9 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       // Open the connection.
-      const a = await peerA.data(peerB.id);
+      const a = await peerA.data(peerB.id, { name: 'Foobar' });
       expect(a.kind).to.eql('data');
+      expect(a.metadata).to.eql({ name: 'Foobar' });
       expect(a.peer.local).to.eql(peerA.id);
       expect(a.peer.remote).to.eql(peerB.id);
       expect(a).to.eql(peerA.dataConnections[0]);
@@ -97,6 +98,7 @@ export default Dev.describe('WebRTC', (e) => {
 
       expect(peerA.dataConnections[0].isOpen).to.eql(true);
       expect(peerB.dataConnections[0].isOpen).to.eql(true);
+      expect(peerB.dataConnections[0].metadata.name).to.eql('Foobar');
 
       expect(peerA.connectionsByPeer[0].peer).to.eql(peerB.id);
       expect(peerB.connectionsByPeer[0].peer).to.eql(peerA.id);
