@@ -12,7 +12,7 @@ export function MemoryState() {
 
   const api = {
     connections$: connections$.asObservable(),
-    connections: Util.toConnectionSet(() => [...memory.connections]),
+    connections: Util.connections.toSet(() => [...memory.connections]),
 
     fireChanged<P extends t.PeerConnectionChanged>(action: P['action'], subject: P['subject']) {
       const kind = subject.kind;

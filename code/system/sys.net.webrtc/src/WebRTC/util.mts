@@ -1,4 +1,4 @@
-import { t, cuid } from './common';
+import { t, cuid, R } from './common';
 
 export const Util = {
   randomPeerId() {
@@ -31,22 +31,41 @@ export const Util = {
     },
   },
 
-  toConnectionSet(input: t.PeerConnection[] | (() => t.PeerConnection[])): t.PeerConnections {
-    const fn = typeof input === 'function' ? input : () => input;
-    return {
-      get length() {
-        return fn().length;
-      },
-      get all() {
-        return fn();
-      },
-      get data() {
-        return Util.filter.onDataConnection(fn());
-      },
-      get media() {
-        return Util.filter.onMediaConnection(fn());
-      },
-    };
+  connections: {
+    toSet(input: t.PeerConnection[] | (() => t.PeerConnection[])): t.PeerConnections {
+      const fn = typeof input === 'function' ? input : () => input;
+      return {
+        get length() {
+          return fn().length;
+        },
+        get all() {
+          return fn();
+        },
+        get data() {
+          return Util.filter.onDataConnection(fn());
+        },
+        get media() {
+          return Util.filter.onMediaConnection(fn());
+        },
+      };
+    },
+    byPeer(connections: t.PeerConnection[]): t.PeerConnectionsByPeer[] {
+      const byPeer = R.groupBy((item) => item.peer.remote, connections);
+      return Object.entries(byPeer).map(([peer, all]) => {
+        const item: t.PeerConnectionsByPeer = {
+          peer,
+          length: all.length,
+          all,
+          get data() {
+            return Util.filter.onDataConnection(all);
+          },
+          get media() {
+            return Util.filter.onMediaConnection(all);
+          },
+        };
+        return item;
+      });
+    },
   },
 
   filter: {

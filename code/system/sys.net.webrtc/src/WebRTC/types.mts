@@ -31,14 +31,13 @@ export type Peer = t.Disposable & {
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
 export type PeerConnectionKind = PeerConnection['kind'];
-
+export type PeerConnectionsByPeer = { peer: Id } & PeerConnections;
 export type PeerConnections = {
   readonly length: number;
   readonly all: PeerConnection[];
   readonly data: PeerDataConnection[];
   readonly media: PeerMediaConnection[];
 };
-export type PeerConnectionsByPeer = { peer: Id } & PeerConnections;
 
 type Connection = t.Disposable & {
   readonly id: Id;

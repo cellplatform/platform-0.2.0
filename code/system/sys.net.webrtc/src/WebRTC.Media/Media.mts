@@ -33,8 +33,6 @@ export const Media = {
     };
 
     const getStream: t.PeerGetMediaStream = async (kind) => {
-      console.log('MEDIA getStream // kind:', kind); // TEMP 🐷
-
       if (kind === 'camera') {
         await events.stop(ref.camera).fire();
         await events.start(ref.camera).video();
