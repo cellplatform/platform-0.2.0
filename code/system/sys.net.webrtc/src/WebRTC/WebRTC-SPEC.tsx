@@ -75,7 +75,7 @@ export default Dev.describe('WebRTC', (e) => {
  * system.network.webrtc
  * 
  * Peer-to-peer network tooling
- * (realtime network streams: data/video/audio realtime).
+ * (realtime network streams: data/video/audio).
  * 
  * Runtime:  browser
  * Standard: https://www.w3.org/TR/webrtc/
@@ -161,16 +161,16 @@ export default Dev.describe('WebRTC', (e) => {
 
       const connectCamera = async (remote: t.PeerId = '') => {
         const res = await self.media(remote, 'camera');
-        console.log('⚡️ peer.media (response):', res);
+        console.log('⚡️ peer.media:camera (response):', res);
       };
 
       const connectScreenshare = async (remote: t.PeerId = '') => {
         /**
          * TODO 🐷 - connect screen share
-         * - [ ] recieve event notification from Peer display list.
-         * - [ ] Update WebRTC.media(<target>, { type: 'screenshare' })
+         * - [ ] recieve event notification from Peer display list (UI)
          */
-        console.log('🐷 TODO: connect screen share');
+        const res = await self.media(remote, 'screen');
+        console.log('⚡️ peer.media:screen (response):', res);
       };
 
       dev.row((e) => {
@@ -228,6 +228,7 @@ export default Dev.describe('WebRTC', (e) => {
         connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
         connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
         connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
+        dev.hr();
         dev.button((btn) =>
           btn
             .label('close all')

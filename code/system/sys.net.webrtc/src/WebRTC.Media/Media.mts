@@ -1,4 +1,4 @@
-import { t, rx, slug, MediaStream } from '../common';
+import { MediaStream, rx, t } from '../common';
 
 type T = {
   ref: { camera: string; screen: string };
@@ -20,7 +20,7 @@ export const Media = {
     const busid = rx.bus.instance(bus);
     if (cache[busid]) return cache[busid] as T;
 
-    const ref = generateRef();
+    const ref = generateRef(bus);
     const events = MediaStream.Events(bus);
     MediaStream.Controller({ bus });
 
@@ -33,11 +33,16 @@ export const Media = {
     };
 
     const getStream: t.PeerGetMediaStream = async (kind) => {
-      console.log('kind', kind);
-      await done();
+      console.log('MEDIA getStream // kind:', kind); // TEMP 🐷
 
-      if (kind === 'camera') await events.start(ref.camera).video();
-      if (kind === 'screen') await events.start(ref.screen).screen();
+      if (kind === 'camera') {
+        await events.stop(ref.camera).fire();
+        await events.start(ref.camera).video();
+      }
+      if (kind === 'screen') {
+        await events.stop(ref.screen).fire();
+        await events.start(ref.screen).screen();
+      }
 
       const { stream } = await events.status(ref[kind]).get();
       const media = stream?.media;
@@ -58,8 +63,9 @@ export const Media = {
 /**
  * Helpers
  */
-function generateRef(): T['ref'] {
-  const base = `media.${slug()}`;
+function generateRef(bus: t.EventBus<any>): T['ref'] {
+  const busid = rx.bus.instance(bus);
+  const base = `media.${busid}`;
   return {
     camera: `${base}:camera`,
     screen: `${base}:screen`,

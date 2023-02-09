@@ -22,9 +22,9 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
   });
 
   const api: t.PeerDataConnection = {
+    id: conn.connectionId,
     kind: 'data',
     metadata,
-    id: conn.connectionId,
     in$: in$.pipe(rx.takeUntil(dispose$)),
     peer: {
       local: (conn.provider as any)._id as string,
