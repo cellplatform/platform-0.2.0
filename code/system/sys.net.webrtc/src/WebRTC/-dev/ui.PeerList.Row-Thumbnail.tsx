@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { css, MediaStream, Spinner, t } from './common';
 
 export type RowThumbnailProps = {
-  peerConnections: t.PeerConnectionSet;
+  peerConnections: t.PeerConnectionsByPeer;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };

@@ -4,7 +4,7 @@ import { RowBody } from './ui.PeerList.Row-Body';
 import { RowThumbnail } from './ui.PeerList.Row-Thumbnail';
 
 export type RowProps = {
-  peerConnections: t.PeerConnectionSet;
+  peerConnections: t.PeerConnectionsByPeer;
   debug?: boolean;
   style?: t.CssValue;
   onConnectRequest?: t.OnPeerConnectRequestHandler;

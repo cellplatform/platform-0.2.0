@@ -2,7 +2,7 @@ import { WebRTC } from '..';
 import { AudioWaveform, Button, Color, COLORS, css, Icons, t, useSizeObserver } from './common';
 
 export type RowBodyProps = {
-  peerConnections: t.PeerConnectionSet;
+  peerConnections: t.PeerConnectionsByPeer;
   debug?: boolean;
   style?: t.CssValue;
   onConnectRequest?: t.OnPeerConnectRequestHandler;

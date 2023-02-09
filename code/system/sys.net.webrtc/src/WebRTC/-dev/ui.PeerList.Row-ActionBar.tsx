@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Color, COLORS, css, Icons, t } from './common';
 
 export type ActionBarProps = {
-  peerConnections: t.PeerConnectionSet;
+  peerConnections: t.PeerConnectionsByPeer;
   style?: t.CssValue;
 };
 
