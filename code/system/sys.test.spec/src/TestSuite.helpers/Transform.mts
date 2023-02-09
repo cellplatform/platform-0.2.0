@@ -21,22 +21,27 @@ type Test = {
 export function Transform(describe: Suite, it: Test) {
   const api = {
     /**
-     * Prepare suite.
+     * Transform a test-suite.
      */
     async suite(suite: t.TestSuiteModel) {
       if (!suite.state.ready) await suite.init();
-      if (suite.state.modifier?.includes('skip')) return;
 
       const handler = (test: t.TestModel) => {
         return async () => {
           const res = await test.run();
           if (!res.ok) {
-            throw new Error(res.error?.message ?? `Failed test "${test.description}"`);
+            const err = res.error?.message ?? `Failed test "${test.description}"`;
+            throw new Error(err);
           }
         };
       };
 
-      describe(suite.description, () => {
+      let def: Suite | undefined;
+      if (suite.state.modifier === undefined) def = describe;
+      if (suite.state.modifier === 'skip') def = describe.skip;
+      if (suite.state.modifier === 'only') def = describe.only;
+
+      def?.(suite.description, () => {
         suite.state.tests.forEach((test) => {
           const name = test.description;
           const fn = handler(test);

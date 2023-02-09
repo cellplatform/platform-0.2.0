@@ -171,6 +171,9 @@ describe('TestSuiteModel', () => {
       const root = Test.describe('root', (e) => {
         e.describe.skip('child-1');
         e.describe.only('child-2');
+        e.describe.skip('child-3', (e) => {
+          e.it('foo', (e) => {});
+        });
       });
 
       await root.init();
@@ -178,6 +181,7 @@ describe('TestSuiteModel', () => {
       expect(root.state.modifier).to.eql(undefined);
       expect(root.state.children[0].state.modifier).to.eql('skip');
       expect(root.state.children[1].state.modifier).to.eql('only');
+      expect(root.state.children[2].state.modifier).to.eql('skip');
     });
 
     it('define (root): Test.describe.skip | Test.describe.only', async () => {
