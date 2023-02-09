@@ -17,10 +17,10 @@ export function MemoryState() {
         return [...memory.connections];
       },
       get data() {
-        return Util.filterOnDataConnection(memory.connections);
+        return Util.filter.onDataConnection(memory.connections);
       },
       get media() {
-        return Util.filterOnMediaConnection(memory.connections);
+        return Util.filter.onMediaConnection(memory.connections);
       },
     },
 

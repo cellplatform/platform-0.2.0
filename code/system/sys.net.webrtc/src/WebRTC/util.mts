@@ -31,10 +31,21 @@ export const Util = {
     },
   },
 
-  filterOnDataConnection(source: t.PeerConnection[]) {
-    return source.filter(({ kind }) => kind === 'data') as t.PeerDataConnection[];
-  },
-  filterOnMediaConnection(source: t.PeerConnection[]) {
-    return source.filter(({ kind }) => kind === 'media') as t.PeerMediaConnection[];
+  filter: {
+    onConnection<C extends t.PeerConnection>(
+      kind: C['kind'] | C['kind'][],
+      source: t.PeerConnection[],
+    ) {
+      const match = Array.isArray(kind) ? kind : [kind];
+      return source.filter(({ kind }) => match.includes(kind)) as C[];
+    },
+
+    onDataConnection(source: t.PeerConnection[]) {
+      return Util.filter.onConnection<t.PeerDataConnection>('data', source);
+    },
+
+    onMediaConnection(source: t.PeerConnection[]) {
+      return Util.filter.onConnection<t.PeerMediaConnection>(['media'], source);
+    },
   },
 };

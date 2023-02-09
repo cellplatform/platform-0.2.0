@@ -56,10 +56,10 @@ export function peer(args: {
             peer,
             all,
             get data() {
-              return Util.filterOnDataConnection(all);
+              return Util.filter.onDataConnection(all);
             },
             get media() {
-              return Util.filterOnMediaConnection(all);
+              return Util.filter.onMediaConnection(all);
             },
           };
           return item;
