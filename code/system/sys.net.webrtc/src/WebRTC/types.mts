@@ -7,10 +7,11 @@ type Semver = string;
 export type PeerId = string;
 export type PeerModule = { name: string; version: Semver };
 
-export type PeerGetMediaStream = () => Promise<PeerGetMediaStreamResponse>;
+export type PeerMediaStreamKind = 'camera' | 'screen';
+export type PeerGetMediaStream = (kind: PeerMediaStreamKind) => Promise<PeerGetMediaStreamResponse>;
 export type PeerGetMediaStreamResponse = {
   media: MediaStream | undefined;
-  done(): Promise<void>;
+  done(): Promise<void>; // Indicates the consumer of the stream is finished ("done" ) and it can be released.
 };
 
 /**
@@ -27,7 +28,7 @@ export type Peer = t.Disposable & {
   readonly connectionsByPeer: PeerConnectionSet[];
   readonly disposed: boolean;
   data(connectTo: Id): Promise<PeerDataConnection>;
-  media(connectTo: Id): Promise<PeerMediaConnection>;
+  media(connectTo: Id, kind: PeerMediaStreamKind): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;

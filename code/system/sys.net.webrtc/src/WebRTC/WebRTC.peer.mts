@@ -81,7 +81,7 @@ export function peer(args: {
       /**
        * Start a media connection (video/audio/screen).
        */
-      media(connectTo) {
+      media(connectTo, kind) {
         return new Promise<t.PeerMediaConnection>(async (resolve, reject) => {
           if (!getStream) {
             const err = Error(`Media connections require a "getStream" function to be provided.`);
@@ -89,7 +89,7 @@ export function peer(args: {
           }
 
           const id = Util.asId(connectTo);
-          const stream = await getStream();
+          const stream = await getStream(kind);
           const local = stream?.media;
 
           if (!local) {
@@ -126,7 +126,7 @@ export function peer(args: {
      */
     rtc.on('connection', (conn) => conn.on('open', () => state.storeData(conn)));
     rtc.on('call', async (conn) => {
-      const stream = await getStream?.();
+      const stream = await getStream?.('camera');
       if (!stream?.media) {
         console.warn(`[WebRTC] No local media-stream available. Incoming call rejected.`);
       } else {

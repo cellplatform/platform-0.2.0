@@ -210,7 +210,7 @@ export default Dev.describe('WebRTC', (e) => {
     let peerB: t.Peer;
 
     const Media = WebRTC.Media.singleton();
-    const getMediaStatus = async () => Media.events.status(Media.ref).get();
+    const getMediaStatus = async () => Media.events.status(Media.ref.camera).get();
 
     e.it('initialize: create peers A ⇔ B', async (e) => {
       const [a, b] = await peers(2, Media.getStream);
@@ -219,14 +219,14 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it(
-      'open [media/data] connection → close (last) data-connection → auto closes media-connection',
+      'open [media:camera/data] connection → close (last) data-connection → auto closes media-connection',
       async (e) => {
         const status1 = await getMediaStatus();
         expect(status1.stream).to.eql(undefined);
 
         const data1 = await peerA.data(peerB.id);
         const data2 = await peerA.data(peerB.id);
-        const media = await peerA.media(peerB.id);
+        const media = await peerA.media(peerB.id, 'camera');
 
         await Time.wait(300);
 

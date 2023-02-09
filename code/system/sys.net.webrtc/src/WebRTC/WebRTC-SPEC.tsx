@@ -136,7 +136,7 @@ export default Dev.describe('WebRTC', (e) => {
             onEnter={async () => {
               const id = state.current.debug.remotePeer;
               connectData(id);
-              connectVideo(id);
+              connectCamera(id);
               // await dev.change((d) => (d.debug.remotePeer = ''));
             }}
           />
@@ -159,8 +159,8 @@ export default Dev.describe('WebRTC', (e) => {
         console.log('⚡️ peer.data (response):', res);
       };
 
-      const connectVideo = async (remote: t.PeerId = '') => {
-        const res = await self.media(remote);
+      const connectCamera = async (remote: t.PeerId = '') => {
+        const res = await self.media(remote, 'camera');
         console.log('⚡️ peer.media (response):', res);
       };
 
@@ -182,7 +182,7 @@ export default Dev.describe('WebRTC', (e) => {
             position: 'relative',
             marginTop: 10,
           }),
-          list: css({ marginLeft: 25, marginRight: 10 }),
+          list: css({ marginLeft: 20, marginRight: 10 }),
           hrBottom: css({
             borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
             marginTop: 30,
@@ -192,7 +192,23 @@ export default Dev.describe('WebRTC', (e) => {
 
         return (
           <div {...styles.base}>
-            <PeerList peer={self} style={styles.list} />
+            <PeerList
+              peer={self}
+              style={styles.list}
+              onConnectRequest={(ev) => {
+                /**
+                 * TODO 🐷 - ADD Connection
+                 */
+                console.log('e', e);
+                const remotePeer = state.current.debug.remotePeer;
+
+                /**
+                 * TODO 🐷 connect to requested "kind of" connection
+                 */
+                // connectScreenshare(remotePeer);
+                connectData(remotePeer);
+              }}
+            />
             <div {...styles.hrBottom} />
           </div>
         );
@@ -210,7 +226,7 @@ export default Dev.describe('WebRTC', (e) => {
         };
 
         connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
-        connectButton('camera', (e) => connectVideo(e.state.current.debug.remotePeer));
+        connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
         connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
         dev.button((btn) =>
           btn
@@ -237,8 +253,8 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('WebRTC tests', (e) => invoke(import('./-WebRTC-TEST.mjs')));
-      dev.button('MediaStream tests', (e) => invoke(import('./-WebRTC.Media-TEST.mjs')));
+      dev.button('test WebRTC', (e) => invoke(import('./WebRTC-TEST.mjs')));
+      dev.button('test MediaStream', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
     });
 
     dev.hr();
