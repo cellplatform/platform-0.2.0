@@ -16,7 +16,12 @@ export default Dev.describe('Sample', (e) => {
       .display('grid')
       .size(250, null)
       .render<T>((e) => {
-        return <div>{`🐷 Hello-${e.state.count}`}</div>;
+        return (
+          <div>
+            <div>{`🐷 Hello TODO List`}</div>
+            <div>{`count: ${e.state.count}`}</div>
+          </div>
+        );
       });
   });
 
