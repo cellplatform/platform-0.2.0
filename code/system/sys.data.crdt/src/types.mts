@@ -1,1 +1,1 @@
-export * from './lib.Automerge/types.mjs';
+export {};
