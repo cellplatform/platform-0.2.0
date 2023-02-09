@@ -39,7 +39,7 @@ export function peer(args: {
       signal,
       id,
 
-      connections$: state.connections.$,
+      connections$: state.connections$,
       get connections() {
         return state.connections.all;
       },
@@ -52,7 +52,7 @@ export function peer(args: {
       get connectionsByPeer() {
         const byPeer = R.groupBy((item) => item.peer.remote, api.connections);
         return Object.entries(byPeer).map(([peer, all]) => {
-          const item: t.PeerConnectionSet = {
+          const item: t.PeerConnectionsByPeer = {
             peer,
             all,
             get data() {

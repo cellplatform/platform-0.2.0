@@ -31,21 +31,32 @@ export const Util = {
     },
   },
 
+  toConnectionSet(input: t.PeerConnection[] | (() => t.PeerConnection[])): t.PeerConnections {
+    const fn = typeof input === 'function' ? input : () => input;
+    return {
+      get all() {
+        return fn();
+      },
+      get data() {
+        return Util.filter.onDataConnection(fn());
+      },
+      get media() {
+        return Util.filter.onMediaConnection(fn());
+      },
+    };
+  },
+
   filter: {
-    onConnection<C extends t.PeerConnection>(
-      kind: C['kind'] | C['kind'][],
-      source: t.PeerConnection[],
-    ) {
-      const match = Array.isArray(kind) ? kind : [kind];
-      return source.filter(({ kind }) => match.includes(kind)) as C[];
+    onConnectionKind<C extends t.PeerConnection>(kind: C['kind'], source: t.PeerConnection[]) {
+      return source.filter((conn) => conn.kind === kind) as C[];
     },
 
     onDataConnection(source: t.PeerConnection[]) {
-      return Util.filter.onConnection<t.PeerDataConnection>('data', source);
+      return Util.filter.onConnectionKind<t.PeerDataConnection>('data', source);
     },
 
     onMediaConnection(source: t.PeerConnection[]) {
-      return Util.filter.onConnection<t.PeerMediaConnection>(['media'], source);
+      return Util.filter.onConnectionKind<t.PeerMediaConnection>('media', source);
     },
   },
 };

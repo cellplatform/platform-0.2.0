@@ -11,18 +11,8 @@ export function MemoryState() {
   const connections$ = new rx.Subject<t.PeerConnectionChanged>();
 
   const api = {
-    connections: {
-      $: connections$.asObservable(),
-      get all() {
-        return [...memory.connections];
-      },
-      get data() {
-        return Util.filter.onDataConnection(memory.connections);
-      },
-      get media() {
-        return Util.filter.onMediaConnection(memory.connections);
-      },
-    },
+    connections$: connections$.asObservable(),
+    connections: Util.toConnectionSet(() => [...memory.connections]),
 
     fireChanged<P extends t.PeerConnectionChanged>(action: P['action'], subject: P['subject']) {
       const kind = subject.kind;
