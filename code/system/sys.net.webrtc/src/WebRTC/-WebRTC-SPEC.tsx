@@ -24,12 +24,12 @@ type T = {
     testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
     muted: boolean;
   };
-  peer?: t.Peer;
+  self?: t.Peer;
   connections: t.PeerConnection[];
 };
 const initial: T = {
   connections: [],
-  peer: undefined,
+  self: undefined,
   debug: {
     remotePeer: '',
     muted: location.hostname === 'localhost',
@@ -54,11 +54,11 @@ export default Dev.describe('WebRTC', (e) => {
      * WebRTC (network)
      */
     self = await WebRTC.peer({ signal, getStream });
-    await state.change((d) => (d.peer = self));
+    await state.change((d) => (d.self = self));
     self.connections$.subscribe((e) => {
       state.change((d) => {
         d.connections = e.connections;
-        d.peer = self;
+        d.self = self;
       });
     });
 
@@ -118,7 +118,7 @@ export default Dev.describe('WebRTC', (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        const media = e.state.peer?.mediaConnections[0]; // TEMP - from selection 🐷
+        const media = e.state.self?.mediaConnections[0]; // TEMP - from selection 🐷
         const peerId = WebRTC.Util.asUri(self.id);
         const copyPeer = () => navigator.clipboard.writeText(peerId);
         const height = 250;
@@ -174,8 +174,8 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const { peer, connections } = e.state;
-      const data = { connections, peer };
+      const { self, connections } = e.state;
+      const data = { self, connections };
       return <Dev.Object name={'spec.WebRTC'} data={data} expand={1} />;
     });
 
@@ -247,6 +247,7 @@ export default Dev.describe('WebRTC', (e) => {
             position: 'relative',
             marginTop: 10,
           }),
+          list: css({ MarginX: 25 }),
           hrBottom: css({
             borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
             marginTop: 30,
@@ -256,7 +257,7 @@ export default Dev.describe('WebRTC', (e) => {
 
         return (
           <div {...styles.base}>
-            <PeerList peer={self} />
+            <PeerList peer={self} style={styles.list} />
             <div {...styles.hrBottom} />
           </div>
         );

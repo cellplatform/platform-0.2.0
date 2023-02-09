@@ -31,23 +31,16 @@ export const Row: React.FC<RowProps> = (props) => {
     }),
     body: css({
       display: 'grid',
-      gridTemplateColumns: '40px 10px 1fr 22px',
-    }),
-    peerid: css({
-      Absolute: [null, null, -11, 0],
-      fontSize: 7,
+      gridTemplateColumns: '40px 15px 1fr 30px',
     }),
   };
 
-  const elPeerId = debug && <div {...styles.peerid}>{`peer:${peerConnections.peer}`}</div>;
-
   return (
     <div {...css(styles.base, props.style)} onClick={onRowClick}>
-      {elPeerId}
       <div {...styles.body}>
         <RowThumbnail peerConnections={peerConnections} />
         <div className={'gap'} />
-        <RowBody peerConnections={peerConnections} />
+        <RowBody peerConnections={peerConnections} debug={debug} />
         <ActionBar peerConnections={peerConnections} />
       </div>
     </div>

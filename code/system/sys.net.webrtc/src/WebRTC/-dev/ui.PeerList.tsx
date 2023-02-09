@@ -17,12 +17,16 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
+    row: css({
+      marginBottom: 15,
+      ':last-child': { marginBottom: 0 },
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       {peerConnections.map((connections) => (
-        <Row key={connections.peer} peerConnections={connections} />
+        <Row key={connections.peer} peerConnections={connections} style={styles.row} />
       ))}
     </div>
   );

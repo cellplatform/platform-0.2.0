@@ -1,24 +1,13 @@
-import { useState } from 'react';
-import {
-  AudioWaveform,
-  Button,
-  Color,
-  COLORS,
-  css,
-  Icons,
-  MediaStream,
-  Spinner,
-  t,
-  useSizeObserver,
-} from './common';
+import { AudioWaveform, Button, Color, COLORS, css, Icons, t, useSizeObserver } from './common';
 
 export type RowBodyProps = {
   peerConnections: t.PeerConnectionSet;
+  debug?: boolean;
   style?: t.CssValue;
 };
 
 export const RowBody: React.FC<RowBodyProps> = (props) => {
-  const { peerConnections } = props;
+  const { peerConnections, debug } = props;
 
   const media = peerConnections.media.find((item) => item.stream)?.stream;
   const video = media?.remote;
@@ -53,6 +42,10 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
       placeItems: 'center',
       marginRight: 8,
     }),
+    peerid: css({
+      Absolute: [null, null, -11, 0],
+      fontSize: 7,
+    }),
   };
 
   const elWaveform = video && size.ready && (
@@ -72,6 +65,8 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
     </Button>
   );
 
+  const elPeerId = debug && <div {...styles.peerid}>{`peer:${peerConnections.peer}`}</div>;
+
   return (
     <div ref={size.ref} {...css(styles.base, props.style)}>
       <div {...styles.body}>
@@ -80,6 +75,7 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
         {elScreenShare}
       </div>
       {elWaveform}
+      {elPeerId}
     </div>
   );
 };
