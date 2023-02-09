@@ -1,22 +1,4 @@
-import { WebRTC } from '..';
-import {
-  Button,
-  // Color,
-  // COLORS,
-  // css,
-  Dev,
-  Icons,
-  MediaStream,
-  // rx,
-  slug,
-  // t,
-  TEST,
-  TextInput,
-  TextSyntax,
-} from '../../test.ui';
-
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from './common';
+import { Button, Color, COLORS, css, Icons, MediaStream, t, TextSyntax, WebRTC } from '../common';
 
 export type PeerVideoProps = {
   self: t.Peer;

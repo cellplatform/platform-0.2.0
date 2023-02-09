@@ -1,5 +1,14 @@
-import { WebRTC } from '..';
-import { AudioWaveform, Button, Color, COLORS, css, Icons, t, useSizeObserver } from './common';
+import {
+  AudioWaveform,
+  Button,
+  Color,
+  COLORS,
+  css,
+  Icons,
+  t,
+  useSizeObserver,
+  WebRTC,
+} from '../common';
 
 export type RowBodyProps = {
   peerConnections: t.PeerConnectionsByPeer;

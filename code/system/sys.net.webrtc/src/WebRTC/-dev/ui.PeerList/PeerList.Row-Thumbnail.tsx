@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { css, MediaStream, Spinner, t } from './common';
+import { useState } from 'react';
+import { css, MediaStream, Spinner, t } from '../common';
 
 export type RowThumbnailProps = {
   peerConnections: t.PeerConnectionsByPeer;
