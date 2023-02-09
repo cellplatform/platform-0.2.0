@@ -11,7 +11,7 @@ describe('WebRTC.Util', () => {
 
   it('cleanId', () => {
     const test = (input: string, expected: string) => {
-      const res = Util.cleanId(input);
+      const res = Util.asId(input);
       expect(res).to.eql(expected);
     };
 
@@ -19,6 +19,9 @@ describe('WebRTC.Util', () => {
     test('  myid  ', 'myid');
     test('  peer:myid  ', 'myid');
     test('  peer: myid  ', 'myid');
+    test('peer:myid', 'myid');
+    test('peer:', '');
+    test('peer', 'peer');
   });
 
   it('asUri', () => {

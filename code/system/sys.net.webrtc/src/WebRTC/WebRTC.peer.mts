@@ -15,7 +15,7 @@ export function peer(args: {
   return new Promise<t.Peer>((resolve, reject) => {
     const { getStream } = args;
     const state = MemoryState();
-    const id = Util.cleanId(args.id ?? Util.randomPeerId());
+    const id = Util.asId(args.id ?? Util.randomPeerId());
     const signal = Path.trimHttpPrefix(args.signal);
     const rtc = new PeerJS(id, {
       key: 'conn',
@@ -71,7 +71,7 @@ export function peer(args: {
        */
       data(connectTo) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
-          const id = Util.cleanId(connectTo);
+          const id = Util.asId(connectTo);
           const conn = rtc.connect(id, { reliable: true });
           conn.on('error', (err) => reject(err));
           conn.on('open', async () => resolve(await state.storeData(conn)));
@@ -88,7 +88,7 @@ export function peer(args: {
             return reject(err);
           }
 
-          const id = Util.cleanId(connectTo);
+          const id = Util.asId(connectTo);
           const stream = await getStream();
           const local = stream?.media;
 

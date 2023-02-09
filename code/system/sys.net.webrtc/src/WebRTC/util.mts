@@ -5,14 +5,14 @@ export const Util = {
     return `p${cuid()}`;
   },
 
-  cleanId(input: string) {
+  asId(input: string) {
     input = (input || '').trim();
     input = input.replace(/^peer\:/, '');
     return input.trim();
   },
 
   asUri(id: string) {
-    return `peer:${Util.cleanId(id)}`;
+    return `peer:${Util.asId(id)}`;
   },
 
   isType: {
@@ -20,7 +20,6 @@ export const Util = {
       if (typeof input !== 'object') return false;
 
       const data = input as t.PeerDataPayload;
-
       if (typeof data.source !== 'object') return false;
       if (typeof data.source.peer !== 'string') return false;
       if (typeof data.source.connection !== 'string') return false;
