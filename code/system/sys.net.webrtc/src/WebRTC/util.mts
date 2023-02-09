@@ -34,6 +34,9 @@ export const Util = {
   toConnectionSet(input: t.PeerConnection[] | (() => t.PeerConnection[])): t.PeerConnections {
     const fn = typeof input === 'function' ? input : () => input;
     return {
+      get length() {
+        return fn().length;
+      },
       get all() {
         return fn();
       },

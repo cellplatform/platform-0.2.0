@@ -30,7 +30,7 @@ export function peer(args: {
     let _disposed = false;
     dispose$.subscribe(() => {
       rtc.destroy();
-      api.connections.forEach((conn) => conn.dispose());
+      api.connections.all.forEach((conn) => conn.dispose());
       _disposed = true;
     });
 
@@ -41,19 +41,14 @@ export function peer(args: {
 
       connections$: state.connections$,
       get connections() {
-        return state.connections.all;
-      },
-      get dataConnections() {
-        return state.connections.data;
-      },
-      get mediaConnections() {
-        return state.connections.media;
+        return state.connections;
       },
       get connectionsByPeer() {
-        const byPeer = R.groupBy((item) => item.peer.remote, api.connections);
+        const byPeer = R.groupBy((item) => item.peer.remote, api.connections.all);
         return Object.entries(byPeer).map(([peer, all]) => {
           const item: t.PeerConnectionsByPeer = {
             peer,
+            length: all.length,
             all,
             get data() {
               return Util.filter.onDataConnection(all);
@@ -92,7 +87,7 @@ export function peer(args: {
 
           const done = (res: t.PeerMediaConnection) => {
             res.dispose$
-              .pipe(rx.filter(() => api.mediaConnections.length === 0))
+              .pipe(rx.filter(() => api.connections.media.length === 0))
               .subscribe(() => stream.done());
             resolve(res);
           };

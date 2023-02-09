@@ -31,7 +31,7 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   const peerid = WebRTC.Util.asId(self.id);
 
   // TEMP 🐷
-  const media = self.mediaConnections[0]; // TEMP - from selection 🐷
+  const media = self.connections.media[0]; // TEMP - from selection 🐷
 
   // TEMP 🐷
   const PROFILE =

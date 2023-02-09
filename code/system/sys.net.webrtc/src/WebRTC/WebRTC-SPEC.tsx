@@ -218,26 +218,26 @@ export default Dev.describe('WebRTC', (e) => {
         const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
           dev.button((btn) =>
             btn
-              .label(`connect: ${label}`)
+              .label(`(debug) connect: ${label}`)
               .right((e) => (isSelf(e.state) ? 'self ⚠️' : ''))
               .enabled((e) => canConnect(e.state))
               .onClick(fn),
           );
         };
 
-        connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
-        connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
-        connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
-        dev.hr();
         dev.button((btn) =>
           btn
             .label('close all')
             // .enabled((e) => Boolean(e.state.connections.length > 0))
             .onClick(async (e) => {
-              self.connections.forEach((conn) => conn.dispose());
+              self.connections.all.forEach((conn) => conn.dispose());
               await media.stop(streamRef).fire();
             }),
         );
+        dev.hr();
+        connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
+        connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
+        connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
       });
 
       dev.hr();

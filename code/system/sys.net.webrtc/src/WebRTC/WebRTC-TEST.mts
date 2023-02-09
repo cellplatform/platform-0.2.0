@@ -48,12 +48,12 @@ export default Dev.describe('WebRTC', (e) => {
       const peer = await WebRTC.peer({ signal });
 
       expect(peer.connections).to.eql([]);
-      expect(peer.dataConnections).to.eql([]);
-      expect(peer.mediaConnections).to.eql([]);
+      expect(peer.connections.data).to.eql([]);
+      expect(peer.connections.media).to.eql([]);
 
       expect(peer.connections).to.not.equal(peer.connections);
-      expect(peer.dataConnections).to.not.equal(peer.dataConnections);
-      expect(peer.mediaConnections).to.not.equal(peer.mediaConnections);
+      expect(peer.connections.data).to.not.equal(peer.connections.data);
+      expect(peer.connections.media).to.not.equal(peer.connections.media);
 
       peer.dispose();
     });
@@ -88,17 +88,17 @@ export default Dev.describe('WebRTC', (e) => {
       expect(a.metadata).to.eql({ name: 'Foobar' });
       expect(a.peer.local).to.eql(peerA.id);
       expect(a.peer.remote).to.eql(peerB.id);
-      expect(a).to.eql(peerA.dataConnections[0]);
+      expect(a).to.eql(peerA.connections.data[0]);
 
       expect(peerA.connections.length).to.eql(1);
       await Time.wait(500);
       expect(peerB.connections.length).to.eql(1);
-      expect(peerA.dataConnections.length).to.eql(1);
-      expect(peerB.dataConnections.length).to.eql(1);
+      expect(peerA.connections.data.length).to.eql(1);
+      expect(peerB.connections.data.length).to.eql(1);
 
-      expect(peerA.dataConnections[0].isOpen).to.eql(true);
-      expect(peerB.dataConnections[0].isOpen).to.eql(true);
-      expect(peerB.dataConnections[0].metadata.name).to.eql('Foobar');
+      expect(peerA.connections.data[0].isOpen).to.eql(true);
+      expect(peerB.connections.data[0].isOpen).to.eql(true);
+      expect(peerB.connections.data[0].metadata.name).to.eql('Foobar');
 
       expect(peerA.connectionsByPeer[0].peer).to.eql(peerB.id);
       expect(peerB.connectionsByPeer[0].peer).to.eql(peerA.id);
@@ -114,8 +114,8 @@ export default Dev.describe('WebRTC', (e) => {
     e.it('send JSON between peers', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
-      const a = peerA.dataConnections[0];
-      const b = peerB.dataConnections[0];
+      const a = peerA.connections.data[0];
+      const b = peerB.connections.data[0];
 
       const incomingA: t.PeerDataPayload[] = [];
       const incomingB: t.PeerDataPayload[] = [];
@@ -141,8 +141,8 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('send binary data [Uint8Array] between peers', async (e) => {
-      const a = peerA.dataConnections[0];
-      const b = peerB.dataConnections[0];
+      const a = peerA.connections.data[0];
+      const b = peerB.connections.data[0];
 
       type E = { type: 'foo'; payload: { data: Uint8Array } };
       const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -156,8 +156,8 @@ export default Dev.describe('WebRTC', (e) => {
       type E = { type: 'foo'; payload: { msg: string } };
       const { dispose, dispose$ } = rx.disposable();
 
-      const a = peerA.dataConnections[0];
-      const b = peerB.dataConnections[0];
+      const a = peerA.connections.data[0];
+      const b = peerB.connections.data[0];
 
       const changedA: t.PeerConnectionChanged[] = [];
       const changedB: t.PeerConnectionChanged[] = [];
@@ -239,11 +239,11 @@ export default Dev.describe('WebRTC', (e) => {
         const status2 = await getMediaStatus();
         expect(status2.stream?.media instanceof MediaStream).to.eql(true);
 
-        expect(peerA.dataConnections.length).to.eql(2);
-        expect(peerB.dataConnections.length).to.eql(2);
+        expect(peerA.connections.data.length).to.eql(2);
+        expect(peerB.connections.data.length).to.eql(2);
 
-        expect(peerA.mediaConnections.length).to.eql(1);
-        expect(peerB.mediaConnections.length).to.eql(1);
+        expect(peerA.connections.media.length).to.eql(1);
+        expect(peerB.connections.media.length).to.eql(1);
 
         /**
          * Close the first data-connection.
@@ -254,8 +254,8 @@ export default Dev.describe('WebRTC', (e) => {
         const status3 = await getMediaStatus();
 
         expect(status3.stream?.media instanceof MediaStream).to.eql(true);
-        expect(peerA.mediaConnections.length).to.eql(1);
-        expect(peerB.mediaConnections.length).to.eql(1);
+        expect(peerA.connections.media.length).to.eql(1);
+        expect(peerB.connections.media.length).to.eql(1);
 
         /**
          * Close the first data-connection.

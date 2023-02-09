@@ -21,10 +21,8 @@ export type Peer = t.Disposable & {
   readonly kind: 'local:peer';
   readonly id: Id;
   readonly signal: Hostname;
+  readonly connections: PeerConnections;
   readonly connections$: t.Observable<PeerConnectionChanged>;
-  readonly connections: PeerConnection[];
-  readonly dataConnections: PeerDataConnection[];
-  readonly mediaConnections: PeerMediaConnection[];
   readonly connectionsByPeer: PeerConnectionsByPeer[];
   readonly disposed: boolean;
   data(connectTo: Id, options?: { name?: string }): Promise<PeerDataConnection>;
@@ -35,6 +33,7 @@ export type PeerConnection = PeerDataConnection | PeerMediaConnection;
 export type PeerConnectionKind = PeerConnection['kind'];
 
 export type PeerConnections = {
+  readonly length: number;
   readonly all: PeerConnection[];
   readonly data: PeerDataConnection[];
   readonly media: PeerMediaConnection[];
