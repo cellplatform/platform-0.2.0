@@ -1,20 +1,7 @@
 import { WebRTC } from '.';
-import {
-  Button,
-  Color,
-  COLORS,
-  css,
-  Dev,
-  Icons,
-  MediaStream,
-  rx,
-  slug,
-  t,
-  TEST,
-  TextInput,
-  TextSyntax,
-} from '../test.ui';
+import { Color, COLORS, css, Dev, MediaStream, rx, slug, t, TEST, TextInput } from '../test.ui';
 import { PeerList } from './-dev/ui.PeerList';
+import { PeerVideo } from './-dev/ui.PeerVideo';
 
 type Id = string;
 
@@ -118,59 +105,7 @@ export default Dev.describe('WebRTC', (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        const media = e.state.self?.mediaConnections[0]; // TEMP - from selection 🐷
-        const peerId = WebRTC.Util.asUri(self.id);
-        const copyPeer = () => navigator.clipboard.writeText(peerId);
-        const height = 250;
-
-        const PROFILE =
-          'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png';
-
-        const styles = {
-          base: css({ position: 'relative' }),
-          video: {
-            base: css({
-              height,
-              position: 'relative',
-              borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-              backgroundImage: `url(${PROFILE})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }),
-            bg: css({
-              Absolute: 0,
-              pointerEvents: 'none',
-              display: 'grid',
-              placeItems: 'center',
-            }),
-          },
-          peer: css({ display: 'grid', justifyContent: 'center', padding: 5 }),
-        };
-
-        const elPeer = (
-          <Button onClick={copyPeer}>
-            <TextSyntax text={peerId} monospace={true} fontWeight={'bold'} fontSize={13} />
-          </Button>
-        );
-
-        return (
-          <div {...styles.base}>
-            <div {...styles.video.base}>
-              <div {...styles.video.bg}>
-                <Icons.Face.Caller size={80} opacity={0.2} />
-              </div>
-              {media && (
-                <MediaStream.Video
-                  stream={media.stream.remote}
-                  muted={e.state.debug.muted}
-                  height={height}
-                />
-              )}
-            </div>
-            <div {...styles.peer}>{elPeer}</div>
-          </div>
-        );
+        return <PeerVideo self={self} mediaHeight={250} muted={e.state.debug.muted} />;
       });
 
     dev.footer.border(-0.1).render<T>((e) => {
@@ -202,7 +137,7 @@ export default Dev.describe('WebRTC', (e) => {
               const id = state.current.debug.remotePeer;
               connectData(id);
               connectVideo(id);
-              await dev.change((d) => (d.debug.remotePeer = ''));
+              // await dev.change((d) => (d.debug.remotePeer = ''));
             }}
           />
         );
@@ -210,7 +145,7 @@ export default Dev.describe('WebRTC', (e) => {
       dev.hr();
 
       const isSelf = (state: T) => {
-        const remote = WebRTC.Util.cleanId(state.debug.remotePeer ?? '');
+        const remote = WebRTC.Util.asId(state.debug.remotePeer ?? '');
         return remote === self.id;
       };
 
@@ -247,7 +182,7 @@ export default Dev.describe('WebRTC', (e) => {
             position: 'relative',
             marginTop: 10,
           }),
-          list: css({ MarginX: 25 }),
+          list: css({ marginLeft: 25, marginRight: 10 }),
           hrBottom: css({
             borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
             marginTop: 30,
@@ -280,7 +215,7 @@ export default Dev.describe('WebRTC', (e) => {
         dev.button((btn) =>
           btn
             .label('close all')
-            .enabled((e) => Boolean(e.state.connections.length > 0))
+            // .enabled((e) => Boolean(e.state.connections.length > 0))
             .onClick(async (e) => {
               self.connections.forEach((conn) => conn.dispose());
               await media.stop(streamRef).fire();
