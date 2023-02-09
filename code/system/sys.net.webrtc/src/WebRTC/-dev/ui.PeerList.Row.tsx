@@ -1,114 +1,54 @@
-import { useState } from 'react';
-import {
-  AudioWaveform,
-  Button,
-  Color,
-  COLORS,
-  css,
-  Icons,
-  MediaStream,
-  Spinner,
-  t,
-} from './common';
+import { useEffect, useRef, useState } from 'react';
 
-export type PeerRowProps = {
-  connections: t.PeerConnectionSet;
+import { css, t } from './common';
+import { ActionBar } from './ui.PeerList.Row.ActionBar';
+import { RowBody } from './ui.PeerList.Row.Body';
+import { RowThumbnail } from './ui.PeerList.Row.Thumbnail';
+
+export type RowProps = {
+  peerConnections: t.PeerConnectionSet;
+  debug?: boolean;
   style?: t.CssValue;
 };
 
-export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { connections } = props;
-  const { peer: peerid } = connections;
-
-  const [ready, setReady] = useState(false);
-  const [isCloseOver, setCloseOver] = useState(false);
-
-  const media = connections.media.find((item) => item.stream)?.stream;
-  const video = media?.remote;
+export const Row: React.FC<RowProps> = (props) => {
+  const { peerConnections, debug = true } = props;
 
   /**
    * [Handlers]
    */
-  const close = () => {
-    connections.data.forEach((data) => data.dispose());
+  const onRowClick = () => {
+    console.debug('peer(connections):', peerConnections);
   };
 
   /**
    * [Render]
    */
-  const thumbnailSize = 40;
   const styles = {
     base: css({
       position: 'relative',
-      display: 'grid',
-      gridTemplateColumns: 'auto 10px 1fr auto',
-      boxSizing: 'border-box',
-      height: thumbnailSize,
-    }),
-    left: css({
-      height: thumbnailSize,
+      cursor: 'default',
     }),
     body: css({
       display: 'grid',
-      gridTemplateRows: '1fr auto',
+      gridTemplateColumns: '40px 10px 1fr 22px',
     }),
-    right: css({}),
-    peerid: css({ fontSize: 10, opacity: 0.3 }),
-    thumbnail: {
-      base: css({ position: 'relative' }),
-      bg: css({
-        Absolute: 0,
-        Size: thumbnailSize,
-        display: 'grid',
-        placeItems: 'center',
-        pointerEvents: 'none',
-      }),
-      spinner: css({}),
-    },
+    peerid: css({
+      Absolute: [null, null, -11, 0],
+      fontSize: 7,
+    }),
   };
 
+  const elPeerId = debug && <div {...styles.peerid}>{`peer:${peerConnections.peer}`}</div>;
+
   return (
-    <div {...css(styles.base, props.style)} onClick={() => console.info(connections)}>
-      <div {...styles.left}>
-        {!ready && (
-          <div {...styles.thumbnail.bg}>
-            <Spinner.Orbit size={20} style={styles.thumbnail.spinner} />
-          </div>
-        )}
-        {video && (
-          <MediaStream.Video
-            stream={video}
-            muted={true}
-            width={thumbnailSize}
-            height={thumbnailSize}
-            borderRadius={3}
-            onLoadedData={() => setReady(true)}
-          />
-        )}
-      </div>
-      <div />
+    <div {...css(styles.base, props.style)} onClick={onRowClick}>
+      {elPeerId}
       <div {...styles.body}>
-        <div {...styles.peerid}>{`peer:${peerid}`}</div>
-        <AudioWaveform
-          height={20}
-          stream={video}
-          lineWidth={0.5}
-          lineColor={Color.alpha(COLORS.DARK, 0.3)}
-          style={{ position: 'relative', bottom: -7 }}
-        />
-      </div>
-      <div {...styles.right}>
-        <Button
-          onClick={close}
-          onMouse={(e) => setCloseOver(e.isOver)}
-          tooltip={'Close Connection'}
-        >
-          <Icons.Close
-            size={22}
-            color={isCloseOver ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.7)}
-            style={{ position: 'relative', top: -4, right: -4 }}
-          />
-        </Button>
+        <RowThumbnail peerConnections={peerConnections} />
+        <div className={'gap'} />
+        <RowBody peerConnections={peerConnections} />
+        <ActionBar peerConnections={peerConnections} />
       </div>
     </div>
   );

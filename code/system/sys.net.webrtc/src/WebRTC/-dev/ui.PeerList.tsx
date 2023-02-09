@@ -1,5 +1,5 @@
-import { css, t, COLORS, Color } from './common';
-import { PeerRow } from './ui.PeerList.Row';
+import { css, t } from './common';
+import { Row } from './ui.PeerList.Row';
 
 export type PeerListProps = {
   peer: t.Peer;
@@ -8,32 +8,22 @@ export type PeerListProps = {
 
 export const PeerList: React.FC<PeerListProps> = (props) => {
   const { peer } = props;
-  const peers = peer.connectionsByPeer;
-  if (peers.length === 0) return null;
+  const peerConnections = peer.connectionsByPeer;
+
+  if (peerConnections.length === 0) return null;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-    }),
-    list: css({ marginTop: 10 }),
-    hrBottom: css({
-      borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      marginTop: 20,
-      marginBottom: 20,
-    }),
+    base: css({ position: 'relative' }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.list}>
-        {peers.map((connections) => (
-          <PeerRow key={connections.peer} connections={connections} />
-        ))}
-      </div>
-      <div {...styles.hrBottom} />
+      {peerConnections.map((connections) => (
+        <Row key={connections.peer} peerConnections={connections} />
+      ))}
     </div>
   );
 };
