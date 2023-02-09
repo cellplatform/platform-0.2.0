@@ -11,10 +11,16 @@ export default Dev.describe('Root', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .display('grid')
       .size('fill')
       .render<T>((e) => {
-        return <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} scroll={true} />;
+        return (
+          <Dev.TestRunner.Results
+            {...e.state.debug.testrunner}
+            padding={10}
+            scroll={true}
+            style={{ Absolute: 0 }}
+          />
+        );
       });
   });
 
