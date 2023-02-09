@@ -20,7 +20,7 @@ export type Peer = t.Disposable & {
   readonly kind: 'local:peer';
   readonly id: Id;
   readonly signal: Hostname;
-  readonly connections$: t.Observable<PeerConnectionChange>;
+  readonly connections$: t.Observable<PeerConnectionChanged>;
   readonly connections: PeerConnection[];
   readonly dataConnections: PeerDataConnection[];
   readonly mediaConnections: PeerMediaConnection[];
@@ -43,8 +43,8 @@ export type PeerConnectionSet = {
 type Connection = t.Disposable & {
   readonly id: Id;
   readonly peer: { local: Id; remote: Id };
-  readonly open: boolean;
-  readonly disposed: boolean;
+  readonly isOpen: boolean;
+  readonly isDisposed: boolean;
 };
 
 /**
@@ -72,21 +72,21 @@ export type PeerMediaConnection = Connection & {
 export type PeerMediaStreams = { local: MediaStream; remote: MediaStream };
 
 /**
- * Peer connection change
+ * Peer connection change info.
  */
-export type PeerConnectionChange = PeerDataConnectionChange | PeerMediaConnectionChange;
+export type PeerConnectionChanged = PeerDataConnectionChanged | PeerMediaConnectionChanged;
 
-type ConnectionChange = {
+type ConnectionChanged = {
   action: 'added' | 'removed';
   connections: PeerConnection[];
 };
 
-export type PeerDataConnectionChange = ConnectionChange & {
+export type PeerDataConnectionChanged = ConnectionChanged & {
   kind: 'data';
   subject: PeerDataConnection;
 };
 
-export type PeerMediaConnectionChange = ConnectionChange & {
+export type PeerMediaConnectionChanged = ConnectionChanged & {
   kind: 'media';
   subject: PeerMediaConnection;
 };

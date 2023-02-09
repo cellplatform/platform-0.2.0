@@ -72,8 +72,8 @@ export default Dev.describe('WebRTC', (e) => {
     e.it('open data connection between two peers', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
-      const firedA: t.PeerConnectionChange[] = [];
-      const firedB: t.PeerConnectionChange[] = [];
+      const firedA: t.PeerConnectionChanged[] = [];
+      const firedB: t.PeerConnectionChanged[] = [];
 
       peerA.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
         firedA.push(e);
@@ -157,8 +157,8 @@ export default Dev.describe('WebRTC', (e) => {
       const a = peerA.dataConnections[0];
       const b = peerB.dataConnections[0];
 
-      const changedA: t.PeerConnectionChange[] = [];
-      const changedB: t.PeerConnectionChange[] = [];
+      const changedA: t.PeerConnectionChanged[] = [];
+      const changedB: t.PeerConnectionChanged[] = [];
 
       peerA.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
         changedA.push(e);
