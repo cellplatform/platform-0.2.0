@@ -1,5 +1,5 @@
 import { css, t } from '../common';
-import { Row } from './PeerList.Row';
+import { Row } from './Row';
 
 export type PeerListProps = {
   peer: t.Peer;
