@@ -47,11 +47,11 @@ export default Dev.describe('WebRTC', (e) => {
     e.it('exposes immutable lists (only)', async (e) => {
       const peer = await WebRTC.peer({ signal });
 
-      expect(peer.connections).to.eql([]);
+      expect(peer.connections.all).to.eql([]);
       expect(peer.connections.data).to.eql([]);
       expect(peer.connections.media).to.eql([]);
 
-      expect(peer.connections).to.not.equal(peer.connections);
+      expect(peer.connections.all).to.not.equal(peer.connections.all);
       expect(peer.connections.data).to.not.equal(peer.connections.data);
       expect(peer.connections.media).to.not.equal(peer.connections.media);
 
