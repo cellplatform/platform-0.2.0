@@ -10,10 +10,9 @@ export type PeerVideoProps = {
 export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   const { self, mediaHeight = 250, muted = false } = props;
   const peerUri = WebRTC.Util.asUri(self.id);
-  const peerid = WebRTC.Util.asId(self.id);
 
   // TEMP 🐷
-  const media = self.connections.media[0]; // TEMP - from selection 🐷
+  const camera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
 
   // TEMP 🐷
   const PROFILE =
@@ -61,8 +60,8 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
         <div {...styles.video.bg}>
           <Icons.Face.Caller size={80} opacity={0.2} />
         </div>
-        {media && (
-          <MediaStream.Video stream={media.stream.remote} muted={muted} height={mediaHeight} />
+        {camera && (
+          <MediaStream.Video stream={camera.stream.remote} muted={muted} height={mediaHeight} />
         )}
       </div>
       <div {...styles.peer}>{elPeer}</div>
