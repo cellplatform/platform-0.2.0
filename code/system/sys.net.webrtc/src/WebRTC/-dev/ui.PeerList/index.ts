@@ -1,1 +1,1 @@
-export * from './PeerList';
+export * from './ui.PeerList';

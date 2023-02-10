@@ -11,5 +11,5 @@ export type PeerListConnectReqHandlerArgs = {
 
 export type PeerListDisplayConnReqHandler = (e: PeerListDisplayConnReqHandlerArgs) => void;
 export type PeerListDisplayConnReqHandlerArgs = {
-  connection: t.PeerConnection['id'];
+  connection: t.PeerConnectionId;
 };

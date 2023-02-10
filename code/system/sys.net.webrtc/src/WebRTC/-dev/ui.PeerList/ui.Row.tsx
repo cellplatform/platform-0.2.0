@@ -1,7 +1,7 @@
 import { css, t } from '../common';
-import { ActionBar } from './Row-ActionBar';
-import { RowBody } from './Row-Body';
-import { RowThumbnail } from './Row-Thumbnail';
+import { ActionBar } from './ui.Row-ActionBar';
+import { RowBody } from './ui.Row-Body';
+import { RowThumbnail } from './ui.Row-Thumbnail';
 
 export type RowProps = {
   peerConnections: t.PeerConnectionsByPeer;

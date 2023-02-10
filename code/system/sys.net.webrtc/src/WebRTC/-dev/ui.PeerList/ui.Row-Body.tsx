@@ -1,5 +1,5 @@
 import { AudioWaveform, Color, COLORS, css, t, useSizeObserver, WebRTC } from '../common';
-import { ConnScreenshare } from './Conn.Screenshare';
+import { ConnScreenshare } from './ui.Conn.Screenshare';
 
 export type RowBodyProps = {
   peerConnections: t.PeerConnectionsByPeer;
