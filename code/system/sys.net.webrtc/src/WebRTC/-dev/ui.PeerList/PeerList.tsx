@@ -4,7 +4,8 @@ import { Row } from './Row';
 export type PeerListProps = {
   peer: t.Peer;
   style?: t.CssValue;
-  onConnectRequest?: t.OnPeerConnectRequestHandler;
+  onConnectRequest?: t.PeerListConnectReqHandler;
+  onDisplayConnRequest?: t.PeerListDisplayConnReqHandler;
 };
 
 export const PeerList: React.FC<PeerListProps> = (props) => {
@@ -32,6 +33,7 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
           peerConnections={connections}
           style={styles.row}
           onConnectRequest={props.onConnectRequest}
+          onDisplayConnRequest={props.onDisplayConnRequest}
         />
       ))}
     </div>

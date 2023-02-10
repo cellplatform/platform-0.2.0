@@ -7,7 +7,8 @@ export type RowProps = {
   peerConnections: t.PeerConnectionsByPeer;
   debug?: boolean;
   style?: t.CssValue;
-  onConnectRequest?: t.OnPeerConnectRequestHandler;
+  onConnectRequest?: t.PeerListConnectReqHandler;
+  onDisplayConnRequest?: t.PeerListDisplayConnReqHandler;
 };
 
 export const Row: React.FC<RowProps> = (props) => {
@@ -43,6 +44,7 @@ export const Row: React.FC<RowProps> = (props) => {
           peerConnections={peerConnections}
           debug={debug}
           onConnectRequest={props.onConnectRequest}
+          onDisplayConnRequest={props.onDisplayConnRequest}
         />
         <ActionBar peerConnections={peerConnections} />
       </div>

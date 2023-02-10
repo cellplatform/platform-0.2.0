@@ -3,20 +3,18 @@ import { Color, COLORS, css, Dev, MediaStream, rx, slug, t, TEST, TextInput } fr
 import { PeerList } from './-dev/ui.PeerList';
 import { PeerVideo } from './-dev/ui.PeerVideo';
 
-type Id = string;
-
 type T = {
+  self?: t.Peer;
+  main: { media?: MediaStream };
   debug: {
-    remotePeer?: Id;
+    remotePeer?: t.PeerId;
     testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse };
     muted: boolean;
   };
-  self?: t.Peer;
-  connections: t.PeerConnection[];
 };
 const initial: T = {
-  connections: [],
   self: undefined,
+  main: {},
   debug: {
     remotePeer: '',
     muted: location.hostname === 'localhost',
@@ -24,53 +22,7 @@ const initial: T = {
   },
 };
 
-export default Dev.describe('WebRTC', (e) => {
-  const signal = TEST.signal;
-  let self: t.Peer;
-
-  const bus = rx.bus();
-  const media = MediaStream.Events(bus);
-  const streamRef = `sample.${slug()}`;
-
-  e.it('init:webrtc', async (e) => {
-    const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    const { getStream } = WebRTC.Media.singleton();
-
-    /**
-     * WebRTC (network)
-     */
-    self = await WebRTC.peer({ signal, getStream });
-    await state.change((d) => (d.self = self));
-    self.connections$.subscribe((e) => {
-      state.change((d) => {
-        d.connections = e.connections;
-        d.self = self;
-      });
-    });
-
-    /**
-     * Media (video/audio/screen)
-     */
-    MediaStream.Controller({ bus });
-  });
-
-  e.it('init:ui', async (e) => {
-    const ctx = Dev.ctx(e);
-
-    ctx.subject
-      .display('grid')
-      .backgroundColor(1)
-      .backgroundColor(1)
-      .size('fill')
-      .render<T>(async (e) => {
-        const { MonacoEditor } = await import('sys.ui.react.monaco');
-        const styles = {
-          base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
-          footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
-        };
-
-        const code = `
+const CODE = `
 /**
  * system.network.webrtc
  * 
@@ -86,11 +38,74 @@ export default Dev.describe('WebRTC', (e) => {
  */        
 `.substring(1);
 
+export default Dev.describe('WebRTC', (e) => {
+  const signal = TEST.signal;
+  let self: t.Peer;
+
+  const bus = rx.bus();
+  const media = MediaStream.Events(bus);
+  const streamRef = `sample.${slug()}`;
+
+  e.it('init:webrtc', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+    const { getStream } = WebRTC.Media.singleton();
+
+    /**
+     * WebRTC (network).
+     */
+    self = await WebRTC.peer({ signal, getStream });
+    await state.change((d) => (d.self = self));
+    self.connections$.subscribe((e) => {
+      state.change((d) => (d.self = self));
+    });
+
+    /**
+     * Media (video/audio/screen).
+     */
+    MediaStream.Controller({ bus });
+  });
+
+  e.it('init:ui', async (e) => {
+    const ctx = Dev.ctx(e);
+    ctx.subject
+      .display('grid')
+      .backgroundColor(1)
+      .backgroundColor(1)
+      .size('fill')
+      .render<T>(async (e) => {
+        const { MonacoEditor } = await import('sys.ui.react.monaco');
+        const styles = {
+          base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
+          main: css({ position: 'relative' }),
+          footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
+          media: css({
+            Absolute: 0,
+            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+          }),
+        };
+
+        const media = e.state.main.media;
+
+        const elRunner = !media && (
+          <Dev.TestRunner.Results
+            {...e.state.debug.testrunner}
+            padding={10}
+            scroll={true}
+            style={{ Absolute: 0 }}
+          />
+        );
+
+        const elMedia = media && <MediaStream.Video stream={media} style={styles.media} />;
+
         return (
           <div {...styles.base}>
-            <Dev.TestRunner.Results {...e.state.debug.testrunner} padding={10} scroll={true} />
+            <div {...styles.main}>
+              {elRunner}
+              {elMedia}
+            </div>
             <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} text={code} />
+              <MonacoEditor language={'typescript'} text={CODE} />
             </div>
           </div>
         );
@@ -109,7 +124,8 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const { self, connections } = e.state;
+      const { self } = e.state;
+      const connections = self?.connections;
       const data = { self, connections };
       return <Dev.Object name={'spec.WebRTC'} data={data} expand={1} />;
     });
@@ -137,7 +153,6 @@ export default Dev.describe('WebRTC', (e) => {
               const id = state.current.debug.remotePeer;
               connectData(id);
               connectCamera(id);
-              // await dev.change((d) => (d.debug.remotePeer = ''));
             }}
           />
         );
@@ -196,17 +211,15 @@ export default Dev.describe('WebRTC', (e) => {
               peer={self}
               style={styles.list}
               onConnectRequest={(ev) => {
-                /**
-                 * TODO 🐷 - ADD Connection
-                 */
-                console.log('e', e);
-                const remotePeer = state.current.debug.remotePeer;
-
-                /**
-                 * TODO 🐷 connect to requested "kind of" connection
-                 */
-                // connectScreenshare(remotePeer);
-                connectData(remotePeer);
+                const id = state.current.debug.remotePeer;
+                if (ev.kind === 'data') connectData(id);
+                if (ev.kind === 'media:camera') connectCamera(id);
+                if (ev.kind === 'media:screen') connectScreenshare(id);
+              }}
+              onDisplayConnRequest={(ev) => {
+                const conn = self.connections.media.find((item) => item.id === ev.connection);
+                const stream = conn?.stream.remote || conn?.stream.local;
+                state.change((d) => (d.main.media = stream));
               }}
             />
             <div {...styles.hrBottom} />
@@ -245,7 +258,10 @@ export default Dev.describe('WebRTC', (e) => {
 
     dev.section('Health Check', (dev) => {
       const invoke = async (module: t.SpecImport) => {
-        await dev.change((d) => (d.debug.testrunner.spinning = true));
+        await dev.change((d) => {
+          d.debug.testrunner.spinning = true;
+          d.main.media = undefined;
+        });
         const spec = (await module).default;
         const results = await spec.run();
         await dev.change((d) => {
