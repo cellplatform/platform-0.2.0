@@ -17,6 +17,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Button } from './ui/Button';
 export { Switch } from './ui/Button.Switch';
 export { PropList } from './ui/PropList';
+export { QRCode } from './ui/QRCode';
 export { IFrame } from './ui/IFrame';
 export { Text } from './ui/Text';
 export { TextInput } from './ui/Text.Input';
@@ -29,6 +30,7 @@ export { Keyboard } from './ui/Text.Keyboard';
  */
 export { useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';
+export { useMouseState } from './common';
 
 /**
  * Development

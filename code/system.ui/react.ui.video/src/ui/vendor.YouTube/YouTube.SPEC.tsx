@@ -1,5 +1,5 @@
 import { YouTube, YouTubeProps } from '.';
-import { css, Dev, TextInput } from '../../test.ui';
+import { Text, css, Dev, QRCode, TextInput } from '../../test.ui';
 
 const Wrangle = YouTube.Wrangle;
 
@@ -36,7 +36,7 @@ export default Dev.describe('YouTube', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={0} />);
 
     dev.boolean((btn) =>
       btn
@@ -104,5 +104,40 @@ export default Dev.describe('YouTube', (e) => {
 - [ ] Player JS API (play/pause/seek/status events)
 - [ ] Copy URL (at timestamp)    
     `);
+
+    dev.hr();
+
+    dev.section((dev) => {
+      dev.row((e) => {
+        const { id, start } = e.state.props;
+        const url = YouTube.Wrangle.toEmbedUrl({ id, start });
+
+        console.group('🌳 current (YouTube URL)');
+        console.log('id', id);
+        console.log('start', start);
+        console.log('url', url);
+        console.groupEnd();
+
+        const styles = {
+          base: css({
+            marginTop: 20,
+            display: 'grid',
+            placeItems: 'center',
+          }),
+          footer: css({
+            marginTop: 8,
+          }),
+        };
+
+        const elTimestamp = start && <Text.Syntax text={`start: ${start} secs`} />;
+
+        return (
+          <div {...styles.base}>
+            <QRCode value={url} size={180} />
+            <div {...styles.footer}>{elTimestamp}</div>
+          </div>
+        );
+      });
+    });
   });
 });

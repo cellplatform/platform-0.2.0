@@ -31,7 +31,7 @@ export default Dev.describe('QRCode', (e) => {
 
     dev.section('Size', (dev) => {
       const size = (value: number, suffix?: string) => {
-        const label = `${value}px ${suffix ?? ''}`.trim();
+        const label = `${value} px ${suffix ?? ''}`.trim();
         dev.button(label, (e) => e.change((d) => (d.props.size = value)));
       };
 
@@ -54,7 +54,7 @@ export default Dev.describe('QRCode', (e) => {
         );
       });
 
-      const value = (title: string, value: string) => {
+      const value = (title: string, value: string = title) => {
         dev.button(`value: ${title}`, async (e) => {
           dev.change((d) => (d.props.value = value));
         });
@@ -63,8 +63,9 @@ export default Dev.describe('QRCode', (e) => {
       dev.hr();
 
       value('(empty)', '');
-      value('YouTube: "baby elephant"', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
-      value('current url', window.location.href);
+      value('"Hello, World! 👋"', 'Hello, World! 👋');
+      value('YouTube: Baby Elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+      value('Current URL (location.href)', window.location.href);
     });
   });
 });
