@@ -8,6 +8,7 @@ export const Specs = {
   'sys.ui.common.Center': () => import('../ui/Center/Center.SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
   'sys.ui.common.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
+  'sys.ui.common.QRCode': () => import('../ui/QRCode/QRCode.SPEC'),
   'sys.ui.common.PropList': () => import('../ui/PropList/PropList.SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/Text.SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/TextInput.SPEC'),
