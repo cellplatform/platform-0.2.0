@@ -13,7 +13,8 @@ const _singletonBus = rx.bus();
 export const Media = {
   /**
    * Retrieve a singleton of the Media controller
-   * (optionally for the given bus, otherwise the default singleton bus is used)
+   * (optionally for the given bus, otherwise the
+   *  default singleton bus is used)
    */
   singleton(options: { bus?: t.EventBus<any> } = {}) {
     const bus = options.bus ?? _singletonBus;

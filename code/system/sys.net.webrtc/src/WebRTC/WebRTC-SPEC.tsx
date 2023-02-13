@@ -45,13 +45,13 @@ export default Dev.describe('WebRTC', (e) => {
   let self: t.Peer;
 
   const bus = rx.bus();
-  const media = MediaStream.Events(bus);
+  const media = WebRTC.Media.singleton({ bus });
   const streamRef = `sample.${slug()}`;
 
   e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const { getStream } = WebRTC.Media.singleton();
+    const { getStream } = media;
 
     await state.change((d) => {
       d.debug.muted = local.muted;
@@ -65,11 +65,6 @@ export default Dev.describe('WebRTC', (e) => {
     self.connections$.subscribe((e) => {
       state.change((d) => (d.self = self));
     });
-
-    /**
-     * Media (video/audio/screen).
-     */
-    MediaStream.Controller({ bus });
   });
 
   e.it('init:ui', async (e) => {
@@ -267,7 +262,7 @@ export default Dev.describe('WebRTC', (e) => {
             // .enabled((e) => Boolean(e.state.connections.length > 0))
             .onClick(async (e) => {
               self.connections.all.forEach((conn) => conn.dispose());
-              await media.stop(streamRef).fire();
+              await media.events.stop(streamRef).fire();
             }),
         );
         dev.hr();
