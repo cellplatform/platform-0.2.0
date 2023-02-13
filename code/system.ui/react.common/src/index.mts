@@ -17,7 +17,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Button } from './ui/Button';
 export { Switch } from './ui/Button.Switch';
 export { PropList } from './ui/PropList';
-export { QRCode } from './ui/QRCode';
+// export { QRCode } from './ui/QRCode';
 export { IFrame } from './ui/IFrame';
 export { Text } from './ui/Text';
 export { TextInput } from './ui/Text.Input';
