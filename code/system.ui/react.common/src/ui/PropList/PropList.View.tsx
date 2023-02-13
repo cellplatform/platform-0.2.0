@@ -1,13 +1,14 @@
 import { COLORS, css, DEFAULTS, Style, t } from './common';
 
-import { PropListItem, PropListTitle } from './ui.Item';
+import { PropListItem } from './ui.Item/Item';
+import { PropListTitle } from './ui.Item/Title';
 import { Util } from './Util.mjs';
 
 /**
  * Component
  */
 export const PropList: React.FC<t.PropListProps> = (props) => {
-  const { title, theme = DEFAULTS.theme } = props;
+  const { title, theme = DEFAULTS.theme, titleEllipsis } = props;
   const items = Util.asItems(props.items);
   const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
   const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
@@ -54,12 +55,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     });
 
   const elTitle = title && (
-    <PropListTitle
-      style={styles.title}
-      theme={theme}
-      ellipsis={props.titleEllipsis}
-      defaults={defaults}
-    >
+    <PropListTitle style={styles.title} theme={theme} ellipsis={titleEllipsis} defaults={defaults}>
       {title}
     </PropListTitle>
   );

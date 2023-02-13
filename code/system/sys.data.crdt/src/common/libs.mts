@@ -1,11 +1,1 @@
-/**
- * @vendor
- */
-import Automerge from 'automerge';
-export { Automerge };
-
-/**
- * @system
- */
-export { rx, slug, cuid, Time, Hash, Delete } from 'sys.util';
-export { Path } from 'sys.fs';
+export { rx } from 'sys.util';

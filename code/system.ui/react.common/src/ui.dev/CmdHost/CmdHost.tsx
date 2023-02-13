@@ -1,5 +1,7 @@
+import { Dev } from '../Dev.mjs';
+
 import { useEffect, useRef, useState } from 'react';
-import { Keyboard, Color, COLORS, css, t, rx, Dev } from './common';
+import { Keyboard, Color, COLORS, css, t, rx } from './common';
 import { CmdBar } from './ui.CmdBar';
 
 export type CmdHostProps = {

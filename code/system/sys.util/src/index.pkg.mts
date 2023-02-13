@@ -19,7 +19,7 @@ export const Pkg: ModuleDef = {
     'nanoid': '4.0.1',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

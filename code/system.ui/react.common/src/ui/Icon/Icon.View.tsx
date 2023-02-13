@@ -7,7 +7,6 @@ export type IconComponent = React.FC<IconProps>;
 export type IconViewProps = t.IconProps & {
   type: IconComponent;
   tabIndex?: number;
-  isGreyscale?: boolean;
 };
 
 export const IconView: React.FC<IconViewProps> = (props) => {
@@ -19,8 +18,7 @@ export const IconView: React.FC<IconViewProps> = (props) => {
       display: 'inline-block',
       overflow: 'hidden',
       opacity: opacity === undefined ? 1 : opacity,
-      width: size,
-      height: size,
+      Size: size,
     }),
   };
 
@@ -43,12 +41,6 @@ export const IconView: React.FC<IconViewProps> = (props) => {
 /**
  * Helpers
  */
-
 function formatColor(props: IconViewProps) {
-  const { color = -0.4, isGreyscale } = props;
-  let result = Color.format(color);
-  if (isGreyscale) {
-    result = Color.create(result).greyscale().toHexString();
-  }
-  return result;
+  return props.color ? Color.format(props.color) : undefined;
 }

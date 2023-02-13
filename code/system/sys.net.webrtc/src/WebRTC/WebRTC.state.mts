@@ -8,23 +8,13 @@ import { Util } from './util.mjs';
  */
 export function MemoryState() {
   const memory = { connections: [] as t.PeerConnection[] };
-  const connections$ = new rx.Subject<t.PeerConnectionChange>();
+  const connections$ = new rx.Subject<t.PeerConnectionChanged>();
 
   const api = {
-    connections: {
-      $: connections$.asObservable(),
-      get all() {
-        return [...memory.connections];
-      },
-      get data() {
-        return Util.filterOnDataConnection(memory.connections);
-      },
-      get media() {
-        return Util.filterOnMediaConnection(memory.connections);
-      },
-    },
+    connections$: connections$.asObservable(),
+    connections: Util.connections.toSet(() => [...memory.connections]),
 
-    fireChanged<P extends t.PeerConnectionChange>(action: P['action'], subject: P['subject']) {
+    fireChanged<P extends t.PeerConnectionChanged>(action: P['action'], subject: P['subject']) {
       const kind = subject.kind;
       const connections = memory.connections;
       connections$.next({ kind, action, connections, subject } as P);

@@ -19,7 +19,7 @@ export const Pkg: ModuleDef = {
     'sys.util.node': '0.0.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

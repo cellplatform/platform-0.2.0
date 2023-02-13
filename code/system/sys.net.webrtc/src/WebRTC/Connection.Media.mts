@@ -1,5 +1,4 @@
 import { rx, t } from './common';
-import { Util } from './util.mjs';
 
 /**
  * Represents a P2P media connection (video/screenshare).
@@ -9,6 +8,10 @@ export function PeerMediaConnection(
   stream: t.PeerMediaStreams,
 ): t.PeerMediaConnection {
   const { dispose, dispose$ } = rx.disposable();
+  const metadata: t.PeerMetaMedia = conn.metadata;
+  if (!metadata) {
+    throw new Error(`The media connection did not expose metadata`);
+  }
 
   let _disposed = false;
   dispose$.subscribe(() => {
@@ -19,21 +22,22 @@ export function PeerMediaConnection(
   conn.on('close', dispose);
 
   const api: t.PeerMediaConnection = {
-    kind: 'media',
     id: conn.connectionId,
+    kind: 'media',
+    metadata,
     stream,
     peer: {
       local: (conn.provider as any)._id as string,
       remote: conn.peer,
     },
 
-    get open() {
+    get isOpen() {
       return conn.open;
     },
 
     dispose,
     dispose$,
-    get disposed() {
+    get isDisposed() {
       return _disposed;
     },
   };

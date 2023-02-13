@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.120',
+  version: '0.0.133',
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
@@ -26,7 +26,7 @@ export const Pkg: ModuleDef = {
     'vendor.stripe': '0.0.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

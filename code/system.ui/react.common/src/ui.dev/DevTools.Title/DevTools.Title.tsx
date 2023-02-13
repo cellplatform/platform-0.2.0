@@ -1,4 +1,5 @@
-import { Dev, t } from '../common';
+import { t } from '../common';
+import { Dev } from '../Dev.mjs';
 import { Title } from './ui.Title';
 
 type O = Record<string, unknown>;

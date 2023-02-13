@@ -5,15 +5,17 @@ import { Specs as VideoSpecs } from 'sys.ui.react.video';
 import { Specs as WebRtcSpecs } from 'sys.net.webrtc';
 import { Specs as FsIndexedDbSpecs } from 'sys.fs.indexeddb';
 import { Specs as VendorStripe } from 'vendor.stripe';
+import { Specs as CrdtSpecs } from 'sys.data.crdt';
 
 export const Specs = {
   Root: () => import('../ui/Root/Root.SPEC'),
+  ...WebRtcSpecs,
+  ...CrdtSpecs,
   ...CommonSpecs,
   ...ComonDevSpecs,
   ...DevSpecs,
   ...MonacoSpecs,
   ...VideoSpecs,
-  ...WebRtcSpecs,
   ...FsIndexedDbSpecs,
   ...VendorStripe,
 };

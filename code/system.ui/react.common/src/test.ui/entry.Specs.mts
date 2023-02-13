@@ -8,8 +8,10 @@ export const Specs = {
   'sys.ui.common.Center': () => import('../ui/Center/Center.SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/RenderCount.SPEC'),
   'sys.ui.common.ObjectView': () => import('../ui/ObjectView/ObjectView.SPEC'),
+  'sys.ui.common.QRCode': () => import('../ui/QRCode/QRCode.SPEC'),
   'sys.ui.common.PropList': () => import('../ui/PropList/PropList.SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/Text.SPEC'),
+  'sys.ui.common.Text.Font': () => import('../ui/Text.Font/Font.SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/TextInput.SPEC'),
   'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/Keyboard.SPEC'),
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/TextSecret.SPEC'),
@@ -30,4 +32,7 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/DevTools.Todo.SPEC'),
 };
 
-export default { ...Specs, ...DevSpecs };
+export const All = {
+  ...Specs,
+  ...DevSpecs,
+};

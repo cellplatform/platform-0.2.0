@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
-    "monaco-editor": "^0.34.1",
+    "monaco-editor": "^0.35.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "symbol-observable": "^4.0.0",
@@ -34,8 +34,8 @@
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-7a271e5c.js",
-    "./web": "./dist/web/lib/index-7a271e5c.js"
+    ".": "./dist/web/lib/index-365be312.js",
+    "./web": "./dist/web/lib/index-365be312.js"
   },
   "typesVersions": {
     "*": {

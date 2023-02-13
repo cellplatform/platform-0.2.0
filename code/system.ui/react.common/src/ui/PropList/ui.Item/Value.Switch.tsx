@@ -1,5 +1,5 @@
 import { t } from '../common';
-import { Switch } from './Value.common';
+import { Switch } from '../../Button.Switch';
 
 export type SwitchValueProps = {
   value: t.PropListValue;

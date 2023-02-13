@@ -12,6 +12,8 @@ export {
   TextSyntax,
   Button,
   Spinner,
+  useSizeObserver,
+  useMouseState,
 } from 'sys.ui.react.common';
 
 export { expect, expectError } from 'sys.test';

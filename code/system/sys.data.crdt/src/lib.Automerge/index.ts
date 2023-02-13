@@ -1,1 +1,1 @@
-export * from './AutomergeDoc.mjs';
+export {};

@@ -4,8 +4,7 @@ import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 import { Specs } from './entry.Specs.mjs';
 
-const url = new URL(location.href);
-const params = url.searchParams;
+const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
 
 const BADGE_CI = {

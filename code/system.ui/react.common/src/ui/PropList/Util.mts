@@ -1,10 +1,10 @@
 import { t } from './common';
 import { format } from './Util.format.mjs';
-import { theme } from './Util.theme.mjs';
+import { toTheme } from './Util.theme.mjs';
 
 export const Util = {
   format,
-  theme,
+  theme: toTheme,
 
   asItems(input: t.PropListProps['items']) {
     if (Array.isArray(input)) {

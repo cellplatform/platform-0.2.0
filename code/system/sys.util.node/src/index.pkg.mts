@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     'picocolors': '1.0.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

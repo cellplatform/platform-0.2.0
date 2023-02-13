@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

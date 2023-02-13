@@ -1,4 +1,4 @@
-import { css, DEFAULTS, t, Util } from './common';
+import { css, DEFAULTS, t, toTheme } from './common';
 import { PropListLabel } from './Label';
 import { PropListValue } from './Value';
 
@@ -13,7 +13,7 @@ export type PropListItemProps = {
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const { data, isFirst, isLast, defaults } = props;
-  const theme = Util.theme(props.theme);
+  const theme = toTheme(props.theme);
   const hasValue = Boolean(data.label);
 
   /**

@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.common',
   version: '0.0.0',
   dependencies: {
+    'qrcode.react': '3.1.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.text': '0.0.0',
@@ -26,7 +27,7 @@ export const Pkg: ModuleDef = {
     'react-inspector': '6.0.1',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

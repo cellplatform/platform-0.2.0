@@ -7,6 +7,7 @@ import { Util } from './util.mjs';
 export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection {
   const { dispose, dispose$ } = rx.disposable();
   const in$ = new rx.Subject<t.PeerDataPayload>();
+  const metadata: t.PeerMetaData = conn.metadata || { name: 'Unnamed' };
 
   let _disposed = false;
   dispose$.subscribe(() => {
@@ -21,15 +22,16 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
   });
 
   const api: t.PeerDataConnection = {
-    kind: 'data',
     id: conn.connectionId,
+    kind: 'data',
+    metadata,
     in$: in$.pipe(rx.takeUntil(dispose$)),
     peer: {
       local: (conn.provider as any)._id as string,
       remote: conn.peer,
     },
 
-    get open() {
+    get isOpen() {
       return conn.open;
     },
 
@@ -46,7 +48,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
 
     dispose,
     dispose$,
-    get disposed() {
+    get isDisposed() {
       return _disposed;
     },
   };

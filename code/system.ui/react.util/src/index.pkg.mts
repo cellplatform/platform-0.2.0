@@ -18,7 +18,7 @@ export const Pkg: ModuleDef = {
     'react': '18.2.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

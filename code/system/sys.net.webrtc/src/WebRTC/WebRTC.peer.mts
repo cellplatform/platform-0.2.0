@@ -1,4 +1,4 @@
-import { Path, PeerJS, rx, t, R } from './common';
+import { Path, PeerJS, rx, t } from './common';
 import { Util } from './util.mjs';
 import { MemoryState } from './WebRTC.state.mjs';
 
@@ -15,7 +15,7 @@ export function peer(args: {
   return new Promise<t.Peer>((resolve, reject) => {
     const { getStream } = args;
     const state = MemoryState();
-    const id = Util.cleanId(args.id ?? Util.randomPeerId());
+    const id = Util.asId(args.id ?? Util.randomPeerId());
     const signal = Path.trimHttpPrefix(args.signal);
     const rtc = new PeerJS(id, {
       key: 'conn',
@@ -30,7 +30,7 @@ export function peer(args: {
     let _disposed = false;
     dispose$.subscribe(() => {
       rtc.destroy();
-      api.connections.forEach((conn) => conn.dispose());
+      api.connections.all.forEach((conn) => conn.dispose());
       _disposed = true;
     });
 
@@ -39,40 +39,23 @@ export function peer(args: {
       signal,
       id,
 
-      connections$: state.connections.$,
+      connections$: state.connections$,
       get connections() {
-        return state.connections.all;
-      },
-      get dataConnections() {
-        return state.connections.data;
-      },
-      get mediaConnections() {
-        return state.connections.media;
+        return state.connections;
       },
       get connectionsByPeer() {
-        const byPeer = R.groupBy((item) => item.peer.remote, api.connections);
-        return Object.entries(byPeer).map(([peer, all]) => {
-          const item: t.PeerConnectionSet = {
-            peer,
-            all,
-            get data() {
-              return Util.filterOnDataConnection(all);
-            },
-            get media() {
-              return Util.filterOnMediaConnection(all);
-            },
-          };
-          return item;
-        });
+        return Util.connections.byPeer(state.connections.all);
       },
 
       /**
        * Start a data connection.
        */
-      data(connectTo) {
+      data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
-          const id = Util.cleanId(connectTo);
-          const conn = rtc.connect(id, { reliable: true });
+          const id = Util.asId(connectTo);
+          const name = options.name ?? 'Unnamed';
+          const metadata: t.PeerMetaData = { name };
+          const conn = rtc.connect(id, { reliable: true, metadata });
           conn.on('error', (err) => reject(err));
           conn.on('open', async () => resolve(await state.storeData(conn)));
         });
@@ -81,15 +64,23 @@ export function peer(args: {
       /**
        * Start a media connection (video/audio/screen).
        */
-      media(connectTo) {
+      media(connectTo, input) {
         return new Promise<t.PeerMediaConnection>(async (resolve, reject) => {
           if (!getStream) {
             const err = Error(`Media connections require a "getStream" function to be provided.`);
             return reject(err);
           }
 
-          const id = Util.cleanId(connectTo);
-          const stream = await getStream();
+          const done = (res: t.PeerMediaConnection) => {
+            res.dispose$
+              .pipe(rx.filter(() => api.connections.media.length === 0))
+              .subscribe(() => stream.done());
+            resolve(res);
+          };
+
+          const id = Util.asId(connectTo);
+          const metadata: t.PeerMetaMedia = { input };
+          const stream = await getStream(input);
           const local = stream?.media;
 
           if (!local) {
@@ -97,17 +88,22 @@ export function peer(args: {
             return reject(err);
           }
 
-          const conn = rtc.call(id, local);
+          const conn = rtc.call(id, local, { metadata });
           conn.on('error', (err) => reject(err));
-          conn.on('stream', async (remote) => {
-            const res = await state.storeMedia(conn, { local, remote });
 
-            res.dispose$
-              .pipe(rx.filter(() => api.mediaConnections.length === 0))
-              .subscribe(() => stream.done());
+          if (input === 'camera') {
+            // Listen for the remote-peer response returning it's camera stream (2-way).
+            conn.on('stream', async (remote) => {
+              const res = await state.storeMedia(conn, { local, remote });
+              done(res);
+            });
+          }
 
-            resolve(res);
-          });
+          if (input === 'screen') {
+            // NB: No remote stream is returned for screen sharing.
+            const res = await state.storeMedia(conn, { local });
+            done(res);
+          }
         });
       },
 
@@ -126,14 +122,27 @@ export function peer(args: {
      */
     rtc.on('connection', (conn) => conn.on('open', () => state.storeData(conn)));
     rtc.on('call', async (conn) => {
-      const stream = await getStream?.();
-      if (!stream?.media) {
-        console.warn(`[WebRTC] No local media-stream available. Incoming call rejected.`);
-      } else {
-        const local = stream.media;
-        conn.on('stream', (remote) => state.storeMedia(conn, { local, remote }));
-        conn.answer(local);
+      const metadata: t.PeerMetaMedia = conn.metadata;
+      const input = metadata?.input;
+      let local: MediaStream | undefined;
+
+      if (!input) {
+        console.warn(`[WebRTC] No meta-data on incoming connection. Call rejected.`);
+        return;
       }
+
+      if (input === 'camera') {
+        const stream = await getStream?.('camera');
+        local = stream?.media;
+        if (!local) {
+          const msg = `[WebRTC] No local media-stream of kind "${input}" available. Incoming call rejected.`;
+          console.warn(msg);
+          return;
+        }
+      }
+
+      conn.on('stream', (remote) => state.storeMedia(conn, { local, remote }));
+      conn.answer(local);
     });
   });
 }

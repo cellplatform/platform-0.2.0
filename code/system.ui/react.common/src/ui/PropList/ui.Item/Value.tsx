@@ -4,7 +4,7 @@ import { css, t, Time, useMouseState } from '../common';
 
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
-import { Util } from './Value.common';
+import { format } from '../Util.format.mjs';
 
 export type PropListValueProps = {
   item: t.PropListItem;
@@ -16,23 +16,23 @@ export type PropListValueProps = {
 };
 
 export const PropListValue: React.FC<PropListValueProps> = (props) => {
-  const item = Util.format(props.item);
+  const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
 
   const mouse = useMouseState();
-  const [message, setMessage] = useState<React.ReactNode>();
+  const [message, setMessage] = useState<JSX.Element | string>();
 
   const cursor = item.value.onClick ? 'pointer' : undefined;
 
-  const showMessage = (message: React.ReactNode, delay?: number) => {
+  const showMessage = (message: JSX.Element | string, delay?: number) => {
     setMessage(message);
     Time.delay(delay ?? 1500, () => setMessage(undefined));
   };
 
   const handleClick = async () => {
     const { clipboard, value } = item;
-    let message: React.ReactNode;
+    let message: JSX.Element | string | undefined;
     let delay: number | undefined;
 
     value.onClick?.({

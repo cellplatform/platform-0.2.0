@@ -1,5 +1,5 @@
 import { YouTube, YouTubeProps } from '.';
-import { css, Dev, TextInput } from '../../test.ui';
+import { Text, css, Dev, QRCode, TextInput } from '../../test.ui';
 
 const Wrangle = YouTube.Wrangle;
 
@@ -36,7 +36,7 @@ export default Dev.describe('YouTube', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'info'} data={e.state} expand={0} />);
 
     dev.boolean((btn) =>
       btn
@@ -62,38 +62,82 @@ export default Dev.describe('YouTube', (e) => {
       });
     };
 
-    loadUrl('"cell" at `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+    loadUrl('"cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
     loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+    loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
 
     dev.hr();
 
-    dev.title('Paste Address');
-    dev.row((e) => {
-      const styles = {
-        base: css({}),
-      };
+    dev.section('Paste Address', (dev) => {
+      dev.row((e) => {
+        const styles = {
+          base: css({}),
+        };
 
-      const processUrl = async () => {
-        const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
-        if (id) {
-          await dev.change((d) => {
-            d.props.id = id;
-            d.props.start = start;
-          });
-        }
-      };
+        const processUrl = async () => {
+          const { id, start } = YouTube.Wrangle.fromUrl(e.state.debug.url);
+          if (id) {
+            await dev.change((d) => {
+              d.props.id = id;
+              d.props.start = start;
+            });
+          }
+        };
 
-      return (
-        <div {...styles.base}>
-          <TextInput
-            value={e.state.debug.url}
-            placeholder={'YouTube (URL)'}
-            placeholderStyle={{ opacity: 0.3, italic: true }}
-            onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
-            onEnter={processUrl}
-          />
-        </div>
-      );
+        return (
+          <div {...styles.base}>
+            <TextInput
+              value={e.state.debug.url}
+              placeholder={'YouTube URL'}
+              placeholderStyle={{ opacity: 0.3, italic: true }}
+              onChanged={(e) => dev.change((d) => (d.debug.url = e.to))}
+              onEnter={processUrl}
+            />
+          </div>
+        );
+      });
+    });
+
+    dev.hr();
+
+    dev.TODO(`
+- [ ] Player JS API (play/pause/seek/status events)
+- [ ] Copy URL (at timestamp)    
+    `);
+
+    dev.hr();
+
+    dev.section((dev) => {
+      dev.row((e) => {
+        const { id, start } = e.state.props;
+        const url = YouTube.Wrangle.toEmbedUrl({ id, start });
+
+        console.group('🌳 current (YouTube URL)');
+        console.log('id', id);
+        console.log('start', start);
+        console.log('url', url);
+        console.groupEnd();
+
+        const styles = {
+          base: css({
+            marginTop: 20,
+            display: 'grid',
+            placeItems: 'center',
+          }),
+          footer: css({
+            marginTop: 8,
+          }),
+        };
+
+        const elTimestamp = start && <Text.Syntax text={`start: ${start} secs`} />;
+
+        return (
+          <div {...styles.base}>
+            <QRCode value={url} size={180} />
+            <div {...styles.footer}>{elTimestamp}</div>
+          </div>
+        );
+      });
     });
   });
 });

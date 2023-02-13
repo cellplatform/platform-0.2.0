@@ -1,6 +1,6 @@
 import { Util } from './util.mjs';
 import { peer } from './WebRTC.peer.mjs';
-import { Media } from './Media.mjs';
+import { Media } from '../WebRTC.Media';
 
 /**
  * Library for working with WebRTC peer-to-peer connections.
