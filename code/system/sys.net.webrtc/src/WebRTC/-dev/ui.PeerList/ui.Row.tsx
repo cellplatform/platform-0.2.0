@@ -31,11 +31,12 @@ export const Row: React.FC<RowProps> = (props) => {
   /**
    * [Render]
    */
+  const thumbnailSize = 50;
   const styles = {
     base: css({ position: 'relative', cursor: 'default' }),
     body: css({
       display: 'grid',
-      gridTemplateColumns: '45px 10px 1fr 10px 45px 30px',
+      gridTemplateColumns: `${thumbnailSize}px 10px 1fr 10px ${thumbnailSize}px 30px`,
     }),
   };
 
@@ -46,6 +47,7 @@ export const Row: React.FC<RowProps> = (props) => {
           peer={localPeer}
           stream={localStream}
           proximity={'local'}
+          size={thumbnailSize}
           onClick={printDebug}
         />
         <div />
@@ -60,6 +62,7 @@ export const Row: React.FC<RowProps> = (props) => {
           peer={remotePeer}
           stream={remoteStream}
           proximity={'remote'}
+          size={thumbnailSize}
           onClick={printDebug}
         />
         <ActionBar peerConnections={connections} />

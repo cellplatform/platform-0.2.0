@@ -151,7 +151,6 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     dev.section((dev) => {
-      dev.hr();
       dev.row((e) => {
         return (
           <TextInput

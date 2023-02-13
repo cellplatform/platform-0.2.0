@@ -5,24 +5,25 @@ import { PeerId } from '../ui.PeerId';
 export type RowThumbnailProps = {
   peer: t.PeerId;
   stream?: MediaStream;
+  size?: number;
   proximity: t.PeerProximity;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
-  const { stream, proximity } = props;
+  const { stream, proximity, size = 50 } = props;
 
   const [ready, setReady] = useState(false);
 
   /**
    * [Render]
    */
-  const thumbnailSize = 50;
+  // const thumbnailSize = 50;
   const styles = {
     base: css({
       position: 'relative',
-      Size: thumbnailSize,
+      Size: size,
     }),
     bg: css({
       Absolute: 0,
@@ -47,8 +48,8 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
       style={styles.video}
       stream={stream}
       muted={true}
-      width={thumbnailSize}
-      height={thumbnailSize}
+      width={size}
+      height={size}
       borderRadius={3}
       onLoadedData={() => setReady(true)}
     />
