@@ -11,6 +11,7 @@ export const Specs = {
   'sys.ui.common.QRCode': () => import('../ui/QRCode/QRCode.SPEC'),
   'sys.ui.common.PropList': () => import('../ui/PropList/PropList.SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/Text.SPEC'),
+  'sys.ui.common.Text.Font': () => import('../ui/Text.Font/Font.SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/TextInput.SPEC'),
   'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/Keyboard.SPEC'),
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/TextSecret.SPEC'),
