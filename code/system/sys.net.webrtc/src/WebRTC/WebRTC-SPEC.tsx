@@ -123,7 +123,20 @@ export default Dev.describe('WebRTC', (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        return <PeerVideo self={self} mediaHeight={250} muted={e.state.debug.muted} />;
+        return (
+          <PeerVideo
+            self={self}
+            mediaHeight={250}
+            muted={e.state.debug.muted}
+            onMuteClick={() => {
+              state.change((d) => {
+                const next = !d.debug.muted;
+                d.debug.muted = next;
+                local.muted = next;
+              });
+            }}
+          />
+        );
       });
 
     dev.footer.border(-0.1).render<T>((e) => {
@@ -136,19 +149,6 @@ export default Dev.describe('WebRTC', (e) => {
       };
       return <Dev.Object name={'WebRTC'} data={data} expand={1} />;
     });
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `${e.state.debug.muted ? 'muted' : 'unmuted'}`)
-        .value((e) => e.state.debug.muted)
-        .onClick((e) =>
-          e.change((d) => {
-            const muted = !d.debug.muted;
-            local.muted = muted;
-            d.debug.muted = muted;
-          }),
-        ),
-    );
 
     dev.section((dev) => {
       dev.hr();

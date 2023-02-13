@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Icons } from '../common';
+import { Color, COLORS, css, t, rx, Icons, Button } from '../common';
 
 export type MediaControlsProps = {
   self: t.Peer;
   muted?: boolean;
   style?: t.CssValue;
+  onMuteClick?(e: React.MouseEvent): void;
 };
 
 export const MediaControls: React.FC<MediaControlsProps> = (props) => {
@@ -23,14 +24,16 @@ export const MediaControls: React.FC<MediaControlsProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
     }),
-    icon: css({}),
+    btn: css({ display: 'grid', placeItems: 'center' }),
   };
 
   const Icon = muted ? Icons.Mic.Off : Icons.Mic.On;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Icon style={styles.icon} />
+      <Button onClick={props.onMuteClick} style={styles.btn}>
+        <Icon />
+      </Button>
     </div>
   );
 };

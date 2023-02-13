@@ -7,6 +7,7 @@ export type PeerVideoProps = {
   mediaHeight?: number;
   muted?: boolean;
   style?: t.CssValue;
+  onMuteClick?(e: React.MouseEvent): void;
 };
 
 export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
@@ -68,7 +69,12 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
       <div {...styles.video.base}>
         {elBG}
         {elVideo}
-        <MediaControls style={styles.controls} self={self} muted={muted} />
+        <MediaControls
+          style={styles.controls}
+          self={self}
+          muted={muted}
+          onMuteClick={props.onMuteClick}
+        />
       </div>
       <div {...styles.peer}>
         <PeerId peer={self.id} />
