@@ -65,6 +65,8 @@ export default Dev.describe('WebRTC', (e) => {
     self.connections$.subscribe((e) => {
       state.change((d) => (d.self = self));
     });
+
+    // media.events.status(media.ref.)
   });
 
   e.it('init:ui', async (e) => {
