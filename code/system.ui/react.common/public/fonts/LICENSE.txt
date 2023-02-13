@@ -1,0 +1,16 @@
+https://google-webfonts-helper.herokuapp.com
+
+SIL Open Font License, 1.1
+https://scripts.sil.org/OFL
+https://fonts.google.com/attribution
+
+
+Merriweather
+  Merriweather-Light.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-LightItalic.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-Regular.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-Italic.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-Bold.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-BoldItalic.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-Black.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
+  Merriweather-BlackItalic.ttf: Copyright 2016 The Merriweather Project Authors (https://github.com/EbenSorkin/Merriweather), with Reserved Font Name "Merriweather".
