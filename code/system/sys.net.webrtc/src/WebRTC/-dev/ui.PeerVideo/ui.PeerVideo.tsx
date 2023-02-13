@@ -1,4 +1,6 @@
-import { Button, Color, COLORS, css, Icons, MediaStream, t, TextSyntax, WebRTC } from '../common';
+import { Color, COLORS, css, Icons, MediaStream, t, useMouseState } from '../common';
+import { PeerId } from '../ui.PeerId';
+import { MediaControls } from './ui.MediaControls';
 
 export type PeerVideoProps = {
   self: t.Peer;
@@ -9,19 +11,16 @@ export type PeerVideoProps = {
 
 export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   const { self, mediaHeight = 250, muted = false } = props;
-  const peerUri = WebRTC.Util.asUri(self.id);
 
   // TEMP 🐷
-  const camera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
-
-  // TEMP 🐷
+  const cameraConnection = self.connections.media.find((conn) => conn.metadata.input === 'camera');
   const PROFILE =
     'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png';
 
   /**
-   * [Handlers]
+   * [Hooks]
    */
-  const copyPeer = () => navigator.clipboard.writeText(peerUri);
+  const mouse = useMouseState();
 
   /**
    * [Render]
@@ -45,26 +44,35 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
         placeItems: 'center',
       }),
     },
+
     peer: css({ display: 'grid', justifyContent: 'center', padding: 5 }),
+    controls: css({
+      Absolute: [10, 10, null, null],
+      opacity: mouse.isOver || muted ? 1 : 0,
+      transition: 'all 250ms ease',
+    }),
   };
 
-  const elPeer = (
-    <Button onClick={copyPeer}>
-      <TextSyntax text={peerUri} monospace={true} fontWeight={'bold'} fontSize={13} />
-    </Button>
+  const elBG = (
+    <div {...styles.video.bg}>
+      <Icons.Face.Caller size={80} opacity={0.2} />
+    </div>
+  );
+
+  const elVideo = cameraConnection && (
+    <MediaStream.Video stream={cameraConnection.stream.remote} muted={muted} height={mediaHeight} />
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} {...mouse.handlers}>
       <div {...styles.video.base}>
-        <div {...styles.video.bg}>
-          <Icons.Face.Caller size={80} opacity={0.2} />
-        </div>
-        {camera && (
-          <MediaStream.Video stream={camera.stream.remote} muted={muted} height={mediaHeight} />
-        )}
+        {elBG}
+        {elVideo}
+        <MediaControls style={styles.controls} self={self} muted={muted} />
       </div>
-      <div {...styles.peer}>{elPeer}</div>
+      <div {...styles.peer}>
+        <PeerId peer={self.id} />
+      </div>
     </div>
   );
 };

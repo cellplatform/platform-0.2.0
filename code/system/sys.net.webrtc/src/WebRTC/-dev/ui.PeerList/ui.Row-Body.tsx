@@ -35,10 +35,6 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
       marginRight: 8,
       ':last-child': { marginRight: 0 },
     }),
-    peerid: css({
-      Absolute: [null, null, -11, 0],
-      fontSize: 7,
-    }),
   };
 
   const elWaveform = video && size.ready && (
@@ -52,8 +48,6 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
     />
   );
 
-  const elPeerId = debug && <div {...styles.peerid}>{peerUri}</div>;
-
   return (
     <div ref={size.ref} {...css(styles.base, props.style)}>
       <div {...styles.body}>
@@ -65,7 +59,6 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
         />
       </div>
       {elWaveform}
-      {elPeerId}
     </div>
   );
 };

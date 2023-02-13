@@ -4,6 +4,8 @@ import {
   MdOutlineViewInAr,
   MdSupportAgent,
   MdConnectedTv,
+  MdMic,
+  MdMicOff,
 } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
@@ -18,4 +20,5 @@ export const Icons = {
   Cube: icon(MdOutlineViewInAr),
   Face: { Caller: icon(MdSupportAgent) },
   Screenshare: icon(MdConnectedTv),
+  Mic: { On: icon(MdMic), Off: icon(MdMicOff) },
 };

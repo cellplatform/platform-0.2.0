@@ -35,10 +35,12 @@ const CODE = `
  * Concepts: 
  *  - Distributed EventBus
  *  - Stream types: Data/Media
- */        
+ */
 `.substring(1);
 
 export default Dev.describe('WebRTC', (e) => {
+  type LocalStore = { muted: boolean };
+  const local = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc').object({ muted: true });
   const signal = TEST.signal;
   let self: t.Peer;
 
@@ -50,6 +52,10 @@ export default Dev.describe('WebRTC', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     const { getStream } = WebRTC.Media.singleton();
+
+    await state.change((d) => {
+      d.debug.muted = local.muted;
+    });
 
     /**
      * WebRTC (network).
@@ -79,10 +85,7 @@ export default Dev.describe('WebRTC', (e) => {
           base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
           main: css({ position: 'relative' }),
           footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
-          media: css({
-            Absolute: 0,
-            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-          }),
+          media: css({ Absolute: 0 }),
         };
 
         const media = e.state.main.media;
@@ -126,15 +129,25 @@ export default Dev.describe('WebRTC', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const { self } = e.state;
       const connections = self?.connections;
-      const data = { self, connections };
-      return <Dev.Object name={'spec.WebRTC'} data={data} expand={1} />;
+      const media = { TODO: true }; // TODO 🐷
+      const data = {
+        Peer: { self, connections },
+        MediaStream__TODO__: media,
+      };
+      return <Dev.Object name={'WebRTC'} data={data} expand={1} />;
     });
 
     dev.boolean((btn) =>
       btn
         .label((e) => `${e.state.debug.muted ? 'muted' : 'unmuted'}`)
         .value((e) => e.state.debug.muted)
-        .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'muted'))),
+        .onClick((e) =>
+          e.change((d) => {
+            const muted = !d.debug.muted;
+            local.muted = muted;
+            d.debug.muted = muted;
+          }),
+        ),
     );
 
     dev.section((dev) => {
@@ -170,13 +183,15 @@ export default Dev.describe('WebRTC', (e) => {
       };
 
       const connectData = async (remote: t.PeerId = '') => {
-        const res = await self.data(remote);
-        console.log('⚡️ peer.data (response):', res);
+        const conn = await self.data(remote);
+        console.log('⚡️ peer.data (response):', conn);
+        return conn;
       };
 
       const connectCamera = async (remote: t.PeerId = '') => {
-        const res = await self.media(remote, 'camera');
-        console.log('⚡️ peer.media:camera (response):', res);
+        const conn = await self.media(remote, 'camera');
+        console.log('⚡️ peer.media:camera (response):', conn);
+        return conn;
       };
 
       const connectScreenshare = async (remote: t.PeerId = '') => {
@@ -184,8 +199,9 @@ export default Dev.describe('WebRTC', (e) => {
          * TODO 🐷 - connect screen share
          * - [ ] recieve event notification from Peer display list (UI)
          */
-        const res = await self.media(remote, 'screen');
-        console.log('⚡️ peer.media:screen (response):', res);
+        const conn = await self.media(remote, 'screen');
+        console.log('⚡️ peer.media:screen (response):', conn);
+        return conn;
       };
 
       dev.row((e) => {
@@ -205,21 +221,29 @@ export default Dev.describe('WebRTC', (e) => {
           }),
         };
 
+        const showConnection = (id: t.PeerConnectionId) => {
+          const conn = self.connections.media.find((item) => item.id === id);
+          const stream = conn?.stream.remote || conn?.stream.local;
+          state.change((d) => (d.main.media = stream));
+        };
+
         return (
           <div {...styles.base}>
             <PeerList
-              peer={self}
+              self={self}
               style={styles.list}
-              onConnectRequest={(ev) => {
-                const id = state.current.debug.remotePeer;
-                if (ev.kind === 'data') connectData(id);
-                if (ev.kind === 'media:camera') connectCamera(id);
-                if (ev.kind === 'media:screen') connectScreenshare(id);
+              onConnectRequest={async (ev) => {
+                const peerid = state.current.debug.remotePeer;
+                if (ev.kind === 'data') await connectData(peerid);
+                if (ev.kind === 'media:camera') await connectCamera(peerid);
+                if (ev.kind === 'media:screen') {
+                  const conn = await connectScreenshare(peerid);
+                  console.log('conn', conn);
+                  showConnection(conn.id);
+                }
               }}
               onDisplayConnRequest={(ev) => {
-                const conn = self.connections.media.find((item) => item.id === ev.connection);
-                const stream = conn?.stream.remote || conn?.stream.local;
-                state.change((d) => (d.main.media = stream));
+                showConnection(ev.connection);
               }}
             />
             <div {...styles.hrBottom} />

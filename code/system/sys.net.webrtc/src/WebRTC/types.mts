@@ -4,8 +4,12 @@ type Id = string;
 type Hostname = string;
 type Semver = string;
 
-export type PeerId = string;
 export type PeerModule = { name: string; version: Semver };
+
+export type PeerId = string;
+export type PeerUri = string;
+export type PeerConnectionId = string;
+export type PeerProximity = 'local' | 'remote';
 
 export type PeerMediaStreamInput = 'camera' | 'screen';
 export type PeerGetMediaStream = (input: PeerMediaStreamInput) => Promise<PeerGetMediaStreamRes>;

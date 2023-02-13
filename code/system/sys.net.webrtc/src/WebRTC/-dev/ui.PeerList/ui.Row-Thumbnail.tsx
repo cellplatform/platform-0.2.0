@@ -1,23 +1,24 @@
 import { useState } from 'react';
 import { css, MediaStream, Spinner, t } from '../common';
+import { PeerId } from '../ui.PeerId';
 
 export type RowThumbnailProps = {
-  peerConnections: t.PeerConnectionsByPeer;
+  peer: t.PeerId;
+  stream?: MediaStream;
+  proximity: t.PeerProximity;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
-  const { peerConnections } = props;
+  const { stream, proximity } = props;
 
   const [ready, setReady] = useState(false);
-  const media = peerConnections.media.find((item) => item.stream)?.stream;
-  const video = media?.remote;
 
   /**
    * [Render]
    */
-  const thumbnailSize = 40;
+  const thumbnailSize = 50;
   const styles = {
     base: css({
       position: 'relative',
@@ -30,6 +31,9 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
       pointerEvents: 'none',
     }),
     video: css({}),
+    peerId: css({
+      Absolute: proximity === 'local' ? [null, null, -15, 0] : [null, 0, -15, null],
+    }),
   };
 
   const elBackground = !ready && (
@@ -38,10 +42,10 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
     </div>
   );
 
-  const elVideo = video && (
+  const elVideo = stream && (
     <MediaStream.Video
       style={styles.video}
-      stream={video}
+      stream={stream}
       muted={true}
       width={thumbnailSize}
       height={thumbnailSize}
@@ -50,10 +54,13 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
     />
   );
 
+  const elPeerId = <PeerId peer={props.peer} fontSize={8} abbreviate={4} style={styles.peerId} />;
+
   return (
-    <div {...css(styles.base, props.style)} onClick={props.onClick}>
+    <div {...css(styles.base, props.style)} title={props.proximity} onClick={props.onClick}>
       {elBackground}
       {elVideo}
+      {elPeerId}
     </div>
   );
 };

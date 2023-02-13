@@ -2,16 +2,15 @@ import { css, t } from '../common';
 import { Row } from './ui.Row';
 
 export type PeerListProps = {
-  peer: t.Peer;
+  self: t.Peer;
   style?: t.CssValue;
   onConnectRequest?: t.PeerListConnectReqHandler;
   onDisplayConnRequest?: t.PeerListDisplayConnReqHandler;
 };
 
 export const PeerList: React.FC<PeerListProps> = (props) => {
-  const { peer } = props;
-  const peerConnections = peer.connectionsByPeer;
-
+  const { self } = props;
+  const peerConnections = self.connectionsByPeer;
   if (peerConnections.length === 0) return null;
 
   /**
@@ -30,7 +29,8 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
       {peerConnections.map((connections) => (
         <Row
           key={connections.peer}
-          peerConnections={connections}
+          self={self.id}
+          connections={connections}
           style={styles.row}
           onConnectRequest={props.onConnectRequest}
           onDisplayConnRequest={props.onDisplayConnRequest}
