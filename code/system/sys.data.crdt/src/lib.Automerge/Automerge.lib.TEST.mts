@@ -251,5 +251,78 @@ export default Dev.describe('Automerge (lib)', (e) => {
         });
       });
     });
+
+    e.describe.only('merging (multi-document)', (e) => {
+      /**
+       * Based on sample in README
+       * https://github.com/automerge/automerge
+       */
+      e.it('simple merge', () => {
+        /**
+         * Initial document: "doc1"
+         */
+        let doc1 = createTestDoc();
+        doc1 = Automerge.change<Doc>(doc1, 'Add card', (doc) => {
+          doc.cards.push({ title: 'hello-1a', done: false, count: 0 });
+        });
+        doc1 = Automerge.change<Doc>(doc1, 'Add another card', (doc) => {
+          doc.cards.push({ title: 'hello-2a', done: false, count: 0 });
+        });
+
+        expect(doc1).to.eql({
+          cards: [
+            { title: 'hello-1a', done: false, count: 0 },
+            { title: 'hello-2a', done: false, count: 0 },
+          ],
+        });
+
+        /**
+         * Second document: "doc2"
+         */
+        let doc2 = Automerge.init<Doc>();
+        doc2 = Automerge.merge(doc2, doc1);
+        expect(doc2).to.eql(doc1); // NB: Newly minted document bought up-to-date with the prior document.
+
+        /**
+         * Make competing changes.
+         */
+        doc1 = Automerge.change<Doc>(doc1, 'Mark card as complete', (doc) => {
+          doc.cards[0].done = true;
+        });
+        doc2 = Automerge.change<Doc>(doc2, 'Delete card', (doc) => {
+          delete doc.cards[1];
+        });
+
+        expect(doc1.cards[0].done).to.eql(true);
+        expect(doc2.cards[0].done).to.eql(false);
+
+        expect(doc1.cards.length).to.eql(2);
+        expect(doc2.cards.length).to.eql(1);
+
+        // NB: Cloning not necessary, only because we are testing both ways
+        //     and the document throw an error if merged twice with/from the same input.
+        const merged = {
+          a: Automerge.merge(Automerge.clone(doc1), Automerge.clone(doc2)),
+          b: Automerge.merge(Automerge.clone(doc2), Automerge.clone(doc1)),
+        };
+        expect(merged.a).to.eql(merged.b);
+
+        /**
+         * Examine history.
+         */
+        const history = Automerge.getHistory(merged.a);
+        expect(history.length).to.eql(5);
+
+        const summary = history.map((state) => [state.change.message, state.snapshot.cards.length]);
+
+        expect(summary).to.eql([
+          [null, 0],
+          ['Add card', 1],
+          ['Add another card', 2],
+          ['Mark card as complete', 2],
+          ['Delete card', 1],
+        ]);
+      });
+    });
   });
 });
