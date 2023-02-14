@@ -1,6 +1,8 @@
 import { WebRTC } from '.';
 import { TEST, cuid, Dev, expect, rx, t, Time } from '../test.ui';
 
+import * as Automerge from '@automerge/automerge';
+
 export default Dev.describe('WebRTC', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
@@ -63,7 +65,7 @@ export default Dev.describe('WebRTC', (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
-    e.it('initialize: create peers A ⇔ B', async (e) => {
+    e.it('init: create peers A ⇔ B', async (e) => {
       const [a, b] = await peers(2);
       peerA = a;
       peerB = b;
@@ -214,7 +216,7 @@ export default Dev.describe('WebRTC', (e) => {
     const Media = WebRTC.Media.singleton();
     const getMediaStatus = async () => Media.events.status(Media.ref.camera).get();
 
-    e.it('initialize: create peers A ⇔ B', async (e) => {
+    e.it('init: create peers A ⇔ B', async (e) => {
       const [a, b] = await peers(2, Media.getStream);
       peerA = a;
       peerB = b;
@@ -276,6 +278,111 @@ export default Dev.describe('WebRTC', (e) => {
       peerB.dispose();
       expect(peerA.disposed).to.eql(true);
       expect(peerB.disposed).to.eql(true);
+    });
+  });
+
+  e.describe('CRDT (sync protocol)', async (e) => {
+    type Card = { title: string; done: boolean; count: number };
+    type Doc = {
+      name?: string;
+      cards: Card[]; // NB: An [Array] type with extension methods (eg. insertAt)
+      json?: any;
+    };
+
+    let peerA: t.Peer;
+    let peerB: t.Peer;
+    let connA: t.PeerDataConnection;
+    let connB: t.PeerDataConnection;
+
+    function createTestDoc() {
+      const doc = Automerge.init<Doc>();
+      return Automerge.change(doc, (doc) => {
+        doc.cards = [] as unknown as Automerge.List<Card>;
+      });
+    }
+
+    e.it('init: create peers A ⇔ B and start data connection', async (e) => {
+      const [a, b] = await peers(2);
+      peerA = a;
+      peerB = b;
+
+      connA = await peerA.data(peerB.id);
+      await Time.wait(300);
+      connB = peerB.connections.data[0];
+
+      expect(connA.peer.remote).to.eql(peerB.id);
+      expect(connB.peer.remote).to.eql(peerA.id);
+    });
+
+    e.it('change → sync', async (e) => {
+      let docA = createTestDoc();
+      let docB = createTestDoc();
+
+      type CrdtSyncEvent = { type: 'sys.crdt/sync'; payload: CrdtSync };
+      type CrdtSync = { message: Uint8Array };
+
+      function PeerSyncer<D>(
+        conn: t.PeerDataConnection,
+        getDoc: () => D,
+        setDoc: (doc: D) => void,
+      ) {
+        const { initSyncState, generateSyncMessage, receiveSyncMessage } = Automerge;
+        const { dispose, dispose$ } = rx.disposable();
+        let _syncState = initSyncState();
+
+        /**
+         * TODO 🐷
+         * - [ ] encode/decode sync-state between session.
+         * - [ ] throw errors.
+         */
+
+        conn.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+          const message = new Uint8Array(e.event.payload.message);
+          const res = receiveSyncMessage<D>(getDoc(), _syncState, message);
+          const [nextDoc, nextSyncState, patch] = res;
+
+          _syncState = nextSyncState;
+          setDoc(nextDoc);
+          api.update(); // <== Recursion (via network) 🌳
+        });
+
+        const api = {
+          dispose,
+          update() {
+            const [nextSyncState, message] = generateSyncMessage<D>(getDoc(), _syncState);
+            _syncState = nextSyncState;
+            if (message) {
+              conn.send<CrdtSyncEvent>({ type: 'sys.crdt/sync', payload: { message } });
+            }
+            return Boolean(message);
+          },
+        };
+
+        return api;
+      }
+
+      const syncerA = PeerSyncer(
+        connA,
+        () => docA,
+        (d) => (docA = d),
+      );
+      const syncerB = PeerSyncer(
+        connB,
+        () => docB,
+        (d) => (docB = d),
+      );
+
+      docA = Automerge.change(docA, 'hello-a', (doc) => (doc.name = 'Foo'));
+      docB = Automerge.change(docB, 'hello-b', (doc) => (doc.name = 'Bar'));
+      syncerA.update();
+
+      await Time.wait(2000);
+
+      expect(docA.name).to.eql('Bar');
+      expect(docB.name).to.eql('Bar');
+
+      peerA.dispose();
+      peerB.dispose();
     });
   });
 });
