@@ -1,5 +1,5 @@
 import { YouTube, YouTubeProps } from '.';
-import { Text, css, Dev, QRCode, TextInput } from '../../test.ui';
+import { Text, css, Dev, TextInput } from '../../test.ui';
 
 const Wrangle = YouTube.Wrangle;
 
@@ -107,37 +107,37 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.hr();
 
-    dev.section((dev) => {
-      dev.row((e) => {
-        const { id, start } = e.state.props;
-        const url = YouTube.Wrangle.toEmbedUrl({ id, start });
-
-        console.group('🌳 current (YouTube URL)');
-        console.log('id', id);
-        console.log('start', start);
-        console.log('url', url);
-        console.groupEnd();
-
-        const styles = {
-          base: css({
-            marginTop: 20,
-            display: 'grid',
-            placeItems: 'center',
-          }),
-          footer: css({
-            marginTop: 8,
-          }),
-        };
-
-        const elTimestamp = start && <Text.Syntax text={`start: ${start} secs`} />;
-
-        return (
-          <div {...styles.base}>
-            <QRCode value={url} size={180} />
-            <div {...styles.footer}>{elTimestamp}</div>
-          </div>
-        );
-      });
-    });
+    //     dev.section((dev) => {
+    //       dev.row((e) => {
+    //         const { id, start } = e.state.props;
+    //         const url = YouTube.Wrangle.toEmbedUrl({ id, start });
+    //
+    //         console.group('🌳 current (YouTube URL)');
+    //         console.log('id', id);
+    //         console.log('start', start);
+    //         console.log('url', url);
+    //         console.groupEnd();
+    //
+    //         const styles = {
+    //           base: css({
+    //             marginTop: 20,
+    //             display: 'grid',
+    //             placeItems: 'center',
+    //           }),
+    //           footer: css({
+    //             marginTop: 8,
+    //           }),
+    //         };
+    //
+    //         const elTimestamp = start && <Text.Syntax text={`start: ${start} secs`} />;
+    //
+    //         return (
+    //           <div {...styles.base}>
+    //             <QRCode value={url} size={180} />
+    //             <div {...styles.footer}>{elTimestamp}</div>
+    //           </div>
+    //         );
+    //       });
+    //     });
   });
 });
