@@ -1,0 +1,103 @@
+import { Dev, expect, TestFilesystem } from '../../test.ui';
+import { Automerge } from '..';
+
+export default Dev.describe('Automerge (lib): filesystem', (e) => {
+  type Card = { title: string; done: boolean; count: number };
+  type Doc = {
+    name?: string;
+    cards: Automerge.List<Card>; // NB: An [Array] type with extension methods (eg. insertAt)
+    json?: any;
+  };
+
+  const DEFAULT = {
+    get doc(): Doc {
+      const cards = [] as unknown as Automerge.List<Card>;
+      return { cards };
+    },
+
+    get card(): Card {
+      return { title: 'hello', done: false, count: 0 };
+    },
+  };
+
+  function createTestDoc() {
+    const doc = Automerge.init<Doc>();
+    return Automerge.change(doc, (doc) => {
+      doc.cards = [] as unknown as Automerge.List<Card>;
+    });
+  }
+
+  e.describe('filesystem (Uint8Array)', (e) => {
+    async function getSampleDoc() {
+      const doc = createTestDoc();
+      return Automerge.change<Doc>(doc, 'Add card', (doc) => {
+        doc.cards.push(DEFAULT.card);
+      });
+    }
+
+    e.it('save binary', async () => {
+      const { fs } = TestFilesystem.memory();
+      const path = 'myfile.crdt';
+      const doc = await getSampleDoc();
+
+      const binary = Automerge.save(doc);
+      expect(binary instanceof Uint8Array).to.eql(true);
+
+      expect(await fs.exists(path)).to.eql(false);
+      await fs.write(path, binary);
+      expect(await fs.exists(path)).to.eql(true);
+    });
+
+    e.it('load from saved binary', async () => {
+      const { fs } = TestFilesystem.memory();
+      const path = 'myfile.crdt';
+      const doc1 = await getSampleDoc();
+
+      const STATE = { cards: [DEFAULT.card] };
+      expect(doc1).to.eql(STATE);
+
+      await fs.write(path, Automerge.save(doc1));
+      const binary = (await fs.read(path))!;
+
+      const doc2 = Automerge.load(binary);
+      expect(doc2).to.eql(STATE);
+
+      const { getActorId } = Automerge;
+      expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
+    });
+
+    e.it('getLastLocalChange (saving a log of changes)', async () => {
+      const { fs } = TestFilesystem.memory();
+
+      const saveChange = async (doc: Doc, path: string) => {
+        const binary = Automerge.getLastLocalChange(doc);
+        await fs.write(path, binary);
+      };
+
+      const A1 = await getSampleDoc();
+      const B1a = Automerge.merge(Automerge.init<Doc>(), A1);
+      const B1b = Automerge.merge(Automerge.init<Doc>(), A1);
+
+      await saveChange(A1, 'crdt/1');
+
+      const A2 = Automerge.change<Doc>(A1, (doc) => {
+        doc.cards[0].count++;
+        doc.cards[0].title = 'foo';
+      });
+
+      await saveChange(A2, 'crdt/2');
+
+      const file1 = (await fs.read('crdt/1'))!;
+      const file2 = (await fs.read('crdt/2'))!;
+
+      const [C1a] = Automerge.applyChanges(B1a, [file1, file2]);
+      const [C1b] = Automerge.applyChanges(B1b, [file2, file1]); // NB: Different order.
+
+      expect(C1a.cards[0].count).to.eql(1);
+      expect(C1a.cards[0].title).to.eql('foo');
+
+      expect(C1b.cards[0].count).to.eql(1);
+      expect(C1b.cards[0].title).to.eql('foo');
+    });
+  });
+});
