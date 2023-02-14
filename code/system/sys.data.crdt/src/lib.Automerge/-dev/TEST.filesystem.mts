@@ -36,7 +36,7 @@ export default Dev.describe('Automerge (lib): filesystem', (e) => {
     }
 
     e.it('save binary', async () => {
-      const { fs } = TestFilesystem.memory();
+      const { fs, dispose } = TestFilesystem.memory();
       const path = 'myfile.crdt';
       const doc = await getSampleDoc();
 
@@ -46,10 +46,12 @@ export default Dev.describe('Automerge (lib): filesystem', (e) => {
       expect(await fs.exists(path)).to.eql(false);
       await fs.write(path, binary);
       expect(await fs.exists(path)).to.eql(true);
+
+      dispose();
     });
 
     e.it('load from saved binary', async () => {
-      const { fs } = TestFilesystem.memory();
+      const { fs, dispose } = TestFilesystem.memory();
       const path = 'myfile.crdt';
       const doc1 = await getSampleDoc();
 
@@ -64,10 +66,12 @@ export default Dev.describe('Automerge (lib): filesystem', (e) => {
 
       const { getActorId } = Automerge;
       expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
+
+      dispose();
     });
 
     e.it('getLastLocalChange (saving a log of changes)', async () => {
-      const { fs } = TestFilesystem.memory();
+      const { fs, dispose } = TestFilesystem.memory();
 
       const saveChange = async (doc: Doc, path: string) => {
         const binary = Automerge.getLastLocalChange(doc);
@@ -98,6 +102,8 @@ export default Dev.describe('Automerge (lib): filesystem', (e) => {
 
       expect(C1b.cards[0].count).to.eql(1);
       expect(C1b.cards[0].title).to.eql('foo');
+
+      dispose();
     });
   });
 });

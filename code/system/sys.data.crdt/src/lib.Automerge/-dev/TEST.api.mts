@@ -1,4 +1,4 @@
-import { Dev, expect, TestFilesystem } from '../../test.ui';
+import { Dev, expect } from '../../test.ui';
 import { Automerge } from '..';
 
 export default Dev.describe('Automerge (lib): API', (e) => {
