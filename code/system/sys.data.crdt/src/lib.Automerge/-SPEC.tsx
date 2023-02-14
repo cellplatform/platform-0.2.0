@@ -31,9 +31,8 @@ export default Dev.describe('Root', (e) => {
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
     dev.section('Tests', async (dev) => {
-      const invoke = async (module: t.SpecImport) => {
+      const invoke = async (spec: t.TestSuiteModel) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
-        const spec = (await module).default;
         const results = await spec.run();
         await dev.change((d) => {
           d.debug.testrunner.data = results;
@@ -44,15 +43,22 @@ export default Dev.describe('Root', (e) => {
       const button = async (input: t.SpecImport) => {
         const module = await input;
         const spec = await (module.default as t.TestSuiteModel).init();
-        dev.button(spec.description, (e) => invoke(input));
+        dev.button(spec.description, (e) => invoke(spec));
+        return spec;
       };
 
-      await button(import('./-dev/TEST.basic.mjs'));
-      await button(import('./-dev/TEST.api.mjs'));
-      await button(import('./-dev/TEST.filesystem.mjs'));
-      await button(import('./-dev/TEST.sync.mjs'));
+      const tests = [
+        await button(import('./-dev/TEST.basic.mjs')),
+        await button(import('./-dev/TEST.api.mjs')),
+        await button(import('./-dev/TEST.filesystem.mjs')),
+        await button(import('./-dev/TEST.sync.mjs')),
+      ];
 
       dev.hr();
+
+      const root = Dev.describe('All Suites');
+      root.merge(...tests);
+      dev.button('Run all', (e) => invoke(root));
     });
   });
 });
