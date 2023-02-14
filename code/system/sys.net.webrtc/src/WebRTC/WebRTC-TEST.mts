@@ -343,7 +343,7 @@ export default Dev.describe('WebRTC', (e) => {
 
           _syncState = nextSyncState;
           setDoc(nextDoc);
-          api.update(); // <== Recursion (via network) 🌳
+          api.update(); // <== 🌳 recursion (via network).
         });
 
         const api = {
