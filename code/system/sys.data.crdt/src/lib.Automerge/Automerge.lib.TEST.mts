@@ -1,4 +1,4 @@
-import { Dev, expect } from '../test.ui';
+import { Dev, expect, TestFilesystem } from '../test.ui';
 import { Automerge } from './lib.mjs';
 
 export default Dev.describe('Automerge (lib)', (e) => {
@@ -252,7 +252,7 @@ export default Dev.describe('Automerge (lib)', (e) => {
       });
     });
 
-    e.describe.only('merging (multi-document)', (e) => {
+    e.describe('multi-document merge', (e) => {
       /**
        * Based on sample in README
        * https://github.com/automerge/automerge
@@ -322,6 +322,102 @@ export default Dev.describe('Automerge (lib)', (e) => {
           ['Mark card as complete', 2],
           ['Delete card', 1],
         ]);
+      });
+    });
+
+    e.describe('filesystem (Uint8Array)', (e) => {
+      async function getSampleDoc() {
+        const doc = createTestDoc();
+        return Automerge.change<Doc>(doc, 'Add card', (doc) => {
+          doc.cards.push(DEFAULT.card);
+        });
+      }
+
+      e.it('save binary', async () => {
+        const { fs } = TestFilesystem.memory();
+        const path = 'myfile.crdt';
+        const doc = await getSampleDoc();
+
+        const binary = Automerge.save(doc);
+        expect(binary instanceof Uint8Array).to.eql(true);
+
+        expect(await fs.exists(path)).to.eql(false);
+        await fs.write(path, binary);
+        expect(await fs.exists(path)).to.eql(true);
+      });
+
+      e.it('load from saved binary', async () => {
+        const { fs } = TestFilesystem.memory();
+        const path = 'myfile.crdt';
+        const doc1 = await getSampleDoc();
+
+        const STATE = { cards: [DEFAULT.card] };
+        expect(doc1).to.eql(STATE);
+
+        await fs.write(path, Automerge.save(doc1));
+
+        const binary = (await fs.read(path)) as Automerge.BinaryDocument;
+
+        const doc2 = Automerge.load(binary);
+        expect(doc2).to.eql(STATE);
+
+        const { getActorId } = Automerge;
+        expect(getActorId(doc1)).to.not.eql(getActorId(doc2));
+      });
+
+      e.it('getLastLocalChange (saving a log of changes)', async () => {
+        const { fs } = TestFilesystem.memory();
+
+        const saveChange = async (doc: Doc, path: string) => {
+          const binary = Automerge.getLastLocalChange(doc);
+          await fs.write(path, binary);
+        };
+
+        const A1 = await getSampleDoc();
+        const B1a = Automerge.merge(Automerge.init<Doc>(), A1);
+        const B1b = Automerge.merge(Automerge.init<Doc>(), A1);
+
+        await saveChange(A1, 'crdt/1');
+
+        const A2 = Automerge.change<Doc>(A1, (doc) => {
+          doc.cards[0].count++;
+          doc.cards[0].title = 'foo';
+        });
+
+        await saveChange(A2, 'crdt/2');
+
+        const file1 = (await fs.read('crdt/1')) as Automerge.BinaryChange;
+        const file2 = (await fs.read('crdt/2')) as Automerge.BinaryChange;
+
+        const [C1a] = Automerge.applyChanges(B1a, [file1, file2]);
+        const [C1b] = Automerge.applyChanges(B1b, [file2, file1]); // NB: Different order.
+
+        expect(C1a.cards[0].count).to.eql(1);
+        expect(C1a.cards[0].title).to.eql('foo');
+
+        expect(C1b.cards[0].count).to.eql(1);
+        expect(C1b.cards[0].title).to.eql('foo');
+      });
+    });
+
+    /**
+     * https://github.com/automerge/automerge/blob/main/SYNC.md
+     */
+    e.describe('sync: changes interface', (e) => {
+      e.it('getChanges → applyChanges', () => {
+        const A1 = createTestDoc();
+        const B1 = Automerge.merge(Automerge.init<Doc>(), A1);
+
+        // Make some changes to doc-A.
+        const A2a = Automerge.change<Doc>(A1, (doc) => (doc.name = 'foo'));
+        const A2b = Automerge.change<Doc>(A2a, (doc) => (doc.name = 'foobar'));
+
+        const changes = Automerge.getChanges(A1, A2b);
+        expect(changes.length).to.eql(2);
+
+        // Apply changes to doc-B
+        const [C1] = Automerge.applyChanges(B1, changes);
+        expect(C1.name).to.eql('foobar');
       });
     });
   });
