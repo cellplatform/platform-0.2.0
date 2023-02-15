@@ -35,7 +35,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
     };
 
-    run('Health Check', import('./spec.HealthCheck.mjs'));
+    run('Integrity Checks', import('./spec.ItegrityChecks.mjs'));
     run('Complete Functional Specification', import('./spec.Functional.mjs'));
 
     dev.hr();
