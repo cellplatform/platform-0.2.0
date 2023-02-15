@@ -11,8 +11,6 @@ export default Dev.describe('Todo', (e) => {
     const dev = Dev.tools(e);
     dev
       //
-      .title('TODO (Placeholder)')
-      .hr()
       .TODO()
       .TODO('Do this single-line thing')
       .TODO(`**Long** single-line \`thing\`. ${Dev.Lorem.toString()}`).TODO(`
@@ -26,5 +24,10 @@ export default Dev.describe('Todo', (e) => {
     `);
 
     dev.TODO((todo) => todo.style({ color: 'blue' }).text('hello blue (via function)'));
+
+    dev.TODO(`
+- [ ] Item 1
+- [ ] Item 2        
+    `);
   });
 });
