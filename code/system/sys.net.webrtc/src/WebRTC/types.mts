@@ -55,7 +55,7 @@ type Connection = t.Disposable & {
 export type PeerDataConnection = Connection & {
   readonly kind: 'data';
   readonly metadata: t.PeerMetaData;
-  readonly in$: t.Observable<t.PeerDataPayload>;
+  readonly $: t.Observable<t.PeerDataPayload>;
   send<E extends t.Event>(event: E): PeerDataPayload;
 };
 

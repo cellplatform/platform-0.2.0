@@ -25,7 +25,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
     id: conn.connectionId,
     kind: 'data',
     metadata,
-    in$: in$.pipe(rx.takeUntil(dispose$)),
+    $: in$.pipe(rx.takeUntil(dispose$)),
     peer: {
       local: (conn.provider as any)._id as string,
       remote: conn.peer,
