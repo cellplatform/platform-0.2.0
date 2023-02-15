@@ -130,7 +130,8 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.TODO(`
 - [ ] Player JS API (play/pause/seek/status events)
-- [ ] Copy URL (at timestamp)    
+- [ ] Copy URL (at timestamp)
+- [ ] LocalStorage - last URL
     `);
 
     dev.hr();
