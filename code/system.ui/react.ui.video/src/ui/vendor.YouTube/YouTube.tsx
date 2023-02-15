@@ -8,8 +8,8 @@ type Seconds = number;
 export type YouTubeProps = {
   id?: string;
   start?: Seconds;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   allowFullScreen?: boolean;
   style?: t.CssValue;
 };

@@ -3,9 +3,13 @@ import { Text, css, Dev, TextInput } from '../../test.ui';
 
 const Wrangle = YouTube.Wrangle;
 
+const DEFAULT = {
+  pixelSize: { width: 550, height: 315 },
+};
+
 type T = { props: YouTubeProps; debug: { url?: string } };
 const initial: T = {
-  props: { width: 550, height: 315 },
+  props: { width: '100%', height: '100%' },
   debug: {},
 };
 
@@ -27,8 +31,8 @@ export default Dev.describe('YouTube', (e) => {
     }
 
     ctx.subject
-      //
       .display('grid')
+      .size('fill')
       .render<T>((e) => <YouTube {...e.state.props} />);
   });
 
@@ -50,21 +54,45 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.hr();
 
-    dev.title('Load');
+    dev.section('Size', (dev) => {
+      const size = DEFAULT.pixelSize;
 
-    const loadUrl = (title: string, url: string) => {
-      dev.button(`load: ${title}`, async (e) => {
-        const { id, start } = Wrangle.fromUrl(url);
-        dev.change((d) => {
-          d.props.id = id;
-          d.props.start = start;
+      dev.button(`${size.width} x ${size.height} pixels`, (e) => {
+        dev.ctx.subject.size(null);
+        e.change((d) => {
+          d.props.width = size.width;
+          d.props.height = size.height;
         });
       });
-    };
 
-    loadUrl('"cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
-    loadUrl('baby elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
-    loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
+      dev.button(`Fit Screen (100%)`, (e) => {
+        dev.ctx.subject.size('fill');
+        e.change((d) => {
+          d.props.width = '100%';
+          d.props.height = '100%';
+        });
+      });
+    });
+
+    dev.hr();
+
+    dev.section('Load', (dev) => {
+      const loadUrl = (title: string, url: string) => {
+        dev.button(`load: ${title}`, async (e) => {
+          const { id, start } = Wrangle.fromUrl(url);
+          dev.change((d) => {
+            d.props.id = id;
+            d.props.start = start;
+          });
+        });
+      };
+
+      loadUrl('"Cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+      loadUrl('"Cell - Impossible Machines"', 'https://www.youtube.com/watch?v=TYPFenJQciw');
+      loadUrl('"Optimistic Nihilism"', 'https://www.youtube.com/watch?v=MBRqu0YOH14');
+      loadUrl('Baby Elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+      loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
+    });
 
     dev.hr();
 
@@ -131,7 +159,7 @@ export default Dev.describe('YouTube', (e) => {
           }),
         };
 
-        const elTimestamp = start && <Text.Syntax text={`start: ${start} secs`} />;
+        const elTimestamp = start && <Text.Syntax text={`start at: ${start} secs`} />;
 
         return (
           <div {...styles.base}>
