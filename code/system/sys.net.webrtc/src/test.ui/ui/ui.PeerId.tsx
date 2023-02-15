@@ -1,4 +1,4 @@
-import { Button, t, TextSyntax, Util } from './common';
+import { Button, t, TextSyntax, WebRTC } from './common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;
@@ -16,7 +16,7 @@ export const PeerId: React.FC<PeerIdProps> = (props) => {
    * [Handlers]
    */
   const copyPeer = () => {
-    const text = Util.asUri(props.peer);
+    const text = WebRTC.Util.asUri(props.peer);
     navigator.clipboard.writeText(text);
     props.onCopy?.(text);
   };
@@ -34,15 +34,15 @@ export const PeerId: React.FC<PeerIdProps> = (props) => {
 const Wrangle = {
   uri(props: PeerIdProps) {
     const { abbreviate } = props;
-    const id = Util.asId(props.peer);
+    const id = WebRTC.Util.asId(props.peer);
 
-    if (!abbreviate && typeof abbreviate !== 'number') return Util.asUri(id);
+    if (!abbreviate && typeof abbreviate !== 'number') return WebRTC.Util.asUri(id);
 
     const length = abbreviate === true ? 5 : abbreviate;
 
     const prefix = id.slice(0, length);
     const suffix = id.slice(-length);
 
-    return Util.asUri(`${prefix}..${suffix}`);
+    return WebRTC.Util.asUri(`${prefix}..${suffix}`);
   },
 };

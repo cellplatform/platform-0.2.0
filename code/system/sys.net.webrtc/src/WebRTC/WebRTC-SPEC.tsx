@@ -1,7 +1,18 @@
 import { WebRTC } from '.';
-import { Color, COLORS, css, Dev, MediaStream, rx, slug, t, TEST, TextInput } from '../test.ui';
-import { PeerList } from './-dev/ui.PeerList';
-import { PeerVideo } from './-dev/ui.PeerVideo';
+import {
+  Color,
+  COLORS,
+  css,
+  Dev,
+  MediaStream,
+  rx,
+  slug,
+  t,
+  TEST,
+  TextInput,
+  PeerList,
+  PeerVideo,
+} from '../test.ui';
 
 type T = {
   self?: t.Peer;

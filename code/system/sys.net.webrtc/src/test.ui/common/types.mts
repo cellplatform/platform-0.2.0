@@ -9,3 +9,4 @@ export type { TestSuiteRunResponse, SpecImport, SpecImports } from 'sys.test.spe
  * @local
  */
 export * from '../../common/types.mjs';
+export * from '../ui/types.mjs';
