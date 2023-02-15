@@ -76,8 +76,6 @@ export default Dev.describe('WebRTC', (e) => {
     self.connections$.subscribe((e) => {
       state.change((d) => (d.self = self));
     });
-
-    // media.events.status(media.ref.)
   });
 
   e.it('init:ui', async (e) => {
@@ -301,8 +299,9 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('test WebRTC', (e) => invoke(import('./WebRTC-TEST.mjs')));
-      dev.button('test MediaStream', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
+      dev.button('run: WebRTC tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
+      dev.button('run: MediaStream tests', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
+      dev.button('run: PeerSync tests', (e) => invoke(import('../Crdt/PeerSyncer.TEST.mjs')));
     });
 
     dev.hr();
