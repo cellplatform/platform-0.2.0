@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Icons, Button } from '../common';
+import { Button, Color, css, Icons, t } from '../common';
 
 export type MediaControlsProps = {
   self: t.Peer;
@@ -15,24 +14,26 @@ export const MediaControls: React.FC<MediaControlsProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
+    base: css({ position: 'relative' }),
+    btn: css({
       backgroundColor: Color.format(0.6),
       backdropFilter: 'blur(10px)',
       Padding: [5, 15],
       borderRadius: 5,
+
       display: 'grid',
       placeItems: 'center',
     }),
-    btn: css({ display: 'grid', placeItems: 'center' }),
   };
 
   const Icon = muted ? Icons.Mic.Off : Icons.Mic.On;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={props.onMuteClick} style={styles.btn}>
-        <Icon />
+      <Button onClick={props.onMuteClick}>
+        <div {...styles.btn}>
+          <Icon />
+        </div>
       </Button>
     </div>
   );
