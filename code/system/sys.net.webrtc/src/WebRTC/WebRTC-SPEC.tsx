@@ -63,11 +63,9 @@ export default Dev.describe('WebRTC', (e) => {
   e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const { getStream } = media;
+    await state.change((d) => (d.debug.muted = local.muted));
 
-    await state.change((d) => {
-      d.debug.muted = local.muted;
-    });
+    const { getStream } = media;
 
     /**
      * WebRTC (network).
@@ -309,7 +307,7 @@ export default Dev.describe('WebRTC', (e) => {
 
       dev.button('run: MediaStream tests', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
       dev.button('run: WebRTC tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
-      dev.button('run: PeerSync tests', (e) =>
+      dev.button('run: PeerSync tests (CRDT)', (e) =>
         invoke(import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.mjs')),
       );
     });

@@ -9,7 +9,8 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
   e.timeout(15 * SECOND);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    return await Promise.all(Array.from({ length }).map(() => WebRTC.peer({ signal, getStream })));
+    const wait = Array.from({ length }).map(() => WebRTC.peer({ signal, getStream }));
+    return await Promise.all(wait);
   };
 
   type Doc = {
@@ -62,20 +63,16 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
       (d) => (docB = d),
     );
 
-    // docA = Automerge.change(docA, 'hello-a', (doc) => (doc.count += 5));
     docA = Automerge.change(docA, 'hello-a', (doc) => (doc.name = 'Foo'));
-    await Time.wait(20);
-    docB = Automerge.change(docB, 'hello-b', (doc) => (doc.name = 'Bar'));
+    await Time.wait(200);
+    docB = Automerge.change(docB, 'hello-b', (doc) => (doc.count = 1234));
     await Time.wait(20);
     syncerA.update();
 
-    await Time.wait(2000);
+    await Time.wait(1000);
 
-    console.log('docA.name', docA.name);
-    console.log('docB.name', docB.name);
-
-    // expect(docA.name).to.eql('Bar');
-    // expect(docB.name).to.eql('Bar');
+    expect(docA).to.eql({ name: 'Foo', count: 1234 });
+    expect(docB).to.eql({ name: 'Foo', count: 1234 });
   });
 
   e.it('dispose', async (e) => {
