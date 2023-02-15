@@ -1,6 +1,6 @@
 import { Automerge } from 'sys.data.crdt';
 
-import { PeerSyncer } from '../Crdt';
+import { PeerSyncer } from '../sys.data.crdt.PeerSync';
 import { Dev, expect, rx, t, TEST, Time, WebRTC } from '../test.ui';
 
 export default Dev.describe('CRDT (sync protocol)', (e) => {
@@ -24,10 +24,7 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
 
   function createTestDoc() {
     const doc = Automerge.init<Doc>();
-    return Automerge.change(doc, (doc) => {
-      // doc.cards = [] as unknown as Automerge.List<Card>;
-      doc.count = 0;
-    });
+    return Automerge.change(doc, (doc) => (doc.count = 0));
   }
 
   e.it('init: create peers A ⇔ B and start data connection', async (e) => {
@@ -47,20 +44,19 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
     let docA = createTestDoc();
     let docB = createTestDoc();
 
-    function Syncer<D>(conn: t.PeerDataConnection, getDoc: () => D, setDoc: (doc: D) => void) {
+    function toSyncer<D>(conn: t.PeerDataConnection, getDoc: () => D, setDoc: (doc: D) => void) {
       const $ = conn.$.pipe(rx.map((e) => e.event));
       const fire = conn.send;
       const bus = { $, fire };
-
       return PeerSyncer<D>({ bus, getDoc, setDoc });
     }
 
-    const syncerA = Syncer(
+    const syncerA = toSyncer(
       connA,
       () => docA,
       (d) => (docA = d),
     );
-    const syncerB = Syncer(
+    const syncerB = toSyncer(
       connB,
       () => docB,
       (d) => (docB = d),
