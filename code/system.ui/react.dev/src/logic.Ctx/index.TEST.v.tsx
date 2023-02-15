@@ -99,8 +99,8 @@ describe('Context', () => {
     });
   });
 
-  describe('props.component', () => {
-    it('component', async () => {
+  describe('props.subject', () => {
+    it('subject', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
@@ -122,18 +122,19 @@ describe('Context', () => {
       dispose();
     });
 
-    it('component.size', async () => {
+    it('subject.size', async () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
       const test = async (
-        expected: t.DevRenderSize,
+        expected: t.DevRenderSize | undefined,
         modify: (size: t.DevCtxSubject['size']) => void,
       ) => {
         modify(ctx.subject.size);
         await context.flush();
         const info = await events.info.get();
-        expect(info.render.props?.subject.size).to.eql(expected);
+        const value = info.render.props?.subject.size;
+        expect(value).to.eql(expected);
       };
 
       await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
@@ -141,6 +142,9 @@ describe('Context', () => {
       await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
       await test({ mode: 'center', width: undefined, height: 100 }, (size) => size(null, 100));
       await test({ mode: 'center', width: 200, height: undefined }, (size) => size(200, null));
+
+      await test(undefined, (size) => size(null, null));
+      await test(undefined, (size) => size(null));
 
       const margin = [50, 50, 50, 50] as t.Margin;
       await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));
