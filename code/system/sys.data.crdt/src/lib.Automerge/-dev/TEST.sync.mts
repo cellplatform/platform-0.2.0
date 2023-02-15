@@ -1,7 +1,7 @@
 import { Automerge } from '..';
-import { Dev, expect } from '../../test.ui';
+import { expect, Test } from '../../test.ui';
 
-export default Dev.describe('Automerge (lib): sync', (e) => {
+export default Test.describe('Automerge (lib): sync', (e) => {
   /**
    * https://github.com/automerge/automerge/blob/main/SYNC.md
    */

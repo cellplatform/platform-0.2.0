@@ -1,7 +1,7 @@
-import { Dev, expect, TestFilesystem } from '../../test.ui';
 import { Automerge } from '..';
+import { expect, Test, TestFilesystem } from '../../test.ui';
 
-export default Dev.describe('Automerge (lib): filesystem', (e) => {
+export default Test.describe('Automerge (lib): filesystem', (e) => {
   type Card = { title: string; done: boolean; count: number };
   type Doc = {
     name?: string;

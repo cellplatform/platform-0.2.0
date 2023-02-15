@@ -1,7 +1,7 @@
-import { Dev, expect } from '../../test.ui';
 import { Automerge } from '..';
+import { expect, Test } from '../../test.ui';
 
-export default Dev.describe('Automerge (lib): API', (e) => {
+export default Test.describe('Automerge (lib): API', (e) => {
   type Card = { title: string; done: boolean; count: number };
   type Doc = {
     name?: string;
