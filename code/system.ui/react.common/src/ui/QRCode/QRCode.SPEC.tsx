@@ -1,5 +1,5 @@
-import { Dev, css } from '../../test.ui';
 import { QRCode, QRCodeProps } from '.';
+import { Dev } from '../../test.ui';
 import { TextInput } from '../Text.Input';
 
 type T = { props: QRCodeProps };
@@ -13,14 +13,11 @@ const initial: T = {
 export default Dev.describe('QRCode', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
+    await ctx.state<T>(initial);
 
-    ctx.subject
-      .backgroundColor(1)
-      .display('grid')
-      .render<T>((e) => {
-        return <QRCode {...e.state.props} />;
-      });
+    ctx.subject.display('grid').render<T>((e) => {
+      return <QRCode {...e.state.props} />;
+    });
   });
 
   e.it('debug panel', async (e) => {
