@@ -1,9 +1,6 @@
 import { WebRTC } from '.';
 import { TEST, cuid, Dev, expect, rx, t, Time } from '../test.ui';
 
-import { Automerge } from 'sys.data.crdt';
-import { PeerSyncer } from '../Crdt';
-
 export default Dev.describe('WebRTC', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;

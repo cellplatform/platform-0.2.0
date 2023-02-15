@@ -5,14 +5,15 @@ import {
   css,
   Dev,
   MediaStream,
+  PeerList,
+  PeerVideo,
   rx,
   slug,
   t,
   TEST,
   TextInput,
-  PeerList,
-  PeerVideo,
 } from '../test.ui';
+import { DevCrdtSync } from './-dev/DEV.CrdtSync';
 
 type T = {
   self?: t.Peer;
@@ -88,7 +89,10 @@ export default Dev.describe('WebRTC', (e) => {
       .render<T>(async (e) => {
         const { MonacoEditor } = await import('sys.ui.react.monaco');
         const styles = {
-          base: css({ display: 'grid', gridTemplateRows: '2fr 1fr' }),
+          base: css({
+            display: 'grid',
+            gridTemplateRows: '1fr 1fr 2fr',
+          }),
           main: css({ position: 'relative' }),
           footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
           media: css({ Absolute: 0 }),
@@ -113,6 +117,7 @@ export default Dev.describe('WebRTC', (e) => {
               {elRunner}
               {elMedia}
             </div>
+            <DevCrdtSync self={self} />
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={CODE} />
             </div>
@@ -148,10 +153,13 @@ export default Dev.describe('WebRTC', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const { self } = e.state;
       const connections = self?.connections;
-      const media = { TODO: true }; // TODO 🐷
+      const media = {
+        '🐷[1]': `refactor bus/events in source module: sys.ui.video`,
+      }; // TODO 🐷
       const data = {
+        length: connections?.length ?? 0,
         Peer: { self, connections },
-        MediaStream__TODO__: media,
+        MediaStream__TODO__REFACTOR__: media,
       };
       return <Dev.Object name={'WebRTC'} data={data} expand={1} />;
     });
@@ -285,7 +293,7 @@ export default Dev.describe('WebRTC', (e) => {
       dev.hr();
     });
 
-    dev.section('Health Check', (dev) => {
+    dev.section('Integrity Checks', (dev) => {
       const invoke = async (module: t.SpecImport) => {
         await dev.change((d) => {
           d.debug.testrunner.spinning = true;
@@ -299,9 +307,11 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run: WebRTC tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
       dev.button('run: MediaStream tests', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
-      dev.button('run: PeerSync tests', (e) => invoke(import('../Crdt/PeerSyncer.TEST.mjs')));
+      dev.button('run: WebRTC tests', (e) => invoke(import('./WebRTC-TEST.mjs')));
+      dev.button('run: PeerSync tests', (e) =>
+        invoke(import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.mjs')),
+      );
     });
 
     dev.hr();
