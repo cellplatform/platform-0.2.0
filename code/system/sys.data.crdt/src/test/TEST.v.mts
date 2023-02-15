@@ -1,5 +1,4 @@
-import { Test } from 'sys.test.spec';
-import { describe, it } from '.';
+import { Test, describe, it } from '.';
 
 /**
  * Run tests within CI (server-side).
