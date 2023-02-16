@@ -15,6 +15,12 @@ export const Util = {
     return `peer:${Util.asId(id)}`;
   },
 
+  toDataPayload(conn: t.PeerDataConnection, event: t.Event<any>): t.PeerDataPayload {
+    const peer = conn.peer.local;
+    const connection = conn.id;
+    return { source: { peer, connection }, event };
+  },
+
   isType: {
     PeerDataPayload(input: any) {
       if (typeof input !== 'object') return false;
