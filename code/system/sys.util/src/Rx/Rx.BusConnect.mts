@@ -6,7 +6,7 @@ import { takeUntil, filter, delay } from './Rx.lib.mjs';
  * Setup a two-way connection between two or more event-buses.
  */
 export function BusConnect<E extends t.Event>(
-  buses: t.EventBus<E>[],
+  buses: t.EventBus<any>[],
   options: t.BusConnectOptions = {},
 ): t.BusConnection<E> {
   if (buses.length < 2) {

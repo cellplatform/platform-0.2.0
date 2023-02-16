@@ -13,7 +13,7 @@ export type Bus = BusFactory & {
   isBus(input: any): boolean;
   asType<T extends E>(bus: t.EventBus<any>): t.EventBus<T>;
   instance(bus: t.EventBus<any>): string;
-  connect<T extends E>(buses: t.EventBus<E>[], options?: t.BusConnectOptions): BusConnection<T>;
+  connect<T extends E>(buses: t.EventBus<any>[], options?: t.BusConnectOptions): BusConnection<T>;
 };
 
 /**
