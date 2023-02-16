@@ -315,5 +315,27 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     dev.hr();
+
+    dev.section((dev) => {
+      dev.row(async (e) => {
+        const { QRCode } = await import('sys.ui.react.common');
+
+        const peerId = self.id;
+        const value = WebRTC.Util.asUri(peerId);
+
+        const styles = {
+          base: css({
+            marginTop: 20,
+            display: 'grid',
+            placeItems: 'center',
+          }),
+        };
+        return (
+          <div {...styles.base}>
+            <QRCode value={value} size={180} />
+          </div>
+        );
+      });
+    });
   });
 });
