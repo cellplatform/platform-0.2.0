@@ -90,7 +90,7 @@ export default Dev.describe('YouTube', (e) => {
       loadUrl('"Cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
       loadUrl('"Cell - Impossible Machines"', 'https://www.youtube.com/watch?v=TYPFenJQciw');
       loadUrl('"Optimistic Nihilism"', 'https://www.youtube.com/watch?v=MBRqu0YOH14');
-      loadUrl('Baby Elephant', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
+      loadUrl('Baby elephant 🐘', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
       loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
     });
 
