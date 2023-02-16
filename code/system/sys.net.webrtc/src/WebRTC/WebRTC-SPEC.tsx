@@ -305,11 +305,13 @@ export default Dev.describe('WebRTC', (e) => {
         });
       };
 
-      dev.button('run: MediaStream tests', (e) => invoke(import('../WebRTC.Media/Media-TEST.mjs')));
-      dev.button('run: WebRTC tests', (e) => invoke(import('./WebRTC-SPEC.test.mjs')));
-      dev.button('run: PeerSync tests (CRDT)', (e) =>
-        invoke(import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.ui.mjs')),
-      );
+      const button = (label: string, module: t.SpecImport) => {
+        dev.button(`run: ${label}`, () => invoke(module));
+      };
+
+      button('MediaStream tests', import('../WebRTC.Media/Media-TEST.mjs'));
+      button('WebRTC tests', import('./WebRTC-SPEC.test.mjs'));
+      button('PeerSync tests (CRDT)', import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.ui.mjs'));
     });
 
     dev.hr();

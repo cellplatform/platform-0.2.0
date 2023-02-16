@@ -119,8 +119,8 @@ export default Dev.describe('WebRTC', (e) => {
 
       const incomingA: t.PeerDataPayload[] = [];
       const incomingB: t.PeerDataPayload[] = [];
-      a.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingA.push(e));
-      b.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
+      a.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingA.push(e));
+      b.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
 
       type E = { type: 'foo'; payload: { msg: string } };
       const payloadA = a.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
@@ -148,7 +148,7 @@ export default Dev.describe('WebRTC', (e) => {
       const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
       a.send<E>({ type: 'foo', payload: { data } });
 
-      const received = (await rx.firstValueFrom(b.$)).event as E;
+      const received = (await rx.firstValueFrom(b.in$)).event as E;
       expect(new Uint8Array(received.payload.data)).to.eql(data);
     });
 
@@ -170,7 +170,7 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       const incomingB: t.PeerDataPayload[] = [];
-      b.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
+      b.in$.pipe(rx.takeUntil(dispose$)).subscribe((e) => incomingB.push(e));
 
       // Close the connection on the initiating side (A).
       a.dispose();
