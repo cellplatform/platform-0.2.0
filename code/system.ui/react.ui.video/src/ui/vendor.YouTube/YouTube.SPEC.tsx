@@ -138,10 +138,9 @@ export default Dev.describe('YouTube', (e) => {
 
     dev.section((dev) => {
       dev.row(async (e) => {
+        const { QRCode } = await import('sys.ui.react.common');
         const { id, start } = e.state.props;
         const url = YouTube.Wrangle.toEmbedUrl({ id, start });
-
-        const { QRCode } = await import('sys.ui.react.common');
 
         console.group('🌳 current (YouTube URL)');
         console.log('id', id);
