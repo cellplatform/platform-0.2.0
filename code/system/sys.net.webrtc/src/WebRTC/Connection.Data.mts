@@ -54,7 +54,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
      */
     bus<E extends t.Event>() {
       const $ = in$.pipe(rx.map((e) => e.event as E));
-      const fire = conn.send;
+      const fire = api.send;
       return { $, fire } as t.EventBus<E>;
     },
 

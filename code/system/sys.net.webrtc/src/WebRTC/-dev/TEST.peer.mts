@@ -45,7 +45,7 @@ export default Dev.describe('WebRTC', (e) => {
       peer2.dispose();
     });
 
-    e.it('exposes immutable lists (only)', async (e) => {
+    e.it('exposes lists as immutable', async (e) => {
       const peer = await WebRTC.peer({ signal });
 
       expect(peer.connections.all).to.eql([]);
@@ -84,12 +84,12 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       // Open the connection.
-      const a = await peerA.data(peerB.id, { name: 'Foobar' });
-      expect(a.kind).to.eql('data');
-      expect(a.metadata).to.eql({ name: 'Foobar' });
-      expect(a.peer.local).to.eql(peerA.id);
-      expect(a.peer.remote).to.eql(peerB.id);
-      expect(a).to.eql(peerA.connections.data[0]);
+      const conn = await peerA.data(peerB.id, { name: 'Foobar' });
+      expect(conn.kind).to.eql('data');
+      expect(conn.metadata).to.eql({ name: 'Foobar' });
+      expect(conn.peer.local).to.eql(peerA.id);
+      expect(conn.peer.remote).to.eql(peerB.id);
+      expect(conn).to.eql(peerA.connections.data[0]);
 
       expect(peerA.connections.length).to.eql(1);
       await Time.wait(500);
@@ -151,6 +151,28 @@ export default Dev.describe('WebRTC', (e) => {
 
       const received = (await rx.firstValueFrom(b.in$)).event as E;
       expect(new Uint8Array(received.payload.data)).to.eql(data);
+    });
+
+    e.it('send via an event-bus (aka. "netbus")', async (e) => {
+      type E = { type: 'foo'; payload: { count?: number } };
+
+      const a = peerA.connections.data[0];
+      const b = peerB.connections.data[0];
+
+      const busA = a.bus<E>();
+      const busB = b.bus<E>();
+
+      const firedA: E[] = [];
+      const firedB: E[] = [];
+      busA.$.subscribe((e) => firedA.push(e));
+      busB.$.subscribe((e) => firedB.push(e));
+
+      const event: E = { type: 'foo', payload: { count: 1234 } };
+      busA.fire(event);
+
+      await Time.wait(300);
+      expect(firedA).to.eql([]);
+      expect(firedB).to.eql([event]);
     });
 
     e.it('dispose: data connections (close A.data | B.data)', async (e) => {

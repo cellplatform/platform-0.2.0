@@ -94,37 +94,6 @@ export default Test.describe('Mock', (e) => {
         mock.dispose();
         expect(mock.conn.isDisposed).to.eql(true);
       });
-
-      e.it('toBus', async (e) => {
-        type E = { type: 'foo'; payload: { count: number } };
-
-        const mock = Mock.DataConnection.connect();
-        const busA = mock.a.bus<E>();
-        const busB = mock.b.bus<E>();
-
-        const busFiredA: E[] = [];
-        const busFiredB: E[] = [];
-        busA.$.subscribe((e) => busFiredA.push(e));
-        busB.$.subscribe((e) => busFiredB.push(e));
-
-        const inFiredA: E[] = [];
-        const inFiredB: E[] = [];
-        mock.a.in$.subscribe((e) => inFiredA.push(e.event as E));
-        mock.b.in$.subscribe((e) => inFiredB.push(e.event as E));
-
-        busA.fire({ type: 'foo', payload: { count: 1 } });
-        await Time.wait(10);
-
-        expect(inFiredA).to.eql([]);
-        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]);
-
-        busB.fire({ type: 'foo', payload: { count: 999 } });
-        await Time.wait(10);
-        expect(inFiredA).to.eql([{ type: 'foo', payload: { count: 999 } }]);
-        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]); // NB: no change.
-
-        mock.dispose();
-      });
     });
 
     e.describe('connect (two-sided)', (e) => {
@@ -164,6 +133,37 @@ export default Test.describe('Mock', (e) => {
         expect(inA.length).to.eql(1);
         expect(inB.length).to.eql(1); // NB: no change.
         expect(inA[0].event).to.eql({ type: 'foo', payload: { msg: 'goodbye' } });
+      });
+
+      e.it('fire between peers: via event-bus', async (e) => {
+        type E = { type: 'foo'; payload: { count: number } };
+
+        const mock = Mock.DataConnection.connect();
+        const busA = mock.a.bus<E>();
+        const busB = mock.b.bus<E>();
+
+        const busFiredA: E[] = [];
+        const busFiredB: E[] = [];
+        busA.$.subscribe((e) => busFiredA.push(e));
+        busB.$.subscribe((e) => busFiredB.push(e));
+
+        const inFiredA: E[] = [];
+        const inFiredB: E[] = [];
+        mock.a.in$.subscribe((e) => inFiredA.push(e.event as E));
+        mock.b.in$.subscribe((e) => inFiredB.push(e.event as E));
+
+        busA.fire({ type: 'foo', payload: { count: 1 } });
+        await Time.wait(10);
+
+        expect(inFiredA).to.eql([]);
+        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]);
+
+        busB.fire({ type: 'foo', payload: { count: 999 } });
+        await Time.wait(10);
+        expect(inFiredA).to.eql([{ type: 'foo', payload: { count: 999 } }]);
+        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]); // NB: no change.
+
+        mock.dispose();
       });
 
       e.it('disposed mocks do not send', async (e) => {
