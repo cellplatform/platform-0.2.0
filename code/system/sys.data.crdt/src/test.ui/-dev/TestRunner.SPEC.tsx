@@ -1,4 +1,4 @@
-import { Dev, t } from '../test.ui';
+import { Dev, t } from '..';
 
 type T = {
   debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
@@ -30,7 +30,7 @@ export default Dev.describe('Root', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
-    dev.section('Tests', async (dev) => {
+    dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
         const results = await spec.run();
@@ -40,6 +40,7 @@ export default Dev.describe('Root', (e) => {
         });
       };
 
+      const tests: t.TestSuiteModel[] = [];
       const button = async (input: t.SpecImport) => {
         const module = await input;
         const spec = await (module.default as t.TestSuiteModel).init();
@@ -47,18 +48,30 @@ export default Dev.describe('Root', (e) => {
         return spec;
       };
 
-      const tests = [
-        await button(import('./-dev/TEST.basic.mjs')),
-        await button(import('./-dev/TEST.api.mjs')),
-        await button(import('./-dev/TEST.filesystem.mjs')),
-        await button(import('./-dev/TEST.sync.mjs')),
-      ];
+      dev.button('Run All', async (e) => await invoke(all));
 
       dev.hr();
 
-      const root = Dev.describe('All Suites');
-      root.merge(...tests);
-      dev.button('Run all', (e) => invoke(root));
+      dev.title('sys.crdt');
+
+      tests.push(...[await button(import('../../crdt.Sync/PeerSyncer.TEST.mjs'))]);
+
+      dev.hr();
+
+      dev.title('Automerge (Driver)');
+      tests.push(
+        ...[
+          await button(import('../../driver.Automerge/-dev/TEST.basic.mjs')),
+          await button(import('../../driver.Automerge/-dev/TEST.api.mjs')),
+          await button(import('../../driver.Automerge/-dev/TEST.filesystem.mjs')),
+          await button(import('../../driver.Automerge/-dev/TEST.sync.mjs')),
+        ],
+      );
+
+      dev.hr();
+
+      const all = Dev.describe('All Suites');
+      all.merge(...tests);
     });
   });
 });

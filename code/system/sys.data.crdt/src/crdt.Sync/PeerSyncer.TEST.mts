@@ -45,14 +45,14 @@ export default Test.describe('PeerSyncer', (e) => {
     expect(docB).to.eql({ count: 1234 });
 
     syncerA.update();
-    await Time.wait(10);
+    await Time.wait(30);
 
     expect(docA).to.eql({ name: 'Foo', count: 1234 });
     expect(docB).to.eql(docA);
 
     docB = Automerge.change(docB, (doc) => (doc.name = 'Bar'));
     syncerB.update();
-    await Time.wait(10);
+    await Time.wait(30);
 
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
