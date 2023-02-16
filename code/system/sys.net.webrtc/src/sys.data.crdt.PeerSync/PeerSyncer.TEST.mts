@@ -1,5 +1,6 @@
-import { Automerge } from 'sys.data.crdt';
-import { t, rx, expect, Mock, Test, Time, WebRTC } from '../test.ui';
+import { PeerSyncer } from '.';
+import { expect, rx, Test, Time } from '../test.ui';
+import { Automerge } from './common';
 
 export default Test.describe('CRDT: PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };
@@ -9,18 +10,25 @@ export default Test.describe('CRDT: PeerSyncer', (e) => {
     return Automerge.change(doc, (doc) => (doc.count = 0));
   }
 
-  e.it('sync (via mock DataConnection)', async (e) => {
+  e.it('sync (via mock)', async (e) => {
     let docA = createTestDoc();
     let docB = createTestDoc();
-    const conn = Mock.DataConnection.connect();
 
-    const syncerA = WebRTC.Util.toSyncer(
+    const PeerSyncerConnectionMock = () => {
+      const a = rx.bus();
+      const b = rx.bus();
+      const { dispose, dispose$ } = rx.bus.connect([a, b]);
+      return { a, b, dispose, dispose$ };
+    };
+
+    const conn = PeerSyncerConnectionMock();
+    const syncerA = PeerSyncer(
       conn.a,
       () => docA,
       (d) => (docA = d),
     );
 
-    const syncerB = WebRTC.Util.toSyncer(
+    const syncerB = PeerSyncer(
       conn.b,
       () => docB,
       (d) => (docB = d),
@@ -47,15 +55,7 @@ export default Test.describe('CRDT: PeerSyncer', (e) => {
 
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
-  });
 
-  e.it('sync (via mock bus)', async (e) => {
-    //
-    /**
-     * TODO 🐷
-     * - use BusConnect
-     */
-
-    console.log('-------------------------------------------');
+    conn.dispose();
   });
 });

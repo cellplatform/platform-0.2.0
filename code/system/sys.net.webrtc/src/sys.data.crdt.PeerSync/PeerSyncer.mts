@@ -8,14 +8,18 @@ type Id = string;
  * - [ ] throw errors.
  */
 
-export function PeerSyncer<D>(args: {
-  bus: t.EventBus<any>;
-  getDoc: () => D;
-  setDoc: (doc: D) => void;
-}) {
+/**
+ * Wraps the network synchronization logic for single CRDT
+ * document and a set of network peers.
+ */
+export function PeerSyncer<D>(
+  eventbus: t.EventBus<any>,
+  getDoc: () => D,
+  setDoc: (doc: D) => void,
+) {
   const { initSyncState, generateSyncMessage, receiveSyncMessage } = Automerge;
   const { dispose, dispose$ } = rx.disposable();
-  const bus = rx.busAsType<t.CrdtSyncEvent>(args.bus);
+  const bus = rx.busAsType<t.CrdtSyncEvent>(eventbus);
 
   /**
    * TODO 🐷 - encode/decode sync-state between session.
@@ -38,7 +42,7 @@ export function PeerSyncer<D>(args: {
     const res = receiveSyncMessage<D>(api.doc, _syncState, message);
     const [nextDoc, nextSyncState, patch] = res;
     _syncState = nextSyncState;
-    args.setDoc(nextDoc);
+    setDoc(nextDoc);
     update({ tx }); // <== 🌳 Recursion (via network round-trip).
   });
 
@@ -58,7 +62,7 @@ export function PeerSyncer<D>(args: {
   const api = {
     dispose,
     get doc() {
-      return args.getDoc();
+      return getDoc();
     },
     state() {
       return _syncState;
