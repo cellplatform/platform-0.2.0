@@ -1,6 +1,6 @@
 import { expect, describe, it } from '../test';
 
-import { rx } from './index.mjs';
+import { rx } from '.';
 
 describe('rx', () => {
   describe('rx.event | rx.payload', () => {

@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Delete } from './index.mjs';
+import { Delete } from '.';
 
 describe('Delete', () => {
   describe('deleteUndefined', () => {

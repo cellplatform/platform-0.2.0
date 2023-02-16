@@ -1,4 +1,4 @@
-import { t, Json } from './common.mjs';
+import { t, Json } from './common';
 
 /**
  * Work with a readable stream

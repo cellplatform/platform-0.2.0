@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Path } from './index.mjs';
+import { Path } from '.';
 
 describe('Path', () => {
   it('join', () => {

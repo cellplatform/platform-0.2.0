@@ -1,4 +1,4 @@
-import { t } from '../common/index.mjs';
+import { t } from '../common';
 import { disposable } from './Rx.disposable.mjs';
 import { takeUntil, filter, delay } from './Rx.lib.mjs';
 

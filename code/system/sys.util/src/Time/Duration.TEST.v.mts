@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { time } from './index.mjs';
+import { time } from '.';
 import { Duration } from './Duration.mjs';
 
 const MSEC = 1;

@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Mime } from './index.mjs';
+import { Mime } from '.';
 
 describe('Mime', () => {
   it('toType', () => {

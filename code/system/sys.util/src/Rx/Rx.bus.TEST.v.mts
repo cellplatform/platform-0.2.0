@@ -1,6 +1,6 @@
 import { t, describe, expect, it } from '../test';
-import { rx } from './index.mjs';
-import { Time } from '../Time/index.mjs';
+import { rx } from '.';
+import { Time } from '../Time';
 
 describe('rx.bus', () => {
   describe('isBus', () => {

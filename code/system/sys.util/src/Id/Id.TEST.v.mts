@@ -1,7 +1,7 @@
 import { expect, describe, it } from '../test';
 
-import { Id, slug, cuid } from './index.mjs';
-import { R } from '../common/index.mjs';
+import { Id, slug, cuid } from '.';
+import { R } from '../common';
 
 describe('Id', () => {
   it('display', () => {

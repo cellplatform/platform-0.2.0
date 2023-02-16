@@ -1,7 +1,7 @@
 import { describe, it, expect, t } from '../test';
-import { Time } from '../Time/index.mjs';
+import { Time } from '../Time';
 import { BusConnect } from './Rx.BusConnect.mjs';
-import { rx } from './index.mjs';
+import { rx } from '.';
 
 describe('BusConnect', () => {
   type E = { type: 'foo'; payload: { count?: number } };

@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { time } from './index.mjs';
+import { time } from '.';
 
 describe('time.utc', () => {
   it('now', () => {

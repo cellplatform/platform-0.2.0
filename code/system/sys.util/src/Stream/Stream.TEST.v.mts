@@ -1,6 +1,6 @@
-import { Stream } from './index.mjs';
+import { Stream } from '.';
 import { expect, describe, it } from '../test';
-import { t, Json } from './common.mjs';
+import { t, Json } from './common';
 
 describe('Stream', () => {
   describe('toUint8Array( )', () => {

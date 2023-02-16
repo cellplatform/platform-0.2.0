@@ -1,4 +1,4 @@
-import { R } from '../common/index.mjs';
+import { R } from '../common';
 import { compact } from './Value.Array.mjs';
 
 /**

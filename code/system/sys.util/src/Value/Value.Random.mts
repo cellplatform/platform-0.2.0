@@ -1,4 +1,4 @@
-import { Is } from '../Is/index.mjs';
+import { Is } from '../Is';
 
 /**
  * NOTE: [Shim/Polyfill]

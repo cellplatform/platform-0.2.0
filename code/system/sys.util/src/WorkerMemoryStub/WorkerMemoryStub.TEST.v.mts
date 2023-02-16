@@ -1,8 +1,8 @@
 import { describe, it, expect } from '../test';
 
-import { type t } from '../common/index.mjs';
-import { Time } from '../Time/index.mjs';
-import { WorkerMemoryStub } from './index.mjs';
+import { type t } from '../common';
+import { Time } from '../Time';
+import { WorkerMemoryStub } from '.';
 
 describe('WorkerMemoryStub', () => {
   it('adds worker to list and initialized with self/context', () => {

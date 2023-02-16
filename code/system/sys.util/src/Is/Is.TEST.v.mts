@@ -1,7 +1,7 @@
 import { expect, describe, it } from '../test';
 import { Subject } from 'rxjs';
 
-import { Is } from './index.mjs';
+import { Is } from '.';
 
 describe('Is', () => {
   it('Is.env.(node|browser)', () => {

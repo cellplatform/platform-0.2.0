@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Value } from './index.mjs';
+import { Value } from '.';
 
 describe('Value.object.build', () => {
   it('return default root object (no keyPath)', () => {

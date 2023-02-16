@@ -1,6 +1,6 @@
 import { expect, describe, it } from '../test';
-import { Value } from './index.mjs';
-import { Time } from '../Time/index.mjs';
+import { Value } from '.';
+import { Time } from '../Time';
 
 describe('compact', () => {
   it('makes no change', () => {

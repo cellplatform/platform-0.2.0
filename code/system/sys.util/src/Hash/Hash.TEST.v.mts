@@ -1,5 +1,5 @@
 import { describe, expect, it } from '../test';
-import { Hash } from './index.mjs';
+import { Hash } from '.';
 
 const circular: any = { foo: 123 };
 circular.ref = circular;

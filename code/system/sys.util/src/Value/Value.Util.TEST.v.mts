@@ -1,5 +1,5 @@
 import { expect, describe, it } from '../test';
-import { Value } from './index.mjs';
+import { Value } from '.';
 
 describe('isStatusOk', () => {
   it('is ok', async () => {
