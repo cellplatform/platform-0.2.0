@@ -6,7 +6,7 @@ type EdgeOptions = {
   peer: t.PeerDataConnection['peer'];
 };
 
-type Edge = {
+export type Edge = {
   dispose(): void;
   conn: t.PeerDataConnection;
   connect(remote: Edge): void;
@@ -40,7 +40,7 @@ export const MockDataConnection = {
   /**
    * Create a new edge ("local" or "remote") of a data-connection.
    */
-  edge(options: Partial<EdgeOptions> = {}): Edge {
+  edge(options: Partial<EdgeOptions> = {}) {
     const { dispose, dispose$ } = rx.disposable();
     const in$ = new rx.Subject<t.PeerDataPayload>();
     const out$ = new rx.Subject<t.PeerDataPayload>();
