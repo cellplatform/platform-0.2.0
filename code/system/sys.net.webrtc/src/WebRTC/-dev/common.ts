@@ -1,4 +1,3 @@
-export { Automerge } from 'sys.data.crdt';
-export { PeerSyncer } from '../../sys.data.crdt.PeerSync';
+export { Automerge, Crdt } from 'sys.data.crdt';
 
 export * from '../../test.ui';
