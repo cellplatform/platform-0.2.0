@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test';
 import { Observable, Subject } from 'rxjs';
 import { type t } from '../common/index.mjs';
 
@@ -129,10 +129,6 @@ describe('rx.bus', () => {
 
     it('bus.asType', () => {
       expect(rx.bus.asType).to.equal(rx.busAsType);
-    });
-
-    it('bus.pump', () => {
-      expect(rx.bus.pump).to.equal(rx.pump);
     });
   });
 });

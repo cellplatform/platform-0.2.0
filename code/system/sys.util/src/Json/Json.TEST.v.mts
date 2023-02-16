@@ -1,4 +1,4 @@
-import { t, expect, describe, it } from '../test/index.mjs';
+import { t, expect, describe, it } from '../test';
 import { Json } from './index.mjs';
 
 describe('Json', () => {

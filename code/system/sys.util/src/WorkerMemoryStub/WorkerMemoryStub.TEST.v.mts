@@ -1,4 +1,4 @@
-import { describe, it, expect } from '../test/index.mjs';
+import { describe, it, expect } from '../test';
 
 import { type t } from '../common/index.mjs';
 import { Time } from '../Time/index.mjs';

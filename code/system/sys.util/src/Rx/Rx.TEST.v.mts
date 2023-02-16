@@ -1,16 +1,9 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test';
 import { Subject } from 'rxjs';
 
 import { rx } from './index.mjs';
 
 describe('rx', () => {
-  describe('exports', () => {
-    it('rx.pump', () => {
-      expect(typeof rx.pump.create === 'function').to.equal(true);
-      expect(typeof rx.pump.connect === 'function').to.equal(true);
-    });
-  });
-
   describe('rx.event | rx.payload', () => {
     type FooEvent = { type: 'TYPE/foo'; payload: Foo };
     type Foo = { count: number };
