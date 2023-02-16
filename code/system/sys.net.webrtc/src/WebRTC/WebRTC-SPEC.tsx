@@ -291,7 +291,7 @@ export default Dev.describe('WebRTC', (e) => {
       dev.hr();
     });
 
-    dev.section('Integrity Checks', (dev) => {
+    dev.section('Integrity', (dev) => {
       const invoke = async (module: t.SpecImport) => {
         await dev.change((d) => {
           d.debug.testrunner.spinning = true;
@@ -310,8 +310,8 @@ export default Dev.describe('WebRTC', (e) => {
       };
 
       button('MediaStream tests', import('../WebRTC.Media/Media-TEST.mjs'));
-      button('WebRTC tests', import('./WebRTC-SPEC.test.mjs'));
-      button('PeerSync tests (CRDT)', import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.ui.mjs'));
+      button('WebRTC tests', import('./-dev/TEST.peer.mjs'));
+      button('PeerSyncer (CRDT) tests', import('./-dev/TEST.PeerSyncer.mjs'));
     });
 
     dev.hr();
