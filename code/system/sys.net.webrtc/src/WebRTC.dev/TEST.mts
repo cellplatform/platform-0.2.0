@@ -99,8 +99,8 @@ export default Test.describe('Mock', (e) => {
         type E = { type: 'foo'; payload: { count: number } };
 
         const mock = Mock.DataConnection.connect();
-        const busA = mock.a.toBus<E>();
-        const busB = mock.b.toBus<E>();
+        const busA = mock.a.bus<E>();
+        const busB = mock.b.bus<E>();
 
         const busFiredA: E[] = [];
         const busFiredB: E[] = [];

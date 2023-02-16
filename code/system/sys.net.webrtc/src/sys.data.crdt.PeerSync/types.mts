@@ -3,7 +3,7 @@ type Id = string;
 /**
  * [Events]
  */
-export type CrdtEvents = CrdtSyncEvent;
+export type CrdtEvent = CrdtSyncEvent;
 
 export type CrdtSyncEvent = {
   type: 'sys.crdt/sync';

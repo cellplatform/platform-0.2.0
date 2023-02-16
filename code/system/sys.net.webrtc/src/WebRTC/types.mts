@@ -58,7 +58,7 @@ export type PeerDataConnection = Connection & {
   readonly out$: t.Observable<t.PeerDataPayload>;
   readonly in$: t.Observable<t.PeerDataPayload>;
   send<E extends t.Event>(event: E): PeerDataPayload;
-  toBus<E extends t.Event>(): t.EventBus<E>;
+  bus<E extends t.Event>(): t.EventBus<E>;
 };
 
 export type PeerDataPayload = {

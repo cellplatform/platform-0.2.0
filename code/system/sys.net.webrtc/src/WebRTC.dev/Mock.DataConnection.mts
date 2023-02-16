@@ -85,7 +85,7 @@ export const MockDataConnection = {
         return payload;
       },
 
-      toBus<E extends t.Event>() {
+      bus<E extends t.Event>() {
         const $ = in$.pipe(rx.map((e) => e.event as E));
         const fire = conn.send;
         return { $, fire } as t.EventBus<E>;
