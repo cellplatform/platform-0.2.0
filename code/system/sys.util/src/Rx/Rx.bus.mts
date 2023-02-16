@@ -2,6 +2,7 @@ import { slug } from '../Id/Id.mjs';
 import { busAsType, instance, isBus } from './Rx.bus.util.mjs';
 import { isEvent } from './Rx.event.mjs';
 import { filter, Subject } from './Rx.lib.mjs';
+import { BusConnect } from './Rx.BusConnect.mjs';
 
 import type { t } from '../common.t';
 
@@ -28,7 +29,9 @@ const factory: t.BusFactory = <T extends E = E>(input?: t.Subject<any> | t.Event
 /**
  * Export extended [bus] function.
  */
-(factory as t.Bus).isBus = isBus;
-(factory as t.Bus).asType = busAsType;
-(factory as t.Bus).instance = instance;
+(factory as any).isBus = isBus;
+(factory as any).asType = busAsType;
+(factory as any).instance = instance;
+(factory as any).connect = BusConnect;
+
 export const bus = factory as t.Bus;

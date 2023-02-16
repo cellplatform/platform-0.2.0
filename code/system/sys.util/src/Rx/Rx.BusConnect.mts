@@ -7,8 +7,8 @@ import { takeUntil, filter, delay } from './Rx.lib.mjs';
  */
 export function BusConnect<E extends t.Event>(
   buses: t.EventBus<E>[],
-  options: { async?: boolean; dispose$?: t.Observable<any> } = {},
-) {
+  options: t.BusConnectOptions = {},
+): t.BusConnection<E> {
   if (buses.length < 2) {
     throw new Error('Must have at least two event-buses to setup connection.');
   }

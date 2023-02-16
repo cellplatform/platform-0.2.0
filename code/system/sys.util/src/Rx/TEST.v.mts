@@ -1,5 +1,4 @@
 import { expect, describe, it } from '../test';
-import { Subject } from 'rxjs';
 
 import { rx } from './index.mjs';
 
@@ -12,7 +11,7 @@ describe('rx', () => {
     type Bar = { msg: string };
 
     it('rx.event', () => {
-      const source$ = new Subject<FooEvent | BarEvent>();
+      const source$ = new rx.Subject<FooEvent | BarEvent>();
 
       const fired: FooEvent[] = [];
       rx.event<FooEvent>(source$, 'TYPE/foo').subscribe((e) => fired.push(e));
@@ -27,7 +26,7 @@ describe('rx', () => {
     });
 
     it('rx.payload', () => {
-      const source$ = new Subject<FooEvent | BarEvent>();
+      const source$ = new rx.Subject<FooEvent | BarEvent>();
 
       const fired: Foo[] = [];
       rx.payload<FooEvent>(source$, 'TYPE/foo').subscribe((e) => fired.push(e));
@@ -102,7 +101,7 @@ describe('rx', () => {
     });
 
     it('until$', () => {
-      const until$ = new Subject<number>();
+      const until$ = new rx.Subject<number>();
       const { dispose$ } = rx.disposable(until$);
 
       let count = 0;
@@ -116,7 +115,7 @@ describe('rx', () => {
     });
 
     it('rx.done() - fires and completes the subject', () => {
-      const dispose$ = new Subject<void>();
+      const dispose$ = new rx.Subject<void>();
 
       let count = 0;
       dispose$.subscribe((e) => count++);
@@ -134,7 +133,7 @@ describe('rx', () => {
 
     describe('first', () => {
       it('resolves first response', async () => {
-        const $ = new Subject<E>();
+        const $ = new rx.Subject<E>();
         const promise = rx.asPromise.first<E>(rx.payload<E>($, 'foo'));
 
         $.next({ type: 'foo', payload: { count: 1 } });
@@ -147,7 +146,7 @@ describe('rx', () => {
       });
 
       it('error: completed observable', async () => {
-        const $ = new Subject<E>();
+        const $ = new rx.Subject<E>();
         $.complete();
 
         const res = await rx.asPromise.first<E>(rx.payload<E>($, 'foo'));
@@ -158,7 +157,7 @@ describe('rx', () => {
       });
 
       it('error: timeout', async () => {
-        const $ = new Subject<E>();
+        const $ = new rx.Subject<E>();
         const res = await rx.asPromise.first<E>(rx.payload<E>($, 'foo'), { timeout: 10 });
         expect(res.payload).to.eql(undefined);
         expect(res.error?.code).to.eql('timeout');
@@ -167,7 +166,7 @@ describe('rx', () => {
 
       it('error: timeout ("op")', async () => {
         const op = 'foobar';
-        const $ = new Subject<E>();
+        const $ = new rx.Subject<E>();
         const res = await rx.asPromise.first<E>(rx.payload<E>($, 'foo'), { op, timeout: 10 });
         expect(res.payload).to.eql(undefined);
         expect(res.error?.code).to.eql('timeout');
