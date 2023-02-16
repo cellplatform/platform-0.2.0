@@ -1,4 +1,4 @@
-import { MockDataConnection as DataConnection } from './MockDataConnection.mjs';
+import { MockDataConnection as DataConnection } from './Mock.DataConnection.mjs';
 
 /**
  * Mocks for abstractly simulating a WebRTC network connection.

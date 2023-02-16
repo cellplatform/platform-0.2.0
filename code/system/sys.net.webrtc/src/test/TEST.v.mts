@@ -5,5 +5,5 @@ import { Test, describe, it } from '../test';
  */
 const run = Test.using(describe, it);
 
+await run.suite(import('../WebRTC.dev/TEST.mjs'));
 await run.suite(import('../sys.data.crdt.PeerSync/PeerSyncer.TEST.mjs')); // TEMP, move to CRDT 🐷
-await run.suite(import('../WebRTC.dev/Mock.TEST.mjs'));

@@ -49,6 +49,18 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
       return payload;
     },
 
+    /**
+     * Convert the in$ stream and send method into a standard event-bus.
+     */
+    toBus<E extends t.Event>() {
+      const $ = in$.pipe(rx.map((e) => e.event as E));
+      const fire = conn.send;
+      return { $, fire } as t.EventBus<E>;
+    },
+
+    /**
+     * [Dispose]
+     */
     dispose,
     dispose$,
     get isDisposed() {

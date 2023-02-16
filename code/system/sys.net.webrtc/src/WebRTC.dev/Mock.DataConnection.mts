@@ -34,7 +34,14 @@ export const MockDataConnection = {
     a.connect(b);
     b.connect(a);
 
-    return { a: a.conn, b: b.conn };
+    return {
+      a: a.conn,
+      b: b.conn,
+      dispose() {
+        a.dispose();
+        b.dispose();
+      },
+    };
   },
 
   /**
@@ -72,10 +79,16 @@ export const MockDataConnection = {
       in$: in$.pipe(rx.takeUntil(dispose$)),
       out$: out$.pipe(rx.takeUntil(dispose$)),
 
-      send<E>(event: E) {
-        const payload = Util.toDataPayload(conn, event as t.Event);
+      send<E extends t.Event>(event: E) {
+        const payload = Util.toDataPayload(conn, event);
         if (!_disposed) out$.next(payload);
         return payload;
+      },
+
+      toBus<E extends t.Event>() {
+        const $ = in$.pipe(rx.map((e) => e.event as E));
+        const fire = conn.send;
+        return { $, fire } as t.EventBus<E>;
       },
 
       dispose,

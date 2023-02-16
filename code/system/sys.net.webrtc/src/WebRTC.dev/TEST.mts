@@ -26,12 +26,15 @@ export default Test.describe('Mock', (e) => {
         expect(conn.metadata).to.eql(metadata);
         expect(conn.isOpen).to.eql(true);
         expect(conn.peer).to.eql(peer);
+        mock.dispose();
       });
 
       e.it('unique peer-ids', (e) => {
         const mock1 = Mock.DataConnection.edge();
         const mock2 = Mock.DataConnection.edge();
         expect(mock1.conn.id).to.not.eql(mock2.conn.id);
+        mock1.dispose();
+        mock2.dispose();
       });
 
       e.it('next', async (e) => {
@@ -57,6 +60,8 @@ export default Test.describe('Mock', (e) => {
         mock.dispose();
         mock.conn.send(event);
         expect(_outFired).to.eql(1); // NB: No change.
+
+        mock.dispose();
       });
 
       e.it('dispose', (e) => {
@@ -88,6 +93,37 @@ export default Test.describe('Mock', (e) => {
 
         mock.dispose();
         expect(mock.conn.isDisposed).to.eql(true);
+      });
+
+      e.it('toBus', async (e) => {
+        type E = { type: 'foo'; payload: { count: number } };
+
+        const mock = Mock.DataConnection.connect();
+        const busA = mock.a.toBus<E>();
+        const busB = mock.b.toBus<E>();
+
+        const busFiredA: E[] = [];
+        const busFiredB: E[] = [];
+        busA.$.subscribe((e) => busFiredA.push(e));
+        busB.$.subscribe((e) => busFiredB.push(e));
+
+        const inFiredA: E[] = [];
+        const inFiredB: E[] = [];
+        mock.a.in$.subscribe((e) => inFiredA.push(e.event as E));
+        mock.b.in$.subscribe((e) => inFiredB.push(e.event as E));
+
+        busA.fire({ type: 'foo', payload: { count: 1 } });
+        await Time.wait(10);
+
+        expect(inFiredA).to.eql([]);
+        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]);
+
+        busB.fire({ type: 'foo', payload: { count: 999 } });
+        await Time.wait(10);
+        expect(inFiredA).to.eql([{ type: 'foo', payload: { count: 999 } }]);
+        expect(inFiredB).to.eql([{ type: 'foo', payload: { count: 1 } }]); // NB: no change.
+
+        mock.dispose();
       });
     });
 
