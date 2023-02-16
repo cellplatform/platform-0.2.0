@@ -1,9 +1,8 @@
-import { Automerge } from 'sys.data.crdt';
+import { PeerSyncer } from '.';
+import { Test, expect, rx, t, TEST, Time, WebRTC } from '../test.ui';
+import { Automerge } from './common';
 
-import { PeerSyncer } from '../sys.data.crdt.PeerSync';
-import { Dev, expect, rx, t, TEST, Time, WebRTC } from '../test.ui';
-
-export default Dev.describe('CRDT (sync protocol)', (e) => {
+export default Test.describe('CRDT (sync protocol)', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);
@@ -13,10 +12,7 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
     return await Promise.all(wait);
   };
 
-  type Doc = {
-    name?: string;
-    count: number;
-  };
+  type Doc = { name?: string; count: number };
 
   let peerA: t.Peer;
   let peerB: t.Peer;
@@ -46,7 +42,7 @@ export default Dev.describe('CRDT (sync protocol)', (e) => {
     let docB = createTestDoc();
 
     function toSyncer<D>(conn: t.PeerDataConnection, getDoc: () => D, setDoc: (doc: D) => void) {
-      const $ = conn.$.pipe(rx.map((e) => e.event));
+      const $ = conn.in$.pipe(rx.map((e) => e.event));
       const fire = conn.send;
       const bus = { $, fire };
       return PeerSyncer<D>({ bus, getDoc, setDoc });

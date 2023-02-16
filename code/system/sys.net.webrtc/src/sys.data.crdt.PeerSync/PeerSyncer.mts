@@ -1,8 +1,6 @@
 import { t, rx, Automerge, slug } from './common';
 
 type Id = string;
-export type CrdtSyncEvent = { type: 'sys.crdt/sync'; payload: CrdtSync };
-export type CrdtSync = { message: Uint8Array; tx: Id };
 
 /**
  * TODO 🐷
@@ -17,7 +15,7 @@ export function PeerSyncer<D>(args: {
 }) {
   const { initSyncState, generateSyncMessage, receiveSyncMessage } = Automerge;
   const { dispose, dispose$ } = rx.disposable();
-  const bus = rx.busAsType<CrdtSyncEvent>(args.bus);
+  const bus = rx.busAsType<t.CrdtSyncEvent>(args.bus);
 
   /**
    * TODO 🐷 - encode/decode sync-state between session.
@@ -27,7 +25,7 @@ export function PeerSyncer<D>(args: {
   const sync$ = bus.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter((e) => e.type === 'sys.crdt/sync'),
-    rx.map((e) => e.payload as CrdtSync),
+    rx.map((e) => e.payload as t.CrdtSync),
     rx.map((e) => {
       const { tx } = e;
       const message = Wrangle.asUint8Array(e.message);
@@ -46,12 +44,15 @@ export function PeerSyncer<D>(args: {
 
   const update = (options: { tx?: Id } = {}) => {
     const tx = options.tx || slug();
-    const [nextSyncState, message] = generateSyncMessage<D>(api.doc, _syncState);
-    _syncState = nextSyncState;
+    const [next, message] = generateSyncMessage<D>(api.doc, _syncState);
+    _syncState = next;
     if (message) {
       bus.fire({ type: 'sys.crdt/sync', payload: { tx, message } });
     }
-    return { tx, complete: Boolean(message) };
+    return {
+      tx,
+      complete: Boolean(message),
+    };
   };
 
   const api = {
