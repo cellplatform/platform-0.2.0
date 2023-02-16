@@ -2,7 +2,7 @@ import { Time, Test, expect, t } from '../test.ui';
 import { Mock } from '.';
 
 export default Test.describe('Mock', (e) => {
-  e.describe('DataConnection', (e) => {
+  e.describe('MockDataConnection', (e) => {
     e.describe('single edge', (e) => {
       e.it('default properties', (e) => {
         const mock = Mock.DataConnection.edge();
@@ -109,7 +109,7 @@ export default Test.describe('Mock', (e) => {
 
         a.send({ type: 'foo', payload: { msg: 'hello' } });
 
-        // NB: Async.
+        // NB: Async (no immediate change)
         expect(inA).to.eql([]);
         expect(inB).to.eql([]);
 
