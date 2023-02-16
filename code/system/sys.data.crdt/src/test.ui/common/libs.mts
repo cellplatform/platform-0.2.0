@@ -10,4 +10,4 @@ export { TestFilesystem } from 'sys.fs';
 /**
  * @local
  */
-export * from '../common';
+export * from '../../common';
