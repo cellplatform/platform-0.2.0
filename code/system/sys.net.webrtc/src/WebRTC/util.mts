@@ -1,4 +1,4 @@
-import { t, cuid, R } from './common';
+import { cuid, R, t } from './common';
 
 export const Util = {
   randomPeerId() {
