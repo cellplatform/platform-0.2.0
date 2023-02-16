@@ -1,8 +1,7 @@
-import { PeerSyncer } from '.';
-import { Test, expect, rx, t, TEST, Time, WebRTC } from '../test.ui';
-import { Automerge } from './common';
+import { Dev, expect, t, TEST, Time, WebRTC } from '../../test.ui';
+import { Automerge, PeerSyncer } from './common';
 
-export default Test.describe('CRDT (sync protocol)', (e) => {
+export default Dev.describe('PeerSyncer', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);
@@ -12,7 +11,10 @@ export default Test.describe('CRDT (sync protocol)', (e) => {
     return await Promise.all(wait);
   };
 
-  type Doc = { name?: string; count: number };
+  type Doc = {
+    name?: string;
+    count: number;
+  };
 
   let peerA: t.Peer;
   let peerB: t.Peer;
@@ -37,34 +39,28 @@ export default Test.describe('CRDT (sync protocol)', (e) => {
     expect(connB.peer.remote).to.eql(peerA.id);
   });
 
-  e.it('change → sync', async (e) => {
+  e.it('change → sync (bloom filters)', async (e) => {
     let docA = createTestDoc();
     let docB = createTestDoc();
 
-    function toSyncer<D>(conn: t.PeerDataConnection, getDoc: () => D, setDoc: (doc: D) => void) {
-      const $ = conn.in$.pipe(rx.map((e) => e.event));
-      const fire = conn.send;
-      const bus = { $, fire };
-      return PeerSyncer<D>({ bus, getDoc, setDoc });
-    }
-
-    const syncerA = toSyncer(
-      connA,
+    const syncerA = PeerSyncer(
+      connA.bus(),
       () => docA,
       (d) => (docA = d),
     );
-    const syncerB = toSyncer(
-      connB,
+    const syncerB = PeerSyncer(
+      connB.bus(),
       () => docB,
       (d) => (docB = d),
     );
 
     docA = Automerge.change(docA, 'hello-a', (doc) => (doc.name = 'Foo'));
-    await Time.wait(200);
     docB = Automerge.change(docB, 'hello-b', (doc) => (doc.count = 1234));
-    await Time.wait(20);
-    syncerA.update();
 
+    expect(docA).to.eql({ name: 'Foo', count: 0 });
+    expect(docB).to.eql({ count: 1234 });
+
+    syncerA.update();
     await Time.wait(1000);
 
     expect(docA).to.eql({ name: 'Foo', count: 1234 });
