@@ -1,7 +1,7 @@
-import { t, rx, Automerge, slug } from './common';
+import { Automerge, rx, slug, t } from './common';
+import { SyncState } from './PeerSyncer.State.mjs';
 
 type Id = string;
-
 
 /**
  * Wraps the network synchronization logic for single CRDT
@@ -11,15 +11,13 @@ export function PeerSyncer<D>(
   eventbus: t.EventBus<any>, // An event bus that fires over a network connection.
   getDoc: () => D,
   setDoc: (doc: D) => void,
+  options: { dir?: t.Fs } = {},
 ) {
-  const { initSyncState, generateSyncMessage, receiveSyncMessage } = Automerge;
+  const { dir } = options;
   const { dispose, dispose$ } = rx.disposable();
   const bus = rx.busAsType<t.CrdtSyncEvent>(eventbus);
-
-  /**
-   * TODO 🐷 - encode/decode sync-state between session.
-   */
-  let _syncState = initSyncState();
+  const state = SyncState({ dir });
+  let _count = 0;
 
   const sync$ = bus.$.pipe(
     rx.takeUntil(dispose$),
@@ -32,38 +30,49 @@ export function PeerSyncer<D>(
     }),
   );
 
-  sync$.subscribe((e) => {
+  sync$.subscribe(async (e) => {
     const { tx, message } = e;
-    const res = receiveSyncMessage<D>(api.doc, _syncState, message);
+    const prevSyncState = await state.get();
+    const res = Automerge.receiveSyncMessage<D>(getDoc(), prevSyncState, message);
     const [nextDoc, nextSyncState, patch] = res;
-    _syncState = nextSyncState;
+    state.set(nextSyncState);
     setDoc(nextDoc);
     update({ tx }); // <== 🌳 Recursion (via network round-trip).
   });
 
-  const update = (options: { tx?: Id } = {}) => {
+  const update = async (options: { tx?: Id } = {}) => {
     const tx = options.tx || slug();
-    const [next, message] = generateSyncMessage<D>(api.doc, _syncState);
-    _syncState = next;
+    const prevSyncState = await state.get();
+    const [nextSyncState, message] = Automerge.generateSyncMessage<D>(getDoc(), prevSyncState);
+    state.set(nextSyncState);
+
     if (message) {
       bus.fire({ type: 'sys.crdt/sync', payload: { tx, message } });
+      _count++;
     }
-    return {
-      tx,
-      complete: Boolean(message),
-    };
+
+    const complete = Boolean(message);
+    if (complete) await state.save();
+
+    return { tx, complete };
   };
 
   const api = {
-    dispose,
-    get doc() {
-      return getDoc();
+    get count() {
+      return _count;
     },
+
     state() {
-      return _syncState;
+      return state.get();
     },
+
     update() {
       return update({ tx: slug() });
+    },
+
+    async dispose() {
+      await state.save();
+      dispose();
     },
   };
 
