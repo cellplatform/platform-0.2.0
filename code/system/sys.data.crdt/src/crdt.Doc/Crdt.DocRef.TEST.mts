@@ -2,7 +2,7 @@ import { CrdtDocRef } from '.';
 import { t, expect, Test } from '../test.ui';
 import { Automerge } from './common';
 
-export default Test.describe('DocRef', (e) => {
+export default Test.describe('CRDT.DocRef', (e) => {
   type D = { count: number; name?: string };
 
   e.describe('init', (e) => {
@@ -11,6 +11,7 @@ export default Test.describe('DocRef', (e) => {
       const doc = CrdtDocRef.init<D>(initial);
       expect(doc.current).to.eql(initial);
       expect(doc.current).to.not.equal(initial); // NB: initialized as an Automerge document.
+      expect(doc.id.actor).to.eql(Automerge.getActorId(doc.current));
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
     });
 
@@ -20,6 +21,7 @@ export default Test.describe('DocRef', (e) => {
       const doc = CrdtDocRef.init<D>(initial);
       expect(doc.current).to.eql({ count: 999 });
       expect(doc.current).to.equal(initial);
+      expect(doc.id.actor).to.eql(Automerge.getActorId(doc.current));
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
     });
   });

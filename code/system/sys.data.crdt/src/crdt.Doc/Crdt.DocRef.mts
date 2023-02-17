@@ -13,6 +13,10 @@ export const CrdtDocRef = {
     const api: t.CrdtDocRef<D> = {
       $: $.asObservable(),
 
+      get id() {
+        return { actor: Automerge.getActorId(_doc) };
+      },
+
       /**
        * The current document.
        */

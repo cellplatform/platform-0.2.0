@@ -3,9 +3,10 @@ import { t } from '../common.t';
 export type CrdtDocAction = 'change' | 'replace';
 
 /**
- * Representa an observable CTDT document.
+ * Represents an observable handle to a CRDT document.
  */
 export type CrdtDocRef<D extends {}> = {
+  readonly id: { actor: string };
   readonly $: t.Observable<CrdtDocChange<D>>;
   readonly current: D;
   change(fn: CrdtMutator<D>): void;
