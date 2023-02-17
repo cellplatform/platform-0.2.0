@@ -47,6 +47,12 @@ export default Test.describe('Automerge (lib): API', (e) => {
       expect(Object.isFrozen(doc)).to.eql(true);
     });
 
+    e.it('isAutomerge', (e) => {
+      const doc = Automerge.init();
+      expect(Automerge.isAutomerge(doc)).to.eql(true);
+      expect(Automerge.isAutomerge({})).to.eql(false);
+    });
+
     e.describe('actorId', (e) => {
       e.it('getActorId', () => {
         const doc = Automerge.from<Doc>(DEFAULT.doc);

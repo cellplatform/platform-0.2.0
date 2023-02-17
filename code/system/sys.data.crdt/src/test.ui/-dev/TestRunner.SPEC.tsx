@@ -54,7 +54,12 @@ export default Dev.describe('Root', (e) => {
 
       dev.title('sys.crdt');
 
-      tests.push(...[await button(import('../../crdt.Sync/PeerSyncer.TEST.mjs'))]);
+      tests.push(
+        ...[
+          await button(import('../../crdt.Sync/PeerSyncer.TEST.mjs')),
+          await button(import('../../crdt.Doc/CrdtDocRef.TEST.mjs')),
+        ],
+      );
 
       dev.hr();
 

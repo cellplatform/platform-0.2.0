@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export type { Observable } from 'rxjs';
+
+/**
  * @system
  */
 export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
