@@ -22,8 +22,10 @@ export async function pushToVercel(args: {
     name: `${Pkg.name}.v${Pkg.version}`,
     source,
     team: 'tdb',
+
     project: 'tdb-dev',
     alias: 'dev.db.team',
+
     ensureProject: true,
     regions: ['sfo1'],
     target: 'production', // NB: required to be "production" for the DNS alias to be applied.
