@@ -10,6 +10,7 @@ export type { DataConnection, MediaConnection } from 'peerjs';
 export type { Disposable, PartialDeep, EventBus, Event, FireEvent } from 'sys.types/src/types.mjs';
 export type { MediaEvent, MediaStreamEvents } from 'sys.ui.react.video/src/types.mjs';
 export type { Fs } from 'sys.fs/src/types.mjs';
+export type { CrdtDocRef } from 'sys.data.crdt/src/types.mjs';
 
 /**
  * @local

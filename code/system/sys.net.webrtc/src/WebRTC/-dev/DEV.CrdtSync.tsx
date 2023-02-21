@@ -15,33 +15,25 @@ const DEFAULT = {
  *    - type definitions (via typescript)
  */
 
-type Semver = string;
-type Doc = {
-  version: Semver;
+export type Doc = {
+  version: string;
   name?: string;
   count: number;
   peers: string[];
 };
 
-function createTestDoc() {
-  return Crdt.DocRef.init<Doc>({
-    version: '0.0.0',
-    count: 0,
-    peers: [],
-  });
-}
-
 export type DevCrdtSyncProps = {
   self: t.Peer;
   fs: t.Fs;
+  docRef: t.CrdtDocRef<Doc>;
   style?: t.CssValue;
 };
 
 export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
-  const { self, fs } = props;
+  const { self, fs, docRef } = props;
   const connRef = useRef<t.PeerDataConnection>();
-  const docRef = useRef(createTestDoc());
-  const doc = docRef.current;
+  // const docRef = useRef(createTestDoc());
+  // const doc = docRef.current;
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -66,11 +58,9 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-
     const conn = connRef.current;
-    const doc = docRef.current;
 
-    const doc$ = doc.$.pipe(rx.takeUntil(dispose$));
+    const doc$ = docRef.$.pipe(rx.takeUntil(dispose$));
     const changed$ = doc$.pipe(rx.filter((e) => e.action === 'change'));
     doc$.subscribe(redraw); // Ensure visual is updated.
 
@@ -78,9 +68,9 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
       const dir = fs.dir(DEFAULT.dir);
       const syncer = Crdt.PeerSyncer(
         conn.bus(),
-        () => doc.current,
-        (doc) => docRef.current.replace(doc),
-        { dir },
+        () => docRef.current,
+        (doc) => docRef.replace(doc),
+        // { dir },
       );
 
       changed$.subscribe((e) => syncer.update());
@@ -92,7 +82,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
       console.log('exists (before):', await dir.exists(path));
 
-      const data = Automerge.save(doc.current);
+      const data = Automerge.save(docRef.current);
       await dir.write(path, data);
       const m = await dir.manifest();
 
@@ -168,9 +158,9 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
   const elCountButtons = (
     <div {...styles.buttons}>
-      <Button onClick={() => docRef.current.change((d) => (d.count += 1))}>Increment</Button>
+      <Button onClick={() => docRef.change((d) => (d.count += 1))}>Increment</Button>
       {` | `}
-      <Button onClick={() => docRef.current.change((d) => (d.count -= 1))}>Decrement</Button>
+      <Button onClick={() => docRef.change((d) => (d.count -= 1))}>Decrement</Button>
     </div>
   );
 
@@ -181,7 +171,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
         {elCountButtons}
         <div />
         <div>
-          <Dev.Object name={'doc'} data={doc.current} expand={2} />
+          <Dev.Object name={'doc'} data={docRef.current} expand={2} />
         </div>
         <div {...styles.buttons}></div>
       </div>

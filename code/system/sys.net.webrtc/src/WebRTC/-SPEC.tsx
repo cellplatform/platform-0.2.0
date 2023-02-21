@@ -14,8 +14,10 @@ import {
   TEST,
   TextInput,
   Filesystem,
+  Crdt,
 } from '../test.ui';
-import { DevCrdtSync } from './-dev/DEV.ui.CrdtSync';
+import { DevCrdtSync } from './-dev/DEV.CrdtSync';
+import type { Doc } from './-dev/DEV.CrdtSync';
 
 type T = {
   self?: t.Peer;
@@ -71,6 +73,12 @@ export default Dev.describe('WebRTC', async (e) => {
   const media = WebRTC.Media.singleton({ bus });
   const streamRef = `sample.${slug()}`;
   const fs = (await Filesystem.client({ bus })).fs;
+
+  const docRef = Crdt.DocRef.init<Doc>({
+    version: '0.0.0',
+    count: 0,
+    peers: [],
+  });
 
   e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
@@ -138,8 +146,8 @@ export default Dev.describe('WebRTC', async (e) => {
               {elTestResults}
               {elMedia}
             </div>
-            <DevCrdtSync self={self} fs={fs} />
-            {elOverlay}
+            <DevCrdtSync self={self} fs={fs} docRef={docRef} />
+            {/* {elOverlay} */}
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={CODE} />
             </div>
