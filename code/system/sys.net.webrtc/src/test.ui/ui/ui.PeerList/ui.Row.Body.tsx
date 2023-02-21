@@ -30,7 +30,7 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
       Absolute: [5, 5, 7, 5],
       Flex: 'x-center-start',
     }),
-    waveform: css({ Absolute: [null, 0, -7, 0] }),
+    waveform: css({ Absolute: [-30, -15, null, -15] }),
     btn: css({
       marginRight: 8,
       ':last-child': { marginRight: 0 },
@@ -41,24 +41,26 @@ export const RowBody: React.FC<RowBodyProps> = (props) => {
     <AudioWaveform
       style={styles.waveform}
       height={20}
-      width={size.rect.width}
+      width={size.rect.width + 30}
       stream={video}
       lineWidth={0.5}
-      lineColor={Color.alpha(COLORS.CYAN, 0.8)}
+      lineColor={Color.alpha(COLORS.MAGENTA, 1)}
     />
   );
 
   return (
     <div ref={size.ref} {...css(styles.base, props.style)}>
-      <div {...styles.body}>
-        <ConnScreenshare
-          style={styles.btn}
-          peerConnections={peerConnections}
-          onConnectRequest={props.onConnectRequest}
-          onDisplayConnRequest={props.onDisplayConnRequest}
-        />
-      </div>
       {elWaveform}
+      <div {...styles.body}>
+        {false && ( // TEMP: Hidden for now.
+          <ConnScreenshare
+            style={styles.btn}
+            peerConnections={peerConnections}
+            onConnectRequest={props.onConnectRequest}
+            onDisplayConnRequest={props.onDisplayConnRequest}
+          />
+        )}
+      </div>
     </div>
   );
 };

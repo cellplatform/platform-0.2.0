@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Automerge } from 'sys.data.crdt';
 
-import { COLORS, Button, Color, css, Dev, rx, t, Crdt } from './common';
+import { Filesize, COLORS, Button, Color, css, Dev, rx, t, Crdt } from './common';
+
+const DEFAULT = {
+  dir: 'dev:test-data/myfile.crdt',
+  filename: 'data.crdt',
+};
 
 /**
  * Schema:
@@ -18,49 +23,22 @@ type Doc = {
   peers: string[];
 };
 
-type DocRef<D extends {}> = {
-  $: t.Observable<{ doc: D; action: 'change' | 'replace' }>;
-  current: D;
-  change(fn: (doc: D) => void): void;
-  replace(doc: D): void;
-};
-
-function createDocRef<D extends {}>(): DocRef<D> {
-  let _doc: D = Automerge.init<D>();
-  const $ = new rx.Subject<{ doc: D; action: 'change' | 'replace' }>();
-  return {
-    $: $.asObservable(),
-    get current() {
-      return _doc;
-    },
-    change(fn) {
-      _doc = Automerge.change<D>(_doc, (doc) => fn(doc as D));
-      $.next({ doc: _doc, action: 'change' });
-    },
-    replace(doc) {
-      _doc = doc;
-      $.next({ doc: _doc, action: 'replace' });
-    },
-  };
-}
-
 function createTestDoc() {
-  const doc = createDocRef<Doc>();
-  doc.change((d) => {
-    d.version = '0.0.0';
-    d.count = 0;
-    d.peers = [];
+  return Crdt.DocRef.init<Doc>({
+    version: '0.0.0',
+    count: 0,
+    peers: [],
   });
-  return doc;
 }
 
 export type DevCrdtSyncProps = {
   self: t.Peer;
+  fs: t.Fs;
   style?: t.CssValue;
 };
 
 export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
-  const { self } = props;
+  const { self, fs } = props;
   const connRef = useRef<t.PeerDataConnection>();
   const docRef = useRef(createTestDoc());
   const doc = docRef.current;
@@ -88,26 +66,71 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
+
     const conn = connRef.current;
     const doc = docRef.current;
 
     const doc$ = doc.$.pipe(rx.takeUntil(dispose$));
+    const changed$ = doc$.pipe(rx.filter((e) => e.action === 'change'));
     doc$.subscribe(redraw); // Ensure visual is updated.
 
     if (conn) {
+      const dir = fs.dir(DEFAULT.dir);
       const syncer = Crdt.PeerSyncer(
         conn.bus(),
         () => doc.current,
         (doc) => docRef.current.replace(doc),
+        { dir },
       );
 
-      doc$.pipe(rx.filter((e) => e.action === 'change')).subscribe((e) => {
-        syncer.update();
-      });
+      changed$.subscribe((e) => syncer.update());
     }
+
+    changed$.pipe(rx.debounceTime(300)).subscribe(async (e) => {
+      const dir = fs.dir(DEFAULT.dir);
+      const path = DEFAULT.filename;
+
+      console.log('exists (before):', await dir.exists(path));
+
+      const data = Automerge.save(doc.current);
+      await dir.write(path, data);
+      const m = await dir.manifest();
+
+      console.log('saved', data);
+      console.log('exists (after):', await dir.exists(path));
+
+      console.log('manifest:');
+      m.files.forEach((file) => {
+        const size = Filesize(file.bytes);
+        console.info(` - file: ${file.path} | #${file.filehash.slice(-6)} - ${size}`);
+      });
+    });
 
     return dispose;
   }, [connRef.current?.id]);
+
+  /**
+   * TODO 🐷 TMP
+   */
+  useEffect(() => {
+    (async () => {
+      const dir = fs.dir(DEFAULT.dir);
+      const path = DEFAULT.filename;
+
+      //       console.group('🌳 init');
+      //       console.log('path', path);
+      //       console.log('exists', await fs.exists(path));
+      //
+      //       console.groupEnd();
+
+      if (await fs.exists(path)) {
+        const data = await dir.read(path);
+        console.log('INITIAL (saved)', data);
+      }
+
+      //
+    })();
+  }, []);
 
   /**
    * [Render]

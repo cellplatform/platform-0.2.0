@@ -23,7 +23,8 @@ export const ActionBar: React.FC<ActionBarProps> = (props) => {
     base: css({
       position: 'relative',
       display: 'grid',
-      placeItems: 'center',
+      justifyContent: 'end',
+      alignContent: 'center',
     }),
   };
 

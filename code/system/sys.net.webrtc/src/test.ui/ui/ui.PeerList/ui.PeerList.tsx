@@ -19,7 +19,8 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
   const styles = {
     base: css({ position: 'relative' }),
     row: css({
-      marginBottom: 15,
+      marginTop: 40,
+      marginBottom: 30,
       ':last-child': { marginBottom: 0 },
     }),
   };

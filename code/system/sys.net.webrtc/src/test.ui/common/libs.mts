@@ -14,6 +14,7 @@ export {
   Spinner,
   useSizeObserver,
   useMouseState,
+  FC,
 } from 'sys.ui.react.common';
 
 export { Test } from 'sys.test.spec';

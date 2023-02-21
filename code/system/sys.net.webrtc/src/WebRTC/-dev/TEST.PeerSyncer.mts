@@ -1,7 +1,7 @@
 import { Dev, expect, t, TEST, Time, WebRTC } from '../../test.ui';
 import { Automerge, Crdt } from './common';
 
-export default Dev.describe('PeerSyncer', (e) => {
+export default Dev.describe('PeerSyncer (Integration Test)', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);
@@ -60,8 +60,8 @@ export default Dev.describe('PeerSyncer', (e) => {
     expect(docA).to.eql({ name: 'Foo', count: 0 });
     expect(docB).to.eql({ count: 1234 });
 
-    syncerA.update();
-    await Time.wait(1000);
+    await syncerA.update();
+    await Time.wait(1500);
 
     expect(docA).to.eql({ name: 'Foo', count: 1234 });
     expect(docB).to.eql({ name: 'Foo', count: 1234 });

@@ -1,11 +1,11 @@
-import { Button, t, TextSyntax, WebRTC } from './common';
+import { Button, FC, t, TextSyntax, WebRTC } from './common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;
   style?: t.CssValue;
   abbreviate?: boolean | number;
   fontSize?: number;
-  onCopy?: (peer: t.PeerUri) => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const PeerId: React.FC<PeerIdProps> = (props) => {
@@ -13,19 +13,10 @@ export const PeerId: React.FC<PeerIdProps> = (props) => {
   const uri = Wrangle.uri(props);
 
   /**
-   * [Handlers]
-   */
-  const copyPeer = () => {
-    const text = WebRTC.Util.asUri(props.peer);
-    navigator.clipboard.writeText(text);
-    props.onCopy?.(text);
-  };
-
-  /**
    * [Render]
    */
   return (
-    <Button onClick={copyPeer} style={props.style}>
+    <Button onClick={props.onClick} style={props.style}>
       <TextSyntax text={uri} monospace={true} fontWeight={'bold'} fontSize={fontSize} />
     </Button>
   );

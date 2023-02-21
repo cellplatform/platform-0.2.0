@@ -11,3 +11,5 @@ export { Peer as PeerJS } from 'peerjs';
  */
 export { rx, slug, cuid, Time, Is, Delete, Path } from 'sys.util';
 export { MediaStream } from 'sys.ui.react.video';
+export { Filesystem, Filesize } from 'sys.fs.indexeddb';
+export { Crdt } from 'sys.data.crdt';
