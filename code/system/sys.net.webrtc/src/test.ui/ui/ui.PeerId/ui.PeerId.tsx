@@ -1,4 +1,4 @@
-import { Button, FC, t, TextSyntax, WebRTC } from './common';
+import { Button, FC, t, TextSyntax, WebRTC } from '../common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;

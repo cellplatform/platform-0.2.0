@@ -222,13 +222,13 @@ export default Dev.describe('WebRTC', async (e) => {
 
       const connectData = async (remote: t.PeerId = '') => {
         const conn = await self.data(remote);
-        console.log('⚡️ peer.data (response):', conn);
+        console.info('⚡️ peer.data (response):', conn);
         return conn;
       };
 
       const connectCamera = async (remote: t.PeerId = '') => {
         const conn = await self.media(remote, 'camera');
-        console.log('⚡️ peer.media:camera (response):', conn);
+        console.info('⚡️ peer.media:camera (response):', conn);
         return conn;
       };
 
@@ -238,7 +238,7 @@ export default Dev.describe('WebRTC', async (e) => {
          * - [ ] recieve event notification from Peer display list (UI)
          */
         const conn = await self.media(remote, 'screen');
-        console.log('⚡️ peer.media:screen (response):', conn);
+        console.info('⚡️ peer.media:screen (response):', conn);
         return conn;
       };
 
@@ -276,7 +276,7 @@ export default Dev.describe('WebRTC', async (e) => {
                 if (ev.kind === 'media:camera') await connectCamera(peerid);
                 if (ev.kind === 'media:screen') {
                   const conn = await connectScreenshare(peerid);
-                  console.log('conn', conn);
+                  console.info('conn', conn);
                   showConnection(conn.id);
                 }
               }}
@@ -300,7 +300,6 @@ export default Dev.describe('WebRTC', async (e) => {
           });
           const spec = (await module).default;
           const results = await spec.run();
-          console.log('results', results);
           await dev.change((d) => {
             d.debug.testrunner.results = results;
             d.debug.testrunner.spinning = false;
