@@ -11,12 +11,12 @@ export function PeerSyncer<D>(
   eventbus: t.EventBus<any>, // An event bus that fires over a network connection.
   getDoc: () => D,
   setDoc: (doc: D) => void,
-  options: { dir?: t.Fs } = {},
+  options: { filedir?: t.Fs } = {},
 ) {
-  const { dir } = options;
+  const { filedir } = options;
   const { dispose, dispose$ } = rx.disposable();
   const bus = rx.busAsType<t.CrdtSyncEvent>(eventbus);
-  const state = SyncState({ dir });
+  const state = SyncState({ filedir });
   let _count = 0;
 
   const sync$ = bus.$.pipe(

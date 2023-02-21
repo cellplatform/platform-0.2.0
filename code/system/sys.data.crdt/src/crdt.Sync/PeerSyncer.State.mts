@@ -1,12 +1,11 @@
-import { Automerge, t } from './common';
+import { Automerge, DEFAULTS, t } from './common';
 
 type SyncState = Automerge.SyncState;
-
 const { initSyncState, decodeSyncState, encodeSyncState } = Automerge;
-const filename = '.syncstate';
 
-export function SyncState(args: { dir?: t.Fs }) {
-  const { dir } = args;
+export function SyncState(args: { filedir?: t.Fs }) {
+  const { filedir } = args;
+  const filename = DEFAULTS.sync.filename;
   let _: SyncState | undefined;
 
   const api = {
@@ -20,16 +19,16 @@ export function SyncState(args: { dir?: t.Fs }) {
     },
 
     async init() {
-      if (!dir) return initSyncState();
-      if (!(await dir.exists(filename))) return initSyncState();
-      const data = await dir.read(filename);
+      if (!filedir) return initSyncState();
+      if (!(await filedir.exists(filename))) return initSyncState();
+      const data = await filedir.read(filename);
       return data ? decodeSyncState(data) : initSyncState();
     },
 
     async save() {
-      if (!dir) return false;
+      if (!filedir) return false;
       const data = encodeSyncState(await api.get());
-      await dir.write(filename, data);
+      await filedir.write(filename, data);
       return true;
     },
   };
