@@ -1,8 +1,8 @@
 import 'symbol-observable';
 
+import { Dev } from 'sys.ui.react.common';
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
-import { Specs } from './entry.Specs.mjs';
 
 const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
@@ -12,19 +12,44 @@ const BADGE_CI = {
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
 
+const Imports = {
+  Specs: () => import('./entry.Specs.mjs'),
+  DefaultEntry: () => import('../ui/Root'),
+  Temp: () => import('../ui/Root.Temp'),
+};
+
 /**
  * User Interface
  */
+type SubjectMatter = 'Dev' | 'DefaultEntry' | 'Temp';
 
-(async () => {
+const render = async (subject: SubjectMatter) => {
   const root = createRoot(document.getElementById('root')!);
 
-  if (isDev) {
-    const { Dev } = await import('./index');
+  if (subject === 'Dev') {
+    const { Specs } = await Imports.Specs();
     const el = await Dev.render(Pkg, Specs, { badge: BADGE_CI, hrDepth: 3 });
     root.render(el);
-  } else {
-    const { RootFill } = await import('../ui/Root');
-    root.render(<RootFill />);
   }
+
+  if (subject === 'DefaultEntry') {
+    const { RootFill } = await import('../ui/Root');
+    const el = <RootFill />;
+    root.render(el);
+  }
+
+  if (subject === 'Temp') {
+    const { Temp } = await import('../ui/Root.Temp');
+    const el = <Temp />;
+    root.render(el);
+  }
+};
+
+/**
+ * ENTRY
+ */
+(async () => {
+  if (isDev) return render('Dev');
+  return render('DefaultEntry');
+  // return render('Temp');
 })();
