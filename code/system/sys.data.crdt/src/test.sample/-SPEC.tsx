@@ -29,7 +29,7 @@ export default Dev.describe('Sample', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'sys.crdt'} data={e.state} expand={1} />);
 
     dev.button('tmp', (e) => e.change((d) => d.count++));
   });

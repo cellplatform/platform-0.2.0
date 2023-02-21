@@ -2,7 +2,7 @@ import { PeerSyncer } from '.';
 import { expect, rx, Time, Test, TestFilesystem } from '../test.ui';
 import { Automerge } from './common';
 
-export default Test.describe('PeerSyncer', (e) => {
+export default Test.describe('CRDT.PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };
 
   function ConnectionMock() {
@@ -27,7 +27,7 @@ export default Test.describe('PeerSyncer', (e) => {
     return Automerge.change(doc, (doc) => (doc.count = 0));
   }
 
-  e.it('sync (via mock)', async (e) => {
+  e.it('sync (via event-bus mock)', async (e) => {
     let docA = createTestDoc();
     let docB = createTestDoc();
     const mock = ConnectionMock();

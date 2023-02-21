@@ -11,7 +11,6 @@ export default Test.describe('CRDT.DocRef', (e) => {
       const doc = CrdtDocRef.init<D>(initial);
       expect(doc.current).to.eql(initial);
       expect(doc.current).to.not.equal(initial); // NB: initialized as an Automerge document.
-      expect(doc.id.actor).to.eql(Automerge.getActorId(doc.current));
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
     });
 
@@ -21,8 +20,23 @@ export default Test.describe('CRDT.DocRef', (e) => {
       const doc = CrdtDocRef.init<D>(initial);
       expect(doc.current).to.eql({ count: 999 });
       expect(doc.current).to.equal(initial);
-      expect(doc.id.actor).to.eql(Automerge.getActorId(doc.current));
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
+    });
+  });
+
+  e.describe('properties', (e) => {
+    e.it('doc.id.actor (actorId)', async (e) => {
+      const doc1 = CrdtDocRef.init<D>({ count: 0 });
+      expect(doc1.id.actor).to.eql(Automerge.getActorId(doc1.current));
+      expect(doc1.id.actor).to.eql(doc1.id.actor); // NB: no change.
+      expect(doc1.id.actor.length).to.greaterThan(10);
+
+      const doc2 = CrdtDocRef.init<D>({ count: 0 });
+      expect(doc1.id.actor).to.not.eql(doc2.id.actor);
+
+      // NB: new reference from doc-1.
+      const doc3 = CrdtDocRef.init<D>(Automerge.from<D>(doc1.current));
+      expect(doc3.id.actor).to.not.eql(doc1.id.actor); // Share same underlying CRDT document.
     });
   });
 

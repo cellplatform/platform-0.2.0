@@ -57,13 +57,13 @@ export default Dev.describe('Root', (e) => {
       tests.push(
         ...[
           await button(import('../../crdt.Sync/PeerSyncer.TEST.mjs')),
-          await button(import('../../crdt.Doc/CrdtDocRef.TEST.mjs')),
+          await button(import('../../crdt.Doc/Crdt.DocRef.TEST.mjs')),
         ],
       );
 
       dev.hr();
 
-      dev.title('Automerge (Driver)');
+      dev.title('Driver');
       tests.push(
         ...[
           await button(import('../../driver.Automerge/-dev/TEST.basic.mjs')),
