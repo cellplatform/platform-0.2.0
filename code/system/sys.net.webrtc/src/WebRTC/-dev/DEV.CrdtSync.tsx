@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Automerge } from 'sys.data.crdt';
-
-import { Filesize, COLORS, Button, Color, css, Dev, rx, t, Crdt } from './common';
-
-const DEFAULT = {
-  dir: 'dev:test-data/myfile.crdt',
-  filename: 'data.crdt',
-};
+import { Button, Color, COLORS, Crdt, css, Dev, rx, t } from './common';
 
 /**
  * Schema:
@@ -20,20 +13,18 @@ export type Doc = {
   name?: string;
   count: number;
   peers: string[];
+  url?: string;
 };
 
 export type DevCrdtSyncProps = {
   self: t.Peer;
-  fs: t.Fs;
-  docRef: t.CrdtDocRef<Doc>;
+  docFile: t.CrdtDocFile<Doc>;
   style?: t.CssValue;
 };
 
 export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
-  const { self, fs, docRef } = props;
+  const { self, docFile } = props;
   const connRef = useRef<t.PeerDataConnection>();
-  // const docRef = useRef(createTestDoc());
-  // const doc = docRef.current;
 
   const [, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
@@ -60,67 +51,33 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     const { dispose, dispose$ } = rx.disposable();
     const conn = connRef.current;
 
-    const doc$ = docRef.$.pipe(rx.takeUntil(dispose$));
+    const doc$ = docFile.doc.$.pipe(rx.takeUntil(dispose$));
     const changed$ = doc$.pipe(rx.filter((e) => e.action === 'change'));
     doc$.subscribe(redraw); // Ensure visual is updated.
 
     if (conn) {
-      const dir = fs.dir(DEFAULT.dir);
+      console.log('start syncer');
+
       const syncer = Crdt.PeerSyncer(
         conn.bus(),
-        () => docRef.current,
-        (doc) => docRef.replace(doc),
+        () => docFile.doc.current,
+        (doc) => {
+          console.log('update (sync)', doc);
+          docFile.doc.replace(doc);
+        },
         // { dir },
       );
 
       changed$.subscribe((e) => syncer.update());
+      syncer.update();
     }
 
     changed$.pipe(rx.debounceTime(300)).subscribe(async (e) => {
-      const dir = fs.dir(DEFAULT.dir);
-      const path = DEFAULT.filename;
-
-      console.log('exists (before):', await dir.exists(path));
-
-      const data = Automerge.save(docRef.current);
-      await dir.write(path, data);
-      const m = await dir.manifest();
-
-      console.log('saved', data);
-      console.log('exists (after):', await dir.exists(path));
-
-      console.log('manifest:');
-      m.files.forEach((file) => {
-        const size = Filesize(file.bytes);
-        console.info(` - file: ${file.path} | #${file.filehash.slice(-6)} - ${size}`);
-      });
+      await docFile.save();
     });
 
     return dispose;
   }, [connRef.current?.id]);
-
-  /**
-   * TODO 🐷 TMP
-   */
-  useEffect(() => {
-    (async () => {
-      const dir = fs.dir(DEFAULT.dir);
-      const path = DEFAULT.filename;
-
-      //       console.group('🌳 init');
-      //       console.log('path', path);
-      //       console.log('exists', await fs.exists(path));
-      //
-      //       console.groupEnd();
-
-      if (await fs.exists(path)) {
-        const data = await dir.read(path);
-        console.log('INITIAL (saved)', data);
-      }
-
-      //
-    })();
-  }, []);
 
   /**
    * [Render]
@@ -158,9 +115,9 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
   const elCountButtons = (
     <div {...styles.buttons}>
-      <Button onClick={() => docRef.change((d) => (d.count += 1))}>Increment</Button>
+      <Button onClick={() => docFile.doc.change((d) => (d.count += 1))}>Increment</Button>
       {` | `}
-      <Button onClick={() => docRef.change((d) => (d.count -= 1))}>Decrement</Button>
+      <Button onClick={() => docFile.doc.change((d) => (d.count -= 1))}>Decrement</Button>
     </div>
   );
 
@@ -171,7 +128,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
         {elCountButtons}
         <div />
         <div>
-          <Dev.Object name={'doc'} data={docRef.current} expand={2} />
+          <Dev.Object name={'doc'} data={docFile.doc.current} expand={2} />
         </div>
         <div {...styles.buttons}></div>
       </div>

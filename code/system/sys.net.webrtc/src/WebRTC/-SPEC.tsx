@@ -19,15 +19,19 @@ import {
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
 import type { Doc } from './-dev/DEV.CrdtSync';
 
+const DEFAULT = {
+  filedir: 'dev:test/WebRTC.SPEC',
+  filename: 'cell.crdt',
+};
+
 type T = {
   self?: t.Peer;
-  main: {
-    media?: MediaStream;
-  };
+  main: { media?: MediaStream };
   debug: {
     remotePeer?: t.PeerId;
     testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse | null };
     muted: boolean;
+    imageUrl?: string;
   };
 };
 const initial: T = {
@@ -67,17 +71,27 @@ export default Dev.describe('WebRTC', async (e) => {
   type LocalStore = { muted: boolean };
   const local = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc').object({ muted: true });
   const signal = TEST.signal;
+
   let self: t.Peer;
+  let docFile: t.CrdtDocFile<Doc>;
 
   const bus = rx.bus();
   const media = WebRTC.Media.singleton({ bus });
   const streamRef = `sample.${slug()}`;
   const fs = (await Filesystem.client({ bus })).fs;
+  const filedir = fs.dir(DEFAULT.filedir);
 
-  const docRef = Crdt.DocRef.init<Doc>({
-    version: '0.0.0',
-    count: 0,
-    peers: [],
+  e.it('init:crdt', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+
+    docFile = await Crdt.Doc.file<Doc>(filedir, { version: '0.0.0', count: 0, peers: [] });
+
+    docFile.doc.$.subscribe((e) => {
+      ctx.redraw();
+    });
+
+    state.change((d) => (d.debug.imageUrl = docFile.doc.current.url ?? ''));
   });
 
   e.it('init:webrtc', async (e) => {
@@ -106,6 +120,8 @@ export default Dev.describe('WebRTC', async (e) => {
       .render<T>(async (e) => {
         const { MonacoEditor } = await import('sys.ui.react.monaco');
 
+        const imageUrl = docFile.doc.current.url ?? '';
+
         const styles = {
           base: css({ display: 'grid', gridTemplateRows: '1fr 1fr 150px' }),
           main: css({ position: 'relative' }),
@@ -113,11 +129,9 @@ export default Dev.describe('WebRTC', async (e) => {
           media: css({ Absolute: 0 }),
           overlay: css({
             Absolute: 0,
-
-            backgroundImage: `url(${URL.OVERLAY})`,
+            backgroundImage: `url(${imageUrl})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center',
-
+            backgroundPosition: 'center center',
             backgroundColor: Color.format(0.3),
             backdropFilter: 'blur(30px)',
           }),
@@ -138,7 +152,7 @@ export default Dev.describe('WebRTC', async (e) => {
         );
 
         const testResults = e.state.debug.testrunner.results;
-        const elOverlay = !testResults && testResults !== null && <div {...styles.overlay}></div>;
+        const elOverlay = imageUrl && <div {...styles.overlay}></div>;
 
         return (
           <div {...styles.base}>
@@ -146,8 +160,8 @@ export default Dev.describe('WebRTC', async (e) => {
               {elTestResults}
               {elMedia}
             </div>
-            <DevCrdtSync self={self} fs={fs} docRef={docRef} />
-            {/* {elOverlay} */}
+            <DevCrdtSync self={self} docFile={docFile} />
+            {elOverlay}
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={CODE} />
             </div>
@@ -193,6 +207,7 @@ export default Dev.describe('WebRTC', async (e) => {
         Peer: { self, connections },
         TestResults: e.state.debug.testrunner.results,
         // MediaStream__TODO__REFACTOR__: media,
+        doc: docFile.doc.current,
       };
       return <Dev.Object name={'WebRTC'} data={Delete.undefined(data)} expand={0} />;
     });
@@ -216,6 +231,7 @@ export default Dev.describe('WebRTC', async (e) => {
           />
         );
       });
+
       dev.hr();
 
       const isSelf = (state: T) => {
@@ -323,6 +339,8 @@ export default Dev.describe('WebRTC', async (e) => {
         button('PeerSyncer (CRDT) tests', import('./-dev/TEST.PeerSyncer.mjs'));
       });
 
+      dev.hr();
+
       dev.section((dev) => {
         const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
           dev.button((btn) =>
@@ -334,10 +352,8 @@ export default Dev.describe('WebRTC', async (e) => {
           );
         };
 
-        // dev.hr();
-
+        dev.title('Connection');
         dev.section(() => {
-          dev.hr();
           connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
           connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
           connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
@@ -378,6 +394,37 @@ export default Dev.describe('WebRTC', async (e) => {
           <div {...styles.base}>
             <QRCode value={value} size={180} />
           </div>
+        );
+      });
+    });
+
+    dev.hr();
+
+    dev.section((dev) => {
+      dev.row((e) => {
+        return (
+          <TextInput
+            value={e.state.debug.imageUrl}
+            valueStyle={{ fontSize: 14 }}
+            placeholder={'image'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            focusAction={'Select'}
+            spellCheck={false}
+            onChanged={(e) => {
+              //
+              dev.change((d) => (d.debug.imageUrl = e.to));
+              // docFile.doc.change((d) => (d.url = e.to));
+            }}
+            onEnter={async () => {
+              const url = e.state.debug.imageUrl ?? '';
+
+              docFile.doc.change((d) => (d.url = url));
+
+              // const id = state.current.debug.remotePeer;
+              // connectData(id);
+              // connectCamera(id);
+            }}
+          />
         );
       });
     });
