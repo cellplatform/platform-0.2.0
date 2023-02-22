@@ -1,4 +1,4 @@
-import { Dev, t } from '..';
+import { Dev, t } from '../test.ui';
 
 type T = {
   debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
@@ -56,8 +56,10 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../../crdt.Sync/PeerSyncer.TEST.mjs')),
-          await button(import('../../crdt.Doc/TEST.mjs')),
+          await button(import('../crdt.Doc/DocRef.TEST.mjs')),
+          await button(import('../crdt.Doc/DocFile.TEST.mjs')),
+          await button(import('../crdt.Sync/TEST.mjs')),
+          await button(import('../crdt.Is/TEST.mjs')),
         ],
       );
 
@@ -66,16 +68,16 @@ export default Dev.describe('Root', (e) => {
       dev.title('Driver');
       tests.push(
         ...[
-          await button(import('../../driver.Automerge/-dev/TEST.basic.mjs')),
-          await button(import('../../driver.Automerge/-dev/TEST.api.mjs')),
-          await button(import('../../driver.Automerge/-dev/TEST.filesystem.mjs')),
-          await button(import('../../driver.Automerge/-dev/TEST.sync.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.basic.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.api.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.filesystem.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.sync.mjs')),
         ],
       );
 
       dev.hr();
 
-      const all = Dev.describe('All Suites');
+      const all = Dev.describe('All Test Suites');
       all.merge(...tests);
     });
   });

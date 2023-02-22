@@ -1,6 +1,5 @@
 import { CrdtDoc } from '.';
-import { rx, expect, t, Test } from '../test.ui';
-import { Automerge } from './common';
+import { rx, expect, t, Test, Automerge } from '../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };

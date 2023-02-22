@@ -1,8 +1,7 @@
 import { PeerSyncer } from '.';
-import { expect, rx, Time, Test, TestFilesystem } from '../test.ui';
-import { Automerge } from './common';
+import { expect, rx, Time, Test, TestFilesystem, Automerge } from '../test.ui';
 
-export default Test.describe('CRDT.PeerSyncer', (e) => {
+export default Test.describe('Sync Protocol (PeerSyncer)', (e) => {
   type Doc = { name?: string; count: number };
 
   function ConnectionMock() {

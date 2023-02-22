@@ -11,3 +11,4 @@ export { TestFilesystem } from 'sys.fs';
  * @local
  */
 export * from '../../common';
+export { Automerge } from '../../driver.Automerge';
