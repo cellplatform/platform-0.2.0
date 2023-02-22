@@ -1,8 +1,15 @@
 import { rx, t, Automerge } from './common';
 
-const { isAutomerge, getActorId } = Automerge;
+const { isAutomerge } = Automerge;
 
-export function DocRef<D extends {}>(initial: D) {
+/**
+ * In-memory CRDT document reference (wrapper).
+ */
+export function DocRef<D extends {}>(initial: D, options: { dispose$?: t.Observable<any> } = {}) {
+  const { dispose, dispose$ } = rx.disposable(options.dispose$);
+  let _isDisposed = false;
+  dispose$.subscribe(() => (_isDisposed = true));
+
   let _doc: D = isAutomerge(initial) ? initial : Automerge.from<D>(initial);
   const $ = new rx.Subject<t.CrdtDocChange<D>>();
 
@@ -10,7 +17,24 @@ export function DocRef<D extends {}>(initial: D) {
     $: $.asObservable(),
 
     get id() {
-      return { actor: Automerge.getActorId(_doc) };
+      /**
+       * NOTES:
+       *   source: Automerge Docs
+       *   url:    https://automerge.org/docs/cookbook/persistence/
+       *
+       *    The actorId is a byte-aligned hexidecimal string that
+       *    uniquely identifies the current node. While there are many models
+       *    for persistence and synchronization, every actor/thread/process
+       *    which can generate unique changes to your document should be
+       *    considered its own actor; In the most straightforward and default
+       *    case, you omit actorId, a random UUID is generated. If you pass
+       *    in your own actorId, you must ensure that there can never be two
+       *    different processes with the same actor ID. Even if you have two
+       *    different processes running on the same machine, they must have
+       *    distinct actor IDs.
+       */
+      const actor = Automerge.getActorId(_doc);
+      return { actor };
     },
 
     /**
@@ -39,6 +63,15 @@ export function DocRef<D extends {}>(initial: D) {
       }
       _doc = doc;
       $.next({ doc: _doc, action: 'replace' });
+    },
+
+    /**
+     * Disposal.
+     */
+    dispose,
+    dispose$,
+    get isDisposed() {
+      return _isDisposed;
     },
   };
 
