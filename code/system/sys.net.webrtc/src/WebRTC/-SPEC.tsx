@@ -6,8 +6,6 @@ import {
   css,
   Dev,
   MediaStream,
-  PeerList,
-  PeerVideo,
   rx,
   slug,
   t,
@@ -17,6 +15,9 @@ import {
   Crdt,
 } from '../test.ui';
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
+
+import { PeerList, PeerVideo } from '../test.ui.dev';
+
 import type { Doc } from './-dev/DEV.CrdtSync';
 
 const DEFAULT = {

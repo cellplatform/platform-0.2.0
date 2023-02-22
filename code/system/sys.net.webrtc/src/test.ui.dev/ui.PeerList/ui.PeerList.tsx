@@ -10,6 +10,7 @@ export type PeerListProps = {
 
 export const PeerList: React.FC<PeerListProps> = (props) => {
   const { self } = props;
+
   const peerConnections = self.connectionsByPeer;
   if (peerConnections.length === 0) return null;
 
