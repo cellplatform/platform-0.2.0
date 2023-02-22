@@ -3,7 +3,7 @@ import { t, Is, Automerge } from './common';
 /**
  * Flags
  */
-export const DocIs = {
+export const CrdtIs = {
   /**
    * Determine if the given input is a [DocRef]
    */
@@ -22,7 +22,7 @@ export const DocIs = {
   file(input: any): input is t.CrdtDocFile<{}> {
     if (typeof input !== 'object' || input === null) return false;
     return (
-      DocIs.ref(input.doc) &&
+      CrdtIs.ref(input.doc) &&
       typeof input.exists === 'function' &&
       typeof input.save === 'function' &&
       typeof input.load === 'function'

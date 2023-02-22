@@ -5,10 +5,11 @@ export type CrdtDocAction = 'change' | 'replace';
 /**
  * Represents an observable handle to a CRDT document.
  */
-export type CrdtDocRef<D extends {}> = {
+export type CrdtDocRef<D extends {}> = t.Disposable & {
   readonly id: { actor: string };
   readonly $: t.Observable<CrdtDocChange<D>>;
   readonly current: D;
+  readonly isDisposed: boolean;
   change(fn: CrdtMutator<D>): void;
   replace(doc: D): void;
 };
@@ -23,8 +24,10 @@ export type CrdtMutator<D extends {}> = (doc: D) => void;
 /**
  * A file-system wrapper for a single CRDT document.
  */
-export type CrdtDocFile<D extends {}> = {
+export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly doc: t.CrdtDocRef<D>;
+  readonly isAutosaving: boolean;
+  readonly isDisposed: boolean;
   exists(): Promise<boolean>;
   load(): Promise<void>;
   save(): Promise<void>;
