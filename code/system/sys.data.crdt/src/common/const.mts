@@ -1,4 +1,4 @@
 export const DEFAULTS = {
-  sync: { filename: 'automerge.syncstate' },
-  doc: { filename: 'automerge.data' },
+  sync: { filename: 'crdt.syncstate' },
+  doc: { filename: 'crdt.data' },
 };
