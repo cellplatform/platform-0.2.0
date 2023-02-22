@@ -1,15 +1,19 @@
-import { CrdtDoc } from '.';
-import { Automerge, rx, expect, t, Test, TestFilesystem, Time, DEFAULTS } from '../test.ui';
+import { DocFile } from '.';
+import { Crdt } from '../crdt';
+import { Automerge, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../test.ui';
 
 export default Test.describe('DocFile', (e) => {
   type D = { count: number; name?: string };
-
   const initial: D = { count: 0 };
+
+  e.it('exposed from root API: Crdt.Doc.file', (e) => {
+    expect(Crdt.Doc.file).to.equal(DocFile);
+  });
 
   e.describe('initialize', (e) => {
     e.it('init: does not yet exist in filesystem', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
       expect(file.doc.current).to.eql(initial);
       expect(await file.exists()).to.eql(false);
       file.dispose();
@@ -17,20 +21,20 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('init: pass in existing [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const doc = CrdtDoc.ref<D>(initial);
-      const file = await CrdtDoc.file<D>(filedir, doc);
+      const doc = Crdt.Doc.ref<D>(initial);
+      const file = await DocFile<D>(filedir, doc);
       expect(file.doc).to.equal(doc);
       file.dispose();
     });
 
     e.it('init: loads existing data', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file1 = await CrdtDoc.file<D>(filedir, initial);
+      const file1 = await DocFile<D>(filedir, initial);
 
       file1.doc.change((d) => (d.count = 1234));
       await file1.save();
 
-      const file2 = await CrdtDoc.file<D>(filedir, initial);
+      const file2 = await DocFile<D>(filedir, initial);
       expect(file2.doc.current).to.eql({ count: 1234 });
 
       file1.dispose();
@@ -41,7 +45,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('dispose', (e) => {
     e.it('file.dispose() method', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
 
       let fired = 0;
       file.dispose$.subscribe(() => fired++);
@@ -59,7 +63,7 @@ export default Test.describe('DocFile', (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial, { dispose$ });
+      const file = await DocFile<D>(filedir, initial, { dispose$ });
 
       expect(file.isDisposed).to.eql(false);
       dispose();
@@ -70,7 +74,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('disposing of [DocFile] does not dispose wrapped [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
 
       expect(file.isDisposed).to.eql(false);
       expect(file.doc.isDisposed).to.eql(false);
@@ -86,7 +90,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('filesystem I/O', (e) => {
     e.it('save', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
 
       expect(await file.exists()).to.eql(false);
       expect((await filedir.manifest()).files).to.eql([]);
@@ -102,7 +106,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('load', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
       const original = {
         ref: file.doc,
         doc: file.doc.current,
@@ -133,7 +137,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('info', (e) => {
     e.it('empty (file does not exist)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
       const info = await file.info();
 
       expect(info.exists).to.eql(false);
@@ -143,7 +147,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('has: exists (flag), bytes, manifest', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
 
       await file.save();
       const info = await file.info();
@@ -157,7 +161,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('autosave (debounced)', (e) => {
     e.it('does not auto-save by default', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
       expect(file.isAutosaving).to.eql(false);
 
       await Time.wait(30);
@@ -170,7 +174,7 @@ export default Test.describe('DocFile', (e) => {
     e.it('autosaves', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const autosaveDebounce = 10; // ms
-      const file = await CrdtDoc.file<D>(filedir, initial, { autosaveDebounce });
+      const file = await DocFile<D>(filedir, initial, { autosaveDebounce });
       expect(file.isAutosaving).to.eql(true);
 
       const m1 = await filedir.manifest();
@@ -195,7 +199,7 @@ export default Test.describe('DocFile', (e) => {
       // const { dispose, dispose$ } = rx.disposable();
 
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, initial);
+      const file = await DocFile<D>(filedir, initial);
 
       const change1 = Automerge.getLastLocalChange(file.doc.current);
       file.doc.change((d) => d.count++);

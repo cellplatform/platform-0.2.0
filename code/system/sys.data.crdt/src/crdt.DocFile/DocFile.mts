@@ -1,5 +1,5 @@
 import { t, DEFAULTS, Automerge, rx } from './common';
-import { DocRef } from './DocRef.mjs';
+import { DocRef } from '../crdt.DocRef';
 import { CrdtIs } from '../crdt.Is';
 
 type Milliseconds = number;
