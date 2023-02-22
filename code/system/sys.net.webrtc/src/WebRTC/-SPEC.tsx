@@ -21,8 +21,7 @@ import { PeerList, PeerVideo } from '../test.ui.dev';
 import type { Doc } from './-dev/DEV.CrdtSync';
 
 const DEFAULT = {
-  filedir: 'dev:test/WebRTC.SPEC',
-  filename: 'cell.crdt',
+  filedir: 'dev:test/WebRTC.SPEC/self.cell',
 };
 
 type T = {
@@ -82,19 +81,6 @@ export default Dev.describe('WebRTC', async (e) => {
   const fs = (await Filesystem.client({ bus })).fs;
   const filedir = fs.dir(DEFAULT.filedir);
 
-  e.it('init:crdt', async (e) => {
-    const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-
-    docFile = await Crdt.Doc.file<Doc>(filedir, { version: '0.0.0', count: 0, peers: [] });
-
-    docFile.doc.$.subscribe((e) => {
-      ctx.redraw();
-    });
-
-    state.change((d) => (d.debug.imageUrl = docFile.doc.current.url ?? ''));
-  });
-
   e.it('init:webrtc', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -109,6 +95,16 @@ export default Dev.describe('WebRTC', async (e) => {
     self.connections$.subscribe((e) => {
       state.change((d) => (d.self = self));
     });
+  });
+
+  e.it('init:crdt', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+
+    docFile = await Crdt.Doc.file<Doc>(filedir, { version: '0.0.0', count: 0, peers: [] });
+    docFile.doc.$.subscribe((e) => ctx.redraw());
+
+    state.change((d) => (d.debug.imageUrl = docFile.doc.current.url ?? ''));
   });
 
   e.it('init:ui', async (e) => {
@@ -161,7 +157,7 @@ export default Dev.describe('WebRTC', async (e) => {
               {elTestResults}
               {elMedia}
             </div>
-            <DevCrdtSync self={self} docFile={docFile} />
+            <DevCrdtSync self={self} file={docFile} />
             {elOverlay}
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={CODE} />
