@@ -18,12 +18,12 @@ export type Doc = {
 
 export type DevCrdtSyncProps = {
   self: t.Peer;
-  docFile: t.CrdtDocFile<Doc>;
+  file: t.CrdtDocFile<Doc>;
   style?: t.CssValue;
 };
 
 export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
-  const { self, docFile } = props;
+  const { self, file } = props;
   const connRef = useRef<t.PeerDataConnection>();
 
   const [, setCount] = useState(0);
@@ -51,7 +51,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     const { dispose, dispose$ } = rx.disposable();
     const conn = connRef.current;
 
-    const doc$ = docFile.doc.$.pipe(rx.takeUntil(dispose$));
+    const doc$ = file.doc.$.pipe(rx.takeUntil(dispose$));
     const changed$ = doc$.pipe(rx.filter((e) => e.action === 'change'));
     doc$.subscribe(redraw); // Ensure visual is updated.
 
@@ -60,10 +60,10 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
       const syncer = Crdt.PeerSyncer(
         conn.bus(),
-        () => docFile.doc.current,
+        () => file.doc.current,
         (doc) => {
           console.log('update (sync)', doc);
-          docFile.doc.replace(doc);
+          file.doc.replace(doc);
         },
         // { dir },
       );
@@ -73,7 +73,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     }
 
     changed$.pipe(rx.debounceTime(300)).subscribe(async (e) => {
-      await docFile.save();
+      await file.save();
     });
 
     return dispose;
@@ -115,9 +115,9 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
 
   const elCountButtons = (
     <div {...styles.buttons}>
-      <Button onClick={() => docFile.doc.change((d) => (d.count += 1))}>Increment</Button>
+      <Button onClick={() => file.doc.change((d) => (d.count += 1))}>Increment</Button>
       {` | `}
-      <Button onClick={() => docFile.doc.change((d) => (d.count -= 1))}>Decrement</Button>
+      <Button onClick={() => file.doc.change((d) => (d.count -= 1))}>Decrement</Button>
     </div>
   );
 
@@ -128,7 +128,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
         {elCountButtons}
         <div />
         <div>
-          <Dev.Object name={'doc'} data={docFile.doc.current} expand={2} />
+          <Dev.Object name={'doc'} data={file.doc.current} expand={2} />
         </div>
         <div {...styles.buttons}></div>
       </div>

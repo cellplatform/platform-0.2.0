@@ -51,11 +51,20 @@ export async function DocFile<D extends {}>(
     },
 
     /**
+     * Summary info about the CRDT file.
+     */
+    async info() {
+      const exists = await api.exists();
+      const manifest = await filedir.manifest();
+      const bytes = manifest.files.reduce((acc, next) => acc + next.bytes, 0);
+      return { exists, bytes, manifest };
+    },
+
+    /**
      * Load (and replace) the document from the file-system.
      */
     async load() {
-      if (api.isDisposed) return;
-      if (!(await api.exists())) return;
+      if (api.isDisposed || !(await api.exists())) return;
       const data = await filedir.read(filename);
       if (data) api.doc.replace(Automerge.load<D>(data));
     },
@@ -65,8 +74,7 @@ export async function DocFile<D extends {}>(
      */
     async save() {
       if (api.isDisposed) return;
-      const data = Automerge.save(doc.current);
-      await filedir.write(filename, data);
+      await filedir.write(filename, Automerge.save(doc.current));
     },
 
     /**

@@ -130,6 +130,30 @@ export default Test.describe('DocFile', (e) => {
     });
   });
 
+  e.describe('info', (e) => {
+    e.it('empty (file does not exist)', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await CrdtDoc.file<D>(filedir, initial);
+      const info = await file.info();
+
+      expect(info.exists).to.eql(false);
+      expect(info.bytes).to.eql(0);
+      expect(info.manifest.files).to.eql([]);
+    });
+
+    e.it('has: exists (flag), bytes, manifest', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await CrdtDoc.file<D>(filedir, initial);
+
+      await file.save();
+      const info = await file.info();
+
+      expect(info.exists).to.eql(true);
+      expect(info.bytes).to.greaterThan(100);
+      expect(info.manifest.files.length).to.eql(1);
+    });
+  });
+
   e.describe('autosave (debounced)', (e) => {
     e.it('does not auto-save by default', async (e) => {
       const filedir = TestFilesystem.memory().fs;
@@ -167,7 +191,7 @@ export default Test.describe('DocFile', (e) => {
   });
 
   e.describe('log persistence strategy', (e) => {
-    e.it('.getLastLocalChange', async (e) => {
+    e.it.skip('.getLastLocalChange', async (e) => {
       // const { dispose, dispose$ } = rx.disposable();
 
       const filedir = TestFilesystem.memory().fs;

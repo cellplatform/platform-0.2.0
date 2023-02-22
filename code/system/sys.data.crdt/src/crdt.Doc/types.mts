@@ -29,6 +29,13 @@ export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly isAutosaving: boolean;
   readonly isDisposed: boolean;
   exists(): Promise<boolean>;
+  info(): Promise<CrdtDocFileInfo>;
   load(): Promise<void>;
   save(): Promise<void>;
+};
+
+export type CrdtDocFileInfo = {
+  bytes: number;
+  exists: boolean;
+  manifest: t.DirManifest;
 };
