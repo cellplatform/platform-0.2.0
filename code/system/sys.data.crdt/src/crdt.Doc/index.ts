@@ -1,1 +1,1 @@
-export * from './Crdt.DocRef.mjs';
+export * from './Doc.mjs';

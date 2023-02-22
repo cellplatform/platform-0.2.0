@@ -19,3 +19,13 @@ export type CrdtDocChange<D extends {}> = { doc: D; action: CrdtDocAction };
  * A function that mutates a CRDT document.
  */
 export type CrdtMutator<D extends {}> = (doc: D) => void;
+
+/**
+ * A file-system wrapper for a single CRDT document.
+ */
+export type CrdtDocFile<D extends {}> = {
+  readonly doc: t.CrdtDocRef<D>;
+  exists(): Promise<boolean>;
+  load(): Promise<void>;
+  save(): Promise<void>;
+};

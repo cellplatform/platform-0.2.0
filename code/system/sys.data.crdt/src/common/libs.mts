@@ -7,4 +7,4 @@ export const R = { clone };
 /**
  * @system
  */
-export { rx, slug, Time } from 'sys.util';
+export { rx, slug, Time, Is } from 'sys.util';

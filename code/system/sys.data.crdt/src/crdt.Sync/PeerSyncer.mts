@@ -8,7 +8,7 @@ type Id = string;
  * document and a set of network peers.
  */
 export function PeerSyncer<D>(
-  eventbus: t.EventBus<any>, // An event bus that fires over a network connection.
+  eventbus: t.EventBus<any>, // An event-bus that fires over a network connection.
   getDoc: () => D,
   setDoc: (doc: D) => void,
   options: { filedir?: t.Fs } = {},
