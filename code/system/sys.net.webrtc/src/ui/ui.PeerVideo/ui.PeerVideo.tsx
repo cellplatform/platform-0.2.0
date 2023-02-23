@@ -6,34 +6,29 @@ import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
 
 export type PeerVideoProps = {
-  self: t.Peer;
+  self?: t.Peer;
   mediaHeight?: number;
   muted?: boolean;
   style?: t.CssValue;
   onMuteClick?(e: React.MouseEvent): void;
 };
 
+const URL = {
+  Allen:
+    'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png',
+  James:
+    'https://user-images.githubusercontent.com/185555/220017460-0dfe4a43-aab5-46fc-8940-ea5a5813cff6.png',
+  Rowan:
+    'https://user-images.githubusercontent.com/185555/220252528-49154284-88e2-46aa-9544-2dff1c7a44a8.png',
+};
+
 export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   const { self, mediaHeight = 250, muted = false } = props;
-
   const [showCopied, setShowCopied] = useState(false);
+  const mouse = useMouseState();
 
   // TEMP 🐷
-  const cameraConnection = self.connections.media.find((conn) => conn.metadata.input === 'camera');
-
-  const URL = {
-    Allen:
-      'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png',
-    James:
-      'https://user-images.githubusercontent.com/185555/220017460-0dfe4a43-aab5-46fc-8940-ea5a5813cff6.png',
-    Rowan:
-      'https://user-images.githubusercontent.com/185555/220252528-49154284-88e2-46aa-9544-2dff1c7a44a8.png',
-  };
-
-  /**
-   * [Hooks]
-   */
-  const mouse = useMouseState();
+  const cameraConnection = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
 
   /**
    * [Lifecycle]
@@ -42,6 +37,8 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
     const timer = setTimeout(() => setShowCopied(false), 1500);
     return () => clearTimeout(timer);
   }, [showCopied]);
+
+  if (!self) return null;
 
   /**
    * [Handlers]

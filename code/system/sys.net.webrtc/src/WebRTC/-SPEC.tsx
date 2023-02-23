@@ -68,8 +68,8 @@ const CODE = `
 
 export default Dev.describe('WebRTC', async (e) => {
   type LocalStore = { muted: boolean };
-  const local = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc').object({ muted: true });
-  const signal = TEST.signal;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc');
+  const local = localstore.object({ muted: true });
 
   let self: t.Peer;
   let docFile: t.CrdtDocFile<Doc>;
@@ -89,11 +89,9 @@ export default Dev.describe('WebRTC', async (e) => {
      * WebRTC (network).
      */
     const { getStream } = media;
-    self = await WebRTC.peer({ signal, getStream });
+    self = await WebRTC.peer({ signal: TEST.signal, getStream });
     await state.change((d) => (d.self = self));
-    self.connections$.subscribe((e) => {
-      state.change((d) => (d.self = self));
-    });
+    self.connections$.subscribe((e) => state.change((d) => (d.self = self)));
   });
 
   e.it('init:crdt', async (e) => {
