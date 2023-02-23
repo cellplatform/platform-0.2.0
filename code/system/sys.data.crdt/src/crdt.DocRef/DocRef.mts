@@ -9,7 +9,7 @@ export function DocRef<D extends {}>(
   initial: D,
   options: {
     dispose$?: t.Observable<any>;
-    onChange?: (e: { doc: D; change: Uint8Array }) => void;
+    onChange?: t.CrdtDocRefChangeHandler<D>;
   } = {},
 ) {
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
@@ -24,20 +24,22 @@ export function DocRef<D extends {}>(
 
     get id() {
       /**
+       * The "actorID" is conceptually similar to a process-id.
+       *
        * NOTES:
        *   source: Automerge Docs
        *   url:    https://automerge.org/docs/cookbook/persistence/
        *
-       *    The actorId is a byte-aligned hexidecimal string that
-       *    uniquely identifies the current node. While there are many models
-       *    for persistence and synchronization, every actor/thread/process
-       *    which can generate unique changes to your document should be
-       *    considered its own actor; In the most straightforward and default
-       *    case, you omit actorId, a random UUID is generated. If you pass
-       *    in your own actorId, you must ensure that there can never be two
-       *    different processes with the same actor ID. Even if you have two
-       *    different processes running on the same machine, they must have
-       *    distinct actor IDs.
+       *  "The actorId is a byte-aligned hexidecimal string that
+       *   uniquely identifies the current node. While there are many models
+       *   for persistence and synchronization, every actor/thread/process
+       *   which can generate unique changes to your document should be
+       *   considered its own actor; In the most straightforward and default
+       *   case, you omit actorId, a random UUID is generated. If you pass
+       *   in your own actorId, you must ensure that there can never be two
+       *   different processes with the same actor ID. Even if you have two
+       *   different processes running on the same machine, they must have
+       *   distinct actor IDs."
        */
       const actor = Automerge.getActorId(_doc);
       return { actor };
@@ -55,13 +57,9 @@ export function DocRef<D extends {}>(
      */
     change(fn) {
       const doc = (_doc = Automerge.change<D>(_doc, (doc) => fn(doc as D)));
-
-      if (options.onChange) {
-        const change = Automerge.getLastLocalChange(doc);
-        if (change) options.onChange({ doc, change });
-      }
-
-      $.next({ action: 'change', doc });
+      const change = Automerge.getLastLocalChange(doc);
+      if (change) options.onChange?.({ doc, change });
+      $.next({ action: 'change', doc, change });
     },
 
     /**

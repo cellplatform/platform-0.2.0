@@ -1,6 +1,6 @@
 import { DocRef } from '.';
 import { Crdt } from '../crdt';
-import { Time, Automerge, expect, rx, t, Test } from '../test.ui';
+import { Automerge, expect, rx, t, Test } from '../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };
@@ -85,7 +85,7 @@ export default Test.describe('DocRef', (e) => {
       expect(fired[0].doc).to.eql({ count: 999 });
     });
 
-    e.it('changes (and update)', (e) => {
+    e.it('change (and update via [Automerge.applyChanges])', (e) => {
       const changes: Uint8Array[] = [];
       const docRef = DocRef<D>(initial, { onChange: (e) => changes.push(e.change) });
 
@@ -98,6 +98,22 @@ export default Test.describe('DocRef', (e) => {
       expect(doc.count).to.eql(999);
       expect(doc.name).to.eql('foo');
     });
+
+    e.it(
+      'broadcasts the [Automerge.getLastLocalChange] associated with each [doc.change(d→)] mutation',
+      async (e) => {
+        const doc = DocRef<D>(initial);
+        const fired: t.CrdtDocAction<D>[] = [];
+        doc.$.subscribe((e) => fired.push(e));
+
+        doc.change((doc) => (doc.count = 999));
+        expect(fired.length).to.eql(1);
+
+        const event = fired[0] as t.CrdtDocChange<D>;
+        expect(event.action).to.eql('change');
+        expect(event.change).to.eql(Automerge.getLastLocalChange(doc.current));
+      },
+    );
   });
 
   e.describe('replace', (e) => {
