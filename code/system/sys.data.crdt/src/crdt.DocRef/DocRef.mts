@@ -14,17 +14,26 @@ export function DocRef<D extends {}>(
 ) {
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
-  dispose$.subscribe(() => (_isDisposed = true));
+  dispose$.subscribe(() => {
+    _isDisposed = true;
+    onChangeHandlers.clear();
+  });
 
   const $ = new rx.Subject<t.CrdtDocAction<D>>();
   let _doc: D = isAutomerge(initial) ? initial : Automerge.from<D>(initial);
+
+  const onChangeHandlers = new Set<t.CrdtDocRefChangeHandler<D>>();
+  const fireOnChange = (change?: Uint8Array) => {
+    const doc = _doc;
+    if (change) onChangeHandlers.forEach((fn) => fn({ doc, change }));
+  };
 
   const api: t.CrdtDocRef<D> = {
     $: $.asObservable(),
 
     get id() {
       /**
-       * The "actorID" is conceptually similar to a process-id.
+       * The "actorID" is conceptually similar to a unique process-id.
        *
        * NOTES:
        *   source: Automerge Docs
@@ -56,10 +65,12 @@ export function DocRef<D extends {}>(
      * Change mutator.
      */
     change(fn) {
+      if (api.isDisposed) return api;
       const doc = (_doc = Automerge.change<D>(_doc, (doc) => fn(doc as D)));
       const change = Automerge.getLastLocalChange(doc);
-      if (change) options.onChange?.({ doc, change });
+      fireOnChange(change);
       $.next({ action: 'change', doc, change });
+      return api;
     },
 
     /**
@@ -68,11 +79,22 @@ export function DocRef<D extends {}>(
      * For normal document usage, use the [change] method.
      */
     replace(doc) {
+      if (api.isDisposed) return api;
       if (!isAutomerge(doc)) {
         throw new Error('Cannot replace with a non-Automerge document');
       }
       _doc = doc;
       $.next({ action: 'replace', doc });
+      return api;
+    },
+
+    /**
+     * Change handlers.
+     */
+    onChange(fn) {
+      if (api.isDisposed) return api;
+      onChangeHandlers.add(fn);
+      return api;
     },
 
     /**
@@ -85,11 +107,14 @@ export function DocRef<D extends {}>(
     },
   };
 
-  if (options.onChange && !isAutomerge(initial)) {
-    // NB: If this was not an Automerge document, then ensure the initial change
-    //     values (created via [Automerge.from]) are fired through the listener.
-    const change = Automerge.getLastLocalChange(_doc);
-    if (change) options.onChange?.({ doc: _doc, change });
+  /**
+   * Initial setup.
+   */
+  if (options.onChange) onChangeHandlers.add(options.onChange);
+  if (onChangeHandlers.size > 0 && !isAutomerge(initial)) {
+    // NB: If this was a new Automerge document, then ensure the initial change-set
+    //     (created via [Automerge.from]) is broadcast to any listeners.
+    fireOnChange(Automerge.getLastLocalChange(_doc));
   }
 
   return api;

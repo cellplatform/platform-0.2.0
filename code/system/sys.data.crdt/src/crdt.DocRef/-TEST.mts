@@ -85,6 +85,26 @@ export default Test.describe('DocRef', (e) => {
       expect(fired[0].doc).to.eql({ count: 999 });
     });
 
+    e.it('onChange (via {onChange} option and onChange handler method)', async (e) => {
+      const fired1: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
+
+      const doc = DocRef<D>(initial, { onChange: (e) => fired1.push(e) });
+      expect(fired1.length).to.eql(1); // NB: Initial change at assignment of {initial} object.
+
+      doc.change((doc) => (doc.count = 123));
+      expect(fired1.length).to.eql(2);
+
+      const fired2: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
+      const handler: t.CrdtDocRefChangeHandler<D> = (e) => fired2.push(e);
+      doc.onChange(handler);
+      doc.onChange(handler);
+      doc.onChange(handler); // NB: Only added once.
+
+      doc.change((doc) => (doc.count = 456));
+      expect(fired1.length).to.eql(3);
+      expect(fired2.length).to.eql(1);
+    });
+
     e.it('change (and update via [Automerge.applyChanges])', (e) => {
       const changes: Uint8Array[] = [];
       const docRef = DocRef<D>(initial, { onChange: (e) => changes.push(e.change) });
