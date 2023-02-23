@@ -50,6 +50,6 @@ const render = async (subject: SubjectMatter) => {
  */
 (async () => {
   if (isDev) return render('Dev');
-  // return render('DefaultEntry');
-  return render('Temp');
+  return render('DefaultEntry');
+  // return render('Temp');
 })();

@@ -75,7 +75,7 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@tsconfig/svelte": "^3.0.0",
     "@types/fs-extra": "^11.0.1",
-    "@types/glob": "^8.0.1",
+    "@types/glob": "^8.1.0",
     "@types/jsdom": "^21.1.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.14.0",
