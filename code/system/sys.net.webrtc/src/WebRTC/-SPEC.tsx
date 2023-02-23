@@ -1,27 +1,26 @@
 import { WebRTC } from '.';
 import {
-  Delete,
   Color,
   COLORS,
+  Crdt,
   css,
+  Delete,
   Dev,
+  Filesystem,
   MediaStream,
   rx,
   slug,
   t,
   TEST,
   TextInput,
-  Filesystem,
-  Crdt,
 } from '../test.ui';
+import { PeerList, PeerVideo } from '../ui';
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
-
-import { PeerList, PeerVideo } from '../test.ui.dev';
 
 import type { Doc } from './-dev/DEV.CrdtSync';
 
 const DEFAULT = {
-  filedir: 'dev:test/WebRTC.SPEC/self.cell',
+  filedir: 'dev:test/WebRTC.SPEC/cell.self',
 };
 
 type T = {
@@ -328,12 +327,17 @@ export default Dev.describe('WebRTC', async (e) => {
         };
 
         const button = (label: string, module: t.SpecImport) => {
-          dev.button(`run: ${label}`, () => invoke(module));
+          dev.button((btn) =>
+            btn
+              .label(label)
+              .onClick(() => invoke(module))
+              .right('tests'),
+          );
         };
 
-        button('MediaStream tests', import('../WebRTC.Media/Media-TEST.mjs'));
-        button('WebRTC tests', import('./-dev/TEST.peer.mjs'));
-        button('PeerSyncer (CRDT) tests', import('./-dev/TEST.PeerSyncer.mjs'));
+        button('sys.crdt.Sync (Document State)', import('./-dev/TEST.PeerSyncer.mjs'));
+        button('sys.local.MediaStream', import('../WebRTC.Media/Media-TEST.mjs'));
+        button('sys.net.WebRTC', import('./-dev/TEST.peer.mjs'));
       });
 
       dev.hr();
