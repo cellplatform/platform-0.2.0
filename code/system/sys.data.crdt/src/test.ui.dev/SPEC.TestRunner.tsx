@@ -48,7 +48,7 @@ export default Dev.describe('Root', (e) => {
         return spec;
       };
 
-      dev.button('Run All', async (e) => await invoke(all));
+      dev.button('all', async (e) => await invoke(all));
 
       dev.hr();
 
