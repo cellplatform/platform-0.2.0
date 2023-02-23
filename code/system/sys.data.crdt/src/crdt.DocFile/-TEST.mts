@@ -19,11 +19,30 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
     });
 
+    e.it('init: pass {onChange} option to [DocRef] constructor', async (e) => {
+      const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
+      const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
+
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial, { onChange });
+
+      file.doc.change((d) => d.count++);
+      expect(fired.length).to.eql(2); // NB: the {onChange} handler successfully registered on to the [DocRef].
+    });
+
     e.it('init: pass in existing [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const doc = Crdt.Doc.ref<D>(initial);
-      const file = await DocFile<D>(filedir, doc);
+
+      const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
+      const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
+
+      const file = await DocFile<D>(filedir, doc, { onChange });
       expect(file.doc).to.equal(doc);
+
+      file.doc.change((d) => d.count++);
+      expect(fired.length).to.eql(1); // NB: the {onChange} handler successfully registered on to the [DocRef].
+
       file.dispose();
     });
 

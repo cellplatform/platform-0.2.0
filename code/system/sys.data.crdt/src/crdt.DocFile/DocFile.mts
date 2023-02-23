@@ -19,14 +19,18 @@ export async function DocFile<D extends {}>(
   options: {
     dispose$?: t.Observable<any>;
     autosaveDebounce?: Milliseconds;
+    onChange?: t.CrdtDocRefChangeHandler<D>;
   } = {},
 ) {
+  const { onChange } = options;
+
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => (_isDisposed = true));
 
   const filename = DEFAULTS.doc.filename;
-  const doc = CrdtIs.ref(initial) ? initial : DocRef<D>(initial);
+  const doc = CrdtIs.ref(initial) ? initial : DocRef<D>(initial, { onChange });
+  if (CrdtIs.ref(initial) && options.onChange) doc.onChange(options.onChange);
 
   if (options.autosaveDebounce) {
     doc.$.pipe(
@@ -37,8 +41,14 @@ export async function DocFile<D extends {}>(
   }
 
   const api: t.CrdtDocFile<D> = {
+    /**
+     * CRDT document reference.
+     */
     doc,
 
+    /**
+     * Flag indicating if the document is autosaved after (de-bounced) changes.
+     */
     get isAutosaving() {
       return Boolean(options.autosaveDebounce);
     },
