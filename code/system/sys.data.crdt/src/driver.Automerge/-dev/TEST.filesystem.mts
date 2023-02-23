@@ -105,5 +105,34 @@ export default Test.describe('Automerge (lib): filesystem', (e) => {
 
       dispose();
     });
+
+    e.it('getLastLocalChange: undefined (no change)', async (e) => {
+      let doc = Automerge.init<Doc>();
+      const changeA = Automerge.getLastLocalChange(doc);
+      expect(changeA).to.eql(undefined);
+
+      doc = Automerge.change<Doc>(doc, (d) => null); // NB: do nothing.
+      const changeB = Automerge.getLastLocalChange(doc);
+      expect(changeB).to.eql(undefined);
+
+      doc = Automerge.change<Doc>(doc, (d) => (d.name = 'foo'));
+      const changeC = Automerge.getLastLocalChange(doc);
+      expect(changeC).to.be.instanceOf(Uint8Array);
+    });
+
+    e.it('getLastLocalChange: apply multiple times', async (e) => {
+      let doc1 = Automerge.init<Doc>();
+      let doc2 = Automerge.init<Doc>();
+
+      doc1 = Automerge.change<Doc>(doc1, (d) => (d.name = 'foo'));
+      const change = Automerge.getLastLocalChange(doc1)!;
+      expect(change).to.be.instanceOf(Uint8Array);
+
+      [doc2] = Automerge.applyChanges(doc2, [change]);
+      [doc2] = Automerge.applyChanges(doc2, [change]); // NB: repeat with applied change.
+      [doc2] = Automerge.applyChanges(doc2, [change]); // NB: repeat with applied change.
+
+      expect(doc2.name).to.eql('foo');
+    });
   });
 });

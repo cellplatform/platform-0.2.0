@@ -5,13 +5,19 @@ const { isAutomerge } = Automerge;
 /**
  * In-memory CRDT document reference (wrapper).
  */
-export function DocRef<D extends {}>(initial: D, options: { dispose$?: t.Observable<any> } = {}) {
+export function DocRef<D extends {}>(
+  initial: D,
+  options: {
+    dispose$?: t.Observable<any>;
+    onChange?: (e: { doc: D; change: Uint8Array }) => void;
+  } = {},
+) {
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => (_isDisposed = true));
 
+  const $ = new rx.Subject<t.CrdtDocAction<D>>();
   let _doc: D = isAutomerge(initial) ? initial : Automerge.from<D>(initial);
-  const $ = new rx.Subject<t.CrdtDocChange<D>>();
 
   const api: t.CrdtDocRef<D> = {
     $: $.asObservable(),
@@ -48,8 +54,14 @@ export function DocRef<D extends {}>(initial: D, options: { dispose$?: t.Observa
      * Change mutator.
      */
     change(fn) {
-      _doc = Automerge.change<D>(_doc, (doc) => fn(doc as D));
-      $.next({ doc: _doc, action: 'change' });
+      const doc = (_doc = Automerge.change<D>(_doc, (doc) => fn(doc as D)));
+
+      if (options.onChange) {
+        const change = Automerge.getLastLocalChange(doc);
+        if (change) options.onChange({ doc, change });
+      }
+
+      $.next({ action: 'change', doc });
     },
 
     /**
@@ -62,7 +74,7 @@ export function DocRef<D extends {}>(initial: D, options: { dispose$?: t.Observa
         throw new Error('Cannot replace with a non-Automerge document');
       }
       _doc = doc;
-      $.next({ doc: _doc, action: 'replace' });
+      $.next({ action: 'replace', doc });
     },
 
     /**
@@ -74,6 +86,13 @@ export function DocRef<D extends {}>(initial: D, options: { dispose$?: t.Observa
       return _isDisposed;
     },
   };
+
+  if (options.onChange && !isAutomerge(initial)) {
+    // NB: If this was not an Automerge document, then ensure the initial change
+    //     values (created via [Automerge.from]) are fired through the listener.
+    const change = Automerge.getLastLocalChange(_doc);
+    if (change) options.onChange?.({ doc: _doc, change });
+  }
 
   return api;
 }

@@ -1,6 +1,6 @@
 import { DocRef } from '.';
 import { Crdt } from '../crdt';
-import { Automerge, expect, rx, t, Test } from '../test.ui';
+import { Time, Automerge, expect, rx, t, Test } from '../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };
@@ -69,10 +69,41 @@ export default Test.describe('DocRef', (e) => {
     });
   });
 
+  e.describe('change', (e) => {
+    const initial: D = { count: 0 };
+
+    e.it('changes and fires update event', (e) => {
+      const doc = DocRef<D>(initial);
+      const fired: t.CrdtDocAction<D>[] = [];
+      doc.$.subscribe((e) => fired.push(e));
+
+      doc.change((doc) => (doc.count = 999));
+      expect(doc.current).to.eql({ count: 999 });
+
+      expect(fired.length).to.eql(1);
+      expect(fired[0].action).to.eql('change');
+      expect(fired[0].doc).to.eql({ count: 999 });
+    });
+
+    e.it('changes (and update)', (e) => {
+      const changes: Uint8Array[] = [];
+      const docRef = DocRef<D>(initial, { onChange: (e) => changes.push(e.change) });
+
+      docRef.change((doc) => (doc.count = 999));
+      docRef.change((doc) => (doc.name = 'foo'));
+
+      let doc = Automerge.init<D>();
+      [doc] = Automerge.applyChanges<D>(doc, changes);
+
+      expect(doc.count).to.eql(999);
+      expect(doc.name).to.eql('foo');
+    });
+  });
+
   e.describe('replace', (e) => {
-    e.it('replace', (e) => {
+    e.it('replaces and fires update event', (e) => {
       const doc = DocRef<D>({ count: 0 });
-      const fired: t.CrdtDocChange<D>[] = [];
+      const fired: t.CrdtDocAction<D>[] = [];
       doc.$.subscribe((e) => fired.push(e));
 
       const changed = Automerge.change(doc.current, (doc) => (doc.count = 999));

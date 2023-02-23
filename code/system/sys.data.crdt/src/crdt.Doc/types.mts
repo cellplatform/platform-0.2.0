@@ -1,20 +1,21 @@
 import { t } from '../common.t';
 
-export type CrdtDocAction = 'change' | 'replace';
-
 /**
  * Represents an observable handle to a CRDT document.
  */
 export type CrdtDocRef<D extends {}> = t.Disposable & {
   readonly id: { actor: string };
-  readonly $: t.Observable<CrdtDocChange<D>>;
+  readonly $: t.Observable<CrdtDocAction<D>>;
   readonly current: D;
   readonly isDisposed: boolean;
   change(fn: CrdtMutator<D>): void;
   replace(doc: D): void;
 };
 
-export type CrdtDocChange<D extends {}> = { doc: D; action: CrdtDocAction };
+export type CrdtDocActionKind = CrdtDocAction<{}>['action'];
+export type CrdtDocAction<D extends {}> = CrdtDocChange<D> | CrdtDocReplace<D>;
+export type CrdtDocChange<D extends {}> = { doc: D; action: 'change' };
+export type CrdtDocReplace<D extends {}> = { doc: D; action: 'replace' };
 
 /**
  * A function that mutates a CRDT document.
