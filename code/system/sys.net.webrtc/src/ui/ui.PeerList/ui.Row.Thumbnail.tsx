@@ -7,25 +7,20 @@ export type RowThumbnailProps = {
   peer: t.PeerId;
   stream?: MediaStream;
   size?: number;
-  proximity: t.PeerProximity;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
-  const { stream, proximity, size = 50 } = props;
+  const { stream, size = 50 } = props;
 
   const [ready, setReady] = useState(false);
 
   /**
    * [Render]
    */
-  // const thumbnailSize = 50;
   const styles = {
-    base: css({
-      position: 'relative',
-      Size: size,
-    }),
+    base: css({ position: 'relative', Size: size }),
     bg: css({
       Absolute: 0,
       display: 'grid',
@@ -34,7 +29,9 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
     }),
     video: css({}),
     peerId: css({
-      Absolute: proximity === 'local' ? [null, null, -15, 0] : [null, 0, -15, null],
+      Absolute: [null, 0, -12, 0],
+      display: 'grid',
+      placeItems: 'center',
     }),
 
     brain: {
@@ -70,10 +67,10 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
 
   const elPeerId = (
     <PeerId
+      style={styles.peerId}
       peer={props.peer}
       fontSize={8}
       abbreviate={4}
-      style={styles.peerId}
       onClick={() => copyPeer(props.peer)}
     />
   );
@@ -90,7 +87,7 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} title={props.proximity} onClick={props.onClick}>
+    <div {...css(styles.base, props.style)} onClick={props.onClick}>
       {elBackground}
       {elVideo}
       {elPeerId}

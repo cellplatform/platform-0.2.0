@@ -46,7 +46,6 @@ export const Row: React.FC<RowProps> = (props) => {
         <RowThumbnail
           peer={localPeer}
           stream={localStream}
-          proximity={'local'}
           size={thumbnailSize}
           onClick={printDebug}
         />
@@ -61,7 +60,6 @@ export const Row: React.FC<RowProps> = (props) => {
         <RowThumbnail
           peer={remotePeer}
           stream={remoteStream}
-          proximity={'remote'}
           size={thumbnailSize}
           onClick={printDebug}
         />

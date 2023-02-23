@@ -25,4 +25,5 @@ export { RecordButton, AudioWaveform } from 'sys.ui.react.video';
  * @local
  */
 export * from '../../common';
-export { Icons } from './Icons.mjs';
+export { Icons } from '../Icons.mjs';
+export { WebRTC } from '../../WebRTC';
