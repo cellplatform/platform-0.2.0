@@ -1,4 +1,5 @@
-import { t, WebRTC } from './common';
+import type * as t from './types.mjs';
+import { WebRTC } from './libs.mjs';
 
 /**
  * Format and place a "peer:<id>" on the clipboard.

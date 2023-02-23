@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, css, Icons, MediaStream, t, useMouseState } from '../common';
+import { Color, COLORS, copyPeer, css, Icons, MediaStream, t, useMouseState } from '../common';
 import { PeerId } from '../ui.PeerId';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
-import { copyPeer } from '../util.mjs';
 
 export type PeerVideoProps = {
   self: t.Peer;
