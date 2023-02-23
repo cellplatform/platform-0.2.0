@@ -1,6 +1,6 @@
 import { DocFile } from '.';
 import { Crdt } from '../crdt';
-import { Automerge, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../test.ui';
+import { slug, Automerge, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../test.ui';
 
 export default Test.describe('DocFile', (e) => {
   type D = { count: number; name?: string };
@@ -112,7 +112,7 @@ export default Test.describe('DocFile', (e) => {
         doc: file.doc.current,
       };
 
-      const fired: t.CrdtDocChange<D>[] = [];
+      const fired: t.CrdtDocAction<D>[] = [];
       file.doc.$.subscribe((e) => fired.push(e));
 
       await file.load();
@@ -158,7 +158,24 @@ export default Test.describe('DocFile', (e) => {
     });
   });
 
-  e.describe('autosave (debounced)', (e) => {
+  /**
+   * NOTES:
+   *   source: Automerge Docs
+   *   url:    https://automerge.org/docs/cookbook/persistence/
+   *
+   *  "Storing one change at a time is good for small updates to a document,
+   *   since it will be more compact than storing the whole document over
+   *   and over again. But storing the whole document will be more compact
+   *   (and faster) than storing the whole log of changes since the document
+   *   was created. This can be tested and fine-tuned based on the number of
+   *   changes you're saving at any one given time. If you're saving hundreds
+   *   of changes, it is probably more efficienty to simply write the whole
+   *   document to disk using Automerge.save(doc). If you have a long history
+   *   and only want to sync one change, then using getLastLocalChange will be
+   *   more efficient."
+   */
+
+  e.describe('persistence strategy: complete compressed file - autosave (debounced)', (e) => {
     e.it('does not auto-save by default', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile<D>(filedir, initial);
@@ -194,22 +211,102 @@ export default Test.describe('DocFile', (e) => {
     });
   });
 
-  e.describe('log persistence strategy', (e) => {
-    e.it.skip('.getLastLocalChange', async (e) => {
-      // const { dispose, dispose$ } = rx.disposable();
-
+  e.describe('persistence strategy: logfiles', (e) => {
+    /**
+     * TODO 🐷
+     */
+    e.it.skip('[getLastLocalChange] → [applyChanges]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile<D>(filedir, initial);
 
-      const change1 = Automerge.getLastLocalChange(file.doc.current);
-      file.doc.change((d) => d.count++);
-      const change2 = Automerge.getLastLocalChange(file.doc.current);
+      const change1 = Automerge.getLastLocalChange(file.doc.current)!;
+      expect(change1).to.eql(Automerge.getLastLocalChange(file.doc.current));
+
+      file.doc.change((d) => (d.count = 1234));
+      const change2 = Automerge.getLastLocalChange(file.doc.current)!;
+
+      expect(change1).to.exist;
+      expect(change2).to.exist;
+      expect(change1).to.not.eql(change2);
+
+      let doc = Automerge.init<D>();
+      expect(doc.count).to.eql(undefined);
+
+      [doc] = Automerge.applyChanges<D>(doc, [change1]);
+      expect(doc.count).to.eql(0); // NB: Initial value (set within the [DocFile] constructor).
+
+      [doc] = Automerge.applyChanges<D>(doc, [change2]);
+      expect(doc.count).to.eql(1234);
+
+      file.dispose();
+    });
+
+    e.it('multiple changes log', async (e) => {
+      const _changes: Uint8Array[] = [];
+
+      /**
+       * TODO 🐷
+       * Turn this "log saving" behavior into a function passed
+       * to the DocFile options (or true to use Default log saving strategy function)
+       */
+
+      const dirname = '.log.changes';
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial, {
+        async onChange(e) {
+          // Store changes in-memory for testing below.
+          _changes.push(e.change);
+
+          // Store change as a file within the log directory.
+          if (e.change instanceof Uint8Array) {
+            const logdir = filedir.dir(dirname);
+            const count = (await logdir.manifest()).files.length;
+            const filename = `${count}.${slug()}`;
+            await logdir.write(filename, e.change);
+          }
+        },
+      });
+
+      const getManifestFiles = async () => (await filedir.manifest()).files;
+      const files1 = await getManifestFiles();
+      expect(files1.length).to.eql(1); // NB: change is the initial document setup
+
+      file.doc.change((d) => (d.count = 123));
+      file.doc.change((d) => (d.count = 456));
+      await Time.wait(10); // NB: setup test scenario for filename ID "<count>.<slug>" incrementer not overwriting a simple count.
+      file.doc.change((d) => (d.name = 'foo'));
+
+      await Time.wait(10);
+      const files2 = await getManifestFiles();
+      expect(files2.length).to.eql(4); // NB: additional changes saved as files.
+
+      const filenames = files2.map((file) => file.path);
+      expect(filenames[0].startsWith('.log.changes/0.')).to.eql(true);
+      expect(filenames[1].startsWith('.log.changes/1.')).to.eql(true);
+      expect(filenames[2].startsWith('.log.changes/1.')).to.eql(true); // NB: ^^^ increments safely. "<count>.<slug>"
+      expect(filenames[3].startsWith('.log.changes/3.')).to.eql(true);
+
+      // Reconstruct a document from the in-memory changes.
+      let docFromChanges = Automerge.init<D>();
+      [docFromChanges] = Automerge.applyChanges<D>(docFromChanges, _changes);
+      expect(docFromChanges).to.eql({ count: 456, name: 'foo' });
 
       console.log('-------------------------------------------');
-      console.log('change1', change1);
-      console.log('change2', change2);
+      console.log('docFromChanges', docFromChanges);
 
-      //
+      // Reconstruct a document from the saved file changes in the log.
+      const logdir = filedir.dir(dirname);
+      const logfiles = (await logdir.manifest()).files;
+      const logfileChanges = (await Promise.all(
+        logfiles.map(async (file) => logdir.read(file.path)).filter(Boolean),
+      )) as Uint8Array[];
+
+      let docFromLogFiles = Automerge.init<D>();
+      [docFromLogFiles] = Automerge.applyChanges<D>(docFromLogFiles, logfileChanges);
+      expect(docFromLogFiles).to.eql({ count: 456, name: 'foo' });
+
+      console.log('docFromLogFiles', docFromLogFiles);
+
       file.dispose();
     });
   });

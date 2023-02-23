@@ -3,7 +3,9 @@ import { Dev, t } from '../test.ui';
 type T = {
   debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
 };
-const initial: T = { debug: { testrunner: {} } };
+const initial: T = {
+  debug: { testrunner: {} },
+};
 
 export default Dev.describe('Root', (e) => {
   e.it('init', async (e) => {
@@ -16,9 +18,9 @@ export default Dev.describe('Root', (e) => {
         return (
           <Dev.TestRunner.Results
             {...e.state.debug.testrunner}
+            style={{ Absolute: 0 }}
             padding={10}
             scroll={true}
-            style={{ Absolute: 0 }}
           />
         );
       });
@@ -56,10 +58,10 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../crdt.DocRef/TEST.mjs')),
-          await button(import('../crdt.DocFile/TEST.mjs')),
-          await button(import('../crdt.Sync/TEST.mjs')),
-          await button(import('../crdt.Is/TEST.mjs')),
+          await button(import('../crdt.DocRef/-TEST.mjs')),
+          await button(import('../crdt.DocFile/-TEST.mjs')),
+          await button(import('../crdt.Sync/-TEST.mjs')),
+          await button(import('../crdt.Is/-TEST.mjs')),
         ],
       );
 
