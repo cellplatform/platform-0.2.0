@@ -5,7 +5,7 @@ import { RowThumbnail } from './ui.Row.Thumbnail';
 
 export type RowProps = {
   self: t.PeerId;
-  connections: t.PeerConnectionsByPeer;
+  peer: t.PeerConnectionsByPeer;
   debug?: boolean;
   style?: t.CssValue;
   onConnectRequest?: t.PeerListConnectReqHandler;
@@ -13,19 +13,19 @@ export type RowProps = {
 };
 
 export const Row: React.FC<RowProps> = (props) => {
-  const { self, connections, debug = true } = props;
+  const { self, peer, debug = false } = props;
 
   const localPeer = self;
-  const remotePeer = connections.peer;
+  const remotePeer = peer.peer;
 
-  const localStream = Wrangle.media(connections, 'local');
-  const remoteStream = Wrangle.media(connections, 'remote');
+  const localStream = Wrangle.media(peer, 'local');
+  const remoteStream = Wrangle.media(peer, 'remote');
 
   /**
    * [Handlers]
    */
   const printDebug = () => {
-    console.debug('peer(connections):', connections);
+    console.debug('peer(connections):', peer);
   };
 
   /**
@@ -52,7 +52,7 @@ export const Row: React.FC<RowProps> = (props) => {
         <div />
         <RowBody
           debug={debug}
-          peerConnections={connections}
+          peerConnections={peer}
           onConnectRequest={props.onConnectRequest}
           onDisplayConnRequest={props.onDisplayConnRequest}
         />
@@ -63,7 +63,7 @@ export const Row: React.FC<RowProps> = (props) => {
           size={thumbnailSize}
           onClick={printDebug}
         />
-        <ActionBar peerConnections={connections} />
+        <ActionBar peerConnections={peer} />
       </div>
     </div>
   );

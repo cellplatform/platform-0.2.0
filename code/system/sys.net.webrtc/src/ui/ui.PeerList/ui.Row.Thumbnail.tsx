@@ -12,7 +12,6 @@ export type RowThumbnailProps = {
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
   const { stream, size = 50 } = props;
-
   const [ready, setReady] = useState(false);
 
   /**

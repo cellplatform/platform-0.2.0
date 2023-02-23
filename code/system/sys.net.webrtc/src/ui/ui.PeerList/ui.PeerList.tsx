@@ -32,7 +32,7 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
         <Row
           key={connections.peer}
           self={self.id}
-          connections={connections}
+          peer={connections}
           style={styles.row}
           onConnectRequest={props.onConnectRequest}
           onDisplayConnRequest={props.onDisplayConnRequest}
