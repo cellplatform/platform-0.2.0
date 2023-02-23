@@ -1,22 +1,32 @@
-import { Button, t, TextSyntax, WebRTC } from '../common';
+import { Button, t, TextSyntax, WebRTC, copyPeer } from '../common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;
   style?: t.CssValue;
   abbreviate?: boolean | number | [number, number];
   fontSize?: number;
-  onClick?: React.MouseEventHandler;
+  copyOnClick?: boolean;
+  onClick?: (e: { id: t.PeerId; uri: t.PeerUri; copied: boolean }) => void;
 };
 
 export const PeerId: React.FC<PeerIdProps> = (props) => {
-  const { fontSize = 13 } = props;
+  const { fontSize = 13, copyOnClick = false } = props;
   const uri = Wrangle.uri(props);
+
+  /**
+   * Handlers
+   */
+  const handleClick = () => {
+    const id = WebRTC.Util.asId(props.peer);
+    if (copyOnClick) copyPeer(id);
+    props.onClick?.({ id, uri, copied: copyOnClick });
+  };
 
   /**
    * [Render]
    */
   return (
-    <Button onClick={props.onClick} style={props.style}>
+    <Button onClick={handleClick} style={props.style}>
       <TextSyntax text={uri} monospace={true} fontWeight={'bold'} fontSize={fontSize} />
     </Button>
   );
