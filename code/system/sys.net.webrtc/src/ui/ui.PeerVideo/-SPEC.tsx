@@ -1,5 +1,5 @@
 import { PeerVideo, PeerVideoProps } from '.';
-import { WebRTC, rx, Dev, TEST, t } from '../../test.ui';
+import { Dev, t, TEST, WebRTC } from '../../test.ui';
 
 type T = { props: PeerVideoProps };
 const initial: T = { props: {} };
@@ -18,7 +18,7 @@ export default Dev.describe('PeerVideo', (e) => {
     await state.change((d) => (d.props.muted = local.muted));
 
     /**
-     * WebRTC (network).
+     * WebRTC (network)
      */
     const { getStream } = media;
     self = await WebRTC.peer({ signal: TEST.signal, getStream });
