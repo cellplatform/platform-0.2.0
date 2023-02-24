@@ -7,14 +7,14 @@ export default Dev.describe('WebRTC', (e) => {
   e.timeout(15 * SECOND);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    const wait = Array.from({ length }).map(() => WebRTC.peer({ signal, getStream }));
+    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
     return await Promise.all(wait);
   };
 
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
-      const peer1 = await WebRTC.peer({ signal: `  http://${signal}  ` }); // NB: Trims the HTTP prefix.
-      const peer2 = await WebRTC.peer({ signal: `  https://${signal}  ` });
+      const peer1 = await WebRTC.peer(`  http://${signal}  `); // NB: Trims the HTTP prefix.
+      const peer2 = await WebRTC.peer(`  https://${signal}  `);
 
       expect(peer1.signal).to.eql(signal);
       expect(peer2.signal).to.eql(signal);
@@ -24,7 +24,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('generates a unique peer-id', async (e) => {
-      const peer = await WebRTC.peer({ signal });
+      const peer = await WebRTC.peer(signal);
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
       expect(peer.kind).to.eql('local:peer');
@@ -35,8 +35,8 @@ export default Dev.describe('WebRTC', (e) => {
     e.it('uses a specific peer-id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
-      const peer1 = await WebRTC.peer({ signal, id: id1 });
-      const peer2 = await WebRTC.peer({ signal, id: `peer:${id2}` });
+      const peer1 = await WebRTC.peer(signal, { id: id1 });
+      const peer2 = await WebRTC.peer(signal, { id: `peer:${id2}` });
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2); // NB: Trims the "peer:" URI prefix.
@@ -46,7 +46,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('exposes lists as immutable', async (e) => {
-      const peer = await WebRTC.peer({ signal });
+      const peer = await WebRTC.peer(signal);
 
       expect(peer.connections.all).to.eql([]);
       expect(peer.connections.data).to.eql([]);

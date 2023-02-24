@@ -7,7 +7,7 @@ export default Dev.describe('PeerSyncer (Integration Test)', (e) => {
   e.timeout(15 * SECOND);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    const wait = Array.from({ length }).map(() => WebRTC.peer({ signal, getStream }));
+    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
     return await Promise.all(wait);
   };
 

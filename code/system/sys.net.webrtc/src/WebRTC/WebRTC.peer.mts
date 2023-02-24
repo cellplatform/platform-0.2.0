@@ -3,17 +3,12 @@ import { Util } from './util.mjs';
 import { MemoryState } from './WebRTC.state.mjs';
 
 type HostName = string;
+type Options = { id?: t.PeerId; getStream?: t.PeerGetMediaStream };
 
 /**
  * Start a new local peer.
  */
-export function peer(
-  signal: HostName,
-  options: {
-    id?: t.PeerId;
-    getStream?: t.PeerGetMediaStream;
-  },
-): Promise<t.Peer> {
+export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
   return new Promise<t.Peer>((resolve, reject) => {
     signal = Path.trimHttpPrefix(signal);
     const { getStream } = options;
