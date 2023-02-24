@@ -78,7 +78,7 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
     });
 
-    e.it('dispose via { dispose$ } option', async (e) => {
+    e.it('file dispose via { dispose$ } option', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const filedir = TestFilesystem.memory().fs;
@@ -91,7 +91,7 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
     });
 
-    e.it('disposing of [DocFile] does not dispose wrapped [DocRef]', async (e) => {
+    e.it('disposing of [DocFile] does not dispose the wrapped [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile<D>(filedir, initial);
 
@@ -103,6 +103,23 @@ export default Test.describe('DocFile', (e) => {
       expect(file.doc.isDisposed).to.eql(false);
 
       file.dispose();
+    });
+
+    e.it('disposing of the wrapped [DocRef] does dispose the [DocFile]', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial);
+
+      let fired = 0;
+      file.dispose$.subscribe(() => fired++);
+
+      expect(file.isDisposed).to.eql(false);
+      expect(file.doc.isDisposed).to.eql(false);
+
+      file.doc.dispose();
+
+      expect(file.isDisposed).to.eql(true);
+      expect(file.doc.isDisposed).to.eql(true);
+      expect(fired).to.eql(1);
     });
   });
 
@@ -193,9 +210,8 @@ export default Test.describe('DocFile', (e) => {
    *   and only want to sync one change, then using getLastLocalChange will be
    *   more efficient."
    */
-
-  e.describe('persistence strategy: complete compressed file - autosave (debounced)', (e) => {
-    e.it('does not auto-save by default', async (e) => {
+  e.describe('persistence strategy: autosave (debounced) complete compressed file', (e) => {
+    e.it('does not autosave by default', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile<D>(filedir, initial);
       expect(file.isAutosaving).to.eql(false);
@@ -207,10 +223,17 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
     });
 
-    e.it('autosaves', async (e) => {
+    e.it('does not autosave when debounce is 0 (or negative)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const autosaveDebounce = 10; // ms
-      const file = await DocFile<D>(filedir, initial, { autosaveDebounce });
+      const file1 = await DocFile<D>(filedir, initial, { autosave: 0 });
+      const file2 = await DocFile<D>(filedir, initial, { autosave: -1 });
+      expect(file1.isAutosaving).to.eql(false);
+      expect(file2.isAutosaving).to.eql(false);
+    });
+
+    e.it('autosaves (after debounce delay)', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial, { autosave: 10 });
       expect(file.isAutosaving).to.eql(true);
 
       const m1 = await filedir.manifest();
@@ -228,62 +251,46 @@ export default Test.describe('DocFile', (e) => {
 
       file.dispose();
     });
+
+    e.it('autosaves (via True flag to options)', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial, { autosave: true });
+      expect(file.isAutosaving).to.eql(true);
+
+      const m1 = await filedir.manifest();
+
+      file.doc.change((d) => (d.count = 1234));
+      await Time.wait(DEFAULTS.doc.autosaveDebounce + 10);
+
+      const m2 = await filedir.manifest();
+      expect(m1.files.length).to.eql(0);
+      expect(m2.files.length).to.eql(1);
+    });
+
+    e.it('does not autosave (via False flag to options)', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile<D>(filedir, initial, { autosave: false });
+      expect(file.isAutosaving).to.eql(false);
+    });
   });
 
   e.describe('persistence strategy: logfiles', (e) => {
-    /**
-     * TODO 🐷
-     */
-    e.it.skip('[getLastLocalChange] → [applyChanges]', async (e) => {
+    e.it('isLogging (property)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
-
-      const change1 = Automerge.getLastLocalChange(file.doc.current)!;
-      expect(change1).to.eql(Automerge.getLastLocalChange(file.doc.current));
-
-      file.doc.change((d) => (d.count = 1234));
-      const change2 = Automerge.getLastLocalChange(file.doc.current)!;
-
-      expect(change1).to.exist;
-      expect(change2).to.exist;
-      expect(change1).to.not.eql(change2);
-
-      let doc = Automerge.init<D>();
-      expect(doc.count).to.eql(undefined);
-
-      [doc] = Automerge.applyChanges<D>(doc, [change1]);
-      expect(doc.count).to.eql(0); // NB: Initial value (set within the [DocFile] constructor).
-
-      [doc] = Automerge.applyChanges<D>(doc, [change2]);
-      expect(doc.count).to.eql(1234);
-
-      file.dispose();
+      const file1 = await DocFile<D>(filedir, initial);
+      const file2 = await DocFile<D>(filedir, initial, { logsave: true });
+      expect(file1.isLogging).to.eql(false); // NB: default.
+      expect(file2.isLogging).to.eql(true);
     });
 
     e.it('multiple changes log', async (e) => {
       const _changes: Uint8Array[] = [];
 
-      /**
-       * TODO 🐷
-       * Turn this "log saving" behavior into a function passed
-       * to the DocFile options (or true to use Default log saving strategy function)
-       */
-
-      const dirname = '.log.changes';
+      const dirname = DEFAULTS.doc.logdir;
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile<D>(filedir, initial, {
-        async onChange(e) {
-          // Store changes in-memory for testing below.
-          _changes.push(e.change);
-
-          // Store change as a file within the log directory.
-          if (e.change instanceof Uint8Array) {
-            const logdir = filedir.dir(dirname);
-            const count = (await logdir.manifest()).files.length;
-            const filename = `${count}.${slug()}`;
-            await logdir.write(filename, e.change);
-          }
-        },
+        logsave: true,
+        onChange: (e) => _changes.push(e.change),
       });
 
       const getManifestFiles = async () => (await filedir.manifest()).files;
@@ -300,31 +307,26 @@ export default Test.describe('DocFile', (e) => {
       expect(files2.length).to.eql(4); // NB: additional changes saved as files.
 
       const filenames = files2.map((file) => file.path);
-      expect(filenames[0].startsWith('.log.changes/0.')).to.eql(true);
-      expect(filenames[1].startsWith('.log.changes/1.')).to.eql(true);
-      expect(filenames[2].startsWith('.log.changes/1.')).to.eql(true); // NB: ^^^ increments safely. "<count>.<slug>"
-      expect(filenames[3].startsWith('.log.changes/3.')).to.eql(true);
+      expect(filenames[0].startsWith('log.changes/0.')).to.eql(true);
+      expect(filenames[1].startsWith('log.changes/1.')).to.eql(true);
+      expect(filenames[2].startsWith('log.changes/1.')).to.eql(true); // NB: ^^^ increments safely. "<count>.<slug>"
+      expect(filenames[3].startsWith('log.changes/3.')).to.eql(true);
 
       // Reconstruct a document from the in-memory changes.
       let docFromChanges = Automerge.init<D>();
       [docFromChanges] = Automerge.applyChanges<D>(docFromChanges, _changes);
       expect(docFromChanges).to.eql({ count: 456, name: 'foo' });
 
-      console.log('-------------------------------------------');
-      console.log('docFromChanges', docFromChanges);
-
       // Reconstruct a document from the saved file changes in the log.
+      const read = async (path: string) => (await logdir.read(path))!;
       const logdir = filedir.dir(dirname);
-      const logfiles = (await logdir.manifest()).files;
-      const logfileChanges = (await Promise.all(
-        logfiles.map(async (file) => logdir.read(file.path)).filter(Boolean),
-      )) as Uint8Array[];
+      const logfiles = (await logdir.manifest()).files.map(({ path }) => path);
+      const outOfOrder = [1, 0, 3, 2].map((i) => logfiles[i]);
+      const logfileChanges = await Promise.all(outOfOrder.map(read));
 
       let docFromLogFiles = Automerge.init<D>();
       [docFromLogFiles] = Automerge.applyChanges<D>(docFromLogFiles, logfileChanges);
       expect(docFromLogFiles).to.eql({ count: 456, name: 'foo' });
-
-      console.log('docFromLogFiles', docFromLogFiles);
 
       file.dispose();
     });

@@ -6,6 +6,7 @@ import type { t } from '../common.t';
 export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly doc: t.CrdtDocRef<D>;
   readonly isAutosaving: boolean;
+  readonly isLogging: boolean;
   readonly isDisposed: boolean;
   exists(): Promise<boolean>;
   info(): Promise<CrdtDocFileInfo>;

@@ -1,14 +1,18 @@
-import { t, DEFAULTS, Automerge, rx } from './common';
 import { DocRef } from '../crdt.DocRef';
 import { CrdtIs } from '../crdt.Is';
+import { Automerge, DEFAULTS, rx, t } from './common';
+import { autoSaveStrategy } from './strategy.AutoSave.mjs';
+import { saveLogStrategy } from './strategy.SaveLog.mjs';
 
 type Milliseconds = number;
+const filename = DEFAULTS.doc.filename;
 
-/**
- * TODO 🐷
- * - autosave (or not)
- * - log saving strategy
- */
+type Options<D extends {}> = {
+  dispose$?: t.Observable<any>;
+  autosave?: boolean | Milliseconds;
+  logsave?: boolean;
+  onChange?: t.CrdtDocRefChangeHandler<D>;
+};
 
 /**
  * Extend a CRDT [DocRef] with file-system persistence.
@@ -16,30 +20,38 @@ type Milliseconds = number;
 export async function DocFile<D extends {}>(
   filedir: t.Fs,
   initial: D | t.CrdtDocRef<D>,
-  options: {
-    dispose$?: t.Observable<any>;
-    autosaveDebounce?: Milliseconds;
-    onChange?: t.CrdtDocRefChangeHandler<D>;
-  } = {},
+  options: Options<D> = {},
 ) {
-  const { onChange } = options;
+  const autosaveDebounce = Wrangle.autosaveDebounce(options.autosave);
 
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
-  dispose$.subscribe(() => (_isDisposed = true));
+  dispose$.subscribe(() => {
+    _isDisposed = true;
+    onChange$.complete();
+  });
 
-  const filename = DEFAULTS.doc.filename;
+  const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
+  const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
+    if (!_isDisposed) {
+      onChange$.next(e);
+      options.onChange?.(e);
+    }
+  };
+
+  // NB: Must be initialized before the [DocRef] below to catch the first change (upon initialization).
+  if (Wrangle.isLogging(options)) saveLogStrategy(filedir, onChange$, dispose$);
+
+  /**
+   * [DocRef]
+   */
   const doc = CrdtIs.ref(initial) ? initial : DocRef<D>(initial, { onChange });
-  if (CrdtIs.ref(initial) && options.onChange) doc.onChange(options.onChange);
+  if (CrdtIs.ref(initial)) doc.onChange(onChange);
+  doc.dispose$.subscribe(dispose);
 
-  if (options.autosaveDebounce) {
-    doc.$.pipe(
-      rx.takeUntil(dispose$),
-      rx.debounceTime(options.autosaveDebounce),
-      rx.filter((e) => e.action === 'change' || e.action === 'replace'),
-    ).subscribe(() => api.save());
-  }
-
+  /**
+   * [DocFile]
+   */
   const api: t.CrdtDocFile<D> = {
     /**
      * CRDT document reference.
@@ -50,7 +62,14 @@ export async function DocFile<D extends {}>(
      * Flag indicating if the document is autosaved after (de-bounced) changes.
      */
     get isAutosaving() {
-      return Boolean(options.autosaveDebounce);
+      return Wrangle.isAutosaving(options);
+    },
+
+    /**
+     * Flag indicating if the document is saving incremental changes to a log file.
+     */
+    get isLogging() {
+      return Wrangle.isLogging(options);
     },
 
     /**
@@ -97,6 +116,28 @@ export async function DocFile<D extends {}>(
     },
   };
 
+  if (api.isAutosaving) autoSaveStrategy(api, autosaveDebounce);
   await api.load();
   return api;
 }
+
+/**
+ * [Helpers]
+ */
+const Wrangle = {
+  autosaveDebounce(input?: boolean | Milliseconds): number {
+    if (input === false || input === undefined) return 0;
+    if (input === true) return DEFAULTS.doc.autosaveDebounce;
+    if (typeof input === 'number') return Math.max(0, input);
+    throw new Error(`Invalid autosave debounce value: ${input} (expected: boolean or number)`);
+  },
+
+  isAutosaving(options: Options<any> = {}) {
+    const msecs = Wrangle.autosaveDebounce(options.autosave);
+    return msecs > 0;
+  },
+
+  isLogging(options: Options<any> = {}) {
+    return Boolean(options.logsave);
+  },
+};
