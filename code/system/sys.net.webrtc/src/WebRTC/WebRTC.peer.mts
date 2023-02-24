@@ -7,16 +7,18 @@ type HostName = string;
 /**
  * Start a new local peer.
  */
-export function peer(args: {
-  signal: HostName;
-  id?: t.PeerId;
-  getStream?: t.PeerGetMediaStream;
-}): Promise<t.Peer> {
+export function peer(
+  signal: HostName,
+  options: {
+    id?: t.PeerId;
+    getStream?: t.PeerGetMediaStream;
+  },
+): Promise<t.Peer> {
   return new Promise<t.Peer>((resolve, reject) => {
-    const { getStream } = args;
+    signal = Path.trimHttpPrefix(signal);
+    const { getStream } = options;
     const state = MemoryState();
-    const id = Util.asId(args.id ?? Util.randomPeerId());
-    const signal = Path.trimHttpPrefix(args.signal);
+    const id = Util.asId(options.id ?? Util.randomPeerId());
     const rtc = new PeerJS(id, {
       key: 'conn',
       path: '/',

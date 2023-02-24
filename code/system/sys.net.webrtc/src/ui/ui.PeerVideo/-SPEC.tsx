@@ -21,7 +21,7 @@ export default Dev.describe('PeerVideo', (e) => {
      * WebRTC (network)
      */
     const { getStream } = media;
-    self = await WebRTC.peer({ signal: TEST.signal, getStream });
+    self = await WebRTC.peer(TEST.signal, { getStream });
     await state.change((d) => (d.props.self = self));
     self.connections$.subscribe((e) => state.change((d) => (d.props.self = self)));
   });
