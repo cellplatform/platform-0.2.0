@@ -1,7 +1,7 @@
 /**
  * @system
  */
-export type { CssValue } from 'sys.ui.react.common';
+export type { CssValue, CssEdgesInput } from 'sys.ui.react.common/src/types.mjs';
 export type {
   TestSuiteRunResponse,
   SpecImport,
@@ -13,3 +13,4 @@ export type {
  * @local
  */
 export * from '../../common/types.mjs';
+export * from '../types.mjs';
