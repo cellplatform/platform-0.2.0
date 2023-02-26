@@ -45,7 +45,7 @@ export async function init<D extends {}>(
   /**
    * [DocRef]
    */
-  const doc = CrdtIs.ref(initial) ? initial : DocRef<D>(initial, { onChange });
+  const doc = CrdtIs.ref(initial) ? initial : DocRef.init<D>(initial, { onChange });
   if (CrdtIs.ref(initial)) doc.onChange(onChange);
   doc.dispose$.subscribe(dispose);
 
