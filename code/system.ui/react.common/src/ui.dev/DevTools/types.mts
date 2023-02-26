@@ -39,4 +39,10 @@ export type DevTools<S extends O = O> = {
   TODO(fn: t.DevTodoHandler<S>): DevTools<S>;
 
   hr(): DevTools<S>;
+  hr(
+    line: t.DevHrThickness | [t.DevHrThickness, t.DevHrOpacity],
+    margin?: t.DevHrMargin,
+    color?: t.DevHrColor,
+  ): DevTools<S>;
+  hr(fn: t.DevHrHandler<S>): DevTools<S>;
 };
