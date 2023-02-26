@@ -16,6 +16,7 @@ import {
 } from '../test.ui';
 import { PeerList, PeerVideo } from '../ui';
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
+import { CrdtInfo } from 'sys.data.crdt';
 
 import type { Doc } from './-dev/DEV.CrdtSync';
 
@@ -201,11 +202,12 @@ export default Dev.describe('WebRTC', async (e) => {
         Peer: { self, connections },
         TestResults: e.state.debug.testrunner.results,
         // MediaStream__TODO__REFACTOR__: media,
-        doc: docFile.doc.current,
+        'doc.crdt': docFile.doc.current,
       };
       return <Dev.Object name={'WebRTC'} data={Delete.undefined(data)} expand={0} />;
     });
 
+    // Remote Peer (Connect)
     dev.section((dev) => {
       dev.row((e) => {
         return (
@@ -374,13 +376,15 @@ export default Dev.describe('WebRTC', async (e) => {
       );
     });
 
+    // QRCode
     dev.section((dev) => {
       dev.row(async (e) => {
         const { QRCode } = await import('sys.ui.react.common');
 
         const peerId = self.id;
         // const value = WebRTC.Util.asUri(peerId);
-        const value = URL.PHIL;
+        // const value = URL.PHIL;
+        const value = e.state.debug.imageUrl;
 
         const styles = {
           base: css({
@@ -399,6 +403,7 @@ export default Dev.describe('WebRTC', async (e) => {
 
     dev.hr();
 
+    // ImageUrl
     dev.section((dev) => {
       dev.row((e) => {
         return (
@@ -425,6 +430,15 @@ export default Dev.describe('WebRTC', async (e) => {
             }}
           />
         );
+      });
+    });
+
+    dev.hr();
+
+    // CRDT (Info)
+    dev.section('CRDT (State)', (dev) => {
+      dev.row((e) => {
+        return <CrdtInfo style={{ Margin: [0, 20] }} />;
       });
     });
   });
