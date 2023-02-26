@@ -4,8 +4,8 @@
 
 export { Observable, Subject } from 'rxjs';
 
-import { clone, equals, mergeDeepRight, uniq } from 'ramda';
-export const R = { clone, equals, mergeDeepRight, uniq };
+import { clone, equals, mergeDeepRight, uniq, clamp } from 'ramda';
+export const R = { clone, equals, mergeDeepRight, uniq, clamp };
 
 /**
  * @system

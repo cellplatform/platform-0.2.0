@@ -62,6 +62,8 @@ export function button<S extends O = O>(
   });
 
   label.subscribe(ref.redraw);
+  right.subscribe(ref.redraw);
+  enabled.subscribe(ref.redraw);
 
   fn?.(args);
 }
