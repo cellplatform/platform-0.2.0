@@ -7,13 +7,14 @@ export default Test.describe('DocFile', (e) => {
   const initial: D = { count: 0 };
 
   e.it('exposed from root API: Crdt.Doc.file', (e) => {
-    expect(Crdt.Doc.file).to.equal(DocFile);
+    expect(Crdt.Doc.DocFile).to.equal(DocFile);
+    expect(Crdt.Doc.file).to.equal(DocFile.init);
   });
 
   e.describe('initialize', (e) => {
     e.it('init: does not yet exist in filesystem', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
       expect(file.doc.current).to.eql(initial);
       expect(await file.exists()).to.eql(false);
       file.dispose();
@@ -24,7 +25,7 @@ export default Test.describe('DocFile', (e) => {
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
 
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, { onChange });
+      const file = await DocFile.init<D>(filedir, initial, { onChange });
 
       file.doc.change((d) => d.count++);
       expect(fired.length).to.eql(2); // NB: the {onChange} handler successfully registered on to the [DocRef].
@@ -37,7 +38,7 @@ export default Test.describe('DocFile', (e) => {
       const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
 
-      const file = await DocFile<D>(filedir, doc, { onChange });
+      const file = await DocFile.init<D>(filedir, doc, { onChange });
       expect(file.doc).to.equal(doc);
 
       file.doc.change((d) => d.count++);
@@ -48,12 +49,12 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('init: loads existing data', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file1 = await DocFile<D>(filedir, initial);
+      const file1 = await DocFile.init<D>(filedir, initial);
 
       file1.doc.change((d) => (d.count = 1234));
       await file1.save();
 
-      const file2 = await DocFile<D>(filedir, initial);
+      const file2 = await DocFile.init<D>(filedir, initial);
       expect(file2.doc.current).to.eql({ count: 1234 });
 
       file1.dispose();
@@ -64,7 +65,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('dispose', (e) => {
     e.it('file.dispose() method', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
 
       let fired = 0;
       file.dispose$.subscribe(() => fired++);
@@ -82,7 +83,7 @@ export default Test.describe('DocFile', (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, { dispose$ });
+      const file = await DocFile.init<D>(filedir, initial, { dispose$ });
 
       expect(file.isDisposed).to.eql(false);
       dispose();
@@ -93,7 +94,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('disposing of [DocFile] does not dispose the wrapped [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
 
       expect(file.isDisposed).to.eql(false);
       expect(file.doc.isDisposed).to.eql(false);
@@ -107,7 +108,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('disposing of the wrapped [DocRef] does dispose the [DocFile]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
 
       let fired = 0;
       file.dispose$.subscribe(() => fired++);
@@ -126,7 +127,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('filesystem I/O', (e) => {
     e.it('save', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
 
       expect(await file.exists()).to.eql(false);
       expect((await filedir.manifest()).files).to.eql([]);
@@ -142,7 +143,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('load', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
       const original = {
         ref: file.doc,
         doc: file.doc.current,
@@ -173,7 +174,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('info', (e) => {
     e.it('empty (file does not exist)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
       const info = await file.info();
 
       expect(info.exists).to.eql(false);
@@ -183,7 +184,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('has: exists (flag), bytes, manifest', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
 
       await file.save();
       const info = await file.info();
@@ -213,7 +214,7 @@ export default Test.describe('DocFile', (e) => {
   e.describe('persistence strategy: autosave (debounced) complete compressed file', (e) => {
     e.it('does not autosave by default', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial);
+      const file = await DocFile.init<D>(filedir, initial);
       expect(file.isAutosaving).to.eql(false);
 
       await Time.wait(30);
@@ -225,15 +226,15 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('does not autosave when debounce is 0 (or negative)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file1 = await DocFile<D>(filedir, initial, { autosave: 0 });
-      const file2 = await DocFile<D>(filedir, initial, { autosave: -1 });
+      const file1 = await DocFile.init<D>(filedir, initial, { autosave: 0 });
+      const file2 = await DocFile.init<D>(filedir, initial, { autosave: -1 });
       expect(file1.isAutosaving).to.eql(false);
       expect(file2.isAutosaving).to.eql(false);
     });
 
     e.it('autosaves (after debounce delay)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, { autosave: 10 });
+      const file = await DocFile.init<D>(filedir, initial, { autosave: 10 });
       expect(file.isAutosaving).to.eql(true);
 
       const m1 = await filedir.manifest();
@@ -254,7 +255,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('autosaves (via True flag to options)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, { autosave: true });
+      const file = await DocFile.init<D>(filedir, initial, { autosave: true });
       expect(file.isAutosaving).to.eql(true);
 
       const m1 = await filedir.manifest();
@@ -269,7 +270,7 @@ export default Test.describe('DocFile', (e) => {
 
     e.it('does not autosave (via False flag to options)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, { autosave: false });
+      const file = await DocFile.init<D>(filedir, initial, { autosave: false });
       expect(file.isAutosaving).to.eql(false);
     });
   });
@@ -277,8 +278,8 @@ export default Test.describe('DocFile', (e) => {
   e.describe('persistence strategy: logfiles', (e) => {
     e.it('isLogging (property)', async (e) => {
       const filedir = TestFilesystem.memory().fs;
-      const file1 = await DocFile<D>(filedir, initial);
-      const file2 = await DocFile<D>(filedir, initial, { logsave: true });
+      const file1 = await DocFile.init<D>(filedir, initial);
+      const file2 = await DocFile.init<D>(filedir, initial, { logsave: true });
       expect(file1.isLogging).to.eql(false); // NB: default.
       expect(file2.isLogging).to.eql(true);
     });
@@ -288,7 +289,7 @@ export default Test.describe('DocFile', (e) => {
 
       const dirname = DEFAULTS.doc.logdir;
       const filedir = TestFilesystem.memory().fs;
-      const file = await DocFile<D>(filedir, initial, {
+      const file = await DocFile.init<D>(filedir, initial, {
         logsave: true,
         onChange: (e) => _changes.push(e.change),
       });

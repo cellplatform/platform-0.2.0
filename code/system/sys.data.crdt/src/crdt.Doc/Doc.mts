@@ -1,7 +1,8 @@
-import { DocRef as ref } from '../crdt.DocRef';
-import { DocFile as file } from '../crdt.DocFile';
+import { DocRef } from '../crdt.DocRef';
+import { DocFile } from '../crdt.DocFile';
 
 export const CrdtDoc = {
-  ref,
-  file,
+  DocFile,
+  ref: DocRef,
+  file: DocFile.init,
 };
