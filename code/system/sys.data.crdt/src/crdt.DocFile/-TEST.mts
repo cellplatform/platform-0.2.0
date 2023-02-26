@@ -283,7 +283,7 @@ export default Test.describe('DocFile', (e) => {
       expect(file2.isLogging).to.eql(true);
     });
 
-    e.it('multiple changes log', async (e) => {
+    e.it('multiple changes stored in "log.changes/" directory', async (e) => {
       const _changes: Uint8Array[] = [];
 
       const dirname = DEFAULTS.doc.logdir;
@@ -307,10 +307,10 @@ export default Test.describe('DocFile', (e) => {
       expect(files2.length).to.eql(4); // NB: additional changes saved as files.
 
       const filenames = files2.map((file) => file.path);
-      expect(filenames[0].startsWith('log.changes/0.')).to.eql(true);
-      expect(filenames[1].startsWith('log.changes/1.')).to.eql(true);
-      expect(filenames[2].startsWith('log.changes/1.')).to.eql(true); // NB: ^^^ increments safely. "<count>.<slug>"
-      expect(filenames[3].startsWith('log.changes/3.')).to.eql(true);
+      expect(filenames[0].startsWith('log.localchange/0.')).to.eql(true);
+      expect(filenames[1].startsWith('log.localchange/1.')).to.eql(true);
+      expect(filenames[2].startsWith('log.localchange/1.')).to.eql(true); // NB: ^^^ increments safely. "<count>.<slug>"
+      expect(filenames[3].startsWith('log.localchange/3.')).to.eql(true);
 
       // Reconstruct a document from the in-memory changes.
       let docFromChanges = Automerge.init<D>();

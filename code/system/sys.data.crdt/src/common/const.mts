@@ -1,8 +1,8 @@
 export const DEFAULTS = {
-  sync: { filename: 'crdt.syncstate' },
+  sync: { filename: '.tmp.syncstate' },
   doc: {
     filename: 'crdt.data',
-    logdir: 'log.changes',
+    logdir: 'log.localchange',
     autosaveDebounce: 300,
   },
 } as const;
