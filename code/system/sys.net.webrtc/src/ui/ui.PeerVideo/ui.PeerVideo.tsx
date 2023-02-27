@@ -55,9 +55,8 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
     base: css({ position: 'relative' }),
     video: {
       base: css({
-        height: mediaHeight,
         position: 'relative',
-        borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+        height: mediaHeight,
         backgroundImage: `url(${URL.Rowan})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
