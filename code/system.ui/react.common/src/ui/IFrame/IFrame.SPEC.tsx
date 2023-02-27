@@ -27,7 +27,9 @@ export default Dev.describe('IFrame', (e) => {
     ctx.subject
       .display('grid')
       .size('fill')
-      .render<T>((e) => <IFrame {...e.state.props} onLoad={() => console.info('⚡️ onLoad')} />);
+      .render<T>((e) => (
+        <IFrame {...e.state.props} onLoad={(e) => console.info('⚡️ onLoad:', e)} />
+      ));
   });
 
   e.it('debug panel', async (e) => {
@@ -54,18 +56,22 @@ export default Dev.describe('IFrame', (e) => {
         dev.button(`src: ${label}`, (e) => e.change((d) => (d.props.src = url)));
       };
 
+      const local = new URL(`${location.origin}${location.pathname}`);
+      load('local', local.href);
+      load('local?dev=...', `${local.href}?dev=sys.ui.common.Center`);
+      dev.hr();
       load('Wikipedia: "W3C"', 'https://en.wikipedia.org/wiki/World_Wide_Web_Consortium');
       load('Wikipedia: "Foobar" mobile format', 'https://en.m.wikipedia.org/wiki/Foobar');
       load('Google (← blocked)', 'https://google.com');
       dev.hr();
-      dev.button('srcDoc (← <html>)', (e) =>
-        e.change((d) => (d.props.src = { html: '<h1>Hello 👋<h1>' })),
-      );
+      dev.button('srcDoc (← <html>)', (e) => {
+        e.change((d) => (d.props.src = { html: '<h1>Hello 👋<h1>' }));
+      });
       dev.hr();
       dev.button('`undefined`', (e) => e.change((d) => (d.props.src = undefined)));
     });
 
-    dev.hr();
+    dev.hr(5, 15);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>

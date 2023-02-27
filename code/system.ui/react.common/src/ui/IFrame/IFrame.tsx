@@ -1,11 +1,17 @@
-import { HTMLAttributeReferrerPolicy } from 'react';
+import { useRef } from 'react';
+import type { HTMLAttributeReferrerPolicy } from 'react';
 
-import { Is, css, FC, t } from '../common';
+import { css, FC, t } from '../common';
 import { DEFAULTS } from './const.mjs';
 
 type HttpPermissionsPolicy = string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
 type UrlString = string;
 type Src = { html?: string; url?: UrlString };
+
+export type IFrameLoadedEventHandler = (e: IFrameLoadedEventHandlerArgs) => void;
+export type IFrameLoadedEventHandlerArgs = {
+  href: string;
+};
 
 export type IFrameProps = {
   src?: UrlString | Src;
@@ -19,12 +25,26 @@ export type IFrameProps = {
   referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
   loading?: t.IFrameLoading;
   style?: t.CssValue;
-  onLoad?: React.DOMAttributes<HTMLIFrameElement>['onLoad'];
+  onLoad?: IFrameLoadedEventHandler;
 };
 
 const View: React.FC<IFrameProps> = (props) => {
   const { width, height, loading = 'eager' } = props;
   const content = Wrangle.content(props);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  /**
+   * Handlers
+   */
+  const handleLoad = () => {
+    let href = content.src ?? '';
+    try {
+      href = iframeRef.current?.contentWindow?.location.href ?? href;
+    } catch (error) {
+      // [Ignore]: This will be a cross-origin block. Fire the best guess at what the URL is.
+    }
+    props.onLoad?.({ href });
+  };
 
   /**
    * [Render]
@@ -44,8 +64,9 @@ const View: React.FC<IFrameProps> = (props) => {
       {props.src && (
         <iframe
           {...styles.iframe}
+          ref={iframeRef}
           src={content.src}
-          srcDoc={content.srcDoc}
+          srcDoc={content.html}
           title={props.title}
           name={props.name}
           allow={props.allow}
@@ -53,7 +74,7 @@ const View: React.FC<IFrameProps> = (props) => {
           referrerPolicy={props.referrerPolicy}
           loading={loading}
           sandbox={Wrangle.sandbox(props)}
-          onLoad={props.onLoad}
+          onLoad={handleLoad}
         />
       )}
     </div>
@@ -69,10 +90,10 @@ const Wrangle = {
     return Array.isArray(sandbox) ? sandbox.join(' ') : undefined; // NB: <undefined> === all restrictions applied.
   },
 
-  content(props: IFrameProps): { src?: string; srcDoc?: string } {
-    if (!props.src) return { src: undefined, srcDoc: undefined };
+  content(props: IFrameProps): { src?: string; html?: string } {
+    if (!props.src) return { src: undefined, html: undefined };
     if (typeof props.src === 'string') return { src: props.src };
-    return { src: props.src.url, srcDoc: props.src.html };
+    return { src: props.src.url, html: props.src.html };
   },
 };
 
