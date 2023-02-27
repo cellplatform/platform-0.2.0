@@ -41,20 +41,14 @@ export default Dev.describe('PeerVideo', async (e) => {
 
     dev.button('connect', async (e) => {
       await e.change((d) => (d.props.spinning = true));
-
-      // const network = await TestNetwork.p2p();
-      const { peerA, peerB } = network;
       await network.connect();
-
       await e.change(async (d) => {
-        d.props.self = peerA;
-
         await Time.wait(500); // NB: [HACK] Wait for media to be ready before hiding spinner.
         d.props.spinning = false;
       });
     });
 
-    dev.button('disconnect', async (e) => {
+    dev.button('disconnect', (e) => {
       network.peerA.connections.all.forEach((conn) => conn.dispose());
     });
   });
@@ -63,7 +57,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    network = await TestNetwork.p2p();
+    network = await TestNetwork.init();
 
     const update = async (d: T) => {
       d.self = network.peerA;
@@ -71,6 +65,6 @@ export default Dev.describe('PeerVideo', async (e) => {
       d.props.self = network.peerA;
     };
     await state.change((d) => update(d));
-    network.peerA.connections$.subscribe((e) => state.change((d) => update(d)));
+    network.peerA.connections$.subscribe(() => state.change((d) => update(d)));
   });
 });

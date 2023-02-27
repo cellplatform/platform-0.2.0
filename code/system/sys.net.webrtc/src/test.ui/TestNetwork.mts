@@ -22,7 +22,7 @@ export const TestNetwork = {
   /**
    * Generate a simple 2-node connected network.
    */
-  async p2p() {
+  async init() {
     const { dispose, dispose$ } = rx.disposable();
     const media = WebRTC.Media.singleton({});
     const [peerA, peerB] = await TestNetwork.peers(2, media.getStream);

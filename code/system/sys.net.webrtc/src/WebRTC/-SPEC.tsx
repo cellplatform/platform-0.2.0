@@ -119,7 +119,6 @@ export default Dev.describe('WebRTC', async (e) => {
 
     docFile.doc.$.subscribe(redraw);
 
-    // const info = await docFile.info();
     state.change(async (d) => {
       const doc = docFile.doc.current;
       d.main.imageUrl = doc.url ?? '';

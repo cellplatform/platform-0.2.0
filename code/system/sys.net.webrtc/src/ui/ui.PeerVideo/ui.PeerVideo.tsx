@@ -63,6 +63,7 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
         backgroundRepeat: 'no-repeat',
       }),
       bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
+      media: css({}),
     },
 
     peer: css({
@@ -89,7 +90,12 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   };
 
   const elVideo = cameraConnection && (
-    <MediaStream.Video stream={cameraConnection.stream.remote} muted={muted} height={mediaHeight} />
+    <MediaStream.Video
+      stream={cameraConnection.stream.remote}
+      muted={muted}
+      height={mediaHeight}
+      style={styles.video.media}
+    />
   );
 
   const elPeerCopied = showCopied && <PeerCopied />;
