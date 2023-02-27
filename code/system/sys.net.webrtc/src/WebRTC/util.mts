@@ -1,6 +1,9 @@
 import { cuid, R, t } from './common';
+import { waitFor } from './util.$.mjs';
 
 export const Util = {
+  waitFor,
+
   randomPeerId() {
     return `p${cuid()}`;
   },

@@ -1,5 +1,4 @@
-import { WebRTC } from '..';
-import { TEST, cuid, Dev, expect, rx, t, Time } from '../../test.ui';
+import { TEST, cuid, Dev, expect, rx, t, Time, WebRTC } from '..';
 
 export default Dev.describe('WebRTC', (e) => {
   const signal = TEST.signal;

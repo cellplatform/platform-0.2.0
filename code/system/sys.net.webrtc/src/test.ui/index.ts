@@ -1,3 +1,5 @@
 export * from './common';
+
 export { WebRTC } from '../index.mjs';
-export { Mock } from '../WebRTC.dev';
+export { TestNetwork } from './TestNetwork.mjs';
+export { Mock } from './-dev.mocks';

@@ -87,6 +87,7 @@ export type PeerMetaMedia = { input: PeerMediaStreamInput };
 /**
  * Peer connection change info.
  */
+export type PeerConnectionKind = PeerConnectionChanged['kind'];
 export type PeerConnectionChanged = PeerDataConnectionChanged | PeerMediaConnectionChanged;
 
 type ConnectionChanged = {

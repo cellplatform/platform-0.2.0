@@ -1,4 +1,4 @@
-import { MediaStream, rx, t } from '../common';
+import { MediaStream, rx, t } from './common';
 
 type T = {
   ref: { camera: string; screen: string };
@@ -62,6 +62,7 @@ export const Media = {
 /**
  * Helpers
  */
+
 function generateRef(bus: t.EventBus<any>): T['ref'] {
   const busid = rx.bus.instance(bus);
   const base = `media.${busid}`;

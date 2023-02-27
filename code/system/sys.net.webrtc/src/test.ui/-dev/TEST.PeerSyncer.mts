@@ -1,7 +1,7 @@
-import { Dev, expect, t, TEST, Time, WebRTC } from '../../test.ui';
-import { Automerge, Crdt } from './common';
+import { Dev, expect, t, TEST, Time, WebRTC } from '..';
+import { Automerge, Crdt } from '../common';
 
-export default Dev.describe('PeerSyncer (Integration Test)', (e) => {
+export default Dev.describe('PeerSyncer', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);

@@ -1,5 +1,5 @@
-import { Time, Test, expect, t } from '../test.ui';
-import { Mock } from '.';
+import { Time, Test, expect, t } from '../../test.ui';
+import { Mock } from './Mock.mjs';
 
 export default Test.describe('Mock', (e) => {
   e.describe('MockDataConnection', (e) => {

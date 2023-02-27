@@ -9,17 +9,13 @@ import {
   Delete,
   Dev,
   Filesystem,
-  MediaStream,
   rx,
   slug,
   t,
   TEST,
   TextInput,
-  IFrame,
 } from '../test.ui';
 import { PeerList, PeerVideo } from '../ui';
-import { DevCrdtSync } from './-dev/DEV.CrdtSync';
-
 import { DevSample } from './-dev/DEV.Sample';
 
 import type { Doc } from './-dev/DEV.CrdtSync';
@@ -78,6 +74,8 @@ const CODE = `
 `.substring(1);
 
 export default Dev.describe('WebRTC', async (e) => {
+  e.timeout(9999);
+
   type LocalStore = { muted: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc');
   const local = localstore.object({ muted: true });
@@ -302,39 +300,6 @@ export default Dev.describe('WebRTC', async (e) => {
       });
 
       dev.section((dev) => {
-        dev.title('Integrity');
-
-        const invoke = async (module: t.SpecImport) => {
-          await dev.change((d) => {
-            d.debug.testrunner.spinning = true;
-            d.debug.testrunner.results = null;
-            d.main.media = undefined;
-          });
-          const spec = (await module).default;
-          const results = await spec.run();
-          await dev.change((d) => {
-            d.debug.testrunner.results = results;
-            d.debug.testrunner.spinning = false;
-          });
-        };
-
-        const button = (label: string, module: t.SpecImport) => {
-          dev.button((btn) =>
-            btn
-              .label(label)
-              .onClick(() => invoke(module))
-              .right('tests'),
-          );
-        };
-
-        button('sys.crdt.Sync (Document State)', import('./-dev/TEST.PeerSyncer.mjs'));
-        button('sys.local.MediaStream', import('../WebRTC.Media/Media-TEST.mjs'));
-        button('sys.net.WebRTC', import('./-dev/TEST.peer.mjs'));
-      });
-
-      dev.hr();
-
-      dev.section((dev) => {
         const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
           dev.button((btn) =>
             btn
@@ -367,7 +332,7 @@ export default Dev.describe('WebRTC', async (e) => {
       });
     });
 
-    dev.hr(5);
+    dev.hr(5, 20);
     dev.section('Debug', (dev) => {
       const increment = (label: string, by: number) => {
         dev.button(label, (e) => docFile.doc.change((d) => (d.count += by)));
