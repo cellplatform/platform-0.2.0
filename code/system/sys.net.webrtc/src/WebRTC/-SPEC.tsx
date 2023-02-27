@@ -1,3 +1,5 @@
+import { CrdtInfo } from 'sys.data.crdt';
+
 import { WebRTC } from '.';
 import {
   Color,
@@ -13,10 +15,10 @@ import {
   t,
   TEST,
   TextInput,
+  IFrame,
 } from '../test.ui';
 import { PeerList, PeerVideo } from '../ui';
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
-import { CrdtInfo } from 'sys.data.crdt';
 
 import type { Doc } from './-dev/DEV.CrdtSync';
 
@@ -26,18 +28,23 @@ const DEFAULT = {
 
 type T = {
   self?: t.Peer;
-  main: { media?: MediaStream };
+  main: {
+    media?: MediaStream;
+    imageUrl?: string;
+    iframeUrl?: string;
+  };
   debug: {
+    redraw: number;
     remotePeer?: t.PeerId;
     testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse | null };
     muted: boolean;
-    imageUrl?: string;
   };
 };
 const initial: T = {
   self: undefined,
   main: {},
   debug: {
+    redraw: 0,
     remotePeer: '',
     muted: location.hostname === 'localhost',
     testrunner: {},
@@ -98,11 +105,26 @@ export default Dev.describe('WebRTC', async (e) => {
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+    const redraw = () => state.change((d) => d.debug.redraw++);
 
-    docFile = await Crdt.Doc.file<Doc>(filedir, { version: '0.0.0', count: 0, peers: [] });
-    docFile.doc.$.subscribe((e) => ctx.redraw());
+    docFile = await Crdt.Doc.file<Doc>(
+      filedir,
+      { version: '0.0.0', count: 0, peers: [] },
+      { autosave: true },
+    );
 
-    state.change((d) => (d.debug.imageUrl = docFile.doc.current.url ?? ''));
+    const res = await docFile.load();
+
+    const info = await docFile.info();
+    console.log('info', info);
+
+    docFile.doc.$.subscribe(redraw);
+
+    state.change((d) => {
+      const doc = docFile.doc.current;
+      d.main.imageUrl = doc.url ?? '';
+      d.main.iframeUrl = doc.iframe ?? '';
+    });
   });
 
   e.it('init:ui', async (e) => {
@@ -116,19 +138,24 @@ export default Dev.describe('WebRTC', async (e) => {
         const { MonacoEditor } = await import('sys.ui.react.monaco');
 
         const imageUrl = docFile.doc.current.url ?? '';
+        const iframeUrl = docFile.doc.current.iframe ?? '';
 
         const styles = {
-          base: css({ display: 'grid', gridTemplateRows: '1fr 1fr 150px' }),
+          base: css({ display: 'grid', gridTemplateRows: '1fr 200px' }),
           main: css({ position: 'relative' }),
           footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
           media: css({ Absolute: 0 }),
-          overlay: css({
+          overlayImage: css({
             Absolute: 0,
             backgroundImage: `url(${imageUrl})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center center',
             backgroundColor: Color.format(0.3),
             backdropFilter: 'blur(30px)',
+          }),
+          overlayIFrame: css({
+            Absolute: 0,
+            backgroundColor: COLORS.WHITE,
           }),
         };
 
@@ -146,17 +173,24 @@ export default Dev.describe('WebRTC', async (e) => {
           />
         );
 
-        const testResults = e.state.debug.testrunner.results;
-        const elOverlay = imageUrl && <div {...styles.overlay}></div>;
-
         return (
           <div {...styles.base}>
             <div {...styles.main}>
               {elTestResults}
               {elMedia}
+              {imageUrl && <div {...styles.overlayImage}></div>}
+              {iframeUrl && (
+                <IFrame
+                  src={iframeUrl}
+                  style={styles.overlayIFrame}
+                  onLoad={(e) => {
+                    console.log('on load', e);
+                    docFile.doc.change((d) => (d.iframe = e.href));
+                  }}
+                />
+              )}
             </div>
-            <DevCrdtSync self={self} file={docFile} />
-            {elOverlay}
+            <DevCrdtSync self={self} file={docFile} style={{ Absolute: 0, display: 'none' }} />
             <div {...styles.footer}>
               <MonacoEditor language={'typescript'} text={CODE} />
             </div>
@@ -193,18 +227,33 @@ export default Dev.describe('WebRTC', async (e) => {
       const { self } = e.state;
       const connections = self?.connections;
 
+      const doc = structuredClone(docFile.doc.current);
+      Object.entries(doc).forEach(([key, value]) => {
+        const MAX = 40;
+        if (typeof value === 'string' && value.length > MAX) {
+          (doc as any)[key] = `${value.slice(0, MAX)}...`;
+        }
+      });
+
       const media = {
         '🐷[1]': `refactor bus/events in source module: sys.ui.video`,
       }; // TODO 🐷
 
       const data = {
-        length: connections?.length ?? 0,
+        // length: connections?.length ?? 0,
         Peer: { self, connections },
         TestResults: e.state.debug.testrunner.results,
         // MediaStream__TODO__REFACTOR__: media,
-        'doc.crdt': docFile.doc.current,
+        doc,
       };
-      return <Dev.Object name={'WebRTC'} data={Delete.undefined(data)} expand={0} />;
+      return (
+        <Dev.Object
+          name={'WebRTC'}
+          data={Delete.undefined(data)}
+          expand={{ paths: ['$', '$.doc'] }}
+          fontSize={11}
+        />
+      );
     });
 
     // Remote Peer (Connect)
@@ -358,22 +407,30 @@ export default Dev.describe('WebRTC', async (e) => {
           connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
           connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
           connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
+
+          dev.hr();
+          dev.section(() => {
+            dev.button((btn) =>
+              btn
+                .label('close all connections')
+                .enabled((e) => Boolean(self.connections.length > 0))
+                .onClick(async (e) => {
+                  self.connections.all.forEach((conn) => conn.dispose());
+                  await media.events.stop(streamRef).fire();
+                }),
+            );
+          });
         });
       });
     });
 
-    dev.hr();
-
-    dev.section(() => {
-      dev.button((btn) =>
-        btn
-          .label('close all connections')
-          .enabled((e) => Boolean(self.connections.length > 0))
-          .onClick(async (e) => {
-            self.connections.all.forEach((conn) => conn.dispose());
-            await media.events.stop(streamRef).fire();
-          }),
-      );
+    dev.hr(5);
+    dev.section('Debug', (dev) => {
+      const increment = (label: string, by: number) => {
+        dev.button(label, (e) => docFile.doc.change((d) => (d.count += by)));
+      };
+      increment('increment', 1);
+      increment('decrement', -1);
     });
 
     // QRCode
@@ -384,7 +441,7 @@ export default Dev.describe('WebRTC', async (e) => {
         const peerId = self.id;
         // const value = WebRTC.Util.asUri(peerId);
         // const value = URL.PHIL;
-        const value = e.state.debug.imageUrl;
+        const value = e.state.main.imageUrl;
 
         const styles = {
           base: css({
@@ -408,25 +465,39 @@ export default Dev.describe('WebRTC', async (e) => {
       dev.row((e) => {
         return (
           <TextInput
-            value={e.state.debug.imageUrl}
+            value={e.state.main.imageUrl}
             valueStyle={{ fontSize: 14 }}
             placeholder={'image'}
             placeholderStyle={{ opacity: 0.3, italic: true }}
             focusAction={'Select'}
             spellCheck={false}
-            onChanged={(e) => {
-              //
-              dev.change((d) => (d.debug.imageUrl = e.to));
-              // docFile.doc.change((d) => (d.url = e.to));
-            }}
-            onEnter={async () => {
-              const url = e.state.debug.imageUrl ?? '';
-
+            onChanged={(e) => dev.change((d) => (d.main.imageUrl = e.to))}
+            onEnter={() => {
+              const url = e.state.main.imageUrl ?? '';
               docFile.doc.change((d) => (d.url = url));
+            }}
+          />
+        );
+      });
+    });
 
-              // const id = state.current.debug.remotePeer;
-              // connectData(id);
-              // connectCamera(id);
+    dev.hr();
+
+    // IFrameURL
+    dev.section((dev) => {
+      dev.row((e) => {
+        return (
+          <TextInput
+            value={e.state.main.iframeUrl}
+            valueStyle={{ fontSize: 14 }}
+            placeholder={'iframe'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            focusAction={'Select'}
+            spellCheck={false}
+            onChanged={(e) => dev.change((d) => (d.main.iframeUrl = e.to))}
+            onEnter={() => {
+              const url = e.state.main.iframeUrl ?? '';
+              docFile.doc.change((d) => (d.iframe = url));
             }}
           />
         );

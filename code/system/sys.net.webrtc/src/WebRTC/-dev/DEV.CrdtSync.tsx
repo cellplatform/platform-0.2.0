@@ -14,6 +14,7 @@ export type Doc = {
   count: number;
   peers: string[];
   url?: string;
+  iframe?: string;
 };
 
 export type DevCrdtSyncProps = {
