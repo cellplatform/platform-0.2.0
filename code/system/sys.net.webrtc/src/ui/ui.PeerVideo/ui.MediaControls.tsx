@@ -11,6 +11,14 @@ export const MediaControls: React.FC<MediaControlsProps> = (props) => {
   const { muted = false } = props;
 
   /**
+   * [Handlers]
+   */
+  const handleMuteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    props.onMuteClick?.(e);
+  };
+
+  /**
    * [Render]
    */
   const styles = {
@@ -30,7 +38,7 @@ export const MediaControls: React.FC<MediaControlsProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={props.onMuteClick}>
+      <Button onClick={handleMuteClick}>
         <div {...styles.btn}>
           <Icon />
         </div>

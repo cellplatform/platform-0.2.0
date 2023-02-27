@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Color, COLORS, copyPeer, css, Icons, MediaStream, t, useMouseState } from '../common';
+import { Color, copyPeer, css, MediaStream, t, useMouseState, Spinner } from '../common';
 import { PeerId } from '../ui.PeerId';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
@@ -9,6 +9,7 @@ export type PeerVideoProps = {
   self?: t.Peer;
   mediaHeight?: number;
   muted?: boolean;
+  spinning?: boolean;
   style?: t.CssValue;
   onMuteClick?(e: React.MouseEvent): void;
 };
@@ -16,8 +17,6 @@ export type PeerVideoProps = {
 const URL = {
   Allen:
     'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png',
-  James:
-    'https://user-images.githubusercontent.com/185555/220017460-0dfe4a43-aab5-46fc-8940-ea5a5813cff6.png',
   Rowan:
     'https://user-images.githubusercontent.com/185555/220252528-49154284-88e2-46aa-9544-2dff1c7a44a8.png',
 };
@@ -25,6 +24,8 @@ const URL = {
 export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   const { self, mediaHeight = 250, muted = false } = props;
   const [showCopied, setShowCopied] = useState(false);
+  const isSpinning = props.spinning ? true : !self;
+
   const mouse = useMouseState();
 
   // TEMP 🐷
@@ -38,12 +39,11 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
     return () => clearTimeout(timer);
   }, [showCopied]);
 
-  if (!self) return null;
-
   /**
    * [Handlers]
    */
   const handleCopyPeer = () => {
+    if (!self) return;
     copyPeer(self.id);
     setShowCopied(true);
   };
@@ -62,27 +62,31 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }),
-      bg: css({
-        Absolute: 0,
-        pointerEvents: 'none',
-        display: 'grid',
-        placeItems: 'center',
-      }),
+      bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
     },
 
-    peer: css({ display: 'grid', justifyContent: 'center', padding: 5 }),
+    peer: css({
+      height: 28,
+      boxSizing: 'border-box',
+      display: 'grid',
+      placeItems: 'center',
+    }),
     controls: css({
       Absolute: [10, 10, null, null],
       opacity: mouse.isOver || muted ? 1 : 0,
       transition: 'all 250ms ease',
     }),
+    spinner: css({
+      Absolute: 0,
+      backgroundColor: Color.format(0.6),
+      backdropFilter: `blur(10px)`,
+      pointerEvents: 'none',
+      opacity: isSpinning ? 1 : 0,
+      transition: 'all 400ms ease',
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
-
-  const elBG = (
-    <div {...styles.video.bg}>
-      <Icons.Face.Caller size={80} opacity={0.2} />
-    </div>
-  );
 
   const elVideo = cameraConnection && (
     <MediaStream.Video stream={cameraConnection.stream.remote} muted={muted} height={mediaHeight} />
@@ -90,22 +94,31 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
 
   const elPeerCopied = showCopied && <PeerCopied />;
 
+  const elMediaControls = self && (
+    <MediaControls
+      style={styles.controls}
+      self={self}
+      muted={muted}
+      onMuteClick={props.onMuteClick}
+    />
+  );
+
+  const elSpinner = (
+    <div {...styles.spinner}>
+      <Spinner.Puff />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <div {...styles.video.base} onClick={handleCopyPeer}>
-        {elBG}
+      <div {...styles.video.base}>
+        <div {...styles.video.bg} onClick={handleCopyPeer} />
         {elVideo}
-        <MediaControls
-          style={styles.controls}
-          self={self}
-          muted={muted}
-          onMuteClick={props.onMuteClick}
-        />
+        {elMediaControls}
         {elPeerCopied}
+        {elSpinner}
       </div>
-      <div {...styles.peer}>
-        <PeerId peer={self.id} onClick={handleCopyPeer} />
-      </div>
+      <div {...styles.peer}>{self && <PeerId peer={self.id} onClick={handleCopyPeer} />}</div>
     </div>
   );
 };

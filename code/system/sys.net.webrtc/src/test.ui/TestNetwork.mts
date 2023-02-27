@@ -1,5 +1,11 @@
 import { TEST, WebRTC, t, rx } from './common';
 
+export type TestNetworkP2P = t.Disposable & {
+  peerA: t.Peer;
+  peerB: t.Peer;
+  connect(kind?: t.PeerConnectionKind[]): Promise<void>;
+};
+
 /**
  * Helpers for working with test P2P networks.
  */
@@ -26,7 +32,7 @@ export const TestNetwork = {
       peerB.dispose();
     });
 
-    return {
+    const api: TestNetworkP2P = {
       peerA,
       peerB,
       dispose,
@@ -47,5 +53,7 @@ export const TestNetwork = {
         await Promise.all(wait);
       },
     };
+
+    return api;
   },
 };

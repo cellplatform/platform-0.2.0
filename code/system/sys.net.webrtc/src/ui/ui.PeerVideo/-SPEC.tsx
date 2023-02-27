@@ -1,34 +1,27 @@
 import { PeerVideo, PeerVideoProps } from '.';
-import { Dev, t, TEST, WebRTC } from '../../test.ui';
+import { Dev, rx, t, TEST, WebRTC, TestNetwork, TestNetworkP2P, Time } from '../../test.ui';
 
-type T = { props: PeerVideoProps };
+type T = {
+  props: PeerVideoProps;
+  self?: t.Peer;
+  remote?: t.Peer;
+};
 const initial: T = { props: {} };
 
-export default Dev.describe('PeerVideo', (e) => {
+export default Dev.describe('PeerVideo', async (e) => {
+  e.timeout(9999);
+
   type LocalStore = { muted: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerVideo');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.PeerVideo');
   const local = localstore.object({ muted: true });
 
-  const media = WebRTC.Media.singleton({});
-  let self: t.Peer;
+  let network: TestNetworkP2P;
 
-  e.it('init:webrtc', async (e) => {
+  e.it('init:ui', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     await state.change((d) => (d.props.muted = local.muted));
 
-    /**
-     * WebRTC (network)
-     */
-    const { getStream } = media;
-    self = await WebRTC.peer(TEST.signal, { getStream });
-    await state.change((d) => (d.props.self = self));
-    self.connections$.subscribe((e) => state.change((d) => (d.props.self = self)));
-  });
-
-  e.it('init:ui', async (e) => {
-    const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
       .display('grid')
@@ -42,8 +35,42 @@ export default Dev.describe('PeerVideo', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'spec.PeerVideo'} data={e.state} expand={1} />);
 
-    dev.title('PeerVideo');
+    dev.title('PeerVideo').hr();
+
+    dev.button('connect', async (e) => {
+      await e.change((d) => (d.props.spinning = true));
+
+      // const network = await TestNetwork.p2p();
+      const { peerA, peerB } = network;
+      await network.connect();
+
+      await e.change(async (d) => {
+        d.props.self = peerA;
+
+        await Time.wait(500); // NB: [HACK] Wait for media to be ready before hiding spinner.
+        d.props.spinning = false;
+      });
+    });
+
+    dev.button('disconnect', async (e) => {
+      network.peerA.connections.all.forEach((conn) => conn.dispose());
+    });
+  });
+
+  e.it('init:network', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+
+    network = await TestNetwork.p2p();
+
+    const update = async (d: T) => {
+      d.self = network.peerA;
+      d.remote = network.peerB;
+      d.props.self = network.peerA;
+    };
+    await state.change((d) => update(d));
+    network.peerA.connections$.subscribe((e) => state.change((d) => update(d)));
   });
 });
