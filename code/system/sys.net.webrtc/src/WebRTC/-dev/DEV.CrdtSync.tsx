@@ -15,6 +15,7 @@ export type Doc = {
   peers: string[];
   url?: string;
   iframe?: string;
+  code?: string;
 };
 
 export type DevCrdtSyncProps = {

@@ -20,6 +20,8 @@ import {
 import { PeerList, PeerVideo } from '../ui';
 import { DevCrdtSync } from './-dev/DEV.CrdtSync';
 
+import { DevSample } from './-dev/DEV.Sample';
+
 import type { Doc } from './-dev/DEV.CrdtSync';
 
 const DEFAULT = {
@@ -32,6 +34,7 @@ type T = {
     media?: MediaStream;
     imageUrl?: string;
     iframeUrl?: string;
+    code?: string;
   };
   debug: {
     redraw: number;
@@ -113,17 +116,17 @@ export default Dev.describe('WebRTC', async (e) => {
       { autosave: true },
     );
 
-    const res = await docFile.load();
-
     const info = await docFile.info();
-    console.log('info', info);
+    console.log('docFile/info', info);
 
     docFile.doc.$.subscribe(redraw);
 
-    state.change((d) => {
+    // const info = await docFile.info();
+    state.change(async (d) => {
       const doc = docFile.doc.current;
       d.main.imageUrl = doc.url ?? '';
       d.main.iframeUrl = doc.iframe ?? '';
+      d.main.code = doc.code ?? CODE;
     });
   });
 
@@ -135,67 +138,7 @@ export default Dev.describe('WebRTC', async (e) => {
       .backgroundColor(1)
       .size('fill')
       .render<T>(async (e) => {
-        const { MonacoEditor } = await import('sys.ui.react.monaco');
-
-        const imageUrl = docFile.doc.current.url ?? '';
-        const iframeUrl = docFile.doc.current.iframe ?? '';
-
-        const styles = {
-          base: css({ display: 'grid', gridTemplateRows: '1fr 200px' }),
-          main: css({ position: 'relative' }),
-          footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
-          media: css({ Absolute: 0 }),
-          overlayImage: css({
-            Absolute: 0,
-            backgroundImage: `url(${imageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            backgroundColor: Color.format(0.3),
-            backdropFilter: 'blur(30px)',
-          }),
-          overlayIFrame: css({
-            Absolute: 0,
-            backgroundColor: COLORS.WHITE,
-          }),
-        };
-
-        const media = e.state.main.media;
-        const elMedia = media && <MediaStream.Video stream={media} style={styles.media} />;
-
-        const testrunner = e.state.debug.testrunner;
-        const elTestResults = (
-          <Dev.TestRunner.Results
-            spinning={testrunner.spinning}
-            data={testrunner.results || undefined}
-            padding={10}
-            scroll={true}
-            style={{ Absolute: 0 }}
-          />
-        );
-
-        return (
-          <div {...styles.base}>
-            <div {...styles.main}>
-              {elTestResults}
-              {elMedia}
-              {imageUrl && <div {...styles.overlayImage}></div>}
-              {iframeUrl && (
-                <IFrame
-                  src={iframeUrl}
-                  style={styles.overlayIFrame}
-                  onLoad={(e) => {
-                    console.log('on load', e);
-                    docFile.doc.change((d) => (d.iframe = e.href));
-                  }}
-                />
-              )}
-            </div>
-            <DevCrdtSync self={self} file={docFile} style={{ Absolute: 0, display: 'none' }} />
-            <div {...styles.footer}>
-              <MonacoEditor language={'typescript'} text={CODE} />
-            </div>
-          </div>
-        );
+        return <DevSample self={self} docFile={docFile} testrunner={e.state.debug.testrunner} />;
       });
   });
 
@@ -229,7 +172,7 @@ export default Dev.describe('WebRTC', async (e) => {
 
       const doc = structuredClone(docFile.doc.current);
       Object.entries(doc).forEach(([key, value]) => {
-        const MAX = 40;
+        const MAX = 35;
         if (typeof value === 'string' && value.length > MAX) {
           (doc as any)[key] = `${value.slice(0, MAX)}...`;
         }
