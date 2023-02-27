@@ -1,4 +1,4 @@
-import { Button, t, TextSyntax, WebRTC, copyPeer } from '../common';
+import { css, Button, t, TextSyntax, WebRTC, copyPeer, FC } from '../common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;
@@ -9,8 +9,12 @@ export type PeerIdProps = {
   onClick?: (e: { id: t.PeerId; uri: t.PeerUri; copied: boolean }) => void;
 };
 
-export const PeerId: React.FC<PeerIdProps> = (props) => {
-  const { fontSize = 13, copyOnClick = false } = props;
+const DEFAULTS = {
+  fontSize: 13,
+};
+
+const View: React.FC<PeerIdProps> = (props) => {
+  const { fontSize = DEFAULTS.fontSize, copyOnClick = false } = props;
   const uri = Wrangle.uri(props);
 
   /**
@@ -25,17 +29,33 @@ export const PeerId: React.FC<PeerIdProps> = (props) => {
   /**
    * [Render]
    */
+  const styles = {
+    base: css({ fontSize }),
+  };
+
   return (
-    <Button onClick={handleClick} style={props.style}>
+    <Button onClick={handleClick} style={css(styles.base, props.style)}>
       <TextSyntax text={uri} monospace={true} fontWeight={'bold'} fontSize={fontSize} />
     </Button>
   );
 };
 
 /**
- * [Helpers]
+ * Export
  */
 
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const PeerId = FC.decorate<PeerIdProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'PeerId' },
+);
+
+/**
+ * [Helpers]
+ */
 const Wrangle = {
   uri(props: PeerIdProps) {
     const { abbreviate } = props;

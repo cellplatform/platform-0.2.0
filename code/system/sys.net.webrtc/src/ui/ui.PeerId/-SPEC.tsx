@@ -36,5 +36,18 @@ export default Dev.describe('PeerId', (e) => {
         .value((e) => e.state.props.copyOnClick)
         .onClick((e) => e.change((d) => Dev.toggle(d.props, 'copyOnClick'))),
     );
+
+    dev.hr();
+
+    dev.section('fontSize', (dev) => {
+      const fontsize = (value?: number, label?: string) => {
+        const text = label ?? `${value}px`;
+        dev.button(text, (e) => e.change((d) => (d.props.fontSize = value)));
+      };
+
+      fontsize(8);
+      fontsize(undefined, '(default)');
+      fontsize(24);
+    });
   });
 });
