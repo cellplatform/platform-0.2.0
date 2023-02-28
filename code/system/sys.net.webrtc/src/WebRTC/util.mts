@@ -58,11 +58,11 @@ export const Util = {
         },
       };
     },
-    byPeer(connections: t.PeerConnection[]): t.PeerConnectionsByPeer[] {
+    byPeer(local: t.PeerId, connections: t.PeerConnection[]): t.PeerConnectionsByPeer[] {
       const byPeer = R.groupBy((item) => item.peer.remote, connections);
-      return Object.entries(byPeer).map(([peer, all]) => {
+      return Object.entries(byPeer).map(([remote, all]) => {
         const item: t.PeerConnectionsByPeer = {
-          peer,
+          peer: { local, remote },
           length: all.length,
           all,
           get data() {

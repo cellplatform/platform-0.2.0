@@ -58,7 +58,7 @@ export const Row: React.FC<RowProps> = (props) => {
         />
         <div />
         <RowThumbnail
-          peer={remotePeer}
+          peer={remotePeer.remote}
           stream={remoteStream}
           size={thumbnailSize}
           onClick={printDebug}

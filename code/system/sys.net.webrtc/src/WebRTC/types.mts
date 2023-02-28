@@ -34,7 +34,7 @@ export type Peer = t.Disposable & {
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
-export type PeerConnectionsByPeer = { peer: Id } & PeerConnections;
+export type PeerConnectionsByPeer = { peer: { local: Id; remote: Id } } & PeerConnections;
 export type PeerConnections = {
   readonly length: number;
   readonly all: PeerConnection[];

@@ -41,7 +41,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
         return state.connections;
       },
       get connectionsByPeer() {
-        return Util.connections.byPeer(state.connections.all);
+        return Util.connections.byPeer(id, state.connections.all);
       },
 
       /**

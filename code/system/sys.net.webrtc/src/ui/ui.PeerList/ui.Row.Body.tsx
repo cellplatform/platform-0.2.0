@@ -11,7 +11,7 @@ export type RowBodyProps = {
 
 export const RowBody: React.FC<RowBodyProps> = (props) => {
   const { peerConnections, debug } = props;
-  const peerid = peerConnections.peer;
+  const peerid = peerConnections.peer.remote;
   const peerUri = WebRTC.Util.asUri(peerid);
 
   const media = peerConnections.media.find((item) => item.stream)?.stream;

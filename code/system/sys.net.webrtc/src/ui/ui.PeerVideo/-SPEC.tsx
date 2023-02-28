@@ -12,7 +12,7 @@ export default Dev.describe('PeerVideo', async (e) => {
   e.timeout(9999);
 
   type LocalStore = { muted: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.PeerVideo');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerVideo');
   const local = localstore.object({ muted: true });
 
   let network: TestNetworkP2P;

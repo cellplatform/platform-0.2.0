@@ -10,7 +10,7 @@ export type ConnScreenshareProps = {
 
 export const ConnScreenshare: React.FC<ConnScreenshareProps> = (props) => {
   const { peerConnections } = props;
-  const peer = peerConnections.peer;
+  const peer = peerConnections.peer.remote;
   const screenConn = peerConnections.media.find((item) => item.metadata.input === 'screen');
 
   const [isOver, setOver] = useState(false);

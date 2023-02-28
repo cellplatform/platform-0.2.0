@@ -3,14 +3,20 @@ import { Color, COLORS, css, t, rx } from '../common';
 import { ActionBar } from './ui.Item.ActionBar';
 
 export type PeerListItemProps = {
-  // self: t.PeerId;
-  // peer: t.PeerConnectionsByPeer;
+  connections?: t.PeerConnectionsByPeer;
   debug?: boolean;
   style?: t.CssValue;
+  onCloseRequest?: () => void;
 };
 
 export const PeerListItem: React.FC<PeerListItemProps> = (props) => {
   const { debug = false } = props;
+  if (!props.connections) return null;
+
+  const peer = props.connections.peer;
+
+  console.log('peer', peer);
+  console.log('connetions', props.connections);
 
   /**
    * [Render]
@@ -33,7 +39,7 @@ export const PeerListItem: React.FC<PeerListItemProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.main}>left</div>
       <div {...styles.closeAction}>
-        <ActionBar onCloseRequest={() => console.log('close TODO')} />
+        <ActionBar onCloseRequest={props.onCloseRequest} />
       </div>
     </div>
   );

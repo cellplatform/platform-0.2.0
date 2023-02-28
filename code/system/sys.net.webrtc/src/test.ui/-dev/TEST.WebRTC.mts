@@ -100,8 +100,10 @@ export default Dev.describe('WebRTC', (e) => {
       expect(peerB.connections.data[0].isOpen).to.eql(true);
       expect(peerB.connections.data[0].metadata.name).to.eql('Foobar');
 
-      expect(peerA.connectionsByPeer[0].peer).to.eql(peerB.id);
-      expect(peerB.connectionsByPeer[0].peer).to.eql(peerA.id);
+      expect(peerA.connectionsByPeer[0].peer.local).to.eql(peerA.id);
+      expect(peerA.connectionsByPeer[0].peer.remote).to.eql(peerB.id);
+      expect(peerB.connectionsByPeer[0].peer.local).to.eql(peerB.id);
+      expect(peerB.connectionsByPeer[0].peer.remote).to.eql(peerA.id);
 
       expect(firedA.length).to.eql(1);
       expect(firedB.length).to.eql(1);

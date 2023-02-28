@@ -30,7 +30,7 @@ export const PeerList: React.FC<PeerListProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {peerConnections.map((connections) => (
         <Row
-          key={connections.peer}
+          key={connections.peer.remote}
           self={self.id}
           peer={connections}
           style={styles.row}
