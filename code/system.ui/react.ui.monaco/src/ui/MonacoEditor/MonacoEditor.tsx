@@ -1,8 +1,7 @@
 import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 
-import { css, t, FC } from '../common';
-import { LANGUAGES, DEFAULTS } from './const.mjs';
+import { css, t, FC, LANGUAGES, DEFAULTS } from './common';
 
 import type { OnChange, OnMount } from '@monaco-editor/react';
 
@@ -26,9 +25,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    if (text !== editor.getValue()) {
-      editor.setValue(text ?? '');
-    }
+    if (text !== editor.getValue()) editor.setValue(text ?? '');
   }, [text]);
 
   useEffect(() => {
@@ -42,7 +39,6 @@ const View: React.FC<MonacoEditorProps> = (props) => {
     const editor = ed as unknown as t.MonacoStandaloneCodeEditor;
     editorRef.current = editor;
     editor.getModel()?.updateOptions({ tabSize });
-
     if (props.focusOnLoad) editor.focus();
     props.onReady?.({ editor, monaco });
   };
