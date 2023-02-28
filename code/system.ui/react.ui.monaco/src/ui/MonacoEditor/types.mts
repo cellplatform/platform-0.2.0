@@ -4,5 +4,5 @@
  */
 import type * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-export type MonacoStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
+export type MonacoCodeEditor = monaco.editor.IStandaloneCodeEditor;
 export type { Monaco } from '@monaco-editor/react';

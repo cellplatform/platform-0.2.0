@@ -12,12 +12,12 @@ export type MonacoEditorProps = {
   tabSize?: number;
   style?: t.CssValue;
   onChange?: (e: { text: string }) => void;
-  onReady?: (e: { editor: t.MonacoStandaloneCodeEditor; monaco: t.Monaco }) => void;
+  onReady?: (e: { editor: t.MonacoCodeEditor; monaco: t.Monaco }) => void;
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
   const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize } = props;
-  const editorRef = useRef<t.MonacoStandaloneCodeEditor>();
+  const editorRef = useRef<t.MonacoCodeEditor>();
 
   /**
    * [Lifecycle]
@@ -36,7 +36,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
    * [Handlers]
    */
   const handleEditorDidMount: OnMount = (ed, monaco) => {
-    const editor = ed as unknown as t.MonacoStandaloneCodeEditor;
+    const editor = ed as unknown as t.MonacoCodeEditor;
     editorRef.current = editor;
     editor.getModel()?.updateOptions({ tabSize });
     if (props.focusOnLoad) editor.focus();
