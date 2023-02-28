@@ -1,6 +1,6 @@
 import { describe, expect, it } from '../test';
 import { Dev } from '../test.ui';
-import Specs from './entry.Specs.mjs';
+import Specs from '../test.ui/entry.Specs.mjs';
 
 describe('visual specs', () => {
   it('run', async () => {
