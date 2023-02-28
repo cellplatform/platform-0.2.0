@@ -204,14 +204,31 @@ describe('Path', () => {
         expect(Path.ensureHttpsPrefix(input)).to.eql(expected, input);
       };
 
+      [null, undefined, 123, [], {}, true].forEach((v) => test(v, 'https://'));
       test('', 'https://');
       test('  ', 'https://');
       test('foo', 'https://foo');
       test('  foo?d ', 'https://foo?d');
+
+      // NB: converts HTTP => HTTPS.
       test('http://foo', 'https://foo');
-      test('http://', 'https://');
+      test('  http://  ', 'https://');
+    });
+
+    it('ensureHttpPrefix', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureHttpPrefix(input)).to.eql(expected, input);
+      };
 
       [null, undefined, 123, [], {}, true].forEach((v) => test(v, 'https://'));
+      test('', 'https://');
+      test('  ', 'https://');
+      test('foo', 'https://foo');
+      test('  foo?d ', 'https://foo?d');
+
+      // NB: retains HTTP (does not convert to HTTPS)
+      test('http://foo', 'http://foo');
+      test('  http://  ', 'http://');
     });
 
     it('trimFilePrefix', () => {

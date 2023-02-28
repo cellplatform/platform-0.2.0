@@ -38,10 +38,21 @@ export function trimHttpPrefix(input: string) {
 }
 
 /**
- * Ensure an "https://" prefix om the given string.
+ * Ensure an "https://" OR "http://" prefix on the given string.
+ */
+export function ensureHttpPrefix(input?: string) {
+  const text = trim(input);
+  const https = 'https://';
+  const isHttp = text.startsWith('https://') || text.startsWith('http://');
+  return isHttp ? text : `${https}${text}`;
+}
+
+/**
+ * Ensure an "http://" prefix on the given string.
  */
 export function ensureHttpsPrefix(input?: string) {
-  return typeof input !== 'string' ? 'https://' : `https://${trimHttpPrefix(input)}`;
+  const https = 'https://';
+  return typeof input !== 'string' ? https : `${https}${trimHttpPrefix(input)}`;
 }
 
 /**
