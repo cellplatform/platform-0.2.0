@@ -1,4 +1,4 @@
-import { Dev, TestNetwork, TestNetworkP2P } from '../../test.ui';
+import { Dev, TestNetwork } from '../../test.ui';
 import { PeerListItem, PeerListItemProps } from '.';
 
 type T = { props: PeerListItemProps };
@@ -11,7 +11,6 @@ export default Dev.describe('PeerList.Item', async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerList.Item');
   const local = localstore.object({ debug: true });
 
-  // let network: TestNetworkP2P;
   const network = await TestNetwork.init();
 
   e.it('init', async (e) => {
