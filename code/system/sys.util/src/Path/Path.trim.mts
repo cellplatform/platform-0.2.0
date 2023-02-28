@@ -38,6 +38,13 @@ export function trimHttpPrefix(input: string) {
 }
 
 /**
+ * Ensure an "https://" prefix om the given string.
+ */
+export function ensureHttpsPrefix(input?: string) {
+  return typeof input !== 'string' ? 'https://' : `https://${trimHttpPrefix(input)}`;
+}
+
+/**
  * Trims the "file://" prefix if present
  */
 export function trimFilePrefix(input: string) {

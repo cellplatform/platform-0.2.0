@@ -199,6 +199,21 @@ describe('Path', () => {
       test({}, '');
     });
 
+    it('ensureHttpsPrefix', () => {
+      const test = (input: any, expected: string) => {
+        expect(Path.ensureHttpsPrefix(input)).to.eql(expected, input);
+      };
+
+      test('', 'https://');
+      test('  ', 'https://');
+      test('foo', 'https://foo');
+      test('  foo?d ', 'https://foo?d');
+      test('http://foo', 'https://foo');
+      test('http://', 'https://');
+
+      [null, undefined, 123, [], {}, true].forEach((v) => test(v, 'https://'));
+    });
+
     it('trimFilePrefix', () => {
       const test = (input: any, expected: string) => {
         expect(Path.trimFilePrefix(input)).to.eql(expected);
