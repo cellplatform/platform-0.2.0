@@ -43,7 +43,7 @@ export function trimHttpPrefix(input: string) {
 export function ensureHttpPrefix(input?: string) {
   const text = trim(input);
   const https = 'https://';
-  const isHttp = text.startsWith('https://') || text.startsWith('http://');
+  const isHttp = [https, 'http://'].some((prefix) => text.startsWith(prefix));
   return isHttp ? text : `${https}${text}`;
 }
 
