@@ -9,8 +9,7 @@ export type DevLayoutEditor = { peerName: string; editor: t.MonacoCodeEditor };
 
 export type DevLayoutProps = {
   peerNames: string[];
-  isRunningTests?: boolean;
-  testResults?: t.TestSuiteRunResponse;
+  tests: { running: boolean; results?: t.TestSuiteRunResponse };
   style?: t.CssValue;
   onReady?: DevLayoutReadyHandler;
 };
@@ -54,10 +53,10 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
     const isFirst = i === 0;
     return (
       <DevEditor
-        style={{ borderTop: isFirst ? undefined : divider }}
-        key={`${name}.${i}`}
         name={name}
+        key={`${name}.${i}`}
         onReady={(e) => handleEditorReady(name, e.editor)}
+        style={{ borderTop: isFirst ? undefined : divider }}
       />
     );
   });
@@ -67,8 +66,8 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
       {elEditors}
       <div {...styles.bottom.base}>
         <Dev.TestRunner.Results
-          data={props.testResults}
-          spinning={props.isRunningTests}
+          data={props.tests.results}
+          spinning={props.tests.running}
           style={styles.bottom.runner}
           padding={[10, 20, 10, 10]}
         />

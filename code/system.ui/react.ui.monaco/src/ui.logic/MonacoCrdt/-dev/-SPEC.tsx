@@ -1,18 +1,30 @@
-import { t, Dev, css, Color, COLORS, Value } from './common';
+import { t, Dev, css, Color, COLORS, Value, Crdt, Automerge } from './common';
 import { DevLayout, DevLayoutProps } from './DEV.Layout';
 import { MonacoCrdt } from '..';
 
-type T = { layout: DevLayoutProps };
-const initial: T = { layout: { peerNames: [] } };
+type T = {
+  peerNames: string[];
+  docs: t.CrdtDocRef<t.SampleDoc>[];
+  tests: { running: boolean; results?: t.TestSuiteRunResponse };
+};
+const initial: T = { peerNames: [], docs: [], tests: { running: false } };
 
 export default Dev.describe('MonacoCrdt', (e) => {
   type LocalStore = { peerTotal: number };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
   const local = localstore.object({ peerTotal: 2 });
 
-  const setPeerTotal = async (total: number, state: T) => {
-    local.peerTotal = total;
-    state.layout.peerNames = Array.from({ length: total }).map((_, i) => `Peer-${i + 1}`);
+  const setPeerTotal = async (length: number, state: T) => {
+    local.peerTotal = length;
+    state.peerNames = Array.from({ length }).map((_, i) => `Peer-${i + 1}`);
+
+    state.docs.forEach((doc) => doc.dispose());
+    state.docs = state.peerNames.map(() => {
+      return Crdt.Doc.ref<t.SampleDoc>({
+        count: 0,
+        code: new Automerge.Text(),
+      });
+    });
   };
 
   e.it('init', async (e) => {
@@ -27,7 +39,8 @@ export default Dev.describe('MonacoCrdt', (e) => {
       .render<T>((e) => {
         return (
           <DevLayout
-            {...e.state.layout}
+            peerNames={e.state.peerNames}
+            tests={e.state.tests}
             onReady={(e) => {
               console.log('⚡️ layout ready', e);
             }}
@@ -38,9 +51,11 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'MonacoCrdt'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const docs = e.state.docs.map((doc) => doc.current);
+      const data = { docs };
+      return <Dev.Object name={'MonacoCrdt'} data={data} expand={1} />;
+    });
 
     dev.section('Peers', (dev) => {
       const total = (total: number) => {
@@ -57,15 +72,15 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.section('Unit Tests', async (dev) => {
       const run = async (bundle: t.BundleImport) => {
         const tests = (await bundle).default;
-        await dev.change((d) => (d.layout.isRunningTests = true));
+        await dev.change((d) => (d.tests.running = true));
         await dev.change(async (d) => {
-          d.layout.testResults = await tests.run();
-          d.layout.isRunningTests = false;
+          d.tests.results = await tests.run();
+          d.tests.running = false;
         });
       };
 
       dev.button('run all tests', (e) => run(import('./-TEST.mjs')));
-      dev.button('clear', (e) => e.change((d) => (d.layout.testResults = undefined)));
+      dev.button('clear', (e) => e.change((d) => (d.tests = { ...initial.tests })));
     });
   });
 });
