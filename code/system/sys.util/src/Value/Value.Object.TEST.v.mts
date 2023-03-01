@@ -1,6 +1,76 @@
 import { expect, describe, it } from '../test';
 import { Value } from '.';
 
+describe('Value.object.walk', () => {
+  type T = { key: string | number; value: any };
+
+  it('processes object', () => {
+    const walked: T[] = [];
+    const input = {
+      name: 'foo',
+      count: 123,
+      child: { enabled: true, list: [1, 2] },
+    };
+
+    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+
+    expect(walked).to.eql([
+      { key: 'name', value: 'foo' },
+      { key: 'count', value: 123 },
+      { key: 'child', value: { enabled: true, list: [1, 2] } },
+      { key: 'enabled', value: true },
+      { key: 'list', value: [1, 2] },
+      { key: 0, value: 1 },
+      { key: 1, value: 2 },
+    ]);
+  });
+
+  it('processes array', () => {
+    const walked: T[] = [];
+    const input = ['foo', 123, { enabled: true, list: [1, 2] }];
+
+    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+
+    expect(walked).to.eql([
+      { key: 0, value: 'foo' },
+      { key: 1, value: 123 },
+      { key: 2, value: { enabled: true, list: [1, 2] } },
+      { key: 'enabled', value: true },
+      { key: 'list', value: [1, 2] },
+      { key: 0, value: 1 },
+      { key: 1, value: 2 },
+    ]);
+  });
+
+  it('processes nothing (non-object / array)', () => {
+    const test = (input: any) => {
+      const walked: any[] = [];
+      Value.object.walk(input, (e) => walked.push(e));
+      expect(walked).to.eql([]); // NB: nothing walked.
+    };
+    [0, true, '', null, undefined].forEach((input) => test(input));
+  });
+
+  it('stops midway', () => {
+    const walked: T[] = [];
+    const input = {
+      name: 'foo',
+      child: { enabled: true, list: [1, 2] },
+    };
+
+    Value.object.walk(input, (e) => {
+      const { key, value } = e;
+      if (value === true) return e.stop();
+      walked.push({ key, value });
+    });
+
+    expect(walked).to.eql([
+      { key: 'name', value: 'foo' },
+      { key: 'child', value: { enabled: true, list: [1, 2] } },
+    ]);
+  });
+});
+
 describe('Value.object.build', () => {
   it('return default root object (no keyPath)', () => {
     expect(Value.object.build('', {})).to.eql({});
@@ -224,7 +294,7 @@ describe('Value.object.toArray', () => {
   });
 });
 
-describe('trimStringsDeep', () => {
+describe('Value.object.trimStringsDeep', () => {
   it('shallow', () => {
     const name = 'foo'.repeat(100);
     const obj = {
