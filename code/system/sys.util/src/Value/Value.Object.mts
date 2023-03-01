@@ -1,3 +1,4 @@
+import { R } from '../common';
 export * from './Value.Object.keyPath.mjs';
 
 /**
@@ -60,7 +61,7 @@ export function trimStringsDeep<T extends Record<string, any>>(
     });
   };
 
-  const clone = immutable ? structuredClone(obj) : obj;
+  const clone = immutable ? R.clone(obj) : obj;
   adjust(clone);
   walk(clone, (e) => {
     const value = e.value;
