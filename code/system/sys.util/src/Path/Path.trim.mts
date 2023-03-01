@@ -38,24 +38,6 @@ export function trimHttpPrefix(input: string) {
 }
 
 /**
- * Ensure an "https://" OR "http://" prefix on the given string.
- */
-export function ensureHttpPrefix(input?: string) {
-  const text = trim(input);
-  const https = 'https://';
-  const isHttp = [https, 'http://'].some((prefix) => text.startsWith(prefix));
-  return isHttp ? text : `${https}${text}`;
-}
-
-/**
- * Ensure an "http://" prefix on the given string.
- */
-export function ensureHttpsPrefix(input?: string) {
-  const https = 'https://';
-  return typeof input !== 'string' ? https : `${https}${trimHttpPrefix(input)}`;
-}
-
-/**
  * Trims the "file://" prefix if present
  */
 export function trimFilePrefix(input: string) {
@@ -73,27 +55,4 @@ export function trimWildcardEnd(input: string) {
     path = trimWildcardEnd(path); // <== RECURSION 🌳
   }
   return path;
-}
-
-/**
- * Ensures the path starts with a single "/".
- */
-export function ensureSlashStart(input: string) {
-  return `/${trimSlashesStart(input)}`;
-}
-
-/**
- * Ensures the path ends in a single "/".
- */
-export function ensureSlashEnd(input: string) {
-  return `${trimSlashesEnd(input)}/`;
-}
-
-/**
- * Ensures the path starts and ends in a single "/".
- */
-export function ensureSlashes(input: string) {
-  input = ensureSlashStart(input);
-  input = ensureSlashEnd(input);
-  return input;
 }
