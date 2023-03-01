@@ -171,6 +171,36 @@ export function toArray<T = Record<string, unknown>, K = keyof T>(
 }
 
 /**
+ * Walk the tree and ensure all strings are less than the given max-length.
+ */
+export function trimStringsDeep<T extends Record<string, any>>(
+  obj: T,
+  options: { maxLength?: number; ellipsis?: boolean; immutable?: boolean } = {},
+) {
+  // NB: This is a recursive function ← via Object.walk(🌳)
+  const { ellipsis = true, immutable = true } = options;
+  const MAX = options.maxLength ?? 35;
+
+  const adjust = (obj: Record<string, string>) => {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (typeof value === 'string' && value.length > MAX) {
+        let text = value.slice(0, MAX);
+        if (ellipsis) text += '...';
+        (obj as any)[key] = text;
+      }
+    });
+  };
+
+  const clone = immutable ? structuredClone(obj) : obj;
+  adjust(clone);
+  walk(clone, (e) => {
+    if (typeof e === 'object' && e !== null) adjust(e);
+  });
+
+  return clone;
+}
+
+/**
  * [Helpers]
  */
 function prepareKeyPath(keyPath: string) {

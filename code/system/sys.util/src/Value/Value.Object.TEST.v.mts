@@ -223,3 +223,76 @@ describe('Value.object.toArray', () => {
     expect(res.length).to.eql(2);
   });
 });
+
+describe('trimStringsDeep', () => {
+  it('shallow', () => {
+    const name = 'foo'.repeat(100);
+    const obj = {
+      name,
+      count: 123,
+      obj: {},
+      list: [],
+      bool: true,
+      undef: undefined,
+      nil: null,
+    };
+
+    const res1 = Value.object.trimStringsDeep(obj);
+    const res2 = Value.object.trimStringsDeep(obj, { immutable: false });
+
+    const expected = {
+      ...obj,
+      name: `${name.substring(0, 35)}...`, // NB: default max-length
+    };
+
+    expect(res1).to.eql(expected);
+    expect(res2).to.eql(expected);
+
+    expect(res1).to.not.equal(obj); // NB: default: immutable clone.
+    expect(res2).to.equal(obj);
+  });
+
+  it('deep', () => {
+    const name = 'foo'.repeat(50);
+    const obj = {
+      name,
+      child: {
+        child: {
+          name,
+          count: 123,
+          obj: {},
+          list: [],
+          bool: true,
+          undef: undefined,
+          nil: null,
+        },
+      },
+    };
+
+    const res = Value.object.trimStringsDeep(obj);
+
+    expect(res).to.eql({
+      name: `${name.substring(0, 35)}...`,
+      child: {
+        child: {
+          ...obj.child.child,
+          name: `${name.substring(0, 35)}...`,
+        },
+      },
+    });
+  });
+
+  it('options: no ellipsis, maxLength', () => {
+    const name = 'foo'.repeat(100);
+    const obj = { name };
+
+    const res1 = Value.object.trimStringsDeep(obj, {});
+    const res2 = Value.object.trimStringsDeep(obj, {
+      ellipsis: false,
+      maxLength: 10,
+    });
+
+    expect(res1.name).to.eql(`${name.substring(0, 35)}...`); // NB: default
+    expect(res2.name).to.eql(name.substring(0, 10));
+  });
+});
