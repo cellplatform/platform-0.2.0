@@ -1,4 +1,4 @@
-import { CrdtInfo } from 'sys.data.crdt';
+import { Automerge, CrdtInfo } from 'sys.data.crdt';
 
 import { WebRTC } from '.';
 import {
@@ -14,6 +14,7 @@ import {
   t,
   TEST,
   TextInput,
+  Path,
 } from '../test.ui';
 import { PeerList, PeerVideo } from '../ui';
 import { DevSample } from './-dev/DEV.Sample';
@@ -110,7 +111,7 @@ export default Dev.describe('WebRTC', async (e) => {
 
     docFile = await Crdt.Doc.file<Doc>(
       filedir,
-      { version: '0.0.0', count: 0, peers: [] },
+      { version: '0.0.0', count: 0, peers: [], code: new Automerge.Text() },
       { autosave: true },
     );
 
@@ -123,7 +124,7 @@ export default Dev.describe('WebRTC', async (e) => {
       const doc = docFile.doc.current;
       d.main.imageUrl = doc.url ?? '';
       d.main.iframeUrl = doc.iframe ?? '';
-      d.main.code = doc.code ?? CODE;
+      d.main.code = doc.code?.toString() ?? CODE;
     });
   });
 
@@ -143,6 +144,14 @@ export default Dev.describe('WebRTC', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
 
+    const toggleMute = () => {
+      return state.change((d) => {
+        const next = !d.debug.muted;
+        d.debug.muted = next;
+        local.muted = next;
+      });
+    };
+
     dev.header
       .padding(0)
       .border(-0.1)
@@ -152,13 +161,7 @@ export default Dev.describe('WebRTC', async (e) => {
             self={self}
             mediaHeight={250}
             muted={e.state.debug.muted}
-            onMuteClick={() => {
-              state.change((d) => {
-                const next = !d.debug.muted;
-                d.debug.muted = next;
-                local.muted = next;
-              });
-            }}
+            onMuteClick={toggleMute}
           />
         );
       });
@@ -166,14 +169,7 @@ export default Dev.describe('WebRTC', async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const { self } = e.state;
       const connections = self?.connections;
-
-      const doc = structuredClone(docFile.doc.current);
-      Object.entries(doc).forEach(([key, value]) => {
-        const MAX = 35;
-        if (typeof value === 'string' && value.length > MAX) {
-          (doc as any)[key] = `${value.slice(0, MAX)}...`;
-        }
-      });
+      const doc = Dev.trimStringsDeep(docFile.doc.current, { maxLength: 35 });
 
       const media = {
         '🐷[1]': `refactor bus/events in source module: sys.ui.video`,
@@ -338,7 +334,69 @@ export default Dev.describe('WebRTC', async (e) => {
       };
       increment('increment', 1);
       increment('decrement', -1);
+      dev.hr();
+      dev.button('reset text', (e) => {
+        docFile.doc.change((d) => d.code.deleteAt(0, d.code.length));
+      });
     });
+
+    dev.hr();
+
+    // IFrameURL
+    dev.section((dev) => {
+      dev.row((e) => {
+        return (
+          <TextInput
+            value={e.state.main.iframeUrl}
+            valueStyle={{ fontSize: 14 }}
+            placeholder={'iframe'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            focusAction={'Select'}
+            spellCheck={false}
+            onChanged={(e) => dev.change((d) => (d.main.iframeUrl = e.to))}
+            onEnter={() => {
+              const text = (e.state.main.iframeUrl || '').trim();
+              const url = text ? Path.ensureHttpsPrefix(text) : '';
+              console.log('url', url);
+              docFile.doc.change((d) => (d.iframe = url));
+            }}
+          />
+        );
+      });
+      dev.hr();
+    });
+
+    // ImageUrl
+    dev.section((dev) => {
+      dev.row((e) => {
+        return (
+          <TextInput
+            value={e.state.main.imageUrl}
+            valueStyle={{ fontSize: 14 }}
+            placeholder={'image'}
+            placeholderStyle={{ opacity: 0.3, italic: true }}
+            focusAction={'Select'}
+            spellCheck={false}
+            onChanged={(e) => dev.change((d) => (d.main.imageUrl = e.to))}
+            onEnter={() => {
+              const text = (e.state.main.imageUrl || '').trim();
+              const url = text ? Path.ensureHttpsPrefix(text) : '';
+              docFile.doc.change((d) => (d.url = url));
+            }}
+          />
+        );
+      });
+      dev.hr();
+    });
+
+    // CRDT (Info)
+    dev.section('CRDT (State)', (dev) => {
+      dev.row((e) => {
+        return <CrdtInfo style={{ Margin: [0, 20] }} />;
+      });
+    });
+
+    dev.hr();
 
     // QRCode
     dev.section((dev) => {
@@ -362,61 +420,6 @@ export default Dev.describe('WebRTC', async (e) => {
             <QRCode value={value} size={180} />
           </div>
         );
-      });
-    });
-
-    dev.hr();
-
-    // ImageUrl
-    dev.section((dev) => {
-      dev.row((e) => {
-        return (
-          <TextInput
-            value={e.state.main.imageUrl}
-            valueStyle={{ fontSize: 14 }}
-            placeholder={'image'}
-            placeholderStyle={{ opacity: 0.3, italic: true }}
-            focusAction={'Select'}
-            spellCheck={false}
-            onChanged={(e) => dev.change((d) => (d.main.imageUrl = e.to))}
-            onEnter={() => {
-              const url = e.state.main.imageUrl ?? '';
-              docFile.doc.change((d) => (d.url = url));
-            }}
-          />
-        );
-      });
-    });
-
-    dev.hr();
-
-    // IFrameURL
-    dev.section((dev) => {
-      dev.row((e) => {
-        return (
-          <TextInput
-            value={e.state.main.iframeUrl}
-            valueStyle={{ fontSize: 14 }}
-            placeholder={'iframe'}
-            placeholderStyle={{ opacity: 0.3, italic: true }}
-            focusAction={'Select'}
-            spellCheck={false}
-            onChanged={(e) => dev.change((d) => (d.main.iframeUrl = e.to))}
-            onEnter={() => {
-              const url = e.state.main.iframeUrl ?? '';
-              docFile.doc.change((d) => (d.iframe = url));
-            }}
-          />
-        );
-      });
-    });
-
-    dev.hr();
-
-    // CRDT (Info)
-    dev.section('CRDT (State)', (dev) => {
-      dev.row((e) => {
-        return <CrdtInfo style={{ Margin: [0, 20] }} />;
       });
     });
   });

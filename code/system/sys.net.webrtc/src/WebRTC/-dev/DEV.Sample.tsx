@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { MonacoEditor } from 'sys.ui.react.monaco';
+import { DevCrdtTextSample } from './DEV.CrdtText.mjs';
 
 import { Color, COLORS, css, Dev, IFrame, t } from './common';
 import { DevCrdtSync } from './DEV.CrdtSync';
 
 import type { Doc } from './DEV.CrdtSync';
 
-import type { MonacoStandaloneCodeEditor } from 'sys.ui.react.monaco/src/types.mjs';
+import type { MonacoCodeEditor } from 'sys.ui.react.monaco/src/types.mjs';
 
 export type DevSampleProps = {
   self: t.Peer;
@@ -19,7 +20,7 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
   const imageUrl = docFile.doc.current.url ?? '';
   const iframeUrl = docFile.doc.current.iframe ?? '';
 
-  const codeEditorRef = useRef<MonacoStandaloneCodeEditor>();
+  const codeEditorRef = useRef<MonacoCodeEditor>();
   const code = docFile.doc.current.code;
 
   /**
@@ -28,9 +29,9 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
   useEffect(() => {
     const text = code ?? '';
     const editor = codeEditorRef.current;
-    if (editor && editor.getValue() === text) {
-      editor.setValue(text);
-    }
+    // if (editor && editor.getValue() === text) {
+    //   editor.setValue(text);
+    // }
   }, [code]);
 
   /**
@@ -85,14 +86,17 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
       <DevCrdtSync self={self} file={docFile} style={{ Absolute: 0, display: 'none' }} />
       <div {...styles.footer}>
         <MonacoEditor
-          language={'typescript'}
-          text={docFile.doc.current.code}
+          language={'markdown'}
+          // text={docFile.doc.current.code?.toString() ?? ''}
           onChange={(e) => {
-            docFile.doc.change((d) => (d.code = e.text));
+            // docFile.doc.change((d) => (d.code = e.text));
           }}
           onReady={(e) => {
-            //
-            codeEditorRef.current = e.editor;
+            const { editor } = e;
+            codeEditorRef.current = editor;
+            const doc = docFile.doc;
+
+            DevCrdtTextSample.init({ editor, doc });
           }}
         />
       </div>

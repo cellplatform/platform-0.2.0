@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Color, COLORS, Crdt, css, Dev, rx, t } from './common';
+import { Automerge, Button, Color, COLORS, Crdt, css, Dev, rx, t } from './common';
 
 /**
  * Schema:
@@ -15,7 +15,7 @@ export type Doc = {
   peers: string[];
   url?: string;
   iframe?: string;
-  code?: string;
+  code: Automerge.Text;
 };
 
 export type DevCrdtSyncProps = {

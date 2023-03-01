@@ -10,6 +10,8 @@ export type {
   TestSuiteModel,
 } from 'sys.test.spec/src/types.mjs';
 
+export type { MonacoCodeEditor } from 'sys.ui.react.monaco/src/types.mjs';
+
 /**
  * @local
  */
