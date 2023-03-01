@@ -11,8 +11,8 @@ export type MonacoEditorProps = {
   focusOnLoad?: boolean;
   tabSize?: number;
   style?: t.CssValue;
-  onChange?: (e: { text: string }) => void;
-  onReady?: (e: { editor: t.MonacoCodeEditor; monaco: t.Monaco }) => void;
+  onChange?: t.MonacoEditorChangeHandler;
+  onReady?: t.MonacoEditorReadyHandler;
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
@@ -43,8 +43,8 @@ const View: React.FC<MonacoEditorProps> = (props) => {
     props.onReady?.({ editor, monaco });
   };
 
-  const handleChange: OnChange = (text = '') => {
-    props.onChange?.({ text });
+  const handleChange: OnChange = (text = '', event) => {
+    props.onChange?.({ text, event });
   };
 
   /**
