@@ -204,9 +204,9 @@ describe('Path', () => {
         expect(Path.ensureHttpsPrefix(input)).to.eql(expected, input);
       };
 
-      [null, undefined, 123, [], {}, true].forEach((v) => test(v, 'https://'));
-      test('', 'https://');
-      test('  ', 'https://');
+      [null, undefined, 123, [], {}, true].forEach((v) => test(v, ''));
+      test('', '');
+      test('  ', '');
       test('foo', 'https://foo');
       test('  foo?d ', 'https://foo?d');
 
@@ -220,9 +220,9 @@ describe('Path', () => {
         expect(Path.ensureHttpPrefix(input)).to.eql(expected, input);
       };
 
-      [null, undefined, 123, [], {}, true].forEach((v) => test(v, 'https://'));
-      test('', 'https://');
-      test('  ', 'https://');
+      [null, undefined, 123, [], {}, true].forEach((v) => test(v, ''));
+      test('', '');
+      test('  ', '');
       test('foo', 'https://foo');
       test('  foo?d ', 'https://foo?d');
 

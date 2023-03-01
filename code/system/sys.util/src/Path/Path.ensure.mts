@@ -4,18 +4,25 @@ import { trim, trimHttpPrefix, trimSlashesEnd, trimSlashesStart } from './Path.t
  * Ensure an "https://" OR "http://" prefix on the given string.
  */
 export function ensureHttpPrefix(input?: string) {
+  const HTTP = 'http://';
+  const HTTPS = 'https://';
   const text = trim(input);
-  const https = 'https://';
-  const isHttp = [https, 'http://'].some((prefix) => text.startsWith(prefix));
-  return isHttp ? text : `${https}${text}`;
+  if (!text) return '';
+  const isHttp = [HTTPS, HTTP].some((prefix) => text.startsWith(prefix));
+  return isHttp ? text : `${HTTPS}${text}`;
 }
 
 /**
- * Ensure an "http://" prefix on the given string.
+ * Ensure an "https://" prefix on the given string.
  */
 export function ensureHttpsPrefix(input?: string) {
-  const https = 'https://';
-  return typeof input !== 'string' ? https : `${https}${trimHttpPrefix(input)}`;
+  const HTTP = 'https://';
+  const HTTPS = 'https://';
+  const text = trim(input);
+  if (!text) return text;
+  if (text === HTTPS) return HTTPS;
+  if (text === HTTP) return HTTPS;
+  return `${HTTPS}${trimHttpPrefix(text)}`;
 }
 
 /**
