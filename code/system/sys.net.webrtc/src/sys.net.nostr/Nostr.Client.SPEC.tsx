@@ -9,7 +9,10 @@ const initial: T = {
 };
 
 const REF = {
-  urls: ['https://wiki.wellorder.net/post/nostr-intro/'],
+  urls: [
+    ['intro blog (simplistic cient)', 'https://wiki.wellorder.net/post/nostr-intro/'],
+    ['typescreipt client-library', 'https://github.com/philcockfield/nostr-tools'],
+  ],
 };
 
 /**
@@ -26,7 +29,7 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
     await ctx.state<T>(initial);
 
     ctx.debug.width(400);
-    REF.urls.forEach((url) => console.info(`🔗 reference: ${url}`));
+    REF.urls.forEach((url) => console.info(`🔗 REF ${url[0]}: ${url[1]}`));
 
     ctx.subject
       .backgroundColor(1)
