@@ -28,8 +28,8 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
     base: css({
       boxSizing: 'border-box',
       position: 'relative',
-      display: 'grid',
       color: COLORS.DARK,
+      display: 'grid',
     }),
     main: css({
       position: 'relative',
