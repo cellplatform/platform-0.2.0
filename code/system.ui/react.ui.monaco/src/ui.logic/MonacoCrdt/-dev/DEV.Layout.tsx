@@ -53,6 +53,7 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
 
   const elEditors = peers.map((peer, i) => {
     const isFirst = i === 0;
+
     return (
       <DevEditor
         name={peer.name}
