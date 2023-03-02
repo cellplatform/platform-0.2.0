@@ -1,4 +1,4 @@
-import { t, Dev, css, Color, COLORS, Value, Crdt, Automerge } from './common';
+import { rx, t, Dev, css, Color, COLORS, Value, Crdt, Automerge } from './common';
 import { DevLayout, DevLayoutProps } from './DEV.Layout';
 import { MonacoCrdt } from '..';
 
@@ -19,11 +19,33 @@ export default Dev.describe('MonacoCrdt', (e) => {
   const setPeerTotal = async (length: number, state: T) => {
     local.peerTotal = length;
     state.peerNames = Array.from({ length }).map((_, i) => `Peer-${i + 1}`);
+
     _docs.forEach((doc) => doc.dispose());
-    _docs = state.peerNames.map(() => {
+    _docs = state.peerNames.map((_, i) => {
       return Crdt.Doc.ref<t.SampleDoc>({
         count: 0,
         code: new Automerge.Text(),
+      });
+    });
+
+    _docs.forEach((docA) => {
+      const others = _docs.filter((d) => d !== docA);
+      others.forEach((docB) => {
+        const busA = rx.bus();
+        const busB = rx.bus();
+        const conn = rx.bus.connect([busA, busB]);
+
+        const syncA = Crdt.Doc.sync(busA, docA);
+        const syncB = Crdt.Doc.sync(busB, docB);
+
+        const dispose = () => {
+          conn.dispose();
+          syncA.dispose();
+          syncB.dispose();
+        };
+
+        docA.dispose$.subscribe(dispose);
+        docB.dispose$.subscribe(dispose);
       });
     });
   };
