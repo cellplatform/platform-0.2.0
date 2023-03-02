@@ -1,5 +1,5 @@
 import { Color, css, MonacoEditor, t } from './common';
-import { DevEditorState } from './DEV.Editor.State';
+import { DevEditorCard } from './DEV.Editor.Card';
 
 export type DevEditorProps = {
   name: string;
@@ -16,9 +16,21 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ display: 'grid', gridTemplateColumns: '1fr 1fr' }),
-    left: css({ borderRight: `solid 1px ${Color.format(-0.1)}`, display: 'grid' }),
-    right: css({ padding: 30, display: 'grid' }),
+    base: css({
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      backgroundColor: Color.format(0.5),
+      backdropFilter: 'blur(10px)',
+    }),
+    left: css({
+      backgroundColor: Color.format(1),
+      borderRight: `solid 1px ${Color.format(-0.1)}`,
+      display: 'grid',
+    }),
+    right: css({
+      boxSizing: 'border-box',
+      display: 'grid',
+    }),
   };
 
   return (
@@ -27,7 +39,7 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
         <MonacoEditor onReady={props.onReady} language={props.language} />
       </div>
       <div {...styles.right}>
-        <DevEditorState name={name} doc={doc} />
+        <DevEditorCard name={name} doc={doc} />
       </div>
     </div>
   );

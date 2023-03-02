@@ -40,13 +40,14 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
     base: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateRows: `${peers.map(() => '1pr')} 1fr`,
+      gridAutoRows: '1fr',
     }),
     top: css({ display: 'grid' }),
     bottom: {
       base: css({
         position: 'relative',
         borderTop: peers.length > 0 ? divider : undefined,
+        backgroundColor: Color.format(1),
       }),
       runner: css({ Absolute: 0 }),
     },
@@ -54,7 +55,7 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
 
   const elEditors = peers.map((peer, i) => {
     const isFirst = i === 0;
-
+    const borderTop = isFirst ? undefined : divider;
     return (
       <DevEditor
         key={`${peer.name}.${i}`}
@@ -62,7 +63,7 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
         doc={peer.doc}
         language={props.language}
         onReady={(e) => handleEditorReady(peer, e.editor)}
-        style={{ borderTop: isFirst ? undefined : divider }}
+        style={{ borderTop }}
       />
     );
   });
