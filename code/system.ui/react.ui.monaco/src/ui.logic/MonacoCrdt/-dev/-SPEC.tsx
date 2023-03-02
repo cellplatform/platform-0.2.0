@@ -1,5 +1,5 @@
 import { rx, t, Dev, css, Color, COLORS, Value, Crdt, Automerge } from './common';
-import { DevLayout, DevLayoutProps } from './DEV.Layout';
+import { DevLayout } from './DEV.Layout';
 import { MonacoCrdt } from '..';
 
 type T = {
@@ -68,6 +68,13 @@ export default Dev.describe('MonacoCrdt', (e) => {
             tests={e.state.tests}
             onReady={(e) => {
               console.log('⚡️ layout ready', e);
+
+              e.editors.forEach((e) => {
+                const doc = e.peer.doc;
+                const editor = e.editor;
+                const crdt = MonacoCrdt.init(doc, 'code', editor);
+                console.info('MonacoCrdt:', crdt);
+              });
             }}
           />
         );
@@ -116,10 +123,27 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('count: increment (first)', (e) => {
-        _docs[0].change((d) => d.count++);
-        redraw();
-      });
+      const inc = (amount: number) => {
+        dev.change((d) => {
+          _docs[0].change((d) => (d.count += amount));
+          redraw();
+        });
+      };
+
+      dev.button((btn) =>
+        btn
+          .label('increment count')
+          .right('← on first Doc<T>')
+          .onClick((e) => inc(1)),
+      );
+      dev.button((btn) =>
+        btn
+          .label('decrement count')
+          .right('← on first Doc<T>')
+          .onClick((e) => inc(-1)),
+      );
+
+      dev.hr();
     });
   });
 });
