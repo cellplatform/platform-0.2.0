@@ -29,6 +29,7 @@ export default Test.describe('DocFile', (e) => {
 
       file.doc.change((d) => d.count++);
       expect(fired.length).to.eql(2); // NB: the {onChange} handler successfully registered on to the [DocRef].
+      file.dispose();
     });
 
     e.it('init: pass in existing [DocRef]', async (e) => {
@@ -43,7 +44,6 @@ export default Test.describe('DocFile', (e) => {
 
       file.doc.change((d) => d.count++);
       expect(fired.length).to.eql(1); // NB: the {onChange} handler successfully registered on to the [DocRef].
-
       file.dispose();
     });
 

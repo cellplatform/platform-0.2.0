@@ -18,9 +18,6 @@ export default Dev.describe('CrdtInfo', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-
-    console.log('local.debug', local);
-
     await state.change((d) => (d.debug = local));
 
     ctx.subject.display('grid').render<T>((e) => {

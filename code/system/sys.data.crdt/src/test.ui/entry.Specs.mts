@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.crdt.tests': () => import('./-SPEC.TestRunner'),
+  'sys.crdt.tests': () => import('./-TestRunner'),
   'sys.crdt.ui.CrdtInfo': () => import('../ui/CrdtInfo/-SPEC'),
 };
 

@@ -43,10 +43,11 @@ export default Dev.describe('Root', (e) => {
       };
 
       const tests: t.TestSuiteModel[] = [];
-      const button = async (input: t.SpecImport) => {
+      const button = async (input: t.SpecImport, immediate?: boolean) => {
         const module = await input;
         const spec = await (module.default as t.TestSuiteModel).init();
         dev.button(spec.description, (e) => invoke(spec));
+        if (immediate) invoke(spec);
         return spec;
       };
 
@@ -60,7 +61,8 @@ export default Dev.describe('Root', (e) => {
         ...[
           await button(import('../crdt.DocRef/-TEST.mjs')),
           await button(import('../crdt.DocFile/-TEST.mjs')),
-          await button(import('../crdt.Sync/-TEST.mjs')),
+          await button(import('../crdt.Sync/-TEST.DocSync.mjs'), true),
+          await button(import('../crdt.Sync/-TEST.PeerSyncer.mjs')),
           await button(import('../crdt.Is/-TEST.mjs')),
         ],
       );

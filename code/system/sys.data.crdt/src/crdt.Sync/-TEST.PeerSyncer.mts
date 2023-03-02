@@ -1,23 +1,14 @@
 import { PeerSyncer } from '.';
-import { expect, rx, Time, Test, TestFilesystem, Automerge } from '../test.ui';
+import { Automerge, expect, rx, Test, Time } from '../test.ui';
 
-export default Test.describe('Sync Protocol (PeerSyncer)', (e) => {
+export default Test.describe('Sync Protocol - PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };
 
   function ConnectionMock() {
-    const dirname = 'my-file';
-    const storeA = TestFilesystem.memory();
-    const storeB = TestFilesystem.memory();
-
-    const a = { bus: rx.bus(), dir: storeA.fs.dir(dirname) };
-    const b = { bus: rx.bus(), dir: storeA.fs.dir(dirname) };
-
+    const a = { bus: rx.bus() };
+    const b = { bus: rx.bus() };
     const conn = rx.bus.connect([a.bus, b.bus]);
-    const dispose = () => {
-      conn.dispose();
-      storeA.dispose();
-      storeB.dispose();
-    };
+    const dispose = () => conn.dispose();
     return { a, b, dispose };
   }
 
@@ -26,7 +17,7 @@ export default Test.describe('Sync Protocol (PeerSyncer)', (e) => {
     return Automerge.change(doc, (doc) => (doc.count = 0));
   }
 
-  e.it('sync (via event-bus mock)', async (e) => {
+  e.it('syncs (via event-bus mock)', async (e) => {
     let docA = createTestDoc();
     let docB = createTestDoc();
     const mock = ConnectionMock();
