@@ -4,6 +4,7 @@ import { DevEditorState } from './DEV.Editor.State';
 export type DevEditorProps = {
   name: string;
   doc: t.CrdtDocRef<t.SampleDoc>;
+  language: t.EditorLanguage;
   style?: t.CssValue;
   onReady?: t.MonacoEditorReadyHandler;
 };
@@ -23,7 +24,7 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
-        <MonacoEditor onReady={props.onReady} />
+        <MonacoEditor onReady={props.onReady} language={props.language} />
       </div>
       <div {...styles.right}>
         <DevEditorState name={name} doc={doc} />

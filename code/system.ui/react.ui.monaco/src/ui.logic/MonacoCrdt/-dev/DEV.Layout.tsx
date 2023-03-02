@@ -10,6 +10,7 @@ export type DevLayoutEditor = { peer: t.DevPeer; editor: t.MonacoCodeEditor };
 export type DevLayoutProps = {
   peers?: t.DevPeer[];
   tests: { running: boolean; results?: t.TestSuiteRunResponse };
+  language: t.EditorLanguage;
   style?: t.CssValue;
   onReady?: DevLayoutReadyHandler;
 };
@@ -56,9 +57,10 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
 
     return (
       <DevEditor
+        key={`${peer.name}.${i}`}
         name={peer.name}
         doc={peer.doc}
-        key={`${peer.name}.${i}`}
+        language={props.language}
         onReady={(e) => handleEditorReady(peer, e.editor)}
         style={{ borderTop: isFirst ? undefined : divider }}
       />
