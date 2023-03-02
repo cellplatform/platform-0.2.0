@@ -8,14 +8,14 @@ type Id = string;
  * document and a set of network peers.
  */
 export function PeerSyncer<D>(
-  eventbus: t.EventBus<any>, // An event-bus that fires over a network connection.
+  netbus: t.EventBus<any>, // An event-bus that fires over a network connection.
   getDoc: () => D,
   setDoc: (doc: D) => void,
   options: { filedir?: t.Fs } = {},
 ) {
   const { filedir } = options;
   const { dispose, dispose$ } = rx.disposable();
-  const bus = rx.busAsType<t.CrdtSyncEvent>(eventbus);
+  const bus = rx.busAsType<t.CrdtSyncEvent>(netbus);
   const state = SyncState({ filedir });
   let _count = 0;
 

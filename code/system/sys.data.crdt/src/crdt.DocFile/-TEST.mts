@@ -75,8 +75,6 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
       expect(fired).to.eql(1);
       expect(file.isDisposed).to.eql(true);
-
-      file.dispose();
     });
 
     e.it('file dispose via { dispose$ } option', async (e) => {
@@ -88,8 +86,6 @@ export default Test.describe('DocFile', (e) => {
       expect(file.isDisposed).to.eql(false);
       dispose();
       expect(file.isDisposed).to.eql(true);
-
-      file.dispose();
     });
 
     e.it('disposing of [DocFile] does not dispose the wrapped [DocRef]', async (e) => {
@@ -102,8 +98,6 @@ export default Test.describe('DocFile', (e) => {
       file.dispose();
       expect(file.isDisposed).to.eql(true);
       expect(file.doc.isDisposed).to.eql(false);
-
-      file.dispose();
     });
 
     e.it('disposing of the wrapped [DocRef] does dispose the [DocFile]', async (e) => {
@@ -121,6 +115,8 @@ export default Test.describe('DocFile', (e) => {
       expect(file.isDisposed).to.eql(true);
       expect(file.doc.isDisposed).to.eql(true);
       expect(fired).to.eql(1);
+
+      file.dispose();
     });
   });
 

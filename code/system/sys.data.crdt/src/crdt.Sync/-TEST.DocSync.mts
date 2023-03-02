@@ -1,7 +1,6 @@
 import { DocSync } from '.';
 import { DocRef } from '../crdt.DocRef';
-
-import { Automerge, expect, rx, Test, Time, t } from '../test.ui';
+import { expect, rx, t, Test, Time } from '../test.ui';
 
 export default Test.describe('Sync Protocol - DocSync', (e) => {
   type D = { name?: string; count: number };
@@ -15,11 +14,13 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
   }
 
   e.describe('initialize', (e) => {
+    const bus = rx.bus();
+
     e.it('init: pass {onChange} option to [DocRef] constructor', async (e) => {
       const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
 
-      const sync = DocSync.init<D>({ count: 0 }, { onChange });
+      const sync = DocSync.init<D>(bus, { count: 0 }, { onChange });
 
       sync.doc.change((d) => d.count++);
       expect(fired.length).to.eql(2); // NB: the {onChange} handler successfully registered on to the [DocRef].
@@ -31,7 +32,7 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
 
       const docRef = DocRef.init<D>({ count: 0 });
-      const sync = DocSync.init<D>(docRef, { onChange });
+      const sync = DocSync.init<D>(bus, docRef, { onChange });
       expect(sync.doc).to.equal(docRef);
 
       sync.doc.change((d) => d.count++);
@@ -42,47 +43,43 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
   });
 
   e.describe('dispose', (e) => {
-    e.it('file.dispose() method', async (e) => {
-      const sync = DocSync.init<D>({ count: 0 });
+    const bus = rx.bus();
+
+    e.it('dispose() method', async (e) => {
+      const sync = DocSync.init<D>(bus, { count: 0 });
 
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
 
       expect(sync.isDisposed).to.eql(false);
-      sync.dispose();
-      sync.dispose();
+      await sync.dispose();
+      await sync.dispose();
       expect(fired).to.eql(1);
       expect(sync.isDisposed).to.eql(true);
-
-      sync.dispose();
     });
 
-    e.it('file dispose via { dispose$ } option', async (e) => {
+    e.it('dispose via { dispose$ } option', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
-      const sync = DocSync.init<D>({ count: 0 }, { dispose$ });
+      const sync = DocSync.init<D>(bus, { count: 0 }, { dispose$ });
       expect(sync.isDisposed).to.eql(false);
       dispose();
       expect(sync.isDisposed).to.eql(true);
-
-      sync.dispose();
     });
 
-    e.it('disposing of [DocFile] does not dispose the wrapped [DocRef]', async (e) => {
-      const sync = DocSync.init<D>({ count: 0 });
+    e.it('disposing of [DocSync] does not dispose the wrapped [DocRef]', async (e) => {
+      const sync = DocSync.init<D>(bus, { count: 0 });
 
       expect(sync.isDisposed).to.eql(false);
       expect(sync.doc.isDisposed).to.eql(false);
 
-      sync.dispose();
+      await sync.dispose();
       expect(sync.isDisposed).to.eql(true);
       expect(sync.doc.isDisposed).to.eql(false);
-
-      sync.dispose();
     });
 
-    e.it('disposing of the wrapped [DocRef] does dispose the [DocFile]', async (e) => {
-      const sync = DocSync.init<D>({ count: 0 });
+    e.it('disposing of the wrapped [DocRef] does dispose the [DocSync]', async (e) => {
+      const sync = DocSync.init<D>(bus, { count: 0 });
 
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
@@ -95,16 +92,50 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
       expect(sync.isDisposed).to.eql(true);
       expect(sync.doc.isDisposed).to.eql(true);
       expect(fired).to.eql(1);
+
+      await sync.dispose();
     });
   });
 
-  //   e.it('syncs DocRef', async (e) => {
-  //     //
-  //     let docA = createTestDoc();
-  //     let docB = createTestDoc();
-  //     const mock = ConnectionMock();
-  //
-  //     console.log('---------------------------------------');
-  //     console.log('docA', docA);
-  //   });
+  e.describe('sync', (e) => {
+    e.it('syncs between [docA] and [docB]', async (e) => {
+      const mock = ConnectionMock();
+
+      const docA = DocRef.init<D>({ count: 0 });
+      const docB = DocRef.init<D>({ count: 0 });
+
+      const debounce = 0;
+      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+
+      expect(syncerA.doc).to.equal(docA);
+      expect(syncerB.doc).to.equal(docB);
+      expect(syncerA.doc.current).to.eql({ count: 0 });
+      expect(syncerB.doc.current).to.eql({ count: 0 });
+
+      docA.change((doc) => (doc.name = 'Foo'));
+      docB.change((doc) => (doc.count = 1234));
+
+      expect(syncerA.doc.current).to.eql({ name: 'Foo', count: 0 });
+      expect(syncerB.doc.current).to.eql({ count: 1234 });
+
+      await Time.wait(50);
+
+      expect(docA.current).to.eql({ name: 'Foo', count: 1234 });
+      expect(docB.current).to.eql(docA.current);
+
+      docB.change((doc) => (doc.name = 'Bar'));
+      await Time.wait(50);
+
+      expect(docB.current).to.eql({ name: 'Bar', count: 1234 });
+      expect(docB.current).to.eql(docA.current);
+
+      expect(syncerA.count).to.eql(4);
+      expect(syncerB.count).to.eql(4);
+
+      mock.dispose();
+      syncerA.dispose();
+      syncerB.dispose();
+    });
+  });
 });
