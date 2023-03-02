@@ -1,12 +1,7 @@
 import { Color, css, Dev, Icons, COLORS, Spinner } from '../test.ui';
 
-type T = {
-  loading?: boolean;
-  notes: string[];
-};
-const initial: T = {
-  notes: [],
-};
+type T = { loading?: boolean; notes: string[] };
+const initial: T = { notes: [] };
 
 const REF = {
   urls: [
