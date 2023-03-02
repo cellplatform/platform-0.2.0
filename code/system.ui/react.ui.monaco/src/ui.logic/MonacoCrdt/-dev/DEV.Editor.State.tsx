@@ -38,7 +38,13 @@ export const DevEditorState: React.FC<DevEditorStateProps> = (props) => {
     }),
     body: css({ position: 'relative' }),
     inner: css({ Absolute: [10, 15] }),
+    codeText: css({
+      borderTop: `solid 1px ${Color.format(-0.1)}`,
+      marginTop: 20,
+    }),
   };
+
+  const codeText = doc.current.code.toString() || '<empty>';
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -46,6 +52,9 @@ export const DevEditorState: React.FC<DevEditorStateProps> = (props) => {
       <div {...styles.body}>
         <div {...styles.inner}>
           <Dev.Object data={doc.current} />
+          <div {...styles.codeText}>
+            <pre>{codeText}</pre>
+          </div>
         </div>
       </div>
     </div>

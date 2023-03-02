@@ -17,7 +17,7 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
   const styles = {
     base: css({ display: 'grid', gridTemplateColumns: '1fr 1fr' }),
     left: css({ borderRight: `solid 1px ${Color.format(-0.1)}`, display: 'grid' }),
-    right: css({ padding: 5, display: 'grid' }),
+    right: css({ padding: 30, display: 'grid' }),
   };
 
   return (
