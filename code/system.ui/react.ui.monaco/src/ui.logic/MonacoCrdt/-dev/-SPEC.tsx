@@ -37,9 +37,12 @@ export default Dev.describe('MonacoCrdt', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const names = e.state.peerNames;
+        const docs = e.state.docs;
+        const peers = docs.map((doc, i) => ({ doc, name: names[i] }));
         return (
           <DevLayout
-            peerNames={e.state.peerNames}
+            peers={peers}
             tests={e.state.tests}
             onReady={(e) => {
               console.log('⚡️ layout ready', e);
@@ -52,8 +55,12 @@ export default Dev.describe('MonacoCrdt', (e) => {
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
+      const data = {};
       const docs = e.state.docs.map((doc) => doc.current);
-      const data = { docs };
+      docs.forEach((doc, i) => {
+        const peer = e.state.peerNames[i];
+        (data as any)[peer] = doc;
+      });
       return <Dev.Object name={'MonacoCrdt'} data={data} expand={1} />;
     });
 

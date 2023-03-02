@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 
-import { Color, css, Dev, R, t } from './common';
+import { Color, css, Dev, t } from './common';
 import { DevEditor } from './DEV.Editor';
 
 export type DevLayoutReadyHandler = (e: DevLayoutReadyHandlerArgs) => void;
 export type DevLayoutReadyHandlerArgs = { editors: DevLayoutEditor[] };
-export type DevLayoutEditor = { peerName: string; editor: t.MonacoCodeEditor };
+export type DevLayoutEditor = { peer: t.DevPeer; editor: t.MonacoCodeEditor };
 
 export type DevLayoutProps = {
-  peerNames: string[];
+  peers?: t.DevPeer[];
   tests: { running: boolean; results?: t.TestSuiteRunResponse };
   style?: t.CssValue;
   onReady?: DevLayoutReadyHandler;
@@ -18,17 +18,16 @@ export type DevLayoutProps = {
  * Layout of editors and test-runner.
  */
 export const DevLayout: React.FC<DevLayoutProps> = (props) => {
-  const peerNames = R.uniq(props.peerNames);
+  const { peers = [] } = props;
   const readyRefs = useRef<DevLayoutEditor[]>([]);
 
   /**
    * [Handlers]
    */
-  const handleEditorReady = (peerName: string, editor: t.MonacoCodeEditor) => {
+  const handleEditorReady = (peer: t.DevPeer, editor: t.MonacoCodeEditor) => {
     const editors = readyRefs.current;
-    if (editors.some((e) => e.peerName === peerName)) return;
-    editors.push({ peerName, editor });
-    const isReady = peerNames.every((name) => editors.some((e) => e.peerName === name));
+    editors.push({ peer, editor });
+    const isReady = peers.every((peer) => editors.some((e) => e.peer.name === peer.name));
     if (isReady) props.onReady?.({ editors });
   };
 
@@ -40,22 +39,26 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
     base: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateRows: `${peerNames.map(() => '1pr')} 1fr`,
+      gridTemplateRows: `${peers.map(() => '1pr')} 1fr`,
     }),
     top: css({ display: 'grid' }),
     bottom: {
-      base: css({ position: 'relative', borderTop: peerNames.length > 0 ? divider : undefined }),
+      base: css({
+        position: 'relative',
+        borderTop: peers.length > 0 ? divider : undefined,
+      }),
       runner: css({ Absolute: 0 }),
     },
   };
 
-  const elEditors = peerNames.map((name, i) => {
+  const elEditors = peers.map((peer, i) => {
     const isFirst = i === 0;
     return (
       <DevEditor
-        name={name}
-        key={`${name}.${i}`}
-        onReady={(e) => handleEditorReady(name, e.editor)}
+        name={peer.name}
+        doc={peer.doc}
+        key={`${peer.name}.${i}`}
+        onReady={(e) => handleEditorReady(peer, e.editor)}
         style={{ borderTop: isFirst ? undefined : divider }}
       />
     );

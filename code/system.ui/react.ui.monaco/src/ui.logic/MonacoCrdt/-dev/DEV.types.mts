@@ -8,3 +8,8 @@ export type SampleDoc = {
   count: number;
   code: t.AutomergeText;
 };
+
+export type DevPeer = {
+  name: string;
+  doc: t.CrdtDocRef<SampleDoc>;
+};
