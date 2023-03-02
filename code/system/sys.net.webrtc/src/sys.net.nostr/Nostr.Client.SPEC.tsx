@@ -11,8 +11,6 @@ const REF = {
 };
 
 /**
- * Links:
- *  - https://wiki.wellorder.net/post/nostr-intro/
  *
  * TODO 🐷
  * MOVE this module to it's package: sys.net.nostr
