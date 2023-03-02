@@ -153,15 +153,16 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
           ws.send(JSON.stringify(e));
         };
 
-        // connect to a relay
+        // Connect to a relay.
         var ws = new WebSocket('wss://nostr-pub.wellorder.net');
+        const AUTHOR_PUBLIC_KEY = '35d26e4690cbe1';
 
-        // send a subscription request for text notes from authors with my pubkey
+        // Send a subscription request for text notes from authors with my pubkey
         ws.addEventListener('open', function (event) {
-          send('REQ', 'my-sub', { kinds: [1], authors: ['35d26e4690cbe1'] });
+          send('REQ', 'my-sub', { kinds: [1], authors: [AUTHOR_PUBLIC_KEY] });
         });
 
-        // print out all the returned notes
+        // Print out all the returned notes.
         ws.addEventListener('message', async function (ev) {
           /**
            * TODO 🐷
