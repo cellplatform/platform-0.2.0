@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Dev } from './common';
+import { useEffect, useState } from 'react';
+import { Color, COLORS, css, Dev, rx, t } from './common';
 
 export type DevEditorStateProps = {
   name: string;
@@ -9,7 +9,6 @@ export type DevEditorStateProps = {
 
 export const DevEditorState: React.FC<DevEditorStateProps> = (props) => {
   const { name, doc } = props;
-
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
@@ -19,7 +18,6 @@ export const DevEditorState: React.FC<DevEditorStateProps> = (props) => {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
     doc.$.pipe(rx.takeUntil(dispose$)).subscribe(redraw);
-
     return dispose;
   }, [doc.id.actor]);
 
@@ -27,21 +25,28 @@ export const DevEditorState: React.FC<DevEditorStateProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
+    }),
     title: css({
-      marginBottom: 8,
+      userSelect: 'none',
       backgroundColor: Color.alpha(COLORS.DARK, 0.04),
       borderBottom: `solid 1px ${Color.format(-0.03)}`,
       Padding: [3, 7],
     }),
-    body: css({ Padding: [8, 15] }),
+    body: css({ position: 'relative' }),
+    inner: css({ Absolute: [10, 15] }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.title}>{name}</div>
       <div {...styles.body}>
-        <Dev.Object data={doc.current} />
+        <div {...styles.inner}>
+          <Dev.Object data={doc.current} />
+        </div>
       </div>
     </div>
   );
