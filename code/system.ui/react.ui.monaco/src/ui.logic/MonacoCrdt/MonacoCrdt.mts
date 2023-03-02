@@ -57,7 +57,7 @@ export const MonacoCrdt = {
      * API
      */
     return {
-      kind: 'MonacoCRDT',
+      kind: 'crdt:monaco',
       dispose,
       dispose$,
       get isDisposed() {
