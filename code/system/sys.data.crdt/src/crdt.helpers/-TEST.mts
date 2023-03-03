@@ -28,4 +28,39 @@ export default Test.describe('crdt helpers', (e) => {
     });
   });
 
+  e.describe('fieldAs', (e) => {
+    e.it('exposed from API root', (e) => {
+      expect(Crdt.fieldAs).to.equal(fieldAs);
+    });
+
+    e.it('type: Automerge.Text', (e) => {
+      type D = { msg?: t.AutomergeText; count: number };
+
+      const doc1 = CrdtDoc.ref<D>({ count: 0 });
+      const doc2 = CrdtDoc.ref<D>({ count: 0, msg: new Automerge.Text() });
+
+      const res1 = fieldAs(doc1.current, 'msg').textType;
+      const res2 = fieldAs(doc2.current, 'msg').textType;
+      const res3 = fieldAs(doc2.current, 'count').textType;
+
+      expect(res1).to.eql(undefined);
+      expect(res2 instanceof Automerge.Text).to.eql(true);
+      expect(res3).to.eql(undefined);
+    });
+
+    e.it('type: Automerge.Counter', (e) => {
+      type D = { count?: t.AutomergeCounter; total?: number };
+
+      const doc1 = CrdtDoc.ref<D>({});
+      const doc2 = CrdtDoc.ref<D>({ count: new Automerge.Counter(), total: 0 });
+
+      const res1 = fieldAs(doc1.current, 'count').counterType;
+      const res2 = fieldAs(doc2.current, 'count').counterType;
+      const res3 = fieldAs(doc2.current, 'total').counterType;
+
+      expect(res1).to.eql(undefined);
+      expect(res2 instanceof Automerge.Counter).to.eql(true);
+      expect(res3).to.eql(undefined);
+    });
+  });
 });
