@@ -15,9 +15,17 @@ const initial: T = {
 };
 
 export default Dev.describe('MonacoEditor', (e) => {
+  type LocalStore = { language: t.EditorLanguage };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
+  const local = localstore.object({ language: initial.props.language! });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
+    state.change((d) => {
+      d.props.language = local.language;
+    });
+
     ctx.subject
       .size('fill')
       .display('grid')
@@ -36,8 +44,17 @@ export default Dev.describe('MonacoEditor', (e) => {
     dev.section('Language', (dev) => {
       const language = (input: t.EditorLanguage | '---') => {
         if (input.startsWith('---')) return dev.hr(-1, 5);
-        const name = input as t.EditorLanguage;
-        return dev.button(name, (e) => e.change((d) => (d.props.language = name)));
+
+        const language = input as t.EditorLanguage;
+        return dev.button((btn) =>
+          btn
+            .label(language)
+            .right((e) => (e.state.props.language === language ? 'current' : ''))
+            .onClick((e) => {
+              e.change((d) => (d.props.language = language));
+              local.language = language;
+            }),
+        );
       };
       language('typescript');
       language('javascript');
