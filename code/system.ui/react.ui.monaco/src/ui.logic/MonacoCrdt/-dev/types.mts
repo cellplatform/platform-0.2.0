@@ -1,4 +1,4 @@
-import { t } from '../../../common.t';
+import type { t } from '../../../common.t';
 export * from '../../../common/types.mjs';
 
 /**
@@ -9,6 +9,9 @@ export type SampleDoc = {
   code: t.AutomergeText;
 };
 
+/**
+ * Network peer
+ */
 export type DevPeer = {
   name: string;
   doc: t.CrdtDocRef<SampleDoc>;

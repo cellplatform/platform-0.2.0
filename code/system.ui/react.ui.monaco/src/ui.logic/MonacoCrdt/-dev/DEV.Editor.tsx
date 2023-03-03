@@ -7,6 +7,7 @@ export type DevEditorProps = {
   language: t.EditorLanguage;
   style?: t.CssValue;
   onReady?: t.MonacoEditorReadyHandler;
+  onDispose?: t.MonacoEditorDisposedHandler;
 };
 
 export const DevEditor: React.FC<DevEditorProps> = (props) => {
@@ -36,7 +37,11 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
-        <MonacoEditor onReady={props.onReady} language={props.language} />
+        <MonacoEditor
+          language={props.language}
+          onReady={props.onReady}
+          onDispose={props.onDispose}
+        />
       </div>
       <div {...styles.right}>
         <DevEditorCard name={name} doc={doc} />

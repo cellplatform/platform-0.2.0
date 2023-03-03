@@ -4,8 +4,14 @@ import { Color, css, Dev, t } from './common';
 import { DevEditor } from './DEV.Editor';
 
 export type DevLayoutReadyHandler = (e: DevLayoutReadyHandlerArgs) => void;
-export type DevLayoutReadyHandlerArgs = { editors: DevLayoutEditor[] };
-export type DevLayoutEditor = { peer: t.DevPeer; editor: t.MonacoCodeEditor };
+export type DevLayoutReadyHandlerArgs = { editors: DevLayoutPeerEditor[] };
+export type DevLayoutPeerEditor = { peer: t.DevPeer; editor: t.MonacoCodeEditor };
+
+export type DevLayoutEditorDisposedHandler = (e: DevLayoutEditorDisposedHandlerArgs) => void;
+export type DevLayoutEditorDisposedHandlerArgs = {
+  editors: DevLayoutPeerEditor[];
+  disposed: DevLayoutPeerEditor;
+};
 
 export type DevLayoutProps = {
   peers?: t.DevPeer[];
@@ -13,6 +19,7 @@ export type DevLayoutProps = {
   language: t.EditorLanguage;
   style?: t.CssValue;
   onReady?: DevLayoutReadyHandler;
+  onDisposed?: DevLayoutEditorDisposedHandler;
 };
 
 /**
@@ -20,16 +27,22 @@ export type DevLayoutProps = {
  */
 export const DevLayout: React.FC<DevLayoutProps> = (props) => {
   const { peers = [] } = props;
-  const readyRefs = useRef<DevLayoutEditor[]>([]);
+  const editorRefs = useRef<DevLayoutPeerEditor[]>([]);
 
   /**
    * [Handlers]
    */
   const handleEditorReady = (peer: t.DevPeer, editor: t.MonacoCodeEditor) => {
-    const editors = readyRefs.current;
+    const editors = editorRefs.current;
     editors.push({ peer, editor });
     const isReady = peers.every((peer) => editors.some((e) => e.peer.name === peer.name));
     if (isReady) props.onReady?.({ editors });
+  };
+
+  const handleEditorDispose = (peer: t.DevPeer, editor: t.MonacoCodeEditor) => {
+    const disposed = { peer, editor };
+    const editors = editorRefs.current.filter((e) => e.peer.name !== peer.name);
+    props.onDisposed?.({ disposed, editors });
   };
 
   /**
@@ -58,12 +71,13 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
     const borderTop = isFirst ? undefined : divider;
     return (
       <DevEditor
+        style={{ borderTop }}
         key={`${peer.name}.${i}`}
         name={peer.name}
         doc={peer.doc}
         language={props.language}
         onReady={(e) => handleEditorReady(peer, e.editor)}
-        style={{ borderTop }}
+        onDispose={(e) => handleEditorDispose(peer, e.editor)}
       />
     );
   });
