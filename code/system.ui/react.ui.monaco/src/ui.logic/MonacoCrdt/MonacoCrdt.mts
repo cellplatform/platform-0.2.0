@@ -55,7 +55,7 @@ export const MonacoCrdt = {
 
       e.changes.forEach((change) => {
         doc.change((d) => {
-          const textCrdt = toTextType<D>(d, field);
+          const textCrdt = Crdt.fieldAs(d, field).textType;
           if (textCrdt) {
             const index = change.rangeOffset;
             if (change.text === '') {

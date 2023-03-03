@@ -43,17 +43,21 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
       Padding: [10, 15],
       Flex: 'x-center-spaceBetween',
     }),
-    body: css({ position: 'relative', Padding: 20 }),
+    body: css({
+      position: 'relative',
+      Padding: 20,
+    }),
     codeString: css({
       marginTop: 20,
       borderTop: `dashed 1px ${Color.alpha(COLORS.MAGENTA, 0.3)}`,
       fontSize: 14,
       fontWeight: 600,
       userSelect: 'text',
+      overflow: 'hidden',
     }),
   };
 
-  const codeString = (doc.current.code.toString() || '<empty>').substring(0, 150);
+  const codeString = Wrangle.codeString(doc.current.code.toString());
 
   const elMain = (
     <div {...styles.main}>
@@ -77,4 +81,16 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
       </Card>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  codeString(text?: string) {
+    const MAX = 50;
+    if (!text) return '<empty>';
+    return text.length > MAX - 1 ? `${text.substring(0, MAX)}...` : text;
+  },
 };
