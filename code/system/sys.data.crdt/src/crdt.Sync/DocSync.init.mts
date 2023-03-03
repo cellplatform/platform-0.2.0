@@ -1,5 +1,5 @@
 import { DocRef } from '../crdt.DocRef';
-import { CrdtIs } from '../crdt.Is';
+import { CrdtIs } from '../crdt.helpers';
 import { t, rx, DEFAULTS } from './common';
 import { PeerSyncer } from './PeerSyncer.mjs';
 

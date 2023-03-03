@@ -13,7 +13,7 @@ await run.suite(import('../crdt.Sync/-TEST.DocSync.mjs'));
 await run.suite(import('../crdt.Sync/-TEST.PeerSyncer.mjs'));
 await run.suite(import('../crdt.DocRef/-TEST.mjs'));
 await run.suite(import('../crdt.DocFile/-TEST.mjs'));
-await run.suite(import('../crdt.Is/-TEST.mjs'));
+await run.suite(import('../crdt.helpers/-TEST.mjs'));
 
 /**
  * Test Harness (UI)

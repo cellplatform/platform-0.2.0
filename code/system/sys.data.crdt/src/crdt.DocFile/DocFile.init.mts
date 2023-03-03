@@ -1,5 +1,5 @@
 import { DocRef } from '../crdt.DocRef';
-import { CrdtIs } from '../crdt.Is';
+import { CrdtIs } from '../crdt.helpers';
 import { Automerge, DEFAULTS, rx, t } from './common';
 import { autoSaveStrategy } from './strategy.AutoSave.mjs';
 import { saveLogStrategy } from './strategy.SaveLog.mjs';

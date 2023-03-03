@@ -63,7 +63,7 @@ export default Dev.describe('Root', (e) => {
           await button(import('../crdt.DocFile/-TEST.mjs')),
           await button(import('../crdt.Sync/-TEST.DocSync.mjs'), true),
           await button(import('../crdt.Sync/-TEST.PeerSyncer.mjs')),
-          await button(import('../crdt.Is/-TEST.mjs')),
+          await button(import('../crdt.helpers/-TEST.mjs')),
         ],
       );
 
