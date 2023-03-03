@@ -1,7 +1,7 @@
 import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 
-import { css, t, FC, LANGUAGES, DEFAULTS } from './common';
+import { css, DEFAULTS, FC, LANGUAGES, t } from './common';
 
 import type { OnChange, OnMount } from '@monaco-editor/react';
 
@@ -13,15 +13,19 @@ export type MonacoEditorProps = {
   style?: t.CssValue;
   onChange?: t.MonacoEditorChangeHandler;
   onReady?: t.MonacoEditorReadyHandler;
+  onDispose?: t.MonacoEditorDisposedHandler;
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
   const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize } = props;
+
+  const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
 
   /**
    * [Lifecycle]
    */
+
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
@@ -32,12 +36,20 @@ const View: React.FC<MonacoEditorProps> = (props) => {
     editorRef.current?.getModel()?.updateOptions({ tabSize });
   }, [tabSize]);
 
+  useEffect(() => {
+    return () => {
+      const editor = editorRef.current!;
+      const monaco = monacoRef.current!;
+      props.onDispose?.({ editor, monaco });
+    };
+  }, []);
+
   /**
    * [Handlers]
    */
   const handleEditorDidMount: OnMount = (ed, monaco) => {
-    const editor = ed as unknown as t.MonacoCodeEditor;
-    editorRef.current = editor;
+    monacoRef.current = monaco;
+    const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     editor.getModel()?.updateOptions({ tabSize });
     if (props.focusOnLoad) editor.focus();
     props.onReady?.({ editor, monaco });

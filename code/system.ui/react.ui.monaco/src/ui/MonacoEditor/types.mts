@@ -17,6 +17,12 @@ export type MonacoEditorReadyHandlerArgs = {
   monaco: Monaco;
 };
 
+export type MonacoEditorDisposedHandler = (e: MonacoEditorDisposedHandlerArgs) => void;
+export type MonacoEditorDisposedHandlerArgs = {
+  editor: MonacoCodeEditor;
+  monaco: Monaco;
+};
+
 export type MonacoEditorChangeHandler = (e: MonacoEditorChangeHandlerArgs) => void;
 export type MonacoEditorChangeHandlerArgs = {
   text: string;
