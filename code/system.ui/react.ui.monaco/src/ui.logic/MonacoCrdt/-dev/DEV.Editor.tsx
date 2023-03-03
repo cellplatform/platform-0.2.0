@@ -2,6 +2,7 @@ import { Color, css, MonacoEditor, t } from './common';
 import { DevEditorCard } from './DEV.Editor.Card';
 
 export type DevEditorProps = {
+  index: number;
   name: string;
   doc: t.CrdtDocRef<t.SampleDoc>;
   language: t.EditorLanguage;
@@ -41,6 +42,7 @@ export const DevEditor: React.FC<DevEditorProps> = (props) => {
           language={props.language}
           onReady={props.onReady}
           onDispose={props.onDispose}
+          focusOnLoad={props.index === 0}
         />
       </div>
       <div {...styles.right}>

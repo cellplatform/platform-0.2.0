@@ -73,6 +73,7 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
       <DevEditor
         style={{ borderTop }}
         key={`${peer.name}.${i}`}
+        index={i}
         name={peer.name}
         doc={peer.doc}
         language={props.language}

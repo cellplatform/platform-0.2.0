@@ -1,5 +1,7 @@
 import { Crdt, rx, t } from './common';
 
+type Milliseconds = number;
+
 /**
  * Tools for working with CRDTs and Monaco.
  */
@@ -8,7 +10,12 @@ export const MonacoCrdt = {
    * An adapter for managing 2-way binding between a Monaco code-editor
    * and a CRDT (Automerge.Text) collaborative text data-structure.
    */
-  syncer<D extends {}>(editor: t.MonacoCodeEditor, doc: t.CrdtDocRef<D>, field: keyof D) {
+  syncer<D extends {}>(
+    editor: t.MonacoCodeEditor,
+    doc: t.CrdtDocRef<D>,
+    field: keyof D,
+    options: { debounce?: Milliseconds } = {},
+  ) {
     if (!editor) throw new Error(`No editor provided`);
     if (!doc) throw new Error(`No CRDT document provided`);
 
@@ -23,7 +30,8 @@ export const MonacoCrdt = {
      */
     doc.$.pipe(
       rx.takeUntil(dispose$),
-      rx.filter((e) => e.action === 'change'),
+      rx.filter((e) => e.action === 'replace'),
+      rx.debounceTime(options.debounce ?? 300),
     ).subscribe((e) => {
       const textCrdt = Crdt.fieldAs(doc.current, field).textType;
       if (!textCrdt) return;
@@ -31,15 +39,11 @@ export const MonacoCrdt = {
       let text = textCrdt.toString();
       const eq = text === editor.getValue();
 
-      console.log('🐷 SYNC!! doc changed', eq);
-
       if (!eq) {
         _ignoreChange = true;
-        const range = editor.getSelection()!;
-
-        // TODO 🐷
-        // editor.setValue(text);
-        // editor.setSelection(range);
+        const before = editor.getSelection()!;
+        editor.setValue(text);
+        editor.setSelection(before);
         _ignoreChange = false;
       }
     });
@@ -50,8 +54,6 @@ export const MonacoCrdt = {
     editor.onDidChangeModelContent((e) => {
       if (api.isDisposed) return;
       if (_ignoreChange) return;
-
-      console.log('🐷 SYNC!! editor changed');
 
       e.changes.forEach((change) => {
         doc.change((d) => {
