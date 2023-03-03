@@ -19,11 +19,10 @@ export const MonacoCrdt = {
     if (!editor) throw new Error(`No editor provided`);
     if (!doc) throw new Error(`No CRDT document provided`);
 
+    let _ignoreChange = false;
     let _isDisposed = false;
     const { dispose, dispose$ } = rx.disposable();
     dispose$.subscribe(() => (_isDisposed = true));
-
-    let _ignoreChange = false;
 
     /**
      * Document CRDT change.
