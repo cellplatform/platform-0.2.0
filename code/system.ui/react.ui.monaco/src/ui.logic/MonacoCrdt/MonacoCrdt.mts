@@ -1,46 +1,61 @@
-import { Crdt, t, Automerge, rx } from './common';
+import { Crdt, rx, t } from './common';
 
 /**
- * An adapter for managing 2-way binding between a Monaco code-editor
- * and a CRDT (Automerge.Text) collaborative text data-structure.
+ * Tools for working with CRDTs and Monaco.
  */
 export const MonacoCrdt = {
   /**
-   * Initialize a new binding.
+   * An adapter for managing 2-way binding between a Monaco code-editor
+   * and a CRDT (Automerge.Text) collaborative text data-structure.
    */
-  init<D extends {}>(doc: t.CrdtDocRef<D>, codeField: keyof D, editor: t.MonacoCodeEditor) {
+  syncer<D extends {}>(editor: t.MonacoCodeEditor, doc: t.CrdtDocRef<D>, field: keyof D) {
+    if (!editor) throw new Error(`No editor provided`);
+    if (!doc) throw new Error(`No CRDT document provided`);
+
     let _isDisposed = false;
     const { dispose, dispose$ } = rx.disposable();
     dispose$.subscribe(() => (_isDisposed = true));
 
-    const toTextType = <D extends {}>(doc: D, codeField: keyof D) => {
-      const text = doc[codeField];
-      return text instanceof Automerge.Text ? text : undefined;
-    };
-
     let _ignoreChange = false;
-    doc.$.pipe().subscribe((e) => {
-      const textCrdt = toTextType(doc.current, codeField);
+
+    /**
+     * Document CRDT change.
+     */
+    doc.$.pipe(
+      rx.takeUntil(dispose$),
+      rx.filter((e) => e.action === 'change'),
+    ).subscribe((e) => {
+      const textCrdt = Crdt.fieldAs(doc.current, field).textType;
       if (!textCrdt) return;
 
       let text = textCrdt.toString();
       const eq = text === editor.getValue();
 
+      console.log('🐷 SYNC!! doc changed', eq);
+
       if (!eq) {
         _ignoreChange = true;
         const range = editor.getSelection()!;
 
-        editor.setValue(text);
-        editor.setSelection(range);
+        // TODO 🐷
+        // editor.setValue(text);
+        // editor.setSelection(range);
         _ignoreChange = false;
       }
     });
 
+    /**
+     * Local editor change.
+     */
     editor.onDidChangeModelContent((e) => {
+      if (api.isDisposed) return;
       if (_ignoreChange) return;
+
+      console.log('🐷 SYNC!! editor changed');
+
       e.changes.forEach((change) => {
         doc.change((d) => {
-          const textCrdt = toTextType<D>(d, codeField);
+          const textCrdt = toTextType<D>(d, field);
           if (textCrdt) {
             const index = change.rangeOffset;
             if (change.text === '') {
@@ -56,13 +71,22 @@ export const MonacoCrdt = {
     /**
      * API
      */
-    return {
-      kind: 'crdt:monaco',
+    const api: t.MonacoCrdtSyncer<D> = {
+      kind: 'crdt:monaco:syncer',
+      editor,
+      doc,
+      field,
+
+      /**
+       * Disposal.
+       */
       dispose,
       dispose$,
       get isDisposed() {
         return _isDisposed;
       },
     };
+
+    return api;
   },
 };

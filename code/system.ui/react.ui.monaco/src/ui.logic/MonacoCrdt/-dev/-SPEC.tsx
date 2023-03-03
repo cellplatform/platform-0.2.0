@@ -1,97 +1,89 @@
 import { MonacoCrdt } from '..';
-import { Automerge, Crdt, Dev, rx, t, Value } from './common';
+import { Dev, t, Value } from './common';
+import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
 type T = {
   redraw: number;
-  peerNames: string[];
   tests: { running: boolean; results?: t.TestSuiteRunResponse };
   language: t.EditorLanguage;
 };
 const initial: T = {
   redraw: 0,
-  peerNames: [],
   tests: { running: false },
   language: 'typescript',
 };
 
+type LocalStore = { peerTotal: number; language: t.EditorLanguage };
+type PeerItem = {
+  peer: t.DevPeer;
+  syncer?: t.MonacoCrdtSyncer<t.SampleDoc>;
+};
+
 export default Dev.describe('MonacoCrdt', (e) => {
-  type LocalStore = { peerTotal: number; language: t.EditorLanguage };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
   const local = localstore.object({ peerTotal: 2, language: initial.language });
 
-  let _docs: t.CrdtDocRef<t.SampleDoc>[] = [];
+  const editors = new Set<t.MonacoCodeEditor>();
+  const peerMap = new Map<string, PeerItem>();
 
-  const setPeerTotal = async (length: number, state: T) => {
+  const disposeOf = (item: PeerItem) => {
+    item.peer.doc.dispose();
+    item.syncer?.dispose();
+    console.log('dispose of', item);
+  };
+
+  const totalPeers = (length: number) => {
     local.peerTotal = length;
-    state.peerNames = Array.from({ length }).map((_, i) => `Cell-${i + 1}`);
+    const names = Array.from({ length }).map((_, i) => `Cell-${i + 1}`);
 
-    /**
-     * Initialize new CRDT document.
-     */
-    _docs.forEach((doc) => doc.dispose());
-    _docs = state.peerNames.map((_, i) => {
-      return Crdt.Doc.ref<t.SampleDoc>({
-        count: 0,
-        code: new Automerge.Text(),
-      });
+    peerMap.forEach((item) => disposeOf(item));
+    peerMap.clear();
+    initSyncingCrdtDocs(names).forEach((item) => {
+      const { name, doc } = item;
+      const peer = { name, doc };
+      peerMap.set(name, { peer });
     });
 
-    /**
-     * Setup sync protocol between all peers.
-     */
-    _docs.forEach((docA) => {
-      const others = _docs.filter((d) => d !== docA);
-      others.forEach((docB) => {
-        const busA = rx.bus();
-        const busB = rx.bus();
-        const conn = rx.bus.connect([busA, busB]);
+    initEditorSyncers();
+  };
 
-        const syncA = Crdt.Doc.sync(busA, docA);
-        const syncB = Crdt.Doc.sync(busB, docB);
-
-        const dispose = () => {
-          conn.dispose();
-          syncA.dispose();
-          syncB.dispose();
-        };
-
-        docA.dispose$.subscribe(dispose);
-        docB.dispose$.subscribe(dispose);
-      });
+  const initEditorSyncers = () => {
+    Array.from(peerMap.entries()).forEach(([name, item], i) => {
+      console.log('init', name);
+      const peer = item.peer;
+      const editor = Array.from(editors)[i];
+      if (editor && !item.syncer) {
+        const syncer = MonacoCrdt.syncer(editor, peer.doc, 'code');
+        item.syncer = syncer;
+        console.info('MonacoCrdt.syncer:', syncer);
+      }
     });
   };
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    await state.change((d) => setPeerTotal(local.peerTotal, d));
+    await state.change((d) => {
+      d.language = local.language;
+      totalPeers(local.peerTotal);
+    });
 
     ctx.subject
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const names = e.state.peerNames;
-        const peers = _docs.map((doc, i) => ({ doc, name: names[i] }));
-
+        const peers = Array.from(peerMap, (item) => item[1].peer);
         return (
           <DevLayout
             peers={peers}
             tests={e.state.tests}
             language={e.state.language}
+            onDisposed={(e) => editors.delete(e.disposed.editor)}
             onReady={(e) => {
               console.log('⚡️ layout ready', e);
-
-              /**
-               * NOTE 🌳🌳🌳
-               * This is where the [CRDT ←→ Editor] sync handler
-               * is initialized.
-               */
-              e.editors.forEach((e) => {
-                const { peer, editor } = e;
-                const crdt = MonacoCrdt.syncer(editor, peer.doc, 'code');
-                console.info('MonacoCrdt.syncer:', crdt);
-              });
+              e.editors.forEach((e) => editors.add(e.editor));
+              initEditorSyncers();
             }}
           />
         );
@@ -104,10 +96,10 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {};
-      const docs = _docs.map((doc) => doc.current);
-      docs.forEach((doc, i) => {
-        const peer = e.state.peerNames[i];
-        (data as any)[peer] = doc;
+      peerMap.forEach((item) => {
+        const key = item.peer.name;
+        const doc = item.peer.doc.current;
+        (data as any)[key] = doc;
       });
       return <Dev.Object name={'MonacoCrdt'} data={data} expand={1} />;
     });
@@ -115,8 +107,16 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.section('Peers', (dev) => {
       const total = (total: number) => {
         const label = `${total} ${Value.plural(total, 'peer', 'peers')}`;
-        dev.button(label, (e) => e.change((d) => setPeerTotal(total, d)));
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right((e) => (peerMap.size === total ? 'current' : ''))
+            .onClick((e) => e.change((d) => totalPeers(total))),
+        );
       };
+
+      total(0);
+      dev.hr(-1, 5);
       total(1);
       total(2);
       total(3);
@@ -142,7 +142,8 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.section('Debug', (dev) => {
       const inc = (amount: number) => {
         dev.change((d) => {
-          _docs[0].change((d) => (d.count += amount));
+          const peer = peerMap.get('Cell-1')?.peer;
+          peer?.doc.change((d) => (d.count += amount));
           redraw();
         });
       };
@@ -166,9 +167,19 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.section('Language', (dev) => {
       const language = (input: t.EditorLanguage | '---') => {
         if (input.startsWith('---')) return dev.hr(-1, 5);
-        const name = input as t.EditorLanguage;
-        return dev.button(name, (e) => e.change((d) => (d.language = name)));
+
+        const language = input as t.EditorLanguage;
+        return dev.button((btn) =>
+          btn
+            .label(language)
+            .right((e) => (e.state.language === language ? 'current' : ''))
+            .onClick((e) => {
+              e.change((d) => (d.language = language));
+              local.language = language;
+            }),
+        );
       };
+
       language('typescript');
       language('javascript');
       language('---');
