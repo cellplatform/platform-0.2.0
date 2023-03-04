@@ -7,6 +7,9 @@ const REF = {
   urls: [
     ['intro blog (simplistic cient)', 'https://wiki.wellorder.net/post/nostr-intro/'],
     ['typescreipt client-library', 'https://github.com/philcockfield/nostr-tools'],
+    ['nostr relays', 'https://nostr.com/relays'],
+    ['how to setup a relay', 'https://andreneves.xyz/p/set-up-a-nostr-relay-server-in-under'],
+    ['protocols:nips', 'https://github.com/nostr-protocol/nips/blob/master/01.md'],
   ],
 };
 
@@ -186,6 +189,22 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
 
       dev.button('clear', (e) => {
         e.change((d) => (d.notes = []));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('nostr-tools', async (dev) => {
+      const nostr = await import('nostr-tools');
+
+      dev.button('generat keys', (dev) => {
+        let sk = nostr.generatePrivateKey(); // `sk` is a hex string
+        let pk = nostr.getPublicKey(sk); //     `pk` is a hex string
+
+        console.group('🌳 nostr keys');
+        console.info(`private key (secret): ${sk}`);
+        console.info(`public key: ${pk}`);
+        console.groupEnd();
       });
     });
   });
