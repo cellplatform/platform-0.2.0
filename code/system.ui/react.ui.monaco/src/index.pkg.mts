@@ -20,7 +20,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.util': '0.0.0',
-    'monaco-editor': '0.35.0',
+    'monaco-editor': '0.36.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
   },

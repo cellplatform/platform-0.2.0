@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     'qrcode': '1.5.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'react-icons': '4.7.1',
+    'react-icons': '4.8.0',
     'react-spinners': '0.13.8',
     'react-inspector': '6.0.1',
     'sys.types': '0.0.0',
