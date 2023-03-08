@@ -1,9 +1,9 @@
 import { RefObject, useEffect, useState } from 'react';
 
-import { css, DEFAULTS, t, Time } from '../common';
-import { Util } from '../util.mjs';
-import { TextInputHint } from './TextInput.Hint';
-import { HtmlInput } from './TextInput.Html';
+import { css, DEFAULTS, t, Time } from './common';
+import { Util } from './util.mjs';
+import { TextInputHint } from './ui.TextInput.Hint';
+import { HtmlInput } from './ui.TextInput.Html';
 
 import type { TextInputProps } from '../types.mjs';
 export type { TextInputProps };

@@ -2,8 +2,11 @@ import { useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { t, Time } from './common';
 import { TextInputRef } from './TextInput.Ref.mjs';
-import { TextInput as TextInputBase } from './ui/TextInput';
+import { TextInput as TextInputBase } from './ui.TextInput.Base';
 
+/**
+ * A simple HTML text input primitive
+ */
 export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => TextInputRef(inputRef));

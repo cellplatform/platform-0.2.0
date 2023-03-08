@@ -1,4 +1,4 @@
-export * from './TextInput';
+export * from './ui.TextInput';
 export * from './TextInput.Masks.mjs';
 
 /**

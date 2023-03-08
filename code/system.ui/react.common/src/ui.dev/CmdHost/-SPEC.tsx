@@ -1,7 +1,6 @@
 import { Dev } from '../../test.ui';
-import { CmdHost } from './CmdHost';
-import type { CmdHostProps } from './CmdHost';
-import { t } from './common';
+import { CmdHost } from './ui.CmdHost';
+import type { CmdHostProps } from './ui.CmdHost';
 
 const specs = {
   foo: () => import('../DevTools/-SPEC'),
@@ -29,7 +28,5 @@ export default Dev.describe('CmdHost', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec.CmdHost'} data={e.state} expand={1} />);
-
-    // dev.button('tmp', (e) => e.change((d) => d.count++));
   });
 });
