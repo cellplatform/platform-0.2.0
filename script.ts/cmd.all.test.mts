@@ -21,6 +21,9 @@ const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 const timer = Time.timer();
 
 const filter = (path: string) => {
+  // TEMP 🐷
+  return path.includes('/sys.data.crdt');
+
   if (path.includes('/code/compiler.samples/')) return false;
   if (path.includes('/code/spikes/')) return false;
   return true;
@@ -111,10 +114,21 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
           const filename = item.name.substring(base.length + 1);
           assertionResults
             .filter((item) => item.status === 'failed')
-            .forEach((item) => {
+            .forEach((item, i) => {
               const { line, column } = item.location;
+
+              const testAncestors = `${item.ancestorTitles.filter(Boolean).join(' → ').trim()}`;
+              const testTitle = `${testAncestors} → ${pc.red(item.title.trim())}`;
               const address = `${filename}:${line}:${column}`;
-              console.info(pc.yellow(pc.dim(`        ${address}`)));
+              const detail = `|→ ${pc.red(`failure in:`)} ${testTitle}`;
+
+              console.info(pc.yellow(pc.dim(`    (${i + 1}) ${address}`)));
+              console.info(pc.yellow(pc.dim(`        ${detail}`)));
+              item.failureMessages.forEach((item) => {
+                const failure = `|→ ${pc.red('message:')}    ${item}`;
+                console.info(pc.yellow(pc.dim(`        ${failure}`)));
+              });
+              console.info(' ');
             });
         });
     }
