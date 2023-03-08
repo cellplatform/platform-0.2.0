@@ -1,1 +1,1 @@
-export { CmdHost } from './CmdHost';
+export { CmdHost } from './ui.CmdHost';
