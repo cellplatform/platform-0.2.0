@@ -4,8 +4,8 @@ import type { CmdHostProps } from './CmdHost';
 import { t } from './common';
 
 const specs = {
-  foo: () => import('../DevTools/DevTools.SPEC'),
-  bar: () => import('../DevTools/DevTools.SPEC'),
+  foo: () => import('../DevTools/-SPEC'),
+  bar: () => import('../DevTools/-SPEC'),
 };
 
 type T = { props: CmdHostProps };

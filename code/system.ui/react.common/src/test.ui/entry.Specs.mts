@@ -23,14 +23,14 @@ export const Specs = {
 };
 
 export const DevSpecs = {
-  'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/TestRunner.SPEC'),
-  'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/CmdHost.SPEC'),
-  'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/DevTools.SPEC'),
-  'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/DevTools.Hr.SPEC'),
-  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/DevTools.Button.SPEC'),
-  'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/DevTools.Boolean.SPEC'),
-  'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/DevTools.Title.SPEC'),
-  'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/DevTools.Todo.SPEC'),
+  'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/-SPEC.TestRunner'),
+  'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/-SPEC'),
+  'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/-SPEC'),
+  'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/-SPEC'),
+  'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/-SPEC'),
+  'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/-SPEC'),
+  'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/-SPEC'),
+  'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 
 export const All = {
