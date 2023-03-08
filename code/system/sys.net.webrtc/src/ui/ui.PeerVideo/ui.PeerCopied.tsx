@@ -4,12 +4,14 @@ import { Color, COLORS, css, t, rx, Icons } from '../common';
 type Milliseconds = number;
 
 export type PeerCopiedProps = {
+  message?: string;
   style?: t.CssValue;
 };
 
 export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
-  const [ready, setReady] = useState(false);
+  const { message = 'Your Local Peer Copied' } = props;
 
+  const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
 
   /**
@@ -45,7 +47,7 @@ export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.message.base}>
-        <div {...styles.message.text}>{`Peer Copied`}</div>
+        <div {...styles.message.text}>{message}</div>
         <div {...styles.message.icon}>
           <Icons.Done.Outline color={COLORS.GREEN} />
         </div>

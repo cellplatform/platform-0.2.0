@@ -2,12 +2,22 @@ import { PeerId, PeerIdProps } from '.';
 import { cuid, Dev } from '../../test.ui';
 
 type T = { props: PeerIdProps };
-const initial: T = { props: { peer: cuid() } };
+const initial: T = {
+  props: { peer: cuid(), fontSize: 24, copyOnClick: true },
+};
 
 export default Dev.describe('PeerId', (e) => {
+  type LocalStore = { copyOnClick: boolean };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.peerid');
+  const local = localstore.object({ copyOnClick: initial.props.copyOnClick! });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
+    state.change((d) => {
+      d.props.copyOnClick = local.copyOnClick;
+    });
+
     ctx.subject
       .backgroundColor(1)
       .display('grid')
@@ -18,6 +28,10 @@ export default Dev.describe('PeerId', (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    console.log('state', state);
+
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
@@ -32,9 +46,9 @@ export default Dev.describe('PeerId', (e) => {
 
     dev.boolean((btn) =>
       btn
-        .label('copyOnCLick')
+        .label('⚡️ copyOnClick')
         .value((e) => e.state.props.copyOnClick)
-        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'copyOnClick'))),
+        .onClick((e) => e.change((d) => (local.copyOnClick = Dev.toggle(d.props, 'copyOnClick')))),
     );
 
     dev.hr();
@@ -42,11 +56,16 @@ export default Dev.describe('PeerId', (e) => {
     dev.section('fontSize', (dev) => {
       const fontsize = (value?: number, label?: string) => {
         const text = label ?? `${value}px`;
-        dev.button(text, (e) => e.change((d) => (d.props.fontSize = value)));
+        dev.button((btn) =>
+          btn
+            .label(text)
+            .right((e) => (e.state.props.fontSize === value ? 'current' : ''))
+            .onClick((e) => e.change((d) => (d.props.fontSize = value))),
+        );
       };
 
       fontsize(8);
-      fontsize(undefined, '(default)');
+      fontsize(undefined, `${PeerId.DEFAULTS.fontSize}px (undefined → default)`);
       fontsize(24);
     });
   });

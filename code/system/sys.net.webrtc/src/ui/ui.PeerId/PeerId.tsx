@@ -1,4 +1,4 @@
-import { css, Button, t, TextSyntax, WebRTC, copyPeer, FC } from '../common';
+import { Button, copyPeer, css, FC, t, TextSyntax, WebRTC } from '../common';
 
 export type PeerIdProps = {
   peer: t.PeerId | t.PeerUri;
@@ -33,11 +33,18 @@ const View: React.FC<PeerIdProps> = (props) => {
     base: css({ fontSize }),
   };
 
-  return (
-    <Button onClick={handleClick} style={css(styles.base, props.style)}>
-      <TextSyntax text={uri} monospace={true} fontWeight={'bold'} fontSize={fontSize} />
-    </Button>
-  );
+  const elText = <TextSyntax text={uri} monospace={true} fontWeight={'bold'} fontSize={fontSize} />;
+
+  if (props.copyOnClick || props.onClick) {
+    return (
+      <Button onClick={handleClick} style={css(styles.base, props.style)}>
+        {elText}
+      </Button>
+    );
+  }
+
+  // NB: Not a "pressable" button - return just the simple colored-highlighted text.
+  return elText;
 };
 
 /**
