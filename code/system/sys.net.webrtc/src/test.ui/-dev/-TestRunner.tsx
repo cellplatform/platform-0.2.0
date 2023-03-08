@@ -50,7 +50,7 @@ export default Dev.describe('Root', (e) => {
         return spec;
       };
 
-      dev.button('all', async (e) => await invoke(all));
+      dev.button('run all', async (e) => await invoke(all));
 
       dev.hr();
       dev.title('Integration tests');
