@@ -48,7 +48,7 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
   );
 
   const styles = {
-    base: css({ display: 'grid', gridTemplateRows: '1fr 200px' }),
+    base: css({ display: 'grid', gridTemplateRows: '1fr 100px' }),
     main: css({ position: 'relative' }),
     footer: css({ borderTop: `solid 1px ${Color.format(-0.2)}`, display: 'grid' }),
     media: css({ Absolute: 0 }),
