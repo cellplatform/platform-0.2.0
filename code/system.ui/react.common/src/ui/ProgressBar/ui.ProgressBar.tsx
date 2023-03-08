@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Color, COLORS, css, R, t, useSizeObserver, Value, Time } from '../common';
+
+import { COLORS, Color, css, R, t, Time, Value } from '../common';
+import { useSizeObserver } from '../useSizeObserver';
 import { TimeMap } from './ui.TimeMap';
 
 type Seconds = number;

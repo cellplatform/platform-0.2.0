@@ -4,7 +4,6 @@ export { Pkg } from './index.pkg.mjs';
 export { Specs } from './test.ui/entry.Specs.mjs';
 
 export { AudioWaveform } from './ui/AudioWaveform';
-export { ProgressBar } from './ui/ProgressBar';
 export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
 

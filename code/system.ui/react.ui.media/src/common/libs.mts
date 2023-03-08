@@ -17,5 +17,6 @@ export {
   Color,
   Style,
   ObjectView,
+  ProgressBar,
   useSizeObserver,
 } from 'sys.ui.react.common';

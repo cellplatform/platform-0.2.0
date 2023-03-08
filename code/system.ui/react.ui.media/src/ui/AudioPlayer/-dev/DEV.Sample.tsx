@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Time, Color, COLORS, css, t, rx, Value, ObjectView } from '../../common';
-import { ProgressBar } from '../../ProgressBar';
+import { Color, css, ObjectView, ProgressBar, t, Time, Value } from '../../common';
 
 type Seconds = number;
 
@@ -9,7 +7,7 @@ export type DevSampleProps = {
   duration?: Seconds;
   currentTime?: Seconds;
   style?: t.CssValue;
-  onProgressBarClick?: t.ProgressBarClickHandler;
+  onProgressBarClick?: (e: { percent: number }) => void;
 };
 
 export const DevSample: React.FC<DevSampleProps> = (props) => {
