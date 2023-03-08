@@ -8,6 +8,7 @@ type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
  */
 export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
+  state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
 
   header: t.DevCtxDebugHeader;

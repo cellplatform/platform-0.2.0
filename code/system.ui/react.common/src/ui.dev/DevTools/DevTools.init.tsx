@@ -45,8 +45,12 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
+    async state() {
+      return _state || (_state = await ctx.state(initial));
+    },
+
     async change(fn) {
-      const state = _state || (_state = await ctx.state(initial));
+      const state = await api.state();
       return state.change(fn);
     },
 
