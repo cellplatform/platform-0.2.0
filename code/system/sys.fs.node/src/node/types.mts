@@ -1,6 +1,7 @@
 import type fsextra from 'fs-extra';
 import type path from 'path';
 import type { Json } from 'sys.types';
+import type { GlobOptions as NodeGlobOptions } from 'glob';
 
 /**
  * Common Node (POSIX) based filesystem interface.
@@ -15,12 +16,6 @@ export type NodeFs = typeof fsextra & typeof path & { glob: NodeGlobMatcher; str
  *
  */
 export type NodeGlob = { find: NodeGlobMatcher };
-export type NodeGlobOptions = {
-  nodir?: boolean;
-  ignore?: string | ReadonlyArray<string>;
-  nocase?: boolean;
-  dot?: boolean;
-};
 export type NodeGlobMatcher = (pattern: string, options?: NodeGlobOptions) => Promise<string[]>;
 
 /**
