@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, Style, t, TextProcessor } from '../common';
 import { DEFAULT } from './ui.Todo.DEFAULT.mjs';
 import { useGlobalStyles } from '../DevTools.GlobalStyles';
-import { RiMoneyDollarCircleFill } from 'react-icons/ri';
 
 export type TodoProps = {
   text?: string;
@@ -15,10 +14,6 @@ const View: React.FC<TodoProps> = (props) => {
   const text = Wrangle.text(props);
   const isEmpty = Wrangle.isEmpty(props);
   const isSingleline = isEmpty || !text.includes('\n');
-
-  console.log('-------------------------------------------');
-  console.log('isSingleline', isSingleline);
-  console.log('text', text.substring(0, 20));
 
   useGlobalStyles();
   const [safeHtml, setSafeHtml] = useState('');

@@ -67,7 +67,7 @@ export default Dev.describe('AudioPlayer', (e) => {
     });
 
     _audio.addEventListener('timeupdate', (e) => {
-      console.log('timeupdate', e);
+      // console.log('timeupdate', e);
       const currentTime = audio.currentTime;
       console.log('currentTime (secs):', audio.currentTime);
       state.change((d) => (d.props.currentTime = currentTime));
