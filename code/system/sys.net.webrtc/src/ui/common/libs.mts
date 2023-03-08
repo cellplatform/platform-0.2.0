@@ -19,7 +19,7 @@ export {
 
 export { Test } from 'sys.test.spec';
 export { expect, expectError } from 'sys.test';
-export { RecordButton, AudioWaveform } from 'sys.ui.react.video';
+export { RecordButton, AudioWaveform } from 'sys.ui.react.media';
 
 /**
  * @local

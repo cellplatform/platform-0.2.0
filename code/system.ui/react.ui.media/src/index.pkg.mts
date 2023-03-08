@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react.video',
+  name: 'sys.ui.react.media',
   version: '0.0.0',
   dependencies: {
     '@vimeo/player': '2.18.0',

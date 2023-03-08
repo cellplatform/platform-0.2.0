@@ -1,4 +1,4 @@
-import { Specs as VideoSpecs } from 'sys.ui.react.video';
+import { Specs as MediaSpecs } from 'sys.ui.react.media';
 import { Specs as CodeEditorSpecs } from 'sys.ui.react.monaco';
 
 export const Specs = {
@@ -10,7 +10,7 @@ export const Specs = {
   'spike.ui.Video.ProgressBar': () => import('../ui/Video.ProgressBar/ui.ProgressBar.SPEC'),
   'spike.ui.Concept.Playlist': () => import('../ui/Concept.Playlist/Playlist.SPEC'),
 
-  ...VideoSpecs,
+  ...MediaSpecs,
   ...CodeEditorSpecs,
 };
 
