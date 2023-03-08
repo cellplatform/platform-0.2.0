@@ -12,7 +12,6 @@ import { Template } from '../Template.mjs';
  *    - Builds type definitions [.d.ts] output into a root /types folder.
  *    - Bundles typescript into production distribution (ESM, via Vite/Rollup)
  *    - Updates [packag.json] with ESM {exports} and typescript {typesVersions}.
- *
  */
 export async function build(
   dir: t.DirString,
