@@ -2,6 +2,7 @@ import { Automerge, CrdtInfo } from 'sys.data.crdt';
 
 import { WebRTC } from '.';
 import {
+  Time,
   Color,
   COLORS,
   Crdt,
@@ -21,12 +22,15 @@ import { DevSample } from './-dev/DEV.Sample';
 
 import type { Doc } from './-dev/DEV.CrdtSync';
 
+type Milliseconds = number;
+
 const DEFAULT = {
   filedir: 'dev:test/WebRTC.SPEC/cell.self',
 };
 
 type T = {
   self?: t.Peer;
+  elapsed: Milliseconds;
   main: {
     media?: MediaStream;
     imageUrl?: string;
@@ -42,6 +46,7 @@ type T = {
 };
 const initial: T = {
   self: undefined,
+  elapsed: 0,
   main: {},
   debug: {
     redraw: 0,
@@ -144,6 +149,47 @@ export default Dev.describe('WebRTC', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
 
+    const Conn = {
+      isSelf(state: T) {
+        const remote = WebRTC.Util.asId(state.debug.remotePeer ?? '');
+        return remote === self.id;
+      },
+
+      canConnect(state: T) {
+        const remote = state.debug.remotePeer ?? '';
+        return Boolean(remote) && !Conn.isSelf(state);
+      },
+
+      async connectData(remote: t.PeerId = '') {
+        const conn = await self.data(remote);
+        console.info('⚡️ peer.data (response):', conn);
+
+        await state.change((d) => (d.elapsed = 0));
+        const timer = Time.timer();
+        rx.interval(1000)
+          .pipe(rx.takeUntil(conn.dispose$))
+          .subscribe((e) => state.change((d) => (d.elapsed = timer.elapsed.msec)));
+
+        return conn;
+      },
+
+      async connectCamera(remote: t.PeerId = '') {
+        const conn = await self.media(remote, 'camera');
+        console.info('⚡️ peer.media:camera (response):', conn);
+        return conn;
+      },
+
+      async connectScreenshare(remote: t.PeerId = '') {
+        /**
+         * TODO 🐷 - connect screen share
+         * - [ ] recieve event notification from Peer display list (UI)
+         */
+        const conn = await self.media(remote, 'screen');
+        console.info('⚡️ peer.media:screen (response):', conn);
+        return conn;
+      },
+    };
+
     const toggleMute = () => {
       return state.change((d) => {
         const next = !d.debug.muted;
@@ -180,154 +226,135 @@ export default Dev.describe('WebRTC', async (e) => {
         Peer: { self, connections },
         TestResults: e.state.debug.testrunner.results,
         // MediaStream__TODO__REFACTOR__: media,
-        doc,
+        'Doc<T>': doc,
       };
       return (
         <Dev.Object
           name={'WebRTC'}
           data={Delete.undefined(data)}
-          expand={{ paths: ['$', '$.doc'] }}
+          // expand={{ paths: ['$', '$.doc'] }}
           fontSize={11}
         />
       );
     });
 
-    // Remote Peer (Connect)
-    dev.section((dev) => {
-      dev.row((e) => {
-        return (
-          <TextInput
-            value={e.state.debug.remotePeer}
-            valueStyle={{ fontSize: 14 }}
-            placeholder={'paste remote peer'}
-            placeholderStyle={{ opacity: 0.3, italic: true }}
-            focusAction={'Select'}
-            spellCheck={false}
-            onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
-            onEnter={async () => {
-              const id = state.current.debug.remotePeer;
-              connectData(id);
-              connectCamera(id);
+    // Textbox (Peer ID)
+    dev.row((e) => {
+      return (
+        <TextInput
+          value={e.state.debug.remotePeer}
+          valueStyle={{ fontSize: 14 }}
+          placeholder={'paste remote peer'}
+          placeholderStyle={{ opacity: 0.3, italic: true }}
+          focusAction={'Select'}
+          spellCheck={false}
+          onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
+          onEnter={async () => {
+            const id = state.current.debug.remotePeer;
+            Conn.connectData(id);
+            Conn.connectCamera(id);
+          }}
+        />
+      );
+    });
+
+    dev.hr();
+
+    // Doug (elapsed time)
+    dev.row((e) => {
+      const styles = { base: css({ display: 'grid', gridTemplateColumns: '1fr auto' }) };
+      const elapsed = Time.duration(e.state.elapsed);
+      return (
+        <div {...styles.base}>
+          <div>{`🧔‍♂️ Doug Time`}</div>
+          <div>{`${elapsed.toString()} ⏰`}</div>
+        </div>
+      );
+    });
+
+    dev.hr();
+
+    // Peer List 🧠
+    dev.row((e) => {
+      const totalPeers = self.connectionsByPeer.length;
+      if (totalPeers === 0) return;
+
+      const styles = {
+        base: css({
+          position: 'relative',
+          marginTop: 10,
+        }),
+        list: css({ marginLeft: 20, marginRight: 10 }),
+        hrBottom: css({
+          borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          marginTop: 30,
+          marginBottom: 20,
+        }),
+      };
+
+      const showConnection = (id: t.PeerConnectionId) => {
+        const conn = self.connections.media.find((item) => item.id === id);
+        const stream = conn?.stream.remote || conn?.stream.local;
+        state.change((d) => (d.main.media = stream));
+      };
+
+      return (
+        <div {...styles.base}>
+          <PeerList
+            self={self}
+            style={styles.list}
+            onConnectRequest={async (ev) => {
+              const peerid = state.current.debug.remotePeer;
+              if (ev.kind === 'data') await Conn.connectData(peerid);
+              if (ev.kind === 'media:camera') await Conn.connectCamera(peerid);
+              if (ev.kind === 'media:screen') {
+                const conn = await Conn.connectScreenshare(peerid);
+                console.info('conn', conn);
+                showConnection(conn.id);
+              }
+            }}
+            onDisplayConnRequest={(ev) => {
+              showConnection(ev.connection);
             }}
           />
+          <div {...styles.hrBottom} />
+        </div>
+      );
+    });
+
+    dev.section('Connection', (dev) => {
+      const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
+        dev.button((btn) =>
+          btn
+            .label(`(debug) connect: ${label}`)
+            .right((e) => (Conn.isSelf(e.state) ? 'self ⚠️' : ''))
+            .enabled((e) => Conn.canConnect(e.state))
+            .onClick(fn),
         );
-      });
-
-      dev.hr();
-
-      const isSelf = (state: T) => {
-        const remote = WebRTC.Util.asId(state.debug.remotePeer ?? '');
-        return remote === self.id;
       };
 
-      const canConnect = (state: T) => {
-        const remote = state.debug.remotePeer ?? '';
-        return Boolean(remote) && !isSelf(state);
-      };
+      dev.section(() => {
+        connectButton('data', (e) => Conn.connectData(e.state.current.debug.remotePeer));
+        connectButton('camera', (e) => Conn.connectCamera(e.state.current.debug.remotePeer));
+        connectButton('screen', (e) => Conn.connectScreenshare(e.state.current.debug.remotePeer));
 
-      const connectData = async (remote: t.PeerId = '') => {
-        const conn = await self.data(remote);
-        console.info('⚡️ peer.data (response):', conn);
-        return conn;
-      };
-
-      const connectCamera = async (remote: t.PeerId = '') => {
-        const conn = await self.media(remote, 'camera');
-        console.info('⚡️ peer.media:camera (response):', conn);
-        return conn;
-      };
-
-      const connectScreenshare = async (remote: t.PeerId = '') => {
-        /**
-         * TODO 🐷 - connect screen share
-         * - [ ] recieve event notification from Peer display list (UI)
-         */
-        const conn = await self.media(remote, 'screen');
-        console.info('⚡️ peer.media:screen (response):', conn);
-        return conn;
-      };
-
-      dev.row((e) => {
-        const totalPeers = self.connectionsByPeer.length;
-        if (totalPeers === 0) return;
-
-        const styles = {
-          base: css({
-            position: 'relative',
-            marginTop: 10,
-          }),
-          list: css({ marginLeft: 20, marginRight: 10 }),
-          hrBottom: css({
-            borderBottom: `solid 5px ${Color.alpha(COLORS.DARK, 0.1)}`,
-            marginTop: 30,
-            marginBottom: 20,
-          }),
-        };
-
-        const showConnection = (id: t.PeerConnectionId) => {
-          const conn = self.connections.media.find((item) => item.id === id);
-          const stream = conn?.stream.remote || conn?.stream.local;
-          state.change((d) => (d.main.media = stream));
-        };
-
-        return (
-          <div {...styles.base}>
-            <PeerList
-              self={self}
-              style={styles.list}
-              onConnectRequest={async (ev) => {
-                const peerid = state.current.debug.remotePeer;
-                if (ev.kind === 'data') await connectData(peerid);
-                if (ev.kind === 'media:camera') await connectCamera(peerid);
-                if (ev.kind === 'media:screen') {
-                  const conn = await connectScreenshare(peerid);
-                  console.info('conn', conn);
-                  showConnection(conn.id);
-                }
-              }}
-              onDisplayConnRequest={(ev) => {
-                showConnection(ev.connection);
-              }}
-            />
-            <div {...styles.hrBottom} />
-          </div>
-        );
-      });
-
-      dev.section((dev) => {
-        const connectButton = (label: string, fn: t.DevButtonClickHandler<T>) => {
+        dev.hr();
+        dev.section(() => {
           dev.button((btn) =>
             btn
-              .label(`(debug) connect: ${label}`)
-              .right((e) => (isSelf(e.state) ? 'self ⚠️' : ''))
-              .enabled((e) => canConnect(e.state))
-              .onClick(fn),
+              .label('close all connections')
+              .enabled((e) => Boolean(self.connections.length > 0))
+              .onClick(async (e) => {
+                self.connections.all.forEach((conn) => conn.dispose());
+                await media.events.stop(streamRef).fire();
+              }),
           );
-        };
-
-        dev.title('Connection');
-        dev.section(() => {
-          connectButton('data', (e) => connectData(e.state.current.debug.remotePeer));
-          connectButton('camera', (e) => connectCamera(e.state.current.debug.remotePeer));
-          connectButton('screen', (e) => connectScreenshare(e.state.current.debug.remotePeer));
-
-          dev.hr();
-          dev.section(() => {
-            dev.button((btn) =>
-              btn
-                .label('close all connections')
-                .enabled((e) => Boolean(self.connections.length > 0))
-                .onClick(async (e) => {
-                  self.connections.all.forEach((conn) => conn.dispose());
-                  await media.events.stop(streamRef).fire();
-                }),
-            );
-          });
         });
       });
     });
 
     dev.hr(5, 20);
+
     dev.section('Debug', (dev) => {
       const increment = (label: string, by: number) => {
         dev.button(label, (e) => docFile.doc.change((d) => (d.count += by)));
