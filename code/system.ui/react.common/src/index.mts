@@ -34,14 +34,12 @@ export { useSizeObserver } from './ui/useSizeObserver';
 export { useMouseState } from './common';
 
 /**
- * Development
- */
-export { Dev, DevTools, Spec } from './ui.dev';
-
-/**
  * Common up-stream modules.
  */
 export { FC } from 'sys.ui.react.util';
 export { css, Style, Color, COLORS, rx } from './common';
 
-export type { CssValue } from './common/types.mjs';
+/**
+ * Development
+ */
+export { Dev, DevTools, Spec } from './ui.dev';
