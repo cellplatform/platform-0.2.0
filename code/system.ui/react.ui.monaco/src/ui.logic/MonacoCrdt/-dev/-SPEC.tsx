@@ -5,16 +5,22 @@ import { DevLayout } from './DEV.Layout';
 
 type T = {
   redraw: number;
-  tests: { running: boolean; results?: t.TestSuiteRunResponse };
   language: t.EditorLanguage;
+  debug: { showTests: boolean };
+  tests: { running: boolean; results?: t.TestSuiteRunResponse };
 };
 const initial: T = {
   redraw: 0,
   tests: { running: false },
   language: 'typescript',
+  debug: { showTests: true },
 };
 
-type LocalStore = { peerTotal: number; language: t.EditorLanguage };
+type LocalStore = {
+  peerTotal: number;
+  language: t.EditorLanguage;
+  showTests: boolean;
+};
 type PeerItem = {
   peer: t.DevPeer;
   syncer?: t.MonacoCrdtSyncer<t.SampleDoc>;
@@ -22,7 +28,11 @@ type PeerItem = {
 
 export default Dev.describe('MonacoCrdt', (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
-  const local = localstore.object({ peerTotal: 2, language: initial.language });
+  const local = localstore.object({
+    peerTotal: 2,
+    language: initial.language,
+    showTests: initial.debug.showTests,
+  });
 
   const editors = new Set<t.MonacoCodeEditor>();
   const peerMap = new Map<string, PeerItem>();
@@ -66,6 +76,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.language = local.language;
+      d.debug.showTests = local.showTests;
       totalPeers(local.peerTotal);
     });
 
@@ -77,7 +88,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
         return (
           <DevLayout
             peers={peers}
-            tests={e.state.tests}
+            tests={e.state.debug.showTests ? e.state.tests : undefined}
             language={e.state.language}
             onDisposed={(e) => editors.delete(e.disposed.editor)}
             onReady={(e) => {
@@ -133,7 +144,24 @@ export default Dev.describe('MonacoCrdt', (e) => {
           d.tests.running = false;
         });
       };
-      dev.button('run all tests', (e) => run(import('./-TEST.mjs')));
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (e.state.debug.showTests ? 'hide tests' : 'show tests'))
+          .value((e) => e.state.debug.showTests)
+          .onClick((e) => {
+            e.change((d) => {
+              const next = Dev.toggle(d.debug, 'showTests');
+              local.showTests = next;
+            });
+          }),
+      );
+      dev.hr(-1, 5);
+
+      dev.button('run tests', (e) => {
+        e.change((d) => (d.debug.showTests = true));
+        run(import('./-TEST.mjs'));
+      });
       dev.button('clear', (e) => e.change((d) => (d.tests = { ...initial.tests })));
     });
 

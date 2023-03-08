@@ -12,6 +12,8 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
   const [_, setCount] = useState(0);
   const redraw = () => setCount((prev) => prev + 1);
 
+  const codeString = doc.current.code.toString();
+
   /**
    * [Lifecycle]
    */
@@ -54,10 +56,9 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
       fontWeight: 600,
       userSelect: 'text',
       overflow: 'hidden',
+      opacity: Boolean(codeString) ? 1 : 0.3,
     }),
   };
-
-  const codeString = Wrangle.codeString(doc.current.code.toString());
 
   const elMain = (
     <div {...styles.main}>
@@ -68,7 +69,7 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
       <div {...styles.body}>
         <Dev.Object data={doc.current} />
         <div {...styles.codeString}>
-          <pre>{codeString}</pre>
+          <pre>{Wrangle.codeString(codeString)}</pre>
         </div>
       </div>
     </div>

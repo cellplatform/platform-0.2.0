@@ -15,7 +15,7 @@ export type DevLayoutEditorDisposedHandlerArgs = {
 
 export type DevLayoutProps = {
   peers?: t.DevPeer[];
-  tests: { running: boolean; results?: t.TestSuiteRunResponse };
+  tests?: { running: boolean; results?: t.TestSuiteRunResponse };
   language: t.EditorLanguage;
   style?: t.CssValue;
   onReady?: DevLayoutReadyHandler;
@@ -83,17 +83,21 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
     );
   });
 
+  const elTestRunner = props.tests && (
+    <div {...styles.bottom.base}>
+      <Dev.TestRunner.Results
+        data={props.tests.results}
+        spinning={props.tests.running}
+        style={styles.bottom.runner}
+        padding={[10, 20, 10, 10]}
+      />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       {elEditors}
-      <div {...styles.bottom.base}>
-        <Dev.TestRunner.Results
-          data={props.tests.results}
-          spinning={props.tests.running}
-          style={styles.bottom.runner}
-          padding={[10, 20, 10, 10]}
-        />
-      </div>
+      {elTestRunner}
     </div>
   );
 };
