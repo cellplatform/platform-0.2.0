@@ -21,9 +21,6 @@ const pkg = (await fs.readJSON(fs.resolve('./package.json'))) as Pkg;
 const timer = Time.timer();
 
 const filter = (path: string) => {
-  // TEMP 🐷
-  return path.includes('/sys.data.crdt');
-
   if (path.includes('/code/compiler.samples/')) return false;
   if (path.includes('/code/spikes/')) return false;
   return true;
