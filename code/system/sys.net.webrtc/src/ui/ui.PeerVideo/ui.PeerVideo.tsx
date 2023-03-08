@@ -35,7 +35,7 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
    * [Lifecycle]
    */
   useEffect(() => {
-    const timer = setTimeout(() => setShowCopied(false), 1500);
+    const timer = setTimeout(() => setShowCopied(false), 2000);
     return () => clearTimeout(timer);
   }, [showCopied]);
 
