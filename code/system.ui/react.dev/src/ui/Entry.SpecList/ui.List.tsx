@@ -21,6 +21,7 @@ export const List: React.FC<ListProps> = (props) => {
   const styles = {
     base: css({
       listStyleType: 'none',
+      color: COLORS.DARK,
       borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.03)}`,
       padding: 0,
       margin: 0,
@@ -30,6 +31,13 @@ export const List: React.FC<ListProps> = (props) => {
       borderTop: `dashed 1px ${Color.alpha(COLORS.DARK, 0.4)}`,
       marginTop: 30,
       marginBottom: 10,
+    }),
+    empty: css({
+      fontSize: 14,
+      fontStyle: 'italic',
+      opacity: 0.4,
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
@@ -57,9 +65,13 @@ export const List: React.FC<ListProps> = (props) => {
     );
   };
 
+  const elEmpty = importsKeys.length === 0 && <div {...styles.empty}>{'Nothing to display.'}</div>;
+  const elList = importsKeys.map((key, i) => item(i, key, { Icon: VscSymbolClass, ns: true }));
+
   return (
     <ul {...css(styles.base, props.style)}>
-      {importsKeys.map((key, i) => item(i, key, { Icon: VscSymbolClass, ns: true }))}
+      {elEmpty}
+      {elList}
 
       <hr {...styles.hrDashed} />
 
