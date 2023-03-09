@@ -1,5 +1,5 @@
 import { Context } from '.';
-import { DEFAULT, describe, expect, Id, it, t, TestSample } from '../test';
+import { DEFAULTS, describe, expect, Id, it, t, TestSample } from '../test';
 
 export function expectRendererId(value?: string) {
   expect(value?.startsWith(Id.renderer.prefix)).to.eql(true);
@@ -164,7 +164,7 @@ describe('Context', () => {
   });
 
   describe('props.host', () => {
-    const HOST = DEFAULT.props.host;
+    const HOST = DEFAULTS.props.host;
 
     it('backgroundColor | tracelineColor', async () => {
       const { events, context, dispose } = await TestSample.context();
@@ -330,7 +330,7 @@ describe('Context', () => {
         expect(info.render.props?.debug.body.padding).to.eql(expected);
       };
 
-      const DEBUG = DEFAULT.props.debug.body;
+      const DEBUG = DEFAULTS.props.debug.body;
 
       await expectValue(undefined, DEBUG.padding);
       await expectValue(null, DEBUG.padding);
@@ -354,7 +354,7 @@ describe('Context', () => {
         expect(info.render.props?.debug.width).to.eql(expected);
       };
 
-      const DEBUG = DEFAULT.props.debug;
+      const DEBUG = DEFAULTS.props.debug;
 
       await expectValue(undefined, DEBUG.width);
       await expectValue(null, DEBUG.width);
@@ -367,7 +367,7 @@ describe('Context', () => {
     });
 
     describe('header', () => {
-      const HEADER = DEFAULT.props.debug.header;
+      const HEADER = DEFAULTS.props.debug.header;
 
       it('header (props}', async () => {
         const { events, context, dispose } = await TestSample.context();
@@ -411,7 +411,7 @@ describe('Context', () => {
           expect(info.render.props?.debug.header.padding).to.eql(expected);
         };
 
-        const DEBUG = DEFAULT.props.debug.header;
+        const DEBUG = DEFAULTS.props.debug.header;
 
         await expectValue(undefined, DEBUG.padding);
         await expectValue(null, DEBUG.padding);
@@ -426,7 +426,7 @@ describe('Context', () => {
     });
 
     describe('footer', () => {
-      const FOOTER = DEFAULT.props.debug.footer;
+      const FOOTER = DEFAULTS.props.debug.footer;
 
       it('footer (props)', async () => {
         const { events, context, dispose } = await TestSample.context();
@@ -470,7 +470,7 @@ describe('Context', () => {
           expect(info.render.props?.debug.footer.padding).to.eql(expected);
         };
 
-        const DEBUG = DEFAULT.props.debug.footer;
+        const DEBUG = DEFAULTS.props.debug.footer;
 
         await expectValue(undefined, DEBUG.padding);
         await expectValue(null, DEBUG.padding);

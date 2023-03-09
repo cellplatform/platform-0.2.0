@@ -1,8 +1,8 @@
-import { DEFAULT, t, Margin } from './common';
+import { DEFAULTS, t, Margin } from './common';
 
 import type { PropArgs } from './common.types';
 
-const HOST = DEFAULT.props.host;
+const HOST = DEFAULTS.props.host;
 
 export function CtxPropsHost(props: PropArgs) {
   const api: t.DevCtxHost = {

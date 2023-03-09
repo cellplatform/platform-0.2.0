@@ -2,7 +2,7 @@ import type { t } from '../common.t';
 import { Color } from './libs.mjs';
 import { COLORS } from './const.COLORS.mjs';
 
-export const DEFAULT = {
+export const DEFAULTS = {
   get props(): t.DevRenderProps {
     return {
       host: {
@@ -36,7 +36,7 @@ export const DEFAULT = {
    * URL query-string keys.
    */
   QS: {
-    D: 'd', // NB: alias for "?dev"
-    DEV: 'dev',
+    d: 'd', // NB: alias for "?dev"
+    dev: 'dev',
   },
 } as const;
