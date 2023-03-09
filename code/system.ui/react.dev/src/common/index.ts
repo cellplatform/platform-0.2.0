@@ -9,4 +9,4 @@ export * from './libs.mjs';
 export * from './Margin.mjs';
 export * from './Is.mjs';
 export * from './Id.mjs';
-export * from './WrangleUrl.mjs';
+export * from './Wrangle.mjs';

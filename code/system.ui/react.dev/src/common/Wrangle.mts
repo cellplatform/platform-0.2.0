@@ -82,3 +82,8 @@ export const WrangleUrl = {
       .filter(({ fn }) => typeof fn === 'function');
   },
 };
+
+export const DevWrangle = {
+  Url: WrangleUrl,
+  Params: WrangleUrlParams,
+};

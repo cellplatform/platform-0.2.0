@@ -7,7 +7,7 @@ export type { IconType } from 'react-icons';
 /**
  * @system
  */
-export * from 'sys.ui.react.dev.types';
+export * from 'sys.ui.react.dev.types/src/types.mjs';
 
 export type {
   EventBus,
