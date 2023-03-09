@@ -34,14 +34,15 @@ const View: React.FC<IFrameProps> = (props) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   /**
-   * Handlers
+   * [Handlers]
    */
   const handleLoad = () => {
     let href = content.src ?? '';
     try {
       href = iframeRef.current?.contentWindow?.location.href ?? href;
     } catch (error) {
-      // [Ignore]: This will be a cross-origin block. Fire the best guess at what the URL is.
+      // [Ignore]: This will be a cross-origin block.
+      //           Fire the best guess at what the URL is.
     }
     props.onLoad?.({ href });
   };
