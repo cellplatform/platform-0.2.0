@@ -5,10 +5,8 @@ import { HarnessHost } from '../Harness.Host';
 export type HarnessProps = {
   instance?: t.DevInstance;
   spec?: t.SpecImport;
-  keyboard?: boolean;
-
-  style?: t.CssValue;
   allowRubberband?: boolean;
+  style?: t.CssValue;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
