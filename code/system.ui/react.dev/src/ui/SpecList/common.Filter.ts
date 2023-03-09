@@ -7,10 +7,10 @@ export const Filter = {
     filter = (filter || '').trim();
     if (!(filter || '').trim()) return imports;
 
-    const matcher = Fuzzy.pattern(filter, 1);
+    const matcher = Fuzzy.pattern(filter.toLowerCase(), 1);
 
     return Object.keys(imports).reduce((acc, key) => {
-      const match = matcher.match(key);
+      const match = matcher.match(key.toLowerCase());
       if (match.exists) acc[key] = imports[key];
       return acc;
     }, {} as t.SpecImports);
