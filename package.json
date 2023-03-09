@@ -55,7 +55,7 @@
     "react-error-boundary": "^3.1.4",
     "react-icons": "^4.8.0",
     "react-spinners": "^0.13.8",
-    "rimraf": "^4.3.1",
+    "rimraf": "^4.4.0",
     "rxjs": "^7.8.0",
     "react-inspector": "^6.0.1",
     "rehype-sanitize": "^5.0.1",
