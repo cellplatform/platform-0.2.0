@@ -1,6 +1,6 @@
 import { Dev } from '.';
 import { describe, expect, it } from '../../test';
-import { Spec } from '../common.libs.mjs';
+import { Spec } from '../common';
 
 describe('Dev', () => {
   it('imports base methods from underlying module', () => {

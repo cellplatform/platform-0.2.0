@@ -14,3 +14,12 @@ export { Tree } from 'sys.test.spec';
  */
 export const DevBase = (await import('sys.ui.react.dev')).Dev;
 export const ValueHandler = DevBase.ValueHandler;
+
+/**
+ * @local
+ */
+export { DevIcons as Icons, Icon } from '../Icons.mjs';
+export { ObjectView } from '../../ui/ObjectView';
+export { Button } from '../../ui/Button';
+export { Switch } from '../../ui/Button.Switch';
+export { RenderCount } from '../../ui/RenderCount';

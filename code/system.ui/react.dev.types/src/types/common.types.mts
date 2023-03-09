@@ -13,7 +13,10 @@ export type {
   BundleImport,
   TestSuiteRunResponse,
   TestHandlerArgs,
+  SpecImports,
 } from 'sys.test.spec/src/types.mjs';
+
+export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
 
 /**
  * @local
@@ -21,3 +24,4 @@ export type {
 export * from './index';
 
 export type UrlString = string;
+export type UrlInput = string | URL | Location;
