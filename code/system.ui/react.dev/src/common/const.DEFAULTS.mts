@@ -1,5 +1,6 @@
-import type * as t from './common/types.mjs';
-import { Color, COLORS } from './common';
+import type { t } from '../common.t';
+import { Color } from './libs.mjs';
+import { COLORS } from './const.COLORS.mjs';
 
 export const DEFAULT = {
   get props(): t.DevRenderProps {

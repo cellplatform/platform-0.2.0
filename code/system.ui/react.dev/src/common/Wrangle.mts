@@ -1,5 +1,5 @@
 import type * as t from './types.mjs';
-import { DEFAULT } from '../DEFAULT.mjs';
+import { DEFAULT } from './const.mjs';
 
 const QS = DEFAULT.QS;
 
