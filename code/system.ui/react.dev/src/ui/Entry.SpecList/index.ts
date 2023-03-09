@@ -1,1 +1,1 @@
-export * from './SpecList';
+export * from './ui.SpecList';
