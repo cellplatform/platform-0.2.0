@@ -1,5 +1,1 @@
-export const DEFAULTS = {
-  MD: {
-    CLASS: { TODO: 'sys-dev-md-todo' },
-  },
-};
+export * from './const.DEFAULTS.mjs';

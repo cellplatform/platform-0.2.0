@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { css, DevBase, t } from './common';
 import { CmdBar } from './ui.CmdBar';
 
@@ -46,12 +44,4 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
       <CmdBar text={props.filter} onChanged={(e) => props.onFilterChanged?.({ filter: e.to })} />
     </div>
   );
-};
-
-/**
- * A version of <CmdHost> that manages state interanally.
- */
-export const CmdHostStateful: React.FC<CmdHostProps> = (props) => {
-  const [filter, setFilter] = useState(props.filter);
-  return <CmdHost {...props} filter={filter} onFilterChanged={(e) => setFilter(e.filter)} />;
 };
