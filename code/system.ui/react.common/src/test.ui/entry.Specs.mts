@@ -33,7 +33,7 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 
-export const All = {
+export const AllSpecs = {
   ...Specs,
   ...DevSpecs,
 };
