@@ -41,16 +41,13 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       border: 'none',
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.12)}`,
     }),
-    link: css({
-      color: COLORS.BLUE,
-      textDecoration: 'none',
-    }),
+    link: css({ color: COLORS.BLUE, textDecoration: 'none' }),
     linkDimmed: {
       color: Color.alpha(COLORS.DARK, 0.4),
       ':hover': { color: COLORS.BLUE },
     },
     row: {
-      base: css({ display: 'grid', gridTemplateColumns: 'auto 1fr' }),
+      base: css({ display: 'grid', gridTemplateColumns: 'auto auto 1fr' }),
       icon: css({ marginRight: 10, display: 'grid', placeItems: 'center' }),
       label: css({ ':hover': { textDecoration: 'underline' } }),
     },
@@ -59,12 +56,13 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   return (
     <li {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
-      <a href={url.href} {...css(styles.link, !ns ? styles.linkDimmed : undefined)}>
-        <div {...styles.row.base}>
-          <div {...styles.row.icon}>{Icon && <VscSymbolClass />}</div>
+      <div {...styles.row.base}>
+        <div {...styles.row.icon}>{Icon && <VscSymbolClass color={COLORS.BLUE} />}</div>
+        <a href={url.href} {...css(styles.link, !ns ? styles.linkDimmed : undefined)}>
           <div {...styles.row.label}>{title ?? address}</div>
-        </div>
-      </a>
+        </a>
+        <div />
+      </div>
     </li>
   );
 };
