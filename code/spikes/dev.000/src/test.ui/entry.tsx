@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
 
-const BADGE_CI = {
+const BADGE = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
@@ -28,7 +28,7 @@ const render = async (subject: SubjectMatter) => {
 
   if (subject === 'Dev') {
     const { Specs } = await Imports.Specs();
-    const el = await Dev.render(Pkg, Specs, { badge: BADGE_CI, hrDepth: 3 });
+    const el = await Dev.render(Pkg, Specs, { badge: BADGE, hrDepth: 3 });
     root.render(el);
   }
 
