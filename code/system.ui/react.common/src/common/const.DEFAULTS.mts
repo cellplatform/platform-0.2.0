@@ -2,7 +2,5 @@ export const DEFAULTS = {
   /**
    * URL query-string keys.
    */
-  QS: {
-    filter: 'filter',
-  },
+  QS: { filter: 'filter' },
 } as const;
