@@ -1,5 +1,4 @@
-import { t } from '../common';
-import { Dev } from '../Dev.mjs';
+import { t, ValueHandler } from '../common';
 import { Hr } from './ui.Hr';
 
 type O = Record<string, unknown>;
@@ -15,10 +14,10 @@ export function hr<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const margin = Dev.ValueHandler<t.DevHrMargin, S>(events);
-  const color = Dev.ValueHandler<t.DevHrColor, S>(events);
-  const thickness = Dev.ValueHandler<number, S>(events);
-  const opacity = Dev.ValueHandler<number, S>(events);
+  const margin = ValueHandler<t.DevHrMargin, S>(events);
+  const color = ValueHandler<t.DevHrColor, S>(events);
+  const thickness = ValueHandler<number, S>(events);
+  const opacity = ValueHandler<number, S>(events);
 
   const args: t.DevHrHandlerArgs<S> = {
     ctx,
