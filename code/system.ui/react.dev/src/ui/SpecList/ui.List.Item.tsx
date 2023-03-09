@@ -1,5 +1,5 @@
 import { VscSymbolClass } from 'react-icons/vsc';
-import { Calc, Color, COLORS, css, KEY, t } from './common';
+import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
 
 export type ListItemProps = {
   index: number;
@@ -26,8 +26,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const next = importsKeys[index];
   const showHr = !beyondBounds && Calc.showHr(hrDepth, prev, next);
 
-  if (address) params.set(KEY.DEV, address);
-  if (!address) params.delete(KEY.DEV);
+  if (address) params.set(DEFAULTS.QS.DEV, address);
+  if (!address) params.delete(DEFAULTS.QS.DEV);
 
   /**
    * [Render]

@@ -1,6 +1,6 @@
 import { VscSymbolClass } from 'react-icons/vsc';
 
-import { Color, COLORS, css, KEY, t } from './common';
+import { Color, COLORS, css, DEFAULTS, t } from './common';
 import { ListItem } from './ui.List.Item';
 
 export type ListProps = {
@@ -13,7 +13,7 @@ export type ListProps = {
 export const List: React.FC<ListProps> = (props) => {
   const { imports, url } = props;
   const importsKeys = Object.keys(props.imports);
-  const hasDevParam = url.searchParams.has(KEY.DEV);
+  const hasDevParam = url.searchParams.has(DEFAULTS.QS.DEV);
 
   /**
    * [Render]

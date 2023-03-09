@@ -9,16 +9,16 @@ export const WrangleUrlParams = {
    */
   isDev(location?: t.UrlInput) {
     const params = WrangleUrl.location(location).searchParams;
-    return params.has(QS.d) || params.has(QS.dev);
+    return params.has(QS.D) || params.has(QS.DEV);
   },
 
   formatDevFlag(options: { location?: t.UrlInput } = {}) {
     const url = WrangleUrl.location(options.location);
 
-    if (url.searchParams.has(QS.d)) {
-      const value = url.searchParams.get(QS.d) || 'true';
-      url.searchParams.delete(QS.d);
-      url.searchParams.set(QS.dev, value);
+    if (url.searchParams.has(QS.D)) {
+      const value = url.searchParams.get(QS.D) || 'true';
+      url.searchParams.delete(QS.D);
+      url.searchParams.set(QS.DEV, value);
       if (!options.location) {
         window.location.search = url.searchParams.toString();
       }
@@ -30,9 +30,9 @@ export const WrangleUrlParams = {
   ensureIndexDevFlag(options: { location?: t.UrlInput } = {}) {
     const url = WrangleUrl.location(options.location);
     const params = url.searchParams;
-    params.delete(DEFAULTS.QS.d);
-    params.delete(DEFAULTS.QS.dev);
-    params.set(DEFAULTS.QS.dev, 'true');
+    params.delete(DEFAULTS.QS.D);
+    params.delete(DEFAULTS.QS.DEV);
+    params.set(DEFAULTS.QS.DEV, 'true');
     if (!options.location) {
       window.location.search = url.searchParams.toString();
     }
@@ -56,9 +56,9 @@ export const WrangleUrl = {
    */
   async module(url: URL, specs: t.SpecImports) {
     const params = url.searchParams;
-    if (!params.has(QS.dev)) return undefined;
+    if (!params.has(QS.DEV)) return undefined;
 
-    const namespace = params.get(QS.dev) ?? '';
+    const namespace = params.get(QS.DEV) ?? '';
     const matches = WrangleUrl.moduleMatches(namespace, specs);
 
     if (matches[0]) {
