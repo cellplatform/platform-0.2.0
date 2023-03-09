@@ -1,4 +1,11 @@
 import { Dev } from '../test.ui';
+import { AkahuClient } from 'akahu';
+
+/**
+ * TODO 🐷 DO NOT CHECK IN!!!!!!!!!!!!!!!!!!
+ */
+const appToken = 'app_token_'; // TEMP 🐷
+const userToken = 'user_token_'; // TEMP 🐷
 
 type T = { count: number };
 const initial: T = { count: 0 };
@@ -22,6 +29,16 @@ export default Dev.describe('Akahu', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
-    dev.button('tmp', (e) => e.change((d) => d.count++));
+    dev.button('tmp', async (e) => {
+      console.log('AkahuClient', AkahuClient);
+
+      const headers = {};
+      const akahu = new AkahuClient({ appToken, headers });
+      const user = await akahu.users.get(userToken);
+      const accounts = await akahu.accounts.list(userToken);
+
+      console.log('user', user);
+      console.log('accounts', accounts);
+    });
   });
 });
