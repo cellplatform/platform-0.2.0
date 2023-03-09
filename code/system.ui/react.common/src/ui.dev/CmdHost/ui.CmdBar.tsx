@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Keyboard, Color, COLORS, css, t, rx, TextInput, DevIcons } from './common';
+import { useState } from 'react';
 
+import { COLORS, css, DevIcons, t, TextInput } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
 
 export type CmdBarProps = {

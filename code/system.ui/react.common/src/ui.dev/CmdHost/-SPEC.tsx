@@ -1,25 +1,36 @@
 import { Dev } from '../../test.ui';
 import { CmdHost } from './ui.CmdHost';
+import { Pkg } from '../../index.pkg.mjs';
 import type { CmdHostProps } from './ui.CmdHost';
 
 const specs = {
   foo: () => import('../DevTools/-SPEC'),
+  foobar: () => import('../DevTools/-SPEC'),
   bar: () => import('../DevTools/-SPEC'),
+  bars: () => import('../DevTools/-SPEC'),
+  'bars.boo': () => import('../DevTools/-SPEC'),
+  boo: () => import('../DevTools/-SPEC'),
+  zoo: () => import('../DevTools/-SPEC'),
 };
 
 type T = { props: CmdHostProps };
-const initial: T = { props: { specs } };
+const initial: T = { props: { pkg: Pkg, imports: specs } };
 
 export default Dev.describe('CmdHost', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
     ctx.subject
       .size('fill')
       .display('grid')
       .backgroundColor(1)
       .render<T>((e) => {
-        return <CmdHost {...e.state.props} />;
+        return (
+          <CmdHost
+            {...e.state.props}
+            onFilterChanged={(e) => state.change((d) => (d.props.filter = e.filter))}
+          />
+        );
       });
   });
 

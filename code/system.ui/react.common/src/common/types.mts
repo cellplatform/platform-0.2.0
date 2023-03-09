@@ -44,6 +44,8 @@ export type {
   DevRenderProps,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
+export type { SpecListBadge } from 'sys.ui.react.dev/src/types.mjs';
+
 export type {
   UIEventBase,
   UIModifierKeys,
@@ -59,3 +61,4 @@ export type {
  * @local
  */
 export * from '../types.mjs';
+export type UrlInput = string | URL | Location;

@@ -1,18 +1,20 @@
-import { Dev } from '../Dev.mjs';
+import { useEffect, useState } from 'react';
 
-import { useEffect, useRef, useState } from 'react';
-import { Keyboard, Color, COLORS, css, t, rx } from './common';
+import { css, DevBase, t } from './common';
 import { CmdBar } from './ui.CmdBar';
 
 export type CmdHostProps = {
-  specs?: t.SpecImports;
+  pkg: { name: string; version: string };
+  imports?: t.SpecImports;
+  filter?: string;
   style?: t.CssValue;
+  hrDepth?: number;
+  badge?: t.SpecListBadge;
+  onFilterChanged?: (e: { filter: string }) => void;
 };
 
 export const CmdHost: React.FC<CmdHostProps> = (props) => {
-  const { specs } = props;
-
-  const [text, setText] = useState('');
+  const { pkg } = props;
 
   /**
    * [Render]
@@ -26,15 +28,30 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
     body: css({
       position: 'relative',
       display: 'grid',
+      Scroll: true,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <Dev.SpecList imports={specs} />
+        <DevBase.SpecList
+          title={pkg.name}
+          version={pkg.version}
+          imports={props.imports}
+          filter={props.filter}
+          badge={props.badge}
+        />
       </div>
-      <CmdBar text={text} onChanged={(e) => setText(e.to)} />
+      <CmdBar text={props.filter} onChanged={(e) => props.onFilterChanged?.({ filter: e.to })} />
     </div>
   );
+};
+
+/**
+ * A version of <CmdHost> that manages state interanally.
+ */
+export const CmdHostStateful: React.FC<CmdHostProps> = (props) => {
+  const [filter, setFilter] = useState(props.filter);
+  return <CmdHost {...props} filter={filter} onFilterChanged={(e) => setFilter(e.filter)} />;
 };

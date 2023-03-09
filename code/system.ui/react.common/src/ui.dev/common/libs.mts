@@ -12,8 +12,12 @@ export { Tree } from 'sys.test.spec';
  *
  *   For more context see: https://github.com/Menci/vite-plugin-top-level-await
  */
-export const DevBase = (await import('sys.ui.react.dev')).Dev;
-export const ValueHandler = DevBase.ValueHandler;
+export const {
+  Dev: DevBase,
+  ValueHandler,
+  DevWrangle,
+  DevKeyboard,
+} = await import('sys.ui.react.dev');
 
 /**
  * @local
