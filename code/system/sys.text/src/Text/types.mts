@@ -1,4 +1,4 @@
-import { type t } from '../common.t';
+import type { t } from '../common.t';
 import type { is } from 'unist-util-is';
 
 export type Text = {
@@ -6,6 +6,7 @@ export type Text = {
   Processor: t.TextProcessor;
   Markdown: t.Markdown;
   Yaml: t.Yaml;
+  Fuzzy: t.Fuzzy;
 };
 
 export type TextIs = {
