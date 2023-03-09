@@ -29,6 +29,7 @@ export default Spec.describe('SpecList', (e) => {
               version={Pkg.version}
               imports={specs}
               hrDepth={2}
+              // filter={'foo'}
               badge={{
                 image: ci.badge,
                 href: ci.info,
