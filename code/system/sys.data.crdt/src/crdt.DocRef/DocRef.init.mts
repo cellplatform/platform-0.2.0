@@ -5,7 +5,7 @@ const { isAutomerge } = Automerge;
 /**
  * In-memory CRDT document reference (wrapper).
  */
-export function init<D extends {}>(
+export function createDocRef<D extends {}>(
   initial: D,
   options: {
     dispose$?: t.Observable<any>;
