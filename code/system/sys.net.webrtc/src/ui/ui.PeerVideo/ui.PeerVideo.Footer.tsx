@@ -73,15 +73,15 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
     }),
-    connectedIcon: css({
+    connectedThumbnail: css({
       Padding: [2, 5],
       display: 'grid',
       placeItems: 'center',
     }),
   };
 
-  const elPeer = showPeer && self && (
-    <div {...styles.peer}>{<PeerId peer={self.id} onClick={handleCopyPeer} />}</div>
+  const elPeer = showPeer && (
+    <div {...styles.peer}>{<PeerId peer={self?.id} onClick={handleCopyPeer} />}</div>
   );
 
   const elConnect = showConnect && (
@@ -110,8 +110,8 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
           </Button>
         )}
         {isConnected && (
-          <div {...styles.connectedIcon}>
-            <Icons.Connection.On size={22} color={COLORS.MAGENTA} />
+          <div {...styles.connectedThumbnail}>
+            <Icons.Globe.Lock size={22} color={COLORS.BLUE} />
           </div>
         )}
       </div>
