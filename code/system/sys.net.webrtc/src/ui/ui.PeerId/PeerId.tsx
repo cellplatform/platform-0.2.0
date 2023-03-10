@@ -1,12 +1,12 @@
 import { Button, copyPeer, css, FC, t, TextSyntax, WebRTC } from '../common';
 
 export type PeerIdProps = {
-  peer: t.PeerId | t.PeerUri;
-  style?: t.CssValue;
+  peer?: t.PeerId | t.PeerUri;
   abbreviate?: boolean | number | [number, number];
   prefix?: string;
   fontSize?: number;
   copyOnClick?: boolean;
+  style?: t.CssValue;
   onClick?: (e: { id: t.PeerId; uri: t.PeerUri; copied: boolean }) => void;
 };
 
@@ -16,13 +16,12 @@ const DEFAULTS = {
 
 const View: React.FC<PeerIdProps> = (props) => {
   const { fontSize = DEFAULTS.fontSize, copyOnClick = false } = props;
-  // const uri = Wrangle.uri(props);
-  const id = Wrangle.id(props);
 
   /**
    * Handlers
    */
   const handleClick = () => {
+    if (!props.peer) return;
     const id = WebRTC.Util.asId(props.peer);
     const uri = WebRTC.Util.asUri(id);
     if (copyOnClick) copyPeer(id);
@@ -33,7 +32,12 @@ const View: React.FC<PeerIdProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ fontSize }),
+    base: css({
+      fontSize,
+      opacity: props.peer ? 1 : 0.3,
+      filter: `grayscale(${props.peer ? 0 : 1})`,
+      transition: 'all 150ms ease',
+    }),
   };
 
   const elText = (
@@ -75,12 +79,12 @@ export const PeerId = FC.decorate<PeerIdProps, Fields>(
  */
 const Wrangle = {
   uri(props: PeerIdProps) {
-    return WebRTC.Util.asUri(props.peer);
+    return props.peer ? WebRTC.Util.asUri(props.peer) : '';
   },
 
   id(props: PeerIdProps) {
     const { abbreviate } = props;
-    const id = WebRTC.Util.asId(props.peer);
+    const id = props.peer ? WebRTC.Util.asId(props.peer) : '';
 
     if (!abbreviate && typeof abbreviate !== 'number' && !Array.isArray(abbreviate)) {
       return id;
@@ -98,11 +102,9 @@ const Wrangle = {
   },
 
   peerText(props: PeerIdProps) {
-    //
+    if (!props.peer) return 'peer:loading...';
     const id = Wrangle.id(props);
-
     const prefix = (props.prefix ?? '').trim();
-
     return prefix ? `${prefix.replace(/\:$/, '')}:${id}` : WebRTC.Util.asUri(id);
   },
 };
