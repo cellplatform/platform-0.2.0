@@ -1,5 +1,5 @@
 import { cuid, R, t } from './common';
-import { waitFor } from './util.$.mjs';
+import { waitFor } from './Util.$.mjs';
 
 export const Util = {
   waitFor,

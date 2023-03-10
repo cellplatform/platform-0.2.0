@@ -1,7 +1,7 @@
 import type { Automerge } from 'sys.data.crdt';
 export type { Automerge };
 
-import { Util } from './util.mjs';
+import { Util } from '../WebRTC.Util';
 import { peer } from './WebRTC.peer.mjs';
 import { Media } from './Media.mjs';
 

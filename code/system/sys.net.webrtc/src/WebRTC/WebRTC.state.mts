@@ -1,7 +1,6 @@
-import { rx, t } from './common';
+import { rx, t, Util } from './common';
 import { PeerDataConnection } from './Connection.Data.mjs';
 import { PeerMediaConnection } from './Connection.Media.mjs';
-import { Util } from './util.mjs';
 
 /**
  * State management of current WebRTC session - peers/connections.

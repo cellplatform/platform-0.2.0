@@ -1,5 +1,4 @@
-import { Path, PeerJS, rx, t } from './common';
-import { Util } from './util.mjs';
+import { Path, PeerJS, rx, t, Util } from './common';
 import { MemoryState } from './WebRTC.state.mjs';
 
 type HostName = string;

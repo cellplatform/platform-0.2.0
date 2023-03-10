@@ -1,5 +1,4 @@
-import { rx, t } from './common';
-import { Util } from './util.mjs';
+import { rx, t, Util } from './common';
 
 /**
  * Represents a P2P data connection.
