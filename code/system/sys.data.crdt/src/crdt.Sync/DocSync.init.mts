@@ -3,21 +3,16 @@ import { CrdtIs } from '../crdt.helpers';
 import { t, rx, DEFAULTS } from './common';
 import { PeerSyncer } from './PeerSyncer.mjs';
 
-type Milliseconds = number;
-type Options<D extends {}> = {
-  dispose$?: t.Observable<any>;
-  onChange?: t.CrdtDocRefChangeHandler<D>;
-  debounce?: Milliseconds;
-};
-
 /**
  * Extends a CRDT [DocRef] with peer-sync capabilities.
  */
 export function init<D extends {}>(
   netbus: t.EventBus<any>, // An event-bus that fires over a network connection.
   initial: D | t.CrdtDocRef<D>,
-  options: Options<D> = {},
+  options: t.CrdtDocSyncOptions<D> = {},
 ) {
+  const { syncOnStart = true } = options;
+
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => ensureDisposed());
@@ -64,6 +59,7 @@ export function init<D extends {}>(
    */
   const api: t.CrdtDocSync<D> = {
     doc,
+    update: syncer.update,
 
     get count() {
       return syncer.count;
@@ -82,5 +78,6 @@ export function init<D extends {}>(
     },
   };
 
+  if (syncOnStart) api.update();
   return api;
 }

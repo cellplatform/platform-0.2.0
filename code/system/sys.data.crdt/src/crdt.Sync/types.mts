@@ -1,6 +1,14 @@
 import type { t } from '../common.t';
 
 type Id = string;
+type Milliseconds = number;
+
+export type CrdtDocSyncOptions<D extends {}> = {
+  dispose$?: t.Observable<any>;
+  onChange?: t.CrdtDocRefChangeHandler<D>;
+  debounce?: Milliseconds;
+  syncOnStart?: boolean;
+};
 
 /**
  * Extends a CRDT [DocRef] with peer-sync capabilities.
@@ -10,6 +18,7 @@ export type CrdtDocSync<D extends {}> = {
   readonly doc: t.CrdtDocRef<D>;
   readonly isDisposed: boolean;
   readonly dispose$: t.Observable<any>;
+  update: PeerSyncer['update'];
   dispose(): Promise<void>;
 };
 

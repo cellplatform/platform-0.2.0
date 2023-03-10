@@ -100,7 +100,6 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
   e.describe('sync', (e) => {
     e.it('syncs between [docA] and [docB]', async (e) => {
       const mock = ConnectionMock();
-
       const docA = DocRef.init<D>({ count: 0 });
       const docB = DocRef.init<D>({ count: 0 });
 
@@ -132,6 +131,65 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
 
       expect(syncerA.count).to.eql(4);
       expect(syncerB.count).to.eql(4);
+
+      mock.dispose();
+      syncerA.dispose();
+      syncerB.dispose();
+    });
+
+    e.it('syncOnStart: true (default)', async (e) => {
+      const mock = ConnectionMock();
+      const docA = DocRef.init<D>({ count: 0 });
+      const docB = DocRef.init<D>({ count: 0 });
+
+      // NB: make some changes before syncer init.
+      docA.change((d) => d.count++);
+      docA.change((d) => d.count++);
+      docA.change((d) => d.count++);
+
+      expect(docA.current.count).to.eql(3);
+      expect(docB.current.count).to.eql(0);
+
+      const debounce = 0;
+      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+
+      await Time.wait(50);
+      expect(docA.current.count).to.eql(3);
+      expect(docB.current.count).to.eql(3); // NB: Sync has occured (automatically)
+
+      mock.dispose();
+      syncerA.dispose();
+      syncerB.dispose();
+    });
+
+    e.it('syncOnStart: false', async (e) => {
+      const mock = ConnectionMock();
+      const docA = DocRef.init<D>({ count: 0 });
+      const docB = DocRef.init<D>({ count: 0 });
+
+      // NB: make some changes before syncer init.
+      docA.change((d) => d.count++);
+      docA.change((d) => d.count++);
+      docA.change((d) => d.count++);
+
+      expect(docA.current.count).to.eql(3);
+      expect(docB.current.count).to.eql(0);
+
+      const options: t.CrdtDocSyncOptions<D> = { debounce: 0, syncOnStart: false };
+      const syncerA = DocSync.init<D>(mock.a.bus, docA, options);
+      const syncerB = DocSync.init<D>(mock.b.bus, docB, options);
+
+      await Time.wait(50);
+      expect(docA.current.count).to.eql(3);
+      expect(docB.current.count).to.eql(0); // NB: Sync not initiated.
+
+      // Initiate the sync manually.
+      syncerA.update();
+
+      await Time.wait(50);
+      expect(docA.current.count).to.eql(3);
+      expect(docB.current.count).to.eql(3);
 
       mock.dispose();
       syncerA.dispose();
