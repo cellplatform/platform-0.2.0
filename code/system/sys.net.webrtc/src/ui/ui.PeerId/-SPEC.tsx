@@ -40,6 +40,7 @@ export default Dev.describe('PeerId', (e) => {
       dev.button('none', (e) => e.change((d) => (d.props.abbreviate = false)));
       dev.button('6 chars', (e) => e.change((d) => (d.props.abbreviate = 6)));
       dev.button('[4, 4] chars', (e) => e.change((d) => (d.props.abbreviate = [4, 4])));
+      dev.button('[3, 6] chars', (e) => e.change((d) => (d.props.abbreviate = [3, 6])));
     });
 
     dev.hr();
@@ -50,6 +51,11 @@ export default Dev.describe('PeerId', (e) => {
         .value((e) => e.state.props.copyOnClick)
         .onClick((e) => e.change((d) => (local.copyOnClick = Dev.toggle(d.props, 'copyOnClick')))),
     );
+
+    dev.hr(-1, 5);
+
+    dev.button('prefix: "me"', (e) => e.change((d) => (d.props.prefix = '  me:  ')));
+    dev.button('prefix: none', (e) => e.change((d) => (d.props.prefix = undefined)));
 
     dev.hr();
 
@@ -63,7 +69,6 @@ export default Dev.describe('PeerId', (e) => {
             .onClick((e) => e.change((d) => (d.props.fontSize = value))),
         );
       };
-
       fontsize(8);
       fontsize(undefined, `${PeerId.DEFAULTS.fontSize}px (undefined → default)`);
       fontsize(24);

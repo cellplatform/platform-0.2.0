@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, Icons } from '../common';
 
-type Milliseconds = number;
-
 export type PeerCopiedProps = {
   message?: string;
   style?: t.CssValue;
 };
 
 export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
-  const { message = 'Your Local Peer Copied' } = props;
-
-  const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
+  const { message = 'Local Peer Copied' } = props;
 
   /**
    * [Render]

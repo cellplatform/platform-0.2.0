@@ -1,28 +1,42 @@
 import { useEffect, useState } from 'react';
 
-import { Color, copyPeer, css, MediaStream, t, useMouseState, Spinner } from '../common';
-import { PeerId } from '../ui.PeerId';
+import { Color, copyPeer, css, FC, MediaStream, Spinner, t, useMouseState } from '../common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
+import { PeerVideoFooter } from './ui.PeerVideo.Footer';
 
 export type PeerVideoProps = {
   self?: t.Peer;
+  remotePeer?: t.PeerId;
   mediaHeight?: number;
   muted?: boolean;
   spinning?: boolean;
+  showPeer?: boolean;
+  showConnect?: boolean;
   style?: t.CssValue;
   onMuteClick?(e: React.MouseEvent): void;
+  onRemotePeerChanged?: t.PeerVideoRemoteChangedHandler;
+  onConnectRequest?: t.PeerVideoConnectRequestHandler;
+};
+
+const DEFAULTS = {
+  showPeer: true,
+  showConnect: true,
 };
 
 const URL = {
-  Allen:
-    'https://user-images.githubusercontent.com/185555/206985006-18bf5e3c-b6f2-4a47-8036-9513e842797e.png',
   Rowan:
     'https://user-images.githubusercontent.com/185555/220252528-49154284-88e2-46aa-9544-2dff1c7a44a8.png',
 };
 
-export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
-  const { self, mediaHeight = 250, muted = false } = props;
+const View: React.FC<PeerVideoProps> = (props) => {
+  const {
+    self,
+    mediaHeight = 250,
+    muted = false,
+    showPeer = DEFAULTS.showPeer,
+    showConnect = DEFAULTS.showConnect,
+  } = props;
   const [showCopied, setShowCopied] = useState(false);
   const isSpinning = props.spinning ? true : !self;
 
@@ -42,7 +56,7 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handleCopyPeer = () => {
+  const handlePeerCopied = () => {
     if (!self) return;
     copyPeer(self.id);
     setShowCopied(true);
@@ -87,6 +101,7 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
     }),
+    footer: css({}),
   };
 
   const elVideo = cameraConnection && (
@@ -118,13 +133,33 @@ export const PeerVideo: React.FC<PeerVideoProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
       <div {...styles.video.base}>
-        <div {...styles.video.bg} onClick={handleCopyPeer} />
+        <div {...styles.video.bg} onClick={handlePeerCopied} />
         {elVideo}
         {elMediaControls}
         {elPeerCopied}
         {elSpinner}
       </div>
-      <div {...styles.peer}>{self && <PeerId peer={self.id} onClick={handleCopyPeer} />}</div>
+      <PeerVideoFooter
+        style={styles.footer}
+        self={self}
+        remotePeer={props.remotePeer}
+        showPeer={showPeer}
+        showConnect={showConnect}
+        spinning={props.spinning}
+        onLocalPeerCopied={handlePeerCopied}
+        onRemotePeerChanged={props.onRemotePeerChanged}
+        onConnectRequest={props.onConnectRequest}
+      />
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = { DEFAULTS: typeof DEFAULTS };
+export const PeerVideo = FC.decorate<PeerVideoProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'PeerVideo' },
+);

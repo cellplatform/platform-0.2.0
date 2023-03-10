@@ -44,6 +44,7 @@ export const Row: React.FC<RowProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         <RowThumbnail
+          isSelf={true}
           peer={localPeer}
           stream={localStream}
           size={thumbnailSize}

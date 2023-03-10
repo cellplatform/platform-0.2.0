@@ -5,13 +5,14 @@ import { PeerId } from '../ui.PeerId';
 export type RowThumbnailProps = {
   peer: t.PeerId;
   stream?: MediaStream;
+  isSelf?: boolean;
   size?: number;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
-  const { stream, size = 50 } = props;
+  const { stream, size = 50, isSelf = false } = props;
   const [ready, setReady] = useState(false);
 
   /**
@@ -67,6 +68,7 @@ export const RowThumbnail: React.FC<RowThumbnailProps> = (props) => {
     <PeerId
       style={styles.peerId}
       peer={props.peer}
+      prefix={isSelf ? 'me' : undefined}
       fontSize={8}
       abbreviate={4}
       onClick={() => copyPeer(props.peer)}
