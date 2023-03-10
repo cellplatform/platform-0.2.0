@@ -1,4 +1,4 @@
-import { rx, cuid, R, t } from './common';
+import { rx, t } from './common';
 
 /**
  * Helpers that wait for a specific observable event.
