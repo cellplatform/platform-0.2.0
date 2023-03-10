@@ -1,17 +1,18 @@
 import { PeerVideo, PeerVideoProps } from '.';
-import { COLORS, Dev, t, TestNetwork, TestNetworkP2P, Time } from '../../test.ui';
+import { COLORS, Dev, t, TestNetwork, TestNetworkP2P, Time, Crdt, Filesystem } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
 
 type T = {
-  self?: t.Peer;
   remote?: t.Peer;
   props: PeerVideoProps;
-  debug: { showBg: boolean };
+  debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
   props: { showPeer: true, showConnect: true },
-  debug: { showBg: true },
+  debug: { showBg: true, redraw: 0 },
 };
+
+type Doc = { count: number };
 
 export default Dev.describe('PeerVideo', async (e) => {
   e.timeout(9999);
@@ -21,14 +22,40 @@ export default Dev.describe('PeerVideo', async (e) => {
   const local = localstore.object({ muted: true, showBg: initial.debug.showBg });
 
   let network: TestNetworkP2P;
+  let docRef: t.CrdtDocRef<Doc>;
+
+  const fs = (await Filesystem.client({})).fs;
+  const filedir = fs.dir('dev-peer-video');
+
+  e.it('init:crdt', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+    const redraw = () => state.change((d) => d.debug.redraw++);
+
+    docRef = Crdt.Doc.ref<Doc>({ count: 0 });
+    await Crdt.Doc.file<Doc>(filedir, docRef, { autosave: true });
+
+    docRef.$.subscribe(redraw);
+    redraw();
+  });
 
   e.it('init:ui', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.muted = local.muted;
       d.debug.showBg = local.showBg;
+      d.props.muted = local.muted;
+      d.props.showPeer = local.showPeer;
+      d.props.showConnect = local.showConnect;
     });
+
+    const toggleMute = () => {
+      return state.change((d) => {
+        const next = !d.props.muted;
+        d.props.muted = next;
+        local.muted = next;
+      });
+    };
 
     ctx.subject
       .display('grid')
@@ -39,6 +66,7 @@ export default Dev.describe('PeerVideo', async (e) => {
           <PeerVideo
             {...e.state.props}
             style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
+            onMuteClick={toggleMute}
             onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
             onConnectRequest={async (e) => {
               const self = network.peerA;
@@ -55,12 +83,13 @@ export default Dev.describe('PeerVideo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        self: e.state.self,
+        Self: e.state.props.self,
+        'Doc<T>': docRef?.current,
       };
       return <Dev.Object name={'PeerVideo'} data={data} expand={1} />;
     });
 
-    // Debug.
+    // Debug
     dev.section((dev) => {
       dev.boolean((btn) =>
         btn
@@ -84,6 +113,13 @@ export default Dev.describe('PeerVideo', async (e) => {
           .value((e) => e.state.props.showConnect ?? PeerVideo.DEFAULTS.showConnect)
           .onClick((e) => e.change((d) => (local.showBg = Dev.toggle(d.props, 'showConnect')))),
       );
+
+      dev.hr(-1, 5);
+      const count = (label: string, by: number) => {
+        dev.button(label, (e) => docRef.change((d) => (d.count += by)));
+      };
+      count('increment', 1);
+      count('decrement', -1);
     });
 
     dev.hr(5, 20);
@@ -92,9 +128,9 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.button((btn) =>
         btn
           .label('connect')
-          .enabled((e) => (e.state.self?.connections.length ?? 0) === 0)
+          .enabled((e) => (e.state.props.self?.connections.length ?? 0) === 0)
           .right((e) => {
-            const self = e.state.self;
+            const self = e.state.props.self;
             if (!self) return '';
             return self.connections.length === 0 ? '←' : '';
           })
@@ -114,9 +150,9 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.button((btn) =>
         btn
           .label('disconnect')
-          .enabled((e) => (e.state.self?.connections.length ?? 0) > 0)
+          .enabled((e) => (e.state.props.self?.connections.length ?? 0) > 0)
           .right((e) => {
-            const self = e.state.self;
+            const self = e.state.props.self;
             if (!self) return '';
             return self.connections.length > 0 ? '←' : '';
           })
@@ -129,7 +165,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     dev.hr(5, [20, 50]);
 
     dev.row((e) => {
-      const self = e.state.self;
+      const self = e.state.props.self;
       return self ? <PeerList self={self} style={{ MarginX: 35 }} /> : null;
     });
   });
@@ -138,7 +174,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     const update = async (d: T) => {
-      d.self = network.peerA;
+      d.props.self = network.peerA;
       d.remote = network.peerB;
       d.props.self = network.peerA;
     };
