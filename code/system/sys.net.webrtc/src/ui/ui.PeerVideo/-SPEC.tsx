@@ -1,17 +1,18 @@
 import { PeerVideo, PeerVideoProps } from '.';
 import {
-  rx,
   COLORS,
+  Crdt,
   Dev,
+  Filesystem,
+  rx,
   t,
   TestNetwork,
   TestNetworkP2P,
   Time,
-  Crdt,
-  Filesystem,
   WebRTC,
 } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
+import { Controller, NetworkState } from './-dev/Controller.mjs';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -27,8 +28,8 @@ const initial: T = {
 type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
-type DocShared = { count: number; peers: string[] };
-const initialSharedDoc: DocShared = { count: 0, peers: [] };
+type DocShared = { count: number; network: NetworkState };
+const initialSharedDoc: DocShared = { count: 0, network: { peers: [] } };
 
 export default Dev.describe('PeerVideo', async (e) => {
   e.timeout(1000 * 30);
@@ -56,31 +57,34 @@ export default Dev.describe('PeerVideo', async (e) => {
 
   async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
     const updateSelf = () => state.change((d) => (d.props.self = self));
-    const redraw = () => state.change((d) => d.debug.redraw++);
 
     network = await TestNetwork.init();
     self = network.peerA;
     self.connections$.subscribe(updateSelf);
     updateSelf();
 
+    Controller.listen({
+      self,
+      state: docShared,
+      filedir: dirs.shared,
+      dispose$,
+    });
+
     const changed = WebRTC.Util.connections.changed(self, dispose$);
     const added$ = changed.data.added$;
     const removed$ = changed.data.removed$;
 
-    /**
-     * Setup "sync protocol" on newly added data-connections.
-     */
-    added$.subscribe((conn) => {
-      const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
-      const filedir = dirs.shared;
-      Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
-
-      docShared.change((d) => {
-        const peers = d.peers ?? (d.peers = []);
-        const remotePeerId = conn.peer.remote;
-        if (!peers.includes(remotePeerId)) peers.push(remotePeerId);
-      });
-    });
+    // /**
+    //  * Setup "sync protocol" on newly added data-connections.
+    //  */
+    // added$.subscribe((conn) => {
+    //   const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
+    //   const filedir = dirs.shared;
+    //   Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
+    //   docShared.change((d) => {
+    //     Controller.mutate.addPeer(d.network, conn.peer.remote);
+    //   });
+    // });
   }
 
   e.it('init:crdt', async (e) => {
@@ -136,8 +140,12 @@ export default Dev.describe('PeerVideo', async (e) => {
 
               await Promise.all([
                 self?.data(e.remote), //             <== Start (data).
-                // self.media(e.remote, 'camera'), //  <== Start (camera).
+                self?.media(e.remote, 'camera'), //  <== Start (camera).
               ]);
+
+              docShared.change((d) => {
+                Controller.mutate.addPeer(d.network, e.remote);
+              });
 
               state.change((d) => (d.props.spinning = false));
             }}
@@ -157,7 +165,7 @@ export default Dev.describe('PeerVideo', async (e) => {
         <Dev.Object
           fontSize={11}
           name={'PeerVideo'}
-          expand={{ level: 1, paths: ['$.Doc<Shared>'] }}
+          expand={{ level: 1, paths: ['$.Doc<Shared>', '$.Doc<Shared>.network'] }}
           data={{
             [`Peer<Me>[${total}]`]: self,
             'Doc<Me>': docMe?.current,
@@ -194,7 +202,6 @@ export default Dev.describe('PeerVideo', async (e) => {
           ),
       );
     });
-    // dev.hr(-1, 5);
 
     dev.hr(5, 20);
 
@@ -209,7 +216,13 @@ export default Dev.describe('PeerVideo', async (e) => {
       };
       count('count: increment', 1);
       count('count: decrement', -1);
-      //
+      dev.hr(-1, 5);
+      dev.button('reset', (e) =>
+        docShared.change((d) => {
+          d.count = 0;
+          d.network.peers = [];
+        }),
+      );
     });
 
     dev.hr(5, 20);
