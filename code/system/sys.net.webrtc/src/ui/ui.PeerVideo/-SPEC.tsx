@@ -20,10 +20,7 @@ type T = {
   debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
-  props: {
-    showPeer: DEFAULTS.showPeer,
-    showConnect: DEFAULTS.showConnect,
-  },
+  props: { showPeer: DEFAULTS.showPeer, showConnect: DEFAULTS.showConnect },
   debug: { showBg: true, redraw: 0 },
 };
 
