@@ -1,7 +1,7 @@
 import { Path, PeerJS, rx, t, WebRTCUtil } from './common';
 import { MemoryState } from './WebRTC.state.mjs';
 
-type Options = { id?: t.PeerId; getStream?: t.PeerGetMediaStream };
+type Options = { id?: t.PeerId; getStream?: t.PeerGetMediaStream; silent?: boolean };
 type SignalServer = {
   host: string;
   path: string;
@@ -20,6 +20,14 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     const key = endpoint.key;
     const host = Path.trimHttpPrefix(endpoint.host);
     const path = `/${Path.trimSlashes(endpoint.path)}`;
+
+    if (!options.silent) {
+      console.group('🔒 Peer Connection (WebRTC)');
+      console.info('host:', host);
+      console.info('path:', path);
+      console.info('key:', key);
+      console.groupEnd();
+    }
 
     const rtc = new PeerJS(id, {
       host,

@@ -54,6 +54,35 @@ export default Dev.describe('PeerVideo', async (e) => {
     shared: fs.dir('dev.doc.shared'),
   };
 
+  async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
+    const updateSelf = () => state.change((d) => (d.props.self = self));
+    const redraw = () => state.change((d) => d.debug.redraw++);
+
+    network = await TestNetwork.init();
+    self = network.peerA;
+    self.connections$.subscribe(updateSelf);
+    updateSelf();
+
+    const changed = WebRTC.Util.connections.changed(self, dispose$);
+    const added$ = changed.data.added$;
+    const removed$ = changed.data.removed$;
+
+    /**
+     * Setup "sync protocol" on newly added data-connections.
+     */
+    added$.subscribe((conn) => {
+      const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
+      const filedir = dirs.shared;
+      Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
+
+      docShared.change((d) => {
+        const peers = d.peers ?? (d.peers = []);
+        const remotePeerId = conn.peer.remote;
+        if (!peers.includes(remotePeerId)) peers.push(remotePeerId);
+      });
+    });
+  }
+
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
     const dispose$ = ctx.dispose$;
@@ -98,16 +127,15 @@ export default Dev.describe('PeerVideo', async (e) => {
         return (
           <PeerVideo
             {...e.state.props}
-            self={network.peerA}
+            self={self}
             style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
             onMuteClick={toggleMute}
             onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
             onConnectRequest={async (e) => {
-              const self = network.peerA;
-              state.change((d) => (d.props.spinning = true));
+              state?.change((d) => (d.props.spinning = true));
 
               await Promise.all([
-                self.data(e.remote), //             <== Start (data).
+                self?.data(e.remote), //             <== Start (data).
                 // self.media(e.remote, 'camera'), //  <== Start (camera).
               ]);
 
@@ -232,31 +260,6 @@ export default Dev.describe('PeerVideo', async (e) => {
   e.it('init:network', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const updateSelf = () => state.change((d) => (d.props.self = self));
-    const redraw = () => state.change((d) => d.debug.redraw++);
-
-    network = await TestNetwork.init();
-    self = network.peerA;
-    self.connections$.subscribe(updateSelf);
-    updateSelf();
-
-    const changed = WebRTC.Util.connections.changed(self, ctx.dispose$);
-    const added$ = changed.data.added$;
-    const removed$ = changed.data.removed$;
-
-    /**
-     * Setup "sync protocol" on newly added data-connections.
-     */
-    added$.subscribe((conn) => {
-      const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
-      const filedir = dirs.shared;
-      Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
-
-      docShared.change((d) => {
-        const peers = d.peers ?? (d.peers = []);
-        const remotePeerId = conn.peer.remote;
-        if (!peers.includes(remotePeerId)) peers.push(remotePeerId);
-      });
-    });
+    await initNetwork(state, ctx.dispose$);
   });
 });

@@ -102,7 +102,7 @@ const Wrangle = {
   },
 
   peerText(props: PeerIdProps) {
-    if (!props.peer) return 'peer:loading...';
+    if (!props.peer) return 'peer:initiating...';
     const id = Wrangle.id(props);
     const prefix = (props.prefix ?? '').trim();
     return prefix ? `${prefix.replace(/\:$/, '')}:${id}` : WebRTC.Util.asUri(id);
