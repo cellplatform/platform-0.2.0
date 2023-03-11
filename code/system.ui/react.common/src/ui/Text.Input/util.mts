@@ -7,10 +7,6 @@ import { ValueUtil as value } from './util.value.mjs';
  */
 export const Util = {
   value,
-
-  /**
-   * CSS helpers.
-   */
   css: {
     ...CssUtil,
     toWidth,
