@@ -1,25 +1,33 @@
 import { Path, PeerJS, rx, t, WebRTCUtil } from './common';
 import { MemoryState } from './WebRTC.state.mjs';
 
-type HostName = string;
 type Options = { id?: t.PeerId; getStream?: t.PeerGetMediaStream };
+type SignalServer = {
+  host: string;
+  path: string;
+  key: string;
+};
 
 /**
  * Start a new local peer.
  */
-export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
+export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.Peer> {
   return new Promise<t.Peer>((resolve, reject) => {
-    signal = Path.trimHttpPrefix(signal);
     const { getStream } = options;
+
     const state = MemoryState();
     const id = WebRTCUtil.asId(options.id ?? WebRTCUtil.randomPeerId());
+    const key = endpoint.key;
+    const host = Path.trimHttpPrefix(endpoint.host);
+    const path = `/${Path.trimSlashes(endpoint.path)}`;
+
     const rtc = new PeerJS(id, {
-      key: 'conn',
-      path: '/',
+      host,
+      path,
+      key,
       secure: true,
       port: 443,
       debug: 2,
-      host: signal,
     });
 
     const { dispose, dispose$ } = rx.disposable();
@@ -32,7 +40,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
 
     const api: t.Peer = {
       kind: 'local:peer',
-      signal,
+      signal: host,
       id,
 
       connections$: state.connections$,

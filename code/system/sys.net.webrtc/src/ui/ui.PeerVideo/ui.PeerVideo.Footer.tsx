@@ -48,7 +48,7 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
     }),
     input: {
       outer: css({
-        Padding: [5, 5, 5, 3],
+        Padding: 5,
         display: 'grid',
         gridTemplateColumns: 'auto 1fr auto',
       }),
@@ -103,7 +103,7 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
       <div {...styles.input.textbox}>
         <TextInput
           value={props.remotePeer}
-          valueStyle={{ fontSize: 13, color: Color.alpha(COLORS.DARK, isConnected ? 0.3 : 1) }}
+          valueStyle={{ fontSize: 13, color: Color.alpha(COLORS.DARK, 1) }}
           placeholder={'connect to remote peer'}
           placeholderStyle={{ opacity: 0.3, italic: true }}
           focusAction={'Select'}

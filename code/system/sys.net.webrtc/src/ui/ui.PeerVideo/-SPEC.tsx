@@ -27,11 +27,11 @@ const initial: T = {
 type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
-type DocShared = { count: number };
-const initialSharedDoc: DocShared = { count: 0 };
+type DocShared = { count: number; peers: string[] };
+const initialSharedDoc: DocShared = { count: 0, peers: [] };
 
 export default Dev.describe('PeerVideo', async (e) => {
-  e.timeout(9999);
+  e.timeout(1000 * 30);
 
   type LocalStore = { muted: boolean; showBg: boolean; showPeer?: boolean; showConnect?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerVideo');
@@ -43,6 +43,7 @@ export default Dev.describe('PeerVideo', async (e) => {
   });
 
   let network: TestNetworkP2P;
+  let self: t.Peer | undefined;
   let docMe: t.CrdtDocRef<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
 
@@ -59,12 +60,17 @@ export default Dev.describe('PeerVideo', async (e) => {
     const state = await ctx.state<T>(initial);
     const redraw = () => state.change((d) => d.debug.redraw++);
 
+    // Initialize CRDT documents.
     docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
     docShared = Crdt.Doc.ref<DocShared>(initialSharedDoc, { dispose$ });
 
+    // Start file-persistence.
     await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
-    // await Crdt.Doc.file<DocMe>(dirs.shared, docShared, { autosave: true });
+    await Crdt.Doc.file<DocMe>(dirs.shared, docShared, { autosave: true });
 
+    // NB: See: "init:network" (below) for network-sychronization-protocol startup (P2P).
+
+    // Listen.
     docMe.$.subscribe(redraw);
     docShared.$.subscribe(redraw);
     redraw();
@@ -92,6 +98,7 @@ export default Dev.describe('PeerVideo', async (e) => {
         return (
           <PeerVideo
             {...e.state.props}
+            self={network.peerA}
             style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
             onMuteClick={toggleMute}
             onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
@@ -115,7 +122,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const self = e.state.props.self;
+      const self = network?.peerA;
       const total = self?.connections.length ?? 0;
 
       return (
@@ -124,7 +131,7 @@ export default Dev.describe('PeerVideo', async (e) => {
           name={'PeerVideo'}
           expand={{ level: 1, paths: ['$.Doc<Shared>'] }}
           data={{
-            [`Peer<Self>[${total}]`]: self,
+            [`Peer<Me>[${total}]`]: self,
             'Doc<Me>': docMe?.current,
             'Doc<Shared>': docShared?.current,
           }}
@@ -158,8 +165,12 @@ export default Dev.describe('PeerVideo', async (e) => {
             e.change((d) => (local.showConnect = Dev.toggle(d.props, 'showConnect'))),
           ),
       );
+    });
+    // dev.hr(-1, 5);
 
-      dev.hr(-1, 5);
+    dev.hr(5, 20);
+
+    dev.section('Doc<Shared>', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -170,6 +181,7 @@ export default Dev.describe('PeerVideo', async (e) => {
       };
       count('count: increment', 1);
       count('count: decrement', -1);
+      //
     });
 
     dev.hr(5, 20);
@@ -178,9 +190,8 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.button((btn) =>
         btn
           .label('connect')
-          .enabled((e) => (e.state.props.self?.connections.length ?? 0) === 0)
+          .enabled((e) => (self?.connections.length ?? 0) === 0)
           .right((e) => {
-            const self = e.state.props.self;
             if (!self) return '';
             return self.connections.length === 0 ? '←' : '';
           })
@@ -200,9 +211,8 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.button((btn) =>
         btn
           .label('disconnect')
-          .enabled((e) => (e.state.props.self?.connections.length ?? 0) > 0)
+          .enabled((e) => (self?.connections.length ?? 0) > 0)
           .right((e) => {
-            const self = e.state.props.self;
             if (!self) return '';
             return self.connections.length > 0 ? '←' : '';
           })
@@ -215,7 +225,6 @@ export default Dev.describe('PeerVideo', async (e) => {
     dev.hr(5, [20, 50]);
 
     dev.row((e) => {
-      const self = e.state.props.self;
       return self ? <PeerList self={self} style={{ MarginX: 35 }} /> : null;
     });
   });
@@ -223,11 +232,11 @@ export default Dev.describe('PeerVideo', async (e) => {
   e.it('init:network', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const updateSelf = () => state.change((d) => (d.props.self = network.peerA));
+    const updateSelf = () => state.change((d) => (d.props.self = self));
+    const redraw = () => state.change((d) => d.debug.redraw++);
 
     network = await TestNetwork.init();
-
-    const self = network.peerA;
+    self = network.peerA;
     self.connections$.subscribe(updateSelf);
     updateSelf();
 
@@ -242,6 +251,12 @@ export default Dev.describe('PeerVideo', async (e) => {
       const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
       const filedir = dirs.shared;
       Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
+
+      docShared.change((d) => {
+        const peers = d.peers ?? (d.peers = []);
+        const remotePeerId = conn.peer.remote;
+        if (!peers.includes(remotePeerId)) peers.push(remotePeerId);
+      });
     });
   });
 });
