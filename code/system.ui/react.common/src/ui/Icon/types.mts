@@ -12,6 +12,7 @@ export type IconProps = {
   size?: number;
   color?: number | string;
   opacity?: number;
+  tooltip?: string;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
   onDoubleClick?: React.MouseEventHandler;

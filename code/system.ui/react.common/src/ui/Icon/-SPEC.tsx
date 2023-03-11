@@ -1,14 +1,14 @@
+import { COLORS, css, Dev } from '../../test.ui';
 import { Icons } from '../Icons.mjs';
-import type { IconProps } from '.';
 
-import { Dev, COLORS, Color, css } from '../../test.ui';
+import type { IconProps } from '.';
 
 type T = {
   props: IconProps;
   debug: { inheritColor: boolean };
 };
 const initial: T = {
-  props: {},
+  props: { tooltip: 'Hello' },
   debug: { inheritColor: true },
 };
 
@@ -16,6 +16,7 @@ export default Dev.describe('Icon', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
+
     ctx.subject
       .backgroundColor(1)
       .display('grid')
@@ -57,7 +58,15 @@ export default Dev.describe('Icon', (e) => {
       color('cyan', COLORS.CYAN);
       color('blue', COLORS.BLUE);
       color('red', COLORS.RED);
+      dev.hr(-1, 5);
       color('<undefined> - inherit');
+    });
+
+    dev.hr();
+
+    dev.section('tooltip', (dev) => {
+      dev.button('"Hello"', (e) => e.change((d) => (d.props.tooltip = 'Hello')));
+      dev.button('none', (e) => e.change((d) => (d.props.tooltip = undefined)));
     });
   });
 });

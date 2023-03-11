@@ -26,6 +26,7 @@ export const IconView: React.FC<IconViewProps> = (props) => {
     <div
       {...css(styles.base, props.style)}
       tabIndex={props.tabIndex}
+      title={props.tooltip}
       onClick={props.onClick}
       onDoubleClick={props.onDoubleClick}
       onMouseDown={props.onMouseDown}
