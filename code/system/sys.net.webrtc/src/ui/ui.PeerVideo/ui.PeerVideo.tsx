@@ -43,6 +43,9 @@ const View: React.FC<PeerVideoProps> = (props) => {
   const mouse = useMouseState();
 
   // TEMP 🐷
+  /**
+   * TODO 🐷
+   */
   const cameraConnection = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
 
   /**
