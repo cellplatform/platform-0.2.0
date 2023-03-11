@@ -1,4 +1,4 @@
-import { Path, PeerJS, rx, t, Util } from './common';
+import { Path, PeerJS, rx, t, WebRTCUtil } from './common';
 import { MemoryState } from './WebRTC.state.mjs';
 
 type HostName = string;
@@ -12,7 +12,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
     signal = Path.trimHttpPrefix(signal);
     const { getStream } = options;
     const state = MemoryState();
-    const id = Util.asId(options.id ?? Util.randomPeerId());
+    const id = WebRTCUtil.asId(options.id ?? WebRTCUtil.randomPeerId());
     const rtc = new PeerJS(id, {
       key: 'conn',
       path: '/',
@@ -40,7 +40,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
         return state.connections;
       },
       get connectionsByPeer() {
-        return Util.connections.byPeer(id, state.connections.all);
+        return WebRTCUtil.connections.byPeer(id, state.connections.all);
       },
 
       /**
@@ -48,7 +48,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
        */
       data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
-          const id = Util.asId(connectTo);
+          const id = WebRTCUtil.asId(connectTo);
           const name = options.name ?? 'Unnamed';
           const metadata: t.PeerMetaData = { name };
           const conn = rtc.connect(id, { reliable: true, metadata });
@@ -74,7 +74,7 @@ export function peer(signal: HostName, options: Options = {}): Promise<t.Peer> {
             resolve(res);
           };
 
-          const id = Util.asId(connectTo);
+          const id = WebRTCUtil.asId(connectTo);
           const metadata: t.PeerMetaMedia = { input };
           const stream = await getStream(input);
           const local = stream?.media;

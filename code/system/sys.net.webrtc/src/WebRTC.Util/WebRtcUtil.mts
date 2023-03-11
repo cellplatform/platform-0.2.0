@@ -5,7 +5,7 @@ import { identity } from './util.identity.mjs';
 import { isType } from './util.isType.mjs';
 import { waitFor } from './util.waitFor.mjs';
 
-export const Util = {
+export const WebRTCUtil = {
   ...identity,
 
   waitFor,

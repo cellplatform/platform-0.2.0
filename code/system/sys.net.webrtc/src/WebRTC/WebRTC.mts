@@ -1,7 +1,7 @@
 import type { Automerge } from 'sys.data.crdt';
 export type { Automerge };
 
-import { Util } from '../WebRTC.Util';
+import { WebRTCUtil } from '../WebRTC.Util';
 import { peer } from './WebRTC.peer.mjs';
 import { Media } from './Media.mjs';
 
@@ -9,7 +9,7 @@ import { Media } from './Media.mjs';
  * Library for working with WebRTC peer-to-peer connections.
  */
 export const WebRTC = {
-  Util,
+  Util: WebRTCUtil,
   Media,
   peer,
 };
