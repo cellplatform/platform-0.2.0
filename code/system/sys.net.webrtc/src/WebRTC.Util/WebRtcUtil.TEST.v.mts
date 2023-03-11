@@ -1,5 +1,5 @@
 import { describe, it, expect, t } from '../test';
-import { Util } from './Util.mjs';
+import { Util } from '.';
 
 describe('WebRTC.Util', () => {
   it('randomPeerId', (e) => {

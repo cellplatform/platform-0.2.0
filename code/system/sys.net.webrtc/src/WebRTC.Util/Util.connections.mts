@@ -1,5 +1,5 @@
 import { R, rx, t } from './common';
-import { filter } from './Util.filter.mjs';
+import { filter } from './util.filter.mjs';
 
 const noop$ = new rx.Subject<void>(); // no-op observable.
 
