@@ -11,10 +11,10 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@vimeo/player": "^2.18.0",
-    "framer-motion": "^10.2.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@vimeo/player": "2.18.0",
+    "framer-motion": "10.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "sys.fs": "0.0.0",
     "sys.types": "0.0.0",
     "sys.ui.react.common": "0.0.0",
@@ -23,7 +23,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
-    "@types/vimeo__player": "^2.16.3",
+    "@types/vimeo__player": "2.16.3",
     "sys.test": "0.0.0",
     "sys.ui.react.dev": "0.0.0"
   },
