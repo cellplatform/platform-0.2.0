@@ -175,4 +175,24 @@ describe('rx', () => {
       });
     });
   });
+
+  describe('rx.isObservable', () => {
+    it('is an observable', () => {
+      const $ = new rx.Subject<string>() as unknown;
+      expect(rx.isObservable($)).to.eql(true);
+      if (rx.isObservable<string>($)) {
+        $.subscribe(); // NB: observable type inferred.
+      }
+    });
+
+    it('is not observable', () => {
+      [undefined, null, 0, true, [], {}, 'a'].forEach((value) => {
+        expect(rx.isObservable(value)).to.eql(false);
+      });
+    });
+
+    it('exposed from rx.bus', () => {
+      expect(rx.isObservable).to.equal(rx.bus.isObservable);
+    });
+  });
 });

@@ -10,7 +10,8 @@ export type BusFactory = <T extends E = E>(
 ) => t.EventBus<T>;
 
 export type Bus = BusFactory & {
-  isBus(input: any): boolean;
+  isBus<T extends E = E>(input?: any): input is t.EventBus<T>;
+  isObservable<T = any>(input?: any): input is t.Observable<T>;
   asType<T extends E>(bus: t.EventBus<any>): t.EventBus<T>;
   instance(bus: t.EventBus<any>): string;
   connect<T extends E>(buses: t.EventBus<any>[], options?: t.BusConnectOptions): BusConnection<T>;

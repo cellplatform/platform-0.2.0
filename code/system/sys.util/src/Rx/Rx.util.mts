@@ -16,9 +16,16 @@ export function busAsType<E extends t.Event>(bus: t.EventBus<any>) {
 }
 
 /**
- * Determine if the given object in an EventBus.
+ * Determine if the given object in an [EventBus].
  */
 export function isBus(input: any) {
   if (typeof input !== 'object' || input === null) return false;
   return Is.observable(input.$) && typeof input.fire === 'function';
+}
+
+/**
+ * Determine if the given object is an observable.
+ */
+export function isObservable<T = any>(input?: any): input is t.Observable<T> {
+  return Is.observable<T>(input);
 }

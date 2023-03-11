@@ -29,8 +29,8 @@ export const Is: t.Is = {
   /**
    * Determine if the given input is an observable Subject.
    */
-  subject<T = any>(input?: any): input is t.Observable<T> {
-    return Is.observable(input) && typeof input?.next === 'function';
+  subject<T = any>(input?: any): input is t.Subject<T> {
+    return Is.observable(input) && typeof (input as any)?.next === 'function';
   },
 
   /**
