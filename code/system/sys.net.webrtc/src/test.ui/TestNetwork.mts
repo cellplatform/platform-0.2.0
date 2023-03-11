@@ -41,7 +41,7 @@ export const TestNetwork = {
         let wait: Promise<any>[] = [];
 
         if (kind.includes('data')) {
-          wait.push(peerA.data(peerB.id, { name: 'Sample' }));
+          wait.push(peerA.data(peerB.id, { name: 'Test Network' }));
           wait.push(WebRTC.Util.waitFor.nextDataConnection(peerB));
         }
 
