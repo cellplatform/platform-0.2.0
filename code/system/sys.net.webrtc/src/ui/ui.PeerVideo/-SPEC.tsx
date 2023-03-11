@@ -1,41 +1,75 @@
 import { PeerVideo, PeerVideoProps } from '.';
-import { COLORS, Dev, t, TestNetwork, TestNetworkP2P, Time, Crdt, Filesystem } from '../../test.ui';
+import {
+  rx,
+  COLORS,
+  Dev,
+  t,
+  TestNetwork,
+  TestNetworkP2P,
+  Time,
+  Crdt,
+  Filesystem,
+  WebRTC,
+} from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
 
+const DEFAULTS = PeerVideo.DEFAULTS;
+
 type T = {
-  remote?: t.Peer;
   props: PeerVideoProps;
   debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
-  props: { showPeer: true, showConnect: true },
+  props: {
+    showPeer: DEFAULTS.showPeer,
+    showConnect: DEFAULTS.showConnect,
+  },
   debug: { showBg: true, redraw: 0 },
 };
 
-type Doc = { count: number };
+type DocMe = { count: number };
+const initialMeDoc: DocMe = { count: 0 };
+
+type DocShared = { count: number };
+const initialSharedDoc: DocShared = { count: 0 };
 
 export default Dev.describe('PeerVideo', async (e) => {
   e.timeout(9999);
 
   type LocalStore = { muted: boolean; showBg: boolean; showPeer?: boolean; showConnect?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerVideo');
-  const local = localstore.object({ muted: true, showBg: initial.debug.showBg });
+  const local = localstore.object({
+    muted: true,
+    showBg: initial.debug.showBg,
+    showPeer: initial.props.showPeer,
+    showConnect: initial.props.showConnect,
+  });
 
   let network: TestNetworkP2P;
-  let docRef: t.CrdtDocRef<Doc>;
+  let docMe: t.CrdtDocRef<DocMe>;
+  let docShared: t.CrdtDocRef<DocShared>;
 
-  const fs = (await Filesystem.client({})).fs;
-  const filedir = fs.dir('dev-peer-video');
+  const bus = rx.bus();
+  const fs = (await Filesystem.client({ bus })).fs;
+  const dirs = {
+    me: fs.dir('dev.doc.me'),
+    shared: fs.dir('dev.doc.shared'),
+  };
 
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
+    const dispose$ = ctx.dispose$;
     const state = await ctx.state<T>(initial);
     const redraw = () => state.change((d) => d.debug.redraw++);
 
-    docRef = Crdt.Doc.ref<Doc>({ count: 0 });
-    await Crdt.Doc.file<Doc>(filedir, docRef, { autosave: true });
+    docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
+    docShared = Crdt.Doc.ref<DocShared>(initialSharedDoc, { dispose$ });
 
-    docRef.$.subscribe(redraw);
+    await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
+    // await Crdt.Doc.file<DocMe>(dirs.shared, docShared, { autosave: true });
+
+    docMe.$.subscribe(redraw);
+    docShared.$.subscribe(redraw);
     redraw();
   });
 
@@ -50,11 +84,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     });
 
     const toggleMute = () => {
-      return state.change((d) => {
-        const next = !d.props.muted;
-        d.props.muted = next;
-        local.muted = next;
-      });
+      return state.change((d) => (local.muted = d.props.muted = !d.props.muted));
     };
 
     ctx.subject
@@ -71,7 +101,12 @@ export default Dev.describe('PeerVideo', async (e) => {
             onConnectRequest={async (e) => {
               const self = network.peerA;
               state.change((d) => (d.props.spinning = true));
-              await Promise.all([self.data(e.remote), self.media(e.remote, 'camera')]);
+
+              await Promise.all([
+                self.data(e.remote), //             <== Start (data).
+                // self.media(e.remote, 'camera'), //  <== Start (camera).
+              ]);
+
               state.change((d) => (d.props.spinning = false));
             }}
           />
@@ -81,12 +116,23 @@ export default Dev.describe('PeerVideo', async (e) => {
 
   e.it('debug panel', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        Self: e.state.props.self,
-        'Doc<T>': docRef?.current,
-      };
-      return <Dev.Object name={'PeerVideo'} data={data} expand={1} />;
+      const self = e.state.props.self;
+      const total = self?.connections.length ?? 0;
+
+      return (
+        <Dev.Object
+          fontSize={11}
+          name={'PeerVideo'}
+          expand={{ level: 1, paths: ['$.Doc<Shared>'] }}
+          data={{
+            [`Peer<Self>[${total}]`]: self,
+            'Doc<Me>': docMe?.current,
+            'Doc<Shared>': docShared?.current,
+          }}
+        />
+      );
     });
 
     // Debug
@@ -103,28 +149,35 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.boolean((btn) =>
         btn
           .label('show peer-id')
-          .value((e) => e.state.props.showPeer ?? PeerVideo.DEFAULTS.showPeer)
-          .onClick((e) => e.change((d) => (local.showBg = Dev.toggle(d.props, 'showPeer')))),
+          .value((e) => e.state.props.showPeer)
+          .onClick((e) => e.change((d) => (local.showPeer = Dev.toggle(d.props, 'showPeer')))),
       );
 
       dev.boolean((btn) =>
         btn
           .label('show connect')
           .value((e) => e.state.props.showConnect ?? PeerVideo.DEFAULTS.showConnect)
-          .onClick((e) => e.change((d) => (local.showBg = Dev.toggle(d.props, 'showConnect')))),
+          .onClick((e) =>
+            e.change((d) => (local.showConnect = Dev.toggle(d.props, 'showConnect'))),
+          ),
       );
 
       dev.hr(-1, 5);
       const count = (label: string, by: number) => {
-        dev.button(label, (e) => docRef.change((d) => (d.count += by)));
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right(by > 0 ? '(+)' : '(-)')
+            .onClick((e) => docShared.change((d) => (d.count += by))),
+        );
       };
-      count('increment', 1);
-      count('decrement', -1);
+      count('count: increment', 1);
+      count('count: decrement', -1);
     });
 
     dev.hr(5, 20);
 
-    dev.section('Programmatic Peer Connection (Test)', (dev) => {
+    dev.section('(Debug) Programmatic Peer Connection', (dev) => {
       dev.button((btn) =>
         btn
           .label('connect')
@@ -173,14 +226,25 @@ export default Dev.describe('PeerVideo', async (e) => {
   e.it('init:network', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    const update = async (d: T) => {
-      d.props.self = network.peerA;
-      d.remote = network.peerB;
-      d.props.self = network.peerA;
-    };
+    const updateSelf = () => state.change((d) => (d.props.self = network.peerA));
 
     network = await TestNetwork.init();
-    await state.change((d) => update(d));
-    network.peerA.connections$.subscribe(() => state.change((d) => update(d)));
+
+    const self = network.peerA;
+    self.connections$.subscribe(updateSelf);
+    updateSelf();
+
+    const changed = WebRTC.Util.connections.changed(self, ctx.dispose$);
+    const added$ = changed.data.added$;
+    const removed$ = changed.data.removed$;
+
+    /**
+     * Setup "sync protocol" on newly added data-connections.
+     */
+    added$.subscribe((conn) => {
+      const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
+      const filedir = dirs.shared;
+      Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
+    });
   });
 });

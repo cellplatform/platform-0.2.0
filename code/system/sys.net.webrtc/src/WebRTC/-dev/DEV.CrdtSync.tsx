@@ -57,6 +57,10 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     const changed$ = doc$.pipe(rx.filter((e) => e.action === 'change'));
     doc$.subscribe(redraw); // Ensure visual is updated.
 
+    /**
+     * TODO 🐷
+     */
+
     if (conn) {
       console.log('start syncer');
 
