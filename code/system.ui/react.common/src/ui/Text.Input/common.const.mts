@@ -43,4 +43,4 @@ export const DEFAULTS = {
   prop,
   focusActions,
   systemFont,
-};
+} as const;

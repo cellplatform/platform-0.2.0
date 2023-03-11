@@ -39,6 +39,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
           imports={props.imports}
           filter={props.filter}
           badge={props.badge}
+          hrDepth={props.hrDepth}
         />
       </div>
       <CmdBar text={props.filter} onChanged={(e) => props.onFilterChanged?.({ filter: e.to })} />

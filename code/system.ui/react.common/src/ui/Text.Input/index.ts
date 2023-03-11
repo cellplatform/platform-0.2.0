@@ -1,5 +1,5 @@
-export * from './ui.TextInput';
-export * from './TextInput.Masks.mjs';
+export { TextInput } from './ui.TextInput';
+export { TextInputMasks } from './TextInput.Masks.mjs';
 
 /**
  * TODO 🐷

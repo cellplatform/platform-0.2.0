@@ -13,5 +13,5 @@ export const R = { clone, equals, mergeDeepRight, uniq, clamp, prop, sortBy };
 export { FC, useMouseState } from 'sys.ui.react.util';
 export { rx, slug, cuid, Is, Time, Value, Delete } from 'sys.util';
 export { css, Color, Style } from 'sys.ui.react.css';
-export { LocalStorage, Keyboard } from 'sys.ui.dom';
+export { LocalStorage, Keyboard, KeyboardMonitor } from 'sys.ui.dom';
 export { Text, Fuzzy } from 'sys.text';

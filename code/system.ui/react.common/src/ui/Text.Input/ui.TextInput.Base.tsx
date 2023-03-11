@@ -13,7 +13,7 @@ type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
 /**
  * Component
  */
-export const TextInput: React.FC<Props> = (props) => {
+export const TextInputBase: React.FC<Props> = (props) => {
   const {
     inputRef,
     placeholder,
