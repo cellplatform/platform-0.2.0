@@ -1,6 +1,6 @@
 export const DEFAULTS = {
   sync: {
-    filename: '.tmp.syncstate',
+    filename: '.syncstate',
     debounce: 300,
   },
   doc: {

@@ -1,6 +1,6 @@
 import { DocSync } from '.';
 import { DocRef } from '../crdt.DocRef';
-import { expect, rx, t, Test, Time } from '../test.ui';
+import { TestFilesystem, expect, rx, t, Test, Time, DEFAULTS } from '../test.ui';
 
 export default Test.describe('Sync Protocol - DocSync', (e) => {
   type D = { name?: string; count: number };
@@ -190,6 +190,37 @@ export default Test.describe('Sync Protocol - DocSync', (e) => {
       await Time.wait(50);
       expect(docA.current.count).to.eql(3);
       expect(docB.current.count).to.eql(3);
+
+      mock.dispose();
+      syncerA.dispose();
+      syncerB.dispose();
+    });
+  });
+
+  e.describe('filedir (persist sync-state)', (e) => {
+    e.it('persists sync-state', async (e) => {
+      const fs = TestFilesystem.memory().fs;
+      const filedir = fs.dir('my-crdt');
+
+      const mock = ConnectionMock();
+      const docA = DocRef.init<D>({ count: 0 });
+      const docB = DocRef.init<D>({ count: 0 });
+
+      const debounce = 0;
+      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce, filedir });
+      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+
+      docA.change((d) => (d.count = 888));
+      const m1 = await filedir.manifest();
+      expect(m1.files).to.eql([]);
+
+      await Time.wait(50);
+      expect(docA.current.count).to.eql(888);
+      expect(docB.current.count).to.eql(888);
+
+      const m2 = await filedir.manifest();
+      expect(m2.files.length).to.eql(1);
+      expect(m2.files[0].path).to.eql(DEFAULTS.sync.filename);
 
       mock.dispose();
       syncerA.dispose();

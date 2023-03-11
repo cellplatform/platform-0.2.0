@@ -8,6 +8,7 @@ export type CrdtDocSyncOptions<D extends {}> = {
   onChange?: t.CrdtDocRefChangeHandler<D>;
   debounce?: Milliseconds;
   syncOnStart?: boolean;
+  filedir?: t.Fs;
 };
 
 /**

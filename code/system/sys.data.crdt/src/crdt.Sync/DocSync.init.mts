@@ -11,7 +11,7 @@ export function createSyncDoc<D extends {}>(
   initial: D | t.CrdtDocRef<D>,
   options: t.CrdtDocSyncOptions<D> = {},
 ) {
-  const { syncOnStart = true } = options;
+  const { syncOnStart = true, filedir } = options;
 
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
@@ -38,12 +38,13 @@ export function createSyncDoc<D extends {}>(
   doc.dispose$.subscribe(dispose);
 
   /**
-   * [PeerSyncer] logic.
+   * [PeerSyncer]
    */
   const syncer = PeerSyncer<D>(
     netbus,
     () => doc.current,
     (d) => doc.replace(d),
+    { filedir },
   );
 
   doc.$.pipe(
