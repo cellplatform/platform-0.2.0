@@ -1,14 +1,25 @@
-import { RefObject, useEffect, useState } from 'react';
+import {
+  RefObject,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useTransition,
+  useState,
+  useLayoutEffect,
+} from 'react';
 
 import { css, DEFAULTS, t, Time } from './common';
-import { Util } from './util.mjs';
+import { TextInputRef } from './TextInput.Ref.mjs';
 import { TextInputHint } from './ui.TextInput.Hint';
 import { HtmlInput } from './ui.TextInput.Html';
+import { Util } from './util.mjs';
 
 import type { TextInputProps } from '../types.mjs';
 export type { TextInputProps };
 
-type Props = t.TextInputProps & { inputRef: RefObject<HTMLInputElement> };
+type Props = t.TextInputProps & {
+  inputRef: RefObject<HTMLInputElement>;
+};
 
 /**
  * Component
@@ -31,21 +42,20 @@ export const TextInputBase: React.FC<Props> = (props) => {
   const [width, setWidth] = useState<string | number>();
 
   /**
-   * [Lifecycle]
+   * Lifecycle: Auto-size.
    */
   useEffect(() => {
     const { autoSize } = props;
     if (autoSize) Time.delay(0, async () => setWidth(await Util.css.toWidth(props))); // NB: Delay is so size measurement returns accurate number.
     if (!autoSize) setWidth(undefined);
-  }, [value, props.autoSize]); // eslint-disable-line
+  }, [value, props.autoSize]);
 
   /**
    * [Handlers]
    */
-
   const handleDoubleClick = (e: React.MouseEvent) => {
-    // NB: When the <input> is dbl-clicked and there is no value
-    //     it is deduced that the placeholder was clicked.
+    // NB: When the <input> is dbl-clicked and there is no
+    //     value it is deduced that the placeholder was clicked.
     if (!hasValue) {
       const handler = Wrangle.labelDoubleClickHandler(props, 'Placeholder');
       handler(e);
@@ -111,13 +121,13 @@ export const TextInputBase: React.FC<Props> = (props) => {
 
   const elInput = (
     <HtmlInput
-      style={styles.input}
       inputRef={inputRef}
+      style={styles.input}
       className={props.className}
+      value={value}
       isEnabled={isEnabled}
       isPassword={isPassword}
       disabledOpacity={disabledOpacity}
-      value={value}
       maxLength={props.maxLength}
       mask={props.mask}
       valueStyle={valueStyle}

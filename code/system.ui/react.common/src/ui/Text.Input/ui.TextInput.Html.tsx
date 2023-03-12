@@ -1,7 +1,7 @@
-import { RefObject } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
 import { useFocus } from '../useFocus';
-import { Color, css, DEFAULTS, R, t, KeyboardMonitor } from './common';
+import { Color, css, DEFAULTS, KeyboardMonitor, R, t } from './common';
 import { TextInputRef } from './TextInput.Ref.mjs';
 import { Util } from './util.mjs';
 
@@ -33,16 +33,36 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   const {
     inputRef,
     value = '',
+    isPassword = DEFAULTS.prop.isPassword,
     isEnabled = DEFAULTS.prop.isEnabled,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
-    isPassword = DEFAULTS.prop.isPassword,
-    maxLength,
     selectionBackground,
+    maxLength,
   } = props;
 
-  // const inputRef = useRef<HTMLInputElement>(null);
   const ref = TextInputRef(inputRef);
-  const focusState = useFocus(inputRef, { redraw: false });
+  useFocus(inputRef, { redraw: false });
+
+  /**
+   * [Lifecycle]
+   */
+  useEffect(() => {
+    /**
+     * NOTE:
+     *    The <input> element is a "uncontrolled" component.
+     *    This means that the value is not managed by React, so
+     *    we update the value manually here when it changes.
+     *
+     * RATAIONLE:
+     *    This is done do preserve the caret/selection position
+     *    within the textbox when the value is changed externally
+     *    via the [value] prop, which causes problems if there is
+     *    an async delay between the [onChange] callback firing
+     *    and the value being re-sent down to this component.
+     */
+    const el = inputRef.current;
+    if (el) el.value = value;
+  }, [value]);
 
   /**
    * [Handlers]
@@ -65,7 +85,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     // Update state and alert listeners.
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
-      onChanged?.({ from, to, isMax, char, modifierKeys });
+      const selection = Wrangle.selection(inputRef.current);
+      onChanged?.({ from, to, isMax, char, modifierKeys, selection });
     }
   };
 
@@ -157,7 +178,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
       ref={inputRef}
       type={isPassword ? 'password' : 'text'}
       disabled={!isEnabled}
-      value={value}
+      value={undefined} /* NB: uncontrolled, value handled above in [useEffect] */
       maxLength={maxLength}
       spellCheck={props.spellCheck}
       autoCapitalize={props.autoCapitalize === false ? 'off' : undefined}
@@ -179,4 +200,12 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
 const cloneModifierKeys = () => {
   return { ...KeyboardMonitor.state.current.modifiers };
+};
+
+const Wrangle = {
+  selection(el?: HTMLInputElement | null) {
+    const start = el?.selectionStart ?? -1;
+    const end = el?.selectionEnd ?? -1;
+    return { start, end };
+  },
 };

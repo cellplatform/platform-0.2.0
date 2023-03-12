@@ -43,13 +43,14 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
         console.info('⚡️ onEscape', e);
       }}
       onChanged={async (e) => {
-        if (debug.isUpdateAsync) await Time.wait(0);
+        if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
         if (debug.isUpdateEnabled) {
           setValue(e.to);
           if (debug.isHintEnabled) setHint(Hints.lookup(e.to ?? ''));
         } else {
           setHint('');
         }
+        // console.info('⚡️ onChanged', e);
       }}
       onLabelDoubleClick={(e) => {
         console.info('⚡️ onLabelDoubleClick', e);

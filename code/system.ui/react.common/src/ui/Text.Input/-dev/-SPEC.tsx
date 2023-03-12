@@ -13,7 +13,6 @@ type T = {
     isUpdateEnabled: boolean;
     isUpdateAsync: boolean;
   };
-  output: Record<string, any>;
   ref?: t.TextInputRef;
 };
 
@@ -24,25 +23,24 @@ const initial: T = {
     focusOnLoad: true,
   },
   debug: {
-    isHintEnabled: true,
     render: true,
+    isHintEnabled: true,
     isNumericMask: false,
     isUpdateEnabled: true,
     isUpdateAsync: false,
   },
-  output: {},
 };
 
 export default Dev.describe('TextInput', (e) => {
-  type LocalStore = { debug: T['debug'] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.TextInput');
-  const local = localstore.object({ debug: initial.debug });
+  type LocalStoreDebug = T['debug'];
+  const localstore = Dev.LocalStorage<LocalStoreDebug>('dev:sys.ui.TextInput');
+  const localDebug = localstore.object(initial.debug);
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
-      d.debug = local.debug;
+      d.debug = localDebug;
     });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {
@@ -145,7 +143,9 @@ export default Dev.describe('TextInput', (e) => {
         btn
           .label('render')
           .value((e) => e.state.debug.render)
-          .onClick((e) => e.change((d) => (local.debug.render = Dev.toggle(d.debug, 'render')))),
+          .onClick((e) => {
+            e.change((d) => (localDebug.render = Dev.toggle(d.debug, 'render')));
+          }),
       );
 
       dev.boolean((btn) =>
@@ -153,7 +153,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `mask: isNumeric`)
           .value((e) => e.state.debug.isNumericMask)
           .onClick((e) => {
-            e.change((d) => (local.debug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
+            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
           }),
       );
 
@@ -162,7 +162,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `hinting (auto-complete)`)
           .value((e) => e.state.debug.isHintEnabled)
           .onClick((e) => {
-            e.change((d) => (local.debug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
+            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
           }),
       );
 
@@ -172,7 +172,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `update handler: ${current(e.state)}`)
           .value((e) => e.state.debug.isUpdateEnabled)
           .onClick((e) => {
-            e.change((d) => (local.debug.isUpdateEnabled = Dev.toggle(d.debug, 'isUpdateEnabled')));
+            e.change((d) => (localDebug.isUpdateEnabled = Dev.toggle(d.debug, 'isUpdateEnabled')));
           });
       });
 
@@ -182,7 +182,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `update async: ${current(e.state)}`)
           .value((e) => e.state.debug.isUpdateAsync)
           .onClick((e) => {
-            e.change((d) => (local.debug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
+            e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
           });
       });
     });
