@@ -9,8 +9,9 @@ type T = {
     render: boolean;
     status?: t.TextInputStatus;
     isHintEnabled: boolean;
-    isUpdateEnabled: boolean;
     isNumericMask: boolean;
+    isUpdateEnabled: boolean;
+    isUpdateAsync: boolean;
   };
   output: Record<string, any>;
   ref?: t.TextInputRef;
@@ -27,14 +28,22 @@ const initial: T = {
     render: true,
     isNumericMask: false,
     isUpdateEnabled: true,
+    isUpdateAsync: false,
   },
   output: {},
 };
 
 export default Dev.describe('TextInput', (e) => {
+  type LocalStore = { debug: T['debug'] };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.TextInput');
+  const local = localstore.object({ debug: initial.debug });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+    state.change((d) => {
+      d.debug = local.debug;
+    });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {
       e.cancel();
@@ -81,7 +90,7 @@ export default Dev.describe('TextInput', (e) => {
       value(dev.lorem(50), 'long (lorem)');
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
       function boolean(key: keyof T['props']) {
@@ -108,7 +117,7 @@ export default Dev.describe('TextInput', (e) => {
 
     dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Actions', (dev) => {
       type F = (ref: t.TextInputRef) => void;
@@ -129,28 +138,32 @@ export default Dev.describe('TextInput', (e) => {
       action('cursorToEnd', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
           .label('render')
           .value((e) => e.state.debug.render)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'render'))),
+          .onClick((e) => e.change((d) => (local.debug.render = Dev.toggle(d.debug, 'render')))),
       );
 
       dev.boolean((btn) =>
         btn
           .label((e) => `mask: isNumeric`)
           .value((e) => e.state.debug.isNumericMask)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isNumericMask'))),
+          .onClick((e) => {
+            e.change((d) => (local.debug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
+          }),
       );
 
       dev.boolean((btn) =>
         btn
           .label((e) => `hinting (auto-complete)`)
           .value((e) => e.state.debug.isHintEnabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isHintEnabled'))),
+          .onClick((e) => {
+            e.change((d) => (local.debug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
+          }),
       );
 
       dev.boolean((btn) => {
@@ -158,10 +171,20 @@ export default Dev.describe('TextInput', (e) => {
         btn
           .label((e) => `update handler: ${current(e.state)}`)
           .value((e) => e.state.debug.isUpdateEnabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'isUpdateEnabled')));
+          .onClick((e) => {
+            e.change((d) => (local.debug.isUpdateEnabled = Dev.toggle(d.debug, 'isUpdateEnabled')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const current = (state: T) => (state.debug.isUpdateAsync ? 'asynchronous' : 'synchronous');
+        btn
+          .label((e) => `update async: ${current(e.state)}`)
+          .value((e) => e.state.debug.isUpdateAsync)
+          .onClick((e) => {
+            e.change((d) => (local.debug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
+          });
       });
     });
-
-    dev.hr();
   });
 });
