@@ -79,10 +79,15 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
             opacity: 0.3,
             italic: true,
           }}
+          maxLength={40}
           focusAction={'Select'}
           spellCheck={false}
           onEnter={handleConnect}
-          onChanged={(e) => props.onRemotePeerChanged?.({ ...ids, remote: e.to })}
+          onChanged={(e) => {
+            const local = ids.local;
+            const remote = e.to;
+            props.onRemotePeerChanged?.({ local, remote });
+          }}
         />
       </div>
       <div {...styles.edgeIcons}>
