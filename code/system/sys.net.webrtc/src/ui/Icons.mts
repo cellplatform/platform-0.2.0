@@ -18,6 +18,7 @@ import {
   MdPublic,
   MdWifiTethering,
   MdWifiTetheringOff,
+  MdError,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -46,4 +47,5 @@ export const Icons = {
   },
   Connection: { On: icon(MdWifiTethering), Off: icon(MdWifiTetheringOff) },
   Arrow: { Start: icon(MdStart), TwoWay: icon(MdMultipleStop) },
+  Error: icon(MdError),
 };

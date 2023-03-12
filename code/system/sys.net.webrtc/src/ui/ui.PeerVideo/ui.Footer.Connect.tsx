@@ -13,7 +13,8 @@ export type FooterConnectProps = {
 };
 
 export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
-  const { ids } = props;
+  const { self, ids } = props;
+  const error = Wrangle.error(props);
 
   /**
    * [Handlers]
@@ -85,14 +86,31 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
         />
       </div>
       <div {...styles.edgeIcons}>
-        {!props.isConnected && props.canConnect && (
+        {!props.isConnected && props.canConnect && !error && (
           <ConnectButton
             isSpinning={props.isSpinning}
             canConnect={props.canConnect}
             onClick={handleConnect}
           />
         )}
+        {error && <Icons.Error tooltip={error} color={COLORS.YELLOW} />}
       </div>
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  error(props: FooterConnectProps) {
+    const { self, ids } = props;
+
+    if (ids.remote && ids.remote === self?.id) {
+      return 'Cannot connect to self.';
+    }
+
+    return '';
+  },
 };
