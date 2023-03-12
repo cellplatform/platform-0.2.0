@@ -36,7 +36,7 @@ export default Dev.describe('YouTube', (e) => {
       .render<T>((e) => <YouTube {...e.state.props} />);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)

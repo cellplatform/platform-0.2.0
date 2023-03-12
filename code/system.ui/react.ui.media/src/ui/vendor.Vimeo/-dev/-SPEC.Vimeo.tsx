@@ -31,7 +31,7 @@ export default Dev.describe('Vimeo Player', (e) => {
     });
   });
 
-  e.it('debug panel', (e) => {
+  e.it('ui:debug', (e) => {
     const dev = Dev.tools<S>(e, initial);
     dev
       .button((btn) => btn.label('Play').onClick((e) => events.play.fire()))

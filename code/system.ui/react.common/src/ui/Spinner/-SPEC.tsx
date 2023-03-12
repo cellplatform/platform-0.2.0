@@ -23,7 +23,7 @@ export default Dev.describe('Spinner', (e) => {
     ctx.subject.render<T>((e) => e.state.el);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     await puff(dev);
 

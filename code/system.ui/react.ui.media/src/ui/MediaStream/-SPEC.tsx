@@ -111,7 +111,7 @@ export default Dev.describe('MediaStream', (e) => {
     });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
 

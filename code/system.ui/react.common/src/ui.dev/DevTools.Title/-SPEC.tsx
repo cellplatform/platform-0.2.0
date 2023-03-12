@@ -24,7 +24,7 @@ export default Dev.describe('Title', (e) => {
       .render<T>((e) => <Title {...e.state.props} />);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e);
 
     dev.footer

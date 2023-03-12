@@ -13,7 +13,7 @@ export default Dev.describe('MeasureSize', (e) => {
     await ctx.state<T>(initial);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.ctx.state<T>(initial);
 

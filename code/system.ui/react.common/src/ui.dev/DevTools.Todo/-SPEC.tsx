@@ -7,7 +7,7 @@ export default Dev.describe('Todo', (e) => {
     ctx.subject.size(300, null).render(() => <Todo style={{ margin: 0 }} />);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools(e);
     dev
       //

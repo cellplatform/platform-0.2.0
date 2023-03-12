@@ -34,7 +34,7 @@ export default Dev.describe('CmdHost', (e) => {
       });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)

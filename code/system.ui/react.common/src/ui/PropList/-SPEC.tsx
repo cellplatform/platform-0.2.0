@@ -47,7 +47,7 @@ export default Dev.describe('PropList', (e) => {
       .render<T>((e) => <PropList {...e.state.props} />);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const ctx = dev.ctx;
 

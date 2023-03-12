@@ -121,7 +121,7 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
       });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const clone = Dev.trimStringsDeep(e.state, { maxLength: 30 });

@@ -48,7 +48,7 @@ export default Spec.describe('MySample', (e) => {
       });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const ctx = Spec.ctx(e);
     if (!ctx.is.initial) return;
 

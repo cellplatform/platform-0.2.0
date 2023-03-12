@@ -19,7 +19,7 @@ export default Dev.describe('DevTools', (e) => {
       .render<T>((e) => <Sample state={e.state} />);
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = DevTools.init<T>(e, initial);
     const debug = dev.ctx.debug;
 

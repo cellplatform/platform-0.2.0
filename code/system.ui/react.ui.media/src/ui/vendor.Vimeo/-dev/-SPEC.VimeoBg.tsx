@@ -32,7 +32,7 @@ export default Dev.describe('VimeoBackground Player', (e) => {
     ctx.subject.size(800, 600).render(() => el);
   });
 
-  e.it('debug panel', (e) => {
+  e.it('ui:debug', (e) => {
     const dev = Dev.tools<S>(e, initial);
     dev
       .button((btn) => btn.label('Play').onClick((e) => events.play.fire()))
