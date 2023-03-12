@@ -1,4 +1,4 @@
-import { PeerVideo, PeerVideoProps } from '.';
+import { PeerVideo, PeerVideoProps } from '..';
 import {
   COLORS,
   Crdt,
@@ -10,9 +10,9 @@ import {
   TestNetworkP2P,
   Time,
   WebRTC,
-} from '../../test.ui';
-import { PeerList } from '../ui.PeerList';
-import { Controller, NetworkState } from './-dev/Controller.mjs';
+} from '../../../test.ui';
+import { PeerList } from '../../ui.PeerList';
+import { Controller, NetworkState } from './DEV.Controller.mjs';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -21,7 +21,10 @@ type T = {
   debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
-  props: { showPeer: DEFAULTS.showPeer, showConnect: DEFAULTS.showConnect },
+  props: {
+    showPeer: DEFAULTS.showPeer,
+    showConnect: DEFAULTS.showConnect,
+  },
   debug: { showBg: true, redraw: 0 },
 };
 
@@ -29,7 +32,7 @@ type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
 type DocShared = { count: number; network: NetworkState };
-const initialSharedDoc: DocShared = { count: 0, network: { peers: [] } };
+const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
 
 export default Dev.describe('PeerVideo', async (e) => {
   e.timeout(1000 * 30);
@@ -68,6 +71,14 @@ export default Dev.describe('PeerVideo', async (e) => {
       state: docShared,
       filedir: dirs.shared,
       dispose$,
+      onConnectStart(e) {
+        console.log('start', e);
+        state.change((d) => (d.props.spinning = true));
+      },
+      onConnectComplete(e) {
+        console.log('complete', e);
+        state.change((d) => (d.props.spinning = false));
+      },
     });
 
     const changed = WebRTC.Util.connections.changed(self, dispose$);
@@ -101,7 +112,9 @@ export default Dev.describe('PeerVideo', async (e) => {
     await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
     await Crdt.Doc.file<DocMe>(dirs.shared, docShared, { autosave: true });
 
-    // NB: See: "init:network" (below) for network-sychronization-protocol startup (P2P).
+    // NB:
+    // See: "init:network" (below) for network-sychronization-protocol startup (P2P).
+    //      after the UI has been initiated.
 
     // Listen.
     docMe.$.subscribe(redraw);
@@ -136,25 +149,23 @@ export default Dev.describe('PeerVideo', async (e) => {
             onMuteClick={toggleMute}
             onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
             onConnectRequest={async (e) => {
-              state?.change((d) => (d.props.spinning = true));
-
-              await Promise.all([
-                self?.data(e.remote), //             <== Start (data).
-                self?.media(e.remote, 'camera'), //  <== Start (camera).
-              ]);
-
+              if (!self) return;
               docShared.change((d) => {
-                Controller.mutate.addPeer(d.network, e.remote);
-              });
+                const initiatedBy = self!.id;
 
-              state.change((d) => (d.props.spinning = false));
+                console.log('-------------------------------------------');
+                console.log('self', self);
+                console.log('initiatedBy', initiatedBy);
+
+                Controller.Mutate.addPeer(d.network, e.remote, { initiatedBy });
+              });
             }}
           />
         );
       });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
@@ -165,9 +176,17 @@ export default Dev.describe('PeerVideo', async (e) => {
         <Dev.Object
           fontSize={11}
           name={'PeerVideo'}
-          expand={{ level: 1, paths: ['$.Doc<Shared>', '$.Doc<Shared>.network'] }}
+          expand={{
+            level: 1,
+            paths: [
+              // '$.Doc<Me>',
+              '$.Doc<Shared>',
+              '$.Doc<Shared>.network',
+              '$.Doc<Shared>.network.*',
+            ],
+          }}
           data={{
-            [`Peer<Me>[${total}]`]: self,
+            [`WebRTC.Peer<Me>[${total}]`]: self,
             'Doc<Me>': docMe?.current,
             'Doc<Shared>': docShared?.current,
           }}
@@ -205,12 +224,33 @@ export default Dev.describe('PeerVideo', async (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('Doc<Me>', (dev) => {
+      const count = (label: string, by: number) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right(by > 0 ? '++' : '--')
+            .onClick((e) => docMe.change((d) => (d.count += by))),
+        );
+      };
+      count('count: increment', 1);
+      count('count: decrement', -1);
+      // dev.hr(-1, 5);
+      // dev.button('reset (destroy)', (e) =>
+      //   docMe.change((d) => {
+      //     d.count = 0;
+      //   }),
+      // );
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Doc<Shared>', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right(by > 0 ? '(+)' : '(-)')
+            .right(by > 0 ? '++' : '--')
             .onClick((e) => docShared.change((d) => (d.count += by))),
         );
       };
@@ -220,7 +260,7 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.button('reset', (e) =>
         docShared.change((d) => {
           d.count = 0;
-          d.network.peers = [];
+          d.network.peers = {};
         }),
       );
     });
@@ -251,7 +291,7 @@ export default Dev.describe('PeerVideo', async (e) => {
 
       dev.button((btn) =>
         btn
-          .label('disconnect')
+          .label('disconnect (kill all)')
           .enabled((e) => (self?.connections.length ?? 0) > 0)
           .right((e) => {
             if (!self) return '';
