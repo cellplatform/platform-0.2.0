@@ -12,7 +12,7 @@ import {
   WebRTC,
 } from '../../../test.ui';
 import { PeerList } from '../../ui.PeerList';
-import { Controller, NetworkState } from './DEV.Controller.mjs';
+import { Controller } from './DEV.Controller.mjs';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -31,7 +31,7 @@ const initial: T = {
 type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
-type DocShared = { count: number; network: NetworkState };
+type DocShared = { count: number; network: t.NetworkState };
 const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
 
 export default Dev.describe('PeerVideo', async (e) => {
@@ -72,11 +72,9 @@ export default Dev.describe('PeerVideo', async (e) => {
       filedir: dirs.shared,
       dispose$,
       onConnectStart(e) {
-        console.log('start', e);
         state.change((d) => (d.props.spinning = true));
       },
       onConnectComplete(e) {
-        console.log('complete', e);
         state.change((d) => (d.props.spinning = false));
       },
     });
@@ -151,13 +149,14 @@ export default Dev.describe('PeerVideo', async (e) => {
             onConnectRequest={async (e) => {
               if (!self) return;
               docShared.change((d) => {
-                const initiatedBy = self!.id;
+                const local = self!.id;
+                const initiatedBy = local;
 
                 console.log('-------------------------------------------');
                 console.log('self', self);
                 console.log('initiatedBy', initiatedBy);
 
-                Controller.Mutate.addPeer(d.network, e.remote, { initiatedBy });
+                Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
               });
             }}
           />
