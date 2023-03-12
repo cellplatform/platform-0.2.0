@@ -49,7 +49,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
   useEffect(() => {
     /**
      * NOTE:
-     *    The <input> element is a "uncontrolled" component.
+     *    The <input> element is an "uncontrolled" component.
      *    This means that the value is not managed by React, so
      *    we update the value manually here when it changes.
      *
@@ -58,7 +58,8 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
      *    within the textbox when the value is changed externally
      *    via the [value] prop, which causes problems if there is
      *    an async delay between the [onChange] callback firing
-     *    and the value being re-sent down to this component.
+     *    on this textbox and the value being processed and re-sent
+     *    down the UI hierarchy to this component.
      */
     const el = inputRef.current;
     if (el) el.value = value;
