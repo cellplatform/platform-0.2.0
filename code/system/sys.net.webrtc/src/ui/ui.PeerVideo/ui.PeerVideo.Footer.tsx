@@ -1,5 +1,6 @@
-import { Button, Color, COLORS, css, Icons, t, TextInput, WebRTC } from '../common';
+import { Color, COLORS, css, Icons, t, TextInput, WebRTC } from '../common';
 import { PeerId } from '../ui.PeerId';
+import { ConnectButton } from './ui.ConnectButton';
 
 export type PeerVideoFooterProps = {
   self?: t.Peer;
@@ -39,16 +40,17 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
-    peer: css({
-      height: 28,
+    me: css({
+      height: 32,
       boxSizing: 'border-box',
       display: 'grid',
-      placeItems: 'center',
+      alignContent: 'center',
+      paddingLeft: 8,
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
     input: {
       outer: css({
-        Padding: 5,
+        Padding: [5, 2, 5, 5],
         display: 'grid',
         gridTemplateColumns: 'auto 1fr auto',
       }),
@@ -65,17 +67,6 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
         gap: '1px',
       }),
     },
-    connectButton: css({
-      backgroundColor: canConnect ? COLORS.BLUE : undefined,
-      transition: 'all 150ms ease-out',
-      borderRadius: 5,
-      Padding: [4, 12],
-      display: 'grid',
-      placeItems: 'center',
-
-      fontSize: 11,
-      color: COLORS.WHITE,
-    }),
     connectedThumbnail: css({
       Padding: [2, 5],
       display: 'grid',
@@ -84,7 +75,7 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
   };
 
   const elPeer = showPeer && (
-    <div {...styles.peer}>{<PeerId peer={self?.id} prefix={'me'} onClick={handleCopyPeer} />}</div>
+    <div {...styles.me}>{<PeerId peer={self?.id} prefix={'me'} onClick={handleCopyPeer} />}</div>
   );
 
   const elConnect = showConnect && (
@@ -103,9 +94,19 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
       <div {...styles.input.textbox}>
         <TextInput
           value={props.remotePeer}
-          valueStyle={{ fontSize: 13, color: Color.alpha(COLORS.DARK, 1) }}
           placeholder={'connect to remote peer'}
-          placeholderStyle={{ opacity: 0.3, italic: true }}
+          valueStyle={{
+            fontFamily: 'monospace',
+            fontSize: 13,
+            fontWeight: 'bold',
+            color: Color.alpha(COLORS.DARK, 1),
+          }}
+          placeholderStyle={{
+            fontFamily: 'sans-serif',
+            fontSize: 13,
+            opacity: 0.3,
+            italic: true,
+          }}
           focusAction={'Select'}
           spellCheck={false}
           onEnter={handleConnect}
@@ -114,14 +115,7 @@ export const PeerVideoFooter: React.FC<PeerVideoFooterProps> = (props) => {
       </div>
       <div {...styles.input.edgeIcons}>
         {!isConnected && canConnect && (
-          <Button
-            style={styles.connectButton}
-            isEnabled={canConnect && !spinning}
-            disabledOpacity={isConnected ? 1 : 0.3}
-            onClick={handleConnect}
-          >
-            <div>{'Connect'}</div>
-          </Button>
+          <ConnectButton canConnect={canConnect} spinning={spinning} onClick={handleConnect} />
         )}
       </div>
     </div>
