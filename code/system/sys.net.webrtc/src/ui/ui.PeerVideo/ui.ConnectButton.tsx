@@ -1,15 +1,14 @@
 import { Button, Color, COLORS, css, Spinner, t } from '../common';
 
 export type ConnectButtonProps = {
-  spinning?: boolean;
+  isSpinning?: boolean;
   canConnect?: boolean;
   style?: t.CssValue;
-
   onClick?: React.MouseEventHandler;
 };
 
 export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
-  const { canConnect, spinning } = props;
+  const { canConnect, isSpinning } = props;
 
   /**
    * [Render]
@@ -30,13 +29,13 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
       userSelect: 'none',
     }),
     inner: css({ position: 'relative', transition }),
-    label: css({ Padding: [4, 14], opacity: spinning ? 0 : 1 }),
+    label: css({ Padding: [4, 14], opacity: isSpinning ? 0 : 1 }),
     spinner: css({
       Absolute: 0,
       transition,
       display: 'grid',
       placeItems: 'center',
-      opacity: spinning ? 1 : 0,
+      opacity: isSpinning ? 1 : 0,
     }),
   };
 
@@ -49,8 +48,8 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      isEnabled={canConnect && !spinning}
-      disabledOpacity={spinning ? 0.8 : 1}
+      isEnabled={canConnect && !isSpinning}
+      disabledOpacity={isSpinning ? 0.8 : 1}
       onClick={props.onClick}
     >
       <div {...styles.inner}>

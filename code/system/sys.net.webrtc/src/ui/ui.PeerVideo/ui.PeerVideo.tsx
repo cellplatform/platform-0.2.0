@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Color, copyPeer, css, FC, MediaStream, Spinner, t, useMouseState } from '../common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
-import { PeerVideoFooter } from './ui.PeerVideo.Footer';
+import { Footer } from './ui.Footer';
 
 export type PeerVideoProps = {
   self?: t.Peer;
@@ -142,13 +142,13 @@ const View: React.FC<PeerVideoProps> = (props) => {
         {elPeerCopied}
         {elSpinner}
       </div>
-      <PeerVideoFooter
+      <Footer
         style={styles.footer}
         self={self}
         remotePeer={props.remotePeer}
         showPeer={showPeer}
         showConnect={showConnect}
-        spinning={props.spinning}
+        isSpinning={props.spinning}
         onLocalPeerCopied={handlePeerCopied}
         onRemotePeerChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
