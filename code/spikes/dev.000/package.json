@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.213",
+  "version": "0.0.216",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,9 +17,11 @@
   "dependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sys.data.crdt": "0.0.0",
+    "sys.fs": "0.0.0",
+    "sys.fs.indexeddb": "0.0.0",
     "sys.net.webrtc": "0.0.0",
     "sys.text": "0.0.0",
-    "sys.types": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.dev": "0.0.0",
     "sys.ui.react.media": "0.0.0",
@@ -28,14 +30,15 @@
     "vendor.stripe": "0.0.0"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-af3529ab.js",
-    "./web": "./dist/web/lib/index-af3529ab.js"
+    ".": "./dist/web/lib/index-10829e15.js",
+    "./web": "./dist/web/lib/index-10829e15.js"
   },
   "typesVersions": {
     "*": {
