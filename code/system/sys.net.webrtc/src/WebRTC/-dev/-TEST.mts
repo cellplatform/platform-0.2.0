@@ -234,7 +234,7 @@ export default Dev.describe('WebRTC', (e) => {
       dispose();
     });
 
-    e.it('dispose: peers (A | B) - isOpen: false', async (e) => {
+    e.it('dispose: peers (A | B)', async (e) => {
       expect(peerA.disposed).to.eql(false);
       expect(peerB.disposed).to.eql(false);
 
@@ -309,6 +309,10 @@ export default Dev.describe('WebRTC', (e) => {
         expect(status4.stream?.media).to.eql(undefined);
         expect(peerA.connections.length).to.eql(0);
         expect(peerB.connections.length).to.eql(0);
+
+        expect(data1.isOpen).to.eql(false);
+        expect(data2.isOpen).to.eql(false);
+        expect(media.isOpen).to.eql(false);
       },
     );
 
