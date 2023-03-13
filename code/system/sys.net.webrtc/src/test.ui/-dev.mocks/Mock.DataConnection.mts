@@ -53,7 +53,7 @@ export const MockDataConnection = {
     const out$ = new rx.Subject<t.PeerDataPayload>();
 
     const id = options.id || createConnId();
-    const metadata: t.PeerMetaData = options.metadata ?? { name: 'Unnamed' };
+    const metadata: t.PeerMetaData = options.metadata ?? { label: 'Unnamed' };
     const peer = options.peer ?? {
       local: createPeerId(),
       remote: createPeerId(),
