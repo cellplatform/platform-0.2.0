@@ -32,7 +32,10 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
     base: css({
       position: 'relative',
       boxSizing: 'border-box',
-      Padding: [5, 2, 5, 5],
+      height: 32,
+      overflow: 'hidden',
+
+      Padding: [4, 2, 5, 5],
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',
     }),
@@ -53,13 +56,19 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.edgeIcons}>
-        {!props.isConnected && <Icons.Globe.Language size={22} opacity={0.3} color={COLORS.DARK} />}
+        {!props.isConnected && (
+          <Icons.Globe.Language
+            size={20}
+            color={ids.remote ? Color.alpha(COLORS.CYAN, 0.3) : Color.alpha(COLORS.DARK, 0.2)}
+          />
+        )}
         {props.isConnected && (
-          <Icons.Globe.Lock
-            size={22}
+          <Icons.Network.Antenna
+            size={20}
             opacity={1}
-            color={Color.darken(COLORS.CYAN, 2)}
+            color={Color.darken(COLORS.CYAN, 0)}
             tooltip={'Secure Connection'}
+            offset={[0, 1]}
           />
         )}
       </div>
@@ -71,14 +80,16 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
             fontFamily: 'monospace',
             fontSize: 13,
             fontWeight: 'bold',
-            color: Color.alpha(COLORS.DARK, 1),
+            color: Color.alpha(COLORS.CYAN, 1),
           }}
           placeholderStyle={{
             fontFamily: 'sans-serif',
             fontSize: 13,
             opacity: 0.3,
             italic: true,
+            color: Color.alpha(COLORS.DARK, 0.5),
           }}
+          selectionBackground={Color.alpha(COLORS.CYAN, 0.1)}
           maxLength={40}
           focusAction={'Select'}
           spellCheck={false}

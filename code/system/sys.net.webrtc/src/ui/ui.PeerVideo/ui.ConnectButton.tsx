@@ -17,7 +17,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: canConnect ? COLORS.BLUE : undefined,
+      backgroundColor: canConnect ? COLORS.MAGENTA : undefined,
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
       transition,
       borderRadius: 4,
@@ -29,7 +29,11 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
       userSelect: 'none',
     }),
     inner: css({ position: 'relative', transition }),
-    label: css({ Padding: [4, 14], opacity: isSpinning ? 0 : 1 }),
+    label: css({
+      Padding: [4, 14],
+      opacity: isSpinning ? 0 : 1,
+      fontSize: 10,
+    }),
     spinner: css({
       Absolute: 0,
       transition,

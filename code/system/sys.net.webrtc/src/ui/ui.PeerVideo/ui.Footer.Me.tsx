@@ -24,6 +24,7 @@ export const FooterMe: React.FC<FooterMeProps> = (props) => {
   const styles = {
     base: css({
       height: 32,
+      overflow: 'hidden',
       boxSizing: 'border-box',
       display: 'grid',
       alignContent: 'center',
