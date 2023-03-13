@@ -23,7 +23,8 @@ export type PeerGetMediaStreamRes = {
  */
 export type Peer = t.Disposable & {
   readonly kind: 'local:peer';
-  readonly id: Id;
+  readonly tx: Id; // Instance id.
+  readonly id: Id; // Peer id (Public).
   readonly signal: Hostname;
   readonly connections: PeerConnections;
   readonly connections$: t.Observable<PeerConnectionChanged>;

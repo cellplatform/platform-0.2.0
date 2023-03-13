@@ -1,4 +1,4 @@
-import { TEST, cuid, Dev, expect, rx, t, Time, WebRTC } from '..';
+import { TEST, cuid, Dev, expect, rx, t, Time, WebRTC } from '../../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
   const signal = TEST.signal;
@@ -12,11 +12,13 @@ export default Dev.describe('WebRTC', (e) => {
 
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
-      const peer1 = await WebRTC.peer({ ...signal, host: ` http://${signal} ` }); // NB: Trims the HTTP prefix.
-      const peer2 = await WebRTC.peer({ ...signal, host: ` https://${signal} ` });
+      const host = signal.host;
+      const peer1 = await WebRTC.peer({ ...signal, host: ` http://${host} ` }); // NB: Trims the HTTP prefix.
+      const peer2 = await WebRTC.peer({ ...signal, host: ` https://${host} ` });
 
-      expect(peer1.signal).to.eql(signal);
-      expect(peer2.signal).to.eql(signal);
+      const url = `${signal.host}/${signal.path}`;
+      expect(peer1.signal).to.eql(url);
+      expect(peer2.signal).to.eql(url);
 
       peer1.dispose();
       peer2.dispose();
@@ -42,6 +44,15 @@ export default Dev.describe('WebRTC', (e) => {
 
       peer1.dispose();
       peer2.dispose();
+    });
+
+    e.it('generates a unique "tx" lifetime identifier (in-memory peer instance)', async (e) => {
+      const peer1 = await WebRTC.peer(signal, { id: cuid() });
+      const peer2 = await WebRTC.peer(signal, {});
+
+      expect(peer1.tx).to.match(/^peer\.tx\./);
+      expect(peer2.tx).to.match(/^peer\.tx\./);
+      expect(peer1.tx).to.not.eql(peer2.tx);
     });
 
     e.it('exposes lists as immutable', async (e) => {

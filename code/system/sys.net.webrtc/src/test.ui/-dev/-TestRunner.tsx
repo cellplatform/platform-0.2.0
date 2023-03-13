@@ -57,7 +57,7 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('./TEST.WebRTC.mjs')),
+          await button(import('../../WebRTC/-dev/TEST.WebRTC.mjs')),
           await button(import('./TEST.WebRTC.Media.mjs')),
           await button(import('./TEST.PeerSyncer.mjs')),
         ],
