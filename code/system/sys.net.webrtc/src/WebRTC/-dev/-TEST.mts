@@ -194,6 +194,9 @@ export default Dev.describe('WebRTC', (e) => {
       const a = peerA.connections.data[0];
       const b = peerB.connections.data[0];
 
+      expect(a.isOpen).to.eql(true);
+      expect(b.isOpen).to.eql(true);
+
       const changedA: t.PeerConnectionChanged[] = [];
       const changedB: t.PeerConnectionChanged[] = [];
 
@@ -212,6 +215,9 @@ export default Dev.describe('WebRTC', (e) => {
       expect(a.isDisposed).to.eql(true);
       await Time.wait(500);
 
+      expect(a.isOpen).to.eql(false);
+      expect(b.isOpen).to.eql(false);
+
       expect(changedA.length).to.eql(1);
       expect(changedB.length).to.eql(1);
       expect(changedA[0].action).to.eql('removed');
@@ -228,7 +234,7 @@ export default Dev.describe('WebRTC', (e) => {
       dispose();
     });
 
-    e.it('dispose: peers (A | B)', async (e) => {
+    e.it('dispose: peers (A | B) - isOpen: false', async (e) => {
       expect(peerA.disposed).to.eql(false);
       expect(peerB.disposed).to.eql(false);
 
