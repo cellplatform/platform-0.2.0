@@ -1,4 +1,4 @@
-import { Dev, t } from '../test.ui';
+import { Time, Dev, t } from '../test.ui';
 
 type T = {
   debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
@@ -28,9 +28,12 @@ export default Dev.describe('Root', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = {
+        TestResults: e.state.debug.testrunner.data,
+      };
+      return <Dev.Object name={'spec'} data={data} expand={1} />;
+    });
 
     dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
@@ -51,38 +54,46 @@ export default Dev.describe('Root', (e) => {
         return spec;
       };
 
-      dev.button('all', async (e) => await invoke(all));
-
-      dev.hr();
-
       dev.title('sys.crdt');
 
       tests.push(
         ...[
           await button(import('../crdt.DocRef/-TEST.mjs')),
           await button(import('../crdt.DocFile/-TEST.mjs')),
-          await button(import('../crdt.Sync/-TEST.DocSync.mjs'), true),
+          await button(import('../crdt.Sync/-TEST.DocSync.mjs')),
           await button(import('../crdt.Sync/-TEST.PeerSyncer.mjs')),
           await button(import('../crdt.helpers/-TEST.mjs')),
         ],
       );
 
-      dev.hr();
+      dev.hr(-1, 5);
 
-      dev.title('Driver');
+      dev.title('Driver (Underlying Library)');
       tests.push(
         ...[
           await button(import('../driver.Automerge/-dev/TEST.basic.mjs')),
-          await button(import('../driver.Automerge/-dev/TEST.api.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.api.mjs'), true),
           await button(import('../driver.Automerge/-dev/TEST.filesystem.mjs')),
           await button(import('../driver.Automerge/-dev/TEST.sync.mjs')),
         ],
       );
 
-      dev.hr();
+      dev.hr(5, 20);
 
       const all = Dev.describe('All Test Suites');
       all.merge(...tests);
+
+      dev.button((btn) =>
+        btn
+          .label('run all')
+          .right('🌳')
+          .onClick((e) => invoke(all)),
+      );
+
+      /**
+       * Immediate invocation of tests.
+       */
+      // Time.delay(0, () => invoke(all));
     });
   });
 });
