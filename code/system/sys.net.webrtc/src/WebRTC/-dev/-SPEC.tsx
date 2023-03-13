@@ -2,7 +2,6 @@ import { Automerge, CrdtInfo } from 'sys.data.crdt';
 
 import { WebRTC } from '..';
 import {
-  Time,
   Color,
   COLORS,
   Crdt,
@@ -10,19 +9,17 @@ import {
   Delete,
   Dev,
   Filesystem,
+  Path,
   rx,
   slug,
   t,
   TEST,
   TextInput,
-  Path,
 } from '../../test.ui';
 import { PeerList, PeerVideo } from '../../ui';
 import { DevSample } from './DEV.Sample';
 
 import type { Doc } from './DEV.CrdtSync';
-
-type Milliseconds = number;
 
 const DEFAULT = {
   filedir: 'dev:test/WebRTC.SPEC/cell.self',
