@@ -1,4 +1,4 @@
-import { Dev, t } from '.';
+import { Dev, t, Time } from '.';
 
 type T = {
   debug: { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
@@ -68,6 +68,10 @@ export default Dev.describe('Root', (e) => {
         ],
       );
 
+      dev.hr(-1, 10);
+
+      tests.push(...[await button(import('./-dev.mocks/-TEST.mjs'))]);
+
       dev.hr(5, 20);
 
       const all = Dev.describe('All Test Suites');
@@ -83,7 +87,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      // Time.delay(0, () => invoke(all));
+      Time.delay(0, () => invoke(all));
     });
   });
 });

@@ -1,7 +1,7 @@
 import { Time, Test, expect, t } from '../../test.ui';
 import { Mock } from './Mock.mjs';
 
-export default Test.describe('Mock', (e) => {
+export default Test.describe('mocks', (e) => {
   e.describe('MockDataConnection', (e) => {
     e.describe('single edge', (e) => {
       e.it('default properties', (e) => {
@@ -9,7 +9,7 @@ export default Test.describe('Mock', (e) => {
         const conn = mock.conn;
         expect(conn.id.startsWith('dc_')).to.eql(true);
         expect(conn.kind).to.eql('data');
-        expect(conn.metadata).to.eql({ name: 'Unnamed' });
+        expect(conn.metadata.label).to.eql('Unnamed');
         expect(conn.isOpen).to.eql(true);
         expect(conn.peer.local.length).to.greaterThan(10);
         expect(conn.peer.remote.length).to.greaterThan(10);
@@ -17,7 +17,7 @@ export default Test.describe('Mock', (e) => {
 
       e.it('overridden prperties (initial)', (e) => {
         const id = 'my-id';
-        const metadata: t.PeerMetaData = { name: 'Foo' };
+        const metadata: t.PeerMetaData = { label: 'Foo' };
         const peer = { local: 'a', remote: 'b' };
         const mock = Mock.DataConnection.edge({ id, metadata, peer });
         const conn = mock.conn;
