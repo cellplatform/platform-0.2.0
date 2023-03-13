@@ -48,10 +48,14 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     const { dispose, dispose$ } = rx.disposable();
     let _disposed = false;
     dispose$.subscribe(() => {
-      rtc.destroy();
       api.connections.all.forEach((conn) => conn.dispose());
+      rtc.destroy();
+      error$.complete();
       _disposed = true;
     });
+
+    const error$ = new rx.Subject<t.PeerError>();
+    rtc.on('error', (err) => error$.next(WebRTCUtil.error.toError(err)));
 
     const api: t.Peer = {
       kind: 'local:peer',
@@ -127,6 +131,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
         });
       },
 
+      error$: error$.pipe(rx.takeUntil(dispose$)),
       dispose,
       dispose$,
       get disposed() {

@@ -29,6 +29,7 @@ export type Peer = t.Disposable & {
   readonly connections: PeerConnections;
   readonly connections$: t.Observable<PeerConnectionChanged>;
   readonly connectionsByPeer: PeerConnectionsByPeer[];
+  readonly error$: t.Observable<PeerError>;
   readonly disposed: boolean;
   data(connectTo: Id, options?: { name?: string }): Promise<PeerDataConnection>;
   media(connectTo: Id, input: PeerMediaStreamInput): Promise<PeerMediaConnection>;
@@ -104,4 +105,29 @@ export type PeerDataConnectionChanged = ConnectionChanged & {
 export type PeerMediaConnectionChanged = ConnectionChanged & {
   kind: 'media';
   subject: PeerMediaConnection;
+};
+
+/**
+ * Errors
+ * ref: https://peerjs.com/docs/#peeron-error
+ */
+export type PeerErrorType =
+  | 'unknown'
+  | 'browser-incompatible' // (FATAL) The client's browser does not support some or all WebRTC features that you are trying to use.
+  | 'disconnected' //         You've already disconnected this peer from the server and can no longer make any new connections on it.
+  | 'invalid-id' //           (FATAL) The ID passed into the Peer constructor contains illegal characters.
+  | 'invalid-key' //          (FATAL) The API key passed into the Peer constructor contains illegal characters or is not in the system (cloud server only).
+  | 'network' //              Lost or cannot establish a connection to the signalling server.
+  | 'peer-unavailable' //     The peer you're trying to connect to does not exist.
+  | 'ssl-unavailable' //      (FATAL) PeerJS is being used securely, but the cloud server does not support SSL. Use a custom PeerServer.
+  | 'server-error' //         (FATAL) Unable to reach the server.
+  | 'socket-error' //         (FATAL) An error from the underlying socket.
+  | 'socket-closed' //        (FATAL) The underlying socket closed unexpectedly.
+  | 'unavailable-id' //       (sometimes FATAL) The ID passed into the Peer constructor is already taken (non-fatal).
+  | 'webrtc'; //              Native WebRTC errors.
+
+export type PeerError = {
+  type: PeerErrorType;
+  error: Error;
+  isFatal: boolean;
 };
