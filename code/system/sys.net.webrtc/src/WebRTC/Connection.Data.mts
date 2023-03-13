@@ -7,7 +7,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
   const { dispose, dispose$ } = rx.disposable();
   const in$ = new rx.Subject<t.PeerDataPayload>();
   const out$ = new rx.Subject<t.PeerDataPayload>();
-  const metadata: t.PeerMetaData = conn.metadata || { name: 'Unnamed' };
+  const metadata: t.PeerMetaData = conn.metadata || { label: 'Unnamed' };
 
   let _disposed = false;
   dispose$.subscribe(() => {

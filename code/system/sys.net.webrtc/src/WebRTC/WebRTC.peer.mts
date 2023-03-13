@@ -77,11 +77,32 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
           const id = WebRTCUtil.asId(connectTo);
-          const name = options.name ?? 'Unnamed';
-          const metadata: t.PeerMetaData = { name };
-          const conn = rtc.connect(id, { reliable: true, metadata });
-          conn.on('error', (err) => reject(err));
-          conn.on('open', async () => resolve(await state.storeData(conn)));
+          const label = options.name ?? 'Unnamed';
+          const metadata: t.PeerMetaData = { label };
+          const conn = rtc.connect(id, { reliable: true, metadata, label });
+
+          let _isDone = false;
+          const done = () => {
+            _isDone = true;
+            rtc.removeListener('error', handleError);
+          };
+
+          const fail = (err: Error) => {
+            if (_isDone) return;
+            done();
+            reject(err);
+          };
+
+          const handleError = (err: Error) => fail(err);
+          rtc.on('error', handleError);
+
+          conn.on('error', (err) => fail(err));
+          conn.on('open', async () => {
+            if (_isDone) return;
+            const res = await state.storeData(conn);
+            done();
+            resolve(res);
+          });
         });
       },
 

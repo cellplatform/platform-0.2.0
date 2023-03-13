@@ -1,7 +1,32 @@
 import { R, rx, t } from './common';
 import { filter } from './util.filter.mjs';
 
-const noop$ = new rx.Subject<void>(); // no-op observable.
+const noop$ = new rx.Subject<void>(); // no-operation observable.
+
+/**
+ * Determine if the given peer is alive.
+ */
+export async function isAlive(self: t.Peer, subject: t.PeerId) {
+  // NB: If the subject is the local peer, then it is always alive unless disposed.
+  if (self.id === subject) return !self.disposed;
+  if (self.disposed) return false;
+
+  // Check for existing connection to test.
+  const data = self.connections.data.find((item) => item.peer.remote === subject);
+  if (data) {
+    return data.isOpen;
+  }
+
+  // Start (then stop) a transient test connection.
+  try {
+    const conn = await self.data(subject, { name: 'test:isAlive' });
+    const isAlive = conn.isOpen;
+    conn.dispose();
+    return isAlive;
+  } catch (error) {
+    return false;
+  }
+}
 
 export const connections = {
   /**
