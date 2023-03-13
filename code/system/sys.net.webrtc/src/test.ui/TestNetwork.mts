@@ -15,7 +15,8 @@ export const TestNetwork = {
    */
   async peers(length: number = 2, getStream?: t.PeerGetMediaStream) {
     const signal = TEST.signal;
-    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
+    const log = true;
+    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream, log }));
     return (await Promise.all(wait)) as t.Peer[];
   },
 

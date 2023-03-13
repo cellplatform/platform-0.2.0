@@ -1,7 +1,11 @@
 import { Path, PeerJS, rx, t, WebRTCUtil, slug } from './common';
 import { MemoryState } from './WebRTC.state.mjs';
 
-type Options = { id?: t.PeerId; getStream?: t.PeerGetMediaStream; silent?: boolean };
+type Options = {
+  id?: t.PeerId;
+  getStream?: t.PeerGetMediaStream;
+  log?: boolean;
+};
 type SignalServer = {
   host: string;
   path: string;
@@ -23,12 +27,12 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     const path = `/${Path.trimSlashes(endpoint.path)}`;
     const signal = host + path;
 
-    if (!options.silent) {
+    if (options.log) {
       console.group('🔒 Peer Connection (WebRTC)');
       console.info('host:', host);
       console.info('path:', path);
-      console.info('key:', key);
-      console.info('tx:', tx);
+      console.info('key:', key, '(api)');
+      console.info('tx:', tx, '(in-memory instance)');
       console.groupEnd();
     }
 
