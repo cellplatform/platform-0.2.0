@@ -70,7 +70,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('connection: peer.data', async (e) => {
+  e.describe('connection: data', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
@@ -242,7 +242,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('connection: peer.media', async (e) => {
+  e.describe('connection: media', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
@@ -314,7 +314,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe.only('WebRTC.Util', (e) => {
+  e.describe.skip('WebRTC.Util', (e) => {
     e.it('isAlive', async (e) => {
       //
       const [a, b] = await peers(2);
