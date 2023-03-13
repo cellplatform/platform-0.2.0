@@ -1,4 +1,4 @@
-import { MediaStream, rx, t } from './common';
+import { MediaStream, rx, t } from '../common';
 
 type T = {
   ref: { camera: string; screen: string };

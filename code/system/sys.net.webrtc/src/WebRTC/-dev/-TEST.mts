@@ -2,8 +2,9 @@ import { TEST, cuid, Dev, expect, rx, t, Time, WebRTC } from '../../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
   const signal = TEST.signal;
-  const SECOND = 1000;
-  e.timeout(15 * SECOND);
+  const signalEndpoint = `${signal.host}/${signal.path}`;
+
+  e.timeout(1000 * 15);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
     const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
@@ -16,9 +17,8 @@ export default Dev.describe('WebRTC', (e) => {
       const peer1 = await WebRTC.peer({ ...signal, host: ` http://${host} ` }); // NB: Trims the HTTP prefix.
       const peer2 = await WebRTC.peer({ ...signal, host: ` https://${host} ` });
 
-      const url = `${signal.host}/${signal.path}`;
-      expect(peer1.signal).to.eql(url);
-      expect(peer2.signal).to.eql(url);
+      expect(peer1.signal).to.eql(signalEndpoint);
+      expect(peer2.signal).to.eql(signalEndpoint);
 
       peer1.dispose();
       peer2.dispose();
@@ -29,7 +29,7 @@ export default Dev.describe('WebRTC', (e) => {
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
       expect(peer.kind).to.eql('local:peer');
-      expect(peer.signal).to.eql(signal);
+      expect(peer.signal).to.eql(signalEndpoint);
       peer.dispose();
     });
 
@@ -311,6 +311,30 @@ export default Dev.describe('WebRTC', (e) => {
       peerB.dispose();
       expect(peerA.disposed).to.eql(true);
       expect(peerB.disposed).to.eql(true);
+    });
+  });
+
+  e.describe.only('WebRTC.Util', (e) => {
+    e.it('isAlive', async (e) => {
+      //
+      const [a, b] = await peers(2);
+
+      const isAlive0 = await WebRTC.Util.isAlive(a, a.id); // NB: Self - (alive, when not disposed)
+      const isAlive1 = await WebRTC.Util.isAlive(a, b.id);
+      const isAlive2 = await WebRTC.Util.isAlive(a, 'not-alive-peerid');
+
+      a.dispose();
+      const isAlive3 = await WebRTC.Util.isAlive(a, a.id); // NB: Self - disposed.
+
+      console.log('-------------------------------------------');
+      console.log('isAlive0', isAlive0);
+      console.log('isAlive1', isAlive1);
+      // console.log('isAlive2', isAlive2);
+      console.log('isAlive3', isAlive3);
+
+      expect(isAlive0).to.eql(true);
+      expect(isAlive1).to.eql(true);
+      expect(isAlive3).to.eql(false);
     });
   });
 });

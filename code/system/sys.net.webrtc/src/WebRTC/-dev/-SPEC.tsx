@@ -1,6 +1,6 @@
 import { Automerge, CrdtInfo } from 'sys.data.crdt';
 
-import { WebRTC } from '.';
+import { WebRTC } from '..';
 import {
   Time,
   Color,
@@ -16,11 +16,11 @@ import {
   TEST,
   TextInput,
   Path,
-} from '../test.ui';
-import { PeerList, PeerVideo } from '../ui';
-import { DevSample } from './-dev/DEV.Sample';
+} from '../../test.ui';
+import { PeerList, PeerVideo } from '../../ui';
+import { DevSample } from './DEV.Sample';
 
-import type { Doc } from './-dev/DEV.CrdtSync';
+import type { Doc } from './DEV.CrdtSync';
 
 type Milliseconds = number;
 
@@ -30,7 +30,6 @@ const DEFAULT = {
 
 type T = {
   self?: t.Peer;
-  elapsed: Milliseconds;
   main: {
     media?: MediaStream;
     imageUrl?: string;
@@ -46,7 +45,6 @@ type T = {
 };
 const initial: T = {
   self: undefined,
-  elapsed: 0,
   main: {},
   debug: {
     redraw: 0,
@@ -163,13 +161,6 @@ export default Dev.describe('WebRTC', async (e) => {
       async connectData(remote: t.PeerId = '') {
         const conn = await self.data(remote);
         console.info('⚡️ peer.data (response):', conn);
-
-        await state.change((d) => (d.elapsed = 0));
-        const timer = Time.timer();
-        rx.interval(1000)
-          .pipe(rx.takeUntil(conn.dispose$))
-          .subscribe((e) => state.change((d) => (d.elapsed = timer.elapsed.msec)));
-
         return conn;
       },
 
@@ -255,20 +246,6 @@ export default Dev.describe('WebRTC', async (e) => {
             Conn.connectCamera(id);
           }}
         />
-      );
-    });
-
-    dev.hr();
-
-    // Doug (elapsed time)
-    dev.row((e) => {
-      const styles = { base: css({ display: 'grid', gridTemplateColumns: '1fr auto' }) };
-      const elapsed = Time.duration(e.state.elapsed);
-      return (
-        <div {...styles.base}>
-          <div>{`🧔‍♂️ Doug Time`}</div>
-          <div>{`${elapsed.toString()} ⏰`}</div>
-        </div>
       );
     });
 

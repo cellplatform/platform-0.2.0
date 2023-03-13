@@ -1,4 +1,4 @@
-import { Dev, rx, expect, WebRTC } from '..';
+import { Dev, rx, expect, WebRTC } from '../test.ui';
 
 export default Dev.describe('WebRTC.Media', (e) => {
   const SECOND = 1000;

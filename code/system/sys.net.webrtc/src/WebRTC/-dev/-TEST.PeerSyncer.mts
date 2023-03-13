@@ -1,4 +1,4 @@
-import { Dev, expect, t, TEST, Time, WebRTC } from '..';
+import { Dev, expect, t, TEST, Time, WebRTC } from '../../test.ui';
 import { Automerge, Crdt } from '../common';
 
 export default Dev.describe('PeerSyncer', (e) => {

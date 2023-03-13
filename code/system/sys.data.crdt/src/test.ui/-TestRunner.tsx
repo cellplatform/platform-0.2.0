@@ -1,7 +1,7 @@
-import { Time, Dev, t } from '../test.ui';
+import { Dev, t } from '../test.ui';
 
 type T = {
-  debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
+  debug: { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
 };
 const initial: T = {
   debug: { testrunner: {} },
@@ -15,12 +15,14 @@ export default Dev.describe('Root', (e) => {
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
+        const { spinning, results } = e.state.debug.testrunner;
         return (
           <Dev.TestRunner.Results
-            {...e.state.debug.testrunner}
-            style={{ Absolute: 0 }}
+            data={results}
+            spinning={spinning}
             padding={10}
             scroll={true}
+            style={{ Absolute: 0 }}
           />
         );
       });
@@ -30,7 +32,7 @@ export default Dev.describe('Root', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        TestResults: e.state.debug.testrunner.data,
+        TestResults: e.state.debug.testrunner.results,
       };
       return <Dev.Object name={'spec'} data={data} expand={1} />;
     });
@@ -40,7 +42,7 @@ export default Dev.describe('Root', (e) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
         const results = await spec.run();
         await dev.change((d) => {
-          d.debug.testrunner.data = results;
+          d.debug.testrunner.results = results;
           d.debug.testrunner.spinning = false;
         });
       };

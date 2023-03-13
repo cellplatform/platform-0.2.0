@@ -1,7 +1,7 @@
-import { Dev, t } from '..';
+import { Dev, t } from '.';
 
 type T = {
-  debug: { testrunner: { spinning?: boolean; data?: t.TestSuiteRunResponse } };
+  debug: { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
 };
 const initial: T = {
   debug: { testrunner: {} },
@@ -15,12 +15,14 @@ export default Dev.describe('Root', (e) => {
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
+        const { spinning, results } = e.state.debug.testrunner;
         return (
           <Dev.TestRunner.Results
-            {...e.state.debug.testrunner}
-            style={{ Absolute: 0 }}
+            data={results}
+            spinning={spinning}
             padding={10}
             scroll={true}
+            style={{ Absolute: 0 }}
           />
         );
       });
@@ -37,36 +39,51 @@ export default Dev.describe('Root', (e) => {
         await dev.change((d) => (d.debug.testrunner.spinning = true));
         const results = await spec.run();
         await dev.change((d) => {
-          d.debug.testrunner.data = results;
+          d.debug.testrunner.results = results;
           d.debug.testrunner.spinning = false;
         });
       };
 
       const tests: t.TestSuiteModel[] = [];
-      const button = async (input: t.SpecImport) => {
+      const button = async (input: t.SpecImport, immediate?: boolean) => {
         const module = await input;
         const spec = await (module.default as t.TestSuiteModel).init();
-        dev.button(spec.description, (e) => invoke(spec));
+        dev.button((btn) =>
+          btn
+            .label(spec.description)
+            .right(() => (immediate ? '← immediate' : ''))
+            .onClick(() => invoke(spec)),
+        );
+        if (immediate) invoke(spec);
         return spec;
       };
 
-      dev.button('run all', async (e) => await invoke(all));
-
-      dev.hr();
-      dev.title('Integration tests');
+      dev.title('Integration Tests');
 
       tests.push(
         ...[
-          await button(import('../../WebRTC/-dev/TEST.WebRTC.mjs')),
-          await button(import('./TEST.WebRTC.Media.mjs')),
-          await button(import('./TEST.PeerSyncer.mjs')),
+          await button(import('../WebRTC/-dev/-TEST.mjs')),
+          await button(import('../WebRTC/-dev/-TEST.PeerSyncer.mjs')),
+          await button(import('../WebRTC.Media/-TEST.mjs')),
         ],
       );
 
-      dev.hr();
+      dev.hr(5, 20);
 
       const all = Dev.describe('All Test Suites');
       all.merge(...tests);
+
+      dev.button((btn) =>
+        btn
+          .label('run all')
+          .right('🌳')
+          .onClick((e) => invoke(all)),
+      );
+
+      /**
+       * Immediate invocation of tests.
+       */
+      // Time.delay(0, () => invoke(all));
     });
   });
 });
