@@ -31,7 +31,10 @@ const initial: T = {
 type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
-type DocShared = { count: number; network: t.NetworkState };
+type DocShared = {
+  count: number;
+  network: t.NetworkState;
+};
 const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
 
 export default Dev.describe('PeerVideo', async (e) => {
@@ -174,20 +177,20 @@ export default Dev.describe('PeerVideo', async (e) => {
       return (
         <Dev.Object
           fontSize={11}
-          name={'PeerVideo'}
+          name={'Me'}
           expand={{
             level: 1,
             paths: [
-              // '$.Doc<Me>',
-              '$.Doc<Shared>',
-              '$.Doc<Shared>.network',
-              '$.Doc<Shared>.network.*',
+              //
+              '$.Doc<Public>',
+              '$.Doc<Public>.network',
+              '$.Doc<Public>.network.*',
             ],
           }}
           data={{
-            [`WebRTC.Peer<Me>[${total}]`]: self,
-            'Doc<Me>': docMe?.current,
-            'Doc<Shared>': docShared?.current,
+            [`WebRTC.Peer[${total}]`]: self,
+            'Doc<Private>': docMe?.current,
+            'Doc<Public>': docShared?.current,
           }}
         />
       );
@@ -223,7 +226,7 @@ export default Dev.describe('PeerVideo', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Me>', (dev) => {
+    dev.section('Doc<Private>', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -244,7 +247,7 @@ export default Dev.describe('PeerVideo', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Shared>', (dev) => {
+    dev.section('Doc<Public> (Shared)', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
