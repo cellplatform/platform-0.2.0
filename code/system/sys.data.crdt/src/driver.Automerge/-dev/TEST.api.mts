@@ -194,6 +194,23 @@ export default Test.describe('Automerge: API surface area', (e) => {
         expect(doc.json?.value.list).to.not.equal(obj.list);
         expect(doc.json?.value.child).to.not.equal(obj.child);
       });
+
+      e.describe('edge cases', (e) => {
+        e.it('error: cannot write an { value: <undefined> } object', (e) => {
+          // NB: This is a limitation of the underlying Automerge library.
+          let doc = createTestDoc();
+          const fn = () => {
+            doc = Automerge.change<Doc>(doc, (d) => (d.json = { value: undefined }));
+          };
+          expect(fn).to.throw(/Unsupported type of value: undefined/);
+        });
+
+        e.it('can write a { value: <null> } object', (e) => {
+          let doc = createTestDoc();
+          doc = Automerge.change<Doc>(doc, (d) => (d.json = { value: null }));
+          expect(doc.json.value).to.eql(null);
+        });
+      });
     });
   });
 
