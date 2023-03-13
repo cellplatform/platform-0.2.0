@@ -10,7 +10,7 @@ export type IconViewProps = t.IconProps & {
 };
 
 export const IconView: React.FC<IconViewProps> = (props) => {
-  const { size = 24, opacity } = props;
+  const { size = 24, opacity, offset } = props;
   const Component = props.type;
 
   const styles = {
@@ -19,6 +19,7 @@ export const IconView: React.FC<IconViewProps> = (props) => {
       overflow: 'hidden',
       opacity: opacity === undefined ? 1 : opacity,
       Size: size,
+      transform: offset ? `translate(${offset[0]}px, ${offset[1]}px)` : undefined,
     }),
   };
 

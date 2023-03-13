@@ -41,14 +41,31 @@ export default Dev.describe('Icon', (e) => {
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `inherit color: ${e.state.debug.inheritColor ? 'magenta' : '(none)'}`)
-        .value((e) => e.state.debug.inheritColor)
-        .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'inheritColor'))),
-    );
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `inherit color: ${e.state.debug.inheritColor ? 'magenta' : '(none)'}`)
+          .value((e) => e.state.debug.inheritColor)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'inheritColor'))),
+      );
 
-    dev.hr();
+      dev.boolean((btn) =>
+        btn
+          .label((e) => {
+            const offset = e.state.props.offset;
+            return `offset: ${offset ? `[${offset.toString()}]` : '<none>'}`;
+          })
+          .value((e) => Boolean(e.state.props.offset))
+          .onClick((e) => {
+            e.change((d) => {
+              const exists = Boolean(d.props.offset);
+              d.props.offset = exists ? undefined : [35, -40];
+            });
+          }),
+      );
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Color', (dev) => {
       const color = (name: string, value?: string) => {
