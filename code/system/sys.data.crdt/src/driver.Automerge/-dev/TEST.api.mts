@@ -2,6 +2,7 @@ import { Automerge } from '..';
 import { expect, Test } from '../../test.ui';
 
 export default Test.describe('Automerge (lib): API surface area', (e) => {
+export default Test.describe('Automerge: API surface area', (e) => {
   type Card = { title: string; done: boolean; count: number };
   type Doc = {
     name?: string;
