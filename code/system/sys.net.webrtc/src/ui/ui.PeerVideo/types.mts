@@ -20,5 +20,9 @@ export type NetworkStatePeers = { [key: string]: NetworkStatePeer };
 export type NetworkStatePeer = {
   id: t.PeerId;
   initiatedBy?: t.PeerId;
-  meta: { useragent?: string };
+  meta: NetworkStatePeerMeta;
+};
+
+export type NetworkStatePeerMeta = {
+  useragent?: string;
 };
