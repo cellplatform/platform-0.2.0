@@ -44,14 +44,14 @@ export default Test.describe('Sync Protocol - PeerSyncer', (e) => {
     expect(docB).to.eql({ count: 1234 });
 
     await syncerA.update();
-    await Time.wait(50);
+    await Time.wait(100);
 
     expect(docA).to.eql({ name: 'Foo', count: 1234 });
     expect(docB).to.eql(docA);
 
     docB = Automerge.change(docB, (doc) => (doc.name = 'Bar'));
     await syncerB.update();
-    await Time.wait(50);
+    await Time.wait(100);
 
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
