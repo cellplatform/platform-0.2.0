@@ -7,7 +7,7 @@ import { Keyboard, t } from './common';
 export function useKeyboard(textboxRef?: t.TextInputRef) {
   useEffect(() => {
     const handler = Keyboard.on({
-      'CMD + KeyP'(e) {
+      'CMD + KeyK'(e) {
         e.cancel();
         textboxRef?.focus();
         textboxRef?.selectAll();
