@@ -1,6 +1,6 @@
 import { Dev, rx, expect, WebRtc } from '../test.ui';
 
-export default Dev.describe('WebRtc.Media', (e) => {
+export default Dev.describe('WebRtc.Media (Stream Input)', (e) => {
   const SECOND = 1000;
   e.timeout(15 * SECOND);
 

@@ -1,7 +1,7 @@
 import { Time, Test, expect, t } from '../../test.ui';
 import { Mock } from './Mock.mjs';
 
-export default Test.describe('mocks', (e) => {
+export default Test.describe('mocking (helpers)', (e) => {
   e.describe('MockDataConnection', (e) => {
     e.describe('single edge', (e) => {
       e.it('default properties', (e) => {

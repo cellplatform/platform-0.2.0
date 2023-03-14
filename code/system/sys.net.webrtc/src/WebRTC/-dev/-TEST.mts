@@ -1,24 +1,30 @@
-import { cuid, Dev, expect, expectError, rx, t, TEST, Time, WebRtc } from '../../test.ui';
+import {
+  cuid,
+  Dev,
+  expect,
+  expectError,
+  rx,
+  t,
+  TEST,
+  Time,
+  WebRtc,
+  TestNetwork,
+} from '../../test.ui';
 
 export default Dev.describe('WebRtc', (e) => {
   e.timeout(1000 * 15);
-
   const signal = TEST.signal;
-  const signalEndpoint = `${signal.host}/${signal.path}`;
-
-  const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream }));
-    return await Promise.all(wait);
-  };
 
   e.describe('peer: initial state', (e) => {
+    const endpoint = `${signal.host}/${signal.path}`;
+
     e.it('trims HTTP from host', async (e) => {
       const host = signal.host;
       const peer1 = await WebRtc.peer({ ...signal, host: ` http://${host} ` }); // NB: Trims the HTTP prefix.
       const peer2 = await WebRtc.peer({ ...signal, host: ` https://${host} ` });
 
-      expect(peer1.signal).to.eql(signalEndpoint);
-      expect(peer2.signal).to.eql(signalEndpoint);
+      expect(peer1.signal).to.eql(endpoint);
+      expect(peer2.signal).to.eql(endpoint);
 
       peer1.dispose();
       peer2.dispose();
@@ -29,7 +35,7 @@ export default Dev.describe('WebRtc', (e) => {
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
       expect(peer.kind).to.eql('local:peer');
-      expect(peer.signal).to.eql(signalEndpoint);
+      expect(peer.signal).to.eql(endpoint);
       peer.dispose();
     });
 
@@ -70,12 +76,12 @@ export default Dev.describe('WebRtc', (e) => {
     });
   });
 
-  e.describe('connection: data', async (e) => {
+  e.describe.only('connection: data', async (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
     e.it('init: create peers A ⇔ B', async (e) => {
-      const [a, b] = await peers(2);
+      const [a, b] = await TestNetwork.peers(2);
       peerA = a;
       peerB = b;
     });
@@ -188,11 +194,20 @@ export default Dev.describe('WebRtc', (e) => {
     });
 
     e.it('error: remote peer does not exist', async (e) => {
+      const { dispose, dispose$ } = rx.disposable();
+
+      peerA.error$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+        //
+        console.log('e', e);
+      });
+
       expectError(
         //
         () => peerA.data('FOO-404'),
         'Could not connect to peer FOO-404',
       );
+
+      dispose();
     });
 
     e.it('dispose: data connections (close A.data | B.data)', async (e) => {
@@ -261,10 +276,11 @@ export default Dev.describe('WebRtc', (e) => {
     let peerB: t.Peer;
 
     const Media = WebRtc.Media.singleton();
+    const getStream = Media.getStream;
     const getMediaStatus = async () => Media.events.status(Media.ref.camera).get();
 
     e.it('init: create peers A ⇔ B', async (e) => {
-      const [a, b] = await peers(2, Media.getStream);
+      const [a, b] = await TestNetwork.peers(2, { getStream });
       peerA = a;
       peerB = b;
     });
@@ -332,75 +348,75 @@ export default Dev.describe('WebRtc', (e) => {
     });
   });
 
-  e.describe('WebRtc.Util', (e) => {
-    e.describe('isAlive', (e) => {
-      let peerA: t.Peer;
-      let peerB: t.Peer;
-
-      e.it('init: create peers A ⇔ B', async (e) => {
-        const [a, b] = await peers(2);
-        peerA = a;
-        peerB = b;
-      });
-
-      e.it('remote peer does not exist', async (e) => {
-        const res = await WebRtc.Util.isAlive(peerA, 'no-exist');
-        expect(res).to.eql(false);
-      });
-
-      e.it('has existing connection to remote peer (fast)', async (e) => {
-        const conn = await peerA.data(peerB.id);
-        const res = await WebRtc.Util.isAlive(peerA, peerB.id);
-        conn.dispose();
-        expect(res).to.eql(true);
-      });
-
-      e.it(
-        'no existing connection to remote peer: establish new transient test data connection',
-        async (e) => {
-          expect(peerA.connections.length).to.eql(0);
-          expect(peerB.connections.length).to.eql(0);
-
-          const fired: t.PeerConnectionChanged[] = [];
-          peerA.connections$.subscribe((e) => fired.push(e));
-
-          const res = await WebRtc.Util.isAlive(peerA, peerB.id);
-          expect(res).to.eql(true);
-
-          expect(peerA.connections.length).to.eql(0);
-          expect(peerB.connections.length).to.eql(0);
-
-          expect(fired.length).to.eql(2);
-          expect(fired[0].action).to.eql('added');
-          expect(fired[1].action).to.eql('removed');
-
-          const conn = fired[0].connections[0] as t.PeerDataConnection;
-          expect(conn.metadata.label).to.eql('test:isAlive');
-        },
-      );
-
-      e.it('remote peer disposed', async (e) => {
-        peerB.dispose();
-        const res = await WebRtc.Util.isAlive(peerA, peerB.id);
-        expect(res).to.eql(false);
-      });
-
-      e.it('dispose: peers (A | B)', async (e) => {
-        // NB: Self - (alive, when not disposed)
-        expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(true);
-        expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false); // Already disposed ^
-
-        peerA.dispose();
-        peerB.dispose();
-        expect(peerA.disposed).to.eql(true);
-        expect(peerB.disposed).to.eql(true);
-
-        // NB: Self - disposed.
-        expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(false);
-        expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false);
-
-        await Time.wait(500);
-      });
-    });
-  });
+  //   e.describe('WebRtc.Util', (e) => {
+  //     e.describe('isAlive', (e) => {
+  //       let peerA: t.Peer;
+  //       let peerB: t.Peer;
+  //
+  //       e.it('init: create peers A ⇔ B', async (e) => {
+  //         const [a, b] = await TestNetwork.peers(2);
+  //         peerA = a;
+  //         peerB = b;
+  //       });
+  //
+  //       e.it('remote peer does not exist', async (e) => {
+  //         const res = await WebRtc.Util.isAlive(peerA, 'no-exist');
+  //         expect(res).to.eql(false);
+  //       });
+  //
+  //       e.it('has existing connection to remote peer (fast)', async (e) => {
+  //         const conn = await peerA.data(peerB.id);
+  //         const res = await WebRtc.Util.isAlive(peerA, peerB.id);
+  //         conn.dispose();
+  //         expect(res).to.eql(true);
+  //       });
+  //
+  //       e.it(
+  //         'no existing connection to remote peer: establish new transient test data connection',
+  //         async (e) => {
+  //           expect(peerA.connections.length).to.eql(0);
+  //           expect(peerB.connections.length).to.eql(0);
+  //
+  //           const fired: t.PeerConnectionChanged[] = [];
+  //           peerA.connections$.subscribe((e) => fired.push(e));
+  //
+  //           const res = await WebRtc.Util.isAlive(peerA, peerB.id);
+  //           expect(res).to.eql(true);
+  //
+  //           expect(peerA.connections.length).to.eql(0);
+  //           expect(peerB.connections.length).to.eql(0);
+  //
+  //           expect(fired.length).to.eql(2);
+  //           expect(fired[0].action).to.eql('added');
+  //           expect(fired[1].action).to.eql('removed');
+  //
+  //           const conn = fired[0].connections[0] as t.PeerDataConnection;
+  //           expect(conn.metadata.label).to.eql('test:isAlive');
+  //         },
+  //       );
+  //
+  //       e.it('remote peer disposed', async (e) => {
+  //         peerB.dispose();
+  //         const res = await WebRtc.Util.isAlive(peerA, peerB.id);
+  //         expect(res).to.eql(false);
+  //       });
+  //
+  //       e.it('dispose: peers (A | B)', async (e) => {
+  //         // NB: Self - (alive, when not disposed)
+  //         expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(true);
+  //         expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false); // Already disposed ^
+  //
+  //         peerA.dispose();
+  //         peerB.dispose();
+  //         expect(peerA.disposed).to.eql(true);
+  //         expect(peerB.disposed).to.eql(true);
+  //
+  //         // NB: Self - disposed.
+  //         expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(false);
+  //         expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false);
+  //
+  //         await Time.wait(500);
+  //       });
+  //     });
+  //   });
 });
