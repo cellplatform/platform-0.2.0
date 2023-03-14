@@ -197,7 +197,7 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
     dev.section('nostr-tools', async (dev) => {
       const nostr = await import('nostr-tools');
 
-      dev.button('generat keys', (dev) => {
+      dev.button('generate keys', (dev) => {
         let sk = nostr.generatePrivateKey(); // `sk` is a hex string
         let pk = nostr.getPublicKey(sk); //     `pk` is a hex string
 
