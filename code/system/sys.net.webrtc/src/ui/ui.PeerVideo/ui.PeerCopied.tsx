@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Icons } from '../common';
+import { Color, COLORS, css, Icons, t } from '../common';
 
 export type PeerCopiedProps = {
   message?: string;
@@ -22,7 +21,7 @@ export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
     }),
     message: {
       base: css({
-        backgroundColor: Color.alpha(COLORS.WHITE, 0.4),
+        backgroundColor: Color.alpha(COLORS.WHITE, 0.7),
         border: `solid 1px ${Color.format(1)}`,
         borderRadius: 10,
         Padding: [15, 30],
@@ -32,10 +31,9 @@ export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
         display: 'grid',
         placeItems: 'center',
         boxSizing: 'border-box',
+        fontSize: 20,
       }),
-      icon: css({
-        marginLeft: 20,
-      }),
+      icon: css({ marginLeft: 20 }),
     },
   };
 
