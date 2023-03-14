@@ -1,7 +1,7 @@
 import { Dev, expect, t, TEST, Time, WebRtc } from '../../test.ui';
 import { Automerge, Crdt } from '../common';
 
-export default Dev.describe('WebRtc ⇔ CRDT (Sync Protocol)', (e) => {
+export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
   const signal = TEST.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);

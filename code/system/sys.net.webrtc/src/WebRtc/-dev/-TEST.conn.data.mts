@@ -1,6 +1,6 @@
 import { Dev, expect, expectError, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 
-export default Dev.describe('WebRtc: Data Connection', (e) => {
+export default Dev.describe('Data Connection', (e) => {
   e.timeout(1000 * 15);
 
   let peerA: t.Peer;

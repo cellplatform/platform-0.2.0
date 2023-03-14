@@ -1,6 +1,6 @@
 import { Dev, expect, rx, t, TestNetwork, Time, WebRtc, expectError } from '../../test.ui';
 
-export default Dev.describe('WebRtc: Media Connection', (e) => {
+export default Dev.describe('Media Connection', (e) => {
   e.timeout(1000 * 15);
 
   e.describe('connection: media', async (e) => {
