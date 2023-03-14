@@ -16,7 +16,6 @@ export type FooterProps = {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   const { self, showPeer, showConnect, isSpinning = false } = props;
-  if (!showPeer && !showConnect) return null;
 
   const canConnect = Wrangle.canConnect(props);
   const isConnected = Wrangle.isConnected(props);
@@ -30,7 +29,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
     me: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
   };
 
-  const elConnect = (
+  const elConnect = showConnect && (
     <FooterConnect
       self={self}
       ids={ids}
@@ -45,6 +44,8 @@ export const Footer: React.FC<FooterProps> = (props) => {
   const elMe = showPeer && (
     <FooterMe self={self} style={styles.me} onLocalPeerCopied={props.onLocalPeerCopied} />
   );
+
+  if (!elConnect && !elMe) return null;
 
   return (
     <div {...css(styles.base, props.style)}>
