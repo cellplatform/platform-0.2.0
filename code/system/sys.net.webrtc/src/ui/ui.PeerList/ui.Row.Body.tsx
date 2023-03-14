@@ -1,4 +1,4 @@
-import { AudioWaveform, Color, COLORS, css, t, useSizeObserver, WebRTC } from '../common';
+import { AudioWaveform, Color, COLORS, css, t, useSizeObserver, WebRtc } from '../common';
 import { ConnScreenshare } from './ui.Conn.Screenshare';
 
 export type RowBodyProps = {
@@ -12,7 +12,7 @@ export type RowBodyProps = {
 export const RowBody: React.FC<RowBodyProps> = (props) => {
   const { peerConnections, debug } = props;
   const peerid = peerConnections.peer.remote;
-  const peerUri = WebRTC.Util.asUri(peerid);
+  const peerUri = WebRtc.Util.asUri(peerid);
 
   const media = peerConnections.media.find((item) => item.stream)?.stream;
   const video = media?.remote;

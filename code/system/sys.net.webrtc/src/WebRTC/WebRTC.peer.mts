@@ -1,5 +1,5 @@
-import { Path, PeerJS, rx, t, WebRTCUtil, slug } from './common';
-import { MemoryState } from './WebRTC.state.mjs';
+import { Path, PeerJS, rx, t, WebRtcUtil, slug } from './common';
+import { MemoryState } from './WebRtc.state.mjs';
 
 type Options = {
   id?: t.PeerId;
@@ -21,7 +21,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
 
     const tx = `peer.tx.${slug()}`;
     const state = MemoryState();
-    const id = WebRTCUtil.asId(options.id ?? WebRTCUtil.randomPeerId());
+    const id = WebRtcUtil.asId(options.id ?? WebRtcUtil.randomPeerId());
     const key = endpoint.key;
     const host = Path.trimHttpPrefix(endpoint.host);
     const path = `/${Path.trimSlashes(endpoint.path)}`;
@@ -55,7 +55,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     });
 
     const error$ = new rx.Subject<t.PeerError>();
-    rtc.on('error', (err) => error$.next(WebRTCUtil.error.toError(err)));
+    rtc.on('error', (err) => error$.next(WebRtcUtil.error.toError(err)));
 
     const api: t.Peer = {
       kind: 'local:peer',
@@ -68,7 +68,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
         return state.connections;
       },
       get connectionsByPeer() {
-        return WebRTCUtil.connections.byPeer(id, state.connections.all);
+        return WebRtcUtil.connections.byPeer(id, state.connections.all);
       },
 
       /**
@@ -76,7 +76,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
        */
       data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
-          const id = WebRTCUtil.asId(connectTo);
+          const id = WebRtcUtil.asId(connectTo);
           const label = options.name ?? 'Unnamed';
           const metadata: t.PeerMetaData = { label };
           const conn = rtc.connect(id, { reliable: true, metadata, label });
@@ -123,7 +123,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
             resolve(res);
           };
 
-          const id = WebRTCUtil.asId(connectTo);
+          const id = WebRtcUtil.asId(connectTo);
           const metadata: t.PeerMetaMedia = { input };
           const stream = await getStream(input);
           const local = stream?.media;

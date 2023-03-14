@@ -1,4 +1,4 @@
-import { rx, slug, t, WebRTC } from '../common';
+import { rx, slug, t, WebRtc } from '../common';
 
 type EdgeOptions = {
   id: string;
@@ -80,7 +80,7 @@ export const MockDataConnection = {
       out$: out$.pipe(rx.takeUntil(dispose$)),
 
       send<E extends t.Event>(event: E) {
-        const payload = WebRTC.Util.toDataPayload(conn, event);
+        const payload = WebRtc.Util.toDataPayload(conn, event);
         if (!_disposed) out$.next(payload);
         return payload;
       },

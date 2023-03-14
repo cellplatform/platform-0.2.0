@@ -1,4 +1,4 @@
-import { Button, copyPeer, css, FC, t, TextSyntax, WebRTC } from '../common';
+import { Button, copyPeer, css, FC, t, TextSyntax, WebRtc } from '../common';
 
 export type PeerIdProps = {
   peer?: t.PeerId | t.PeerUri;
@@ -22,8 +22,8 @@ const View: React.FC<PeerIdProps> = (props) => {
    */
   const handleClick = () => {
     if (!props.peer) return;
-    const id = WebRTC.Util.asId(props.peer);
-    const uri = WebRTC.Util.asUri(id);
+    const id = WebRtc.Util.asId(props.peer);
+    const uri = WebRtc.Util.asUri(id);
     if (copyOnClick) copyPeer(id);
     props.onClick?.({ id, uri, copied: copyOnClick });
   };
@@ -79,12 +79,12 @@ export const PeerId = FC.decorate<PeerIdProps, Fields>(
  */
 const Wrangle = {
   uri(props: PeerIdProps) {
-    return props.peer ? WebRTC.Util.asUri(props.peer) : '';
+    return props.peer ? WebRtc.Util.asUri(props.peer) : '';
   },
 
   id(props: PeerIdProps) {
     const { abbreviate } = props;
-    const id = props.peer ? WebRTC.Util.asId(props.peer) : '';
+    const id = props.peer ? WebRtc.Util.asId(props.peer) : '';
 
     if (!abbreviate && typeof abbreviate !== 'number' && !Array.isArray(abbreviate)) {
       return id;
@@ -105,6 +105,6 @@ const Wrangle = {
     if (!props.peer) return 'peer:initiating...';
     const id = Wrangle.id(props);
     const prefix = (props.prefix ?? '').trim();
-    return prefix ? `${prefix.replace(/\:$/, '')}:${id}` : WebRTC.Util.asUri(id);
+    return prefix ? `${prefix.replace(/\:$/, '')}:${id}` : WebRtc.Util.asUri(id);
   },
 };

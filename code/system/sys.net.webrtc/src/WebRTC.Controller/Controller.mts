@@ -1,6 +1,6 @@
 import { Crdt, rx, t } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
-import { WebRTCUtil } from '../WebRTC.Util';
+import { WebRtcUtil } from '../WebRtc.Util';
 
 /**
  * TODO 🐷 MOVE to type.mts
@@ -30,7 +30,7 @@ export const WebRtcController = {
     /**
      * Listen to connections.
      */
-    const changed = WebRTCUtil.connections.changed(self, args.dispose$);
+    const changed = WebRtcUtil.connections.changed(self, args.dispose$);
     const connAdded$ = changed.data.added$;
     const connRemoved$ = changed.data.removed$;
 

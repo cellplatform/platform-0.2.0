@@ -1,4 +1,4 @@
-import { rx, t, WebRTCUtil } from './common';
+import { rx, t, WebRtcUtil } from './common';
 import { PeerDataConnection } from './Connection.Data.mjs';
 import { PeerMediaConnection } from './Connection.Media.mjs';
 
@@ -11,7 +11,7 @@ export function MemoryState() {
 
   const api = {
     connections$: connections$.asObservable(),
-    connections: WebRTCUtil.connections.toSet(() => [...memory.connections]),
+    connections: WebRtcUtil.connections.toSet(() => [...memory.connections]),
 
     fireChanged<P extends t.PeerConnectionChanged>(action: P['action'], subject: P['subject']) {
       const kind = subject.kind;

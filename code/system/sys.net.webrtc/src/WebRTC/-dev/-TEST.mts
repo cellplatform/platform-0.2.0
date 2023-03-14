@@ -1,21 +1,21 @@
-import { cuid, Dev, expect, expectError, rx, t, TEST, Time, WebRTC } from '../../test.ui';
+import { cuid, Dev, expect, expectError, rx, t, TEST, Time, WebRtc } from '../../test.ui';
 
-export default Dev.describe('WebRTC', (e) => {
+export default Dev.describe('WebRtc', (e) => {
   const signal = TEST.signal;
   const signalEndpoint = `${signal.host}/${signal.path}`;
 
   e.timeout(1000 * 15);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
+    const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream }));
     return await Promise.all(wait);
   };
 
   e.describe('peer: initial state', (e) => {
     e.it('trims HTTP from host', async (e) => {
       const host = signal.host;
-      const peer1 = await WebRTC.peer({ ...signal, host: ` http://${host} ` }); // NB: Trims the HTTP prefix.
-      const peer2 = await WebRTC.peer({ ...signal, host: ` https://${host} ` });
+      const peer1 = await WebRtc.peer({ ...signal, host: ` http://${host} ` }); // NB: Trims the HTTP prefix.
+      const peer2 = await WebRtc.peer({ ...signal, host: ` https://${host} ` });
 
       expect(peer1.signal).to.eql(signalEndpoint);
       expect(peer2.signal).to.eql(signalEndpoint);
@@ -25,7 +25,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('generates a unique peer-id', async (e) => {
-      const peer = await WebRTC.peer(signal);
+      const peer = await WebRtc.peer(signal);
       expect(peer.id).to.be.a('string');
       expect(peer.id.length).to.greaterThan(10);
       expect(peer.kind).to.eql('local:peer');
@@ -36,8 +36,8 @@ export default Dev.describe('WebRTC', (e) => {
     e.it('uses a specific peer-id', async (e) => {
       const id1 = cuid();
       const id2 = cuid();
-      const peer1 = await WebRTC.peer(signal, { id: id1 });
-      const peer2 = await WebRTC.peer(signal, { id: `peer:${id2}` });
+      const peer1 = await WebRtc.peer(signal, { id: id1 });
+      const peer2 = await WebRtc.peer(signal, { id: `peer:${id2}` });
 
       expect(peer1.id).to.eql(id1);
       expect(peer2.id).to.eql(id2); // NB: Trims the "peer:" URI prefix.
@@ -47,8 +47,8 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('generates a unique "tx" lifetime identifier (in-memory peer instance)', async (e) => {
-      const peer1 = await WebRTC.peer(signal, { id: cuid() });
-      const peer2 = await WebRTC.peer(signal, {});
+      const peer1 = await WebRtc.peer(signal, { id: cuid() });
+      const peer2 = await WebRtc.peer(signal, {});
 
       expect(peer1.tx).to.match(/^peer\.tx\./);
       expect(peer2.tx).to.match(/^peer\.tx\./);
@@ -56,7 +56,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
 
     e.it('exposes lists as immutable', async (e) => {
-      const peer = await WebRTC.peer(signal);
+      const peer = await WebRtc.peer(signal);
 
       expect(peer.connections.all).to.eql([]);
       expect(peer.connections.data).to.eql([]);
@@ -139,8 +139,8 @@ export default Dev.describe('WebRTC', (e) => {
       const payloadA = a.send<E>({ type: 'foo', payload: { msg: 'from-A' } });
       const payloadB = b.send<E>({ type: 'foo', payload: { msg: 'from-B' } });
 
-      expect(WebRTC.Util.isType.PeerDataPayload(payloadA)).to.eql(true);
-      expect(WebRTC.Util.isType.PeerDataPayload(payloadB)).to.eql(true);
+      expect(WebRtc.Util.isType.PeerDataPayload(payloadA)).to.eql(true);
+      expect(WebRtc.Util.isType.PeerDataPayload(payloadB)).to.eql(true);
 
       await Time.wait(500);
 
@@ -260,7 +260,7 @@ export default Dev.describe('WebRTC', (e) => {
     let peerA: t.Peer;
     let peerB: t.Peer;
 
-    const Media = WebRTC.Media.singleton();
+    const Media = WebRtc.Media.singleton();
     const getMediaStatus = async () => Media.events.status(Media.ref.camera).get();
 
     e.it('init: create peers A ⇔ B', async (e) => {
@@ -332,7 +332,7 @@ export default Dev.describe('WebRTC', (e) => {
     });
   });
 
-  e.describe('WebRTC.Util', (e) => {
+  e.describe('WebRtc.Util', (e) => {
     e.describe('isAlive', (e) => {
       let peerA: t.Peer;
       let peerB: t.Peer;
@@ -344,13 +344,13 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       e.it('remote peer does not exist', async (e) => {
-        const res = await WebRTC.Util.isAlive(peerA, 'no-exist');
+        const res = await WebRtc.Util.isAlive(peerA, 'no-exist');
         expect(res).to.eql(false);
       });
 
       e.it('has existing connection to remote peer (fast)', async (e) => {
         const conn = await peerA.data(peerB.id);
-        const res = await WebRTC.Util.isAlive(peerA, peerB.id);
+        const res = await WebRtc.Util.isAlive(peerA, peerB.id);
         conn.dispose();
         expect(res).to.eql(true);
       });
@@ -364,7 +364,7 @@ export default Dev.describe('WebRTC', (e) => {
           const fired: t.PeerConnectionChanged[] = [];
           peerA.connections$.subscribe((e) => fired.push(e));
 
-          const res = await WebRTC.Util.isAlive(peerA, peerB.id);
+          const res = await WebRtc.Util.isAlive(peerA, peerB.id);
           expect(res).to.eql(true);
 
           expect(peerA.connections.length).to.eql(0);
@@ -381,14 +381,14 @@ export default Dev.describe('WebRTC', (e) => {
 
       e.it('remote peer disposed', async (e) => {
         peerB.dispose();
-        const res = await WebRTC.Util.isAlive(peerA, peerB.id);
+        const res = await WebRtc.Util.isAlive(peerA, peerB.id);
         expect(res).to.eql(false);
       });
 
       e.it('dispose: peers (A | B)', async (e) => {
         // NB: Self - (alive, when not disposed)
-        expect(await WebRTC.Util.isAlive(peerA, peerA.id)).to.eql(true);
-        expect(await WebRTC.Util.isAlive(peerB, peerB.id)).to.eql(false); // Already disposed ^
+        expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(true);
+        expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false); // Already disposed ^
 
         peerA.dispose();
         peerB.dispose();
@@ -396,8 +396,8 @@ export default Dev.describe('WebRTC', (e) => {
         expect(peerB.disposed).to.eql(true);
 
         // NB: Self - disposed.
-        expect(await WebRTC.Util.isAlive(peerA, peerA.id)).to.eql(false);
-        expect(await WebRTC.Util.isAlive(peerB, peerB.id)).to.eql(false);
+        expect(await WebRtc.Util.isAlive(peerA, peerA.id)).to.eql(false);
+        expect(await WebRtc.Util.isAlive(peerB, peerB.id)).to.eql(false);
 
         await Time.wait(500);
       });

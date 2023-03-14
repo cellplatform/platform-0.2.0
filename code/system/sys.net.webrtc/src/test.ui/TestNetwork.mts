@@ -1,4 +1,4 @@
-import { TEST, WebRTC, t, rx } from './common';
+import { TEST, WebRtc, t, rx } from './common';
 
 export type TestNetworkP2P = t.Disposable & {
   peerA: t.Peer;
@@ -16,7 +16,7 @@ export const TestNetwork = {
   async peers(length: number = 2, getStream?: t.PeerGetMediaStream) {
     const signal = TEST.signal;
     const log = true;
-    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream, log }));
+    const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream, log }));
     return (await Promise.all(wait)) as t.Peer[];
   },
 
@@ -25,7 +25,7 @@ export const TestNetwork = {
    */
   async init() {
     const { dispose, dispose$ } = rx.disposable();
-    const media = WebRTC.Media.singleton({});
+    const media = WebRtc.Media.singleton({});
     const [peerA, peerB] = await TestNetwork.peers(2, media.getStream);
 
     dispose$.subscribe(() => {
@@ -43,12 +43,12 @@ export const TestNetwork = {
 
         if (kind.includes('data')) {
           wait.push(peerA.data(peerB.id, { name: 'Test Network' }));
-          wait.push(WebRTC.Util.waitFor.nextDataConnection(peerB));
+          wait.push(WebRtc.Util.waitFor.nextDataConnection(peerB));
         }
 
         if (kind.includes('media')) {
           wait.push(peerA.media(peerB.id, 'camera'));
-          wait.push(WebRTC.Util.waitFor.nextMediaConnection(peerB));
+          wait.push(WebRtc.Util.waitFor.nextMediaConnection(peerB));
         }
 
         await Promise.all(wait);

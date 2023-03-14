@@ -1,4 +1,4 @@
-import { Dev, expect, t, TEST, Time, WebRTC } from '../../test.ui';
+import { Dev, expect, t, TEST, Time, WebRtc } from '../../test.ui';
 import { Automerge, Crdt } from '../common';
 
 export default Dev.describe('PeerSyncer', (e) => {
@@ -7,7 +7,7 @@ export default Dev.describe('PeerSyncer', (e) => {
   e.timeout(15 * SECOND);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
-    const wait = Array.from({ length }).map(() => WebRTC.peer(signal, { getStream }));
+    const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream }));
     return await Promise.all(wait);
   };
 

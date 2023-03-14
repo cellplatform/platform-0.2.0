@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, WebRTC } from '../common';
+import { Color, COLORS, css, t, WebRtc } from '../common';
 import { FooterConnect } from './ui.Footer.Connect';
 import { FooterMe } from './ui.Footer.Me';
 
@@ -61,7 +61,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
 export const Wrangle = {
   ids(props: FooterProps) {
     const local = (props.self?.id ?? '').trim();
-    const remote = WebRTC.Util.asId(props.remotePeer ?? '');
+    const remote = WebRtc.Util.asId(props.remotePeer ?? '');
     return { local, remote };
   },
 

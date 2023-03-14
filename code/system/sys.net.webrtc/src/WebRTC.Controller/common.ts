@@ -1,2 +1,2 @@
 export * from '../common';
-export * from '../WebRTC.Util';
+export * from '../WebRtc.Util';

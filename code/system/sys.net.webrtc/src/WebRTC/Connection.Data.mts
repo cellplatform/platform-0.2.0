@@ -1,4 +1,4 @@
-import { rx, t, WebRTCUtil } from './common';
+import { rx, t, WebRtcUtil } from './common';
 
 /**
  * Represents a P2P data connection.
@@ -20,7 +20,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
   out$.subscribe((payload) => conn.send(payload));
   conn.on('close', dispose);
   conn.on('data', (data: any) => {
-    if (WebRTCUtil.isType.PeerDataPayload(data)) in$.next(data);
+    if (WebRtcUtil.isType.PeerDataPayload(data)) in$.next(data);
   });
 
   const api: t.PeerDataConnection = {
@@ -43,7 +43,7 @@ export function PeerDataConnection(conn: t.DataConnection): t.PeerDataConnection
      * Send an event to the peer.
      */
     send<E extends t.Event>(event: E) {
-      const payload = WebRTCUtil.toDataPayload(api, event);
+      const payload = WebRtcUtil.toDataPayload(api, event);
       out$.next(payload);
       return payload;
     },

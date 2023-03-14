@@ -1,2 +1,2 @@
-export * from './WebRTC/types.mjs';
-export * from './WebRTC.Controller/types.mjs';
+export * from './WebRtc/types.mjs';
+export * from './WebRtc.Controller/types.mjs';

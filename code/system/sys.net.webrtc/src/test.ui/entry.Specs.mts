@@ -1,5 +1,5 @@
 export const Specs = {
-  'sys.net.webrtc': () => import('../WebRTC/-dev/-SPEC'),
+  'sys.net.webrtc': () => import('../WebRtc/-dev/-SPEC'),
   'sys.net.webrtc.ui.PeerId': () => import('../ui/ui.PeerId/-SPEC'),
   'sys.net.webrtc.ui.PeerVideo': () => import('../ui/ui.PeerVideo/-SPEC'),
   'sys.net.webrtc.ui.PeerList.Item': () => import('../ui/ui.PeerList.Item/-SPEC'),

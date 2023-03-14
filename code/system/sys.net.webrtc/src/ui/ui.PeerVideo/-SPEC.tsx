@@ -9,10 +9,10 @@ import {
   TestNetwork,
   TestNetworkP2P,
   Time,
-  WebRTC,
+  WebRtc,
 } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
-import { Controller } from '../../WebRTC.Controller';
+import { Controller } from '../../WebRtc.Controller';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -82,7 +82,7 @@ export default Dev.describe('PeerVideo', async (e) => {
       },
     });
 
-    const changed = WebRTC.Util.connections.changed(self, dispose$);
+    const changed = WebRtc.Util.connections.changed(self, dispose$);
     const added$ = changed.data.added$;
     const removed$ = changed.data.removed$;
 
@@ -188,7 +188,7 @@ export default Dev.describe('PeerVideo', async (e) => {
             ],
           }}
           data={{
-            [`WebRTC.Peer[${total}]`]: self,
+            [`WebRtc.Peer[${total}]`]: self,
             'Doc<Private>': docMe?.current,
             'Doc<Public>': docShared?.current,
           }}

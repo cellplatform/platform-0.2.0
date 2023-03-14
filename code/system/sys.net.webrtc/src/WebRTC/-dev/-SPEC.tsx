@@ -1,6 +1,6 @@
 import { Automerge, CrdtInfo } from 'sys.data.crdt';
 
-import { WebRTC } from '..';
+import { WebRtc } from '..';
 import {
   Color,
   COLORS,
@@ -22,7 +22,7 @@ import { DevSample } from './DEV.Sample';
 import type { Doc } from './DEV.CrdtSync';
 
 const DEFAULT = {
-  filedir: 'dev:test/WebRTC.SPEC/cell.self',
+  filedir: 'dev:test/WebRtc.SPEC/cell.self',
 };
 
 type T = {
@@ -74,7 +74,7 @@ const CODE = `
 
 `.substring(1);
 
-export default Dev.describe('WebRTC', async (e) => {
+export default Dev.describe('WebRtc', async (e) => {
   e.timeout(9999);
 
   type LocalStore = { muted: boolean };
@@ -85,7 +85,7 @@ export default Dev.describe('WebRTC', async (e) => {
   let docFile: t.CrdtDocFile<Doc>;
 
   const bus = rx.bus();
-  const media = WebRTC.Media.singleton({ bus });
+  const media = WebRtc.Media.singleton({ bus });
   const streamRef = `sample.${slug()}`;
   const fs = (await Filesystem.client({ bus })).fs;
   const filedir = fs.dir(DEFAULT.filedir);
@@ -99,7 +99,7 @@ export default Dev.describe('WebRTC', async (e) => {
      * WebRTC (network).
      */
     const { getStream } = media;
-    self = await WebRTC.peer(TEST.signal, { getStream });
+    self = await WebRtc.peer(TEST.signal, { getStream });
     await state.change((d) => (d.self = self));
     self.connections$.subscribe((e) => state.change((d) => (d.self = self)));
   });
@@ -146,7 +146,7 @@ export default Dev.describe('WebRTC', async (e) => {
 
     const Conn = {
       isSelf(state: T) {
-        const remote = WebRTC.Util.asId(state.debug.remotePeer ?? '');
+        const remote = WebRtc.Util.asId(state.debug.remotePeer ?? '');
         return remote === self.id;
       },
 
@@ -218,7 +218,7 @@ export default Dev.describe('WebRTC', async (e) => {
       };
       return (
         <Dev.Object
-          name={'WebRTC'}
+          name={'WebRtc'}
           data={Delete.undefined(data)}
           // expand={{ paths: ['$', '$.doc'] }}
           fontSize={11}
@@ -405,7 +405,7 @@ export default Dev.describe('WebRTC', async (e) => {
         const { QRCode } = await import('sys.ui.react.common');
 
         const peerId = self.id;
-        // const value = WebRTC.Util.asUri(peerId);
+        // const value = WebRtc.Util.asUri(peerId);
         // const value = URL.PHIL;
         const value = e.state.main.imageUrl;
 
