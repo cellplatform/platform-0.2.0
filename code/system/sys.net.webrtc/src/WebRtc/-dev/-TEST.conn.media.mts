@@ -1,4 +1,4 @@
-import { cuid, Dev, expect, t, TEST, TestNetwork, Time, WebRtc } from '../../test.ui';
+import { Dev, expect, rx, t, TestNetwork, Time, WebRtc, expectError } from '../../test.ui';
 
 export default Dev.describe('WebRtc: Media Connection', (e) => {
   e.timeout(1000 * 15);
@@ -71,6 +71,27 @@ export default Dev.describe('WebRtc: Media Connection', (e) => {
         expect(media.isOpen).to.eql(false);
       },
     );
+
+    e.it('error: remote peer does not exist', async (e) => {
+      const { dispose, dispose$ } = rx.disposable();
+
+      const errors: t.PeerError[] = [];
+      peerA.error$.pipe(rx.takeUntil(dispose$)).subscribe((e) => errors.push(e));
+
+      const errorMessage = 'Could not connect to peer FOO-404';
+      await expectError(
+        // Attempt to connect to a peer that does not exist.
+        () => peerA.media('FOO-404', 'camera'),
+        errorMessage,
+      );
+
+      console.log('errors', errors);
+      expect(errors.length).to.eql(1);
+      expect(errors[0].type === 'peer-unavailable').to.eql(true);
+      expect(errors[0].error.message).to.eql(errorMessage);
+
+      dispose();
+    });
 
     e.it('dispose: peers (A | B)', async (e) => {
       peerA.dispose();

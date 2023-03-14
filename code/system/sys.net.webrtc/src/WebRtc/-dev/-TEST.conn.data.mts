@@ -126,7 +126,11 @@ export default Dev.describe('WebRtc: Data Connection', (e) => {
     peerA.error$.pipe(rx.takeUntil(dispose$)).subscribe((e) => errors.push(e));
 
     const errorMessage = 'Could not connect to peer FOO-404';
-    await expectError(() => peerA.data('FOO-404'), errorMessage);
+    await expectError(
+      // Attempt to connect to a peer that does not exist.
+      () => peerA.data('FOO-404'),
+      errorMessage,
+    );
 
     expect(errors.length).to.eql(1);
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
