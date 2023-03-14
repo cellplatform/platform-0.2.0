@@ -51,7 +51,12 @@ export default Dev.describe('Root', (e) => {
       const button = async (input: t.SpecImport, immediate?: boolean) => {
         const module = await input;
         const spec = await (module.default as t.TestSuiteModel).init();
-        dev.button(spec.description, (e) => invoke(spec));
+        dev.button((btn) =>
+          btn
+            .label(spec.description)
+            .right(() => (immediate ? '← immediate' : ''))
+            .onClick(() => invoke(spec)),
+        );
         if (immediate) invoke(spec);
         return spec;
       };
