@@ -1,17 +1,8 @@
 import { PeerVideo, PeerVideoProps } from '.';
-import {
-  COLORS,
-  Crdt,
-  Dev,
-  Filesystem,
-  rx,
-  t,
-  TestNetwork,
-  TestNetworkP2P,
-  Time,
-  WebRtc,
-} from '../../test.ui';
+import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
+
+import type { TestNetworkP2P } from '../../test.ui';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -63,7 +54,7 @@ export default Dev.describe('PeerVideo', async (e) => {
   async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
     const updateSelf = () => state.change((d) => (d.props.self = self));
 
-    network = await TestNetwork.init();
+    network = await TestNetwork.init({ log: true });
     self = network.peerA;
     self.connections$.subscribe(updateSelf);
     updateSelf();

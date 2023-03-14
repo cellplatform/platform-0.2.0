@@ -1,4 +1,4 @@
-import { TEST, WebRtc, t, rx } from './common';
+import { rx, t, TEST, WebRtc } from './common';
 
 export type TestNetworkP2P = t.Disposable & {
   peerA: t.Peer;
@@ -13,9 +13,13 @@ export const TestNetwork = {
   /**
    * Generate sample peers.
    */
-  async peers(length: number = 2, getStream?: t.PeerGetMediaStream) {
+  async peers(
+    length: number = 2,
+    options: { getStream?: t.PeerGetMediaStream | boolean; log?: boolean } = {},
+  ) {
+    const getStream = Wrangle.getStream(options);
     const signal = TEST.signal;
-    const log = true;
+    const log = options.log;
     const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream, log }));
     return (await Promise.all(wait)) as t.Peer[];
   },
@@ -23,10 +27,9 @@ export const TestNetwork = {
   /**
    * Generate a simple 2-node connected network.
    */
-  async init() {
+  async init(options: { log?: boolean } = {}) {
     const { dispose, dispose$ } = rx.disposable();
-    const media = WebRtc.Media.singleton({});
-    const [peerA, peerB] = await TestNetwork.peers(2, media.getStream);
+    const [peerA, peerB] = await TestNetwork.peers(2, { getStream: true, log: options.log });
 
     dispose$.subscribe(() => {
       peerA.dispose();
@@ -56,5 +59,21 @@ export const TestNetwork = {
     };
 
     return api;
+  },
+};
+
+/**
+ * Helpers
+ */
+
+export const Wrangle = {
+  getStream(options: { getStream?: t.PeerGetMediaStream | boolean } = {}) {
+    if (options.getStream === true) {
+      return WebRtc.Media.singleton({}).getStream;
+    }
+
+    if (typeof options.getStream === 'function') return options.getStream;
+
+    return undefined;
   },
 };
