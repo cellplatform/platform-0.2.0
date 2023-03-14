@@ -1,4 +1,4 @@
-import { Dev, t } from '../test.ui';
+import { Dev, t, Time } from '../test.ui';
 
 type T = {
   debug: { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
