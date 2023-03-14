@@ -1,4 +1,4 @@
-import { PeerVideo, PeerVideoProps } from '..';
+import { PeerVideo, PeerVideoProps } from '.';
 import {
   COLORS,
   Crdt,
@@ -10,9 +10,9 @@ import {
   TestNetworkP2P,
   Time,
   WebRTC,
-} from '../../../test.ui';
-import { PeerList } from '../../ui.PeerList';
-import { Controller } from './DEV.Controller.mjs';
+} from '../../test.ui';
+import { PeerList } from '../ui.PeerList';
+import { Controller } from '../../WebRTC.Controller';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 

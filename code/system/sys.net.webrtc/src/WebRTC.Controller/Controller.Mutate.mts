@@ -1,4 +1,4 @@
-import { t } from '../../common';
+import { t } from './common';
 
 /**
  * Helpers for mutating the state data.
@@ -24,14 +24,17 @@ export const Mutate = {
     console.log('ADD PEER=============');
     console.log('data', data);
     console.log('peers', peers);
+    console.log('isMe', isMe);
 
     const peer: t.NetworkStatePeer = {
       id: subject,
       meta: {},
     };
 
-    if (isMe) peer.meta.useragent = navigator.userAgent;
     if (initiatedBy) peer.initiatedBy = initiatedBy;
+    if (isMe) {
+      peer.meta.useragent = navigator.userAgent;
+    }
 
     console.group('🌳 ADD');
     console.log('peer.id', peer.id);

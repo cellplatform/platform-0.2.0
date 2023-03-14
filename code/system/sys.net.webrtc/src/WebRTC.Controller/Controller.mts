@@ -1,5 +1,6 @@
-import { Crdt, rx, t, WebRTC } from '../../common';
-import { Mutate } from './DEV.Controller.Mutate.mjs';
+import { Crdt, rx, t } from './common';
+import { Mutate } from './Controller.Mutate.mjs';
+import { WebRTCUtil } from '../WebRTC.Util';
 
 /**
  * TODO 🐷 MOVE to type.mts
@@ -10,7 +11,7 @@ export type Doc = { network: t.NetworkState };
  * Manages keeping a WebRTC network-peer in sync with a
  * shared/synced CRDT document that all team peers are aware of.
  */
-export const Controller = {
+export const WebRtcController = {
   Mutate,
 
   /**
@@ -29,7 +30,7 @@ export const Controller = {
     /**
      * Listen to connections.
      */
-    const changed = WebRTC.Util.connections.changed(self, args.dispose$);
+    const changed = WebRTCUtil.connections.changed(self, args.dispose$);
     const connAdded$ = changed.data.added$;
     const connRemoved$ = changed.data.removed$;
 
@@ -47,7 +48,7 @@ export const Controller = {
          * - sync-state FS
          * - BUG: error on ".file" not found (sometime)
          */
-        // filedir,
+        filedir,
         dispose$,
         syncOnStart: true,
       });
