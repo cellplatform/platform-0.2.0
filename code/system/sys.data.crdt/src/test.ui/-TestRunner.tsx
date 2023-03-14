@@ -31,9 +31,7 @@ export default Dev.describe('Root', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        TestResults: e.state.debug.testrunner.results,
-      };
+      const data = { TestResults: e.state.debug.testrunner.results };
       return <Dev.Object name={'spec'} data={data} expand={1} />;
     });
 
