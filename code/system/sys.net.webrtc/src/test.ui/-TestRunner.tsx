@@ -65,9 +65,10 @@ export default Dev.describe('Root', (e) => {
       tests.push(
         ...[
           await button(import('../WebRtc/-dev/-TEST.mjs')),
-          await button(import('../WebRtc.Controller/-dev/-TEST.mjs'), true),
-          await button(import('../WebRtc/-dev/-TEST.Util.mjs')),
-          await button(import('../WebRtc/-dev/-TEST.Sync.mjs')),
+          await button(import('../WebRtc/-dev/-TEST.conn.data.mjs'), true),
+          await button(import('../WebRtc/-dev/-TEST.conn.media.mjs')),
+          await button(import('../WebRtc.Controller/-dev/-TEST.mjs')),
+          await button(import('../WebRtc/-dev/-TEST.sync.mjs')),
           await button(import('../WebRtc.Media/-TEST.mjs')),
         ],
       );
