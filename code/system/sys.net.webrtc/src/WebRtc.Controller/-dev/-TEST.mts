@@ -1,100 +1,81 @@
-import { t, Dev, expect } from '../../test.ui';
+import { t, rx, Dev, expect, TestNetwork, Crdt, Filesystem } from '../../test.ui';
 import { WebRtcController } from '..';
 
-export default Dev.describe('WebRtc.Controller', (e) => {
+type DocShared = {
+  count: number;
+  network: t.NetworkState;
+};
+
+// const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
+
+export default Dev.describe('Controller', async (e) => {
   e.timeout(1000 * 15);
 
+  const { dispose, dispose$ } = rx.disposable();
+
+  const Mutate = WebRtcController.Mutate;
+  const bus = rx.bus();
+  const fs = (await Filesystem.client({ bus, dispose$ })).fs;
+  const filedir = fs.dir('dev.test.WebRtc.Controller');
+
+  const initialState: DocShared = { count: 0, network: { peers: {} } };
+  const state = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+
   e.describe('Controller.listen', (e) => {
-    e.it('init', async (e) => {
+    let peerA: t.Peer;
+    let peerB: t.Peer;
+
+    e.it('init: create peers A ⇔ B', async (e) => {
+      const [a, b] = await TestNetwork.peers(2, { getStream: true });
+      peerA = a;
+      peerB = b;
+    });
+
+    e.it('start listening to a P2P network - ["local:peer" + crdt.doc<shared>]', async (e) => {
+      const self = peerA;
+
+      // console.log('network', network);
+
+      WebRtcController.listen({
+        self,
+        state,
+        filedir,
+        dispose$,
+        onConnectStart(e) {
+          // state.change((d) => (d.props.spinning = true));
+          console.log('onConnectStart', e);
+        },
+        onConnectComplete(e) {
+          // state.change((d) => (d.props.spinning = false));
+          console.log('onConnectComplete', e);
+        },
+      });
+
+      // console.log('res', res);
       //
+
       /**
        * TODO 🐷
        */
       //
     });
-  });
 
-  /**
-   * Mutation helpers.
-   */
-  e.describe('Mutate', (e) => {
-    const Mutate = WebRtcController.Mutate;
+    e.it('add peers: A ← B (initiated by self)', async (e) => {
+      const self = peerA.id;
+      const remote = peerB.id;
 
-    const sampleState = () => {
-      const data: t.NetworkState = { peers: {} }; // NB: tests when the child "peers" property is missing (auto inserted).
-      return { data };
-    };
-
-    e.describe('addPeer', (e) => {
-      e.it('add a remote peer', (e) => {
-        const { data } = sampleState();
-        const res = Mutate.addPeer(data, 'a', 'b');
-
-        expect(res.existing).to.eql(false);
-        expect(res.isSelf).to.eql(false);
-        expect(res.peer.initiatedBy).to.eql(undefined);
-        expect(res.peer).to.eql(data.peers.b);
+      state.change((d) => {
+        Mutate.addPeer(d.network, self, remote, { initiatedBy: self });
       });
 
-      e.it('handles incomplete starting document', (e) => {
-        const { data } = sampleState();
-
-        delete (data as any).peers;
-
-        const res = Mutate.addPeer(data, 'a', 'b');
-        expect(res.peer).to.eql(data.peers.b);
-      });
-
-      e.it('add local peer (self)', (e) => {
-        const { data } = sampleState();
-        const res = Mutate.addPeer(data, 'a', 'a');
-
-        expect(res.existing).to.eql(false);
-        expect(res.isSelf).to.eql(true);
-        expect(res.peer.initiatedBy).to.eql(undefined);
-        expect(res.peer).to.eql(data.peers.a);
-        expect(res.peer.meta.useragent).to.eql(navigator.userAgent);
-      });
-
-      e.it('initiatedBy', (e) => {
-        const { data } = sampleState();
-        const res = Mutate.addPeer(data, 'a', 'b', { initiatedBy: 'a' });
-        expect(res.peer.initiatedBy).to.eql('a');
-      });
-
-      e.it('existing peer', (e) => {
-        const { data } = sampleState();
-        const res1 = Mutate.addPeer(data, 'a', 'b');
-        const res2 = Mutate.addPeer(data, 'a', 'b');
-        expect(res1.existing).to.eql(false);
-        expect(res2.existing).to.eql(true);
-      });
+      console.log('state.doc.current', state.current);
     });
 
-    e.describe('removePeer', (e) => {
-      e.it('removes peer from tree', (e) => {
-        const { data } = sampleState();
+    e.it.skip('remove peer', async (e) => {});
+    e.it.skip('purge stale/dead peers', async (e) => {});
 
-        const res1 = Mutate.addPeer(data, 'a', 'b');
-        expect(data.peers.b).to.exist;
-
-        const res2 = Mutate.removePeer(data, 'b');
-        expect(data.peers.b).to.not.exist;
-        expect(res2.existing).to.eql(true);
-        expect(res2.peer).to.equal(res1.peer);
-
-        const res3 = Mutate.removePeer(data, 'b');
-        expect(res3.existing).to.eql(false);
-        expect(res3.peer).to.eql(undefined);
-      });
-
-      e.it('specified peer does not exist', (e) => {
-        const { data } = sampleState();
-        const res = Mutate.removePeer(data, 'a');
-        expect(res.existing).to.eql(false);
-        expect(res.peer).to.eql(undefined);
-        expect(data.peers).to.eql({});
-      });
+    e.it('dispose', async (e) => {
+      // dispose();
     });
   });
 });
