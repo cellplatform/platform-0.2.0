@@ -15,7 +15,7 @@ export default Test.describe('mocks', (e) => {
         expect(conn.peer.remote.length).to.greaterThan(10);
       });
 
-      e.it('overridden prperties (initial)', (e) => {
+      e.it('overridden properties (initial)', (e) => {
         const id = 'my-id';
         const metadata: t.PeerMetaData = { label: 'Foo' };
         const peer = { local: 'a', remote: 'b' };
