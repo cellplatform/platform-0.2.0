@@ -28,7 +28,9 @@ export default Dev.describe('WebRtc.Controller', (e) => {
 
       e.it('handles incomplete starting document', (e) => {
         const { data } = sampleState();
+
         delete (data as any).peers;
+
         const res = Mutate.addPeer(data, 'a', 'b');
         expect(res.peer).to.eql(data.peers.b);
       });
@@ -59,6 +61,22 @@ export default Dev.describe('WebRtc.Controller', (e) => {
       });
     });
 
-    e.describe('remotePeer', (e) => {});
+    e.describe('removePeer', (e) => {
+      e.it('remove', (e) => {
+        const { data } = sampleState();
+
+        const res1 = Mutate.addPeer(data, 'a', 'b');
+        expect(data.peers.b).to.exist;
+
+        const res2 = Mutate.removePeer(data, 'b');
+        expect(data.peers.b).to.not.exist;
+        expect(res2.existing).to.eql(true);
+        expect(res2.peer).to.equal(res1.peer);
+
+        const res3 = Mutate.removePeer(data, 'b');
+        expect(res3.existing).to.eql(false);
+        expect(res3.peer).to.eql(undefined);
+      });
+    });
   });
 });

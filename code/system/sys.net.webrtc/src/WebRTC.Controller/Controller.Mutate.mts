@@ -52,9 +52,10 @@ export const Mutate = {
 
   removePeer(data: t.NetworkState, subject: t.PeerId) {
     const peers = Wrangle.peers(data);
-    const exists = Boolean(peers[subject]);
-    if (exists) delete data.peers[subject];
-    return { existing: exists };
+    const peer = peers[subject];
+    const existing = Boolean(peer);
+    if (existing) delete data.peers[subject];
+    return { existing, peer };
   },
 };
 
