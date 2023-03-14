@@ -26,13 +26,16 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     const host = Path.trimHttpPrefix(endpoint.host);
     const path = `/${Path.trimSlashes(endpoint.path)}`;
     const signal = host + path;
+    const port = 443;
 
     if (options.log) {
-      console.group('🔒 Peer Connection (WebRTC)');
-      console.info('host:', host);
-      console.info('path:', path);
-      console.info('key:', key, '(api)');
-      console.info('tx:', tx, '(in-memory instance)');
+      console.group('🐚 WebRTC Peer');
+      console.info(' - namespace:', 'sys.net.webrtc');
+      console.info(' - host:', host);
+      console.info(' - path:', path);
+      console.info(' - key:', `"${key}" (api)`);
+      console.info(' - secure:', { port }, '🔒');
+      console.info(' - tx:', `"${tx}" (in-memory instance)`);
       console.groupEnd();
     }
 
@@ -41,7 +44,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       path,
       key,
       secure: true,
-      port: 443,
+      port,
       debug: 2,
     });
 
