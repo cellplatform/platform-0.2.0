@@ -1,10 +1,10 @@
 import { cuid, Dev, expect, expectError, rx, t, TEST, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRtc', (e) => {
+  e.timeout(1000 * 15);
+
   const signal = TEST.signal;
   const signalEndpoint = `${signal.host}/${signal.path}`;
-
-  e.timeout(1000 * 15);
 
   const peers = async (length: number, getStream?: t.PeerGetMediaStream) => {
     const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream }));
