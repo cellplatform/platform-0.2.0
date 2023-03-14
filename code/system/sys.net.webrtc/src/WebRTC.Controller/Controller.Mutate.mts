@@ -8,6 +8,9 @@ import { t } from './common';
  *    immutable CRDT 'change' handler.
  */
 export const Mutate = {
+  /**
+   * Add a peer to the network if it does not already exist.
+   */
   addPeer(
     data: t.NetworkState,
     self: t.PeerId,
@@ -17,35 +20,34 @@ export const Mutate = {
     const { initiatedBy } = options;
     const peers = Wrangle.peers(data);
     const exists = Boolean(peers[subject]);
-    const isMe = self === subject;
+    const isSelf = self === subject;
 
-    if (exists) return { peer: peers[subject], existing: true };
+    const done = () => {
+      const peer = peers[subject];
+      return { peer, existing: exists, isSelf };
+    };
 
-    console.log('ADD PEER=============');
-    console.log('data', data);
-    console.log('peers', peers);
-    console.log('isMe', isMe);
+    const setContext = (peer: t.NetworkStatePeer) => {
+      if (initiatedBy) peer.initiatedBy = initiatedBy;
+      if (isSelf) {
+        peer.meta.useragent = navigator.userAgent;
+      }
+    };
+
+    if (exists) {
+      const peer = peers[subject];
+      setContext(peer);
+      return done();
+    }
 
     const peer: t.NetworkStatePeer = {
       id: subject,
       meta: {},
     };
 
-    if (initiatedBy) peer.initiatedBy = initiatedBy;
-    if (isMe) {
-      peer.meta.useragent = navigator.userAgent;
-    }
-
-    console.group('🌳 ADD');
-    console.log('peer.id', peer.id);
-    console.log('peer', peer);
-    console.log('peers', peers);
-    console.log('isMe', isMe);
-    console.log('initiatedBy', initiatedBy);
-    console.groupEnd();
-
+    setContext(peer);
     peers[peer.id] = peer;
-    return { peer, existing: false };
+    return done();
   },
 
   removePeer(data: t.NetworkState, subject: t.PeerId) {
