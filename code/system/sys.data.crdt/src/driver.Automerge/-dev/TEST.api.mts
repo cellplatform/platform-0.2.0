@@ -1,7 +1,6 @@
 import { Automerge } from '..';
-import { expect, Test } from '../../test.ui';
+import { Time, expect, Test } from '../../test.ui';
 
-export default Test.describe('Automerge (lib): API surface area', (e) => {
 export default Test.describe('Automerge: API surface area', (e) => {
   type Card = { title: string; done: boolean; count: number };
   type Doc = {
@@ -284,6 +283,54 @@ export default Test.describe('Automerge: API surface area', (e) => {
         ['Mark card as complete', 2],
         ['Delete card', 1],
       ]);
+    });
+  });
+
+  e.describe('conflicts', (e) => {
+    /**
+     * REF:
+     *    https://automerge.org/docs/cookbook/conflicts/
+     */
+    e.it('getConflicts', async (e) => {
+      type T = { x: number };
+      let docA = Automerge.change(Automerge.init<T>(), (d) => (d.x = 1));
+      let docB = Automerge.change(Automerge.init<T>(), (d) => (d.x = 2));
+
+      docA = Automerge.merge(docA, docB);
+      docB = Automerge.merge(docB, docA);
+      expect(docA).to.eql(docB);
+
+      const conflictsA = Automerge.getConflicts<T>(docA, 'x');
+      const conflictsB = Automerge.getConflicts<T>(docB, 'x');
+      expect(conflictsA).to.eql(conflictsB);
+
+      const entries = Object.entries(conflictsA ?? {});
+      expect(entries.length).to.eql(2);
+
+      console.log('docA.x', docA.x);
+      console.log('docB.x', docB.x);
+      // expect(entries[0][1]).to.eql(!docA.x);
+      // expect(entries[1][1]).to.eql(docA.x);
+
+      console.log('conflictsA', { x: conflictsA });
+      console.log('conflictsB', { x: conflictsB });
+
+      console.log('conflictsA.x', conflictsA?.x);
+      console.log('typeof conflictsA', typeof conflictsA);
+      console.log('Object.keys(conflictsA ?? {})', Object.keys(conflictsA ?? {}));
+      console.log('Object.entries(conflictsA ?? {})', Object.entries(conflictsA ?? {}));
+
+      const historyA = Automerge.getHistory(docA);
+      const historyB = Automerge.getHistory(docA);
+
+      console.log('-------------------------------------------');
+      console.log('historyA', historyA);
+      console.log('historyB', historyB);
+
+      console.log('historyA[0].snapshot', historyA[0].snapshot);
+      console.log('historyA[1].snapshot', historyA[1].snapshot);
+      console.log('historyA[0].snapshot.x', historyA[0].snapshot.x);
+      console.log('historyA[1].snapshot.x', historyA[1].snapshot.x);
     });
   });
 });
