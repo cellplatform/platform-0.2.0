@@ -9,9 +9,9 @@ export type FooterProps = {
   showConnect: boolean;
   isSpinning?: boolean;
   style?: t.CssValue;
-  onLocalPeerCopied?: t.PeerVideoLocalCopiedHandler;
-  onRemotePeerChanged?: t.PeerVideoRemoteChangedHandler;
-  onConnectRequest?: t.PeerVideoConnectRequestHandler;
+  onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
+  onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
+  onConnectRequest?: t.PeerCardConnectRequestHandler;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {

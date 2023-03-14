@@ -1,13 +1,13 @@
-import { PeerVideo, PeerVideoProps } from '.';
+import { PeerCard, PeerCardProps } from '.';
 import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
 
 import type { TestNetworkP2P } from '../../test.ui';
 
-const DEFAULTS = PeerVideo.DEFAULTS;
+const DEFAULTS = PeerCard.DEFAULTS;
 
 type T = {
-  props: PeerVideoProps;
+  props: PeerCardProps;
   debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
@@ -27,11 +27,11 @@ type DocShared = {
 };
 const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
 
-export default Dev.describe('PeerVideo', async (e) => {
+export default Dev.describe('PeerCard', async (e) => {
   e.timeout(1000 * 30);
 
   type LocalStore = { muted: boolean; showBg: boolean; showPeer?: boolean; showConnect?: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerVideo');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
     muted: true,
     showBg: initial.debug.showBg,
@@ -133,7 +133,7 @@ export default Dev.describe('PeerVideo', async (e) => {
       .render<T>((e) => {
         const { showBg } = e.state.debug;
         return (
-          <PeerVideo
+          <PeerCard
             {...e.state.props}
             self={self}
             style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
@@ -207,7 +207,7 @@ export default Dev.describe('PeerVideo', async (e) => {
       dev.boolean((btn) =>
         btn
           .label('show connect')
-          .value((e) => e.state.props.showConnect ?? PeerVideo.DEFAULTS.showConnect)
+          .value((e) => e.state.props.showConnect ?? PeerCard.DEFAULTS.showConnect)
           .onClick((e) =>
             e.change((d) => (local.showConnect = Dev.toggle(d.props, 'showConnect'))),
           ),

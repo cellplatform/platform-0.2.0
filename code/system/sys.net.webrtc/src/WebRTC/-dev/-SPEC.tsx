@@ -16,7 +16,7 @@ import {
   TEST,
   TextInput,
 } from '../../test.ui';
-import { PeerList, PeerVideo } from '../../ui';
+import { PeerList, PeerCard } from '../../ui';
 import { DevSample } from './DEV.Sample';
 
 import type { Doc } from './DEV.CrdtSync';
@@ -191,7 +191,7 @@ export default Dev.describe('WebRtc', async (e) => {
       .border(-0.1)
       .render<T>((e) => {
         return (
-          <PeerVideo
+          <PeerCard
             self={self}
             mediaHeight={250}
             muted={e.state.debug.muted}

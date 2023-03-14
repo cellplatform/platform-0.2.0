@@ -8,8 +8,8 @@ export type FooterConnectProps = {
   isConnected: boolean;
   isSpinning: boolean;
   style?: t.CssValue;
-  onRemotePeerChanged?: t.PeerVideoRemoteChangedHandler;
-  onConnectRequest?: t.PeerVideoConnectRequestHandler;
+  onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
+  onConnectRequest?: t.PeerCardConnectRequestHandler;
 };
 
 export const FooterConnect: React.FC<FooterConnectProps> = (props) => {

@@ -4,7 +4,7 @@ import { PeerId } from '../ui.PeerId';
 export type FooterMeProps = {
   self?: t.Peer;
   style?: t.CssValue;
-  onLocalPeerCopied?: t.PeerVideoLocalCopiedHandler;
+  onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
 };
 
 export const FooterMe: React.FC<FooterMeProps> = (props) => {

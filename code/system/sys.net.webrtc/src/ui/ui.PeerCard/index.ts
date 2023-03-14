@@ -1,1 +1,1 @@
-export * from './ui.PeerVideo';
+export * from './ui.PeerCard';

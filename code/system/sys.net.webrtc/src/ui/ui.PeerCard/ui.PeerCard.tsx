@@ -5,20 +5,6 @@ import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
 import { Footer } from './ui.Footer';
 
-export type PeerVideoProps = {
-  self?: t.Peer;
-  remotePeer?: t.PeerId;
-  mediaHeight?: number;
-  muted?: boolean;
-  spinning?: boolean;
-  showPeer?: boolean;
-  showConnect?: boolean;
-  style?: t.CssValue;
-  onMuteClick?(e: React.MouseEvent): void;
-  onRemotePeerChanged?: t.PeerVideoRemoteChangedHandler;
-  onConnectRequest?: t.PeerVideoConnectRequestHandler;
-};
-
 const DEFAULTS = {
   showPeer: true,
   showConnect: true,
@@ -29,7 +15,27 @@ const URL = {
     'https://user-images.githubusercontent.com/185555/220252528-49154284-88e2-46aa-9544-2dff1c7a44a8.png',
 };
 
-const View: React.FC<PeerVideoProps> = (props) => {
+/**
+ * Types
+ */
+export type PeerCardProps = {
+  self?: t.Peer;
+  remotePeer?: t.PeerId;
+  mediaHeight?: number;
+  muted?: boolean;
+  spinning?: boolean;
+  showPeer?: boolean;
+  showConnect?: boolean;
+  style?: t.CssValue;
+  onMuteClick?(e: React.MouseEvent): void;
+  onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
+  onConnectRequest?: t.PeerCardConnectRequestHandler;
+};
+
+/**
+ * Component
+ */
+const View: React.FC<PeerCardProps> = (props) => {
   const {
     self,
     mediaHeight = 250,
@@ -161,8 +167,8 @@ const View: React.FC<PeerVideoProps> = (props) => {
  * Export
  */
 type Fields = { DEFAULTS: typeof DEFAULTS };
-export const PeerVideo = FC.decorate<PeerVideoProps, Fields>(
+export const PeerCard = FC.decorate<PeerCardProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'PeerVideo' },
+  { displayName: 'PeerCard' },
 );
