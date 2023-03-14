@@ -65,9 +65,9 @@ export default Dev.describe('Root', (e) => {
       tests.push(
         ...[
           await button(import('../WebRtc/-dev/-TEST.mjs')),
-          await button(import('../WebRtc/-dev/-TEST.PeerSyncer.mjs')),
           await button(import('../WebRtc.Media/-TEST.mjs')),
-          await button(import('../WebRtc.Controller/-TEST.mjs'), true),
+          await button(import('../WebRtc.Controller/-dev/-TEST.mjs'), true),
+          await button(import('../WebRtc/-dev/-TEST.PeerSyncer.mjs')),
         ],
       );
 

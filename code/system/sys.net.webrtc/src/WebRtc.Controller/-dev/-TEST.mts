@@ -1,8 +1,18 @@
-import { t, Dev, expect } from '../test.ui';
-import { WebRtcController } from '.';
+import { t, Dev, expect } from '../../test.ui';
+import { WebRtcController } from '..';
 
 export default Dev.describe('WebRtc.Controller', (e) => {
   e.timeout(1000 * 15);
+
+  e.describe('Controller.listen', (e) => {
+    e.it('init', async (e) => {
+      //
+      /**
+       * TODO 🐷
+       */
+      //
+    });
+  });
 
   /**
    * Mutation helpers.
@@ -62,7 +72,7 @@ export default Dev.describe('WebRtc.Controller', (e) => {
     });
 
     e.describe('removePeer', (e) => {
-      e.it('remove', (e) => {
+      e.it('removes peer from tree', (e) => {
         const { data } = sampleState();
 
         const res1 = Mutate.addPeer(data, 'a', 'b');
@@ -76,6 +86,14 @@ export default Dev.describe('WebRtc.Controller', (e) => {
         const res3 = Mutate.removePeer(data, 'b');
         expect(res3.existing).to.eql(false);
         expect(res3.peer).to.eql(undefined);
+      });
+
+      e.it('specified peer does not exist', (e) => {
+        const { data } = sampleState();
+        const res = Mutate.removePeer(data, 'a');
+        expect(res.existing).to.eql(false);
+        expect(res.peer).to.eql(undefined);
+        expect(data.peers).to.eql({});
       });
     });
   });
