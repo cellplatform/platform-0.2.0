@@ -1,1 +1,1 @@
-export { WebRtcController as Controller } from './Controller.mjs';
+export { WebRtcController } from './Controller.mjs';

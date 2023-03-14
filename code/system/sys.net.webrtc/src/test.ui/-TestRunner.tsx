@@ -67,7 +67,7 @@ export default Dev.describe('Root', (e) => {
           await button(import('../WebRtc/-dev/-TEST.mjs')),
           await button(import('../WebRtc/-dev/-TEST.PeerSyncer.mjs')),
           await button(import('../WebRtc.Media/-TEST.mjs')),
-          await button(import('../WebRtc.Controller/-TEST.mjs')),
+          await button(import('../WebRtc.Controller/-TEST.mjs'), true),
         ],
       );
 
@@ -90,9 +90,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      Time.delay(0, () => {
-        if (!_hasImmediate) invoke(all);
-      });
+      if (!_hasImmediate) Time.delay(0, () => invoke(all));
     });
   });
 });

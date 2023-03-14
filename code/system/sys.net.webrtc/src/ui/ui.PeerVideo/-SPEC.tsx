@@ -12,7 +12,6 @@ import {
   WebRtc,
 } from '../../test.ui';
 import { PeerList } from '../ui.PeerList';
-import { Controller } from '../../WebRtc.Controller';
 
 const DEFAULTS = PeerVideo.DEFAULTS;
 
@@ -69,7 +68,7 @@ export default Dev.describe('PeerVideo', async (e) => {
     self.connections$.subscribe(updateSelf);
     updateSelf();
 
-    Controller.listen({
+    WebRtc.Controller.listen({
       self,
       state: docShared,
       filedir: dirs.shared,
@@ -159,7 +158,7 @@ export default Dev.describe('PeerVideo', async (e) => {
                 console.log('self', self);
                 console.log('initiatedBy', initiatedBy);
 
-                Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
+                WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
               });
             }}
           />

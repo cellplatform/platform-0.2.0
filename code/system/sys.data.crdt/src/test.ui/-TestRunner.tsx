@@ -45,6 +45,7 @@ export default Dev.describe('Root', (e) => {
         });
       };
 
+      let _hasImmediate = false;
       const tests: t.TestSuiteModel[] = [];
       const button = async (input: t.SpecImport, immediate?: boolean) => {
         const module = await input;
@@ -56,6 +57,7 @@ export default Dev.describe('Root', (e) => {
             .onClick(() => invoke(spec)),
         );
         if (immediate) invoke(spec);
+        if (immediate) _hasImmediate = true;
         return spec;
       };
 
@@ -98,7 +100,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      // Time.delay(0, () => invoke(all));
+      if (!_hasImmediate) Time.delay(0, () => invoke(all));
     });
   });
 });
