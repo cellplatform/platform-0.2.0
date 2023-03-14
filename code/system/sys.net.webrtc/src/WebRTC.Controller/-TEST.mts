@@ -12,7 +12,7 @@ export default Dev.describe('WebRtc.Controller', (e) => {
 
     e.describe('addPeer', (e) => {
       e.it('add a remote peer', (e) => {
-        const data: t.NetworkState = { peers: {} };
+        const data: t.NetworkState = {} as any; // NB: tests when the child "peers" property is missing (auto inserted).
         const res = Mutate.addPeer(data, 'a', 'b');
 
         expect(res.existing).to.eql(false);
