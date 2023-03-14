@@ -90,7 +90,7 @@ export default Dev.describe('WebRtc: Data Connection', (e) => {
     const b = peerB.connections.data[0];
 
     type E = { type: 'foo'; payload: { data: Uint8Array } };
-    const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    const data = new Uint8Array([1, 2, 3, 4, 999]);
     a.send<E>({ type: 'foo', payload: { data } });
 
     const received = (await rx.firstValueFrom(b.in$)).event as E;
@@ -122,16 +122,15 @@ export default Dev.describe('WebRtc: Data Connection', (e) => {
   e.it('error: remote peer does not exist', async (e) => {
     const { dispose, dispose$ } = rx.disposable();
 
-    peerA.error$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-      //
-      console.log('e', e);
-    });
+    const errors: t.PeerError[] = [];
+    peerA.error$.pipe(rx.takeUntil(dispose$)).subscribe((e) => errors.push(e));
 
-    expectError(
-      //
-      () => peerA.data('FOO-404'),
-      'Could not connect to peer FOO-404',
-    );
+    const errorMessage = 'Could not connect to peer FOO-404';
+    await expectError(() => peerA.data('FOO-404'), errorMessage);
+
+    expect(errors.length).to.eql(1);
+    expect(errors[0].type === 'peer-unavailable').to.eql(true);
+    expect(errors[0].error.message).to.eql(errorMessage);
 
     dispose();
   });
