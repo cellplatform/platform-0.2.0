@@ -1,10 +1,10 @@
 import { Dev, t, Time } from '.';
 
 type T = {
-  debug: { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
+  testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
 };
 const initial: T = {
-  debug: { testrunner: {} },
+  testrunner: {},
 };
 
 export default Dev.describe('Root', (e) => {
@@ -15,7 +15,7 @@ export default Dev.describe('Root', (e) => {
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
-        const { spinning, results } = e.state.debug.testrunner;
+        const { spinning, results } = e.state.testrunner;
         return (
           <Dev.TestRunner.Results
             data={results}
@@ -36,11 +36,11 @@ export default Dev.describe('Root', (e) => {
 
     dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
-        await dev.change((d) => (d.debug.testrunner.spinning = true));
+        await dev.change((d) => (d.testrunner.spinning = true));
         const results = await spec.run();
         await dev.change((d) => {
-          d.debug.testrunner.results = results;
-          d.debug.testrunner.spinning = false;
+          d.testrunner.results = results;
+          d.testrunner.spinning = false;
         });
       };
 
@@ -102,6 +102,13 @@ export default Dev.describe('Root', (e) => {
           .label('run all')
           .right('🌳')
           .onClick((e) => invoke(all)),
+      );
+      dev.hr(-1, 5);
+      dev.button('clear', (e) =>
+        e.change((d) => {
+          d.testrunner.results = undefined;
+          d.testrunner.spinning = false;
+        }),
       );
 
       /**
