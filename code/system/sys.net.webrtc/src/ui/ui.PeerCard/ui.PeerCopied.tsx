@@ -6,7 +6,7 @@ export type PeerCopiedProps = {
 };
 
 export const PeerCopied: React.FC<PeerCopiedProps> = (props) => {
-  const { message = 'Your local peer-id copied' } = props;
+  const { message = 'Copied your local peer-id' } = props;
 
   /**
    * [Render]
