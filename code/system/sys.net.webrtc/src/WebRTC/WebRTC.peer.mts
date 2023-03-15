@@ -1,10 +1,10 @@
-import { Path, PeerJS, rx, t, WebRtcUtil, slug } from './common';
+import { Path, PeerJS, rx, t, WebRtcUtil } from './common';
 import { MemoryState } from './WebRtc.state.mjs';
 
 type Options = {
   id?: t.PeerId;
-  getStream?: t.PeerGetMediaStream;
   log?: boolean;
+  getStream?: t.PeerGetMediaStream;
 };
 type SignalServer = {
   host: string;
@@ -19,12 +19,12 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
   return new Promise<t.Peer>((resolve, reject) => {
     const { getStream } = options;
 
-    const tx = `peer.tx.${slug()}`;
     const state = MemoryState();
+    const tx = state.tx;
     const id = WebRtcUtil.asId(options.id ?? WebRtcUtil.randomPeerId());
-    const key = endpoint.key;
     const host = Path.trimHttpPrefix(endpoint.host);
     const path = `/${Path.trimSlashes(endpoint.path)}`;
+    const key = endpoint.key;
     const signal = host + path;
     const port = 443;
 
@@ -62,9 +62,9 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
 
     const api: t.Peer = {
       kind: 'local:peer',
+      tx,
       signal,
       id,
-      tx,
 
       connections$: state.connections$,
       get connections() {
