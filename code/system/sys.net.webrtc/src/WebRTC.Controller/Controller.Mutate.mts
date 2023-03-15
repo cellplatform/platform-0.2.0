@@ -1,4 +1,4 @@
-import { t } from './common';
+import { t, UserAgent } from './common';
 
 /**
  * Helpers for mutating the state data.
@@ -24,13 +24,14 @@ export const Mutate = {
 
     const done = () => {
       const peer = peers[subject];
-      return { peer, existing: exists, isSelf };
+      const existing = exists;
+      return { peer, existing, isSelf };
     };
 
     const setContext = (peer: t.NetworkStatePeer) => {
       if (initiatedBy) peer.initiatedBy = initiatedBy;
       if (isSelf) {
-        peer.meta.useragent = navigator.userAgent;
+        peer.meta.userAgent = UserAgent.parse(navigator.userAgent);
       }
     };
 
