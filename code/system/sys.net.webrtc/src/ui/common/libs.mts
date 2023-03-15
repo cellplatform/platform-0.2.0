@@ -12,9 +12,9 @@ export {
   TextSyntax,
   Button,
   Spinner,
+  FC,
   useSizeObserver,
   useMouseState,
-  FC,
 } from 'sys.ui.react.common';
 
 export { Test } from 'sys.test.spec';

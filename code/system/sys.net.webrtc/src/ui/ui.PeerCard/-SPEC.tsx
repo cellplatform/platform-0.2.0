@@ -190,7 +190,7 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.section((dev) => {
       dev.boolean((btn) =>
         btn
-          .label('white background')
+          .label((e) => (e.state.debug.showBg ? 'background (white)' : 'background'))
           .value((e) => e.state.debug.showBg)
           .onClick((e) => e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')))),
       );
