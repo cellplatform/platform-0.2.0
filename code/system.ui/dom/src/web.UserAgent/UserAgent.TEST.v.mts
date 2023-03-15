@@ -11,4 +11,11 @@ describe('UserAgent', () => {
     expect(res.os.name).to.eql('Mac OS');
     expect(res.browser.name).to.eql('Chrome');
   });
+
+  it('UserAgent.current (safe on server)', () => {
+    const res = UserAgent.current;
+    expect(res.browser.name).to.eql('WebKit');
+    expect(res.engine.name).to.eql('WebKit');
+    expect(res.os.name).to.eql('');
+  });
 });

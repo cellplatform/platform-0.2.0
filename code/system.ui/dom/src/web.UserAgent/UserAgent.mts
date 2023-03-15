@@ -12,6 +12,14 @@ import type { t } from '../common.t';
  */
 export const UserAgent = {
   /**
+   * Parse the browser user-agent string.
+   */
+  get current() {
+    const text = typeof navigator === 'object' ? navigator.userAgent : '';
+    return UserAgent.parse(text);
+  },
+
+  /**
    * Convert a browser user-agent string into a structured object.
    * Example:
    *
