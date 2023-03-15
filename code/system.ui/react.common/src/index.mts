@@ -35,10 +35,10 @@ export { useSizeObserver } from './ui/useSizeObserver';
 export { useMouseState } from './common';
 
 /**
- * Common up-stream modules.
+ * Common up-stream modules
  */
-export { FC } from 'sys.ui.react.util';
-export { css, Style, Color, COLORS, rx } from './common';
+
+export { css, Style, Color, COLORS, rx, FC, UserAgent } from './common';
 
 /**
  * Development
