@@ -1,4 +1,4 @@
-import { t, Dev, expect, TestNetwork } from '../../test.ui';
+import { UserAgent, t, Dev, expect, TestNetwork } from '../../test.ui';
 import { WebRtcController } from '..';
 
 export default Dev.describe('Controller.Mutate', (e) => {
@@ -8,7 +8,7 @@ export default Dev.describe('Controller.Mutate', (e) => {
   /**
    * Mutation helpers.
    */
-  e.describe('Mutate (via CRDT change handler - Immutable)', (e) => {
+  e.describe('mutate (via CRDT change handler - Immutable)', (e) => {
     const sampleState = () => {
       const data: t.NetworkState = { peers: {} }; // NB: tests when the child "peers" property is missing (auto inserted).
       return { data };
@@ -42,7 +42,7 @@ export default Dev.describe('Controller.Mutate', (e) => {
         expect(res.isSelf).to.eql(true);
         expect(res.peer.initiatedBy).to.eql(undefined);
         expect(res.peer).to.eql(data.peers.a);
-        expect(res.peer.meta.useragent).to.eql(navigator.userAgent);
+        expect(res.peer.meta.userAgent).to.eql(UserAgent.current);
       });
 
       e.it('initiatedBy', (e) => {
@@ -61,7 +61,7 @@ export default Dev.describe('Controller.Mutate', (e) => {
     });
 
     e.describe('removePeer', (e) => {
-      e.it('removes peer from tree', (e) => {
+      e.it('removes peer from object tree', (e) => {
         const { data } = sampleState();
 
         const res1 = Mutate.addPeer(data, 'a', 'b');
@@ -77,7 +77,7 @@ export default Dev.describe('Controller.Mutate', (e) => {
         expect(res3.peer).to.eql(undefined);
       });
 
-      e.it('when specified peer does not exist', (e) => {
+      e.it('does nothing when specified peer does not exist', (e) => {
         const { data } = sampleState();
         const res = Mutate.removePeer(data, 'a');
         expect(res.existing).to.eql(false);
