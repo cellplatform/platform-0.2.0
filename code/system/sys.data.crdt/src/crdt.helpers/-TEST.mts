@@ -73,7 +73,7 @@ export default Test.describe('crdt helpers', (e) => {
   });
 
   e.describe('toObject', (e) => {
-    type D = { count: number };
+    type D = { count: number; child?: { msg: string } };
 
     e.it('toObject(<DocRef>)', (e) => {
       const docRef = CrdtDoc.ref<D>({ count: 1 });
@@ -105,19 +105,33 @@ export default Test.describe('crdt helpers', (e) => {
 
     e.it('toObject(<Automerge Doc>)', async (e) => {
       let doc = Automerge.init<D>();
-      doc = Automerge.change<D>(doc, (doc) => (doc.count = 5));
+      doc = Automerge.change<D>(doc, (doc) => {
+        doc.count = 5;
+        doc.child = { msg: 'hello' };
+      });
 
-      const res = Crdt.toObject(doc);
-      expect(Automerge.isAutomerge(res)).to.eql(false);
-      expect(res).to.eql({ count: 5 });
-      expect(res).to.not.equal(doc);
+      const res1 = Crdt.toObject(doc);
+      const res2 = Crdt.toObject(doc.child ?? {});
+
+      expect(Automerge.isAutomerge(res1)).to.eql(false);
+      expect(Automerge.isAutomerge(res2)).to.eql(false);
+
+      expect(res1).to.eql({ count: 5, child: { msg: 'hello' } });
+      expect(res1).to.not.equal(doc);
+
+      expect(res2).to.eql({ msg: 'hello' });
+      expect(res2).to.not.equal(doc.child);
     });
 
     e.it('simple objects', async (e) => {
+      const obj = { count: 1, child: { msg: 'hello' } };
+
       const res1 = Crdt.toObject({});
-      const res2 = Crdt.toObject({ count: 1 });
+      const res2 = Crdt.toObject(obj);
+      const res3 = Crdt.toObject(obj.child);
       expect(res1).to.eql({});
-      expect(res2).to.eql({ count: 1 });
+      expect(res2).to.eql(obj);
+      expect(res3).to.eql(obj.child);
     });
 
     e.it('throw error', (e) => {
