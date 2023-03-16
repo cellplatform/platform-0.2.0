@@ -34,8 +34,8 @@ export const WebRtcController = {
     const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
     const instance = events.instance.id;
     self.connections$.pipe(rx.takeUntil(events.dispose$)).subscribe((change) => {
-      // NB: Ferry peer-event through the event-bus.
       bus.fire({
+        // NB: Ferry the peer-event through the event-bus.
         type: 'sys.net.webrtc/conns:changed',
         payload: { instance, change },
       });
@@ -85,15 +85,16 @@ export const WebRtcController = {
       state.change((d) => {
         // initiatedBy
         const { local, remote } = conn.peer;
-        Mutate.addPeer(d.network, self.id, local);
-        Mutate.addPeer(d.network, self.id, remote);
+        const { initiatedBy } = conn.metadata;
+        Mutate.addPeer(d.network, self.id, local, { initiatedBy });
+        Mutate.addPeer(d.network, self.id, remote, { initiatedBy });
       });
 
       state.change((d) => {
         const localPeer = d.network.peers[self.id];
-        if (localPeer) {
-          localPeer.meta.userAgent = UserAgent.parse(navigator.userAgent);
-        }
+        // if (localPeer) {
+        //   localPeer.meta.userAgent = UserAgent.parse(navigator.userAgent);
+        // }
       });
     });
 
