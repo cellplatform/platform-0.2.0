@@ -3,4 +3,4 @@ export { Test, Tree } from 'sys.test.spec';
 export { TestFilesystem } from 'sys.fs';
 
 export * from '../ui/common';
-export { Automerge } from '../driver.Automerge';
+export { Crdt, toObject, Automerge } from '../index.mjs';
