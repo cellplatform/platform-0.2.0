@@ -14,13 +14,23 @@ export const Media = {
   /**
    * Retrieve a singleton of the Media controller
    * (optionally for the given bus, otherwise the
-   *  default singleton bus is used)
+   *  default singleton bus is used).
    */
   singleton(options: { bus?: t.EventBus<any> } = {}) {
     const bus = options.bus ?? _singletonBus;
-    const busid = rx.bus.instance(bus);
-    if (cache[busid]) return cache[busid] as T;
+    const key = rx.bus.instance(bus);
+    if (cache[key]) return cache[key] as T;
 
+    const api = Media.create({ bus });
+    cache[key] = api;
+    return api;
+  },
+
+  /**
+   * Creat a new instance.
+   */
+  create(options: { bus?: t.EventBus<any> } = {}) {
+    const bus = options.bus ?? _singletonBus;
     const ref = generateRef(bus);
     const events = MediaStream.Events(bus);
     MediaStream.Controller({ bus });
@@ -54,7 +64,6 @@ export const Media = {
       getStream,
     };
 
-    cache[busid] = api;
     return api;
   },
 };
