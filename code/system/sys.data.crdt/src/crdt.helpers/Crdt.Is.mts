@@ -10,6 +10,7 @@ export const CrdtIs = {
   ref(input: any): input is t.CrdtDocRef<{}> {
     if (typeof input !== 'object' || input === null) return false;
     return (
+      input.kind === 'Crdt:DocRef' &&
       typeof input.change === 'function' &&
       Is.observable(input.$) &&
       Automerge.isAutomerge(input.current)
@@ -23,6 +24,7 @@ export const CrdtIs = {
     if (typeof input !== 'object' || input === null) return false;
     return (
       CrdtIs.ref(input.doc) &&
+      input.kind === 'Crdt:DocFile' &&
       typeof input.exists === 'function' &&
       typeof input.save === 'function' &&
       typeof input.load === 'function'
