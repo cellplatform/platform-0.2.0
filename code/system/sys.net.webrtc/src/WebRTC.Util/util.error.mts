@@ -23,6 +23,7 @@ export const error = {
   toError(err: Error): t.PeerError {
     const type = error.toType(err);
     const isFatal = error.isFatal(type);
-    return { type, isFatal, error: err };
+    const message = err.message;
+    return { type, isFatal, message };
   },
 };

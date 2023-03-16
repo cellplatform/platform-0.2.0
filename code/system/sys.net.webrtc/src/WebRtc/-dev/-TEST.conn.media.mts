@@ -87,7 +87,7 @@ export default Dev.describe('Media Connection', (e) => {
 
     expect(errors.length).to.eql(1);
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
-    expect(errors[0].error.message).to.eql(errorMessage);
+    expect(errors[0].message).to.eql(errorMessage);
 
     dispose();
   });

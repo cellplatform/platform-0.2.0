@@ -128,6 +128,6 @@ export type PeerErrorType =
 
 export type PeerError = {
   type: PeerErrorType;
-  error: Error;
+  message: string;
   isFatal: boolean;
 };
