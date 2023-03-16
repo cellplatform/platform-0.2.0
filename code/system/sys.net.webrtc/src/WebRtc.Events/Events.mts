@@ -3,6 +3,18 @@ import { WebRtcUtil, rx, slug, t } from './common';
 type Id = string;
 
 /**
+ * Creat a new events API wrapper.
+ */
+export function factory(
+  bus: t.EventBus<any>,
+  peer: t.PeerId,
+  options: { dispose$?: t.Observable<any> } = {},
+) {
+  const { dispose$ } = options;
+  return WebRtcEvents({ instance: { bus, id: peer }, dispose$ });
+}
+
+/**
  * Event API.
  */
 export function WebRtcEvents(args: {
