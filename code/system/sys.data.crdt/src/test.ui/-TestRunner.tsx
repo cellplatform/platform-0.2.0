@@ -75,11 +75,12 @@ export default Dev.describe('Root', (e) => {
 
       dev.hr(-1, 5);
 
-      dev.title('Driver (Underlying Library)');
+      dev.title('Driver (Automerge)');
       tests.push(
         ...[
           await button(import('../driver.Automerge/-dev/TEST.basic.mjs')),
-          await button(import('../driver.Automerge/-dev/TEST.api.mjs'), true),
+          await button(import('../driver.Automerge/-dev/TEST.api.mjs')),
+          await button(import('../driver.Automerge/-dev/TEST.initialState.mjs'), true),
           await button(import('../driver.Automerge/-dev/TEST.filesystem.mjs')),
           await button(import('../driver.Automerge/-dev/TEST.sync.mjs')),
         ],
