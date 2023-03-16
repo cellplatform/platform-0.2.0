@@ -77,7 +77,7 @@ export default Dev.describe('WebRTC', (e) => {
       });
 
       e.it('remote peer does not exist', async (e) => {
-        const res = await WebRtc.Util.isAlive(peerA, 'no-exist');
+        const res = await WebRtc.Util.isAlive(peerA, 'FOO-404');
         expect(res).to.eql(false);
       });
 
