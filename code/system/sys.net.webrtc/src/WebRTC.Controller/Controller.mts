@@ -17,19 +17,21 @@ export const WebRtcController = {
   /**
    * Manage the state of network peers.
    */
-  listen(args: {
-    self: t.Peer;
-    state: t.CrdtDocRef<Doc>;
-    filedir?: t.Fs;
-    dispose$?: t.Observable<any>;
-    bus?: t.EventBus<any>;
-    onConnectStart?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
-    onConnectComplete?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
-  }): t.WebRtcEvents {
-    const { self, state, filedir } = args;
+  listen(
+    self: t.Peer,
+    state: t.CrdtDocRef<Doc>,
+    options: {
+      filedir?: t.Fs;
+      dispose$?: t.Observable<any>;
+      bus?: t.EventBus<any>;
+      onConnectStart?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
+      onConnectComplete?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
+    } = {},
+  ): t.WebRtcEvents {
+    const { filedir } = options;
 
-    const bus = rx.busAsType<t.WebRtcEvent>(args.bus ?? rx.bus());
-    const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: args.dispose$ });
+    const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
+    const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
     const instance = events.instance.id;
     self.connections$.pipe(rx.takeUntil(events.dispose$)).subscribe((change) => {
       // NB: Ferry peer-event through the event-bus.
@@ -47,7 +49,8 @@ export const WebRtcController = {
       const { name, version } = Pkg;
       const info: t.WebRtcInfo = {
         module: { name, version },
-        peer: { id: self.id },
+        peer: self,
+        state: R.clone(state.current.network),
       };
       bus.fire({
         type: 'sys.net.webrtc/info:res',
@@ -80,6 +83,7 @@ export const WebRtcController = {
       });
 
       state.change((d) => {
+        // initiatedBy
         const { local, remote } = conn.peer;
         Mutate.addPeer(d.network, self.id, local);
         Mutate.addPeer(d.network, self.id, remote);
@@ -118,7 +122,7 @@ export const WebRtcController = {
             payload: { tx, instance, peer, state: before },
           });
 
-          args.onConnectStart?.(peer);
+          options.onConnectStart?.(peer);
 
           /**
            * TODO 🐷
@@ -131,7 +135,7 @@ export const WebRtcController = {
             self.media(remote.id, 'camera'), //  <== Start (camera).
           ]);
 
-          args.onConnectComplete?.(peer);
+          options.onConnectComplete?.(peer);
           const after = R.clone(state.current.network);
           bus.fire({
             type: 'sys.net.webrtc/connect:complete',

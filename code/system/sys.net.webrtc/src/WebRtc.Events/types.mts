@@ -6,7 +6,8 @@ type Semver = string;
 
 export type WebRtcInfo = {
   module: { name: string; version: Semver };
-  peer: { id: t.PeerId };
+  peer: t.Peer;
+  state: t.NetworkState;
 };
 
 /**
