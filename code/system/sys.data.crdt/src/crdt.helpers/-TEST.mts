@@ -1,30 +1,38 @@
 import { CrdtIs, fieldAs } from '.';
 import { Crdt } from '../crdt';
 import { CrdtDoc } from '../crdt.Doc';
-import { expect, Automerge, t, Test, TestFilesystem } from '../test.ui';
+import { Automerge, expect, rx, t, Test, TestFilesystem } from '../test.ui';
 
 export default Test.describe('crdt helpers', (e) => {
   e.describe('is (flags)', (e) => {
     type D = { count: number; name?: string };
-    const is = CrdtIs;
+    const Is = CrdtIs;
 
     e.it('exposed from API root', (e) => {
       expect(Crdt.Is).to.equal(CrdtIs);
     });
 
-    e.it('is.ref (DocRef)', (e) => {
+    e.it('Is.ref (DocRef)', (e) => {
       const doc = CrdtDoc.ref<D>({ count: 1 });
-      expect(is.ref(doc)).to.eql(true);
-      [null, undefined, {}, [], 0, true, 'a'].forEach((doc) => expect(is.ref(doc)).to.eql(false));
+      expect(Is.ref(doc)).to.eql(true);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.ref(d)).to.eql(false));
     });
 
-    e.it('is.file (DocFile)', async (e) => {
+    e.it('Is.file (DocFile)', async (e) => {
       const doc = CrdtDoc.ref<D>({ count: 1 });
       const filedir = TestFilesystem.memory().fs;
       const file = await CrdtDoc.file<D>(filedir, { count: 0 });
-      expect(is.file(file)).to.eql(true);
-      expect(is.file(doc)).to.eql(false);
-      [null, undefined, {}, [], 0, true, 'a'].forEach((doc) => expect(is.file(doc)).to.eql(false));
+      expect(Is.file(file)).to.eql(true);
+      expect(Is.file(doc)).to.eql(false);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.file(d)).to.eql(false));
+    });
+
+    e.it('Is.docSync', async (e) => {
+      const bus = rx.bus();
+      const sync = CrdtDoc.sync<D>(bus, { count: 0 });
+      expect(Is.sync(sync)).to.eql(true);
+      expect(Is.sync(sync.doc)).to.eql(false);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.sync(d)).to.eql(false));
     });
   });
 
