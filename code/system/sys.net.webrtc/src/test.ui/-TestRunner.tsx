@@ -74,7 +74,7 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../WebRtc.Controller/-dev/-TEST.mjs'), true),
+          await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs'), true),
           await button(import('../WebRtc.Controller/-dev/-TEST.mutate.mjs')),
         ],
       );
