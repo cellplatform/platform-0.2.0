@@ -1,4 +1,4 @@
-import { Dev, t, Time } from '.';
+import { Dev, t, Time, WebRtc } from '.';
 
 type T = {
   testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
@@ -110,6 +110,11 @@ export default Dev.describe('Root', (e) => {
           d.testrunner.spinning = false;
         }),
       );
+      dev.button('stop media stream', () => {
+        const media = WebRtc.Media.singleton();
+        media.events.stop(media.ref.camera);
+        media.events.stop(media.ref.screen);
+      });
 
       /**
        * Immediate invocation of tests.
