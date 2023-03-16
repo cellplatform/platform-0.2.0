@@ -1,6 +1,11 @@
 import { WebRtcEvents } from '.';
 import { describe, expect, it } from '../test';
 
+/**
+ * NOTE:
+ *    Most of the tests for the Events API wrapper occur
+ *    within the [WebRTC.Controller] test suites.
+ */
 describe('WebRtcEvents', () => {
   describe('is', () => {
     const is = WebRtcEvents.is;
