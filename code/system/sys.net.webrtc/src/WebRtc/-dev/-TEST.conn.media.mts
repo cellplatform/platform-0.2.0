@@ -19,6 +19,7 @@ export default Dev.describe('Media Connection', (e) => {
   e.it(
     'open [media:camera/data] connection → close (last) data-connection → auto closes media-connection',
     async (e) => {
+      await Media.events.stop(Media.ref.camera).fire();
       const status1 = await getMediaStatus();
       expect(status1.stream).to.eql(undefined);
 
