@@ -1,15 +1,25 @@
-import { t, rx, Dev, expect, TestNetwork, Crdt, Filesystem } from '../../test.ui';
 import { WebRtcController } from '..';
+import {
+  Time,
+  expect,
+  Automerge,
+  Crdt,
+  Dev,
+  Filesystem,
+  R,
+  rx,
+  t,
+  TestNetwork,
+  Pkg,
+} from '../../test.ui';
+
+import { initialCommit as initialCommitData } from './initial.data.mjs';
 
 type DocShared = {
-  count: number;
   network: t.NetworkState;
 };
 
-// const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
-
 export default Dev.describe('Controller', async (e) => {
-  e.timeout(1000 * 15);
 
   const { dispose, dispose$ } = rx.disposable();
 
@@ -71,11 +81,24 @@ export default Dev.describe('Controller', async (e) => {
       console.log('state.doc.current', state.current);
     });
 
+    e.it.skip('events$: connect:start → connect:complete', async (e) => {});
     e.it.skip('remove peer', async (e) => {});
     e.it.skip('purge stale/dead peers', async (e) => {});
 
+    e.it('info', async (e) => {
+      const info = await controller.info.get();
+      expect(info?.module.name).to.eql(Pkg.name);
+      expect(info?.module.version).to.eql(Pkg.version);
+      expect(info?.peer.id).to.eql(peerA.id);
+    });
+
     e.it('dispose', async (e) => {
       // dispose();
+      /**
+       * TODO 🐷
+       * - dispose of controller
+       * - listen for dispose$ event
+       */
     });
   });
 });

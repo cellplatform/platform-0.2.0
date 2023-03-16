@@ -14,4 +14,6 @@ export type NetworkStatePeer = {
   meta: NetworkStatePeerMeta;
 };
 
-export type NetworkStatePeerMeta = { useragent?: string };
+export type NetworkStatePeerMeta = {
+  userAgent?: t.UserAgent;
+};

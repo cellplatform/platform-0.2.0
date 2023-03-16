@@ -1,6 +1,6 @@
-import { Crdt, rx, t } from './common';
+import { WebRtcEvents } from '../WebRtc.Events';
+import { Crdt, Pkg, R, rx, slug, t, UserAgent } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
-import { WebRtcUtil } from '../WebRtc.Util';
 
 /**
  * TODO 🐷 MOVE to type.mts
@@ -22,26 +22,52 @@ export const WebRtcController = {
     state: t.CrdtDocRef<Doc>;
     filedir?: t.Fs;
     dispose$?: t.Observable<any>;
+    bus?: t.EventBus<any>;
     onConnectStart?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
     onConnectComplete?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
-  }) {
+  }): t.WebRtcEvents {
     const { self, state, filedir } = args;
+
+    const bus = rx.busAsType<t.WebRtcEvent>(args.bus ?? rx.bus());
+    const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: args.dispose$ });
+    const instance = events.instance.id;
+    self.connections$.pipe(rx.takeUntil(events.dispose$)).subscribe((change) => {
+      // NB: Ferry peer-event through the event-bus.
+      bus.fire({
+        type: 'sys.net.webrtc/conns:changed',
+        payload: { instance, change },
+      });
+    });
+
+    /**
+     * Info
+     */
+    events.info.req$.subscribe((e) => {
+      const { tx } = e;
+      const { name, version } = Pkg;
+      const info: t.WebRtcInfo = {
+        module: { name, version },
+        peer: { id: self.id },
+      };
+      bus.fire({
+        type: 'sys.net.webrtc/info:res',
+        payload: { tx, instance, info },
+      });
+    });
 
     /**
      * Listen to connections.
      */
-    const changed = WebRtcUtil.connections.changed(self, args.dispose$);
-    const connAdded$ = changed.data.added$;
-    const connRemoved$ = changed.data.removed$;
+    const dataConnections = events.connections.changed.data;
 
     /**
      * New connection.
      */
-    connAdded$.subscribe(async (conn) => {
+    dataConnections.added$.subscribe(async (conn) => {
       /**
        * Setup "sync protocol" on newly added data-connections.
        */
-      const dispose$ = connRemoved$.pipe(rx.filter((e) => e.id === conn.id));
+      const dispose$ = dataConnections.removed$.pipe(rx.filter((e) => e.id === conn.id));
       const syncer = Crdt.Doc.sync<Doc>(conn.bus(), state, {
         /**
          * TODO 🐷
@@ -61,23 +87,17 @@ export const WebRtcController = {
 
       state.change((d) => {
         const localPeer = d.network.peers[self.id];
-
-        console.log('localPeer >>> ||||||||||||', localPeer);
-
-        // localPeer.initiatedBy
-        console.log('navigator.userAgent', navigator.userAgent);
-
-        localPeer.meta.useragent = navigator.userAgent;
+        if (localPeer) {
+          localPeer.meta.userAgent = UserAgent.parse(navigator.userAgent);
+        }
       });
     });
 
     /**
      * Connection closed (clean up).
      */
-    connRemoved$.subscribe((e) => {
-      state.change((d) => {
-        Mutate.removePeer(d.network, e.peer.remote);
-      });
+    dataConnections.removed$.subscribe((e) => {
+      state.change((d) => Mutate.removePeer(d.network, e.peer.remote));
     });
 
     /**
@@ -90,7 +110,15 @@ export const WebRtcController = {
         const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
 
         if (!exists && isInitiatedByMe) {
-          args.onConnectStart?.({ local: self.id, remote: remote.id });
+          const tx = slug();
+          const peer = { local: self.id, remote: remote.id };
+          const before = R.clone(state.current.network);
+          bus.fire({
+            type: 'sys.net.webrtc/connect:start',
+            payload: { tx, instance, peer, state: before },
+          });
+
+          args.onConnectStart?.(peer);
 
           /**
            * TODO 🐷
@@ -103,12 +131,22 @@ export const WebRtcController = {
             self.media(remote.id, 'camera'), //  <== Start (camera).
           ]);
 
-          args.onConnectComplete?.({ local: self.id, remote: remote.id });
+          args.onConnectComplete?.(peer);
+          const after = R.clone(state.current.network);
+          bus.fire({
+            type: 'sys.net.webrtc/connect:complete',
+            payload: { tx, instance, peer, state: after },
+          });
         }
       };
 
       const peers = e.doc.network.peers ?? {};
       Object.values(peers).forEach((peer) => processChange(peer));
     });
+
+    /**
+     * PUBLIC API.
+     */
+    return events;
   },
 };
