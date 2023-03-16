@@ -1,4 +1,4 @@
-import { rx, t, Automerge } from './common';
+import { rx, t, Automerge, Is } from './common';
 
 const { isAutomerge } = Automerge;
 
@@ -6,7 +6,7 @@ const { isAutomerge } = Automerge;
  * In-memory CRDT document reference (wrapper).
  */
 export function createDocRef<D extends {}>(
-  initial: D,
+  initial: D | Uint8Array, // NB: Uint8Array is a serialized Automerge document.
   options: {
     dispose$?: t.Observable<any>;
     onChange?: t.CrdtDocRefChangeHandler<D>;
@@ -20,7 +20,7 @@ export function createDocRef<D extends {}>(
   });
 
   const $ = new rx.Subject<t.CrdtDocAction<D>>();
-  let _doc: D = isAutomerge(initial) ? initial : Automerge.from<D>(initial);
+  let _doc: D = Wrangle.automergeDoc(initial);
 
   const onChangeHandlers = new Set<t.CrdtDocRefChangeHandler<D>>();
   const fireOnChange = (change?: Uint8Array) => {
@@ -119,3 +119,18 @@ export function createDocRef<D extends {}>(
 
   return api;
 }
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  automergeDoc<D extends {}>(initial: D | Uint8Array) {
+    if (initial instanceof Uint8Array) {
+      const [doc] = Automerge.applyChanges<D>(Automerge.init(), [initial]);
+      return doc;
+    } else {
+      return isAutomerge(initial) ? initial : Automerge.from<D>(initial);
+    }
+  },
+};
