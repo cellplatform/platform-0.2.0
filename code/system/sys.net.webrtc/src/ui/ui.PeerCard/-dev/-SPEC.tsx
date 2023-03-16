@@ -41,7 +41,7 @@ export default Dev.describe('PeerCard', async (e) => {
   let docMe: t.CrdtDocRef<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
 
-  const byteArray = Crdt.Schema.toByteArray<DocShared>({ count: 0, network: { peers: {} } });
+  const byteArray = Crdt.Doc.Schema.toByteArray<DocShared>({ count: 0, network: { peers: {} } });
   console.info('CODE FILE (schema.mts):');
   console.info(byteArray.toString());
 
