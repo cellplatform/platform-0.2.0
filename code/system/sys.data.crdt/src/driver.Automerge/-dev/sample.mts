@@ -1,7 +1,8 @@
 export type D = { list: number[] };
 
 /**
- * Initial CRDT Document<D> state.
+ * Initial CRDT Document state.
+ * Generated via: Crdt.Doc.Schema.toByteArray(...)  ← (check into source-control).
  */
 export const initialDoc = [
   133, 111, 74, 131, 190, 183, 161, 37, 1, 73, 0, 16, 254, 53, 104, 232, 153, 34, 72, 179, 153, 182,
