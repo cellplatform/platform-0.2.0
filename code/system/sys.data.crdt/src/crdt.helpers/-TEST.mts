@@ -63,4 +63,41 @@ export default Test.describe('crdt helpers', (e) => {
       expect(res3).to.eql(undefined);
     });
   });
+
+  e.describe('toObject', (e) => {
+    type D = { count: number };
+
+    e.it('from DocRef', (e) => {
+      const docRef = CrdtDoc.ref<D>({ count: 1 });
+      const res = Crdt.toObject(docRef);
+
+      expect(Automerge.isAutomerge(docRef.current)).to.eql(true);
+      expect(Automerge.isAutomerge(res)).to.eql(false);
+      expect(res).to.eql({ count: 1 });
+      expect(res).to.eql(docRef.current);
+      expect(res).to.not.equal(docRef.current);
+    });
+
+    e.it('from DocFile', async (e) => {
+      //
+      const file = await Crdt.Doc.file<D>(TestFilesystem.memory().fs, { count: 1 });
+      const res = Crdt.toObject(file);
+      expect(res).to.eql({ count: 1 });
+      expect(res).to.eql(file.doc.current);
+      expect(res).to.not.equal(file.doc.current);
+
+      console.log('file', file);
+      console.log('res', res);
+    });
+
+    e.it('from Automerge document', async (e) => {
+      let doc = Automerge.init<D>();
+      doc = Automerge.change<D>(doc, (doc) => (doc.count = 5));
+
+      const res = Crdt.toObject(doc);
+      expect(Automerge.isAutomerge(res)).to.eql(false);
+      expect(res).to.eql({ count: 5 });
+      expect(res).to.not.equal(doc);
+    });
+  });
 });
