@@ -53,6 +53,8 @@ export async function createDocFile<D extends {}>(
    * [DocFile]
    */
   const api: t.CrdtDocFile<D> = {
+    kind: 'Crdt:DocFile',
+
     /**
      * CRDT document reference.
      */

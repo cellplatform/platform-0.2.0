@@ -4,6 +4,7 @@ import type { t } from '../common.t';
  * Extends a CRDT [DocRef] with file-system persistence.
  */
 export type CrdtDocFile<D extends {}> = t.Disposable & {
+  readonly kind: 'Crdt:DocFile';
   readonly doc: t.CrdtDocRef<D>;
   readonly isDisposed: boolean;
   readonly isAutosaving: boolean;
@@ -15,7 +16,7 @@ export type CrdtDocFile<D extends {}> = t.Disposable & {
 };
 
 export type CrdtDocFileInfo = {
-  bytes: number;
-  exists: boolean;
-  manifest: t.DirManifest;
+  readonly bytes: number;
+  readonly exists: boolean;
+  readonly manifest: t.DirManifest;
 };
