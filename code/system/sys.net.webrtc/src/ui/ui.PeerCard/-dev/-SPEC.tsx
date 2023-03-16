@@ -1,8 +1,11 @@
-import { PeerCard, PeerCardProps } from '.';
-import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
-import { PeerList } from '../ui.PeerList';
+import { PeerCard, PeerCardProps } from '..';
+import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../../test.ui';
+import { PeerList } from '../../ui.PeerList';
 
-import type { TestNetworkP2P } from '../../test.ui';
+import type { TestNetworkP2P } from '../../../test.ui';
+
+import { initialSharedDoc } from './-schema.mjs';
+import type { DocShared } from './-schema.mjs';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
@@ -21,12 +24,6 @@ const initial: T = {
 type DocMe = { count: number };
 const initialMeDoc: DocMe = { count: 0 };
 
-type DocShared = {
-  count: number;
-  network: t.NetworkState;
-};
-const initialSharedDoc: DocShared = { count: 0, network: { peers: {} } };
-
 export default Dev.describe('PeerCard', async (e) => {
   e.timeout(1000 * 30);
 
@@ -44,6 +41,10 @@ export default Dev.describe('PeerCard', async (e) => {
   let docMe: t.CrdtDocRef<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
 
+  const byteArray = Crdt.Schema.toByteArray<DocShared>({ count: 0, network: { peers: {} } });
+  console.info('CODE FILE (schema.mts):');
+  console.info(byteArray.toString());
+
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
   const dirs = {
@@ -59,10 +60,9 @@ export default Dev.describe('PeerCard', async (e) => {
     self.connections$.subscribe(updateSelf);
     updateSelf();
 
-    WebRtc.Controller.listen({
-      self,
-      state: docShared,
-      filedir: dirs.shared,
+    const filedir = dirs.shared;
+    WebRtc.Controller.listen(self, docShared, {
+      filedir,
       dispose$,
       onConnectStart(e) {
         state.change((d) => (d.props.spinning = true));
@@ -71,22 +71,6 @@ export default Dev.describe('PeerCard', async (e) => {
         state.change((d) => (d.props.spinning = false));
       },
     });
-
-    const changed = WebRtc.Util.connections.changed(self, dispose$);
-    const added$ = changed.data.added$;
-    const removed$ = changed.data.removed$;
-
-    // /**
-    //  * Setup "sync protocol" on newly added data-connections.
-    //  */
-    // added$.subscribe((conn) => {
-    //   const dispose$ = removed$.pipe(rx.filter((e) => e.id === conn.id));
-    //   const filedir = dirs.shared;
-    //   Crdt.Doc.sync<DocShared>(conn.bus(), docShared, { filedir, dispose$ });
-    //   docShared.change((d) => {
-    //     Controller.mutate.addPeer(d.network, conn.peer.remote);
-    //   });
-    // });
   }
 
   e.it('init:crdt', async (e) => {
@@ -98,6 +82,10 @@ export default Dev.describe('PeerCard', async (e) => {
     // Initialize CRDT documents.
     docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
     docShared = Crdt.Doc.ref<DocShared>(initialSharedDoc, { dispose$ });
+
+    console.log('initialSharedDoc', initialSharedDoc);
+
+    console.log(Crdt.toObject(docShared));
 
     // Start file-persistence.
     await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
