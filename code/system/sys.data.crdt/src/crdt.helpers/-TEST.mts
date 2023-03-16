@@ -112,5 +112,20 @@ export default Test.describe('crdt helpers', (e) => {
       expect(res).to.eql({ count: 5 });
       expect(res).to.not.equal(doc);
     });
+
+    e.it('simple objects', async (e) => {
+      const res1 = Crdt.toObject({});
+      const res2 = Crdt.toObject({ count: 1 });
+      expect(res1).to.eql({});
+      expect(res2).to.eql({ count: 1 });
+    });
+
+    e.it('throw error', (e) => {
+      const test = (input: any) => {
+        const fn = () => Crdt.toObject(input);
+        expect(fn).to.throw(/Unable to convert/);
+      };
+      [null, undefined, 1, true, 'a', []].forEach((value) => test(value));
+    });
   });
 });
