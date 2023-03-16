@@ -29,6 +29,7 @@ export function createDocRef<D extends {}>(
   };
 
   const api: t.CrdtDocRef<D> = {
+    kind: 'Crdt:DocRef',
     $: $.asObservable(),
 
     get id() {

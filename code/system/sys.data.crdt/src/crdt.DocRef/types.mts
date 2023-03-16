@@ -15,6 +15,7 @@ export type CrdtDocRefChangeHandlerArgs<D extends {}> = {
  * Represents an observable handle to a CRDT document.
  */
 export type CrdtDocRef<D extends {}> = t.Disposable & {
+  readonly kind: 'Crdt:DocRef';
   readonly id: { actor: string };
   readonly $: t.Observable<CrdtDocAction<D>>;
   readonly current: D;

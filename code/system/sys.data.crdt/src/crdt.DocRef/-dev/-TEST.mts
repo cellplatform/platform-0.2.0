@@ -1,5 +1,5 @@
 import { DocRef } from '..';
-import { R, Crdt, Automerge, expect, rx, t, Test, toObject } from '../../test.ui';
+import { Automerge, Crdt, expect, rx, t, Test, toObject } from '../../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };
@@ -10,6 +10,11 @@ export default Test.describe('DocRef', (e) => {
   });
 
   e.describe('initialize', (e) => {
+    e.it('kind', (e) => {
+      const doc = DocRef.init<D>({ count: 0 });
+      expect(doc.kind).to.eql('Crdt:DocRef');
+    });
+
     e.it('from initial {object}', (e) => {
       const initial = { count: 0 };
       const doc = DocRef.init<D>(initial);

@@ -12,7 +12,7 @@ export default Test.describe('DocFile', (e) => {
   });
 
   e.describe('initialize', (e) => {
-    e.it('init: kind', async (e) => {
+    e.it('kind', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial);
       expect(file.kind).to.eql('Crdt:DocFile');
