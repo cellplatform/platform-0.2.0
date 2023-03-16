@@ -107,7 +107,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      if (!_hasImmediate) Time.delay(0, () => invoke(all));
+      if (!_hasImmediate) Time.delay(100, () => invoke(all));
     });
   });
 });
