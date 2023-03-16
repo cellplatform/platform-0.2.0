@@ -4,7 +4,7 @@ import { DocRef } from '../crdt.DocRef';
 /**
  * Tools for working with document schemas.
  */
-export const Schema = {
+export const CrdtSchema = {
   /**
    * Convert an initial object's document structure into a byte-array such that it
    * can be used to initialize a new CRDT document independenctly on different peer
