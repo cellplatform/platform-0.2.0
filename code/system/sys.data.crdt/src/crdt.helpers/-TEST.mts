@@ -9,7 +9,7 @@ export default Test.describe('crdt helpers', (e) => {
     const is = CrdtIs;
 
     e.it('exposed from API root', (e) => {
-      expect(Crdt.is).to.equal(CrdtIs);
+      expect(Crdt.Is).to.equal(CrdtIs);
     });
 
     e.it('is.ref (DocRef)', (e) => {
