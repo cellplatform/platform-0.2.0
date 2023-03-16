@@ -1,4 +1,4 @@
-import { PeerSyncer } from '../crdt.Sync';
+import { PeerSyncer } from '../crdt.DocSync';
 import { CrdtDoc as Doc } from '../crdt.Doc';
 import { CrdtIs as is, fieldAs, toObject } from '../crdt.helpers';
 const Schema = Doc.Schema;
