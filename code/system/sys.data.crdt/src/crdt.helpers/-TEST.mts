@@ -75,7 +75,7 @@ export default Test.describe('crdt helpers', (e) => {
   e.describe('toObject', (e) => {
     type D = { count: number };
 
-    e.it('from DocRef', (e) => {
+    e.it('toObject(<DocRef>)', (e) => {
       const docRef = CrdtDoc.ref<D>({ count: 1 });
       const res = Crdt.toObject(docRef);
 
@@ -86,19 +86,24 @@ export default Test.describe('crdt helpers', (e) => {
       expect(res).to.not.equal(docRef.current);
     });
 
-    e.it('from DocFile', async (e) => {
-      //
+    e.it('toObject(<DocFile>)', async (e) => {
       const file = await Crdt.Doc.file<D>(TestFilesystem.memory().fs, { count: 1 });
       const res = Crdt.toObject(file);
       expect(res).to.eql({ count: 1 });
       expect(res).to.eql(file.doc.current);
       expect(res).to.not.equal(file.doc.current);
-
-      console.log('file', file);
-      console.log('res', res);
     });
 
-    e.it('from Automerge document', async (e) => {
+    e.it('toObject(<SyncFile>)', async (e) => {
+      const bus = rx.bus();
+      const sync = CrdtDoc.sync<D>(bus, { count: 1 });
+      const res = Crdt.toObject(sync);
+      expect(res).to.eql({ count: 1 });
+      expect(res).to.eql(sync.doc.current);
+      expect(res).to.not.equal(sync.doc.current);
+    });
+
+    e.it('toObject(<Automerge Doc>)', async (e) => {
       let doc = Automerge.init<D>();
       doc = Automerge.change<D>(doc, (doc) => (doc.count = 5));
 

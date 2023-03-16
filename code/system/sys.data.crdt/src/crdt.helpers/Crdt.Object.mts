@@ -9,5 +9,6 @@ export function toObject<D extends {}>(doc: D | t.CrdtDocRef<D>) {
   if (Automerge.isAutomerge(doc)) return obj(doc as D);
   if (Is.ref(doc)) return obj(doc.current);
   if (Is.file(doc)) return obj(doc.doc.current);
+  if (Is.sync(doc)) return obj(doc.doc.current);
   throw new Error('Unknown object kind.');
 }
