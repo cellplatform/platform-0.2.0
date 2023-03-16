@@ -30,6 +30,9 @@ export default Dev.describe('Controller', async (e) => {
 
   const initialState: DocShared = { count: 0, network: { peers: {} } };
   const state = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+  e.it('exposed from root API', (e) => {
+    expect(WebRtcController).to.equal(WebRtc.Controller);
+  });
 
   e.describe('Controller.listen', (e) => {
     let peerA: t.Peer;
@@ -39,6 +42,31 @@ export default Dev.describe('Controller', async (e) => {
       const [a, b] = await TestNetwork.peers(2, { getStream: true });
       peerA = a;
       peerB = b;
+    });
+
+    e.describe('event-bus', (e) => {
+      e.it('default generated bus (← info method)', async (e) => {
+        controller = WebRtcController.listen(peerA, stateDoc);
+        const info = await controller.info.get();
+        controller.dispose();
+        expect(info?.peer).to.equal(peerA);
+      });
+
+      e.it('specified bus (← info method)', async (e) => {
+        const bus = rx.bus();
+        controller = WebRtcController.listen(peerA, stateDoc, { bus });
+
+        const events1 = WebRtc.events(bus, peerA.id);
+        const events2 = WebRtc.events(bus, peerA);
+
+        const info1 = await events1.info.get();
+        const info2 = await events2.info.get();
+
+        expect(info1?.peer).to.equal(peerA);
+        expect(info2?.peer).to.equal(peerA);
+
+        controller.dispose();
+      });
     });
 
     e.it('start listening to a P2P network - ["local:peer" + crdt.doc<shared>]', async (e) => {
