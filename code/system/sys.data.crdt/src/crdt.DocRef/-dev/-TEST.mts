@@ -1,6 +1,5 @@
-import { DocRef } from '.';
-import { Crdt } from '../crdt';
-import { Automerge, expect, rx, t, Test } from '../test.ui';
+import { DocRef } from '..';
+import { R, Crdt, Automerge, expect, rx, t, Test, toObject } from '../../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };
@@ -156,6 +155,40 @@ export default Test.describe('DocRef', (e) => {
       const doc = DocRef.init<D>({ count: 0 });
       const fn = () => doc.replace({ count: 123 });
       expect(fn).to.throw(/Cannot replace with a non-Automerge document/);
+    });
+  });
+
+  e.describe('initial document structure (multi-peer safe)', (e) => {
+    e.it('Schema (exposed from API)', async (e) => {
+      expect(Crdt.Schema).to.exist;
+      expect(Crdt.Schema).to.eql(Crdt.Doc.Schema);
+    });
+
+    e.it('Schema.toByteArray', async (e) => {
+      const initialObject: D = { count: 0, name: 'foo' };
+      const byteArray = Crdt.Doc.Schema.toByteArray<D>(initialObject);
+      const code = byteArray.sourceFile; // NB: TypeScript source-code to save within module (aka. "schema" starting point).
+
+      expect(byteArray.commit.byteLength).to.eql(70);
+      expect(code).to.include('export type D = { count: number };');
+      expect(code).to.include('export const initialState = new Uint8Array([');
+      expect(code).to.eql(byteArray.toString());
+    });
+
+    e.it('initialize from byte-array (Uint8Array)', async (e) => {
+      const initialObject: D = { count: 0, name: 'foo' };
+      const docA = DocRef.init<D>(initialObject);
+
+      const { initialDoc } = await import('./-sample.mjs');
+      const initial = new Uint8Array(initialDoc);
+      expect(initial.byteLength).to.eql(70);
+
+      // Create new doc from the byte-array.
+      const docB = DocRef.init<D>(initial);
+      const docC = DocRef.init<D>(initial);
+
+      expect(toObject(docB)).to.eql(toObject(docA));
+      expect(toObject(docC)).to.eql(toObject(docA));
     });
   });
 });
