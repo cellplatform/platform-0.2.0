@@ -1,5 +1,5 @@
-import { PeerSyncer } from '.';
-import { Automerge, expect, rx, Test, Time } from '../test.ui';
+import { PeerSyncer } from '..';
+import { Automerge, expect, rx, Test, Time } from '../../test.ui';
 
 export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };

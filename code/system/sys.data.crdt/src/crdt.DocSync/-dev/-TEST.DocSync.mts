@@ -1,6 +1,6 @@
-import { DocSync } from '.';
-import { DocRef } from '../crdt.DocRef';
-import { TestFilesystem, expect, rx, t, Test, Time, DEFAULTS } from '../test.ui';
+import { DocSync } from '..';
+import { DocRef } from '../../crdt.DocRef';
+import { TestFilesystem, expect, rx, t, Test, Time, DEFAULTS } from '../../test.ui';
 
 export default Test.describe('Sync Protocol: DocSync', (e) => {
   type D = { name?: string; count: number };
