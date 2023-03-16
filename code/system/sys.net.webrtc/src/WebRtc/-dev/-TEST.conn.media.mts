@@ -42,6 +42,9 @@ export default Dev.describe('Media Connection', (e) => {
       expect(peerA.connections.media.length).to.eql(1);
       expect(peerB.connections.media.length).to.eql(1);
 
+      expect(peerA.connections.media[0].metadata.initiatedBy).to.eql(peerA.id);
+      expect(peerB.connections.media[0].metadata.initiatedBy).to.eql(peerA.id);
+
       /**
        * Close the first data-connection.
        * This should have no effect on the media connection.

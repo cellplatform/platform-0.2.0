@@ -83,8 +83,8 @@ export type PeerMediaStreams = { local?: MediaStream; remote?: MediaStream };
  * Connection Metadata.
  */
 export type PeerMeta = PeerMetaData | PeerMetaMedia;
-export type PeerMetaData = { label: string };
-export type PeerMetaMedia = { input: PeerMediaStreamInput };
+export type PeerMetaData = { label: string; initiatedBy?: t.PeerId };
+export type PeerMetaMedia = { input: PeerMediaStreamInput; initiatedBy?: t.PeerId };
 
 /**
  * Peer connection change info.

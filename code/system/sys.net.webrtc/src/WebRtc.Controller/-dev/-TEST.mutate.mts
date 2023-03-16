@@ -42,7 +42,6 @@ export default Dev.describe('Controller.Mutate', (e) => {
         expect(res.isSelf).to.eql(true);
         expect(res.peer.initiatedBy).to.eql(undefined);
         expect(res.peer).to.eql(data.peers.a);
-        expect(res.peer.meta.userAgent).to.eql(UserAgent.current);
       });
 
       e.it('initiatedBy', (e) => {

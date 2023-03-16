@@ -29,6 +29,7 @@ export default Dev.describe('Data Connection', (e) => {
     const conn = await peerA.data(peerB.id, { name: 'Foobar' });
     expect(conn.kind).to.eql('data');
     expect(conn.metadata.label).to.eql('Foobar');
+    expect(conn.metadata.initiatedBy).to.eql(peerA.id);
     expect(conn.peer.local).to.eql(peerA.id);
     expect(conn.peer.remote).to.eql(peerB.id);
     expect(conn).to.eql(peerA.connections.data[0]);
@@ -42,6 +43,7 @@ export default Dev.describe('Data Connection', (e) => {
     expect(peerA.connections.data[0].isOpen).to.eql(true);
     expect(peerB.connections.data[0].isOpen).to.eql(true);
     expect(peerB.connections.data[0].metadata.label).to.eql('Foobar');
+    expect(peerB.connections.data[0].metadata.initiatedBy).to.eql(peerA.id);
 
     expect(peerA.connectionsByPeer[0].peer.local).to.eql(peerA.id);
     expect(peerA.connectionsByPeer[0].peer.remote).to.eql(peerB.id);
