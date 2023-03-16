@@ -15,6 +15,7 @@ export type CrdtDocSyncOptions<D extends {}> = {
  * Extends a CRDT [DocRef] with peer-sync capabilities.
  */
 export type CrdtDocSync<D extends {}> = {
+  readonly kind: 'Crdt:DocSync';
   readonly count: number;
   readonly doc: t.CrdtDocRef<D>;
   readonly isDisposed: boolean;

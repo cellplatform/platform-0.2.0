@@ -16,6 +16,11 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
   e.describe('initialize', (e) => {
     const bus = rx.bus();
 
+    e.it('kind', async (e) => {
+      const sync = DocSync.init<D>(bus, { count: 0 });
+      expect(sync.kind).to.eql('Crdt:DocSync');
+    });
+
     e.it('init: pass {onChange} option to [DocRef] constructor', async (e) => {
       const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);

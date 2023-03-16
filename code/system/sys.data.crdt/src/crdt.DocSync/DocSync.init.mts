@@ -59,6 +59,7 @@ export function createSyncDoc<D extends {}>(
    * [DocSync]
    */
   const api: t.CrdtDocSync<D> = {
+    kind: 'Crdt:DocSync',
     doc,
     update: syncer.update,
 
