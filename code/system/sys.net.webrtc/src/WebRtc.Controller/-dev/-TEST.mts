@@ -113,11 +113,12 @@ export default Dev.describe('Controller', async (e) => {
     e.it.skip('remove peer', async (e) => {});
     e.it.skip('purge stale/dead peers', async (e) => {});
 
-    e.it('info', async (e) => {
+    e.it('info (← via event-bus)', async (e) => {
       const info = await controller.info.get();
       expect(info?.module.name).to.eql(Pkg.name);
       expect(info?.module.version).to.eql(Pkg.version);
-      expect(info?.peer.id).to.eql(peerA.id);
+      expect(info?.peer).to.equal(peerA);
+      expect(typeof info?.state.peers === 'object').to.eql(true);
     });
 
     e.it('dispose', async (e) => {
