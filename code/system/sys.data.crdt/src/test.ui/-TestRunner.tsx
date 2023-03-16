@@ -65,22 +65,22 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../crdt.DocRef/-TEST.mjs')),
+          await button(import('../crdt.DocRef/-dev/-TEST.mjs')),
           await button(import('../crdt.DocFile/-TEST.mjs')),
           await button(import('../crdt.Sync/-TEST.DocSync.mjs')),
           await button(import('../crdt.Sync/-TEST.PeerSyncer.mjs')),
-          await button(import('../crdt.helpers/-TEST.mjs')),
+          await button(import('../crdt.helpers/-TEST.mjs'), true),
         ],
       );
 
-      dev.hr(-1, 5);
+      dev.hr(-1, 10);
 
       dev.title('Driver (Automerge)');
       tests.push(
         ...[
           await button(import('../driver.Automerge/-dev/TEST.basic.mjs')),
           await button(import('../driver.Automerge/-dev/TEST.api.mjs')),
-          await button(import('../driver.Automerge/-dev/TEST.initialState.mjs'), true),
+          await button(import('../driver.Automerge/-dev/TEST.initialState.mjs')),
           await button(import('../driver.Automerge/-dev/TEST.filesystem.mjs')),
           await button(import('../driver.Automerge/-dev/TEST.sync.mjs')),
         ],

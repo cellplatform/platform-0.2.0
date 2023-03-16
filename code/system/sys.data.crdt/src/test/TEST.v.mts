@@ -11,7 +11,7 @@ await run.suite(import('../driver.Automerge/-dev/TEST.filesystem.mjs'));
 await run.suite(import('../driver.Automerge/-dev/TEST.sync.mjs'));
 await run.suite(import('../crdt.Sync/-TEST.DocSync.mjs'));
 await run.suite(import('../crdt.Sync/-TEST.PeerSyncer.mjs'));
-await run.suite(import('../crdt.DocRef/-TEST.mjs'));
+await run.suite(import('../crdt.DocRef/-dev/-TEST.mjs'));
 await run.suite(import('../crdt.DocFile/-TEST.mjs'));
 await run.suite(import('../crdt.helpers/-TEST.mjs'));
 

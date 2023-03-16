@@ -15,3 +15,9 @@ export { Automerge } from './driver.Automerge';
  * Supporting UI
  */
 export { CrdtInfo } from './ui/CrdtInfo';
+
+/**
+ * Helpers
+ */
+
+export { toObject } from './crdt.helpers';
