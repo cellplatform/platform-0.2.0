@@ -25,20 +25,25 @@ export default Test.describe('initial document structure (multi-peer)', (e) => {
    *    able to merge."
    *
    */
-  e.it(
-    'hard-coded byte array hard-coded in application source: init → Automerge.getLastLocalChange() → [Uint8Array]',
-    async (e) => {
-      type D = { list: number[] };
+  e.describe('hard-coded byte array [Uint8Array]', (e) => {
+    type D = { list: number[] };
 
-      /**
-       * Machine-1:
-       *    - Create a document, and setup it's initial structure (change)
-       *    - Get the initial change (as a byte array).
-       */
-      let docA = Automerge.init<D>();
+    let initialCommit: Uint8Array | undefined;
+    let docA: Automerge.Doc<D>;
+
+    e.it('→ create and initialize Document<T> structure', async (e) => {
+      docA = Automerge.init<D>();
       docA = Automerge.change(docA, (doc) => (doc.list = [42] as any));
-      const initCommit1 = Automerge.getLastLocalChange(docA);
+    });
 
+    e.it(
+      '→ get the change as a byte-array [Uint8Array] - Automerge.getLastLocalChange()',
+      async (e) => {
+        initialCommit = Automerge.getLastLocalChange(docA);
+      },
+    );
+
+    e.it.skip('sample: code string to save as file', async (e) => {
       /**
        *    - Hard-code the initial change and save it within the application source.
        *    - Save to a file.
@@ -49,18 +54,23 @@ export default Test.describe('initial document structure (multi-peer)', (e) => {
        * Also worth including within the comments or source of the file,
        * the typescript <Type> definition, eg <D>.
        */
-      const code = `export const initialDoc = [${initCommit1?.toString()}];`;
 
-      /**
-       * Machine-2:
-       *    - Create a document, and initialize it with the hard-coded byte array.
-       */
+      const byteArray = initialCommit?.toString();
+      const code = `export const initialDoc = [${byteArray}];`;
 
-      const { initialDoc } = await import('./sample.mjs');
-      const initCommit2 = new Uint8Array(initialDoc);
+      // eg:
+      // fs.save(code, { filename: 'initialDoc.mts' });
+    });
 
-      let [docB] = Automerge.applyChanges<D>(Automerge.init(), [initCommit2]);
-      expect(docB.list).to.eql([42]);
-    },
-  );
+    e.it(
+      '→ use the byte-array [Uint8Array] to create a new Document<T> on the different peer',
+      async (e) => {
+        const { initialDoc } = await import('./sample.mjs');
+        const initial = new Uint8Array(initialDoc);
+
+        let [docB] = Automerge.applyChanges<D>(Automerge.init(), [initial]);
+        expect(docB.list).to.eql([42]);
+      },
+    );
+  });
 });
