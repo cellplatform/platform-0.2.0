@@ -1,10 +1,10 @@
 import { toObject, Crdt, Pkg, R, rx, slug, t, UserAgent, WebRtcEvents, WebRtcUtil } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
+import { pruneDeadPeers } from './util.mjs';
 
 /**
  * TODO 🐷 MOVE to type.mts
  */
-export type Doc = { network: t.NetworkState };
 
 /**
  * Manages keeping a WebRTC network-peer in sync with a
@@ -18,7 +18,7 @@ export const WebRtcController = {
    */
   listen(
     self: t.Peer,
-    state: t.CrdtDocRef<Doc>,
+    state: t.CrdtDocRef<t.ControlledDoc>,
     options: {
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
@@ -83,7 +83,7 @@ export const WebRtcController = {
        * Setup "sync protocol" on newly added data-connections.
        */
       const dispose$ = dataConnections.removed$.pipe(rx.filter((e) => e.id === conn.id));
-      const syncer = Crdt.Doc.sync<Doc>(conn.bus(), state, {
+      const syncer = Crdt.Doc.sync<ControlledDoc>(conn.bus(), state, {
         /**
          * TODO 🐷
          * - sync-state FS
@@ -124,7 +124,7 @@ export const WebRtcController = {
     state.onChange(async (e) => {
       const peers = e.doc.network.peers ?? {};
       Object.values(peers)
-        .filter((remote) => remote.id !== self.id) // Ignore self (not remote).
+        .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
         .filter((remote) => !remote.error)
         .forEach((remote) => {
           const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
@@ -171,6 +171,19 @@ export const WebRtcController = {
       options.onConnectComplete?.(after);
       bus.fire({ type: 'sys.net.webrtc/connect:complete', payload: after });
     };
+
+    /**
+     * Prune dead peers.
+     */
+    events.prune.req$.subscribe(async (e) => {
+      const { tx } = e;
+      const res = await pruneDeadPeers(self, state);
+      const pruned = res.removed;
+      bus.fire({
+        type: 'sys.net.webrtc/prune:res',
+        payload: { tx, instance, removed: pruned },
+      });
+    });
 
     /**
      * PUBLIC API.

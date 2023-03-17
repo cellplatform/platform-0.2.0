@@ -127,7 +127,7 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
       expect(connB?.peer.remote).to.eql(p1.id);
     });
 
-    e.it.skip('[fail] connect peer: A → FOO-404', async (e) => {
+    e.it('[fail] connect peer: A → FOO-404', async (e) => {
       const self = peerA.id;
       const remote = 'FOO-404';
 
@@ -160,9 +160,6 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
     e.it.skip('meta: userAgent added to {peers} state', async (e) => {
       // expect(res.peer.meta.userAgent).to.eql(UserAgent.current);
     });
-
-    e.it.skip('remove peer', async (e) => {});
-    e.it.skip('purge stale/dead peers', async (e) => {});
 
     e.it('info (← via event-bus)', async (e) => {
       const info = await controller.info.get();

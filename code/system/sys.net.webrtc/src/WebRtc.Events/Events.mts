@@ -2,6 +2,8 @@ import { WebRtcUtil, rx, slug, t } from './common';
 
 type Id = string;
 
+const DEFAULT = { timeout: 1000 };
+
 /**
  * Creat a new events API wrapper.
  */
@@ -43,7 +45,7 @@ export function WebRtcEvents(args: {
     req$: rx.payload<t.WebRtcInfoReqEvent>($, 'sys.net.webrtc/info:req'),
     res$: rx.payload<t.WebRtcInfoResEvent>($, 'sys.net.webrtc/info:res'),
     async fire(options = {}) {
-      const { timeout = 3000 } = options;
+      const { timeout = DEFAULT.timeout } = options;
       const tx = slug();
       const op = 'info';
       const res$ = info.res$.pipe(rx.filter((e) => e.tx === tx));
@@ -98,6 +100,32 @@ export function WebRtcEvents(args: {
     },
   };
 
+  /**
+   * Prune
+   */
+  const prune: t.WebRtcEvents['prune'] = {
+    req$: rx.payload<t.WebRtcPrunePeersReqEvent>($, 'sys.net.webrtc/prune:req'),
+    res$: rx.payload<t.WebRtcPrunePeersResEvent>($, 'sys.net.webrtc/prune:res'),
+    async fire(options = {}) {
+      const { timeout = DEFAULT.timeout } = options;
+      const tx = slug();
+      const op = 'prune';
+      const res$ = prune.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.WebRtcPrunePeersResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.net.webrtc/prune:req',
+        payload: { tx, instance },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      return { tx, instance, removed: [], error };
+    },
+  };
+
   return {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
@@ -105,6 +133,7 @@ export function WebRtcEvents(args: {
     errors,
     connect,
     connections,
+    prune,
 
     /**
      * Disposal.
