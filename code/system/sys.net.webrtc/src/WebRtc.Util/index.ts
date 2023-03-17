@@ -1,1 +1,1 @@
-export { WebRtcUtil } from './WebRtc.Util.mjs';
+export { WebRtcUtils } from './Utils.mjs';

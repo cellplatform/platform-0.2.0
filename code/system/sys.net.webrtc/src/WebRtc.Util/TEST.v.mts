@@ -1,17 +1,17 @@
 import { describe, it, expect, t } from '../test';
-import { WebRtcUtil } from '.';
+import { WebRtcUtils } from '.';
 
 describe('WebRtc.Util', () => {
   it('randomPeerId', (e) => {
-    const id1 = WebRtcUtil.randomPeerId();
-    const id2 = WebRtcUtil.randomPeerId();
+    const id1 = WebRtcUtils.randomPeerId();
+    const id2 = WebRtcUtils.randomPeerId();
     expect(id1).to.not.eql(id2);
     expect(id1[0]).to.eql('p');
   });
 
   it('cleanId', () => {
     const test = (input: string, expected: string) => {
-      const res = WebRtcUtil.asId(input);
+      const res = WebRtcUtils.asId(input);
       expect(res).to.eql(expected);
     };
 
@@ -26,7 +26,7 @@ describe('WebRtc.Util', () => {
 
   it('asUri', () => {
     const test = (input: string, expected: string) => {
-      const res = WebRtcUtil.asUri(input);
+      const res = WebRtcUtils.asUri(input);
       expect(res).to.eql(expected);
     };
 
@@ -39,7 +39,7 @@ describe('WebRtc.Util', () => {
   describe('isType', () => {
     it('isType.PeerDataPayload', () => {
       const test = (expected: boolean, input: any) => {
-        const res = WebRtcUtil.isType.PeerDataPayload(input);
+        const res = WebRtcUtils.isType.PeerDataPayload(input);
         expect(res).to.eql(expected);
       };
 

@@ -1,2 +1,2 @@
 export * from '../common';
-export { WebRtcUtil } from '../WebRtc.Util';
+export { WebRtcUtils as WebRtcUtil } from '../WebRtc.Util';

@@ -1,4 +1,4 @@
-import { Path, PeerJS, rx, t, WebRtcUtil } from './common';
+import { Path, PeerJS, rx, t, WebRtcUtils } from './common';
 import { MemoryState } from './WebRtc.state.mjs';
 
 type Options = {
@@ -21,7 +21,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
 
     const state = MemoryState();
     const tx = state.tx;
-    const id = WebRtcUtil.asId(options.id ?? WebRtcUtil.randomPeerId());
+    const id = WebRtcUtils.asId(options.id ?? WebRtcUtils.randomPeerId());
     const host = Path.trimHttpPrefix(endpoint.host);
     const path = `/${Path.trimSlashes(endpoint.path)}`;
     const key = endpoint.key;
@@ -58,7 +58,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     });
 
     const error$ = new rx.Subject<t.PeerError>();
-    rtc.on('error', (err) => error$.next(WebRtcUtil.error.toPeerError(err)));
+    rtc.on('error', (err) => error$.next(WebRtcUtils.error.toPeerError(err)));
 
     const api: t.Peer = {
       kind: 'local:peer',
@@ -71,7 +71,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
         return state.connections;
       },
       get connectionsByPeer() {
-        return WebRtcUtil.connections.byPeer(id, state.connections.all);
+        return WebRtcUtils.connections.byPeer(id, state.connections.all);
       },
 
       /**
@@ -79,7 +79,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
        */
       data(connectTo, options = {}) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
-          const id = WebRtcUtil.asId(connectTo);
+          const id = WebRtcUtils.asId(connectTo);
           const label = options.name ?? 'Unnamed';
           const initiatedBy = api.id;
           const metadata: t.PeerMetaData = { label, initiatedBy };
@@ -129,7 +129,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
           const cleanup = () => rtc.removeListener('error', handleError);
           rtc.addListener('error', handleError);
 
-          const id = WebRtcUtil.asId(connectTo);
+          const id = WebRtcUtils.asId(connectTo);
           const initiatedBy = api.id;
           const metadata: t.PeerMetaMedia = { input, initiatedBy };
           const stream = await getStream(input);
