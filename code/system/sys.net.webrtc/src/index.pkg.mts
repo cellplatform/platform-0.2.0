@@ -16,6 +16,7 @@ export const Pkg: ModuleDef = {
     'nostr-tools': '1.7.4',
     'peerjs': '1.4.7',
     'sys.data.crdt': '0.0.0',
+    'sys.fs': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
