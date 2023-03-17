@@ -12,6 +12,7 @@ export type NetworkStatePeer = {
   id: t.PeerId;
   initiatedBy?: t.PeerId;
   device: NetworkStateDevice;
+  error?: string;
 };
 
 export type NetworkStateDevice = {

@@ -58,13 +58,13 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
     });
 
     const error$ = new rx.Subject<t.PeerError>();
-    rtc.on('error', (err) => error$.next(WebRtcUtil.error.toError(err)));
+    rtc.on('error', (err) => error$.next(WebRtcUtil.error.toPeerError(err)));
 
     const api: t.Peer = {
       kind: 'local:peer',
       tx,
-      signal,
       id,
+      signal,
 
       connections$: state.connections$,
       get connections() {

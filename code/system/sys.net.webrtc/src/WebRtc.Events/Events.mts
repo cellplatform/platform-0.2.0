@@ -68,7 +68,19 @@ export function WebRtcEvents(args: {
   };
 
   /**
-   * Connect (Action)
+   * Errors.
+   */
+  const errors$ = rx.payload<t.WebRtcErrorEvent>($, 'sys.net.webrtc/error');
+  const errors: t.WebRtcEvents['errors'] = {
+    $: errors$,
+    peer$: errors$.pipe(
+      rx.filter((e) => e.kind === 'Peer'),
+      rx.map((e) => e.error),
+    ),
+  };
+
+  /**
+   * Connect (Action).
    */
   const connect: t.WebRtcEvents['connect'] = {
     start$: rx.payload<t.WebRtcConnectStartEvent>($, 'sys.net.webrtc/connect:start'),
@@ -90,6 +102,7 @@ export function WebRtcEvents(args: {
     instance: { bus: rx.bus.instance(bus), id: instance },
     $,
     info,
+    errors,
     connect,
     connections,
 

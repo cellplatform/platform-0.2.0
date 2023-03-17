@@ -20,7 +20,7 @@ export const error = {
     return FATAL.includes(type);
   },
 
-  toError(err: Error): t.PeerError {
+  toPeerError(err: Error): t.PeerError {
     const type = error.toType(err);
     const isFatal = error.isFatal(type);
     const message = err.message;

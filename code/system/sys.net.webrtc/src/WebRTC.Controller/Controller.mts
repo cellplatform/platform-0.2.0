@@ -1,5 +1,4 @@
-import { WebRtcEvents } from '../WebRtc.Events';
-import { Crdt, Pkg, R, rx, slug, t, UserAgent } from './common';
+import { toObject, Crdt, Pkg, R, rx, slug, t, UserAgent, WebRtcEvents, WebRtcUtil } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 
 /**
@@ -24,8 +23,8 @@ export const WebRtcController = {
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
       bus?: t.EventBus<any>;
-      onConnectStart?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
-      onConnectComplete?: (e: { local: t.PeerId; remote: t.PeerId }) => void;
+      onConnectStart?: (e: t.WebRtcConnectStart) => void;
+      onConnectComplete?: (e: t.WebRtcConnectComplete) => void;
     } = {},
   ): t.WebRtcEvents {
     const { filedir } = options;
@@ -33,12 +32,25 @@ export const WebRtcController = {
     const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
     const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
     const instance = events.instance.id;
-    self.connections$.pipe(rx.takeUntil(events.dispose$)).subscribe((change) => {
+    const dispose$ = events.dispose$;
+
+    // NB: Ferry the peer-event through the event-bus.
+    self.connections$.pipe(rx.takeUntil(dispose$)).subscribe((change) => {
       bus.fire({
-        // NB: Ferry the peer-event through the event-bus.
         type: 'sys.net.webrtc/conns:changed',
         payload: { instance, change },
       });
+    });
+    self.error$.pipe(rx.takeUntil(dispose$)).subscribe((error) => {
+      bus.fire({
+        type: 'sys.net.webrtc/error',
+        payload: toWebRtcError(error),
+      });
+    });
+    const toWebRtcError = (error: t.PeerError): t.WebRtcError => ({
+      instance,
+      kind: 'Peer',
+      error,
     });
 
     /**
@@ -92,6 +104,7 @@ export const WebRtcController = {
 
       state.change((d) => {
         const localPeer = d.network.peers[self.id];
+
         // if (localPeer) {
         //   localPeer.meta.userAgent = UserAgent.parse(navigator.userAgent);
         // }
@@ -105,48 +118,58 @@ export const WebRtcController = {
       state.change((d) => Mutate.removePeer(d.network, e.peer.remote));
     });
 
+    const connectTo = async (remote: t.NetworkStatePeer) => {
+      const tx = slug();
+      const peer = { local: self.id, remote: remote.id };
+      const before: t.WebRtcConnectStart = {
+        tx,
+        instance,
+        peer,
+        state: R.clone(state.current.network),
+      };
+      options.onConnectStart?.(before);
+      bus.fire({ type: 'sys.net.webrtc/connect:start', payload: before });
+
+      /**
+       * TODO 🐷
+       * - camera option (for audio only)
+       */
+
+      try {
+        await Promise.all([
+          self.data(remote.id), //             <== Start (data).
+          self.media(remote.id, 'camera'), //  <== Start (camera).
+        ]);
+      } catch (err: any) {
+        const error = WebRtcUtil.error.toPeerError(err);
+        state.change((d) => {
+          const message = `[${error.type}] ${err.message}`;
+          d.network.peers[remote.id].error = message;
+        });
+      }
+
+      const after: t.WebRtcConnectComplete = {
+        tx,
+        instance,
+        peer,
+        state: R.clone(state.current.network),
+      };
+      options.onConnectComplete?.(after);
+      bus.fire({ type: 'sys.net.webrtc/connect:complete', payload: after });
+    };
+
     /**
      * Listen to document changes.
      */
     state.onChange(async (e) => {
-      const processChange = async (remote: t.NetworkStatePeer) => {
-        if (remote.id === self.id) return; // Ignore self.
-        const isInitiatedByMe = remote.initiatedBy === self.id;
-        const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
-
-        if (!exists && isInitiatedByMe) {
-          const tx = slug();
-          const peer = { local: self.id, remote: remote.id };
-          const before = R.clone(state.current.network);
-          bus.fire({
-            type: 'sys.net.webrtc/connect:start',
-            payload: { tx, instance, peer, state: before },
-          });
-
-          options.onConnectStart?.(peer);
-
-          /**
-           * TODO 🐷
-           * - spinner (start/end)
-           * - camera option (for audio only)
-           */
-
-          await Promise.all([
-            self.data(remote.id), //             <== Start (data).
-            self.media(remote.id, 'camera'), //  <== Start (camera).
-          ]);
-
-          options.onConnectComplete?.(peer);
-          const after = R.clone(state.current.network);
-          bus.fire({
-            type: 'sys.net.webrtc/connect:complete',
-            payload: { tx, instance, peer, state: after },
-          });
-        }
-      };
-
       const peers = e.doc.network.peers ?? {};
-      Object.values(peers).forEach((peer) => processChange(peer));
+      Object.values(peers).forEach((remote) => {
+        if (remote.id === self.id) return; // Ignore self (not remote).
+        if (remote.error) return;
+
+        const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
+        if (!exists) connectTo(remote);
+      });
     });
 
     /**

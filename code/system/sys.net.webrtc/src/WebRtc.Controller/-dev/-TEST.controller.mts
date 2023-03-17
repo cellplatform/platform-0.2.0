@@ -29,48 +29,47 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
 
   const initialState: DocShared = { network: { peers: {} } };
   const stateDoc = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
-
   let controller: t.WebRtcEvents;
 
   e.it('exposed from root API', (e) => {
     expect(WebRtcController).to.equal(WebRtc.Controller);
   });
 
+  let peerA: t.Peer;
+  let peerB: t.Peer;
+
+  e.it('setup peers A ⇔ B', async (e) => {
+    const [a, b] = await TestNetwork.peers(2, { getStream: true });
+    peerA = a;
+    peerB = b;
+  });
+
+  e.describe('event-bus', (e) => {
+    e.it('default generated bus (← info method)', async (e) => {
+      controller = WebRtcController.listen(peerA, stateDoc);
+      const info = await controller.info.get();
+      controller.dispose();
+      expect(info?.peer).to.equal(peerA);
+    });
+
+    e.it('specified bus (← info method)', async (e) => {
+      const bus = rx.bus();
+      controller = WebRtcController.listen(peerA, stateDoc, { bus });
+
+      const events1 = WebRtc.events(bus, peerA.id);
+      const events2 = WebRtc.events(bus, peerA);
+
+      const info1 = await events1.info.get();
+      const info2 = await events2.info.get();
+
+      expect(info1?.peer).to.equal(peerA);
+      expect(info2?.peer).to.equal(peerA);
+
+      controller.dispose();
+    });
+  });
+
   e.describe('Controller.listen', (e) => {
-    let peerA: t.Peer;
-    let peerB: t.Peer;
-
-    e.it('init: create peers A ⇔ B', async (e) => {
-      const [a, b] = await TestNetwork.peers(2, { getStream: true });
-      peerA = a;
-      peerB = b;
-    });
-
-    e.describe('event-bus', (e) => {
-      e.it('default generated bus (← info method)', async (e) => {
-        controller = WebRtcController.listen(peerA, stateDoc);
-        const info = await controller.info.get();
-        controller.dispose();
-        expect(info?.peer).to.equal(peerA);
-      });
-
-      e.it('specified bus (← info method)', async (e) => {
-        const bus = rx.bus();
-        controller = WebRtcController.listen(peerA, stateDoc, { bus });
-
-        const events1 = WebRtc.events(bus, peerA.id);
-        const events2 = WebRtc.events(bus, peerA);
-
-        const info1 = await events1.info.get();
-        const info2 = await events2.info.get();
-
-        expect(info1?.peer).to.equal(peerA);
-        expect(info2?.peer).to.equal(peerA);
-
-        controller.dispose();
-      });
-    });
-
     e.it('start listening to a P2P network - ["local:peer" + crdt.doc<shared>]', async (e) => {
       const self = peerA;
 
@@ -78,19 +77,17 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
         filedir,
         dispose$,
         onConnectStart(e) {
-          // state.change((d) => (d.props.spinning = true));
-          console.log('onConnectStart', e);
+          // console.log('onConnectStart', e);
         },
         onConnectComplete(e) {
-          // state.change((d) => (d.props.spinning = false));
-          console.log('onConnectComplete', e);
+          // console.log('onConnectComplete', e);
         },
       });
 
       // await rx.firstValueFrom(waiter.dispose$);
     });
 
-    e.it('connect peer: A → B (initiated by A)', async (e) => {
+    e.it('[success] connect peer: A → B (initiated by A)', async (e) => {
       const self = peerA.id;
       const remote = peerB.id;
       const wait = rx.firstValueFrom(controller.connect.complete$);
@@ -112,6 +109,9 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
       expect(p1.initiatedBy).to.eql(self);
       expect(p2.initiatedBy).to.eql(self);
 
+      expect(p1.error).to.eql(undefined);
+      expect(p2.error).to.eql(undefined);
+
       // Ensure live connections match the synced state-document.
       await Time.wait(500);
       const connA = peerA.connections.data.find((conn) => conn.peer.remote === remote);
@@ -127,6 +127,34 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
 
       console.log('-------------------------------------------');
       console.log('doc', toObject(doc.network));
+    });
+
+    e.it('[fail] connect peer: A → FOO-404', async (e) => {
+      const self = peerA.id;
+      const remote = 'FOO-404';
+
+      const errors: t.PeerError[] = [];
+      controller.errors.peer$.subscribe((e) => errors.push(e));
+
+      /**
+       * Adding peer to document (CRDT) initiates the
+       * controller's connection sequence.
+       */
+      stateDoc.change((d) => {
+        const initiatedBy = self;
+        Mutate.addPeer(d.network, self, remote, { initiatedBy });
+      });
+      expect(stateDoc.current.network.peers[remote].initiatedBy).to.eql(self);
+
+      await rx.firstValueFrom(controller.errors.peer$);
+      expect(errors.length).to.eql(1);
+      expect(errors[0].type === 'peer-unavailable').to.eql(true);
+
+      await Time.wait(10);
+      const doc = stateDoc.current;
+      const p2 = doc.network.peers[remote];
+      expect(p2.error).to.include(errors[0].message);
+      expect(p2.error).to.include('[peer-unavailable]');
     });
 
     e.it.skip('events$: connect:start → connect:complete', async (e) => {});

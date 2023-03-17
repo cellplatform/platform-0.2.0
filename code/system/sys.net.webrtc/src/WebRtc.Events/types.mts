@@ -47,6 +47,11 @@ export type WebRtcEvents = t.Disposable & {
       };
     };
   };
+
+  errors: {
+    $: t.Observable<t.WebRtcError>;
+    peer$: t.Observable<t.PeerError>;
+  };
 };
 
 /**
@@ -55,6 +60,7 @@ export type WebRtcEvents = t.Disposable & {
 export type WebRtcEvent =
   | WebRtcInfoReqEvent
   | WebRtcInfoResEvent
+  | WebRtcErrorEvent
   | WebRtcConnectStartEvent
   | WebRtcConnectCompleteEvent
   | WebRtcConnectionsChangedEvent;
@@ -77,6 +83,21 @@ export type WebRtcInfoRes = {
   instance: t.PeerId;
   info?: WebRtcInfo;
   error?: string;
+};
+
+/**
+ * Error event
+ */
+export type WebRtcErrorEvent = {
+  type: 'sys.net.webrtc/error';
+  payload: WebRtcError;
+};
+export type WebRtcError = WebRtcErrorPeer;
+
+export type WebRtcErrorPeer = {
+  instance: t.PeerId;
+  kind: 'Peer';
+  error: t.PeerError;
 };
 
 /**
