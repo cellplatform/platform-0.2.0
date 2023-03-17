@@ -43,7 +43,7 @@ export default Test.describe('initial document structure (multi-peer)', (e) => {
       },
     );
 
-    e.it.skip('sample: code string to save as file', async (e) => {
+    e.it.skip('sample: output string of code to save as file (*.ts)', async (e) => {
       /**
        *    - Hard-code the initial change and save it within the application source.
        *    - Save to a file.
@@ -52,14 +52,14 @@ export default Test.describe('initial document structure (multi-peer)', (e) => {
        *    ./sample.mts (example under test)
        *
        * Also worth including within the comments or source of the file,
-       * the typescript <Type> definition, eg <D>.
+       * the typescript <Type> definition.
        */
 
       const byteArray = initialCommit?.toString();
       const code = `export const initialDoc = [${byteArray}];`;
 
       // eg:
-      // fs.save(code, { filename: 'initialDoc.mts' });
+      // fs.save(code, { filename: 'myfile.ts' });
     });
 
     e.it(
