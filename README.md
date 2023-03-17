@@ -103,7 +103,7 @@ Ideas, history, context:
 - [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a "message", be as extremely late-bound as possible. Build everything else up and out of that (aka. LISP-ey).
 
 
-*NB: "object" meaning the original SmallTalk conception of "object," not the following "OOP" notions that emerged later ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
+*NB: "object" meaning the original SmallTalk conception of "object," not the later "OOP" notions that emerged later ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
 
 ---
 
