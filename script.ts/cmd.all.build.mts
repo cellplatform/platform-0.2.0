@@ -10,6 +10,8 @@ await Builder.Dependencies.syncVersions({ save: true });
 const pkg = await Builder.PackageJson.load(fs.resolve('.'));
 
 const filter = (path: string) => {
+  if (!path.includes('/sys.net.webrtc')) return false; // TEMP 🐷
+
   if (path.includes('code/compiler.samples/')) return false;
   if (path.includes('code/spikes/')) return false;
   if (path.includes('_legacy')) return false;
