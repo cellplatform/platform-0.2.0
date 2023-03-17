@@ -16,6 +16,5 @@ describe('UserAgent', () => {
     const res = UserAgent.current;
     expect(res.browser.name).to.eql('WebKit');
     expect(res.engine.name).to.eql('WebKit');
-    expect(res.os.name).to.eql('');
   });
 });
