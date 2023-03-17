@@ -13,19 +13,26 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   const isSkipped = excluded.includes('skip');
   const isExcludedViaOnly = excluded.includes('only');
 
-  // NB: still show if "skipped" to the test retains visibility until either implemented or deleted
+  // NB: still show if "skipped" to the test retains visibility
+  //     until either implemented or deleted.
   if (isExcludedViaOnly && !isSkipped) return null;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', marginBottom: 4 }),
+    _base: css({
+      position: 'relative',
+      marginBottom: 4,
+    }),
+    get base() {
+      return this._base;
+    },
+    set base(value) {
+      this._base = value;
+    },
     line: {
-      base: css({
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr auto',
-      }),
+      base: css({ display: 'grid', gridTemplateColumns: 'auto 1fr auto' }),
       icon: css({ marginRight: 6 }),
       elapsed: css({ marginLeft: 20, opacity: 0.2, userSelect: 'none' }),
     },
@@ -55,7 +62,7 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
           {elIconSkipped}
         </div>
         <Description text={data.description} isSkipped={isSkipped} />
-        {<div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>}
+        <div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>
       </div>
       {elError}
     </div>

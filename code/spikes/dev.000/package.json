@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.133",
+  "version": "0.0.232",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,27 +15,30 @@
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sys.data.crdt": "0.0.0",
+    "sys.fs": "0.0.0",
+    "sys.fs.indexeddb": "0.0.0",
     "sys.net.webrtc": "0.0.0",
     "sys.text": "0.0.0",
-    "sys.types": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.dev": "0.0.0",
+    "sys.ui.react.media": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.video": "0.0.0",
     "sys.util": "0.0.0",
     "vendor.stripe": "0.0.0"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.html.d.html",
   "exports": {
-    ".": "./dist/web/lib/index-219bed96.js",
-    "./web": "./dist/web/lib/index-219bed96.js"
+    ".": "./dist/web/lib/index-46ad30cf.js",
+    "./web": "./dist/web/lib/index-46ad30cf.js"
   },
   "typesVersions": {
     "*": {

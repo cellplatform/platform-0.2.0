@@ -1,13 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC } from '../common';
-
-import { QRCodeSVG } from 'qrcode.react';
+import QRCodeLib from 'qrcode';
+import { useEffect, useRef } from 'react';
+import { css, FC, t } from '../common';
 
 type Pixels = number;
-
-const DEFAULTS = {
-  size: 128,
-};
+const DEFAULTS = { size: 128 };
 
 export type QRCodeProps = {
   value?: string;
@@ -16,23 +12,29 @@ export type QRCodeProps = {
 };
 
 const View: React.FC<QRCodeProps> = (props) => {
-  const { size = DEFAULTS.size } = props;
+  const { size = DEFAULTS.size, value } = props;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    QRCodeLib.toCanvas(
+      canvasRef.current,
+      value ?? '',
+      { errorCorrectionLevel: 'H', width: size },
+      (error) => {},
+    );
+  }, [canvasRef.current, props.value, size]);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      Size: size,
-    }),
+    base: css({ Size: size }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <QRCodeSVG value={props.value ?? ''} size={size} />
-    </div>
-  );
+  return <canvas ref={canvasRef} {...css(styles.base, props.style)} />;
 };
 
 /**

@@ -222,6 +222,7 @@ export type TextInputChangeEvent = {
   char: string;
   isMax: boolean | null;
   modifierKeys: t.KeyboardModifierFlags;
+  selection: { start: number; end: number };
 };
 
 /**

@@ -1,5 +1,5 @@
-import { t } from '../common';
-import { Dev } from '../Dev.mjs';
+import { t, ValueHandler } from '../common';
+
 import { Title } from './ui.Title';
 
 type O = Record<string, unknown>;
@@ -15,8 +15,8 @@ export function title<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const text = Dev.ValueHandler<string, S>(events);
-  const style = Dev.ValueHandler<t.DevTitleStyle, S>(events);
+  const text = ValueHandler<string, S>(events);
+  const style = ValueHandler<t.DevTitleStyle, S>(events);
   const clickHandlers = new Set<t.DevTitleClickHandler<S>>();
 
   const args: t.DevTitleHandlerArgs<S> = {

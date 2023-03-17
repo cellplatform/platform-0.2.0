@@ -10,6 +10,7 @@ export {
   // ref:  https://rxjs.dev/deprecations/to-promise
   firstValueFrom,
   lastValueFrom,
+  interval,
 } from 'rxjs';
 
 export {

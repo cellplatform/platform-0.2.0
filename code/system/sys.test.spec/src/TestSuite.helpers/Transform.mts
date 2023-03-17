@@ -1,4 +1,5 @@
 import type { t } from '../common.t';
+import { Is } from '../common';
 
 type R = any | Promise<any>;
 type Handler = () => R;
@@ -23,7 +24,10 @@ export function Transform(describe: Suite, it: Test) {
     /**
      * Transform a test-suite.
      */
-    async suite(suite: t.TestSuiteModel) {
+    async suite(input: t.TestSuiteModel | t.SpecImport) {
+      type M = t.TestSuiteModel;
+      const suite = (Is.promise(input) ? ((await input) as any).default : input) as M;
+
       if (!suite.state.ready) await suite.init();
 
       const handler = (test: t.TestModel) => {

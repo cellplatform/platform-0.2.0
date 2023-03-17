@@ -139,9 +139,13 @@ export type VitestResultsData = {
   success: boolean;
   testResults: Array<{
     assertionResults: {
-      fullname: string;
+      ancestorTitles: string[];
+      fullName: string;
+      title: string;
       status: 'passed' | 'failed';
+      failureMessages: string[];
       location: { line: number; column: number };
+      duration: number;
     }[];
     startTime: number;
     endTime: number;

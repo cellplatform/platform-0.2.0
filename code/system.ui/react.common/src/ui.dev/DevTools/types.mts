@@ -8,6 +8,7 @@ type SectionHandler<S extends O> = (dev: DevTools<S>) => void;
  */
 export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
+  state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
 
   header: t.DevCtxDebugHeader;
@@ -39,4 +40,10 @@ export type DevTools<S extends O = O> = {
   TODO(fn: t.DevTodoHandler<S>): DevTools<S>;
 
   hr(): DevTools<S>;
+  hr(
+    line: t.DevHrThickness | [t.DevHrThickness, t.DevHrOpacity],
+    margin?: t.DevHrMargin,
+    color?: t.DevHrColor,
+  ): DevTools<S>;
+  hr(fn: t.DevHrHandler<S>): DevTools<S>;
 };

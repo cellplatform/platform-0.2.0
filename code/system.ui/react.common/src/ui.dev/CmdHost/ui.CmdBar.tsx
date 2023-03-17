@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Keyboard, Color, COLORS, css, t, rx, TextInput, DevIcons } from './common';
+import { useState } from 'react';
 
+import { COLORS, css, t, TextInput } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
 
 export type CmdBarProps = {
@@ -22,35 +22,28 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
     base: css({
       position: 'relative',
       boxSizing: 'border-box',
-      Padding: [7, 5],
+      Padding: [7, 7],
       color: COLORS.WHITE,
       backgroundColor: COLORS.DARK,
-
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      columnGap: 3,
-    }),
-    icon: css({
-      opacity: isFocused ? 1 : 0.3,
-      filter: `grayscale(${isFocused && Boolean(props.text) ? 0 : 100}%)`,
-      transition: 'all 150ms ease',
     }),
     textbox: css({}),
+    placeholder: css({}),
   };
+
+  const elPlaceholder = <div {...styles.placeholder}>Command ⌘K</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <DevIcons.Command style={styles.icon} color={COLORS.CYAN} size={20} />
       <TextInput
         style={styles.textbox}
         value={props.text}
-        placeholder={'command'}
+        placeholder={elPlaceholder}
         placeholderStyle={{ opacity: 0.3, color: COLORS.WHITE }}
         valueStyle={{
           color: COLORS.WHITE,
           fontFamily: 'monospace',
           fontWeight: 'normal',
-          fontSize: 14,
+          fontSize: 18,
         }}
         onReady={(ref) => setTextboxRef(ref)}
         onFocus={() => setFocused(true)}

@@ -1,26 +1,18 @@
-import type * as t from 'sys.types';
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-
-import { Id } from '../Id/Id.mjs';
+import { slug } from '../Id/Id.mjs';
+import { busAsType, instance, isBus } from './Rx.util.mjs';
 import { isEvent } from './Rx.event.mjs';
-import { instance, busAsType, isBus } from './Rx.bus.util.mjs';
-import { Pump } from './Rx.Pump.mjs';
+import { filter, Subject } from './Rx.lib.mjs';
+import { BusConnect } from './Rx.BusConnect.mjs';
+import { isObservable } from './Rx.util.mjs';
+
+import type { t } from '../common.t';
 
 type E = t.Event;
-
-type BusFactory = <T extends E = E>(input?: Subject<any> | t.EventBus<any>) => t.EventBus<T>;
-type Bus = BusFactory & {
-  isBus(input: any): boolean;
-  asType<T extends E>(bus: t.EventBus<any>): t.EventBus<T>;
-  instance(bus: t.EventBus<any>): string;
-  pump: typeof Pump;
-};
 
 /**
  * Factory for creating an event-bus.
  */
-const factory: BusFactory = <T extends E = E>(input?: Subject<any> | t.EventBus<any>) => {
+const factory: t.BusFactory = <T extends E = E>(input?: t.Subject<any> | t.EventBus<any>) => {
   if (isBus(input)) return input as t.EventBus<T>;
 
   const subject$ = (input as Subject<any>) || new Subject<any>();
@@ -30,7 +22,7 @@ const factory: BusFactory = <T extends E = E>(input?: Subject<any> | t.EventBus<
     fire: (e) => subject$.next(e),
   };
 
-  (res as any)._instance = `bus.${Id.slug()}`; // NB: An instance ID for debugging sanity.
+  (res as any)._instance = `bus.${slug()}`; // NB: An instance ID for debugging sanity.
 
   return res;
 };
@@ -38,10 +30,10 @@ const factory: BusFactory = <T extends E = E>(input?: Subject<any> | t.EventBus<
 /**
  * Export extended [bus] function.
  */
-
 (factory as any).isBus = isBus;
+(factory as any).isObservable = isObservable;
 (factory as any).asType = busAsType;
 (factory as any).instance = instance;
-(factory as any).pump = Pump;
+(factory as any).connect = BusConnect;
 
-export const bus = factory as Bus;
+export const bus = factory as t.Bus;

@@ -1,10 +1,10 @@
-import { t, Id, Margin, DEFAULT } from './common';
+import { t, Id, Margin, DEFAULTS } from './common';
 
 import type { PropArgs } from './common.types';
 
 export function CtxPropsDebug(props: PropArgs) {
   const { events } = props;
-  const DEBUG = DEFAULT.props.debug;
+  const DEBUG = DEFAULTS.props.debug;
 
   const api: t.DevCtxDebug = {
     row(input) {
@@ -30,7 +30,7 @@ export function CtxPropsDebug(props: PropArgs) {
     },
 
     width(input) {
-      const value = Wrangle.width(input, DEFAULT.props.debug.width);
+      const value = Wrangle.width(input, DEFAULTS.props.debug.width);
       props.current().debug.width = value;
       props.changed();
       return api;

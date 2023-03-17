@@ -1,12 +1,9 @@
-import type * as t from './types.mjs';
-
-export { t };
+export type { t } from '../common.t';
 export * from '../index.pkg.mjs';
-export * from '../DEFAULT.mjs';
 
-export * from './constants.mjs';
+export * from './const.mjs';
 export * from './libs.mjs';
 export * from './Margin.mjs';
 export * from './Is.mjs';
 export * from './Id.mjs';
-export * from './WrangleUrl.mjs';
+export * from './Wrangle.mjs';

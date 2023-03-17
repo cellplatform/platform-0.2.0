@@ -1,7 +1,5 @@
-import { t } from '../common';
-import { Dev } from '../Dev.mjs';
+import { t, ValueHandler } from '../common';
 import { Todo } from './ui.Todo';
-import { useGlobalStyles } from '../DevTools.GlobalStyles';
 
 type O = Record<string, unknown>;
 
@@ -16,8 +14,8 @@ export function todo<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const text = Dev.ValueHandler<string, S>(events);
-  const style = Dev.ValueHandler<t.DevTodoStyle, S>(events);
+  const text = ValueHandler<string, S>(events);
+  const style = ValueHandler<t.DevTodoStyle, S>(events);
 
   const args: t.DevTodoHandlerArgs<S> = {
     ctx,

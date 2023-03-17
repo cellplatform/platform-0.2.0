@@ -1,6 +1,6 @@
 export const ModuleSpecs = {
-  'sys.ui.dev.Harness': () => import('../ui/Harness/Harness.SPEC'),
-  'sys.ui.dev.SpecList': () => import('../ui/Entry.SpecList/SpecList.SPEC'),
+  'sys.ui.dev.Harness': () => import('../ui/Harness/-SPEC'),
+  'sys.ui.dev.SpecList': () => import('../ui/SpecList/-SPEC'),
 };
 
 export const SampleSpecs = {

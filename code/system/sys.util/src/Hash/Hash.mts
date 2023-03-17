@@ -1,5 +1,5 @@
 import * as AsmCrypto from 'asmcrypto.js';
-import { R } from '../common/index.mjs';
+import { R } from '../common';
 
 export type HashOptions = {
   asString?: (input?: any) => string;

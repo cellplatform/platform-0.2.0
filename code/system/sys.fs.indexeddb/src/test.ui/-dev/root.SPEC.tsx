@@ -21,7 +21,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
   });
 
-  e.it('debug panel', async (e) => {
+  e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
@@ -35,7 +35,7 @@ export default Dev.describe('TestRunner', (e) => {
       });
     };
 
-    run('Health Check', import('./spec.HealthCheck.mjs'));
+    run('Integrity Checks', import('./spec.ItegrityChecks.mjs'));
     run('Complete Functional Specification', import('./spec.Functional.mjs'));
 
     dev.hr();

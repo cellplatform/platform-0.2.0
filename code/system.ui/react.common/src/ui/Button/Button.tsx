@@ -103,6 +103,7 @@ const View: React.FC<ButtonProps> = (props) => {
 
   return (
     <div
+      role={'button'}
       {...css(styles.base, props.style)}
       title={props.tooltip}
       onMouseEnter={over(true)}

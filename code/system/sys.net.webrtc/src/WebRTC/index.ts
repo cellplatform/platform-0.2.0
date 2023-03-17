@@ -1,1 +1,1 @@
-export * from './WebRTC.mjs';
+export * from './WebRtc.mjs';

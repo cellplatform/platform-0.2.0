@@ -1,5 +1,75 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { Value } from './index.mjs';
+import { expect, describe, it } from '../test';
+import { Value } from '.';
+
+describe('Value.object.walk', () => {
+  type T = { key: string | number; value: any };
+
+  it('processes object', () => {
+    const walked: T[] = [];
+    const input = {
+      name: 'foo',
+      count: 123,
+      child: { enabled: true, list: [1, 2] },
+    };
+
+    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+
+    expect(walked).to.eql([
+      { key: 'name', value: 'foo' },
+      { key: 'count', value: 123 },
+      { key: 'child', value: { enabled: true, list: [1, 2] } },
+      { key: 'enabled', value: true },
+      { key: 'list', value: [1, 2] },
+      { key: 0, value: 1 },
+      { key: 1, value: 2 },
+    ]);
+  });
+
+  it('processes array', () => {
+    const walked: T[] = [];
+    const input = ['foo', 123, { enabled: true, list: [1, 2] }];
+
+    Value.object.walk(input, ({ key, value }) => walked.push({ key, value }));
+
+    expect(walked).to.eql([
+      { key: 0, value: 'foo' },
+      { key: 1, value: 123 },
+      { key: 2, value: { enabled: true, list: [1, 2] } },
+      { key: 'enabled', value: true },
+      { key: 'list', value: [1, 2] },
+      { key: 0, value: 1 },
+      { key: 1, value: 2 },
+    ]);
+  });
+
+  it('processes nothing (non-object / array)', () => {
+    const test = (input: any) => {
+      const walked: any[] = [];
+      Value.object.walk(input, (e) => walked.push(e));
+      expect(walked).to.eql([]); // NB: nothing walked.
+    };
+    [0, true, '', null, undefined].forEach((input) => test(input));
+  });
+
+  it('stops midway', () => {
+    const walked: T[] = [];
+    const input = {
+      name: 'foo',
+      child: { enabled: true, list: [1, 2] },
+    };
+
+    Value.object.walk(input, (e) => {
+      const { key, value } = e;
+      if (value === true) return e.stop();
+      walked.push({ key, value });
+    });
+
+    expect(walked).to.eql([
+      { key: 'name', value: 'foo' },
+      { key: 'child', value: { enabled: true, list: [1, 2] } },
+    ]);
+  });
+});
 
 describe('Value.object.build', () => {
   it('return default root object (no keyPath)', () => {
@@ -221,5 +291,78 @@ describe('Value.object.toArray', () => {
     type K = 'foo' | 'bar';
     const res = Value.object.toArray<IFoos, K>(foos);
     expect(res.length).to.eql(2);
+  });
+});
+
+describe('Value.object.trimStringsDeep', () => {
+  it('shallow', () => {
+    const name = 'foo'.repeat(100);
+    const obj = {
+      name,
+      count: 123,
+      obj: {},
+      list: [],
+      bool: true,
+      undef: undefined,
+      nil: null,
+    };
+
+    const res1 = Value.object.trimStringsDeep(obj);
+    const res2 = Value.object.trimStringsDeep(obj, { immutable: false });
+
+    const expected = {
+      ...obj,
+      name: `${name.substring(0, 35)}...`, // NB: default max-length
+    };
+
+    expect(res1).to.eql(expected);
+    expect(res2).to.eql(expected);
+
+    expect(res1).to.not.equal(obj); // NB: default: immutable clone.
+    expect(res2).to.equal(obj);
+  });
+
+  it('deep', () => {
+    const name = 'foo'.repeat(50);
+    const obj = {
+      name,
+      child: {
+        child: {
+          name,
+          count: 123,
+          obj: {},
+          list: [],
+          bool: true,
+          undef: undefined,
+          nil: null,
+        },
+      },
+    };
+
+    const res = Value.object.trimStringsDeep(obj);
+
+    expect(res).to.eql({
+      name: `${name.substring(0, 35)}...`,
+      child: {
+        child: {
+          ...obj.child.child,
+          name: `${name.substring(0, 35)}...`,
+        },
+      },
+    });
+  });
+
+  it('options: no ellipsis, maxLength', () => {
+    const name = 'foo'.repeat(100);
+    const obj = { name };
+
+    const res1 = Value.object.trimStringsDeep(obj, {});
+    const res2 = Value.object.trimStringsDeep(obj, {
+      ellipsis: false,
+      maxLength: 10,
+    });
+
+    expect(res1.name).to.eql(`${name.substring(0, 35)}...`); // NB: default
+    expect(res2.name).to.eql(name.substring(0, 10));
   });
 });

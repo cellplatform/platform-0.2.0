@@ -32,6 +32,11 @@ export function CtxPropsSubject(props: PropArgs) {
         props.changed();
       }
 
+      if (args.every((v) => v === null)) {
+        current.size = undefined;
+        props.changed();
+      }
+
       return api;
     },
 

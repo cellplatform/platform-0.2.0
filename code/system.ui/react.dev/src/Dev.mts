@@ -2,8 +2,7 @@ import { DevBus as Bus } from './logic.Bus';
 import { Spec } from './logic.Spec';
 import { ValueHandler } from './logic.Tools';
 import { headless } from './test.ui/headless';
-import { Entry } from './ui/Entry';
-import { SpecList } from './ui/Entry.SpecList';
+import { SpecList } from './ui/SpecList';
 import { Harness } from './ui/Harness';
 
 export const Dev = {
@@ -12,6 +11,5 @@ export const Dev = {
   SpecList,
   Harness,
   ValueHandler,
-  render: Entry.render,
   headless,
 };

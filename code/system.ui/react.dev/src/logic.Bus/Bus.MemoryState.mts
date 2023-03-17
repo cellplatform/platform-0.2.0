@@ -1,4 +1,4 @@
-import { Id, DEFAULT, Is, R, rx, t } from './common';
+import { Id, DEFAULTS, Is, R, rx, t } from './common';
 
 type O = Record<string, unknown>;
 type Revision = { number: number; message: string };
@@ -11,7 +11,7 @@ export type ChangedHandlerArgs = { message: t.DevInfoChangeMessage; info: t.DevI
  */
 export function BusMemoryState(args: { instance: t.DevInstance; onChanged?: ChangedHandler }) {
   let _revision: Revision = { number: 0, message: 'initial' };
-  let _current: t.DevInfo = DEFAULT.info;
+  let _current: t.DevInfo = DEFAULTS.info;
 
   _current.instance.session = Id.ctx.create();
   _current.instance.bus = rx.bus.instance(args.instance.bus);

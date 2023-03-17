@@ -1,7 +1,7 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test';
 import { Subject } from 'rxjs';
 
-import { Is } from './index.mjs';
+import { Is } from '.';
 
 describe('Is', () => {
   it('Is.env.(node|browser)', () => {
@@ -25,6 +25,11 @@ describe('Is', () => {
     test({ subscribe: () => null }, true);
     test(new Subject<void>(), true);
     test(new Subject<void>().asObservable(), true);
+
+    const $ = new Subject() as unknown;
+    if (Is.observable<number>($)) {
+      $.subscribe(); // Type inferred after boolean check.
+    }
   });
 
   it('Is.subject', () => {
@@ -43,6 +48,11 @@ describe('Is', () => {
 
     test(new Subject<void>(), true);
     test(new Subject<void>().asObservable(), false);
+
+    const $ = new Subject() as unknown;
+    if (Is.subject<number>($)) {
+      $.next(1234); // Type inferred after boolean check.
+    }
   });
 
   it('Is.stream', () => {
@@ -80,6 +90,11 @@ describe('Is', () => {
     test({ then: () => null }, true);
     test(wait(), true);
     test(myPromise(), true);
+
+    const p = myPromise as unknown;
+    if (Is.promise<string>(p)) {
+      p.then(); // Type inferred after boolean check.
+    }
   });
 
   describe('Is.plainObject', () => {

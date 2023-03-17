@@ -1,4 +1,4 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test';
 import { Value } from './Value.mjs';
 
 describe('Value.toNumber', () => {

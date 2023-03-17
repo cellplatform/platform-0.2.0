@@ -1,7 +1,7 @@
-import { expect, describe, it } from '../test/index.mjs';
+import { expect, describe, it } from '../test';
 import { Subject } from 'rxjs';
 
-import { Dispose } from './index.mjs';
+import { Dispose } from '.';
 
 describe('Disposable', () => {
   it('create', () => {

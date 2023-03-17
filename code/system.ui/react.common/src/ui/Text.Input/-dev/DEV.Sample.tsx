@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { TextInput } from '..';
-import { t } from '../common';
+import { Time, t } from '../common';
 import { Hints } from './DEV.Hints.mjs';
 
 export type DevSampleProps = {
   props: t.TextInputProps;
-  debug: { isHintEnabled: boolean; isUpdateEnabled: boolean };
+  debug: {
+    isHintEnabled: boolean;
+    isUpdateEnabled: boolean;
+    isUpdateAsync: boolean;
+  };
   onReady: t.TextInputReadyHandler;
 };
 
@@ -38,13 +42,15 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
       onEscape={(e) => {
         console.info('⚡️ onEscape', e);
       }}
-      onChanged={(e) => {
+      onChanged={async (e) => {
+        if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
         if (debug.isUpdateEnabled) {
           setValue(e.to);
           if (debug.isHintEnabled) setHint(Hints.lookup(e.to ?? ''));
         } else {
           setHint('');
         }
+        // console.info('⚡️ onChanged', e);
       }}
       onLabelDoubleClick={(e) => {
         console.info('⚡️ onLabelDoubleClick', e);

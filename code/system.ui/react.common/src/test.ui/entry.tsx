@@ -3,11 +3,18 @@ import 'symbol-observable';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
-import { Dev } from '../ui.dev/Dev.mjs';
+import { Dev } from '../ui.dev';
 
-const { All } = await import('./entry.Specs.mjs');
+const badge = {
+  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
+  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+};
 
-console.info(`Pkg:`, Pkg);
-const root = createRoot(document.getElementById('root')!);
-const el = await Dev.render(Pkg, All, { hrDepth: 3 });
-root.render(<StrictMode>{el}</StrictMode>);
+(async () => {
+  console.info(`Pkg:`, Pkg);
+  const { AllSpecs } = await import('./entry.Specs.mjs');
+
+  const el = await Dev.render(Pkg, AllSpecs, { hrDepth: 3, badge });
+  const root = createRoot(document.getElementById('root')!);
+  root.render(<StrictMode>{el}</StrictMode>);
+})();

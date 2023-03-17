@@ -1,5 +1,5 @@
-import { t, expect, describe, it } from '../test/index.mjs';
-import { Json } from './index.mjs';
+import { t, expect, describe, it } from '../test';
+import { Json } from '.';
 
 describe('Json', () => {
   describe('Json.stringify', () => {

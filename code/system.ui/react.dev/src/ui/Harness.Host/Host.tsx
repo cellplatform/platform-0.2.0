@@ -1,9 +1,9 @@
-import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULT } from '../common';
+import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULTS } from '../common';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostBackground } from './Host.Background';
 
-const HOST = DEFAULT.props.host;
+const HOST = DEFAULTS.props.host;
 
 export type HarnessHostProps = {
   instance: t.DevInstance;

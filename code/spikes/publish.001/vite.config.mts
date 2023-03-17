@@ -18,6 +18,6 @@ export default Config.vite(import.meta.url, (e) => {
   e.chunk('sys.json', 'sys.data.json');
   e.chunk('sys.fs', ['sys.fs', 'sys.fs.indexeddb']);
   e.chunk('sys.dev', ['sys.ui.react.dev', 'sys.test.spec']);
-  e.chunk('sys.video', 'sys.ui.react.video');
+  e.chunk('sys.media', 'sys.ui.react.media');
   e.chunk('sys.monaco', 'sys.ui.react.monaco');
 });

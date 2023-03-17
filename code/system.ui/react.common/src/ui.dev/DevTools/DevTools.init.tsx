@@ -45,8 +45,12 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
+    async state() {
+      return _state || (_state = await ctx.state(initial));
+    },
+
     async change(fn) {
-      const state = _state || (_state = await ctx.state(initial));
+      const state = await api.state();
       return state.change(fn);
     },
 
@@ -60,9 +64,12 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     },
 
     /**
-     * Widgets: Argument Wrangling.
+     * [Widgets]: Argument Wrangling.
      */
 
+    /**
+     * Simple button.
+     */
     button(...args: any[]) {
       if (typeof args[0] === 'string') {
         api.button((btn) => btn.label(args[0]).onClick(args[1]));
@@ -73,6 +80,9 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
+    /**
+     * Boolean switch button.
+     */
     boolean(...args: any[]) {
       if (typeof args[0] === 'function') {
         boolean<S>(events, ctx, initial, args[0]);
@@ -80,6 +90,9 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
+    /**
+     * Title text.
+     */
     title(...args: any[]) {
       if (typeof args[0] === 'string') {
         api.title((title) => title.text(args[0]).style(args[1]));
@@ -90,6 +103,9 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
+    /**
+     * Task marker ("todo")
+     */
     TODO(...args: any[]) {
       if (args.length === 0) {
         return api.TODO('');
@@ -103,8 +119,22 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       return api;
     },
 
-    hr() {
-      hr(ctx);
+    /**
+     * Horizontal-rule (visual divider).
+     */
+    hr(...args: any[]) {
+      if (args.length === 0) {
+        return api.hr(() => null);
+      }
+      if (typeof args[0] === 'number' || Array.isArray(args[0])) {
+        const line = Array.isArray(args[0]) ? args[0] : [args[0]];
+        const margin = args[1];
+        const color = args[2];
+        return api.hr((hr) => hr.thickness(line[0]).opacity(line[1]).margin(margin).color(color));
+      }
+      if (typeof args[0] === 'function') {
+        hr<S>(events, ctx, initial, args[0]);
+      }
       return api;
     },
   };

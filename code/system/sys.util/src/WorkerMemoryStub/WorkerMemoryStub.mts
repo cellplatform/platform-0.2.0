@@ -1,4 +1,4 @@
-import { type t } from '../common/index.mjs';
+import { type t } from '../common';
 
 /**
  * In-memory simulation of the WebWorker API for testing code

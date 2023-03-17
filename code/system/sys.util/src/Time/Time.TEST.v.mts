@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { time } from './index.mjs';
+import { expect, describe, it } from '../test';
+import { time } from '.';
 
 describe('time', () => {
   it('formats date', () => {

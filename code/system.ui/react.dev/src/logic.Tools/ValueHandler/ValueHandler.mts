@@ -1,4 +1,4 @@
-import { DEFAULT, R, t } from '../../common';
+import { DEFAULTS, R, t } from '../../common';
 
 type O = Record<string, unknown>;
 
@@ -21,7 +21,7 @@ export function ValueHandler<V, State extends O>(events: t.DevEvents) {
   const getCurrent = async (data?: t.DevInfo) => {
     const info = data ?? (await events.info.get());
     const state = (info.render.state ?? {}) as State;
-    const dev = (info.render.props ?? DEFAULT.props) as t.DevRenderProps;
+    const dev = (info.render.props ?? DEFAULTS.props) as t.DevRenderProps;
     const res = _handler?.({ state, dev });
     return res;
   };

@@ -1,7 +1,7 @@
 import { Context } from '../logic.Ctx';
 import { BusEvents } from './Bus.Events.mjs';
 import { BusMemoryState } from './Bus.MemoryState.mjs';
-import { R, DEFAULT, Id, Is, rx, t, Test } from './common';
+import { R, DEFAULTS, Id, Is, rx, t, Test } from './common';
 
 /**
  * Event controller.
@@ -190,7 +190,7 @@ export function BusController(args: {
     let error: string | undefined;
 
     state.change('props:write', async (draft) => {
-      const props = draft.render.props || (draft.render.props = DEFAULT.props);
+      const props = draft.render.props || (draft.render.props = DEFAULTS.props);
       const res = e.mutate(props);
       if (Is.promise(res)) await res;
       draft.render.revision.props += 1;

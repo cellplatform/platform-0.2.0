@@ -23,18 +23,20 @@ export type PeerGetMediaStreamRes = {
  */
 export type Peer = t.Disposable & {
   readonly kind: 'local:peer';
-  readonly id: Id;
+  readonly tx: Id; // Instance id.
+  readonly id: Id; // Peer id (Public).
   readonly signal: Hostname;
   readonly connections: PeerConnections;
   readonly connections$: t.Observable<PeerConnectionChanged>;
   readonly connectionsByPeer: PeerConnectionsByPeer[];
+  readonly error$: t.Observable<PeerError>;
   readonly disposed: boolean;
   data(connectTo: Id, options?: { name?: string }): Promise<PeerDataConnection>;
   media(connectTo: Id, input: PeerMediaStreamInput): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
-export type PeerConnectionsByPeer = { peer: Id } & PeerConnections;
+export type PeerConnectionsByPeer = { peer: { local: Id; remote: Id } } & PeerConnections;
 export type PeerConnections = {
   readonly length: number;
   readonly all: PeerConnection[];
@@ -55,8 +57,10 @@ type Connection = t.Disposable & {
 export type PeerDataConnection = Connection & {
   readonly kind: 'data';
   readonly metadata: t.PeerMetaData;
+  readonly out$: t.Observable<t.PeerDataPayload>;
   readonly in$: t.Observable<t.PeerDataPayload>;
   send<E extends t.Event>(event: E): PeerDataPayload;
+  bus<E extends t.Event>(): t.EventBus<E>;
 };
 
 export type PeerDataPayload = {
@@ -79,12 +83,13 @@ export type PeerMediaStreams = { local?: MediaStream; remote?: MediaStream };
  * Connection Metadata.
  */
 export type PeerMeta = PeerMetaData | PeerMetaMedia;
-export type PeerMetaData = { name: string };
-export type PeerMetaMedia = { input: PeerMediaStreamInput };
+export type PeerMetaData = { label: string; initiatedBy?: t.PeerId };
+export type PeerMetaMedia = { input: PeerMediaStreamInput; initiatedBy?: t.PeerId };
 
 /**
  * Peer connection change info.
  */
+export type PeerConnectionKind = PeerConnectionChanged['kind'];
 export type PeerConnectionChanged = PeerDataConnectionChanged | PeerMediaConnectionChanged;
 
 type ConnectionChanged = {
@@ -100,4 +105,29 @@ export type PeerDataConnectionChanged = ConnectionChanged & {
 export type PeerMediaConnectionChanged = ConnectionChanged & {
   kind: 'media';
   subject: PeerMediaConnection;
+};
+
+/**
+ * Errors
+ * ref: https://peerjs.com/docs/#peeron-error
+ */
+export type PeerErrorType =
+  | 'unknown'
+  | 'browser-incompatible' // (FATAL) The client's browser does not support some or all WebRTC features that you are trying to use.
+  | 'disconnected' //         You've already disconnected this peer from the server and can no longer make any new connections on it.
+  | 'invalid-id' //           (FATAL) The ID passed into the Peer constructor contains illegal characters.
+  | 'invalid-key' //          (FATAL) The API key passed into the Peer constructor contains illegal characters or is not in the system (cloud server only).
+  | 'network' //              Lost or cannot establish a connection to the signalling server.
+  | 'peer-unavailable' //     The peer you're trying to connect to does not exist.
+  | 'ssl-unavailable' //      (FATAL) PeerJS is being used securely, but the cloud server does not support SSL. Use a custom PeerServer.
+  | 'server-error' //         (FATAL) Unable to reach the server.
+  | 'socket-error' //         (FATAL) An error from the underlying socket.
+  | 'socket-closed' //        (FATAL) The underlying socket closed unexpectedly.
+  | 'unavailable-id' //       (sometimes FATAL) The ID passed into the Peer constructor is already taken (non-fatal).
+  | 'webrtc'; //              Native WebRTC errors.
+
+export type PeerError = {
+  type: PeerErrorType;
+  message: string;
+  isFatal: boolean;
 };

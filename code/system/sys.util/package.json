@@ -13,8 +13,8 @@
   "dependencies": {
     "sys.types": "0.0.0",
     "sys.util": "0.0.0",
-    "asmcrypto.js": "^2.3.2",
-    "nanoid": "^4.0.1"
+    "asmcrypto.js": "2.3.2",
+    "nanoid": "4.0.1"
   },
   "devDependencies": {
     "sys.test": "0.0.0"

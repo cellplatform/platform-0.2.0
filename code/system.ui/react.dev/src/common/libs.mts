@@ -9,3 +9,4 @@ export { FC, useMouseState } from 'sys.ui.react.util';
 export { css, Color } from 'sys.ui.react.css';
 export { Test } from 'sys.test.spec';
 export { Keyboard } from 'sys.ui.dom';
+export { Fuzzy } from 'sys.text';

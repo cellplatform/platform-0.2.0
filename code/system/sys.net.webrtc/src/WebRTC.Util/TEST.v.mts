@@ -1,0 +1,55 @@
+import { describe, it, expect, t } from '../test';
+import { WebRtcUtil } from '.';
+
+describe('WebRtc.Util', () => {
+  it('randomPeerId', (e) => {
+    const id1 = WebRtcUtil.randomPeerId();
+    const id2 = WebRtcUtil.randomPeerId();
+    expect(id1).to.not.eql(id2);
+    expect(id1[0]).to.eql('p');
+  });
+
+  it('cleanId', () => {
+    const test = (input: string, expected: string) => {
+      const res = WebRtcUtil.asId(input);
+      expect(res).to.eql(expected);
+    };
+
+    test('myid', 'myid');
+    test('  myid  ', 'myid');
+    test('  peer:myid  ', 'myid');
+    test('  peer: myid  ', 'myid');
+    test('peer:myid', 'myid');
+    test('peer:', '');
+    test('peer', 'peer');
+  });
+
+  it('asUri', () => {
+    const test = (input: string, expected: string) => {
+      const res = WebRtcUtil.asUri(input);
+      expect(res).to.eql(expected);
+    };
+
+    test('myid', 'peer:myid');
+    test('  myid  ', 'peer:myid');
+    test('  peer:myid  ', 'peer:myid');
+    test('peer: myid', 'peer:myid');
+  });
+
+  describe('isType', () => {
+    it('isType.PeerDataPayload', () => {
+      const test = (expected: boolean, input: any) => {
+        const res = WebRtcUtil.isType.PeerDataPayload(input);
+        expect(res).to.eql(expected);
+      };
+
+      const e: t.PeerDataPayload = {
+        source: { peer: '<id>', connection: '<id>' },
+        event: { type: 'foo', payload: { count: 1234 } },
+      };
+
+      test(true, e);
+      [true, 123, '', {}, []].forEach((value) => test(false, value));
+    });
+  });
+});

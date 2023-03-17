@@ -15,6 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
+    'approx-string-match': '2.0.0',
     'rehype-sanitize': '5.0.1',
     'rehype-stringify': '9.0.3',
     'rehype-format': '4.0.1',

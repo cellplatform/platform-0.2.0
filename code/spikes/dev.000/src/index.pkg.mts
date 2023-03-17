@@ -11,17 +11,19 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.133',
+  version: '0.0.232',
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
+    'sys.data.crdt': '0.0.0',
+    'sys.fs': '0.0.0',
+    'sys.fs.indexeddb': '0.0.0',
     'sys.net.webrtc': '0.0.0',
     'sys.text': '0.0.0',
-    'sys.types': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.dev': '0.0.0',
+    'sys.ui.react.media': '0.0.0',
     'sys.ui.react.monaco': '0.0.0',
-    'sys.ui.react.video': '0.0.0',
     'sys.util': '0.0.0',
     'vendor.stripe': '0.0.0',
   },

@@ -14,7 +14,7 @@ export function useGlobalStyles() {
     if (_isAdded) return;
     _isAdded = true;
 
-    Style.global(TodoStyles, { prefix: `.${CLASS.TODO}` });
+    Style.global(TodoStyles, { prefix: `.${CLASS.todo}` });
   }, []);
 
   return { TodoStyles };

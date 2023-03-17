@@ -1,6 +1,6 @@
 export const Specs = {
-  'sys.crdt.sample': () => import('../test.sample/-SPEC'),
-  'sys.crdt.lib.Automerge': () => import('../lib.Automerge/-SPEC'),
+  'sys.crdt.tests': () => import('./-TestRunner'),
+  'sys.crdt.ui.CrdtInfo': () => import('../ui/CrdtInfo/-SPEC'),
 };
 
 export default Specs;

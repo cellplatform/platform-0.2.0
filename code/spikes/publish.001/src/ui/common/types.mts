@@ -8,7 +8,7 @@ export type {
   VimeoStatus,
   VimeoEvents,
   VimeoId,
-} from 'sys.ui.react.video/src/types.mjs';
+} from 'sys.ui.react.media/src/types.mjs';
 
 export type { ButtonMouseHandler } from 'sys.ui.react.common/src/types.mjs';
 

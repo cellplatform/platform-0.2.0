@@ -1,5 +1,4 @@
-import { t } from '../common';
-import { Dev } from '../Dev.mjs';
+import { t, ValueHandler } from '../common';
 import { Boolean } from './ui.Boolean';
 
 type O = Record<string, unknown>;
@@ -15,9 +14,9 @@ export function boolean<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = Dev.ValueHandler<string, S>(events);
-  const value = Dev.ValueHandler<boolean | undefined, S>(events);
-  const enabled = Dev.ValueHandler<boolean, S>(events);
+  const label = ValueHandler<string, S>(events);
+  const value = ValueHandler<boolean | undefined, S>(events);
+  const enabled = ValueHandler<boolean, S>(events);
   const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {

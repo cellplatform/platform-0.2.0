@@ -1,4 +1,4 @@
-import { describe, expect, it } from '../test/index.mjs';
+import { describe, expect, it } from '../test';
 import { maybeWait, Promise } from './Promise.mjs';
 
 describe('Promise', () => {

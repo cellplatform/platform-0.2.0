@@ -12,23 +12,24 @@
   "dependencies": {
     "sys.types": "0.0.0",
     "sys.util": "0.0.0",
-    "rehype-sanitize": "^5.0.1",
-    "rehype-stringify": "^9.0.3",
-    "rehype-format": "^4.0.1",
-    "remark-frontmatter": "^4.0.1",
-    "remark-gfm": "^3.0.1",
+    "approx-string-match": "2.0.0",
+    "rehype-sanitize": "5.0.1",
+    "rehype-stringify": "9.0.3",
+    "rehype-format": "4.0.1",
+    "remark-frontmatter": "4.0.1",
+    "remark-gfm": "3.0.1",
     "remark-rehype": "10.1.0",
-    "remark-parse": "^10.0.1",
-    "remark-stringify": "^10.0.2",
-    "retext-english": "^4.1.0",
-    "retext-stringify": "^3.1.0",
-    "unified": "^10.1.2",
-    "unist-util-select": "^4.0.3",
-    "yaml": "^2.2.1"
+    "remark-parse": "10.0.1",
+    "remark-stringify": "10.0.2",
+    "retext-english": "4.1.0",
+    "retext-stringify": "3.1.0",
+    "unified": "10.1.2",
+    "unist-util-select": "4.0.3",
+    "yaml": "2.2.1"
   },
   "devDependencies": {
     "sys.test": "0.0.0",
-    "@types/sanitize-html": "^2.8.0"
+    "@types/sanitize-html": "2.8.1"
   },
   "license": "MIT",
   "private": true,

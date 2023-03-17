@@ -1,21 +1,21 @@
-import { ModuleSpecs as DevSpecs } from 'sys.ui.react.dev';
-import { Specs as CommonSpecs, DevSpecs as ComonDevSpecs } from 'sys.ui.react.common';
-import { Specs as MonacoSpecs } from 'sys.ui.react.monaco';
-import { Specs as VideoSpecs } from 'sys.ui.react.video';
-import { Specs as WebRtcSpecs } from 'sys.net.webrtc';
-import { Specs as FsIndexedDbSpecs } from 'sys.fs.indexeddb';
-import { Specs as VendorStripe } from 'vendor.stripe';
-import { Specs as CrdtSpecs } from 'sys.data.crdt';
+const { Specs: CommonSpecs, DevSpecs: ComonDevSpecs } = await import('sys.ui.react.common');
+const { ModuleSpecs: DevSpecs } = await import('sys.ui.react.dev');
+const { Specs: MonacoSpecs } = await import('sys.ui.react.monaco');
+const { Specs: MediaSpecs } = await import('sys.ui.react.media');
+const { Specs: WebRtcSpecs } = await import('sys.net.webrtc');
+const { Specs: FsIndexedDbSpecs } = await import('sys.fs.indexeddb');
+const { Specs: VendorStripe } = await import('vendor.stripe');
+const { Specs: CrdtSpecs } = await import('sys.data.crdt');
 
 export const Specs = {
   Root: () => import('../ui/Root/Root.SPEC'),
   ...WebRtcSpecs,
   ...CrdtSpecs,
+  ...MonacoSpecs,
   ...CommonSpecs,
   ...ComonDevSpecs,
   ...DevSpecs,
-  ...MonacoSpecs,
-  ...VideoSpecs,
+  ...MediaSpecs,
   ...FsIndexedDbSpecs,
   ...VendorStripe,
 };

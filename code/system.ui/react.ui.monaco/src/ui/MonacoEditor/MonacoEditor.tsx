@@ -1,8 +1,7 @@
 import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 
-import { css, t, FC } from '../common';
-import { LANGUAGES, DEFAULTS } from './const.mjs';
+import { css, DEFAULTS, FC, LANGUAGES, t } from './common';
 
 import type { OnChange, OnMount } from '@monaco-editor/react';
 
@@ -12,43 +11,52 @@ export type MonacoEditorProps = {
   focusOnLoad?: boolean;
   tabSize?: number;
   style?: t.CssValue;
-  onChange?: (e: { text: string }) => void;
-  onReady?: (e: { editor: t.MonacoEditor; monaco: t.Monaco }) => void;
+  onChange?: t.MonacoEditorChangeHandler;
+  onReady?: t.MonacoEditorReadyHandler;
+  onDispose?: t.MonacoEditorDisposedHandler;
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
   const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize } = props;
-  const editorRef = useRef<t.MonacoEditor>();
+
+  const monacoRef = useRef<t.Monaco>();
+  const editorRef = useRef<t.MonacoCodeEditor>();
 
   /**
    * [Lifecycle]
    */
+
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
-    if (text !== editor.getValue()) {
-      editor.setValue(text ?? '');
-    }
+    if (text !== editor.getValue()) editor.setValue(text ?? '');
   }, [text]);
 
   useEffect(() => {
     editorRef.current?.getModel()?.updateOptions({ tabSize });
   }, [tabSize]);
 
+  useEffect(() => {
+    return () => {
+      const editor = editorRef.current!;
+      const monaco = monacoRef.current!;
+      props.onDispose?.({ editor, monaco });
+    };
+  }, []);
+
   /**
    * [Handlers]
    */
   const handleEditorDidMount: OnMount = (ed, monaco) => {
-    const editor = ed as unknown as t.MonacoEditor;
-    editorRef.current = editor;
+    monacoRef.current = monaco;
+    const editor = (editorRef.current = ed as unknown as t.MonacoCodeEditor);
     editor.getModel()?.updateOptions({ tabSize });
-
     if (props.focusOnLoad) editor.focus();
     props.onReady?.({ editor, monaco });
   };
 
-  const handleChange: OnChange = (text = '') => {
-    props.onChange?.({ text });
+  const handleChange: OnChange = (text = '', event) => {
+    props.onChange?.({ text, event });
   };
 
   /**

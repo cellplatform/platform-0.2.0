@@ -1,8 +1,6 @@
-import { expect, describe, it } from '../test/index.mjs';
-import { Observable, Subject } from 'rxjs';
-import { type t } from '../common/index.mjs';
-
-import { rx } from './index.mjs';
+import { t, describe, expect, it } from '../test';
+import { rx } from '.';
+import { Time } from '../Time';
 
 describe('rx.bus', () => {
   describe('isBus', () => {
@@ -10,7 +8,7 @@ describe('rx.bus', () => {
       const test = (input: any) => {
         expect(rx.isBus(input)).to.eql(true);
       };
-      test({ $: new Observable(), fire: () => null });
+      test({ $: new rx.Observable(), fire: () => null });
       test(rx.bus());
     });
 
@@ -23,8 +21,8 @@ describe('rx.bus', () => {
       test(123);
       test({});
       test([123, {}]);
-      test({ event$: new Observable() });
-      test({ $: new Observable() });
+      test({ event$: new rx.Observable() });
+      test({ $: new rx.Observable() });
       test({ fire: () => null });
     });
   });
@@ -81,7 +79,7 @@ describe('rx.bus', () => {
     });
 
     it('create: use given subject', () => {
-      const source$ = new Subject<any>(); // NB: Does not care the typing of the input observable (flexible).
+      const source$ = new rx.Subject<any>(); // NB: Does not care the typing of the input observable (flexible).
       const bus = rx.bus<MyEvent>(source$);
 
       const fired: MyEvent[] = [];
@@ -103,7 +101,7 @@ describe('rx.bus', () => {
     });
 
     it('filters out non-standard [event] objects from the stream', () => {
-      const source$ = new Subject<any>();
+      const source$ = new rx.Subject<any>();
       const bus = rx.bus<MyEvent>(source$);
 
       const fired: MyEvent[] = [];
@@ -130,9 +128,49 @@ describe('rx.bus', () => {
     it('bus.asType', () => {
       expect(rx.bus.asType).to.equal(rx.busAsType);
     });
+  });
 
-    it('bus.pump', () => {
-      expect(rx.bus.pump).to.equal(rx.pump);
+  describe('bus.connect', () => {
+    type E = t.Event;
+
+    it('connect: async', async () => {
+      const a = rx.bus();
+      const b = rx.bus();
+      const conn = rx.bus.connect([a, b]);
+      expect(conn.buses).to.eql([a, b]);
+
+      const firedA: E[] = [];
+      const firedB: E[] = [];
+      a.$.subscribe((e) => firedA.push(e));
+      b.$.subscribe((e) => firedB.push(e));
+
+      const event: E = { type: 'foo', payload: { count: 123 } };
+      a.fire(event);
+
+      expect(firedA).to.eql([event]);
+      expect(firedB).to.eql([]);
+
+      await Time.wait(10);
+      expect(firedA).to.eql([event]);
+      expect(firedB).to.eql([event]);
+    });
+
+    it('connect: sync', () => {
+      const a = rx.bus();
+      const b = rx.bus();
+      const conn = rx.bus.connect([a, b], { async: false });
+      expect(conn.buses).to.eql([a, b]);
+
+      const firedA: E[] = [];
+      const firedB: E[] = [];
+      a.$.subscribe((e) => firedA.push(e));
+      b.$.subscribe((e) => firedB.push(e));
+
+      const event: E = { type: 'foo', payload: { count: 123 } };
+      a.fire(event);
+
+      expect(firedA).to.eql([event]);
+      expect(firedB).to.eql([event]);
     });
   });
 });

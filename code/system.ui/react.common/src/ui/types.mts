@@ -5,6 +5,7 @@ export * from './Center/types.mjs';
 export * from './IFrame/types.mjs';
 export * from './Icon/types.mjs';
 export * from './ObjectView/types.mjs';
+export * from './ProgressBar/types.mjs';
 export * from './PropList/types.mjs';
 export * from './Spinner/types.mjs';
 

@@ -1,4 +1,5 @@
 export * from './ui/MonacoEditor/types.mjs';
+export * from './ui.logic/MonacoCrdt/types.mjs';
 
 /**
  * Supported languages.

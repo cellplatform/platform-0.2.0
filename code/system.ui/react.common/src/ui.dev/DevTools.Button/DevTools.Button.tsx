@@ -1,5 +1,5 @@
-import { t } from '../common';
-import { Dev } from '../Dev.mjs';
+import { t, ValueHandler } from '../common';
+
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
@@ -16,9 +16,9 @@ export function button<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = Dev.ValueHandler<string, S>(events);
-  const right = Dev.ValueHandler<RightInput, S>(events);
-  const enabled = Dev.ValueHandler<boolean, S>(events);
+  const label = ValueHandler<string, S>(events);
+  const right = ValueHandler<RightInput, S>(events);
+  const enabled = ValueHandler<boolean, S>(events);
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
@@ -62,6 +62,8 @@ export function button<S extends O = O>(
   });
 
   label.subscribe(ref.redraw);
+  right.subscribe(ref.redraw);
+  enabled.subscribe(ref.redraw);
 
   fn?.(args);
 }

@@ -1,4 +1,4 @@
-import type * as t from './types.mjs';
+import type { t } from '../common.t';
 
 const REGEX = {
   EMAIL:
@@ -22,15 +22,15 @@ export const Is: t.Is = {
   /**
    * Determine if the given input is an Observable.
    */
-  observable(input?: any) {
+  observable<T = any>(input?: any): input is t.Observable<T> {
     return typeof input === 'object' && typeof input?.subscribe === 'function';
   },
 
   /**
    * Determine if the given input is an observable Subject.
    */
-  subject(input?: any) {
-    return Is.observable(input) && typeof input?.next === 'function';
+  subject<T = any>(input?: any): input is t.Subject<T> {
+    return Is.observable(input) && typeof (input as any)?.next === 'function';
   },
 
   /**
@@ -43,7 +43,7 @@ export const Is: t.Is = {
   /**
    * Determines whether the given value is a Promise.
    */
-  promise(value?: any) {
+  promise<T = any>(value?: any): value is Promise<T> {
     return value ? typeof value === 'object' && typeof value.then === 'function' : false;
   },
 

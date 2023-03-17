@@ -1,18 +1,19 @@
-import { rx, t } from './common';
+import { slug, rx, t, WebRtcUtil } from './common';
 import { PeerDataConnection } from './Connection.Data.mjs';
 import { PeerMediaConnection } from './Connection.Media.mjs';
-import { Util } from './util.mjs';
 
 /**
  * State management of current WebRTC session - peers/connections.
  */
 export function MemoryState() {
+  const tx = `peer.tx.${slug()}`;
   const memory = { connections: [] as t.PeerConnection[] };
   const connections$ = new rx.Subject<t.PeerConnectionChanged>();
 
   const api = {
+    tx,
     connections$: connections$.asObservable(),
-    connections: Util.connections.toSet(() => [...memory.connections]),
+    connections: WebRtcUtil.connections.toSet(() => [...memory.connections]),
 
     fireChanged<P extends t.PeerConnectionChanged>(action: P['action'], subject: P['subject']) {
       const kind = subject.kind;
