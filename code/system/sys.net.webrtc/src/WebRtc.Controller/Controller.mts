@@ -1,4 +1,15 @@
-import { toObject, Crdt, Pkg, R, rx, slug, t, UserAgent, WebRtcEvents, WebRtcUtil } from './common';
+import {
+  toObject,
+  Crdt,
+  Pkg,
+  R,
+  rx,
+  slug,
+  t,
+  UserAgent,
+  WebRtcEvents,
+  WebRtcUtils,
+} from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
 
@@ -155,7 +166,7 @@ export const WebRtcController = {
           self.media(remote, 'camera'), //  <== Start (camera).
         ]);
       } catch (err: any) {
-        const error = WebRtcUtil.error.toPeerError(err);
+        const error = WebRtcUtils.error.toPeerError(err);
         state.change((d) => {
           const message = `[${error.type}] ${err.message}`;
           d.network.peers[remote].error = message;

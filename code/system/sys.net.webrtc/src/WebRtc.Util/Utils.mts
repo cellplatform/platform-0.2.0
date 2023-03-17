@@ -6,7 +6,7 @@ import { isType } from './util.isType.mjs';
 import { waitFor } from './util.waitFor.mjs';
 import { error } from './util.error.mjs';
 
-export const WebRtcUtil = {
+export const WebRtcUtils = {
   ...identity,
 
   waitFor,

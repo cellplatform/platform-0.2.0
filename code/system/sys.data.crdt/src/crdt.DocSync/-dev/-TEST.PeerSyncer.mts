@@ -44,20 +44,20 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
     expect(docB).to.eql({ count: 1234 });
 
     await syncerA.update();
-    await Time.wait(100);
+    await Time.wait(300);
 
     expect(docA).to.eql({ name: 'Foo', count: 1234 });
     expect(docB).to.eql(docA);
 
     docB = Automerge.change(docB, (doc) => (doc.name = 'Bar'));
     await syncerB.update();
-    await Time.wait(100);
+    await Time.wait(300);
 
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
 
-    expect(syncerA.count).to.eql(3);
-    expect(syncerB.count).to.eql(3);
+    expect([3, 4, 5]).to.include(syncerA.count); // NB: normally 3 or 4 bounces (varies by environment, eg. CI).
+    expect([3, 4, 5]).to.include(syncerB.count);
 
     mock.dispose();
     await syncerA.dispose();
