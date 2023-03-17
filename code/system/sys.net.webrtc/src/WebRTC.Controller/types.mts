@@ -1,5 +1,7 @@
 import type { t } from '../common.t';
 
+export type ControlledDoc = { network: t.NetworkState };
+
 /**
  * Representation of a conversational network (P2P)
  */

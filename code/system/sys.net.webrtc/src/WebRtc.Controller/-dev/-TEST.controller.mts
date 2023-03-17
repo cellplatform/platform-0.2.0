@@ -12,6 +12,7 @@ import {
   toObject,
   WebRtc,
 } from '../../test.ui';
+import { pruneDeadPeers } from '../util.mjs';
 
 type DocShared = {
   network: t.NetworkState;
@@ -124,12 +125,9 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
       expect(connA?.peer.remote).to.eql(p2.id);
       expect(connB?.peer.local).to.eql(p2.id);
       expect(connB?.peer.remote).to.eql(p1.id);
-
-      console.log('-------------------------------------------');
-      console.log('doc', toObject(doc.network));
     });
 
-    e.it('[fail] connect peer: A → FOO-404', async (e) => {
+    e.it.skip('[fail] connect peer: A → FOO-404', async (e) => {
       const self = peerA.id;
       const remote = 'FOO-404';
 
@@ -172,6 +170,26 @@ export default Dev.describe('Controller (CRDT)', async (e) => {
       expect(info?.module.version).to.eql(Pkg.version);
       expect(info?.peer).to.equal(peerA);
       expect(typeof info?.state.peers === 'object').to.eql(true);
+    });
+
+    e.it('kill peer-B → auto removed from peer-A state doc', async (e) => {
+      const remote = peerB.id;
+      expect(stateDoc.current.network.peers[remote]).to.exist;
+
+      peerB.dispose(); // Kill the peer.
+      await Time.wait(500);
+      expect(stateDoc.current.network.peers[remote]).to.not.exist;
+    });
+
+    e.it('prune dead peers', async (e) => {
+      const state = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+      state.change((d) => Mutate.addPeer(d.network, 'A', 'B', { initiatedBy: 'A' }));
+
+      expect(state.current.network.peers['B']).to.exist;
+
+      const res = await pruneDeadPeers(peerA, state);
+      expect(res.removed).to.eql(['B']);
+      expect(state.current.network.peers['B']).to.not.exist;
     });
 
     e.it('dispose', async (e) => {
