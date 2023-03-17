@@ -42,8 +42,11 @@ export default Dev.describe('PeerCard', async (e) => {
   let docShared: t.CrdtDocRef<DocShared>;
 
   const byteArray = Crdt.Doc.Schema.toByteArray<DocShared>({ count: 0, network: { peers: {} } });
+
+  console.info('');
   console.info('CODE FILE (schema.mts):');
   console.info(byteArray.toString());
+  console.info('');
 
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
@@ -51,6 +54,8 @@ export default Dev.describe('PeerCard', async (e) => {
     me: fs.dir('dev.doc.me'),
     shared: fs.dir('dev.doc.shared'),
   };
+
+  let controller: t.WebRtcEvents;
 
   async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
     const updateSelf = () => state.change((d) => (d.props.self = self));
@@ -61,8 +66,8 @@ export default Dev.describe('PeerCard', async (e) => {
     updateSelf();
 
     const filedir = dirs.shared;
-    WebRtc.Controller.listen(self, docShared, {
-      filedir,
+    controller = WebRtc.Controller.listen(self, docShared, {
+      // filedir,
       dispose$,
       onConnectStart(e) {
         state.change((d) => (d.props.spinning = true));
@@ -83,13 +88,9 @@ export default Dev.describe('PeerCard', async (e) => {
     docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
     docShared = Crdt.Doc.ref<DocShared>(initialSharedDoc, { dispose$ });
 
-    console.log('initialSharedDoc', initialSharedDoc);
-
-    console.log(Crdt.toObject(docShared));
-
     // Start file-persistence.
     await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
-    await Crdt.Doc.file<DocMe>(dirs.shared, docShared, { autosave: true });
+    // await Crdt.Doc.file<DocShared>(dirs.shared, docShared, { autosave: true });
 
     // NB:
     // See: "init:network" (below) for network-sychronization-protocol startup (P2P).
@@ -99,6 +100,24 @@ export default Dev.describe('PeerCard', async (e) => {
     docMe.$.subscribe(redraw);
     docShared.$.subscribe(redraw);
     redraw();
+
+    docShared.$.subscribe((e) => {
+      const debug = e.doc.json?.debug;
+      if (debug === 'minimal') {
+        //
+        state.change((d) => {
+          d.props.showConnect = false;
+          d.props.showPeer = false;
+        });
+      }
+
+      if (debug === 'normal' || debug === undefined) {
+        state.change((d) => {
+          d.props.showConnect = local.showConnect;
+          d.props.showPeer = local.showPeer;
+        });
+      }
+    });
   });
 
   e.it('init:ui', async (e) => {
@@ -180,8 +199,24 @@ export default Dev.describe('PeerCard', async (e) => {
         btn
           .label((e) => (e.state.debug.showBg ? 'background (white)' : 'background'))
           .value((e) => e.state.debug.showBg)
-          .onClick((e) => e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')))),
+          .onClick((e) => {
+            e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')));
+          }),
       );
+
+      dev.button('tmp: minimal', (e) => {
+        docShared.change((d) => {
+          if (!d.json) d.json = {};
+          d.json.debug = 'minimal';
+        });
+      });
+
+      dev.button('tmp: normal', (e) => {
+        docShared.change((d) => {
+          if (!d.json) d.json = {};
+          d.json.debug = 'normal';
+        });
+      });
 
       dev.hr(-1, 5);
 
@@ -200,6 +235,13 @@ export default Dev.describe('PeerCard', async (e) => {
             e.change((d) => (local.showConnect = Dev.toggle(d.props, 'showConnect'))),
           ),
       );
+
+      dev.hr(-1, 5);
+
+      dev.button('prune dead peers', async (e) => {
+        const res = controller.prune.fire();
+        console.log('res', res);
+      });
     });
 
     dev.hr(5, 20);

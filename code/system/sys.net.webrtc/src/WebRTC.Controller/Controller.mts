@@ -83,7 +83,7 @@ export const WebRtcController = {
        * Setup "sync protocol" on newly added data-connections.
        */
       const dispose$ = dataConnections.removed$.pipe(rx.filter((e) => e.id === conn.id));
-      const syncer = Crdt.Doc.sync<ControlledDoc>(conn.bus(), state, {
+      const syncer = Crdt.Doc.sync<t.ControlledDoc>(conn.bus(), state, {
         /**
          * TODO 🐷
          * - sync-state FS

@@ -1,8 +1,9 @@
 import type { t } from '../../../common.t';
 
 export type DocShared = {
-  count: number;
   network: t.NetworkState;
+  count: number;
+  json?: t.JsonMap;
 };
 
 /**
