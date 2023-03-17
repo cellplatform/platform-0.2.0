@@ -118,9 +118,23 @@ export const WebRtcController = {
       state.change((d) => Mutate.removePeer(d.network, e.peer.remote));
     });
 
-    const connectTo = async (remote: t.NetworkStatePeer) => {
+    /**
+     * Listen to document changes.
+     */
+    state.onChange(async (e) => {
+      const peers = e.doc.network.peers ?? {};
+      Object.values(peers)
+        .filter((remote) => remote.id !== self.id) // Ignore self (not remote).
+        .filter((remote) => !remote.error)
+        .forEach((remote) => {
+          const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
+          if (!exists) connectTo(remote.id);
+        });
+    });
+
+    const connectTo = async (remote: t.PeerId) => {
       const tx = slug();
-      const peer = { local: self.id, remote: remote.id };
+      const peer = { local: self.id, remote };
       const before: t.WebRtcConnectStart = {
         tx,
         instance,
@@ -137,14 +151,14 @@ export const WebRtcController = {
 
       try {
         await Promise.all([
-          self.data(remote.id), //             <== Start (data).
-          self.media(remote.id, 'camera'), //  <== Start (camera).
+          self.data(remote), //             <== Start (data).
+          self.media(remote, 'camera'), //  <== Start (camera).
         ]);
       } catch (err: any) {
         const error = WebRtcUtil.error.toPeerError(err);
         state.change((d) => {
           const message = `[${error.type}] ${err.message}`;
-          d.network.peers[remote.id].error = message;
+          d.network.peers[remote].error = message;
         });
       }
 
@@ -157,20 +171,6 @@ export const WebRtcController = {
       options.onConnectComplete?.(after);
       bus.fire({ type: 'sys.net.webrtc/connect:complete', payload: after });
     };
-
-    /**
-     * Listen to document changes.
-     */
-    state.onChange(async (e) => {
-      const peers = e.doc.network.peers ?? {};
-      Object.values(peers).forEach((remote) => {
-        if (remote.id === self.id) return; // Ignore self (not remote).
-        if (remote.error) return;
-
-        const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
-        if (!exists) connectTo(remote);
-      });
-    });
 
     /**
      * PUBLIC API.
