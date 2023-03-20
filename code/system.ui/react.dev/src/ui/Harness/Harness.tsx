@@ -7,6 +7,7 @@ export type HarnessProps = {
   spec?: t.SpecImport;
   allowRubberband?: boolean;
   style?: t.CssValue;
+  onHostResize?: t.HarnessResizeHandler;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
@@ -18,8 +19,15 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     id: props.instance?.id,
     runOnLoad: true,
   });
-
   const { instance } = controller;
+
+  /**
+   * [Handlers]
+   */
+  const handleResize: t.HarnessResizeHandler = (e) => {
+    const { size } = e;
+    props.onHostResize?.(e);
+  };
 
   /**
    * [Render]
@@ -39,7 +47,7 @@ export const Harness: React.FC<HarnessProps> = (props) => {
 
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
-      <HarnessHost instance={instance} />
+      <HarnessHost instance={instance} onResize={handleResize} />
       <DebugPanel instance={instance} />
     </div>
   );

@@ -2,20 +2,34 @@ import { COLORS, Color, css, R, t, useCurrentState, WrangleUrl, DEFAULTS } from 
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostBackground } from './Host.Background';
+import { useSizeObserver } from '../../ui.hooks';
+import { useEffect } from 'react';
 
 const HOST = DEFAULTS.props.host;
 
 export type HarnessHostProps = {
   instance: t.DevInstance;
   style?: t.CssValue;
+  onResize?: t.HarnessResizeHandler;
 };
 
 export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const { instance } = props;
 
+  const size = useSizeObserver();
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
   const host = renderProps?.host;
+
+  /**
+   * [Effects]
+   */
+  useEffect(() => {
+    // Bubble resize events.
+    const { ready, rect } = size;
+    const { width, height } = rect;
+    props.onResize?.({ ready, size: { width, height } });
+  }, [size.ready, size.rect]);
 
   /**
    * [Handlers]
@@ -64,7 +78,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
+    <div ref={size.ref} {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
       {elBackground}
       {elGrid}
       {elEmpty}
