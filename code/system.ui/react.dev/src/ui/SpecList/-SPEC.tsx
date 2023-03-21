@@ -16,27 +16,41 @@ export default Spec.describe('SpecList', (e) => {
       .render(async (e) => {
         const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs.mjs');
 
+        const fn = () => import('../../test.ui/sample.specs/MySample.SPEC');
         const specs = {
           ...SampleSpecs,
           ...ModuleSpecs,
-          foo: () => import('../../test.ui/sample.specs/MySample.SPEC'),
+          foo: fn,
         };
 
+        const NUMBERS = ['one', 'two', 'three', 'four'];
+        const addSamples = (prefix: string) => {
+          NUMBERS.forEach((num) => {
+            const key = `${prefix}.${num}`;
+            (specs as any)[key] = fn;
+          });
+        };
+
+        addSamples('foo.bar');
+        addSamples('foo.baz');
+
         return (
-          <div {...css({ Absolute: 0, Scroll: true })}>
-            <SpecList
-              title={Pkg.name}
-              version={Pkg.version}
-              imports={specs}
-              hrDepth={2}
-              // filter={'foo'}
-              selectedIndex={0}
-              badge={{
-                image: ci.badge,
-                href: ci.info,
-              }}
-            />
-          </div>
+          <SpecList
+            title={Pkg.name}
+            version={Pkg.version}
+            imports={specs}
+            hrDepth={2}
+            scroll={true}
+            // filter={'foo'}
+            selectedIndex={0}
+            badge={{
+              image: ci.badge,
+              href: ci.info,
+            }}
+            onChildVisibility={(e) => {
+              console.info('⚡️ onChildVisibility', e);
+            }}
+          />
         );
       });
   });
