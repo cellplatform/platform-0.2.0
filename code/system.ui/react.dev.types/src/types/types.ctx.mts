@@ -4,6 +4,7 @@ type Id = string;
 type SpecId = Id;
 type Color = string | number;
 type O = Record<string, unknown>;
+type NumberOrNil = number | null | undefined;
 
 /**
  * Context wrapper that manages a {ctx} object passed
@@ -61,7 +62,7 @@ export type DevCtxObject = {
 export type DevCtxSubject = {
   display(value: DevPropDisplay): DevCtxSubject;
   backgroundColor(value?: Color): DevCtxSubject;
-  size(width?: number | null, height?: number | null): DevCtxSubject;
+  size(value: [NumberOrNil, NumberOrNil]): DevCtxSubject;
   size(mode: DevFillMode, margin?: t.DevMarginInput): DevCtxSubject;
   render<T extends O = O>(fn: t.DevRenderer<T>): DevCtxSubject;
 };

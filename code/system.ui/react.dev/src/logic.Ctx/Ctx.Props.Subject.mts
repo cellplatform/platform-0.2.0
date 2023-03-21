@@ -1,4 +1,4 @@
-import { Margin, t, Id } from './common';
+import { Is, Margin, t, Id } from './common';
 
 import type { PropArgs } from './common.types';
 
@@ -15,17 +15,22 @@ export function CtxPropsSubject(props: PropArgs) {
       const current = props.current().subject;
       current.size = undefined;
 
-      if (args.length === 2 && (typeof args[0] === 'number' || typeof args[1] === 'number')) {
-        current.size = {
-          mode: 'center',
-          width: typeof args[0] === 'number' ? args[0] : undefined,
-          height: typeof args[1] === 'number' ? args[1] : undefined,
-        };
+      if (Array.isArray(args[0])) {
+        const [width, height] = args[0];
+        if (Is.nil(width) && Is.nil(height)) {
+          current.size = undefined;
+        } else {
+          current.size = {
+            mode: 'center',
+            width: typeof width === 'number' ? width : undefined,
+            height: typeof height === 'number' ? height : undefined,
+          };
+        }
         props.changed();
       }
 
       if (args[0] === 'fill' || args[0] === 'fill-x' || args[0] === 'fill-y') {
-        const margin = Margin.wrangle(args[1] ?? 50);
+        const margin = Margin.wrangle((args[1] as t.DevMarginInput) ?? 50);
         current.size = { mode: 'fill', margin, x: true, y: true };
         if (args[0] === 'fill-x') current.size.y = false;
         if (args[0] === 'fill-y') current.size.x = false;
