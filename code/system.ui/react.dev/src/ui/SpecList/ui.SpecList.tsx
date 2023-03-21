@@ -7,6 +7,7 @@ export type SpecListProps = {
   title?: string;
   version?: string;
   imports?: t.SpecImports;
+  selectedIndex?: number;
   filter?: string;
   href?: string;
   hrDepth?: number;
@@ -40,7 +41,12 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
-      <List imports={imports} url={url} hrDepth={props.hrDepth} />
+      <List
+        imports={imports}
+        url={url}
+        selectedIndex={props.selectedIndex}
+        hrDepth={props.hrDepth}
+      />
       <Footer />
     </div>
   );

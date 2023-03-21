@@ -30,6 +30,7 @@ export default Spec.describe('SpecList', (e) => {
               imports={specs}
               hrDepth={2}
               // filter={'foo'}
+              selectedIndex={0}
               badge={{
                 image: ci.badge,
                 href: ci.info,

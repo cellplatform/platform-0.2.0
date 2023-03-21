@@ -6,6 +6,7 @@ import { ListItem } from './ui.List.Item';
 export type ListProps = {
   imports: t.SpecImports;
   url: URL;
+  selectedIndex?: number;
   hrDepth?: number;
   style?: t.CssValue;
 };
@@ -59,6 +60,7 @@ export const List: React.FC<ListProps> = (props) => {
         address={address}
         title={options.title}
         ns={options.ns}
+        isSelected={index === props.selectedIndex}
         Icon={options.Icon}
         hrDepth={props.hrDepth}
       />
