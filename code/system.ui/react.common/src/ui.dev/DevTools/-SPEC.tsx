@@ -14,7 +14,7 @@ export default Dev.describe('DevTools', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(400, undefined)
+      .size([400, null])
       .backgroundColor(1)
       .render<T>((e) => <Sample state={e.state} />);
   });

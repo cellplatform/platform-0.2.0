@@ -10,7 +10,7 @@ export default Spec.describe('sample.DevTools.Button', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(200, null)
+      .size([200, null])
       .render((e) => {
         return (
           <ButtonSample

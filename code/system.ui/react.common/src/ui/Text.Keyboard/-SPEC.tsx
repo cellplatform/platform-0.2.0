@@ -44,7 +44,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(540, 300)
+      .size([540, 300])
       .render<T>((e) => <DevSample state={e.state.keyboard} />);
   });
 

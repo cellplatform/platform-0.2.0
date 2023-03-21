@@ -28,7 +28,7 @@ if (isDev) {
     ...ModuleSpecs,
   };
 
-  const el = await render(Pkg, Specs);
+  const el = await render(Pkg, Specs, { hrDepth: 2 });
   root.render(<StrictMode>{el}</StrictMode>);
 } else {
   const { MySample } = await import('../test.ui/sample.specs/MySample');

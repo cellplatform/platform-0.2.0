@@ -20,7 +20,7 @@ export default Dev.describe('Title', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .size(250, undefined)
+      .size([250, undefined])
       .render<T>((e) => <Title {...e.state.props} />);
   });
 

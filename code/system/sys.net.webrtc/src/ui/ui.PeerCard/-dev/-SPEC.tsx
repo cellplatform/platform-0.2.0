@@ -136,7 +136,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     ctx.subject
       .display('grid')
-      .size(400, null)
+      .size([400, null])
       .render<T>((e) => {
         const { showBg } = e.state.debug;
         return (

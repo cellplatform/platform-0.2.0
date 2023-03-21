@@ -88,7 +88,7 @@ export default Dev.describe('AudioPlayer', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size(400, null)
+      .size([400, null])
       .display('grid')
       .render<T>((e) => {
         return (

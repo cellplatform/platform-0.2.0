@@ -17,7 +17,7 @@ export default Dev.describe('Button', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <Button {...e.state.props} />);
   });
 

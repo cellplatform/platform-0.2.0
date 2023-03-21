@@ -28,7 +28,7 @@ export default Dev.describe('Boolean', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <Boolean {...e.state.props} onClick={onClick} />);
   });
 

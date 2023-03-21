@@ -19,7 +19,7 @@ export default Dev.describe('Card', (e) => {
     ctx.host.tracelineColor(-0.05);
     ctx.subject
       .display('grid')
-      .size(450, null)
+      .size([450, null])
       .render<T>((e) => {
         const { props } = e.state;
 

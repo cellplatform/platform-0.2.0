@@ -43,7 +43,7 @@ export default Dev.describe('PropList', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <PropList {...e.state.props} />);
   });
 

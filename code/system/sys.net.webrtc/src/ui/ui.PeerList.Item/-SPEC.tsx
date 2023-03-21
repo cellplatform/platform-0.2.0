@@ -22,7 +22,7 @@ export default Dev.describe('PeerList.Item', async (e) => {
 
     ctx.subject
       .display('grid')
-      .size(380, null)
+      .size([380, null])
       .render<T>((e) => {
         return (
           <PeerListItem

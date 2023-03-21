@@ -4,7 +4,7 @@ export const root = Spec.describe('MySample', (e) => {
   e.it('init', async (e) => {
     const ctx = Spec.ctx(e);
     ctx.subject
-      .size(300, 140)
+      .size([300, 140])
       .display('flex')
       .backgroundColor(1)
       .render((e) => <div>Hello Component</div>);

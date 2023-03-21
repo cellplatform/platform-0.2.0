@@ -11,7 +11,7 @@ export default Dev.describe('useFocus', (e) => {
     ctx.subject
       .display('grid')
       .backgroundColor(1)
-      .size(400, null)
+      .size([400, null])
       .render<T>((e) => {
         const elChild = e.state.embedChild && <Sample />;
         return <Sample>{elChild}</Sample>;

@@ -13,7 +13,7 @@ export default Dev.describe('RenderCount', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .size(250, 30)
+      .size([250, 30])
       .render<T>((e) => (
         <Sample>
           <RenderCount {...e.state.props} />

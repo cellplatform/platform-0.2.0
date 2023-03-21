@@ -50,14 +50,14 @@ export default Dev.describe('TextInput', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(300, null)
+      .size([300, null])
       .render<T>((e) => {
         const { debug } = e.state;
         if (!debug.render) return;
 
         const autoSize = e.state.props.autoSize;
         if (autoSize) ctx.subject.size('fill-x');
-        if (!autoSize) ctx.subject.size(300, null);
+        if (!autoSize) ctx.subject.size([300, null]);
 
         const mask = debug.isNumericMask ? TextInputMasks.isNumeric : undefined;
         const props = { ...e.state.props, mask };

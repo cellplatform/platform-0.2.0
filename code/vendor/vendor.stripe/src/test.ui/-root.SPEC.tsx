@@ -10,7 +10,7 @@ export default Dev.describe('Root', (e) => {
     ctx.subject
       .display('grid')
       .backgroundColor(1)
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => {
         return <div>{`🐷 Hello-${'Stripe'}`}</div>;
       });
