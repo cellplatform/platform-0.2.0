@@ -12,11 +12,6 @@ export const DevKeyboard = {
        * ACTION: Cancel "print" HTML page (default browser action).
        */
       'CMD + KeyP': (e) => e.cancel(),
-
-      /**
-       * ACTION: Clear "developer-tools" console.
-       */
-      'CMD + KeyK': (e) => console.clear(),
     });
   },
 };
