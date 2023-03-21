@@ -85,7 +85,7 @@ export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
  * Input
  */
 export type TextInputFocusAction = {
-  focusOnLoad?: boolean;
+  focusOnReady?: boolean;
   focusAction?: 'Select' | TextInputCursorAction;
 };
 

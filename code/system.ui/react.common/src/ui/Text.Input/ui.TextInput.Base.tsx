@@ -138,7 +138,7 @@ export const TextInputBase: React.FC<Props> = (props) => {
       maxLength={props.maxLength}
       mask={props.mask}
       valueStyle={valueStyle}
-      focusOnLoad={props.focusOnLoad}
+      focusOnReady={props.focusOnReady}
       focusAction={props.focusAction}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}

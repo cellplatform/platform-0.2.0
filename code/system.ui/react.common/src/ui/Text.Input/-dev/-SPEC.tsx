@@ -21,7 +21,7 @@ const initial: T = {
   props: {
     ...DEFAULTS.prop,
     placeholder: 'my placeholder',
-    focusOnLoad: true,
+    focusOnReady: true,
   },
   debug: {
     render: true,
@@ -112,7 +112,7 @@ export default Dev.describe('TextInput', (e) => {
       boolean('spellCheck');
       dev.hr();
       boolean('autoSize');
-      boolean('focusOnLoad');
+      boolean('focusOnReady');
     });
 
     dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
