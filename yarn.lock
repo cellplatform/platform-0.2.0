@@ -1794,19 +1794,19 @@ format@^0.2.0:
   resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==
 
-framer-motion@10.5.0:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.5.0.tgz#0519193acdd60669ec27fde948a389d8e1f5251b"
-  integrity sha512-84Gh6Ct+KCk82YOnS7oq68IMlqcyaejrj2Xtxmh+CPOi7gqa1SZORZYWMJujQ2Qw0YRM2j1xQQdQo/+BtoQicQ==
+framer-motion@10.6.1:
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.6.1.tgz#c55972e8bd1f120dc848e5b9249dfcbc36180600"
+  integrity sha512-e1o4JKJ98/pfUkYkze+23A+r5SW6JujDSAEzIKWq6jsrVIE+QSwpu4U7L8+maOXcTnfAZlI930MfpvA/+zaa5g==
   dependencies:
     tslib "^2.4.0"
   optionalDependencies:
     "@emotion/is-prop-valid" "^0.8.2"
 
-framer-motion@10.6.1:
-  version "10.6.1"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.6.1.tgz#c55972e8bd1f120dc848e5b9249dfcbc36180600"
-  integrity sha512-e1o4JKJ98/pfUkYkze+23A+r5SW6JujDSAEzIKWq6jsrVIE+QSwpu4U7L8+maOXcTnfAZlI930MfpvA/+zaa5g==
+framer-motion@10.8.4:
+  version "10.8.4"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.8.4.tgz#29635007b5eefdab9e5ffa4b2fde184cd018d5a1"
+  integrity sha512-dNcWapHLw1uTH9Yukqj1+uU87YM7GEkz2HjjR/k5Efo5ZKhzHpEeTsifrulwhTOqOR2N009JkMhtHnHEhMfKkg==
   dependencies:
     tslib "^2.4.0"
   optionalDependencies:
@@ -3278,18 +3278,6 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-nostr-tools@1.7.4:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/nostr-tools/-/nostr-tools-1.7.4.tgz#8f14ffde8f6674c3758bb49207a1ee4227a4b9fe"
-  integrity sha512-YowDJ+S3UW9KCYPDZfZXXMITrJSMjiCmFOK5HohyKkg+w6EipFUTkFRBPRA2BTLXO/qw8gukKXfL0B7Dv3jtcQ==
-  dependencies:
-    "@noble/hashes" "1.0.0"
-    "@noble/secp256k1" "^1.7.1"
-    "@scure/base" "^1.1.1"
-    "@scure/bip32" "^1.1.5"
-    "@scure/bip39" "^1.1.1"
-    prettier "^2.8.4"
-
 nostr-tools@1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/nostr-tools/-/nostr-tools-1.7.5.tgz#349f469ff2877deb99d71c63d4883af93ec9f9a5"
@@ -3646,10 +3634,10 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-error-boundary@3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
-  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
+react-error-boundary@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-4.0.0.tgz#fe3691e4a5c1ed3758b65976bf94ff7babc356f4"
+  integrity sha512-vNbTyivmwBxCpJA68Ry55rJhZMzJSB+egkEm8hkEzbEBJLsJp5054zEVpoK/8ndxt6B+dvEA2LDw33xUfvE8og==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
