@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { DevBus } from '../logic.Bus';
-import { Is, t } from './common';
+import { DEFAULTS, Is, t } from './common';
 import { useCurrentState } from './useCurrentState.mjs';
 import { useRedrawEvent } from './useRedrawEvent.mjs';
 
@@ -35,10 +35,14 @@ export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef
 
 async function render(events: t.DevEvents, renderer?: t.DevRendererRef) {
   if (!renderer) return null;
-
   const id = renderer?.id ?? '';
-  const state = (await events.info.get()).render.state ?? {};
-  const res = renderer.fn({ id, state });
+
+  const { info } = await events.info.fire();
+  if (!info) return null;
+
+  const state = info.render.state ?? {};
+  const size = info.render.props?.size ?? DEFAULTS.size;
+  const res = renderer.fn({ id, state, size });
   if (Is.promise(res)) await res;
 
   return (res as JSX.Element) ?? null;
