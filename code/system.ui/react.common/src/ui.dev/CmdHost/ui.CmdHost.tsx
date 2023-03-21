@@ -13,6 +13,7 @@ export type CmdHostProps = {
   hrDepth?: number;
   badge?: t.SpecListBadge;
   style?: t.CssValue;
+  focusOnReady?: boolean;
   onChanged?: (e: { filter: string }) => void;
   onCmdFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
@@ -23,13 +24,16 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
   const { pkg } = props;
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
 
-  useKeyboard(textboxRef);
+  useKeyboard(textboxRef, {
+    onArrowKey(e) {
+      textboxRef?.focus();
+    },
+  });
 
   /**
    * Handlers
    */
   const filterChanged = (filter: string) => {
-    console.log('filter', filter);
     props.onChanged?.({ filter });
   };
 
@@ -65,6 +69,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
       <CmdBar
         text={props.filter}
         hintKey={props.hintKey}
+        focusOnReady={props.focusOnReady ?? true}
         onReady={(ref) => setTextboxRef(ref)}
         onChanged={(e) => filterChanged(e.to)}
         onFocusChange={props.onCmdFocusChange}

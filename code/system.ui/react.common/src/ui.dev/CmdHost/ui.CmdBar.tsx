@@ -5,6 +5,7 @@ export type CmdBarProps = {
   text?: string;
   style?: t.CssValue;
   hintKey?: string | string[];
+  focusOnReady?: boolean;
   onReady?: t.TextInputReadyHandler;
   onChanged?: t.TextInputChangeEventHandler;
   onFocusChange?: t.TextInputFocusChangeHandler;
@@ -63,12 +64,13 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
             fontWeight: 'normal',
             fontSize: 16,
           }}
-          onReady={props.onReady}
-          onChanged={props.onChanged}
           onFocusChange={props.onFocusChange}
           spellCheck={false}
           autoCorrect={false}
           autoCapitalize={false}
+          focusOnReady={props.focusOnReady}
+          onReady={props.onReady}
+          onChanged={props.onChanged}
           onKeyDown={props.onKeyDown}
           onKeyUp={props.onKeyUp}
         />
