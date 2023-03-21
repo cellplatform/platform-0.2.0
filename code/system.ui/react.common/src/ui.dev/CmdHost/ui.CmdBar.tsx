@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { COLORS, css, t, TextInput } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
+import { CmdBarPlaceholder } from './ui.CmdBar.Placeholder';
 
 export type CmdBarProps = {
   text?: string;
@@ -27,10 +28,9 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       backgroundColor: COLORS.DARK,
     }),
     textbox: css({}),
-    placeholder: css({}),
   };
 
-  const elPlaceholder = <div {...styles.placeholder}>Command ⌘K</div>;
+  const elPlaceholder = <CmdBarPlaceholder />;
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -38,12 +38,12 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
         style={styles.textbox}
         value={props.text}
         placeholder={elPlaceholder}
-        placeholderStyle={{ opacity: 0.3, color: COLORS.WHITE }}
+        placeholderStyle={{ opacity: 1, color: COLORS.WHITE }}
         valueStyle={{
           color: COLORS.WHITE,
           fontFamily: 'monospace',
           fontWeight: 'normal',
-          fontSize: 18,
+          fontSize: 16,
         }}
         onReady={(ref) => setTextboxRef(ref)}
         onFocus={() => setFocused(true)}
