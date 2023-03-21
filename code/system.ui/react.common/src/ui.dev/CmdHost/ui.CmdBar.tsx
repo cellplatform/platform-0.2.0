@@ -33,48 +33,43 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       Padding: [7, 7],
     }),
     hintKeys: {
-      base: css({
-        paddingLeft: 6,
-        paddingRight: 6,
-        display: 'grid',
-        placeItems: 'center',
-      }),
-      inner: css({
-        Flex: 'horizontal-center-center',
-      }),
+      base: css({ paddingLeft: 6, paddingRight: 6, display: 'grid', placeItems: 'center' }),
+      inner: css({ Flex: 'horizontal-center-center' }),
     },
   };
+
+  const elTextbox = (
+    <TextInput
+      value={props.text}
+      placeholder={'command'}
+      placeholderStyle={{
+        opacity: 0.3,
+        color: COLORS.WHITE,
+        fontFamily: 'sans-serif',
+      }}
+      valueStyle={{
+        color: COLORS.WHITE,
+        fontFamily: 'monospace',
+        fontWeight: 'normal',
+        fontSize: 16,
+      }}
+      onFocusChange={props.onFocusChange}
+      spellCheck={false}
+      autoCorrect={false}
+      autoCapitalize={false}
+      focusOnReady={props.focusOnReady}
+      onReady={props.onReady}
+      onChanged={props.onChanged}
+      onKeyDown={props.onKeyDown}
+      onKeyUp={props.onKeyUp}
+    />
+  );
 
   const elHintKeys = hintKeys.map((key, i) => <HintKey key={i} text={key} />);
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.textbox}>
-        <TextInput
-          value={props.text}
-          placeholder={'command'}
-          placeholderStyle={{
-            opacity: 0.3,
-            color: COLORS.WHITE,
-            fontFamily: 'sans-serif',
-          }}
-          valueStyle={{
-            color: COLORS.WHITE,
-            fontFamily: 'monospace',
-            fontWeight: 'normal',
-            fontSize: 16,
-          }}
-          onFocusChange={props.onFocusChange}
-          spellCheck={false}
-          autoCorrect={false}
-          autoCapitalize={false}
-          focusOnReady={props.focusOnReady}
-          onReady={props.onReady}
-          onChanged={props.onChanged}
-          onKeyDown={props.onKeyDown}
-          onKeyUp={props.onKeyUp}
-        />
-      </div>
+      <div {...styles.textbox}>{elTextbox}</div>
       {hasHintKeys && (
         <div {...styles.hintKeys.base}>
           <div {...styles.hintKeys.inner}>{elHintKeys}</div>
