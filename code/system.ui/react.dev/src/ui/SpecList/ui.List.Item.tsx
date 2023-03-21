@@ -1,7 +1,10 @@
+import { useRef, useEffect, useState } from 'react';
+
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
 
 export type ListItemProps = {
+  baseRef?: React.RefObject<HTMLLIElement>;
   index: number;
   url: URL;
   imports: t.SpecImports;
@@ -63,7 +66,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   };
 
   return (
-    <li {...css(styles.base, props.style)}>
+    <li ref={props.baseRef} {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
       <div {...styles.row.base}>
         <div {...styles.row.icon}>
