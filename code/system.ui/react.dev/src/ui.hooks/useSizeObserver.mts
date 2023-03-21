@@ -19,9 +19,13 @@ export function useSizeObserver<T extends E = HTMLDivElement>(refs: React.RefObj
    */
   useEffect(() => {
     let $: ResizeObserver;
-    $ = new ResizeObserver((entries) => setCount((prev) => prev + 1));
-    const elements = refs.map((ref) => ref.current!).filter(Boolean);
-    elements.forEach((el) => $.observe(el));
+
+    // NB: ensure safe when run in CI on server.
+    if (typeof ResizeObserver === 'function') {
+      $ = new ResizeObserver((entries) => setCount((prev) => prev + 1));
+      const elements = refs.map((ref) => ref.current!).filter(Boolean);
+      elements.forEach((el) => $.observe(el));
+    }
 
     /**
      * Dispose
