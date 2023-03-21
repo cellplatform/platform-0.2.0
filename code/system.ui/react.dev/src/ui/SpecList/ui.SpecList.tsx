@@ -1,4 +1,4 @@
-import { COLORS, css, Filter, t, useRubberband } from './common';
+import { COLORS, css, Filter, t, useRubberband, FC } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -16,7 +16,7 @@ export type SpecListProps = {
   style?: t.CssValue;
 };
 
-export const SpecList: React.FC<SpecListProps> = (props) => {
+const View: React.FC<SpecListProps> = (props) => {
   const url = new URL(props.href ?? window.location.href);
   const imports = Filter.specs(props.imports, props.filter);
 
@@ -51,3 +51,15 @@ export const SpecList: React.FC<SpecListProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  Filter: typeof Filter;
+};
+export const SpecList = FC.decorate<SpecListProps, Fields>(
+  View,
+  { Filter },
+  { displayName: 'SpecList' },
+);

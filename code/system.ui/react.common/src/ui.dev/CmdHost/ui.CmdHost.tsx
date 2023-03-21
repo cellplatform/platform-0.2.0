@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { css, DevBase, t } from './common';
+import { css, SpecList, t } from './common';
 import { CmdBar } from './ui.CmdBar';
 import { useKeyboard } from './useKeyboard.mjs';
 
@@ -29,6 +29,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
    * Handlers
    */
   const filterChanged = (filter: string) => {
+    console.log('filter', filter);
     props.onChanged?.({ filter });
   };
 
@@ -51,7 +52,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <DevBase.SpecList
+        <SpecList
           title={pkg.name}
           version={pkg.version}
           imports={props.specs}
