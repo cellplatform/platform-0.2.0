@@ -14,7 +14,7 @@ export type CmdHostProps = {
   badge?: t.SpecListBadge;
   style?: t.CssValue;
   focusOnReady?: boolean;
-  onChanged?: (e: { filter: string }) => void;
+  onChanged?: t.CmdHostChangedHandler;
   onCmdFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
   onKeyUp?: t.TextInputKeyEventHandler;
@@ -33,24 +33,16 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
   /**
    * Handlers
    */
-  const filterChanged = (filter: string) => {
-    props.onChanged?.({ filter });
+  const filterChanged = (command: string) => {
+    props.onChanged?.({ command });
   };
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-      gridTemplateRows: '1fr auto',
-    }),
-    body: css({
-      position: 'relative',
-      display: 'grid',
-      Scroll: true,
-    }),
+    base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto' }),
+    body: css({ position: 'relative', display: 'grid' }),
   };
 
   return (
@@ -64,6 +56,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
           badge={props.badge}
           hrDepth={props.hrDepth}
           selectedIndex={props.selectedIndex}
+          scroll={true}
         />
       </div>
       <CmdBar

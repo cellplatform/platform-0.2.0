@@ -1,21 +1,25 @@
-import { Dev } from '../../test.ui';
-import { CmdHost, CmdHostStateful } from '.';
+import { t, Dev } from '../../test.ui';
+import { CmdHostStateful } from '.';
 import { Pkg } from '../../index.pkg.mjs';
 
 import type { CmdHostProps } from '.';
 
-const specs = {
-  foo: () => import('../DevTools/-SPEC'),
-  foobar: () => import('../DevTools/-SPEC'),
-  bar: () => import('../DevTools/-SPEC'),
-  bars: () => import('../DevTools/-SPEC'),
-  'bars.boo': () => import('../DevTools/-SPEC'),
-  boo: () => import('../DevTools/-SPEC'),
-  zoo: () => import('../DevTools/-SPEC'),
+const fn = () => import('../DevTools/-SPEC');
+
+const specs: t.SpecImports = {
+  foo: fn,
+  foobar: fn,
 };
 
+const NUMBERS = ['one', 'two', 'three', 'four'];
+const add = (key: string) => ((specs as t.SpecImports)[key] = fn);
+const addSamples = (prefix: string) => NUMBERS.forEach((num) => add(`${prefix}.${num}`));
+addSamples('foo.bar');
+addSamples('foo.baz');
+add('zoo');
+
 type T = { props: CmdHostProps };
-const initial: T = { props: { pkg: Pkg, specs: specs } };
+const initial: T = { props: { pkg: Pkg, specs, hrDepth: 2 } };
 
 export default Dev.describe('CmdHost', (e) => {
   e.it('init', async (e) => {
@@ -29,7 +33,7 @@ export default Dev.describe('CmdHost', (e) => {
         return (
           <CmdHostStateful
             {...e.state.props}
-            onChanged={(e) => state.change((d) => (d.props.filter = e.filter))}
+            onChanged={(e) => state.change((d) => (d.props.filter = e.command))}
           />
         );
       });
@@ -40,5 +44,19 @@ export default Dev.describe('CmdHost', (e) => {
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'CmdHost'} data={e.state} expand={1} />);
+
+    dev.section('hrDepth', (dev) => {
+      const depth = (value?: number) => {
+        dev.button((btn) =>
+          btn
+            .label(`${value ?? '(undefined)'}`)
+            .right((e) => (e.state.props.hrDepth === value ? '←' : ''))
+            .onClick((e) => e.change((d) => (d.props.hrDepth = value))),
+        );
+      };
+      [undefined, 2, 3].forEach((value) => depth(value));
+    });
+
+    dev.hr(-1, 5);
   });
 });
