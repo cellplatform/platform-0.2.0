@@ -25,6 +25,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       position: 'relative',
       backgroundColor: COLORS.DARK,
       color: COLORS.WHITE,
+      userSelect: 'none',
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),

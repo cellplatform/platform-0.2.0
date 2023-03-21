@@ -11,6 +11,7 @@ export const HintKey: React.FC<HintKeyProps> = (props) => {
       position: 'relative',
       fontFamily: 'sans-serif',
       fontSize: 11,
+      userSelect: 'none',
       border: `solid 1px ${Color.format(0.15)}`,
       backgroundColor: Color.format(0.06),
       borderRadius: 4,
