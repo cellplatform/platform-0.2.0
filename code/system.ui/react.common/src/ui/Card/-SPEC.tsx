@@ -44,7 +44,7 @@ export default Dev.describe('Card', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.Card'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Card'} data={e.state} expand={1} />);
 
     dev
       .title('Properties')

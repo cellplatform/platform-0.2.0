@@ -29,7 +29,7 @@ export default Dev.describe('Spinner', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.Spinner'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Spinner'} data={e.state} expand={1} />);
 
     dev.section('Puff', (dev) => {
       dev.button('size: 16px', (e) => puff(dev, { size: 16 }));

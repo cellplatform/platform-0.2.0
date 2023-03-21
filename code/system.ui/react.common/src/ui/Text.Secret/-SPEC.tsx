@@ -24,7 +24,7 @@ export default Dev.describe('TextSecret', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.TextSecret'} data={e.state} expand={3} />);
+      .render<T>((e) => <Dev.Object name={'TextSecret'} data={e.state} expand={3} />);
 
     dev
       .title('Properties')

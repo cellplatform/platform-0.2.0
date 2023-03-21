@@ -20,7 +20,7 @@ export default Dev.describe('Root', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.Stripe'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Stripe'} data={e.state} expand={1} />);
 
     dev.title('Stripe API (Wrapper)');
     dev.TODO('Take a donation (digital Koha) - simple payment UI (Credit Card)');

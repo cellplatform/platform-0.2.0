@@ -38,6 +38,6 @@ export default Dev.describe('CmdHost', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.CmdHost'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'CmdHost'} data={e.state} expand={1} />);
   });
 });

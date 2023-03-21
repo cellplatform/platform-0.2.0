@@ -54,7 +54,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
       .border(-0.1)
       .render<T>((e) => (
         <Dev.Object
-          name={'spec.KeyboardMonitor'}
+          name={'KeyboardMonitor'}
           data={e.state.keyboard}
           expand={{ level: 1, paths: ['$.current.pressed', '$.current', '$.current.pressed.*'] }}
         />
