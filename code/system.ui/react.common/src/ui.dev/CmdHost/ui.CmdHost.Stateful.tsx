@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CmdHost, CmdHostProps } from './ui.CmdHost';
-import { DEFAULTS } from './common';
+import { R, DEFAULTS, t } from './common';
 
 export type CmdHostStatefulProps = Omit<CmdHostProps, 'filter'> & {
   mutateUrl?: boolean;
@@ -10,8 +10,13 @@ export type CmdHostStatefulProps = Omit<CmdHostProps, 'filter'> & {
  * A version of <CmdHost> that manages state interanally.
  */
 export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
-  const { mutateUrl = true } = props;
+  const { mutateUrl = true, specs } = props;
+  const total = specs ? Object.keys(specs).length : -1;
+
   const [filter, setFilter] = useState(Wrangle.url().filter);
+  const [isFocused, setFocused] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs });
 
   /**
    * [Handlers]
@@ -19,13 +24,28 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   const handleFilterChanged = (e: { filter: string }) => {
     if (mutateUrl) Wrangle.mutateUrl(e.filter);
     setFilter(e.filter);
-    props.onFilterChanged?.(e);
+    props.onChanged?.(e);
   };
 
   /**
    * [Render]
    */
-  return <CmdHost {...props} filter={filter} onFilterChanged={handleFilterChanged} />;
+  return (
+    <CmdHost
+      {...props}
+      filter={filter}
+      selectedIndex={isFocused ? selectedIndex : undefined}
+      onChanged={handleFilterChanged}
+      hintKey={hintKeys}
+      onCmdFocusChange={(e) => setFocused(e.isFocused)}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowUp') setSelectedIndex(Wrangle.selected(specs, selectedIndex - 1));
+        if (e.key === 'ArrowDown') setSelectedIndex(Wrangle.selected(specs, selectedIndex + 1));
+        if (e.key === 'Home') setSelectedIndex(Wrangle.selected(specs, 0));
+        if (e.key === 'End') setSelectedIndex(Wrangle.selected(specs, total - 1));
+      }}
+    />
+  );
 };
 
 /**
@@ -45,5 +65,16 @@ const Wrangle = {
     if (!filter) params.delete(DEFAULTS.QS.filter);
     const path = url.href;
     window.history.pushState({ path }, '', path);
+  },
+
+  selected(specs: t.SpecImports | undefined, next: number) {
+    if (!specs) return -1;
+    const total = Object.keys(specs).length;
+    return R.clamp(0, total - 1, next);
+  },
+
+  hintKey(args: { isFocused: boolean; specs?: t.SpecImports; selectedIndex: number }) {
+    if (!args.isFocused) return '⌘K';
+    return ['↑', '↓', 'enter'];
   },
 };

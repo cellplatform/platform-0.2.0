@@ -1,18 +1,36 @@
+import { useEffect, useState } from 'react';
+
 import { css, DevBase, t } from './common';
 import { CmdBar } from './ui.CmdBar';
+import { useKeyboard } from './useKeyboard.mjs';
 
 export type CmdHostProps = {
   pkg: { name: string; version: string };
-  imports?: t.SpecImports;
+  specs?: t.SpecImports;
   filter?: string;
-  style?: t.CssValue;
+  selectedIndex?: number;
+  hintKey?: string | string[];
   hrDepth?: number;
   badge?: t.SpecListBadge;
-  onFilterChanged?: (e: { filter: string }) => void;
+  style?: t.CssValue;
+  onChanged?: (e: { filter: string }) => void;
+  onCmdFocusChange?: t.TextInputFocusChangeHandler;
+  onKeyDown?: t.TextInputKeyEventHandler;
+  onKeyUp?: t.TextInputKeyEventHandler;
 };
 
 export const CmdHost: React.FC<CmdHostProps> = (props) => {
   const { pkg } = props;
+  const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
+
+  useKeyboard(textboxRef);
+
+  /**
+   * Handlers
+   */
+  const filterChanged = (filter: string) => {
+    props.onChanged?.({ filter });
+  };
 
   /**
    * [Render]
@@ -36,13 +54,22 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
         <DevBase.SpecList
           title={pkg.name}
           version={pkg.version}
-          imports={props.imports}
+          imports={props.specs}
           filter={props.filter}
           badge={props.badge}
           hrDepth={props.hrDepth}
+          selectedIndex={props.selectedIndex}
         />
       </div>
-      <CmdBar text={props.filter} onChanged={(e) => props.onFilterChanged?.({ filter: e.to })} />
+      <CmdBar
+        text={props.filter}
+        hintKey={props.hintKey}
+        onReady={(ref) => setTextboxRef(ref)}
+        onChanged={(e) => filterChanged(e.to)}
+        onFocusChange={props.onCmdFocusChange}
+        onKeyDown={props.onKeyDown}
+        onKeyUp={props.onKeyUp}
+      />
     </div>
   );
 };

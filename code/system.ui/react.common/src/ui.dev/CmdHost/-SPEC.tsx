@@ -1,7 +1,8 @@
 import { Dev } from '../../test.ui';
-import { CmdHost } from './ui.CmdHost';
+import { CmdHost, CmdHostStateful } from '.';
 import { Pkg } from '../../index.pkg.mjs';
-import type { CmdHostProps } from './ui.CmdHost';
+
+import type { CmdHostProps } from '.';
 
 const specs = {
   foo: () => import('../DevTools/-SPEC'),
@@ -14,7 +15,7 @@ const specs = {
 };
 
 type T = { props: CmdHostProps };
-const initial: T = { props: { pkg: Pkg, imports: specs } };
+const initial: T = { props: { pkg: Pkg, specs: specs } };
 
 export default Dev.describe('CmdHost', (e) => {
   e.it('init', async (e) => {
@@ -26,9 +27,9 @@ export default Dev.describe('CmdHost', (e) => {
       .backgroundColor(1)
       .render<T>((e) => {
         return (
-          <CmdHost
+          <CmdHostStateful
             {...e.state.props}
-            onFilterChanged={(e) => state.change((d) => (d.props.filter = e.filter))}
+            onChanged={(e) => state.change((d) => (d.props.filter = e.filter))}
           />
         );
       });
