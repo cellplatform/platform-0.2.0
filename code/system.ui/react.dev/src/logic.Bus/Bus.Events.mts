@@ -3,7 +3,7 @@ import { filter } from 'rxjs/operators';
 import { asArray, rx, slug, t } from './common';
 import { ContextState } from '../logic.Ctx/Context.State.mjs';
 
-const DEFAULT = { TIMEOUT: 1000 };
+const DEFAULT = { TIMEOUT: 500 };
 
 type O = Record<string, unknown>;
 type Id = string;
@@ -258,7 +258,9 @@ export function BusEvents(args: {
    * Redraw (re-render component).
    */
   const redraw: t.DevEvents['redraw'] = {
-    $: rx.payload<t.DevRedrawEvent>($, 'sys.dev/redraw'),
+    $: rx
+      .payload<t.DevRedrawEvent>($, 'sys.dev/redraw')
+      .pipe(rx.observeOn(rx.animationFrameScheduler)),
     fire(...renderers) {
       bus.fire({
         type: 'sys.dev/redraw',
@@ -266,7 +268,9 @@ export function BusEvents(args: {
       });
     },
     async subject() {
-      const id = (await info.get()).render.props?.subject.renderer?.id;
+      const res = await info.fire();
+      if (!res.info) return; // NB: Ignore if not ready.
+      const id = res.info?.render.props?.subject.renderer?.id;
       if (id) redraw.fire(id);
       return id;
     },

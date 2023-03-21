@@ -16,6 +16,7 @@ export type {
   Json,
   JsonMap,
   IgnoredResponse,
+  DomRect,
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
