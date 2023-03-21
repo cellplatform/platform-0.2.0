@@ -71,10 +71,6 @@ export type DevEvents = t.Disposable & {
       pending(revision: number): void;
     };
   };
-  ui: {
-    resized$: t.Observable<t.DevUiResized>;
-    resized(args: Omit<DevUiResized, 'instance'>): void;
-  };
   redraw: {
     $: t.Observable<t.DevRedraw>;
     fire(...renderers: Id[]): void;
@@ -102,8 +98,7 @@ export type DevEvent =
   | DevPropsChangeReqEvent
   | DevPropsChangeResEvent
   | DevPropsFlushPendingEvent
-  | DevRedrawEvent
-  | DevUiResizedEvent;
+  | DevRedrawEvent;
 
 /**
  * Module info.
@@ -250,17 +245,4 @@ export type DevRedrawEvent = {
 export type DevRedraw = {
   instance: Id;
   renderers: Id[];
-};
-
-/**
- * UI: Resized
- */
-export type DevUiResizedEvent = {
-  type: 'sys.dev/ui/resized';
-  payload: DevUiResized;
-};
-export type DevUiResized = {
-  instance: Id;
-  subject: 'Host';
-  size: { width: number; height: number };
 };
