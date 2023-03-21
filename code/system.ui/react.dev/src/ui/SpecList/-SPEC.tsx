@@ -1,5 +1,5 @@
 import { SpecList } from '.';
-import { css, Pkg, Spec } from '../../test.ui';
+import { css, Pkg, Spec, t } from '../../test.ui';
 
 const ci = {
   badge: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
@@ -24,15 +24,12 @@ export default Spec.describe('SpecList', (e) => {
         };
 
         const NUMBERS = ['one', 'two', 'three', 'four'];
-        const addSamples = (prefix: string) => {
-          NUMBERS.forEach((num) => {
-            const key = `${prefix}.${num}`;
-            (specs as any)[key] = fn;
-          });
-        };
+        const add = (key: string) => ((specs as t.SpecImports)[key] = fn);
+        const addSamples = (prefix: string) => NUMBERS.forEach((num) => add(`${prefix}.${num}`));
 
         addSamples('foo.bar');
         addSamples('foo.baz');
+        add('zoo');
 
         return (
           <SpecList

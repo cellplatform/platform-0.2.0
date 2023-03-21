@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { COLORS, css, Filter, t, useRubberband, FC } from './common';
+import { COLORS, css, FC, Filter, t, useRubberband } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -42,7 +42,7 @@ const View: React.FC<SpecListProps> = (props) => {
     const rootMargin = '0px';
     const threshold = 1.0;
 
-    const map = new Map<number, SpecListChildVisibility>();
+    const map = new Map<number, t.SpecListChildVisibility>();
     const refs = itemRefs.current;
 
     if (root) {
@@ -75,6 +75,7 @@ const View: React.FC<SpecListProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       Scroll: scroll,
       Absolute: scroll ? 0 : undefined,
     }),
@@ -84,6 +85,7 @@ const View: React.FC<SpecListProps> = (props) => {
       fontFamily: 'sans-serif',
       lineHeight: '2em',
       color: COLORS.DARK,
+      boxSizing: 'border-box',
       padding: 30,
       paddingTop: 20,
     }),
@@ -94,8 +96,8 @@ const View: React.FC<SpecListProps> = (props) => {
     <div {...styles.body}>
       <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
       <List
-        imports={imports}
         url={url}
+        imports={imports}
         selectedIndex={props.selectedIndex}
         hrDepth={props.hrDepth}
         itemRef={itemRef}
