@@ -32,6 +32,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
     }),
     render: css({ Absolute: [4, 5, null, null], fontSize: 11, opacity: 0.6 }),
     link: css({ Absolute: [null, 10, 10, null] }),
+    data: css({ fontSize: 12 }),
   };
 
   _count++;
@@ -41,8 +42,8 @@ export const MySample: React.FC<MySampleProps> = (props) => {
     <div {...css(styles.base, props.style)} onClick={props.onClick}>
       <div {...styles.body}>
         <div>🐷 {props.text ?? 'MySample'}</div>
-        <div>
-          <pre>state: {props.data ? JSON.stringify(props.data) : 'undefined'} </pre>
+        <div {...styles.data}>
+          <pre>state: {props.data ? JSON.stringify(props.data, null, '  ') : 'undefined'} </pre>
         </div>
         <a href={'?dev'} {...styles.link}>
           ?dev

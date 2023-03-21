@@ -37,7 +37,10 @@ export default Spec.describe('MySample', (e) => {
           <MySample
             style={{ flex: 1 }}
             text={text}
-            data={{ count: e.state.count }}
+            data={{
+              count: e.state.count,
+              'size.host': e.size.host,
+            }}
             throwError={e.state.throwError}
             onClick={() => {
               ctx.subject.backgroundColor(1);
