@@ -1,6 +1,15 @@
 import { useEffect, useRef } from 'react';
 
-import { COLORS, css, t, useBusController, useRubberband, useSizeObserver } from '../common';
+import { ErrorFallback } from './ErrorFallback';
+import {
+  COLORS,
+  css,
+  ErrorBoundary,
+  t,
+  useBusController,
+  useRubberband,
+  useSizeObserver,
+} from '../common';
 import { DebugPanel } from '../Harness.DebugPanel';
 import { HarnessHost } from '../Harness.Host';
 
@@ -35,7 +44,8 @@ export const Harness: React.FC<HarnessProps> = (props) => {
    */
   useEffect(() => {
     const events = controller.events;
-    if (!(resize.ready && controller.ready && events)) return;
+    if (!events) return;
+    if (!(resize.ready && controller.ready)) return;
 
     // Bubble resize events.
     events.props.change.fire((d) => {
@@ -66,8 +76,10 @@ export const Harness: React.FC<HarnessProps> = (props) => {
 
   return (
     <div ref={baseRef} {...css(styles.reset, styles.base, props.style)}>
-      <HarnessHost instance={instance} baseRef={hostRef} subjectRef={subjectRef} />
-      <DebugPanel instance={instance} baseRef={debugRef} />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <HarnessHost instance={instance} baseRef={hostRef} subjectRef={subjectRef} />
+        <DebugPanel instance={instance} baseRef={debugRef} />
+      </ErrorBoundary>
     </div>
   );
 };
