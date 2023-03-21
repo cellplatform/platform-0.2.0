@@ -1,5 +1,3 @@
-import { useRef, useEffect, useState } from 'react';
-
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
 
@@ -21,7 +19,6 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   const { index, Icon, hrDepth = -1, ns, title, imports, address, url, isSelected } = props;
   const importsKeys = Object.keys(imports);
 
-  const isLast = index >= importsKeys.length - 1;
   const beyondBounds = index === -1 ? true : index > importsKeys.length - 1;
   const params = url.searchParams;
 
@@ -48,10 +45,11 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
       color: isSelected ? COLORS.WHITE : COLORS.BLUE,
       textDecoration: 'none',
     }),
-    linkDimmed: {
+    linkDimmed: css({
+      userSelect: 'none',
       color: Color.alpha(COLORS.DARK, 0.4),
       ':hover': { color: COLORS.BLUE },
-    },
+    }),
     row: {
       base: css({
         backgroundColor: isSelected ? Color.alpha(COLORS.BLUE, 1) : undefined,
