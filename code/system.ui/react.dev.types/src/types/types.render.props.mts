@@ -1,6 +1,7 @@
 import { type t } from './common';
 
 type Color = string | number;
+type Size = { width: number; height: number };
 
 export type DevBackgroundImageSize = 'cover' | 'fill';
 export type DevBackgroundImage = {
@@ -20,6 +21,7 @@ export type DevRenderProps = {
   subject: DevRenderPropsSubject;
   host: DevRenderPropsHost;
   debug: DevRenderPropsDebug;
+  size: { harness: Size; host: Size; subject: Size; debug: Size };
 };
 
 /**
