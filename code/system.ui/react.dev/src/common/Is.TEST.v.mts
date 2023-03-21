@@ -70,4 +70,11 @@ describe('Is (flags)', () => {
     expect(Is.test(_test!)).to.eql(true);
     expect(Is.testArgs(_args!)).to.eql(true);
   });
+
+  it('nil', () => {
+    expect(Is.nil()).to.eql(true);
+    expect(Is.nil(undefined)).to.eql(true);
+    expect(Is.nil(null)).to.eql(true);
+    [0, false, {}, [], ''].forEach((value) => expect(Is.nil(value)).to.eql(false));
+  });
 });
