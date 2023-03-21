@@ -4,6 +4,15 @@ import { Color } from './libs.mjs';
 import type { t } from '../common.t';
 
 export const DEFAULTS = {
+  get size(): t.DevRenderedSize {
+    return {
+      harness: { width: -1, height: -1 },
+      host: { width: -1, height: -1 },
+      subject: { width: -1, height: -1 },
+      debug: { width: -1, height: -1 },
+    };
+  },
+
   get props(): t.DevRenderProps {
     return {
       host: {
@@ -22,6 +31,7 @@ export const DEFAULTS = {
         },
         footer: { border: {}, padding: [8, 8, 8, 8] },
       },
+      size: DEFAULTS.size,
     };
   },
 

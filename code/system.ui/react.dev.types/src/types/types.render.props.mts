@@ -21,7 +21,14 @@ export type DevRenderProps = {
   subject: DevRenderPropsSubject;
   host: DevRenderPropsHost;
   debug: DevRenderPropsDebug;
-  size: { harness: Size; host: Size; subject: Size; debug: Size };
+  size: DevRenderedSize;
+};
+
+export type DevRenderedSize = {
+  harness: Size;
+  host: Size;
+  subject: Size;
+  debug: Size;
 };
 
 /**
