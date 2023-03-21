@@ -161,6 +161,13 @@ export type TextInputEventHandlers = {
   onTab?: TextInputTabEventHandler;
   onFocus?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
   onBlur?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
+  onFocusChange?: TextInputFocusChangeHandler;
+};
+
+export type TextInputFocusChangeHandler = (e: TextInputFocusChangeHandlerArgs) => void;
+export type TextInputFocusChangeHandlerArgs = {
+  isFocused: boolean;
+  event: React.FocusEvent<HTMLInputElement>;
 };
 
 /**

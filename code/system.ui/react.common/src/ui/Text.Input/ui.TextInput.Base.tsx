@@ -62,6 +62,15 @@ export const TextInputBase: React.FC<Props> = (props) => {
     }
   };
 
+  const handleFocusChange = (
+    event: React.FocusEvent<HTMLInputElement, Element>,
+    isFocused: boolean,
+  ) => {
+    if (isFocused) props.onFocus?.(event);
+    if (!isFocused) props.onBlur?.(event);
+    props.onFocusChange?.({ event, isFocused });
+  };
+
   /**
    * [Render]
    */
@@ -133,8 +142,8 @@ export const TextInputBase: React.FC<Props> = (props) => {
       focusAction={props.focusAction}
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
-      onFocus={props.onFocus}
-      onBlur={props.onBlur}
+      onFocus={(e) => handleFocusChange(e, true)}
+      onBlur={(e) => handleFocusChange(e, false)}
       onChanged={(e) => props.onChanged?.(e)}
       onEnter={props.onEnter}
       onEscape={props.onEscape}
