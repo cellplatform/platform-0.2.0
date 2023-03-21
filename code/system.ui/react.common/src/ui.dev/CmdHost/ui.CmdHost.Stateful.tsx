@@ -22,10 +22,33 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handleFilterChanged = (e: { filter: string }) => {
-    if (mutateUrl) Url.mutateFilter(e.filter);
-    setFilter(e.filter);
+  const handleFilterChanged: t.CmdHostChangedHandler = (e) => {
+    if (mutateUrl) Url.mutateFilter(e.command);
+    setFilter(e.command);
     props.onChanged?.(e);
+  };
+
+  const handleKeyboard = (key: string, cancel: () => void) => {
+    if (key === 'ArrowUp') {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex - 1));
+      cancel();
+    }
+    if (key === 'ArrowDown') {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex + 1));
+      cancel();
+    }
+    if (key === 'Home') {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
+    }
+    if (key === 'End') {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
+    }
+    if (key === 'Enter') {
+      if (mutateUrl) {
+        Url.mutateSelected(selectedIndex, filteredSpecs);
+        window.location.reload();
+      }
+    }
   };
 
   /**
@@ -39,28 +62,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
       onChanged={handleFilterChanged}
       hintKey={hintKeys}
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
-      onKeyDown={(e) => {
-        if (e.key === 'ArrowUp') {
-          setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex - 1));
-          e.preventDefault();
-        }
-        if (e.key === 'ArrowDown') {
-          setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex + 1));
-          e.preventDefault();
-        }
-        if (e.key === 'Home') {
-          setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
-        }
-        if (e.key === 'End') {
-          setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
-        }
-        if (e.key === 'Enter') {
-          if (mutateUrl) {
-            Url.mutateSelected(selectedIndex, filteredSpecs);
-            window.location.reload();
-          }
-        }
-      }}
+      onKeyDown={(e) => handleKeyboard(e.key, e.preventDefault)}
     />
   );
 };
