@@ -12,6 +12,7 @@ type T = {
     isNumericMask: boolean;
     isUpdateEnabled: boolean;
     isUpdateAsync: boolean;
+    elementPlaceholder: boolean;
   };
   ref?: t.TextInputRef;
 };
@@ -28,6 +29,7 @@ const initial: T = {
     isNumericMask: false,
     isUpdateEnabled: true,
     isUpdateAsync: false,
+    elementPlaceholder: false,
   },
 };
 
@@ -183,6 +185,17 @@ export default Dev.describe('TextInput', (e) => {
           .value((e) => e.state.debug.isUpdateAsync)
           .onClick((e) => {
             e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        btn
+          .label((e) => `placeholder: ${e.state.debug.elementPlaceholder ? '<element>' : 'text'}`)
+          .value((e) => e.state.debug.elementPlaceholder)
+          .onClick((e) => {
+            e.change((d) => {
+              localDebug.elementPlaceholder = Dev.toggle(d.debug, 'elementPlaceholder');
+            });
           });
       });
     });

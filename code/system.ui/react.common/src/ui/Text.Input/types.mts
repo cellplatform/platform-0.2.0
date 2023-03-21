@@ -52,7 +52,7 @@ export type TextInputProps = t.TextInputFocusAction &
     width?: number | string;
     minWidth?: number;
     maxWidth?: number;
-    placeholder?: string | JSX.Element;
+    placeholder?: string | JSX.Element | boolean;
 
     spellCheck?: boolean;
     autoCapitalize?: boolean;

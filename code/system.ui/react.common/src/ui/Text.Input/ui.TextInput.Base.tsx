@@ -69,7 +69,6 @@ export const TextInputBase: React.FC<Props> = (props) => {
     base: {
       position: 'relative',
       boxSizing: 'border-box',
-      lineHeight: 0,
       width,
     } as const,
     inner: { position: 'relative' } as const,
@@ -85,7 +84,6 @@ export const TextInputBase: React.FC<Props> = (props) => {
       pointerEvents: 'none',
 
       display: 'grid',
-      alignContent: 'center',
     } as const,
     readonly: {
       userSelect: 'auto',
