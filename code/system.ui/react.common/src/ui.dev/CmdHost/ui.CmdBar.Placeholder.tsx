@@ -16,8 +16,6 @@ export const CmdBarPlaceholder: React.FC<CmdBarPlaceholderProps> = (props) => {
       userSelect: 'none',
     }),
     label: css({
-      position: 'relative',
-      top: -1,
       display: 'grid',
       alignContent: 'center',
       opacity: 0.2,
