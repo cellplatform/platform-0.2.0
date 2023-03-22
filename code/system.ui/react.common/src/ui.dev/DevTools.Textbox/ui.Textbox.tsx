@@ -30,9 +30,6 @@ const View: React.FC<TextboxProps> = (props) => {
   const isActive = Wrangle.isActive(props);
   const [isFocused, setFocused] = useState(false);
 
-  const { margin } = props;
-  console.log('margin', margin);
-
   /**
    * [Render]
    */
