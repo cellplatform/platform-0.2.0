@@ -44,27 +44,29 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
     props.onChanged?.(e);
   };
 
-  const handleKeyboard = (key: string, preventDefault: () => void) => {
-    if (key === 'ArrowUp') {
-      preventDefault();
-      setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex - 1));
+  const handleKeyboard = (e: t.TextInputKeyEvent) => {
+    if (e.key === 'ArrowUp') {
+      const next = selectedIndex - (e.metaKey ? 5 : 1);
+      setSelectedIndex(Wrangle.selected(filteredSpecs, next));
+      e.preventDefault();
     }
-    if (key === 'ArrowDown') {
-      preventDefault();
-      setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex + 1));
+    if (e.key === 'ArrowDown') {
+      const next = selectedIndex + (e.metaKey ? 5 : 1);
+      setSelectedIndex(Wrangle.selected(filteredSpecs, next));
+      e.preventDefault();
     }
-    if (key === 'Home') {
-      preventDefault();
+    if (e.key === 'Home') {
       setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
+      e.preventDefault();
     }
-    if (key === 'End') {
-      preventDefault();
+    if (e.key === 'End') {
       setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
+      e.preventDefault();
     }
-    if (key === 'Enter' && mutateUrl) {
-      preventDefault();
+    if (e.key === 'Enter' && mutateUrl) {
       Url.mutateSelected(selectedIndex, filteredSpecs);
       window.location.reload();
+      e.preventDefault();
     }
   };
 
@@ -80,7 +82,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
       scrollTo$={scrollToRef.current}
       onChanged={handleFilterChanged}
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
-      onKeyDown={(e) => handleKeyboard(e.key, e.preventDefault)}
+      onKeyDown={handleKeyboard}
       onChildVisibility={(e) => setChildItems(e.items)}
     />
   );
