@@ -26,19 +26,16 @@ export function useScrollObserver(
 
     if (root) {
       const options = { root, rootMargin, threshold };
+
       observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           const el = entry.target as HTMLLIElement;
           const index = itemRefs.findIndex((ref) => ref.current === el);
-          map.set(index, {
-            index,
-            isOnScreen: entry.isIntersecting,
-            threshold,
-          });
+          const isOnScreen = entry.isIntersecting;
+          map.set(index, { index, isOnScreen, threshold });
         });
 
-        const items = toArray(mapRef);
-        callback?.({ items });
+        callback?.({ items: toArray(mapRef) });
       }, options);
 
       itemRefs.forEach((ref) => {

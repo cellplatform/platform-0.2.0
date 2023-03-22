@@ -28,9 +28,9 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
    * Effects
    */
   useEffect(() => {
-    const item = childItems[selectedIndex];
-    if (item && !item.isOnScreen) {
-      const index = item.index;
+    const child = childItems[selectedIndex];
+    if (child && !child.isOnScreen) {
+      const index = child.index;
       scrollToRef.current.next({ index });
     }
   }, [selectedIndex, selectionChangeTrigger]);
@@ -44,22 +44,25 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
     props.onChanged?.(e);
   };
 
-  const handleKeyboard = (key: string, cancel: () => void) => {
+  const handleKeyboard = (key: string, preventDefault: () => void) => {
     if (key === 'ArrowUp') {
+      preventDefault();
       setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex - 1));
-      cancel();
     }
     if (key === 'ArrowDown') {
+      preventDefault();
       setSelectedIndex(Wrangle.selected(filteredSpecs, selectedIndex + 1));
-      cancel();
     }
     if (key === 'Home') {
+      preventDefault();
       setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
     }
     if (key === 'End') {
+      preventDefault();
       setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
     }
     if (key === 'Enter' && mutateUrl) {
+      preventDefault();
       Url.mutateSelected(selectedIndex, filteredSpecs);
       window.location.reload();
     }
@@ -96,8 +99,8 @@ const Wrangle = {
 
   selected(specs: t.SpecImports | undefined, next: number) {
     if (!specs) return -1;
-    const total = Object.keys(specs).length;
-    return R.clamp(0, total - 1, next);
+    const total = Object.keys(specs).length - 1;
+    return total >= 0 ? R.clamp(0, total, next) : -1;
   },
 
   hintKey(args: { isFocused: boolean; specs?: t.SpecImports; selectedIndex: number }) {

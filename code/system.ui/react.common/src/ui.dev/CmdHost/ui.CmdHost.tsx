@@ -27,9 +27,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
 
   useKeyboard(textboxRef, {
-    onArrowKey(e) {
-      textboxRef?.focus();
-    },
+    onArrowKey: () => textboxRef?.focus(),
   });
 
   /**

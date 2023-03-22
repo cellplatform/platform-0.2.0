@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { t, rx } from './common';
 
 /**
@@ -27,9 +27,11 @@ export function useScrollController(
         rx.filter(() => !_isScrolling),
       )
       .subscribe((e) => {
-        _isScrolling = true;
         const el = itemRefs[e.index]?.current;
-        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (el) {
+          _isScrolling = true;
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       });
 
     return () => {
@@ -37,5 +39,5 @@ export function useScrollController(
       scrolling$.complete();
       baseRef.current?.removeEventListener('scroll', onScroll);
     };
-  }, [Boolean(scrollTo$)]);
+  }, [Boolean(scrollTo$), itemRefs.length]);
 }

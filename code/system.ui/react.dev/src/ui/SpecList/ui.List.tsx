@@ -55,7 +55,7 @@ export const List: React.FC<ListProps> = (props) => {
       Icon?: t.IconType;
     } = {},
   ) => {
-    const isSelected = index === props.selectedIndex;
+    const isSelected = !options.ns ? false : index === props.selectedIndex;
     const ref = props.itemRef?.(index);
     return (
       <ListItem

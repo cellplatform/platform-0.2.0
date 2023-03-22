@@ -37,6 +37,12 @@ const View: React.FC<SpecListProps> = (props) => {
     return refs[index];
   };
 
+  // NB: Ensure the refs array is the same length as the imports.
+  const keys = Object.keys(imports);
+  if (itemRefs.current.length > keys.length) {
+    itemRefs.current = itemRefs.current.slice(0, keys.length);
+  }
+
   useRubberband(props.allowRubberband ?? false);
   useScrollObserver(baseRef, itemRefs.current, props.onChildVisibility);
   useScrollController(baseRef, itemRefs.current, props.scrollTo$);
