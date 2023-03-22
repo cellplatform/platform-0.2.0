@@ -1,1 +1,1 @@
-export type CrdtInfoFields = 'Module';
+export type CrdtInfoFields = 'Module' | 'Driver';
