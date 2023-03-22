@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
-import { COLORS, css, FC, Filter, rx, t, useRubberband } from './common';
+import { COLORS, css, FC, Filter, t, useRubberband } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -66,19 +66,37 @@ const View: React.FC<SpecListProps> = (props) => {
       padding: 30,
       paddingTop: 20,
     }),
+    list: {
+      outer: css({
+        marginTop: 30,
+        display: 'grid',
+      }),
+      inner: css({
+        minWidth: 550,
+        MarginX: 50,
+      }),
+    },
     title: css({ marginBottom: 20 }),
   };
+
+  const elList = (
+    <div {...styles.list.outer}>
+      <div {...styles.list.inner}>
+        <List
+          url={url}
+          imports={imports}
+          selectedIndex={props.selectedIndex}
+          hrDepth={props.hrDepth}
+          itemRef={itemRef}
+        />
+      </div>
+    </div>
+  );
 
   const elBody = (
     <div {...styles.body}>
       <Title title={props.title} version={props.version} badge={props.badge} style={styles.title} />
-      <List
-        url={url}
-        imports={imports}
-        selectedIndex={props.selectedIndex}
-        hrDepth={props.hrDepth}
-        itemRef={itemRef}
-      />
+      {elList}
       <Footer />
     </div>
   );
