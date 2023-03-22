@@ -18,8 +18,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    // .field('Module.Name', { label: 'Name', value: Pkg.name })
-    // .field('Module.Version', { label: 'Version', value: Pkg.version })
+    .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
     .items(fields);
 
   /**
@@ -27,7 +26,6 @@ const View: React.FC<CrdtInfoProps> = (props) => {
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       position: 'relative',
       width,
       minWidth,
@@ -42,6 +40,18 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       <PropList items={items} defaults={{ clipboard: false }} />
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  automerge() {
+    const name = '@automerge/automerge';
+    const version = Pkg.dependencies[name] ?? '0.0.0';
+    return `${name}@${version}`;
+  },
 };
 
 /**

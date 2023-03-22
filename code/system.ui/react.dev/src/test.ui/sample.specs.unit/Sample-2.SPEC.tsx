@@ -8,7 +8,7 @@ export function Wrapper() {
       const ctx = Spec.ctx(e);
 
       ctx.subject
-        .size(300, 140)
+        .size([300, 140])
         .display('flex')
         .backgroundColor(1)
         .render((e) => <div>Hello</div>);

@@ -11,7 +11,7 @@ export default Dev.describe('useFocus', (e) => {
     ctx.subject
       .display('grid')
       .backgroundColor(1)
-      .size(400, null)
+      .size([400, null])
       .render<T>((e) => {
         const elChild = e.state.embedChild && <Sample />;
         return <Sample>{elChild}</Sample>;
@@ -22,7 +22,7 @@ export default Dev.describe('useFocus', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.useFocus'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'useFocus'} data={e.state} expand={1} />);
 
     dev.row(() => {
       const style: t.CssValue = {

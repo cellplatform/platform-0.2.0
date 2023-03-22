@@ -18,22 +18,26 @@ export const CrdtSchema = {
    *       (circa March, 2023)
    *       https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
    */
-  toByteArray<D extends {}>(initial: D) {
+  toByteArray<D extends {}>(initial: D, options: { typeDef?: string } = {}) {
     const doc = DocRef.init<D>(initial);
-    const commit = Automerge.getLastLocalChange(doc.current)!;
+    const bytes = Automerge.getLastLocalChange(doc.current)!;
     const api = {
       /**
        * The initial commit as a byte-array [Uint8Array].
        */
-      commit,
+      bytes,
 
       /**
        * File source-code.
        */
       get sourceFile() {
-        const byteArray = commit?.toString();
+        const byteArray = bytes?.toString();
+
+        const typeDef =
+          options.typeDef ?? 'export type D = { count: number }; // <== 🐷 Change this.';
+
         const code = `
-export type D = { count: number }; // <== 🐷 Change this.
+${typeDef}
 
 /**
  * Initial CRDT Document state.

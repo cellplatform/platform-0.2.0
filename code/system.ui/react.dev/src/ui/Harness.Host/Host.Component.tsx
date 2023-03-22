@@ -5,6 +5,7 @@ export type HostComponentProps = {
   instance: t.DevInstance;
   border: string;
   renderProps?: t.DevRenderProps;
+  subjectRef?: React.RefObject<HTMLDivElement>;
   style?: t.CssValue;
 };
 
@@ -38,7 +39,7 @@ export const HostComponent: React.FC<HostComponentProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} onDoubleClick={(e) => e.stopPropagation()}>
-      <div {...styles.container} className={'ComponentHost'}>
+      <div ref={props.subjectRef} {...styles.container} className={'ComponentHost'}>
         {element}
       </div>
     </div>

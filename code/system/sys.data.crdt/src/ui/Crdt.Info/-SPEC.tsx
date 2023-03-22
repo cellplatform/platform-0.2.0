@@ -39,7 +39,9 @@ export default Dev.describe('CrdtInfo', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
+      .render<T>((e) => (
+        <Dev.Object name={'Dev.CrdtInfo'} data={{ props: e.state.props }} expand={1} />
+      ));
 
     dev.section((dev) => {
       dev.boolean((btn) =>
@@ -77,12 +79,12 @@ export default Dev.describe('CrdtInfo', (e) => {
       });
     });
 
-    dev.hr(5, 20);
+    dev.hr(5, 30);
 
-    dev.section('Component: CrdtInfo', (dev) => {
+    dev.section('Component', (dev) => {
       dev.hr(0, 5);
       dev.row((e) => {
-        return <CrdtInfo {...e.state.props} style={{ Margin: [0, 10, 0, 25] }} />;
+        return <CrdtInfo {...e.state.props} style={{ Margin: [0, 10, 0, 10] }} />;
       });
     });
   });

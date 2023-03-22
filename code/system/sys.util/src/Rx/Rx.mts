@@ -1,6 +1,6 @@
 import 'symbol-observable';
 
-export * from './Rx.lib.mjs';
+export * from './RxJs.lib.mjs';
 export * from './Rx.bus.mjs';
 export * from './Rx.disposable.mjs';
 export * from './Rx.event.mjs';

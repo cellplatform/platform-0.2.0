@@ -10,7 +10,7 @@ export const Specs = {
   'sys.ui.common.ObjectView': () => import('../ui/ObjectView/-SPEC'),
   'sys.ui.common.ProgressBar': () => import('../ui/ProgressBar/-SPEC'),
   'sys.ui.common.QRCode': () => import('../ui/QRCode/-SPEC'),
-  'sys.ui.common.PropList': () => import('../ui/PropList/-SPEC'),
+  'sys.ui.common.PropList': () => import('../ui/PropList/-dev/-SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/-SPEC'),
   'sys.ui.common.Text.Font': () => import('../ui/Text.Font/-SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/-SPEC'),
@@ -30,6 +30,7 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/-SPEC'),
   'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/-SPEC'),
   'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/-SPEC'),
+  'sys.ui.dev.DevTools.Textbox': () => import('../ui.dev/DevTools.Textbox/-SPEC'),
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 

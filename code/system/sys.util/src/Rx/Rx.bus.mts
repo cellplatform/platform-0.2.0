@@ -1,7 +1,7 @@
 import { slug } from '../Id/Id.mjs';
 import { busAsType, instance, isBus } from './Rx.util.mjs';
 import { isEvent } from './Rx.event.mjs';
-import { filter, Subject } from './Rx.lib.mjs';
+import { filter, Subject } from './RxJs.lib.mjs';
 import { BusConnect } from './Rx.BusConnect.mjs';
 import { isObservable } from './Rx.util.mjs';
 

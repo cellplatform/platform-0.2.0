@@ -105,7 +105,7 @@ describe('Context', () => {
       const ctx = context.ctx;
 
       const fn = () => null;
-      ctx.subject.backgroundColor(-0.2).display('flex').size(10, 20).render(fn);
+      ctx.subject.backgroundColor(-0.2).display('flex').size([10, 20]).render(fn);
 
       expect(context.pending).to.eql(true);
       await context.flush();
@@ -137,14 +137,15 @@ describe('Context', () => {
         expect(value).to.eql(expected);
       };
 
-      await test({ mode: 'center', width: 10, height: 20 }, (size) => size(10, 20));
-      await test({ mode: 'center', width: undefined, height: 20 }, (size) => size(undefined, 20));
-      await test({ mode: 'center', width: 10, height: undefined }, (size) => size(10, undefined));
-      await test({ mode: 'center', width: undefined, height: 100 }, (size) => size(null, 100));
-      await test({ mode: 'center', width: 200, height: undefined }, (size) => size(200, null));
+      await test({ mode: 'center', width: 10, height: 20 }, (size) => size([10, 20]));
+      await test({ mode: 'center', width: undefined, height: 20 }, (size) => size([undefined, 20]));
+      await test({ mode: 'center', width: 10, height: undefined }, (size) => size([10, undefined]));
+      await test({ mode: 'center', width: undefined, height: 100 }, (size) => size([null, 100]));
+      await test({ mode: 'center', width: 200, height: undefined }, (size) => size([200, null]));
 
-      await test(undefined, (size) => size(null, null));
-      await test(undefined, (size) => size(null));
+      await test(undefined, (size) => size([null, null]));
+      await test(undefined, (size) => size([undefined, null]));
+      await test(undefined, (size) => size([null, undefined]));
 
       const margin = [50, 50, 50, 50] as t.Margin;
       await test({ mode: 'fill', x: true, y: true, margin }, (size) => size('fill'));

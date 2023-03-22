@@ -44,7 +44,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(540, 300)
+      .size([540, 300])
       .render<T>((e) => <DevSample state={e.state.keyboard} />);
   });
 
@@ -54,7 +54,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
       .border(-0.1)
       .render<T>((e) => (
         <Dev.Object
-          name={'spec.KeyboardMonitor'}
+          name={'KeyboardMonitor'}
           data={e.state.keyboard}
           expand={{ level: 1, paths: ['$.current.pressed', '$.current', '$.current.pressed.*'] }}
         />

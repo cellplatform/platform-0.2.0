@@ -14,7 +14,7 @@ export { Automerge } from './driver.Automerge';
 /**
  * Supporting UI
  */
-export { CrdtInfo } from './ui/CrdtInfo';
+export { CrdtInfo } from './ui/Crdt.Info';
 
 /**
  * Helpers

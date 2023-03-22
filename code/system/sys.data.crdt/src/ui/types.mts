@@ -1,1 +1,1 @@
-export * from './CrdtInfo/types.mjs';
+export * from './Crdt.Info/types.mjs';

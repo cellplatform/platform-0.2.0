@@ -1,7 +1,7 @@
 import { UserAgent, t, Dev, expect, TestNetwork } from '../../test.ui';
 import { WebRtcController } from '..';
 
-export default Dev.describe('Controller.Mutate', (e) => {
+export default Dev.describe('Network Controller.Mutate', (e) => {
   e.timeout(1000 * 15);
   const Mutate = WebRtcController.Mutate;
 

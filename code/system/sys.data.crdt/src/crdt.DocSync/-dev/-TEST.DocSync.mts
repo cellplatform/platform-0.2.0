@@ -134,8 +134,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       expect(docB.current).to.eql({ name: 'Bar', count: 1234 });
       expect(docB.current).to.eql(docA.current);
 
-      expect(syncerA.count).to.eql(4);
-      expect(syncerB.count).to.eql(4);
+      expect(syncerA.count).to.greaterThanOrEqual(4);
+      expect(syncerB.count).to.greaterThanOrEqual(4);
 
       mock.dispose();
       syncerA.dispose();

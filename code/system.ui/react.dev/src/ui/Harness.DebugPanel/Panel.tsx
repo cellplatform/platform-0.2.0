@@ -4,6 +4,7 @@ import { DebugPanelBody as Body } from './Panel.Body';
 
 export type DebugPanelProps = {
   instance: t.DevInstance;
+  baseRef?: React.RefObject<HTMLDivElement>;
   style?: t.CssValue;
 };
 
@@ -35,7 +36,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div ref={props.baseRef} {...css(styles.base, props.style)}>
       <Header instance={instance} current={debug?.header} />
       <div {...styles.body}>
         <Body instance={instance} current={current.info} />

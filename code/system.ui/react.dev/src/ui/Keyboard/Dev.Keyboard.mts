@@ -1,22 +1,26 @@
 import { Keyboard } from '../common';
 
 export const DevKeyboard = {
-  listen() {
+  /**
+   * Common keyboard controller actions for the DEV harness environment.
+   */
+  listen(options: { cancelSave?: boolean; cancelPrint?: boolean } = {}) {
+    const { cancelSave = true, cancelPrint = true } = options;
+
     Keyboard.on({
       /**
        * ACTION: Cancel "save" HTML page (default browser action).
        */
-      'CMD + KeyS': (e) => e.cancel(),
+      'CMD + KeyS'(e) {
+        if (cancelSave) e.cancel();
+      },
 
       /**
        * ACTION: Cancel "print" HTML page (default browser action).
        */
-      'CMD + KeyP': (e) => e.cancel(),
-
-      /**
-       * ACTION: Clear "developer-tools" console.
-       */
-      'CMD + KeyK': (e) => console.clear(),
+      'CMD + KeyP'(e) {
+        if (cancelPrint) e.cancel();
+      },
     });
   },
 };

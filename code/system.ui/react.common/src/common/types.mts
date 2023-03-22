@@ -1,7 +1,7 @@
 /**
  * @external
  */
-export type { Observable } from 'rxjs';
+export type { Observable, Subject } from 'rxjs';
 export type { CSSProperties } from 'react';
 
 /**
@@ -44,7 +44,12 @@ export type {
   DevRenderProps,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
-export type { SpecListBadge } from 'sys.ui.react.dev/src/types.mjs';
+export type {
+  SpecListBadge,
+  SpecListChildVisibilityHandler,
+  SpecListChildVisibility,
+  SpecListScrollTarget,
+} from 'sys.ui.react.dev/src/types.mjs';
 
 export type {
   UIEventBase,
@@ -62,3 +67,5 @@ export type {
  */
 export * from '../types.mjs';
 export type UrlInput = string | URL | Location;
+export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
+export type Margin = [number, number, number, number];

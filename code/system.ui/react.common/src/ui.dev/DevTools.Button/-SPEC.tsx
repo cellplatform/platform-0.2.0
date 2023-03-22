@@ -17,7 +17,7 @@ export default Dev.describe('Button', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <Button {...e.state.props} />);
   });
 
@@ -26,7 +26,7 @@ export default Dev.describe('Button', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'props'} data={e.state.props} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Dev.Button'} data={e.state.props} expand={1} />);
 
     dev.section((dev) => {
       dev

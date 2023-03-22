@@ -4,7 +4,7 @@ import { Boolean } from './ui.Boolean';
 type O = Record<string, unknown>;
 
 /**
- * A simple clickable text-busson that represents a boolean value.
+ * A simple clickable text-button that represents a boolean value.
  */
 export function boolean<S extends O = O>(
   events: t.DevEvents,
@@ -63,6 +63,7 @@ export function boolean<S extends O = O>(
 
   label.subscribe(ref.redraw);
   value.subscribe(ref.redraw);
+  enabled.subscribe(ref.redraw);
 
   fn?.(args);
 }

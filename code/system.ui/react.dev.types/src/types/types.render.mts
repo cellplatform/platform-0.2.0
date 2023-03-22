@@ -11,7 +11,11 @@ type RenderedResult = JSX.Element | undefined | null;
 export type DevRenderer<T extends O = O> = (
   args: DevRendererArgs<T>,
 ) => RenderedResult | Promise<RenderedResult>;
-export type DevRendererArgs<T extends O = O> = { id: RendererId; state: T };
+export type DevRendererArgs<T extends O = O> = {
+  id: RendererId;
+  state: T;
+  size: t.DevRenderedSize;
+};
 
 /**
  * Response to the assignment of a renderer that provides

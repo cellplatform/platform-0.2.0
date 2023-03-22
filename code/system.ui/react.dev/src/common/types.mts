@@ -16,6 +16,7 @@ export type {
   Json,
   JsonMap,
   IgnoredResponse,
+  DomRect,
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
@@ -32,6 +33,6 @@ export type {
  * @local
  */
 export * from '../types.mjs';
+export type UrlInput = string | URL | Location;
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];
-export type UrlInput = string | URL | Location;

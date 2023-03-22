@@ -28,7 +28,7 @@ export default Dev.describe('Boolean', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <Boolean {...e.state.props} onClick={onClick} />);
   });
 
@@ -36,7 +36,7 @@ export default Dev.describe('Boolean', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'DevTools.spec'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Dev.Boolean'} data={e.state} expand={1} />);
 
     dev.section((dev) => {
       dev

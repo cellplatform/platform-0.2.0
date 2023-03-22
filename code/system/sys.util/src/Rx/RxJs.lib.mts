@@ -11,6 +11,8 @@ export {
   firstValueFrom,
   lastValueFrom,
   interval,
+  observeOn,
+  animationFrameScheduler,
 } from 'rxjs';
 
 export {

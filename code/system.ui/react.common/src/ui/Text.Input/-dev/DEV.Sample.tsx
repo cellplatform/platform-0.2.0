@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { TextInput } from '..';
-import { Time, t } from '../common';
+import { css, Color, Time, t } from '../common';
 import { Hints } from './DEV.Hints.mjs';
 
 export type DevSampleProps = {
@@ -10,6 +10,7 @@ export type DevSampleProps = {
     isHintEnabled: boolean;
     isUpdateEnabled: boolean;
     isUpdateAsync: boolean;
+    elementPlaceholder: boolean;
   };
   onReady: t.TextInputReadyHandler;
 };
@@ -29,12 +30,44 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
   /**
    * [Render]
    */
+
+  const styles = {
+    placeholder: css({
+      display: 'grid',
+      gridTemplateColumns: 'auto auto 1fr',
+      columnGap: 10,
+    }),
+    label: css({
+      fontStyle: 'normal',
+      display: 'grid',
+      alignContent: 'center',
+    }),
+    key: css({
+      fontSize: 10,
+      border: `solid 2px ${Color.format(-0.4)}`,
+      borderRadius: 5,
+      fontStyle: 'normal',
+      fontWeight: 600,
+      display: 'grid',
+      placeItems: 'center',
+      PaddingX: 5,
+    }),
+  };
+
+  const elPlaceholder = (
+    <div {...styles.placeholder}>
+      <div {...styles.label}>custom placeholder</div>
+      <div {...styles.key}>⌘K</div>
+    </div>
+  );
+
   return (
     <TextInput
       {...dev.props}
       ref={inputRef}
       value={value}
       hint={debug.isHintEnabled ? hint : undefined}
+      placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
       onReady={dev.onReady}
       onEnter={(e) => {
         console.info('⚡️ onEnter', e);

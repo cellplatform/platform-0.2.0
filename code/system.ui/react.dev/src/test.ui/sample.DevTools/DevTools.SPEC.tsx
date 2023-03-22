@@ -5,22 +5,23 @@ import { DevTools } from './DevTools';
 let _count = 0;
 
 export default Spec.describe('sample.DevTools.Button', (e) => {
-  e.it('init', (e) =>
-    Spec.once(e, (ctx) => {
-      ctx.subject
-        .display('grid')
-        .size(200, null)
-        .render((e) => {
-          return (
-            <ButtonSample
-              ctx={ctx}
-              label={'My Button'}
-              onClick={() => console.info('init/onClick', e)}
-            />
-          );
-        });
-    }),
-  );
+  e.it('init', (e) => {
+    const ctx = Spec.ctx(e);
+
+    ctx.subject
+      .display('grid')
+      .size([200, null])
+      .render((e) => {
+        return (
+          <ButtonSample
+            ctx={ctx}
+            label={'My Button'}
+            onClick={() => console.info('init/onClick', e)}
+          />
+        );
+      });
+    Spec.once(e, (ctx) => {});
+  });
 
   e.it('Buttons', (e) => {
     const dev = DevTools.init(e);

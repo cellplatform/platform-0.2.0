@@ -1,4 +1,4 @@
-import { MdCheck, MdClose, MdPlayArrow, MdToggleOff } from 'react-icons/md';
+import { MdCheck, MdClose, MdPlayArrow, MdToggleOff, MdKeyboard } from 'react-icons/md';
 import { VscSymbolVariable } from 'react-icons/vsc';
 import { TbPrompt } from 'react-icons/tb';
 import { HiCommandLine } from 'react-icons/hi2';
@@ -21,4 +21,5 @@ export const DevIcons = {
   CmdPrompt: icon(TbPrompt),
   Command: icon(HiCommandLine),
   CommandKey: icon(BiCommand),
+  Keyboard: icon(MdKeyboard),
 };

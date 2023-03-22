@@ -58,7 +58,7 @@ export default Dev.describe('YouTube', (e) => {
       const size = DEFAULT.pixelSize;
 
       dev.button(`${size.width} x ${size.height} pixels`, (e) => {
-        dev.ctx.subject.size(null);
+        dev.ctx.subject.size([null, null]);
         e.change((d) => {
           d.props.width = size.width;
           d.props.height = size.height;

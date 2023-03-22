@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
-import { Pkg } from '../../index.pkg.mjs';
+import { COLORS, css, t } from '../common';
 import { Footer } from './Root.Footer';
+import { useKeyboard } from './useKeyboard.mjs';
 
 export type RootProps = {
   fill?: boolean;
@@ -10,6 +9,7 @@ export type RootProps = {
 
 export const Root: React.FC<RootProps> = (props) => {
   const href = '?dev';
+  useKeyboard();
 
   /**
    * [Render]

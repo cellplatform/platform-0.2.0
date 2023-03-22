@@ -17,29 +17,39 @@ export function useBusController(
   const busid = rx.bus.instance(bus);
 
   const [info, setInfo] = useState<t.DevInfo>(DEFAULTS.info);
+  const eventsRef = useRef<t.DevEvents>();
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    const controller = DevBus.Controller({ instance });
-    controller.info.changed$.pipe(filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
+    const events = (eventsRef.current = DevBus.Controller({ instance }));
+    events.info.changed$.pipe(filter((e) => Boolean(e.info))).subscribe((e) => setInfo(e.info));
 
     /**
      * Initialize.
      */
     Time.delay(0, async () => {
-      if (!controller.disposed) {
-        await controller.load.fire(options.bundle);
-        if (options.runOnLoad) controller.run.fire();
+      if (!events.disposed) {
+        await events.load.fire(options.bundle);
+        if (options.runOnLoad) events.run.fire();
       }
     });
 
-    return () => controller.dispose();
+    return () => events.dispose();
   }, [id, busid, Boolean(options.bundle)]);
 
   /**
    * API
    */
-  return { instance, info };
+  return {
+    instance,
+    info,
+    get events() {
+      return eventsRef.current;
+    },
+    get ready() {
+      return Boolean(info.render.props);
+    },
+  };
 }

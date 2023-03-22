@@ -14,7 +14,7 @@ export default Dev.describe('DevTools', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(400, undefined)
+      .size([400, null])
       .backgroundColor(1)
       .render<T>((e) => <Sample state={e.state} />);
   });
@@ -28,7 +28,7 @@ export default Dev.describe('DevTools', (e) => {
      */
     debug.footer.border(-0.15).render((e) => <Dev.Object data={e.state} style={{ margin: 8 }} />);
 
-    dev.title('DevTools', { margin: 0 }).hr();
+    dev.title('DevTools', { margin: 0 }).hr(5);
 
     /**
      * Buttons
@@ -41,7 +41,11 @@ export default Dev.describe('DevTools', (e) => {
       }),
     );
 
-    dev.hr();
+    dev.hr(-1, 8);
+
+    dev.textbox((txt) => txt.label('My Textbox TODO'));
+
+    dev.hr(5, 20);
 
     dev.TODO();
 
@@ -82,7 +86,7 @@ export default Dev.describe('DevTools', (e) => {
             ),
         );
 
-      dev.hr();
+      dev.hr(5, 20);
 
       dev.section('Section (Pending)');
     });

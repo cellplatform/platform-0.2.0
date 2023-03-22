@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { VscSymbolClass } from 'react-icons/vsc';
 
 import { Color, COLORS, css, DEFAULTS, t } from './common';
@@ -6,7 +8,10 @@ import { ListItem } from './ui.List.Item';
 export type ListProps = {
   imports: t.SpecImports;
   url: URL;
+  scroll?: boolean;
+  selectedIndex?: number;
   hrDepth?: number;
+  itemRef?: (index: number) => React.RefObject<HTMLLIElement>;
   style?: t.CssValue;
 };
 
@@ -50,10 +55,14 @@ export const List: React.FC<ListProps> = (props) => {
       Icon?: t.IconType;
     } = {},
   ) => {
+    const isSelected = !options.ns ? false : index === props.selectedIndex;
+    const ref = props.itemRef?.(index);
     return (
       <ListItem
         key={index}
+        baseRef={ref}
         index={index}
+        isSelected={isSelected}
         url={url}
         imports={imports}
         address={address}

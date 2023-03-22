@@ -28,7 +28,7 @@ export default Spec.describe('MySample', (e) => {
     });
 
     ctx.subject
-      .size(300, 200)
+      .size([300, 200])
       .display('flex')
       .backgroundColor('rgba(255, 0, 0, 0.1)' /* RED */)
       .render<T>((e) => {
@@ -37,7 +37,10 @@ export default Spec.describe('MySample', (e) => {
           <MySample
             style={{ flex: 1 }}
             text={text}
-            data={{ count: e.state.count }}
+            data={{
+              count: e.state.count,
+              'size.host': e.size.host,
+            }}
             throwError={e.state.throwError}
             onClick={() => {
               ctx.subject.backgroundColor(1);
@@ -112,7 +115,7 @@ export default Spec.describe('MySample', (e) => {
 
     dev
       .hr()
-      .button((btn) => btn.label('size: 300, 200').onClick((e) => e.ctx.subject.size(300, 140)))
+      .button((btn) => btn.label('size: 300, 200').onClick((e) => e.ctx.subject.size([300, 140])))
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.subject.size('fill')))
       .button((btn) => btn.label('size: fill-x').onClick((e) => e.ctx.subject.size('fill-x')))
       .button((btn) => btn.label('size: fill-y').onClick((e) => e.ctx.subject.size('fill-y')))

@@ -11,5 +11,6 @@ export const DEFAULTS = {
    */
   QS: {
     filter: 'filter',
+    dev: 'dev',
   },
 } as const;

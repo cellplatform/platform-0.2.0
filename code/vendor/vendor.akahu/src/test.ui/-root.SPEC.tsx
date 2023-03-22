@@ -16,7 +16,7 @@ export default Dev.describe('Akahu', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size(250, null)
+      .size([250, null])
       .display('grid')
       .render<T>((e) => {
         return <div>{`🐷 Hello-${e.state.count}`}</div>;

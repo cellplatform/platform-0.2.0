@@ -1,19 +1,21 @@
-import { useState } from 'react';
-
 import { COLORS, css, t, TextInput } from './common';
-import { useKeyboard } from './useKeyboard.mjs';
+import { HintKey } from './ui.HintKey';
 
 export type CmdBarProps = {
   text?: string;
   style?: t.CssValue;
+  hintKey?: string | string[];
+  focusOnReady?: boolean;
+  onReady?: t.TextInputReadyHandler;
   onChanged?: t.TextInputChangeEventHandler;
+  onFocusChange?: t.TextInputFocusChangeHandler;
+  onKeyDown?: t.TextInputKeyEventHandler;
+  onKeyUp?: t.TextInputKeyEventHandler;
 };
 
 export const CmdBar: React.FC<CmdBarProps> = (props) => {
-  const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
-  const [isFocused, setFocused] = useState(false);
-
-  useKeyboard(textboxRef);
+  const hintKeys = Wrangle.hintKeys(props);
+  const hasHintKeys = hintKeys.length > 0;
 
   /**
    * [Render]
@@ -21,38 +23,69 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      backgroundColor: COLORS.DARK,
+      color: COLORS.WHITE,
+      userSelect: 'none',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
+    }),
+    textbox: css({
       boxSizing: 'border-box',
       Padding: [7, 7],
-      color: COLORS.WHITE,
-      backgroundColor: COLORS.DARK,
     }),
-    textbox: css({}),
-    placeholder: css({}),
+    hintKeys: {
+      base: css({ paddingLeft: 6, paddingRight: 6, display: 'grid', placeItems: 'center' }),
+      inner: css({ Flex: 'horizontal-center-center' }),
+    },
   };
 
-  const elPlaceholder = <div {...styles.placeholder}>Command ⌘K</div>;
+  const elTextbox = (
+    <TextInput
+      value={props.text}
+      placeholder={'command'}
+      placeholderStyle={{
+        opacity: 0.3,
+        color: COLORS.WHITE,
+        fontFamily: 'sans-serif',
+      }}
+      valueStyle={{
+        color: COLORS.WHITE,
+        fontFamily: 'monospace',
+        fontWeight: 'normal',
+        fontSize: 16,
+      }}
+      onFocusChange={props.onFocusChange}
+      spellCheck={false}
+      autoCorrect={false}
+      autoCapitalize={false}
+      focusOnReady={props.focusOnReady}
+      onReady={props.onReady}
+      onChanged={props.onChanged}
+      onKeyDown={props.onKeyDown}
+      onKeyUp={props.onKeyUp}
+    />
+  );
+
+  const elHintKeys = hintKeys.map((key, i) => <HintKey key={i} text={key} />);
 
   return (
     <div {...css(styles.base, props.style)}>
-      <TextInput
-        style={styles.textbox}
-        value={props.text}
-        placeholder={elPlaceholder}
-        placeholderStyle={{ opacity: 0.3, color: COLORS.WHITE }}
-        valueStyle={{
-          color: COLORS.WHITE,
-          fontFamily: 'monospace',
-          fontWeight: 'normal',
-          fontSize: 18,
-        }}
-        onReady={(ref) => setTextboxRef(ref)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        onChanged={props.onChanged}
-        spellCheck={false}
-        autoCorrect={false}
-        autoCapitalize={false}
-      />
+      <div {...styles.textbox}>{elTextbox}</div>
+      {hasHintKeys && (
+        <div {...styles.hintKeys.base}>
+          <div {...styles.hintKeys.inner}>{elHintKeys}</div>
+        </div>
+      )}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+const Wrangle = {
+  hintKeys(props: CmdBarProps) {
+    if (!props.hintKey) return [];
+    return Array.isArray(props.hintKey) ? props.hintKey : [props.hintKey];
+  },
 };

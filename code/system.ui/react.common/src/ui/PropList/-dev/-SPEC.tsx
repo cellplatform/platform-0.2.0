@@ -1,8 +1,8 @@
 import { PropList } from '.';
-import { Dev, t } from '../../test.ui';
-import { BuilderSample, sampleItems, SampleFields } from './-dev';
+import { Dev, t } from '../../../test.ui';
+import { BuilderSample, sampleItems, SampleFields } from '.';
 
-import type { MyFields } from './-dev';
+import type { MyFields } from '.';
 
 type SampleKind = 'Samples' | 'Builder' | 'Empty';
 type T = {
@@ -43,7 +43,7 @@ export default Dev.describe('PropList', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(250, null)
+      .size([250, null])
       .render<T>((e) => <PropList {...e.state.props} />);
   });
 
@@ -53,7 +53,7 @@ export default Dev.describe('PropList', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.PropList'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'PropList'} data={e.state} expand={1} />);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
@@ -86,8 +86,12 @@ export default Dev.describe('PropList', (e) => {
     });
 
     dev.section('Title', (dev) => {
-      dev.TODO().hr();
+      dev.button('none', (e) => e.change((d) => (d.props.title = undefined)));
+      dev.button('"MyTitle"', (e) => e.change((d) => (d.props.title = 'MyTitle')));
+      dev.button('long (50 words)', (e) => e.change((d) => (d.props.title = Dev.Lorem.words(50))));
     });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       const button = (kind: SampleKind) => {
@@ -97,8 +101,9 @@ export default Dev.describe('PropList', (e) => {
       button('Empty');
       button('Samples');
       button('Builder');
-      dev.hr();
     });
+
+    dev.hr(5, 20);
 
     dev.section((dev) => {
       const bool = (key: keyof T['debug']['fieldSelector']) =>
@@ -121,9 +126,10 @@ export default Dev.describe('PropList', (e) => {
           title: fieldSelector.title ? 'Field Selector' : undefined,
           resettable: fieldSelector.resettable,
           showIndexes: fieldSelector.showIndexes,
-          onClick(ev) {
+          async onClick(ev) {
+            await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
+            Util.setSample(dev.ctx, 'Builder');
             console.log('⚡️ FieldSelector.onClick:', ev);
-            dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
           },
         };
 

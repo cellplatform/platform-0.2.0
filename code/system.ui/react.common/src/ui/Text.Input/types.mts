@@ -52,7 +52,7 @@ export type TextInputProps = t.TextInputFocusAction &
     width?: number | string;
     minWidth?: number;
     maxWidth?: number;
-    placeholder?: string | JSX.Element;
+    placeholder?: string | JSX.Element | boolean;
 
     spellCheck?: boolean;
     autoCapitalize?: boolean;
@@ -85,7 +85,7 @@ export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
  * Input
  */
 export type TextInputFocusAction = {
-  focusOnLoad?: boolean;
+  focusOnReady?: boolean;
   focusAction?: 'Select' | TextInputCursorAction;
 };
 
@@ -161,6 +161,13 @@ export type TextInputEventHandlers = {
   onTab?: TextInputTabEventHandler;
   onFocus?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
   onBlur?: React.EventHandler<React.FocusEvent<HTMLInputElement>>;
+  onFocusChange?: TextInputFocusChangeHandler;
+};
+
+export type TextInputFocusChangeHandler = (e: TextInputFocusChangeHandlerArgs) => void;
+export type TextInputFocusChangeHandlerArgs = {
+  isFocused: boolean;
+  event: React.FocusEvent<HTMLInputElement>;
 };
 
 /**

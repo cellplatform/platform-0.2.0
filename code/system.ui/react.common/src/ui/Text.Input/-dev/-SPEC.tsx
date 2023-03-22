@@ -12,6 +12,7 @@ type T = {
     isNumericMask: boolean;
     isUpdateEnabled: boolean;
     isUpdateAsync: boolean;
+    elementPlaceholder: boolean;
   };
   ref?: t.TextInputRef;
 };
@@ -20,7 +21,7 @@ const initial: T = {
   props: {
     ...DEFAULTS.prop,
     placeholder: 'my placeholder',
-    focusOnLoad: true,
+    focusOnReady: true,
   },
   debug: {
     render: true,
@@ -28,6 +29,7 @@ const initial: T = {
     isNumericMask: false,
     isUpdateEnabled: true,
     isUpdateAsync: false,
+    elementPlaceholder: false,
   },
 };
 
@@ -50,14 +52,14 @@ export default Dev.describe('TextInput', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(300, null)
+      .size([300, null])
       .render<T>((e) => {
         const { debug } = e.state;
         if (!debug.render) return;
 
         const autoSize = e.state.props.autoSize;
         if (autoSize) ctx.subject.size('fill-x');
-        if (!autoSize) ctx.subject.size(300, null);
+        if (!autoSize) ctx.subject.size([300, null]);
 
         const mask = debug.isNumericMask ? TextInputMasks.isNumeric : undefined;
         const props = { ...e.state.props, mask };
@@ -110,7 +112,7 @@ export default Dev.describe('TextInput', (e) => {
       boolean('spellCheck');
       dev.hr();
       boolean('autoSize');
-      boolean('focusOnLoad');
+      boolean('focusOnReady');
     });
 
     dev.TODO(`focusActions: ${DEFAULTS.focusActions.join()}`);
@@ -183,6 +185,17 @@ export default Dev.describe('TextInput', (e) => {
           .value((e) => e.state.debug.isUpdateAsync)
           .onClick((e) => {
             e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        btn
+          .label((e) => `placeholder: ${e.state.debug.elementPlaceholder ? '<element>' : 'text'}`)
+          .value((e) => e.state.debug.elementPlaceholder)
+          .onClick((e) => {
+            e.change((d) => {
+              localDebug.elementPlaceholder = Dev.toggle(d.debug, 'elementPlaceholder');
+            });
           });
       });
     });

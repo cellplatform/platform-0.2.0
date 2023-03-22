@@ -13,7 +13,7 @@ export default Dev.describe('RenderCount', (e) => {
     await ctx.state<T>(initial);
     ctx.subject
       .display('grid')
-      .size(250, 30)
+      .size([250, 30])
       .render<T>((e) => (
         <Sample>
           <RenderCount {...e.state.props} />
@@ -25,7 +25,7 @@ export default Dev.describe('RenderCount', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec.RenderCount'} data={e.state} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'RenderCount'} data={e.state} expand={1} />);
 
     dev.section('Actions', (dev) => {
       dev.button('redraw', (e) => e.change((d) => d.count++));

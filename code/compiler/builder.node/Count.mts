@@ -110,7 +110,7 @@ export const Count = {
       const path = `   ${fs.dirname(dir.substring(1))}/${pc.white(fs.basename(dir))}`;
       const totalSize = `   /src ${prettybytes(bytes)}  `;
       const totalFiles = `   ${files}`;
-      const totalLines = `   ${pc.gray(lines.toLocaleString())}`;
+      const totalLines = `    ${pc.gray(lines.toLocaleString())}`;
       table.push([path, totalSize, totalFiles, totalLines]);
     };
 
@@ -122,9 +122,10 @@ export const Count = {
     const total = Sum.dir(dirs);
     const totalBytes = `   ${pc.white(prettybytes(total.bytes))}`;
     const totalFiles = `  ${pc.white(total.files.toLocaleString())}`;
-    const totalLines = `  ${pc.bold(pc.green(total.lines.toLocaleString()))}`;
+    const totalLines = `   ${pc.bold(pc.green(total.lines.toLocaleString()))}`;
     table.push([]);
     table.push(['', totalBytes, totalFiles, totalLines]);
+    table.push(['', pc.gray('   size'), pc.gray('  files'), pc.gray('   lines')]);
 
     console.info();
     console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));

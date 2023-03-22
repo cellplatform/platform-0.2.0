@@ -4,6 +4,10 @@ import { Is as base } from 'sys.test.spec';
 export const Is = {
   ...base,
 
+  nil(input?: any) {
+    return input === undefined || input === null;
+  },
+
   ctx(input: any) {
     if (input === null || typeof input !== 'object') return false;
     const obj = input as t.DevCtx;

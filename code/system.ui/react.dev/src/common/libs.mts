@@ -1,3 +1,4 @@
+export { ErrorBoundary } from 'react-error-boundary';
 import { mergeDeepRight, clone, equals } from 'ramda';
 export const R = { mergeDeepRight, clone, equals };
 

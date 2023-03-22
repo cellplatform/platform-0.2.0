@@ -5,6 +5,7 @@ import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
 import { title } from '../DevTools.Title';
 import { todo } from '../DevTools.Todo';
+import { textbox } from '../DevTools.Textbox';
 import { Helpers } from './Helpers.mjs';
 
 type O = Record<string, unknown>;
@@ -64,8 +65,25 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     },
 
     /**
-     * [Widgets]: Argument Wrangling.
+     * 🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳
+     *
+     *  Widget: Argument wrangling methods.
+     *
+     * 🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳🌳
      */
+
+    /**
+     * Title text.
+     */
+    title(...args: any[]) {
+      if (typeof args[0] === 'string') {
+        api.title((title) => title.text(args[0]).style(args[1]));
+      }
+      if (typeof args[0] === 'function') {
+        title<S>(events, ctx, initial, args[0]);
+      }
+      return api;
+    },
 
     /**
      * Simple button.
@@ -91,14 +109,11 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     },
 
     /**
-     * Title text.
+     * Input Textbox
      */
-    title(...args: any[]) {
-      if (typeof args[0] === 'string') {
-        api.title((title) => title.text(args[0]).style(args[1]));
-      }
+    textbox(...args: any[]) {
       if (typeof args[0] === 'function') {
-        title<S>(events, ctx, initial, args[0]);
+        textbox<S>(events, ctx, initial, args[0]);
       }
       return api;
     },
