@@ -126,9 +126,10 @@ export default Dev.describe('PropList', (e) => {
           title: fieldSelector.title ? 'Field Selector' : undefined,
           resettable: fieldSelector.resettable,
           showIndexes: fieldSelector.showIndexes,
-          onClick(ev) {
+          async onClick(ev) {
+            await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
+            Util.setSample(dev.ctx, 'Builder');
             console.log('⚡️ FieldSelector.onClick:', ev);
-            dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
           },
         };
 
