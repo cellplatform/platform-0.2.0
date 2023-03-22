@@ -86,8 +86,12 @@ export default Dev.describe('PropList', (e) => {
     });
 
     dev.section('Title', (dev) => {
-      dev.TODO().hr();
+      dev.button('none', (e) => e.change((d) => (d.props.title = undefined)));
+      dev.button('"MyTitle"', (e) => e.change((d) => (d.props.title = 'MyTitle')));
+      dev.button('long (50 words)', (e) => e.change((d) => (d.props.title = Dev.Lorem.words(50))));
     });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       const button = (kind: SampleKind) => {
@@ -97,8 +101,9 @@ export default Dev.describe('PropList', (e) => {
       button('Empty');
       button('Samples');
       button('Builder');
-      dev.hr();
     });
+
+    dev.hr(5, 20);
 
     dev.section((dev) => {
       const bool = (key: keyof T['debug']['fieldSelector']) =>
