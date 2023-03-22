@@ -17,6 +17,7 @@ export type TextboxProps = {
   label?: ContentInput;
   value?: StringOrNil;
   placeholder?: ContentInput;
+  left?: ContentInput;
   right?: ContentInput;
   footer?: ContentInput;
   error?: ErrorInput;
@@ -33,6 +34,7 @@ const View: React.FC<TextboxProps> = (props) => {
   /**
    * [Render]
    */
+  const HEIGHT = 26;
   const errorColor = Wrangle.errorColor(props);
   const styles = {
     base: css({
@@ -51,17 +53,18 @@ const View: React.FC<TextboxProps> = (props) => {
       borderBottom: `solid 1px`,
       borderBottomColor: Wrangle.borderColor(props, isActive, isFocused),
       display: 'grid',
-      gridTemplateColumns: '1fr auto',
+      gridTemplateColumns: 'auto 1fr auto',
     }),
     input: css({
       boxSizing: 'border-box',
-      PaddingX: 5,
+      paddingLeft: props.left ? 1 : 5,
+      paddingRight: props.right ? 1 : 5,
       PaddingY: 3,
       display: 'grid',
-      height: 26,
+      height: HEIGHT,
     }),
-    right: css({
-      height: 26,
+    edge: css({
+      height: HEIGHT,
       opacity: isActive ? 1 : 0.2,
       display: 'grid',
       placeItems: 'center',
@@ -95,14 +98,13 @@ const View: React.FC<TextboxProps> = (props) => {
     </div>
   );
 
-  const elRight = <div {...styles.right}>{props.right}</div>;
-
   return (
     <div {...css(styles.base, props.style)}>
       {props.label && <div {...styles.title}>{props.label}</div>}
       <div {...styles.body}>
+        <div {...styles.edge}>{props.left}</div>
         {elInput}
-        {elRight}
+        <div {...styles.edge}>{props.right}</div>
       </div>
       {props.footer && <div {...styles.footer}>{props.footer}</div>}
     </div>

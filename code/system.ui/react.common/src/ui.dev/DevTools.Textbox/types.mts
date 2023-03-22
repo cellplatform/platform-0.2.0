@@ -18,6 +18,7 @@ export type DevTextboxHandlerArgs<S extends O = O> = {
   label(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   value(value: StringOrNil | t.DevValueHandler<StringOrNil, S>): DevTextboxHandlerArgs<S>;
   placeholder(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
+  left(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   right(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   footer(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   error(value: ErrorInput | t.DevValueHandler<ErrorInput, S>): DevTextboxHandlerArgs<S>;

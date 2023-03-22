@@ -22,6 +22,7 @@ export function textbox<S extends O = O>(
   const label = ValueHandler<ContentInput, S>(events);
   const value = ValueHandler<StringOrNil, S>(events);
   const placeholder = ValueHandler<ContentInput, S>(events);
+  const left = ValueHandler<ContentInput, S>(events);
   const right = ValueHandler<ContentInput, S>(events);
   const footer = ValueHandler<ContentInput, S>(events);
   const error = ValueHandler<ErrorInput, S>(events);
@@ -45,6 +46,10 @@ export function textbox<S extends O = O>(
     },
     placeholder(input) {
       placeholder.handler(input);
+      return args;
+    },
+    left(input) {
+      left.handler(input);
       return args;
     },
     right(input) {
@@ -91,11 +96,12 @@ export function textbox<S extends O = O>(
         value={value.current}
         label={label.current}
         placeholder={placeholder.current}
+        left={left.current}
         right={right.current}
         footer={footer.current}
         error={error.current}
-        onChange={hasHandlers ? onChange : undefined}
         onEnter={onEnter}
+        onChange={hasHandlers ? onChange : undefined}
       />
     );
   });
@@ -104,6 +110,7 @@ export function textbox<S extends O = O>(
   label.subscribe(ref.redraw);
   value.subscribe(ref.redraw);
   placeholder.subscribe(ref.redraw);
+  left.subscribe(ref.redraw);
   right.subscribe(ref.redraw);
   footer.subscribe(ref.redraw);
   error.subscribe(ref.redraw);

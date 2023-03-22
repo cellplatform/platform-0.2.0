@@ -83,16 +83,20 @@ export default Dev.describe('Textbox', (e) => {
           ),
       );
 
+      dev.hr(-1, 5);
+
+      const elIcon = <DevIcons.Keyboard style={{ MarginX: 3 }} />;
+      dev.boolean((btn) =>
+        btn
+          .label('left')
+          .value((e) => Boolean(e.state.props.left))
+          .onClick((e) => e.change((d) => (d.props.left = d.props.left ? undefined : elIcon))),
+      );
       dev.boolean((btn) =>
         btn
           .label('right')
           .value((e) => Boolean(e.state.props.right))
-          .onClick((e) =>
-            e.change((d) => {
-              const el = <DevIcons.Keyboard style={{ MarginX: 3 }} />;
-              d.props.right = d.props.right ? undefined : el;
-            }),
-          ),
+          .onClick((e) => e.change((d) => (d.props.right = d.props.right ? undefined : elIcon))),
       );
 
       dev.hr(-1, 5);
@@ -119,6 +123,7 @@ export default Dev.describe('Textbox', (e) => {
         .enabled((e) => e.state.props.isEnabled)
         .label((e) => e.state.props.label)
         .placeholder((e) => e.state.props.placeholder)
+        .left((e) => e.state.props.left)
         .right((e) => e.state.props.right)
         .value((e) => e.state.props.value)
         .error((e) => e.state.props.error)
