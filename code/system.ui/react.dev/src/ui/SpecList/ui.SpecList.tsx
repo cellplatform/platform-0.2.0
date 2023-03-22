@@ -5,6 +5,7 @@ import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
 import { useScrollObserver } from './useScrollObserver.mjs';
+import { useScrollController } from './useScrollController.mjs';
 
 export type SpecListProps = {
   title?: string;
@@ -38,38 +39,7 @@ const View: React.FC<SpecListProps> = (props) => {
 
   useRubberband(props.allowRubberband ?? false);
   useScrollObserver(baseRef, itemRefs.current, props.onChildVisibility);
-
-  /**
-   * Effect: Scrolling behavior.
-   */
-  useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-
-    let _isScrolling = false;
-    const scrolling$ = new rx.Subject<void>();
-    const onScroll = () => scrolling$.next();
-    baseRef.current?.addEventListener('scroll', onScroll);
-
-    const scrollComplete$ = scrolling$.pipe(rx.takeUntil(dispose$), rx.debounceTime(50));
-    scrollComplete$.subscribe((e) => (_isScrolling = false));
-
-    const scrollTo$ = props.scrollTo$?.pipe(
-      rx.takeUntil(dispose$),
-      rx.filter(() => !_isScrolling),
-    );
-
-    scrollTo$?.subscribe((e) => {
-      _isScrolling = true;
-      const el = itemRefs.current[e.index]?.current;
-      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-
-    return () => {
-      dispose();
-      scrolling$.complete();
-      baseRef.current?.removeEventListener('scroll', onScroll);
-    };
-  }, [Boolean(props.scrollTo$)]);
+  useScrollController(baseRef, itemRefs.current, props.scrollTo$);
 
   /**
    * [Render]
