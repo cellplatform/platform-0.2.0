@@ -237,7 +237,7 @@ export default Dev.describe('WebRtc', async (e) => {
           focusAction={'Select'}
           spellCheck={false}
           onChanged={(e) => dev.change((d) => (d.debug.remotePeer = e.to))}
-          onEnter={async () => {
+          onEnter={() => {
             const id = state.current.debug.remotePeer;
             Conn.connectData(id);
             Conn.connectCamera(id);

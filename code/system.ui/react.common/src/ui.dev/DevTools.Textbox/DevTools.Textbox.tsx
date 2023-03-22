@@ -2,6 +2,9 @@ import { t, ValueHandler } from '../common';
 import { Textbox } from './ui.Textbox';
 
 type O = Record<string, unknown>;
+type BoolOrNil = boolean | undefined | null;
+type StringOrNil = string | undefined | null;
+type ContentInput = StringOrNil | JSX.Element;
 
 /**
  * A plain-text Textbox input.
@@ -14,10 +17,13 @@ export function textbox<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = ValueHandler<string, S>(events);
-  const value = ValueHandler<boolean | undefined, S>(events);
-  const enabled = ValueHandler<boolean, S>(events);
-  const clickHandlers = new Set<t.DevTextboxClickHandler<S>>();
+  const label = ValueHandler<ContentInput, S>(events);
+  const value = ValueHandler<StringOrNil, S>(events);
+  const placeholder = ValueHandler<ContentInput, S>(events);
+  const right = ValueHandler<ContentInput, S>(events);
+  const enabled = ValueHandler<BoolOrNil, S>(events);
+  const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
+  const enterHandlers = new Set<t.DevTextboxEnterHandler<S>>();
 
   const args: t.DevTextboxHandlerArgs<S> = {
     ctx,
@@ -29,12 +35,24 @@ export function textbox<S extends O = O>(
       value.handler(input);
       return args;
     },
+    placeholder(input) {
+      placeholder.handler(input);
+      return args;
+    },
+    right(input) {
+      right.handler(input);
+      return args;
+    },
     enabled(input) {
       enabled.handler(input);
       return args;
     },
-    onClick(handler) {
-      if (typeof handler === 'function') clickHandlers.add(handler);
+    onChange(handler) {
+      if (typeof handler === 'function') changeHandlers.add(handler);
+      return args;
+    },
+    onEnter(handler) {
+      if (typeof handler === 'function') enterHandlers.add(handler);
       return args;
     },
   };
@@ -42,27 +60,37 @@ export function textbox<S extends O = O>(
   const ref = ctx.debug.row(async (e) => {
     const state = await ctx.state<S>(initial);
     const change = state.change;
-    const onClick = async () => {
-      const current = value.current ?? false;
+    const onChange: t.TextInputChangeEventHandler = (e) => {
+      const next = e.to;
       const dev = ctx.toObject().props;
-      clickHandlers.forEach((fn) => fn({ ...args, dev, current, state, change }));
+      changeHandlers.forEach((fn) => fn({ ...args, dev, next, state, change }));
+    };
+    const onEnter: t.TextInputKeyEventHandler = (e) => {
+      const dev = ctx.toObject().props;
+      enterHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
     };
 
-    const hasHandlers = clickHandlers.size > 0;
+    const hasHandlers = changeHandlers.size > 0;
     const isEnabled = hasHandlers && enabled.current !== false;
 
     return (
       <Textbox
+        isEnabled={isEnabled}
         value={value.current}
         label={label.current}
-        isEnabled={isEnabled}
-        onClick={hasHandlers ? onClick : undefined}
+        placeholder={placeholder.current}
+        right={right.current}
+        onChange={hasHandlers ? onChange : undefined}
+        onEnter={onEnter}
       />
     );
   });
 
   label.subscribe(ref.redraw);
   value.subscribe(ref.redraw);
+  placeholder.subscribe(ref.redraw);
+  right.subscribe(ref.redraw);
+  enabled.subscribe(ref.redraw);
 
   fn?.(args);
 }

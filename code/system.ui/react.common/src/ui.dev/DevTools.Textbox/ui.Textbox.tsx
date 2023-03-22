@@ -1,52 +1,99 @@
-import { FC, Switch, t } from '../common';
+import { useEffect, useState, useRef } from 'react';
+
+import { COLORS, Color, css, FC, TextInput, t } from '../common';
 import { Button } from '../DevTools.Button';
 
-const DEFAULT = { ...Button.DEFAULT, value: false };
+const DEFAULT = {
+  isEnabled: true,
+  placeholder: 'enter text...',
+};
+
+type StringOrNil = string | undefined | null;
+type ContentInput = StringOrNil | JSX.Element;
 
 export type TextboxProps = {
   isEnabled?: boolean;
-  label?: string | JSX.Element;
-  value?: boolean;
-
+  label?: ContentInput;
+  value?: StringOrNil;
+  placeholder?: ContentInput;
+  right?: ContentInput;
   style?: t.CssValue;
   labelOpacity?: number;
-  onClick?: React.MouseEventHandler;
+  onChange?: t.TextInputChangeEventHandler;
+  onEnter?: t.TextInputKeyEventHandler;
 };
 
 const View: React.FC<TextboxProps> = (props) => {
-  const { value = DEFAULT.value } = props;
   const isActive = Wrangle.isActive(props);
-
-  /**
-   * Handlers
-   */
-  const handleClick: React.MouseEventHandler = (e) => {
-    if (isActive) {
-      e.preventDefault();
-      props.onClick?.(e);
-    }
-  };
+  const [isFocused, setFocused] = useState(false);
 
   /**
    * [Render]
    */
-  const elRight = (
-    <Switch
-      value={value}
-      isEnabled={isActive}
-      height={16}
-      onMouseDown={(e) => e.preventDefault()}
-    />
+  const styles = {
+    base: css({
+      position: 'relative',
+      boxSizing: 'border-box',
+      userSelect: 'none',
+      color: COLORS.DARK,
+    }),
+    title: css({
+      fontSize: 12,
+      color: Color.alpha(COLORS.DARK, 0.7),
+      marginBottom: 5,
+      opacity: isActive ? 1 : 0.4,
+    }),
+    body: css({
+      borderBottom: `solid 1px`,
+      borderBottomColor:
+        isActive && isFocused ? Color.alpha(COLORS.CYAN, 1) : Color.alpha(COLORS.DARK, 0.1),
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
+    }),
+    input: css({
+      boxSizing: 'border-box',
+      PaddingX: 5,
+      PaddingY: 3,
+      display: 'grid',
+      height: 26,
+    }),
+    right: css({
+      display: 'grid',
+      placeItems: 'center',
+      height: 26,
+    }),
+  };
+
+  const elInput = (
+    <div {...styles.input}>
+      <TextInput
+        isEnabled={isActive}
+        value={Wrangle.value(props)}
+        placeholder={Wrangle.placeholder(props)}
+        placeholderStyle={{ opacity: 0.2, italic: true }}
+        focusAction={'Select'}
+        spellCheck={false}
+        onFocusChange={(e) => setFocused(e.isFocused)}
+        onChanged={(e) => {
+          if (isActive) props.onChange?.(e);
+        }}
+        onEnter={(e) => {
+          if (isActive) props.onEnter?.(e);
+        }}
+      />
+    </div>
   );
 
+  const elRight = <div {...styles.right}>{props.right}</div>;
+
   return (
-    <Button
-      {...props}
-      style={props.style}
-      enabled={isActive}
-      rightElement={elRight}
-      onClick={handleClick}
-    />
+    <div {...css(styles.base, props.style)}>
+      {props.label && <div {...styles.title}>{props.label}</div>}
+      <div {...styles.body}>
+        {elInput}
+        {elRight}
+      </div>
+    </div>
   );
 };
 
@@ -56,10 +103,18 @@ const View: React.FC<TextboxProps> = (props) => {
 
 const Wrangle = {
   isActive(props: TextboxProps): boolean {
-    const { isEnabled = DEFAULT.enabled } = props;
+    const { isEnabled = DEFAULT.isEnabled } = props;
     if (!isEnabled) return false;
-    if (!props.onClick) return false;
     return true;
+  },
+
+  value(props: TextboxProps) {
+    return props.value ?? '';
+  },
+
+  placeholder(props: TextboxProps) {
+    if (props.placeholder === null) return '';
+    return props.placeholder ?? DEFAULT.placeholder;
   },
 };
 

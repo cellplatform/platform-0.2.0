@@ -63,6 +63,7 @@ export function boolean<S extends O = O>(
 
   label.subscribe(ref.redraw);
   value.subscribe(ref.redraw);
+  enabled.subscribe(ref.redraw);
 
   fn?.(args);
 }

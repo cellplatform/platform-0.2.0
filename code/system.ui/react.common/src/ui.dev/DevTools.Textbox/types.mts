@@ -1,27 +1,39 @@
 import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
-type BoolOrUndefined = boolean | undefined;
+type BoolOrNil = boolean | undefined | null;
+type StringOrNil = string | undefined | null;
+type ContentInput = StringOrNil | JSX.Element;
 
 /**
- * Boolean
+ * Textbox
  */
 export type DevTextboxHandler<S extends O = O> = (e: DevTextboxHandlerArgs<S>) => t.IgnoredResponse;
 export type DevTextboxHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
-  label(value: string | t.DevValueHandler<string, S>): DevTextboxHandlerArgs<S>;
-  value(value: BoolOrUndefined | t.DevValueHandler<BoolOrUndefined, S>): DevTextboxHandlerArgs<S>;
-  enabled(value: boolean | t.DevValueHandler<boolean, S>): DevTextboxHandlerArgs<S>;
-  onClick(fn: DevTextboxClickHandler<S>): DevTextboxHandlerArgs<S>;
+  label(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
+  value(value: StringOrNil | t.DevValueHandler<StringOrNil, S>): DevTextboxHandlerArgs<S>;
+  placeholder(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
+  right(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
+  enabled(value: BoolOrNil | t.DevValueHandler<BoolOrNil, S>): DevTextboxHandlerArgs<S>;
+  onChange(fn: DevTextboxChangeHandler<S>): DevTextboxHandlerArgs<S>;
+  onEnter(fn: DevTextboxEnterHandler<S>): DevTextboxHandlerArgs<S>;
 };
 
 /**
- * Boolean Click
+ * Change
  */
-export type DevTextboxClickHandler<S extends O = O> = (e: DevTextboxClickHandlerArgs<S>) => void;
-export type DevTextboxClickHandlerArgs<S extends O = O> = DevTextboxHandlerArgs<S> & {
+export type DevTextboxChangeHandler<S extends O = O> = (e: DevTextboxChangeHandlerArgs<S>) => void;
+export type DevTextboxChangeHandlerArgs<S extends O = O> = DevTextboxHandlerArgs<S> & {
   dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
-  current: boolean;
+  next: string;
+};
+
+export type DevTextboxEnterHandler<S extends O = O> = (e: DevTextboxEnterHandlerArgs<S>) => void;
+export type DevTextboxEnterHandlerArgs<S extends O = O> = DevTextboxHandlerArgs<S> & {
+  dev: t.DevRenderProps;
+  state: t.DevCtxState<S>;
+  change: t.DevCtxState<S>['change'];
 };
