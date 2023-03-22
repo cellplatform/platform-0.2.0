@@ -26,7 +26,7 @@ export default Dev.describe('Button', (e) => {
 
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'props'} data={e.state.props} expand={1} />);
+      .render<T>((e) => <Dev.Object name={'Dev.Button'} data={e.state.props} expand={1} />);
 
     dev.section((dev) => {
       dev

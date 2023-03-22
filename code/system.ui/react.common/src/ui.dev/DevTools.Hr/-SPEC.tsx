@@ -18,7 +18,7 @@ export default Dev.describe('Hr', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer
       .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={0} />);
+      .render<T>((e) => <Dev.Object name={'Dev.Hr'} data={e.state} expand={0} />);
 
     dev.title('Horizontal Rule').hr();
 
