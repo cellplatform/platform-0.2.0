@@ -28,13 +28,15 @@ export type DevTools<S extends O = O> = {
   /**
    * Widgets.
    */
+  title(text: string, style?: t.DevTitleStyle): DevTools<S>;
+  title(fn: t.DevTitleHandler<S>): DevTools<S>;
+
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
   button(fn: t.DevButtonHandler<S>): DevTools<S>;
 
   boolean(fn: t.DevBooleanHandler<S>): DevTools<S>;
 
-  title(text: string, style?: t.DevTitleStyle): DevTools<S>;
-  title(fn: t.DevTitleHandler<S>): DevTools<S>;
+  textbox(fn: t.DevTextboxHandler<S>): DevTools<S>;
 
   TODO(text?: string, style?: t.DevTodoStyle): DevTools<S>;
   TODO(fn: t.DevTodoHandler<S>): DevTools<S>;
