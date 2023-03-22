@@ -29,9 +29,12 @@ export function useScrollObserver(
       observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           const el = entry.target as HTMLLIElement;
-          const { isIntersecting } = entry;
           const index = itemRefs.findIndex((ref) => ref.current === el);
-          map.set(index, { index, isIntersecting });
+          map.set(index, {
+            index,
+            isOnScreen: entry.isIntersecting,
+            threshold,
+          });
         });
 
         const items = toArray(mapRef);

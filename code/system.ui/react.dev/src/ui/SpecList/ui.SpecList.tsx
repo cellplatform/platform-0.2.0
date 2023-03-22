@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { COLORS, css, FC, Filter, t, useRubberband } from './common';
+import { rx, COLORS, css, FC, Filter, t, useRubberband } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -18,6 +18,7 @@ export type SpecListProps = {
   allowRubberband?: boolean;
   style?: t.CssValue;
   scroll?: boolean;
+  scrollTo$?: t.Observable<t.SpecListScrollTarget>;
   onChildVisibility?: t.SpecListChildVisibilityHandler;
 };
 
@@ -37,6 +38,18 @@ const View: React.FC<SpecListProps> = (props) => {
 
   useRubberband(props.allowRubberband ?? false);
   useScrollObserver(baseRef, itemRefs.current, props.onChildVisibility);
+
+  /**
+   * Effect: Scrolling behavior.
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    props.scrollTo$?.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+      const el = itemRefs.current[e.index]?.current;
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    return dispose;
+  }, [Boolean(props.scrollTo$)]);
 
   /**
    * [Render]
