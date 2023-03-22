@@ -1,11 +1,9 @@
 import { PeerCard, PeerCardProps } from '..';
 import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../../test.ui';
 import { PeerList } from '../../ui.PeerList';
+import { DocShared, NetworkSchema } from './Schema.mjs';
 
 import type { TestNetworkP2P } from '../../../test.ui';
-
-import { initialSharedDoc } from './-schema.mjs';
-import type { DocShared } from './-schema.mjs';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
@@ -40,13 +38,6 @@ export default Dev.describe('PeerCard', async (e) => {
   let self: t.Peer | undefined;
   let docMe: t.CrdtDocRef<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
-
-  const byteArray = Crdt.Doc.Schema.toByteArray<DocShared>({ count: 0, network: { peers: {} } });
-
-  console.info('');
-  console.info('CODE FILE (schema.mts):');
-  console.info(byteArray.toString());
-  console.info('');
 
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
@@ -86,7 +77,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     // Initialize CRDT documents.
     docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
-    docShared = Crdt.Doc.ref<DocShared>(initialSharedDoc, { dispose$ });
+    docShared = NetworkSchema.genesis().doc;
 
     // Start file-persistence.
     await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
@@ -179,9 +170,11 @@ export default Dev.describe('PeerCard', async (e) => {
             level: 1,
             paths: [
               //
+              '$.Doc<Private>',
               '$.Doc<Public>',
-              '$.Doc<Public>.network',
-              '$.Doc<Public>.network.*',
+              // '$.Doc<Public>.network',
+              // '$.Doc<Public>.network.*',
+              '$.Doc<Public>.tmp',
             ],
           }}
           data={{
