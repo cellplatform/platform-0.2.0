@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { rx, COLORS, css, FC, Filter, t, useRubberband } from './common';
+import { COLORS, css, FC, Filter, rx, t, useRubberband } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
@@ -44,11 +44,31 @@ const View: React.FC<SpecListProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    props.scrollTo$?.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+
+    let _isScrolling = false;
+    const scrolling$ = new rx.Subject<void>();
+    const onScroll = () => scrolling$.next();
+    baseRef.current?.addEventListener('scroll', onScroll);
+
+    const scrollComplete$ = scrolling$.pipe(rx.takeUntil(dispose$), rx.debounceTime(50));
+    scrollComplete$.subscribe((e) => (_isScrolling = false));
+
+    const scrollTo$ = props.scrollTo$?.pipe(
+      rx.takeUntil(dispose$),
+      rx.filter(() => !_isScrolling),
+    );
+
+    scrollTo$?.subscribe((e) => {
+      _isScrolling = true;
       const el = itemRefs.current[e.index]?.current;
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
-    return dispose;
+
+    return () => {
+      dispose();
+      scrolling$.complete();
+      baseRef.current?.removeEventListener('scroll', onScroll);
+    };
   }, [Boolean(props.scrollTo$)]);
 
   /**

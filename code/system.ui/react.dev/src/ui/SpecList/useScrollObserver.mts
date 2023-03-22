@@ -19,7 +19,7 @@ export function useScrollObserver(
     let observer: IntersectionObserver;
     const root = baseRef.current;
     const rootMargin = '0px';
-    const threshold = options.threshold ?? 0.5;
+    const threshold = options.threshold ?? 0.75;
 
     const map = mapRef.current;
     map.clear();
