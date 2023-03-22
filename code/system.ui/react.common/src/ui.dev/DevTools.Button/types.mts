@@ -9,9 +9,9 @@ type RightInput = string | JSX.Element;
 export type DevButtonHandler<S extends O = O> = (e: DevButtonHandlerArgs<S>) => t.IgnoredResponse;
 export type DevButtonHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
+  enabled(value: boolean | t.DevValueHandler<boolean, S>): DevButtonHandlerArgs<S>;
   label(value: string | t.DevValueHandler<string, S>): DevButtonHandlerArgs<S>;
   right(value: RightInput | t.DevValueHandler<RightInput, S>): DevButtonHandlerArgs<S>;
-  enabled(value: boolean | t.DevValueHandler<boolean, S>): DevButtonHandlerArgs<S>;
   onClick(fn: DevButtonClickHandler<S>): DevButtonHandlerArgs<S>;
 };
 
