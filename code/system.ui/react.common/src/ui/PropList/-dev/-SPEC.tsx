@@ -1,8 +1,8 @@
 import { PropList } from '.';
-import { Dev, t } from '../../test.ui';
-import { BuilderSample, sampleItems, SampleFields } from './-dev';
+import { Dev, t } from '../../../test.ui';
+import { BuilderSample, sampleItems, SampleFields } from '.';
 
-import type { MyFields } from './-dev';
+import type { MyFields } from '.';
 
 type SampleKind = 'Samples' | 'Builder' | 'Empty';
 type T = {
