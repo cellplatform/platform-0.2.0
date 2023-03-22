@@ -15,7 +15,7 @@ export default Test.describe('Schema', (e) => {
       const byteArray = CrdtSchema.toByteArray<D>(initialObject);
       const code = byteArray.sourceFile; // NB: TypeScript source-code to save within module (aka. "schema" starting point).
 
-      expect(byteArray.commit.byteLength).to.eql(70);
+      expect(byteArray.bytes.byteLength).to.eql(70);
       expect(code).to.include('export type D = { count: number };');
       expect(code).to.include('export const initialState = new Uint8Array([');
       expect(code).to.eql(byteArray.toString());
