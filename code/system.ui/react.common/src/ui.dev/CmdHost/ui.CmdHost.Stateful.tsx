@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CmdHost, CmdHostProps } from './ui.CmdHost';
-import { R, DEFAULTS, t, SpecList } from './common';
+import { R, DEFAULTS, t, SpecList, rx } from './common';
 
 export type CmdHostStatefulProps = Omit<CmdHostProps, 'filter'> & {
   mutateUrl?: boolean;
 };
+
+type T = t.Subject<t.SpecListScrollTarget>;
 
 /**
  * A version of <CmdHost> that manages state interanally.
@@ -18,6 +20,20 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs });
   const filteredSpecs = SpecList.Filter.specs(specs, filter);
+  const [childItems, setChildItems] = useState<t.SpecListChildVisibility[]>([]);
+  const selectionChangeTrigger = childItems.map((item) => item.isOnScreen).join(',');
+  const scrollToRef = useRef<T>(new rx.Subject<t.SpecListScrollTarget>());
+
+  /**
+   * Effects
+   */
+  useEffect(() => {
+    const item = childItems[selectedIndex];
+    if (item && !item.isOnScreen) {
+      const index = item.index;
+      scrollToRef.current.next({ index });
+    }
+  }, [selectedIndex, selectionChangeTrigger]);
 
   /**
    * [Handlers]
@@ -43,11 +59,9 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
     if (key === 'End') {
       setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
     }
-    if (key === 'Enter') {
-      if (mutateUrl) {
-        Url.mutateSelected(selectedIndex, filteredSpecs);
-        window.location.reload();
-      }
+    if (key === 'Enter' && mutateUrl) {
+      Url.mutateSelected(selectedIndex, filteredSpecs);
+      window.location.reload();
     }
   };
 
@@ -59,10 +73,12 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
       {...props}
       filter={filter}
       selectedIndex={isFocused ? selectedIndex : undefined}
-      onChanged={handleFilterChanged}
       hintKey={hintKeys}
+      scrollTo$={scrollToRef.current}
+      onChanged={handleFilterChanged}
       onCmdFocusChange={(e) => setFocused(e.isFocused)}
       onKeyDown={(e) => handleKeyboard(e.key, e.preventDefault)}
+      onChildVisibility={(e) => setChildItems(e.items)}
     />
   );
 };

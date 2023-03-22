@@ -14,10 +14,12 @@ export type CmdHostProps = {
   badge?: t.SpecListBadge;
   style?: t.CssValue;
   focusOnReady?: boolean;
+  scrollTo$?: t.Observable<t.SpecListScrollTarget>;
   onChanged?: t.CmdHostChangedHandler;
   onCmdFocusChange?: t.TextInputFocusChangeHandler;
   onKeyDown?: t.TextInputKeyEventHandler;
   onKeyUp?: t.TextInputKeyEventHandler;
+  onChildVisibility?: t.SpecListChildVisibilityHandler;
 };
 
 export const CmdHost: React.FC<CmdHostProps> = (props) => {
@@ -55,8 +57,10 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
           filter={props.filter}
           badge={props.badge}
           hrDepth={props.hrDepth}
-          selectedIndex={props.selectedIndex}
           scroll={true}
+          scrollTo$={props.scrollTo$}
+          selectedIndex={props.selectedIndex}
+          onChildVisibility={props.onChildVisibility}
         />
       </div>
       <CmdBar
