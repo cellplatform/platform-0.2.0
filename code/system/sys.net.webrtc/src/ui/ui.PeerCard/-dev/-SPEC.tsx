@@ -93,9 +93,8 @@ export default Dev.describe('PeerCard', async (e) => {
     redraw();
 
     docShared.$.subscribe((e) => {
-      const debug = e.doc.json?.debug;
+      const debug = e.doc.tmp.debug;
       if (debug === 'minimal') {
-        //
         state.change((d) => {
           d.props.showConnect = false;
           d.props.showPeer = false;
@@ -199,15 +198,13 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.button('tmp: minimal', (e) => {
         docShared.change((d) => {
-          if (!d.json) d.json = {};
-          d.json.debug = 'minimal';
+          d.tmp.debug = 'minimal';
         });
       });
 
       dev.button('tmp: normal', (e) => {
         docShared.change((d) => {
-          if (!d.json) d.json = {};
-          d.json.debug = 'normal';
+          d.tmp.debug = 'normal';
         });
       });
 
