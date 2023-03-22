@@ -5,6 +5,7 @@ type O = Record<string, unknown>;
 type BoolOrNil = boolean | undefined | null;
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 /**
  * A plain-text Textbox input.
@@ -17,16 +18,23 @@ export function textbox<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
+  const enabled = ValueHandler<BoolOrNil, S>(events);
   const label = ValueHandler<ContentInput, S>(events);
   const value = ValueHandler<StringOrNil, S>(events);
   const placeholder = ValueHandler<ContentInput, S>(events);
   const right = ValueHandler<ContentInput, S>(events);
-  const enabled = ValueHandler<BoolOrNil, S>(events);
+  const footer = ValueHandler<ContentInput, S>(events);
+  const error = ValueHandler<ErrorInput, S>(events);
+
   const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
   const enterHandlers = new Set<t.DevTextboxEnterHandler<S>>();
 
   const args: t.DevTextboxHandlerArgs<S> = {
     ctx,
+    enabled(input) {
+      enabled.handler(input);
+      return args;
+    },
     label(input) {
       label.handler(input);
       return args;
@@ -43,8 +51,12 @@ export function textbox<S extends O = O>(
       right.handler(input);
       return args;
     },
-    enabled(input) {
-      enabled.handler(input);
+    footer(input) {
+      footer.handler(input);
+      return args;
+    },
+    error(input) {
+      error.handler(input);
       return args;
     },
     onChange(handler) {
@@ -80,17 +92,21 @@ export function textbox<S extends O = O>(
         label={label.current}
         placeholder={placeholder.current}
         right={right.current}
+        footer={footer.current}
+        error={error.current}
         onChange={hasHandlers ? onChange : undefined}
         onEnter={onEnter}
       />
     );
   });
 
+  enabled.subscribe(ref.redraw);
   label.subscribe(ref.redraw);
   value.subscribe(ref.redraw);
   placeholder.subscribe(ref.redraw);
   right.subscribe(ref.redraw);
-  enabled.subscribe(ref.redraw);
+  footer.subscribe(ref.redraw);
+  error.subscribe(ref.redraw);
 
   fn?.(args);
 }

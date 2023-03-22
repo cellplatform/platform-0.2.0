@@ -1,8 +1,9 @@
 import { Textbox, TextboxProps } from '.';
-import { Dev } from '../../test.ui';
+import { t, Dev } from '../../test.ui';
 import { DevIcons } from '../Icons.mjs';
 
 type StringOrNil = string | undefined | null;
+type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 type T = {
   props: TextboxProps;
@@ -93,6 +94,22 @@ export default Dev.describe('Textbox', (e) => {
             }),
           ),
       );
+
+      dev.hr(-1, 5);
+
+      const error = (value: ErrorInput) => {
+        dev.button((btn) =>
+          btn
+            .label(`error: ${value}`)
+            .right((e) => (e.state.props.right === value ? '←' : ''))
+            .onClick((e) => e.change((d) => (d.props.error = value))),
+        );
+      };
+
+      error('error');
+      error('warning');
+      error(true);
+      error(undefined);
     });
 
     dev.hr(5, 20);
@@ -104,6 +121,12 @@ export default Dev.describe('Textbox', (e) => {
         .placeholder((e) => e.state.props.placeholder)
         .right((e) => e.state.props.right)
         .value((e) => e.state.props.value)
+        .error((e) => e.state.props.error)
+        .footer((e) =>
+          e.state.props.value
+            ? 'Comentary on the input value.'
+            : 'Here is a hint about what to enter.',
+        )
         .onChange((e) => e.change((d) => (d.props.value = e.next)))
         .onEnter((e) => {
           console.info('ENTER', e);

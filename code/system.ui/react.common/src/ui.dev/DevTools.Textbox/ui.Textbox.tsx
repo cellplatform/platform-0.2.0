@@ -10,6 +10,7 @@ const DEFAULT = {
 
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 export type TextboxProps = {
   isEnabled?: boolean;
@@ -17,6 +18,8 @@ export type TextboxProps = {
   value?: StringOrNil;
   placeholder?: ContentInput;
   right?: ContentInput;
+  footer?: ContentInput;
+  error?: ErrorInput;
   style?: t.CssValue;
   labelOpacity?: number;
   onChange?: t.TextInputChangeEventHandler;
@@ -30,6 +33,7 @@ const View: React.FC<TextboxProps> = (props) => {
   /**
    * [Render]
    */
+  const errorColor = Wrangle.errorColor(props);
   const styles = {
     base: css({
       position: 'relative',
@@ -45,8 +49,7 @@ const View: React.FC<TextboxProps> = (props) => {
     }),
     body: css({
       borderBottom: `solid 1px`,
-      borderBottomColor:
-        isActive && isFocused ? Color.alpha(COLORS.CYAN, 1) : Color.alpha(COLORS.DARK, 0.1),
+      borderBottomColor: Wrangle.borderColor(props, isActive, isFocused),
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
@@ -58,10 +61,17 @@ const View: React.FC<TextboxProps> = (props) => {
       height: 26,
     }),
     right: css({
-      display: 'grid',
-      placeItems: 'center',
       height: 26,
       opacity: isActive ? 1 : 0.2,
+      display: 'grid',
+      placeItems: 'center',
+    }),
+    footer: css({
+      boxSizing: 'border-box',
+      marginTop: 4,
+      fontSize: 12,
+      fontStyle: 'italic',
+      color: errorColor ?? Color.alpha(COLORS.DARK, 0.5),
     }),
   };
 
@@ -94,6 +104,7 @@ const View: React.FC<TextboxProps> = (props) => {
         {elInput}
         {elRight}
       </div>
+      {props.footer && <div {...styles.footer}>{props.footer}</div>}
     </div>
   );
 };
@@ -116,6 +127,34 @@ const Wrangle = {
   placeholder(props: TextboxProps) {
     if (props.placeholder === null) return '';
     return props.placeholder ?? DEFAULT.placeholder;
+  },
+
+  error(props: TextboxProps) {
+    let error: t.DevTextboxError | undefined = undefined;
+    if (props.error === true) error = 'error';
+    if (typeof props.error === 'string') error = props.error;
+
+    const isError = error === 'error';
+    const isWarning = error === 'warning';
+
+    return {
+      error,
+      isError,
+      isWarning,
+    };
+  },
+
+  errorColor(props: TextboxProps) {
+    const { isError, isWarning } = Wrangle.error(props);
+    if (isError) return COLORS.RED;
+    if (isWarning) return COLORS.YELLOW;
+    return;
+  },
+
+  borderColor(props: TextboxProps, isActive: boolean, isFocused: boolean) {
+    const errorColor = Wrangle.errorColor(props);
+    if (errorColor) return errorColor;
+    return isActive && isFocused ? Color.alpha(COLORS.CYAN, 1) : Color.alpha(COLORS.DARK, 0.1);
   },
 };
 
