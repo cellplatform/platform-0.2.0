@@ -1,7 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-
-import { COLORS, Color, css, FC, TextInput, t } from '../common';
-import { Button } from '../DevTools.Button';
+import { useState } from 'react';
+import { Color, COLORS, css, FC, t, TextInput, Style } from '../common';
 
 const DEFAULT = {
   isEnabled: true,
@@ -10,6 +8,7 @@ const DEFAULT = {
 
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 export type TextboxProps = {
@@ -22,7 +21,7 @@ export type TextboxProps = {
   footer?: ContentInput;
   error?: ErrorInput;
   style?: t.CssValue;
-  labelOpacity?: number;
+  margin?: MarginOrNil;
   onChange?: t.TextInputChangeEventHandler;
   onEnter?: t.TextInputKeyEventHandler;
 };
@@ -30,6 +29,9 @@ export type TextboxProps = {
 const View: React.FC<TextboxProps> = (props) => {
   const isActive = Wrangle.isActive(props);
   const [isFocused, setFocused] = useState(false);
+
+  const { margin } = props;
+  console.log('margin', margin);
 
   /**
    * [Render]
@@ -42,6 +44,7 @@ const View: React.FC<TextboxProps> = (props) => {
       boxSizing: 'border-box',
       userSelect: 'none',
       color: COLORS.DARK,
+      ...Style.toMargins(props.margin),
     }),
     title: css({
       fontSize: 12,

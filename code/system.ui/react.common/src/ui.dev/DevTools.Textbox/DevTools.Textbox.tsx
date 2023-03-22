@@ -5,6 +5,7 @@ type O = Record<string, unknown>;
 type BoolOrNil = boolean | undefined | null;
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 /**
@@ -25,6 +26,7 @@ export function textbox<S extends O = O>(
   const left = ValueHandler<ContentInput, S>(events);
   const right = ValueHandler<ContentInput, S>(events);
   const footer = ValueHandler<ContentInput, S>(events);
+  const margin = ValueHandler<MarginOrNil, S>(events);
   const error = ValueHandler<ErrorInput, S>(events);
 
   const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
@@ -58,6 +60,10 @@ export function textbox<S extends O = O>(
     },
     footer(input) {
       footer.handler(input);
+      return args;
+    },
+    margin(input) {
+      margin.handler(input);
       return args;
     },
     error(input) {
@@ -99,6 +105,7 @@ export function textbox<S extends O = O>(
         left={left.current}
         right={right.current}
         footer={footer.current}
+        margin={margin.current}
         error={error.current}
         onEnter={onEnter}
         onChange={hasHandlers ? onChange : undefined}
@@ -113,6 +120,7 @@ export function textbox<S extends O = O>(
   left.subscribe(ref.redraw);
   right.subscribe(ref.redraw);
   footer.subscribe(ref.redraw);
+  margin.subscribe(ref.redraw);
   error.subscribe(ref.redraw);
 
   fn?.(args);

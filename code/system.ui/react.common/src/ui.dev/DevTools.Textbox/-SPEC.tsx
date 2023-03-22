@@ -83,6 +83,17 @@ export default Dev.describe('Textbox', (e) => {
           ),
       );
 
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'margin')
+          .value((e) => Boolean(e.state.props.margin))
+          .onClick((e) =>
+            e.change((d) => {
+              d.props.margin = d.props.margin ? null : [10, 20, 30, 50];
+            }),
+          ),
+      );
+
       dev.hr(-1, 5);
 
       const elIcon = <DevIcons.Keyboard style={{ MarginX: 3 }} />;
@@ -109,7 +120,6 @@ export default Dev.describe('Textbox', (e) => {
             .onClick((e) => e.change((d) => (d.props.error = value))),
         );
       };
-
       error('error');
       error('warning');
       error(true);
@@ -126,6 +136,7 @@ export default Dev.describe('Textbox', (e) => {
         .left((e) => e.state.props.left)
         .right((e) => e.state.props.right)
         .value((e) => e.state.props.value)
+        .margin((e) => e.state.props.margin)
         .error((e) => e.state.props.error)
         .footer((e) =>
           e.state.props.value

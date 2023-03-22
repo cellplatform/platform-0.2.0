@@ -5,6 +5,7 @@ type BoolOrNil = boolean | undefined | null;
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
 type ErrorInput = DevTextboxError | boolean | undefined | null;
+type MarginOrNil = t.MarginInput | undefined | null;
 
 export type DevTextboxError = 'error' | 'warning';
 
@@ -22,6 +23,7 @@ export type DevTextboxHandlerArgs<S extends O = O> = {
   right(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   footer(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   error(value: ErrorInput | t.DevValueHandler<ErrorInput, S>): DevTextboxHandlerArgs<S>;
+  margin(value: MarginOrNil | t.DevValueHandler<MarginOrNil, S>): DevTextboxHandlerArgs<S>;
   onChange(fn: DevTextboxChangeHandler<S>): DevTextboxHandlerArgs<S>;
   onEnter(fn: DevTextboxEnterHandler<S>): DevTextboxHandlerArgs<S>;
 };
