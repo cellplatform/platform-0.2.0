@@ -21,6 +21,19 @@ export default Test.describe('Schema', (e) => {
       expect(code).to.eql(byteArray.toString());
     });
 
+    e.it(
+      'Schema.toByteArray: custom <D> "type string" for source-code output: { typeDef }',
+      async (e) => {
+        const typeDef = 'export type D = { msg?: string }';
+        const initialObject: D = { count: 0, name: 'foo' };
+        const byteArray = CrdtSchema.toByteArray<D>(initialObject, { typeDef });
+        const code = byteArray.sourceFile; // NB: TypeScript source-code to save within module (aka. "schema" starting point).
+
+        expect(code).to.not.include('export type D = { count: number };');
+        expect(code).to.include(typeDef);
+      },
+    );
+
     e.it('initialize from byte-array (Uint8Array)', async (e) => {
       const initialObject: D = { count: 0, name: 'foo' };
       const docA = Crdt.Doc.ref<D>(initialObject);
