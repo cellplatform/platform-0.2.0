@@ -23,7 +23,9 @@ export default Dev.describe('Textbox', (e) => {
     ctx.subject
       .display('grid')
       .size([250, null])
-      .render<T>((e) => <Textbox {...e.state.props} />);
+      .render<T>((e) => (
+        <Textbox {...e.state.props} onChange={(e) => state.change((d) => (d.props.value = e.to))} />
+      ));
   });
 
   e.it('ui:debug', async (e) => {
