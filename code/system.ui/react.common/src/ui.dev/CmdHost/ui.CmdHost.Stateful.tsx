@@ -15,11 +15,13 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   const { mutateUrl = true, specs } = props;
   const total = specs ? Object.keys(specs).length : -1;
 
-  const [filter, setFilter] = useState(Wrangle.url().filter);
+  const [command, setCommand] = useState(Wrangle.url().filter);
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs });
-  const filteredSpecs = SpecList.Filter.specs(specs, filter);
+
+  const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
+  const filteredSpecs = SpecList.Filter.specs(specs, command);
+
   const [childItems, setChildItems] = useState<t.SpecListChildVisibility[]>([]);
   const selectionChangeTrigger = childItems.map((item) => item.isOnScreen).join(',');
   const scrollToRef = useRef<T>(new rx.Subject<t.SpecListScrollTarget>());
@@ -40,33 +42,45 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
    */
   const handleFilterChanged: t.CmdHostChangedHandler = (e) => {
     if (mutateUrl) Url.mutateFilter(e.command);
-    setFilter(e.command);
+    setCommand(e.command);
     props.onChanged?.(e);
   };
 
   const handleKeyboard = (e: t.TextInputKeyEvent) => {
+    const done = () => e.preventDefault();
+
+    if (e.key === 'Home' || (e.key === 'ArrowUp' && e.metaKey)) {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
+      return done();
+    }
+    if (e.key === 'End' || (e.key === 'ArrowDown' && e.metaKey)) {
+      setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
+      return done();
+    }
+
     if (e.key === 'ArrowUp') {
-      const next = selectedIndex - (e.metaKey ? 5 : 1);
+      const next = selectedIndex - (e.altKey ? 5 : 1);
       setSelectedIndex(Wrangle.selected(filteredSpecs, next));
-      e.preventDefault();
+      return done();
     }
     if (e.key === 'ArrowDown') {
-      const next = selectedIndex + (e.metaKey ? 5 : 1);
+      const next = selectedIndex + (e.altKey ? 5 : 1);
       setSelectedIndex(Wrangle.selected(filteredSpecs, next));
-      e.preventDefault();
-    }
-    if (e.key === 'Home') {
-      setSelectedIndex(Wrangle.selected(filteredSpecs, 0));
-      e.preventDefault();
-    }
-    if (e.key === 'End') {
-      setSelectedIndex(Wrangle.selected(filteredSpecs, total - 1));
-      e.preventDefault();
+      return done();
     }
     if (e.key === 'Enter' && mutateUrl) {
       Url.mutateSelected(selectedIndex, filteredSpecs);
-      window.location.reload();
-      e.preventDefault();
+
+      /**
+       * NB: forced page reload here
+       * 🐷 Integration Extension (HERE)
+       *    - load inline as child <Component>.
+       *    - load transitions (spinner, fade-in, etc).
+       */
+      const nextUrl = window.location.href;
+      window.location.href = nextUrl;
+
+      return done();
     }
   };
 
@@ -76,7 +90,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   return (
     <CmdHost
       {...props}
-      filter={filter}
+      filter={command}
       selectedIndex={isFocused ? selectedIndex : undefined}
       hintKey={hintKeys}
       scrollTo$={scrollToRef.current}
@@ -105,8 +119,13 @@ const Wrangle = {
     return total >= 0 ? R.clamp(0, total, next) : -1;
   },
 
-  hintKey(args: { isFocused: boolean; specs?: t.SpecImports; selectedIndex: number }) {
-    if (!args.isFocused) return '⌘K';
+  hintKey(args: {
+    isFocused: boolean;
+    specs?: t.SpecImports;
+    selectedIndex: number;
+    command: string;
+  }) {
+    if (!args.isFocused) return ['↑', '↓', '⌘K'];
     return ['↑', '↓', 'enter'];
   },
 };
