@@ -73,5 +73,5 @@ type Fields = {
 export const Boolean = FC.decorate<BooleanProps, Fields>(
   View,
   { DEFAULT, isActive: Wrangle.isActive },
-  { displayName: 'Button' },
+  { displayName: 'Button.Boolean' },
 );
