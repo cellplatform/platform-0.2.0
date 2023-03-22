@@ -7,7 +7,7 @@ import { useKeyboard } from './useKeyboard.mjs';
 export type CmdHostProps = {
   pkg: { name: string; version: string };
   specs?: t.SpecImports;
-  filter?: string;
+  command?: string;
   selectedIndex?: number;
   hintKey?: string | string[];
   hrDepth?: number;
@@ -52,7 +52,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
           title={pkg.name}
           version={pkg.version}
           imports={props.specs}
-          filter={props.filter}
+          filter={props.command}
           badge={props.badge}
           hrDepth={props.hrDepth}
           scroll={true}
@@ -62,7 +62,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
         />
       </div>
       <CmdBar
-        text={props.filter}
+        text={props.command}
         hintKey={props.hintKey}
         focusOnReady={props.focusOnReady ?? true}
         onReady={(ref) => setTextboxRef(ref)}

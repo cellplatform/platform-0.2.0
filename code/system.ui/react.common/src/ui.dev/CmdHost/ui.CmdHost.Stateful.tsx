@@ -90,7 +90,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   return (
     <CmdHost
       {...props}
-      filter={command}
+      command={command}
       selectedIndex={isFocused ? selectedIndex : undefined}
       hintKey={hintKeys}
       scrollTo$={scrollToRef.current}

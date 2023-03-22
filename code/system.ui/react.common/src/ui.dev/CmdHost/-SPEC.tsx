@@ -33,7 +33,7 @@ export default Dev.describe('CmdHost', (e) => {
         return (
           <CmdHostStateful
             {...e.state.props}
-            onChanged={(e) => state.change((d) => (d.props.filter = e.command))}
+            onChanged={(e) => state.change((d) => (d.props.command = e.command))}
           />
         );
       });
