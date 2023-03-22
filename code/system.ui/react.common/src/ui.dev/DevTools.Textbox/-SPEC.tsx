@@ -70,6 +70,20 @@ export default Dev.describe('Textbox', (e) => {
 
       dev.boolean((btn) =>
         btn
+          .label((e) =>
+            e.state.props.placeholder === null ? 'placeholder: null' : 'placeholder (default)',
+          )
+          .value((e) => e.state.props.placeholder !== null)
+          .onClick((e) =>
+            e.change((d) => {
+              const next = d.props.placeholder === null ? undefined : null;
+              d.props.placeholder = next;
+            }),
+          ),
+      );
+
+      dev.boolean((btn) =>
+        btn
           .label('right')
           .value((e) => Boolean(e.state.props.right))
           .onClick((e) =>

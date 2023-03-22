@@ -61,6 +61,7 @@ const View: React.FC<TextboxProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
       height: 26,
+      opacity: isActive ? 1 : 0.2,
     }),
   };
 
