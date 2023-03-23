@@ -12,6 +12,7 @@ const initial: T = {
   props: {
     isEnabled: Textbox.DEFAULT.isEnabled,
     label: 'My Label',
+    value: 'Hello 👋',
     // placeholder: null,
   },
 };
@@ -37,10 +38,18 @@ export default Dev.describe('Textbox', (e) => {
 
     dev.section('Value', (dev) => {
       const value = (value: StringOrNil, label?: string) => {
-        dev.button(label ?? `"${value}"`, (e) => e.change((d) => (d.props.value = value)));
+        dev.button((btn) =>
+          btn
+            .label((e) => label ?? `${value}`)
+            .right((e) => (e.state.props.value === value ? '←' : ''))
+            .onClick((e) => {
+              e.change((d) => (d.props.value = value));
+            }),
+        );
       };
 
-      value(undefined, 'undefined');
+      value(undefined, 'clear (undefined)');
+      dev.hr(-1, 5);
       value(null, 'null');
       value('', '"" (empty)');
       dev.hr(-1, 5);
