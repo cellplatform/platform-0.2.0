@@ -22,6 +22,10 @@ const initial: T = {
     ...DEFAULTS.prop,
     placeholder: 'my placeholder',
     focusOnReady: true,
+    placeholderStyle: {
+      ...DEFAULTS.prop.placeholderStyle,
+      // offset: [-10, -15],
+    },
   },
   debug: {
     render: true,

@@ -34,6 +34,7 @@ export const TextInputBase: React.FC<Props> = (props) => {
     isEnabled = DEFAULTS.prop.isEnabled,
     valueStyle = DEFAULTS.prop.valueStyle,
     disabledOpacity = DEFAULTS.prop.disabledOpacity,
+    placeholderStyle = {},
   } = props;
 
   const value = Util.value.format(props.value, maxLength);
@@ -91,6 +92,10 @@ export const TextInputBase: React.FC<Props> = (props) => {
       overflow: 'hidden',
       userSelect: 'none',
       pointerEvents: 'none',
+
+      transform: placeholderStyle.offset
+        ? `translate(${placeholderStyle.offset[0]}px, ${placeholderStyle.offset[1]}px)`
+        : undefined,
 
       display: 'grid',
     } as const,

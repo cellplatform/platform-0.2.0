@@ -63,7 +63,7 @@ export type TextInputProps = t.TextInputFocusAction &
 
     style?: t.CssValue;
     valueStyle?: t.TextInputStyle;
-    placeholderStyle?: t.TextInputStyle;
+    placeholderStyle?: t.TextInputStyle & { offset?: [number, number] };
     className?: string;
 
     onReady?: TextInputReadyHandler;
