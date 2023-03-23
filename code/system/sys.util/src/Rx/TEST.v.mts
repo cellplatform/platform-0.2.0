@@ -1,4 +1,5 @@
 import { expect, describe, it } from '../test';
+import { Time } from '../Time';
 
 import { rx } from '.';
 
@@ -193,6 +194,54 @@ describe('rx', () => {
 
     it('exposed from rx.bus', () => {
       expect(rx.isObservable).to.equal(rx.bus.isObservable);
+    });
+  });
+
+  describe('rx.withinTimeThreshold (eg. "double-click")', () => {
+    const $ = new rx.Subject<void>();
+
+    it('fires within time-threshold', async (e) => {
+      const threshold = rx.withinTimeThreshold($, 30);
+      let fired = 0;
+      threshold.$.subscribe(() => fired++);
+
+      $.next();
+      await Time.wait(10);
+      $.next();
+      expect(fired).to.eql(1);
+
+      threshold.dispose();
+    });
+
+    it('does not fire (outside time-threshold)', async (e) => {
+      const threshold = rx.withinTimeThreshold($, 5);
+      let fired = 0;
+      threshold.$.subscribe(() => fired++);
+
+      $.next();
+      await Time.wait(10);
+      $.next();
+      expect(fired).to.eql(0);
+
+      threshold.dispose();
+    });
+
+    it('dispose', async (e) => {
+      const threshold = rx.withinTimeThreshold($, 10);
+      expect(threshold.disposed).to.eql(false);
+
+      let fired = 0;
+      threshold.$.subscribe(() => fired++);
+
+      threshold.dispose();
+      expect(threshold.disposed).to.eql(true);
+
+      $.next();
+      await Time.wait(2);
+      $.next();
+
+      await Time.wait(50);
+      expect(fired).to.eql(0);
     });
   });
 });
