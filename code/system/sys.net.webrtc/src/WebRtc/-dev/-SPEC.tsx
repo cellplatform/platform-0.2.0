@@ -190,14 +190,7 @@ export default Dev.describe('WebRtc', async (e) => {
       .padding(0)
       .border(-0.1)
       .render<T>((e) => {
-        return (
-          <PeerCard
-            self={self}
-            mediaHeight={250}
-            muted={e.state.debug.muted}
-            onMuteClick={toggleMute}
-          />
-        );
+        return <PeerCard self={self} muted={e.state.debug.muted} onMuteClick={toggleMute} />;
       });
 
     dev.footer.border(-0.1).render<T>((e) => {
