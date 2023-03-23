@@ -140,7 +140,7 @@ export default Dev.describe('Textbox', (e) => {
         .error((e) => e.state.props.error)
         .footer((e) =>
           e.state.props.value
-            ? 'Comentary on the input value.'
+            ? 'Commentary on the input value.'
             : 'Here is a hint about what to enter.',
         )
         .onChange((e) => e.change((d) => (d.props.value = e.next)))
