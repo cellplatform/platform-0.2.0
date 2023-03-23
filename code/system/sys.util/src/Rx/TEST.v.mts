@@ -1,5 +1,6 @@
 import { expect, describe, it } from '../test';
 import { Time } from '../Time';
+import { disposable } from './Rx.disposable.mjs';
 
 import { rx } from '.';
 
@@ -242,6 +243,17 @@ describe('rx', () => {
 
       await Time.wait(50);
       expect(fired).to.eql(0);
+    });
+
+    it('dispose$', async (e) => {
+      const { dispose, dispose$ } = disposable();
+
+      const threshold = rx.withinTimeThreshold($, 10, { dispose$ });
+      expect(threshold.disposed).to.eql(false);
+
+      expect(threshold.disposed).to.eql(false);
+      dispose();
+      expect(threshold.disposed).to.eql(true);
     });
   });
 });
