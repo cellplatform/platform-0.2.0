@@ -6,6 +6,7 @@ import { PeerCopied } from './ui.PeerCopied';
 import { Footer } from './ui.Footer';
 
 const DEFAULTS = {
+  muted: false,
   showPeer: true,
   showConnect: true,
 };

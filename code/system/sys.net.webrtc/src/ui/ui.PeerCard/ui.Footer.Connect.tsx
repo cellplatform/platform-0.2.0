@@ -84,10 +84,11 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
           }}
           placeholderStyle={{
             fontFamily: 'sans-serif',
-            fontSize: 13,
+            fontSize: 14,
             opacity: 0.3,
             italic: true,
             color: Color.alpha(COLORS.DARK, 0.5),
+            offset: [0, 2],
           }}
           selectionBackground={Color.alpha(COLORS.CYAN, 0.1)}
           maxLength={40}
