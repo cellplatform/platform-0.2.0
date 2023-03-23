@@ -49,7 +49,7 @@ export default Dev.describe('LoadPanel', (e) => {
       );
     });
 
-    dev.hr(5, 50);
+    dev.hr(5, 30);
 
     dev.textbox((txt) =>
       txt
