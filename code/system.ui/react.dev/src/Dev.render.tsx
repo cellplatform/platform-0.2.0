@@ -1,7 +1,15 @@
-import { COLORS, DevWrangle, t } from './common';
+import { COLORS, DevWrangle, t, DEFAULTS } from './common';
 import { Harness } from './ui/Harness';
 import { DevKeyboard } from './ui/Keyboard';
 import { SpecList } from './ui/SpecList';
+
+type Options = {
+  location?: t.UrlInput;
+  badge?: t.SpecListBadge;
+  hrDepth?: number;
+  keyboard?: boolean;
+  style?: t.CssValue;
+};
 
 /**
  * Render a harness with the selected `dev=<namespace>` import
@@ -13,20 +21,18 @@ import { SpecList } from './ui/SpecList';
 export async function render(
   pkg: { name: string; version: string },
   specs: t.SpecImports,
-  options: {
-    location?: t.UrlInput;
-    badge?: t.SpecListBadge;
-    hrDepth?: number;
-    keyboard?: boolean;
-    style?: t.CssValue;
-  } = {},
+  options: Options = {},
 ) {
   const { keyboard = true } = options;
   const url = DevWrangle.Url.navigate.formatDevFlag(options);
   const spec = await DevWrangle.Url.module(url, specs);
   const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
-  if (keyboard) DevKeyboard.listen({ cancelPrint: true, cancelSave: true });
+  if (keyboard)
+    DevKeyboard.listen({
+      cancelPrint: true,
+      cancelSave: true,
+    });
 
   if (spec) {
     return <Harness spec={spec} style={style} />;
