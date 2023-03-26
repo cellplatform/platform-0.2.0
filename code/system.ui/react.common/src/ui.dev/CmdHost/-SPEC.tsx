@@ -16,6 +16,7 @@ const add = (key: string) => ((specs as t.SpecImports)[key] = fn);
 const addSamples = (prefix: string) => NUMBERS.forEach((num) => add(`${prefix}.${num}`));
 addSamples('foo.bar');
 addSamples('foo.baz');
+addSamples('boo.cat');
 add('zoo');
 
 type T = { props: CmdHostProps };
