@@ -154,24 +154,6 @@ export default Dev.describe('TextInput', (e) => {
           }),
       );
 
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `mask: isNumeric`)
-          .value((e) => e.state.debug.isNumericMask)
-          .onClick((e) => {
-            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
-          }),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `hinting (auto-complete)`)
-          .value((e) => e.state.debug.isHintEnabled)
-          .onClick((e) => {
-            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
-          }),
-      );
-
       dev.boolean((btn) => {
         const current = (state: T) => (state.debug.isUpdateEnabled ? 'enabled' : 'disabled');
         btn
@@ -191,6 +173,26 @@ export default Dev.describe('TextInput', (e) => {
             e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
           });
       });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `mask: isNumeric`)
+          .value((e) => e.state.debug.isNumericMask)
+          .onClick((e) => {
+            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `hinting (auto-complete)`)
+          .value((e) => e.state.debug.isHintEnabled)
+          .onClick((e) => {
+            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
+          }),
+      );
 
       dev.boolean((btn) => {
         btn
