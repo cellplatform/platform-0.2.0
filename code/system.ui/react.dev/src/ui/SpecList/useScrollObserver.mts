@@ -32,11 +32,11 @@ export function useScrollObserver(
         entries.forEach((entry) => {
           const el = entry.target as HTMLLIElement;
           const index = Array.from(itemRefs.values()).findIndex((item) => item === el);
-          const isOnScreen = entry.isIntersecting;
-          map.set(index, { index, isOnScreen, threshold });
+          const isVisible = entry.isIntersecting;
+          map.set(index, { index, isVisible, threshold });
         });
 
-        callback?.({ items: toArray(mapRef) });
+        callback?.({ children: toArray(mapRef) });
       }, options);
 
       // Start observing the elements.

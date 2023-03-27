@@ -15,10 +15,10 @@ export type SpecListScrollTarget = { index: number };
  * Fired when a list-item is scrolled into or out-of view.
  */
 export type SpecListChildVisibilityHandler = (e: SpecListChildVisibilityHandlerArgs) => void;
-export type SpecListChildVisibilityHandlerArgs = { items: SpecListChildVisibility[] };
+export type SpecListChildVisibilityHandlerArgs = { children: SpecListChildVisibility[] };
 export type SpecListChildVisibility = {
   index: number;
-  isOnScreen: boolean;
+  isVisible: boolean;
   threshold: Percent | [Percent, Percent, Percent, Percent];
 };
 
