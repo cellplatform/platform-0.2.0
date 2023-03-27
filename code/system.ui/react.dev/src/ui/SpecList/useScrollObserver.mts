@@ -3,13 +3,14 @@ import type { t } from './common';
 
 type T = Map<number, t.SpecListChildVisibility>;
 type Percent = number; // 0..1
+type LiMap = Map<number, HTMLLIElement>;
 
 /**
  * Keep track of the visibility of visible list-items as they scroll.
  */
 export function useScrollObserver(
   baseRef: React.RefObject<HTMLDivElement>,
-  itemRefs: React.RefObject<HTMLLIElement>[],
+  itemRefs: LiMap,
   callback: t.SpecListChildVisibilityHandler | undefined,
   options: { threshold?: Percent | [Percent, Percent, Percent, Percent] } = {},
 ) {
@@ -30,7 +31,7 @@ export function useScrollObserver(
       observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           const el = entry.target as HTMLLIElement;
-          const index = itemRefs.findIndex((ref) => ref.current === el);
+          const index = Array.from(itemRefs.values()).findIndex((item) => item === el);
           const isOnScreen = entry.isIntersecting;
           map.set(index, { index, isOnScreen, threshold });
         });
@@ -38,22 +39,21 @@ export function useScrollObserver(
         callback?.({ items: toArray(mapRef) });
       }, options);
 
-      itemRefs.forEach((ref) => {
-        if (ref.current) observer.observe(ref.current);
-      });
+      // Start observing the elements.
+      Array.from(itemRefs.values()).forEach((el) => observer.observe(el));
     }
 
     return () => {
       map.clear();
       observer?.disconnect();
     };
-  }, [itemRefs.length]);
+  }, [itemRefs.size]);
 
   /**
    * API
    */
   return {
-    length: itemRefs.length,
+    length: itemRefs.size,
     get items() {
       return toArray(mapRef);
     },

@@ -7,6 +7,8 @@ import { Title } from './ui.Title';
 import { useScrollObserver } from './useScrollObserver.mjs';
 import { useScrollController } from './useScrollController.mjs';
 
+type LiMap = Map<number, HTMLLIElement>;
+
 export type SpecListProps = {
   title?: string;
   version?: string;
@@ -29,23 +31,21 @@ const View: React.FC<SpecListProps> = (props) => {
   const imports = Filter.specs(props.imports, props.filter);
 
   const baseRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<React.RefObject<HTMLLIElement>[]>([]);
-  const itemRef = (index: number) => {
-    const refs = itemRefs.current;
-    if (refs[index]) return refs[index];
-    refs[index] = useRef<HTMLLIElement>(null);
-    return refs[index];
-  };
-
-  // NB: Ensure the refs array is the same length as the imports.
-  const keys = Object.keys(imports);
-  if (itemRefs.current.length > keys.length) {
-    itemRefs.current = itemRefs.current.slice(0, keys.length);
-  }
+  const itemRefs = useRef<LiMap>(new Map<number, HTMLLIElement>());
 
   useRubberband(props.allowRubberband ?? false);
   useScrollObserver(baseRef, itemRefs.current, props.onChildVisibility);
   useScrollController(baseRef, itemRefs.current, props.scrollTo$);
+
+  /**
+   * [Handlers]
+   */
+  const handleItemReadyChange: t.SpecListItemReadyHandler = (e) => {
+    const map = itemRefs.current;
+    if (e.lifecycle === 'ready') map.set(e.index, e.el!);
+    if (e.lifecycle === 'disposed') map.delete(e.index);
+    console.log('map', map);
+  };
 
   /**
    * [Render]
@@ -67,14 +67,8 @@ const View: React.FC<SpecListProps> = (props) => {
       paddingTop: 20,
     }),
     list: {
-      outer: css({
-        marginTop: 30,
-        display: 'grid',
-      }),
-      inner: css({
-        minWidth: 550,
-        MarginX: 50,
-      }),
+      outer: css({ marginTop: 30, display: 'grid' }),
+      inner: css({ minWidth: 550, MarginX: 50 }),
     },
     title: css({ marginBottom: 20 }),
   };
@@ -87,7 +81,7 @@ const View: React.FC<SpecListProps> = (props) => {
           imports={imports}
           selectedIndex={props.selectedIndex}
           hrDepth={props.hrDepth}
-          itemRef={itemRef}
+          onItemReadyChange={handleItemReadyChange}
         />
       </div>
     </div>
