@@ -145,20 +145,22 @@ export const TextInputBase: React.FC<Props> = (props) => {
       valueStyle={valueStyle}
       focusOnReady={props.focusOnReady}
       focusAction={props.focusAction}
-      onKeyDown={props.onKeyDown}
-      onKeyUp={props.onKeyUp}
-      onFocus={(e) => handleFocusChange(e, true)}
-      onBlur={(e) => handleFocusChange(e, false)}
-      onChanged={(e) => props.onChanged?.(e)}
-      onEnter={props.onEnter}
-      onEscape={props.onEscape}
-      onTab={props.onTab}
-      onDoubleClick={handleDoubleClick}
+      //
       spellCheck={props.spellCheck}
       autoCapitalize={props.autoCapitalize}
       autoCorrect={props.autoCorrect}
       autoComplete={props.autoComplete}
       selectionBackground={props.selectionBackground}
+      //
+      onFocus={(e) => handleFocusChange(e, true)}
+      onBlur={(e) => handleFocusChange(e, false)}
+      onKeyDown={props.onKeyDown}
+      onKeyUp={props.onKeyUp}
+      onChanged={(e) => props.onChanged?.(e)}
+      onEnter={props.onEnter}
+      onEscape={props.onEscape}
+      onTab={props.onTab}
+      onDoubleClick={handleDoubleClick}
     />
   );
 
