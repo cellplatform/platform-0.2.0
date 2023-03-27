@@ -31,6 +31,7 @@
     "cli-table3": "0.6.3",
     "cross-fetch": "3.1.5",
     "dayjs": "1.11.7",
+    "diff": "5.1.0",
     "execa": "7.1.1",
     "fake-indexeddb": "4.0.1",
     "framer-motion": "10.9.1",
@@ -78,6 +79,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "2.0.3",
     "@tsconfig/svelte": "4.0.0",
+    "@types/diff": "5.0.3",
     "@types/fs-extra": "11.0.1",
     "@types/jsdom": "21.1.1",
     "@types/minimist": "1.2.2",

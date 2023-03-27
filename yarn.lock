@@ -669,6 +669,11 @@
   dependencies:
     "@types/ms" "*"
 
+"@types/diff@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@types/diff/-/diff-5.0.3.tgz#1f89e49ff83b5d200d78964fb896c68498ce1828"
+  integrity sha512-amrLbRqTU9bXMCc6uX0sWpxsQzRIo9z6MJPkH1pkez/qOxuqSZVuryJAWoBRq94CeG8JxY+VK4Le9HtjQR5T9A==
+
 "@types/fs-extra@11.0.1":
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-11.0.1.tgz#f542ec47810532a8a252127e6e105f487e0a6ea5"
@@ -1468,15 +1473,15 @@ detect-indent@^6.1.0:
   resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-6.1.0.tgz#592485ebbbf6b3b1ab2be175c8393d04ca0d57e6"
   integrity sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==
 
+diff@5.1.0, diff@^5.0.0, diff@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-5.1.0.tgz#bc52d298c5ea8df9194800224445ed43ffc87e40"
+  integrity sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==
+
 diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
-
-diff@^5.0.0, diff@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/diff/-/diff-5.1.0.tgz#bc52d298c5ea8df9194800224445ed43ffc87e40"
-  integrity sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==
 
 dijkstrajs@^1.0.1:
   version "1.0.2"
@@ -1802,15 +1807,6 @@ format@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==
-
-framer-motion@10.8.4:
-  version "10.8.4"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.8.4.tgz#29635007b5eefdab9e5ffa4b2fde184cd018d5a1"
-  integrity sha512-dNcWapHLw1uTH9Yukqj1+uU87YM7GEkz2HjjR/k5Efo5ZKhzHpEeTsifrulwhTOqOR2N009JkMhtHnHEhMfKkg==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
 
 framer-motion@10.9.1:
   version "10.9.1"
@@ -3238,11 +3234,6 @@ ms@2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-nanoid@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.1.tgz#398d7ccfdbf9faf2231b2ca7e8fff5dbca6a509b"
-  integrity sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==
-
 nanoid@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.2.tgz#140b3c5003959adbebf521c170f282c5e7f9fb9e"
@@ -3291,18 +3282,6 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
-
-nostr-tools@1.7.5:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/nostr-tools/-/nostr-tools-1.7.5.tgz#349f469ff2877deb99d71c63d4883af93ec9f9a5"
-  integrity sha512-FFaYOAn9lFyISClbBzPe2eQ2ZiKx8xFviwHmdgTAmuue+eLrtPEI3tCqPtP624HghX/X4VnaixoiMvDB8g2+tQ==
-  dependencies:
-    "@noble/hashes" "1.0.0"
-    "@noble/secp256k1" "^1.7.1"
-    "@scure/base" "^1.1.1"
-    "@scure/bip32" "^1.1.5"
-    "@scure/bip39" "^1.1.1"
-    prettier "^2.8.4"
 
 nostr-tools@1.8.1:
   version "1.8.1"
