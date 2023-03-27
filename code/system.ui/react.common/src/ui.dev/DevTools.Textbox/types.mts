@@ -36,7 +36,13 @@ export type DevTextboxChangeHandlerArgs<S extends O = O> = DevTextboxHandlerArgs
   dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
-  next: string;
+  next: DevTextboxChangeHandlerNext;
+};
+export type DevTextboxChangeHandlerNext = {
+  from: string;
+  to: string;
+  char: string;
+  selection: { start: number; end: number };
 };
 
 export type DevTextboxEnterHandler<S extends O = O> = (e: DevTextboxEnterHandlerArgs<S>) => void;

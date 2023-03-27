@@ -152,9 +152,12 @@ export default Dev.describe('Textbox', (e) => {
             ? 'Commentary on the input value.'
             : 'Here is a hint about what to enter.',
         )
-        .onChange((e) => e.change((d) => (d.props.value = e.next)))
+        .onChange((e) => {
+          e.change((d) => (d.props.value = e.next.to));
+          console.info('⚡️ onChange', e.next);
+        })
         .onEnter((e) => {
-          console.info('ENTER', e);
+          console.info('⚡️ onEnter', e);
         }),
     );
   });
