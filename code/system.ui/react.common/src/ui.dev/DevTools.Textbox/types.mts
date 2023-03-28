@@ -41,8 +41,7 @@ export type DevTextboxChangeHandlerArgs<S extends O = O> = DevTextboxHandlerArgs
 export type DevTextboxChangeHandlerNext = {
   from: string;
   to: string;
-  char: string;
-  selection: { start: number; end: number };
+  selection: t.TextInputSelection;
 };
 
 export type DevTextboxEnterHandler<S extends O = O> = (e: DevTextboxEnterHandlerArgs<S>) => void;

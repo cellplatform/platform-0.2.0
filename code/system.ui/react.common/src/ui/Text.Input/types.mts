@@ -224,7 +224,6 @@ export type TextInputChanged = TextInputChangeEvent;
 export type TextInputChangeEvent = {
   from: string;
   to: string;
-  char: string;
   isMax: boolean | null;
   modifierKeys: t.KeyboardModifierFlags;
   selection: TextInputSelection;

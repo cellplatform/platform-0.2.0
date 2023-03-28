@@ -75,14 +75,13 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     const from = value;
     let to = ((e.target as any).value as string) || '';
     to = Util.value.format(to, maxLength);
-    const char = Util.value.getChangedChar(from, to);
     const isMax = maxLength === undefined ? null : to.length === maxLength;
 
     // Update state and alert listeners.
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
       const selection = Wrangle.selection(inputRef.current);
-      onChanged?.({ from, to, isMax, char, modifierKeys, selection });
+      onChanged?.({ from, to, isMax, modifierKeys, selection });
     }
   };
 

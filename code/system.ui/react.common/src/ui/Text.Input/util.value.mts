@@ -9,18 +9,4 @@ export const ValueUtil = {
     }
     return value;
   },
-
-  getChangedChar(from: string, to: string) {
-    if (to.length === from.length) return '';
-    if (to.length < from.length) return '';
-
-    let index = 0;
-    for (const toChar of to) {
-      const fromChar = from[index];
-      if (toChar !== fromChar) return toChar; // Exit - changed character found.
-      index += 1;
-    }
-
-    return ''; // No change.
-  },
 };
