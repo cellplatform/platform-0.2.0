@@ -40,6 +40,14 @@ export const CrdtIs = {
       input.kind === 'Crdt:DocSync' && CrdtIs.ref(input.doc) && typeof input.update === 'function'
     );
   },
+
+  /**
+   * Determine if the given input is an [Automerge.Text] type.
+   */
+  text(input: any): input is Automerge.Text {
+    if (notObject(input)) return false;
+    return input instanceof Automerge.Text;
+  },
 };
 
 /**

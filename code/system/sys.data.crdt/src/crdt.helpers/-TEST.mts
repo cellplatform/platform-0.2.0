@@ -4,7 +4,7 @@ import { CrdtDoc } from '../crdt.Doc';
 import { Automerge, expect, rx, t, Test, TestFilesystem } from '../test.ui';
 
 export default Test.describe('crdt helpers', (e) => {
-  e.describe('is (flags)', (e) => {
+  e.describe('Is (flags)', (e) => {
     type D = { count: number; name?: string };
     const Is = CrdtIs;
 
@@ -15,7 +15,9 @@ export default Test.describe('crdt helpers', (e) => {
     e.it('Is.ref (DocRef)', (e) => {
       const doc = CrdtDoc.ref<D>({ count: 1 });
       expect(Is.ref(doc)).to.eql(true);
-      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.ref(d)).to.eql(false));
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.ref(d)).to.eql(false);
+      });
     });
 
     e.it('Is.file (DocFile)', async (e) => {
@@ -24,15 +26,27 @@ export default Test.describe('crdt helpers', (e) => {
       const file = await CrdtDoc.file<D>(filedir, { count: 0 });
       expect(Is.file(file)).to.eql(true);
       expect(Is.file(doc)).to.eql(false);
-      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.file(d)).to.eql(false));
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.file(d)).to.eql(false);
+      });
     });
 
-    e.it('Is.docSync', async (e) => {
+    e.it('Is.docSync', (e) => {
       const bus = rx.bus();
       const sync = CrdtDoc.sync<D>(bus, { count: 0 });
       expect(Is.sync(sync)).to.eql(true);
       expect(Is.sync(sync.doc)).to.eql(false);
-      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => expect(Is.sync(d)).to.eql(false));
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.sync(d)).to.eql(false);
+      });
+    });
+
+    e.it('Is.text', (e) => {
+      const text = new Automerge.Text();
+      expect(Is.text(text)).to.eql(true);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.text(d)).to.eql(false);
+      });
     });
   });
 
@@ -140,6 +154,13 @@ export default Test.describe('crdt helpers', (e) => {
         expect(fn).to.throw(/Unable to convert/);
       };
       [null, undefined, 1, true, 'a', []].forEach((value) => test(value));
+    });
+  });
+
+  e.describe('Text', (e) => {
+    e.it('init', (e) => {
+      const text = Crdt.Text.init();
+      expect(Crdt.Is.text(text)).to.eql(true);
     });
   });
 });

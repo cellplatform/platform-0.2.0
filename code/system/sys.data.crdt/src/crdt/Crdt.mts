@@ -1,6 +1,5 @@
-import { PeerSyncer } from '../crdt.DocSync';
 import { CrdtDoc as Doc } from '../crdt.Doc';
-import { CrdtIs as Is, fieldAs, toObject } from '../crdt.helpers';
+import { CrdtIs as Is, CrdtText as Text, fieldAs, toObject } from '../crdt.helpers';
 
 /**
  * Main index for the [sys.data.crdt] module.
@@ -8,6 +7,7 @@ import { CrdtIs as Is, fieldAs, toObject } from '../crdt.helpers';
 export const Crdt = {
   Doc,
   Is,
+  Text,
   fieldAs,
   toObject,
 };
