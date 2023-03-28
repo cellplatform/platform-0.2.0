@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
-import { t, rx, Time } from './common';
+import { defaultIfEmpty } from 'rxjs';
+
+import { rx, t, Time } from './common';
 
 type LiMap = Map<number, HTMLLIElement>;
 
@@ -34,18 +36,23 @@ export function useScrollController(
     /**
      * Listen for scroll-to-index requests.
      */
-    scrollTo$.subscribe((e) => (_latestIndex = e.index));
-    scrollTo$.pipe(rx.filter(() => !_isScrolling)).subscribe(async (e) => {
-      const el = itemRefs.get(e.index);
-      if (!el) return;
+    scrollTo$.pipe(rx.takeUntil(dispose$)).subscribe((e) => (_latestIndex = e.index));
+    scrollTo$
+      .pipe(
+        rx.takeUntil(dispose$),
+        rx.filter(() => !_isScrolling),
+      )
+      .subscribe(async (e) => {
+        const el = itemRefs.get(e.index);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      // Ensure the scroll-to-index target hasn't changed during the animation.
-      await rx.firstValueFrom(scrollComplete$.pipe(rx.take(1)));
-      await Time.wait(0);
-      if (e.index !== _latestIndex) scrollTo$.next({ index: _latestIndex });
-    });
+        // Ensure the scroll-to-index target hasn't changed during the animation.
+        const wait$ = scrollComplete$.pipe(defaultIfEmpty(-1));
+        await rx.firstValueFrom(wait$);
+        await Time.wait(0);
+        if (e.index !== _latestIndex) scrollTo$.next({ index: _latestIndex });
+      });
 
     return () => {
       dispose();
