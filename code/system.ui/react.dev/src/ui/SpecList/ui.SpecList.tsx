@@ -44,7 +44,6 @@ const View: React.FC<SpecListProps> = (props) => {
     const map = itemRefs.current;
     if (e.lifecycle === 'ready') map.set(e.index, e.el!);
     if (e.lifecycle === 'disposed') map.delete(e.index);
-    console.log('map', map);
   };
 
   /**
