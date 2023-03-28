@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Automerge, Button, Color, COLORS, Crdt, css, Dev, rx, t } from './common';
+import { PeerSyncer } from 'sys.data.crdt';
 
 /**
  * Schema:
@@ -64,7 +65,7 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     if (conn) {
       console.log('start syncer');
 
-      const syncer = Crdt.PeerSyncer(
+      const syncer = PeerSyncer(
         conn.bus(),
         () => file.doc.current,
         (doc) => {

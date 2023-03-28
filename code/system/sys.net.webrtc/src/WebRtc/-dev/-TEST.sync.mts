@@ -1,5 +1,6 @@
 import { Dev, expect, t, TEST, Time, WebRtc } from '../../test.ui';
 import { Automerge, Crdt } from '../common';
+import { PeerSyncer } from 'sys.data.crdt';
 
 export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
   const signal = TEST.signal;
@@ -44,12 +45,12 @@ export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
       let docA = createTestDoc();
       let docB = createTestDoc();
 
-      const syncerA = Crdt.PeerSyncer(
+      const syncerA = PeerSyncer(
         connA.bus(),
         () => docA,
         (d) => (docA = d),
       );
-      const syncerB = Crdt.PeerSyncer(
+      const syncerB = PeerSyncer(
         connB.bus(),
         () => docB,
         (d) => (docB = d),

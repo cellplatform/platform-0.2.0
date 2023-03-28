@@ -10,6 +10,4 @@ export const Crdt = {
   Is,
   fieldAs,
   toObject,
-
-  PeerSyncer, // TODO 🐷 remove this now [internal only]
 };
