@@ -7,6 +7,7 @@ type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
 type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
+type FocusOrNil = t.DevTextboxFocus | undefined | null;
 
 /**
  * A plain-text Textbox input.
@@ -27,6 +28,7 @@ export function textbox<S extends O = O>(
   const right = ValueHandler<ContentInput, S>(events);
   const footer = ValueHandler<ContentInput, S>(events);
   const margin = ValueHandler<MarginOrNil, S>(events);
+  const focus = ValueHandler<FocusOrNil, S>(events);
   const error = ValueHandler<ErrorInput, S>(events);
 
   const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
@@ -66,6 +68,10 @@ export function textbox<S extends O = O>(
       margin.handler(input);
       return args;
     },
+    focus(input) {
+      focus.handler(input);
+      return args;
+    },
     error(input) {
       error.handler(input);
       return args;
@@ -97,6 +103,7 @@ export function textbox<S extends O = O>(
       const dev = ctx.toObject().props;
       changeHandlers.forEach((fn) => fn({ ...args, dev, next, state, change }));
     };
+
     const onEnter: t.TextInputKeyEventHandler = (e) => {
       const dev = ctx.toObject().props;
       enterHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
@@ -116,6 +123,8 @@ export function textbox<S extends O = O>(
         footer={footer.current}
         margin={margin.current}
         error={error.current}
+        focusOnReady={focus.current?.onReady}
+        focusAction={focus.current?.action}
         onEnter={onEnter}
         onChange={hasHandlers ? onChange : undefined}
       />
@@ -130,6 +139,7 @@ export function textbox<S extends O = O>(
   right.subscribe(ref.redraw);
   footer.subscribe(ref.redraw);
   margin.subscribe(ref.redraw);
+  focus.subscribe(ref.redraw);
   error.subscribe(ref.redraw);
 
   fn?.(args);

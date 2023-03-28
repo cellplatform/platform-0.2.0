@@ -8,7 +8,7 @@ import { Util } from './util.mjs';
 /**
  * Types
  */
-export type HtmlInputProps = t.TextInputFocusAction &
+export type HtmlInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   t.TextInputValue & {
     inputRef: RefObject<HTMLInputElement>;

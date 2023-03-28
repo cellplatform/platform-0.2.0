@@ -6,7 +6,7 @@ const systemFont = {
   sans: { family: 'sans-serif' },
 } as const;
 
-const focusActions: t.TextInputFocusAction['focusAction'][] = [
+const focusActions: t.TextInputFocusProps['focusAction'][] = [
   'Select',
   'Cursor:Start',
   'Cursor:End',

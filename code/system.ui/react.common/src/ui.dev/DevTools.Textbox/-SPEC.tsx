@@ -146,6 +146,7 @@ export default Dev.describe('Textbox', (e) => {
         .right((e) => e.state.props.right)
         .value((e) => e.state.props.value)
         .margin((e) => e.state.props.margin)
+        .focus({ onReady: true, action: 'Cursor:End' })
         .error((e) => e.state.props.error)
         .footer((e) =>
           e.state.props.value

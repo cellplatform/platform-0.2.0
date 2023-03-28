@@ -11,7 +11,7 @@ type ContentInput = StringOrNil | JSX.Element;
 type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
-export type TextboxProps = {
+export type TextboxProps = t.TextInputFocusProps & {
   isEnabled?: boolean;
   label?: ContentInput;
   value?: StringOrNil;
@@ -95,7 +95,8 @@ const View: React.FC<TextboxProps> = (props) => {
         value={Wrangle.value(props)}
         placeholder={Wrangle.placeholder(props)}
         placeholderStyle={{ opacity: 0.2, italic: true }}
-        focusAction={'Select'}
+        focusOnReady={props.focusOnReady ?? false}
+        focusAction={props.focusAction ?? 'Select'}
         spellCheck={false}
         onFocusChange={(e) => setFocused(e.isFocused)}
         onChanged={(e) => {

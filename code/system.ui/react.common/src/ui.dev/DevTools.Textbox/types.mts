@@ -6,8 +6,10 @@ type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
 type ErrorInput = DevTextboxError | boolean | undefined | null;
 type MarginOrNil = t.MarginInput | undefined | null;
+type FocusOrNil = DevTextboxFocus | undefined | null;
 
 export type DevTextboxError = 'error' | 'warning';
+export type DevTextboxFocus = { onReady?: boolean; action?: t.TextInputFocusAction };
 
 /**
  * Textbox
@@ -24,6 +26,7 @@ export type DevTextboxHandlerArgs<S extends O = O> = {
   footer(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   error(value: ErrorInput | t.DevValueHandler<ErrorInput, S>): DevTextboxHandlerArgs<S>;
   margin(value: MarginOrNil | t.DevValueHandler<MarginOrNil, S>): DevTextboxHandlerArgs<S>;
+  focus(value: FocusOrNil | t.DevValueHandler<FocusOrNil, S>): DevTextboxHandlerArgs<S>;
   onChange(fn: DevTextboxChangeHandler<S>): DevTextboxHandlerArgs<S>;
   onEnter(fn: DevTextboxEnterHandler<S>): DevTextboxHandlerArgs<S>;
 };

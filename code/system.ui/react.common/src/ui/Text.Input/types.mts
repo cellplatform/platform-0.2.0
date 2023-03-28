@@ -42,7 +42,7 @@ export type TextInputValue = {
   maxLength?: number;
 };
 
-export type TextInputProps = t.TextInputFocusAction &
+export type TextInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   TextInputValue & {
     isEnabled?: boolean;
@@ -85,9 +85,10 @@ export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
 /**
  * Input
  */
-export type TextInputFocusAction = {
+export type TextInputFocusAction = 'Select' | TextInputCursorAction;
+export type TextInputFocusProps = {
   focusOnReady?: boolean;
-  focusAction?: 'Select' | TextInputCursorAction;
+  focusAction?: TextInputFocusAction;
 };
 
 /**
