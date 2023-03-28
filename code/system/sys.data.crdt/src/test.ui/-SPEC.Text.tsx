@@ -33,6 +33,7 @@ export default Dev.describe('Text', (e) => {
       txt
         .label('Text')
         .value(() => doc.current.text.toString())
+        .focus({ onReady: true })
         .onChange((e) => {
           doc.change((d) => {
             e.next.diff.forEach((change) => {
