@@ -4,7 +4,7 @@ import { Wrangle } from './Wrangle.mjs';
 export type DebugPanelBarProps = {
   instance: t.DevInstance;
   edge: 'Top' | 'Bottom';
-  current?: t.DevRenderPropsDebugBar;
+  current?: t.DevRenderPropsEdge;
   style?: t.CssValue;
 };
 
