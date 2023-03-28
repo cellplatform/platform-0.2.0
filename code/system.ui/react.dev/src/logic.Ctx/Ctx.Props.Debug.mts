@@ -1,4 +1,4 @@
-import { t, Id, Margin, DEFAULTS } from './common';
+import { DEFAULTS, Id, Margin, t } from './common';
 import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
 
 import type { PropArgs } from './common.types';
@@ -37,17 +37,11 @@ export function CtxPropsDebug(props: PropArgs) {
       return api;
     },
 
-    /**
-     * Header
-     */
     header: CtxPanelEdge(DEBUG.header, (fn) => {
       fn(props.current().debug.header);
       props.changed();
     }),
 
-    /**
-     * Footer
-     */
     footer: CtxPanelEdge(DEBUG.footer, (fn) => {
       fn(props.current().debug.footer);
       props.changed();

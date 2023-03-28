@@ -1,9 +1,10 @@
 import { Color, COLORS, css, DEFAULTS, R, t, useCurrentState, WrangleUrl } from '../common';
+import { PanelFooter, PanelHeader } from '../Harness.PanelEdge';
 import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 
-const HOST = DEFAULTS.props.host;
+const DEFAULT = DEFAULTS.props.host;
 
 export type HarnessHostProps = {
   instance: t.DevInstance;
@@ -29,7 +30,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   /**
    * [Render]
    */
-  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? HOST.tracelineColor)}`;
+  const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? DEFAULT.tracelineColor)}`;
   const styles = {
     base: css({
       position: 'relative',
@@ -37,16 +38,16 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
       color: COLORS.DARK,
       backgroundColor:
         host?.backgroundColor === undefined
-          ? Color.format(HOST.backgroundColor)
+          ? Color.format(DEFAULT.backgroundColor)
           : Color.format(host.backgroundColor),
     }),
+    body: css({
+      Absolute: 0,
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr auto',
+    }),
     empty: {
-      base: css({
-        Absolute: 0,
-        display: 'grid',
-        placeContent: 'center',
-        userSelect: 'none',
-      }),
+      base: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),
       label: css({ opacity: 0.3, fontStyle: 'italic', fontSize: 14 }),
     },
   };
@@ -64,6 +65,14 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     </HostGrid>
   );
 
+  const elBody = (
+    <div {...styles.body}>
+      <PanelHeader instance={instance} current={host?.header} />
+      {elGrid}
+      <PanelFooter instance={instance} current={host?.footer} />
+    </div>
+  );
+
   const elEmpty = !renderProps && (
     <div {...styles.empty.base}>
       <div {...styles.empty.label}>{'Nothing to display.'}</div>
@@ -73,7 +82,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   return (
     <div ref={props.baseRef} {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
       {elBackground}
-      {elGrid}
+      {elBody}
       {elEmpty}
     </div>
   );

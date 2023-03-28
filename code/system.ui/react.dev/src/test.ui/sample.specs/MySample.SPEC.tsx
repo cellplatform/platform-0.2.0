@@ -27,6 +27,16 @@ export default Spec.describe('MySample', (e) => {
       console.log('keyboard', e.pattern);
     });
 
+    ctx.host.header.render<T>((e) => {
+      return <div>Header</div>;
+      // return null;
+    });
+
+    ctx.host.footer.render<T>((e) => {
+      return <div>Footer</div>;
+      // return null;
+    });
+
     ctx.subject
       .size([300, 200])
       .display('flex')

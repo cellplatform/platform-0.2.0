@@ -1,4 +1,5 @@
 import { DEFAULTS, t, Margin } from './common';
+import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
 
 import type { PropArgs } from './common.types';
 
@@ -23,6 +24,15 @@ export function CtxPropsHost(props: PropArgs) {
       props.changed();
       return api;
     },
+
+    header: CtxPanelEdge(HOST.header, (fn) => {
+      fn(props.current().host.header);
+      props.changed();
+    }),
+    footer: CtxPanelEdge(HOST.footer, (fn) => {
+      fn(props.current().host.footer);
+      props.changed();
+    }),
   };
   return api;
 }

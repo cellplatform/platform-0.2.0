@@ -74,6 +74,8 @@ export type DevCtxHost<S extends O = O> = {
   backgroundColor(value: Color | null): DevCtxHost<S>;
   backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost<S>;
   tracelineColor(value: Color | null): DevCtxHost<S>;
+  header: DevCtxEdge<S>;
+  footer: DevCtxEdge<S>;
 };
 
 /**
@@ -84,18 +86,12 @@ export type DevCtxDebug<S extends O = O> = {
   scroll(value: boolean): DevCtxDebug;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
   width(value: number): DevCtxDebug;
-  header: DevCtxHeader<S>;
-  footer: DevCtxFooter<S>;
+  header: DevCtxEdge<S>;
+  footer: DevCtxEdge<S>;
 };
 
-export type DevCtxHeader<S extends O = O> = {
-  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxHeader;
-  border(color: Color | null): DevCtxHeader;
-  padding(value: t.DevMarginInput | undefined | null): DevCtxHeader;
-};
-
-export type DevCtxFooter<S extends O = O> = {
-  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxFooter;
-  border(color: Color | null): DevCtxFooter;
-  padding(value: t.DevMarginInput | undefined | null): DevCtxFooter;
+export type DevCtxEdge<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxEdge;
+  border(color: Color | null): DevCtxEdge;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxEdge;
 };

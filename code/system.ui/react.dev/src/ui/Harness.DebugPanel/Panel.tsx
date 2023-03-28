@@ -1,5 +1,5 @@
 import { Color, css, R, t, useCurrentState } from '../common';
-import { DebugPanelFooter as Footer, DebugPanelHeader as Header } from './Panel.Bar';
+import { PanelFooter, PanelHeader } from '../Harness.PanelEdge';
 import { DebugPanelBody as Body } from './Panel.Body';
 
 export type DebugPanelProps = {
@@ -26,6 +26,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       justifySelf: 'stretch',
       borderLeft: `solid 1px ${Color.format(-0.1)}`,
       width,
+
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
     }),
@@ -37,11 +38,11 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
 
   return (
     <div ref={props.baseRef} {...css(styles.base, props.style)}>
-      <Header instance={instance} current={debug?.header} />
+      <PanelHeader instance={instance} current={debug?.header} />
       <div {...styles.body}>
         <Body instance={instance} current={current.info} />
       </div>
-      <Footer instance={instance} current={debug?.footer} />
+      <PanelFooter instance={instance} current={debug?.footer} />
     </div>
   );
 };

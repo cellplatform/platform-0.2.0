@@ -48,6 +48,8 @@ export type DevRenderPropsHost = {
   backgroundColor?: Color;
   backgroundImage?: DevBackgroundImage;
   tracelineColor?: Color;
+  header: DevRenderPropsEdge;
+  footer: DevRenderPropsEdge;
 };
 
 /**
@@ -56,12 +58,12 @@ export type DevRenderPropsHost = {
 export type DevRenderPropsDebug = {
   width?: number;
   header: DevRenderPropsEdge;
+  footer: DevRenderPropsEdge;
   body: {
     renderers: t.DevRendererRef<any>[];
     scroll: boolean;
     padding: t.DevMargin;
   };
-  footer: DevRenderPropsEdge;
 };
 
 export type DevRenderPropsEdge = {
