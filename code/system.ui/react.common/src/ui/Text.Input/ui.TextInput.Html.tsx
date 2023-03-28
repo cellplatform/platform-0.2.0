@@ -69,7 +69,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
    * [Handlers]
    */
   const handleChange = (e: React.ChangeEvent) => {
-    const { onChanged, maxLength, mask } = props;
+    const { onChanged, maxLength } = props;
 
     // Derive values.
     const from = value;
@@ -77,11 +77,6 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     to = Util.value.format(to, maxLength);
     const char = Util.value.getChangedChar(from, to);
     const isMax = maxLength === undefined ? null : to.length === maxLength;
-
-    // Check whether an input-filter will mask the value.
-    if (char && mask) {
-      if (!mask({ text: to, char })) return; // Handled.
-    }
 
     // Update state and alert listeners.
     if (from !== to) {

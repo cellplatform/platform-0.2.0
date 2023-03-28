@@ -141,7 +141,6 @@ export const TextInputBase: React.FC<Props> = (props) => {
       isPassword={isPassword}
       disabledOpacity={disabledOpacity}
       maxLength={props.maxLength}
-      mask={props.mask}
       valueStyle={valueStyle}
       focusOnReady={props.focusOnReady}
       focusAction={props.focusAction}

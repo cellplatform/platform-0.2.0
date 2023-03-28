@@ -22,8 +22,10 @@ export type TextInputStatus = {
   empty: boolean;
   value: string;
   size: { width: Pixels; height: Pixels };
-  selection: { start: number; end: number };
+  selection: TextInputSelection;
 };
+
+export type TextInputSelection = { start: number; end: number };
 
 export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
@@ -38,7 +40,6 @@ export type TextInputValue = {
   value?: string;
   hint?: string | JSX.Element;
   maxLength?: number;
-  mask?: t.TextInputMaskHandler;
 };
 
 export type TextInputProps = t.TextInputFocusAction &
@@ -88,9 +89,6 @@ export type TextInputFocusAction = {
   focusOnReady?: boolean;
   focusAction?: 'Select' | TextInputCursorAction;
 };
-
-export type TextInputMask = { text: string; char: string };
-export type TextInputMaskHandler = (e: TextInputMask) => boolean; // True - OK, False - disallow.
 
 /**
  * EVENTS (API)
@@ -229,7 +227,7 @@ export type TextInputChangeEvent = {
   char: string;
   isMax: boolean | null;
   modifierKeys: t.KeyboardModifierFlags;
-  selection: { start: number; end: number };
+  selection: TextInputSelection;
 };
 
 /**

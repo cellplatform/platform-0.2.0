@@ -1,4 +1,3 @@
-import { TextInputMasks } from '..';
 import { Dev, t } from '../../../test.ui';
 import { Time, DEFAULTS, KeyboardMonitor } from '../common';
 import { DevSample } from './DEV.Sample';
@@ -65,11 +64,9 @@ export default Dev.describe('TextInput', (e) => {
         if (autoSize) ctx.subject.size('fill-x');
         if (!autoSize) ctx.subject.size([300, null]);
 
-        const mask = debug.isNumericMask ? TextInputMasks.isNumeric : undefined;
-        const props = { ...e.state.props, mask };
         return (
           <DevSample
-            props={props}
+            props={e.state.props}
             debug={debug}
             onReady={(ref) => {
               console.log('⚡️ onReady:', ref);
