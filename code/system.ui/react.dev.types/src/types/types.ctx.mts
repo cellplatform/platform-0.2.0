@@ -70,10 +70,10 @@ export type DevCtxSubject = {
 /**
  * Subject Component Host ("Harness")
  */
-export type DevCtxHost = {
-  backgroundColor(value: Color | null): DevCtxHost;
-  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost;
-  tracelineColor(value: Color | null): DevCtxHost;
+export type DevCtxHost<S extends O = O> = {
+  backgroundColor(value: Color | null): DevCtxHost<S>;
+  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost<S>;
+  tracelineColor(value: Color | null): DevCtxHost<S>;
 };
 
 /**
