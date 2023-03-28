@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx } from '../common';
 
 export type LoadPanelProps = {
+  address?: string;
   style?: t.CssValue;
 };
 

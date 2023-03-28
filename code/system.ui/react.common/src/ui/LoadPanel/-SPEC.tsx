@@ -2,6 +2,7 @@ import { t, css, Dev } from '../../test.ui';
 import { LoadPanel, LoadPanelProps } from './ui.LoadPanel';
 
 type T = {
+  address?: string;
   props: LoadPanelProps;
   debug: { fullscreen: boolean };
 };
@@ -14,6 +15,10 @@ export default Dev.describe('LoadPanel', (e) => {
   type LocalStore = T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LoadPanel');
   const local = localstore.object(initial.debug);
+
+  /**
+   * TODO 🐷
+   */
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -51,13 +56,15 @@ export default Dev.describe('LoadPanel', (e) => {
 
     dev.hr(5, 30);
 
+    dev.TODO();
+
     dev.textbox((txt) =>
       txt
         .label((e) => 'load address')
         .placeholder((e) => 'uri')
-        .value((e) => '')
-        .onChange((e) => {})
-        .onEnter((e) => {}),
+        .value((e) => e.state.address)
+        .onChange((e) => e.change((d) => (d.address = e.next.to)))
+        .onEnter((e) => e.change((d) => (d.props.address = e.state.current.address))),
     );
 
     /**
