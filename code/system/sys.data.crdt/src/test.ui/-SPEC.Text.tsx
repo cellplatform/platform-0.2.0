@@ -13,7 +13,7 @@ export default Dev.describe('Text', (e) => {
       .backgroundColor(1)
       .display('grid')
       .render((e) => {
-        const text = doc.current.text.toString();
+        const text = doc.current.text.toString().trim();
         const style: t.CssValue = {
           fontSize: 18,
           padding: 10,
@@ -52,8 +52,10 @@ export default Dev.describe('Text', (e) => {
     /**
      * Footer
      */
-    dev.footer
-      .border(-0.1)
-      .render<D>((e) => <Dev.Object name={'Dev.Text'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<D>((e) => {
+      const text = doc.current.text.toString();
+      const data = { text };
+      return <Dev.Object name={'Dev.Text'} data={data} expand={1} />;
+    });
   });
 });
