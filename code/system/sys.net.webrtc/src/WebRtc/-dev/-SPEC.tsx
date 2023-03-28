@@ -16,7 +16,7 @@ import {
   TEST,
   TextInput,
 } from '../../test.ui';
-import { PeerList, PeerCard } from '../../ui';
+import { PeerCard, PeerList } from '../../ui';
 import { DevSample } from './DEV.Sample';
 
 import type { Doc } from './DEV.CrdtSync';
