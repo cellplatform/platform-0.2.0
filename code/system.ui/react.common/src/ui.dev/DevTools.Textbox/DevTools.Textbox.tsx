@@ -86,7 +86,14 @@ export function textbox<S extends O = O>(
 
     const onChange: t.TextInputChangeEventHandler = (e) => {
       const { from, to, selection } = e;
-      const next: t.DevTextboxChangeHandlerNext = { from, to, selection };
+      const next: t.DevTextboxChangeHandlerNext = {
+        from,
+        to,
+        selection,
+        get diff() {
+          return e.diff;
+        },
+      };
       const dev = ctx.toObject().props;
       changeHandlers.forEach((fn) => fn({ ...args, dev, next, state, change }));
     };
