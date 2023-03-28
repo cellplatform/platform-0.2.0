@@ -21,7 +21,7 @@ export function useScrollController(
     const onScroll = () => scrolling$.next();
     baseRef.current?.addEventListener('scroll', onScroll);
 
-    const scrollComplete$ = scrolling$.pipe(rx.debounceTime(50));
+    const scrollComplete$ = scrolling$.pipe(rx.takeUntil(dispose$), rx.debounceTime(50));
     scrolling$.subscribe(() => (_isScrolling = true));
     scrollComplete$.subscribe(() => (_isScrolling = false));
 
