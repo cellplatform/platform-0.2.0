@@ -227,6 +227,12 @@ export type TextInputChangeEvent = {
   isMax: boolean | null;
   modifierKeys: t.KeyboardModifierFlags;
   selection: TextInputSelection;
+  diff: TextInputCharDiff[];
+};
+export type TextInputCharDiff = {
+  kind: 'Added' | 'Deleted' | 'Unchanged';
+  index: number;
+  value: string;
 };
 
 /**

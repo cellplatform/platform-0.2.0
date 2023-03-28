@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect } from 'react';
 
 import { useFocus } from '../useFocus';
 import { Color, css, DEFAULTS, KeyboardMonitor, R, t } from './common';
@@ -81,7 +81,16 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
       const selection = Wrangle.selection(inputRef.current);
-      onChanged?.({ from, to, isMax, modifierKeys, selection });
+      onChanged?.({
+        from,
+        to,
+        isMax,
+        modifierKeys,
+        selection,
+        get diff() {
+          return Util.value.diff(from, to);
+        },
+      });
     }
   };
 

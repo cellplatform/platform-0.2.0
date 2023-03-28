@@ -62,8 +62,6 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
     </div>
   );
 
-  console.log('value', value);
-
   return (
     <TextInput
       {...dev.props}
