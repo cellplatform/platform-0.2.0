@@ -29,6 +29,7 @@ export type DevTextboxHandlerArgs<S extends O = O> = {
   focus(value: FocusOrNil | t.DevValueHandler<FocusOrNil, S>): DevTextboxHandlerArgs<S>;
   onChange(fn: DevTextboxChangeHandler<S>): DevTextboxHandlerArgs<S>;
   onEnter(fn: DevTextboxEnterHandler<S>): DevTextboxHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };
 
 /**
