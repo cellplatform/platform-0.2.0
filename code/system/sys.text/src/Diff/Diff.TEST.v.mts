@@ -3,7 +3,7 @@ import { Diff } from '.';
 
 describe('Diff', () => {
   it('no change', () => {
-    const res1 = Diff.chars('hello', 'hello');
+    const res1 = Diff.chars('hello', 'hello'); // NB: Case-sensitive by default.
     const res2 = Diff.chars('hello', 'Hello', { ignoreCase: true });
 
     expect(res1.length).to.eql(1);
