@@ -173,7 +173,6 @@ export default Dev.describe('PeerCard', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     self = await initNetwork(ctx, docShared, state);
-
     ctx.redraw();
   });
 
