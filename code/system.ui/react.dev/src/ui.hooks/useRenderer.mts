@@ -17,7 +17,7 @@ export function useRenderer(instance: t.DevInstance, renderer?: t.DevRendererRef
    */
   useEffect(() => {
     const events = DevBus.events(instance);
-    render(events, renderer).then(async (el) => {
+    render(events, renderer).then((el) => {
       if (!events.disposed) setElement(el);
     });
     return () => events.dispose();
