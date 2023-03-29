@@ -10,4 +10,5 @@ export const Crdt = {
   Text,
   fieldAs,
   toObject,
+  text: Text.init,
 };

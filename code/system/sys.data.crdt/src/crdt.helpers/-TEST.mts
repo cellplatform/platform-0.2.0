@@ -1,7 +1,7 @@
 import { CrdtIs, fieldAs } from '.';
 import { Crdt } from '../crdt';
 import { CrdtDoc } from '../crdt.Doc';
-import { Automerge, expect, rx, t, Test, TestFilesystem } from '../test.ui';
+import { Automerge, expect, rx, t, Test, TestFilesystem, Diff } from '../test.ui';
 
 export default Test.describe('crdt helpers', (e) => {
   e.describe('Is (flags)', (e) => {
@@ -160,7 +160,60 @@ export default Test.describe('crdt helpers', (e) => {
   e.describe('Text', (e) => {
     e.it('init', (e) => {
       const text = Crdt.Text.init();
+      expect(text.toString()).to.eql('');
       expect(Crdt.Is.text(text)).to.eql(true);
+    });
+
+    e.it('init: initial value', (e) => {
+      const text = Crdt.Text.init('hello');
+      expect(text.toString()).to.eql('hello');
+    });
+
+    e.it('init: Crdt.text()', (e) => {
+      const text = Crdt.text();
+      expect(text.toString()).to.eql('');
+      expect(Crdt.Is.text(text)).to.eql(true);
+    });
+
+    e.describe('update (diffs)', (e) => {
+      e.it('no change', (e) => {
+        const text = Crdt.text('hello');
+        const diff = Diff.chars(text.toString(), 'hello');
+        expect(diff[0].kind).to.eql('Unchanged');
+
+        expect(text.toString()).to.eql('hello');
+        Crdt.Text.update(text, diff);
+        expect(text.toString()).to.eql('hello'); // NB: no change.
+      });
+
+      e.it('add text', (e) => {
+        const text = Crdt.text();
+        const diff = Diff.chars(text.toString(), 'hello');
+
+        expect(text.toString()).to.eql('');
+        Crdt.Text.update(text, diff);
+        expect(text.toString()).to.eql('hello');
+      });
+
+      e.it('delete text', (e) => {
+        const initial = 'hello world!';
+        const text = Crdt.text(initial);
+        const diff = Diff.chars(initial, 'hello');
+
+        Crdt.Text.update(text, diff);
+        expect(text.toString()).to.eql('hello');
+      });
+
+      e.it('delete text (within doc)', (e) => {
+        type D = { text: t.AutomergeText };
+        const initial = 'hello world!';
+        const doc = Crdt.Doc.ref<D>({ text: Crdt.text(initial) });
+        expect(doc.current.text.toString()).to.eql(initial);
+
+        const diff = Diff.chars(initial, 'hello');
+        doc.change((d) => Crdt.Text.update(d.text, diff));
+        expect(doc.current.text?.toString()).to.eql('hello');
+      });
     });
   });
 });
