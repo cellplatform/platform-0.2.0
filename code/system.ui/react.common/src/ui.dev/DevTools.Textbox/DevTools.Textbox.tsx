@@ -138,17 +138,5 @@ export function textbox<S extends O = O>(
   });
 
   Object.values(values).forEach((value) => value.subscribe(ref.redraw));
-
-  // values.enabled.subscribe(ref.redraw);
-  // values.label.subscribe(ref.redraw);
-  // values.value.subscribe(ref.redraw);
-  // values.placeholder.subscribe(ref.redraw);
-  // values.left.subscribe(ref.redraw);
-  // values.right.subscribe(ref.redraw);
-  // values.footer.subscribe(ref.redraw);
-  // values.margin.subscribe(ref.redraw);
-  // values.focus.subscribe(ref.redraw);
-  // values.error.subscribe(ref.redraw);
-
   fn?.(args);
 }

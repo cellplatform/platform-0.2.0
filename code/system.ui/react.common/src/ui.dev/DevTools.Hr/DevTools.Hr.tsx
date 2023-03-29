@@ -14,46 +14,48 @@ export function hr<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const margin = ValueHandler<t.DevHrMargin, S>(events);
-  const color = ValueHandler<t.DevHrColor, S>(events);
-  const thickness = ValueHandler<number, S>(events);
-  const opacity = ValueHandler<number, S>(events);
+  const values = {
+    margin: ValueHandler<t.DevHrMargin, S>(events),
+    color: ValueHandler<t.DevHrColor, S>(events),
+    thickness: ValueHandler<number, S>(events),
+    opacity: ValueHandler<number, S>(events),
+  };
 
   const args: t.DevHrHandlerArgs<S> = {
     ctx,
     margin(value) {
-      margin.handler(value);
+      values.margin.handler(value);
       return args;
     },
     color(value) {
-      color.handler(value);
+      values.color.handler(value);
       return args;
     },
     thickness(value) {
-      thickness.handler(value);
+      values.thickness.handler(value);
       return args;
     },
     opacity(value) {
-      opacity.handler(value);
+      values.opacity.handler(value);
       return args;
+    },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
     },
   };
 
   const ref = ctx.debug.row((e) => {
     return (
       <Hr
-        marginY={margin.current}
-        color={color.current}
-        thickness={thickness.current}
-        opacity={opacity.current}
+        marginY={values.margin.current}
+        color={values.color.current}
+        thickness={values.thickness.current}
+        opacity={values.opacity.current}
       />
     );
   });
 
-  margin.subscribe(ref.redraw);
-  color.subscribe(ref.redraw);
-  thickness.subscribe(ref.redraw);
-  opacity.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }

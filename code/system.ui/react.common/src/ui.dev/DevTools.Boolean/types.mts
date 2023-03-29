@@ -13,6 +13,7 @@ export type DevBooleanHandlerArgs<S extends O = O> = {
   label(value: string | t.DevValueHandler<string, S>): DevBooleanHandlerArgs<S>;
   value(value: BoolOrUndefined | t.DevValueHandler<BoolOrUndefined, S>): DevBooleanHandlerArgs<S>;
   onClick(fn: DevBooleanClickHandler<S>): DevBooleanHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };
 
 /**

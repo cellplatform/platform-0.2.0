@@ -14,28 +14,34 @@ export function boolean<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = ValueHandler<string, S>(events);
-  const value = ValueHandler<boolean | undefined, S>(events);
-  const enabled = ValueHandler<boolean, S>(events);
+  const values = {
+    label: ValueHandler<string, S>(events),
+    value: ValueHandler<boolean | undefined, S>(events),
+    enabled: ValueHandler<boolean, S>(events),
+  };
   const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {
     ctx,
     label(input) {
-      label.handler(input);
+      values.label.handler(input);
       return args;
     },
     value(input) {
-      value.handler(input);
+      values.value.handler(input);
       return args;
     },
     enabled(input) {
-      enabled.handler(input);
+      values.enabled.handler(input);
       return args;
     },
     onClick(handler) {
       if (typeof handler === 'function') clickHandlers.add(handler);
       return args;
+    },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
     },
   };
 
@@ -43,27 +49,24 @@ export function boolean<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const onClick = async () => {
-      const current = value.current ?? false;
+      const current = values.value.current ?? false;
       const dev = ctx.toObject().props;
       clickHandlers.forEach((fn) => fn({ ...args, dev, current, state, change }));
     };
 
     const hasHandlers = clickHandlers.size > 0;
-    const isEnabled = hasHandlers && enabled.current !== false;
+    const isEnabled = hasHandlers && values.enabled.current !== false;
 
     return (
       <Boolean
-        value={value.current}
-        label={label.current}
+        value={values.value.current}
+        label={values.label.current}
         isEnabled={isEnabled}
         onClick={hasHandlers ? onClick : undefined}
       />
     );
   });
 
-  label.subscribe(ref.redraw);
-  value.subscribe(ref.redraw);
-  enabled.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }
