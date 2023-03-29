@@ -1,8 +1,9 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { VscSymbolClass } from 'react-icons/vsc';
 import { Calc, Color, COLORS, css, DEFAULTS, t } from './common';
 
 export type ListItemProps = {
-  baseRef?: React.RefObject<HTMLLIElement>;
   index: number;
   url: URL;
   imports: t.SpecImports;
@@ -13,6 +14,7 @@ export type ListItemProps = {
   ns?: boolean;
   hrDepth?: number;
   style?: t.CssValue;
+  onReadyChange?: t.SpecListItemReadyHandler;
 };
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -28,6 +30,19 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
 
   if (address) params.set(DEFAULTS.QS.DEV, address);
   if (!address) params.delete(DEFAULTS.QS.DEV);
+
+  const baseRef = useRef<HTMLLIElement>(null);
+
+  /**
+   * [Lifecycle]
+   */
+  useEffect(() => {
+    const el = baseRef.current ?? undefined;
+    props.onReadyChange?.({ index, lifecycle: 'ready', el });
+    return () => {
+      props.onReadyChange?.({ index, lifecycle: 'disposed' });
+    };
+  }, []);
 
   /**
    * [Render]
@@ -64,7 +79,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
   };
 
   return (
-    <li ref={props.baseRef} {...css(styles.base, props.style)}>
+    <li ref={baseRef} {...css(styles.base, props.style)}>
       {showHr && <hr {...styles.hr} />}
       <div {...styles.row.base}>
         <div {...styles.row.icon}>

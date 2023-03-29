@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Color, COLORS, css, FC, t, TextInput, Style } from '../common';
 
 const DEFAULT = {
   isEnabled: true,
-  placeholder: 'enter text...',
+  placeholder: 'enter text here...',
 };
 
 type StringOrNil = string | undefined | null;
@@ -11,7 +11,7 @@ type ContentInput = StringOrNil | JSX.Element;
 type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
-export type TextboxProps = {
+export type TextboxProps = t.TextInputFocusProps & {
   isEnabled?: boolean;
   label?: ContentInput;
   value?: StringOrNil;
@@ -29,6 +29,15 @@ export type TextboxProps = {
 const View: React.FC<TextboxProps> = (props) => {
   const isActive = Wrangle.isActive(props);
   const [isFocused, setFocused] = useState(false);
+  const inputRef = useRef<t.TextInputRef>(null);
+
+  /**
+   * [Handlers]
+   */
+  const focusTextbox = (e: React.MouseEvent) => {
+    e.preventDefault();
+    inputRef.current?.focus();
+  };
 
   /**
    * [Render]
@@ -81,11 +90,13 @@ const View: React.FC<TextboxProps> = (props) => {
   const elInput = (
     <div {...styles.input}>
       <TextInput
+        ref={inputRef}
         isEnabled={isActive}
         value={Wrangle.value(props)}
         placeholder={Wrangle.placeholder(props)}
         placeholderStyle={{ opacity: 0.2, italic: true }}
-        focusAction={'Select'}
+        focusOnReady={props.focusOnReady ?? false}
+        focusAction={props.focusAction ?? 'Select'}
         spellCheck={false}
         onFocusChange={(e) => setFocused(e.isFocused)}
         onChanged={(e) => {
@@ -100,13 +111,21 @@ const View: React.FC<TextboxProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {props.label && <div {...styles.title}>{props.label}</div>}
+      {props.label && (
+        <div {...styles.title} onMouseDown={focusTextbox}>
+          {props.label}
+        </div>
+      )}
       <div {...styles.body}>
         <div {...styles.edge}>{props.left}</div>
         {elInput}
         <div {...styles.edge}>{props.right}</div>
       </div>
-      {props.footer && <div {...styles.footer}>{props.footer}</div>}
+      {props.footer && (
+        <div {...styles.footer} onMouseDown={focusTextbox}>
+          {props.footer}
+        </div>
+      )}
     </div>
   );
 };

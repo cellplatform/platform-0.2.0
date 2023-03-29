@@ -22,8 +22,10 @@ export type TextInputStatus = {
   empty: boolean;
   value: string;
   size: { width: Pixels; height: Pixels };
-  selection: { start: number; end: number };
+  selection: TextInputSelection;
 };
+
+export type TextInputSelection = { start: number; end: number };
 
 export type TextInputLabelDoubleClickHandler = (e: TextInputLabelDoubleClickHandlerArgs) => void;
 export type TextInputLabelDoubleClickHandlerArgs = { target: TextInputLabelKind };
@@ -38,10 +40,9 @@ export type TextInputValue = {
   value?: string;
   hint?: string | JSX.Element;
   maxLength?: number;
-  mask?: t.TextInputMaskHandler;
 };
 
-export type TextInputProps = t.TextInputFocusAction &
+export type TextInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   TextInputValue & {
     isEnabled?: boolean;
@@ -63,7 +64,7 @@ export type TextInputProps = t.TextInputFocusAction &
 
     style?: t.CssValue;
     valueStyle?: t.TextInputStyle;
-    placeholderStyle?: t.TextInputStyle;
+    placeholderStyle?: t.TextInputStyle & { offset?: [number, number] };
     className?: string;
 
     onReady?: TextInputReadyHandler;
@@ -84,13 +85,11 @@ export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
 /**
  * Input
  */
-export type TextInputFocusAction = {
+export type TextInputFocusAction = 'Select' | TextInputCursorAction;
+export type TextInputFocusProps = {
   focusOnReady?: boolean;
-  focusAction?: 'Select' | TextInputCursorAction;
+  focusAction?: TextInputFocusAction;
 };
-
-export type TextInputMask = { text: string; char: string };
-export type TextInputMaskHandler = (e: TextInputMask) => boolean; // True - OK, False - disallow.
 
 /**
  * EVENTS (API)
@@ -226,10 +225,10 @@ export type TextInputChanged = TextInputChangeEvent;
 export type TextInputChangeEvent = {
   from: string;
   to: string;
-  char: string;
   isMax: boolean | null;
   modifierKeys: t.KeyboardModifierFlags;
-  selection: { start: number; end: number };
+  selection: TextInputSelection;
+  diff: t.TextCharDiff[];
 };
 
 /**

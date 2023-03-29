@@ -12,6 +12,7 @@ export type DevTitleHandlerArgs<S extends O = O> = {
   text(value: string | t.DevValueHandler<string, S>): DevTitleHandlerArgs<S>;
   style(value: StyleArg<S>): DevTitleHandlerArgs<S>;
   onClick(fn: DevTitleClickHandler<S>): DevTitleHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };
 
 export type DevTitleStyle = {

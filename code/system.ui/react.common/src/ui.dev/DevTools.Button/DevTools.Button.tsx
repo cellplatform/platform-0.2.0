@@ -16,28 +16,34 @@ export function button<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const label = ValueHandler<string, S>(events);
-  const right = ValueHandler<RightInput, S>(events);
-  const enabled = ValueHandler<boolean, S>(events);
+  const values = {
+    label: ValueHandler<string, S>(events),
+    right: ValueHandler<RightInput, S>(events),
+    enabled: ValueHandler<boolean, S>(events),
+  };
   const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
 
   const args: t.DevButtonHandlerArgs<S> = {
     ctx,
     label(value) {
-      label.handler(value);
+      values.label.handler(value);
       return args;
     },
     right(value) {
-      right.handler(value);
+      values.right.handler(value);
       return args;
     },
     enabled(value) {
-      enabled.handler(value);
+      values.enabled.handler(value);
       return args;
     },
     onClick(handler) {
       if (typeof handler === 'function') clickHandlers.add(handler);
       return args;
+    },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
     },
   };
 
@@ -45,15 +51,16 @@ export function button<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const dev = ctx.toObject().props;
-    const elRight = typeof right.current === 'string' ? <div>{right.current}</div> : right.current;
+    const right = values.right.current;
+    const elRight = typeof right === 'string' ? <div>{right}</div> : right;
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
 
     const hasHandlers = clickHandlers.size > 0;
-    const isEnabled = hasHandlers && enabled.current !== false;
+    const isEnabled = hasHandlers && values.enabled.current !== false;
 
     return (
       <Button
-        label={label.current}
+        label={values.label.current}
         rightElement={elRight}
         enabled={isEnabled}
         onClick={hasHandlers ? onClick : undefined}
@@ -61,9 +68,6 @@ export function button<S extends O = O>(
     );
   });
 
-  label.subscribe(ref.redraw);
-  right.subscribe(ref.redraw);
-  enabled.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }

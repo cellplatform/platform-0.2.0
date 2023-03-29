@@ -14,28 +14,32 @@ export function todo<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const text = ValueHandler<string, S>(events);
-  const style = ValueHandler<t.DevTodoStyle, S>(events);
+  const values = {
+    text: ValueHandler<string, S>(events),
+    style: ValueHandler<t.DevTodoStyle, S>(events),
+  };
 
   const args: t.DevTodoHandlerArgs<S> = {
     ctx,
     text(value) {
-      text.handler(value);
+      values.text.handler(value);
       return args;
     },
     style(input) {
       const value = input === null ? Todo.DEFAULT.style : input;
-      style.handler(value);
+      values.style.handler(value);
       return args;
+    },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
     },
   };
 
   const ref = ctx.debug.row(async (e) => {
-    return <Todo text={text.current} style={style.current} />;
+    return <Todo text={values.text.current} style={values.style.current} />;
   });
 
-  text.subscribe(ref.redraw);
-  style.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }

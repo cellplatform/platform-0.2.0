@@ -1,4 +1,3 @@
-import { TextInputMasks } from '..';
 import { Dev, t } from '../../../test.ui';
 import { Time, DEFAULTS, KeyboardMonitor } from '../common';
 import { DevSample } from './DEV.Sample';
@@ -22,6 +21,10 @@ const initial: T = {
     ...DEFAULTS.prop,
     placeholder: 'my placeholder',
     focusOnReady: true,
+    placeholderStyle: {
+      ...DEFAULTS.prop.placeholderStyle,
+      // offset: [-10, -15],
+    },
   },
   debug: {
     render: true,
@@ -61,11 +64,9 @@ export default Dev.describe('TextInput', (e) => {
         if (autoSize) ctx.subject.size('fill-x');
         if (!autoSize) ctx.subject.size([300, null]);
 
-        const mask = debug.isNumericMask ? TextInputMasks.isNumeric : undefined;
-        const props = { ...e.state.props, mask };
         return (
           <DevSample
-            props={props}
+            props={e.state.props}
             debug={debug}
             onReady={(ref) => {
               console.log('⚡️ onReady:', ref);
@@ -150,24 +151,6 @@ export default Dev.describe('TextInput', (e) => {
           }),
       );
 
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `mask: isNumeric`)
-          .value((e) => e.state.debug.isNumericMask)
-          .onClick((e) => {
-            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
-          }),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `hinting (auto-complete)`)
-          .value((e) => e.state.debug.isHintEnabled)
-          .onClick((e) => {
-            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
-          }),
-      );
-
       dev.boolean((btn) => {
         const current = (state: T) => (state.debug.isUpdateEnabled ? 'enabled' : 'disabled');
         btn
@@ -187,6 +170,26 @@ export default Dev.describe('TextInput', (e) => {
             e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
           });
       });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `mask: isNumeric`)
+          .value((e) => e.state.debug.isNumericMask)
+          .onClick((e) => {
+            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `hinting (auto-complete)`)
+          .value((e) => e.state.debug.isHintEnabled)
+          .onClick((e) => {
+            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
+          }),
+      );
 
       dev.boolean((btn) => {
         btn

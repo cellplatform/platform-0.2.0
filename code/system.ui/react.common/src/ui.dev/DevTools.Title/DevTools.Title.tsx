@@ -15,24 +15,30 @@ export function title<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const text = ValueHandler<string, S>(events);
-  const style = ValueHandler<t.DevTitleStyle, S>(events);
+  const values = {
+    text: ValueHandler<string, S>(events),
+    style: ValueHandler<t.DevTitleStyle, S>(events),
+  };
   const clickHandlers = new Set<t.DevTitleClickHandler<S>>();
 
   const args: t.DevTitleHandlerArgs<S> = {
     ctx,
     text(value) {
-      text.handler(value);
+      values.text.handler(value);
       return args;
     },
     style(input) {
       const value = input === null ? Title.DEFAULT.style : input;
-      style.handler(value);
+      values.style.handler(value);
       return args;
     },
     onClick(handler) {
       if (typeof handler === 'function') clickHandlers.add(handler);
       return args;
+    },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
     },
   };
 
@@ -42,15 +48,13 @@ export function title<S extends O = O>(
     const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, state, change }));
     return (
       <Title
-        text={text.current}
-        style={style.current}
+        text={values.text.current}
+        style={values.style.current}
         onClick={clickHandlers.size > 0 ? onClick : undefined}
       />
     );
   });
 
-  text.subscribe(ref.redraw);
-  style.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }

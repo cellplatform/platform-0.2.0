@@ -261,17 +261,18 @@ export function BusEvents(args: {
     $: rx
       .payload<t.DevRedrawEvent>($, 'sys.dev/redraw')
       .pipe(rx.observeOn(rx.animationFrameScheduler)),
-    fire(...renderers) {
+    fire(args) {
+      const { renderers = [], all } = args;
       bus.fire({
         type: 'sys.dev/redraw',
-        payload: { instance, renderers },
+        payload: { instance, renderers, all },
       });
     },
     async subject() {
       const res = await info.fire();
       if (!res.info) return; // NB: Ignore if not ready.
       const id = res.info?.render.props?.subject.renderer?.id;
-      if (id) redraw.fire(id);
+      if (id) redraw.fire({ renderers: [id] });
       return id;
     },
   };

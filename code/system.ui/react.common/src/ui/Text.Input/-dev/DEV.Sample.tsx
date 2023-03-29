@@ -44,7 +44,8 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
     }),
     key: css({
       fontSize: 10,
-      border: `solid 2px ${Color.format(-0.4)}`,
+      border: `solid 1px ${Color.format(-0.4)}`,
+      // backgroundColor: Color.format(1),
       borderRadius: 5,
       fontStyle: 'normal',
       fontWeight: 600,
@@ -83,7 +84,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
         } else {
           setHint('');
         }
-        // console.info('⚡️ onChanged', e);
+        console.info('⚡️ onChanged', e);
       }}
       onLabelDoubleClick={(e) => {
         console.info('⚡️ onLabelDoubleClick', e);

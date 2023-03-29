@@ -1,5 +1,17 @@
 import { COLORS, t, DevBase, DevWrangle, DevKeyboard } from '../common';
-import { CmdHost, CmdHostStateful } from '../CmdHost';
+import { CmdHostStateful } from '../CmdHost';
+import { KeyboardActions } from './Keyboard.mjs';
+
+type EscapeAction = 'ReloadRootUrl';
+
+type Options = {
+  location?: t.UrlInput;
+  badge?: t.SpecListBadge;
+  hrDepth?: number;
+  keyboard?: boolean;
+  doubleEscapeKeyAction?: null | EscapeAction;
+  style?: t.CssValue;
+};
 
 /**
  * Render a harness with the selected `dev=<namespace>` import
@@ -8,24 +20,28 @@ import { CmdHost, CmdHostStateful } from '../CmdHost';
 export async function render(
   pkg: { name: string; version: string },
   specs: t.SpecImports,
-  options: {
-    location?: t.UrlInput;
-    badge?: t.SpecListBadge;
-    hrDepth?: number;
-    keyboard?: boolean;
-    style?: t.CssValue;
-  } = {},
+  options: Options = {},
 ) {
-  const { keyboard = true } = options;
+  const { keyboard = true, doubleEscapeKeyAction = 'ReloadRootUrl' } = options;
   const url = DevWrangle.Url.navigate.formatDevFlag(options);
   const spec = await DevWrangle.Url.module(url, specs);
+
   const style = options.style ?? {
     Absolute: 0,
     backgroundColor: COLORS.WHITE,
   };
 
   if (spec) {
-    if (keyboard) DevKeyboard.listen();
+    if (keyboard) {
+      DevKeyboard.listen({
+        cancelPrint: true,
+        cancelSave: true,
+        onDoubleEscape(e) {
+          KeyboardActions.onDoubleEscape(doubleEscapeKeyAction);
+        },
+      });
+    }
+
     return <DevBase.Harness spec={spec} style={style} />;
   }
 

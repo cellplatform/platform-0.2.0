@@ -7,6 +7,7 @@ type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
 type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
+type FocusOrNil = t.DevTextboxFocus | undefined | null;
 
 /**
  * A plain-text Textbox input.
@@ -19,15 +20,18 @@ export function textbox<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
-  const enabled = ValueHandler<BoolOrNil, S>(events);
-  const label = ValueHandler<ContentInput, S>(events);
-  const value = ValueHandler<StringOrNil, S>(events);
-  const placeholder = ValueHandler<ContentInput, S>(events);
-  const left = ValueHandler<ContentInput, S>(events);
-  const right = ValueHandler<ContentInput, S>(events);
-  const footer = ValueHandler<ContentInput, S>(events);
-  const margin = ValueHandler<MarginOrNil, S>(events);
-  const error = ValueHandler<ErrorInput, S>(events);
+  const values = {
+    enabled: ValueHandler<BoolOrNil, S>(events),
+    label: ValueHandler<ContentInput, S>(events),
+    value: ValueHandler<StringOrNil, S>(events),
+    placeholder: ValueHandler<ContentInput, S>(events),
+    left: ValueHandler<ContentInput, S>(events),
+    right: ValueHandler<ContentInput, S>(events),
+    footer: ValueHandler<ContentInput, S>(events),
+    margin: ValueHandler<MarginOrNil, S>(events),
+    focus: ValueHandler<FocusOrNil, S>(events),
+    error: ValueHandler<ErrorInput, S>(events),
+  };
 
   const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
   const enterHandlers = new Set<t.DevTextboxEnterHandler<S>>();
@@ -35,39 +39,43 @@ export function textbox<S extends O = O>(
   const args: t.DevTextboxHandlerArgs<S> = {
     ctx,
     enabled(input) {
-      enabled.handler(input);
+      values.enabled.handler(input);
       return args;
     },
     label(input) {
-      label.handler(input);
+      values.label.handler(input);
       return args;
     },
     value(input) {
-      value.handler(input);
+      values.value.handler(input);
       return args;
     },
     placeholder(input) {
-      placeholder.handler(input);
+      values.placeholder.handler(input);
       return args;
     },
     left(input) {
-      left.handler(input);
+      values.left.handler(input);
       return args;
     },
     right(input) {
-      right.handler(input);
+      values.right.handler(input);
       return args;
     },
     footer(input) {
-      footer.handler(input);
+      values.footer.handler(input);
       return args;
     },
     margin(input) {
-      margin.handler(input);
+      values.margin.handler(input);
+      return args;
+    },
+    focus(input) {
+      values.focus.handler(input);
       return args;
     },
     error(input) {
-      error.handler(input);
+      values.error.handler(input);
       return args;
     },
     onChange(handler) {
@@ -78,50 +86,57 @@ export function textbox<S extends O = O>(
       if (typeof handler === 'function') enterHandlers.add(handler);
       return args;
     },
+    redraw(subject) {
+      Object.values(values).forEach((value) => value.redraw());
+      if (subject) events.redraw.subject();
+    },
   };
 
   const ref = ctx.debug.row(async (e) => {
     const state = await ctx.state<S>(initial);
     const change = state.change;
+
     const onChange: t.TextInputChangeEventHandler = (e) => {
-      const next = e.to;
+      const { from, to, selection } = e;
+      const next: t.DevTextboxChangeHandlerNext = {
+        from,
+        to,
+        selection,
+        get diff() {
+          return e.diff;
+        },
+      };
       const dev = ctx.toObject().props;
       changeHandlers.forEach((fn) => fn({ ...args, dev, next, state, change }));
     };
+
     const onEnter: t.TextInputKeyEventHandler = (e) => {
       const dev = ctx.toObject().props;
       enterHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
     };
 
     const hasHandlers = changeHandlers.size > 0;
-    const isEnabled = hasHandlers && enabled.current !== false;
+    const isEnabled = hasHandlers && values.enabled.current !== false;
 
     return (
       <Textbox
         isEnabled={isEnabled}
-        value={value.current}
-        label={label.current}
-        placeholder={placeholder.current}
-        left={left.current}
-        right={right.current}
-        footer={footer.current}
-        margin={margin.current}
-        error={error.current}
+        value={values.value.current}
+        label={values.label.current}
+        placeholder={values.placeholder.current}
+        left={values.left.current}
+        right={values.right.current}
+        footer={values.footer.current}
+        margin={values.margin.current}
+        error={values.error.current}
+        focusOnReady={values.focus.current?.onReady}
+        focusAction={values.focus.current?.action}
         onEnter={onEnter}
         onChange={hasHandlers ? onChange : undefined}
       />
     );
   });
 
-  enabled.subscribe(ref.redraw);
-  label.subscribe(ref.redraw);
-  value.subscribe(ref.redraw);
-  placeholder.subscribe(ref.redraw);
-  left.subscribe(ref.redraw);
-  right.subscribe(ref.redraw);
-  footer.subscribe(ref.redraw);
-  margin.subscribe(ref.redraw);
-  error.subscribe(ref.redraw);
-
+  Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }

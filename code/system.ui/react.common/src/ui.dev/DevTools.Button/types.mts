@@ -13,6 +13,7 @@ export type DevButtonHandlerArgs<S extends O = O> = {
   label(value: string | t.DevValueHandler<string, S>): DevButtonHandlerArgs<S>;
   right(value: RightInput | t.DevValueHandler<RightInput, S>): DevButtonHandlerArgs<S>;
   onClick(fn: DevButtonClickHandler<S>): DevButtonHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };
 
 /**

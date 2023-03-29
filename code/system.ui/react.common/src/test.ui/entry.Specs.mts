@@ -4,6 +4,7 @@ export const Specs = {
   'sys.ui.common.Button.Switch': () => import('../ui/Button.Switch/-SPEC'),
   'sys.ui.common.Icon': () => import('../ui/Icon/-SPEC'),
   'sys.ui.common.IFrame': () => import('../ui/IFrame/-SPEC'),
+  'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),
   'sys.ui.common.Spinner': () => import('../ui/Spinner/-SPEC'),
   'sys.ui.common.Center': () => import('../ui/Center/-SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/-SPEC'),

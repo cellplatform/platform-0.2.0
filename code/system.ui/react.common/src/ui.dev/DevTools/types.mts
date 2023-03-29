@@ -11,8 +11,8 @@ export type DevTools<S extends O = O> = {
   state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
 
-  header: t.DevCtxDebugHeader;
-  footer: t.DevCtxDebugFooter;
+  header: t.DevCtxEdge;
+  footer: t.DevCtxEdge;
   row: t.DevCtxDebug<S>['row'];
 
   /**

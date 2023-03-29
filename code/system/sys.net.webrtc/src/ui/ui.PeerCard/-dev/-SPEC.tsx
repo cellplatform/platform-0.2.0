@@ -1,43 +1,62 @@
 import { PeerCard, PeerCardProps } from '..';
-import { COLORS, Crdt, Dev, Filesystem, rx, t, TestNetwork, Time, WebRtc } from '../../../test.ui';
+import {
+  COLORS,
+  Crdt,
+  css,
+  Dev,
+  Filesystem,
+  MediaStream,
+  rx,
+  t,
+  TEST,
+  WebRtc,
+} from '../../../test.ui';
 import { PeerList } from '../../ui.PeerList';
 import { DocShared, NetworkSchema } from './Schema.mjs';
-
-import type { TestNetworkP2P } from '../../../test.ui';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
 type T = {
-  props: PeerCardProps;
+  remotePeer?: t.PeerId;
+  spinning?: boolean;
   debug: { showBg: boolean; redraw: number };
 };
 const initial: T = {
-  props: {
-    showPeer: DEFAULTS.showPeer,
-    showConnect: DEFAULTS.showConnect,
-  },
   debug: { showBg: true, redraw: 0 },
 };
 
-type DocMe = { count: number };
+type DocMe = { count: number; text?: string };
 const initialMeDoc: DocMe = { count: 0 };
 
 export default Dev.describe('PeerCard', async (e) => {
-  e.timeout(1000 * 30);
+  e.timeout(1000 * 90);
 
   type LocalStore = { muted: boolean; showBg: boolean; showPeer?: boolean; showConnect?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
-    muted: true,
     showBg: initial.debug.showBg,
-    showPeer: initial.props.showPeer,
-    showConnect: initial.props.showConnect,
+    muted: DEFAULTS.muted,
+    showPeer: DEFAULTS.showPeer,
+    showConnect: DEFAULTS.showConnect,
   });
 
-  let network: TestNetworkP2P;
   let self: t.Peer | undefined;
   let docMe: t.CrdtDocRef<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
+
+  const SharedProps = {
+    get current() {
+      if (!docShared.current.tmp.props) SharedProps.change((d) => null); // NB: ensure the props object exists on the CRDT.
+      return docShared.current.tmp.props as PeerCardProps;
+    },
+    change(fn: (draft: PeerCardProps) => void) {
+      return docShared.change((d) => {
+        const props = (d.tmp.props || {}) as PeerCardProps;
+        fn(props);
+        if (!d.tmp.props) d.tmp.props = props as t.JsonMap;
+      });
+    },
+  };
 
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
@@ -49,31 +68,34 @@ export default Dev.describe('PeerCard', async (e) => {
   let controller: t.WebRtcEvents;
 
   async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
-    const updateSelf = () => state.change((d) => (d.props.self = self));
+    const redraw = () => state.change((d) => d.debug.redraw++);
 
-    network = await TestNetwork.init({ log: true });
-    self = network.peerA;
-    self.connections$.subscribe(updateSelf);
-    updateSelf();
+    const getStream = WebRtc.Media.singleton().getStream;
+    self = await WebRtc.peer(TEST.signal, { getStream, log: true });
+    self.connections$.subscribe(redraw);
 
     const filedir = dirs.shared;
     controller = WebRtc.Controller.listen(self, docShared, {
       // filedir,
       dispose$,
       onConnectStart(e) {
-        state.change((d) => (d.props.spinning = true));
+        state.change((d) => (d.spinning = true));
       },
       onConnectComplete(e) {
-        state.change((d) => (d.props.spinning = false));
+        state.change((d) => (d.spinning = false));
       },
     });
   }
 
-  e.it('init:crdt', async (e) => {
+  e.it('init:state', async (e) => {
     const ctx = Dev.ctx(e);
     const dispose$ = ctx.dispose$;
     const state = await ctx.state<T>(initial);
     const redraw = () => state.change((d) => d.debug.redraw++);
+
+    await state.change((d) => {
+      d.debug.showBg = local.showBg;
+    });
 
     // Initialize CRDT documents.
     docMe = Crdt.Doc.ref<DocMe>(initialMeDoc, { dispose$ });
@@ -87,65 +109,76 @@ export default Dev.describe('PeerCard', async (e) => {
     // See: "init:network" (below) for network-sychronization-protocol startup (P2P).
     //      after the UI has been initiated.
 
-    // Listen.
+    // Redraw when the CRDT document changes.
     docMe.$.subscribe(redraw);
     docShared.$.subscribe(redraw);
-    redraw();
 
-    docShared.$.subscribe((e) => {
-      const debug = e.doc.tmp.debug;
-      if (debug === 'minimal') {
-        state.change((d) => {
-          d.props.showConnect = false;
-          d.props.showPeer = false;
-        });
-      }
-
-      if (debug === 'normal' || debug === undefined) {
-        state.change((d) => {
-          d.props.showConnect = local.showConnect;
-          d.props.showPeer = local.showPeer;
-        });
-      }
+    SharedProps.change((d) => {
+      d.muted = local.muted;
+      d.showPeer = local.showPeer;
+      d.showConnect = local.showConnect;
+      d.fill = false;
     });
   });
 
   e.it('init:ui', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.debug.showBg = local.showBg;
-      d.props.muted = local.muted;
-      d.props.showPeer = local.showPeer;
-      d.props.showConnect = local.showConnect;
-    });
 
     const toggleMute = () => {
-      return state.change((d) => (local.muted = d.props.muted = !d.props.muted));
+      return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
+    ctx.host.footer.padding(0).render<T>(async (e) => {
+      const { MonacoEditor } = await import('sys.ui.react.monaco');
+      return (
+        <div {...css({ height: 200, display: 'grid' })}>
+          <MonacoEditor />
+        </div>
+      );
+    });
+
     ctx.subject
+      //
       .display('grid')
-      .size([400, null])
       .render<T>((e) => {
         const { showBg } = e.state.debug;
+        const props = SharedProps.current;
+        const fullscreen = props.fill;
+        const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
+
+        if (fullscreen && camera) {
+          ctx.subject.size('fill');
+        } else {
+          ctx.subject.size([400, 320]);
+        }
+
+        if (fullscreen && camera) {
+          return (
+            <MediaStream.Video
+              stream={camera?.stream.remote}
+              muted={props.muted}
+              style={{ Absolute: 0 }}
+            />
+          );
+        }
+
         return (
           <PeerCard
-            {...e.state.props}
+            {...props}
             self={self}
+            remotePeer={e.state.remotePeer}
+            spinning={e.state.spinning}
             style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
             onMuteClick={toggleMute}
-            onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
+            onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
             onConnectRequest={async (e) => {
               if (!self) return;
+
+              // NB: Updating the CRDT triggers to listening [Controller].
               docShared.change((d) => {
                 const local = self!.id;
                 const initiatedBy = local;
-
-                console.log('-------------------------------------------');
-                console.log('self', self);
-                console.log('initiatedBy', initiatedBy);
-
                 WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
               });
             }}
@@ -157,36 +190,9 @@ export default Dev.describe('PeerCard', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.footer.border(-0.1).render<T>((e) => {
-      const self = network?.peerA;
-      const total = self?.connections.length ?? 0;
+    dev.section('Environment', (dev) => {
+      dev.button('redraw', (e) => e.change((d) => d.debug.redraw++));
 
-      return (
-        <Dev.Object
-          fontSize={11}
-          name={'Me'}
-          expand={{
-            level: 1,
-            paths: [
-              //
-              '$.Doc<Private>',
-              '$.Doc<Public>',
-              // '$.Doc<Public>.network',
-              // '$.Doc<Public>.network.*',
-              '$.Doc<Public>.tmp',
-            ],
-          }}
-          data={{
-            [`WebRtc.Peer[${total}]`]: self,
-            'Doc<Private>': docMe?.current,
-            'Doc<Public>': docShared?.current,
-          }}
-        />
-      );
-    });
-
-    // Debug
-    dev.section((dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => (e.state.debug.showBg ? 'background (white)' : 'background'))
@@ -195,43 +201,37 @@ export default Dev.describe('PeerCard', async (e) => {
             e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')));
           }),
       );
+    });
 
-      dev.button('tmp: minimal', (e) => {
-        docShared.change((d) => {
-          d.tmp.debug = 'minimal';
-        });
-      });
+    dev.hr(5, 20);
 
-      dev.button('tmp: normal', (e) => {
-        docShared.change((d) => {
-          d.tmp.debug = 'normal';
-        });
-      });
-
-      dev.hr(-1, 5);
-
+    dev.section('Props', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('show peer-id')
-          .value((e) => e.state.props.showPeer)
-          .onClick((e) => e.change((d) => (local.showPeer = Dev.toggle(d.props, 'showPeer')))),
+          .label((e) => `size${SharedProps.current.fill ? ' (fullscreen)' : ' (fixed)'}`)
+          .value((e) => SharedProps.current.fill)
+          .onClick((e) => {
+            SharedProps.change((d) => Dev.toggle(d, 'fill'));
+          }),
       );
 
       dev.boolean((btn) =>
         btn
-          .label('show connect')
-          .value((e) => e.state.props.showConnect ?? PeerCard.DEFAULTS.showConnect)
-          .onClick((e) =>
-            e.change((d) => (local.showConnect = Dev.toggle(d.props, 'showConnect'))),
-          ),
+          .label('showPeer')
+          .value((e) => SharedProps.current.showPeer)
+          .onClick((e) => {
+            SharedProps.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
+          }),
       );
 
-      dev.hr(-1, 5);
-
-      dev.button('prune dead peers', async (e) => {
-        const res = controller.prune.fire();
-        console.log('res', res);
-      });
+      dev.boolean((btn) =>
+        btn
+          .label('showConnect')
+          .value((e) => SharedProps.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
+          .onClick((e) => {
+            SharedProps.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
+          }),
+      );
     });
 
     dev.hr(5, 20);
@@ -245,14 +245,21 @@ export default Dev.describe('PeerCard', async (e) => {
             .onClick((e) => docMe.change((d) => (d.count += by))),
         );
       };
+      dev.textbox((txt) =>
+        txt
+          .label((e) => 'simple text string:')
+          .value((e) => docMe.current.text)
+          .placeholder('private text here...')
+          .margin([0, 0, 15, 0])
+          .onChange((e) => {
+            console.log('e.next', e.next);
+            docMe.change((d) => (d.text = e.next.to));
+          })
+          .onEnter((e) => {}),
+      );
+
       count('count: increment', 1);
       count('count: decrement', -1);
-      // dev.hr(-1, 5);
-      // dev.button('reset (destroy)', (e) =>
-      //   docMe.change((d) => {
-      //     d.count = 0;
-      //   }),
-      // );
     });
 
     dev.hr(5, 20);
@@ -279,38 +286,17 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('(Debug) Programmatic Peer Connection', (dev) => {
+    dev.section('(Debug)', (dev) => {
       dev.button((btn) =>
         btn
-          .label('connect')
-          .enabled((e) => (self?.connections.length ?? 0) === 0)
-          .right((e) => {
-            if (!self) return '';
-            return self.connections.length === 0 ? '←' : '';
-          })
-          .onClick(async (e) => {
-            await e.change((d) => {
-              d.props.spinning = true;
-              d.props.remotePeer = network.peerB.id;
-            });
-            await network.connect();
-            await e.change(async (d) => {
-              await Time.wait(500); // NB: [HACK] Wait for media to be ready before hiding spinner.
-              d.props.spinning = false;
-            });
-          }),
-      );
-
-      dev.button((btn) =>
-        btn
-          .label('disconnect (kill all)')
+          .label('disconnect (all)')
           .enabled((e) => (self?.connections.length ?? 0) > 0)
           .right((e) => {
             if (!self) return '';
             return self.connections.length > 0 ? '←' : '';
           })
           .onClick(async (e) => {
-            network.peerA.connections.all.forEach((conn) => conn.dispose());
+            self?.connections.all.forEach((conn) => conn.dispose());
           }),
       );
     });
@@ -320,11 +306,46 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       return self ? <PeerList self={self} style={{ MarginX: 35 }} /> : null;
     });
+
+    /**
+     * Footer
+     */
+    dev.footer.border(-0.1).render<T>((e) => {
+      // const self = network?.peerA;
+      const total = self?.connections.length ?? 0;
+
+      return (
+        <Dev.Object
+          fontSize={11}
+          name={'Me'}
+          expand={{
+            level: 1,
+            paths: [
+              //
+              '$.Doc<Private>',
+              '$.Doc<Public>',
+              // '$.Doc<Public>.network',
+              // '$.Doc<Public>.network.*',
+              // '$.Doc<Public>.tmp',
+            ],
+          }}
+          data={{
+            [`WebRtc.Peer[${total}]`]: self,
+            'Doc<Private>': docMe?.current,
+            'Doc<Public>': docShared?.current,
+          }}
+        />
+      );
+    });
   });
 
   e.it('init:network', async (e) => {
+    const redraw = () => state.change((d) => d.debug.redraw++);
+
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     await initNetwork(state, ctx.dispose$);
+
+    redraw();
   });
 });

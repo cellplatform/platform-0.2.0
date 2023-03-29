@@ -17,4 +17,5 @@ export type DevHrHandlerArgs<S extends O = O> = {
   color(value: DevHrColor | t.DevValueHandler<DevHrColor, S>): DevHrHandlerArgs<S>;
   thickness(value: DevHrThickness | t.DevValueHandler<DevHrThickness, S>): DevHrHandlerArgs<S>;
   opacity(value: DevHrOpacity | t.DevValueHandler<DevHrOpacity, S>): DevHrHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };

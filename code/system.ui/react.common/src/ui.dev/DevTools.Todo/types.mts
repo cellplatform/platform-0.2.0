@@ -11,6 +11,7 @@ export type DevTodoHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
   text(value: string | t.DevValueHandler<string, S>): DevTodoHandlerArgs<S>;
   style(value: StyleArg<S>): DevTodoHandlerArgs<S>;
+  redraw(subject?: boolean): void;
 };
 
 export type DevTodoStyle = {

@@ -35,7 +35,7 @@ export type DevCtx = {
   readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
-  redraw(): Promise<void>;
+  redraw(all?: boolean): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
 };
 
@@ -70,10 +70,12 @@ export type DevCtxSubject = {
 /**
  * Subject Component Host ("Harness")
  */
-export type DevCtxHost = {
-  backgroundColor(value: Color | null): DevCtxHost;
-  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost;
-  tracelineColor(value: Color | null): DevCtxHost;
+export type DevCtxHost<S extends O = O> = {
+  backgroundColor(value: Color | null): DevCtxHost<S>;
+  backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost<S>;
+  tracelineColor(value: Color | null): DevCtxHost<S>;
+  header: DevCtxEdge<S>;
+  footer: DevCtxEdge<S>;
 };
 
 /**
@@ -84,18 +86,12 @@ export type DevCtxDebug<S extends O = O> = {
   scroll(value: boolean): DevCtxDebug;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
   width(value: number): DevCtxDebug;
-  header: DevCtxDebugHeader<S>;
-  footer: DevCtxDebugFooter<S>;
+  header: DevCtxEdge<S>;
+  footer: DevCtxEdge<S>;
 };
 
-export type DevCtxDebugHeader<S extends O = O> = {
-  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugHeader;
-  border(color: Color | null): DevCtxDebugHeader;
-  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugHeader;
-};
-
-export type DevCtxDebugFooter<S extends O = O> = {
-  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxDebugFooter;
-  border(color: Color | null): DevCtxDebugFooter;
-  padding(value: t.DevMarginInput | undefined | null): DevCtxDebugFooter;
+export type DevCtxEdge<S extends O = O> = {
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxEdge;
+  border(color: Color | null): DevCtxEdge;
+  padding(value: t.DevMarginInput | undefined | null): DevCtxEdge;
 };

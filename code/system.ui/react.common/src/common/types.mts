@@ -8,17 +8,17 @@ export type { CSSProperties } from 'react';
  * @system
  */
 export type {
-  Size,
   DomRect,
+  Disposable,
+  EventBus,
   IgnoredResponse,
   JsonU,
   JsonMapU,
-  EventBus,
-  Disposable,
+  Size,
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
-
+export type { TextCharDiff } from 'sys.text/src/types.mjs';
 export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
 
 export type {
@@ -35,8 +35,7 @@ export type {
   DevEvents,
   DevInfo,
   DevCtxDebug,
-  DevCtxDebugHeader,
-  DevCtxDebugFooter,
+  DevCtxEdge,
   DevTheme,
   DevValueHandler,
   DevRenderRef,

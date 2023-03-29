@@ -1,4 +1,5 @@
-import { Color, css, t } from '../common';
+import { useEffect } from 'react';
+import { Color, css, DEFAULTS, Keyboard, t } from '../common';
 
 export type MySampleProps = {
   text?: string;
@@ -15,6 +16,23 @@ export const MySample: React.FC<MySampleProps> = (props) => {
     throw new Error('MySample: Intentional error');
   }
 
+  /**
+   * [Effects]
+   */
+  useEffect(() => {
+    const keyboard = Keyboard.on({
+      Enter(e) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(DEFAULTS.QS.DEV, 'true');
+        window.location.href = url.href;
+      },
+    });
+    return () => keyboard.dispose();
+  }, []);
+
+  /**
+   * [Render]
+   */
   const styles = {
     base: css({
       position: 'relative',

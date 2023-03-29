@@ -1,14 +1,14 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect } from 'react';
 
 import { useFocus } from '../useFocus';
-import { Color, css, DEFAULTS, KeyboardMonitor, R, t } from './common';
+import { Color, css, DEFAULTS, KeyboardMonitor, R, t, Diff } from './common';
 import { TextInputRef } from './TextInput.Ref.mjs';
 import { Util } from './util.mjs';
 
 /**
  * Types
  */
-export type HtmlInputProps = t.TextInputFocusAction &
+export type HtmlInputProps = t.TextInputFocusProps &
   t.TextInputEventHandlers &
   t.TextInputValue & {
     inputRef: RefObject<HTMLInputElement>;
@@ -69,25 +69,28 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
    * [Handlers]
    */
   const handleChange = (e: React.ChangeEvent) => {
-    const { onChanged, maxLength, mask } = props;
+    const { onChanged, maxLength } = props;
 
     // Derive values.
     const from = value;
     let to = ((e.target as any).value as string) || '';
     to = Util.value.format(to, maxLength);
-    const char = Util.value.getChangedChar(from, to);
     const isMax = maxLength === undefined ? null : to.length === maxLength;
-
-    // Check whether an input-filter will mask the value.
-    if (char && mask) {
-      if (!mask({ text: to, char })) return; // Handled.
-    }
 
     // Update state and alert listeners.
     if (from !== to) {
       const modifierKeys = cloneModifierKeys();
       const selection = Wrangle.selection(inputRef.current);
-      onChanged?.({ from, to, isMax, char, modifierKeys, selection });
+      onChanged?.({
+        from,
+        to,
+        isMax,
+        modifierKeys,
+        selection,
+        get diff() {
+          return Diff.chars(from, to, { ignoreCase: false });
+        },
+      });
     }
   };
 

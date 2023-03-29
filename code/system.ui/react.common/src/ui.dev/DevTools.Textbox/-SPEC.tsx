@@ -12,6 +12,7 @@ const initial: T = {
   props: {
     isEnabled: Textbox.DEFAULT.isEnabled,
     label: 'My Label',
+    value: 'Hello 👋',
     // placeholder: null,
   },
 };
@@ -37,10 +38,18 @@ export default Dev.describe('Textbox', (e) => {
 
     dev.section('Value', (dev) => {
       const value = (value: StringOrNil, label?: string) => {
-        dev.button(label ?? `"${value}"`, (e) => e.change((d) => (d.props.value = value)));
+        dev.button((btn) =>
+          btn
+            .label((e) => label ?? `${value}`)
+            .right((e) => (e.state.props.value === value ? '←' : ''))
+            .onClick((e) => {
+              e.change((d) => (d.props.value = value));
+            }),
+        );
       };
 
-      value(undefined, 'undefined');
+      value(undefined, 'clear (undefined)');
+      dev.hr(-1, 5);
       value(null, 'null');
       value('', '"" (empty)');
       dev.hr(-1, 5);
@@ -137,15 +146,19 @@ export default Dev.describe('Textbox', (e) => {
         .right((e) => e.state.props.right)
         .value((e) => e.state.props.value)
         .margin((e) => e.state.props.margin)
+        .focus({ onReady: true, action: 'Cursor:End' })
         .error((e) => e.state.props.error)
         .footer((e) =>
           e.state.props.value
-            ? 'Comentary on the input value.'
+            ? 'Commentary on the input value.'
             : 'Here is a hint about what to enter.',
         )
-        .onChange((e) => e.change((d) => (d.props.value = e.next)))
+        .onChange((e) => {
+          e.change((d) => (d.props.value = e.next.to));
+          console.info('⚡️ onChange', e.next);
+        })
         .onEnter((e) => {
-          console.info('ENTER', e);
+          console.info('⚡️ onEnter', e);
         }),
     );
   });

@@ -1,4 +1,5 @@
-import { t, Id, Margin, DEFAULTS } from './common';
+import { DEFAULTS, Id, Margin, t } from './common';
+import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
 
 import type { PropArgs } from './common.types';
 
@@ -10,7 +11,7 @@ export function CtxPropsDebug(props: PropArgs) {
     row(input) {
       const id = Id.renderer.create();
       const fn = typeof input === 'function' ? input : () => input;
-      const redraw = () => events.redraw.fire(id);
+      const redraw = () => events.redraw.fire({ renderers: [id] });
       props.current().debug.body.renderers.push({ id, fn });
       props.changed();
       return { id, redraw };
@@ -36,55 +37,15 @@ export function CtxPropsDebug(props: PropArgs) {
       return api;
     },
 
-    /**
-     * Header
-     */
-    header: {
-      render(input) {
-        const id = Id.renderer.create();
-        const fn = typeof input === 'function' ? input : () => input;
-        props.current().debug.header.renderer = { id, fn };
-        props.changed();
-        return api.header;
-      },
-      border(color) {
-        if (color === null) color = DEBUG.header.border.color!;
-        props.current().debug.header.border.color = color;
-        props.changed();
-        return api.header;
-      },
-      padding(input) {
-        const value = Margin.wrangle(input ?? DEBUG.header.padding);
-        props.current().debug.header.padding = value;
-        props.changed();
-        return api.header;
-      },
-    },
+    header: CtxPanelEdge(DEBUG.header, (fn) => {
+      fn(props.current().debug.header);
+      props.changed();
+    }),
 
-    /**
-     * Footer
-     */
-    footer: {
-      render(input) {
-        const id = Id.renderer.create();
-        const fn = typeof input === 'function' ? input : () => input;
-        props.current().debug.footer.renderer = { id, fn };
-        props.changed();
-        return api.footer;
-      },
-      border(color) {
-        if (color === null) color = DEBUG.footer.border.color!;
-        props.current().debug.footer.border.color = color;
-        props.changed();
-        return api.footer;
-      },
-      padding(input) {
-        const value = Margin.wrangle(input ?? DEBUG.footer.padding);
-        props.current().debug.footer.padding = value;
-        props.changed();
-        return api.footer;
-      },
-    },
+    footer: CtxPanelEdge(DEBUG.footer, (fn) => {
+      fn(props.current().debug.footer);
+      props.changed();
+    }),
   };
 
   return api;

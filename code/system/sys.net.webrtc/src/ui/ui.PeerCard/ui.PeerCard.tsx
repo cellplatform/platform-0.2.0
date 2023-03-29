@@ -6,6 +6,7 @@ import { PeerCopied } from './ui.PeerCopied';
 import { Footer } from './ui.Footer';
 
 const DEFAULTS = {
+  muted: false,
   showPeer: true,
   showConnect: true,
 };
@@ -21,12 +22,14 @@ const URL = {
 export type PeerCardProps = {
   self?: t.Peer;
   remotePeer?: t.PeerId;
-  mediaHeight?: number;
   muted?: boolean;
   spinning?: boolean;
   showPeer?: boolean;
   showConnect?: boolean;
+
   style?: t.CssValue;
+  fill?: boolean;
+
   onMuteClick?(e: React.MouseEvent): void;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
@@ -38,7 +41,6 @@ export type PeerCardProps = {
 const View: React.FC<PeerCardProps> = (props) => {
   const {
     self,
-    mediaHeight = 250,
     muted = false,
     showPeer = DEFAULTS.showPeer,
     showConnect = DEFAULTS.showConnect,
@@ -75,11 +77,14 @@ const View: React.FC<PeerCardProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
+    }),
     video: {
       base: css({
         position: 'relative',
-        height: mediaHeight,
         backgroundImage: `url(${URL.Rowan})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -115,10 +120,9 @@ const View: React.FC<PeerCardProps> = (props) => {
 
   const elVideo = cameraConnection && (
     <MediaStream.Video
+      style={styles.video.media}
       stream={cameraConnection.stream.remote}
       muted={muted}
-      height={mediaHeight}
-      style={styles.video.media}
     />
   );
 
