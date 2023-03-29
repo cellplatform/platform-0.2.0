@@ -45,7 +45,7 @@ export type DevTextboxChangeHandlerNext = {
   from: string;
   to: string;
   selection: t.TextInputSelection;
-  diff: t.TextInputCharDiff[];
+  diff: t.TextCharDiff[];
 };
 
 export type DevTextboxEnterHandler<S extends O = O> = (e: DevTextboxEnterHandlerArgs<S>) => void;

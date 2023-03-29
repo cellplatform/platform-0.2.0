@@ -1,7 +1,7 @@
 import { RefObject, useEffect } from 'react';
 
 import { useFocus } from '../useFocus';
-import { Color, css, DEFAULTS, KeyboardMonitor, R, t } from './common';
+import { Color, css, DEFAULTS, KeyboardMonitor, R, t, Diff } from './common';
 import { TextInputRef } from './TextInput.Ref.mjs';
 import { Util } from './util.mjs';
 
@@ -88,7 +88,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
         modifierKeys,
         selection,
         get diff() {
-          return Util.value.diff(from, to);
+          return Diff.chars(from, to, { ignoreCase: false });
         },
       });
     }
