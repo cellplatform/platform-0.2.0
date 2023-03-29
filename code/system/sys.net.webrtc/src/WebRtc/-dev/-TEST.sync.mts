@@ -1,6 +1,5 @@
-import { Dev, expect, t, TEST, Time, WebRtc } from '../../test.ui';
-import { Automerge, Crdt } from '../common';
 import { PeerSyncer } from 'sys.data.crdt';
+import { Automerge, Dev, expect, t, TEST, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
   const signal = TEST.signal;
