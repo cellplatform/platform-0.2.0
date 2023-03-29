@@ -26,9 +26,9 @@ export function ValueHandler<V, State extends O>(events: t.DevEvents) {
     return res;
   };
 
-  const onChanged = async (info?: t.DevInfo) => {
+  const onChanged = async (info?: t.DevInfo, force?: boolean) => {
     const value = await getCurrent(info);
-    if (value !== undefined && !R.equals(value, _latest)) {
+    if (value !== undefined && (force || !R.equals(value, _latest))) {
       subscribers.forEach((fn) => fn({ value }));
     }
     _latest = value;
@@ -36,6 +36,9 @@ export function ValueHandler<V, State extends O>(events: t.DevEvents) {
 
   events.state.changed$.subscribe((e) => onChanged(e.info));
   events.props.changed$.subscribe((e) => onChanged(e.info));
+  events.redraw.$.subscribe((e) => {
+    if (e.all) onChanged(undefined, true);
+  });
 
   const api = {
     get current() {
@@ -49,6 +52,9 @@ export function ValueHandler<V, State extends O>(events: t.DevEvents) {
     subscribe(fn: Subscriber) {
       subscribers.add(fn);
       return () => subscribers.delete(fn);
+    },
+    redraw() {
+      onChanged(undefined, true);
     },
     dispose() {
       subscribers.clear();
