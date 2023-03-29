@@ -27,7 +27,6 @@ export default Dev.describe('Text', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools(e);
     const state = await dev.ctx.state<T>(initial);
-    const redraw = () => state.change((d) => d.count++);
 
     dev.textbox((txt) =>
       txt
@@ -36,7 +35,7 @@ export default Dev.describe('Text', (e) => {
         .focus({ onReady: true })
         .onChange((e) => {
           doc.change((d) => Crdt.Text.update(d.text, e.next.diff));
-          redraw();
+          txt.redraw(true);
         }),
     );
 
