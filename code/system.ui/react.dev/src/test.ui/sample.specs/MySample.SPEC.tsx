@@ -90,7 +90,6 @@ export default Spec.describe('MySample', (e) => {
     dev
       .button((btn) => btn.label('run specs').onClick((e) => ctx.run()))
       .button((btn) => btn.label('run specs (reset)').onClick((e) => ctx.run({ reset: true })))
-      .button((btn) => btn.label('ctx.redraw').onClick(() => ctx.redraw()))
       .button((btn) =>
         btn.label('throw error').onClick((e) => {
           state.change((d) => (d.throwError = true));
@@ -102,6 +101,7 @@ export default Spec.describe('MySample', (e) => {
     dev
       .button((btn) => btn.label('increment (+)').onClick((e) => state.change((d) => d.count++)))
       .button((btn) => btn.label('decrement (-)').onClick((e) => state.change((d) => d.count--)))
+      .button((btn) => btn.label('no change').onClick((e) => state.change((d) => null)))
       .hr();
 
     debug.row(<div>Harness</div>);
@@ -119,9 +119,9 @@ export default Spec.describe('MySample', (e) => {
       });
     });
 
-    dev.button((btn) => {
-      btn.label('redraw: subject').onClick((e) => events.redraw.subject());
-    });
+    dev
+      .button((btn) => btn.label('ctx.redraw (subject only)').onClick(() => ctx.redraw()))
+      .button((btn) => btn.label('ctx.redraw (all)').onClick(() => ctx.redraw(true)));
 
     dev
       .hr()

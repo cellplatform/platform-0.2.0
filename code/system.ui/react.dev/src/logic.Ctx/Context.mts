@@ -48,7 +48,12 @@ export const Context = {
         return res.info ?? (await events.info.get());
       },
 
-      async redraw() {
+      async redraw(all) {
+        if (all) {
+          const info = await events.info.get();
+          const renderers = info.render.props?.debug.body.renderers.map((r) => r.id) ?? [];
+          events.redraw.fire(...renderers);
+        }
         await events.redraw.subject();
       },
 
