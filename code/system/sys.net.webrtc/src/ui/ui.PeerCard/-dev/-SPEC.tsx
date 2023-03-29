@@ -1,5 +1,5 @@
 import { PeerCard, PeerCardProps } from '..';
-import { COLORS, Crdt, css, Dev, Filesystem, MediaStream, rx, t, TEST, WebRtc } from './common';
+import { COLORS, Crdt, Dev, Filesystem, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { PeerList } from '../../ui.PeerList';
 import { DocShared, NetworkSchema } from './Schema.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
@@ -55,17 +55,14 @@ export default Dev.describe('PeerCard', async (e) => {
     shared: fs.dir('dev.doc.shared'),
   };
 
-  let controller: t.WebRtcEvents;
-
-  async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
-    const redraw = () => state.change((d) => d.debug.redraw++);
-
+  async function initNetwork(ctx: t.DevCtx, doc: t.CrdtDocRef<DocShared>, state: t.DevCtxState<T>) {
+    const { dispose$ } = ctx;
     const getStream = WebRtc.Media.singleton().getStream;
-    self = await WebRtc.peer(TEST.signal, { getStream, log: true });
-    self.connections$.subscribe(redraw);
+    const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
+    self.connections$.subscribe(() => ctx.redraw(true));
 
     const filedir = dirs.shared;
-    controller = WebRtc.Controller.listen(self, docShared, {
+    WebRtc.Controller.listen(self, doc, {
       // filedir,
       dispose$,
       onConnectStart(e) {
@@ -75,6 +72,8 @@ export default Dev.describe('PeerCard', async (e) => {
         state.change((d) => (d.spinning = false));
       },
     });
+
+    return self;
   }
 
   e.it('init:state', async (e) => {
@@ -168,6 +167,14 @@ export default Dev.describe('PeerCard', async (e) => {
           />
         );
       });
+  });
+
+  e.it('init:network', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+    self = await initNetwork(ctx, docShared, state);
+
+    ctx.redraw();
   });
 
   e.it('ui:debug', async (e) => {
@@ -326,15 +333,5 @@ export default Dev.describe('PeerCard', async (e) => {
         />
       );
     });
-  });
-
-  e.it('init:network', async (e) => {
-    const redraw = () => state.change((d) => d.debug.redraw++);
-
-    const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    await initNetwork(state, ctx.dispose$);
-
-    redraw();
   });
 });
