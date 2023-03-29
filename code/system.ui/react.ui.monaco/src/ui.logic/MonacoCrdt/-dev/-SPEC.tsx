@@ -64,7 +64,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
       const peer = item.peer;
       const editor = Array.from(editors)[i];
       if (editor && !item.syncer) {
-        const syncer = MonacoCrdt.syncer(editor, peer.doc, 'code', {});
+        const syncer = MonacoCrdt.syncer(editor, peer.doc, (doc) => doc.code);
         item.syncer = syncer;
         console.info('MonacoCrdt.syncer:', syncer);
       }

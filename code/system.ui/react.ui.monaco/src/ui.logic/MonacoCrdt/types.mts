@@ -5,5 +5,4 @@ export type MonacoCrdtSyncer<D extends {}> = t.Disposable & {
   readonly isDisposed: boolean;
   readonly editor: t.MonacoCodeEditor;
   readonly doc: t.CrdtDocRef<D>;
-  readonly field: keyof D;
 };
