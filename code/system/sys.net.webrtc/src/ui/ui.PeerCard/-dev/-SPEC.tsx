@@ -1,18 +1,8 @@
 import { PeerCard, PeerCardProps } from '..';
-import {
-  COLORS,
-  Crdt,
-  css,
-  Dev,
-  Filesystem,
-  MediaStream,
-  rx,
-  t,
-  TEST,
-  WebRtc,
-} from '../../../test.ui';
+import { COLORS, Crdt, css, Dev, Filesystem, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { PeerList } from '../../ui.PeerList';
 import { DocShared, NetworkSchema } from './Schema.mjs';
+import { SpecMonacoSync } from './-SPEC.Monaco';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
@@ -129,14 +119,7 @@ export default Dev.describe('PeerCard', async (e) => {
       return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
-    ctx.host.footer.padding(0).render<T>(async (e) => {
-      const { MonacoEditor } = await import('sys.ui.react.monaco');
-      return (
-        <div {...css({ height: 200, display: 'grid' })}>
-          <MonacoEditor />
-        </div>
-      );
-    });
+    ctx.host.footer.padding(0).render<T>(() => SpecMonacoSync(docShared));
 
     ctx.subject
       //
@@ -201,6 +184,13 @@ export default Dev.describe('PeerCard', async (e) => {
             e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')));
           }),
       );
+
+      dev.hr(-1, 5);
+
+      dev.button('NetworkSchema (genesis)', (e) => {
+        const { schema } = NetworkSchema.genesis();
+        console.info('NetworkSchema.genesis', schema.sourceFile);
+      });
     });
 
     dev.hr(5, 20);
@@ -311,7 +301,6 @@ export default Dev.describe('PeerCard', async (e) => {
      * Footer
      */
     dev.footer.border(-0.1).render<T>((e) => {
-      // const self = network?.peerA;
       const total = self?.connections.length ?? 0;
 
       return (
