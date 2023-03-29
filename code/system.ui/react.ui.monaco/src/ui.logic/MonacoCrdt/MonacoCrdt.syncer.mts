@@ -53,7 +53,7 @@ export function syncer<D extends {}>(
    * Local editor change.
    */
   editor.onDidChangeModelContent((e) => {
-    if (api.isDisposed) return;
+    if (api.disposed) return;
     if (_ignoreChange) return;
 
     e.changes.forEach((change) => {
@@ -81,7 +81,7 @@ export function syncer<D extends {}>(
 
     dispose,
     dispose$,
-    get isDisposed() {
+    get disposed() {
       return _isDisposed;
     },
   };
