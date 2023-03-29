@@ -50,7 +50,7 @@ export const Context = {
 
       async redraw(all) {
         if (all) {
-          events.redraw.fire({ all: true });
+          events.redraw.fire({ all });
         } else {
           await events.redraw.subject();
         }
