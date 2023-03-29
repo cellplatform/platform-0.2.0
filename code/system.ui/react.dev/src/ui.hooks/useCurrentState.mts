@@ -17,8 +17,8 @@ export function useCurrentState(
   const { distinctUntil } = options;
   const busid = rx.bus.instance(instance.bus);
 
-  const [count, setCount] = useState(0);
   const [info, setInfo] = useState<t.DevInfo>();
+  const [count, setCount] = useState(0);
 
   /**
    * [Lifecycle]

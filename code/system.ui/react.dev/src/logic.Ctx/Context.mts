@@ -50,11 +50,10 @@ export const Context = {
 
       async redraw(all) {
         if (all) {
-          const info = await events.info.get();
-          const renderers = info.render.props?.debug.body.renderers.map((r) => r.id) ?? [];
-          events.redraw.fire(...renderers);
+          events.redraw.fire({ all: true });
+        } else {
+          await events.redraw.subject();
         }
-        await events.redraw.subject();
       },
 
       async state<T extends O>(initial: T) {

@@ -11,7 +11,7 @@ export function CtxPropsDebug(props: PropArgs) {
     row(input) {
       const id = Id.renderer.create();
       const fn = typeof input === 'function' ? input : () => input;
-      const redraw = () => events.redraw.fire(id);
+      const redraw = () => events.redraw.fire({ renderers: [id] });
       props.current().debug.body.renderers.push({ id, fn });
       props.changed();
       return { id, redraw };

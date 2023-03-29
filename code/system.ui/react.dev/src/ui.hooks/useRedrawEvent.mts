@@ -16,15 +16,16 @@ export function useRedrawEvent(
     .map((item) => (typeof item === 'object' ? item.id : item) as Id);
 
   const [count, setCount] = useState(0);
-  const forceRedraw = () => setCount((prev) => prev + 1);
+  const redraw = () => setCount((prev) => prev + 1);
 
   /**
    * [Lifecycle]
    */
   useEffect(() => {
     const events = DevBus.Events({ instance });
-    const match$ = events.redraw.$.pipe(filter((e) => ids.some((id) => e.renderers.includes(id))));
-    match$.subscribe(forceRedraw);
+    const hasRenderer = (renderers: Id[]) => ids.some((id) => renderers.includes(id));
+    const match$ = events.redraw.$.pipe(filter((e) => e.all || hasRenderer(e.renderers)));
+    match$.subscribe(redraw);
     return () => events.dispose();
   }, [ids.join(',')]);
 
