@@ -1,11 +1,11 @@
-import { css, Dev, Crdt, t, Automerge } from '../test.ui';
+import { css, Dev, Crdt, t, Automerge, expect } from '../test.ui';
 
 type T = { count: number };
 const initial: T = { count: 0 };
 
 export default Dev.describe('Text', (e) => {
   type D = { text: t.AutomergeText };
-  const doc = Crdt.Doc.ref<D>({ text: new Automerge.Text() });
+  const doc = Crdt.Doc.ref<D>({ text: Crdt.text() });
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -35,16 +35,7 @@ export default Dev.describe('Text', (e) => {
         .value(() => doc.current.text.toString())
         .focus({ onReady: true })
         .onChange((e) => {
-          doc.change((d) => {
-            e.next.diff.forEach((change) => {
-              if (change.kind === 'Added') {
-                d.text.insertAt(change.index, change.value);
-              }
-              if (change.kind === 'Deleted') {
-                d.text.deleteAt(change.index, change.value.length);
-              }
-            });
-          });
+          doc.change((d) => Crdt.Text.update(d.text, e.next.diff));
           redraw();
         }),
     );
@@ -54,8 +45,9 @@ export default Dev.describe('Text', (e) => {
      */
     dev.footer.border(-0.1).render<D>((e) => {
       const text = doc.current.text.toString();
-      const data = { text };
-      return <Dev.Object name={'Dev.Text'} data={data} expand={1} />;
+      const history = Automerge.getHistory(doc.current).map((m) => m.snapshot.text.toString());
+      const data = { text, history };
+      return <Dev.Object name={'Dev.Text'} data={data} expand={2} />;
     });
   });
 });
