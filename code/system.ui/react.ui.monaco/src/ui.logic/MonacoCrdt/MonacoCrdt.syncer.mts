@@ -1,6 +1,10 @@
+import { Position, Range } from 'monaco-editor';
 import { Crdt, rx, t } from './common';
 
+import type { ISelection } from 'monaco-editor';
+
 type Milliseconds = number;
+type SelectionOffset = { start: number; end: number };
 
 /**
  * An adapter for managing 2-way binding between a Monaco code-editor
@@ -24,6 +28,13 @@ export function syncer<D extends {}>(
     const text = field(doc);
     if (!Crdt.Is.text(text)) throw new Error(`Automerge.Text field not returned from getter`);
     return text;
+  };
+
+  const changeText = (fn: (text: t.AutomergeText) => void) => {
+    doc.change((d) => {
+      const text = getText(d);
+      if (text) fn(text);
+    });
   };
 
   /**
@@ -50,22 +61,41 @@ export function syncer<D extends {}>(
   });
 
   /**
+   * Keep track of current/previous selection offsets.
+   */
+  let _selection: SelectionOffset = { start: 0, end: 0 };
+  editor.onDidChangeCursorSelection((e) => (_selection = Wrangle.offsets(editor, e.selection)));
+
+  /**
    * Local editor change.
    */
   editor.onDidChangeModelContent((e) => {
     if (api.disposed) return;
     if (_ignoreChange) return;
 
-    e.changes.forEach((change) => {
-      doc.change((d) => {
-        const text = getText(d);
-        if (!text) return;
+    /**
+     * Check if the user has deleted all text by replacing
+     * a complete selection with a single typed character.
+     */
+    const oldLength = e.changes.reduce((acc, c) => acc + c.rangeLength, 0);
+    const newLength = e.changes.reduce((acc, c) => acc + c.text.length, 0);
+    if (oldLength > 0 && newLength > 0) {
+      changeText((text) => {
+        const offset = _selection;
+        text.deleteAt(offset.start, offset.end - offset.start);
+      });
+    }
 
+    /**
+     * Apply each change to the CRDT text field.
+     */
+    e.changes.forEach((change) => {
+      changeText((text) => {
         const index = change.rangeOffset;
         if (change.text === '') {
           text.deleteAt(index, change.rangeLength);
         } else {
-          text.insertAt(index, change.text);
+          text.insertAt(index, ...change.text.split(''));
         }
       });
     });
@@ -88,3 +118,23 @@ export function syncer<D extends {}>(
 
   return api;
 }
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  offsets(editor: t.MonacoCodeEditor, selection: ISelection) {
+    const model = editor.getModel();
+    if (!model) throw new Error(`Editor did not return a text model.`);
+    const position = {
+      start: new Position(selection.selectionStartLineNumber, selection.selectionStartColumn),
+      end: new Position(selection.positionLineNumber, selection.positionColumn),
+    };
+    const range = Range.fromPositions(position.start, position.end);
+    return {
+      start: model.getOffsetAt(range.getStartPosition()),
+      end: model.getOffsetAt(range.getEndPosition()),
+    };
+  },
+};
