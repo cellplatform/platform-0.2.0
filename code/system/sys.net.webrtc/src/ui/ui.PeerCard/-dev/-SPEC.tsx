@@ -118,7 +118,10 @@ export default Dev.describe('PeerCard', async (e) => {
       return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
-    ctx.host.footer.padding(0).render<T>(() => SpecMonacoSync(docShared));
+    ctx.host.footer.padding(0).render<T>(() => {
+      const peer = self?.id;
+      return peer ? SpecMonacoSync(peer, docShared) : null;
+    });
 
     ctx.subject
       //
@@ -173,7 +176,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     self = await initNetwork(ctx, docShared, state);
-    ctx.redraw();
+    ctx.redraw(true);
   });
 
   e.it('ui:debug', async (e) => {

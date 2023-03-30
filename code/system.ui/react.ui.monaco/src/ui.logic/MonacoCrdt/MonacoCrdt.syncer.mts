@@ -1,13 +1,18 @@
 import { Crdt, rx, t } from './common';
 import { SelectionOffset, Wrangle } from './Wrangle.mjs';
 
+type Id = string;
 type Milliseconds = number;
+
+type Peers = { [id: string]: PeerState };
+type PeerState = {};
 
 /**
  * An adapter for managing 2-way binding between a Monaco code-editor
  * and a CRDT (Automerge.Text) collaborative text data-structure.
  */
 export function syncer<D extends {}>(args: {
+  peer: Id;
   editor: t.MonacoCodeEditor;
   doc: t.CrdtDocRef<D>;
   text: (doc: D) => t.AutomergeText;

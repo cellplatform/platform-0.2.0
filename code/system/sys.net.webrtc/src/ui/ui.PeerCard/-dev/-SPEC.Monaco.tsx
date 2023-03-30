@@ -3,12 +3,14 @@ import { Crdt, css, t } from './common';
 
 import type { DocShared } from './Schema.mjs';
 
+type Id = string;
 type T = t.JsonMap & { code: t.AutomergeText };
 
-export function SpecMonacoSync(doc: t.CrdtDocRef<DocShared>) {
+export function SpecMonacoSync(peer: Id, doc: t.CrdtDocRef<DocShared>) {
   return (
     <div {...css({ height: 200, display: 'grid' })}>
       <MonacoEditor
+        focusOnLoad={true}
         onReady={({ editor }) => {
           /**
            * Ensure the code field exists.
@@ -20,7 +22,12 @@ export function SpecMonacoSync(doc: t.CrdtDocRef<DocShared>) {
           /**
            * Start the syncer.
            */
-          const syncer = MonacoCrdt.syncer(editor, doc, (d) => (d.tmp as T).code);
+          const syncer = MonacoCrdt.syncer({
+            peer,
+            editor,
+            doc,
+            text: (d) => (d.tmp as T).code,
+          });
           console.log('syncer', syncer);
         }}
       />
