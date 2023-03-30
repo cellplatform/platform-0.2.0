@@ -3,8 +3,6 @@ import { Dev, t, Value } from './common';
 import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
-import type { TestCtx, TestPeer } from './-TEST.mjs';
-
 type T = {
   redraw: number;
   language: t.EditorLanguage;
@@ -131,14 +129,14 @@ export default Dev.describe('MonacoCrdt', (e) => {
       const wrangleTestCtx = async () => {
         await dev.change((d) => totalPeers(2));
 
-        const peer = (index: number): TestPeer => {
+        const peer = (index: number): t.TestPeer => {
           const editor = Array.from(editors)[index];
           const peer = Array.from(peerMap)[index][1].peer;
           const { doc } = peer;
           return { editor, doc };
         };
 
-        const ctx: TestCtx = {
+        const ctx: t.TestCtx = {
           peer1: peer(0),
           peer2: peer(1),
         };
