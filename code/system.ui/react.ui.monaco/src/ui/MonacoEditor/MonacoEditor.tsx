@@ -68,7 +68,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} className={DEFAULTS.className}>
       <div {...styles.inner}>
         <EditorReact
           defaultLanguage={language}
