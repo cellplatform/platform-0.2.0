@@ -1,21 +1,19 @@
-import { Position, Range } from 'monaco-editor';
 import { Crdt, rx, t } from './common';
-
-import type { ISelection } from 'monaco-editor';
+import { SelectionOffset, Wrangle } from './Wrangle.mjs';
 
 type Milliseconds = number;
-type SelectionOffset = { start: number; end: number };
 
 /**
  * An adapter for managing 2-way binding between a Monaco code-editor
  * and a CRDT (Automerge.Text) collaborative text data-structure.
  */
-export function syncer<D extends {}>(
-  editor: t.MonacoCodeEditor,
-  doc: t.CrdtDocRef<D>,
-  field: (doc: D) => t.AutomergeText,
-  options: { debounce?: Milliseconds } = {},
-) {
+export function syncer<D extends {}>(args: {
+  editor: t.MonacoCodeEditor;
+  doc: t.CrdtDocRef<D>;
+  text: (doc: D) => t.AutomergeText;
+  debounce?: Milliseconds;
+}) {
+  const { editor, doc, debounce = 300 } = args;
   if (!editor) throw new Error(`No editor provided`);
   if (!doc) throw new Error(`No CRDT document provided`);
 
@@ -25,7 +23,7 @@ export function syncer<D extends {}>(
   dispose$.subscribe(() => (_isDisposed = true));
 
   const getText = (doc: D) => {
-    const text = field(doc);
+    const text = args.text(doc);
     if (!Crdt.Is.text(text)) throw new Error(`Automerge.Text field not returned from getter`);
     return text;
   };
@@ -43,7 +41,7 @@ export function syncer<D extends {}>(
   doc.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter((e) => e.action === 'replace'),
-    rx.debounceTime(options.debounce ?? 300),
+    rx.debounceTime(debounce),
   ).subscribe((e) => {
     const text = getText(doc.current);
     if (!text) return;
@@ -64,7 +62,9 @@ export function syncer<D extends {}>(
    * Keep track of current/previous selection offsets.
    */
   let _selection: SelectionOffset = { start: 0, end: 0 };
-  editor.onDidChangeCursorSelection((e) => (_selection = Wrangle.offsets(editor, e.selection)));
+  editor.onDidChangeCursorSelection((e) => {
+    _selection = Wrangle.offsets(editor, e.selection);
+  });
 
   /**
    * Local editor change.
@@ -77,8 +77,8 @@ export function syncer<D extends {}>(
      * Check if the user has deleted all text by replacing
      * a complete selection with a single typed character.
      */
-    const oldLength = e.changes.reduce((acc, c) => acc + c.rangeLength, 0);
-    const newLength = e.changes.reduce((acc, c) => acc + c.text.length, 0);
+    const oldLength = e.changes.reduce((acc, change) => acc + change.rangeLength, 0);
+    const newLength = e.changes.reduce((acc, change) => acc + change.text.length, 0);
     if (oldLength > 0 && newLength > 0) {
       changeText((text) => {
         const offset = _selection;
@@ -118,23 +118,3 @@ export function syncer<D extends {}>(
 
   return api;
 }
-
-/**
- * Helpers
- */
-
-const Wrangle = {
-  offsets(editor: t.MonacoCodeEditor, selection: ISelection) {
-    const model = editor.getModel();
-    if (!model) throw new Error(`Editor did not return a text model.`);
-    const position = {
-      start: new Position(selection.selectionStartLineNumber, selection.selectionStartColumn),
-      end: new Position(selection.positionLineNumber, selection.positionColumn),
-    };
-    const range = Range.fromPositions(position.start, position.end);
-    return {
-      start: model.getOffsetAt(range.getStartPosition()),
-      end: model.getOffsetAt(range.getEndPosition()),
-    };
-  },
-};
