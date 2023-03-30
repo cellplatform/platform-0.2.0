@@ -16,3 +16,15 @@ export type DevPeer = {
   name: string;
   doc: t.CrdtDocRef<SampleDoc>;
 };
+
+/**
+ *
+ */
+export type TestPeer = {
+  doc: t.CrdtDocRef<SampleDoc>;
+  editor: t.MonacoCodeEditor;
+};
+export type TestCtx = {
+  peer1: TestPeer;
+  peer2: TestPeer;
+};

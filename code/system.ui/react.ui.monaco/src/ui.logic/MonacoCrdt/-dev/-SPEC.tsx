@@ -3,6 +3,8 @@ import { Dev, t, Value } from './common';
 import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
+import type { TestCtx, TestPeer } from './-TEST.mjs';
+
 type T = {
   redraw: number;
   language: t.EditorLanguage;
@@ -105,23 +107,13 @@ export default Dev.describe('MonacoCrdt', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const redraw = () => dev.change((d) => d.redraw++);
 
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = {};
-      peerMap.forEach((item) => {
-        const key = item.peer.name;
-        const doc = item.peer.doc.current;
-        (data as any)[key] = doc;
-      });
-      return <Dev.Object name={'MonacoCrdt'} data={data} expand={1} />;
-    });
-
     dev.section('Peers', (dev) => {
       const total = (total: number) => {
         const label = `${total} ${Value.plural(total, 'peer', 'peers')}`;
         dev.button((btn) =>
           btn
             .label(label)
-            .right((e) => (peerMap.size === total ? 'current' : ''))
+            .right((e) => (peerMap.size === total ? '← current' : ''))
             .onClick((e) => e.change((d) => totalPeers(total))),
         );
       };
@@ -136,11 +128,29 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.hr(5, 20);
 
     dev.section('Unit Tests', async (dev) => {
+      const wrangleTestCtx = async () => {
+        await dev.change((d) => totalPeers(2));
+
+        const peer = (index: number): TestPeer => {
+          const editor = Array.from(editors)[index];
+          const peer = Array.from(peerMap)[index][1].peer;
+          const { doc } = peer;
+          return { editor, doc };
+        };
+
+        const ctx: TestCtx = {
+          peer1: peer(0),
+          peer2: peer(1),
+        };
+        return ctx;
+      };
+
       const run = async (bundle: t.BundleImport) => {
-        const tests = (await bundle).default;
+        const tests = (await bundle).default as t.TestSuiteModel;
+        const ctx = await wrangleTestCtx();
         await dev.change((d) => (d.tests.running = true));
         await dev.change(async (d) => {
-          d.tests.results = await tests.run();
+          d.tests.results = await tests.run({ ctx });
           d.tests.running = false;
         });
       };
@@ -156,11 +166,12 @@ export default Dev.describe('MonacoCrdt', (e) => {
             });
           }),
       );
+
       dev.hr(-1, 5);
 
-      dev.button('run tests', (e) => {
-        e.change((d) => (d.debug.showTests = true));
-        run(import('./-TEST.mjs'));
+      dev.button('run tests', async (e) => {
+        await e.change((d) => (d.debug.showTests = true));
+        await run(import('./-TEST.mjs'));
       });
       dev.button('clear', (e) => e.change((d) => (d.tests = { ...initial.tests })));
     });
@@ -193,14 +204,13 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.hr(5, 20);
 
     dev.section('Language', (dev) => {
-      const language = (input: t.EditorLanguage | '---') => {
-        if (input.startsWith('---')) return dev.hr(-1, 5);
-
+      const hr = () => dev.hr(-1, 5);
+      const language = (input: t.EditorLanguage) => {
         const language = input as t.EditorLanguage;
         return dev.button((btn) =>
           btn
             .label(language)
-            .right((e) => (e.state.language === language ? 'current' : ''))
+            .right((e) => (e.state.language === language ? '← current' : ''))
             .onClick((e) => {
               e.change((d) => (d.language = language));
               local.language = language;
@@ -210,11 +220,24 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
       language('typescript');
       language('javascript');
-      language('---');
+      hr();
       language('json');
       language('yaml');
-      language('---');
+      hr();
       language('markdown');
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data: { [key: string]: any } = {};
+      peerMap.forEach(({ peer }) => {
+        const key = peer.name;
+        const doc = peer.doc.current;
+        data[key] = doc;
+      });
+      return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={1} />;
     });
   });
 });
