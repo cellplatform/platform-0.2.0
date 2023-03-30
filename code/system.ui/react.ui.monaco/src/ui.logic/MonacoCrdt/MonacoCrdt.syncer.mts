@@ -4,7 +4,7 @@ import { SelectionOffset, Wrangle } from './Wrangle.mjs';
 type Id = string;
 type Milliseconds = number;
 
-type Peers = { [id: string]: PeerState };
+type PeersState = { [id: string]: PeerState };
 type PeerState = {};
 
 /**
@@ -14,13 +14,16 @@ type PeerState = {};
 export function syncer<D extends {}>(args: {
   peer: Id;
   editor: t.MonacoCodeEditor;
-  doc: t.CrdtDocRef<D>;
-  text: (doc: D) => t.AutomergeText;
+  data: {
+    doc: t.CrdtDocRef<D>;
+    getText: (doc: D) => t.AutomergeText;
+  };
+  // getPeers: (doc: D) => PeersState;
   debounce?: Milliseconds;
 }) {
-  const { editor, doc, debounce = 300 } = args;
+  const { peer, editor, data, debounce = 300 } = args;
   if (!editor) throw new Error(`No editor provided`);
-  if (!doc) throw new Error(`No CRDT document provided`);
+  if (!data.doc) throw new Error(`No CRDT document provided`);
 
   let _ignoreChange = false;
   let _isDisposed = false;
@@ -28,13 +31,13 @@ export function syncer<D extends {}>(args: {
   dispose$.subscribe(() => (_isDisposed = true));
 
   const getText = (doc: D) => {
-    const text = args.text(doc);
-    if (!Crdt.Is.text(text)) throw new Error(`Automerge.Text field not returned from getter`);
+    const text = data.getText(doc);
+    if (!Crdt.Is.text(text)) throw new Error(`[Automerge.Text] field not returned from getter`);
     return text;
   };
 
   const changeText = (fn: (text: t.AutomergeText) => void) => {
-    doc.change((d) => {
+    data.doc.change((d) => {
       const text = getText(d);
       if (text) fn(text);
     });
@@ -43,12 +46,12 @@ export function syncer<D extends {}>(args: {
   /**
    * Document CRDT change.
    */
-  doc.$.pipe(
+  data.doc.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter((e) => e.action === 'replace'),
     rx.debounceTime(debounce),
   ).subscribe((e) => {
-    const text = getText(doc.current);
+    const text = getText(data.doc.current);
     if (!text) return;
 
     let value = text.toString();
@@ -112,7 +115,9 @@ export function syncer<D extends {}>(args: {
   const api: t.MonacoCrdtSyncer<D> = {
     kind: 'crdt:monaco:syncer',
     editor,
-    doc,
+    get doc() {
+      return data.doc.current;
+    },
 
     dispose,
     dispose$,

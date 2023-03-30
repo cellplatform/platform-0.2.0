@@ -25,8 +25,7 @@ export function SpecMonacoSync(peer: Id, doc: t.CrdtDocRef<DocShared>) {
           const syncer = MonacoCrdt.syncer({
             peer,
             editor,
-            doc,
-            text: (d) => (d.tmp as T).code,
+            data: { doc, getText: (d) => (d.tmp as T).code },
           });
           console.log('syncer', syncer);
         }}
