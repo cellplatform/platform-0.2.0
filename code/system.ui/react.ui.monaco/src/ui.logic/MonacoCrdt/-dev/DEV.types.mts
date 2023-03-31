@@ -7,6 +7,7 @@ export * from '../../../common/types.mjs';
 export type SampleDoc = {
   count: number;
   code: t.AutomergeText;
+  peers: t.EditorPeersState;
 };
 
 /**

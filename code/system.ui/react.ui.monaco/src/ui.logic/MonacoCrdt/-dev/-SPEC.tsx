@@ -4,15 +4,13 @@ import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
 type T = {
-  redraw: number;
   language: t.EditorLanguage;
   debug: { showTests: boolean };
   tests: { running: boolean; results?: t.TestSuiteRunResponse };
 };
 const initial: T = {
-  redraw: 0,
-  tests: { running: false },
   language: 'typescript',
+  tests: { running: false },
   debug: { showTests: true },
 };
 
@@ -23,7 +21,7 @@ type LocalStore = {
 };
 type PeerItem = {
   peer: t.DevPeer;
-  syncer?: t.MonacoCrdtSyncer<t.SampleDoc>;
+  syncer?: t.MonacoCrdtSyncer;
 };
 
 export default Dev.describe('MonacoCrdt', (e) => {
@@ -45,7 +43,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
   const totalPeers = (length: number) => {
     local.peerTotal = length;
-    const names = Array.from({ length }).map((_, i) => `Cell-${i + 1}`);
+    const names = Array.from({ length }).map((_, i) => `cell-${i + 1}`);
 
     peerMap.forEach((item) => disposeOf(item));
     peerMap.clear();
@@ -64,10 +62,11 @@ export default Dev.describe('MonacoCrdt', (e) => {
       const peer = item.peer;
       const editor = Array.from(editors)[i];
       if (editor && !item.syncer) {
+        const doc = peer.doc;
         const syncer = MonacoCrdt.syncer({
-          peer: peer.name,
           editor,
-          data: { doc: peer.doc, getText: (doc) => doc.code },
+          data: { doc, getText: (doc) => doc.code },
+          peers: { local: peer.name, doc, getPeers: (doc) => doc.peers },
         });
         item.syncer = syncer;
         console.info('MonacoCrdt.syncer:', syncer);
@@ -107,7 +106,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const redraw = () => dev.change((d) => d.redraw++);
+    const redraw = () => dev.ctx.redraw(true);
 
     dev.section('Peers', (dev) => {
       const total = (total: number) => {
@@ -201,6 +200,9 @@ export default Dev.describe('MonacoCrdt', (e) => {
           .right('← on first Doc<T>')
           .onClick((e) => inc(-1)),
       );
+
+      dev.hr(-1, 5);
+      dev.button('redraw', (e) => dev.ctx.redraw(true));
     });
 
     dev.hr(5, 20);
@@ -221,7 +223,6 @@ export default Dev.describe('MonacoCrdt', (e) => {
       };
 
       language('typescript');
-      language('javascript');
       hr();
       language('json');
       language('yaml');
@@ -239,7 +240,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
         const doc = peer.doc.current;
         data[key] = doc;
       });
-      return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={1} />;
+      return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={2} />;
     });
   });
 });
