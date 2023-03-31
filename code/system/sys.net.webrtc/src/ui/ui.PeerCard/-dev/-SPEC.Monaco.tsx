@@ -3,10 +3,9 @@ import { Crdt, css, t } from './common';
 
 import type { DocShared } from './Schema.mjs';
 
-type Id = string;
-type T = t.JsonMap & { code: t.AutomergeText };
+type T = t.JsonMap & { code: t.AutomergeText; peers: t.EditorPeersState };
 
-export function SpecMonacoSync(peer: Id, doc: t.CrdtDocRef<DocShared>) {
+export function SpecMonacoSync(self: t.Peer, doc: t.CrdtDocRef<DocShared>) {
   return (
     <div {...css({ height: 200, display: 'grid' })}>
       <MonacoEditor
@@ -18,14 +17,17 @@ export function SpecMonacoSync(peer: Id, doc: t.CrdtDocRef<DocShared>) {
           if (!doc.current.tmp.code) {
             doc.change((d) => ((d.tmp as T).code = Crdt.text()));
           }
+          if (!doc.current.tmp.peers) {
+            doc.change((d) => ((d.tmp as T).peers = {}));
+          }
 
           /**
            * Start the syncer.
            */
           const syncer = MonacoCrdt.syncer({
-            peer,
             editor,
             data: { doc, getText: (d) => (d.tmp as T).code },
+            peers: { local: self.id, doc, getPeers: (d) => (d.tmp as T).peers },
           });
           console.log('syncer', syncer);
         }}

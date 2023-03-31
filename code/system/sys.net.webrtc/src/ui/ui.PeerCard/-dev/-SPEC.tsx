@@ -119,8 +119,7 @@ export default Dev.describe('PeerCard', async (e) => {
     };
 
     ctx.host.footer.padding(0).render<T>(() => {
-      const peer = self?.id;
-      return peer ? SpecMonacoSync(peer, docShared) : null;
+      return self ? SpecMonacoSync(self, docShared) : null;
     });
 
     ctx.subject
