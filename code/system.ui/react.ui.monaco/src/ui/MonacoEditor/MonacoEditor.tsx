@@ -2,6 +2,7 @@ import EditorReact from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
 
 import { css, DEFAULTS, FC, LANGUAGES, t } from './common';
+import { Wrangle } from './Wrangle.mjs';
 
 import type { OnChange, OnMount } from '@monaco-editor/react';
 
@@ -21,13 +22,14 @@ const View: React.FC<MonacoEditorProps> = (props) => {
 
   const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
+  const editor = editorRef.current;
+
+  useCarets(editor, props.carets);
 
   /**
    * [Lifecycle]
    */
-
   useEffect(() => {
-    const editor = editorRef.current;
     if (!editor) return;
     if (text !== editor.getValue()) editor.setValue(text ?? '');
   }, [text]);
@@ -68,7 +70,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} className={DEFAULTS.className}>
+    <div {...css(styles.base, props.style)} className={Wrangle.className(editor)}>
       <div {...styles.inner}>
         <EditorReact
           defaultLanguage={language}
@@ -88,9 +90,14 @@ const View: React.FC<MonacoEditorProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   languages: typeof LANGUAGES;
+  className: typeof Wrangle.className;
 };
 export const MonacoEditor = FC.decorate<MonacoEditorProps, Fields>(
   View,
-  { DEFAULTS, languages: LANGUAGES },
+  {
+    DEFAULTS,
+    languages: LANGUAGES,
+    className: Wrangle.className,
+  },
   { displayName: 'MonacoEditor' },
 );
