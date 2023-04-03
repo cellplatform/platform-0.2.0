@@ -71,7 +71,7 @@ export function createSyncDoc<D extends {}>(
      * Disposal.
      */
     dispose$,
-    get isDisposed() {
+    get disposed() {
       return _isDisposed;
     },
     async dispose() {

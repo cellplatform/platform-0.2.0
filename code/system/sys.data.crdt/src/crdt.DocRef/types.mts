@@ -19,8 +19,10 @@ export type CrdtDocRef<D extends {}> = t.Disposable & {
   readonly id: { actor: string };
   readonly $: t.Observable<CrdtDocAction<D>>;
   readonly current: D;
-  readonly isDisposed: boolean;
+  readonly disposed: boolean;
+  readonly history: CrdtDocHistory<D>[];
   change(fn: CrdtMutator<D>): CrdtDocRef<D>;
+  change(message: string, fn: CrdtMutator<D>): CrdtDocRef<D>;
   replace(doc: D): CrdtDocRef<D>;
   onChange(fn: CrdtDocRefChangeHandler<D>): CrdtDocRef<D>;
 };

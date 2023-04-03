@@ -41,20 +41,20 @@ export default Test.describe('DocRef', (e) => {
       let fired = 0;
       doc.dispose$.subscribe(() => fired++);
 
-      expect(doc.isDisposed).to.eql(false);
+      expect(doc.disposed).to.eql(false);
       doc.dispose();
       doc.dispose();
       expect(fired).to.eql(1);
-      expect(doc.isDisposed).to.eql(true);
+      expect(doc.disposed).to.eql(true);
     });
 
     e.it('dispose via { dispose$ } option', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
       const doc = DocRef.init<D>({ count: 0 }, { dispose$ });
 
-      expect(doc.isDisposed).to.eql(false);
+      expect(doc.disposed).to.eql(false);
       dispose();
-      expect(doc.isDisposed).to.eql(true);
+      expect(doc.disposed).to.eql(true);
     });
   });
 

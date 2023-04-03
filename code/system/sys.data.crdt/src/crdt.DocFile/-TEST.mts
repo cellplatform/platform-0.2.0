@@ -76,11 +76,11 @@ export default Test.describe('DocFile', (e) => {
       let fired = 0;
       file.dispose$.subscribe(() => fired++);
 
-      expect(file.isDisposed).to.eql(false);
+      expect(file.disposed).to.eql(false);
       file.dispose();
       file.dispose();
       expect(fired).to.eql(1);
-      expect(file.isDisposed).to.eql(true);
+      expect(file.disposed).to.eql(true);
     });
 
     e.it('file dispose via { dispose$ } option', async (e) => {
@@ -89,21 +89,21 @@ export default Test.describe('DocFile', (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial, { dispose$ });
 
-      expect(file.isDisposed).to.eql(false);
+      expect(file.disposed).to.eql(false);
       dispose();
-      expect(file.isDisposed).to.eql(true);
+      expect(file.disposed).to.eql(true);
     });
 
     e.it('disposing of [DocFile] does not dispose the wrapped [DocRef]', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial);
 
-      expect(file.isDisposed).to.eql(false);
-      expect(file.doc.isDisposed).to.eql(false);
+      expect(file.disposed).to.eql(false);
+      expect(file.doc.disposed).to.eql(false);
 
       file.dispose();
-      expect(file.isDisposed).to.eql(true);
-      expect(file.doc.isDisposed).to.eql(false);
+      expect(file.disposed).to.eql(true);
+      expect(file.doc.disposed).to.eql(false);
     });
 
     e.it('disposing of the wrapped [DocRef] does dispose the [DocFile]', async (e) => {
@@ -113,13 +113,13 @@ export default Test.describe('DocFile', (e) => {
       let fired = 0;
       file.dispose$.subscribe(() => fired++);
 
-      expect(file.isDisposed).to.eql(false);
-      expect(file.doc.isDisposed).to.eql(false);
+      expect(file.disposed).to.eql(false);
+      expect(file.doc.disposed).to.eql(false);
 
       file.doc.dispose();
 
-      expect(file.isDisposed).to.eql(true);
-      expect(file.doc.isDisposed).to.eql(true);
+      expect(file.disposed).to.eql(true);
+      expect(file.doc.disposed).to.eql(true);
       expect(fired).to.eql(1);
 
       file.dispose();

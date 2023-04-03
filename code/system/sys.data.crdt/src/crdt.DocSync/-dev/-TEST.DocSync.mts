@@ -56,31 +56,31 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
 
-      expect(sync.isDisposed).to.eql(false);
+      expect(sync.disposed).to.eql(false);
       await sync.dispose();
       await sync.dispose();
       expect(fired).to.eql(1);
-      expect(sync.isDisposed).to.eql(true);
+      expect(sync.disposed).to.eql(true);
     });
 
     e.it('dispose via { dispose$ } option', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
 
       const sync = DocSync.init<D>(bus, { count: 0 }, { dispose$ });
-      expect(sync.isDisposed).to.eql(false);
+      expect(sync.disposed).to.eql(false);
       dispose();
-      expect(sync.isDisposed).to.eql(true);
+      expect(sync.disposed).to.eql(true);
     });
 
     e.it('disposing of [DocSync] does not dispose the wrapped [DocRef]', async (e) => {
       const sync = DocSync.init<D>(bus, { count: 0 });
 
-      expect(sync.isDisposed).to.eql(false);
-      expect(sync.doc.isDisposed).to.eql(false);
+      expect(sync.disposed).to.eql(false);
+      expect(sync.doc.disposed).to.eql(false);
 
       await sync.dispose();
-      expect(sync.isDisposed).to.eql(true);
-      expect(sync.doc.isDisposed).to.eql(false);
+      expect(sync.disposed).to.eql(true);
+      expect(sync.doc.disposed).to.eql(false);
     });
 
     e.it('disposing of the wrapped [DocRef] does dispose the [DocSync]', async (e) => {
@@ -89,13 +89,13 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
 
-      expect(sync.isDisposed).to.eql(false);
-      expect(sync.doc.isDisposed).to.eql(false);
+      expect(sync.disposed).to.eql(false);
+      expect(sync.doc.disposed).to.eql(false);
 
       sync.doc.dispose();
 
-      expect(sync.isDisposed).to.eql(true);
-      expect(sync.doc.isDisposed).to.eql(true);
+      expect(sync.disposed).to.eql(true);
+      expect(sync.doc.disposed).to.eql(true);
       expect(fired).to.eql(1);
 
       await sync.dispose();

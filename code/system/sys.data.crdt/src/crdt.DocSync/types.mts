@@ -18,10 +18,10 @@ export type CrdtDocSync<D extends {}> = {
   readonly kind: 'Crdt:DocSync';
   readonly count: number;
   readonly doc: t.CrdtDocRef<D>;
-  readonly isDisposed: boolean;
+  readonly disposed: boolean;
   readonly dispose$: t.Observable<any>;
-  update: PeerSyncer['update'];
   dispose(): Promise<void>;
+  update: PeerSyncer['update'];
 };
 
 /**

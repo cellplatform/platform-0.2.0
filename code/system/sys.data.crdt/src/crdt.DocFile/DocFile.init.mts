@@ -95,7 +95,7 @@ export async function createDocFile<D extends {}>(
      * Load (and replace) the document from the file-system.
      */
     async load() {
-      if (api.isDisposed || !(await api.exists())) return;
+      if (api.disposed || !(await api.exists())) return;
       const data = await filedir.read(filename);
       if (data) api.doc.replace(Automerge.load<D>(data));
     },
@@ -104,7 +104,7 @@ export async function createDocFile<D extends {}>(
      * Save the document to the file-system.
      */
     async save() {
-      if (api.isDisposed) return;
+      if (api.disposed) return;
       await filedir.write(filename, Automerge.save(doc.current));
     },
 
@@ -113,7 +113,7 @@ export async function createDocFile<D extends {}>(
      */
     dispose,
     dispose$,
-    get isDisposed() {
+    get disposed() {
       return _isDisposed;
     },
   };

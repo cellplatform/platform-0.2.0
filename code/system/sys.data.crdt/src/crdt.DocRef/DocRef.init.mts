@@ -80,7 +80,7 @@ export function createDocRef<D extends {}>(
      * For normal document usage, use the [change] method.
      */
     replace(doc) {
-      if (api.isDisposed) return api;
+      if (api.disposed) return api;
       if (!isAutomerge(doc)) {
         throw new Error('Cannot replace with a non-Automerge document');
       }
@@ -93,7 +93,7 @@ export function createDocRef<D extends {}>(
      * Change handlers.
      */
     onChange(fn) {
-      if (api.isDisposed) return api;
+      if (api.disposed) return api;
       onChangeHandlers.add(fn);
       return api;
     },
@@ -103,7 +103,7 @@ export function createDocRef<D extends {}>(
      */
     dispose,
     dispose$,
-    get isDisposed() {
+    get disposed() {
       return _isDisposed;
     },
   };
