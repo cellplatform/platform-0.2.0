@@ -9,6 +9,7 @@ export type { Observable } from 'rxjs';
 export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
 export type { Fs, DirManifest } from 'sys.fs/src/types.mjs';
 export type { TextCharDiff } from 'sys.text/src/types.mjs';
+export type { DevCtxState } from 'sys.ui.react.common/src/types.mjs';
 
 /**
  * @local
