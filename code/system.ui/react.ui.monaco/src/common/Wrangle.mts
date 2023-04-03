@@ -35,7 +35,22 @@ export const Wrangle = {
     };
   },
 
-  asRange(input: t.IRange) {
+  asIRange(input: t.IRange | [number, number, number, number] | [number, number]) {
+    if (Array.isArray(input)) {
+      return input.length === 4
+        ? {
+            startLineNumber: input[0],
+            startColumn: input[1],
+            endLineNumber: input[2],
+            endColumn: input[3],
+          }
+        : {
+            startLineNumber: input[0],
+            startColumn: input[1],
+            endLineNumber: input[0],
+            endColumn: input[1],
+          };
+    }
     const { startLineNumber, startColumn, endLineNumber, endColumn } = input;
     return {
       startLineNumber,
@@ -43,5 +58,10 @@ export const Wrangle = {
       endLineNumber,
       endColumn,
     };
+  },
+
+  asRange(monaco: t.Monaco, input: t.IRange | [number, number, number, number] | [number, number]) {
+    const { startLineNumber, startColumn, endLineNumber, endColumn } = Wrangle.asIRange(input);
+    return new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn);
   },
 };
