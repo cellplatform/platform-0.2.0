@@ -17,6 +17,7 @@ export {
 
 export {
   debounceTime,
+  throttleTime,
   delay,
   distinctUntilChanged,
   filter,
