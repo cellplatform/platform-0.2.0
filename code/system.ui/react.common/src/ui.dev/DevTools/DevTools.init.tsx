@@ -27,8 +27,8 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
     footer: debug.footer,
     row: debug.row,
 
-    redraw() {
-      return ctx.redraw(true);
+    redraw(target) {
+      return ctx.redraw(target);
     },
 
     /**
