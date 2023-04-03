@@ -27,6 +27,8 @@ export type CrdtDocRef<D extends {}> = t.Disposable & {
   onChange(fn: CrdtDocRefChangeHandler<D>): CrdtDocRef<D>;
 };
 
+export type CrdtDocHistory<D extends {}> = t.AutomergeState<D>;
+
 export type CrdtDocActionKind = CrdtDocAction<{}>['action'];
 export type CrdtDocAction<D extends {}> = CrdtDocChange<D> | CrdtDocReplace<D>;
 export type CrdtDocChange<D extends {}> = {

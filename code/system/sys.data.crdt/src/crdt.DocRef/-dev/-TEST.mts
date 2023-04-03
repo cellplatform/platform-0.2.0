@@ -21,6 +21,10 @@ export default Test.describe('DocRef', (e) => {
       expect(doc.current).to.eql(initial);
       expect(doc.current).to.not.equal(initial); // NB: initialized as an Automerge document.
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
+
+      const history = doc.history;
+      expect(history.length).to.eql(1);
+      expect(history[0].change.message).to.eql(null);
     });
 
     e.it('from initial {Automerge} document', (e) => {
@@ -84,6 +88,19 @@ export default Test.describe('DocRef', (e) => {
 
       doc.change((doc) => (doc.count = 999));
       expect(doc.current).to.eql({ count: 999 });
+    e.it('history list cached until next change', async (e) => {
+      const doc = DocRef.init<D>(initial);
+
+      doc.change((doc) => (doc.count = 999));
+
+      const history1 = doc.history;
+      const history2 = doc.history;
+      expect(history1).to.equal(history2); // NB: Cached.
+
+      doc.change((doc) => (doc.count = 888));
+      expect(history2).to.not.equal(doc.history); // NB: New reference.
+      expect(doc.history).to.equal(doc.history); //  NB: Cached.
+    });
 
       expect(fired.length).to.eql(1);
       expect(fired[0].action).to.eql('change');

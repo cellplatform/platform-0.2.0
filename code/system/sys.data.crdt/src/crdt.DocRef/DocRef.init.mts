@@ -21,11 +21,15 @@ export function createDocRef<D extends {}>(
 
   const $ = new rx.Subject<t.CrdtDocAction<D>>();
   let _doc: D = Wrangle.automergeDoc(initial);
+  let _history: t.CrdtDocHistory<D>[] | undefined;
 
   const onChangeHandlers = new Set<t.CrdtDocRefChangeHandler<D>>();
   const fireOnChange = (change?: Uint8Array) => {
-    const doc = _doc;
-    if (change) onChangeHandlers.forEach((fn) => fn({ doc, change }));
+    if (change) {
+      _history = undefined;
+      const doc = _doc;
+      onChangeHandlers.forEach((fn) => fn({ doc, change }));
+    }
   };
 
   const api: t.CrdtDocRef<D> = {
@@ -60,6 +64,13 @@ export function createDocRef<D extends {}>(
      */
     get current() {
       return _doc;
+    },
+
+    /**
+     * The document change history.
+     */
+    get history() {
+      return (_history = _history || Automerge.getHistory<D>(_doc));
     },
 
     /**
