@@ -13,7 +13,6 @@ export type { Fs } from 'sys.fs/src/types.mjs';
 export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
 export type { UserAgent } from 'sys.ui.dom/src/types.mjs';
 export type { CrdtDocRef, CrdtDocFile, AutomergeText } from 'sys.data.crdt/src/types.mjs';
-export type { EditorPeersState } from 'sys.ui.react.monaco/src/types.mjs';
 
 /**
  * @local

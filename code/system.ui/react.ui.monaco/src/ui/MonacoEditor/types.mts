@@ -9,7 +9,7 @@ export { Monaco };
 export type MonacoCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 /**
- * Component Events
+ * Editor ready.
  */
 export type MonacoEditorReadyHandler = (e: MonacoEditorReadyHandlerArgs) => void;
 export type MonacoEditorReadyHandlerArgs = {
@@ -17,12 +17,18 @@ export type MonacoEditorReadyHandlerArgs = {
   monaco: Monaco;
 };
 
+/**
+ * Editor disposed.
+ */
 export type MonacoEditorDisposedHandler = (e: MonacoEditorDisposedHandlerArgs) => void;
 export type MonacoEditorDisposedHandlerArgs = {
   editor: MonacoCodeEditor;
   monaco: Monaco;
 };
 
+/**
+ * Editor changed.
+ */
 export type MonacoEditorChangeHandler = (e: MonacoEditorChangeHandlerArgs) => void;
 export type MonacoEditorChangeHandlerArgs = {
   text: string;

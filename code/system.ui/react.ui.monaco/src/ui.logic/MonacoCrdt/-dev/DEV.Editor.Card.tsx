@@ -34,6 +34,7 @@ export const DevEditorCard: React.FC<DevEditorCardProps> = (props) => {
       display: 'grid',
     }),
     main: css({
+      overflow: 'hidden',
       position: 'relative',
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
