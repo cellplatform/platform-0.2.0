@@ -1,9 +1,18 @@
-import type { t } from './common';
-
-export type SelectionOffset = { start: number; end: number };
+import { DEFAULTS } from './const.mjs';
+import type { t } from '../common.t';
 
 export const Wrangle = {
-  offsets(monaco: t.Monaco, editor: t.MonacoCodeEditor, selection: t.ISelection): SelectionOffset {
+  editorClassName(editor?: t.MonacoCodeEditor) {
+    let id = editor?.getId() ?? '';
+    if (id.includes(':')) id = `instance-${id.split(':')[1]}`;
+    return `${DEFAULTS.className} ${id}`.trim();
+  },
+
+  offsets(
+    monaco: t.Monaco,
+    editor: t.MonacoCodeEditor,
+    selection: t.ISelection,
+  ): t.SelectionOffset {
     const { Range } = monaco;
     const model = editor.getModel();
     if (!model) throw new Error(`Editor did not return a text model.`);
