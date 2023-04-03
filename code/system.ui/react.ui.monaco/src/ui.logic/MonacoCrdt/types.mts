@@ -1,5 +1,6 @@
 import type { t } from '../../common.t';
-import type { ISelection } from 'monaco-editor';
+
+type PeerId = string;
 
 /**
  * An adapter for managing 2-way binding between a Monaco code-editor
@@ -10,6 +11,17 @@ export type MonacoCrdtSyncer = t.Disposable & {
   readonly disposed: boolean;
 };
 
+export type MonacoCrdtSyncerDocTextArg<D extends {}> = {
+  doc: t.CrdtDocRef<D>;
+  getText: (doc: D) => t.AutomergeText;
+};
+
+export type MonacoCrdtSyncerDocPeersArg<D extends {}> = {
+  local: PeerId;
+  doc: t.CrdtDocRef<D>;
+  getPeers: (doc: D) => t.EditorPeersState;
+};
+
 /**
  * A data-structure for tracking the transient editor-state of syncing each peer.
  * NOTE:
@@ -18,4 +30,4 @@ export type MonacoCrdtSyncer = t.Disposable & {
  *    for the purposes of manging connected peer state.
  */
 export type EditorPeersState = { [peerId: string]: EditorPeerState };
-export type EditorPeerState = { selection?: ISelection };
+export type EditorPeerState = { selection?: t.IRange };
