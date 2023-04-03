@@ -32,6 +32,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     showTests: initial.debug.showTests,
   });
 
+  let monaco: t.Monaco;
   const editors = new Set<t.MonacoCodeEditor>();
   const peerMap = new Map<string, PeerItem>();
 
@@ -43,7 +44,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
   const totalPeers = (length: number) => {
     local.peerTotal = length;
-    const names = Array.from({ length }).map((_, i) => `cell-${i + 1}`);
+    const names = Array.from({ length }).map((_, i) => `Cell-${i + 1}`);
 
     peerMap.forEach((item) => disposeOf(item));
     peerMap.clear();
@@ -61,9 +62,11 @@ export default Dev.describe('MonacoCrdt', (e) => {
       console.log('init', name);
       const peer = item.peer;
       const editor = Array.from(editors)[i];
+
       if (editor && !item.syncer) {
         const doc = peer.doc;
         const syncer = MonacoCrdt.syncer({
+          monaco,
           editor,
           data: { doc, getText: (doc) => doc.code },
           peers: { local: peer.name, doc, getPeers: (doc) => doc.peers },
@@ -96,6 +99,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
             onDisposed={(e) => editors.delete(e.disposed.editor)}
             onReady={(e) => {
               console.log('⚡️ layout ready', e);
+              monaco = e.monaco;
               e.editors.forEach((e) => editors.add(e.editor));
               initEditorSyncers();
             }}

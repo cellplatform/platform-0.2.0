@@ -1,4 +1,10 @@
 /**
+ * @external
+ */
+export type { Observable } from 'rxjs';
+export type { ISelection, IRange } from 'monaco-editor';
+
+/**
  * @system
  */
 export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
