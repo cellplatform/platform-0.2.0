@@ -1,23 +1,19 @@
 import { Dev, Crdt, Automerge } from '../../test.ui';
 import { CrdtHistory, CrdtHistoryProps } from '.';
+import { CrdtInfo } from '../Crdt.Info';
 
 type T = { redraw: number; props: CrdtHistoryProps };
 const initial: T = { redraw: 0, props: {} };
 
-type Doc = { count: number };
-
 export default Dev.describe('CrdtHistory', (e) => {
+  type Doc = { count: number };
   const initialDoc: Doc = { count: 0 };
   const doc = Crdt.Doc.ref<Doc>(initialDoc);
 
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
-    const dispose$ = ctx.dispose$;
-    const state = await ctx.state<T>(initial);
-
-    const redraw = () => state.change((d) => d.redraw++);
-    doc.$.subscribe(redraw);
-    redraw();
+    doc.$.subscribe(() => ctx.redraw(true));
+    ctx.redraw(true);
   });
 
   e.it('init:ui', async (e) => {
@@ -37,20 +33,46 @@ export default Dev.describe('CrdtHistory', (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Change CRDT document', (dev) => {
-      dev.button('increment', (e) => doc.change((d) => d.count++));
-      dev.button('decrement', (e) => doc.change((d) => d.count--));
+      let message = '';
+      dev.textbox((txt) =>
+        txt
+          .placeholder('commit message')
+          .value((e) => message)
+          .margin([0, 0, 10, 0])
+          .onChange((e) => {
+            message = e.to.value;
+            e.redraw();
+          }),
+      );
+
+      const change = (by: number) => doc.change(message, (d) => (d.count += by));
+      dev.button('increment', (e) => change(1));
+      dev.button('decrement', (e) => change(-1));
     });
 
-    dev.hr(-1, 5);
+    dev.hr(5, 20);
 
-    /**
-     * Footer
-     */
+    dev.row((e) => {
+      const latest = doc.history[doc.history.length - 1];
+      return (
+        <CrdtInfo
+          fields={['Module', 'History.Item']}
+          data={{ history: { item: { data: latest, title: 'Latest Change' } } }}
+          margin={[0, 30]}
+        />
+      );
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
     dev.footer.border(-0.1).render<T>((e) => {
       const history = Automerge.getHistory(doc.current);
-
+      const latest = history[history.length - 1];
       const data = {
         'Doc<T>': doc.current,
+        'history.latest': latest,
         history,
       };
 
@@ -59,8 +81,7 @@ export default Dev.describe('CrdtHistory', (e) => {
           name={'dev.CrdtHistory'}
           data={data}
           expand={{
-            //
-            paths: ['$', '$.Doc<T>', '$.history'],
+            paths: ['$', '$.Doc<T>'],
           }}
         />
       );
