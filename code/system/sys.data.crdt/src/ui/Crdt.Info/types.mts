@@ -1,1 +1,1 @@
-export type CrdtInfoFields = 'Module' | 'Driver';
+export type CrdtInfoFields = 'Module' | 'Driver' | 'History.Item';

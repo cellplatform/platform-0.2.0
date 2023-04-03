@@ -1,27 +1,52 @@
-import { css, Color, PropList, Dev, t } from '../../test.ui';
 import { CrdtInfo, CrdtInfoProps } from '.';
+import { Color, Crdt, Dev, PropList, t } from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
-  debug: { tracelines: boolean; bg: boolean };
+  debug: { bg: boolean };
 };
 const initial: T = {
   props: {},
-  debug: { tracelines: false, bg: false },
+  debug: { bg: false },
 };
 
 export default Dev.describe('CrdtInfo', (e) => {
-  type LocalStore = T['debug'];
+  type Doc = { count: number };
+  const initialDoc: Doc = { count: 0 };
+  const doc = Crdt.Doc.ref<Doc>(initialDoc);
+
+  type LocalStore = { bg: boolean; fields?: t.CrdtInfoFields[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.CrdtInfo');
-  const local = localstore.object({ bg: true, tracelines: false });
+  const local = localstore.object({ bg: initial.debug.bg, fields: initial.props.fields });
+
+  const Util = {
+    props(state: T): CrdtInfoProps {
+      return {
+        ...state.props,
+        data: {
+          history: {
+            item: {
+              data: doc.history[doc.history.length - 1],
+              title: 'Latest Change',
+            },
+          },
+        },
+      };
+    },
+  };
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    await state.change((d) => (d.debug = local));
+    await state.change((d) => {
+      d.debug.bg = local.bg;
+      d.props.fields = local.fields;
+    });
+    doc.$.subscribe(() => ctx.redraw());
 
     ctx.subject.display('grid').render<T>((e) => {
-      const { debug, props } = e.state;
+      const { debug } = e.state;
+      const props = Util.props(e.state);
       return (
         <CrdtInfo
           {...props}
@@ -37,13 +62,8 @@ export default Dev.describe('CrdtInfo', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => (
-        <Dev.Object name={'Dev.CrdtInfo'} data={{ props: e.state.props }} expand={1} />
-      ));
 
-    dev.section((dev) => {
+    dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
           .label('background')
@@ -51,28 +71,26 @@ export default Dev.describe('CrdtInfo', (e) => {
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
 
-      dev.boolean((btn) =>
-        btn
-          .label('debug: tracelines')
-          .enabled(false)
-          .value((e) => e.state.debug.tracelines)
-          .onClick((e) => e.change((d) => (local.tracelines = Dev.toggle(d.debug, 'tracelines')))),
-      );
+      dev.hr(-1, 5);
+      const change = (by: number) => doc.change(dev.lorem(50), (d) => (d.count += by));
+      dev.button('increment', (e) => change(1));
+      dev.button('decrement', (e) => change(-1));
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
-        const props = e.state.props;
+        const props = Util.props(e.state);
         return (
           <PropList.FieldSelector
-            style={{ Margin: [0, 10, 0, 25] }}
+            style={{ Margin: [10, 10, 0, 25] }}
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}
             onClick={(ev) => {
-              console.log('⚡️ FieldSelector.onClick:', ev);
-              dev.change((d) => (d.props.fields = ev.next as CrdtInfoProps['fields']));
+              let fields = ev.next as CrdtInfoProps['fields'];
+              dev.change((d) => (d.props.fields = fields));
+              local.fields = fields?.length === 0 ? undefined : fields;
             }}
           />
         );
@@ -84,8 +102,31 @@ export default Dev.describe('CrdtInfo', (e) => {
     dev.section('Component', (dev) => {
       dev.hr(0, 5);
       dev.row((e) => {
-        return <CrdtInfo {...e.state.props} style={{ Margin: [0, 10, 0, 10] }} />;
+        const props = Util.props(e.state);
+        return <CrdtInfo {...props} style={{ Margin: [0, 10, 0, 10] }} />;
       });
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = {
+        props: Util.props(e.state),
+        'Doc<T>': doc.current,
+        history: doc.history,
+      };
+
+      return (
+        <Dev.Object
+          name={'dev.CrdtHistory'}
+          data={data}
+          expand={{
+            paths: ['$', '$.Doc<T>'],
+          }}
+        />
+      );
     });
   });
 });

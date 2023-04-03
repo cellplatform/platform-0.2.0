@@ -1,12 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { Pkg, Color, COLORS, css, t, rx, FC, PropList, DEFAULTS, FIELDS } from './common';
+import { css, DEFAULTS, FC, FIELDS, Pkg, PropList, Style, t, Time, Value } from './common';
+
+export type CrdtInfoData = {
+  history?: {
+    item?: { data: t.AutomergeState<any>; title?: string };
+  };
+};
 
 export type CrdtInfoProps = {
   fields?: t.CrdtInfoFields[];
   width?: number;
   minWidth?: number;
   maxWidth?: number;
+  data?: CrdtInfoData;
   padding?: t.CssEdgesInput;
+  margin?: t.CssEdgesInput;
   style?: t.CssValue;
 };
 
@@ -14,11 +21,39 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields } = props;
+  const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields, data = {} } = props;
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
+    .field('History.Item', () => {
+      const item = data.history?.item;
+      if (!item) return;
+      const change = item.data.change;
+      const hash = change.hash.slice(0, 8);
+      const actor = change.actor.slice(0, 8);
+      const title = item.title ?? 'History Item';
+      const time = Time.day(change.time);
+
+      const res: t.PropListItem[] = [];
+      const indent = 15;
+
+      res.push({
+        label: title,
+        value: `${change.ops.length} ${Value.plural(change.ops.length, 'operation', 'operations')}`,
+      });
+      res.push({ label: 'Actor', value: actor, tooltip: change.actor, indent });
+      res.push({ label: 'Hash', value: hash, tooltip: change.hash, indent });
+      if (change.message) res.push({ label: 'Message', value: change.message, indent });
+      if (change.time)
+        res.push({
+          label: 'Time',
+          value: time.format('D MMM YYYY, h:mma'),
+          indent,
+        });
+
+      return res;
+    })
     .items(fields);
 
   /**
@@ -27,11 +62,12 @@ const View: React.FC<CrdtInfoProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      boxSizing: 'border-box',
       width,
       minWidth,
       maxWidth,
-      Padding: props.padding,
-      boxSizing: 'border-box',
+      ...Style.toPadding(props.padding),
+      ...Style.toMargins(props.margin),
     }),
   };
 
