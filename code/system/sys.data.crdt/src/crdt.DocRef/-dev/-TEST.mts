@@ -88,6 +88,35 @@ export default Test.describe('DocRef', (e) => {
 
       doc.change((doc) => (doc.count = 999));
       expect(doc.current).to.eql({ count: 999 });
+      expect(fired.length).to.eql(1);
+
+      const event = fired[0] as t.CrdtDocChange<D>;
+      expect(event.action).to.eql('change');
+      expect(event.doc).to.eql({ count: 999 });
+      expect(typeof event.info.time).to.eql('number');
+      expect(event.info.message).to.eql(undefined);
+    });
+
+    e.it('changes with commit message', (e) => {
+      const doc = DocRef.init<D>(initial);
+      const fired: t.CrdtDocAction<D>[] = [];
+      doc.$.subscribe((e) => fired.push(e));
+
+      const msg = 'my message (v0.2.3)';
+      doc.change(msg, (doc) => (doc.count = 999));
+
+      expect(fired.length).to.eql(1);
+      const event = fired[0] as t.CrdtDocChange<D>;
+
+      expect(typeof event.info.time).to.eql('number');
+      expect(event.info.message).to.eql(msg);
+
+      const history = doc.history;
+      expect(history.length).to.eql(2);
+      expect(history[1].change.time).to.eql(event.info.time);
+      expect(history[1].change.message).to.eql(msg);
+    });
+
     e.it('history list cached until next change', async (e) => {
       const doc = DocRef.init<D>(initial);
 
@@ -102,9 +131,21 @@ export default Test.describe('DocRef', (e) => {
       expect(doc.history).to.equal(doc.history); //  NB: Cached.
     });
 
+    e.it('empty commit message is nulled', (e) => {
+      const doc = DocRef.init<D>(initial);
+
+      const fired: t.CrdtDocAction<D>[] = [];
+      doc.$.subscribe((e) => fired.push(e));
+
+      const msg = '   ';
+      doc.change(msg, (doc) => (doc.count = 999));
+
       expect(fired.length).to.eql(1);
-      expect(fired[0].action).to.eql('change');
-      expect(fired[0].doc).to.eql({ count: 999 });
+      const event = fired[0] as t.CrdtDocChange<D>;
+      expect(event.info.message).to.eql(undefined);
+
+      const history = doc.history;
+      expect(history[1].change.message).to.eql(null);
     });
 
     e.it('onChange (via {onChange} option and onChange handler method)', async (e) => {

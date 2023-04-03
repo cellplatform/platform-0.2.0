@@ -35,6 +35,10 @@ export type CrdtDocChange<D extends {}> = {
   doc: D;
   action: 'change';
   change?: AutomergeLocalChange;
+  info: {
+    time: number; // Unix timestamp (advisory only, not used in conflict resolution).
+    message?: string;
+  };
 };
 export type CrdtDocReplace<D extends {}> = { doc: D; action: 'replace' };
 

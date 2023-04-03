@@ -1,4 +1,4 @@
-import { rx, t, Automerge, Is } from './common';
+import { Time, rx, t, Automerge, Is } from './common';
 
 const { isAutomerge } = Automerge;
 
@@ -76,12 +76,17 @@ export function createDocRef<D extends {}>(
     /**
      * Change mutator.
      */
-    change(fn) {
-      if (api.isDisposed) return api;
-      const doc = (_doc = Automerge.change<D>(_doc, (doc) => fn(doc as D)));
+    change(...args: []) {
+      if (api.disposed) return api;
+
+      const time = Time.now.timestamp;
+      const { message, fn } = Wrangle.changeArgs<D>(args);
+
+      const doc = (_doc = Automerge.change<D>(_doc, { time, message }, (doc) => fn(doc as D)));
       const change = Automerge.getLastLocalChange(doc);
+
       fireOnChange(change);
-      $.next({ action: 'change', doc, change });
+      $.next({ action: 'change', doc, change, info: { time, message } });
       return api;
     },
 
@@ -144,5 +149,22 @@ const Wrangle = {
     } else {
       return isAutomerge(initial) ? initial : Automerge.from<D>(initial);
     }
+  },
+
+  changeArgs<D extends {}>(args: any[]) {
+    type F = t.CrdtMutator<D>;
+    if (typeof args[0] === 'function') {
+      const fn = args[0] as F;
+      return { message: undefined, fn };
+    }
+
+    if (typeof args[0] === 'string') {
+      const msg = (args[0] as string).trim();
+      const message = msg || undefined;
+      const fn = args[1] as F;
+      return { message, fn };
+    }
+
+    throw new Error(`Could not wrangle change args.`);
   },
 };
