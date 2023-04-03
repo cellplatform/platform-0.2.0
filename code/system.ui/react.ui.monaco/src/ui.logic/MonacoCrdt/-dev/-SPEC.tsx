@@ -242,7 +242,12 @@ export default Dev.describe('MonacoCrdt', (e) => {
       peerMap.forEach(({ peer }) => {
         const key = peer.name;
         const doc = peer.doc.current;
-        data[key] = doc;
+        const text = doc.code.toString();
+
+        data[key] = {
+          ...doc,
+          code: `chars:(${text.length}), lines:(${text.split('\n').length})`,
+        };
       });
       return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={2} />;
     });
