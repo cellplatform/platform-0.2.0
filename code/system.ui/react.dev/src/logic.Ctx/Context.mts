@@ -48,12 +48,9 @@ export const Context = {
         return res.info ?? (await events.info.get());
       },
 
-      async redraw(all) {
-        if (all) {
-          events.redraw.fire({ all });
-        } else {
-          await events.redraw.subject();
-        }
+      async redraw(target = 'all') {
+        if (target === 'all') events.redraw.fire({ all: true });
+        if (target === 'subject') await events.redraw.subject();
       },
 
       async state<T extends O>(initial: T) {

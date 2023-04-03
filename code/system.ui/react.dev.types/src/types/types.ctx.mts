@@ -35,7 +35,7 @@ export type DevCtx = {
   readonly is: DevCtxIs;
   toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
-  redraw(all?: boolean): Promise<void>;
+  redraw(target?: 'all' | 'subject'): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
 };
 

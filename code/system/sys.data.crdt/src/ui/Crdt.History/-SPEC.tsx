@@ -12,8 +12,8 @@ export default Dev.describe('CrdtHistory', (e) => {
 
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
-    doc.$.subscribe(() => ctx.redraw(true));
-    ctx.redraw(true);
+    doc.$.subscribe(() => ctx.redraw());
+    ctx.redraw();
   });
 
   e.it('init:ui', async (e) => {
