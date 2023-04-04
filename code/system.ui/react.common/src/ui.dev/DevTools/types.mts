@@ -10,7 +10,7 @@ export type DevTools<S extends O = O> = {
   ctx: t.DevCtx;
   state(): Promise<t.DevCtxState<S>>;
   change: t.DevCtxState<S>['change'];
-  redraw(target: t.DevRedrawTarget): Promise<void>;
+  redraw(target?: t.DevRedrawTarget): Promise<void>;
 
   header: t.DevCtxEdge;
   footer: t.DevCtxEdge;
