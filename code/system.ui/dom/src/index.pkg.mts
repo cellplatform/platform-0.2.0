@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'ua-parser-js': '1.0.34',
+    'ua-parser-js': '1.0.35',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
