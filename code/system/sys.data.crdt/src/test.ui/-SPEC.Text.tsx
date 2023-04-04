@@ -28,10 +28,10 @@ export default Dev.describe('Text', (e) => {
     const dev = Dev.tools(e);
     const state = await dev.ctx.state<T>(initial);
 
-    doc.$.pipe(rx.takeUntil(dev.ctx.dispose$)).subscribe((e) => dev.redraw(true));
+    doc.$.pipe(rx.takeUntil(dev.ctx.dispose$)).subscribe((e) => dev.redraw());
 
     dev.section((dev) => {
-      dev.button('redraw', (e) => dev.redraw(true));
+      dev.button('redraw', (e) => dev.redraw());
     });
 
     dev.hr(5, 30);
