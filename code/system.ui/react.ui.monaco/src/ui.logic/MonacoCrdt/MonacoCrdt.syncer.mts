@@ -77,7 +77,8 @@ export function syncer<D extends {}, P extends {} = D>(args: {
         .forEach((key) => {
           const position = peers[key].selection ?? null;
           const caret = carets.id(key);
-          if (!caret.eq(position)) {
+          const changed = !caret.eq(position);
+          if (changed) {
             caret.change({ position });
             fireChange('selection:remote');
           }
