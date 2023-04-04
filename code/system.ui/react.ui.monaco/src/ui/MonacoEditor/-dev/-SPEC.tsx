@@ -1,5 +1,5 @@
-import { t, Dev, CSS } from '../../../test.ui';
 import { MonacoEditor, MonacoEditorProps } from '..';
+import { Dev, Wrangle, t, EditorCarets } from '../../../test.ui';
 
 const DEFAULTS = MonacoEditor.DEFAULTS;
 
@@ -14,17 +14,23 @@ const initial: T = {
 };
 
 export default Dev.describe('MonacoEditor', (e) => {
-  type LocalStore = { text: string; language: t.EditorLanguage };
+  type LocalStore = {
+    text: string;
+    language: t.EditorLanguage;
+    selection: t.IRange | null;
+  };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
   const local = localstore.object({
     text: initial.props.text!,
     language: initial.props.language!,
+    selection: null,
   });
 
   let editor: t.MonacoCodeEditor;
   let monaco: t.Monaco;
+  let carets: t.EditorCarets;
 
-  e.it('init', async (e) => {
+  e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
@@ -41,11 +47,20 @@ export default Dev.describe('MonacoEditor', (e) => {
             {...e.state.props}
             onReady={(e) => {
               console.info(`⚡️ onReady:`, e);
+
               editor = e.editor;
               monaco = e.monaco;
+              carets = EditorCarets(monaco, editor);
+
+              const asRange = Wrangle.asIRange;
+              if (local.selection) editor.setSelection(local.selection);
+              editor.onDidChangeCursorSelection((e) => (local.selection = asRange(e.selection)));
+
+              ctx.redraw();
             }}
             onChange={(e) => {
               local.text = e.text;
+              ctx.redraw();
             }}
           />
         );
@@ -54,6 +69,13 @@ export default Dev.describe('MonacoEditor', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const ctx = dev.ctx;
+
+    dev.section('Debug', (dev) => {
+      dev.button('redraw', (e) => ctx.redraw());
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Language', (dev) => {
       const hr = () => dev.hr(-1, 5);
@@ -92,48 +114,46 @@ export default Dev.describe('MonacoEditor', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Caret', (dev) => {
-      dev.button('tmp', (e) => {
-        //
-        console.log('editor', editor);
-        console.log('monaco', monaco);
+    dev.section('Carets', (dev) => {
+      const getCaret = () => carets.id('foo.bar');
 
-        // Create a cursor decoration for another user
-        const cursorDecoration = {
-          range: new monaco.Range(1, 1, 1, 1),
-          options: {
-            className: CSS.CLASS.CARET,
-            isWholeLine: true,
-          },
-        };
+      dev.button('position: [1, 3]', (e) => getCaret().change({ position: [1, 3] }));
+      dev.button('position: [1, 5]', (e) => getCaret().change({ position: [1, 5] }));
+      dev.button('position: null', (e) => getCaret().change({ position: null }));
 
-        // Add the cursor decoration to the editor
-        const cursor = editor.getModel()?.deltaDecorations([], [cursorDecoration]);
-        console.log('cursor', cursor);
-
-        // Update the cursor position for another user
-        function updateCursor(lineNumber: number, column: number) {
-          const newRange = new monaco.Range(lineNumber, column, lineNumber, column);
-          editor.getModel()?.deltaDecorations(cursor!, [
-            {
-              range: newRange,
-              options: {
-                className: CSS.CLASS.CARET,
-                // isWholeLine: true,
-              },
-            },
-          ]);
-        }
-        // Example usage
-        updateCursor(1, 5); // Move the cursor to line 1, column 5
-      });
+      dev.hr(-1, 5);
+      dev.button('color: blue', (e) => getCaret().change({ color: 'blue' }));
+      dev.hr(-1, 5);
+      dev.button('clear', (e) => carets.current.forEach((c) => c.dispose()));
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'Dev.MonacoEditor'} data={e.state} expand={1} />);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const textModel = editor?.getModel();
+      const text = textModel?.getValue() ?? '';
+
+      const data = {
+        props: e.state.props,
+        editor: !editor
+          ? undefined
+          : {
+              'id.instance': editor?.getId(),
+              'css.class': MonacoEditor.className(editor),
+              text: `chars:(${text.length}), lines:(${text.split('\n').length})`,
+            },
+      };
+      return (
+        <Dev.Object
+          name={'Dev.MonacoEditor'}
+          data={data}
+          expand={{
+            level: 1,
+            paths: ['$.editor'],
+          }}
+        />
+      );
+    });
   });
 });
