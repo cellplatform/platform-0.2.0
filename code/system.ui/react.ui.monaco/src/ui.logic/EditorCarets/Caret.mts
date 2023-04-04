@@ -11,7 +11,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
   });
 
   let _color = 'red';
-  let _opacity = 0.5;
+  let _opacity = 0.6;
   let _cursor: string[] | undefined;
   let _position: t.EditorCaretPosition | undefined;
 

@@ -85,6 +85,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
 
           const textFocused = peers[key].textFocused ?? false;
           const opacity = textFocused ? 0.6 : 0.2;
+
           if (!caret.eq({ opacity })) {
             caret.change({ opacity });
             fireChange('remote', 'focus');
