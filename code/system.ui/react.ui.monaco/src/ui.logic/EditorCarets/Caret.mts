@@ -11,6 +11,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
   });
 
   let _color = 'red';
+  let _opacity = 0.5;
   let _cursor: string[] | undefined;
   let _position: t.EditorCaretPosition | undefined;
 
@@ -26,6 +27,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
     style.innerHTML = `
     ${selector} {
       border-left: 2px solid ${_color};
+      opacity: ${_opacity};
     }
   `;
   };
@@ -42,7 +44,6 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
 
   const api: t.EditorCaret = {
     id,
-    color: _color,
     dispose,
     dispose$,
 
@@ -50,10 +51,24 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
       return _position ?? { line: -1, column: -1 };
     },
 
+    get color() {
+      return _color;
+    },
+
+    get opacity() {
+      return _opacity;
+    },
+
     change(args) {
+      let styleChanged = false;
       if (args.color) {
         _color = args.color;
-        updateStyle();
+        styleChanged = true;
+      }
+
+      if (typeof args.opacity === 'number') {
+        _opacity = R.clamp(0, 1, args.opacity);
+        styleChanged = true;
       }
 
       if (args.position) {
@@ -70,6 +85,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
         removeCursor();
       }
 
+      if (styleChanged) updateStyle();
       return api;
     },
 

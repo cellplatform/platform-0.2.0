@@ -1,8 +1,8 @@
 /**
  * @external
  */
-import { uniq, equals } from 'ramda';
-export const R = { uniq, equals };
+import { uniq, equals, clamp } from 'ramda';
+export const R = { uniq, equals, clamp };
 
 /**
  * @system

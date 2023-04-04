@@ -14,7 +14,14 @@ export type EditorCarets = t.Disposable & {
 export type EditorCaret = t.Disposable & {
   readonly id: string;
   readonly color: string;
+  readonly opacity: number;
   readonly position: EditorCaretPosition;
-  change(args: { position?: t.IRange | LineColumn | null; color?: string }): EditorCaret;
+  change(args: EditorCaretChangeArgs): EditorCaret;
   eq(position?: t.IRange | LineColumn | null): boolean;
+};
+
+export type EditorCaretChangeArgs = {
+  position?: t.IRange | LineColumn | null;
+  color?: string;
+  opacity?: number; // 0..1
 };
