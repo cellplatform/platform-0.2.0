@@ -11,10 +11,18 @@ export type TestNetworkP2P = t.Disposable & {
  */
 export const TestNetwork = {
   /**
+   * Single peer network setup.
+   */
+  async peer(options: { log?: boolean } = {}) {
+    const [self] = await TestNetwork.peers(1, { getStream: true, log: options.log });
+    return self;
+  },
+
+  /**
    * Generate sample peers.
    */
   async peers(
-    length: number = 2,
+    length: number,
     options: { getStream?: t.PeerGetMediaStream | boolean; log?: boolean } = {},
   ) {
     const getStream = Wrangle.getStream(options);
@@ -68,12 +76,8 @@ export const TestNetwork = {
 
 export const Wrangle = {
   getStream(options: { getStream?: t.PeerGetMediaStream | boolean } = {}) {
-    if (options.getStream === true) {
-      return WebRtc.Media.singleton({}).getStream;
-    }
-
+    if (options.getStream === true) return WebRtc.Media.singleton({}).getStream;
     if (typeof options.getStream === 'function') return options.getStream;
-
     return undefined;
   },
 };
