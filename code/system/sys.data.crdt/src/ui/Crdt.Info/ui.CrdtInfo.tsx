@@ -33,7 +33,6 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       const hash = change.hash.slice(0, 8);
       const actor = change.actor.slice(0, 8);
       const title = item.title ?? 'History Item';
-      const time = Time.day(change.time);
 
       const res: t.PropListItem[] = [];
       const indent = 15;
@@ -44,14 +43,19 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       });
       res.push({ label: 'Actor', value: actor, tooltip: change.actor, indent });
       res.push({ label: 'Hash', value: hash, tooltip: change.hash, indent });
+
       if (change.message) res.push({ label: 'Message', value: change.message, indent });
-      if (change.time)
+
+      if (change.time) {
+        const time = Time.day(change.time);
+        const elapsed = Time.elapsed(time);
+        const format = elapsed.sec < 60 ? 'D MMM YYYY, h:mm:ssa' : 'D MMM YYYY, h:mma';
         res.push({
           label: 'Time',
-          value: time.format('D MMM YYYY, h:mma'),
+          value: time.format(format),
           indent,
         });
-
+      }
       return res;
     })
     .items(fields);
