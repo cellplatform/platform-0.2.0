@@ -13,7 +13,8 @@ export type MonacoCrdtSyncer = t.Disposable & {
 };
 
 export type MonacoCrdtSyncerChange = {
-  kind: 'text' | 'selection:local' | 'selection:remote';
+  kind: 'text' | 'selection' | 'focus';
+  proximity: 'local' | 'remote';
 };
 
 export type MonacoCrdtSyncerDocTextArg<D extends {}> = {
@@ -35,4 +36,7 @@ export type MonacoCrdtSyncerDocPeersArg<D extends {}> = {
  *    for the purposes of manging connected peer state.
  */
 export type EditorPeersState = { [peerId: string]: EditorPeerState };
-export type EditorPeerState = { selection?: t.IRange };
+export type EditorPeerState = {
+  selection?: t.IRange;
+  textFocused?: boolean;
+};

@@ -32,7 +32,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
 
   type C = t.MonacoCrdtSyncerChange;
   const _$ = new rx.Subject<C>();
-  const fireChange = (kind: C['kind']) => _$.next({ kind });
+  const fireChange = (proximity: C['proximity'], kind: C['kind']) => _$.next({ proximity, kind });
 
   const docText = DocText(args.data);
   const docPeers = DocPeers(args.peers);
@@ -57,7 +57,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
       editor.setSelection(before);
 
       _ignoreChange = false;
-      fireChange('text');
+      fireChange('remote', 'text');
     }
   });
 
@@ -80,7 +80,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
           const changed = !caret.eq(position);
           if (changed) {
             caret.change({ position });
-            fireChange('selection:remote');
+            fireChange('remote', 'selection');
           }
         });
     }
@@ -91,11 +91,11 @@ export function syncer<D extends {}, P extends {} = D>(args: {
    */
   let _selection: t.SelectionOffset = { start: 0, end: 0 };
   editor.onDidChangeCursorSelection((e) => {
-    _selection = Wrangle.offsets(monaco, editor, e.selection);
-    if (docPeers) {
-      docPeers.changeLocal((local) => (local.selection = Wrangle.asIRange(e.selection)));
-    }
-    fireChange('selection:local');
+    if (api.disposed) return;
+    const next = e.selection;
+    _selection = Wrangle.offsets(monaco, editor, next);
+    if (docPeers) docPeers.changeLocal((local) => (local.selection = Wrangle.asIRange(next)));
+    fireChange('local', 'selection');
   });
 
   /**
@@ -135,8 +135,20 @@ export function syncer<D extends {}, P extends {} = D>(args: {
       });
     });
 
-    fireChange('text');
+    fireChange('local', 'text');
   });
+
+  /**
+   * Track focus state.
+   */
+  const focusChanged = (isFocused: boolean) => {
+    if (api.disposed) return;
+    if (!args.peers) return;
+    docPeers.changeLocal((local) => (local.textFocused = isFocused));
+    fireChange('local', 'focus');
+  };
+  editor.onDidFocusEditorText(() => focusChanged(true));
+  editor.onDidBlurEditorText(() => focusChanged(false));
 
   /**
    * API
