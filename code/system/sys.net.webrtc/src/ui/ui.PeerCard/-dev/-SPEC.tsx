@@ -236,7 +236,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Private>', (dev) => {
+    dev.section('Private Doc', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -263,7 +263,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Public> (Shared)', (dev) => {
+    dev.section('Public Doc (Shared)', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -274,22 +274,22 @@ export default Dev.describe('PeerCard', async (e) => {
       };
       count('count: increment', 1);
       count('count: decrement', -1);
+
       dev.hr(-1, 5);
-      dev.button('reset', (e) =>
-        docShared.change((d) => {
-          d.count = 0;
-          d.network.peers = {};
-        }),
-      );
 
       dev.row((e) => {
         const history = docShared.history;
         const latest = history[history.length - 1];
         return (
           <CrdtInfo
-            fields={['Module', 'History.Item']}
-            margin={[15, 40, 0, 40]}
-            data={{ history: { item: { data: latest, title: 'Latest Change' } } }}
+            fields={['Module', 'History.Total', 'History.Item']}
+            margin={[15, 30, 0, 30]}
+            data={{
+              history: {
+                data: history,
+                item: { data: latest, title: 'Latest Change' },
+              },
+            }}
           />
         );
       });

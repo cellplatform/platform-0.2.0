@@ -99,8 +99,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
       />
       <MonacoEditor
-        focusOnLoad={true}
         language={'yaml'}
+        focusOnLoad={true}
         onReady={({ editor, monaco }) => setMainCtx({ editor, monaco })}
       />
     </div>
