@@ -5,6 +5,9 @@ import { t, Crdt } from './common';
  */
 export function DocText<D extends {}>(args: t.MonacoCrdtSyncerDocTextArg<D>) {
   const api = {
+    get $() {
+      return args.doc.$;
+    },
     get(doc: D) {
       const text = args.getText(doc);
       if (!Crdt.Is.text(text)) throw new Error(`[Automerge.Text] not returned from getter`);

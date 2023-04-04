@@ -5,6 +5,10 @@ import { t } from './common';
  */
 export function DocPeers<P extends {}>(args?: t.MonacoCrdtSyncerDocPeersArg<P>) {
   const api = {
+    get $() {
+      return args?.doc.$;
+    },
+
     get(doc: P) {
       return args?.getPeers(doc);
     },
