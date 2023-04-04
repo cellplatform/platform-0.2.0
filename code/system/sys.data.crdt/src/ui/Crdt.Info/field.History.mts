@@ -9,7 +9,7 @@ export function History(data: t.CrdtInfoData): t.PropListItem[] {
   const commits = Value.plural(total, 'commit (genesis)', 'commits');
 
   res.push({
-    label: 'History',
+    label: data.history?.title ?? 'History',
     value: `${total} ${commits}`,
   });
 

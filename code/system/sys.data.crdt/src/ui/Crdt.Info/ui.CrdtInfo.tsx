@@ -1,6 +1,7 @@
 import { css, DEFAULTS, FC, FIELDS, Pkg, PropList, Style, t, Time, Value } from './common';
 import { HistoryItem } from './field.History.Item.mjs';
 import { History } from './field.History.mjs';
+import { File } from './field.File.mjs';
 
 export type CrdtInfoProps = {
   fields?: t.CrdtInfoFields[];
@@ -24,6 +25,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
     .field('History.Total', () => History(data))
     .field('History.Item', () => HistoryItem(data))
+    .field('File', () => File(data))
     .items(fields);
 
   /**

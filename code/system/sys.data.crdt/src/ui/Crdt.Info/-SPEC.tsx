@@ -120,7 +120,7 @@ export default Dev.describe('CrdtInfo', (e) => {
       dev.hr(0, 5);
       dev.row((e) => {
         const props = Util.props(e.state);
-        return <CrdtInfo {...props} style={{ Margin: [0, 10, 0, 10] }} />;
+        return <CrdtInfo {...props} style={{ Margin: [0, 10, 0, 25] }} />;
       });
     });
   });

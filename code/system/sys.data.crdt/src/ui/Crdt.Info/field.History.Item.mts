@@ -16,21 +16,21 @@ export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
     label: title,
     value: `${change.ops.length} ${Value.plural(change.ops.length, 'operation', 'operations')}`,
   });
-  res.push({ label: 'Actor', value: actor, tooltip: change.actor, indent });
-  res.push({ label: 'Hash', value: hash, tooltip: change.hash, indent });
-
-  if (change.message) res.push({ label: 'Message', value: change.message, indent });
+  res.push({ label: 'Actor', value: actor, tooltip: `actor-id: ${change.actor}`, indent });
+  res.push({ label: 'Hash', value: hash, tooltip: `commit hash: ${change.hash}`, indent });
 
   if (change.time) {
     const time = Time.day(change.time);
     const elapsed = Time.elapsed(time);
     const month = 'D MMM YYYY';
     const format = elapsed.sec < 60 ? `h:mm:ssa, ${month}` : `h:mma, ${month}`;
-    res.push({
-      label: 'Time',
-      value: time.format(format),
-      indent,
-    });
+    res.push({ label: 'Time', value: time.format(format), indent });
   }
+
+  if (change.message) {
+    const value = change.message;
+    res.push({ label: 'Message', value, tooltip: value, indent });
+  }
+
   return res;
 }
