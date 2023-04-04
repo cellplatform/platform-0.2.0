@@ -15,6 +15,7 @@ export {
   FC,
   useSizeObserver,
   useMouseState,
+  Card,
 } from 'sys.ui.react.common';
 
 export { Test } from 'sys.test.spec';
