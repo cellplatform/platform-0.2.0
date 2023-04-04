@@ -4,6 +4,8 @@ import { PeerList } from '../../ui.PeerList';
 import { DocShared, NetworkSchema } from './Schema.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
 
+import { CrdtInfo } from 'sys.data.crdt';
+
 const DEFAULTS = PeerCard.DEFAULTS;
 
 type T = {
@@ -59,7 +61,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const { dispose$ } = ctx;
     const getStream = WebRtc.Media.singleton().getStream;
     const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
-    self.connections$.subscribe(() => ctx.redraw(true));
+    self.connections$.subscribe(() => ctx.redraw());
 
     const filedir = dirs.shared;
     WebRtc.Controller.listen(self, doc, {
@@ -119,7 +121,7 @@ export default Dev.describe('PeerCard', async (e) => {
     };
 
     ctx.host.footer.padding(0).render<T>(() => {
-      return self ? SpecMonacoSync(self, docShared) : null;
+      return <SpecMonacoSync self={self} doc={docShared} />;
     });
 
     ctx.subject
@@ -175,7 +177,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     self = await initNetwork(ctx, docShared, state);
-    ctx.redraw(true);
+    ctx.redraw();
   });
 
   e.it('ui:debug', async (e) => {
@@ -250,8 +252,7 @@ export default Dev.describe('PeerCard', async (e) => {
           .placeholder('private text here...')
           .margin([0, 0, 15, 0])
           .onChange((e) => {
-            console.log('e.next', e.next);
-            docMe.change((d) => (d.text = e.next.to));
+            docMe.change((d) => (d.text = e.to.value));
           })
           .onEnter((e) => {}),
       );
@@ -280,6 +281,18 @@ export default Dev.describe('PeerCard', async (e) => {
           d.network.peers = {};
         }),
       );
+
+      dev.row((e) => {
+        const history = docShared.history;
+        const latest = history[history.length - 1];
+        return (
+          <CrdtInfo
+            fields={['Module', 'History.Item']}
+            margin={[15, 40, 0, 40]}
+            data={{ history: { item: { data: latest, title: 'Latest Change' } } }}
+          />
+        );
+      });
     });
 
     dev.hr(5, 20);
@@ -304,13 +317,13 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       return self ? <PeerList self={self} style={{ MarginX: 35 }} /> : null;
     });
+  });
 
-    /**
-     * Footer
-     */
+  e.it('ui:debug:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
     dev.footer.border(-0.1).render<T>((e) => {
       const total = self?.connections.length ?? 0;
-
       return (
         <Dev.Object
           fontSize={11}
