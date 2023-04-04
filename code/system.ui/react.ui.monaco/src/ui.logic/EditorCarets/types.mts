@@ -15,5 +15,5 @@ export type EditorCaret = t.Disposable & {
   readonly id: string;
   readonly color: string;
   readonly position: EditorCaretPosition;
-  change(args: { position?: t.IRange | LineColumn; color?: string }): EditorCaret;
+  change(args: { position?: t.IRange | LineColumn | null; color?: string }): EditorCaret;
 };

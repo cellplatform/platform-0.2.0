@@ -4,8 +4,12 @@ import { Caret } from './Caret.mjs';
 /**
  * Manages a set of carets for an editor.
  */
-export function EditorCarets(monaco: t.Monaco, editor: t.MonacoCodeEditor) {
-  const { dispose, dispose$ } = rx.disposable();
+export function EditorCarets(
+  monaco: t.Monaco,
+  editor: t.MonacoCodeEditor,
+  options: { dispose$?: t.Observable<any> } = {},
+) {
+  const { dispose, dispose$ } = rx.disposable(options.dispose$);
   editor.onDidDispose(dispose);
   dispose$.subscribe(() => api.clear());
   const carets = new Map<string, t.EditorCaret>();

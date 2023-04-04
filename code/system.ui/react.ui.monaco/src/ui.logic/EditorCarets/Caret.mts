@@ -7,7 +7,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     document.head.removeChild(style);
-    if (_cursor) getTextModel().deltaDecorations(_cursor, []);
+    removeCursor();
   });
 
   let _color = 'red';
@@ -30,6 +30,9 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
   `;
   };
 
+  const removeCursor = () => {
+    if (_cursor) getTextModel().deltaDecorations(_cursor, []);
+  };
   const getTextModel = () => {
     const model = editor.getModel();
     if (!model) throw new Error(`The editor did not return a text-model.`);
@@ -59,6 +62,10 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
 
         _position = { line: range.endLineNumber, column: range.endColumn };
         _cursor = model.deltaDecorations(_cursor ?? [], [cursorDecoration]);
+      }
+
+      if (args.position === null) {
+        removeCursor();
       }
 
       return api;
