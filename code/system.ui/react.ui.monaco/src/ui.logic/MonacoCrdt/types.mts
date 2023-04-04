@@ -9,6 +9,11 @@ type PeerId = string;
 export type MonacoCrdtSyncer = t.Disposable & {
   readonly kind: 'crdt:monaco:syncer';
   readonly disposed: boolean;
+  readonly $: t.Observable<MonacoCrdtSyncerChange>;
+};
+
+export type MonacoCrdtSyncerChange = {
+  kind: 'text' | 'selection:local' | 'selection:remote';
 };
 
 export type MonacoCrdtSyncerDocTextArg<D extends {}> = {

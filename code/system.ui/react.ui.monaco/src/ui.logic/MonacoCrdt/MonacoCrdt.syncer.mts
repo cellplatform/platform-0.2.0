@@ -1,7 +1,7 @@
-import { rx, t } from './common';
+import { EditorCarets } from '../EditorCarets';
+import { rx, t, Wrangle } from './common';
 import { DocPeers } from './doc.Peers.mjs';
 import { DocText } from './doc.Text.mjs';
-import { SelectionOffset, Wrangle } from './Wrangle.mjs';
 
 type Milliseconds = number;
 
@@ -25,46 +25,76 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   let _ignoreChange = false;
   let _isDisposed = false;
   const { dispose, dispose$ } = rx.disposable(args.dispose$);
-  dispose$.subscribe(() => (_isDisposed = true));
+  dispose$.subscribe(() => {
+    _isDisposed = true;
+    _$.complete();
+  });
+
+  type C = t.MonacoCrdtSyncerChange;
+  const _$ = new rx.Subject<C>();
+  const fireChange = (kind: C['kind']) => _$.next({ kind });
 
   const docText = DocText(args.data);
   const docPeers = DocPeers(args.peers);
+  const carets = EditorCarets(monaco, editor, { dispose$ });
 
   /**
    * Document CRDT change.
    */
-  data.doc.$.pipe(
+  docText.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter((e) => e.action === 'replace'),
     rx.debounceTime(debounce),
   ).subscribe((e) => {
-    const text = docText.get(data.doc.current);
+    const text = docText.get(data.doc.current)?.toString();
     if (!text) return;
 
-    let value = text.toString();
-    const eq = value === editor.getValue();
-
-    if (!eq) {
+    if (text !== editor.getValue()) {
       _ignoreChange = true;
+
       const before = editor.getSelection()!;
-      editor.setValue(value);
+      editor.setValue(text);
       editor.setSelection(before);
+
       _ignoreChange = false;
+      fireChange('text');
+    }
+  });
+
+  /**
+   * Remote peers change (caret/selection).
+   */
+  docPeers.$?.pipe(
+    rx.takeUntil(dispose$),
+    rx.filter((e) => e.action === 'replace'),
+    rx.debounceTime(debounce),
+  ).subscribe((e) => {
+    const local = args.peers?.local ?? '';
+    const peers = docPeers.get(e.doc);
+    if (local && peers) {
+      Object.keys(peers)
+        .filter((key) => key !== local)
+        .forEach((key) => {
+          const position = peers[key].selection ?? null;
+          const caret = carets.id(key);
+          if (!caret.eq(position)) {
+            caret.change({ position });
+            fireChange('selection:remote');
+          }
+        });
     }
   });
 
   /**
    * Keep track of current/previous selection offsets.
    */
-  let _selection: SelectionOffset = { start: 0, end: 0 };
+  let _selection: t.SelectionOffset = { start: 0, end: 0 };
   editor.onDidChangeCursorSelection((e) => {
-    // Store latest cursor selection.
     _selection = Wrangle.offsets(monaco, editor, e.selection);
-
-    // Update shared/synced peer selection state.
     if (docPeers) {
-      docPeers.changeLocal((local) => (local.selection = Wrangle.asRange(e.selection)));
+      docPeers.changeLocal((local) => (local.selection = Wrangle.asIRange(e.selection)));
     }
+    fireChange('selection:local');
   });
 
   /**
@@ -103,12 +133,15 @@ export function syncer<D extends {}, P extends {} = D>(args: {
         }
       });
     });
+
+    fireChange('text');
   });
 
   /**
    * API
    */
   const api: t.MonacoCrdtSyncer = {
+    $: _$.pipe(rx.takeUntil(dispose$)),
     kind: 'crdt:monaco:syncer',
     dispose,
     dispose$,

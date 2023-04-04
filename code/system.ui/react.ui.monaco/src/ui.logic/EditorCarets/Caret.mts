@@ -1,4 +1,4 @@
-import { t, rx, Wrangle, DEFAULTS } from '../common';
+import { R, t, rx, Wrangle, DEFAULTS } from '../common';
 
 /**
  * Represents a single caret in the editor.
@@ -12,7 +12,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
 
   let _color = 'red';
   let _cursor: string[] | undefined;
-  let _position: t.EditorCaretPosition = { line: -1, column: -1 };
+  let _position: t.EditorCaretPosition | undefined;
 
   const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
   const className = `caret-${id.replace(/\./g, '-')}`;
@@ -32,6 +32,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
 
   const removeCursor = () => {
     if (_cursor) getTextModel().deltaDecorations(_cursor, []);
+    _position = undefined;
   };
   const getTextModel = () => {
     const model = editor.getModel();
@@ -46,7 +47,7 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
     dispose$,
 
     get position() {
-      return _position;
+      return _position ?? { line: -1, column: -1 };
     },
 
     change(args) {
@@ -57,7 +58,8 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
 
       if (args.position) {
         const model = getTextModel();
-        const range = Wrangle.asRange(monaco, args.position);
+        const coord = Wrangle.asIRange(args.position);
+        const range = Wrangle.asRange(monaco, [coord.endLineNumber, coord.endColumn]);
         const cursorDecoration = { range, options: { className } };
 
         _position = { line: range.endLineNumber, column: range.endColumn };
@@ -69,6 +71,12 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
       }
 
       return api;
+    },
+
+    eq(input) {
+      if (input === null || input === undefined) return _position === undefined;
+      const coord = Wrangle.asIRange(input);
+      return coord.endLineNumber === _position?.line && coord.endColumn === _position?.column;
     },
   };
 
