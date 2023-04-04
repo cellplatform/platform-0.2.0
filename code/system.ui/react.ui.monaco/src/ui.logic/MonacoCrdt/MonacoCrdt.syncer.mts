@@ -77,10 +77,17 @@ export function syncer<D extends {}, P extends {} = D>(args: {
         .forEach((key) => {
           const position = peers[key].selection ?? null;
           const caret = carets.id(key);
-          const changed = !caret.eq(position);
-          if (changed) {
+
+          if (!caret.eq({ position })) {
             caret.change({ position });
             fireChange('remote', 'selection');
+          }
+
+          const textFocused = peers[key].textFocused ?? false;
+          const opacity = textFocused ? 0.6 : 0.2;
+          if (!caret.eq({ opacity })) {
+            caret.change({ opacity });
+            fireChange('remote', 'focus');
           }
         });
     }

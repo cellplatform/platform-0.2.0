@@ -17,7 +17,7 @@ export type EditorCaret = t.Disposable & {
   readonly opacity: number;
   readonly position: EditorCaretPosition;
   change(args: EditorCaretChangeArgs): EditorCaret;
-  eq(position?: t.IRange | LineColumn | null): boolean;
+  eq(args: EditorCaretChangeArgs): boolean;
 };
 
 export type EditorCaretChangeArgs = {

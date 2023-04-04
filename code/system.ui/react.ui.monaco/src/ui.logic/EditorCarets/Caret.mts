@@ -59,9 +59,12 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
       return _opacity;
     },
 
+    /**
+     * Change the caret state.
+     */
     change(args) {
       let styleChanged = false;
-      if (args.color) {
+      if (typeof args.color === 'string') {
         _color = args.color;
         styleChanged = true;
       }
@@ -89,10 +92,29 @@ export function Caret(monaco: t.Monaco, editor: t.MonacoCodeEditor, id: string):
       return api;
     },
 
-    eq(input) {
-      if (input === null || input === undefined) return _position === undefined;
-      const coord = Wrangle.asIRange(input);
-      return coord.endLineNumber === _position?.line && coord.endColumn === _position?.column;
+    /**
+     * Compare the given args with the current state.
+     */
+    eq(args) {
+      if (args.position === null) {
+        if (!_position) return false;
+      }
+
+      if (args.position) {
+        const coord = Wrangle.asIRange(args.position);
+        if (coord.endLineNumber !== _position?.line) return false;
+        if (coord.endColumn !== _position?.column) return false;
+      }
+
+      if (typeof args.color === 'string') {
+        if (args.color !== _color) return false;
+      }
+
+      if (typeof args.opacity === 'number') {
+        if (args.opacity !== _opacity) return false;
+      }
+
+      return true;
     },
   };
 
