@@ -1,17 +1,13 @@
 import { css, DEFAULTS, FC, FIELDS, Pkg, PropList, Style, t, Time, Value } from './common';
-
-export type CrdtInfoData = {
-  history?: {
-    item?: { data: t.AutomergeState<any>; title?: string };
-  };
-};
+import { HistoryItem } from './field.History.Item.mjs';
+import { History } from './field.History.mjs';
 
 export type CrdtInfoProps = {
   fields?: t.CrdtInfoFields[];
   width?: number;
   minWidth?: number;
   maxWidth?: number;
-  data?: CrdtInfoData;
+  data?: t.CrdtInfoData;
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
   style?: t.CssValue;
@@ -26,38 +22,8 @@ const View: React.FC<CrdtInfoProps> = (props) => {
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
-    .field('History.Item', () => {
-      const item = data.history?.item;
-      if (!item) return;
-      const change = item.data.change;
-      const hash = change.hash.slice(0, 8);
-      const actor = change.actor.slice(0, 8);
-      const title = item.title ?? 'History Item';
-
-      const res: t.PropListItem[] = [];
-      const indent = 15;
-
-      res.push({
-        label: title,
-        value: `${change.ops.length} ${Value.plural(change.ops.length, 'operation', 'operations')}`,
-      });
-      res.push({ label: 'Actor', value: actor, tooltip: change.actor, indent });
-      res.push({ label: 'Hash', value: hash, tooltip: change.hash, indent });
-
-      if (change.message) res.push({ label: 'Message', value: change.message, indent });
-
-      if (change.time) {
-        const time = Time.day(change.time);
-        const elapsed = Time.elapsed(time);
-        const format = elapsed.sec < 60 ? 'D MMM YYYY, h:mm:ssa' : 'D MMM YYYY, h:mma';
-        res.push({
-          label: 'Time',
-          value: time.format(format),
-          indent,
-        });
-      }
-      return res;
-    })
+    .field('History.Total', () => History(data))
+    .field('History.Item', () => HistoryItem(data))
     .items(fields);
 
   /**

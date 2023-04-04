@@ -3,11 +3,11 @@ import { Color, Crdt, Dev, PropList, t } from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
-  debug: { bg: boolean };
+  debug: { bg: boolean; message: boolean };
 };
 const initial: T = {
   props: {},
-  debug: { bg: false },
+  debug: { bg: false, message: false },
 };
 
 export default Dev.describe('CrdtInfo', (e) => {
@@ -15,9 +15,13 @@ export default Dev.describe('CrdtInfo', (e) => {
   const initialDoc: Doc = { count: 0 };
   const doc = Crdt.Doc.ref<Doc>(initialDoc);
 
-  type LocalStore = { bg: boolean; fields?: t.CrdtInfoFields[] };
+  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.CrdtInfo');
-  const local = localstore.object({ bg: initial.debug.bg, fields: initial.props.fields });
+  const local = localstore.object({
+    fields: initial.props.fields,
+    bg: initial.debug.bg,
+    message: initial.debug.message,
+  });
 
   const Util = {
     props(state: T): CrdtInfoProps {
@@ -25,6 +29,7 @@ export default Dev.describe('CrdtInfo', (e) => {
         ...state.props,
         data: {
           history: {
+            data: doc.history,
             item: {
               data: doc.history[doc.history.length - 1],
               title: 'Latest Change',
@@ -62,6 +67,7 @@ export default Dev.describe('CrdtInfo', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
@@ -72,9 +78,20 @@ export default Dev.describe('CrdtInfo', (e) => {
       );
 
       dev.hr(-1, 5);
-      const change = (by: number) => doc.change(dev.lorem(50), (d) => (d.count += by));
+      const change = (by: number) => {
+        const message = state.current.debug.message ? dev.lorem(50) : '';
+        doc.change(message, (d) => (d.count += by));
+      };
+
       dev.button('increment', (e) => change(1));
       dev.button('decrement', (e) => change(-1));
+      dev.hr(-1, 5);
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'commit message')
+          .value((e) => e.state.debug.message)
+          .onClick((e) => e.change((d) => (local.message = Dev.toggle(d.debug, 'message')))),
+      );
     });
 
     dev.hr(5, 20);
