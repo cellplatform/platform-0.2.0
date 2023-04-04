@@ -4,7 +4,7 @@ import { Color, css, Dev, t } from './common';
 import { DevEditor } from './DEV.Editor';
 
 export type DevLayoutReadyHandler = (e: DevLayoutReadyHandlerArgs) => void;
-export type DevLayoutReadyHandlerArgs = { editors: DevLayoutPeerEditor[] };
+export type DevLayoutReadyHandlerArgs = { monaco: t.Monaco; editors: DevLayoutPeerEditor[] };
 export type DevLayoutPeerEditor = { peer: t.DevPeer; editor: t.MonacoCodeEditor };
 
 export type DevLayoutEditorDisposedHandler = (e: DevLayoutEditorDisposedHandlerArgs) => void;
@@ -32,11 +32,11 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
   /**
    * [Handlers]
    */
-  const handleEditorReady = (peer: t.DevPeer, editor: t.MonacoCodeEditor) => {
+  const handleEditorReady = (peer: t.DevPeer, monaco: t.Monaco, editor: t.MonacoCodeEditor) => {
     const editors = editorRefs.current;
     editors.push({ peer, editor });
     const isReady = peers.every((peer) => editors.some((e) => e.peer.name === peer.name));
-    if (isReady) props.onReady?.({ editors });
+    if (isReady) props.onReady?.({ monaco, editors });
   };
 
   const handleEditorDispose = (peer: t.DevPeer, editor: t.MonacoCodeEditor) => {
@@ -77,7 +77,7 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
         name={peer.name}
         doc={peer.doc}
         language={props.language}
-        onReady={(e) => handleEditorReady(peer, e.editor)}
+        onReady={(e) => handleEditorReady(peer, e.monaco, e.editor)}
         onDispose={(e) => handleEditorDispose(peer, e.editor)}
       />
     );

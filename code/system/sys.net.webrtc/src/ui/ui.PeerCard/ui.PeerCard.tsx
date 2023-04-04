@@ -55,6 +55,7 @@ const View: React.FC<PeerCardProps> = (props) => {
    * TODO 🐷
    */
   const cameraConnection = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
+  const stream = cameraConnection?.stream.remote;
 
   /**
    * [Lifecycle]
@@ -90,8 +91,17 @@ const View: React.FC<PeerCardProps> = (props) => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }),
-      bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
-      media: css({}),
+      bg: css({
+        Absolute: 0,
+        display: 'grid',
+        placeItems: 'center',
+      }),
+      media: css({
+        Absolute: 0,
+        overflow: 'hidden',
+        display: 'grid',
+        placeItems: 'center',
+      }),
     },
 
     peer: css({
@@ -118,12 +128,10 @@ const View: React.FC<PeerCardProps> = (props) => {
     footer: css({}),
   };
 
-  const elVideo = cameraConnection && (
-    <MediaStream.Video
-      style={styles.video.media}
-      stream={cameraConnection.stream.remote}
-      muted={muted}
-    />
+  const elVideo = stream && (
+    <div {...styles.video.media}>
+      <MediaStream.Video stream={stream} muted={muted} />
+    </div>
   );
 
   const elPeerCopied = showCopied && <PeerCopied />;

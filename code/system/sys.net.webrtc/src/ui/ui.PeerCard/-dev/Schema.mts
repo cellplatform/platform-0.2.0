@@ -9,11 +9,7 @@ export type { DocShared } from './Schema.bytes.mjs';
  */
 export const NetworkSchema = {
   get initial() {
-    const doc: DocShared = {
-      count: 0,
-      network: { peers: {} },
-      tmp: {},
-    };
+    const doc: DocShared = { count: 0, network: { peers: {} }, tmp: {} };
     return { doc, bytes };
   },
 

@@ -120,8 +120,8 @@ export default Spec.describe('MySample', (e) => {
     });
 
     dev
-      .button((btn) => btn.label('ctx.redraw (subject only)').onClick(() => ctx.redraw()))
-      .button((btn) => btn.label('ctx.redraw (all)').onClick(() => ctx.redraw(true)));
+      .button((btn) => btn.label('ctx.redraw (subject only)').onClick(() => ctx.redraw('subject')))
+      .button((btn) => btn.label('ctx.redraw (all) - default').onClick(() => ctx.redraw()));
 
     dev
       .hr()

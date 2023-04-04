@@ -40,11 +40,10 @@ export type DevTextboxChangeHandlerArgs<S extends O = O> = DevTextboxHandlerArgs
   dev: t.DevRenderProps;
   state: t.DevCtxState<S>;
   change: t.DevCtxState<S>['change'];
-  next: DevTextboxChangeHandlerNext;
+  to: DevTextboxChangeHandlerTo;
 };
-export type DevTextboxChangeHandlerNext = {
-  from: string;
-  to: string;
+export type DevTextboxChangeHandlerTo = {
+  value: string;
   selection: t.TextInputSelection;
   diff: t.TextCharDiff[];
 };

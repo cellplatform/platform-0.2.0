@@ -1,4 +1,4 @@
-import { css, Dev, Crdt, t, Automerge, expect } from '../test.ui';
+import { rx, css, Dev, Crdt, t, Automerge, expect } from '../test.ui';
 
 type T = { count: number };
 const initial: T = { count: 0 };
@@ -28,20 +28,28 @@ export default Dev.describe('Text', (e) => {
     const dev = Dev.tools(e);
     const state = await dev.ctx.state<T>(initial);
 
+    doc.$.pipe(rx.takeUntil(dev.ctx.dispose$)).subscribe((e) => dev.redraw());
+
+    dev.section((dev) => {
+      dev.button('redraw', (e) => dev.redraw());
+    });
+
+    dev.hr(5, 30);
+
     dev.textbox((txt) =>
       txt
         .label('Text')
         .value(() => doc.current.text.toString())
         .focus({ onReady: true })
         .onChange((e) => {
-          doc.change((d) => Crdt.Text.update(d.text, e.next.diff));
+          doc.change((d) => Crdt.Text.update(d.text, e.to.diff));
           txt.redraw(true);
         }),
     );
+  });
 
-    /**
-     * Footer
-     */
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<D>((e) => {
       const text = doc.current.text.toString();
       const history = Automerge.getHistory(doc.current).map((m) => m.snapshot.text.toString());

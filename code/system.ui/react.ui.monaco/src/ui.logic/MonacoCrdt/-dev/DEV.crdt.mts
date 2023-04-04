@@ -8,6 +8,7 @@ export function initSyncingCrdtDocs(peerNames: string[]) {
     const doc = Crdt.Doc.ref<t.SampleDoc>({
       count: 0,
       code: new Automerge.Text(),
+      peers: {},
     });
     return { name, doc };
   });

@@ -1,18 +1,10 @@
 import { PeerCard, PeerCardProps } from '..';
-import {
-  COLORS,
-  Crdt,
-  css,
-  Dev,
-  Filesystem,
-  MediaStream,
-  rx,
-  t,
-  TEST,
-  WebRtc,
-} from '../../../test.ui';
+import { COLORS, Crdt, Dev, Filesystem, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { PeerList } from '../../ui.PeerList';
 import { DocShared, NetworkSchema } from './Schema.mjs';
+import { SpecMonacoSync } from './-SPEC.Monaco';
+
+import { CrdtInfo } from 'sys.data.crdt';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
@@ -65,17 +57,14 @@ export default Dev.describe('PeerCard', async (e) => {
     shared: fs.dir('dev.doc.shared'),
   };
 
-  let controller: t.WebRtcEvents;
-
-  async function initNetwork(state: t.DevCtxState<T>, dispose$: t.Observable<any>) {
-    const redraw = () => state.change((d) => d.debug.redraw++);
-
+  async function initNetwork(ctx: t.DevCtx, doc: t.CrdtDocRef<DocShared>, state: t.DevCtxState<T>) {
+    const { dispose$ } = ctx;
     const getStream = WebRtc.Media.singleton().getStream;
-    self = await WebRtc.peer(TEST.signal, { getStream, log: true });
-    self.connections$.subscribe(redraw);
+    const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
+    self.connections$.subscribe(() => ctx.redraw());
 
     const filedir = dirs.shared;
-    controller = WebRtc.Controller.listen(self, docShared, {
+    WebRtc.Controller.listen(self, doc, {
       // filedir,
       dispose$,
       onConnectStart(e) {
@@ -85,6 +74,8 @@ export default Dev.describe('PeerCard', async (e) => {
         state.change((d) => (d.spinning = false));
       },
     });
+
+    return self;
   }
 
   e.it('init:state', async (e) => {
@@ -129,13 +120,8 @@ export default Dev.describe('PeerCard', async (e) => {
       return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
-    ctx.host.footer.padding(0).render<T>(async (e) => {
-      const { MonacoEditor } = await import('sys.ui.react.monaco');
-      return (
-        <div {...css({ height: 200, display: 'grid' })}>
-          <MonacoEditor />
-        </div>
-      );
+    ctx.host.footer.padding(0).render<T>(() => {
+      return <SpecMonacoSync self={self} doc={docShared} />;
     });
 
     ctx.subject
@@ -187,6 +173,13 @@ export default Dev.describe('PeerCard', async (e) => {
       });
   });
 
+  e.it('init:network', async (e) => {
+    const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
+    self = await initNetwork(ctx, docShared, state);
+    ctx.redraw();
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
@@ -201,6 +194,13 @@ export default Dev.describe('PeerCard', async (e) => {
             e.change((d) => (local.showBg = Dev.toggle(d.debug, 'showBg')));
           }),
       );
+
+      dev.hr(-1, 5);
+
+      dev.button('NetworkSchema (genesis)', (e) => {
+        const { schema } = NetworkSchema.genesis();
+        console.info('NetworkSchema.genesis', schema.sourceFile);
+      });
     });
 
     dev.hr(5, 20);
@@ -236,7 +236,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Private>', (dev) => {
+    dev.section('Private Doc', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -247,13 +247,11 @@ export default Dev.describe('PeerCard', async (e) => {
       };
       dev.textbox((txt) =>
         txt
-          .label((e) => 'simple text string:')
           .value((e) => docMe.current.text)
           .placeholder('private text here...')
           .margin([0, 0, 15, 0])
           .onChange((e) => {
-            console.log('e.next', e.next);
-            docMe.change((d) => (d.text = e.next.to));
+            docMe.change((d) => (d.text = e.to.value));
           })
           .onEnter((e) => {}),
       );
@@ -264,7 +262,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Doc<Public> (Shared)', (dev) => {
+    dev.section('Public Doc (Shared)', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
@@ -275,13 +273,25 @@ export default Dev.describe('PeerCard', async (e) => {
       };
       count('count: increment', 1);
       count('count: decrement', -1);
+
       dev.hr(-1, 5);
-      dev.button('reset', (e) =>
-        docShared.change((d) => {
-          d.count = 0;
-          d.network.peers = {};
-        }),
-      );
+
+      dev.row((e) => {
+        const history = docShared.history;
+        const latest = history[history.length - 1];
+        return (
+          <CrdtInfo
+            fields={['Module', 'File', 'History.Total', 'History.Item']}
+            margin={[15, 30, 5, 30]}
+            data={{
+              history: {
+                data: history,
+                item: { data: latest, title: 'Latest Change' },
+              },
+            }}
+          />
+        );
+      });
     });
 
     dev.hr(5, 20);
@@ -306,14 +316,13 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       return self ? <PeerList self={self} style={{ MarginX: 35 }} /> : null;
     });
+  });
 
-    /**
-     * Footer
-     */
+  e.it('ui:debug:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
     dev.footer.border(-0.1).render<T>((e) => {
-      // const self = network?.peerA;
       const total = self?.connections.length ?? 0;
-
       return (
         <Dev.Object
           fontSize={11}
@@ -337,15 +346,5 @@ export default Dev.describe('PeerCard', async (e) => {
         />
       );
     });
-  });
-
-  e.it('init:network', async (e) => {
-    const redraw = () => state.change((d) => d.debug.redraw++);
-
-    const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    await initNetwork(state, ctx.dispose$);
-
-    redraw();
   });
 });

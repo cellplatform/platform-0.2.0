@@ -1,6 +1,5 @@
 import 'symbol-observable';
 
-import { Dev } from 'sys.ui.react.common';
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 
@@ -12,12 +11,6 @@ const BADGE = {
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
 };
 
-const Imports = {
-  Specs: () => import('./entry.Specs.mjs'),
-  DefaultEntry: () => import('../ui/Root'),
-  Temp: () => import('../ui/Root.Temp'),
-};
-
 /**
  * User Interface
  */
@@ -27,7 +20,8 @@ const render = async (subject: SubjectMatter) => {
   const root = createRoot(document.getElementById('root')!);
 
   if (subject === 'Dev') {
-    const { Specs } = await Imports.Specs();
+    const { Dev } = await import('sys.ui.react.common');
+    const { Specs } = await import('./entry.Specs.mjs');
     const el = await Dev.render(Pkg, Specs, { badge: BADGE, hrDepth: 3 });
     root.render(el);
   }

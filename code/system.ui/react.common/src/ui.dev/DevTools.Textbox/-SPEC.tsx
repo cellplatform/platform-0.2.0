@@ -154,8 +154,8 @@ export default Dev.describe('Textbox', (e) => {
             : 'Here is a hint about what to enter.',
         )
         .onChange((e) => {
-          e.change((d) => (d.props.value = e.next.to));
-          console.info('⚡️ onChange', e.next);
+          e.change((d) => (d.props.value = e.to.value));
+          console.info('⚡️ onChange', e.to);
         })
         .onEnter((e) => {
           console.info('⚡️ onEnter', e);

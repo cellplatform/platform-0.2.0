@@ -1,4 +1,4 @@
-import { rx, t, Automerge, Is } from './common';
+import { Time, rx, t, Automerge, Is } from './common';
 
 const { isAutomerge } = Automerge;
 
@@ -21,11 +21,15 @@ export function createDocRef<D extends {}>(
 
   const $ = new rx.Subject<t.CrdtDocAction<D>>();
   let _doc: D = Wrangle.automergeDoc(initial);
+  let _history: t.CrdtDocHistory<D>[] | undefined;
 
   const onChangeHandlers = new Set<t.CrdtDocRefChangeHandler<D>>();
   const fireOnChange = (change?: Uint8Array) => {
-    const doc = _doc;
-    if (change) onChangeHandlers.forEach((fn) => fn({ doc, change }));
+    if (change) {
+      _history = undefined;
+      const doc = _doc;
+      onChangeHandlers.forEach((fn) => fn({ doc, change }));
+    }
   };
 
   const api: t.CrdtDocRef<D> = {
@@ -63,14 +67,26 @@ export function createDocRef<D extends {}>(
     },
 
     /**
+     * The document change history.
+     */
+    get history() {
+      return (_history = _history || Automerge.getHistory<D>(_doc));
+    },
+
+    /**
      * Change mutator.
      */
-    change(fn) {
-      if (api.isDisposed) return api;
-      const doc = (_doc = Automerge.change<D>(_doc, (doc) => fn(doc as D)));
+    change(...args: []) {
+      if (api.disposed) return api;
+
+      const time = Time.now.timestamp;
+      const { message, fn } = Wrangle.changeArgs<D>(args);
+
+      const doc = (_doc = Automerge.change<D>(_doc, { time, message }, (doc) => fn(doc as D)));
       const change = Automerge.getLastLocalChange(doc);
+
       fireOnChange(change);
-      $.next({ action: 'change', doc, change });
+      $.next({ action: 'change', doc, change, info: { time, message } });
       return api;
     },
 
@@ -80,7 +96,7 @@ export function createDocRef<D extends {}>(
      * For normal document usage, use the [change] method.
      */
     replace(doc) {
-      if (api.isDisposed) return api;
+      if (api.disposed) return api;
       if (!isAutomerge(doc)) {
         throw new Error('Cannot replace with a non-Automerge document');
       }
@@ -93,7 +109,7 @@ export function createDocRef<D extends {}>(
      * Change handlers.
      */
     onChange(fn) {
-      if (api.isDisposed) return api;
+      if (api.disposed) return api;
       onChangeHandlers.add(fn);
       return api;
     },
@@ -103,7 +119,7 @@ export function createDocRef<D extends {}>(
      */
     dispose,
     dispose$,
-    get isDisposed() {
+    get disposed() {
       return _isDisposed;
     },
   };
@@ -133,5 +149,22 @@ const Wrangle = {
     } else {
       return isAutomerge(initial) ? initial : Automerge.from<D>(initial);
     }
+  },
+
+  changeArgs<D extends {}>(args: any[]) {
+    type F = t.CrdtMutator<D>;
+    if (typeof args[0] === 'function') {
+      const fn = args[0] as F;
+      return { message: undefined, fn };
+    }
+
+    if (typeof args[0] === 'string') {
+      const msg = (args[0] as string).trim();
+      const message = msg || undefined;
+      const fn = args[1] as F;
+      return { message, fn };
+    }
+
+    throw new Error(`Could not wrangle change args.`);
   },
 };

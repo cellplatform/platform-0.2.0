@@ -41,6 +41,7 @@ export type {
   DevRenderRef,
   DevRenderer,
   DevRenderProps,
+  DevRedrawTarget,
 } from 'sys.ui.react.dev.types/src/types.mjs';
 
 export type {

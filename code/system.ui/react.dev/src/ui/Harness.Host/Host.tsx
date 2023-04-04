@@ -21,13 +21,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const host = renderProps?.host;
 
   /**
-   * [Handlers]
-   */
-  const navigateToIndex = (e: React.MouseEvent) => {
-    WrangleUrl.navigate.ensureIndexDevFlag();
-  };
-
-  /**
    * [Render]
    */
   const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? DEFAULT.tracelineColor)}`;
@@ -80,7 +73,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   );
 
   return (
-    <div ref={props.baseRef} {...css(styles.base, props.style)} onDoubleClick={navigateToIndex}>
+    <div ref={props.baseRef} {...css(styles.base, props.style)}>
       {elBackground}
       {elBody}
       {elEmpty}

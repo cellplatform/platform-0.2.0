@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Pkg, Color, COLORS, css, t, rx, FC, PropList, DEFAULTS, FIELDS } from './common';
+import { css, DEFAULTS, FC, FIELDS, Pkg, PropList, Style, t, Time, Value } from './common';
+import { HistoryItem } from './field.History.Item.mjs';
+import { History } from './field.History.mjs';
+import { File } from './field.File.mjs';
 
 export type CrdtInfoProps = {
   fields?: t.CrdtInfoFields[];
   width?: number;
   minWidth?: number;
   maxWidth?: number;
+  data?: t.CrdtInfoData;
   padding?: t.CssEdgesInput;
+  margin?: t.CssEdgesInput;
   style?: t.CssValue;
 };
 
@@ -14,11 +18,14 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields } = props;
+  const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields, data = {} } = props;
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
+    .field('History.Total', () => History(data))
+    .field('History.Item', () => HistoryItem(data))
+    .field('File', () => File(data))
     .items(fields);
 
   /**
@@ -27,11 +34,12 @@ const View: React.FC<CrdtInfoProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      boxSizing: 'border-box',
       width,
       minWidth,
       maxWidth,
-      Padding: props.padding,
-      boxSizing: 'border-box',
+      ...Style.toPadding(props.padding),
+      ...Style.toMargins(props.margin),
     }),
   };
 

@@ -63,7 +63,7 @@ export default Dev.describe('LoadPanel', (e) => {
         .label((e) => 'load address')
         .placeholder((e) => 'uri')
         .value((e) => e.state.address)
-        .onChange((e) => e.change((d) => (d.address = e.next.to)))
+        .onChange((e) => e.change((d) => (d.address = e.to.value)))
         .onEnter((e) => e.change((d) => (d.props.address = e.state.current.address))),
     );
 

@@ -38,7 +38,7 @@ export const HostComponent: React.FC<HostComponentProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} onDoubleClick={(e) => e.stopPropagation()}>
+    <div {...css(styles.base, props.style)}>
       <div ref={props.subjectRef} {...styles.container} className={'ComponentHost'}>
         {element}
       </div>
