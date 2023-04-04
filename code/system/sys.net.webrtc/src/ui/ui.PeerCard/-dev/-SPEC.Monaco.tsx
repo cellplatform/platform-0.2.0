@@ -85,11 +85,11 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
   if (!self || !doc) return <div {...css(styles.base, props.style)} />;
 
   const SAMPLE_INDEX = `
-  diagrams:
-    - slc/intro
-    - slc/macro
-    - slc/impact
-  `.substring(1);
+diagrams:
+  - slc/intro
+  - slc/macro
+  - slc/impact
+`.substring(1);
 
   return (
     <div {...css(styles.base, props.style)}>

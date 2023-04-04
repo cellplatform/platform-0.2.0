@@ -247,7 +247,6 @@ export default Dev.describe('PeerCard', async (e) => {
       };
       dev.textbox((txt) =>
         txt
-          .label((e) => 'simple text string:')
           .value((e) => docMe.current.text)
           .placeholder('private text here...')
           .margin([0, 0, 15, 0])
@@ -282,8 +281,8 @@ export default Dev.describe('PeerCard', async (e) => {
         const latest = history[history.length - 1];
         return (
           <CrdtInfo
-            fields={['Module', 'History.Total', 'History.Item']}
-            margin={[15, 30, 0, 30]}
+            fields={['Module', 'File', 'History.Total', 'History.Item']}
+            margin={[15, 30, 5, 30]}
             data={{
               history: {
                 data: history,
