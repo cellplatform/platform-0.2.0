@@ -9,7 +9,7 @@ import type { ObjectViewTheme } from './types.mjs';
 export type ObjectViewProps = {
   name?: string;
   data?: any;
-  expand?: number | { level?: number; paths?: string[] };
+  expand?: number | { level?: number; paths?: string[] | boolean };
   showNonenumerable?: boolean;
   showRootSummary?: boolean;
   sortObjectKeys?: boolean;
@@ -65,12 +65,14 @@ const Wrangle = {
       TREENODE_LINE_HEIGHT: lineHeight,
     };
   },
+
   baseTheme(theme?: ObjectViewTheme) {
     theme = theme ?? DEFAULTS.theme;
     if (theme === 'Light') return chromeLight;
     if (theme === 'Dark') return chromeDark;
     throw new Error(`Theme '${theme}' not supported.`);
   },
+
   expand(props: ObjectViewProps) {
     const { expand } = props;
     let expandLevel: number | undefined = undefined;
@@ -82,7 +84,7 @@ const Wrangle = {
 
     if (typeof expand === 'object') {
       expandLevel = expand.level;
-      expandPaths = expand.paths;
+      expandPaths = Array.isArray(expand.paths) ? expand.paths : undefined;
     }
 
     return { expandLevel, expandPaths };
