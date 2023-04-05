@@ -8,8 +8,7 @@ export type PropListTitleProps = {
 };
 
 export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
-  const { data } = props;
-  const { value, ellipsis = true, margin = [0, 0, 5, 0] } = Wrangle.title(data);
+  const { value, ellipsis = true, margin = [0, 0, 5, 0] } = Wrangle.title(props.data);
   const content = Wrangle.titleValue(value);
   const theme = Wrangle.theme(props.theme);
 

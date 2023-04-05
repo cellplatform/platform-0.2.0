@@ -47,7 +47,7 @@ export const Wrangle = {
   title(input?: t.PropListTitleInput): t.PropListTitle {
     if (!input) return { value: [null, null] };
 
-    if (typeof input === 'object') {
+    if (typeof input === 'object' && !Array.isArray(input)) {
       const obj = input as t.PropListTitle;
       const value = Wrangle.titleValue(obj.value);
       return { ...obj, value };
