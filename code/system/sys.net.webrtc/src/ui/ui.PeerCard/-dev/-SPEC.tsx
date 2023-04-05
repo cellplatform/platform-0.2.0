@@ -225,7 +225,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('NetworkSchema (genesis)', (e) => {
+      dev.button('Network (Genesis Schema)', (e) => {
         const { schema } = NetworkSchema.genesis();
         console.info('NetworkSchema.genesis', schema.sourceFile);
       });
