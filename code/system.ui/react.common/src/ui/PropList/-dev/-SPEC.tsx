@@ -21,6 +21,7 @@ type T = {
 const initial: T = {
   props: {
     title: 'MyTitle',
+    titleMargin: [30, 50],
     titleEllipsis: true,
     defaults: { clipboard: false },
     theme: 'Light',
@@ -81,6 +82,13 @@ export default Dev.describe('PropList', (e) => {
           .value((e) => e.state.props.defaults?.monospace)
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
       );
+
+      dev.hr(-1, 5);
+
+      dev.button('toggle: titleMargin', (e) => {
+        const current = e.state.current.props.titleMargin;
+        e.change((d) => (d.props.titleMargin = current ? undefined : [30, 50]));
+      });
 
       dev.hr();
     });

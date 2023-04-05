@@ -8,7 +8,7 @@ import { Util } from './Util.mjs';
  * Component
  */
 export const PropList: React.FC<t.PropListProps> = (props) => {
-  const { title, theme = DEFAULTS.theme, titleEllipsis } = props;
+  const { title, titleMargin = [0, 0, 5, 0], theme = DEFAULTS.theme, titleEllipsis } = props;
   const items = Util.asItems(props.items);
   const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
   const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
@@ -35,7 +35,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       ...Style.toPadding(props.padding),
     }),
     items: css({}),
-    title: css({ marginBottom: 5 }),
+    title: css({ ...Style.toMargins(titleMargin) }),
   };
 
   const elItems = items

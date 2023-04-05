@@ -8,6 +8,7 @@ export type PropListTheme = t.CommonTheme;
 export type PropListTitleProps = {
   title?: string | JSX.Element | null;
   titleEllipsis?: boolean;
+  titleMargin?: t.CssEdgesInput;
 };
 
 export type PropListProps = PropListTitleProps & {
