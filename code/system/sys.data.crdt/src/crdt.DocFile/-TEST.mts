@@ -131,6 +131,9 @@ export default Test.describe('DocFile', (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial);
 
+      const fired: t.CrdtFileAction<D>[] = [];
+      file.$.subscribe((e) => fired.push(e));
+
       expect(await file.exists()).to.eql(false);
       expect((await filedir.manifest()).files).to.eql([]);
 
@@ -139,6 +142,10 @@ export default Test.describe('DocFile', (e) => {
 
       expect(await file.exists()).to.eql(true);
       expect(m.files.length).to.eql(1);
+
+      expect(fired.length).to.eql(1);
+      expect(fired[0].action).to.eql('saved');
+      expect(fired[0].doc).to.eql(file.doc.current);
 
       file.dispose();
     });

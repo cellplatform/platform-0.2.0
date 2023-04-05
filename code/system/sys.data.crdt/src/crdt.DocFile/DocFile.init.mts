@@ -29,8 +29,10 @@ export async function createDocFile<D extends {}>(
   dispose$.subscribe(() => {
     _isDisposed = true;
     onChange$.complete();
+    action$.complete();
   });
 
+  const action$ = new rx.Subject<t.CrdtFileAction<D>>();
   const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
     if (!_isDisposed) {
@@ -59,6 +61,11 @@ export async function createDocFile<D extends {}>(
      * CRDT document reference.
      */
     doc,
+
+    /**
+     * Observable events.
+     */
+    $: action$.pipe(rx.takeUntil(dispose$)),
 
     /**
      * Flag indicating if the document is autosaved after (de-bounced) changes.
@@ -106,6 +113,10 @@ export async function createDocFile<D extends {}>(
     async save() {
       if (api.disposed) return;
       await filedir.write(filename, Automerge.save(doc.current));
+      action$.next({
+        doc: doc.current,
+        action: 'saved',
+      });
     },
 
     /**
