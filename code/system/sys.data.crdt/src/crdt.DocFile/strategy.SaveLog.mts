@@ -19,6 +19,12 @@ export function saveLogStrategy<D extends {} = {}>(
       const count = (await logdir.manifest()).files.length;
       const filename = `${count}.${slug()}`;
       const { bytes, hash } = await logdir.write(filename, e.change);
-      onSave?.({ action: 'saved:log', filename, bytes, hash });
+      onSave?.({
+        action: 'saved',
+        kind: 'log',
+        filename,
+        bytes,
+        hash,
+      });
     });
 }

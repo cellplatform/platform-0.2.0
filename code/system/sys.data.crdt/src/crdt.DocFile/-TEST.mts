@@ -146,7 +146,8 @@ export default Test.describe('DocFile', (e) => {
       expect(fired.length).to.eql(1);
 
       const event = fired[0] as t.CrdtFileActionSaved;
-      expect(event.action).to.eql('saved:file');
+      expect(event.action).to.eql('saved');
+      expect(event.kind).to.eql('file');
       expect(event.filename).to.eql('crdt.data');
       expect(event.hash).to.match(/^sha256-/);
       expect(event.bytes).to.be.greaterThan(0);
@@ -200,12 +201,23 @@ export default Test.describe('DocFile', (e) => {
       await file.delete();
       expect(await getCount()).to.eql(0);
 
+      expect(fired.length).to.eql(2);
+      expect(fired[0].action).to.eql('saved');
+      expect(fired[1].action).to.eql('deleted');
+
+      const event = fired[1] as t.CrdtFileActionDeleted;
+      expect(event.file).to.eql(1);
+      expect(event.logfiles).to.eql(0);
+
       file.dispose();
     });
 
     e.it('delete: file-log', async (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial, { logsave: true });
+
+      const fired: t.CrdtFileAction[] = [];
+      file.$.subscribe((e) => fired.push(e));
 
       const getManifestFiles = async () => (await filedir.manifest()).files;
 
@@ -219,6 +231,17 @@ export default Test.describe('DocFile', (e) => {
 
       expect(files1.length).to.eql(3);
       expect(files2.length).to.eql(0);
+
+      await Time.wait(10);
+      expect(fired.length).to.eql(4);
+      expect(fired[0].action).to.eql('saved');
+      expect(fired[1].action).to.eql('saved');
+      expect(fired[2].action).to.eql('saved');
+      expect(fired[3].action).to.eql('deleted');
+
+      const event = fired[3] as t.CrdtFileActionDeleted;
+      expect(event.file).to.eql(0);
+      expect(event.logfiles).to.eql(3);
 
       file.dispose();
     });
@@ -351,7 +374,8 @@ export default Test.describe('DocFile', (e) => {
       expect(fired.length).to.greaterThan(1);
 
       const event = fired[0] as t.CrdtFileActionSaved;
-      expect(event.action).to.eql('saved:log');
+      expect(event.action).to.eql('saved');
+      expect(event.kind).to.eql('log');
 
       expect(event.filename.length).to.greaterThan(5);
       expect(event.hash).to.match(/^sha256-/);

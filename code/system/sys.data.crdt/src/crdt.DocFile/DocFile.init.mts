@@ -117,7 +117,8 @@ export async function createDocFile<D extends {}>(
       const data = Automerge.save(doc.current);
       const { bytes, hash } = await filedir.write(filename, data);
       action$.next({
-        action: 'saved:file',
+        action: 'saved',
+        kind: 'file',
         filename,
         bytes,
         hash,
@@ -129,14 +130,23 @@ export async function createDocFile<D extends {}>(
      */
     async delete() {
       // Single file.
+      const exists = await filedir.exists(filename);
       await filedir.delete(filename);
 
       // Log files.
       const logdir = filedir.dir(DEFAULTS.doc.logdir);
       const log = await logdir.manifest();
-      if (log.files.length > 0) {
+      const logfiles = log.files.length;
+      if (logfiles > 0) {
         await Promise.all(log.files.map((file) => logdir.delete(file.path)));
       }
+
+      // Alert listeners.
+      action$.next({
+        action: 'deleted',
+        file: exists ? 1 : 0,
+        logfiles,
+      });
     },
 
     /**

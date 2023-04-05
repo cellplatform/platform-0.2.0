@@ -27,7 +27,8 @@ export type CrdtFileActionKind = CrdtFileAction['action'];
 export type CrdtFileAction = CrdtFileActionSaved | CrdtFileActionDeleted;
 
 export type CrdtFileActionSaved = {
-  action: 'saved:file' | 'saved:log';
+  action: 'saved';
+  kind: 'file' | 'log';
   filename: string;
   bytes: number;
   hash: string;
@@ -35,4 +36,6 @@ export type CrdtFileActionSaved = {
 
 export type CrdtFileActionDeleted = {
   action: 'deleted';
+  file: number;
+  logfiles: number;
 };
