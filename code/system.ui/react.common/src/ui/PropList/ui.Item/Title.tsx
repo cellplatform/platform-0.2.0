@@ -17,17 +17,19 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
 
   const styles = {
     base: css({
+      flex: 1,
       boxSizing: 'border-box',
       position: 'relative',
-      flex: 1,
-      fontWeight: 'bold',
-      fontSize: DEFAULTS.fontSize + 1,
-      color: theme.color.base,
       ...Style.toPadding(margin),
 
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',
       columnGap: 8,
+    }),
+    edge: css({
+      fontWeight: 'bold',
+      fontSize: DEFAULTS.fontSize + 1,
+      color: theme.color.base,
     }),
     ellipsis: css({
       whiteSpace: 'nowrap',
@@ -36,13 +38,13 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
     }),
   };
 
-  const edge = css(ellipsis && styles.ellipsis);
+  const edge = css(styles.edge, ellipsis && styles.ellipsis);
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{content[0]}</div>
+      <div {...edge}>{content[0]}</div>
       <div />
-      <div>{content[1]}</div>
+      <div {...edge}>{content[1]}</div>
     </div>
   );
 };
