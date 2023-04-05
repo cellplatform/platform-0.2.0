@@ -95,7 +95,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 ---
 
-Ideas, history, context:
+### Ideas, history, context:
 
 - [video](https://www.youtube.com/watch?v=Ud8WRAdihPg) Alan Kay, Learning and Computer Science, 1970s, [video](https://www.youtube.com/watch?v=YyIQKBzIuBY) Alan Kay, 2011, Programming and Scaling
 - [video](https://www.youtube.com/watch?v=cmi-AXKvx30&t=323s) David Clark (1960's vs. 1970/80's)  
@@ -104,14 +104,23 @@ Ideas, history, context:
 - [video](https://youtu.be/0fpDlAEQio4?t=2641) SmallTalk (1976, 1980), only three primitive concepts. Everything is an object*, everything is a "message", be as extremely late-bound as possible. Build everything else up and out of that (aka. LISP-ey).
 
 
-*NB: "object" meaning the original SmallTalk conception of "object," not the later "OOP" notions that emerged later ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
+*NB: "object" meaning the original SmallTalk conception of "object," not the later "OOP" notions that emerged in the following decades ([ref.related](https://youtu.be/o4Xgx7bg3Lg?t=118)).
+
+<img width="710" alt="image" src="https://user-images.githubusercontent.com/185555/230206000-abc1c9bf-8ef4-477c-9740-53fd4a4c8186.png">
+
+[Augmenting Human Intellect](https://www.dougengelbart.org/content/view/138/): A Conceptual Framework  
+1962, Douglas C. Engelbart, SRI Summary Report - [ref](https://www.dougengelbart.org/content/view/138/)
+
+<p>&nbsp;</p>
+
+>> “We refer to a way of life in an integrated domain where hunches, **cut-and-try**, intangibles and **human “feel for a situation”** usefully co-exist with powerful concepts, streamlines terminology and notation, sophisticated methods, and high-powered electronic aids.
 
 ---
 
 <p>&nbsp;</p>
 
 ## Human Systems 
-(aka. the "all of us"). Social/relational networks and people, across scales. "People" not "users." 
+(aka. the "all of us"). Diverse social/relational networks of people, across scales. "People" not "users." 
 
 <p>&nbsp;</p>
 
