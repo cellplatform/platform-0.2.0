@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Color, copyPeer, css, FC, MediaStream, Spinner, t, useMouseState } from '../common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
-import { Footer } from './ui.Footer';
+import { ConnectInput } from '../ui.ConnectInput';
 
 const DEFAULTS = {
   muted: false,
@@ -26,6 +26,7 @@ export type PeerCardProps = {
   spinning?: boolean;
   showPeer?: boolean;
   showConnect?: boolean;
+  devPanelWidth?: number;
 
   style?: t.CssValue;
   fill?: boolean;
@@ -96,12 +97,13 @@ const View: React.FC<PeerCardProps> = (props) => {
         display: 'grid',
         placeItems: 'center',
       }),
-      media: css({
+      mediaOuter: css({
         Absolute: 0,
         overflow: 'hidden',
         display: 'grid',
         placeItems: 'center',
       }),
+      media: css({ Absolute: 0 }),
     },
 
     peer: css({
@@ -129,8 +131,8 @@ const View: React.FC<PeerCardProps> = (props) => {
   };
 
   const elVideo = stream && (
-    <div {...styles.video.media}>
-      <MediaStream.Video stream={stream} muted={muted} />
+    <div {...styles.video.mediaOuter}>
+      <MediaStream.Video stream={stream} muted={muted} {...styles.video.media} />
     </div>
   );
 
@@ -160,7 +162,7 @@ const View: React.FC<PeerCardProps> = (props) => {
         {elPeerCopied}
         {elSpinner}
       </div>
-      <Footer
+      <ConnectInput
         style={styles.footer}
         self={self}
         remotePeer={props.remotePeer}
