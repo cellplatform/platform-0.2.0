@@ -1,5 +1,5 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
-import { Color, Crdt, Dev, PropList, t } from '../../test.ui';
+import { Card, Color, Crdt, Dev, PropList, t, rx, getTestFs } from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
@@ -14,6 +14,11 @@ export default Dev.describe('CrdtInfo', (e) => {
   type Doc = { count: number };
   const initialDoc: Doc = { count: 0 };
   const doc = Crdt.Doc.ref<Doc>(initialDoc);
+  const bus = rx.bus();
+  const fs = await getTestFs(bus);
+  const fsdirs = {
+    doc: fs.dir('dev.CrdtInfo.doc'),
+  };
 
   type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.CrdtInfo');
