@@ -7,6 +7,7 @@ export function saveLogStrategy<D extends {} = {}>(
   dir: t.Fs,
   onChange$: t.Observable<t.CrdtDocRefChangeHandlerArgs<D>>,
   dispose$: t.Observable<any>,
+  onSave?: (e: t.CrdtFileActionSaved) => void,
 ) {
   const logdir = dir.dir(DEFAULTS.doc.logdir);
   onChange$
@@ -17,6 +18,7 @@ export function saveLogStrategy<D extends {} = {}>(
     .subscribe(async (e) => {
       const count = (await logdir.manifest()).files.length;
       const filename = `${count}.${slug()}`;
-      await logdir.write(filename, e.change);
+      const { bytes, hash } = await logdir.write(filename, e.change);
+      onSave?.({ action: 'saved:log', filename, bytes, hash });
     });
 }

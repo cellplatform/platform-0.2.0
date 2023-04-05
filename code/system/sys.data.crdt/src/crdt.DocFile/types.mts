@@ -5,7 +5,7 @@ import type { t } from '../common.t';
  */
 export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly kind: 'Crdt:DocFile';
-  readonly $: t.Observable<CrdtFileAction<D>>;
+  readonly $: t.Observable<CrdtFileAction>;
   readonly doc: t.CrdtDocRef<D>;
   readonly disposed: boolean;
   readonly isAutosaving: boolean;
@@ -14,6 +14,7 @@ export type CrdtDocFile<D extends {}> = t.Disposable & {
   info(): Promise<CrdtFileInfo>;
   load(): Promise<void>;
   save(): Promise<void>;
+  delete(): Promise<void>;
 };
 
 export type CrdtFileInfo = {
@@ -22,8 +23,16 @@ export type CrdtFileInfo = {
   readonly manifest: t.DirManifest;
 };
 
-export type CrdtFileActionKind = CrdtFileAction<{}>['action'];
-export type CrdtFileAction<D extends {}> = {
-  doc: D;
-  action: 'saved';
+export type CrdtFileActionKind = CrdtFileAction['action'];
+export type CrdtFileAction = CrdtFileActionSaved | CrdtFileActionDeleted;
+
+export type CrdtFileActionSaved = {
+  action: 'saved:file' | 'saved:log';
+  filename: string;
+  bytes: number;
+  hash: string;
+};
+
+export type CrdtFileActionDeleted = {
+  action: 'deleted';
 };

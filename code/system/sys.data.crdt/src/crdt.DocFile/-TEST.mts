@@ -131,7 +131,7 @@ export default Test.describe('DocFile', (e) => {
       const filedir = TestFilesystem.memory().fs;
       const file = await DocFile.init<D>(filedir, initial);
 
-      const fired: t.CrdtFileAction<D>[] = [];
+      const fired: t.CrdtFileAction[] = [];
       file.$.subscribe((e) => fired.push(e));
 
       expect(await file.exists()).to.eql(false);
@@ -144,8 +144,12 @@ export default Test.describe('DocFile', (e) => {
       expect(m.files.length).to.eql(1);
 
       expect(fired.length).to.eql(1);
-      expect(fired[0].action).to.eql('saved');
-      expect(fired[0].doc).to.eql(file.doc.current);
+
+      const event = fired[0] as t.CrdtFileActionSaved;
+      expect(event.action).to.eql('saved:file');
+      expect(event.filename).to.eql('crdt.data');
+      expect(event.hash).to.match(/^sha256-/);
+      expect(event.bytes).to.be.greaterThan(0);
 
       file.dispose();
     });
@@ -175,6 +179,46 @@ export default Test.describe('DocFile', (e) => {
       expect(file.doc).to.equal(original.ref); // NB: Replaces the underlying Automerge doc, not the ref.
       expect(file.doc.current).to.not.equal(original.doc);
       expect(file.doc.current).to.eql(original.doc); // NB: Equivalent but not the same instance.
+
+      file.dispose();
+    });
+
+    e.it('delete: file', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile.init<D>(filedir, initial);
+
+      const fired: t.CrdtFileAction[] = [];
+      file.$.subscribe((e) => fired.push(e));
+
+      const getManifest = () => filedir.manifest();
+      const getCount = async () => (await getManifest()).files.length;
+      expect(await getCount()).to.eql(0);
+
+      await file.save();
+      expect(await getCount()).to.eql(1);
+
+      await file.delete();
+      expect(await getCount()).to.eql(0);
+
+      file.dispose();
+    });
+
+    e.it('delete: file-log', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile.init<D>(filedir, initial, { logsave: true });
+
+      const getManifestFiles = async () => (await filedir.manifest()).files;
+
+      file.doc.change((d) => (d.count = 123));
+      file.doc.change((d) => (d.name = 'foo'));
+      await Time.wait(10);
+
+      const files1 = await getManifestFiles();
+      await file.delete();
+      const files2 = await getManifestFiles();
+
+      expect(files1.length).to.eql(3);
+      expect(files2.length).to.eql(0);
 
       file.dispose();
     });
@@ -291,6 +335,29 @@ export default Test.describe('DocFile', (e) => {
       const file2 = await DocFile.init<D>(filedir, initial, { logsave: true });
       expect(file1.isLogging).to.eql(false); // NB: default.
       expect(file2.isLogging).to.eql(true);
+    });
+
+    e.it('fires "saved:log" action ($)', async (e) => {
+      const filedir = TestFilesystem.memory().fs;
+      const file = await DocFile.init<D>(filedir, initial, { logsave: true });
+
+      const fired: t.CrdtFileAction[] = [];
+      file.$.subscribe((e) => fired.push(e));
+
+      file.doc.change((d) => (d.count = 123));
+      file.doc.change((d) => (d.name = 'foo'));
+      await Time.wait(10);
+
+      expect(fired.length).to.greaterThan(1);
+
+      const event = fired[0] as t.CrdtFileActionSaved;
+      expect(event.action).to.eql('saved:log');
+
+      expect(event.filename.length).to.greaterThan(5);
+      expect(event.hash).to.match(/^sha256-/);
+      expect(event.bytes).to.be.greaterThan(0);
+
+      file.dispose();
     });
 
     e.it('multiple changes stored in "log.changes/" directory', async (e) => {

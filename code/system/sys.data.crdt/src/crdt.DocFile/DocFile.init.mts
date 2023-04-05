@@ -32,7 +32,7 @@ export async function createDocFile<D extends {}>(
     action$.complete();
   });
 
-  const action$ = new rx.Subject<t.CrdtFileAction<D>>();
+  const action$ = new rx.Subject<t.CrdtFileAction>();
   const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
     if (!_isDisposed) {
@@ -42,7 +42,9 @@ export async function createDocFile<D extends {}>(
   };
 
   // NB: Must be initialized before the [DocRef] below to catch the first change (upon initialization).
-  if (Wrangle.isLogging(options)) saveLogStrategy(filedir, onChange$, dispose$);
+  if (Wrangle.isLogging(options)) {
+    saveLogStrategy(filedir, onChange$, dispose$, (e) => action$.next(e));
+  }
 
   /**
    * [DocRef]
@@ -112,11 +114,29 @@ export async function createDocFile<D extends {}>(
      */
     async save() {
       if (api.disposed) return;
-      await filedir.write(filename, Automerge.save(doc.current));
+      const data = Automerge.save(doc.current);
+      const { bytes, hash } = await filedir.write(filename, data);
       action$.next({
-        doc: doc.current,
-        action: 'saved',
+        action: 'saved:file',
+        filename,
+        bytes,
+        hash,
       });
+    },
+
+    /**
+     * Delete the document from the file-system.
+     */
+    async delete() {
+      // Single file.
+      await filedir.delete(filename);
+
+      // Log files.
+      const logdir = filedir.dir(DEFAULTS.doc.logdir);
+      const log = await logdir.manifest();
+      if (log.files.length > 0) {
+        await Promise.all(log.files.map((file) => logdir.delete(file.path)));
+      }
     },
 
     /**
