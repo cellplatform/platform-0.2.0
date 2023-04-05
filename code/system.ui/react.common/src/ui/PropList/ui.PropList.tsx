@@ -8,7 +8,7 @@ import { Wrangle } from './Util.mjs';
  * Component
  */
 export const PropList: React.FC<t.PropListProps> = (props) => {
-  const { title, theme = DEFAULTS.theme } = props;
+  const { theme = DEFAULTS.theme } = props;
   const items = Wrangle.items(props.items);
   const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
   const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
@@ -54,16 +54,8 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       );
     });
 
-  const elTitle = title && (
-    <PropListTitle
-      style={styles.title}
-      theme={theme}
-      defaults={defaults}
-      ellipsis={props.titleEllipsis}
-      margin={props.titleMargin}
-    >
-      {title}
-    </PropListTitle>
+  const elTitle = props.title && (
+    <PropListTitle style={styles.title} theme={theme} defaults={defaults} data={props.title} />
   );
 
   return (

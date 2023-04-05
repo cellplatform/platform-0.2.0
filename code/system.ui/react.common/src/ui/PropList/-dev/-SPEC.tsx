@@ -1,6 +1,7 @@
 import { PropList } from '.';
 import { Dev, t } from '../../../test.ui';
 import { BuilderSample, sampleItems, SampleFields } from '.';
+import { Wrangle } from '../Util.mjs';
 
 import type { MyFields } from '.';
 
@@ -21,8 +22,6 @@ type T = {
 const initial: T = {
   props: {
     title: 'MyTitle',
-    titleMargin: undefined,
-    titleEllipsis: true,
     defaults: { clipboard: false },
     theme: 'Light',
   },
@@ -82,38 +81,52 @@ export default Dev.describe('PropList', (e) => {
     });
 
     dev.section('Title', (dev) => {
-      const title = (label: string, value: t.PropListTitleProps['title']) => {
-        dev.button(`set: ${label}`, (e) => e.change((d) => (d.props.title = value)));
+      const Title = {
+        read(state: T) {
+          return Wrangle.title(state.props.title);
+        },
+        obj(state: T): t.PropListTitle {
+          const current = state.props.title;
+          if (typeof current === 'object' && current !== null) return current as t.PropListTitle;
+          return (state.props.title = {});
+        },
       };
 
       const lorem = Dev.Lorem.words(50);
+      const titleButton = (label: string, value: t.PropListTitle['value']) => {
+        dev.button(`set: ${label}`, (e) => {
+          e.change((d) => (Title.obj(d).value = value));
+        });
+      };
 
-      title('none (undefined)', undefined);
+      titleButton('none (undefined)', undefined);
       dev.hr(-1, 5);
-      title('"MyTitle"', 'MyTitle');
-      title('long (50 words)', lorem);
+      titleButton('"MyTitle"', 'MyTitle');
+      titleButton('long (50 words)', lorem);
       dev.hr(-1, 5);
-      title('[ "Left", "Right" ]', ['Left', 'Right']);
-      title('[ (long), "Right" ]', [lorem, 'Right']);
-      title('[ "Left", (long) ]', ['Left', lorem]);
-      title('[ (long), (long) ]', [lorem, lorem]);
+      titleButton('[ "Left", "Right" ]', ['Left', 'Right']);
+      titleButton('[ (long), "Right" ]', [lorem, 'Right']);
+      titleButton('[ "Left", (long) ]', ['Left', lorem]);
+      titleButton('[ (long), (long) ]', [lorem, lorem]);
 
       dev.hr(1, 5);
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `ellipsis: ${Boolean(e.state.props.titleEllipsis)}`)
-          .value((e) => e.state.props.titleEllipsis)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'titleEllipsis'))),
+          .label((e) => `ellipsis: ${Boolean(Title.read(e.state).ellipsis)}`)
+          .value((e) => Title.read(e.state).ellipsis)
+          .onClick((e) => e.change((d) => Dev.toggle(Title.obj(d), 'ellipsis'))),
       );
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `margin: ${e.state.props.titleMargin || '(default)'}`)
-          .value((e) => Boolean(e.state.props.titleMargin))
+          .label((e) => `margin: ${Title.read(e.state).margin || '(default)'}`)
+          .value((e) => Boolean(Title.read(e.state).margin))
           .onClick((e) => {
-            const current = e.state.current.props.titleMargin;
-            e.change((d) => (d.props.titleMargin = current ? undefined : [30, 50]));
+            e.change((d) => {
+              const title = Title.obj(d);
+              title.margin = title.margin ? undefined : [30, 50];
+            });
           }),
       );
     });

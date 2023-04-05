@@ -44,9 +44,25 @@ export const Wrangle = {
     return input.toString();
   },
 
-  renderTitle(input: t.PropListTitleProps['title']): [t.PropListTitle, t.PropListTitle] {
+  title(input?: t.PropListTitleInput): t.PropListTitle {
+    if (!input) return { value: [null, null] };
+
+    if (typeof input === 'object') {
+      const obj = input as t.PropListTitle;
+      const value = Wrangle.titleValue(obj.value);
+      return { ...obj, value };
+    }
+
+    const value = Wrangle.titleValue(input);
+    return { value };
+  },
+
+  titleValue(input: t.PropListTitle['value']): [t.PropListTitleContent, t.PropListTitleContent] {
     if (!input) return [null, null];
+
     const list = Array.isArray(input) ? input : [input];
-    return [list[0] ?? null, list[1] ?? null];
+    const left = list[0] ?? null;
+    const right = list[1] ?? null;
+    return [left, right] as [t.PropListTitleContent, t.PropListTitleContent];
   },
 };

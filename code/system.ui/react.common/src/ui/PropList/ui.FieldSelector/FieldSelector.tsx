@@ -65,7 +65,6 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   return (
     <PropList
       title={props.title}
-      titleEllipsis={props.titleEllipsis}
       items={items}
       defaults={{ clipboard: false }}
       style={css(styles.base, props.style)}

@@ -1,19 +1,19 @@
 import { Style, css, DEFAULTS, t, Wrangle } from './common';
 
 export type PropListTitleProps = {
-  children?: t.PropListTitleProps['title'];
-  margin?: t.PropListTitleProps['titleMargin'];
+  data?: t.PropListTitleInput;
   defaults: t.PropListDefaults;
-  ellipsis?: boolean;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
-  const { ellipsis = true, margin = [0, 0, 5, 0] } = props;
-
+  const { data } = props;
+  const { value, ellipsis = true, margin = [0, 0, 5, 0] } = Wrangle.title(data);
+  const content = Wrangle.titleValue(value);
   const theme = Wrangle.theme(props.theme);
-  const content = Wrangle.renderTitle(props.children);
+
+  if (!content[0] && !content[1]) return null;
 
   const styles = {
     base: css({

@@ -4,15 +4,17 @@ import type { t } from '../common.t';
  * Component: <PropList>
  */
 export type PropListTheme = t.CommonTheme;
-export type PropListTitle = string | JSX.Element | null;
 
-export type PropListTitleProps = {
-  title?: PropListTitle | [PropListTitle, PropListTitle];
-  titleEllipsis?: boolean;
-  titleMargin?: t.CssEdgesInput;
+export type PropListTitleInput = PropListTitle['value'] | PropListTitle;
+export type PropListTitleContent = string | JSX.Element | null;
+export type PropListTitle = {
+  value?: PropListTitleContent | [PropListTitleContent, PropListTitleContent];
+  ellipsis?: boolean;
+  margin?: t.CssEdgesInput;
 };
 
-export type PropListProps = PropListTitleProps & {
+export type PropListProps = {
+  title?: t.PropListTitleInput;
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
   padding?: t.CssEdgesInput;
@@ -26,7 +28,8 @@ export type PropListProps = PropListTitleProps & {
 /**
  * Component: <PropsList.FieldSelector>
  */
-export type PropListFieldSelectorProps<F extends string = string> = t.PropListTitleProps & {
+export type PropListFieldSelectorProps<F extends string = string> = {
+  title?: t.PropListTitleInput;
   all?: F[];
   selected?: F[];
   resettable?: boolean;
