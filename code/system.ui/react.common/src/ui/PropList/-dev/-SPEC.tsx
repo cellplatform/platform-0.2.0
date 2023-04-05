@@ -21,7 +21,7 @@ type T = {
 const initial: T = {
   props: {
     title: 'MyTitle',
-    titleMargin: [30, 50],
+    titleMargin: undefined,
     titleEllipsis: true,
     defaults: { clipboard: false },
     theme: 'Light',
@@ -90,11 +90,11 @@ export default Dev.describe('PropList', (e) => {
         e.change((d) => (d.props.titleMargin = current ? undefined : [30, 50]));
       });
 
-      dev.hr();
+      dev.hr(5, 20);
     });
 
     dev.section('Title', (dev) => {
-      dev.button('none', (e) => e.change((d) => (d.props.title = undefined)));
+      dev.button('none (undefined)', (e) => e.change((d) => (d.props.title = undefined)));
       dev.button('"MyTitle"', (e) => e.change((d) => (d.props.title = 'MyTitle')));
       dev.button('long (50 words)', (e) => e.change((d) => (d.props.title = Dev.Lorem.words(50))));
     });

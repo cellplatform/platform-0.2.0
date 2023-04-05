@@ -1,6 +1,6 @@
 import { DEFAULTS, FC, t, THEMES } from './common';
 import { FieldBuilder } from './FieldBuilder.mjs';
-import { PropList as View } from './PropList.View';
+import { PropList as View } from './ui.PropList';
 import { PropListProps } from './types.mjs';
 import { FieldSelector } from './ui.FieldSelector';
 

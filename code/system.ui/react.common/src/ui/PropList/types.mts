@@ -4,9 +4,10 @@ import type { t } from '../common.t';
  * Component: <PropList>
  */
 export type PropListTheme = t.CommonTheme;
+export type PropListTitle = string | JSX.Element | null;
 
 export type PropListTitleProps = {
-  title?: string | JSX.Element | null;
+  title?: PropListTitle | [PropListTitle, PropListTitle];
   titleEllipsis?: boolean;
   titleMargin?: t.CssEdgesInput;
 };

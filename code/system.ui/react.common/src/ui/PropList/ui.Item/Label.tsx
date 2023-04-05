@@ -1,4 +1,4 @@
-import { css, t, toTheme } from './common';
+import { css, t, Wrangle } from './common';
 
 export type PropListLabelProps = {
   data: t.PropListItem;
@@ -8,7 +8,7 @@ export type PropListLabelProps = {
 };
 
 export const PropListLabel: React.FC<PropListLabelProps> = (props) => {
-  const theme = toTheme(props.theme);
+  const theme = Wrangle.theme(props.theme);
 
   const styles = {
     base: css({

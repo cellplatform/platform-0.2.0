@@ -1,19 +1,19 @@
 import { t } from './common';
 import { format } from './Util.format.mjs';
-import { toTheme } from './Util.theme.mjs';
+import { theme } from './Util.theme.mjs';
 
-export const Util = {
+export const Wrangle = {
   format,
-  theme: toTheme,
+  theme,
 
-  asItems(input: t.PropListProps['items']) {
+  items(input: t.PropListProps['items']) {
     if (Array.isArray(input)) {
       return input;
     }
 
     if (typeof input === 'object') {
       return Object.keys(input).map((key) => {
-        const item: t.PropListItem = { label: key, value: Util.toRenderValue(input[key]) };
+        const item: t.PropListItem = { label: key, value: Wrangle.renderValue(input[key]) };
         return item;
       });
     }
@@ -21,7 +21,7 @@ export const Util = {
     return [];
   },
 
-  toRenderValue(input: any) {
+  renderValue(input: any) {
     if (input === null) return null;
     if (input === undefined) return undefined;
 

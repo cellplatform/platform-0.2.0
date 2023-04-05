@@ -2,14 +2,14 @@ import { COLORS, css, DEFAULTS, Style, t } from './common';
 
 import { PropListItem } from './ui.Item/Item';
 import { PropListTitle } from './ui.Item/Title';
-import { Util } from './Util.mjs';
+import { Wrangle } from './Util.mjs';
 
 /**
  * Component
  */
 export const PropList: React.FC<t.PropListProps> = (props) => {
   const { title, titleMargin = [0, 0, 5, 0], theme = DEFAULTS.theme, titleEllipsis } = props;
-  const items = Util.asItems(props.items);
+  const items = Wrangle.items(props.items);
   const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
   const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
 

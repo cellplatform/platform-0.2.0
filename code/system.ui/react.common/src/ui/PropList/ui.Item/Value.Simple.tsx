@@ -1,6 +1,6 @@
 import { Color, COLORS, css, t } from './common';
 import { CopyIcon } from './CopyIcon';
-import { toTheme } from '../Util.theme.mjs';
+import { Wrangle } from '../Util.mjs';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
@@ -60,7 +60,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 function toTextColor(props: SimpleValueProps) {
   if (props.value.color !== undefined) return Color.format(props.value.color);
 
-  const theme = toTheme(props.theme);
+  const theme = Wrangle.theme(props.theme);
   if (props.message) return theme.color.alpha(0.3);
 
   const is = toFlags(props);
