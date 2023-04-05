@@ -212,7 +212,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Environment', (dev) => {
-      dev.button('redraw', (e) => e.change((d) => d.debug.redraw++));
+      dev.button('redraw', (e) => dev.redraw());
 
       dev.boolean((btn) =>
         btn
@@ -269,7 +269,7 @@ export default Dev.describe('PeerCard', async (e) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right(by > 0 ? '++' : '--')
+            .right(by > 0 ? 'count +1' : 'count -1')
             .onClick((e) => docMe.change((d) => (d.count += by))),
         );
       };
@@ -284,8 +284,8 @@ export default Dev.describe('PeerCard', async (e) => {
           .onEnter((e) => {}),
       );
 
-      count('count: increment', 1);
-      count('count: decrement', -1);
+      count('increment', 1);
+      count('decrement', -1);
     });
 
     dev.hr(5, 20);
@@ -295,12 +295,12 @@ export default Dev.describe('PeerCard', async (e) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right(by > 0 ? '++' : '--')
+            .right(by > 0 ? 'count +1' : 'count -1')
             .onClick((e) => docShared.change((d) => (d.count += by))),
         );
       };
-      count('count: increment', 1);
-      count('count: decrement', -1);
+      count('increment', 1);
+      count('decrement', -1);
 
       dev.hr(-1, 5);
 
