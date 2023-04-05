@@ -43,4 +43,10 @@ export const Wrangle = {
 
     return input.toString();
   },
+
+  renderTitle(input: t.PropListTitleProps['title']): [t.PropListTitle, t.PropListTitle] {
+    if (!input) return [null, null];
+    const list = Array.isArray(input) ? input : [input];
+    return [list[0] ?? null, list[1] ?? null];
+  },
 };
