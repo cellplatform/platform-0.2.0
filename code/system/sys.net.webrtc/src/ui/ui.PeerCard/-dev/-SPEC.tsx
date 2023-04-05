@@ -78,6 +78,34 @@ export default Dev.describe('PeerCard', async (e) => {
     return self;
   }
 
+  e.it('init:keyboard', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    /**
+     * Keyboard shortcut actions.
+     */
+    const keyboard = Keyboard.on({
+      /**
+       * Show/hide right-hand side panel.
+       */
+      'CMD + Backslash'(e) {
+        e.cancel();
+
+        const before = dev.ctx.toObject().props.debug.width;
+        const next = before === 0 ? 400 : 0;
+        const value = dev.ctx.debug.width(next);
+        const after = dev.ctx.toObject().props.debug.width;
+
+        local.sidepanelWidth = after;
+        SharedProps.change((d) => (d.devPanelWidth = after));
+
+        console.log('value', value);
+        console.log('before', before);
+        console.log('after', after);
+      },
+    });
+  });
+
   e.it('init:state', async (e) => {
     const ctx = Dev.ctx(e);
     const dispose$ = ctx.dispose$;
