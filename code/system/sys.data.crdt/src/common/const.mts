@@ -5,7 +5,7 @@ export const DEFAULTS = {
   },
   doc: {
     filename: 'crdt.data',
-    logdir: 'log.localchange',
+    logdir: 'local.log',
     autosaveDebounce: 300,
   },
 } as const;
