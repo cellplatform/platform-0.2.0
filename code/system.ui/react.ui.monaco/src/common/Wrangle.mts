@@ -1,5 +1,8 @@
 import { DEFAULTS } from './const.mjs';
 import type { t } from '../common.t';
+import { Is } from './Is.mjs';
+
+type RangeInput = t.EditorRange | [number, number, number, number] | [number, number];
 
 export const Wrangle = {
   editorClassName(editor?: t.MonacoCodeEditor) {
@@ -35,7 +38,7 @@ export const Wrangle = {
     };
   },
 
-  asIRange(input: t.IRange | [number, number, number, number] | [number, number]) {
+  asRange(input: RangeInput) {
     if (Array.isArray(input)) {
       return input.length === 4
         ? {
@@ -60,8 +63,51 @@ export const Wrangle = {
     };
   },
 
-  asRange(monaco: t.Monaco, input: t.IRange | [number, number, number, number] | [number, number]) {
-    const { startLineNumber, startColumn, endLineNumber, endColumn } = Wrangle.asIRange(input);
+  asMonacoRange(monaco: t.Monaco, input: RangeInput) {
+    const { startLineNumber, startColumn, endLineNumber, endColumn } = Wrangle.asRange(input);
     return new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn);
+  },
+
+  selections(input?: t.EditorSelectionInput): t.EditorRange[] {
+    if (!input) return [];
+
+    type V = t.EditorRange | t.CharPositionTuple;
+    const isValue = (value: V) => Is.editorRange(value) || Is.charPositionTuple(value);
+    const toRange = (value: V): t.EditorRange => {
+      if (Is.editorRange(value)) return value;
+      if (Is.charPositionTuple(value)) {
+        return {
+          startLineNumber: value[0],
+          startColumn: value[1],
+          endLineNumber: value[0],
+          endColumn: value[1],
+        };
+      }
+      throw new Error('Range conversion from input not supported');
+    };
+
+    if (Is.editorRange(input)) return [input];
+    if (Is.charPositionTuple(input)) return [toRange(input)];
+    if (Array.isArray(input)) return (input as V[]).filter(isValue).map(toRange);
+
+    return [];
+  },
+
+  toRangeStart(input: t.EditorRange): t.EditorRange {
+    return {
+      startLineNumber: input.startLineNumber,
+      startColumn: input.startColumn,
+      endLineNumber: input.startLineNumber,
+      endColumn: input.startColumn,
+    };
+  },
+
+  toRangeEnd(input: t.EditorRange): t.EditorRange {
+    return {
+      startLineNumber: input.endLineNumber,
+      startColumn: input.endColumn,
+      endLineNumber: input.endLineNumber,
+      endColumn: input.endColumn,
+    };
   },
 };
