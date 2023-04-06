@@ -37,6 +37,6 @@ export type MonacoCrdtSyncerDocPeersArg<D extends {}> = {
  */
 export type EditorPeersState = { [peerId: string]: EditorPeerState };
 export type EditorPeerState = {
-  selection?: t.IRange;
+  selections?: t.EditorRange[];
   textFocused?: boolean;
 };
