@@ -10,7 +10,7 @@ export function History(data: t.CrdtInfoData): t.PropListItem[] {
 
   res.push({
     label: data.history?.title ?? 'History',
-    value: `${total} ${commits}`,
+    value: `${total.toLocaleString()} ${commits}`,
   });
 
   return res;

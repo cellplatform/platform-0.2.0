@@ -1,7 +1,12 @@
 /**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListItem } from 'sys.ui.react.common/src/types.mjs';
+export type {
+  CssValue,
+  CssEdgesInput,
+  PropListItem,
+  PropListTitleInput,
+} from 'sys.ui.react.common/src/types.mjs';
 export type {
   TestSuiteRunResponse,
   SpecImport,

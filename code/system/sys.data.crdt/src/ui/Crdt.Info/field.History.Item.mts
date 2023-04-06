@@ -1,12 +1,12 @@
-import { t, Time, Value } from './common';
+import { t, Time, Value, Wrangle } from './common';
 
 export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
   const item = data?.history?.item;
   if (!item) return [];
 
   const change = item.data.change;
-  const hash = change.hash.slice(0, 8);
-  const actor = change.actor.slice(0, 8);
+  const hash = change.hash;
+  const actor = change.actor;
   const title = item.title ?? 'History Item';
 
   const res: t.PropListItem[] = [];
@@ -16,8 +16,18 @@ export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
     label: title,
     value: `${change.ops.length} ${Value.plural(change.ops.length, 'operation', 'operations')}`,
   });
-  res.push({ label: 'Actor', value: actor, tooltip: `actor-id: ${change.actor}`, indent });
-  res.push({ label: 'Hash', value: hash, tooltip: `commit hash: ${change.hash}`, indent });
+  res.push({
+    label: 'Actor',
+    value: Wrangle.displayHash(actor, 6),
+    tooltip: `actor-id: ${change.actor}`,
+    indent,
+  });
+  res.push({
+    label: 'Hash',
+    value: Wrangle.displayHash(hash, 6),
+    tooltip: `commit hash: ${change.hash}`,
+    indent,
+  });
 
   if (change.time) {
     const time = Time.day(change.time);
