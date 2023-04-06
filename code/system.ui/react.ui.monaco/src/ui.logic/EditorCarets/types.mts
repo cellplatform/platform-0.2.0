@@ -1,9 +1,5 @@
 import type { t } from '../../common.t';
 
-type LineColumn = [number, number]; // Line, Column.
-
-export type EditorCaretPosition = { line: number; column: number };
-
 export type EditorCarets = t.Disposable & {
   readonly editor: t.MonacoCodeEditor;
   readonly current: EditorCaret[];
@@ -15,13 +11,20 @@ export type EditorCaret = t.Disposable & {
   readonly id: string;
   readonly color: string;
   readonly opacity: number;
-  readonly position: EditorCaretPosition;
+  readonly selections: t.EditorRange[];
   change(args: EditorCaretChangeArgs): EditorCaret;
   eq(args: EditorCaretChangeArgs): boolean;
 };
 
 export type EditorCaretChangeArgs = {
-  position?: t.IRange | LineColumn | null;
+  selections?: EditorSelectionInput;
   color?: string;
   opacity?: number; // 0..1
 };
+
+export type EditorSelectionInput =
+  | t.EditorRange
+  | t.EditorRange[]
+  | t.CharPositionTuple
+  | t.CharPositionTuple[]
+  | null;

@@ -5,7 +5,6 @@ import { Caret } from './Caret.mjs';
  * Manages a set of carets for an editor.
  */
 export function EditorCarets(
-  monaco: t.Monaco,
   editor: t.MonacoCodeEditor,
   options: { dispose$?: t.Observable<any> } = {},
 ) {
@@ -25,7 +24,7 @@ export function EditorCarets(
 
     id(id: string): t.EditorCaret {
       if (carets.has(id)) return carets.get(id)!;
-      const caret = Caret(monaco, editor, id);
+      const caret = Caret(editor, id);
       carets.set(id, caret);
       caret.dispose$.subscribe(() => carets.delete(id));
       return caret;
