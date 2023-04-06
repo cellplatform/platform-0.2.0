@@ -18,7 +18,5 @@ export type EditorRange = {
 };
 
 export type CharPosition = { line: number; column: number };
-export type CharPositionTuple = [number, number]; // Line, Column.
-
-export type CharRange = { start: t.CharPosition; end: t.CharPosition };
-export type CharRangeTuple = { start: t.CharPositionTuple; end: t.CharPositionTuple };
+export type CharPositionTuple = [number, number]; // Line:Column.
+export type CharRangeTuple = [number, number, number, number]; // Start:[Line:Column], End:[Line:Column]
