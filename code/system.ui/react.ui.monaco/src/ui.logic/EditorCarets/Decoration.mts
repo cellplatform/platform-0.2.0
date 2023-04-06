@@ -1,9 +1,9 @@
 import { Is, R, t, rx, Wrangle, DEFAULTS } from '../common';
 
 /**
- * Represents a single caret in the editor.
+ * Manages caret/selection(s) decoration within an editor.
  */
-export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
+export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     _isDisposed = true;

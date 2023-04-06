@@ -1,5 +1,5 @@
 import { t, rx } from '../common';
-import { Caret } from './Caret.mjs';
+import { CaretDecoration } from './Decoration.mjs';
 
 /**
  * Manages a set of carets for an editor.
@@ -30,7 +30,7 @@ export function EditorCarets(
 
     id(id: string): t.EditorCaret {
       if (carets.has(id)) return carets.get(id)!;
-      const caret = Caret(editor, id);
+      const caret = CaretDecoration(editor, id);
       carets.set(id, caret);
       caret.$.subscribe((e) => $.next(e));
       caret.dispose$.subscribe(() => carets.delete(id));
