@@ -51,7 +51,7 @@ export type KeyMatchPatterns = {
 /**
  * State.
  */
-export type KeyboardKey = { key: string; code: string; is: KeyboardKeyFlags };
+export type KeyboardKey = { key: string; code: string; is: KeyboardKeyFlags; timestamp: number };
 export type KeyboardState = {
   current: KeyboardStateCurrent;
   last?: KeyboardKeypress;

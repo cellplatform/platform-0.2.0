@@ -31,8 +31,8 @@ export const Util = {
 
   toStateKey(e: t.KeyboardKeypress): t.KeyboardKey {
     const { is } = e;
-    const { key, code } = e.keypress;
-    return { key, code, is };
+    const { key, code, timeStamp: timestamp } = e.keypress;
+    return { key, code, is, timestamp };
   },
 
   toKeypress(e: KeyboardEvent): t.KeyboardKeypress {

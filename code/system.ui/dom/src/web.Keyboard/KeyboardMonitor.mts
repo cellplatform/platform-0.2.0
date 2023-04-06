@@ -5,7 +5,7 @@ import { Util } from './util.mjs';
 let _isListening = false;
 let _state: t.KeyboardState = R.clone(DEFAULTS.state);
 const { dispose, dispose$ } = rx.disposable();
-const $ = new rx.BehaviorSubject<t.KeyboardState>(_state);
+const singleton$ = new rx.BehaviorSubject<t.KeyboardState>(_state);
 
 /**
  * Global keyboard monitor.
@@ -21,7 +21,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
 
   get $() {
     ensureStarted();
-    return $.asObservable();
+    return singleton$.asObservable();
   },
 
   get state() {
@@ -33,7 +33,7 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
     const disposable = rx.disposable();
     if (KeyboardMonitor.isSupported) {
       ensureStarted();
-      $.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
+      singleton$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
     }
     return disposable;
   },
@@ -105,13 +105,12 @@ function keypressHandler(event: KeyboardEvent) {
   const e = Util.toKeypress(event);
   updateModifierKeys(e);
   updatePressedKeys(e);
-
   change((state) => (state.last = e));
   fireNext();
 }
 
 function fireNext() {
-  if (_isListening) $.next(_state);
+  if (_isListening) singleton$.next(_state);
 }
 
 function change(fn: (state: t.KeyboardState) => void) {
@@ -210,24 +209,26 @@ function on(
   ensureStarted();
   const matcher = Match.pattern(pattern);
 
-  $.pipe(
-    rx.takeUntil(dispose$),
-    rx.takeUntil(disposable.dispose$),
-    rx.filter((e) => Boolean(e.last)),
-    rx.filter((e) => e.current.pressed.length > 0),
-  ).subscribe((e) => {
-    const pressed = e.current.pressed.map((e) => e.code);
-    const modifiers = e.current.modifiers;
+  singleton$
+    .pipe(
+      rx.takeUntil(dispose$),
+      rx.takeUntil(disposable.dispose$),
+      rx.filter((e) => Boolean(e.last)),
+      rx.filter((e) => e.current.pressed.length > 0),
+    )
+    .subscribe((e) => {
+      const pressed = e.current.pressed.map((e) => e.code);
+      const modifiers = e.current.modifiers;
 
-    if (matcher.isMatch(pressed, modifiers)) {
-      fn({
-        pattern,
-        state: e.current,
-        event: e.last!,
-        cancel: () => e.last!.cancel(),
-      });
-    }
-  });
+      if (matcher.isMatch(pressed, modifiers)) {
+        fn({
+          pattern,
+          state: e.current,
+          event: e.last!,
+          cancel: () => e.last!.cancel(),
+        });
+      }
+    });
 
   return disposable;
 }
