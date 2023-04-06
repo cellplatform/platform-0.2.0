@@ -65,7 +65,7 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../crdt.DocRef/-dev/-TEST.mjs')),
+          await button(import('../crdt.DocRef/-TEST.mjs')),
           await button(import('../crdt.DocFile/-TEST.mjs')),
           await button(import('../crdt.DocSync/-dev/-TEST.DocSync.mjs')),
           await button(import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs')),
