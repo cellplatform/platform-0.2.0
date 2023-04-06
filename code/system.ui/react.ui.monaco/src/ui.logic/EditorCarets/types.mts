@@ -17,14 +17,16 @@ export type EditorCaret = t.Disposable & {
 };
 
 export type EditorCaretChangeArgs = {
-  selections?: EditorSelectionInput;
+  selections?: EditorRangesInput;
   color?: string;
   opacity?: number; // 0..1
 };
 
-export type EditorSelectionInput =
+export type EditorRangesInput =
   | t.EditorRange
   | t.EditorRange[]
   | t.CharPositionTuple
   | t.CharPositionTuple[]
   | null;
+
+export type EditorRangeInput = t.EditorRange | t.CharPositionTuple | t.CharRangeTuple | null;

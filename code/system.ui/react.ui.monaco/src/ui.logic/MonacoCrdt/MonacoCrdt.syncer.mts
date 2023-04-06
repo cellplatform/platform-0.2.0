@@ -106,7 +106,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
     if (_isDisposed) return;
 
     const next = editor.getSelections()!;
-    _lastSelection = next.map((range) => Wrangle.offsets(monaco, editor, range));
+    _lastSelection = next.map((range) => Wrangle.monaco(monaco).offsets(editor, range));
 
     if (args.peers) {
       const selections = next.map((next) => Wrangle.asRange(next));

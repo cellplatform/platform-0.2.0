@@ -1,4 +1,4 @@
-import { R, t, rx, Wrangle, DEFAULTS } from '../common';
+import { Is, R, t, rx, Wrangle, DEFAULTS } from '../common';
 
 /**
  * Represents a single caret in the editor.
@@ -7,17 +7,17 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     document.head.removeChild(style);
-    removeCursors();
+    Decorations.clear();
   });
 
   let _color = 'red';
   let _opacity = 0.6;
-  let _cursorRefs: string[] = [];
+  let _refs: string[] = [];
   let _selections: t.EditorRange[] = [];
 
   const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
-  const className = `caret-${id.replace(/\./g, '-')}`;
-  const selector = `.${editorSelector} .${className}`;
+  const caretClass = `caret-${id.replace(/\./g, '-')}`;
+  const selectionClass = `selection-${id.replace(/\./g, '-')}`;
   const style = document.createElement('style');
   style.setAttribute('type', 'text/css');
   style.setAttribute('data-meta', DEFAULTS.className);
@@ -25,22 +25,34 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
 
   const updateStyle = () => {
     style.innerHTML = `
-    ${selector} {
-      border-left: 2px solid ${_color};
+    ${`.${editorSelector} .${caretClass}`} {
       opacity: ${_opacity};
+      border-right: 2px solid ${_color};
+    }
+    ${`.${editorSelector} .${selectionClass}`} {
+      opacity: ${0.05};
+      background-color: ${_color};
     }
   `;
   };
 
-  const removeCursors = () => {
-    if (_cursorRefs.length > 0) getTextModel().deltaDecorations(_cursorRefs, []);
-    _selections = [];
-    _cursorRefs = [];
+  const Decorations = {
+    add(decorations: t.monaco.editor.IModelDeltaDecoration[]) {
+      const model = TextModel.get();
+      _refs = model.deltaDecorations(_refs, decorations);
+    },
+    clear() {
+      if (_refs.length > 0) _refs = TextModel.get().deltaDecorations(_refs, []);
+      _selections = [];
+    },
   };
-  const getTextModel = () => {
-    const model = editor.getModel();
-    if (!model) throw new Error(`The editor did not return a text-model`);
-    return model;
+
+  const TextModel = {
+    get() {
+      const model = editor.getModel();
+      if (!model) throw new Error(`The editor did not return a text-model`);
+      return model;
+    },
   };
 
   const api: t.EditorCaret = {
@@ -76,24 +88,31 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
       }
 
       if (args.selections) {
-        const model = getTextModel();
-        const selections = Wrangle.selections(args.selections);
+        const selections = Wrangle.asRanges(args.selections);
 
         type D = t.monaco.editor.IModelDeltaDecoration;
         const decorations = selections.reduce((acc, next) => {
           acc.push({
             range: Wrangle.toRangeEnd(next),
-            options: { className },
+            options: { className: caretClass },
           });
+
+          if (!Is.singleCharRange(next)) {
+            acc.push({
+              range: next,
+              options: { className: selectionClass },
+            });
+          }
+
           return acc;
         }, [] as D[]);
 
-        _cursorRefs = model.deltaDecorations(_cursorRefs, decorations);
+        Decorations.add(decorations);
         _selections = selections;
       }
 
       if (args.selections === null) {
-        removeCursors();
+        Decorations.clear();
       }
 
       if (styleChanged) updateStyle();
@@ -109,7 +128,7 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
       }
 
       if (args.selections) {
-        const selections = Wrangle.selections(args.selections);
+        const selections = Wrangle.asRanges(args.selections);
         if (!R.equals(selections, _selections)) return false;
       }
 
