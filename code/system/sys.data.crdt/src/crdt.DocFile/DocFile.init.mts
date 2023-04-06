@@ -77,7 +77,7 @@ export async function createDocFile<D extends {}>(
     /**
      * Flag indicating if the document is autosaved after (de-bounced) changes.
      */
-    get isAutosaving() {
+    get autosaving() {
       return Wrangle.isAutosaving(options);
     },
 
@@ -167,7 +167,7 @@ export async function createDocFile<D extends {}>(
     },
   };
 
-  if (api.isAutosaving) autoSaveStrategy(api, autosaveDebounce);
+  if (api.autosaving) autoSaveStrategy(api, autosaveDebounce);
   await api.load();
   return api;
 }

@@ -8,7 +8,7 @@ export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly $: t.Observable<CrdtFileAction>;
   readonly doc: t.CrdtDocRef<D>;
   readonly disposed: boolean;
-  readonly isAutosaving: boolean;
+  readonly autosaving: boolean;
   logging: boolean;
   exists(): Promise<boolean>;
   info(): Promise<CrdtFileInfo>;

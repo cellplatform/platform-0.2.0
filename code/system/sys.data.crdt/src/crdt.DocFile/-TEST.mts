@@ -293,7 +293,7 @@ export default Test.describe.only('DocFile', (e) => {
       e.it('does not autosave by default', async (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial);
-        expect(file.isAutosaving).to.eql(false);
+        expect(file.autosaving).to.eql(false);
 
         await Time.wait(30);
         const m = await filedir.manifest();
@@ -306,14 +306,14 @@ export default Test.describe.only('DocFile', (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file1 = await DocFile.init<D>(filedir, initial, { autosave: 0 });
         const file2 = await DocFile.init<D>(filedir, initial, { autosave: -1 });
-        expect(file1.isAutosaving).to.eql(false);
-        expect(file2.isAutosaving).to.eql(false);
+        expect(file1.autosaving).to.eql(false);
+        expect(file2.autosaving).to.eql(false);
       });
 
       e.it('autosaves (after debounce delay)', async (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial, { autosave: 10 });
-        expect(file.isAutosaving).to.eql(true);
+        expect(file.autosaving).to.eql(true);
 
         const m1 = await filedir.manifest();
 
@@ -334,7 +334,7 @@ export default Test.describe.only('DocFile', (e) => {
       e.it('autosaves (via True flag to options)', async (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial, { autosave: true });
-        expect(file.isAutosaving).to.eql(true);
+        expect(file.autosaving).to.eql(true);
 
         const m1 = await filedir.manifest();
 
@@ -349,7 +349,7 @@ export default Test.describe.only('DocFile', (e) => {
       e.it('does not autosave (via False flag to options)', async (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial, { autosave: false });
-        expect(file.isAutosaving).to.eql(false);
+        expect(file.autosaving).to.eql(false);
       });
     });
 
@@ -440,7 +440,7 @@ export default Test.describe.only('DocFile', (e) => {
       e.it('change isLogging after creation', async (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial);
-        expect(file.isAutosaving).to.eql(false);
+        expect(file.autosaving).to.eql(false);
         expect(file.logging).to.eql(false);
 
         const fired: t.CrdtFileAction[] = [];
