@@ -114,7 +114,7 @@ Architecture, API's, and other conceptual primmitives will change (probably radi
 
 <p>&nbsp;</p>
 
->> “We refer to a way of life in an integrated domain where hunches, **cut-and-try**, intangibles and **human “feel for a situation”** usefully co-exist with powerful concepts, streamlines terminology and notation, sophisticated methods, and high-powered electronic aids.
+>> “We refer to a way of life in an integrated domain where hunches, **cut-and-try**, intangibles and **human “feel for a situation”** usefully co-exist with powerful concepts, streamlined terminology and notation, sophisticated methods, and high-powered electronic aids.
 
 ---
 
