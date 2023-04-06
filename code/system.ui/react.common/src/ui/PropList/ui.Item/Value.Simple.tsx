@@ -21,11 +21,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
   const cursor = props.cursor ?? is.copyActive ? 'pointer' : 'default';
 
   const styles = {
-    base: css({
-      position: 'relative',
-      flex: 1,
-      height: 13,
-    }),
+    base: css({ position: 'relative', flex: 1 }),
     text: css({
       Absolute: 0,
       color: textColor,

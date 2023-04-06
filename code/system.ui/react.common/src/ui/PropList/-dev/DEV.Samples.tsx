@@ -44,6 +44,7 @@ export const sampleItems: t.PropListItem[] = [
       onClick: (e) => e.message(<div style={{ color: COLORS.MAGENTA }}>clicked!</div>, 1200),
     },
   },
+  { label: 'descender gyp', value: 'descender gyp' },
   {
     label: 'label',
     value: <div {...styles.value}>value</div>,
