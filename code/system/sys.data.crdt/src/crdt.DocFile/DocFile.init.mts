@@ -32,6 +32,8 @@ export async function createDocFile<D extends {}>(
     action$.complete();
   });
 
+  let _isLogging = Wrangle.isLogging(options);
+
   const action$ = new rx.Subject<t.CrdtFileAction>();
   const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
@@ -42,9 +44,12 @@ export async function createDocFile<D extends {}>(
   };
 
   // NB: Must be initialized before the [DocRef] below to catch the first change (upon initialization).
-  if (Wrangle.isLogging(options)) {
-    saveLogStrategy(filedir, onChange$, dispose$, (e) => action$.next(e));
-  }
+  saveLogStrategy(filedir, {
+    onChange$,
+    dispose$,
+    enabled: () => _isLogging,
+    onSave: (e) => action$.next(e),
+  });
 
   /**
    * [DocRef]
@@ -79,8 +84,11 @@ export async function createDocFile<D extends {}>(
     /**
      * Flag indicating if the document is saving incremental changes to a log file.
      */
-    get isLogging() {
-      return Wrangle.isLogging(options);
+    get logging() {
+      return _isLogging;
+    },
+    set logging(value: boolean) {
+      _isLogging = value;
     },
 
     /**

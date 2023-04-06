@@ -9,7 +9,7 @@ export type CrdtDocFile<D extends {}> = t.Disposable & {
   readonly doc: t.CrdtDocRef<D>;
   readonly disposed: boolean;
   readonly isAutosaving: boolean;
-  readonly isLogging: boolean;
+  logging: boolean;
   exists(): Promise<boolean>;
   info(): Promise<CrdtFileInfo>;
   load(): Promise<void>;
