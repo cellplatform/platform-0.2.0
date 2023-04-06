@@ -119,7 +119,7 @@ export default Dev.describe('MonacoEditor', (e) => {
 
       const changeSelection = (
         label: string,
-        selection: t.EditorSelectionInput,
+        selection: t.EditorRangesInput,
         options: { right?: string } = {},
       ) => {
         dev.button((btn) =>
@@ -131,7 +131,7 @@ export default Dev.describe('MonacoEditor', (e) => {
       };
 
       dev.button('selection: null', (e) => getCaret().change({ selections: null }));
-      changeSelection('selection: []', []);
+      changeSelection('selection: [ ]', []);
       dev.hr(-1, 5);
       changeSelection('selection: [1, 3]', [1, 3]);
       changeSelection('selection: [1, 5]', [1, 5]);
@@ -161,8 +161,13 @@ export default Dev.describe('MonacoEditor', (e) => {
         },
       ]);
 
+      const color = (color: string) => {
+        dev.button(`color: ${color}`, (e) => getCaret().change({ color }));
+      };
+
       dev.hr(-1, 5);
-      dev.button('color: blue', (e) => getCaret().change({ color: 'blue' }));
+      color('red');
+      color('blue');
       dev.hr(-1, 5);
       dev.button((btn) =>
         btn
