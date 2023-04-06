@@ -1,4 +1,4 @@
-import { t, Value, Wrangle, Filesize, Icons, Path } from './common';
+import { t, Value, Wrangle, COLORS, Icons, Path } from './common';
 import { DEFAULTS } from '../common';
 
 export function File(
@@ -23,7 +23,7 @@ export function File(
 
     res.push({
       label: file?.title ?? 'Persistence',
-      value: files.length === 0 ? `(not saved)` : <Icons.Repo size={15} />,
+      value: files.length === 0 ? `(not saved)` : <Icons.Repo size={15} color={COLORS.DARK} />,
     });
 
     if (manifest) {
@@ -58,11 +58,11 @@ export function File(
         let strategy = '';
         let strategyCount = 0;
         if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `file (compressed)`;
+          strategy += `(compressed) file`;
           strategyCount++;
         }
         if (docFile.logging || logFiles.length > 0) {
-          strategy += `${strategy ? ', ' : ''}change log`;
+          strategy += `${strategy ? ', ' : ''}running log`;
           strategyCount++;
         }
         if (strategy.trim()) {
