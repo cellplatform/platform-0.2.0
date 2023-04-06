@@ -1,8 +1,8 @@
 import { DocFile } from '.';
 import { Crdt } from '../crdt';
-import { slug, Automerge, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../test.ui';
+import { Automerge, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../test.ui';
 
-export default Test.describe.only('DocFile', (e) => {
+export default Test.describe('DocFile', (e) => {
   type D = { count: number; name?: string };
   const initial: D = { count: 0 };
 
@@ -340,8 +340,8 @@ export default Test.describe.only('DocFile', (e) => {
 
         file.doc.change((d) => (d.count = 1234));
         await Time.wait(DEFAULTS.doc.autosaveDebounce + 10);
-
         const m2 = await filedir.manifest();
+
         expect(m1.files.length).to.eql(0);
         expect(m2.files.length).to.eql(1);
       });
@@ -350,6 +350,34 @@ export default Test.describe.only('DocFile', (e) => {
         const filedir = TestFilesystem.memory().fs;
         const file = await DocFile.init<D>(filedir, initial, { autosave: false });
         expect(file.autosaving).to.eql(false);
+      });
+
+      e.it('autosave property changed after creation', async (e) => {
+        const filedir = TestFilesystem.memory().fs;
+        const file = await DocFile.init<D>(filedir, initial);
+        expect(file.autosaving).to.eql(false);
+        expect(file.logging).to.eql(false);
+
+        const sampleChange = async () => {
+          file.doc.change((d) => (d.count += 1));
+          await Time.wait(DEFAULTS.doc.autosaveDebounce + 10);
+          return await filedir.manifest();
+        };
+
+        const m1 = await sampleChange();
+
+        file.autosaving = true;
+        expect(file.autosaving).to.eql(true);
+
+        const m2 = await sampleChange();
+
+        file.autosaving = false;
+        expect(file.autosaving).to.eql(false);
+        const m3 = await sampleChange();
+
+        expect(m1.files.length).to.eql(0);
+        expect(m2.files.length).to.eql(1);
+        expect(m3.files.length).to.eql(1);
       });
     });
 

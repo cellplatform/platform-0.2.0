@@ -22,8 +22,6 @@ export async function createDocFile<D extends {}>(
   initial: D | t.CrdtDocRef<D>,
   options: Options<D> = {},
 ) {
-  const autosaveDebounce = Wrangle.autosaveDebounce(options.autosave);
-
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => {
@@ -33,6 +31,7 @@ export async function createDocFile<D extends {}>(
   });
 
   let _isLogging = Wrangle.isLogging(options);
+  let _isAutosaving = Wrangle.isAutosaving(options);
 
   const action$ = new rx.Subject<t.CrdtFileAction>();
   const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
@@ -78,7 +77,10 @@ export async function createDocFile<D extends {}>(
      * Flag indicating if the document is autosaved after (de-bounced) changes.
      */
     get autosaving() {
-      return Wrangle.isAutosaving(options);
+      return _isAutosaving;
+    },
+    set autosaving(value: boolean) {
+      _isAutosaving = value;
     },
 
     /**
@@ -167,7 +169,10 @@ export async function createDocFile<D extends {}>(
     },
   };
 
-  if (api.autosaving) autoSaveStrategy(api, autosaveDebounce);
+  autoSaveStrategy(api, {
+    debounce: Wrangle.autosaveDebounce(options.autosave),
+    enabled: () => api.autosaving,
+  });
   await api.load();
   return api;
 }
