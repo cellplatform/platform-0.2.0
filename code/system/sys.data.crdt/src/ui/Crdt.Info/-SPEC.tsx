@@ -49,8 +49,8 @@ export default Dev.describe('CrdtInfo', async (e) => {
           history: {
             data: doc.history,
             item: {
-              data: doc.history[doc.history.length - 1],
               title: 'Latest Change',
+              data: doc.history[doc.history.length - 1],
             },
           },
         },
