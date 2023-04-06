@@ -1,10 +1,20 @@
 import { PeerCard, PeerCardProps } from '..';
-import { COLORS, Crdt, Dev, Filesystem, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { PeerList } from '../../ui.PeerList';
-import { DocShared, NetworkSchema } from './Schema.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
-
-import { CrdtInfo } from 'sys.data.crdt';
+import {
+  COLORS,
+  Crdt,
+  Dev,
+  Filesystem,
+  Keyboard,
+  MediaStream,
+  rx,
+  t,
+  TEST,
+  WebRtc,
+} from './common';
+import { FileCard } from './FileCard';
+import { DocShared, NetworkSchema } from './Schema.mjs';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
@@ -23,17 +33,25 @@ const initialMeDoc: DocMe = { count: 0 };
 export default Dev.describe('PeerCard', async (e) => {
   e.timeout(1000 * 90);
 
-  type LocalStore = { muted: boolean; showBg: boolean; showPeer?: boolean; showConnect?: boolean };
+  type LocalStore = {
+    muted: boolean;
+    showBg: boolean;
+    showPeer?: boolean;
+    showConnect?: boolean;
+    sidepanelWidth?: number;
+  };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
     showBg: initial.debug.showBg,
     muted: DEFAULTS.muted,
     showPeer: DEFAULTS.showPeer,
     showConnect: DEFAULTS.showConnect,
+    sidepanelWidth: 400,
   });
 
   let self: t.Peer | undefined;
   let docMe: t.CrdtDocRef<DocMe>;
+  let docMeFile: t.CrdtDocFile<DocMe>;
   let docShared: t.CrdtDocRef<DocShared>;
 
   const SharedProps = {
@@ -52,7 +70,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
-  const dirs = {
+  const fsdirs = {
     me: fs.dir('dev.doc.me'),
     shared: fs.dir('dev.doc.shared'),
   };
@@ -63,7 +81,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
     self.connections$.subscribe(() => ctx.redraw());
 
-    const filedir = dirs.shared;
+    const filedir = fsdirs.shared;
     WebRtc.Controller.listen(self, doc, {
       // filedir,
       dispose$,
@@ -110,7 +128,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const ctx = Dev.ctx(e);
     const dispose$ = ctx.dispose$;
     const state = await ctx.state<T>(initial);
-    const redraw = () => state.change((d) => d.debug.redraw++);
+    const redraw = () => ctx.redraw();
 
     await state.change((d) => {
       d.debug.showBg = local.showBg;
@@ -121,7 +139,7 @@ export default Dev.describe('PeerCard', async (e) => {
     docShared = NetworkSchema.genesis().doc;
 
     // Start file-persistence.
-    await Crdt.Doc.file<DocMe>(dirs.me, docMe, { autosave: true, dispose$ });
+    docMeFile = await Crdt.Doc.file<DocMe>(fsdirs.me, docMe, { autosave: true, dispose$ });
     // await Crdt.Doc.file<DocShared>(dirs.shared, docShared, { autosave: true });
 
     // NB:
@@ -136,6 +154,7 @@ export default Dev.describe('PeerCard', async (e) => {
       d.muted = local.muted;
       d.showPeer = local.showPeer;
       d.showConnect = local.showConnect;
+      d.devPanelWidth = local.sidepanelWidth;
       d.fill = false;
     });
   });
@@ -160,6 +179,8 @@ export default Dev.describe('PeerCard', async (e) => {
         const props = SharedProps.current;
         const fullscreen = props.fill;
         const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
+
+        ctx.debug.width(props.devPanelWidth ?? 400);
 
         if (fullscreen && camera) {
           ctx.subject.size('fill');
@@ -205,13 +226,15 @@ export default Dev.describe('PeerCard', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     self = await initNetwork(ctx, docShared, state);
+
+    console.log('self', self);
     ctx.redraw();
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Environment', (dev) => {
+    dev.section('Debug', (dev) => {
       dev.button('redraw', (e) => dev.redraw());
 
       dev.boolean((btn) =>
@@ -229,6 +252,19 @@ export default Dev.describe('PeerCard', async (e) => {
         const { schema } = NetworkSchema.genesis();
         console.info('NetworkSchema.genesis', schema.sourceFile);
       });
+
+      dev.button((btn) =>
+        btn
+          .label('disconnect (all)')
+          .enabled((e) => (self?.connections.length ?? 0) > 0)
+          .right((e) => {
+            if (!self) return '';
+            return self.connections.length > 0 ? '←' : '';
+          })
+          .onClick(async (e) => {
+            self?.connections.all.forEach((conn) => conn.dispose());
+          }),
+      );
     });
 
     dev.hr(5, 20);
@@ -242,6 +278,8 @@ export default Dev.describe('PeerCard', async (e) => {
             SharedProps.change((d) => Dev.toggle(d, 'fill'));
           }),
       );
+
+      dev.hr(-1, 5);
 
       dev.boolean((btn) =>
         btn
@@ -264,12 +302,12 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Private Doc', (dev) => {
+    dev.section('Private Doc (Me)', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right(by > 0 ? 'count +1' : 'count -1')
+            .right((e) => `← count: ${docShared.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
             .onClick((e) => docMe.change((d) => (d.count += by))),
         );
       };
@@ -286,6 +324,10 @@ export default Dev.describe('PeerCard', async (e) => {
 
       count('increment', 1);
       count('decrement', -1);
+
+      dev.row((e) => {
+        return <FileCard doc={docMe} file={docMeFile} margin={[20, 40]} />;
+      });
     });
 
     dev.hr(5, 20);
@@ -295,48 +337,16 @@ export default Dev.describe('PeerCard', async (e) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right(by > 0 ? 'count +1' : 'count -1')
+            .right((e) => `← count: ${docShared.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
             .onClick((e) => docShared.change((d) => (d.count += by))),
         );
       };
       count('increment', 1);
       count('decrement', -1);
 
-      dev.hr(-1, 5);
-
       dev.row((e) => {
-        const history = docShared.history;
-        const latest = history[history.length - 1];
-        return (
-          <CrdtInfo
-            fields={['Module', 'File', 'History.Total', 'History.Item']}
-            margin={[15, 30, 5, 30]}
-            data={{
-              history: {
-                data: history,
-                item: { data: latest, title: 'Latest Change' },
-              },
-            }}
-          />
-        );
+        return <FileCard doc={docShared} margin={[20, 40]} />;
       });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('(Debug)', (dev) => {
-      dev.button((btn) =>
-        btn
-          .label('disconnect (all)')
-          .enabled((e) => (self?.connections.length ?? 0) > 0)
-          .right((e) => {
-            if (!self) return '';
-            return self.connections.length > 0 ? '←' : '';
-          })
-          .onClick(async (e) => {
-            self?.connections.all.forEach((conn) => conn.dispose());
-          }),
-      );
     });
 
     dev.hr(5, [20, 50]);
@@ -348,31 +358,36 @@ export default Dev.describe('PeerCard', async (e) => {
 
   e.it('ui:debug:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const isLocalhost = window.location.hostname === 'localhost';
 
-    dev.footer.border(-0.1).render<T>((e) => {
-      const total = self?.connections.length ?? 0;
-      return (
-        <Dev.Object
-          fontSize={11}
-          name={'Me'}
-          expand={{
-            level: 1,
-            paths: [
-              //
-              '$.Doc<Private>',
-              '$.Doc<Public>',
-              // '$.Doc<Public>.network',
-              // '$.Doc<Public>.network.*',
-              // '$.Doc<Public>.tmp',
-            ],
-          }}
-          data={{
-            [`WebRtc.Peer[${total}]`]: self,
-            'Doc<Private>': docMe?.current,
-            'Doc<Public>': docShared?.current,
-          }}
-        />
-      );
-    });
+    dev.footer
+      //
+      .border(-0.1)
+      .render<T>((e) => {
+        const total = self?.connections.length ?? 0;
+
+        return (
+          <Dev.Object
+            fontSize={11}
+            name={'Me'}
+            expand={{
+              level: 1,
+              paths: isLocalhost && [
+                //
+                // '$.Doc<Private>',
+                '$.Doc<Public>',
+                // '$.Doc<Public>.network',
+                // '$.Doc<Public>.network.*',
+                // '$.Doc<Public>.tmp',
+              ],
+            }}
+            data={{
+              [`WebRtc.Peer[${total}]`]: self,
+              'Doc<Private>': docMe?.current,
+              'Doc<Public>': docShared?.current,
+            }}
+          />
+        );
+      });
   });
 });
