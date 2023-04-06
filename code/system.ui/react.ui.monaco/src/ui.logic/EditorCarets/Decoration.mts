@@ -1,4 +1,5 @@
-import { Is, R, t, rx, Wrangle, DEFAULTS } from '../common';
+import { Is, R, rx, t, Wrangle } from '../common';
+import { DecorationStyle } from './Decoration.style.mjs';
 
 /**
  * Manages caret/selection(s) decoration within an editor.
@@ -7,8 +8,8 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     _isDisposed = true;
-    document.head.removeChild(style);
     Decorations.clear();
+    style.dispose();
     fireChanged();
     $.complete();
   });
@@ -27,26 +28,7 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
       disposed: _isDisposed,
     });
 
-  const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
-  const caretClass = `caret-${id.replace(/\./g, '-')}`;
-  const selectionClass = `selection-${id.replace(/\./g, '-')}`;
-  const style = document.createElement('style');
-  style.setAttribute('type', 'text/css');
-  style.setAttribute('data-meta', DEFAULTS.className);
-  document.head.appendChild(style);
-
-  const updateStyle = () => {
-    style.innerHTML = `
-    ${`.${editorSelector} .${caretClass}`} {
-      opacity: ${_opacity};
-      border-right: 2px solid ${_color};
-    }
-    ${`.${editorSelector} .${selectionClass}`} {
-      opacity: ${0.05};
-      background-color: ${_color};
-    }
-  `;
-  };
+  const style = DecorationStyle(editor, id);
 
   const Decorations = {
     add(decorations: t.monaco.editor.IModelDeltaDecoration[]) {
@@ -90,13 +72,13 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
 
       if (typeof args.color === 'string') {
         _color = args.color;
-        updateStyle();
+        style.update(api);
         changed = true;
       }
 
       if (typeof args.opacity === 'number') {
         _opacity = R.clamp(0, 1, args.opacity);
-        updateStyle();
+        style.update(api);
         changed = true;
       }
 
@@ -107,13 +89,13 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
         const decorations = selections.reduce((acc, next) => {
           acc.push({
             range: Wrangle.toRangeEnd(next),
-            options: { className: caretClass },
+            options: { className: style.caretClass },
           });
 
           if (!Is.singleCharRange(next)) {
             acc.push({
               range: next,
-              options: { className: selectionClass },
+              options: { className: style.selectionClass },
             });
           }
 
@@ -168,6 +150,6 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     },
   };
 
-  updateStyle();
+  style.update(api);
   return api;
 }
