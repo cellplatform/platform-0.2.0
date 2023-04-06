@@ -1,4 +1,4 @@
-import { t, Value, Wrangle, Filesize } from './common';
+import { t, Value, Wrangle, Filesize, Icons, Path } from './common';
 import { DEFAULTS } from '../common';
 
 export function File(
@@ -23,7 +23,7 @@ export function File(
 
     res.push({
       label: file?.title ?? 'Persistence',
-      value: files.length === 0 ? `(not saved)` : undefined,
+      value: files.length === 0 ? `(not saved)` : <Icons.Repo size={15} />,
     });
 
     if (manifest) {
@@ -48,21 +48,37 @@ export function File(
           indent,
         });
 
-        let strategy = '';
-        if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `compressed file`;
-        }
-        if (docFile.logging || logFiles.length > 0) {
-          strategy += `${strategy ? ', ' : ''}change logging`;
-        }
-        if (strategy.trim()) {
-          res.push({ label: 'Strategy', value: strategy, indent });
-        }
-
         res.push({
           label: 'Hash',
           value: Wrangle.displayHash(manifest.hash.files, [12, 5]),
           tooltip: `files hash:\n${manifest.hash.files}`,
+          indent,
+        });
+
+        let strategy = '';
+        let strategyCount = 0;
+        if (docFile.autosaving || stdFiles.length > 0) {
+          strategy += `file (compressed)`;
+          strategyCount++;
+        }
+        if (docFile.logging || logFiles.length > 0) {
+          strategy += `${strategy ? ', ' : ''}change log`;
+          strategyCount++;
+        }
+        if (strategy.trim()) {
+          res.push({
+            label: Value.plural(strategyCount, 'Strategy', 'Strategies'),
+            value: strategy,
+            indent,
+          });
+        }
+      }
+
+      if (file.path && filesTotal.count > 0) {
+        res.push({
+          label: 'Filesystem',
+          value: Path.ensureSlashes(file.path),
+          tooltip: `file: ${file.path}`,
           indent,
         });
       }

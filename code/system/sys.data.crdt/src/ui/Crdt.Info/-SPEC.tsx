@@ -16,8 +16,10 @@ const initialDoc: Doc = { count: 0 };
 export default Dev.describe('CrdtInfo', async (e) => {
   const bus = rx.bus();
   const fs = await getTestFs(bus);
+
+  const toFs = (path: string) => ({ path, fs: fs.dir('dev.sample/crdt-info') });
   const fsdirs = {
-    doc: fs.dir('dev.CrdtInfo.doc'),
+    doc: toFs('dev.CrdtInfo.doc'),
   };
 
   type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
@@ -34,7 +36,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
   });
 
   const doc = Crdt.Doc.ref<Doc>(initialDoc);
-  const docFile = await Crdt.Doc.file<Doc>(fsdirs.doc, doc, {
+  const docFile = await Crdt.Doc.file<Doc>(fsdirs.doc.fs, doc, {
     autosave: local.autosave,
     logsave: local.logsave,
   });
@@ -45,7 +47,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
         ...state.props,
         title: state.debug.title ? ['Left Title', 'Right Title'] : undefined,
         data: {
-          file: { data: docFile },
+          file: { data: docFile, path: fsdirs.doc.path },
           history: {
             data: doc.history,
             item: {
@@ -79,6 +81,8 @@ export default Dev.describe('CrdtInfo', async (e) => {
       const props = Util.props(e.state);
 
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
+      ctx.subject.size([320, null]);
+
       const base = css({ Padding: debug.bg ? [20, 25] : 0 });
 
       return (

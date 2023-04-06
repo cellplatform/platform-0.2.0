@@ -3,7 +3,7 @@ import type { t } from '../common.t';
 export type CrdtInfoFields = 'Module' | 'Driver' | 'File' | 'History.Total' | 'History.Item';
 
 export type CrdtInfoData = {
-  file?: { data?: t.CrdtDocFile<any>; title?: string };
+  file?: { data?: t.CrdtDocFile<any>; title?: string; path?: string };
   history?: {
     title?: string;
     data?: t.CrdtDocHistory<any>[];

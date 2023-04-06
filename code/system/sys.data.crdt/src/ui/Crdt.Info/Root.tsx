@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Card, css, DEFAULTS, FC, FIELDS, Pkg, PropList, rx, Style, t } from './common';
-import { File } from './field.File.mjs';
+import { File } from './field.File';
 import { HistoryItem } from './field.History.Item.mjs';
 import { History } from './field.History.mjs';
 
