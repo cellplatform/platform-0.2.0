@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { css, DEFAULTS, FC, FIELDS, Pkg, PropList, rx, Style, t } from './common';
+import { Card, css, DEFAULTS, FC, FIELDS, Pkg, PropList, rx, Style, t } from './common';
 import { File } from './field.File.mjs';
 import { HistoryItem } from './field.History.Item.mjs';
 import { History } from './field.History.mjs';
@@ -12,8 +12,8 @@ export type CrdtInfoProps = {
   minWidth?: number;
   maxWidth?: number;
   data?: t.CrdtInfoData;
-  padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
+  card?: boolean;
   style?: t.CssValue;
 };
 
@@ -70,16 +70,25 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       width,
       minWidth,
       maxWidth,
-      ...Style.toPadding(props.padding),
+    }),
+    edges: css({
       ...Style.toMargins(props.margin),
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <PropList title={props.title} items={items} defaults={{ clipboard: false }} />
-    </div>
+  const elBody = (
+    <PropList title={Wrangle.title(props)} items={items} defaults={{ clipboard: false }} />
   );
+
+  if (props.card) {
+    return (
+      <Card style={css(styles.base, props.style)} padding={[20, 25, 30, 25]} margin={props.margin}>
+        {elBody}
+      </Card>
+    );
+  }
+
+  return <div {...css(styles.base, styles.edges, props.style)}>{elBody}</div>;
 };
 
 /**
@@ -91,6 +100,12 @@ const Wrangle = {
     const name = '@automerge/automerge';
     const version = Pkg.dependencies[name] ?? '0.0.0';
     return `${name}@${version}`;
+  },
+
+  title(props: CrdtInfoProps) {
+    const title = PropList.Wrangle.title(props.title);
+    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
+    return title;
   },
 };
 

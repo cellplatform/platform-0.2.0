@@ -1,13 +1,13 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
-import { Card, Color, Crdt, Dev, PropList, t, rx, getTestFs } from '../../test.ui';
+import { Crdt, css, Dev, getTestFs, PropList, rx, t } from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
-  debug: { bg: boolean; message: string; logsave: boolean; autosave: boolean };
+  debug: { bg: boolean; title: boolean; message: string; logsave: boolean; autosave: boolean };
 };
 const initial: T = {
-  props: {},
-  debug: { bg: false, message: '', logsave: false, autosave: true },
+  props: { card: true },
+  debug: { bg: false, title: false, message: '', logsave: false, autosave: true },
 };
 
 type Doc = { count: number };
@@ -20,11 +20,14 @@ export default Dev.describe('CrdtInfo', async (e) => {
     doc: fs.dir('dev.CrdtInfo.doc'),
   };
 
-  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[] };
+  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.CrdtInfo');
   const local = localstore.object({
     fields: initial.props.fields,
+    card: initial.props.card,
+
     bg: initial.debug.bg,
+    title: initial.debug.title,
     message: initial.debug.message,
     logsave: initial.debug.logsave,
     autosave: initial.debug.autosave,
@@ -40,6 +43,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
     props(state: T): CrdtInfoProps {
       return {
         ...state.props,
+        title: state.debug.title ? ['Left Title', 'Right Title'] : undefined,
         data: {
           file: { data: docFile },
           history: {
@@ -59,7 +63,9 @@ export default Dev.describe('CrdtInfo', async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.fields = local.fields;
+      d.props.card = local.card;
       d.debug.bg = local.bg;
+      d.debug.title = local.title;
       d.debug.logsave = local.logsave;
       d.debug.autosave = local.autosave;
     });
@@ -71,15 +77,14 @@ export default Dev.describe('CrdtInfo', async (e) => {
     ctx.subject.display('grid').render<T>((e) => {
       const { debug } = e.state;
       const props = Util.props(e.state);
+
+      ctx.subject.backgroundColor(debug.bg ? 1 : 0);
+      const base = css({ Padding: debug.bg ? [20, 25] : 0 });
+
       return (
-        <CrdtInfo
-          {...props}
-          padding={debug.bg ? [20, 25] : 0}
-          style={{
-            width: debug.bg ? 300 : 250,
-            backgroundColor: Color.format(debug.bg ? 1 : 0),
-          }}
-        />
+        <div {...base}>
+          <CrdtInfo {...props} card={false} />
+        </div>
       );
     });
   });
@@ -94,6 +99,13 @@ export default Dev.describe('CrdtInfo', async (e) => {
           .label('background')
           .value((e) => e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'title')
+          .value((e) => e.state.debug.title)
+          .onClick((e) => e.change((d) => (local.title = Dev.toggle(d.debug, 'title')))),
       );
 
       dev.hr(-1, 5);
@@ -175,16 +187,23 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
     dev.hr(5, 30);
 
-    dev.section('Component', (dev) => {
-      dev.hr(0, 5);
+    dev.section((dev) => {
       dev.row((e) => {
         const props = Util.props(e.state);
         return (
-          <Card margin={[5, 25, 40, 25]} padding={[25]} shadow={true}>
-            <CrdtInfo {...props} />
-          </Card>
+          <CrdtInfo {...props} margin={[15, 25, 30, 25]} />
+          // <Card margin={[15, 25, 30, 25]} padding={[25]} shadow={true}>
+          // </Card>
         );
       });
+
+      dev.hr(-1, 5);
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'as card')
+          .value((e) => e.state.props.card)
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+      );
     });
   });
 

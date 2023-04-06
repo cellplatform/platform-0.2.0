@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MonacoCrdt, MonacoEditor } from 'sys.ui.react.monaco';
 
-import { COLORS, Crdt, css, rx, t } from './common';
+import { COLORS, Crdt, css, rx, t, Color } from './common';
 
 import type { DocShared } from './Schema.mjs';
 
@@ -80,11 +80,19 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr 1.3fr',
     }),
+    left: css({
+      borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+    }),
+    right: css({}),
   };
 
   if (!self || !doc) return <div {...css(styles.base, props.style)} />;
 
   const SAMPLE_INDEX = `
+environment:
+  - network:data
+  - network:video
+
 diagrams:
   - slc/intro
   - slc/macro
@@ -94,11 +102,13 @@ diagrams:
   return (
     <div {...css(styles.base, props.style)}>
       <MonacoEditor
+        style={styles.left}
         language={'yaml'}
         text={SAMPLE_INDEX}
         onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
       />
       <MonacoEditor
+        style={styles.right}
         language={'yaml'}
         focusOnLoad={true}
         onReady={({ editor, monaco }) => setMainCtx({ editor, monaco })}
