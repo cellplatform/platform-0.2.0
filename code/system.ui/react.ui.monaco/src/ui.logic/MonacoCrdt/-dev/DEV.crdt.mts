@@ -1,10 +1,10 @@
 import { Automerge, Crdt, rx, t } from './common';
 
-export function initSyncingCrdtDocs(peerNames: string[]) {
+export function initCrdtDocsWithPeerSyncers(peerNames: string[]) {
   /**
    * Initialize new CRDT documents.
    */
-  const items: t.DevPeer[] = peerNames.map((name) => {
+  const items: t.DevPeer[] = peerNames.map((name, i) => {
     const doc = Crdt.Doc.ref<t.SampleDoc>({
       count: 0,
       code: new Automerge.Text(),

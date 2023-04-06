@@ -1,6 +1,6 @@
 import { MonacoCrdt } from '..';
 import { rx, Dev, t, Value } from './common';
-import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
+import { initCrdtDocsWithPeerSyncers } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
 type T = {
@@ -48,7 +48,8 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
     peerMap.forEach((item) => disposeOf(item));
     peerMap.clear();
-    initSyncingCrdtDocs(names).forEach((item) => {
+
+    initCrdtDocsWithPeerSyncers(names).forEach((item) => {
       const { name, doc } = item;
       const peer = { name, doc };
       peerMap.set(name, { peer });
@@ -243,6 +244,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data: { [key: string]: any } = {};
+
       peerMap.forEach(({ peer }) => {
         const key = peer.name;
         const doc = peer.doc.current;
@@ -253,7 +255,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
           code: `chars:(${text.length}), lines:(${text.split('\n').length})`,
         };
       });
-      return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={2} />;
+      return <Dev.Object name={'MonacoCrdt'} data={data} expand={2} />;
     });
   });
 });
