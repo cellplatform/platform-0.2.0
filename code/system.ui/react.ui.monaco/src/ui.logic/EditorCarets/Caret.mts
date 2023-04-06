@@ -6,14 +6,26 @@ import { Is, R, t, rx, Wrangle, DEFAULTS } from '../common';
 export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
+    _isDisposed = true;
     document.head.removeChild(style);
     Decorations.clear();
+    fireChanged();
+    $.complete();
   });
 
+  let _isDisposed = false;
   let _color = 'red';
   let _opacity = 0.6;
   let _refs: string[] = [];
   let _selections: t.EditorRange[] = [];
+
+  const $ = new rx.Subject<t.EditorCaretChanged>();
+  const fireChanged = () =>
+    $.next({
+      id,
+      current: [...api.selections],
+      disposed: _isDisposed,
+    });
 
   const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
   const caretClass = `caret-${id.replace(/\./g, '-')}`;
@@ -38,8 +50,7 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
 
   const Decorations = {
     add(decorations: t.monaco.editor.IModelDeltaDecoration[]) {
-      const model = TextModel.get();
-      _refs = model.deltaDecorations(_refs, decorations);
+      _refs = TextModel.get().deltaDecorations(_refs, decorations);
     },
     clear() {
       if (_refs.length > 0) _refs = TextModel.get().deltaDecorations(_refs, []);
@@ -57,8 +68,7 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
 
   const api: t.EditorCaret = {
     id,
-    dispose,
-    dispose$,
+    $: $.pipe(rx.takeUntil(dispose$)),
 
     get selections() {
       return _selections ?? [];
@@ -76,15 +86,18 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
      * Change the caret state.
      */
     change(args) {
-      let styleChanged = false;
+      let changed = false;
+
       if (typeof args.color === 'string') {
         _color = args.color;
-        styleChanged = true;
+        updateStyle();
+        changed = true;
       }
 
       if (typeof args.opacity === 'number') {
         _opacity = R.clamp(0, 1, args.opacity);
-        styleChanged = true;
+        updateStyle();
+        changed = true;
       }
 
       if (args.selections) {
@@ -109,13 +122,15 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
 
         Decorations.add(decorations);
         _selections = selections;
+        changed = true;
       }
 
       if (args.selections === null) {
         Decorations.clear();
+        changed = true;
       }
 
-      if (styleChanged) updateStyle();
+      if (changed) fireChanged();
       return api;
     },
 
@@ -141,6 +156,15 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
       }
 
       return true;
+    },
+
+    /**
+     * Lifecycle.
+     */
+    dispose,
+    dispose$,
+    get disposed() {
+      return _isDisposed;
     },
   };
 

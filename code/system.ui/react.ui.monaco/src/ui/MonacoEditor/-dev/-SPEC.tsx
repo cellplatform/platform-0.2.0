@@ -51,6 +51,7 @@ export default Dev.describe('MonacoEditor', (e) => {
               editor = e.editor;
               monaco = e.monaco;
               carets = EditorCarets(editor);
+              carets.$.subscribe((e) => ctx.redraw());
 
               const asRange = Wrangle.asRange;
               if (local.selection) editor.setSelection(local.selection);
@@ -193,15 +194,13 @@ export default Dev.describe('MonacoEditor', (e) => {
               'css.class': MonacoEditor.className(editor),
               text: `chars:(${text.length}), lines:(${text.split('\n').length})`,
             },
+        carets: carets?.current ?? [],
       };
       return (
         <Dev.Object
           name={'Dev.MonacoEditor'}
           data={data}
-          expand={{
-            level: 1,
-            paths: ['$.editor'],
-          }}
+          expand={{ level: 1, paths: ['$.editor'] }}
         />
       );
     });

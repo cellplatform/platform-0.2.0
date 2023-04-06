@@ -7,15 +7,21 @@ import { Caret } from './Caret.mjs';
 export function EditorCarets(
   editor: t.MonacoCodeEditor,
   options: { dispose$?: t.Observable<any> } = {},
-) {
+): t.EditorCarets {
+  let _isDisposed = false;
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   editor.onDidDispose(dispose);
-  dispose$.subscribe(() => api.clear());
+  dispose$.subscribe(() => {
+    _isDisposed = true;
+    api.clear();
+    $.complete();
+  });
+
+  const $ = new rx.Subject<t.EditorCaretChanged>();
   const carets = new Map<string, t.EditorCaret>();
 
   const api: t.EditorCarets = {
-    dispose,
-    dispose$,
+    $: $.pipe(rx.takeUntil(dispose$)),
     editor,
 
     get current() {
@@ -26,6 +32,7 @@ export function EditorCarets(
       if (carets.has(id)) return carets.get(id)!;
       const caret = Caret(editor, id);
       carets.set(id, caret);
+      caret.$.subscribe((e) => $.next(e));
       caret.dispose$.subscribe(() => carets.delete(id));
       return caret;
     },
@@ -33,6 +40,15 @@ export function EditorCarets(
     clear() {
       api.current.forEach((caret) => caret.dispose());
       return api;
+    },
+
+    /**
+     * Lifecycle.
+     */
+    dispose,
+    dispose$,
+    get disposed() {
+      return _isDisposed;
     },
   };
 
