@@ -37,14 +37,11 @@ describe('Is', () => {
     expect(Is.nullRange(NULL_RANGE)).to.eql(true);
   });
 
-  it('Is.span | Is.singleChar', () => {
+  it('Is.singleCharRange', () => {
     const range1 = Wrangle.asRange([1, 5]);
     const range2 = Wrangle.asRange([1, 5, 1, 6]);
 
-    expect(Is.singleChar(range1)).to.eql(true);
-    expect(Is.singleChar(range2)).to.eql(false);
-
-    expect(Is.span(range1)).to.eql(false);
-    expect(Is.span(range2)).to.eql(true);
+    expect(Is.singleCharRange(range1)).to.eql(true);
+    expect(Is.singleCharRange(range2)).to.eql(false);
   });
 });

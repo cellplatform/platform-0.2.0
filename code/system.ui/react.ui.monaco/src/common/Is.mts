@@ -29,11 +29,7 @@ export const Is = {
     return R.equals(input, DEFAULTS.NULL_RANGE);
   },
 
-  span(input: t.EditorRangeInput) {
-    return !Is.singleChar(input);
-  },
-
-  singleChar(input: t.EditorRangeInput) {
+  singleCharRange(input: t.EditorRangeInput) {
     const range = asRange(input);
     return range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn;
   },
