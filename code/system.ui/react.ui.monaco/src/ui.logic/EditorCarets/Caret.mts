@@ -7,12 +7,12 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     document.head.removeChild(style);
-    removeCursor();
+    removeCursors();
   });
 
   let _color = 'red';
   let _opacity = 0.6;
-  let _cursor: string[] | undefined;
+  let _cursorRefs: string[] = [];
   let _selections: t.EditorRange[] = [];
 
   const editorSelector = Wrangle.editorClassName(editor).split(' ').join('.');
@@ -32,13 +32,14 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
   `;
   };
 
-  const removeCursor = () => {
-    if (_cursor) getTextModel().deltaDecorations(_cursor, []);
+  const removeCursors = () => {
+    if (_cursorRefs.length > 0) getTextModel().deltaDecorations(_cursorRefs, []);
     _selections = [];
+    _cursorRefs = [];
   };
   const getTextModel = () => {
     const model = editor.getModel();
-    if (!model) throw new Error(`The editor did not return a text-model.`);
+    if (!model) throw new Error(`The editor did not return a text-model`);
     return model;
   };
 
@@ -87,12 +88,12 @@ export function Caret(editor: t.MonacoCodeEditor, id: string): t.EditorCaret {
           return acc;
         }, [] as D[]);
 
-        _cursor = model.deltaDecorations(_cursor ?? [], decorations);
+        _cursorRefs = model.deltaDecorations(_cursorRefs, decorations);
         _selections = selections;
       }
 
       if (args.selections === null) {
-        removeCursor();
+        removeCursors();
       }
 
       if (styleChanged) updateStyle();
