@@ -5,8 +5,9 @@ import { COLORS, Crdt, css, rx, t, Color } from './common';
 
 import type { DocShared } from './Schema.mjs';
 
-type T = t.JsonMap & { code: t.AutomergeText; peers: t.EditorPeersState };
 type EditorCtx = { monaco: t.Monaco; editor: t.MonacoCodeEditor };
+type EditorState = { code: t.AutomergeText; peers: t.EditorPeersState };
+type T = t.JsonMap & { index: EditorState; main: EditorState };
 
 export type SpecMonacoSyncProps = {
   self?: t.Peer;
@@ -27,48 +28,44 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (self && mainCtx && doc) {
+    if (self && indexCtx && mainCtx && doc) {
       /**
        * Ensure the code field exists.
        */
-      if (!doc.current.tmp.code) {
-        doc.change((d) => ((d.tmp as T).code = Crdt.text()));
-      }
-      if (!doc.current.tmp.peers) {
-        doc.change((d) => ((d.tmp as T).peers = {}));
-      }
+
+      const getTmp = () => doc.current.tmp as T;
+      if (!getTmp().index) doc.change((d) => (d.tmp.index = {}));
+      if (!getTmp().main) doc.change((d) => (d.tmp.main = {}));
+
+      if (!getTmp().index.code) doc.change((d) => ((d.tmp as T).index.code = Crdt.text()));
+      if (!getTmp().index.peers) doc.change((d) => ((d.tmp as T).index.peers = {}));
+
+      if (!getTmp().main.code) doc.change((d) => ((d.tmp as T).main.code = Crdt.text()));
+      if (!getTmp().main.peers) doc.change((d) => ((d.tmp as T).main.peers = {}));
 
       /**
        * Start the syncer.
        */
-      const { monaco, editor } = mainCtx;
-      const syncer = MonacoCrdt.syncer({
+      const local = self.id;
+      MonacoCrdt.syncer({
         dispose$,
-        monaco,
-        editor,
-        data: { doc, getText: (d) => (d.tmp as T).code },
-        peers: { local: self.id, doc, getPeers: (d) => (d.tmp as T).peers },
+        monaco: mainCtx.monaco,
+        editor: mainCtx.editor,
+        data: { doc, getText: (d) => (d.tmp as T).main.code },
+        peers: { local, doc, getPeers: (d) => (d.tmp as T).main.peers },
       });
 
-      console.log('syncer', syncer);
-
-      doc.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-        const tmp = e.doc.tmp as T;
-
-        const remotePeers = Object.keys(tmp.peers)
-          .filter((id) => id !== self.id)
-          .map((id) => tmp.peers[id]);
-
-        /**
-         * TODO 🐷
-         * - update
-         */
-        console.log('remotePeers', remotePeers);
+      MonacoCrdt.syncer({
+        dispose$,
+        monaco: indexCtx.monaco,
+        editor: indexCtx.editor,
+        data: { doc, getText: (d) => (d.tmp as T).index.code },
+        peers: { local, doc, getPeers: (d) => (d.tmp as T).index.peers },
       });
     }
 
     return dispose;
-  }, [self, doc, mainCtx]);
+  }, [self, doc, mainCtx, indexCtx]);
 
   /**
    * [Render]
