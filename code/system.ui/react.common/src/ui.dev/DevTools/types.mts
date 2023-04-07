@@ -29,7 +29,7 @@ export type DevTools<S extends O = O> = {
   /**
    * Widgets.
    */
-  title(text: string, style?: t.DevTitleStyle): DevTools<S>;
+  title(text: string | [string, string], style?: t.DevTitleStyle): DevTools<S>;
   title(fn: t.DevTitleHandler<S>): DevTools<S>;
 
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;

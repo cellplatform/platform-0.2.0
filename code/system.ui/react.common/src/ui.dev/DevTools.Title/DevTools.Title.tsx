@@ -16,7 +16,7 @@ export function title<S extends O = O>(
   if (!ctx.is.initial) return;
 
   const values = {
-    text: ValueHandler<string, S>(events),
+    text: ValueHandler<string | [string, string], S>(events),
     style: ValueHandler<t.DevTitleStyle, S>(events),
   };
   const clickHandlers = new Set<t.DevTitleClickHandler<S>>();

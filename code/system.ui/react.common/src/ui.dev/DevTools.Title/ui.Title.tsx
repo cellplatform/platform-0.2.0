@@ -2,23 +2,25 @@ import { css, FC, Style, t } from '../common';
 import { DEFAULT } from './ui.Title.DEFAULT.mjs';
 
 export type TitleProps = {
-  text?: string;
+  text?: string | [string, string];
   style?: t.DevTitleStyle;
   onClick?: () => void;
 };
 
 const View: React.FC<TitleProps> = (props) => {
-  const { text = DEFAULT.title } = props;
-  const style = { ...DEFAULT.style, ...props.style };
+  const text = Wrangle.text(props);
 
   /**
    * [Render]
    */
+  const style = { ...DEFAULT.style, ...props.style };
   const styles = {
     base: css({
       ...Style.toMargins(style.margin),
       cursor: props.onClick ? 'pointer' : 'default',
       display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto',
+      columnGap: 8,
     }),
     ellipsis:
       style.ellipsis &&
@@ -35,9 +37,24 @@ const View: React.FC<TitleProps> = (props) => {
   };
   return (
     <div {...styles.base} onClick={props.onClick}>
-      <div {...css(styles.text, styles.ellipsis)}>{text}</div>
+      <div {...css(styles.text, styles.ellipsis)}>{text[0]}</div>
+      <div />
+      <div {...css(styles.text, styles.ellipsis)}>{text[1]}</div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+
+const Wrangle = {
+  text(props: TitleProps): [string, string] {
+    const text = Array.isArray(props.text) ? props.text : [props.text];
+    const left = text[0] ?? DEFAULT.title;
+    const right = text[1] ?? '';
+    return [left, right];
+  },
 };
 
 /**

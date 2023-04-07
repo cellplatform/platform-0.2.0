@@ -79,7 +79,7 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
      * Title text.
      */
     title(...args: any[]) {
-      if (typeof args[0] === 'string') {
+      if (typeof args[0] === 'string' || Array.isArray(args[0])) {
         api.title((title) => title.text(args[0]).style(args[1]));
       }
       if (typeof args[0] === 'function') {

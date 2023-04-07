@@ -62,6 +62,13 @@ export default Dev.describe('Title', (e) => {
         }),
       )
       .hr()
-      .title('Simple Title');
+      .title('Simple Title')
+      .title(['Left', 'Right']);
+
+    dev.hr(5, 20);
+
+    dev.title(['Left', 'Right']);
+    dev.hr(-1, 10);
+    dev.title([Dev.Lorem.words(50), Dev.Lorem.words(50)]);
   });
 });
