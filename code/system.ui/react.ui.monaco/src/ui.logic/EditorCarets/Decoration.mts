@@ -40,11 +40,13 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     },
   };
 
+  let _model: t.monaco.editor.ITextModel | undefined;
   const TextModel = {
     get() {
-      const model = editor.getModel();
-      if (!model) throw new Error(`The editor did not return a text-model`);
-      return model;
+      if (_model) return _model;
+      _model = editor.getModel()!;
+      if (!_model) throw new Error(`The editor did not return a text-model`);
+      return _model;
     },
   };
 
