@@ -21,10 +21,10 @@ const DEFAULTS = PeerCard.DEFAULTS;
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
-  debug: { showBg: boolean; redraw: number };
+  debug: { showBg: boolean };
 };
 const initial: T = {
-  debug: { showBg: true, redraw: 0 },
+  debug: { showBg: true },
 };
 
 type DocMe = { count: number; text?: string };
@@ -36,14 +36,16 @@ export default Dev.describe('PeerCard', async (e) => {
   type LocalStore = {
     muted: boolean;
     showBg: boolean;
+    showFooter: boolean;
     showPeer?: boolean;
     showConnect?: boolean;
     sidepanelWidth?: number;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
-    showBg: initial.debug.showBg,
     muted: DEFAULTS.muted,
+    showBg: initial.debug.showBg,
+    showFooter: true,
     showPeer: DEFAULTS.showPeer,
     showConnect: DEFAULTS.showConnect,
     sidepanelWidth: 400,
@@ -70,9 +72,10 @@ export default Dev.describe('PeerCard', async (e) => {
 
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus })).fs;
+  const getFs = (path: string) => ({ path, fs: fs.dir(path) });
   const fsdirs = {
-    me: fs.dir('dev.doc.me'),
-    shared: fs.dir('dev.doc.shared'),
+    me: getFs('dev.doc.me'),
+    shared: getFs('dev.doc.shared'),
   };
 
   async function initNetwork(ctx: t.DevCtx, doc: t.CrdtDocRef<DocShared>, state: t.DevCtxState<T>) {
@@ -81,7 +84,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
     self.connections$.subscribe(() => ctx.redraw());
 
-    const filedir = fsdirs.shared;
+    const filedir = fsdirs.shared.fs;
     WebRtc.Controller.listen(self, doc, {
       // filedir,
       dispose$,
@@ -98,6 +101,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
   e.it('init:keyboard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     /**
      * Keyboard shortcut actions.
@@ -111,15 +115,20 @@ export default Dev.describe('PeerCard', async (e) => {
 
         const before = dev.ctx.toObject().props.debug.width;
         const next = before === 0 ? 400 : 0;
-        const value = dev.ctx.debug.width(next);
+        dev.ctx.debug.width(next);
         const after = dev.ctx.toObject().props.debug.width;
 
         local.sidepanelWidth = after;
         SharedProps.change((d) => (d.devPanelWidth = after));
+      },
 
-        console.log('value', value);
-        console.log('before', before);
-        console.log('after', after);
+      'Alt + Backslash'(e) {
+        e.cancel();
+
+        const next = !SharedProps.current.devShowFooter;
+        local.showFooter = next;
+        SharedProps.change((d) => (d.devShowFooter = next));
+        dev.redraw();
       },
     });
   });
@@ -139,7 +148,7 @@ export default Dev.describe('PeerCard', async (e) => {
     docShared = NetworkSchema.genesis().doc;
 
     // Start file-persistence.
-    docMeFile = await Crdt.Doc.file<DocMe>(fsdirs.me, docMe, { autosave: true, dispose$ });
+    docMeFile = await Crdt.Doc.file<DocMe>(fsdirs.me.fs, docMe, { autosave: true, dispose$ });
     // await Crdt.Doc.file<DocShared>(dirs.shared, docShared, { autosave: true });
 
     // NB:
@@ -153,6 +162,7 @@ export default Dev.describe('PeerCard', async (e) => {
     SharedProps.change((d) => {
       d.muted = local.muted;
       d.showPeer = local.showPeer;
+      d.devShowFooter = local.showFooter;
       d.showConnect = local.showConnect;
       d.devPanelWidth = local.sidepanelWidth;
       d.fill = false;
@@ -167,7 +177,9 @@ export default Dev.describe('PeerCard', async (e) => {
       return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
-    ctx.host.footer.padding(0).render<T>(() => {
+    ctx.host.footer.padding(0).render<T>((e) => {
+      const props = SharedProps.current;
+      if (!props.devShowFooter) return null;
       return <SpecMonacoSync self={self} doc={docShared} />;
     });
 
@@ -326,7 +338,9 @@ export default Dev.describe('PeerCard', async (e) => {
       count('decrement', -1);
 
       dev.row((e) => {
-        return <FileCard doc={docMe} file={docMeFile} margin={[20, 40]} />;
+        return (
+          <FileCard doc={docMe} file={docMeFile} filepath={fsdirs.me.path} margin={[20, 40]} />
+        );
       });
     });
 
@@ -345,7 +359,7 @@ export default Dev.describe('PeerCard', async (e) => {
       count('decrement', -1);
 
       dev.row((e) => {
-        return <FileCard doc={docShared} margin={[20, 40]} />;
+        return <FileCard doc={docShared} filepath={fsdirs.shared.path} margin={[20, 40]} />;
       });
     });
 

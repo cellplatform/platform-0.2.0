@@ -6,6 +6,7 @@ export type FileCardProps = {
   title?: t.PropListTitleInput;
   doc: t.CrdtDocRef<any>;
   file?: t.CrdtDocFile<any>;
+  filepath?: string;
   shadow?: t.CardProps['shadow'];
   margin?: t.CssEdgesInput;
   style?: t.CssValue;
@@ -18,10 +19,10 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
   const history = doc.history;
   const latest = history[history.length - 1];
   const data: t.CrdtInfoData = {
-    file: { data: props.file },
+    file: { data: props.file, path: props.filepath },
     history: {
       data: history,
-      item: { data: latest, title: 'Latest Change' },
+      item: { data: latest, title: 'Last Change' },
     },
   };
 

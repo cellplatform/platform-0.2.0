@@ -26,7 +26,9 @@ export type PeerCardProps = {
   spinning?: boolean;
   showPeer?: boolean;
   showConnect?: boolean;
+
   devPanelWidth?: number;
+  devShowFooter?: boolean;
 
   style?: t.CssValue;
   fill?: boolean;
