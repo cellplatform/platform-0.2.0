@@ -28,6 +28,11 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   dispose$.subscribe(() => {
     _isDisposed = true;
     _$.complete();
+
+    handlerDidFocusEditorText.dispose();
+    handlerDidBlurEditorText.dispose();
+    handlerDidChangeModelContent.dispose();
+    handlerDidChangeCursorSelection.dispose();
   });
 
   type C = t.MonacoCrdtSyncerChange;
@@ -102,7 +107,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
    * Keep track of current/previous selection offsets.
    */
   let _lastSelection: t.SelectionOffset[] = [];
-  editor.onDidChangeCursorSelection((e) => {
+  const handlerDidChangeCursorSelection = editor.onDidChangeCursorSelection((e) => {
     if (_isDisposed) return;
 
     const next = editor.getSelections()!;
@@ -119,7 +124,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   /**
    * Local editor change.
    */
-  editor.onDidChangeModelContent((e) => {
+  const handlerDidChangeModelContent = editor.onDidChangeModelContent((e) => {
     if (_isDisposed) return;
     if (_ignoreChange) return;
 
@@ -166,8 +171,8 @@ export function syncer<D extends {}, P extends {} = D>(args: {
     docPeers.changeLocal((local) => (local.textFocused = isFocused));
     fireChange('local', 'focus');
   };
-  editor.onDidFocusEditorText(() => focusChanged(true));
-  editor.onDidBlurEditorText(() => focusChanged(false));
+  const handlerDidFocusEditorText = editor.onDidFocusEditorText(() => focusChanged(true));
+  const handlerDidBlurEditorText = editor.onDidBlurEditorText(() => focusChanged(false));
   if (editor.hasTextFocus()) focusChanged(true);
 
   /**

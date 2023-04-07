@@ -8,6 +8,7 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
   const { dispose, dispose$ } = rx.disposable();
   dispose$.subscribe(() => {
     _isDisposed = true;
+    handlerDidChangeContent.dispose();
     Decorations.clear();
     style.dispose();
     fireChanged();
@@ -29,26 +30,51 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
     });
 
   const style = DecorationStyle(editor, id);
+  const model = editor.getModel()!;
+  if (!model) throw new Error(`The editor did not return a text-model`);
 
   const Decorations = {
     add(decorations: t.monaco.editor.IModelDeltaDecoration[]) {
-      _refs = TextModel.get().deltaDecorations(_refs, decorations);
+      _refs = model.deltaDecorations(_refs, decorations);
     },
     clear() {
-      if (_refs.length > 0) _refs = TextModel.get().deltaDecorations(_refs, []);
+      if (_refs.length > 0) _refs = model.deltaDecorations(_refs, []);
       _selections = [];
     },
   };
 
-  let _model: t.monaco.editor.ITextModel | undefined;
-  const TextModel = {
-    get() {
-      if (_model) return _model;
-      _model = editor.getModel()!;
-      if (!_model) throw new Error(`The editor did not return a text-model`);
-      return _model;
-    },
+  const updateSelections = (selections: t.EditorRange[]) => {
+    type D = t.monaco.editor.IModelDeltaDecoration;
+    const decorations = selections.reduce((acc, next) => {
+      acc.push({
+        range: Wrangle.toRangeEnd(next),
+        options: { className: style.className.caret },
+      });
+      if (!Is.singleCharRange(next)) {
+        acc.push({
+          range: next,
+          options: { className: style.className.selection },
+        });
+      }
+      return acc;
+    }, [] as D[]);
+
+    Decorations.add(decorations);
+    _selections = selections;
   };
+
+  const disposeOfLineOrphans = (selections: t.EditorRange[]) => {
+    const text = model.getValue();
+    const lines = text.split('\n');
+    selections.forEach((range) => {
+      const line = lines[range.endLineNumber - 1];
+      if (!line) api.dispose();
+    });
+  };
+
+  const handlerDidChangeContent = model.onDidChangeContent((e) =>
+    disposeOfLineOrphans(api.selections),
+  );
 
   const api: t.EditorCaret = {
     id,
@@ -86,26 +112,7 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
 
       if (args.selections) {
         const selections = Wrangle.asRanges(args.selections);
-
-        type D = t.monaco.editor.IModelDeltaDecoration;
-        const decorations = selections.reduce((acc, next) => {
-          acc.push({
-            range: Wrangle.toRangeEnd(next),
-            options: { className: style.className.caret },
-          });
-
-          if (!Is.singleCharRange(next)) {
-            acc.push({
-              range: next,
-              options: { className: style.className.selection },
-            });
-          }
-
-          return acc;
-        }, [] as D[]);
-
-        Decorations.add(decorations);
-        _selections = selections;
+        updateSelections(selections);
         changed = true;
       }
 

@@ -10,9 +10,10 @@ export function EditorCarets(
 ): t.EditorCarets {
   let _isDisposed = false;
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
-  editor.onDidDispose(dispose);
+  const handlerDidDispose = editor.onDidDispose(dispose);
   dispose$.subscribe(() => {
     _isDisposed = true;
+    handlerDidDispose.dispose();
     api.clear();
     $.complete();
   });
