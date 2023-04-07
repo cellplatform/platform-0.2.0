@@ -9,10 +9,14 @@ export function File(
   const docFile = file?.data;
   const res: t.PropListItem[] = [];
 
+  const MSG = {
+    NOT_SAVED: `in-memory (not saved)`,
+  };
+
   if (!docFile) {
     res.push({
       label: file?.title ?? 'Persistence',
-      value: `(not saved)`,
+      value: MSG.NOT_SAVED,
     });
   }
 
@@ -20,10 +24,11 @@ export function File(
     const indent = 15;
     const manifest = info?.manifest;
     const files = manifest?.files ?? [];
+    const hasFiles = files.length > 0;
 
     res.push({
       label: file?.title ?? 'Persistence',
-      value: files.length === 0 ? `(not saved)` : <Icons.Repo size={15} color={COLORS.DARK} />,
+      value: !hasFiles ? MSG.NOT_SAVED : <Icons.Repo size={15} color={COLORS.DARK} />,
     });
 
     if (manifest) {

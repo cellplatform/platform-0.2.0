@@ -45,7 +45,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
     props(state: T): CrdtInfoProps {
       return {
         ...state.props,
-        title: state.debug.title ? ['Left Title', 'Right Title'] : undefined,
+        title: state.debug.title ? ['CRDT Document', null] : undefined,
         data: {
           file: { data: docFile, path: fsdirs.doc.path },
           history: {
@@ -100,23 +100,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('background')
-          .value((e) => e.state.debug.bg)
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => 'title')
-          .value((e) => e.state.debug.title)
-          .onClick((e) => e.change((d) => (local.title = Dev.toggle(d.debug, 'title')))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label('save: file')
+          .label('save strategy: file')
           .value((e) => e.state.debug.autosave)
           .onClick((e) =>
             e.change((d) => {
@@ -128,7 +112,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label('save: logging')
+          .label('save strategy: running log')
           .value((e) => e.state.debug.logsave)
           .onClick((e) =>
             e.change((d) => {
@@ -140,7 +124,9 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
       dev.button('delete file', (e) => docFile.delete());
 
-      dev.hr(-1, 5);
+      dev.hr(-1, [5, 8]);
+
+      dev.title('Change');
 
       const inc = (by: number) => {
         const message = state.current.debug.message;
@@ -194,19 +180,30 @@ export default Dev.describe('CrdtInfo', async (e) => {
     dev.section((dev) => {
       dev.row((e) => {
         const props = Util.props(e.state);
-        return (
-          <CrdtInfo {...props} margin={[15, 25, 30, 25]} />
-          // <Card margin={[15, 25, 30, 25]} padding={[25]} shadow={true}>
-          // </Card>
-        );
+        return <CrdtInfo {...props} margin={[15, 25, 30, 25]} />;
       });
 
-      dev.hr(-1, 5);
       dev.boolean((btn) =>
         btn
           .label((e) => 'as card')
           .value((e) => e.state.props.card)
           .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'title')
+          .value((e) => e.state.debug.title)
+          .onClick((e) => e.change((d) => (local.title = Dev.toggle(d.debug, 'title')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('background')
+          .value((e) => e.state.debug.bg)
+          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
     });
   });

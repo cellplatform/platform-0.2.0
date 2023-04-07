@@ -1,4 +1,4 @@
-import { t, Time, Value, Wrangle } from './common';
+import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
 
 export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
   const item = data?.history?.item;
@@ -14,7 +14,12 @@ export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
 
   res.push({
     label: title,
+    value: <Icons.Commit color={COLORS.DARK} size={15} />,
+  });
+  res.push({
+    label: 'Action',
     value: `${change.ops.length} ${Value.plural(change.ops.length, 'operation', 'operations')}`,
+    indent,
   });
   res.push({
     label: 'Actor',
