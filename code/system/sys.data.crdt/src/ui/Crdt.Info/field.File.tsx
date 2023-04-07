@@ -1,5 +1,6 @@
 import { t, Value, Wrangle, COLORS, Icons, Path } from './common';
 import { DEFAULTS } from '../common';
+import { Hash } from './ui.Hash';
 
 export function File(
   data: t.CrdtInfoData,
@@ -55,7 +56,7 @@ export function File(
 
         res.push({
           label: 'Hash',
-          value: Wrangle.displayHash(manifest.hash.files, [12, 5]),
+          value: <Hash text={manifest.hash.files} />,
           tooltip: `files hash:\n${manifest.hash.files}`,
           indent,
         });

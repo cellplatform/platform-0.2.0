@@ -1,4 +1,5 @@
 import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
+import { Hash } from './ui.Hash';
 
 export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
   const item = data?.history?.item;
@@ -29,7 +30,7 @@ export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
   });
   res.push({
     label: 'Hash',
-    value: Wrangle.displayHash(hash, 6),
+    value: <Hash text={hash} />,
     tooltip: `commit hash: ${change.hash}`,
     indent,
   });
