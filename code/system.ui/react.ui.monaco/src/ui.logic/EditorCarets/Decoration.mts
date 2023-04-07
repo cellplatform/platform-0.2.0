@@ -91,13 +91,13 @@ export function CaretDecoration(editor: t.MonacoCodeEditor, id: string): t.Edito
         const decorations = selections.reduce((acc, next) => {
           acc.push({
             range: Wrangle.toRangeEnd(next),
-            options: { className: style.caretClass },
+            options: { className: style.className.caret },
           });
 
           if (!Is.singleCharRange(next)) {
             acc.push({
               range: next,
-              options: { className: style.selectionClass },
+              options: { className: style.className.selection },
             });
           }
 
