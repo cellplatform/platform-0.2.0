@@ -44,4 +44,24 @@ describe('Is', () => {
     expect(Is.singleCharRange(range1)).to.eql(true);
     expect(Is.singleCharRange(range2)).to.eql(false);
   });
+
+  it('Is.rangeWithinText', () => {
+    const test = (expected: boolean, range: t.EditorRangeInput, text: string) => {
+      const res = Is.rangeWithinString(range, text);
+      expect(res).to.eql(expected);
+    };
+
+    test(false, null, 'hello');
+    test(false, [-1, -1], 'hello');
+
+    test(true, [1, 6], 'hello');
+    test(false, [1, 7], 'hello');
+
+    test(true, [1, 1], '');
+    test(false, [1, 2], '');
+
+    test(true, [1, 1], 'h');
+    test(true, [1, 2], 'h');
+    test(false, [1, 3], 'h');
+  });
 });

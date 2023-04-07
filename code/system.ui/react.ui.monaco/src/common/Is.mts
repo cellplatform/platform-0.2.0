@@ -33,4 +33,18 @@ export const Is = {
     const range = asRange(input);
     return range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn;
   },
+
+  rangeWithinString(input: t.EditorRangeInput, text: string) {
+    const range = asRange(input);
+    const lines = text.split('\n');
+    const startLine = lines[range.startLineNumber - 1];
+    const endLine = lines[range.endLineNumber - 1];
+
+    if (startLine === undefined || endLine === undefined) return false;
+    if (range.startColumn < 0 || range.endColumn < 0) return false;
+    if (range.startColumn > startLine.length + 1) return false;
+    if (range.endColumn > endLine.length + 1) return false;
+
+    return true;
+  },
 };
