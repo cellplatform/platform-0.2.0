@@ -128,8 +128,8 @@ export const Count = {
     table.push(['', pc.gray('   size'), pc.gray('  files'), pc.gray('   lines')]);
 
     console.info();
-    console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));
     console.info(pc.gray(`match:   ${pc.green(pattern)}`));
+    console.info(pc.gray(`exclude: ${exclude.map((w) => pc.yellow(w)).join(pc.gray(' ⊙ '))}`));
     console.info();
 
     console.info(pc.gray(table.toString()));
