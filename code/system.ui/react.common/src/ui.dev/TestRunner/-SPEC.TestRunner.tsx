@@ -54,16 +54,26 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.button('clear', (e) => e.change((d) => (d.props.data = undefined)));
 
-    dev.hr();
+    dev.hr(5, 20);
 
-    dev.boolean((btn) =>
-      btn
-        .label('isSpinning')
-        .value((e) => e.state.props.spinning)
-        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
-    );
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label('isSpinning')
+          .value((e) => e.state.props.spinning)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
+      );
 
-    dev.hr();
+      dev.boolean((btn) =>
+        btn
+          .label('scroll')
+          .value((e) => e.state.props.scroll)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'scroll'))),
+      );
+    });
+
+    dev.hr(5, 20);
+
     dev.footer.render((e) => {
       return <Dev.TestRunner.Compact />;
     });

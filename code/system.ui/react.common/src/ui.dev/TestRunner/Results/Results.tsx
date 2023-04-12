@@ -18,12 +18,9 @@ export const Results: React.FC<ResultsProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      boxSizing: 'border-box',
       fontSize: 13,
       color: COLORS.DARK,
       cursor: 'default',
-      Scroll: scroll,
-      ...Style.toPadding(props.padding),
     }),
     empty: css({
       opacity: 0.4,
@@ -36,6 +33,12 @@ export const Results: React.FC<ResultsProps> = (props) => {
       Absolute: [25, 0, null, 0],
       display: 'grid',
       placeItems: 'center',
+    }),
+    body: css({
+      Absolute: scroll ? 0 : undefined,
+      boxSizing: 'border-box',
+      Scroll: scroll,
+      ...Style.toPadding(props.padding),
     }),
     results: css({
       opacity: spinning ? 0.15 : 1,
@@ -53,9 +56,13 @@ export const Results: React.FC<ResultsProps> = (props) => {
     <div {...styles.empty}>{'No test results to display.'}</div>
   );
 
+  const elBody = (
+    <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      {data && <SuiteResults data={data} style={styles.results} />}
+      {elBody}
       {elEmpty}
       {elSpinner}
     </div>
