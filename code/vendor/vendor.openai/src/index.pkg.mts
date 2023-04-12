@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'vendor.openai',
   version: '0.0.0',
   dependencies: {
+    'openai': '3.2.1',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
