@@ -22,14 +22,18 @@ const View: React.FC<ObjectViewProps> = (props) => {
   const {
     name,
     data,
+    sortObjectKeys,
     showNonenumerable = DEFAULTS.showNonenumerable,
     showRootSummary = DEFAULTS.showRootSummary,
-    sortObjectKeys,
+    fontSize = DEFAULTS.font.size,
   } = props;
   const { expandLevel, expandPaths } = Wrangle.expand(props);
 
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      fontSize,
+    }),
   };
 
   return (
@@ -37,6 +41,7 @@ const View: React.FC<ObjectViewProps> = (props) => {
       <ObjectInspector
         name={name}
         data={data}
+        fontsize={fontSize}
         showNonenumerable={showNonenumerable}
         nodeRenderer={renderer({ showRootSummary })}
         sortObjectKeys={sortObjectKeys}
