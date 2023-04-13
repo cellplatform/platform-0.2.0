@@ -1,5 +1,5 @@
-import { MdSettingsInputAntenna, MdSensors, MdSensorsOff } from 'react-icons/md';
-import { GoRepo, GoGitCommit } from 'react-icons/go';
+import { GoGitCommit, GoRepo } from 'react-icons/go';
+import { MdDoneAll, MdSettingsInputAntenna, MdToggleOn, MdWarning } from 'react-icons/md';
 import { VscDebugDisconnect } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
 
@@ -14,5 +14,10 @@ export const Icons = {
   Network: {
     Antenna: icon(MdSettingsInputAntenna),
     Disconnect: icon(VscDebugDisconnect),
+  },
+  Test: {
+    Passed: icon(MdDoneAll),
+    Failed: icon(MdWarning),
+    Skipped: icon(MdToggleOn),
   },
 };
