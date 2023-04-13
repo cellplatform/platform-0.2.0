@@ -8,7 +8,7 @@ const initial: T = { redraw: 0, props: {} };
 export default Dev.describe('CrdtHistory', (e) => {
   type Doc = { count: number };
   const initialDoc: Doc = { count: 0 };
-  const doc = Crdt.Doc.ref<Doc>(initialDoc);
+  const doc = Crdt.Doc.ref<Doc>('my-id', initialDoc);
 
   e.it('init:crdt', async (e) => {
     const ctx = Dev.ctx(e);
