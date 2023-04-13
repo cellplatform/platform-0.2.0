@@ -23,7 +23,7 @@ export default Test.describe('Schema', (e) => {
 
     e.it(
       'Schema.toByteArray: custom <D> "type string" for source-code output: { typeDef }',
-      async (e) => {
+      (e) => {
         const typeDef = 'export type D = { msg?: string }';
         const initialObject: D = { count: 0, name: 'foo' };
         const byteArray = CrdtSchema.toByteArray<D>(initialObject, { typeDef });
@@ -36,15 +36,16 @@ export default Test.describe('Schema', (e) => {
 
     e.it('initialize from byte-array (Uint8Array)', async (e) => {
       const initialObject: D = { count: 0, name: 'foo' };
-      const docA = Crdt.Doc.ref<D>(initialObject);
+      const docid = 'my-id';
+      const docA = Crdt.Doc.ref<D>(docid, initialObject);
 
       const { initialDoc } = await import('./-sample.mjs');
       const initial = new Uint8Array(initialDoc);
       expect(initial.byteLength).to.eql(70);
 
       // Create new doc from the byte-array.
-      const docB = Crdt.Doc.ref<D>(initial);
-      const docC = Crdt.Doc.ref<D>(initial);
+      const docB = Crdt.Doc.ref<D>(docid, initial);
+      const docC = Crdt.Doc.ref<D>(docid, initial);
 
       expect(toObject(docB)).to.eql(toObject(docA));
       expect(toObject(docC)).to.eql(toObject(docA));

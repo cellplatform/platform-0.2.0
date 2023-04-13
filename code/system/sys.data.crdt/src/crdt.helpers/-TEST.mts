@@ -1,9 +1,11 @@
 import { CrdtIs, fieldAs } from '.';
 import { Crdt } from '../crdt';
 import { CrdtDoc } from '../crdt.Doc';
-import { Automerge, expect, rx, t, Test, TestFilesystem, Diff } from '../test.ui';
+import { Automerge, Diff, expect, rx, t, Test, TestFilesystem } from '../test.ui';
 
 export default Test.describe('crdt helpers', (e) => {
+  const docid = 'my-id';
+
   e.describe('Is (flags)', (e) => {
     type D = { count: number; name?: string };
     const Is = CrdtIs;
@@ -13,7 +15,7 @@ export default Test.describe('crdt helpers', (e) => {
     });
 
     e.it('Is.ref (DocRef)', (e) => {
-      const doc = CrdtDoc.ref<D>({ count: 1 });
+      const doc = CrdtDoc.ref<D>(docid, { count: 1 });
       expect(Is.ref(doc)).to.eql(true);
       [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
         expect(Is.ref(d)).to.eql(false);
@@ -21,11 +23,12 @@ export default Test.describe('crdt helpers', (e) => {
     });
 
     e.it('Is.file (DocFile)', async (e) => {
-      const doc = CrdtDoc.ref<D>({ count: 1 });
+      const doc = CrdtDoc.ref<D>(docid, { count: 1 });
       const filedir = TestFilesystem.memory().fs;
-      const file = await CrdtDoc.file<D>(filedir, { count: 0 });
+      const file = await CrdtDoc.file<D>(filedir, doc);
       expect(Is.file(file)).to.eql(true);
       expect(Is.file(doc)).to.eql(false);
+
       [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
         expect(Is.file(d)).to.eql(false);
       });
@@ -33,7 +36,8 @@ export default Test.describe('crdt helpers', (e) => {
 
     e.it('Is.docSync', (e) => {
       const bus = rx.bus();
-      const sync = CrdtDoc.sync<D>(bus, { count: 0 });
+      const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
+      const sync = CrdtDoc.sync<D>(bus, doc);
       expect(Is.sync(sync)).to.eql(true);
       expect(Is.sync(sync.doc)).to.eql(false);
       [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
@@ -58,8 +62,8 @@ export default Test.describe('crdt helpers', (e) => {
     e.it('type: Automerge.Text', (e) => {
       type D = { msg?: t.AutomergeText; count: number };
 
-      const doc1 = CrdtDoc.ref<D>({ count: 0 });
-      const doc2 = CrdtDoc.ref<D>({ count: 0, msg: new Automerge.Text() });
+      const doc1 = CrdtDoc.ref<D>(docid, { count: 0 });
+      const doc2 = CrdtDoc.ref<D>(docid, { count: 0, msg: new Automerge.Text() });
 
       const res1 = fieldAs(doc1.current, 'msg').textType;
       const res2 = fieldAs(doc2.current, 'msg').textType;
@@ -73,8 +77,8 @@ export default Test.describe('crdt helpers', (e) => {
     e.it('type: Automerge.Counter', (e) => {
       type D = { count?: t.AutomergeCounter; total?: number };
 
-      const doc1 = CrdtDoc.ref<D>({});
-      const doc2 = CrdtDoc.ref<D>({ count: new Automerge.Counter(), total: 0 });
+      const doc1 = CrdtDoc.ref<D>(docid, {});
+      const doc2 = CrdtDoc.ref<D>(docid, { count: new Automerge.Counter(), total: 0 });
 
       const res1 = fieldAs(doc1.current, 'count').counterType;
       const res2 = fieldAs(doc2.current, 'count').counterType;
@@ -90,7 +94,7 @@ export default Test.describe('crdt helpers', (e) => {
     type D = { count: number; child?: { msg: string } };
 
     e.it('toObject(<DocRef>)', (e) => {
-      const docRef = CrdtDoc.ref<D>({ count: 1 });
+      const docRef = CrdtDoc.ref<D>(docid, { count: 1 });
       const res = Crdt.toObject(docRef);
 
       expect(Automerge.isAutomerge(docRef.current)).to.eql(true);
@@ -101,7 +105,8 @@ export default Test.describe('crdt helpers', (e) => {
     });
 
     e.it('toObject(<DocFile>)', async (e) => {
-      const file = await Crdt.Doc.file<D>(TestFilesystem.memory().fs, { count: 1 });
+      const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
+      const file = await Crdt.Doc.file<D>(TestFilesystem.memory().fs, doc);
       const res = Crdt.toObject(file);
       expect(res).to.eql({ count: 1 });
       expect(res).to.eql(file.doc.current);
@@ -110,7 +115,8 @@ export default Test.describe('crdt helpers', (e) => {
 
     e.it('toObject(<SyncFile>)', async (e) => {
       const bus = rx.bus();
-      const sync = CrdtDoc.sync<D>(bus, { count: 1 });
+      const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
+      const sync = CrdtDoc.sync<D>(bus, doc);
       const res = Crdt.toObject(sync);
       expect(res).to.eql({ count: 1 });
       expect(res).to.eql(sync.doc.current);
@@ -207,7 +213,7 @@ export default Test.describe('crdt helpers', (e) => {
       e.it('delete text (within doc)', (e) => {
         type D = { text: t.AutomergeText };
         const initial = 'hello world!';
-        const doc = Crdt.Doc.ref<D>({ text: Crdt.text(initial) });
+        const doc = Crdt.Doc.ref<D>(docid, { text: Crdt.text(initial) });
         expect(doc.current.text.toString()).to.eql(initial);
 
         const diff = Diff.chars(initial, 'hello');
