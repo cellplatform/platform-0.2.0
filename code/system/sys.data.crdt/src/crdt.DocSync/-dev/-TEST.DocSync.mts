@@ -139,8 +139,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce });
       const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
 
-      const firedA: t.PeerSyncUpdated<Doc>[] = [];
-      const firedB: t.PeerSyncUpdated<Doc>[] = [];
+      const firedA: t.PeerSyncUpdated<D>[] = [];
+      const firedB: t.PeerSyncUpdated<D>[] = [];
       syncDocA.$.subscribe((e) => firedA.push(e));
       syncDocB.$.subscribe((e) => firedB.push(e));
 
