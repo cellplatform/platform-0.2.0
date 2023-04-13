@@ -109,11 +109,13 @@ export default Dev.describe('WebRtc', async (e) => {
     const state = await ctx.state<T>(initial);
     const redraw = () => state.change((d) => d.debug.redraw++);
 
-    docFile = await Crdt.Doc.file<Doc>(
-      filedir,
-      { version: '0.0.0', count: 0, peers: [], code: new Automerge.Text() },
-      { autosave: true },
-    );
+    const doc = Crdt.Doc.ref<Doc>('doc-id', {
+      version: '0.0.0',
+      count: 0,
+      peers: [],
+      code: new Automerge.Text(),
+    });
+    docFile = await Crdt.Doc.file<Doc>(filedir, doc, { autosave: true });
 
     const info = await docFile.info();
     console.log('docFile/info', info);

@@ -25,7 +25,7 @@ export default Dev.describe('NetworkSchema (P2P)', (e) => {
 
   e.it('NetworkSchema.doc: initial Document<T> (schema) from encoded byte-array', async (e) => {
     const { bytes: initialState } = await import('./Schema.bytes.mjs');
-    const doc1 = Crdt.Doc.ref<DocShared>(initialState);
+    const doc1 = Crdt.Doc.ref<DocShared>('doc-id', initialState);
     expect(doc1.current).to.eql(NetworkSchema.initial.doc);
 
     const doc2 = NetworkSchema.genesis().doc;

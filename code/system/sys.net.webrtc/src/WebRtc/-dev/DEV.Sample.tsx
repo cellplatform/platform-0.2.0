@@ -41,7 +41,6 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
     <Dev.TestRunner.Results
       spinning={testrunner.spinning}
       data={testrunner.results || undefined}
-      padding={10}
       scroll={true}
       style={{ Absolute: 0 }}
     />

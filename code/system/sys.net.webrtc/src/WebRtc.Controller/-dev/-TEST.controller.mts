@@ -29,7 +29,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
   const filedir = fs.dir('dev.test.WebRtc.Controller');
 
   const initialState: DocShared = { network: { peers: {} } };
-  const stateDoc = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+  const stateDoc = Crdt.Doc.ref<DocShared>('doc-id', initialState, { dispose$ });
   let controller: t.WebRtcEvents;
 
   e.it('exposed from root API', (e) => {
@@ -179,7 +179,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
     });
 
     e.it('prune dead peers', async (e) => {
-      const state = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+      const state = Crdt.Doc.ref<DocShared>('doc-id', initialState, { dispose$ });
       state.change((d) => Mutate.addPeer(d.network, 'A', 'B', { initiatedBy: 'A' }));
 
       expect(state.current.network.peers['B']).to.exist;

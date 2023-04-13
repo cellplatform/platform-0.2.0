@@ -21,7 +21,6 @@ export default Dev.describe('Root', (e) => {
             data={results}
             spinning={spinning}
             scroll={true}
-            padding={10}
             style={{ Absolute: 0 }}
           />
         );

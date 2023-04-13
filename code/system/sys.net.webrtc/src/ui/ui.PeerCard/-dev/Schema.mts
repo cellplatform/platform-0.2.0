@@ -19,7 +19,7 @@ export const NetworkSchema = {
   genesis(options: { dispose$?: t.Observable<any> } = {}) {
     const initial = NetworkSchema.initial;
     const schema = Crdt.Doc.Schema.toByteArray<DocShared>(initial.doc, { typeDef });
-    const doc = Crdt.Doc.ref<DocShared>(initial.bytes, options);
+    const doc = Crdt.Doc.ref<DocShared>('dummy-id', initial.bytes, options);
     return {
       schema,
       doc,

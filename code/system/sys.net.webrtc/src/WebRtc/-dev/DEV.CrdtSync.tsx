@@ -65,18 +65,18 @@ export const DevCrdtSync: React.FC<DevCrdtSyncProps> = (props) => {
     if (conn) {
       console.log('start syncer');
 
-      const syncer = PeerSyncer(
-        conn.bus(),
-        () => file.doc.current,
-        (doc) => {
-          console.log('update (sync)', doc);
-          file.doc.replace(doc);
-        },
-        // { dir },
-      );
+      // const syncer = PeerSyncer(
+      //   conn.bus(),
+      //   () => file.doc.current,
+      //   (doc) => {
+      //     console.log('update (sync)', doc);
+      //     file.doc.replace(doc);
+      //   },
+      //   // { dir },
+      // );
 
-      changed$.subscribe((e) => syncer.update());
-      syncer.update();
+      // changed$.subscribe((e) => syncer.update());
+      // syncer.update();
     }
 
     changed$.pipe(rx.debounceTime(300)).subscribe(async (e) => {
