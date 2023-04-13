@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, Wrangle } from './common';
+import { useMouseState } from 'sys.ui.react.common';
 
 const DEFAULT = {
   length: [8, 5] as [number, number],
@@ -15,6 +16,7 @@ export const Hash: React.FC<HashProps> = (props) => {
   let text = props.text ?? '';
   const { prefix, hash } = Local.prefix(text);
   const shortened = Wrangle.displayHash(hash, props.length ?? DEFAULT.length);
+  const mouse = useMouseState();
 
   /**
    * [Render]
@@ -25,7 +27,9 @@ export const Hash: React.FC<HashProps> = (props) => {
       textTransform: 'uppercase',
       marginRight: 6,
       fontWeight: 'bold',
-      opacity: 0.15,
+      opacity: mouse.isOver ? 0.4 : 0.15,
+      color: mouse.isOver ? COLORS.MAGENTA : COLORS.DARK,
+      transition: 'opacity 200ms, color 200ms',
       letterSpacing: -0.1,
     }),
     hash: css({}),
@@ -35,7 +39,7 @@ export const Hash: React.FC<HashProps> = (props) => {
   const elHash = <div {...styles.hash}>{shortened}</div>;
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)} {...mouse.handlers}>
       {elPrefix}
       {elHash}
     </div>

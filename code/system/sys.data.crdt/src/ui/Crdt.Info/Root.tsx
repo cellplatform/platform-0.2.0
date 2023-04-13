@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import { Card, css, DEFAULTS, FC, FIELDS, Pkg, PropList, rx, Style, t } from './common';
-import { File } from './field.File';
-import { HistoryItem } from './field.History.Item';
-import { History } from './field.History.mjs';
+import { FieldFile } from './field.File';
+import { FieldHistoryItem } from './field.History.Item';
+import { FieldHistory } from './field.History.mjs';
+import { FieldNetwork } from './field.Network';
+import { FieldModuleTests } from './field.Module.Tests';
+import { FieldUrl } from './field.Url';
 
 export type CrdtInfoProps = {
   title?: t.PropListTitleInput;
@@ -34,7 +37,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     const { dispose, dispose$ } = rx.disposable();
     dispose$.subscribe(() => (isDisposed = true));
 
-    const docFile = data.file?.data;
+    const docFile = data.file?.doc;
     if (docFile) {
       const updateState = async () => {
         if (isDisposed) return;
@@ -50,14 +53,18 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     }
 
     return () => dispose();
-  }, [Boolean(data.file?.data)]);
+  }, [Boolean(data.file?.doc)]);
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
+    .field('Module.Tests', () => FieldModuleTests(data))
     .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
-    .field('History.Total', () => History(data))
-    .field('History.Item', () => HistoryItem(data))
-    .field('File', () => File(data, file))
+    .field('Driver.Runtime', { label: 'Driver Runtime', value: 'ƒ ← WASM ← Rust' })
+    .field('History', () => FieldHistory(data))
+    .field('History.Item', () => FieldHistoryItem(data))
+    .field('File', () => FieldFile(data, file))
+    .field('Network', () => FieldNetwork(data))
+    .field('Url', () => FieldUrl(data))
     .items(fields);
 
   /**

@@ -1,19 +1,23 @@
 export * from '../common';
-import { t, Value, Filesize } from '../common';
+import { t, Value, Filesize, DEFAULTS as DEFAULTS_BASE } from '../common';
 
 /**
  * Constants
  */
 export const FIELDS: t.CrdtInfoFields[] = [
   'Module',
+  'Module.Tests',
   'Driver',
-  'File',
-  'History.Total',
+  'Driver.Runtime',
+  'History',
   'History.Item',
+  'File',
+  'Network',
+  'Url',
 ];
 
 const fields = ['Module'] as t.CrdtInfoFields[];
-export const DEFAULTS = { fields } as const;
+export const DEFAULTS = { fields, indent: 15, doc: DEFAULTS_BASE.doc } as const;
 
 export const Wrangle = {
   displayHash(hash: string, length: number | [number, number]) {

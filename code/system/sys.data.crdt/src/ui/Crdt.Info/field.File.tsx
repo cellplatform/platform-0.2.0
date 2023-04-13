@@ -1,13 +1,12 @@
-import { t, Value, Wrangle, COLORS, Icons, Path } from './common';
-import { DEFAULTS } from '../common';
+import { t, Value, Wrangle, COLORS, Icons, Path, DEFAULTS } from './common';
 import { Hash } from './ui.Hash';
 
-export function File(
+export function FieldFile(
   data: t.CrdtInfoData,
   info?: { exists: boolean; manifest: t.DirManifest },
 ): t.PropListItem[] {
   const file = data.file;
-  const docFile = file?.data;
+  const docFile = file?.doc;
   const res: t.PropListItem[] = [];
 
   const MSG = {
@@ -22,7 +21,8 @@ export function File(
   }
 
   if (docFile) {
-    const indent = 15;
+    const indent = DEFAULTS.indent;
+
     const manifest = info?.manifest;
     const files = manifest?.files ?? [];
     const hasFiles = files.length > 0;
@@ -61,10 +61,19 @@ export function File(
           indent,
         });
 
+        if (file.path && filesTotal.count > 0) {
+          res.push({
+            label: 'Filesystem',
+            value: Path.ensureSlashes(file.path),
+            tooltip: `file path: ${file.path}`,
+            indent,
+          });
+        }
+
         let strategy = '';
         let strategyCount = 0;
         if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `(compressed) file`;
+          strategy += `compressed file`;
           strategyCount++;
         }
         if (docFile.logging || logFiles.length > 0) {
@@ -78,15 +87,6 @@ export function File(
             indent,
           });
         }
-      }
-
-      if (file.path && filesTotal.count > 0) {
-        res.push({
-          label: 'Filesystem',
-          value: Path.ensureSlashes(file.path),
-          tooltip: `file: ${file.path}`,
-          indent,
-        });
       }
     }
   }

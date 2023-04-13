@@ -1,13 +1,20 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
-import { Crdt, css, Dev, getTestFs, PropList, rx, t } from '../../test.ui';
+import { Crdt, css, Dev, getTestFs, PropList, rx, t, ConnectionMock } from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
-  debug: { bg: boolean; title: boolean; message: string; logsave: boolean; autosave: boolean };
+  debug: {
+    bg: boolean;
+    title: boolean;
+    message: string;
+    logsave: boolean;
+    autosave: boolean;
+    syncDoc: boolean;
+  };
 };
 const initial: T = {
   props: { card: true },
-  debug: { bg: false, title: false, message: '', logsave: false, autosave: true },
+  debug: { bg: false, title: false, message: '', logsave: false, autosave: true, syncDoc: false },
 };
 
 type Doc = { count: number };
@@ -19,7 +26,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
   const toFs = (path: string) => ({ path, fs: fs.dir('dev.sample/crdt-info') });
   const fsdirs = {
-    doc: toFs('dev.CrdtInfo.doc'),
+    doc: toFs('dev.crdt-info.sample'),
   };
 
   type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
@@ -33,26 +40,36 @@ export default Dev.describe('CrdtInfo', async (e) => {
     message: initial.debug.message,
     logsave: initial.debug.logsave,
     autosave: initial.debug.autosave,
+    syncDoc: initial.debug.syncDoc,
   });
 
-  const doc = Crdt.Doc.ref<Doc>(initialDoc);
-  const docFile = await Crdt.Doc.file<Doc>(fsdirs.doc.fs, doc, {
+  const docid = 'my-doc';
+  const docA = Crdt.Doc.ref<Doc>(docid, initialDoc);
+  const docB = Crdt.Doc.ref<Doc>(docid, initialDoc);
+
+  const docFile = await Crdt.Doc.file<Doc>(fsdirs.doc.fs, docA, {
     autosave: local.autosave,
     logsave: local.logsave,
   });
 
+  const conns = ConnectionMock();
+  const syncDocA = Crdt.Doc.sync<Doc>(conns.a.bus, docA);
+  const syncDocB = Crdt.Doc.sync<Doc>(conns.b.bus, docB);
+
   const Util = {
     props(state: T): CrdtInfoProps {
+      const { debug, props } = state;
       return {
-        ...state.props,
-        title: state.debug.title ? ['CRDT Document', null] : undefined,
+        ...props,
+        title: debug.title ? ['CRDT Document', null] : undefined,
         data: {
-          file: { data: docFile, path: fsdirs.doc.path },
+          file: { doc: docFile, path: fsdirs.doc.path },
+          network: { doc: debug.syncDoc ? syncDocA : undefined },
           history: {
-            data: doc.history,
+            data: docA.history,
             item: {
               title: 'Latest Change',
-              data: doc.history[doc.history.length - 1],
+              data: docA.history[docA.history.length - 1],
             },
           },
         },
@@ -70,10 +87,11 @@ export default Dev.describe('CrdtInfo', async (e) => {
       d.debug.title = local.title;
       d.debug.logsave = local.logsave;
       d.debug.autosave = local.autosave;
+      d.debug.syncDoc = local.syncDoc;
     });
 
     const redraw = () => ctx.redraw();
-    doc.$.subscribe(redraw);
+    docA.$.subscribe(redraw);
     docFile.$.subscribe(redraw);
 
     ctx.subject.display('grid').render<T>((e) => {
@@ -98,6 +116,15 @@ export default Dev.describe('CrdtInfo', async (e) => {
     const state = await dev.state();
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `syncDoc`)
+          .value((e) => e.state.debug.syncDoc)
+          .onClick((e) => e.change((d) => (local.syncDoc = Dev.toggle(d.debug, 'syncDoc')))),
+      );
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) =>
         btn
           .label('save strategy: file')
@@ -130,15 +157,15 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
       const inc = (by: number) => {
         const message = state.current.debug.message;
-        doc.change(message, (d) => (d.count += by));
+        docA.change(message, (d) => (d.count += by));
       };
 
       const count = (label: string, by: number) => {
         dev.button((btn) =>
           btn
-            .label(label)
-            .right((e) => `${doc.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => doc.change((d) => (d.count += by))),
+            .label(`${label} →`)
+            .right((e) => `count = ${docA.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+            .onClick((e) => docA.change((d) => (d.count += by))),
         );
       };
 
@@ -155,14 +182,14 @@ export default Dev.describe('CrdtInfo', async (e) => {
       );
     });
 
-    dev.hr(5, 20);
+    dev.hr(0, 10);
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
         const props = Util.props(e.state);
         return (
           <PropList.FieldSelector
-            style={{ Margin: [10, 25, 0, 25] }}
+            style={{ Margin: [10, 40, 10, 30] }}
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}
             onClick={(ev) => {
@@ -175,12 +202,10 @@ export default Dev.describe('CrdtInfo', async (e) => {
       });
     });
 
-    dev.hr(5, 30);
-
     dev.section((dev) => {
       dev.row((e) => {
         const props = Util.props(e.state);
-        return <CrdtInfo {...props} margin={[15, 25, 30, 25]} />;
+        return <CrdtInfo {...props} margin={[15, 25, 40, 25]} />;
       });
 
       dev.boolean((btn) =>
@@ -214,8 +239,8 @@ export default Dev.describe('CrdtInfo', async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: Util.props(e.state),
-        'Doc<T>': doc.current,
-        history: doc.history,
+        history: docA.history,
+        'Doc<T>': docA.current,
       };
 
       return (

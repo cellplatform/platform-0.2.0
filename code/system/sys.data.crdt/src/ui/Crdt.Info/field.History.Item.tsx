@@ -1,7 +1,7 @@
 import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
 import { Hash } from './ui.Hash';
 
-export function HistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
+export function FieldHistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
   const item = data?.history?.item;
   if (!item) return [];
 
