@@ -20,7 +20,6 @@ export default Dev.describe('Root', (e) => {
           <Dev.TestRunner.Results
             data={results}
             spinning={spinning}
-            padding={10}
             scroll={true}
             style={{ Absolute: 0 }}
           />
