@@ -1,5 +1,5 @@
 import { PeerSyncer } from '..';
-import { Automerge, ConnectionMock, expect, Test, Time } from '../../test.ui';
+import { t, Automerge, ConnectionMock, expect, Test, Time } from '../../test.ui';
 
 export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };
@@ -28,6 +28,11 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
       (d) => (docB = d),
     );
 
+    const firedA: t.PeerSyncUpdated<Doc>[] = [];
+    const firedB: t.PeerSyncUpdated<Doc>[] = [];
+    syncerA.$.subscribe((e) => firedA.push(e));
+    syncerB.$.subscribe((e) => firedB.push(e));
+
     expect(docA).to.eql({ count: 0 });
     expect(docB).to.eql({ count: 0 });
 
@@ -49,6 +54,11 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
 
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
+
+    expect(firedA.length).to.eql(6);
+    expect(firedB.length).to.eql(6);
+    expect(firedA[firedA.length - 1].bytes).to.eql(1021);
+    expect(firedB[firedB.length - 1].bytes).to.eql(1021);
 
     expect(syncerA.count).to.equal(6);
     expect(syncerB.count).to.equal(6);
@@ -78,7 +88,7 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
     await syncerB.dispose();
   });
 
-  e.it('multiple docs on same netbus (do not conflict)', async (e) => {
+  e.it('multiple docs on same netbus (do not intermingle)', async (e) => {
     let docA1 = createTestDoc();
     let docA2 = createTestDoc();
     let docB1 = createTestDoc();
@@ -126,7 +136,7 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
 
     expect(docA1).to.eql({ name: 'Foo', count: 1234 });
     expect(docA2).to.eql(docA1);
-    expect(docB1).to.eql({ count: 0 }); // NB: no change
+    expect(docB1).to.eql({ count: 0 }); // NB: not changed.
     expect(docB2).to.eql(docB1);
 
     docB1 = Automerge.change(docB1, (doc) => (doc.name = 'Bar'));
@@ -141,7 +151,11 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
     expect(docB2).to.eql(docB1);
 
     mock.dispose();
-    await syncerA1.dispose();
-    await syncerA2.dispose();
+    await Promise.all([
+      syncerA1.dispose(),
+      syncerA2.dispose(),
+      syncerB1.dispose(),
+      syncerB2.dispose(),
+    ]);
   });
 });

@@ -17,11 +17,18 @@ export function PeerSyncer<D extends {}>(
 ): t.PeerSyncer<D> {
   const { filedir } = options;
   const { dispose, dispose$ } = rx.disposable();
+  dispose$.subscribe(() => {
+    _updated$.complete();
+  });
+
   const bus = rx.busAsType<t.CrdtEvent>(netbus);
   const state = SyncState({ filedir });
 
   let _count = 0;
   let _bytes = 0;
+  const getCurrentDoc = () => ({ id: docid, data: toObject<D>(getDoc()) });
+
+  const _updated$ = new rx.Subject<t.PeerSyncUpdated<D>>();
 
   const sync$ = bus.$.pipe(
     rx.takeUntil(dispose$),
@@ -43,10 +50,11 @@ export function PeerSyncer<D extends {}>(
       const [nextDoc, nextSyncState, patch] = res;
       state.set(nextSyncState);
 
-      _count += 1;
-      _bytes += message.byteLength;
-
       setDoc(nextDoc);
+      const count = (_count += 1);
+      const bytes = (_bytes += message.byteLength);
+      _updated$.next({ tx, count, bytes, doc: getCurrentDoc() });
+
       update({ tx }); // <== 🌳 RECURSION (via network round-trip).
     }
   });
@@ -68,6 +76,8 @@ export function PeerSyncer<D extends {}>(
   };
 
   const api: t.PeerSyncer<D> = {
+    $: _updated$.pipe(rx.takeUntil(dispose$)),
+
     get count() {
       return _count;
     },
@@ -81,7 +91,7 @@ export function PeerSyncer<D extends {}>(
     },
 
     update() {
-      let _complete: undefined | Promise<t.PeerSyncUpdate<D>>;
+      let _complete: undefined | Promise<t.PeerSyncUpdated<D>>;
       const tx = slug();
       update({ tx });
       return {
@@ -102,7 +112,7 @@ export function PeerSyncer<D extends {}>(
             rx.filter((e) => e.message === null),
             rx.take(1),
             rx.delay(10),
-            rx.map(() => ({ tx, bytes, count, doc: { id: docid, data: toObject<D>(getDoc()) } })),
+            rx.map(() => ({ tx, bytes, count, doc: getCurrentDoc() })),
           );
 
           return (_complete = rx.firstValueFrom(complete$));

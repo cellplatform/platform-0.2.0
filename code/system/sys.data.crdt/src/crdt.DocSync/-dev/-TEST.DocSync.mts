@@ -122,6 +122,37 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
 
       expect(syncDocA.count).to.greaterThanOrEqual(4);
       expect(syncDocB.count).to.greaterThanOrEqual(4);
+      expect(syncDocA.bytes).to.greaterThanOrEqual(1450);
+      expect(syncDocB.bytes).to.greaterThanOrEqual(1450);
+
+      mock.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
+    });
+
+    e.it('syncs observable ($)', async (e) => {
+      const mock = ConnectionMock();
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
+
+      const debounce = 0;
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+
+      const firedA: t.PeerSyncUpdated<Doc>[] = [];
+      const firedB: t.PeerSyncUpdated<Doc>[] = [];
+      syncDocA.$.subscribe((e) => firedA.push(e));
+      syncDocB.$.subscribe((e) => firedB.push(e));
+
+      docA.change((doc) => (doc.name = 'Foo'));
+      docB.change((doc) => (doc.count = 1234));
+      await Time.wait(50);
+
+      expect(firedA.length).to.eql(6);
+      expect(firedB.length).to.eql(6);
+
+      expect(firedA[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
+      expect(firedB[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
 
       mock.dispose();
       syncDocA.dispose();

@@ -60,10 +60,16 @@ export function createSyncDoc<D extends {}>(
   const api: t.CrdtDocSync<D> = {
     kind: 'Crdt:DocSync',
     doc,
+
+    $: syncer.$,
     update: syncer.update,
 
     get count() {
       return syncer.count;
+    },
+
+    get bytes() {
+      return syncer.bytes;
     },
 
     /**
