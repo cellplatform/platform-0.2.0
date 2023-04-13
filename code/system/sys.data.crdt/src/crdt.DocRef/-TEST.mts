@@ -3,6 +3,7 @@ import { Automerge, Crdt, expect, rx, t, Test } from '../test.ui';
 
 export default Test.describe('DocRef', (e) => {
   type D = { count: number; name?: string };
+  const docid = 'my-id';
 
   e.it('exposed from root API: Crdt.Doc.ref', (e) => {
     expect(Crdt.Doc.DocRef).to.equal(DocRef);
@@ -11,13 +12,19 @@ export default Test.describe('DocRef', (e) => {
 
   e.describe('initialize', (e) => {
     e.it('kind', (e) => {
-      const doc = DocRef.init<D>({ count: 0 });
+      const doc = DocRef.init<D>(docid, { count: 0 });
       expect(doc.kind).to.eql('Crdt:DocRef');
+    });
+
+    e.it('id', (e) => {
+      const doc = DocRef.init<D>(docid, { count: 0 });
+      expect(doc.id.doc).to.eql(docid);
+      expect(typeof doc.id.actor).to.eql('string');
     });
 
     e.it('from initial {object}', (e) => {
       const initial = { count: 0 };
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
       expect(doc.current).to.eql(initial);
       expect(doc.current).to.not.equal(initial); // NB: initialized as an Automerge document.
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
@@ -30,7 +37,7 @@ export default Test.describe('DocRef', (e) => {
     e.it('from initial {Automerge} document', (e) => {
       let initial: D = Automerge.init<D>();
       initial = Automerge.change<D>(initial, (doc) => (doc.count = 999));
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
       expect(doc.current).to.eql({ count: 999 });
       expect(doc.current).to.equal(initial);
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
@@ -40,7 +47,7 @@ export default Test.describe('DocRef', (e) => {
   e.describe('dispose', (e) => {
     e.it('ref.dispose() method', async (e) => {
       const initial = { count: 0 };
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
 
       let fired = 0;
       doc.dispose$.subscribe(() => fired++);
@@ -54,7 +61,7 @@ export default Test.describe('DocRef', (e) => {
 
     e.it('dispose via { dispose$ } option', async (e) => {
       const { dispose, dispose$ } = rx.disposable();
-      const doc = DocRef.init<D>({ count: 0 }, { dispose$ });
+      const doc = DocRef.init<D>(docid, { count: 0 }, { dispose$ });
 
       expect(doc.disposed).to.eql(false);
       dispose();
@@ -64,16 +71,16 @@ export default Test.describe('DocRef', (e) => {
 
   e.describe('properties', (e) => {
     e.it('doc.id.actor (actorID - unique within process)', async (e) => {
-      const doc1 = DocRef.init<D>({ count: 0 });
+      const doc1 = DocRef.init<D>(docid, { count: 0 });
       expect(doc1.id.actor).to.eql(Automerge.getActorId(doc1.current));
       expect(doc1.id.actor).to.eql(doc1.id.actor); // NB: no change.
       expect(doc1.id.actor.length).to.greaterThan(10);
 
-      const doc2 = DocRef.init<D>({ count: 0 });
+      const doc2 = DocRef.init<D>(docid, { count: 0 });
       expect(doc1.id.actor).to.not.eql(doc2.id.actor);
 
       // NB: new reference from doc-1.
-      const doc3 = DocRef.init<D>(Automerge.from<D>(doc1.current));
+      const doc3 = DocRef.init<D>(docid, Automerge.from<D>(doc1.current));
       expect(doc3.id.actor).to.not.eql(doc1.id.actor); // Share same underlying CRDT document.
     });
   });
@@ -82,7 +89,7 @@ export default Test.describe('DocRef', (e) => {
     const initial: D = { count: 0 };
 
     e.it('changes and fires update event', (e) => {
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
       const fired: t.CrdtDocAction<D>[] = [];
       doc.$.subscribe((e) => fired.push(e));
 
@@ -98,7 +105,7 @@ export default Test.describe('DocRef', (e) => {
     });
 
     e.it('changes with commit message', (e) => {
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
       const fired: t.CrdtDocAction<D>[] = [];
       doc.$.subscribe((e) => fired.push(e));
 
@@ -118,7 +125,7 @@ export default Test.describe('DocRef', (e) => {
     });
 
     e.it('history list cached until next change', async (e) => {
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
 
       doc.change((doc) => (doc.count = 999));
 
@@ -132,7 +139,7 @@ export default Test.describe('DocRef', (e) => {
     });
 
     e.it('empty commit message is nulled', (e) => {
-      const doc = DocRef.init<D>(initial);
+      const doc = DocRef.init<D>(docid, initial);
 
       const fired: t.CrdtDocAction<D>[] = [];
       doc.$.subscribe((e) => fired.push(e));
@@ -151,7 +158,7 @@ export default Test.describe('DocRef', (e) => {
     e.it('onChange (via {onChange} option and onChange handler method)', async (e) => {
       const fired1: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
 
-      const doc = DocRef.init<D>(initial, { onChange: (e) => fired1.push(e) });
+      const doc = DocRef.init<D>(docid, initial, { onChange: (e) => fired1.push(e) });
       expect(fired1.length).to.eql(1); // NB: Initial change at assignment of {initial} object.
 
       doc.change((doc) => (doc.count = 123));
@@ -170,7 +177,7 @@ export default Test.describe('DocRef', (e) => {
 
     e.it('change (and update via [Automerge.applyChanges])', (e) => {
       const changes: Uint8Array[] = [];
-      const docRef = DocRef.init<D>(initial, { onChange: (e) => changes.push(e.change) });
+      const docRef = DocRef.init<D>(docid, initial, { onChange: (e) => changes.push(e.change) });
 
       docRef.change((doc) => (doc.count = 999));
       docRef.change((doc) => (doc.name = 'foo'));
@@ -185,7 +192,7 @@ export default Test.describe('DocRef', (e) => {
     e.it(
       'broadcasts the [Automerge.getLastLocalChange] associated with each [doc.change(d→)] mutation',
       async (e) => {
-        const doc = DocRef.init<D>(initial);
+        const doc = DocRef.init<D>(docid, initial);
         const fired: t.CrdtDocAction<D>[] = [];
         doc.$.subscribe((e) => fired.push(e));
 
@@ -201,7 +208,7 @@ export default Test.describe('DocRef', (e) => {
 
   e.describe('replace', (e) => {
     e.it('replaces and fires update event', (e) => {
-      const doc = DocRef.init<D>({ count: 0 });
+      const doc = DocRef.init<D>(docid, { count: 0 });
       const fired: t.CrdtDocAction<D>[] = [];
       doc.$.subscribe((e) => fired.push(e));
 
@@ -215,7 +222,7 @@ export default Test.describe('DocRef', (e) => {
     });
 
     e.it('throw: not an Automerge document', (e) => {
-      const doc = DocRef.init<D>({ count: 0 });
+      const doc = DocRef.init<D>(docid, { count: 0 });
       const fn = () => doc.replace({ count: 123 });
       expect(fn).to.throw(/Cannot replace with a non-Automerge document/);
     });

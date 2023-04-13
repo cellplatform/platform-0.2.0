@@ -1,12 +1,13 @@
-import { Time, rx, t, Automerge, Is } from './common';
+import { Automerge, rx, t, Time } from './common';
 
-const { isAutomerge } = Automerge;
+type Id = string;
 
 /**
  * In-memory CRDT document reference (wrapper).
  */
 export function createDocRef<D extends {}>(
-  initial: D | Uint8Array, // NB: Uint8Array is a serialized Automerge document.
+  docid: Id,
+  initial: D | Uint8Array, // NB: [Uint8Array] is a serialized Automerge document.
   options: {
     dispose$?: t.Observable<any>;
     onChange?: t.CrdtDocRefChangeHandler<D>;
@@ -56,7 +57,7 @@ export function createDocRef<D extends {}>(
        *   distinct actor IDs."
        */
       const actor = Automerge.getActorId(_doc);
-      return { actor };
+      return { actor, doc: docid };
     },
 
     /**
@@ -97,7 +98,7 @@ export function createDocRef<D extends {}>(
      */
     replace(doc) {
       if (api.disposed) return api;
-      if (!isAutomerge(doc)) {
+      if (!Automerge.isAutomerge(doc)) {
         throw new Error('Cannot replace with a non-Automerge document');
       }
       _doc = doc;
@@ -128,7 +129,7 @@ export function createDocRef<D extends {}>(
    * Initial setup.
    */
   if (options.onChange) onChangeHandlers.add(options.onChange);
-  if (onChangeHandlers.size > 0 && !isAutomerge(initial)) {
+  if (onChangeHandlers.size > 0 && !Automerge.isAutomerge(initial)) {
     // NB: If this was a new Automerge document, then ensure the initial change-set
     //     (created via [Automerge.from]) is broadcast to any listeners.
     fireOnChange(Automerge.getLastLocalChange(_doc));
@@ -147,7 +148,7 @@ const Wrangle = {
       const [doc] = Automerge.applyChanges<D>(Automerge.init(), [initial]);
       return doc;
     } else {
-      return isAutomerge(initial) ? initial : Automerge.from<D>(initial);
+      return Automerge.isAutomerge(initial) ? initial : Automerge.from<D>(initial);
     }
   },
 
