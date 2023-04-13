@@ -1,5 +1,3 @@
-import { DocRef } from '../crdt.DocRef';
-import { CrdtIs } from '../crdt.helpers';
 import { Automerge, DEFAULTS, rx, t } from './common';
 import { autoSaveStrategy } from './strategy.AutoSave.mjs';
 import { saveLogStrategy } from './strategy.SaveLog.mjs';
@@ -19,7 +17,7 @@ type Options<D extends {}> = {
  */
 export async function createDocFile<D extends {}>(
   filedir: t.Fs,
-  initial: D | t.CrdtDocRef<D>,
+  doc: t.CrdtDocRef<D>,
   options: Options<D> = {},
 ) {
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
@@ -44,6 +42,7 @@ export async function createDocFile<D extends {}>(
 
   // NB: Must be initialized before the [DocRef] below to catch the first change (upon initialization).
   saveLogStrategy(filedir, {
+    doc,
     onChange$,
     dispose$,
     enabled: () => _isLogging,
@@ -53,8 +52,7 @@ export async function createDocFile<D extends {}>(
   /**
    * [DocRef]
    */
-  const doc = CrdtIs.ref(initial) ? initial : DocRef.init<D>(initial, { onChange });
-  if (CrdtIs.ref(initial)) doc.onChange(onChange);
+  doc.onChange(onChange);
   doc.dispose$.subscribe(dispose);
 
   /**
