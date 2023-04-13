@@ -47,7 +47,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
     statusMargin: css({
       width: 2,
       Absolute: [0, null, 0, 0],
-      backgroundColor: data?.ok ? COLORS.GREEN : COLORS.RED,
+      backgroundColor: data?.ok ? COLORS.LIME : COLORS.RED,
     }),
   };
 
