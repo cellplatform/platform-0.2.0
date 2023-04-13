@@ -1808,15 +1808,6 @@ format@^0.2.0:
   resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==
 
-framer-motion@10.10.0:
-  version "10.10.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.10.0.tgz#929f3d3ca653af9885e162a979fc941acfa2ce7a"
-  integrity sha512-eCsyOcJimIRbx9KOzBTO3j9u1rF/H8/o/ybizYqdrzHkEeHx9L2NcEfGWfV0OHTc1JV17ECVzuZpomupEJ4+dw==
-  dependencies:
-    tslib "^2.4.0"
-  optionalDependencies:
-    "@emotion/is-prop-valid" "^0.8.2"
-
 framer-motion@10.11.2:
   version "10.11.2"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.11.2.tgz#0c423acbc3be232b364365b84cf3fd8a519c1044"
@@ -3235,11 +3226,6 @@ mlly@^1.1.0, mlly@^1.1.1:
     pkg-types "^1.0.2"
     ufo "^1.1.1"
 
-monaco-editor@0.36.1:
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.36.1.tgz#aad528c815605307473a1634612946921d8079b5"
-  integrity sha512-/CaclMHKQ3A6rnzBzOADfwdSJ25BFoFT0Emxsc4zYVyav5SkK9iA6lEtIeuN/oRYbwPgviJT+t3l+sjFa28jYg==
-
 monaco-editor@0.37.1:
   version "0.37.1"
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.37.1.tgz#d6f5ffb593e019e74e19bf8a2bdef5a691876f4e"
@@ -3303,18 +3289,6 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
-
-nostr-tools@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/nostr-tools/-/nostr-tools-1.8.1.tgz#4e54a354cc88ea0200634da3ee5a1c3466e1794c"
-  integrity sha512-/2IUe5xINUYT5hYBoEz51dfRaodbRHnyF8n+ZbKWCoh0ZRX6AL88OoDNrWaWWo7tP5j5OyzSL9g/z4TP7bshEA==
-  dependencies:
-    "@noble/hashes" "1.0.0"
-    "@noble/secp256k1" "^1.7.1"
-    "@scure/base" "^1.1.1"
-    "@scure/bip32" "^1.1.5"
-    "@scure/bip39" "^1.1.1"
-    prettier "^2.8.4"
 
 nostr-tools@1.8.2:
   version "1.8.2"
