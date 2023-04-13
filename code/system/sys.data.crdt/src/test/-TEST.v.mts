@@ -1,20 +1,12 @@
 import { Test, describe, it } from '.';
+import { TESTS } from './-TESTS.mjs';
 
 /**
  * Run tests within CI (server-side).
  */
 const run = Test.using(describe, it);
-
-await run.suite(import('../driver.Automerge/-dev/TEST.basic.mjs'));
-await run.suite(import('../driver.Automerge/-dev/TEST.api.mjs'));
-await run.suite(import('../driver.Automerge/-dev/TEST.filesystem.mjs'));
-await run.suite(import('../driver.Automerge/-dev/TEST.sync.mjs'));
-await run.suite(import('../crdt.DocSync/-dev/-TEST.DocSync.mjs'));
-await run.suite(import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs'));
-await run.suite(import('../crdt.DocRef/-TEST.mjs'));
-await run.suite(import('../crdt.DocFile/-TEST.mjs'));
-await run.suite(import('../crdt.Schema/-dev/-TEST.mjs'));
-await run.suite(import('../crdt.helpers/-TEST.mjs'));
+const wait = TESTS.all().map((m) => run.suite(m));
+await Promise.all(wait);
 
 /**
  * Test Harness (UI)
