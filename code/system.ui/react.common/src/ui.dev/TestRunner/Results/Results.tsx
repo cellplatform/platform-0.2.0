@@ -1,9 +1,10 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { css, Style, t, COLORS, Spinner } from '../common';
 import { SuiteResults } from './Results.Suite';
 
 export type ResultsProps = {
   data?: t.TestSuiteRunResponse;
-  padding?: t.CssEdgesInput;
   spinning?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
@@ -35,14 +36,20 @@ export const Results: React.FC<ResultsProps> = (props) => {
       placeItems: 'center',
     }),
     body: css({
+      position: 'relative',
       Absolute: scroll ? 0 : undefined,
       boxSizing: 'border-box',
       Scroll: scroll,
-      ...Style.toPadding(props.padding),
     }),
     results: css({
       opacity: spinning ? 0.15 : 1,
       filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
+      Margin: [10, 20, 50, 20],
+    }),
+    statusMargin: css({
+      width: 2,
+      Absolute: [0, null, 0, 0],
+      backgroundColor: data?.ok ? COLORS.GREEN : COLORS.RED,
     }),
   };
 
@@ -57,7 +64,10 @@ export const Results: React.FC<ResultsProps> = (props) => {
   );
 
   const elBody = (
-    <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
+    <div {...styles.body}>
+      {data && <div {...styles.statusMargin} />}
+      {data && <SuiteResults data={data} style={styles.results} />}
+    </div>
   );
 
   return (

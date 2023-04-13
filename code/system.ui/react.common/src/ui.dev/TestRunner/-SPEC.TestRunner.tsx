@@ -3,6 +3,7 @@ import { expect } from '../../test.ui';
 
 import type { ResultsProps } from './Results';
 
+type Ctx = { fail: boolean };
 type T = { props: ResultsProps };
 const initial: T = { props: {} };
 
@@ -11,8 +12,9 @@ const root = Dev.describe('root spec', (e) => {
     expect(123).to.eql(123);
   });
 
-  e.it('fail', async (e) => {
-    expect(123).to.eql(5);
+  e.it('bar', async (e) => {
+    const ctx = e.ctx as Ctx;
+    if (ctx.fail) expect(123).to.eql(5);
   });
 
   e.it.skip('skipped test', async (e) => {});
@@ -40,19 +42,29 @@ export default Dev.describe('TestRunner', (e) => {
       .backgroundColor(1)
       .size('fill')
       .render<T>((e) => {
-        return <Dev.TestRunner.Results {...e.state.props} padding={10} />;
+        return <Dev.TestRunner.Results {...e.state.props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.button('run test', async (e) => {
-      const results = await root.run();
-      await e.change((d) => (d.props.data = results));
-    });
+    dev.section((dev) => {
+      dev.button('run (success)', async (e) => {
+        const ctx: Ctx = { fail: false };
+        const results = await root.run({ ctx });
+        await e.change((d) => (d.props.data = results));
+      });
 
-    dev.button('clear', (e) => e.change((d) => (d.props.data = undefined)));
+      dev.button('run (fail)', async (e) => {
+        const ctx: Ctx = { fail: true };
+        const results = await root.run({ ctx });
+        await e.change((d) => (d.props.data = results));
+      });
+
+      dev.hr(-1, 5);
+      dev.button('clear', (e) => e.change((d) => (d.props.data = undefined)));
+    });
 
     dev.hr(5, 20);
 
@@ -73,7 +85,10 @@ export default Dev.describe('TestRunner', (e) => {
     });
 
     dev.hr(5, 20);
+  });
 
+  e.it('ui:footer', (e) => {
+    const dev = Dev.tools<T>(e, initial);
     dev.footer.render((e) => {
       return <Dev.TestRunner.Compact />;
     });
