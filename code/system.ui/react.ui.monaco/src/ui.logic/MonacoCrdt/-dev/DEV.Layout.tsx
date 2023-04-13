@@ -89,7 +89,6 @@ export const DevLayout: React.FC<DevLayoutProps> = (props) => {
         data={props.tests.results}
         spinning={props.tests.running}
         style={styles.bottom.runner}
-        padding={[10, 20, 10, 10]}
       />
     </div>
   );
