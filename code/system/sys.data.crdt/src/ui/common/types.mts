@@ -7,12 +7,6 @@ export type {
   PropListItem,
   PropListTitleInput,
 } from 'sys.ui.react.common/src/types.mjs';
-export type {
-  TestSuiteRunResponse,
-  SpecImport,
-  SpecImports,
-  TestSuiteModel,
-} from 'sys.test.spec/src/types.mjs';
 
 /**
  * @local
