@@ -115,7 +115,7 @@ const ButtonText = (props: { results?: t.TestSuiteRunResponse }) => {
     const title = `${skipped} skipped`;
     push(
       <div {...css(styles.skipped, styles.item)} key={title} title={title}>
-        <Icons.Test.Skipped size={14} /> {skipped}
+        <Icons.Test.Skipped size={14} style={{ transform: 'scaleX(-1)' }} /> {skipped}
       </div>,
     );
   }
