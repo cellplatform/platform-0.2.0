@@ -62,14 +62,12 @@ export const Results: React.FC<ResultsProps> = (props) => {
   );
 
   const elBody = (
-    <div {...styles.body}>
-      {data && <div {...styles.statusMargin} />}
-      {data && <SuiteResults data={data} style={styles.results} />}
-    </div>
+    <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
+      {data && <div {...styles.statusMargin} />}
       {elBody}
       {elEmpty}
       {elSpinner}
