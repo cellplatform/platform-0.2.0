@@ -146,6 +146,14 @@ export type TestSuiteRunResponse = {
   children: TestSuiteRunResponse[];
 };
 
+export type TestSuiteRunStats = {
+  total: number;
+  succeeded: number;
+  failed: number;
+  skipped: number;
+  only: number;
+};
+
 /**
  * Handler that runs before/after a test is run.
  */
