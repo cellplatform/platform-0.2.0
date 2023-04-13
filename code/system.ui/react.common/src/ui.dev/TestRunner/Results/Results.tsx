@@ -1,6 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
-
-import { css, Style, t, COLORS, Spinner } from '../common';
+import { COLORS, css, Spinner, t } from '../common';
 import { SuiteResults } from './Results.Suite';
 
 export type ResultsProps = {
