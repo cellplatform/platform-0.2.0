@@ -1,4 +1,4 @@
-import { t, Is } from '../common';
+import { rx, t, Is } from '../common';
 import { TestFilesystem } from 'sys.fs';
 
 export { expect, expectError } from 'sys.test';
@@ -18,4 +18,15 @@ export async function getTestFs(bus: t.EventBus<any>) {
   // Browser.
   const { Filesystem } = await import('sys.fs.indexeddb');
   return (await Filesystem.client({ bus })).fs;
+}
+
+/**
+ * In-memory bus connection.
+ */
+export function ConnectionMock() {
+  const a = { bus: rx.bus() };
+  const b = { bus: rx.bus() };
+  const conn = rx.bus.connect([a.bus, b.bus]);
+  const dispose = () => conn.dispose();
+  return { a, b, dispose };
 }
