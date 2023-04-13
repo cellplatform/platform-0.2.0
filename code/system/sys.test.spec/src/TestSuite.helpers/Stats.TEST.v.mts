@@ -1,18 +1,19 @@
-import { ResultStats } from '.';
+import { Stats } from '.';
 import { describe, expect, it, t, Test } from '../test';
 
 describe('ResultStats', () => {
   const toResults = async (input: t.TestSuiteModel) => {
     await input.init();
     const results = await input.run();
-    const stats = ResultStats.suite(results);
+    const stats = Stats.suite(results);
     return { results, stats };
   };
 
   it('empty', async () => {
     const root = Test.describe('root', (e) => {});
-    const { stats } = await toResults(root);
 
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(0);
     expect(stats.succeeded).to.eql(0);
     expect(stats.failed).to.eql(0);
@@ -25,7 +26,8 @@ describe('ResultStats', () => {
       e.it('foo', (e) => {});
     });
 
-    const { stats } = await toResults(root);
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(1);
     expect(stats.succeeded).to.eql(1);
     expect(stats.failed).to.eql(0);
@@ -43,7 +45,8 @@ describe('ResultStats', () => {
       });
     });
 
-    const { stats } = await toResults(root);
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(2);
     expect(stats.succeeded).to.eql(1);
     expect(stats.failed).to.eql(1);
@@ -59,7 +62,8 @@ describe('ResultStats', () => {
       });
     });
 
-    const { stats } = await toResults(root);
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(2);
     expect(stats.succeeded).to.eql(1);
     expect(stats.failed).to.eql(0);
@@ -78,7 +82,8 @@ describe('ResultStats', () => {
       e.it.skip('skipped', (e) => {});
     });
 
-    const { stats } = await toResults(root);
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(5);
     expect(stats.succeeded).to.eql(2);
     expect(stats.failed).to.eql(0);
@@ -97,7 +102,8 @@ describe('ResultStats', () => {
       e.it('two', (e) => {});
     });
 
-    const { stats } = await toResults(root);
+    const { results, stats } = await toResults(root);
+    expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(5);
     expect(stats.succeeded).to.eql(2);
     expect(stats.failed).to.eql(0);

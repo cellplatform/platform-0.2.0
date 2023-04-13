@@ -1,16 +1,19 @@
 import { t } from '../common';
 import { Tree } from './Tree.mjs';
 
-export const ResultStats = {
-  suite(results: t.TestSuiteRunResponse): t.TestSuiteRunStats {
-    const res: t.TestSuiteRunStats = {
+export const Stats = {
+  get empty(): t.TestSuiteRunStats {
+    return {
       total: 0,
       succeeded: 0,
       failed: 0,
       skipped: 0,
       only: 0,
     };
+  },
 
+  suite(results: t.TestSuiteRunResponse): t.TestSuiteRunStats {
+    const res = Stats.empty;
     if (Tree.Results.isEmpty(results)) return res;
 
     Tree.Results.walkDown(results, (e) => {

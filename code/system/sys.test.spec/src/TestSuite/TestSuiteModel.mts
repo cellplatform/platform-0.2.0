@@ -1,7 +1,7 @@
 import { DEFAULT, slug, t, Time } from './common';
 import { Constraints } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
-import { TestTree } from '../TestSuite.helpers/TestTree.mjs';
+import { TestTree, Stats } from '../TestSuite.helpers';
 
 type LazyParent = () => t.TestSuiteModel;
 
@@ -51,7 +51,16 @@ export const TestSuiteModel = (args: {
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
       const tx = `run.tx.${slug()}`;
-      const res: R = { id, tx, ok: true, description, elapsed: -1, tests: [], children: [] };
+      const res: R = {
+        id,
+        tx,
+        ok: true,
+        description,
+        elapsed: -1,
+        tests: [],
+        children: [],
+        stats: Stats.empty,
+      };
 
       await init(model);
       const tests = model.state.tests;
@@ -64,6 +73,7 @@ export const TestSuiteModel = (args: {
         res.elapsed = timer.elapsed.msec;
         if (res.tests.some(({ error }) => Boolean(error))) res.ok = false;
         if (res.children.some(({ ok }) => !ok)) res.ok = false;
+        res.stats = Stats.suite(res);
         resolve(res);
       };
 

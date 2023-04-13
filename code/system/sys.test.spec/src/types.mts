@@ -144,6 +144,7 @@ export type TestSuiteRunResponse = {
   elapsed: Milliseconds;
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
+  stats: TestSuiteRunStats;
 };
 
 export type TestSuiteRunStats = {
