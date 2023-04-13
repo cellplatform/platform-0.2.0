@@ -1,6 +1,4 @@
-import { DocRef } from '../crdt.DocRef';
-import { CrdtIs } from '../crdt.helpers';
-import { t, rx, DEFAULTS } from './common';
+import { DEFAULTS, rx, t } from './common';
 import { PeerSyncer } from './PeerSyncer.mjs';
 
 /**
@@ -8,7 +6,7 @@ import { PeerSyncer } from './PeerSyncer.mjs';
  */
 export function createSyncDoc<D extends {}>(
   netbus: t.EventBus<any>, // An event-bus that fires over a network connection.
-  initial: D | t.CrdtDocRef<D>,
+  doc: t.CrdtDocRef<D>,
   options: t.CrdtDocSyncOptions<D> = {},
 ) {
   const { syncOnStart = true, filedir } = options;
@@ -18,14 +16,14 @@ export function createSyncDoc<D extends {}>(
   dispose$.subscribe(() => ensureDisposed());
   const ensureDisposed = async () => {
     _isDisposed = true;
-    onChange$.complete();
+    change$.complete();
     await syncer.dispose();
   };
 
-  const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
+  const change$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
     if (!_isDisposed) {
-      onChange$.next(e);
+      change$.next(e);
       options.onChange?.(e);
     }
   };
@@ -33,15 +31,16 @@ export function createSyncDoc<D extends {}>(
   /**
    * [DocRef]
    */
-  const doc = CrdtIs.ref(initial) ? initial : DocRef.init<D>(initial, { onChange });
-  if (CrdtIs.ref(initial)) doc.onChange(onChange);
+  doc.onChange(onChange);
   doc.dispose$.subscribe(dispose);
+  const docid = doc.id.doc;
 
   /**
    * [PeerSyncer]
    */
   const syncer = PeerSyncer<D>(
     netbus,
+    docid,
     () => doc.current,
     (d) => doc.replace(d),
     { filedir },

@@ -21,16 +21,24 @@ export type CrdtDocSync<D extends {}> = {
   readonly disposed: boolean;
   readonly dispose$: t.Observable<any>;
   dispose(): Promise<void>;
-  update: PeerSyncer['update'];
+  update: PeerSyncer<D>['update'];
 };
 
 /**
  * Wraps the network synchronization logic for single CRDT
  * document and a set of network peers.
  */
-export type PeerSyncer = {
+export type PeerSyncer<D extends {}> = {
   readonly count: number;
-  state(): Promise<t.AutomergeSyncState>;
-  update(): Promise<{ tx: Id; complete: boolean }>;
+  readonly bytes: number;
   dispose(): Promise<void>;
+  state(): Promise<t.AutomergeSyncState>;
+  update(): { tx: Id; complete: Promise<PeerSyncUpdate<D>> };
+};
+
+export type PeerSyncUpdate<D extends {}> = {
+  tx: Id;
+  count: number;
+  bytes: number;
+  doc: { id: Id; data: D };
 };

@@ -1,5 +1,6 @@
 import { Automerge, rx, slug, t } from './common';
 import { SyncState } from './PeerSyncer.State.mjs';
+import { toObject } from '../crdt.helpers';
 
 type Id = string;
 
@@ -7,59 +8,72 @@ type Id = string;
  * Wraps the network synchronization logic for single CRDT
  * document and a set of network peers.
  */
-export function PeerSyncer<D>(
+export function PeerSyncer<D extends {}>(
   netbus: t.EventBus<any>, // An event-bus that fires over a network connection.
+  docid: Id,
   getDoc: () => D,
   setDoc: (doc: D) => void,
   options: { filedir?: t.Fs } = {},
-) {
+): t.PeerSyncer<D> {
   const { filedir } = options;
   const { dispose, dispose$ } = rx.disposable();
-  const bus = rx.busAsType<t.CrdtSyncEvent>(netbus);
+  const bus = rx.busAsType<t.CrdtEvent>(netbus);
   const state = SyncState({ filedir });
+
   let _count = 0;
+  let _bytes = 0;
 
   const sync$ = bus.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter((e) => e.type === 'sys.crdt/sync'),
-    rx.map((e) => e.payload as t.CrdtSync),
+    rx.map((e) => e.payload as t.CrdtSyncMessage),
+    rx.filter((e) => e.docid === docid),
     rx.map((e) => {
       const { tx } = e;
-      const message = Wrangle.asUint8Array(e.message);
-      return { message, tx };
+      const message = e.message ? Wrangle.asUint8Array(e.message) : null;
+      return { tx, message };
     }),
   );
 
   sync$.subscribe(async (e) => {
     const { tx, message } = e;
-    const prevSyncState = await state.get();
-    const res = Automerge.receiveSyncMessage<D>(getDoc(), prevSyncState, message);
-    const [nextDoc, nextSyncState, patch] = res;
-    state.set(nextSyncState);
-    setDoc(nextDoc);
-    update({ tx }); // <== 🌳 Recursion (via network round-trip).
+    if (message) {
+      const prevSyncState = await state.get();
+      const res = Automerge.receiveSyncMessage<D>(getDoc(), prevSyncState, message);
+      const [nextDoc, nextSyncState, patch] = res;
+      state.set(nextSyncState);
+
+      _count += 1;
+      _bytes += message.byteLength;
+
+      setDoc(nextDoc);
+      update({ tx }); // <== 🌳 RECURSION (via network round-trip).
+    }
   });
 
-  const update = async (options: { tx?: Id } = {}) => {
-    const tx = options.tx || slug();
+  const update = async (args: { tx: Id }) => {
+    const tx = args.tx || slug();
     const prevSyncState = await state.get();
     const [nextSyncState, message] = Automerge.generateSyncMessage<D>(getDoc(), prevSyncState);
     state.set(nextSyncState);
 
-    if (message) {
-      bus.fire({ type: 'sys.crdt/sync', payload: { tx, message } });
-      _count++;
-    }
+    bus.fire({
+      type: 'sys.crdt/sync',
+      payload: { tx, docid, message },
+    });
 
-    const complete = Boolean(message);
+    const complete = !Boolean(message);
     if (complete) await state.save();
-
     return { tx, complete };
   };
 
-  const api = {
+  const api: t.PeerSyncer<D> = {
     get count() {
       return _count;
+    },
+
+    get bytes() {
+      return _bytes;
     },
 
     state() {
@@ -67,7 +81,33 @@ export function PeerSyncer<D>(
     },
 
     update() {
-      return update({ tx: slug() });
+      let _complete: undefined | Promise<t.PeerSyncUpdate<D>>;
+      const tx = slug();
+      update({ tx });
+      return {
+        tx,
+        get complete() {
+          if (_complete) return _complete;
+
+          let count = 0;
+          let bytes = 0;
+          const tx$ = sync$.pipe(rx.filter((e) => e.tx === tx));
+
+          tx$.pipe(rx.filter((e) => e.message !== null)).subscribe((e) => {
+            bytes += e.message?.length ?? 0;
+            count += 1;
+          });
+
+          const complete$ = tx$.pipe(
+            rx.filter((e) => e.message === null),
+            rx.take(1),
+            rx.delay(10),
+            rx.map(() => ({ tx, bytes, count, doc: { id: docid, data: toObject<D>(getDoc()) } })),
+          );
+
+          return (_complete = rx.firstValueFrom(complete$));
+        },
+      };
     },
 
     async dispose() {
