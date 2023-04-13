@@ -15,7 +15,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(0);
-    expect(stats.succeeded).to.eql(0);
+    expect(stats.passed).to.eql(0);
     expect(stats.failed).to.eql(0);
     expect(stats.skipped).to.eql(0);
     expect(stats.only).to.eql(0);
@@ -29,7 +29,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(1);
-    expect(stats.succeeded).to.eql(1);
+    expect(stats.passed).to.eql(1);
     expect(stats.failed).to.eql(0);
     expect(stats.skipped).to.eql(0);
     expect(stats.only).to.eql(0);
@@ -48,7 +48,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(2);
-    expect(stats.succeeded).to.eql(1);
+    expect(stats.passed).to.eql(1);
     expect(stats.failed).to.eql(1);
     expect(stats.skipped).to.eql(0);
     expect(stats.only).to.eql(0);
@@ -65,7 +65,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(2);
-    expect(stats.succeeded).to.eql(1);
+    expect(stats.passed).to.eql(1);
     expect(stats.failed).to.eql(0);
     expect(stats.skipped).to.eql(1);
     expect(stats.only).to.eql(0);
@@ -85,7 +85,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(5);
-    expect(stats.succeeded).to.eql(2);
+    expect(stats.passed).to.eql(2);
     expect(stats.failed).to.eql(0);
     expect(stats.skipped).to.eql(1);
     expect(stats.only).to.eql(2);
@@ -105,7 +105,7 @@ describe('ResultStats', () => {
     const { results, stats } = await toResults(root);
     expect(results.stats).to.eql(stats);
     expect(stats.total).to.eql(5);
-    expect(stats.succeeded).to.eql(2);
+    expect(stats.passed).to.eql(2);
     expect(stats.failed).to.eql(0);
     expect(stats.skipped).to.eql(1);
     expect(stats.only).to.eql(2);

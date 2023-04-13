@@ -5,7 +5,7 @@ export const Stats = {
   get empty(): t.TestSuiteRunStats {
     return {
       total: 0,
-      succeeded: 0,
+      passed: 0,
       failed: 0,
       skipped: 0,
       only: 0,
@@ -24,7 +24,7 @@ export const Stats = {
       const only = !skipped && excluded.includes('only');
 
       res.total++;
-      if (e.test.ok && !skipped && !only) res.succeeded++;
+      if (e.test.ok && !skipped && !only) res.passed++;
       if (!e.test.ok) res.failed++;
       if (skipped) res.skipped++;
       if (only) res.only++;

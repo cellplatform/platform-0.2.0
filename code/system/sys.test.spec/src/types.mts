@@ -149,7 +149,7 @@ export type TestSuiteRunResponse = {
 
 export type TestSuiteRunStats = {
   total: number;
-  succeeded: number;
+  passed: number;
   failed: number;
   skipped: number;
   only: number;
