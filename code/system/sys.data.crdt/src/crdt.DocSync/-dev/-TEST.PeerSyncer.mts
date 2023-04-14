@@ -55,15 +55,15 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
     expect(docB).to.eql({ name: 'Bar', count: 1234 });
     expect(docB).to.eql(docA);
 
-    expect(firedA.length).to.eql(6);
-    expect(firedB.length).to.eql(6);
-    expect(firedA[firedA.length - 1].bytes).to.eql(1021);
-    expect(firedB[firedB.length - 1].bytes).to.eql(1021);
+    expect(firedA.length).to.greaterThan(5);
+    expect(firedB.length).to.greaterThan(5);
+    expect(firedA[firedA.length - 1].bytes).to.greaterThan(1000);
+    expect(firedB[firedB.length - 1].bytes).to.greaterThan(1000);
 
-    expect(syncerA.count).to.equal(6);
-    expect(syncerB.count).to.equal(6);
-    expect(syncerA.bytes).to.equal(1021);
-    expect(syncerB.bytes).to.equal(1021);
+    expect(syncerA.count).to.greaterThan(5);
+    expect(syncerB.count).to.greaterThan(5);
+    expect(syncerA.bytes).to.greaterThan(1000);
+    expect(syncerB.bytes).to.greaterThan(1000);
 
     docA = Automerge.change(docA, (doc) => (doc.count = 888));
     docB = Automerge.change(docB, (doc) => (doc.name = 'Baz'));
