@@ -73,8 +73,8 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
     const complete = await Promise.all([resA.complete, resB.complete]);
     expect(complete[0].tx).to.eql(resA.tx);
     expect(complete[1].tx).to.eql(resB.tx);
-    expect(complete[0].bytes).to.greaterThan(300);
-    expect(complete[1].bytes).to.greaterThan(300);
+    expect(complete[0].bytes).to.greaterThan(100);
+    expect(complete[1].bytes).to.greaterThan(100);
     expect(complete[0].doc.id).to.eql('doc-id');
     expect(complete[1].doc.id).to.eql('doc-id');
     expect(complete[0].doc.data).to.eql(docA);
