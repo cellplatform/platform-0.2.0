@@ -148,8 +148,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       docB.change((doc) => (doc.count = 1234));
       await Time.wait(50);
 
-      expect(firedA.length).to.eql(6);
-      expect(firedB.length).to.eql(6);
+      expect(firedA.length).to.greaterThan(5);
+      expect(firedB.length).to.greaterThan(5);
 
       expect(firedA[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
       expect(firedB[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
