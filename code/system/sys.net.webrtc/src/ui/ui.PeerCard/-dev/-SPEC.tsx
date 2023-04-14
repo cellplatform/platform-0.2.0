@@ -5,12 +5,14 @@ import { SpecMonacoSync } from './-SPEC.Monaco';
 import { COLORS, Dev, Filesystem, Keyboard, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { FileCard } from './FileCard';
 import { DocShared, NetworkSchema } from './Schema.mjs';
+import yaml from 'yaml';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
+  yaml?: any;
   debug: { showBg: boolean };
 };
 const initial: T = { debug: { showBg: true } };
@@ -100,6 +102,13 @@ export default Dev.describe('PeerCard', async (e) => {
 
     await state.change((d) => {
       d.debug.showBg = local.showBg;
+
+      // TEMP 🐷
+      // NOTE: this is repeated within [SpecMonacoSync]
+      const code = docs.me.doc.current.code?.toString();
+      if (code) {
+        d.yaml = yaml.parse(code);
+      }
     });
 
     // NB:
@@ -142,12 +151,16 @@ export default Dev.describe('PeerCard', async (e) => {
             //
             console.log('Editor Text Changed', e);
 
-            docs.shared.doc.change((d) => {
-              const tmp = d.tmp || (d.tmp = {});
-              const parsed = (tmp.parsed || (tmp.parsed = {})) as any;
-              parsed[e.kind] = e.data;
+            state.change((d) => {
+              d.yaml = e.data;
             });
-            ctx.redraw();
+
+            // docs.shared.doc.change((d) => {
+            //   const tmp = d.tmp || (d.tmp = {});
+            //   const parsed = (tmp.parsed || (tmp.parsed = {})) as any;
+            //   parsed[e.kind] = e.data;
+            // });
+            // ctx.redraw();
           }}
         />
       );
@@ -382,12 +395,13 @@ export default Dev.describe('PeerCard', async (e) => {
             name={'Me'}
             expand={{
               level: 1,
-              paths: isLocalhost && ['$.Doc<Public>'],
+              // paths: isLocalhost && ['$.Doc<Public>'],
             }}
             data={{
               [`Network.Peer(${total})`]: self,
               'Doc<Private>': docs.me.doc.current,
               'Doc<Public>': docs.shared.doc.current,
+              yaml: e.state.yaml,
             }}
           />
         );

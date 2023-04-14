@@ -56,9 +56,6 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         docs.me.change((d) => (d.code = Crdt.text(initial)));
       }
 
-      const m = docs.me.current.code?.toString();
-      console.log('m', m);
-
       /**
        * Start the syncer.
        */
@@ -79,29 +76,28 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       });
 
       const listenForChanges = (
-        kind: 'index' | 'main',
-        doc: t.CrdtDocRef<DocShared>,
-        getText: (tmp: T) => t.AutomergeText,
+        kind: 'index',
+        doc: t.CrdtDocRef<DocMe>,
+        getText: (tmp: DocMe) => t.AutomergeText,
       ) => {
         //
         doc.$.pipe(
           rx.takeUntil(dispose$),
           rx.debounceTime(500),
-          rx.distinctUntilChanged(
-            (prev, next) => getText(prev.doc.tmp as T) === getText(next.doc.tmp as T),
-          ),
+          rx.distinctUntilChanged((prev, next) => getText(prev.doc) === getText(next.doc)),
         ).subscribe((e) => {
           /**
            * TODO 🐷 - parse the YAML and update the "data" object.
            */
-          // const text = getText(e.doc.tmp as T);
-          // const data = yaml.parse(text.toString());
-          // props.onChange?.({ kind, data });
+          const text = getText(e.doc);
+          const data = yaml.parse(text.toString());
+          console.log('data', data);
+          props.onChange?.({ kind, data });
         });
       };
 
-      listenForChanges('index', docs.shared, (tmp: T) => tmp.index.code);
-      listenForChanges('main', docs.shared, (tmp: T) => tmp.main.code);
+      listenForChanges('index', docs.me, (doc: DocMe) => doc.code!);
+      // listenForChanges('main', docs.shared, (tmp: T) => tmp.main.code);
     }
 
     return () => {
