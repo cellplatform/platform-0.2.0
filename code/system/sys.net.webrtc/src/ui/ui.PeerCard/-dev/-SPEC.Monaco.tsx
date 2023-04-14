@@ -47,11 +47,17 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       if (!getTmp().index) docs.shared.change((d) => (d.tmp.index = {}));
       if (!getTmp().main) docs.shared.change((d) => (d.tmp.main = {}));
 
-      if (!getTmp().index.code) docs.shared.change((d) => ((d.tmp as T).index.code = Crdt.text()));
+      if (!getTmp().main.peers) docs.shared.change((d) => ((d.tmp as T).main.peers = {}));
       if (!getTmp().index.peers) docs.shared.change((d) => ((d.tmp as T).index.peers = {}));
 
       if (!getTmp().main.code) docs.shared.change((d) => ((d.tmp as T).main.code = Crdt.text()));
-      if (!getTmp().main.peers) docs.shared.change((d) => ((d.tmp as T).main.peers = {}));
+      if (!Crdt.Is.text(docs.me.current.code)) {
+        const initial = docs.me.current.text ?? '';
+        docs.me.change((d) => (d.code = Crdt.text(initial)));
+      }
+
+      const m = docs.me.current.code?.toString();
+      console.log('m', m);
 
       /**
        * Start the syncer.
@@ -60,8 +66,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         dispose$,
         monaco: indexCtx.monaco,
         editor: indexCtx.editor,
-        data: { doc: docs.shared, getText: (d) => (d.tmp as T).index.code },
-        peers: { local, doc: docs.shared, getPeers: (d) => (d.tmp as T).index.peers },
+        data: { doc: docs.me, getText: (d) => d.code! },
+        // peers: { local, doc: docs.shared, getPeers: (d) => (d.tmp as T).index.peers },
       });
 
       const textSyncerMain = MonacoCrdt.syncer({
@@ -85,9 +91,12 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
             (prev, next) => getText(prev.doc.tmp as T) === getText(next.doc.tmp as T),
           ),
         ).subscribe((e) => {
-          const text = getText(e.doc.tmp as T);
-          const data = yaml.parse(text.toString());
-          props.onChange?.({ kind, data });
+          /**
+           * TODO 🐷 - parse the YAML and update the "data" object.
+           */
+          // const text = getText(e.doc.tmp as T);
+          // const data = yaml.parse(text.toString());
+          // props.onChange?.({ kind, data });
         });
       };
 
@@ -140,7 +149,7 @@ docs:
         <MonacoEditor
           style={styles.editor}
           language={'yaml'}
-          // text={SAMPLE_INDEX}
+          text={docs.me.current.code?.toString()}
           onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
         />
       </div>

@@ -2,7 +2,7 @@ import { Crdt, t } from './common';
 import { NetworkSchema } from './Schema.mjs';
 
 export type { DocShared } from './Schema.mjs';
-export type DocMe = { count: number; text?: string };
+export type DocMe = { count: number; text?: string; code?: t.AutomergeText };
 
 export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any> }) {
   const { dispose$ } = args;

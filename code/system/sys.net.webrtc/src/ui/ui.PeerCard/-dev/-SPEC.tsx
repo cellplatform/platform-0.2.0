@@ -102,8 +102,6 @@ export default Dev.describe('PeerCard', async (e) => {
       d.debug.showBg = local.showBg;
     });
 
-    // Initialize CRDT documents.
-
     // NB:
     // See: "init:network" (below) for network-sychronization-protocol startup (P2P).
     //      after the UI has been initiated.

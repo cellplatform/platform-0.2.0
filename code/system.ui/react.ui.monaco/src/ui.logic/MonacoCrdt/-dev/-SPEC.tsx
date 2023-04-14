@@ -1,6 +1,6 @@
 import { MonacoCrdt } from '..';
 import { rx, Dev, t, Value } from './common';
-import { initCrdtDocsWithPeerSyncers } from './DEV.crdt.mjs';
+import { initCrdtDocsWithPeerSyncers as initDocsWithPeerSyncers } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
 type T = {
@@ -49,7 +49,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     peerMap.forEach((item) => disposeOf(item));
     peerMap.clear();
 
-    initCrdtDocsWithPeerSyncers(names).forEach((item) => {
+    initDocsWithPeerSyncers(names).forEach((item) => {
       const { name, doc } = item;
       const peer = { name, doc };
       peerMap.set(name, { peer });

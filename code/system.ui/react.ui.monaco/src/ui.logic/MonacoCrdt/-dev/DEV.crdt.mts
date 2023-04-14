@@ -6,9 +6,10 @@ export function initCrdtDocsWithPeerSyncers(peerNames: string[]) {
    */
   const items: t.DevPeer[] = peerNames.map((name, i) => {
     const id = `shared-doc-id`;
+    const initial = 'hello';
     const doc = Crdt.Doc.ref<t.SampleDoc>(id, {
       count: 0,
-      code: new Automerge.Text(),
+      code: new Automerge.Text(initial),
       peers: {},
     });
     return { name, doc };

@@ -28,7 +28,6 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   dispose$.subscribe(() => {
     _isDisposed = true;
     _$.complete();
-
     handlerDidFocusEditorText.dispose();
     handlerDidBlurEditorText.dispose();
     handlerDidChangeModelContent.dispose();
