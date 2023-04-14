@@ -17,7 +17,12 @@ export const FIELDS: t.CrdtInfoFields[] = [
 ];
 
 const fields = ['Module'] as t.CrdtInfoFields[];
-export const DEFAULTS = { fields, indent: 15, doc: DEFAULTS_BASE.doc } as const;
+export const DEFAULTS = {
+  fields,
+  indent: 15,
+  doc: DEFAULTS_BASE.doc,
+  query: DEFAULTS_BASE.query,
+} as const;
 
 export const Wrangle = {
   displayHash(hash: string, length: number | [number, number]) {

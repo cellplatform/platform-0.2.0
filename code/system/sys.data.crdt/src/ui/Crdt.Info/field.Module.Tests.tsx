@@ -1,5 +1,6 @@
-import { t, Test } from './common';
+import { t, Test, Icons } from './common';
 import { TestRunner } from './ui.TestRunner';
+import { TestLabel } from './ui.TestRunner.Label';
 
 export function FieldModuleTests(data: t.CrdtInfoData, info?: {}): t.PropListItem[] {
   const res: t.PropListItem[] = [];
@@ -15,7 +16,7 @@ export function FieldModuleTests(data: t.CrdtInfoData, info?: {}): t.PropListIte
   };
 
   res.push({
-    label: 'Verify Module',
+    label: <TestLabel />,
     value: <TestRunner loadTests={loadTests} />,
   });
 
