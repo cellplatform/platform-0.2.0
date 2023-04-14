@@ -1,4 +1,4 @@
-import { t, Value, Wrangle, COLORS, Icons, Path, DEFAULTS } from './common';
+import { COLORS, DEFAULTS, Icons, Path, t, Value, Wrangle } from './common';
 import { Hash } from './ui.Hash';
 
 export function FieldFile(
@@ -29,7 +29,7 @@ export function FieldFile(
 
     res.push({
       label: file?.title ?? 'Persistence',
-      value: !hasFiles ? MSG.NOT_SAVED : <Icons.Repo size={15} color={COLORS.DARK} />,
+      value: hasFiles ? <Icons.Repo size={15} color={COLORS.DARK} /> : MSG.NOT_SAVED,
     });
 
     if (manifest) {

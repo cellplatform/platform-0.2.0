@@ -8,7 +8,7 @@ export function FieldNetwork(data: t.CrdtInfoData, info?: {}): t.PropListItem[] 
   const indent = DEFAULTS.indent;
 
   res.push({
-    label: 'Network Sync',
+    label: syncDoc ? 'Network Sync' : 'Network',
     value: <Network syncDoc={syncDoc} />,
   });
 

@@ -1,0 +1,30 @@
+import { Crdt, t } from './common';
+import { NetworkSchema } from './Schema.mjs';
+
+export type { DocShared } from './Schema.mjs';
+export type DocMe = { count: number; text?: string };
+
+export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any> }) {
+  const { dispose$ } = args;
+
+  const getFs = (path: string) => ({ path, fs: args.rootfs.dir(path) });
+  const dirs = {
+    get: getFs,
+    me: getFs('dev.doc.me'),
+    shared: getFs('dev.doc.shared'),
+  };
+
+  const docMe = Crdt.Doc.ref<DocMe>('me-doc', { count: 0 }, { dispose$ });
+  const docShared = NetworkSchema.genesis().doc;
+
+  return {
+    dirs,
+    me: {
+      doc: docMe,
+      file: await Crdt.Doc.file<DocMe>(dirs.me.fs, docMe, { autosave: true, dispose$ }),
+    },
+    shared: {
+      doc: docShared,
+    },
+  };
+}

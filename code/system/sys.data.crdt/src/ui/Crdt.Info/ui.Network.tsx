@@ -6,7 +6,7 @@ export type NetworkProps = {
 };
 
 const MSG = {
-  NOT_SYNCING: `not syncing →`,
+  NOT_SYNCING: `not connected →`,
 };
 
 export const Network: React.FC<NetworkProps> = (props) => {
@@ -18,7 +18,7 @@ export const Network: React.FC<NetworkProps> = (props) => {
    */
   const styles = {
     base: css({ Flex: 'x-center-center' }),
-    msg: css({ marginRight: 8, opacity: isSyncing ? 1 : 0.3 }),
+    msg: css({ marginRight: 6, opacity: isSyncing ? 1 : 0.3 }),
     networkIcon: css({ opacity: isSyncing ? 1 : 0.2 }),
   };
 
