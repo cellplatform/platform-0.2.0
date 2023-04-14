@@ -1,4 +1,4 @@
-import { COLORS, css, t } from '../common';
+import { Color, COLORS, css, t } from '../common';
 
 export type DescriptionProps = {
   text: string;
@@ -20,7 +20,7 @@ export const Description: React.FC<DescriptionProps> = (props) => {
       gridTemplateColumns: 'auto 1fr',
     }),
     todo: css({
-      backgroundColor: COLORS.MAGENTA,
+      backgroundColor: Color.alpha(COLORS.MAGENTA, 0.5),
       marginRight: 6,
       PaddingX: 5,
       paddingTop: 4,
