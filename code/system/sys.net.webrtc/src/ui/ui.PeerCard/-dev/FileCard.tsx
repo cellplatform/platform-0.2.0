@@ -19,10 +19,10 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
   const history = doc.history;
   const latest = history[history.length - 1];
   const data: t.CrdtInfoData = {
-    file: { data: props.file, path: props.filepath },
+    file: { doc: props.file, path: props.filepath },
     history: {
       data: history,
-      item: { data: latest, title: 'Last Change' },
+      item: { data: latest, title: 'Latest Commit' },
     },
   };
 
@@ -32,7 +32,15 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
   return (
     <CrdtInfo
       title={Wrangle.title(props)}
-      fields={['Module', 'History.Total', 'History.Item', 'File']}
+      fields={[
+        'Module',
+        'Module.Tests',
+        'Driver.Runtime',
+        'History',
+        'History.Item',
+        'File',
+        'Network',
+      ]}
       data={data}
       card={true}
       margin={props.margin}
