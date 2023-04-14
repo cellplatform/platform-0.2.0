@@ -1,15 +1,4 @@
-import {
-  toObject,
-  Crdt,
-  Pkg,
-  R,
-  rx,
-  slug,
-  t,
-  UserAgent,
-  WebRtcEvents,
-  WebRtcUtils,
-} from './common';
+import { Crdt, Pkg, R, rx, slug, t, WebRtcEvents, WebRtcUtils } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
 
@@ -37,7 +26,7 @@ export const WebRtcController = {
       onConnectStart?: (e: t.WebRtcConnectStart) => void;
       onConnectComplete?: (e: t.WebRtcConnectComplete) => void;
     } = {},
-  ): t.WebRtcEvents {
+  ) {
     const { filedir } = options;
 
     const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
@@ -94,6 +83,7 @@ export const WebRtcController = {
        * Setup "sync protocol" on newly added data-connections.
        */
       const dispose$ = dataConnections.removed$.pipe(rx.filter((e) => e.id === conn.id));
+
       const syncer = Crdt.Doc.sync<t.ControlledDoc>(conn.bus(), state, {
         /**
          * TODO 🐷
@@ -106,7 +96,6 @@ export const WebRtcController = {
       });
 
       state.change((d) => {
-        // initiatedBy
         const { local, remote } = conn.peer;
         const { initiatedBy } = conn.metadata;
         Mutate.addPeer(d.network, self.id, local, { initiatedBy });
@@ -189,10 +178,10 @@ export const WebRtcController = {
     events.prune.req$.subscribe(async (e) => {
       const { tx } = e;
       const res = await pruneDeadPeers(self, state);
-      const pruned = res.removed;
+      const removed = res.removed;
       bus.fire({
         type: 'sys.net.webrtc/prune:res',
-        payload: { tx, instance, removed: pruned },
+        payload: { tx, instance, removed },
       });
     });
 
