@@ -28,7 +28,7 @@ export function FieldFile(
     const hasFiles = files.length > 0;
 
     res.push({
-      label: file?.title ?? 'Persistence',
+      label: file?.title ?? 'Local Persistence',
       value: hasFiles ? <Icons.Repo size={15} color={COLORS.DARK} /> : MSG.NOT_SAVED,
     });
 
