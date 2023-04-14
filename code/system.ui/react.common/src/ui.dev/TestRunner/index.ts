@@ -1,9 +1,11 @@
 import { Results } from './Results';
-import { RunnerCompact } from './Runner.Compact';
+import { CompactTestRunner } from './Runner.Compact';
+import { PropListTestRunner } from './Runner.PropList';
 
 export const TestRunner = {
   Results,
-  Compact: RunnerCompact,
+  Compact: CompactTestRunner,
+  PropList: PropListTestRunner,
 };
 
-export { Results, RunnerCompact };
+export { Results, CompactTestRunner, PropListTestRunner };

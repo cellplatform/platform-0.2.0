@@ -1,10 +1,10 @@
 import { Icons, Color, COLORS, css, t, rx, Button } from '../common';
 
-export type RunnerCompactProps = {
+export type CompactTestRunnerProps = {
   style?: t.CssValue;
 };
 
-export const RunnerCompact: React.FC<RunnerCompactProps> = (props) => {
+export const CompactTestRunner: React.FC<CompactTestRunnerProps> = (props) => {
   /**
    * [Render]
    */

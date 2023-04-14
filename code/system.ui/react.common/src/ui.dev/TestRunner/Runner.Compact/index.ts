@@ -1,1 +1,1 @@
-export * from './RunnerCompact';
+export * from './Compact.TestRunner';

@@ -1,1 +1,1 @@
-export * from './PropList.Runner.mjs';
+export * from './PropList.TestRunner.mjs';

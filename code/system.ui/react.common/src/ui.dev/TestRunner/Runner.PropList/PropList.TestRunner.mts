@@ -3,7 +3,7 @@ import { t } from './common';
 /**
  * <PropList> compact test-runner.
  */
-export const PropListRunner = {
+export const PropListTestRunner = {
   /**
    * Generates a <PropList> item for running unit tests.
    */
