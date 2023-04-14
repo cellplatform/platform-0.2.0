@@ -1,4 +1,4 @@
-import { t, Test, Icons } from './common';
+import { t, Test } from './common';
 import { TestRunner } from './ui.TestRunner';
 import { TestLabel } from './ui.TestRunner.Label';
 

@@ -1,12 +1,11 @@
 import { GoGitCommit, GoRepo } from 'react-icons/go';
 import {
   MdDoneAll,
-  MdInfo,
+  MdInfoOutline,
   MdPlayArrow,
   MdReplay,
   MdSettingsInputAntenna,
   MdToggleOn,
-  MdInfoOutline,
   MdWarning,
 } from 'react-icons/md';
 import { VscDebugDisconnect } from 'react-icons/vsc';
