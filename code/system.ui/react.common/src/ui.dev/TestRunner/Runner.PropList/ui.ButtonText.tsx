@@ -30,7 +30,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
       transform: 'translateY(1px)',
     }),
     runAgain: css({
-      marginRight: 3,
+      marginRight: 5,
       opacity: isOver ? 1 : 0,
       transition: 'opacity 200ms ease-out',
     }),

@@ -43,4 +43,4 @@ export { css, Style, Color, COLORS, rx, FC, UserAgent } from './common';
 /**
  * Development
  */
-export { Dev, DevTools, Spec } from './ui.dev';
+export { Dev, DevTools, Spec, TestRunner } from './ui.dev';

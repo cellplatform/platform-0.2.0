@@ -20,24 +20,31 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const [isRunning, setRunning] = useState(false);
   const [results, setResults] = useState<t.TestSuiteRunResponse>();
   const [runAtTime, setRunAtTime] = useState<Milliseconds>();
-
-  const [_, setRedraw] = useState(0);
-  const redraw = () => setRedraw((n) => n + 1);
-
-  const sinceLastRun = runAtTime ? Time.duration(Time.now.timestamp - runAtTime) : undefined;
-  const isColoredText = mouse.isOver
-    ? true
-    : sinceLastRun
-    ? sinceLastRun.msec < DEFAULT.DELAY_COLORED_MSEC
-    : false;
+  const [isColoredText, setColoredText] = useState(false);
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    rx.interval(DEFAULT.DELAY_COLORED_MSEC + 200)
-      .pipe(rx.takeUntil(dispose$))
-      .subscribe(redraw);
+    setColoredText(false);
+
+    if (typeof runAtTime === 'number') {
+      const delay = DEFAULT.DELAY_COLORED_MSEC;
+      const elapsed = () => Time.duration(Time.now.timestamp - runAtTime);
+      const expired = () => elapsed().msec > delay;
+
+      setColoredText(!expired());
+      rx.interval(300)
+        .pipe(
+          rx.takeUntil(dispose$),
+          rx.map((e) => expired()),
+        )
+        .subscribe((isExpired) => {
+          setColoredText(!isExpired);
+          if (isExpired) dispose();
+        });
+    }
+
     return dispose;
-  }, [isColoredText]);
+  }, [runAtTime]);
 
   const runTests = async () => {
     if (isRunning) return;

@@ -84,13 +84,6 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.title('PropList');
 
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `fail`)
-        .value((e) => true)
-        .onClick((e) => {}),
-    );
-
     dev.row((e) => {
       type TField = 'Module' | 'Module.Version' | 'Module.Tests';
       const fields: TField[] = ['Module', 'Module.Version', 'Module.Tests'];
