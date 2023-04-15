@@ -13,9 +13,11 @@ export {
   Button,
   Spinner,
   useMouseState,
+  TestRunner,
 } from 'sys.ui.react.common';
-export { Value } from 'sys.util';
+
 export { Filesize } from 'sys.fs';
+export { Value } from 'sys.util';
 export { Test } from 'sys.test.spec';
 
 /**

@@ -1,24 +1,10 @@
-import { t, Test } from './common';
-import { TestRunner } from './ui.TestRunner';
-import { TestLabel } from './ui.TestRunner.Label';
+import { t, TestRunner } from './common';
 
-export function FieldModuleTests(data: t.CrdtInfoData, info?: {}): t.PropListItem[] {
-  const res: t.PropListItem[] = [];
-
-  /**
-   * TODO 🐷
-   * - move UI component to [sys.ui.common/PropsList]
-   */
-  const loadTests = async () => {
+export function FieldModuleTests(data: t.CrdtInfoData, info?: {}) {
+  return TestRunner.PropList.item(async () => {
     const { TESTS } = await import('../../test/-TESTS.mjs');
-    const root = await Test.bundle(TESTS.all());
-    return root;
-  };
-
-  res.push({
-    label: <TestLabel />,
-    value: <TestRunner loadTests={loadTests} />,
+    const root = await TestRunner.bundle(TESTS.all());
+    const ctx = {};
+    return { root, ctx };
   });
-
-  return res;
 }
