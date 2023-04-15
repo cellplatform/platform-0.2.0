@@ -90,7 +90,7 @@ export const TestSuiteModel = (args: {
         for (const childSuite of childSuites) {
           const { only } = options;
           const timeout = childSuite.state.timeout ?? getTimeout();
-          res.children.push(await childSuite.run({ timeout, only })); // <== RECURSION 🌳
+          res.children.push(await childSuite.run({ timeout, only, ctx })); // <== RECURSION 🌳
         }
       }
 
