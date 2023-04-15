@@ -6,7 +6,7 @@ import { ButtonText } from './ui.ButtonText';
 type Milliseconds = number;
 
 const DEFAULT = {
-  DELAY_COLORED_MSEC: 1000 * 5, // 5 secsonds.
+  DELAY_COLORED_MSEC: 1000 * 5, // 5-secsonds.
 };
 
 export type TestRunnerProps = {
@@ -16,6 +16,7 @@ export type TestRunnerProps = {
 
 export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const mouse = useMouseState();
+  const isOver = mouse.isOver;
 
   const [isRunning, setRunning] = useState(false);
   const [results, setResults] = useState<t.TestSuiteRunResponse>();
@@ -30,17 +31,14 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       const delay = DEFAULT.DELAY_COLORED_MSEC;
       const elapsed = () => Time.duration(Time.now.timestamp - runAtTime);
       const expired = () => elapsed().msec > delay;
+      const update = () => {
+        const isExpired = expired();
+        setColoredText(!isExpired);
+        if (isExpired) dispose(); // Stop the timer when the "colored text" delay has expired.
+      };
 
-      setColoredText(!expired());
-      rx.interval(300)
-        .pipe(
-          rx.takeUntil(dispose$),
-          rx.map((e) => expired()),
-        )
-        .subscribe((isExpired) => {
-          setColoredText(!isExpired);
-          if (isExpired) dispose();
-        });
+      rx.interval(300).pipe(rx.takeUntil(dispose$)).subscribe(update);
+      update();
     }
 
     return dispose;
@@ -69,21 +67,29 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ display: 'grid', placeItems: 'center' }),
+    base: css({
+      flex: 1,
+      display: 'grid',
+      alignContent: 'center',
+      gridTemplateColumns: '1fr auto',
+    }),
     spinner: css({ minWidth: 110 }),
   };
 
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={40} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
-      <ButtonText results={results} isColored={isColoredText} isOver={mouse.isOver} />
+      <ButtonText results={results} isColored={isColoredText} isOver={isOver} />
     </Button>
   );
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      {elSpinner}
-      {elButton}
+      <div />
+      <div>
+        {elSpinner}
+        {elButton}
+      </div>
     </div>
   );
 };

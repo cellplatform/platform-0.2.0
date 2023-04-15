@@ -8,7 +8,8 @@ export type ButtonTextProps = {
 };
 
 export const ButtonText: React.FC<ButtonTextProps> = (props) => {
-  const { results, isOver, isColored = true } = props;
+  const { results, isOver = false, isColored = true } = props;
+  const showRunAgain = isOver && Boolean(results);
   const asColor = (color: string) => (isColored ? color : COLORS.DARK);
 
   /**
@@ -31,7 +32,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
     }),
     runAgain: css({
       marginRight: 5,
-      opacity: isOver ? 1 : 0,
+      opacity: showRunAgain ? 1 : 0,
       transition: 'opacity 200ms ease-out',
     }),
   };
