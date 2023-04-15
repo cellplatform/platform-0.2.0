@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
-import { rx, Button, COLORS, css, Icons, Spinner, t, Time, useMouseState } from './common';
-import { ButtonText } from './ui.TestRunner.ButtonText';
+import { useEffect, useState } from 'react';
+
+import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState } from './common';
+import { ButtonText } from './ui.ButtonText';
 
 type Milliseconds = number;
 
+const DEFAULT = {
+  DELAY_COLORED_MSEC: 1000 * 5, // 5 secsonds.
+};
+
 export type TestRunnerProps = {
-  loadTests: () => Promise<t.TestSuiteModel>;
+  get: t.GetTestPayload;
   style?: t.CssValue;
 };
 
@@ -19,17 +24,16 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const [_, setRedraw] = useState(0);
   const redraw = () => setRedraw((n) => n + 1);
 
-  const COLORED_DELAY_MSEC = 1000 * 5; // 5 secsonds.
   const sinceLastRun = runAtTime ? Time.duration(Time.now.timestamp - runAtTime) : undefined;
   const isColoredText = mouse.isOver
     ? true
     : sinceLastRun
-    ? sinceLastRun.msec < COLORED_DELAY_MSEC
+    ? sinceLastRun.msec < DEFAULT.DELAY_COLORED_MSEC
     : false;
 
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    rx.interval(COLORED_DELAY_MSEC + 200)
+    rx.interval(DEFAULT.DELAY_COLORED_MSEC + 200)
       .pipe(rx.takeUntil(dispose$))
       .subscribe(redraw);
     return dispose;
@@ -40,8 +44,8 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     setRunning(true);
     setResults(undefined);
 
-    const root = await props.loadTests();
-    const res = await root.run();
+    const { root, ctx, timeout } = await props.get();
+    const res = await root.run({ ctx, timeout });
 
     console.group('🌳 Test Run');
     console.info('ok', res.ok);

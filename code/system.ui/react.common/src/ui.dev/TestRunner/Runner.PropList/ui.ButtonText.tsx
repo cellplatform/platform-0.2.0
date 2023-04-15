@@ -30,7 +30,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
       transform: 'translateY(1px)',
     }),
     runAgain: css({
-      marginRight: 4,
+      marginRight: 3,
       opacity: isOver ? 1 : 0,
       transition: 'opacity 200ms ease-out',
     }),
@@ -99,7 +99,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
     );
   }
 
-  const elRunAgain = <div {...styles.runAgain}>{'rerun'}</div>;
+  const elRunAgain = <div {...styles.runAgain}>{'rerun →'}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>

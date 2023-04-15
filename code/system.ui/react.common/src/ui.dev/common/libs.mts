@@ -3,6 +3,7 @@
  */
 export { Tree } from 'sys.test.spec';
 export { Dev as DevBase, Spec, ValueHandler, DevWrangle, DevKeyboard } from 'sys.ui.react.dev';
+export { Test } from 'sys.test.spec';
 
 /**
  * @local

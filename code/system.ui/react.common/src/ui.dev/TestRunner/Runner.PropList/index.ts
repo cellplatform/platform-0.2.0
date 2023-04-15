@@ -1,1 +1,1 @@
-export * from './TestRunner.mjs';
+export * from './TestRunner';

@@ -1,4 +1,4 @@
-import { Dev, expect } from '../../../test.ui';
+import { Dev, expect, t } from '../../../test.ui';
 import type { TestCtx } from './-types.mjs';
 
 export default Dev.describe('root', (e) => {
@@ -7,8 +7,8 @@ export default Dev.describe('root', (e) => {
   });
 
   e.it('bar', async (e) => {
-    const ctx = e.ctx as TestCtx;
-    if (ctx.fail) expect(123).to.eql(5);
+    const ctx = Wrangle.ctx(e);
+    if (ctx.fail) expect(123).to.eql('BOO');
   });
 
   e.it.skip('skipped test', async (e) => {});
@@ -26,3 +26,9 @@ export default Dev.describe('root', (e) => {
     e.it.skip('bar', async (e) => {});
   });
 });
+
+const Wrangle = {
+  ctx(e: t.TestHandlerArgs) {
+    return e.ctx as TestCtx;
+  },
+};
