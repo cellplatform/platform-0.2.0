@@ -6,14 +6,15 @@ import { t, Value, Filesize, DEFAULTS as DEFAULTS_BASE } from '../common';
  */
 export const FIELDS: t.CrdtInfoFields[] = [
   'Module',
-  'Module.Tests',
-  'Driver',
+  'Module.Verify',
+  'Driver.Library',
   'Driver.Runtime',
   'History',
   'History.Item',
   'File',
   'Network',
   'Url',
+  'Url.QRCode',
 ];
 
 const fields = ['Module'] as t.CrdtInfoFields[];

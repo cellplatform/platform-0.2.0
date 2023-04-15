@@ -1,21 +1,28 @@
-import { Button, t, Value, Wrangle, COLORS, Icons, Path } from './common';
-import { DEFAULTS, css } from '../common';
-import { Hash } from './ui.Hash';
+import { t } from './common';
+import { QRCode } from './ui.QRCode';
 
-export function FieldUrl(data: t.CrdtInfoData, info?: {}): t.PropListItem[] {
-  const res: t.PropListItem[] = [];
+/**
+ * Field: URL link
+ */
+export function FieldUrl(data: t.CrdtInfoData, info?: {}) {
+  const value = data.url?.href;
+  if (!value) return;
 
-  /**
-   * TODO 🐷
-   * - URL
-   * - QR CODE
-   * - Copy to clipboard
-   */
+  const label = data.url?.title ?? 'URL';
+  const item: t.PropListItem = { label, value };
 
-  res.push({
-    label: 'URL',
-    value: '🐷 QR CODE',
-  });
+  return item;
+}
 
-  return res;
+/**
+ * Field: QRCode
+ */
+export function FieldUrlQRCode(data: t.CrdtInfoData, info?: {}) {
+  const href = data.url?.href;
+  if (!href) return;
+
+  const value = <QRCode href={href} />;
+  const item: t.PropListItem = { value };
+
+  return item;
 }

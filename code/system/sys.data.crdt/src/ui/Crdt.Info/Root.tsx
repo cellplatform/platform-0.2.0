@@ -5,8 +5,9 @@ import { FieldFile } from './field.File';
 import { FieldHistoryItem } from './field.History.Item';
 import { FieldHistory } from './field.History.mjs';
 import { FieldNetwork } from './field.Network';
-import { FieldModuleTests } from './field.Module.Tests';
-import { FieldUrl } from './field.Url';
+import { FieldModuleVerify } from './field.Module.Verify';
+import { FieldUrl, FieldUrlQRCode } from './field.Url';
+import { useFile } from './useFile.mjs';
 
 export type CrdtInfoProps = {
   title?: t.PropListTitleInput;
@@ -25,46 +26,19 @@ export type CrdtInfoProps = {
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
   const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields, data = {} } = props;
-
-  type F = { exists: boolean; manifest: t.DirManifest };
-  const [file, setFile] = useState<F | undefined>();
-
-  /**
-   * [Effects]
-   */
-  useEffect(() => {
-    let isDisposed = false;
-    const { dispose, dispose$ } = rx.disposable();
-    dispose$.subscribe(() => (isDisposed = true));
-
-    const docFile = data.file?.doc;
-    if (docFile) {
-      const updateState = async () => {
-        if (isDisposed) return;
-        const info = await docFile.info();
-        if (!isDisposed) {
-          const { exists, manifest } = info;
-          setFile({ exists, manifest });
-        }
-      };
-
-      updateState();
-      docFile?.$.pipe(rx.takeUntil(dispose$)).subscribe(updateState);
-    }
-
-    return () => dispose();
-  }, [Boolean(data.file?.doc)]);
+  const file = useFile(data);
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Tests', () => FieldModuleTests(data))
-    .field('Driver', { label: 'Driver', value: Wrangle.automerge() })
-    .field('Driver.Runtime', { label: 'Driver Runtime', value: 'ƒ ← WASM ← Rust' })
+    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Driver.Library', { label: 'Library', value: Wrangle.automerge() })
+    .field('Driver.Runtime', { label: 'Runtime', value: 'ƒ ← WASM ← Rust' })
     .field('History', () => FieldHistory(data))
     .field('History.Item', () => FieldHistoryItem(data))
     .field('File', () => FieldFile(data, file))
     .field('Network', () => FieldNetwork(data))
     .field('Url', () => FieldUrl(data))
+    .field('Url.QRCode', () => FieldUrlQRCode(data))
     .items(fields);
 
   /**
@@ -78,9 +52,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       minWidth,
       maxWidth,
     }),
-    edges: css({
-      ...Style.toMargins(props.margin),
-    }),
+    edges: css({ ...Style.toMargins(props.margin) }),
   };
 
   const elBody = (

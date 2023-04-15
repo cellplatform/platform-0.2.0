@@ -65,6 +65,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
         data: {
           file: { doc: docFile, path: fsdirs.doc.path },
           network: { doc: debug.syncDoc ? syncDocA : undefined },
+          url: { href: location.href },
           history: {
             data: docA.history,
             item: {
@@ -231,6 +232,8 @@ export default Dev.describe('CrdtInfo', async (e) => {
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
     });
+
+    dev.hr(0, 100);
   });
 
   e.it('ui:footer', async (e) => {

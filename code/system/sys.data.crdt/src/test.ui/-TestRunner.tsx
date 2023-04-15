@@ -1,4 +1,4 @@
-import { Dev, t, Time } from '../test.ui';
+import { Pkg, Dev, t, Time } from '../test.ui';
 
 type T = {
   testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
@@ -29,10 +29,6 @@ export default Dev.describe('Root', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const data = { TestResults: e.state.testrunner.results };
-      return <Dev.Object name={'spec'} data={data} expand={1} />;
-    });
 
     dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
@@ -109,6 +105,16 @@ export default Dev.describe('Root', (e) => {
        * Immediate invocation of tests.
        */
       if (!_hasImmediate) Time.delay(100, () => invoke(all));
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = {
+        TestResults: e.state.testrunner.results,
+      };
+      return <Dev.Object name={`state`} data={data} expand={1} />;
     });
   });
 });
