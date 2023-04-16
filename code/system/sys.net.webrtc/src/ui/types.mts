@@ -1,3 +1,4 @@
+export * from './ui.Info/types.mjs';
 export * from './ui.ConnectInput/types.mjs';
 export * from './ui.PeerCard/types.mjs';
 export * from './ui.PeerList/types.mjs';

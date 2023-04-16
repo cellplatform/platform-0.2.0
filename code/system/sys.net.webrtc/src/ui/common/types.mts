@@ -7,7 +7,7 @@ export type {
   DevButtonClickHandler,
   CssEdgesInput,
   CardProps,
-  PropListTitleInput,
+  PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type {

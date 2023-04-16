@@ -17,6 +17,8 @@ export {
   useMouseState,
   Card,
   Keyboard,
+  PropList,
+  TestRunner,
 } from 'sys.ui.react.common';
 
 export { Test } from 'sys.test.spec';
