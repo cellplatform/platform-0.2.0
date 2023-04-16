@@ -5,7 +5,7 @@ export type {
   CssValue,
   CssEdgesInput,
   PropListItem,
-  PropListTitleInput,
+  PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**

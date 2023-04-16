@@ -30,7 +30,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
   };
 
   type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.CrdtInfo');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.Info');
   const local = localstore.object({
     fields: initial.props.fields,
     card: initial.props.card,
@@ -98,12 +98,10 @@ export default Dev.describe('CrdtInfo', async (e) => {
     ctx.subject.display('grid').render<T>((e) => {
       const { debug } = e.state;
       const props = Util.props(e.state);
-
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
       ctx.subject.size([320, null]);
 
       const base = css({ Padding: debug.bg ? [20, 25] : 0 });
-
       return (
         <div {...base}>
           <CrdtInfo {...props} card={false} />

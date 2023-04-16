@@ -1,20 +1,16 @@
-import { useEffect, useState } from 'react';
-
-import { Card, css, DEFAULTS, FC, FIELDS, Pkg, PropList, rx, Style, t } from './common';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
 import { FieldFile } from './field.File';
 import { FieldHistoryItem } from './field.History.Item';
 import { FieldHistory } from './field.History.mjs';
-import { FieldNetwork } from './field.Network';
 import { FieldModuleVerify } from './field.Module.Verify';
+import { FieldNetwork } from './field.Network';
 import { FieldUrl, FieldUrlQRCode } from './field.Url';
 import { useFile } from './useFile.mjs';
 
 export type CrdtInfoProps = {
-  title?: t.PropListTitleInput;
+  title?: t.PropListProps['title'];
+  width?: t.PropListProps['width'];
   fields?: t.CrdtInfoFields[];
-  width?: number;
-  minWidth?: number;
-  maxWidth?: number;
   data?: t.CrdtInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
@@ -25,7 +21,7 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { width, minWidth = 230, maxWidth, fields = DEFAULTS.fields, data = {} } = props;
+  const { fields = DEFAULTS.fields, data = {} } = props;
   const file = useFile(data);
 
   const items = PropList.builder<t.CrdtInfoFields>()
@@ -41,39 +37,23 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     .field('Url.QRCode', () => FieldUrlQRCode(data))
     .items(fields);
 
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      position: 'relative',
-      boxSizing: 'border-box',
-      width,
-      minWidth,
-      maxWidth,
-    }),
-    edges: css({ ...Style.toMargins(props.margin) }),
-  };
-
-  const elBody = (
-    <PropList title={Wrangle.title(props)} items={items} defaults={{ clipboard: false }} />
+  return (
+    <PropList
+      title={Wrangle.title(props)}
+      items={items}
+      width={props.width ?? { min: 230 }}
+      defaults={{ clipboard: false }}
+      card={props.card}
+      padding={props.card ? [20, 25, 30, 25] : undefined}
+      margin={props.margin}
+      style={props.style}
+    />
   );
-
-  if (props.card) {
-    return (
-      <Card style={css(styles.base, props.style)} padding={[20, 25, 30, 25]} margin={props.margin}>
-        {elBody}
-      </Card>
-    );
-  }
-
-  return <div {...css(styles.base, styles.edges, props.style)}>{elBody}</div>;
 };
 
 /**
  * Helpers
  */
-
 const Wrangle = {
   automerge() {
     const name = '@automerge/automerge';
