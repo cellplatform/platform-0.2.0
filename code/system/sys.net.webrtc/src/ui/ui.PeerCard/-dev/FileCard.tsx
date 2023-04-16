@@ -3,7 +3,7 @@ import { CrdtInfo } from 'sys.data.crdt';
 import { t } from './common';
 
 export type FileCardProps = {
-  title?: t.PropListTitleInput;
+  title?: t.PropListProps['title'];
   doc: t.CrdtDocRef<any>;
   file?: t.CrdtDocFile<any>;
   filepath?: string;
@@ -33,8 +33,8 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
     <CrdtInfo
       title={Wrangle.title(props)}
       fields={[
+        'Module.Verify',
         'Module',
-        'Module.Tests',
         'Driver.Runtime',
         'History',
         'History.Item',
