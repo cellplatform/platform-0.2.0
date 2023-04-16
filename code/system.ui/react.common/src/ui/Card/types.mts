@@ -19,6 +19,7 @@ export type CardProps = {
   background?: t.CardBackground;
   border?: t.CardBorder;
   showAsCard?: boolean;
+  showReverse?: boolean;
   padding?: t.CssEdgesInput; // NB: padding is dropped if "NOT" showing as card.
   margin?: t.CssEdgesInput;
   width?: t.CardWidth;
