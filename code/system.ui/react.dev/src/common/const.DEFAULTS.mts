@@ -48,8 +48,8 @@ export const DEFAULTS = {
   /**
    * URL query-string keys.
    */
-  QS: {
-    D: 'd', // NB: alias for "?dev"
-    DEV: 'dev',
+  qs: {
+    d: 'd', // NB: alias for "?dev"
+    dev: 'dev',
   },
 } as const;
