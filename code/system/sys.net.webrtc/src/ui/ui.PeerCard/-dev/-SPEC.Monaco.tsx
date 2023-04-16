@@ -165,7 +165,6 @@ docs:
         </div>
         <div {...styles.titlebar}>
           <div>{'Me (Private)'}</div>
-          <div>{'Notes'}</div>
         </div>
       </div>
       <div {...css(styles.edge, styles.right)}>
