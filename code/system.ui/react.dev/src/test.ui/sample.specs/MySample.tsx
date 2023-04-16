@@ -23,7 +23,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
     const keyboard = Keyboard.on({
       Enter(e) {
         const url = new URL(window.location.href);
-        url.searchParams.set(DEFAULTS.QS.DEV, 'true');
+        url.searchParams.set(DEFAULTS.qs.dev, 'true');
         window.location.href = url.href;
       },
     });
