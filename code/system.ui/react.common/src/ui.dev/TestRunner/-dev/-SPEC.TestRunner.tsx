@@ -5,10 +5,11 @@ import suite2 from './-TEST.sample-2.mjs';
 
 import type { TestCtx, ResultsProps } from './-types.mjs';
 
-type T = { props: ResultsProps; ctx: TestCtx };
+type T = { props: ResultsProps; ctx: TestCtx; debug: { infoUrl: boolean } };
 const initial: T = {
-  props: { spinning: false, scroll: true },
   ctx: { fail: false },
+  props: { spinning: false, scroll: true },
+  debug: { infoUrl: true },
 };
 
 export default Dev.describe('TestRunner', (e) => {
@@ -91,19 +92,33 @@ export default Dev.describe('TestRunner', (e) => {
       const items = PropList.builder<TField>()
         .field('Module', { label: 'Module', value: Pkg.name })
         .field('Module.Version', { label: 'Version', value: Pkg.version })
-        .field('Module.Tests', () =>
-          Dev.TestRunner.PropList.item(async () => {
-            const m1 = await import('./-TEST.sample-1.mjs');
-            const m2 = await import('./-TEST.sample-2.mjs');
-            const root = await Dev.bundle([m1.default, m2.default]);
-            const ctx = state.current.ctx;
-            return { root, ctx };
-          }),
-        )
+        .field('Module.Tests', () => {
+          const infoUrl = e.state.debug.infoUrl ? location.href : undefined;
+
+          return Dev.TestRunner.PropList.item({
+            infoUrl, // 🌳 ← Any view address that contains more details about the test run.
+            async get() {
+              const m1 = await import('./-TEST.sample-1.mjs');
+              const m2 = await import('./-TEST.sample-2.mjs');
+              const root = await Dev.bundle([m1.default, m2.default]);
+              const ctx = state.current.ctx;
+              return { root, ctx };
+            },
+          });
+        })
         .items(fields);
 
-      return <PropList items={items} margin={[30, 35, 20, 35]} defaults={{ clipboard: false }} />;
+      return <PropList items={items} margin={[30, 35, 0, 35]} defaults={{ clipboard: false }} />;
     });
+
+    dev.hr(-1, [30, 10]);
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => 'infoUrl')
+        .value((e) => e.state.debug.infoUrl)
+        .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'infoUrl'))),
+    );
   });
 
   e.it('ui:footer', (e) => {

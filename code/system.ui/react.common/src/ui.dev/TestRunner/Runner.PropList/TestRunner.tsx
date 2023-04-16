@@ -10,10 +10,10 @@ export const PropListTestRunner = {
   /**
    * Generates a <PropList> item for running unit tests.
    */
-  item(fn: t.GetTestPayload): t.PropListItem {
+  item(args: { get: t.GetTestPayload; label?: string; infoUrl?: string }): t.PropListItem {
     return {
-      label: <TestLabel />,
-      value: <TestRunner get={fn} />,
+      label: <TestLabel title={args.label} infoUrl={args.infoUrl} />,
+      value: <TestRunner get={args.get} />,
     };
   },
 };

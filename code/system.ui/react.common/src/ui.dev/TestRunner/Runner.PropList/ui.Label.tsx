@@ -1,10 +1,14 @@
-import { css, DEFAULTS, DevIcons, t } from './common';
+import { css, DevIcons, t } from './common';
 
 export type TestLabelProps = {
+  title?: string;
+  infoUrl?: string;
   style?: t.CssValue;
 };
 
 export const TestLabel: React.FC<TestLabelProps> = (props) => {
+  const { title = 'Verify', infoUrl } = props;
+
   /**
    * [Render]
    */
@@ -14,36 +18,22 @@ export const TestLabel: React.FC<TestLabelProps> = (props) => {
   };
 
   const tooltip = 'Show test runner in full-screen mode.';
-  const elInfo = (
+  const elInfo = infoUrl && (
     <a
-      href={Href.tests}
       {...styles.link}
+      href={infoUrl}
       target={'_blank'}
       rel={'noopener noreferrer'}
       title={tooltip}
     >
-      <DevIcons.Info size={14} color={-0.3} />
+      <DevIcons.Info size={14} color={-0.3} offset={[0, 0]} />
     </a>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{'Verify'}</div>
+      <div>{title}</div>
       {elInfo}
     </div>
   );
-};
-
-/**
- * Helpers
- */
-const Href = {
-  get tests() {
-    /**
-     * TODO 🐷
-     */
-    const url = new URL(location.origin);
-    url.searchParams.set('dev', 'sys.crdt.tests'); // TEMP 🐷
-    return url.href;
-  },
 };

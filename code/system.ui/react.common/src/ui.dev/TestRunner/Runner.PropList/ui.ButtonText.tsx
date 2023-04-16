@@ -16,10 +16,13 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Flex: 'x-center-center' }),
+    base: css({
+      Flex: 'x-center-center',
+      minHeight: 15,
+    }),
     item: css({
       Flex: 'x-center-center',
-      transition: 'all 200ms ease-out',
+      transition: 'all 500ms ease-out',
     }),
     failed: css({ color: asColor(COLORS.RED) }),
     passed: css({ color: asColor(COLORS.GREEN) }),
@@ -33,7 +36,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
     runAgain: css({
       marginRight: 5,
       opacity: showRunAgain ? 1 : 0,
-      transition: 'opacity 200ms ease-out',
+      transition: 'opacity 150ms ease-out',
     }),
   };
 

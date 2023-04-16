@@ -26,7 +26,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
       Flex: 'center-center',
       userSelect: 'none',
       fontStyle: 'italic',
-      padding: 15,
+      padding: 20,
     }),
     spinner: css({
       Absolute: [25, 0, null, 0],
@@ -57,9 +57,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
     </div>
   );
 
-  const elEmpty = !data && !spinning && (
-    <div {...styles.empty}>{'No test results to display.'}</div>
-  );
+  const elEmpty = !data && !spinning && <div {...styles.empty}>{'No results to display.'}</div>;
 
   const elBody = (
     <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
