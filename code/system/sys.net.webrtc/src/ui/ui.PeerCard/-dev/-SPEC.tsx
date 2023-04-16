@@ -92,6 +92,17 @@ export default Dev.describe('PeerCard', async (e) => {
         SharedProps.change((d) => (d.devShowFooter = next));
         dev.redraw();
       },
+
+      'ALT + CTRL + KeyN'(e) {
+        e.cancel();
+        const qs = Dev.Url.qs;
+        const url = new URL(location.href);
+        const params = url.searchParams;
+        const namespace = params.get(qs.dev) ?? '';
+        params.set(qs.dev, 'true');
+        params.set(qs.selected, namespace);
+        window.open(url.href, '_blank', 'noopener,noreferrer');
+      },
     });
   });
 
@@ -401,7 +412,7 @@ export default Dev.describe('PeerCard', async (e) => {
               [`Network.Peer(${total})`]: self,
               'Doc<Private>': docs.me.doc.current,
               'Doc<Public>': docs.shared.doc.current,
-              yaml: e.state.yaml,
+              'me.yaml': e.state.yaml,
             }}
           />
         );
