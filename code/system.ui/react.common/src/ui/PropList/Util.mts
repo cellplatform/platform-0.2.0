@@ -1,10 +1,20 @@
-import { t } from './common';
+import { t, DEFAULTS } from './common';
 import { format } from './Util.format.mjs';
 import { theme } from './Util.theme.mjs';
 
 export const Wrangle = {
   format,
   theme,
+
+  sizeProp(input?: t.PropListSize | number) {
+    return typeof input === 'number' ? { fixed: input } : input;
+  },
+
+  cardProps(input: t.PropListProps['card']): t.PropListCard | undefined {
+    if (!input) return undefined;
+    if (typeof input === 'object') return input;
+    return { ...DEFAULTS.card };
+  },
 
   items(input: t.PropListProps['items']) {
     if (Array.isArray(input)) {

@@ -24,6 +24,7 @@ const initial: T = {
     title: 'MyTitle',
     defaults: { clipboard: false },
     theme: 'Light',
+    card: false,
   },
   debug: {
     source: 'Samples',
@@ -44,7 +45,13 @@ export default Dev.describe('PropList', (e) => {
     ctx.subject
       .display('grid')
       .size([250, null])
-      .render<T>((e) => <PropList {...e.state.props} />);
+      .render<T>((e) => {
+        const isCard = Boolean(e.state.props.card);
+        const width = isCard ? 250 + 25 * 2 : 250;
+        ctx.subject.size([width, null]);
+
+        return <PropList {...e.state.props} />;
+      });
   });
 
   e.it('ui:debug', async (e) => {
@@ -75,6 +82,13 @@ export default Dev.describe('PropList', (e) => {
           .label('defaults.monospace')
           .value((e) => e.state.props.defaults?.monospace)
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('card')
+          .value((e) => Boolean(e.state.props.card))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'card'))),
       );
 
       dev.hr(5, 20);

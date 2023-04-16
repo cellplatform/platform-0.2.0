@@ -3,6 +3,7 @@ import { COLORS, css, DEFAULTS, Style, t } from './common';
 import { PropListItem } from './ui.Item/Item';
 import { PropListTitle } from './ui.Item/Title';
 import { Wrangle } from './Util.mjs';
+import { Card } from '../Card';
 
 /**
  * Component
@@ -10,8 +11,9 @@ import { Wrangle } from './Util.mjs';
 export const PropList: React.FC<t.PropListProps> = (props) => {
   const { theme = DEFAULTS.theme } = props;
   const items = Wrangle.items(props.items);
-  const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
-  const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
+  const width = Wrangle.sizeProp(props.width);
+  const height = Wrangle.sizeProp(props.height);
+  const card = Wrangle.cardProps(props.card);
 
   const defaults: t.PropListDefaults = {
     clipboard: true,
@@ -31,8 +33,8 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       maxHeight: height?.max,
 
       boxSizing: 'border-box',
-      ...Style.toMargins(props.margin),
-      ...Style.toPadding(props.padding),
+      ...Style.toMargins(card ? undefined : props.margin),
+      ...Style.toPadding(card ? undefined : props.padding),
     }),
     items: css({}),
     title: css({}),
@@ -59,9 +61,14 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <Card
+      showAsCard={Boolean(card)}
+      style={css(styles.base, props.style)}
+      padding={props.padding ?? [20, 25, 30, 25]}
+      margin={props.margin}
+    >
       {elTitle}
       <div {...styles.items}>{elItems}</div>
-    </div>
+    </Card>
   );
 };

@@ -19,11 +19,15 @@ export type PropListProps = {
   defaults?: t.PropListDefaults;
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
-  width?: number | { fixed?: number; min?: number; max?: number };
-  height?: number | { fixed?: number; min?: number; max?: number };
+  width?: number | t.PropListSize;
+  height?: number | t.PropListSize;
+  card?: boolean | PropListCard;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
+
+export type PropListSize = { fixed?: number; min?: number; max?: number };
+export type PropListCard = {};
 
 /**
  * Component: <PropsList.FieldSelector>
