@@ -116,9 +116,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       display: visible ? 'grid' : 'none',
       gridTemplateColumns: 'minmax(200px, 400px) 2fr',
     }),
-    editor: css({
-      Absolute: 0,
-    }),
+    editor: css({ Absolute: 0 }),
     left: css({
       position: 'relative',
       borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
@@ -126,6 +124,21 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
     right: css({
       position: 'relative',
     }),
+
+    titlebar: css({
+      backgroundColor: Color.alpha(COLORS.DARK, 0.4),
+      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
+      color: COLORS.WHITE,
+      fontSize: 12,
+      Padding: [3, 8, 4, 8],
+      Flex: 'x-center-spaceBetween',
+    }),
+
+    edge: css({
+      display: 'grid',
+      gridTemplateRows: '1fr auto',
+    }),
+    editorOuter: css({ position: 'relative' }),
   };
 
   if (!self || !docs.shared) return <div {...css(styles.base, props.style)} />;
@@ -141,21 +154,32 @@ docs:
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>
-        <MonacoEditor
-          style={styles.editor}
-          language={'yaml'}
-          text={docs.me.current.code?.toString()}
-          onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
-        />
+      <div {...css(styles.edge, styles.left)}>
+        <div {...styles.editorOuter}>
+          <MonacoEditor
+            style={styles.editor}
+            language={'yaml'}
+            text={docs.me.current.code?.toString()}
+            onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
+          />
+        </div>
+        <div {...styles.titlebar}>
+          <div>{'Me (Private)'}</div>
+          <div>{'Notes'}</div>
+        </div>
       </div>
-      <div {...styles.right}>
-        <MonacoEditor
-          style={styles.editor}
-          language={'yaml'}
-          focusOnLoad={true}
-          onReady={({ editor, monaco }) => setMainCtx({ editor, monaco })}
-        />
+      <div {...css(styles.edge, styles.right)}>
+        <div {...styles.editorOuter}>
+          <MonacoEditor
+            style={styles.editor}
+            language={'yaml'}
+            focusOnLoad={true}
+            onReady={({ editor, monaco }) => setMainCtx({ editor, monaco })}
+          />
+        </div>
+        <div {...styles.titlebar}>
+          <div>{'Shared (Public)'}</div>
+        </div>
       </div>
     </div>
   );
