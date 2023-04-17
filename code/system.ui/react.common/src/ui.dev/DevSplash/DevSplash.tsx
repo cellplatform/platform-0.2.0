@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, FC, Color, COLORS, css, t, rx, Pkg } from './common';
+import { COLORS, css, DEFAULTS, FC, t } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
 
-export type DevHomeProps = {
+export type DevSplashProps = {
   children?: JSX.Element;
   center?: boolean;
   pkg?: string | JSX.Element;
@@ -12,7 +11,7 @@ export type DevHomeProps = {
   onEnter?: () => void;
 };
 
-const View: React.FC<DevHomeProps> = (props) => {
+const View: React.FC<DevSplashProps> = (props) => {
   const {
     fill = DEFAULTS.fill,
     center = DEFAULTS.center,
@@ -73,8 +72,8 @@ const View: React.FC<DevHomeProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const DevHome = FC.decorate<DevHomeProps, Fields>(
+export const DevSplash = FC.decorate<DevSplashProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'DevHome' },
+  { displayName: 'DevSplash' },
 );

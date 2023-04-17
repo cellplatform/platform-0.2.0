@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef, isValidElement } from 'react';
+import { isValidElement } from 'react';
 
 import { Dev, Pkg } from '../../test.ui';
-import { DevHome, DevHomeProps } from '.';
+import { DevSplash, DevSplashProps } from '.';
 
 type T = {
-  props: DevHomeProps;
+  props: DevSplashProps;
   debug: {};
 };
-const DEFAULTS = DevHome.DEFAULTS;
+const DEFAULTS = DevSplash.DEFAULTS;
 const initial: T = {
   props: {
     center: DEFAULTS.center,
@@ -17,7 +17,7 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('DevHome', (e) => {
+export default Dev.describe('DevSplash', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -26,7 +26,7 @@ export default Dev.describe('DevHome', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <DevHome {...e.state.props} />;
+        return <DevSplash {...e.state.props} />;
       });
   });
 
