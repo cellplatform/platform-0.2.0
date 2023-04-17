@@ -8,8 +8,6 @@ const { Specs: VendorStripe } = await import('vendor.stripe');
 const { Specs: CrdtSpecs } = await import('sys.data.crdt');
 
 export const Specs = {
-  Root: () => import('../ui/Root/Root.SPEC'),
-
   ...WebRtcSpecs,
   ...CrdtSpecs,
   ...MonacoSpecs,

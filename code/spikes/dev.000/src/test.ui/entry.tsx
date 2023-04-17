@@ -23,27 +23,23 @@ const render = async (subject: SubjectMatter) => {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('./entry.Specs.mjs');
     const el = await Dev.render(Pkg, Specs, { badge: BADGE, hrDepth: 3 });
-    root.render(el);
+    return root.render(el);
   }
 
   if (subject === 'DefaultEntry') {
-    const { RootFill } = await import('../ui/Root');
-    const el = <RootFill />;
-    root.render(el);
+    const { Dev } = await import('sys.ui.react.common');
+    return root.render(<Dev.Home pkg={Pkg.toString()} />);
   }
 
   if (subject === 'Temp') {
     const { Temp } = await import('../ui/Root.Temp');
     const el = <Temp />;
-    root.render(el);
+    return root.render(el);
   }
 };
 
 /**
  * ENTRY
  */
-(async () => {
-  if (isDev) return render('Dev');
-  return render('DefaultEntry');
-  // return render('Temp');
-})();
+if (isDev) render('Dev');
+if (!isDev) render('DefaultEntry');
