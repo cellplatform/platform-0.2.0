@@ -8,6 +8,13 @@ import type { t } from '../common.t';
 export const Wrangle = {
   monaco,
 
+  toMonacoTheme(theme?: t.EditorTheme) {
+    if (typeof theme !== 'string') return undefined;
+    if (theme === 'Light') return 'light';
+    if (theme === 'Dark') return 'vs-dark';
+    return theme; // Defaults to 'light' within Monaco.
+  },
+
   editorClassName(editor?: t.MonacoCodeEditor) {
     let id = editor?.getId() ?? '';
     if (id.includes(':')) id = `instance-${id.split(':')[1]}`;

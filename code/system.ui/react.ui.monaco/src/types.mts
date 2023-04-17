@@ -8,11 +8,12 @@ export * from './ui.logic/MonacoCrdt/types.mjs';
  * Supported languages.
  */
 export type EditorLanguage = 'markdown' | 'typescript' | 'javascript' | 'json' | 'yaml';
-export type SelectionOffset = { start: number; end: number };
+export type EditorTheme = 'Light' | 'Dark';
 
 /**
  * Selection and position.
  */
+export type SelectionOffset = { start: number; end: number };
 export type CharPosition = { line: number; column: number };
 export type CharPositionTuple = [number, number]; // Line:Column.
 export type CharRangeTuple = [number, number, number, number]; // Start:[Line:Column], End:[Line:Column]

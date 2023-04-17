@@ -8,6 +8,8 @@ import type { OnChange, OnMount } from '@monaco-editor/react';
 export type MonacoEditorProps = {
   text?: string;
   language?: t.EditorLanguage;
+  theme?: t.EditorTheme;
+  placeholder?: string;
   focusOnLoad?: boolean;
   tabSize?: number;
   style?: t.CssValue;
@@ -17,11 +19,17 @@ export type MonacoEditorProps = {
 };
 
 const View: React.FC<MonacoEditorProps> = (props) => {
-  const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize } = props;
+  const { text, language = DEFAULTS.language, tabSize = DEFAULTS.tabSize, placeholder } = props;
+  const theme = Wrangle.toMonacoTheme(props.theme);
 
   const monacoRef = useRef<t.Monaco>();
   const editorRef = useRef<t.MonacoCodeEditor>();
   const editor = editorRef.current;
+
+  /**
+   * TODO 🐷
+   */
+  console.log('placeholder', placeholder);
 
   /**
    * [Lifecycle]
@@ -72,6 +80,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
         <EditorReact
           defaultLanguage={language}
           language={language}
+          theme={theme}
           defaultValue={text}
           onMount={handleEditorDidMount}
           onChange={handleChange}

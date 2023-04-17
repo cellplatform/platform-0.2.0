@@ -7,6 +7,7 @@ type T = { props: MonacoEditorProps };
 const initial: T = {
   props: {
     text: '',
+    theme: 'Light',
     language: DEFAULTS.language,
     tabSize: DEFAULTS.tabSize,
     focusOnLoad: true,
@@ -105,12 +106,39 @@ export default Dev.describe('MonacoEditor', (e) => {
     dev.hr(5, 20);
 
     dev.section('Options', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .margin([0, 0, 10, 0])
+          .label((e) => 'placeholder')
+          .placeholder('enter placeholder text')
+          .value((e) => e.state.props.placeholder)
+          .onChange((e) => {
+            e.change((d) => (d.props.placeholder = e.to.value));
+          })
+          .onEnter((e) => {}),
+      );
+
       const tabSize = (size: number) => {
         const label = `tabSize: ${size}`;
         dev.button(label, (e) => e.change((d) => (d.props.tabSize = size)));
       };
       tabSize(2);
       tabSize(4);
+    });
+
+    dev.hr(-1);
+
+    dev.section('EditorTheme', (dev) => {
+      const theme = (value: t.EditorTheme) => {
+        dev.button((btn) =>
+          btn
+            .label(() => `theme: "${value}"`)
+            .right((e) => (e.state.props.theme === value ? '← current' : ''))
+            .onClick((e) => e.change((d) => (d.props.theme = value))),
+        );
+      };
+      theme('Light');
+      theme('Dark');
     });
 
     dev.hr(5, 20);
@@ -197,11 +225,7 @@ export default Dev.describe('MonacoEditor', (e) => {
         carets: carets?.current ?? [],
       };
       return (
-        <Dev.Object
-          name={'Dev.MonacoEditor'}
-          data={data}
-          expand={{ level: 1, paths: ['$.editor'] }}
-        />
+        <Dev.Object name={'MonacoEditor'} data={data} expand={{ level: 1, paths: ['$.editor'] }} />
       );
     });
   });
