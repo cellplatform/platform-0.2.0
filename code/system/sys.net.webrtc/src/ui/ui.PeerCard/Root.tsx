@@ -26,6 +26,7 @@ export type PeerCardProps = {
   spinning?: boolean;
   showPeer?: boolean;
   showConnect?: boolean;
+  backgroundUrl?: string;
 
   devPanelWidth?: number;
   devShowFooter?: boolean;
@@ -89,16 +90,12 @@ const View: React.FC<PeerCardProps> = (props) => {
     video: {
       base: css({
         position: 'relative',
-        backgroundImage: `url(${URL.Rowan})`,
+        backgroundImage: `url(${props.backgroundUrl || URL.Rowan})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }),
-      bg: css({
-        Absolute: 0,
-        display: 'grid',
-        placeItems: 'center',
-      }),
+      bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
       mediaOuter: css({
         Absolute: 0,
         overflow: 'hidden',

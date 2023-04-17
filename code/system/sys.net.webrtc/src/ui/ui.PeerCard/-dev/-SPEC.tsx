@@ -29,6 +29,7 @@ export default Dev.describe('PeerCard', async (e) => {
     showPeer?: boolean;
     showConnect?: boolean;
     sidepanelWidth?: number;
+    backgroundUrl?: string;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
@@ -38,6 +39,7 @@ export default Dev.describe('PeerCard', async (e) => {
     showPeer: DEFAULTS.showPeer,
     showConnect: DEFAULTS.showConnect,
     sidepanelWidth: 400,
+    backgroundUrl: '',
   });
 
   let self: t.Peer | undefined;
@@ -136,6 +138,7 @@ export default Dev.describe('PeerCard', async (e) => {
       d.devShowFooter = local.showFooter;
       d.showConnect = local.showConnect;
       d.devPanelWidth = local.sidepanelWidth;
+      d.backgroundUrl = local.backgroundUrl;
       d.fill = false;
     });
   });
@@ -350,6 +353,18 @@ export default Dev.describe('PeerCard', async (e) => {
           .value((e) => SharedProps.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
           .onClick((e) => {
             SharedProps.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
+          }),
+      );
+
+      dev.hr(0, 5);
+
+      dev.textbox((txt) =>
+        txt
+          .label((e) => 'backgroundUrl')
+          .value((e) => local.backgroundUrl ?? '')
+          .onChange((e) => (local.backgroundUrl = e.to.value ?? ''))
+          .onEnter((e) => {
+            SharedProps.change((d) => (d.backgroundUrl = local.backgroundUrl));
           }),
       );
     });
