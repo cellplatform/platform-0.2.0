@@ -12,7 +12,7 @@ const initial: T = {
   props: {
     center: DEFAULTS.center,
     keyboard: DEFAULTS.keyboard,
-    pkg: Pkg.toString(),
+    footer: ['index-0', 'index-1', Pkg.toString()],
   },
   debug: {},
 };
@@ -50,14 +50,13 @@ export default Dev.describe('DevSplash', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `pkg`)
-          .value((e) => Boolean(e.state.props.pkg))
+          .label((e) => `footer`)
+          .value((e) => Boolean(e.state.props.footer))
           .onClick((e) =>
             e.change((d) => {
-              //
-              const current = d.props.pkg;
-              const next = current ? undefined : Pkg.toString();
-              d.props.pkg = next;
+              const current = d.props.footer;
+              const next = current ? undefined : initial.props.footer;
+              d.props.footer = next;
             }),
           ),
       );

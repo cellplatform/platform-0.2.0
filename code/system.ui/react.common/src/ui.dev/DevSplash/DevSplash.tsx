@@ -1,10 +1,11 @@
 import { COLORS, css, DEFAULTS, FC, t } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
+import { Footer, FooterInput } from './DevSplash.Footer';
 
 export type DevSplashProps = {
   children?: JSX.Element;
   center?: boolean;
-  pkg?: string | JSX.Element;
+  footer?: FooterInput;
   fill?: boolean;
   keyboard?: boolean;
   style?: t.CssValue;
@@ -16,7 +17,6 @@ const View: React.FC<DevSplashProps> = (props) => {
     fill = DEFAULTS.fill,
     center = DEFAULTS.center,
     keyboard = DEFAULTS.keyboard,
-    pkg,
     onEnter,
   } = props;
 
@@ -33,9 +33,10 @@ const View: React.FC<DevSplashProps> = (props) => {
     base: css({
       Absolute: fill ? 0 : undefined,
       position: !fill ? 'relative' : undefined,
+      color: COLORS.DARK,
+      cursor: 'default',
       display: 'grid',
       placeItems: center ? 'center' : undefined,
-      color: COLORS.DARK,
     }),
     link: css({
       color: COLORS.CYAN,
@@ -43,14 +44,11 @@ const View: React.FC<DevSplashProps> = (props) => {
       ':hover': { textDecoration: 'underline' },
     }),
     defaultContent: css({
-      fontSize: 80,
+      fontSize: 70,
       fontWeight: 'bold',
       letterSpacing: -2,
     }),
-    pkg: css({
-      Absolute: [null, 10, 10, null],
-      cursor: 'default',
-    }),
+    footer: css({ Absolute: [null, 0, 0, 0] }),
   };
 
   const elDefault = (
@@ -59,12 +57,12 @@ const View: React.FC<DevSplashProps> = (props) => {
     </a>
   );
   const elContent = props.children || elDefault;
-  const elPkg = pkg && <div {...styles.pkg}>{pkg}</div>;
+  const elFooter = props.footer && <Footer content={props.footer} style={styles.footer} />;
 
   return (
     <div {...css(styles.reset, styles.base, props.style)}>
       {elContent}
-      {elPkg}
+      {elFooter}
     </div>
   );
 };
