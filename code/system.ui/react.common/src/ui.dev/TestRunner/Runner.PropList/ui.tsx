@@ -5,8 +5,8 @@ import { ButtonText } from './ui.ButtonText';
 
 type Milliseconds = number;
 
-const DEFAULT = {
-  DELAY_COLORED_MSEC: 1000 * 5, // 5-secsonds.
+const MSEC = {
+  DELAY_COLORED: 1000 * 5, // 5 seconds
 };
 
 export type TestRunnerProps = {
@@ -28,7 +28,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     setColoredText(false);
 
     if (typeof runAtTime === 'number') {
-      const delay = DEFAULT.DELAY_COLORED_MSEC;
+      const delay = MSEC.DELAY_COLORED;
       const elapsed = () => Time.duration(Time.now.timestamp - runAtTime);
       const expired = () => elapsed().msec > delay;
       const update = () => {
@@ -49,6 +49,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     setRunning(true);
     setResults(undefined);
 
+    await Time.wait(0); // Allow UI to update.
     const { root, ctx, timeout } = await props.get();
     const res = await root.run({ ctx, timeout });
 
