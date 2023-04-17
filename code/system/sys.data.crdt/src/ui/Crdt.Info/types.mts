@@ -6,9 +6,11 @@ export type CrdtInfoFields =
   | 'Driver.Library'
   | 'Driver.Runtime'
   | 'File'
+  | 'File.Driver'
   | 'Network'
   | 'History'
   | 'History.Item'
+  | 'History.Item.Message'
   | 'Url'
   | 'Url.QRCode';
 

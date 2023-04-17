@@ -2,6 +2,7 @@ import { COLORS, DEFAULTS, Icons, Path, t, Value, Wrangle } from './common';
 import { Hash } from './ui.Hash';
 
 export function FieldFile(
+  fields: t.CrdtInfoFields[],
   data: t.CrdtInfoData,
   info?: { exists: boolean; manifest: t.DirManifest },
 ): t.PropListItem[] {
@@ -62,8 +63,16 @@ export function FieldFile(
         });
 
         if (file.path && filesTotal.count > 0) {
+          if (fields.includes('File.Driver')) {
+            res.push({
+              label: 'Filesystem',
+              value: `sys.fs.indexeddb`,
+              indent,
+            });
+          }
+
           res.push({
-            label: 'Filesystem',
+            label: 'Path',
             value: Path.ensureSlashes(file.path),
             tooltip: `file path: ${file.path}`,
             indent,
@@ -73,11 +82,11 @@ export function FieldFile(
         let strategy = '';
         let strategyCount = 0;
         if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `compressed file`;
+          strategy += `compressed-file`;
           strategyCount++;
         }
         if (docFile.logging || logFiles.length > 0) {
-          strategy += `${strategy ? ', ' : ''}running log`;
+          strategy += `${strategy ? ', ' : ''}append-log`;
           strategyCount++;
         }
         if (strategy.trim()) {

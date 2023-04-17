@@ -11,15 +11,17 @@ export const FIELDS: t.CrdtInfoFields[] = [
   'Driver.Runtime',
   'History',
   'History.Item',
+  'History.Item.Message',
   'File',
+  'File.Driver',
   'Network',
   'Url',
   'Url.QRCode',
 ];
 
-const fields = ['Module'] as t.CrdtInfoFields[];
+const defaultFields = ['Module', 'Module.Verify'] as t.CrdtInfoFields[];
 export const DEFAULTS = {
-  fields,
+  fields: defaultFields,
   indent: 15,
   doc: DEFAULTS_BASE.doc,
   query: DEFAULTS_BASE.query,

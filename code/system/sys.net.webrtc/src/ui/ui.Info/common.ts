@@ -6,9 +6,9 @@ import { t } from '../common';
  */
 export const FIELDS: t.WebRtcInfoFields[] = ['Module', 'Module.Verify'];
 
-const fields = ['Module'] as t.WebRtcInfoFields[];
+const defaultFields = ['Module.Verify', 'Module'] as t.WebRtcInfoFields[];
 export const DEFAULTS = {
-  fields,
+  fields: defaultFields,
   indent: 15,
   query: { dev: 'dev', selected: 'selected' },
 } as const;

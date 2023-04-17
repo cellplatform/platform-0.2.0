@@ -1,7 +1,10 @@
 import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
 import { Hash } from './ui.Hash';
 
-export function FieldHistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
+export function FieldHistoryItem(
+  fields: t.CrdtInfoFields[],
+  data: t.CrdtInfoData,
+): t.PropListItem[] {
   const item = data?.history?.item;
   if (!item) return [];
 
@@ -43,9 +46,14 @@ export function FieldHistoryItem(data: t.CrdtInfoData): t.PropListItem[] {
     res.push({ label: 'Time', value: time.format(format), indent });
   }
 
-  if (change.message) {
-    const value = change.message;
-    res.push({ label: 'Message', value, tooltip: value, indent });
+  if (fields.includes('History.Item.Message')) {
+    const value = change.message ?? '-';
+    res.push({
+      label: 'Message',
+      value,
+      tooltip: value,
+      indent,
+    });
   }
 
   return res;
