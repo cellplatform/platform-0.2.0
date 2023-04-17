@@ -28,13 +28,15 @@ const render = async (subject: SubjectMatter) => {
 
   if (subject === 'DefaultEntry') {
     const { Dev } = await import('sys.ui.react.common');
-    return root.render(<Dev.Home pkg={Pkg.toString()} />);
+    const pkg = Pkg.toString();
+    root.render(<Dev.Splash footer={pkg} />);
+    return;
   }
 
   if (subject === 'Temp') {
     const { Temp } = await import('../ui/Root.Temp');
-    const el = <Temp />;
-    return root.render(el);
+    root.render(<Temp />);
+    return;
   }
 };
 
