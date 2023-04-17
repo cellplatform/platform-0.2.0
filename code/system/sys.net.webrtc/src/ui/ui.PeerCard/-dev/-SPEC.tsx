@@ -157,6 +157,9 @@ export default Dev.describe('PeerCard', async (e) => {
             me: docs.me.doc,
             shared: docs.shared.doc,
           }}
+          paths={{
+            me: docs.me.path,
+          }}
           visible={props.devShowFooter}
           onChange={(e) => {
             //
@@ -263,7 +266,7 @@ export default Dev.describe('PeerCard', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Me (Private)', (dev) => {
+    dev.section(['Me', '(Private)'], (dev) => {
       const me = docs.me;
       dev.row((e) => {
         return (
@@ -296,7 +299,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Shared State (Public)', (dev) => {
+    dev.section(['Shared State', '(Public)'], (dev) => {
       const shared = docs.shared;
       dev.row((e) => {
         return <FileCard doc={shared.doc} filepath={docs.dirs.shared.path} margin={[20, 40]} />;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MonacoCrdt, MonacoEditor } from 'sys.ui.react.monaco';
 import yaml from 'yaml';
 
-import { COLORS, Crdt, css, rx, t, Color } from './common';
+import { COLORS, Crdt, css, rx, t, Color, Path } from './common';
 
 import type { DocShared, DocMe } from './-SPEC.Docs.mjs';
 
@@ -18,6 +18,9 @@ export type SpecMonacoSyncProps = {
     me: t.CrdtDocRef<DocMe>;
     shared: t.CrdtDocRef<DocShared>;
   };
+  paths: {
+    me: string;
+  };
   self?: t.Peer;
   visible?: boolean;
   style?: t.CssValue;
@@ -28,7 +31,9 @@ export type SpecMonacoSyncProps = {
  * A shared syncing code-editor.
  */
 export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
-  const { self, docs, visible = true } = props;
+  const { self, docs, visible = true, paths } = props;
+  const theme = 'Light';
+
   const [indexCtx, setIndexCtx] = useState<EditorCtx>();
   const [mainCtx, setMainCtx] = useState<EditorCtx>();
 
@@ -111,6 +116,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
    */
   const styles = {
     base: css({
+      color: COLORS.DARK,
       backgroundColor: COLORS.WHITE,
       height: visible ? 250 : 0,
       display: visible ? 'grid' : 'none',
@@ -126,9 +132,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
     }),
 
     titlebar: css({
-      backgroundColor: Color.alpha(COLORS.DARK, 0.4),
-      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
-      color: COLORS.WHITE,
+      backgroundColor: Color.alpha(COLORS.DARK, 0.06),
+      borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
       fontSize: 12,
       Padding: [3, 8, 4, 8],
       Flex: 'x-center-spaceBetween',
@@ -143,15 +148,6 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
 
   if (!self || !docs.shared) return <div {...css(styles.base, props.style)} />;
 
-  const SAMPLE_INDEX = `
-env:
-  - chat:data:video
-
-docs:
-  - meetings/latest
-  - project/slc/
-  `.substring(1);
-
   return (
     <div {...css(styles.base, props.style)}>
       <div {...css(styles.edge, styles.left)}>
@@ -159,12 +155,14 @@ docs:
           <MonacoEditor
             style={styles.editor}
             language={'yaml'}
+            theme={theme}
             text={docs.me.current.code?.toString()}
             onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
           />
         </div>
         <div {...styles.titlebar}>
-          <div>{'Me (Private)'}</div>
+          <div>{'Trust: Me (Private)'}</div>
+          <div>{Path.ensureSlashStart(paths.me)}</div>
         </div>
       </div>
       <div {...css(styles.edge, styles.right)}>
@@ -172,6 +170,7 @@ docs:
           <MonacoEditor
             style={styles.editor}
             language={'yaml'}
+            theme={theme}
             focusOnLoad={true}
             onReady={({ editor, monaco }) => setMainCtx({ editor, monaco })}
           />

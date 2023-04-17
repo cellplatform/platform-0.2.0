@@ -38,6 +38,7 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
         'Driver.Runtime',
         'History',
         'History.Item',
+        'History.Item.Message',
         'File',
         'Network',
       ]}
