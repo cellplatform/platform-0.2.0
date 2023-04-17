@@ -35,8 +35,11 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
      * Helpers
      */
     section(...args: any[]) {
-      if (typeof args[0] === 'string') {
-        api.title(args[0]);
+      if (
+        typeof args[0] === 'string' ||
+        (Array.isArray(args[0]) && typeof args[0][0] === 'string')
+      ) {
+        api.title(args[0] as string);
         if (typeof args[1] === 'function') {
           api.section(args[1]);
         } else {

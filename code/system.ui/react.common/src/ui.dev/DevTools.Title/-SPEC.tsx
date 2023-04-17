@@ -27,9 +27,11 @@ export default Dev.describe('Title', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e);
 
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'Dev.Title'} data={e.state} expand={2} />);
+    dev.section(['Section', '(Right)'], (dev) => {
+      dev.button('hello');
+    });
+
+    dev.hr(5, 20);
 
     dev
       .title((title) =>
@@ -37,10 +39,13 @@ export default Dev.describe('Title', (e) => {
           .text((e) => `Hello Title ${e.state.count}`)
           .onClick((e) => console.info('⚡️ onClick')),
       )
-      .button('increment (+)', (e) => e.change((d) => d.count++))
-      .hr()
-      .title((title) => title.style({ margin: [30, 40], color: COLORS.MAGENTA }))
-      .hr();
+      .button('increment (+)', (e) => e.change((d) => d.count++));
+
+    dev.hr();
+
+    dev.title((title) => title.style({ margin: [30, 40], color: COLORS.MAGENTA }));
+
+    dev.hr(5, 20);
 
     dev
       .title('Properties')
@@ -70,5 +75,12 @@ export default Dev.describe('Title', (e) => {
     dev.title(['Left', 'Right']);
     dev.hr(-1, 10);
     dev.title([Dev.Lorem.words(50), Dev.Lorem.words(50)]);
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'Dev.Title'} data={e.state} expand={2} />);
   });
 });
