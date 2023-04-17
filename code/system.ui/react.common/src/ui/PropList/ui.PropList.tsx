@@ -64,7 +64,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     <Card
       showAsCard={Boolean(card)}
       style={css(styles.base, props.style)}
-      padding={props.padding ?? [20, 25, 30, 25]}
+      padding={props.padding ?? [20, 25]}
       margin={props.margin}
     >
       {elTitle}

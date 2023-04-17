@@ -1,1 +1,1 @@
-export * from './Root.mjs';
+export * from './Root';
