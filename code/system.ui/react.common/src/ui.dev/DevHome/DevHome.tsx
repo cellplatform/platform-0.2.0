@@ -6,13 +6,20 @@ export type DevHomeProps = {
   children?: JSX.Element;
   center?: boolean;
   pkg?: string | JSX.Element;
+  fill?: boolean;
   keyboard?: boolean;
   style?: t.CssValue;
   onEnter?: () => void;
 };
 
 const View: React.FC<DevHomeProps> = (props) => {
-  const { center = DEFAULTS.center, keyboard = DEFAULTS.keyboard, pkg, onEnter } = props;
+  const {
+    fill = DEFAULTS.fill,
+    center = DEFAULTS.center,
+    keyboard = DEFAULTS.keyboard,
+    pkg,
+    onEnter,
+  } = props;
 
   useKeyboard({
     enabled: keyboard,
@@ -23,10 +30,13 @@ const View: React.FC<DevHomeProps> = (props) => {
    * [Render]
    */
   const styles = {
+    reset: css({ fontFamily: 'sans-serif' }),
     base: css({
-      position: 'relative',
+      Absolute: fill ? 0 : undefined,
+      position: !fill ? 'relative' : undefined,
       display: 'grid',
       placeItems: center ? 'center' : undefined,
+      color: COLORS.DARK,
     }),
     link: css({
       color: COLORS.CYAN,
@@ -34,7 +44,7 @@ const View: React.FC<DevHomeProps> = (props) => {
       ':hover': { textDecoration: 'underline' },
     }),
     defaultContent: css({
-      fontSize: 70,
+      fontSize: 80,
       fontWeight: 'bold',
       letterSpacing: -2,
     }),
@@ -53,7 +63,7 @@ const View: React.FC<DevHomeProps> = (props) => {
   const elPkg = pkg && <div {...styles.pkg}>{pkg}</div>;
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.reset, styles.base, props.style)}>
       {elContent}
       {elPkg}
     </div>
