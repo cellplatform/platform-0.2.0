@@ -32,7 +32,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
       card={props.card}
-      padding={props.card ? [20, 25, 30, 25] : undefined}
+      padding={props.card ? [20, 25] : undefined}
       margin={props.margin}
     />
   );
