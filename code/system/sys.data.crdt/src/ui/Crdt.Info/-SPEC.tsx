@@ -155,8 +155,8 @@ export default Dev.describe('CrdtInfo', async (e) => {
       dev.title('Change');
 
       const inc = (by: number) => {
-        const message = state.current.debug.message;
-        docA.change(message, (d) => (d.count += by));
+        const commit = state.current.debug.message;
+        docA.change(commit, (d) => (d.count += by));
       };
 
       const count = (label: string, by: number) => {
@@ -164,7 +164,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
           btn
             .label(`${label} →`)
             .right((e) => `count = ${docA.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => docA.change((d) => (d.count += by))),
+            .onClick((e) => inc(by)),
         );
       };
 
