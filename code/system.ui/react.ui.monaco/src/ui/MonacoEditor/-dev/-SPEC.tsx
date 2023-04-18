@@ -112,9 +112,7 @@ export default Dev.describe('MonacoEditor', (e) => {
           .label((e) => 'placeholder')
           .placeholder('enter placeholder text')
           .value((e) => e.state.props.placeholder)
-          .onChange((e) => {
-            e.change((d) => (d.props.placeholder = e.to.value));
-          })
+          .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
           .onEnter((e) => {}),
       );
 

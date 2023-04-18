@@ -120,7 +120,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       backgroundColor: COLORS.WHITE,
       height: visible ? 250 : 0,
       display: visible ? 'grid' : 'none',
-      gridTemplateColumns: 'minmax(200px, 400px) 2fr',
+      gridTemplateColumns: 'minmax(280px, 1fr) 1fr',
     }),
     editor: css({ Absolute: 0 }),
     left: css({
