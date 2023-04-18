@@ -12,29 +12,45 @@ export const WrangleUrlParams = {
     return params.has(QS.d) || params.has(QS.dev);
   },
 
-  formatDevFlag(options: { location?: t.UrlInput } = {}) {
+  formatDevFlag(
+    options: { location?: t.UrlInput; defaultNamespace?: string; forceDev?: boolean } = {},
+  ) {
+    const { defaultNamespace, forceDev } = options;
     const url = WrangleUrl.location(options.location);
+    const params = url.searchParams;
 
-    if (url.searchParams.has(QS.d)) {
-      const value = url.searchParams.get(QS.d) || 'true';
-      url.searchParams.delete(QS.d);
-      url.searchParams.set(QS.dev, value);
+    const updateParams = () => {
       if (!options.location) {
-        window.location.search = url.searchParams.toString();
+        const diff = window.location.search !== `?${params.toString()}`;
+        if (diff) window.location.search = params.toString();
+      }
+    };
+
+    if (params.has(QS.d)) {
+      const value = params.get(QS.d) || defaultNamespace || 'true';
+      params.delete(QS.d);
+      params.set(QS.dev, value);
+      updateParams();
+    }
+
+    if (forceDev) {
+      if (!params.has(QS.dev)) {
+        params.set(QS.dev, defaultNamespace || 'true');
+        updateParams();
       }
     }
 
     return url;
   },
 
-  ensureIndexDevFlag(options: { location?: t.UrlInput } = {}) {
+  ensureDevFlag(options: { location?: t.UrlInput } = {}) {
     const url = WrangleUrl.location(options.location);
     const params = url.searchParams;
     params.delete(DEFAULTS.qs.d);
     params.delete(DEFAULTS.qs.dev);
     params.set(DEFAULTS.qs.dev, 'true');
     if (!options.location) {
-      window.location.search = url.searchParams.toString();
+      window.location.search = params.toString();
     }
     return url;
   },
