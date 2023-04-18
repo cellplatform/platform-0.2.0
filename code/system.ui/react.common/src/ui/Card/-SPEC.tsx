@@ -1,15 +1,19 @@
-import { Card, CardProps } from '.';
-import { css, Dev } from '../../test.ui';
+import { Card } from '.';
+import { css, Dev, t } from '../../test.ui';
 
-type T = { props: CardProps };
+type T = {
+  props: t.CardProps;
+  debug: { flipFast: boolean };
+};
 const initial: T = {
   props: {
     padding: [25, 30],
     userSelect: true,
     shadow: true,
     showAsCard: true,
-    showReverse: false,
+    showBackside: false,
   },
+  debug: { flipFast: true },
 };
 
 export default Dev.describe('Card', (e) => {
@@ -22,10 +26,9 @@ export default Dev.describe('Card', (e) => {
       .display('grid')
       .size([450, null])
       .render<T>((e) => {
-        const { props } = e.state;
+        const { props, debug } = e.state;
 
         const styles = {
-          base: css({}),
           body: css({
             backgroundColor: 'rgba(255, 0, 0, 0.03)' /* RED */,
             lineHeight: 1.3,
@@ -33,8 +36,20 @@ export default Dev.describe('Card', (e) => {
         };
 
         const elBody = <div {...styles.body}>{Dev.Lorem.toString()}</div>;
+        const elBackside = <div {...styles.body}>{`🐷 Backside`}</div>;
+
         return (
-          <Card {...props} onClick={() => console.info('⚡️ onClick')}>
+          <Card
+            {...props}
+            backside={elBackside}
+            showBackside={{
+              // NB: Typically this is a simple boolean that uses the default values.
+              //     Shown here with the full configuration option.
+              flipped: Boolean(props.showBackside),
+              speed: debug.flipFast ? 300 : 1000,
+            }}
+            onClick={() => console.info('⚡️ onClick')}
+          >
             {elBody}
           </Card>
         );
@@ -81,9 +96,9 @@ export default Dev.describe('Card', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => 'showReverse ← 🐷TODO')
-          .value((e) => e.state.props.showReverse)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showReverse'))),
+          .label((e) => 'showBackside')
+          .value((e) => Boolean(e.state.props.showBackside))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showBackside'))),
       );
     });
 
@@ -121,6 +136,17 @@ export default Dev.describe('Card', (e) => {
           ),
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flip fast`)
+          .value((e) => e.state.debug.flipFast)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'flipFast'))),
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -136,7 +162,7 @@ export default Dev.describe('Card', (e) => {
  */
 
 const Util = {
-  toBackground(props: CardProps) {
+  toBackground(props: t.CardProps) {
     return props.background || (props.background = {});
   },
 };

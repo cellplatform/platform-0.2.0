@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { FC, Color, COLORS, css, t, rx } from '../common';
+import { css, FC, t } from '../common';
 
-const DEFAULTS = {};
+type Milliseconds = number;
+const DEFAULTS = { speed: 300 };
 
 export type FlipProps = {
-  msecs?: number;
+  flipped?: boolean;
+  speed?: Milliseconds;
   front?: JSX.Element;
   back?: JSX.Element;
-  flipped?: boolean;
   style?: t.CssValue;
 };
 
 const View: React.FC<FlipProps> = (props) => {
-  const { flipped = false, msecs = 600 } = props;
+  const { flipped = false, speed = DEFAULTS.speed } = props;
 
   /**
    * [Render]
@@ -24,7 +24,7 @@ const View: React.FC<FlipProps> = (props) => {
       gridColumn: 1,
       boxSizing: 'border-box',
       backfaceVisibility: 'hidden',
-      transition: `transform ${msecs}ms ease-out`,
+      transition: `transform ${speed}ms ease-out`,
       display: 'grid',
     }),
     front: css({ transform: `rotateY(${flipped ? -180 : 0}deg)` }),
