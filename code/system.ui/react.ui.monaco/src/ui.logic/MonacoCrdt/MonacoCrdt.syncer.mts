@@ -42,6 +42,16 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   const docPeers = DocPeers(args.peers);
   const carets = EditorCarets(editor, { dispose$ });
 
+  const changeEditorText = (text: string) => {
+    _ignoreChange = true;
+
+    const before = editor.getSelections()!;
+    editor.setValue(text);
+    editor.setSelections(before);
+
+    _ignoreChange = false;
+  };
+
   /**
    * Document CRDT change.
    */
@@ -52,18 +62,12 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   ).subscribe((e) => {
     const text = docText.get(data.doc.current)?.toString();
     if (text === editor.getValue()) return;
-    _ignoreChange = true;
-
-    const before = editor.getSelections()!;
-    editor.setValue(text);
-    editor.setSelections(before);
-
-    _ignoreChange = false;
+    changeEditorText(text);
     fireChange('remote', 'text');
   });
 
   /**
-   * Update the state from a change in a remote-peer.
+   * Update the state from a change on the remote-peer.
    */
   const syncFromRemotePeer = (peer: string, state: t.EditorPeerState) => {
     const caret = carets.id(peer);
@@ -85,7 +89,7 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   };
 
   /**
-   * Remote peers change (caret/selection).
+   * Monitor remote peer changes (caret/selection).
    */
   docPeers.$?.pipe(
     rx.takeUntil(dispose$),
@@ -173,6 +177,15 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   const handlerDidFocusEditorText = editor.onDidFocusEditorText(() => focusChanged(true));
   const handlerDidBlurEditorText = editor.onDidBlurEditorText(() => focusChanged(false));
   if (editor.hasTextFocus()) focusChanged(true);
+
+  /**
+   * Assign iniital value from the data-object to the editor.
+   */
+  const initial = data.getText(data.doc.current).toString();
+  if (initial) {
+    changeEditorText(initial);
+    fireChange('local', 'text');
+  }
 
   /**
    * API
