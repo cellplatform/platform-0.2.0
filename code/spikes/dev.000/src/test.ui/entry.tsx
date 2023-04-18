@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client';
 
 const params = new URL(location.href).searchParams;
 const isDev = params.has('dev') || params.has('d');
-
 const badge = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
