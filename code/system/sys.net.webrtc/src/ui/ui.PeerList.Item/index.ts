@@ -1,1 +1,1 @@
-export * from './ui.Root';
+export * from './Root';
