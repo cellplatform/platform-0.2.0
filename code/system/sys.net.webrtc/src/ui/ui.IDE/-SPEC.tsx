@@ -335,6 +335,12 @@ export default Dev.describe('PeerCard', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
+    dev.row((e) => {
+      return <WebRtc.InfoCard fields={['Module', 'Module.Verify']} />;
+    });
+
+    dev.hr(5, 20);
+
     dev.section(['Me', '(Private)'], (dev) => {
       const me = docs.me;
       dev.row((e) => {
