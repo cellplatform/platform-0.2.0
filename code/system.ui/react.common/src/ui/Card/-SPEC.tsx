@@ -1,5 +1,5 @@
 import { Card } from '.';
-import { css, Dev, t } from '../../test.ui';
+import { css, Dev, t, Keyboard } from '../../test.ui';
 
 type T = {
   props: t.CardProps;
@@ -56,6 +56,17 @@ export default Dev.describe('Card', (e) => {
       });
   });
 
+  e.it('init:keyboard', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    Keyboard.on({
+      Enter(e) {
+        e.cancel();
+        state.change((d) => Dev.toggle(d.props, 'showBackside'));
+      },
+    });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
@@ -96,7 +107,7 @@ export default Dev.describe('Card', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => 'showBackside')
+          .label((e) => 'showBackside (Enter)')
           .value((e) => Boolean(e.state.props.showBackside))
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showBackside'))),
       );
