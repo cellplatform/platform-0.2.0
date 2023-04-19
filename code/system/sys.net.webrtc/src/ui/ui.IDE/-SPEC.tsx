@@ -1,3 +1,4 @@
+import { DocShared, NetworkSchema } from '../../sys.net.schema';
 import { PeerCard, PeerCardProps } from '../ui.PeerCard';
 import { PeerList } from '../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
@@ -16,7 +17,6 @@ import {
   Yaml,
 } from './common';
 import { FileCard } from './FileCard';
-import { DocShared, NetworkSchema } from '../../sys.net.schema';
 
 type T = {
   remotePeer?: t.PeerId;
@@ -31,7 +31,6 @@ const initial: T = { debug: { showBg: true }, parsed: {} };
 
 export default Dev.describe('PeerCard', async (e) => {
   e.timeout(1000 * 90);
-
   const { dispose, dispose$ } = rx.disposable();
 
   type LocalStore = {
