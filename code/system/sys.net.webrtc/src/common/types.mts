@@ -13,10 +13,11 @@ export type { Fs } from 'sys.fs/src/types.mjs';
 export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
 export type { UserAgent } from 'sys.ui.dom/src/types.mjs';
 export type {
+  AutomergeText,
   CrdtDocRef,
   CrdtDocFile,
   CrdtDocSync,
-  AutomergeText,
+  CrdtInfoFields,
 } from 'sys.data.crdt/src/types.mjs';
 
 /**
