@@ -15,7 +15,10 @@ export const HostLayers: React.FC<HostLayersProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Absolute: 0 }),
+    base: css({
+      Absolute: 0,
+      pointerEvents: 'none',
+    }),
   };
 
   return (

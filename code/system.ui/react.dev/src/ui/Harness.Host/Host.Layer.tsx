@@ -19,6 +19,7 @@ export const HostLayer: React.FC<HostLayerProps> = (props) => {
     base: css({
       Absolute: 0,
       display: 'grid',
+      pointerEvents: 'none',
     }),
   };
 
