@@ -29,7 +29,7 @@ const View: React.FC<MonacoEditorProps> = (props) => {
   /**
    * TODO 🐷
    */
-  console.log('placeholder', placeholder);
+  // console.log('placeholder', placeholder);
 
   /**
    * [Lifecycle]
