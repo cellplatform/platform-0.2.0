@@ -55,10 +55,10 @@ export default Dev.describe('PeerCard', async (e) => {
 
   let self: t.Peer | undefined;
 
-  const SharedProps = {
+  const Shared = {
     get current() {
       const doc = docs.shared.doc;
-      if (!doc.current.tmp.props) SharedProps.change((d) => null); // NB: ensure the props object exists on the CRDT.
+      if (!doc.current.tmp.props) Shared.change((d) => null); // NB: ensure the props object exists on the CRDT.
       return doc.current.tmp.props as PeerCardProps;
     },
     change(fn: (draft: PeerCardProps) => void) {
@@ -94,15 +94,15 @@ export default Dev.describe('PeerCard', async (e) => {
         const after = dev.ctx.toObject().props.debug.width;
 
         local.sidepanelWidth = after;
-        SharedProps.change((d) => (d.devPanelWidth = after));
+        Shared.change((d) => (d.devPanelWidth = after));
       },
 
       'ALT + CTRL + Backslash'(e) {
         e.cancel();
 
-        const next = !SharedProps.current.devShowFooter;
+        const next = !Shared.current.devShowFooter;
         local.showFooter = next;
-        SharedProps.change((d) => (d.devShowFooter = next));
+        Shared.change((d) => (d.devShowFooter = next));
         dev.redraw();
       },
 
@@ -141,7 +141,7 @@ export default Dev.describe('PeerCard', async (e) => {
     docs.me.doc.$.subscribe(redraw);
     docs.shared.doc.$.subscribe(redraw);
 
-    SharedProps.change((d) => {
+    Shared.change((d) => {
       d.muted = local.muted;
       d.showPeer = local.showPeer;
       d.devShowFooter = local.showFooter;
@@ -157,7 +157,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const state = await ctx.state<T>(initial);
 
     const toggleMute = () => {
-      return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
+      return Shared.change((d) => (local.muted = d.muted = !d.muted));
     };
 
     /**
@@ -217,7 +217,7 @@ export default Dev.describe('PeerCard', async (e) => {
       .display('grid')
       .render<T>((e) => {
         const { showBg } = e.state.debug;
-        const props = SharedProps.current;
+        const props = Shared.current;
         const fullscreen = props.fill;
         const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
 
@@ -266,7 +266,7 @@ export default Dev.describe('PeerCard', async (e) => {
      * Footer (Code Editors)
      */
     ctx.host.footer.padding(0).render<T>((e) => {
-      const props = SharedProps.current;
+      const props = Shared.current;
       return (
         <SpecMonacoSync
           self={self}
@@ -397,13 +397,13 @@ export default Dev.describe('PeerCard', async (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => {
-            const fill = SharedProps.current.fill;
+            const fill = Shared.current.fill;
             const suffix = fill ? ' (fill host)' : ' (constrained)';
             return `subject size ${suffix}`;
           })
-          .value((e) => SharedProps.current.fill)
+          .value((e) => Shared.current.fill)
           .onClick((e) => {
-            SharedProps.change((d) => Dev.toggle(d, 'fill'));
+            Shared.change((d) => Dev.toggle(d, 'fill'));
           }),
       );
 
@@ -412,18 +412,18 @@ export default Dev.describe('PeerCard', async (e) => {
       dev.boolean((btn) =>
         btn
           .label('showPeer')
-          .value((e) => SharedProps.current.showPeer)
+          .value((e) => Shared.current.showPeer)
           .onClick((e) => {
-            SharedProps.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
+            Shared.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
           }),
       );
 
       dev.boolean((btn) =>
         btn
           .label('showConnect')
-          .value((e) => SharedProps.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
+          .value((e) => Shared.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
           .onClick((e) => {
-            SharedProps.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
+            Shared.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
           }),
       );
 
@@ -435,7 +435,7 @@ export default Dev.describe('PeerCard', async (e) => {
           .value((e) => local.backgroundUrl ?? '')
           .onChange((e) => (local.backgroundUrl = e.to.value ?? ''))
           .onEnter((e) => {
-            SharedProps.change((d) => (d.backgroundUrl = local.backgroundUrl));
+            Shared.change((d) => (d.backgroundUrl = local.backgroundUrl));
           }),
       );
     });

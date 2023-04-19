@@ -7,7 +7,6 @@ export type FileCardProps = {
   doc: t.CrdtDocRef<any>;
   file?: t.CrdtDocFile<any>;
   filepath?: string;
-  shadow?: t.CardProps['shadow'];
   margin?: t.CssEdgesInput;
   style?: t.CssValue;
 };
