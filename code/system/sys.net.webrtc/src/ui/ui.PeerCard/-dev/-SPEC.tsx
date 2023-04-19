@@ -437,13 +437,16 @@ export default Dev.describe('PeerCard', async (e) => {
             expand={{
               level: 1,
               // paths: isLocalhost && ['$.Doc<Public>'],
+              paths: ['$.yaml'],
             }}
             data={{
               [`Network.Peer(${total})`]: self,
               'Doc<Private>': docs.me.doc.current,
               'Doc<Public>': docs.shared.doc.current,
-              'me.yaml': e.state.parsed.me,
-              'shared.yaml': e.state.parsed.shared,
+              yaml: {
+                me: e.state.parsed.me,
+                shared: e.state.parsed.shared,
+              },
             }}
           />
         );
