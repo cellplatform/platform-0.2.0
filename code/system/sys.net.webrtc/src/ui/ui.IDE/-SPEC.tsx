@@ -164,10 +164,10 @@ export default Dev.describe('PeerCard', async (e) => {
      * CI (MetaData)
      */
     ctx.host.layer(1).render<T>((e) => {
+      const root = 'https://github.com/cellplatform/platform-0.2.0/actions/workflows';
       const badge = {
-        image:
-          'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
-        href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+        image: `${root}/node.esm.yml/badge.svg`,
+        href: `${root}//node.esm.yml`,
       };
 
       const styles = {
@@ -318,10 +318,22 @@ export default Dev.describe('PeerCard', async (e) => {
           state.change((d) => (d.spinning = true));
         },
         onConnectComplete(e) {
+          console.log('-------------------------------------------');
+          console.log('e onConnectComplete', e);
+
           state.change((d) => (d.spinning = false));
         },
       });
 
+      /**
+       * TODO 🐷
+       * - events.onConncted <== DocSync(DocRef)
+       * - store memory-ref
+       * - add to Card (SharedDoc)
+       * - add to footer editor (SharedDoc)
+       */
+
+      console.log('-------------------------------------------');
       return self;
     }
 
