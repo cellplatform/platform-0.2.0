@@ -1,7 +1,8 @@
 import { Crdt, t } from './common';
-import { NetworkSchema } from './Schema.mjs';
 
-export type { DocShared } from './Schema.mjs';
+import { NetworkSchema } from '../../sys.net.schema';
+
+export type { DocShared } from '../../sys.net.schema';
 export type DocMe = { count: number; text?: string; code?: t.AutomergeText };
 
 export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any> }) {

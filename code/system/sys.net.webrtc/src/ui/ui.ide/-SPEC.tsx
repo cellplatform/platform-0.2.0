@@ -1,5 +1,5 @@
-import { PeerCard, PeerCardProps } from '..';
-import { PeerList } from '../../ui.PeerList';
+import { PeerCard, PeerCardProps } from '../ui.PeerCard';
+import { PeerList } from '../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
 import {
@@ -16,7 +16,7 @@ import {
   Yaml,
 } from './common';
 import { FileCard } from './FileCard';
-import { DocShared, NetworkSchema } from './Schema.mjs';
+import { DocShared, NetworkSchema } from '../../sys.net.schema';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 

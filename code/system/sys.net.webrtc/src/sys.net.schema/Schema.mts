@@ -1,4 +1,4 @@
-import { t, Crdt } from '../../common';
+import { t, Crdt } from './common';
 import { bytes, typeDef } from './Schema.bytes.mjs';
 
 import type { DocShared } from './Schema.bytes.mjs';

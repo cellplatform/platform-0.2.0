@@ -7,7 +7,7 @@ export const TESTS = {
 
       import('../WebRtc.Controller/-dev/-TEST.controller.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.mutate.mjs'),
-      import('../ui/ui.PeerCard/-dev/Schema.TEST.mjs'),
+      import('../sys.net.schema/Schema.TEST.mjs'),
 
       import('../WebRtc/-dev/-TEST.sync.mjs'),
       import('../WebRtc.Media/-TEST.mjs'),

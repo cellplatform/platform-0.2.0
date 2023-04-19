@@ -75,7 +75,7 @@ export default Dev.describe('Root', (e) => {
         ...[
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.mutate.mjs')),
-          await button(import('../ui/ui.PeerCard/-dev/Schema.TEST.mjs'), true),
+          await button(import('../sys.net.schema/Schema.TEST.mjs')),
         ],
       );
 

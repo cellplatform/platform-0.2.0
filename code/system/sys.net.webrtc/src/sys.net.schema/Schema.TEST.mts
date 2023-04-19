@@ -1,4 +1,4 @@
-import { Crdt, Dev, expect } from '../../../test.ui';
+import { Crdt, Dev, expect } from '../test.ui';
 import { NetworkSchema } from './Schema.mjs';
 
 import type { DocShared } from './Schema.mjs';
