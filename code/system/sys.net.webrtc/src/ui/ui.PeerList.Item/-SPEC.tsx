@@ -35,11 +35,10 @@ export default Dev.describe('PeerList.Item', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
 
     dev.title('PeerList (Item)').hr();
+
+    dev.TODO('');
 
     dev.boolean((btn) =>
       btn
@@ -63,5 +62,12 @@ export default Dev.describe('PeerList.Item', async (e) => {
       network.peerA.connections.all.forEach((conn) => conn.dispose());
       await e.change((d) => (d.props.connections = undefined));
     });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'PeerList.Item'} data={e.state} expand={1} />);
   });
 });
