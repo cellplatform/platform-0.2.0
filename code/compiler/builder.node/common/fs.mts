@@ -1,6 +1,6 @@
 import fsextra from 'fs-extra';
-import glob from 'glob';
 import path from 'path';
+import { glob } from 'glob';
 
 /**
  * Node filesystem access.
