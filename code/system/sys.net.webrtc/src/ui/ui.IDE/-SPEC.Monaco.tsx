@@ -165,8 +165,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
           />
         </div>
         <div {...css(styles.titlebar, styles.titlebarPrivate)}>
-          <div>{'Me (Private)'}</div>
           <div>{Path.ensureSlashStart(paths.me)}</div>
+          <div>{'(Private)'}</div>
         </div>
       </div>
       <div {...css(styles.edge, styles.right)}>
@@ -180,7 +180,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
           />
         </div>
         <div {...styles.titlebar}>
-          <div>{'Shared (Public)'}</div>
+          <div>{'Shared'}</div>
+          <div>{'(Public)'}</div>
         </div>
       </div>
     </div>
