@@ -73,6 +73,7 @@ export default Dev.describe('PeerCard', async (e) => {
   const bus = rx.bus();
   const rootfs = (await Filesystem.client({ bus, dispose$ })).fs;
   const docs = await SpecDocs({ rootfs, dispose$ });
+  let controller: t.WebRtcEvents | undefined;
 
   e.it('init:keyboard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
@@ -302,19 +303,16 @@ export default Dev.describe('PeerCard', async (e) => {
       const { dispose$ } = ctx;
       const getStream = WebRtc.Media.singleton().getStream;
       const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
-      self.connections$.subscribe(() => ctx.redraw());
+      self.connections$.subscribe(async (e) => ctx.redraw());
 
       const filedir = docs.dirs.shared.fs;
-      const events = WebRtc.Controller.listen(self, doc, {
+      controller = WebRtc.Controller.listen(self, doc, {
         // filedir,
         dispose$,
         onConnectStart(e) {
           state.change((d) => (d.spinning = true));
         },
         onConnectComplete(e) {
-          console.log('-------------------------------------------');
-          console.log('e onConnectComplete', e);
-
           state.change((d) => (d.spinning = false));
         },
       });
@@ -381,8 +379,17 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.section(['Shared State', '(Public)'], (dev) => {
       const shared = docs.shared;
-      dev.row((e) => {
-        return <FileCard doc={shared.doc} filepath={docs.dirs.shared.path} margin={[20, 40]} />;
+      dev.row(async (e) => {
+        const info = await controller?.info.get();
+        const sync = (info?.syncers ?? [])[0];
+        return (
+          <FileCard
+            doc={shared.doc}
+            filepath={docs.dirs.shared.path}
+            syncer={sync?.syncer}
+            margin={[20, 40]}
+          />
+        );
       });
 
       const count = (label: string, by: number) => {

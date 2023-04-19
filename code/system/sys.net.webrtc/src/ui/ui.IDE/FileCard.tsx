@@ -7,12 +7,13 @@ export type FileCardProps = {
   doc: t.CrdtDocRef<any>;
   file?: t.CrdtDocFile<any>;
   filepath?: string;
+  syncer?: t.CrdtDocSync<any>;
   margin?: t.CssEdgesInput;
   style?: t.CssValue;
 };
 
 export const FileCard: React.FC<FileCardProps> = (props) => {
-  const { doc } = props;
+  const { doc, syncer } = props;
   if (!doc) return null;
 
   const history = doc.history;
@@ -25,22 +26,28 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
     },
   };
 
+  const fields: t.CrdtInfoFields[] = [
+    'Module.Verify',
+    'Module',
+    'Driver.Runtime',
+    'History',
+    'History.Item',
+    'History.Item.Message',
+    'File',
+  ];
+
+  if (syncer) {
+    fields.push('Network');
+    data.network = { doc: syncer };
+  }
+
   /**
    * [Render]
    */
   return (
     <CrdtInfo
       title={Wrangle.title(props)}
-      fields={[
-        'Module.Verify',
-        'Module',
-        'Driver.Runtime',
-        'History',
-        'History.Item',
-        'History.Item.Message',
-        'File',
-        'Network',
-      ]}
+      fields={fields}
       data={data}
       card={true}
       margin={props.margin}
