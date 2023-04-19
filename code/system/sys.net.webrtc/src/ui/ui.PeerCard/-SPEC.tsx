@@ -1,7 +1,8 @@
 import { Dev } from '../../test.ui';
+import { PeerCard, PeerCardProps } from '.';
 
-type T = { count: number };
-const initial: T = { count: 0 };
+type T = { props: PeerCardProps };
+const initial: T = { props: {} };
 
 export default Dev.describe('PeerCard', (e) => {
   e.it('ui:init', async (e) => {
@@ -9,16 +10,15 @@ export default Dev.describe('PeerCard', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size([400, 320])
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 PeerCard-${e.state.count}`}</div>;
+        return <PeerCard {...e.state.props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.button('tmp', (e) => e.change((d) => d.count++));
   });
 
   e.it('ui:footer', async (e) => {

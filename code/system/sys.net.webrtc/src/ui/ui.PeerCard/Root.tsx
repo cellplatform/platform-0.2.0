@@ -49,12 +49,10 @@ const View: React.FC<PeerCardProps> = (props) => {
     showPeer = DEFAULTS.showPeer,
     showConnect = DEFAULTS.showConnect,
   } = props;
-  const [showCopied, setShowCopied] = useState(false);
   const isSpinning = props.spinning ? true : !self;
-
+  const [showCopied, setShowCopied] = useState(false);
   const mouse = useMouseState();
 
-  // TEMP 🐷
   /**
    * TODO 🐷
    */
