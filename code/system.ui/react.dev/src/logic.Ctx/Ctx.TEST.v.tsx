@@ -253,6 +253,49 @@ describe('Context', () => {
 
       dispose();
     });
+
+    it('layers', async () => {
+      const { events, context, dispose } = await TestSample.context();
+      const ctx = context.ctx;
+
+      const getHost = async () => (await events.info.get()).render?.props?.host!;
+
+      const info0 = await getHost();
+      expect(info0).to.eql(undefined);
+
+      ctx.host.backgroundColor(1);
+      await context.flush();
+
+      const info1 = await getHost();
+      expect(info1.layers).to.eql([]); // Empty layers.
+
+      const fn = () => ctx.host.layer(0);
+      expect(fn).to.throw(/The 0-index layer is reserved for the main subject/);
+
+      const layer = ctx.host.layer(1);
+      expect(layer.index).to.eql(1);
+      expect(ctx.host.layer(1)).to.not.equal(layer); // NB: New instance each time (common state stored on render props).
+
+      const renderer1 = () => <div>foo-1</div>;
+      const renderer2 = () => <div>foo-2</div>;
+
+      layer.render(renderer1);
+      const info2 = await getHost();
+      expect(info2.layers[1].renderer?.fn).to.eql(renderer1);
+
+      // Replace renderer.
+      ctx.host.layer(1).render(renderer2);
+      const info3 = await getHost();
+      expect(info3.layers[1].renderer?.fn).to.eql(renderer2);
+
+      // Item behind main subject (-1).
+      ctx.host.layer(-1).render(renderer1);
+      const info4 = await getHost();
+      expect(info4.layers[-1].renderer?.fn).to.eql(renderer1);
+      expect(info4.layers[1].renderer?.fn).to.eql(renderer2);
+
+      dispose();
+    });
   });
 
   describe('props.debug', () => {

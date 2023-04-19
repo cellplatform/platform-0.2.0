@@ -1,4 +1,4 @@
-import { DEFAULTS, t, Margin } from './common';
+import { DEFAULTS, t, Margin, Id } from './common';
 import { CtxPanelEdge } from './Ctx.PanelEdge.mjs';
 
 import type { PropArgs } from './common.types';
@@ -23,6 +23,24 @@ export function CtxPropsHost(props: PropArgs) {
       props.current().host.backgroundImage = Wrangle.backgroundImage(value);
       props.changed();
       return api;
+    },
+
+    layer(index: number) {
+      if (index === 0) throw new Error(`The 0-index layer is reserved for the main subject.`);
+
+      const layer: t.DevCtxLayer = {
+        index,
+        render(input) {
+          const id = Id.renderer.create();
+          const fn = typeof input === 'function' ? input : () => input;
+          const host = props.current().host;
+          host.layers[index] = { renderer: { id, fn } };
+          props.changed();
+          return layer;
+        },
+      };
+
+      return layer;
     },
 
     header: CtxPanelEdge(HOST.header, (fn) => {

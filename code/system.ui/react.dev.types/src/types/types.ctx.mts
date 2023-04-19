@@ -34,10 +34,10 @@ export type DevCtx = {
   readonly host: DevCtxHost;
   readonly debug: DevCtxDebug;
   readonly is: DevCtxIs;
-  toObject(): DevCtxObject;
   run(options?: { reset?: boolean; only?: SpecId | SpecId[] }): Promise<t.DevInfo>;
   redraw(target?: DevRedrawTarget): Promise<void>;
   state<T extends O>(initial: T): Promise<DevCtxState<T>>;
+  toObject(): DevCtxObject;
 };
 
 export type DevCtxIs = {
@@ -72,11 +72,12 @@ export type DevCtxSubject = {
  * Subject Component Host ("Harness")
  */
 export type DevCtxHost<S extends O = O> = {
+  readonly header: DevCtxEdge<S>;
+  readonly footer: DevCtxEdge<S>;
   backgroundColor(value: Color | null): DevCtxHost<S>;
   backgroundImage(value: t.DevBackgroundImageInput | t.UrlString | null): DevCtxHost<S>;
   tracelineColor(value: Color | null): DevCtxHost<S>;
-  header: DevCtxEdge<S>;
-  footer: DevCtxEdge<S>;
+  layer(index: number): DevCtxLayer<S>;
 };
 
 /**
@@ -92,7 +93,12 @@ export type DevCtxDebug<S extends O = O> = {
 };
 
 export type DevCtxEdge<S extends O = O> = {
-  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxEdge;
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxEdge<S>;
   border(color: Color | null): DevCtxEdge;
   padding(value: t.DevMarginInput | undefined | null): DevCtxEdge;
+};
+
+export type DevCtxLayer<S extends O = O> = {
+  readonly index: number;
+  render<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): DevCtxLayer<S>;
 };
