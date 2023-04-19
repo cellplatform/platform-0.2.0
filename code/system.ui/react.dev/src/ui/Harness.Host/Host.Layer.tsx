@@ -16,7 +16,10 @@ export const HostLayer: React.FC<HostLayerProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Absolute: 0, display: 'grid' }),
+    base: css({
+      Absolute: 0,
+      display: 'grid',
+    }),
   };
 
   return <div {...css(styles.base, props.style)}>{element}</div>;
