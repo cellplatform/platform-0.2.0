@@ -197,10 +197,10 @@ export default Dev.describe('PeerCard', async (e) => {
     });
 
     ctx.host.layer(1).render<T>((e) => {
-      const data = e.state.parsed.shared;
+      const data = e.state?.parsed?.shared;
       if (typeof data !== 'object' || data === null) return null;
 
-      const images = data.images;
+      const images = data?.images;
       if (typeof images !== 'object') return null;
 
       const image = images[0];
