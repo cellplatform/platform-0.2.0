@@ -18,8 +18,6 @@ import {
 import { FileCard } from './FileCard';
 import { DocShared, NetworkSchema } from '../../sys.net.schema';
 
-const DEFAULTS = PeerCard.DEFAULTS;
-
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
@@ -47,11 +45,11 @@ export default Dev.describe('PeerCard', async (e) => {
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
-    muted: DEFAULTS.muted,
+    muted: PeerCard.DEFAULTS.muted,
     showBg: initial.debug.showBg,
     showFooter: true,
-    showPeer: DEFAULTS.showPeer,
-    showConnect: DEFAULTS.showConnect,
+    showPeer: PeerCard.DEFAULTS.showPeer,
+    showConnect: PeerCard.DEFAULTS.showConnect,
     sidepanelWidth: 400,
     backgroundUrl: '',
   });
@@ -163,40 +161,36 @@ export default Dev.describe('PeerCard', async (e) => {
       return SharedProps.change((d) => (local.muted = d.muted = !d.muted));
     };
 
-    ctx.host.footer.padding(0).render<T>((e) => {
-      const props = SharedProps.current;
+    /**
+     * CI (MetaData)
+     */
+    ctx.host.layer(1).render<T>((e) => {
+      const badge = {
+        image:
+          'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
+        href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+      };
+
+      const styles = {
+        base: css({}),
+        link: css({
+          Absolute: [10, 10, null, null],
+          pointerEvents: 'auto',
+        }),
+      };
       return (
-        <SpecMonacoSync
-          self={self}
-          docs={{
-            me: docs.me.doc,
-            shared: docs.shared.doc,
-          }}
-          paths={{
-            me: docs.me.path,
-          }}
-          visible={props.devShowFooter}
-          onChange={(e) => {
-            //
-            console.log('Editor Text Changed', e);
-
-            state.change((d) => {
-              if (e.kind === 'me') d.parsed.me = e.data;
-              if (e.kind === 'shared') d.parsed.shared = e.data;
-            });
-
-            // docs.shared.doc.change((d) => {
-            //   const tmp = d.tmp || (d.tmp = {});
-            //   const parsed = (tmp.parsed || (tmp.parsed = {})) as any;
-            //   parsed[e.kind] = e.data;
-            // });
-            // ctx.redraw();
-          }}
-        />
+        <div {...styles.base}>
+          <a href={badge.href} target={'_blank'} rel={'noopener noreferrer'} {...styles.link}>
+            <img src={badge.image} />
+          </a>
+        </div>
       );
     });
 
-    ctx.host.layer(1).render<T>((e) => {
+    /**
+     * Image Renderer
+     */
+    ctx.host.layer(2).render<T>((e) => {
       const data = e.state?.parsed?.shared;
       if (typeof data !== 'object' || data === null) return null;
 
@@ -216,6 +210,9 @@ export default Dev.describe('PeerCard', async (e) => {
       return <div {...styles.base}></div>;
     });
 
+    /**
+     * Root layer (PeerCard)
+     */
     ctx.subject
       //
       .display('grid')
@@ -265,6 +262,42 @@ export default Dev.describe('PeerCard', async (e) => {
           />
         );
       });
+
+    /**
+     * Footer (Code Editors)
+     */
+    ctx.host.footer.padding(0).render<T>((e) => {
+      const props = SharedProps.current;
+      return (
+        <SpecMonacoSync
+          self={self}
+          docs={{
+            me: docs.me.doc,
+            shared: docs.shared.doc,
+          }}
+          paths={{
+            me: docs.me.path,
+          }}
+          visible={props.devShowFooter}
+          onChange={(e) => {
+            //
+            console.log('Editor Text Changed', e);
+
+            state.change((d) => {
+              if (e.kind === 'me') d.parsed.me = e.data;
+              if (e.kind === 'shared') d.parsed.shared = e.data;
+            });
+
+            // docs.shared.doc.change((d) => {
+            //   const tmp = d.tmp || (d.tmp = {});
+            //   const parsed = (tmp.parsed || (tmp.parsed = {})) as any;
+            //   parsed[e.kind] = e.data;
+            // });
+            // ctx.redraw();
+          }}
+        />
+      );
+    });
   });
 
   e.it('init:network', async (e) => {
