@@ -155,10 +155,7 @@ export default Dev.describe('PeerCard', async (e) => {
   e.it('init:ui', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-
-    const toggleMute = () => {
-      return Shared.change((d) => (local.muted = d.muted = !d.muted));
-    };
+    const toggleMute = () => Shared.change((d) => (local.muted = d.muted = !d.muted));
 
     /**
      * CI (MetaData)
@@ -212,55 +209,52 @@ export default Dev.describe('PeerCard', async (e) => {
     /**
      * Root layer (PeerCard)
      */
-    ctx.subject
-      //
-      .display('grid')
-      .render<T>((e) => {
-        const { showBg } = e.state.debug;
-        const props = Shared.current;
-        const fullscreen = props.fill;
-        const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
+    ctx.subject.display('grid').render<T>((e) => {
+      const { showBg } = e.state.debug;
+      const props = Shared.current;
+      const fullscreen = props.fill;
+      const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
 
-        ctx.debug.width(props.devPanelWidth ?? 400);
+      ctx.debug.width(props.devPanelWidth ?? 400);
 
-        if (fullscreen && camera) {
-          ctx.subject.size('fill');
-        } else {
-          ctx.subject.size([400, 320]);
-        }
+      if (fullscreen && camera) {
+        ctx.subject.size('fill');
+      } else {
+        ctx.subject.size([400, 320]);
+      }
 
-        if (fullscreen && camera) {
-          return (
-            <MediaStream.Video
-              stream={camera?.stream.remote}
-              muted={props.muted}
-              style={{ Absolute: 0 }}
-            />
-          );
-        }
-
+      if (fullscreen && camera) {
         return (
-          <PeerCard
-            {...props}
-            self={self}
-            remotePeer={e.state.remotePeer}
-            spinning={e.state.spinning}
-            style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
-            onMuteClick={toggleMute}
-            onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
-            onConnectRequest={async (e) => {
-              if (!self) return;
-
-              // NB: Updating the CRDT triggers to listening [Controller].
-              docs.shared.doc.change((d) => {
-                const local = self!.id;
-                const initiatedBy = local;
-                WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
-              });
-            }}
+          <MediaStream.Video
+            stream={camera?.stream.remote}
+            muted={props.muted}
+            style={{ Absolute: 0 }}
           />
         );
-      });
+      }
+
+      return (
+        <PeerCard
+          {...props}
+          self={self}
+          remotePeer={e.state.remotePeer}
+          spinning={e.state.spinning}
+          style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
+          onMuteClick={toggleMute}
+          onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
+          onConnectRequest={async (e) => {
+            if (!self) return;
+
+            // NB: Updating the CRDT triggers to listening [Controller].
+            docs.shared.doc.change((d) => {
+              const local = self!.id;
+              const initiatedBy = local;
+              WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
+            });
+          }}
+        />
+      );
+    });
 
     /**
      * Footer (Code Editors)
