@@ -8,6 +8,13 @@ export type WebRtcInfo = {
   module: { name: string; version: Semver };
   peer: t.Peer;
   state: t.NetworkState;
+  syncers: t.WebRtcInfoSyncer[];
+};
+
+export type WebRtcInfoSyncer = {
+  local: t.PeerId;
+  remote: t.PeerId;
+  syncer: t.CrdtDocSync<t.NetworkSharedDoc>;
 };
 
 /**
