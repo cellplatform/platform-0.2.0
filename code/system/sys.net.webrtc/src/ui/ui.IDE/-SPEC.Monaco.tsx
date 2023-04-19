@@ -138,6 +138,11 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       Flex: 'x-center-spaceBetween',
     }),
 
+    titlebarPrivate: css({
+      backgroundColor: `${Color.alpha(COLORS.GREEN, 1)}`,
+      color: COLORS.WHITE,
+    }),
+
     edge: css({
       display: 'grid',
       gridTemplateRows: '1fr auto',
@@ -159,8 +164,8 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
             onReady={({ editor, monaco }) => setIndexCtx({ editor, monaco })}
           />
         </div>
-        <div {...styles.titlebar}>
-          <div>{'Trust: Me (Private)'}</div>
+        <div {...css(styles.titlebar, styles.titlebarPrivate)}>
+          <div>{'Me (Private)'}</div>
           <div>{Path.ensureSlashStart(paths.me)}</div>
         </div>
       </div>
