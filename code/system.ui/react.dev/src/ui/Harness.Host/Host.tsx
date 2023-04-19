@@ -1,8 +1,9 @@
-import { Color, COLORS, css, DEFAULTS, R, t, useCurrentState, WrangleUrl } from '../common';
+import { Color, COLORS, css, DEFAULTS, R, t, useCurrentState } from '../common';
 import { PanelFooter, PanelHeader } from '../Harness.PanelEdge';
 import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
+import { HostLayers } from './Host.Layers';
 
 const DEFAULT = DEFAULTS.props.host;
 
@@ -19,25 +20,32 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
   const current = useCurrentState(instance, { distinctUntil });
   const renderProps = current.info?.render.props;
   const host = renderProps?.host;
+  const layersAbove = Wrangle.layers(host, (i) => i > 0);
+  const layersBelow = Wrangle.layers(host, (i) => i < 0);
 
   /**
    * [Render]
    */
   const cropmark = `solid 1px ${Color.format(host?.tracelineColor ?? DEFAULT.tracelineColor)}`;
+  const backgroundColor =
+    host?.backgroundColor === undefined
+      ? Color.format(DEFAULT.backgroundColor)
+      : Color.format(host.backgroundColor);
   const styles = {
     base: css({
       position: 'relative',
       overflow: 'hidden',
       color: COLORS.DARK,
-      backgroundColor:
-        host?.backgroundColor === undefined
-          ? Color.format(DEFAULT.backgroundColor)
-          : Color.format(host.backgroundColor),
+      backgroundColor,
     }),
     body: css({
       Absolute: 0,
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
+    }),
+    main: css({
+      position: 'relative',
+      display: 'grid',
     }),
     empty: {
       base: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),
@@ -58,10 +66,18 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     </HostGrid>
   );
 
+  const elMain = (
+    <div {...styles.main}>
+      <HostLayers instance={instance} layers={layersBelow} />
+      {elGrid}
+      <HostLayers instance={instance} layers={layersAbove} />
+    </div>
+  );
+
   const elBody = (
     <div {...styles.body}>
       <PanelHeader instance={instance} current={host?.header} />
-      {elGrid}
+      {elMain}
       <PanelFooter instance={instance} current={host?.footer} />
     </div>
   );
@@ -91,4 +107,14 @@ const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
   if (prev.run.results?.tx !== next.run.results?.tx) return false;
   if (!R.equals(prev.render.revision, next.render.revision)) return false;
   return true;
+};
+
+const Wrangle = {
+  layers(host: t.DevRenderPropsHost | undefined, filter: (index: number) => boolean) {
+    const obj = host?.layers ?? {};
+    const items = Object.keys(obj)
+      .map((key) => obj[key])
+      .filter((item) => filter(item.index));
+    return R.sortBy(R.prop('index'), items);
+  },
 };

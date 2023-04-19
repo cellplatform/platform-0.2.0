@@ -39,6 +39,7 @@ export const MySample: React.FC<MySampleProps> = (props) => {
       fontFamily: 'sans-serif',
       display: 'grid',
       placeItems: 'center',
+      backdropFilter: 'blur(5px)',
     }),
     body: css({
       position: 'relative',

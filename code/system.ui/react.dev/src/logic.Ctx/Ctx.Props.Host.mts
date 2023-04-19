@@ -34,7 +34,7 @@ export function CtxPropsHost(props: PropArgs) {
           const id = Id.renderer.create();
           const fn = typeof input === 'function' ? input : () => input;
           const host = props.current().host;
-          host.layers[index] = { renderer: { id, fn } };
+          host.layers[index.toString()] = { index, renderer: { id, fn } };
           props.changed();
           return layer;
         },

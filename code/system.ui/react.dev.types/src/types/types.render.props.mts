@@ -50,7 +50,7 @@ export type DevRenderPropsHost = {
   tracelineColor?: Color;
   header: DevRenderPropsEdge;
   footer: DevRenderPropsEdge;
-  layers: DevRenderPropsLayer[];
+  layers: DevRenderPropsLayers;
 };
 
 /**
@@ -62,8 +62,8 @@ export type DevRenderPropsDebug = {
   footer: DevRenderPropsEdge;
   body: {
     renderers: t.DevRendererRef<any>[];
-    scroll: boolean;
     padding: t.DevMargin;
+    scroll: boolean;
   };
 };
 
@@ -73,7 +73,9 @@ export type DevRenderPropsEdge = {
   padding: t.DevMargin;
 };
 
+export type DevRenderPropsLayers = { [key: string]: DevRenderPropsLayer };
 export type DevRenderPropsLayer = {
+  index: number;
   renderer?: t.DevRendererRef<any>;
 };
 

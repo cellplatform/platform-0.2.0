@@ -267,7 +267,7 @@ describe('Context', () => {
       await context.flush();
 
       const info1 = await getHost();
-      expect(info1.layers).to.eql([]); // Empty layers.
+      expect(info1.layers).to.eql({}); // Empty layers.
 
       const fn = () => ctx.host.layer(0);
       expect(fn).to.throw(/The 0-index layer is reserved for the main subject/);
@@ -281,18 +281,20 @@ describe('Context', () => {
 
       layer.render(renderer1);
       const info2 = await getHost();
-      expect(info2.layers[1].renderer?.fn).to.eql(renderer1);
+      expect(info2.layers['1'].renderer?.fn).to.eql(renderer1);
+      expect(info2.layers['1'].index).to.eql(1);
 
       // Replace renderer.
       ctx.host.layer(1).render(renderer2);
       const info3 = await getHost();
-      expect(info3.layers[1].renderer?.fn).to.eql(renderer2);
+      expect(info3.layers['1'].renderer?.fn).to.eql(renderer2);
 
       // Item behind main subject (-1).
       ctx.host.layer(-1).render(renderer1);
       const info4 = await getHost();
-      expect(info4.layers[-1].renderer?.fn).to.eql(renderer1);
-      expect(info4.layers[1].renderer?.fn).to.eql(renderer2);
+      expect(info4.layers['-1'].renderer?.fn).to.eql(renderer1);
+      expect(info4.layers['1'].renderer?.fn).to.eql(renderer2);
+      expect(info4.layers['-1'].index).to.eql(-1);
 
       dispose();
     });
