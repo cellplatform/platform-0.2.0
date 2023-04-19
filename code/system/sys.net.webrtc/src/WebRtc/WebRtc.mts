@@ -12,10 +12,10 @@ import { WebRtcInfo as InfoCard } from '../ui/ui.Info';
  * Library for working with WebRTC peer-to-peer connections.
  */
 export const WebRtc = {
-  Controller,
-  Media,
-  Util,
   peer,
   events,
   InfoCard,
+  Controller,
+  Media,
+  Util,
 };
