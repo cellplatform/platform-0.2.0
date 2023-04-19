@@ -117,6 +117,7 @@ export default Dev.describe('Card', (e) => {
 
     dev.section('Background', (dev) => {
       dev.button('load background', async (e) => {
+        // SAMPLE IMAGE OF: a subtle flowing background pattern.
         const url =
           'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80';
         const host = e.ctx.toObject().props.host;
@@ -142,7 +143,10 @@ export default Dev.describe('Card', (e) => {
           .value((e) => e.state.props.background?.blur === 4)
           .onClick((e) =>
             e.change(({ props }) => {
-              props.background = { ...Util.toBackground(props), blur: e.current ? undefined : 4 };
+              props.background = {
+                ...Util.toBackground(props),
+                blur: e.current ? undefined : 4,
+              };
             }),
           ),
       );
