@@ -1,11 +1,7 @@
 import { Dev, t, Time, WebRtc } from '.';
 
-type T = {
-  testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
-};
-const initial: T = {
-  testrunner: {},
-};
+type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
+const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
   e.it('init', async (e) => {
@@ -119,7 +115,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      if (!_hasImmediate) Time.delay(100, () => invoke(all));
+      // if (!_hasImmediate) Time.delay(100, () => invoke(all));
     });
   });
 });
