@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MonacoCrdt, MonacoEditor } from 'sys.ui.react.monaco';
-import yaml from 'yaml';
 
-import { COLORS, Crdt, css, rx, t, Color, Path } from './common';
+import { Yaml, COLORS, Crdt, css, rx, t, Color, Path } from './common';
 
 import type { DocShared, DocMe } from './-SPEC.Docs.mjs';
 
@@ -24,7 +23,7 @@ export type SpecMonacoSyncProps = {
   self?: t.Peer;
   visible?: boolean;
   style?: t.CssValue;
-  onChange?: (e: { kind: 'index' | 'main'; data: any }) => void;
+  onChange?: (e: { kind: 'me' | 'shared'; data: any }) => void;
 };
 
 /**
@@ -80,35 +79,35 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         peers: { local, doc: docs.shared, getPeers: (d) => (d.tmp as T).main.peers },
       });
 
-      const listenForChanges = (
-        kind: 'index',
-        doc: t.CrdtDocRef<DocMe>,
-        getText: (tmp: DocMe) => t.AutomergeText,
+      const listenForChanges = <T extends {}>(
+        kind: 'me' | 'shared',
+        doc: t.CrdtDocRef<T>,
+        getText: (doc: T) => t.AutomergeText | undefined,
       ) => {
         //
         doc.$.pipe(
           rx.takeUntil(dispose$),
           rx.debounceTime(500),
-          rx.distinctUntilChanged((prev, next) => getText(prev.doc) === getText(next.doc)),
+          rx.distinctUntilChanged(
+            (prev, next) => getText(prev.doc)?.toString() === getText(next.doc)?.toString(),
+          ),
         ).subscribe((e) => {
           /**
            * TODO 🐷 - parse the YAML and update the "data" object.
            */
           const text = getText(e.doc);
-          const data = yaml.parse(text.toString());
-          console.log('data', data);
-          props.onChange?.({ kind, data });
+          if (text) {
+            const data = Yaml.parse(text.toString());
+            props.onChange?.({ kind, data });
+          }
         });
       };
 
-      listenForChanges('index', docs.me, (doc: DocMe) => doc.code!);
-      // listenForChanges('main', docs.shared, (tmp: T) => tmp.main.code);
+      listenForChanges('me', docs.me, (doc: DocMe) => doc.code!);
+      listenForChanges('shared', docs.shared, (doc: DocShared) => (doc.tmp as T).main.code);
     }
 
-    return () => {
-      dispose();
-      console.log('dispose monaco footer');
-    };
+    return dispose;
   }, [self, docs.shared, docs.me, mainCtx, indexCtx]);
 
   /**

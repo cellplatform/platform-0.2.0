@@ -2,20 +2,33 @@ import { PeerCard, PeerCardProps } from '..';
 import { PeerList } from '../../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
-import { COLORS, Dev, Filesystem, Keyboard, MediaStream, rx, t, TEST, WebRtc } from './common';
+import {
+  Yaml,
+  COLORS,
+  Dev,
+  Filesystem,
+  Keyboard,
+  MediaStream,
+  rx,
+  t,
+  TEST,
+  WebRtc,
+} from './common';
 import { FileCard } from './FileCard';
 import { DocShared, NetworkSchema } from './Schema.mjs';
-import yaml from 'yaml';
 
 const DEFAULTS = PeerCard.DEFAULTS;
 
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
-  yaml?: any;
+  parsed: {
+    me?: any;
+    shared?: any;
+  };
   debug: { showBg: boolean };
 };
-const initial: T = { debug: { showBg: true } };
+const initial: T = { debug: { showBg: true }, parsed: {} };
 
 export default Dev.describe('PeerCard', async (e) => {
   e.timeout(1000 * 90);
@@ -118,10 +131,8 @@ export default Dev.describe('PeerCard', async (e) => {
 
       // TEMP 🐷
       // NOTE: this is repeated within [SpecMonacoSync]
-      const code = docs.me.doc.current.code?.toString();
-      if (code) {
-        d.yaml = yaml.parse(code);
-      }
+      const me = docs.me.doc.current.code?.toString();
+      if (me) d.parsed.me = Yaml.parse(me);
     });
 
     // NB:
@@ -169,7 +180,8 @@ export default Dev.describe('PeerCard', async (e) => {
             console.log('Editor Text Changed', e);
 
             state.change((d) => {
-              d.yaml = e.data;
+              if (e.kind === 'me') d.parsed.me = e.data;
+              if (e.kind === 'shared') d.parsed.shared = e.data;
             });
 
             // docs.shared.doc.change((d) => {
@@ -430,7 +442,8 @@ export default Dev.describe('PeerCard', async (e) => {
               [`Network.Peer(${total})`]: self,
               'Doc<Private>': docs.me.doc.current,
               'Doc<Public>': docs.shared.doc.current,
-              'me.yaml': e.state.yaml,
+              'me.yaml': e.state.parsed.me,
+              'shared.yaml': e.state.parsed.shared,
             }}
           />
         );
