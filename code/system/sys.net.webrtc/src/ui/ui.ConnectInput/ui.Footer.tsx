@@ -1,4 +1,5 @@
-import { Color, COLORS, css, t, WebRtc } from '../common';
+import { WebRtc } from '../../WebRtc';
+import { Color, COLORS, css, t } from '../common';
 import { FooterConnect } from './ui.Footer.Connect';
 import { FooterMe } from './ui.Footer.Me';
 

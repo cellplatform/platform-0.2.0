@@ -38,4 +38,3 @@ export { CrdtInfo } from 'sys.data.crdt';
  */
 export * from '../../common';
 export { Icons } from '../Icons.mjs';
-export { WebRtc } from '../../WebRtc';

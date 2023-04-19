@@ -1,5 +1,5 @@
+import { WebRtc } from '../../WebRtc';
 import type * as t from './types.mjs';
-import { WebRtc } from './libs.mjs';
 
 /**
  * Format and place a "peer:<id>" on the clipboard.

@@ -1,6 +1,6 @@
 export const Specs = {
-  'sys.net.webrtc': () => import('../ui/ui.ide/-SPEC'),
-  'sys.net.webrtc.ide': () => import('../ui/ui.ide/-SPEC'),
+  'sys.net.webrtc': () => import('../ui/ui.IDE/-SPEC'),
+  'sys.net.webrtc.ide': () => import('../ui/ui.IDE/-SPEC'),
 
   'sys.net.webrtc.ui.Info': () => import('../ui/ui.Info/-SPEC'),
   'sys.net.webrtc.ui.PeerCard': () => import('../ui/ui.PeerCard/-SPEC'),

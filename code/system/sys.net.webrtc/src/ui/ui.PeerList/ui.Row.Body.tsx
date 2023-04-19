@@ -1,4 +1,5 @@
-import { AudioWaveform, Color, COLORS, css, t, useSizeObserver, WebRtc } from '../common';
+import { WebRtc } from '../../WebRtc';
+import { AudioWaveform, Color, COLORS, css, t, useSizeObserver } from '../common';
 import { ConnScreenshare } from './ui.Conn.Screenshare';
 
 export type RowBodyProps = {
