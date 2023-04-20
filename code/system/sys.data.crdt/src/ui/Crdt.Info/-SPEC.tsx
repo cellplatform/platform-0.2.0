@@ -278,7 +278,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
       return (
         <Dev.Object
-          name={'sys.data.crdt.Info'}
+          name={'sys.crdt.Info'}
           data={data}
           expand={{
             paths: ['$', '$.Doc<T>'],
