@@ -10,23 +10,10 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@automerge/automerge-wasm@0.1.25":
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.1.25.tgz#cee27cbe74acba3f0a7fc095390a7c2904768bbb"
-  integrity sha512-bTpSCkUS2/3cy2xVtpJzaf6wZla9tQhRvzq29LkNrJQ/Lp8dxLVAOZC7t1Nio4uzawTp8pIuhNlbYRM1Gh3VPA==
-
 "@automerge/automerge-wasm@0.1.26-marks-prelease.1":
   version "0.1.26-marks-prelease.1"
   resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.1.26-marks-prelease.1.tgz#64c42161d89c7e8672262d6b05f0fea4413bf7ab"
   integrity sha512-l15yvsENRsiFm0Din2oBtLp6geNa0+b2pb2nEcMRfDecyFGZ8Kcbo6PHvw5eVbJU2IzQRl33Gb4Wd7/SNVmQfg==
-
-"@automerge/automerge@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.0.2.tgz#17b323ea3d6e58fb770119f5cb4d5b9704181608"
-  integrity sha512-UnKOB4L/0qJ91aiVQDiN9Qf9IuigWpRs9yKC+5Z9qmCHH8AcETvv/B82FqWjkNn4bDPAJoDMhy/DG78pP+bfew==
-  dependencies:
-    "@automerge/automerge-wasm" "0.1.25"
-    uuid "^9.0.0"
 
 "@automerge/automerge@2.0.3-marks-prelease.1":
   version "2.0.3-marks-prelease.1"
@@ -734,10 +721,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.3.tgz#f0b991c32cfc6a4e7f3399d6cb4b8cf9a0315014"
   integrity sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==
 
-"@types/node@18.15.11":
-  version "18.15.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
-  integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
+"@types/node@18.15.12":
+  version "18.15.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.12.tgz#833756634e78c829e1254db006468dadbb0c696b"
+  integrity sha512-Wha1UwsB3CYdqUm2PPzh/1gujGCNtWVUYF0mB00fJFoR4gTyWTDPjSm+zBF787Ahw8vSGgBja90MkgFwvB86Dg==
 
 "@types/parse5@^6.0.0":
   version "6.0.3"
@@ -835,10 +822,10 @@
   resolved "https://registry.yarnpkg.com/@types/vimeo__player/-/vimeo__player-2.18.0.tgz#182498528fab1e524cfe9898646e65316f895d19"
   integrity sha512-AcPX2xDSl2gRrZGXOjEg1LUyuabgCxpakHTnVr+H6EqlNS6e5I8zR7AqEtN2J2dgMLc5cVm1YvkuyIRpMOcnEg==
 
-"@vercel/edge@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.3.2.tgz#2895479a80ef3e291da61bbdc6c76b54af2b7c1e"
-  integrity sha512-+Vmzzdj5bRdLkBUERJEMkm1pgBDoMrcyDZLRjCWQskOTpi9NfAyu5RU42y4XxpPBwHpuRzkk6lpGa1g3c1Xw2w==
+"@vercel/edge@0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.3.3.tgz#c0fcc883c255e30fff7efd95195817cde7253ef2"
+  integrity sha512-KKisuIHb+azlnV5UFa9aoQNRZQb8IeaqGqmDIFbeQvIJ6YZl3vn4QitdNj5PO9+aRySnkIdxj4MF6JwTurcSRA==
 
 "@vimeo/player@2.18.0":
   version "2.18.0"
