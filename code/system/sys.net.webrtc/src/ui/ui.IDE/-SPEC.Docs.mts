@@ -22,13 +22,13 @@ export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any
       doc: docMe,
       file: await Crdt.Doc.file<DocMe>(dirs.me.fs, docMe, { autosave: true, dispose$ }),
       path: dirs.me.path,
-      dir: dirs.me.fs,
+      fs: dirs.me.fs,
     },
     shared: {
       doc: docShared,
       // file: await Crdt.Doc.file<DocMe>(dirs.shared.fs, docShared, { autosave: true, dispose$ }),
       path: dirs.shared.path,
-      dir: dirs.shared.fs,
+      fs: dirs.shared.fs,
     },
   };
 }

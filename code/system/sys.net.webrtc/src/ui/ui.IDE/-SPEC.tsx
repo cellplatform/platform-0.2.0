@@ -3,19 +3,7 @@ import { PeerCard, PeerCardProps } from '../ui.PeerCard';
 import { PeerList } from '../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
-import {
-  COLORS,
-  css,
-  Dev,
-  Filesystem,
-  Keyboard,
-  MediaStream,
-  rx,
-  t,
-  TEST,
-  WebRtc,
-  Yaml,
-} from './common';
+import { COLORS, css, Dev, Filesystem, Keyboard, MediaStream, rx, t, TEST, WebRtc } from './common';
 import { FileCard } from './FileCard';
 
 type T = {
@@ -302,7 +290,7 @@ export default Dev.describe('PeerCard', async (e) => {
       const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
       self.connections$.subscribe(async (e) => ctx.redraw());
 
-      const filedir = docs.shared.dir;
+      const filedir = docs.shared.fs;
       controller = WebRtc.Controller.listen(self, doc, {
         filedir,
         dispose$,
