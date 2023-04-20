@@ -1,5 +1,5 @@
 import { Automerge } from '..';
-import { R, Time, expect, Test } from '../../test.ui';
+import { expect, Test } from '../../test.ui';
 
 export default Test.describe('initial document structure (multi-peer)', (e) => {
   /**
@@ -43,7 +43,7 @@ export default Test.describe('initial document structure (multi-peer)', (e) => {
       },
     );
 
-    e.it.skip('sample: output string of code to save as file (*.ts)', async (e) => {
+    e.it('sample: output string of code to save as file (*.ts)', async (e) => {
       /**
        *    - Hard-code the initial change and save it within the application source.
        *    - Save to a file.
