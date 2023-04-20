@@ -88,7 +88,7 @@ const Wrangle = {
     return value;
   },
 
-  showBackside(props: t.CardProps): t.CardShowBackside {
+  showBackside(props: t.CardProps): t.CardBackside {
     let flipped = false;
     let speed = Flip.DEFAULTS.speed;
     if (!props.showBackside) return { flipped, speed };

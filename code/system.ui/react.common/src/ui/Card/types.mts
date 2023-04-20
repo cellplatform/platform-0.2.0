@@ -12,7 +12,7 @@ export type CardBackground = {
   blur?: number;
 };
 
-export type CardShowBackside = {
+export type CardBackside = {
   flipped?: boolean;
   speed?: Milliseconds;
 };
@@ -27,7 +27,7 @@ export type CardProps = {
   background?: t.CardBackground;
   border?: t.CardBorder;
   showAsCard?: boolean;
-  showBackside?: boolean | CardShowBackside;
+  showBackside?: boolean | CardBackside;
   backside?: JSX.Element;
   padding?: t.CssEdgesInput; // NB: padding is dropped if "NOT" showing as card.
   margin?: t.CssEdgesInput;
