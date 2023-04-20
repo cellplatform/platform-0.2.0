@@ -39,12 +39,12 @@ const vercel = Vercel.client({ bus, fs, token }); // <═══╗
 //                                        SHARED EventBus 🌳
 
 await vercel.deploy({
-  name: 'my-tmp',
+  name: 'redirect',
 
-  source: 'tmp/sys.video',
+  source: 'tmp/rowan',
   team: 'tdb',
-  project: 'tdb-tmp',
-  alias: 'tmp.db.team',
+  project: 'cell-rowan',
+  alias: 'rowanyeoman.com',
 
   ensureProject: true,
   regions: ['sfo1'],

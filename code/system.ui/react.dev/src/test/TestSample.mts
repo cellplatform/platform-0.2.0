@@ -1,7 +1,7 @@
 import { rx, slug } from '../common';
 import { DevBus } from '../logic.Bus';
 import { Context } from '../logic.Ctx';
-import { SAMPLES } from '../test.ui/sample.specs.unit';
+import { SAMPLES } from '../test.ui/sample.specs.unit-test';
 
 /**
  * Sample test factories.

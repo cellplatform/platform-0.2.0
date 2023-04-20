@@ -59,7 +59,7 @@ const View: React.FC<TodoProps> = (props) => {
   const elHtml = safeHtml && (
     <span
       {...styles.html}
-      className={DEFAULTS.MD.CLASS.todo}
+      className={DEFAULTS.md.class.todo}
       dangerouslySetInnerHTML={{ __html: safeHtml }}
     />
   );

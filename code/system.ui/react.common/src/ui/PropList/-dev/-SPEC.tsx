@@ -1,6 +1,7 @@
 import { PropList } from '.';
 import { Dev, t } from '../../../test.ui';
 import { BuilderSample, sampleItems, SampleFields } from '.';
+import { Wrangle } from '../Util.mjs';
 
 import type { MyFields } from '.';
 
@@ -21,9 +22,9 @@ type T = {
 const initial: T = {
   props: {
     title: 'MyTitle',
-    titleEllipsis: true,
     defaults: { clipboard: false },
     theme: 'Light',
+    card: false,
   },
   debug: {
     source: 'Samples',
@@ -44,16 +45,17 @@ export default Dev.describe('PropList', (e) => {
     ctx.subject
       .display('grid')
       .size([250, null])
-      .render<T>((e) => <PropList {...e.state.props} />);
+      .render<T>((e) => {
+        const isCard = Boolean(e.state.props.card);
+        const width = isCard ? 250 + 25 * 2 : 250;
+        ctx.subject.size([width, null]);
+
+        return <PropList {...e.state.props} />;
+      });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    const ctx = dev.ctx;
-
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'PropList'} data={e.state} expand={1} />);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
@@ -82,23 +84,75 @@ export default Dev.describe('PropList', (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
       );
 
-      dev.hr();
+      dev.boolean((btn) =>
+        btn
+          .label('card')
+          .value((e) => Boolean(e.state.props.card))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'card'))),
+      );
+
+      dev.hr(5, 20);
     });
 
     dev.section('Title', (dev) => {
-      dev.button('none', (e) => e.change((d) => (d.props.title = undefined)));
-      dev.button('"MyTitle"', (e) => e.change((d) => (d.props.title = 'MyTitle')));
-      dev.button('long (50 words)', (e) => e.change((d) => (d.props.title = Dev.Lorem.words(50))));
+      const Title = {
+        read(state: T) {
+          return Wrangle.title(state.props.title);
+        },
+        obj(state: T): t.PropListTitle {
+          const current = state.props.title;
+          if (typeof current === 'object' && current !== null) return current as t.PropListTitle;
+          return (state.props.title = {});
+        },
+      };
+
+      const lorem = Dev.Lorem.words(50);
+      const titleButton = (label: string, value: t.PropListTitle['value']) => {
+        dev.button(`set: ${label}`, (e) => {
+          e.change((d) => (Title.obj(d).value = value));
+        });
+      };
+
+      titleButton('none (undefined)', undefined);
+      dev.hr(-1, 5);
+      titleButton('"MyTitle"', 'MyTitle');
+      titleButton('long (50 words)', lorem);
+      dev.hr(-1, 5);
+      titleButton('[ "Left", "Right" ]', ['Left', 'Right']);
+      titleButton('[ (long), "Right" ]', [lorem, 'Right']);
+      titleButton('[ "Left", (long) ]', ['Left', lorem]);
+      titleButton('[ (long), (long) ]', [lorem, lorem]);
+
+      dev.hr(1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `ellipsis: ${Boolean(Title.read(e.state).ellipsis)}`)
+          .value((e) => Title.read(e.state).ellipsis)
+          .onClick((e) => e.change((d) => Dev.toggle(Title.obj(d), 'ellipsis'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `margin: ${Title.read(e.state).margin || '(default)'}`)
+          .value((e) => Boolean(Title.read(e.state).margin))
+          .onClick((e) => {
+            e.change((d) => {
+              const title = Title.obj(d);
+              title.margin = title.margin ? undefined : [30, 50];
+            });
+          }),
+      );
     });
 
     dev.hr(5, 20);
 
-    dev.section('Debug', (dev) => {
+    dev.section('Items', (dev) => {
       const button = (kind: SampleKind) => {
-        const label = `items: ${kind}`;
-        dev.button(label, (e) => Util.setSample(e.ctx, kind));
+        dev.button(`${kind}`, (e) => Util.setSample(e.ctx, kind));
       };
       button('Empty');
+      dev.hr(-1, 5);
       button('Samples');
       button('Builder');
     });
@@ -136,6 +190,14 @@ export default Dev.describe('PropList', (e) => {
         return <PropList.FieldSelector {...props} style={{ Margin: [25, 25, 25, 38] }} />;
       });
     });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => <Dev.Object name={'PropList'} data={e.state} expand={1} />);
   });
 });
 

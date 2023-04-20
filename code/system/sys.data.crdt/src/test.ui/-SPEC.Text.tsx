@@ -5,7 +5,7 @@ const initial: T = { count: 0 };
 
 export default Dev.describe('Text', (e) => {
   type D = { text: t.AutomergeText };
-  const doc = Crdt.Doc.ref<D>({ text: Crdt.text() });
+  const doc = Crdt.Doc.ref<D>('my-id', { text: Crdt.text() });
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);

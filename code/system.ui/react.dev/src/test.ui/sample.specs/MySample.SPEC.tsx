@@ -37,6 +37,13 @@ export default Spec.describe('MySample', (e) => {
       // return null;
     });
 
+    const styles = {
+      above: css({ padding: 20 }),
+      below: css({ Absolute: [null, 20, 20, null] }),
+    };
+    ctx.host.layer(1).render((e) => <div {...styles.above}>Layer Above</div>);
+    ctx.host.layer(-1).render((e) => <div {...styles.below}>Layer Below</div>);
+
     ctx.subject
       .size([300, 200])
       .display('flex')

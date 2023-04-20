@@ -1,13 +1,12 @@
 /**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListItem } from 'sys.ui.react.common/src/types.mjs';
 export type {
-  TestSuiteRunResponse,
-  SpecImport,
-  SpecImports,
-  TestSuiteModel,
-} from 'sys.test.spec/src/types.mjs';
+  CssValue,
+  CssEdgesInput,
+  PropListItem,
+  PropListProps,
+} from 'sys.ui.react.common/src/types.mjs';
 
 /**
  * @local

@@ -23,13 +23,13 @@ export type DevTools<S extends O = O> = {
   theme(value: t.DevTheme): DevTools<S>;
 
   // NB: Useful for logically grouping blocks.
-  section(title: string, fn?: SectionHandler<S>): DevTools<S>;
+  section(title: string | [string, string], fn?: SectionHandler<S>): DevTools<S>;
   section(fn: SectionHandler<S>): DevTools<S>;
 
   /**
    * Widgets.
    */
-  title(text: string, style?: t.DevTitleStyle): DevTools<S>;
+  title(text: string | [string, string], style?: t.DevTitleStyle): DevTools<S>;
   title(fn: t.DevTitleHandler<S>): DevTools<S>;
 
   button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;

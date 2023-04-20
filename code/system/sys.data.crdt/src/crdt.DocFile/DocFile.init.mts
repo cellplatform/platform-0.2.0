@@ -1,5 +1,3 @@
-import { DocRef } from '../crdt.DocRef';
-import { CrdtIs } from '../crdt.helpers';
 import { Automerge, DEFAULTS, rx, t } from './common';
 import { autoSaveStrategy } from './strategy.AutoSave.mjs';
 import { saveLogStrategy } from './strategy.SaveLog.mjs';
@@ -19,18 +17,21 @@ type Options<D extends {}> = {
  */
 export async function createDocFile<D extends {}>(
   filedir: t.Fs,
-  initial: D | t.CrdtDocRef<D>,
+  doc: t.CrdtDocRef<D>,
   options: Options<D> = {},
 ) {
-  const autosaveDebounce = Wrangle.autosaveDebounce(options.autosave);
-
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => {
     _isDisposed = true;
     onChange$.complete();
+    action$.complete();
   });
 
+  let _isLogging = Wrangle.isLogging(options);
+  let _isAutosaving = Wrangle.isAutosaving(options);
+
+  const action$ = new rx.Subject<t.CrdtFileAction>();
   const onChange$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
     if (!_isDisposed) {
@@ -40,13 +41,18 @@ export async function createDocFile<D extends {}>(
   };
 
   // NB: Must be initialized before the [DocRef] below to catch the first change (upon initialization).
-  if (Wrangle.isLogging(options)) saveLogStrategy(filedir, onChange$, dispose$);
+  saveLogStrategy(filedir, {
+    doc,
+    onChange$,
+    dispose$,
+    enabled: () => _isLogging,
+    onSave: (e) => action$.next(e),
+  });
 
   /**
    * [DocRef]
    */
-  const doc = CrdtIs.ref(initial) ? initial : DocRef.init<D>(initial, { onChange });
-  if (CrdtIs.ref(initial)) doc.onChange(onChange);
+  doc.onChange(onChange);
   doc.dispose$.subscribe(dispose);
 
   /**
@@ -61,17 +67,28 @@ export async function createDocFile<D extends {}>(
     doc,
 
     /**
+     * Observable events.
+     */
+    $: action$.pipe(rx.takeUntil(dispose$)),
+
+    /**
      * Flag indicating if the document is autosaved after (de-bounced) changes.
      */
-    get isAutosaving() {
-      return Wrangle.isAutosaving(options);
+    get autosaving() {
+      return _isAutosaving;
+    },
+    set autosaving(value: boolean) {
+      _isAutosaving = value;
     },
 
     /**
      * Flag indicating if the document is saving incremental changes to a log file.
      */
-    get isLogging() {
-      return Wrangle.isLogging(options);
+    get logging() {
+      return _isLogging;
+    },
+    set logging(value: boolean) {
+      _isLogging = value;
     },
 
     /**
@@ -105,7 +122,39 @@ export async function createDocFile<D extends {}>(
      */
     async save() {
       if (api.disposed) return;
-      await filedir.write(filename, Automerge.save(doc.current));
+      const data = Automerge.save(doc.current);
+      const { bytes, hash } = await filedir.write(filename, data);
+      action$.next({
+        action: 'saved',
+        kind: 'file',
+        filename,
+        bytes,
+        hash,
+      });
+    },
+
+    /**
+     * Delete the document from the file-system.
+     */
+    async delete() {
+      // Single file.
+      const exists = await filedir.exists(filename);
+      await filedir.delete(filename);
+
+      // Log files.
+      const logdir = filedir.dir(DEFAULTS.doc.logdir);
+      const log = await logdir.manifest();
+      const logfiles = log.files.length;
+      if (logfiles > 0) {
+        await Promise.all(log.files.map((file) => logdir.delete(file.path)));
+      }
+
+      // Alert listeners.
+      action$.next({
+        action: 'deleted',
+        file: exists ? 1 : 0,
+        logfiles,
+      });
     },
 
     /**
@@ -118,7 +167,10 @@ export async function createDocFile<D extends {}>(
     },
   };
 
-  if (api.isAutosaving) autoSaveStrategy(api, autosaveDebounce);
+  autoSaveStrategy(api, {
+    debounce: Wrangle.autosaveDebounce(options.autosave),
+    enabled: () => api.autosaving,
+  });
   await api.load();
   return api;
 }

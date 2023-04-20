@@ -4,7 +4,7 @@ import { Mutate } from './Controller.Mutate.mjs';
 /**
  * Examine the health of each peer and disconnect if required.
  */
-export async function pruneDeadPeers(self: t.Peer, state: t.CrdtDocRef<t.ControlledDoc>) {
+export async function pruneDeadPeers(self: t.Peer, state: t.CrdtDocRef<t.NetworkSharedDoc>) {
   const peers = state.current.network.peers ?? {};
   const removed: t.PeerId[] = [];
 

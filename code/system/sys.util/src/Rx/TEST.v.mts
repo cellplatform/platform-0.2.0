@@ -108,12 +108,36 @@ describe('rx', () => {
 
       let count = 0;
       dispose$.subscribe(() => count++);
-
       expect(count).to.eql(0);
 
       until$.next(123);
       until$.next(456);
       expect(count).to.eql(1);
+    });
+
+    it('lifecycle', () => {
+      const until$ = new rx.Subject<number>();
+      const lifecycleA = rx.lifecycle(until$);
+      const lifecycleB = rx.lifecycle();
+
+      const count = { a: 0, b: 0 };
+      lifecycleA.dispose$.subscribe(() => count.a++);
+      lifecycleB.dispose$.subscribe(() => count.b++);
+
+      expect(lifecycleA.disposed).to.eql(false);
+      expect(lifecycleB.disposed).to.eql(false);
+
+      until$.next(123);
+      expect(lifecycleA.disposed).to.eql(true);
+      expect(lifecycleB.disposed).to.eql(false);
+      expect(count).to.eql({ a: 1, b: 0 });
+
+      lifecycleA.dispose(); // NB: No effect.
+      lifecycleB.dispose();
+
+      expect(lifecycleA.disposed).to.eql(true);
+      expect(lifecycleB.disposed).to.eql(true);
+      expect(count).to.eql({ a: 1, b: 1 });
     });
 
     it('rx.done() - fires and completes the subject', () => {

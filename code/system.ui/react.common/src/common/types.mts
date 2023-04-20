@@ -22,8 +22,10 @@ export type { TextCharDiff } from 'sys.text/src/types.mjs';
 export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
 
 export type {
+  TestSuiteModel,
   TestSuiteRunResponse,
   TestRunResponse,
+  TestHandlerArgs,
   SpecImports,
   SpecImport,
 } from 'sys.test.spec/src/types.mjs';

@@ -9,7 +9,6 @@ import {
   t,
   TestNetwork,
   Time,
-  toObject,
   WebRtc,
 } from '../../test.ui';
 import { pruneDeadPeers } from '../util.mjs';
@@ -28,9 +27,12 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
   const fs = (await Filesystem.client({ bus, dispose$ })).fs;
   const filedir = fs.dir('dev.test.WebRtc.Controller');
 
-  const initialState: DocShared = { network: { peers: {} } };
-  const stateDoc = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
-  let controller: t.WebRtcEvents;
+  const setup = () => {
+    const initial: DocShared = { network: { peers: {} } };
+    const stateDoc = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
+
+    return { initial, stateDoc };
+  };
 
   e.it('exposed from root API', (e) => {
     expect(WebRtcController).to.equal(WebRtc.Controller);
@@ -45,7 +47,10 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
     peerB = b;
   });
 
-  e.describe('event-bus', (e) => {
+  e.describe('EventBus', (e) => {
+    const { stateDoc } = setup();
+    let controller: t.WebRtcEvents;
+
     e.it('default generated bus (← info method)', async (e) => {
       controller = WebRtcController.listen(peerA, stateDoc);
       const info = await controller.info.get();
@@ -62,25 +67,41 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
       const info1 = await events1.info.get();
       const info2 = await events2.info.get();
+      controller.dispose();
 
       expect(info1?.peer).to.equal(peerA);
       expect(info2?.peer).to.equal(peerA);
+    });
 
+    e.it('info', async (e) => {
+      controller = WebRtcController.listen(peerA, stateDoc);
+      const info = await controller.info.get();
       controller.dispose();
+
+      expect(info?.module.name).to.eql(Pkg.name);
+      expect(info?.module.version).to.eql(Pkg.version);
+      expect(info?.peer).to.equal(peerA);
+      expect(info?.state.peers).to.eql({});
+      expect(info?.syncers).to.eql([]);
     });
   });
 
   e.describe('Controller.listen', (e) => {
-    e.it('start listening to a P2P network - ["local:peer" + crdt.doc<shared>]', async (e) => {
+    const { stateDoc, initial } = setup();
+    let controller: t.WebRtcEvents;
+
+    e.it('init: start listening to a network - ["local:peer" + crdt.doc<shared>]', async (e) => {
       const self = peerA;
 
       controller = WebRtcController.listen(self, stateDoc, {
         filedir,
         dispose$,
         onConnectStart(e) {
+          // eg. start spinning
           // console.log('onConnectStart', e);
         },
         onConnectComplete(e) {
+          // eg. stop spinning
           // console.log('onConnectComplete', e);
         },
       });
@@ -93,6 +114,11 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       const remote = peerB.id;
       const wait = rx.firstValueFrom(controller.connect.complete$);
 
+      let firedStart: t.WebRtcConnectStart[] = [];
+      let firedComplete: t.WebRtcConnectStart[] = [];
+      controller.connect.start$.subscribe((e) => firedStart.push(e));
+      controller.connect.complete$.subscribe((e) => firedComplete.push(e));
+
       /**
        * Adding peer to document (CRDT) initiates the
        * controller's connection sequence.
@@ -101,6 +127,9 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
         const initiatedBy = self;
         Mutate.addPeer(d.network, self, remote, { initiatedBy });
       });
+
+      const info1 = await controller.info.get();
+      expect(info1?.syncers).to.eql([]);
 
       await wait;
       const doc = stateDoc.current;
@@ -112,6 +141,23 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
       expect(p1.error).to.eql(undefined);
       expect(p2.error).to.eql(undefined);
+
+      expect(firedStart.length).to.eql(1);
+      expect(firedComplete.length).to.eql(1);
+      expect(firedComplete[0].peer).to.eql({ local: self, remote });
+
+      const info2 = await controller.info.get();
+      const syncers = info2?.syncers ?? [];
+      expect(syncers.length).to.eql(1);
+
+      expect(syncers[0].local).to.eql(self);
+      expect(syncers[0].remote).to.eql(remote);
+      expect(syncers[0].syncer.doc).to.equal(stateDoc);
+
+      console.log('syncers', syncers);
+      console.log('syncers.length', syncers.length);
+      console.log('info after connect', info2);
+      console.log('info.syncers', info2?.syncers[0]);
 
       // Ensure live connections match the synced state-document.
       await Time.wait(500);
@@ -155,18 +201,8 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(p2.error).to.include('[peer-unavailable]');
     });
 
-    e.it.skip('events$: connect:start → connect:complete', async (e) => {});
-
     e.it.skip('meta: userAgent added to {peers} state', async (e) => {
       // expect(res.peer.meta.userAgent).to.eql(UserAgent.current);
-    });
-
-    e.it('info (← via event-bus)', async (e) => {
-      const info = await controller.info.get();
-      expect(info?.module.name).to.eql(Pkg.name);
-      expect(info?.module.version).to.eql(Pkg.version);
-      expect(info?.peer).to.equal(peerA);
-      expect(typeof info?.state.peers === 'object').to.eql(true);
     });
 
     e.it('kill peer-B → auto removed from peer-A state doc', async (e) => {
@@ -179,7 +215,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
     });
 
     e.it('prune dead peers', async (e) => {
-      const state = Crdt.Doc.ref<DocShared>(initialState, { dispose$ });
+      const state = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
       state.change((d) => Mutate.addPeer(d.network, 'A', 'B', { initiatedBy: 'A' }));
 
       expect(state.current.network.peers['B']).to.exist;
@@ -190,11 +226,15 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
     });
 
     e.it('dispose', async (e) => {
-      // dispose();
+      await Time.wait(300);
+      let count = 0;
+      controller.dispose$.subscribe(() => count++);
+
+      dispose();
+      expect(count).to.eql(1);
       /**
        * TODO 🐷
        * - dispose of controller
-       * - listen for dispose$ event
        */
     });
   });

@@ -1,4 +1,4 @@
-import { css, DEFAULTS, t, toTheme } from './common';
+import { css, DEFAULTS, t, Wrangle } from './common';
 import { PropListLabel } from './Label';
 import { PropListValue } from './Value';
 
@@ -13,7 +13,7 @@ export type PropListItemProps = {
 
 export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const { data, isFirst, isLast, defaults } = props;
-  const theme = toTheme(props.theme);
+  const theme = Wrangle.theme(props.theme);
   const hasValue = Boolean(data.label);
 
   /**

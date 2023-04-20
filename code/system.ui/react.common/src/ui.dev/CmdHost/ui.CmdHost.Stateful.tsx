@@ -118,8 +118,8 @@ const Wrangle = {
   url() {
     const url = new URL(window.location.href);
     const params = url.searchParams;
-    const filter = params.get(DEFAULTS.QS.filter) ?? '';
-    const selected = params.get(DEFAULTS.QS.selected) ?? '';
+    const filter = params.get(DEFAULTS.qs.filter) ?? '';
+    const selected = params.get(DEFAULTS.qs.selected) ?? '';
     return { url, params, filter, selected };
   },
 
@@ -159,8 +159,8 @@ const Url = {
 
   mutateFilter(filter: string, options: { reload?: boolean } = {}) {
     const { url, params } = Wrangle.url();
-    if (filter) params.set(DEFAULTS.QS.filter, filter);
-    if (!filter) params.delete(DEFAULTS.QS.filter);
+    if (filter) params.set(DEFAULTS.qs.filter, filter);
+    if (!filter) params.delete(DEFAULTS.qs.filter);
     Url.push(url, options);
   },
 
@@ -176,8 +176,8 @@ const Url = {
     const namespace = Wrangle.selectedNamespaceFromIndex(specs, index);
     if (!namespace) return;
 
-    params.set(DEFAULTS.QS.dev, namespace);
-    params.delete(DEFAULTS.QS.selected);
+    params.set(DEFAULTS.qs.dev, namespace);
+    params.delete(DEFAULTS.qs.selected);
     Url.push(url, options);
   },
 };

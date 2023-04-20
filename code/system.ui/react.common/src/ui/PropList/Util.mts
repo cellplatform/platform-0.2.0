@@ -1,19 +1,29 @@
-import { t } from './common';
+import { t, DEFAULTS } from './common';
 import { format } from './Util.format.mjs';
-import { toTheme } from './Util.theme.mjs';
+import { theme } from './Util.theme.mjs';
 
-export const Util = {
+export const Wrangle = {
   format,
-  theme: toTheme,
+  theme,
 
-  asItems(input: t.PropListProps['items']) {
+  sizeProp(input?: t.PropListSize | number) {
+    return typeof input === 'number' ? { fixed: input } : input;
+  },
+
+  cardProps(input: t.PropListProps['card']): t.PropListCard | undefined {
+    if (!input) return undefined;
+    if (typeof input === 'object') return input;
+    return { ...DEFAULTS.card };
+  },
+
+  items(input: t.PropListProps['items']) {
     if (Array.isArray(input)) {
       return input;
     }
 
     if (typeof input === 'object') {
       return Object.keys(input).map((key) => {
-        const item: t.PropListItem = { label: key, value: Util.toRenderValue(input[key]) };
+        const item: t.PropListItem = { label: key, value: Wrangle.renderValue(input[key]) };
         return item;
       });
     }
@@ -21,7 +31,7 @@ export const Util = {
     return [];
   },
 
-  toRenderValue(input: any) {
+  renderValue(input: any) {
     if (input === null) return null;
     if (input === undefined) return undefined;
 
@@ -42,5 +52,27 @@ export const Util = {
     }
 
     return input.toString();
+  },
+
+  title(input?: t.PropListTitleInput): t.PropListTitle {
+    if (!input) return { value: [null, null] };
+
+    if (typeof input === 'object' && !Array.isArray(input)) {
+      const obj = input as t.PropListTitle;
+      const value = Wrangle.titleValue(obj.value);
+      return { ...obj, value };
+    }
+
+    const value = Wrangle.titleValue(input);
+    return { value };
+  },
+
+  titleValue(input: t.PropListTitle['value']): [t.PropListTitleContent, t.PropListTitleContent] {
+    if (!input) return [null, null];
+
+    const list = Array.isArray(input) ? input : [input];
+    const left = list[0] ?? null;
+    const right = list[1] ?? null;
+    return [left, right] as [t.PropListTitleContent, t.PropListTitleContent];
   },
 };

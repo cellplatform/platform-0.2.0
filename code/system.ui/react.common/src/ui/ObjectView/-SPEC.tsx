@@ -37,9 +37,23 @@ export default Dev.describe('ObjectView', (e) => {
       );
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Configurations', (e) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `theme: ${e.state.theme ?? ObjectView.DEFAULTS.theme}`)
+          .value((e) => Boolean(e.state.theme))
+          .onClick((e) => {
+            const current = e.state.current.theme ?? ObjectView.DEFAULTS.theme;
+            const next = current === 'Dark' ? 'Light' : 'Dark';
+            e.change((draft) => (draft.theme = next));
+            dev.theme(next);
+          }),
+      );
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) =>
         btn
           .label('name')
@@ -50,20 +64,35 @@ export default Dev.describe('ObjectView', (e) => {
           }),
       );
 
-      dev.hr();
+      dev.boolean((btn) =>
+        btn
+          .label(
+            (e) =>
+              `fontSize: ${
+                Boolean(e.state.fontSize)
+                  ? `(larger, ${e.state.fontSize}px)`
+                  : `(default, ${ObjectView.DEFAULTS.font.size}px)`
+              }`,
+          )
+          .value((e) => Boolean(e.state.fontSize))
+          .onClick((e) => {
+            e.change((d) => {
+              d.fontSize = d.fontSize ? undefined : (d.fontSize = 18);
+            });
+          }),
+      );
 
-      dev.button((btn) =>
-        btn.label('theme: Light').onClick((e) => {
-          e.change((d) => (d.theme = 'Light'));
-          dev.theme('Light');
-        }),
-      );
-      dev.button((btn) =>
-        btn.label('theme: Dark').onClick((e) => {
-          e.change((draft) => (draft.theme = 'Dark'));
-          dev.theme('Dark');
-        }),
-      );
+      dev.hr(-1, 5);
+
+      const expand = (label: string, value?: number) => {
+        dev.button((btn) => {
+          btn.label(label).onClick((e) => e.change((e) => (e.expand = value)));
+        });
+      };
+
+      expand('expand = `1`', 1);
+      expand('expand = `99`', 99);
+      expand('expand = `undefined`', undefined);
 
       dev.hr();
 
@@ -76,24 +105,29 @@ export default Dev.describe('ObjectView', (e) => {
         });
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
-    dev.section('Data', (dev) => {
-      const value = (label: string, data: any) => {
-        dev.button(label, (e) => e.change((d) => (d.data = data)));
+    dev.section('Data (← JSON)', (dev) => {
+      const value = (label: string, data: any, right?: string) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right(right ?? '')
+            .onClick((e) => e.change((d) => (d.data = data))),
+        );
       };
       value('`undefined`', undefined);
       value('`null`', null);
       dev.hr();
-      value('`true`', true);
-      value('`123`', 123);
-      value('`"Hello"`', 'Hello');
+      value('`true`', true, '← boolean');
+      value('`123`', 123, '← number');
+      value('`"Hello"`', 'Hello', '← string');
       dev.hr();
       value('`{object}`', initial.data);
-      value('`{ }`', {});
+      value('`{ }`', {}, '(empty)');
       dev.hr();
       value('`[array]`', [1, 'two', { id: 'three' }, [true, 'four', () => null]]);
-      value('`[ ]`', []);
+      value('`[ ]`', [], '(empty)');
     });
 
     dev.hr();

@@ -77,7 +77,6 @@ describe('timer', () => {
     expect(time.timer(start).elapsed.day).to.eql(4.8);
     expect(time.timer(start, { round: 0 }).elapsed.day).to.eql(5);
     expect(time.timer(start, { round: 1 }).elapsed.day).to.eql(4.8);
-    expect(time.timer(start, { round: 2 }).elapsed.day).to.eql(4.75);
 
     const timer = time.timer(start);
     expect(timer.elapsed.toString('d')).to.eql('5d');

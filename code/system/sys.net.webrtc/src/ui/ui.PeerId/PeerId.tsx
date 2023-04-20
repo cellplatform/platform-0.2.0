@@ -1,4 +1,5 @@
-import { Button, copyPeer, css, FC, t, TextSyntax, WebRtc } from '../common';
+import { WebRtc } from '../../WebRtc';
+import { Button, copyPeer, css, FC, t, TextSyntax } from '../common';
 
 export type PeerIdProps = {
   peer?: t.PeerId | t.PeerUri;

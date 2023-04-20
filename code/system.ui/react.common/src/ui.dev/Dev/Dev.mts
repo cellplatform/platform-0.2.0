@@ -1,12 +1,13 @@
 import { Lorem } from '../../ui.tools';
 import { ObjectView } from '../../ui/ObjectView';
-import { DevBase, LocalStorage, Value } from '../common';
+import { Test, DevBase, LocalStorage, Value, DEFAULTS } from '../common';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
 import { render } from './Dev.render';
-
+import { DevSplash as Splash } from '../DevSplash';
 const { describe, ctx } = DevBase.Spec;
 const { trimStringsDeep } = Value.object;
+const qs = DEFAULTS.qs;
 
 export const Dev = {
   ...DevBase,
@@ -15,14 +16,16 @@ export const Dev = {
 
   Tools: DevTools,
   tools: DevTools.init,
+  bundle: Test.bundle,
 
+  Splash,
   TestRunner,
   LocalStorage,
   Object: ObjectView,
   Lorem,
+  Url: { qs },
 
   ctx,
   describe,
-
   trimStringsDeep,
 };

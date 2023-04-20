@@ -1,23 +1,24 @@
 import { MonacoCrdt } from '..';
 import { rx, Dev, t, Value } from './common';
-import { initSyncingCrdtDocs } from './DEV.crdt.mjs';
+import { initDocsWithPeerSyncers } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
 
 type T = {
   language: t.EditorLanguage;
-  debug: { showTests: boolean };
   tests: { running: boolean; results?: t.TestSuiteRunResponse };
+  debug: { showTests: boolean; initialValue: boolean };
 };
 const initial: T = {
   language: 'typescript',
   tests: { running: false },
-  debug: { showTests: true },
+  debug: { showTests: true, initialValue: true },
 };
 
 type LocalStore = {
   peerTotal: number;
   language: t.EditorLanguage;
   showTests: boolean;
+  initialValue: boolean;
 };
 type PeerItem = {
   peer: t.DevPeer;
@@ -30,6 +31,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     peerTotal: 2,
     language: initial.language,
     showTests: initial.debug.showTests,
+    initialValue: initial.debug.initialValue,
   });
 
   let monaco: t.Monaco;
@@ -42,13 +44,15 @@ export default Dev.describe('MonacoCrdt', (e) => {
     console.log('dispose of', item);
   };
 
-  const totalPeers = (ctx: t.DevCtx, length: number) => {
+  const totalPeers = (ctx: t.DevCtx, state: T, length: number) => {
     local.peerTotal = length;
     const names = Array.from({ length }).map((_, i) => `Cell-${i + 1}`);
 
     peerMap.forEach((item) => disposeOf(item));
     peerMap.clear();
-    initSyncingCrdtDocs(names).forEach((item) => {
+
+    const initial = state.debug.initialValue ? 'Hello World' : undefined;
+    initDocsWithPeerSyncers(names, { initial }).forEach((item) => {
       const { name, doc } = item;
       const peer = { name, doc };
       peerMap.set(name, { peer });
@@ -86,7 +90,8 @@ export default Dev.describe('MonacoCrdt', (e) => {
     await state.change((d) => {
       d.language = local.language;
       d.debug.showTests = local.showTests;
-      totalPeers(ctx, local.peerTotal);
+      d.debug.initialValue = local.initialValue;
+      totalPeers(ctx, d, local.peerTotal);
     });
 
     ctx.subject
@@ -123,7 +128,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
           btn
             .label(label)
             .right((e) => (peerMap.size === total ? '← current' : ''))
-            .onClick((e) => e.change((d) => totalPeers(ctx, total))),
+            .onClick((e) => e.change((d) => totalPeers(ctx, e.state.current, total))),
         );
       };
 
@@ -138,7 +143,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
 
     dev.section('Unit Tests', async (dev) => {
       const wrangleTestCtx = async () => {
-        await dev.change((d) => totalPeers(dev.ctx, 2));
+        await dev.change((d) => totalPeers(dev.ctx, d, 2));
 
         const peer = (index: number): t.TestPeer => {
           const editor = Array.from(editors)[index];
@@ -188,28 +193,37 @@ export default Dev.describe('MonacoCrdt', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      const inc = (amount: number) => {
-        dev.change((d) => {
-          const peer = peerMap.get('Cell-1')?.peer;
-          peer?.doc.change((d) => (d.count += amount));
-          redraw();
-        });
-      };
-
-      dev.button((btn) =>
+      dev.boolean((btn) =>
         btn
-          .label('increment count')
-          .right('← on first Doc<T>')
-          .onClick((e) => inc(1)),
-      );
-      dev.button((btn) =>
-        btn
-          .label('decrement count')
-          .right('← on first Doc<T>')
-          .onClick((e) => inc(-1)),
+          .label((e) => `initial value`)
+          .value((e) => e.state.debug.initialValue)
+          .onClick((e) =>
+            e.change((d) => (local.initialValue = Dev.toggle(d.debug, 'initialValue'))),
+          ),
       );
 
       dev.hr(-1, 5);
+
+      const inc = (by: number) => {
+        dev.change((d) => {
+          const peer = peerMap.get('Cell-1')?.peer;
+          peer?.doc.change((d) => (d.count += by));
+          redraw();
+        });
+      };
+      const incButton = (by: number, label: string) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right('← on first Doc<T>')
+            .onClick((e) => inc(by)),
+        );
+      };
+      incButton(1, 'increment: count + 1');
+      incButton(1, 'decrement: count - 1');
+
+      dev.hr(-1, 5);
+
       dev.button('redraw', (e) => dev.ctx.redraw());
     });
 
@@ -243,6 +257,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data: { [key: string]: any } = {};
+
       peerMap.forEach(({ peer }) => {
         const key = peer.name;
         const doc = peer.doc.current;
@@ -253,7 +268,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
           code: `chars:(${text.length}), lines:(${text.split('\n').length})`,
         };
       });
-      return <Dev.Object name={'Dev.MonacoCrdt'} data={data} expand={2} />;
+      return <Dev.Object name={'MonacoCrdt'} data={data} expand={2} />;
     });
   });
 });

@@ -16,8 +16,8 @@
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
-    "@monaco-editor/react": "4.4.6",
-    "monaco-editor": "0.36.1",
+    "@monaco-editor/react": "4.5.0",
+    "monaco-editor": "0.37.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "symbol-observable": "4.0.0",

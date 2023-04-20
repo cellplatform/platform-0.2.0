@@ -1,27 +1,27 @@
 import { forwardRef } from 'react';
 
 import { Color, COLORS, css, Style, t } from '../common';
-export * from './types.mjs';
+import { Flip } from '../Flip';
 
 /**
  * Component
  */
 export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
-  const { showAsCard = true } = props;
-  const borderColor = props.border?.color ?? Color.alpha(COLORS.DARK, 0.3);
+  const { showAsCard = true, backside } = props;
 
   const bg = props.background ?? {};
   const bgColor = bg.color ?? 1;
-
-  const shadow = toShadow(props.shadow);
+  const borderColor = props.border?.color ?? Color.alpha(COLORS.DARK, 0.3);
+  const shadow = Wrangle.shadow(props.shadow);
   const width = typeof props.width === 'number' ? { fixed: props.width } : props.width;
   const height = typeof props.height === 'number' ? { fixed: props.height } : props.height;
+  const showBackside = Wrangle.showBackside(props);
 
   const styles = {
     base: css({
       position: 'relative',
       boxSizing: 'border-box',
-      userSelect: toUserSelect(props.userSelect),
+      userSelect: Wrangle.userSelect(props.userSelect),
 
       width: width?.fixed,
       height: height?.fixed,
@@ -31,6 +31,7 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
       maxHeight: height?.max,
 
       ...Style.toMargins(props.margin),
+      display: 'grid',
     }),
     card: css({
       border: `solid 1px ${Color.format(borderColor)}`,
@@ -39,20 +40,30 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
       backdropFilter: typeof bg.blur === 'number' ? `blur(${bg.blur}px)` : undefined,
       boxShadow: Style.toShadow(shadow),
       ...Style.toPadding(props.padding),
+      display: 'grid',
     }),
   };
+
+  const sideStyle = showAsCard ? styles.card : undefined;
+  const elFront = <div {...sideStyle}>{props.children}</div>;
+  const elBack = backside && <div {...sideStyle}>{backside}</div>;
 
   return (
     <div
       ref={ref}
-      {...css(styles.base, showAsCard ? styles.card : undefined, props.style)}
+      {...css(styles.base, props.style)}
       onDoubleClick={props.onDoubleClick}
       onMouseDown={props.onMouseDown}
       onMouseUp={props.onMouseUp}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
     >
-      {props.children}
+      <Flip
+        flipped={showBackside.flipped}
+        speed={showBackside.speed}
+        front={elFront}
+        back={elBack}
+      />
     </div>
   );
 });
@@ -63,15 +74,31 @@ Card.displayName = 'Card';
  * [Helpers]
  */
 
-function toUserSelect(value: t.CardProps['userSelect']) {
-  value = value ?? false;
-  value = value === true ? 'auto' : value;
-  value = value === false ? 'none' : value;
-  return value as React.CSSProperties['userSelect'];
-}
+const Wrangle = {
+  userSelect(value: t.CardProps['userSelect']) {
+    value = value ?? false;
+    value = value === true ? 'auto' : value;
+    value = value === false ? 'none' : value;
+    return value as React.CSSProperties['userSelect'];
+  },
 
-function toShadow(value: t.CardProps['shadow']): t.CssShadow | undefined {
-  if (value === false) return undefined;
-  if (value === true || value === undefined) return { y: 2, color: -0.08, blur: 6 };
-  return value;
-}
+  shadow(value: t.CardProps['shadow']): t.CssShadow | undefined {
+    if (value === false) return undefined;
+    if (value === true || value === undefined) return { y: 2, color: -0.08, blur: 6 };
+    return value;
+  },
+
+  showBackside(props: t.CardProps): t.CardShowBackside {
+    let flipped = false;
+    let speed = Flip.DEFAULTS.speed;
+    if (!props.showBackside) return { flipped, speed };
+    if (props.backside) {
+      if (props.showBackside === true) flipped = true;
+      if (typeof props.showBackside === 'object') {
+        flipped = props.showBackside.flipped ?? false;
+        speed = props.showBackside.speed ?? speed;
+      }
+    }
+    return { flipped, speed };
+  },
+};

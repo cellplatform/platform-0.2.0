@@ -13,10 +13,10 @@ export const KeyboardActions = {
        */
       const url = new URL(window.location.href);
       const params = url.searchParams;
-      const namespace = params.get(DEFAULTS.QS.dev) ?? '';
+      const namespace = params.get(DEFAULTS.qs.dev) ?? '';
 
-      params.set(DEFAULTS.QS.dev, 'true');
-      if (namespace && namespace !== 'true') params.set(DEFAULTS.QS.selected, namespace); // NB: hint to load with current selection
+      params.set(DEFAULTS.qs.dev, 'true');
+      if (namespace && namespace !== 'true') params.set(DEFAULTS.qs.selected, namespace); // NB: hint to load with current selection
 
       window.history.pushState({}, '', url.href);
       window.location.reload();

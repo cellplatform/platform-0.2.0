@@ -144,6 +144,15 @@ export type TestSuiteRunResponse = {
   elapsed: Milliseconds;
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
+  stats: TestSuiteRunStats;
+};
+
+export type TestSuiteRunStats = {
+  total: number;
+  passed: number;
+  failed: number;
+  skipped: number;
+  only: number;
 };
 
 /**

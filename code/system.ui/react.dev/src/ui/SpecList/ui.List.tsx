@@ -16,7 +16,7 @@ export type ListProps = {
 export const List: React.FC<ListProps> = (props) => {
   const { imports, url } = props;
   const importsKeys = Object.keys(props.imports);
-  const hasDevParam = url.searchParams.has(DEFAULTS.QS.DEV);
+  const hasDevParam = url.searchParams.has(DEFAULTS.qs.dev);
 
   /**
    * [Render]

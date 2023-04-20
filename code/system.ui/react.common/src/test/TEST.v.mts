@@ -9,7 +9,7 @@ const run = Test.using(describe, it);
 describe('visual specs', () => {
   it('run', async () => {
     const { Dev, expect } = await import('../test.ui');
-    const { AllSpecs } = await import('../test.ui/entry.Specs.mjs');
+    const { All: AllSpecs } = await import('../test.ui/entry.Specs.mjs');
     const res = await Dev.headless(AllSpecs);
     expect(res.ok).to.eql(true);
   });

@@ -3,13 +3,17 @@ type Id = string;
 /**
  * [Events]
  */
-export type CrdtEvent = CrdtSyncEvent;
+export type CrdtEvent = CrdtSyncMessageEvent;
 
 /**
  * Fires a CRDT sync-protocol event over the network.
  */
-export type CrdtSyncEvent = {
+export type CrdtSyncMessageEvent = {
   type: 'sys.crdt/sync';
-  payload: CrdtSync;
+  payload: CrdtSyncMessage;
 };
-export type CrdtSync = { tx: Id; message: Uint8Array };
+export type CrdtSyncMessage = {
+  tx: Id;
+  docid: Id;
+  message: Uint8Array | null;
+};

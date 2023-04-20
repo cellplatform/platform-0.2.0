@@ -6,8 +6,8 @@ export const R = { splitEvery };
 
 import ora from 'ora';
 import pc from 'picocolors';
-import rimraf from 'rimraf';
-import glob from 'glob';
+import { rimraf } from 'rimraf';
+import { glob } from 'glob';
 import { execa } from 'execa';
 import minimist from 'minimist';
 import filesize from 'pretty-bytes';

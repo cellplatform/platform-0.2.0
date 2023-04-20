@@ -1,9 +1,8 @@
-import { css, Style, t, COLORS, Spinner } from '../common';
+import { COLORS, css, Spinner, t } from '../common';
 import { SuiteResults } from './Results.Suite';
 
 export type ResultsProps = {
   data?: t.TestSuiteRunResponse;
-  padding?: t.CssEdgesInput;
   spinning?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
@@ -18,28 +17,37 @@ export const Results: React.FC<ResultsProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      boxSizing: 'border-box',
       fontSize: 13,
       color: COLORS.DARK,
       cursor: 'default',
-      Scroll: scroll,
-      ...Style.toPadding(props.padding),
     }),
     empty: css({
       opacity: 0.4,
       Flex: 'center-center',
       userSelect: 'none',
       fontStyle: 'italic',
-      padding: 15,
+      padding: 20,
     }),
     spinner: css({
       Absolute: [25, 0, null, 0],
       display: 'grid',
       placeItems: 'center',
     }),
+    body: css({
+      position: 'relative',
+      Absolute: scroll ? 0 : undefined,
+      boxSizing: 'border-box',
+      Scroll: scroll,
+    }),
     results: css({
       opacity: spinning ? 0.15 : 1,
       filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
+      Margin: [10, 20, 50, 20],
+    }),
+    statusMargin: css({
+      width: 2,
+      Absolute: [0, null, 0, 0],
+      backgroundColor: data?.ok ? COLORS.LIME : COLORS.RED,
     }),
   };
 
@@ -49,13 +57,16 @@ export const Results: React.FC<ResultsProps> = (props) => {
     </div>
   );
 
-  const elEmpty = !data && !spinning && (
-    <div {...styles.empty}>{'No test results to display.'}</div>
+  const elEmpty = !data && !spinning && <div {...styles.empty}>{'No results to display.'}</div>;
+
+  const elBody = (
+    <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {data && <SuiteResults data={data} style={styles.results} />}
+      {data && <div {...styles.statusMargin} />}
+      {elBody}
       {elEmpty}
       {elSpinner}
     </div>

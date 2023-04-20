@@ -360,15 +360,20 @@ describe('TestSuiteModel', () => {
       const args: t.TestHandlerArgs[] = [];
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => args.push(e));
+        e.describe('child', (e) => {
+          e.it('bar', (e) => args.push(e));
+        });
       });
 
       const ctx = { foo: 123 };
       await root.run(); // NB: no context.
       await root.run({ ctx });
 
-      expect(args.length).to.eql(2);
+      expect(args.length).to.eql(4); // NB: run twice
       expect(args[0].ctx).to.eql(undefined);
-      expect(args[1].ctx).to.eql(ctx);
+      expect(args[1].ctx).to.eql(undefined);
+      expect(args[2].ctx).to.eql(ctx);
+      expect(args[3].ctx).to.eql(ctx);
     });
 
     it('no tests', async () => {

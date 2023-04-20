@@ -1,22 +1,31 @@
-import { css, DEFAULTS, t, toTheme } from './common';
+import { Style, css, DEFAULTS, t, Wrangle } from './common';
 
 export type PropListTitleProps = {
-  children?: React.ReactNode;
+  data?: t.PropListTitleInput;
   defaults: t.PropListDefaults;
-  ellipsis?: boolean;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
-  const ellipsis = props.ellipsis ?? true;
-  const theme = toTheme(props.theme);
+  const { value, ellipsis = true, margin = [0, 0, 10, 0] } = Wrangle.title(props.data);
+  const content = Wrangle.titleValue(value);
+  const theme = Wrangle.theme(props.theme);
+
+  if (!content[0] && !content[1]) return null;
 
   const styles = {
     base: css({
-      position: 'relative',
-      width: '100%',
       flex: 1,
+      boxSizing: 'border-box',
+      position: 'relative',
+      ...Style.toPadding(margin),
+
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto',
+      columnGap: 8,
+    }),
+    edge: css({
       fontWeight: 'bold',
       fontSize: DEFAULTS.fontSize + 1,
       color: theme.color.base,
@@ -28,7 +37,13 @@ export const PropListTitle: React.FC<PropListTitleProps> = (props) => {
     }),
   };
 
+  const edge = css(styles.edge, ellipsis && styles.ellipsis);
+
   return (
-    <div {...css(styles.base, ellipsis && styles.ellipsis, props.style)}>{props.children}</div>
+    <div {...css(styles.base, props.style)}>
+      <div {...edge}>{content[0]}</div>
+      <div />
+      <div {...edge}>{content[1]}</div>
+    </div>
   );
 };

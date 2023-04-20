@@ -1,42 +1,24 @@
 import { DocSync } from '..';
 import { DocRef } from '../../crdt.DocRef';
-import { TestFilesystem, expect, rx, t, Test, Time, DEFAULTS } from '../../test.ui';
+import { ConnectionMock, DEFAULTS, expect, rx, t, Test, TestFilesystem, Time } from '../../test.ui';
 
 export default Test.describe('Sync Protocol: DocSync', (e) => {
   type D = { name?: string; count: number };
-
-  function ConnectionMock() {
-    const a = { bus: rx.bus() };
-    const b = { bus: rx.bus() };
-    const conn = rx.bus.connect([a.bus, b.bus]);
-    const dispose = () => conn.dispose();
-    return { a, b, dispose };
-  }
+  const docid = 'my-id';
 
   e.describe('initialize', (e) => {
     const bus = rx.bus();
+    const docRef = DocRef.init<D>(docid, { count: 0 });
 
     e.it('kind', async (e) => {
-      const sync = DocSync.init<D>(bus, { count: 0 });
+      const sync = DocSync.init<D>(bus, docRef);
       expect(sync.kind).to.eql('Crdt:DocSync');
-    });
-
-    e.it('init: pass {onChange} option to [DocRef] constructor', async (e) => {
-      const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
-      const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
-
-      const sync = DocSync.init<D>(bus, { count: 0 }, { onChange });
-
-      sync.doc.change((d) => d.count++);
-      expect(fired.length).to.eql(2); // NB: the {onChange} handler successfully registered on to the [DocRef].
-      sync.dispose();
     });
 
     e.it('init: pass in existing [DocRef]', async (e) => {
       const fired: t.CrdtDocRefChangeHandlerArgs<D>[] = [];
       const onChange: t.CrdtDocRefChangeHandler<D> = (e) => fired.push(e);
 
-      const docRef = DocRef.init<D>({ count: 0 });
       const sync = DocSync.init<D>(bus, docRef, { onChange });
       expect(sync.doc).to.equal(docRef);
 
@@ -51,7 +33,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
     const bus = rx.bus();
 
     e.it('dispose() method', async (e) => {
-      const sync = DocSync.init<D>(bus, { count: 0 });
+      const docRef = DocRef.init<D>(docid, { count: 0 });
+      const sync = DocSync.init<D>(bus, docRef);
 
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
@@ -64,16 +47,18 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
     });
 
     e.it('dispose via { dispose$ } option', async (e) => {
+      const docRef = DocRef.init<D>(docid, { count: 0 });
       const { dispose, dispose$ } = rx.disposable();
 
-      const sync = DocSync.init<D>(bus, { count: 0 }, { dispose$ });
+      const sync = DocSync.init<D>(bus, docRef, { dispose$ });
       expect(sync.disposed).to.eql(false);
       dispose();
       expect(sync.disposed).to.eql(true);
     });
 
     e.it('disposing of [DocSync] does not dispose the wrapped [DocRef]', async (e) => {
-      const sync = DocSync.init<D>(bus, { count: 0 });
+      const docRef = DocRef.init<D>(docid, { count: 0 });
+      const sync = DocSync.init<D>(bus, docRef);
 
       expect(sync.disposed).to.eql(false);
       expect(sync.doc.disposed).to.eql(false);
@@ -84,7 +69,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
     });
 
     e.it('disposing of the wrapped [DocRef] does dispose the [DocSync]', async (e) => {
-      const sync = DocSync.init<D>(bus, { count: 0 });
+      const docRef = DocRef.init<D>(docid, { count: 0 });
+      const sync = DocSync.init<D>(bus, docRef);
 
       let fired = 0;
       sync.dispose$.subscribe(() => fired++);
@@ -105,23 +91,23 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
   e.describe('sync', (e) => {
     e.it('syncs between [docA] and [docB]', async (e) => {
       const mock = ConnectionMock();
-      const docA = DocRef.init<D>({ count: 0 });
-      const docB = DocRef.init<D>({ count: 0 });
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
 
       const debounce = 0;
-      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce });
-      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
 
-      expect(syncerA.doc).to.equal(docA);
-      expect(syncerB.doc).to.equal(docB);
-      expect(syncerA.doc.current).to.eql({ count: 0 });
-      expect(syncerB.doc.current).to.eql({ count: 0 });
+      expect(syncDocA.doc).to.equal(docA);
+      expect(syncDocB.doc).to.equal(docB);
+      expect(syncDocA.doc.current).to.eql({ count: 0 });
+      expect(syncDocB.doc.current).to.eql({ count: 0 });
 
       docA.change((doc) => (doc.name = 'Foo'));
       docB.change((doc) => (doc.count = 1234));
 
-      expect(syncerA.doc.current).to.eql({ name: 'Foo', count: 0 });
-      expect(syncerB.doc.current).to.eql({ count: 1234 });
+      expect(syncDocA.doc.current).to.eql({ name: 'Foo', count: 0 });
+      expect(syncDocB.doc.current).to.eql({ count: 1234 });
 
       await Time.wait(50);
 
@@ -134,18 +120,49 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       expect(docB.current).to.eql({ name: 'Bar', count: 1234 });
       expect(docB.current).to.eql(docA.current);
 
-      expect(syncerA.count).to.greaterThanOrEqual(4);
-      expect(syncerB.count).to.greaterThanOrEqual(4);
+      expect(syncDocA.count).to.greaterThanOrEqual(4);
+      expect(syncDocB.count).to.greaterThanOrEqual(4);
+      expect(syncDocA.bytes).to.greaterThanOrEqual(1450);
+      expect(syncDocB.bytes).to.greaterThanOrEqual(1450);
 
       mock.dispose();
-      syncerA.dispose();
-      syncerB.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
+    });
+
+    e.it('syncs observable ($)', async (e) => {
+      const mock = ConnectionMock();
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
+
+      const debounce = 0;
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+
+      const firedA: t.PeerSyncUpdated<D>[] = [];
+      const firedB: t.PeerSyncUpdated<D>[] = [];
+      syncDocA.$.subscribe((e) => firedA.push(e));
+      syncDocB.$.subscribe((e) => firedB.push(e));
+
+      docA.change((doc) => (doc.name = 'Foo'));
+      docB.change((doc) => (doc.count = 1234));
+      await Time.wait(50);
+
+      expect(firedA.length).to.greaterThan(5);
+      expect(firedB.length).to.greaterThan(5);
+
+      expect(firedA[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
+      expect(firedB[5].doc.data).to.eql({ name: 'Foo', count: 1234 });
+
+      mock.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
     });
 
     e.it('syncOnStart: true (default)', async (e) => {
       const mock = ConnectionMock();
-      const docA = DocRef.init<D>({ count: 0 });
-      const docB = DocRef.init<D>({ count: 0 });
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
 
       // NB: make some changes before syncer init.
       docA.change((d) => d.count++);
@@ -156,22 +173,22 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       expect(docB.current.count).to.eql(0);
 
       const debounce = 0;
-      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce });
-      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce });
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
 
       await Time.wait(50);
       expect(docA.current.count).to.eql(3);
       expect(docB.current.count).to.eql(3); // NB: Sync has occured (automatically)
 
       mock.dispose();
-      syncerA.dispose();
-      syncerB.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
     });
 
     e.it('syncOnStart: false', async (e) => {
       const mock = ConnectionMock();
-      const docA = DocRef.init<D>({ count: 0 });
-      const docB = DocRef.init<D>({ count: 0 });
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
 
       // NB: make some changes before syncer init.
       docA.change((d) => d.count++);
@@ -182,23 +199,23 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       expect(docB.current.count).to.eql(0);
 
       const options: t.CrdtDocSyncOptions<D> = { debounce: 0, syncOnStart: false };
-      const syncerA = DocSync.init<D>(mock.a.bus, docA, options);
-      const syncerB = DocSync.init<D>(mock.b.bus, docB, options);
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, options);
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, options);
 
       await Time.wait(50);
       expect(docA.current.count).to.eql(3);
       expect(docB.current.count).to.eql(0); // NB: Sync not initiated.
 
       // Initiate the sync manually.
-      syncerA.update();
+      syncDocA.update();
 
       await Time.wait(50);
       expect(docA.current.count).to.eql(3);
       expect(docB.current.count).to.eql(3);
 
       mock.dispose();
-      syncerA.dispose();
-      syncerB.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
     });
   });
 
@@ -208,12 +225,12 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       const filedir = fs.dir('my-crdt');
 
       const mock = ConnectionMock();
-      const docA = DocRef.init<D>({ count: 0 });
-      const docB = DocRef.init<D>({ count: 0 });
+      const docA = DocRef.init<D>(docid, { count: 0 });
+      const docB = DocRef.init<D>(docid, { count: 0 });
 
       const debounce = 0;
-      const syncerA = DocSync.init<D>(mock.a.bus, docA, { debounce, filedir });
-      const syncerB = DocSync.init<D>(mock.b.bus, docB, { debounce });
+      const syncDocA = DocSync.init<D>(mock.a.bus, docA, { debounce, filedir });
+      const syncDocB = DocSync.init<D>(mock.b.bus, docB, { debounce });
 
       docA.change((d) => (d.count = 888));
       const m1 = await filedir.manifest();
@@ -228,8 +245,8 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
       expect(m2.files[0].path).to.eql(DEFAULTS.sync.filename);
 
       mock.dispose();
-      syncerA.dispose();
-      syncerB.dispose();
+      syncDocA.dispose();
+      syncDocB.dispose();
     });
   });
 });

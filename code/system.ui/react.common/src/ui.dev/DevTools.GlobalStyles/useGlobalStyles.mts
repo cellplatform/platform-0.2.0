@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { DEFAULTS, Style } from '../common';
 import { TodoStyles } from './styles.Todo.mjs';
 
-const CLASS = DEFAULTS.MD.CLASS;
+const CLASS = DEFAULTS.md.class;
 let _isAdded = false;
 
 /**

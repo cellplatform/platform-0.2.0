@@ -1,9 +1,23 @@
 import type { t } from '../common.t';
 
-export type CrdtInfoFields = 'Module' | 'Driver' | 'File' | 'History.Total' | 'History.Item';
+export type CrdtInfoFields =
+  | 'Module'
+  | 'Module.Verify'
+  | 'Driver.Library'
+  | 'Driver.Runtime'
+  | 'File'
+  | 'File.Driver'
+  | 'Network'
+  | 'History'
+  | 'History.Item'
+  | 'History.Item.Message'
+  | 'Url'
+  | 'Url.QRCode';
 
 export type CrdtInfoData = {
-  file?: { data?: t.CrdtDocFile<any>; title?: string };
+  file?: { doc?: t.CrdtDocFile<any>; title?: string; path?: string };
+  network?: { doc?: t.CrdtDocSync<any> };
+  url?: { href: string; title?: string };
   history?: {
     title?: string;
     data?: t.CrdtDocHistory<any>[];

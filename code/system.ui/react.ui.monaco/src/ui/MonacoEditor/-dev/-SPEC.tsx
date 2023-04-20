@@ -7,6 +7,7 @@ type T = { props: MonacoEditorProps };
 const initial: T = {
   props: {
     text: '',
+    theme: 'Light',
     language: DEFAULTS.language,
     tabSize: DEFAULTS.tabSize,
     focusOnLoad: true,
@@ -17,7 +18,7 @@ export default Dev.describe('MonacoEditor', (e) => {
   type LocalStore = {
     text: string;
     language: t.EditorLanguage;
-    selection: t.IRange | null;
+    selection: t.EditorRange | null;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.monaco.crdt');
   const local = localstore.object({
@@ -50,9 +51,10 @@ export default Dev.describe('MonacoEditor', (e) => {
 
               editor = e.editor;
               monaco = e.monaco;
-              carets = EditorCarets(monaco, editor);
+              carets = EditorCarets(editor);
+              carets.$.subscribe((e) => ctx.redraw());
 
-              const asRange = Wrangle.asIRange;
+              const asRange = Wrangle.asRange;
               if (local.selection) editor.setSelection(local.selection);
               editor.onDidChangeCursorSelection((e) => (local.selection = asRange(e.selection)));
 
@@ -104,6 +106,16 @@ export default Dev.describe('MonacoEditor', (e) => {
     dev.hr(5, 20);
 
     dev.section('Options', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .margin([0, 0, 10, 0])
+          .label((e) => 'placeholder')
+          .placeholder('enter placeholder text')
+          .value((e) => e.state.props.placeholder)
+          .onChange((e) => e.change((d) => (d.props.placeholder = e.to.value)))
+          .onEnter((e) => {}),
+      );
+
       const tabSize = (size: number) => {
         const label = `tabSize: ${size}`;
         dev.button(label, (e) => e.change((d) => (d.props.tabSize = size)));
@@ -112,19 +124,84 @@ export default Dev.describe('MonacoEditor', (e) => {
       tabSize(4);
     });
 
+    dev.hr(-1);
+
+    dev.section('EditorTheme', (dev) => {
+      const theme = (value: t.EditorTheme) => {
+        dev.button((btn) =>
+          btn
+            .label(() => `theme: "${value}"`)
+            .right((e) => (e.state.props.theme === value ? '← current' : ''))
+            .onClick((e) => e.change((d) => (d.props.theme = value))),
+        );
+      };
+      theme('Light');
+      theme('Dark');
+    });
+
     dev.hr(5, 20);
 
     dev.section('Carets', (dev) => {
       const getCaret = () => carets.id('foo.bar');
 
-      dev.button('position: [1, 3]', (e) => getCaret().change({ position: [1, 3] }));
-      dev.button('position: [1, 5]', (e) => getCaret().change({ position: [1, 5] }));
-      dev.button('position: null', (e) => getCaret().change({ position: null }));
+      const changeSelection = (
+        label: string,
+        selection: t.EditorRangesInput,
+        options: { right?: string } = {},
+      ) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right(options.right ?? '')
+            .onClick(() => getCaret().change({ selections: selection })),
+        );
+      };
+
+      dev.button('selection: null', (e) => getCaret().change({ selections: null }));
+      changeSelection('selection: [ ]', []);
+      dev.hr(-1, 5);
+      changeSelection('selection: [1, 3]', [1, 3]);
+      changeSelection('selection: [1, 5]', [1, 5]);
+      changeSelection('selection: {EditorRange}', {
+        startLineNumber: 1,
+        startColumn: 5,
+        endLineNumber: 2,
+        endColumn: 2,
+      });
+      dev.hr(-1, 5);
+      changeSelection('selection: [1, 5], [2, 2]', [
+        [1, 5],
+        [2, 2],
+      ]);
+      changeSelection('selection: {EditorRange}, {EditorRange}', [
+        {
+          startLineNumber: 1,
+          startColumn: 5,
+          endLineNumber: 2,
+          endColumn: 2,
+        },
+        {
+          startLineNumber: 3,
+          startColumn: 1,
+          endLineNumber: 3,
+          endColumn: 3,
+        },
+      ]);
+
+      const color = (color: string) => {
+        dev.button(`color: ${color}`, (e) => getCaret().change({ color }));
+      };
 
       dev.hr(-1, 5);
-      dev.button('color: blue', (e) => getCaret().change({ color: 'blue' }));
+      color('red');
+      color('blue');
       dev.hr(-1, 5);
-      dev.button('clear', (e) => carets.current.forEach((c) => c.dispose()));
+      dev.button((btn) =>
+        btn
+          .label('clear')
+          .right('(dispose all)')
+          .onClick(() => carets.current.forEach((c) => c.dispose())),
+      );
     });
   });
 
@@ -143,16 +220,10 @@ export default Dev.describe('MonacoEditor', (e) => {
               'css.class': MonacoEditor.className(editor),
               text: `chars:(${text.length}), lines:(${text.split('\n').length})`,
             },
+        carets: carets?.current ?? [],
       };
       return (
-        <Dev.Object
-          name={'Dev.MonacoEditor'}
-          data={data}
-          expand={{
-            level: 1,
-            paths: ['$.editor'],
-          }}
-        />
+        <Dev.Object name={'MonacoEditor'} data={data} expand={{ level: 1, paths: ['$.editor'] }} />
       );
     });
   });

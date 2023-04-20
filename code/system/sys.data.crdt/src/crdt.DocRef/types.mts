@@ -1,6 +1,7 @@
 import type { t } from '../common.t';
 
 type AutomergeLocalChange = Uint8Array;
+type Id = string;
 
 /**
  * Document Change Handler.
@@ -16,7 +17,7 @@ export type CrdtDocRefChangeHandlerArgs<D extends {}> = {
  */
 export type CrdtDocRef<D extends {}> = t.Disposable & {
   readonly kind: 'Crdt:DocRef';
-  readonly id: { actor: string };
+  readonly id: { actor: Id; doc: Id };
   readonly $: t.Observable<CrdtDocAction<D>>;
   readonly current: D;
   readonly disposed: boolean;

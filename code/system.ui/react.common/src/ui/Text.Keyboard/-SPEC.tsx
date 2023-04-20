@@ -42,6 +42,20 @@ export default Dev.describe('KeyboardMonitor', (e) => {
       Escape: (e) => log(e),
     });
 
+    /**
+     * Patterns with same key, but different modifiers
+     * NOTE:
+     *    Pipe is the same as backslash.
+     *    On MacOS, these will both trigger as the CMD key keeps
+     *    the "|" key in a down state until CMD is released.
+     *    This may produce subtle bugs (a possibly needs to be worked around
+     *    within the monitor).
+     */
+    Keyboard.Monitor.on({
+      'CMD + ALT + Backslash': (e) => console.log('e', e.pattern),
+      'CMD + Backslash': (e) => console.log('e', e.pattern),
+    });
+
     ctx.subject
       .display('grid')
       .size([540, 300])

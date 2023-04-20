@@ -28,6 +28,10 @@ export function syncer<D extends {}, P extends {} = D>(args: {
   dispose$.subscribe(() => {
     _isDisposed = true;
     _$.complete();
+    handlerDidFocusEditorText.dispose();
+    handlerDidBlurEditorText.dispose();
+    handlerDidChangeModelContent.dispose();
+    handlerDidChangeCursorSelection.dispose();
   });
 
   type C = t.MonacoCrdtSyncerChange;
@@ -36,7 +40,17 @@ export function syncer<D extends {}, P extends {} = D>(args: {
 
   const docText = DocText(args.data);
   const docPeers = DocPeers(args.peers);
-  const carets = EditorCarets(monaco, editor, { dispose$ });
+  const carets = EditorCarets(editor, { dispose$ });
+
+  const changeEditorText = (text: string) => {
+    _ignoreChange = true;
+
+    const before = editor.getSelections()!;
+    editor.setValue(text);
+    editor.setSelections(before);
+
+    _ignoreChange = false;
+  };
 
   /**
    * Document CRDT change.
@@ -47,22 +61,35 @@ export function syncer<D extends {}, P extends {} = D>(args: {
     rx.debounceTime(debounce),
   ).subscribe((e) => {
     const text = docText.get(data.doc.current)?.toString();
-    if (!text) return;
-
-    if (text !== editor.getValue()) {
-      _ignoreChange = true;
-
-      const before = editor.getSelection()!;
-      editor.setValue(text);
-      editor.setSelection(before);
-
-      _ignoreChange = false;
-      fireChange('remote', 'text');
-    }
+    if (text === editor.getValue()) return;
+    changeEditorText(text);
+    fireChange('remote', 'text');
   });
 
   /**
-   * Remote peers change (caret/selection).
+   * Update the state from a change on the remote-peer.
+   */
+  const syncFromRemotePeer = (peer: string, state: t.EditorPeerState) => {
+    const caret = carets.id(peer);
+    const selections = state.selections ?? [];
+
+    // Selection.
+    if (!caret.eq({ selections })) {
+      caret.change({ selections });
+      fireChange('remote', 'selection');
+    }
+
+    // Focus state (text).
+    const isFocused = state.textFocused ?? false;
+    const opacity = isFocused ? 0.6 : 0.2;
+    if (!caret.eq({ opacity })) {
+      caret.change({ opacity });
+      fireChange('remote', 'focus');
+    }
+  };
+
+  /**
+   * Monitor remote peer changes (caret/selection).
    */
   docPeers.$?.pipe(
     rx.takeUntil(dispose$),
@@ -74,43 +101,34 @@ export function syncer<D extends {}, P extends {} = D>(args: {
     if (local && peers) {
       Object.keys(peers)
         .filter((key) => key !== local)
-        .forEach((key) => {
-          const position = peers[key].selection ?? null;
-          const caret = carets.id(key);
-
-          if (!caret.eq({ position })) {
-            caret.change({ position });
-            fireChange('remote', 'selection');
-          }
-
-          const textFocused = peers[key].textFocused ?? false;
-          const opacity = textFocused ? 0.6 : 0.2;
-
-          if (!caret.eq({ opacity })) {
-            caret.change({ opacity });
-            fireChange('remote', 'focus');
-          }
-        });
+        .map((key) => ({ key, state: peers[key] }))
+        .forEach(({ key, state }) => syncFromRemotePeer(key, state));
     }
   });
 
   /**
    * Keep track of current/previous selection offsets.
    */
-  let _selection: t.SelectionOffset = { start: 0, end: 0 };
-  editor.onDidChangeCursorSelection((e) => {
-    if (api.disposed) return;
-    const next = e.selection;
-    _selection = Wrangle.offsets(monaco, editor, next);
-    if (docPeers) docPeers.changeLocal((local) => (local.selection = Wrangle.asIRange(next)));
+  let _lastSelection: t.SelectionOffset[] = [];
+  const handlerDidChangeCursorSelection = editor.onDidChangeCursorSelection((e) => {
+    if (_isDisposed) return;
+
+    const next = editor.getSelections()!;
+    _lastSelection = next.map((range) => Wrangle.monaco(monaco).offsets(editor, range));
+
+    if (args.peers) {
+      const selections = next.map((next) => Wrangle.asRange(next));
+      docPeers.changeLocal((local) => (local.selections = selections));
+    }
+
     fireChange('local', 'selection');
   });
 
   /**
    * Local editor change.
    */
-  editor.onDidChangeModelContent((e) => {
-    if (api.disposed) return;
+  const handlerDidChangeModelContent = editor.onDidChangeModelContent((e) => {
+    if (_isDisposed) return;
     if (_ignoreChange) return;
 
     /**
@@ -124,8 +142,9 @@ export function syncer<D extends {}, P extends {} = D>(args: {
     const newLength = e.changes.reduce((acc, change) => acc + change.text.length, 0);
     if (oldLength > 0 && newLength > 0) {
       docText.change((text) => {
-        const offset = _selection;
-        text.deleteAt(offset.start, offset.end - offset.start);
+        _lastSelection.forEach(({ start, end }) => {
+          text.deleteAt(start, end - start);
+        });
       });
     }
 
@@ -150,13 +169,23 @@ export function syncer<D extends {}, P extends {} = D>(args: {
    * Track focus state.
    */
   const focusChanged = (isFocused: boolean) => {
-    if (api.disposed) return;
+    if (_isDisposed) return;
     if (!args.peers) return;
     docPeers.changeLocal((local) => (local.textFocused = isFocused));
     fireChange('local', 'focus');
   };
-  editor.onDidFocusEditorText(() => focusChanged(true));
-  editor.onDidBlurEditorText(() => focusChanged(false));
+  const handlerDidFocusEditorText = editor.onDidFocusEditorText(() => focusChanged(true));
+  const handlerDidBlurEditorText = editor.onDidBlurEditorText(() => focusChanged(false));
+  if (editor.hasTextFocus()) focusChanged(true);
+
+  /**
+   * Assign iniital value from the data-object to the editor.
+   */
+  const initial = data.getText(data.doc.current).toString();
+  if (initial) {
+    changeEditorText(initial);
+    fireChange('local', 'text');
+  }
 
   /**
    * API

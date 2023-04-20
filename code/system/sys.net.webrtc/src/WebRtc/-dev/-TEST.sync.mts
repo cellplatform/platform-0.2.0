@@ -46,11 +46,13 @@ export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
 
       const syncerA = PeerSyncer(
         connA.bus(),
+        'doc-id',
         () => docA,
         (d) => (docA = d),
       );
       const syncerB = PeerSyncer(
         connB.bus(),
+        'doc-id',
         () => docB,
         (d) => (docB = d),
       );

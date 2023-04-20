@@ -34,7 +34,7 @@ export const HostGrid: React.FC<HostGridProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ display: 'grid' }),
+    base: css({ Absolute: 0, display: 'grid' }),
     grid: {
       fill: css({
         gridTemplateColumns: isFillY ? GRID.CENTER.COLUMNS : GRID.FILL.COLUMNS,

@@ -1,6 +1,6 @@
 import { Color, COLORS, css, t } from './common';
 import { CopyIcon } from './CopyIcon';
-import { toTheme } from '../Util.theme.mjs';
+import { Wrangle } from '../Util.mjs';
 
 export type SimpleValueProps = {
   defaults: t.PropListDefaults;
@@ -21,11 +21,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
   const cursor = props.cursor ?? is.copyActive ? 'pointer' : 'default';
 
   const styles = {
-    base: css({
-      position: 'relative',
-      flex: 1,
-      height: 13,
-    }),
+    base: css({ position: 'relative', flex: 1 }),
     text: css({
       Absolute: 0,
       color: textColor,
@@ -60,7 +56,7 @@ export const SimpleValue: React.FC<SimpleValueProps> = (props) => {
 function toTextColor(props: SimpleValueProps) {
   if (props.value.color !== undefined) return Color.format(props.value.color);
 
-  const theme = toTheme(props.theme);
+  const theme = Wrangle.theme(props.theme);
   if (props.message) return theme.color.alpha(0.3);
 
   const is = toFlags(props);

@@ -1,7 +1,7 @@
 import type * as t from './types.mjs';
 import { DEFAULTS } from './const.mjs';
 
-const QS = DEFAULTS.QS;
+const QS = DEFAULTS.qs;
 
 export const WrangleUrlParams = {
   /**
@@ -9,32 +9,48 @@ export const WrangleUrlParams = {
    */
   isDev(location?: t.UrlInput) {
     const params = WrangleUrl.location(location).searchParams;
-    return params.has(QS.D) || params.has(QS.DEV);
+    return params.has(QS.d) || params.has(QS.dev);
   },
 
-  formatDevFlag(options: { location?: t.UrlInput } = {}) {
+  formatDevFlag(
+    options: { location?: t.UrlInput; defaultNamespace?: string; forceDev?: boolean } = {},
+  ) {
+    const { defaultNamespace, forceDev } = options;
     const url = WrangleUrl.location(options.location);
+    const params = url.searchParams;
 
-    if (url.searchParams.has(QS.D)) {
-      const value = url.searchParams.get(QS.D) || 'true';
-      url.searchParams.delete(QS.D);
-      url.searchParams.set(QS.DEV, value);
+    const updateParams = () => {
       if (!options.location) {
-        window.location.search = url.searchParams.toString();
+        const diff = window.location.search !== `?${params.toString()}`;
+        if (diff) window.location.search = params.toString();
+      }
+    };
+
+    if (params.has(QS.d)) {
+      const value = params.get(QS.d) || defaultNamespace || 'true';
+      params.delete(QS.d);
+      params.set(QS.dev, value);
+      updateParams();
+    }
+
+    if (forceDev) {
+      if (!params.has(QS.dev)) {
+        params.set(QS.dev, defaultNamespace || 'true');
+        updateParams();
       }
     }
 
     return url;
   },
 
-  ensureIndexDevFlag(options: { location?: t.UrlInput } = {}) {
+  ensureDevFlag(options: { location?: t.UrlInput } = {}) {
     const url = WrangleUrl.location(options.location);
     const params = url.searchParams;
-    params.delete(DEFAULTS.QS.D);
-    params.delete(DEFAULTS.QS.DEV);
-    params.set(DEFAULTS.QS.DEV, 'true');
+    params.delete(DEFAULTS.qs.d);
+    params.delete(DEFAULTS.qs.dev);
+    params.set(DEFAULTS.qs.dev, 'true');
     if (!options.location) {
-      window.location.search = url.searchParams.toString();
+      window.location.search = params.toString();
     }
     return url;
   },
@@ -56,9 +72,9 @@ export const WrangleUrl = {
    */
   async module(url: URL, specs: t.SpecImports) {
     const params = url.searchParams;
-    if (!params.has(QS.DEV)) return undefined;
+    if (!params.has(QS.dev)) return undefined;
 
-    const namespace = params.get(QS.DEV) ?? '';
+    const namespace = params.get(QS.dev) ?? '';
     const matches = WrangleUrl.moduleMatches(namespace, specs);
 
     if (matches[0]) {

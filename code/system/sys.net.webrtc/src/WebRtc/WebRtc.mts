@@ -6,14 +6,16 @@ import { WebRtcUtils as Util } from '../WebRtc.Util';
 import { peer } from './WebRtc.peer.mjs';
 import { Media } from '../WebRtc.Media';
 import { events } from '../WebRtc.Events';
+import { WebRtcInfo as InfoCard } from '../ui/ui.Info';
 
 /**
  * Library for working with WebRTC peer-to-peer connections.
  */
 export const WebRtc = {
+  peer,
+  events,
+  InfoCard,
   Controller,
   Media,
   Util,
-  peer,
-  events,
 };

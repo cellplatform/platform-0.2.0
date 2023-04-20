@@ -1,67 +1,67 @@
 import { DEFAULTS } from './const.mjs';
+import { Is } from './Is.mjs';
+import { monaco } from './Wrangle.monaco.mjs';
+import { asRange } from './Wrangle.asRange.mjs';
+
 import type { t } from '../common.t';
 
 export const Wrangle = {
+  monaco,
+
+  toMonacoTheme(theme?: t.EditorTheme) {
+    if (typeof theme !== 'string') return undefined;
+    if (theme === 'Light') return 'light';
+    if (theme === 'Dark') return 'vs-dark';
+    return theme; // Defaults to 'light' within Monaco.
+  },
+
   editorClassName(editor?: t.MonacoCodeEditor) {
     let id = editor?.getId() ?? '';
     if (id.includes(':')) id = `instance-${id.split(':')[1]}`;
     return `${DEFAULTS.className} ${id}`.trim();
   },
 
-  offsets(
-    monaco: t.Monaco,
-    editor: t.MonacoCodeEditor,
-    selection: t.ISelection,
-  ): t.SelectionOffset {
-    const { Range } = monaco;
-    const model = editor.getModel();
-    if (!model) throw new Error(`Editor did not return a text model.`);
+  asRange,
+  asRanges(input?: t.EditorRangesInput): t.EditorRange[] {
+    if (!input) return [];
 
-    const position = Wrangle.position(monaco, selection);
-    const range = Range.fromPositions(position.start, position.end);
+    type V = t.EditorRange | t.CharPositionTuple;
+    const isValue = (value: V) => Is.editorRange(value) || Is.charPositionTuple(value);
+    const toRange = (value: V): t.EditorRange => {
+      if (Is.editorRange(value)) return value;
+      if (Is.charPositionTuple(value)) {
+        return {
+          startLineNumber: value[0],
+          startColumn: value[1],
+          endLineNumber: value[0],
+          endColumn: value[1],
+        };
+      }
+      throw new Error('Range conversion from input not supported');
+    };
+
+    if (Is.editorRange(input)) return [input];
+    if (Is.charPositionTuple(input)) return [toRange(input)];
+    if (Array.isArray(input)) return (input as V[]).filter(isValue).map(toRange);
+
+    return [];
+  },
+
+  toRangeStart(input: t.EditorRange): t.EditorRange {
     return {
-      start: model.getOffsetAt(range.getStartPosition()),
-      end: model.getOffsetAt(range.getEndPosition()),
+      startLineNumber: input.startLineNumber,
+      startColumn: input.startColumn,
+      endLineNumber: input.startLineNumber,
+      endColumn: input.startColumn,
     };
   },
 
-  position(monaco: t.Monaco, selection: t.ISelection) {
-    const { Position } = monaco;
-    const { selectionStartLineNumber, selectionStartColumn } = selection;
-    const { positionLineNumber, positionColumn } = selection;
+  toRangeEnd(input: t.EditorRange): t.EditorRange {
     return {
-      start: new Position(selectionStartLineNumber, selectionStartColumn),
-      end: new Position(positionLineNumber, positionColumn),
+      startLineNumber: input.endLineNumber,
+      startColumn: input.endColumn,
+      endLineNumber: input.endLineNumber,
+      endColumn: input.endColumn,
     };
-  },
-
-  asIRange(input: t.IRange | [number, number, number, number] | [number, number]) {
-    if (Array.isArray(input)) {
-      return input.length === 4
-        ? {
-            startLineNumber: input[0],
-            startColumn: input[1],
-            endLineNumber: input[2],
-            endColumn: input[3],
-          }
-        : {
-            startLineNumber: input[0],
-            startColumn: input[1],
-            endLineNumber: input[0],
-            endColumn: input[1],
-          };
-    }
-    const { startLineNumber, startColumn, endLineNumber, endColumn } = input;
-    return {
-      startLineNumber,
-      startColumn,
-      endLineNumber,
-      endColumn,
-    };
-  },
-
-  asRange(monaco: t.Monaco, input: t.IRange | [number, number, number, number] | [number, number]) {
-    const { startLineNumber, startColumn, endLineNumber, endColumn } = Wrangle.asIRange(input);
-    return new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn);
   },
 };

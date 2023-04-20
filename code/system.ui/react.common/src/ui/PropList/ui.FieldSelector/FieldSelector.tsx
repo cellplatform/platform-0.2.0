@@ -1,6 +1,6 @@
 import { css, FC, t, Button, DEFAULT } from './common';
 import { FieldBuilder } from '../FieldBuilder.mjs';
-import { PropList } from '../PropList.View';
+import { PropList } from '../ui.PropList';
 
 import { FieldSelectorLabel } from './FieldSelector.Label';
 
@@ -65,7 +65,6 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   return (
     <PropList
       title={props.title}
-      titleEllipsis={props.titleEllipsis}
       items={items}
       defaults={{ clipboard: false }}
       style={css(styles.base, props.style)}

@@ -9,7 +9,7 @@ import type { ObjectViewTheme } from './types.mjs';
 export type ObjectViewProps = {
   name?: string;
   data?: any;
-  expand?: number | { level?: number; paths?: string[] };
+  expand?: number | { level?: number; paths?: string[] | boolean };
   showNonenumerable?: boolean;
   showRootSummary?: boolean;
   sortObjectKeys?: boolean;
@@ -22,14 +22,18 @@ const View: React.FC<ObjectViewProps> = (props) => {
   const {
     name,
     data,
+    sortObjectKeys,
     showNonenumerable = DEFAULTS.showNonenumerable,
     showRootSummary = DEFAULTS.showRootSummary,
-    sortObjectKeys,
+    fontSize = DEFAULTS.font.size,
   } = props;
   const { expandLevel, expandPaths } = Wrangle.expand(props);
 
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      fontSize,
+    }),
   };
 
   return (
@@ -37,6 +41,7 @@ const View: React.FC<ObjectViewProps> = (props) => {
       <ObjectInspector
         name={name}
         data={data}
+        fontsize={fontSize}
         showNonenumerable={showNonenumerable}
         nodeRenderer={renderer({ showRootSummary })}
         sortObjectKeys={sortObjectKeys}
@@ -65,12 +70,14 @@ const Wrangle = {
       TREENODE_LINE_HEIGHT: lineHeight,
     };
   },
+
   baseTheme(theme?: ObjectViewTheme) {
     theme = theme ?? DEFAULTS.theme;
     if (theme === 'Light') return chromeLight;
     if (theme === 'Dark') return chromeDark;
     throw new Error(`Theme '${theme}' not supported.`);
   },
+
   expand(props: ObjectViewProps) {
     const { expand } = props;
     let expandLevel: number | undefined = undefined;
@@ -82,7 +89,7 @@ const Wrangle = {
 
     if (typeof expand === 'object') {
       expandLevel = expand.level;
-      expandPaths = expand.paths;
+      expandPaths = Array.isArray(expand.paths) ? expand.paths : undefined;
     }
 
     return { expandLevel, expandPaths };

@@ -1,1 +1,1 @@
-export * from './ui.PeerCard';
+export * from './Root';

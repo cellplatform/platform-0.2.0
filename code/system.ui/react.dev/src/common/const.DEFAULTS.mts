@@ -21,6 +21,7 @@ export const DEFAULTS = {
         backgroundImage: { url: '', size: 'cover', margin: [0, 0, 0, 0] },
         header: { border: { color: -0.1 }, padding: [8, 8, 8, 8] },
         footer: { border: { color: -0.1 }, padding: [8, 8, 8, 8] },
+        layers: {},
       },
       subject: {},
       debug: {
@@ -48,8 +49,8 @@ export const DEFAULTS = {
   /**
    * URL query-string keys.
    */
-  QS: {
-    D: 'd', // NB: alias for "?dev"
-    DEV: 'dev',
+  qs: {
+    d: 'd', // NB: alias for "?dev"
+    dev: 'dev',
   },
 } as const;

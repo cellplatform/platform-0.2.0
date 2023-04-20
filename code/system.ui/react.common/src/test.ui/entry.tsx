@@ -12,9 +12,8 @@ const badge = {
 
 (async () => {
   console.info(`Pkg:`, Pkg);
-  const { AllSpecs } = await import('./entry.Specs.mjs');
-
-  const el = await Dev.render(Pkg, AllSpecs, { hrDepth: 3, badge });
+  const { All: AllSpecs } = await import('./entry.Specs.mjs');
+  const el = await Dev.render(Pkg, AllSpecs, { badge, hrDepth: 3 });
   const root = createRoot(document.getElementById('root')!);
   root.render(<StrictMode>{el}</StrictMode>);
 })();

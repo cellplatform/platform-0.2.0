@@ -3,7 +3,7 @@ export const R = { clone, equals, uniq, mergeDeepRight };
 
 import { execa } from 'execa';
 import pc from 'picocolors';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import semver from 'semver';
 import prettybytes from 'pretty-bytes';
 

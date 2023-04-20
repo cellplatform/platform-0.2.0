@@ -19,7 +19,7 @@ export const CrdtSchema = {
    *       https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
    */
   toByteArray<D extends {}>(initial: D, options: { typeDef?: string } = {}) {
-    const doc = DocRef.init<D>(initial);
+    const doc = DocRef.init<D>('dummy-id', initial);
     const bytes = Automerge.getLastLocalChange(doc.current)!;
     const api = {
       /**

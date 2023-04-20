@@ -10,6 +10,8 @@ type Options = {
   hrDepth?: number;
   keyboard?: boolean;
   doubleEscapeKeyAction?: null | EscapeAction;
+  defaultNamespace?: string;
+  forceDev?: boolean;
   style?: t.CssValue;
 };
 

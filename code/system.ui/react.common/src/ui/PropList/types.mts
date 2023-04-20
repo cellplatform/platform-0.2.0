@@ -5,26 +5,35 @@ import type { t } from '../common.t';
  */
 export type PropListTheme = t.CommonTheme;
 
-export type PropListTitleProps = {
-  title?: string | JSX.Element | null;
-  titleEllipsis?: boolean;
+export type PropListTitleInput = PropListTitle['value'] | PropListTitle;
+export type PropListTitleContent = string | JSX.Element | null;
+export type PropListTitle = {
+  value?: PropListTitleContent | [PropListTitleContent, PropListTitleContent];
+  ellipsis?: boolean;
+  margin?: t.CssEdgesInput;
 };
 
-export type PropListProps = PropListTitleProps & {
+export type PropListProps = {
+  title?: t.PropListTitleInput;
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
-  width?: number | { fixed?: number; min?: number; max?: number };
-  height?: number | { fixed?: number; min?: number; max?: number };
+  width?: number | t.PropListSize;
+  height?: number | t.PropListSize;
+  card?: boolean | PropListCard;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
+export type PropListSize = { fixed?: number; min?: number; max?: number };
+export type PropListCard = {};
+
 /**
  * Component: <PropsList.FieldSelector>
  */
-export type PropListFieldSelectorProps<F extends string = string> = t.PropListTitleProps & {
+export type PropListFieldSelectorProps<F extends string = string> = {
+  title?: t.PropListTitleInput;
   all?: F[];
   selected?: F[];
   resettable?: boolean;

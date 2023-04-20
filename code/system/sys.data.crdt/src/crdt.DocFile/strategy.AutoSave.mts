@@ -1,4 +1,4 @@
-import { t, rx } from './common';
+import { t, rx, DEFAULTS } from './common';
 
 type Milliseconds = number;
 
@@ -7,11 +7,17 @@ type Milliseconds = number;
  */
 export function autoSaveStrategy<D extends {} = {}>(
   file: t.CrdtDocFile<D>,
-  debounce: Milliseconds = 300,
+  args: {
+    enabled: () => boolean;
+    debounce?: Milliseconds;
+  },
 ) {
+  const { debounce = DEFAULTS.doc.autosaveDebounce } = args;
+
   file.doc.$.pipe(
     rx.takeUntil(file.dispose$),
-    rx.debounceTime(debounce),
+    rx.filter(() => args.enabled()),
     rx.filter((e) => e.action === 'change' || e.action === 'replace'),
+    rx.debounceTime(debounce),
   ).subscribe(() => file.save());
 }

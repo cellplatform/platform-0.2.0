@@ -13,10 +13,11 @@ export const Pkg: ModuleDef = {
   name: 'sys.net.webrtc',
   version: '0.0.0',
   dependencies: {
-    'nostr-tools': '1.8.1',
+    'nostr-tools': '1.10.0',
     'peerjs': '1.4.7',
     'sys.data.crdt': '0.0.0',
     'sys.fs': '0.0.0',
+    'sys.text': '0.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },

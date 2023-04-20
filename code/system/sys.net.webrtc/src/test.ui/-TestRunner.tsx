@@ -1,11 +1,7 @@
 import { Dev, t, Time, WebRtc } from '.';
 
-type T = {
-  testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
-};
-const initial: T = {
-  testrunner: {},
-};
+type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
+const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
   e.it('init', async (e) => {
@@ -21,7 +17,6 @@ export default Dev.describe('Root', (e) => {
             data={results}
             spinning={spinning}
             scroll={true}
-            padding={10}
             style={{ Absolute: 0 }}
           />
         );
@@ -76,7 +71,7 @@ export default Dev.describe('Root', (e) => {
         ...[
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.mutate.mjs')),
-          await button(import('../ui/ui.PeerCard/-dev/Schema.TEST.mjs'), true),
+          await button(import('../sys.net.schema/Schema.TEST.mjs')),
         ],
       );
 
