@@ -1,5 +1,15 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
-import { Crdt, css, Dev, getTestFs, PropList, rx, t, ConnectionMock } from '../../test.ui';
+import {
+  Crdt,
+  css,
+  Dev,
+  getTestFs,
+  PropList,
+  rx,
+  t,
+  ConnectionMock,
+  Keyboard,
+} from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
@@ -29,11 +39,12 @@ export default Dev.describe('CrdtInfo', async (e) => {
     doc: toFs('dev.crdt-info.sample'),
   };
 
-  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
+  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean; flipped?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.Info');
   const local = localstore.object({
     fields: initial.props.fields,
     card: initial.props.card,
+    flipped: initial.props.flipped,
 
     bg: initial.debug.bg,
     title: initial.debug.title,
@@ -110,11 +121,32 @@ export default Dev.describe('CrdtInfo', async (e) => {
     });
   });
 
+  e.it('init:keyboard', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    Keyboard.on({
+      Enter(e) {
+        e.cancel();
+        state.change((d) => {
+          local.flipped = Dev.toggle(d.props, 'flipped');
+          local.card = d.props.card = true;
+        });
+      },
+    });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flipped (← Enter)`)
+          .value((e) => Boolean(e.state.props.flipped))
+          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
+      );
+
       dev.boolean((btn) =>
         btn
           .label((e) => `syncDoc`)
