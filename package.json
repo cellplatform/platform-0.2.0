@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "@automerge/automerge": "2.0.2",
+    "@automerge/automerge": "2.0.3-marks-prelease.1",
     "@monaco-editor/react": "4.5.0",
     "@tauri-apps/api": "1.2.0",
     "@vercel/edge": "0.3.2",
