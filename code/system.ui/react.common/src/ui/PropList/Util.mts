@@ -10,10 +10,10 @@ export const Wrangle = {
     return typeof input === 'number' ? { fixed: input } : input;
   },
 
-  cardProps(input: t.PropListProps['card']): t.PropListCard | undefined {
-    if (!input) return undefined;
-    if (typeof input === 'object') return input;
-    return { ...DEFAULTS.card };
+  cardProps(input: t.PropListProps): t.PropListCard | undefined {
+    if (!input.card) return undefined;
+    if (typeof input.card === 'object') return input.card;
+    return DEFAULTS.card;
   },
 
   items(input: t.PropListProps['items']) {

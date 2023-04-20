@@ -25,6 +25,7 @@ const initial: T = {
     defaults: { clipboard: false },
     theme: 'Light',
     card: false,
+    flipped: false,
   },
   debug: {
     source: 'Samples',
@@ -37,20 +38,33 @@ const initial: T = {
 };
 
 export default Dev.describe('PropList', (e) => {
+  type LocalStore = { card?: boolean; flipped: boolean };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.PropList');
+  const local = localstore.object({
+    card: initial.props.card as boolean,
+    flipped: initial.props.flipped as boolean,
+  });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     await Util.setSample(ctx, state.current.debug.source);
+
+    state.change((d) => {
+      d.props.card = local.card;
+      d.props.flipped = local.flipped;
+    });
 
     ctx.subject
       .display('grid')
       .size([250, null])
       .render<T>((e) => {
         const isCard = Boolean(e.state.props.card);
-        const width = isCard ? 250 + 25 * 2 : 250;
-        ctx.subject.size([width, null]);
+        ctx.subject.size([isCard ? 250 + 25 * 2 : 250, null]);
+        ctx.host.tracelineColor(isCard ? -0.03 : -0.05);
 
-        return <PropList {...e.state.props} />;
+        const backside = <div>Backside 🐷</div>;
+        return <PropList {...e.state.props} backside={backside} />;
       });
   });
 
@@ -84,11 +98,20 @@ export default Dev.describe('PropList', (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(Util.defaults(d.props), 'monospace'))),
       );
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) =>
         btn
           .label('card')
           .value((e) => Boolean(e.state.props.card))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'card'))),
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flipped`)
+          .value((e) => Boolean(e.state.props.flipped))
+          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
       );
 
       dev.hr(5, 20);

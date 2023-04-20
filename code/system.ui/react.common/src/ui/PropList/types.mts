@@ -1,5 +1,7 @@
 import type { t } from '../common.t';
 
+type Milliseconds = number;
+
 /**
  * Component: <PropList>
  */
@@ -22,12 +24,14 @@ export type PropListProps = {
   width?: number | t.PropListSize;
   height?: number | t.PropListSize;
   card?: boolean | PropListCard;
+  flipped?: boolean;
+  backside?: JSX.Element;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };
 
 export type PropListSize = { fixed?: number; min?: number; max?: number };
-export type PropListCard = {};
+export type PropListCard = { flipSpeed?: Milliseconds; shadow?: boolean | t.CssShadow };
 
 /**
  * Component: <PropsList.FieldSelector>

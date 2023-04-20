@@ -13,7 +13,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
   const items = Wrangle.items(props.items);
   const width = Wrangle.sizeProp(props.width);
   const height = Wrangle.sizeProp(props.height);
-  const card = Wrangle.cardProps(props.card);
+  const card = Wrangle.cardProps(props);
 
   const defaults: t.PropListDefaults = {
     clipboard: true,
@@ -63,6 +63,9 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
   return (
     <Card
       showAsCard={Boolean(card)}
+      showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
+      backside={props.backside}
+      shadow={card?.shadow}
       style={css(styles.base, props.style)}
       padding={props.padding ?? [20, 25]}
       margin={props.margin}
