@@ -130,7 +130,7 @@ describe('Patch', () => {
       expect(res.to.child.foo).to.eql([123, 456]);
 
       expect(res.op).to.eql('update');
-      expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/length', 'msg']);
+      expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
       expect(res.patches.next.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
     });
 
@@ -160,7 +160,7 @@ describe('Patch', () => {
       expect(res.to.child.foo).to.eql([123, 456]);
 
       expect(res.op).to.eql('update');
-      expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/length', 'msg']);
+      expect(res.patches.prev.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
       expect(res.patches.next.map((c) => c.path)).to.eql(['child/foo/1', 'msg']);
     });
 
