@@ -23,11 +23,11 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     props.onClick?.({ field, action, previous, next });
   };
 
-  const handleReset = () => {
+  const handleReset = (e: React.MouseEvent) => {
     props.onClick?.({
       action: 'Reset',
       previous: [...selected],
-      next: undefined,
+      next: e.metaKey ? [] : undefined, // NB: force empty if meta-key, otherwise use defaults.
     });
   };
 
