@@ -305,9 +305,9 @@ export default Dev.describe('PeerCard', async (e) => {
       const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
       self.connections$.subscribe(async (e) => ctx.redraw());
 
-      const filedir = docs.dirs.shared.fs;
+      const filedir = docs.shared.dir;
       controller = WebRtc.Controller.listen(self, doc, {
-        // filedir,
+        filedir,
         dispose$,
         onConnectStart(e) {
           state.change((d) => (d.spinning = true));
@@ -347,9 +347,7 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.section(['Me', '(Private)'], (dev) => {
       const me = docs.me;
       dev.row((e) => {
-        return (
-          <FileCard doc={me.doc} file={me.file} filepath={docs.dirs.me.path} margin={[20, 40]} />
-        );
+        return <FileCard doc={me.doc} file={me.file} filepath={docs.me.path} margin={[20, 40]} />;
       });
 
       const count = (label: string, by: number) => {
@@ -385,7 +383,8 @@ export default Dev.describe('PeerCard', async (e) => {
         return (
           <FileCard
             doc={shared.doc}
-            filepath={docs.dirs.shared.path}
+            // file={shared.file}
+            // filepath={docs.shared.path}
             syncer={sync?.syncer}
             margin={[20, 40]}
           />
