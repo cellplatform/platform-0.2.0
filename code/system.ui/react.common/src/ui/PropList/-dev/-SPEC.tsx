@@ -1,6 +1,6 @@
-import { PropList } from '.';
-import { Dev, t } from '../../../test.ui';
-import { BuilderSample, sampleItems, SampleFields } from '.';
+import { BuilderSample, SampleFields, sampleItems } from '.';
+import { PropList } from '..';
+import { Dev, Keyboard, t } from '../../../test.ui';
 import { Wrangle } from '../Util.mjs';
 
 import type { MyFields } from '.';
@@ -63,9 +63,24 @@ export default Dev.describe('PropList', (e) => {
         ctx.subject.size([isCard ? 250 + 25 * 2 : 250, null]);
         ctx.host.tracelineColor(isCard ? -0.03 : -0.05);
 
-        const backside = <div>Backside 🐷</div>;
+        const backside = <div>🐷 Sample Backside</div>;
+        // const backside = null;
         return <PropList {...e.state.props} backside={backside} />;
       });
+  });
+
+  e.it('init:keyboard', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    Keyboard.on({
+      Enter(e) {
+        e.cancel();
+        state.change((d) => {
+          local.flipped = Dev.toggle(d.props, 'flipped');
+          local.card = d.props.card = true;
+        });
+      },
+    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -109,7 +124,7 @@ export default Dev.describe('PropList', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `flipped`)
+          .label((e) => `flipped (← Enter)`)
           .value((e) => Boolean(e.state.props.flipped))
           .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
       );

@@ -25,7 +25,7 @@ export type PropListProps = {
   height?: number | t.PropListSize;
   card?: boolean | PropListCard;
   flipped?: boolean;
-  backside?: JSX.Element;
+  backside?: JSX.Element | null;
   theme?: t.PropListTheme;
   style?: t.CssValue;
 };

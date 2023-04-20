@@ -23,12 +23,11 @@ export type CardHeight = CardSizeDimension;
 
 export type CardProps = {
   children?: React.ReactNode;
-
   background?: t.CardBackground;
   border?: t.CardBorder;
   showAsCard?: boolean;
   showBackside?: boolean | CardBackside;
-  backside?: JSX.Element;
+  backside?: JSX.Element | null;
   padding?: t.CssEdgesInput; // NB: padding is dropped if "NOT" showing as card.
   margin?: t.CssEdgesInput;
   width?: t.CardWidth;

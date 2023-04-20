@@ -4,6 +4,7 @@ import { PropListItem } from './ui.Item/Item';
 import { PropListTitle } from './ui.Item/Title';
 import { Wrangle } from './Util.mjs';
 import { Card } from '../Card';
+import { EmptyBackside } from './ui.EmptyBackside';
 
 /**
  * Component
@@ -64,14 +65,16 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     <Card
       showAsCard={Boolean(card)}
       showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
-      backside={props.backside}
+      backside={props.backside || <EmptyBackside />}
       shadow={card?.shadow}
       style={css(styles.base, props.style)}
       padding={props.padding ?? [20, 25]}
       margin={props.margin}
     >
-      {elTitle}
-      <div {...styles.items}>{elItems}</div>
+      <div>
+        {elTitle}
+        <div {...styles.items}>{elItems}</div>
+      </div>
     </Card>
   );
 };
