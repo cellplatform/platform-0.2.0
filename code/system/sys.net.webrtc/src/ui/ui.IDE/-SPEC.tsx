@@ -21,10 +21,7 @@ import { FileCard } from './FileCard';
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
-  parsed: {
-    me?: any;
-    shared?: any;
-  };
+  parsed: { me?: any; shared?: any };
   debug: { showBg: boolean };
 };
 const initial: T = { debug: { showBg: true }, parsed: {} };
@@ -127,11 +124,6 @@ export default Dev.describe('PeerCard', async (e) => {
 
     await state.change((d) => {
       d.debug.showBg = local.showBg;
-
-      // TEMP 🐷
-      // NOTE: this is repeated within [SpecMonacoSync]
-      const me = docs.me.doc.current.code?.toString();
-      if (me) d.parsed.me = Yaml.parse(me);
     });
 
     // NB:
@@ -165,7 +157,7 @@ export default Dev.describe('PeerCard', async (e) => {
       const root = 'https://github.com/cellplatform/platform-0.2.0/actions/workflows';
       const badge = {
         image: `${root}/node.esm.yml/badge.svg`,
-        href: `${root}//node.esm.yml`,
+        href: `${root}/node.esm.yml`,
       };
 
       const styles = {
@@ -245,6 +237,11 @@ export default Dev.describe('PeerCard', async (e) => {
           onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
           onConnectRequest={async (e) => {
             if (!self) return;
+
+            /**
+             * TODO 🐷
+             * - replicate this in the PeerCard dedicated spec.
+             */
 
             // NB: Updating the CRDT triggers to listening [Controller].
             docs.shared.doc.change((d) => {
