@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Wrangle } from './common';
-import { useMouseState } from 'sys.ui.react.common';
+import { COLORS, css, t, useMouseState, Wrangle, Value } from './common';
 
 const DEFAULT = {
   length: [8, 5] as [number, number],
@@ -15,7 +13,7 @@ export type HashProps = {
 export const Hash: React.FC<HashProps> = (props) => {
   let text = props.text ?? '';
   const { prefix, hash } = Local.prefix(text);
-  const shortened = Wrangle.displayHash(hash, props.length ?? DEFAULT.length);
+  const shortened = Value.shortenHash(hash, props.length ?? DEFAULT.length);
   const mouse = useMouseState();
 
   /**

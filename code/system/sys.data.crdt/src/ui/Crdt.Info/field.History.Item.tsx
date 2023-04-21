@@ -1,4 +1,4 @@
-import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
+import { COLORS, Icons, t, Time, Value } from './common';
 import { Hash } from './ui.Hash';
 
 export function FieldHistoryItem(
@@ -27,7 +27,7 @@ export function FieldHistoryItem(
   });
   res.push({
     label: 'Actor',
-    value: Wrangle.displayHash(actor, 6),
+    value: Value.shortenHash(actor, 6),
     tooltip: `actor-id: ${change.actor}`,
     indent,
   });
