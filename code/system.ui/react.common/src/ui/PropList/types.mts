@@ -93,6 +93,7 @@ type ValueBase = {
   color?: string | number;
   fontSize?: number;
   bold?: boolean;
+  opacity?: number;
   onClick?: (e: PropListValueEventArgs) => void;
 };
 

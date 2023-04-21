@@ -37,6 +37,7 @@ export const sampleItems: t.PropListItem[] = [
   { label: 'color', value: { data: 'My Color', color: COLORS.MAGENTA } },
   { label: 'long (ellipsis)', value: Lorem.toString() },
   { label: 'bold', value: { data: 'value', bold: true } },
+  { label: 'value opacity', value: { data: 'foobar', opacity: 0.3 } },
   {
     label: 'click handler',
     value: {
