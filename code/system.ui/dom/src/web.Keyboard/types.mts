@@ -41,7 +41,7 @@ export type KeyMatchSubscriberHandlerArgs = {
   readonly pattern: t.KeyPattern;
   readonly state: t.KeyboardStateCurrent;
   readonly event: t.KeyboardKeypress;
-  cancel(): void;
+  handled(): void;
 };
 
 export type KeyMatchPatterns = {
