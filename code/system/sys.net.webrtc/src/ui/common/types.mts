@@ -7,6 +7,7 @@ export type {
   CssValue,
   CssEdgesInput,
   PropListProps,
+  PropListItem,
   DevButtonClickHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 

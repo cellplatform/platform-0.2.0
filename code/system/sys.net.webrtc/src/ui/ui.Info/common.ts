@@ -4,7 +4,7 @@ import { t } from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.WebRtcInfoFields[] = ['Module', 'Module.Verify'];
+export const FIELDS: t.WebRtcInfoFields[] = ['Module', 'Module.Verify', 'Self'];
 
 const defaultFields = ['Module.Verify', 'Module'] as t.WebRtcInfoFields[];
 export const DEFAULTS = {
