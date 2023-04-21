@@ -3,6 +3,7 @@ import * as Math from './Value.Math.mjs';
 import * as Random from './Value.Random.mjs';
 import * as To from './Value.To.mjs';
 import * as Util from './Value.Util.mjs';
+import * as Hash from './Value.Hash.mjs';
 
 import * as object from './Value.Object.mjs';
 
@@ -16,4 +17,5 @@ export const Value = {
   ...Math,
   ...Random,
   ...Util,
+  ...Hash,
 };

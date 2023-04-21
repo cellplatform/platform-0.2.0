@@ -76,4 +76,10 @@ describe('hash', () => {
     test(Symbol('foo'), '902ba95c2a');
     test((i: number) => i, '40de1fa8e1');
   });
+
+  it('shorten', () => {
+    const hash = 'sha256-1234567890';
+    const res = Hash.shorten(hash, 3, { trimPrefix: true });
+    expect(res).to.eql('123 .. 890');
+  });
 });
