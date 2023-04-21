@@ -22,14 +22,14 @@ export const DevKeyboard = {
        * ACTION: Cancel "save" HTML page (default browser action).
        */
       'CMD + KeyS'(e) {
-        if (cancelSave) e.cancel();
+        if (cancelSave) e.handled();
       },
 
       /**
        * ACTION: Cancel "print" HTML page (default browser action).
        */
       'CMD + KeyP'(e) {
-        if (cancelPrint) e.cancel();
+        if (cancelPrint) e.handled();
       },
     });
 

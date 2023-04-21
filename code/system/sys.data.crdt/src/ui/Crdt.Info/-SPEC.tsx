@@ -126,7 +126,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
     const state = await dev.state();
     Keyboard.on({
       Enter(e) {
-        e.cancel();
+        e.handled();
         state.change((d) => {
           local.flipped = Dev.toggle(d.props, 'flipped');
           local.card = d.props.card = true;

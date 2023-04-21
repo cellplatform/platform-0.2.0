@@ -61,7 +61,7 @@ export default Dev.describe('Card', (e) => {
     const state = await dev.state();
     Keyboard.on({
       Enter(e) {
-        e.cancel();
+        e.handled();
         state.change((d) => Dev.toggle(d.props, 'showBackside'));
       },
     });

@@ -26,7 +26,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
      * Single pattern registration
      */
     Keyboard.Monitor.on('CMD + KeyL', (e) => {
-      e.cancel();
+      e.handled();
       log(e);
     });
 
@@ -35,7 +35,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
      */
     Keyboard.Monitor.on({
       'CMD + KeyP'(e) {
-        e.cancel();
+        e.handled();
         log(e);
       },
       'SHIFT + ALT + KeyP': (e) => log(e),
