@@ -146,7 +146,7 @@ The inverse proposition also appears to be true:
 <p>&nbsp;</p>
 
 
-![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/221512720-7449daab-42e7-4535-8fdc-77463f7678cf.png)
+![smor-sys crdt-cell](https://user-images.githubusercontent.com/185555/233560802-f4b2e339-bb90-40cf-b3fc-78387c1f853a.png)
 
 
 <p>&nbsp;</p>
