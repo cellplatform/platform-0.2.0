@@ -26,7 +26,7 @@ export function CtxPropsHost(props: PropArgs) {
     },
 
     layer(index: number) {
-      if (index === 0) throw new Error(`The 0-index layer is reserved for the main subject.`);
+      if (index === 0) throw new Error(`The index-0 layer is reserved for the main subject.`);
 
       const layer: t.DevCtxLayer = {
         index,
