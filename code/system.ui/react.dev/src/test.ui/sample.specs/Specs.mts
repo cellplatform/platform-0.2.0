@@ -1,6 +1,6 @@
 export const Specs = {
-  'sample.MySample': () => import('./MySample.SPEC'),
-  'sample.empty': () => import('./Empty.SPEC'),
-  'sample.fail': () => import('./Fail.SPEC'),
-  'sample.error': () => import('./Error.SPEC'),
+  'sample.MySample': () => import('./-SPEC.MySample'),
+  'sample.empty': () => import('./-SPEC.Empty'),
+  'sample.fail': () => import('./-SPEC.Fail'),
+  'sample.error': () => import('./-SPEC.Error'),
 };

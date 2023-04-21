@@ -16,7 +16,7 @@ export default Spec.describe('SpecList', (e) => {
       .render(async (e) => {
         const { SampleSpecs, ModuleSpecs } = await import('../../test.ui/entry.Specs.mjs');
 
-        const fn = () => import('../../test.ui/sample.specs/MySample.SPEC');
+        const fn = () => import('../../test.ui/sample.specs/-SPEC.MySample');
         const specs = {
           ...SampleSpecs,
           ...ModuleSpecs,
