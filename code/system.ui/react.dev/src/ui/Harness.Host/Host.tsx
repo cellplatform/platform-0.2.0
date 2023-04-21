@@ -4,6 +4,7 @@ import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostLayers } from './Host.Layers';
+import { BarLoader } from '../Spinners';
 
 const DEFAULT = DEFAULTS.props.host;
 
@@ -49,7 +50,6 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
     }),
     empty: {
       base: css({ Absolute: 0, display: 'grid', placeContent: 'center', userSelect: 'none' }),
-      label: css({ opacity: 0.3, fontStyle: 'italic', fontSize: 14 }),
     },
   };
 
@@ -84,7 +84,7 @@ export const HarnessHost: React.FC<HarnessHostProps> = (props) => {
 
   const elEmpty = !renderProps && (
     <div {...styles.empty.base}>
-      <div {...styles.empty.label}>{'Nothing to display.'}</div>
+      <BarLoader />
     </div>
   );
 
