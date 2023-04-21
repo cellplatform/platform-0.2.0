@@ -85,7 +85,7 @@ export type KeyboardKeypress = {
   readonly key: string;
   readonly keypress: KeyboardKeypressProps;
   readonly is: KeyboardKeyFlags;
-  cancel(): void;
+  handled(): void;
 };
 
 export type KeyboardKeypressProps = t.UIEventBase &

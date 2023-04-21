@@ -226,7 +226,7 @@ function on(
           pattern,
           state: e.current,
           event,
-          handled: () => event?.cancel(),
+          handled: () => event?.handled(),
         });
       }
     });
