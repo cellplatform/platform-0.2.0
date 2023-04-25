@@ -1,6 +1,4 @@
-import { Crdt, t } from './common';
-
-import { NetworkSchema } from '../../sys.net.schema';
+import { Crdt, t, NetworkSchema } from './common';
 
 export type { DocShared } from '../../sys.net.schema';
 export type DocMe = { count: number; text?: string; code?: t.AutomergeText };
@@ -26,7 +24,7 @@ export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any
     },
     shared: {
       doc: docShared,
-      // file: await Crdt.Doc.file<DocMe>(dirs.shared.fs, docShared, { autosave: true, dispose$ }),
+      // file: await Crdt.Doc.file<DocMe>(dirs.shared.fs, docShared, { autosave: false, dispose$ }),
       path: dirs.shared.path,
       fs: dirs.shared.fs,
     },

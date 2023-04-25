@@ -86,8 +86,14 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       ) => {
         const firedChanged = (text?: string) => {
           if (text) {
-            const data = Yaml.parse(text);
-            props.onChange?.({ kind, data });
+            try {
+              const data = Yaml.parse(text);
+              props.onChange?.({ kind, data });
+            } catch (err: any) {
+              const data = `YAML Parse Error: ${err.message}`;
+              console.warn(data);
+              props.onChange?.({ kind, data });
+            }
           }
         };
 
@@ -172,8 +178,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
           />
         </div>
         <div {...styles.titlebar}>
-          <div>{'Shared'}</div>
-          <div>{'(Public)'}</div>
+          <div>{'Shared State'}</div>
         </div>
       </div>
     </div>
