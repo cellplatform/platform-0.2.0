@@ -6,7 +6,7 @@ import { ButtonText } from './ui.ButtonText';
 type Milliseconds = number;
 
 const MSEC = {
-  DELAY_COLORED: 1000 * 5, // 5 seconds
+  DELAY_COLORED: 1000 * 10, // 10-seconds
 };
 
 export type TestRunnerProps = {
