@@ -121,9 +121,10 @@ export default Dev.describe('CrdtInfo', async (e) => {
     });
   });
 
-  e.it('init:keyboard', async (e) => {
+  e.it('keyboard:init', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     Keyboard.on({
       Enter(e) {
         e.handled();
