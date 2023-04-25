@@ -1,8 +1,14 @@
-import { Dev, TestNetwork, t } from '../../../test.ui';
-import { ConnectInput } from '..';
+import { WebRtc, Dev, TestNetwork, t } from '../../test.ui';
+import { ConnectInput } from '.';
 
 type T = { props: t.ConnectInputProps };
-const initial: T = { props: {} };
+const initial: T = {
+  props: {
+    showPeer: ConnectInput.DEFAULTS.showPeer,
+    showConnect: ConnectInput.DEFAULTS.showConnect,
+    spinning: ConnectInput.DEFAULTS.spinning,
+  },
+};
 
 export default Dev.describe('ConnectInput', async (e) => {
   const self = await TestNetwork.peer();
@@ -32,24 +38,42 @@ export default Dev.describe('ConnectInput', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Props', (dev) => {
+    dev.row((e) => {
+      return (
+        <WebRtc.InfoCard
+          fields={['Module.Verify', 'Module', 'Self']}
+          data={{ self: { peer: self } }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
           .label('showPeer')
-          // TODO 🐷
-          // .value((e) => SharedProps.current.showPeer)
+          .value((e) => Boolean(e.state.props.showPeer))
           .onClick((e) => {
-            // SharedProps.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
+            e.change((d) => Dev.toggle(d.props, 'showPeer'));
           }),
       );
 
       dev.boolean((btn) =>
         btn
           .label('showConnect')
-          // TODO 🐷
-          // .value((e) => SharedProps.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
+          .value((e) => Boolean(e.state.props.showConnect))
           .onClick((e) => {
-            // SharedProps.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
+            e.change((d) => Dev.toggle(d.props, 'showConnect'));
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('spinning')
+          .value((e) => Boolean(e.state.props.spinning))
+          .onClick((e) => {
+            e.change((d) => Dev.toggle(d.props, 'spinning'));
           }),
       );
     });

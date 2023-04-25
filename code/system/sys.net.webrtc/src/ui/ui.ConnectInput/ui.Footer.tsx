@@ -1,5 +1,5 @@
 import { WebRtc } from '../../WebRtc';
-import { Color, COLORS, css, t } from '../common';
+import { Color, COLORS, css, t, DEFAULTS } from './common';
 import { FooterConnect } from './ui.Footer.Connect';
 import { FooterMe } from './ui.Footer.Me';
 
@@ -16,7 +16,12 @@ export type ConnectInputProps__ = {
 };
 
 export const Footer: React.FC<t.ConnectInputProps> = (props) => {
-  const { self, showPeer = true, showConnect = true, isSpinning = false } = props;
+  const {
+    self,
+    showPeer = DEFAULTS.showPeer,
+    showConnect = DEFAULTS.showConnect,
+    spinning: isSpinning = DEFAULTS.spinning,
+  } = props;
 
   const canConnect = Wrangle.canConnect(props);
   const isConnected = Wrangle.isConnected(props);
@@ -80,7 +85,7 @@ export const Wrangle = {
 
   isConnected(props: t.ConnectInputProps) {
     const { remote } = Wrangle.ids(props);
-    if (props.isSpinning) return false;
+    if (props.spinning) return false;
     return props.self?.connections.all.some((conn) => conn.peer.remote === remote) ?? false;
   },
 };

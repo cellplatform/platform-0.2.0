@@ -5,7 +5,7 @@ export type ConnectInputProps = {
   remotePeer?: t.PeerId;
   showPeer?: boolean;
   showConnect?: boolean;
-  isSpinning?: boolean;
+  spinning?: boolean;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;

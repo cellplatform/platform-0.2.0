@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { FC, Color, COLORS, css, t, rx, DEFAULTS } from './common';
 import { Footer } from './ui.Footer';
 
-export const ConnectInput: React.FC<t.ConnectInputProps> = (props) => {
+const View: React.FC<t.ConnectInputProps> = (props) => {
   /**
    * [Render]
    */
@@ -28,3 +28,15 @@ export const ConnectInput: React.FC<t.ConnectInputProps> = (props) => {
 
   return <div {...css(styles.base, props.style)}>{elBody}</div>;
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const ConnectInput = FC.decorate<t.ConnectInputProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'ConnectInput' },
+);

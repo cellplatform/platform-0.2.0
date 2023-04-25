@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, t } from './common';
 import { PeerId } from '../ui.PeerId';
 
 export type FooterMeProps = {
