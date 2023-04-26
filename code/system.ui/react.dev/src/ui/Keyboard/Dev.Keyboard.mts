@@ -1,6 +1,16 @@
 import { Keyboard, rx } from '../common';
 
+type Milliseconds = number;
+
+const DEFAULTS = {
+  cancelSave: true,
+  cancelPrint: true,
+  doubleEscapeDelay: 300,
+} as const;
+
 export const DevKeyboard = {
+  DEFAULTS,
+
   /**
    * Common keyboard controller actions for the DEV harness environment.
    */
@@ -8,10 +18,15 @@ export const DevKeyboard = {
     options: {
       cancelSave?: boolean;
       cancelPrint?: boolean;
+      doubleEscapeDelay?: Milliseconds;
       onDoubleEscape?: (e: { delay: number }) => void;
     } = {},
   ) {
-    const { cancelSave = true, cancelPrint = true } = options;
+    const {
+      cancelSave = DEFAULTS.cancelSave,
+      cancelPrint = DEFAULTS.cancelPrint,
+      doubleEscapeDelay = DEFAULTS.doubleEscapeDelay,
+    } = options;
 
     const keyboard = Keyboard.on({
       Escape(e) {
@@ -39,7 +54,7 @@ export const DevKeyboard = {
      * Double-press event monitoring.
      */
     const escape$ = new rx.Subject<void>();
-    const delay = 300;
+    const delay = doubleEscapeDelay;
     const doubleEscape$ = rx.withinTimeThreshold(escape$, delay, { dispose$ });
     doubleEscape$.$.subscribe((e) => options.onDoubleEscape?.({ delay }));
 
@@ -48,4 +63,4 @@ export const DevKeyboard = {
      */
     return keyboard;
   },
-};
+} as const;
