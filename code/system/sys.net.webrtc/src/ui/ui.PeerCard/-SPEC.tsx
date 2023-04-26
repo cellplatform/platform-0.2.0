@@ -16,7 +16,7 @@ export default Dev.describe('PeerCard', async (e) => {
       .size([400, 320])
       .display('grid')
       .render<T>((e) => {
-        return <PeerCard {...e.state.props} />;
+        return <PeerCard {...e.state.props} self={self} />;
       });
   });
 
@@ -26,14 +26,14 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       return (
         <WebRtc.InfoCard
-          fields={['Module', 'Module.Verify', 'Self']}
+          fields={['Module.Verify', 'Module', 'Self']}
           data={{ self: { peer: self } }}
         />
       );
     });
   });
 
-  e.it('ui:footer', async (e) => {
+  e.it('ui:footer', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
