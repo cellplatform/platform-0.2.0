@@ -165,7 +165,7 @@ const View: React.FC<PeerCardProps> = (props) => {
         remotePeer={props.remotePeer}
         showPeer={showPeer}
         showConnect={showConnect}
-        isSpinning={props.spinning}
+        spinning={props.spinning}
         onLocalPeerCopied={handlePeerCopied}
         onRemotePeerChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
