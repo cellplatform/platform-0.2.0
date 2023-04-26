@@ -1,4 +1,4 @@
-import { COLORS, DevWrangle, t, DEFAULTS } from './common';
+import { COLORS, DevWrangle, t } from './common';
 import { Harness } from './ui/Harness';
 import { DevKeyboard } from './ui/Keyboard';
 import { SpecList } from './ui/SpecList';
