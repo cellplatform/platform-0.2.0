@@ -20,6 +20,8 @@ export function textbox<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
+  const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
+  const enterHandlers = new Set<t.DevTextboxEnterHandler<S>>();
   const values = {
     enabled: ValueHandler<BoolOrNil, S>(events),
     label: ValueHandler<ContentInput, S>(events),
@@ -32,9 +34,6 @@ export function textbox<S extends O = O>(
     focus: ValueHandler<FocusOrNil, S>(events),
     error: ValueHandler<ErrorInput, S>(events),
   };
-
-  const changeHandlers = new Set<t.DevTextboxChangeHandler<S>>();
-  const enterHandlers = new Set<t.DevTextboxEnterHandler<S>>();
 
   const args: t.DevTextboxHandlerArgs<S> = {
     ctx,
