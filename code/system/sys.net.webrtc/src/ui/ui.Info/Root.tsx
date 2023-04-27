@@ -6,6 +6,7 @@ export type WebRtcInfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.WebRtcInfoFields[];
+  flipped?: boolean;
   data?: t.WebRtcInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
@@ -32,6 +33,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
       card={props.card}
+      flipped={props.flipped}
       padding={props.card ? [20, 25] : undefined}
       margin={props.margin}
     />

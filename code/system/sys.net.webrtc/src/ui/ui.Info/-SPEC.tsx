@@ -1,4 +1,4 @@
-import { Dev, css, PropList, t } from '../../test.ui';
+import { Dev, css, PropList, t, TestNetwork, Keyboard } from '../../test.ui';
 import { WebRtcInfo, WebRtcInfoProps } from '.';
 
 type T = {
@@ -10,27 +10,34 @@ const initial: T = {
   debug: { bg: true, title: false },
 };
 
-export default Dev.describe('WebRtcInfo', (e) => {
-  type LocalStore = T['debug'] & { fields?: t.WebRtcInfoFields[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
-  const local = localstore.object({
-    bg: initial.debug.bg,
-    title: initial.debug.title,
-    fields: initial.props.fields,
-  });
+type LocalStore = T['debug'] & { fields?: t.WebRtcInfoFields[] };
+const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
+const local = localstore.object({
+  bg: initial.debug.bg,
+  title: initial.debug.title,
+  fields: initial.props.fields,
+});
+
+export default Dev.describe('WebRtcInfo', async (e) => {
+  const self = await TestNetwork.peer();
 
   const Util = {
     props(state: T): WebRtcInfoProps {
       const { debug, props } = state;
       return {
         ...props,
-        title: debug.title ? ['Network', 'WebRTC'] : undefined,
+        title: debug.title ? 'Network' : undefined,
+        data: {
+          self: { peer: self },
+        },
       };
     },
   };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    self.connections$.subscribe((e) => ctx.redraw());
+
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -50,6 +57,20 @@ export default Dev.describe('WebRtcInfo', (e) => {
           <WebRtcInfo {...props} card={false} />
         </div>
       );
+    });
+  });
+
+  e.it('keyboard:init', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    Keyboard.on({
+      Enter(e) {
+        e.handled();
+        state.change((d) => {
+          Dev.toggle(d.props, 'flipped');
+        });
+      },
     });
   });
 
@@ -95,14 +116,27 @@ export default Dev.describe('WebRtcInfo', (e) => {
           .value((e) => e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flipped (← Enter)`)
+          .value((e) => Boolean(e.state.props.flipped))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
+      );
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
-      return <Dev.Object name={'WebRtcInfo'} data={data} expand={1} />;
+      const total = self?.connections.length ?? 0;
+      const data = {
+        [`Network.Peer(${total})`]: self,
+        props: e.state.props,
+      };
+      return <Dev.Object name={'WebRtc.InfoCard'} data={data} expand={1} />;
     });
   });
 });
