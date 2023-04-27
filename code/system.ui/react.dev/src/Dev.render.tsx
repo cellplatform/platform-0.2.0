@@ -28,11 +28,7 @@ export async function render(
   const spec = await DevWrangle.Url.module(url, specs);
   const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
-  if (keyboard)
-    DevKeyboard.listen({
-      cancelPrint: true,
-      cancelSave: true,
-    });
+  if (keyboard) DevKeyboard.listen({});
 
   if (spec) {
     return <Harness spec={spec} style={style} />;

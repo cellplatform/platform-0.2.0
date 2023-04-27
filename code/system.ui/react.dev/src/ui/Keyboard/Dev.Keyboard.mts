@@ -1,15 +1,14 @@
-import { Keyboard, rx } from '../common';
+import { Keyboard, rx, DEFAULTS } from '../common';
 
 type Milliseconds = number;
 
-const DEFAULTS = {
-  cancelSave: true,
-  cancelPrint: true,
-  doubleEscapeDelay: 300,
-} as const;
-
 export const DevKeyboard = {
-  DEFAULTS,
+  DEFAULTS: {
+    cancelSave: true,
+    cancelPrint: true,
+    newTab: true,
+    doubleEscapeDelay: 300,
+  },
 
   /**
    * Common keyboard controller actions for the DEV harness environment.
@@ -18,15 +17,21 @@ export const DevKeyboard = {
     options: {
       cancelSave?: boolean;
       cancelPrint?: boolean;
+      newTab?: boolean;
       doubleEscapeDelay?: Milliseconds;
       onDoubleEscape?: (e: { delay: number }) => void;
     } = {},
   ) {
+    const DEFAULT = DevKeyboard.DEFAULTS;
+    const qs = DEFAULTS.qs;
     const {
-      cancelSave = DEFAULTS.cancelSave,
-      cancelPrint = DEFAULTS.cancelPrint,
-      doubleEscapeDelay = DEFAULTS.doubleEscapeDelay,
+      cancelSave = DEFAULT.cancelSave,
+      cancelPrint = DEFAULT.cancelPrint,
+      newTab = DEFAULT.newTab,
+      doubleEscapeDelay = DEFAULT.doubleEscapeDelay,
     } = options;
+
+    const openUrlTab = (href: string) => window.open(href, '_blank', 'noopener,noreferrer');
 
     const keyboard = Keyboard.on({
       Escape(e) {
@@ -46,6 +51,26 @@ export const DevKeyboard = {
       'CMD + KeyP'(e) {
         if (cancelPrint) e.handled();
       },
+
+      /**
+       * ACTION: new tab.
+       */
+      'CTRL + ALT + KeyT'(e) {
+        if (!newTab) return;
+        e.handled();
+        openUrlTab(location.href);
+      },
+
+      'ALT + KeyT'(e) {
+        if (!newTab) return;
+        e.handled();
+        const url = new URL(location.href);
+        const params = url.searchParams;
+        const namespace = params.get(qs.dev) ?? '';
+        params.set(qs.dev, 'true');
+        params.set(qs.selected, namespace);
+        openUrlTab(url.href);
+      },
     });
 
     const { dispose$ } = keyboard;
@@ -64,3 +89,7 @@ export const DevKeyboard = {
     return keyboard;
   },
 } as const;
+
+/**
+ * [Helpers]
+ */

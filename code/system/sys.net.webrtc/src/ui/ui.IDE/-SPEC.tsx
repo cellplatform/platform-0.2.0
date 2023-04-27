@@ -94,17 +94,6 @@ export default Dev.describe('PeerCard', async (e) => {
         Shared.change((d) => (d.devShowFooter = next));
         dev.redraw();
       },
-
-      'ALT + CTRL + KeyN'(e) {
-        e.handled();
-        const qs = Dev.Url.qs;
-        const url = new URL(location.href);
-        const params = url.searchParams;
-        const namespace = params.get(qs.dev) ?? '';
-        params.set(qs.dev, 'true');
-        params.set(qs.selected, namespace);
-        window.open(url.href, '_blank', 'noopener,noreferrer');
-      },
     });
   });
 
