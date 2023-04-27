@@ -1,6 +1,6 @@
-import { t, TestRunner, DEFAULTS, Value } from './common';
+import { PropList, t, TestRunner, DEFAULTS, Value } from './common';
 
-export function FieldSelf(data: t.WebRtcInfoData): t.PropListItem {
+export function FieldSelf(fields: t.WebRtcInfoFields[], data: t.WebRtcInfoData): t.PropListItem {
   const self = data.self;
   const label = self?.title ?? 'Self';
   const peer = self?.peer;
@@ -12,11 +12,11 @@ export function FieldSelf(data: t.WebRtcInfoData): t.PropListItem {
     };
   }
 
-
   const item: t.PropListItem = {
     label,
     value: {
-      data: `me:${Value.shortenHash(peer.id, [5, 5])}`,
+      data: `peer:${Value.shortenHash(peer.id, [5, 5])}`,
+      clipboard: peer.id,
     },
   };
 

@@ -1,6 +1,7 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
 import { FieldModuleVerify } from './field.Module.Verify';
 import { FieldSelf } from './field.Self';
+import { FieldConnections } from './field.Connections';
 
 export type WebRtcInfoProps = {
   title?: t.PropListProps['title'];
@@ -21,8 +22,9 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
 
   const items = PropList.builder<t.WebRtcInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
-    .field('Self', () => FieldSelf(data))
+    .field('Module.Verify', () => FieldModuleVerify(fields, data))
+    .field('Self', () => FieldSelf(fields, data))
+    .field('Connections', () => FieldConnections(fields, data))
     .items(fields);
 
   return (

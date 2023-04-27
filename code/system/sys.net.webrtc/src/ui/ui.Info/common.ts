@@ -4,11 +4,16 @@ import { t } from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.WebRtcInfoFields[] = ['Module', 'Module.Verify', 'Self'];
+export const FIELDS: t.WebRtcInfoFields[] = [
+  'Module',
+  'Module.Verify',
+  'Self',
+  'Connections',
+  'Connetions.List',
+];
 
-const defaultFields = ['Module.Verify', 'Module'] as t.WebRtcInfoFields[];
 export const DEFAULTS = {
-  fields: defaultFields,
+  fields: ['Module.Verify', 'Module'] as t.WebRtcInfoFields[],
   indent: 15,
   query: { dev: 'dev', selected: 'selected' },
 } as const;

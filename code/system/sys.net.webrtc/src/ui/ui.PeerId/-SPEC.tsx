@@ -55,7 +55,7 @@ export default Dev.describe('PeerId', (e) => {
     dev.hr(-1, 5);
 
     dev.button('prefix: "me"', (e) => e.change((d) => (d.props.prefix = '  me:  ')));
-    dev.button('prefix: none', (e) => e.change((d) => (d.props.prefix = undefined)));
+    dev.button('prefix: (undefined)', (e) => e.change((d) => (d.props.prefix = undefined)));
 
     dev.hr();
 
