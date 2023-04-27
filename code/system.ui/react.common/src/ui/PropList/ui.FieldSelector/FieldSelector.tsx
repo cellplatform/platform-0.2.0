@@ -1,6 +1,6 @@
 import { css, FC, t, Button, DEFAULTS } from './common';
 import { FieldBuilder } from '../FieldBuilder.mjs';
-import { PropList } from '../ui.PropList';
+import { PropList } from '../ui/PropList';
 
 import { FieldSelectorLabel } from './FieldSelector.Label';
 

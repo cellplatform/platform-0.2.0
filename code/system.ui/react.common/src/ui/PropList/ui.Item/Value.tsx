@@ -19,11 +19,10 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
   const item = format(props.item);
   const value = item.value;
   const isCopyable = item.isCopyable(props.defaults);
+  const cursor = item.value.onClick ? 'pointer' : undefined;
 
   const mouse = useMouseState();
   const [message, setMessage] = useState<JSX.Element | string>();
-
-  const cursor = item.value.onClick ? 'pointer' : undefined;
 
   const showMessage = (message: JSX.Element | string, delay?: number) => {
     setMessage(message);
@@ -68,17 +67,16 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
       userSelect: 'none',
       fontWeight: item.value.bold ? 'bold' : undefined,
     }),
-    component: css({ flex: 1, Flex: 'center-end' }),
   };
 
-  const renderValue = () => {
+  const renderKind = () => {
     const kind = (value as t.PropListValueKinds).kind;
 
     if (kind === 'Switch') {
       return <SwitchValue value={value} onClick={handleClick} />;
     }
 
-    if (item.isSimple || message) {
+    if (message || item.isSimple || item.isComponent) {
       return (
         <SimpleValue
           value={value}
@@ -93,20 +91,12 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
       );
     }
 
-    if (item.isComponent) {
-      return (
-        <div {...styles.component} onClick={handleClick}>
-          {item.value.data}
-        </div>
-      );
-    }
-
     return null;
   };
 
   return (
     <div {...styles.base} title={item.tooltip} {...mouse.handlers}>
-      {renderValue()}
+      {renderKind()}
     </div>
   );
 };

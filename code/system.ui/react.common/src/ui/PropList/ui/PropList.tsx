@@ -1,10 +1,10 @@
-import { COLORS, css, DEFAULTS, Style, t } from './common';
+import { COLORS, css, DEFAULTS, Style, t } from '../common';
 
-import { PropListItem } from './ui.Item/Item';
-import { PropListTitle } from './ui.Item/Title';
-import { Wrangle } from './Util.mjs';
-import { Card } from '../Card';
-import { EmptyBackside } from './ui.EmptyBackside';
+import { PropListItem } from '../ui.Item/Item';
+import { PropListTitle } from '../ui.Item/Title';
+import { Wrangle } from '../Util.mjs';
+import { Card } from '../../Card';
+import { EmptyBackside } from './EmptyBackside';
 
 /**
  * Component
