@@ -4,11 +4,15 @@ import { Button } from './ui.Button';
 
 import type { ButtonProps } from './ui.Button';
 
-type T = { count: number; props: ButtonProps; debug: { enabled: boolean } };
+type T = {
+  count: number;
+  props: ButtonProps;
+  debug: { enabled: boolean; spinning: boolean };
+};
 const initial: T = {
   count: 0,
   props: { rightElement: <div>123</div>, onClick: (e) => console.info(`⚡️ onClick`) },
-  debug: { enabled: true },
+  debug: { enabled: true, spinning: false },
 };
 
 export default Dev.describe('Button', (e) => {
@@ -56,7 +60,7 @@ export default Dev.describe('Button', (e) => {
         .button('no `onClick`');
     });
 
-    dev.hr();
+    dev.hr(5, 15);
 
     dev.section((dev) => {
       dev
@@ -69,7 +73,7 @@ export default Dev.describe('Button', (e) => {
         );
     });
 
-    dev.hr();
+    dev.hr(5, 15);
 
     dev.section((dev) => {
       dev.button((btn) =>
@@ -91,7 +95,8 @@ export default Dev.describe('Button', (e) => {
 
       dev.button((btn) => btn.label('sample left').right('"right string"'));
     });
-    dev.hr();
+
+    dev.hr(5, 15);
 
     dev.section((dev) => {
       dev.boolean((btn) =>
@@ -109,6 +114,23 @@ export default Dev.describe('Button', (e) => {
       );
     });
 
-    dev.hr();
+    dev.hr(5, 15);
+
+    dev.section((dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label('debug.spinning')
+          .value((e) => e.state.debug.spinning)
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'spinning'))),
+      );
+
+      dev.button((btn) =>
+        btn
+          .label((e) => `my button ${e.state.debug.spinning ? '(stop)' : ' (start)'}`)
+          .spinner((e) => e.state.debug.spinning)
+          .right('right value')
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'spinning'))),
+      );
+    });
   });
 });

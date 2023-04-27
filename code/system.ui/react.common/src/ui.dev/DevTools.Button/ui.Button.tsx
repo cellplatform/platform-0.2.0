@@ -61,7 +61,7 @@ const View: React.FC<ButtonProps> = (props) => {
       gridTemplateColumns: '1fr auto',
     }),
     left: css({ transform: pressedTransform }),
-    right: css({}),
+    right: css({ display: 'grid', placeItems: 'center' }),
     label: css({ opacity: Wrangle.labelOpacity(props) }),
   };
 

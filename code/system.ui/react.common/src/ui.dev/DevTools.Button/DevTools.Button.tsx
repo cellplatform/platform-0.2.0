@@ -1,9 +1,9 @@
-import { t, ValueHandler } from '../common';
-
+import { COLORS, Spinner, t, ValueHandler } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
 type RightInput = string | JSX.Element;
+type SpinnerInput = boolean;
 
 /**
  * A simple clickable text button implementation.
@@ -16,15 +16,28 @@ export function button<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
+  const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
   const values = {
+    enabled: ValueHandler<boolean, S>(events),
     label: ValueHandler<string, S>(events),
     right: ValueHandler<RightInput, S>(events),
-    enabled: ValueHandler<boolean, S>(events),
+    spinner: ValueHandler<SpinnerInput, S>(events),
   };
-  const clickHandlers = new Set<t.DevButtonClickHandler<S>>();
+
+  const wrangle = {
+    rightElement() {
+      if (values.spinner.current) return <Spinner.Bar color={COLORS.GREEN} width={35} />;
+      const right = values.right.current;
+      return typeof right === 'string' ? <div>{right}</div> : right;
+    },
+  };
 
   const args: t.DevButtonHandlerArgs<S> = {
     ctx,
+    enabled(value) {
+      values.enabled.handler(value);
+      return args;
+    },
     label(value) {
       values.label.handler(value);
       return args;
@@ -33,8 +46,8 @@ export function button<S extends O = O>(
       values.right.handler(value);
       return args;
     },
-    enabled(value) {
-      values.enabled.handler(value);
+    spinner(value) {
+      values.spinner.handler(value);
       return args;
     },
     onClick(handler) {
@@ -51,17 +64,14 @@ export function button<S extends O = O>(
     const state = await ctx.state<S>(initial);
     const change = state.change;
     const dev = ctx.toObject().props;
-    const right = values.right.current;
-    const elRight = typeof right === 'string' ? <div>{right}</div> : right;
-    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
-
     const hasHandlers = clickHandlers.size > 0;
     const isEnabled = hasHandlers && values.enabled.current !== false;
+    const onClick = () => clickHandlers.forEach((fn) => fn({ ...args, dev, state, change }));
 
     return (
       <Button
         label={values.label.current}
-        rightElement={elRight}
+        rightElement={wrangle.rightElement()}
         enabled={isEnabled}
         onClick={hasHandlers ? onClick : undefined}
       />
