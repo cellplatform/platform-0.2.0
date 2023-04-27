@@ -6,13 +6,14 @@ const DEFAULT = {
 
 export type HashValueProps = {
   text: string;
+  prefix?: string;
   length?: number | [number, number];
   style?: t.CssValue;
 };
 
 export const HashValue: React.FC<HashValueProps> = (props) => {
   const text = props.text ?? '';
-  const prefix = Local.prefix(text);
+  const prefix = props.prefix ?? Wrangle.prefix(text);
   const shortened = Value.shortenHash(text, props.length ?? DEFAULT.length, { trimPrefix: true });
   const mouse = useMouseState();
 
@@ -47,7 +48,7 @@ export const HashValue: React.FC<HashValueProps> = (props) => {
 /**
  * [Helpers]
  */
-const Local = {
+const Wrangle = {
   prefix(input: string) {
     const index = input.indexOf('-');
     return index === -1 ? '' : input.substring(0, index);

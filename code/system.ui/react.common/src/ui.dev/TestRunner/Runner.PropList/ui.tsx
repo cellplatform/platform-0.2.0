@@ -70,6 +70,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const styles = {
     base: css({
       flex: 1,
+      minHeight: 16,
       display: 'grid',
       alignContent: 'center',
       gridTemplateColumns: '1fr auto',
