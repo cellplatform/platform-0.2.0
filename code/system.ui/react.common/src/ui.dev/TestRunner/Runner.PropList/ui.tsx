@@ -78,7 +78,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     spinner: css({ minWidth: 110 }),
   };
 
-  const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={40} />;
+  const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
       <ButtonText results={results} isColored={isColoredText} isOver={isOver} />
