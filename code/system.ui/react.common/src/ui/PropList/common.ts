@@ -14,4 +14,4 @@ export const DEFAULTS = {
   get card() {
     return { flipSpeed: 300, shadow: true };
   },
-};
+} as const;

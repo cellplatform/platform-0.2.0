@@ -1,4 +1,4 @@
-import { css, FC, t, Button, DEFAULT } from './common';
+import { css, FC, t, Button, DEFAULTS } from './common';
 import { FieldBuilder } from '../FieldBuilder.mjs';
 import { PropList } from '../ui.PropList';
 
@@ -7,8 +7,8 @@ import { FieldSelectorLabel } from './FieldSelector.Label';
 const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
     selected = [],
-    resettable = DEFAULT.resettable,
-    showIndexes = DEFAULT.showIndexes,
+    resettable = DEFAULTS.resettable,
+    showIndexes = DEFAULTS.showIndexes,
   } = props;
   const all = [...(props.all ?? [])];
   const isSelected = (field: string) => selected.includes(field);
@@ -76,11 +76,11 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
  * Export
  */
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULTS: typeof DEFAULTS;
   FieldBuilder: typeof FieldBuilder;
 };
 export const FieldSelector = FC.decorate<t.PropListFieldSelectorProps, Fields>(
   View,
-  { DEFAULT, FieldBuilder },
+  { DEFAULTS, FieldBuilder },
   { displayName: 'PropList.FieldSelector' },
 );

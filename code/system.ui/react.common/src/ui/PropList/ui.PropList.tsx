@@ -17,7 +17,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
   const card = Wrangle.cardProps(props);
 
   const defaults: t.PropListDefaults = {
-    clipboard: true,
+    clipboard: false,
     ...props.defaults,
   };
 

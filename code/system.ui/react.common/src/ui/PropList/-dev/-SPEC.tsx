@@ -31,8 +31,8 @@ const initial: T = {
     source: 'Samples',
     fieldSelector: {
       title: true,
-      resettable: PropList.FieldSelector.DEFAULT.resettable,
-      showIndexes: PropList.FieldSelector.DEFAULT.showIndexes,
+      resettable: PropList.FieldSelector.DEFAULTS.resettable,
+      showIndexes: PropList.FieldSelector.DEFAULTS.showIndexes,
     },
   },
 };
