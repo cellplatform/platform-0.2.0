@@ -24,7 +24,7 @@ export const WebRtcController = {
       onConnectComplete?: (e: t.WebRtcConnectComplete) => void;
     } = {},
   ) {
-    const { filedir } = options;
+    const { filedir, onConnectStart, onConnectComplete } = options;
     const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
     const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
     const instance = events.instance.id;
@@ -137,13 +137,14 @@ export const WebRtcController = {
         .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
         .filter((remote) => !remote.error)
         .forEach((remote) => {
-          const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
-          if (!exists) connectTo(remote.id);
+          const { id, tx } = remote;
+          const exists = self.connections.all.some((conn) => conn.peer.remote === id);
+          if (!exists) connectTo(remote.id, { tx });
         });
     });
 
-    const connectTo = async (remote: t.PeerId) => {
-      const tx = slug();
+    const connectTo = async (remote: t.PeerId, options: { tx?: string } = {}) => {
+      const tx = options.tx ?? slug();
       const peer = { local: self.id, remote };
       const before: t.WebRtcConnectStart = {
         tx,
@@ -151,11 +152,8 @@ export const WebRtcController = {
         peer,
         state: R.clone(state.current.network),
       };
-      options.onConnectStart?.(before);
-      bus.fire({
-        type: 'sys.net.webrtc/connect:start',
-        payload: before,
-      });
+      onConnectStart?.(before);
+      bus.fire({ type: 'sys.net.webrtc/connect:start', payload: before });
 
       /**
        * TODO 🐷
@@ -181,12 +179,21 @@ export const WebRtcController = {
         peer,
         state: R.clone(state.current.network),
       };
-      options.onConnectComplete?.(after);
-      bus.fire({
-        type: 'sys.net.webrtc/connect:complete',
-        payload: after,
-      });
+      onConnectComplete?.(after);
+      bus.fire({ type: 'sys.net.webrtc/connect:complete', payload: after });
     };
+
+    /**
+     * Initiate a connection via the shared StateDocument.
+     */
+    events.connect.req$.subscribe((e) => {
+      const { tx } = e;
+      state.change((d) => {
+        const local = self.id;
+        const initiatedBy = local;
+        Mutate.addPeer(d.network, local, e.remote, { initiatedBy, tx });
+      });
+    });
 
     /**
      * Prune dead peers.

@@ -15,9 +15,8 @@ export const Mutate = {
     data: t.NetworkState,
     self: t.PeerId,
     subject: t.PeerId,
-    options: { initiatedBy?: t.PeerId } = {},
+    options: { initiatedBy?: t.PeerId; tx?: string } = {},
   ) {
-    const { initiatedBy } = options;
     const peers = Wrangle.peers(data);
     const exists = Boolean(peers[subject]);
     const isSelf = self === subject;
@@ -29,7 +28,9 @@ export const Mutate = {
     };
 
     const setContext = (peer: t.NetworkStatePeer) => {
+      const { initiatedBy, tx } = options;
       if (initiatedBy) peer.initiatedBy = initiatedBy;
+      if (tx) peer.tx = tx;
     };
 
     if (exists) {

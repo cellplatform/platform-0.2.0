@@ -30,6 +30,7 @@ export function WebRtcEvents(args: {
 
   const bus = rx.busAsType<t.WebRtcEvent>(args.instance.bus);
   const instance = args.instance.id;
+  const local = instance;
   const is = WebRtcEvents.is;
 
   const $ = bus.$.pipe(
@@ -85,8 +86,29 @@ export function WebRtcEvents(args: {
    * Connect (Action).
    */
   const connect: t.WebRtcEvents['connect'] = {
+    req$: rx.payload<t.WebRtcConnectReqEvent>($, 'sys.net.webrtc/connect:req'),
     start$: rx.payload<t.WebRtcConnectStartEvent>($, 'sys.net.webrtc/connect:start'),
     complete$: rx.payload<t.WebRtcConnectCompleteEvent>($, 'sys.net.webrtc/connect:complete'),
+    async fire(remote, options = {}) {
+      const { timeout = 10000 } = options;
+      const tx = slug();
+      const op = 'connect';
+      const res$ = connect.complete$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.WebRtcConnectCompleteEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.net.webrtc/connect:req',
+        payload: { tx, instance, remote },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      const state = (await info.get())?.state.current.network!;
+      const peer = { local, remote };
+      return { tx, instance, peer, state, error };
+    },
   };
 
   /**

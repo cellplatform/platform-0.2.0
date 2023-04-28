@@ -7,6 +7,7 @@ export type NetworkState = { peers: NetworkStatePeers };
 export type NetworkStatePeers = { [key: string]: NetworkStatePeer };
 export type NetworkStatePeer = {
   id: t.PeerId;
+  tx?: string;
   initiatedBy?: t.PeerId;
   device: NetworkStateDevice;
   error?: string;

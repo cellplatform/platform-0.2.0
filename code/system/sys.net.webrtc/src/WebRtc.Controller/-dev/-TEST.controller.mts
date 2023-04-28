@@ -102,7 +102,6 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
     e.it('init: start listening to a network - ["local:peer" + crdt.doc<shared>]', async (e) => {
       const self = peerA;
-
       controller = WebRtcController.listen(self, {
         state,
         filedir,
@@ -116,8 +115,6 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
           // console.log('onConnectComplete', e);
         },
       });
-
-      // await rx.firstValueFrom(waiter.dispose$);
     });
 
     e.it('[success] connect peer: A → B (initiated by A)', async (e) => {
@@ -234,6 +231,33 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       const res = await pruneDeadPeers(peerA, state);
       expect(res.removed).to.eql(['B']);
       expect(state.current.network.peers['B']).to.not.exist;
+
+      // expect(state.current.network.peers['FOO-404']).to.not.exist;
+    });
+
+    e.it('connect peer via events', async (e) => {
+      const info1 = await controller.info.get();
+
+      expect(info1?.syncers).to.eql([]);
+      expect(peerA.connections.length).to.eql(0);
+
+      /**
+       * NOTE:
+       *   This updated the shared-state {network.peers} via the controller.
+       */
+      const res = await controller.connect.fire(peerB.id);
+      expect(res.peer.local).to.eql(peerA.id);
+      expect(res.peer.remote).to.eql(peerB.id);
+
+      const info2 = (await controller.info.get())!;
+      const network = info2?.state.current.network!;
+
+      await Time.wait(1500);
+
+      expect(network.peers[peerA.id]).to.exist;
+      expect(network.peers[peerB.id]).to.exist;
+
+      console.log('info2.syncers', info2.syncers);
     });
 
     e.it('dispose', async (e) => {

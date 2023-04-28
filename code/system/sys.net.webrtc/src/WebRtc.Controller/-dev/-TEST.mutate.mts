@@ -1,4 +1,4 @@
-import { UserAgent, t, Dev, expect, TestNetwork } from '../../test.ui';
+import { UserAgent, t, Dev, expect, slug } from '../../test.ui';
 import { WebRtcController } from '..';
 
 export default Dev.describe('Network Controller.Mutate', (e) => {
@@ -22,6 +22,7 @@ export default Dev.describe('Network Controller.Mutate', (e) => {
         expect(res.existing).to.eql(false);
         expect(res.isSelf).to.eql(false);
         expect(res.peer.initiatedBy).to.eql(undefined);
+        expect(res.peer.tx).to.eql(undefined);
         expect(res.peer).to.eql(data.peers.b);
       });
 
@@ -44,10 +45,17 @@ export default Dev.describe('Network Controller.Mutate', (e) => {
         expect(res.peer).to.eql(data.peers.a);
       });
 
-      e.it('initiatedBy', (e) => {
+      e.it('context: initiatedBy', (e) => {
         const { data } = sampleState();
         const res = Mutate.addPeer(data, 'a', 'b', { initiatedBy: 'a' });
         expect(res.peer.initiatedBy).to.eql('a');
+      });
+
+      e.it('context: tx', (e) => {
+        const { data } = sampleState();
+        const tx = slug();
+        const res = Mutate.addPeer(data, 'a', 'b', { tx });
+        expect(res.peer.tx).to.eql(tx);
       });
 
       e.it('existing peer', (e) => {

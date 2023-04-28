@@ -33,8 +33,10 @@ export type WebRtcEvents = t.Disposable & {
   };
 
   connect: {
+    req$: t.Observable<t.WebRtcConnectReq>;
     start$: t.Observable<t.WebRtcConnectStart>;
     complete$: t.Observable<t.WebRtcConnectComplete>;
+    fire(remote: t.PeerId, options?: { timeout?: Milliseconds }): Promise<WebRtcConnectComplete>;
   };
 
   connections: {
@@ -74,6 +76,7 @@ export type WebRtcEvent =
   | WebRtcInfoReqEvent
   | WebRtcInfoResEvent
   | WebRtcErrorEvent
+  | WebRtcConnectReqEvent
   | WebRtcConnectStartEvent
   | WebRtcConnectCompleteEvent
   | WebRtcConnectionsChangedEvent
@@ -113,6 +116,19 @@ export type WebRtcErrorPeer = {
   instance: t.PeerId;
   kind: 'Peer';
   error: t.PeerError;
+};
+
+/**
+ * Fires when a network connection initiates.
+ */
+export type WebRtcConnectReqEvent = {
+  type: 'sys.net.webrtc/connect:req'; // NB: [WebRtcConnectCompleteEvent] fires as response.
+  payload: WebRtcConnectReq;
+};
+export type WebRtcConnectReq = {
+  tx: string;
+  instance: t.PeerId;
+  remote: t.PeerId;
 };
 
 /**
