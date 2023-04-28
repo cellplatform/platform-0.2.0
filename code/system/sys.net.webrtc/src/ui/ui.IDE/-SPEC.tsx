@@ -23,8 +23,6 @@ export default Dev.describe('PeerCard', async (e) => {
     muted: boolean;
     showBg: boolean;
     showFooter: boolean;
-    showPeer?: boolean;
-    showConnect?: boolean;
     sidepanelWidth?: number;
     backgroundUrl?: string;
     persistSharedDoc?: boolean;
@@ -32,11 +30,10 @@ export default Dev.describe('PeerCard', async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
     muted: PeerCard.DEFAULTS.muted,
+
     showBg: initial.debug.showBg,
     persistSharedDoc: initial.debug.persistSharedDoc,
     showFooter: true,
-    showPeer: PeerCard.DEFAULTS.showPeer,
-    showConnect: PeerCard.DEFAULTS.showConnect,
     sidepanelWidth: 400,
     backgroundUrl: '',
   });
@@ -117,9 +114,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     Shared.change((d) => {
       d.muted = local.muted;
-      d.showPeer = local.showPeer;
       d.devShowFooter = local.showFooter;
-      d.showConnect = local.showConnect;
       d.devPanelWidth = local.sidepanelWidth;
       d.backgroundUrl = local.backgroundUrl;
       d.fill = false;
@@ -207,6 +202,7 @@ export default Dev.describe('PeerCard', async (e) => {
             /**
              * TODO 🐷
              * - replicate this in the PeerCard dedicated spec.
+             * - The state doc update should be done within the controller (events.connect.peer)
              */
 
             // NB: Updating the CRDT triggers to listening [Controller].
@@ -249,18 +245,17 @@ export default Dev.describe('PeerCard', async (e) => {
   });
 
   e.it('init:network', async (e) => {
-    async function initNetwork(
-      ctx: t.DevCtx,
-      doc: t.CrdtDocRef<DocShared>,
-      state: t.DevCtxState<T>,
-    ) {
+    async function initNetwork(ctx: t.DevCtx, doc: t.CrdtDocRef<DocShared>) {
       const { dispose$ } = ctx;
+      const state = await ctx.state<T>(initial);
+
       const getStream = WebRtc.Media.singleton().getStream;
       const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
       self.connections$.subscribe(async (e) => ctx.redraw());
 
       const filedir = docs.shared.fs;
-      controller = WebRtc.Controller.listen(self, doc, {
+      controller = WebRtc.Controller.listen(self, {
+        state: doc,
         filedir,
         dispose$,
         onConnectStart(e) {
@@ -284,8 +279,7 @@ export default Dev.describe('PeerCard', async (e) => {
     }
 
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    self = await initNetwork(ctx, docs.shared.doc, state);
+    self = await initNetwork(ctx, docs.shared.doc);
     ctx.redraw();
   });
 
@@ -401,44 +395,9 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      dev.boolean((btn) =>
-        btn
-          .label((e) => {
-            const fill = Shared.current.fill;
-            const suffix = fill ? ' (fill host)' : ' (constrained)';
-            return `subject size ${suffix}`;
-          })
-          .value((e) => Shared.current.fill)
-          .onClick((e) => {
-            Shared.change((d) => Dev.toggle(d, 'fill'));
-          }),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label('showPeer')
-          .value((e) => Shared.current.showPeer)
-          .onClick((e) => {
-            Shared.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
-          }),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label('showConnect')
-          .value((e) => Shared.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
-          .onClick((e) => {
-            Shared.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
-          }),
-      );
-
-      dev.hr(0, 5);
-
       dev.textbox((txt) =>
         txt
-          .label((e) => 'backgroundUrl')
+          .label((e) => 'PeerCard.backgroundUrl')
           .value((e) => local.backgroundUrl ?? '')
           .onChange((e) => {
             local.backgroundUrl = e.to.value ?? '';
@@ -448,6 +407,19 @@ export default Dev.describe('PeerCard', async (e) => {
             Shared.change((d) => (d.backgroundUrl = local.backgroundUrl));
             e.redraw();
           }),
+      );
+
+      dev.hr(0, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => {
+            const fill = Shared.current.fill;
+            const suffix = fill ? ' (fill host)' : ' (constrained)';
+            return `subject size ${suffix}`;
+          })
+          .value((e) => Shared.current.fill)
+          .onClick((e) => Shared.change((d) => Dev.toggle(d, 'fill'))),
       );
     });
 

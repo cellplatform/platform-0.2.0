@@ -1,4 +1,4 @@
-import { Crdt, t, NetworkSchema } from './common';
+import { Crdt, t, WebRtc } from './common';
 
 export type { DocShared } from '../../sys.net.schema';
 export type DocMe = { count: number; text?: string; code?: t.AutomergeText };
@@ -13,7 +13,7 @@ export async function SpecDocs(args: { rootfs: t.Fs; dispose$?: t.Observable<any
   };
 
   const docMe = Crdt.Doc.ref<DocMe>('me-doc', { count: 0 }, { dispose$ });
-  const docShared = NetworkSchema.genesis().doc;
+  const docShared = WebRtc.NetworkSchema.genesis().doc;
 
   return {
     me: {
