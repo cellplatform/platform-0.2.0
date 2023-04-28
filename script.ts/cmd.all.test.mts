@@ -111,9 +111,10 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
           const filename = item.name.substring(base.length + 1);
           assertionResults
             .filter((item) => item.status === 'failed')
-            .filter((item) => Boolean(item.location))
             .forEach((item, i) => {
-              const { line, column } = item.location;
+              const { location } = item;
+              const line = location?.line ?? 'unknown-line';
+              const column = location?.column ?? 'unknown-column';
 
               const testAncestors = `${item.ancestorTitles.filter(Boolean).join(' → ').trim()}`;
               const testTitle = `${testAncestors} → ${pc.red(item.title.trim())}`;
@@ -126,6 +127,7 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
                 const failure = `|→ ${pc.red('message:')}    ${item}`;
                 console.info(pc.yellow(pc.dim(`        ${failure}`)));
               });
+
               console.info(' ');
             });
         });
