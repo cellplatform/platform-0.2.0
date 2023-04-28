@@ -1,8 +1,15 @@
-import { Dev, WebRtc, TestNetwork } from '../../test.ui';
 import { PeerCard, PeerCardProps } from '.';
+import { Dev, PropList, t, TestNetwork, WebRtc } from '../../test.ui';
 
 type T = { props: PeerCardProps };
 const initial: T = { props: {} };
+
+type LocalStore = { backgroundUrl?: string; fields?: t.ConnectInputFields[] };
+const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
+const local = localstore.object({
+  backgroundUrl: initial.props.backgroundUrl,
+  fields: initial.props.fields,
+});
 
 export default Dev.describe('PeerCard', async (e) => {
   const self = await TestNetwork.peer();
@@ -10,6 +17,11 @@ export default Dev.describe('PeerCard', async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    state.change((d) => {
+      d.props.backgroundUrl = local.backgroundUrl;
+      d.props.fields = local.fields;
+    });
 
     ctx.subject
       .backgroundColor(1)
@@ -28,7 +40,42 @@ export default Dev.describe('PeerCard', async (e) => {
         <WebRtc.InfoCard
           fields={['Module.Verify', 'Module', 'Self']}
           data={{ self: { peer: self } }}
+          margin={[0, 20, 0, 20]}
         />
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.row((e) => {
+        return (
+          <PropList.FieldSelector
+            style={{ Margin: [10, 20, 0, 20] }}
+            all={PeerCard.FIELDS}
+            selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
+            onClick={(ev) => {
+              let fields = ev.next as t.ConnectInputFields[];
+              dev.change((d) => (d.props.fields = fields));
+              local.fields = fields?.length === 0 ? undefined : fields;
+            }}
+          />
+        );
+      });
+
+      dev.textbox((txt) =>
+        txt
+          .label((e) => 'backgroundUrl')
+          .value((e) => local.backgroundUrl ?? '')
+          .margin([10, 0, 0, 0])
+          .onChange((e) => {
+            local.backgroundUrl = e.to.value;
+            e.redraw();
+          })
+          .onEnter((e) => {
+            e.change((d) => (d.props.backgroundUrl = local.backgroundUrl));
+            e.redraw();
+          }),
       );
     });
   });

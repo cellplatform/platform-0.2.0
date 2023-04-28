@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import { Color, copyPeer, css, FC, MediaStream, Spinner, t, useMouseState } from '../common';
+import {
+  Color,
+  copyPeer,
+  css,
+  FC,
+  MediaStream,
+  Spinner,
+  t,
+  useMouseState,
+  DEFAULTS,
+  FIELDS,
+} from './common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
 import { ConnectInput } from '../ui.ConnectInput';
-
-const DEFAULTS = {
-  muted: false,
-  showPeer: true,
-  showConnect: true,
-};
 
 const URL = {
   Rowan:
@@ -24,8 +29,6 @@ export type PeerCardProps = {
   remotePeer?: t.PeerId;
   muted?: boolean;
   spinning?: boolean;
-  showPeer?: boolean;
-  showConnect?: boolean;
   backgroundUrl?: string;
 
   devPanelWidth?: number;
@@ -34,6 +37,7 @@ export type PeerCardProps = {
   style?: t.CssValue;
   fill?: boolean;
 
+  fields?: t.ConnectInputFields[];
   onMuteClick?(e: React.MouseEvent): void;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
@@ -43,12 +47,7 @@ export type PeerCardProps = {
  * Component
  */
 const View: React.FC<PeerCardProps> = (props) => {
-  const {
-    self,
-    muted = false,
-    showPeer = DEFAULTS.showPeer,
-    showConnect = DEFAULTS.showConnect,
-  } = props;
+  const { self, muted = DEFAULTS.muted, fields = DEFAULTS.fields } = props;
   const isSpinning = props.spinning ? true : !self;
   const [showCopied, setShowCopied] = useState(false);
   const mouse = useMouseState();
@@ -163,9 +162,8 @@ const View: React.FC<PeerCardProps> = (props) => {
         style={styles.footer}
         self={self}
         remotePeer={props.remotePeer}
-        showPeer={showPeer}
-        showConnect={showConnect}
         spinning={props.spinning}
+        fields={fields}
         onLocalPeerCopied={handlePeerCopied}
         onRemotePeerChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
@@ -177,9 +175,12 @@ const View: React.FC<PeerCardProps> = (props) => {
 /**
  * Export
  */
-type Fields = { DEFAULTS: typeof DEFAULTS };
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  FIELDS: typeof FIELDS;
+};
 export const PeerCard = FC.decorate<PeerCardProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, FIELDS },
   { displayName: 'PeerCard' },
 );
