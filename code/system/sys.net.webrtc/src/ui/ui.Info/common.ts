@@ -7,7 +7,7 @@ import type { t } from '../common';
 export const FIELDS: t.WebRtcInfoFields[] = [
   'Module',
   'Module.Verify',
-  'Self',
+  'Self.Id',
   'State.Shared',
   'Peers',
   'Peers.List',

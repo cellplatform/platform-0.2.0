@@ -27,7 +27,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
   const items = PropList.builder<t.WebRtcInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(fields, data))
-    .field('Self', () => FieldSelf(fields, data, info))
+    .field('Self.Id', () => FieldSelf(fields, data, info))
     .field('Peers', () => FieldPeers(fields, data, info))
     .field('Peers.List', () => FieldPeersList(fields, data, info))
     .field('State.Shared', () => FieldStateShared(fields, data, info))
