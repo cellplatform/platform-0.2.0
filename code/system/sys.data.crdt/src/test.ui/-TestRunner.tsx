@@ -91,6 +91,7 @@ export default Dev.describe('Root', (e) => {
         btn
           .label('run all')
           .right('🌳')
+          .spinner((e) => Boolean(e.state.testrunner.spinning))
           .onClick((e) => invoke(all)),
       );
       dev.hr(-1, 5);
