@@ -126,7 +126,7 @@ export default Dev.describe('Button', (e) => {
 
       dev.button((btn) =>
         btn
-          .label((e) => `my button ${e.state.debug.spinning ? '(stop)' : ' (start)'}`)
+          .label((e) => `button ${e.state.debug.spinning ? '(stop)' : ' (start)'}`)
           .spinner((e) => e.state.debug.spinning)
           .right('right value')
           .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'spinning'))),
