@@ -113,8 +113,8 @@ const runInParallel = async (args: { paths: string[]; batch?: number }) => {
             .filter((item) => item.status === 'failed')
             .forEach((item, i) => {
               const { location } = item;
-              const line = location?.line ?? 'unknown-line';
-              const column = location?.column ?? 'unknown-column';
+              const line = location?.line ?? 'line-<unknown>';
+              const column = location?.column ?? 'column-<unknown>';
 
               const testAncestors = `${item.ancestorTitles.filter(Boolean).join(' → ').trim()}`;
               const testTitle = `${testAncestors} → ${pc.red(item.title.trim())}`;
