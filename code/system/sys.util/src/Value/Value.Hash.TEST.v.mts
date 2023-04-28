@@ -26,7 +26,7 @@ describe('Value.Hash', () => {
       expect(res).to.eql('67890');
     });
 
-    it.only('length: [5, 0]', () => {
+    it('length: [5, 0]', () => {
       const res = Value.shortenHash(hash, [5, 0], { trimPrefix: true });
       expect(res).to.eql('12345');
     });
