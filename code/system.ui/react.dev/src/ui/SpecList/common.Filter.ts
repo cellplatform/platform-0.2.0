@@ -1,13 +1,18 @@
 import { t, Fuzzy } from '../common';
 
 export const Filter = {
-  specs(imports?: t.SpecImports, filter?: string): t.SpecImports {
+  specs(
+    imports?: t.SpecImports,
+    filter?: string,
+    options: { maxErrors?: number } = {},
+  ): t.SpecImports {
     if (!imports) return {};
 
     filter = (filter || '').trim();
-    if (!(filter || '').trim()) return imports;
+    if (!filter) return imports;
 
-    const matcher = Fuzzy.pattern(filter.toLowerCase(), 1);
+    const { maxErrors = 2 } = options;
+    const matcher = Fuzzy.pattern(filter.toLowerCase(), maxErrors);
 
     return Object.keys(imports).reduce((acc, key) => {
       const match = matcher.match(key.toLowerCase());
