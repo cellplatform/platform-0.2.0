@@ -1,6 +1,7 @@
 import { Crdt, Pkg, R, rx, slug, t, WebRtcEvents, WebRtcUtils } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
+import { NetworkSchema } from '../sys.net.schema';
 
 /**
  * Manages keeping a WebRTC network-peer in sync with a
@@ -14,8 +15,8 @@ export const WebRtcController = {
    */
   listen(
     self: t.Peer,
-    state: t.CrdtDocRef<t.NetworkSharedDoc>,
     options: {
+      state?: t.CrdtDocRef<t.NetworkSharedDoc>;
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
       bus?: t.EventBus<any>;
@@ -28,7 +29,8 @@ export const WebRtcController = {
     const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
     const instance = events.instance.id;
     const dispose$ = events.dispose$;
-    const syncers = new Map<string, t.WebRtcInfoSyncer>();
+    const state = options.state ?? NetworkSchema.genesis({ dispose$ }).doc;
+    const syncers = new Map<string, t.WebRtcStateSyncer>();
 
     dispose$.subscribe(() => {
       syncers.clear();
@@ -63,7 +65,7 @@ export const WebRtcController = {
       const info: t.WebRtcInfo = {
         module: { name, version },
         peer: self,
-        state: R.clone(state.current.network),
+        state,
         syncers: Array.from(syncers.entries()).map(([_, syncer]) => syncer),
       };
       bus.fire({
