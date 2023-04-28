@@ -1,14 +1,23 @@
 import { PeerCard, PeerCardProps } from '.';
 import { Dev, PropList, t, TestNetwork, WebRtc } from '../../test.ui';
 
-type T = { props: PeerCardProps };
-const initial: T = { props: {} };
+type T = {
+  props: PeerCardProps;
+};
+const initial: T = {
+  props: {},
+};
 
-type LocalStore = { backgroundUrl?: string; fields?: t.ConnectInputField[] };
+type LocalStore = {
+  backgroundUrl?: string;
+  showBg?: boolean;
+  fields?: t.ConnectInputField[];
+};
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
 const local = localstore.object({
   backgroundUrl: initial.props.backgroundUrl,
   fields: initial.props.fields,
+  showBg: true,
 });
 
 export default Dev.describe('PeerCard', async (e) => {
@@ -24,10 +33,10 @@ export default Dev.describe('PeerCard', async (e) => {
     });
 
     ctx.subject
-      .backgroundColor(1)
       .size([400, 320])
       .display('grid')
       .render<T>((e) => {
+        ctx.subject.backgroundColor(local.showBg ? 1 : 0);
         return <PeerCard {...e.state.props} self={self} />;
       });
   });
@@ -48,21 +57,6 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      dev.row((e) => {
-        return (
-          <PropList.FieldSelector
-            style={{ Margin: [10, 20, 0, 20] }}
-            all={PeerCard.FIELDS}
-            selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
-            onClick={(ev) => {
-              const fields = ev.next as t.ConnectInputField[];
-              dev.change((d) => (d.props.fields = fields));
-              local.fields = fields?.length === 0 ? undefined : fields;
-            }}
-          />
-        );
-      });
-
       dev.textbox((txt) =>
         txt
           .label((e) => 'backgroundUrl')
@@ -75,6 +69,36 @@ export default Dev.describe('PeerCard', async (e) => {
           .onEnter((e) => {
             e.change((d) => (d.props.backgroundUrl = local.backgroundUrl));
             e.redraw();
+          }),
+      );
+
+      dev.row((e) => {
+        return (
+          <PropList.FieldSelector
+            title={'Fields'}
+            style={{ Margin: [30, 20, 0, 20] }}
+            all={PeerCard.FIELDS}
+            selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
+            onClick={(ev) => {
+              const fields = ev.next as t.ConnectInputField[];
+              dev.change((d) => (d.props.fields = fields));
+              local.fields = fields?.length === 0 ? undefined : fields;
+            }}
+          />
+        );
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (local.showBg ? 'background (white)' : 'background'))
+          .value((e) => local.showBg)
+          .onClick((e) => {
+            local.showBg = !local.showBg;
+            dev.redraw();
           }),
       );
     });
