@@ -187,11 +187,16 @@ export default Dev.describe('PeerCard', async (e) => {
         );
       }
 
+      const fields: t.ConnectInputField[] = ['Peer:Remote', 'Peer:Self'];
+      if (camera) fields.push('Video');
+
       return (
         <PeerCard
           {...props}
+          fields={fields}
           self={self}
           remotePeer={e.state.remotePeer}
+          footerVideo={camera?.stream.local}
           spinning={e.state.spinning}
           style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
           onMuteClick={toggleMute}
@@ -287,7 +292,7 @@ export default Dev.describe('PeerCard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtc.InfoCard fields={['Module', 'Module.Verify']} />;
+      return <WebRtc.InfoCard fields={['Module.Verify', 'Module']} />;
     });
 
     dev.hr(5, 20);
