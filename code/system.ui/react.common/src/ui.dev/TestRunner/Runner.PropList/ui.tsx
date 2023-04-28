@@ -60,8 +60,13 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     Test.Tree.Results.walkDown(res, (e) => {
       if (!e.test) return;
       if (e.test?.ok) return;
-      const text = `${e.suite.description} > ${e.test.description}`;
-      console.info('⛔️', text);
+      console.warn(`${e.suite.description} > ${e.test.description}`);
+
+      /**
+       * TODO 🐷
+       * - include [e.parent] property, to allow for walking up the tree.
+       * - toString() => "root > suite > test"
+       */
     });
     console.groupEnd();
 
