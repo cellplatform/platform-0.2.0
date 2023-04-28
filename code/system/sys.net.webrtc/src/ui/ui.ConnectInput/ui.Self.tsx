@@ -1,13 +1,13 @@
 import { css, t } from './common';
 import { PeerId } from '../ui.PeerId';
 
-export type FooterMeProps = {
+export type SelfProps = {
   self?: t.Peer;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
 };
 
-export const FooterMe: React.FC<FooterMeProps> = (props) => {
+export const Self: React.FC<SelfProps> = (props) => {
   const { self } = props;
 
   /**

@@ -22,6 +22,7 @@ import {
   MdSettingsInputAntenna,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
+import { FaNetworkWired } from 'react-icons/fa';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -49,5 +50,8 @@ export const Icons = {
   Connection: { On: icon(MdWifiTethering), Off: icon(MdWifiTetheringOff) },
   Arrow: { Start: icon(MdStart), TwoWay: icon(MdMultipleStop) },
   Error: icon(MdError),
-  Network: { Antenna: icon(MdSettingsInputAntenna) },
+  Network: {
+    Antenna: icon(MdSettingsInputAntenna),
+    Docs: icon(FaNetworkWired),
+  },
 };

@@ -1,7 +1,7 @@
 import { Color, COLORS, css, Icons, t, TextInput } from './common';
 import { ConnectButton } from './ui.ConnectButton';
 
-export type FooterConnectProps = {
+export type RemoteProps = {
   self?: t.Peer;
   ids: { local: t.PeerId; remote: t.PeerId };
   canConnect: boolean;
@@ -12,7 +12,7 @@ export type FooterConnectProps = {
   onConnectRequest?: t.PeerCardConnectRequestHandler;
 };
 
-export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
+export const Remote: React.FC<RemoteProps> = (props) => {
   const { self, ids } = props;
   const error = Wrangle.error(props);
 
@@ -121,7 +121,7 @@ export const FooterConnect: React.FC<FooterConnectProps> = (props) => {
  */
 
 const Wrangle = {
-  error(props: FooterConnectProps) {
+  error(props: RemoteProps) {
     const { self, ids } = props;
 
     if (ids.remote && ids.remote === self?.id) {

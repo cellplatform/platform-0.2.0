@@ -1,32 +1,76 @@
-import { useEffect, useRef, useState } from 'react';
-import { FC, Color, COLORS, css, t, rx, DEFAULTS } from './common';
-import { Footer } from './ui.Footer';
+import { Color, COLORS, css, DEFAULTS, FC, FIELDS, t } from './common';
+import { Remote } from './ui.Remote';
+import { Self } from './ui.Self';
+import { Wrangle } from './Wrangle.mjs';
+import { Video } from './ui.Video';
 
 const View: React.FC<t.ConnectInputProps> = (props) => {
+  const { self, spinning: isSpinning = DEFAULTS.spinning, fields = DEFAULTS.fields } = props;
+
+  if (!self) return null;
+  const canConnect = Wrangle.canConnect(props);
+  const isConnected = Wrangle.isConnected(props);
+  const ids = Wrangle.ids(props);
+  const idFields = Wrangle.idFields(props);
+
   /**
    * [Render]
    */
+  const height = idFields.length * 32;
   const styles = {
     base: css({
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      height,
+      position: 'relative',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
     }),
+    divider: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
+    fields: css({}),
   };
 
-  /**
-   * TODO 🐷
-   */
+  const elFields = idFields.map((field, i) => {
+    const key = `${field}.${i}`;
+    const dividerStyle = i > 0 ? styles.divider : undefined;
 
-  const elBody = props.self && (
-    <Footer
-      {...props}
-      // self={props.self}
-      // showPeer={props.showPeer}
-      // showConnect={props.showConnect}
-      // isSpinning={props.isSpinning}
-    />
+    if (field === 'Peer:Remote') {
+      return (
+        <Remote
+          key={key}
+          self={self}
+          ids={ids}
+          canConnect={canConnect}
+          isConnected={isConnected}
+          isSpinning={isSpinning}
+          onRemotePeerChanged={props.onRemotePeerChanged}
+          onConnectRequest={props.onConnectRequest}
+          style={dividerStyle}
+        />
+      );
+    }
+
+    if (field === 'Peer:Self') {
+      return (
+        <Self
+          key={key}
+          self={self}
+          onLocalPeerCopied={props.onLocalPeerCopied}
+          style={dividerStyle}
+        />
+      );
+    }
+
+    return null;
+  });
+
+  if (elFields.length === 0) return null;
+  const elVideo = fields.includes('Video:Self') && <Video size={height} />;
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.fields}>{elFields}</div>
+      {elVideo}
+    </div>
   );
-
-  return <div {...css(styles.base, props.style)}>{elBody}</div>;
 };
 
 /**
@@ -34,9 +78,10 @@ const View: React.FC<t.ConnectInputProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  FIELDS: typeof FIELDS;
 };
 export const ConnectInput = FC.decorate<t.ConnectInputProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, FIELDS },
   { displayName: 'ConnectInput' },
 );

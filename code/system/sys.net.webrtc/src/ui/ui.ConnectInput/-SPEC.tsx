@@ -1,14 +1,21 @@
-import { WebRtc, Dev, TestNetwork, t } from '../../test.ui';
+import { WebRtc, Dev, TestNetwork, t, PropList } from '../../test.ui';
 import { ConnectInput } from '.';
+
+const { DEFAULTS } = ConnectInput;
 
 type T = { props: t.ConnectInputProps };
 const initial: T = {
   props: {
-    showPeer: ConnectInput.DEFAULTS.showPeer,
-    showConnect: ConnectInput.DEFAULTS.showConnect,
-    spinning: ConnectInput.DEFAULTS.spinning,
+    spinning: DEFAULTS.spinning,
+    fields: DEFAULTS.fields,
   },
 };
+
+type LocalStore = { fields?: t.ConnectInputFields[] };
+const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ConnectInput');
+const local = localstore.object({
+  fields: initial.props.fields,
+});
 
 export default Dev.describe('ConnectInput', async (e) => {
   const self = await TestNetwork.peer();
@@ -22,8 +29,11 @@ export default Dev.describe('ConnectInput', async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-
     self.connections$.subscribe(() => ctx.redraw());
+
+    await state.change((d) => {
+      d.props.fields = local.fields;
+    });
 
     ctx.subject
       .backgroundColor(1)
@@ -31,7 +41,12 @@ export default Dev.describe('ConnectInput', async (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = Util.props(e.state);
-        return <ConnectInput {...props} />;
+        return (
+          <ConnectInput
+            {...props}
+            onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
+          />
+        );
       });
   });
 
@@ -39,35 +54,32 @@ export default Dev.describe('ConnectInput', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return (
-        <WebRtc.InfoCard
-          fields={['Module.Verify', 'Module', 'Self']}
-          data={{ self: { peer: self } }}
-        />
-      );
+      return <WebRtc.InfoCard fields={['Module', 'Self']} data={{ self: { peer: self } }} />;
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Fields', (dev) => {
+      dev.row((e) => {
+        const props = Util.props(e.state);
+        return (
+          <PropList.FieldSelector
+            style={{ Margin: [10, 40, 10, 30] }}
+            all={ConnectInput.FIELDS}
+            selected={props.fields ?? DEFAULTS.fields}
+            onClick={(ev) => {
+              let fields = ev.next as t.ConnectInputProps['fields'];
+              dev.change((d) => (d.props.fields = fields));
+              local.fields = fields?.length === 0 ? undefined : fields;
+            }}
+          />
+        );
+      });
     });
 
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
-      dev.boolean((btn) =>
-        btn
-          .label('showPeer')
-          .value((e) => Boolean(e.state.props.showPeer))
-          .onClick((e) => {
-            e.change((d) => Dev.toggle(d.props, 'showPeer'));
-          }),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label('showConnect')
-          .value((e) => Boolean(e.state.props.showConnect))
-          .onClick((e) => {
-            e.change((d) => Dev.toggle(d.props, 'showConnect'));
-          }),
-      );
-
       dev.boolean((btn) =>
         btn
           .label('spinning')
@@ -77,8 +89,6 @@ export default Dev.describe('ConnectInput', async (e) => {
           }),
       );
     });
-
-    dev.hr(-1, 5);
   });
 
   e.it('ui:footer', async (e) => {
