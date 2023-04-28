@@ -6,9 +6,9 @@ export { WebRtcUtils } from '../../WebRtc.Util';
 /**
  * Constants
  */
-export const FIELDS: t.ConnectInputFields[] = ['Peer:Remote', 'Peer:Self', 'Video:Self'];
+export const FIELDS: t.ConnectInputField[] = ['Peer:Remote', 'Peer:Self', 'Video'];
 
-const fields: t.ConnectInputFields[] = ['Peer:Remote', 'Peer:Self'];
+const fields: t.ConnectInputField[] = ['Peer:Remote', 'Peer:Self'];
 export const DEFAULTS = {
   fields,
   spinning: false,

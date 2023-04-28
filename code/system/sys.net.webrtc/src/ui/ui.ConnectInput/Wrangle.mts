@@ -1,4 +1,4 @@
-import { t, WebRtcUtils, DEFAULTS } from './common';
+import { R, t, WebRtcUtils, DEFAULTS } from './common';
 
 export const Wrangle = {
   ids(props: t.ConnectInputProps) {
@@ -8,7 +8,7 @@ export const Wrangle = {
   },
 
   canConnect(props: t.ConnectInputProps) {
-    const { fields = DEFAULTS.fields } = props;
+    const fields = Wrangle.fields(props);
     if (!props.self || !fields.includes('Peer:Remote')) return false;
 
     const { local, remote } = Wrangle.ids(props);
@@ -25,9 +25,14 @@ export const Wrangle = {
     return props.self?.connections.all.some((conn) => conn.peer.remote === remote) ?? false;
   },
 
-  idFields(props: t.ConnectInputProps) {
+  fields(props: t.ConnectInputProps) {
     const { fields = DEFAULTS.fields } = props;
-    const include: t.ConnectInputFields[] = ['Peer:Self', 'Peer:Remote'];
+    return R.uniq(fields);
+  },
+
+  idFields(props: t.ConnectInputProps) {
+    const fields = Wrangle.fields(props);
+    const include: t.ConnectInputField[] = ['Peer:Self', 'Peer:Remote'];
     return fields.filter((field) => include.includes(field));
   },
 };

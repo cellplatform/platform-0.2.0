@@ -11,7 +11,7 @@ const initial: T = {
   },
 };
 
-type LocalStore = { fields?: t.ConnectInputFields[] };
+type LocalStore = { fields?: t.ConnectInputField[] };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ConnectInput');
 const local = localstore.object({
   fields: initial.props.fields,

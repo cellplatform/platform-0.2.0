@@ -63,7 +63,7 @@ const View: React.FC<t.ConnectInputProps> = (props) => {
   });
 
   if (elFields.length === 0) return null;
-  const elVideo = fields.includes('Video:Self') && <Video size={height} />;
+  const elVideo = fields.includes('Video') && <Video size={height} stream={props.video} />;
 
   return (
     <div {...css(styles.base, props.style)}>
