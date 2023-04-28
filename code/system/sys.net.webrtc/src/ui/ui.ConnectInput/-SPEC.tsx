@@ -11,10 +11,11 @@ const initial: T = {
   },
 };
 
-type LocalStore = { fields?: t.ConnectInputField[] };
+type LocalStore = { fields?: t.ConnectInputField[]; self: boolean };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ConnectInput');
 const local = localstore.object({
   fields: initial.props.fields,
+  self: true,
 });
 
 export default Dev.describe('ConnectInput', async (e) => {
@@ -22,7 +23,10 @@ export default Dev.describe('ConnectInput', async (e) => {
 
   const Util = {
     props: (state: T) => {
-      return { ...state.props, self };
+      return {
+        ...state.props,
+        self: local.self ? self : undefined,
+      };
     },
   };
 
@@ -86,6 +90,20 @@ export default Dev.describe('ConnectInput', async (e) => {
           .value((e) => Boolean(e.state.props.spinning))
           .onClick((e) => {
             e.change((d) => Dev.toggle(d.props, 'spinning'));
+          }),
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (local.self ? 'self (set)' : 'self (not set)'))
+          .value((e) => local.self)
+          .onClick((e) => {
+            local.self = !local.self;
+            dev.redraw();
           }),
       );
     });

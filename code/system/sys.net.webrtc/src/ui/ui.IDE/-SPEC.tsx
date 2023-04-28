@@ -168,7 +168,6 @@ export default Dev.describe('PeerCard', async (e) => {
       const props = Shared.current;
       const fullscreen = props.fill;
       const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
-
       ctx.debug.width(props.devPanelWidth ?? 400);
 
       if (fullscreen && camera) {
@@ -187,14 +186,12 @@ export default Dev.describe('PeerCard', async (e) => {
         );
       }
 
-      const fields: t.ConnectInputField[] = ['Peer:Remote', 'Peer:Self'];
-      if (camera) fields.push('Video');
-
       return (
         <PeerCard
           {...props}
-          fields={fields}
+          fields={['Peer:Remote', 'Peer:Self', 'Video']}
           self={self}
+          gap={2}
           remotePeer={e.state.remotePeer}
           footerVideo={camera?.stream.local}
           spinning={e.state.spinning}
@@ -266,7 +263,6 @@ export default Dev.describe('PeerCard', async (e) => {
        * - add to footer editor (SharedDoc)
        */
 
-      console.log('-------------------------------------------');
       return self;
     }
 

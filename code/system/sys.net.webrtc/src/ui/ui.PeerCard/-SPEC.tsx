@@ -1,23 +1,24 @@
 import { PeerCard, PeerCardProps } from '.';
 import { Dev, PropList, t, TestNetwork, WebRtc } from '../../test.ui';
 
-type T = {
-  props: PeerCardProps;
-};
-const initial: T = {
-  props: {},
-};
+type T = { props: PeerCardProps };
+const initial: T = { props: {} };
+const { DEFAULTS } = PeerCard;
 
 type LocalStore = {
-  backgroundUrl?: string;
-  showBg?: boolean;
   fields?: t.ConnectInputField[];
+  backgroundUrl?: string;
+  whiteBg: boolean;
+  gap: number;
+  self: boolean;
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
 const local = localstore.object({
   backgroundUrl: initial.props.backgroundUrl,
   fields: initial.props.fields,
-  showBg: true,
+  gap: DEFAULTS.gap,
+  whiteBg: true,
+  self: true,
 });
 
 export default Dev.describe('PeerCard', async (e) => {
@@ -28,16 +29,17 @@ export default Dev.describe('PeerCard', async (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.backgroundUrl = local.backgroundUrl;
       d.props.fields = local.fields;
+      d.props.backgroundUrl = local.backgroundUrl;
+      d.props.gap = local.gap;
     });
 
     ctx.subject
       .size([400, 320])
       .display('grid')
       .render<T>((e) => {
-        ctx.subject.backgroundColor(local.showBg ? 1 : 0);
-        return <PeerCard {...e.state.props} self={self} />;
+        ctx.subject.backgroundColor(local.whiteBg ? 1 : 0);
+        return <PeerCard {...e.state.props} self={local.self ? self : undefined} />;
       });
   });
 
@@ -68,7 +70,7 @@ export default Dev.describe('PeerCard', async (e) => {
           })
           .onEnter((e) => {
             e.change((d) => (d.props.backgroundUrl = local.backgroundUrl));
-            e.redraw();
+            dev.redraw();
           }),
       );
 
@@ -94,11 +96,35 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => (local.showBg ? 'background (white)' : 'background'))
-          .value((e) => local.showBg)
+          .label((e) => (local.self ? 'self (set)' : 'self (not set, spinning)'))
+          .value((e) => local.self)
           .onClick((e) => {
-            local.showBg = !local.showBg;
+            local.self = !local.self;
             dev.redraw();
+          }),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (local.whiteBg ? 'background (white)' : 'background (none)'))
+          .value((e) => local.whiteBg)
+          .onClick((e) => {
+            local.whiteBg = !local.whiteBg;
+            dev.redraw();
+          }),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (local.gap ? 'gap (5px)' : 'gap (none)'))
+          .value((e) => local.gap > 0)
+          .onClick((e) => {
+            e.change((d) => {
+              const current = d.props.gap ?? DEFAULTS.gap;
+              local.gap = d.props.gap = current === 0 ? 5 : 0;
+            });
           }),
       );
     });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import {
+  R,
   Color,
   copyPeer,
   css,
@@ -29,6 +30,7 @@ export type PeerCardProps = {
   remotePeer?: t.PeerId;
   muted?: boolean;
   spinning?: boolean;
+  gap?: number;
   backgroundUrl?: string;
   footerVideo?: MediaStream;
 
@@ -49,6 +51,7 @@ export type PeerCardProps = {
  */
 const View: React.FC<PeerCardProps> = (props) => {
   const { self, muted = DEFAULTS.muted, fields = DEFAULTS.fields } = props;
+  const gap = R.clamp(0, Number.MAX_VALUE, props.gap ?? DEFAULTS.gap);
   const isSpinning = props.spinning ? true : !self;
   const [showCopied, setShowCopied] = useState(false);
   const mouse = useMouseState();
@@ -92,6 +95,7 @@ const View: React.FC<PeerCardProps> = (props) => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        marginBottom: self ? gap : 0,
       }),
       bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
       mediaOuter: css({
@@ -102,7 +106,6 @@ const View: React.FC<PeerCardProps> = (props) => {
       }),
       media: css({ Absolute: 0 }),
     },
-
     peer: css({
       height: 28,
       boxSizing: 'border-box',

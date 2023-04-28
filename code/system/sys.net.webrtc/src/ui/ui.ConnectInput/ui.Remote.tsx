@@ -59,7 +59,9 @@ export const Remote: React.FC<RemoteProps> = (props) => {
         {!props.isConnected && (
           <Icons.Globe.Language
             size={20}
-            color={ids.remote ? Color.alpha(COLORS.CYAN, 0.8) : Color.alpha(COLORS.DARK, 0.2)}
+            color={
+              ids.remote && self ? Color.alpha(COLORS.CYAN, 0.8) : Color.alpha(COLORS.DARK, 0.2)
+            }
           />
         )}
         {props.isConnected && (
@@ -74,6 +76,7 @@ export const Remote: React.FC<RemoteProps> = (props) => {
       </div>
       <div {...styles.textbox}>
         <TextInput
+          isEnabled={Boolean(self)}
           value={ids.remote}
           placeholder={'connect to remote peer'}
           valueStyle={{

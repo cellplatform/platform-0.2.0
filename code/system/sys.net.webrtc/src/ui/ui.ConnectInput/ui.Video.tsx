@@ -1,4 +1,4 @@
-import { MediaStream, Color, COLORS, css, t, rx } from './common';
+import { Color, COLORS, css, MediaStream, t } from './common';
 
 export type VideoProps = {
   size?: number;
@@ -16,16 +16,13 @@ export const Video: React.FC<VideoProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      Size: size,
-      borderLeft: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      overflow: 'hidden',
+      borderLeft: `solid ${stream ? 1 : 0}px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      height: size,
+      width: stream ? size : 0,
+      transition: 'width 250ms ease',
     }),
     video: css({ Absolute: [gutter, null, null, gutter] }),
-    frame: css({
-      Absolute: 8,
-      pointerEvents: 'none',
-      border: `dashed 1px ${Color.alpha(COLORS.WHITE, 0.4)}`,
-      borderRadius: 8,
-    }),
   };
 
   const elVideo = stream && (
@@ -38,10 +35,5 @@ export const Video: React.FC<VideoProps> = (props) => {
     />
   );
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      {elVideo}
-      <div {...styles.frame} />
-    </div>
-  );
+  return <div {...css(styles.base, props.style)}>{elVideo}</div>;
 };

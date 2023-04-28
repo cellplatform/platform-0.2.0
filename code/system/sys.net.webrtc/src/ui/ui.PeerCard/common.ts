@@ -7,4 +7,5 @@ export { FIELDS } from '../ui.ConnectInput/common';
 export const DEFAULTS = {
   muted: false,
   fields: D.fields,
+  gap: 0,
 };

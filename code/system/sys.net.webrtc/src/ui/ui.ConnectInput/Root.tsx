@@ -6,8 +6,6 @@ import { Video } from './ui.Video';
 
 const View: React.FC<t.ConnectInputProps> = (props) => {
   const { self, spinning: isSpinning = DEFAULTS.spinning, fields = DEFAULTS.fields } = props;
-
-  if (!self) return null;
   const canConnect = Wrangle.canConnect(props);
   const isConnected = Wrangle.isConnected(props);
   const ids = Wrangle.ids(props);
@@ -19,8 +17,10 @@ const View: React.FC<t.ConnectInputProps> = (props) => {
   const height = idFields.length * 32;
   const styles = {
     base: css({
-      height,
       position: 'relative',
+      height: self ? height : 0,
+      transition: 'height 250ms ease',
+      overflow: 'hidden',
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
