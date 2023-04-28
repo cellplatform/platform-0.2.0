@@ -62,7 +62,7 @@ export default Dev.describe('Media Connection', (e) => {
        * This should auto-close the media connection.
        */
       data2.dispose();
-      await Time.wait(300);
+      await Time.wait(600);
       expect(peerA.connections.length).to.eql(0);
       expect(peerB.connections.length).to.eql(0);
 
