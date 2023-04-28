@@ -1,14 +1,14 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
 import {
+  ConnectionMock,
   Crdt,
   css,
   Dev,
   getTestFs,
+  Keyboard,
   PropList,
   rx,
   t,
-  ConnectionMock,
-  Keyboard,
 } from '../../test.ui';
 
 type T = {
