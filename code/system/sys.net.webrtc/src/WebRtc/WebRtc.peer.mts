@@ -1,5 +1,5 @@
 import { Path, PeerJS, rx, t, WebRtcUtils } from './common';
-import { MemoryState } from './WebRtc.state.mjs';
+import { MemoryState } from './WebRtc.memory.mjs';
 
 type Options = {
   id?: t.PeerId;
@@ -43,8 +43,8 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       host,
       path,
       key,
-      secure: true,
       port,
+      secure: true,
       debug: 2,
     });
 
