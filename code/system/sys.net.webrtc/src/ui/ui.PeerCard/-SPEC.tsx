@@ -4,7 +4,7 @@ import { Dev, PropList, t, TestNetwork, WebRtc } from '../../test.ui';
 type T = { props: PeerCardProps };
 const initial: T = { props: {} };
 
-type LocalStore = { backgroundUrl?: string; fields?: t.ConnectInputFields[] };
+type LocalStore = { backgroundUrl?: string; fields?: t.ConnectInputField[] };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
 const local = localstore.object({
   backgroundUrl: initial.props.backgroundUrl,
@@ -38,7 +38,7 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       return (
         <WebRtc.InfoCard
-          fields={['Module.Verify', 'Module', 'Self']}
+          fields={['Module.Verify', 'Module']}
           data={{ self: { peer: self } }}
           margin={[0, 20, 0, 20]}
         />
@@ -55,7 +55,7 @@ export default Dev.describe('PeerCard', async (e) => {
             all={PeerCard.FIELDS}
             selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
             onClick={(ev) => {
-              const fields = ev.next as t.ConnectInputFields[];
+              const fields = ev.next as t.ConnectInputField[];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}

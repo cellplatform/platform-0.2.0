@@ -2,7 +2,7 @@ import { t, Value } from './common';
 import { Chip } from './ui.Chip';
 
 export function FieldSelf(
-  fields: t.WebRtcInfoFields[],
+  fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem {

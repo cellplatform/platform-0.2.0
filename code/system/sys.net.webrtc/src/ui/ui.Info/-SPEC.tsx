@@ -11,7 +11,7 @@ const initial: T = {
   debug: { bg: true, title: false },
 };
 
-type LocalStore = T['debug'] & { fields?: t.WebRtcInfoFields[] };
+type LocalStore = T['debug'] & { fields?: t.WebRtcInfoField[] };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   bg: initial.debug.bg,

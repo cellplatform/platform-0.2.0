@@ -3,7 +3,7 @@ import { Chip } from './ui.Chip';
 import { Video } from './ui.Video';
 
 export function FieldPeersList(
-  fields: t.WebRtcInfoFields[],
+  fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem[] {

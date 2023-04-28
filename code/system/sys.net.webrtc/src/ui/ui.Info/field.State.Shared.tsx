@@ -1,7 +1,7 @@
 import { t, Value, Icons, COLORS, Color, Crdt } from './common';
 
 export function FieldStateShared(
-  fields: t.WebRtcInfoFields[],
+  fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem {

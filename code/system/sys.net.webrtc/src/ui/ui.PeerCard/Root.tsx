@@ -30,6 +30,7 @@ export type PeerCardProps = {
   muted?: boolean;
   spinning?: boolean;
   backgroundUrl?: string;
+  footerVideo?: MediaStream;
 
   devPanelWidth?: number;
   devShowFooter?: boolean;
@@ -37,7 +38,7 @@ export type PeerCardProps = {
   style?: t.CssValue;
   fill?: boolean;
 
-  fields?: t.ConnectInputFields[];
+  fields?: t.ConnectInputField[];
   onMuteClick?(e: React.MouseEvent): void;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
@@ -160,10 +161,11 @@ const View: React.FC<PeerCardProps> = (props) => {
       </div>
       <ConnectInput
         style={styles.footer}
+        fields={fields}
         self={self}
         remotePeer={props.remotePeer}
+        video={props.footerVideo}
         spinning={props.spinning}
-        fields={fields}
         onLocalPeerCopied={handlePeerCopied}
         onRemotePeerChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}

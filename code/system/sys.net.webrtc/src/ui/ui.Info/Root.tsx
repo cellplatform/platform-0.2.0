@@ -9,7 +9,7 @@ import { useInfo } from './useInfo.mjs';
 export type WebRtcInfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.WebRtcInfoFields[];
+  fields?: t.WebRtcInfoField[];
   flipped?: boolean;
   data?: t.WebRtcInfoData;
   margin?: t.CssEdgesInput;
@@ -24,7 +24,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
   const { fields = DEFAULTS.fields, data = {} } = props;
   const info = useInfo(data.events);
 
-  const items = PropList.builder<t.WebRtcInfoFields>()
+  const items = PropList.builder<t.WebRtcInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(fields, data))
     .field('Self.Id', () => FieldSelf(fields, data, info))

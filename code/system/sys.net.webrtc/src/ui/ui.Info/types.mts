@@ -1,6 +1,6 @@
 import type { t } from '../common.t';
 
-export type WebRtcInfoFields =
+export type WebRtcInfoField =
   | 'Module'
   | 'Module.Verify'
   | 'Self.Id'
