@@ -4,10 +4,13 @@ export type WebRtcInfoFields =
   | 'Module'
   | 'Module.Verify'
   | 'Self'
-  | 'Connections'
-  | 'Connetions.List';
+  | 'State.Shared'
+  | 'Peers'
+  | 'Peers.List';
 
 export type WebRtcInfoData = {
+  events?: t.WebRtcEvents;
   self?: { peer: t.Peer; title?: string };
-  connections?: { title?: string };
+  peers?: { title?: string };
+  state?: { shared?: { title?: string } };
 };

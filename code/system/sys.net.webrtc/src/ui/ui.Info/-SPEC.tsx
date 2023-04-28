@@ -1,9 +1,10 @@
-import { Dev, css, PropList, t, TestNetwork, Keyboard } from '../../test.ui';
+import { Value, Dev, css, PropList, t, TestNetwork, Keyboard, WebRtc } from '../../test.ui';
 import { WebRtcInfo, WebRtcInfoProps } from '.';
+import { ConnectInput } from '../ui.ConnectInput';
 
 type T = {
   props: WebRtcInfoProps;
-  debug: { bg: boolean; title: boolean };
+  debug: { bg: boolean; title: boolean; addingConnection?: boolean; remotePeer?: t.PeerId };
 };
 const initial: T = {
   props: {},
@@ -19,7 +20,9 @@ const local = localstore.object({
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
+  const remotes: t.Peer[] = [];
   const self = await TestNetwork.peer();
+  const events = WebRtc.Controller.listen(self);
 
   const Util = {
     props(state: T): WebRtcInfoProps {
@@ -28,6 +31,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         ...props,
         title: debug.title ? 'Network' : undefined,
         data: {
+          events,
           self: { peer: self },
         },
       };
@@ -36,9 +40,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const state = await ctx.state<T>(initial);
     self.connections$.subscribe((e) => ctx.redraw());
 
-    const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
@@ -63,14 +67,29 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   e.it('keyboard:init', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
     Keyboard.on({
       Enter(e) {
         e.handled();
-        state.change((d) => {
-          Dev.toggle(d.props, 'flipped');
-        });
+        state.change((d) => Dev.toggle(d.props, 'flipped'));
       },
+    });
+  });
+
+  e.it('ui:header', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.header.border(-0.1).padding(0);
+    dev.header.render<T>((e) => {
+      return (
+        <ConnectInput
+          remotePeer={e.state.debug.remotePeer}
+          self={self}
+          fields={['Peer:Self', 'Peer:Remote', 'Video:Self']}
+          onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
+          onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
+        />
+      );
     });
   });
 
@@ -86,7 +105,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             all={WebRtcInfo.FIELDS}
             selected={props.fields ?? WebRtcInfo.DEFAULTS.fields}
             onClick={(ev) => {
-              let fields = ev.next as WebRtcInfoProps['fields'];
+              const fields = ev.next as WebRtcInfoProps['fields'];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}
@@ -126,15 +145,50 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      const isAdding = (state: T) => state.debug.addingConnection!;
+      dev.button((btn) =>
+        btn
+          .label((e) => (isAdding(e.state) ? 'adding new peer...' : 'add peer'))
+          .enabled((e) => !isAdding(e.state))
+          .spinner((e) => isAdding(e.state))
+          .right((e) => `${remotes.length} ${Value.plural(remotes.length, 'remote', 'remotes')}`)
+          .onClick(async (e) => {
+            e.change((d) => (d.debug.addingConnection = true));
+
+            const remote = await TestNetwork.peer();
+            remotes.push(remote);
+
+            const info = await events.info.get();
+
+            info?.state.change((d) => {
+
+              const local = self.id;
+              const initiatedBy = local;
+              WebRtc.Controller.Mutate.addPeer(d.network, local, remote.id, { initiatedBy });
+            });
+
+            e.change((d) => (d.debug.addingConnection = false));
+          }),
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer.border(-0.1).render<T>((e) => {
-      const total = self?.connections.length ?? 0;
+
+    dev.footer.border(-0.1).render<T>(async (e) => {
+      const info = await events.info.get();
+      const sharedState = info?.state;
+
+      const total = self?.connectionsByPeer.length ?? 0;
       const data = {
-        [`Network.Peer(${total})`]: self,
-        props: e.state.props,
+        [`Peer.Self(${total})`]: self,
+        'Peers.Remote': remotes,
+        'State.Shared': sharedState?.current,
       };
       return <Dev.Object name={'WebRtc.InfoCard'} data={data} expand={1} />;
     });

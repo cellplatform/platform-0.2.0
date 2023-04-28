@@ -68,7 +68,7 @@ export default Dev.describe('ConnectInput', async (e) => {
             all={ConnectInput.FIELDS}
             selected={props.fields ?? DEFAULTS.fields}
             onClick={(ev) => {
-              let fields = ev.next as t.ConnectInputProps['fields'];
+              const fields = ev.next as t.ConnectInputProps['fields'];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}

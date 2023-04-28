@@ -1,6 +1,11 @@
-import { PropList, t, TestRunner, DEFAULTS, Value } from './common';
+import { t, Value } from './common';
+import { Chip } from './ui.Chip';
 
-export function FieldSelf(fields: t.WebRtcInfoFields[], data: t.WebRtcInfoData): t.PropListItem {
+export function FieldSelf(
+  fields: t.WebRtcInfoFields[],
+  data: t.WebRtcInfoData,
+  info?: t.WebRtcInfo,
+): t.PropListItem {
   const self = data.self;
   const label = self?.title ?? 'Self';
   const peer = self?.peer;
@@ -14,8 +19,9 @@ export function FieldSelf(fields: t.WebRtcInfoFields[], data: t.WebRtcInfoData):
 
   const item: t.PropListItem = {
     label,
+    tooltip: `Peer ID: ${peer.id}`,
     value: {
-      data: `peer:${Value.shortenHash(peer.id, [5, 5])}`,
+      data: <Chip text={`me:${Value.shortenHash(peer.id, [0, 5])}`} />,
       clipboard: peer.id,
     },
   };

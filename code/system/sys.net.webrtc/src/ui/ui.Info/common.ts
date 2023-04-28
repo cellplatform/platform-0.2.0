@@ -1,5 +1,5 @@
 export * from '../common';
-import { t } from '../common';
+import type { t } from '../common';
 
 /**
  * Constants
@@ -8,8 +8,9 @@ export const FIELDS: t.WebRtcInfoFields[] = [
   'Module',
   'Module.Verify',
   'Self',
-  'Connections',
-  'Connetions.List',
+  'State.Shared',
+  'Peers',
+  'Peers.List',
 ];
 
 export const DEFAULTS = {

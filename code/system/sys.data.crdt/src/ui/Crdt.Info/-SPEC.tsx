@@ -225,7 +225,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}
             onClick={(ev) => {
-              let fields = ev.next as CrdtInfoProps['fields'];
+              const fields = ev.next as CrdtInfoProps['fields'];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}

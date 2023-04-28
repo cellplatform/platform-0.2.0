@@ -1,7 +1,10 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
 import { FieldModuleVerify } from './field.Module.Verify';
+import { FieldPeers } from './field.Peers';
+import { FieldPeersList } from './field.Peers.List';
 import { FieldSelf } from './field.Self';
-import { FieldConnections } from './field.Connections';
+import { FieldStateShared } from './field.State.Shared';
+import { useInfo } from './useInfo.mjs';
 
 export type WebRtcInfoProps = {
   title?: t.PropListProps['title'];
@@ -19,12 +22,15 @@ export type WebRtcInfoProps = {
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
   const { fields = DEFAULTS.fields, data = {} } = props;
+  const info = useInfo(data.events);
 
   const items = PropList.builder<t.WebRtcInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(fields, data))
-    .field('Self', () => FieldSelf(fields, data))
-    .field('Connections', () => FieldConnections(fields, data))
+    .field('Self', () => FieldSelf(fields, data, info))
+    .field('Peers', () => FieldPeers(fields, data, info))
+    .field('Peers.List', () => FieldPeersList(fields, data, info))
+    .field('State.Shared', () => FieldStateShared(fields, data, info))
     .items(fields);
 
   return (
