@@ -55,13 +55,13 @@ export const DevKeyboard = {
       /**
        * ACTION: new tab.
        */
-      'CTRL + ALT + KeyT'(e) {
+      'ALT + KeyT'(e) {
         if (!newTab) return;
         e.handled();
         openUrlTab(location.href);
       },
 
-      'ALT + KeyT'(e) {
+      'CTRL + ALT + KeyT'(e) {
         if (!newTab) return;
         e.handled();
         const url = new URL(location.href);
