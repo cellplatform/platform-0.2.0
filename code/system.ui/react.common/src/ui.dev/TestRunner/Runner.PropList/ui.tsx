@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState } from './common';
+import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState, Test } from './common';
 import { ButtonText } from './ui.ButtonText';
 
 type Milliseconds = number;
@@ -56,7 +56,13 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     console.group('🌳 Test Run');
     console.info('ok', res.ok);
     console.info('stats', res.stats);
-    console.info('details', res);
+    console.info('root', res);
+    Test.Tree.Results.walkDown(res, (e) => {
+      if (!e.test) return;
+      if (e.test?.ok) return;
+      const text = `${e.suite.description} > ${e.test.description}`;
+      console.info('⛔️', text);
+    });
     console.groupEnd();
 
     setResults(res);
