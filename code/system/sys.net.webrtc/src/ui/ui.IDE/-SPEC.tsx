@@ -201,21 +201,8 @@ export default Dev.describe('PeerCard', async (e) => {
           style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
           onMuteClick={toggleMute}
           onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
-          onConnectRequest={async (e) => {
-            if (!self) return;
-
-            /**
-             * TODO 🐷
-             * - replicate this in the PeerCard dedicated spec.
-             * - The state doc update should be done within the controller (events.connect.peer)
-             */
-
-            // NB: Updating the CRDT triggers to listening [Controller].
-            docs.shared.doc.change((d) => {
-              const local = self!.id;
-              const initiatedBy = local;
-              WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
-            });
+          onConnectRequest={(e) => {
+            if (self) controller?.connect.fire(e.remote);
           }}
         />
       );
