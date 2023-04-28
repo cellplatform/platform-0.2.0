@@ -55,7 +55,7 @@ export default Dev.describe('PeerCard', async (e) => {
             all={PeerCard.FIELDS}
             selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
             onClick={(ev) => {
-              let fields = ev.next as t.ConnectInputFields[];
+              const fields = ev.next as t.ConnectInputFields[];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}
