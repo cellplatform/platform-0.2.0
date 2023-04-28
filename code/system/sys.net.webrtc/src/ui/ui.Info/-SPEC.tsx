@@ -85,7 +85,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         <ConnectInput
           remotePeer={e.state.debug.remotePeer}
           self={self}
-          fields={['Peer:Self', 'Peer:Remote', 'Video:Self']}
+          fields={['Peer:Self', 'Peer:Remote', 'Video']}
           onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
           onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
         />
@@ -155,22 +155,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .label((e) => (isAdding(e.state) ? 'adding new peer...' : 'add peer'))
           .enabled((e) => !isAdding(e.state))
           .spinner((e) => isAdding(e.state))
-          .right((e) => `${remotes.length} ${Value.plural(remotes.length, 'remote', 'remotes')}`)
+          .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
           .onClick(async (e) => {
             e.change((d) => (d.debug.addingConnection = true));
 
+            // Create a new sample peer.
             const remote = await TestNetwork.peer();
             remotes.push(remote);
 
-            const info = await events.info.get();
-
-            info?.state.change((d) => {
-
-              const local = self.id;
-              const initiatedBy = local;
-              WebRtc.Controller.Mutate.addPeer(d.network, local, remote.id, { initiatedBy });
-            });
-
+            // Connect.
+            await events.connect.fire(remote.id);
             e.change((d) => (d.debug.addingConnection = false));
           }),
       );
