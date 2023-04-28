@@ -97,14 +97,14 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
   });
 
   e.describe('Controller.listen', (e) => {
-    const { state: stateDoc, initial } = setup();
+    const { state, initial } = setup();
     let controller: t.WebRtcEvents;
 
     e.it('init: start listening to a network - ["local:peer" + crdt.doc<shared>]', async (e) => {
       const self = peerA;
 
       controller = WebRtcController.listen(self, {
-        state: stateDoc,
+        state,
         filedir,
         dispose$,
         onConnectStart(e) {
@@ -134,7 +134,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
        * Adding peer to document (CRDT) initiates the
        * controller's connection sequence.
        */
-      stateDoc.change((d) => {
+      state.change((d) => {
         const initiatedBy = self;
         Mutate.addPeer(d.network, self, remote, { initiatedBy });
       });
@@ -143,7 +143,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(info1?.syncers).to.eql([]);
 
       await wait;
-      const doc = stateDoc.current;
+      const doc = state.current;
       const p1 = doc.network.peers[self];
       const p2 = doc.network.peers[remote];
 
@@ -163,7 +163,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
       expect(syncers[0].local).to.eql(self);
       expect(syncers[0].remote).to.eql(remote);
-      expect(syncers[0].syncer.doc).to.equal(stateDoc);
+      expect(syncers[0].syncer.doc).to.equal(state);
 
       console.log('syncers', syncers);
       console.log('syncers.length', syncers.length);
@@ -195,18 +195,18 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
        * Adding peer to document (CRDT) initiates the
        * controller's connection sequence.
        */
-      stateDoc.change((d) => {
+      state.change((d) => {
         const initiatedBy = self;
         Mutate.addPeer(d.network, self, remote, { initiatedBy });
       });
-      expect(stateDoc.current.network.peers[remote].initiatedBy).to.eql(self);
+      expect(state.current.network.peers[remote].initiatedBy).to.eql(self);
 
       await rx.firstValueFrom(controller.errors.peer$);
       expect(errors.length).to.eql(1);
       expect(errors[0].type === 'peer-unavailable').to.eql(true);
 
       await Time.wait(10);
-      const doc = stateDoc.current;
+      const doc = state.current;
       const p2 = doc.network.peers[remote];
       expect(p2.error).to.include(errors[0].message);
       expect(p2.error).to.include('[peer-unavailable]');
@@ -218,11 +218,11 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
     e.it('kill peer-B → auto removed from peer-A state doc', async (e) => {
       const remote = peerB.id;
-      expect(stateDoc.current.network.peers[remote]).to.exist;
+      expect(state.current.network.peers[remote]).to.exist;
 
       peerB.dispose(); // Kill the peer.
       await Time.wait(500);
-      expect(stateDoc.current.network.peers[remote]).to.not.exist;
+      expect(state.current.network.peers[remote]).to.not.exist;
     });
 
     e.it('prune dead peers', async (e) => {
