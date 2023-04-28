@@ -23,10 +23,12 @@ export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => 
   const styles = {
     subpart: css({ opacity: 0.4 }),
     index: css({
+      position: 'relative',
+      top: -1,
       marginLeft: 6,
       fontFamily: 'monospace',
       fontWeight: 600,
-      fontSize: 10,
+      fontSize: 9,
       color: Color.alpha(COLORS.DARK, 0.8),
       borderRadius: 3,
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
