@@ -1,6 +1,6 @@
 import { NetworkSchema } from '../sys.net.schema';
 import { Crdt, Pkg, R, rx, slug, t, UserAgent, WebRtcEvents, WebRtcUtils } from './common';
-import { Mutate } from './Controller.Mutate.mjs';
+import { Mutate } from './State.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
 
 /**
@@ -74,7 +74,7 @@ export const WebRtcController = {
       });
     });
 
-    const updateLocalMetadata = () => {
+    const updateLocalMetadata = (state: t.NetworkDocSharedRef) => {
       const peers = state.current.network.peers ?? {};
       const localPeer = peers[self.id];
       const ua = UserAgent.current;
@@ -124,7 +124,7 @@ export const WebRtcController = {
         Mutate.addPeer(d.network, self.id, remote, { initiatedBy });
       });
 
-      updateLocalMetadata();
+      updateLocalMetadata(state);
     });
 
     /**
@@ -138,7 +138,7 @@ export const WebRtcController = {
     /**
      * When network peers change ensure all connections are established.
      */
-    const onPeersChanged = async () => {
+    const onPeersChanged = async (state: t.NetworkDocSharedRef) => {
       const peers = state.current.network.peers ?? {};
       const remotePeers = Object.values(peers)
         .filter((item) => item.id !== self.id)
@@ -158,7 +158,7 @@ export const WebRtcController = {
       /**
        * Ensure user-agent is up to date.
        */
-      updateLocalMetadata();
+      updateLocalMetadata(state);
     };
 
     /**
@@ -168,7 +168,7 @@ export const WebRtcController = {
     state.$.pipe(
       rx.map((e) => e.doc),
       rx.distinctUntilChanged((prev, next) => R.equals(ids(prev), ids(next))),
-    ).subscribe(onPeersChanged);
+    ).subscribe(() => onPeersChanged(state));
 
     /**
      * Establish connection.
@@ -206,10 +206,7 @@ export const WebRtcController = {
         ]);
       } catch (err: any) {
         const error = WebRtcUtils.error.toPeerError(err);
-        state.change((d) => {
-          const message = `[${error.type}] ${err.message}`;
-          d.network.peers[remote].error = message;
-        });
+        state.change((d) => (d.network.peers[remote].error = `[${error.type}] ${err.message}`));
       }
 
       /**
