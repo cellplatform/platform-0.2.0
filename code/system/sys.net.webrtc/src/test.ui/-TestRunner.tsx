@@ -97,7 +97,7 @@ export default Dev.describe('Root', (e) => {
 
       dev.button((btn) =>
         btn
-          .label('run')
+          .label((e) => (e.state.testrunner.spinning ? 'running...' : 'run'))
           .right('🌳')
           .spinner((e) => Boolean(e.state.testrunner.spinning))
           .onClick((e) => invoke(all)),
