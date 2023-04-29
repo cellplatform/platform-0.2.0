@@ -16,7 +16,7 @@ export const WebRtcController = {
   listen(
     self: t.Peer,
     options: {
-      state?: t.NetworkSharedDocRef;
+      state?: t.NetworkDocSharedRef;
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
       bus?: t.EventBus<any>;
@@ -105,7 +105,7 @@ export const WebRtcController = {
         rx.take(1),
       );
 
-      const syncer = Crdt.Doc.sync<t.NetworkSharedDoc>(conn.bus(), state, {
+      const syncer = Crdt.Doc.sync<t.NetworkDocShared>(conn.bus(), state, {
         /**
          * TODO 🐷
          * - sync-state FS
