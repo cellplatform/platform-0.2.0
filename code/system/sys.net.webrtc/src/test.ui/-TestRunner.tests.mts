@@ -7,6 +7,7 @@ export const TESTS = {
 
       import('../WebRtc.Controller/-dev/-TEST.controller.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs'),
+      import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs'),
       import('../sys.net.schema/Schema.TEST.mjs'),
 

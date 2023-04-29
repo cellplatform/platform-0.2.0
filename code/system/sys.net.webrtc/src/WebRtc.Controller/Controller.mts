@@ -178,7 +178,7 @@ export const WebRtcController = {
       const peer = { local: self.id, remote };
 
       /**
-       * Before
+       * Before.
        */
       const before: t.WebRtcConnectStart = {
         tx,
@@ -195,14 +195,14 @@ export const WebRtcController = {
        */
 
       /**
-       * Connect
+       * Connect.
        */
       let conns: t.PeerConnection[] = [];
 
       try {
         conns = await Promise.all([
           self.data(remote), //             <== Start (data).
-          self.media(remote, 'camera'), //  <== Start (camera).
+          // self.media(remote, 'camera'), //  <== Start (camera).
         ]);
       } catch (err: any) {
         const error = WebRtcUtils.error.toPeerError(err);
@@ -213,7 +213,7 @@ export const WebRtcController = {
       }
 
       /**
-       * After
+       * After.
        */
       const after: t.WebRtcConnectComplete = {
         tx,
