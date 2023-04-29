@@ -141,8 +141,8 @@ export const WebRtcController = {
     const onPeersChanged = async () => {
       const peers = state.current.network.peers ?? {};
       const remotePeers = Object.values(peers)
-        .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
-        .filter((remote) => !remote.error);
+        .filter((item) => item.id !== self.id)
+        .filter((item) => !item.error);
 
       /**
        * Ensure peers are connected.
