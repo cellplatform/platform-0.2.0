@@ -254,15 +254,10 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(state.current.network.peers['B']).to.exist;
 
       const res = await pruneDeadPeers(peerA, state);
+
       expect(res.removed).to.eql(['B']);
       expect(state.current.network.peers['B']).to.not.exist;
-
-      /**
-       * TODO 🐷
-       * - Ensure pruning removes "FOO-404"
-       */
-
-      // expect(state.current.network.peers['FOO-404']).to.not.exist;
+      expect(state.current.network.peers['FOO-404']).to.not.exist;
     });
 
     e.it('dispose', async (e) => {
