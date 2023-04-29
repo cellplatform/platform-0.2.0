@@ -17,7 +17,7 @@ type DocShared = {
   network: t.NetworkState;
 };
 
-export default Dev.describe('Network Controller: CRDT', async (e) => {
+export default Dev.describe('Network Controller', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
 
@@ -40,7 +40,7 @@ export default Dev.describe('Network Controller: CRDT', async (e) => {
   let peerB: t.Peer;
   let peerC: t.Peer;
 
-  e.it('setup peers A ⇔ B ⇔ C', async (e) => {
+  e.it('setup peers: A ⇔ B ⇔ C', async (e) => {
     const [a, b, c] = await TestNetwork.peers(3, { getStream: true, dispose$ });
     peerA = a;
     peerB = b;
@@ -52,7 +52,7 @@ export default Dev.describe('Network Controller: CRDT', async (e) => {
     let controller: t.WebRtcEvents;
 
     e.it('default auto-generated bus', async (e) => {
-      controller = WebRtcController.listen(peerA, state);
+      controller = WebRtcController.listen(peerA);
       const info = await controller.info.get();
       controller.dispose();
       expect(info?.peer).to.equal(peerA);
