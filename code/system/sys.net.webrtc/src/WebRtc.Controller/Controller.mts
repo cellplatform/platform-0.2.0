@@ -1,4 +1,4 @@
-import { Crdt, Pkg, R, rx, slug, t, WebRtcEvents, WebRtcUtils } from './common';
+import { Crdt, Pkg, R, rx, slug, t, WebRtcEvents, WebRtcUtils, UserAgent } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
 import { NetworkSchema } from '../sys.net.schema';
@@ -74,6 +74,18 @@ export const WebRtcController = {
       });
     });
 
+    const updateLocalMetadata = () => {
+      const peers = state.current.network.peers ?? {};
+      const localPeer = peers[self.id];
+      const ua = UserAgent.current;
+      if (localPeer && !R.equals(localPeer.device.userAgent, ua)) {
+        state.change((d) => {
+          const local = d.network.peers[self.id];
+          if (local) local.device.userAgent = ua;
+        });
+      }
+    };
+
     /**
      * Listen to connections.
      */
@@ -103,6 +115,7 @@ export const WebRtcController = {
         dispose$,
         syncOnStart: true,
       });
+
       syncers.set(conn.id, { local, remote, syncer });
 
       state.change((d) => {
@@ -111,13 +124,7 @@ export const WebRtcController = {
         Mutate.addPeer(d.network, self.id, remote, { initiatedBy });
       });
 
-      state.change((d) => {
-        const localPeer = d.network.peers[self.id];
-
-        // if (localPeer) {
-        //   localPeer.meta.userAgent = UserAgent.parse(navigator.userAgent);
-        // }
-      });
+      updateLocalMetadata();
     });
 
     /**
@@ -133,14 +140,25 @@ export const WebRtcController = {
      */
     state.onChange(async (e) => {
       const peers = e.doc.network.peers ?? {};
-      Object.values(peers)
+      const remotePeers = Object.values(peers)
         .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
-        .filter((remote) => !remote.error)
-        .forEach((remote) => {
-          const { id, tx } = remote;
-          const exists = self.connections.all.some((conn) => conn.peer.remote === id);
-          if (!exists) connectTo(remote.id, { tx });
-        });
+        .filter((remote) => !remote.error);
+
+      /**
+       * Ensure peers are connected.
+       */
+      const wait = Object.values(remotePeers).map(async (remote) => {
+        const { id, tx } = remote;
+        const exists = self.connections.all.some((conn) => conn.peer.remote === id);
+        if (!exists) await connectTo(remote.id, { tx });
+      });
+
+      await Promise.all(wait);
+
+      /**
+       * Ensure user-agent is up to date.
+       */
+      updateLocalMetadata();
     });
 
     const connectTo = async (remote: t.PeerId, options: { tx?: string } = {}) => {
