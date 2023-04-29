@@ -35,7 +35,7 @@ export const TestNetwork = {
     const signal = TEST.signal;
     const log = options.log;
     const wait = Array.from({ length }).map((_, i) => {
-      const id = `${cuid()}-p${i + 1}`;
+      const id = `p${i + 1}-${cuid()}`;
       return WebRtc.peer(signal, { id, getStream, log, dispose$ });
     });
     return (await Promise.all(wait)) as t.Peer[];
