@@ -275,7 +275,16 @@ export default Dev.describe('PeerCard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtc.InfoCard fields={['Module.Verify', 'Module']} />;
+      if (!self || !controller) return;
+      return (
+        <WebRtc.InfoCard
+          fields={['Module.Verify', 'Module', 'State.Shared', 'Peers.List']}
+          data={{
+            events: controller,
+            self: { peer: self },
+          }}
+        />
+      );
     });
 
     dev.hr(5, 20);
