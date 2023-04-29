@@ -1,7 +1,7 @@
-import { Crdt, Pkg, R, rx, slug, t, WebRtcEvents, WebRtcUtils, UserAgent } from './common';
+import { NetworkSchema } from '../sys.net.schema';
+import { Crdt, Pkg, R, rx, slug, t, UserAgent, WebRtcEvents, WebRtcUtils } from './common';
 import { Mutate } from './Controller.Mutate.mjs';
 import { pruneDeadPeers } from './util.mjs';
-import { NetworkSchema } from '../sys.net.schema';
 
 /**
  * Manages keeping a WebRTC network-peer in sync with a
@@ -16,7 +16,7 @@ export const WebRtcController = {
   listen(
     self: t.Peer,
     options: {
-      state?: t.CrdtDocRef<t.NetworkSharedDoc>;
+      state?: t.NetworkSharedDocRef;
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
       bus?: t.EventBus<any>;
@@ -136,31 +136,43 @@ export const WebRtcController = {
     });
 
     /**
-     * Listen to document changes.
+     * When network peers change ensure all connections are established.
      */
-    state.onChange(async (e) => {
-      const peers = e.doc.network.peers ?? {};
+    const handleNetworkPeersChanged = async () => {
+      const peers = state.current.network.peers ?? {};
       const remotePeers = Object.values(peers)
         .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
         .filter((remote) => !remote.error);
 
       /**
+       * Ensure user-agent is up to date.
+       */
+      updateLocalMetadata();
+
+      /**
        * Ensure peers are connected.
        */
       const wait = Object.values(remotePeers).map(async (remote) => {
-        const { id, tx } = remote;
-        const exists = self.connections.all.some((conn) => conn.peer.remote === id);
+        const { tx } = remote;
+        const exists = self.connections.all.some((conn) => conn.peer.remote === remote.id);
         if (!exists) await connectTo(remote.id, { tx });
       });
 
       await Promise.all(wait);
+    };
 
-      /**
-       * Ensure user-agent is up to date.
-       */
-      updateLocalMetadata();
-    });
+    /**
+     * Listen to document changes.
+     */
+    const ids = (doc: t.NetworkSharedDoc) => Object.keys(doc.network.peers ?? {});
+    state.$.pipe(
+      rx.map((e) => e.doc),
+      rx.distinctUntilChanged((prev, next) => R.equals(ids(prev), ids(next))),
+    ).subscribe(handleNetworkPeersChanged);
 
+    /**
+     * Establish connection.
+     */
     const connectTo = async (remote: t.PeerId, options: { tx?: string } = {}) => {
       const tx = options.tx ?? slug();
       const peer = { local: self.id, remote };
