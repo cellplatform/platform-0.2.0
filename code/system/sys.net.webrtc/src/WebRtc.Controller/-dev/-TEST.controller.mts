@@ -17,7 +17,7 @@ type DocShared = {
   network: t.NetworkState;
 };
 
-export default Dev.describe('Network Controller (CRDT)', async (e) => {
+export default Dev.describe('Network Controller: CRDT', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
 
