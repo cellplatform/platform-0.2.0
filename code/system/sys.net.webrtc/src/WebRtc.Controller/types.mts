@@ -21,3 +21,4 @@ export type NetworkStateDevice = {
  * Controller
  */
 export type NetworkSharedDoc = { network: t.NetworkState };
+export type NetworkSharedDocRef = t.CrdtDocRef<t.NetworkSharedDoc>;

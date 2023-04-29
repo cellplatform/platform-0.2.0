@@ -7,7 +7,7 @@ type Semver = string;
 export type WebRtcInfo = {
   module: { name: string; version: Semver };
   peer: t.Peer;
-  state: t.CrdtDocRef<t.NetworkSharedDoc>;
+  state: t.NetworkSharedDocRef;
   syncers: t.WebRtcStateSyncer[];
 };
 
