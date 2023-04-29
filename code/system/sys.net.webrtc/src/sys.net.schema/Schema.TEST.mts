@@ -3,7 +3,7 @@ import { NetworkSchema } from './Schema.mjs';
 
 import type { DocShared } from './Schema.mjs';
 
-export default Dev.describe('NetworkSchema (P2P)', (e) => {
+export default Dev.describe('Network Schema (P2P)', (e) => {
   e.it('NetworkSchema.initial', (e) => {
     const initial = NetworkSchema.initial;
     expect(initial.doc.count).to.eql(0);
