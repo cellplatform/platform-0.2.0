@@ -11,7 +11,7 @@ export const Filter = {
     filter = (filter || '').trim();
     if (!filter) return imports;
 
-    const { maxErrors = 2 } = options;
+    const { maxErrors = 1 } = options;
     const matcher = Fuzzy.pattern(filter.toLowerCase(), maxErrors);
 
     return Object.keys(imports).reduce((acc, key) => {
