@@ -1,5 +1,5 @@
 import { WebRtc } from '../WebRtc';
-import { rx, t, TEST } from './common';
+import { rx, t, TEST, cuid } from './common';
 
 export type TestNetworkP2P = t.Disposable & {
   peerA: t.Peer;
@@ -34,8 +34,9 @@ export const TestNetwork = {
     const getStream = Wrangle.getStream(options);
     const signal = TEST.signal;
     const log = options.log;
-    const wait = Array.from({ length }).map(() => {
-      return WebRtc.peer(signal, { getStream, log, dispose$ });
+    const wait = Array.from({ length }).map((_, i) => {
+      const id = `${cuid()}-p${i + 1}`;
+      return WebRtc.peer(signal, { id, getStream, log, dispose$ });
     });
     return (await Promise.all(wait)) as t.Peer[];
   },

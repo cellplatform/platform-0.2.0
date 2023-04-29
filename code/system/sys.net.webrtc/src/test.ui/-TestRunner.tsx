@@ -69,9 +69,9 @@ export default Dev.describe('Root', (e) => {
 
       tests.push(
         ...[
-          await button(import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs')),
+          await button(import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs')),
           await button(import('../sys.net.schema/Schema.TEST.mjs')),
         ],
       );
