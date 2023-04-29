@@ -48,18 +48,18 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
     peerC = c;
   });
 
-  e.describe('EventBus', (e) => {
+  e.describe('EventBus ← (controller.listen response)', (e) => {
     const { state } = setup();
     let controller: t.WebRtcEvents;
 
-    e.it('default generated bus (← info method)', async (e) => {
+    e.it('default auto-generated bus', async (e) => {
       controller = WebRtcController.listen(peerA, state);
       const info = await controller.info.get();
       controller.dispose();
       expect(info?.peer).to.equal(peerA);
     });
 
-    e.it('specified bus (← info method)', async (e) => {
+    e.it('uses specified bus', async (e) => {
       const bus = rx.bus();
       controller = WebRtcController.listen(peerA, { bus });
 
@@ -74,7 +74,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(info2?.peer).to.equal(peerA);
     });
 
-    e.it('info (← provided network state)', async (e) => {
+    e.it('provided network state CRDT', async (e) => {
       controller = WebRtcController.listen(peerA, { state });
       const info = await controller.info.get();
       controller.dispose();
@@ -87,7 +87,7 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(info?.syncers).to.eql([]);
     });
 
-    e.it('info (← generated network state)', async (e) => {
+    e.it('auto-generated network state CRDT', async (e) => {
       controller = WebRtcController.listen(peerA, {});
       const info = await controller.info.get();
       controller.dispose();
