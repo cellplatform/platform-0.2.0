@@ -5,6 +5,7 @@ type Options = {
   id?: t.PeerId;
   log?: boolean;
   getStream?: t.PeerGetMediaStream;
+  dispose$?: t.Observable<any>;
 };
 type SignalServer = {
   host: string;
@@ -48,7 +49,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       debug: 2,
     });
 
-    const { dispose, dispose$ } = rx.disposable();
+    const { dispose, dispose$ } = rx.disposable(options.dispose$);
     let _disposed = false;
     dispose$.subscribe(() => {
       api.connections.all.forEach((conn) => conn.dispose());

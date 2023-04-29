@@ -24,25 +24,31 @@ export const TestNetwork = {
    */
   async peers(
     length: number,
-    options: { getStream?: t.PeerGetMediaStream | boolean; log?: boolean } = {},
+    options: {
+      log?: boolean;
+      getStream?: t.PeerGetMediaStream | boolean;
+      dispose$?: t.Observable<any>;
+    } = {},
   ) {
+    const { dispose$ } = options;
     const getStream = Wrangle.getStream(options);
     const signal = TEST.signal;
     const log = options.log;
-    const wait = Array.from({ length }).map(() => WebRtc.peer(signal, { getStream, log }));
+    const wait = Array.from({ length }).map(() => {
+      return WebRtc.peer(signal, { getStream, log, dispose$ });
+    });
     return (await Promise.all(wait)) as t.Peer[];
   },
 
   /**
    * Generate a simple 2-node connected network.
    */
-  async init(options: { log?: boolean } = {}) {
+  async init(options: { log?: boolean; dispose$?: t.Observable<any> } = {}) {
     const { dispose, dispose$ } = rx.disposable();
-    const [peerA, peerB] = await TestNetwork.peers(2, { getStream: true, log: options.log });
-
-    dispose$.subscribe(() => {
-      peerA.dispose();
-      peerB.dispose();
+    const [peerA, peerB] = await TestNetwork.peers(2, {
+      log: options.log,
+      getStream: true,
+      dispose$,
     });
 
     const api: TestNetworkP2P = {
