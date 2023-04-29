@@ -138,16 +138,11 @@ export const WebRtcController = {
     /**
      * When network peers change ensure all connections are established.
      */
-    const handleNetworkPeersChanged = async () => {
+    const onPeersChanged = async () => {
       const peers = state.current.network.peers ?? {};
       const remotePeers = Object.values(peers)
         .filter((peer) => peer.id !== self.id) // Ignore self (not remote).
         .filter((remote) => !remote.error);
-
-      /**
-       * Ensure user-agent is up to date.
-       */
-      updateLocalMetadata();
 
       /**
        * Ensure peers are connected.
@@ -159,16 +154,21 @@ export const WebRtcController = {
       });
 
       await Promise.all(wait);
+
+      /**
+       * Ensure user-agent is up to date.
+       */
+      updateLocalMetadata();
     };
 
     /**
      * Listen to document changes.
      */
-    const ids = (doc: t.NetworkSharedDoc) => Object.keys(doc.network.peers ?? {});
+    const ids = (doc: t.NetworkDocShared) => Object.keys(doc.network.peers ?? {});
     state.$.pipe(
       rx.map((e) => e.doc),
       rx.distinctUntilChanged((prev, next) => R.equals(ids(prev), ids(next))),
-    ).subscribe(handleNetworkPeersChanged);
+    ).subscribe(onPeersChanged);
 
     /**
      * Establish connection.
@@ -176,6 +176,10 @@ export const WebRtcController = {
     const connectTo = async (remote: t.PeerId, options: { tx?: string } = {}) => {
       const tx = options.tx ?? slug();
       const peer = { local: self.id, remote };
+
+      /**
+       * Before
+       */
       const before: t.WebRtcConnectStart = {
         tx,
         instance,
@@ -190,8 +194,13 @@ export const WebRtcController = {
        * - camera option (for audio only)
        */
 
+      /**
+       * Connect
+       */
+      let conns: t.PeerConnection[] = [];
+
       try {
-        await Promise.all([
+        conns = await Promise.all([
           self.data(remote), //             <== Start (data).
           self.media(remote, 'camera'), //  <== Start (camera).
         ]);
@@ -203,6 +212,9 @@ export const WebRtcController = {
         });
       }
 
+      /**
+       * After
+       */
       const after: t.WebRtcConnectComplete = {
         tx,
         instance,
@@ -214,7 +226,7 @@ export const WebRtcController = {
     };
 
     /**
-     * Initiate a connection via the shared StateDocument.
+     * Initiate a connection via updating the shared {network} state-document.
      */
     events.connect.req$.subscribe((e) => {
       const { tx } = e;

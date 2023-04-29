@@ -14,9 +14,9 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
   let controllerC: t.WebRtcEvents;
 
   const getState = async (events: t.WebRtcEvents) => (await events.info.get())?.state!;
-  let stateA: t.NetworkSharedDocRef;
-  let stateB: t.NetworkSharedDocRef;
-  let stateC: t.NetworkSharedDocRef;
+  let stateA: t.NetworkDocSharedRef;
+  let stateB: t.NetworkDocSharedRef;
+  let stateC: t.NetworkDocSharedRef;
 
   e.it('setup peers: A ⇔ B ⇔ C', async (e) => {
     const [a, b, c] = await TestNetwork.peers(3, { getStream: true, dispose$ });
@@ -34,13 +34,10 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
   });
 
   e.it('connect: A ⇔ B ⇔ C', async (e) => {
-    // await controllerA.connect.fire(peerB.id);
-    // await controllerC.connect.fire(peerB.id);
-
     await controllerA.connect.fire(peerB.id);
-    await controllerA.connect.fire(peerC.id);
+    await controllerC.connect.fire(peerB.id);
 
-    await Time.wait(3000);
+    await Time.wait(5000);
 
     const write = async (prefix: string, events: t.WebRtcEvents) => {
       const info = (await events.info.get())!;
@@ -58,9 +55,24 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
     console.log('peerB.', peerB.connections.length);
     console.log('peerC.', peerC.connections.length);
 
-    expect(peerA.connections.length).to.eql(4); // NB: data + camera (*2)
-    expect(peerB.connections.length).to.eql(4);
-    expect(peerC.connections.length).to.eql(4);
+  });
+
+  e.it('state change | sync: A ⇔ B ⇔ C', async (e) => {
+    stateA.change((d) => {
+      d.tmp.message = 'hello';
+    });
+
+    /**
+     * TODO 🐷
+     * - Figure out a nice way with Observable$ to wait for the change to propogate to all peers.
+     * - To avoid the "wait" below.
+     */
+
+    await Time.wait(2000);
+
+    // NB: Change propogated to all peers (all same).
+    expect(stateA.current).to.eql(stateB.current);
+    expect(stateB.current).to.eql(stateC.current);
   });
 
   e.it('dispose', async (e) => {

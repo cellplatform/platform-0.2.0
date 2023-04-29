@@ -13,10 +13,6 @@ import {
 } from '../../test.ui';
 import { pruneDeadPeers } from '../util.mjs';
 
-type DocShared = {
-  network: t.NetworkState;
-};
-
 export default Dev.describe('Network Controller', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
@@ -27,8 +23,8 @@ export default Dev.describe('Network Controller', async (e) => {
   const filedir = fs.dir('dev.test.WebRtc.Controller');
 
   const setup = () => {
-    const initial: DocShared = { network: { peers: {} } };
-    const state = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
+    const initial: t.NetworkDocShared = { count: 0, network: { peers: {} }, tmp: {} };
+    const state = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
     return { initial, state };
   };
 
@@ -247,7 +243,7 @@ export default Dev.describe('Network Controller', async (e) => {
     });
 
     e.it('prune dead peers', async (e) => {
-      const state = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
+      const state = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
       state.change((d) => Mutate.addPeer(d.network, 'A', 'B', { initiatedBy: 'A' }));
 
       expect(state.current.network.peers['B']).to.exist;
