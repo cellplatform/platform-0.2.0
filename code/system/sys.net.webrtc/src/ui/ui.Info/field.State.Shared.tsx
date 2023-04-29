@@ -1,4 +1,5 @@
-import { t, Value, Icons, COLORS, Color, Crdt } from './common';
+import { t, Value, Icons, COLORS, Color, Crdt, css, Filesize } from './common';
+import { useSyncerTraffic } from './useSyncerTraffic.mjs';
 
 export function FieldStateShared(
   fields: t.WebRtcInfoField[],
@@ -9,22 +10,67 @@ export function FieldStateShared(
   const peer = self?.peer;
   const shared = data.state?.shared ?? {};
   const label = shared.title ?? 'Shared State';
-  const doc = info?.state;
-
-  if (!doc) {
-    return {
-      label,
-      value: { data: '-', opacity: 0.3 },
-    };
-  }
 
   return {
     label,
     value: {
-      data: <Icons.Network.Docs size={15} color={Color.alpha(COLORS.DARK, 0.6)} />,
+      data: <Syncers info={info} />,
       onClick(e) {
-        console.info('shared/state.network', Crdt.toObject(doc.current.network));
+        const doc = info?.state.current;
+        const data = doc ? Crdt.toObject(doc.network) : undefined;
+        console.info('shared/state.network', data);
       },
     },
   };
 }
+
+/**
+ * Component
+ */
+
+export type SyncProps = {
+  info?: t.WebRtcInfo;
+  style?: t.CssValue;
+};
+
+export const Syncers: React.FC<SyncProps> = (props) => {
+  const { syncers, bytes, messages } = useSyncerTraffic(props.info);
+
+  const isEmpty = syncers.length === 0;
+  const size = Filesize(bytes, { round: 0 });
+  const text = `${messages} ${Value.plural(messages, 'message', 'messages')}, ${size}`;
+
+  /**
+   * [Render]
+   */
+  const styles = {
+    base: css({ position: 'relative' }),
+    empty: css({ opacity: 0.3 }),
+    icon: css({ position: 'relative', top: -1 }),
+    body: css({
+      display: 'grid',
+      alignContent: 'center',
+      gridTemplateColumns: '1fr auto auto',
+      columnGap: 6,
+    }),
+  };
+
+  const Icon = Icons.Network.Docs;
+  const elIcon = <Icon size={15} color={Color.alpha(COLORS.DARK, 0.6)} style={styles.icon} />;
+  const elEmpty = isEmpty && <div {...styles.empty}>{elIcon}</div>;
+  const elBody = !isEmpty && (
+    <div {...styles.body}>
+      <div />
+      <div>{text}</div>
+      {elIcon}
+    </div>
+  );
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      {elEmpty}
+      {elBody}
+      {/* <div>{messages > 0 ? text : '-'}</div> */}
+    </div>
+  );
+};

@@ -20,9 +20,16 @@ const local = localstore.object({
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
-  const remotes: t.Peer[] = [];
+  type TRemote = {
+    name: string;
+    peer: t.Peer;
+    controller: t.WebRtcEvents;
+    state: t.NetworkDocSharedRef;
+  };
+  const remotes: TRemote[] = [];
   const self = await TestNetwork.peer();
   const events = WebRtc.Controller.listen(self);
+  const selfState = (await events.info.get())?.state!;
 
   const Util = {
     props(state: T): WebRtcInfoProps {
@@ -160,15 +167,49 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             e.change((d) => (d.debug.addingConnection = true));
 
             // Create a new sample peer.
-            const remote = await TestNetwork.peer();
-            remotes.push(remote);
+            const peer = await TestNetwork.peer();
+            const controller = WebRtc.Controller.listen(peer);
+            const state = (await controller.info.get())?.state!;
+            const name = `remote-${remotes.length + 1}`;
+            remotes.push({ name, peer, controller, state });
 
             // Connect.
-            await events.connect.fire(remote.id);
+            await events.connect.fire(peer.id);
             e.change((d) => (d.debug.addingConnection = false));
           }),
       );
+
+      dev.hr(-1, 5);
+
+      const count = (label: string, by: number) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right((e) => `count: ${selfState.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+            .onClick((e) => {
+              selfState.change((d) => (d.count += by));
+              dev.redraw();
+            }),
+        );
+      };
+      count('increment →', 1);
+      count('decrement →', -1);
     });
+
+    dev.hr(-1, 5);
+
+    dev.button((btn) =>
+      btn
+        .label('print')
+        .right('← console')
+        .onClick(async (e) => {
+          console.info('self.count:', selfState.current.count);
+          for (const remote of remotes) {
+            const state = remote.state.current;
+            console.info(`${remote.name}.count:`, state.count);
+          }
+        }),
+    );
   });
 
   e.it('ui:footer', async (e) => {
