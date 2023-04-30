@@ -56,7 +56,7 @@ export const Syncers: React.FC<SyncProps> = (props) => {
   };
 
   const Icon = Icons.Network.Docs;
-  const elIcon = <Icon size={15} color={Color.alpha(COLORS.DARK, 0.6)} style={styles.icon} />;
+  const elIcon = <Icon size={15} color={Color.alpha(COLORS.DARK, 0.8)} style={styles.icon} />;
   const elEmpty = isEmpty && <div {...styles.empty}>{elIcon}</div>;
   const elBody = !isEmpty && (
     <div {...styles.body}>
@@ -70,7 +70,6 @@ export const Syncers: React.FC<SyncProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {elEmpty}
       {elBody}
-      {/* <div>{messages > 0 ? text : '-'}</div> */}
     </div>
   );
 };
