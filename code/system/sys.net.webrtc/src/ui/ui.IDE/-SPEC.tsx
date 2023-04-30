@@ -278,7 +278,7 @@ export default Dev.describe('PeerCard', async (e) => {
       if (!self || !controller) return;
       return (
         <WebRtc.InfoCard
-          fields={['Module.Verify', 'Module', 'State.Shared', 'Peers.List']}
+          fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
           data={{
             events: controller,
             self: { peer: self },
