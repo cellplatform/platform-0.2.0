@@ -74,11 +74,11 @@ export default Dev.describe('YouTube', (e) => {
       });
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Load', (dev) => {
       const loadUrl = (title: string, url: string) => {
-        dev.button(`load: ${title}`, async (e) => {
+        dev.button(`${title}`, async (e) => {
           const { id, start } = Wrangle.fromUrl(url);
           dev.change((d) => {
             d.props.id = id;
@@ -87,14 +87,18 @@ export default Dev.describe('YouTube', (e) => {
         });
       };
 
-      loadUrl('"Cell" at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
-      loadUrl('"Cell - Impossible Machines"', 'https://www.youtube.com/watch?v=TYPFenJQciw');
-      loadUrl('"Optimistic Nihilism"', 'https://www.youtube.com/watch?v=MBRqu0YOH14');
+      loadUrl('Cell at timestamp: `39s`', 'https://www.youtube.com/watch?v=URUJD5NEXC8&t=39s');
+      loadUrl('"Impossible Machines" (Cells)', 'https://www.youtube.com/watch?v=TYPFenJQciw');
+      dev.hr(-1, 5);
       loadUrl('Baby elephant 🐘', 'https://www.youtube.com/watch?v=nlyYDuSdU38');
-      loadUrl('CRDT: "peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
+      dev.hr(-1, 5);
+      loadUrl('"Local First" - @pvh', 'https://youtu.be/KrPsyr8Ig6M');
+      loadUrl('"peritext" research paper discussion', 'https://youtu.be/07j2AXC9BH8?t=937');
+      dev.hr(-1, 5);
+      loadUrl('"Making Progress" - Alan Kay', 'https://youtu.be/Vt8jyPqsmxE?t=90');
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Paste Address', (dev) => {
       dev.row((e) => {
@@ -126,7 +130,7 @@ export default Dev.describe('YouTube', (e) => {
       });
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.TODO(`
 - [ ] Player JS API (play/pause/seek/status events)
