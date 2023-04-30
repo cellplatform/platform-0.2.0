@@ -56,6 +56,11 @@ export function WebRtcEvents(args: {
       const res = await info.fire(options);
       return res.error ? undefined : res?.info;
     },
+
+    async state(options = {}) {
+      const res = await info.fire(options);
+      return res.error ? undefined : res?.info?.state;
+    },
   };
 
   /**

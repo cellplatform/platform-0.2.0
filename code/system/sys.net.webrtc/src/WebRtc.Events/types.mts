@@ -30,6 +30,7 @@ export type WebRtcEvents = t.Disposable & {
     res$: t.Observable<t.WebRtcInfoRes>;
     fire(options?: { timeout?: Milliseconds }): Promise<WebRtcInfoRes>;
     get(options?: { timeout?: Milliseconds }): Promise<WebRtcInfo | undefined>;
+    state(options?: { timeout?: Milliseconds }): Promise<t.NetworkDocSharedRef | undefined>;
   };
 
   connect: {
