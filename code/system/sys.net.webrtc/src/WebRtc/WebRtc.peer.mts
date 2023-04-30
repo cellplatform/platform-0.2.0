@@ -107,7 +107,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       /**
        * Start a media connection (video/audio/screen).
        */
-      media(connectTo, input) {
+      media(connectTo, input, options = {}) {
         return new Promise<t.PeerMediaConnection>(async (resolve, reject) => {
           if (!getStream) {
             const err = Error(`Media connections require a "getStream" function to be provided.`);

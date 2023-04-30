@@ -35,8 +35,9 @@ export type Peer = t.Disposable & {
   media(connectTo: Id, input: PeerMediaStreamInput): Promise<PeerMediaConnection>;
 };
 
+export type PeerConnectionEndpoints = { local: Id; remote: Id };
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
-export type PeerConnectionsByPeer = { peer: { local: Id; remote: Id } } & PeerConnections;
+export type PeerConnectionsByPeer = { peer: PeerConnectionEndpoints } & PeerConnections;
 export type PeerConnections = {
   readonly length: number;
   readonly all: PeerConnection[];
@@ -46,7 +47,7 @@ export type PeerConnections = {
 
 type Connection = t.Disposable & {
   readonly id: Id;
-  readonly peer: { local: Id; remote: Id };
+  readonly peer: PeerConnectionEndpoints;
   readonly isOpen: boolean;
   readonly isDisposed: boolean;
 };
@@ -83,8 +84,13 @@ export type PeerMediaStreams = { local?: MediaStream; remote?: MediaStream };
  * Connection Metadata.
  */
 export type PeerMeta = PeerMetaData | PeerMetaMedia;
-export type PeerMetaData = { label: string; initiatedBy?: t.PeerId };
-export type PeerMetaMedia = { input: PeerMediaStreamInput; initiatedBy?: t.PeerId };
+export type PeerMetaData = {
+  initiatedBy?: t.PeerId;
+};
+export type PeerMetaMedia = {
+  input: PeerMediaStreamInput;
+  initiatedBy?: t.PeerId;
+};
 
 /**
  * Peer connection change info.
