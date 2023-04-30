@@ -4,6 +4,7 @@ type Milliseconds = number;
 
 export const DevKeyboard = {
   DEFAULTS: {
+    clearConsole: true,
     cancelSave: true,
     cancelPrint: true,
     newTab: true,
@@ -15,6 +16,7 @@ export const DevKeyboard = {
    */
   listen(
     options: {
+      clearConsole?: boolean;
       cancelSave?: boolean;
       cancelPrint?: boolean;
       newTab?: boolean;
@@ -25,6 +27,7 @@ export const DevKeyboard = {
     const DEFAULT = DevKeyboard.DEFAULTS;
     const qs = DEFAULTS.qs;
     const {
+      clearConsole = DEFAULT.clearConsole,
       cancelSave = DEFAULT.cancelSave,
       cancelPrint = DEFAULT.cancelPrint,
       newTab = DEFAULT.newTab,
@@ -36,6 +39,13 @@ export const DevKeyboard = {
     const keyboard = Keyboard.on({
       Escape(e) {
         escape$.next();
+      },
+
+      'CMD + KeyK'(e) {
+        if (clearConsole) {
+          e.handled();
+          console.clear();
+        }
       },
 
       /**
