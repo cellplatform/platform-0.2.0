@@ -10,7 +10,7 @@ export type WebRtcInfoField =
 
 export type WebRtcInfoData = {
   events?: t.WebRtcEvents;
-  self?: { peer: t.Peer; title?: string };
+  self?: { title?: string };
   peers?: { title?: string };
   state?: { shared?: { title?: string } };
 };

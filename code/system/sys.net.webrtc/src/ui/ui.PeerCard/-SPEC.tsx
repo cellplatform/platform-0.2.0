@@ -23,6 +23,7 @@ const local = localstore.object({
 
 export default Dev.describe('PeerCard', async (e) => {
   const self = await TestNetwork.peer();
+  const events = WebRtc.controller(self);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -50,7 +51,7 @@ export default Dev.describe('PeerCard', async (e) => {
       return (
         <WebRtc.InfoCard
           fields={['Module.Verify', 'Module']}
-          data={{ self: { peer: self } }}
+          data={{ events }}
           margin={[0, 20, 0, 20]}
         />
       );

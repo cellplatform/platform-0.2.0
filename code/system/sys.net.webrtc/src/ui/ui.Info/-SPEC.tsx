@@ -28,7 +28,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   };
   const remotes: TRemote[] = [];
   const self = await TestNetwork.peer();
-  const events = WebRtc.Controller.listen(self);
+  const events = WebRtc.controller(self);
   const selfState = (await events.info.get())?.state!;
 
   const Util = {
@@ -39,7 +39,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         title: debug.title ? 'Network' : undefined,
         data: {
           events,
-          self: { peer: self },
+          self: {},
         },
       };
     },
@@ -168,7 +168,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
             // Create a new sample peer.
             const peer = await TestNetwork.peer();
-            const controller = WebRtc.Controller.listen(peer);
+            const controller = WebRtc.controller(peer);
             const state = (await controller.info.get())?.state!;
             const name = `remote-${remotes.length + 1}`;
             remotes.push({ name, peer, controller, state });

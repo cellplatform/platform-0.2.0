@@ -8,7 +8,7 @@ export function FieldSelf(
 ): t.PropListItem {
   const self = data.self;
   const label = self?.title ?? 'Me';
-  const peer = self?.peer;
+  const peer = info?.peer;
 
   if (!peer) {
     return {

@@ -7,8 +7,7 @@ export function FieldGroupList(
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem[] {
-  const self = data.self;
-  const peer = self?.peer;
+  const peer = info?.peer;
   const indent = 15;
 
   if (!peer || peer.connections.length === 0) {

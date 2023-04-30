@@ -6,8 +6,6 @@ export function FieldStateShared(
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem {
-  const self = data.self;
-  const peer = self?.peer;
   const shared = data.state?.shared ?? {};
   const label = shared.title ?? 'Shared State';
 

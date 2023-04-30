@@ -15,9 +15,12 @@ import { NetworkSchema } from '../sys.net.schema';
 export const WebRtc = {
   peer,
   events,
+
   InfoCard,
-  Controller,
   NetworkSchema,
   Media,
   Util,
+
+  Controller,
+  controller: Controller.listen,
 };

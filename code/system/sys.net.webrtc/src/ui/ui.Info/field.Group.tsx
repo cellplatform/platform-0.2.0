@@ -5,8 +5,7 @@ export function FieldGroup(
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
 ): t.PropListItem {
-  const self = data.self;
-  const peer = self?.peer;
+  const peer = info?.peer;
   const label = data.peers?.title ?? 'Group';
 
   if (!peer || peer.connections.length === 0) {
