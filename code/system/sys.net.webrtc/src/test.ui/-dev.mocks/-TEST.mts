@@ -9,7 +9,6 @@ export default Test.describe('mocking (helpers)', (e) => {
         const conn = mock.conn;
         expect(conn.id.startsWith('dc_')).to.eql(true);
         expect(conn.kind).to.eql('data');
-        expect(conn.metadata.label).to.eql('Unnamed');
         expect(conn.isOpen).to.eql(true);
         expect(conn.peer.local.length).to.greaterThan(10);
         expect(conn.peer.remote.length).to.greaterThan(10);
@@ -17,7 +16,7 @@ export default Test.describe('mocking (helpers)', (e) => {
 
       e.it('overridden properties (initial)', (e) => {
         const id = 'my-id';
-        const metadata: t.PeerMetaData = { label: 'Foo' };
+        const metadata: t.PeerMetaData = {};
         const peer = { local: 'a', remote: 'b' };
         const mock = Mock.DataConnection.edge({ id, metadata, peer });
         const conn = mock.conn;
