@@ -159,7 +159,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const isAdding = (state: T) => state.debug.addingConnection!;
       dev.button((btn) =>
         btn
-          .label((e) => (isAdding(e.state) ? 'adding new peer...' : 'add peer'))
+          .label((e) => (isAdding(e.state) ? 'creating new peer...' : 'new peer (network)'))
           .enabled((e) => !isAdding(e.state))
           .spinner((e) => isAdding(e.state))
           .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
@@ -200,8 +200,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.button((btn) =>
       btn
-        .label('print')
-        .right('← console')
+        .label('print debug')
+        .right('← console log')
         .onClick(async (e) => {
           console.info('self.count:', selfState.current.count);
           for (const remote of remotes) {

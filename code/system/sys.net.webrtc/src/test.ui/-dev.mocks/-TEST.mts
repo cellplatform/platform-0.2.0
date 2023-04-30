@@ -1,4 +1,4 @@
-import { Time, Test, expect, t } from '../../test.ui';
+import { expect, t, Test, Time } from '../../test.ui';
 import { Mock } from './Mock.mjs';
 
 export default Test.describe('mocking (helpers)', (e) => {
