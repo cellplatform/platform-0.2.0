@@ -7,7 +7,7 @@ export function FieldSelf(
   info?: t.WebRtcInfo,
 ): t.PropListItem {
   const self = data.self;
-  const label = self?.title ?? 'Self';
+  const label = self?.title ?? 'Me';
   const peer = self?.peer;
 
   if (!peer) {

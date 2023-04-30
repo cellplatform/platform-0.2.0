@@ -5,8 +5,8 @@ export type WebRtcInfoField =
   | 'Module.Verify'
   | 'Self.Id'
   | 'State.Shared'
-  | 'Peers'
-  | 'Peers.List';
+  | 'Group'
+  | 'Group.Peers';
 
 export type WebRtcInfoData = {
   events?: t.WebRtcEvents;

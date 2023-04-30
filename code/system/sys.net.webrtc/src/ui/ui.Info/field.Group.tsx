@@ -1,6 +1,6 @@
 import { t, Value } from './common';
 
-export function FieldPeers(
+export function FieldGroup(
   fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,

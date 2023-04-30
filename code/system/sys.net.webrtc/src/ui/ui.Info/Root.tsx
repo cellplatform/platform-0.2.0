@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
 import { FieldModuleVerify } from './field.Module.Verify';
-import { FieldPeers } from './field.Peers';
-import { FieldPeersList } from './field.Peers.List';
+import { FieldGroup } from './field.Group';
+import { FieldGroupList } from './field.Group.Peers';
 import { FieldSelf } from './field.Self';
 import { FieldStateShared } from './field.State.Shared';
 import { useInfo } from './useInfo.mjs';
@@ -28,8 +28,8 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(fields, data))
     .field('Self.Id', () => FieldSelf(fields, data, info))
-    .field('Peers', () => FieldPeers(fields, data, info))
-    .field('Peers.List', () => FieldPeersList(fields, data, info))
+    .field('Group', () => FieldGroup(fields, data, info))
+    .field('Group.Peers', () => FieldGroupList(fields, data, info))
     .field('State.Shared', () => FieldStateShared(fields, data, info))
     .items(fields);
 

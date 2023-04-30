@@ -2,7 +2,7 @@ import { Value, t, PropList } from './common';
 import { Chip } from './ui.Chip';
 import { Video } from './ui.Video';
 
-export function FieldPeersList(
+export function FieldGroupList(
   fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
