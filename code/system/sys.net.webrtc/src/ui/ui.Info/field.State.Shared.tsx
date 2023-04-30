@@ -1,5 +1,5 @@
 import { t, Value, Icons, COLORS, Color, Crdt, css, Filesize } from './common';
-import { useSyncerTraffic } from './useSyncerTraffic.mjs';
+import { useSyncTraffic } from './useSyncTraffic.mjs';
 
 export function FieldStateShared(
   fields: t.WebRtcInfoField[],
@@ -27,14 +27,13 @@ export function FieldStateShared(
 /**
  * Component
  */
-
 export type SyncProps = {
   info?: t.WebRtcInfo;
   style?: t.CssValue;
 };
 
 export const Syncers: React.FC<SyncProps> = (props) => {
-  const { syncers, bytes, messages } = useSyncerTraffic(props.info);
+  const { syncers, bytes, messages } = useSyncTraffic(props.info);
 
   const isEmpty = syncers.length === 0;
   const size = Filesize(bytes, { round: 0 });

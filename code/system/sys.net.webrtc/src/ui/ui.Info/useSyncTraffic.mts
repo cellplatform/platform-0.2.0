@@ -4,7 +4,7 @@ import { rx, t } from './common';
 /**
  * Accumulate network traffic stats from all syncers.
  */
-export function useSyncerTraffic(info?: t.WebRtcInfo) {
+export function useSyncTraffic(info?: t.WebRtcInfo) {
   const syncers = info?.syncers ?? [];
   const ids = syncers.map((item) => item.syncer.doc.id.doc);
 
