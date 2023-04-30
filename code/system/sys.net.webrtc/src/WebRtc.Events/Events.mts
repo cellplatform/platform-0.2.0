@@ -5,18 +5,6 @@ type Id = string;
 const DEFAULT = { timeout: 1000 };
 
 /**
- * Creat a new events API wrapper.
- */
-export function factory(
-  bus: t.EventBus<any>,
-  peer: t.PeerId,
-  options: { dispose$?: t.Observable<any> } = {},
-) {
-  const { dispose$ } = options;
-  return WebRtcEvents({ instance: { bus, id: peer }, dispose$ });
-}
-
-/**
  * Event API.
  */
 export function WebRtcEvents(args: {
