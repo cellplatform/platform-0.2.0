@@ -1,6 +1,6 @@
 import { COLORS, DevWrangle, t } from './common';
+import { DevKeyboard } from './logic.Keyboard';
 import { Harness } from './ui/Harness';
-import { DevKeyboard } from './ui/Keyboard';
 import { SpecList } from './ui/SpecList';
 
 type Options = {
