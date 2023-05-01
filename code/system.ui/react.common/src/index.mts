@@ -12,6 +12,7 @@ export { Specs, DevSpecs } from './test.ui/entry.Specs.mjs';
 export { Button } from './ui/Button';
 export { Card } from './ui/Card';
 export { Center } from './ui/Center';
+export { Chip } from './ui/Chip';
 export { Icon } from './ui/Icon';
 export { IFrame } from './ui/IFrame';
 export { Keyboard } from './ui/Text.Keyboard';
