@@ -82,6 +82,6 @@ export const sampleItems: t.PropListItem[] = [
   },
   { label: 'indent foo', value: 1234, indent: 15 },
   { label: 'indent bar', value: 5678, indent: 15 },
-  { label: 'hash', value: { data: <PropList.HashValue text={HASH} />, clipboard: HASH } },
+  { label: 'hash', value: { data: <PropList.Hash text={HASH} />, clipboard: HASH } },
   { value: <div {...css(styles.bgRed, { flex: 1, height: 30 })}>value only</div> },
 ];

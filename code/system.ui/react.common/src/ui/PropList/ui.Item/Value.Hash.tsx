@@ -4,14 +4,14 @@ const DEFAULT = {
   length: [8, 5] as [number, number],
 };
 
-export type HashValueProps = {
+export type HashProps = {
   text: string;
   prefix?: string;
   length?: number | [number, number];
   style?: t.CssValue;
 };
 
-export const HashValue: React.FC<HashValueProps> = (props) => {
+export const Hash: React.FC<HashProps> = (props) => {
   const text = props.text ?? '';
   const prefix = props.prefix ?? Wrangle.prefix(text);
   const shortened = Value.shortenHash(text, props.length ?? DEFAULT.length, { trimPrefix: true });

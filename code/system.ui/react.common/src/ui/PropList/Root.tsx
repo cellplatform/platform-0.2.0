@@ -3,8 +3,9 @@ import { FieldBuilder } from './FieldBuilder.mjs';
 import { PropList as View } from './ui/PropList';
 import { PropListProps } from './types.mjs';
 import { FieldSelector } from './ui.FieldSelector';
-import { HashValue } from './ui.Item/Value.Hash';
+import { Hash } from './ui.Item/Value.Hash';
 import { Wrangle } from './Util.mjs';
+import { Chip } from '../Chip';
 
 export type { PropListProps };
 
@@ -15,7 +16,8 @@ type Fields = {
   builder<F extends string>(): t.PropListFieldBuilder<F>;
   FieldBuilder: typeof FieldBuilder;
   FieldSelector: typeof FieldSelector;
-  HashValue: typeof HashValue;
+  Hash: typeof Hash;
+  Chip: typeof Chip;
 };
 
 export const PropList = FC.decorate<PropListProps, Fields>(
@@ -27,7 +29,8 @@ export const PropList = FC.decorate<PropListProps, Fields>(
     builder: FieldBuilder,
     FieldBuilder,
     FieldSelector,
-    HashValue,
+    Hash,
+    Chip,
   },
   { displayName: 'PropList' },
 );
