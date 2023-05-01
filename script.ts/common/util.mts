@@ -23,18 +23,12 @@ export const Util = {
   /**
    * Find matching files.
    */
-  glob(pattern: string) {
-    return new Promise<string[]>((resolve, reject) => {
-      glob(pattern, (err, matches) => (err ? reject(err) : resolve(matches)));
-    });
-  },
+  glob,
 
   /**
    * Convert a number (bytes) to a human readable file-size string.
    */
-  filesize(bytes: number) {
-    return filesize(bytes);
-  },
+  filesize,
 
   /**
    * Calculate the size of a folder
