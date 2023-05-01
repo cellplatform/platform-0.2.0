@@ -32,7 +32,7 @@ export default Dev.describe('Chip', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = { props: e.state.props };
       return <Dev.Object name={'Chip'} data={data} expand={1} />;
     });
   });

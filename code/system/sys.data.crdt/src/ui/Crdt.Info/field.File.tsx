@@ -57,7 +57,7 @@ export function FieldFile(
         res.push({
           label: 'Hash',
           value: {
-            data: <PropList.HashValue text={manifest.hash.files} />,
+            data: <PropList.Hash text={manifest.hash.files} />,
             clipboard: manifest.hash.files,
           },
           tooltip: `files hash:\n${manifest.hash.files}`,

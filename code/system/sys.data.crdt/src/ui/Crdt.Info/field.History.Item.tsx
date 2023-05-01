@@ -32,7 +32,7 @@ export function FieldHistoryItem(
   });
   res.push({
     label: 'Hash',
-    value: { data: <PropList.HashValue text={hash} />, clipboard: hash },
+    value: { data: <PropList.Hash text={hash} />, clipboard: hash },
     tooltip: `commit hash: ${change.hash}`,
     indent,
   });
