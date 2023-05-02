@@ -12,7 +12,7 @@ const initial: T = {
     tooltip: 'My Button',
     label: 'Hello-🐷',
   },
-  debug: { bg: false, useLabel: true },
+  debug: { bg: true, useLabel: true },
 };
 
 type LocalStore = T['debug'];
@@ -40,7 +40,7 @@ export default Dev.describe('Button', (e) => {
         props.children = undefined;
       } else {
         props.label = undefined;
-        props.children = <div>Hello Child Element</div>;
+        props.children = <div>Child Element</div>;
       }
 
       return (
