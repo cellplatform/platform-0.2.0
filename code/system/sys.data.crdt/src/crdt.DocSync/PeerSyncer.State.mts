@@ -1,24 +1,29 @@
-import { Automerge, DEFAULTS, t } from './common';
+import { rx, Automerge, DEFAULTS, t } from './common';
 
 type SyncState = Automerge.SyncState;
 const { initSyncState, decodeSyncState, encodeSyncState } = Automerge;
 
-export function SyncState(args: { filedir?: t.Fs }) {
+export function SyncState(args: { filedir?: t.Fs; dispose$?: t.Observable<any> }) {
+  let _disposed = false;
+  const { dispose$, dispose } = rx.disposable(args.dispose$);
+  dispose$.subscribe(() => (_disposed = true));
+
   const { filedir } = args;
   const filename = DEFAULTS.sync.filename;
-  let _: SyncState | undefined;
+  let _current: SyncState | undefined;
 
   const api = {
     async get() {
-      if (!_) api.set(await api.init());
-      return _ as SyncState;
+      if (!_current && !api.disposed) api.set(await api.init());
+      return _current as SyncState;
     },
 
     set(value: SyncState) {
-      _ = value;
+      _current = value;
     },
 
     async init() {
+      if (api.disposed) throw new Error('PeerSyncer.State is disposed');
       if (!filedir) return initSyncState();
       if (!(await filedir.exists(filename))) return initSyncState();
       const data = await filedir.read(filename);
@@ -26,12 +31,21 @@ export function SyncState(args: { filedir?: t.Fs }) {
     },
 
     async save() {
-      if (!filedir) return false;
+      if (!filedir || api.disposed) return false;
       const data = encodeSyncState(await api.get());
       await filedir.write(filename, data);
       return true;
     },
-  };
+
+    /**
+     * Lifecycle
+     */
+    dispose$,
+    dispose,
+    get disposed() {
+      return _disposed;
+    },
+  } as const;
 
   return api;
 }

@@ -22,7 +22,7 @@ export function PeerSyncer<D extends {}>(
   });
 
   const bus = rx.busAsType<t.CrdtEvent>(netbus);
-  const state = SyncState({ filedir });
+  const state = SyncState({ filedir, dispose$ });
 
   let _count = 0;
   let _bytes = 0;
