@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { COLORS, css, FC, Style, t } from '../common';
+import { Spinner } from '../Spinner';
 
-const DEFAULT = {
+const DEFAULTS = {
   isEnabled: true,
   block: false,
+  spinning: false,
   disabledOpacity: 0.3,
   userSelect: false,
   pressedOffset: [0, 1] as [number, number],
@@ -15,6 +17,7 @@ export type ButtonProps = {
   isEnabled?: boolean;
   block?: boolean;
   tooltip?: string;
+  spinning?: boolean;
 
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
@@ -36,11 +39,12 @@ export type ButtonProps = {
 
 const View: React.FC<ButtonProps> = (props) => {
   const {
-    isEnabled = DEFAULT.isEnabled,
-    block = DEFAULT.block,
-    disabledOpacity = DEFAULT.disabledOpacity,
-    userSelect = DEFAULT.userSelect,
-    pressedOffset = DEFAULT.pressedOffset,
+    isEnabled = DEFAULTS.isEnabled,
+    block = DEFAULTS.block,
+    disabledOpacity = DEFAULTS.disabledOpacity,
+    userSelect = DEFAULTS.userSelect,
+    pressedOffset = DEFAULTS.pressedOffset,
+    spinning = DEFAULTS.spinning,
   } = props;
 
   const [isOver, setIsOver] = useState(false);
@@ -89,6 +93,7 @@ const View: React.FC<ButtonProps> = (props) => {
     base: css({
       ...Style.toMargins(props.margin),
       ...Style.toPadding(props.padding),
+      position: 'relative',
       display: block ? 'block' : 'inline-block',
       minWidth: props.minWidth,
       maxWidth: props.maxWidth,
@@ -98,8 +103,26 @@ const View: React.FC<ButtonProps> = (props) => {
       userSelect: userSelect ? 'auto' : 'none',
       transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
     }),
+    body: css({
+      opacity: spinning ? 0.15 : 1,
+      filter: `blur(${spinning ? 3 : 0}px)`,
+      transition: 'opacity 0.1s ease',
+    }),
     label: css({}),
+    spinner: css({
+      Absolute: 0,
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
+
+  console.log('spinning', spinning);
+
+  const elSpinner = spinning && (
+    <div {...styles.spinner}>
+      <Spinner.Bar color={COLORS.GREEN} width={30} {...styles.spinner} />
+    </div>
+  );
 
   return (
     <div
@@ -112,8 +135,11 @@ const View: React.FC<ButtonProps> = (props) => {
       onMouseUp={down(false)}
       onDoubleClick={props.onDoubleClick}
     >
-      {props.label && <div {...styles.label}>{props.label}</div>}
-      {props.children}
+      <div {...styles.body}>
+        {props.label && <div {...styles.label}>{props.label}</div>}
+        {props.children}
+      </div>
+      {elSpinner}
     </div>
   );
 };
@@ -147,10 +173,10 @@ const Wrangle = {
  */
 
 type Fields = {
-  DEFAULT: typeof DEFAULT;
+  DEFAULTS: typeof DEFAULTS;
 };
 export const Button = FC.decorate<ButtonProps, Fields>(
   View,
-  { DEFAULT },
+  { DEFAULTS },
   { displayName: 'Button' },
 );
