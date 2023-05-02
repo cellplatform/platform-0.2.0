@@ -3,7 +3,7 @@ import { Button, ButtonProps } from './Button';
 
 const DEFAULTS = Button.DEFAULTS;
 
-type T = { props: ButtonProps; debug: { bg: boolean; useLabel: boolean } };
+type T = { props: ButtonProps; debug: { bg: boolean; useLabel: boolean; padding: boolean } };
 const initial: T = {
   props: {
     isEnabled: DEFAULTS.isEnabled,
@@ -12,7 +12,7 @@ const initial: T = {
     tooltip: 'My Button',
     label: 'Hello-🐷',
   },
-  debug: { bg: true, useLabel: true },
+  debug: { bg: true, useLabel: true, padding: false },
 };
 
 type LocalStore = T['debug'];
@@ -33,15 +33,22 @@ export default Dev.describe('Button', (e) => {
       const { debug } = e.state;
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
 
-      const props = { ...e.state.props };
+      const props = {
+        ...e.state.props,
+        padding: debug.padding ? 20 : undefined,
+      };
 
       if (!debug.useLabel) {
         props.label = 'Label-🐷';
         props.children = undefined;
       } else {
         props.label = undefined;
-        props.children = <div>Child Element</div>;
+        props.children = <div>{'My Child Element'}</div>;
       }
+
+      // const styles = {
+      //   base: css({}),
+      // };
 
       return (
         <Button
@@ -87,22 +94,34 @@ export default Dev.describe('Button', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.button((btn) =>
+        btn
+          .label('content: <child element>')
+          .right((e) => (!e.state.debug.useLabel ? '← current' : ''))
+          .onClick((e) => e.change((d) => (d.debug.useLabel = false))),
+      );
+
+      dev.button((btn) =>
+        btn
+          .label('content: "label" property')
+          .right((e) => (e.state.debug.useLabel ? '← current' : ''))
+          .onClick((e) => e.change((d) => (d.debug.useLabel = true))),
+      );
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) =>
         btn
-          .label((e) => `using: ${e.state.debug.useLabel ? '"text" label' : '<child> element'}`)
-          .value((e) => Boolean(e.state.debug.useLabel))
-          .onClick((e) => {
-            e.change((d) => {
-              local.useLabel = Dev.toggle(d.debug, 'useLabel');
-            });
-          }),
+          .label((e) => `background (${e.state.debug.bg ? 'showing' : 'transparent'})`)
+          .value((e) => Boolean(e.state.debug.bg))
+          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `bg: ${e.state.debug.bg ? 'showing' : 'transparent'}`)
-          .value((e) => Boolean(e.state.debug.bg))
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
+          .label((e) => `padding`)
+          .value((e) => Boolean(e.state.debug.padding))
+          .onClick((e) => e.change((d) => (local.padding = Dev.toggle(d.debug, 'padding')))),
       );
     });
   });
