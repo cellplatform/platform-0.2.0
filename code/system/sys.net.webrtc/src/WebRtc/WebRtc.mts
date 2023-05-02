@@ -6,7 +6,6 @@ import { WebRtcUtils as Util } from '../WebRtc.Util';
 import { peer } from './WebRtc.peer.mjs';
 import { Media } from '../WebRtc.Media';
 import { events } from '../WebRtc.Events';
-import { WebRtcInfo as InfoCard } from '../ui/ui.Info';
 import { NetworkSchema } from '../sys.net.schema';
 
 /**
@@ -16,7 +15,6 @@ export const WebRtc = {
   peer,
   events,
 
-  InfoCard,
   NetworkSchema,
   Media,
   Util,
