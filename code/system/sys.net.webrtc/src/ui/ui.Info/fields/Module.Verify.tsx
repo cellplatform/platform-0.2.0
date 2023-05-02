@@ -1,10 +1,10 @@
-import { t, TestRunner, DEFAULTS } from './common';
+import { t, TestRunner, DEFAULTS } from '../common';
 
 export function FieldModuleVerify(fields: t.WebRtcInfoField[], data: t.WebRtcInfoData) {
   return TestRunner.PropList.item({
     infoUrl: Wrangle.infoUrl(),
     async get() {
-      const { TESTS } = await import('../../test.ui/-TestRunner.tests.mjs');
+      const { TESTS } = await import('../../../test.ui/-TestRunner.tests.mjs');
       const root = await TestRunner.bundle(TESTS.all());
       const ctx = {};
       return { root, ctx };

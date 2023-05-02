@@ -14,14 +14,14 @@ export function useSyncTraffic(info?: t.WebRtcInfo) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
-    const update = (count: number, bytes: number) => {
-      setMessages(count);
-      setBytes(bytes);
+    const append = (count: number, bytes: number) => {
+      setMessages((prev) => prev + count);
+      setBytes((prev) => prev + bytes);
     };
 
     syncers.map(({ syncer }) => {
-      syncer.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => update(e.count, e.bytes));
-      update(syncer.count, syncer.bytes);
+      syncer.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => append(e.count, e.bytes));
+      append(syncer.count, syncer.bytes);
     });
 
     return dispose;

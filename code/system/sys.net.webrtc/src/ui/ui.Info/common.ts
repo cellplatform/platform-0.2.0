@@ -11,10 +11,19 @@ export const FIELDS: t.WebRtcInfoField[] = [
   'State.Shared',
   'Group',
   'Group.Peers',
+  'Peer',
+  'Peer.Connections',
 ];
 
 export const DEFAULTS = {
-  fields: ['Module.Verify', 'Module'] as t.WebRtcInfoField[],
+  fields: [
+    'Module.Verify',
+    'Module',
+    'Self.Id',
+    'State.Shared',
+    'Group',
+    'Group.Peers',
+  ] as t.WebRtcInfoField[],
   indent: 15,
   query: { dev: 'dev', selected: 'selected' },
 } as const;

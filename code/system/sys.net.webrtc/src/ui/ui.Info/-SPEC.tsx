@@ -159,7 +159,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const isAdding = (state: T) => state.debug.addingConnection!;
       dev.button((btn) =>
         btn
-          .label((e) => (isAdding(e.state) ? 'creating new peer...' : 'new peer (network)'))
+          .label((e) => (isAdding(e.state) ? 'creating new network/peer...' : 'new network/peer'))
           .enabled((e) => !isAdding(e.state))
           .spinner((e) => isAdding(e.state))
           .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
@@ -224,6 +224,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         [`Peer.Self(${total})`]: self,
         'Peers.Remote': remotes,
         'State.Shared': sharedState?.current,
+        'State.Shared.peers': sharedState?.current?.network.peers,
       };
       return <Dev.Object name={'WebRtc.InfoCard'} data={data} expand={1} />;
     });

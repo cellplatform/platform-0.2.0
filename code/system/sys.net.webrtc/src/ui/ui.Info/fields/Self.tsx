@@ -1,5 +1,4 @@
-import { t, Value } from './common';
-import { Chip } from './ui.Chip';
+import { t, Value, PropList } from '../common';
 
 export function FieldSelf(
   fields: t.WebRtcInfoField[],
@@ -17,11 +16,12 @@ export function FieldSelf(
     };
   }
 
+  const shorthash = Value.shortenHash(peer.id, [5, 0]);
   const item: t.PropListItem = {
     label,
     tooltip: `Peer ID: ${peer.id}`,
     value: {
-      data: <Chip text={`me:${Value.shortenHash(peer.id, [0, 5])}`} />,
+      data: <PropList.Chip text={`me:${shorthash}`} />,
       clipboard: peer.id,
     },
   };

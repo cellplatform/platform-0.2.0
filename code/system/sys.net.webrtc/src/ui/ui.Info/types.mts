@@ -6,11 +6,14 @@ export type WebRtcInfoField =
   | 'Self.Id'
   | 'State.Shared'
   | 'Group'
-  | 'Group.Peers';
+  | 'Group.Peers'
+  | 'Peer'
+  | 'Peer.Connections';
 
 export type WebRtcInfoData = {
   events?: t.WebRtcEvents;
   self?: { title?: string };
-  peers?: { title?: string };
+  peer?: { title?: string };
+  group?: { title?: string };
   state?: { shared?: { title?: string } };
 };
