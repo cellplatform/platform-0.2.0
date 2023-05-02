@@ -109,14 +109,8 @@ const View: React.FC<ButtonProps> = (props) => {
       transition: 'opacity 0.1s ease',
     }),
     label: css({}),
-    spinner: css({
-      Absolute: 0,
-      display: 'grid',
-      placeItems: 'center',
-    }),
+    spinner: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
   };
-
-  console.log('spinning', spinning);
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
