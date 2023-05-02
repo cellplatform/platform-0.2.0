@@ -33,13 +33,7 @@ export default Dev.describe('Button', (e) => {
       const { debug } = e.state;
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
 
-      // const label = debug.useLabel ? e.state.props.label : undefined;
-
-      const props = {
-        ...e.state.props,
-        // label: debug.useLabel ? e.state.props.label : undefined,
-        // children: !debug.useLabel ? e.state.props.children : undefined,
-      };
+      const props = { ...e.state.props };
 
       if (!debug.useLabel) {
         props.label = 'Label-🐷';
@@ -52,8 +46,11 @@ export default Dev.describe('Button', (e) => {
       return (
         <Button
           {...props}
-          onClick={(e) => console.info('⚡️ onClick', e)}
           onMouse={(e) => console.info(`⚡️ onMouse`, e)}
+          onClick={(e) => {
+            console.info('⚡️ onClick', e);
+            // state.change((d) => Dev.toggle(d.props, 'spinning'));
+          }}
         />
       );
     });

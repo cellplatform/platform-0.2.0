@@ -98,12 +98,12 @@ const View: React.FC<ButtonProps> = (props) => {
       minWidth: props.minWidth,
       maxWidth: props.maxWidth,
       opacity: isEnabled ? 1 : disabledOpacity,
-      cursor: isEnabled ? 'pointer' : 'default',
+      cursor: isEnabled && !spinning ? 'pointer' : 'default',
       color: Wrangle.color({ isEnabled, isOver }),
       userSelect: userSelect ? 'auto' : 'none',
-      transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
     }),
     body: css({
+      transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
       opacity: spinning ? 0.15 : 1,
       filter: `blur(${spinning ? 3 : 0}px)`,
       transition: 'opacity 0.1s ease',
@@ -120,7 +120,7 @@ const View: React.FC<ButtonProps> = (props) => {
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner.Bar color={COLORS.GREEN} width={30} {...styles.spinner} />
+      <Spinner.Bar color={isEnabled ? COLORS.GREEN : COLORS.DARK} width={30} {...styles.spinner} />
     </div>
   );
 
