@@ -1,28 +1,29 @@
+import { FaNetworkWired } from 'react-icons/fa';
 import {
+  MdCamera,
   MdClose,
   MdConnectedTv,
   MdDelete,
   MdDone,
   MdDoneOutline,
+  MdError,
+  MdKeyboard,
+  MdLanguage,
+  MdMemory,
   MdMic,
   MdMicOff,
-  MdOutlineViewInAr,
-  MdSupportAgent,
-  MdKeyboard,
-  MdCamera,
-  MdLanguage,
-  MdVpnLock,
-  MdStart,
   MdMultipleStop,
-  MdPublicOff,
+  MdOutlineViewInAr,
   MdPublic,
+  MdPublicOff,
+  MdSettingsInputAntenna,
+  MdStart,
+  MdSupportAgent,
+  MdVpnLock,
   MdWifiTethering,
   MdWifiTetheringOff,
-  MdError,
-  MdSettingsInputAntenna,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
-import { FaNetworkWired } from 'react-icons/fa';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -50,6 +51,7 @@ export const Icons = {
   Connection: { On: icon(MdWifiTethering), Off: icon(MdWifiTetheringOff) },
   Arrow: { Start: icon(MdStart), TwoWay: icon(MdMultipleStop) },
   Error: icon(MdError),
+  Memory: icon(MdMemory),
   Network: {
     Antenna: icon(MdSettingsInputAntenna),
     Docs: icon(FaNetworkWired),
