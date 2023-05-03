@@ -65,12 +65,11 @@ export const Syncers: React.FC<SyncProps> = (props) => {
     base: css({ position: 'relative' }),
     empty: css({ opacity: 0.3 }),
     icoDoc: css({ position: 'relative', top: -1, marginLeft: 6 }),
-    icoNet: css({ marginRight: 4 }),
+    icoNet: css({ marginLeft: 6 }),
     body: css({
       display: 'grid',
       alignContent: 'center',
       gridTemplateColumns: '1fr auto auto auto',
-      // columnGap: 4,
     }),
   };
 
@@ -84,8 +83,8 @@ export const Syncers: React.FC<SyncProps> = (props) => {
   const elBody = !isEmpty && (
     <div {...styles.body}>
       <div />
-      {elIcoNet}
       <div>{text}</div>
+      {elIcoNet}
       {elIcoDoc}
     </div>
   );

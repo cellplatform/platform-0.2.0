@@ -5,7 +5,8 @@ import { FieldModuleVerify } from './fields/Module.Verify';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
 import { useInfo } from './useInfo.mjs';
-import { FieldPeer, FieldPeerConnections } from './fields/Peer';
+import { FieldPeer } from './fields/Peer';
+import { FieldPeerConnections } from './fields/Peer.Connections';
 
 export type WebRtcInfoProps = {
   title?: t.PropListProps['title'];

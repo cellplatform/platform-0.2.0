@@ -1,6 +1,6 @@
-import { Value, Dev, css, PropList, t, TestNetwork, Keyboard, WebRtc } from '../../test.ui';
-import { WebRtcInfo, WebRtcInfoProps } from '.';
-import { ConnectInput } from '../ui.ConnectInput';
+import { Value, Dev, css, PropList, t, TestNetwork, Keyboard, WebRtc } from '../../../test.ui';
+import { WebRtcInfo, WebRtcInfoProps } from '..';
+import { ConnectInput } from '../../ui.ConnectInput';
 
 type T = {
   props: WebRtcInfoProps;
@@ -71,16 +71,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     });
   });
 
-  e.it('keyboard:init', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    Keyboard.on({
-      Enter(e) {
-        e.handled();
-        state.change((d) => Dev.toggle(d.props, 'flipped'));
-      },
-    });
-  });
+  // e.it('keyboard:init', async (e) => {
+  //   const dev = Dev.tools<T>(e, initial);
+  //   const state = await dev.state();
+  //   Keyboard.on({
+  //     Enter(e) {
+  //       e.handled();
+  //       state.change((d) => Dev.toggle(d.props, 'flipped'));
+  //     },
+  //   });
+  // });
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
@@ -95,6 +95,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
           onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
           onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
+          onConnectRequest={(e) => {
+            //
+
+            events.connect.fire(e.remote);
+          }}
         />
       );
     });
@@ -147,7 +152,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `flipped (← Enter)`)
+          .label((e) => `flipped`)
           .value((e) => Boolean(e.state.props.flipped))
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
