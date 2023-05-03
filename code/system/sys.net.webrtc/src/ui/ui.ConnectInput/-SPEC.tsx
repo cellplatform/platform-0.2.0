@@ -1,5 +1,5 @@
-import { WebRtc, Dev, TestNetwork, t, PropList } from '../../test.ui';
 import { ConnectInput } from '.';
+import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
 
 const { DEFAULTS } = ConnectInput;
 
@@ -20,6 +20,7 @@ const local = localstore.object({
 
 export default Dev.describe('ConnectInput', async (e) => {
   const self = await TestNetwork.peer();
+  const events = WebRtc.controller(self);
 
   const Util = {
     props: (state: T) => {
@@ -58,7 +59,7 @@ export default Dev.describe('ConnectInput', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtc.InfoCard fields={['Module', 'Self.Id']} data={{ self: { peer: self } }} />;
+      return <WebRtcInfo fields={['Module', 'Self.Id']} data={{ events }} />;
     });
 
     dev.hr(5, 20);
