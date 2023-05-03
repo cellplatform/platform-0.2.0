@@ -1,5 +1,5 @@
 import { PeerCard, PeerCardProps } from '.';
-import { Dev, PropList, t, TestNetwork, WebRtc } from '../../test.ui';
+import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
 
 type T = { props: PeerCardProps };
 const initial: T = { props: {} };
@@ -49,7 +49,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.row((e) => {
       return (
-        <WebRtc.InfoCard
+        <WebRtcInfo
           fields={['Module.Verify', 'Module']}
           data={{ events }}
           margin={[0, 20, 0, 20]}
