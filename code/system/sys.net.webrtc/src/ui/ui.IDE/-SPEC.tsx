@@ -3,9 +3,21 @@ import { PeerCard, PeerCardProps } from '../ui.PeerCard';
 import { PeerList } from '../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
-import { COLORS, css, Dev, Filesystem, Keyboard, MediaStream, rx, t, TEST, WebRtc } from './common';
-import { FileCard } from './FileCard';
 import { REPL } from './-SPEC.REPL';
+import {
+  COLORS,
+  css,
+  Dev,
+  Filesystem,
+  Keyboard,
+  MediaStream,
+  rx,
+  t,
+  TEST,
+  WebRtc,
+  WebRtcInfo,
+} from './common';
+import { FileCard } from './FileCard';
 
 type T = {
   remotePeer?: t.PeerId;
@@ -277,7 +289,7 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.row((e) => {
       if (!self || !controller) return;
       return (
-        <WebRtc.InfoCard
+        <WebRtcInfo
           fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
           data={{ events: controller }}
         />
