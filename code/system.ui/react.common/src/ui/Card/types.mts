@@ -34,6 +34,8 @@ export type CardProps = {
   height?: t.CardHeight;
   userSelect?: string | boolean;
   shadow?: boolean | t.CssShadow;
+  focused?: boolean;
+  tabIndex?: number; // NB: auto set to 0 if [focused] property or [onFocus/onBlur] handlers are set.
   style?: t.CssValue;
 
   onClick?: React.MouseEventHandler;
@@ -42,4 +44,8 @@ export type CardProps = {
   onMouseUp?: React.MouseEventHandler;
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
+  onFocusChange?: CardFocusChangeHandler;
 };
+
+export type CardFocusChangeHandler = (e: CardFocusChangeHandlerArgs) => void;
+export type CardFocusChangeHandlerArgs = { focused: boolean };

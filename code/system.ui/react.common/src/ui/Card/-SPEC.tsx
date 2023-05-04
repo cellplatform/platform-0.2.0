@@ -1,9 +1,9 @@
 import { Card } from '.';
-import { css, Dev, t, Keyboard } from '../../test.ui';
+import { Color, COLORS, css, Dev, Keyboard, t } from '../../test.ui';
 
 type T = {
   props: t.CardProps;
-  debug: { flipFast: boolean };
+  debug: { flipFast: boolean; focusable: boolean };
 };
 const initial: T = {
   props: {
@@ -13,13 +13,13 @@ const initial: T = {
     showAsCard: true,
     showBackside: false,
   },
-  debug: { flipFast: true },
+  debug: { flipFast: true, focusable: true },
 };
 
 export default Dev.describe('Card', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
 
     ctx.host.tracelineColor(-0.05);
     ctx.subject
@@ -49,6 +49,14 @@ export default Dev.describe('Card', (e) => {
               speed: debug.flipFast ? 300 : 1000,
             }}
             onClick={() => console.info('⚡️ onClick')}
+            onFocusChange={
+              !debug.focusable
+                ? undefined
+                : (e) => {
+                    console.info('⚡️ onFocusChange', e);
+                    state.change((d) => (d.props.focused = e.focused));
+                  }
+            }
           >
             {elBody}
           </Card>
@@ -104,13 +112,6 @@ export default Dev.describe('Card', (e) => {
           .value((e) => Boolean(e.state.props.showAsCard))
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showAsCard'))),
       );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => 'showBackside (Enter)')
-          .value((e) => Boolean(e.state.props.showBackside))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showBackside'))),
-      );
     });
 
     dev.hr(5, 20);
@@ -157,9 +158,25 @@ export default Dev.describe('Card', (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `flip fast`)
+          .label((e) => `focusable`)
+          .value((e) => Boolean(e.state.debug.focusable))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'focusable'))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flip speed: ${e.state.debug.flipFast ? 'fast' : 'slow'}`)
           .value((e) => e.state.debug.flipFast)
           .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'flipFast'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'showBackside (Enter)')
+          .value((e) => Boolean(e.state.props.showBackside))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showBackside'))),
       );
     });
   });
