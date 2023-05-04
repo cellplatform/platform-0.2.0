@@ -1,19 +1,8 @@
 import { WebRtcController } from '..';
-import {
-  Crdt,
-  Dev,
-  expect,
-  Filesystem,
-  Pkg,
-  rx,
-  t,
-  TestNetwork,
-  Time,
-  WebRtc,
-} from '../../test.ui';
+import { Crdt, Dev, expect, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 import { pruneDeadPeers } from '../util.mjs';
 
-export default Dev.describe('Network Controller: Failure states', async (e) => {
+export default Dev.describe('Network Controller: Failure', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
 
@@ -25,7 +14,7 @@ export default Dev.describe('Network Controller: Failure states', async (e) => {
 
   const initial = WebRtc.NetworkSchema.initial.doc;
   const state = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
-  let controller: t.WebRtcEvents;
+  let controller: t.WebRtcController;
 
   e.it('setup peers: A ⇔ B (listen)', async (e) => {
     const [a, b] = await TestNetwork.peers(2, { getStream: true, dispose$ });
@@ -39,11 +28,11 @@ export default Dev.describe('Network Controller: Failure states', async (e) => {
      * NOTE:
      *   This updated the shared-state {network.peers} via the controller.
      */
-    const res = await controller.connect.fire(peerB.id);
+    const res = await controller.events.connect.fire(peerB.id);
     expect(res.peer.local).to.eql(peerA.id);
     expect(res.peer.remote).to.eql(peerB.id);
 
-    const info = (await controller.info.get())!;
+    const info = (await controller.events.info.get())!;
     const network = info?.state.current.network!;
 
     expect(network.peers[peerA.id]).to.exist;
@@ -55,7 +44,7 @@ export default Dev.describe('Network Controller: Failure states', async (e) => {
     const remote = 'FOO-404';
 
     const errors: t.PeerError[] = [];
-    controller.errors.peer$.subscribe((e) => errors.push(e));
+    controller.events.errors.peer$.subscribe((e) => errors.push(e));
 
     /**
      * Adding peer to document (CRDT) initiates the
@@ -67,7 +56,7 @@ export default Dev.describe('Network Controller: Failure states', async (e) => {
     });
     expect(state.current.network.peers[remote].initiatedBy).to.eql(self);
 
-    await rx.firstValueFrom(controller.errors.peer$);
+    await rx.firstValueFrom(controller.events.errors.peer$);
     expect(errors.length).to.eql(1);
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
 

@@ -1,7 +1,7 @@
 import { WebRtcController } from '..';
 import { Crdt, Dev, expect, rx, t, TestNetwork, Time } from '../../test.ui';
 
-export default Dev.describe('Network Controller: 3-way connection', async (e) => {
+export default Dev.describe('Network Controller: 3-way connections', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
 
@@ -9,11 +9,11 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
   let peerB: t.Peer;
   let peerC: t.Peer;
 
-  let controllerA: t.WebRtcEvents;
-  let controllerB: t.WebRtcEvents;
-  let controllerC: t.WebRtcEvents;
+  let controllerA: t.WebRtcController;
+  let controllerB: t.WebRtcController;
+  let controllerC: t.WebRtcController;
 
-  const getState = async (events: t.WebRtcEvents) => (await events.info.get())?.state!;
+  const getState = async (ctrl: t.WebRtcController) => (await ctrl.events.info.get())?.state!;
   let stateA: t.NetworkDocSharedRef;
   let stateB: t.NetworkDocSharedRef;
   let stateC: t.NetworkDocSharedRef;
@@ -34,13 +34,13 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
   });
 
   e.it('connect: A ⇔ B ⇔ C', async (e) => {
-    await controllerA.connect.fire(peerB.id);
-    await controllerC.connect.fire(peerB.id);
+    await controllerA.events.connect.fire(peerB.id);
+    await controllerC.events.connect.fire(peerB.id);
 
     await Time.wait(5000);
 
-    const write = async (prefix: string, events: t.WebRtcEvents) => {
-      const info = (await events.info.get())!;
+    const write = async (prefix: string, ctrl: t.WebRtcController) => {
+      const info = (await ctrl.events.info.get())!;
       const doc = Crdt.toObject(info.state.current);
       console.log(prefix, '(peers):', doc.network.peers);
     };
@@ -55,12 +55,15 @@ export default Dev.describe('Network Controller: 3-way connection', async (e) =>
     console.log('peerB.', peerB.connections.length);
     console.log('peerC.', peerC.connections.length);
 
+    await Time.wait(1000);
+
+    expect(peerA.connections.length).to.eql(2);
+    expect(peerB.connections.length).to.eql(2);
+    expect(peerC.connections.length).to.eql(2);
   });
 
   e.it('state change | sync: A ⇔ B ⇔ C', async (e) => {
-    stateA.change((d) => {
-      d.tmp.message = 'hello';
-    });
+    stateA.change((d) => (d.tmp.message = 'hello'));
 
     /**
      * TODO 🐷

@@ -1,7 +1,7 @@
 import { WebRtcController } from '..';
 import { Dev, expect, slug, t } from '../../test.ui';
 
-export default Dev.describe('Network Controller: Mutate state', (e) => {
+export default Dev.describe('Network Controller: Mutate (State)', (e) => {
   e.timeout(1000 * 15);
   const Mutate = WebRtcController.Mutate;
 
