@@ -18,9 +18,7 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
   /**
    * Handlers
    */
-  const focusHandler = (focused: boolean) => {
-    return () => props.onFocusChange?.({ focused });
-  };
+  const focusHandler = (focused: boolean) => () => props.onFocusChange?.({ focused });
 
   /**
    * Render
