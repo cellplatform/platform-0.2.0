@@ -28,7 +28,7 @@ const styles = {
 export const sampleItems: t.PropListItem[] = [
   { label: 'string 👋', value: 'hello 🌳' },
   { label: 'number', value: { data: 123456, clipboard: 'Value: 123456', monospace: true } },
-  { label: 'boolean', value: true },
+  { label: 'boolean', value: true, selected: true },
   { label: 'boolean (switch)', value: { data: true, kind: 'Switch' } },
   { label: 'boolean (switch) - disabled', value: { data: undefined, kind: 'Switch' } },
   { label: 'clipboard function', value: { data: 'hello', clipboard: () => String(Math.random()) } },

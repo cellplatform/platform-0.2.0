@@ -1,4 +1,4 @@
-import { t, DEFAULTS } from './common';
+import { Color, COLORS, DEFAULTS, t } from './common';
 import { format } from './Util.format.mjs';
 import { theme } from './Util.theme.mjs';
 
@@ -8,6 +8,15 @@ export const Wrangle = {
 
   sizeProp(input?: t.PropListSize | number) {
     return typeof input === 'number' ? { fixed: input } : input;
+  },
+
+  selected(item: t.PropListItem, isDark: boolean): t.PropListItemSelected | undefined {
+    const value = item.selected;
+    if (!value) return undefined;
+    if (typeof value === 'object') return value;
+    if (isDark) return { color: 0.05 };
+    if (!isDark) return { color: Color.alpha(COLORS.DARK, 0.03) };
+    return;
   },
 
   cardProps(input: t.PropListProps): t.PropListCard | undefined {

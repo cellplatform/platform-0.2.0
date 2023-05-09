@@ -1,10 +1,9 @@
-import { useState } from 'react';
-
-import { css, t, Time, useMouseState } from '../common';
+import { useRef, useState } from 'react';
+import { format } from '../Util.format.mjs';
+import { DEFAULTS, Time, css, t, useMouseState } from '../common';
 
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
-import { format } from '../Util.format.mjs';
 
 export type PropListValueProps = {
   item: t.PropListItem;
@@ -23,10 +22,13 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
 
   const mouse = useMouseState();
   const [message, setMessage] = useState<JSX.Element | string>();
+  const messageDelay = useRef<t.TimeDelayPromise>();
 
   const showMessage = (message: JSX.Element | string, delay?: number) => {
+    messageDelay.current?.cancel();
     setMessage(message);
-    Time.delay(delay ?? 1500, () => setMessage(undefined));
+    const msecs = delay ?? DEFAULTS.messageDelay;
+    messageDelay.current = Time.delay(msecs, () => setMessage(undefined));
   };
 
   const handleClick = async () => {

@@ -80,7 +80,10 @@ export type PropListItem = {
   tooltip?: string;
   visible?: boolean;
   indent?: number;
+  selected?: boolean | PropListItemSelected;
 };
+
+export type PropListItemSelected = { color: string | number };
 
 /**
  * The value portion of a [PropList] item.
