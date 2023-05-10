@@ -2,10 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, DEFAULTS, Icons } from './common';
 
 export type ControlBarProps = {
+  camera?: MediaStream;
+  screen?: MediaStream;
   style?: t.CssValue;
 };
 
 export const ControlBar: React.FC<ControlBarProps> = (props) => {
+  const { camera, screen } = props;
+
+
   /**
    * [Render]
    */
