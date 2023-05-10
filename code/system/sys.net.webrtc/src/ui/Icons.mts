@@ -2,7 +2,6 @@ import { FaNetworkWired } from 'react-icons/fa';
 import {
   MdCamera,
   MdClose,
-  MdConnectedTv,
   MdDelete,
   MdDone,
   MdDoneOutline,
@@ -14,6 +13,11 @@ import {
   MdMic,
   MdMicOff,
   MdMultipleStop,
+  MdOutlineBadge,
+  MdOutlineScreenShare,
+  MdOutlineStopScreenShare,
+  MdOutlineVideoCameraFront,
+  MdOutlineVideocamOff,
   MdOutlineViewInAr,
   MdPublic,
   MdPublicOff,
@@ -36,10 +40,28 @@ export const Icons = {
   Delete: { Bin: icon(MdDelete) },
   Cube: icon(MdOutlineViewInAr),
   Person: icon(MdEmojiPeople),
-  Screenshare: icon(MdConnectedTv),
-  Mic: { On: icon(MdMic), Off: icon(MdMicOff) },
-  Camera: { On: icon(MdCamera) },
-  Done: { Outline: icon(MdDoneOutline), Solid: icon(MdDone) },
+  Screenshare: {
+    Start: icon(MdOutlineScreenShare),
+    Stop: icon(MdOutlineStopScreenShare),
+  },
+  Mic: {
+    On: icon(MdMic),
+    Off: icon(MdMicOff),
+  },
+  Camera: {
+    On: icon(MdCamera),
+  },
+  Video: {
+    On: icon(MdOutlineVideoCameraFront),
+    Off: icon(MdOutlineVideocamOff),
+  },
+  Identity: {
+    Badge: icon(MdOutlineBadge),
+  },
+  Done: {
+    Outline: icon(MdDoneOutline),
+    Solid: icon(MdDone),
+  },
   Note: { Event: icon(VscGithubAction) },
   Keyboard: icon(MdKeyboard),
   Globe: {

@@ -9,6 +9,7 @@ export type {
   PropListProps,
   PropListItem,
   DevButtonClickHandler,
+  IconRenderer,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type {

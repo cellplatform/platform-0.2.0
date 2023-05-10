@@ -16,15 +16,19 @@ export default Dev.describe('PeerControlBar', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    ctx.host.tracelineColor(-0.05);
+
     ctx.subject
       .backgroundColor(1)
       .size([null, null])
       .display('grid')
+
       .render<T>((e) => {
         const props = {
           ...e.state.props,
-          camera: e.state.camera?.media,
-          screen: e.state.screen?.media,
+          // camera: e.state.camera?.media,
+          // screen: e.state.screen?.media,
         };
 
         return <PeerControlBar {...props} />;
