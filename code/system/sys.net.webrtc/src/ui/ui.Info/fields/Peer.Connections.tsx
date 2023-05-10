@@ -1,4 +1,4 @@
-import { t, Value, PropList, Icons, DEFAULTS } from '../common';
+import { css, t, Value, PropList, Icons, DEFAULTS } from '../common';
 
 const { indent } = DEFAULTS;
 
@@ -9,16 +9,47 @@ export function FieldPeerConnections(
 ): t.PropListItem[] {
   const peer = info?.peer;
 
-
   if (!peer) return [];
-
-  const p = (text: string, length: number) => text.slice(0, length);
 
   return peer.connections.all.map((conn) => {
     return {
       label: `local:p:${p(conn.peer.local, 5)} →`,
-      value: `p:${p(conn.peer.remote, 5)}:${conn.kind}:${p(conn.id, 8)}`,
+      value: <PeerValue conn={conn} />,
       indent,
     };
   });
 }
+
+/**
+ * Components
+ */
+export type PeerValueProps = {
+  conn: t.PeerConnection;
+  style?: t.CssValue;
+};
+
+export const PeerValue: React.FC<PeerValueProps> = (props) => {
+  const { conn } = props;
+  const remote = {
+    peer: `p:${p(conn.peer.remote, 5)}:`,
+    conn: `${conn.kind}:${p(conn.id, 8)}`,
+  };
+
+  const styles = {
+    base: css({ Flex: 'x-center-center' }),
+    peer: css({ opacity: 0.3 }),
+    conn: css({}),
+  };
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <span {...styles.peer}>{remote.peer}</span>
+      <span {...styles.conn}>{remote.conn}</span>
+    </div>
+  );
+};
+
+/**
+ * Helpers
+ */
+const p = (text: string, length: number) => text.slice(0, length);
