@@ -1,5 +1,4 @@
-import { Crdt, PropList, t, Value, DEFAULTS } from '../common';
-import { Video } from '../ui.Video';
+import { t } from '../common';
 import { PeerRow } from '../ui.PeerRow';
 
 export function FieldGroupList(
@@ -21,16 +20,13 @@ export function FieldGroupList(
     .filter(Boolean);
   if (!local) return [];
 
-  const render = (data: t.NetworkStatePeer): t.PropListItem => {
-    const marginLeft = DEFAULTS.indent;
-    const value = <PeerRow self={peer} state={data} style={{ marginLeft }} />;
+  const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
+    const { isSelf } = options;
+    const value = <PeerRow self={peer} data={data} selected={isSelf} style={{ marginLeft: 5 }} />;
     return { value };
   };
 
-  const items: t.PropListItem[] = [render(local)];
+  const items: t.PropListItem[] = [render(local, { isSelf: true })];
   remotes.forEach((data) => items.push(render(data)));
-
-  console.log('items', items);
   return items;
-
 }
