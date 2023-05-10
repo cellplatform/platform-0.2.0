@@ -31,7 +31,12 @@ export type PropListProps = {
 };
 
 export type PropListSize = { fixed?: number; min?: number; max?: number };
-export type PropListCard = { flipSpeed?: Milliseconds; shadow?: boolean | t.CssShadow };
+export type PropListCard = {
+  flipSpeed?: Milliseconds;
+  shadow?: boolean | t.CssShadow;
+  background?: t.CardBackground;
+  border?: t.CardBorder;
+};
 
 /**
  * Component: <PropsList.FieldSelector>

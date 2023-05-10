@@ -1,11 +1,11 @@
-import { DEFAULTS, FC, t, THEMES } from './common';
+import { Wrangle } from './Util.mjs';
+import { Chip, DEFAULTS, FC, THEMES, t } from './common';
+
 import { FieldBuilder } from './FieldBuilder.mjs';
-import { PropList as View } from './ui/PropList';
 import { PropListProps } from './types.mjs';
 import { FieldSelector } from './ui.FieldSelector';
 import { Hash } from './ui.Item/Value.Hash';
-import { Wrangle } from './Util.mjs';
-import { Chip } from '../Chip';
+import { PropList as View } from './ui/PropList';
 
 export type { PropListProps };
 
