@@ -18,7 +18,7 @@ export function FieldGroup(
   const total = peer.connectionsByPeer.length + 1; // NB: +1 for self.
   const item: t.PropListItem = {
     label,
-    value: `${total} ${Value.plural(total, 'peer', 'peers')}`,
+    value: `${total} ${Value.plural(total, 'member', 'members')}`,
   };
 
   return item;
