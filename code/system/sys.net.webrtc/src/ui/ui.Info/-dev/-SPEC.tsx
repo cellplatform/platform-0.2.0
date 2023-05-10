@@ -81,16 +81,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     });
   });
 
-  // e.it('keyboard:init', async (e) => {
-  //   const dev = Dev.tools<T>(e, initial);
-  //   const state = await dev.state();
-  //   Keyboard.on({
-  //     Enter(e) {
-  //       e.handled();
-  //       state.change((d) => Dev.toggle(d.props, 'flipped'));
-  //     },
-  //   });
-  // });
+  e.it('keyboard:init', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    Keyboard.on({
+      Enter(e) {
+        // e.handled();
+        // state.change((d) => Dev.toggle(d.props, 'flipped'));
+      },
+    });
+  });
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
