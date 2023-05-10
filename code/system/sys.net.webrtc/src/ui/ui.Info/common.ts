@@ -26,5 +26,6 @@ export const DEFAULTS = {
   ] as t.WebRtcInfoField[],
   indent: 15,
   fontSize: 13,
+  minRowHeight: 16,
   query: { dev: 'dev', selected: 'selected' },
 } as const;

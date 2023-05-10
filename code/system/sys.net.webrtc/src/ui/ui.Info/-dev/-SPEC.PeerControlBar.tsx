@@ -1,16 +1,16 @@
 import { Dev, WebRtc, t } from '../../../test.ui';
-import { ControlBar, ControlBarProps } from '../ui.ControlBar';
+import { PeerControlBar, PeerControlBarProps } from '../ui.PeerControlBar';
 
 type T = {
   camera?: t.PeerGetMediaStreamRes;
   screen?: t.PeerGetMediaStreamRes;
-  props: ControlBarProps;
+  props: PeerControlBarProps;
 };
 const initial: T = {
   props: {},
 };
 
-export default Dev.describe('ControlBar', (e) => {
+export default Dev.describe('PeerControlBar', (e) => {
   const getStream = WebRtc.Media.singleton().getStream;
 
   e.it('ui:init', async (e) => {
@@ -18,7 +18,7 @@ export default Dev.describe('ControlBar', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size([null, 16])
+      .size([null, null])
       .display('grid')
       .render<T>((e) => {
         const props = {
@@ -27,7 +27,7 @@ export default Dev.describe('ControlBar', (e) => {
           screen: e.state.screen?.media,
         };
 
-        return <ControlBar {...props} />;
+        return <PeerControlBar {...props} />;
       });
   });
 

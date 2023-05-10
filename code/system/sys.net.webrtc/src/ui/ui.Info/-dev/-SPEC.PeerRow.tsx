@@ -43,7 +43,7 @@ export default Dev.describe('PeerRow', async (e) => {
 
     ctx.subject
       .backgroundColor(1)
-      .size([250, 16])
+      .size([250, null])
       .display('grid')
       .render<T>((e) => {
         return <PeerRow {...e.state.props} />;
