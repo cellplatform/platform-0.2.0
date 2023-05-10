@@ -1,4 +1,14 @@
-import { Value, Dev, css, PropList, t, TestNetwork, Keyboard, WebRtc } from '../../../test.ui';
+import {
+  Crdt,
+  Value,
+  Dev,
+  css,
+  PropList,
+  t,
+  TestNetwork,
+  Keyboard,
+  WebRtc,
+} from '../../../test.ui';
 import { WebRtcInfo, WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 
@@ -20,23 +30,23 @@ const local = localstore.object({
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
+  const self = await TestNetwork.peer();
+  const controller = WebRtc.controller(self);
+  const events = controller.events;
+
   type TRemote = {
     name: string;
     peer: t.Peer;
-    controller: t.WebRtcEvents;
-    state: t.NetworkDocSharedRef;
+    controller: t.WebRtcController;
   };
   const remotes: TRemote[] = [];
-  const self = await TestNetwork.peer();
-  const events = WebRtc.controller(self);
-  const selfState = (await events.info.get())?.state!;
 
   const Util = {
     props(state: T): WebRtcInfoProps {
       const { debug, props } = state;
       return {
         ...props,
-        title: debug.title ? 'Network' : undefined,
+        title: debug.title ? ['Network Cell', ''] : undefined,
         data: {
           events,
           self: {},
@@ -174,9 +184,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             // Create a new sample peer.
             const peer = await TestNetwork.peer();
             const controller = WebRtc.controller(peer);
-            const state = (await controller.info.get())?.state!;
             const name = `remote-${remotes.length + 1}`;
-            remotes.push({ name, peer, controller, state });
+            remotes.push({ name, peer, controller });
 
             // Connect.
             await events.connect.fire(peer.id);
@@ -190,9 +199,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right((e) => `count: ${selfState.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+            .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
             .onClick((e) => {
-              selfState.change((d) => (d.count += by));
+              controller.state.change((d) => (d.count += by));
               dev.redraw();
             }),
         );
@@ -208,11 +217,21 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         .label('print debug')
         .right('← console log')
         .onClick(async (e) => {
-          console.info('self.count:', selfState.current.count);
-          for (const remote of remotes) {
-            const state = remote.state.current;
-            console.info(`${remote.name}.count:`, state.count);
-          }
+          const info = await events.info.get();
+          const state = info?.state;
+          console.log('state', Crdt.toObject(state?.current.network.peers ?? {}));
+
+          const log = (title: string, ref: t.NetworkDocSharedRef) => {
+            const state = Crdt.toObject(ref.current);
+            console.group('🌳 ', title);
+            console.info('state', state);
+            console.info('peers', state.network.peers);
+            console.groupEnd();
+          };
+
+          log('local', controller.state);
+          remotes.forEach((remote) => log('remote', remote.controller.state));
+          console.info('remotes', remotes);
         }),
     );
   });
@@ -221,17 +240,21 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>(async (e) => {
-      const info = await events.info.get();
-      const sharedState = info?.state;
-
-      const total = self?.connectionsByPeer.length ?? 0;
+      const sharedState = controller.state;
+      const total = self.connectionsByPeer.length ?? 0;
       const data = {
-        [`Peer.Self(${total})`]: self,
-        'Peers.Remote': remotes,
-        'State.Shared': sharedState?.current,
-        'State.Shared.peers': sharedState?.current?.network.peers,
+        [`Peers:Self(${total})`]: self,
+        'Peers:Remote': remotes,
+        'State:Shared': sharedState?.current,
+        'State:Shared:peers': sharedState?.current?.network.peers,
       };
-      return <Dev.Object name={'WebRtc.InfoCard'} data={data} expand={1} />;
+      return (
+        <Dev.Object
+          name={'WebRtc.InfoCard'}
+          data={data}
+          expand={{ level: 1, paths: ['$.State:Shared:peers'] }}
+        />
+      );
     });
   });
 });

@@ -25,5 +25,6 @@ export const DEFAULTS = {
     'State.Shared',
   ] as t.WebRtcInfoField[],
   indent: 15,
+  fontSize: 13,
   query: { dev: 'dev', selected: 'selected' },
 } as const;

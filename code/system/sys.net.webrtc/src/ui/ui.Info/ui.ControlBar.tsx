@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Color, COLORS, css, t, rx, DEFAULTS, Icons } from './common';
 
 export type ControlBarProps = {
   style?: t.CssValue;
@@ -11,13 +11,16 @@ export const ControlBar: React.FC<ControlBarProps> = (props) => {
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      fontSize: DEFAULTS.fontSize,
+      userSelect: 'none',
+      display: 'grid',
     }),
+    icoDoc: css({ marginLeft: 10 }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ControlBar`}</div>
-    </div>
-  );
+  const icoColor = Color.alpha(COLORS.DARK, 0.8);
+
+  const elIconDoc = <Icons.Network.Docs size={15} color={icoColor} style={styles.icoDoc} />;
+
+  return <div {...css(styles.base, props.style)}>{elIconDoc}</div>;
 };

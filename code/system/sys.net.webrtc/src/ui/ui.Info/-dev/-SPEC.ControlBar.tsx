@@ -10,7 +10,7 @@ export default Dev.describe('ControlBar', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size([null, 16])
       .display('grid')
       .render<T>((e) => {
         return <ControlBar {...e.state.props} />;
