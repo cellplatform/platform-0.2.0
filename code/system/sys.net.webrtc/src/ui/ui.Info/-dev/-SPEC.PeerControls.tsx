@@ -68,28 +68,38 @@ export default Dev.describe('PeerFacets', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Media', (dev) => {
-      dev.button('camera: start', async (e) => {
-        const camera = await getStream('camera');
-        e.change((d) => (d.camera = camera));
-      });
+      const stopCamera = async () => {
+        await state.current.camera?.done();
+        await state.change((d) => (d.camera = undefined));
+      };
 
-      dev.button('camera: stop', async (e) => {
-        e.state.current.camera?.done();
-        e.change((d) => (d.camera = undefined));
-      });
+      const stopScreen = async () => {
+        await state.current.screen?.done();
+        await state.change((d) => (d.screen = undefined));
+      };
+
+      dev.button((btn) =>
+        btn
+          .label('stop camera')
+          .right((e) => (e.state.camera ? '←' : ''))
+          .onClick(stopCamera),
+      );
+
+      dev.button((btn) =>
+        btn
+          .label('stop screen')
+          .right((e) => (e.state.screen ? '←' : ''))
+          .onClick(stopScreen),
+      );
 
       dev.hr(-1, 5);
 
-      dev.button('screen: start', async (e) => {
-        const screen = await getStream('screen');
-        e.change((d) => (d.screen = screen));
-      });
-
-      dev.button('screen: stop', async (e) => {
-        e.state.current.screen?.done();
-        e.change((d) => (d.screen = undefined));
+      dev.button('stop all', (e) => {
+        stopCamera();
+        stopScreen();
       });
     });
 
