@@ -10,7 +10,6 @@ export function FieldStateShared(
   const label = shared.title ?? 'Shared State';
 
   const clipboard = () => {
-    //
     const doc = info?.state.current;
     const data = doc ? Crdt.toObject(doc.network) : undefined;
     console.info('shared/state.network', data);
@@ -21,20 +20,6 @@ export function FieldStateShared(
     label,
     value: {
       data: <Syncers info={info} />,
-
-      // clipboard: () => {
-      // const doc = info?.state.current;
-      // const data = doc ? Crdt.toObject(doc.network) : undefined;
-      // console.info('shared/state.network', data);
-      // return JSON.stringify(data, null, '  ');
-      // },
-
-      // ocl(e) {},
-      // onClick(e) {
-      //   const doc = info?.state.current;
-      //   const data = doc ? Crdt.toObject(doc.network) : undefined;
-      //   console.info('shared/state.network', data);
-      // },
     },
   };
 }
@@ -64,7 +49,7 @@ export const Syncers: React.FC<SyncProps> = (props) => {
   const styles = {
     base: css({ position: 'relative' }),
     empty: css({ opacity: 0.3 }),
-    icoDoc: css({ position: 'relative', top: -1, marginLeft: 6 }),
+    icoDoc: css({ position: 'relative', top: -1, marginLeft: 10 }),
     icoNet: css({ marginLeft: 6 }),
     body: css({
       display: 'grid',

@@ -2,12 +2,14 @@ import { COLORS, Color, Icons, t } from './common';
 
 export type IconProps = {
   kind: t.WebRtcInfoPeerFacet;
+  enabled?: boolean;
+  selected?: boolean;
   style?: t.CssValue;
 };
 
 export const Icon: React.FC<IconProps> = (props) => {
-  const { kind } = props;
-  const color = Color.alpha(COLORS.DARK, 0.8);
+  const { kind, selected, enabled = true } = props;
+  const color = selected && enabled ? Color.alpha(COLORS.BLUE, 1) : Color.alpha(COLORS.DARK, 0.8);
 
   if (kind === 'Mic') {
     return <Icons.Mic.On size={14} color={color} />;
