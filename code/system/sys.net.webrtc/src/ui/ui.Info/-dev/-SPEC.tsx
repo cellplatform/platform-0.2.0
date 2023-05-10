@@ -14,7 +14,12 @@ import { ConnectInput } from '../../ui.ConnectInput';
 
 type T = {
   props: WebRtcInfoProps;
-  debug: { bg: boolean; title: boolean; addingConnection?: boolean; remotePeer?: t.PeerId };
+  debug: {
+    bg: boolean;
+    title: boolean;
+    remotePeer?: t.PeerId;
+    addingConnection?: 'VirtualNetwork' | 'RealNetwork';
+  };
 };
 const initial: T = {
   props: {},
@@ -103,12 +108,13 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           remotePeer={e.state.debug.remotePeer}
           self={self}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
+          spinning={e.state.debug.addingConnection === 'RealNetwork'}
           onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
           onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
-          onConnectRequest={(e) => {
-            //
-
-            events.connect.fire(e.remote);
+          onConnectRequest={async (e) => {
+            await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
+            await events.connect.fire(e.remote);
+            await state.change((d) => (d.debug.addingConnection = undefined));
           }}
         />
       );
@@ -171,15 +177,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      const isAdding = (state: T) => state.debug.addingConnection!;
+      const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
       dev.button((btn) =>
         btn
           .label((e) => (isAdding(e.state) ? 'creating new network/peer...' : 'new network/peer'))
-          .enabled((e) => !isAdding(e.state))
+          .enabled((e) => e.state.debug.addingConnection === undefined)
           .spinner((e) => isAdding(e.state))
           .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
           .onClick(async (e) => {
-            e.change((d) => (d.debug.addingConnection = true));
+            e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
 
             // Create a new sample peer.
             const peer = await TestNetwork.peer();
@@ -189,7 +195,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
             // Connect.
             await events.connect.fire(peer.id);
-            e.change((d) => (d.debug.addingConnection = false));
+            e.change((d) => (d.debug.addingConnection = undefined));
           }),
       );
 
