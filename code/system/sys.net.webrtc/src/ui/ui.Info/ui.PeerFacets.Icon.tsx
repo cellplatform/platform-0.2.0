@@ -1,7 +1,7 @@
 import { COLORS, Color, Icons, t } from './common';
 
 export type IconProps = {
-  kind: t.WebRtcInfoPeerControl;
+  kind: t.WebRtcInfoPeerFacet;
   style?: t.CssValue;
 };
 

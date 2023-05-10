@@ -47,7 +47,7 @@ export const ConnScreenshare: React.FC<ConnScreenshareProps> = (props) => {
       onMouse={(e) => setOver(e.isOver)}
       tooltip={Wrangle.tooltip(props)}
     >
-      <Icons.Screenshare size={22} />
+      <Icons.Screenshare.Start size={22} />
     </Button>
   );
 

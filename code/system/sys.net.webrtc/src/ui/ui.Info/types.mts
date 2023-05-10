@@ -18,4 +18,4 @@ export type WebRtcInfoData = {
   state?: { shared?: { title?: string } };
 };
 
-export type WebRtcInfoPeerControl = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';
+export type WebRtcInfoPeerFacet = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';
