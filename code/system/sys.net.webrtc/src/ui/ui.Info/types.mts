@@ -19,9 +19,10 @@ export type WebRtcInfoData = {
 
 export type WebRtcInfoDataGroup = {
   title?: string;
-  onPeerSelect?: WebRtcInfoPeerRowSelectHandler;
-  onPeerClick?: WebRtcInfoPeerCtrlsClickHandler;
   selected?: t.PeerId;
+  useController?: boolean;
+  onPeerSelect?: WebRtcInfoPeerRowSelectHandler;
+  onPeerCtrlClick?: WebRtcInfoPeerCtrlsClickHandler;
 };
 
 export type WebRtcInfoPeerFacet = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';

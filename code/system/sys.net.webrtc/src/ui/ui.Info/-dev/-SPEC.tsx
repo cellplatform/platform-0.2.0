@@ -1,14 +1,15 @@
 import {
   Crdt,
-  Value,
   Dev,
-  css,
-  PropList,
-  t,
-  TestNetwork,
   Keyboard,
+  PropList,
+  TestNetwork,
+  Value,
   WebRtc,
+  css,
+  t,
 } from '../../../test.ui';
+
 import { WebRtcInfo, WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 
@@ -20,6 +21,7 @@ type T = {
     remotePeer?: t.PeerId;
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
+    useGroupController?: boolean;
   };
 };
 const initial: T = {
@@ -33,6 +35,7 @@ const local = localstore.object({
   bg: initial.debug.bg,
   title: initial.debug.title,
   fields: initial.props.fields,
+  useGroupController: true,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -52,19 +55,24 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const { debug, props } = state.current;
       return {
         ...props,
-        title: debug.title ? 'Network Cell' : undefined,
         events,
-        data: {
-          group: {
-            selected: debug.selectedPeer,
-            async onPeerSelect(e) {
-              console.info('⚡️ onPeerSelect', e);
-              state.change((d) => (d.debug.selectedPeer = e.peerid));
-            },
+        title: debug.title ? 'Network Cell' : undefined,
+        data: Util.data(state),
+      };
+    },
 
-            async onPeerClick(e) {
-              console.info('⚡️ onPeerClick', e);
-            },
+    data(state: t.DevCtxState<T>): t.WebRtcInfoData {
+      const { debug } = state.current;
+      return {
+        group: {
+          selected: debug.selectedPeer,
+          useController: debug.useGroupController,
+          async onPeerSelect(e) {
+            console.info('⚡️ onPeerSelect', e);
+            state.change((d) => (d.debug.selectedPeer = e.peerid));
+          },
+          async onPeerCtrlClick(e) {
+            console.info('⚡️ onPeerClick', e);
           },
         },
       };
@@ -80,6 +88,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.title = local.title;
+      d.debug.useGroupController = local.useGroupController;
     });
 
     ctx.subject.display('grid').render<T>((e) => {
@@ -190,7 +199,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
       dev.button((btn) =>
         btn
-          .label((e) => (isAdding(e.state) ? 'creating new network/peer...' : 'new network/peer'))
+          .label((e) =>
+            isAdding(e.state) ? 'creating new network/peer...' : 'create new network/peer',
+          )
           .enabled((e) => e.state.debug.addingConnection === undefined)
           .spinner((e) => isAdding(e.state))
           .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
@@ -250,6 +261,17 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           console.info('remotes', remotes);
         }),
     );
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `useGroupController`)
+        .value((e) => Boolean(e.state.debug.useGroupController))
+        .onClick((e) =>
+          e.change((d) => {
+            local.useGroupController = Dev.toggle(d.debug, 'useGroupController');
+          }),
+        ),
+    );
   });
 
   e.it('ui:footer', async (e) => {
@@ -268,7 +290,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       };
       return (
         <Dev.Object
-          name={'WebRtc.InfoCard'}
+          name={'WebRtc.Info'}
           data={data}
           expand={{ level: 1, paths: ['$.State:Shared:peers'] }}
         />

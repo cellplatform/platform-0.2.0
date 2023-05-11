@@ -30,9 +30,10 @@ export function FieldGroupList(
         peerid={data.id}
         isSelf={isSelf}
         isSelected={isSelected}
+        useController={group?.useController}
         style={{ marginLeft: 5 }}
         onSelect={group?.onPeerSelect}
-        onControlClick={group?.onPeerClick}
+        onControlClick={group?.onPeerCtrlClick}
       />
     );
     return { value };

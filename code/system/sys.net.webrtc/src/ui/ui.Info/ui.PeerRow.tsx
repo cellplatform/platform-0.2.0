@@ -1,10 +1,12 @@
 import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
 import { PeerCtrls } from './ui.PeerCtrls';
+import { usePeerRowController } from './usePeerRowController.mjs';
 
 export type PeerRowProps = {
   peerid: t.PeerId;
   isSelf?: boolean;
   isSelected?: boolean;
+  useController?: boolean;
   style?: t.CssValue;
   onSelect?: t.WebRtcInfoPeerRowSelectHandler;
   onControlClick?: t.WebRtcInfoPeerCtrlsClickHandler;
@@ -12,6 +14,8 @@ export type PeerRowProps = {
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
   const { peerid, isSelected, isSelf = false } = props;
+
+  const ctrlr = usePeerRowController({ enabled: props.useController ?? false });
 
   /**
    * [Render]

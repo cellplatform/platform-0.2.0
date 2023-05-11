@@ -1,15 +1,23 @@
-import { t, Dev, TestNetwork, WebRtc } from '../../../test.ui';
+import { Dev, TestNetwork, WebRtc, t } from '../../../test.ui';
 import { PeerRow, PeerRowProps } from '../ui.PeerRow';
 
-type T = { props: PeerRowProps };
-const initial: T = { props: { peerid: 'p-foo' } };
+type T = {
+  props: PeerRowProps;
+  debug: { useNetwork: 'Local' | 'Remote' };
+};
+const initial: T = {
+  props: { peerid: 'p-foo' },
+  debug: { useNetwork: 'Local' },
+};
 
 export default Dev.describe('PeerRow', async (e) => {
-  type LocalStore = { isSelected: boolean; isSelf: boolean };
+  type LocalStore = T['debug'] & { isSelected: boolean; isSelf: boolean; useController: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerRow');
   const local = localstore.object({
     isSelected: true,
     isSelf: true,
+    useNetwork: 'Local',
+    useController: true,
   });
 
   const create = async () => {
@@ -33,6 +41,8 @@ export default Dev.describe('PeerRow', async (e) => {
     state.change((d) => {
       d.props.isSelected = local.isSelected;
       d.props.isSelf = local.isSelf;
+      d.props.useController = local.useController;
+      d.debug.useNetwork = local.useNetwork;
     });
 
     ctx.subject
@@ -54,6 +64,15 @@ export default Dev.describe('PeerRow', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'useController')
+          .value((e) => Boolean(e.state.props.useController))
+          .onClick((e) =>
+            e.change((d) => (local.useController = Dev.toggle(d.props, 'useController'))),
+          ),
+      );
+      dev.hr(-1, 5);
       dev.boolean((btn) =>
         btn
           .label((e) => 'isSelected')
