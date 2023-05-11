@@ -42,9 +42,9 @@ export default Dev.describe('PeerFacets', (e) => {
       .display('grid')
 
       .render<T>((e) => {
-        const handleKindClick = async (args: { kind: t.WebRtcInfoPeerFacet }) => {
-          const { kind } = args;
-          console.info(`⚡️ onClick:`, args);
+        const handleKindClick: t.WebRtcInfoPeerCtrlsClickHandler = async (e) => {
+          const { kind } = e;
+          console.info(`⚡️ onClick:`, e);
 
           /**
            * START/END Media Stream.
@@ -122,6 +122,17 @@ export default Dev.describe('PeerFacets', (e) => {
             stopCamera();
             stopScreen();
           }),
+      );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `isSelf`)
+          .value((e) => e.state.props.isSelf)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isSelf'))),
       );
     });
 

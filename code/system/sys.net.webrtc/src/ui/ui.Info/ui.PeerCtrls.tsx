@@ -3,6 +3,7 @@ import { PeerCtrlButton, PeerCtrlButtonProps } from './ui.PeerCtrls.Button';
 
 export type PeerCtrlsProps = {
   peerid: t.PeerId;
+  isSelf?: boolean;
   spinning?: t.WebRtcInfoPeerFacet[];
   disabled?: t.WebRtcInfoPeerFacet[];
   off?: t.WebRtcInfoPeerFacet[];
@@ -12,7 +13,7 @@ export type PeerCtrlsProps = {
 };
 
 const View: React.FC<PeerCtrlsProps> = (props) => {
-  const { peerid } = props;
+  const { peerid, isSelf = false } = props;
   const keyboard = Keyboard.useKeyboardState();
   const modifiers = keyboard.current.modifiers;
 
@@ -35,6 +36,7 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
 
   const tool = (facet: t.WebRtcInfoPeerFacet, options: Partial<PeerCtrlButtonProps> = {}) => {
     const is = {
+      self: isSelf,
       spinning: Wrangle.is.spinning(props, facet),
       disabled: Wrangle.is.disabled(props, facet),
       off: Wrangle.is.off(props, facet),
