@@ -38,7 +38,7 @@ export type WebRtcInfoPeerRowSelectArgs = { peerid: t.PeerId };
  */
 export type WebRtcInfoPeerCtrlsClickHandler = (e: WebRtcInfoPeerCtrlsClickArgs) => void;
 export type WebRtcInfoPeerCtrlsClickArgs = {
-  kind: t.WebRtcInfoPeerFacet;
+  kind: t.WebRtcInfoPeerFacet | 'Close';
   peerid: t.PeerId;
   is: { spinning: boolean; disabled: boolean; off: boolean };
 };

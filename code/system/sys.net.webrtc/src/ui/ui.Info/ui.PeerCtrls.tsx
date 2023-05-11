@@ -14,6 +14,7 @@ export type PeerCtrlsProps = {
 const View: React.FC<PeerCtrlsProps> = (props) => {
   const { peerid } = props;
   const keyboard = Keyboard.useKeyboardState();
+  const modifiers = keyboard.current.modifiers;
 
   const styles = {
     base: css({
@@ -32,18 +33,25 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
     }),
   };
 
-  const tool = (kind: t.WebRtcInfoPeerFacet, options: Partial<PeerCtrlButtonProps> = {}) => {
+  const tool = (facet: t.WebRtcInfoPeerFacet, options: Partial<PeerCtrlButtonProps> = {}) => {
     const is = {
-      spinning: Wrangle.is.spinning(props, kind),
-      disabled: Wrangle.is.disabled(props, kind),
-      off: Wrangle.is.off(props, kind),
+      spinning: Wrangle.is.spinning(props, facet),
+      disabled: Wrangle.is.disabled(props, facet),
+      off: Wrangle.is.off(props, facet),
     };
     const enabled = !is.disabled;
-    const onClick = () => props.onClick?.({ kind, peerid, is });
+    const onClick = () => {
+      const isClose = facet === 'StateDoc' && modifiers?.meta;
+      props.onClick?.({
+        kind: isClose ? 'Close' : facet,
+        peerid,
+        is,
+      });
+    };
     return (
       <PeerCtrlButton
         {...options}
-        kind={kind}
+        kind={facet}
         enabled={enabled}
         off={is.off}
         spinning={is.spinning}
