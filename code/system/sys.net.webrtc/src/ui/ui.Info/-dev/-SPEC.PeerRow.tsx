@@ -1,9 +1,10 @@
 import { Dev, TestNetwork, WebRtc, t } from '../../../test.ui';
 import { PeerRow, PeerRowProps } from '../ui.PeerRow';
 
+type NetworkProximity = 'Local' | 'Remote';
 type T = {
   props: PeerRowProps;
-  debug: { useNetwork: 'Local' | 'Remote' };
+  debug: { useNetwork: NetworkProximity };
 };
 const initial: T = {
   props: { peerid: 'p-foo' },
@@ -45,6 +46,7 @@ export default Dev.describe('PeerRow', async (e) => {
       d.debug.useNetwork = local.useNetwork;
     });
 
+    ctx.host.tracelineColor(-0.04);
     ctx.subject
       .backgroundColor(1)
       .size([250, null])
@@ -54,7 +56,7 @@ export default Dev.describe('PeerRow', async (e) => {
           <PeerRow
             {...e.state.props}
             onSelect={(e) => console.info('⚡️ onSelect:', e)}
-            onControlClick={(e) => console.info('⚡️ onControlClick:', e)}
+            onCtrlClick={(e) => console.info('⚡️ onControlClick:', e)}
           />
         );
       });
@@ -81,13 +83,32 @@ export default Dev.describe('PeerRow', async (e) => {
       );
       dev.boolean((btn) =>
         btn
-          .label((e) => 'isSelf')
+          .label((e) => `isSelf ${e.state.props.isSelf ? ' ("me")' : ''}`)
+          .enabled(false)
           .value((e) => Boolean(e.state.props.isSelf))
           .onClick((e) => e.change((d) => (local.isSelf = Dev.toggle(d.props, 'isSelf')))),
       );
     });
 
     dev.hr(5, 20);
+
+    dev.section('Network', (dev) => {
+      const useNetwork = (network: NetworkProximity) => {
+        dev.button((btn) =>
+          btn
+            .label(`use ${network}`)
+            .right((e) => (e.state.debug.useNetwork === network ? '← (current)' : ''))
+            .onClick((e) => {
+              e.change((d) => {
+                d.debug.useNetwork = local.useNetwork = network;
+                d.props.isSelf = local.isSelf = network === 'Local';
+              });
+            }),
+        );
+      };
+      useNetwork('Local');
+      useNetwork('Remote');
+    });
   });
 
   e.it('ui:footer', async (e) => {

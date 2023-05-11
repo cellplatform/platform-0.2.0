@@ -9,7 +9,7 @@ export type PeerRowProps = {
   useController?: boolean;
   style?: t.CssValue;
   onSelect?: t.WebRtcInfoPeerRowSelectHandler;
-  onControlClick?: t.WebRtcInfoPeerCtrlsClickHandler;
+  onCtrlClick?: t.WebRtcInfoPeerCtrlsClickHandler;
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
@@ -61,7 +61,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elLeft}
-      <PeerCtrls peerid={peerid} onClick={props.onControlClick} />
+      <PeerCtrls peerid={peerid} onClick={props.onCtrlClick} />
     </div>
   );
 };

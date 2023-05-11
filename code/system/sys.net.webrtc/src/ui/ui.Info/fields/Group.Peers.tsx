@@ -33,7 +33,7 @@ export function FieldGroupList(
         useController={group?.useController}
         style={{ marginLeft: 5 }}
         onSelect={group?.onPeerSelect}
-        onControlClick={group?.onPeerCtrlClick}
+        onCtrlClick={group?.onPeerCtrlClick}
       />
     );
     return { value };
