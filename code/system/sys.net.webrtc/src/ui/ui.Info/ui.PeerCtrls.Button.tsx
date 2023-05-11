@@ -12,13 +12,22 @@ export type PeerCtrlButtonProps = {
   style?: t.CssValue;
   paddingX?: [number, number];
   spinnerColor?: string | number;
+  keyboard?: t.KeyboardState;
   onClick?: () => void;
 };
 
 export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
-  const { kind, off = false, clickable = true, spinning = false, paddingX = [5, 5] } = props;
+  const {
+    kind,
+    off = false,
+    clickable = true,
+    spinning = false,
+    paddingX = [5, 5],
+    keyboard,
+  } = props;
   const enabled = clickable && (props.enabled ?? true);
   const disabledOpacity = clickable ? 0.15 : 1;
+
   const [isOver, setOver] = useState(false);
 
   /**
@@ -55,7 +64,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
 
   const elIcon = (
     <div {...styles.icon}>
-      <PeerCtrlIcon kind={kind} off={off} enabled={enabled} over={isOver} />
+      <PeerCtrlIcon kind={kind} off={off} enabled={enabled} over={isOver} keyboard={keyboard} />
     </div>
   );
 

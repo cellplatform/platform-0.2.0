@@ -5,12 +5,14 @@ export type PeerCtrlIconProps = {
   enabled?: boolean;
   off?: boolean;
   over?: boolean;
+  keyboard?: t.KeyboardState;
   style?: t.CssValue;
 };
 
 export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   const { kind, off, over } = Wrangle.props(props);
   const color = Wrangle.color(props);
+  const modifiers = props.keyboard?.current.modifiers;
 
   if (kind === 'Mic') {
     const Icon = off && !over ? Icons.Mic.Off : Icons.Mic.On;
@@ -32,7 +34,8 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    return <Icons.Network.Docs size={15} color={color} />;
+    const Icon = off && modifiers?.meta ? Icons.Close : Icons.Network.Docs;
+    return <Icon size={15} color={color} />;
   }
 
   return <div>{`Icon not supported: '${kind}'`}</div>;

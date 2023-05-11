@@ -1,11 +1,11 @@
-import { COLORS, Color, DEFAULTS, FC, R, css, t } from './common';
+import { COLORS, Color, DEFAULTS, FC, Keyboard, R, css, t } from './common';
 import { PeerCtrlButton, PeerCtrlButtonProps } from './ui.PeerCtrls.Button';
 
 export type PeerCtrlsProps = {
   peerid: t.PeerId;
   spinning?: t.WebRtcInfoPeerFacet[];
-  off?: t.WebRtcInfoPeerFacet[];
   disabled?: t.WebRtcInfoPeerFacet[];
+  off?: t.WebRtcInfoPeerFacet[];
   style?: t.CssValue;
   spinnerColor?: string | number;
   onClick?: t.WebRtcInfoPeerCtrlsClickHandler;
@@ -13,6 +13,7 @@ export type PeerCtrlsProps = {
 
 const View: React.FC<PeerCtrlsProps> = (props) => {
   const { peerid } = props;
+  const keyboard = Keyboard.useKeyboardState();
 
   const styles = {
     base: css({
@@ -47,6 +48,7 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
         off={is.off}
         spinning={is.spinning}
         spinnerColor={props.spinnerColor}
+        keyboard={keyboard}
         onClick={onClick}
       />
     );
