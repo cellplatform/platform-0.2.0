@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Button, Spinner } from './common';
+import { useState } from 'react';
+import { Button, COLORS, Spinner, css, t } from './common';
+import { Icon } from './ui.PeerControls.Icon';
 
-export type ToolButtonProps = {
+export type PeerControlButtonProps = {
+  kind: t.WebRtcInfoPeerFacet;
   clickable?: boolean;
-  children?: JSX.Element;
   enabled?: boolean;
-  selected?: boolean;
+  off?: boolean;
   tooltip?: string;
   spinning?: boolean;
   style?: t.CssValue;
@@ -14,10 +15,11 @@ export type ToolButtonProps = {
   onClick?: () => void;
 };
 
-export const ToolButton: React.FC<ToolButtonProps> = (props) => {
-  const { clickable = true, selected = false, spinning = false, paddingX = [5, 5] } = props;
+export const PeerControlButton: React.FC<PeerControlButtonProps> = (props) => {
+  const { kind, off = false, clickable = true, spinning = false, paddingX = [5, 5] } = props;
   const enabled = clickable && (props.enabled ?? true);
-  const disabledOpacity = clickable ? 0.3 : 1;
+  const disabledOpacity = clickable ? 0.15 : 1;
+  const [isOver, setOver] = useState(false);
 
   /**
    * [Render]
@@ -32,7 +34,7 @@ export const ToolButton: React.FC<ToolButtonProps> = (props) => {
       marginLeft: paddingX[0],
       marginRight: paddingX[1],
     }),
-    children: css({
+    icon: css({
       display: 'grid',
       placeItems: 'center',
       opacity: spinning ? 0 : 1,
@@ -51,16 +53,23 @@ export const ToolButton: React.FC<ToolButtonProps> = (props) => {
     </div>
   );
 
+  const elIcon = (
+    <div {...styles.icon}>
+      <Icon kind={kind} off={off} enabled={enabled} over={isOver} />
+    </div>
+  );
+
   return (
     <Button
+      style={css(styles.base, props.style)}
       isEnabled={enabled}
       disabledOpacity={disabledOpacity}
       tooltip={props.tooltip}
-      style={css(styles.base, props.style)}
       onClick={props.onClick}
+      onMouse={(e) => setOver(e.isOver)}
     >
       <div {...styles.body}>
-        <div {...styles.children}>{props.children}</div>
+        {elIcon}
         {elSpinner}
       </div>
     </Button>

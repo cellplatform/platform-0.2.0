@@ -1,4 +1,4 @@
-import { PropList, Dev, WebRtc, t } from '../../../test.ui';
+import { PropList, Dev, WebRtc, t, MediaStream } from '../../../test.ui';
 import { PeerControls, PeerControlsProps } from '../ui.PeerControls';
 
 type T = {
@@ -9,9 +9,9 @@ type T = {
 const initial: T = { props: {} };
 
 type LocalStore = {
-  disabled?: t.WebRtcInfoPeerFacet[];
-  selected?: t.WebRtcInfoPeerFacet[];
   spinning?: t.WebRtcInfoPeerFacet[];
+  off?: t.WebRtcInfoPeerFacet[];
+  disabled?: t.WebRtcInfoPeerFacet[];
 };
 
 export default Dev.describe('PeerFacets', (e) => {
@@ -19,9 +19,9 @@ export default Dev.describe('PeerFacets', (e) => {
 
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info.PeerFacets');
   const local = localstore.object({
-    disabled: undefined,
-    selected: undefined,
     spinning: undefined,
+    off: undefined,
+    disabled: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -30,7 +30,7 @@ export default Dev.describe('PeerFacets', (e) => {
 
     state.change((d) => {
       d.props.disabled = local.disabled;
-      d.props.selected = local.selected;
+      d.props.off = local.off;
       d.props.spinning = local.spinning;
     });
 
@@ -51,11 +51,9 @@ export default Dev.describe('PeerFacets', (e) => {
           if (kind === 'Video') {
             const current = state.current.camera;
             if (!current) {
-              // START
               const camera = await getStream('camera');
               state.change((d) => (d.camera = camera));
             } else {
-              // END
               current.done();
               state.change((d) => (d.camera = undefined));
             }
@@ -81,17 +79,22 @@ export default Dev.describe('PeerFacets', (e) => {
         await state.change((d) => (d.screen = undefined));
       };
 
+      const renderMedia = (stream?: MediaStream) => {
+        if (!stream) return '';
+        return <MediaStream.Video stream={stream} width={16} height={16} borderRadius={2} />;
+      };
+
       dev.button((btn) =>
         btn
           .label('stop camera')
-          .right((e) => (e.state.camera ? '←' : ''))
+          .right((e) => renderMedia(e.state.camera?.media))
           .onClick(stopCamera),
       );
 
       dev.button((btn) =>
         btn
           .label('stop screen')
-          .right((e) => (e.state.screen ? '←' : ''))
+          .right((e) => renderMedia(e.state.screen?.media))
           .onClick(stopScreen),
       );
 
@@ -127,19 +130,21 @@ export default Dev.describe('PeerFacets', (e) => {
       });
     };
 
-    dev.hr(5, 15);
-    fieldSelector('Disabled', 'disabled', (fields) => {
-      dev.change((d) => (d.props.disabled = fields));
-      local.disabled = fields;
-    });
-    dev.hr(5, 15);
-    fieldSelector('Selected', 'selected', (fields) => {
-      dev.change((d) => (d.props.selected = fields));
-      local.selected = fields;
-    });
+    dev.hr(5, 20);
+
     fieldSelector('Spinning', 'spinning', (fields) => {
       dev.change((d) => (d.props.spinning = fields));
       local.spinning = fields;
+    });
+    dev.hr(5, [5, 15]);
+    fieldSelector('Off', 'off', (fields) => {
+      dev.change((d) => (d.props.off = fields));
+      local.off = fields;
+    });
+    dev.hr(5, [5, 15]);
+    fieldSelector('Disabled', 'disabled', (fields) => {
+      dev.change((d) => (d.props.disabled = fields));
+      local.disabled = fields;
     });
   });
 

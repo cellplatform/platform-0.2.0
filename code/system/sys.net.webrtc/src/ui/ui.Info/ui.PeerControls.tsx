@@ -1,14 +1,13 @@
 import { COLORS, Color, DEFAULTS, FC, css, t } from './common';
-import { Icon } from './ui.PeerControls.Icon';
-import { ToolButton, ToolButtonProps } from './ui.ToolButton';
+import { PeerControlButton, PeerControlButtonProps } from './ui.PeerControls.Button';
 
 export type PeerFacetsHandler = (e: PeerFacetsHandlerArgs) => void;
 export type PeerFacetsHandlerArgs = { kind: t.WebRtcInfoPeerFacet };
 
 export type PeerControlsProps = {
-  disabled?: t.WebRtcInfoPeerFacet[];
-  selected?: t.WebRtcInfoPeerFacet[];
   spinning?: t.WebRtcInfoPeerFacet[];
+  off?: t.WebRtcInfoPeerFacet[];
+  disabled?: t.WebRtcInfoPeerFacet[];
   style?: t.CssValue;
   spinnerColor?: string | number;
   onClick?: PeerFacetsHandler;
@@ -35,23 +34,21 @@ const View: React.FC<PeerControlsProps> = (props) => {
     }),
   };
 
-  const tool = (kind: t.WebRtcInfoPeerFacet, options: Partial<ToolButtonProps> = {}) => {
+  const tool = (kind: t.WebRtcInfoPeerFacet, options: Partial<PeerControlButtonProps> = {}) => {
     const disabled = Wrangle.disabled(props, kind);
-    const selected = Wrangle.selected(props, kind);
-
+    const off = Wrangle.off(props, kind);
     const enabled = !disabled;
     const onClick = () => props.onClick?.({ kind });
     return (
-      <ToolButton
+      <PeerControlButton
         {...options}
+        kind={kind}
         enabled={enabled}
-        selected={selected}
+        off={off}
         spinning={Wrangle.spinning(props, kind)}
         spinnerColor={props.spinnerColor}
         onClick={onClick}
-      >
-        <Icon kind={kind} selected={selected} enabled={enabled} />
-      </ToolButton>
+      />
     );
   };
 
@@ -78,8 +75,8 @@ const Wrangle = {
     return Wrangle.includes(props.disabled, kind);
   },
 
-  selected(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
-    return Wrangle.includes(props.selected, kind);
+  off(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
+    return Wrangle.includes(props.off, kind);
   },
 
   spinning(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
