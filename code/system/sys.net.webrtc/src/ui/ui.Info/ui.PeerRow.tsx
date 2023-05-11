@@ -1,31 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
-import { Button, Color, COLORS, css, t, rx, Icons, MediaStream } from '../common';
+import { useState } from 'react';
+import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
+import { PeerControls } from './ui.PeerControls';
 
 export type PeerRowProps = {
-  self: t.Peer;
-  state: t.NetworkStatePeer;
+  self?: t.Peer;
+  data?: t.NetworkStatePeer;
+  selected?: boolean;
   style?: t.CssValue;
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { self, state } = props;
-  const isSelf = self.id === state.id;
+  const { self, data, selected } = props;
+  if (!self || !data) return null;
 
+  const isSelf = self.id === data.id;
   const [muted, setMuted] = useState(false);
+  const [spinning, setSpinning] = useState(false);
 
-  const connections = self.connectionsByPeer.find((item) => {
-    return item.peer.remote === state.id;
-  });
-  console.log('connections', connections);
+  const connections = self.connectionsByPeer.find(({ peer }) => peer.remote === data.id);
+  console.log('connections', connections); // TEMP 🐷
 
   /**
    * Handlers
    */
   const connect = async () => {
-    //
+    setSpinning(true);
+
     console.log('connect');
-    const res = self.media(state.id, 'camera');
+    const res = await self.media(data.id, 'camera');
     console.log('connect:res', res);
+
+    setSpinning(false);
   };
 
   /**
@@ -33,53 +38,50 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
    */
   const styles = {
     base: css({
-      position: 'relative',
       flex: 1,
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      height: 16,
+      position: 'relative',
+      userSelect: 'none',
+      fontSize: DEFAULTS.fontSize,
+      minHeight: DEFAULTS.minRowHeight,
       display: 'grid',
-      gridTemplateColumns: '1fr auto auto',
+      gridTemplateColumns: 'auto 1fr auto',
     }),
-    icon: css({ marginLeft: 10 }),
+    icoPerson: css({
+      transform: isSelf ? `scaleX(-1)` : undefined,
+    }),
+
+    left: css({
+      display: 'grid',
+      placeItems: 'center',
+      gridTemplateColumns: 'auto auto 1fr',
+      columnGap: 5,
+    }),
+    label: css({ opacity: 0.3 }),
+    selected: css({
+      Size: 5,
+      borderRadius: 5,
+      backgroundColor: COLORS.BLUE,
+      opacity: selected ? 1 : 0,
+    }),
   };
 
-  const iconColor = Color.alpha(COLORS.DARK, 0.8);
-  const elIconDoc = <Icons.Network.Docs size={15} color={iconColor} style={styles.icon} />;
+  const icoColor = Color.alpha(COLORS.DARK, 0.8);
 
-  // const camera = connections?.media.find((conn) => conn.metadata.input === 'camera');
-  // const camera = Wrangle.camera(self, state.id);
-  // const elMedia = camera?.stream && (
-  //   // <MediaStream.Video width={15} height={15} stream={camera.stream.remote} />
-  // );
+  const elLeft = (
+    <div {...styles.left}>
+      <div {...styles.selected} />
+      <Icons.Person size={15} color={icoColor} style={styles.icoPerson} />
+      <div {...styles.label}>{isSelf ? 'me' : ''}</div>
+    </div>
+  );
+
+  const elRight = <PeerControls />;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>
-        {isSelf && <div>Me</div>}
-        {/* <div>{elMedia}</div> */}
-      </div>
-      <div>
-        <div>{!isSelf && <Button onClick={connect}>Video</Button>}</div>
-      </div>
-      {elIconDoc}
+      {elLeft}
+      <div />
+      {elRight}
     </div>
   );
-};
-
-/**
- * [Helpers]
- */
-const Wrangle = {
-  connections(self: t.Peer, peer: t.PeerId) {
-    //
-  },
-
-  camera(self: t.Peer, peer: t.PeerId) {
-    // const connections = self.connectionsByPeer.find((item) => {
-    //   return item.peer.remote === state.id;
-    // });
-    // const isSelf = self.id === peer;
-    // return self.connectionsByPeer.find((conn) => conn.metadata.input === 'camera');
-    // return self.connectionsByPeer.find((conn) => conn.peer.);
-  },
 };
