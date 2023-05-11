@@ -1,6 +1,6 @@
 import { COLORS, Color, Icons, t } from './common';
 
-export type IconProps = {
+export type PeerCtrlIconProps = {
   kind: t.WebRtcInfoPeerFacet;
   enabled?: boolean;
   off?: boolean;
@@ -8,7 +8,7 @@ export type IconProps = {
   style?: t.CssValue;
 };
 
-export const Icon: React.FC<IconProps> = (props) => {
+export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   const { kind, off, over } = Wrangle.props(props);
   const color = Wrangle.color(props);
 
@@ -42,12 +42,12 @@ export const Icon: React.FC<IconProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  props(props: IconProps) {
+  props(props: PeerCtrlIconProps) {
     const { kind, enabled = true, off = false, over = false } = props;
     return { kind, enabled, off, over };
   },
 
-  color(props: IconProps) {
+  color(props: PeerCtrlIconProps) {
     const { enabled, off, over } = Wrangle.props(props);
     if (!enabled) return Color.alpha(COLORS.DARK, 0.8);
     if (over) return Color.alpha(COLORS.BLUE, 1);

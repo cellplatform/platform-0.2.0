@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button, COLORS, Spinner, css, t } from './common';
-import { Icon } from './ui.PeerControls.Icon';
+import { PeerCtrlIcon } from './ui.PeerCtrls.Icon';
 
-export type PeerControlButtonProps = {
+export type PeerCtrlButtonProps = {
   kind: t.WebRtcInfoPeerFacet;
   clickable?: boolean;
   enabled?: boolean;
@@ -15,7 +15,7 @@ export type PeerControlButtonProps = {
   onClick?: () => void;
 };
 
-export const PeerControlButton: React.FC<PeerControlButtonProps> = (props) => {
+export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
   const { kind, off = false, clickable = true, spinning = false, paddingX = [5, 5] } = props;
   const enabled = clickable && (props.enabled ?? true);
   const disabledOpacity = clickable ? 0.15 : 1;
@@ -55,7 +55,7 @@ export const PeerControlButton: React.FC<PeerControlButtonProps> = (props) => {
 
   const elIcon = (
     <div {...styles.icon}>
-      <Icon kind={kind} off={off} enabled={enabled} over={isOver} />
+      <PeerCtrlIcon kind={kind} off={off} enabled={enabled} over={isOver} />
     </div>
   );
 

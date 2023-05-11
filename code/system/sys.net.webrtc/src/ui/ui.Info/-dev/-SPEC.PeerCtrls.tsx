@@ -1,10 +1,10 @@
 import { PropList, Dev, WebRtc, t, MediaStream } from '../../../test.ui';
-import { PeerControls, PeerControlsProps } from '../ui.PeerControls';
+import { PeerCtrls, PeerCtrlsProps } from '../ui.PeerCtrls';
 
 type T = {
   camera?: t.PeerGetMediaStreamRes;
   screen?: t.PeerGetMediaStreamRes;
-  props: PeerControlsProps;
+  props: PeerCtrlsProps;
 };
 const initial: T = { props: { peerid: 'p-foo' } };
 
@@ -60,7 +60,7 @@ export default Dev.describe('PeerFacets', (e) => {
           }
         };
 
-        return <PeerControls {...e.state.props} onClick={handleKindClick} />;
+        return <PeerCtrls {...e.state.props} onClick={handleKindClick} />;
       });
   });
 
@@ -108,7 +108,7 @@ export default Dev.describe('PeerFacets', (e) => {
 
     const fieldSelector = (
       title: string,
-      prop: keyof PeerControlsProps,
+      prop: keyof PeerCtrlsProps,
       change: (fields?: t.WebRtcInfoPeerFacet[]) => void,
     ) => {
       dev.section(title, (dev) => {
@@ -116,7 +116,7 @@ export default Dev.describe('PeerFacets', (e) => {
           return (
             <PropList.FieldSelector
               style={{ Margin: [10, 40, 5, 30] }}
-              all={PeerControls.FIELDS}
+              all={PeerCtrls.FIELDS}
               selected={e.state.props[prop] as string[]}
               showIndexes={false}
               onClick={(ev) => {

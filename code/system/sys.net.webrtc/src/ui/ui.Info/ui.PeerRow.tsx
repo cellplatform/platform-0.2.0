@@ -1,16 +1,13 @@
 import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
-import { PeerControls, PeerControlsClickHandler } from './ui.PeerControls';
-
-export type PeerRowClickHandler = (e: PeerRowClickHandlerArgs) => void;
-export type PeerRowClickHandlerArgs = { peerid: t.PeerId };
+import { PeerCtrls } from './ui.PeerCtrls';
 
 export type PeerRowProps = {
   peerid: t.PeerId;
   isSelf?: boolean;
   isSelected?: boolean;
   style?: t.CssValue;
-  onSelect?: PeerRowClickHandler;
-  onControlClick?: PeerControlsClickHandler;
+  onSelect?: t.WebRtcInfoPeerRowSelectHandler;
+  onControlClick?: t.WebRtcInfoPeerCtrlsClickHandler;
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
@@ -60,7 +57,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elLeft}
-      <PeerControls peerid={peerid} onClick={props.onControlClick} />
+      <PeerCtrls peerid={peerid} onClick={props.onControlClick} />
     </div>
   );
 };

@@ -4,7 +4,7 @@ export const Specs = {
 
   'sys.net.webrtc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'sys.net.webrtc.ui.Info.PeerRow': () => import('../ui/ui.Info/-dev/-SPEC.PeerRow'),
-  'sys.net.webrtc.ui.Info.PeerControls': () => import('../ui/ui.Info/-dev/-SPEC.PeerControls'),
+  'sys.net.webrtc.ui.Info.PeerCtrls': () => import('../ui/ui.Info/-dev/-SPEC.PeerCtrls'),
   'sys.net.webrtc.ui.PeerCard': () => import('../ui/ui.PeerCard/-SPEC'),
   'sys.net.webrtc.ui.ConnectInput': () => import('../ui/ui.ConnectInput/-SPEC'),
 
