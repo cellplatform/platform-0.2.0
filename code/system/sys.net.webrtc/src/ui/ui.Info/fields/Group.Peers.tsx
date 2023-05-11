@@ -5,6 +5,7 @@ export function FieldGroupList(
   fields: t.WebRtcInfoField[],
   data: t.WebRtcInfoData,
   info?: t.WebRtcInfo,
+  events?: t.WebRtcEvents,
 ): t.PropListItem[] {
   const peer = info?.peer;
   const state = info?.state;
@@ -28,6 +29,7 @@ export function FieldGroupList(
     const value = (
       <PeerRow
         peerid={data.id}
+        events={events}
         isSelf={isSelf}
         isSelected={isSelected}
         useController={group?.useController}

@@ -35,6 +35,17 @@ export default Dev.describe('PeerRow', async (e) => {
   //   return network.peers[peer.id];
   // };
 
+  const Util = {
+    props(state: T): PeerRowProps {
+      const { debug, props } = state;
+
+      const network = debug.useNetwork === 'Local' ? self : remote;
+      const events = network.controller.events;
+
+      return { ...props, events };
+    },
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -52,9 +63,10 @@ export default Dev.describe('PeerRow', async (e) => {
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
+        const props = Util.props(e.state);
         return (
           <PeerRow
-            {...e.state.props}
+            {...props}
             onSelect={(e) => console.info('⚡️ onSelect:', e)}
             onCtrlClick={(e) => console.info('⚡️ onControlClick:', e)}
           />
@@ -118,7 +130,7 @@ export default Dev.describe('PeerRow', async (e) => {
       const data = {
         [`Peer:Self(${total(self.peer)})`]: self,
         [`Peer:Remote(${total(remote.peer)})`]: remote,
-        props: e.state.props,
+        props: Util.props(e.state),
       };
 
       return <Dev.Object name={'PeerRow'} data={data} expand={1} />;
