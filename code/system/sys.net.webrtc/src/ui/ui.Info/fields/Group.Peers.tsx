@@ -13,6 +13,7 @@ export function FieldGroupList(
     return [];
   }
 
+  const group = data.group;
   const network = state.current.network;
   const local = Object.values(network.peers).find((e) => e.id === peer.id);
   const remotes = Object.values(network.peers)
@@ -22,10 +23,18 @@ export function FieldGroupList(
 
   const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
     const { isSelf } = options;
+    const isSelected = group?.selected === data.id;
 
-    const isSelected = isSelf; // TEMP 🐷
-
-    const value = <PeerRow peerid={data.id} isSelected={isSelected} style={{ marginLeft: 5 }} />;
+    const value = (
+      <PeerRow
+        peerid={data.id}
+        isSelf={isSelf}
+        isSelected={isSelected}
+        style={{ marginLeft: 5 }}
+        onSelect={group?.onPeerSelect}
+        onControlClick={group?.onPeerClick}
+      />
+    );
     return { value };
   };
 

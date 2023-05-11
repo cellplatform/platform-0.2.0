@@ -12,9 +12,16 @@ export type WebRtcInfoField =
 
 export type WebRtcInfoData = {
   self?: { title?: string };
-  peer?: { title?: string };
-  group?: { title?: string };
   state?: { shared?: { title?: string } };
+  peer?: { title?: string };
+  group?: WebRtcInfoDataGroup;
+};
+
+export type WebRtcInfoDataGroup = {
+  title?: string;
+  onPeerSelect?: WebRtcInfoPeerRowSelectHandler;
+  onPeerClick?: WebRtcInfoPeerCtrlsClickHandler;
+  selected?: t.PeerId;
 };
 
 export type WebRtcInfoPeerFacet = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';

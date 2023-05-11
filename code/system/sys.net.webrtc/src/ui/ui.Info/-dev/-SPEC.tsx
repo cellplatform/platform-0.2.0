@@ -18,6 +18,7 @@ type T = {
     bg: boolean;
     title: boolean;
     remotePeer?: t.PeerId;
+    selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
   };
 };
@@ -47,13 +48,25 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const remotes: TRemote[] = [];
 
   const Util = {
-    props(state: T): WebRtcInfoProps {
-      const { debug, props } = state;
+    props(state: t.DevCtxState<T>): WebRtcInfoProps {
+      const { debug, props } = state.current;
       return {
         ...props,
         title: debug.title ? 'Network Cell' : undefined,
         events,
-        data: {},
+        data: {
+          group: {
+            selected: debug.selectedPeer,
+            async onPeerSelect(e) {
+              console.info('⚡️ onPeerSelect', e);
+              state.change((d) => (d.debug.selectedPeer = e.peerid));
+            },
+
+            async onPeerClick(e) {
+              console.info('⚡️ onPeerClick', e);
+            },
+          },
+        },
       };
     },
   };
@@ -71,7 +84,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     ctx.subject.display('grid').render<T>((e) => {
       const { debug } = e.state;
-      const props = Util.props(e.state);
+      const props = Util.props(state);
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
       ctx.subject.size([320, null]);
       return (
@@ -119,10 +132,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
-        const props = Util.props(e.state);
+        const props = Util.props(state);
         return (
           <PropList.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
@@ -140,7 +154,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.section((dev) => {
       dev.row((e) => {
-        const props = Util.props(e.state);
+        const props = Util.props(state);
         return <WebRtcInfo {...props} card={true} margin={[15, 25, 40, 25]} />;
       });
 
@@ -240,11 +254,13 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>(async (e) => {
       const sharedState = controller.state;
       const total = self.connectionsByPeer.length ?? 0;
       const data = {
+        props: Util.props(state),
         [`Peers:Self(${total})`]: self,
         'Peers:Remote': remotes,
         'State:Shared': sharedState?.current,

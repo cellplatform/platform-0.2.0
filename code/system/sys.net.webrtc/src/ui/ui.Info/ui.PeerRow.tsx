@@ -46,7 +46,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   };
 
   const elLeft = (
-    <div {...styles.left} onClick={() => props.onSelect?.({ peerid })}>
+    <div {...styles.left} onMouseDown={() => props.onSelect?.({ peerid })}>
       <div {...styles.selected} />
       <Icons.Person size={15} color={icoColor} style={styles.icoPerson} />
       <div {...styles.label}>{isSelf ? 'me' : ''}</div>
