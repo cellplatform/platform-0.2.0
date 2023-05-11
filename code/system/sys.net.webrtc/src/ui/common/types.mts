@@ -10,6 +10,7 @@ export type {
   PropListItem,
   DevButtonClickHandler,
   IconRenderer,
+  KeyboardState,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type {

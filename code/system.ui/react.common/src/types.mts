@@ -2,6 +2,11 @@
  * @system
  */
 export type { CssValue, CssEdgesInput, CssRadiusInput } from 'sys.ui.react.css/src/types.mjs';
+export type {
+  KeyboardState,
+  KeyboardStateCurrent,
+  KeyboardKeypress,
+} from 'sys.ui.dom/src/types.mjs';
 
 /**
  * @local
