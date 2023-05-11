@@ -72,7 +72,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             state.change((d) => (d.debug.selectedPeer = e.peerid));
           },
           async onPeerCtrlClick(e) {
-            console.info('⚡️ onPeerClick', e);
+            console.info('⚡️ onPeerCtrlClick', e);
           },
         },
       };
@@ -208,13 +208,12 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .onClick(async (e) => {
             e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
 
-            // Create a new sample peer.
+            // Create a new peer (sample remote).
             const peer = await TestNetwork.peer();
             const controller = WebRtc.controller(peer);
             const name = `remote-${remotes.length + 1}`;
             remotes.push({ name, peer, controller });
 
-            // Connect.
             await events.connect.fire(peer.id);
             e.change((d) => (d.debug.addingConnection = undefined));
           }),
