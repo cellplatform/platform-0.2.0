@@ -53,7 +53,7 @@ export default Dev.describe('PeerRow', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Use', (dev) => {
+    dev.section('Peer', (dev) => {
       const button = (label: string, args: { peer: t.Peer; controller: t.WebRtcController }) => {
         dev.button((btn) =>
           btn
@@ -63,8 +63,8 @@ export default Dev.describe('PeerRow', async (e) => {
         );
       };
 
-      button('peer: self (me)', self);
-      button('peer: remote', remote);
+      button('self (me)', self);
+      button('remote', remote);
     });
 
     dev.hr(5, 20);

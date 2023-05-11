@@ -30,8 +30,8 @@ export default Dev.describe('PeerFacets', (e) => {
 
     state.change((d) => {
       d.props.disabled = local.disabled;
-      d.props.off = local.off;
       d.props.spinning = local.spinning;
+      d.props.off = local.off;
     });
 
     ctx.host.tracelineColor(-0.05);

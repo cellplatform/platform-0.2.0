@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, FC, css, t } from './common';
+import { COLORS, Color, DEFAULTS, FC, R, css, t } from './common';
 import { PeerControlButton, PeerControlButtonProps } from './ui.PeerControls.Button';
 
 export type PeerFacetsHandler = (e: PeerFacetsHandlerArgs) => void;
@@ -14,9 +14,6 @@ export type PeerControlsProps = {
 };
 
 const View: React.FC<PeerControlsProps> = (props) => {
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({
       userSelect: 'none',
@@ -35,8 +32,8 @@ const View: React.FC<PeerControlsProps> = (props) => {
   };
 
   const tool = (kind: t.WebRtcInfoPeerFacet, options: Partial<PeerControlButtonProps> = {}) => {
-    const disabled = Wrangle.disabled(props, kind);
-    const off = Wrangle.off(props, kind);
+    const disabled = Wrangle.is.disabled(props, kind);
+    const off = Wrangle.is.off(props, kind);
     const enabled = !disabled;
     const onClick = () => props.onClick?.({ kind });
     return (
@@ -45,7 +42,7 @@ const View: React.FC<PeerControlsProps> = (props) => {
         kind={kind}
         enabled={enabled}
         off={off}
-        spinning={Wrangle.spinning(props, kind)}
+        spinning={Wrangle.is.spinning(props, kind)}
         spinnerColor={props.spinnerColor}
         onClick={onClick}
       />
@@ -71,22 +68,42 @@ const View: React.FC<PeerControlsProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  disabled(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
-    return Wrangle.includes(props.disabled, kind);
+  is: {
+    disabled(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
+      return includes(props.disabled, kind);
+    },
+
+    off(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
+      return includes(props.off, kind);
+    },
+
+    spinning(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
+      return includes(props.spinning, kind);
+    },
   },
 
-  off(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
-    return Wrangle.includes(props.off, kind);
-  },
+  fields: {
+    disabled(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet, value: boolean) {
+      return fields(props.disabled, kind, value);
+    },
 
-  spinning(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet) {
-    return Wrangle.includes(props.spinning, kind);
-  },
+    off(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet, value: boolean) {
+      return fields(props.off, kind, value);
+    },
 
-  includes(list: t.WebRtcInfoPeerFacet[] = [], kind: t.WebRtcInfoPeerFacet) {
-    return list.includes(kind);
+    spinning(props: PeerControlsProps, kind: t.WebRtcInfoPeerFacet, value: boolean) {
+      return fields(props.spinning, kind, value);
+    },
   },
 };
+
+function includes(list: t.WebRtcInfoPeerFacet[] = [], kind: t.WebRtcInfoPeerFacet) {
+  return list.includes(kind);
+}
+
+function fields(list: t.WebRtcInfoPeerFacet[] = [], kind: t.WebRtcInfoPeerFacet, value: boolean) {
+  return value ? R.uniq([...list, kind]) : list.filter((item) => item !== kind);
+}
 
 /**
  * Export
@@ -94,9 +111,10 @@ const Wrangle = {
 const FIELDS: t.WebRtcInfoPeerFacet[] = ['Video', 'Mic', 'Screen', 'Identity', 'StateDoc'];
 type Fields = {
   FIELDS: typeof FIELDS;
+  Wrangle: typeof Wrangle;
 };
 export const PeerControls = FC.decorate<PeerControlsProps, Fields>(
   View,
-  { FIELDS },
+  { FIELDS, Wrangle },
   { displayName: 'PeerFacets' },
 );
