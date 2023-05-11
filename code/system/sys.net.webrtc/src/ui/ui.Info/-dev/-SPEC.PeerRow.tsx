@@ -1,15 +1,15 @@
 import { t, Dev, TestNetwork, WebRtc } from '../../../test.ui';
 import { PeerRow, PeerRowProps } from '../ui.PeerRow';
 
-type T = {
-  props: PeerRowProps;
-};
+type T = { props: PeerRowProps };
+const initial: T = { props: {} };
 
 export default Dev.describe('PeerRow', async (e) => {
-  type LocalStore = { selected: boolean };
+  type LocalStore = { isSelected: boolean; isSelf: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerRow');
   const local = localstore.object({
-    selected: true,
+    isSelected: true,
+    isSelf: true,
   });
 
   const create = async () => {
@@ -20,25 +20,19 @@ export default Dev.describe('PeerRow', async (e) => {
 
   const [self, remote] = await Promise.all([create(), create()]);
 
-  const networkPeer = (args: { peer: t.Peer; controller: t.WebRtcController }) => {
-    const { peer, controller } = args;
-    const network = controller.state.current.network;
-    return network.peers[peer.id];
-  };
-
-  const initial: T = {
-    props: {
-      self: self.peer,
-      data: networkPeer(self),
-    },
-  };
+  // const networkPeer = (args: { peer: t.Peer; controller: t.WebRtcController }) => {
+  //   const { peer, controller } = args;
+  //   const network = controller.state.current.network;
+  //   return network.peers[peer.id];
+  // };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.selected = local.selected;
+      d.props.isSelected = local.isSelected;
+      d.props.isSelf = local.isSelf;
     });
 
     ctx.subject
@@ -46,35 +40,30 @@ export default Dev.describe('PeerRow', async (e) => {
       .size([250, null])
       .display('grid')
       .render<T>((e) => {
-        return <PeerRow {...e.state.props} />;
+        return (
+          <PeerRow
+            {...e.state.props}
+            onControlClick={(e) => console.info('⚡️ onControlClick:', e)}
+          />
+        );
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Peer', (dev) => {
-      const button = (label: string, args: { peer: t.Peer; controller: t.WebRtcController }) => {
-        dev.button((btn) =>
-          btn
-            .label(label)
-            .right((e) => (e.state.props.data?.id === args.peer.id ? '← (current)' : ''))
-            .onClick((e) => e.change((d) => (d.props.data = networkPeer(args)))),
-        );
-      };
-
-      button('self (me)', self);
-      button('remote', remote);
-    });
-
-    dev.hr(5, 20);
-
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `selected`)
-          .value((e) => Boolean(e.state.props.selected))
-          .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected')))),
+          .label((e) => 'isSelected')
+          .value((e) => Boolean(e.state.props.isSelected))
+          .onClick((e) => e.change((d) => (local.isSelected = Dev.toggle(d.props, 'isSelected')))),
+      );
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'isSelf')
+          .value((e) => Boolean(e.state.props.isSelf))
+          .onClick((e) => e.change((d) => (local.isSelf = Dev.toggle(d.props, 'isSelf')))),
       );
     });
 

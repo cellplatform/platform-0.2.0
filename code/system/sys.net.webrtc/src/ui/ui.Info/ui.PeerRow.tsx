@@ -1,41 +1,20 @@
-import { useState } from 'react';
 import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
-import { PeerControls } from './ui.PeerControls';
+import { PeerControls, PeerControlsClickHandler } from './ui.PeerControls';
 
 export type PeerRowProps = {
-  self?: t.Peer;
-  data?: t.NetworkStatePeer;
-  selected?: boolean;
+  isSelf?: boolean;
+  isSelected?: boolean;
   style?: t.CssValue;
+  onControlClick?: PeerControlsClickHandler;
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { self, data, selected } = props;
-  if (!self || !data) return null;
-
-  const isSelf = self.id === data.id;
-  const [muted, setMuted] = useState(false);
-  const [spinning, setSpinning] = useState(false);
-
-  const connections = self.connectionsByPeer.find(({ peer }) => peer.remote === data.id);
-  console.log('connections', connections); // TEMP 🐷
-
-  /**
-   * Handlers
-   */
-  const connect = async () => {
-    setSpinning(true);
-
-    console.log('connect');
-    const res = await self.media(data.id, 'camera');
-    console.log('connect:res', res);
-
-    setSpinning(false);
-  };
+  const { isSelected, isSelf = false } = props;
 
   /**
    * [Render]
    */
+  const icoColor = Color.alpha(COLORS.DARK, 0.8);
   const styles = {
     base: css({
       flex: 1,
@@ -49,7 +28,6 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
     icoPerson: css({
       transform: isSelf ? `scaleX(-1)` : undefined,
     }),
-
     left: css({
       display: 'grid',
       placeItems: 'center',
@@ -61,11 +39,9 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       Size: 5,
       borderRadius: 5,
       backgroundColor: COLORS.BLUE,
-      opacity: selected ? 1 : 0,
+      opacity: isSelected ? 1 : 0,
     }),
   };
-
-  const icoColor = Color.alpha(COLORS.DARK, 0.8);
 
   const elLeft = (
     <div {...styles.left}>
@@ -75,13 +51,11 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
     </div>
   );
 
-  const elRight = <PeerControls />;
-
   return (
     <div {...css(styles.base, props.style)}>
       {elLeft}
       <div />
-      {elRight}
+      <PeerControls onClick={props.onControlClick} />
     </div>
   );
 };

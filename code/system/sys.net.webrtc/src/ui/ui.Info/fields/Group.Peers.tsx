@@ -22,7 +22,8 @@ export function FieldGroupList(
 
   const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
     const { isSelf } = options;
-    const value = <PeerRow self={peer} data={data} selected={isSelf} style={{ marginLeft: 5 }} />;
+    const isSelected = isSelf; // TEMP 🐷
+    const value = <PeerRow isSelected={isSelected} style={{ marginLeft: 5 }} />;
     return { value };
   };
 

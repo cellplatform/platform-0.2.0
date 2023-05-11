@@ -1,8 +1,11 @@
 import { COLORS, Color, DEFAULTS, FC, R, css, t } from './common';
 import { PeerControlButton, PeerControlButtonProps } from './ui.PeerControls.Button';
 
-export type PeerFacetsHandler = (e: PeerFacetsHandlerArgs) => void;
-export type PeerFacetsHandlerArgs = { kind: t.WebRtcInfoPeerFacet };
+export type PeerControlsClickHandler = (e: PeerControlsClickHandlerArgs) => void;
+export type PeerControlsClickHandlerArgs = {
+  kind: t.WebRtcInfoPeerFacet;
+  is: { spinning: boolean; disabled: boolean; off: boolean };
+};
 
 export type PeerControlsProps = {
   spinning?: t.WebRtcInfoPeerFacet[];
@@ -10,7 +13,7 @@ export type PeerControlsProps = {
   disabled?: t.WebRtcInfoPeerFacet[];
   style?: t.CssValue;
   spinnerColor?: string | number;
-  onClick?: PeerFacetsHandler;
+  onClick?: PeerControlsClickHandler;
 };
 
 const View: React.FC<PeerControlsProps> = (props) => {
@@ -32,17 +35,20 @@ const View: React.FC<PeerControlsProps> = (props) => {
   };
 
   const tool = (kind: t.WebRtcInfoPeerFacet, options: Partial<PeerControlButtonProps> = {}) => {
-    const disabled = Wrangle.is.disabled(props, kind);
-    const off = Wrangle.is.off(props, kind);
-    const enabled = !disabled;
-    const onClick = () => props.onClick?.({ kind });
+    const is = {
+      spinning: Wrangle.is.spinning(props, kind),
+      disabled: Wrangle.is.disabled(props, kind),
+      off: Wrangle.is.off(props, kind),
+    };
+    const enabled = !is.disabled;
+    const onClick = () => props.onClick?.({ kind, is });
     return (
       <PeerControlButton
         {...options}
         kind={kind}
         enabled={enabled}
-        off={off}
-        spinning={Wrangle.is.spinning(props, kind)}
+        off={is.off}
+        spinning={is.spinning}
         spinnerColor={props.spinnerColor}
         onClick={onClick}
       />
