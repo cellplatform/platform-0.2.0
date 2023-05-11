@@ -1,6 +1,7 @@
 import { Keyboard } from '..';
 import { Dev, t } from '../../../test.ui';
 import { DevSample } from './DEV.Sample';
+import { DevHook } from './DEV.Hook';
 
 type T = { keyboard: t.KeyboardState };
 const initial: T = {
@@ -23,7 +24,7 @@ export default Dev.describe('KeyboardMonitor', (e) => {
     };
 
     /**
-     * Single pattern registration
+     * Single pattern registration.
      */
     Keyboard.Monitor.on('CMD + KeyL', (e) => {
       e.handled();
@@ -74,10 +75,27 @@ export default Dev.describe('KeyboardMonitor', (e) => {
         />
       ));
 
+    dev.row((e) => <DevHook />);
+
+    dev.hr(5, 20);
+
     dev.row(async (e) => {
-      const { EventProps } = await Keyboard.ui.EventProps();
+      const { EventProps } = await Keyboard.EventProps();
       const event = e.state.keyboard.last;
       return <EventProps event={event} style={{ MarginX: 15, marginTop: 5 }} />;
     });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer
+      .border(-0.1)
+      .render<T>((e) => (
+        <Dev.Object
+          name={'KeyboardMonitor'}
+          data={e.state.keyboard}
+          expand={{ level: 1, paths: ['$.current.pressed', '$.current', '$.current.pressed.*'] }}
+        />
+      ));
   });
 });
