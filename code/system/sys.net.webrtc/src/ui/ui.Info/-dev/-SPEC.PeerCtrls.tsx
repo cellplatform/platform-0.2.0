@@ -34,6 +34,7 @@ export default Dev.describe('PeerFacets', (e) => {
       d.props.off = local.off;
     });
 
+    ctx.debug.width(300);
     ctx.host.tracelineColor(-0.05);
     ctx.subject
       .backgroundColor(1)
@@ -51,11 +52,18 @@ export default Dev.describe('PeerFacets', (e) => {
           if (kind === 'Video') {
             const current = state.current.camera;
             if (!current) {
+              state.change((d) => (d.props.spinning = ['Video']));
               const camera = await getStream('camera');
-              state.change((d) => (d.camera = camera));
+              state.change((d) => {
+                d.camera = camera;
+                d.props.spinning = undefined;
+              });
             } else {
               current.done();
-              state.change((d) => (d.camera = undefined));
+              state.change((d) => {
+                d.camera = undefined;
+                d.props.spinning = undefined;
+              });
             }
           }
         };
@@ -81,12 +89,16 @@ export default Dev.describe('PeerFacets', (e) => {
 
       const renderMedia = (stream?: MediaStream) => {
         if (!stream) return '';
-        return <MediaStream.Video stream={stream} width={16} height={16} borderRadius={2} />;
+        return (
+          <MediaStream.Video muted={true} stream={stream} width={16} height={16} borderRadius={2} />
+        );
       };
 
       dev.button((btn) =>
         btn
-          .label('stop camera')
+          .label('stop video')
+          .enabled((e) => Boolean(e.state.camera))
+          .spinner((e) => (e.state.props.spinning ?? []).includes('Video'))
           .right((e) => renderMedia(e.state.camera?.media))
           .onClick(stopCamera),
       );
@@ -94,16 +106,23 @@ export default Dev.describe('PeerFacets', (e) => {
       dev.button((btn) =>
         btn
           .label('stop screen')
+          .enabled((e) => Boolean(e.state.screen))
+          .spinner((e) => (e.state.props.spinning ?? []).includes('Screen'))
           .right((e) => renderMedia(e.state.screen?.media))
           .onClick(stopScreen),
       );
 
       dev.hr(-1, 5);
 
-      dev.button('stop all', (e) => {
-        stopCamera();
-        stopScreen();
-      });
+      dev.button((btn) =>
+        btn
+          .label('stop all')
+          .enabled((e) => Boolean(e.state.camera || e.state.screen))
+          .onClick(() => {
+            stopCamera();
+            stopScreen();
+          }),
+      );
     });
 
     const fieldSelector = (
