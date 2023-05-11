@@ -1,8 +1,9 @@
 import { css, t } from './DEV.common';
 import { DevKey, DevKeyDefaults } from './DEV.Key';
 
+type Edge = 'Left' | 'Right';
 export type DevModifierKeysProps = {
-  edge: 'Left' | 'Right';
+  edge: Edge;
   state: t.KeyboardState;
   spacing?: number;
   style?: t.CssValue;
@@ -10,12 +11,15 @@ export type DevModifierKeysProps = {
 
 export const DevModifierKeys: React.FC<DevModifierKeysProps> = (props) => {
   const { edge, state, spacing = DevKeyDefaults.SPACING } = props;
+  const isLeft = edge === 'Left';
+  const isRight = edge === 'Right';
 
-  type P = { isPressed: boolean; isEdge: boolean };
+  type P = { isPressed: boolean; isEdge: boolean; edge: Edge };
   const toPressed = (state: t.KeyboardModifierEdges): P => {
     return {
       isPressed: state.length > 0,
       isEdge: (state as string[]).includes(edge),
+      edge,
     };
   };
 
@@ -29,27 +33,45 @@ export const DevModifierKeys: React.FC<DevModifierKeysProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      Flex: 'y-stretch-stretch',
-      boxSizing: 'border-box',
-    }),
-    row: css({
-      Flex: edge === 'Left' ? 'x-start-start' : 'x-end-end',
+    base: css({ position: 'relative' }),
+    top: css({
       marginBottom: spacing,
-      ':last-child': { marginBottom: 0 },
+      display: 'grid',
+      gridTemplateColumns: isLeft ? '1.3fr 1fr' : '1fr 1.3fr',
+    }),
+    bottom: css({
+      display: 'grid',
+      gridTemplateColumns: 'auto auto auto',
+      columnGap: spacing,
     }),
   };
 
+  const elLeft = isLeft && (
+    <>
+      <DevKey label={'Ctrl'} {...ctrl} />
+      <DevKey label={'Alt'} {...alt} />
+      <DevKey label={'Meta'} {...meta} />
+    </>
+  );
+
+  const elRight = isRight && (
+    <>
+      <DevKey label={'Meta'} {...meta} />
+      <DevKey label={'Alt'} {...alt} />
+      <DevKey label={'Ctrl'} {...ctrl} />
+    </>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.row}>
-        <DevKey label={'Shift'} paddingX={30} {...shift} />
+      <div {...styles.top}>
+        {edge === 'Right' && <div />}
+        <DevKey label={'Shift'} {...shift} />
+        {edge === 'Left' && <div />}
       </div>
-      <div {...styles.row}>
-        <DevKey label={'Ctrl'} {...ctrl} />
-        <DevKey label={'Alt'} {...alt} />
-        <DevKey label={'Meta'} {...meta} />
+      <div {...styles.bottom}>
+        {elLeft}
+        {elRight}
       </div>
     </div>
   );

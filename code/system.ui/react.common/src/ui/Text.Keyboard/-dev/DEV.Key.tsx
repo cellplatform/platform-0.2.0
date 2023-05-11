@@ -1,8 +1,9 @@
-import { t, Card, Color, COLORS, css, TextSyntax } from './DEV.common';
+import { COLORS, Color, TextSyntax, css, t } from './DEV.common';
 
 export const DevKeyDefaults = { SPACING: 4 };
 
 export type DevKeyProps = {
+  edge: 'Left' | 'Right';
   label?: string | JSX.Element;
   isPressed?: boolean;
   isEdge?: boolean;
@@ -12,25 +13,16 @@ export type DevKeyProps = {
 };
 
 export const DevKey: React.FC<DevKeyProps> = (props) => {
-  const {
-    label = '?',
-    isPressed = false,
-    isEdge = false,
-    paddingX = 12,
-    spacing = DevKeyDefaults.SPACING,
-  } = props;
+  const { label = '?', isPressed = false, isEdge = false, paddingX = 12 } = props;
 
-  /**
-   * [Render]
-   */
   const styles = {
     base: css({
       position: 'relative',
-      boxSizing: 'border-box',
-      overflow: 'hidden',
       transform: `translate(0, ${isPressed ? 2 : 0}px)`,
-      marginRight: spacing,
-      ':last-child': { marginRight: 0 },
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.5)}`,
+      borderRadius: 4,
+      backgroundColor: COLORS.WHITE,
+      boxShadow: `0 2px 4px 0 ${Color.format(-0.1)}`,
     }),
     bg: css({
       Absolute: 0,
@@ -51,9 +43,9 @@ export const DevKey: React.FC<DevKeyProps> = (props) => {
     typeof label !== 'string' ? label : <TextSyntax text={`<${label}>`} style={styles.label} />;
 
   return (
-    <Card style={css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)}>
       <div {...styles.bg} />
       <div {...styles.body}>{elLabel}</div>
-    </Card>
+    </div>
   );
 };
