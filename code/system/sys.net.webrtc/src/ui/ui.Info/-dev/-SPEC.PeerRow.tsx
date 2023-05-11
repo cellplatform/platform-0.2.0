@@ -38,11 +38,13 @@ export default Dev.describe('PeerRow', async (e) => {
   const Util = {
     props(state: T): PeerRowProps {
       const { debug, props } = state;
-
       const network = debug.useNetwork === 'Local' ? self : remote;
-      const events = network.controller.events;
 
-      return { ...props, events };
+      return {
+        ...props,
+        peerid: network.peer.id,
+        events: network.controller.events,
+      };
     },
   };
 
@@ -68,7 +70,7 @@ export default Dev.describe('PeerRow', async (e) => {
           <PeerRow
             {...props}
             onSelect={(e) => console.info('⚡️ onSelect:', e)}
-            onCtrlClick={(e) => console.info('⚡️ onControlClick:', e)}
+            onCtrlClick={(e) => console.info('⚡️ onCtrlClick:', e)}
           />
         );
       });
