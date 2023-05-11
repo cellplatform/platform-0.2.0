@@ -50,11 +50,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     dev.row((e) => {
       return (
-        <WebRtcInfo
-          fields={['Module.Verify', 'Module']}
-          data={{ events }}
-          margin={[0, 20, 0, 20]}
-        />
+        <WebRtcInfo fields={['Module.Verify', 'Module']} events={events} margin={[0, 20, 0, 20]} />
       );
     });
 

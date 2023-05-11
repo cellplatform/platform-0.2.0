@@ -291,7 +291,7 @@ export default Dev.describe('PeerCard', async (e) => {
       return (
         <WebRtcInfo
           fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
-          data={{ events: controller.events }}
+          events={controller.events}
         />
       );
     });

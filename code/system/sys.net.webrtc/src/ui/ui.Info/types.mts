@@ -11,7 +11,6 @@ export type WebRtcInfoField =
   | 'Peer.Connections';
 
 export type WebRtcInfoData = {
-  events?: t.WebRtcEvents;
   self?: { title?: string };
   peer?: { title?: string };
   group?: { title?: string };

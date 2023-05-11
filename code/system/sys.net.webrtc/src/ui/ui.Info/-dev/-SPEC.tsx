@@ -51,11 +51,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const { debug, props } = state;
       return {
         ...props,
-        title: debug.title ? ['Network Cell', ''] : undefined,
-        data: {
-          events,
-          self: {},
-        },
+        title: debug.title ? 'Network Cell' : undefined,
+        events,
+        data: {},
       };
     },
   };

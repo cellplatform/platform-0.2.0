@@ -9,6 +9,7 @@ import { FieldPeer } from './fields/Peer';
 import { FieldPeerConnections } from './fields/Peer.Connections';
 
 export type WebRtcInfoProps = {
+  events?: t.WebRtcEvents;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.WebRtcInfoField[];
@@ -24,7 +25,7 @@ export type WebRtcInfoProps = {
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
   const { fields = DEFAULTS.fields, data = {} } = props;
-  const info = useInfo(data.events);
+  const info = useInfo(props.events);
 
   const items = PropList.builder<t.WebRtcInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
