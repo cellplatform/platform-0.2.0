@@ -1,15 +1,20 @@
 import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
 import { PeerControls, PeerControlsClickHandler } from './ui.PeerControls';
 
+export type PeerRowClickHandler = (e: PeerRowClickHandlerArgs) => void;
+export type PeerRowClickHandlerArgs = { peerid: t.PeerId };
+
 export type PeerRowProps = {
+  peerid: t.PeerId;
   isSelf?: boolean;
   isSelected?: boolean;
   style?: t.CssValue;
+  onSelect?: PeerRowClickHandler;
   onControlClick?: PeerControlsClickHandler;
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { isSelected, isSelf = false } = props;
+  const { peerid, isSelected, isSelf = false } = props;
 
   /**
    * [Render]
@@ -23,7 +28,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       fontSize: DEFAULTS.fontSize,
       minHeight: DEFAULTS.minRowHeight,
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      gridTemplateColumns: '1fr auto',
     }),
     icoPerson: css({
       transform: isSelf ? `scaleX(-1)` : undefined,
@@ -31,7 +36,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
     left: css({
       display: 'grid',
       placeItems: 'center',
-      gridTemplateColumns: 'auto auto 1fr',
+      gridTemplateColumns: 'auto auto auto 1fr',
       columnGap: 5,
     }),
     label: css({ opacity: 0.3 }),
@@ -44,18 +49,18 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   };
 
   const elLeft = (
-    <div {...styles.left}>
+    <div {...styles.left} onClick={() => props.onSelect?.({ peerid })}>
       <div {...styles.selected} />
       <Icons.Person size={15} color={icoColor} style={styles.icoPerson} />
       <div {...styles.label}>{isSelf ? 'me' : ''}</div>
+      <div />
     </div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
       {elLeft}
-      <div />
-      <PeerControls onClick={props.onControlClick} />
+      <PeerControls peerid={peerid} onClick={props.onControlClick} />
     </div>
   );
 };

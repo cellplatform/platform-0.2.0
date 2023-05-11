@@ -2,7 +2,7 @@ import { t, Dev, TestNetwork, WebRtc } from '../../../test.ui';
 import { PeerRow, PeerRowProps } from '../ui.PeerRow';
 
 type T = { props: PeerRowProps };
-const initial: T = { props: {} };
+const initial: T = { props: { peerid: 'p-foo' } };
 
 export default Dev.describe('PeerRow', async (e) => {
   type LocalStore = { isSelected: boolean; isSelf: boolean };
@@ -43,6 +43,7 @@ export default Dev.describe('PeerRow', async (e) => {
         return (
           <PeerRow
             {...e.state.props}
+            onSelect={(e) => console.info('⚡️ onSelect:', e)}
             onControlClick={(e) => console.info('⚡️ onControlClick:', e)}
           />
         );

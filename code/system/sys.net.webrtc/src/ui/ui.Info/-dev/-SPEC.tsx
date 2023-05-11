@@ -74,10 +74,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const props = Util.props(e.state);
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
       ctx.subject.size([320, null]);
-
-      const base = css({ Padding: debug.bg ? [20, 25] : 0 });
       return (
-        <div {...base}>
+        <div {...css({ Padding: debug.bg ? [20, 25] : 0 })}>
           <WebRtcInfo {...props} card={false} />
         </div>
       );

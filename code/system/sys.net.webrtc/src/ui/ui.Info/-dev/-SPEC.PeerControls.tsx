@@ -6,7 +6,7 @@ type T = {
   screen?: t.PeerGetMediaStreamRes;
   props: PeerControlsProps;
 };
-const initial: T = { props: {} };
+const initial: T = { props: { peerid: 'p-foo' } };
 
 type LocalStore = {
   spinning?: t.WebRtcInfoPeerFacet[];

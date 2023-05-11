@@ -22,8 +22,10 @@ export function FieldGroupList(
 
   const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
     const { isSelf } = options;
+
     const isSelected = isSelf; // TEMP 🐷
-    const value = <PeerRow isSelected={isSelected} style={{ marginLeft: 5 }} />;
+
+    const value = <PeerRow peerid={data.id} isSelected={isSelected} style={{ marginLeft: 5 }} />;
     return { value };
   };
 

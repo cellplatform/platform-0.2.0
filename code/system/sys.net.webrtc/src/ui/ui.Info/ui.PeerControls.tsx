@@ -4,10 +4,12 @@ import { PeerControlButton, PeerControlButtonProps } from './ui.PeerControls.But
 export type PeerControlsClickHandler = (e: PeerControlsClickHandlerArgs) => void;
 export type PeerControlsClickHandlerArgs = {
   kind: t.WebRtcInfoPeerFacet;
+  peerid: t.PeerId;
   is: { spinning: boolean; disabled: boolean; off: boolean };
 };
 
 export type PeerControlsProps = {
+  peerid: t.PeerId;
   spinning?: t.WebRtcInfoPeerFacet[];
   off?: t.WebRtcInfoPeerFacet[];
   disabled?: t.WebRtcInfoPeerFacet[];
@@ -17,6 +19,8 @@ export type PeerControlsProps = {
 };
 
 const View: React.FC<PeerControlsProps> = (props) => {
+  const { peerid } = props;
+
   const styles = {
     base: css({
       userSelect: 'none',
@@ -41,7 +45,7 @@ const View: React.FC<PeerControlsProps> = (props) => {
       off: Wrangle.is.off(props, kind),
     };
     const enabled = !is.disabled;
-    const onClick = () => props.onClick?.({ kind, is });
+    const onClick = () => props.onClick?.({ kind, peerid, is });
     return (
       <PeerControlButton
         {...options}
