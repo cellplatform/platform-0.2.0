@@ -25,24 +25,17 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
     paddingX = [5, 5],
     keyboard,
   } = props;
+
   const enabled = clickable && (props.enabled ?? true);
   const disabledOpacity = clickable ? 0.15 : 1;
-
   const [isOver, setOver] = useState(false);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-      placeItems: 'center',
-    }),
-    body: css({
-      marginLeft: paddingX[0],
-      marginRight: paddingX[1],
-    }),
+    base: css({ position: 'relative', display: 'grid', placeItems: 'center' }),
+    body: css({ marginLeft: paddingX[0], marginRight: paddingX[1] }),
     icon: css({
       display: 'grid',
       placeItems: 'center',

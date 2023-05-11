@@ -34,7 +34,7 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    const Icon = off && modifiers?.meta ? Icons.Close : Icons.Network.Docs;
+    const Icon = modifiers?.meta ? Icons.Close : Icons.Network.Docs;
     return <Icon size={15} color={color} />;
   }
 

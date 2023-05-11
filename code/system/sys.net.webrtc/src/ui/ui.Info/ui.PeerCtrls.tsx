@@ -64,7 +64,7 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
       {elDivider}
       {tool('Identity')}
       {elDivider}
-      {tool('StateDoc', { paddingX: [5, 0], clickable: false })}
+      {tool('StateDoc', { paddingX: [5, 0] })}
     </div>
   );
 };
