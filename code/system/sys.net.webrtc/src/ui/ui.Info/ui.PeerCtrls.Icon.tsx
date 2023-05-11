@@ -3,29 +3,30 @@ import { COLORS, Color, Icons, t } from './common';
 export type PeerCtrlIconProps = {
   kind: t.WebRtcInfoPeerFacet;
   enabled?: boolean;
-  off?: boolean;
-  over?: boolean;
+  isSelf?: boolean;
+  isOff?: boolean;
+  isOver?: boolean;
   keyboard?: t.KeyboardState;
   style?: t.CssValue;
 };
 
 export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
-  const { kind, off, over } = Wrangle.props(props);
+  const { kind, isOff, isOver, isSelf } = Wrangle.props(props);
   const color = Wrangle.color(props);
   const modifiers = props.keyboard?.current.modifiers;
 
   if (kind === 'Mic') {
-    const Icon = off && !over ? Icons.Mic.Off : Icons.Mic.On;
+    const Icon = isOff && !isOver ? Icons.Mic.Off : Icons.Mic.On;
     return <Icon size={14} color={color} />;
   }
 
   if (kind === 'Video') {
-    const Icon = off && !over ? Icons.Video.Off : Icons.Video.On;
+    const Icon = isOff && !isOver ? Icons.Video.Off : Icons.Video.On;
     return <Icon size={14} color={color} />;
   }
 
   if (kind === 'Screen') {
-    const Icon = off && !over ? Icons.Screenshare.Stop : Icons.Screenshare.Start;
+    const Icon = isOff && !isOver ? Icons.Screenshare.Stop : Icons.Screenshare.Start;
     return <Icon size={14} color={color} />;
   }
 
@@ -34,7 +35,7 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    const Icon = modifiers?.meta ? Icons.Close : Icons.Network.Docs;
+    const Icon = modifiers?.meta && !isSelf ? Icons.Close : Icons.Network.Docs;
     return <Icon size={15} color={color} />;
   }
 
@@ -46,14 +47,14 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
  */
 const Wrangle = {
   props(props: PeerCtrlIconProps) {
-    const { kind, enabled = true, off = false, over = false } = props;
-    return { kind, enabled, off, over };
+    const { kind, enabled = true, isOff = false, isOver = false, isSelf = false } = props;
+    return { kind, enabled, isOff, isOver, isSelf };
   },
 
   color(props: PeerCtrlIconProps) {
-    const { enabled, off, over } = Wrangle.props(props);
+    const { enabled, isOff, isOver } = Wrangle.props(props);
     if (!enabled) return Color.alpha(COLORS.DARK, 0.8);
-    if (over) return Color.alpha(COLORS.BLUE, 1);
-    return Color.alpha(COLORS.DARK, off ? 0.3 : 0.8);
+    if (isOver) return Color.alpha(COLORS.BLUE, 1);
+    return Color.alpha(COLORS.DARK, isOff ? 0.3 : 0.8);
   },
 };

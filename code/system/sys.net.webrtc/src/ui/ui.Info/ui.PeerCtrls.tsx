@@ -43,20 +43,18 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
     };
     const enabled = !is.disabled;
     const onClick = () => {
-      const isClose = facet === 'StateDoc' && modifiers?.meta;
-      props.onClick?.({
-        kind: isClose ? 'Close' : facet,
-        peerid,
-        is,
-      });
+      const isClose = !isSelf && facet === 'StateDoc' && modifiers?.meta;
+      const kind = isClose ? 'Close' : facet;
+      props.onClick?.({ kind, peerid, is });
     };
     return (
       <PeerCtrlButton
         {...options}
         kind={facet}
+        isSelf={isSelf}
         enabled={enabled}
-        off={is.off}
-        spinning={is.spinning}
+        isOff={is.off}
+        isSpinning={is.spinning}
         spinnerColor={props.spinnerColor}
         keyboard={keyboard}
         onClick={onClick}

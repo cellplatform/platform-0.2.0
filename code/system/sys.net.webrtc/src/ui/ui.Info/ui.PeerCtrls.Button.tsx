@@ -4,11 +4,12 @@ import { PeerCtrlIcon } from './ui.PeerCtrls.Icon';
 
 export type PeerCtrlButtonProps = {
   kind: t.WebRtcInfoPeerFacet;
-  clickable?: boolean;
   enabled?: boolean;
-  off?: boolean;
+  isSelf?: boolean;
+  isClickable?: boolean;
+  isSpinning?: boolean;
+  isOff?: boolean;
   tooltip?: string;
-  spinning?: boolean;
   style?: t.CssValue;
   paddingX?: [number, number];
   spinnerColor?: string | number;
@@ -19,15 +20,16 @@ export type PeerCtrlButtonProps = {
 export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
   const {
     kind,
-    off = false,
-    clickable = true,
-    spinning = false,
+    isOff = false,
+    isClickable = true,
+    isSelf = false,
+    isSpinning = false,
     paddingX = [5, 5],
     keyboard,
   } = props;
 
-  const enabled = clickable && (props.enabled ?? true);
-  const disabledOpacity = clickable ? 0.15 : 1;
+  const enabled = isClickable && (props.enabled ?? true);
+  const disabledOpacity = isClickable ? 0.15 : 1;
   const [isOver, setOver] = useState(false);
 
   /**
@@ -39,7 +41,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
     icon: css({
       display: 'grid',
       placeItems: 'center',
-      opacity: spinning ? 0 : 1,
+      opacity: isSpinning ? 0 : 1,
       transition: `opacity 0.15s ease`,
     }),
     spinner: css({
@@ -49,7 +51,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
     }),
   };
 
-  const elSpinner = spinning && (
+  const elSpinner = isSpinning && (
     <div {...styles.spinner}>
       <Spinner.Bar width={16} color={props.spinnerColor ?? COLORS.DARK} />
     </div>
@@ -57,7 +59,14 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
 
   const elIcon = (
     <div {...styles.icon}>
-      <PeerCtrlIcon kind={kind} off={off} enabled={enabled} over={isOver} keyboard={keyboard} />
+      <PeerCtrlIcon
+        kind={kind}
+        isSelf={isSelf}
+        isOff={isOff}
+        enabled={enabled}
+        isOver={isOver}
+        keyboard={keyboard}
+      />
     </div>
   );
 
