@@ -15,7 +15,6 @@ export type PeerCtrlsProps = {
 const View: React.FC<PeerCtrlsProps> = (props) => {
   const { peerid, isSelf = false } = props;
   const keyboard = Keyboard.useKeyboardState();
-  const modifiers = keyboard.current.modifiers;
 
   const styles = {
     base: css({
@@ -41,9 +40,8 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
       disabled: Wrangle.is.disabled(props, facet),
       off: Wrangle.is.off(props, facet),
     };
-    const enabled = !is.disabled;
     const onClick = () => {
-      const isClose = !isSelf && facet === 'StateDoc' && modifiers?.meta;
+      const isClose = Wrangle.is.close(props, keyboard, facet);
       const kind = isClose ? 'Close' : facet;
       props.onClick?.({ kind, peerid, is });
     };
@@ -52,9 +50,9 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
         {...options}
         kind={facet}
         isSelf={isSelf}
-        enabled={enabled}
         isOff={is.off}
         isSpinning={is.spinning}
+        enabled={!is.disabled}
         spinnerColor={props.spinnerColor}
         keyboard={keyboard}
         onClick={onClick}
@@ -92,6 +90,12 @@ const Wrangle = {
 
     spinning(props: PeerCtrlsProps, kind: t.WebRtcInfoPeerFacet) {
       return includes(props.spinning, kind);
+    },
+
+    close(props: PeerCtrlsProps, keyboard: t.KeyboardState, facet: t.WebRtcInfoPeerFacet) {
+      const { isSelf } = props;
+      const modifiers = keyboard.current.modifiers;
+      return !isSelf && facet === 'StateDoc' && modifiers?.meta;
     },
   },
 
