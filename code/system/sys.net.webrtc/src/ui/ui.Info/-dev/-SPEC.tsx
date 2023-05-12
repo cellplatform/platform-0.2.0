@@ -262,6 +262,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           }),
         ),
     );
+
+    dev.button('redraw', () => dev.redraw());
   });
 
   e.it('ui:footer', async (e) => {

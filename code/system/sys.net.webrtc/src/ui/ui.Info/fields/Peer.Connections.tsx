@@ -33,7 +33,8 @@ export const PeerValue: React.FC<PeerValueProps> = (props) => {
   const { conn } = props;
   const remote = {
     peer: `p:${p(conn.peer.remote, 5)}:`,
-    conn: `${conn.kind}:${p(conn.id, 8)}`,
+    // conn: `${conn.kind}:${p(conn.id, 8)}`,
+    conn: `${p(conn.id, 8)}`,
   };
 
   const styles = {

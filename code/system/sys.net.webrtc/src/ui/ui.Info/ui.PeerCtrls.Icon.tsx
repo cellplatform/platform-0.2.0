@@ -37,8 +37,11 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    const Icon = modifiers?.meta && !isSelf && isOverParent ? Icons.Close : Icons.Network.Docs;
-    return <Icon size={15} color={color} />;
+    const isClose = modifiers?.meta && !isSelf;
+    const Icon = isClose ? Icons.Close : Icons.Network.Docs;
+    const opacity = !isOver && isClose ? 0.3 : 1;
+    const col = isClose && isOver ? COLORS.RED : color;
+    return <Icon size={15} color={col} opacity={opacity} />;
   }
 
   return <div>{`Icon not supported: '${kind}'`}</div>;

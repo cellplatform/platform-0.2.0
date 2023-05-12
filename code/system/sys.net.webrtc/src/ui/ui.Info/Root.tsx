@@ -29,7 +29,6 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
   const { events, fields = DEFAULTS.fields, data = {} } = props;
 
   const info = useInfo(events);
-
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
