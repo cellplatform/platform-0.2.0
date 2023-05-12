@@ -42,7 +42,7 @@ export const Mutate = {
     const peer: t.NetworkStatePeer = {
       id: subject,
       device: {},
-      connections: { data: [] },
+      connections: {},
     };
 
     setContext(peer);

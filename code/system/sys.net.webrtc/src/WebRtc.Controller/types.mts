@@ -18,11 +18,7 @@ export type NetworkStatePeerConnections = {
   /**
    * NB: The "main" connection is the primary connection used for data transfer.
    *     and is assumed to exist as the baseline default resource of each peer.
-   *
-   *        connections.data[0]  <-- "main" (default) connection.
-   *
    */
-  data: t.PeerConnectionId[];
 };
 
 export type NetworkStateDevice = {
