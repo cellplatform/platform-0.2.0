@@ -1,4 +1,4 @@
-import { t } from './common';
+import { t, UserAgent, R } from './common';
 
 /**
  * Helpers for mutating the state data.
@@ -42,9 +42,7 @@ export const Mutate = {
     const peer: t.NetworkStatePeer = {
       id: subject,
       device: {},
-      // connections: {
-      //   main: { tx: tx ?? slug() },
-      // },
+      connections: { data: [] },
     };
 
     setContext(peer);

@@ -2,15 +2,15 @@ import { WebRtcController } from '..';
 import {
   Crdt,
   Dev,
-  expect,
   Filesystem,
   Pkg,
-  rx,
-  t,
   TestNetwork,
   Time,
-  WebRtc,
   UserAgent,
+  WebRtc,
+  expect,
+  rx,
+  t,
 } from '../../test.ui';
 
 export default Dev.describe('Network Controller', async (e) => {
@@ -202,6 +202,16 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(connA?.peer.remote).to.eql(p2.id);
       expect(connB?.peer.local).to.eql(p2.id);
       expect(connB?.peer.remote).to.eql(p1.id);
+
+      /**
+       * TODO - either assert this, or remove the {connections.data} concept.
+       */
+      console.log('-------------------------------------------');
+      console.log('connA?.id', connA?.id);
+      console.log('p1:data', [...p1.connections.data]);
+      console.log('p2:data', [...p2.connections.data]);
+      console.log('-------------------------------------------');
+      // expect(p1.connections.data).to.eql([connA?.id]);
     });
 
     e.it('connect peer (via event-bus): A → C (initiated by A)', async (e) => {

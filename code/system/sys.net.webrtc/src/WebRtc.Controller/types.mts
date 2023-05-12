@@ -10,13 +10,20 @@ export type NetworkStatePeer = {
   tx?: string; // The transaction-id of the operation that initiated the peer.
   initiatedBy?: t.PeerId;
   device: NetworkStateDevice;
-  // connections: {
-  //   main: NetworkStatePeerData;
-  // };
+  connections: NetworkStatePeerConnections;
   error?: string;
 };
 
-// export type NetworkStatePeerData = { tx: string };
+export type NetworkStatePeerConnections = {
+  /**
+   * NB: The "main" connection is the primary connection used for data transfer.
+   *     and is assumed to exist as the baseline default resource of each peer.
+   *
+   *        connections.data[0]  <-- "main" (default) connection.
+   *
+   */
+  data: t.PeerConnectionId[];
+};
 
 export type NetworkStateDevice = {
   userAgent?: t.UserAgent;
