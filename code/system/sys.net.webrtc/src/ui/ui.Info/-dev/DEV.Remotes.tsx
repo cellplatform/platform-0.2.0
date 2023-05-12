@@ -22,7 +22,11 @@ export const DevRemotes: React.FC<DevRemotesProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', fontSize: 14 }),
+    base: css({
+      position: 'relative',
+      userSelect: 'none',
+      fontSize: 14,
+    }),
   };
 
   return (
