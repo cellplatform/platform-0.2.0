@@ -35,13 +35,13 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
 
   const items = PropList.builder<t.WebRtcInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(fields, data))
-    .field('Self.Id', () => FieldSelf(fields, data, info))
-    .field('Group', () => FieldGroup(fields, data, info))
+    .field('Module.Verify', () => FieldModuleVerify({ fields, data }))
+    .field('Self.Id', () => FieldSelf({ fields, data, info }))
+    .field('Group', () => FieldGroup({ fields, data, info }))
     .field('Group.Peers', () => FieldGroupPeers({ fields, data, info, events, isOver }))
-    .field('State.Shared', () => FieldStateShared(fields, data, info))
-    .field('Peer', () => FieldPeer(fields, data, info))
-    .field('Peer.Connections', () => FieldPeerConnections(fields, data, info))
+    .field('State.Shared', () => FieldStateShared({ fields, data, info }))
+    .field('Peer', () => FieldPeer({ fields, data, info }))
+    .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))
     .items(fields);
 
   return (

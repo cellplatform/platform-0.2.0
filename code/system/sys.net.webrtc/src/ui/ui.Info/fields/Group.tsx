@@ -1,10 +1,11 @@
 import { t, Value } from '../common';
 
-export function FieldGroup(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-): t.PropListItem {
+export function FieldGroup(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+}): t.PropListItem {
+  const { info, data } = args;
   const peer = info?.peer;
   const label = data.group?.title ?? 'Peer Group';
 

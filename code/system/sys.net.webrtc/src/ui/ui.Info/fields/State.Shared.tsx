@@ -1,11 +1,12 @@
-import { t, Value, Icons, COLORS, Color, Crdt, css, Filesize } from '../common';
+import { COLORS, Color, Crdt, Filesize, Icons, Value, css, t } from '../common';
 import { useSyncTraffic } from '../useSyncTraffic.mjs';
 
-export function FieldStateShared(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-): t.PropListItem {
+export function FieldStateShared(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+}): t.PropListItem {
+  const { data, info } = args;
   const shared = data.state?.shared ?? {};
   const label = shared.title ?? 'Shared State';
 

@@ -1,12 +1,13 @@
-import { css, t, Value, PropList, Icons, DEFAULTS } from '../common';
+import { DEFAULTS, css, t } from '../common';
 
 const { indent } = DEFAULTS;
 
-export function FieldPeerConnections(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-): t.PropListItem[] {
+export function FieldPeerConnections(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+}): t.PropListItem[] {
+  const { info } = args;
   const peer = info?.peer;
 
   if (!peer) return [];

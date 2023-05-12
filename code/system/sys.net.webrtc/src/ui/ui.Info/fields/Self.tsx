@@ -1,10 +1,11 @@
-import { t, Value, PropList } from '../common';
+import { PropList, Value, t } from '../common';
 
-export function FieldSelf(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-): t.PropListItem {
+export function FieldSelf(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+}): t.PropListItem {
+  const { data, info } = args;
   const self = data.self;
   const label = self?.title ?? 'Me';
   const peer = info?.peer;

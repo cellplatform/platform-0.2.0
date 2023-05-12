@@ -1,12 +1,11 @@
-import { t, Value, PropList, Icons, DEFAULTS } from '../common';
+import { Value, t } from '../common';
 
-const { indent } = DEFAULTS;
-
-export function FieldPeer(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-): t.PropListItem {
+export function FieldPeer(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+}): t.PropListItem {
+  const { info, data } = args;
   const peer = info?.peer;
   const label = data.peer?.title ?? 'Local Network Peer';
 

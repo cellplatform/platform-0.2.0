@@ -1,6 +1,6 @@
-import { t, TestRunner, DEFAULTS } from '../common';
+import { DEFAULTS, TestRunner, t } from '../common';
 
-export function FieldModuleVerify(fields: t.WebRtcInfoField[], data: t.WebRtcInfoData) {
+export function FieldModuleVerify(args: { fields: t.WebRtcInfoField[]; data: t.WebRtcInfoData }) {
   return TestRunner.PropList.item({
     infoUrl: Wrangle.infoUrl(),
     async get() {
