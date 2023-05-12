@@ -16,30 +16,32 @@ export const WebRtcController = {
   listen(
     self: t.Peer,
     options: {
+      bus?: t.EventBus<any>;
       state?: t.NetworkDocSharedRef;
       filedir?: t.Fs;
       dispose$?: t.Observable<any>;
-      bus?: t.EventBus<any>;
       onConnectStart?: (e: t.WebRtcConnectStart) => void;
       onConnectComplete?: (e: t.WebRtcConnectComplete) => void;
     } = {},
-  ) {
+  ): t.WebRtcController {
     const { filedir, onConnectStart, onConnectComplete } = options;
+    const instance = self.id;
     const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
 
     const eventsFactory = (dispose$?: t.Observable<any>) =>
       WebRtcEvents({
-        instance: { bus, id: self.id },
+        instance: { bus, id: instance },
         dispose$,
       });
 
     const events = eventsFactory(options.dispose$);
-    const instance = events.instance.id;
     const { dispose$, dispose } = events;
     const state = options.state ?? NetworkSchema.genesis({ dispose$ }).doc;
     const syncers = new Map<string, t.WebRtcStateSyncer>();
 
+    let _disposed = false;
     dispose$.subscribe(() => {
+      _disposed = true;
       syncers.clear();
     });
 
