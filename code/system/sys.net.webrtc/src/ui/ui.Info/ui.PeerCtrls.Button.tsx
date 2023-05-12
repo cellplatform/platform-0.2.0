@@ -9,6 +9,7 @@ export type PeerCtrlButtonProps = {
   isClickable?: boolean;
   isSpinning?: boolean;
   isOff?: boolean;
+  isOverParent?: boolean;
   tooltip?: string;
   style?: t.CssValue;
   paddingX?: [number, number];
@@ -24,6 +25,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
     isClickable = true,
     isSelf = false,
     isSpinning = false,
+    isOverParent,
     paddingX = [5, 5],
     keyboard,
   } = props;
@@ -65,6 +67,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
         isOff={isOff}
         enabled={enabled}
         isOver={isOver}
+        isOverParent={isOverParent}
         keyboard={keyboard}
       />
     </div>

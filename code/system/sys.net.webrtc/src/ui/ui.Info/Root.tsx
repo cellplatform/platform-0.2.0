@@ -1,12 +1,14 @@
+import { useState } from 'react';
+
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
 import { FieldGroup } from './fields/Group';
 import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
 import { FieldModuleVerify } from './fields/Module.Verify';
+import { FieldPeer } from './fields/Peer';
+import { FieldPeerConnections } from './fields/Peer.Connections';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
 import { useInfo } from './useInfo.mjs';
-import { FieldPeer } from './fields/Peer';
-import { FieldPeerConnections } from './fields/Peer.Connections';
 
 export type WebRtcInfoProps = {
   events?: t.WebRtcEvents;
@@ -25,14 +27,18 @@ export type WebRtcInfoProps = {
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
   const { events, fields = DEFAULTS.fields, data = {} } = props;
+
   const info = useInfo(events);
+
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
 
   const items = PropList.builder<t.WebRtcInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(fields, data))
     .field('Self.Id', () => FieldSelf(fields, data, info))
     .field('Group', () => FieldGroup(fields, data, info))
-    .field('Group.Peers', () => FieldGroupPeers(fields, data, info, events))
+    .field('Group.Peers', () => FieldGroupPeers({ fields, data, info, events, isOver }))
     .field('State.Shared', () => FieldStateShared(fields, data, info))
     .field('Peer', () => FieldPeer(fields, data, info))
     .field('Peer.Connections', () => FieldPeerConnections(fields, data, info))
@@ -49,6 +55,8 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       flipped={props.flipped}
       padding={props.card ? [20, 25] : undefined}
       margin={props.margin}
+      onMouseEnter={over(true)}
+      onMouseLeave={over(false)}
     />
   );
 };

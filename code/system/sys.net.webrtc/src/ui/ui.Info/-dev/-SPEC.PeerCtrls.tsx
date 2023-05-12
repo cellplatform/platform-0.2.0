@@ -6,12 +6,14 @@ type T = {
   screen?: t.PeerGetMediaStreamRes;
   props: PeerCtrlsProps;
 };
-const initial: T = { props: { peerid: 'p-foo' } };
+const initial: T = {
+  props: { peerid: 'p-foo', isOverParent: true },
+};
 
 type LocalStore = {
   spinning?: t.WebRtcInfoPeerFacet[];
-  off?: t.WebRtcInfoPeerFacet[];
   disabled?: t.WebRtcInfoPeerFacet[];
+  off?: t.WebRtcInfoPeerFacet[];
 };
 
 export default Dev.describe('PeerFacets', (e) => {
@@ -20,8 +22,8 @@ export default Dev.describe('PeerFacets', (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info.PeerFacets');
   const local = localstore.object({
     spinning: undefined,
-    off: undefined,
     disabled: undefined,
+    off: undefined,
   });
 
   e.it('ui:init', async (e) => {

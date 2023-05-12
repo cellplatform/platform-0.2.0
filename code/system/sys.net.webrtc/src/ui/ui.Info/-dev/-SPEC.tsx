@@ -1,18 +1,8 @@
-import {
-  Crdt,
-  Dev,
-  Keyboard,
-  PropList,
-  TestNetwork,
-  Value,
-  WebRtc,
-  css,
-  t,
-} from '../../../test.ui';
+import { Crdt, Dev, Keyboard, PropList, TestNetwork, WebRtc, css, t } from '../../../test.ui';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
-import { type TDevRemote, DevRemotes } from './DEV.Remotes';
+import { DevRemotes, type TDevRemote } from './DEV.Remotes';
 
 type T = {
   props: WebRtcInfoProps;

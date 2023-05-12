@@ -72,7 +72,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       padding={props.padding ?? [20, 25]}
       margin={props.margin}
     >
-      <div>
+      <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
         {elTitle}
         <div {...styles.items}>{elItems}</div>
       </div>

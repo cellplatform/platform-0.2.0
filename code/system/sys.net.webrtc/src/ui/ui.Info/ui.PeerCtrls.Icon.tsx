@@ -6,11 +6,13 @@ export type PeerCtrlIconProps = {
   isSelf?: boolean;
   isOff?: boolean;
   isOver?: boolean;
+  isOverParent?: boolean;
   keyboard?: t.KeyboardState;
   style?: t.CssValue;
 };
 
 export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
+  const { isOverParent } = props;
   const { kind, isOff, isOver, isSelf } = Wrangle.props(props);
   const color = Wrangle.color(props);
   const modifiers = props.keyboard?.current.modifiers;
@@ -35,7 +37,7 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    const Icon = modifiers?.meta && !isSelf ? Icons.Close : Icons.Network.Docs;
+    const Icon = modifiers?.meta && !isSelf && isOverParent ? Icons.Close : Icons.Network.Docs;
     return <Icon size={15} color={color} />;
   }
 

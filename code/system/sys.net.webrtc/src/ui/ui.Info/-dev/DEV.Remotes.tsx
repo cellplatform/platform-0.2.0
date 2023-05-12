@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
-
+import { useState } from 'react';
 import { Button, Icons, PropList, Value, css, t } from '../common';
 
 export type TDevRemote = {

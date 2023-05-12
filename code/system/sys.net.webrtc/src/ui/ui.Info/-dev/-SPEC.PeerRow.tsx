@@ -7,7 +7,7 @@ type T = {
   debug: { useNetwork: NetworkProximity };
 };
 const initial: T = {
-  props: { peerid: 'p-foo' },
+  props: { peerid: 'p-foo', isOverParent: true },
   debug: { useNetwork: 'Local' },
 };
 

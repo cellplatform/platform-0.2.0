@@ -28,6 +28,8 @@ export type PropListProps = {
   backside?: JSX.Element | null;
   theme?: t.PropListTheme;
   style?: t.CssValue;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
 };
 
 export type PropListSize = { fixed?: number; min?: number; max?: number };

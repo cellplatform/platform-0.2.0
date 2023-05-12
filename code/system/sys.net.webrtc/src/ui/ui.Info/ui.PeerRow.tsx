@@ -7,6 +7,7 @@ export type PeerRowProps = {
   events?: t.WebRtcEvents;
   isSelf?: boolean;
   isSelected?: boolean;
+  isOverParent?: boolean;
   useController?: boolean;
   style?: t.CssValue;
   onSelect?: t.WebRtcInfoPeerRowSelectHandler;
@@ -14,7 +15,7 @@ export type PeerRowProps = {
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { events, peerid, isSelected, isSelf = false } = props;
+  const { events, peerid, isSelected, isSelf, isOverParent } = props;
 
   const ctrlr = usePeerRowController({
     peerid,
@@ -69,8 +70,9 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       {elLeft}
       <PeerCtrls
         peerid={peerid}
-        isSelf={isSelf}
         off={ctrlr.off}
+        isSelf={isSelf}
+        isOverParent={isOverParent}
         onClick={(e) => {
           ctrlr.onCtrlClick(e);
           props.onCtrlClick?.(e);

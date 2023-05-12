@@ -3,17 +3,18 @@ import { PeerCtrlButton, PeerCtrlButtonProps } from './ui.PeerCtrls.Button';
 
 export type PeerCtrlsProps = {
   peerid: t.PeerId;
-  isSelf?: boolean;
   spinning?: t.WebRtcInfoPeerFacet[];
   disabled?: t.WebRtcInfoPeerFacet[];
   off?: t.WebRtcInfoPeerFacet[];
+  isSelf?: boolean;
+  isOverParent?: boolean;
   style?: t.CssValue;
   spinnerColor?: string | number;
   onClick?: t.WebRtcInfoPeerCtrlsClickHandler;
 };
 
 const View: React.FC<PeerCtrlsProps> = (props) => {
-  const { peerid, isSelf = false } = props;
+  const { peerid, isSelf = false, isOverParent } = props;
   const keyboard = Keyboard.useKeyboardState();
 
   const styles = {
@@ -52,6 +53,7 @@ const View: React.FC<PeerCtrlsProps> = (props) => {
         isSelf={isSelf}
         isOff={is.off}
         isSpinning={is.spinning}
+        isOverParent={isOverParent}
         enabled={!is.disabled}
         spinnerColor={props.spinnerColor}
         keyboard={keyboard}

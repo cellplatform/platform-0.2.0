@@ -1,12 +1,15 @@
 import { t } from '../common';
 import { PeerRow } from '../ui.PeerRow';
 
-export function FieldGroupList(
-  fields: t.WebRtcInfoField[],
-  data: t.WebRtcInfoData,
-  info?: t.WebRtcInfo,
-  events?: t.WebRtcEvents,
-): t.PropListItem[] {
+export function FieldGroupList(args: {
+  fields: t.WebRtcInfoField[];
+  data: t.WebRtcInfoData;
+  info?: t.WebRtcInfo;
+  events?: t.WebRtcEvents;
+  isOver?: boolean;
+}): t.PropListItem[] {
+  const { info, events, data } = args;
+  const isOverParent = args.isOver;
   const peer = info?.peer;
   const state = info?.state;
 
@@ -32,6 +35,7 @@ export function FieldGroupList(
         events={events}
         isSelf={isSelf}
         isSelected={isSelected}
+        isOverParent={isOverParent}
         useController={group?.useController}
         style={{ marginLeft: 5 }}
         onSelect={group?.onPeerSelect}
