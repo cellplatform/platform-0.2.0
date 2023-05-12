@@ -7,7 +7,7 @@ export type NetworkState = { peers: NetworkStatePeers };
 export type NetworkStatePeers = { [key: string]: NetworkStatePeer };
 export type NetworkStatePeer = {
   id: t.PeerId;
-  tx?: string; // The transaction-id of the operation that initiated the peer.
+  tx?: string; // The transaction-id of the operation that initiated the peer (NB: used for response event capture).
   initiatedBy?: t.PeerId;
   device: NetworkStateDevice;
   connections: NetworkStatePeerConnections;
