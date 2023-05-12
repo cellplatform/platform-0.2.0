@@ -136,6 +136,28 @@ export const WebRtcController = {
     });
 
     /**
+     * Close requests.
+     */
+    events.close.req$.subscribe((e) => {
+      const { tx } = e;
+      const peer = { local: self.id, remote: e.remote };
+      const remote = self.connectionsByPeer.find((item) => item.peer.remote === e.remote);
+
+      const done = (error?: string) => {
+        bus.fire({
+          type: 'sys.net.webrtc/close:res',
+          payload: { tx, instance, peer, state: state.current.network, error },
+        });
+      };
+
+      if (!remote) {
+        return done(`Peer to close not found`);
+      }
+
+      remote.all.forEach((conn) => conn.dispose());
+      done();
+    });
+    /**
      * When network peers change ensure all connections are established.
      */
     const onPeersChanged = async (state: t.NetworkDocSharedRef) => {

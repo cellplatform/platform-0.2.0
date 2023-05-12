@@ -237,6 +237,25 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(item.syncer.doc.current.network).to.eql(network);
     });
 
+    e.it('close connection', async (e) => {
+      const getNetwork = async () => (await events.info.state())?.current.network!;
+
+      const network1 = await getNetwork();
+      expect(network1.peers[peerA.id]).to.exist;
+      expect(network1.peers[peerC.id]).to.exist;
+      expect(peerA.connections.length).to.eql(2);
+
+      const res = await events.close.fire(peerC.id);
+      const network2 = await getNetwork();
+      expect(res.state).to.eql(network2);
+      expect(res.peer.local).to.eql(peerA.id);
+      expect(res.peer.remote).to.eql(peerC.id);
+
+      expect(network2.peers[peerA.id]).to.exist;
+      expect(network2.peers[peerC.id]).to.not.exist; // NB: Removed from state-doc.
+      expect(peerA.connections.length).to.eql(1);
+    });
+
     e.it('dispose', (e) => {
       let count = 0;
       events.dispose$.subscribe(() => count++);

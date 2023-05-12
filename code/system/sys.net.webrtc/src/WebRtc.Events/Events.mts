@@ -116,6 +116,34 @@ export function WebRtcEvents(args: {
   };
 
   /**
+   * Close.
+   */
+  const close: t.WebRtcEvents['close'] = {
+    req$: rx.payload<t.WebRtcCloseReqEvent>($, 'sys.net.webrtc/close:req'),
+    res$: rx.payload<t.WebRtcCloseResEvent>($, 'sys.net.webrtc/close:res'),
+    async fire(remote, options = {}) {
+      const { timeout = 10000 } = options;
+      const tx = slug();
+      const op = 'close';
+      const res$ = close.res$.pipe(rx.filter((e) => e.tx === tx));
+      const first = rx.asPromise.first<t.WebRtcCloseResEvent>(res$, { op, timeout });
+
+      bus.fire({
+        type: 'sys.net.webrtc/close:req',
+        payload: { tx, instance, remote },
+      });
+
+      const res = await first;
+      if (res.payload) return res.payload;
+
+      const error = res.error?.message ?? 'Failed';
+      const state = (await info.get())?.state.current.network!;
+      const peer = { local, remote };
+      return { tx, instance, peer, state, error };
+    },
+  };
+
+  /**
    * Prune
    */
   const prune: t.WebRtcEvents['prune'] = {
@@ -148,6 +176,7 @@ export function WebRtcEvents(args: {
     errors,
     connect,
     connections,
+    close,
     prune,
 
     /**
