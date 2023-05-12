@@ -57,6 +57,12 @@ export const Mutate = {
     if (existing) delete data.peers[subject];
     return { existing, peer };
   },
+
+  updateLocalMetadata(data: t.NetworkState, self: t.PeerId, options: { ua?: t.UserAgent } = {}) {
+    const peers = data.peers ?? {};
+    const localPeer = peers[self];
+    localPeer.device.userAgent = options.ua ?? UserAgent.current;
+  },
 };
 
 /**

@@ -1,5 +1,5 @@
 import { WebRtcController } from '..';
-import { Dev, expect, slug, t } from '../../test.ui';
+import { UserAgent, Dev, expect, slug, t } from '../../test.ui';
 
 export default Dev.describe('Network Controller: Mutate (State)', (e) => {
   e.timeout(1000 * 15);
@@ -8,7 +8,7 @@ export default Dev.describe('Network Controller: Mutate (State)', (e) => {
   /**
    * Mutation helpers.
    */
-  e.describe('mutate (via CRDT change handler - Immutable)', (e) => {
+  e.describe('mutate (should be done within CRDT immutable change handler)', (e) => {
     const sampleState = () => {
       const data: t.NetworkState = { peers: {} }; // NB: tests when the child "peers" property is missing (auto inserted).
       return { data };
@@ -91,6 +91,18 @@ export default Dev.describe('Network Controller: Mutate (State)', (e) => {
         expect(res.existing).to.eql(false);
         expect(res.peer).to.eql(undefined);
         expect(data.peers).to.eql({});
+      });
+    });
+
+    e.describe('update meta-data', (e) => {
+      e.it('updateLocalMetadata', (e) => {
+        const { data } = sampleState();
+
+        Mutate.addPeer(data, 'a', 'a');
+        expect(data.peers.a.device).to.eql({});
+
+        Mutate.updateLocalMetadata(data, 'a');
+        expect(data.peers.a.device.userAgent).to.eql(UserAgent.current);
       });
     });
   });
