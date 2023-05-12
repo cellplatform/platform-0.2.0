@@ -1,5 +1,10 @@
 import type { t } from '../common.t';
 
+export type WebRtcController = t.Lifecycle & {
+  state: t.NetworkDocSharedRef;
+  events(): t.WebRtcEvents;
+};
+
 /**
  * Representation of a conversational network (P2P)
  */

@@ -21,7 +21,7 @@ const local = localstore.object({
 export default Dev.describe('ConnectInput', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
-  const events = controller.events;
+  const events = controller.events();
 
   const Util = {
     props: (state: T) => {

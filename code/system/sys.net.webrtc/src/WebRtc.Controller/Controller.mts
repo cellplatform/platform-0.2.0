@@ -26,9 +26,16 @@ export const WebRtcController = {
   ) {
     const { filedir, onConnectStart, onConnectComplete } = options;
     const bus = rx.busAsType<t.WebRtcEvent>(options.bus ?? rx.bus());
-    const events = WebRtcEvents({ instance: { bus, id: self.id }, dispose$: options.dispose$ });
+
+    const eventsFactory = (dispose$?: t.Observable<any>) =>
+      WebRtcEvents({
+        instance: { bus, id: self.id },
+        dispose$,
+      });
+
+    const events = eventsFactory(options.dispose$);
     const instance = events.instance.id;
-    const dispose$ = events.dispose$;
+    const { dispose$, dispose } = events;
     const state = options.state ?? NetworkSchema.genesis({ dispose$ }).doc;
     const syncers = new Map<string, t.WebRtcStateSyncer>();
 
@@ -272,6 +279,25 @@ export const WebRtcController = {
     /**
      * PUBLIC API.
      */
-    return events;
+    const api: t.WebRtcController = {
+      state,
+
+      /**
+       * Create a new events interface into the controller.
+       */
+      events() {
+        return eventsFactory(dispose$);
+      },
+
+      /**
+       * Lifecycle
+       */
+      dispose,
+      dispose$,
+      get disposed() {
+        return _disposed;
+      },
+    };
+    return api;
   },
 };

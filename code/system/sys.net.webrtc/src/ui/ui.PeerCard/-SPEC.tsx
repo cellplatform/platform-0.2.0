@@ -24,7 +24,7 @@ const local = localstore.object({
 export default Dev.describe('PeerCard', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
-  const events = controller.events;
+  const events = controller.events();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

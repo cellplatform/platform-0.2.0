@@ -42,7 +42,6 @@ export default Dev.describe('PeerCard', async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
   const local = localstore.object({
     muted: PeerCard.DEFAULTS.muted,
-
     showBg: initial.debug.showBg,
     persistSharedDoc: initial.debug.persistSharedDoc,
     showFooter: true,
@@ -71,6 +70,7 @@ export default Dev.describe('PeerCard', async (e) => {
   const rootfs = (await Filesystem.client({ bus, dispose$ })).fs;
   const docs = await SpecDocs({ rootfs, dispose$ });
   let controller: t.WebRtcController;
+  let events: t.WebRtcEvents;
 
   e.it('init:keyboard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
@@ -211,7 +211,7 @@ export default Dev.describe('PeerCard', async (e) => {
           onMuteClick={toggleMute}
           onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
           onConnectRequest={(e) => {
-            if (self) controller?.events.connect.fire(e.remote);
+            if (self) events?.connect.fire(e.remote);
           }}
         />
       );
@@ -266,6 +266,7 @@ export default Dev.describe('PeerCard', async (e) => {
           state.change((d) => (d.spinning = false));
         },
       });
+      events = controller.events();
 
       /**
        * TODO 🐷
@@ -291,7 +292,7 @@ export default Dev.describe('PeerCard', async (e) => {
       return (
         <WebRtcInfo
           fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
-          events={controller.events}
+          events={events}
         />
       );
     });
@@ -373,7 +374,7 @@ export default Dev.describe('PeerCard', async (e) => {
       dev.row(async (e) => {
         const debug = e.state.debug;
         // const isSaving = debug.persistSharedDoc;
-        const info = await controller?.events.info.get();
+        const info = await events.info.get();
         const sync = (info?.syncers ?? [])[0];
         return (
           <FileCard
@@ -452,7 +453,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.button('prune (dead peers)', async (e) => {
         // WebRtc.Util.prune;
-        const res = await controller?.events.prune.fire();
+        const res = await events.prune.fire();
         console.info('prune:', res);
         //
       });

@@ -6,30 +6,32 @@ export type TDevRemote = {
   name: string;
   peer: t.Peer;
   controller: t.WebRtcController;
+  events: t.WebRtcEvents;
 };
 
 export type DevRemotesProps = {
-  controller: t.WebRtcController;
+  self: t.WebRtcController;
   remotes?: TDevRemote[];
   style?: t.CssValue;
 };
 
 export const DevRemotes: React.FC<DevRemotesProps> = (props) => {
-  const { remotes = [], controller } = props;
+  const { remotes = [], self } = props;
   if (remotes.length === 0) return null;
 
-  /**
-   * [Render]
-   */
   const styles = {
-    base: css({ position: 'relative', userSelect: 'none', fontSize: 14 }),
+    base: css({
+      position: 'relative',
+      userSelect: 'none',
+      fontSize: 14,
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       {remotes.map((remote) => {
         const key = remote.peer.id;
-        return <Row key={key} controller={controller} remote={remote} />;
+        return <Row key={key} controller={self} remote={remote} />;
       })}
     </div>
   );
@@ -46,7 +48,6 @@ export type RowProps = {
 
 export const Row: React.FC<RowProps> = (props) => {
   const { controller, remote } = props;
-  const events = controller.events;
   const network = controller.state.current.network;
   const peer = remote.peer;
 
@@ -58,7 +59,9 @@ export const Row: React.FC<RowProps> = (props) => {
   const exists = Boolean(network.peers[remote.peer.id]);
   const reconnect = async () => {
     setConnecting(true);
+    const events = controller.events();
     await events.connect.fire(remote.peer.id);
+    events.dispose();
     setConnecting(false);
   };
 

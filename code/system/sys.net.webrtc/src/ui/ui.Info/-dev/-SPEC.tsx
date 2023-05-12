@@ -32,7 +32,7 @@ const local = localstore.object({
 export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
-  const events = controller.events;
+  const events = controller.events();
   const remotes: TDevRemote[] = [];
 
   const Util = {
@@ -196,7 +196,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             const peer = await TestNetwork.peer();
             const controller = WebRtc.controller(peer);
             const name = `remote-${remotes.length + 1}`;
-            remotes.push({ name, peer, controller });
+            remotes.push({ name, peer, controller, events: controller.events() });
 
             await events.connect.fire(peer.id);
             e.change((d) => (d.debug.addingConnection = undefined));
@@ -205,7 +205,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.row(() => {
         const style = css({ Margin: [8, 0, 5, 30] });
-        return <DevRemotes controller={controller} remotes={remotes} style={style} />;
+        return <DevRemotes self={controller} remotes={remotes} style={style} />;
       });
 
       dev.hr(-1, 5);

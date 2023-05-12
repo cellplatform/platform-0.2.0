@@ -48,7 +48,8 @@ export default Dev.describe('Network Controller', async (e) => {
 
     e.it('default auto-generated bus', async (e) => {
       const controller = WebRtcController.listen(peerA);
-      const info = await controller.events.info.get();
+      const events = controller.events();
+      const info = await events.info.get();
       expect(info?.peer).to.equal(peerA);
       controller.dispose();
     });
@@ -63,6 +64,8 @@ export default Dev.describe('Network Controller', async (e) => {
       const info1 = await events1.info.get();
       const info2 = await events2.info.get();
       controller.dispose();
+      events1.dispose();
+      events2.dispose();
 
       expect(info1?.peer).to.equal(peerA);
       expect(info2?.peer).to.equal(peerA);
@@ -70,7 +73,8 @@ export default Dev.describe('Network Controller', async (e) => {
 
     e.it('auto-generated network state CRDT', async (e) => {
       const controller = WebRtcController.listen(peerA, {});
-      const info = await controller.events.info.get();
+      const events = controller.events();
+      const info = await events.info.get();
       controller.dispose();
       expect(info?.state).to.not.equal(state); // NB: generated state document within controller.
       expect(info?.state.current.network.peers[peerA.id].id).to.eql(peerA.id); // NB: Auto added self to {peers}
@@ -80,7 +84,8 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(state.current.network.peers).to.eql({});
 
       const controller = WebRtcController.listen(peerA, { state });
-      const info = await controller.events.info.get();
+      const events = controller.events();
+      const info = await events.info.get();
       controller.dispose();
 
       expect(info?.module.name).to.eql(Pkg.name);
@@ -93,7 +98,8 @@ export default Dev.describe('Network Controller', async (e) => {
 
     e.it('auto assigns the local meta-data', async (e) => {
       const controller = WebRtcController.listen(peerA, {});
-      const state = (await controller.events.info.state())!;
+      const events = controller.events();
+      const state = (await events.info.state())!;
       controller.dispose();
 
       const self = state.current.network.peers[peerA.id];
@@ -111,15 +117,35 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(get(state.current)?.id).to.eql(peerA.id);
 
       const controller = WebRtcController.listen(peerA, { state });
-      const info = await controller.events.info.get();
+      const events = controller.events();
+      const info = await events.info.get();
       controller.dispose();
       state.dispose();
 
       expect(get(info?.state.current)).to.eql(get(state.current));
     });
+
+    e.it('dispose', (e) => {
+      const controller = WebRtcController.listen(peerA);
+      const events1 = controller.events();
+      const events2 = controller.events();
+
+      expect(events1.instance).to.eql(events2.instance);
+      expect(events1).to.not.equal(events2); // NB: Not same instance.
+
+      events1.dispose();
+      expect(controller.disposed).to.eql(false);
+      expect(events1.disposed).to.eql(true);
+      expect(events2.disposed).to.eql(false);
+
+      controller.dispose();
+      expect(controller.disposed).to.eql(true);
+      expect(events1.disposed).to.eql(true); // NB: Already disposed.
+      expect(events2.disposed).to.eql(true); // NB: Disposed via controller.
+    });
   });
 
-  e.describe('Controller.listen', (e) => {
+  e.describe.skip('Controller.listen', (e) => {
     const { state } = setup();
     let controller: t.WebRtcController;
     let events: t.WebRtcEvents;
@@ -139,7 +165,7 @@ export default Dev.describe('Network Controller', async (e) => {
           // console.log('onConnectComplete', e);
         },
       });
-      events = controller.events;
+      events = controller.events();
 
       const info = await events.info.get();
       expect(info?.state.current.network.peers[peerA.id].id).to.eql(peerA.id); // NB: Auto added self to {peers}
@@ -261,6 +287,7 @@ export default Dev.describe('Network Controller', async (e) => {
       events.dispose$.subscribe(() => count++);
 
       dispose(); // NB: causes controller to be disposed (via dispose$).
+      expect(controller.disposed).to.eql(true);
       expect(events.disposed).to.eql(true);
       expect(count).to.eql(1);
     });

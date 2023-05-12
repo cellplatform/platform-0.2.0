@@ -24,16 +24,11 @@ export default Dev.describe('PeerRow', async (e) => {
   const create = async () => {
     const peer = await TestNetwork.peer();
     const controller = WebRtc.controller(peer);
-    return { peer, controller };
+    const events = controller.events();
+    return { peer, controller, events };
   };
 
   const [self, remote] = await Promise.all([create(), create()]);
-
-  // const networkPeer = (args: { peer: t.Peer; controller: t.WebRtcController }) => {
-  //   const { peer, controller } = args;
-  //   const network = controller.state.current.network;
-  //   return network.peers[peer.id];
-  // };
 
   const Util = {
     props(state: T): PeerRowProps {
@@ -43,7 +38,7 @@ export default Dev.describe('PeerRow', async (e) => {
       return {
         ...props,
         peerid: network.peer.id,
-        events: network.controller.events,
+        events: network.events,
       };
     },
   };

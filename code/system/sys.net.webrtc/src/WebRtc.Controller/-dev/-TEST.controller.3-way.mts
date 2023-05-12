@@ -13,7 +13,12 @@ export default Dev.describe('Network Controller: 3-way connections', async (e) =
   let controllerB: t.WebRtcController;
   let controllerC: t.WebRtcController;
 
-  const getState = async (ctrl: t.WebRtcController) => (await ctrl.events.info.get())?.state!;
+  const getState = async (ctrl: t.WebRtcController) => {
+    const events = ctrl.events();
+    const info = (await events.info.get())?.state!;
+    events.dispose();
+    return info;
+  };
   let stateA: t.NetworkDocSharedRef;
   let stateB: t.NetworkDocSharedRef;
   let stateC: t.NetworkDocSharedRef;
@@ -34,14 +39,20 @@ export default Dev.describe('Network Controller: 3-way connections', async (e) =
   });
 
   e.it('connect: A ⇔ B ⇔ C', async (e) => {
-    await controllerA.events.connect.fire(peerB.id);
-    await controllerC.events.connect.fire(peerB.id);
+    const eventsA = controllerA.events();
+    const eventsC = controllerA.events();
+
+    await eventsA.connect.fire(peerB.id);
+    await eventsC.connect.fire(peerB.id);
 
     await Time.wait(5000);
 
     const write = async (prefix: string, ctrl: t.WebRtcController) => {
-      const info = (await ctrl.events.info.get())!;
+      const events = ctrl.events();
+      const info = (await events.info.get())!;
       const doc = Crdt.toObject(info.state.current);
+      events.dispose();
+
       console.log(prefix, '(peers):', doc.network.peers);
     };
 
@@ -60,6 +71,9 @@ export default Dev.describe('Network Controller: 3-way connections', async (e) =
     expect(peerA.connections.length).to.eql(2);
     expect(peerB.connections.length).to.eql(2);
     expect(peerC.connections.length).to.eql(2);
+
+    eventsA.dispose();
+    eventsC.dispose();
   });
 
   e.it('state change | sync: A ⇔ B ⇔ C', async (e) => {
