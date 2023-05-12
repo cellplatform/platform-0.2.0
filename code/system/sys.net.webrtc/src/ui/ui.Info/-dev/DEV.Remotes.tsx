@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Button, Icons, PropList, Value, css, t } from '../common';
+import { useEffect, useState, useRef } from 'react';
+
+import { rx, Button, Icons, PropList, Value, css, t } from '../common';
 
 export type TDevRemote = {
   name: string;
@@ -21,17 +22,14 @@ export const DevRemotes: React.FC<DevRemotesProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      userSelect: 'none',
-      fontSize: 14,
-    }),
+    base: css({ position: 'relative', userSelect: 'none', fontSize: 14 }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       {remotes.map((remote) => {
-        return <Row key={remote.peer.id} controller={controller} remote={remote} />;
+        const key = remote.peer.id;
+        return <Row key={key} controller={controller} remote={remote} />;
       })}
     </div>
   );
@@ -50,8 +48,11 @@ export const Row: React.FC<RowProps> = (props) => {
   const { controller, remote } = props;
   const events = controller.events;
   const network = controller.state.current.network;
+  const peer = remote.peer;
 
   const [isConnecting, setConnecting] = useState(false);
+  const [_, setCount] = useState(0);
+  const redraw = () => setCount((prev) => prev + 1);
 
   const short = `peer:${Value.shortenHash(remote.peer.id, [5, 0])}`;
   const exists = Boolean(network.peers[remote.peer.id]);
@@ -60,6 +61,15 @@ export const Row: React.FC<RowProps> = (props) => {
     await events.connect.fire(remote.peer.id);
     setConnecting(false);
   };
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    peer.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => redraw);
+    return dispose;
+  }, [remote.peer.id]);
 
   /**
    * [Render]
@@ -96,7 +106,7 @@ export const Row: React.FC<RowProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
         <Icons.Person size={15} />
-        {`${remote.name}`}
+        {`${remote.name} (${peer.connections.length})`}
       </div>
       <div />
       <div {...styles.right}>
