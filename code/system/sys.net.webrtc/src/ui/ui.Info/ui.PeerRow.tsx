@@ -17,7 +17,9 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   const { events, peerid, isSelected, isSelf = false } = props;
 
   const ctrlr = usePeerRowController({
+    peerid,
     events,
+    isSelf,
     enabled: props.useController ?? false,
   });
 
@@ -65,7 +67,15 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elLeft}
-      <PeerCtrls peerid={peerid} onClick={props.onCtrlClick} />
+      <PeerCtrls
+        peerid={peerid}
+        isSelf={isSelf}
+        off={ctrlr.off}
+        onClick={(e) => {
+          ctrlr.onCtrlClick(e);
+          props.onCtrlClick?.(e);
+        }}
+      />
     </div>
   );
 };

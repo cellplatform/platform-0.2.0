@@ -10,8 +10,9 @@ import {
   t,
 } from '../../../test.ui';
 
-import { WebRtcInfo, WebRtcInfoProps } from '..';
+import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
+import { type TDevRemote, DevRemotes } from './DEV.Remotes';
 
 type T = {
   props: WebRtcInfoProps;
@@ -42,13 +43,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
   const events = controller.events;
-
-  type TRemote = {
-    name: string;
-    peer: t.Peer;
-    controller: t.WebRtcController;
-  };
-  const remotes: TRemote[] = [];
+  const remotes: TDevRemote[] = [];
 
   const Util = {
     props(state: t.DevCtxState<T>): WebRtcInfoProps {
@@ -204,7 +199,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           )
           .enabled((e) => e.state.debug.addingConnection === undefined)
           .spinner((e) => isAdding(e.state))
-          .right((e) => `${remotes.length} remote ${Value.plural(remotes.length, 'peer', 'peers')}`)
           .onClick(async (e) => {
             e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
 
@@ -218,6 +212,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             e.change((d) => (d.debug.addingConnection = undefined));
           }),
       );
+
+      dev.row(() => {
+        const style = css({ Margin: [8, 0, 5, 30] });
+        return <DevRemotes controller={controller} remotes={remotes} style={style} />;
+      });
 
       dev.hr(-1, 5);
 
@@ -260,6 +259,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           console.info('remotes', remotes);
         }),
     );
+
+    dev.hr(-1, 5);
 
     dev.boolean((btn) =>
       btn
