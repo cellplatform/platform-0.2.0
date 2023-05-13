@@ -23,7 +23,10 @@ export function FieldGroupList(args: {
   const remotes = Object.values(network.peers)
     .filter((e) => e.id !== peer.id)
     .filter(Boolean);
-  if (!local) return [];
+
+  if (!local) {
+    return [];
+  }
 
   const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
     const { isSelf } = options;
