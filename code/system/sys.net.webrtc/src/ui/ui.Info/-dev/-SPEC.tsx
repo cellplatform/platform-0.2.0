@@ -157,7 +157,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         return <DevRemotes self={controller} remotes={remotes} style={style} />;
       });
 
-      dev.button('run sync', async () => {
+      dev.button('sync', async () => {
         const info = await events.info.get();
         info?.syncers.forEach(({ syncer }) => syncer.update());
       });
