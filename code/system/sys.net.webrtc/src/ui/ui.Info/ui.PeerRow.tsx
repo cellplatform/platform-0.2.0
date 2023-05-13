@@ -71,6 +71,8 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       <PeerCtrls
         peerid={peerid}
         off={ctrlr.off}
+        disabled={ctrlr.disabled}
+        spinning={ctrlr.spinning}
         isSelf={isSelf}
         isOverParent={isOverParent}
         onClick={(e) => {

@@ -60,6 +60,6 @@ const Wrangle = {
     const { enabled, isOff, isOver } = Wrangle.props(props);
     if (!enabled) return Color.alpha(COLORS.DARK, 0.8);
     if (isOver) return Color.alpha(COLORS.BLUE, 1);
-    return Color.alpha(COLORS.DARK, isOff ? 0.3 : 0.8);
+    return Color.alpha(COLORS.DARK, isOff ? 0.5 : 0.8);
   },
 };

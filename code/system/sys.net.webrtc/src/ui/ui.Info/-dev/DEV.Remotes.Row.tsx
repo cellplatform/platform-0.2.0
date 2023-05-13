@@ -77,12 +77,13 @@ export const Row: React.FC<RowProps> = (props) => {
   );
 
   const total = peer.connections.length;
+  const totalConns = `${total} ${Value.plural(total, 'connection', 'connections')}`;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>
+      <div {...styles.left} title={totalConns}>
         <Icons.Person size={15} />
-        {`${remote.name} (${total} ${Value.plural(total, 'conn', 'conns')})`}
+        {`${remote.name} (${total})`}
       </div>
       <div />
       <div {...styles.right}>
