@@ -128,6 +128,103 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    dev.section('Debug', (dev) => {
+      const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
+      dev.button((btn) =>
+        btn
+          .label((e) =>
+            isAdding(e.state) ? 'creating new network/peer...' : 'create new network/peer',
+          )
+          .enabled((e) => e.state.debug.addingConnection === undefined)
+          .right(() => `(local sample)`)
+          .spinner((e) => isAdding(e.state))
+          .onClick(async (e) => {
+            e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
+
+            // Create a new peer (sample remote).
+            const peer = await TestNetwork.peer();
+            const controller = WebRtc.controller(peer);
+            const name = `remote-${remotes.length + 1}`;
+            remotes.push({ name, peer, controller, events: controller.events() });
+
+            await events.connect.fire(peer.id);
+            e.change((d) => (d.debug.addingConnection = undefined));
+          }),
+      );
+
+      dev.row(() => {
+        const style = css({ Margin: [8, 0, 8, 30] });
+        return <DevRemotes self={controller} remotes={remotes} style={style} />;
+      });
+
+      dev.button('run sync', async () => {
+        const info = await events.info.get();
+        info?.syncers.forEach(({ syncer }) => syncer.update());
+      });
+
+      dev.hr(-1, 5);
+
+      const count = (label: string, by: number) => {
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+            .onClick((e) => {
+              controller.state.change((d) => (d.count += by));
+              dev.redraw();
+            }),
+        );
+      };
+      count('increment →', 1);
+      count('decrement →', -1);
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `useGroupController`)
+          .value((e) => Boolean(e.state.debug.useGroupController))
+          .onClick((e) =>
+            e.change((d) => {
+              local.useGroupController = Dev.toggle(d.debug, 'useGroupController');
+            }),
+          ),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) =>
+        btn
+          .label('print debug')
+          .right('← console log')
+          .onClick((e) => {
+            const state = controller.state.current;
+            console.log('state', Crdt.toObject(state.network.peers ?? {}));
+
+            const log = (title: string, ref: t.NetworkDocSharedRef) => {
+              const state = Crdt.toObject(ref.current);
+              console.group('🌳 ', title);
+              console.info('state', state);
+              console.info('peers', state.network.peers);
+              console.groupEnd();
+            };
+
+            log('local', controller.state);
+            remotes.forEach((remote) => log('remote', remote.controller.state));
+            console.info('remotes', remotes);
+          }),
+      );
+
+      dev.button('redraw', () => dev.redraw());
+    });
+
+    dev.hr(5, 20);
+  });
+
+  e.it('ui:card', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
     dev.section('Fields', (dev) => {
       dev.row((e) => {
         const props = Util.props(state);
@@ -177,93 +274,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
     });
-
-    dev.hr(5, 20);
-
-    dev.section('Debug', (dev) => {
-      const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
-      dev.button((btn) =>
-        btn
-          .label((e) =>
-            isAdding(e.state) ? 'creating new network/peer...' : 'create new network/peer',
-          )
-          .enabled((e) => e.state.debug.addingConnection === undefined)
-          .spinner((e) => isAdding(e.state))
-          .onClick(async (e) => {
-            e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
-
-            // Create a new peer (sample remote).
-            const peer = await TestNetwork.peer();
-            const controller = WebRtc.controller(peer);
-            const name = `remote-${remotes.length + 1}`;
-            remotes.push({ name, peer, controller, events: controller.events() });
-
-            await events.connect.fire(peer.id);
-            e.change((d) => (d.debug.addingConnection = undefined));
-          }),
-      );
-
-      dev.row(() => {
-        const style = css({ Margin: [8, 0, 5, 30] });
-        return <DevRemotes self={controller} remotes={remotes} style={style} />;
-      });
-
-      dev.hr(-1, 5);
-
-      const count = (label: string, by: number) => {
-        dev.button((btn) =>
-          btn
-            .label(label)
-            .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => {
-              controller.state.change((d) => (d.count += by));
-              dev.redraw();
-            }),
-        );
-      };
-      count('increment →', 1);
-      count('decrement →', -1);
-    });
-
-    dev.hr(-1, 5);
-
-    dev.button((btn) =>
-      btn
-        .label('print debug')
-        .right('← console log')
-        .onClick(async (e) => {
-          const info = await events.info.get();
-          const state = info?.state;
-          console.log('state', Crdt.toObject(state?.current.network.peers ?? {}));
-
-          const log = (title: string, ref: t.NetworkDocSharedRef) => {
-            const state = Crdt.toObject(ref.current);
-            console.group('🌳 ', title);
-            console.info('state', state);
-            console.info('peers', state.network.peers);
-            console.groupEnd();
-          };
-
-          log('local', controller.state);
-          remotes.forEach((remote) => log('remote', remote.controller.state));
-          console.info('remotes', remotes);
-        }),
-    );
-
-    dev.hr(-1, 5);
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `useGroupController`)
-        .value((e) => Boolean(e.state.debug.useGroupController))
-        .onClick((e) =>
-          e.change((d) => {
-            local.useGroupController = Dev.toggle(d.debug, 'useGroupController');
-          }),
-        ),
-    );
-
-    dev.button('redraw', () => dev.redraw());
   });
 
   e.it('ui:footer', async (e) => {
@@ -273,12 +283,19 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.footer.border(-0.1).render<T>(async (e) => {
       const sharedState = controller.state;
       const total = self.connectionsByPeer.length ?? 0;
+
+      const peers = { ...(sharedState?.current?.network.peers ?? {}) };
+      if (peers[self.id]) {
+        peers[`me:${self.id}`] = peers[self.id];
+        delete peers[self.id];
+      }
+
       const data = {
         props: Util.props(state),
         [`Peers:Self(${total})`]: self,
         'Peers:Remote': remotes,
         'State:Shared': sharedState?.current,
-        'State:Shared:peers': sharedState?.current?.network.peers,
+        'State:Shared:peers': peers,
       };
       return (
         <Dev.Object

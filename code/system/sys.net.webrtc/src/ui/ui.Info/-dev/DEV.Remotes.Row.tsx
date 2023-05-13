@@ -76,11 +76,13 @@ export const Row: React.FC<RowProps> = (props) => {
     </Button>
   );
 
+  const total = peer.connections.length;
+
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
         <Icons.Person size={15} />
-        {`${remote.name} (${peer.connections.length})`}
+        {`${remote.name} (${total} ${Value.plural(total, 'conn', 'conns')})`}
       </div>
       <div />
       <div {...styles.right}>
