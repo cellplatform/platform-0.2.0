@@ -1,8 +1,8 @@
-import { Crdt, Dev, Keyboard, PropList, TestNetwork, WebRtc, css, t } from '../../../test.ui';
+import { Crdt, Dev, Keyboard, PropList, TestNetwork, WebRtc, css, t } from './common';
+import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
-import { DevRemotes, type TDevRemote } from './DEV.Remotes';
 
 type T = {
   props: WebRtcInfoProps;
@@ -33,7 +33,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
   const events = controller.events();
-  const remotes: TDevRemote[] = [];
+  const remotes: t.TDevRemote[] = [];
 
   const Util = {
     props(state: t.DevCtxState<T>): WebRtcInfoProps {
