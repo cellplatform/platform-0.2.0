@@ -8,9 +8,9 @@ export type {
   CssEdgesInput,
   PropListProps,
   PropListItem,
-  DevButtonClickHandler,
   IconRenderer,
   KeyboardState,
+  DevButtonClickHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type {
