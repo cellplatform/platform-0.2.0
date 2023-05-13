@@ -26,6 +26,7 @@ import {
   MdVpnLock,
   MdWifiTethering,
   MdWifiTetheringOff,
+  MdRefresh,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -36,6 +37,7 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Refresh: icon(MdRefresh),
   Close: icon(MdClose),
   Delete: { Bin: icon(MdDelete) },
   Cube: icon(MdOutlineViewInAr),
@@ -76,6 +78,6 @@ export const Icons = {
   Memory: icon(MdMemory),
   Network: {
     Antenna: icon(MdSettingsInputAntenna),
-    Docs: icon(FaNetworkWired),
+    Nodes: icon(FaNetworkWired),
   },
 };

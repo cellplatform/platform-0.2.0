@@ -61,7 +61,7 @@ export const Syncers: React.FC<SyncProps> = (props) => {
 
   const iconColor = Color.alpha(COLORS.DARK, 0.8);
   const Icon = Icons.Network;
-  const elIcoDoc = <Icon.Docs size={15} color={iconColor} style={styles.icoDoc} />;
+  const elIcoDoc = <Icon.Nodes size={15} color={iconColor} style={styles.icoDoc} />;
   const elIcoNet = <Icon.Antenna size={14} color={iconColor} style={styles.icoNet} />;
 
   const elEmpty = isEmpty && <div {...styles.empty}>{elIcoDoc}</div>;
