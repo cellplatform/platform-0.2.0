@@ -22,7 +22,7 @@ export default Dev.describe('WebRTC: connection → data', (e) => {
     peerB.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => firedB.push(e));
 
     // Open the connection.
-    const conn = await peerA.data(peerB.id, { name: 'Foobar' });
+    const conn = await peerA.data(peerB.id);
     expect(conn.kind).to.eql('data');
     expect(conn.metadata.initiatedBy).to.eql(peerA.id);
     expect(conn.peer.local).to.eql(peerA.id);

@@ -78,13 +78,12 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       /**
        * Start a data connection.
        */
-      data(connectTo, options = {}) {
+      data(connectTo) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
           const id = WebRtcUtils.asId(connectTo);
-          const label = options.name ?? 'Unnamed';
           const initiatedBy = api.id;
           const metadata: t.PeerMetaData = { initiatedBy };
-          const conn = rtc.connect(id, { reliable: true, metadata, label });
+          const conn = rtc.connect(id, { reliable: true, metadata });
 
           const fail = (err: Error) => {
             cleanup();

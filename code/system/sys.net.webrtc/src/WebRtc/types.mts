@@ -11,8 +11,8 @@ export type PeerUri = string;
 export type PeerConnectionId = string;
 export type PeerProximity = 'local' | 'remote';
 
-export type PeerMediaStreamInput = 'camera' | 'screen';
-export type PeerGetMediaStream = (input: PeerMediaStreamInput) => Promise<PeerGetMediaStreamRes>;
+export type PeerMediaStreamSource = 'camera' | 'screen';
+export type PeerGetMediaStream = (input: PeerMediaStreamSource) => Promise<PeerGetMediaStreamRes>;
 export type PeerGetMediaStreamRes = {
   media: MediaStream | undefined;
   done(): Promise<void>; // Indicates the consumer of the stream is finished ("done") and it can be released.
@@ -31,8 +31,8 @@ export type Peer = t.Disposable & {
   readonly connectionsByPeer: PeerConnectionsByPeer[];
   readonly error$: t.Observable<PeerError>;
   readonly disposed: boolean;
-  data(connectTo: Id, options?: { name?: string }): Promise<PeerDataConnection>;
-  media(connectTo: Id, input: PeerMediaStreamInput): Promise<PeerMediaConnection>;
+  data(connectTo: Id): Promise<PeerDataConnection>;
+  media(connectTo: Id, input: PeerMediaStreamSource): Promise<PeerMediaConnection>;
 };
 
 export type PeerConnectionEndpoints = { local: Id; remote: Id };
@@ -88,7 +88,7 @@ export type PeerMetaData = {
   initiatedBy?: t.PeerId;
 };
 export type PeerMetaMedia = {
-  input: PeerMediaStreamInput;
+  input: PeerMediaStreamSource;
   initiatedBy?: t.PeerId;
 };
 
