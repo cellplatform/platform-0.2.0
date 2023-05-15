@@ -97,7 +97,7 @@ const Wrangle = {
     close(props: PeerCtrlsProps, keyboard: t.KeyboardState, facet: t.WebRtcInfoPeerFacet) {
       const { isSelf } = props;
       const modifiers = keyboard.current.modifiers;
-      return !isSelf && facet === 'StateDoc' && modifiers?.meta;
+      return !isSelf && facet === 'StateDoc' && modifiers?.alt;
     },
   },
 

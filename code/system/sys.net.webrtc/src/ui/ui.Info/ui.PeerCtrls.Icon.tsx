@@ -15,7 +15,7 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   const { isOverParent } = props;
   const { kind, isOff, isOver, isSelf } = Wrangle.props(props);
   const color = Wrangle.color(props);
-  const modifiers = props.keyboard?.current.modifiers;
+  const keyModifiers = props.keyboard?.current.modifiers;
 
   if (kind === 'Mic') {
     const Icon = isOff && !isOver ? Icons.Mic.Off : Icons.Mic.On;
@@ -37,7 +37,7 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   }
 
   if (kind === 'StateDoc') {
-    const isClose = modifiers?.meta && !isSelf;
+    const isClose = keyModifiers?.alt && !isSelf;
     const Icon = isClose ? Icons.Close : Icons.Network.Nodes;
     const opacity = !isOver && isClose ? 0.3 : 1;
     const col = isClose && isOver ? COLORS.RED : color;
