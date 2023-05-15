@@ -27,6 +27,7 @@ import {
   MdWifiTethering,
   MdWifiTetheringOff,
   MdRefresh,
+  MdCable,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -38,6 +39,7 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Refresh: icon(MdRefresh),
+  Cable: icon(MdCable),
   Close: icon(MdClose),
   Delete: { Bin: icon(MdDelete) },
   Cube: icon(MdOutlineViewInAr),
