@@ -34,7 +34,6 @@ export default Dev.describe('PeerRow', async (e) => {
     props(state: T): PeerRowProps {
       const { debug, props } = state;
       const network = debug.useNetwork === 'Local' ? self : remote;
-
       return {
         ...props,
         peerid: network.peer.id,
