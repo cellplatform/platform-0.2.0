@@ -1,8 +1,30 @@
-import { Crdt, Dev, Keyboard, PropList, TestNetwork, WebRtc, css, t } from './common';
+import {
+  Pkg,
+  Crdt,
+  css,
+  Dev,
+  Icons,
+  Keyboard,
+  MediaStream,
+  PropList,
+  t,
+  TestNetwork,
+  WebRtc,
+} from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
+
+/**
+ * WORKING DEPLOYMENT
+ *
+ *    db-dev-kqz205jum-tdb.vercel.app
+ *
+ * Urls:
+ *   - Dashboard: https://vercel.com/tdb/tdb-dev
+ *   - Endpoint:  https://dev.db.team/?dev=true
+ */
 
 type T = {
   props: WebRtcInfoProps;
@@ -13,6 +35,7 @@ type T = {
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
+    fullscreenVideo?: boolean;
   };
 };
 const initial: T = {
@@ -27,6 +50,7 @@ const local = localstore.object({
   title: initial.debug.title,
   fields: initial.props.fields,
   useGroupController: true,
+  fullscreenVideo: false,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -67,25 +91,88 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
     self.connections$.subscribe((e) => ctx.redraw());
+    controller.state.$.pipe().subscribe((e) => ctx.redraw());
 
     await state.change((d) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.title = local.title;
       d.debug.useGroupController = local.useGroupController;
+      d.debug.fullscreenVideo = local.fullscreenVideo;
+      if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
     });
 
-    ctx.subject.display('grid').render<T>((e) => {
+    const renderInfoCard = (e: { state: T }) => {
       const { debug } = e.state;
-      const props = Util.props(state);
+
+      /**
+       * Setup host
+       */
       ctx.subject.backgroundColor(debug.bg ? 1 : 0);
       ctx.subject.size([320, null]);
+
+      /**
+       * Render <Component>
+       */
       return (
         <div {...css({ Padding: debug.bg ? [20, 25] : 0 })}>
-          <WebRtcInfo {...props} card={false} />
+          <WebRtcInfo {...Util.props(state)} card={false} />
         </div>
       );
+    };
+
+    const renderFullscreenVideo = (e: { state: T }) => {
+      /**
+       * Setup host
+       */
+      ctx.subject.backgroundColor(1);
+      ctx.subject.size('fill');
+
+      const renderEmpty = () => {
+        const styles = {
+          base: css({
+            display: 'grid',
+            placeItems: 'center',
+            opacity: 0.3,
+          }),
+        };
+        return <div {...styles.base}>No video to display.</div>;
+      };
+
+      /**
+       * Render <Component>
+       */
+      const { debug } = e.state;
+      const selectedPeer = e.state.debug.selectedPeer;
+      const isSelf = selectedPeer === self.id;
+      const isRemote = !isSelf;
+
+      if (!selectedPeer) return renderEmpty();
+
+      const remoteCamera = self.connections.media.find((m) => m.peer.remote === selectedPeer);
+      if (isRemote && !remoteCamera) return renderEmpty();
+
+      const selfCamera =
+        !isRemote &&
+        self.connections.media
+          .filter((conn) => conn.metadata.input === 'camera')
+          .find((conn) => conn.peer.local === self.id);
+
+      const camera = isSelf ? selfCamera : remoteCamera;
+      if (!camera) return renderEmpty();
+
+      const stream = isSelf ? camera?.stream.local : camera?.stream.remote;
+      if (!stream) return renderEmpty();
+      return <MediaStream.Video stream={stream} style={{ Absolute: 0 }} muted={true} />;
+    };
+
+    ctx.subject.display('grid').render<T>((e) => {
+      return e.state.debug.fullscreenVideo
+        ? //
+          renderFullscreenVideo(e)
+        : renderInfoCard(e);
     });
   });
 
@@ -132,11 +219,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
       dev.button((btn) =>
         btn
-          .label((e) =>
-            isAdding(e.state) ? 'creating new network/peer...' : 'create new network/peer',
-          )
+          .label((e) => (isAdding(e.state) ? 'creating peer...' : 'create peer'))
           .enabled((e) => e.state.debug.addingConnection === undefined)
-          .right(() => `(local sample)`)
+          .right(() => `(sample)`)
           .spinner((e) => isAdding(e.state))
           .onClick(async (e) => {
             e.change((d) => (d.debug.addingConnection = 'VirtualNetwork'));
@@ -157,10 +242,27 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         return <DevRemotes self={controller} remotes={remotes} style={style} />;
       });
 
-      dev.button('sync', async () => {
-        const info = await events.info.get();
-        info?.syncers.forEach(({ syncer }) => syncer.update());
-      });
+      dev.button((btn) =>
+        btn
+          .label('force sync')
+          .right(
+            <div {...css({ Flex: 'x-center-center' })}>
+              <Icons.Network.Nodes size={15} />
+              <Icons.Refresh size={15} style={{ marginLeft: 3 }} />
+            </div>,
+          )
+          .onClick(async (e) => {
+            const info = await events.info.get();
+
+            info?.state.change((d) => {
+              WebRtc.Controller.Mutate.updateLocalMetadata(d.network, self.id);
+              //
+            });
+
+            const wait = info?.syncers.map(({ syncer }) => syncer.update().complete) ?? [];
+            await Promise.all(wait);
+          }),
+      );
 
       dev.hr(-1, 5);
 
@@ -184,11 +286,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         btn
           .label((e) => `useGroupController`)
           .value((e) => Boolean(e.state.debug.useGroupController))
-          .onClick((e) =>
+          .onClick((e) => {
             e.change((d) => {
               local.useGroupController = Dev.toggle(d.debug, 'useGroupController');
-            }),
-          ),
+            });
+          }),
       );
 
       dev.hr(-1, 5);
@@ -215,7 +317,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           }),
       );
 
-      dev.button('redraw', () => dev.redraw());
+      dev.button((btn) =>
+        btn
+          .label('redraw')
+          .right(<Icons.Refresh size={15} style={{ marginLeft: 3 }} />)
+          .onClick((e) => {
+            dev.redraw();
+          }),
+      );
     });
 
     dev.hr(5, 20);
@@ -225,12 +334,33 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Fields', (dev) => {
+    dev.title('Card');
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => {
+          const isVideo = e.state.debug.fullscreenVideo;
+          return `showing ${!!isVideo ? '"Video" (→ "Card")' : '"Card" (→ "Video")'}`;
+        })
+        .value((e) => Boolean(e.state.debug.fullscreenVideo))
+        .onClick((e) => {
+          e.change((d) => {
+            local.fullscreenVideo = Dev.toggle(d.debug, 'fullscreenVideo');
+            if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id;
+          });
+        }),
+    );
+
+    dev.hr(-1, 5);
+
+    dev.section((dev) => {
       dev.row((e) => {
+        if (e.state.debug.fullscreenVideo) return null;
         const props = Util.props(state);
         return (
           <PropList.FieldSelector
-            style={{ Margin: [10, 40, 10, 30] }}
+            title={[Pkg.name, 'Card Fields']}
+            style={{ Margin: [20, 50, 10, 50] }}
             all={WebRtcInfo.FIELDS}
             selected={props.fields ?? WebRtcInfo.DEFAULTS.fields}
             onClick={(ev) => {
@@ -243,14 +373,12 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       });
     });
 
-    dev.section((dev) => {
-      dev.row((e) => {
-        const props = Util.props(state);
-        return <WebRtcInfo {...props} card={true} margin={[15, 25, 40, 25]} />;
-      });
+    dev.row((e) => {
+      if (!e.state.debug.fullscreenVideo) return null;
+      return <WebRtcInfo {...Util.props(state)} card={true} margin={[15, 25, 40, 25]} />;
+    });
 
-      dev.hr(-1, 5);
-
+    dev.section('Properites', (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => 'title')
@@ -261,6 +389,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.boolean((btn) =>
         btn
           .label('background')
+          .enabled((e) => !Boolean(e.state.debug.fullscreenVideo))
           .value((e) => e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
@@ -286,7 +415,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       const peers = { ...(sharedState?.current?.network.peers ?? {}) };
       if (peers[self.id]) {
-        peers[`me:${self.id}`] = peers[self.id];
+        peers[`(me):${self.id}`] = peers[self.id];
         delete peers[self.id];
       }
 
