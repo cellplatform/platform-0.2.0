@@ -10,6 +10,7 @@ export type VideoProps = {
   borderRadius?: t.CssRadiusInput;
   backgroundColor?: string | number;
   muted?: boolean;
+  tooltip?: string;
   style?: t.CssValue;
   onClick?: ClickHandler;
   onMouseDown?: ClickHandler;
@@ -20,7 +21,7 @@ export type VideoProps = {
 };
 
 export const Video: React.FC<VideoProps> = (props) => {
-  const { stream, muted: isMuted = false, width, height, borderRadius } = props;
+  const { stream, muted = true, width, height, borderRadius } = props;
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export const Video: React.FC<VideoProps> = (props) => {
   return (
     <div
       {...css(styles.base, props.style)}
+      title={props.tooltip}
       onClick={props.onClick}
       onMouseDown={props.onMouseDown}
       onMouseUp={props.onMouseUp}
@@ -57,7 +59,7 @@ export const Video: React.FC<VideoProps> = (props) => {
         {...styles.video}
         ref={videoRef}
         autoPlay={true}
-        muted={isMuted}
+        muted={muted}
         onLoadedData={props.onLoadedData}
       />
     </div>
