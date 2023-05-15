@@ -1,10 +1,12 @@
 import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
 import { PeerCtrls } from './ui.PeerCtrls';
+import { VideoThumbnails } from './ui.PeerRow.Video';
 import { usePeerRowController } from './usePeerRowController.mjs';
 
 export type PeerRowProps = {
   peerid: t.PeerId;
   events?: t.WebRtcEvents;
+  media?: t.PeerMediaConnection[];
   isSelf?: boolean;
   isSelected?: boolean;
   isOverParent?: boolean;
@@ -15,7 +17,7 @@ export type PeerRowProps = {
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { events, peerid, isSelected, isSelf, isOverParent } = props;
+  const { events, peerid, isSelected, isSelf, isOverParent, media = [] } = props;
 
   const ctrlr = usePeerRowController({
     peerid,
@@ -47,6 +49,7 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
       gridTemplateColumns: 'auto auto auto 1fr',
       columnGap: 5,
     }),
+    leftContent: css({ Flex: 'x-center-center' }),
     label: css({ opacity: 0.3 }),
     selected: css({
       Size: 5,
@@ -56,11 +59,20 @@ export const PeerRow: React.FC<PeerRowProps> = (props) => {
     }),
   };
 
+  const elMeLabel = isSelf && media.length === 0 && <div {...styles.label}>{'me'}</div>;
+
+  const elMedia = (
+    <VideoThumbnails peerid={peerid} media={media} state={ctrlr.state.peer} isSelf={isSelf} />
+  );
+
   const elLeft = (
     <div {...styles.left} onMouseDown={() => props.onSelect?.({ peerid })}>
       <div {...styles.selected} />
       <Icons.Person size={15} color={icoColor} style={styles.icoPerson} />
-      <div {...styles.label}>{isSelf ? 'me' : ''}</div>
+      <div {...styles.leftContent}>
+        {elMeLabel}
+        {elMedia}
+      </div>
       <div />
     </div>
   );
