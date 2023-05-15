@@ -31,11 +31,14 @@ export function FieldGroupList(args: {
   const render = (data: t.NetworkStatePeer, options: { isSelf?: boolean } = {}): t.PropListItem => {
     const { isSelf } = options;
     const isSelected = group?.selected === data.id;
-
+    const connections = peer.connectionsByPeer.find((item) => {
+      return data.id === (isSelf ? item.peer.local : item.peer.remote);
+    });
     const value = (
       <PeerRow
         peerid={data.id}
         events={events}
+        media={connections?.media}
         isSelf={isSelf}
         isSelected={isSelected}
         isOverParent={isOverParent}
