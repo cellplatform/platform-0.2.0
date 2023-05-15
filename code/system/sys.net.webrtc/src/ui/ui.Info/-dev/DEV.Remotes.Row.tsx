@@ -28,6 +28,8 @@ export const Row: React.FC<RowProps> = (props) => {
 
   const short = `peer:${Value.shortenHash(remote.peer.id, [5, 0])}`;
   const exists = Boolean(network.peers[remote.peer.id]);
+  const isReconnectRequired = !exists || isConnecting;
+
   const reconnect = async () => {
     setConnecting(true);
     const events = controller.events();
@@ -68,11 +70,16 @@ export const Row: React.FC<RowProps> = (props) => {
       placeItems: 'center',
       columnGap: 5,
     }),
+    reconnect: css({ Flex: 'x-center-center' }),
+    label: css({ opacity: isReconnectRequired ? 0.3 : 1 }),
   };
 
-  const elReconnect = (!exists || isConnecting) && (
+  const elReconnect = isReconnectRequired && (
     <Button onClick={reconnect} spinning={isConnecting}>
-      {'reconnect →'}
+      <div {...styles.reconnect}>
+        <Icons.Refresh size={15} />
+        <Icons.Cable size={15} />
+      </div>
     </Button>
   );
 
@@ -83,7 +90,7 @@ export const Row: React.FC<RowProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.left} title={totalConns}>
         <Icons.Person size={15} />
-        {`${remote.name} (${total})`}
+        <span {...styles.label}>{`${remote.name} (${total})`}</span>
       </div>
       <div />
       <div {...styles.right}>
