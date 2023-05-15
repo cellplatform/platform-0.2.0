@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { expect } from 'chai';
 
 import { DevBus } from '../../logic.Bus';
-import { Color, COLORS, css, Spec } from '../common';
+import { Color, COLORS, css, Spec, DEFAULTS } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
 
@@ -131,6 +131,9 @@ export default Spec.describe('MySample', (e) => {
       .button((btn) => btn.label('ctx.redraw (all) - default').onClick(() => ctx.redraw()));
 
     dev
+      .hr()
+      .button((btn) => btn.label('debug.width: 400').onClick((e) => e.ctx.debug.width(400)))
+      .button((btn) => btn.label('debug.width: 50').onClick((e) => e.ctx.debug.width(250)))
       .hr()
       .button((btn) => btn.label('size: 300, 200').onClick((e) => e.ctx.subject.size([300, 140])))
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.subject.size('fill')))
