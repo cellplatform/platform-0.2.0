@@ -11,6 +11,7 @@ export type {
   IconRenderer,
   KeyboardState,
   DevButtonClickHandler,
+  CssRadiusInput,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type {
