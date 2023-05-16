@@ -41,6 +41,36 @@ export default Test.describe('Lens', (e) => {
     });
   });
 
+  e.describe('dispose', (e) => {
+    e.it('disposes when root disposes', (e) => {
+      const { root } = setup();
+      const lens = CrdtLens.init<D, TChild>(root, getDesendent);
+
+      expect(lens.disposed).to.eql(false);
+      expect(root.disposed).to.eql(false);
+
+      root.dispose();
+
+      expect(lens.disposed).to.eql(true);
+      expect(root.disposed).to.eql(true);
+    });
+
+    e.it('disposes without effecting root', (e) => {
+      const { root } = setup();
+      const lens = CrdtLens.init<D, TChild>(root, getDesendent);
+
+      expect(lens.disposed).to.eql(false);
+      expect(root.disposed).to.eql(false);
+
+      lens.dispose();
+
+      expect(lens.disposed).to.eql(true);
+      expect(root.disposed).to.eql(false);
+
+      root.dispose();
+    });
+  });
+
   e.describe('change', (e) => {
     e.it('lens descendent object does initially exist', () => {
       const root = Crdt.Doc.ref<D>('foo-id', { child: { count: 0 } });
@@ -92,4 +122,19 @@ export default Test.describe('Lens', (e) => {
     });
   });
 
+  e.it('$ (change events → descendent)', (e) => {
+    const root = Crdt.Doc.ref<D>('foo-id', {});
+    const lens = CrdtLens.init<D, TChild>(root, getDesendent);
+
+    const fired: t.CrdtLensChange<D, TChild>[] = [];
+    lens.$.subscribe((e) => fired.push(e));
+
+    lens.change((d) => (d.count = 123));
+
+    expect(fired.length).to.eql(1);
+    expect(fired[0].doc.child?.count).to.eql(123);
+    expect(fired[0].lens.count).to.eql(123);
+
+    root.dispose();
+  });
 });
