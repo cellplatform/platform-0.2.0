@@ -14,9 +14,9 @@ export type NetworkStatePeer = {
   id: t.PeerId;
   tx?: string; // The transaction-id of the operation that initiated the peer (NB: used for response event capture).
   initiatedBy?: t.PeerId;
-  device: NetworkStateDevice;
-  connections: NetworkStatePeerConnections;
   error?: string;
+  conns: NetworkStatePeerConnections;
+  device: NetworkStateDevice;
 };
 
 export type NetworkStatePeerConnections = {
@@ -24,6 +24,9 @@ export type NetworkStatePeerConnections = {
    * NB: The "main" connection is the primary connection used for data transfer.
    *     and is assumed to exist as the baseline default resource of each peer.
    */
+  mic?: boolean;
+  video?: boolean;
+  screen?: boolean;
 };
 
 export type NetworkStateDevice = {

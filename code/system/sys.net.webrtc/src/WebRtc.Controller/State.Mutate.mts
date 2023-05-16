@@ -13,14 +13,14 @@ export const Mutate = {
    */
   addPeer(
     data: t.NetworkState,
-    self: t.PeerId,
+    selfid: t.PeerId,
     subject: t.PeerId,
     options: { initiatedBy?: t.PeerId; tx?: string } = {},
   ) {
     const { initiatedBy, tx } = options;
     const peers = Wrangle.peers(data);
     const exists = Boolean(peers[subject]);
-    const isSelf = self === subject;
+    const isSelf = selfid === subject;
 
     const done = () => {
       const peer = peers[subject];
@@ -42,7 +42,7 @@ export const Mutate = {
     const peer: t.NetworkStatePeer = {
       id: subject,
       device: {},
-      connections: {},
+      conns: {},
     };
 
     setContext(peer);
@@ -58,9 +58,9 @@ export const Mutate = {
     return { existing, peer };
   },
 
-  updateLocalMetadata(data: t.NetworkState, self: t.PeerId, options: { ua?: t.UserAgent } = {}) {
+  updateLocalMetadata(data: t.NetworkState, selfid: t.PeerId, options: { ua?: t.UserAgent } = {}) {
     const peers = data.peers ?? {};
-    const localPeer = peers[self];
+    const localPeer = peers[selfid];
     localPeer.device.userAgent = options.ua ?? UserAgent.current;
   },
 };
