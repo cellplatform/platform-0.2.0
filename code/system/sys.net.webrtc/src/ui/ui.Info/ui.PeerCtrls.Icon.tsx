@@ -18,17 +18,17 @@ export const PeerCtrlIcon: React.FC<PeerCtrlIconProps> = (props) => {
   const keyModifiers = props.keyboard?.current.modifiers;
 
   if (kind === 'Mic') {
-    const Icon = isOff && !isOver ? Icons.Mic.Off : Icons.Mic.On;
+    const Icon = isOff ? Icons.Mic.Off : Icons.Mic.On;
     return <Icon size={14} color={color} />;
   }
 
   if (kind === 'Video') {
-    const Icon = isOff && !isOver ? Icons.Video.Off : Icons.Video.On;
+    const Icon = isOff ? Icons.Video.Off : Icons.Video.On;
     return <Icon size={14} color={color} />;
   }
 
   if (kind === 'Screen') {
-    const Icon = isOff && !isOver ? Icons.Screenshare.Stop : Icons.Screenshare.Start;
+    const Icon = isOff ? Icons.Screenshare.Stop : Icons.Screenshare.Start;
     return <Icon size={14} color={color} />;
   }
 
