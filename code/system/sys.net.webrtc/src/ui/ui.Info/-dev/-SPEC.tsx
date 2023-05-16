@@ -15,6 +15,7 @@ import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
+import { DevVideo } from './DEV.Video';
 
 /**
  * WORKING DEPLOYMENT
@@ -124,50 +125,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     };
 
     const renderFullscreenVideo = (e: { state: T }) => {
-      /**
-       * Setup host
-       */
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-
-      const renderEmpty = () => {
-        const styles = {
-          base: css({
-            display: 'grid',
-            placeItems: 'center',
-            opacity: 0.3,
-          }),
-        };
-        return <div {...styles.base}>No video to display.</div>;
-      };
-
-      /**
-       * Render <Component>
-       */
-      const { debug } = e.state;
-      const selectedPeer = e.state.debug.selectedPeer;
-      const isSelf = selectedPeer === self.id;
-      const isRemote = !isSelf;
-
-      if (!selectedPeer) return renderEmpty();
-
-      const remoteCamera = self.connections.media.find((m) => m.peer.remote === selectedPeer);
-      if (isRemote && !remoteCamera) return renderEmpty();
-
-      const selfCamera =
-        !isRemote &&
-        self.connections.media
-          .filter((conn) => conn.metadata.input === 'camera')
-          .find((conn) => conn.peer.local === self.id);
-
-      const camera = isSelf ? selfCamera : remoteCamera;
-      if (!camera) return renderEmpty();
-
-      const stream = isSelf ? camera?.stream.local : camera?.stream.remote;
-      if (!stream) return renderEmpty();
-      return <MediaStream.Video stream={stream} style={{ Absolute: 0 }} muted={true} />;
+      return <DevVideo self={self} peerid={e.state.debug.selectedPeer} />;
     };
 
+    /**
+     * Render subject.
+     */
     ctx.subject.display('grid').render<T>((e) => {
       return e.state.debug.fullscreenVideo
         ? //
@@ -193,12 +158,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.header.border(-0.1).padding(0);
     dev.header.render<T>((e) => {
+      const firstCamera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
+
       return (
         <ConnectInput
           remotePeer={e.state.debug.remotePeer}
           self={self}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
           spinning={e.state.debug.addingConnection === 'RealNetwork'}
+          video={firstCamera?.stream.local}
+          muted={true}
           onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
           onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
           onConnectRequest={async (e) => {
