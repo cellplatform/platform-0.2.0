@@ -8,6 +8,7 @@ export type ConnectInputProps = {
   spinning?: boolean;
   fields?: t.ConnectInputField[];
   video?: MediaStream;
+  muted?: boolean;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;

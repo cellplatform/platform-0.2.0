@@ -3,11 +3,12 @@ import { Color, COLORS, css, MediaStream, t } from './common';
 export type VideoProps = {
   size?: number;
   stream?: MediaStream;
+  muted?: boolean;
   style?: t.CssValue;
 };
 
 export const Video: React.FC<VideoProps> = (props) => {
-  const { stream, size = 64 } = props;
+  const { stream, size = 64, muted } = props;
   const gutter = 0;
 
   /**
@@ -30,7 +31,7 @@ export const Video: React.FC<VideoProps> = (props) => {
       stream={props.stream}
       width={size - gutter * 2}
       height={size - gutter * 2}
-      muted={true}
+      muted={props.muted}
       style={styles.video}
     />
   );
