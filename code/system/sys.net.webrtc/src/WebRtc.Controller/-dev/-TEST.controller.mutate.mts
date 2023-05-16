@@ -24,7 +24,7 @@ export default Dev.describe('Network Controller: Mutate (State)', (e) => {
         expect(res.peer.initiatedBy).to.eql(undefined);
         expect(res.peer.tx).to.eql(undefined);
         expect(res.peer).to.eql(data.peers.b);
-        expect(res.peer.connections).to.eql({});
+        expect(res.peer.conns).to.eql({});
       });
 
       e.it('handles incomplete starting document', (e) => {

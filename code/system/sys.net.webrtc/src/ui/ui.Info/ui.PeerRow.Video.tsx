@@ -69,7 +69,7 @@ const Wrangle = {
     const { state, isSelf } = props;
     if (conn.metadata.input === 'screen') return true;
     if (isSelf) return true; // NB: Do not cause feedback look into own mic.
-    return !Boolean(state?.mic);
+    return !Boolean(state?.conns?.mic);
   },
 
   radius(index: number, total: number) {
