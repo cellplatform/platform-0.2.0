@@ -4,7 +4,7 @@ import { PeerSyncer } from './PeerSyncer.mjs';
 /**
  * Extends a CRDT [DocRef] with peer-sync capabilities.
  */
-export function createSyncDoc<D extends {}>(
+export function init<D extends {}>(
   netbus: t.EventBus<any>, // An event-bus that fires over a network connection.
   doc: t.CrdtDocRef<D>,
   options: t.CrdtDocSyncOptions<D> = {},

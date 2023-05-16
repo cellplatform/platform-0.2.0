@@ -5,14 +5,14 @@ type Id = string;
 /**
  * In-memory CRDT document reference (wrapper).
  */
-export function createDocRef<D extends {}>(
+export function init<D extends {}>(
   docid: Id,
   initial: D | Uint8Array, // NB: [Uint8Array] is a serialized Automerge document.
   options: {
     dispose$?: t.Observable<any>;
     onChange?: t.CrdtDocRefChangeHandler<D>;
   } = {},
-) {
+): t.CrdtDocRef<D> {
   const { dispose, dispose$ } = rx.disposable(options.dispose$);
   let _isDisposed = false;
   dispose$.subscribe(() => {

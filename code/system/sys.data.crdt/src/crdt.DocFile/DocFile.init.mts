@@ -15,7 +15,7 @@ type Options<D extends {}> = {
 /**
  * Extend a CRDT [DocRef] with file-system persistence.
  */
-export async function createDocFile<D extends {}>(
+export async function init<D extends {}>(
   filedir: t.Fs,
   doc: t.CrdtDocRef<D>,
   options: Options<D> = {},
