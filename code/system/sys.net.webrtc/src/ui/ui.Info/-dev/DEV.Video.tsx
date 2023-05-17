@@ -61,15 +61,8 @@ export const DevVideo: React.FC<DevVideoProps> = (props) => {
     const key = `${conn.id}:${i}`;
     const stream = isSelf ? conn.stream.local : conn.stream.remote;
     return (
-      <Button style={styles.thumbnail} onClick={() => setSelected(conn)}>
-        <MediaStream.Video
-          key={key}
-          stream={stream}
-          width={46}
-          height={46}
-          muted={true}
-          borderRadius={5}
-        />
+      <Button key={key} style={styles.thumbnail} onClick={() => setSelected(conn)}>
+        <MediaStream.Video stream={stream} width={46} height={46} muted={true} borderRadius={5} />
       </Button>
     );
   });
