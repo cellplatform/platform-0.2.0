@@ -73,7 +73,7 @@ export default Dev.describe('Root', (e) => {
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs')),
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs')),
-          await button(import('../WebRtc.SharedProps/-dev/-TEST.mjs')),
+          await button(import('../WebRtc.State/-dev/-TEST.mjs'), true),
           await button(import('../sys.net.schema/-dev/-TEST.mjs')),
         ],
       );

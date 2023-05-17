@@ -9,7 +9,7 @@ export const TESTS = {
       import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs'),
-      import('../WebRtc.SharedProps/-dev/-TEST.mjs'),
+      import('../WebRtc.State/-dev/-TEST.mjs'),
       import('../sys.net.schema/-dev/-TEST.mjs'),
 
       import('../WebRtc/-dev/-TEST.sync.mjs'),
