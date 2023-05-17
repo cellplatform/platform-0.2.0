@@ -43,7 +43,7 @@ ${typeDef}
  * Initial CRDT Document state.
  * Generated via: Crdt.Doc.Schema.toByteArray(...)  ← (check into source-control).
  */
-export const initialState = new Uint8Array([${byteArray}]);
+export const bytes = new Uint8Array([${byteArray}]);
 `.substring(1);
         return code;
       },

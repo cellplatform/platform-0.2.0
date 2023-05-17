@@ -17,7 +17,7 @@ export default Test.describe('Schema', (e) => {
 
       expect(byteArray.bytes.byteLength).to.eql(70);
       expect(code).to.include('export type D = { count: number };');
-      expect(code).to.include('export const initialState = new Uint8Array([');
+      expect(code).to.include('export const bytes = new Uint8Array([');
       expect(code).to.eql(byteArray.toString());
     });
 
