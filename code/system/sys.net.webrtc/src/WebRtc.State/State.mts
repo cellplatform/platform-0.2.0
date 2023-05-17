@@ -1,4 +1,4 @@
-import { Crdt, t, rx } from './common';
+import { Crdt, t } from './common';
 
 /**
  * Tools for working with the WebRTC shared network state.
@@ -13,7 +13,7 @@ export const WebRtcState = {
       doc,
 
       /**
-       * Retrieve a lens into the { props.[namespace] } object.
+       * Retrieve a lens into a namespace on the {props} object.
        */
       props<T extends {}>(namespace: N, initial: T) {
         return Crdt.lens<t.NetworkDocShared, T>(doc, (draft) => {
