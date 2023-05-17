@@ -7,11 +7,12 @@ import { Wrangle } from '../crdt.DocRef/Wrangle.mjs';
 export function init<D extends {}, C extends {}>(
   root: t.CrdtDocRef<D>,
   get: t.CrdtLensDescendent<D, C>,
+  options: { dispose$?: t.Observable<any> } = {},
 ): t.CrdtLens<D, C> {
   let _count = 0;
 
   let _disposed = false;
-  const { dispose, dispose$ } = rx.disposable(root.dispose$);
+  const { dispose, dispose$ } = rx.disposable([root.dispose$, options.dispose$]);
   dispose$.subscribe(() => {
     subject$.complete();
     _disposed = true;
@@ -25,10 +26,16 @@ export function init<D extends {}, C extends {}>(
     root,
     $,
 
+    /**
+     * Current value of the descendent.
+     */
     get current() {
       return get(root.current);
     },
 
+    /**
+     * Immutable change mutation on the descendent.
+     */
     change(...args: []) {
       if (api.disposed) return api;
       const { message, fn } = Wrangle.changeArgs<D, C>(args);
@@ -41,7 +48,7 @@ export function init<D extends {}, C extends {}>(
       // NB: forces the [get] factory to initialize the descendent if necessary.
       if (_count === 0) root.change('(sys): ensure lens descendent', (draft) => get(draft));
 
-      let _fired: t.CrdtDocChange<D> | undefined = undefined;
+      let _fired: t.CrdtDocChange<D> | undefined;
       root.$.pipe(
         rx.filter((e) => e.action === 'change'),
         rx.take(1),
@@ -55,11 +62,19 @@ export function init<D extends {}, C extends {}>(
 
       // Alert listeners.
       if (_fired) {
-        subject$.next({ ...(_fired as t.CrdtDocChange<D>), lens: api.current });
+        const lens = api.current;
+        subject$.next({ ..._fired, lens });
       }
 
       _count++;
       return api;
+    },
+
+    /**
+     * Create a new sub-lens.
+     */
+    lens<T extends {}>(get: t.CrdtLensDescendent<C, T>) {
+      return init(root, (doc) => get(api.current), { dispose$ });
     },
 
     /**

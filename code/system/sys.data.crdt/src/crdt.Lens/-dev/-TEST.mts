@@ -3,7 +3,7 @@ import { Crdt, expect, t, Test, toObject } from '../../test.ui';
 import { CrdtLens } from '..';
 
 export default Test.describe('Lens', (e) => {
-  type TChild = { count: number };
+  type TChild = { count: number; child?: TChild };
   type D = {
     child?: TChild;
   };
@@ -136,5 +136,54 @@ export default Test.describe('Lens', (e) => {
     expect(fired[0].lens.count).to.eql(123);
 
     root.dispose();
+  });
+
+  e.describe('sub lens', (e) => {
+    e.it('init', (e) => {
+      const root = Crdt.Doc.ref<D>('foo-id', {});
+      const lens1 = CrdtLens.init<D, TChild>(root, getDesendent);
+      const lens2 = lens1.lens(getDesendent);
+
+      expect(root.current).to.eql({}); // NB: Lazy initialization.
+
+      expect(lens2.current).to.eql({ count: 0 }); // NB: reading current forces initialization of the tree.
+      expect(root.current.child?.count).to.eql(0);
+      expect(root.current.child?.child?.count).to.eql(0);
+
+      root.dispose();
+    });
+
+    e.it('change', (e) => {
+      const root = Crdt.Doc.ref<D>('foo-id', {});
+      const lens1 = CrdtLens.init<D, TChild>(root, getDesendent);
+      const lens2 = lens1.lens(getDesendent);
+
+      lens2.change((d) => (d.count = 123));
+
+      expect(root.current.child?.count).to.eql(0);
+      expect(root.current.child?.child?.count).to.eql(123);
+      expect(lens2.current.count).to.eql(123);
+
+      root.dispose();
+    });
+
+    e.it('dispose', (e) => {
+      const root = Crdt.Doc.ref<D>('foo-id', {});
+      const lens1 = CrdtLens.init<D, TChild>(root, getDesendent);
+      const lens2 = CrdtLens.init<D, TChild>(root, getDesendent);
+      const lens3 = lens2.lens(getDesendent);
+
+      lens2.dispose();
+      expect(root.disposed).to.eql(false);
+      expect(lens1.disposed).to.eql(false);
+      expect(lens2.disposed).to.eql(true);
+      expect(lens3.disposed).to.eql(true);
+
+      root.dispose();
+      expect(root.disposed).to.eql(true);
+      expect(lens1.disposed).to.eql(true);
+      expect(lens2.disposed).to.eql(true);
+      expect(lens3.disposed).to.eql(true);
+    });
   });
 });

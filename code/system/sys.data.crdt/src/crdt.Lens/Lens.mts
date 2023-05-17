@@ -1,4 +1,3 @@
-import { t } from '../common';
 import { init } from './Lens.init.mjs';
 
 /**

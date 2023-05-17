@@ -15,6 +15,7 @@ export type CrdtLens<D extends {}, C extends {}> = t.Lifecycle & {
   readonly current: C;
   change(fn: t.CrdtMutator<C>): t.CrdtLens<D, C>;
   change(message: string, fn: t.CrdtMutator<C>): t.CrdtLens<D, C>;
+  lens<T extends {}>(get: CrdtLensDescendent<C, T>): CrdtLens<D, T>;
 };
 
 export type CrdtLensChange<D extends {}, C extends {}> = t.CrdtDocChange<D> & { lens: C };
