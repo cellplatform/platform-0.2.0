@@ -9,7 +9,11 @@ export type { NetworkDocShared as DocShared } from './Schema.bytes.mjs';
  */
 export const NetworkSchema = {
   get initial() {
-    const doc: NetworkDocShared = { count: 0, network: { peers: {} }, tmp: {} };
+    const doc: NetworkDocShared = {
+      count: 0,
+      network: { peers: {}, props: {} },
+      tmp: {},
+    };
     return { doc, bytes };
   },
 
@@ -24,5 +28,12 @@ export const NetworkSchema = {
       schema,
       doc,
     };
+  },
+
+  /**
+   * Dev
+   */
+  toByteArray() {
+    return Crdt.Doc.Schema.toByteArray<NetworkDocShared>(NetworkSchema.initial.doc, { typeDef });
   },
 };

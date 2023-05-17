@@ -1,4 +1,4 @@
-import { Dev, t, Time, WebRtc } from '.';
+import { Time, Dev, WebRtc, t } from '.';
 
 type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
 const initial: T = { testrunner: {} };
@@ -113,6 +113,15 @@ export default Dev.describe('Root', (e) => {
         const media = WebRtc.Media.singleton();
         media.events.stop(media.ref.camera);
         media.events.stop(media.ref.screen);
+      });
+
+      dev.button('copy schema bytes', (e) => {
+        const schema = WebRtc.NetworkSchema.toByteArray();
+        console.info('Network Schema:', schema.toString());
+        navigator.clipboard.writeText(schema.toString());
+
+        e.right('← copied');
+        Time.delay(1500, () => e.right(''));
       });
 
       /**

@@ -8,7 +8,14 @@ export type WebRtcController = t.Lifecycle & {
 /**
  * Representation of a conversational network (P2P)
  */
-export type NetworkState = { peers: NetworkStatePeers };
+export type NetworkState = {
+  peers: NetworkStatePeers;
+  props: NetworkStateProps;
+};
+
+/**
+ * Peers
+ */
 export type NetworkStatePeers = { [key: string]: NetworkStatePeer };
 export type NetworkStatePeer = {
   id: t.PeerId;
@@ -31,6 +38,13 @@ export type NetworkStatePeerConnections = {
 
 export type NetworkStateDevice = {
   userAgent?: t.UserAgent;
+};
+
+/**
+ * Shared Properties
+ */
+export type NetworkStateProps = {
+  [namespace: string]: Record<string, unknown>;
 };
 
 /**
