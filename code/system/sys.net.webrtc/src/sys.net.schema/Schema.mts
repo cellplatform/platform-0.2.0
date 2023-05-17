@@ -29,11 +29,4 @@ export const NetworkSchema = {
       doc,
     };
   },
-
-  /**
-   * Dev
-   */
-  toByteArray() {
-    return Crdt.Doc.Schema.toByteArray<NetworkDocShared>(NetworkSchema.initial.doc, { typeDef });
-  },
 };

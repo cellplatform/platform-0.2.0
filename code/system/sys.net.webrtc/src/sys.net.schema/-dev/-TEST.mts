@@ -1,7 +1,7 @@
-import { Crdt, Dev, expect } from '../test.ui';
-import { NetworkSchema } from './Schema.mjs';
+import { Crdt, Dev, expect } from '../../test.ui';
+import { NetworkSchema } from '../Schema.mjs';
 
-import type { DocShared } from './Schema.mjs';
+import type { DocShared } from '../Schema.mjs';
 
 export default Dev.describe('Network Schema', (e) => {
   e.it('NetworkSchema.initial', (e) => {
@@ -17,16 +17,14 @@ export default Dev.describe('Network Schema', (e) => {
 
   e.it('NetworkSchema.genesis: generates byte-array (source code, typescript)', async (e) => {
     const genesis = NetworkSchema.genesis();
-    const { schema } = genesis;
 
-    expect(schema.sourceFile).to.include('export type NetworkDocShared = {');
-    expect(schema.toString()).to.eql(schema.sourceFile);
-    expect(schema.bytes instanceof Uint8Array).to.eql(true);
-    expect(schema.bytes).to.eql(NetworkSchema.toByteArray().bytes);
+    expect(genesis.schema.sourceFile).to.include('export type NetworkDocShared = {');
+    expect(genesis.schema.toString()).to.eql(genesis.schema.sourceFile);
+    expect(genesis.schema.bytes instanceof Uint8Array).to.eql(true);
   });
 
   e.it('NetworkSchema.doc: initial Document<T> (schema) from encoded byte-array', async (e) => {
-    const { bytes: initialState } = await import('./Schema.bytes.mjs');
+    const { bytes: initialState } = await import('../Schema.bytes.mjs');
     const doc1 = Crdt.Doc.ref<DocShared>('doc-id', initialState);
     expect(doc1.current).to.eql(NetworkSchema.initial.doc);
 

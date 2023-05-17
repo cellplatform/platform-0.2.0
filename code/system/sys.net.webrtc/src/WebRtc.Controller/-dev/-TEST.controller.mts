@@ -23,7 +23,7 @@ export default Dev.describe('Network Controller', async (e) => {
   const filedir = fs.dir('dev.test.WebRtc.Controller');
 
   const setup = () => {
-    const initial: t.NetworkDocShared = { count: 0, network: { peers: {} }, tmp: {} };
+    const initial: t.NetworkDocShared = { count: 0, network: { peers: {}, props: {} }, tmp: {} };
     const state = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
     return { initial, state };
   };

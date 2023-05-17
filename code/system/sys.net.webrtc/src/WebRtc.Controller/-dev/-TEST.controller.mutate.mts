@@ -10,7 +10,7 @@ export default Dev.describe('Network Controller: Mutate (State)', (e) => {
    */
   e.describe('mutate (should be done within CRDT immutable change handler)', (e) => {
     const sampleState = () => {
-      const data: t.NetworkState = { peers: {} }; // NB: tests when the child "peers" property is missing (auto inserted).
+      const data: t.NetworkState = { peers: {}, props: {} }; // NB: tests when the child "peers" property is missing (auto inserted).
       return { data };
     };
 
