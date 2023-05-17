@@ -117,7 +117,7 @@ describe('rx', () => {
 
     it('lifecycle', () => {
       const until$ = new rx.Subject<number>();
-      const lifecycleA = rx.lifecycle(until$);
+      const lifecycleA = rx.lifecycle([until$, undefined, until$]);
       const lifecycleB = rx.lifecycle();
 
       const count = { a: 0, b: 0 };

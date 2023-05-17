@@ -1,19 +1,21 @@
-import type { t } from '../common.t';
 import { Observable, Subject, take } from 'rxjs';
+import type { t } from '../common.t';
 
 import { Dispose } from '../Dispose';
+
+type UntilObservable = Observable<any> | (Observable<any> | undefined)[];
 
 /**
  * Generates the base mechanism of an disposable observable.
  */
-export function disposable(until$?: Observable<any> | Observable<any>[]): t.Disposable {
+export function disposable(until$?: UntilObservable): t.Disposable {
   return Dispose.create(until$);
 }
 
 /**
  * Generates a disposable observable that keeps track on the "is disposed" state.
  */
-export function lifecycle(until$?: Observable<any> | Observable<any>[]): t.Lifecycle {
+export function lifecycle(until$?: UntilObservable): t.Lifecycle {
   const { dispose, dispose$ } = disposable(until$);
   let _disposed = false;
   dispose$.pipe(take(1)).subscribe(() => (_disposed = true));
