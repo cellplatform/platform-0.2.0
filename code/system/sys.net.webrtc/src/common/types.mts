@@ -25,6 +25,7 @@ export type {
   CrdtDocFile,
   CrdtDocSync,
   CrdtInfoFields,
+  CrdtLens,
 } from 'sys.data.crdt/src/types.mjs';
 
 /**

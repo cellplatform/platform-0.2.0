@@ -1,4 +1,4 @@
-import { t, rx } from './common';
+import { Crdt, t, rx } from './common';
 
 /**
  * Tools for working with the WebRTC shared network state.
@@ -7,22 +7,21 @@ export const WebRtcState = {
   /**
    * Initialize a new {props} lens.
    */
-  init(doc: t.NetworkDocSharedRef) {
-    let _disposed = false;
-    const { dispose, dispose$ } = rx.disposable(doc.dispose$);
-    dispose$.subscribe(() => (_disposed = true));
-
-    const api: t.WebRtcState = {
+  init<N extends string = string>(doc: t.NetworkDocSharedRef) {
+    const api: t.WebRtcState<N> = {
       kind: 'WebRtc:State',
       doc,
 
       /**
-       * Lifecycle.
+       * Retrieve a lens into the { props.[namespace] } object.
        */
-      dispose,
-      dispose$,
-      get disposed() {
-        return _disposed;
+      props<T extends {}>(namespace: N, initial: T) {
+        return Crdt.lens<t.NetworkDocShared, T>(doc, (draft) => {
+          const network = draft.network;
+          const props = network.props || (network.props = {});
+          const subject = props[namespace] || (props[namespace] = initial);
+          return subject as T;
+        });
       },
     };
 
