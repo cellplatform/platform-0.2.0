@@ -13,13 +13,13 @@ export const WebRtcState = {
       doc,
 
       /**
-       * Retrieve a lens into a namespace on the {props} object.
+       * Retrieve a lens into a namespace on the {network.props} object.
        */
       props<T extends {}>(namespace: N, initial: T) {
         return Crdt.lens<t.NetworkDocShared, T>(doc, (draft) => {
           const network = draft.network;
           const props = network.props || (network.props = {});
-          const subject = props[namespace] || (props[namespace] = initial);
+          const subject = props[namespace] || (props[namespace] = initial ?? {});
           return subject as T;
         });
       },
