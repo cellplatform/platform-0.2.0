@@ -1,8 +1,21 @@
-import { Crdt, css, Dev, Icons, Keyboard, Pkg, PropList, t, TestNetwork, WebRtc } from './common';
+import {
+  Crdt,
+  css,
+  Dev,
+  Icons,
+  Keyboard,
+  Pkg,
+  PropList,
+  rx,
+  t,
+  TestNetwork,
+  WebRtc,
+} from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
+import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevVideo } from './DEV.Video';
 
 /**
@@ -25,13 +38,13 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
     fullscreenVideo?: boolean;
+    showRight?: boolean;
   };
 };
 const initial: T = {
   props: {},
   debug: { bg: true, title: false },
 };
-type P = { count: number };
 
 type LocalStore = T['debug'] & { fields?: t.WebRtcInfoField[] };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
@@ -41,14 +54,21 @@ const local = localstore.object({
   fields: initial.props.fields,
   useGroupController: true,
   fullscreenVideo: false,
+  showRight: true,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
+  const remotes: t.TDevRemote[] = [];
+
   const controller = WebRtc.controller(self);
   const events = controller.events();
-  const props = controller.state.props<P>('dev.ui', { count: 0 });
-  const remotes: t.TDevRemote[] = [];
+  const props = controller.state.props<t.TDevProps>('dev.ui', {
+    count: 0,
+    showRight: local.showRight,
+  });
+
+  DevKeyboard(props);
 
   const Util = {
     props(state: t.DevCtxState<T>): WebRtcInfoProps {
@@ -85,6 +105,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     self.connections$.subscribe((e) => ctx.redraw());
     controller.state.doc.$.pipe().subscribe((e) => ctx.redraw());
+
+    props.$.pipe(
+      rx.map((e) => e.lens.showRight),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe((e) => (local.showRight = e));
 
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -124,6 +149,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
      * Render subject.
      */
     ctx.subject.display('grid').render<T>((e) => {
+      ctx.debug.width(props.current.showRight ? 400 : 0);
       return e.state.debug.fullscreenVideo
         ? //
           renderFullscreenVideo(e)

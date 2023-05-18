@@ -1,4 +1,4 @@
-import type * as t from './DEV.types.mjs';
+import type * as t from './types.mjs';
 
 export * from '../../../test.ui';
 export { t };

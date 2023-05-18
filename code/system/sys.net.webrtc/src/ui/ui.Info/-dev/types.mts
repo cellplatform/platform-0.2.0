@@ -7,3 +7,5 @@ export type TDevRemote = {
   controller: t.WebRtcController;
   events: t.WebRtcEvents;
 };
+
+export type TDevProps = { count: number; showRight?: boolean };
