@@ -39,7 +39,7 @@ export default Dev.describe('PeerCard', async (e) => {
     backgroundUrl?: string;
     persistSharedDoc?: boolean;
   };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.IDE');
   const local = localstore.object({
     muted: PeerCard.DEFAULTS.muted,
     showBg: initial.debug.showBg,
