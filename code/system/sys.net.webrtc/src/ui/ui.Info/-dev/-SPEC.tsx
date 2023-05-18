@@ -16,17 +16,7 @@ import { DevRemotes } from './DEV.Remotes';
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
-import { DevVideo } from './DEV.Video';
-
-/**
- * WORKING DEPLOYMENT
- *
- *    db-dev-kqz205jum-tdb.vercel.app
- *
- * Urls:
- *   - Dashboard: https://vercel.com/tdb/tdb-dev
- *   - Endpoint:  https://dev.db.team/?dev=true
- */
+import { DevMedia } from './DEV.Media';
 
 type T = {
   props: WebRtcInfoProps;
@@ -37,8 +27,6 @@ type T = {
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
-    fullscreenVideo?: boolean;
-    showRight?: boolean;
   };
 };
 const initial: T = {
@@ -46,15 +34,25 @@ const initial: T = {
   debug: { bg: true, title: false },
 };
 
-type LocalStore = T['debug'] & { fields?: t.WebRtcInfoField[] };
+type LocalStore = T['debug'] & {
+  fullscreenVideo?: boolean;
+  showRight?: boolean;
+  imageUrl?: string;
+  showImage?: boolean;
+  cardFlipped?: boolean;
+  fields?: t.WebRtcInfoField[];
+};
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   bg: initial.debug.bg,
   title: initial.debug.title,
-  fields: initial.props.fields,
   useGroupController: true,
   fullscreenVideo: false,
   showRight: true,
+  imageUrl: '',
+  showImage: true,
+  cardFlipped: false,
+  fields: WebRtcInfo.DEFAULTS.fields,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -63,18 +61,26 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   const controller = WebRtc.controller(self);
   const events = controller.events();
-  const props = controller.state.props<t.TDevProps>('dev.ui', {
+  const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
-    showRight: local.showRight,
+    // showRight: local.showRight,
+    showRight: true,
+    fullscreenVideo: local.fullscreenVideo,
+    imageUrl: local.imageUrl ?? '',
+    showImage: local.showImage,
+    cardFlipped: local.cardFlipped,
+    fields: local.fields,
   });
 
   DevKeyboard(props);
 
   const Util = {
     props(state: t.DevCtxState<T>): WebRtcInfoProps {
-      const { debug, props } = state.current;
+      const { debug } = state.current;
+      const fields = props.current.fields;
       return {
-        ...props,
+        ...state.current.props,
+        fields,
         events,
         title: debug.title ? 'Network Cell' : undefined,
         data: Util.data(state),
@@ -109,14 +115,25 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     props.$.pipe(
       rx.map((e) => e.lens.showRight),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((e) => (local.showRight = e));
+    ).subscribe((value) => (local.showRight = value));
+    props.$.pipe(
+      rx.map((e) => e.lens.imageUrl),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe((value) => (local.imageUrl = value));
+    props.$.pipe(
+      rx.map((e) => e.lens.showImage),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe((value) => (local.showImage = value));
+    props.$.pipe(
+      rx.map((e) => e.lens.fields),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe((value) => (local.fields = value));
 
     await state.change((d) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.title = local.title;
       d.debug.useGroupController = local.useGroupController;
-      d.debug.fullscreenVideo = local.fullscreenVideo;
       if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
     });
 
@@ -142,7 +159,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const renderFullscreenVideo = (e: { state: T }) => {
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-      return <DevVideo self={self} peerid={e.state.debug.selectedPeer} />;
+      return <DevMedia self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
     };
 
     /**
@@ -150,7 +167,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
      */
     ctx.subject.display('grid').render<T>((e) => {
       ctx.debug.width(props.current.showRight ? 400 : 0);
-      return e.state.debug.fullscreenVideo
+      return props.current.fullscreenVideo
         ? //
           renderFullscreenVideo(e)
         : renderInfoCard(e);
@@ -194,6 +211,118 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         />
       );
     });
+  });
+
+  e.it('ui:card', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.title('Card');
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => {
+          const isVideo = props.current.fullscreenVideo;
+          return `showing ${!!isVideo ? '"Media" (→ "Info Card")' : '"Info Card" (→ "Media")'}`;
+        })
+        .value((e) => Boolean(props.current.fullscreenVideo))
+        .onClick((e) => {
+          props.change((d) => {
+            local.fullscreenVideo = Dev.toggle(d, 'fullscreenVideo');
+          });
+
+          e.change((d) => {
+            if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id;
+          });
+        }),
+    );
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `flipped`)
+        .value((e) => Boolean(props.current.cardFlipped))
+        .enabled((e) => Boolean(props.current.fullscreenVideo))
+        .onClick((e) => props.change((d) => Dev.toggle(d, 'cardFlipped'))),
+    );
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `show image`)
+        .value((e) => Boolean(props.current.showImage))
+        .enabled((e) => Boolean(props.current.fullscreenVideo))
+        .onClick((e) => props.change((d) => Dev.toggle(d, 'showImage'))),
+    );
+
+    dev.textbox((txt) =>
+      txt
+        .margin([10, 0, 0, 0])
+        .label((e) => 'image url')
+        .placeholder('https://...')
+        .value((e) => props.current.imageUrl ?? '')
+        .onChange((e) => {
+          props.change((d) => (d.imageUrl = e.to.value));
+        })
+        .onEnter((e) => {}),
+    );
+
+    dev.section((dev) => {
+      dev.row((e) => {
+        if (props.current.fullscreenVideo) return null;
+        return (
+          <PropList.FieldSelector
+            title={[Pkg.name, 'Card Fields']}
+            style={{ Margin: [20, 50, 30, 50] }}
+            all={WebRtcInfo.FIELDS}
+            selected={props.current.fields}
+            resettable={true}
+            onClick={(ev) => {
+              const next = ev.next as WebRtcInfoProps['fields'];
+              props.change((d) => (d.fields = next));
+            }}
+          />
+        );
+      });
+    });
+
+    dev.row((e) => {
+      if (!props.current.fullscreenVideo) return null;
+      return (
+        <WebRtcInfo
+          {...Util.props(state)}
+          card={true}
+          flipped={props.current.cardFlipped}
+          margin={[15, 25, 40, 25]}
+        />
+      );
+    });
+
+    dev.section('Properites', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => 'title')
+          .value((e) => e.state.debug.title)
+          .onClick((e) => e.change((d) => (local.title = Dev.toggle(d.debug, 'title')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label('background')
+          .enabled((e) => !Boolean(props.current.fullscreenVideo))
+          .value((e) => e.state.debug.bg)
+          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flipped`)
+          .value((e) => Boolean(e.state.props.flipped))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
+      );
+    });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:debug', async (e) => {
@@ -309,82 +438,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       );
     });
 
-    dev.hr(5, 20);
-  });
-
-  e.it('ui:card', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-
-    dev.title('Card');
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => {
-          const isVideo = e.state.debug.fullscreenVideo;
-          return `showing ${!!isVideo ? '"Video" (→ "Card")' : '"Card" (→ "Video")'}`;
-        })
-        .value((e) => Boolean(e.state.debug.fullscreenVideo))
-        .onClick((e) => {
-          e.change((d) => {
-            local.fullscreenVideo = Dev.toggle(d.debug, 'fullscreenVideo');
-            if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id;
-          });
-        }),
-    );
-
-    dev.hr(-1, 5);
-
-    dev.section((dev) => {
-      dev.row((e) => {
-        if (e.state.debug.fullscreenVideo) return null;
-        const props = Util.props(state);
-        return (
-          <PropList.FieldSelector
-            title={[Pkg.name, 'Card Fields']}
-            style={{ Margin: [20, 50, 10, 50] }}
-            all={WebRtcInfo.FIELDS}
-            selected={props.fields ?? WebRtcInfo.DEFAULTS.fields}
-            onClick={(ev) => {
-              const fields = ev.next as WebRtcInfoProps['fields'];
-              dev.change((d) => (d.props.fields = fields));
-              local.fields = fields?.length === 0 ? undefined : fields;
-            }}
-          />
-        );
-      });
-    });
-
-    dev.row((e) => {
-      if (!e.state.debug.fullscreenVideo) return null;
-      return <WebRtcInfo {...Util.props(state)} card={true} margin={[15, 25, 40, 25]} />;
-    });
-
-    dev.section('Properites', (dev) => {
-      dev.boolean((btn) =>
-        btn
-          .label((e) => 'title')
-          .value((e) => e.state.debug.title)
-          .onClick((e) => e.change((d) => (local.title = Dev.toggle(d.debug, 'title')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label('background')
-          .enabled((e) => !Boolean(e.state.debug.fullscreenVideo))
-          .value((e) => e.state.debug.bg)
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `flipped`)
-          .value((e) => Boolean(e.state.props.flipped))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
-      );
-    });
+    // dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {
@@ -406,14 +460,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         [`Peers:Self(${total})`]: self,
         'Peers:Remote': remotes,
         'State:root': sharedState?.current,
-        'State::props': props.current,
-        'State::peers': peers,
+        'State:(lens):props': props.current,
+        'State:(lens):peers': peers,
       };
       return (
         <Dev.Object
           name={'WebRtc.Info'}
           data={data}
-          expand={{ level: 1, paths: ['$.State::peers'] }}
+          expand={{ level: 1, paths: ['$.State:::peers'] }}
         />
       );
     });
