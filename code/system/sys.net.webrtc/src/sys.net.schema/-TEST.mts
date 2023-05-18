@@ -1,7 +1,7 @@
-import { Crdt, Dev, expect } from '../../test.ui';
-import { NetworkSchema } from '../Schema.mjs';
+import { Crdt, Dev, expect } from '../test.ui';
+import { NetworkSchema } from './Schema.mjs';
 
-import type { DocShared } from '../Schema.mjs';
+import type { DocShared } from './Schema.mjs';
 
 export default Dev.describe('Network Schema', (e) => {
   e.it('NetworkSchema.initial', (e) => {
@@ -28,7 +28,7 @@ export default Dev.describe('Network Schema', (e) => {
   });
 
   e.it('NetworkSchema.doc ← initial Document<T> (schema) from encoded byte-array', async (e) => {
-    const { bytes: initialState } = await import('../Schema.bytes.mjs');
+    const { bytes: initialState } = await import('./Schema.bytes.mjs');
     const doc = Crdt.Doc.ref<DocShared>('doc-id', initialState);
     expect(doc.current).to.eql(NetworkSchema.initial.doc);
 
