@@ -31,6 +31,7 @@ const initial: T = {
   props: {},
   debug: { bg: true, title: false },
 };
+type P = { count: number };
 
 type LocalStore = T['debug'] & { fields?: t.WebRtcInfoField[] };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
@@ -46,6 +47,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
   const events = controller.events();
+  const props = controller.state.props<P>('dev.ui', { count: 0 });
   const remotes: t.TDevRemote[] = [];
 
   const Util = {
@@ -228,10 +230,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           btn
             .label(label)
             .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => {
-              controller.state.doc.change((d) => (d.count += by));
-              dev.redraw();
-            }),
+            .onClick((e) => props.change((d) => (d.count += by))),
         );
       };
       count('increment →', 1);
@@ -380,14 +379,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         props: Util.props(state),
         [`Peers:Self(${total})`]: self,
         'Peers:Remote': remotes,
-        'State:Shared': sharedState?.current,
-        'State:Shared:peers': peers,
+        'State:root': sharedState?.current,
+        'State::props': props.current,
+        'State::peers': peers,
       };
       return (
         <Dev.Object
           name={'WebRtc.Info'}
           data={data}
-          expand={{ level: 1, paths: ['$.State:Shared:peers'] }}
+          expand={{ level: 1, paths: ['$.State::peers'] }}
         />
       );
     });
