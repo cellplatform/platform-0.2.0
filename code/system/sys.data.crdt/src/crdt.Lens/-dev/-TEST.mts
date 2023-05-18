@@ -1,4 +1,4 @@
-import { Crdt, expect, t, Test, toObject } from '../../test.ui';
+import { Crdt, expect, t, Test } from '../../test.ui';
 
 import { CrdtLens } from '..';
 

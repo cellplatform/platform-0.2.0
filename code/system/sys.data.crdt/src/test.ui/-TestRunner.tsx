@@ -1,11 +1,9 @@
-import { Pkg, Dev, t, Time } from '../test.ui';
+import { Dev, Time, t } from '../test.ui';
 
 type T = {
   testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
 };
-const initial: T = {
-  testrunner: {},
-};
+const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
   e.it('init', async (e) => {
