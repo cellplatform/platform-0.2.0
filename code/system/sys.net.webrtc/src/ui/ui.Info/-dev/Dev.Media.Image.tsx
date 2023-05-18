@@ -12,20 +12,24 @@ export const DevMediaImage: React.FC<DevMediaImageProps> = (props) => {
   if (!url) return null;
   if (!Wrangle.isVisible(current)) return null;
 
+  const fit = current.imageFit ?? 'cover';
+  const isContain = fit === 'contain';
+
   /**
    * [Render]
    */
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.alpha(COLORS.WHITE, 0.7),
+      backgroundColor: Color.alpha(COLORS.WHITE, 0.8),
       backdropFilter: `blur(5px)`,
     }),
     img: css({
-      Absolute: 0,
+      Absolute: isContain ? 50 : 0,
       backgroundImage: `url(${url})`,
-      backgroundSize: 'cover',
+      backgroundSize: fit,
       backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
     }),
   };
 
@@ -46,7 +50,7 @@ const Wrangle = {
   },
 
   isVisible(props: t.TDevSharedProps) {
-    const { showImage = true } = props;
+    const { imageVisible: showImage = true } = props;
     return showImage;
   },
 };

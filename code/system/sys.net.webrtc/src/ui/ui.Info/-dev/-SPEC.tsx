@@ -37,8 +37,9 @@ const initial: T = {
 type LocalStore = T['debug'] & {
   fullscreenVideo?: boolean;
   showRight?: boolean;
-  imageUrl?: string;
-  showImage?: boolean;
+  imageUrl?: t.TDevSharedProps['imageUrl'];
+  imageVisible?: t.TDevSharedProps['imageVisible'];
+  imageFit?: t.TDevSharedProps['imageFit'];
   cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
 };
@@ -50,7 +51,8 @@ const local = localstore.object({
   fullscreenVideo: false,
   showRight: true,
   imageUrl: '',
-  showImage: true,
+  imageVisible: true,
+  imageFit: 'cover',
   cardFlipped: false,
   fields: WebRtcInfo.DEFAULTS.fields,
 });
@@ -67,7 +69,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     showRight: true,
     fullscreenVideo: local.fullscreenVideo,
     imageUrl: local.imageUrl ?? '',
-    showImage: local.showImage,
+    imageVisible: local.imageVisible,
+    imageFit: local.imageFit,
     cardFlipped: local.cardFlipped,
     fields: local.fields,
   });
@@ -121,9 +124,13 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       rx.distinctUntilChanged((prev, next) => prev === next),
     ).subscribe((value) => (local.imageUrl = value));
     props.$.pipe(
-      rx.map((e) => e.lens.showImage),
+      rx.map((e) => e.lens.imageVisible),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.showImage = value));
+    ).subscribe((value) => (local.imageVisible = value));
+    props.$.pipe(
+      rx.map((e) => e.lens.imageFit),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe((value) => (local.imageFit = value));
     props.$.pipe(
       rx.map((e) => e.lens.fields),
       rx.distinctUntilChanged((prev, next) => prev === next),
@@ -245,26 +252,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         .onClick((e) => props.change((d) => Dev.toggle(d, 'cardFlipped'))),
     );
 
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `show image`)
-        .value((e) => Boolean(props.current.showImage))
-        .enabled((e) => Boolean(props.current.fullscreenVideo))
-        .onClick((e) => props.change((d) => Dev.toggle(d, 'showImage'))),
-    );
-
-    dev.textbox((txt) =>
-      txt
-        .margin([10, 0, 0, 0])
-        .label((e) => 'image url')
-        .placeholder('https://...')
-        .value((e) => props.current.imageUrl ?? '')
-        .onChange((e) => {
-          props.change((d) => (d.imageUrl = e.to.value));
-        })
-        .onEnter((e) => {}),
-    );
-
     dev.section((dev) => {
       dev.row((e) => {
         if (props.current.fullscreenVideo) return null;
@@ -296,6 +283,42 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         />
       );
     });
+
+    dev.section('Image', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .margin([5, 0, 10, 0])
+          .placeholder('https://...')
+          .value((e) => props.current.imageUrl ?? '')
+          .onChange((e) => {
+            props.change((d) => (d.imageUrl = e.to.value));
+          })
+          .onEnter((e) => {}),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `visible`)
+          .value((e) => Boolean(props.current.imageVisible))
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'imageVisible'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `${props.current.imageFit === 'cover' ? 'cover' : 'contained'}`)
+          .value((e) => Boolean(props.current.imageFit === 'cover'))
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => {
+            props.change((d) => {
+              const next = d.imageFit === 'cover' ? 'contain' : 'cover';
+              d.imageFit = next;
+            });
+          }),
+      );
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Properites', (dev) => {
       dev.boolean((btn) =>

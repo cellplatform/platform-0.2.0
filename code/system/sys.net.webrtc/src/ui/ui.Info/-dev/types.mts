@@ -12,10 +12,11 @@ export type TDevSharedProps = {
   count: number;
   showRight?: boolean;
   fullscreenVideo?: boolean;
-  imageUrl?: string;
-  showImage?: boolean;
   cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
+  imageUrl?: string;
+  imageVisible?: boolean;
+  imageFit?: 'cover' | 'contain';
 };
 
 export type TDevSharedPropsLens = t.WebRtcStateLens<TDevSharedProps>;

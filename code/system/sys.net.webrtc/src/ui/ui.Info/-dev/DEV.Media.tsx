@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, MediaStream, Button } from './common';
+import { useState } from 'react';
 import { DevMediaImage } from './Dev.Media.Image';
+import { Button, COLORS, Color, MediaStream, css, t } from './common';
 
 export type DevMediaProps = {
   self: t.Peer;
@@ -72,8 +72,8 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {!elVideo && elEmpty}
       {elVideo}
-      <div {...styles.thumbnails}>{elThumbnails}</div>
       {elImage}
+      <div {...styles.thumbnails}>{elThumbnails}</div>
     </div>
   );
 };
