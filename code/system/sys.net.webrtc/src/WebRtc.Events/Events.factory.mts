@@ -4,7 +4,7 @@ import { WebRtcEvents } from './Events.mjs';
 /**
  * Creat a new events API wrapper.
  */
-export function events(
+export function clientFactory(
   bus: t.EventBus<any>,
   peer: t.PeerId | t.Peer,
   options: { dispose$?: t.Observable<any> } = {},

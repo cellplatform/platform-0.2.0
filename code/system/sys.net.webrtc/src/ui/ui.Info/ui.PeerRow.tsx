@@ -5,7 +5,7 @@ import { usePeerRowController } from './usePeerRowController.mjs';
 
 export type PeerRowProps = {
   peerid: t.PeerId;
-  events?: t.WebRtcEvents;
+  client?: t.WebRtcEvents;
   media?: t.PeerMediaConnection[];
   isSelf?: boolean;
   isSelected?: boolean;
@@ -17,11 +17,11 @@ export type PeerRowProps = {
 };
 
 export const PeerRow: React.FC<PeerRowProps> = (props) => {
-  const { events, peerid, isSelected, isSelf, isOverParent, media = [] } = props;
+  const { client, peerid, isSelected, isSelf, isOverParent, media = [] } = props;
 
   const ctrlr = usePeerRowController({
     peerid,
-    events,
+    client,
     isSelf,
     enabled: props.useController ?? false,
   });

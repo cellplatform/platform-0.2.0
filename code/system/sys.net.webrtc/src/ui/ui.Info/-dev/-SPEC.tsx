@@ -62,7 +62,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const remotes: t.TDevRemote[] = [];
 
   const controller = WebRtc.controller(self);
-  const events = controller.events();
+  const client = controller.client();
   const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
     // showRight: local.showRight,
@@ -84,7 +84,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return {
         ...state.current.props,
         fields,
-        events,
+        client,
         title: debug.title ? 'Network Cell' : undefined,
         data: Util.data(state),
       };
@@ -212,7 +212,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
           onConnectRequest={async (e) => {
             await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
-            await events.connect.fire(e.remote);
+            await client.connect.fire(e.remote);
             await state.change((d) => (d.debug.addingConnection = undefined));
           }}
         />
@@ -367,10 +367,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             // Create a new peer (sample remote).
             const peer = await TestNetwork.peer();
             const controller = WebRtc.controller(peer);
+            const client = controller.client();
             const name = `remote-${remotes.length + 1}`;
-            remotes.push({ name, peer, controller, events: controller.events() });
+            remotes.push({ name, peer, controller, client });
 
-            await events.connect.fire(peer.id);
+            await client.connect.fire(peer.id);
             e.change((d) => (d.debug.addingConnection = undefined));
           }),
       );
@@ -390,7 +391,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             </div>,
           )
           .onClick(async (e) => {
-            const info = await events.info.get();
+            const info = await client.info.get();
 
             info?.state.change((d) => {
               WebRtc.Controller.Mutate.updateLocalMetadata(d.network, self.id);

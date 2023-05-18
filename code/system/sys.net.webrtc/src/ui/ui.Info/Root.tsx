@@ -11,7 +11,7 @@ import { FieldStateShared } from './fields/State.Shared';
 import { useInfo } from './useInfo.mjs';
 
 export type WebRtcInfoProps = {
-  events?: t.WebRtcEvents;
+  client?: t.WebRtcEvents;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.WebRtcInfoField[];
@@ -26,9 +26,9 @@ export type WebRtcInfoProps = {
  * Component
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
-  const { events, fields = DEFAULTS.fields, data = {} } = props;
+  const { client, fields = DEFAULTS.fields, data = {} } = props;
 
-  const info = useInfo(events);
+  const info = useInfo(client);
   const [isOver, setOver] = useState(false);
   const over = (isOver: boolean) => () => setOver(isOver);
 
@@ -37,7 +37,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
     .field('Module.Verify', () => FieldModuleVerify({ fields, data }))
     .field('Self.Id', () => FieldSelf({ fields, data, info }))
     .field('Group', () => FieldGroup({ fields, data, info }))
-    .field('Group.Peers', () => FieldGroupPeers({ fields, data, info, events, isOver }))
+    .field('Group.Peers', () => FieldGroupPeers({ fields, data, info, client, isOver }))
     .field('State.Shared', () => FieldStateShared({ fields, data, info }))
     .field('Peer', () => FieldPeer({ fields, data, info }))
     .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))

@@ -70,7 +70,7 @@ export default Dev.describe('PeerCard', async (e) => {
   const rootfs = (await Filesystem.client({ bus, dispose$ })).fs;
   const docs = await SpecDocs({ rootfs, dispose$ });
   let controller: t.WebRtcController;
-  let events: t.WebRtcEvents;
+  let client: t.WebRtcEvents;
 
   e.it('init:keyboard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
@@ -211,7 +211,7 @@ export default Dev.describe('PeerCard', async (e) => {
           onMuteClick={toggleMute}
           onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
           onConnectRequest={(e) => {
-            if (self) events?.connect.fire(e.remote);
+            if (self) client?.connect.fire(e.remote);
           }}
         />
       );
@@ -266,7 +266,7 @@ export default Dev.describe('PeerCard', async (e) => {
           state.change((d) => (d.spinning = false));
         },
       });
-      events = controller.events();
+      client = controller.client();
 
       /**
        * TODO 🐷
@@ -292,7 +292,7 @@ export default Dev.describe('PeerCard', async (e) => {
       return (
         <WebRtcInfo
           fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
-          events={events}
+          client={client}
         />
       );
     });
@@ -374,7 +374,7 @@ export default Dev.describe('PeerCard', async (e) => {
       dev.row(async (e) => {
         const debug = e.state.debug;
         // const isSaving = debug.persistSharedDoc;
-        const info = await events.info.get();
+        const info = await client.info.get();
         const sync = (info?.syncers ?? [])[0];
         return (
           <FileCard
@@ -453,7 +453,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.button('prune (dead peers)', async (e) => {
         // WebRtc.Util.prune;
-        const res = await events.prune.fire();
+        const res = await client.prune.fire();
         console.info('prune:', res);
         //
       });

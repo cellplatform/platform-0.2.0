@@ -1,14 +1,14 @@
-import { Crdt, t } from '../common';
+import { t } from '../common';
 import { PeerRow } from '../ui.PeerRow';
 
 export function FieldGroupList(args: {
   fields: t.WebRtcInfoField[];
   data: t.WebRtcInfoData;
   info?: t.WebRtcInfo;
-  events?: t.WebRtcEvents;
+  client?: t.WebRtcEvents;
   isOver?: boolean;
 }): t.PropListItem[] {
-  const { info, events, data } = args;
+  const { info, client, data } = args;
   const isOverParent = args.isOver;
   const peer = info?.peer;
   const state = info?.state;
@@ -37,7 +37,7 @@ export function FieldGroupList(args: {
     const value = (
       <PeerRow
         peerid={data.id}
-        events={events}
+        client={client}
         media={connections?.media}
         isSelf={isSelf}
         isSelected={isSelected}

@@ -1,23 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Button, Icons, PropList, Value, css, rx, t } from './common';
 
-export type TDevRemote = {
-  name: string;
-  peer: t.Peer;
-  controller: t.WebRtcController;
-  events: t.WebRtcEvents;
-};
-
 /**
  * List Item (Row)
  */
-export type RowProps = {
+export type DevRowProps = {
   controller: t.WebRtcController;
-  remote: TDevRemote;
+  remote: t.TDevRemote;
   style?: t.CssValue;
 };
 
-export const Row: React.FC<RowProps> = (props) => {
+export const DevRow: React.FC<DevRowProps> = (props) => {
   const { controller, remote } = props;
   const network = controller.state.current.network;
   const peer = remote.peer;
@@ -32,9 +25,9 @@ export const Row: React.FC<RowProps> = (props) => {
 
   const reconnect = async () => {
     setConnecting(true);
-    const events = controller.events();
-    await events.connect.fire(remote.peer.id);
-    events.dispose();
+    const client = controller.client();
+    await client.connect.fire(remote.peer.id);
+    client.dispose();
     setConnecting(false);
   };
 

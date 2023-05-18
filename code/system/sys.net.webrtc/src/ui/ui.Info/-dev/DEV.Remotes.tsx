@@ -1,4 +1,4 @@
-import { Row } from './DEV.Remotes.Row';
+import { DevRow } from './DEV.Remotes.Row';
 import { css, t } from './common';
 
 export type DevRemotesProps = {
@@ -22,8 +22,7 @@ export const DevRemotes: React.FC<DevRemotesProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {remotes.map((remote) => {
-        const key = remote.peer.id;
-        return <Row key={key} controller={self} remote={remote} />;
+        return <DevRow key={remote.peer.id} controller={self} remote={remote} />;
       })}
     </div>
   );

@@ -5,7 +5,7 @@ export type TDevRemote = {
   name: string;
   peer: t.Peer;
   controller: t.WebRtcController;
-  events: t.WebRtcEvents;
+  client: t.WebRtcEvents;
 };
 
 export type TDevSharedProps = {

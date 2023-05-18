@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { rx, t } from './common';
 
-export function useInfo(events?: t.WebRtcEvents) {
+export function useInfo(client?: t.WebRtcEvents) {
   const [info, setInfo] = useState<t.WebRtcInfo | undefined>(undefined);
 
   /**
@@ -10,15 +10,15 @@ export function useInfo(events?: t.WebRtcEvents) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
-    if (events) {
-      const update = async () => setInfo(await events.info.get());
-      const changed$ = events.connections.changed.$.pipe(rx.takeUntil(dispose$));
+    if (client) {
+      const update = async () => setInfo(await client.info.get());
+      const changed$ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
       changed$.pipe(rx.debounceTime(300)).subscribe(update);
       update();
     }
 
     return dispose;
-  }, [events?.instance.id]);
+  }, [client?.instance.id]);
 
   /**
    * API.

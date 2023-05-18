@@ -1,2 +1,2 @@
 export { WebRtcEvents } from './Events.mjs';
-export { events } from './Events.factory.mjs';
+export { clientFactory } from './Events.factory.mjs';

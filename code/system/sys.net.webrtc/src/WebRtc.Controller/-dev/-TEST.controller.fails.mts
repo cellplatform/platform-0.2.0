@@ -13,14 +13,14 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
   const initial = WebRtc.NetworkSchema.initial.doc;
   const doc = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
   let controller: t.WebRtcController;
-  let events: t.WebRtcEvents;
+  let client: t.WebRtcEvents;
 
   e.it('setup peers: A ⇔ B (listen)', async (e) => {
     const [a, b] = await TestNetwork.peers(2, { getStream: true, dispose$ });
     peerA = a;
     peerB = b;
     controller = WebRtcController.listen(peerA, { doc, dispose$ });
-    events = controller.events();
+    client = controller.client();
   });
 
   e.it('connect peer: A → B', async (e) => {
@@ -28,11 +28,11 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
      * NOTE:
      *   This updated the shared-state {network.peers} via the controller.
      */
-    const res = await events.connect.fire(peerB.id);
+    const res = await client.connect.fire(peerB.id);
     expect(res.peer.local).to.eql(peerA.id);
     expect(res.peer.remote).to.eql(peerB.id);
 
-    const info = (await events.info.get())!;
+    const info = (await client.info.get())!;
     const network = info?.state.current.network!;
 
     expect(network.peers[peerA.id]).to.exist;
@@ -44,7 +44,7 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
     const remote = 'FOO-404';
 
     const errors: t.PeerError[] = [];
-    events.errors.peer$.subscribe((e) => errors.push(e));
+    client.errors.peer$.subscribe((e) => errors.push(e));
 
     /**
      * Adding peer to document (CRDT) initiates the
@@ -56,7 +56,7 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
     });
     expect(doc.current.network.peers[remote].initiatedBy).to.eql(self);
 
-    await rx.firstValueFrom(events.errors.peer$);
+    await rx.firstValueFrom(client.errors.peer$);
     expect(errors.length).to.eql(1);
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
 

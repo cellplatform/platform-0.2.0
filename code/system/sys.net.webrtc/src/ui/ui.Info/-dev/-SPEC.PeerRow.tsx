@@ -24,8 +24,8 @@ export default Dev.describe('PeerRow', async (e) => {
   const create = async () => {
     const peer = await TestNetwork.peer();
     const controller = WebRtc.controller(peer);
-    const events = controller.events();
-    return { peer, controller, events };
+    const client = controller.client();
+    return { peer, controller, client };
   };
 
   const [self, remote] = await Promise.all([create(), create()]);
@@ -37,7 +37,7 @@ export default Dev.describe('PeerRow', async (e) => {
       return {
         ...props,
         peerid: network.peer.id,
-        events: network.events,
+        client: network.client,
       };
     },
   };

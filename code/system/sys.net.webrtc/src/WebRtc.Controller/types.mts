@@ -2,7 +2,7 @@ import type { t } from '../common.t';
 
 export type WebRtcController = t.Lifecycle & {
   state: t.WebRtcState;
-  events(): t.WebRtcEvents;
+  client(): t.WebRtcEvents;
 };
 
 /**
