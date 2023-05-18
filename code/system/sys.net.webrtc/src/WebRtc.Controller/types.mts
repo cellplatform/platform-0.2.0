@@ -1,7 +1,7 @@
 import type { t } from '../common.t';
 
 export type WebRtcController = t.Lifecycle & {
-  state: t.NetworkDocSharedRef;
+  state: t.WebRtcState;
   events(): t.WebRtcEvents;
 };
 

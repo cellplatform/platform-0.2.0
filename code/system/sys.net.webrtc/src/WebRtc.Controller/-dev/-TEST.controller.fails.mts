@@ -5,15 +5,13 @@ import { pruneDeadPeers } from '../util.mjs';
 export default Dev.describe('Network Controller: Failure', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
-
   const Mutate = WebRtcController.Mutate;
-  const bus = rx.bus();
 
   let peerA: t.Peer;
   let peerB: t.Peer;
 
   const initial = WebRtc.NetworkSchema.initial.doc;
-  const state = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
+  const doc = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
   let controller: t.WebRtcController;
   let events: t.WebRtcEvents;
 
@@ -21,7 +19,7 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
     const [a, b] = await TestNetwork.peers(2, { getStream: true, dispose$ });
     peerA = a;
     peerB = b;
-    controller = WebRtcController.listen(peerA, { state, dispose$ });
+    controller = WebRtcController.listen(peerA, { doc, dispose$ });
     events = controller.events();
   });
 
@@ -52,18 +50,18 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
      * Adding peer to document (CRDT) initiates the
      * controller's connection sequence.
      */
-    state.change((d) => {
+    doc.change((d) => {
       const initiatedBy = self;
       Mutate.addPeer(d.network, self, remote, { initiatedBy });
     });
-    expect(state.current.network.peers[remote].initiatedBy).to.eql(self);
+    expect(doc.current.network.peers[remote].initiatedBy).to.eql(self);
 
     await rx.firstValueFrom(events.errors.peer$);
     expect(errors.length).to.eql(1);
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
 
     await Time.wait(10);
-    const doc = state.current;
+    const doc = doc.current;
     const p2 = doc.network.peers[remote];
     expect(p2.error).to.include(errors[0].message);
     expect(p2.error).to.include('[peer-unavailable]');
@@ -71,11 +69,11 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
 
   e.it('kill peer-B → auto removed from peer-A state doc', async (e) => {
     const remote = peerB.id;
-    expect(state.current.network.peers[remote]).to.exist;
+    expect(doc.current.network.peers[remote]).to.exist;
 
     peerB.dispose(); // Kill the peer.
     await Time.wait(500);
-    expect(state.current.network.peers[remote]).to.not.exist;
+    expect(doc.current.network.peers[remote]).to.not.exist;
   });
 
   e.it('prune dead peers', async (e) => {

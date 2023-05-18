@@ -256,7 +256,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
       const filedir = docs.shared.fs;
       controller = WebRtc.Controller.listen(self, {
-        state: doc,
+        doc,
         filedir,
         dispose$,
         onConnectStart(e) {
