@@ -8,4 +8,14 @@ export type TDevRemote = {
   events: t.WebRtcEvents;
 };
 
-export type TDevProps = { count: number; showRight?: boolean };
+export type TDevSharedProps = {
+  count: number;
+  showRight?: boolean;
+  fullscreenVideo?: boolean;
+  imageUrl?: string;
+  showImage?: boolean;
+  cardFlipped?: boolean;
+  fields?: t.WebRtcInfoField[];
+};
+
+export type TDevSharedPropsLens = t.WebRtcStateLens<TDevSharedProps>;
