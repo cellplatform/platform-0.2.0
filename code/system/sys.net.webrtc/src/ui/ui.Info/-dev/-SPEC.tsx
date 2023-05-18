@@ -1,16 +1,4 @@
-import {
-  Pkg,
-  Crdt,
-  css,
-  Dev,
-  Icons,
-  Keyboard,
-  MediaStream,
-  PropList,
-  t,
-  TestNetwork,
-  WebRtc,
-} from './common';
+import { Crdt, css, Dev, Icons, Keyboard, Pkg, PropList, t, TestNetwork, WebRtc } from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
@@ -94,7 +82,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const state = await ctx.state<T>(initial);
 
     self.connections$.subscribe((e) => ctx.redraw());
-    controller.state.$.pipe().subscribe((e) => ctx.redraw());
+    controller.state.doc.$.pipe().subscribe((e) => ctx.redraw());
 
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -241,7 +229,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             .label(label)
             .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
             .onClick((e) => {
-              controller.state.change((d) => (d.count += by));
+              controller.state.doc.change((d) => (d.count += by));
               dev.redraw();
             }),
         );
@@ -280,8 +268,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
               console.groupEnd();
             };
 
-            log('local', controller.state);
-            remotes.forEach((remote) => log('remote', remote.controller.state));
+            log('local', controller.state.doc);
+            remotes.forEach((remote) => log('remote', remote.controller.state.doc));
             console.info('remotes', remotes);
           }),
       );
