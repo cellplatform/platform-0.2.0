@@ -61,8 +61,7 @@ export default Dev.describe('Network Controller: Failure', async (e) => {
     expect(errors[0].type === 'peer-unavailable').to.eql(true);
 
     await Time.wait(10);
-    const doc = doc.current;
-    const p2 = doc.network.peers[remote];
+    const p2 = doc.current.network.peers[remote];
     expect(p2.error).to.include(errors[0].message);
     expect(p2.error).to.include('[peer-unavailable]');
   });

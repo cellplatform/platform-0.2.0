@@ -202,9 +202,8 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(info1?.syncers).to.eql([]);
 
       await wait;
-      const doc = doc.current;
-      const p1 = doc.network.peers[self];
-      const p2 = doc.network.peers[remote];
+      const p1 = doc.current.network.peers[self];
+      const p2 = doc.current.network.peers[remote];
 
       expect(p1.initiatedBy).to.eql(self);
       expect(p2.initiatedBy).to.eql(self);
