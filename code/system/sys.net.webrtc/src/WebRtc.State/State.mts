@@ -13,6 +13,13 @@ export const WebRtcState = {
       doc,
 
       /**
+       * Current state.
+       */
+      get current() {
+        return doc.current;
+      },
+
+      /**
        * Retrieve a lens into a namespace on the {network.props} object.
        */
       props<T extends {}>(namespace: N, initial: T) {

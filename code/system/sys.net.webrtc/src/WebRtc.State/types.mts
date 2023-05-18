@@ -3,6 +3,7 @@ import type { t } from '../common.t';
 export type WebRtcState<N extends string = string> = {
   readonly kind: 'WebRtc:State';
   readonly doc: t.NetworkDocSharedRef;
+  readonly current: t.NetworkDocShared;
   props<T extends {}>(namespace: N, initial: T): t.WebRtcStateLens<T>;
 };
 
