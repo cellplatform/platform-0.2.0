@@ -47,6 +47,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   title?: t.PropListTitleInput;
   all?: F[];
   selected?: F[];
+  default?: F[];
   resettable?: boolean;
   showIndexes?: boolean;
   style?: t.CssValue;

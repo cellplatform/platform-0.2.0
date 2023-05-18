@@ -273,6 +273,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
             all={WebRtcInfo.FIELDS}
+            default={WebRtcInfo.DEFAULTS.fields}
             selected={props.current.fields}
             resettable={true}
             onClick={(ev) => {

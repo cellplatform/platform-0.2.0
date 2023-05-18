@@ -27,7 +27,7 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     props.onClick?.({
       action: 'Reset',
       previous: [...selected],
-      next: e.metaKey ? [] : undefined, // NB: force empty if meta-key, otherwise use defaults.
+      next: e.metaKey ? [] : props.default, // NB: force empty if meta-key, otherwise use defaults.
     });
   };
 
