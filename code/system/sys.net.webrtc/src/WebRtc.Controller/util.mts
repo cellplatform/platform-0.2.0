@@ -1,5 +1,5 @@
 import { t, WebRtcUtils } from './common';
-import { Mutate } from './State.Mutate.mjs';
+import { Mutate } from '../WebRtc.State/State.Mutate.mjs';
 
 /**
  * Examine the health of each peer and disconnect if required.

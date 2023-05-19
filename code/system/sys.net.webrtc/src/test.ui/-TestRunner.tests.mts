@@ -8,8 +8,8 @@ export const TESTS = {
       import('../WebRtc.Controller/-dev/-TEST.controller.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs'),
       import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs'),
-      import('../WebRtc.Controller/-dev/-TEST.controller.mutate.mjs'),
-      import('../WebRtc.State/-TEST.mjs'),
+      import('../WebRtc.State/-dev/-TEST.mjs'),
+      import('../WebRtc.State/-dev/-TEST.mutate.mjs'),
       import('../sys.net.schema/-TEST.mjs'),
 
       import('../WebRtc/-dev/-TEST.sync.mjs'),

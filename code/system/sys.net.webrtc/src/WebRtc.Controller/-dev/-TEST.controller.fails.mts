@@ -5,7 +5,7 @@ import { pruneDeadPeers } from '../util.mjs';
 export default Dev.describe('Network Controller: Failure', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
-  const Mutate = WebRtcController.Mutate;
+  const Mutate = WebRtc.State.Mutate;
 
   let peerA: t.Peer;
   let peerB: t.Peer;

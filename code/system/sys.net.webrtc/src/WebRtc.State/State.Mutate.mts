@@ -1,4 +1,4 @@
-import { t, UserAgent, R } from './common';
+import { UserAgent, t } from './common';
 
 /**
  * Helpers for mutating the state data.

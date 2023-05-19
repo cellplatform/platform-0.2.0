@@ -1,9 +1,12 @@
 import { Crdt, t } from './common';
+import { Mutate } from './State.Mutate.mjs';
 
 /**
  * Tools for working with the WebRTC shared network state.
  */
 export const WebRtcState = {
+  Mutate,
+
   /**
    * Initialize a new {props} lens.
    */
@@ -34,4 +37,4 @@ export const WebRtcState = {
 
     return api;
   },
-};
+} as const;

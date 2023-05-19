@@ -394,8 +394,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             const info = await client.info.get();
 
             info?.state.change((d) => {
-              WebRtc.Controller.Mutate.updateLocalMetadata(d.network, self.id);
-              //
+              WebRtc.State.Mutate.updateLocalMetadata(d.network, self.id);
             });
 
             const wait = info?.syncers.map(({ syncer }) => syncer.update().complete) ?? [];

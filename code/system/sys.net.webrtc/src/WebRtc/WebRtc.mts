@@ -7,7 +7,7 @@ import { peer } from './WebRtc.peer.mjs';
 import { Media } from '../WebRtc.Media';
 import { WebRtcEvents } from '../WebRtc.Events';
 import { NetworkSchema } from '../sys.net.schema';
-import { WebRtcState } from '../WebRtc.State';
+import { WebRtcState as State } from '../WebRtc.State';
 
 /**
  * Library for working with WebRTC peer-to-peer connections.
@@ -15,7 +15,6 @@ import { WebRtcState } from '../WebRtc.State';
 export const WebRtc = {
   peer,
   client: WebRtcEvents.client,
-  state: WebRtcState.init,
 
   NetworkSchema,
   Media,
@@ -23,4 +22,7 @@ export const WebRtc = {
 
   Controller,
   controller: Controller.listen,
+
+  State,
+  state: State.init,
 };

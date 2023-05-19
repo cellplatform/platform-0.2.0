@@ -1,9 +1,9 @@
-import { WebRtcController } from '..';
-import { UserAgent, Dev, expect, slug, t } from '../../test.ui';
+import { Dev, UserAgent, expect, slug, t } from '../../test.ui';
+import { WebRtcState } from '../State.mjs';
 
-export default Dev.describe('Network Controller: Mutate (State)', (e) => {
+export default Dev.describe('State.Mutate', (e) => {
   e.timeout(1000 * 15);
-  const Mutate = WebRtcController.Mutate;
+  const Mutate = WebRtcState.Mutate;
 
   /**
    * Mutation helpers.

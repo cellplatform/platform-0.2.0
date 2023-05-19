@@ -17,7 +17,7 @@ export default Dev.describe('Network Controller', async (e) => {
   e.timeout(1000 * 50);
   const { dispose, dispose$ } = rx.disposable();
 
-  const Mutate = WebRtcController.Mutate;
+  const Mutate = WebRtc.State.Mutate;
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus, dispose$ })).fs;
   const filedir = fs.dir('dev.test.WebRtc.Controller');
