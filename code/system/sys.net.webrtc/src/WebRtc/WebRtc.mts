@@ -25,4 +25,4 @@ export const WebRtc = {
 
   State,
   state: State.init,
-};
+} as const;

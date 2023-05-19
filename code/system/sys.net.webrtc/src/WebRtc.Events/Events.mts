@@ -19,4 +19,4 @@ export const WebRtcEvents = {
       return WebRtcEvents.client(bus, peer, lifecycle.dispose$);
     };
   },
-};
+} as const;

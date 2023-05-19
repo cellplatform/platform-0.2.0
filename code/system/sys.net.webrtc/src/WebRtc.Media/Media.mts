@@ -66,7 +66,7 @@ export const Media = {
 
     return api;
   },
-};
+} as const;
 
 /**
  * Helpers
