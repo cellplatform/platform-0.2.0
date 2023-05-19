@@ -498,7 +498,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         props: Util.props(state),
         [`Peers:Self(${total})`]: self,
         'Peers:Remote': remotes,
-        'State:root': sharedState?.current,
+        State: sharedState?.current,
         'State:(lens):props': props.current,
         'State:(lens):peers': peers,
       };
