@@ -73,7 +73,7 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {!elVideo && elEmpty}
       {elVideo}
-      <DevMediaImage bus={bus} shared={props.shared} style={styles.fill} />;
+      <DevMediaImage bus={bus} shared={props.shared} style={styles.fill} />
       <DevPlayer bus={bus} shared={props.shared} style={styles.player} />
       <div {...styles.thumbnails}>{elThumbnails}</div>
     </div>
