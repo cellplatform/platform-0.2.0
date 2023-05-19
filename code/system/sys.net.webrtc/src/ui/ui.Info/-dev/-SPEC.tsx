@@ -53,14 +53,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const client = controller.client();
   const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
-    // showRight: local.showRight,
+    fields: local.fields,
     showRight: true,
+    // showRight: local.showRight,
     fullscreenVideo: local.fullscreenVideo,
+
     imageUrl: local.imageUrl ?? '',
     imageVisible: local.imageVisible,
     imageFit: local.imageFit,
     cardFlipped: local.cardFlipped,
-    fields: local.fields,
   });
 
   DevKeyboard(props);
@@ -104,11 +105,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     controller.state.doc.$.pipe().subscribe((e) => ctx.redraw());
 
     function persistToLocalOnChange(
-      propsField: keyof t.TDevSharedProps,
+      propField: keyof t.TDevSharedProps,
       localField: keyof LocalStore,
     ) {
       props.$.pipe(
-        rx.map((e) => e.lens[propsField]),
+        rx.map((e) => e.lens[propField]),
         rx.distinctUntilChanged((prev, next) => prev === next),
       ).subscribe((value) => {
         (local[localField] as any) = value;
