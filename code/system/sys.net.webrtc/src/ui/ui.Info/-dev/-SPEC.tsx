@@ -115,26 +115,22 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     self.connections$.subscribe((e) => ctx.redraw());
     controller.state.doc.$.pipe().subscribe((e) => ctx.redraw());
 
-    props.$.pipe(
-      rx.map((e) => e.lens.showRight),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.showRight = value));
-    props.$.pipe(
-      rx.map((e) => e.lens.imageUrl),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.imageUrl = value));
-    props.$.pipe(
-      rx.map((e) => e.lens.imageVisible),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.imageVisible = value));
-    props.$.pipe(
-      rx.map((e) => e.lens.imageFit),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.imageFit = value));
-    props.$.pipe(
-      rx.map((e) => e.lens.fields),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((value) => (local.fields = value));
+    function persistToLocalOnChange(
+      propsField: keyof t.TDevSharedProps,
+      localField: keyof LocalStore,
+    ) {
+      props.$.pipe(
+        rx.map((e) => e.lens[propsField]),
+        rx.distinctUntilChanged((prev, next) => prev === next),
+      ).subscribe((value) => {
+        (local[localField] as any) = value;
+      });
+    }
+    persistToLocalOnChange('showRight', 'showRight');
+    persistToLocalOnChange('imageUrl', 'imageUrl');
+    persistToLocalOnChange('imageVisible', 'imageVisible');
+    persistToLocalOnChange('imageFit', 'imageFit');
+    persistToLocalOnChange('fields', 'fields');
 
     await state.change((d) => {
       d.props.fields = local.fields;
