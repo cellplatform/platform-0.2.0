@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { DevMediaImage } from './Dev.Media.Image';
 import { Button, COLORS, Color, MediaStream, css, t } from './common';
+import { DevPlayer } from './Dev.Media.Player';
 
 export type DevMediaProps = {
+  bus: t.EventBus<any>;
   self: t.Peer;
   shared: t.TDevSharedPropsLens;
   peerid?: t.PeerId;
@@ -10,7 +12,7 @@ export type DevMediaProps = {
 };
 
 export const DevMedia: React.FC<DevMediaProps> = (props) => {
-  const { self, peerid } = props;
+  const { self, peerid, bus } = props;
   const isSelf = peerid === self.id;
   const shared = props.shared.current;
 
@@ -44,6 +46,7 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
       borderRadius: 5,
     }),
     fill: css({ Absolute: 0 }),
+    player: css({ Absolute: [null, null, 20, 20] }),
   };
 
   const elEmpty = <div {...styles.empty}>No media to display.</div>;
@@ -66,13 +69,12 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
     <MediaStream.Video stream={stream} muted={true} style={styles.selected} />
   );
 
-  const elImage = shared.imageUrl && <DevMediaImage shared={props.shared} style={styles.fill} />;
-
   return (
     <div {...css(styles.base, props.style)}>
       {!elVideo && elEmpty}
       {elVideo}
-      {elImage}
+      <DevMediaImage bus={bus} shared={props.shared} style={styles.fill} />;
+      <DevPlayer bus={bus} shared={props.shared} style={styles.player} />
       <div {...styles.thumbnails}>{elThumbnails}</div>
     </div>
   );

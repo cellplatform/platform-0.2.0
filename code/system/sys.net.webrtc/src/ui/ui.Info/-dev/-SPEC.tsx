@@ -1,4 +1,4 @@
-import { Crdt, css, Dev, Icons, Pkg, PropList, rx, t, TestNetwork, WebRtc } from './common';
+import { Crdt, css, Dev, Icons, Pkg, PropList, rx, t, TestNetwork, Vimeo, WebRtc } from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
@@ -25,29 +25,38 @@ const initial: T = {
 type LocalStore = T['debug'] & {
   fullscreenVideo?: boolean;
   showRight?: boolean;
+  cardFlipped?: boolean;
+  fields?: t.WebRtcInfoField[];
   imageUrl?: t.TDevSharedProps['imageUrl'];
   imageVisible?: t.TDevSharedProps['imageVisible'];
   imageFit?: t.TDevSharedProps['imageFit'];
-  cardFlipped?: boolean;
-  fields?: t.WebRtcInfoField[];
+  vimeoId?: t.TDevSharedProps['vimeoId'];
+  vimeoVisible?: t.TDevSharedProps['vimeoVisible'];
+  vimeoMuted?: t.TDevSharedProps['vimeoMuted'];
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   bg: initial.debug.bg,
   title: initial.debug.title,
   useGroupController: true,
+  fields: WebRtcInfo.DEFAULTS.fields,
   fullscreenVideo: false,
   showRight: true,
   imageUrl: '',
   imageVisible: true,
   imageFit: 'cover',
   cardFlipped: false,
-  fields: WebRtcInfo.DEFAULTS.fields,
+  vimeoId: '',
+  vimeoVisible: true,
+  vimeoMuted: true,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
+  const bus = rx.bus();
   const self = await TestNetwork.peer();
   const remotes: t.TDevRemote[] = [];
+
+  const vimeo = Vimeo.Events({ instance: { bus, id: 'foo' } });
 
   const controller = WebRtc.controller(self);
   const client = controller.client();
@@ -57,11 +66,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     showRight: true,
     // showRight: local.showRight,
     fullscreenVideo: local.fullscreenVideo,
+    cardFlipped: local.cardFlipped,
 
     imageUrl: local.imageUrl ?? '',
     imageVisible: local.imageVisible,
     imageFit: local.imageFit,
-    cardFlipped: local.cardFlipped,
+
+    vimeoId: local.vimeoId,
+    vimeoVisible: local.vimeoVisible,
+    vimeoMuted: local.vimeoMuted,
   });
 
   DevKeyboard(props);
@@ -111,15 +124,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       props.$.pipe(
         rx.map((e) => e.lens[propField]),
         rx.distinctUntilChanged((prev, next) => prev === next),
-      ).subscribe((value) => {
-        (local[localField] as any) = value;
-      });
+      ).subscribe((value) => ((local[localField] as any) = value));
     }
+    persistToLocalOnChange('fields', 'fields');
     persistToLocalOnChange('showRight', 'showRight');
     persistToLocalOnChange('imageUrl', 'imageUrl');
     persistToLocalOnChange('imageVisible', 'imageVisible');
     persistToLocalOnChange('imageFit', 'imageFit');
-    persistToLocalOnChange('fields', 'fields');
+    persistToLocalOnChange('vimeoId', 'vimeoId');
+    persistToLocalOnChange('vimeoVisible', 'vimeoVisible');
+    persistToLocalOnChange('vimeoMuted', 'vimeoMuted');
 
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -151,7 +165,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const renderFullscreenVideo = (e: { state: T }) => {
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-      return <DevMedia self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
+      return <DevMedia bus={bus} self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
     };
 
     /**
@@ -290,6 +304,42 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             });
           }),
       );
+    });
+
+    dev.hr(-1, 15);
+
+    dev.section('Video', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .margin([5, 0, 10, 0])
+          .placeholder('vimeo id')
+          .value((e) => props.current.vimeoId ?? '')
+          .onChange((e) => {
+            props.change((d) => (d.vimeoId = e.to.value));
+          })
+          .onEnter((e) => {}),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `visible`)
+          .value((e) => Boolean(props.current.vimeoVisible))
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'vimeoVisible'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `muted`)
+          .value((e) => Boolean(props.current.vimeoMuted))
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'vimeoMuted'))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.button('play', (e) => props.change((d) => (d.vimeoPlaying = true)));
+      dev.button('pause', (e) => props.change((d) => (d.vimeoPlaying = false)));
     });
 
     dev.hr(5, 20);

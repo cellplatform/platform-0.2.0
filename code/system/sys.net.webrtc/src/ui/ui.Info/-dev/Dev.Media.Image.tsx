@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, t, rx, Path } from './common';
 
 export type DevMediaImageProps = {
+  bus: t.EventBus<any>;
   shared: t.TDevSharedPropsLens;
   style?: t.CssValue;
 };

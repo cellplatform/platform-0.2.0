@@ -17,6 +17,10 @@ export type TDevSharedProps = {
   imageUrl?: string;
   imageVisible?: boolean;
   imageFit?: 'cover' | 'contain';
+  vimeoId?: string;
+  vimeoVisible?: boolean;
+  vimeoPlaying?: boolean;
+  vimeoMuted?: boolean;
 };
 
 export type TDevSharedPropsLens = t.WebRtcStateLens<TDevSharedProps>;
