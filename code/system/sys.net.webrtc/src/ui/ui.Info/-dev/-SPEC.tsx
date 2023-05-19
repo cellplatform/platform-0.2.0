@@ -1,16 +1,4 @@
-import {
-  Crdt,
-  css,
-  Dev,
-  Icons,
-  Keyboard,
-  Pkg,
-  PropList,
-  rx,
-  t,
-  TestNetwork,
-  WebRtc,
-} from './common';
+import { Crdt, css, Dev, Icons, Pkg, PropList, rx, t, TestNetwork, WebRtc } from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
@@ -177,17 +165,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     });
   });
 
-  e.it('keyboard:init', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-    Keyboard.on({
-      Enter(e) {
-        // e.handled();
-        // state.change((d) => Dev.toggle(d.props, 'flipped'));
-      },
-    });
-  });
-
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
@@ -330,15 +307,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .enabled((e) => !Boolean(props.current.fullscreenVideo))
           .value((e) => e.state.debug.bg)
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `flipped`)
-          .value((e) => Boolean(e.state.props.flipped))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
     });
 
