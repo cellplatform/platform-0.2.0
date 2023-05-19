@@ -25,9 +25,7 @@ export const DevRow: React.FC<DevRowProps> = (props) => {
 
   const reconnect = async () => {
     setConnecting(true);
-    const client = controller.client();
-    await client.connect.fire(remote.peer.id);
-    client.dispose();
+    await controller.withClient((client) => client.connect.fire(remote.peer.id));
     setConnecting(false);
   };
 

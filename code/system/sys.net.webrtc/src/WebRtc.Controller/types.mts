@@ -2,7 +2,8 @@ import type { t } from '../common.t';
 
 export type WebRtcController = t.Lifecycle & {
   state: t.WebRtcState;
-  client(): t.WebRtcEvents;
+  client(dispose$?: t.Observable<any>): t.WebRtcEvents;
+  withClient(fn: (client: t.WebRtcEvents) => any): Promise<void>;
 };
 
 /**

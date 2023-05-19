@@ -5,7 +5,7 @@ import { WebRtcController as Controller } from '../WebRtc.Controller';
 import { WebRtcUtils as Util } from '../WebRtc.Util';
 import { peer } from './WebRtc.peer.mjs';
 import { Media } from '../WebRtc.Media';
-import { clientFactory } from '../WebRtc.Events';
+import { WebRtcEvents } from '../WebRtc.Events';
 import { NetworkSchema } from '../sys.net.schema';
 import { WebRtcState } from '../WebRtc.State';
 
@@ -14,7 +14,7 @@ import { WebRtcState } from '../WebRtc.State';
  */
 export const WebRtc = {
   peer,
-  client: clientFactory,
+  client: WebRtcEvents.client,
   state: WebRtcState.init,
 
   NetworkSchema,

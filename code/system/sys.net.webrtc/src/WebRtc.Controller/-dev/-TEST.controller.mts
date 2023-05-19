@@ -51,7 +51,7 @@ export default Dev.describe('Network Controller', async (e) => {
     expect(ctrl2.state.doc).to.equal(doc);
   });
 
-  e.describe('EventBus ← (controller.listen response)', (e) => {
+  e.describe('EventBus: controller.client ← (controller.listen)', (e) => {
     const { doc } = setup();
 
     e.it('default auto-generated bus', async (e) => {
@@ -134,9 +134,11 @@ export default Dev.describe('Network Controller', async (e) => {
     });
 
     e.it('dispose', (e) => {
+      const { dispose$, dispose } = rx.disposable();
       const controller = WebRtcController.listen(peerA);
       const client1 = controller.client();
       const client2 = controller.client();
+      const client3 = controller.client(dispose$);
 
       expect(client1.instance).to.eql(client2.instance);
       expect(client1).to.not.equal(client2); // NB: Not same instance.
@@ -145,11 +147,51 @@ export default Dev.describe('Network Controller', async (e) => {
       expect(controller.disposed).to.eql(false);
       expect(client1.disposed).to.eql(true);
       expect(client2.disposed).to.eql(false);
+      expect(client3.disposed).to.eql(false);
+
+      dispose();
+      expect(controller.disposed).to.eql(false);
+      expect(client1.disposed).to.eql(true);
+      expect(client2.disposed).to.eql(false);
+      expect(client3.disposed).to.eql(true); // NB: via dispose$ in param
 
       controller.dispose();
       expect(controller.disposed).to.eql(true);
       expect(client1.disposed).to.eql(true); // NB: Already disposed.
       expect(client2.disposed).to.eql(true); // NB: Disposed via controller.
+      expect(client3.disposed).to.eql(true);
+    });
+
+    e.it('dispose$', (e) => {
+      const { dispose$, dispose } = rx.disposable();
+      const controller = WebRtcController.listen(peerA, { dispose$ });
+      const client = controller.client();
+
+      dispose();
+      expect(controller.disposed).to.eql(true);
+      expect(client.disposed).to.eql(true);
+    });
+  });
+
+  e.describe('EventBus: controller.withClient ← (controller.listen)', (e) => {
+    e.it('invokes with isolated transient event-bus', async (e) => {
+      const controller = WebRtcController.listen(peerA);
+      let info: t.WebRtcInfo | undefined;
+      let client1: t.WebRtcEvents | undefined;
+      let client2: t.WebRtcEvents | undefined;
+
+      await controller.withClient(async (client) => {
+        client1 = client;
+        info = await client.info.get();
+      });
+
+      await controller.withClient((client) => {
+        client2 = client;
+      });
+
+      expect(client1?.disposed).to.eql(true);
+      expect(client2?.disposed).to.eql(true);
+      expect(info?.peer.id).to.eql(peerA.id);
     });
   });
 

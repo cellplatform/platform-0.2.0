@@ -6,7 +6,7 @@ type TFacet = t.WebRtcInfoPeerFacet;
 
 type Args = {
   peerid: t.PeerId;
-  events?: t.WebRtcEvents;
+  client?: t.WebRtcEvents;
   enabled?: boolean;
   isSelf?: boolean;
 };
@@ -15,10 +15,10 @@ type Args = {
  * Controller for a single peer.
  */
 export function usePeerRowController(args: Args) {
-  const { peerid, events, isSelf = false } = args;
-  const enabled = Boolean(events && (args.enabled ?? true));
+  const { peerid, client, isSelf = false } = args;
+  const enabled = Boolean(client && (args.enabled ?? true));
 
-  const info = useInfo(events);
+  const info = useInfo(client);
   const doc = useNetworkDocState(info?.state);
   const peerState = doc?.network.peers[peerid];
   const totalPeers = Object.keys(doc?.network.peers ?? {}).length;
@@ -49,13 +49,13 @@ export function usePeerRowController(args: Args) {
    * Click Handler.
    */
   const onCtrlClick: t.WebRtcInfoPeerCtrlsClickHandler = async (e) => {
-    const state = await events?.info.state();
-    if (!enabled || !events || !state) return;
+    const state = await client?.info.state();
+    if (!enabled || !client || !state) return;
 
-    const selfid = events.instance.id ?? '';
+    const selfid = client.instance.id ?? '';
 
     if (e.kind === 'Close' && !isSelf) {
-      await events.close.fire(peerid);
+      await client.close.fire(peerid);
     }
     if (e.kind === 'Video') {
       console.log('CLICK video', e); // TEMP 🐷
@@ -92,7 +92,7 @@ export function usePeerRowController(args: Args) {
    * API
    */
   return {
-    instance: events?.instance,
+    instance: client?.instance,
     enabled,
     spinning,
     disabled,

@@ -47,11 +47,12 @@ export default Dev.describe('Network Controller: 3-way connections', async (e) =
 
     await Time.wait(5000);
 
-    const write = async (prefix: string, ctrl: t.WebRtcController) => {
-      const client = ctrl.client();
-      const info = (await client.info.get())!;
-      const doc = Crdt.toObject(info.state.current);
-      client.dispose();
+    const write = async (prefix: string, controller: t.WebRtcController) => {
+      await controller.withClient(async (client) => {
+        const info = (await client.info.get())!;
+        const doc = Crdt.toObject(info.state.current);
+        console.info(prefix, doc);
+      });
     };
 
     console.log('-------------------------------------------');
