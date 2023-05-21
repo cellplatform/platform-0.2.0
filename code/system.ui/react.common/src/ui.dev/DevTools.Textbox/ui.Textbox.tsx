@@ -186,7 +186,11 @@ const Wrangle = {
     if (value === true) {
       const opacity = isFocused ? 1 : 0.3;
       const color = isFocused ? Color.darken(COLORS.CYAN, 2) : COLORS.DARK;
-      return <DevIcons.Keyboard style={{ MarginX: 3 }} color={color} opacity={opacity} />;
+      const style = {
+        marginLeft: edge === 'right' ? 0 : 1,
+        marginRight: edge === 'left' ? 1 : 0,
+      };
+      return <DevIcons.Keyboard style={style} color={color} opacity={opacity} />;
     }
 
     return value;

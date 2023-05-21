@@ -4,6 +4,7 @@ type O = Record<string, unknown>;
 type BoolOrNil = boolean | undefined | null;
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type EdgeInput = ContentInput | boolean;
 type ErrorInput = DevTextboxError | boolean | undefined | null;
 type MarginOrNil = t.MarginInput | undefined | null;
 type FocusOrNil = DevTextboxFocus | undefined | null;
@@ -21,8 +22,8 @@ export type DevTextboxHandlerArgs<S extends O = O> = {
   label(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   value(value: StringOrNil | t.DevValueHandler<StringOrNil, S>): DevTextboxHandlerArgs<S>;
   placeholder(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
-  left(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
-  right(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
+  left(value: EdgeInput | t.DevValueHandler<EdgeInput, S>): DevTextboxHandlerArgs<S>;
+  right(value: EdgeInput | t.DevValueHandler<EdgeInput, S>): DevTextboxHandlerArgs<S>;
   footer(value: ContentInput | t.DevValueHandler<ContentInput, S>): DevTextboxHandlerArgs<S>;
   error(value: ErrorInput | t.DevValueHandler<ErrorInput, S>): DevTextboxHandlerArgs<S>;
   margin(value: MarginOrNil | t.DevValueHandler<MarginOrNil, S>): DevTextboxHandlerArgs<S>;

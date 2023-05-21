@@ -109,7 +109,7 @@ export default Dev.describe('Textbox', (e) => {
 
       dev.section((dev) => {
         const isJSX = (state: T) => state.debug.edgeKind === 'JSX';
-        const elKeyboard = <DevIcons.Keyboard style={{ MarginX: 3 }} />;
+        const elIcon = <DevIcons.Keyboard style={{ MarginX: 3 }} color={'rgba(255, 0, 0, 0.5)'} />;
 
         dev.boolean((btn) =>
           btn
@@ -120,8 +120,8 @@ export default Dev.describe('Textbox', (e) => {
                 const kind = d.debug.edgeKind === 'JSX' ? 'Boolean' : 'JSX';
                 d.debug.edgeKind = kind;
                 if (kind === 'JSX') {
-                  if (d.props.left === true) d.props.left = elKeyboard;
-                  if (d.props.right === true) d.props.right = elKeyboard;
+                  if (d.props.left === true) d.props.left = elIcon;
+                  if (d.props.right === true) d.props.right = elIcon;
                 }
                 if (kind === 'Boolean') {
                   if (typeof d.props.left === 'object') d.props.left = true;
@@ -138,7 +138,7 @@ export default Dev.describe('Textbox', (e) => {
               .value((e) => Boolean(e.state.props[field]))
               .onClick((e) =>
                 e.change((d) => {
-                  const value = isJSX(d) ? elKeyboard : true;
+                  const value = isJSX(d) ? elIcon : true;
                   d.props[field] = d.props[field] ? undefined : value;
                 }),
               ),

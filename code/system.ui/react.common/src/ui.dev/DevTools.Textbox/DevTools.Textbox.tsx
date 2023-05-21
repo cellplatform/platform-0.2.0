@@ -5,6 +5,7 @@ type O = Record<string, unknown>;
 type BoolOrNil = boolean | undefined | null;
 type StringOrNil = string | undefined | null;
 type ContentInput = StringOrNil | JSX.Element;
+type EdgeInput = ContentInput | boolean;
 type MarginOrNil = t.MarginInput | undefined | null;
 type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 type FocusOrNil = t.DevTextboxFocus | undefined | null;
@@ -27,8 +28,8 @@ export function textbox<S extends O = O>(
     label: ValueHandler<ContentInput, S>(events),
     value: ValueHandler<StringOrNil, S>(events),
     placeholder: ValueHandler<ContentInput, S>(events),
-    left: ValueHandler<ContentInput, S>(events),
-    right: ValueHandler<ContentInput, S>(events),
+    left: ValueHandler<EdgeInput, S>(events),
+    right: ValueHandler<EdgeInput, S>(events),
     footer: ValueHandler<ContentInput, S>(events),
     margin: ValueHandler<MarginOrNil, S>(events),
     focus: ValueHandler<FocusOrNil, S>(events),

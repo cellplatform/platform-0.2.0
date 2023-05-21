@@ -281,6 +281,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         txt
           .margin([5, 0, 10, 0])
           .placeholder('https://...')
+          .left(true)
           .value((e) => props.current.imageUrl ?? '')
           .onChange((e) => {
             props.change((d) => (d.imageUrl = e.to.value));
@@ -316,6 +317,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.textbox((txt) =>
         txt
           .margin([5, 0, 10, 0])
+          .left(true)
           .placeholder('vimeo id')
           .value((e) => props.current.vimeoId ?? '')
           .onChange((e) => {
