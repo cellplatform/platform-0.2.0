@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, Path } from './common';
+import { useEffect, useState } from 'react';
+import { COLORS, Color, Path, css, t } from './common';
 
 export type DevMediaImageProps = {
   bus: t.EventBus<any>;
@@ -10,11 +10,26 @@ export type DevMediaImageProps = {
 export const DevMediaImage: React.FC<DevMediaImageProps> = (props) => {
   const current = props.shared.current;
   const url = Wrangle.imageUrl(current.imageUrl);
-  if (!url) return null;
-  if (!Wrangle.isVisible(current)) return null;
+  const isVisible = Wrangle.isVisible(current);
+
+  if (!url || !isVisible) return null;
 
   const fit = current.imageFit ?? 'cover';
   const isContain = fit === 'contain';
+
+  const [isLoaded, setLoaded] = useState(false);
+  const [isError, setError] = useState(false);
+
+  useEffect(() => {
+    setLoaded(false);
+    setError(false);
+  }, [url]);
+
+  /**
+   * Handlers
+   */
+  const onLoad = () => setLoaded(true);
+  const onError = () => setError(true);
 
   /**
    * [Render]
@@ -22,8 +37,10 @@ export const DevMediaImage: React.FC<DevMediaImageProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: Color.alpha(COLORS.WHITE, 0.8),
-      backdropFilter: `blur(5px)`,
+      overflow: 'hidden',
+      backdropFilter: `blur(15px)`,
+      backgroundColor: Color.alpha(COLORS.WHITE, isLoaded ? 1 : 0.8),
+      transition: 'background-color 0.3s ease',
     }),
     img: css({
       Absolute: isContain ? 50 : 0,
@@ -31,11 +48,19 @@ export const DevMediaImage: React.FC<DevMediaImageProps> = (props) => {
       backgroundSize: fit,
       backgroundPosition: 'center center',
       backgroundRepeat: 'no-repeat',
+      opacity: isLoaded ? 1 : 0,
+      transition: 'opacity 0.3s ease',
+    }),
+    hiddenLoader: css({
+      pointerEvents: 'none',
+      Absolute: [-9999, null, null, -9999],
+      opacity: 0,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
+      <img {...styles.hiddenLoader} src={url} onLoad={onLoad} onError={onError} />
       <div {...styles.img} />
     </div>
   );
