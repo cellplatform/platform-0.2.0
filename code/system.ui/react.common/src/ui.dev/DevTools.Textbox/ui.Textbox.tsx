@@ -16,8 +16,8 @@ export type TextboxProps = t.TextInputFocusProps & {
   label?: ContentInput;
   value?: StringOrNil;
   placeholder?: ContentInput;
-  left?: ContentInput;
-  right?: ContentInput;
+  left?: ContentInput | boolean;
+  right?: ContentInput | boolean;
   footer?: ContentInput;
   error?: ErrorInput;
   style?: t.CssValue;
