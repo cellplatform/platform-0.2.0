@@ -6,6 +6,11 @@ import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
 
+/**
+ * video: 727951677
+ * diagram: https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
+ */
+
 type T = {
   props: WebRtcInfoProps;
   debug: {
@@ -216,11 +221,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.boolean((btn) =>
       btn
-        .label((e) => {
-          const isVideo = props.current.fullscreenVideo;
-          return `showing ${!!isVideo ? '"Media" (→ "Info Card")' : '"Info Card" (→ "Media")'}`;
-        })
-        .value((e) => Boolean(props.current.fullscreenVideo))
+        .label((e) => (Boolean(props.current.fullscreenVideo) ? 'configure' : 'configuring'))
+        .value((e) => !Boolean(props.current.fullscreenVideo))
         .onClick((e) => {
           props.change((d) => {
             local.fullscreenVideo = Dev.toggle(d, 'fullscreenVideo');
@@ -234,11 +236,13 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.boolean((btn) =>
       btn
-        .label((e) => `flipped`)
+        .label((e) => (Boolean(props.current.cardFlipped) ? 'flipped' : 'flip'))
         .value((e) => Boolean(props.current.cardFlipped))
         .enabled((e) => Boolean(props.current.fullscreenVideo))
         .onClick((e) => props.change((d) => Dev.toggle(d, 'cardFlipped'))),
     );
+
+    dev.hr(-1, 5);
 
     dev.section((dev) => {
       dev.row((e) => {
