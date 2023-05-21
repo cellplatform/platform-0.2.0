@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Color, COLORS, css, FC, t, TextInput, Style } from '../common';
+import { DevIcons } from '../Icons.mjs';
 
 const DEFAULT = {
   isEnabled: true,
@@ -117,9 +118,9 @@ const View: React.FC<TextboxProps> = (props) => {
         </div>
       )}
       <div {...styles.body}>
-        <div {...styles.edge}>{props.left}</div>
+        <div {...styles.edge}>{Wrangle.edge(props, 'left', isFocused)}</div>
         {elInput}
-        <div {...styles.edge}>{props.right}</div>
+        <div {...styles.edge}>{Wrangle.edge(props, 'right', isFocused)}</div>
       </div>
       {props.footer && (
         <div {...styles.footer} onMouseDown={focusTextbox}>
@@ -176,6 +177,19 @@ const Wrangle = {
     const errorColor = Wrangle.errorColor(props);
     if (errorColor) return errorColor;
     return isActive && isFocused ? Color.alpha(COLORS.CYAN, 1) : Color.alpha(COLORS.DARK, 0.1);
+  },
+
+  edge(props: TextboxProps, edge: keyof Pick<TextboxProps, 'left' | 'right'>, isFocused: boolean) {
+    const value = props[edge];
+    if (!value) return null;
+
+    if (value === true) {
+      const opacity = isFocused ? 1 : 0.3;
+      const color = isFocused ? Color.darken(COLORS.CYAN, 2) : COLORS.DARK;
+      return <DevIcons.Keyboard style={{ MarginX: 3 }} color={color} opacity={opacity} />;
+    }
+
+    return value;
   },
 };
 
