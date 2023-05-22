@@ -9,7 +9,6 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "sample.web.lib-2": "0.0.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
@@ -17,15 +16,16 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/index.d.mts",
+  "types": "./dist/types.d/Foo.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./web": "./dist/web/index.js",
+    "./web/Foo": "./dist/web/foo.js"
   },
   "typesVersions": {
     "*": {
       "web": [
-        "./dist/types.d/index.d.mts"
+        "./dist/types.d/Foo.d.mts"
       ]
     }
   }
