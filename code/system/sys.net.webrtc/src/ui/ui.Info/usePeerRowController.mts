@@ -1,6 +1,7 @@
-import { t, R } from './common';
+import { WebRtcState } from '../../WebRtc.State';
+import { R, t } from './common';
 import { useInfo } from './useInfo.mjs';
-import { useNetworkDocState } from './useNetworkDocState.mjs';
+import { useNetworkState } from './useNetworkState.mjs';
 
 type TFacet = t.WebRtcInfoPeerFacet;
 
@@ -19,7 +20,7 @@ export function usePeerRowController(args: Args) {
   const enabled = Boolean(client && (args.enabled ?? true));
 
   const info = useInfo(client);
-  const doc = useNetworkDocState(info?.state);
+  const doc = useNetworkState(info?.state);
   const peerState = doc?.network.peers[peerid];
   const totalPeers = Object.keys(doc?.network.peers ?? {}).length;
 
@@ -49,28 +50,18 @@ export function usePeerRowController(args: Args) {
    * Click Handler.
    */
   const onCtrlClick: t.WebRtcInfoPeerCtrlsClickHandler = async (e) => {
-    const state = await client?.info.state();
-    if (!enabled || !client || !state) return;
+    const doc = await client?.info.state();
+    if (!enabled || !client || !doc) return;
 
     const selfid = client.instance.id ?? '';
+    const state = WebRtcState.init(doc);
 
     if (e.kind === 'Close' && !isSelf) {
       await client.close.fire(peerid);
     }
 
-    /**
-     * TODO 🐷 Create Video Connection => Mute/Unmute Video Camera
-     */
     if (e.kind === 'Video') {
-      console.log('CLICK video', e); // TEMP 🐷
-
-      /**
-       * TODO 🐷 - via Mutate helper (with tests)
-       */
-      console.warn('Video', 'via Mutate helper (with tests)');
-
-      state.change((d) => {
-        const self = d.network.peers[selfid];
+      state.peer(selfid, selfid).change((self) => {
         const conns = self.conns || (self.conns = {});
         conns.video = true;
         conns.mic = true;
@@ -78,23 +69,15 @@ export function usePeerRowController(args: Args) {
     }
 
     if (e.kind === 'Screen') {
-      state.change((d) => {
-        const self = d.network.peers[selfid];
+      state.peer(selfid, selfid).change((self) => {
         const conns = self.conns || (self.conns = {});
         conns.screen = true;
       });
     }
 
     if (e.kind === 'Mic') {
-      /**
-       * TODO 🐷 - via Mutate helper (with tests)
-       */
-      console.warn('Mic', 'via Mutate helper (with tests)');
-
-      state.change((d) => {
-        const peer = d.network.peers[peerid];
+      state.peer(selfid, peerid).change((peer) => {
         const conns = peer.conns || (peer.conns = {});
-
         conns.mic = !Boolean(conns.mic);
       });
     }
