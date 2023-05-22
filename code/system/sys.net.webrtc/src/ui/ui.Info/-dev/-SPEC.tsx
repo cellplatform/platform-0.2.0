@@ -429,7 +429,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         dev.button((btn) =>
           btn
             .label(label)
-            .right((e) => `count: ${controller.state.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+            .right((e) => `count: ${props.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
             .onClick((e) => props.change((d) => (d.count += by))),
         );
       };

@@ -44,9 +44,7 @@ export type NetworkStateDevice = {
 /**
  * Shared Properties
  */
-export type NetworkStateProps = {
-  [namespace: string]: Record<string, unknown>;
-};
+export type NetworkStateProps = { [namespace: string]: Record<string, unknown> };
 
 /**
  * Controller

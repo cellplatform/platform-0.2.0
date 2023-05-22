@@ -387,16 +387,16 @@ export default Dev.describe('PeerCard', async (e) => {
         );
       });
 
-      const count = (label: string, by: number) => {
-        dev.button((btn) =>
-          btn
-            .label(label)
-            .right((e) => `count: ${shared.doc.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => shared.doc.change((d) => (d.count += by))),
-        );
-      };
-      count('increment →', 1);
-      count('decrement →', -1);
+      // const count = (label: string, by: number) => {
+      //   dev.button((btn) =>
+      //     btn
+      //       .label(label)
+      //       .right((e) => `count: ${shared.doc.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+      //       .onClick((e) => shared.doc.change((d) => (d.count += by))),
+      //   );
+      // };
+      // count('increment →', 1);
+      // count('decrement →', -1);
     });
 
     dev.hr(5, 20);
