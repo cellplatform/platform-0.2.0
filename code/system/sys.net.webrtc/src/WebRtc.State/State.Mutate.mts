@@ -13,14 +13,14 @@ export const Mutate = {
    */
   addPeer(
     data: t.NetworkState,
-    selfid: t.PeerId,
+    self: t.PeerId,
     subject: t.PeerId,
     options: { initiatedBy?: t.PeerId; tx?: string } = {},
   ) {
     const { initiatedBy, tx } = options;
     const peers = Wrangle.peers(data);
     const exists = Boolean(peers[subject]);
-    const isSelf = selfid === subject;
+    const isSelf = self === subject;
 
     const done = () => {
       const peer = peers[subject];
