@@ -100,4 +100,84 @@ export default Dev.describe('Network: State', (e) => {
       expect(bar.disposed).to.eql(true);
     });
   });
+
+  e.describe('peer ← by "peer-id"', (e) => {
+    e.it('create lens (self)', (e) => {
+      const { doc } = setup();
+      expect(doc.current.network.peers).to.eql({});
+
+      const state = WebRtcState.init<N>(doc);
+      const lens = state.peer('me', 'me');
+      doc.dispose();
+      expect(lens.current.id).to.eql('me');
+      expect(doc.current.network.peers['me']).to.eql(lens.current);
+    });
+
+    e.it('create lens (remote)', (e) => {
+      const { doc } = setup();
+      const state = WebRtcState.init<N>(doc);
+      const lens = state.peer('me', 'remote');
+      doc.dispose();
+      expect(lens.current.id).to.eql('remote');
+      expect(doc.current.network.peers['remote']).to.eql(lens.current);
+    });
+
+    e.it('create lens ← {options}', (e) => {
+      const { doc } = setup();
+      const state = WebRtcState.init<N>(doc);
+      const lens = state.peer('me', 'remote', { tx: 'foo', initiatedBy: 'bar' });
+      doc.dispose();
+      expect(lens.current.id).to.eql('remote');
+      expect(lens.current.tx).to.eql('foo');
+      expect(lens.current.initiatedBy).to.eql('bar');
+    });
+
+    e.it('change', (e) => {
+      const { doc } = setup();
+      const state = WebRtcState.init<N>(doc);
+      const peer1 = state.peer('me', 'me');
+      const peer2 = state.peer('me', 'remote');
+
+      console.log('peer1', Crdt.toObject(peer1));
+
+      expect(peer1.current.conns).to.eql({});
+      expect(peer2.current.conns).to.eql({});
+
+      peer1.change((d) => (d.conns.video = true));
+      expect(peer1.current.conns).to.eql({ video: true });
+      expect(peer2.current.conns).to.eql({});
+
+      peer2.change((d) => (d.conns.mic = false));
+      expect(peer1.current.conns).to.eql({ video: true });
+      expect(peer2.current.conns).to.eql({ mic: false });
+
+      doc.dispose();
+    });
+
+    e.it('dispose of lens', (e) => {
+      const { doc } = setup();
+      const state = WebRtcState.init<N>(doc);
+      const peer1 = state.peer('me', 'me');
+      const peer2 = state.peer('me', 'remote');
+
+      expect(peer1.disposed).to.eql(false);
+      expect(peer2.disposed).to.eql(false);
+
+      peer1.dispose();
+      expect(doc.disposed).to.eql(false);
+      expect(peer1.disposed).to.eql(true);
+      expect(peer2.disposed).to.eql(false);
+
+      peer1.change((d) => (d.conns.video = true));
+      peer2.change((d) => (d.conns.mic = false));
+
+      expect(peer1.current.conns.video).to.eql(undefined); // NB: No change, already disposed.
+      expect(peer2.current.conns.mic).to.eql(false);
+
+      doc.dispose();
+      expect(doc.disposed).to.eql(true);
+      expect(peer1.disposed).to.eql(true);
+      expect(peer2.disposed).to.eql(true);
+    });
+  });
 });
