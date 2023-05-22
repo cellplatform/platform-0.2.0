@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.farcaster',
+  name: 'sys.net.fc',
   version: '0.0.0',
   dependencies: {
     '@farcaster/hub-web': '0.3.4',
