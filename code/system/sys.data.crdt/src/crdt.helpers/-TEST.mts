@@ -123,7 +123,7 @@ export default Test.describe('crdt helpers', (e) => {
       expect(res).to.not.equal(file.doc.current);
     });
 
-    e.it('toObject(<SyncFile>)', async (e) => {
+    e.it('toObject(<SyncFile>)', (e) => {
       const bus = rx.bus();
       const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
       const sync = CrdtDoc.sync<D>(bus, doc);
@@ -131,6 +131,15 @@ export default Test.describe('crdt helpers', (e) => {
       expect(res).to.eql({ count: 1 });
       expect(res).to.eql(sync.doc.current);
       expect(res).to.not.equal(sync.doc.current);
+    });
+
+    e.it('toObject(<Lens>)', (e) => {
+      const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
+      const lens = Crdt.lens(doc, (d) => d.child ?? (d.child = { msg: 'foo' }));
+      const res = Crdt.toObject(lens);
+      expect(res).to.eql({ msg: 'foo' });
+      expect(res).to.eql(lens.current);
+      expect(res).to.not.equal(lens.root.current.child);
     });
 
     e.it('toObject(<Automerge Doc>)', async (e) => {

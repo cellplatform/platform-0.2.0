@@ -10,6 +10,7 @@ function convert<D extends {}>(doc: D | t.CrdtDocRef<D>): D {
   if (Is.ref(doc)) return obj(doc.current);
   if (Is.file(doc)) return obj(doc.doc.current);
   if (Is.sync(doc)) return obj(doc.doc.current);
+  if (Is.lens(doc)) return obj(doc.current);
   if (typeof doc === 'object' && doc !== null && !Array.isArray(doc)) return obj(doc);
   throw new Error(`Unable to convert ${typeof doc} into object.`);
 }
