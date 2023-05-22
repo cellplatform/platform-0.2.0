@@ -1,10 +1,10 @@
 import { t, WebRtcUtils } from './common';
-import { Mutate } from './Controller.Mutate.mjs';
+import { Mutate } from '../WebRtc.State/State.Mutate.mjs';
 
 /**
  * Examine the health of each peer and disconnect if required.
  */
-export async function pruneDeadPeers(self: t.Peer, state: t.CrdtDocRef<t.NetworkSharedDoc>) {
+export async function pruneDeadPeers(self: t.Peer, state: t.NetworkDocSharedRef) {
   const peers = state.current.network.peers ?? {};
   const removed: t.PeerId[] = [];
 

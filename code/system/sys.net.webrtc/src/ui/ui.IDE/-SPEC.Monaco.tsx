@@ -63,7 +63,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       /**
        * Start the syncer.
        */
-      const textSyncerIndex = MonacoCrdt.syncer({
+      const indexBinding = MonacoCrdt.syncer({
         dispose$,
         monaco: indexCtx.monaco,
         editor: indexCtx.editor,
@@ -71,7 +71,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         // peers: { local, doc: docs.shared, getPeers: (d) => (d.tmp as T).index.peers },
       });
 
-      const textSyncerMain = MonacoCrdt.syncer({
+      const mainBinding = MonacoCrdt.syncer({
         dispose$,
         monaco: mainCtx.monaco,
         editor: mainCtx.editor,
@@ -84,23 +84,27 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
         doc: t.CrdtDocRef<T>,
         getText: (doc: T) => t.AutomergeText | undefined,
       ) => {
-        //
+        const firedChanged = (text?: string) => {
+          if (text) {
+            try {
+              const data = Yaml.parse(text);
+              props.onChange?.({ kind, data });
+            } catch (err: any) {
+              const data = `YAML Parse Error: ${err.message}`;
+              console.warn(data);
+              props.onChange?.({ kind, data });
+            }
+          }
+        };
+
         doc.$.pipe(
           rx.takeUntil(dispose$),
           rx.debounceTime(500),
           rx.distinctUntilChanged(
             (prev, next) => getText(prev.doc)?.toString() === getText(next.doc)?.toString(),
           ),
-        ).subscribe((e) => {
-          /**
-           * TODO 🐷 - parse the YAML and update the "data" object.
-           */
-          const text = getText(e.doc);
-          if (text) {
-            const data = Yaml.parse(text.toString());
-            props.onChange?.({ kind, data });
-          }
-        });
+        ).subscribe((e) => firedChanged(getText(e.doc)?.toString()));
+        firedChanged(getText(doc.current)?.toString());
       };
 
       listenForChanges('me', docs.me, (doc: DocMe) => doc.code!);
@@ -129,7 +133,6 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
     right: css({
       position: 'relative',
     }),
-
     titlebar: css({
       backgroundColor: Color.alpha(COLORS.DARK, 0.06),
       borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.08)}`,
@@ -137,16 +140,11 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
       Padding: [3, 8, 4, 8],
       Flex: 'x-center-spaceBetween',
     }),
-
     titlebarPrivate: css({
       backgroundColor: `${Color.alpha(COLORS.GREEN, 1)}`,
       color: COLORS.WHITE,
     }),
-
-    edge: css({
-      display: 'grid',
-      gridTemplateRows: '1fr auto',
-    }),
+    edge: css({ display: 'grid', gridTemplateRows: '1fr auto' }),
     editorOuter: css({ position: 'relative' }),
   };
 
@@ -180,8 +178,7 @@ export const SpecMonacoSync: React.FC<SpecMonacoSyncProps> = (props) => {
           />
         </div>
         <div {...styles.titlebar}>
-          <div>{'Shared'}</div>
-          <div>{'(Public)'}</div>
+          <div>{'Shared State'}</div>
         </div>
       </div>
     </div>

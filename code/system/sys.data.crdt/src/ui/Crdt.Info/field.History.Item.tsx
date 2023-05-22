@@ -1,5 +1,4 @@
-import { COLORS, Icons, t, Time, Value, Wrangle } from './common';
-import { Hash } from './ui.Hash';
+import { COLORS, Icons, PropList, t, Time, Value } from './common';
 
 export function FieldHistoryItem(
   fields: t.CrdtInfoFields[],
@@ -27,13 +26,13 @@ export function FieldHistoryItem(
   });
   res.push({
     label: 'Actor',
-    value: Wrangle.displayHash(actor, 6),
+    value: { data: Value.shortenHash(actor, 6), clipboard: hash },
     tooltip: `actor-id: ${change.actor}`,
     indent,
   });
   res.push({
     label: 'Hash',
-    value: <Hash text={hash} />,
+    value: { data: <PropList.Hash text={hash} />, clipboard: hash },
     tooltip: `commit hash: ${change.hash}`,
     indent,
   });

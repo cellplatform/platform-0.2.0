@@ -1,6 +1,6 @@
 import { Dev, expect, expectError, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 
-export default Dev.describe('Data Connection', (e) => {
+export default Dev.describe('WebRTC: connection → data', (e) => {
   e.timeout(1000 * 15);
 
   let peerA: t.Peer;
@@ -18,17 +18,12 @@ export default Dev.describe('Data Connection', (e) => {
     const firedA: t.PeerConnectionChanged[] = [];
     const firedB: t.PeerConnectionChanged[] = [];
 
-    peerA.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-      firedA.push(e);
-    });
-    peerB.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
-      firedB.push(e);
-    });
+    peerA.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => firedA.push(e));
+    peerB.connections$.pipe(rx.takeUntil(dispose$)).subscribe((e) => firedB.push(e));
 
     // Open the connection.
-    const conn = await peerA.data(peerB.id, { name: 'Foobar' });
+    const conn = await peerA.data(peerB.id);
     expect(conn.kind).to.eql('data');
-    expect(conn.metadata.label).to.eql('Foobar');
     expect(conn.metadata.initiatedBy).to.eql(peerA.id);
     expect(conn.peer.local).to.eql(peerA.id);
     expect(conn.peer.remote).to.eql(peerB.id);
@@ -42,7 +37,6 @@ export default Dev.describe('Data Connection', (e) => {
 
     expect(peerA.connections.data[0].isOpen).to.eql(true);
     expect(peerB.connections.data[0].isOpen).to.eql(true);
-    expect(peerB.connections.data[0].metadata.label).to.eql('Foobar');
     expect(peerB.connections.data[0].metadata.initiatedBy).to.eql(peerA.id);
 
     expect(peerA.connectionsByPeer[0].peer.local).to.eql(peerA.id);

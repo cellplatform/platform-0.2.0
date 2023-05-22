@@ -1,11 +1,9 @@
-import { Pkg, Dev, t, Time } from '../test.ui';
+import { Dev, Time, t } from '../test.ui';
 
 type T = {
   testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
 };
-const initial: T = {
-  testrunner: {},
-};
+const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
   e.it('init', async (e) => {
@@ -64,6 +62,7 @@ export default Dev.describe('Root', (e) => {
           await button(import('../crdt.DocFile/-TEST.mjs')),
           await button(import('../crdt.DocSync/-dev/-TEST.DocSync.mjs')),
           await button(import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs')),
+          await button(import('../crdt.Lens/-dev/-TEST.mjs')),
           await button(import('../crdt.Schema/-dev/-TEST.mjs')),
           await button(import('../crdt.helpers/-TEST.mjs')),
         ],
@@ -89,8 +88,9 @@ export default Dev.describe('Root', (e) => {
 
       dev.button((btn) =>
         btn
-          .label('run all')
+          .label((e) => (e.state.testrunner.spinning ? 'running...' : 'run'))
           .right('🌳')
+          .spinner((e) => Boolean(e.state.testrunner.spinning))
           .onClick((e) => invoke(all)),
       );
       dev.hr(-1, 5);

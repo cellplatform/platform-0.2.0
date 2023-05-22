@@ -6,8 +6,8 @@ const DEFAULTS = { speed: 300 };
 export type FlipProps = {
   flipped?: boolean;
   speed?: Milliseconds;
-  front?: JSX.Element;
-  back?: JSX.Element;
+  front?: JSX.Element | null;
+  back?: JSX.Element | null;
   style?: t.CssValue;
 };
 

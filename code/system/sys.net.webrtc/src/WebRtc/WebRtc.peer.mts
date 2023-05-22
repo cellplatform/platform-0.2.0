@@ -1,10 +1,11 @@
 import { Path, PeerJS, rx, t, WebRtcUtils } from './common';
-import { MemoryState } from './WebRtc.state.mjs';
+import { MemoryState } from './WebRtc.memory.mjs';
 
 type Options = {
   id?: t.PeerId;
   log?: boolean;
   getStream?: t.PeerGetMediaStream;
+  dispose$?: t.Observable<any>;
 };
 type SignalServer = {
   host: string;
@@ -43,12 +44,12 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       host,
       path,
       key,
-      secure: true,
       port,
+      secure: true,
       debug: 2,
     });
 
-    const { dispose, dispose$ } = rx.disposable();
+    const { dispose, dispose$ } = rx.disposable(options.dispose$);
     let _disposed = false;
     dispose$.subscribe(() => {
       api.connections.all.forEach((conn) => conn.dispose());
@@ -77,13 +78,12 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       /**
        * Start a data connection.
        */
-      data(connectTo, options = {}) {
+      data(connectTo) {
         return new Promise<t.PeerDataConnection>((resolve, reject) => {
           const id = WebRtcUtils.asId(connectTo);
-          const label = options.name ?? 'Unnamed';
           const initiatedBy = api.id;
-          const metadata: t.PeerMetaData = { label, initiatedBy };
-          const conn = rtc.connect(id, { reliable: true, metadata, label });
+          const metadata: t.PeerMetaData = { initiatedBy };
+          const conn = rtc.connect(id, { reliable: true, metadata });
 
           const fail = (err: Error) => {
             cleanup();
@@ -106,7 +106,7 @@ export function peer(endpoint: SignalServer, options: Options = {}): Promise<t.P
       /**
        * Start a media connection (video/audio/screen).
        */
-      media(connectTo, input) {
+      media(connectTo, input, options = {}) {
         return new Promise<t.PeerMediaConnection>(async (resolve, reject) => {
           if (!getStream) {
             const err = Error(`Media connections require a "getStream" function to be provided.`);

@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.common',
   version: '0.0.0',
   dependencies: {
-    'qrcode': '1.5.1',
+    'qrcode': '1.5.3',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'react-icons': '4.8.0',

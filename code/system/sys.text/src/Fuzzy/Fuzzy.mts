@@ -25,7 +25,11 @@ export const Fuzzy: t.Fuzzy = {
             const start = matches[0]?.start ?? -1;
             const end = matches[matches.length - 1]?.end ?? -1;
             const exists = start !== -1 && end !== -1;
-            return { start, end, text: exists ? text.substring(start, end) : '' };
+            return {
+              start,
+              end,
+              text: exists ? text.substring(start, end) : '',
+            };
           },
         };
       },

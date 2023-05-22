@@ -52,5 +52,6 @@ export const DEFAULTS = {
   qs: {
     d: 'd', // NB: alias for "?dev"
     dev: 'dev',
+    selected: 'selected',
   },
 } as const;

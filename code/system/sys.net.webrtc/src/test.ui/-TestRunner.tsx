@@ -1,4 +1,4 @@
-import { Dev, t, Time, WebRtc } from '.';
+import { Time, Dev, WebRtc, t } from '.';
 
 type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
 const initial: T = { testrunner: {} };
@@ -70,8 +70,11 @@ export default Dev.describe('Root', (e) => {
       tests.push(
         ...[
           await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs')),
-          await button(import('../WebRtc.Controller/-dev/-TEST.mutate.mjs')),
-          await button(import('../sys.net.schema/Schema.TEST.mjs')),
+          await button(import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs')),
+          await button(import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs')),
+          await button(import('../WebRtc.State/-dev/-TEST.mjs'), true),
+          await button(import('../WebRtc.State/-dev/-TEST.mutate.mjs')),
+          await button(import('../sys.net.schema/-TEST.mjs')),
         ],
       );
 
@@ -95,8 +98,9 @@ export default Dev.describe('Root', (e) => {
 
       dev.button((btn) =>
         btn
-          .label('run all')
+          .label((e) => (e.state.testrunner.spinning ? 'running...' : 'run'))
           .right('🌳')
+          .spinner((e) => Boolean(e.state.testrunner.spinning))
           .onClick((e) => invoke(all)),
       );
       dev.hr(-1, 5);
@@ -110,6 +114,15 @@ export default Dev.describe('Root', (e) => {
         const media = WebRtc.Media.singleton();
         media.events.stop(media.ref.camera);
         media.events.stop(media.ref.screen);
+      });
+
+      dev.button('copy schema bytes', (e) => {
+        const schema = WebRtc.NetworkSchema.genesis().schema;
+        console.info('Network Schema:', schema.toString());
+        navigator.clipboard.writeText(schema.toString());
+
+        e.right('← copied');
+        Time.delay(1500, () => e.right(''));
       });
 
       /**

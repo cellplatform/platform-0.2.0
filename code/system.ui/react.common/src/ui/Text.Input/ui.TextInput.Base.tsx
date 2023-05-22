@@ -1,15 +1,6 @@
-import {
-  RefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useTransition,
-  useState,
-  useLayoutEffect,
-} from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
 import { css, DEFAULTS, t, Time } from './common';
-import { TextInputRef } from './TextInput.Ref.mjs';
 import { TextInputHint } from './ui.TextInput.Hint';
 import { HtmlInput } from './ui.TextInput.Html';
 import { Util } from './util.mjs';
@@ -98,6 +89,8 @@ export const TextInputBase: React.FC<Props> = (props) => {
         : undefined,
 
       display: 'grid',
+      justifyContent: 'left',
+      alignContent: 'center',
     } as const,
     readonly: {
       userSelect: 'auto',

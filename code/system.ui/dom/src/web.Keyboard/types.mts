@@ -41,7 +41,7 @@ export type KeyMatchSubscriberHandlerArgs = {
   readonly pattern: t.KeyPattern;
   readonly state: t.KeyboardStateCurrent;
   readonly event: t.KeyboardKeypress;
-  cancel(): void;
+  handled(): void;
 };
 
 export type KeyMatchPatterns = {
@@ -85,7 +85,7 @@ export type KeyboardKeypress = {
   readonly key: string;
   readonly keypress: KeyboardKeypressProps;
   readonly is: KeyboardKeyFlags;
-  cancel(): void;
+  handled(): void;
 };
 
 export type KeyboardKeypressProps = t.UIEventBase &

@@ -145,7 +145,7 @@ const Wrangle = {
     selectedIndex: number;
     command: string;
   }) {
-    if (!args.isFocused) return ['↑', '↓', '⌘K'];
+    if (!args.isFocused) return ['↑', '↓', '⎇K'];
     return ['↑', '↓', 'enter'];
   },
 };

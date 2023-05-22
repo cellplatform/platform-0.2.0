@@ -1,30 +1,89 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
-import { Footer } from './ui.Footer';
+import { Color, COLORS, css, DEFAULTS, FC, FIELDS, t } from './common';
+import { Remote } from './ui.Remote';
+import { Self } from './ui.Self';
+import { Wrangle } from './Wrangle.mjs';
+import { Video } from './ui.Video';
 
-export const ConnectInput: React.FC<t.ConnectInputProps> = (props) => {
+const View: React.FC<t.ConnectInputProps> = (props) => {
+  const { self, spinning: isSpinning = DEFAULTS.spinning, fields = DEFAULTS.fields } = props;
+  const canConnect = Wrangle.canConnect(props);
+  const isConnected = Wrangle.isConnected(props);
+  const ids = Wrangle.ids(props);
+  const idFields = Wrangle.idFields(props);
+
   /**
    * [Render]
    */
+  const height = idFields.length * 32;
   const styles = {
     base: css({
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      position: 'relative',
+      height: self ? height : 0,
+      transition: 'height 250ms ease',
+      overflow: 'hidden',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
     }),
+    divider: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
+    fields: css({}),
   };
 
-  /**
-   * TODO 🐷
-   */
+  const elFields = idFields.map((field, i) => {
+    const key = `${field}.${i}`;
+    const dividerStyle = i > 0 ? styles.divider : undefined;
 
-  const elBody = props.self && (
-    <Footer
-      {...props}
-      // self={props.self}
-      // showPeer={props.showPeer}
-      // showConnect={props.showConnect}
-      // isSpinning={props.isSpinning}
-    />
+    if (field === 'Peer:Remote') {
+      return (
+        <Remote
+          key={key}
+          self={self}
+          ids={ids}
+          canConnect={canConnect}
+          isConnected={isConnected}
+          isSpinning={isSpinning}
+          onRemotePeerChanged={props.onRemotePeerChanged}
+          onConnectRequest={props.onConnectRequest}
+          style={dividerStyle}
+        />
+      );
+    }
+
+    if (field === 'Peer:Self') {
+      return (
+        <Self
+          key={key}
+          self={self}
+          onLocalPeerCopied={props.onLocalPeerCopied}
+          style={dividerStyle}
+        />
+      );
+    }
+
+    return null;
+  });
+
+  if (elFields.length === 0) return null;
+  const elVideo = fields.includes('Video') && (
+    <Video size={height} stream={props.video} muted={props.muted} />
   );
 
-  return <div {...css(styles.base, props.style)}>{elBody}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.fields}>{elFields}</div>
+      {elVideo}
+    </div>
+  );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  FIELDS: typeof FIELDS;
+};
+export const ConnectInput = FC.decorate<t.ConnectInputProps, Fields>(
+  View,
+  { DEFAULTS, FIELDS },
+  { displayName: 'ConnectInput' },
+);

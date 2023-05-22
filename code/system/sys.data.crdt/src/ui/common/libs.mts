@@ -15,6 +15,7 @@ export {
   useMouseState,
   TestRunner,
   QRCode,
+  Keyboard,
 } from 'sys.ui.react.common';
 
 export { Filesize } from 'sys.fs';

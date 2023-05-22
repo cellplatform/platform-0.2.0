@@ -1,5 +1,4 @@
-import { COLORS, DEFAULTS, Icons, Path, t, Value, Wrangle } from './common';
-import { Hash } from './ui.Hash';
+import { COLORS, DEFAULTS, Icons, Path, t, Value, Wrangle, PropList } from './common';
 
 export function FieldFile(
   fields: t.CrdtInfoFields[],
@@ -57,7 +56,10 @@ export function FieldFile(
 
         res.push({
           label: 'Hash',
-          value: <Hash text={manifest.hash.files} />,
+          value: {
+            data: <PropList.Hash text={manifest.hash.files} />,
+            clipboard: manifest.hash.files,
+          },
           tooltip: `files hash:\n${manifest.hash.files}`,
           indent,
         });

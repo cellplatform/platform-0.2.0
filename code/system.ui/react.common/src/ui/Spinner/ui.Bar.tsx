@@ -25,7 +25,14 @@ export const SpinnerBar: React.FC<SpinnerBarProps> = (props) => {
    * [Render]
    */
   const override: t.CSSProperties = {};
-  const styles = { base: css({ position: 'relative' }) };
+  const styles = {
+    base: css({
+      position: 'relative',
+      width,
+      borderRadius: 10,
+      overflow: 'hidden',
+    }),
+  };
 
   return (
     <div {...css(styles.base, props.style)}>

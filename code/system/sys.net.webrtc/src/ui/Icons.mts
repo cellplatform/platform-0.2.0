@@ -1,25 +1,33 @@
+import { FaNetworkWired } from 'react-icons/fa';
 import {
+  MdCamera,
   MdClose,
-  MdConnectedTv,
   MdDelete,
   MdDone,
   MdDoneOutline,
+  MdEmojiPeople,
+  MdError,
+  MdKeyboard,
+  MdLanguage,
+  MdMemory,
   MdMic,
   MdMicOff,
-  MdOutlineViewInAr,
-  MdSupportAgent,
-  MdKeyboard,
-  MdCamera,
-  MdLanguage,
-  MdVpnLock,
-  MdStart,
   MdMultipleStop,
-  MdPublicOff,
+  MdOutlineBadge,
+  MdOutlineScreenShare,
+  MdOutlineStopScreenShare,
+  MdOutlineVideoCameraFront,
+  MdOutlineVideocamOff,
+  MdOutlineViewInAr,
   MdPublic,
+  MdPublicOff,
+  MdSettingsInputAntenna,
+  MdStart,
+  MdVpnLock,
   MdWifiTethering,
   MdWifiTetheringOff,
-  MdError,
-  MdSettingsInputAntenna,
+  MdRefresh,
+  MdCable,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
@@ -30,14 +38,34 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Refresh: icon(MdRefresh),
+  Cable: icon(MdCable),
   Close: icon(MdClose),
   Delete: { Bin: icon(MdDelete) },
   Cube: icon(MdOutlineViewInAr),
-  Face: { Caller: icon(MdSupportAgent) },
-  Screenshare: icon(MdConnectedTv),
-  Mic: { On: icon(MdMic), Off: icon(MdMicOff) },
-  Camera: { On: icon(MdCamera) },
-  Done: { Outline: icon(MdDoneOutline), Solid: icon(MdDone) },
+  Person: icon(MdEmojiPeople),
+  Screenshare: {
+    Start: icon(MdOutlineScreenShare),
+    Stop: icon(MdOutlineStopScreenShare),
+  },
+  Mic: {
+    On: icon(MdMic),
+    Off: icon(MdMicOff),
+  },
+  Camera: {
+    On: icon(MdCamera),
+  },
+  Video: {
+    On: icon(MdOutlineVideoCameraFront),
+    Off: icon(MdOutlineVideocamOff),
+  },
+  Identity: {
+    Badge: icon(MdOutlineBadge),
+  },
+  Done: {
+    Outline: icon(MdDoneOutline),
+    Solid: icon(MdDone),
+  },
   Note: { Event: icon(VscGithubAction) },
   Keyboard: icon(MdKeyboard),
   Globe: {
@@ -49,5 +77,9 @@ export const Icons = {
   Connection: { On: icon(MdWifiTethering), Off: icon(MdWifiTetheringOff) },
   Arrow: { Start: icon(MdStart), TwoWay: icon(MdMultipleStop) },
   Error: icon(MdError),
-  Network: { Antenna: icon(MdSettingsInputAntenna) },
+  Memory: icon(MdMemory),
+  Network: {
+    Antenna: icon(MdSettingsInputAntenna),
+    Nodes: icon(FaNetworkWired),
+  },
 };

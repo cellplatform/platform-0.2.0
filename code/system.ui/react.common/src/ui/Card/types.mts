@@ -12,7 +12,7 @@ export type CardBackground = {
   blur?: number;
 };
 
-export type CardShowBackside = {
+export type CardBackside = {
   flipped?: boolean;
   speed?: Milliseconds;
 };
@@ -23,18 +23,19 @@ export type CardHeight = CardSizeDimension;
 
 export type CardProps = {
   children?: React.ReactNode;
-
   background?: t.CardBackground;
   border?: t.CardBorder;
   showAsCard?: boolean;
-  showBackside?: boolean | CardShowBackside;
-  backside?: JSX.Element;
+  showBackside?: boolean | CardBackside;
+  backside?: JSX.Element | null;
   padding?: t.CssEdgesInput; // NB: padding is dropped if "NOT" showing as card.
   margin?: t.CssEdgesInput;
   width?: t.CardWidth;
   height?: t.CardHeight;
   userSelect?: string | boolean;
   shadow?: boolean | t.CssShadow;
+  focused?: boolean;
+  tabIndex?: number; // NB: auto set to 0 if [focused] property or [onFocus/onBlur] handlers are set.
   style?: t.CssValue;
 
   onClick?: React.MouseEventHandler;
@@ -43,4 +44,8 @@ export type CardProps = {
   onMouseUp?: React.MouseEventHandler;
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
+  onFocusChange?: CardFocusChangeHandler;
 };
+
+export type CardFocusChangeHandler = (e: CardFocusChangeHandlerArgs) => void;
+export type CardFocusChangeHandlerArgs = { focused: boolean };

@@ -9,7 +9,7 @@ type T = {
   debug: { showTests: boolean; initialValue: boolean };
 };
 const initial: T = {
-  language: 'typescript',
+  language: 'yaml',
   tests: { running: false },
   debug: { showTests: true, initialValue: true },
 };

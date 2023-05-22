@@ -221,11 +221,12 @@ function on(
       const modifiers = e.current.modifiers;
 
       if (matcher.isMatch(pressed, modifiers)) {
+        const event = e.last!;
         fn({
           pattern,
           state: e.current,
-          event: e.last!,
-          cancel: () => e.last!.cancel(),
+          event,
+          handled: () => event?.handled(),
         });
       }
     });

@@ -46,8 +46,10 @@ export const Util = {
       get is() {
         return Util.toFlags(e);
       },
-      cancel() {
+      handled() {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
       },
     };
   },

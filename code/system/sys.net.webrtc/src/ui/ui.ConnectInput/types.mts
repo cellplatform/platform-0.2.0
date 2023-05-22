@@ -1,11 +1,14 @@
 import type { t } from '../common.t';
 
+export type ConnectInputField = 'Peer:Remote' | 'Peer:Self' | 'Video';
+
 export type ConnectInputProps = {
   self?: t.Peer;
   remotePeer?: t.PeerId;
-  showPeer?: boolean;
-  showConnect?: boolean;
-  isSpinning?: boolean;
+  spinning?: boolean;
+  fields?: t.ConnectInputField[];
+  video?: MediaStream;
+  muted?: boolean;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;

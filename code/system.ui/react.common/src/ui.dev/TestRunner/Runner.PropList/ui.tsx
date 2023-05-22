@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState } from './common';
+import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState, Test } from './common';
 import { ButtonText } from './ui.ButtonText';
 
 type Milliseconds = number;
 
 const MSEC = {
-  DELAY_COLORED: 1000 * 5, // 5 seconds
+  DELAY_COLORED: 1000 * 10, // 10-seconds
 };
 
 export type TestRunnerProps = {
@@ -56,7 +56,18 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     console.group('🌳 Test Run');
     console.info('ok', res.ok);
     console.info('stats', res.stats);
-    console.info('details', res);
+    console.info('root', res);
+    Test.Tree.Results.walkDown(res, (e) => {
+      if (!e.test) return;
+      if (e.test?.ok) return;
+      console.warn(`${e.suite.description} > ${e.test.description}`);
+
+      /**
+       * TODO 🐷
+       * - include [e.parent] property, to allow for walking up the tree.
+       * - toString() => "root > suite > test"
+       */
+    });
     console.groupEnd();
 
     setResults(res);
@@ -70,6 +81,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const styles = {
     base: css({
       flex: 1,
+      minHeight: 16,
       display: 'grid',
       alignContent: 'center',
       gridTemplateColumns: '1fr auto',
@@ -77,7 +89,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     spinner: css({ minWidth: 110 }),
   };
 
-  const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={40} />;
+  const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
       <ButtonText results={results} isColored={isColoredText} isOver={isOver} />

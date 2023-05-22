@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'cross-fetch': '3.1.5',
+    'cross-fetch': '3.1.6',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

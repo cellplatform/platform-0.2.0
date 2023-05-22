@@ -14,3 +14,4 @@ export { Button } from '../../ui/Button';
 export { Switch } from '../../ui/Button.Switch';
 export { RenderCount } from '../../ui/RenderCount';
 export { TextInput } from '../../ui/Text.Input';
+export { Spinner } from '../../ui/Spinner';

@@ -1,6 +1,6 @@
-import { COLORS, DevWrangle, t, DEFAULTS } from './common';
+import { COLORS, DevWrangle, t } from './common';
+import { DevKeyboard } from './logic.Keyboard';
 import { Harness } from './ui/Harness';
-import { DevKeyboard } from './ui/Keyboard';
 import { SpecList } from './ui/SpecList';
 
 type Options = {
@@ -28,11 +28,7 @@ export async function render(
   const spec = await DevWrangle.Url.module(url, specs);
   const style = options.style ?? { Absolute: 0, backgroundColor: COLORS.WHITE };
 
-  if (keyboard)
-    DevKeyboard.listen({
-      cancelPrint: true,
-      cancelSave: true,
-    });
+  if (keyboard) DevKeyboard.listen({});
 
   if (spec) {
     return <Harness spec={spec} style={style} />;

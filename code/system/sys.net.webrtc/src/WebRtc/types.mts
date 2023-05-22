@@ -11,8 +11,8 @@ export type PeerUri = string;
 export type PeerConnectionId = string;
 export type PeerProximity = 'local' | 'remote';
 
-export type PeerMediaStreamInput = 'camera' | 'screen';
-export type PeerGetMediaStream = (input: PeerMediaStreamInput) => Promise<PeerGetMediaStreamRes>;
+export type PeerMediaStreamSource = 'camera' | 'screen';
+export type PeerGetMediaStream = (input: PeerMediaStreamSource) => Promise<PeerGetMediaStreamRes>;
 export type PeerGetMediaStreamRes = {
   media: MediaStream | undefined;
   done(): Promise<void>; // Indicates the consumer of the stream is finished ("done") and it can be released.
@@ -31,12 +31,13 @@ export type Peer = t.Disposable & {
   readonly connectionsByPeer: PeerConnectionsByPeer[];
   readonly error$: t.Observable<PeerError>;
   readonly disposed: boolean;
-  data(connectTo: Id, options?: { name?: string }): Promise<PeerDataConnection>;
-  media(connectTo: Id, input: PeerMediaStreamInput): Promise<PeerMediaConnection>;
+  data(connectTo: Id): Promise<PeerDataConnection>;
+  media(connectTo: Id, input: PeerMediaStreamSource): Promise<PeerMediaConnection>;
 };
 
+export type PeerConnectionEndpoints = { local: Id; remote: Id };
 export type PeerConnection = PeerDataConnection | PeerMediaConnection;
-export type PeerConnectionsByPeer = { peer: { local: Id; remote: Id } } & PeerConnections;
+export type PeerConnectionsByPeer = { peer: PeerConnectionEndpoints } & PeerConnections;
 export type PeerConnections = {
   readonly length: number;
   readonly all: PeerConnection[];
@@ -46,7 +47,7 @@ export type PeerConnections = {
 
 type Connection = t.Disposable & {
   readonly id: Id;
-  readonly peer: { local: Id; remote: Id };
+  readonly peer: PeerConnectionEndpoints;
   readonly isOpen: boolean;
   readonly isDisposed: boolean;
 };
@@ -83,8 +84,13 @@ export type PeerMediaStreams = { local?: MediaStream; remote?: MediaStream };
  * Connection Metadata.
  */
 export type PeerMeta = PeerMetaData | PeerMetaMedia;
-export type PeerMetaData = { label: string; initiatedBy?: t.PeerId };
-export type PeerMetaMedia = { input: PeerMediaStreamInput; initiatedBy?: t.PeerId };
+export type PeerMetaData = {
+  initiatedBy?: t.PeerId;
+};
+export type PeerMetaMedia = {
+  input: PeerMediaStreamSource;
+  initiatedBy?: t.PeerId;
+};
 
 /**
  * Peer connection change info.

@@ -152,6 +152,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
       border: 'none',
       width: '100%',
       lineHeight: 0,
+      minHeight: 20,
       outline: 'none',
       background: 'transparent',
       boxSizing: 'border-box',
@@ -177,7 +178,7 @@ export const HtmlInput: React.FC<HtmlInputProps> = (props) => {
 
   return (
     <input
-      {...css(styles.base as t.CssValue, props.style)}
+      {...css(styles.base, props.style)}
       className={props.className}
       ref={inputRef}
       type={isPassword ? 'password' : 'text'}

@@ -33,17 +33,15 @@ export async function render(
     backgroundColor: COLORS.WHITE,
   };
 
-  if (spec) {
-    if (keyboard) {
-      DevKeyboard.listen({
-        cancelPrint: true,
-        cancelSave: true,
-        onDoubleEscape(e) {
-          KeyboardActions.onDoubleEscape(doubleEscapeKeyAction);
-        },
-      });
-    }
+  if (keyboard) {
+    DevKeyboard.listen({
+      onDoubleEscape(e) {
+        if (spec) KeyboardActions.onDoubleEscape(doubleEscapeKeyAction);
+      },
+    });
+  }
 
+  if (spec) {
     return <DevBase.Harness spec={spec} style={style} />;
   }
 

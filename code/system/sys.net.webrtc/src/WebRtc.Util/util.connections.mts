@@ -19,7 +19,7 @@ export async function isAlive(self: t.Peer, subject: t.PeerId) {
 
   // Start (then stop) a transient test connection.
   try {
-    const conn = await self.data(subject, { name: 'test:isAlive' });
+    const conn = await self.data(subject);
     const isAlive = conn.isOpen;
     conn.dispose();
     return isAlive;

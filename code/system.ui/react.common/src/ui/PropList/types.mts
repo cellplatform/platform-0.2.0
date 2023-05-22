@@ -1,5 +1,7 @@
 import type { t } from '../common.t';
 
+type Milliseconds = number;
+
 /**
  * Component: <PropList>
  */
@@ -22,12 +24,21 @@ export type PropListProps = {
   width?: number | t.PropListSize;
   height?: number | t.PropListSize;
   card?: boolean | PropListCard;
+  flipped?: boolean;
+  backside?: JSX.Element | null;
   theme?: t.PropListTheme;
   style?: t.CssValue;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
 };
 
 export type PropListSize = { fixed?: number; min?: number; max?: number };
-export type PropListCard = {};
+export type PropListCard = {
+  flipSpeed?: Milliseconds;
+  shadow?: boolean | t.CssShadow;
+  background?: t.CardBackground;
+  border?: t.CardBorder;
+};
 
 /**
  * Component: <PropsList.FieldSelector>
@@ -36,6 +47,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   title?: t.PropListTitleInput;
   all?: F[];
   selected?: F[];
+  default?: F[];
   resettable?: boolean;
   showIndexes?: boolean;
   style?: t.CssValue;
@@ -76,7 +88,10 @@ export type PropListItem = {
   tooltip?: string;
   visible?: boolean;
   indent?: number;
+  selected?: boolean | PropListItemSelected;
 };
+
+export type PropListItemSelected = { color: string | number };
 
 /**
  * The value portion of a [PropList] item.
@@ -89,6 +104,7 @@ type ValueBase = {
   color?: string | number;
   fontSize?: number;
   bold?: boolean;
+  opacity?: number;
   onClick?: (e: PropListValueEventArgs) => void;
 };
 

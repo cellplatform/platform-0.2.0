@@ -1,12 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
-import { FC, Color, COLORS, css, t, rx, DEFAULTS, PropList, Pkg, FIELDS } from './common';
+import { useState } from 'react';
 
-import { FieldModuleVerify } from './field.Module.Verify';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
+import { FieldGroup } from './fields/Group';
+import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
+import { FieldModuleVerify } from './fields/Module.Verify';
+import { FieldPeer } from './fields/Peer';
+import { FieldPeerConnections } from './fields/Peer.Connections';
+import { FieldSelf } from './fields/Self';
+import { FieldStateShared } from './fields/State.Shared';
+import { useInfo } from './useInfo.mjs';
 
 export type WebRtcInfoProps = {
+  client?: t.WebRtcEvents;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.WebRtcInfoFields[];
+  fields?: t.WebRtcInfoField[];
+  flipped?: boolean;
   data?: t.WebRtcInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
@@ -17,11 +26,21 @@ export type WebRtcInfoProps = {
  * Component
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
-  const { fields = DEFAULTS.fields, data = {} } = props;
+  const { client, fields = DEFAULTS.fields, data = {} } = props;
 
-  const items = PropList.builder<t.WebRtcInfoFields>()
+  const info = useInfo(client);
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
+  const items = PropList.builder<t.WebRtcInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
-    .field('Module.Verify', () => FieldModuleVerify(data))
+    .field('Module.Verify', () => FieldModuleVerify({ fields, data }))
+    .field('Self.Id', () => FieldSelf({ fields, data, info }))
+    .field('Group', () => FieldGroup({ fields, data, info }))
+    .field('Group.Peers', () => FieldGroupPeers({ fields, data, info, client, isOver }))
+    .field('State.Shared', () => FieldStateShared({ fields, data, info }))
+    .field('Peer', () => FieldPeer({ fields, data, info }))
+    .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))
     .items(fields);
 
   return (
@@ -32,8 +51,11 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
       card={props.card}
+      flipped={props.flipped}
       padding={props.card ? [20, 25] : undefined}
       margin={props.margin}
+      onMouseEnter={over(true)}
+      onMouseLeave={over(false)}
     />
   );
 };

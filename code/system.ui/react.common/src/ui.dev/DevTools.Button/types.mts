@@ -2,6 +2,7 @@ import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
 type RightInput = string | JSX.Element;
+type SpinnerInput = boolean;
 
 /**
  * Button
@@ -12,6 +13,7 @@ export type DevButtonHandlerArgs<S extends O = O> = {
   enabled(value: boolean | t.DevValueHandler<boolean, S>): DevButtonHandlerArgs<S>;
   label(value: string | t.DevValueHandler<string, S>): DevButtonHandlerArgs<S>;
   right(value: RightInput | t.DevValueHandler<RightInput, S>): DevButtonHandlerArgs<S>;
+  spinner(value: t.DevValueHandler<SpinnerInput, S>): DevButtonHandlerArgs<S>;
   onClick(fn: DevButtonClickHandler<S>): DevButtonHandlerArgs<S>;
   redraw(subject?: boolean): void;
 };

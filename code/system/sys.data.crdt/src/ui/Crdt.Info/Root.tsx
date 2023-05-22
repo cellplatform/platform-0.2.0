@@ -14,6 +14,7 @@ export type CrdtInfoProps = {
   data?: t.CrdtInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
+  flipped?: boolean;
   style?: t.CssValue;
 };
 
@@ -21,13 +22,13 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { fields = DEFAULTS.fields, data = {} } = props;
+  const { fields = DEFAULTS.fields, data = {}, flipped } = props;
   const file = useFile(data);
 
   const items = PropList.builder<t.CrdtInfoFields>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
-    .field('Driver.Library', { label: 'Library', value: Wrangle.automerge() })
+    .field('Driver.Library', { label: 'Library', value: Wrangle.automergeLib() })
     .field('Driver.Runtime', { label: 'Runtime', value: 'ƒ ← WASM ← Rust' })
     .field('History', () => FieldHistory(data))
     .field('History.Item', () => FieldHistoryItem(fields, data))
@@ -44,6 +45,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
       width={props.width ?? { min: 230 }}
       defaults={{ clipboard: false }}
       card={props.card}
+      flipped={props.flipped}
       padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       style={props.style}
@@ -55,10 +57,10 @@ const View: React.FC<CrdtInfoProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  automerge() {
+  automergeLib() {
     const name = '@automerge/automerge';
     const version = Pkg.dependencies[name] ?? '0.0.0';
-    return `${name}@${version}`;
+    return `automerge@${version}`;
   },
 
   title(props: CrdtInfoProps) {

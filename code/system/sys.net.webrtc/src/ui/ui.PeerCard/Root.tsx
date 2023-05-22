@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { Color, copyPeer, css, FC, MediaStream, Spinner, t, useMouseState } from '../common';
+import {
+  R,
+  Color,
+  copyPeer,
+  css,
+  FC,
+  MediaStream,
+  Spinner,
+  t,
+  useMouseState,
+  DEFAULTS,
+  FIELDS,
+} from './common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
 import { ConnectInput } from '../ui.ConnectInput';
-
-const DEFAULTS = {
-  muted: false,
-  showPeer: true,
-  showConnect: true,
-};
 
 const URL = {
   Rowan:
@@ -24,9 +30,9 @@ export type PeerCardProps = {
   remotePeer?: t.PeerId;
   muted?: boolean;
   spinning?: boolean;
-  showPeer?: boolean;
-  showConnect?: boolean;
+  gap?: number;
   backgroundUrl?: string;
+  footerVideo?: MediaStream;
 
   devPanelWidth?: number;
   devShowFooter?: boolean;
@@ -34,6 +40,7 @@ export type PeerCardProps = {
   style?: t.CssValue;
   fill?: boolean;
 
+  fields?: t.ConnectInputField[];
   onMuteClick?(e: React.MouseEvent): void;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
@@ -43,12 +50,8 @@ export type PeerCardProps = {
  * Component
  */
 const View: React.FC<PeerCardProps> = (props) => {
-  const {
-    self,
-    muted = false,
-    showPeer = DEFAULTS.showPeer,
-    showConnect = DEFAULTS.showConnect,
-  } = props;
+  const { self, muted = DEFAULTS.muted, fields = DEFAULTS.fields } = props;
+  const gap = R.clamp(0, Number.MAX_VALUE, props.gap ?? DEFAULTS.gap);
   const isSpinning = props.spinning ? true : !self;
   const [showCopied, setShowCopied] = useState(false);
   const mouse = useMouseState();
@@ -92,6 +95,7 @@ const View: React.FC<PeerCardProps> = (props) => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        marginBottom: self ? gap : 0,
       }),
       bg: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
       mediaOuter: css({
@@ -102,7 +106,6 @@ const View: React.FC<PeerCardProps> = (props) => {
       }),
       media: css({ Absolute: 0 }),
     },
-
     peer: css({
       height: 28,
       boxSizing: 'border-box',
@@ -161,11 +164,11 @@ const View: React.FC<PeerCardProps> = (props) => {
       </div>
       <ConnectInput
         style={styles.footer}
+        fields={fields}
         self={self}
         remotePeer={props.remotePeer}
-        showPeer={showPeer}
-        showConnect={showConnect}
-        isSpinning={props.spinning}
+        video={props.footerVideo}
+        spinning={props.spinning}
         onLocalPeerCopied={handlePeerCopied}
         onRemotePeerChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
@@ -177,9 +180,12 @@ const View: React.FC<PeerCardProps> = (props) => {
 /**
  * Export
  */
-type Fields = { DEFAULTS: typeof DEFAULTS };
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  FIELDS: typeof FIELDS;
+};
 export const PeerCard = FC.decorate<PeerCardProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, FIELDS },
   { displayName: 'PeerCard' },
 );

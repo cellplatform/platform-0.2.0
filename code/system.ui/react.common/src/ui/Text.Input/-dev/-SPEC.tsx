@@ -49,7 +49,7 @@ export default Dev.describe('TextInput', (e) => {
     });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {
-      e.cancel();
+      e.handled();
       state.current.ref?.focus();
     });
 

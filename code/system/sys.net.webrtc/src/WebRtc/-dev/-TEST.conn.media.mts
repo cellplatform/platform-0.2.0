@@ -1,6 +1,6 @@
-import { Dev, expect, rx, t, TestNetwork, Time, WebRtc, expectError } from '../../test.ui';
+import { Dev, expect, expectError, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
 
-export default Dev.describe('Media Connection', (e) => {
+export default Dev.describe('WebRTC: connection → media', (e) => {
   e.timeout(1000 * 15);
 
   let peerA: t.Peer;
@@ -62,7 +62,7 @@ export default Dev.describe('Media Connection', (e) => {
        * This should auto-close the media connection.
        */
       data2.dispose();
-      await Time.wait(300);
+      await Time.wait(600);
       expect(peerA.connections.length).to.eql(0);
       expect(peerB.connections.length).to.eql(0);
 

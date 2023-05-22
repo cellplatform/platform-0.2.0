@@ -4,8 +4,8 @@ import { describe, expect, it } from '../../test';
 describe('headless (test runner)', () => {
   it('success (OK)', async () => {
     const Specs = {
-      'sample.MySample': () => import('../sample.specs/MySample.SPEC'),
-      'sample.empty': () => import('../sample.specs/Empty.SPEC'),
+      'sample.MySample': () => import('../sample.specs/-SPEC.MySample'),
+      'sample.empty': () => import('../sample.specs/-SPEC.Empty'),
     };
     const res = await Dev.headless(Specs);
     expect(res.ok).to.eql(true);
@@ -15,7 +15,7 @@ describe('headless (test runner)', () => {
 
   it('fail', async () => {
     const Specs = {
-      'sample.Fail': () => import('../sample.specs/Fail.SPEC'),
+      'sample.Fail': () => import('../sample.specs/-SPEC.Fail'),
     };
     const res = await Dev.headless(Specs);
     expect(res.ok).to.eql(false);

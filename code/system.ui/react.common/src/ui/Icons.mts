@@ -1,6 +1,6 @@
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
 import { MdFace, MdPortableWifiOff, MdVisibility, MdVisibilityOff, MdWifi } from 'react-icons/md';
-import { RiFileCopyFill } from 'react-icons/ri';
+import { TbCopy } from 'react-icons/tb';
 
 import { Icon } from './Icon';
 
@@ -12,7 +12,7 @@ const icon = Icon.renderer;
 export const Icons = {
   Wifi: { On: icon(MdWifi), Off: icon(MdPortableWifiOff) },
   Face: icon(MdFace),
-  Copy: icon(RiFileCopyFill),
+  Copy: icon(TbCopy),
   Visibility: { On: icon(MdVisibility), Off: icon(MdVisibilityOff) },
   Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
 };

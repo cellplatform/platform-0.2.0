@@ -2,36 +2,30 @@ import { WebRtcController } from '..';
 import {
   Crdt,
   Dev,
-  expect,
   Filesystem,
   Pkg,
-  rx,
-  t,
   TestNetwork,
   Time,
+  UserAgent,
   WebRtc,
+  expect,
+  rx,
+  t,
 } from '../../test.ui';
-import { pruneDeadPeers } from '../util.mjs';
 
-type DocShared = {
-  network: t.NetworkState;
-};
-
-export default Dev.describe('Network Controller (CRDT)', async (e) => {
+export default Dev.describe('Network Controller', async (e) => {
   e.timeout(1000 * 50);
-
   const { dispose, dispose$ } = rx.disposable();
 
-  const Mutate = WebRtcController.Mutate;
+  const Mutate = WebRtc.State.Mutate;
   const bus = rx.bus();
   const fs = (await Filesystem.client({ bus, dispose$ })).fs;
   const filedir = fs.dir('dev.test.WebRtc.Controller');
 
   const setup = () => {
-    const initial: DocShared = { network: { peers: {} } };
-    const stateDoc = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
-
-    return { initial, stateDoc };
+    const initial = WebRtc.NetworkSchema.initial.doc;
+    const doc = Crdt.Doc.ref<t.NetworkDocShared>('doc-id', initial, { dispose$ });
+    return { initial, doc };
   };
 
   e.it('exposed from root API', (e) => {
@@ -40,60 +34,176 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
 
   let peerA: t.Peer;
   let peerB: t.Peer;
+  let peerC: t.Peer;
 
-  e.it('setup peers A ⇔ B', async (e) => {
-    const [a, b] = await TestNetwork.peers(2, { getStream: true });
+  e.it('setup peers: A ⇔ B ⇔ C', async (e) => {
+    const [a, b, c] = await TestNetwork.peers(3, { getStream: true, dispose$ });
     peerA = a;
     peerB = b;
+    peerC = c;
   });
 
-  e.describe('EventBus', (e) => {
-    const { stateDoc } = setup();
-    let controller: t.WebRtcEvents;
+  e.it('state', (e) => {
+    const { doc } = setup();
+    const ctrl1 = WebRtcController.listen(peerA);
+    const ctrl2 = WebRtcController.listen(peerA, { doc });
+    expect(ctrl1.state.kind).to.eql('WebRtc:State');
+    expect(ctrl2.state.doc).to.equal(doc);
+  });
 
-    e.it('default generated bus (← info method)', async (e) => {
-      controller = WebRtcController.listen(peerA, stateDoc);
-      const info = await controller.info.get();
-      controller.dispose();
+  e.describe('EventBus: controller.client ← (controller.listen)', (e) => {
+    const { doc } = setup();
+
+    e.it('default auto-generated bus', async (e) => {
+      const controller = WebRtcController.listen(peerA);
+      const client = controller.client();
+      const info = await client.info.get();
       expect(info?.peer).to.equal(peerA);
+      controller.dispose();
     });
 
-    e.it('specified bus (← info method)', async (e) => {
+    e.it('uses specified bus', async (e) => {
       const bus = rx.bus();
-      controller = WebRtcController.listen(peerA, stateDoc, { bus });
+      const controller = WebRtcController.listen(peerA, { bus });
 
-      const events1 = WebRtc.events(bus, peerA.id);
-      const events2 = WebRtc.events(bus, peerA);
+      const client1 = WebRtc.client(bus, peerA.id);
+      const client2 = WebRtc.client(bus, peerA);
 
-      const info1 = await events1.info.get();
-      const info2 = await events2.info.get();
+      const info1 = await client1.info.get();
+      const info2 = await client2.info.get();
       controller.dispose();
+      client1.dispose();
+      client2.dispose();
 
       expect(info1?.peer).to.equal(peerA);
       expect(info2?.peer).to.equal(peerA);
     });
 
-    e.it('info', async (e) => {
-      controller = WebRtcController.listen(peerA, stateDoc);
-      const info = await controller.info.get();
+    e.it('auto-generated network state CRDT', async (e) => {
+      const controller = WebRtcController.listen(peerA, {});
+      const client = controller.client();
+      const info = await client.info.get();
+      controller.dispose();
+      expect(info?.state).to.not.equal(doc); // NB: generated state document within controller.
+      expect(info?.state.current.network.peers[peerA.id].id).to.eql(peerA.id); // NB: Auto added self to {peers}
+    });
+
+    e.it('provided network state (CRDT)', async (e) => {
+      expect(doc.current.network.peers).to.eql({});
+
+      const controller = WebRtcController.listen(peerA, { doc: doc });
+      const client = controller.client();
+      const info = await client.info.get();
       controller.dispose();
 
       expect(info?.module.name).to.eql(Pkg.name);
       expect(info?.module.version).to.eql(Pkg.version);
       expect(info?.peer).to.equal(peerA);
-      expect(info?.state.peers).to.eql({});
+      expect(info?.state.current.network.peers[peerA.id].id).to.eql(peerA.id); // NB: Auto added self to {peers}
+      expect(info?.state).to.equal(doc);
       expect(info?.syncers).to.eql([]);
+    });
+
+    e.it('auto assigns the local meta-data', async (e) => {
+      const controller = WebRtcController.listen(peerA, {});
+      const client = controller.client();
+      const state = (await client.info.state())!;
+      controller.dispose();
+
+      const self = state.current.network.peers[peerA.id];
+      expect(self.id).to.eql(peerA.id);
+      expect(self.device.userAgent).to.eql(UserAgent.current);
+    });
+
+    e.it('provided network state already has {self} peer.', async (e) => {
+      const { doc } = setup();
+      expect(doc.current.network.peers).to.eql({}); // NB: No peers at this point.
+
+      const get = (state?: t.NetworkDocShared) => state?.network.peers[peerA.id];
+
+      doc.change((d) => Mutate.addPeer(d.network, peerA.id, peerA.id)); // NB: Add self.
+      expect(get(doc.current)?.id).to.eql(peerA.id);
+
+      const controller = WebRtcController.listen(peerA, { doc: doc });
+      const client = controller.client();
+      const info = await client.info.get();
+      controller.dispose();
+      doc.dispose();
+
+      expect(get(info?.state.current)).to.eql(get(doc.current));
+    });
+
+    e.it('dispose', (e) => {
+      const { dispose$, dispose } = rx.disposable();
+      const controller = WebRtcController.listen(peerA);
+      const client1 = controller.client();
+      const client2 = controller.client();
+      const client3 = controller.client(dispose$);
+
+      expect(client1.instance).to.eql(client2.instance);
+      expect(client1).to.not.equal(client2); // NB: Not same instance.
+
+      client1.dispose();
+      expect(controller.disposed).to.eql(false);
+      expect(client1.disposed).to.eql(true);
+      expect(client2.disposed).to.eql(false);
+      expect(client3.disposed).to.eql(false);
+
+      dispose();
+      expect(controller.disposed).to.eql(false);
+      expect(client1.disposed).to.eql(true);
+      expect(client2.disposed).to.eql(false);
+      expect(client3.disposed).to.eql(true); // NB: via dispose$ in param
+
+      controller.dispose();
+      expect(controller.disposed).to.eql(true);
+      expect(client1.disposed).to.eql(true); // NB: Already disposed.
+      expect(client2.disposed).to.eql(true); // NB: Disposed via controller.
+      expect(client3.disposed).to.eql(true);
+    });
+
+    e.it('dispose$', (e) => {
+      const { dispose$, dispose } = rx.disposable();
+      const controller = WebRtcController.listen(peerA, { dispose$ });
+      const client = controller.client();
+
+      dispose();
+      expect(controller.disposed).to.eql(true);
+      expect(client.disposed).to.eql(true);
     });
   });
 
-  e.describe('Controller.listen', (e) => {
-    const { stateDoc, initial } = setup();
-    let controller: t.WebRtcEvents;
+  e.describe('EventBus: controller.withClient ← (controller.listen)', (e) => {
+    e.it('invokes with isolated transient event-bus', async (e) => {
+      const controller = WebRtcController.listen(peerA);
+      let info: t.WebRtcInfo | undefined;
+      let client1: t.WebRtcEvents | undefined;
+      let client2: t.WebRtcEvents | undefined;
 
-    e.it('init: start listening to a network - ["local:peer" + crdt.doc<shared>]', async (e) => {
+      await controller.withClient(async (client) => {
+        client1 = client;
+        info = await client.info.get();
+      });
+
+      await controller.withClient((client) => {
+        client2 = client;
+      });
+
+      expect(client1?.disposed).to.eql(true);
+      expect(client2?.disposed).to.eql(true);
+      expect(info?.peer.id).to.eql(peerA.id);
+    });
+  });
+
+  e.describe.skip('Controller.listen', (e) => {
+    const { doc } = setup();
+    let controller: t.WebRtcController;
+    let client: t.WebRtcEvents;
+
+    e.it('init: start listening to the network', async (e) => {
       const self = peerA;
-
-      controller = WebRtcController.listen(self, stateDoc, {
+      controller = WebRtcController.listen(self, {
+        doc: doc,
         filedir,
         dispose$,
         onConnectStart(e) {
@@ -105,36 +215,37 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
           // console.log('onConnectComplete', e);
         },
       });
+      client = controller.client();
 
-      // await rx.firstValueFrom(waiter.dispose$);
+      const info = await client.info.get();
+      expect(info?.state.current.network.peers[peerA.id].id).to.eql(peerA.id); // NB: Auto added self to {peers}
     });
 
-    e.it('[success] connect peer: A → B (initiated by A)', async (e) => {
+    e.it('connect peer: A → B (initiated by A)', async (e) => {
       const self = peerA.id;
       const remote = peerB.id;
-      const wait = rx.firstValueFrom(controller.connect.complete$);
+      const wait = rx.firstValueFrom(client.connect.complete$);
 
-      let firedStart: t.WebRtcConnectStart[] = [];
-      let firedComplete: t.WebRtcConnectStart[] = [];
-      controller.connect.start$.subscribe((e) => firedStart.push(e));
-      controller.connect.complete$.subscribe((e) => firedComplete.push(e));
+      const firedStart: t.WebRtcConnectStart[] = [];
+      const firedComplete: t.WebRtcConnectStart[] = [];
+      client.connect.start$.subscribe((e) => firedStart.push(e));
+      client.connect.complete$.subscribe((e) => firedComplete.push(e));
 
       /**
        * Adding peer to document (CRDT) initiates the
        * controller's connection sequence.
        */
-      stateDoc.change((d) => {
+      doc.change((d) => {
         const initiatedBy = self;
         Mutate.addPeer(d.network, self, remote, { initiatedBy });
       });
 
-      const info1 = await controller.info.get();
+      const info1 = await client.info.get();
       expect(info1?.syncers).to.eql([]);
 
       await wait;
-      const doc = stateDoc.current;
-      const p1 = doc.network.peers[self];
-      const p2 = doc.network.peers[remote];
+      const p1 = doc.current.network.peers[self];
+      const p2 = doc.current.network.peers[remote];
 
       expect(p1.initiatedBy).to.eql(self);
       expect(p2.initiatedBy).to.eql(self);
@@ -146,18 +257,13 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(firedComplete.length).to.eql(1);
       expect(firedComplete[0].peer).to.eql({ local: self, remote });
 
-      const info2 = await controller.info.get();
+      const info2 = await client.info.get();
       const syncers = info2?.syncers ?? [];
       expect(syncers.length).to.eql(1);
 
       expect(syncers[0].local).to.eql(self);
       expect(syncers[0].remote).to.eql(remote);
-      expect(syncers[0].syncer.doc).to.equal(stateDoc);
-
-      console.log('syncers', syncers);
-      console.log('syncers.length', syncers.length);
-      console.log('info after connect', info2);
-      console.log('info.syncers', info2?.syncers[0]);
+      expect(syncers[0].syncer.doc).to.equal(doc);
 
       // Ensure live connections match the synced state-document.
       await Time.wait(500);
@@ -173,69 +279,66 @@ export default Dev.describe('Network Controller (CRDT)', async (e) => {
       expect(connB?.peer.remote).to.eql(p1.id);
     });
 
-    e.it('[fail] connect peer: A → FOO-404', async (e) => {
-      const self = peerA.id;
-      const remote = 'FOO-404';
+    e.it('connect peer (via event-bus): A → C (initiated by A)', async (e) => {
+      const firedStart: t.WebRtcConnectStart[] = [];
+      const firedComplete: t.WebRtcConnectStart[] = [];
+      client.connect.start$.subscribe((e) => firedStart.push(e));
+      client.connect.complete$.subscribe((e) => firedComplete.push(e));
 
-      const errors: t.PeerError[] = [];
-      controller.errors.peer$.subscribe((e) => errors.push(e));
+      const info1 = (await client.info.get())!;
+      expect(info1.syncers.length).to.eql(1, '(1) total syncers');
 
       /**
-       * Adding peer to document (CRDT) initiates the
-       * controller's connection sequence.
+       * NOTE:
+       *   This updated the shared-state {network.peers} via the controller.
        */
-      stateDoc.change((d) => {
-        const initiatedBy = self;
-        Mutate.addPeer(d.network, self, remote, { initiatedBy });
-      });
-      expect(stateDoc.current.network.peers[remote].initiatedBy).to.eql(self);
+      const res = await client.connect.fire(peerC.id);
+      expect(res.peer.local).to.eql(peerA.id);
+      expect(res.peer.remote).to.eql(peerC.id);
 
-      await rx.firstValueFrom(controller.errors.peer$);
-      expect(errors.length).to.eql(1);
-      expect(errors[0].type === 'peer-unavailable').to.eql(true);
+      const info2 = (await client.info.get())!;
+      const network = info2?.state.current.network!;
 
-      await Time.wait(10);
-      const doc = stateDoc.current;
-      const p2 = doc.network.peers[remote];
-      expect(p2.error).to.include(errors[0].message);
-      expect(p2.error).to.include('[peer-unavailable]');
+      expect(network.peers[peerA.id]).to.exist;
+      expect(network.peers[peerC.id]).to.exist;
+
+      expect(firedStart.length).to.eql(1, 'fired-start');
+      expect(firedComplete.length).to.eql(1, 'fired-complete');
+
+      expect(info2.syncers.length).to.eql(2, '(2) total syncers');
+      const item = info2.syncers[1];
+      expect(item.local).to.eql(peerA.id);
+      expect(item.remote).to.eql(peerC.id);
+      expect(item.syncer.doc.current.network).to.eql(network);
     });
 
-    e.it.skip('meta: userAgent added to {peers} state', async (e) => {
-      // expect(res.peer.meta.userAgent).to.eql(UserAgent.current);
+    e.it('close connection', async (e) => {
+      const getNetwork = async () => (await client.info.state())?.current.network!;
+
+      const network1 = await getNetwork();
+      expect(network1.peers[peerA.id]).to.exist;
+      expect(network1.peers[peerC.id]).to.exist;
+      expect(peerA.connections.length).to.eql(2);
+
+      const res = await client.close.fire(peerC.id);
+      const network2 = await getNetwork();
+      expect(res.state).to.eql(network2);
+      expect(res.peer.local).to.eql(peerA.id);
+      expect(res.peer.remote).to.eql(peerC.id);
+
+      expect(network2.peers[peerA.id]).to.exist;
+      expect(network2.peers[peerC.id]).to.not.exist; // NB: Removed from state-doc.
+      expect(peerA.connections.length).to.eql(1);
     });
 
-    e.it('kill peer-B → auto removed from peer-A state doc', async (e) => {
-      const remote = peerB.id;
-      expect(stateDoc.current.network.peers[remote]).to.exist;
-
-      peerB.dispose(); // Kill the peer.
-      await Time.wait(500);
-      expect(stateDoc.current.network.peers[remote]).to.not.exist;
-    });
-
-    e.it('prune dead peers', async (e) => {
-      const state = Crdt.Doc.ref<DocShared>('doc-id', initial, { dispose$ });
-      state.change((d) => Mutate.addPeer(d.network, 'A', 'B', { initiatedBy: 'A' }));
-
-      expect(state.current.network.peers['B']).to.exist;
-
-      const res = await pruneDeadPeers(peerA, state);
-      expect(res.removed).to.eql(['B']);
-      expect(state.current.network.peers['B']).to.not.exist;
-    });
-
-    e.it('dispose', async (e) => {
-      await Time.wait(300);
+    e.it('dispose', (e) => {
       let count = 0;
-      controller.dispose$.subscribe(() => count++);
+      client.dispose$.subscribe(() => count++);
 
-      dispose();
+      dispose(); // NB: causes controller to be disposed (via dispose$).
+      expect(controller.disposed).to.eql(true);
+      expect(client.disposed).to.eql(true);
       expect(count).to.eql(1);
-      /**
-       * TODO 🐷
-       * - dispose of controller
-       */
     });
   });
 });

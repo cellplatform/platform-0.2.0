@@ -31,7 +31,7 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
       padding: 10,
       boxSizing: 'border-box',
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: 'auto 1fr auto',
     }),
     icon: css({ Absolute: [0, null, null, 12] }),
     keys: css({ Flex: 'x-center-center' }),
@@ -84,6 +84,7 @@ export const DevSample: React.FC<DevSampleProps> = (props) => {
       </div>
       <div {...styles.footer}>
         <DevModifierKeys edge={'Left'} state={state} />
+        <div />
         <DevModifierKeys edge={'Right'} state={state} />
       </div>
     </div>

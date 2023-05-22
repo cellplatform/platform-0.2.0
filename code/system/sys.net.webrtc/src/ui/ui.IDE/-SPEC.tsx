@@ -3,6 +3,7 @@ import { PeerCard, PeerCardProps } from '../ui.PeerCard';
 import { PeerList } from '../ui.PeerList';
 import { SpecDocs } from './-SPEC.Docs.mjs';
 import { SpecMonacoSync } from './-SPEC.Monaco';
+import { REPL } from './-SPEC.REPL';
 import {
   COLORS,
   css,
@@ -14,18 +15,15 @@ import {
   t,
   TEST,
   WebRtc,
-  Yaml,
+  WebRtcInfo,
 } from './common';
 import { FileCard } from './FileCard';
 
 type T = {
   remotePeer?: t.PeerId;
   spinning?: boolean;
-  parsed: {
-    me?: any;
-    shared?: any;
-  };
-  debug: { showBg: boolean };
+  parsed: { me?: any; shared?: any };
+  debug: { showBg: boolean; persistSharedDoc?: boolean };
 };
 const initial: T = { debug: { showBg: true }, parsed: {} };
 
@@ -37,18 +35,16 @@ export default Dev.describe('PeerCard', async (e) => {
     muted: boolean;
     showBg: boolean;
     showFooter: boolean;
-    showPeer?: boolean;
-    showConnect?: boolean;
     sidepanelWidth?: number;
     backgroundUrl?: string;
+    persistSharedDoc?: boolean;
   };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerCard');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.IDE');
   const local = localstore.object({
     muted: PeerCard.DEFAULTS.muted,
     showBg: initial.debug.showBg,
+    persistSharedDoc: initial.debug.persistSharedDoc,
     showFooter: true,
-    showPeer: PeerCard.DEFAULTS.showPeer,
-    showConnect: PeerCard.DEFAULTS.showConnect,
     sidepanelWidth: 400,
     backgroundUrl: '',
   });
@@ -73,7 +69,8 @@ export default Dev.describe('PeerCard', async (e) => {
   const bus = rx.bus();
   const rootfs = (await Filesystem.client({ bus, dispose$ })).fs;
   const docs = await SpecDocs({ rootfs, dispose$ });
-  let controller: t.WebRtcEvents | undefined;
+  let controller: t.WebRtcController;
+  let client: t.WebRtcEvents;
 
   e.it('init:keyboard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
@@ -87,7 +84,7 @@ export default Dev.describe('PeerCard', async (e) => {
        * Show/hide right-hand side panel.
        */
       'ALT + Backslash'(e) {
-        e.cancel();
+        e.handled();
 
         const before = dev.ctx.toObject().props.debug.width;
         const next = before === 0 ? 400 : 0;
@@ -99,23 +96,12 @@ export default Dev.describe('PeerCard', async (e) => {
       },
 
       'ALT + CTRL + Backslash'(e) {
-        e.cancel();
+        e.handled();
 
         const next = !Shared.current.devShowFooter;
         local.showFooter = next;
         Shared.change((d) => (d.devShowFooter = next));
         dev.redraw();
-      },
-
-      'ALT + CTRL + KeyN'(e) {
-        e.cancel();
-        const qs = Dev.Url.qs;
-        const url = new URL(location.href);
-        const params = url.searchParams;
-        const namespace = params.get(qs.dev) ?? '';
-        params.set(qs.dev, 'true');
-        params.set(qs.selected, namespace);
-        window.open(url.href, '_blank', 'noopener,noreferrer');
       },
     });
   });
@@ -127,11 +113,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     await state.change((d) => {
       d.debug.showBg = local.showBg;
-
-      // TEMP 🐷
-      // NOTE: this is repeated within [SpecMonacoSync]
-      const me = docs.me.doc.current.code?.toString();
-      if (me) d.parsed.me = Yaml.parse(me);
+      d.debug.persistSharedDoc = local.persistSharedDoc;
     });
 
     // NB:
@@ -144,9 +126,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
     Shared.change((d) => {
       d.muted = local.muted;
-      d.showPeer = local.showPeer;
       d.devShowFooter = local.showFooter;
-      d.showConnect = local.showConnect;
       d.devPanelWidth = local.sidepanelWidth;
       d.backgroundUrl = local.backgroundUrl;
       d.fill = false;
@@ -165,7 +145,7 @@ export default Dev.describe('PeerCard', async (e) => {
       const root = 'https://github.com/cellplatform/platform-0.2.0/actions/workflows';
       const badge = {
         image: `${root}/node.esm.yml/badge.svg`,
-        href: `${root}//node.esm.yml`,
+        href: `${root}/node.esm.yml`,
       };
 
       const styles = {
@@ -185,26 +165,11 @@ export default Dev.describe('PeerCard', async (e) => {
     });
 
     /**
-     * Image Renderer
+     * Configure REPL
      */
     ctx.host.layer(2).render<T>((e) => {
-      const data = e.state?.parsed?.shared;
-      if (typeof data !== 'object' || data === null) return null;
-
-      const images = data?.images;
-      if (typeof images !== 'object') return null;
-
-      const image = images[0];
-      if (typeof image !== 'string') return null;
-
-      const styles = {
-        base: css({
-          backgroundImage: `url(${image})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-        }),
-      };
-      return <div {...styles.base}></div>;
+      const state = e.state?.parsed?.shared;
+      return REPL.render({ state });
     });
 
     /**
@@ -215,7 +180,6 @@ export default Dev.describe('PeerCard', async (e) => {
       const props = Shared.current;
       const fullscreen = props.fill;
       const camera = self?.connections.media.find((conn) => conn.metadata.input === 'camera');
-
       ctx.debug.width(props.devPanelWidth ?? 400);
 
       if (fullscreen && camera) {
@@ -237,21 +201,17 @@ export default Dev.describe('PeerCard', async (e) => {
       return (
         <PeerCard
           {...props}
+          fields={['Peer:Remote', 'Peer:Self', 'Video']}
           self={self}
+          gap={2}
           remotePeer={e.state.remotePeer}
+          footerVideo={camera?.stream.local}
           spinning={e.state.spinning}
           style={{ backgroundColor: showBg ? COLORS.WHITE : undefined }}
           onMuteClick={toggleMute}
           onRemotePeerChanged={(e) => state.change((d) => (d.remotePeer = e.remote))}
-          onConnectRequest={async (e) => {
-            if (!self) return;
-
-            // NB: Updating the CRDT triggers to listening [Controller].
-            docs.shared.doc.change((d) => {
-              const local = self!.id;
-              const initiatedBy = local;
-              WebRtc.Controller.Mutate.addPeer(d.network, local, e.remote, { initiatedBy });
-            });
+          onConnectRequest={(e) => {
+            if (self) client?.connect.fire(e.remote);
           }}
         />
       );
@@ -274,20 +234,11 @@ export default Dev.describe('PeerCard', async (e) => {
           }}
           visible={props.devShowFooter}
           onChange={(e) => {
-            //
             console.log('Editor Text Changed', e);
-
             state.change((d) => {
               if (e.kind === 'me') d.parsed.me = e.data;
               if (e.kind === 'shared') d.parsed.shared = e.data;
             });
-
-            // docs.shared.doc.change((d) => {
-            //   const tmp = d.tmp || (d.tmp = {});
-            //   const parsed = (tmp.parsed || (tmp.parsed = {})) as any;
-            //   parsed[e.kind] = e.data;
-            // });
-            // ctx.redraw();
           }}
         />
       );
@@ -295,18 +246,17 @@ export default Dev.describe('PeerCard', async (e) => {
   });
 
   e.it('init:network', async (e) => {
-    async function initNetwork(
-      ctx: t.DevCtx,
-      doc: t.CrdtDocRef<DocShared>,
-      state: t.DevCtxState<T>,
-    ) {
+    async function initNetwork(ctx: t.DevCtx, doc: t.CrdtDocRef<DocShared>) {
       const { dispose$ } = ctx;
+      const state = await ctx.state<T>(initial);
+
       const getStream = WebRtc.Media.singleton().getStream;
       const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
       self.connections$.subscribe(async (e) => ctx.redraw());
 
-      const filedir = docs.shared.dir;
-      controller = WebRtc.Controller.listen(self, doc, {
+      const filedir = docs.shared.fs;
+      controller = WebRtc.Controller.listen(self, {
+        doc,
         filedir,
         dispose$,
         onConnectStart(e) {
@@ -316,6 +266,7 @@ export default Dev.describe('PeerCard', async (e) => {
           state.change((d) => (d.spinning = false));
         },
       });
+      client = controller.client();
 
       /**
        * TODO 🐷
@@ -325,13 +276,11 @@ export default Dev.describe('PeerCard', async (e) => {
        * - add to footer editor (SharedDoc)
        */
 
-      console.log('-------------------------------------------');
       return self;
     }
 
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    self = await initNetwork(ctx, docs.shared.doc, state);
+    self = await initNetwork(ctx, docs.shared.doc);
     ctx.redraw();
   });
 
@@ -339,7 +288,13 @@ export default Dev.describe('PeerCard', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtc.InfoCard fields={['Module', 'Module.Verify']} />;
+      if (!self || !controller) return;
+      return (
+        <WebRtcInfo
+          fields={['Module.Verify', 'Module', 'State.Shared', 'Group', 'Group.Peers']}
+          client={client}
+        />
+      );
     });
 
     dev.hr(5, 20);
@@ -376,36 +331,93 @@ export default Dev.describe('PeerCard', async (e) => {
     dev.hr(5, 20);
 
     dev.section(['Shared State', '(Public)'], (dev) => {
+      /**
+       * Persistence (Save File)
+       */
+      dev.section((dev) => {
+        dev.boolean((btn) =>
+          btn
+            .enabled(false)
+            .label((e) => `autosave`)
+            .value((e) => Boolean(e.state.debug.persistSharedDoc))
+            .onClick((e) =>
+              e.change((d) => {
+                local.persistSharedDoc = Dev.toggle(d.debug, 'persistSharedDoc');
+              }),
+            ),
+        );
+
+        dev.hr(-1, 5);
+
+        dev.button((btn) =>
+          btn
+            .enabled(false)
+            .label('save file')
+            .onClick((e) => {
+              // const res = await docs.shared.file.save();
+              // console.info('saved:', res);
+            }),
+        );
+
+        dev.button((btn) =>
+          btn
+            .enabled(false)
+            .label('delete file')
+            .onClick((e) => {
+              // const res = await docs.shared.file.delete();
+              // console.info('deleted', res);
+            }),
+        );
+      });
+
       const shared = docs.shared;
       dev.row(async (e) => {
-        const info = await controller?.info.get();
+        const debug = e.state.debug;
+        // const isSaving = debug.persistSharedDoc;
+        const info = await client.info.get();
         const sync = (info?.syncers ?? [])[0];
         return (
           <FileCard
             doc={shared.doc}
             // file={shared.file}
-            // filepath={docs.shared.path}
+            filepath={docs.shared.path}
             syncer={sync?.syncer}
             margin={[20, 40]}
           />
         );
       });
 
-      const count = (label: string, by: number) => {
-        dev.button((btn) =>
-          btn
-            .label(label)
-            .right((e) => `count: ${shared.doc.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
-            .onClick((e) => shared.doc.change((d) => (d.count += by))),
-        );
-      };
-      count('increment →', 1);
-      count('decrement →', -1);
+      // const count = (label: string, by: number) => {
+      //   dev.button((btn) =>
+      //     btn
+      //       .label(label)
+      //       .right((e) => `count: ${shared.doc.current.count} ${by > 0 ? '+ 1' : '- 1'}`)
+      //       .onClick((e) => shared.doc.change((d) => (d.count += by))),
+      //   );
+      // };
+      // count('increment →', 1);
+      // count('decrement →', -1);
     });
 
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .label((e) => 'PeerCard.backgroundUrl')
+          .value((e) => local.backgroundUrl ?? '')
+          .onChange((e) => {
+            local.backgroundUrl = e.to.value ?? '';
+            e.redraw();
+          })
+          .onEnter((e) => {
+            Shared.change((d) => (d.backgroundUrl = local.backgroundUrl));
+            e.redraw();
+          }),
+      );
+
+      dev.hr(0, 5);
+
       dev.boolean((btn) =>
         btn
           .label((e) => {
@@ -414,41 +426,7 @@ export default Dev.describe('PeerCard', async (e) => {
             return `subject size ${suffix}`;
           })
           .value((e) => Shared.current.fill)
-          .onClick((e) => {
-            Shared.change((d) => Dev.toggle(d, 'fill'));
-          }),
-      );
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) =>
-        btn
-          .label('showPeer')
-          .value((e) => Shared.current.showPeer)
-          .onClick((e) => {
-            Shared.change((d) => (local.showPeer = Dev.toggle(d, 'showPeer')));
-          }),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label('showConnect')
-          .value((e) => Shared.current.showConnect ?? PeerCard.DEFAULTS.showConnect)
-          .onClick((e) => {
-            Shared.change((d) => (local.showConnect = Dev.toggle(d, 'showConnect')));
-          }),
-      );
-
-      dev.hr(0, 5);
-
-      dev.textbox((txt) =>
-        txt
-          .label((e) => 'backgroundUrl')
-          .value((e) => local.backgroundUrl ?? '')
-          .onChange((e) => (local.backgroundUrl = e.to.value ?? ''))
-          .onEnter((e) => {
-            Shared.change((d) => (d.backgroundUrl = local.backgroundUrl));
-          }),
+          .onClick((e) => Shared.change((d) => Dev.toggle(d, 'fill'))),
       );
     });
 
@@ -468,9 +446,16 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('Network (genesis schema)', (e) => {
+      dev.button('Network Schema (← genesis)', (e) => {
         const { schema } = NetworkSchema.genesis();
         console.info('NetworkSchema.genesis', schema.sourceFile);
+      });
+
+      dev.button('prune (dead peers)', async (e) => {
+        // WebRtc.Util.prune;
+        const res = await client.prune.fire();
+        console.info('prune:', res);
+        //
       });
 
       dev.button((btn) =>
@@ -507,7 +492,6 @@ export default Dev.describe('PeerCard', async (e) => {
             name={'Me'}
             expand={{
               level: 1,
-              // paths: isLocalhost && ['$.Doc<Public>'],
               paths: ['$.yaml'],
             }}
             data={{

@@ -7,14 +7,14 @@ type Semver = string;
 export type WebRtcInfo = {
   module: { name: string; version: Semver };
   peer: t.Peer;
-  state: t.NetworkState;
-  syncers: t.WebRtcInfoSyncer[];
+  state: t.NetworkDocSharedRef;
+  syncers: t.WebRtcStateSyncer[];
 };
 
-export type WebRtcInfoSyncer = {
+export type WebRtcStateSyncer = {
   local: t.PeerId;
   remote: t.PeerId;
-  syncer: t.CrdtDocSync<t.NetworkSharedDoc>;
+  syncer: t.CrdtDocSync<t.NetworkDocShared>;
 };
 
 /**
@@ -30,11 +30,14 @@ export type WebRtcEvents = t.Disposable & {
     res$: t.Observable<t.WebRtcInfoRes>;
     fire(options?: { timeout?: Milliseconds }): Promise<WebRtcInfoRes>;
     get(options?: { timeout?: Milliseconds }): Promise<WebRtcInfo | undefined>;
+    state(options?: { timeout?: Milliseconds }): Promise<t.NetworkDocSharedRef | undefined>;
   };
 
   connect: {
+    req$: t.Observable<t.WebRtcConnectReq>;
     start$: t.Observable<t.WebRtcConnectStart>;
     complete$: t.Observable<t.WebRtcConnectComplete>;
+    fire(remote: t.PeerId, options?: { timeout?: Milliseconds }): Promise<WebRtcConnectComplete>;
   };
 
   connections: {
@@ -53,6 +56,12 @@ export type WebRtcEvents = t.Disposable & {
         removed$: t.Observable<t.PeerMediaConnection>;
       };
     };
+  };
+
+  close: {
+    req$: t.Observable<t.WebRtcCloseReq>;
+    res$: t.Observable<t.WebRtcCloseRes>;
+    fire(remote: t.PeerId, options?: { timeout?: Milliseconds }): Promise<WebRtcCloseRes>;
   };
 
   errors: {
@@ -74,9 +83,12 @@ export type WebRtcEvent =
   | WebRtcInfoReqEvent
   | WebRtcInfoResEvent
   | WebRtcErrorEvent
+  | WebRtcConnectReqEvent
   | WebRtcConnectStartEvent
   | WebRtcConnectCompleteEvent
   | WebRtcConnectionsChangedEvent
+  | WebRtcCloseReqEvent
+  | WebRtcCloseResEvent
   | WebRtcPrunePeersReqEvent
   | WebRtcPrunePeersResEvent;
 
@@ -87,14 +99,14 @@ export type WebRtcInfoReqEvent = {
   type: 'sys.net.webrtc/info:req';
   payload: WebRtcInfoReq;
 };
-export type WebRtcInfoReq = { tx: string; instance: t.PeerId };
+export type WebRtcInfoReq = { tx: Id; instance: t.PeerId };
 
 export type WebRtcInfoResEvent = {
   type: 'sys.net.webrtc/info:res';
   payload: WebRtcInfoRes;
 };
 export type WebRtcInfoRes = {
-  tx: string;
+  tx: Id;
   instance: t.PeerId;
   info?: WebRtcInfo;
   error?: string;
@@ -118,12 +130,25 @@ export type WebRtcErrorPeer = {
 /**
  * Fires when a network connection initiates.
  */
+export type WebRtcConnectReqEvent = {
+  type: 'sys.net.webrtc/connect:req'; // NB: [WebRtcConnectCompleteEvent] fires as response.
+  payload: WebRtcConnectReq;
+};
+export type WebRtcConnectReq = {
+  tx: Id;
+  instance: t.PeerId;
+  remote: t.PeerId;
+};
+
+/**
+ * Fires when a network connection initiates.
+ */
 export type WebRtcConnectStartEvent = {
   type: 'sys.net.webrtc/connect:start';
   payload: WebRtcConnectStart;
 };
 export type WebRtcConnectStart = {
-  tx: string;
+  tx: Id;
   instance: t.PeerId;
   peer: { local: t.PeerId; remote: t.PeerId };
   state: t.NetworkState;
@@ -137,7 +162,7 @@ export type WebRtcConnectCompleteEvent = {
   payload: WebRtcConnectComplete;
 };
 export type WebRtcConnectComplete = {
-  tx: string;
+  tx: Id;
   instance: t.PeerId;
   peer: { local: t.PeerId; remote: t.PeerId };
   state: t.NetworkState;
@@ -157,20 +182,45 @@ export type WebRtcConnectionsChanged = {
 };
 
 /**
+ * Close.
+ */
+export type WebRtcCloseReqEvent = {
+  type: 'sys.net.webrtc/close:req';
+  payload: WebRtcCloseReq;
+};
+export type WebRtcCloseReq = {
+  tx: Id;
+  instance: t.PeerId;
+  remote: t.PeerId;
+};
+
+export type WebRtcCloseResEvent = {
+  type: 'sys.net.webrtc/close:res';
+  payload: WebRtcCloseRes;
+};
+export type WebRtcCloseRes = {
+  tx: Id;
+  instance: t.PeerId;
+  peer: { local: t.PeerId; remote: t.PeerId };
+  state: t.NetworkState;
+  error?: string;
+};
+
+/**
  * Prune dead peers
  */
 export type WebRtcPrunePeersReqEvent = {
   type: 'sys.net.webrtc/prune:req';
   payload: WebRtcPrunePeersReq;
 };
-export type WebRtcPrunePeersReq = { tx: string; instance: t.PeerId };
+export type WebRtcPrunePeersReq = { tx: Id; instance: t.PeerId };
 
 export type WebRtcPrunePeersResEvent = {
   type: 'sys.net.webrtc/prune:res';
   payload: WebRtcPrunePeersRes;
 };
 export type WebRtcPrunePeersRes = {
-  tx: string;
+  tx: Id;
   instance: t.PeerId;
   removed: t.PeerId[];
   error?: string;

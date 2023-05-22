@@ -3,7 +3,7 @@ export * from '../common';
 /**
  * Constants
  */
-export const DEFAULT = {
+export const DEFAULTS = {
   resettable: true,
   showIndexes: true,
 };

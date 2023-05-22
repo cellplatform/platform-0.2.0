@@ -1,5 +1,5 @@
-import { COLORS, css, Dev } from '../../test.ui';
 import { Flip, FlipProps } from '.';
+import { COLORS, css, Dev, Keyboard } from '../../test.ui';
 
 type T = {
   props: FlipProps;
@@ -31,16 +31,21 @@ export default Dev.describe('Flip', (e) => {
         const debug = e.state.debug;
 
         const styles = {
-          side: css({
-            padding: 10,
-            backgroundColor: COLORS.WHITE,
-          }),
+          face: css({ padding: 10, backgroundColor: COLORS.WHITE }),
+          title: css({ marginBottom: 10 }),
+          emoji: css({ fontSize: 38, display: 'grid', placeItems: 'center' }),
         };
 
-        const elFront = <div {...styles.side}>🐷 Frontside</div>;
+        const elFront = (
+          <div {...styles.face}>
+            <div {...styles.emoji}>🙊</div>
+            <div {...styles.title}>Frontside</div>
+          </div>
+        );
         const elBack = (
-          <div {...styles.side}>
-            <div>🐷 Backside</div>
+          <div {...styles.face}>
+            <div {...styles.emoji}>🙈</div>
+            <div {...styles.title}>Backside</div>
             <div>{Dev.Lorem.words(20)}</div>
           </div>
         );
@@ -55,13 +60,28 @@ export default Dev.describe('Flip', (e) => {
       });
   });
 
+  e.it('keyboard:init', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+    Keyboard.on({
+      Enter(e) {
+        e.handled();
+        state.change((d) => Dev.toggle(d.props, 'flipped'));
+      },
+      Space(e) {
+        e.handled();
+        state.change((d) => Dev.toggle(d.debug, 'content'));
+      },
+    });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `flipped`)
+          .label((e) => `flipped (← Enter)`)
           .value((e) => e.state.props.flipped)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
@@ -72,7 +92,7 @@ export default Dev.describe('Flip', (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => `content`)
+          .label((e) => `content (← Space)`)
           .value((e) => e.state.debug.content)
           .onClick((e) => e.change((d) => (local.content = Dev.toggle(d.debug, 'content')))),
       );
@@ -82,7 +102,9 @@ export default Dev.describe('Flip', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        props: e.state.props,
+      };
       return <Dev.Object name={'Flip'} data={data} expand={1} />;
     });
   });

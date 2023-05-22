@@ -14,12 +14,12 @@ export function boolean<S extends O = O>(
 ) {
   if (!ctx.is.initial) return;
 
+  const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
   const values = {
     label: ValueHandler<string, S>(events),
     value: ValueHandler<boolean | undefined, S>(events),
     enabled: ValueHandler<boolean, S>(events),
   };
-  const clickHandlers = new Set<t.DevBooleanClickHandler<S>>();
 
   const args: t.DevBooleanHandlerArgs<S> = {
     ctx,

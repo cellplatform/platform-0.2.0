@@ -1,4 +1,4 @@
-import { t, DEFAULTS } from './common';
+import { Color, COLORS, DEFAULTS, t, WrangleCard } from './common';
 import { format } from './Util.format.mjs';
 import { theme } from './Util.theme.mjs';
 
@@ -10,10 +10,28 @@ export const Wrangle = {
     return typeof input === 'number' ? { fixed: input } : input;
   },
 
-  cardProps(input: t.PropListProps['card']): t.PropListCard | undefined {
-    if (!input) return undefined;
-    if (typeof input === 'object') return input;
-    return { ...DEFAULTS.card };
+  selected(item: t.PropListItem, isDark: boolean): t.PropListItemSelected | undefined {
+    const value = item.selected;
+    if (!value) return undefined;
+    if (typeof value === 'object') return value;
+    if (isDark) return { color: 0.05 };
+    if (!isDark) return { color: Color.alpha(COLORS.DARK, 0.03) };
+    return;
+  },
+
+  cardProps(input: t.PropListProps): t.PropListCard | undefined {
+    if (!input.card) return undefined;
+    if (typeof input.card === 'object') return input.card;
+
+    const { theme = DEFAULTS.theme } = input;
+    const isDark = theme === 'Dark';
+
+    const flipSpeed = 300;
+    const shadow = true;
+    const background = isDark ? WrangleCard.bg({ background: { color: 0.05 } }) : undefined;
+    const border = isDark ? WrangleCard.border({ border: { color: 0.3 } }) : undefined;
+
+    return { flipSpeed, shadow, background, border };
   },
 
   items(input: t.PropListProps['items']) {

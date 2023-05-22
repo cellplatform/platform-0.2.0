@@ -106,9 +106,6 @@ export default Dev.describe('WebRTC', (e) => {
           expect(fired.length).to.eql(2);
           expect(fired[0].action).to.eql('added');
           expect(fired[1].action).to.eql('removed');
-
-          const conn = fired[0].connections[0] as t.PeerDataConnection;
-          expect(conn.metadata.label).to.eql('test:isAlive');
         },
       );
 

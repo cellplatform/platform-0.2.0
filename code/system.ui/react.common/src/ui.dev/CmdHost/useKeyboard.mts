@@ -14,14 +14,14 @@ export function useKeyboard(
 ) {
   useEffect(() => {
     const arrowKey = (e: t.KeyMatchSubscriberHandlerArgs, key: ArrowKey) => {
-      e.cancel();
+      e.handled();
       const meta = e.state.modifiers.meta;
       options.onArrowKey?.({ key, meta });
     };
 
     const handler = Keyboard.on({
-      ['CMD + KeyK'](e) {
-        e.cancel();
+      ['ALT + KeyK'](e) {
+        e.handled();
         textboxRef?.focus();
         textboxRef?.selectAll();
       },

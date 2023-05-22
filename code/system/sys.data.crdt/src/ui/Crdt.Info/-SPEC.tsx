@@ -1,5 +1,15 @@
 import { CrdtInfo, CrdtInfoProps } from '.';
-import { Crdt, css, Dev, getTestFs, PropList, rx, t, ConnectionMock } from '../../test.ui';
+import {
+  ConnectionMock,
+  Crdt,
+  css,
+  Dev,
+  getTestFs,
+  Keyboard,
+  PropList,
+  rx,
+  t,
+} from '../../test.ui';
 
 type T = {
   props: CrdtInfoProps;
@@ -29,11 +39,12 @@ export default Dev.describe('CrdtInfo', async (e) => {
     doc: toFs('dev.crdt-info.sample'),
   };
 
-  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean };
+  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean; flipped?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.Info');
   const local = localstore.object({
     fields: initial.props.fields,
     card: initial.props.card,
+    flipped: initial.props.flipped,
 
     bg: initial.debug.bg,
     title: initial.debug.title,
@@ -110,11 +121,33 @@ export default Dev.describe('CrdtInfo', async (e) => {
     });
   });
 
+  e.it('keyboard:init', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    Keyboard.on({
+      Enter(e) {
+        e.handled();
+        state.change((d) => {
+          local.flipped = Dev.toggle(d.props, 'flipped');
+          local.card = d.props.card = true;
+        });
+      },
+    });
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `flipped (← Enter)`)
+          .value((e) => Boolean(e.state.props.flipped))
+          .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
+      );
+
       dev.boolean((btn) =>
         btn
           .label((e) => `syncDoc`)
@@ -192,7 +225,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}
             onClick={(ev) => {
-              let fields = ev.next as CrdtInfoProps['fields'];
+              const fields = ev.next as CrdtInfoProps['fields'];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}
@@ -246,7 +279,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
 
       return (
         <Dev.Object
-          name={'sys.data.crdt.Info'}
+          name={'sys.crdt.Info'}
           data={data}
           expand={{
             paths: ['$', '$.Doc<T>'],

@@ -269,8 +269,9 @@ describe('Context', () => {
       const info1 = await getHost();
       expect(info1.layers).to.eql({}); // Empty layers.
 
-      const fn = () => ctx.host.layer(0);
-      expect(fn).to.throw(/The 0-index layer is reserved for the main subject/);
+      expect(() => ctx.host.layer(0)).to.throw(
+        /The index-0 layer is reserved for the main subject/,
+      );
 
       const layer = ctx.host.layer(1);
       expect(layer.index).to.eql(1);

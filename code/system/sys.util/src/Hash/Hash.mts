@@ -1,5 +1,6 @@
 import * as AsmCrypto from 'asmcrypto.js';
 import { R } from '../common';
+import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash.mjs';
 
 export type HashOptions = {
   asString?: (input?: any) => string;
@@ -42,8 +43,11 @@ export const Hash = {
     if (input instanceof Uint8Array) return input;
     return AsmCrypto.string_to_bytes((options.asString ?? R.toString)(input));
   },
-};
 
-/**
- * Helpers
- */
+  /**
+   * Shorten a hash for display.
+   */
+  shorten(hash: string, length: number | [number, number], options?: ShortenHashOptions) {
+    return shortenHash(hash, length, options);
+  },
+};

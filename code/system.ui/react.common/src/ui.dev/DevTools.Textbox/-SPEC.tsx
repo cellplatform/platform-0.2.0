@@ -7,6 +7,7 @@ type ErrorInput = t.DevTextboxError | boolean | undefined | null;
 
 type T = {
   props: TextboxProps;
+  debug: { edgeKind: 'JSX' | 'Boolean' };
 };
 const initial: T = {
   props: {
@@ -15,6 +16,7 @@ const initial: T = {
     value: 'Hello 👋',
     // placeholder: null,
   },
+  debug: { edgeKind: 'Boolean' },
 };
 
 export default Dev.describe('Textbox', (e) => {
@@ -105,19 +107,47 @@ export default Dev.describe('Textbox', (e) => {
 
       dev.hr(-1, 5);
 
-      const elIcon = <DevIcons.Keyboard style={{ MarginX: 3 }} />;
-      dev.boolean((btn) =>
-        btn
-          .label('left')
-          .value((e) => Boolean(e.state.props.left))
-          .onClick((e) => e.change((d) => (d.props.left = d.props.left ? undefined : elIcon))),
-      );
-      dev.boolean((btn) =>
-        btn
-          .label('right')
-          .value((e) => Boolean(e.state.props.right))
-          .onClick((e) => e.change((d) => (d.props.right = d.props.right ? undefined : elIcon))),
-      );
+      dev.section((dev) => {
+        const isJSX = (state: T) => state.debug.edgeKind === 'JSX';
+        const elIcon = <DevIcons.Keyboard style={{ MarginX: 3 }} color={'rgba(255, 0, 0, 0.5)'} />;
+
+        dev.boolean((btn) =>
+          btn
+            .label((e) => `value kind: ${e.state.debug.edgeKind === 'JSX' ? 'JSX' : 'Boolean'}`)
+            .value((e) => Boolean(e.state.debug.edgeKind === 'JSX'))
+            .onClick((e) => {
+              e.change((d) => {
+                const kind = d.debug.edgeKind === 'JSX' ? 'Boolean' : 'JSX';
+                d.debug.edgeKind = kind;
+                if (kind === 'JSX') {
+                  if (d.props.left === true) d.props.left = elIcon;
+                  if (d.props.right === true) d.props.right = elIcon;
+                }
+                if (kind === 'Boolean') {
+                  if (typeof d.props.left === 'object') d.props.left = true;
+                  if (typeof d.props.right === 'object') d.props.right = true;
+                }
+              });
+            }),
+        );
+
+        const edge = (field: keyof Pick<TextboxProps, 'left' | 'right'>) => {
+          dev.boolean((btn) =>
+            btn
+              .label((e) => `${field} ← (${isJSX(e.state) ? 'JSX' : 'Boolean'})`)
+              .value((e) => Boolean(e.state.props[field]))
+              .onClick((e) =>
+                e.change((d) => {
+                  const value = isJSX(d) ? elIcon : true;
+                  d.props[field] = d.props[field] ? undefined : value;
+                }),
+              ),
+          );
+        };
+
+        edge('left');
+        edge('right');
+      });
 
       dev.hr(-1, 5);
 

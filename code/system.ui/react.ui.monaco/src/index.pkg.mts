@@ -13,8 +13,8 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.monaco',
   version: '0.0.0',
   dependencies: {
-    '@monaco-editor/react': '4.5.0',
-    'monaco-editor': '0.37.1',
+    '@monaco-editor/react': '4.5.1',
+    'monaco-editor': '0.38.0',
     'diff': '5.1.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',

@@ -6,6 +6,7 @@ export const TESTS = {
       import('../crdt.DocSync/-dev/-TEST.DocSync.mjs'),
       import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs'),
       import('../crdt.Schema/-dev/-TEST.mjs'),
+      import('../crdt.Lens/-dev/-TEST.mjs'),
       import('../crdt.helpers/-TEST.mjs'),
 
       import('../driver.Automerge/-dev/TEST.basic.mjs'),
