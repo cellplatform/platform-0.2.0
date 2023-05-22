@@ -9,6 +9,7 @@ import { DevMedia } from './DEV.Media';
 /**
  * video: 727951677
  * diagram: https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
+ * youtube: https://youtu.be/WGfS6pPJ5jo
  */
 
 type T = {
@@ -38,6 +39,9 @@ type LocalStore = T['debug'] & {
   vimeoId?: t.TDevSharedProps['vimeoId'];
   vimeoVisible?: t.TDevSharedProps['vimeoVisible'];
   vimeoMuted?: t.TDevSharedProps['vimeoMuted'];
+  youtubeId?: t.TDevSharedProps['youtubeId'];
+  youtubeVisible?: t.TDevSharedProps['youtubeVisible'];
+  youtubeMuted?: t.TDevSharedProps['youtubeMuted'];
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
@@ -54,6 +58,9 @@ const local = localstore.object({
   vimeoId: '',
   vimeoVisible: true,
   vimeoMuted: true,
+  youtubeId: '',
+  youtubeVisible: true,
+  youtubeMuted: true,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -67,7 +74,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const client = controller.client();
   const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
-    fields: local.fields,
+    fields: local.fields ?? [],
     showRight: true,
     // showRight: local.showRight,
     fullscreenVideo: local.fullscreenVideo,
@@ -80,6 +87,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     vimeoId: local.vimeoId,
     vimeoVisible: local.vimeoVisible,
     vimeoMuted: local.vimeoMuted,
+
+    youtubeId: local.youtubeId,
+    youtubeVisible: local.youtubeVisible,
+    youtubeMuted: local.youtubeMuted,
   });
 
   DevKeyboard(props);
@@ -139,6 +150,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     persistToLocalOnChange('vimeoId', 'vimeoId');
     persistToLocalOnChange('vimeoVisible', 'vimeoVisible');
     persistToLocalOnChange('vimeoMuted', 'vimeoMuted');
+    persistToLocalOnChange('youtubeId', 'youtubeId');
+    persistToLocalOnChange('youtubeVisible', 'youtubeVisible');
+    persistToLocalOnChange('youtubeMuted', 'youtubeMuted');
 
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -280,7 +294,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.textbox((txt) =>
         txt
           .margin([5, 0, 10, 0])
-          .placeholder('https://...')
+          .placeholder('https:')
           .left(true)
           .value((e) => props.current.imageUrl ?? '')
           .onChange((e) => {
@@ -343,9 +357,41 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       );
 
       dev.hr(-1, 5);
-
       dev.button('play', (e) => props.change((d) => (d.vimeoPlaying = true)));
       dev.button('pause', (e) => props.change((d) => (d.vimeoPlaying = false)));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('YouTube', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .margin([5, 0, 10, 0])
+          .left(true)
+          .placeholder('https:')
+          .value((e) => props.current.youtubeId ?? '')
+          .onChange((e) => {
+            props.change((d) => (d.youtubeId = e.to.value));
+          })
+          .onEnter((e) => {}),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `visible`)
+          .value((e) => Boolean(props.current.youtubeVisible))
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'youtubeVisible'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `muted`)
+          .value((e) => Boolean(props.current.youtubeMuted))
+          .enabled(false)
+          .enabled((e) => Boolean(props.current.fullscreenVideo))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'youtubeMuted'))),
+      );
     });
 
     dev.hr(5, 20);
@@ -477,13 +523,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         btn
           .label('redraw')
           .right(<Icons.Refresh size={15} style={{ marginLeft: 3 }} />)
-          .onClick((e) => {
-            dev.redraw();
-          }),
+          .onClick((e) => dev.redraw()),
       );
     });
-
-    // dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {

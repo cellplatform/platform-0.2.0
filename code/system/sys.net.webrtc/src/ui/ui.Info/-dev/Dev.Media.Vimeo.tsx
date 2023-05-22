@@ -1,19 +1,13 @@
 import { useEffect } from 'react';
-import { Is, Vimeo, css, rx, t } from './common';
+import { Is, Vimeo, css, rx, t, YouTube } from './common';
 
-/**
- * https://vimeo.com/manage/videos/727951677/transcript?ts=200
- * https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
- * 727951677
- */
-
-export type DevPlayerProps = {
+export type DevVimeoProps = {
   bus: t.EventBus<any>;
   shared: t.TDevSharedPropsLens;
   style?: t.CssValue;
 };
 
-export const DevPlayer: React.FC<DevPlayerProps> = (props) => {
+export const DevVimeo: React.FC<DevVimeoProps> = (props) => {
   const { bus } = props;
   const current = props.shared.current;
   const id = Wrangle.vimeoId(current);

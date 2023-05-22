@@ -14,13 +14,20 @@ export type TDevSharedProps = {
   fullscreenVideo?: boolean;
   cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
+
   imageUrl?: string;
   imageVisible?: boolean;
   imageFit?: 'cover' | 'contain';
+
   vimeoId?: string;
   vimeoVisible?: boolean;
   vimeoPlaying?: boolean;
   vimeoMuted?: boolean;
+
+  youtubeId?: string;
+  youtubeVisible?: boolean;
+  youtubePlaying?: boolean;
+  youtubeMuted?: boolean;
 };
 
 export type TDevSharedPropsLens = t.WebRtcPropsLens<TDevSharedProps>;
