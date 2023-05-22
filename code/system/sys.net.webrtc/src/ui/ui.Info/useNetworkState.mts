@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { rx, t } from './common';
-export { WebRtcState } from '../../WebRtc.State';
 
 /**
  * Turn the [NetworkDoc.current] into a React state.
