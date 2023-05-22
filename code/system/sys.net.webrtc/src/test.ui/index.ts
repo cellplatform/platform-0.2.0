@@ -1,4 +1,5 @@
 export * from './common';
+export { expect, expectError } from 'sys.test';
 
 export { WebRtc } from '../index.mjs';
 export { TestNetwork } from './TestNetwork.mjs';

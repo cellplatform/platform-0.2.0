@@ -57,9 +57,17 @@ export function usePeerRowController(args: Args) {
     if (e.kind === 'Close' && !isSelf) {
       await client.close.fire(peerid);
     }
+
+    /**
+     * TODO 🐷 Create Video Connection => Mute/Unmute Video Camera
+     */
     if (e.kind === 'Video') {
       console.log('CLICK video', e); // TEMP 🐷
 
+      /**
+       * TODO 🐷 - via Mutate helper (with tests)
+       */
+      console.warn('Video', 'via Mutate helper (with tests)');
 
       state.change((d) => {
         const self = d.network.peers[selfid];
@@ -78,6 +86,10 @@ export function usePeerRowController(args: Args) {
     }
 
     if (e.kind === 'Mic') {
+      /**
+       * TODO 🐷 - via Mutate helper (with tests)
+       */
+      console.warn('Mic', 'via Mutate helper (with tests)');
 
       state.change((d) => {
         const peer = d.network.peers[peerid];

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-
 import { rx, t } from './common';
+export { WebRtcState } from '../../WebRtc.State';
 
 /**
  * Turn the [NetworkDoc.current] into a React state.
  */
-export function useNetworkDocState(ref?: t.NetworkDocSharedRef) {
+export function useNetworkState(ref?: t.NetworkDocSharedRef) {
   const [current, setCurrent] = useState<t.NetworkDocShared>();
 
   /**

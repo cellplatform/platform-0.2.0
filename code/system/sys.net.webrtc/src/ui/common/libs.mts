@@ -2,39 +2,34 @@
  * @external
  */
 import Yaml from 'yaml';
-export { Yaml };
-
+export { CrdtInfo } from 'sys.data.crdt';
+export { Test } from 'sys.test.spec';
 /**
  * @system
  */
 export {
-  css,
-  Color,
-  COLORS,
-  rx,
-  Dev,
-  IFrame,
-  TextInput,
-  TextSyntax,
   Button,
-  Spinner,
-  FC,
-  useSizeObserver,
-  useMouseState,
+  COLORS,
   Card,
+  Color,
+  Dev,
+  FC,
+  IFrame,
   Keyboard,
   PropList,
+  Spinner,
   TestRunner,
+  TextInput,
+  TextSyntax,
+  css,
+  rx,
+  useMouseState,
+  useSizeObserver,
 } from 'sys.ui.react.common';
-
-export { Test } from 'sys.test.spec';
-export { expect, expectError } from 'sys.test';
-export { RecordButton, AudioWaveform, Vimeo } from 'sys.ui.react.media';
-
-export { CrdtInfo } from 'sys.data.crdt';
-
+export { AudioWaveform, RecordButton, Vimeo } from 'sys.ui.react.media';
 /**
  * @local
  */
 export * from '../../common';
 export { Icons } from '../Icons.mjs';
+export { Yaml };
