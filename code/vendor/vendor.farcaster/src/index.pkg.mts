@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'vendor.farcaster',
   version: '0.0.0',
   dependencies: {
+    '@farcaster/hub-web': '0.3.4',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },

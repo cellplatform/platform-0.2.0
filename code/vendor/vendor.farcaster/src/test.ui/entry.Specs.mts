@@ -1,5 +1,5 @@
 export const Specs = {
-  'ns.root.SAMPLE': () => import('./-SPEC'),
+  'sys.net.fc': () => import('./-SPEC'),
 };
 
 export default Specs;
