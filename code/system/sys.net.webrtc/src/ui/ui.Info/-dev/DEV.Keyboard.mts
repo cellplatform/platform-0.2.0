@@ -1,6 +1,6 @@
 import { Keyboard, t, Dev } from './common';
 
-export function DevKeyboard(props: t.WebRtcStateLens<t.TDevSharedProps>) {
+export function DevKeyboard(props: t.WebRtcPropsLens<t.TDevSharedProps>) {
   Keyboard.on({
     /**
      * Show/hide right-hand side panel.

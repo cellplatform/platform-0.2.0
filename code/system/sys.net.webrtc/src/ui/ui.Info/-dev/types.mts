@@ -23,4 +23,4 @@ export type TDevSharedProps = {
   vimeoMuted?: boolean;
 };
 
-export type TDevSharedPropsLens = t.WebRtcStateLens<TDevSharedProps>;
+export type TDevSharedPropsLens = t.WebRtcPropsLens<TDevSharedProps>;
