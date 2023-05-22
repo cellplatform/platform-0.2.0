@@ -313,7 +313,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.hr(-1, 15);
 
-    dev.section('Video', (dev) => {
+    dev.section('Vimeo', (dev) => {
       dev.textbox((txt) =>
         txt
           .margin([5, 0, 10, 0])
