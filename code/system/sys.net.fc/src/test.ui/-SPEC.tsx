@@ -3,11 +3,14 @@ import { getHubRpcClient } from '@farcaster/hub-web';
 
 type T = {
   casts: string[];
-  debug: { spinning: boolean };
+  debug: { spinning: boolean; fid: number };
 };
 const initial: T = {
   casts: [],
-  debug: { spinning: false },
+  debug: {
+    spinning: false,
+    fid: 15, // 12567
+  },
 };
 
 /**
@@ -26,7 +29,7 @@ export default Dev.describe('Root', (e) => {
       .render<T>((e) => {
         const casts = e.state.casts;
 
-        if (casts.length === 0) return <div>Nothing.</div>;
+        if (casts.length === 0) return <div>Empty</div>;
 
         return (
           <div>
@@ -54,10 +57,11 @@ export default Dev.describe('Root', (e) => {
            * https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-web#getting-start-fetching-casts
            *
            */
-          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285');
-          const fid = 15; // 12567
-          const res = await client.getCastsByFid({ fid });
           const tmp: string[] = [];
+
+          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285');
+          const fid = e.state.current.debug.fid;
+          const res = await client.getCastsByFid({ fid });
 
           const list = res.map((casts) =>
             casts.messages.map((cast) => {
@@ -79,7 +83,12 @@ export default Dev.describe('Root', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { casts } = e.state;
+      const { fid } = e.state.debug;
+      const data = {
+        fid,
+        casts,
+      };
       return <Dev.Object name={'Root'} data={data} expand={1} />;
     });
   });
