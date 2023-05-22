@@ -7,7 +7,7 @@ export default Test.describe('crdt helpers', (e) => {
   const docid = 'my-id';
 
   e.describe('Is (flags)', (e) => {
-    type D = { count: number; name?: string };
+    type D = { count: number; name?: string; child?: { msg?: string } };
     const Is = CrdtIs;
 
     e.it('exposed from API root', (e) => {
@@ -42,6 +42,16 @@ export default Test.describe('crdt helpers', (e) => {
       expect(Is.sync(sync.doc)).to.eql(false);
       [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
         expect(Is.sync(d)).to.eql(false);
+      });
+    });
+
+    e.it('Is.lens', (e) => {
+      const doc = Crdt.Doc.ref<D>(docid, { count: 1 });
+      const lens = Crdt.lens(doc, (d) => d.child ?? (d.child = {}));
+      expect(Is.lens(lens)).to.eql(true);
+      expect(Is.lens(doc)).to.eql(false);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.lens(d)).to.eql(false);
       });
     });
 

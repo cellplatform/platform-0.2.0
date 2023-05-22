@@ -32,12 +32,25 @@ export const CrdtIs = {
   },
 
   /**
-   * Determine if the given input is a [DocSync]..
+   * Determine if the given input is a [DocSync].
    */
   sync(input: any): input is t.CrdtDocSync<{}> {
     if (notObject(input)) return false;
     return (
       input.kind === 'Crdt:DocSync' && CrdtIs.ref(input.doc) && typeof input.update === 'function'
+    );
+  },
+
+  /**
+   * Determine if the given input is a Lens.
+   */
+  lens(input: any): input is t.CrdtLens<{}, {}> {
+    if (notObject(input)) return false;
+    return (
+      input.kind === 'Crdt:Lens' &&
+      CrdtIs.ref(input.root) &&
+      typeof input.change === 'function' &&
+      typeof input.lens === 'function'
     );
   },
 
