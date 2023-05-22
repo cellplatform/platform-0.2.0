@@ -6,6 +6,12 @@ import { pruneDeadPeers } from './util.mjs';
 const Mutate = WebRtcState.Mutate;
 
 /**
+ * TODO 🐷
+ * - See tests: "3-way controller"
+ * - Refactor required.
+ */
+
+/**
  * Start a controller instance to manager the live state of network peers.
  *
  * Notes:
