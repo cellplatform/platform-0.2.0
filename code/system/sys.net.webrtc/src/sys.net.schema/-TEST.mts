@@ -7,7 +7,6 @@ export default Dev.describe('Network Schema', (e) => {
   e.it('NetworkSchema.initial', (e) => {
     const initial = NetworkSchema.initial;
 
-    expect(initial.doc.count).to.eql(0);
     expect(initial.doc.network.peers).to.eql({});
     expect(initial.doc.network.props).to.eql({});
     expect(initial.doc.tmp).to.eql({});
