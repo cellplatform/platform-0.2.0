@@ -18,8 +18,7 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    ".": "./dist/web/index.js"
   },
   "typesVersions": {
     "*": {

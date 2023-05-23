@@ -16,16 +16,29 @@
   },
   "license": "MIT",
   "private": true,
-  "types": "./dist/types.d/Foo.d.mts",
+  "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
+    "./Bar": "./dist/web/Bar.js",
+    "./Foo": "./dist/web/Foo.js",
+    "./node": "./dist/node/index.js",
+    "./node/Bar": "./dist/node/Bar.js",
+    "./node/Foo": "./dist/node/Foo.js",
     "./web": "./dist/web/index.js",
-    "./web/Foo": "./dist/web/foo.js"
+    "./web/Bar": "./dist/web/Bar.js",
+    "./web/Foo": "./dist/web/Foo.js"
   },
   "typesVersions": {
     "*": {
+      "node": [
+        "./dist/types.d/index.d.mts",
+        "./dist/types.d/logic/Bar.d.mts",
+        "./dist/types.d/logic/Foo.d.mts"
+      ],
       "web": [
-        "./dist/types.d/Foo.d.mts"
+        "./dist/types.d/index.d.mts",
+        "./dist/types.d/logic/Bar.d.mts",
+        "./dist/types.d/logic/Foo.d.mts"
       ]
     }
   }
