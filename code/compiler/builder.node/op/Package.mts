@@ -28,9 +28,6 @@ export const Package = {
       await Util.PackageJson.save(path, file);
     };
 
-    /**
-     * TODO 🐷 pub metaDist back in
-     */
     await save(root, pkgRoot, metaRoot);
     await save(fs.join(root, subdir), pkgDist, metaDist);
   },
@@ -115,7 +112,7 @@ export const Package = {
       }
 
       if (isIndex) {
-        Types.target(target).push(typePath);
+        if (targets.length > 1) Types.target(target).push(typePath);
       } else {
         const key = Util.stripRelativeRoot(exportKey);
         Types.target(key).push(typePath);
