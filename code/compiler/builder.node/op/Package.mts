@@ -16,10 +16,11 @@ export const Package = {
     root = fs.resolve(root);
     const subdir = Paths.outDir.root;
     const pkgRoot = await Util.PackageJson.load(root);
-    const metaRoot = await Package.metadata({ root, subdir });
 
     const { name, version } = pkgRoot;
     const pkgDist: t.PkgJson = { name, version, type: 'module' };
+
+    const metaRoot = await Package.metadata({ root, subdir });
     const metaDist = await Package.metadata({ root });
 
     const save = async (path: string, pkg: t.PkgJson, meta?: PkgMeta) => {
@@ -27,8 +28,11 @@ export const Package = {
       await Util.PackageJson.save(path, file);
     };
 
-    await save(fs.join(root, subdir), pkgDist, metaDist);
+    /**
+     * TODO 🐷 pub metaDist back in
+     */
     await save(root, pkgRoot, metaRoot);
+    await save(fs.join(root, subdir), pkgDist, metaDist);
   },
 
   /**
@@ -69,8 +73,8 @@ export const Package = {
         const list = R.uniq(Types.target(target));
         return list.find((path) => path.endsWith('/index.d.mts')) ?? '';
       },
-      target(target: t.ViteTarget) {
-        const list = Types.mutable[target] ?? (Types.mutable[target] = []);
+      target(key: string) {
+        const list = Types.mutable[key] ?? (Types.mutable[key] = []);
         return list;
       },
     };
@@ -99,24 +103,23 @@ export const Package = {
       entry: { key: string; path: string };
       target: t.ViteTarget;
       targets: t.ViteTarget[];
-      files: t.ViteManifestFile[];
     }) => {
-      const { target, targets, files } = args;
-      const isDefaultTarget = Is.defaultTarget(targets, target);
-      const isIndex = args.entry.key;
-      const targetList = Types.target(target);
+      const { entry, target, targets } = args;
+      const isIndex = args.entry.key === 'index';
+      const exportKey = Wrangle.exportKey(targets, target, entry.key);
+      const type = Package.toTypeFile(entry.path);
+      const typePath = formatPath(type.filepath);
 
-      if (isDefaultTarget && isIndex) {
-        _types = Types.defaultType(target);
+      if (isIndex && Is.defaultTarget(targets, target)) {
+        _types = typePath;
       }
 
-      files
-        .filter((file) => file.isEntry)
-        .forEach((file) => {
-          const type = Package.toTypeFile(file.src);
-          const path = formatPath(type.filepath);
-          targetList.push(path);
-        });
+      if (isIndex) {
+        Types.target(target).push(typePath);
+      } else {
+        const key = Util.stripRelativeRoot(exportKey);
+        Types.target(key).push(typePath);
+      }
     };
 
     const processBuild = async (
@@ -128,7 +131,7 @@ export const Package = {
       for (const key of Object.keys(libEntry)) {
         const entry = { key, path: libEntry[key] };
         await appendBundleFile({ entry, target, targets, files });
-        await appendType({ entry, target, targets, files });
+        await appendType({ entry, target, targets });
       }
     };
 
@@ -190,6 +193,7 @@ const Wrangle = {
      * NB: The targets array order is determined within the
      *     [vite.config.mts] file.
      *
+     *    Order matters in the [vite.config] configuration.
      *    The first specified target is assumed to be the
      *    default (base) target.
      *
@@ -202,7 +206,6 @@ const Wrangle = {
      *
      *      });
      */
-    // NB: order matters in the [vite.config] file.
     return targets[0];
   },
 
