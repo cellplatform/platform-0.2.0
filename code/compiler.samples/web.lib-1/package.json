@@ -30,14 +30,28 @@
   },
   "typesVersions": {
     "*": {
+      "Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "Foo": [
+        "./dist/types.d/logic/Foo.d.mts"
+      ],
       "node": [
-        "./dist/types.d/index.d.mts",
-        "./dist/types.d/logic/Bar.d.mts",
+        "./dist/types.d/index.d.mts"
+      ],
+      "node/Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "node/Foo": [
         "./dist/types.d/logic/Foo.d.mts"
       ],
       "web": [
-        "./dist/types.d/index.d.mts",
-        "./dist/types.d/logic/Bar.d.mts",
+        "./dist/types.d/index.d.mts"
+      ],
+      "web/Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "web/Foo": [
         "./dist/types.d/logic/Foo.d.mts"
       ]
     }

@@ -33,10 +33,14 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js"
+    ".": "./dist/web/index.js",
+    "./dev": "./dist/web/dev.js"
   },
   "typesVersions": {
     "*": {
+      "dev": [
+        "./dist/types.d/index.dev.d.mts"
+      ],
       "web": [
         "./dist/types.d/index.d.mts"
       ]
