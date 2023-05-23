@@ -1,8 +1,6 @@
-import { fs, t, Util } from '../common/index.mjs';
+import { fs, R, t, Util } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 import { Vite } from './Vite.mjs';
-
-const join = fs.join;
 
 type PkgMeta = {
   types: string;
@@ -17,17 +15,16 @@ export const Package = {
   async generate(root: t.DirString) {
     root = fs.resolve(root);
     const subdir = Paths.outDir.root;
-
     const pkgRoot = await Util.PackageJson.load(root);
-    const metaRoot = await Package.meta({ root, subdir });
+    const metaRoot = await Package.metadata({ root, subdir });
 
     const { name, version } = pkgRoot;
     const pkgDist: t.PkgJson = { name, version, type: 'module' };
-    const metaDist = await Package.meta({ root });
+    const metaDist = await Package.metadata({ root });
 
-    const save = async (path: string, pkg: t.PkgJson, meta: PkgMeta) => {
-      const data = { ...pkg, ...meta };
-      await Util.PackageJson.save(path, data);
+    const save = async (path: string, pkg: t.PkgJson, meta?: PkgMeta) => {
+      const file = { ...pkg, ...meta };
+      await Util.PackageJson.save(path, file);
     };
 
     await save(fs.join(root, subdir), pkgDist, metaDist);
@@ -35,85 +32,121 @@ export const Package = {
   },
 
   /**
-   * Generate {exports} object.
+   * Generate the {exports} and {typesVersions} fields
+   * for the [package.json] file.
    */
-  async meta(args: {
+  async metadata(args: {
     root: t.DirString;
-    subdir?: string; // eg. '/dist/' if building a [package.json] at a higher level that the 'dist/' folder itself.
+    subdir?: string; // eg. '/dist/' if building a [package.json] at a higher level than the 'dist/' folder itself.
     defaultTarget?: t.ViteTarget;
-  }): Promise<PkgMeta> {
+  }): Promise<PkgMeta | undefined> {
     const { subdir = '' } = args;
     const root = fs.resolve(args.root);
-    const distDir = join(root, Paths.outDir.root);
+    const { config, targets } = await Vite.loadConfig(root);
+    const builds = await Wrangle.distDirs(root);
+    const libEntry = Wrangle.libEntry(root, config);
+    if (!libEntry) return undefined;
 
-    const { pathExists } = fs;
-    if (!(await pathExists(distDir))) throw new Error(`Dist folder does not exist: ${distDir}`);
+    const Exports = {
+      mutable: {} as t.PkgJsonExports,
+      get sorted() {
+        return sortKeys(Exports.mutable);
+      },
+    };
 
-    const exports: t.PkgJsonExports = {};
-    const typesFiles: t.PkgJsonTypesVersionsFiles = {};
-    let types = '';
+    let _types = '';
+    const Types = {
+      mutable: {} as t.PkgJsonTypesVersionsFiles,
+      get hasTypes() {
+        return Object.keys(Types.mutable).length > 0;
+      },
+      get versions() {
+        const obj = sortKeys(Types.mutable);
+        Object.keys(obj).forEach((key) => (obj[key] = R.uniq(obj[key])));
+        return Types.hasTypes ? { '*': obj } : undefined;
+      },
+      defaultType(target: t.ViteTarget) {
+        const list = R.uniq(Types.target(target));
+        return list.find((path) => path.endsWith('/index.d.mts')) ?? '';
+      },
+      target(target: t.ViteTarget) {
+        const list = Types.mutable[target] ?? (Types.mutable[target] = []);
+        return list;
+      },
+    };
 
     const formatPath = (path: string) => {
-      if (subdir) path = join(subdir, path);
+      if (subdir) path = fs.join(subdir, path);
       return Util.ensureRelativeRoot(path);
     };
 
-    const append = async (target: t.ViteTarget, files: t.ViteManifestFile[]) => {
-      const entry = files.find((file) => file.isEntry);
-      if (!entry) throw new Error(`Entry file not found for target: "${target}". ${root}`);
-
-      // Types.
-      const entryType = Package.toTypeFile(entry.src);
-      typesFiles[target] = [formatPath(entryType.filepath)];
-      types = formatPath(entryType.filepath);
-
-      // Exports reference.
-      for (const item of files) {
-        if (item.isEntry) {
-          const key = Util.ensureRelativeRoot(target);
-          exports[key] = formatPath(join(target, item.file));
-        }
-
-        /**
-         * TODO 🐷
-         * - add additional entry points here, when this is
-         *   released within Vite.
-         *
-         * REF
-         *    https://github.com/vitejs/vite/pull/7047#issuecomment-1248269393
-         *    https://github.com/vitejs/vite/pull/10315
-         *
-         */
+    const appendBundleFile = async (args: {
+      entry: { key: string; path: string };
+      target: t.ViteTarget;
+      targets: t.ViteTarget[];
+      files: t.ViteManifestFile[];
+    }) => {
+      const { entry, target, targets, files } = args;
+      const manifest = files.find((file) => file.src === args.entry.path);
+      if (manifest?.isEntry) {
+        const key = Wrangle.exportKey(targets, target, entry.key);
+        const filePath = formatPath(fs.join(args.target, manifest.file));
+        Exports.mutable[key] = filePath;
       }
     };
 
-    // Derive the list of all builds ("web" and/or "node" etc).
-    const pattern = join(distDir, '*', Paths.viteBuildManifest);
-    const paths = (await fs.glob(pattern)).map((manifest) => {
-      const dir = fs.dirname(manifest);
-      const target = fs.basename(dir) as t.ViteTarget;
-      return { dir, target };
-    });
+    const appendType = async (args: {
+      entry: { key: string; path: string };
+      target: t.ViteTarget;
+      targets: t.ViteTarget[];
+      files: t.ViteManifestFile[];
+    }) => {
+      const { target, targets, files } = args;
+      const isDefaultTarget = Is.defaultTarget(targets, target);
+      const isIndex = args.entry.key;
+      const targetList = Types.target(target);
 
-    // Process each build target.
-    for (const item of paths) {
-      const { files } = await Vite.loadManifest(item.dir);
-      await append(item.target, files);
+      if (isDefaultTarget && isIndex) {
+        _types = Types.defaultType(target);
+      }
+
+      files
+        .filter((file) => file.isEntry)
+        .forEach((file) => {
+          const type = Package.toTypeFile(file.src);
+          const path = formatPath(type.filepath);
+          targetList.push(path);
+        });
+    };
+
+    const processBuild = async (
+      build: { dir: string; target: t.ViteTarget },
+      targets: t.ViteTarget[],
+    ) => {
+      const { target } = build;
+      const { files } = await Vite.loadManifest(build.dir);
+      for (const key of Object.keys(libEntry)) {
+        const entry = { key, path: libEntry[key] };
+        await appendBundleFile({ entry, target, targets, files });
+        await appendType({ entry, target, targets, files });
+      }
+    };
+
+    // Process each build-target (eg: "web", "node").
+    for (const build of builds) {
+      await processBuild(build, targets);
     }
 
-    // Add root values.
-    const defaultTarget = ((): t.ViteTarget => {
-      if (paths.length === 1) return paths[0].target;
-      return args.defaultTarget ?? 'web';
-    })();
-    exports['.'] = exports[Util.ensureRelativeRoot(defaultTarget)];
+    // Process [default] build target.
+    const defaultTarget = Wrangle.defaultTarget(targets);
+    const defaultBuild = builds.find((build) => build.target === defaultTarget);
+    if (defaultBuild) await processBuild(defaultBuild, [defaultTarget]);
 
     // Finish up.
-    const hasTypes = Object.keys(typesFiles).length > 0;
     return {
-      types,
-      exports: sortKeys(exports),
-      typesVersions: hasTypes ? { '*': sortKeys(typesFiles) } : undefined,
+      types: _types,
+      exports: Exports.sorted,
+      typesVersions: Types.versions,
     };
   },
 
@@ -143,3 +176,63 @@ function sortKeys<T extends Object>(obj: T) {
     return acc;
   }, {} as T);
 }
+
+const Is = {
+  defaultTarget(targets: t.ViteTarget[], subject?: t.ViteTarget): boolean {
+    if (subject !== undefined) return targets[0] === subject;
+    return targets.length === 1;
+  },
+};
+
+const Wrangle = {
+  defaultTarget(targets: t.ViteTarget[]) {
+    /**
+     * NB: The targets array order is determined within the
+     *     [vite.config.mts] file.
+     *
+     *    The first specified target is assumed to be the
+     *    default (base) target.
+     *
+     *    eg:
+     *      export default Config.vite(import.meta.url, (e) => {
+     *
+     *        e.target('web');          // ← default target: "web"
+     *        e.target('web', 'node');  // ← default target: "web"
+     *        e.target('node', 'web');  // ← default target: "node"
+     *
+     *      });
+     */
+    // NB: order matters in the [vite.config] file.
+    return targets[0];
+  },
+
+  libEntry(root: t.DirString, config: t.ViteUserConfig) {
+    const lib = config?.build?.lib;
+    if (typeof lib !== 'object') return undefined;
+    if (typeof lib.entry !== 'object') return undefined;
+    return Object.keys(lib.entry).reduce((acc, key) => {
+      acc[key] = lib.entry[key].substring(root.length + 1);
+      return acc;
+    }, {});
+  },
+
+  exportKey(targets: t.ViteTarget[], target: t.ViteTarget, key: string) {
+    let out = '';
+    if (!Is.defaultTarget(targets)) out = target;
+    if (key !== 'index') out = fs.join(out, key);
+    out = Util.ensureRelativeRoot(out);
+    return out === './' ? '.' : out;
+  },
+
+  async distDirs(root: t.DirString) {
+    // Derive the list of paths to all builds (eg. "web" and/or "node" etc).
+    const distDir = fs.join(fs.resolve(root), Paths.outDir.root);
+    const pattern = fs.join(distDir, '*', Paths.viteBuildManifest);
+    const match = await fs.glob(pattern);
+    return match.map((manifest) => {
+      const dir = fs.dirname(manifest);
+      const target = fs.basename(dir) as t.ViteTarget;
+      return { dir, target };
+    });
+  },
+};
