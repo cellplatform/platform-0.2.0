@@ -394,19 +394,17 @@ describe('Context', () => {
       const { events, context, dispose } = await TestSample.context();
       const ctx = context.ctx;
 
-      const expectValue = async (value: any, expected?: number) => {
+      const expectValue = async (value: any, expected?: number | null) => {
         ctx.debug.width(value);
         await context.flush();
         const info = await events.info.get();
         expect(info.render.props?.debug.width).to.eql(expected);
       };
 
-      const DEBUG = DEFAULTS.props.debug;
+      await expectValue(undefined, DEFAULTS.props.debug.width);
+      await expectValue(null, null); // NB: means don't render.
 
-      await expectValue(undefined, DEBUG.width);
-      await expectValue(null, DEBUG.width);
-
-      await expectValue(0, 0);
+      await expectValue(0, 0); // NB: means do render (invisibly). Useful when the contents of the panel are required but hidden, like unmuted media elements
       await expectValue(-1, 0);
       await expectValue(200, 200);
 

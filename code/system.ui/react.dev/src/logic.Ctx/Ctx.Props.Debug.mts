@@ -56,7 +56,8 @@ export function CtxPropsDebug(props: PropArgs) {
  */
 
 const Wrangle = {
-  width(value: number | undefined, defaultValue?: number) {
+  width(value?: number | null, defaultValue?: number | null) {
+    if (value === null) return null;
     if (typeof value !== 'number') return defaultValue;
     return Math.max(0, value);
   },
