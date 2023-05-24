@@ -10,7 +10,7 @@ export { Automerge } from './driver.Automerge';
 export { Crdt } from './crdt';
 
 /**
- * Supporting UI
+ * UI
  */
 export { CrdtInfo } from './ui/Crdt.Info';
 
