@@ -44,3 +44,5 @@ export const Specs = {
   ...ModuleSpecs,
   ...DevSpecs,
 };
+
+export default Specs;

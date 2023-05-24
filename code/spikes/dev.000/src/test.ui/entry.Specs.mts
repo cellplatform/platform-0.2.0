@@ -1,6 +1,6 @@
-const { Specs: Common, DevSpecs: ComonDev } = await import('sys.ui.react.common/specs');
+const { ModuleSpecs: Common, DevSpecs: ComonDev } = await import('sys.ui.react.common/specs');
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
-const { Specs: Monaco } = await import('sys.ui.react.monaco');
+const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 const { Specs: Media } = await import('sys.ui.react.media');
 const { Specs: WebRtc } = await import('sys.net.webrtc');
 const { Specs: FsIndexedDb } = await import('sys.fs.indexeddb');
