@@ -21,12 +21,5 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "web": [
-        "./dist/types.d/index.d.mts"
-      ]
-    }
   }
 }

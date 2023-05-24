@@ -1,7 +1,3 @@
-import 'symbol-observable';
-
-export * from './types.mjs';
-
 export { Filesystem } from './Filesystem.mjs';
 export { Path, Filesize, Bus } from 'sys.fs';
 

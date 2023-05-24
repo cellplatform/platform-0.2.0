@@ -1,5 +1,3 @@
-export * from './types.mjs';
-
 export { Pkg } from './index.pkg.mjs';
 export { Diff } from './Diff';
 export { Fuzzy } from './Fuzzy';

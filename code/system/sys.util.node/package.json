@@ -19,12 +19,5 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/node/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "node": [
-        "./dist/types.d/index.d.mts"
-      ]
-    }
   }
 }

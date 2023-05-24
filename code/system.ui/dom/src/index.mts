@@ -1,4 +1,3 @@
-export * from './types.mjs';
 export { Pkg } from './index.pkg.mjs';
 
 export { Keyboard, KeyboardMonitor, KeyListener } from './web.Keyboard';
