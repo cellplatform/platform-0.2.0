@@ -1,13 +1,12 @@
+import { expect } from 'chai';
 import { useState } from 'react';
 
-import { expect } from 'chai';
+import { Keyboard } from 'sys.ui.dom';
 
 import { DevBus } from '../../logic.Bus';
-import { Color, COLORS, css, Spec, DEFAULTS } from '../common';
+import { COLORS, Color, Spec, css } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
-
-import { Keyboard } from 'sys.ui.dom';
 
 let _renderCount = 0;
 
