@@ -1,3 +1,12 @@
+/**
+ * AUDIT NOTES
+ *   Crypto libraries mirror the desgin desicions made
+ *   by @v on the [@farcaster/hub-web] library.
+ *
+ *      circa: May 2023
+ *      https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-web
+ *
+ *  */
 import { sha256 } from '@noble/hashes/sha256';
 import { sha1 } from '@noble/hashes/sha1';
 import { R } from '../common';
