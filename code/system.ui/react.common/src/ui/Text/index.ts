@@ -1,7 +1,7 @@
-import { TextSyntax as Syntax } from '../Text.Syntax';
 import { TextInput as Input } from '../Text.Input';
-import { TextSecret as Secret } from '../Text.Secret';
 import { Keyboard } from '../Text.Keyboard';
+import { TextSecret as Secret } from '../Text.Secret';
+import { TextSyntax as Syntax } from '../Text.Syntax';
 
 export const Text = {
   Syntax,

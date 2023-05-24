@@ -1,4 +1,4 @@
-import { css, Dev } from '../../test.ui';
+import { css, Dev } from '../../../test.ui';
 
 type T = { pitch: number };
 const initial: T = { pitch: 1 };
@@ -44,7 +44,7 @@ export default Dev.describe('Text', (e) => {
       });
 
       dev.button('long: Orwell (essay extract - "Why I Write", 1946)', async (e) => {
-        const { Essays } = await import('./-dev/SAMPLE.essay.mjs');
+        const { Essays } = await import('./DEV.essay.mjs');
         const text = Essays.Orwell.extract;
         const words = text.split(' ');
 
