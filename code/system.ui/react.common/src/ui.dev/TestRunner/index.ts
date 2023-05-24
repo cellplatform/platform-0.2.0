@@ -1,13 +1,14 @@
-import { Results } from './Results';
-import { CompactTestRunner } from './Runner.Compact';
-import { PropListTestRunner } from './Runner.PropList';
+import { TestResults } from './Results';
+import { TestRunnerCompact } from './Runner.Compact';
+import { TestRunnerPropList } from './Runner.PropList';
 import { Test } from './common';
 
 export const TestRunner = {
-  Results,
-  Compact: CompactTestRunner,
-  PropList: PropListTestRunner,
+  Results: TestResults,
+  Compact: TestRunnerCompact,
+  PropList: TestRunnerPropList,
   bundle: Test.bundle,
 };
 
-export { Results, CompactTestRunner, PropListTestRunner };
+export { TestResults, TestRunnerCompact, TestRunnerPropList };
+export default TestRunner;

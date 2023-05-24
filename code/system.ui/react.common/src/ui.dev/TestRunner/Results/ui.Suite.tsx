@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { css, t, Time, Tree } from '../common';
-import { Description } from './Result.Description';
-import { TestResult } from './Results.Test';
+import { css, t, Time, Tree } from './common';
+import { Description } from './ui.Description';
+import { TestResult } from './ui.Test';
 
 export type SuiteResultsProps = {
   data: t.TestSuiteRunResponse;

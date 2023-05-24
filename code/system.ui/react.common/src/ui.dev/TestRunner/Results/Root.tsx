@@ -1,14 +1,14 @@
-import { COLORS, css, Spinner, t } from '../common';
-import { SuiteResults } from './Results.Suite';
+import { COLORS, css, Spinner, t } from './common';
+import { SuiteResults } from './ui.Suite';
 
-export type ResultsProps = {
+export type TestResultsProps = {
   data?: t.TestSuiteRunResponse;
   spinning?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
 };
 
-export const Results: React.FC<ResultsProps> = (props) => {
+export const TestResults: React.FC<TestResultsProps> = (props) => {
   const { data, spinning = false, scroll = true } = props;
 
   /**

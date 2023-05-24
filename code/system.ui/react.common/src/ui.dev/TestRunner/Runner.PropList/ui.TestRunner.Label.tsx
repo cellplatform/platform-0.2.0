@@ -1,12 +1,12 @@
 import { css, DevIcons, t } from './common';
 
-export type TestLabelProps = {
+export type TestRunnerLabelProps = {
   title?: string;
   infoUrl?: string;
   style?: t.CssValue;
 };
 
-export const TestLabel: React.FC<TestLabelProps> = (props) => {
+export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
   const { title = 'Verify', infoUrl } = props;
 
   /**

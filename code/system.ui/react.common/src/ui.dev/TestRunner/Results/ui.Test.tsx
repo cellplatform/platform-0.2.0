@@ -1,6 +1,6 @@
-import { Color, COLORS, css, Icons, t, Time } from '../common';
-import { Description } from './Result.Description';
-import { TestError } from './Results.Test.Error';
+import { Color, COLORS, css, Icons, t, Time } from './common';
+import { Description } from './ui.Description';
+import { TestError } from './ui.Test.Error';
 
 export type TestResultProps = {
   data: t.TestRunResponse;
