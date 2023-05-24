@@ -1,6 +1,6 @@
 import { Dev } from '../index.mjs';
 import { describe, expect, it } from '../test';
-import Specs from './entry.Specs.mjs';
+import { Specs } from './entry.Specs.mjs';
 
 /**
  * Sample of testing the visual UI specs headlessly on the server.
