@@ -1,6 +1,6 @@
 /**
  * AUDIT NOTES
- *   Crypto libraries mirror the desgin desicions made
+ *   Crypto libraries mirror the desgin decisions made
  *   by @v on the [@farcaster/hub-web] library.
  *
  *      circa: May 2023
