@@ -16,6 +16,7 @@ const initial: T = {
 /**
  * Docs:
  *    https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-web
+ *    https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-nodejs/docs
  */
 
 export default Dev.describe('Root', (e) => {
