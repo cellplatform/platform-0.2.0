@@ -11,8 +11,8 @@ describe('visual specs', () => {
     'run',
     async () => {
       const { Dev, expect } = await import('../test.ui');
-      const { All: AllSpecs } = await import('../test.ui/entry.Specs.mjs');
-      const res = await Dev.headless(AllSpecs);
+      const { Specs } = await import('../test.ui/entry.Specs.mjs');
+      const res = await Dev.headless(Specs);
       expect(res.ok).to.eql(true);
     },
     { timeout: 1000 * 10 },

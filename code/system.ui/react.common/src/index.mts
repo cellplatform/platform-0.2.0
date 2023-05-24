@@ -1,10 +1,7 @@
-export * from './types.mjs';
-
 /**
  * Meta
  */
 export { Pkg } from './index.pkg.mjs';
-export { Specs, DevSpecs } from './test.ui/entry.Specs.mjs';
 
 /**
  * Components
