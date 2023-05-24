@@ -83,7 +83,6 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.title('PropList');
 
     dev.row((e) => {
       type TField = 'Module' | 'Module.Version' | 'Module.Tests';
