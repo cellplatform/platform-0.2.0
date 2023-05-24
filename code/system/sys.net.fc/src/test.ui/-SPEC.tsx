@@ -47,6 +47,7 @@ export default Dev.describe('Root', (e) => {
     dev.button((btn) =>
       btn
         .label('getCastsByFid')
+        .right('← "hello world"')
         .spinner((e) => e.state.debug.spinning)
         .onClick(async (e) => {
           await e.change((d) => (d.debug.spinning = true));
@@ -59,7 +60,7 @@ export default Dev.describe('Root', (e) => {
            */
           const tmp: string[] = [];
 
-          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285');
+          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285', true);
           const fid = e.state.current.debug.fid;
           const res = await client.getCastsByFid({ fid });
 
