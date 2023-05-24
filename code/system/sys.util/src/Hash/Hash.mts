@@ -1,4 +1,5 @@
 import { sha256 } from '@noble/hashes/sha256';
+import { sha1 } from '@noble/hashes/sha1';
 import { R } from '../common';
 import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash.mjs';
 
@@ -9,7 +10,23 @@ export type HashOptions = {
 
 export const Hash = {
   /**
-   * Generate a self-describing SHA256 hash of the given object.
+   * Generate a self-describing SHA1 hash of the given input.
+   *
+   * NOTE:
+   *    This is not cryptographically secure.
+   *    It is however useful for generating hashes on files that for
+   *    de-duping where cryptographic security is not required.
+   *
+   */
+  sha1(input: any, options: HashOptions = {}) {
+    const { prefix = true } = options;
+    const bytes = Hash.toBytes(input, options);
+    const hash = Hash.toHex(sha1(bytes));
+    return hash && prefix ? `sha1-${hash}` : hash;
+  },
+
+  /**
+   * Generate a self-describing SHA256 hash of the given input.
    */
   sha256(input: any, options: HashOptions = {}) {
     const { prefix = true } = options;
