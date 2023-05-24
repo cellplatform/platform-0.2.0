@@ -1,4 +1,4 @@
-import * as AsmCrypto from 'asmcrypto.js';
+import { sha256 } from '@noble/hashes/sha256';
 import { R } from '../common';
 import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash.mjs';
 
@@ -13,27 +13,9 @@ export const Hash = {
    */
   sha256(input: any, options: HashOptions = {}) {
     const { prefix = true } = options;
-
-    const algorithm = new AsmCrypto.Sha256();
     const bytes = Hash.toBytes(input, options);
-    const result = algorithm.process(bytes).finish().result;
-    const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
-
+    const hash = Hash.toHex(sha256(bytes));
     return hash && prefix ? `sha256-${hash}` : hash;
-  },
-
-  /**
-   * Generate a self-descriving SHA1 hash of the given object.
-   */
-  sha1(input: any, options: HashOptions = {}) {
-    const { prefix = true } = options;
-
-    const algorithm = new AsmCrypto.Sha1();
-    const bytes = Hash.toBytes(input, options);
-    const result = algorithm.process(bytes).finish().result;
-    const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
-
-    return hash && prefix ? `sha1-${hash}` : hash;
   },
 
   /**
@@ -41,7 +23,20 @@ export const Hash = {
    */
   toBytes(input: any, options: HashOptions = {}) {
     if (input instanceof Uint8Array) return input;
-    return AsmCrypto.string_to_bytes((options.asString ?? R.toString)(input));
+    const text = (options.asString ?? R.toString)(input);
+    return new TextEncoder().encode(text);
+  },
+
+  /**
+   * Convert a bytes array to a hex string.
+   */
+  toHex(bytes: Uint8Array): string {
+    let output = '';
+    for (let i = 0; i < bytes.length; i++) {
+      const hex = bytes[i].toString(16).padStart(2, '0');
+      output += hex;
+    }
+    return output;
   },
 
   /**
