@@ -1,22 +1,24 @@
-const { Specs: CommonSpecs, DevSpecs: ComonDevSpecs } = await import('sys.ui.react.common');
-const { ModuleSpecs: DevSpecs } = await import('sys.ui.react.dev');
-const { Specs: MonacoSpecs } = await import('sys.ui.react.monaco');
-const { Specs: MediaSpecs } = await import('sys.ui.react.media');
-const { Specs: WebRtcSpecs } = await import('sys.net.webrtc');
-// const { Specs: FarcasterSpecs } = await import('sys.net.fc');
-const { Specs: FsIndexedDbSpecs } = await import('sys.fs.indexeddb');
+const { Specs: Common, DevSpecs: ComonDev } = await import('sys.ui.react.common/specs');
+const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
+const { Specs: Monaco } = await import('sys.ui.react.monaco');
+const { Specs: Media } = await import('sys.ui.react.media');
+const { Specs: WebRtc } = await import('sys.net.webrtc');
+const { Specs: FsIndexedDb } = await import('sys.fs.indexeddb');
 const { Specs: VendorStripe } = await import('vendor.stripe');
-const { Specs: CrdtSpecs } = await import('sys.data.crdt');
+const { Specs: Crdt } = await import('sys.data.crdt');
+
+// const { Specs: FarcasterSpecs } = await import('sys.net.fc');
 
 export const Specs = {
-  ...WebRtcSpecs,
   // ...FarcasterSpecs,
-  ...CrdtSpecs,
-  ...MonacoSpecs,
-  ...CommonSpecs,
-  ...ComonDevSpecs,
-  ...DevSpecs,
-  ...MediaSpecs,
-  ...FsIndexedDbSpecs,
+
+  ...WebRtc,
+  ...Crdt,
+  ...Monaco,
+  ...Common,
+  ...ComonDev,
+  ...Dev,
+  ...Media,
+  ...FsIndexedDb,
   ...VendorStripe,
 };
