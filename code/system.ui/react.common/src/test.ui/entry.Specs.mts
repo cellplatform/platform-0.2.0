@@ -1,4 +1,6 @@
-export const Specs = {
+export { Pkg } from '../index.pkg.mjs';
+
+export const ModuleSpecs = {
   'sys.ui.common.Button': () => import('../ui/Button/-SPEC'),
   'sys.ui.common.Button.Switch': () => import('../ui/Button.Switch/-SPEC'),
   'sys.ui.common.Card': () => import('../ui/Card/-SPEC'),
@@ -15,7 +17,7 @@ export const Specs = {
   'sys.ui.common.ObjectView': () => import('../ui/ObjectView/-SPEC'),
   'sys.ui.common.QRCode': () => import('../ui/QRCode/-SPEC'),
   'sys.ui.common.Spinner': () => import('../ui/Spinner/-SPEC'),
-  'sys.ui.common.Text': () => import('../ui/Text/-SPEC'),
+  'sys.ui.common.Text': () => import('../ui/Text/-dev/-SPEC'),
   'sys.ui.common.Text.Font': () => import('../ui/Text.Font/-SPEC'),
   'sys.ui.common.Text.Input': () => import('../ui/Text.Input/-dev/-SPEC'),
   'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/-dev/-SPEC'),
@@ -38,7 +40,9 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 
-export const All = {
-  ...Specs,
+export const Specs = {
+  ...ModuleSpecs,
   ...DevSpecs,
 };
+
+export default Specs;

@@ -16,12 +16,12 @@ export const Pkg: ModuleDef = {
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
-    'sys.ui.react': '0.0.0',
+    'sys.ui.react.util': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

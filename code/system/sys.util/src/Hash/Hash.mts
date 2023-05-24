@@ -1,4 +1,14 @@
-import * as AsmCrypto from 'asmcrypto.js';
+/**
+ * AUDIT NOTES
+ *   Crypto libraries mirror the desgin decisions made
+ *   by @v on the [@farcaster/hub-web] library.
+ *
+ *      circa: May 2023
+ *      https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-web
+ *
+ *  */
+import { sha256 } from '@noble/hashes/sha256';
+import { sha1 } from '@noble/hashes/sha1';
 import { R } from '../common';
 import { shortenHash, ShortenHashOptions } from '../Value/Value.Hash.mjs';
 
@@ -9,31 +19,29 @@ export type HashOptions = {
 
 export const Hash = {
   /**
-   * Generate a self-describing SHA256 hash of the given object.
-   */
-  sha256(input: any, options: HashOptions = {}) {
-    const { prefix = true } = options;
-
-    const algorithm = new AsmCrypto.Sha256();
-    const bytes = Hash.toBytes(input, options);
-    const result = algorithm.process(bytes).finish().result;
-    const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
-
-    return hash && prefix ? `sha256-${hash}` : hash;
-  },
-
-  /**
-   * Generate a self-descriving SHA1 hash of the given object.
+   * Generate a self-describing SHA1 hash of the given input.
+   *
+   * NOTE:
+   *    This is not cryptographically secure.
+   *    It is however useful for generating hashes on files that for
+   *    de-duping where cryptographic security is not required.
+   *
    */
   sha1(input: any, options: HashOptions = {}) {
     const { prefix = true } = options;
-
-    const algorithm = new AsmCrypto.Sha1();
     const bytes = Hash.toBytes(input, options);
-    const result = algorithm.process(bytes).finish().result;
-    const hash = result ? AsmCrypto.bytes_to_hex(result) : '';
-
+    const hash = Hash.toHex(sha1(bytes));
     return hash && prefix ? `sha1-${hash}` : hash;
+  },
+
+  /**
+   * Generate a self-describing SHA256 hash of the given input.
+   */
+  sha256(input: any, options: HashOptions = {}) {
+    const { prefix = true } = options;
+    const bytes = Hash.toBytes(input, options);
+    const hash = Hash.toHex(sha256(bytes));
+    return hash && prefix ? `sha256-${hash}` : hash;
   },
 
   /**
@@ -41,7 +49,20 @@ export const Hash = {
    */
   toBytes(input: any, options: HashOptions = {}) {
     if (input instanceof Uint8Array) return input;
-    return AsmCrypto.string_to_bytes((options.asString ?? R.toString)(input));
+    const text = (options.asString ?? R.toString)(input);
+    return new TextEncoder().encode(text);
+  },
+
+  /**
+   * Convert a bytes array to a hex string.
+   */
+  toHex(bytes: Uint8Array): string {
+    let output = '';
+    for (let i = 0; i < bytes.length; i++) {
+      const hex = bytes[i].toString(16).padStart(2, '0');
+      output += hex;
+    }
+    return output;
   },
 
   /**

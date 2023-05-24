@@ -20,7 +20,7 @@ export function useKeyboard(
     };
 
     const handler = Keyboard.on({
-      ['ALT + KeyK'](e) {
+      ['ALT + KeyJ'](e) {
         e.handled();
         textboxRef?.focus();
         textboxRef?.selectAll();

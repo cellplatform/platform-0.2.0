@@ -1,5 +1,4 @@
 export { Pkg } from './index.pkg.mjs';
-export { ModuleSpecs } from './test.ui/entry.Specs.mjs';
 
 export { Spec } from './logic.Spec';
 export { ValueHandler } from './logic.Tools';

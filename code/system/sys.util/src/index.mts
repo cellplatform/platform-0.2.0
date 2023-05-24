@@ -1,5 +1,3 @@
-export * from './types.mjs';
-
 export { Delete } from './Delete';
 export { Dispose } from './Dispose';
 export { Hash } from './Hash/Hash.mjs';

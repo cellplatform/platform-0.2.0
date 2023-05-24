@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@vimeo/player": "2.19.0",
-    "framer-motion": "10.12.12",
+    "framer-motion": "10.12.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sys.fs": "0.0.0",
@@ -32,12 +32,12 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "web": [
-        "./dist/types.d/index.d.mts"
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
     }
   }

@@ -22,14 +22,6 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "web": [
-        "./dist/types.d/index.d.mts"
-      ]
-    }
+    ".": "./dist/web/index.js"
   }
 }

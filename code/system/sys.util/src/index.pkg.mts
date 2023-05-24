@@ -13,9 +13,9 @@ export const Pkg: ModuleDef = {
   name: 'sys.util',
   version: '0.0.0',
   dependencies: {
+    '@noble/ed25519': '2.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'asmcrypto.js': '2.3.2',
     'nanoid': '4.0.2',
   },
   toString() {

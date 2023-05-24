@@ -20,13 +20,13 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/node/foo.js",
-    "./node": "./dist/node/foo.js"
+    ".": "./dist/node/index.js",
+    "./Foo": "./dist/node/Foo.js"
   },
   "typesVersions": {
     "*": {
-      "node": [
-        "./dist/types.d/index.d.mts"
+      "Foo": [
+        "./dist/types.d/Foo.d.mts"
       ]
     }
   }

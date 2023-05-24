@@ -10,15 +10,19 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'spike.openai',
+  name: 'sys.net.fc',
   version: '0.0.0',
   dependencies: {
+    '@farcaster/core': '0.8.1',
+    '@farcaster/hub-web': '0.3.4',
+    '@improbable-eng/grpc-web': '0.15.0',
+    '@improbable-eng/grpc-web-node-http-transport': '0.15.0',
+    '@noble/ed25519': '2.0.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
-    'openai': '3.1.0',
   },
   toString() {
-    return `💦 module: ${Pkg.name} (v${Pkg.version})`;
+    return `${Pkg.name}@${Pkg.version}`;
   },
 };
 

@@ -22,7 +22,7 @@
   "devDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "yaml": "2.2.2",
+    "yaml": "2.3.0",
     "sys.test": "0.0.0",
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.common": "0.0.0",
@@ -34,12 +34,12 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "web": [
-        "./dist/types.d/index.d.mts"
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
     }
   }

@@ -1,6 +1,4 @@
-import { CrdtInfo } from 'sys.data.crdt';
-
-import { t } from './common';
+import { t, CrdtInfo } from './common';
 
 export type FileCardProps = {
   title?: t.PropListProps['title'];

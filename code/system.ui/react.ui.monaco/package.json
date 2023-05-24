@@ -32,12 +32,12 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "web": [
-        "./dist/types.d/index.d.mts"
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
     }
   }

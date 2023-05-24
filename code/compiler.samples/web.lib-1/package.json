@@ -9,7 +9,6 @@
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
   "dependencies": {
-    "sample.web.lib-2": "0.0.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
@@ -20,12 +19,40 @@
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./web": "./dist/web/index.js"
+    "./Bar": "./dist/web/Bar.js",
+    "./Foo": "./dist/web/Foo.js",
+    "./node": "./dist/node/index.js",
+    "./node/Bar": "./dist/node/Bar.js",
+    "./node/Foo": "./dist/node/Foo.js",
+    "./web": "./dist/web/index.js",
+    "./web/Bar": "./dist/web/Bar.js",
+    "./web/Foo": "./dist/web/Foo.js"
   },
   "typesVersions": {
     "*": {
+      "Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "Foo": [
+        "./dist/types.d/logic/Foo.d.mts"
+      ],
+      "node": [
+        "./dist/types.d/index.d.mts"
+      ],
+      "node/Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "node/Foo": [
+        "./dist/types.d/logic/Foo.d.mts"
+      ],
       "web": [
         "./dist/types.d/index.d.mts"
+      ],
+      "web/Bar": [
+        "./dist/types.d/logic/Bar.d.mts"
+      ],
+      "web/Foo": [
+        "./dist/types.d/logic/Foo.d.mts"
       ]
     }
   }

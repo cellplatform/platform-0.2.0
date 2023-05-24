@@ -27,7 +27,7 @@ export async function build(
     await Dependencies.syncVersions({ filter: (dir) => dir === relativeDir });
   }
 
-  // - Typescript.
+  // - Typescript (lint).
   const tsBuildOutput = await Typescript.build(dir, { exitOnError, silent });
   if (!tsBuildOutput.ok) return tsBuildOutput;
 
