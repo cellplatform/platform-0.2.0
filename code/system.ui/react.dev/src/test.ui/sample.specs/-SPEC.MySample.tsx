@@ -1,13 +1,12 @@
+import { expect } from 'chai';
 import { useState } from 'react';
 
-import { expect } from 'chai';
+import { Keyboard } from 'sys.ui.dom';
 
 import { DevBus } from '../../logic.Bus';
-import { Color, COLORS, css, Spec, DEFAULTS } from '../common';
+import { COLORS, Color, Spec, css } from '../common';
 import { DevTools } from '../sample.DevTools';
 import { MySample } from './MySample';
-
-import { Keyboard } from 'sys.ui.dom';
 
 let _renderCount = 0;
 
@@ -133,7 +132,11 @@ export default Spec.describe('MySample', (e) => {
     dev
       .hr()
       .button((btn) => btn.label('debug.width: 400').onClick((e) => e.ctx.debug.width(400)))
-      .button((btn) => btn.label('debug.width: 50').onClick((e) => e.ctx.debug.width(250)))
+      .button((btn) => btn.label('debug.width: 250').onClick((e) => e.ctx.debug.width(250)))
+      .button((btn) => btn.label('debug.width: 0').onClick((e) => e.ctx.debug.width(-99)))
+      .button((btn) =>
+        btn.label('debug.width: <null> (no render)').onClick((e) => e.ctx.debug.width(null)),
+      )
       .hr()
       .button((btn) => btn.label('size: 300, 200').onClick((e) => e.ctx.subject.size([300, 140])))
       .button((btn) => btn.label('size: fill').onClick((e) => e.ctx.subject.size('fill')))

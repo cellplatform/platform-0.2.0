@@ -57,7 +57,7 @@ export type DevRenderPropsHost = {
  * Debug Panel
  */
 export type DevRenderPropsDebug = {
-  width?: number;
+  width?: number | null;
   header: DevRenderPropsEdge;
   footer: DevRenderPropsEdge;
   body: {

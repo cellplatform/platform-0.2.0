@@ -34,7 +34,7 @@ export type PeerCardProps = {
   backgroundUrl?: string;
   footerVideo?: MediaStream;
 
-  devPanelWidth?: number;
+  devPanelWidth?: number | null;
   devShowFooter?: boolean;
 
   style?: t.CssValue;

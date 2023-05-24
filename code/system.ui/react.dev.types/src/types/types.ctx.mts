@@ -87,7 +87,7 @@ export type DevCtxDebug<S extends O = O> = {
   row<T extends O = S>(input: t.DevRenderer<T> | JSX.Element): t.DevRenderRef;
   scroll(value: boolean): DevCtxDebug;
   padding(value: t.DevMarginInput | undefined | null): DevCtxDebug;
-  width(value: number): DevCtxDebug;
+  width(value: number | null): DevCtxDebug;
   header: DevCtxEdge<S>;
   footer: DevCtxEdge<S>;
 };

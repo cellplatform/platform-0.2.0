@@ -15,7 +15,8 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
   const debug = current.info?.render.props?.debug;
   const width = Wrangle.width(debug);
 
-  if (width <= 0) return null;
+  if (width === null) return null; // NB: configured to not render.
+  const isHidden = width <= 0;
 
   /**
    * [Render]
@@ -26,9 +27,9 @@ export const DebugPanel: React.FC<DebugPanelProps> = (props) => {
       justifySelf: 'stretch',
       borderLeft: `solid 1px ${Color.format(-0.1)}`,
       width,
-
-      display: 'grid',
+      display: isHidden ? 'none' : 'grid',
       gridTemplateRows: 'auto 1fr auto',
+      pointerEvents: isHidden ? 'none' : undefined,
     }),
     body: css({
       Scroll: debug?.body.scroll,
@@ -60,7 +61,9 @@ const distinctUntil = (p: t.DevInfoChanged, n: t.DevInfoChanged) => {
 
 const Wrangle = {
   width(debug?: t.DevRenderPropsDebug) {
-    if (!debug?.width) return 0;
-    return Math.max(0, debug.width ?? 0);
+    const value = debug?.width;
+    if (value === null) return null;
+    if (!value) return 0;
+    return Math.max(0, value ?? 0);
   },
 };

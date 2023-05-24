@@ -9,11 +9,7 @@ const { Specs: Media } = await import('sys.ui.react.media/specs');
 
 const { Specs: VendorStripe } = await import('vendor.stripe/specs');
 
-// const { Specs: FarcasterSpecs } = await import('sys.net.fc');
-
 export const Specs = {
-  // ...FarcasterSpecs,
-
   ...WebRtc,
   ...Crdt,
   ...Monaco,
@@ -22,6 +18,5 @@ export const Specs = {
   ...Dev,
   ...Media,
   ...Fs,
-
   ...VendorStripe,
 };
