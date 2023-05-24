@@ -7,7 +7,7 @@ const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
 
-const { Specs: VendorStripe } = await import('vendor.stripe');
+const { Specs: VendorStripe } = await import('vendor.stripe/specs');
 
 // const { Specs: FarcasterSpecs } = await import('sys.net.fc');
 
@@ -22,5 +22,6 @@ export const Specs = {
   ...Dev,
   ...Media,
   ...Fs,
+
   ...VendorStripe,
 };
