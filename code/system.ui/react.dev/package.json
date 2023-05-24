@@ -36,9 +36,6 @@
     "*": {
       "specs": [
         "./dist/types.d/test.ui/entry.Specs.d.mts"
-      ],
-      "web": [
-        "./dist/types.d/index.d.mts"
       ]
     }
   }
