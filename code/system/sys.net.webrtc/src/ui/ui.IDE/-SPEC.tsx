@@ -35,7 +35,7 @@ export default Dev.describe('PeerCard', async (e) => {
     muted: boolean;
     showBg: boolean;
     showFooter: boolean;
-    sidepanelWidth?: number;
+    sidepanelWidth?: number | null;
     backgroundUrl?: string;
     persistSharedDoc?: boolean;
   };
