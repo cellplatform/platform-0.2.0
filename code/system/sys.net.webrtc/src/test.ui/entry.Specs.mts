@@ -1,3 +1,5 @@
+export { Pkg } from '../index.pkg.mjs';
+
 export const Specs = {
   'sys.net.webrtc': () => import('../ui/ui.Info/-dev/-SPEC'),
 

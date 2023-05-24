@@ -1,6 +1,6 @@
 const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
-const { Specs: WebRtc } = await import('sys.net.webrtc');
+const { Specs: WebRtc } = await import('sys.net.webrtc/specs');
 
 const { ModuleSpecs: Common, DevSpecs: ComonDev } = await import('sys.ui.react.common/specs');
 const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
