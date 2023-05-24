@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.util',
   version: '0.0.0',
   dependencies: {
-    '@noble/ed25519': '2.0.0',
+    '@noble/hashes': '1.3.0',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'nanoid': '4.0.2',
