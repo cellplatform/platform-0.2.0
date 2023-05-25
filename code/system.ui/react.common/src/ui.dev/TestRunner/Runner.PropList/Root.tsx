@@ -5,4 +5,5 @@ import { Item } from './Root.item';
  */
 export const TestRunnerPropList = {
   Item,
+  runner: Item.runner,
 };

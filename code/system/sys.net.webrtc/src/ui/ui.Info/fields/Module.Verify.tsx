@@ -1,7 +1,7 @@
 import { DEFAULTS, TestRunner, t } from '../common';
 
 export function FieldModuleVerify(args: { fields: t.WebRtcInfoField[]; data: t.WebRtcInfoData }) {
-  return TestRunner.PropList.item({
+  return TestRunner.PropList.runner({
     infoUrl: Wrangle.infoUrl(),
     async get() {
       const { TESTS } = await import('../../../test.ui/-TestRunner.tests.mjs');
