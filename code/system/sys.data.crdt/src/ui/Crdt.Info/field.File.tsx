@@ -1,7 +1,7 @@
 import { COLORS, DEFAULTS, Icons, Path, t, Value, Wrangle, PropList } from './common';
 
 export function FieldFile(
-  fields: t.CrdtInfoFields[],
+  fields: t.CrdtInfoField[],
   data: t.CrdtInfoData,
   info?: { exists: boolean; manifest: t.DirManifest },
 ): t.PropListItem[] {

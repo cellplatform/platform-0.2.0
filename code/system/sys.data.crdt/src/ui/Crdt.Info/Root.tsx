@@ -10,7 +10,7 @@ import { useFile } from './useFile.mjs';
 export type CrdtInfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.CrdtInfoFields[];
+  fields?: t.CrdtInfoField[];
   data?: t.CrdtInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
@@ -25,7 +25,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
   const { fields = DEFAULTS.fields, data = {}, flipped } = props;
   const file = useFile(data);
 
-  const items = PropList.builder<t.CrdtInfoFields>()
+  const items = PropList.builder<t.CrdtInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
     .field('Driver.Library', { label: 'Library', value: Wrangle.automergeLib() })

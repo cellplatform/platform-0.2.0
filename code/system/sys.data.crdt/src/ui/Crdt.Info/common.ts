@@ -4,7 +4,7 @@ import { t, Value, Filesize, DEFAULTS as DEFAULTS_BASE } from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.CrdtInfoFields[] = [
+export const FIELDS: t.CrdtInfoField[] = [
   'Module',
   'Module.Verify',
   'Driver.Library',
@@ -19,7 +19,7 @@ export const FIELDS: t.CrdtInfoFields[] = [
   'Url.QRCode',
 ];
 
-const defaultFields = ['Module', 'Module.Verify'] as t.CrdtInfoFields[];
+const defaultFields = ['Module', 'Module.Verify'] as t.CrdtInfoField[];
 export const DEFAULTS = {
   fields: defaultFields,
   indent: 15,

@@ -1,7 +1,7 @@
 import { COLORS, Icons, PropList, t, Time, Value } from './common';
 
 export function FieldHistoryItem(
-  fields: t.CrdtInfoFields[],
+  fields: t.CrdtInfoField[],
   data: t.CrdtInfoData,
 ): t.PropListItem[] {
   const item = data?.history?.item;

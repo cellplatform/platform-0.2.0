@@ -1,6 +1,6 @@
 import type { t } from '../common.t';
 
-export type CrdtInfoFields =
+export type CrdtInfoField =
   | 'Module'
   | 'Module.Verify'
   | 'Driver.Library'
