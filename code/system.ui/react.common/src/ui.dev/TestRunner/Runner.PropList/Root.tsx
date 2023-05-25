@@ -1,18 +1,8 @@
-import { t } from './common';
-import { TestRunner } from './ui.TestRunner';
-import { TestRunnerLabel } from './ui.TestRunner.Label';
+import { Item } from './Root.item';
 
 /**
  * <PropList> compact test-runner.
  */
 export const TestRunnerPropList = {
-  /**
-   * Generates a <PropList> item for running unit tests.
-   */
-  item(args: { get: t.GetTestPayload; label?: string; infoUrl?: string }): t.PropListItem {
-    return {
-      label: <TestRunnerLabel title={args.label} infoUrl={args.infoUrl} />,
-      value: <TestRunner get={args.get} />,
-    };
-  },
+  Item,
 };
