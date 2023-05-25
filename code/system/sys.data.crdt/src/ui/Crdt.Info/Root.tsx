@@ -5,7 +5,7 @@ import { FieldHistory } from './fields/History.mjs';
 import { FieldModuleVerify } from './fields/Module.Verify';
 import { FieldNetwork } from './fields/Network';
 import { FieldUrl, FieldUrlQRCode } from './fields/Url';
-import { useFile } from './useFile.mjs';
+import { useFile } from './hooks/useFile.mjs';
 
 export type CrdtInfoProps = {
   title?: t.PropListProps['title'];

@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, QRCode as BaseQRCode } from './common';
+import { QRCode as BaseQRCode, css, t } from '../common';
 
 export type QRCodeProps = {
   href?: string;

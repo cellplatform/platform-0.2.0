@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, t } from './common';
+import { rx, t } from '../common';
 
 type T = { exists: boolean; manifest: t.DirManifest };
 
