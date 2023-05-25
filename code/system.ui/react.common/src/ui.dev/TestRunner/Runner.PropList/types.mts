@@ -9,5 +9,7 @@ export type TestRunnerPropListData = {
   pkg?: t.ModuleDef;
   run?: {
     infoUrl?: string;
+    label?: string;
+    get?: t.GetTestSuite;
   };
 };

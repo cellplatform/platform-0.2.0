@@ -10,7 +10,7 @@ const MSEC = {
 };
 
 export type TestRunnerProps = {
-  get: t.GetTestPayload;
+  get: t.GetTestSuite;
   style?: t.CssValue;
 };
 

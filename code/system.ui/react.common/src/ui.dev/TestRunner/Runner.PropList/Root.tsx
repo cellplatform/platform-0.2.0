@@ -1,4 +1,4 @@
-import { Item } from './Root.item';
+import { Item } from './Root.Item';
 import { DEFAULTS, FC, FIELDS, PropList, t } from './common';
 import { FieldTestsRun } from './fields/TestsRun';
 

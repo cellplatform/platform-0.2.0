@@ -28,7 +28,7 @@ export const ModuleSpecs = {
 };
 
 export const DevSpecs = {
-  'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/-dev/-SPEC.TestRunner'),
+  'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/-dev/-SPEC'),
   'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/-SPEC'),
   'sys.ui.dev.DevSplash': () => import('../ui.dev/DevSplash/-SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/-SPEC'),

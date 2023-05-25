@@ -1,4 +1,4 @@
-import { Dev, Pkg, t } from '../../../test.ui';
+import { Dev, Pkg, t, Time } from '../../../test.ui';
 import { PropList } from '../../../ui/PropList';
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
@@ -126,9 +126,24 @@ export default Dev.describe('TestRunner', (e) => {
     dev.hr(5, 20);
 
     dev.section('TestRunner.PropList', (dev) => {
+      const get: t.GetTestSuite = async () => {
+        const m1 = await import('./-TEST.sample-1.mjs');
+        const m2 = await import('./-TEST.sample-2.mjs');
+        const root = await Dev.bundle([m1.default, m2.default]);
+        const ctx = state.current.ctx;
+        await Time.wait(800); // Sample delay.
+        return { root, ctx };
+      };
+
       dev.row((e) => {
         const { debug } = e.state;
-        const data = { pkg: Pkg };
+        const data: t.TestRunnerPropListData = {
+          pkg: Pkg,
+          run: {
+            infoUrl: debug.infoUrl ? location.href : undefined,
+            get,
+          },
+        };
         return (
           <Dev.TestRunner.PropList
             fields={debug.fields}

@@ -8,8 +8,8 @@ export * from './Runner.PropList/types.mjs';
 /**
  * Retrieve a test model (suite | "describe").
  */
-export type GetTestPayload = () => Promise<TestPayload>;
-export type TestPayload = {
+export type GetTestSuite = () => Promise<GetTestSuitePayload>;
+export type GetTestSuitePayload = {
   root: t.TestSuiteModel;
   ctx?: Ctx;
   timeout?: Milliseconds;
