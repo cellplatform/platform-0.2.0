@@ -38,13 +38,16 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
       opacity: 0.3,
     }),
     selected: css({ Absolute: 0 }),
-    thumbnails: css({ Absolute: [null, 20, 20, 20], Flex: 'x-center-center' }),
+    thumbnails: css({
+      Absolute: [null, 20, 20, 20],
+      Flex: 'x-center-end',
+    }),
     thumbnail: css({
-      marginRight: 6,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      border: `solid 5px ${Color.alpha(COLORS.WHITE, 0.2)}`,
       backgroundColor: Color.alpha(COLORS.DARK, 0.06),
+      marginRight: 8,
       ':last-child': { marginRight: 0 },
-      borderRadius: 5,
+      borderRadius: 8,
     }),
     fill: css({ Absolute: 0 }),
     player: css({ Absolute: [null, null, 20, 20] }),
@@ -59,9 +62,16 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
   const elThumbnails = conns.map((conn, i) => {
     const key = `${conn.id}:${i}`;
     const stream = isSelf ? conn.stream.local : conn.stream.remote;
+    const size = 80;
     return (
       <Button key={key} style={styles.thumbnail} onClick={() => setSelected(conn)}>
-        <MediaStream.Video stream={stream} width={46} height={46} muted={true} borderRadius={5} />
+        <MediaStream.Video
+          stream={stream}
+          width={size}
+          height={size}
+          muted={true}
+          borderRadius={5}
+        />
       </Button>
     );
   });
