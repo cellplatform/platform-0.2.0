@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, t } from './common';
+import { rx, t } from '../common';
 
 /**
  * Accumulate network traffic stats from all syncers.

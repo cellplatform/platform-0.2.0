@@ -8,7 +8,7 @@ import { FieldPeer } from './fields/Peer';
 import { FieldPeerConnections } from './fields/Peer.Connections';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
-import { useInfo } from './useInfo.mjs';
+import { useInfo } from './hooks/useInfo.mjs';
 
 export type WebRtcInfoProps = {
   client?: t.WebRtcEvents;

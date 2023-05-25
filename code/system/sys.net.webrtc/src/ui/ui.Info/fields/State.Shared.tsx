@@ -1,5 +1,5 @@
 import { COLORS, Color, Crdt, Filesize, Icons, Value, css, t } from '../common';
-import { useSyncTraffic } from '../useSyncTraffic.mjs';
+import { useSyncTraffic } from '../hooks/useSyncTraffic.mjs';
 
 export function FieldStateShared(args: {
   fields: t.WebRtcInfoField[];

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, COLORS, Spinner, css, t } from './common';
-import { PeerCtrlIcon } from './ui.PeerCtrls.Icon';
+import { Button, COLORS, Spinner, css, t } from '../common';
+import { PeerCtrlIcon } from './PeerCtrls.Icon';
 
 export type PeerCtrlButtonProps = {
   kind: t.WebRtcInfoPeerFacet;

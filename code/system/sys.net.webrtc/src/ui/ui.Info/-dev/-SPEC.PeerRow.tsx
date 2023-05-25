@@ -1,5 +1,5 @@
 import { Dev, TestNetwork, WebRtc, t } from './common';
-import { PeerRow, PeerRowProps } from '../ui.PeerRow';
+import { PeerRow, PeerRowProps } from '../ui/PeerRow';
 
 type NetworkProximity = 'Local' | 'Remote';
 type T = {

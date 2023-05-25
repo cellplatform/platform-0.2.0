@@ -1,7 +1,7 @@
-import { COLORS, Color, DEFAULTS, Icons, css, t } from './common';
-import { PeerCtrls } from './ui.PeerCtrls';
-import { VideoThumbnails } from './ui.PeerRow.Video';
-import { usePeerRowController } from './usePeerRowController.mjs';
+import { COLORS, Color, DEFAULTS, Icons, css, t } from '../common';
+import { PeerCtrls } from './PeerCtrls';
+import { VideoThumbnails } from './PeerRow.Video';
+import { usePeerRowController } from '../hooks/usePeerRowController.mjs';
 
 export type PeerRowProps = {
   peerid: t.PeerId;

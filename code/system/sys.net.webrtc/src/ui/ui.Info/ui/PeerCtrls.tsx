@@ -1,5 +1,5 @@
-import { COLORS, Color, DEFAULTS, FC, Keyboard, R, css, t } from './common';
-import { PeerCtrlButton, PeerCtrlButtonProps } from './ui.PeerCtrls.Button';
+import { COLORS, Color, DEFAULTS, FC, Keyboard, R, css, t } from '../common';
+import { PeerCtrlButton, PeerCtrlButtonProps } from './PeerCtrls.Button';
 
 export type PeerCtrlsProps = {
   peerid: t.PeerId;

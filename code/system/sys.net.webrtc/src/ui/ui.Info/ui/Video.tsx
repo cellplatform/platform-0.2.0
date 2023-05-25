@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { MediaStream, Color, COLORS, css, t, rx } from './common';
+import { COLORS, Color, MediaStream, css, t } from '../common';
 
 export type VideoProps = {
   stream?: MediaStream;
