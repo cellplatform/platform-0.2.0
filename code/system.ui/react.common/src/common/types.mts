@@ -15,6 +15,7 @@ export type {
   JsonU,
   JsonMapU,
   Size,
+  ModuleDef,
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
