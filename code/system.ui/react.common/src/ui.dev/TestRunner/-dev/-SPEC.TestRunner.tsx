@@ -1,9 +1,9 @@
-import { Dev, Pkg, Time, t } from '../../../test.ui';
+import { Dev, Pkg, t } from '../../../test.ui';
 import { PropList } from '../../../ui/PropList';
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
 
-import type { TestCtx, ResultsProps } from './-types.mjs';
+import type { ResultsProps, TestCtx } from './-types.mjs';
 
 type T = {
   ctx: TestCtx;

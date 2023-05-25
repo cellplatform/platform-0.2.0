@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, DEFAULTS, FIELDS, PropList } from './common';
 import { Item } from './Root.item';
+import { DEFAULTS, FC, FIELDS, PropList, t } from './common';
+import { FieldTestsRun } from './fields/TestsRun';
 
 const runner = Item.runner;
 
@@ -28,11 +28,7 @@ const View: React.FC<TestRunnerPropListProps> = (props) => {
   const items = PropList.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
-    .field('Tests.Run', () => {
-
-      return [];
-
-    })
+    .field('Tests.Run', () => FieldTestsRun({ fields, data }))
     .items(fields);
 
   return (
@@ -69,7 +65,7 @@ type Fields = {
   FIELDS: typeof FIELDS;
   DEFAULTS: typeof DEFAULTS;
   Item: typeof Item;
-  runner: typeof Item.runner;
+  runner: typeof runner;
 };
 
 export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
