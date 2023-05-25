@@ -1,5 +1,5 @@
-import { t } from './common';
-import { QRCode } from './ui.QRCode';
+import { t } from '../common';
+import { QRCode } from '../ui.QRCode';
 
 /**
  * Field: URL link

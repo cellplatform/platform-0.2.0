@@ -1,6 +1,6 @@
-import { DEFAULTS, t } from './common';
-import { Network } from './ui.Network';
-import { SyncTraffic } from './ui.Network.SyncTraffic';
+import { DEFAULTS, t } from '../common';
+import { Network } from '../ui.Network';
+import { SyncTraffic } from '../ui.Network.SyncTraffic';
 
 export function FieldNetwork(data: t.CrdtInfoData, info?: {}): t.PropListItem[] {
   const res: t.PropListItem[] = [];

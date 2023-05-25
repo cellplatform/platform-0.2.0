@@ -1,4 +1,4 @@
-import { t, Value, Time } from './common';
+import { t, Value, Time } from '../common';
 
 export function FieldHistory(data: t.CrdtInfoData): t.PropListItem[] {
   const history = data.history?.data;

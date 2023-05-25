@@ -1,4 +1,4 @@
-import { COLORS, Icons, PropList, t, Time, Value } from './common';
+import { COLORS, Icons, PropList, t, Time, Value } from '../common';
 
 export function FieldHistoryItem(
   fields: t.CrdtInfoField[],

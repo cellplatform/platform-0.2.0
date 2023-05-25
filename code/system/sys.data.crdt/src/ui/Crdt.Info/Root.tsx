@@ -1,10 +1,10 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
-import { FieldFile } from './field.File';
-import { FieldHistoryItem } from './field.History.Item';
-import { FieldHistory } from './field.History.mjs';
-import { FieldModuleVerify } from './field.Module.Verify';
-import { FieldNetwork } from './field.Network';
-import { FieldUrl, FieldUrlQRCode } from './field.Url';
+import { FieldFile } from './fields/File';
+import { FieldHistoryItem } from './fields/History.Item';
+import { FieldHistory } from './fields/History.mjs';
+import { FieldModuleVerify } from './fields/Module.Verify';
+import { FieldNetwork } from './fields/Network';
+import { FieldUrl, FieldUrlQRCode } from './fields/Url';
 import { useFile } from './useFile.mjs';
 
 export type CrdtInfoProps = {
