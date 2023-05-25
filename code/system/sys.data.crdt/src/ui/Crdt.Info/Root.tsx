@@ -22,7 +22,7 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { fields = DEFAULTS.fields, data = {}, flipped } = props;
+  const { fields = DEFAULTS.fields, data = {} } = props;
   const file = useFile(data);
 
   const items = PropList.builder<t.CrdtInfoField>()
