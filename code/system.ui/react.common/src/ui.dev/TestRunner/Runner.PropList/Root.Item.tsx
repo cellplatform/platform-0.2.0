@@ -1,6 +1,6 @@
 import { t } from './common';
-import { TestRunner } from './ui.TestRunner';
-import { TestRunnerLabel } from './ui.TestRunner.Label';
+import { TestRunner } from './ui/TestRunner';
+import { TestRunnerLabel } from './ui/TestRunner.Label';
 
 /**
  * <PropList> compact test-runner.

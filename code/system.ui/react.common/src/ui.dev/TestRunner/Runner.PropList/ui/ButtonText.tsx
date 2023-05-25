@@ -1,4 +1,4 @@
-import { Value, COLORS, css, t, Time, DevIcons } from './common';
+import { Value, COLORS, css, t, Time, DevIcons } from '../common';
 
 export type ButtonTextProps = {
   isColored?: boolean;

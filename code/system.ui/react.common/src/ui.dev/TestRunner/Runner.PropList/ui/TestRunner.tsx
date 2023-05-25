@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState, Test } from './common';
-import { ButtonText } from './ui.ButtonText';
+import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState, Test } from '../common';
+import { ButtonText } from './ButtonText';
 
 type Milliseconds = number;
 

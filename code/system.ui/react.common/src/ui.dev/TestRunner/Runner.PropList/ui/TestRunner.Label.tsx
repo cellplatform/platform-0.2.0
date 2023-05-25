@@ -1,4 +1,4 @@
-import { css, DevIcons, t } from './common';
+import { css, DevIcons, t } from '../common';
 
 export type TestRunnerLabelProps = {
   title?: string;
