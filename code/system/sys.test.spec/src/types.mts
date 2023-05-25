@@ -1,7 +1,7 @@
+import type { Transform } from './TestSuite.helpers/Transform.mjs';
+import type { Tree } from './TestSuite.helpers/Tree.mjs';
 import { t } from './common.t';
 export * from './TestSuite.helpers/types.mjs';
-import type { Tree } from './TestSuite.helpers/Tree.mjs';
-import type { Transform } from './TestSuite.helpers/Transform.mjs';
 
 type Id = string;
 type Anything = void | any;
@@ -12,7 +12,7 @@ type IgnoredResponse = any | Promise<any>;
 export type TestModifier = 'skip' | 'only';
 
 export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
-export type SpecImport = Promise<{ default: any }>;
+export type SpecImport = Promise<{ default: TestSuiteModel }>;
 export type SpecImports = { [namespace: string]: () => SpecImport };
 
 /**
