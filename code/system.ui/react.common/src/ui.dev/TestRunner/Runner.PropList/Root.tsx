@@ -1,6 +1,7 @@
 import { Item } from './Root.Item';
 import { DEFAULTS, FC, FIELDS, PropList, t } from './common';
 import { FieldTestsRun } from './fields/TestsRun';
+import { FieldTestsSelector } from './fields/TestsSelector';
 
 const runner = Item.runner;
 
@@ -29,6 +30,7 @@ const View: React.FC<TestRunnerPropListProps> = (props) => {
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
     .field('Tests.Run', () => FieldTestsRun({ fields, data }))
+    .field('Tests.Selector', () => FieldTestsSelector({ fields, data }))
     .items(fields);
 
   return (
