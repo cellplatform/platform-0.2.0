@@ -103,7 +103,7 @@ export const ButtonText: React.FC<ButtonTextProps> = (props) => {
     );
   }
 
-  const elRunAgain = <div {...styles.runAgain}>{'rerun →'}</div>;
+  const elRunAgain = <div {...styles.runAgain}>{'run →'}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
