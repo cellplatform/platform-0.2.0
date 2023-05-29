@@ -7,7 +7,7 @@ export type TestRunnerField = 'Module' | 'Module.Version' | 'Tests.Run' | 'Tests
  */
 export type TestRunnerPropListData = {
   pkg?: t.ModuleDef;
-  specs?: t.SpecImport[];
+  specs?: { all?: t.SpecImport[]; selected?: t.SpecImport[] };
   run?: {
     infoUrl?: string;
     label?: string;

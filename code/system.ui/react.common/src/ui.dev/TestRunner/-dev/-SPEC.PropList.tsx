@@ -64,10 +64,17 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         const infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.Results' : undefined;
+
+        const sample1 = import('./-TEST.sample-1.mjs');
+        const sample2 = import('./-TEST.sample-2.mjs');
+
         const data: t.TestRunnerPropListData = {
           pkg: Pkg,
           run: { infoUrl, get },
-          specs: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
+          specs: {
+            all: [sample1, sample2],
+            selected: [sample2],
+          },
         };
 
         return <Dev.TestRunner.PropList fields={debug.fields} data={data} card={debug.card} />;

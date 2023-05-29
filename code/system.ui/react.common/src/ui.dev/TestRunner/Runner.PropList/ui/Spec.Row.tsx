@@ -4,6 +4,7 @@ import { useSpecImports } from '../hooks/useSpecImports.mjs';
 
 export type SpecRowProps = {
   spec: t.SpecImport;
+  selected?: boolean;
   style?: t.CssValue;
 };
 
@@ -51,7 +52,7 @@ export const SpecRow: React.FC<SpecRowProps> = (props) => {
         </div>
       </Button>
       <div {...styles.right}>
-        <Switch height={12} />
+        <Switch height={12} value={props.selected} />
       </div>
     </div>
   );
