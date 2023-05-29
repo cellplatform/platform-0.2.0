@@ -11,7 +11,7 @@ export function FieldTestsSelector(args: {
   return specs.all.map((spec) => {
     const isSelected = Wrangle.isSelected(args.data, spec);
     return {
-      value: <SpecRow spec={spec} selected={isSelected} />,
+      value: <SpecRow import={spec} selected={isSelected} onSelectionChange={specs.onChange} />,
     };
   });
 }
@@ -21,13 +21,7 @@ export function FieldTestsSelector(args: {
  */
 const Wrangle = {
   isSelected(data: t.TestRunnerPropListData, spec: t.SpecImport) {
-    const specs = data?.specs ?? {};
-    // const all = specs?.all ?? [];
-    const selected = specs.selected;
-
-    if (selected === undefined) return true;
-
-    return selected.includes(spec);
-    //
+    const selected = (data?.specs ?? {}).selected;
+    return selected?.includes(spec) ?? false;
   },
 };

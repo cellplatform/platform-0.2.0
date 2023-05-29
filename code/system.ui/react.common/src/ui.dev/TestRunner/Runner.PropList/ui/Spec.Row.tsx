@@ -1,15 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, Switch, Icons, Button } from '../common';
+import { Button, COLORS, Icons, Switch, css, t } from '../common';
 import { useSpecImports } from '../hooks/useSpecImports.mjs';
 
 export type SpecRowProps = {
-  spec: t.SpecImport;
+  import: t.SpecImport;
   selected?: boolean;
   style?: t.CssValue;
+  onSelectionChange?: t.SpecSelectionHandler;
 };
 
 export const SpecRow: React.FC<SpecRowProps> = (props) => {
-  const spec = useSpecImports(props.spec);
+  const spec = useSpecImports(props.import);
+  const isSelected = Boolean(props.selected);
+
+  /**
+   * Handlers
+   */
+  const handleSwitchClick = () => {
+    if (spec.suite) {
+      props.onSelectionChange?.({
+        import: props.import,
+        spec: spec.suite,
+        from: isSelected,
+        to: !isSelected,
+      });
+    }
+  };
 
   /**
    * [Render]
@@ -52,7 +67,7 @@ export const SpecRow: React.FC<SpecRowProps> = (props) => {
         </div>
       </Button>
       <div {...styles.right}>
-        <Switch height={12} value={props.selected} />
+        <Switch height={12} value={isSelected} onClick={handleSwitchClick} />
       </div>
     </div>
   );

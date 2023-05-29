@@ -3,6 +3,7 @@ import { DEFAULTS, FC, FIELDS, PropList, t } from './common';
 import { FieldTestsRun } from './fields/TestsRun';
 import { FieldTestsSelector } from './fields/TestsSelector';
 import { FieldSelector } from './ui/FieldSelector';
+import { TestRunnerPropListController as controller } from './Root.Controller.mjs';
 
 const runner = Item.runner;
 
@@ -69,11 +70,12 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   FieldSelector: typeof FieldSelector;
   Item: typeof Item;
+  controller: typeof controller;
   runner: typeof runner;
 };
 
 export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
   View,
-  { FIELDS, DEFAULTS, FieldSelector, Item, runner },
+  { FIELDS, DEFAULTS, FieldSelector, Item, controller, runner },
   { displayName: 'TestRunnerPropList' },
 );

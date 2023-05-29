@@ -10,28 +10,31 @@ type T = {
   ctx: TestCtx;
   props: TestRunnerPropListProps;
   debug: {
-    card: boolean;
-    infoUrl: boolean;
-    fields?: t.TestRunnerField[];
+    infoUrl?: boolean;
   };
 };
 const initial: T = {
   ctx: { fail: false },
-  props: {},
-  debug: {
+  props: {
     card: true,
-    infoUrl: true,
     fields: DEFAULTS.fields,
+  },
+  debug: {
+    infoUrl: true,
   },
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = T['debug'];
+  type LocalStore = {
+    card: boolean;
+    infoUrl?: boolean;
+    fields?: t.TestRunnerField[];
+  };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
     infoUrl: initial.debug.infoUrl,
-    fields: initial.debug.fields,
-    card: initial.debug.card,
+    fields: initial.props.fields!,
+    card: initial.props.card!,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,8 +43,8 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     await state.change((d) => {
       d.debug.infoUrl = local.infoUrl;
-      d.debug.fields = local.fields;
-      d.debug.card = local.card;
+      d.props.fields = local.fields;
+      d.props.card = local.card;
     });
 
     const get: t.GetTestSuite = async () => {
@@ -54,30 +57,47 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       return { root, ctx };
     };
 
-    const getSize = (): [number, null] => [state.current.debug.card ? 330 : 250, null];
+    const getSize = (): [number, null] => [state.current.props.card ? 330 : 250, null];
 
+    const controller = Dev.TestRunner.PropList.controller({
+      pkg: Pkg,
+      run: {
+        infoUrl: state.current.debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.Results' : undefined,
+        get,
+      },
+      specs: {
+        all: [
+          import('./-TEST.sample-1.mjs'),
+          import('./-TEST.sample-2.mjs'),
+          import('./-TEST.controller.mjs'),
+        ],
+        onChange(e) {
+          console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller.
+        },
+      },
+    });
+
+    const updateData = () => state.change((d) => (d.props.data = controller.current));
+    controller.$.subscribe((e) => {
+      updateData();
+      if (e.action === 'Specs:Selection') {
+        // TODO 🐷
+        console.log('🐷 TODO', 'store selection on local-storage');
+      }
+    });
+    updateData();
+
+    ctx.host.tracelineColor(-0.05);
     ctx.subject
       .backgroundColor(0)
       .size(getSize())
       .display('grid')
-
       .render<T>((e) => {
-        const { debug } = e.state;
-        const infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.Results' : undefined;
+        const { props, debug } = e.state;
 
-        const sample1 = import('./-TEST.sample-1.mjs');
-        const sample2 = import('./-TEST.sample-2.mjs');
+        // const data = controller.current;
 
-        const data: t.TestRunnerPropListData = {
-          pkg: Pkg,
-          run: { infoUrl, get },
-          specs: {
-            all: [sample1, sample2],
-            selected: [sample2],
-          },
-        };
-
-        return <Dev.TestRunner.PropList fields={debug.fields} data={data} card={debug.card} />;
+        return <Dev.TestRunner.PropList {...props} />;
       });
   });
 
@@ -90,10 +110,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         return (
           <Dev.TestRunner.PropList.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
-            selected={e.state.debug.fields}
+            selected={e.state.props.fields}
             onClick={(ev) => {
               const fields = ev.next as t.TestRunnerField[];
-              dev.change((d) => (d.debug.fields = fields));
+              dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}
           />
@@ -114,8 +134,8 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `card`)
-          .value((e) => e.state.debug.card)
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.debug, 'card')))),
+          .value((e) => e.state.props.card)
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
       );
     });
   });

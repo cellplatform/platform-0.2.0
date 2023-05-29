@@ -117,7 +117,9 @@ export default Dev.describe('TestRunner', (e) => {
         const data: t.TestRunnerPropListData = {
           pkg: Pkg,
           run: { infoUrl: location.href, get },
-          specs: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
+          specs: {
+            all: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
+          },
         };
         return (
           <Dev.TestRunner.PropList
