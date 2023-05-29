@@ -4,6 +4,7 @@ import { FieldTestsRun } from './fields/TestsRun';
 import { FieldTestsSelector } from './fields/TestsSelector';
 
 const runner = Item.runner;
+const FieldSelector = PropList.FieldSelector;
 
 /**
  * <PropList> compact test-runner.
@@ -66,12 +67,13 @@ const Wrangle = {
 type Fields = {
   FIELDS: typeof FIELDS;
   DEFAULTS: typeof DEFAULTS;
+  FieldSelector: typeof FieldSelector;
   Item: typeof Item;
   runner: typeof runner;
 };
 
 export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
   View,
-  { FIELDS, DEFAULTS, Item, runner },
+  { FIELDS, DEFAULTS, Item, FieldSelector, runner },
   { displayName: 'TestRunnerPropList' },
 );

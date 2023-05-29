@@ -1,31 +1,28 @@
 import { Dev, Pkg, t, Time } from '../../../test.ui';
-import { PropList } from '../../../ui/PropList';
+
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
 
-import type { ResultsProps, TestCtx } from './-types.mjs';
+import type { TestResultsProps } from '../Results';
+import type { TestCtx } from './-types.mjs';
 
 type T = {
   ctx: TestCtx;
-  props: ResultsProps;
-  debug: { infoUrl: boolean; fields?: t.TestRunnerField[]; card: boolean };
+  props: TestResultsProps;
+  debug: { card: boolean };
 };
 const initial: T = {
   ctx: { fail: false },
   props: { spinning: false, scroll: true },
   debug: {
-    infoUrl: true,
-    fields: Dev.TestRunner.PropList.DEFAULTS.fields,
     card: true,
   },
 };
 
 export default Dev.describe('TestRunner', (e) => {
   type LocalStore = T['debug'];
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
-    infoUrl: initial.debug.infoUrl,
-    fields: initial.debug.fields,
     card: initial.debug.card,
   });
 
@@ -34,8 +31,6 @@ export default Dev.describe('TestRunner', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.infoUrl = local.infoUrl;
-      d.debug.fields = local.fields;
       d.debug.card = local.card;
     });
 
@@ -106,29 +101,11 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('TestRunner.PropList.Fields', (dev) => {
-      dev.row((e) => {
-        return (
-          <PropList.FieldSelector
-            style={{ Margin: [10, 40, 10, 30] }}
-            all={Dev.TestRunner.PropList.FIELDS}
-            selected={e.state.debug.fields}
-            onClick={(ev) => {
-              const fields = ev.next as t.TestRunnerField[];
-              dev.change((d) => (d.debug.fields = fields));
-              local.fields = fields?.length === 0 ? undefined : fields;
-            }}
-          />
-        );
-      });
-    });
-
-    dev.hr(5, 20);
-
     dev.section('TestRunner.PropList', (dev) => {
       const get: t.GetTestSuite = async () => {
         const m1 = await import('./-TEST.sample-1.mjs');
         const m2 = await import('./-TEST.sample-2.mjs');
+
         const root = await Dev.bundle([m1.default, m2.default]);
         const ctx = state.current.ctx;
         await Time.wait(800); // Sample delay.
@@ -139,14 +116,12 @@ export default Dev.describe('TestRunner', (e) => {
         const { debug } = e.state;
         const data: t.TestRunnerPropListData = {
           pkg: Pkg,
-          run: {
-            infoUrl: debug.infoUrl ? location.href : undefined,
-            get,
-          },
+          run: { infoUrl: location.href, get },
+          specs: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
         };
         return (
           <Dev.TestRunner.PropList
-            fields={debug.fields}
+            fields={['Tests.Run', 'Tests.Selector']}
             data={data}
             card={debug.card}
             margin={[20, 35, 0, 35]}
@@ -156,13 +131,6 @@ export default Dev.describe('TestRunner', (e) => {
     });
 
     dev.hr(-1, [30, 10]);
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `infoUrl ← (${e.state.debug.infoUrl ? 'showing' : 'hidden'})`)
-        .value((e) => e.state.debug.infoUrl)
-        .onClick((e) => e.change((d) => (local.infoUrl = Dev.toggle(d.debug, 'infoUrl')))),
-    );
 
     dev.boolean((btn) =>
       btn
