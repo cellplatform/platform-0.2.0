@@ -16,7 +16,7 @@ export const FIELDS: t.TestRunnerField[] = [
   'Tests.Selector',
 ];
 
-const fields = ['Module', 'Module.Version', 'Tests.Run'] as t.TestRunnerField[];
+const fields = ['Tests.Run', 'Tests.Selector'] as t.TestRunnerField[];
 
 export const DEFAULTS = {
   fields,
