@@ -139,11 +139,4 @@ export default Dev.describe('TestRunner', (e) => {
         .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.debug, 'card')))),
     );
   });
-
-  e.it('ui:footer', (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    dev.footer.render((e) => {
-      return <Dev.TestRunner.Compact />;
-    });
-  });
 });
