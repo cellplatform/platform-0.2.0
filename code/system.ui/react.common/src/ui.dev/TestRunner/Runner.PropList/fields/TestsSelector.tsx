@@ -1,5 +1,6 @@
 import { t } from '../common';
-import { SpecRow } from '../ui/Spec.Row';
+import { SpecsRow } from '../ui/Specs.Row';
+import { SpecsReset } from '../ui/Specs.Reset';
 
 export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
@@ -11,9 +12,21 @@ export function FieldTestsSelector(args: {
   return specs.all.map((spec) => {
     const isSelected = Wrangle.isSelected(args.data, spec);
     return {
-      value: <SpecRow import={spec} selected={isSelected} onSelectionChange={specs.onChange} />,
+      value: <SpecsRow import={spec} selected={isSelected} onSelectionChange={specs.onChange} />,
     };
   });
+}
+
+export function FieldTestsSelectorReset(args: {
+  fields: t.TestRunnerField[];
+  data: t.TestRunnerPropListData;
+}): t.PropListItem | undefined {
+  const specs = args.data?.specs;
+  if (!specs?.all || specs.all.length === 0) return undefined;
+
+  return {
+    value: <SpecsReset />,
+  };
 }
 
 /**

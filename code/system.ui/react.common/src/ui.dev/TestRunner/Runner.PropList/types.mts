@@ -1,6 +1,11 @@
 import type { t } from '../../../common.t';
 
-export type TestRunnerField = 'Module' | 'Module.Version' | 'Tests.Run' | 'Tests.Selector';
+export type TestRunnerField =
+  | 'Module'
+  | 'Module.Version'
+  | 'Tests.Run'
+  | 'Tests.Selector'
+  | 'Tests.Selector.Reset';
 
 /**
  * Data model for the <TestRunner.PropList> component.

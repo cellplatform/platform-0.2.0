@@ -1,9 +1,9 @@
 import { Item } from './Item';
+import { TestRunnerPropListController as controller } from './Root.Controller.mjs';
 import { DEFAULTS, FC, FIELDS, PropList, t } from './common';
 import { FieldTestsRun } from './fields/TestsRun';
-import { FieldTestsSelector } from './fields/TestsSelector';
-import { FieldSelector } from './ui/FieldSelector';
-import { TestRunnerPropListController as controller } from './Root.Controller.mjs';
+import { FieldTestsSelector, FieldTestsSelectorReset } from './fields/TestsSelector';
+import { PropListFieldSelector } from './ui/PropList.FieldSelector';
 
 const runner = Item.runner;
 
@@ -33,6 +33,7 @@ const View: React.FC<TestRunnerPropListProps> = (props) => {
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
     .field('Tests.Run', () => FieldTestsRun({ fields, data }))
     .field('Tests.Selector', () => FieldTestsSelector({ fields, data }))
+    .field('Tests.Selector.Reset', () => FieldTestsSelectorReset({ fields, data }))
     .items(fields);
 
   return (
@@ -68,7 +69,7 @@ const Wrangle = {
 type Fields = {
   FIELDS: typeof FIELDS;
   DEFAULTS: typeof DEFAULTS;
-  FieldSelector: typeof FieldSelector;
+  FieldSelector: typeof PropListFieldSelector;
   Item: typeof Item;
   controller: typeof controller;
   runner: typeof runner;
@@ -76,6 +77,13 @@ type Fields = {
 
 export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
   View,
-  { FIELDS, DEFAULTS, FieldSelector, Item, controller, runner },
+  {
+    FIELDS,
+    DEFAULTS,
+    FieldSelector: PropListFieldSelector,
+    Item,
+    controller,
+    runner,
+  },
   { displayName: 'TestRunnerPropList' },
 );

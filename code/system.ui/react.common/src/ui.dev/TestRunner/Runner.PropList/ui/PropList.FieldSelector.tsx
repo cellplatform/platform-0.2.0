@@ -1,8 +1,8 @@
 import { DEFAULTS, FIELDS, PropList, t } from '../common';
 
-export type FieldSelectorProps = t.PropListFieldSelectorProps<t.TestRunnerField>;
+export type PropListFieldSelectorProps = t.PropListFieldSelectorProps<t.TestRunnerField>;
 
-export const FieldSelector: React.FC<FieldSelectorProps> = (props) => {
+export const PropListFieldSelector: React.FC<PropListFieldSelectorProps> = (props) => {
   const { all = FIELDS, selected = DEFAULTS.fields } = props;
   return <PropList.FieldSelector {...props} all={all} selected={selected} />;
 };
