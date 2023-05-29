@@ -9,15 +9,19 @@ const DEFAULTS = PropList.DEFAULTS;
 type T = {
   ctx: TestCtx;
   props: TestRunnerPropListProps;
-  debug: { infoUrl: boolean; fields?: t.TestRunnerField[]; card: boolean };
+  debug: {
+    card: boolean;
+    infoUrl: boolean;
+    fields?: t.TestRunnerField[];
+  };
 };
 const initial: T = {
   ctx: { fail: false },
   props: {},
   debug: {
+    card: true,
     infoUrl: true,
     fields: DEFAULTS.fields,
-    card: true,
   },
 };
 
