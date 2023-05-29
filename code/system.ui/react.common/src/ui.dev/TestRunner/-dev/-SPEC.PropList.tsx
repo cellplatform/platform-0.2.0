@@ -54,22 +54,19 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       return { root, ctx };
     };
 
-    const getSize = (): [number, null] => [state.current.debug.card ? 300 : 240, null];
+    const getSize = (): [number, null] => [state.current.debug.card ? 330 : 250, null];
 
     ctx.subject
-      .backgroundColor(1)
+      .backgroundColor(0)
       .size(getSize())
       .display('grid')
+
       .render<T>((e) => {
         const { debug } = e.state;
-        ctx.subject.size(getSize());
-
+        const infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.Results' : undefined;
         const data: t.TestRunnerPropListData = {
           pkg: Pkg,
-          run: {
-            infoUrl: debug.infoUrl ? location.href : undefined,
-            get,
-          },
+          run: { infoUrl, get },
           specs: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
         };
 

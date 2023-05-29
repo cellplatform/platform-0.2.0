@@ -74,6 +74,6 @@ type Fields = {
 
 export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
   View,
-  { FIELDS, DEFAULTS, Item, FieldSelector, runner },
+  { FIELDS, DEFAULTS, FieldSelector, Item, runner },
   { displayName: 'TestRunnerPropList' },
 );
