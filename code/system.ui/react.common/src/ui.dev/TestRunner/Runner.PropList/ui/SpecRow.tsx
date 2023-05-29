@@ -22,7 +22,7 @@ export const SpecRow: React.FC<SpecRowProps> = (props) => {
     left: css({
       display: 'grid',
       gridTemplateColumns: 'auto 1fr',
-      columnGap: 5,
+      columnGap: 8,
     }),
     right: css({
       paddingTop: 1,
