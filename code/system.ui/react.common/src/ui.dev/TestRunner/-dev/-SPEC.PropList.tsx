@@ -66,7 +66,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
         const data: t.TestRunnerPropListData = {
           pkg: Pkg,
-          run: { infoUrl: location.href, get },
+          run: {
+            infoUrl: debug.infoUrl ? location.href : undefined,
+            get,
+          },
           specs: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
         };
 

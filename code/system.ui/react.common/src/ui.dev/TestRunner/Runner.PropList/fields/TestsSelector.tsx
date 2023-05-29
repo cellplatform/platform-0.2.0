@@ -9,6 +9,6 @@ export function FieldTestsSelector(args: {
   if (!specs || specs.length === 0) return [];
 
   return specs.map((spec, i) => {
-    return { value: <SpecRow /> };
+    return { value: <SpecRow spec={spec} /> };
   });
 }

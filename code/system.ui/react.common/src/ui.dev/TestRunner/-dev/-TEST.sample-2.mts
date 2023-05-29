@@ -1,7 +1,7 @@
-import { Dev, expect, t } from '../../../test.ui';
+import { Dev, expect, t, Lorem } from '../../../test.ui';
 import type { TestCtx } from './-types.mjs';
 
-export default Dev.describe('root', (e) => {
+export default Dev.describe(`sample-2: ${Lorem.words(20)}`, (e) => {
   Array.from({ length: 50 }).forEach((_, i) => {
     e.describe(`suite ${i + 1}`, (e) => {
       Array.from({ length: 5 }).forEach((_, i) => {
