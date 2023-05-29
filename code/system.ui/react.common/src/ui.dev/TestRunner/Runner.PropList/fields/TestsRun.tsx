@@ -1,5 +1,5 @@
 import { t } from '../common';
-import { Item } from '../Root.Item';
+import { Item } from '../Item';
 
 export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];
