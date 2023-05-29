@@ -18,7 +18,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const specs = SpecList.Filter.specs(props.specs, command);
+  const specs = SpecList.Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
   const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
 
