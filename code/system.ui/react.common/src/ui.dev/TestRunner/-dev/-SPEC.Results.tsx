@@ -102,7 +102,7 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('TestRunner.PropList', async (dev) => {
+    dev.section('TestRunner.PropList', (dev) => {
       const get: t.GetTestSuite = async () => {
         const m1 = await import('./-TEST.sample-1.mjs');
         const m2 = await import('./-TEST.sample-2.mjs');
@@ -113,27 +113,27 @@ export default Dev.describe('TestRunner', (e) => {
         return { root, ctx };
       };
 
-      const controller = await Dev.TestRunner.PropList.controller({
-        pkg: Pkg,
-        run: { infoUrl: location.href, get },
-        specs: {
-          all: [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')],
-          selected: local.selected,
-          onChange: (e) => (local.selected = controller.selected),
-        },
-      });
-
-      controller.$.subscribe(() => dev.redraw());
-
-      dev.row(async (e) => {
+      dev.row((e) => {
         const { debug } = e.state;
 
         return (
-          <Dev.TestRunner.PropList
-            fields={['Tests.Run', 'Tests.Selector']}
-            data={controller.current}
+          <Dev.TestRunner.PropList.Stateful
             card={debug.card}
-            margin={[20, 35, 0, 35]}
+            margin={[20, 20, 0, 20]}
+            fields={['Tests.Run', 'Tests.Selector']}
+            initial={{
+              pkg: Pkg,
+              run: { infoUrl: location.href, get },
+              specs: {
+                selected: local.selected,
+                all: [
+                  import('./-TEST.sample-1.mjs'),
+                  import('./-TEST.sample-2.mjs'),
+                  import('./-TEST.controller.mjs'),
+                ],
+              },
+            }}
+            onChanged={(e) => (local.selected = e.selected)}
           />
         );
       });

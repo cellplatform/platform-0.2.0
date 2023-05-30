@@ -1,4 +1,4 @@
-import { Dev, t, Pkg, Time, Json } from '../../../test.ui';
+import { Dev, Json, Pkg, Time, t } from '../../../test.ui';
 
 import type { TestRunnerPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
@@ -19,10 +19,7 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields'> &
-    T['debug'] & {
-      selected: string[];
-    };
+  type LocalStore = Pick<P, 'card' | 'fields'> & T['debug'] & { selected: string[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
     infoUrl: true,
@@ -76,7 +73,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     updateData();
     controller.$.subscribe((e) => {
       updateData();
-      if (e.action === 'Specs:Selection') local.selected = e.data.specs?.selected ?? [];
+      if (e.op === 'selection') local.selected = e.data.specs?.selected ?? [];
     });
 
     ctx.host.tracelineColor(-0.05);
