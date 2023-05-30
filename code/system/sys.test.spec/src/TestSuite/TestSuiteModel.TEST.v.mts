@@ -76,6 +76,7 @@ describe('TestSuiteModel', () => {
 
       const res1 = await root.init();
       expect(res1).to.equal(root);
+      expect(root.ready).to.eql(true);
       expect(root.state.ready).to.eql(true);
       expect(count).to.eql(1);
 
@@ -255,6 +256,48 @@ describe('TestSuiteModel', () => {
       });
 
       expect(walked).to.eql(['root', 'child-1', 'child-2', 'child-2 > foo']);
+    });
+  });
+
+  describe('hash', async () => {
+    const model1 = await Test.describe('foo').init();
+    const model2 = await Test.describe('foo', (e) => {
+      e.it('bar', () => null);
+      e.describe('child', (e) => {
+        e.it('baz', () => null);
+        e.it('boo', () => null);
+      });
+    }).init();
+
+    it('hash: SHA1 (default)', async () => {
+      const hash1 = model1.hash();
+      const hash2 = model2.hash();
+      const hash3 = model2.hash();
+
+      expect(hash1).to.not.eql(hash2);
+      expect(hash2).to.eql(hash3);
+      expect(hash1).to.match(/^suite\:sha1-/);
+    });
+
+    it('hash: SHA256', async () => {
+      const hash1 = model1.hash('SHA1');
+      const hash2 = model1.hash('SHA256');
+      expect(hash2).to.match(/^suite\:sha256-/);
+      expect(hash2.length).to.greaterThan(hash1.length);
+    });
+
+    it('hash: not initialized', async () => {
+      const model = Test.describe('foo', (e) => {
+        e.it('bar', () => null);
+      });
+
+      const hash1 = model.hash();
+      await model.init();
+      const hash2 = model.hash();
+
+      expect(hash1).to.not.eql(hash2);
+      expect(hash1).to.match(/^suite\:sha1-/);
+      expect(hash2).to.match(/^suite\:sha1-/);
     });
   });
 

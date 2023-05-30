@@ -1,7 +1,6 @@
-import { DEFAULT, slug, t, Time, Delete } from './common';
-import { Constraints } from '../TestSuite.helpers';
+import { Constraints, Stats, TestTree } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
-import { TestTree, Stats } from '../TestSuite.helpers';
+import { DEFAULT, Delete, Hash, Time, slug, t } from './common';
 
 type LazyParent = () => t.TestSuiteModel;
 
@@ -175,6 +174,20 @@ export const TestSuiteModel = (args: {
 
     walk(handler) {
       TestTree.walkDown(model, handler);
+    },
+
+    hash(algo = 'SHA1') {
+      const identity: string[] = [];
+      TestTree.walkDown(model, (e) => {
+        if (e.test) identity.push(`test:${e.test.description}`);
+        if (!e.test) identity.push(`suite:${e.suite.description}`);
+      });
+
+      let hash = '';
+      if (algo === 'SHA1') hash = Hash.sha1(identity);
+      if (algo === 'SHA256') hash = Hash.sha256(identity);
+
+      return `suite:${hash}`;
     },
 
     toString: () => state.description,

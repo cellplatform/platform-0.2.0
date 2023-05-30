@@ -117,6 +117,7 @@ export type TestSuiteModel = TestSuite & {
   init(): Promise<TestSuiteModel>;
   clone(): Promise<TestSuiteModel>;
   walk(handler: (e: t.SuiteWalkDownArgs) => void): void;
+  hash(algo?: 'SHA1' | 'SHA256'): string;
   toString(): string;
 };
 
