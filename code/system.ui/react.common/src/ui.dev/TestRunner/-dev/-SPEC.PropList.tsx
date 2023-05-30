@@ -1,4 +1,4 @@
-import { Dev, t, Pkg, Time } from '../../../test.ui';
+import { Dev, t, Pkg, Time, Json } from '../../../test.ui';
 
 import type { TestRunnerPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
@@ -10,7 +10,7 @@ type P = TestRunnerPropListProps;
 type T = {
   ctx: TestCtx;
   props: P;
-  debug: { infoUrl?: boolean; ellipsis?: boolean };
+  debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
 };
 const initial: T = {
   ctx: { fail: false },
@@ -30,6 +30,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     fields: DEFAULTS.fields,
     card: true,
     selected: [],
+    label: '',
   });
 
   e.it('ui:init', async (e) => {
@@ -39,6 +40,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     await state.change((d) => {
       d.debug.infoUrl = local.infoUrl;
       d.debug.ellipsis = local.ellipsis;
+      d.debug.label = local.label;
       d.props.fields = local.fields;
       d.props.card = local.card;
     });
@@ -54,15 +56,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     const getSize = (): [number, null] => [state.current.props.card ? 330 : 250, null];
 
-    const infoUrl = '?dev=sys.ui.dev.TestRunner.Results';
     const controller = await Dev.TestRunner.PropList.controller({
       pkg: Pkg,
-      run: {
-        infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        get,
-      },
+      run: { get },
       specs: {
-        ellipsis: () => state.current.debug.ellipsis,
         all: [
           import('./-TEST.sample-1.mjs'),
           import('./-TEST.sample-2.mjs'),
@@ -76,11 +73,11 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     });
 
     const updateData = () => state.change((d) => (d.props.data = controller.current));
+    updateData();
     controller.$.subscribe((e) => {
       updateData();
       if (e.action === 'Specs:Selection') local.selected = e.data.specs?.selected ?? [];
     });
-    updateData();
 
     ctx.host.tracelineColor(-0.05);
     ctx.subject
@@ -88,8 +85,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       .size(getSize())
       .display('grid')
       .render<T>((e) => {
-        const { props } = e.state;
-        return <Dev.TestRunner.PropList {...props} />;
+        const { props, debug } = e.state;
+        const data = Json.Patch.change(props.data ?? {}, (d) => {
+          d.run!.infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.PropList' : undefined;
+          d.run!.label = debug.label || undefined;
+          d.specs!.ellipsis = debug.ellipsis;
+        }).to;
+        return <Dev.TestRunner.PropList {...props} data={data} />;
       });
   });
 
@@ -116,6 +118,15 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     dev.hr(5, [10, 20]);
 
     dev.section('Options', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .left(true)
+          .margin([0, 0, 5, 0])
+          .placeholder('run.label')
+          .value((e) => e.state.debug.label)
+          .onChange((e) => e.change((d) => (local.label = d.debug.label = e.to.value))),
+      );
+
       dev.boolean((btn) =>
         btn
           .label((e) => `infoUrl ← (${e.state.debug.infoUrl ? 'showing' : 'hidden'})`)
@@ -125,16 +136,18 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `card`)
-          .value((e) => e.state.props.card)
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
           .label((e) => `ellipsis`)
           .value((e) => Boolean(e.state.debug.ellipsis))
           .onClick((e) => e.change((d) => (local.ellipsis = Dev.toggle(d.debug, 'ellipsis')))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `card`)
+          .value((e) => e.state.props.card)
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
       );
     });
   });
