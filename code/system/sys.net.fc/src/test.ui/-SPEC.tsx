@@ -1,5 +1,4 @@
 import { Dev } from '../test.ui';
-import { getHubRpcClient } from '@farcaster/hub-web';
 
 type T = {
   casts: string[];
@@ -52,6 +51,9 @@ export default Dev.describe('Root', (e) => {
         .spinner((e) => e.state.debug.spinning)
         .onClick(async (e) => {
           await e.change((d) => (d.debug.spinning = true));
+
+          // import { getHubRpcClient } from '@farcaster/hub-web';
+          const { getHubRpcClient } = await import('@farcaster/hub-web');
 
           /**
            *
