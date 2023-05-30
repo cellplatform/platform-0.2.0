@@ -53,6 +53,7 @@ export type SpecSelectionResetHandlerArgs = {
  * Observable.
  */
 export type TestRunnerPropListChange = {
-  action: 'Specs:Selection';
+  op: 'selection' | 'reset';
   data: TestRunnerPropListData;
+  selected: HashString[];
 };

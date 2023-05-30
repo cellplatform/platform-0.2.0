@@ -8,11 +8,15 @@ export async function controller(initial?: t.TestRunnerPropListData) {
   const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
-
-  /**
-   * Setup the current state of the component.
-   */
   const _current = await Wrangle.initialState(initial);
+
+  const fire = (kind: t.TestRunnerPropListChange['op']) => {
+    $.next({
+      op: kind,
+      data: api.current,
+      selected: api.selected,
+    });
+  };
 
   /**
    * API
@@ -44,7 +48,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
 
             // Bubble event.
             initial?.specs?.onChange?.(e);
-            $.next({ action: 'Specs:Selection', data: api.current });
+            fire('selection');
           },
 
           async onReset(e) {
@@ -55,7 +59,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
 
             // Bubble event.
             initial?.specs?.onReset?.(e);
-            $.next({ action: 'Specs:Selection', data: api.current });
+            fire('reset');
           },
         },
       };
