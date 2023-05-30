@@ -22,7 +22,7 @@ export function useSpecImport(data: t.TestRunnerPropListData, spec: t.SpecImport
     Util.ensureLoaded(spec).then((spec) => {
       if (lifecycle.disposed || !spec) return;
       setSuite(spec.suite);
-      setHash(spec.hash);
+      setHash(spec.suite.hash());
     });
     return lifecycle.dispose;
   }, [spec]);

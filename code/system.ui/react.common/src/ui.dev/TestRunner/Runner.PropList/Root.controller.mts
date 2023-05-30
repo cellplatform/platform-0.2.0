@@ -64,7 +64,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
            */
           async onSelect(e) {
             // Update selection state.
-            const hash = Util.hash(e.spec);
+            const hash = e.spec.hash();
             if (e.to) State.selectSpec(hash);
             if (!e.to) State.unselectSpec(hash);
 
@@ -74,7 +74,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
           },
 
           async onRunSingle(e) {
-            const hash = Util.hash(e.spec);
+            const hash = e.spec.hash();
             State.selectSpec(hash); // NB: Additive to the selection (when run).
 
 
@@ -86,7 +86,9 @@ export async function controller(initial?: t.TestRunnerPropListData) {
           async onReset(e) {
             // Update selection state.
             const all = await Promise.all((State.current.specs?.all ?? []).map(Util.ensureLoaded));
-            const selected = e.modifiers.meta ? [] : all.map((item) => item?.hash!).filter(Boolean);
+            const selected = e.modifiers.meta
+              ? []
+              : all.map((item) => item?.suite.hash()!).filter(Boolean);
             State.current.specs = { ...State.current.specs, selected };
 
             // Bubble event.
@@ -127,5 +129,10 @@ const Wrangle = {
     specs.all = specs.all ?? [];
     specs.selected = specs.selected ?? [];
     return data;
+  },
+
+  ctx(specs: t.TestRunnerPropListSpecsData) {
+    const ctx = specs.ctx ?? {};
+    return typeof ctx === 'function' ? ctx() : ctx;
   },
 };
