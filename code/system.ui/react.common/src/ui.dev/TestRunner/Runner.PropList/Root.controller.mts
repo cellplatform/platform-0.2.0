@@ -54,7 +54,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
           async onReset(e) {
             // Update selection state.
             const all = await Promise.all((_current.specs?.all ?? []).map(Util.ensureLoaded));
-            const selected = e.modifiers.alt ? [] : all.map((item) => item?.hash!).filter(Boolean);
+            const selected = e.modifiers.meta ? [] : all.map((item) => item?.hash!).filter(Boolean);
             _current.specs = { ..._current.specs, selected };
 
             // Bubble event.
