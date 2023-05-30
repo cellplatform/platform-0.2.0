@@ -19,12 +19,13 @@ export const Pkg: ModuleDef = {
     'react-icons': '4.9.0',
     'react-spinners': '0.13.8',
     'react-inspector': '6.0.1',
-    'sys.types': '0.0.0',
-    'sys.util': '0.0.0',
+    'sys.data.json': '0.0.0',
     'sys.text': '0.0.0',
+    'sys.types': '0.0.0',
     'sys.ui.dom': '0.0.0',
     'sys.ui.react.util': '0.0.0',
     'sys.ui.react.css': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
