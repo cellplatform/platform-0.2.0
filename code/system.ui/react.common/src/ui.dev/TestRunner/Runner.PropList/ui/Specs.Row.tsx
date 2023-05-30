@@ -1,6 +1,8 @@
-import { Button, css, DEFAULTS, Icons, Switch, t } from '../common';
+import { useState } from 'react';
+import { Button, css, DEFAULTS, Switch, t } from '../common';
 import { useSpecImport } from '../hooks/useSpecImport.mjs';
 import { Util } from '../Util.mjs';
+import { RunIcon } from './Specs.Row.RunIcon';
 
 export type SpecsRowProps = {
   data: t.TestRunnerPropListData;
@@ -13,6 +15,7 @@ export type SpecsRowProps = {
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
   const ellipsis = Wrangle.ellipsis(props);
+  const [isOver, setOver] = useState(false);
 
   /**
    * Handlers
@@ -59,11 +62,6 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       justifyContent: 'center',
       alignContent: 'top',
     }),
-    runIcon: css({
-      display: 'grid',
-      justifyContent: 'center',
-      alignContent: 'top',
-    }),
     description: css({
       paddingTop: 1,
     }),
@@ -74,17 +72,11 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     }),
   };
 
-  const elRunIcon = (
-    <div>
-      <Icons.Run.FullCircle.Outline size={16} style={styles.runIcon} />
-    </div>
-  );
-
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={handleTestRunClick}>
+      <Button onClick={handleTestRunClick} onMouse={(e) => setOver(e.isOver)}>
         <div {...styles.left}>
-          {elRunIcon}
+          <RunIcon isSelected={spec.isSelected} isOver={isOver} />
           <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
             {spec.description}
           </div>
