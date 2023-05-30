@@ -81,6 +81,7 @@ describe('TestModel', () => {
       expect(res.error).to.eql(undefined);
       expect(res.description).to.eql(description);
       expect(res.excluded).to.eql(undefined);
+      expect(res.noop).to.eql(undefined);
     });
 
     it('async', async () => {
@@ -215,6 +216,18 @@ describe('TestModel', () => {
       const test = TestModel({ parent, description, handler });
       const res = await test.run({ timeout: 10 });
       expect(res.timeout).to.eql(30);
+    });
+
+    it('noop', async () => {
+      let count = 0;
+      const handler: t.TestHandler = () => count++;
+      const test = TestModel({ parent, description, handler });
+      const res = await test.run({ noop: true });
+
+      expect(res.ok).to.eql(true);
+      expect(res.noop).to.eql(true);
+      expect(count).to.eql(0);
+      expect(res.elapsed).to.greaterThan(-1);
     });
   });
 });

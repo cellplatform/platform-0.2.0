@@ -1,4 +1,4 @@
-import { DEFAULT, slug, t, Time } from './common';
+import { DEFAULT, slug, t, Time, Delete } from './common';
 import { Constraints } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
 import { TestTree, Stats } from '../TestSuite.helpers';
@@ -46,7 +46,7 @@ export const TestSuiteModel = (args: {
   };
 
   const runSuite = (model: t.TestSuiteModel, options: t.TestSuiteRunOptions = {}) => {
-    const { deep = true, ctx, beforeEach, afterEach } = options;
+    const { deep = true, ctx, beforeEach, afterEach, noop } = options;
 
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
@@ -60,6 +60,7 @@ export const TestSuiteModel = (args: {
         tests: [],
         children: [],
         stats: Stats.empty,
+        noop,
       };
 
       await init(model);
@@ -74,7 +75,7 @@ export const TestSuiteModel = (args: {
         if (res.tests.some(({ error }) => Boolean(error))) res.ok = false;
         if (res.children.some(({ ok }) => !ok)) res.ok = false;
         res.stats = Stats.suite(res);
-        resolve(res);
+        resolve(Delete.undefined(res));
       };
 
       for (const test of tests) {
@@ -83,14 +84,14 @@ export const TestSuiteModel = (args: {
         const excluded = Constraints.exclusionModifiers(test);
         const before = beforeEach;
         const after = afterEach;
-        res.tests.push(await test.run({ timeout, excluded, ctx, before, after }));
+        res.tests.push(await test.run({ timeout, excluded, ctx, before, after, noop }));
       }
 
       if (deep && childSuites.length > 0) {
         for (const childSuite of childSuites) {
           const { only } = options;
           const timeout = childSuite.state.timeout ?? getTimeout();
-          res.children.push(await childSuite.run({ timeout, only, ctx })); // <== RECURSION 🌳
+          res.children.push(await childSuite.run({ timeout, only, ctx, noop })); // <== RECURSION 🌳
         }
       }
 

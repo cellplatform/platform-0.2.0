@@ -291,7 +291,7 @@ describe('TestSuiteModel', () => {
     });
   });
 
-  describe.only('run', () => {
+  describe('run', () => {
     it('sync', async () => {
       let count = 0;
       const root = Test.describe('root', (e) => {
@@ -302,6 +302,7 @@ describe('TestSuiteModel', () => {
       expect(res.id).to.eql(root.id);
       expect(res.ok).to.eql(true);
       expect(count).to.eql(1);
+      expect(res.noop).to.eql(undefined);
     });
 
     it('async', async () => {
@@ -448,6 +449,38 @@ describe('TestSuiteModel', () => {
       const res = await root.run({ deep: false });
       expect(count).to.eql(0);
       expect(res.ok).to.eql(true);
+    });
+
+    it('run as no-op', async () => {
+      let beforeEach = 0;
+      let afterEach = 0;
+      let count = 0;
+
+      const root = Test.describe('root', (e) => {
+        e.it('foo', () => count++);
+        e.describe('child', (e) => {
+          e.it.skip('bar', () => count++);
+          e.it('baz', () => count++);
+        });
+      });
+
+      const res = await root.run({
+        noop: true,
+        beforeEach: (e) => beforeEach++,
+        afterEach: (e) => afterEach++,
+      });
+
+      expect(res.ok).to.eql(true);
+      expect(res.noop).to.eql(true);
+      expect(count).to.eql(0);
+      expect(beforeEach).to.eql(0);
+      expect(afterEach).to.eql(0);
+      expect(res.stats).to.eql({ total: 3, passed: 2, failed: 0, skipped: 1, only: 0 });
+
+      expect(res.tests[0].noop).to.eql(true);
+      expect(res.children[0].noop).to.eql(true);
+      expect(res.children[0].tests[0].noop).to.eql(true);
+      expect(res.children[0].tests[1].noop).to.eql(true);
     });
 
     describe('excluded', () => {

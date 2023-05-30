@@ -1,4 +1,4 @@
-import { maybeWait, DEFAULT, Delete, slug, t, Time, R } from './common';
+import { DEFAULT, Delete, R, Time, maybeWait, slug, t } from './common';
 
 /**
  * A single test.
@@ -19,6 +19,7 @@ export const TestModel = (args: {
       const tx = `run.tx.${slug()}`;
       const timer = Time.timer();
       const excluded = toExcluded({ modifier, excluded: options.excluded });
+      const { noop } = options;
 
       const response: R = {
         id,
@@ -28,6 +29,7 @@ export const TestModel = (args: {
         elapsed: -1,
         timeout: Math.max(0, options.timeout ?? DEFAULT.TIMEOUT),
         excluded,
+        noop,
       };
 
       let _stopTimeout: () => void = () => null;
@@ -65,7 +67,7 @@ export const TestModel = (args: {
         /**
          * Before handler.
          */
-        if (options.before) {
+        if (options.before && !noop) {
           await maybeWait(options.before({ id, description }));
         }
 
@@ -73,12 +75,14 @@ export const TestModel = (args: {
          * Test handler.
          */
         startTimeout(response.timeout);
-        await maybeWait(handler(args));
+        if (!noop) {
+          await maybeWait(handler(args));
+        }
 
         /**
          * After handler.
          */
-        if (options.after) {
+        if (options.after && !noop) {
           const elapsed = timer.elapsed.msec;
           await maybeWait(options.after({ id, description, elapsed }));
         }

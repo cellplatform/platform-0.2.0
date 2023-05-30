@@ -89,6 +89,7 @@ export type TestRunOptions = {
   ctx?: Ctx;
   before?: BeforeRunTest;
   after?: AfterRunTest;
+  noop?: boolean; // Produces a result without executing any of the actual test function.
 };
 export type TestRunResponse = {
   id: Id;
@@ -99,6 +100,7 @@ export type TestRunResponse = {
   timeout: Milliseconds;
   excluded?: TestModifier[];
   error?: Error;
+  noop?: boolean;
 };
 
 /**
@@ -136,6 +138,7 @@ export type TestSuiteRunOptions = {
   only?: TestModel['id'][]; // Override: a set of spec IDs to filter on, excluding all others.
   beforeEach?: BeforeRunTest;
   afterEach?: AfterRunTest;
+  noop?: boolean; // Produces a result-tree without executing any of the actual test functions.
 };
 export type TestSuiteRunResponse = {
   id: Id;
@@ -146,6 +149,7 @@ export type TestSuiteRunResponse = {
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
   stats: TestSuiteRunStats;
+  noop?: boolean;
 };
 
 export type TestSuiteRunStats = {
