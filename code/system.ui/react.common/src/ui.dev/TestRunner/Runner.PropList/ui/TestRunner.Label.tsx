@@ -13,8 +13,8 @@ export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ Flex: 'x-center-center' }),
-    link: css({ marginLeft: 4 }),
+    base: css({ position: 'relative' }),
+    link: css({ Absolute: [0, -16, 0, null] }),
   };
 
   const tooltip = 'Show test runner in full-screen mode.';
@@ -32,7 +32,7 @@ export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{title}</div>
+      {title}
       {elInfo}
     </div>
   );
