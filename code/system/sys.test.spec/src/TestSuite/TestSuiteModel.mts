@@ -34,6 +34,11 @@ export const TestSuiteModel = (args: {
   const { parent, description } = args;
   const id = `TestSuite.${slug()}`;
 
+  const hashes = {
+    sha1: '',
+    sha256: '',
+  };
+
   const init = async (suite: t.TestSuiteModel) => {
     const state = suite.state;
     if (!state.ready) {
@@ -177,6 +182,9 @@ export const TestSuiteModel = (args: {
     },
 
     hash(algo = 'SHA1') {
+      if (hashes.sha1 && algo === 'SHA1') return hashes.sha1;
+      if (hashes.sha256 && algo === 'SHA256') return hashes.sha256;
+
       const identity: string[] = [];
       TestTree.walkDown(model, (e) => {
         if (e.test) identity.push(`test:${e.test.description}`);
@@ -187,7 +195,13 @@ export const TestSuiteModel = (args: {
       if (algo === 'SHA1') hash = Hash.sha1(identity);
       if (algo === 'SHA256') hash = Hash.sha256(identity);
 
-      return `suite:${hash}`;
+      const res = `suite:${hash}`;
+      if (model.ready) {
+        // Cache result when fully initialized.
+        if (algo === 'SHA1') hashes.sha1 = res;
+        if (algo === 'SHA256') hashes.sha256 = res;
+      }
+      return res;
     },
 
     toString: () => state.description,
