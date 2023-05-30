@@ -8,9 +8,7 @@ export function FieldTestsRun(args: {
   const data = args.data?.run;
   if (!data || !data.get) return;
 
-  const { get } = data;
-  const infoUrl = typeof data.infoUrl === 'function' ? data.infoUrl() : data.infoUrl;
-  const label = typeof data.label === 'function' ? data.label() : data.label;
+  const { get, infoUrl, label } = data;
 
   return Item.runner({
     infoUrl, // 🌳 ← Any view address that contains further details about the test run. (info) icon.

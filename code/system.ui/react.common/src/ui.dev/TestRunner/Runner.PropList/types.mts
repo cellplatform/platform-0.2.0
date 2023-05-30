@@ -19,15 +19,15 @@ export type TestRunnerPropListData = {
 };
 
 export type TestRunnerPropListRunData = {
-  infoUrl?: string | (() => string | undefined);
-  label?: string | (() => string | undefined);
+  infoUrl?: string;
+  label?: string;
   get?: t.GetTestSuite;
 };
 
 export type TestRunnerPropListSpecsData = {
   all?: t.SpecImport[];
   selected?: HashString[];
-  ellipsis?: boolean | (() => boolean | undefined);
+  ellipsis?: boolean;
   onChange?: SpecSelectionHandler;
   onReset?: SpecSelectionResetHandler;
 };

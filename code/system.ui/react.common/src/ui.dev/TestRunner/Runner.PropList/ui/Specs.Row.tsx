@@ -11,7 +11,7 @@ export type SpecsRowProps = {
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
-  const ellipsis = Wrangle.ellipsis(props.data);
+  const ellipsis = props.data.specs?.ellipsis ?? DEFAULTS.ellipsis;
 
   /**
    * Handlers
@@ -71,14 +71,4 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       </div>
     </div>
   );
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  ellipsis(data: t.TestRunnerPropListData) {
-    const ellipsis = data.specs?.ellipsis ?? DEFAULTS.ellipsis;
-    return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
-  },
 };
