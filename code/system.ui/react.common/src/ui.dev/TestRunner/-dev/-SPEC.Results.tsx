@@ -120,11 +120,11 @@ export default Dev.describe('TestRunner', (e) => {
           <Dev.TestRunner.PropList.Stateful
             card={debug.card}
             margin={[20, 20, 0, 20]}
-            fields={['Tests.Run', 'Tests.Selector']}
             initial={{
               pkg: Pkg,
-              run: { infoUrl: location.href, get },
+              run: { get },
               specs: {
+                ellipsis: true,
                 selected: local.selected,
                 all: [
                   import('./-TEST.sample-1.mjs'),
