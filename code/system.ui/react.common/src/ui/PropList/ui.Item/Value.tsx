@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { format } from '../Util.format.mjs';
-import { DEFAULTS, Time, css, t, useMouseState } from '../common';
+import { DEFAULTS, Time, css, t, useMouseState } from './common';
 
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
