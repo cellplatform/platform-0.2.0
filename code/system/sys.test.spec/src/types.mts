@@ -1,7 +1,8 @@
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
 import type { Tree } from './TestSuite.helpers/Tree.mjs';
-import { t } from './common.t';
-export * from './TestSuite.helpers/types.mjs';
+import type { t } from './common.t';
+
+export type * from './TestSuite.helpers/types.mjs';
 
 type Id = string;
 type Anything = void | any;

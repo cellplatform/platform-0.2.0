@@ -256,7 +256,42 @@ describe('TestSuiteModel', () => {
     });
   });
 
-  describe('run', () => {
+  describe('merge', () => {
+    it('merges', async () => {
+      const root = Test.describe('root');
+      const child1 = Test.describe('child-1');
+      const child2 = Test.describe('child-2');
+      const child3 = Test.describe('child-3');
+
+      expect(root.state.children).to.eql([]);
+
+      await root.merge(child1);
+      expect(root.state.children.length).to.eql(1);
+      expect(root.state.children[0].state.description).to.eql(child1.state.description);
+
+      await root.merge(child2, child3);
+      expect(root.state.children.length).to.eql(3);
+
+      expect(root.state.children[0].state.description).to.eql(child1.state.description);
+      expect(root.state.children[1].state.description).to.eql(child2.state.description);
+      expect(root.state.children[2].state.description).to.eql(child3.state.description);
+
+      expect(root.state.children[0].state.parent?.id).to.eql(root.id);
+      expect(root.state.children[1].state.parent?.id).to.eql(root.id);
+      expect(root.state.children[2].state.parent?.id).to.eql(root.id);
+
+      // Not the same instance (cloned).
+      expect(root.state.children[0]).to.not.equal(child1);
+      expect(root.state.children[1]).to.not.equal(child2);
+      expect(root.state.children[2]).to.not.equal(child3);
+
+      expect(TestTree.root(root.state.children[0])).to.equal(root);
+      expect(TestTree.root(root.state.children[1])).to.equal(root);
+      expect(TestTree.root(root.state.children[2])).to.equal(root);
+    });
+  });
+
+  describe.only('run', () => {
     it('sync', async () => {
       let count = 0;
       const root = Test.describe('root', (e) => {
@@ -554,41 +589,6 @@ describe('TestSuiteModel', () => {
         expect(res.children[0].children[0].tests[0].ok).to.eql(false);
         expect(res.children[0].children[0].tests[0].error?.message).to.include('timed out');
       });
-    });
-  });
-
-  describe('merge', () => {
-    it('merges', async () => {
-      const root = Test.describe('root');
-      const child1 = Test.describe('child-1');
-      const child2 = Test.describe('child-2');
-      const child3 = Test.describe('child-3');
-
-      expect(root.state.children).to.eql([]);
-
-      await root.merge(child1);
-      expect(root.state.children.length).to.eql(1);
-      expect(root.state.children[0].state.description).to.eql(child1.state.description);
-
-      await root.merge(child2, child3);
-      expect(root.state.children.length).to.eql(3);
-
-      expect(root.state.children[0].state.description).to.eql(child1.state.description);
-      expect(root.state.children[1].state.description).to.eql(child2.state.description);
-      expect(root.state.children[2].state.description).to.eql(child3.state.description);
-
-      expect(root.state.children[0].state.parent?.id).to.eql(root.id);
-      expect(root.state.children[1].state.parent?.id).to.eql(root.id);
-      expect(root.state.children[2].state.parent?.id).to.eql(root.id);
-
-      // Not the same instance (cloned).
-      expect(root.state.children[0]).to.not.equal(child1);
-      expect(root.state.children[1]).to.not.equal(child2);
-      expect(root.state.children[2]).to.not.equal(child3);
-
-      expect(TestTree.root(root.state.children[0])).to.equal(root);
-      expect(TestTree.root(root.state.children[1])).to.equal(root);
-      expect(TestTree.root(root.state.children[2])).to.equal(root);
     });
   });
 });
