@@ -1,4 +1,4 @@
-import { Dev, Json, Pkg, Time, t } from '../../../test.ui';
+import { Dev, Pkg, Time, t } from '../../../test.ui';
 
 import type { TestRunnerPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
@@ -51,18 +51,28 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       return { root, ctx };
     };
 
+    const infoUrl = '?dev=sys.ui.dev.TestRunner.PropList';
     const controller = await Dev.TestRunner.PropList.controller({
       pkg: Pkg,
-      run: { get },
+      run: {
+        label: () => state.current.debug.label || undefined,
+        infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
+        get,
+      },
       specs: {
+        ellipsis: () => state.current.debug.ellipsis,
+        ctx: () => state.current.ctx,
         all: [
           import('./-TEST.sample-1.mjs'),
           import('./-TEST.sample-2.mjs'),
           import('./-TEST.controller.mjs'),
         ],
         selected: local.selected,
-        onChange(e) {
-          console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller.
+        onSelect(e) {
+          console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
+        },
+        async onRunSingle(e) {
+          console.info('⚡️ onRunSingle:', e);
         },
       },
     });
@@ -71,7 +81,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     updateData();
     controller.$.subscribe((e) => {
       updateData();
-      if (e.op === 'selection') local.selected = e.data.specs?.selected ?? [];
+      local.selected = e.data.specs?.selected ?? [];
     });
 
     const getSize = (): [number, null] => [state.current.props.card ? 330 : 330, null];
@@ -81,16 +91,8 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       .size(getSize())
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-
-        const data = Json.Patch.change(props.data ?? {}, (d) => {
-          d.run!.infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.PropList' : undefined;
-          d.run!.label = debug.label || undefined;
-          d.specs!.ellipsis = debug.ellipsis;
-        }).to;
-        return (
-          <Dev.TestRunner.PropList {...props} data={data} style={{ margin: props.card ? 0 : 20 }} />
-        );
+        const { props } = e.state;
+        return <Dev.TestRunner.PropList {...props} style={{ margin: props.card ? 0 : 20 }} />;
       });
   });
 
@@ -149,12 +151,24 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
       );
     });
+
+    dev.hr(5, 20);
+
+    dev.section('debug', (dev) => {
+      dev.button('redraw', () => dev.redraw());
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `ctx.fail = ${e.state.ctx.fail}`)
+          .value((e) => e.state.ctx.fail)
+          .onClick((e) => e.change((d) => Dev.toggle(d.ctx, 'fail'))),
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = { ...e.state };
       return <Dev.Object name={'TestRunner.PropList'} data={data} expand={1} />;
     });
   });

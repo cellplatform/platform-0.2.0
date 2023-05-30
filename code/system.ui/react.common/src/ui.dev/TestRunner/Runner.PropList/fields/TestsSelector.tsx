@@ -11,7 +11,14 @@ export function FieldTestsSelector(args: {
 
   return specs.all.map((spec) => {
     return {
-      value: <SpecsRow data={args.data} import={spec} onSelectionChange={specs.onChange} />,
+      value: (
+        <SpecsRow
+          data={args.data}
+          import={spec}
+          onSelectionChange={specs.onSelect}
+          onRunClick={specs.onRunSingle}
+        />
+      ),
     };
   });
 }
