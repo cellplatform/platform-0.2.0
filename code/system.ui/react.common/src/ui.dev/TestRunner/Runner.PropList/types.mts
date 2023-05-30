@@ -1,6 +1,7 @@
 import type { t } from '../../../common.t';
 
 type HashString = string;
+type Ctx = Record<string, unknown>;
 
 export type TestRunnerField =
   | 'Module'
@@ -28,16 +29,17 @@ export type TestRunnerPropListSpecsData = {
   ctx?: Ctx | (() => Ctx);
   all?: t.SpecImport[];
   selected?: HashString[];
-  ellipsis?: boolean;
-  onChange?: SpecSelectionHandler;
-  onReset?: SpecSelectionResetHandler;
+  ellipsis?: boolean | (() => boolean | undefined);
+  onSelect?: SpecsSelectionHandler;
+  onRunSingle?: SpecRunClickHandler;
+  onReset?: SpecsSelectionResetHandler;
 };
 
 /**
  * Event handlers.
  */
-export type SpecSelectionHandler = (e: SpecSelectionHandlerArgs) => void;
-export type SpecSelectionHandlerArgs = {
+export type SpecsSelectionHandler = (e: SpecsSelectionHandlerArgs) => void;
+export type SpecsSelectionHandlerArgs = {
   import: t.SpecImport;
   spec: t.TestSuiteModel;
   from: boolean;
@@ -45,8 +47,14 @@ export type SpecSelectionHandlerArgs = {
   modifiers: t.KeyboardModifierFlags;
 };
 
-export type SpecSelectionResetHandler = (e: SpecSelectionResetHandlerArgs) => void;
-export type SpecSelectionResetHandlerArgs = {
+export type SpecsSelectionResetHandler = (e: SpecsSelectionResetHandlerArgs) => void;
+export type SpecsSelectionResetHandlerArgs = {
+  modifiers: t.KeyboardModifierFlags;
+};
+
+export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void;
+export type SpecRunClickHandlerArgs = {
+  spec: t.TestSuiteModel;
   modifiers: t.KeyboardModifierFlags;
 };
 
@@ -54,7 +62,7 @@ export type SpecSelectionResetHandlerArgs = {
  * Observable.
  */
 export type TestRunnerPropListChange = {
-  op: 'selection' | 'reset';
+  op: 'selection' | 'reset' | 'run:single';
   data: TestRunnerPropListData;
   selected: HashString[];
 };
