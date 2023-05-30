@@ -1,16 +1,16 @@
 import { Button, COLORS, Icons, Switch, css, t } from '../common';
-import { useSpecImports } from '../hooks/useSpecImports.mjs';
+import { useSpecImport } from '../hooks/useSpecImport.mjs';
 
 export type SpecsRowProps = {
+  data: t.TestRunnerPropListData;
   import: t.SpecImport;
-  selected?: boolean;
   style?: t.CssValue;
   onSelectionChange?: t.SpecSelectionHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const spec = useSpecImports(props.import);
-  const isSelected = Boolean(props.selected);
+  const spec = useSpecImport(props.data, props.import);
+  const isSelected = spec.isSelected;
 
   /**
    * Handlers

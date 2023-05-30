@@ -1,5 +1,7 @@
 import type { t } from '../../../common.t';
 
+type HashString = string;
+
 export type TestRunnerField =
   | 'Module'
   | 'Module.Version'
@@ -24,7 +26,7 @@ export type TestRunnerPropListRunData = {
 
 export type TestRunnerPropListSpecsData = {
   all?: t.SpecImport[];
-  selected?: t.SpecImport[];
+  selected?: HashString[];
   onChange?: SpecSelectionHandler;
 };
 

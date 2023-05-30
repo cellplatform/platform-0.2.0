@@ -9,9 +9,7 @@ const DEFAULTS = PropList.DEFAULTS;
 type T = {
   ctx: TestCtx;
   props: TestRunnerPropListProps;
-  debug: {
-    infoUrl?: boolean;
-  };
+  debug: { infoUrl?: boolean };
 };
 const initial: T = {
   ctx: { fail: false },
@@ -19,9 +17,7 @@ const initial: T = {
     card: true,
     fields: DEFAULTS.fields,
   },
-  debug: {
-    infoUrl: true,
-  },
+  debug: { infoUrl: true },
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
@@ -29,12 +25,14 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     card: boolean;
     infoUrl?: boolean;
     fields?: t.TestRunnerField[];
+    selected: string[];
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
     infoUrl: initial.debug.infoUrl,
     fields: initial.props.fields!,
     card: initial.props.card!,
+    selected: [],
   });
 
   e.it('ui:init', async (e) => {
@@ -59,10 +57,11 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     const getSize = (): [number, null] => [state.current.props.card ? 330 : 250, null];
 
-    const controller = Dev.TestRunner.PropList.controller({
+    const infoUrl = '?dev=sys.ui.dev.TestRunner.Results';
+    const controller = await Dev.TestRunner.PropList.controller({
       pkg: Pkg,
       run: {
-        infoUrl: state.current.debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.Results' : undefined,
+        infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
         get,
       },
       specs: {
@@ -71,6 +70,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           import('./-TEST.sample-2.mjs'),
           import('./-TEST.controller.mjs'),
         ],
+        selected: local.selected,
         onChange(e) {
           console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller.
         },
@@ -80,10 +80,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     const updateData = () => state.change((d) => (d.props.data = controller.current));
     controller.$.subscribe((e) => {
       updateData();
-      if (e.action === 'Specs:Selection') {
-        // TODO 🐷
-        console.log('🐷 TODO', 'store selection on local-storage');
-      }
+      if (e.action === 'Specs:Selection') local.selected = e.data.specs?.selected ?? [];
     });
     updateData();
 
@@ -93,10 +90,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       .size(getSize())
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
-
-        // const data = controller.current;
-
+        const { props } = e.state;
         return <Dev.TestRunner.PropList {...props} />;
       });
   });

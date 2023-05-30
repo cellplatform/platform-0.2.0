@@ -1,9 +1,10 @@
-import { t, rx, R } from './common';
+import { R, rx, t } from './common';
+import { Util } from './Util.mjs';
 
 /**
  * Default controller for the TestRunnerPropList component.
  */
-export function TestRunnerPropListController(initial?: t.TestRunnerPropListData) {
+export async function TestRunnerPropListController(initial?: t.TestRunnerPropListData) {
   const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
@@ -11,7 +12,7 @@ export function TestRunnerPropListController(initial?: t.TestRunnerPropListData)
   /**
    * Setup the current state of the component.
    */
-  const _current = Wrangle.initialState(initial);
+  const _current = await Wrangle.initialState(initial);
 
   /**
    * API
@@ -31,11 +32,13 @@ export function TestRunnerPropListController(initial?: t.TestRunnerPropListData)
           /**
            * Handle selection <Switch> being toggled.
            */
-          onChange(e) {
-            // Update state.
+          async onChange(e) {
+            // Update selection state.
+            const hash = Util.hash(e.spec);
             let selected = _current.specs?.selected ?? [];
-            if (e.to && !selected.includes(e.import)) selected = [...selected, e.import];
-            if (!e.to) selected = selected.filter((item) => item !== e.import);
+
+            if (e.to && !selected.includes(hash)) selected = [...selected, hash];
+            if (!e.to) selected = selected.filter((item) => item !== hash);
             _current.specs = { ..._current.specs, selected };
 
             // Bubble event.
@@ -66,11 +69,11 @@ export function TestRunnerPropListController(initial?: t.TestRunnerPropListData)
  * Helpers
  */
 const Wrangle = {
-  initialState(initial?: t.TestRunnerPropListData) {
+  async initialState(initial?: t.TestRunnerPropListData) {
     const data = R.clone(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
     specs.all = specs.all ?? [];
-    specs.selected = specs.selected ? specs.selected : specs.all;
+    specs.selected = specs.selected ?? [];
     return data;
   },
 };
