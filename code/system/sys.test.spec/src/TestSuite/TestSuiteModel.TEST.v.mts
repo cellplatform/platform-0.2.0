@@ -257,7 +257,7 @@ describe('TestSuiteModel', () => {
   });
 
   describe('merge', () => {
-    it('merges', async () => {
+    it('merges multiple specs together into single root', async () => {
       const root = Test.describe('root');
       const child1 = Test.describe('child-1');
       const child2 = Test.describe('child-2');
