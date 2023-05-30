@@ -138,6 +138,10 @@ export const TestSuiteModel = (args: {
     describe: describe as t.TestSuiteDescribe,
     it: it as t.TestSuiteIt,
 
+    get ready() {
+      return state.ready;
+    },
+
     get description() {
       return state.description;
     },

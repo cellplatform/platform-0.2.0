@@ -19,17 +19,18 @@ describe('TestSuiteModel', () => {
 
     it('empty (no handler)', () => {
       const root = Test.describe('root');
+      expect(root.ready).to.eql(false);
+      expect(root.state.ready).to.eql(false);
       expect(root.state.description).to.eql('root');
       expect(root.state.children).to.eql([]);
       expect(root.state.tests).to.eql([]);
-      expect(root.state.ready).to.eql(false);
       expect(root.state.modifier).to.eql(undefined);
     });
 
     it('handler (not initialized)', () => {
       const handler: t.TestSuiteHandler = (e) => null;
       const root = Test.describe('root', handler);
-      expect(root.state.ready).to.eql(false);
+      expect(root.ready).to.eql(false);
     });
 
     it('timeout', async () => {
@@ -67,9 +68,10 @@ describe('TestSuiteModel', () => {
         test = e.it('foo', handler);
       });
 
+      expect(root.ready).to.eql(false);
+      expect(root.state.ready).to.eql(false);
       expect(root.description).to.eql('root');
       expect(root.state.description).to.eql('root');
-      expect(root.state.ready).to.eql(false);
       expect(count).to.eql(0);
 
       const res1 = await root.init();

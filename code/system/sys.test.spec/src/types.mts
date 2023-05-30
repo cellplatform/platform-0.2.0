@@ -111,6 +111,7 @@ export type TestSuiteModel = TestSuite & {
   readonly kind: 'TestSuite';
   readonly state: TestSuiteModelState;
   readonly description: string;
+  readonly ready: boolean; // true after [init] has been run.
   run: TestSuiteRun;
   merge(...suites: TestSuiteModel[]): Promise<TestSuiteModel>;
   init(): Promise<TestSuiteModel>;
