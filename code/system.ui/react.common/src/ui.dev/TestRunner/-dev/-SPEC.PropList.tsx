@@ -119,7 +119,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         txt
           .left(true)
           .margin([0, 0, 5, 0])
-          .placeholder('run.label')
+          .placeholder('title (run)')
           .value((e) => e.state.debug.label)
           .onChange((e) => e.change((d) => (local.label = d.debug.label = e.to.value))),
       );

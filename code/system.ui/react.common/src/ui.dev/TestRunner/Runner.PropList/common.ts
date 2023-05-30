@@ -21,5 +21,5 @@ const fields = ['Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'] as t.Test
 
 export const DEFAULTS = {
   fields,
-  ellipsis: false,
+  ellipsis: true,
 } as const;

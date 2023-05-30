@@ -9,31 +9,24 @@ import type { TestCtx } from './-types.mjs';
 type T = {
   ctx: TestCtx;
   props: TestResultsProps;
-  debug: { card: boolean };
+  debug: {};
 };
 const initial: T = {
   ctx: { fail: false },
   props: { spinning: false, scroll: true },
-  debug: {
-    card: true,
-  },
+  debug: {},
 };
 
 export default Dev.describe('TestRunner', (e) => {
-  type LocalStore = { card: boolean; selected: string[] };
+  type LocalStore = { selected: string[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
-    card: initial.debug.card,
     selected: [],
   });
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-
-    await state.change((d) => {
-      d.debug.card = local.card;
-    });
 
     ctx.subject
       .display('grid')
@@ -118,8 +111,7 @@ export default Dev.describe('TestRunner', (e) => {
 
         return (
           <Dev.TestRunner.PropList.Stateful
-            card={debug.card}
-            margin={[20, 20, 0, 20]}
+            margin={[20, 35, 0, 30]}
             initial={{
               pkg: Pkg,
               run: { get },
@@ -138,14 +130,5 @@ export default Dev.describe('TestRunner', (e) => {
         );
       });
     });
-
-    dev.hr(-1, [30, 10]);
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => `card`)
-        .value((e) => e.state.debug.card)
-        .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.debug, 'card')))),
-    );
   });
 });
