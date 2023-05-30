@@ -6,32 +6,29 @@ import type { TestCtx } from './-types.mjs';
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;
 
+type P = TestRunnerPropListProps;
 type T = {
   ctx: TestCtx;
-  props: TestRunnerPropListProps;
-  debug: { infoUrl?: boolean };
+  props: P;
+  debug: { infoUrl?: boolean; ellipsis?: boolean };
 };
 const initial: T = {
   ctx: { fail: false },
-  props: {
-    card: true,
-    fields: DEFAULTS.fields,
-  },
-  debug: { infoUrl: true },
+  props: {},
+  debug: { infoUrl: true, ellipsis: false },
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = {
-    card: boolean;
-    infoUrl?: boolean;
-    fields?: t.TestRunnerField[];
-    selected: string[];
-  };
+  type LocalStore = Pick<P, 'card' | 'fields'> &
+    T['debug'] & {
+      selected: string[];
+    };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
-    infoUrl: initial.debug.infoUrl,
-    fields: initial.props.fields!,
-    card: initial.props.card!,
+    infoUrl: true,
+    ellipsis: false,
+    fields: DEFAULTS.fields,
+    card: true,
     selected: [],
   });
 
@@ -41,6 +38,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     await state.change((d) => {
       d.debug.infoUrl = local.infoUrl;
+      d.debug.ellipsis = local.ellipsis;
       d.props.fields = local.fields;
       d.props.card = local.card;
     });
@@ -48,7 +46,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     const get: t.GetTestSuite = async () => {
       const m1 = await import('./-TEST.sample-1.mjs');
       const m2 = await import('./-TEST.sample-2.mjs');
-
       const root = await Dev.bundle([m1.default, m2.default]);
       const ctx = state.current.ctx;
       await Time.wait(800); // Sample delay.
@@ -65,6 +62,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         get,
       },
       specs: {
+        ellipsis: () => state.current.debug.ellipsis,
         all: [
           import('./-TEST.sample-1.mjs'),
           import('./-TEST.sample-2.mjs'),
@@ -130,6 +128,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `card`)
           .value((e) => e.state.props.card)
           .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `ellipsis`)
+          .value((e) => Boolean(e.state.debug.ellipsis))
+          .onClick((e) => e.change((d) => (local.ellipsis = Dev.toggle(d.debug, 'ellipsis')))),
       );
     });
   });

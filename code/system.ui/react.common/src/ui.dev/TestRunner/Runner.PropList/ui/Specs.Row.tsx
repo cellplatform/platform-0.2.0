@@ -1,4 +1,4 @@
-import { Button, COLORS, Icons, Switch, css, t } from '../common';
+import { Button, COLORS, Icons, Switch, css, t, DEFAULTS } from '../common';
 import { useSpecImport } from '../hooks/useSpecImport.mjs';
 
 export type SpecsRowProps = {
@@ -10,7 +10,7 @@ export type SpecsRowProps = {
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
-  const isSelected = spec.isSelected;
+  const ellipsis = Wrangle.ellipsis(props.data);
 
   /**
    * Handlers
@@ -20,8 +20,8 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       props.onSelectionChange?.({
         import: props.import,
         spec: spec.suite,
-        from: isSelected,
-        to: !isSelected,
+        from: spec.isSelected,
+        to: !spec.isSelected,
       });
     }
   };
@@ -52,10 +52,8 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       justifyContent: 'center',
       alignContent: 'top',
     }),
-    desc: css({
-      paddingRight: 5,
-      color: COLORS.DARK,
-    }),
+    desc: css({ paddingRight: 5, color: COLORS.DARK }),
+    ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
   };
 
   return (
@@ -63,12 +61,22 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       <Button>
         <div {...styles.left}>
           <Icons.Play size={12} style={styles.runIcon} />
-          <div {...styles.desc}>{spec.description}</div>
+          <div {...css(styles.desc, ellipsis ? styles.ellipsis : false)}>{spec.description}</div>
         </div>
       </Button>
       <div {...styles.right}>
-        <Switch height={12} value={isSelected} onClick={handleSwitchClick} />
+        <Switch height={12} value={spec.isSelected} onClick={handleSwitchClick} />
       </div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  ellipsis(data: t.TestRunnerPropListData) {
+    const ellipsis = data.specs?.ellipsis ?? DEFAULTS.ellipsis;
+    return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
+  },
 };
