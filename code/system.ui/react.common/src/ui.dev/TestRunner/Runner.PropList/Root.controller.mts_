@@ -4,7 +4,7 @@ import { Util } from './Util.mjs';
 /**
  * Default controller for the TestRunnerPropList component.
  */
-export async function TestRunnerPropListController(initial?: t.TestRunnerPropListData) {
+export async function controller(initial?: t.TestRunnerPropListData) {
   const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
