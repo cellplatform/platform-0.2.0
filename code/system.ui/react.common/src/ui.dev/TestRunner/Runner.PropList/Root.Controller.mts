@@ -42,8 +42,6 @@ export async function TestRunnerPropListController(initial?: t.TestRunnerPropLis
             if (!e.to) selected = selected.filter((item) => item !== hash);
             _current.specs = { ..._current.specs, selected };
 
-            console.log('_current.specs', _current.specs);
-
             // Bubble event.
             initial?.specs?.onChange?.(e);
             $.next({
