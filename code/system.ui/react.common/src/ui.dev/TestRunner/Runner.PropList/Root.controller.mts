@@ -8,7 +8,6 @@ export async function controller(initial?: t.TestRunnerPropListData) {
   const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
-  const _current = await Wrangle.initialState(initial);
 
   const fire = (kind: t.TestRunnerPropListChange['op']) => {
     $.next({
@@ -16,6 +15,32 @@ export async function controller(initial?: t.TestRunnerPropListData) {
       data: api.current,
       selected: api.selected,
     });
+  };
+
+  const State = {
+    _current: await Wrangle.initialState(initial),
+    get current() {
+      return State._current;
+    },
+
+    get specs() {
+      return State.current.specs ?? (State.current.specs = {});
+    },
+
+    selectSpec(hash: string) {
+      const selected = State.specs.selected ?? [];
+      if (!selected.includes(hash)) {
+        State.current.specs = {
+          ...State.current.specs,
+          selected: [...selected, hash],
+        };
+      }
+    },
+
+    unselectSpec(hash: string) {
+      const selected = State.specs.selected ?? [];
+      State.specs.selected = selected.filter((item) => item !== hash);
+    },
   };
 
   /**
@@ -30,32 +55,39 @@ export async function controller(initial?: t.TestRunnerPropListData) {
      */
     get current(): t.TestRunnerPropListData {
       return {
-        ..._current,
+        ...State.current,
         specs: {
-          ..._current.specs,
+          ...State.current.specs,
 
           /**
            * Handle selection <Switch> being toggled.
            */
-          async onChange(e) {
+          async onSelect(e) {
             // Update selection state.
             const hash = Util.hash(e.spec);
-            let selected = _current.specs?.selected ?? [];
-
-            if (e.to && !selected.includes(hash)) selected = [...selected, hash];
-            if (!e.to) selected = selected.filter((item) => item !== hash);
-            _current.specs = { ..._current.specs, selected };
+            if (e.to) State.selectSpec(hash);
+            if (!e.to) State.unselectSpec(hash);
 
             // Bubble event.
-            initial?.specs?.onChange?.(e);
+            initial?.specs?.onSelect?.(e);
             fire('selection');
+          },
+
+          async onRunSingle(e) {
+            const hash = Util.hash(e.spec);
+            State.selectSpec(hash); // NB: Additive to the selection (when run).
+
+
+            // Bubble event.
+            initial?.specs?.onRunSingle?.(e);
+            fire('run:single');
           },
 
           async onReset(e) {
             // Update selection state.
-            const all = await Promise.all((_current.specs?.all ?? []).map(Util.ensureLoaded));
+            const all = await Promise.all((State.current.specs?.all ?? []).map(Util.ensureLoaded));
             const selected = e.modifiers.meta ? [] : all.map((item) => item?.hash!).filter(Boolean);
-            _current.specs = { ..._current.specs, selected };
+            State.current.specs = { ...State.current.specs, selected };
 
             // Bubble event.
             initial?.specs?.onReset?.(e);
@@ -65,8 +97,11 @@ export async function controller(initial?: t.TestRunnerPropListData) {
       };
     },
 
+    /**
+     * The list of selected specs (by "spec:hash" URI)
+     */
     get selected() {
-      return _current.specs?.selected ?? [];
+      return State.current.specs?.selected ?? [];
     },
 
     /**
