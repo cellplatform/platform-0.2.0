@@ -44,10 +44,18 @@ export async function TestRunnerPropListController(initial?: t.TestRunnerPropLis
 
             // Bubble event.
             initial?.specs?.onChange?.(e);
-            $.next({
-              action: 'Specs:Selection',
-              data: api.current,
-            });
+            $.next({ action: 'Specs:Selection', data: api.current });
+          },
+
+          async onReset(e) {
+            // Update selection state.
+            const all = await Promise.all((_current.specs?.all ?? []).map(Util.ensureLoaded));
+            const selected = e.modifiers.alt ? [] : all.map((item) => item?.hash!).filter(Boolean);
+            _current.specs = { ..._current.specs, selected };
+
+            // Bubble event.
+            initial?.specs?.onReset?.(e);
+            $.next({ action: 'Specs:Selection', data: api.current });
           },
         },
       };

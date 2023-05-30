@@ -23,6 +23,6 @@ export function FieldTestsSelectorReset(args: {
   const specs = args.data?.specs;
   if (!specs?.all || specs.all.length === 0) return undefined;
   return {
-    value: <SpecsReset />,
+    value: <SpecsReset data={args.data} />,
   };
 }

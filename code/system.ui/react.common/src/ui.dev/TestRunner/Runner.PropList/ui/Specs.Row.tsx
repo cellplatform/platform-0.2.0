@@ -1,5 +1,6 @@
 import { Button, COLORS, Icons, Switch, css, t, DEFAULTS } from '../common';
 import { useSpecImport } from '../hooks/useSpecImport.mjs';
+import { Util } from '../Util.mjs';
 
 export type SpecsRowProps = {
   data: t.TestRunnerPropListData;
@@ -15,13 +16,14 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   /**
    * Handlers
    */
-  const handleSwitchClick = () => {
+  const handleSwitchClick = (e: React.MouseEvent) => {
     if (spec.suite) {
       props.onSelectionChange?.({
         import: props.import,
         spec: spec.suite,
         from: spec.isSelected,
         to: !spec.isSelected,
+        modifiers: Util.modifiers(e),
       });
     }
   };

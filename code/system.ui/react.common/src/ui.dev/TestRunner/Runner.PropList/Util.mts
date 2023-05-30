@@ -17,4 +17,13 @@ export const Util = {
   hash(suite: t.TestSuiteModel) {
     return `suite:${Hash.sha1(suite.description)}`;
   },
+
+  modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
+    return {
+      shift: e.shiftKey,
+      ctrl: e.ctrlKey,
+      alt: e.altKey,
+      meta: e.metaKey,
+    };
+  },
 };

@@ -29,6 +29,7 @@ export type TestRunnerPropListSpecsData = {
   selected?: HashString[];
   ellipsis?: boolean | (() => boolean | undefined);
   onChange?: SpecSelectionHandler;
+  onReset?: SpecSelectionResetHandler;
 };
 
 /**
@@ -40,8 +41,17 @@ export type SpecSelectionHandlerArgs = {
   spec: t.TestSuiteModel;
   from: boolean;
   to: boolean;
+  modifiers: t.KeyboardModifierFlags;
 };
 
+export type SpecSelectionResetHandler = (e: SpecSelectionResetHandlerArgs) => void;
+export type SpecSelectionResetHandlerArgs = {
+  modifiers: t.KeyboardModifierFlags;
+};
+
+/**
+ * Observable.
+ */
 export type TestRunnerPropListChange = {
   action: 'Specs:Selection';
   data: TestRunnerPropListData;
