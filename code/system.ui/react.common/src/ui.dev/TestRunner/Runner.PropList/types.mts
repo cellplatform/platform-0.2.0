@@ -19,12 +19,13 @@ export type TestRunnerPropListData = {
 };
 
 export type TestRunnerPropListRunData = {
-  infoUrl?: string;
-  label?: string;
+  infoUrl?: string | (() => string | undefined);
+  label?: string | (() => string | undefined);
   get?: t.GetTestSuite;
 };
 
 export type TestRunnerPropListSpecsData = {
+  ctx?: Ctx | (() => Ctx);
   all?: t.SpecImport[];
   selected?: HashString[];
   ellipsis?: boolean;

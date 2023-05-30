@@ -6,12 +6,13 @@ export type SpecsRowProps = {
   data: t.TestRunnerPropListData;
   import: t.SpecImport;
   style?: t.CssValue;
-  onSelectionChange?: t.SpecSelectionHandler;
+  onSelectionChange?: t.SpecsSelectionHandler;
+  onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
-  const ellipsis = props.data.specs?.ellipsis ?? DEFAULTS.ellipsis;
+  const ellipsis = Wrangle.ellipsis(props);
 
   /**
    * Handlers
@@ -23,6 +24,15 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
         spec: spec.suite,
         from: spec.isSelected,
         to: !spec.isSelected,
+        modifiers: Util.modifiers(e),
+      });
+    }
+  };
+
+  const handleTestRunClick = (e: React.MouseEvent) => {
+    if (spec.suite) {
+      props.onRunClick?.({
+        spec: spec.suite,
         modifiers: Util.modifiers(e),
       });
     }
@@ -66,7 +76,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button>
+      <Button onClick={handleTestRunClick}>
         <div {...styles.left}>
           <Icons.Run.FullCircle.Outline size={16} style={styles.runIcon} />
           <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
@@ -79,4 +89,14 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       </div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  ellipsis(props: SpecsRowProps) {
+    const ellipsis = props.data.specs?.ellipsis ?? DEFAULTS.ellipsis;
+    return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
+  },
 };
