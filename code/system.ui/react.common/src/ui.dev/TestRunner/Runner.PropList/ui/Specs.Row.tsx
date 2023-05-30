@@ -1,4 +1,4 @@
-import { Button, COLORS, Icons, Switch, css, t, DEFAULTS } from '../common';
+import { Button, css, DEFAULTS, Icons, Switch, t } from '../common';
 import { useSpecImport } from '../hooks/useSpecImport.mjs';
 import { Util } from '../Util.mjs';
 
@@ -46,6 +46,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       flex: 1,
       display: 'grid',
       gridTemplateColumns: '1fr auto',
+      columnGap: 5,
     }),
     left: css({
       display: 'grid',
@@ -53,19 +54,18 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       columnGap: 8,
     }),
     right: css({
-      paddingTop: 1,
+      paddingTop: 2,
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'top',
     }),
     runIcon: css({
-      paddingTop: 1,
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'top',
     }),
     description: css({
-      paddingRight: 5,
+      paddingTop: 1,
     }),
     ellipsis: css({
       overflow: 'hidden',
@@ -74,18 +74,24 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     }),
   };
 
+  const elRunIcon = (
+    <div>
+      <Icons.Run.FullCircle.Outline size={16} style={styles.runIcon} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       <Button onClick={handleTestRunClick}>
         <div {...styles.left}>
-          <Icons.Run.FullCircle.Outline size={16} style={styles.runIcon} />
+          {elRunIcon}
           <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
             {spec.description}
           </div>
         </div>
       </Button>
-      <div {...styles.right}>
-        <Switch height={12} value={spec.isSelected} onClick={handleSwitchClick} />
+      <div {...styles.right} onClick={handleSwitchClick}>
+        <Switch height={12} value={spec.isSelected} />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Dev, Lorem, expect, t } from '../../../test.ui';
 import type { TestCtx } from './-types.mjs';
 
-export default Dev.describe(`sample-2: ${Lorem.words(10)}`, (e) => {
+export default Dev.describe(`Sample-2: ${Lorem.words(10)}`, (e) => {
   const length = 50;
 
   Array.from({ length }).forEach((_, i) => {
