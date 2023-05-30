@@ -51,8 +51,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       return { root, ctx };
     };
 
-    const getSize = (): [number, null] => [state.current.props.card ? 330 : 250, null];
-
     const controller = await Dev.TestRunner.PropList.controller({
       pkg: Pkg,
       run: { get },
@@ -76,19 +74,23 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       if (e.op === 'selection') local.selected = e.data.specs?.selected ?? [];
     });
 
+    const getSize = (): [number, null] => [state.current.props.card ? 330 : 330, null];
     ctx.host.tracelineColor(-0.05);
     ctx.subject
-      .backgroundColor(0)
+      .backgroundColor(1)
       .size(getSize())
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
+
         const data = Json.Patch.change(props.data ?? {}, (d) => {
           d.run!.infoUrl = debug.infoUrl ? '?dev=sys.ui.dev.TestRunner.PropList' : undefined;
           d.run!.label = debug.label || undefined;
           d.specs!.ellipsis = debug.ellipsis;
         }).to;
-        return <Dev.TestRunner.PropList {...props} data={data} />;
+        return (
+          <Dev.TestRunner.PropList {...props} data={data} style={{ margin: props.card ? 0 : 20 }} />
+        );
       });
   });
 

@@ -54,16 +54,24 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       justifyContent: 'center',
       alignContent: 'top',
     }),
-    desc: css({ paddingRight: 5, color: COLORS.DARK }),
-    ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
+    description: css({
+      paddingRight: 5,
+    }),
+    ellipsis: css({
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <Button>
         <div {...styles.left}>
-          <Icons.Play size={12} style={styles.runIcon} />
-          <div {...css(styles.desc, ellipsis ? styles.ellipsis : false)}>{spec.description}</div>
+          <Icons.Run.FullCircle.Outline size={16} style={styles.runIcon} />
+          <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
+            {spec.description}
+          </div>
         </div>
       </Button>
       <div {...styles.right}>

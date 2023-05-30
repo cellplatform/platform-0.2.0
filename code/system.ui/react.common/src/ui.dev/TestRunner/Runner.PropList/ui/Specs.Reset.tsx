@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx, FC, Button } from '../common';
 import { Util } from '../Util.mjs';
+import { Button, css, t } from '../common';
 
 export type SpecsResetProps = {
   data: t.TestRunnerPropListData;
@@ -23,7 +22,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={handleResetClick}>Reset</Button>
+      <Button onClick={handleResetClick}>{'reset'}</Button>
     </div>
   );
 };
