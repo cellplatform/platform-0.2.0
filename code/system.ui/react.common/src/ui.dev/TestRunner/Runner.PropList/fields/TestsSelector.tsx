@@ -16,7 +16,7 @@ export function FieldTestsSelector(args: {
           data={args.data}
           import={spec}
           onSelectionChange={specs.onSelect}
-          onRunClick={specs.onRunSingle}
+          onRunClick={specs.onRunSpec}
         />
       ),
     };
