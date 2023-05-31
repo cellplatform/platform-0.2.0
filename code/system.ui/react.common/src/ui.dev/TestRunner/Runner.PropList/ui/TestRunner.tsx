@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-
-import { Button, COLORS, css, rx, Spinner, t, Time, useMouseState, Test } from '../common';
-import { ButtonText } from './ButtonText';
+import { Button, COLORS, Spinner, Test, Time, css, rx, t, useMouseState } from '../common';
+import { ResultsText } from './Results.Text';
 
 type Milliseconds = number;
 
@@ -44,15 +43,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     return dispose;
   }, [runAtTime]);
 
-  const runTests = async () => {
-    if (isRunning) return;
-    setRunning(true);
-    setResults(undefined);
-
-    await Time.wait(0); // Allow UI to update.
-    const { root, ctx, timeout } = await props.get();
-    const res = await root.run({ ctx, timeout });
-
+  const logResults = (res: t.TestSuiteRunResponse) => {
     console.group('🌳 Test Run');
     console.info('ok', res.ok);
     console.info('stats', res.stats);
@@ -69,7 +60,18 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
        */
     });
     console.groupEnd();
+  };
 
+  const runTests = async () => {
+    if (isRunning) return;
+    setRunning(true);
+    setResults(undefined);
+
+    await Time.wait(0); // Allow UI to update.
+    const { root, ctx, timeout } = await props.get();
+    const res = await root.run({ ctx, timeout });
+
+    logResults(res);
     setResults(res);
     setRunAtTime(Time.now.timestamp);
     setRunning(false);
@@ -92,7 +94,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
-      <ButtonText results={results} isColored={isColoredText} isOver={isOver} />
+      <ResultsText results={results} isColored={isColoredText} isOver={isOver} />
     </Button>
   );
 

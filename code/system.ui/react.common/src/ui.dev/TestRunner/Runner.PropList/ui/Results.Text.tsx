@@ -1,13 +1,13 @@
 import { Value, COLORS, css, t, Time, DevIcons } from '../common';
 
-export type ButtonTextProps = {
+export type ResultsTextProps = {
   isColored?: boolean;
   isOver?: boolean;
   results?: t.TestSuiteRunResponse;
   style?: t.CssValue;
 };
 
-export const ButtonText: React.FC<ButtonTextProps> = (props) => {
+export const ResultsText: React.FC<ResultsTextProps> = (props) => {
   const { results, isOver = false, isColored = true } = props;
   const showRunAgain = isOver && Boolean(results);
   const asColor = (color: string) => (isColored ? color : COLORS.DARK);
