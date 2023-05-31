@@ -102,7 +102,6 @@ const Wrangle = {
 
   isRunning(props: SpecsRowProps, hash: string) {
     const results = props.data.specs?.results;
-    if (!results) return false;
-    return results[hash] === true;
+    return !results ? false : results[hash] === true;
   },
 };
