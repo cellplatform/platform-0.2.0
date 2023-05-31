@@ -13,13 +13,13 @@ type T = {
   debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
 };
 const initial: T = {
-  ctx: { fail: false },
+  ctx: { fail: false, delay: 300 },
   props: {},
   debug: { infoUrl: true, ellipsis: false },
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields'> & T['debug'] & { selected: string[] };
+  type LocalStore = Pick<P, 'card' | 'fields'> & T['debug'] & { selected: string[]; delay: number };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
     infoUrl: true,
@@ -28,6 +28,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     card: true,
     selected: [],
     label: '',
+    delay: initial.ctx.delay,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,6 +41,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.label = local.label;
       d.props.fields = local.fields;
       d.props.card = local.card;
+      d.ctx.delay = local.delay;
     });
 
     const get: t.GetTestSuite = async () => {
@@ -71,8 +73,8 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         onSelect(e) {
           console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
         },
-        async onRunSingle(e) {
-          console.info('⚡️ onRunSingle:', e);
+        async onRunSpec(e) {
+          console.info('⚡️ onRunSpec:', e);
         },
       },
     });
@@ -156,11 +158,24 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     dev.section('debug', (dev) => {
       dev.button('redraw', () => dev.redraw());
+
       dev.boolean((btn) =>
         btn
           .label((e) => `ctx.fail = ${e.state.ctx.fail}`)
           .value((e) => e.state.ctx.fail)
           .onClick((e) => e.change((d) => Dev.toggle(d.ctx, 'fail'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `ctx.delay = ${e.state.ctx.delay}ms`)
+          .value((e) => e.state.ctx.delay === 300)
+          .onClick((e) => {
+            e.change((d) => {
+              const next = d.ctx.delay === 300 ? 1000 : 300;
+              local.delay = d.ctx.delay = next;
+            });
+          }),
       );
     });
   });
@@ -168,7 +183,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = { ...e.state };
+      const data = {
+        ...e.state,
+        'props.data.specs': e.state.props.data?.specs,
+      };
       return <Dev.Object name={'TestRunner.PropList'} data={data} expand={1} />;
     });
   });

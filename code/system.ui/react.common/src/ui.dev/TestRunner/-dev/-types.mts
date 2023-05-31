@@ -1,1 +1,4 @@
-export type TestCtx = { fail: boolean };
+export type TestCtx = {
+  fail: boolean;
+  delay: number;
+};

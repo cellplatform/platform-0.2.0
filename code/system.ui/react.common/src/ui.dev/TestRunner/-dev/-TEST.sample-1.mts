@@ -3,7 +3,8 @@ import type { TestCtx } from './-types.mjs';
 
 export default Dev.describe('sample-1', (e) => {
   e.it('foo', async (e) => {
-    await Time.wait(300);
+    const ctx = Wrangle.ctx(e);
+    await Time.wait(ctx.delay);
     expect(123).to.eql(123);
   });
 

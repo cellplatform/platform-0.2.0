@@ -12,7 +12,7 @@ type T = {
   debug: {};
 };
 const initial: T = {
-  ctx: { fail: false },
+  ctx: { fail: false, delay: 300 },
   props: { spinning: false, scroll: true },
   debug: {},
 };
