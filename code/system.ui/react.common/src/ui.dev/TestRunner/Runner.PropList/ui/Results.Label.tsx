@@ -34,7 +34,7 @@ export const ResultsLabel: React.FC<ResultsLabelProps> = (props) => {
   /**
    * No results (first run required)
    */
-  if (!results) {
+  if (!results || results.stats.total === 0) {
     return (
       <div {...styles.base}>
         <DevIcons.Test.Run size={12} style={styles.runIcon} /> {'run tests'}
