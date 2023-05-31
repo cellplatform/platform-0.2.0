@@ -1,5 +1,4 @@
-import { R, rx, t } from './common';
-import { Util } from './Util.mjs';
+import { R, t } from './common';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
@@ -13,14 +12,19 @@ export async function State(initial?: t.TestRunnerPropListData) {
     },
 
     get specs() {
-      return api.current.specs ?? (api.current.specs = {});
+      return _current.specs ?? (_current.specs = {});
+    },
+
+    get results() {
+      const specs = api.specs;
+      return specs.results ?? (specs.results = {});
     },
 
     selectSpec(hash: string) {
       const selected = api.specs.selected ?? [];
       if (!selected.includes(hash)) {
-        api.current.specs = {
-          ...api.current.specs,
+        _current.specs = {
+          ..._current.specs,
           selected: [...selected, hash],
         };
       }
@@ -29,6 +33,16 @@ export async function State(initial?: t.TestRunnerPropListData) {
     unselectSpec(hash: string) {
       const selected = api.specs.selected ?? [];
       api.specs.selected = selected.filter((item) => item !== hash);
+    },
+
+    runStart(spec: t.TestSuiteModel) {
+      const hash = spec.hash();
+      api.results[hash] = true;
+    },
+
+    runComplete(spec: t.TestSuiteModel, res: t.TestSuiteRunResponse) {
+      const hash = spec.hash();
+      api.results[hash] = res;
     },
   } as const;
 

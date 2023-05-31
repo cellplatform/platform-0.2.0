@@ -15,6 +15,8 @@ export type SpecsRowProps = {
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
   const ellipsis = Wrangle.ellipsis(props);
+  const isRunning = Wrangle.isRunning(props, spec.hash);
+
   const [isOver, setOver] = useState(false);
 
   /**
@@ -76,7 +78,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <Button onClick={handleTestRunClick} onMouse={(e) => setOver(e.isOver)}>
         <div {...styles.left}>
-          <RunIcon isSelected={spec.isSelected} isOver={isOver} />
+          <RunIcon isSelected={spec.isSelected} isOver={isOver} isRunning={isRunning} />
           <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
             {spec.description}
           </div>
@@ -96,5 +98,11 @@ const Wrangle = {
   ellipsis(props: SpecsRowProps) {
     const ellipsis = props.data.specs?.ellipsis ?? DEFAULTS.ellipsis;
     return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
+  },
+
+  isRunning(props: SpecsRowProps, hash: string) {
+    const results = props.data.specs?.results;
+    if (!results) return false;
+    return results[hash] === true;
   },
 };

@@ -30,8 +30,9 @@ export type TestRunnerPropListSpecsData = {
   all?: t.SpecImport[];
   selected?: HashString[];
   ellipsis?: boolean | (() => boolean | undefined);
+  results?: { [key: HashString]: true | t.TestSuiteRunResponse };
   onSelect?: SpecsSelectionHandler;
-  onRunSingle?: SpecRunClickHandler;
+  onRunSpec?: SpecRunClickHandler;
   onReset?: SpecsSelectionResetHandler;
 };
 
@@ -62,7 +63,7 @@ export type SpecRunClickHandlerArgs = {
  * Observable.
  */
 export type TestRunnerPropListChange = {
-  op: 'selection' | 'reset' | 'run:single';
+  op: 'selection' | 'reset' | 'run:single:start' | 'run:single:complete';
   data: TestRunnerPropListData;
   selected: HashString[];
 };

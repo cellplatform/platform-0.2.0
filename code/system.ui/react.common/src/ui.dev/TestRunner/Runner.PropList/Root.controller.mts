@@ -1,15 +1,15 @@
-import { R, rx, t } from './common';
-import { Util } from './Util.mjs';
 import { State } from './Root.controller.State.mjs';
+import { Util } from './Util.mjs';
+import { Time, rx, t } from './common';
 
 /**
  * Default controller for the TestRunnerPropList component.
  */
 export async function controller(initial?: t.TestRunnerPropListData) {
-  const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
 
+  const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const state = await State(initial);
 
   const fire = (kind: t.TestRunnerPropListChange['op']) => {
@@ -50,15 +50,22 @@ export async function controller(initial?: t.TestRunnerPropListData) {
             fire('selection');
           },
 
-          async onRunSingle(e) {
+          async onRunSpec(e) {
             const hash = e.spec.hash();
             state.selectSpec(hash); // NB: Additive to the selection (when run).
 
+            // Pre-run state update.
+            state.runStart(e.spec);
+            fire('run:single:start');
 
+            // Execute the spec.
+            const ctx = Wrangle.ctx(state.specs);
+            const res = await e.spec.run({ ctx });
+            state.runComplete(e.spec, res);
 
             // Bubble event.
-            initial?.specs?.onRunSingle?.(e);
-            fire('run:single');
+            initial?.specs?.onRunSpec?.(e);
+            fire('run:single:complete');
           },
 
           async onReset(e) {
