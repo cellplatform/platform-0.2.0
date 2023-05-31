@@ -100,8 +100,12 @@ const Wrangle = {
     return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
   },
 
-  isRunning(props: SpecsRowProps, hash: string) {
+  results(props: SpecsRowProps, hash: string) {
     const results = props.data.specs?.results;
-    return !results ? false : results[hash] === true;
+    return results ? results[hash] : false;
+  },
+
+  isRunning(props: SpecsRowProps, hash: string) {
+    return Wrangle.results(props, hash) === true;
   },
 };

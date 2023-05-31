@@ -15,7 +15,7 @@ type T = {
 const initial: T = {
   ctx: { fail: false, delay: 1000 },
   props: {},
-  debug: { infoUrl: true, ellipsis: false },
+  debug: { infoUrl: false, ellipsis: false },
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
