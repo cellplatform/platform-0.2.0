@@ -16,23 +16,14 @@ export const ResultsText: React.FC<ResultsTextProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      Flex: 'x-center-center',
-      minHeight: 15,
-    }),
-    item: css({
-      Flex: 'x-center-center',
-      transition: 'all 500ms ease-out',
-    }),
+    base: css({ Flex: 'x-center-center', minHeight: 15 }),
+    item: css({ Flex: 'x-center-center', transition: 'all 500ms ease-out' }),
     failed: css({ color: asColor(COLORS.RED) }),
     passed: css({ color: asColor(COLORS.GREEN) }),
     skipped: css({ color: asColor(COLORS.YELLOW), opacity: isColored ? 1 : 0.3 }),
     elapsed: css({ color: COLORS.DARK }),
     spacer: css({ width: 6 }),
-    runIcon: css({
-      marginRight: 2,
-      transform: 'translateY(1px)',
-    }),
+    runIcon: css({ marginRight: 2, transform: 'translateY(1px)' }),
     runAgain: css({
       marginRight: 5,
       opacity: showRunAgain ? 1 : 0,
