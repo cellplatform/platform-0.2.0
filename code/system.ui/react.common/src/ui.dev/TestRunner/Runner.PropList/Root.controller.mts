@@ -1,6 +1,6 @@
 import { State } from './Root.controller.State.mjs';
 import { Util } from './Util.mjs';
-import { Time, rx, t } from './common';
+import { rx, t } from './common';
 
 /**
  * Default controller for the TestRunnerPropList component.
@@ -21,6 +21,55 @@ export async function controller(initial?: t.TestRunnerPropListData) {
   };
 
   /**
+   * Handle selection <Switch> being toggled.
+   */
+  const onSelect: t.SpecsSelectionHandler = async (e) => {
+    // Update selection state.
+    const hash = e.spec.hash();
+    if (e.to) state.selectSpec(hash);
+    if (!e.to) state.unselectSpec(hash);
+
+    // Bubble event.
+    initial?.specs?.onSelect?.(e);
+    fire('selection');
+  };
+
+  /**
+   * Handle "run" button being clicked.
+   */
+  const onRunSpec: t.SpecRunClickHandler = async (e) => {
+    const hash = e.spec.hash();
+    state.selectSpec(hash); // NB: Additive to the selection (when run).
+
+    // Pre-run state update.
+    state.runStart(e.spec);
+    fire('run:single:start');
+
+    // Execute the spec.
+    const ctx = Wrangle.ctx(state.specs);
+    const res = await e.spec.run({ ctx });
+    state.runComplete(e.spec, res);
+
+    // Bubble event.
+    initial?.specs?.onRunSpec?.(e);
+    fire('run:single:complete');
+  };
+
+  /**
+   * Handle "reset" button being clicked.
+   */
+  const onReset: t.SpecsSelectionResetHandler = async (e) => {
+    // Update selection state.
+    const all = await Promise.all((state.current.specs?.all ?? []).map(Util.ensureLoaded));
+    const selected = e.modifiers.meta ? [] : all.map((item) => item?.suite.hash()!).filter(Boolean);
+    state.current.specs = { ...state.current.specs, selected };
+
+    // Bubble event.
+    initial?.specs?.onReset?.(e);
+    fire('reset');
+  };
+
+  /**
    * API
    */
   const api = {
@@ -35,51 +84,9 @@ export async function controller(initial?: t.TestRunnerPropListData) {
         ...state.current,
         specs: {
           ...state.current.specs,
-
-          /**
-           * Handle selection <Switch> being toggled.
-           */
-          async onSelect(e) {
-            // Update selection state.
-            const hash = e.spec.hash();
-            if (e.to) state.selectSpec(hash);
-            if (!e.to) state.unselectSpec(hash);
-
-            // Bubble event.
-            initial?.specs?.onSelect?.(e);
-            fire('selection');
-          },
-
-          async onRunSpec(e) {
-            const hash = e.spec.hash();
-            state.selectSpec(hash); // NB: Additive to the selection (when run).
-
-            // Pre-run state update.
-            state.runStart(e.spec);
-            fire('run:single:start');
-
-            // Execute the spec.
-            const ctx = Wrangle.ctx(state.specs);
-            const res = await e.spec.run({ ctx });
-            state.runComplete(e.spec, res);
-
-            // Bubble event.
-            initial?.specs?.onRunSpec?.(e);
-            fire('run:single:complete');
-          },
-
-          async onReset(e) {
-            // Update selection state.
-            const all = await Promise.all((state.current.specs?.all ?? []).map(Util.ensureLoaded));
-            const selected = e.modifiers.meta
-              ? []
-              : all.map((item) => item?.suite.hash()!).filter(Boolean);
-            state.current.specs = { ...state.current.specs, selected };
-
-            // Bubble event.
-            initial?.specs?.onReset?.(e);
-            fire('reset');
-          },
+          onSelect,
+          onRunSpec,
+          onReset,
         },
       };
     },
