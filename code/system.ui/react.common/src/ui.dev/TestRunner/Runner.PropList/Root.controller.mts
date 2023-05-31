@@ -1,6 +1,6 @@
 import { State } from './Root.controller.State.mjs';
 import { Util } from './Util.mjs';
-import { rx, t } from './common';
+import { Test, rx, t } from './common';
 
 /**
  * Default controller for the TestRunnerPropList component.
@@ -70,6 +70,16 @@ export async function controller(initial?: t.TestRunnerPropListData) {
   };
 
   /**
+   * Create a bundle of the currently selected specs.
+   */
+  const bundle: t.GetTestSuite = async () => {
+    const specs = await api.selected.specs();
+    const ctx = Wrangle.ctx(state.current.specs!);
+    const root = await Test.bundle(specs);
+    return { root, ctx };
+  };
+
+  /**
    * API
    */
   const api = {
@@ -98,9 +108,9 @@ export async function controller(initial?: t.TestRunnerPropListData) {
       const hashes = state.current.specs?.selected ?? [];
       return {
         hashes,
+        bundle,
         async specs() {
-          const all = await api.all();
-          return all.filter((spec) => hashes.includes(spec.hash()));
+          return (await api.all()).filter((spec) => hashes.includes(spec.hash()));
         },
       };
     },

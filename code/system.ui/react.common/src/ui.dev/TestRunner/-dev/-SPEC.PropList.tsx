@@ -44,22 +44,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.ctx.delay = local.delay;
     });
 
-    const get: t.GetTestSuite = async () => {
-      const m1 = await import('./-TEST.sample-1.mjs');
-      const m2 = await import('./-TEST.sample-2.mjs');
-      const root = await Dev.bundle([m1.default, m2.default]);
-      const ctx = state.current.ctx;
-      await Time.wait(800); // Sample delay.
-      return { root, ctx };
-    };
-
     const infoUrl = '?dev=sys.ui.dev.TestRunner.PropList';
     const controller = await Dev.TestRunner.PropList.controller({
       pkg: Pkg,
       run: {
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        get,
+        get: () => controller.selected.bundle(),
       },
       specs: {
         ellipsis: () => state.current.debug.ellipsis,
