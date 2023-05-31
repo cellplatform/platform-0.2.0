@@ -16,7 +16,7 @@ export async function controller(initial?: t.TestRunnerPropListData) {
     $.next({
       op: kind,
       data: api.current,
-      selected: api.selected,
+      selected: api.selected.hashes,
     });
   };
 
@@ -60,8 +60,8 @@ export async function controller(initial?: t.TestRunnerPropListData) {
    */
   const onReset: t.SpecsSelectionResetHandler = async (e) => {
     // Update selection state.
-    const all = await Promise.all((state.current.specs?.all ?? []).map(Util.ensureLoaded));
-    const selected = e.modifiers.meta ? [] : all.map((item) => item?.suite.hash()!).filter(Boolean);
+    const all = await api.all();
+    const selected = e.modifiers.meta ? [] : all.map((spec) => spec.hash());
     state.current.specs = { ...state.current.specs, selected };
 
     // Bubble event.
@@ -92,10 +92,25 @@ export async function controller(initial?: t.TestRunnerPropListData) {
     },
 
     /**
-     * The list of selected specs (by "spec:hash" URI)
+     * The list of selected specs (by "spec:hash" URI).
      */
     get selected() {
-      return state.current.specs?.selected ?? [];
+      const hashes = state.current.specs?.selected ?? [];
+      return {
+        hashes,
+        async specs() {
+          const all = await api.all();
+          return all.filter((spec) => hashes.includes(spec.hash()));
+        },
+      };
+    },
+
+    /**
+     * Retrieves the complete list of initialized specs.
+     */
+    async all() {
+      const wait = (state.current.specs?.all ?? []).map(Util.ensureLoaded);
+      return (await Promise.all(wait)).filter(Boolean).map((item) => item?.suite!);
     },
 
     /**

@@ -13,7 +13,7 @@ type T = {
   debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
 };
 const initial: T = {
-  ctx: { fail: false, delay: 300 },
+  ctx: { fail: false, delay: 1000 },
   props: {},
   debug: { infoUrl: true, ellipsis: false },
 };
