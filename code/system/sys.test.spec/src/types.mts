@@ -5,6 +5,8 @@ import type { t } from './common.t';
 export type * from './TestSuite.helpers/types.mjs';
 
 type Id = string;
+type SuiteId = Id;
+type TestId = Id;
 type Anything = void | any;
 type Milliseconds = number;
 type Ctx = Record<string, unknown>;
@@ -40,7 +42,7 @@ export type TestIs = {
  * A suite ("set") of tests.x
  */
 export type TestSuite = {
-  id: Id;
+  id: SuiteId;
   timeout(value: Milliseconds): TestSuite;
   describe: TestSuiteDescribe;
   it: TestSuiteIt;
@@ -61,7 +63,7 @@ export type TestSuiteItDef = (description: string, handler?: TestHandler) => Tes
 export type TestSuiteHandler = (e: TestSuite) => Anything | Promise<Anything>;
 export type TestHandler = (e: TestHandlerArgs) => Anything | Promise<Anything>;
 export type TestHandlerArgs = {
-  id: Id;
+  id: TestId;
   description: string;
   timeout(value: Milliseconds): TestHandlerArgs;
   ctx?: Ctx;
@@ -73,7 +75,7 @@ export type TestHandlerArgs = {
 export type TestModel = {
   kind: 'Test';
   parent: TestSuiteModel;
-  id: Id;
+  id: TestId;
   run: TestRun;
   description: string;
   handler?: TestHandler;
@@ -92,7 +94,7 @@ export type TestRunOptions = {
   noop?: boolean; // Produces a result without executing any of the actual test function.
 };
 export type TestRunResponse = {
-  id: Id;
+  id: TestId;
   tx: Id; // Unique ID for the individual test run operation.
   ok: boolean;
   description: string;
@@ -143,7 +145,7 @@ export type TestSuiteRunOptions = {
   noop?: boolean; // Produces a result-tree without executing any of the actual test functions.
 };
 export type TestSuiteRunResponse = {
-  id: Id;
+  id: SuiteId;
   tx: Id; // Unique ID for the individual suite run operation.
   ok: boolean;
   description: string;
@@ -163,17 +165,18 @@ export type TestSuiteRunStats = {
 };
 
 /**
- * Handler that runs before/after a test is run.
+ * Handlers that run before/after a test is run.
  */
 export type BeforeRunTest = (e: BeforeRunTestArgs) => IgnoredResponse;
 export type BeforeRunTestArgs = {
-  id: Id;
+  id: TestId;
   description: string;
 };
 
 export type AfterRunTest = (e: AfterRunTestArgs) => IgnoredResponse;
 export type AfterRunTestArgs = {
-  id: Id;
+  id: TestId;
   description: string;
-  elapsed: Milliseconds;
+  result: t.TestRunResponse;
+};
 };

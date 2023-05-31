@@ -33,14 +33,15 @@ export const TestModel = (args: {
       };
 
       let _stopTimeout: () => void = () => null;
-
-      const done = (options: { error?: Error } = {}) => {
+      const finalizeResponse = (options: { error?: Error } = {}) => {
         _stopTimeout?.();
         response.elapsed = timer.elapsed.msec;
         response.error = options.error;
         response.ok = !Boolean(response.error);
-        resolve(Delete.undefined(response));
+        return Delete.undefined(response);
       };
+
+      const done = (options: { error?: Error } = {}) => resolve(finalizeResponse(options));
       if (!handler || excluded) return done();
 
       const startTimeout = (msecs: number) => {
@@ -63,31 +64,36 @@ export const TestModel = (args: {
         },
       };
 
+      if (noop) return done();
+
       try {
         /**
          * Before handler.
          */
-        if (options.before && !noop) {
+        if (options.before) {
           await maybeWait(options.before({ id, description }));
         }
 
         /**
          * Test handler.
          */
+        let error: Error | undefined;
         startTimeout(response.timeout);
-        if (!noop) {
+        try {
           await maybeWait(handler(args));
+        } catch (err: any) {
+          error = err;
         }
 
         /**
          * After handler.
          */
-        if (options.after && !noop) {
-          const elapsed = timer.elapsed.msec;
-          await maybeWait(options.after({ id, description, elapsed }));
+        if (options.after) {
+          const result = finalizeResponse({ error });
+          await maybeWait(options.after({ id, description, result }));
         }
 
-        return done();
+        return done({ error });
       } catch (error: any) {
         done({ error });
       }

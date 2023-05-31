@@ -371,6 +371,7 @@ describe('TestSuiteModel', () => {
         e.it('foo', (e) => {});
         e.it('bar', async (e) => {
           await Time.wait(5);
+          throw new Error('Fail');
         });
       });
 
@@ -393,6 +394,10 @@ describe('TestSuiteModel', () => {
       expect(afterEach.length).to.eql(2);
       expect(afterEach[0].description).to.eql('foo');
       expect(afterEach[1].description).to.eql('bar');
+
+      expect(afterEach[0].result.ok).to.eql(true);
+      expect(afterEach[1].result.ok).to.eql(false);
+
       expect(afterEach[0].id).to.eql(test1.id);
       expect(afterEach[1].id).to.eql(test2.id);
     });
