@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { Button, css, DEFAULTS, Switch, t } from '../common';
+import { css, Switch, t } from '../common';
 import { useSpecImport } from '../hooks/useSpecImport.mjs';
 import { Util } from '../Util.mjs';
-import { RunIcon } from './Specs.Row.RunIcon';
+import { Body } from './Spec.Row.Body';
 
 export type SpecsRowProps = {
   data: t.TestRunnerPropListData;
@@ -14,10 +13,6 @@ export type SpecsRowProps = {
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const spec = useSpecImport(props.data, props.import);
-  const ellipsis = Wrangle.ellipsis(props);
-  const isRunning = Wrangle.isRunning(props, spec.hash);
-
-  const [isOver, setOver] = useState(false);
 
   /**
    * Handlers
@@ -34,7 +29,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     }
   };
 
-  const handleTestRunClick = (e: React.MouseEvent) => {
+  const handleBodyClick = (e: React.MouseEvent) => {
     if (spec.suite) {
       props.onRunClick?.({
         spec: spec.suite,
@@ -53,59 +48,25 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
       gridTemplateColumns: '1fr auto',
       columnGap: 5,
     }),
-    left: css({
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      columnGap: 8,
-    }),
-    right: css({
+    switch: css({
       paddingTop: 2,
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'top',
     }),
-    description: css({
-      paddingTop: 1,
-    }),
-    ellipsis: css({
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Button onClick={handleTestRunClick} onMouse={(e) => setOver(e.isOver)}>
-        <div {...styles.left}>
-          <RunIcon isSelected={spec.isSelected} isOver={isOver} isRunning={isRunning} />
-          <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
-            {spec.description}
-          </div>
-        </div>
-      </Button>
-      <div {...styles.right} onClick={handleSwitchClick}>
+      <Body
+        data={props.data}
+        suite={spec.suite}
+        isSelected={spec.isSelected}
+        onClick={handleBodyClick}
+      />
+      <div {...styles.switch} onClick={handleSwitchClick}>
         <Switch height={12} value={spec.isSelected} />
       </div>
     </div>
   );
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  ellipsis(props: SpecsRowProps) {
-    const ellipsis = props.data.specs?.ellipsis ?? DEFAULTS.ellipsis;
-    return typeof ellipsis === 'function' ? ellipsis() : ellipsis;
-  },
-
-  results(props: SpecsRowProps, hash: string) {
-    const results = props.data.specs?.results;
-    return results ? results[hash] : false;
-  },
-
-  isRunning(props: SpecsRowProps, hash: string) {
-    return Wrangle.results(props, hash) === true;
-  },
 };
