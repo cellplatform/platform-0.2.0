@@ -366,7 +366,7 @@ describe('TestSuiteModel', () => {
       expect(res.elapsed).to.greaterThan(18);
     });
 
-    it('{beforeEach, afterEach} parameter', async () => {
+    it('{ beforeEach, afterEach } parameter', async () => {
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => {});
         e.it('bar', async (e) => {
@@ -381,16 +381,23 @@ describe('TestSuiteModel', () => {
         afterEach: (e) => afterEach.push(e),
       });
 
+      const test1 = root.state.tests[0];
+      const test2 = root.state.tests[1];
+
       expect(beforeEach.length).to.eql(2);
       expect(beforeEach[0].description).to.eql('foo');
       expect(beforeEach[1].description).to.eql('bar');
+      expect(beforeEach[0].id).to.eql(test1.id);
+      expect(beforeEach[1].id).to.eql(test2.id);
 
       expect(afterEach.length).to.eql(2);
       expect(afterEach[0].description).to.eql('foo');
       expect(afterEach[1].description).to.eql('bar');
+      expect(afterEach[0].id).to.eql(test1.id);
+      expect(afterEach[1].id).to.eql(test2.id);
     });
 
-    it('run with {only} subset of IDs option', async () => {
+    it('run with { only } subset of IDs option', async () => {
       let _fired: string[] = [];
       const root = Test.describe('root', (e) => {
         e.it('one', () => _fired.push('one'));
@@ -421,6 +428,18 @@ describe('TestSuiteModel', () => {
       expect(res2).to.eql(['two']);
       expect(res3).to.eql(['two', 'three']);
       expect(res4).to.eql([]);
+    });
+
+    it('{ onProgress } callback', async () => {
+      const root = Test.describe('root', (e) => {
+        e.describe('child-1', (e) => {
+          e.describe('child-2', (e) => {
+            e.it('foo', () => null);
+          });
+        });
+      });
+
+      const res = await root.run({});
     });
 
     it('unique "tx" identifier for each suite run operation', async () => {
