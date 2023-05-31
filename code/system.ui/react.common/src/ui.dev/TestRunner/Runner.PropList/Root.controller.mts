@@ -62,7 +62,11 @@ export async function controller(initial?: t.TestRunnerPropListData) {
     // Update selection state.
     const all = await api.all();
     const selected = e.modifiers.meta ? [] : all.map((spec) => spec.hash());
-    state.current.specs = { ...state.current.specs, selected };
+    state.current.specs = {
+      ...state.current.specs,
+      selected,
+      results: undefined,
+    };
 
     // Bubble event.
     initial?.specs?.onReset?.(e);

@@ -7,6 +7,9 @@ export async function State(initial?: t.TestRunnerPropListData) {
   let _current = await Wrangle.initialState(initial);
 
   const api = {
+    /**
+     * State properties:
+     */
     get current() {
       return _current;
     },
@@ -19,6 +22,10 @@ export async function State(initial?: t.TestRunnerPropListData) {
       const specs = api.specs;
       return specs.results ?? (specs.results = {});
     },
+
+    /**
+     * Mutation methods:
+     */
 
     selectSpec(hash: string) {
       const selected = api.specs.selected ?? [];

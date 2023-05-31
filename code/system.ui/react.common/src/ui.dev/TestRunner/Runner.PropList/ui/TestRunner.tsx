@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Button, COLORS, Spinner, Test, Time, css, rx, t, useMouseState } from '../common';
-import { ResultsText } from './Results.Text';
+import {
+  Button,
+  COLORS,
+  DEFAULTS,
+  Spinner,
+  Test,
+  Time,
+  css,
+  rx,
+  t,
+  useMouseState,
+} from '../common';
+import { ResultsLabel } from './Results.Label';
 
 type Milliseconds = number;
-
-const MSEC = {
-  DELAY_COLORED: 1000 * 10, // 10-seconds
-};
 
 export type TestRunnerProps = {
   get: t.GetTestSuite;
@@ -27,7 +34,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     setColoredText(false);
 
     if (typeof runAtTime === 'number') {
-      const delay = MSEC.DELAY_COLORED;
+      const delay = DEFAULTS.colorDelay;
       const elapsed = () => Time.duration(Time.now.timestamp - runAtTime);
       const expired = () => elapsed().msec > delay;
       const update = () => {
@@ -94,7 +101,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
-      <ResultsText results={results} isColored={isColoredText} isOver={isOver} />
+      <ResultsLabel results={results} isColored={isColoredText} isOver={isOver} />
     </Button>
   );
 

@@ -22,4 +22,5 @@ const fields = ['Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'] as t.Test
 export const DEFAULTS = {
   fields,
   ellipsis: true,
+  colorDelay: 1000 * 8,
 } as const;
