@@ -3,6 +3,7 @@
   "version": "0.2.5-alpha",
   "type": "module",
   "scripts": {
+    "prepare": "cp code/compiler/tsconfig/tsconfig.json ./tsconfig.json",
     "build": "ts-node-esm   -T script.ts/cmd.all.build.mts",
     "test": "ts-node-esm    -T script.ts/cmd.all.test.mts",
     "clean": "ts-node-esm   -T script.ts/cmd.all.clean.mts",
