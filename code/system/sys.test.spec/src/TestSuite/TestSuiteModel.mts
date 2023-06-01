@@ -54,7 +54,7 @@ export const TestSuiteModel = (args: {
 
     type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
-      const tx = `run.tx.${slug()}`;
+      const tx = `run.suite.tx.${slug()}`;
       const res: R = {
         id,
         tx,
