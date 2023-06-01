@@ -1,6 +1,5 @@
-import { useState, useRef } from 'react';
-import { Color, COLORS, css, FC, t, TextInput, Style } from '../common';
-import { DevIcons } from '../Icons.mjs';
+import { useRef, useState } from 'react';
+import { COLORS, Color, DevIcons, FC, Style, TextInput, css, t } from '../common';
 
 const DEFAULT = {
   isEnabled: true,

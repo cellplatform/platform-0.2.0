@@ -1,7 +1,6 @@
 import { t } from '../common';
 
 export * from '../common';
-export { DevIcons } from '../../Icons.mjs';
 export { PropList } from '../../../ui/PropList';
 export { Switch } from '../../../ui/Button.Switch';
 

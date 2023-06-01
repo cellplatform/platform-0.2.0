@@ -1,4 +1,4 @@
-import { COLORS, Icons, Spinner, css, t } from '../common';
+import { COLORS, DevIcons, Spinner, css, t } from '../common';
 
 export type RunIconProps = {
   isSelected?: boolean;
@@ -34,7 +34,7 @@ export const RunIcon: React.FC<RunIconProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Icons.Run.FullCircle.Outline size={16} style={styles.icon} />
+      <DevIcons.Run.FullCircle.Outline size={16} style={styles.icon} />
       {elSpinner}
     </div>
   );

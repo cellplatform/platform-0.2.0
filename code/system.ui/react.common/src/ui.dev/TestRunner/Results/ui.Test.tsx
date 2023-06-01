@@ -1,4 +1,4 @@
-import { Color, COLORS, css, Icons, t, Time } from './common';
+import { Color, COLORS, css, DevIcons, t, Time } from './common';
 import { Description } from './ui.Description';
 import { TestError } from './ui.Test.Error';
 
@@ -39,10 +39,10 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     error: css({ marginLeft: 25 }),
   };
 
-  const elIconSuccess = !isSkipped && data.ok && <Icons.Tick size={16} color={COLORS.LIME} />;
-  const elIconFail = !isSkipped && !data.ok && <Icons.Close size={16} color={COLORS.MAGENTA} />;
+  const elIconSuccess = !isSkipped && data.ok && <DevIcons.Tick size={16} color={COLORS.LIME} />;
+  const elIconFail = !isSkipped && !data.ok && <DevIcons.Close size={16} color={COLORS.MAGENTA} />;
   const elIconSkipped = isSkipped && (
-    <Icons.Skip
+    <DevIcons.Skip
       size={16}
       color={Color.alpha(COLORS.DARK, 0.3)}
       style={{ position: 'relative', top: 2 }}
