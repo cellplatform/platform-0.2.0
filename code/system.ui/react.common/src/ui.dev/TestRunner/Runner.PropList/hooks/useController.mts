@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { PropListController } from '../logic/Controller.mjs';
 import { rx, t } from '../common';
+import { PropListController } from '../logic/Controller.mjs';
 
 export function useController(args: {
   initial?: t.TestRunnerPropListData;
@@ -13,10 +13,11 @@ export function useController(args: {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    PropListController(args.initial).then((ctrl) => {
-      const update = () => setData(ctrl.current);
+    PropListController(args.initial).then((controller) => {
+      const $ = controller.$.pipe(rx.takeUntil(dispose$));
+      const update = () => setData(controller.current);
       update();
-      ctrl.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {
+      $.subscribe((e) => {
         update();
         args.onChanged?.(e);
       });
