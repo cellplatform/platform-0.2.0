@@ -59,6 +59,18 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    * Handle the "run all" button being clicked.
    */
   const onRunAll: t.SpecRunAllClickHandler = async (e) => {
+    const { modifiers } = e;
+
+    // Select all if modifier key was pressed.
+    const forceAll = modifiers.meta;
+    if (forceAll) {
+      (await api.all()).forEach((spec) => state.selectSpec(spec.hash()));
+    }
+
+    const specs = forceAll ? await api.all() : await api.selected.specs();
+    for (const spec of specs) {
+      await onRunSingle({ spec, modifiers });
+    }
 
     // Bubble event.
     initial?.run?.onRunAll?.(e);

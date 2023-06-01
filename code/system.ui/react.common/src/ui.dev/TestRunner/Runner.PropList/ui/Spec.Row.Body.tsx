@@ -96,8 +96,8 @@ const Wrangle = {
   },
 
   results(props: BodyProps, hash: string) {
-    const entry = props.data.specs?.results;
-    return entry ? entry[hash] : false;
+    const results = props.data.specs?.results;
+    return results ? results[hash] : false;
   },
 
   isRunning(props: BodyProps, hash: string) {

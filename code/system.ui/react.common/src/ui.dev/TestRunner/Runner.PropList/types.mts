@@ -54,15 +54,14 @@ export type SpecsSelectionResetHandlerArgs = {
   modifiers: t.KeyboardModifierFlags;
 };
 
-export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void;
+export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void | Promise<void>;
 export type SpecRunClickHandlerArgs = {
   spec: t.TestSuiteModel;
   modifiers: t.KeyboardModifierFlags;
 };
 
-export type SpecRunAllClickHandler = (e: SpecRunAllClickHandlerArgs) => void;
+export type SpecRunAllClickHandler = (e: SpecRunAllClickHandlerArgs) => void | Promise<void>;
 export type SpecRunAllClickHandlerArgs = {
-  specs: t.TestSuiteModel[];
   modifiers: t.KeyboardModifierFlags;
 };
 
