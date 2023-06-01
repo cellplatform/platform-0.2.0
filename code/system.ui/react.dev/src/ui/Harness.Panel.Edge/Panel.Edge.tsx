@@ -22,6 +22,7 @@ export const PanelEdge: React.FC<PanelBarProps> = (props) => {
       Padding: current?.padding,
       borderTop: edge === 'Footer' ? Wrangle.borderStyle(current) : undefined,
       borderBottom: edge === 'Header' ? Wrangle.borderStyle(current) : undefined,
+      overflowX: 'hidden',
     }),
   };
 
