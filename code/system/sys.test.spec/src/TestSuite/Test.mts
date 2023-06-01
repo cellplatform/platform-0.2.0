@@ -1,6 +1,7 @@
-import { Is, Total, Transform, Tree } from '../TestSuite.helpers';
+import { Is, Stats, Total, Transform, Tree } from '../TestSuite.helpers';
 import { bundle } from './Test.bundle.mjs';
 import { Def } from './TestSuiteModel.mjs';
+
 import { type t } from './common';
 
 const describe = Def.variants();
@@ -12,6 +13,7 @@ export const Test: t.Test = {
   Is,
   Tree,
   Total,
+  Stats,
 
   using: Transform,
   describe,

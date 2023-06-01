@@ -132,12 +132,25 @@ describe('Stats', () => {
       e.it('two', (e) => {});
     });
 
-    it('stats list', async () => {
+    it('stats (list)', async () => {
       const { stats } = await toResults(root);
       const res = Stats.merge([stats, stats, stats]);
-
       expect(stats).to.eql({ total: 5, passed: 1, failed: 1, skipped: 1, only: 2 });
       expect(res).to.eql({ total: 15, passed: 3, failed: 3, skipped: 3, only: 6 });
+    });
+
+    it('stats (list)', async () => {
+      const { stats, results } = await toResults(root);
+      const res = Stats.merge([results, results, results]);
+      expect(stats).to.eql({ total: 5, passed: 1, failed: 1, skipped: 1, only: 2 });
+      expect(res).to.eql({ total: 15, passed: 3, failed: 3, skipped: 3, only: 6 });
+    });
+
+    it('empty []', async () => {
+      const res1 = Stats.merge();
+      const res2 = Stats.merge([]);
+      expect(res1).to.eql(Stats.empty);
+      expect(res2).to.eql(Stats.empty);
     });
   });
 });

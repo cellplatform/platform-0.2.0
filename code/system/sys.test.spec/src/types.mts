@@ -1,3 +1,4 @@
+import type { Stats } from './TestSuite.helpers/Stats.mjs';
 import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
 import type { Tree } from './TestSuite.helpers/Tree.mjs';
@@ -26,6 +27,7 @@ export type Test = {
   Is: TestIs;
   Tree: typeof Tree;
   Total: typeof Total;
+  Stats: typeof Stats;
   describe: TestSuiteDescribe;
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;

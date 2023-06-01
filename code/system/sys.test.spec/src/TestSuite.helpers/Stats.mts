@@ -1,5 +1,6 @@
 import { t } from '../common';
 import { Tree } from './Tree.mjs';
+import { Is } from './Is.mjs';
 
 export const Stats = {
   /**
@@ -36,8 +37,10 @@ export const Stats = {
   /**
    * Merge a list of results into a single stats object.
    */
-  merge(list: t.TestSuiteRunStats[]): t.TestSuiteRunStats {
+  merge(input: (t.TestSuiteRunStats | t.TestSuiteRunResponse)[] = []): t.TestSuiteRunStats {
+    const list = input.map((item) => (Is.results(item) ? item.stats : item));
     const res: t.TestSuiteRunStats = Stats.empty;
+
     list.forEach((item) => {
       res.total += item.total;
       res.passed += item.passed;
@@ -45,6 +48,7 @@ export const Stats = {
       res.skipped += item.skipped;
       res.only += item.only;
     });
+
     return res;
   },
 };
