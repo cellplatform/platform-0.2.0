@@ -6,3 +6,4 @@ export * from './TestTree.mjs';
 export * from './ResultTree.mjs';
 export * from './Stats.mjs';
 export * from './Transform.mjs';
+export * from './Total.mjs';
