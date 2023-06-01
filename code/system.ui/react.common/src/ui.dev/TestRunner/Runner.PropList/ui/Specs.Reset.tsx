@@ -1,5 +1,5 @@
 import { Util } from '../Util.mjs';
-import { Button, css, t } from '../common';
+import { Button, Keyboard, css, t, useMouseState } from '../common';
 
 export type SpecsResetProps = {
   data: t.TestRunnerPropListData;
@@ -7,6 +7,14 @@ export type SpecsResetProps = {
 };
 
 export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
+  const mouse = useMouseState();
+  const keyboard = Keyboard.useKeyboardState();
+  const isMeta = keyboard.current.modifiers.meta;
+  const label = isMeta && mouse.isOver ? 'clear' : 'reset';
+
+  /**
+   * Handlers
+   */
   const handleResetClick = (e: React.MouseEvent) => {
     const specs = props.data?.specs ?? {};
     const modifiers = Util.modifiers(e);
@@ -17,12 +25,15 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({}),
+    base: css({
+      flex: 1,
+      Flex: 'horizontal-center-end',
+    }),
   };
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <Button onClick={handleResetClick}>{'reset'}</Button>
+    <div {...css(styles.base, props.style)} {...mouse.handlers}>
+      <Button onClick={handleResetClick}>{label}</Button>
     </div>
   );
 };
