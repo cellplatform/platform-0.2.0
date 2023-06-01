@@ -1,8 +1,8 @@
 import { Item } from './Item';
 import { Stateful } from './Root.Stateful';
-import { controller } from './Root.controller.mjs';
 import { DEFAULTS, FC, FIELDS } from './common';
 import { useController } from './hooks/useController.mjs';
+import { PropListController as controller } from './logic/Controller.mjs';
 import { PropList as View, type TestRunnerPropListProps } from './ui/PropList';
 import { PropListFieldSelector as FieldSelector } from './ui/PropList.FieldSelector';
 

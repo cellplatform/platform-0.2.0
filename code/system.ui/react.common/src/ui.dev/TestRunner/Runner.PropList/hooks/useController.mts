@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { controller } from '../Root.controller.mjs';
+import { PropListController } from '../logic/Controller.mjs';
 import { rx, t } from '../common';
 
 export function useController(args: {
@@ -13,7 +13,7 @@ export function useController(args: {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    controller(args.initial).then((ctrl) => {
+    PropListController(args.initial).then((ctrl) => {
       const update = () => setData(ctrl.current);
       update();
       ctrl.$.pipe(rx.takeUntil(dispose$)).subscribe((e) => {

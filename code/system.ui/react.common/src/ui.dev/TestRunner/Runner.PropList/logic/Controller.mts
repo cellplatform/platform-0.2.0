@@ -1,11 +1,11 @@
-import { State } from './Root.controller.State.mjs';
-import { Util } from './Util.mjs';
-import { Test, rx, t } from './common';
+import { Util } from '../Util.mjs';
+import { Test, rx, t } from '../common';
+import { State } from './Controller.State.mjs';
 
 /**
  * Default controller for the TestRunnerPropList component.
  */
-export async function controller(initial?: t.TestRunnerPropListData) {
+export async function PropListController(initial?: t.TestRunnerPropListData) {
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
 

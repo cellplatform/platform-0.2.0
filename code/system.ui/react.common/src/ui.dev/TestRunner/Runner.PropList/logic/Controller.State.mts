@@ -1,4 +1,4 @@
-import { R, t } from './common';
+import { R, t } from '../common';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
@@ -26,7 +26,6 @@ export async function State(initial?: t.TestRunnerPropListData) {
     /**
      * Mutation methods:
      */
-
     selectSpec(hash: string) {
       const selected = api.specs.selected ?? [];
       if (!selected.includes(hash)) {
