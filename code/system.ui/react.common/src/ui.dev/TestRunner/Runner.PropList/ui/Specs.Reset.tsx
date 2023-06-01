@@ -10,7 +10,8 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
   const mouse = useMouseState();
   const keyboard = Keyboard.useKeyboardState();
   const isMeta = keyboard.current.modifiers.meta;
-  const label = isMeta && mouse.isOver ? 'clear' : 'reset';
+  const isClear = isMeta && mouse.isOver;
+  const label = isClear ? 'clear' : 'all';
 
   /**
    * Handlers
@@ -25,15 +26,15 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      flex: 1,
-      Flex: 'horizontal-center-end',
-    }),
+    base: css({ flex: 1, Flex: 'horizontal-center-end' }),
+    button: css({ marginRight: isClear ? 0 : 5 }),
   };
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <Button onClick={handleResetClick}>{label}</Button>
+      <Button onClick={handleResetClick} style={styles.button}>
+        {label}
+      </Button>
     </div>
   );
 };
