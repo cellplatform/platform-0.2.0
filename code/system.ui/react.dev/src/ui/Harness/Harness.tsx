@@ -10,7 +10,7 @@ import {
   useRubberband,
   useSizeObserver,
 } from '../common';
-import { DebugPanel } from '../Harness.DebugPanel';
+import { DebugPanel } from '../Harness.Panel.Debug';
 import { HarnessHost } from '../Harness.Host';
 
 type Size = { width: number; height: number };
