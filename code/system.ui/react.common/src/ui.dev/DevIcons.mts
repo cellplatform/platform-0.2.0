@@ -9,12 +9,12 @@ import {
   MdNotStarted,
   MdPlayArrow,
   MdPlayCircle,
+  MdPlayCircleOutline,
   MdReplay,
   MdSlowMotionVideo,
   MdToggleOff,
   MdToggleOn,
   MdWarning,
-  MdPlayCircleOutline,
 } from 'react-icons/md';
 import { TbPrompt } from 'react-icons/tb';
 import { VscSymbolVariable } from 'react-icons/vsc';
