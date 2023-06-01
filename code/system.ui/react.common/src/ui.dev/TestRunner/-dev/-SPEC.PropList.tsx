@@ -79,6 +79,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     const getSize = (): [number, null] => [state.current.props.card ? 330 : 330, null];
     ctx.host.tracelineColor(-0.05);
+    ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
       .size(getSize())
