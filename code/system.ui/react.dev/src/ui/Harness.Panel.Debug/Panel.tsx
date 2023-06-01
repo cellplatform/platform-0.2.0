@@ -1,5 +1,5 @@
 import { Color, css, R, t, useCurrentState } from '../common';
-import { PanelFooter, PanelHeader } from '../Harness.PanelEdge';
+import { PanelFooter, PanelHeader } from '../Harness.Panel.Edge';
 import { DebugPanelBody as Body } from './Panel.Body';
 
 export type DebugPanelProps = {

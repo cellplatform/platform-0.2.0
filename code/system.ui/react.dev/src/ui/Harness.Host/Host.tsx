@@ -1,10 +1,10 @@
 import { Color, COLORS, css, DEFAULTS, R, t, useCurrentState } from '../common';
-import { PanelFooter, PanelHeader } from '../Harness.PanelEdge';
+import { PanelFooter, PanelHeader } from '../Harness.Panel.Edge';
+import { BarLoader } from '../Spinners';
 import { HostBackground } from './Host.Background';
 import { HostComponent } from './Host.Component';
 import { HostGrid } from './Host.Grid';
 import { HostLayers } from './Host.Layers';
-import { BarLoader } from '../Spinners';
 
 const DEFAULT = DEFAULTS.props.host;
 
