@@ -9,10 +9,10 @@ export const Item = {
   /**
    * Generates a <PropList> item for running unit tests.
    */
-  runner(args: { get: t.GetTestSuite; label?: string; infoUrl?: string }): t.PropListItem {
+  runner(args: { bundle: t.GetTestBundle; label?: string; infoUrl?: string }): t.PropListItem {
     return {
       label: <TestRunnerLabel title={args.label} infoUrl={args.infoUrl} />,
-      value: <TestRunner get={args.get} />,
+      value: <TestRunner bundle={args.bundle} />,
     };
   },
 };

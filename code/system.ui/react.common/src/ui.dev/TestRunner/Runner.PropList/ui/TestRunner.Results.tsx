@@ -1,14 +1,15 @@
-import { Value, COLORS, css, t, Time, DevIcons } from '../common';
+import { COLORS, DevIcons, Test, Time, Value, css, t } from '../common';
 
-export type ResultsLabelProps = {
+export type ResultsProps = {
   isColored?: boolean;
   isOver?: boolean;
-  results?: t.TestSuiteRunResponse;
+  results?: t.TestSuiteRunResponse[];
   style?: t.CssValue;
 };
 
-export const ResultsLabel: React.FC<ResultsLabelProps> = (props) => {
-  const { results, isOver = false, isColored = true } = props;
+export const Results: React.FC<ResultsProps> = (props) => {
+  const { results = [], isOver = false, isColored = true } = props;
+  const stats = Test.Stats.merge(results);
   const showRunAgain = isOver && Boolean(results);
   const asColor = (color: string) => (isColored ? color : COLORS.DARK);
 
@@ -34,7 +35,7 @@ export const ResultsLabel: React.FC<ResultsLabelProps> = (props) => {
   /**
    * No results (first run required)
    */
-  if (!results || results.stats.total === 0) {
+  if (!results || stats.total === 0) {
     return (
       <div {...styles.base}>
         <DevIcons.Test.Run size={12} style={styles.runIcon} /> {'run tests'}
@@ -45,10 +46,10 @@ export const ResultsLabel: React.FC<ResultsLabelProps> = (props) => {
   /**
    * Results exist.
    */
-  const { stats } = results;
   const { passed, failed } = stats;
   const skipped = stats.skipped + stats.only;
-  const elapsed = Time.duration(results.elapsed);
+  const msecs = results.map((e) => e.elapsed).reduce((acc, msecs) => acc + msecs, 0);
+  const elapsed = Time.duration(msecs);
 
   const items: JSX.Element[] = [];
   const push = (el: JSX.Element) => {
@@ -107,7 +108,6 @@ export const ResultsLabel: React.FC<ResultsLabelProps> = (props) => {
 /**
  * [Helpers]
  */
-
 const Wrangle = {
   title(total: number, suffix: string) {
     const tests = Value.plural(total, 'test', 'tests');

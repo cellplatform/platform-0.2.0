@@ -11,12 +11,12 @@ import {
   t,
   useMouseState,
 } from '../common';
-import { ResultsLabel } from './Results.Label';
+import { Results } from './TestRunner.Results';
 
 type Milliseconds = number;
 
 export type TestRunnerProps = {
-  get: t.GetTestSuite;
+  bundle: t.GetTestBundle;
   style?: t.CssValue;
 };
 
@@ -25,7 +25,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const isOver = mouse.isOver;
 
   const [isRunning, setRunning] = useState(false);
-  const [results, setResults] = useState<t.TestSuiteRunResponse>();
+  const [results, setResults] = useState<t.TestSuiteRunResponse[]>([]);
   const [runAtTime, setRunAtTime] = useState<Milliseconds>();
   const [isColoredText, setColoredText] = useState(false);
 
@@ -40,7 +40,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       const update = () => {
         const isExpired = expired();
         setColoredText(!isExpired);
-        if (isExpired) dispose(); // Stop the timer when the "colored text" delay has expired.
+        if (isExpired) dispose(); // Stop timer when the "colored text" delay has expired.
       };
 
       rx.interval(300).pipe(rx.takeUntil(dispose$)).subscribe(update);
@@ -51,7 +51,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   }, [runAtTime]);
 
   const logResults = (res: t.TestSuiteRunResponse) => {
-    console.group('🌳 Test Run');
+    console.group(`🌳 Run: ${res.description}`);
     console.info('ok', res.ok);
     console.info('stats', res.stats);
     console.info('root', res);
@@ -59,12 +59,6 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       if (!e.test) return;
       if (e.test?.ok) return;
       console.warn(`${e.suite.description} > ${e.test.description}`);
-
-      /**
-       * TODO 🐷
-       * - include [e.parent] property, to allow for walking up the tree.
-       * - toString() => "root > suite > test"
-       */
     });
     console.groupEnd();
   };
@@ -72,14 +66,19 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const runTests = async () => {
     if (isRunning) return;
     setRunning(true);
-    setResults(undefined);
+    setResults([]);
+    await Time.wait(0); // NB: allow UI to update.
 
-    await Time.wait(0); // Allow UI to update.
-    const { root, ctx, timeout } = await props.get();
-    const res = await root.run({ ctx, timeout });
+    const { specs, ctx, timeout } = await props.bundle();
+    const results: t.TestSuiteRunResponse[] = [];
 
-    logResults(res);
-    setResults(res);
+    for (const suite of specs) {
+      const res = await suite.run({ ctx, timeout });
+      results.push(res);
+      logResults(res);
+    }
+
+    setResults(results);
     setRunAtTime(Time.now.timestamp);
     setRunning(false);
   };
@@ -101,7 +100,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTests}>
-      <ResultsLabel results={results} isColored={isColoredText} isOver={isOver} />
+      <Results results={results} isColored={isColoredText} isOver={isOver} />
     </Button>
   );
 

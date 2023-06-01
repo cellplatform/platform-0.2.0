@@ -6,15 +6,15 @@ export function FieldTestsRun(args: {
   data: t.TestRunnerPropListData;
 }): t.PropListItem | undefined {
   const data = args.data?.run;
-  if (!data || !data.get) return;
+  if (!data || !data.bundle) return;
 
-  const { get } = data;
+  const { bundle } = data;
   const label = typeof data.label === 'function' ? data.label() : data.label;
   const infoUrl = typeof data.infoUrl === 'function' ? data.infoUrl() : data.infoUrl;
 
   return Item.runner({
     infoUrl, // 🌳 ← Any view address that contains further details about the test run. (info) icon.
     label,
-    get,
+    bundle,
   });
 }

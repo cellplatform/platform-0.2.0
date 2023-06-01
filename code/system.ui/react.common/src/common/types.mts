@@ -27,6 +27,7 @@ export type {
   TestSuiteRunResponse,
   TestRunResponse,
   TestHandlerArgs,
+  TestSuiteRunStats,
   SpecImports,
   SpecImport,
 } from 'sys.test.spec/src/types.mjs';

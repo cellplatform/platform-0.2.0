@@ -22,7 +22,7 @@ export type TestRunnerPropListData = {
 export type TestRunnerPropListRunData = {
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
-  get?: t.GetTestSuite;
+  bundle?: t.GetTestBundle;
 };
 
 export type TestRunnerPropListSpecsData = {

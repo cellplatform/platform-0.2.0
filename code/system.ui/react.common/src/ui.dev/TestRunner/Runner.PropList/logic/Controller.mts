@@ -1,5 +1,5 @@
 import { Util } from '../Util.mjs';
-import { Test, rx, t } from '../common';
+import { rx, t } from '../common';
 import { State } from './Controller.State.mjs';
 
 /**
@@ -76,11 +76,10 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
   /**
    * Create a bundle of the currently selected specs.
    */
-  const bundle: t.GetTestSuite = async () => {
+  const bundle: t.GetTestBundle = async () => {
     const specs = await api.selected.specs();
     const ctx = Wrangle.ctx(state.current.specs!);
-    const root = await Test.bundle(specs);
-    return { root, ctx };
+    return { specs, ctx };
   };
 
   /**
@@ -96,6 +95,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     get current(): t.TestRunnerPropListData {
       return {
         ...state.current,
+        run: { ...state.current.run, bundle },
         specs: {
           ...state.current.specs,
           onSelect,

@@ -8,9 +8,9 @@ export * from './Runner.PropList/types.mjs';
 /**
  * Retrieve a test model (suite | "describe").
  */
-export type GetTestSuite = () => Promise<GetTestSuitePayload>;
-export type GetTestSuitePayload = {
-  root: t.TestSuiteModel;
+export type GetTestBundle = () => Promise<GetTestBundleResponse>;
+export type GetTestBundleResponse = {
+  specs: t.TestSuiteModel[];
   ctx?: Ctx;
   timeout?: Milliseconds;
 };

@@ -46,11 +46,14 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
     const infoUrl = '?dev=sys.ui.dev.TestRunner.PropList';
     const controller = await Dev.TestRunner.PropList.controller({
+      /**
+       * Initial data.
+       */
       pkg: Pkg,
       run: {
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        get: () => controller.selected.bundle(),
+        bundle: () => controller.selected.bundle(),
       },
       specs: {
         ellipsis: () => state.current.debug.ellipsis,
