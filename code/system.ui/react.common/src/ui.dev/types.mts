@@ -1,5 +1,5 @@
 export * from './Dev.CmdHost/types.mjs';
-export * from './DevSplash/types.mjs';
+export * from './Dev.Splash/types.mjs';
 
 export * from './DevTools/types.mjs';
 export * from './DevTools.Boolean/types.mjs';

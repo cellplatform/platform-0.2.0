@@ -1,7 +1,7 @@
 import { Lorem } from '../../ui.tools';
 import { ObjectView } from '../../ui/ObjectView';
 import { DevIcons as Icons } from '../DevIcons.mjs';
-import { DevSplash as Splash } from '../DevSplash';
+import { DevSplash as Splash } from '../Dev.Splash';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
 import { DEFAULTS, DevBase, LocalStorage, Test, Value } from '../common';
