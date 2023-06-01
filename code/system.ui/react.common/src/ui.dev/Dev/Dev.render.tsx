@@ -1,5 +1,5 @@
 import { COLORS, t, DevBase, DevWrangle, DevKeyboard } from '../common';
-import { CmdHostStateful } from '../CmdHost';
+import { CmdHostStateful } from '../Dev.CmdHost';
 import { KeyboardActions } from './Keyboard.mjs';
 
 type EscapeAction = 'ReloadRootUrl';

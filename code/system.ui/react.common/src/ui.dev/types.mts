@@ -1,4 +1,4 @@
-export * from './CmdHost/types.mjs';
+export * from './Dev.CmdHost/types.mjs';
 export * from './DevSplash/types.mjs';
 
 export * from './DevTools/types.mjs';
