@@ -369,28 +369,33 @@ describe('TestSuiteModel', () => {
     it('{ beforeEach, afterEach } parameter', async () => {
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => {});
-        e.it('bar', async (e) => {
-          await Time.wait(5);
-          throw new Error('Fail');
+        e.describe('child', (e) => {
+          e.it('bar', async (e) => {
+            await Time.wait(5);
+            throw new Error('Fail');
+          });
         });
       });
 
       const beforeEach: t.BeforeRunTestArgs[] = [];
       const afterEach: t.AfterRunTestArgs[] = [];
-      await root.run({
+      const res = await root.run({
         beforeEach: (e) => beforeEach.push(e),
         afterEach: (e) => afterEach.push(e),
       });
 
+      expect(res.ok).to.eql(false);
       const test1 = root.state.tests[0];
-      const test2 = root.state.tests[1];
+      const test2 = root.state.children[0].state.tests[0];
 
+      // Before
       expect(beforeEach.length).to.eql(2);
       expect(beforeEach[0].description).to.eql('foo');
       expect(beforeEach[1].description).to.eql('bar');
       expect(beforeEach[0].id).to.eql(test1.id);
       expect(beforeEach[1].id).to.eql(test2.id);
 
+      // After
       expect(afterEach.length).to.eql(2);
       expect(afterEach[0].description).to.eql('foo');
       expect(afterEach[1].description).to.eql('bar');
@@ -437,14 +442,90 @@ describe('TestSuiteModel', () => {
 
     it('{ onProgress } callback', async () => {
       const root = Test.describe('root', (e) => {
-        e.describe('child-1', (e) => {
-          e.describe('child-2', (e) => {
-            e.it('foo', () => null);
+        e.it('foo', (e) => {});
+        e.describe('child', (e) => {
+          e.it('bar', async (e) => {
+            await Time.wait(5);
+            throw Error('foo');
           });
+          e.it.skip('skipped', async (e) => {});
         });
       });
 
-      const res = await root.run({});
+      const fired: t.SuiteRunProgressArgs[] = [];
+      const res = await root.run({
+        onProgress: (e) => fired.push(e),
+      });
+
+      expect(res.ok).to.eql(false);
+
+      const ops = fired.map((e) => e.op);
+      expect(ops).to.eql([
+        'run:suite:start',
+        'run:test:before',
+        'run:test:after',
+        'run:test:before',
+        'run:test:after',
+        'run:suite:complete',
+      ]);
+
+      const op1 = fired[0];
+      const op2 = fired[1];
+      const op3 = fired[2];
+      const op4 = fired[3];
+      const op5 = fired[4];
+      const op6 = fired[5];
+
+      const expectProgress = (
+        op: t.SuiteRunProgressArgs,
+        total: number,
+        completed: number,
+        percent: number,
+      ) => {
+        expect(op.progress.total).to.eql(total);
+        expect(op.progress.completed).to.eql(completed);
+        expect(op.progress.percent).to.eql(percent);
+      };
+
+      const expectTotal = (op: t.SuiteRunProgressArgs) =>
+        expect(op.total).to.eql({
+          total: 3,
+          runnable: 2,
+          skipped: 1,
+          only: 0,
+        });
+
+      // Start - BeforeAll
+      expect(op1.op).to.eql('run:suite:start');
+      expect(op1.id.suite).to.eql(root.id);
+      expect(op1.id.tx).to.eql(res.tx);
+      expect(op1.elapsed).to.greaterThanOrEqual(0);
+      expectTotal(op1);
+      expectProgress(op1, 2, 0, 0);
+
+      // Test-1
+      expect(op2.op).to.eql('run:test:before');
+      expectTotal(op2);
+      expectProgress(op2, 2, 0, 0);
+
+      expect(op3.op).to.eql('run:test:after');
+      expectTotal(op3);
+      expectProgress(op3, 2, 1, 0.5);
+
+      // Test-2
+      expect(op4.op).to.eql('run:test:before');
+      expectTotal(op4);
+      expectProgress(op4, 2, 1, 0.5);
+
+      expect(op5.op).to.eql('run:test:after');
+      expectTotal(op5);
+      expectProgress(op5, 2, 2, 1);
+
+      // Complete - AfterAll
+      expect(op6.op).to.eql('run:suite:complete');
+      expectTotal(op6);
+      expectProgress(op6, 2, 2, 1);
+      expect(op6.elapsed).to.greaterThanOrEqual(1);
     });
 
     it('unique "tx" identifier for each suite run operation', async () => {
