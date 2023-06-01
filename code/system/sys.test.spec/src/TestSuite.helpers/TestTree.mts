@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { t } from '../common';
 import { Is } from './Is.mjs';
 
 export type SuiteFindArgs = { suite: t.TestSuiteModel; test?: t.TestModel };

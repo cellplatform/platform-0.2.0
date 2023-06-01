@@ -1,34 +1,34 @@
-import { Test } from '../index.mjs';
-import { describe, expect, it, t } from '../test';
-import { TestTree, SuiteWalkDownArgs, SuiteWalkUpArgs } from '.';
+import { SuiteWalkDownArgs, SuiteWalkUpArgs, TestTree } from '.';
+import { describe, expect, it, t, Test } from '../test';
 
 type T = t.TestSuiteModel | t.TestModel;
 
-describe('TestTree ("Hierarchy")', () => {
-  const createRoot = async () => {
-    const root = await Test.describe('root', (e) => {
-      e.it('1', (e) => null);
-      e.describe('2', (e) => {
-        e.it('2.1', () => null);
-        e.describe('2.2', (e) => {
-          e.describe('2.2.1', (e) => {
-            e.it('2.2.1.1');
-            e.it('2.2.1.2');
-          });
+export const createRoot = async () => {
+  const root = Test.describe('root', (e) => {
+    e.it('1', (e) => null);
+    e.describe('2', (e) => {
+      e.it('2.1', () => null);
+      e.describe('2.2', (e) => {
+        e.describe('2.2.1', (e) => {
+          e.it('2.2.1.1');
+          e.it('2.2.1.2');
         });
       });
-      e.it('3', (e) => null);
-    }).init();
+    });
+    e.it('3', (e) => null);
+  });
 
-    const findSuite = (description: string) =>
-      TestTree.findOne(root, (e) => e.suite.toString() === description).suite;
+  const findSuite = (description: string) =>
+    TestTree.findOne(root, (e) => e.suite.toString() === description).suite;
 
-    const findTest = (description: string) =>
-      TestTree.findOne(root, (e) => e.test?.toString() === description).test;
+  const findTest = (description: string) =>
+    TestTree.findOne(root, (e) => e.test?.toString() === description).test;
 
-    return { root, findSuite, findTest };
-  };
+  await root.init();
+  return { root, findSuite, findTest };
+};
 
+describe('TestTree ("Hierarchy")', () => {
   it('parent', async () => {
     const { root, findTest, findSuite } = await createRoot();
 
