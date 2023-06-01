@@ -1,5 +1,6 @@
 import { Constraints, Stats, TestTree } from '../TestSuite.helpers';
 import { TestModel } from './TestModel.mjs';
+import { Progress } from './TestSuiteModel.Progress.mjs';
 import { DEFAULT, Delete, Hash, Time, slug, t } from './common';
 
 type LazyParent = () => t.TestSuiteModel;
@@ -33,8 +34,7 @@ export const TestSuiteModel = (args: {
 }): t.TestSuiteModel => {
   const { parent, description } = args;
   const id = `TestSuite.${slug()}`;
-
-  const hashes = {
+  const hashCache = {
     sha1: '',
     sha256: '',
   };
@@ -49,10 +49,11 @@ export const TestSuiteModel = (args: {
     return suite;
   };
 
-  const runSuite = (model: t.TestSuiteModel, options: t.TestSuiteRunOptions = {}) => {
-    const { deep = true, ctx, beforeEach, afterEach, noop } = options;
+  type R = t.TestSuiteRunResponse;
+  type O = t.TestSuiteRunOptions;
+  const runSuite = (model: t.TestSuiteModel, options: O = {}) => {
+    const { deep = true, ctx, noop, beforeEach, afterEach } = options;
 
-    type R = t.TestSuiteRunResponse;
     return new Promise<R>(async (resolve) => {
       const tx = `run.suite.tx.${slug()}`;
       const res: R = {
@@ -71,35 +72,53 @@ export const TestSuiteModel = (args: {
       const tests = model.state.tests;
       const childSuites = model.state.children;
 
+      const progress = Progress(options.onProgress, { model, tx, beforeEach, afterEach });
+      const before = progress.before;
+      const after = progress.after;
+
       const getTimeout = () => options.timeout ?? model.state.timeout ?? DEFAULT.TIMEOUT;
       const timer = Time.timer();
 
-      const done = () => {
-        res.elapsed = timer.elapsed.msec;
-        if (res.tests.some(({ error }) => Boolean(error))) res.ok = false;
-        if (res.children.some(({ ok }) => !ok)) res.ok = false;
-        res.stats = Stats.suite(res);
-        resolve(Delete.undefined(res));
-      };
+      /**
+       * Execute Tests.
+       */
+      progress.beforeAll();
 
       for (const test of tests) {
         if (options.only && !options.only.includes(test.id)) continue;
         const timeout = getTimeout();
         const excluded = Constraints.exclusionModifiers(test);
-        const before = beforeEach;
-        const after = afterEach;
         res.tests.push(await test.run({ timeout, excluded, ctx, before, after, noop }));
       }
 
+      /**
+       * Execute child suites.
+       */
       if (deep && childSuites.length > 0) {
         for (const childSuite of childSuites) {
-          const { only } = options;
           const timeout = childSuite.state.timeout ?? getTimeout();
-          res.children.push(await childSuite.run({ timeout, only, ctx, noop })); // <== RECURSION 🌳
+          const result = await childSuite.run({
+            ...options,
+            timeout,
+            onProgress: undefined, // NB: Child suites do not report progress (handled completely from root suite).
+            beforeEach: before,
+            afterEach: after,
+          });
+          res.children.push(result); // <== RECURSION 🌳
         }
       }
 
-      done();
+      /**
+       * Done.
+       */
+      res.elapsed = timer.elapsed.msec;
+      if (res.tests.some(({ error }) => Boolean(error))) res.ok = false;
+      if (res.children.some(({ ok }) => !ok)) res.ok = false;
+      res.stats = Stats.suite(res);
+
+      // Finish up.
+      progress.afterAll();
+      resolve(Delete.undefined(res));
     });
   };
 
@@ -156,6 +175,7 @@ export const TestSuiteModel = (args: {
     },
 
     init: () => init(model),
+
     async run(options) {
       return runSuite(model, options);
     },
@@ -182,8 +202,8 @@ export const TestSuiteModel = (args: {
     },
 
     hash(algo = 'SHA1') {
-      if (hashes.sha1 && algo === 'SHA1') return hashes.sha1;
-      if (hashes.sha256 && algo === 'SHA256') return hashes.sha256;
+      if (hashCache.sha1 && algo === 'SHA1') return hashCache.sha1;
+      if (hashCache.sha256 && algo === 'SHA256') return hashCache.sha256;
 
       const identity: string[] = [];
       TestTree.walkDown(model, (e) => {
@@ -198,8 +218,8 @@ export const TestSuiteModel = (args: {
       const res = `suite:${hash}`;
       if (model.ready) {
         // Cache result when fully initialized.
-        if (algo === 'SHA1') hashes.sha1 = res;
-        if (algo === 'SHA256') hashes.sha256 = res;
+        if (algo === 'SHA1') hashCache.sha1 = res;
+        if (algo === 'SHA256') hashCache.sha256 = res;
       }
       return res;
     },
