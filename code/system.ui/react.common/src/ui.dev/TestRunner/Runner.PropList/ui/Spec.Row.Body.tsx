@@ -54,7 +54,7 @@ export const Body: React.FC<BodyProps> = (props) => {
     icon: css({
       float: 'left',
       marginRight: 2,
-      color: isColored ? Wrangle.iconColor(ok) : undefined,
+      color: isColored || isOver ? Wrangle.iconColor(ok) : undefined,
       transition: 'color 0.2s ease-in-out',
     }),
   };
@@ -109,8 +109,7 @@ const Wrangle = {
     return typeof results === 'object' ? results.ok : undefined;
   },
 
-  iconColor(ok?: boolean) {
-    //
+  iconColor(ok?: boolean, isOver?: boolean) {
     if (ok === undefined) return COLORS.DARK;
     return ok ? COLORS.GREEN : COLORS.RED;
   },
