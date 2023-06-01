@@ -10,7 +10,6 @@
     "count": "ts-node-esm   -T script.ts/cmd.count.mts",
     "nuke": "ts-node-esm    -T script.ts/cmd.nuke.mts",
     "tmp": "ts-node-esm     -T script.ts/tmp.mts",
-    "ext": "ts-node-esm     -T script.ts/tmp.ext.mts",
     "mit": "fossa analyze --debug",
     "ci": "yarn audit && yarn build && yarn test && yarn count"
   },
