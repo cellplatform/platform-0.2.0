@@ -1,3 +1,4 @@
+import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
 import type { Tree } from './TestSuite.helpers/Tree.mjs';
 import type { t } from './common.t';
@@ -24,6 +25,7 @@ export type SpecImports = { [namespace: string]: () => SpecImport };
 export type Test = {
   Is: TestIs;
   Tree: typeof Tree;
+  Total: typeof Total;
   describe: TestSuiteDescribe;
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
@@ -142,6 +144,7 @@ export type TestSuiteRunOptions = {
   only?: TestModel['id'][]; // Override: a set of spec IDs to filter on, excluding all others.
   beforeEach?: BeforeRunTest;
   afterEach?: AfterRunTest;
+  onProgress?: SuiteRunProgress;
   noop?: boolean; // Produces a result-tree without executing any of the actual test functions.
 };
 export type TestSuiteRunResponse = {
@@ -157,9 +160,16 @@ export type TestSuiteRunResponse = {
 };
 
 export type TestSuiteRunStats = {
-  total: number;
+  total: number; // The total number of tests that ran.
   passed: number;
   failed: number;
+  skipped: number;
+  only: number;
+};
+
+export type TestSuiteTotal = {
+  total: number;
+  runnable: number; // NB: Total runnable tests, excluding skipped tests
   skipped: number;
   only: number;
 };
@@ -179,4 +189,39 @@ export type AfterRunTestArgs = {
   description: string;
   result: t.TestRunResponse;
 };
+
+/**
+ * Handlers that report progress during a run operation.
+ */
+export type SuiteRunProgress = (e: SuiteRunProgressArgs) => void;
+export type SuiteRunProgressArgs =
+  | SuiteRunProgressStart
+  | SuiteRunProgressBeforeTest
+  | SuiteRunProgressAfterTest
+  | SuiteRunProgressComplete;
+
+type TestSuiteRunCommon = {
+  id: { suite: SuiteId; tx: Id };
+  progress: { percent: number; total: number; completed: number };
+  total: t.TestSuiteTotal;
+  elapsed: Milliseconds;
+};
+
+export type SuiteRunProgressStart = TestSuiteRunCommon & {
+  op: 'run:suite:start';
+};
+
+export type SuiteRunProgressBeforeTest = TestSuiteRunCommon & {
+  op: 'run:test:before';
+  description: string;
+};
+
+export type SuiteRunProgressAfterTest = TestSuiteRunCommon & {
+  op: 'run:test:after';
+  description: string;
+  result: t.TestRunResponse;
+};
+
+export type SuiteRunProgressComplete = TestSuiteRunCommon & {
+  op: 'run:suite:complete';
 };
