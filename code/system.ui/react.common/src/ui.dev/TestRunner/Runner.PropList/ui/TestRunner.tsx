@@ -16,14 +16,14 @@ import { Results } from './TestRunner.Results';
 type Milliseconds = number;
 
 export type TestRunnerProps = {
-  bundle: t.GetTestBundle;
+  data: t.TestRunnerPropListData;
   style?: t.CssValue;
 };
 
 export const TestRunner: React.FC<TestRunnerProps> = (props) => {
+  const run = props.data.run;
   const mouse = useMouseState();
   const isOver = mouse.isOver;
-
   const [isRunning, setRunning] = useState(false);
   const [results, setResults] = useState<t.TestSuiteRunResponse[]>([]);
   const [runAtTime, setRunAtTime] = useState<Milliseconds>();
@@ -64,12 +64,12 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   };
 
   const runTests = async () => {
-    if (isRunning) return;
+    if (isRunning || !run?.bundle) return;
     setRunning(true);
     setResults([]);
     await Time.wait(0); // NB: allow UI to update.
 
-    const { specs, ctx, timeout } = await props.bundle();
+    const { specs, ctx, timeout } = await run.bundle();
     const results: t.TestSuiteRunResponse[] = [];
 
     for (const suite of specs) {

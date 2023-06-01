@@ -6,6 +6,7 @@ export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
   data: t.TestRunnerPropListData;
 }): t.PropListItem[] {
+  const run = args.data?.run;
   const specs = args.data?.specs;
   if (!specs?.all || specs.all.length === 0) return [];
 
@@ -16,7 +17,7 @@ export function FieldTestsSelector(args: {
           data={args.data}
           import={spec}
           onSelectionChange={specs.onSelect}
-          onRunClick={specs.onRunSpec}
+          onRunClick={run?.onRunSingle}
         />
       ),
     };

@@ -30,14 +30,14 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     if (!e.to) state.unselectSpec(hash);
 
     // Bubble event.
-    initial?.specs?.onSelect?.(e);
     fire('selection');
+    initial?.specs?.onSelect?.(e);
   };
 
   /**
    * Handle "run" button being clicked.
    */
-  const onRunSpec: t.SpecRunClickHandler = async (e) => {
+  const onRunSingle: t.SpecRunClickHandler = async (e) => {
     const hash = e.spec.hash();
     state.selectSpec(hash); // NB: Additive to the selection (when run).
 
@@ -51,8 +51,17 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     state.runComplete(e.spec, res);
 
     // Bubble event.
-    initial?.specs?.onRunSpec?.(e);
     fire('run:single:complete');
+    initial?.run?.onRunSingle?.(e);
+  };
+
+  /**
+   * Handle the "run all" button being clicked.
+   */
+  const onRunAll: t.SpecRunAllClickHandler = async (e) => {
+
+    // Bubble event.
+    initial?.run?.onRunAll?.(e);
   };
 
   /**
@@ -69,8 +78,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     };
 
     // Bubble event.
-    initial?.specs?.onReset?.(e);
     fire('reset');
+    initial?.specs?.onReset?.(e);
   };
 
   /**
@@ -95,11 +104,15 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     get current(): t.TestRunnerPropListData {
       return {
         ...state.current,
-        run: { ...state.current.run, bundle },
+        run: {
+          ...state.current.run,
+          bundle,
+          onRunSingle,
+          onRunAll,
+        },
         specs: {
           ...state.current.specs,
           onSelect,
-          onRunSpec,
           onReset,
         },
       };

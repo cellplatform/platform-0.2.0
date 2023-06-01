@@ -47,13 +47,19 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     const infoUrl = '?dev=sys.ui.dev.TestRunner.PropList';
     const controller = await Dev.TestRunner.PropList.controller({
       /**
-       * Initial data.
+       * Initial state (passed into Controller).
        */
       pkg: Pkg,
       run: {
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
         bundle: () => controller.selected.bundle(),
+        async onRunSingle(e) {
+          console.info('⚡️ onRunSingle:', e);
+        },
+        async onRunAll(e) {
+          console.info('⚡️ onRunAll:', e);
+        },
       },
       specs: {
         ellipsis: () => state.current.debug.ellipsis,
@@ -66,9 +72,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         selected: local.selected,
         onSelect(e) {
           console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
-        },
-        async onRunSpec(e) {
-          console.info('⚡️ onRunSpec:', e);
         },
       },
     });
@@ -181,6 +184,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       const data = {
         ...e.state,
         'props.data.specs': e.state.props.data?.specs,
+        'props.data.specs.results': e.state.props.data?.specs?.results,
       };
       return <Dev.Object name={'TestRunner.PropList'} data={data} expand={1} />;
     });

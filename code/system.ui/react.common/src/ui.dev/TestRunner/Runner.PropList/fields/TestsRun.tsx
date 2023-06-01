@@ -1,20 +1,20 @@
-import { t } from '../common';
-import { Item } from '../Item';
+import type { t } from '../common';
+import { TestRunner } from '../ui/TestRunner';
+import { TestRunnerLabel } from '../ui/TestRunner.Label';
 
 export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];
   data: t.TestRunnerPropListData;
 }): t.PropListItem | undefined {
-  const data = args.data?.run;
-  if (!data || !data.bundle) return;
+  const data = args.data;
+  const run = data?.run;
+  if (!run || !run.bundle) return;
 
-  const { bundle } = data;
-  const label = typeof data.label === 'function' ? data.label() : data.label;
-  const infoUrl = typeof data.infoUrl === 'function' ? data.infoUrl() : data.infoUrl;
+  const label = typeof run.label === 'function' ? run.label() : run.label;
+  const infoUrl = typeof run.infoUrl === 'function' ? run.infoUrl() : run.infoUrl;
 
-  return Item.runner({
-    infoUrl, // 🌳 ← Any view address that contains further details about the test run. (info) icon.
-    label,
-    bundle,
-  });
+  return {
+    label: <TestRunnerLabel title={label} infoUrl={infoUrl} />,
+    value: <TestRunner data={data} />,
+  };
 }

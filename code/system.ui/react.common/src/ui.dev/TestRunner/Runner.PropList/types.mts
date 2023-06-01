@@ -23,6 +23,8 @@ export type TestRunnerPropListRunData = {
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
   bundle?: t.GetTestBundle;
+  onRunSingle?: SpecRunClickHandler;
+  onRunAll?: SpecRunAllClickHandler;
 };
 
 export type TestRunnerPropListSpecsData = {
@@ -32,7 +34,6 @@ export type TestRunnerPropListSpecsData = {
   ellipsis?: boolean | (() => boolean | undefined);
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
   onSelect?: SpecsSelectionHandler;
-  onRunSpec?: SpecRunClickHandler;
   onReset?: SpecsSelectionResetHandler;
 };
 
@@ -56,6 +57,12 @@ export type SpecsSelectionResetHandlerArgs = {
 export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void;
 export type SpecRunClickHandlerArgs = {
   spec: t.TestSuiteModel;
+  modifiers: t.KeyboardModifierFlags;
+};
+
+export type SpecRunAllClickHandler = (e: SpecRunAllClickHandlerArgs) => void;
+export type SpecRunAllClickHandlerArgs = {
+  specs: t.TestSuiteModel[];
   modifiers: t.KeyboardModifierFlags;
 };
 
