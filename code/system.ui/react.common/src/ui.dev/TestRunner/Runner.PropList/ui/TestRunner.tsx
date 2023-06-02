@@ -1,16 +1,6 @@
 import { useEffect, useState } from 'react';
-import {
-  Button,
-  COLORS,
-  DEFAULTS,
-  Spinner,
-  Test,
-  Time,
-  css,
-  rx,
-  t,
-  useMouseState,
-} from '../common';
+import { Util } from '../Util.mjs';
+import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, t, useMouseState } from '../common';
 import { Results } from './TestRunner.Results';
 
 type Milliseconds = number;
@@ -21,11 +11,12 @@ export type TestRunnerProps = {
 };
 
 export const TestRunner: React.FC<TestRunnerProps> = (props) => {
-  const run = props.data.run;
+  const { data } = props;
   const mouse = useMouseState();
-  const isOver = mouse.isOver;
-  const [isRunning, setRunning] = useState(false);
-  const [results, setResults] = useState<t.TestSuiteRunResponse[]>([]);
+
+  const results = Wrangle.results(props);
+  const isRunning = Wrangle.isRunning(props);
+
   const [runAtTime, setRunAtTime] = useState<Milliseconds>();
   const [isColoredText, setColoredText] = useState(false);
 
@@ -50,37 +41,12 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     return dispose;
   }, [runAtTime]);
 
-  const logResults = (res: t.TestSuiteRunResponse) => {
-    console.group(`🌳 Run: ${res.description}`);
-    console.info('ok', res.ok);
-    console.info('stats', res.stats);
-    console.info('root', res);
-    Test.Tree.Results.walkDown(res, (e) => {
-      if (!e.test) return;
-      if (e.test?.ok) return;
-      console.warn(`${e.suite.description} > ${e.test.description}`);
-    });
-    console.groupEnd();
-  };
-
-  const runTests = async () => {
-    if (isRunning || !run?.bundle) return;
-    setRunning(true);
-    setResults([]);
-    await Time.wait(0); // NB: allow UI to update.
-
-    const { specs, ctx, timeout } = await run.bundle();
-    const results: t.TestSuiteRunResponse[] = [];
-
-    for (const suite of specs) {
-      const res = await suite.run({ ctx, timeout });
-      results.push(res);
-      logResults(res);
+  const runTestsClick = async (e: React.MouseEvent) => {
+    if (data.run) {
+      const modifiers = Util.modifiers(e);
+      await data.run.onRunAll?.({ modifiers });
+      setRunAtTime(Time.now.timestamp);
     }
-
-    setResults(results);
-    setRunAtTime(Time.now.timestamp);
-    setRunning(false);
   };
 
   /**
@@ -99,8 +65,8 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
 
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
-    <Button onClick={runTests}>
-      <Results results={results} isColored={isColoredText} isOver={isOver} />
+    <Button onClick={runTestsClick}>
+      <Results results={results} isColored={isColoredText} isOver={mouse.isOver} />
     </Button>
   );
 
@@ -113,4 +79,20 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       </div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  isRunning(props: TestRunnerProps) {
+    const results = props.data.specs?.results ?? {};
+    return Object.values(results).some((value) => typeof value === 'boolean');
+  },
+
+  results(props: TestRunnerProps) {
+    const results = props.data.specs?.results ?? {};
+    const res = Object.values(results).filter((value) => typeof value === 'object');
+    return res as t.TestSuiteRunResponse[];
+  },
 };

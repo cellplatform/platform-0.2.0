@@ -50,6 +50,10 @@ export async function State(initial?: t.TestRunnerPropListData) {
       const hash = spec.hash();
       api.results[hash] = res;
     },
+
+    clearResults() {
+      api.specs.results = undefined;
+    },
   } as const;
 
   return api;

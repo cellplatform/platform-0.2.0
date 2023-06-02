@@ -12,9 +12,9 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
   const $ = new rx.Subject<t.TestRunnerPropListChange>();
   const state = await State(initial);
 
-  const fire = (kind: t.TestRunnerPropListChange['op']) => {
+  const fire = (op: t.TestRunnerPropListChange['op']) => {
     $.next({
-      op: kind,
+      op,
       data: api.current,
       selected: api.selected.hashes,
     });
@@ -60,9 +60,10 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    */
   const onRunAll: t.SpecRunAllClickHandler = async (e) => {
     const { modifiers } = e;
-
-    // Select all if modifier key was pressed.
     const forceAll = modifiers.meta;
+
+    state.clearResults();
+
     if (forceAll) {
       (await api.all()).forEach((spec) => state.selectSpec(spec.hash()));
     }

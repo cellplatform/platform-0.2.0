@@ -11,7 +11,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
   const keyboard = Keyboard.useKeyboardState();
   const isMeta = keyboard.current.modifiers.meta;
   const isClear = isMeta && mouse.isOver;
-  const label = isClear ? 'clear' : 'all';
+  const label = isClear ? 'none' : 'all';
 
   /**
    * Handlers
