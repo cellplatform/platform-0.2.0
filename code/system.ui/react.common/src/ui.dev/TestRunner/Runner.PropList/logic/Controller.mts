@@ -62,6 +62,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    */
   const onRunAll: t.SpecRunAllClickHandler = async (e) => {
     initial?.run?.onRunAll?.(e); // Bubble event.
+    fire('run:all:start');
 
     const { modifiers } = e;
     const forceAll = modifiers.meta;
@@ -75,6 +76,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     for (const spec of specs) {
       await onRunSingle({ spec, modifiers });
     }
+
+    fire('run:all:complete');
   };
 
   /**

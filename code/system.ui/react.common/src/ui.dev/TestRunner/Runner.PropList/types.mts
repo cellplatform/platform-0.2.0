@@ -70,7 +70,13 @@ export type SpecRunAllClickHandlerArgs = {
  * Observable.
  */
 export type TestRunnerPropListChange = {
-  op: 'selection' | 'reset' | 'run:single:start' | 'run:single:complete';
+  op:
+    | 'selection'
+    | 'reset'
+    | 'run:all:start'
+    | 'run:single:start'
+    | 'run:single:complete'
+    | 'run:all:complete';
   data: TestRunnerPropListData;
   selected: HashString[];
 };
