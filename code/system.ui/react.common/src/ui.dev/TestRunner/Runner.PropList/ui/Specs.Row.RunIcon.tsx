@@ -21,7 +21,7 @@ export const RunIcon: React.FC<RunIconProps> = (props) => {
       justifyContent: 'center',
       alignContent: 'top',
       opacity: Wrangle.spinnerOpacity(props),
-      transition: `opacity 0.15s ease-in-out`,
+      transition: `all 0.15s ease-in-out`,
       color: isOver && isSelected ? COLORS.BLUE : COLORS.DARK,
     }),
   };

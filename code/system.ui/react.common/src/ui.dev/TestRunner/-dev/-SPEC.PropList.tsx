@@ -1,4 +1,4 @@
-import { Dev, Pkg, Time, t } from '../../../test.ui';
+import { Dev, Pkg, t } from '../../../test.ui';
 
 import type { TestRunnerPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
@@ -19,7 +19,8 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields'> & T['debug'] & { selected: string[]; delay: number };
+  type LocalStore = Pick<P, 'card' | 'fields'> &
+    T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
     infoUrl: true,
@@ -29,6 +30,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     selected: [],
     label: '',
     delay: initial.ctx.delay,
+    fail: initial.ctx.fail,
   });
 
   e.it('ui:init', async (e) => {
@@ -42,6 +44,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.props.fields = local.fields;
       d.props.card = local.card;
       d.ctx.delay = local.delay;
+      d.ctx.fail = local.fail;
     });
 
     const infoUrl = '?dev=sys.ui.dev.TestRunner.PropList';
@@ -161,7 +164,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         btn
           .label((e) => `ctx.fail = ${e.state.ctx.fail}`)
           .value((e) => e.state.ctx.fail)
-          .onClick((e) => e.change((d) => Dev.toggle(d.ctx, 'fail'))),
+          .onClick((e) => e.change((d) => (local.fail = Dev.toggle(d.ctx, 'fail')))),
       );
 
       dev.boolean((btn) =>

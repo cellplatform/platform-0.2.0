@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import { COLORS, Button, DEFAULTS, DevIcons, css, rx, t, Time } from '../common';
+import { Button, COLORS, DEFAULTS, DevIcons, Time, css, rx, t } from '../common';
 import { RunIcon } from './Specs.Row.RunIcon';
 
 export type BodyProps = {
@@ -25,16 +24,14 @@ export const Body: React.FC<BodyProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const life = rx.lifecycle();
-
+    const lifecycle = rx.lifecycle();
     if (typeof ok === 'boolean') {
       setColored(true);
       Time.delay(DEFAULTS.colorDelay, () => {
-        if (!life.disposed) setColored(false);
+        if (!lifecycle.disposed) setColored(false);
       });
     }
-
-    return life.dispose;
+    return lifecycle.dispose;
   }, [ok]);
 
   /**
@@ -45,17 +42,17 @@ export const Body: React.FC<BodyProps> = (props) => {
     body: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      columnGap: 8,
+      gridTemplateColumns: 'auto 1fr auto',
     }),
-    left: css({}),
-    right: css({ paddingTop: 1 }),
+    left: css({ marginRight: 8 }),
+    middle: css({ paddingTop: 1 }),
+    right: css({ display: 'grid', placeItems: 'center' }),
     ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     icon: css({
-      float: 'left',
-      marginRight: 2,
       color: isColored || isOver ? Wrangle.iconColor(ok) : undefined,
-      transition: 'color 0.2s ease-in-out',
+      transition: 'all 0.15s ease-in-out',
+      display: 'grid',
+      placeItems: 'center',
     }),
   };
 
@@ -76,10 +73,10 @@ export const Body: React.FC<BodyProps> = (props) => {
           isRunning={isRunning}
           style={styles.left}
         />
-        <div {...css(styles.right, ellipsis ? styles.ellipsis : false)}>
+        <div {...css(styles.middle, ellipsis ? styles.ellipsis : false)}>{elText}</div>
+        <div {...styles.right}>
           {elIcoPassed}
           {elIcoFailed}
-          {elText}
         </div>
       </div>
     </Button>

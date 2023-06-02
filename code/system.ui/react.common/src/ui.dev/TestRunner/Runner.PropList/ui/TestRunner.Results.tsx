@@ -18,7 +18,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
    */
   const styles = {
     base: css({ Flex: 'x-center-center', minHeight: 15 }),
-    item: css({ Flex: 'x-center-center', transition: 'all 500ms ease-out' }),
+    item: css({ Flex: 'x-center-center', transition: 'all 0.15s ease-in-out' }),
     failed: css({ color: asColor(COLORS.RED) }),
     passed: css({ color: asColor(COLORS.GREEN) }),
     skipped: css({ color: asColor(COLORS.YELLOW), opacity: isColored ? 1 : 0.3 }),
@@ -28,7 +28,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
     runAgain: css({
       marginRight: 5,
       opacity: showRunAgain ? 1 : 0,
-      transition: 'opacity 150ms ease-out',
+      transition: 'opacity 0.15s ease-in-out',
     }),
   };
 

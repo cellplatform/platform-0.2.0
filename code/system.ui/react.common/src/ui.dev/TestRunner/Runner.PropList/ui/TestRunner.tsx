@@ -12,40 +12,29 @@ export type TestRunnerProps = {
 
 export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const { data } = props;
-  const mouse = useMouseState();
-
   const results = Wrangle.results(props);
   const isRunning = Wrangle.isRunning(props);
+  const txs = results.map((m) => m.tx).join();
 
-  const [runAtTime, setRunAtTime] = useState<Milliseconds>();
-  const [isColoredText, setColoredText] = useState(false);
+  const mouse = useMouseState();
+  const [isColored, setColored] = useState(false);
 
   useEffect(() => {
-    const { dispose, dispose$ } = rx.disposable();
-    setColoredText(false);
-
-    if (typeof runAtTime === 'number') {
-      const delay = DEFAULTS.colorDelay;
-      const elapsed = () => Time.duration(Time.now.timestamp - runAtTime);
-      const expired = () => elapsed().msec > delay;
-      const update = () => {
-        const isExpired = expired();
-        setColoredText(!isExpired);
-        if (isExpired) dispose(); // Stop timer when the "colored text" delay has expired.
-      };
-
-      rx.interval(300).pipe(rx.takeUntil(dispose$)).subscribe(update);
-      update();
+    const lifecycle = rx.lifecycle();
+    if (results.length > 0) {
+      setColored(true);
+      Time.delay(DEFAULTS.colorDelay, () => {
+        if (!lifecycle.disposed) setColored(false);
+      });
     }
 
-    return dispose;
-  }, [runAtTime]);
+    return lifecycle.dispose;
+  }, [txs]);
 
   const runTestsClick = async (e: React.MouseEvent) => {
     if (data.run) {
       const modifiers = Util.modifiers(e);
       await data.run.onRunAll?.({ modifiers });
-      setRunAtTime(Time.now.timestamp);
     }
   };
 
@@ -66,7 +55,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
   const elButton = !isRunning && (
     <Button onClick={runTestsClick}>
-      <Results results={results} isColored={isColoredText} isOver={mouse.isOver} />
+      <Results results={results} isColored={isColored} isOver={mouse.isOver} />
     </Button>
   );
 
