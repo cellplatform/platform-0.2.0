@@ -1,14 +1,19 @@
-import { Dev, Time, t } from '../test.ui';
+import { Dev, t } from '../test.ui';
 
 type T = {
-  testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse };
+  testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse[] };
 };
 const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
+  type LocalStore = { selected: string[] };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.testrunner');
+  const local = localstore.object({ selected: [] });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
+
     ctx.subject
       .backgroundColor(1)
       .size('fill')
@@ -27,13 +32,48 @@ export default Dev.describe('Root', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.row((e) => {
+      return (
+        <Dev.TestRunner.PropList.Stateful
+          margin={[20, 10, 0, 0]}
+          initial={{
+            specs: {
+              selected: local.selected,
+              all: [
+                import('../crdt.DocRef/-TEST.mjs'),
+                import('../crdt.DocFile/-TEST.mjs'),
+                import('../crdt.DocSync/-dev/-TEST.DocSync.mjs'),
+                import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs'),
+                import('../crdt.Lens/-dev/-TEST.mjs'),
+                import('../crdt.Schema/-dev/-TEST.mjs'),
+                import('../crdt.helpers/-TEST.mjs'),
+
+                import('../driver.Automerge/-dev/TEST.basic.mjs'),
+                import('../driver.Automerge/-dev/TEST.api.mjs'),
+                import('../driver.Automerge/-dev/TEST.initialState.mjs'),
+                import('../driver.Automerge/-dev/TEST.filesystem.mjs'),
+                import('../driver.Automerge/-dev/TEST.sync.mjs'),
+              ],
+            },
+          }}
+          onChanged={async (e) => {
+            local.selected = e.selected;
+            await state.change((d) => (d.testrunner.results = e.results));
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
 
     dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
         await dev.change((d) => (d.testrunner.spinning = true));
         const results = await spec.run();
         await dev.change((d) => {
-          d.testrunner.results = results;
+          // d.testrunner.results = results;
           d.testrunner.spinning = false;
         });
       };
@@ -104,7 +144,7 @@ export default Dev.describe('Root', (e) => {
       /**
        * Immediate invocation of tests.
        */
-      if (!_hasImmediate) Time.delay(100, () => invoke(all));
+      // if (!_hasImmediate) Time.delay(100, () => invoke(all));
     });
   });
 
