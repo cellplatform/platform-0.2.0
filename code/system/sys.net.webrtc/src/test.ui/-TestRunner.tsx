@@ -4,6 +4,10 @@ type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } 
 const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
+  type LocalStore = { selected: string[] };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.testrunner');
+  const local = localstore.object({ selected: [] });
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -25,9 +29,44 @@ export default Dev.describe('Root', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.footer
-      .border(-0.1)
-      .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
+    const state = await dev.state();
+
+    dev.row((e) => {
+      return (
+        <Dev.TestRunner.PropList.Stateful
+          margin={[20, 10, 0, 0]}
+          initial={{
+            run: { label: 'Integration Tests' },
+            specs: {
+              selected: local.selected,
+              all: [
+                import('../WebRtc/-dev/-TEST.mjs'),
+                import('../WebRtc/-dev/-TEST.conn.data.mjs'),
+                import('../WebRtc/-dev/-TEST.conn.media.mjs'),
+                //
+                import('../WebRtc.Controller/-dev/-TEST.controller.mjs'),
+                import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs'),
+                import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs'),
+                import('../WebRtc.State/-dev/-TEST.mjs'),
+                import('../WebRtc.State/-dev/-TEST.mutate.mjs'),
+                import('../sys.net.schema/-TEST.mjs'),
+                //
+                import('../WebRtc/-dev/-TEST.sync.mjs'),
+                import('../WebRtc.Media/-TEST.mjs'),
+                //
+                import('./-dev.mocks/-TEST.mjs'),
+              ],
+            },
+          }}
+          onChanged={async (e) => {
+            local.selected = e.selected;
+            await state.change((d) => (d.testrunner.results = e.results));
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
 
     dev.section(async (dev) => {
       const invoke = async (spec: t.TestSuiteModel) => {
@@ -129,6 +168,14 @@ export default Dev.describe('Root', (e) => {
        * Immediate invocation of tests.
        */
       // if (!_hasImmediate) Time.delay(100, () => invoke(all));
+    });
+  });
+
+  e.it('ui:footer', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    dev.footer.border(-0.1).render<T>((e) => {
+      const data = e.state;
+      return <Dev.Object name={'suite'} data={data} expand={1} />;
     });
   });
 });
