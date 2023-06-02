@@ -85,7 +85,6 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
 
     // Update selection state.
     const all = await api.all();
-    // const selected = e.modifiers.meta ? [] : all.map((spec) => spec.hash());
     const selected = select === 'none' ? [] : all.map((spec) => spec.hash());
 
     state.current.specs = {
