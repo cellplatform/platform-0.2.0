@@ -3,8 +3,6 @@ import { Util } from '../Util.mjs';
 import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, t, useMouseState } from '../common';
 import { Results } from './TestRunner.Results';
 
-type Milliseconds = number;
-
 export type TestRunnerProps = {
   data: t.TestRunnerPropListData;
   style?: t.CssValue;

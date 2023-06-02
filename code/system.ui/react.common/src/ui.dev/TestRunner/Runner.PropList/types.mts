@@ -52,6 +52,7 @@ export type SpecsSelectionHandlerArgs = {
 export type SpecsSelectionResetHandler = (e: SpecsSelectionResetHandlerArgs) => void;
 export type SpecsSelectionResetHandlerArgs = {
   modifiers: t.KeyboardModifierFlags;
+  select?: 'all' | 'none';
 };
 
 export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void | Promise<void>;
