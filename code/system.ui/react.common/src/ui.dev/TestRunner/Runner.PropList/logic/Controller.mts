@@ -24,6 +24,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    * Handle selection <Switch> being toggled.
    */
   const onSelect: t.SpecsSelectionHandler = async (e) => {
+    initial?.specs?.onSelect?.(e); // Bubble event.
+
     // Update selection state.
     const hash = e.spec.hash();
     if (e.to) state.selectSpec(hash);
@@ -31,13 +33,14 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
 
     // Bubble event.
     fire('selection');
-    initial?.specs?.onSelect?.(e);
   };
 
   /**
    * Handle "run" button being clicked.
    */
   const onRunSingle: t.SpecRunClickHandler = async (e) => {
+    initial?.run?.onRunSingle?.(e); // Bubble event.
+
     const hash = e.spec.hash();
     state.selectSpec(hash); // NB: Additive to the selection (when run).
 
@@ -50,18 +53,18 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     const res = await e.spec.run({ ctx });
     state.runComplete(e.spec, res);
 
-    // Bubble event.
+    // Complete.
     fire('run:single:complete');
-    initial?.run?.onRunSingle?.(e);
   };
 
   /**
    * Handle the "run all" button being clicked.
    */
   const onRunAll: t.SpecRunAllClickHandler = async (e) => {
+    initial?.run?.onRunAll?.(e); // Bubble event.
+
     const { modifiers } = e;
     const forceAll = modifiers.meta;
-
     state.clearResults();
 
     if (forceAll) {
@@ -72,18 +75,16 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     for (const spec of specs) {
       await onRunSingle({ spec, modifiers });
     }
-
-    // Bubble event.
-    initial?.run?.onRunAll?.(e);
   };
 
   /**
    * Handle "reset" button being clicked.
    */
   const onReset: t.SpecsSelectionResetHandler = async (e) => {
-    const { select = 'all' } = e;
+    initial?.specs?.onReset?.(e); // Bubble event.
 
     // Update selection state.
+    const { select = 'all' } = e;
     const all = await api.all();
     const selected = select === 'none' ? [] : all.map((spec) => spec.hash());
 
@@ -95,7 +96,6 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
 
     // Bubble event.
     fire('reset');
-    initial?.specs?.onReset?.(e);
   };
 
   /**

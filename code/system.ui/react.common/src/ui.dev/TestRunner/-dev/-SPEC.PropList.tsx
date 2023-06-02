@@ -107,7 +107,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       dev.row((e) => {
         return (
           <Dev.TestRunner.PropList.FieldSelector
-            style={{ Margin: [10, 40, 10, 30] }}
+            style={{ Margin: [10, 30, 10, 25] }}
             selected={e.state.props.fields}
             onClick={(ev) => {
               const fields = ev.next as t.TestRunnerField[];
