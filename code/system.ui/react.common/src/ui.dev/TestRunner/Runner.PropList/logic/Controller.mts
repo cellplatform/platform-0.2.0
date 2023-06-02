@@ -13,10 +13,17 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
   const state = await State(initial);
 
   const fire = (op: t.TestRunnerPropListChange['op']) => {
+    const data = { ...api.current };
+    const results = Object.values(data.specs?.results ?? []);
     $.next({
       op,
-      data: api.current,
+      data,
       selected: api.selected.hashes,
+      get results() {
+        return results
+          .filter((result) => typeof result === 'object')
+          .filter(Boolean) as t.TestSuiteRunResponse[];
+      },
     });
   };
 

@@ -79,4 +79,5 @@ export type TestRunnerPropListChange = {
     | 'run:all:complete';
   data: TestRunnerPropListData;
   selected: HashString[];
+  results: t.TestSuiteRunResponse[];
 };

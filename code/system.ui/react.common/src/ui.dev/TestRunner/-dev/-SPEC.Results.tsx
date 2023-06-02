@@ -1,4 +1,4 @@
-import { Dev } from '../../../test.ui';
+import { Dev, t } from '../../../test.ui';
 
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
@@ -103,7 +103,6 @@ export default Dev.describe('TestRunner', (e) => {
             initial={{
               specs: {
                 ctx: () => state.current.ctx,
-                ellipsis: true,
                 selected: local.selected,
                 all: [
                   import('./-TEST.sample-1.mjs'),
@@ -112,7 +111,10 @@ export default Dev.describe('TestRunner', (e) => {
                 ],
               },
             }}
-            onChanged={(e) => (local.selected = e.selected)}
+            onChanged={async (e) => {
+              local.selected = e.selected;
+              await state.change((d) => (d.props.data = e.results));
+            }}
           />
         );
       });

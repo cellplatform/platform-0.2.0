@@ -1,8 +1,10 @@
 import { COLORS, css, Spinner, t } from './common';
 import { SuiteResults } from './ui.Suite';
 
+type R = t.TestSuiteRunResponse;
+
 export type TestResultsProps = {
-  data?: t.TestSuiteRunResponse;
+  data?: R | R[];
   spinning?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
@@ -10,6 +12,10 @@ export type TestResultsProps = {
 
 export const TestResults: React.FC<TestResultsProps> = (props) => {
   const { data, spinning = false, scroll = true } = props;
+
+  const list = (Array.isArray(data) ? data : [data]).filter(Boolean) as R[];
+  const isEmpty = list.length === 0;
+  const ok = list.every((item) => item.ok);
 
   /**
    * [Render]
@@ -47,7 +53,7 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
     statusMargin: css({
       width: 2,
       Absolute: [0, null, 0, 0],
-      backgroundColor: data?.ok ? COLORS.LIME : COLORS.RED,
+      backgroundColor: ok ? COLORS.LIME : COLORS.RED,
     }),
   };
 
@@ -57,15 +63,19 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
     </div>
   );
 
-  const elEmpty = !data && !spinning && <div {...styles.empty}>{'No results to display.'}</div>;
+  const elEmpty = isEmpty && !spinning && <div {...styles.empty}>{'No results to display.'}</div>;
 
-  const elBody = (
-    <div {...styles.body}>{data && <SuiteResults data={data} style={styles.results} />}</div>
+  const elBody = !spinning && (
+    <div {...styles.body}>
+      {list.map((data) => {
+        return <SuiteResults key={data.tx} data={data} style={styles.results} />;
+      })}
+    </div>
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {data && <div {...styles.statusMargin} />}
+      {!isEmpty && <div {...styles.statusMargin} />}
       {elBody}
       {elEmpty}
       {elSpinner}
