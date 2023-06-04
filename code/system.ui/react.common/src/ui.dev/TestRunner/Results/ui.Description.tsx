@@ -20,13 +20,13 @@ export const Description: React.FC<DescriptionProps> = (props) => {
       gridTemplateColumns: 'auto 1fr',
     }),
     todo: css({
-      backgroundColor: Color.alpha(COLORS.MAGENTA, 0.5),
+      backgroundColor: Color.alpha(COLORS.MAGENTA, 0.15),
+      color: Color.alpha(COLORS.MAGENTA, 0.5),
       marginRight: 6,
       PaddingX: 5,
       paddingTop: 4,
       fontSize: 10,
       fontWeight: 600,
-      color: COLORS.WHITE,
       borderRadius: 3,
     }),
     text: css({

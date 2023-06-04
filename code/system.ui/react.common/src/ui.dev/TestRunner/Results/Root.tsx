@@ -1,5 +1,6 @@
-import { COLORS, css, Spinner, t } from './common';
-import { SuiteResults } from './ui.Suite';
+import { Color, COLORS, css, Spinner, t } from './common';
+import { SuiteResults } from './ui.Suite.Results';
+import { Suite } from './ui.Suite';
 
 type R = t.TestSuiteRunResponse;
 
@@ -45,11 +46,6 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
       boxSizing: 'border-box',
       Scroll: scroll,
     }),
-    results: css({
-      opacity: spinning ? 0.15 : 1,
-      filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
-      Margin: [10, 20, 50, 20],
-    }),
     statusMargin: css({
       width: 2,
       Absolute: [0, null, 0, 0],
@@ -68,7 +64,7 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
   const elBody = !spinning && (
     <div {...styles.body}>
       {list.map((data) => {
-        return <SuiteResults key={data.tx} data={data} style={styles.results} />;
+        return <Suite data={data} spinning={spinning} />;
       })}
     </div>
   );

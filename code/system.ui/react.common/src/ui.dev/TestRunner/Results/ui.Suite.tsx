@@ -1,47 +1,37 @@
-import { useMemo } from 'react';
+import { COLORS, Color, css, t } from './common';
+import { SuiteResults } from './ui.Suite.Results';
 
-import { css, t, Time, Tree } from './common';
-import { Description } from './ui.Description';
-import { TestResult } from './ui.Test';
-
-export type SuiteResultsProps = {
+export type SuiteProps = {
   data: t.TestSuiteRunResponse;
+  spinning?: boolean;
   style?: t.CssValue;
 };
 
-export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
-  const { data } = props;
-  const elapsed = Time.duration(data.elapsed).toString();
-
-  const isEmpty = useMemo(() => Tree.Results.isEmpty(data), [data.id]);
-  if (isEmpty) return null;
+export const Suite: React.FC<SuiteProps> = (props) => {
+  const { data, spinning } = props;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
-    title: {
-      base: css({ Flex: 'horizontal-stretch-stretch', marginBottom: 4 }),
-      description: css({ flex: 1 }),
-      elapsed: css({ opacity: 1, userSelect: 'none' }),
-    },
-    body: css({ position: 'relative', paddingLeft: 10 }),
+    base: css({
+      position: 'relative',
+      filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
+      opacity: spinning ? 0.15 : 1,
+      backgroundColor: !data.ok ? Color.alpha(COLORS.RED, 0.03) : undefined,
+      borderBottom: `dashed 2px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      Padding: [20, 20, 10, 20],
+      ':first-child': { paddingTop: 15 },
+      ':last-child': {
+        borderBottom: 'none',
+        marginBottom: 30,
+      },
+    }),
   };
-
-  const elTests = data.tests.map((test) => <TestResult key={test.id} data={test} />);
-  const elChildren = data.children.map((suite) => <SuiteResults key={suite.id} data={suite} />);
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.title.base}>
-        <Description text={data.description} style={styles.title.description} />
-        <div {...styles.title.elapsed}>{elapsed}</div>
-      </div>
-      <div {...styles.body}>
-        {elTests}
-        {elChildren}
-      </div>
+      <SuiteResults key={data.tx} data={data} />
     </div>
   );
 };
