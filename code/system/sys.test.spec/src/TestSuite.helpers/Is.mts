@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { type t } from './common';
 import { Is as base } from 'sys.util';
 
 export const Is = {

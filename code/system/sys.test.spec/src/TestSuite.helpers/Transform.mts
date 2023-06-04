@@ -1,5 +1,4 @@
-import { Is } from '../common';
-import type { t } from '../common.t';
+import { Is, type t } from './common';
 
 type R = any | Promise<any>;
 type Handler = () => R;
