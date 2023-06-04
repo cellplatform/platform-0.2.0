@@ -162,8 +162,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
      * Retrieves the complete list of initialized specs.
      */
     async all() {
-      const wait = (state.current.specs?.all ?? []).map(Util.ensureLoaded);
-      return (await Promise.all(wait)).filter(Boolean).map((item) => item?.suite!);
+      return await state.all();
     },
 
     /**

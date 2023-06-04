@@ -14,9 +14,9 @@ export function useSpecImport(data: t.TestRunnerPropListData, spec: t.SpecImport
    */
   useEffect(() => {
     const lifecycle = rx.lifecycle();
-    Util.ensureLoaded(spec).then((spec) => {
-      if (lifecycle.disposed || !spec) return;
-      setSuite(spec.suite);
+    Util.ensureLoaded(spec).then((suite) => {
+      if (lifecycle.disposed || !suite) return;
+      setSuite(suite);
     });
     return lifecycle.dispose;
   }, [spec]);

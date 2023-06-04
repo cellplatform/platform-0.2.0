@@ -1,4 +1,5 @@
 import { R, t } from '../common';
+import { Util } from '../Util.mjs';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
@@ -23,6 +24,10 @@ export async function State(initial?: t.TestRunnerPropListData) {
       return specs.results ?? (specs.results = {});
     },
 
+    async all() {
+      const wait = (api.current.specs?.all ?? []).map(Util.ensureLoaded);
+      return (await Promise.all(wait)).filter(Boolean).map((suite) => suite!);
+    },
     /**
      * Mutation methods:
      */

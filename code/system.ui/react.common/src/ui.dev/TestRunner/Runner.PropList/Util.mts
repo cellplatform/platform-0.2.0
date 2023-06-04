@@ -5,10 +5,7 @@ export const Util = {
     const suite = (await input).default;
     if (suite?.kind !== 'TestSuite') return;
     if (!suite.ready) await suite.init();
-    return {
-      import: input,
-      suite,
-    };
+    return suite;
   },
 
   modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
