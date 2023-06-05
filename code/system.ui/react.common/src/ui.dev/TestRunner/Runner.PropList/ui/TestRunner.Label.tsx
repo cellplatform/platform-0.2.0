@@ -1,13 +1,16 @@
 import { css, DevIcons, t } from '../common';
 
+type R = t.TestRunnerPropListRunData;
+
 export type TestRunnerLabelProps = {
-  title?: string;
-  infoUrl?: string;
+  label?: R['label'];
+  infoUrl?: R['infoUrl'];
   style?: t.CssValue;
 };
 
 export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
-  const { title = 'Verify', infoUrl } = props;
+  const label = Wrangle.label(props);
+  const infoUrl = Wrangle.infoUrl(props);
 
   /**
    * [Render]
@@ -32,8 +35,23 @@ export const TestRunnerLabel: React.FC<TestRunnerLabelProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {title}
+      {label}
       {elInfo}
     </div>
   );
+};
+
+/**
+ * [Helpers]
+ */
+
+const Wrangle = {
+  label(props: TestRunnerLabelProps) {
+    const { label = 'Verify' } = props;
+    return typeof label === 'function' ? label() : label;
+  },
+  infoUrl(props: TestRunnerLabelProps) {
+    const { infoUrl } = props;
+    return typeof infoUrl === 'function' ? infoUrl() : infoUrl;
+  },
 };

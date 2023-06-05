@@ -14,7 +14,7 @@ export function FieldTestsRun(args: {
   const infoUrl = typeof run.infoUrl === 'function' ? run.infoUrl() : run.infoUrl;
 
   return {
-    label: <TestRunnerLabel title={label} infoUrl={infoUrl} />,
+    label: <TestRunnerLabel label={label} infoUrl={infoUrl} />,
     value: <TestRunner data={data} />,
   };
 }
