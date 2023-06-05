@@ -15,11 +15,11 @@ export const Loader = {
     options: { init?: boolean } = {},
   ): Promise<TResult[]> {
     type TImport = t.TestSuiteModel | Promise<any>;
-    const list: TImport[] = Array.isArray(input) ? input : [input];
-
+    const source: TImport[] = Array.isArray(input) ? input : [input];
     const res: TResult[] = [];
+
     const push = (suite: t.TestSuiteModel, isDefault: boolean) => {
-      const exists = res.find((item) => item.suite === suite);
+      const exists = res.find((item) => item?.suite === suite);
       if (!exists) res.push({ suite, isDefault });
     };
 
@@ -35,9 +35,8 @@ export const Loader = {
       });
     };
 
-    await Promise.all(list.map(load));
-
-    if (options.init) await Promise.all(res.map((item) => item.suite.init()));
-    return res;
+    for (const item of source) await load(item); // NB: Ordered.
+    if (options.init) await Promise.all(res.map((item) => item?.suite.init()));
+    return res.filter(Boolean);
   },
 };
