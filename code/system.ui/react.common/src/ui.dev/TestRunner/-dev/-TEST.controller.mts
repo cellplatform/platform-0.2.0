@@ -1,5 +1,5 @@
-import { Dev, expect, type t, Time, type TestCtx, Wrangle } from './-common.mjs';
 import { TestPropList } from '..';
+import { Dev, expect, type t } from './-common.mjs';
 
 export default Dev.describe('(Self) Controller Behavior', (e) => {
   e.it('init', async (e) => {
@@ -18,25 +18,18 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
       expect(labels[2].startsWith('Sample-2: Lorem')).to.eql(true);
     };
 
-    e.it('plain array', async (e) => {
-      const controller = await TestPropList.controller({
-        run: { all },
-      });
-
+    e.it('simple list (array)', async (e) => {
+      const controller = await TestPropList.controller({ run: { all } });
       expectOrder(controller.all);
     });
 
     e.it('function', async (e) => {
-      const controller = await TestPropList.controller({
-        run: { all: () => all },
-      });
+      const controller = await TestPropList.controller({ run: { all: () => all } });
       expectOrder(controller.all);
     });
 
     e.it('async function', async (e) => {
-      const controller = await TestPropList.controller({
-        run: { all: async () => all },
-      });
+      const controller = await TestPropList.controller({ run: { all: async () => all } });
       expectOrder(controller.all);
     });
   });
