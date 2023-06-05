@@ -1,7 +1,7 @@
+import type { Loader, Tree } from './TestSuite.helpers';
 import type { Stats } from './TestSuite.helpers/Stats.mjs';
 import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
-import type { Tree } from './TestSuite.helpers/Tree.mjs';
 import type { t } from './common.t';
 
 export type * from './TestSuite.helpers/types.mjs';
@@ -29,11 +29,15 @@ export type Test = {
   Total: typeof Total;
   Stats: typeof Stats;
   describe: TestSuiteDescribe;
+
+  import: typeof Loader.import;
+  using: typeof Transform;
+
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
+
   run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
   run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
-  using: typeof Transform;
 };
 
 export type TestIs = {

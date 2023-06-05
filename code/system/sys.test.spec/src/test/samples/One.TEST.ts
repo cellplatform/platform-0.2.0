@@ -6,3 +6,7 @@ export default Test.describe('One', (e) => {
     expect(123).to.eql(123);
   });
 });
+
+export const MySpec = Test.describe('MySpec', (e) => {
+  e.it('my.foo', (e) => {});
+});

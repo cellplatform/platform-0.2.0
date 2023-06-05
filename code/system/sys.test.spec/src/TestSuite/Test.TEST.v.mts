@@ -45,12 +45,14 @@ describe('Test (Root/Entry)', () => {
       const test1 = children[0].state.tests[0];
       const test2 = children[1].state.tests[0];
 
-      expect(children.length).to.eql(2);
-      expect(children[0].state.description).to.eql('One');
-      expect(children[1].state.description).to.eql('Two');
+      expect(children.length).to.eql(3);
+      expect(children[0].description).to.eql('One');
+      expect(children[1].description).to.eql('MySpec');
+      expect(children[2].description).to.eql('Two');
 
       expect(children[0].state.parent?.id).to.eql(bundle.id);
-      expect(children[0].state.parent?.id).to.eql(bundle.id);
+      expect(children[1].state.parent?.id).to.eql(bundle.id);
+      expect(children[2].state.parent?.id).to.eql(bundle.id);
 
       expect(TestTree.root(test1)).to.equal(bundle);
       expect(TestTree.root(test2)).to.equal(bundle);
@@ -66,9 +68,10 @@ describe('Test (Root/Entry)', () => {
         import('../test/samples/Two.TEST'),
       ]);
       const children = bundle2.state.children;
-      expect(children.length).to.eql(2);
-      expect(children[0].state.description).to.eql('One');
-      expect(children[1].state.description).to.eql('Two');
+      expect(children.length).to.eql(3);
+      expect(children[0].description).to.eql('One');
+      expect(children[1].description).to.eql('MySpec');
+      expect(children[2].description).to.eql('Two');
     });
 
     it('dynamic: default export not a test-suite (ignore)', async () => {
@@ -140,7 +143,8 @@ describe('Test (Root/Entry)', () => {
       expect(res.description).to.eql('Tests');
 
       expect(res.children[0].tests[0].description).to.eql('one.foo');
-      expect(res.children[1].tests[0].description).to.eql('two.foo');
+      expect(res.children[1].tests[0].description).to.eql('my.foo');
+      expect(res.children[2].tests[0].description).to.eql('two.foo');
     });
 
     it('mixed import (dynamic/static) with explicit root "description"', async () => {

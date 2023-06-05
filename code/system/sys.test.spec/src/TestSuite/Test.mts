@@ -1,4 +1,4 @@
-import { Is, Stats, Total, Transform, Tree } from '../TestSuite.helpers';
+import { Is, Stats, Total, Transform, Tree, Loader } from '../TestSuite.helpers';
 import { bundle } from './Test.bundle.mjs';
 import { Def } from './TestSuiteModel.mjs';
 
@@ -18,6 +18,7 @@ export const Test: t.Test = {
   using: Transform,
   describe,
   bundle,
+  import: Loader.import,
 
   /**
    * Bundle and run a set of tests.
