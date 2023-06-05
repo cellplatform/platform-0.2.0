@@ -19,6 +19,7 @@ export const Body: React.FC<BodyProps> = (props) => {
 
   const [isOver, setOver] = useState(false);
   const [isColored, setColored] = useState(false);
+  const iconColor = isColored || isOver ? Wrangle.iconColor(ok) : undefined;
 
   /**
    * Lifecycle
@@ -49,7 +50,7 @@ export const Body: React.FC<BodyProps> = (props) => {
     right: css({ display: 'grid', placeItems: 'center' }),
     ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     icon: css({
-      color: isColored || isOver ? Wrangle.iconColor(ok) : undefined,
+      color: iconColor,
       transition: 'all 0.15s ease-in-out',
       display: 'grid',
       placeItems: 'center',
@@ -71,6 +72,7 @@ export const Body: React.FC<BodyProps> = (props) => {
           isSelected={isSelected}
           isOver={isOver}
           isRunning={isRunning}
+          iconColor={iconColor}
           style={styles.left}
         />
         <div {...css(styles.middle, ellipsis ? styles.ellipsis : false)}>{elText}</div>

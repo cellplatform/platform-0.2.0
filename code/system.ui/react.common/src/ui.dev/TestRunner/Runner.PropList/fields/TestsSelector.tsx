@@ -1,21 +1,24 @@
 import { t } from '../common';
-import { SpecsRow } from '../ui/Specs.Row';
 import { SpecsReset } from '../ui/Specs.Reset';
+import { SpecsRow } from '../ui/Specs.Row';
 
 export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
   data: t.TestRunnerPropListData;
+  suites: t.TestSuiteModel[];
 }): t.PropListItem[] {
-  const run = args.data?.run;
-  const specs = args.data?.specs;
-  if (!specs?.all || specs.all.length === 0) return [];
+  const { data, suites } = args;
+  const run = data?.run;
+  const specs = data?.specs ?? {};
 
-  return specs.all.map((spec) => {
+  if (!specs.all || specs.all.length === 0) return [];
+
+  return suites.map((spec) => {
     return {
       value: (
         <SpecsRow
-          data={args.data}
-          import={spec}
+          data={data}
+          spec={spec}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />

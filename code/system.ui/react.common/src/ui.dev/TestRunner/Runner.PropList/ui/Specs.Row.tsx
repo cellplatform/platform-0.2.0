@@ -1,41 +1,37 @@
 import { css, Switch, t } from '../common';
-import { useSpecImport } from '../hooks/useSpecImport.mjs';
+
 import { Util } from '../Util.mjs';
-import { Body } from './Spec.Row.Body';
+import { Body } from './Specs.Row.Body';
 
 export type SpecsRowProps = {
   data: t.TestRunnerPropListData;
-  import: t.SpecImport;
+  spec: t.TestSuiteModel;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const spec = useSpecImport(props.data, props.import);
+  const { data, spec } = props;
+  const isSelected = Util.isSelected(data, spec);
 
   /**
    * Handlers
    */
   const handleSwitchClick = (e: React.MouseEvent) => {
-    if (spec.suite) {
-      props.onSelectionChange?.({
-        import: props.import,
-        spec: spec.suite,
-        from: spec.isSelected,
-        to: !spec.isSelected,
-        modifiers: Util.modifiers(e),
-      });
-    }
+    props.onSelectionChange?.({
+      spec,
+      from: isSelected,
+      to: !isSelected,
+      modifiers: Util.modifiers(e),
+    });
   };
 
   const handleBodyClick = (e: React.MouseEvent) => {
-    if (spec.suite) {
-      props.onRunClick?.({
-        spec: spec.suite,
-        modifiers: Util.modifiers(e),
-      });
-    }
+    props.onRunClick?.({
+      spec,
+      modifiers: Util.modifiers(e),
+    });
   };
 
   /**
@@ -58,14 +54,9 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Body
-        data={props.data}
-        suite={spec.suite}
-        isSelected={spec.isSelected}
-        onClick={handleBodyClick}
-      />
+      <Body data={props.data} suite={spec} isSelected={isSelected} onClick={handleBodyClick} />
       <div {...styles.switch} onClick={handleSwitchClick}>
-        <Switch height={12} value={spec.isSelected} />
+        <Switch height={12} value={isSelected} />
       </div>
     </div>
   );
