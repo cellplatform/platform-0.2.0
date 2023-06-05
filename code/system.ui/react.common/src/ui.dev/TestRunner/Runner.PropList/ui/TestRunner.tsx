@@ -33,24 +33,33 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     if (data.run) {
       const modifiers = Util.modifiers(e);
       await data.run.onRunAll?.({ modifiers });
+      mouse.reset();
     }
   };
 
   /**
    * [Render]
    */
+  const height = 15;
   const styles = {
     base: css({
       flex: 1,
-      minHeight: 16,
+      height,
       display: 'grid',
-      alignContent: 'center',
       gridTemplateColumns: '1fr auto',
     }),
-    spinner: css({ minWidth: 110 }),
+    spinner: css({
+      height,
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
 
-  const elSpinner = isRunning && <Spinner.Bar color={COLORS.GREEN} width={35} />;
+  const elSpinner = isRunning && (
+    <div {...styles.spinner}>
+      <Spinner.Bar color={COLORS.GREEN} width={35} />
+    </div>
+  );
   const elButton = !isRunning && (
     <Button onClick={runTestsClick}>
       <Results results={results} isColored={isColored} isOver={mouse.isOver} />

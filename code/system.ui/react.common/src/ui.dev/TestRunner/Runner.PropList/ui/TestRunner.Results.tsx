@@ -1,4 +1,5 @@
 import { COLORS, DevIcons, Test, Time, Value, css, t } from '../common';
+import { RunIcon } from './Specs.Row.RunIcon';
 
 export type ResultsProps = {
   isColored?: boolean;
@@ -10,14 +11,13 @@ export type ResultsProps = {
 export const Results: React.FC<ResultsProps> = (props) => {
   const { results = [], isOver = false, isColored = true } = props;
   const stats = Test.Stats.merge(results);
-  const showRunAgain = isOver && Boolean(results);
   const asColor = (color: string) => (isColored ? color : COLORS.DARK);
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ Flex: 'x-center-center', minHeight: 15 }),
+    base: css({ position: 'relative', Flex: 'x-center-center', height: 15 }),
     item: css({ Flex: 'x-center-center', transition: 'all 0.15s ease-in-out' }),
     failed: css({ color: asColor(COLORS.RED) }),
     passed: css({ color: asColor(COLORS.GREEN) }),
@@ -25,11 +25,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
     elapsed: css({ color: COLORS.DARK }),
     spacer: css({ width: 6 }),
     runIcon: css({ marginRight: 2, transform: 'translateY(1px)' }),
-    runAgain: css({
-      marginRight: 5,
-      opacity: showRunAgain ? 1 : 0,
-      transition: 'opacity 0.15s ease-in-out',
-    }),
+    runAgain: css({ marginLeft: 3, transition: 'opacity 0.15s ease-in-out' }),
   };
 
   /**
@@ -95,12 +91,17 @@ export const Results: React.FC<ResultsProps> = (props) => {
     );
   }
 
-  const elRunAgain = <div {...styles.runAgain}>{'run →'}</div>;
+  const runAgainColor = isOver ? COLORS.BLUE : isColored ? COLORS.GREEN : undefined;
+  const elRunAgain = (
+    <div {...styles.runAgain}>
+      <RunIcon isSelected={true} iconColor={runAgainColor} />
+    </div>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elRunAgain}
       {items}
+      {elRunAgain}
     </div>
   );
 };

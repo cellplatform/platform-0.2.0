@@ -45,15 +45,15 @@ export const Body: React.FC<BodyProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr auto auto ',
     }),
-    runIcon: css({ marginLeft: 8 }),
-    resultIcons: css({ display: 'grid', placeItems: 'center' }),
+    runIcon: css({}),
+    resultIcons: css({ marginLeft: 5, marginRight: 3, paddingTop: 1 }),
     text: css({ paddingTop: 1 }),
     ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     icon: css({
       color: iconColor,
-      transition: 'all 0.15s ease-in-out',
       display: 'grid',
       placeItems: 'center',
+      transition: 'all 0.15s ease-in-out',
     }),
   };
 

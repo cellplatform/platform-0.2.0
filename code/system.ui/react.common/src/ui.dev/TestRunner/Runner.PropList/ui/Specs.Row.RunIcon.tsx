@@ -15,8 +15,16 @@ export const RunIcon: React.FC<RunIconProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
-    spinner: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
+    base: css({
+      position: 'relative',
+      height: 16,
+    }),
+    spinner: css({
+      Absolute: 0,
+      display: 'grid',
+      placeItems: 'center',
+      height: 16,
+    }),
     icon: css({
       display: 'grid',
       justifyContent: 'center',
