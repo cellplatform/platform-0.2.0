@@ -1,4 +1,4 @@
-import { Dev, Pkg, t } from '../../../test.ui';
+import { Dev, Pkg, t } from './-common.mjs';
 
 import type { TestPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
@@ -55,7 +55,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       pkg: Pkg,
       run: {
         ctx: () => state.current.ctx,
-        all() {
+        async all() {
           // NB: function or array (optionally async).
           return [
             import('./-TEST.sample-1.mjs'),

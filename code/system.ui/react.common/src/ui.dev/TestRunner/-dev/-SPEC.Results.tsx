@@ -1,5 +1,4 @@
-import { Dev, t } from '../../../test.ui';
-
+import { Dev } from './-common.mjs';
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
 
