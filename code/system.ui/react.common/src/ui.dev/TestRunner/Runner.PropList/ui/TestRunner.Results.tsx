@@ -91,7 +91,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
         {...css(styles.elapsed, styles.item)}
         key={'elapsed'}
         title={title}
-      >{`← in ${elapsed}`}</div>,
+      >{`in ${elapsed}`}</div>,
     );
   }
 
