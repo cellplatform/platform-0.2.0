@@ -1,6 +1,5 @@
+import { type TestPropListProps } from '../Test.PropList';
 import { Dev, Pkg, t, type TestCtx } from './-common.mjs';
-
-import type { TestPropListProps } from '../Runner.PropList';
 
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;

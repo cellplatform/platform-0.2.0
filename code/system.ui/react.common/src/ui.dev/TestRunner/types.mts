@@ -1,9 +1,8 @@
-import type { t } from '../../common.t';
+import { type t } from '../../common.t';
+export type * from './Test.PropList/types.mjs';
 
 type Milliseconds = number;
 type Ctx = Record<string, unknown>;
-
-export * from './Runner.PropList/types.mjs';
 
 /**
  * Retrieve a test model (suite | "describe").

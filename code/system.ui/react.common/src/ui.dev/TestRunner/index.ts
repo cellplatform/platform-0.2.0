@@ -1,6 +1,5 @@
+import { TestPropList } from './Test.PropList';
 import { TestResults } from './Test.Results';
-import { TestPropList } from './Runner.PropList';
-
 import { Test } from './common';
 
 export const TestRunner = {
