@@ -1,6 +1,8 @@
-import { Dev, expect, t, Time } from '../../../test.ui';
-import type { TestCtx } from './-types.mjs';
+import { Dev, Time, Wrangle, expect } from './-common.mjs';
 
+/**
+ * Default export.
+ */
 export default Dev.describe('sample-1', (e) => {
   e.it('foo', async (e) => {
     const ctx = Wrangle.ctx(e);
@@ -29,15 +31,9 @@ export default Dev.describe('sample-1', (e) => {
   });
 });
 
+/**
+ * Named export.
+ */
 export const MySpec = Dev.describe('MySpec', (e) => {
   e.it('foo', async (e) => {});
 });
-
-/**
- * Helpers
- */
-const Wrangle = {
-  ctx(e: t.TestHandlerArgs) {
-    return e.ctx as TestCtx;
-  },
-};

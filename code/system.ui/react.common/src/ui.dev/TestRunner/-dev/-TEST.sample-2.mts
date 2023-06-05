@@ -1,5 +1,4 @@
-import { Time, Dev, Lorem, expect, t } from '../../../test.ui';
-import type { TestCtx } from './-types.mjs';
+import { Dev, Lorem, Time, Wrangle, expect } from './-common.mjs';
 
 export default Dev.describe(`Sample-2: ${Lorem.words(20)}.`, (e) => {
   const length = 50;
@@ -23,13 +22,3 @@ export default Dev.describe(`Sample-2: ${Lorem.words(20)}.`, (e) => {
     });
   });
 });
-
-const Wrangle = {
-  ctx(e: t.TestHandlerArgs) {
-    return e.ctx as TestCtx;
-  },
-
-  shouldThrow(e: t.TestHandlerArgs) {
-    return Wrangle.ctx(e).fail && Math.random() < 0.5;
-  },
-};

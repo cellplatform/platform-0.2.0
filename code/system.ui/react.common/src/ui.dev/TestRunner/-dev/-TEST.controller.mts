@@ -1,9 +1,18 @@
-import { Dev, expect, t, Time } from '../../../test.ui';
-import type { TestCtx } from './-types.mjs';
+import { Dev, expect, type t, Time, type TestCtx, Wrangle } from './-common.mjs';
+import { TestRunnerPropList } from '..';
 
 export default Dev.describe('(Self Ref) Controller Behavior', (e) => {
-  e.it('foo', async (e) => {
-    await Time.wait(300);
-    expect(123).to.eql(123);
+  e.describe('load → all', (e) => {
+    e.it.skip('plain array', async (e) => {
+      const ctx = Wrangle.ctx(e);
+    });
+
+    e.it.skip('function', async (e) => {
+      const ctx = Wrangle.ctx(e);
+    });
+
+    e.it.skip('async function', async (e) => {
+      const ctx = Wrangle.ctx(e);
+    });
   });
 });
