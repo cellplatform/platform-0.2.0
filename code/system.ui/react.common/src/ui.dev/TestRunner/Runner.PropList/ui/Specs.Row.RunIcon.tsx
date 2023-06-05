@@ -4,11 +4,12 @@ export type RunIconProps = {
   isSelected?: boolean;
   isOver?: boolean;
   isRunning?: boolean;
+  iconColor?: string;
   style?: t.CssValue;
 };
 
 export const RunIcon: React.FC<RunIconProps> = (props) => {
-  const { isSelected, isOver, isRunning } = props;
+  const { isSelected, isOver, isRunning, iconColor = COLORS.DARK } = props;
 
   /**
    * [Render]
@@ -21,8 +22,8 @@ export const RunIcon: React.FC<RunIconProps> = (props) => {
       justifyContent: 'center',
       alignContent: 'top',
       opacity: Wrangle.spinnerOpacity(props),
-      transition: `all 0.15s ease-in-out`,
-      color: isOver && isSelected ? COLORS.BLUE : COLORS.DARK,
+      transition: `all 0.3s ease-in-out`,
+      color: isOver && isSelected ? COLORS.BLUE : iconColor,
     }),
   };
 
