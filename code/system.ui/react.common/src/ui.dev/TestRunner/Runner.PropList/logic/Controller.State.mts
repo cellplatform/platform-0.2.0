@@ -1,4 +1,4 @@
-import { R, t, Test } from '../common';
+import { R, Test, type t } from '../common';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
