@@ -29,6 +29,13 @@ export default Dev.describe('sample-1', (e) => {
   });
 });
 
+export const MySpec = Dev.describe('MySpec', (e) => {
+  e.it('foo', async (e) => {});
+});
+
+/**
+ * Helpers
+ */
 const Wrangle = {
   ctx(e: t.TestHandlerArgs) {
     return e.ctx as TestCtx;
