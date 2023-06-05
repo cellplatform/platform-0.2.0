@@ -55,11 +55,14 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       pkg: Pkg,
       run: {
         ctx: () => state.current.ctx,
-        all: [
-          import('./-TEST.sample-1.mjs'),
-          import('./-TEST.sample-2.mjs'),
-          import('./-TEST.controller.mjs'),
-        ],
+        all() {
+          // NB: function or array (optionally async).
+          return [
+            import('./-TEST.sample-1.mjs'),
+            import('./-TEST.sample-2.mjs'),
+            import('./-TEST.controller.mjs'),
+          ];
+        },
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
         bundle: () => controller.selected.bundle(),
