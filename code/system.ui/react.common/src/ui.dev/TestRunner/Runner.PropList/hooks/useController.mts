@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { rx, t } from '../common';
-import { PropListController } from '../logic/Controller.mjs';
+import { TestPropListController } from '../logic/Controller.mjs';
 
 export function useController(args: {
   initial?: t.TestRunnerPropListData;
@@ -14,7 +14,7 @@ export function useController(args: {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
-    PropListController(args.initial).then((controller) => {
+    TestPropListController(args.initial).then((controller) => {
       const update = () => setData(controller.current);
       update();
 

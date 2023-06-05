@@ -4,7 +4,7 @@ import { State } from './Controller.State.mjs';
 /**
  * Default controller for the TestRunnerPropList component.
  */
-export async function PropListController(initial?: t.TestRunnerPropListData) {
+export async function TestPropListController(initial?: t.TestRunnerPropListData) {
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
 
@@ -118,7 +118,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    * API
    */
   const api = {
-    kind: 'TestRunner.PropList.Controller',
+    kind: 'Test.PropList.Controller',
     $: $.pipe(rx.takeUntil(dispose$)),
 
     /**

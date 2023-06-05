@@ -1,5 +1,5 @@
-import { R, Test, type t } from '../common';
 import { Util } from '../Util.mjs';
+import { R, type t } from '../common';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
