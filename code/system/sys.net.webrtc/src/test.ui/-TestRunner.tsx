@@ -1,6 +1,6 @@
-import { Time, Dev, WebRtc, t } from '.';
+import { Dev, Time, WebRtc, type t } from '.';
 
-type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse } };
+type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse[] } };
 const initial: T = { testrunner: {} };
 
 export default Dev.describe('Root', (e) => {
@@ -33,12 +33,11 @@ export default Dev.describe('Root', (e) => {
 
     dev.row((e) => {
       return (
-        <Dev.TestRunner.PropList.Stateful
+        <Dev.TestRunner.PropList.Controlled
           margin={[20, 10, 0, 0]}
           initial={{
-            run: { label: 'Integration Tests' },
-            specs: {
-              selected: local.selected,
+            run: {
+              label: 'Integration Tests',
               all: [
                 import('../WebRtc/-dev/-TEST.mjs'),
                 import('../WebRtc/-dev/-TEST.conn.data.mjs'),
@@ -57,6 +56,7 @@ export default Dev.describe('Root', (e) => {
                 import('./-dev.mocks/-TEST.mjs'),
               ],
             },
+            specs: { selected: local.selected },
           }}
           onChanged={async (e) => {
             local.selected = e.selected;
@@ -73,7 +73,7 @@ export default Dev.describe('Root', (e) => {
         await dev.change((d) => (d.testrunner.spinning = true));
         const results = await spec.run();
         await dev.change((d) => {
-          d.testrunner.results = results;
+          // d.testrunner.results = results;
           d.testrunner.spinning = false;
         });
       };

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
 import { FieldGroup } from './fields/Group';
 import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
 import { FieldModuleVerify } from './fields/Module.Verify';

@@ -1,5 +1,5 @@
 export const TESTS = {
-  all() {
+  get all() {
     return [
       import('../WebRtc/-dev/-TEST.mjs'),
       import('../WebRtc/-dev/-TEST.conn.data.mjs'),

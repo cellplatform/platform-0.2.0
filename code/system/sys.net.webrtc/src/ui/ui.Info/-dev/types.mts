@@ -1,6 +1,17 @@
 import { t } from '../../common.t';
+
 export type * from '../../common/types.mjs';
 
+/**
+ * Test Runner
+ */
+export type TDevRunnerCtx = {
+  props: t.WebRtcPropsLens<TDevSharedProps>;
+};
+
+/**
+ * Shared
+ */
 export type TDevRemote = {
   name: string;
   peer: t.Peer;
