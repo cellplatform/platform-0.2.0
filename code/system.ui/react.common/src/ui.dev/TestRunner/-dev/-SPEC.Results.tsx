@@ -37,6 +37,36 @@ export default Dev.describe('TestRunner', (e) => {
       });
   });
 
+  e.it('ui:debug.PropList', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.row((e) => {
+      return (
+        <Dev.TestRunner.PropList.Stateful
+          margin={[20, 35, 0, 30]}
+          initial={{
+            specs: {
+              ctx: () => state.current.ctx,
+              selected: local.selected,
+              all: [
+                import('./-TEST.sample-1.mjs'),
+                import('./-TEST.sample-2.mjs'),
+                import('./-TEST.controller.mjs'),
+              ],
+            },
+          }}
+          onChanged={async (e) => {
+            local.selected = e.selected;
+            await state.change((d) => (d.props.data = e.results));
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
+  });
+
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
@@ -86,38 +116,6 @@ export default Dev.describe('TestRunner', (e) => {
           .value((e) => e.state.props.scroll)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'scroll'))),
       );
-    });
-
-    dev.hr(5, 20);
-  });
-
-  e.it('ui:debug.PropList', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-
-    dev.section('TestRunner.PropList', (dev) => {
-      dev.row((e) => {
-        return (
-          <Dev.TestRunner.PropList.Stateful
-            margin={[20, 35, 0, 30]}
-            initial={{
-              specs: {
-                ctx: () => state.current.ctx,
-                selected: local.selected,
-                all: [
-                  import('./-TEST.sample-1.mjs'),
-                  import('./-TEST.sample-2.mjs'),
-                  import('./-TEST.controller.mjs'),
-                ],
-              },
-            }}
-            onChanged={async (e) => {
-              local.selected = e.selected;
-              await state.change((d) => (d.props.data = e.results));
-            }}
-          />
-        );
-      });
     });
   });
 });
