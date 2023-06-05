@@ -75,9 +75,9 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     const totalSelected = state.specs.selected?.length ?? 0;
 
     state.clearResults();
-    if (forceAll || totalSelected === 0) await state.selectAll();
+    if (forceAll || totalSelected === 0) state.selectAll();
 
-    const specs = forceAll ? await api.all() : await api.selected.specs();
+    const specs = forceAll ? api.all : api.selected.specs;
     for (const spec of specs) {
       await onRunSingle({ spec, modifiers });
     }
@@ -93,8 +93,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
 
     // Update selection state.
     const { select = 'all' } = e;
-    const all = await api.all();
-    const selected = select === 'none' ? [] : all.map((spec) => spec.hash());
+    const selected = select === 'none' ? [] : api.all.map((spec) => spec.hash());
 
     state.current.specs = {
       ...state.current.specs,
@@ -110,7 +109,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    * Create a bundle of the currently selected specs.
    */
   const bundle: t.GetTestBundle = async () => {
-    const specs = await api.selected.specs();
+    const specs = api.selected.specs;
     const ctx = Wrangle.ctx(state.current.specs!);
     return { specs, ctx };
   };
@@ -150,8 +149,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
       return {
         hashes,
         bundle,
-        async specs() {
-          return (await api.all()).filter((spec) => hashes.includes(spec.hash()));
+        get specs() {
+          return api.all.filter((spec) => hashes.includes(spec.hash()));
         },
       };
     },
@@ -159,9 +158,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     /**
      * Retrieves the complete list of initialized specs.
      */
-    async all() {
-      const all = await state.all();
-      return all;
+    get all() {
+      return state.all;
     },
 
     /**
