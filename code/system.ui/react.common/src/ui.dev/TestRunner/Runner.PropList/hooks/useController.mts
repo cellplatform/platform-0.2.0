@@ -13,13 +13,15 @@ export function useController(args: {
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
+
     PropListController(args.initial).then((controller) => {
-      const $ = controller.$.pipe(rx.takeUntil(dispose$));
       const update = () => setData(controller.current);
       update();
+
+      const $ = controller.$.pipe(rx.takeUntil(dispose$));
       $.subscribe((e) => {
-        update();
         args.onChanged?.(e);
+        update();
       });
     });
 

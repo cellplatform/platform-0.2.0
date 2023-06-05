@@ -1,5 +1,4 @@
-import { R, t } from '../common';
-import { Util } from '../Util.mjs';
+import { R, t, Test } from '../common';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
@@ -25,9 +24,15 @@ export async function State(initial?: t.TestRunnerPropListData) {
     },
 
     async all() {
-      const wait = (api.current.specs?.all ?? []).map(Util.ensureLoaded);
-      return (await Promise.all(wait)).filter(Boolean).map((suite) => suite!);
+      const imported = await Wrangle.importAndInitialize(_current);
+      return imported.map((e) => e.suite);
     },
+
+    async selectAll() {
+      const all = await api.all();
+      all.forEach((spec) => api.selectSpec(spec.hash()));
+    },
+
     /**
      * Mutation methods:
      */
@@ -69,11 +74,20 @@ export async function State(initial?: t.TestRunnerPropListData) {
  */
 const Wrangle = {
   async initialState(initial?: t.TestRunnerPropListData) {
-    const data = R.clone(initial ?? {});
+    const data = R.clone<t.TestRunnerPropListData>(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
-    specs.all = specs.all ?? [];
+
+    const imported = await Wrangle.importAndInitialize(data);
+    specs.all = imported.map(({ suite }) => suite);
     specs.selected = specs.selected ?? [];
+
     return data;
+  },
+
+  async importAndInitialize(input?: t.TestRunnerPropListData) {
+    const data = input ?? {};
+    const specs = data.specs ?? (data.specs = {});
+    return Test.import(specs.all ?? [], { init: true });
   },
 
   ctx(specs: t.TestRunnerPropListSpecsData) {

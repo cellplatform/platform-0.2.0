@@ -1,4 +1,3 @@
-import { Util } from '../Util.mjs';
 import { rx, t } from '../common';
 import { State } from './Controller.State.mjs';
 
@@ -73,11 +72,10 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
 
     const { modifiers } = e;
     const forceAll = modifiers.meta;
-    state.clearResults();
+    const totalSelected = state.specs.selected?.length ?? 0;
 
-    if (forceAll) {
-      (await api.all()).forEach((spec) => state.selectSpec(spec.hash()));
-    }
+    state.clearResults();
+    if (forceAll || totalSelected === 0) await state.selectAll();
 
     const specs = forceAll ? await api.all() : await api.selected.specs();
     for (const spec of specs) {
@@ -162,7 +160,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
      * Retrieves the complete list of initialized specs.
      */
     async all() {
-      return await state.all();
+      const all = await state.all();
+      return all;
     },
 
     /**

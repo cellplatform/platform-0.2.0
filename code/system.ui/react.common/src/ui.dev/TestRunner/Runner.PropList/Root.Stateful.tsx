@@ -11,6 +11,6 @@ export type StatefulProps = Omit<TestRunnerPropListProps, 'data'> & {
 
 export const Stateful: React.FC<StatefulProps> = (props) => {
   const { initial, onChanged } = props;
-  const ctrl = useController({ initial, onChanged });
-  return <PropList {...props} data={ctrl.data} />;
+  const controller = useController({ initial, onChanged });
+  return <PropList {...props} data={controller.data} />;
 };

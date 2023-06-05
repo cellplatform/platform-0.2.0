@@ -1,6 +1,7 @@
-import { PropList as Base, DEFAULTS, t } from '../common';
+import { PropList as Base, DEFAULTS, type t } from '../common';
 import { FieldTestsRun } from '../fields/TestsRun';
 import { FieldTestsSelector, FieldTestsSelectorReset } from '../fields/TestsSelector';
+import { useSpecsImport } from '../hooks/useSpecsImport.mjs';
 
 export type TestRunnerPropListProps = {
   title?: t.PropListProps['title'];
@@ -16,12 +17,13 @@ export type TestRunnerPropListProps = {
 export const PropList: React.FC<TestRunnerPropListProps> = (props) => {
   const { data = {}, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
+  const { suites } = useSpecsImport(data);
 
   const items = Base.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
     .field('Tests.Run', () => FieldTestsRun({ fields, data }))
-    .field('Tests.Selector', () => FieldTestsSelector({ fields, data }))
+    .field('Tests.Selector', () => FieldTestsSelector({ fields, data, suites }))
     .field('Tests.Selector.Reset', () => FieldTestsSelectorReset({ fields, data }))
     .items(fields);
 
