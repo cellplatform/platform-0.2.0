@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-
-import { css, t, Time, Tree } from './common';
+import { Time, Tree, css, type t } from './common';
 import { Description } from './ui.Description';
 import { TestResult } from './ui.Test';
 

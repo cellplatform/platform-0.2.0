@@ -20,11 +20,9 @@ export const Suite: React.FC<SuiteProps> = (props) => {
       opacity: spinning ? 0.15 : 1,
       backgroundColor: !data.ok ? Color.alpha(COLORS.RED, 0.03) : undefined,
       borderBottom: `dashed 2px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      Padding: [20, 20, 10, 20],
-      ':first-child': { paddingTop: 15 },
+      Padding: [20, 20, 15, 20],
       ':last-child': {
         borderBottom: 'none',
-        marginBottom: 30,
       },
     }),
   };
