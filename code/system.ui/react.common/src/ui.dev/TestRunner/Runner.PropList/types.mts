@@ -29,7 +29,7 @@ export type TestRunnerPropListRunData = {
 
 export type TestRunnerPropListSpecsData = {
   ctx?: Ctx | (() => Ctx);
-  all?: t.SpecImport[];
+  all?: t.BundleImport[];
   selected?: HashString[];
   ellipsis?: boolean | (() => boolean | undefined);
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
@@ -42,7 +42,6 @@ export type TestRunnerPropListSpecsData = {
  */
 export type SpecsSelectionHandler = (e: SpecsSelectionHandlerArgs) => void;
 export type SpecsSelectionHandlerArgs = {
-  import: t.SpecImport;
   spec: t.TestSuiteModel;
   from: boolean;
   to: boolean;

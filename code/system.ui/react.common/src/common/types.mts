@@ -30,6 +30,7 @@ export type {
   TestSuiteRunStats,
   SpecImports,
   SpecImport,
+  BundleImport,
 } from 'sys.test.spec/src/types.mjs';
 
 export type {
