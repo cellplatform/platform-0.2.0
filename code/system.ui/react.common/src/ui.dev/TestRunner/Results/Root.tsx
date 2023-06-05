@@ -64,7 +64,7 @@ export const TestResults: React.FC<TestResultsProps> = (props) => {
   const elBody = !spinning && (
     <div {...styles.body}>
       {list.map((data) => {
-        return <Suite data={data} spinning={spinning} />;
+        return <Suite key={data.tx} data={data} spinning={spinning} />;
       })}
     </div>
   );
