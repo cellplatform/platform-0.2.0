@@ -20,8 +20,8 @@ export type TestRunnerPropListData = {
 };
 
 export type TestRunnerPropListRunData = {
+  all?: t.BundleImport[] | (() => t.BundleImport[] | Promise<t.BundleImport[]>);
   ctx?: Ctx | (() => Ctx);
-  all?: t.BundleImport[];
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
   bundle?: t.GetTestBundle;
