@@ -5,8 +5,8 @@ import { Test, rx, t } from '../common';
  * Handles turning an import promise into an initialized spec.
  */
 export function useSpecsImport(data: t.TestRunnerPropListData) {
-  const specs = data.specs ?? {};
-  const all = specs.all ?? [];
+  const run = data.run ?? {};
+  const all = run.all ?? [];
 
   const [loaded, setLoaded] = useState(false);
   const [suites, setSuites] = useState<t.TestSuiteModel[]>([]);
@@ -17,7 +17,7 @@ export function useSpecsImport(data: t.TestRunnerPropListData) {
    */
   useEffect(() => {
     const lifecycle = rx.lifecycle();
-    const all = specs.all ?? [];
+    const all = run.all ?? [];
     const imported = Test.import(all, { init: true });
 
     imported.then((res) => {

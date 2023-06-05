@@ -46,15 +46,15 @@ export default Dev.describe('TestRunner', (e) => {
         <Dev.TestRunner.PropList.Stateful
           margin={[20, 35, 0, 30]}
           initial={{
-            specs: {
+            run: {
               ctx: () => state.current.ctx,
-              selected: local.selected,
               all: [
                 import('./-TEST.sample-1.mjs'),
                 import('./-TEST.sample-2.mjs'),
                 import('./-TEST.controller.mjs'),
               ],
             },
+            specs: { selected: local.selected },
           }}
           onChanged={async (e) => {
             local.selected = e.selected;

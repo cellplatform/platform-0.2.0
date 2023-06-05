@@ -60,7 +60,7 @@ const Wrangle = {
   },
 
   isAllSelected(data: t.TestRunnerPropListData) {
-    const all = data.specs?.all ?? [];
+    const all = data.run?.all ?? [];
     const selected = data.specs?.selected ?? [];
     return selected.length > 0 && all.length === selected.length;
   },

@@ -55,7 +55,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
     fire('run:single:start');
 
     // Execute the spec.
-    const ctx = Wrangle.ctx(state.specs);
+    const ctx = Wrangle.ctx(state.current);
     const res = await e.spec.run({ ctx });
     state.runComplete(e.spec, res);
 
@@ -110,7 +110,7 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
    */
   const bundle: t.GetTestBundle = async () => {
     const specs = api.selected.specs;
-    const ctx = Wrangle.ctx(state.current.specs!);
+    const ctx = Wrangle.ctx(state.current);
     return { specs, ctx };
   };
 
@@ -179,8 +179,8 @@ export async function PropListController(initial?: t.TestRunnerPropListData) {
  * Helpers
  */
 const Wrangle = {
-  ctx(specs: t.TestRunnerPropListSpecsData) {
-    const ctx = specs.ctx ?? {};
+  ctx(data: t.TestRunnerPropListData) {
+    const ctx = (data.run ?? {}).ctx;
     return typeof ctx === 'function' ? ctx() : ctx;
   },
 };

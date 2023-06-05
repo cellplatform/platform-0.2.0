@@ -2,16 +2,19 @@ import { t } from '../common';
 import { SpecsReset } from '../ui/Specs.Reset';
 import { SpecsRow } from '../ui/Specs.Row';
 
+/**
+ * Spec selector rows.
+ */
 export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
   data: t.TestRunnerPropListData;
   suites: t.TestSuiteModel[];
 }): t.PropListItem[] {
   const { data, suites } = args;
-  const run = data?.run;
+  const run = data?.run ?? {};
   const specs = data?.specs ?? {};
 
-  if (!specs.all || specs.all.length === 0) return [];
+  if (!run.all || run.all.length === 0) return [];
 
   return suites.map((spec) => {
     return {
@@ -27,13 +30,14 @@ export function FieldTestsSelector(args: {
   });
 }
 
+/**
+ * Reset row.
+ */
 export function FieldTestsSelectorReset(args: {
   fields: t.TestRunnerField[];
   data: t.TestRunnerPropListData;
 }): t.PropListItem | undefined {
-  const specs = args.data?.specs;
-  if (!specs?.all || specs.all.length === 0) return undefined;
-  return {
-    value: <SpecsReset data={args.data} />,
-  };
+  const run = args.data?.run ?? {};
+  if (!run.all || run.all.length === 0) return undefined;
+  return { value: <SpecsReset data={args.data} /> };
 }

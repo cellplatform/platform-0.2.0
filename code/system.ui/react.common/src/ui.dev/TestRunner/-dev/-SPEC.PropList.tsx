@@ -54,25 +54,21 @@ export default Dev.describe('TestRunner.PropList', (e) => {
        */
       pkg: Pkg,
       run: {
-        label: () => state.current.debug.label || undefined,
-        infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        bundle: () => controller.selected.bundle(),
-        async onRunSingle(e) {
-          console.info('⚡️ onRunSingle:', e);
-        },
-        async onRunAll(e) {
-          console.info('⚡️ onRunAll:', e);
-        },
-      },
-      specs: {
-        ellipsis: () => state.current.debug.ellipsis,
         ctx: () => state.current.ctx,
         all: [
           import('./-TEST.sample-1.mjs'),
           import('./-TEST.sample-2.mjs'),
           import('./-TEST.controller.mjs'),
         ],
+        label: () => state.current.debug.label || undefined,
+        infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
+        bundle: () => controller.selected.bundle(),
+        onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
+        onRunAll: (e) => console.info('⚡️ onRunAll:', e),
+      },
+      specs: {
         selected: local.selected,
+        ellipsis: () => state.current.debug.ellipsis,
         onSelect(e) {
           console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
         },

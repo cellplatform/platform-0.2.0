@@ -76,20 +76,17 @@ const Wrangle = {
   async initialState(initial?: t.TestRunnerPropListData) {
     const data = R.clone<t.TestRunnerPropListData>(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
+    const run = data.run ?? (data.run = {});
 
-    const imported = await Wrangle.importAndInitialize(specs);
-    specs.all = imported.map(({ suite }) => suite);
+    const imported = await Wrangle.importAndInitialize(run);
+    run.all = imported.map(({ suite }) => suite);
+
     specs.selected = specs.selected ?? [];
 
     return { data, imported };
   },
 
-  async importAndInitialize(specs: t.TestRunnerPropListSpecsData) {
-    return Test.import(specs.all ?? [], { init: true });
-  },
-
-  ctx(specs: t.TestRunnerPropListSpecsData) {
-    const ctx = specs.ctx ?? {};
-    return typeof ctx === 'function' ? ctx() : ctx;
+  async importAndInitialize(run: t.TestRunnerPropListRunData) {
+    return Test.import(run.all ?? [], { init: true });
   },
 };

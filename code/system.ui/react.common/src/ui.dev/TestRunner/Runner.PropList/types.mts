@@ -20,6 +20,8 @@ export type TestRunnerPropListData = {
 };
 
 export type TestRunnerPropListRunData = {
+  ctx?: Ctx | (() => Ctx);
+  all?: t.BundleImport[];
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
   bundle?: t.GetTestBundle;
@@ -28,8 +30,6 @@ export type TestRunnerPropListRunData = {
 };
 
 export type TestRunnerPropListSpecsData = {
-  ctx?: Ctx | (() => Ctx);
-  all?: t.BundleImport[];
   selected?: HashString[];
   ellipsis?: boolean | (() => boolean | undefined);
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
