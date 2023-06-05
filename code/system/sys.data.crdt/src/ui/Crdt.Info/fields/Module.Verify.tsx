@@ -1,13 +1,13 @@
-import { t, TestRunner, DEFAULTS } from '../common';
+import { DEFAULTS, TestRunner, t } from '../common';
 
 export function FieldModuleVerify(data: t.CrdtInfoData, info?: {}) {
+  const ctx = {};
   return TestRunner.PropList.runner({
-    infoUrl: Wrangle.infoUrl(),
-    async get() {
+    ctx,
+    infoUrl: () => Wrangle.infoUrl(),
+    async all() {
       const { TESTS } = await import('../../../test/-TESTS.mjs');
-      const root = await TestRunner.bundle(TESTS.all());
-      const ctx = {};
-      return { root, ctx };
+      return TESTS.all;
     },
   });
 }
