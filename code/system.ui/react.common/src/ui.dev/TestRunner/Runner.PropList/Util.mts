@@ -1,13 +1,6 @@
 import { t } from './common';
 
 export const Util = {
-  async ensureLoaded(input: t.SpecImport) {
-    const suite = (await input).default;
-    if (suite?.kind !== 'TestSuite') return;
-    if (!suite.ready) await suite.init();
-    return suite;
-  },
-
   modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
     return {
       shift: e.shiftKey,
@@ -15,5 +8,11 @@ export const Util = {
       alt: e.altKey,
       meta: e.metaKey,
     };
+  },
+
+  isSelected(data: t.TestRunnerPropListData, spec?: t.TestSuiteModel) {
+    if (!spec) return false;
+    const selected = (data.specs ?? {}).selected ?? [];
+    return selected.includes(spec.hash());
   },
 };
