@@ -13,7 +13,7 @@ type T = {
   debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
 };
 const initial: T = {
-  ctx: { fail: false, delay: 1000 },
+  ctx: { fail: false, delay: 2000 },
   props: {},
   debug: { infoUrl: false, ellipsis: false },
 };
@@ -170,10 +170,11 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `ctx.delay = ${e.state.ctx.delay}ms`)
-          .value((e) => e.state.ctx.delay === 300)
+          .value((e) => e.state.ctx.delay === initial.ctx.delay)
           .onClick((e) => {
             e.change((d) => {
-              const next = d.ctx.delay === 300 ? 1000 : 300;
+              const defaultDelay = initial.ctx.delay;
+              const next = d.ctx.delay === defaultDelay ? 300 : defaultDelay;
               local.delay = d.ctx.delay = next;
             });
           }),
