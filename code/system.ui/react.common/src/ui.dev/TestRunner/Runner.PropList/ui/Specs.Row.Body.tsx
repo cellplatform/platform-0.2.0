@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, COLORS, DEFAULTS, DevIcons, Time, css, rx, t } from '../common';
+import { Button, COLORS, DEFAULTS, DevIcons, Time, css, rx, type t } from '../common';
 import { RunIcon } from './Specs.Row.RunIcon';
 
 export type BodyProps = {
@@ -43,11 +43,11 @@ export const Body: React.FC<BodyProps> = (props) => {
     body: css({
       position: 'relative',
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      gridTemplateColumns: '1fr auto auto ',
     }),
-    left: css({ marginRight: 8 }),
-    middle: css({ paddingTop: 1 }),
-    right: css({ display: 'grid', placeItems: 'center' }),
+    runIcon: css({ marginLeft: 8 }),
+    resultIcons: css({ display: 'grid', placeItems: 'center' }),
+    text: css({ paddingTop: 1 }),
     ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     icon: css({
       color: iconColor,
@@ -57,9 +57,29 @@ export const Body: React.FC<BodyProps> = (props) => {
     }),
   };
 
-  const elText = <span>{suite?.description ?? ''}</span>;
   const elIcoPassed = ok === true && <DevIcons.Test.Passed size={13} style={styles.icon} />;
   const elIcoFailed = ok === false && <DevIcons.Test.Failed size={13} style={styles.icon} />;
+
+  const elRunIcon = (
+    <RunIcon
+      isSelected={isSelected}
+      isOver={isOver}
+      isRunning={isRunning}
+      iconColor={iconColor}
+      style={styles.runIcon}
+    />
+  );
+
+  const elResultIcons = (
+    <div {...styles.resultIcons}>
+      {elIcoPassed}
+      {elIcoFailed}
+    </div>
+  );
+
+  const elDescription = (
+    <div {...css(styles.text, ellipsis ? styles.ellipsis : false)}>{suite?.description ?? ''}</div>
+  );
 
   return (
     <Button
@@ -68,18 +88,9 @@ export const Body: React.FC<BodyProps> = (props) => {
       onMouse={(e) => setOver(e.isOver)}
     >
       <div {...styles.body}>
-        <RunIcon
-          isSelected={isSelected}
-          isOver={isOver}
-          isRunning={isRunning}
-          iconColor={iconColor}
-          style={styles.left}
-        />
-        <div {...css(styles.middle, ellipsis ? styles.ellipsis : false)}>{elText}</div>
-        <div {...styles.right}>
-          {elIcoPassed}
-          {elIcoFailed}
-        </div>
+        {elDescription}
+        {elResultIcons}
+        {elRunIcon}
       </div>
     </Button>
   );

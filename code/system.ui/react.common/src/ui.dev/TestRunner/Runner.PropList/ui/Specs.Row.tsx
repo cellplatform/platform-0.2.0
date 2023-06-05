@@ -41,8 +41,8 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     base: css({
       flex: 1,
       display: 'grid',
-      gridTemplateColumns: '1fr auto',
-      columnGap: 5,
+      gridTemplateColumns: 'auto 1fr',
+      columnGap: 10,
     }),
     switch: css({
       paddingTop: 2,
@@ -52,12 +52,16 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
     }),
   };
 
+  const elSwitch = (
+    <div {...styles.switch} onClick={handleSwitchClick}>
+      <Switch height={12} value={isSelected} />
+    </div>
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
+      {elSwitch}
       <Body data={props.data} suite={spec} isSelected={isSelected} onClick={handleBodyClick} />
-      <div {...styles.switch} onClick={handleSwitchClick}>
-        <Switch height={12} value={isSelected} />
-      </div>
     </div>
   );
 };
