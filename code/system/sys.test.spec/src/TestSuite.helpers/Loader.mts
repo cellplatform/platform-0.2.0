@@ -27,6 +27,7 @@ export const Loader = {
       const module = Is.promise(item) ? await item : item;
       if (module === null || typeof module !== 'object') return;
       if (Is.suite(item)) return push(item, false);
+
       Object.keys(module).forEach((key) => {
         const suite = module[key];
         const isDefault = key === 'default';
@@ -35,6 +36,7 @@ export const Loader = {
     };
 
     await Promise.all(list.map(load));
+
     if (options.init) await Promise.all(res.map((item) => item.suite.init()));
     return res;
   },

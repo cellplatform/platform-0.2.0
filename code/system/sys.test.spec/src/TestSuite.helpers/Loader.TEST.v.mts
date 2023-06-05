@@ -20,7 +20,7 @@ describe('Loader', () => {
       expect(res4).to.eql([]);
     });
 
-    it('TestSuite: resolved {objects}', async () => {
+    it('TestSuite: {objects}', async () => {
       const root1 = Test.describe('1', (e) => e.it('1.1'));
       const root2 = Test.describe('2', (e) => e.it('2.1'));
 
@@ -32,6 +32,22 @@ describe('Loader', () => {
 
       expect(res[0].suite.ready).to.eql(false);
       expect(res[1].suite.ready).to.eql(false);
+    });
+
+    it('TestSuite: {objects} - initialized', async () => {
+      const root1 = Test.describe('1', (e) => e.it('1.1'));
+      const root2 = Test.describe('2', (e) => e.it('2.1'));
+      await root1.init();
+      await root2.init();
+
+      const res = await Loader.import([root1, undefined as any, root2, null, {}]);
+      expect(res.length).to.eql(2);
+
+      expect(res[0].suite).to.equal(root1);
+      expect(res[1].suite).to.equal(root2);
+
+      expect(res[0].suite.ready).to.eql(true);
+      expect(res[1].suite.ready).to.eql(true);
     });
 
     it('dynamic import("...")', async () => {
@@ -46,7 +62,7 @@ describe('Loader', () => {
       expect(res3.length).to.eql(1);
 
       const root1 = (await import1).default;
-      const root1a = (await import1).MySpec;
+      const root1a = (await import1).MySpec1;
       const root2 = (await import2).default;
 
       expect(res1[0].suite).to.equal(root1);
