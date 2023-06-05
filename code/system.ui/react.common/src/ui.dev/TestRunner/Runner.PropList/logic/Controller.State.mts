@@ -1,4 +1,5 @@
 import { R, Test, type t } from '../common';
+import { Util } from '../Util.mjs';
 
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
@@ -78,15 +79,13 @@ const Wrangle = {
     const specs = data.specs ?? (data.specs = {});
     const run = data.run ?? (data.run = {});
 
-    const imported = await Wrangle.importAndInitialize(run);
-    run.all = imported.map(({ suite }) => suite);
-
+    const imported = await Util.importAndInitialize(data);
+    run.all = imported.map((e) => e.suite);
     specs.selected = specs.selected ?? [];
 
-    return { data, imported };
-  },
-
-  async importAndInitialize(run: t.TestRunnerPropListRunData) {
-    return Test.import(run.all ?? [], { init: true });
+    return {
+      data,
+      imported,
+    };
   },
 };

@@ -1,4 +1,4 @@
-import { t } from './common';
+import { Test, t } from './common';
 
 export const Util = {
   modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
@@ -14,5 +14,11 @@ export const Util = {
     if (!spec) return false;
     const selected = (data.specs ?? {}).selected ?? [];
     return selected.includes(spec.hash());
+  },
+
+  async importAndInitialize(data: t.TestRunnerPropListData) {
+    const all = data.run?.all ?? [];
+    const list = typeof all === 'function' ? all() : all;
+    return Test.import(list, { init: true });
   },
 };
