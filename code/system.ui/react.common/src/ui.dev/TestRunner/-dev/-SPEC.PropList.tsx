@@ -94,6 +94,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props } = e.state;
+        ctx.subject.backgroundColor(props.card ? 0 : 1);
         return <Dev.TestRunner.PropList {...props} style={{ margin: props.card ? 0 : 20 }} />;
       });
   });
@@ -151,6 +152,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `card`)
           .value((e) => e.state.props.card)
           .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `card.flipped`)
+          .value((e) => e.state.props.flipped)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
       );
     });
 
