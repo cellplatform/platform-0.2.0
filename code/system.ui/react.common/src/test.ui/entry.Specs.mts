@@ -30,6 +30,8 @@ export const ModuleSpecs = {
 export const DevSpecs = {
   'sys.ui.dev.TestRunner.Results': () => import('../ui.dev/TestRunner/-dev/-SPEC.Results'),
   'sys.ui.dev.TestRunner.PropList': () => import('../ui.dev/TestRunner/-dev/-SPEC.PropList'),
+  'sys.ui.dev.TestRunner.PropList.runner': () =>
+    import('../ui.dev/TestRunner/-dev/-SPEC.PropList.runner'),
   'sys.ui.dev.CmdHost': () => import('../ui.dev/Dev.CmdHost/-SPEC'),
   'sys.ui.dev.DevSplash': () => import('../ui.dev/Dev.Splash/-SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/-SPEC'),
