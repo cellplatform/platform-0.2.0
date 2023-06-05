@@ -3,7 +3,7 @@ import { FieldTestsRun } from '../fields/TestsRun';
 import { FieldTestsSelector, FieldTestsSelectorReset } from '../fields/TestsSelector';
 import { useSpecsImport } from '../hooks/useSpecsImport.mjs';
 
-export type TestRunnerPropListProps = {
+export type TestPropListProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.TestRunnerField[];
@@ -14,7 +14,7 @@ export type TestRunnerPropListProps = {
   style?: t.CssValue;
 };
 
-export const PropList: React.FC<TestRunnerPropListProps> = (props) => {
+export const PropList: React.FC<TestPropListProps> = (props) => {
   const { data = {}, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
   const { suites } = useSpecsImport(data);
@@ -47,7 +47,7 @@ export const PropList: React.FC<TestRunnerPropListProps> = (props) => {
  */
 
 const Wrangle = {
-  title(props: TestRunnerPropListProps) {
+  title(props: TestPropListProps) {
     const title = Base.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;

@@ -1,5 +1,5 @@
 import { Dev, expect, type t, Time, type TestCtx, Wrangle } from './-common.mjs';
-import { TestRunnerPropList } from '..';
+import { TestPropList } from '..';
 
 export default Dev.describe('(Self Ref) Controller Behavior', (e) => {
   e.describe('load → all', (e) => {

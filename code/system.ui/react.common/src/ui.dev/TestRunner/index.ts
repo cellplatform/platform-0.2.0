@@ -1,13 +1,13 @@
 import { TestResults } from './Results';
-import { TestRunnerPropList } from './Runner.PropList';
+import { TestPropList } from './Runner.PropList';
 
 import { Test } from './common';
 
 export const TestRunner = {
   Results: TestResults,
-  PropList: TestRunnerPropList,
+  PropList: TestPropList,
   bundle: Test.bundle,
 };
 
-export { TestResults, TestRunnerPropList };
+export { TestResults, TestPropList };
 export default TestRunner;

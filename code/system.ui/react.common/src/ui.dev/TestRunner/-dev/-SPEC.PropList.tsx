@@ -1,12 +1,12 @@
 import { Dev, Pkg, t } from '../../../test.ui';
 
-import type { TestRunnerPropListProps } from '../Runner.PropList';
+import type { TestPropListProps } from '../Runner.PropList';
 import type { TestCtx } from './-types.mjs';
 
 const PropList = Dev.TestRunner.PropList;
 const DEFAULTS = PropList.DEFAULTS;
 
-type P = TestRunnerPropListProps;
+type P = TestPropListProps;
 type T = {
   ctx: TestCtx;
   props: P;
