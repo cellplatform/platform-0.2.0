@@ -1,4 +1,4 @@
-import { TestResults } from './Results';
+import { TestResults } from './Test.Results';
 import { TestPropList } from './Runner.PropList';
 
 import { Test } from './common';

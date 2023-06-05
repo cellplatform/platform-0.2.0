@@ -1,9 +1,8 @@
-import { Dev } from './-common.mjs';
+import { Dev, type TestCtx } from './-common.mjs';
 import suite1 from './-TEST.sample-1.mjs';
 import suite2 from './-TEST.sample-2.mjs';
 
-import type { TestResultsProps } from '../Results';
-import type { TestCtx } from './-types.mjs';
+import { type TestResultsProps } from '../Test.Results';
 
 type T = {
   ctx: TestCtx;
