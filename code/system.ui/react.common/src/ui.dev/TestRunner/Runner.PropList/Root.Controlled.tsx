@@ -1,8 +1,6 @@
 import { type t } from './common';
 import { useController } from './hooks/useController.mjs';
-import { PropList } from './ui/PropList';
-
-import type { TestPropListProps } from './ui/PropList';
+import { PropList, type TestPropListProps } from './ui/PropList';
 
 export type TestPropListControlledProps = Omit<TestPropListProps, 'data'> & {
   initial?: t.TestRunnerPropListData;

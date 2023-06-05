@@ -4,7 +4,7 @@ import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, t, useMouseState } fr
 import { Results } from './TestRunner.Results';
 
 export type TestRunnerProps = {
-  data: t.TestRunnerPropListData;
+  data?: t.TestRunnerPropListData;
   style?: t.CssValue;
 };
 
@@ -30,7 +30,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   }, [txs]);
 
   const runTestsClick = async (e: React.MouseEvent) => {
-    if (data.run) {
+    if (data?.run) {
       const modifiers = Util.modifiers(e);
       await data.run.onRunAll?.({ modifiers });
       mouse.reset();
@@ -82,12 +82,12 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
  */
 const Wrangle = {
   isRunning(props: TestRunnerProps) {
-    const results = props.data.specs?.results ?? {};
+    const results = props.data?.specs?.results ?? {};
     return Object.values(results).some((value) => typeof value === 'boolean');
   },
 
   results(props: TestRunnerProps) {
-    const results = props.data.specs?.results ?? {};
+    const results = props.data?.specs?.results ?? {};
     const res = Object.values(results).filter((value) => typeof value === 'object');
     return res as t.TestSuiteRunResponse[];
   },

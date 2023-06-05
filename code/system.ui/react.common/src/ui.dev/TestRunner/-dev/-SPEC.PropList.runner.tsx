@@ -1,5 +1,5 @@
-import { Dev, Pkg, type t, type TestCtx } from './-common.mjs';
 import { PropList } from '../../../ui/PropList';
+import { Dev, Pkg, type TestCtx } from './-common.mjs';
 
 type T = { ctx: TestCtx };
 const initial: T = { ctx: { fail: false, delay: 2000 } };
