@@ -26,13 +26,15 @@ export const Loader = {
     const load = async (item: TImport) => {
       const module = Is.promise(item) ? await item : item;
       if (module === null || typeof module !== 'object') return;
+
+      if (Is.suite(module.default)) push(module.default, true);
       if (Is.suite(item)) return push(item, false);
 
-      Object.keys(module).forEach((key) => {
-        const suite = module[key];
-        const isDefault = key === 'default';
-        if (Is.suite(suite)) push(suite, isDefault);
-      });
+      Object.keys(module)
+        .filter((key) => key !== 'default')
+        .forEach((key) => {
+          if (Is.suite(module[key])) push(module[key], false);
+        });
     };
 
     for (const item of source) await load(item); // NB: Ordered.
