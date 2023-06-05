@@ -42,7 +42,7 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.row((e) => {
       return (
-        <Dev.TestRunner.PropList.Stateful
+        <Dev.TestRunner.PropList.Controlled
           margin={[20, 35, 0, 30]}
           initial={{
             run: {

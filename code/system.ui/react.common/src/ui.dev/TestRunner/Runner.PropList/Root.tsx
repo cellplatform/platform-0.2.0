@@ -1,11 +1,12 @@
-import { Stateful } from './Root.Stateful';
+import { Item } from './Root.Item';
+import { TestPropListControlled } from './Root.Controlled';
 import { DEFAULTS, FC, FIELDS } from './common';
 import { useController } from './hooks/useController.mjs';
-import { PropListController as controller } from './logic/Controller.mjs';
-import { PropList as View, type TestRunnerPropListProps } from './ui/PropList';
+import { TestPropListController as controller } from './logic/Controller.mjs';
+import { PropList as View, type TestPropListProps } from './ui/PropList';
 import { PropListFieldSelector as FieldSelector } from './ui/PropList.FieldSelector';
 
-export type { TestRunnerPropListProps };
+export type { TestPropListProps };
 
 /**
  * Export
@@ -13,21 +14,23 @@ export type { TestRunnerPropListProps };
 type Fields = {
   FIELDS: typeof FIELDS;
   DEFAULTS: typeof DEFAULTS;
-  Stateful: typeof Stateful;
   FieldSelector: typeof FieldSelector;
+  Controlled: typeof TestPropListControlled;
   controller: typeof controller;
   useController: typeof useController;
+  runner: typeof Item.runner;
 };
 
-export const TestRunnerPropList = FC.decorate<TestRunnerPropListProps, Fields>(
+export const TestPropList = FC.decorate<TestPropListProps, Fields>(
   View,
   {
     FIELDS,
     DEFAULTS,
     FieldSelector,
-    Stateful,
+    Controlled: TestPropListControlled,
     controller,
     useController,
+    runner: Item.runner,
   },
-  { displayName: 'TestRunnerPropList' },
+  { displayName: 'TestPropList' },
 );

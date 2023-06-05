@@ -4,12 +4,12 @@ import { PropList } from './ui/PropList';
 
 import type { TestPropListProps } from './ui/PropList';
 
-export type TestPropListStatefulProps = Omit<TestPropListProps, 'data'> & {
+export type TestPropListControlledProps = Omit<TestPropListProps, 'data'> & {
   initial?: t.TestRunnerPropListData;
   onChanged?: (e: t.TestRunnerPropListChange) => void;
 };
 
-export const TestPropListStateful: React.FC<TestPropListStatefulProps> = (props) => {
+export const TestPropListControlled: React.FC<TestPropListControlledProps> = (props) => {
   const { initial, onChanged } = props;
   const controller = useController({ initial, onChanged });
   return <PropList {...props} data={controller.data} />;
