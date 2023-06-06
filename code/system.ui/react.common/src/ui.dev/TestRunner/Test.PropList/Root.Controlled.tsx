@@ -4,7 +4,7 @@ import { PropList, type TestPropListProps } from './ui/PropList';
 
 export type TestPropListControlledProps = Omit<TestPropListProps, 'data'> & {
   initial?: t.TestPropListData;
-  onChanged?: (e: t.TestPropListChange) => void;
+  onChanged?: t.TestPropListChangeHandler;
 };
 
 export const TestPropListControlled: React.FC<TestPropListControlledProps> = (props) => {

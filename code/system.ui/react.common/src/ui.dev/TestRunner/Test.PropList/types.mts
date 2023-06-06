@@ -71,6 +71,7 @@ export type SpecRunAllClickHandlerArgs = {
 /**
  * Observable.
  */
+export type TestPropListChangeHandler = (e: t.TestPropListChange) => void;
 export type TestPropListChange = {
   op:
     | 'selection'
