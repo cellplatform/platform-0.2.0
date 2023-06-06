@@ -18,7 +18,7 @@ export const Suite: React.FC<SuiteProps> = (props) => {
       position: 'relative',
       filter: `grayscale(${spinning ? 100 : 0}%) blur(${spinning ? 1 : 0}px)`,
       opacity: spinning ? 0.15 : 1,
-      backgroundColor: !data.ok ? Color.alpha(COLORS.RED, 0.03) : undefined,
+      backgroundColor: !data.ok ? Color.alpha(COLORS.RED, 0.02) : undefined,
       borderBottom: `dashed 2px ${Color.alpha(COLORS.DARK, 0.1)}`,
       Padding: [20, 20, 15, 20],
       ':last-child': {

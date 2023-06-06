@@ -39,14 +39,14 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     error: css({ marginLeft: 25 }),
   };
 
-  const elIconSuccess = !isSkipped && data.ok && <DevIcons.Tick size={16} color={COLORS.LIME} />;
-  const elIconFail = !isSkipped && !data.ok && <DevIcons.Close size={16} color={COLORS.MAGENTA} />;
-  const elIconSkipped = isSkipped && (
-    <DevIcons.Skip
-      size={16}
-      color={Color.alpha(COLORS.DARK, 0.3)}
-      style={{ position: 'relative', top: 2 }}
-    />
+  const elSuccessIcon = !isSkipped && data.ok && (
+    <DevIcons.Tick size={16} color={COLORS.LIME} offset={[0, 1]} />
+  );
+  const elFailIcon = !isSkipped && !data.ok && (
+    <DevIcons.Close size={16} color={COLORS.RED} offset={[0, 2]} />
+  );
+  const elSkippedIcon = isSkipped && (
+    <DevIcons.Skip size={16} color={Color.alpha(COLORS.DARK, 0.3)} offset={[0, 2]} />
   );
 
   const elError = data.error && <TestError data={data} style={styles.error} />;
@@ -57,9 +57,9 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.line.base}>
         <div {...styles.line.icon}>
-          {elIconSuccess}
-          {elIconFail}
-          {elIconSkipped}
+          {elSuccessIcon}
+          {elFailIcon}
+          {elSkippedIcon}
         </div>
         <Description text={data.description} isSkipped={isSkipped} />
         <div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>
