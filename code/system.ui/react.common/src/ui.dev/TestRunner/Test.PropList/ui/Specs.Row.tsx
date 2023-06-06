@@ -1,8 +1,8 @@
-import { css, type t } from '../common';
 import { Util } from '../Util.mjs';
+import { css, type t } from '../common';
 import { Body } from './Specs.Row.Body';
-import { Title } from './Specs.Row.Title';
 import { Switch } from './Specs.Row.Switch';
+import { Title } from './Specs.Row.Title';
 
 export type SpecsRowProps = {
   data: t.TestPropListData;
