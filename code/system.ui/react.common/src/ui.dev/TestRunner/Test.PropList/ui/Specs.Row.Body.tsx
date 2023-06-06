@@ -48,7 +48,11 @@ export const Body: React.FC<BodyProps> = (props) => {
     }),
     runIcon: css({}),
     resultIcons: css({ marginLeft: 5, marginRight: 3, paddingTop: 1 }),
-    text: css({ paddingTop: 1 }),
+    description: css({
+      paddingTop: 1,
+      opacity: isSelected ? 1 : 0.5,
+      transition: 'opacity 0.15s ease-in-out',
+    }),
     ellipsis: css({ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }),
     icon: css({
       color: iconColor,
@@ -79,7 +83,9 @@ export const Body: React.FC<BodyProps> = (props) => {
   );
 
   const elDescription = (
-    <div {...css(styles.text, ellipsis ? styles.ellipsis : false)}>{suite?.description ?? ''}</div>
+    <div {...css(styles.description, ellipsis ? styles.ellipsis : false)}>
+      {suite?.description ?? ''}
+    </div>
   );
 
   return (
