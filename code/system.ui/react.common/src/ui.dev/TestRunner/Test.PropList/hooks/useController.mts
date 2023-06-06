@@ -4,7 +4,7 @@ import { TestPropListController } from '../logic/Controller.mjs';
 
 export function useController(args: {
   initial?: t.TestPropListData;
-  onChanged?: (e: t.TestPropListChange) => void;
+  onChanged?: t.TestPropListChangeHandler;
 }) {
   const [data, setData] = useState<t.TestPropListData>();
 

@@ -8,6 +8,7 @@ export function FieldTestsSelectorReset(args: {
   fields: t.TestRunnerField[];
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
+  enabled: boolean;
 }): t.PropListItem | undefined {
-  return { value: <SpecsReset data={args.data} groups={args.groups} /> };
+  return { value: <SpecsReset data={args.data} groups={args.groups} enabled={args.enabled} /> };
 }

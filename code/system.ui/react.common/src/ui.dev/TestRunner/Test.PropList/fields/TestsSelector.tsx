@@ -8,6 +8,7 @@ export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
+  enabled: boolean;
 }): t.PropListItem[] {
   const { data, groups } = args;
   const run = data?.run ?? {};
@@ -31,6 +32,7 @@ export function FieldTestsSelector(args: {
           suite={suite}
           title={isDifferentTitle ? title : ''}
           indent={title ? 10 : undefined}
+          enabled={args.enabled}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />

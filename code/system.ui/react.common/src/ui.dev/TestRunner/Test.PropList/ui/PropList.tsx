@@ -12,20 +12,21 @@ export type TestPropListProps = {
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
+  enabled?: boolean;
   style?: t.CssValue;
 };
 
 export const PropList: React.FC<TestPropListProps> = (props) => {
-  const { data = {}, fields = DEFAULTS.fields } = props;
+  const { data = {}, enabled = true, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
   const { groups } = useSuites(data);
 
   const items = Base.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
     .field('Module.Version', { label: 'Version', value: pkg?.version ?? '-' })
-    .field('Tests.Run', () => FieldTestsRun({ fields, data }))
-    .field('Tests.Selector', () => FieldTestsSelector({ fields, data, groups }))
-    .field('Tests.Selector.Reset', () => FieldTestsSelectorReset({ fields, data, groups }))
+    .field('Tests.Run', () => FieldTestsRun({ fields, data, enabled }))
+    .field('Tests.Selector', () => FieldTestsSelector({ fields, data, groups, enabled }))
+    .field('Tests.Selector.Reset', () => FieldTestsSelectorReset({ fields, data, groups, enabled }))
     .items(fields);
 
   return (

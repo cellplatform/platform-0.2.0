@@ -5,6 +5,7 @@ import { TestRunnerLabel } from '../ui/TestRunner.Label';
 export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];
   data: t.TestPropListData;
+  enabled: boolean;
 }): t.PropListItem | undefined {
   const data = args.data;
   const run = data?.run;
@@ -15,6 +16,6 @@ export function FieldTestsRun(args: {
 
   return {
     label: <TestRunnerLabel label={label} infoUrl={infoUrl} />,
-    value: <TestRunner data={data} />,
+    value: <TestRunner data={data} enabled={args.enabled} />,
   };
 }

@@ -9,19 +9,21 @@ export type SpecsRowProps = {
   suite: t.TestSuiteModel;
   title: string;
   indent?: number;
+  enabled?: boolean;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const { data, suite, title } = props;
+  const { data, suite, title, enabled = true } = props;
   const isSelected = Util.isSelected(data, suite);
 
   /**
    * Handlers
    */
   const handleSwitchClick = (e: React.MouseEvent) => {
+    if (!enabled) return;
     props.onSelectionChange?.({
       suite,
       from: isSelected,
@@ -31,6 +33,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   };
 
   const handleBodyClick = (e: React.MouseEvent) => {
+    if (!enabled) return;
     props.onRunClick?.({
       suite,
       modifiers: Util.modifiers(e),
@@ -46,13 +49,24 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   };
 
   const elSwitch = (
-    <Switch isSelected={isSelected} indent={props.indent} onClick={handleSwitchClick} />
+    <Switch
+      isSelected={isSelected}
+      indent={props.indent}
+      onClick={handleSwitchClick}
+      enabled={enabled}
+    />
   );
 
   const elTitle = title && <Title text={title} />;
 
   const elBody = (
-    <Body data={props.data} suite={suite} isSelected={isSelected} onClick={handleBodyClick} />
+    <Body
+      data={props.data}
+      suite={suite}
+      isSelected={isSelected}
+      enabled={enabled}
+      onClick={handleBodyClick}
+    />
   );
 
   return (

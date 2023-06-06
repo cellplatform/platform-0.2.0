@@ -4,10 +4,13 @@ import { Button, Keyboard, css, useMouseState, type t } from '../common';
 export type SpecsResetProps = {
   data: t.TestPropListData;
   groups: t.TestSuiteGroup[];
+  enabled?: boolean;
   style?: t.CssValue;
 };
 
 export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
+  const { enabled = true } = props;
+
   const mouse = useMouseState();
   const keyboard = Keyboard.useKeyboardState();
   const isOver = mouse.isOver;
@@ -19,6 +22,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
    * Handlers
    */
   const handleResetClick = (e: React.MouseEvent) => {
+    if (!enabled) return;
     const specs = props.data?.specs ?? {};
     const modifiers = Util.modifiers(e);
     const select = isClear ? 'none' : 'all';
@@ -40,7 +44,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <Button onClick={handleResetClick} style={styles.button}>
+      <Button onClick={handleResetClick} style={styles.button} isEnabled={enabled}>
         {label}
       </Button>
     </div>

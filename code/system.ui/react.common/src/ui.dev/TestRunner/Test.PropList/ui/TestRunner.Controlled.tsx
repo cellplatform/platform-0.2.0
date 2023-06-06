@@ -4,7 +4,7 @@ import { TestRunner, type TestRunnerProps } from './TestRunner';
 
 export type TestRunnerControlledProps = Omit<TestRunnerProps, 'data'> & {
   initial?: t.TestPropListData;
-  onChanged?: (e: t.TestPropListChange) => void;
+  onChanged?: t.TestPropListChangeHandler;
 };
 
 export const TestRunnerControlled: React.FC<TestRunnerControlledProps> = (props) => {

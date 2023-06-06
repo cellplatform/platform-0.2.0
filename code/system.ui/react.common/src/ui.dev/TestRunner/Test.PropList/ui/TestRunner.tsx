@@ -5,6 +5,7 @@ import { Results } from './TestRunner.Results';
 
 export type TestRunnerProps = {
   data?: t.TestPropListData;
+  enabled?: boolean;
   style?: t.CssValue;
 };
 
@@ -12,6 +13,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const { data } = props;
   const results = Wrangle.results(props);
   const isRunning = Wrangle.isRunning(props);
+  const isEnabled = Wrangle.isEnabled(props);
   const txs = results.map((m) => m.tx).join();
 
   const mouse = useMouseState();
@@ -28,6 +30,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   }, [txs]);
 
   const runTestsClick = async (e: React.MouseEvent) => {
+    if (!isEnabled) return;
     if (data?.run) {
       const modifiers = Util.modifiers(e);
       await data.run.onRunAll?.({ modifiers });
@@ -59,7 +62,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
     </div>
   );
   const elButton = !isRunning && (
-    <Button onClick={runTestsClick}>
+    <Button onClick={runTestsClick} isEnabled={isEnabled}>
       <Results results={results} isColored={isColored} isOver={mouse.isOver} />
     </Button>
   );
@@ -79,7 +82,12 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
+  isEnabled(props: TestRunnerProps) {
+    return props.enabled ?? true;
+  },
+
   isRunning(props: TestRunnerProps) {
+    if (!Wrangle.isEnabled(props)) return false;
     const results = props.data?.specs?.results ?? {};
     return Object.values(results).some((value) => typeof value === 'boolean');
   },

@@ -17,7 +17,7 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
-  type LocalStore = Pick<P, 'card' | 'fields'> &
+  type LocalStore = Pick<P, 'card' | 'fields' | 'enabled'> &
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
@@ -25,6 +25,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     ellipsis: false,
     fields: DEFAULTS.fields,
     card: true,
+    enabled: true,
     selected: [],
     label: '',
     delay: initial.ctx.delay,
@@ -39,8 +40,11 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.infoUrl = local.infoUrl;
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
+
       d.props.fields = local.fields;
       d.props.card = local.card;
+      d.props.enabled = local.enabled;
+
       d.ctx.delay = local.delay;
       d.ctx.fail = local.fail;
     });
@@ -158,6 +162,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `card.flipped`)
           .value((e) => e.state.props.flipped)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `enabled`)
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
       );
     });
 

@@ -6,12 +6,13 @@ export type BodyProps = {
   data: t.TestPropListData;
   suite?: t.TestSuiteModel | undefined;
   isSelected?: boolean;
+  enabled?: boolean;
   style?: t.CssValue;
   onClick?: React.MouseEventHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
-  const { isSelected, suite } = props;
+  const { isSelected, suite, enabled = true } = props;
   const hash = suite?.hash() ?? '';
   const isRunning = Wrangle.isRunning(props, hash);
   const ellipsis = Wrangle.ellipsis(props);
@@ -64,6 +65,7 @@ export const Body: React.FC<BodyProps> = (props) => {
 
   const elRunIcon = (
     <RunIcon
+      enabled={enabled}
       isSelected={isSelected}
       isOver={isOver}
       isRunning={isRunning}
@@ -88,6 +90,7 @@ export const Body: React.FC<BodyProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
+      isEnabled={enabled}
       onClick={props.onClick}
       onMouse={(e) => setOver(e.isOver)}
     >
