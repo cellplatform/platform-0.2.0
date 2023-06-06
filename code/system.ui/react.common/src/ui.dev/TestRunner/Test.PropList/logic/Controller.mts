@@ -158,14 +158,14 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     },
 
     /**
-     * Retrieves the grouped list of initialized test suites.
+     * Retrieves the named-group list of initialized test suites.
      */
     get groups() {
       return state.groups;
     },
 
     /**
-     * Retrieves the complete list of initialized test suites.
+     * Retrieves a complete flat-list of initialized test suites.
      */
     get suites() {
       return state.suites;
