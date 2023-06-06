@@ -10,7 +10,7 @@ export type SuiteResultsProps = {
 
 export const SuiteResults: React.FC<SuiteResultsProps> = (props) => {
   const { data } = props;
-  const elapsed = Time.duration(data.elapsed).toString();
+  const elapsed = Time.duration(data.time.elapsed).toString();
 
   const isEmpty = useMemo(() => Tree.Results.isEmpty(data), [data.id]);
   if (isEmpty) return null;

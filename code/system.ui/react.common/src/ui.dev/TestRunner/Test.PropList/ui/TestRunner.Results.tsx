@@ -44,7 +44,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
    */
   const { passed, failed } = stats;
   const skipped = stats.skipped + stats.only;
-  const msecs = results.map((e) => e.elapsed).reduce((acc, msecs) => acc + msecs, 0);
+  const msecs = results.map((e) => e.time.elapsed).reduce((acc, msecs) => acc + msecs, 0);
   const elapsed = Time.duration(msecs);
 
   const items: JSX.Element[] = [];

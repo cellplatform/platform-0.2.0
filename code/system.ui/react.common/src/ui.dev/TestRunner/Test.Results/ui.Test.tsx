@@ -64,7 +64,7 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
 
   const elError = data.error && <TestError data={data} style={styles.error} />;
 
-  const elapsed = Time.duration(data.elapsed).toString();
+  const elapsed = Time.duration(data.time.elapsed).toString();
 
   return (
     <div {...css(styles.base, props.style)}>
