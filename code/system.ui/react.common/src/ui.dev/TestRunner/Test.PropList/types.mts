@@ -3,12 +3,15 @@ import type { t } from '../../../common.t';
 type HashString = string;
 type Ctx = Record<string, unknown>;
 
+export type TestPropListInput = t.BundleImport | string;
 export type TestRunnerField =
   | 'Module'
   | 'Module.Version'
   | 'Tests.Run'
   | 'Tests.Selector'
   | 'Tests.Selector.Reset';
+
+export type TestSuiteGroup = { title: string; suites: t.TestSuiteModel[] };
 
 /**
  * Data model for the <TestRunner.PropList> component.
@@ -20,7 +23,7 @@ export type TestPropListData = {
 };
 
 export type TestPropListRunData = {
-  list?: t.BundleImport[] | (() => t.BundleImport[] | Promise<t.BundleImport[]>);
+  list?: TestPropListInput[] | (() => TestPropListInput[] | Promise<TestPropListInput[]>);
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);

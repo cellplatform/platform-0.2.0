@@ -77,7 +77,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     state.clearResults();
     if (forceAll || totalSelected === 0) state.selectAll();
 
-    const specs = forceAll ? api.all : api.selected.specs;
+    const specs = forceAll ? api.suites : api.selected.specs;
     for (const spec of specs) {
       await onRunSingle({ spec, modifiers });
     }
@@ -93,7 +93,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
 
     // Update selection state.
     const { select = 'all' } = e;
-    const selected = select === 'none' ? [] : api.all.map((spec) => spec.hash());
+    const selected = select === 'none' ? [] : api.suites.map((spec) => spec.hash());
 
     state.current.specs = {
       ...state.current.specs,
@@ -150,16 +150,23 @@ export async function TestPropListController(initial?: t.TestPropListData) {
         hashes,
         bundle,
         get specs() {
-          return api.all.filter((spec) => hashes.includes(spec.hash()));
+          return api.suites.filter((spec) => hashes.includes(spec.hash()));
         },
       };
     },
 
     /**
-     * Retrieves the complete list of initialized specs.
+     * Retrieves the grouped list of initialized test suites.
      */
-    get all() {
-      return state.all;
+    get groups() {
+      return state.groups;
+    },
+
+    /**
+     * Retrieves the complete list of initialized test suites.
+     */
+    get suites() {
+      return state.suites;
     },
 
     /**

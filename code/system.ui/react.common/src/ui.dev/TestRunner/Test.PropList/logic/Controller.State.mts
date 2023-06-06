@@ -6,7 +6,7 @@ import { R, type t } from '../common';
  */
 export async function State(initial?: t.TestPropListData) {
   const res = await Wrangle.initialState(initial);
-  const imported = res.imported;
+  const groups = res.groups;
   let _current = res.data;
 
   const api = {
@@ -26,12 +26,16 @@ export async function State(initial?: t.TestPropListData) {
       return specs.results ?? (specs.results = {});
     },
 
-    get all() {
-      return imported.map((e) => e.suite);
+    get groups() {
+      return groups;
+    },
+
+    get suites() {
+      return Util.groupsToSuites(groups);
     },
 
     selectAll() {
-      api.all.forEach((spec) => api.selectSpec(spec.hash()));
+      api.suites.forEach((spec) => api.selectSpec(spec.hash()));
     },
 
     /**
@@ -77,15 +81,11 @@ const Wrangle = {
   async initialState(initial?: t.TestPropListData) {
     const data = R.clone<t.TestPropListData>(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
-    const run = data.run ?? (data.run = {});
-
-    const imported = await Util.importAndInitialize(data);
-    run.list = imported.map((e) => e.suite);
+    const groups = await Util.importAndInitialize(data);
     specs.selected = specs.selected ?? [];
-
     return {
       data,
-      imported,
+      groups,
     };
   },
 };

@@ -1,5 +1,4 @@
 import { t } from '../common';
-import { SpecsReset } from '../ui/Specs.Reset';
 import { SpecsRow } from '../ui/Specs.Row';
 
 /**
@@ -8,36 +7,27 @@ import { SpecsRow } from '../ui/Specs.Row';
 export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
   data: t.TestPropListData;
-  suites: t.TestSuiteModel[];
+  groups: t.TestSuiteGroup[];
 }): t.PropListItem[] {
-  const { data, suites } = args;
+  const { data, groups } = args;
   const run = data?.run ?? {};
   const specs = data?.specs ?? {};
+  const res: t.PropListItem[] = [];
 
-  if (!run.list || run.list.length === 0) return [];
-
-  return suites.map((spec) => {
-    return {
-      value: (
+  groups.forEach((group) => {
+    group.suites.forEach((suite) => {
+      const value = (
         <SpecsRow
           data={data}
-          spec={spec}
+          spec={suite}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />
-      ),
-    };
-  });
-}
+      );
 
-/**
- * Reset row.
- */
-export function FieldTestsSelectorReset(args: {
-  fields: t.TestRunnerField[];
-  data: t.TestPropListData;
-}): t.PropListItem | undefined {
-  const run = args.data?.run ?? {};
-  if (!run.list || run.list.length === 0) return undefined;
-  return { value: <SpecsReset data={args.data} /> };
+      res.push({ value });
+    });
+  });
+
+  return res;
 }
