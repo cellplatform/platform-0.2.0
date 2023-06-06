@@ -1,17 +1,21 @@
-import { css, Switch, type t } from '../common';
+import { css, type t } from '../common';
 import { Util } from '../Util.mjs';
 import { Body } from './Specs.Row.Body';
+import { Title } from './Specs.Row.Title';
+import { Switch } from './Specs.Row.Switch';
 
 export type SpecsRowProps = {
   data: t.TestPropListData;
   suite: t.TestSuiteModel;
+  title: string;
+  indent?: number;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const { data, suite } = props;
+  const { data, suite, title } = props;
   const isSelected = Util.isSelected(data, suite);
 
   /**
@@ -37,30 +41,27 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      flex: 1,
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      columnGap: 10,
-    }),
-    switch: css({
-      paddingTop: 2,
-      display: 'grid',
-      justifyContent: 'center',
-      alignContent: 'top',
-    }),
+    base: css({ flex: 1 }),
+    body: css({ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 10 }),
   };
 
   const elSwitch = (
-    <div {...styles.switch} onClick={handleSwitchClick}>
-      <Switch height={12} value={isSelected} />
-    </div>
+    <Switch isSelected={isSelected} indent={props.indent} onClick={handleSwitchClick} />
+  );
+
+  const elTitle = title && <Title text={title} />;
+
+  const elBody = (
+    <Body data={props.data} suite={suite} isSelected={isSelected} onClick={handleBodyClick} />
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elSwitch}
-      <Body data={props.data} suite={suite} isSelected={isSelected} onClick={handleBodyClick} />
+      {elTitle}
+      <div {...styles.body}>
+        {elSwitch}
+        {elBody}
+      </div>
     </div>
   );
 };

@@ -14,12 +14,23 @@ export function FieldTestsSelector(args: {
   const specs = data?.specs ?? {};
   const res: t.PropListItem[] = [];
 
+  let _lastTitle = '';
+
   groups.forEach((group) => {
+    const title = group.title;
     group.suites.forEach((suite) => {
+      const isDifferentTitle = title !== _lastTitle;
+      _lastTitle = title;
+
+      /**
+       * Row → Suite (Selector)
+       */
       const el = (
         <SpecsRow
           data={data}
           suite={suite}
+          title={isDifferentTitle ? title : ''}
+          indent={title ? 10 : undefined}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />

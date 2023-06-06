@@ -58,6 +58,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           return [
             import('./-TEST.sample-1.mjs'),
             import('./-TEST.sample-2.mjs'),
+            'Internal',
             import('./-TEST.controller.mjs'),
           ];
         },
