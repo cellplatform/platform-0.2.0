@@ -16,15 +16,22 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner', (e) => {
-  type LocalStore = { selected: string[] };
+  type LocalStore = TestCtx & { selected: string[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
     selected: [],
+    fail: initial.ctx.fail,
+    delay: initial.ctx.delay,
   });
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    await state.change((d) => {
+      d.ctx.fail = local.fail;
+      d.ctx.delay = local.delay;
+    });
 
     ctx.subject
       .display('grid')
@@ -75,7 +82,7 @@ export default Dev.describe('TestRunner', (e) => {
         btn
           .label((e) => `ctx.fail = ${e.state.ctx.fail}`)
           .value((e) => e.state.ctx.fail)
-          .onClick((e) => e.change((d) => Dev.toggle(d.ctx, 'fail'))),
+          .onClick((e) => e.change((d) => (local.fail = Dev.toggle(d.ctx, 'fail')))),
       );
 
       dev.hr(-1, 5);
