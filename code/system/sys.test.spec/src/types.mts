@@ -11,6 +11,7 @@ type SuiteId = Id;
 type TestId = Id;
 type Anything = void | any;
 type Milliseconds = number;
+type Timestamp = number;
 type Ctx = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
@@ -106,7 +107,7 @@ export type TestRunResponse = {
   tx: Id; // Unique ID for the individual test run operation.
   ok: boolean;
   description: string;
-  elapsed: Milliseconds;
+  time: { started: Timestamp; elapsed: Milliseconds };
   timeout: Milliseconds;
   excluded?: TestModifier[];
   error?: Error;

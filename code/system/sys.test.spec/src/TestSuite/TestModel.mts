@@ -26,7 +26,7 @@ export const TestModel = (args: {
         tx,
         ok: true,
         description,
-        elapsed: -1,
+        time: { started: Time.now.timestamp, elapsed: -1 },
         timeout: Math.max(0, options.timeout ?? DEFAULT.TIMEOUT),
         excluded,
         noop,
@@ -35,7 +35,7 @@ export const TestModel = (args: {
       let _stopTimeout: () => void = () => null;
       const finalizeResponse = (options: { error?: Error } = {}) => {
         _stopTimeout?.();
-        response.elapsed = timer.elapsed.msec;
+        response.time.elapsed = timer.elapsed.msec;
         response.error = options.error;
         response.ok = !Boolean(response.error);
         return Delete.undefined(response);
