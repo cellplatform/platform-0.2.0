@@ -1,8 +1,9 @@
-import { ValueHandler, type t } from '../common';
 import { TestRunner } from '../TestRunner';
+import { ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
 type Margin = t.CssValue['Margin'];
+type ListInput = t.TestPropListRunData['list'];
 
 /**
  * A BDD test-selector/runner.
@@ -17,15 +18,25 @@ export function bdd<S extends O = O>(
 
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
-    margin: ValueHandler<Margin, S>(events),
-    initial: ValueHandler<t.TestPropListData, S>(events),
+    localstore: ValueHandler<string, S>(events),
+    list: ValueHandler<ListInput, S>(events),
+    run: ValueHandler<t.DevBddRunDef, S>(events),
     enabled: ValueHandler<boolean, S>(events),
+    margin: ValueHandler<Margin, S>(events),
   };
 
   const args: t.DevBddHandlerArgs<S> = {
     ctx,
-    initial(input) {
-      values.initial.handler(input);
+    localstore(input) {
+      values.localstore.handler(input);
+      return args;
+    },
+    list(input) {
+      values.list.handler(input);
+      return args;
+    },
+    run(input) {
+      values.run.handler(input);
       return args;
     },
     margin(input) {
@@ -55,15 +66,22 @@ export function bdd<S extends O = O>(
       changeHandlers.forEach((fn) => fn({ ...args, dev, state, change, event: changed }));
     };
 
-    const hasHandlers = changeHandlers.size > 0;
     const isEnabled = values.enabled.current !== false;
+    const list = values.list.current;
+    const run = values.run.current;
+    const data: t.TestPropListData = {
+      run: { list, ctx: run?.ctx, infoUrl: run?.infoUrl, label: run?.label },
+      specs: {},
+    };
 
     return (
       <TestRunner.PropList.Controlled
-        initial={values.initial.current}
+        initial={data}
         margin={values.margin.current}
         enabled={isEnabled}
-        onChanged={hasHandlers ? onChange : undefined}
+        onChanged={(e) => {
+          onChange(e);
+        }}
       />
     );
   });
