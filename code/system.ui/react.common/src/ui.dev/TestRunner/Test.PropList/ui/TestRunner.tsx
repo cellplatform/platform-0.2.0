@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Util } from '../Util.mjs';
-import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, t, useMouseState } from '../common';
+import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, useMouseState, type t } from '../common';
 import { Results } from './TestRunner.Results';
 
 export type TestRunnerProps = {
@@ -18,15 +18,13 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const [isColored, setColored] = useState(false);
 
   useEffect(() => {
-    const lifecycle = rx.lifecycle();
+    const { dispose, dispose$ } = rx.disposable();
     if (results.length > 0) {
       setColored(true);
-      Time.delay(DEFAULTS.colorDelay, () => {
-        if (!lifecycle.disposed) setColored(false);
-      });
+      Time.until(dispose$).delay(DEFAULTS.colorDelay, () => setColored(false));
     }
 
-    return lifecycle.dispose;
+    return dispose;
   }, [txs]);
 
   const runTestsClick = async (e: React.MouseEvent) => {

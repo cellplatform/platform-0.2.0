@@ -25,15 +25,12 @@ export const Body: React.FC<BodyProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    const lifecycle = rx.lifecycle();
+    const { dispose, dispose$ } = rx.disposable();
     if (typeof ok === 'boolean') {
+      Time.until(dispose$).delay(DEFAULTS.colorDelay, () => setColored(false));
       setColored(true);
-      Time.delay(DEFAULTS.colorDelay, () => {
-        if (lifecycle.disposed) return;
-        setColored(false);
-      });
     }
-    return lifecycle.dispose;
+    return dispose;
   }, [ok]);
 
   /**
