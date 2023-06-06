@@ -9,7 +9,7 @@ export function FieldTestsRun(args: {
 }): t.PropListItem | undefined {
   const data = args.data;
   const run = data?.run;
-  if (!run || !run.bundle) return;
+  if (!run) return;
 
   const label = typeof run.label === 'function' ? run.label() : run.label;
   const infoUrl = typeof run.infoUrl === 'function' ? run.infoUrl() : run.infoUrl;

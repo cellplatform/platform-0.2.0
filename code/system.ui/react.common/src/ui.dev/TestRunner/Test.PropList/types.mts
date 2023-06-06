@@ -27,7 +27,6 @@ export type TestPropListRunData = {
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
-  bundle?: t.GetTestBundle;
   onRunSingle?: SpecRunClickHandler;
   onRunAll?: SpecRunAllClickHandler;
 };

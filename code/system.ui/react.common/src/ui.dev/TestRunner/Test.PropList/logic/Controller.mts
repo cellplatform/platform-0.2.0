@@ -134,7 +134,6 @@ export async function TestPropListController(initial?: t.TestPropListData) {
         ...state.current,
         run: {
           ...state.current.run,
-          bundle,
           onRunSingle,
           onRunAll,
         },

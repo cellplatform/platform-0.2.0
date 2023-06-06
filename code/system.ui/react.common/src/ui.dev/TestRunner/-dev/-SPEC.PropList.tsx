@@ -68,7 +68,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         },
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        bundle: () => controller.selected.bundle(),
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
         onRunAll: (e) => console.info('⚡️ onRunAll:', e),
       },
