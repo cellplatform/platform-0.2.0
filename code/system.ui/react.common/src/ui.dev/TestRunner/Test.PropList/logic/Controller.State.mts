@@ -80,7 +80,7 @@ const Wrangle = {
     const run = data.run ?? (data.run = {});
 
     const imported = await Util.importAndInitialize(data);
-    run.all = imported.map((e) => e.suite);
+    run.list = imported.map((e) => e.suite);
     specs.selected = specs.selected ?? [];
 
     return {

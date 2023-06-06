@@ -60,9 +60,9 @@ const Wrangle = {
   },
 
   isAllSelected(data: t.TestPropListData) {
-    const all = data.run?.all ?? [];
+    const list = data.run?.list ?? [];
     const selected = data.specs?.selected ?? [];
-    return selected.length > 0 && all.length === selected.length;
+    return selected.length > 0 && list.length === selected.length;
   },
 
   isNoneSelected(data: t.TestPropListData) {

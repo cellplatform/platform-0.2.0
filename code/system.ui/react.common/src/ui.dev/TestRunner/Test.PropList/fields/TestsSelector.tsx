@@ -14,7 +14,7 @@ export function FieldTestsSelector(args: {
   const run = data?.run ?? {};
   const specs = data?.specs ?? {};
 
-  if (!run.all || run.all.length === 0) return [];
+  if (!run.list || run.list.length === 0) return [];
 
   return suites.map((spec) => {
     return {
@@ -38,6 +38,6 @@ export function FieldTestsSelectorReset(args: {
   data: t.TestPropListData;
 }): t.PropListItem | undefined {
   const run = args.data?.run ?? {};
-  if (!run.all || run.all.length === 0) return undefined;
+  if (!run.list || run.list.length === 0) return undefined;
   return { value: <SpecsReset data={args.data} /> };
 }

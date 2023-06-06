@@ -46,7 +46,7 @@ export default Dev.describe('TestRunner', (e) => {
           initial={{
             run: {
               ctx: () => state.current.ctx,
-              all: [
+              list: [
                 import('./-TEST.sample-1.mjs'),
                 import('./-TEST.sample-2.mjs'),
                 import('./-TEST.controller.mjs'),

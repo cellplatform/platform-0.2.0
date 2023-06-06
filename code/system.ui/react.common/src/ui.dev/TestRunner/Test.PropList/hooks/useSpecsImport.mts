@@ -6,7 +6,7 @@ import { rx, type t } from '../common';
  * Handles turning an import promise into an initialized spec.
  */
 export function useSpecsImport(data: t.TestPropListData) {
-  const all = (data.run ?? {}).all ?? [];
+  const list = (data.run ?? {}).list ?? [];
 
   const [loaded, setLoaded] = useState(false);
   const [suites, setSuites] = useState<t.TestSuiteModel[]>([]);
@@ -24,11 +24,11 @@ export function useSpecsImport(data: t.TestPropListData) {
       const suites = res.map((e) => e.suite);
       const totalReady = suites.reduce((acc, next) => acc + (next.ready ? 1 : 0), 0);
       setSuites(suites);
-      setLoaded(totalReady === all.length);
+      setLoaded(totalReady === list.length);
     });
 
     return lifecycle.dispose;
-  }, [hashes, loaded, all.length]);
+  }, [hashes, loaded, list.length]);
 
   /**
    * API

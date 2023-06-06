@@ -20,7 +20,7 @@ export type TestPropListData = {
 };
 
 export type TestPropListRunData = {
-  all?: t.BundleImport[] | (() => t.BundleImport[] | Promise<t.BundleImport[]>);
+  list?: t.BundleImport[] | (() => t.BundleImport[] | Promise<t.BundleImport[]>);
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);

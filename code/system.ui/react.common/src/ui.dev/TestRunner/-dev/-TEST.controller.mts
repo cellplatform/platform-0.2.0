@@ -9,27 +9,27 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
   });
 
   e.describe('load → all', (e) => {
-    const all = [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')];
+    const list = [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')];
 
-    const expectOrder = (all: t.TestSuiteModel[]) => {
-      const labels = all.map((suite) => suite.description);
+    const expectOrder = (list: t.TestSuiteModel[]) => {
+      const labels = list.map((suite) => suite.description);
       expect(labels[0]).to.eql('Sample-1');
       expect(labels[1]).to.eql('MySpec');
       expect(labels[2].startsWith('Sample-2: Lorem')).to.eql(true);
     };
 
     e.it('simple list (array)', async (e) => {
-      const controller = await TestPropList.controller({ run: { all } });
+      const controller = await TestPropList.controller({ run: { list } });
       expectOrder(controller.all);
     });
 
     e.it('function', async (e) => {
-      const controller = await TestPropList.controller({ run: { all: () => all } });
+      const controller = await TestPropList.controller({ run: { list: () => list } });
       expectOrder(controller.all);
     });
 
     e.it('async function', async (e) => {
-      const controller = await TestPropList.controller({ run: { all: async () => all } });
+      const controller = await TestPropList.controller({ run: { list: async () => list } });
       expectOrder(controller.all);
     });
   });

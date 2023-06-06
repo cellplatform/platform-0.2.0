@@ -17,9 +17,9 @@ export const Util = {
   },
 
   async importAndInitialize(data: t.TestPropListData) {
-    const source = data.run?.all ?? [];
-    const list = typeof source === 'function' ? source() : source;
-    const all = Is.promise(list) ? await list : list;
-    return Test.import(all, { init: true });
+    const input = data.run?.list ?? [];
+    const value = typeof input === 'function' ? input() : input;
+    const list = Is.promise(value) ? await value : value;
+    return Test.import(list, { init: true });
   },
 };
