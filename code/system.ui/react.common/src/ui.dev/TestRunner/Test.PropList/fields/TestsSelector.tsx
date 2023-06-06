@@ -16,7 +16,7 @@ export function FieldTestsSelector(args: {
 
   groups.forEach((group) => {
     group.suites.forEach((suite) => {
-      const value = (
+      const el = (
         <SpecsRow
           data={data}
           spec={suite}
@@ -25,7 +25,7 @@ export function FieldTestsSelector(args: {
         />
       );
 
-      res.push({ value });
+      res.push({ value: el });
     });
   });
 
