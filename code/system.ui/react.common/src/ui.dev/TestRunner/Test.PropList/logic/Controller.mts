@@ -41,10 +41,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     fire('selection');
   };
 
-  /**
-   * Handle "run" button being clicked.
-   */
-  const onRunSingle: t.SpecRunClickHandler = async (e) => {
+  const onRunSingleInternal = async (e: t.SpecRunClickHandlerArgs, options: {} = {}) => {
     initial?.run?.onRunSingle?.(e); // Bubble event.
 
     const hash = e.suite.hash();
@@ -64,6 +61,14 @@ export async function TestPropListController(initial?: t.TestPropListData) {
   };
 
   /**
+   * Handle "run" button being clicked.
+   */
+  const onRunSingle: t.SpecRunClickHandler = async (e) => {
+    state.clearResults();
+    await onRunSingleInternal(e);
+  };
+
+  /**
    * Handle the "run all" button being clicked.
    */
   const onRunAll: t.SpecRunAllClickHandler = async (e) => {
@@ -79,7 +84,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
 
     const specs = forceAll ? api.suites : api.selected.suites;
     for (const suite of specs) {
-      await onRunSingle({ suite, modifiers });
+      await onRunSingleInternal({ suite, modifiers });
     }
 
     fire('run:all:complete');
