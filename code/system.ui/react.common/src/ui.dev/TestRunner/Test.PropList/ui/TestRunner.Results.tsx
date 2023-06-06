@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, Test, Time, Value, css, t } from '../common';
+import { COLORS, DevIcons, Test, Time, Value, css, type t } from '../common';
 import { RunIcon } from './Specs.Row.RunIcon';
 
 export type ResultsProps = {

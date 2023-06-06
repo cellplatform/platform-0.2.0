@@ -1,4 +1,4 @@
-import { COLORS, DevIcons, Spinner, css, t } from '../common';
+import { COLORS, DevIcons, Spinner, css, type t } from '../common';
 
 export type RunIconProps = {
   isSelected?: boolean;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, t } from '../common';
+import { rx, type t } from '../common';
 import { TestPropListController } from '../logic/Controller.mjs';
 
 export function useController(args: {

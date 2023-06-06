@@ -1,5 +1,4 @@
-import { Color, COLORS, css, Spinner, t } from './common';
-import { SuiteResults } from './ui.Suite.Results';
+import { COLORS, css, Spinner, type t } from './common';
 import { Suite } from './ui.Suite';
 
 type R = t.TestSuiteRunResponse;

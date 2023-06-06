@@ -1,4 +1,4 @@
-import { COLORS, Color, css, t } from './common';
+import { COLORS, Color, css, type t } from './common';
 import { SuiteResults } from './ui.Suite.Results';
 
 export type SuiteProps = {

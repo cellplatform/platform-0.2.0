@@ -1,4 +1,4 @@
-import { rx, t } from '../common';
+import { rx, type t } from '../common';
 import { State } from './Controller.State.mjs';
 
 /**

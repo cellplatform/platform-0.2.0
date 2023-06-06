@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Util } from '../Util.mjs';
-import { rx, t } from '../common';
+import { rx, type t } from '../common';
 
 /**
  * Handles turning an import promise into an initialized spec.

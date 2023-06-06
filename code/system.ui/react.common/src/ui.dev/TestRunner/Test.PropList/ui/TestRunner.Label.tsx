@@ -1,4 +1,4 @@
-import { css, DevIcons, t } from '../common';
+import { css, DevIcons, type t } from '../common';
 
 type R = t.TestPropListRunData;
 

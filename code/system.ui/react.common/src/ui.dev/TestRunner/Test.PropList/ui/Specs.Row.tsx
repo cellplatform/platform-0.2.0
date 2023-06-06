@@ -1,4 +1,4 @@
-import { css, Switch, t } from '../common';
+import { css, Switch, type t } from '../common';
 
 import { Util } from '../Util.mjs';
 import { Body } from './Specs.Row.Body';

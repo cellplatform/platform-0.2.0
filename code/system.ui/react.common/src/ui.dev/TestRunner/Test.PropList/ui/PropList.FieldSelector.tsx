@@ -1,4 +1,4 @@
-import { DEFAULTS, FIELDS, PropList, t } from '../common';
+import { DEFAULTS, FIELDS, PropList, type t } from '../common';
 
 export type PropListFieldSelectorProps = t.PropListFieldSelectorProps<t.TestRunnerField>;
 
