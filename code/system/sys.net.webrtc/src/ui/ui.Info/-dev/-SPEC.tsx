@@ -251,7 +251,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             run: {
               ctx: () => ({ props }),
               label: 'Meeting Doc',
-              all: () => [import('./-TEST.Sample.mjs')],
+              list: () => [import('./-TEST.Sample.mjs')],
             },
             specs: {},
           }}

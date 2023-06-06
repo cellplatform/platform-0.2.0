@@ -11,7 +11,7 @@ export function FieldModuleVerify(data: t.CrdtInfoData, info?: {}) {
       return url.href;
     },
 
-    async all() {
+    async list() {
       const { TESTS } = await import('../../../test/-TESTS.mjs');
       return TESTS.all;
     },

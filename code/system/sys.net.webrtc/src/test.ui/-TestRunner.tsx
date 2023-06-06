@@ -38,7 +38,7 @@ export default Dev.describe('Root', (e) => {
           initial={{
             run: {
               label: 'Integration Tests',
-              all: [
+              list: [
                 import('../WebRtc/-dev/-TEST.mjs'),
                 import('../WebRtc/-dev/-TEST.conn.data.mjs'),
                 import('../WebRtc/-dev/-TEST.conn.media.mjs'),

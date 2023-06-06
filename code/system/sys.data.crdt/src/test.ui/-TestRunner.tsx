@@ -41,7 +41,7 @@ export default Dev.describe('Root', (e) => {
           initial={{
             run: {
               label: 'Verify',
-              all: [
+              list: [
                 // System
                 import('../crdt.DocRef/-TEST.mjs'),
                 import('../crdt.DocFile/-TEST.mjs'),
