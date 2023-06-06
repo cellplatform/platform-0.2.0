@@ -49,4 +49,6 @@ export type DevTools<S extends O = O> = {
     color?: t.DevHrColor,
   ): DevTools<S>;
   hr(fn: t.DevHrHandler<S>): DevTools<S>;
+
+  bdd(fn: t.DevBddHandler<S>): DevTools<S>;
 };

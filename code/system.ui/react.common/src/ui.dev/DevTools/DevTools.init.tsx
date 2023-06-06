@@ -1,12 +1,13 @@
 import { Lorem } from '../../ui.tools';
-import { DevBase, Spec, t } from '../common';
 import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
+import { textbox } from '../DevTools.Textbox';
 import { title } from '../DevTools.Title';
 import { todo } from '../DevTools.Todo';
-import { textbox } from '../DevTools.Textbox';
+import { DevBase, Spec, type t } from '../common';
 import { Helpers } from './Helpers.mjs';
+import { bdd } from '../DevTools.BDD';
 
 type O = Record<string, unknown>;
 
@@ -17,15 +18,17 @@ type O = Record<string, unknown>;
 export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
   const initial = initialState ?? ({} as S);
   const ctx = Spec.ctx(input);
-  const debug = ctx.debug;
   const events = DevBase.Bus.events(input);
+  const debug = ctx.debug;
+
   let _state: t.DevCtxState<S> | undefined;
 
+  const { header, footer, row } = debug;
   const api: t.DevTools<S> = {
     ctx,
-    header: debug.header,
-    footer: debug.footer,
-    row: debug.row,
+    header,
+    footer,
+    row,
 
     redraw(target) {
       return ctx.redraw(target);
@@ -156,6 +159,17 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
       if (typeof args[0] === 'function') {
         hr<S>(events, ctx, initial, args[0]);
       }
+      return api;
+    },
+
+    /**
+     * BDD test-selector/runner.
+     */
+    bdd(...args: any[]) {
+      if (typeof args[0] === 'function') {
+        bdd<S>(events, ctx, initial, args[0]);
+      }
+
       return api;
     },
   };
