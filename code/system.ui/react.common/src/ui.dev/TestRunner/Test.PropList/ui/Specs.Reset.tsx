@@ -2,7 +2,7 @@ import { Util } from '../Util.mjs';
 import { Button, Keyboard, css, useMouseState, type t } from '../common';
 
 export type SpecsResetProps = {
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
   style?: t.CssValue;
 };
 
@@ -59,13 +59,13 @@ const Wrangle = {
     return isInvert;
   },
 
-  isAllSelected(data: t.TestRunnerPropListData) {
+  isAllSelected(data: t.TestPropListData) {
     const all = data.run?.all ?? [];
     const selected = data.specs?.selected ?? [];
     return selected.length > 0 && all.length === selected.length;
   },
 
-  isNoneSelected(data: t.TestRunnerPropListData) {
+  isNoneSelected(data: t.TestPropListData) {
     const selected = data.specs?.selected ?? [];
     return selected.length === 0;
   },

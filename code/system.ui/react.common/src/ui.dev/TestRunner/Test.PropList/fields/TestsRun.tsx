@@ -4,7 +4,7 @@ import { TestRunnerLabel } from '../ui/TestRunner.Label';
 
 export function FieldTestsRun(args: {
   fields: t.TestRunnerField[];
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
 }): t.PropListItem | undefined {
   const data = args.data;
   const run = data?.run;

@@ -4,7 +4,7 @@ import { R, type t } from '../common';
 /**
  * Helper wrapper for manipulating controlled spec-runner state.
  */
-export async function State(initial?: t.TestRunnerPropListData) {
+export async function State(initial?: t.TestPropListData) {
   const res = await Wrangle.initialState(initial);
   const imported = res.imported;
   let _current = res.data;
@@ -74,8 +74,8 @@ export async function State(initial?: t.TestRunnerPropListData) {
  * Helpers
  */
 const Wrangle = {
-  async initialState(initial?: t.TestRunnerPropListData) {
-    const data = R.clone<t.TestRunnerPropListData>(initial ?? {});
+  async initialState(initial?: t.TestPropListData) {
+    const data = R.clone<t.TestPropListData>(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
     const run = data.run ?? (data.run = {});
 

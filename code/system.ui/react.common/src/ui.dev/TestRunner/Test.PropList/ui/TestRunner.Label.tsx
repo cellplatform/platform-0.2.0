@@ -1,6 +1,6 @@
 import { css, DevIcons, t } from '../common';
 
-type R = t.TestRunnerPropListRunData;
+type R = t.TestPropListRunData;
 
 export type TestRunnerLabelProps = {
   label?: R['label'];

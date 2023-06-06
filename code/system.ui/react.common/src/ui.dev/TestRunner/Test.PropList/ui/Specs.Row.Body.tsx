@@ -3,7 +3,7 @@ import { Button, COLORS, DEFAULTS, DevIcons, Time, css, rx, type t } from '../co
 import { RunIcon } from './Specs.Row.RunIcon';
 
 export type BodyProps = {
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
   suite?: t.TestSuiteModel | undefined;
   isSelected?: boolean;
   style?: t.CssValue;

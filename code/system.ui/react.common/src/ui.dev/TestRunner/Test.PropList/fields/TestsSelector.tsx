@@ -7,7 +7,7 @@ import { SpecsRow } from '../ui/Specs.Row';
  */
 export function FieldTestsSelector(args: {
   fields: t.TestRunnerField[];
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
   suites: t.TestSuiteModel[];
 }): t.PropListItem[] {
   const { data, suites } = args;
@@ -35,7 +35,7 @@ export function FieldTestsSelector(args: {
  */
 export function FieldTestsSelectorReset(args: {
   fields: t.TestRunnerField[];
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
 }): t.PropListItem | undefined {
   const run = args.data?.run ?? {};
   if (!run.all || run.all.length === 0) return undefined;

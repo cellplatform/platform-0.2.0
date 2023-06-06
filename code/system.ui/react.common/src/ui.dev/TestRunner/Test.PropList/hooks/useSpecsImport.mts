@@ -5,7 +5,7 @@ import { rx, t } from '../common';
 /**
  * Handles turning an import promise into an initialized spec.
  */
-export function useSpecsImport(data: t.TestRunnerPropListData) {
+export function useSpecsImport(data: t.TestPropListData) {
   const all = (data.run ?? {}).all ?? [];
 
   const [loaded, setLoaded] = useState(false);

@@ -4,7 +4,7 @@ import { Button, COLORS, DEFAULTS, Spinner, Time, css, rx, t, useMouseState } fr
 import { Results } from './TestRunner.Results';
 
 export type TestRunnerProps = {
-  data?: t.TestRunnerPropListData;
+  data?: t.TestPropListData;
   style?: t.CssValue;
 };
 

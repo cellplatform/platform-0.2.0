@@ -2,16 +2,16 @@ import { rx, t } from '../common';
 import { State } from './Controller.State.mjs';
 
 /**
- * Default controller for the TestRunnerPropList component.
+ * Default controller for the test runner PropList component.
  */
-export async function TestPropListController(initial?: t.TestRunnerPropListData) {
+export async function TestPropListController(initial?: t.TestPropListData) {
   const lifecycle = rx.lifecycle();
   const { dispose, dispose$ } = lifecycle;
 
-  const $ = new rx.Subject<t.TestRunnerPropListChange>();
+  const $ = new rx.Subject<t.TestPropListChange>();
   const state = await State(initial);
 
-  const fire = (op: t.TestRunnerPropListChange['op']) => {
+  const fire = (op: t.TestPropListChange['op']) => {
     const data = { ...api.current };
     const results = Object.values(data.specs?.results ?? []);
     $.next({
@@ -124,7 +124,7 @@ export async function TestPropListController(initial?: t.TestRunnerPropListData)
     /**
      * The current state of the component.
      */
-    get current(): t.TestRunnerPropListData {
+    get current(): t.TestPropListData {
       return {
         ...state.current,
         run: {
@@ -179,7 +179,7 @@ export async function TestPropListController(initial?: t.TestRunnerPropListData)
  * Helpers
  */
 const Wrangle = {
-  ctx(data: t.TestRunnerPropListData) {
+  ctx(data: t.TestPropListData) {
     const ctx = (data.run ?? {}).ctx;
     return typeof ctx === 'function' ? ctx() : ctx;
   },

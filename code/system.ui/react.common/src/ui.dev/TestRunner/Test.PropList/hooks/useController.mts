@@ -3,10 +3,10 @@ import { rx, t } from '../common';
 import { TestPropListController } from '../logic/Controller.mjs';
 
 export function useController(args: {
-  initial?: t.TestRunnerPropListData;
-  onChanged?: (e: t.TestRunnerPropListChange) => void;
+  initial?: t.TestPropListData;
+  onChanged?: (e: t.TestPropListChange) => void;
 }) {
-  const [data, setData] = useState<t.TestRunnerPropListData>();
+  const [data, setData] = useState<t.TestPropListData>();
 
   /**
    * Lifecycle.

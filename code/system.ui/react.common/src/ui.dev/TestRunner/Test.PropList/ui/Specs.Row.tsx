@@ -4,7 +4,7 @@ import { Util } from '../Util.mjs';
 import { Body } from './Specs.Row.Body';
 
 export type SpecsRowProps = {
-  data: t.TestRunnerPropListData;
+  data: t.TestPropListData;
   spec: t.TestSuiteModel;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;

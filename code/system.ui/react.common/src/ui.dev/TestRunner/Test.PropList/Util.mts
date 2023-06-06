@@ -10,13 +10,13 @@ export const Util = {
     };
   },
 
-  isSelected(data: t.TestRunnerPropListData, spec?: t.TestSuiteModel) {
+  isSelected(data: t.TestPropListData, spec?: t.TestSuiteModel) {
     if (!spec) return false;
     const selected = (data.specs ?? {}).selected ?? [];
     return selected.includes(spec.hash());
   },
 
-  async importAndInitialize(data: t.TestRunnerPropListData) {
+  async importAndInitialize(data: t.TestPropListData) {
     const source = data.run?.all ?? [];
     const list = typeof source === 'function' ? source() : source;
     const all = Is.promise(list) ? await list : list;

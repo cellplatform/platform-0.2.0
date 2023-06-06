@@ -13,13 +13,13 @@ export type TestRunnerField =
 /**
  * Data model for the <TestRunner.PropList> component.
  */
-export type TestRunnerPropListData = {
+export type TestPropListData = {
   pkg?: t.ModuleDef;
-  specs?: TestRunnerPropListSpecsData;
-  run?: TestRunnerPropListRunData;
+  run?: TestPropListRunData;
+  specs?: TestPropListSpecsData;
 };
 
-export type TestRunnerPropListRunData = {
+export type TestPropListRunData = {
   all?: t.BundleImport[] | (() => t.BundleImport[] | Promise<t.BundleImport[]>);
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
@@ -29,7 +29,7 @@ export type TestRunnerPropListRunData = {
   onRunAll?: SpecRunAllClickHandler;
 };
 
-export type TestRunnerPropListSpecsData = {
+export type TestPropListSpecsData = {
   selected?: HashString[];
   ellipsis?: boolean | (() => boolean | undefined);
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
@@ -68,7 +68,7 @@ export type SpecRunAllClickHandlerArgs = {
 /**
  * Observable.
  */
-export type TestRunnerPropListChange = {
+export type TestPropListChange = {
   op:
     | 'selection'
     | 'reset'
@@ -76,7 +76,7 @@ export type TestRunnerPropListChange = {
     | 'run:single:start'
     | 'run:single:complete'
     | 'run:all:complete';
-  data: TestRunnerPropListData;
+  data: TestPropListData;
   selected: HashString[];
   results: t.TestSuiteRunResponse[];
 };

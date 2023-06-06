@@ -2,7 +2,7 @@ import { type t } from './common';
 import { TestRunnerControlled } from './ui/TestRunner.Controlled';
 import { TestRunnerLabel } from './ui/TestRunner.Label';
 
-type R = t.TestRunnerPropListRunData;
+type R = t.TestPropListRunData;
 
 /**
  * <PropList> compact test-runner.
@@ -18,7 +18,7 @@ export const Item = {
     infoUrl?: R['infoUrl'];
   }): t.PropListItem {
     const { all, ctx } = args;
-    const data: t.TestRunnerPropListData = { run: { all, ctx } };
+    const data: t.TestPropListData = { run: { all, ctx } };
     return {
       label: <TestRunnerLabel label={args.label} infoUrl={args.infoUrl} />,
       value: <TestRunnerControlled initial={data} />,

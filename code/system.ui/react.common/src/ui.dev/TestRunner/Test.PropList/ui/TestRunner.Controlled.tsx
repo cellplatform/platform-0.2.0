@@ -3,8 +3,8 @@ import { useController } from '../hooks/useController.mjs';
 import { TestRunner, type TestRunnerProps } from './TestRunner';
 
 export type TestRunnerControlledProps = Omit<TestRunnerProps, 'data'> & {
-  initial?: t.TestRunnerPropListData;
-  onChanged?: (e: t.TestRunnerPropListChange) => void;
+  initial?: t.TestPropListData;
+  onChanged?: (e: t.TestPropListChange) => void;
 };
 
 export const TestRunnerControlled: React.FC<TestRunnerControlledProps> = (props) => {

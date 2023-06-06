@@ -7,7 +7,7 @@ export type TestPropListProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.TestRunnerField[];
-  data?: t.TestRunnerPropListData;
+  data?: t.TestPropListData;
   margin?: t.CssEdgesInput;
   card?: boolean;
   flipped?: boolean;
