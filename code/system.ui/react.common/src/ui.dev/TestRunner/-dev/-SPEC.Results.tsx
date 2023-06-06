@@ -7,21 +7,22 @@ import { type TestResultsProps } from '../Test.Results';
 type T = {
   ctx: TestCtx;
   props: TestResultsProps;
-  debug: {};
+  debug: { noop: boolean };
 };
 const initial: T = {
   ctx: { fail: false, delay: 300 },
   props: { spinning: false, scroll: true },
-  debug: {},
+  debug: { noop: false },
 };
 
 export default Dev.describe('TestRunner', (e) => {
-  type LocalStore = TestCtx & { selected: string[] };
+  type LocalStore = TestCtx & T['debug'] & { selected: string[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
     selected: [],
     fail: initial.ctx.fail,
     delay: initial.ctx.delay,
+    noop: initial.debug.noop,
   });
 
   e.it('init', async (e) => {
@@ -31,6 +32,7 @@ export default Dev.describe('TestRunner', (e) => {
     await state.change((d) => {
       d.ctx.fail = local.fail;
       d.ctx.delay = local.delay;
+      d.debug.noop = local.noop;
     });
 
     ctx.subject
@@ -85,11 +87,19 @@ export default Dev.describe('TestRunner', (e) => {
           .onClick((e) => e.change((d) => (local.fail = Dev.toggle(d.ctx, 'fail')))),
       );
 
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `run({ noop: ${e.state.debug.noop} })`)
+          .value((e) => e.state.debug.noop)
+          .onClick((e) => e.change((d) => (local.noop = Dev.toggle(d.debug, 'noop')))),
+      );
+
       dev.hr(-1, 5);
 
       dev.button('run: sample', async (e) => {
-        const ctx = e.state.current.ctx;
-        const results = await suite1.run({ ctx });
+        const { ctx, debug } = e.state.current;
+        const noop = debug.noop;
+        const results = await suite1.run({ ctx, noop });
         await e.change((d) => (d.props.data = results));
       });
 

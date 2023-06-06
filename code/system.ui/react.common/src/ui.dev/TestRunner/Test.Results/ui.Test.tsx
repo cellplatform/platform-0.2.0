@@ -12,6 +12,7 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   const excluded = data.excluded ?? [];
   const isSkipped = excluded.includes('skip');
   const isExcludedViaOnly = excluded.includes('only');
+  const isNoop = data.noop;
 
   // NB: still show if "skipped" to the test retains visibility
   //     until either implemented or deleted.
@@ -49,6 +50,18 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
     <DevIcons.Skip size={16} color={Color.alpha(COLORS.DARK, 0.3)} offset={[0, 2]} />
   );
 
+  const elIcons = (
+    <>
+      {elSuccessIcon}
+      {elFailIcon}
+      {elSkippedIcon}
+    </>
+  );
+
+  const elNoopIcon = isNoop && (
+    <DevIcons.Wait size={16} color={Color.alpha(COLORS.DARK, 0.5)} offset={[0, 2]} />
+  );
+
   const elError = data.error && <TestError data={data} style={styles.error} />;
 
   const elapsed = Time.duration(data.elapsed).toString();
@@ -56,11 +69,7 @@ export const TestResult: React.FC<TestResultProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.line.base}>
-        <div {...styles.line.icon}>
-          {elSuccessIcon}
-          {elFailIcon}
-          {elSkippedIcon}
-        </div>
+        <div {...styles.line.icon}>{elNoopIcon || elIcons}</div>
         <Description text={data.description} isSkipped={isSkipped} />
         <div {...styles.line.elapsed}>{isSkipped ? '-' : elapsed}</div>
       </div>
