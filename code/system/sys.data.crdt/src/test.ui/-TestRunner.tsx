@@ -35,29 +35,14 @@ export default Dev.describe('Root', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
+    dev.row(async (e) => {
+      const { TESTS } = await import('../test/-TESTS.mjs');
       return (
         <Dev.TestRunner.PropList.Controlled
           initial={{
             run: {
-              label: 'Verify',
-              list: [
-                // System
-                import('../crdt.DocRef/-TEST.mjs'),
-                import('../crdt.DocFile/-TEST.mjs'),
-                import('../crdt.DocSync/-dev/-TEST.DocSync.mjs'),
-                import('../crdt.DocSync/-dev/-TEST.PeerSyncer.mjs'),
-                import('../crdt.Lens/-dev/-TEST.mjs'),
-                import('../crdt.Schema/-dev/-TEST.mjs'),
-                import('../crdt.helpers/-TEST.mjs'),
-
-                // Driver (Automerge)
-                import('../driver.Automerge/-dev/TEST.basic.mjs'),
-                import('../driver.Automerge/-dev/TEST.api.mjs'),
-                import('../driver.Automerge/-dev/TEST.initialState.mjs'),
-                import('../driver.Automerge/-dev/TEST.filesystem.mjs'),
-                import('../driver.Automerge/-dev/TEST.sync.mjs'),
-              ],
+              label: '',
+              list: TESTS.all,
             },
             specs: { selected: local.selected },
           }}

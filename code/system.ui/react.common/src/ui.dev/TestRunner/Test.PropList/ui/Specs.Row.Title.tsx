@@ -10,8 +10,8 @@ export const Title: React.FC<TitleProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ marginBottom: 5 }),
-    title: css({ fontSize: 9 }),
+    base: css({ MarginY: 8 }),
+    title: css({ fontSize: 11, opacity: 0.5 }),
   };
 
   return (

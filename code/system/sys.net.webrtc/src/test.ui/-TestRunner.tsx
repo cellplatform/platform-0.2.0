@@ -1,4 +1,4 @@
-import { Dev, Time, WebRtc, type t } from '.';
+import { Dev, type t } from '.';
 
 type T = { testrunner: { spinning?: boolean; results?: t.TestSuiteRunResponse[] } };
 const initial: T = { testrunner: {} };
@@ -31,30 +31,15 @@ export default Dev.describe('Root', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
+    dev.row(async (e) => {
+      const { TESTS } = await import('./-TestRunner.tests.mjs');
+
       return (
         <Dev.TestRunner.PropList.Controlled
-          margin={[20, 10, 0, 0]}
           initial={{
             run: {
               label: 'Integration Tests',
-              list: [
-                import('../WebRtc/-dev/-TEST.mjs'),
-                import('../WebRtc/-dev/-TEST.conn.data.mjs'),
-                import('../WebRtc/-dev/-TEST.conn.media.mjs'),
-                //
-                import('../WebRtc.Controller/-dev/-TEST.controller.mjs'),
-                import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs'),
-                import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs'),
-                import('../WebRtc.State/-dev/-TEST.mjs'),
-                import('../WebRtc.State/-dev/-TEST.mutate.mjs'),
-                import('../sys.net.schema/-TEST.mjs'),
-                //
-                import('../WebRtc/-dev/-TEST.sync.mjs'),
-                import('../WebRtc.Media/-TEST.mjs'),
-                //
-                import('./-dev.mocks/-TEST.mjs'),
-              ],
+              list: TESTS.all,
             },
             specs: { selected: local.selected },
           }}
@@ -64,110 +49,6 @@ export default Dev.describe('Root', (e) => {
           }}
         />
       );
-    });
-
-    dev.hr(5, 20);
-
-    dev.section(async (dev) => {
-      const invoke = async (spec: t.TestSuiteModel) => {
-        await dev.change((d) => (d.testrunner.spinning = true));
-        const results = await spec.run();
-        await dev.change((d) => {
-          // d.testrunner.results = results;
-          d.testrunner.spinning = false;
-        });
-      };
-
-      let _hasImmediate = false;
-      const tests: t.TestSuiteModel[] = [];
-      const button = async (input: t.SpecImport, immediate?: boolean) => {
-        const module = await input;
-        const spec = await (module.default as t.TestSuiteModel).init();
-        dev.button((btn) =>
-          btn
-            .label(spec.description)
-            .right(() => (immediate ? '← immediate' : ''))
-            .onClick(() => invoke(spec)),
-        );
-        if (immediate) invoke(spec);
-        if (immediate) _hasImmediate = true;
-        return spec;
-      };
-
-      dev.title('Integration Tests');
-
-      tests.push(
-        ...[
-          await button(import('../WebRtc/-dev/-TEST.mjs')),
-          await button(import('../WebRtc/-dev/-TEST.conn.data.mjs')),
-          await button(import('../WebRtc/-dev/-TEST.conn.media.mjs')),
-        ],
-      );
-
-      dev.hr(-1, 10);
-
-      tests.push(
-        ...[
-          await button(import('../WebRtc.Controller/-dev/-TEST.controller.mjs')),
-          await button(import('../WebRtc.Controller/-dev/-TEST.controller.3-way.mjs')),
-          await button(import('../WebRtc.Controller/-dev/-TEST.controller.fails.mjs')),
-          await button(import('../WebRtc.State/-dev/-TEST.mjs'), true),
-          await button(import('../WebRtc.State/-dev/-TEST.mutate.mjs')),
-          await button(import('../sys.net.schema/-TEST.mjs')),
-        ],
-      );
-
-      dev.hr(-1, 10);
-
-      tests.push(
-        ...[
-          await button(import('../WebRtc/-dev/-TEST.sync.mjs')),
-          await button(import('../WebRtc.Media/-TEST.mjs')),
-        ],
-      );
-
-      dev.hr(-1, 10);
-
-      tests.push(...[await button(import('./-dev.mocks/-TEST.mjs'))]);
-
-      dev.hr(5, 20);
-
-      const all = Dev.describe('All Test Suites');
-      all.merge(...tests);
-
-      dev.button((btn) =>
-        btn
-          .label((e) => (e.state.testrunner.spinning ? 'running...' : 'run'))
-          .right('🌳')
-          .spinner((e) => Boolean(e.state.testrunner.spinning))
-          .onClick((e) => invoke(all)),
-      );
-      dev.hr(-1, 5);
-      dev.button('clear', (e) =>
-        e.change((d) => {
-          d.testrunner.results = undefined;
-          d.testrunner.spinning = false;
-        }),
-      );
-      dev.button('stop media stream', () => {
-        const media = WebRtc.Media.singleton();
-        media.events.stop(media.ref.camera);
-        media.events.stop(media.ref.screen);
-      });
-
-      dev.button('copy schema bytes', (e) => {
-        const schema = WebRtc.NetworkSchema.genesis().schema;
-        console.info('Network Schema:', schema.toString());
-        navigator.clipboard.writeText(schema.toString());
-
-        e.right('← copied');
-        Time.delay(1500, () => e.right(''));
-      });
-
-      /**
-       * Immediate invocation of tests.
-       */
-      // if (!_hasImmediate) Time.delay(100, () => invoke(all));
     });
   });
 
