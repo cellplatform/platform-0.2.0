@@ -1,4 +1,4 @@
 import day from 'dayjs';
-import type * as t from './types.mjs';
 
-export { day, t };
+export { day };
+export { type t } from '../common.t';

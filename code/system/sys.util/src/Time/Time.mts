@@ -1,8 +1,9 @@
-import { day, type t } from './common.mjs';
 import { delay, wait } from './Delay.mjs';
 import { Duration } from './Duration.mjs';
 import { elapsed, timer } from './Timer.mjs';
+import { until } from './Until.mjs';
 import { utc } from './Utc.mjs';
+import { day, type t } from './common.mjs';
 
 const Time: t.Time = {
   day,
@@ -11,6 +12,7 @@ const Time: t.Time = {
   timer,
   elapsed,
   utc,
+  until,
   get timezone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   },
