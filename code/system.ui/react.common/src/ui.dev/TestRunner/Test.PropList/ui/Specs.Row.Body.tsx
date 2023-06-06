@@ -29,7 +29,8 @@ export const Body: React.FC<BodyProps> = (props) => {
     if (typeof ok === 'boolean') {
       setColored(true);
       Time.delay(DEFAULTS.colorDelay, () => {
-        if (!lifecycle.disposed) setColored(false);
+        if (lifecycle.disposed) return;
+        setColored(false);
       });
     }
     return lifecycle.dispose;

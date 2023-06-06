@@ -33,7 +33,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     initial?.specs?.onSelect?.(e); // Bubble event.
 
     // Update selection state.
-    const hash = e.spec.hash();
+    const hash = e.suite.hash();
     if (e.to) state.selectSpec(hash);
     if (!e.to) state.unselectSpec(hash);
 
@@ -47,17 +47,17 @@ export async function TestPropListController(initial?: t.TestPropListData) {
   const onRunSingle: t.SpecRunClickHandler = async (e) => {
     initial?.run?.onRunSingle?.(e); // Bubble event.
 
-    const hash = e.spec.hash();
+    const hash = e.suite.hash();
     state.selectSpec(hash); // NB: Additive to the selection (when run).
 
     // Pre-run state update.
-    state.runStart(e.spec);
+    state.runStart(e.suite);
     fire('run:single:start');
 
     // Execute the spec.
     const ctx = Wrangle.ctx(state.current);
-    const res = await e.spec.run({ ctx });
-    state.runComplete(e.spec, res);
+    const res = await e.suite.run({ ctx });
+    state.runComplete(e.suite, res);
 
     // Complete.
     fire('run:single:complete');
@@ -79,7 +79,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
 
     const specs = forceAll ? api.suites : api.selected.specs;
     for (const spec of specs) {
-      await onRunSingle({ spec, modifiers });
+      await onRunSingle({ suite: spec, modifiers });
     }
 
     fire('run:all:complete');
@@ -146,11 +146,13 @@ export async function TestPropListController(initial?: t.TestPropListData) {
      */
     get selected() {
       const hashes = state.current.specs?.selected ?? [];
+      let _specs: t.TestSuiteModel[] | undefined;
       return {
         hashes,
         bundle,
         get specs() {
-          return api.suites.filter((spec) => hashes.includes(spec.hash()));
+          if (!_specs) _specs = api.suites.filter((spec) => hashes.includes(spec.hash()));
+          return _specs;
         },
       };
     },

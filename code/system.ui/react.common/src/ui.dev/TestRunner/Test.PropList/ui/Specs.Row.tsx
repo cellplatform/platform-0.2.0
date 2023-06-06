@@ -1,26 +1,25 @@
 import { css, Switch, type t } from '../common';
-
 import { Util } from '../Util.mjs';
 import { Body } from './Specs.Row.Body';
 
 export type SpecsRowProps = {
   data: t.TestPropListData;
-  spec: t.TestSuiteModel;
+  suite: t.TestSuiteModel;
   style?: t.CssValue;
   onSelectionChange?: t.SpecsSelectionHandler;
   onRunClick?: t.SpecRunClickHandler;
 };
 
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
-  const { data, spec } = props;
-  const isSelected = Util.isSelected(data, spec);
+  const { data, suite } = props;
+  const isSelected = Util.isSelected(data, suite);
 
   /**
    * Handlers
    */
   const handleSwitchClick = (e: React.MouseEvent) => {
     props.onSelectionChange?.({
-      spec,
+      suite,
       from: isSelected,
       to: !isSelected,
       modifiers: Util.modifiers(e),
@@ -29,7 +28,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
 
   const handleBodyClick = (e: React.MouseEvent) => {
     props.onRunClick?.({
-      spec,
+      suite,
       modifiers: Util.modifiers(e),
     });
   };
@@ -61,7 +60,7 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       {elSwitch}
-      <Body data={props.data} suite={spec} isSelected={isSelected} onClick={handleBodyClick} />
+      <Body data={props.data} suite={suite} isSelected={isSelected} onClick={handleBodyClick} />
     </div>
   );
 };

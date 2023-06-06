@@ -45,7 +45,7 @@ export type TestPropListSpecsData = {
  */
 export type SpecsSelectionHandler = (e: SpecsSelectionHandlerArgs) => void;
 export type SpecsSelectionHandlerArgs = {
-  spec: t.TestSuiteModel;
+  suite: t.TestSuiteModel;
   from: boolean;
   to: boolean;
   modifiers: t.KeyboardModifierFlags;
@@ -59,7 +59,7 @@ export type SpecsSelectionResetHandlerArgs = {
 
 export type SpecRunClickHandler = (e: SpecRunClickHandlerArgs) => void | Promise<void>;
 export type SpecRunClickHandlerArgs = {
-  spec: t.TestSuiteModel;
+  suite: t.TestSuiteModel;
   modifiers: t.KeyboardModifierFlags;
 };
 

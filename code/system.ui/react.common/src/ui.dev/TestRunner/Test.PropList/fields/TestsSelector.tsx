@@ -19,7 +19,7 @@ export function FieldTestsSelector(args: {
       const el = (
         <SpecsRow
           data={data}
-          spec={suite}
+          suite={suite}
           onSelectionChange={specs.onSelect}
           onRunClick={run?.onRunSingle}
         />
