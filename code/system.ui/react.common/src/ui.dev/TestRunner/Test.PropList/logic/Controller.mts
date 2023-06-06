@@ -77,9 +77,9 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     state.clearResults();
     if (forceAll || totalSelected === 0) state.selectAll();
 
-    const specs = forceAll ? api.suites : api.selected.specs;
-    for (const spec of specs) {
-      await onRunSingle({ suite: spec, modifiers });
+    const specs = forceAll ? api.suites : api.selected.suites;
+    for (const suite of specs) {
+      await onRunSingle({ suite, modifiers });
     }
 
     fire('run:all:complete');
@@ -109,7 +109,7 @@ export async function TestPropListController(initial?: t.TestPropListData) {
    * Create a bundle of the currently selected specs.
    */
   const bundle: t.GetTestBundle = async () => {
-    const specs = api.selected.specs;
+    const specs = api.selected.suites;
     const ctx = Wrangle.ctx(state.current);
     return { specs, ctx };
   };
@@ -146,13 +146,13 @@ export async function TestPropListController(initial?: t.TestPropListData) {
      */
     get selected() {
       const hashes = state.current.specs?.selected ?? [];
-      let _specs: t.TestSuiteModel[] | undefined;
+      let _suites: t.TestSuiteModel[] | undefined;
       return {
         hashes,
         bundle,
-        get specs() {
-          if (!_specs) _specs = api.suites.filter((spec) => hashes.includes(spec.hash()));
-          return _specs;
+        get suites() {
+          if (!_suites) _suites = api.suites.filter((spec) => hashes.includes(spec.hash()));
+          return _suites;
         },
       };
     },
