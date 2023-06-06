@@ -1,8 +1,6 @@
-import day from 'dayjs';
-
 import { round } from '../Value/Value.Math.mjs';
 import { toNumber } from '../Value/Value.To.mjs';
-import type * as t from './types.mjs';
+import { day, type t } from './common.mjs';
 
 const MSEC = 1;
 const SEC = MSEC * 1000;

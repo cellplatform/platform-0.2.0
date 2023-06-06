@@ -1,10 +1,8 @@
-import day from 'dayjs';
-
+import { day, type t } from './common.mjs';
 import { delay, wait } from './Delay.mjs';
+import { Duration } from './Duration.mjs';
 import { elapsed, timer } from './Timer.mjs';
 import { utc } from './Utc.mjs';
-import type * as t from './types.mjs';
-import { Duration } from './Duration.mjs';
 
 const Time: t.Time = {
   day,
