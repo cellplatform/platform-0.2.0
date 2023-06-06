@@ -61,7 +61,7 @@ export const TestSuiteModel = (args: {
         tx,
         ok: true,
         description,
-        elapsed: -1,
+        time: { started: Time.now.timestamp, elapsed: -1 },
         tests: [],
         children: [],
         stats: Stats.empty,
@@ -111,7 +111,7 @@ export const TestSuiteModel = (args: {
       /**
        * Done.
        */
-      res.elapsed = timer.elapsed.msec;
+      res.time.elapsed = timer.elapsed.msec;
       if (res.tests.some(({ error }) => Boolean(error))) res.ok = false;
       if (res.children.some(({ ok }) => !ok)) res.ok = false;
       res.stats = Stats.suite(res);

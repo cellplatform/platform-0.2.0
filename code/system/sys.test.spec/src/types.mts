@@ -159,7 +159,7 @@ export type TestSuiteRunResponse = {
   tx: Id; // Unique ID for the individual suite run operation.
   ok: boolean;
   description: string;
-  elapsed: Milliseconds;
+  time: { started: Timestamp; elapsed: Milliseconds };
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
   stats: TestSuiteRunStats;

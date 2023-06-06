@@ -342,12 +342,15 @@ describe('TestSuiteModel', () => {
       const root = Test.describe('root', (e) => {
         e.it('foo', () => count++);
       });
+
+      const now = Time.now.timestamp;
       const res = await root.run();
 
       expect(res.id).to.eql(root.id);
       expect(res.ok).to.eql(true);
       expect(count).to.eql(1);
       expect(res.noop).to.eql(undefined);
+      expect(res.time.started).to.greaterThanOrEqual(now);
     });
 
     it('async', async () => {
@@ -363,7 +366,7 @@ describe('TestSuiteModel', () => {
       expect(res.id).to.eql(root.id);
       expect(count).to.eql(1);
       expect(res.ok).to.eql(true);
-      expect(res.elapsed).to.greaterThan(18);
+      expect(res.time.elapsed).to.greaterThan(18);
     });
 
     it('{ beforeEach, afterEach } parameter', async () => {
@@ -760,8 +763,8 @@ describe('TestSuiteModel', () => {
 
         const res = await root.run({ timeout: 10 });
 
-        expect(res.elapsed).to.greaterThan(7);
-        expect(res.elapsed).to.lessThan(150);
+        expect(res.time.elapsed).to.greaterThan(7);
+        expect(res.time.elapsed).to.lessThan(150);
 
         expect(count).to.eql(2); // NB: failing test never increments counter.
         expect(res.ok).to.eql(false);
