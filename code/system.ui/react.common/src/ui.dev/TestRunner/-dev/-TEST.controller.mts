@@ -1,4 +1,5 @@
 import { TestPropList } from '..';
+import { Util } from '../Test.PropList/Util.mjs';
 import { Dev, expect, type t } from './-common.mjs';
 
 export default Dev.describe('(Self) Controller Behavior', (e) => {
@@ -8,16 +9,15 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
     expect(controller.all).to.eql([]);
   });
 
+  const list = [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')];
+  const expectOrder = (list: t.TestSuiteModel[]) => {
+    const labels = list.map((suite) => suite.description);
+    expect(labels[0]).to.eql('Sample-1');
+    expect(labels[1]).to.eql('MySpec');
+    expect(labels[2].startsWith('Sample-2: Lorem')).to.eql(true);
+  };
+
   e.describe('load → all', (e) => {
-    const list = [import('./-TEST.sample-1.mjs'), import('./-TEST.sample-2.mjs')];
-
-    const expectOrder = (list: t.TestSuiteModel[]) => {
-      const labels = list.map((suite) => suite.description);
-      expect(labels[0]).to.eql('Sample-1');
-      expect(labels[1]).to.eql('MySpec');
-      expect(labels[2].startsWith('Sample-2: Lorem')).to.eql(true);
-    };
-
     e.it('simple list (array)', async (e) => {
       const controller = await TestPropList.controller({ run: { list } });
       expectOrder(controller.all);
@@ -31,6 +31,20 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
     e.it('async function', async (e) => {
       const controller = await TestPropList.controller({ run: { list: async () => list } });
       expectOrder(controller.all);
+    });
+  });
+
+  e.describe('Util', (e) => {
+    e.describe('importAndInitialize', (e) => {
+      e.it('imports only', async (e) => {
+        const res1 = await Util.importAndInitialize({ run: { list } });
+        const res2 = await Util.importAndInitialize({ run: { list: () => list } });
+        const res3 = await Util.importAndInitialize({ run: { list: async () => list } });
+
+        expectOrder(res1.map((e) => e.suite));
+        expectOrder(res2.map((e) => e.suite));
+        expectOrder(res3.map((e) => e.suite));
+      });
     });
   });
 });
