@@ -1,7 +1,7 @@
 import type fsextra from 'fs-extra';
-import type path from 'path';
-import type { Json } from 'sys.types';
 import type { GlobOptions as NodeGlobOptions } from 'glob';
+import type path from 'path';
+import type { Json } from 'sys.types/src/types.mjs';
 
 /**
  * Common Node (POSIX) based filesystem interface.

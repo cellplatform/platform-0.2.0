@@ -9,7 +9,7 @@ export type {
   DirManifest,
   ManifestFile,
   PartialDeep,
-} from 'sys.types';
+} from 'sys.types/src/types.mjs';
 
 export type { Fs } from 'sys.fs/src/types.mjs';
 
