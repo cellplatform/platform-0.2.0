@@ -20,7 +20,7 @@ export function bdd<S extends O = O>(
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
     list: ValueHandler<{ input: ListInput }, S>(events),
-    run: ValueHandler<t.DevBddRunDef, S>(events),
+    run: ValueHandler<t.DevBddRun, S>(events),
     enabled: ValueHandler<boolean, S>(events),
     margin: ValueHandler<Margin, S>(events),
   };
