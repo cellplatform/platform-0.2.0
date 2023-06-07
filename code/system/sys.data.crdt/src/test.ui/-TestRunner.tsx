@@ -33,9 +33,9 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.bdd((runner) =>
       runner
-        .localstore('dev:sys.crdt.testrunner')
         .run({ label: '' })
-        .list(async () => (await import('../test/-TESTS.mjs')).TESTS.all)
+        .localstore('dev:sys.crdt.testrunner')
+        .list(async () => (await import('./-TestRunner.tests.mjs')).TESTS.all)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
   });
@@ -44,7 +44,7 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = { TestResults: e.state.results };
-      return <Dev.Object name={`state`} data={data} expand={1} />;
+      return <Dev.Object name={'state'} data={data} expand={1} />;
     });
   });
 });
