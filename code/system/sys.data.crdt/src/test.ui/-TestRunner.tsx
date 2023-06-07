@@ -43,9 +43,7 @@ export default Dev.describe('TestRunner', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        TestResults: e.state.results,
-      };
+      const data = { TestResults: e.state.results };
       return <Dev.Object name={`state`} data={data} expand={1} />;
     });
   });
