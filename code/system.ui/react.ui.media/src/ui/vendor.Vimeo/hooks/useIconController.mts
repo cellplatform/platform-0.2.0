@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { distinctUntilChanged, filter, take } from 'rxjs/operators';
 
 import { type t } from '../common.mjs';
-import { VimeoEvents } from '../VimeoEvents.mjs';
+import { VimeoEvents } from '../Vimeo.Events.mjs';
 
 /**
  * Monitors a Videmo player providing icon values to display based on various strategies..

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { css, FC, t } from './common.mjs';
 import { usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
-import { VimeoEvents } from './VimeoEvents.mjs';
+import { VimeoEvents } from './Vimeo.Events.mjs';
 
 export type VimeoBackgroundProps = {
   instance: t.VimeoInstance;

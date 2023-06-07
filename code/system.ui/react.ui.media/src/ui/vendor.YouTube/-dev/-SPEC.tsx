@@ -1,7 +1,5 @@
-import { YouTube, YouTubeProps } from '.';
-import { Text, css, Dev, TextInput } from '../../test.ui';
-
-const Wrangle = YouTube.Wrangle;
+import { YouTube, YouTubeProps } from '..';
+import { Dev, Text, TextInput, css } from '../../../test.ui';
 
 const DEFAULT = {
   pixelSize: { width: 550, height: 315 },
@@ -79,7 +77,7 @@ export default Dev.describe('YouTube', (e) => {
     dev.section('Load', (dev) => {
       const loadUrl = (title: string, url: string) => {
         dev.button(`${title}`, async (e) => {
-          const { id, start } = Wrangle.fromUrl(url);
+          const { id, start } = YouTube.Wrangle.fromUrl(url);
           dev.change((d) => {
             d.props.id = id;
             d.props.start = start;

@@ -6,7 +6,7 @@ import { IconOverlay, VimeoIconClickArgs } from './components/IconOverlay';
 import { ThumbnailOverlay } from './components/ThumbnailOverlay';
 import { useIconController, usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
-import { VimeoEvents } from './VimeoEvents.mjs';
+import { VimeoEvents } from './Vimeo.Events.mjs';
 
 type Url = string;
 
