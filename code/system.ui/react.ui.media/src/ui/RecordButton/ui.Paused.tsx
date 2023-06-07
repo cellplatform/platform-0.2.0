@@ -1,6 +1,5 @@
 import { m } from 'framer-motion';
-
-import { COLORS, css, t, TRANSITION } from './common';
+import { COLORS, TRANSITION, css, type t } from './common';
 
 export type PausedProps = {
   isEnabled: boolean;

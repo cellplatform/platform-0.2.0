@@ -1,8 +1,7 @@
 import { m } from 'framer-motion';
-
 import { AudioWaveform } from '../AudioWaveform';
 import { Icons } from '../Icons';
-import { Color, COLORS, css, t, TRANSITION } from './common';
+import { COLORS, Color, TRANSITION, css, type t } from './common';
 
 export type RecordingProps = {
   isEnabled: boolean;

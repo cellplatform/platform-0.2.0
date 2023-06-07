@@ -1,7 +1,7 @@
-import { IFrame, t, FC } from '../common';
+import { FC, IFrame, type t } from '../common';
+import { DEFAULTS } from './const.mjs';
 import { usePlayerApi } from './usePlayerApi.mjs';
 import { Wrangle } from './util.mjs';
-import { DEFAULTS } from './const.mjs';
 
 type Seconds = number;
 
