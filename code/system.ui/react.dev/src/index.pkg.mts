@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.dev',
   version: '0.0.0',
   dependencies: {
-    'react-inspector': '6.0.1',
+    'react-inspector': '6.0.2',
     'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.text': '0.0.0',
