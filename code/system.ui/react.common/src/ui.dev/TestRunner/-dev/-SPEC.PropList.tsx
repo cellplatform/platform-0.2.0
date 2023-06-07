@@ -66,6 +66,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
             import('./-TEST.controller.mjs'),
           ];
         },
+        // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),

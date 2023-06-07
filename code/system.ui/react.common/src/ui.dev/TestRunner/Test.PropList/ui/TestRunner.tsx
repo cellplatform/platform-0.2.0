@@ -14,6 +14,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   const results = Wrangle.results(props);
   const isRunning = Wrangle.isRunning(props);
   const isEnabled = Wrangle.isEnabled(props);
+  const isButtonVisible = Wrangle.isButtonVisible(props);
   const txs = results.map((m) => m.tx).join();
 
   const mouse = useMouseState();
@@ -61,10 +62,15 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       <Spinner.Bar color={COLORS.GREEN} width={35} />
     </div>
   );
-  const elButton = !isRunning && (
+
+  const elButton = !isRunning && isButtonVisible && (
     <Button onClick={runTestsClick} isEnabled={isEnabled}>
       <Results results={results} isColored={isColored} isOver={mouse.isOver} />
     </Button>
+  );
+
+  const elResultsOnly = !isRunning && !isButtonVisible && results.length > 0 && (
+    <Results results={results} isColored={isColored} isOver={mouse.isOver} isRunnable={false} />
   );
 
   return (
@@ -73,6 +79,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
       <div>
         {elSpinner}
         {elButton}
+        {elResultsOnly}
       </div>
     </div>
   );
@@ -90,6 +97,11 @@ const Wrangle = {
     if (!Wrangle.isEnabled(props)) return false;
     const results = props.data?.specs?.results ?? {};
     return Object.values(results).some((value) => typeof value === 'boolean');
+  },
+
+  isButtonVisible(props: TestRunnerProps) {
+    const run = props.data?.run ?? {};
+    return run.button !== 'hidden';
   },
 
   results(props: TestRunnerProps) {

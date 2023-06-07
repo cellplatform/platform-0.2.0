@@ -27,6 +27,7 @@ export type TestPropListRunData = {
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
+  button?: 'visible' | 'hidden';
   onRunSingle?: SpecRunClickHandler;
   onRunAll?: SpecRunAllClickHandler;
 };
