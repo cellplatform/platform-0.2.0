@@ -12,7 +12,7 @@ export function FieldModuleVerify(args: { fields: t.WebRtcInfoField[]; data: t.W
     },
 
     async list() {
-      const { TESTS } = await import('../../../test.ui/-TestRunner.tests.mjs');
+      const { TESTS } = await import('../../../test.ui/-TestRunner.TESTS.mjs');
       return TESTS.all;
     },
   });

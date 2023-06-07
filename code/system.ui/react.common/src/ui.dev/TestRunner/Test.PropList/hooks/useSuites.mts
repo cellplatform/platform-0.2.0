@@ -21,9 +21,11 @@ export function useSuites(data: t.TestPropListData) {
     Util.importAndInitialize(data).then((groups) => {
       if (lifecycle.disposed) return;
 
+      const total = Util.groupsToSuites(groups).length;
       const totalReady = Wrangle.totalReady(groups);
+
       setGroups(groups);
-      setLoaded(totalReady === list.length);
+      setLoaded(totalReady === total);
     });
 
     return lifecycle.dispose;

@@ -1,5 +1,5 @@
 import { TestRunner } from '../TestRunner';
-import { ValueHandler, type t, LocalStorage } from '../common';
+import { LocalStorage, ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
 type Margin = t.CssValue['Margin'];
@@ -19,7 +19,7 @@ export function bdd<S extends O = O>(
 
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
-    list: ValueHandler<ListInput, S>(events),
+    list: ValueHandler<{ input: ListInput }, S>(events),
     run: ValueHandler<t.DevBddRunDef, S>(events),
     enabled: ValueHandler<boolean, S>(events),
     margin: ValueHandler<Margin, S>(events),
@@ -39,7 +39,7 @@ export function bdd<S extends O = O>(
       return args;
     },
     list(input) {
-      values.list.handler(input);
+      values.list.handler({ input });
       return args;
     },
     run(input) {
@@ -73,7 +73,8 @@ export function bdd<S extends O = O>(
     };
 
     const isEnabled = values.enabled.current !== false;
-    const list = values.list.current;
+    const list = values.list.current?.input;
+
     const run = values.run.current;
     const data: t.TestPropListData = {
       run: {

@@ -1,7 +1,7 @@
 export const TESTS = {
   get all() {
     return [
-      'Document',
+      'Document (CRDT)',
       import('../crdt.DocRef/-TEST.mjs'),
       import('../crdt.DocFile/-TEST.mjs'),
 
