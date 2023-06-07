@@ -31,7 +31,7 @@ export default Dev.describe('Root', (e) => {
       runner
         .run({ label: 'Integration Tests' })
         .localstore('dev:sys.net.webrtc.testrunner')
-        .list(async () => (await import('./-TestRunner.tests.mjs')).TESTS.all)
+        .list(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
   });
