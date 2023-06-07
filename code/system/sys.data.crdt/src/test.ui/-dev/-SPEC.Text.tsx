@@ -1,4 +1,4 @@
-import { rx, css, Dev, Crdt, t, Automerge, expect } from '../test.ui';
+import { rx, css, Dev, Crdt, t, Automerge, expect } from '..';
 
 type T = { count: number };
 const initial: T = { count: 0 };

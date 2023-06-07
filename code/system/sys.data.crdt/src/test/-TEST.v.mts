@@ -1,5 +1,5 @@
 import { Test, describe, it } from '.';
-import { TESTS } from '../test.ui/-TestRunner.TESTS.mjs';
+import { TESTS } from '../test.ui/-dev/-TestRunner.TESTS.mjs';
 
 /**
  * Run tests within CI (server-side).

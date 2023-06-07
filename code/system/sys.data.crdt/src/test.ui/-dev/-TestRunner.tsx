@@ -1,4 +1,4 @@
-import { Dev, t } from '../test.ui';
+import { Dev, t } from '..';
 
 type T = {
   spinning?: boolean;
