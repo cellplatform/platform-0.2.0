@@ -6,11 +6,7 @@ type T = {
 };
 const initial: T = {};
 
-export default Dev.describe('Root', (e) => {
-  type LocalStore = { selected: string[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.testrunner');
-  const local = localstore.object({ selected: [] });
-
+export default Dev.describe('TestRunner', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -22,10 +18,10 @@ export default Dev.describe('Root', (e) => {
         const { spinning, results } = e.state;
         return (
           <Dev.TestRunner.Results
+            style={{ Absolute: 0 }}
             data={results}
             spinning={spinning}
             scroll={true}
-            style={{ Absolute: 0 }}
           />
         );
       });
@@ -35,24 +31,13 @@ export default Dev.describe('Root', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row(async (e) => {
-      const { TESTS } = await import('../test/-TESTS.mjs');
-      return (
-        <Dev.TestRunner.PropList.Controlled
-          initial={{
-            run: {
-              label: '',
-              list: TESTS.all,
-            },
-            specs: { selected: local.selected },
-          }}
-          onChanged={async (e) => {
-            local.selected = e.selected;
-            await state.change((d) => (d.results = e.results));
-          }}
-        />
-      );
-    });
+    dev.bdd((runner) =>
+      runner
+        .localstore('dev:sys.crdt.testrunner')
+        .run({ label: '' })
+        .list(async () => (await import('../test/-TESTS.mjs')).TESTS.all)
+        .onChanged((e) => state.change((d) => (d.results = e.results))),
+    );
   });
 
   e.it('ui:footer', async (e) => {
