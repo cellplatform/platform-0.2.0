@@ -65,6 +65,7 @@ export type {
   KeyboardModifierEdges,
   KeyboardModifierFlags,
   KeyMatchSubscriberHandlerArgs,
+  LocalStorage,
 } from 'sys.ui.dom/src/types.mjs';
 
 /**

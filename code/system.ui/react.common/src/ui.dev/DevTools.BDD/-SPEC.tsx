@@ -9,7 +9,6 @@ const initial: T = {
 export default Dev.describe('BDD (TestRunner)', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
 
     ctx.subject
       .backgroundColor(1)
@@ -27,6 +26,7 @@ export default Dev.describe('BDD (TestRunner)', (e) => {
     dev.bdd((runner) =>
       runner
         .enabled(true)
+        .localstore('dev:sys.common.TestRunner.BDD')
         .run({ label: 'Foobar', infoUrl: location.href, ctx: () => state.current.ctx })
         .list([
           import('../TestRunner/-dev/-TEST.sample-1.mjs'),
@@ -34,7 +34,7 @@ export default Dev.describe('BDD (TestRunner)', (e) => {
           import('../TestRunner/-dev/-TEST.sample-2.mjs'),
           import('../TestRunner/-dev/-TEST.controller.mjs'),
         ])
-        .onChange((e) => {
+        .onChanged((e) => {
           console.info(`⚡️ onChange:`, e);
         }),
     );

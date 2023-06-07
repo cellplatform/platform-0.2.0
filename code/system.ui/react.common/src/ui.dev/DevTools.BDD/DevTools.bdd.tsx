@@ -1,9 +1,10 @@
 import { TestRunner } from '../TestRunner';
-import { ValueHandler, type t } from '../common';
+import { ValueHandler, type t, LocalStorage } from '../common';
 
 type O = Record<string, unknown>;
 type Margin = t.CssValue['Margin'];
 type ListInput = t.TestPropListRunData['list'];
+type LocalStore = { selected: string[] };
 
 /**
  * A BDD test-selector/runner.
@@ -18,17 +19,23 @@ export function bdd<S extends O = O>(
 
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
-    localstore: ValueHandler<string, S>(events),
     list: ValueHandler<ListInput, S>(events),
     run: ValueHandler<t.DevBddRunDef, S>(events),
     enabled: ValueHandler<boolean, S>(events),
     margin: ValueHandler<Margin, S>(events),
   };
 
+  let local: LocalStore | undefined;
+  const createLocal = (key: string) => {
+    const store = LocalStorage<LocalStore>(`${key}:bdd`);
+    local = store.object({ selected: [] });
+  };
+
   const args: t.DevBddHandlerArgs<S> = {
     ctx,
     localstore(input) {
-      values.localstore.handler(input);
+      input = (input || '').trim();
+      if (input) createLocal(input);
       return args;
     },
     list(input) {
@@ -47,7 +54,7 @@ export function bdd<S extends O = O>(
       values.enabled.handler(input);
       return args;
     },
-    onChange(handler) {
+    onChanged(handler) {
       if (typeof handler === 'function') changeHandlers.add(handler);
       return args;
     },
@@ -62,16 +69,20 @@ export function bdd<S extends O = O>(
     const change = state.change;
     const onChange: t.TestPropListChangeHandler = async (e) => {
       const dev = ctx.toObject().props;
-      const changed = e;
-      changeHandlers.forEach((fn) => fn({ ...args, dev, state, change, event: changed }));
+      changeHandlers.forEach((fn) => fn({ ...args, dev, state, change, ...e }));
     };
 
     const isEnabled = values.enabled.current !== false;
     const list = values.list.current;
     const run = values.run.current;
     const data: t.TestPropListData = {
-      run: { list, ctx: run?.ctx, infoUrl: run?.infoUrl, label: run?.label },
-      specs: {},
+      run: {
+        list,
+        ctx: run?.ctx,
+        infoUrl: run?.infoUrl,
+        label: run?.label,
+      },
+      specs: { selected: local?.selected },
     };
 
     return (
@@ -80,6 +91,7 @@ export function bdd<S extends O = O>(
         margin={values.margin.current}
         enabled={isEnabled}
         onChanged={(e) => {
+          if (local) local.selected = e.selected;
           onChange(e);
         }}
       />
