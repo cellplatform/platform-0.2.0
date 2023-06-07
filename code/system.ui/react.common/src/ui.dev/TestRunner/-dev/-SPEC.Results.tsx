@@ -52,11 +52,15 @@ export default Dev.describe('TestRunner', (e) => {
         .localstore('dev:sys.common.TestRunner.Results')
         .margin([20, 35, 0, 30])
         .run({ ctx: () => state.current.ctx })
-        .list([
-          import('./-TEST.sample-1.mjs'),
-          import('./-TEST.sample-2.mjs'),
-          import('./-TEST.controller.mjs'),
-        ])
+        .list(async () => {
+          /**
+           * NB: This is more convoluted that it might normally be
+           *     with an async import within an async function.
+           *     This is to simulate the async nature of some use-cases.
+           */
+          const { TESTS } = await import('./-TESTS.mjs');
+          return TESTS.all;
+        })
         .onChanged(async (e) => {
           await state.change((d) => (d.props.data = e.results));
         }),

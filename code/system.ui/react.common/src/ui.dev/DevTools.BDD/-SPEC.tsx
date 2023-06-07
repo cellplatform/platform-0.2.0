@@ -28,12 +28,15 @@ export default Dev.describe('BDD (TestRunner)', (e) => {
         .enabled(true)
         .localstore('dev:sys.common.TestRunner.BDD')
         .run({ label: 'Foobar', infoUrl: location.href, ctx: () => state.current.ctx })
-        .list([
-          import('../TestRunner/-dev/-TEST.sample-1.mjs'),
-          'MyTitle',
-          import('../TestRunner/-dev/-TEST.sample-2.mjs'),
-          import('../TestRunner/-dev/-TEST.controller.mjs'),
-        ])
+        .list(async () => {
+          /**
+           * NB: This is more convoluted that it might normally be
+           *     with an async import within an async function.
+           *     This is to simulate the async nature of some use-cases.
+           */
+          const { TESTS } = await import('../TestRunner/-dev/-TESTS.mjs');
+          return TESTS.all;
+        })
         .onChanged((e) => {
           console.info(`⚡️ onChange:`, e);
         }),
