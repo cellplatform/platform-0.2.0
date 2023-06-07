@@ -1,6 +1,5 @@
-import { expect, describe, it } from '../test';
 import { Subject } from 'rxjs';
-
+import { describe, expect, it } from '../test';
 import { delay, wait } from './Delay.mjs';
 
 const now = () => new Date().getTime();

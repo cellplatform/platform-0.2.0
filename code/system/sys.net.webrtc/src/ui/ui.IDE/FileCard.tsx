@@ -24,7 +24,7 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
     },
   };
 
-  const fields: t.CrdtInfoFields[] = [
+  const fields: t.CrdtInfoField[] = [
     'Module.Verify',
     'Module',
     'Driver.Runtime',

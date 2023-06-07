@@ -1,4 +1,16 @@
-import { Crdt, css, Dev, Icons, Pkg, PropList, rx, t, TestNetwork, Vimeo, WebRtc } from './common';
+import {
+  Crdt,
+  css,
+  Dev,
+  Icons,
+  Pkg,
+  PropList,
+  rx,
+  TestNetwork,
+  Vimeo,
+  WebRtc,
+  type t,
+} from './common';
 import { DevRemotes } from './DEV.Remotes';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
@@ -7,7 +19,7 @@ import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
 
 /**
- * video: 727951677
+ * video:   727951677
  * diagram: https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
  * youtube: https://youtu.be/WGfS6pPJ5jo
  */
@@ -225,6 +237,33 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         />
       );
     });
+  });
+
+  e.it('ui:specs', async (e) => {
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
+    dev.row((e) => {
+      return (
+        <Dev.TestRunner.PropList.Controlled
+          margin={[20, 10, 0, 0]}
+          initial={{
+            run: {
+              ctx: () => ({ props }),
+              label: 'Meeting Doc',
+              list: () => [import('./-TEST.Sample.mjs')],
+            },
+            specs: {},
+          }}
+          onChanged={async (e) => {
+            // local.selected = e.selected;
+            // await state.change((d) => (d.testrunner.results = e.results));
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:card', async (e) => {

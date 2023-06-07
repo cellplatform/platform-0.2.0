@@ -1,4 +1,4 @@
-import { maybeWait, DEFAULT, Delete, slug, t, Time, R } from './common';
+import { DEFAULT, Delete, R, Time, maybeWait, slug, t } from './common';
 
 /**
  * A single test.
@@ -16,29 +16,32 @@ export const TestModel = (args: {
     type R = t.TestRunResponse;
 
     return new Promise<R>(async (resolve) => {
-      const tx = `run.tx.${slug()}`;
+      const tx = `run.test.tx.${slug()}`;
       const timer = Time.timer();
       const excluded = toExcluded({ modifier, excluded: options.excluded });
+      const { noop } = options;
 
       const response: R = {
         id,
         tx,
         ok: true,
         description,
-        elapsed: -1,
+        time: { started: Time.now.timestamp, elapsed: -1 },
         timeout: Math.max(0, options.timeout ?? DEFAULT.TIMEOUT),
         excluded,
+        noop,
       };
 
       let _stopTimeout: () => void = () => null;
-
-      const done = (options: { error?: Error } = {}) => {
+      const finalizeResponse = (options: { error?: Error } = {}) => {
         _stopTimeout?.();
-        response.elapsed = timer.elapsed.msec;
+        response.time.elapsed = timer.elapsed.msec;
         response.error = options.error;
         response.ok = !Boolean(response.error);
-        resolve(Delete.undefined(response));
+        return Delete.undefined(response);
       };
+
+      const done = (options: { error?: Error } = {}) => resolve(finalizeResponse(options));
       if (!handler || excluded) return done();
 
       const startTimeout = (msecs: number) => {
@@ -61,6 +64,8 @@ export const TestModel = (args: {
         },
       };
 
+      if (noop) return done();
+
       try {
         /**
          * Before handler.
@@ -72,18 +77,23 @@ export const TestModel = (args: {
         /**
          * Test handler.
          */
+        let error: Error | undefined;
         startTimeout(response.timeout);
-        await maybeWait(handler(args));
+        try {
+          await maybeWait(handler(args));
+        } catch (err: any) {
+          error = err;
+        }
 
         /**
          * After handler.
          */
         if (options.after) {
-          const elapsed = timer.elapsed.msec;
-          await maybeWait(options.after({ id, description, elapsed }));
+          const result = finalizeResponse({ error });
+          await maybeWait(options.after({ id, description, result }));
         }
 
-        return done();
+        return done({ error });
       } catch (error: any) {
         done({ error });
       }

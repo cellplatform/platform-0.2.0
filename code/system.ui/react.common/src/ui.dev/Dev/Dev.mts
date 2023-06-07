@@ -1,11 +1,11 @@
 import { Lorem } from '../../ui.tools';
 import { ObjectView } from '../../ui/ObjectView';
-import { DevSplash as Splash } from '../DevSplash';
+import { DevIcons as Icons } from '../DevIcons.mjs';
+import { DevSplash as Splash } from '../Dev.Splash';
 import { DevTools, Helpers } from '../DevTools';
 import { TestRunner } from '../TestRunner';
 import { DEFAULTS, DevBase, LocalStorage, Test, Value } from '../common';
 import { render } from './Dev.render';
-import { DevIcons as Icons } from '../Icons.mjs';
 
 const { describe, ctx } = DevBase.Spec;
 const { trimStringsDeep } = Value.object;

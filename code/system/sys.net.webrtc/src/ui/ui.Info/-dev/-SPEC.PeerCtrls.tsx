@@ -1,5 +1,5 @@
 import { PropList, Dev, WebRtc, t, MediaStream } from './common';
-import { PeerCtrls, PeerCtrlsProps } from '../ui.PeerCtrls';
+import { PeerCtrls, PeerCtrlsProps } from '../ui/PeerCtrls';
 
 type T = {
   camera?: t.PeerGetMediaStreamRes;

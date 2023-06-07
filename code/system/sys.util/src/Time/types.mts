@@ -1,5 +1,6 @@
 import type { Observable } from 'rxjs';
 import type { Dayjs, ConfigType } from 'dayjs';
+import { type t } from '../common.t';
 
 export type TimeDuration = {
   ok: boolean;
@@ -36,6 +37,7 @@ export type Time = {
   elapsed: TimeElapsed;
   day: DayFactory;
   now: DateTime;
+  until(until$?: t.UntilObservable): TimeUntil;
   timezone: string;
   utc(input?: Date | number): DateTime;
   timer(start?: Date, options?: { round?: number }): Timer;
@@ -53,4 +55,8 @@ export type Timer = {
   startedAt: Date;
   reset: () => Timer;
   elapsed: TimeDuration;
+};
+
+export type TimeUntil = t.Lifecycle & {
+  delay: TimeDelay;
 };

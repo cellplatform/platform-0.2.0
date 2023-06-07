@@ -1,5 +1,5 @@
 import { t } from '../common';
-import { PeerRow } from '../ui.PeerRow';
+import { PeerRow } from '../ui/PeerRow';
 
 export function FieldGroupList(args: {
   fields: t.WebRtcInfoField[];

@@ -1,17 +1,16 @@
 import { useEffect, useRef } from 'react';
-
-import { ErrorFallback } from './ErrorFallback';
+import { HarnessHost } from '../Harness.Host';
+import { DebugPanel } from '../Harness.Panel.Debug';
 import {
   COLORS,
-  css,
   ErrorBoundary,
+  css,
   t,
   useBusController,
   useRubberband,
   useSizeObserver,
 } from '../common';
-import { DebugPanel } from '../Harness.DebugPanel';
-import { HarnessHost } from '../Harness.Host';
+import { ErrorFallback } from './ErrorFallback';
 
 type Size = { width: number; height: number };
 

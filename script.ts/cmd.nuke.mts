@@ -14,10 +14,8 @@ const filter = (path: string) => {
   if (path.includes('/compiler.spikes/')) return false;
   return true;
 };
-let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 
-console.info('paths', paths);
-
+const paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
 for (const path of paths) {
   await remove(fs.join(path, 'node_modules'));
 }
@@ -34,4 +32,4 @@ console.info();
 await remove('./node_modules');
 await remove('./yarn.lock');
 
-console.info(pc.cyan('repository root nuke'));
+console.info(pc.cyan('root repository nuked'));

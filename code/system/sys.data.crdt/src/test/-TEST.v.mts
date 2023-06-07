@@ -5,7 +5,9 @@ import { TESTS } from './-TESTS.mjs';
  * Run tests within CI (server-side).
  */
 const run = Test.using(describe, it);
-const wait = TESTS.all().map((m) => run.suite(m));
+const wait = TESTS.all.map((m) => {
+  if (typeof m === 'object') run.suite(m);
+});
 await Promise.all(wait);
 
 /**

@@ -1,5 +1,7 @@
-export * from '../common';
 import type { t } from '../common';
+
+export { WebRtcState } from '../../WebRtc.State';
+export * from '../common';
 
 /**
  * Constants

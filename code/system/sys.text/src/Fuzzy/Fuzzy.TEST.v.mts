@@ -11,7 +11,7 @@ describe('Fuzzy (Approx String Match)', () => {
   });
 
   it('no match', () => {
-    const res = Fuzzy.pattern('zoo', 1).match('apple');
+    const res = Fuzzy.pattern('zoo', { maxErrors: 1 }).match('apple');
     expect(res.exists).to.eql(false);
     expect(res.matches).to.eql([]);
     expect(res.text).to.eql('apple');

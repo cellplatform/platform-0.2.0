@@ -1,6 +1,5 @@
-import { useState, useRef } from 'react';
-import { Color, COLORS, css, FC, t, TextInput, Style } from '../common';
-import { DevIcons } from '../Icons.mjs';
+import { useRef, useState } from 'react';
+import { COLORS, Color, DevIcons, FC, Style, TextInput, css, t } from '../common';
 
 const DEFAULT = {
   isEnabled: true,
@@ -94,6 +93,7 @@ const View: React.FC<TextboxProps> = (props) => {
         ref={inputRef}
         isEnabled={isActive}
         value={Wrangle.value(props)}
+        valueStyle={{ fontSize: 13, color: COLORS.DARK }}
         placeholder={Wrangle.placeholder(props)}
         placeholderStyle={{ opacity: 0.2, italic: true }}
         focusOnReady={props.focusOnReady ?? false}
@@ -187,10 +187,10 @@ const Wrangle = {
       const opacity = isFocused ? 1 : 0.3;
       const color = isFocused ? Color.darken(COLORS.CYAN, 2) : COLORS.DARK;
       const style = {
-        marginLeft: edge === 'right' ? 0 : 1,
-        marginRight: edge === 'left' ? 1 : 0,
+        marginLeft: edge === 'left' ? 4 : 0,
+        marginRight: edge === 'right' ? 0 : 4,
       };
-      return <DevIcons.Keyboard style={style} color={color} opacity={opacity} />;
+      return <DevIcons.Keyboard style={style} color={color} size={20} opacity={opacity} />;
     }
 
     return value;

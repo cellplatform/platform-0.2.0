@@ -28,15 +28,19 @@ export const ModuleSpecs = {
 };
 
 export const DevSpecs = {
-  'sys.ui.dev.TestRunner': () => import('../ui.dev/TestRunner/-dev/-SPEC.TestRunner'),
-  'sys.ui.dev.CmdHost': () => import('../ui.dev/CmdHost/-SPEC'),
-  'sys.ui.dev.DevSplash': () => import('../ui.dev/DevSplash/-SPEC'),
+  'sys.ui.dev.TestRunner.Results': () => import('../ui.dev/TestRunner/-dev/-SPEC.Results'),
+  'sys.ui.dev.TestRunner.PropList': () => import('../ui.dev/TestRunner/-dev/-SPEC.PropList'),
+  'sys.ui.dev.TestRunner.PropList.runner': () =>
+    import('../ui.dev/TestRunner/-dev/-SPEC.PropList.runner'),
+  'sys.ui.dev.CmdHost': () => import('../ui.dev/Dev.CmdHost/-SPEC'),
+  'sys.ui.dev.DevSplash': () => import('../ui.dev/Dev.Splash/-SPEC'),
   'sys.ui.dev.DevTools': () => import('../ui.dev/DevTools/-SPEC'),
   'sys.ui.dev.DevTools.Hr': () => import('../ui.dev/DevTools.Hr/-SPEC'),
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/-SPEC'),
   'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/-SPEC'),
-  'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/-SPEC'),
   'sys.ui.dev.DevTools.Textbox': () => import('../ui.dev/DevTools.Textbox/-SPEC'),
+  'sys.ui.dev.DevTools.BDD': () => import('../ui.dev/DevTools.BDD/-SPEC'),
+  'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/-SPEC'),
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };
 

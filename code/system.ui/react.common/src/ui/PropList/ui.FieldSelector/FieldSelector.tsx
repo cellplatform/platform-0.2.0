@@ -58,7 +58,7 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   });
 
   if (resettable) {
-    const el = <Button onClick={handleReset}>Reset</Button>;
+    const el = <Button onClick={handleReset}>{'reset'}</Button>;
     items.push({ label: ``, value: { data: el } });
   }
 

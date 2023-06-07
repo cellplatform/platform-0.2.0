@@ -1,7 +1,8 @@
-import { type t } from './common';
-import { Def } from './TestSuiteModel.mjs';
-import { Is, Tree, Transform } from '../TestSuite.helpers';
+import { Is, Stats, Total, Transform, Tree, Loader } from '../TestSuite.helpers';
 import { bundle } from './Test.bundle.mjs';
+import { Def } from './TestSuiteModel.mjs';
+
+import { type t } from './common';
 
 const describe = Def.variants();
 
@@ -11,10 +12,13 @@ const describe = Def.variants();
 export const Test: t.Test = {
   Is,
   Tree,
-  using: Transform,
+  Total,
+  Stats,
 
+  using: Transform,
   describe,
   bundle,
+  import: Loader.import,
 
   /**
    * Bundle and run a set of tests.

@@ -1,18 +1,24 @@
-import { t } from './common.t';
-export * from './TestSuite.helpers/types.mjs';
-import type { Tree } from './TestSuite.helpers/Tree.mjs';
+import type { Loader, Tree } from './TestSuite.helpers';
+import type { Stats } from './TestSuite.helpers/Stats.mjs';
+import type { Total } from './TestSuite.helpers/Total.mjs';
 import type { Transform } from './TestSuite.helpers/Transform.mjs';
+import type { t } from './common.t';
+
+export type * from './TestSuite.helpers/types.mjs';
 
 type Id = string;
+type SuiteId = Id;
+type TestId = Id;
 type Anything = void | any;
 type Milliseconds = number;
+type Timestamp = number;
 type Ctx = Record<string, unknown>;
 type IgnoredResponse = any | Promise<any>;
 
 export type TestModifier = 'skip' | 'only';
 
 export type BundleImport = TestSuiteModel | SpecImport | Promise<any>;
-export type SpecImport = Promise<{ default: any }>;
+export type SpecImport = Promise<{ default: TestSuiteModel }>;
 export type SpecImports = { [namespace: string]: () => SpecImport };
 
 /**
@@ -21,12 +27,18 @@ export type SpecImports = { [namespace: string]: () => SpecImport };
 export type Test = {
   Is: TestIs;
   Tree: typeof Tree;
+  Total: typeof Total;
+  Stats: typeof Stats;
   describe: TestSuiteDescribe;
+
+  import: typeof Loader.import;
+  using: typeof Transform;
+
   bundle(items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
   bundle(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteModel>;
+
   run(items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
   run(description: string, items: BundleImport | BundleImport[]): Promise<TestSuiteRunResponse>;
-  using: typeof Transform;
 };
 
 export type TestIs = {
@@ -39,7 +51,7 @@ export type TestIs = {
  * A suite ("set") of tests.x
  */
 export type TestSuite = {
-  id: Id;
+  id: SuiteId;
   timeout(value: Milliseconds): TestSuite;
   describe: TestSuiteDescribe;
   it: TestSuiteIt;
@@ -60,7 +72,7 @@ export type TestSuiteItDef = (description: string, handler?: TestHandler) => Tes
 export type TestSuiteHandler = (e: TestSuite) => Anything | Promise<Anything>;
 export type TestHandler = (e: TestHandlerArgs) => Anything | Promise<Anything>;
 export type TestHandlerArgs = {
-  id: Id;
+  id: TestId;
   description: string;
   timeout(value: Milliseconds): TestHandlerArgs;
   ctx?: Ctx;
@@ -72,7 +84,7 @@ export type TestHandlerArgs = {
 export type TestModel = {
   kind: 'Test';
   parent: TestSuiteModel;
-  id: Id;
+  id: TestId;
   run: TestRun;
   description: string;
   handler?: TestHandler;
@@ -88,16 +100,18 @@ export type TestRunOptions = {
   ctx?: Ctx;
   before?: BeforeRunTest;
   after?: AfterRunTest;
+  noop?: boolean; // Produces a result without executing any of the actual test function.
 };
 export type TestRunResponse = {
-  id: Id;
+  id: TestId;
   tx: Id; // Unique ID for the individual test run operation.
   ok: boolean;
   description: string;
-  elapsed: Milliseconds;
+  time: { started: Timestamp; elapsed: Milliseconds };
   timeout: Milliseconds;
   excluded?: TestModifier[];
   error?: Error;
+  noop?: boolean;
 };
 
 /**
@@ -108,11 +122,13 @@ export type TestSuiteModel = TestSuite & {
   readonly kind: 'TestSuite';
   readonly state: TestSuiteModelState;
   readonly description: string;
+  readonly ready: boolean; // true after [init] has been run.
   run: TestSuiteRun;
   merge(...suites: TestSuiteModel[]): Promise<TestSuiteModel>;
   init(): Promise<TestSuiteModel>;
   clone(): Promise<TestSuiteModel>;
   walk(handler: (e: t.SuiteWalkDownArgs) => void): void;
+  hash(algo?: 'SHA1' | 'SHA256'): string;
   toString(): string;
 };
 
@@ -135,38 +151,84 @@ export type TestSuiteRunOptions = {
   only?: TestModel['id'][]; // Override: a set of spec IDs to filter on, excluding all others.
   beforeEach?: BeforeRunTest;
   afterEach?: AfterRunTest;
+  onProgress?: SuiteRunProgress;
+  noop?: boolean; // Produces a result-tree without executing any of the actual test functions.
 };
 export type TestSuiteRunResponse = {
-  id: Id;
+  id: SuiteId;
   tx: Id; // Unique ID for the individual suite run operation.
   ok: boolean;
   description: string;
-  elapsed: Milliseconds;
+  time: { started: Timestamp; elapsed: Milliseconds };
   tests: TestRunResponse[];
   children: TestSuiteRunResponse[];
   stats: TestSuiteRunStats;
+  noop?: boolean;
 };
 
 export type TestSuiteRunStats = {
-  total: number;
+  total: number; // The total number of tests that ran.
   passed: number;
   failed: number;
   skipped: number;
   only: number;
 };
 
+export type TestSuiteTotal = {
+  total: number;
+  runnable: number; // NB: Total runnable tests, excluding skipped tests
+  skipped: number;
+  only: number;
+};
+
 /**
- * Handler that runs before/after a test is run.
+ * Handlers that run before/after a test is run.
  */
 export type BeforeRunTest = (e: BeforeRunTestArgs) => IgnoredResponse;
 export type BeforeRunTestArgs = {
-  id: Id;
+  id: TestId;
   description: string;
 };
 
 export type AfterRunTest = (e: AfterRunTestArgs) => IgnoredResponse;
 export type AfterRunTestArgs = {
-  id: Id;
+  id: TestId;
   description: string;
+  result: t.TestRunResponse;
+};
+
+/**
+ * Handlers that report progress during a run operation.
+ */
+export type SuiteRunProgress = (e: SuiteRunProgressArgs) => void;
+export type SuiteRunProgressArgs =
+  | SuiteRunProgressStart
+  | SuiteRunProgressBeforeTest
+  | SuiteRunProgressAfterTest
+  | SuiteRunProgressComplete;
+
+type TestSuiteRunCommon = {
+  id: { suite: SuiteId; tx: Id };
+  progress: { percent: number; total: number; completed: number };
+  total: t.TestSuiteTotal;
   elapsed: Milliseconds;
+};
+
+export type SuiteRunProgressStart = TestSuiteRunCommon & {
+  op: 'run:suite:start';
+};
+
+export type SuiteRunProgressBeforeTest = TestSuiteRunCommon & {
+  op: 'run:test:before';
+  description: string;
+};
+
+export type SuiteRunProgressAfterTest = TestSuiteRunCommon & {
+  op: 'run:test:after';
+  description: string;
+  result: t.TestRunResponse;
+};
+
+export type SuiteRunProgressComplete = TestSuiteRunCommon & {
+  op: 'run:suite:complete';
 };

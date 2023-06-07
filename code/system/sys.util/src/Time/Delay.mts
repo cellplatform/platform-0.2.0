@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import type * as t from './types.mjs';
+import { type t } from './common.mjs';
 
 /**
  * A more useful (promise based) timeout function.

@@ -39,7 +39,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
     doc: toFs('dev.crdt-info.sample'),
   };
 
-  type LocalStore = T['debug'] & { fields?: t.CrdtInfoFields[]; card?: boolean; flipped?: boolean };
+  type LocalStore = T['debug'] & { fields?: t.CrdtInfoField[]; card?: boolean; flipped?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.Info');
   const local = localstore.object({
     fields: initial.props.fields,

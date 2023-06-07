@@ -8,10 +8,11 @@ export { Test } from 'sys.test.spec';
 /**
  * @local
  */
-export { DevIcons as Icons, Icon } from '../Icons.mjs';
+export { DevIcons, Icon } from '../DevIcons.mjs';
 export { ObjectView } from '../../ui/ObjectView';
 export { Button } from '../../ui/Button';
 export { Switch } from '../../ui/Button.Switch';
 export { RenderCount } from '../../ui/RenderCount';
 export { TextInput } from '../../ui/Text.Input';
 export { Spinner } from '../../ui/Spinner';
+export { Keyboard } from '../../ui/Text.Keyboard';

@@ -1,4 +1,5 @@
-export * from './Is/types.mjs';
-export * from './Mime/types.mjs';
-export * from './Time/types.mjs';
-export * from './Rx/types.mjs';
+export type * from './Dispose/types.mjs';
+export type * from './Is/types.mjs';
+export type * from './Mime/types.mjs';
+export type * from './Time/types.mjs';
+export type * from './Rx/types.mjs';

@@ -8,7 +8,8 @@ export const Fuzzy: t.Fuzzy = {
   /**
    * Match using the given "input" pattern.
    */
-  pattern(pattern: string, maxErrors = 2) {
+  pattern(pattern: string, options: { maxErrors?: number } = {}) {
+    const { maxErrors = 2 } = options;
     return {
       /**
        * Match on the given target string value.

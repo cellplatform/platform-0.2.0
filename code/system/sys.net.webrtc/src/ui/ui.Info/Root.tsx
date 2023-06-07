@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
 import { FieldGroup } from './fields/Group';
 import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
 import { FieldModuleVerify } from './fields/Module.Verify';
@@ -8,7 +7,7 @@ import { FieldPeer } from './fields/Peer';
 import { FieldPeerConnections } from './fields/Peer.Connections';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
-import { useInfo } from './useInfo.mjs';
+import { useInfo } from './hooks/useInfo.mjs';
 
 export type WebRtcInfoProps = {
   client?: t.WebRtcEvents;

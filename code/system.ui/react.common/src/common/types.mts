@@ -15,6 +15,7 @@ export type {
   JsonU,
   JsonMapU,
   Size,
+  ModuleDef,
 } from 'sys.types/src/types.mjs';
 
 export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
@@ -26,8 +27,10 @@ export type {
   TestSuiteRunResponse,
   TestRunResponse,
   TestHandlerArgs,
+  TestSuiteRunStats,
   SpecImports,
   SpecImport,
+  BundleImport,
 } from 'sys.test.spec/src/types.mjs';
 
 export type {
@@ -62,6 +65,7 @@ export type {
   KeyboardModifierEdges,
   KeyboardModifierFlags,
   KeyMatchSubscriberHandlerArgs,
+  LocalStorage,
 } from 'sys.ui.dom/src/types.mjs';
 
 /**

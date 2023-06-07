@@ -4,7 +4,7 @@ export type Fuzzy = {
 
 export type FuzzyMatcher = (
   pattern: string,
-  maxErrors?: number,
+  options?: { maxErrors?: number },
 ) => {
   match(input: string | undefined): FuzzyMatchResult;
 };

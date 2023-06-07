@@ -231,7 +231,7 @@ describe('rx', () => {
       threshold.$.subscribe(() => fired++);
 
       $.next();
-      await Time.wait(10);
+      await Time.wait(5);
       $.next();
       expect(fired).to.eql(1);
 

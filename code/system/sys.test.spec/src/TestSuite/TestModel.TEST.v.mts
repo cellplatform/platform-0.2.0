@@ -71,16 +71,19 @@ describe('TestModel', () => {
       const handler: t.TestHandler = () => count++;
       const test = TestModel({ parent, description, handler });
 
+      const now = Time.now.timestamp;
       const res = await test.run();
       expect(count).to.eql(1);
 
       expect(res.id).to.eql(test.id);
       expect(res.ok).to.eql(true);
       expect(res.timeout).to.eql(DEFAULT.TIMEOUT);
-      expect(res.elapsed).to.greaterThan(-1);
+      expect(res.time.started).to.greaterThanOrEqual(now);
+      expect(res.time.elapsed).to.greaterThan(-1);
       expect(res.error).to.eql(undefined);
       expect(res.description).to.eql(description);
       expect(res.excluded).to.eql(undefined);
+      expect(res.noop).to.eql(undefined);
     });
 
     it('async', async () => {
@@ -97,7 +100,7 @@ describe('TestModel', () => {
       expect(res.id).to.eql(test.id);
       expect(res.ok).to.eql(true);
       expect(res.timeout).to.eql(DEFAULT.TIMEOUT);
-      expect(res.elapsed).to.greaterThan(40); // NB: 10ms window (around 50ms) to prevent test fragility.
+      expect(res.time.elapsed).to.greaterThan(40); // NB: 10ms window (around 50ms) to prevent test fragility.
       expect(res.error).to.eql(undefined);
     });
 
@@ -155,7 +158,7 @@ describe('TestModel', () => {
     it('no handler', async () => {
       const test = TestModel({ parent, description });
       const res = await test.run();
-      expect(res.elapsed).to.lessThan(5);
+      expect(res.time.elapsed).to.lessThan(5);
       expect(res.error).to.eql(undefined);
     });
 
@@ -215,6 +218,18 @@ describe('TestModel', () => {
       const test = TestModel({ parent, description, handler });
       const res = await test.run({ timeout: 10 });
       expect(res.timeout).to.eql(30);
+    });
+
+    it('noop', async () => {
+      let count = 0;
+      const handler: t.TestHandler = () => count++;
+      const test = TestModel({ parent, description, handler });
+      const res = await test.run({ noop: true });
+
+      expect(res.ok).to.eql(true);
+      expect(res.noop).to.eql(true);
+      expect(count).to.eql(0);
+      expect(res.time.elapsed).to.greaterThan(-1);
     });
   });
 });

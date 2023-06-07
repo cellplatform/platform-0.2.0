@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { COLORS, css, t } from '../common';
 
 export type TempProps = {
   style?: t.CssValue;

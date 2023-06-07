@@ -1,6 +1,6 @@
-import { type t } from '../common';
+import { type t } from './common';
 import { Is } from './Is.mjs';
-import { TestTree, SuiteWalkUpArgs } from './TestTree.mjs';
+import { SuiteWalkUpArgs, TestTree } from './TestTree.mjs';
 
 type T = t.TestSuiteModel | t.TestModel;
 type M = t.TestModifier;

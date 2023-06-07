@@ -80,7 +80,7 @@ export default Test.describe('crdt helpers', (e) => {
       const res3 = fieldAs(doc2.current, 'count').textType;
 
       expect(res1).to.eql(undefined);
-      expect(res2 instanceof Automerge.Text).to.eql(true);
+      expect((res2 as any) instanceof Automerge.Text).to.eql(true);
       expect(res3).to.eql(undefined);
     });
 
@@ -95,7 +95,7 @@ export default Test.describe('crdt helpers', (e) => {
       const res3 = fieldAs(doc2.current, 'total').counterType;
 
       expect(res1).to.eql(undefined);
-      expect(res2 instanceof Automerge.Counter).to.eql(true);
+      expect((res2 as any) instanceof Automerge.Counter).to.eql(true);
       expect(res3).to.eql(undefined);
     });
   });

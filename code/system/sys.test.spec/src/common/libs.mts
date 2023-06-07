@@ -7,4 +7,4 @@ export const R = { equals, clone, clamp, uniq };
 /**
  * @system
  */
-export { rx, slug, Time, Delete, maybeWait, Is } from 'sys.util';
+export { rx, slug, Time, Delete, Hash, maybeWait, Is } from 'sys.util';

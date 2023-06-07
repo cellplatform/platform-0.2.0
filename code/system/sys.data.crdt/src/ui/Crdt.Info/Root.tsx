@@ -1,16 +1,16 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
-import { FieldFile } from './field.File';
-import { FieldHistoryItem } from './field.History.Item';
-import { FieldHistory } from './field.History.mjs';
-import { FieldModuleVerify } from './field.Module.Verify';
-import { FieldNetwork } from './field.Network';
-import { FieldUrl, FieldUrlQRCode } from './field.Url';
-import { useFile } from './useFile.mjs';
+import { FieldFile } from './fields/File';
+import { FieldHistoryItem } from './fields/History.Item';
+import { FieldHistory } from './fields/History.mjs';
+import { FieldModuleVerify } from './fields/Module.Verify';
+import { FieldNetwork } from './fields/Network';
+import { FieldUrl, FieldUrlQRCode } from './fields/Url';
+import { useFile } from './hooks/useFile.mjs';
 
 export type CrdtInfoProps = {
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
-  fields?: t.CrdtInfoFields[];
+  fields?: t.CrdtInfoField[];
   data?: t.CrdtInfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
@@ -22,10 +22,10 @@ export type CrdtInfoProps = {
  * Component
  */
 const View: React.FC<CrdtInfoProps> = (props) => {
-  const { fields = DEFAULTS.fields, data = {}, flipped } = props;
+  const { fields = DEFAULTS.fields, data = {} } = props;
   const file = useFile(data);
 
-  const items = PropList.builder<t.CrdtInfoFields>()
+  const items = PropList.builder<t.CrdtInfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
     .field('Driver.Library', { label: 'Library', value: Wrangle.automergeLib() })

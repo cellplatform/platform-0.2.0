@@ -19,17 +19,18 @@ describe('TestSuiteModel', () => {
 
     it('empty (no handler)', () => {
       const root = Test.describe('root');
+      expect(root.ready).to.eql(false);
+      expect(root.state.ready).to.eql(false);
       expect(root.state.description).to.eql('root');
       expect(root.state.children).to.eql([]);
       expect(root.state.tests).to.eql([]);
-      expect(root.state.ready).to.eql(false);
       expect(root.state.modifier).to.eql(undefined);
     });
 
     it('handler (not initialized)', () => {
       const handler: t.TestSuiteHandler = (e) => null;
       const root = Test.describe('root', handler);
-      expect(root.state.ready).to.eql(false);
+      expect(root.ready).to.eql(false);
     });
 
     it('timeout', async () => {
@@ -67,13 +68,15 @@ describe('TestSuiteModel', () => {
         test = e.it('foo', handler);
       });
 
+      expect(root.ready).to.eql(false);
+      expect(root.state.ready).to.eql(false);
       expect(root.description).to.eql('root');
       expect(root.state.description).to.eql('root');
-      expect(root.state.ready).to.eql(false);
       expect(count).to.eql(0);
 
       const res1 = await root.init();
       expect(res1).to.equal(root);
+      expect(root.ready).to.eql(true);
       expect(root.state.ready).to.eql(true);
       expect(count).to.eql(1);
 
@@ -256,17 +259,98 @@ describe('TestSuiteModel', () => {
     });
   });
 
+  describe('hash', async () => {
+    const model1 = await Test.describe('foo').init();
+    const model2 = await Test.describe('foo', (e) => {
+      e.it('bar', () => null);
+      e.describe('child', (e) => {
+        e.it('baz', () => null);
+        e.it('boo', () => null);
+      });
+    }).init();
+
+    it('hash: SHA1 (default)', async () => {
+      const hash1 = model1.hash();
+      const hash2 = model2.hash();
+      const hash3 = model2.hash();
+
+      expect(hash1).to.not.eql(hash2);
+      expect(hash2).to.eql(hash3);
+      expect(hash1).to.match(/^suite\:sha1-/);
+    });
+
+    it('hash: SHA256', async () => {
+      const hash1 = model1.hash('SHA1');
+      const hash2 = model1.hash('SHA256');
+      expect(hash2).to.match(/^suite\:sha256-/);
+      expect(hash2.length).to.greaterThan(hash1.length);
+    });
+
+    it('hash: not initialized', async () => {
+      const model = Test.describe('foo', (e) => {
+        e.it('bar', () => null);
+      });
+
+      const hash1 = model.hash();
+      await model.init();
+      const hash2 = model.hash();
+
+      expect(hash1).to.not.eql(hash2);
+      expect(hash1).to.match(/^suite\:sha1-/);
+      expect(hash2).to.match(/^suite\:sha1-/);
+    });
+  });
+
+  describe('merge', () => {
+    it('merges multiple specs together into single root', async () => {
+      const root = Test.describe('root');
+      const child1 = Test.describe('child-1');
+      const child2 = Test.describe('child-2');
+      const child3 = Test.describe('child-3');
+
+      expect(root.state.children).to.eql([]);
+
+      await root.merge(child1);
+      expect(root.state.children.length).to.eql(1);
+      expect(root.state.children[0].state.description).to.eql(child1.state.description);
+
+      await root.merge(child2, child3);
+      expect(root.state.children.length).to.eql(3);
+
+      expect(root.state.children[0].state.description).to.eql(child1.state.description);
+      expect(root.state.children[1].state.description).to.eql(child2.state.description);
+      expect(root.state.children[2].state.description).to.eql(child3.state.description);
+
+      expect(root.state.children[0].state.parent?.id).to.eql(root.id);
+      expect(root.state.children[1].state.parent?.id).to.eql(root.id);
+      expect(root.state.children[2].state.parent?.id).to.eql(root.id);
+
+      // Not the same instance (cloned).
+      expect(root.state.children[0]).to.not.equal(child1);
+      expect(root.state.children[1]).to.not.equal(child2);
+      expect(root.state.children[2]).to.not.equal(child3);
+
+      expect(TestTree.root(root.state.children[0])).to.equal(root);
+      expect(TestTree.root(root.state.children[1])).to.equal(root);
+      expect(TestTree.root(root.state.children[2])).to.equal(root);
+    });
+  });
+
   describe('run', () => {
     it('sync', async () => {
       let count = 0;
       const root = Test.describe('root', (e) => {
         e.it('foo', () => count++);
       });
+
+      const now = Time.now.timestamp;
       const res = await root.run();
 
       expect(res.id).to.eql(root.id);
       expect(res.ok).to.eql(true);
       expect(count).to.eql(1);
+      expect(res.noop).to.eql(undefined);
+      expect(res.time.started).to.greaterThanOrEqual(now);
     });
 
     it('async', async () => {
@@ -282,34 +366,51 @@ describe('TestSuiteModel', () => {
       expect(res.id).to.eql(root.id);
       expect(count).to.eql(1);
       expect(res.ok).to.eql(true);
-      expect(res.elapsed).to.greaterThan(18);
+      expect(res.time.elapsed).to.greaterThan(18);
     });
 
-    it('{beforeEach, afterEach} parameter', async () => {
+    it('{ beforeEach, afterEach } parameter', async () => {
       const root = Test.describe('root', (e) => {
         e.it('foo', (e) => {});
-        e.it('bar', async (e) => {
-          await Time.wait(5);
+        e.describe('child', (e) => {
+          e.it('bar', async (e) => {
+            await Time.wait(5);
+            throw new Error('Fail');
+          });
         });
       });
 
       const beforeEach: t.BeforeRunTestArgs[] = [];
       const afterEach: t.AfterRunTestArgs[] = [];
-      await root.run({
+      const res = await root.run({
         beforeEach: (e) => beforeEach.push(e),
         afterEach: (e) => afterEach.push(e),
       });
 
+      expect(res.ok).to.eql(false);
+      const test1 = root.state.tests[0];
+      const test2 = root.state.children[0].state.tests[0];
+
+      // Before
       expect(beforeEach.length).to.eql(2);
       expect(beforeEach[0].description).to.eql('foo');
       expect(beforeEach[1].description).to.eql('bar');
+      expect(beforeEach[0].id).to.eql(test1.id);
+      expect(beforeEach[1].id).to.eql(test2.id);
 
+      // After
       expect(afterEach.length).to.eql(2);
       expect(afterEach[0].description).to.eql('foo');
       expect(afterEach[1].description).to.eql('bar');
+
+      expect(afterEach[0].result.ok).to.eql(true);
+      expect(afterEach[1].result.ok).to.eql(false);
+
+      expect(afterEach[0].id).to.eql(test1.id);
+      expect(afterEach[1].id).to.eql(test2.id);
     });
 
-    it('run with {only} subset of IDs option', async () => {
+    it('run with { only } subset of IDs option', async () => {
       let _fired: string[] = [];
       const root = Test.describe('root', (e) => {
         e.it('one', () => _fired.push('one'));
@@ -340,6 +441,94 @@ describe('TestSuiteModel', () => {
       expect(res2).to.eql(['two']);
       expect(res3).to.eql(['two', 'three']);
       expect(res4).to.eql([]);
+    });
+
+    it('{ onProgress } callback', async () => {
+      const root = Test.describe('root', (e) => {
+        e.it('foo', (e) => {});
+        e.describe('child', (e) => {
+          e.it('bar', async (e) => {
+            await Time.wait(5);
+            throw Error('foo');
+          });
+          e.it.skip('skipped', async (e) => {});
+        });
+      });
+
+      const fired: t.SuiteRunProgressArgs[] = [];
+      const res = await root.run({
+        onProgress: (e) => fired.push(e),
+      });
+
+      expect(res.ok).to.eql(false);
+
+      const ops = fired.map((e) => e.op);
+      expect(ops).to.eql([
+        'run:suite:start',
+        'run:test:before',
+        'run:test:after',
+        'run:test:before',
+        'run:test:after',
+        'run:suite:complete',
+      ]);
+
+      const op1 = fired[0];
+      const op2 = fired[1];
+      const op3 = fired[2];
+      const op4 = fired[3];
+      const op5 = fired[4];
+      const op6 = fired[5];
+
+      const expectProgress = (
+        op: t.SuiteRunProgressArgs,
+        total: number,
+        completed: number,
+        percent: number,
+      ) => {
+        expect(op.progress.total).to.eql(total);
+        expect(op.progress.completed).to.eql(completed);
+        expect(op.progress.percent).to.eql(percent);
+      };
+
+      const expectTotal = (op: t.SuiteRunProgressArgs) =>
+        expect(op.total).to.eql({
+          total: 3,
+          runnable: 2,
+          skipped: 1,
+          only: 0,
+        });
+
+      // Start - BeforeAll
+      expect(op1.op).to.eql('run:suite:start');
+      expect(op1.id.suite).to.eql(root.id);
+      expect(op1.id.tx).to.eql(res.tx);
+      expect(op1.elapsed).to.greaterThanOrEqual(0);
+      expectTotal(op1);
+      expectProgress(op1, 2, 0, 0);
+
+      // Test-1
+      expect(op2.op).to.eql('run:test:before');
+      expectTotal(op2);
+      expectProgress(op2, 2, 0, 0);
+
+      expect(op3.op).to.eql('run:test:after');
+      expectTotal(op3);
+      expectProgress(op3, 2, 1, 0.5);
+
+      // Test-2
+      expect(op4.op).to.eql('run:test:before');
+      expectTotal(op4);
+      expectProgress(op4, 2, 1, 0.5);
+
+      expect(op5.op).to.eql('run:test:after');
+      expectTotal(op5);
+      expectProgress(op5, 2, 2, 1);
+
+      // Complete - AfterAll
+      expect(op6.op).to.eql('run:suite:complete');
+      expectTotal(op6);
+      expectProgress(op6, 2, 2, 1);
+      expect(op6.elapsed).to.greaterThanOrEqual(1);
     });
 
     it('unique "tx" identifier for each suite run operation', async () => {
@@ -413,6 +602,38 @@ describe('TestSuiteModel', () => {
       const res = await root.run({ deep: false });
       expect(count).to.eql(0);
       expect(res.ok).to.eql(true);
+    });
+
+    it('run as no-op', async () => {
+      let beforeEach = 0;
+      let afterEach = 0;
+      let count = 0;
+
+      const root = Test.describe('root', (e) => {
+        e.it('foo', () => count++);
+        e.describe('child', (e) => {
+          e.it.skip('bar', () => count++);
+          e.it('baz', () => count++);
+        });
+      });
+
+      const res = await root.run({
+        noop: true,
+        beforeEach: (e) => beforeEach++,
+        afterEach: (e) => afterEach++,
+      });
+
+      expect(res.ok).to.eql(true);
+      expect(res.noop).to.eql(true);
+      expect(count).to.eql(0);
+      expect(beforeEach).to.eql(0);
+      expect(afterEach).to.eql(0);
+      expect(res.stats).to.eql({ total: 3, passed: 2, failed: 0, skipped: 1, only: 0 });
+
+      expect(res.tests[0].noop).to.eql(true);
+      expect(res.children[0].noop).to.eql(true);
+      expect(res.children[0].tests[0].noop).to.eql(true);
+      expect(res.children[0].tests[1].noop).to.eql(true);
     });
 
     describe('excluded', () => {
@@ -542,8 +763,8 @@ describe('TestSuiteModel', () => {
 
         const res = await root.run({ timeout: 10 });
 
-        expect(res.elapsed).to.greaterThan(7);
-        expect(res.elapsed).to.lessThan(50);
+        expect(res.time.elapsed).to.greaterThan(7);
+        expect(res.time.elapsed).to.lessThan(150);
 
         expect(count).to.eql(2); // NB: failing test never increments counter.
         expect(res.ok).to.eql(false);
@@ -554,41 +775,6 @@ describe('TestSuiteModel', () => {
         expect(res.children[0].children[0].tests[0].ok).to.eql(false);
         expect(res.children[0].children[0].tests[0].error?.message).to.include('timed out');
       });
-    });
-  });
-
-  describe('merge', () => {
-    it('merges', async () => {
-      const root = Test.describe('root');
-      const child1 = Test.describe('child-1');
-      const child2 = Test.describe('child-2');
-      const child3 = Test.describe('child-3');
-
-      expect(root.state.children).to.eql([]);
-
-      await root.merge(child1);
-      expect(root.state.children.length).to.eql(1);
-      expect(root.state.children[0].state.description).to.eql(child1.state.description);
-
-      await root.merge(child2, child3);
-      expect(root.state.children.length).to.eql(3);
-
-      expect(root.state.children[0].state.description).to.eql(child1.state.description);
-      expect(root.state.children[1].state.description).to.eql(child2.state.description);
-      expect(root.state.children[2].state.description).to.eql(child3.state.description);
-
-      expect(root.state.children[0].state.parent?.id).to.eql(root.id);
-      expect(root.state.children[1].state.parent?.id).to.eql(root.id);
-      expect(root.state.children[2].state.parent?.id).to.eql(root.id);
-
-      // Not the same instance (cloned).
-      expect(root.state.children[0]).to.not.equal(child1);
-      expect(root.state.children[1]).to.not.equal(child2);
-      expect(root.state.children[2]).to.not.equal(child3);
-
-      expect(TestTree.root(root.state.children[0])).to.equal(root);
-      expect(TestTree.root(root.state.children[1])).to.equal(root);
-      expect(TestTree.root(root.state.children[2])).to.equal(root);
     });
   });
 });

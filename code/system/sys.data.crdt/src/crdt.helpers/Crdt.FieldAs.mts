@@ -7,13 +7,21 @@ import { Automerge } from './common';
 export function fieldAs<D extends {}>(doc: D, fieldname: keyof D) {
   return {
     get textType() {
-      const value = doc[fieldname];
+      const value = asObjectOrUndefined(doc[fieldname]);
       return value instanceof Automerge.Text ? value : undefined;
     },
 
     get counterType() {
-      const value = doc[fieldname];
+      const value = asObjectOrUndefined(doc[fieldname]);
       return value instanceof Automerge.Counter ? value : undefined;
     },
   };
+}
+
+/**
+ * Helpers
+ */
+
+function asObjectOrUndefined(value: any) {
+  return typeof value === 'object' ? value : undefined;
 }

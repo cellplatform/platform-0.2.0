@@ -31,5 +31,10 @@ export function useMouseState() {
     onMouseLeave,
 
     handlers: { onMouseDown, onMouseUp, onMouseEnter, onMouseLeave },
+
+    reset() {
+      setDown(false);
+      setOver(false);
+    },
   };
 }

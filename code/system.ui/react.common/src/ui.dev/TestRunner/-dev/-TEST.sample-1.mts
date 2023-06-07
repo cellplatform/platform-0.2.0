@@ -1,9 +1,12 @@
-import { Dev, expect, t, Time } from '../../../test.ui';
-import type { TestCtx } from './-types.mjs';
+import { Dev, Time, Wrangle, expect } from './-common.mjs';
 
-export default Dev.describe('root', (e) => {
+/**
+ * Default export.
+ */
+export default Dev.describe('Sample-1', (e) => {
   e.it('foo', async (e) => {
-    await Time.wait(300);
+    const ctx = Wrangle.ctx(e);
+    await Time.wait(ctx.delay);
     expect(123).to.eql(123);
   });
 
@@ -28,8 +31,9 @@ export default Dev.describe('root', (e) => {
   });
 });
 
-const Wrangle = {
-  ctx(e: t.TestHandlerArgs) {
-    return e.ctx as TestCtx;
-  },
-};
+/**
+ * Named export.
+ */
+export const MySpec = Dev.describe('MySpec', (e) => {
+  e.it('foo', async (e) => {});
+});
