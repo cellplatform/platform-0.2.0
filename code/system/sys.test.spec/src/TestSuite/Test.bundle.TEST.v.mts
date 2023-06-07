@@ -41,7 +41,8 @@ describe('Test.bundle', () => {
     const test2 = children[1].state.tests[0];
     const test3 = children[2].state.tests[0];
 
-    expect(children.map((m) => m.description)).to.eql(['One', 'MySpec', 'Two']);
+    const titles = children.map((m) => m.description);
+    expect(titles).to.eql(['One', 'MySpec1', 'MySpec2', 'Two']);
 
     expect(children[0].state.parent?.id).to.eql(bundle.id);
     expect(children[1].state.parent?.id).to.eql(bundle.id);
@@ -62,8 +63,8 @@ describe('Test.bundle', () => {
       import('../test/samples/Two.TEST'),
     ]);
 
-    const children = bundle2.state.children;
-    expect(children.map((m) => m.description)).to.eql(['One', 'MySpec', 'Two']);
+    const titles = bundle2.state.children.map((m) => m.description);
+    expect(titles).to.eql(['One', 'MySpec1', 'MySpec2', 'Two']);
   });
 
   it('dynamic: default export not a test-suite (ignore)', async () => {

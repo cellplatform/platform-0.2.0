@@ -11,7 +11,7 @@ const describe = Def.variants();
 export async function bundle(...args: any[]) {
   const param1 = args[0];
   const param2 = typeof param1 === 'string' ? args[1] : param1;
-  const suites = (await Loader.import(param2)).map(({ suite }) => suite);
+  const suites = (await Loader.import(param2)).map((e) => e.suite);
   const name = typeof param1 === 'string' ? param1 : Wrangle.rootName(suites);
 
   if (suites.length === 1) {
