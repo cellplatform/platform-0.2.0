@@ -81,6 +81,10 @@ const Wrangle = {
   async initialState(initial?: t.TestPropListData) {
     const data = R.clone<t.TestPropListData>(initial ?? {});
     const specs = data.specs ?? (data.specs = {});
+
+    const run = data.run ?? (data.run = {});
+    if (typeof run.list === 'function') run.list = await run.list();
+
     const groups = await Util.importAndInitialize(data);
     specs.selected = specs.selected ?? [];
     return {
