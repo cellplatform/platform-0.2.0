@@ -7,7 +7,7 @@ import { Spec } from 'sys.fs.spec';
  * - run complete spec set
  */
 
-export default Dev.describe('Filesystem Health Check', async (e) => {
+export default Dev.describe('Health Check', async (e) => {
   const uri = 'path:foo/bar.json';
 
   const id = 'fs.dev';

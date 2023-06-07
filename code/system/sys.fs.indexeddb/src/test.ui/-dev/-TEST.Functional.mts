@@ -2,7 +2,7 @@ import { rx, Dev, Filesystem, expect, Path, t, slug } from '../common';
 import { MemoryMock } from 'sys.fs.spec';
 import { Spec } from 'sys.fs.spec';
 
-export default Dev.describe('Filesystem: Complete Functional Specification (IndexedDb)', (e) => {
+export default Dev.describe('Complete Functional Specification (IndexedDb)', (e) => {
   console.log('Spec', Spec);
   console.log('Spec.every', Spec.every);
 
@@ -17,7 +17,7 @@ export default Dev.describe('Filesystem: Complete Functional Specification (Inde
 
   /**
    * TODO 🐷
-   * Make a detached versino of function: describe, it
+   * Make a detached version of function: describe, it
    * That pipe the definition invoking structure into an [e.describe, e.it] structure.
    *
    *
