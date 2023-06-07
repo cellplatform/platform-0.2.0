@@ -11,6 +11,7 @@ export default Dev.describe('TestRunner', (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
 
+    ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
