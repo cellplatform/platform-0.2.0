@@ -16,7 +16,6 @@ export async function TestPropListController(initial?: t.TestPropListData) {
     const results = Object.values(data.specs?.results ?? []);
     $.next({
       op,
-      data,
       selected: api.selected.hashes,
       get results() {
         return results

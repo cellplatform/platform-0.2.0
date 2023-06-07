@@ -84,7 +84,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     updateData();
     controller.$.subscribe((e) => {
       updateData();
-      local.selected = e.data.specs?.selected ?? [];
+      local.selected = e.selected;
     });
 
     const getSize = (): [number, null] => [state.current.props.card ? 330 : 330, null];

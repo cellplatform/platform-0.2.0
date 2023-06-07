@@ -16,10 +16,9 @@ const initial: T = {
 };
 
 export default Dev.describe('TestRunner', (e) => {
-  type LocalStore = TestCtx & T['debug'] & { selected: string[] };
+  type LocalStore = TestCtx & T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.Results');
   const local = localstore.object({
-    selected: [],
     fail: initial.ctx.fail,
     delay: initial.ctx.delay,
     noop: initial.debug.noop,
@@ -48,28 +47,20 @@ export default Dev.describe('TestRunner', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      return (
-        <Dev.TestRunner.PropList.Controlled
-          margin={[20, 35, 0, 30]}
-          initial={{
-            run: {
-              ctx: () => state.current.ctx,
-              list: [
-                import('./-TEST.sample-1.mjs'),
-                import('./-TEST.sample-2.mjs'),
-                import('./-TEST.controller.mjs'),
-              ],
-            },
-            specs: { selected: local.selected },
-          }}
-          onChanged={async (e) => {
-            local.selected = e.selected;
-            await state.change((d) => (d.props.data = e.results));
-          }}
-        />
-      );
-    });
+    dev.bdd((runner) =>
+      runner
+        .localstore('dev:sys.common.TestRunner.Results')
+        .margin([20, 35, 0, 30])
+        .run({ ctx: () => state.current.ctx })
+        .list([
+          import('./-TEST.sample-1.mjs'),
+          import('./-TEST.sample-2.mjs'),
+          import('./-TEST.controller.mjs'),
+        ])
+        .onChanged(async (e) => {
+          await state.change((d) => (d.props.data = e.results));
+        }),
+    );
 
     dev.hr(5, 20);
   });
