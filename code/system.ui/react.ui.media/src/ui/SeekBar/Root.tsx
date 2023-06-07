@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, rx, FC, type t } from '../common';
+import { Color, COLORS, css, rx, FC, type t } from './common';
 
 export type SeekBarProps = {
   style?: t.CssValue;

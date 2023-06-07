@@ -19,6 +19,8 @@ export default Dev.describe('SeekBar', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {
