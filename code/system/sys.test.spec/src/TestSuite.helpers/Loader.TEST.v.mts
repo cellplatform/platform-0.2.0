@@ -81,6 +81,23 @@ describe('Loader', () => {
       expect(res3[0].isDefault).to.equal(true);
     });
 
+    it('export → import order', async () => {
+      const import1 = import('../test/samples/One.TEST');
+      const import2 = import('../test/samples/Two.TEST');
+
+      const res1 = await Loader.import(import1);
+      const res2 = await Loader.import([import1, import2]);
+      const res3 = await Loader.import([import2, import1]);
+
+      const titles1 = res1.map((e) => e.suite.description);
+      const titles2 = res2.map((e) => e.suite.description);
+      const titles3 = res3.map((e) => e.suite.description);
+
+      expect(titles1).to.eql(['One', 'MySpec1', 'MySpec2']);
+      expect(titles2).to.eql(['One', 'MySpec1', 'MySpec2', 'Two']);
+      expect(titles3).to.eql(['Two', 'One', 'MySpec1', 'MySpec2']);
+    });
+
     it('{init} option', async () => {
       const import1 = import('../test/samples/One.TEST');
       const import2 = import('../test/samples/Two.TEST');
