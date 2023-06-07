@@ -1,5 +1,5 @@
-import { Specs as MediaSpecs } from 'sys.ui.react.media';
-import { Specs as CodeEditorSpecs } from 'sys.ui.react.monaco';
+const { Specs: Media } = await import('sys.ui.react.media/specs');
+const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 
 export const Specs = {
   'spike.dev': () => import('../ui/Root/-dev/Root.SPEC.devenv'),
@@ -10,8 +10,8 @@ export const Specs = {
   'spike.ui.Video.ProgressBar': () => import('../ui/Video.ProgressBar/ui.ProgressBar.SPEC'),
   'spike.ui.Concept.Playlist': () => import('../ui/Concept.Playlist/Playlist.SPEC'),
 
-  ...MediaSpecs,
-  ...CodeEditorSpecs,
+  ...Media,
+  ...Monaco,
 };
 
 export default Specs;

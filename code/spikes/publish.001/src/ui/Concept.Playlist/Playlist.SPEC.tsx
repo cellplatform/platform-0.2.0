@@ -32,7 +32,7 @@ export default Dev.describe('Video.Playlist', (e) => {
 
     ctx.subject
       .display('grid')
-      .size(690, null)
+      .size([690, null])
       .render<T>((e) => {
         return <Playlist {...e.state.props} onClick={(e) => console.info(`⚡️ onClick`, e)} />;
       });
@@ -61,7 +61,7 @@ export default Dev.describe('Video.Playlist', (e) => {
         dev.hr();
 
         const width = (value: number) => {
-          dev.button(`width: ${value}px`, (e) => e.ctx.subject.size(value, null));
+          dev.button(`width: ${value}px`, (e) => e.ctx.subject.size([value, null]));
         };
         width(690);
         width(600);
