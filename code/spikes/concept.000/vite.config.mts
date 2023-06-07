@@ -5,12 +5,13 @@ export const tsconfig = Config.ts((e) => {
 });
 
 export default Config.vite(import.meta.url, (e) => {
+  e.lib({
+    entry: {
+      index: 'src/index.mts',
+      specs: 'src/test.ui/entry.Specs.mts',
+    },
+  });
   e.target('web');
   e.plugin('web:react');
-
-  // e.chunk('ext.react', ['react', 'react-dom']);
-
-  // e.lib({ entry: { index: 'src/index.mts' } });
-  // e.target('web');
   e.externalDependency(e.ctx.deps.map((d) => d.name));
 });
