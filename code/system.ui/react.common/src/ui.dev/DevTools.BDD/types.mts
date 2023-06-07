@@ -9,6 +9,7 @@ export type DevBddRunDef = {
   ctx?: P['ctx'];
   infoUrl?: P['infoUrl'];
   label?: P['label'];
+  button?: P['button'];
 };
 
 /**

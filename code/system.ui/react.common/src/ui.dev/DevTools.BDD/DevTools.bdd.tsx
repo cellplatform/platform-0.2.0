@@ -82,6 +82,7 @@ export function bdd<S extends O = O>(
         ctx: run?.ctx,
         infoUrl: run?.infoUrl,
         label: run?.label,
+        button: run?.button,
       },
       specs: { selected: local?.selected },
     };
