@@ -1,6 +1,6 @@
 import { TestPropList } from '..';
 import { Util } from '../Test.PropList/Util.mjs';
-import { Dev, expect, type t } from './-common.mjs';
+import { Time, Dev, expect, type t } from './-common.mjs';
 
 export default Dev.describe('(Self) Controller Behavior', (e) => {
   e.it('init', async (e) => {
@@ -32,8 +32,20 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
       expectOrder(controller.suites);
     });
 
-    e.it('async function', async (e) => {
+    e.it('async function (simple)', async (e) => {
       const controller = await TestPropList.controller({ run: { list: async () => list } });
+      expectOrder(controller.suites);
+    });
+
+    e.it('async function (wait)', async (e) => {
+      const controller = await TestPropList.controller({
+        run: {
+          async list() {
+            await Time.wait(10);
+            return list;
+          },
+        },
+      });
       expectOrder(controller.suites);
     });
   });
