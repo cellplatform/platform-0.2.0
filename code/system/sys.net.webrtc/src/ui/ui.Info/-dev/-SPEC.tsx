@@ -293,12 +293,13 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.bdd((bdd) =>
       bdd
         .localstore('dev:sys.net.webrtc.Info')
-        .margin([20, 30, 0, 30])
+        .margin([30, 50, 30, 50])
         .run({
           ctx: () => ({ props }),
           label: 'Environment Setup',
           button: 'hidden',
         })
+        .specs({ selectable: false })
         .list([import('./-TEST.Sample')])
         .onChanged(async (e) => {}),
     );
