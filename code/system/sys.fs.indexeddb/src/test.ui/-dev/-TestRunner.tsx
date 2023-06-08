@@ -34,7 +34,7 @@ export default Dev.describe('TestRunner', (e) => {
     dev.bdd((bdd) =>
       bdd
         .localstore('dev:sys.fs.indexeddb')
-        .list([
+        .modules([
           //
           import('./-TEST.ItegrityChecks.mjs'),
           import('./-TEST.Functional.mjs'),

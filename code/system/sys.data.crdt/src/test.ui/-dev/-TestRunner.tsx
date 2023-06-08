@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .localstore('dev:sys.crdt.testrunner')
-        .list(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
+        .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
   });

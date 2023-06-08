@@ -301,7 +301,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           button: 'hidden',
         })
         .specs({ selectable: false })
-        .list([import('./-TEST.Sample')])
+        .modules([import('./-TEST.Sample')])
         .onChanged(async (e) => {}),
     );
 
