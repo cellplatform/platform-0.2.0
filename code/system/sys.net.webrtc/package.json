@@ -27,7 +27,8 @@
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.media": "0.0.0"
+    "sys.ui.react.media": "0.0.0",
+    "spike.concept": "0.0.6"
   },
   "license": "MIT",
   "private": true,
