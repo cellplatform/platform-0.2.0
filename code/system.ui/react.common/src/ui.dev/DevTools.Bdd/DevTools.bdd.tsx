@@ -41,7 +41,7 @@ export function bdd<S extends O = O>(
       return args;
     },
     modules(input) {
-      const value = (Array.isArray(input) ? input : [input]) as ModulesInput;
+      const value = Wrangle.modules(input);
       values.modules.handler({ value });
       return args;
     },
@@ -115,3 +115,13 @@ export function bdd<S extends O = O>(
   Object.values(values).forEach((value) => value.subscribe(ref.redraw));
   fn?.(args);
 }
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  modules(input: ModulesInput | t.BundleImport): ModulesInput {
+    if (typeof input === 'function') return input;
+    return (Array.isArray(input) ? input : [input]) as ModulesInput;
+  },
+};
