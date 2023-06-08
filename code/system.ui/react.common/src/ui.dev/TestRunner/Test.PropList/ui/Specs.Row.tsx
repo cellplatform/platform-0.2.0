@@ -1,5 +1,6 @@
-import { Util } from '../Util.mjs';
 import { css, type t } from '../common';
+import { Util } from '../Util.mjs';
+
 import { Body } from './Specs.Row.Body';
 import { Switch } from './Specs.Row.Switch';
 import { Title } from './Specs.Row.Title';
@@ -18,6 +19,7 @@ export type SpecsRowProps = {
 export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
   const { data, suite, title, enabled = true } = props;
   const isSelected = Util.isSelected(data, suite);
+  const isSelectable = Util.isSelectable(data);
 
   /**
    * Handlers
@@ -44,14 +46,22 @@ export const SpecsRow: React.FC<SpecsRowProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ flex: 1 }),
-    body: css({ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 10 }),
+    base: css({
+      position: 'relative',
+      flex: 1,
+    }),
+    body: css({
+      display: 'grid',
+      paddingLeft: props.indent,
+      gridTemplateColumns: isSelectable ? 'auto 1fr' : undefined,
+      columnGap: 10,
+    }),
   };
 
-  const elSwitch = (
+  const elSwitch = isSelectable && (
     <Switch
       isSelected={isSelected}
-      indent={props.indent}
+      // indent={props.indent}
       onClick={handleSwitchClick}
       enabled={enabled}
     />

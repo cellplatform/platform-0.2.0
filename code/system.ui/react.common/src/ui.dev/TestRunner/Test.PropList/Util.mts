@@ -16,6 +16,11 @@ export const Util = {
     return selected.includes(spec.hash());
   },
 
+  isSelectable(data: t.TestPropListData) {
+    const value = data.specs?.selectable;
+    return Boolean(typeof value === 'function' ? value() : value ?? true);
+  },
+
   async importAndInitialize(data: t.TestPropListData) {
     const groups = await Wrangle.toGroupedList(data.run?.list ?? []);
     const res: t.TestSuiteGroup[] = [];

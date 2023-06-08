@@ -76,9 +76,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       },
       specs: {
         selected: local.selected,
+        selectable: () => state.current.debug.selectable,
         ellipsis: () => state.current.debug.ellipsis,
         onSelect(e) {
-          console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
+          console.info('⚡️ onChange:', e);
         },
       },
     });
