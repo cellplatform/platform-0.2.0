@@ -1,12 +1,9 @@
-import { Crdt, expect, t, Test } from '../../test.ui';
-
 import { CrdtLens } from '..';
+import { Crdt, Test, expect, type t } from '../../test.ui';
 
 export default Test.describe('Lens', (e) => {
   type TChild = { count: number; child?: TChild };
-  type D = {
-    child?: TChild;
-  };
+  type D = { child?: TChild };
 
   const setup = () => {
     const initial: D = { child: { count: 0 } };

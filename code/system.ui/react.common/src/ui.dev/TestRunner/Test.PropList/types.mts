@@ -32,6 +32,7 @@ export type TestPropListRunData = {
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);
   button?: 'visible' | 'hidden';
+  runOnEnter?: boolean | (() => boolean | undefined);
   onRunSingle?: SpecRunClickHandler;
   onRunAll?: SpecRunAllClickHandler;
 };

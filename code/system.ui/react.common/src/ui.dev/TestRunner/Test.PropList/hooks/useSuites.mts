@@ -5,8 +5,8 @@ import { rx, type t } from '../common';
 /**
  * Handles turning an import promise into an initialized spec.
  */
-export function useSuites(data: t.TestPropListData) {
-  const modules = (data.run ?? {}).modules ?? [];
+export function useSuites(args: { data: t.TestPropListData }) {
+  const modules = (args.data.run ?? {}).modules ?? [];
 
   const [loaded, setLoaded] = useState(false);
   const [groups, setGroups] = useState<t.TestSuiteGroup[]>([]);
@@ -18,7 +18,7 @@ export function useSuites(data: t.TestPropListData) {
   useEffect(() => {
     const lifecycle = rx.lifecycle();
 
-    Util.importAndInitialize(data).then((groups) => {
+    Util.importAndInitialize(args.data).then((groups) => {
       if (lifecycle.disposed) return;
 
       const total = Util.groupsToSuites(groups).length;

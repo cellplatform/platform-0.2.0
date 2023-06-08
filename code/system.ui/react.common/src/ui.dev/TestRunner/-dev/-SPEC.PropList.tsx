@@ -8,7 +8,13 @@ type P = TestPropListProps;
 type T = {
   ctx: TestCtx;
   props: P;
-  debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string; selectable?: boolean };
+  debug: {
+    label?: string;
+    infoUrl?: boolean;
+    ellipsis?: boolean;
+    selectable?: boolean;
+    runOnEnter?: boolean;
+  };
 };
 const initial: T = {
   ctx: { fail: false, delay: 300 },
@@ -28,6 +34,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     enabled: true,
     selected: [],
     selectable: true,
+    runOnEnter: true,
     label: '',
     delay: initial.ctx.delay,
     fail: initial.ctx.fail,
@@ -42,6 +49,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
       d.debug.selectable = local.selectable;
+      d.debug.runOnEnter = local.runOnEnter;
 
       d.props.fields = local.fields;
       d.props.card = local.card;
@@ -71,6 +79,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
+        runOnEnter: () => state.current.debug.runOnEnter,
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
         onRunAll: (e) => console.info('⚡️ onRunAll:', e),
       },
@@ -163,6 +172,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `selectable`)
           .value((e) => e.state.debug.selectable)
           .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `runOnEnter`)
+          .value((e) => e.state.debug.runOnEnter)
+          .onClick((e) => e.change((d) => (local.runOnEnter = Dev.toggle(d.debug, 'runOnEnter')))),
       );
 
       dev.hr(-1, 5);
