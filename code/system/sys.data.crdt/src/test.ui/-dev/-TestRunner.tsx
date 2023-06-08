@@ -34,7 +34,7 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.bdd((runner) =>
       runner
-        .run({})
+        .run({ keyTrigger: 'Enter' })
         .localstore('dev:sys.crdt.testrunner')
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
         .onChanged((e) => state.change((d) => (d.results = e.results))),

@@ -1,5 +1,5 @@
-import { CrdtLens } from '..';
-import { Crdt, Test, expect, type t } from '../../test.ui';
+import { CrdtLens } from '.';
+import { Crdt, Test, expect, type t } from '../test.ui';
 
 export default Test.describe('Lens', (e) => {
   type TChild = { count: number; child?: TChild };
