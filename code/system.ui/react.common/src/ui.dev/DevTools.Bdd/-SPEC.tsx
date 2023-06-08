@@ -28,11 +28,14 @@ export default Dev.describe('BDD (TestRunner)', (e) => {
         .enabled(true)
         .localstore('dev:sys.common.TestRunner.BDD')
         .run({ label: 'Foobar', infoUrl: location.href, ctx: () => state.current.ctx })
-        .list(async () => {
+        .modules(async () => {
           /**
-           * NB: This is more convoluted that it might normally be
-           *     with an async import within an async function.
-           *     This is to simulate the async nature of some use-cases.
+           * NB: This example is intentionally more convoluted
+           *     that it might normally be with an async import within an
+           *     async function.
+           *
+           *     This is to simulate the async nature of some common
+           *     usage scenarios.
            */
           const { TESTS } = await import('../TestRunner/-dev/-TESTS.mjs');
           return TESTS.all;

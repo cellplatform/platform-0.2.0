@@ -39,7 +39,7 @@ export function bdd<S extends O = O>(
       if (input) createLocal(input);
       return args;
     },
-    list(input) {
+    modules(input) {
       values.list.handler({ input });
       return args;
     },

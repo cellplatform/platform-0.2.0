@@ -4,7 +4,7 @@ type O = Record<string, unknown>;
 type R = t.TestPropListRunData;
 type S = t.TestPropListSpecsData;
 type Margin = t.CssValue['Margin'];
-type ListInput = R['list'];
+type ModulesInput = R['list'];
 
 export type DevBddRun = {
   ctx?: R['ctx'];
@@ -27,15 +27,7 @@ export type DevBddHandlerArgs<S extends O = O> = {
   localstore(id: string): DevBddHandlerArgs<S>;
   run(value: DevBddRun): DevBddHandlerArgs<S>;
   specs(value: DevBddSpecs): DevBddHandlerArgs<S>;
-
-  /**
-   * TODO 🐷
-   * - rename .list → .suites();
-   * - rename .list → .modules(<imports>)
-   * - rename .list → .imports(<modules>)
-   */
-
-  list(value: ListInput): DevBddHandlerArgs<S>;
+  modules(value: ModulesInput): DevBddHandlerArgs<S>;
   margin(value: Margin): DevBddHandlerArgs<S>;
   enabled(value: boolean | t.DevValueHandler<boolean, S>): DevBddHandlerArgs<S>;
   onChanged(fn: DevBddChangedHandler<S>): DevBddHandlerArgs<S>;
