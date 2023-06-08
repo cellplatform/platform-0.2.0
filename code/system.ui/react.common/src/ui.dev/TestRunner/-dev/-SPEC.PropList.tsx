@@ -11,9 +11,9 @@ type T = {
   debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
 };
 const initial: T = {
-  ctx: { fail: false, delay: 2000 },
+  ctx: { fail: false, delay: 300 },
   props: {},
-  debug: { infoUrl: false, ellipsis: false },
+  debug: {},
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
@@ -21,9 +21,9 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
+    fields: DEFAULTS.fields,
     infoUrl: true,
     ellipsis: false,
-    fields: DEFAULTS.fields,
     card: true,
     enabled: true,
     selected: [],
@@ -191,7 +191,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .onClick((e) => {
             e.change((d) => {
               const defaultDelay = initial.ctx.delay;
-              const next = d.ctx.delay === defaultDelay ? 300 : defaultDelay;
+              const next = d.ctx.delay === defaultDelay ? 1500 : defaultDelay;
               local.delay = d.ctx.delay = next;
             });
           }),
