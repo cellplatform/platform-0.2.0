@@ -2,7 +2,7 @@ import { TestPropList } from '..';
 import { Util } from '../Test.PropList/Util.mjs';
 import { Time, Dev, expect, type t } from './-common.mjs';
 
-export default Dev.describe('(Self) Controller Behavior', (e) => {
+export default Dev.describe('Controller Behavior', (e) => {
   e.it('init', async (e) => {
     const controller = await TestPropList.controller({});
     expect(controller.kind).to.eql('Test.PropList.Controller');
@@ -76,3 +76,5 @@ export default Dev.describe('(Self) Controller Behavior', (e) => {
     });
   });
 });
+
+export const Foo = Dev.describe('Another specification');
