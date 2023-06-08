@@ -1,6 +1,6 @@
 {
   "name": "spike.concept",
-  "version": "0.0.0",
+  "version": "0.0.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -8,7 +8,10 @@
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "patch": "yarn version --patch --no-git-tag-version",
+    "prepare": "yarn build && yarn test --run --reporter=verbose",
+    "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
+    "tmp": "ts-node-esm -T   ./script/tmp.mts"
   },
   "dependencies": {
     "react": "18.2.0",
@@ -29,6 +32,14 @@
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
-    ".": "./dist/web/index.js"
+    ".": "./dist/web/index.js",
+    "./specs": "./dist/web/specs.js"
+  },
+  "typesVersions": {
+    "*": {
+      "specs": [
+        "./dist/types.d/test.ui/entry.Specs.d.mts"
+      ]
+    }
   }
 }

@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'spike.concept',
-  version: '0.0.0',
+  version: '0.0.6',
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
