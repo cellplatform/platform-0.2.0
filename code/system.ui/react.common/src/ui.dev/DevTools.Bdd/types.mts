@@ -1,17 +1,18 @@
 import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
+type D = t.TestPropListData;
 type R = t.TestPropListRunData;
 type S = t.TestPropListSpecsData;
 type MarginInput = t.CssValue['Margin'];
 type ModulesInput = R['modules'];
+type KeyboardInput = D['keyboard'];
 
 export type DevBddRun = {
   ctx?: R['ctx'];
   infoUrl?: R['infoUrl'];
   label?: R['label'];
   button?: R['button'];
-  keyTrigger?: R['triggerKey'];
 };
 
 export type DevBddSpecs = {
@@ -27,6 +28,7 @@ export type DevBddHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
   localstore(id: string): DevBddHandlerArgs<S>;
   run(value: DevBddRun): DevBddHandlerArgs<S>;
+  keyboard(value: KeyboardInput): DevBddHandlerArgs<S>;
   specs(value: DevBddSpecs): DevBddHandlerArgs<S>;
   modules(value: ModulesInput | t.BundleImport): DevBddHandlerArgs<S>;
   margin(value: MarginInput): DevBddHandlerArgs<S>;

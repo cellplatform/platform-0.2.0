@@ -2,9 +2,11 @@ import { TestRunner } from '../TestRunner';
 import { LocalStorage, ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
+type D = t.TestPropListData;
 type R = t.TestPropListRunData;
 type MarginInput = t.CssValue['Margin'];
 type ModulesInput = R['modules'];
+type KeyboardInput = D['keyboard'];
 type LocalStore = { selected: string[] };
 
 /**
@@ -23,6 +25,7 @@ export function bdd<S extends O = O>(
     modules: ValueHandler<{ value: ModulesInput }, S>(events),
     run: ValueHandler<t.DevBddRun, S>(events),
     specs: ValueHandler<t.DevBddSpecs, S>(events),
+    keyboard: ValueHandler<KeyboardInput, S>(events),
     enabled: ValueHandler<boolean, S>(events),
     margin: ValueHandler<MarginInput, S>(events),
   };
@@ -51,6 +54,10 @@ export function bdd<S extends O = O>(
     },
     specs(input) {
       values.specs.handler(input);
+      return args;
+    },
+    keyboard(input) {
+      values.keyboard.handler(input);
       return args;
     },
     margin(input) {
@@ -84,6 +91,7 @@ export function bdd<S extends O = O>(
 
     const run = values.run.current;
     const specs = values.specs.current;
+    const keyboard = values.keyboard.current;
     const data: t.TestPropListData = {
       run: {
         modules: list,
@@ -91,13 +99,13 @@ export function bdd<S extends O = O>(
         infoUrl: run?.infoUrl,
         label: run?.label,
         button: run?.button,
-        triggerKey: run?.keyTrigger,
       },
       specs: {
         selected: local?.selected,
         selectable: specs?.selectable,
         ellipsis: specs?.ellipsis,
       },
+      keyboard,
     };
 
     return (

@@ -13,7 +13,6 @@ type T = {
     infoUrl?: boolean;
     ellipsis?: boolean;
     selectable?: boolean;
-    triggerKey?: boolean;
   };
 };
 const initial: T = {
@@ -34,7 +33,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     enabled: true,
     selected: [],
     selectable: true,
-    triggerKey: true,
     label: '',
     delay: initial.ctx.delay,
     fail: initial.ctx.fail,
@@ -49,7 +47,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
       d.debug.selectable = local.selectable;
-      d.debug.triggerKey = local.triggerKey;
 
       d.props.fields = local.fields;
       d.props.card = local.card;
@@ -79,7 +76,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        triggerKey: () => (state.current.debug.triggerKey ? 'CMD + Enter' : undefined),
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
         onRunAll: (e) => console.info('⚡️ onRunAll:', e),
       },
@@ -90,6 +86,10 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         onSelect(e) {
           console.info('⚡️ onChange:', e);
         },
+      },
+      keyboard: {
+        run: () => 'Enter',
+        runAll: () => 'ALT + Enter',
       },
     });
 
@@ -172,13 +172,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `selectable`)
           .value((e) => e.state.debug.selectable)
           .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `triggerKey ${e.state.debug.triggerKey ? '← (⌘ + Enter)' : ''}`)
-          .value((e) => e.state.debug.triggerKey)
-          .onClick((e) => e.change((d) => (local.triggerKey = Dev.toggle(d.debug, 'triggerKey')))),
       );
 
       dev.hr(-1, 5);

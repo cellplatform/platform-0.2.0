@@ -26,6 +26,7 @@ export type TestPropListData = {
   pkg?: t.ModuleDef;
   run?: TestPropListRunData;
   specs?: TestPropListSpecsData;
+  keyboard?: TestPropListKeyboard;
 };
 
 export type TestPropListRunData = {
@@ -34,9 +35,14 @@ export type TestPropListRunData = {
   infoUrl?: LazyString;
   label?: LazyString;
   button?: 'visible' | 'hidden';
-  triggerKey?: LazyString; // eg. "CMD + Enter"
   onRunSingle?: SpecRunClickHandler;
   onRunAll?: SpecRunAllClickHandler;
+};
+
+export type TestPropListKeyboardPattern = LazyString; // eg. "CMD + Enter"
+export type TestPropListKeyboard = {
+  run?: TestPropListKeyboardPattern; //    Run selected.
+  runAll?: TestPropListKeyboardPattern; // Force run all.
 };
 
 export type TestPropListSpecsData = {

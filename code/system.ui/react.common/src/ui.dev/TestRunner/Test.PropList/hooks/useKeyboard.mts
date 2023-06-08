@@ -7,32 +7,61 @@ import { Keyboard, type t } from '../common';
 export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean }) {
   const { data, enabled = true } = args;
   const modules = (data.run ?? {}).modules ?? [];
+  const keyboard = Wrangle.patterns(data);
+  const patterns = Object.values(keyboard).join(',');
 
   /**
    * Listen for keyboard events.
    */
   useEffect(() => {
-    const pattern = Wrangle.keyTrigger(data) ?? '';
-    const { dispose } = Keyboard.on(pattern, (e) => {
-      /**
-       * Run all/selected tests.
-       */
-      if (!enabled) return;
-      if (!Wrangle.keyTrigger(data)) return;
-      const modifiers = e.state.modifiers;
+    type P = t.TestPropListKeyboardPattern | undefined;
+    type F = t.KeyMatchSubscriberHandler;
+    const dispose: (() => void)[] = [];
+
+    const handle = (input: P, fn: F) => {
+      const pattern = typeof input === 'function' ? input() : input;
+      if (!pattern) return;
+      const handler = Keyboard.on(pattern, (e) => (enabled ? fn(e) : null));
+      dispose.push(handler.dispose);
+    };
+
+    /**
+     * Run selected.
+     */
+    handle(keyboard.run, (e) => {
+      const modifiers = { ...Wrangle.modifiers, meta: false };
       data.run?.onRunAll?.({ modifiers });
     });
 
-    return dispose;
-  }, [enabled, modules.length]);
+    /**
+     * Run all (force).
+     */
+    handle(keyboard.runAll, (e) => {
+      const modifiers = { ...Wrangle.modifiers, meta: true };
+      data.run?.onRunAll?.({ modifiers });
+    });
+
+    return () => dispose.forEach((dispose) => dispose());
+  }, [enabled, modules.length, patterns]);
 }
 
 /**
  * Helpers
  */
 const Wrangle = {
-  keyTrigger(data: t.TestPropListData) {
-    const value = data.run?.triggerKey;
-    return typeof value === 'function' ? value() : value;
+  patterns(data: t.TestPropListData) {
+    const keyboard = data?.keyboard ?? {};
+    return {
+      run: Wrangle.pattern(keyboard.run),
+      runAll: Wrangle.pattern(keyboard.runAll),
+    };
+  },
+
+  pattern(input?: t.TestPropListKeyboardPattern) {
+    return typeof input === 'function' ? input() : input;
+  },
+
+  get modifiers(): t.KeyboardModifierFlags {
+    return { shift: false, ctrl: false, alt: false, meta: false };
   },
 };
