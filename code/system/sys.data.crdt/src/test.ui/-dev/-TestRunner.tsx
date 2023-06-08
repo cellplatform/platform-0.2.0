@@ -34,9 +34,10 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.bdd((runner) =>
       runner
-        .run({ keyTrigger: 'Enter' })
-        .localstore('dev:sys.crdt.testrunner')
+        .run({})
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
+        .localstore('dev:sys.crdt.testrunner')
+        .keyboard({ run: 'Enter', runAll: 'ALT + Enter' })
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
   });
