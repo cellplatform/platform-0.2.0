@@ -34,10 +34,14 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
   };
+  layers: {
+    overlay?: JSX.Element;
+  };
 };
 const initial: T = {
   props: {},
   debug: { bg: true, title: false },
+  layers: {},
 };
 
 type LocalStore = T['debug'] & {
@@ -199,6 +203,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return <DevMedia bus={bus} self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
     };
 
+    ctx.host.layer(1).render<T>((e) => {
+      return e.state.layers.overlay;
+    });
+
     /**
      * Render subject.
      */
@@ -243,25 +251,25 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      return (
-        <Dev.TestRunner.PropList.Controlled
-          margin={[20, 10, 0, 0]}
-          initial={{
-            run: {
-              ctx: () => ({ props }),
-              label: 'Meeting Doc',
-              list: () => [import('./-TEST.Sample.mjs')],
-            },
-            specs: {},
-          }}
-          onChanged={async (e) => {
-            // local.selected = e.selected;
-            // await state.change((d) => (d.testrunner.results = e.results));
-          }}
-        />
-      );
-    });
+    const devCtx: t.TDevRunnerCtx = {
+      props,
+      async overlay(el) {
+        state.change((d) => (d.layers.overlay = el || undefined));
+      },
+    };
+
+    dev.bdd((bdd) =>
+      bdd
+        .margin([20, 30, 0, 30])
+        .localstore('dev:sys.net.webrtc.Info')
+        .run({
+          ctx: devCtx,
+          label: 'Environment Setup',
+          button: 'hidden',
+        })
+        .list([import('./-TEST.Sample')])
+        .onChanged(async (e) => {}),
+    );
 
     dev.hr(5, 20);
   });

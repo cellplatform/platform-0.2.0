@@ -7,6 +7,7 @@ export type * from '../../common/types.mjs';
  */
 export type TDevRunnerCtx = {
   props: t.WebRtcPropsLens<TDevSharedProps>;
+  overlay(el: JSX.Element | null): Promise<void>;
 };
 
 /**
