@@ -1,15 +1,21 @@
 import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
-type P = t.TestPropListRunData;
+type R = t.TestPropListRunData;
+type S = t.TestPropListSpecsData;
 type Margin = t.CssValue['Margin'];
-type ListInput = P['list'];
+type ListInput = R['list'];
 
 export type DevBddRun = {
-  ctx?: P['ctx'];
-  infoUrl?: P['infoUrl'];
-  label?: P['label'];
-  button?: P['button'];
+  ctx?: R['ctx'];
+  infoUrl?: R['infoUrl'];
+  label?: R['label'];
+  button?: R['button'];
+};
+
+export type DevBddSpecs = {
+  selectable?: S['selectable'];
+  ellipsis?: S['ellipsis'];
 };
 
 /**
@@ -19,8 +25,9 @@ export type DevBddHandler<S extends O = O> = (e: DevBddHandlerArgs<S>) => t.Igno
 export type DevBddHandlerArgs<S extends O = O> = {
   ctx: t.DevCtx;
   localstore(id: string): DevBddHandlerArgs<S>;
-  list(value: ListInput): DevBddHandlerArgs<S>;
   run(value: DevBddRun): DevBddHandlerArgs<S>;
+  specs(value: DevBddSpecs): DevBddHandlerArgs<S>;
+  list(value: ListInput): DevBddHandlerArgs<S>;
   margin(value: Margin): DevBddHandlerArgs<S>;
   enabled(value: boolean | t.DevValueHandler<boolean, S>): DevBddHandlerArgs<S>;
   onChanged(fn: DevBddChangedHandler<S>): DevBddHandlerArgs<S>;

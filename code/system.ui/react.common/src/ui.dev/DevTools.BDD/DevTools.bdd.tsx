@@ -21,6 +21,7 @@ export function bdd<S extends O = O>(
   const values = {
     list: ValueHandler<{ input: ListInput }, S>(events),
     run: ValueHandler<t.DevBddRun, S>(events),
+    specs: ValueHandler<t.DevBddSpecs, S>(events),
     enabled: ValueHandler<boolean, S>(events),
     margin: ValueHandler<Margin, S>(events),
   };
@@ -44,6 +45,10 @@ export function bdd<S extends O = O>(
     },
     run(input) {
       values.run.handler(input);
+      return args;
+    },
+    specs(input) {
+      values.specs.handler(input);
       return args;
     },
     margin(input) {
@@ -76,6 +81,7 @@ export function bdd<S extends O = O>(
     const list = values.list.current?.input;
 
     const run = values.run.current;
+    const specs = values.specs.current;
     const data: t.TestPropListData = {
       run: {
         list,
@@ -84,7 +90,11 @@ export function bdd<S extends O = O>(
         label: run?.label,
         button: run?.button,
       },
-      specs: { selected: local?.selected },
+      specs: {
+        selected: local?.selected,
+        selectable: specs?.selectable,
+        ellipsis: specs?.ellipsis,
+      },
     };
 
     return (
