@@ -12,13 +12,13 @@ export const Item = {
    * Generates a <PropList> item for running unit tests.
    */
   runner(args: {
-    list?: R['list'];
+    modules?: R['modules'];
     ctx?: R['ctx'];
     label?: R['label'];
     infoUrl?: R['infoUrl'];
   }): t.PropListItem {
-    const { list, ctx } = args;
-    const data: t.TestPropListData = { run: { list, ctx } };
+    const { modules, ctx } = args;
+    const data: t.TestPropListData = { run: { modules, ctx } };
     return {
       label: <TestRunnerLabel label={args.label} infoUrl={args.infoUrl} />,
       value: <TestRunnerControlled initial={data} />,

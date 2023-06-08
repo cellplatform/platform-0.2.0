@@ -59,7 +59,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       pkg: Pkg,
       run: {
         ctx: () => state.current.ctx,
-        async list() {
+        async modules() {
           // NB: function or array (optionally async).
           return [
             import('./-TEST.sample-1.mjs'),

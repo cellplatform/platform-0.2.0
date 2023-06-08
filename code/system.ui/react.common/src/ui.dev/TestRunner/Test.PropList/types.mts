@@ -23,7 +23,7 @@ export type TestPropListData = {
 };
 
 export type TestPropListRunData = {
-  list?: TestPropListInput[] | (() => TestPropListInput[] | Promise<TestPropListInput[]>);
+  modules?: TestPropListInput[] | (() => TestPropListInput[] | Promise<TestPropListInput[]>);
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);

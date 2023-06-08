@@ -2,8 +2,9 @@ import { TestRunner } from '../TestRunner';
 import { LocalStorage, ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
-type Margin = t.CssValue['Margin'];
-type ListInput = t.TestPropListRunData['list'];
+type R = t.TestPropListRunData;
+type MarginInput = t.CssValue['Margin'];
+type ModulesInput = R['modules'];
 type LocalStore = { selected: string[] };
 
 /**
@@ -19,11 +20,11 @@ export function bdd<S extends O = O>(
 
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
-    list: ValueHandler<{ input: ListInput }, S>(events),
+    modules: ValueHandler<{ input: ModulesInput }, S>(events),
     run: ValueHandler<t.DevBddRun, S>(events),
     specs: ValueHandler<t.DevBddSpecs, S>(events),
     enabled: ValueHandler<boolean, S>(events),
-    margin: ValueHandler<Margin, S>(events),
+    margin: ValueHandler<MarginInput, S>(events),
   };
 
   let local: LocalStore | undefined;
@@ -40,7 +41,7 @@ export function bdd<S extends O = O>(
       return args;
     },
     modules(input) {
-      values.list.handler({ input });
+      values.modules.handler({ input });
       return args;
     },
     run(input) {
@@ -78,13 +79,13 @@ export function bdd<S extends O = O>(
     };
 
     const isEnabled = values.enabled.current !== false;
-    const list = values.list.current?.input;
+    const list = values.modules.current?.input;
 
     const run = values.run.current;
     const specs = values.specs.current;
     const data: t.TestPropListData = {
       run: {
-        list,
+        modules: list,
         ctx: run?.ctx,
         infoUrl: run?.infoUrl,
         label: run?.label,

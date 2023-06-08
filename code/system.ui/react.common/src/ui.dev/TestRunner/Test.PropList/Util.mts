@@ -22,7 +22,7 @@ export const Util = {
   },
 
   async importAndInitialize(data: t.TestPropListData) {
-    const groups = await Wrangle.toGroupedList(data.run?.list ?? []);
+    const groups = await Wrangle.toGroupedList(data.run?.modules ?? []);
     const res: t.TestSuiteGroup[] = [];
 
     for (const group of groups) {
@@ -47,16 +47,19 @@ export const Util = {
  * Helpers
  */
 const Wrangle = {
-  async toList(input: t.TestPropListRunData['list']) {
+  async toList(input: t.TestPropListRunData['modules']) {
     const value = typeof input === 'function' ? input() : input;
+
     let res = Is.promise(value) ? await value : value;
     if (res && !Array.isArray(res)) res = [res];
     res = res?.filter(Boolean);
+
     return res as t.TestPropListInput[];
   },
 
-  async toGroupedList(input: t.TestPropListRunData['list']) {
+  async toGroupedList(input: t.TestPropListRunData['modules']) {
     type T = { title: string; imports: t.BundleImport[] };
+
     const list = await Wrangle.toList(input);
     const res: T[] = [];
 

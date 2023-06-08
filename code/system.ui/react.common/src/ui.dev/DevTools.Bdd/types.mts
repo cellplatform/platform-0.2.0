@@ -3,8 +3,8 @@ import type { t } from '../../common.t';
 type O = Record<string, unknown>;
 type R = t.TestPropListRunData;
 type S = t.TestPropListSpecsData;
-type Margin = t.CssValue['Margin'];
-type ModulesInput = R['list'];
+type MarginInput = t.CssValue['Margin'];
+type ModulesInput = R['modules'];
 
 export type DevBddRun = {
   ctx?: R['ctx'];
@@ -28,7 +28,7 @@ export type DevBddHandlerArgs<S extends O = O> = {
   run(value: DevBddRun): DevBddHandlerArgs<S>;
   specs(value: DevBddSpecs): DevBddHandlerArgs<S>;
   modules(value: ModulesInput): DevBddHandlerArgs<S>;
-  margin(value: Margin): DevBddHandlerArgs<S>;
+  margin(value: MarginInput): DevBddHandlerArgs<S>;
   enabled(value: boolean | t.DevValueHandler<boolean, S>): DevBddHandlerArgs<S>;
   onChanged(fn: DevBddChangedHandler<S>): DevBddHandlerArgs<S>;
   redraw(subject?: boolean): void;

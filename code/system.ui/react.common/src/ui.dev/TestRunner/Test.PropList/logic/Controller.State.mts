@@ -83,7 +83,7 @@ const Wrangle = {
     const specs = data.specs ?? (data.specs = {});
 
     const run = data.run ?? (data.run = {});
-    if (typeof run.list === 'function') run.list = await run.list();
+    if (typeof run.modules === 'function') run.modules = await run.modules();
 
     const groups = await Util.importAndInitialize(data);
     specs.selected = specs.selected ?? [];

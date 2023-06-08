@@ -1,6 +1,6 @@
 import { TestPropList } from '..';
 import { Util } from '../Test.PropList/Util.mjs';
-import { Time, Dev, expect, type t } from './-common.mjs';
+import { Dev, Time, expect, type t } from './-common.mjs';
 
 export default Dev.describe('Controller Behavior', (e) => {
   e.it('init', async (e) => {
@@ -12,37 +12,37 @@ export default Dev.describe('Controller Behavior', (e) => {
   const import1 = import('./-TEST.sample-1.mjs');
   const import2 = import('./-TEST.sample-2.mjs');
 
-  const expectOrder = (list: t.TestSuiteModel[]) => {
-    const labels = list.map((suite) => suite.description);
+  const expectOrder = (modules: t.TestSuiteModel[]) => {
+    const labels = modules.map((suite) => suite.description);
     expect(labels[0]).to.eql('Sample-1');
     expect(labels[1]).to.eql('MySpec');
     expect(labels[2].startsWith('Sample-2: Lorem')).to.eql(true);
   };
 
   e.describe('load → all', (e) => {
-    const list = [import1, import2];
+    const modules = [import1, import2];
 
-    e.it('simple list (array)', async (e) => {
-      const controller = await TestPropList.controller({ run: { list } });
+    e.it('[array]', async (e) => {
+      const controller = await TestPropList.controller({ run: { modules } });
       expectOrder(controller.suites);
     });
 
     e.it('function', async (e) => {
-      const controller = await TestPropList.controller({ run: { list: () => list } });
+      const controller = await TestPropList.controller({ run: { modules: () => modules } });
       expectOrder(controller.suites);
     });
 
     e.it('async function (simple)', async (e) => {
-      const controller = await TestPropList.controller({ run: { list: async () => list } });
+      const controller = await TestPropList.controller({ run: { modules: async () => modules } });
       expectOrder(controller.suites);
     });
 
     e.it('async function (wait)', async (e) => {
       const controller = await TestPropList.controller({
         run: {
-          async list() {
+          async modules() {
             await Time.wait(10);
-            return list;
+            return modules;
           },
         },
       });
@@ -54,7 +54,7 @@ export default Dev.describe('Controller Behavior', (e) => {
     e.describe('importAndInitialize', (e) => {
       e.it('mixed: no initial title', async (e) => {
         const res = await Util.importAndInitialize({
-          run: { list: [import1, 'MyTitle', import2] },
+          run: { modules: [import1, 'MyTitle', import2] },
         });
 
         expect(res.length).to.eql(2);
@@ -67,7 +67,7 @@ export default Dev.describe('Controller Behavior', (e) => {
       });
 
       e.it('mixed: initial title', async (e) => {
-        const res = await Util.importAndInitialize({ run: { list: ['MyTitle', import1] } });
+        const res = await Util.importAndInitialize({ run: { modules: ['MyTitle', import1] } });
 
         expect(res.length).to.eql(1);
         expect(res[0].title).to.eql('MyTitle');
