@@ -39,7 +39,7 @@ export const DevSpecs = {
   'sys.ui.dev.DevTools.Button': () => import('../ui.dev/DevTools.Button/-SPEC'),
   'sys.ui.dev.DevTools.Boolean': () => import('../ui.dev/DevTools.Boolean/-SPEC'),
   'sys.ui.dev.DevTools.Textbox': () => import('../ui.dev/DevTools.Textbox/-SPEC'),
-  'sys.ui.dev.DevTools.BDD': () => import('../ui.dev/DevTools.BDD/-SPEC'),
+  'sys.ui.dev.DevTools.TestRunner': () => import('../ui.dev/DevTools.TestRunner/-SPEC'),
   'sys.ui.dev.DevTools.Title': () => import('../ui.dev/DevTools.Title/-SPEC'),
   'sys.ui.dev.DevTools.Todo': () => import('../ui.dev/DevTools.Todo/-SPEC'),
 };

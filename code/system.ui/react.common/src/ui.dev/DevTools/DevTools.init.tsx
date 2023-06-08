@@ -7,7 +7,7 @@ import { title } from '../DevTools.Title';
 import { todo } from '../DevTools.Todo';
 import { DevBase, Spec, type t } from '../common';
 import { Helpers } from './Helpers.mjs';
-import { bdd } from '../DevTools.BDD';
+import { bdd } from '../DevTools.TestRunner';
 
 type O = Record<string, unknown>;
 
