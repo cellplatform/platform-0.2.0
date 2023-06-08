@@ -3,7 +3,11 @@ import type { t } from '../../../common.t';
 type HashString = string;
 type Ctx = Record<string, unknown>;
 
-export type TestPropListInput = t.BundleImport | string;
+export type TestPropListModuleInput = t.BundleImport | string;
+export type TestPropListModulesInput =
+  | TestPropListModuleInput[]
+  | (() => TestPropListModuleInput[] | Promise<TestPropListModuleInput[]>);
+
 export type TestRunnerField =
   | 'Module'
   | 'Module.Version'
@@ -23,7 +27,7 @@ export type TestPropListData = {
 };
 
 export type TestPropListRunData = {
-  modules?: TestPropListInput[] | (() => TestPropListInput[] | Promise<TestPropListInput[]>);
+  modules?: TestPropListModulesInput;
   ctx?: Ctx | (() => Ctx);
   infoUrl?: string | (() => string | undefined);
   label?: string | (() => string | undefined);

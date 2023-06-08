@@ -47,20 +47,20 @@ export const Util = {
  * Helpers
  */
 const Wrangle = {
-  async toList(input: t.TestPropListRunData['modules']) {
+  async toFlatList(input: t.TestPropListModulesInput) {
     const value = typeof input === 'function' ? input() : input;
 
     let res = Is.promise(value) ? await value : value;
     if (res && !Array.isArray(res)) res = [res];
     res = res?.filter(Boolean);
 
-    return res as t.TestPropListInput[];
+    return res as t.TestPropListModuleInput[];
   },
 
-  async toGroupedList(input: t.TestPropListRunData['modules']) {
+  async toGroupedList(input: t.TestPropListModulesInput) {
     type T = { title: string; imports: t.BundleImport[] };
 
-    const list = await Wrangle.toList(input);
+    const list = await Wrangle.toFlatList(input);
     const res: T[] = [];
 
     list.forEach((item, i) => {
