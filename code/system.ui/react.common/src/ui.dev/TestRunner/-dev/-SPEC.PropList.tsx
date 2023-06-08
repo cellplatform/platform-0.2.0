@@ -8,7 +8,7 @@ type P = TestPropListProps;
 type T = {
   ctx: TestCtx;
   props: P;
-  debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
+  debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string; selectable?: boolean };
 };
 const initial: T = {
   ctx: { fail: false, delay: 300 },
@@ -27,6 +27,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     card: true,
     enabled: true,
     selected: [],
+    selectable: true,
     label: '',
     delay: initial.ctx.delay,
     fail: initial.ctx.fail,
@@ -40,6 +41,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.infoUrl = local.infoUrl;
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
+      d.debug.selectable = local.selectable;
 
       d.props.fields = local.fields;
       d.props.card = local.card;
@@ -148,6 +150,20 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .onClick((e) => e.change((d) => (local.ellipsis = Dev.toggle(d.debug, 'ellipsis')))),
       );
 
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `enabled`)
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `selectable`)
+          .value((e) => e.state.debug.selectable)
+          .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
+      );
+
       dev.hr(-1, 5);
 
       dev.boolean((btn) =>
@@ -162,13 +178,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `card.flipped`)
           .value((e) => e.state.props.flipped)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `enabled`)
-          .value((e) => e.state.props.enabled)
-          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
       );
     });
 
