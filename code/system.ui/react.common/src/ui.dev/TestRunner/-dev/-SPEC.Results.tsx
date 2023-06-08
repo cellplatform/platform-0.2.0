@@ -51,7 +51,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .localstore('dev:sys.common.TestRunner.Results')
         .margin([20, 35, 0, 30])
-        .run({ ctx: () => state.current.ctx })
+        .run({ ctx: () => state.current.ctx, runOnEnter: true })
         .modules(async () => {
           /**
            * NB: This is more convoluted that it might normally be

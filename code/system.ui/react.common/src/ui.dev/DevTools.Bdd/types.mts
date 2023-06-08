@@ -11,6 +11,7 @@ export type DevBddRun = {
   infoUrl?: R['infoUrl'];
   label?: R['label'];
   button?: R['button'];
+  runOnEnter?: R['runOnEnter'];
 };
 
 export type DevBddSpecs = {
