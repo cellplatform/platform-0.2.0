@@ -7,7 +7,6 @@ export type * from '../../common/types.mjs';
  */
 export type TDevRunnerCtx = {
   props: t.WebRtcPropsLens<TDevSharedProps>;
-  overlay(el: JSX.Element | null): Promise<void>;
 };
 
 /**
@@ -23,6 +22,8 @@ export type TDevRemote = {
 export type TDevSharedProps = {
   count: number;
   showRight?: boolean;
+  overlay?: 'sys.data.project' | 'sys.data.crdt' | null;
+
   fullscreenVideo?: boolean;
   cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];

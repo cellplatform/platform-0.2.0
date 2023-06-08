@@ -1,22 +1,22 @@
-import { Dev, Time, type t } from './common';
+import { Dev, type t } from './common';
 
 export const Project = Dev.describe('sys.data.project', (e) => {
   e.it('init', async (e) => {
     const ctx = Wrangle.ctx(e);
-    await Time.wait(300);
+    ctx.props.change((d) => {
+      // d.showRight = false;
+      d.overlay = 'sys.data.project';
+    });
   });
 });
 
 export const Crdt = Dev.describe('sys.data.crdt', (e) => {
   e.it('init', async (e) => {
     const ctx = Wrangle.ctx(e);
-    ctx.props.change((d) => (d.showRight = false));
-
-    const { Specs } = await import('sys.data.crdt/specs');
-    const m = await Specs['sys.crdt.tests']();
-
-    const el = <Dev.Harness spec={m.default} background={1} />;
-    ctx.overlay(el);
+    ctx.props.change((d) => {
+      // d.showRight = false;
+      d.overlay = 'sys.data.crdt';
+    });
   });
 });
 
@@ -39,10 +39,10 @@ export const Reset = Dev.describe('reset', (e) => {
   e.it('reset', async (e) => {
     const ctx = Wrangle.ctx(e);
     ctx.props.change((d) => {
+      d.overlay = null;
       d.vimeoVisible = false;
       d.imageVisible = false;
     });
-    await ctx.overlay(null);
   });
 });
 

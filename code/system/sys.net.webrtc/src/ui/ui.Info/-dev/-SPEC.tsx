@@ -203,10 +203,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return <DevMedia bus={bus} self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
     };
 
-    ctx.host.layer(1).render<T>((e) => {
-      return e.state.layers.overlay;
-    });
-
     /**
      * Render subject.
      */
@@ -217,6 +213,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           renderFullscreenVideo(e)
         : renderInfoCard(e);
     });
+
+    /**
+     * Render overlay.
+     */
+    ctx.host.layer(1).render<T>((e) => e.state.layers.overlay);
   });
 
   e.it('ui:header', async (e) => {
@@ -251,19 +252,43 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const devCtx: t.TDevRunnerCtx = {
-      props,
-      async overlay(el) {
-        state.change((d) => (d.layers.overlay = el || undefined));
-      },
+    const updateOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+      const setOverlay = (el?: JSX.Element) => {
+        state.change((d) => (d.layers.overlay = el));
+      };
+
+      if (kind === 'sys.data.crdt') {
+        const { dev } = await import('sys.data.crdt');
+        const { Specs } = await dev();
+        const m = await Specs['sys.crdt.tests']();
+        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
+        setOverlay(el);
+      }
+
+      if (kind === 'sys.data.project') {
+        const { dev } = await import('spike.concept');
+        const { Specs } = await dev();
+        const m = await Specs['sys.data.project']();
+        const el = <Dev.Harness key={'project'} spec={m.default} background={1} />;
+        setOverlay(el);
+      }
+
+      if (!kind) {
+        setOverlay(undefined);
+      }
     };
+
+    props.$.pipe(
+      rx.map((e) => e.lens.overlay),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe(updateOverlay);
 
     dev.bdd((bdd) =>
       bdd
         .margin([20, 30, 0, 30])
         .localstore('dev:sys.net.webrtc.Info')
         .run({
-          ctx: devCtx,
+          ctx: { props },
           label: 'Environment Setup',
           button: 'hidden',
         })
