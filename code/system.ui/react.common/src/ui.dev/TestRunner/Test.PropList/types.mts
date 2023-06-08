@@ -34,8 +34,8 @@ export type TestPropListRunData = {
 
 export type TestPropListSpecsData = {
   selected?: HashString[];
-  ellipsis?: boolean | (() => boolean | undefined);
   selectable?: boolean | (() => boolean | undefined);
+  ellipsis?: boolean | (() => boolean | undefined);
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
   onSelect?: SpecsSelectionHandler;
   onReset?: SpecsSelectionResetHandler;
