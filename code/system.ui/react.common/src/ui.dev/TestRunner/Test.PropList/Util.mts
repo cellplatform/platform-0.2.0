@@ -1,4 +1,4 @@
-import { Test, t, Is } from './common';
+import { Is, Test, type t } from './common';
 
 export const Util = {
   modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
@@ -22,7 +22,7 @@ export const Util = {
   },
 
   async importAndInitialize(data: t.TestPropListData) {
-    const groups = await Wrangle.toGroupedList(data.run?.modules ?? []);
+    const groups = await Util.modulesToGroupedList(data.run?.modules ?? []);
     const res: t.TestSuiteGroup[] = [];
 
     for (const group of groups) {
@@ -41,13 +41,8 @@ export const Util = {
       return acc;
     }, [] as t.TestSuiteModel[]);
   },
-};
 
-/**
- * Helpers
- */
-const Wrangle = {
-  async toFlatList(input: t.TestPropListModulesInput) {
+  async modulesToFlatList(input: t.TestPropListModulesInput) {
     const value = typeof input === 'function' ? input() : input;
 
     let res = Is.promise(value) ? await value : value;
@@ -57,10 +52,10 @@ const Wrangle = {
     return res as t.TestPropListModuleInput[];
   },
 
-  async toGroupedList(input: t.TestPropListModulesInput) {
+  async modulesToGroupedList(input: t.TestPropListModulesInput) {
     type T = { title: string; imports: t.BundleImport[] };
 
-    const list = await Wrangle.toFlatList(input);
+    const list = await Util.modulesToFlatList(input);
     const res: T[] = [];
 
     list.forEach((item, i) => {
