@@ -27,7 +27,7 @@ export type DevBddHandlerArgs<S extends O = O> = {
   localstore(id: string): DevBddHandlerArgs<S>;
   run(value: DevBddRun): DevBddHandlerArgs<S>;
   specs(value: DevBddSpecs): DevBddHandlerArgs<S>;
-  modules(value: ModulesInput): DevBddHandlerArgs<S>;
+  modules(value: ModulesInput | t.BundleImport): DevBddHandlerArgs<S>;
   margin(value: MarginInput): DevBddHandlerArgs<S>;
   enabled(value: boolean | t.DevValueHandler<boolean, S>): DevBddHandlerArgs<S>;
   onChanged(fn: DevBddChangedHandler<S>): DevBddHandlerArgs<S>;

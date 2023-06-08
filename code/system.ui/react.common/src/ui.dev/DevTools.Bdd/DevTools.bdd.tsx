@@ -20,7 +20,7 @@ export function bdd<S extends O = O>(
 
   const changeHandlers = new Set<t.DevBddChangedHandler<S>>();
   const values = {
-    modules: ValueHandler<{ input: ModulesInput }, S>(events),
+    modules: ValueHandler<{ value: ModulesInput }, S>(events),
     run: ValueHandler<t.DevBddRun, S>(events),
     specs: ValueHandler<t.DevBddSpecs, S>(events),
     enabled: ValueHandler<boolean, S>(events),
@@ -41,7 +41,8 @@ export function bdd<S extends O = O>(
       return args;
     },
     modules(input) {
-      values.modules.handler({ input });
+      const value = (Array.isArray(input) ? input : [input]) as ModulesInput;
+      values.modules.handler({ value });
       return args;
     },
     run(input) {
@@ -79,7 +80,7 @@ export function bdd<S extends O = O>(
     };
 
     const isEnabled = values.enabled.current !== false;
-    const list = values.modules.current?.input;
+    const list = values.modules.current?.value;
 
     const run = values.run.current;
     const specs = values.specs.current;
