@@ -12,16 +12,15 @@ export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean 
    * Listen for keyboard events.
    */
   useEffect(() => {
-    const { dispose } = Keyboard.on({
+    const pattern = Wrangle.keyTrigger(data) ?? '';
+    const { dispose } = Keyboard.on(pattern, (e) => {
       /**
-       * Run all/selected tests on ENTER.
+       * Run all/selected tests.
        */
-      Enter(e) {
-        if (!enabled) return;
-        if (!Wrangle.runOnEnter(data)) return;
-        const modifiers = e.state.modifiers;
-        data.run?.onRunAll?.({ modifiers });
-      },
+      if (!enabled) return;
+      if (!Wrangle.keyTrigger(data)) return;
+      const modifiers = e.state.modifiers;
+      data.run?.onRunAll?.({ modifiers });
     });
 
     return dispose;
@@ -32,9 +31,8 @@ export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean 
  * Helpers
  */
 const Wrangle = {
-  runOnEnter(data: t.TestPropListData) {
-    const value = data.run?.runOnEnter;
-    if (value === undefined) return false;
-    return Boolean(typeof value === 'function' ? value() : value);
+  keyTrigger(data: t.TestPropListData) {
+    const value = data.run?.triggerKey;
+    return typeof value === 'function' ? value() : value;
   },
 };

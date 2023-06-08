@@ -13,7 +13,7 @@ type T = {
     infoUrl?: boolean;
     ellipsis?: boolean;
     selectable?: boolean;
-    runOnEnter?: boolean;
+    triggerKey?: boolean;
   };
 };
 const initial: T = {
@@ -34,7 +34,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     enabled: true,
     selected: [],
     selectable: true,
-    runOnEnter: true,
+    triggerKey: true,
     label: '',
     delay: initial.ctx.delay,
     fail: initial.ctx.fail,
@@ -49,7 +49,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
       d.debug.selectable = local.selectable;
-      d.debug.runOnEnter = local.runOnEnter;
+      d.debug.triggerKey = local.triggerKey;
 
       d.props.fields = local.fields;
       d.props.card = local.card;
@@ -79,7 +79,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
-        runOnEnter: () => state.current.debug.runOnEnter,
+        triggerKey: () => (state.current.debug.triggerKey ? 'CMD + Enter' : undefined),
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
         onRunAll: (e) => console.info('⚡️ onRunAll:', e),
       },
@@ -176,9 +176,9 @@ export default Dev.describe('TestRunner.PropList', (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `runOnEnter`)
-          .value((e) => e.state.debug.runOnEnter)
-          .onClick((e) => e.change((d) => (local.runOnEnter = Dev.toggle(d.debug, 'runOnEnter')))),
+          .label((e) => `triggerKey ${e.state.debug.triggerKey ? '← (⌘ + Enter)' : ''}`)
+          .value((e) => e.state.debug.triggerKey)
+          .onClick((e) => e.change((d) => (local.triggerKey = Dev.toggle(d.debug, 'triggerKey')))),
       );
 
       dev.hr(-1, 5);
