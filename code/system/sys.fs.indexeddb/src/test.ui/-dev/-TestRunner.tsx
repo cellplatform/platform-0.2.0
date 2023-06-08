@@ -33,7 +33,12 @@ export default Dev.describe('TestRunner', (e) => {
 
     dev.bdd((bdd) =>
       bdd
-        .list([import('./-TEST.ItegrityChecks.mjs'), import('./-TEST.Functional.mjs')])
+        .localstore('dev:sys.fs.indexeddb')
+        .list([
+          //
+          import('./-TEST.ItegrityChecks.mjs'),
+          import('./-TEST.Functional.mjs'),
+        ])
         .onChanged((e) => {
           e.change((d) => (d.results = e.results));
         }),

@@ -1,4 +1,4 @@
-import { rx, Dev, Filesystem, expect, Path, t, slug, Filesize } from '../common';
+import { Time, rx, Dev, Filesystem, expect, Path, t, slug, Filesize } from '../common';
 import { MemoryMock } from 'sys.fs.spec';
 import { Spec } from 'sys.fs.spec';
 
@@ -8,8 +8,6 @@ import { Spec } from 'sys.fs.spec';
  */
 
 export default Dev.describe('Health Check', async (e) => {
-  const uri = 'path:foo/bar.json';
-
   const id = 'fs.dev';
   const db = await Filesystem.Driver.IndexedDb({ id });
   const { driver } = db;
@@ -17,10 +15,11 @@ export default Dev.describe('Health Check', async (e) => {
   e.it(`Driver: ${Filesystem.Driver.kind}`, async (e) => {
     console.log('db', db);
 
-    const json = JSON.stringify({ foo: 123 });
+    const now = Time.now.timestamp;
+    const json = JSON.stringify({ foo: 123, now });
     const data = new TextEncoder().encode(json);
 
-    const uri = 'path:.dev/foo/bar.json';
+    const uri = 'path:.dev/health-check/bar.json';
     await driver.io.write(uri, data);
 
     const res = (await driver.io.read(uri)).file?.data;
@@ -41,7 +40,8 @@ export default Dev.describe('Health Check', async (e) => {
       console.log('💦', e);
     });
 
-    const fs = controller.fs('.dev');
+    const fs = controller.fs('.dev/health-check');
+    const uri = 'path:.dev/health-check/bar.json';
     const fsRead = await fs.json.read(uri);
     console.log('read (fs):', fsRead);
 
