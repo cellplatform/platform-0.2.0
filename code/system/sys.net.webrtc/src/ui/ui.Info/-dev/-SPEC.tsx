@@ -253,16 +253,18 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const state = await dev.state();
 
     const updateOverlay = async (kind: t.TDevSharedProps['overlay']) => {
-      const setOverlay = (el?: JSX.Element) => {
-        state.change((d) => (d.layers.overlay = el));
-      };
+      const set = (el?: JSX.Element) => state.change((d) => (d.layers.overlay = el));
+
+      if (!kind) {
+        set(undefined);
+      }
 
       if (kind === 'sys.data.crdt') {
         const { dev } = await import('sys.data.crdt');
         const { Specs } = await dev();
         const m = await Specs['sys.crdt.tests']();
         const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
-        setOverlay(el);
+        set(el);
       }
 
       if (kind === 'sys.data.project') {
@@ -270,14 +272,19 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         const { Specs } = await dev();
         const m = await Specs['sys.data.project']();
         const el = <Dev.Harness key={'project'} spec={m.default} background={1} />;
-        setOverlay(el);
-      }
-
-      if (!kind) {
-        setOverlay(undefined);
+        set(el);
       }
     };
 
+    /**
+     * TODO 🐷
+     * Ensure the props.$ (← lens) event fires when changed
+     * in the master document, ie. when changed remotely on the network.
+     */
+    controller.state.doc.$.pipe(rx.debounceTime(50)).subscribe((e) => {
+      const next = props.current.overlay;
+      updateOverlay(next);
+    });
     props.$.pipe(
       rx.map((e) => e.lens.overlay),
       rx.distinctUntilChanged((prev, next) => prev === next),
@@ -285,10 +292,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.bdd((bdd) =>
       bdd
-        .margin([20, 30, 0, 30])
         .localstore('dev:sys.net.webrtc.Info')
+        .margin([20, 30, 0, 30])
         .run({
-          ctx: { props },
+          ctx: () => ({ props }),
           label: 'Environment Setup',
           button: 'hidden',
         })
