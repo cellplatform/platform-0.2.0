@@ -42,7 +42,8 @@ export const Util = {
     }, [] as t.TestSuiteModel[]);
   },
 
-  async modulesToFlatList(input: t.TestPropListModulesInput) {
+  async modulesToFlatList(input?: t.TestPropListModulesInput) {
+    if (!input) return [];
     const value = typeof input === 'function' ? input() : input;
 
     let res = Is.promise(value) ? await value : value;
@@ -52,11 +53,12 @@ export const Util = {
     return res as t.TestPropListModuleInput[];
   },
 
-  async modulesToGroupedList(input: t.TestPropListModulesInput) {
-    type T = { title: string; imports: t.BundleImport[] };
+  async modulesToGroupedList(input?: t.TestPropListModulesInput) {
+    type TGroup = { title: string; imports: t.BundleImport[] };
 
+    if (!input) return [];
     const list = await Util.modulesToFlatList(input);
-    const res: T[] = [];
+    const res: TGroup[] = [];
 
     list.forEach((item, i) => {
       if (typeof item === 'string' || i === 0) {
