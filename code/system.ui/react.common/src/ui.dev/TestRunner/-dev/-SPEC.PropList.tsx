@@ -83,13 +83,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
         selected: local.selected,
         selectable: () => state.current.debug.selectable,
         ellipsis: () => state.current.debug.ellipsis,
-        onSelect(e) {
-          console.info('⚡️ onChange:', e);
-        },
+        onSelect: (e) => console.info('⚡️ onChange:', e),
       },
       keyboard: {
         run: () => 'Enter',
         runAll: () => 'ALT + Enter',
+        selectAll: 'ALT + KeyA',
+        selectNone: 'ALT + SHIFT + KeyA',
       },
     });
 

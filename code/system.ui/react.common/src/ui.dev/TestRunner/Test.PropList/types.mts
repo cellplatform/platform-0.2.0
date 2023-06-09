@@ -43,6 +43,8 @@ export type TestPropListKeyboardPattern = LazyString; // eg. "CMD + Enter"
 export type TestPropListKeyboard = {
   run?: TestPropListKeyboardPattern; //    Run selected.
   runAll?: TestPropListKeyboardPattern; // Force run all.
+  selectAll?: TestPropListKeyboardPattern;
+  selectNone?: TestPropListKeyboardPattern;
 };
 
 export type TestPropListSpecsData = {
