@@ -37,7 +37,7 @@ export default Dev.describe('TestRunner', (e) => {
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
         .localstore('dev:sys.crdt.testrunner')
-        .keyboard({ run: 'Enter', runAll: 'ALT + Enter' })
+        .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
   });
