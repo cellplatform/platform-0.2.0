@@ -6,8 +6,7 @@ type D = t.TestPropListData;
 type LocalStore = { selected: string[] };
 type MarginInput = t.CssValue['Margin'];
 type ModulesInput = D['modules'];
-type Keyboard = D['keyboard'];
-type KeyboardInput = Keyboard | boolean;
+type KeyboardInput = D['keyboard'] | boolean;
 
 /**
  * A BDD test-selector/runner.
@@ -57,8 +56,7 @@ export function bdd<S extends O = O>(
       return args;
     },
     keyboard(input) {
-      const value = Wrangle.keyboard(input);
-      values.keyboard.handler(value);
+      values.keyboard.handler(input);
       return args;
     },
     margin(input) {
@@ -91,7 +89,7 @@ export function bdd<S extends O = O>(
     const modules = values.modules.current?.value;
     const run = values.run.current;
     const specs = values.specs.current;
-    const keyboard = values.keyboard.current;
+    const keyboard = Wrangle.keyboard(values.keyboard.current);
 
     const data: t.TestPropListData = {
       modules,
@@ -135,7 +133,7 @@ const Wrangle = {
     return (Array.isArray(input) ? input : [input]) as ModulesInput;
   },
 
-  keyboard(input: KeyboardInput): Keyboard | undefined {
+  keyboard(input: KeyboardInput): t.TestPropListKeyboard | undefined {
     if (input === false) return;
     if (input === true)
       return {
