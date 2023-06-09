@@ -3,10 +3,11 @@ import { LocalStorage, ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
 type D = t.TestPropListData;
+type LocalStore = { selected: string[] };
 type MarginInput = t.CssValue['Margin'];
 type ModulesInput = D['modules'];
-type KeyboardInput = D['keyboard'];
-type LocalStore = { selected: string[] };
+type Keyboard = D['keyboard'];
+type KeyboardInput = Keyboard | boolean;
 
 /**
  * A BDD test-selector/runner.
@@ -56,7 +57,8 @@ export function bdd<S extends O = O>(
       return args;
     },
     keyboard(input) {
-      values.keyboard.handler(input);
+      const value = Wrangle.keyboard(input);
+      values.keyboard.handler(value);
       return args;
     },
     margin(input) {
@@ -131,5 +133,17 @@ const Wrangle = {
   modules(input: ModulesInput | t.BundleImport): ModulesInput {
     if (typeof input === 'function') return input;
     return (Array.isArray(input) ? input : [input]) as ModulesInput;
+  },
+
+  keyboard(input: KeyboardInput): Keyboard | undefined {
+    if (input === false) return;
+    if (input === true)
+      return {
+        run: 'Enter',
+        runAll: 'ALT + Enter',
+        selectAll: 'ALT + KeyA',
+        selectNone: 'ALT + SHIFT + KeyA',
+      };
+    return input;
   },
 };
