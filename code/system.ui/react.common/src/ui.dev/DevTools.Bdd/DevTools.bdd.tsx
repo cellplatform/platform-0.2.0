@@ -3,9 +3,8 @@ import { LocalStorage, ValueHandler, type t } from '../common';
 
 type O = Record<string, unknown>;
 type D = t.TestPropListData;
-type R = t.TestPropListRunData;
 type MarginInput = t.CssValue['Margin'];
-type ModulesInput = R['modules'];
+type ModulesInput = D['modules'];
 type KeyboardInput = D['keyboard'];
 type LocalStore = { selected: string[] };
 
@@ -87,14 +86,15 @@ export function bdd<S extends O = O>(
     };
 
     const isEnabled = values.enabled.current !== false;
-    const list = values.modules.current?.value;
-
+    const modules = values.modules.current?.value;
     const run = values.run.current;
     const specs = values.specs.current;
     const keyboard = values.keyboard.current;
+
     const data: t.TestPropListData = {
+      modules,
+      keyboard,
       run: {
-        modules: list,
         ctx: run?.ctx,
         infoUrl: run?.infoUrl,
         label: run?.label,
@@ -105,7 +105,6 @@ export function bdd<S extends O = O>(
         selectable: specs?.selectable,
         ellipsis: specs?.ellipsis,
       },
-      keyboard,
     };
 
     return (

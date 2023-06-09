@@ -6,7 +6,7 @@ import { rx, type t } from '../common';
  * Handles turning an import promise into an initialized spec.
  */
 export function useSuites(args: { data: t.TestPropListData }) {
-  const modules = (args.data.run ?? {}).modules ?? [];
+  const modules = args.data.modules ?? [];
 
   const [loaded, setLoaded] = useState(false);
   const [groups, setGroups] = useState<t.TestSuiteGroup[]>([]);

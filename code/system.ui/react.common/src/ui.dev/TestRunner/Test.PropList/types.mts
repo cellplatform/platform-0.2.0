@@ -24,13 +24,13 @@ export type TestSuiteGroup = { title: string; suites: t.TestSuiteModel[] };
  */
 export type TestPropListData = {
   pkg?: t.ModuleDef;
+  modules?: TestPropListModulesInput;
   run?: TestPropListRunData;
   specs?: TestPropListSpecsData;
   keyboard?: TestPropListKeyboard;
 };
 
 export type TestPropListRunData = {
-  modules?: TestPropListModulesInput;
   ctx?: Ctx | (() => Ctx);
   infoUrl?: LazyString;
   label?: LazyString;

@@ -23,27 +23,25 @@ export default Dev.describe('Controller Behavior', (e) => {
     const modules = [import1, import2];
 
     e.it('[array]', async (e) => {
-      const controller = await TestPropList.controller({ run: { modules } });
+      const controller = await TestPropList.controller({ modules });
       expectOrder(controller.suites);
     });
 
     e.it('function', async (e) => {
-      const controller = await TestPropList.controller({ run: { modules: () => modules } });
+      const controller = await TestPropList.controller({ modules: () => modules });
       expectOrder(controller.suites);
     });
 
     e.it('async function (simple)', async (e) => {
-      const controller = await TestPropList.controller({ run: { modules: async () => modules } });
+      const controller = await TestPropList.controller({ modules: async () => modules });
       expectOrder(controller.suites);
     });
 
     e.it('async function (wait)', async (e) => {
       const controller = await TestPropList.controller({
-        run: {
-          async modules() {
-            await Time.wait(10);
-            return modules;
-          },
+        async modules() {
+          await Time.wait(10);
+          return modules;
         },
       });
       expectOrder(controller.suites);
@@ -53,9 +51,7 @@ export default Dev.describe('Controller Behavior', (e) => {
   e.describe('Util', (e) => {
     e.describe('importAndInitialize', (e) => {
       e.it('mixed: no initial title', async (e) => {
-        const res = await Util.importAndInitialize({
-          run: { modules: [import1, 'MyTitle', import2] },
-        });
+        const res = await Util.importAndInitialize({ modules: [import1, 'MyTitle', import2] });
 
         expect(res.length).to.eql(2);
         expect(res[0].title).to.eql('');
@@ -67,7 +63,7 @@ export default Dev.describe('Controller Behavior', (e) => {
       });
 
       e.it('mixed: initial title', async (e) => {
-        const res = await Util.importAndInitialize({ run: { modules: ['MyTitle', import1] } });
+        const res = await Util.importAndInitialize({ modules: ['MyTitle', import1] });
 
         expect(res.length).to.eql(1);
         expect(res[0].title).to.eql('MyTitle');

@@ -22,7 +22,7 @@ export const Util = {
   },
 
   async importAndInitialize(data: t.TestPropListData) {
-    const groups = await Util.modulesToGroupedList(data.run?.modules ?? []);
+    const groups = await Util.modulesToGroupedList(data.modules ?? []);
     const res: t.TestSuiteGroup[] = [];
 
     for (const group of groups) {

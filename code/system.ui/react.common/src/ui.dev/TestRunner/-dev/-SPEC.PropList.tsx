@@ -62,17 +62,17 @@ export default Dev.describe('TestRunner.PropList', (e) => {
        * Initial state (passed into Controller).
        */
       pkg: Pkg,
+      async modules() {
+        // NB: function or array (optionally async).
+        return [
+          import('./-TEST.sample-1.mjs'),
+          import('./-TEST.sample-2.mjs'),
+          'Internal',
+          import('./-TEST.controller.mjs'),
+        ];
+      },
       run: {
         ctx: () => state.current.ctx,
-        async modules() {
-          // NB: function or array (optionally async).
-          return [
-            import('./-TEST.sample-1.mjs'),
-            import('./-TEST.sample-2.mjs'),
-            'Internal',
-            import('./-TEST.controller.mjs'),
-          ];
-        },
         // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),

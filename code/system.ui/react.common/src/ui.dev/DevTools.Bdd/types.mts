@@ -5,7 +5,7 @@ type D = t.TestPropListData;
 type R = t.TestPropListRunData;
 type S = t.TestPropListSpecsData;
 type MarginInput = t.CssValue['Margin'];
-type ModulesInput = R['modules'];
+type ModulesInput = D['modules'];
 type KeyboardInput = D['keyboard'];
 
 export type DevBddRun = {

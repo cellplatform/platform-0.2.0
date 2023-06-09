@@ -6,7 +6,7 @@ import { Keyboard, type t } from '../common';
  */
 export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean }) {
   const { data, enabled = true } = args;
-  const modules = (data.run ?? {}).modules ?? [];
+  const modules = data.modules ?? [];
   const keyboard = Wrangle.patterns(data);
   const patterns = Object.values(keyboard).join(',');
 
