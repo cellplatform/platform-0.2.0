@@ -268,6 +268,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       }
 
       if (kind === 'sys.data.project') {
+        /**
+         * TODO 🐷
+         * import from remote repo via [Module Federation].
+         */
         const el = <div>🐷 TDB</div>;
         // const { dev } = await import('spike.concept');
         // const { Specs } = await dev();
@@ -277,19 +281,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       }
     };
 
-    /**
-     * TODO 🐷
-     * Ensure the props.$ (← lens) event fires when changed
-     * in the master document, ie. when changed remotely on the network.
-     */
-    controller.state.doc.$.pipe(rx.debounceTime(50)).subscribe((e) => {
-      const next = props.current.overlay;
-      updateOverlay(next);
-    });
     props.$.pipe(
       rx.map((e) => e.lens.overlay),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe(updateOverlay);
+    ).subscribe((e) => updateOverlay);
 
     dev.bdd((bdd) =>
       bdd
