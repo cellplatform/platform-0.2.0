@@ -284,7 +284,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     props.$.pipe(
       rx.map((e) => e.lens.overlay),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe((e) => updateOverlay);
+    ).subscribe(updateOverlay);
 
     dev.bdd((bdd) =>
       bdd
