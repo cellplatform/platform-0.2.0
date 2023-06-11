@@ -11,8 +11,8 @@ export function FieldModuleVerify(data: t.CrdtInfoData, info?: {}) {
       return url.href;
     },
 
-    async list() {
-      const { TESTS } = await import('../../../test.ui/-TestRunner.TESTS.mjs');
+    async modules() {
+      const { TESTS } = await import('../../../test.ui/-dev/-TestRunner.TESTS.mjs');
       return TESTS.all;
     },
   });

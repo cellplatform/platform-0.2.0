@@ -1,4 +1,4 @@
-import { Color, css, ObjectView, ProgressBar, t, Time, Value } from '../../common';
+import { Color, ObjectView, ProgressBar, Time, Value, css, type t } from '../../common';
 
 type Seconds = number;
 

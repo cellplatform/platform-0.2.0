@@ -52,7 +52,8 @@ export default Dev.describe('TestRunner', (e) => {
         .localstore('dev:sys.common.TestRunner.Results')
         .margin([20, 35, 0, 30])
         .run({ ctx: () => state.current.ctx })
-        .list(async () => {
+        .keyboard(true)
+        .modules(async () => {
           /**
            * NB: This is more convoluted that it might normally be
            *     with an async import within an async function.

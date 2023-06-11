@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t, Icons } from '../common.mjs';
+import { COLORS, Color, Icons, css, type t } from '../common.mjs';
 
 export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
 

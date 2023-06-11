@@ -11,7 +11,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "nostr-tools": "1.11.1",
+    "nostr-tools": "1.12.0",
     "peerjs": "1.4.7",
     "sys.data.crdt": "0.0.0",
     "sys.fs": "0.0.0",
@@ -27,7 +27,8 @@
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.media": "0.0.0"
+    "sys.ui.react.media": "0.0.0",
+    "spike.concept": "0.0.6"
   },
   "license": "MIT",
   "private": true,

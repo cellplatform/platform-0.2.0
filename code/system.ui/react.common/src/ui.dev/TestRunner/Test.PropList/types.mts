@@ -2,8 +2,14 @@ import type { t } from '../../../common.t';
 
 type HashString = string;
 type Ctx = Record<string, unknown>;
+type LazyString = string | (() => string | undefined);
+type LazyBool = boolean | (() => boolean | undefined);
 
-export type TestPropListInput = t.BundleImport | string;
+export type TestPropListModuleInput = t.BundleImport | string;
+export type TestPropListModulesInput =
+  | TestPropListModuleInput[]
+  | (() => TestPropListModuleInput[] | Promise<TestPropListModuleInput[]>);
+
 export type TestRunnerField =
   | 'Module'
   | 'Module.Version'
@@ -18,22 +24,33 @@ export type TestSuiteGroup = { title: string; suites: t.TestSuiteModel[] };
  */
 export type TestPropListData = {
   pkg?: t.ModuleDef;
+  modules?: TestPropListModulesInput;
   run?: TestPropListRunData;
   specs?: TestPropListSpecsData;
+  keyboard?: TestPropListKeyboard;
 };
 
 export type TestPropListRunData = {
-  list?: TestPropListInput[] | (() => TestPropListInput[] | Promise<TestPropListInput[]>);
   ctx?: Ctx | (() => Ctx);
-  infoUrl?: string | (() => string | undefined);
-  label?: string | (() => string | undefined);
+  infoUrl?: LazyString;
+  label?: LazyString;
+  button?: 'visible' | 'hidden';
   onRunSingle?: SpecRunClickHandler;
   onRunAll?: SpecRunAllClickHandler;
 };
 
+export type TestPropListKeyboardPattern = LazyString; // eg. "CMD + Enter"
+export type TestPropListKeyboard = {
+  run?: TestPropListKeyboardPattern; //    Run selected.
+  runAll?: TestPropListKeyboardPattern; // Force run all.
+  selectAll?: TestPropListKeyboardPattern;
+  selectNone?: TestPropListKeyboardPattern;
+};
+
 export type TestPropListSpecsData = {
   selected?: HashString[];
-  ellipsis?: boolean | (() => boolean | undefined);
+  selectable?: LazyBool;
+  ellipsis?: LazyBool;
   results?: { [key: HashString]: true | t.TestSuiteRunResponse };
   onSelect?: SpecsSelectionHandler;
   onReset?: SpecsSelectionResetHandler;

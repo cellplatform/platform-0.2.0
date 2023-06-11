@@ -1,14 +1,16 @@
 /// <reference types="vitest" />
+
+import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
-import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
+import wasm from 'vite-plugin-wasm';
 
-import type { RollupOptions, ManualChunksOption } from 'rollup';
+import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
 
 /**
@@ -84,7 +86,8 @@ export const Config = {
       };
 
       /**
-       * Modification IoC (called within each module to perform specific adjustments).
+       * Modification IoC
+       * (called within each module to perform specific adjustments).
        */
       const args: t.ModifyViteConfigArgs = {
         ctx: R.clone({ name, command, mode, config, pkg, deps }),
@@ -130,6 +133,11 @@ export const Config = {
       if (hasPlugin('web:svelte')) {
         const svelte = (await import('@sveltejs/vite-plugin-svelte')).svelte;
         config.plugins?.push(svelte());
+      }
+
+      if (hasPlugin('bundle:visualize')) {
+        const filename = fs.join(Paths.outDir.root, 'bundle.stats.html');
+        config.plugins?.push(visualizer({ filename }));
       }
 
       /**

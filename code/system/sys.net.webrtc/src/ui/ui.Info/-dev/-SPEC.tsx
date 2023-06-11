@@ -34,10 +34,14 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
   };
+  layers: {
+    overlay?: JSX.Element;
+  };
 };
 const initial: T = {
   props: {},
   debug: { bg: true, title: false },
+  layers: {},
 };
 
 type LocalStore = T['debug'] & {
@@ -209,6 +213,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           renderFullscreenVideo(e)
         : renderInfoCard(e);
     });
+
+    /**
+     * Render overlay.
+     */
+    ctx.host.layer(1).render<T>((e) => e.state.layers.overlay);
   });
 
   e.it('ui:header', async (e) => {
@@ -243,25 +252,53 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      return (
-        <Dev.TestRunner.PropList.Controlled
-          margin={[20, 10, 0, 0]}
-          initial={{
-            run: {
-              ctx: () => ({ props }),
-              label: 'Meeting Doc',
-              list: () => [import('./-TEST.Sample.mjs')],
-            },
-            specs: {},
-          }}
-          onChanged={async (e) => {
-            // local.selected = e.selected;
-            // await state.change((d) => (d.testrunner.results = e.results));
-          }}
-        />
-      );
-    });
+    const updateOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+      const set = (el?: JSX.Element) => state.change((d) => (d.layers.overlay = el));
+
+      if (!kind) {
+        set(undefined);
+      }
+
+      if (kind === 'sys.data.crdt') {
+        const { dev } = await import('sys.data.crdt');
+        const { Specs } = await dev();
+        const m = await Specs['sys.crdt.tests']();
+        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
+        set(el);
+      }
+
+      if (kind === 'sys.data.project') {
+        /**
+         * TODO 🐷
+         * import from remote repo via [Module Federation].
+         */
+        const el = <div>🐷 TDB</div>;
+        // const { dev } = await import('spike.concept');
+        // const { Specs } = await dev();
+        // const m = await Specs['sys.data.project']();
+        // const el = <Dev.Harness key={'project'} spec={m.default} background={1} />;
+        set(el);
+      }
+    };
+
+    props.$.pipe(
+      rx.map((e) => e.lens.overlay),
+      rx.distinctUntilChanged((prev, next) => prev === next),
+    ).subscribe(updateOverlay);
+
+    dev.bdd((bdd) =>
+      bdd
+        .localstore('dev:sys.net.webrtc.Info')
+        .margin([30, 50, 30, 50])
+        .run({
+          ctx: () => ({ props }),
+          label: 'Environment Setup',
+          button: 'hidden',
+        })
+        .specs({ selectable: false })
+        .modules(import('./-TEST.Sample'))
+        .onChanged(async (e) => {}),
+    );
 
     dev.hr(5, 20);
   });

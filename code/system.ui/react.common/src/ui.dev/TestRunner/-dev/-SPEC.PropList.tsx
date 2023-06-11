@@ -8,12 +8,17 @@ type P = TestPropListProps;
 type T = {
   ctx: TestCtx;
   props: P;
-  debug: { infoUrl?: boolean; ellipsis?: boolean; label?: string };
+  debug: {
+    label?: string;
+    infoUrl?: boolean;
+    ellipsis?: boolean;
+    selectable?: boolean;
+  };
 };
 const initial: T = {
-  ctx: { fail: false, delay: 2000 },
+  ctx: { fail: false, delay: 300 },
   props: {},
-  debug: { infoUrl: false, ellipsis: false },
+  debug: {},
 };
 
 export default Dev.describe('TestRunner.PropList', (e) => {
@@ -21,12 +26,13 @@ export default Dev.describe('TestRunner.PropList', (e) => {
     T['debug'] & { selected: string[]; delay: number; fail: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.TestRunner.PropList');
   const local = localstore.object({
+    fields: DEFAULTS.fields,
     infoUrl: true,
     ellipsis: false,
-    fields: DEFAULTS.fields,
     card: true,
     enabled: true,
     selected: [],
+    selectable: true,
     label: '',
     delay: initial.ctx.delay,
     fail: initial.ctx.fail,
@@ -40,6 +46,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       d.debug.infoUrl = local.infoUrl;
       d.debug.ellipsis = local.ellipsis;
       d.debug.label = local.label;
+      d.debug.selectable = local.selectable;
 
       d.props.fields = local.fields;
       d.props.card = local.card;
@@ -55,17 +62,18 @@ export default Dev.describe('TestRunner.PropList', (e) => {
        * Initial state (passed into Controller).
        */
       pkg: Pkg,
+      async modules() {
+        // NB: function or array (optionally async).
+        return [
+          import('./-TEST.sample-1.mjs'),
+          import('./-TEST.sample-2.mjs'),
+          'Internal',
+          import('./-TEST.controller.mjs'),
+        ];
+      },
       run: {
         ctx: () => state.current.ctx,
-        async list() {
-          // NB: function or array (optionally async).
-          return [
-            import('./-TEST.sample-1.mjs'),
-            import('./-TEST.sample-2.mjs'),
-            'Internal',
-            import('./-TEST.controller.mjs'),
-          ];
-        },
+        // button: 'hidden',
         label: () => state.current.debug.label || undefined,
         infoUrl: () => (state.current.debug.infoUrl ? infoUrl : undefined),
         onRunSingle: (e) => console.info('⚡️ onRunSingle:', e),
@@ -73,10 +81,15 @@ export default Dev.describe('TestRunner.PropList', (e) => {
       },
       specs: {
         selected: local.selected,
+        selectable: () => state.current.debug.selectable,
         ellipsis: () => state.current.debug.ellipsis,
-        onSelect(e) {
-          console.info('⚡️ onChange:', e); // NB: Bubbled up AFTER controller reacts.
-        },
+        onSelect: (e) => console.info('⚡️ onChange:', e),
+      },
+      keyboard: {
+        run: () => 'Enter',
+        runAll: () => 'ALT + Enter',
+        selectAll: 'ALT + KeyA',
+        selectNone: 'ALT + SHIFT + KeyA',
       },
     });
 
@@ -147,6 +160,20 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .onClick((e) => e.change((d) => (local.ellipsis = Dev.toggle(d.debug, 'ellipsis')))),
       );
 
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `enabled`)
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `selectable`)
+          .value((e) => e.state.debug.selectable)
+          .onClick((e) => e.change((d) => (local.selectable = Dev.toggle(d.debug, 'selectable')))),
+      );
+
       dev.hr(-1, 5);
 
       dev.boolean((btn) =>
@@ -161,13 +188,6 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .label((e) => `card.flipped`)
           .value((e) => e.state.props.flipped)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'flipped'))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `enabled`)
-          .value((e) => e.state.props.enabled)
-          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled')))),
       );
     });
 
@@ -190,7 +210,7 @@ export default Dev.describe('TestRunner.PropList', (e) => {
           .onClick((e) => {
             e.change((d) => {
               const defaultDelay = initial.ctx.delay;
-              const next = d.ctx.delay === defaultDelay ? 300 : defaultDelay;
+              const next = d.ctx.delay === defaultDelay ? 1500 : defaultDelay;
               local.delay = d.ctx.delay = next;
             });
           }),

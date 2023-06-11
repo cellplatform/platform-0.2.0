@@ -1,4 +1,4 @@
-import { rx, t, Time } from '../common';
+import { Time, rx, type t } from '../common';
 import { FileUtil } from '../util';
 
 type M = 'video/webm';

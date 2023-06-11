@@ -1,7 +1,8 @@
 /**
- * Meta
+ * Module (Meta)
  */
-export { Pkg } from './index.pkg.mjs';
+import { Pkg } from './index.pkg.mjs';
+export { Pkg };
 
 /**
  * Components
@@ -39,6 +40,10 @@ export { useMouseState } from './common';
 export { css, Style, Color, COLORS, rx, FC, UserAgent } from './common';
 
 /**
- * Development
+ * Dev
  */
 export { Dev, DevTools, Spec, TestRunner } from './ui.dev';
+export const dev = async () => {
+  const { Specs } = await import('./test.ui/entry.Specs.mjs');
+  return { Specs, Pkg };
+};

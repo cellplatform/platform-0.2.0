@@ -1,4 +1,5 @@
 import { Lorem } from '../../ui.tools';
+import { bdd } from '../DevTools.Bdd';
 import { boolean } from '../DevTools.Boolean';
 import { button } from '../DevTools.Button';
 import { hr } from '../DevTools.Hr';
@@ -7,7 +8,6 @@ import { title } from '../DevTools.Title';
 import { todo } from '../DevTools.Todo';
 import { DevBase, Spec, type t } from '../common';
 import { Helpers } from './Helpers.mjs';
-import { bdd } from '../DevTools.BDD';
 
 type O = Record<string, unknown>;
 

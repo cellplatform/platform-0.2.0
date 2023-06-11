@@ -5,7 +5,8 @@ import {
   COLORS,
   ErrorBoundary,
   css,
-  t,
+  Color,
+  type t,
   useBusController,
   useRubberband,
   useSizeObserver,
@@ -16,9 +17,10 @@ type Size = { width: number; height: number };
 
 export type HarnessProps = {
   instance?: t.DevInstance;
-  spec?: t.SpecImport;
+  spec?: t.SpecImport | t.TestSuiteModel;
   allowRubberband?: boolean;
   style?: t.CssValue;
+  background?: string | number;
 };
 
 export const Harness: React.FC<HarnessProps> = (props) => {
@@ -68,6 +70,8 @@ export const Harness: React.FC<HarnessProps> = (props) => {
     }),
     base: css({
       position: 'relative',
+      backgroundColor: Color.format(props.background),
+      pointerEvents: 'auto',
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),

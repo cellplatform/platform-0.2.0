@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { filter } from 'rxjs/operators';
-
-import { DevBus, rx, slug, t, Time, DEFAULTS } from './common';
+import { DEFAULTS, DevBus, Time, rx, slug, type t } from './common';
 
 type Id = string;
 
@@ -9,7 +8,12 @@ type Id = string;
  * Hook: Setup and lifecycle of the event-bus controller.
  */
 export function useBusController(
-  options: { bus?: t.EventBus; id?: Id; bundle?: t.SpecImport; runOnLoad?: boolean } = {},
+  options: {
+    bus?: t.EventBus;
+    id?: Id;
+    bundle?: t.SpecImport | t.TestSuiteModel;
+    runOnLoad?: boolean;
+  } = {},
 ) {
   const id = options.id ?? useRef(`dev.instance.${slug()}`).current;
   const bus = options.bus ?? useRef(rx.bus()).current;

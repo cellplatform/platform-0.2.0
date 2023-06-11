@@ -24,6 +24,7 @@ export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
 export type {
   TestModel,
   TestHandlerArgs,
+  TestSuiteModel,
   TestSuiteRunResponse,
   SpecImport,
   SpecImports,

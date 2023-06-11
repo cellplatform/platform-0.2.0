@@ -1,4 +1,4 @@
-import { Test, t, Is } from './common';
+import { Is, Test, type t } from './common';
 
 export const Util = {
   modifiers(e: React.MouseEvent): t.KeyboardModifierFlags {
@@ -16,8 +16,13 @@ export const Util = {
     return selected.includes(spec.hash());
   },
 
+  isSelectable(data: t.TestPropListData) {
+    const value = data.specs?.selectable;
+    return Boolean(typeof value === 'function' ? value() : value ?? true);
+  },
+
   async importAndInitialize(data: t.TestPropListData) {
-    const groups = await Wrangle.toGroupedList(data.run?.list ?? []);
+    const groups = await Util.modulesToGroupedList(data.modules ?? []);
     const res: t.TestSuiteGroup[] = [];
 
     for (const group of groups) {
@@ -36,24 +41,22 @@ export const Util = {
       return acc;
     }, [] as t.TestSuiteModel[]);
   },
-};
 
-/**
- * Helpers
- */
-const Wrangle = {
-  async toList(input: t.TestPropListRunData['list']) {
+  async modulesToFlatList(input: t.TestPropListModulesInput) {
     const value = typeof input === 'function' ? input() : input;
+
     let res = Is.promise(value) ? await value : value;
     if (res && !Array.isArray(res)) res = [res];
     res = res?.filter(Boolean);
-    return res as t.TestPropListInput[];
+
+    return res as t.TestPropListModuleInput[];
   },
 
-  async toGroupedList(input: t.TestPropListRunData['list']) {
-    type T = { title: string; imports: t.BundleImport[] };
-    const list = await Wrangle.toList(input);
-    const res: T[] = [];
+  async modulesToGroupedList(input: t.TestPropListModulesInput) {
+    type TGroup = { title: string; imports: t.BundleImport[] };
+
+    const list = await Util.modulesToFlatList(input);
+    const res: TGroup[] = [];
 
     list.forEach((item, i) => {
       if (typeof item === 'string' || i === 0) {

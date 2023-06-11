@@ -1,8 +1,7 @@
 import VimeoPlayer from '@vimeo/player';
 import { useEffect, useRef, useState } from 'react';
-
-import { Delete, R, rx, slug, t, Time } from '../common.mjs';
-import { VimeoEvents } from '../VimeoEvents.mjs';
+import { VimeoEvents } from '../Vimeo.Events.mjs';
+import { Delete, R, Time, rx, slug, type t } from '../common.mjs';
 
 type Times = { duration: number; percent: number; seconds: number };
 type Action = t.VimeoStatus['action'];

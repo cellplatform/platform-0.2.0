@@ -1,6 +1,7 @@
 /**
  * @system
  */
+export type { DomRect } from 'sys.types/src/types.mjs';
 export type { CssValue, CssEdgesInput, CssRadiusInput } from 'sys.ui.react.css/src/types.mjs';
 export type {
   KeyboardState,

@@ -15,18 +15,18 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('TestSuite {objects}', async () => {
-      const root1 = Test.describe('1', (e) => e.it('1.1'));
-      const root2 = Test.describe('2', (e) => e.it('2.1'));
+      const import1 = Test.describe('1', (e) => e.it('1.1'));
+      const import2 = Test.describe('2', (e) => e.it('2.1'));
 
-      const bundle = await Test.bundle([root1, root2]);
+      const bundle = await Test.bundle([import1, import2]);
 
       const children = bundle.state.children;
       const test1 = children[0].state.tests[0];
       const test2 = children[1].state.tests[0];
 
       expect(children.length).to.eql(2);
-      expect(children[0].state.description).to.eql(root1.state.description);
-      expect(children[1].state.description).to.eql(root2.state.description);
+      expect(children[0].state.description).to.eql(import1.state.description);
+      expect(children[1].state.description).to.eql(import2.state.description);
 
       expect(children[0].state.parent?.id).to.eql(bundle.id);
       expect(children[1].state.parent?.id).to.eql(bundle.id);
@@ -36,26 +36,30 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('dynamic imports("...")', async () => {
-      const root1 = import('../test/samples/One.TEST');
-      const root2 = import('../test/samples/Two.TEST');
+      const import1 = import('../test/samples/One.TEST');
+      const import2 = import('../test/samples/Two.TEST');
 
-      const bundle = await Test.bundle([root1, root2]);
+      const bundle = await Test.bundle([import1, import2]);
 
       const children = bundle.state.children;
       const test1 = children[0].state.tests[0];
       const test2 = children[1].state.tests[0];
+      const test3 = children[2].state.tests[0];
 
-      expect(children.length).to.eql(3);
+      expect(children.length).to.eql(4);
       expect(children[0].description).to.eql('One');
-      expect(children[1].description).to.eql('MySpec');
-      expect(children[2].description).to.eql('Two');
+      expect(children[1].description).to.eql('MySpec1');
+      expect(children[2].description).to.eql('MySpec2');
+      expect(children[3].description).to.eql('Two');
 
       expect(children[0].state.parent?.id).to.eql(bundle.id);
       expect(children[1].state.parent?.id).to.eql(bundle.id);
       expect(children[2].state.parent?.id).to.eql(bundle.id);
+      expect(children[3].state.parent?.id).to.eql(bundle.id);
 
       expect(TestTree.root(test1)).to.equal(bundle);
       expect(TestTree.root(test2)).to.equal(bundle);
+      expect(TestTree.root(test3)).to.equal(bundle);
     });
 
     it('dynamic: with no export (ignore)', async () => {
@@ -67,11 +71,13 @@ describe('Test (Root/Entry)', () => {
         import('../test/samples/One.TEST'),
         import('../test/samples/Two.TEST'),
       ]);
+
       const children = bundle2.state.children;
-      expect(children.length).to.eql(3);
+      expect(children.length).to.eql(4);
       expect(children[0].description).to.eql('One');
-      expect(children[1].description).to.eql('MySpec');
-      expect(children[2].description).to.eql('Two');
+      expect(children[1].description).to.eql('MySpec1');
+      expect(children[2].description).to.eql('MySpec2');
+      expect(children[3].description).to.eql('Two');
     });
 
     it('dynamic: default export not a test-suite (ignore)', async () => {
@@ -80,10 +86,10 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('mixed import (dynamic/static) with explicit root "description"', async () => {
-      const root1 = Test.describe('One');
-      const root2 = import('../test/samples/Two.TEST');
+      const import1 = Test.describe('One');
+      const import2 = import('../test/samples/Two.TEST');
 
-      const bundle = await Test.bundle('MySuite', [root1, root2]);
+      const bundle = await Test.bundle('MySuite', [import1, import2]);
       const children = bundle.state.children;
 
       expect(bundle.state.description).to.eql('MySuite');
@@ -93,16 +99,16 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('single item bundle (no array)', async () => {
-      const root1 = Test.describe('One');
-      const root2 = import('../test/samples/Two.TEST');
+      const import1 = Test.describe('One');
+      const import2 = import('../test/samples/Two.TEST');
 
-      const bundle1 = await Test.bundle(root1);
-      const bundle2 = await Test.bundle(root2);
-      const bundle3 = await Test.bundle('MySuite-1', root1);
-      const bundle4 = await Test.bundle('MySuite-2', root2);
+      const bundle1 = await Test.bundle(import1);
+      const bundle2 = await Test.bundle(import2);
+      const bundle3 = await Test.bundle('MySuite-1', import1);
+      const bundle4 = await Test.bundle('MySuite-2', import2);
 
-      expect(bundle1.state.description).to.eql(root1.state.description); // NB: Root name taken from single bundle.
-      expect(bundle2.state.description).to.eql((await root2).default.state.description); // NB: Root name taken from single bundle.
+      expect(bundle1.state.description).to.eql(import1.state.description); // NB: Root name taken from single bundle.
+      expect(bundle2.state.description).to.eql((await import2).default.state.description); // NB: Root name taken from single bundle.
       expect(bundle3.state.description).to.eql('MySuite-1'); // NB: Custom name.
       expect(bundle4.state.description).to.eql('MySuite-2');
     });
@@ -118,8 +124,8 @@ describe('Test (Root/Entry)', () => {
     });
 
     it('TestSuite {objects}', async () => {
-      const root1 = Test.describe('1', (e) => e.it('1.1'));
-      const root2 = Test.describe('2', (e) => e.it('2.1'));
+      const import1 = Test.describe('1', (e) => e.it('1.1'));
+      const import2 = Test.describe('2', (e) => e.it('2.1'));
 
       const test = async (res: t.TestSuiteRunResponse) => {
         expect(res.ok).to.eql(true);
@@ -130,28 +136,29 @@ describe('Test (Root/Entry)', () => {
         expect(res.children[1].tests[0].description).to.eql('2.1');
       };
 
-      await test(await Test.run([root1, root2]));
-      await test(await Test.run(await Test.bundle([root1, root2])));
+      await test(await Test.run([import1, import2]));
+      await test(await Test.run(await Test.bundle([import1, import2])));
     });
 
     it('dynamic imports("...")', async () => {
-      const root1 = import('../test/samples/One.TEST');
-      const root2 = import('../test/samples/Two.TEST');
+      const import1 = import('../test/samples/One.TEST');
+      const import2 = import('../test/samples/Two.TEST');
 
-      const res = await Test.run([root1, root2]);
+      const res = await Test.run([import1, import2]);
       expect(res.ok).to.eql(true);
       expect(res.description).to.eql('Tests');
 
       expect(res.children[0].tests[0].description).to.eql('one.foo');
-      expect(res.children[1].tests[0].description).to.eql('my.foo');
-      expect(res.children[2].tests[0].description).to.eql('two.foo');
+      expect(res.children[1].tests[0].description).to.eql('one.foo-1');
+      expect(res.children[2].tests[0].description).to.eql('one.foo-2');
+      expect(res.children[3].tests[0].description).to.eql('two.foo');
     });
 
     it('mixed import (dynamic/static) with explicit root "description"', async () => {
-      const root1 = Test.describe('One');
-      const root2 = import('../test/samples/Two.TEST');
+      const import1 = Test.describe('One');
+      const import2 = import('../test/samples/Two.TEST');
 
-      const res = await Test.run('MySuite', [root1, root2]);
+      const res = await Test.run('MySuite', [import1, import2]);
       expect(res.ok).to.eql(true);
       expect(res.description).to.eql('MySuite');
 

@@ -1,6 +1,7 @@
 import { WorkerBus } from 'sys.net';
 import { rx } from 'sys.util';
-import { WorkerGlobal } from 'sys.types';
+
+import type { WorkerGlobal } from 'sys.types/src/types.mjs';
 
 const bus = rx.bus();
 const ctx: WorkerGlobal = self as any;

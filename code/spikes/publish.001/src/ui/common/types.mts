@@ -1,8 +1,6 @@
 /**
  * @system
  */
-export type { DomRect } from 'sys.types';
-export type { CssValue } from 'sys.ui.react.css';
 export type {
   VimeoInstance,
   VimeoStatus,
@@ -10,7 +8,7 @@ export type {
   VimeoId,
 } from 'sys.ui.react.media/src/types.mjs';
 
-export type { ButtonMouseHandler } from 'sys.ui.react.common/src/types.mjs';
+export type { ButtonMouseHandler, CssValue, DomRect } from 'sys.ui.react.common/src/types.mjs';
 
 /**
  * @local

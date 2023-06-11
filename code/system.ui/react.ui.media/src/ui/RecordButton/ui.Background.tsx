@@ -1,6 +1,5 @@
 import { m } from 'framer-motion';
-
-import { Color, COLORS, css, t, TRANSITION } from './common';
+import { COLORS, Color, TRANSITION, css, type t } from './common';
 
 export type BackgroundProps = {
   isEnabled: boolean;

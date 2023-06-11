@@ -1,4 +1,4 @@
-import { t, rx } from '../common';
+import { R, Time, rx, type t } from '../common';
 import { Wrangle } from '../crdt.DocRef/Wrangle.mjs';
 
 /**
@@ -11,16 +11,45 @@ export function init<D extends {}, C extends {}>(
 ): t.CrdtLens<D, C> {
   let _count = 0;
 
-  let _disposed = false;
-  const { dispose, dispose$ } = rx.disposable([root.dispose$, options.dispose$]);
-  dispose$.subscribe(() => {
-    subject$.complete();
-    _disposed = true;
-  });
+  const lifecycle = rx.lifecycle([root.dispose$, options.dispose$]);
+  const { dispose, dispose$ } = lifecycle;
+  dispose$.subscribe(() => subject$.complete());
 
   const subject$ = new rx.Subject<t.CrdtLensChange<D, C>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
 
+  const fireFromChange = (e: t.CrdtDocChange<D>) => {
+    const lens = api.current;
+    subject$.next({ ...e, lens });
+  };
+
+  const fireFromReplace = (e: t.CrdtDocReplace<D>) => {
+    subject$.next({
+      action: 'change',
+      doc: e.doc,
+      lens: api.current,
+      info: { time: Time.now.timestamp },
+    });
+  };
+
+  let _changing = false;
+  let _lastValue: C | undefined;
+  const isChanged = () => !R.equals(_lastValue, api.current);
+
+  // Monitor for changes made to the lens scope independently of this instance.
+  root.$.pipe(
+    rx.takeUntil(dispose$),
+    rx.filter(() => !_changing),
+    rx.filter(isChanged),
+  ).subscribe((e) => {
+    if (e.action === 'change') fireFromChange(e);
+    if (e.action === 'replace') fireFromReplace(e);
+    _lastValue = api.current;
+  });
+
+  /**
+   * API
+   */
   const api: t.CrdtLens<D, C> = {
     kind: 'Crdt:Lens',
     root,
@@ -38,6 +67,7 @@ export function init<D extends {}, C extends {}>(
      */
     change(...args: []) {
       if (api.disposed) return api;
+      _changing = true;
       const { message, fn } = Wrangle.changeArgs<D, C>(args);
 
       const mutate: t.CrdtMutator<D> = (draft: D) => {
@@ -61,12 +91,12 @@ export function init<D extends {}, C extends {}>(
       if (!message) root.change(mutate);
 
       // Alert listeners.
-      if (_fired) {
-        const lens = api.current;
-        subject$.next({ ..._fired, lens });
-      }
+      if (_fired) fireFromChange(_fired);
 
+      // Finish up.
       _count++;
+      _lastValue = api.current;
+      _changing = false;
       return api;
     },
 
@@ -83,9 +113,10 @@ export function init<D extends {}, C extends {}>(
     dispose,
     dispose$,
     get disposed() {
-      return _disposed;
+      return lifecycle.disposed;
     },
   };
 
+  _lastValue = api.current;
   return api;
 }

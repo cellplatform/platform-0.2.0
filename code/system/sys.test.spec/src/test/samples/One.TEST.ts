@@ -7,8 +7,12 @@ export default Test.describe('One', (e) => {
   });
 });
 
-export const MySpec1 = Test.describe('MySpec', (e) => {
-  e.it('my.foo', (e) => {});
+export const MySpec1 = Test.describe('MySpec1', (e) => {
+  e.it('one.foo-1', (e) => {});
 });
 
-export const MySpec2 = MySpec1; // NB: Duplicate specs filtered out within [Test.import]
+export const MySpec2 = Test.describe('MySpec2', (e) => {
+  e.it('one.foo-2', (e) => {});
+});
+
+export const MySpec3 = MySpec1; // NB: Duplicate specs filtered out within [Test.import]

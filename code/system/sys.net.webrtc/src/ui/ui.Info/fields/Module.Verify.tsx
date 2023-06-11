@@ -11,7 +11,7 @@ export function FieldModuleVerify(args: { fields: t.WebRtcInfoField[]; data: t.W
       return url.href;
     },
 
-    async list() {
+    async modules() {
       const { TESTS } = await import('../../../test.ui/-TestRunner.TESTS.mjs');
       return TESTS.all;
     },

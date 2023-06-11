@@ -4,12 +4,13 @@ import { RunIcon } from './Specs.Row.RunIcon';
 export type ResultsProps = {
   isColored?: boolean;
   isOver?: boolean;
+  isRunnable?: boolean;
   results?: t.TestSuiteRunResponse[];
   style?: t.CssValue;
 };
 
 export const Results: React.FC<ResultsProps> = (props) => {
-  const { results = [], isOver = false, isColored = true } = props;
+  const { results = [], isOver = false, isColored = true, isRunnable = true } = props;
   const stats = Test.Stats.merge(results);
   const asColor = (color: string) => (isColored ? color : COLORS.DARK);
 
@@ -92,7 +93,7 @@ export const Results: React.FC<ResultsProps> = (props) => {
   }
 
   const runAgainColor = isOver ? COLORS.BLUE : isColored ? COLORS.GREEN : undefined;
-  const elRunAgain = (
+  const elRunAgain = isRunnable && (
     <div {...styles.runAgain}>
       <RunIcon isSelected={true} iconColor={runAgainColor} />
     </div>

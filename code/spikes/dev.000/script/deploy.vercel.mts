@@ -1,6 +1,6 @@
-import { Vercel } from 'vendor.vercel';
 import pc from 'picocolors';
 import { rx } from 'sys.util';
+import { Vercel } from 'vendor.vercel';
 
 import { type t } from '../src/common';
 import { Pkg } from '../src/index.pkg.mjs';

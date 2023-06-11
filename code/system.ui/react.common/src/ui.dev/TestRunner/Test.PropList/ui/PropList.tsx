@@ -2,6 +2,7 @@ import { PropList as Base, DEFAULTS, type t } from '../common';
 import { FieldTestsRun } from '../fields/TestsRun';
 import { FieldTestsSelector } from '../fields/TestsSelector';
 import { FieldTestsSelectorReset } from '../fields/TestsSelector.Reset';
+import { useKeyboard } from '../hooks/useKeyboard.mjs';
 import { useSuites } from '../hooks/useSuites.mjs';
 
 export type TestPropListProps = {
@@ -19,7 +20,8 @@ export type TestPropListProps = {
 export const PropList: React.FC<TestPropListProps> = (props) => {
   const { data = {}, enabled = true, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
-  const { groups } = useSuites(data);
+  const { groups } = useSuites({ data });
+  useKeyboard({ data, enabled });
 
   const items = Base.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })

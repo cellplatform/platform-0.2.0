@@ -34,7 +34,7 @@ export default Dev.describe('TestPropList.runner', (e) => {
          */
         const runner = Dev.TestRunner.PropList.runner({
           ctx: () => state.current.ctx,
-          list: [
+          modules: [
             import('./-TEST.sample-1.mjs'),
             import('./-TEST.sample-2.mjs'),
             import('./-TEST.controller.mjs'),

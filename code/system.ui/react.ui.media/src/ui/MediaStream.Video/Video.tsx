@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { css, t, Style, Color } from '../common';
+import { Color, Style, css, type t } from '../common';
 
 type ClickHandler = React.MouseEventHandler<HTMLDivElement>;
 
