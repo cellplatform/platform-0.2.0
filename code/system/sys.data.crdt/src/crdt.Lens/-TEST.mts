@@ -170,9 +170,19 @@ export default Test.describe('Lens', (e) => {
       lens1.$.subscribe((e) => fired1.push(e));
       lens2.$.subscribe((e) => fired2.push(e));
 
+      expect(lens1.current.count).to.eql(0);
+      expect(lens2.current.count).to.eql(0);
+
       lens1.change((d) => d.count++);
-      expect(fired2.length).to.eql(1);
-      expect(fired2).to.eql(fired1);
+
+      expect(fired1.length).to.eql(1);
+      expect(fired2.length).to.eql(2); // NB: Additional change event fired for the secondary lens.
+      //                                      This is because related to efficient object comparison within
+      //                                      the Lens and should ultimately be more efficnet, not less.
+      expect(fired2[1]).to.eql(fired1[0]);
+
+      expect(lens1.current.count).to.eql(1);
+      expect(lens2.current.count).to.eql(1);
 
       root.dispose();
     });
