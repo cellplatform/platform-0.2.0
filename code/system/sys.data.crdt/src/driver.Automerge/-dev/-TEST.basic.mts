@@ -1,7 +1,7 @@
 import { Automerge } from '..';
 import { expect, Test } from '../../test.ui';
 
-export default Test.describe('"quickstart intro" (basic sequence)', (e) => {
+export default Test.describe('Intro (basic sequence)', (e) => {
   /**
    * Unit test version of the basic "quick start" getting sequence.
    * REF:

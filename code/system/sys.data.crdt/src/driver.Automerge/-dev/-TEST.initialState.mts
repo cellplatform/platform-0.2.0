@@ -1,7 +1,7 @@
 import { Automerge } from '..';
 import { expect, Test } from '../../test.ui';
 
-export default Test.describe('initial document structure (multi-peer)', (e) => {
+export default Test.describe('Initial document structure (multi-peer)', (e) => {
   /**
    * REF: (Automerge Docs)
    *       https://automerge.org/docs/cookbook/modeling-data/
