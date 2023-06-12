@@ -11,9 +11,7 @@ export function FieldTestsSelectorReset(args: {
   groups: t.TestSuiteGroup[];
   enabled: boolean;
 }): t.PropListItem | undefined {
-  const isSelectable = Util.isSelectable(args.data);
-
-  if (!isSelectable) return;
+  if (!Util.isSelectable(args.data)) return;
 
   return {
     value: <SpecsReset data={args.data} groups={args.groups} enabled={args.enabled} />,
