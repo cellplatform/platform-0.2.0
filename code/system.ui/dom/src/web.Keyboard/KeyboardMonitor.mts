@@ -1,5 +1,5 @@
-import { DEFAULTS, R, rx, t } from './common';
 import { Match } from './Match.mjs';
+import { DEFAULTS, R, rx, type t } from './common';
 import { Util } from './util.mjs';
 
 let _isListening = false;
@@ -214,6 +214,7 @@ function on(
       rx.takeUntil(dispose$),
       rx.takeUntil(disposable.dispose$),
       rx.filter((e) => Boolean(e.last)),
+      rx.filter((e) => !Boolean(e.last?.is.handled)),
       rx.filter((e) => e.current.pressed.length > 0),
     )
     .subscribe((e) => {
