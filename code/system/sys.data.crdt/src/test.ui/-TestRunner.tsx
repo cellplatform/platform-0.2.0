@@ -1,4 +1,4 @@
-import { Dev, t } from '..';
+import { Dev, t } from '.';
 
 type T = {
   spinning?: boolean;
