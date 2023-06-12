@@ -17,11 +17,11 @@ export const TESTS = {
       import('../crdt.helpers/-TEST.mjs'),
 
       'Driver (Automerge)',
-      import('../driver.Automerge/-dev/TEST.basic.mjs'),
-      import('../driver.Automerge/-dev/TEST.api.mjs'),
-      import('../driver.Automerge/-dev/TEST.initialState.mjs'),
-      import('../driver.Automerge/-dev/TEST.filesystem.mjs'),
-      import('../driver.Automerge/-dev/TEST.sync.mjs'),
+      import('../driver.Automerge/-dev/-TEST.basic.mjs'),
+      import('../driver.Automerge/-dev/-TEST.api.mjs'),
+      import('../driver.Automerge/-dev/-TEST.initialState.mjs'),
+      import('../driver.Automerge/-dev/-TEST.filesystem.mjs'),
+      import('../driver.Automerge/-dev/-TEST.sync.mjs'),
     ];
   },
 };
