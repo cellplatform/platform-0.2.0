@@ -57,21 +57,10 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 const Wrangle = {
   isClear(props: SpecsResetProps, isMeta: boolean, isOver: boolean) {
     const isInvert = isMeta && isOver;
-    const isAllSelected = Wrangle.isAllSelected(props.data, props.groups);
-    const isNoneSelected = Wrangle.isNoneSelected(props.data);
+    const isAllSelected = Util.isAllSelected(props.data, props.groups);
+    const isNoneSelected = Util.isNoneSelected(props.data);
     if (isAllSelected) return true;
     if (isNoneSelected) return false;
     return isInvert;
-  },
-
-  isAllSelected(data: t.TestPropListData, groups: t.TestSuiteGroup[]) {
-    const total = Util.groupsToSuites(groups).length;
-    const selected = data.specs?.selected ?? [];
-    return selected.length > 0 && selected.length === total;
-  },
-
-  isNoneSelected(data: t.TestPropListData) {
-    const selected = data.specs?.selected ?? [];
-    return selected.length === 0;
   },
 };

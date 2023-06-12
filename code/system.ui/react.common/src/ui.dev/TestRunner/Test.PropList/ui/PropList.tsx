@@ -21,7 +21,7 @@ export const PropList: React.FC<TestPropListProps> = (props) => {
   const { data = {}, enabled = true, fields = DEFAULTS.fields } = props;
   const { pkg } = data;
   const { groups } = useSuites({ data });
-  useKeyboard({ data, enabled });
+  useKeyboard({ data, groups, enabled });
 
   const items = Base.builder<t.TestRunnerField>()
     .field('Module', { label: 'Module', value: pkg?.name ?? '-' })
