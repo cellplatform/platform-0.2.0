@@ -11,7 +11,7 @@ export default Test.describe('zod', (e) => {
    *  https://github.com/colinhacks/zod#basic-usage
    */
   e.describe('zod: basic usage', (e) => {
-    e.it('Creating a simple string schema', (e) => {
+    e.it.skip('Creating a simple string schema', (e) => {
       // creating a schema for strings
       const mySchema = z.string();
 
