@@ -11,6 +11,7 @@ export const Specs = {
   'sys.ui.media.AudioPlayer': () => import('../ui/AudioPlayer/-SPEC'),
   'sys.ui.media.RecordButton': () => import('../ui/RecordButton/-SPEC'),
   'sys.ui.media.SeekBar': () => import('../ui/SeekBar/-dev/-SPEC'),
+  'sys.ui.media.Concept': () => import('../ui/Concept/-dev/-SPEC'),
   ...ServiceSpecs,
 };
 
