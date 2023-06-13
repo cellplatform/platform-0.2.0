@@ -1,7 +1,7 @@
 import { Dev } from '../../../test.ui';
-import { Concept, type ConceptProps } from '..';
+import { ConceptPlayer, type ConceptPlayerProps } from '..';
 
-type T = { props: ConceptProps };
+type T = { props: ConceptPlayerProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('Concept', (e) => {
@@ -13,7 +13,7 @@ export default Dev.describe('Concept', (e) => {
       .size('fill', 100)
       .display('grid')
       .render<T>((e) => {
-        return <Concept {...e.state.props} />;
+        return <ConceptPlayer {...e.state.props} />;
       });
   });
 

@@ -10,7 +10,7 @@ export { Pkg };
 export { AudioWaveform } from './ui/AudioWaveform';
 export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
-export { Concept } from './ui/Concept';
+export { ConceptPlayer as Concept } from './ui/Concept.Player';
 
 export { Vimeo, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
 export { YouTube } from './ui/vendor.YouTube';

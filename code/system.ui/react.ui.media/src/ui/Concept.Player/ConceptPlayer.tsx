@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, rx, FC, type t } from '../common';
 
-export type ConceptProps = {
+export type ConceptPlayerProps = {
   style?: t.CssValue;
 };
 
-export const Concept: React.FC<ConceptProps> = (props) => {
+export const ConceptPlayer: React.FC<ConceptPlayerProps> = (props) => {
   /**
    * [Render]
    */
