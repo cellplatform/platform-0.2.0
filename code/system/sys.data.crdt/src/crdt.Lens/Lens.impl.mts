@@ -1,5 +1,6 @@
-import { Time, Wrangle, rx, type t } from './common';
+import { Time, Wrangle, rx, type t, DEFAULTS } from './common';
 import { toObject } from '../crdt.helpers';
+import { Registry } from './Lens.Registry.mjs';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
@@ -9,11 +10,15 @@ export function init<D extends {}, L extends {}>(
   get: t.CrdtLensDescendent<D, L>,
   options: { dispose$?: t.Observable<any> } = {},
 ): t.CrdtLens<D, L> {
+  Registry.add(root);
   let _count = 0;
 
   const lifecycle = rx.lifecycle([root.dispose$, options.dispose$]);
   const { dispose, dispose$ } = lifecycle;
-  dispose$.subscribe(() => subject$.complete());
+  dispose$.subscribe(() => {
+    subject$.complete();
+    Registry.remove(root);
+  });
 
   const subject$ = new rx.Subject<t.CrdtLensChange<D, L>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
@@ -66,16 +71,23 @@ export function init<D extends {}, L extends {}>(
      */
     change(...args: []) {
       if (api.disposed) return api;
+
       _changing = true;
       const { message, fn } = Wrangle.changeArgs<D, L>(args);
 
-      const mutate: t.CrdtMutator<D> = (draft: D) => {
-        const child = get(draft);
-        fn(child);
-      };
-
       // NB: forces the [get] factory to initialize the descendent if necessary.
-      if (_count === 0) root.change('(sys): ensure lens descendent', (draft) => get(draft));
+      if (_count === 0) {
+        root.change(DEFAULTS.ensureLensMessage, (draft) => {
+          /**
+           * HACK: The `get` function is called for the total
+           *       number of current lens instances to ensure that
+           *       all sub-trees each lens getter may greate are
+           *       correctly initialized.
+           */
+          const length = Registry.total(root);
+          Array.from({ length }).forEach(() => get(draft));
+        });
+      }
 
       let _fired: t.CrdtDocChange<D> | undefined;
       root.$.pipe(
@@ -86,6 +98,11 @@ export function init<D extends {}, L extends {}>(
       });
 
       // Perform change.
+      const mutate: t.CrdtMutator<D> = (draft: D) => {
+        const child = get(draft);
+        fn(child);
+      };
+
       if (message) root.change(message, mutate);
       if (!message) root.change(mutate);
 
@@ -102,8 +119,8 @@ export function init<D extends {}, L extends {}>(
     /**
      * Create a new sub-lens.
      */
-    lens<T extends {}>(get: t.CrdtLensDescendent<L, T>) {
-      return init(root, (doc) => get(api.current), { dispose$ });
+    lens<T extends {}>(fn: t.CrdtLensDescendent<L, T>) {
+      return init(root, (doc) => fn(get(doc)), { dispose$ });
     },
 
     /**
