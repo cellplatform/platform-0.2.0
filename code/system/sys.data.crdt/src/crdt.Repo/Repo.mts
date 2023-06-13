@@ -1,4 +1,4 @@
-import { init } from './Repo.init.mjs';
+import { init } from './Repo.impl.mjs';
 
 export const CrdtRepo = {
   init,

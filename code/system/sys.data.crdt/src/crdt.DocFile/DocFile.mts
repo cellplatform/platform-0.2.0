@@ -1,4 +1,4 @@
-import { init } from './DocFile.init.mjs';
+import { init } from './DocFile.impl.mjs';
 import { toObject } from '../crdt.helpers';
 
 /**
