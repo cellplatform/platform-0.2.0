@@ -1,10 +1,11 @@
-export * from '../driver.Automerge/types.mjs';
+export type * from '../driver.Automerge/types.mjs';
 
-export * from '../crdt.Doc/types.mjs';
-export * from '../crdt.DocRef/types.mjs';
-export * from '../crdt.DocFile/types.mjs';
-export * from '../crdt.DocSync/types.mjs';
-export * from '../crdt.Lens/types.mjs';
+export type * from '../crdt.Doc/types.mjs';
+export type * from '../crdt.DocRef/types.mjs';
+export type * from '../crdt.DocFile/types.mjs';
+export type * from '../crdt.DocSync/types.mjs';
+export type * from '../crdt.Lens/types.mjs';
+export type * from '../crdt.Repo/types.mjs';
 
-export * from '../crdt.helpers/types.mjs';
-export * from './types.events.mjs';
+export type * from '../crdt.helpers/types.mjs';
+export type * from './types.events.mjs';

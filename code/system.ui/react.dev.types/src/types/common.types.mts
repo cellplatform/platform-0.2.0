@@ -29,7 +29,7 @@ export type { CssValue } from 'sys.ui.react.css/src/types.mjs';
 /**
  * @local
  */
-export * from './index';
+export type * from './index';
 
 export type UrlString = string;
 export type UrlInput = string | URL | Location;

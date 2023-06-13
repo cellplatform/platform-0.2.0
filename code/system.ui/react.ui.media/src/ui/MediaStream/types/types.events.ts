@@ -1,8 +1,8 @@
-import { type t } from './common';
+import type { t } from './common';
 
-export * from './types.events.record';
-export * from './types.events.stream';
-export * from './types.events.streams';
+export type * from './types.events.record';
+export type * from './types.events.stream';
+export type * from './types.events.streams';
 
 /**
  * EVENTS
