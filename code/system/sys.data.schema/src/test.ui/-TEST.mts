@@ -43,26 +43,28 @@ export default Test.describe('zod', (e) => {
    * https://github.com/colinhacks/zod#primitives
    */
   e.describe('zod: primitives', (e) => {
-    // primitive values
-    z.string();
-    z.number();
-    z.bigint();
-    z.boolean();
-    z.date();
-    z.symbol();
+    e.it('values', (e) => {
+      // primitive values
+      z.string();
+      z.number();
+      z.bigint();
+      z.boolean();
+      z.date();
+      z.symbol();
 
-    // empty types
-    z.undefined();
-    z.null();
-    z.void(); // accepts undefined
+      // empty types
+      z.undefined();
+      z.null();
+      z.void(); // accepts undefined
 
-    // catch-all types
-    // allows any value
-    z.any();
-    z.unknown();
+      // catch-all types
+      // allows any value
+      z.any();
+      z.unknown();
 
-    // never type
-    // allows no values
-    z.never();
+      // never type
+      // allows no values
+      z.never();
+    });
   });
 });
