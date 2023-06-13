@@ -7,4 +7,4 @@ import { toObject } from '../crdt.helpers';
 export const DocSync = {
   init,
   toObject,
-};
+} as const;

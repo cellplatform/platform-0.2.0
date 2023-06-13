@@ -5,4 +5,4 @@ import { init } from './Lens.init.mjs';
  */
 export const CrdtLens = {
   init,
-};
+} as const;

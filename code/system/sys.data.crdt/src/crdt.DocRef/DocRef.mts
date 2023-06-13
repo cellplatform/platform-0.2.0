@@ -7,4 +7,4 @@ import { toObject } from '../crdt.helpers';
 export const DocRef = {
   init,
   toObject,
-};
+} as const;
