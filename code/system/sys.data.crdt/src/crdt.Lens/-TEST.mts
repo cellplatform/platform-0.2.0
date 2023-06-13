@@ -196,10 +196,33 @@ export default Test.describe('Lens', (e) => {
       root.dispose();
     });
 
-    e.it.skip('no-change: lens different sub-trees', (e) => {
-      /**
-       * TODO 🐷
-       */
+    e.it('no-change: lens on different sub-trees', (e) => {
+      type T = {
+        A: { count: number };
+        B: { child: { count: number } };
+      };
+
+      const root = Crdt.ref<T>('foo', { A: { count: 0 }, B: { child: { count: 0 } } });
+
+      const lens1 = CrdtLens.init<T, T['A']>(root, (doc) => doc.A);
+      const lens2 = CrdtLens.init<T, T['B']>(root, (doc) => doc.B);
+
+      const fired1: t.CrdtLensChange<T, T['A']>[] = [];
+      const fired2: t.CrdtLensChange<T, T['B']>[] = [];
+      lens1.$.subscribe((e) => fired1.push(e));
+      lens2.$.subscribe((e) => fired2.push(e));
+
+      lens1.change((d) => d.count++);
+      expect(lens1.current.count).to.eql(1);
+      expect(fired1.length).to.eql(1);
+      expect(fired2.length).to.eql(0); // No change on lens2 sub-tree.
+
+      lens2.change((d) => (d.child.count = 1234));
+      expect(lens2.current.child.count).to.eql(1234);
+      expect(fired1.length).to.eql(1); // No change (new) on lens1 sub-tree.
+      expect(fired2.length).to.eql(1);
+
+      root.dispose();
     });
 
     e.it('lens nested within lens (same root) ← events', (e) => {
