@@ -2,7 +2,6 @@
  * @system
  */
 export {
-  Dev,
   css,
   COLORS,
   Color,
