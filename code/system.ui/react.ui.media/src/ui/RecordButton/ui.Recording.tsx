@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { AudioWaveform } from '../AudioWaveform';
+import { AudioWaveform } from '../Audio.Waveform';
 import { Icons } from '../Icons';
 import { COLORS, Color, TRANSITION, css, type t } from './common';
 

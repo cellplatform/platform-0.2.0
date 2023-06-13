@@ -1,5 +1,5 @@
 import { useStreamState } from '..';
-import { AudioWaveform } from '../../AudioWaveform';
+import { AudioWaveform } from '../../Audio.Waveform';
 import { type t } from './common';
 
 export type DevAudioWaveformProps = {

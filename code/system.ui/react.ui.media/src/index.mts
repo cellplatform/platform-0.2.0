@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Media
  */
-export { AudioWaveform } from './ui/AudioWaveform';
+export { AudioWaveform } from './ui/Audio.Waveform';
 export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
 export { ConceptPlayer as Concept } from './ui/Concept.Player';
