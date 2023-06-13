@@ -1,36 +1,42 @@
 import { useEffect } from 'react';
-import { Keyboard, type t, Hash } from '../common';
+import { Util } from '../Util.mjs';
+import { Hash, Keyboard, type t } from '../common';
 
 /**
  * Manages keyboard shortcuts for the test runner.
  */
-export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean }) {
-  const { data, enabled = true } = args;
-  const modules = data.modules ?? [];
+export function useKeyboard(args: {
+  data: t.TestPropListData;
+  groups: t.TestSuiteGroup[];
+  enabled?: boolean;
+}) {
+  const { data, groups, enabled = true } = args;
   const keyboard = Wrangle.patterns(data);
-  const hash = Wrangle.patternsHash(data);
+  const selected = data.specs?.selected ?? [];
+  const selectedHash = Hash.sha1(selected);
+  const patternsHash = Wrangle.patternsHash(data);
+  const groupsHash = Wrangle.groupsHash(groups);
+  const deps = [enabled, patternsHash, groupsHash];
+
+  type P = t.TestPropListKeyboardPattern | undefined;
+  type F = t.KeyMatchSubscriberHandler;
+  type D = () => void;
+  const handlePattern = (input: P, fn: F): D[] => {
+    if (!enabled) return [];
+
+    const pattern = ((typeof input === 'function' ? input() : input) || '').trim();
+    if (!pattern) return [];
+
+    const handler = Keyboard.on(pattern, fn);
+    return [handler.dispose];
+  };
 
   /**
-   * Listen for keyboard events.
+   * Run triggers.
    */
   useEffect(() => {
-    type P = t.TestPropListKeyboardPattern | undefined;
-    type F = t.KeyMatchSubscriberHandler;
-    const dispose: (() => void)[] = [];
-
-    const handle = (input: P, fn: F) => {
-      const pattern = typeof input === 'function' ? input() : input;
-      if (!pattern) return;
-      if (!enabled) return;
-      const handler = Keyboard.on(pattern, fn);
-      dispose.push(handler.dispose);
-    };
-
-    const select = (select: t.SpecsSelectionResetHandlerArgs['select']) => {
-      const specs = data.specs ?? {};
-      const modifiers = Wrangle.modifiers();
-      specs.onReset?.({ modifiers, select });
-    };
+    const dispose: D[] = [];
+    const handle = (input: P, fn: F) => dispose.push(...handlePattern(input, fn));
 
     /**
      * Run selected.
@@ -50,8 +56,32 @@ export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean 
       data.run?.onRunAll?.({ modifiers });
     });
 
+    return () => dispose.forEach((fn) => fn());
+  }, deps);
+
+  /**
+   * Select triggers.
+   */
+  useEffect(() => {
+    const dispose: D[] = [];
+    const handle = (input: P, fn: F) => dispose.push(...handlePattern(input, fn));
+
+    const select = (select: t.SpecsSelectionResetHandlerArgs['select']) => {
+      const specs = data.specs ?? {};
+      const modifiers = Wrangle.modifiers();
+      specs.onReset?.({ modifiers, select });
+    };
+
     /**
-     * Select all.
+     * Select all (toggle)
+     */
+    handle(keyboard.selectAllToggle, (e) => {
+      e.handled();
+      select(Util.isAllSelected(data, groups) ? 'none' : 'all');
+    });
+
+    /**
+     * Select all (explicit)
      */
     handle(keyboard.selectAll, (e) => {
       e.handled();
@@ -59,15 +89,15 @@ export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean 
     });
 
     /**
-     * Select none.
+     * Select none (explicit)
      */
     handle(keyboard.selectNone, (e) => {
       e.handled();
       select('none');
     });
 
-    return () => dispose.forEach((dispose) => dispose());
-  }, [hash, enabled, modules.length]);
+    return () => dispose.forEach((fn) => fn());
+  }, [...deps, selectedHash]);
 }
 
 /**
@@ -75,7 +105,12 @@ export function useKeyboard(args: { data: t.TestPropListData; enabled?: boolean 
  */
 const Wrangle = {
   modifiers(): t.KeyboardModifierFlags {
-    return { shift: false, ctrl: false, alt: false, meta: false };
+    return {
+      shift: false,
+      ctrl: false,
+      alt: false,
+      meta: false,
+    };
   },
 
   patterns(data: t.TestPropListData) {
@@ -83,6 +118,7 @@ const Wrangle = {
     return {
       run: Wrangle.pattern(keyboard.run),
       runAll: Wrangle.pattern(keyboard.runAll),
+      selectAllToggle: Wrangle.pattern(keyboard.selectAllToggle),
       selectAll: Wrangle.pattern(keyboard.selectAll),
       selectNone: Wrangle.pattern(keyboard.selectNone),
     };
@@ -96,5 +132,11 @@ const Wrangle = {
     const keyboard = Wrangle.patterns(data);
     const patterns = Object.entries(keyboard).map(([key, value]) => `${key}:${value}`);
     return Hash.sha1(patterns);
+  },
+
+  groupsHash(groups: t.TestSuiteGroup[]) {
+    const suites = Util.groupsToSuites(groups);
+    const hashes = suites.map((suite) => suite.hash());
+    return Hash.sha1(hashes);
   },
 };

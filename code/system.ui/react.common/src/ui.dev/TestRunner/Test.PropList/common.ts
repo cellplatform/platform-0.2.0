@@ -18,8 +18,15 @@ export const FIELDS: t.TestRunnerField[] = [
 
 const fields = ['Tests.Run', 'Tests.Selector', 'Tests.Selector.Reset'] as t.TestRunnerField[];
 
+const keyboard: t.TestPropListKeyboard = {
+  run: 'Enter',
+  runAll: 'ALT + Enter',
+  selectAllToggle: 'ALT + KeyA',
+};
+
 export const DEFAULTS = {
   fields,
   ellipsis: true,
   colorDelay: 1000 * 8,
+  keyboard,
 } as const;

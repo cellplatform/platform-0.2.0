@@ -1,4 +1,4 @@
-import { rx, css, Dev, Crdt, t, Automerge, expect } from '..';
+import { Automerge, Crdt, Dev, css, rx, type t } from '.';
 
 type T = { count: number };
 const initial: T = { count: 0 };

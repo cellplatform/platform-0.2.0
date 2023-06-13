@@ -1,4 +1,4 @@
-import { R, Time, rx, type t } from '../common';
+import { Time, rx, type t } from '../common';
 import { Wrangle } from '../crdt.DocRef/Wrangle.mjs';
 
 /**
@@ -34,13 +34,12 @@ export function init<D extends {}, C extends {}>(
 
   let _changing = false;
   let _lastValue: C | undefined;
-  const isChanged = () => !R.equals(_lastValue, api.current);
 
   // Monitor for changes made to the lens scope independently of this instance.
   root.$.pipe(
     rx.takeUntil(dispose$),
     rx.filter(() => !_changing),
-    rx.filter(isChanged),
+    rx.filter(() => _lastValue !== api.current),
   ).subscribe((e) => {
     if (e.action === 'change') fireFromChange(e);
     if (e.action === 'replace') fireFromReplace(e);

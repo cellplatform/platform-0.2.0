@@ -16,6 +16,7 @@ export type KeyboardKeyFlags = {
   readonly enter: boolean;
   readonly escape: boolean;
   readonly arrow: boolean;
+  readonly handled: boolean;
 };
 
 /**

@@ -1,5 +1,6 @@
 import { TestRunner } from '../TestRunner';
 import { LocalStorage, ValueHandler, type t } from '../common';
+import { DEFAULTS } from '../TestRunner/Test.PropList/common';
 
 type O = Record<string, unknown>;
 type D = t.TestPropListData;
@@ -135,13 +136,7 @@ const Wrangle = {
 
   keyboard(input: KeyboardInput): t.TestPropListKeyboard | undefined {
     if (input === false) return;
-    if (input === true)
-      return {
-        run: 'Enter',
-        runAll: 'ALT + Enter',
-        selectAll: 'ALT + KeyA',
-        selectNone: 'ALT + SHIFT + KeyA',
-      };
+    if (input === true) return DEFAULTS.keyboard;
     return input;
   },
 };

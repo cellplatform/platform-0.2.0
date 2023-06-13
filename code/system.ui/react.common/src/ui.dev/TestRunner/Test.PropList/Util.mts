@@ -21,6 +21,17 @@ export const Util = {
     return Boolean(typeof value === 'function' ? value() : value ?? true);
   },
 
+  isAllSelected(data: t.TestPropListData, groups: t.TestSuiteGroup[]) {
+    const total = Util.groupsToSuites(groups).length;
+    const selected = data.specs?.selected ?? [];
+    return selected.length > 0 && selected.length === total;
+  },
+
+  isNoneSelected(data: t.TestPropListData) {
+    const selected = data.specs?.selected ?? [];
+    return selected.length === 0;
+  },
+
   async importAndInitialize(data: t.TestPropListData) {
     const groups = await Util.modulesToGroupedList(data.modules ?? []);
     const res: t.TestSuiteGroup[] = [];

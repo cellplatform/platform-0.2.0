@@ -26,6 +26,7 @@ export const Util = {
       arrow: e.code.startsWith('Arrow'),
       enter: e.code === 'Enter',
       escape: e.code === 'Escape',
+      handled: e.defaultPrevented,
     };
   },
 
