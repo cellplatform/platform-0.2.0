@@ -1,5 +1,4 @@
-import { Time, rx, type t } from '../common';
-import { Wrangle } from '../crdt.DocRef/Wrangle.mjs';
+import { Time, Wrangle, rx, type t } from './common';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
