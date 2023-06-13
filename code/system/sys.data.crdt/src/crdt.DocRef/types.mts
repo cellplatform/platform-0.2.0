@@ -26,6 +26,7 @@ export type CrdtDocRef<D extends {}> = t.Disposable & {
   change(message: string, fn: CrdtMutator<D>): CrdtDocRef<D>;
   replace(doc: D): CrdtDocRef<D>;
   onChange(fn: CrdtDocRefChangeHandler<D>): CrdtDocRef<D>;
+  toObject(): D;
 };
 
 export type CrdtDocHistory<D extends {}> = t.AutomergeState<D>;

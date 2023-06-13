@@ -1,5 +1,6 @@
 import { Automerge, rx, t, Time } from './common';
 import { Wrangle } from './Wrangle.mjs';
+import { toObject } from '../crdt.helpers';
 
 type Id = string;
 
@@ -117,7 +118,14 @@ export function init<D extends {}>(
     },
 
     /**
-     * Disposal.
+     * Convert the current lens state to a plain object.
+     */
+    toObject() {
+      return toObject(api.current);
+    },
+
+    /**
+     * Lifecycle.
      */
     dispose,
     dispose$,
