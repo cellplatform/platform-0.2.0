@@ -7,11 +7,11 @@ export const ServiceSpecs = {
 };
 
 export const Specs = {
+  'sys.ui.media.Audio.Player': () => import('../ui/Audio.Player/-SPEC'),
+  'sys.ui.media.Concept.Player': () => import('../ui/Concept.Player/-dev/-SPEC'),
   'sys.ui.media.MediaStream': () => import('../ui/MediaStream/-SPEC'),
-  'sys.ui.media.AudioPlayer': () => import('../ui/AudioPlayer/-SPEC'),
   'sys.ui.media.RecordButton': () => import('../ui/RecordButton/-SPEC'),
   'sys.ui.media.SeekBar': () => import('../ui/SeekBar/-dev/-SPEC'),
-  'sys.ui.media.Concept.Player': () => import('../ui/Concept.Player/-dev/-SPEC'),
   ...ServiceSpecs,
 };
 
