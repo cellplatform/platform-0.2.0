@@ -1,20 +1,21 @@
 import { Time, Wrangle, rx, type t } from './common';
+import { toObject } from '../crdt.helpers';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export function init<D extends {}, C extends {}>(
+export function init<D extends {}, L extends {}>(
   root: t.CrdtDocRef<D>,
-  get: t.CrdtLensDescendent<D, C>,
+  get: t.CrdtLensDescendent<D, L>,
   options: { dispose$?: t.Observable<any> } = {},
-): t.CrdtLens<D, C> {
+): t.CrdtLens<D, L> {
   let _count = 0;
 
   const lifecycle = rx.lifecycle([root.dispose$, options.dispose$]);
   const { dispose, dispose$ } = lifecycle;
   dispose$.subscribe(() => subject$.complete());
 
-  const subject$ = new rx.Subject<t.CrdtLensChange<D, C>>();
+  const subject$ = new rx.Subject<t.CrdtLensChange<D, L>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
 
   const fireFromChange = (e: t.CrdtDocChange<D>) => {
@@ -32,7 +33,7 @@ export function init<D extends {}, C extends {}>(
   };
 
   let _changing = false;
-  let _lastValue: C | undefined;
+  let _lastValue: L | undefined;
 
   // Monitor for changes made to the lens scope independently of this instance.
   root.$.pipe(
@@ -48,7 +49,7 @@ export function init<D extends {}, C extends {}>(
   /**
    * API
    */
-  const api: t.CrdtLens<D, C> = {
+  const api: t.CrdtLens<D, L> = {
     kind: 'Crdt:Lens',
     root,
     $,
@@ -66,7 +67,7 @@ export function init<D extends {}, C extends {}>(
     change(...args: []) {
       if (api.disposed) return api;
       _changing = true;
-      const { message, fn } = Wrangle.changeArgs<D, C>(args);
+      const { message, fn } = Wrangle.changeArgs<D, L>(args);
 
       const mutate: t.CrdtMutator<D> = (draft: D) => {
         const child = get(draft);
@@ -101,8 +102,15 @@ export function init<D extends {}, C extends {}>(
     /**
      * Create a new sub-lens.
      */
-    lens<T extends {}>(get: t.CrdtLensDescendent<C, T>) {
+    lens<T extends {}>(get: t.CrdtLensDescendent<L, T>) {
       return init(root, (doc) => get(api.current), { dispose$ });
+    },
+
+    /**
+     * Convert the current lens state to a plain object.
+     */
+    toObject() {
+      return toObject(api.current);
     },
 
     /**

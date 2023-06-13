@@ -36,6 +36,14 @@ export default Test.describe('Lens', (e) => {
       expect(lens.root).to.equal(root);
       root.dispose();
     });
+
+    e.it('toObject', (e) => {
+      const { root } = setup();
+      const lens = Crdt.lens<TRoot, TChild>(root, getDesendent);
+
+      expect(lens.toObject()).to.eql(lens.current);
+      expect(lens.toObject()).to.not.equal(lens.current);
+    });
   });
 
   e.describe('dispose', (e) => {
