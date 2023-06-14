@@ -19,14 +19,14 @@ export const Sample: React.FC<SampleProps> = (props) => {
   const { isEnabled } = props;
 
   const drag = useDragTarget({
-    isEnabled,
+    enabled: isEnabled,
     onDrop: (e) => console.log('⚡️ onDropped (optional)', e),
     onDragOver: (e) => console.log('⚡️ onDragOver (optional)', e),
   });
 
-  const { isDragOver, isDropped } = drag;
+  const { is } = drag;
   const dropped = drag.dropped ? stripBinary(drag.dropped) : undefined;
-  const data = { isDragOver, isDropped, dropped };
+  const data = { is, dropped };
 
   const styles = {
     base: css({ Absolute: 0, display: 'flex' }),
@@ -34,8 +34,8 @@ export const Sample: React.FC<SampleProps> = (props) => {
       base: css({
         flex: 1,
         position: 'relative',
-        filter: drag.isDragOver ? `blur(1px)` : undefined,
-        opacity: drag.isDragOver ? 0.5 : 1,
+        filter: drag.is.over ? `blur(1px)` : undefined,
+        opacity: drag.is.over ? 0.5 : 1,
         Flex: 'vertical-stretch-stretch',
       }),
       toolbar: {
@@ -63,7 +63,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   const elSpacer = <div {...styles.body.toolbar.divider} />;
 
-  const elDragOver = drag.isDragOver && (
+  const elDragOver = drag.is.over && (
     <div {...styles.dragOver}>
       <div>Drop File</div>
     </div>

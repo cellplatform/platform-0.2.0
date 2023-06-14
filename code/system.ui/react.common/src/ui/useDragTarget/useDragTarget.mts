@@ -4,7 +4,7 @@ import { readDropEvent } from './util.mjs';
 
 type Args<T extends HTMLElement> = {
   ref?: React.RefObject<T>;
-  isEnabled?: boolean;
+  enabled?: boolean;
   onDrop?: t.DragTargetDropHandler;
   onDragOver?: (e: { isOver: boolean }) => void;
 };
@@ -17,7 +17,7 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
   input?: Input<T>,
 ): t.DragTargetHook<T> {
   const args = wrangle<T>(useRef<T>(null), input);
-  const { ref, onDrop, isEnabled = true } = args;
+  const { ref, onDrop, enabled = true } = args;
 
   const [isDragOver, setDragOver] = useState<boolean>(false);
   const [dropped, setDropped] = useState<t.Dropped | undefined>();
@@ -40,7 +40,7 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
 
     const dragHandler = (fn?: (e: Event) => void) => {
       return (e: Event) => {
-        if (isEnabled) {
+        if (enabled) {
           fn?.(e);
           e.preventDefault();
           changeDragOver(count > 0);
@@ -54,7 +54,7 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
     const handleMouseLeave = dragHandler(() => (count = 0));
 
     const handleDrop = async (e: DragEvent) => {
-      if (isEnabled) {
+      if (enabled) {
         e.preventDefault();
         changeDragOver(false);
         count = 0;
@@ -78,13 +78,15 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
       el.removeEventListener('mouseleave', handleMouseLeave);
       el.removeEventListener('drop', handleDrop);
     };
-  }, [ref, isEnabled, onDrop]); // eslint-disable-line
+  }, [ref, enabled, onDrop]); // eslint-disable-line
 
   return {
     ref,
-    isDragOver,
-    isDropped: Boolean(dropped),
-    isEnabled,
+    is: {
+      enabled,
+      over: isDragOver,
+      dropped: Boolean(dropped),
+    },
     dropped,
     reset,
   };

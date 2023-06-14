@@ -1,8 +1,8 @@
 import { Dev } from '../../../test.ui';
 import { Sample } from './-Sample';
 
-type T = { isEnabled: boolean };
-const initial: T = { isEnabled: true };
+type T = { enabled: boolean };
+const initial: T = { enabled: true };
 
 export default Dev.describe('useDragTarget', (e) => {
   e.it('ui:init', async (e) => {
@@ -13,7 +13,7 @@ export default Dev.describe('useDragTarget', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Sample isEnabled={e.state.isEnabled} />;
+        return <Sample isEnabled={e.state.enabled} />;
       });
   });
 
@@ -22,9 +22,9 @@ export default Dev.describe('useDragTarget', (e) => {
 
     dev.boolean((btn) =>
       btn
-        .label((e) => `isEnabled`)
-        .value((e) => Boolean(e.state.isEnabled))
-        .onClick((e) => e.change((d) => Dev.toggle(d, 'isEnabled'))),
+        .label((e) => `enabled`)
+        .value((e) => Boolean(e.state.enabled))
+        .onClick((e) => e.change((d) => Dev.toggle(d, 'enabled'))),
     );
   });
 
