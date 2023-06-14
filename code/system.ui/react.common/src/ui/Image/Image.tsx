@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, rx, FC, type t, useDragTarget, DEFAULTS } from './common';
+import { DEFAULTS, FC, css, useDragTarget, type t } from './common';
 import { useBinaryImage } from './useBinaryImage.mjs';
 
 export type ImageDropHandler = (e: ImageDropHandlerArgs) => void;

@@ -9,6 +9,7 @@ export const ModuleSpecs = {
   'sys.ui.common.Flip': () => import('../ui/Flip/-SPEC'),
   'sys.ui.common.Icon': () => import('../ui/Icon/-SPEC'),
   'sys.ui.common.IFrame': () => import('../ui/IFrame/-SPEC'),
+  'sys.ui.common.Image': () => import('../ui/Image/-dev/-SPEC'),
   'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),
   'sys.ui.common.Measure': () => import('../ui.tools/Measure/-SPEC'),
   'sys.ui.common.RenderCount': () => import('../ui/RenderCount/-SPEC'),
