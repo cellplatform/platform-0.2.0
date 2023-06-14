@@ -7,7 +7,7 @@ export const ServiceSpecs = {
 };
 
 export const Specs = {
-  'sys.ui.media.Audio.Player': () => import('../ui/Audio.Player/-SPEC'),
+  'sys.ui.media.Audio.Player': () => import('../ui/Audio.Player/-dev/-SPEC'),
   'sys.ui.media.Concept.Player': () => import('../ui/Concept.Player/-dev/-SPEC'),
   'sys.ui.media.MediaStream': () => import('../ui/MediaStream/-SPEC'),
   'sys.ui.media.RecordButton': () => import('../ui/RecordButton/-SPEC'),
