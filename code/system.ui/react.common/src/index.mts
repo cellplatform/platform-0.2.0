@@ -13,6 +13,7 @@ export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
 export { Icon } from './ui/Icon';
 export { IFrame } from './ui/IFrame';
+export { Image } from './ui/Image';
 export { Keyboard } from './ui/Text.Keyboard';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
