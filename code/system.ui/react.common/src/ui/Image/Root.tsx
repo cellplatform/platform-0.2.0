@@ -1,23 +1,15 @@
-import { DEFAULTS, FC, css, useDragTarget, type t } from './common';
+import { DEFAULTS, FC, css, type t } from './common';
+import { useBinaryImage } from './hooks/useBinaryImage.mjs';
+import { useDrop } from './hooks/useDrop.mjs';
 import { Drop } from './ui/Drop';
-import { useBinaryImage } from './useBinaryImage.mjs';
 
 export type { ImageProps } from './types.mjs';
 
 const View: React.FC<t.ImageProps> = (props) => {
   const { src } = props;
-  const binary = useBinaryImage(typeof src === 'object' ? src : undefined);
 
-  /**
-   * Drag/drop
-   */
-  const drag = useDragTarget({
-    isEnabled: props.drop?.enabled ?? DEFAULTS.drop.enabled,
-    onDrop(e) {
-      const file = e.files.find((item) => DEFAULTS.supportedMimeTypes.includes(item.mimetype));
-      if (file) props.onDrop?.({ file });
-    },
-  });
+  const binary = useBinaryImage(typeof src === 'object' ? src : undefined);
+  const drag = useDrop(props);
 
   /**
    * [Render]
@@ -34,7 +26,7 @@ const View: React.FC<t.ImageProps> = (props) => {
     }),
   };
 
-  const elDragOver = drag.isDragOver && <Drop settings={props.drop} />;
+  const elDragOver = drag.is.over && <Drop settings={props.drop} />;
   const elImg = binary.url && <div {...styles.image} />;
 
   return (

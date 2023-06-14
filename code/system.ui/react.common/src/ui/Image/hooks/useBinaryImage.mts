@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { type t } from './common';
+import { type t } from '../common';
 
 export function useBinaryImage(src?: t.ImageBinary) {
   const length = src?.data?.length || 0;

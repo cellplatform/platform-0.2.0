@@ -1,5 +1,5 @@
 import { Util } from '../Util.mjs';
-import { css, type t } from '../common';
+import { COLORS, css, type t } from '../common';
 import { DropMessage } from './Drop.Message';
 
 export type DropProps = {
@@ -21,6 +21,7 @@ export const Drop: React.FC<DropProps> = (props) => {
       placeItems: 'center',
       backdropFilter: `blur(${blur}px)`,
       pointerEvents: 'none',
+      color: COLORS.DARK,
     }),
   };
 
