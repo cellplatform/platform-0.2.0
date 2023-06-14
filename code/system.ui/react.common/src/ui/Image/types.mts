@@ -28,7 +28,7 @@ export type ImageDropSettings = {
  */
 export type ImageDropHandler = (e: ImageDropHandlerArgs) => void;
 export type ImageDropHandlerArgs = {
-  file: t.DroppedFile;
+  file?: t.DroppedFile;
   supportedMimeTypes: string[];
-  isSupported: boolean;
+  isSupported: boolean | null;
 };

@@ -10,6 +10,6 @@ const drop: t.ImageDropSettings = {
 };
 
 export const DEFAULTS = {
-  supportedMimeTypes: ['image/png', 'image/jpeg'],
+  supportedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
   drop,
 };

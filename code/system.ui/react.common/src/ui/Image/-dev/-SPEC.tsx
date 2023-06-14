@@ -25,7 +25,7 @@ export default Dev.describe('Image', (e) => {
             drop={{}}
             onDrop={(e) => {
               console.info('⚡️ dropped ', e);
-              state.change((d) => (d.file = e.file));
+              if (e.isSupported) state.change((d) => (d.file = e.file));
             }}
           />
         );

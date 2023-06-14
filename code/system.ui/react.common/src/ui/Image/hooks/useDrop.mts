@@ -10,7 +10,7 @@ export function useDrop(props: t.ImageProps) {
   const enabled = props.drop?.enabled ?? DEFAULTS.drop.enabled;
 
   const [file, setFile] = useState<t.DroppedFile>();
-  const [supported, setSupported] = useState<boolean>();
+  const [supported, setSupported] = useState<boolean | null>(null);
 
   const drag = useDragTarget({
     enabled,
@@ -18,7 +18,7 @@ export function useDrop(props: t.ImageProps) {
       const { file, isSupported } = Wrangle.file(e.files);
       setFile(file);
       setSupported(isSupported);
-      if (file) props.onDrop?.({ file, supportedMimeTypes, isSupported });
+      props.onDrop?.({ file, supportedMimeTypes, isSupported });
     },
   });
 
@@ -34,8 +34,13 @@ export function useDrop(props: t.ImageProps) {
  */
 const Wrangle = {
   file(files: t.DroppedFile[]) {
-    const file = files.find((item) => supportedMimeTypes.includes(item.mimetype));
-    const isSupported = files.length > 1 ? Boolean(file) : true;
-    return { file, isSupported };
+    const file = files[0];
+    const isSupported = file ? supportedMimeTypes.includes(file.mimetype) : null;
+    return {
+      file,
+      isSupported,
+    };
   },
+
+  isSupported(files: t.DroppedFile[]) {},
 };
