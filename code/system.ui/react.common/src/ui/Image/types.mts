@@ -12,13 +12,14 @@ export type ImageBinary = {
  */
 export type ImageProps = {
   src?: string | t.ImageBinary;
-  dragOver?: t.ImageDragOverProps;
+  drop?: t.ImageDropSettings;
   style?: t.CssValue;
   onDrop?: t.ImageDropHandler;
 };
 
-export type ImageDragOverProps = {
-  blur?: Pixels;
+export type ImageDropSettings = {
+  overBlur?: Pixels;
+  overContent?: string | JSX.Element;
 };
 
 /**

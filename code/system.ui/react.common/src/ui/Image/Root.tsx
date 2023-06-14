@@ -25,7 +25,7 @@ const View: React.FC<t.ImageProps> = (props) => {
       Absolute: 0,
       display: 'grid',
       placeItems: 'center',
-      backdropFilter: `blur(${Wrangle.backdropBlur(props)}px)`,
+      backdropFilter: `blur(${Wrangle.dropOverBlur(props)}px)`,
       pointerEvents: 'none',
     }),
     image: css({
@@ -36,7 +36,9 @@ const View: React.FC<t.ImageProps> = (props) => {
     }),
   };
 
-  const elDragOver = drag.isDragOver && <div {...styles.dragOver}>Drop Image</div>;
+  const elDragOver = drag.isDragOver && (
+    <div {...styles.dragOver}>{Wrangle.dropOverContent(props)}</div>
+  );
   const elImg = binary.url && <div {...styles.image} />;
 
   return (
@@ -51,8 +53,12 @@ const View: React.FC<t.ImageProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  backdropBlur(props: t.ImageProps) {
-    return props.dragOver?.blur ?? DEFAULTS.dragOver.blur;
+  dropOverBlur(props: t.ImageProps) {
+    return props.drop?.overBlur ?? DEFAULTS.drop.overBlur;
+  },
+
+  dropOverContent(props: t.ImageProps) {
+    return props.drop?.overContent ?? DEFAULTS.drop.overContent;
   },
 };
 

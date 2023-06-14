@@ -3,11 +3,12 @@ import { type t } from '../common';
 export * from '../common';
 export { useDragTarget } from '../useDragTarget';
 
-const dragOver: t.ImageDragOverProps = {
-  blur: 5,
+const drop: t.ImageDropSettings = {
+  overBlur: 5,
+  overContent: 'Drop Image',
 };
 
 export const DEFAULTS = {
   supportedMimeTypes: ['image/png', 'image/jpeg'],
-  dragOver,
+  drop,
 };
