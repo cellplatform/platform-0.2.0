@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/vimeo__player": "2.18.0",
+    "sys.data.crdt": "0.0.0",
     "sys.test": "0.0.0",
     "sys.ui.react.dev": "0.0.0"
   },
