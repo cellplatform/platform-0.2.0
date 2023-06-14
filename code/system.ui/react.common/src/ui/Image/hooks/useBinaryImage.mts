@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { type t } from '../common';
 
+/**
+ * Hook to prepare a binary image for rendering.
+ */
 export function useBinaryImage(src?: t.ImageBinary) {
   const length = src?.data?.length || 0;
   const [url, setUrl] = useState('');
@@ -14,10 +17,13 @@ export function useBinaryImage(src?: t.ImageBinary) {
       setUrl(URL.createObjectURL(data));
     }
 
-    return () => {
-      if (url) URL.revokeObjectURL(url);
-    };
-  }, [length]);
+    if (src === undefined) {
+      setUrl('');
+      URL.revokeObjectURL(url);
+    }
+
+    return () => URL.revokeObjectURL(url);
+  }, [length, src]);
 
   /**
    * API

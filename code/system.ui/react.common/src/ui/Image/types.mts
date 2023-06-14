@@ -13,8 +13,10 @@ export type ImageBinary = {
 export type ImageProps = {
   src?: string | t.ImageBinary;
   drop?: t.ImageDropSettings;
+  paste?: t.ImagePasteSettings;
+  tabIndex?: number;
   style?: t.CssValue;
-  onDrop?: t.ImageDropHandler;
+  onAdd?: t.ImageAddHandler;
 };
 
 export type ImageDropSettings = {
@@ -23,11 +25,18 @@ export type ImageDropSettings = {
   overContent?: string | JSX.Element;
 };
 
+export type ImagePasteSettings = {
+  enabled?: boolean;
+  tabIndex?: number;
+  focusedBlur?: Pixels;
+  focusedContent?: string | JSX.Element;
+};
+
 /**
  * Events
  */
-export type ImageDropHandler = (e: ImageDropHandlerArgs) => void;
-export type ImageDropHandlerArgs = {
+export type ImageAddHandler = (e: ImageAddHandlerArgs) => void;
+export type ImageAddHandlerArgs = {
   file?: t.DroppedFile;
   supportedMimeTypes: string[];
   isSupported: boolean | null;

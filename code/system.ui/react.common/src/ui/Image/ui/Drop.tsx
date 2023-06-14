@@ -1,33 +1,15 @@
-import { Util } from '../Util.mjs';
-import { COLORS, css, type t } from '../common';
-import { DropMessage } from './Drop.Message';
+import { type t } from '../common';
 
-export type DropProps = {
+import { Util } from '../Util.mjs';
+import { Overlay } from './Overlay';
+
+export type DropOverlayProps = {
   settings?: t.ImageDropSettings;
   style?: t.CssValue;
 };
 
-export const Drop: React.FC<DropProps> = (props) => {
-  const { settings } = props;
-  const blur = Util.dropOverBlur(settings);
-
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      Absolute: 0,
-      display: 'grid',
-      placeItems: 'center',
-      backdropFilter: `blur(${blur}px)`,
-      pointerEvents: 'none',
-      color: COLORS.DARK,
-    }),
-  };
-
-  return (
-    <div {...css(styles.base, props.style)}>
-      {settings?.overContent ?? <DropMessage settings={settings} />}
-    </div>
-  );
+export const DropOverlay: React.FC<DropOverlayProps> = (props) => {
+  const blur = Util.dropOverBlur(props.settings);
+  const message = Util.dropOverContent(props.settings);
+  return <Overlay blur={blur} message={message} />;
 };

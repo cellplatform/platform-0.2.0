@@ -1,10 +1,7 @@
 import { Dev, type t, Filesize } from '../../../test.ui';
 import { Image } from '..';
 
-type T = {
-  props: t.ImageProps;
-  file?: t.DroppedFile;
-};
+type T = { props: t.ImageProps };
 const initial: T = {
   props: {},
 };
@@ -21,11 +18,9 @@ export default Dev.describe('Image', (e) => {
         return (
           <Image
             {...e.state.props}
-            src={e.state.file}
-            drop={{}}
-            onDrop={(e) => {
-              console.info('⚡️ dropped ', e);
-              if (e.isSupported) state.change((d) => (d.file = e.file));
+            onAdd={(e) => {
+              console.info('⚡️ onAdd:', e);
+              if (e.isSupported) state.change((d) => (d.props.src = e.file));
             }}
           />
         );
@@ -35,27 +30,50 @@ export default Dev.describe('Image', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Drop', (dev) => {
+    dev.section('Properties', (dev) => {
       const getDrop = (props: t.ImageProps) => props.drop || (props.drop = Image.DEFAULTS.drop);
+      const getPaste = (props: t.ImageProps) => props.paste || (props.paste = Image.DEFAULTS.paste);
 
       dev.boolean((btn) =>
         btn
           .label((e) => `drop.enabled`)
-          .value((e) => Boolean(e.state.props.drop?.enabled))
+          .value((e) => Boolean(e.state.props.drop?.enabled ?? Image.DEFAULTS.drop))
           .onClick((e) => e.change((d) => Dev.toggle(getDrop(d.props), 'enabled'))),
       );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `paste.enabled`)
+          .value((e) => Boolean(e.state.props.paste?.enabled ?? Image.DEFAULTS.paste))
+          .onClick((e) => e.change((d) => Dev.toggle(getPaste(d.props), 'enabled'))),
+      );
+    });
+
+    dev.hr(8, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('reset', (e) => {
+        e.state.change((d) => (d.props.src = undefined));
+      });
     });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const bytes = e.state.file?.data.byteLength ?? -1;
+      const src = e.state.props.src;
+      const bytes = typeof src === 'object' ? src.data.byteLength : -1;
+      const file = typeof src === 'object' ? stripBinary(src) : undefined;
+
+      const props = {
+        ...e.state.props,
+        src: typeof src === 'string' ? src : stripBinary(src),
+      };
 
       const data = {
-        ...e.state,
-        file: e.state.file ? stripBinary(e.state.file) : undefined,
-        filesize: bytes > -1 ? Filesize(bytes) : '-',
+        props,
+        file,
+        filesize: bytes > -1 ? Filesize(bytes) : undefined,
       };
 
       return <Dev.Object name={'Image'} data={data} expand={1} />;
@@ -66,7 +84,7 @@ export default Dev.describe('Image', (e) => {
 /**
  * Helpers
  */
-const stripBinary = (file?: t.DroppedFile) => {
+const stripBinary = (file?: t.ImageBinary) => {
   // NB: The Uint8Array is replaced with a string for display purposes. If left as the
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
   return file ? { ...file, data: `<Uint8Array>[${file.data.byteLength}]` } : undefined;

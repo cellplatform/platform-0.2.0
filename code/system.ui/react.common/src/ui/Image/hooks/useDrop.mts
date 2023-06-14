@@ -1,24 +1,25 @@
 import { useState } from 'react';
-import { DEFAULTS, useDragTarget, type t } from '../common';
+import { DEFAULTS, useDragTarget, type t, Keyboard } from '../common';
 
 const supportedMimeTypes = DEFAULTS.supportedMimeTypes;
 
 /**
  * Hook to manage drag/drop operations.
  */
-export function useDrop(props: t.ImageProps) {
+export function useDrop(ref: React.RefObject<HTMLDivElement>, props: t.ImageProps) {
   const enabled = props.drop?.enabled ?? DEFAULTS.drop.enabled;
 
   const [file, setFile] = useState<t.DroppedFile>();
   const [supported, setSupported] = useState<boolean | null>(null);
 
   const drag = useDragTarget({
+    ref,
     enabled,
     onDrop(e) {
       const { file, isSupported } = Wrangle.file(e.files);
       setFile(file);
       setSupported(isSupported);
-      props.onDrop?.({ file, supportedMimeTypes, isSupported });
+      props.onAdd?.({ file, supportedMimeTypes, isSupported });
     },
   });
 

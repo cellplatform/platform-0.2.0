@@ -1,15 +1,11 @@
-import { Util } from '../Util.mjs';
 import { COLORS, Color, css, type t } from '../common';
 
-export type DropMessageProps = {
-  settings?: t.ImageDropSettings;
+export type OverlayMessageProps = {
+  content: string | JSX.Element;
   style?: t.CssValue;
 };
 
-export const DropMessage: React.FC<DropMessageProps> = (props) => {
-  const { settings } = props;
-  const content = Util.dropOverContent(settings);
-
+export const OverlayMessage: React.FC<OverlayMessageProps> = (props) => {
   /**
    * [Render]
    */
@@ -18,8 +14,12 @@ export const DropMessage: React.FC<DropMessageProps> = (props) => {
       backgroundColor: Color.alpha(COLORS.WHITE, 0.5),
       backdropFilter: 'blur(10px)',
       borderRadius: 8,
-      Padding: [20, 50],
+      boxSizing: 'border-box',
       userSelect: 'none',
+      minWidth: 190,
+      minHeight: 60,
+      display: 'grid',
+      placeItems: 'center',
     }),
     label: css({
       fontSize: 16,
@@ -28,7 +28,7 @@ export const DropMessage: React.FC<DropMessageProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.label}>{content}</div>
+      <div {...styles.label}>{props.content}</div>
     </div>
   );
 };
