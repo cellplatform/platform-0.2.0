@@ -1,5 +1,7 @@
 import { DEFAULTS, FC, css, useDragTarget, type t } from './common';
+import { Drop } from './ui/Drop';
 import { useBinaryImage } from './useBinaryImage.mjs';
+
 export type { ImageProps } from './types.mjs';
 
 const View: React.FC<t.ImageProps> = (props) => {
@@ -24,13 +26,6 @@ const View: React.FC<t.ImageProps> = (props) => {
     base: css({
       position: 'relative',
     }),
-    dragOver: css({
-      Absolute: 0,
-      display: 'grid',
-      placeItems: 'center',
-      backdropFilter: `blur(${Wrangle.dropOverBlur(props)}px)`,
-      pointerEvents: 'none',
-    }),
     image: css({
       Absolute: 0,
       backgroundImage: binary.url ? `url(${binary.url})` : undefined,
@@ -39,9 +34,7 @@ const View: React.FC<t.ImageProps> = (props) => {
     }),
   };
 
-  const elDragOver = drag.isDragOver && (
-    <div {...styles.dragOver}>{Wrangle.dropOverContent(props)}</div>
-  );
+  const elDragOver = drag.isDragOver && <Drop settings={props.drop} />;
   const elImg = binary.url && <div {...styles.image} />;
 
   return (
@@ -50,19 +43,6 @@ const View: React.FC<t.ImageProps> = (props) => {
       {elDragOver}
     </div>
   );
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  dropOverBlur(props: t.ImageProps) {
-    return props.drop?.overBlur ?? DEFAULTS.drop.overBlur;
-  },
-
-  dropOverContent(props: t.ImageProps) {
-    return props.drop?.overContent ?? DEFAULTS.drop.overContent;
-  },
 };
 
 /**

@@ -6,7 +6,7 @@ type T = {
   file?: t.DroppedFile;
 };
 const initial: T = {
-  props: { drop: Image.DEFAULTS.drop },
+  props: {},
 };
 
 export default Dev.describe('Image', (e) => {
@@ -22,6 +22,7 @@ export default Dev.describe('Image', (e) => {
           <Image
             {...e.state.props}
             src={e.state.file}
+            drop={{}}
             onDrop={(e) => {
               console.info('⚡️ dropped ', e);
               state.change((d) => (d.file = e.file));

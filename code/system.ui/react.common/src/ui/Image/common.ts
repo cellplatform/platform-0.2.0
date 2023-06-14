@@ -5,7 +5,7 @@ export { useDragTarget } from '../useDragTarget';
 
 const drop: t.ImageDropSettings = {
   enabled: true,
-  overBlur: 5,
+  overBlur: 20,
   overContent: 'Drop Image',
 };
 
