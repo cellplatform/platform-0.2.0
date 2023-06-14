@@ -4,7 +4,10 @@ import { Button, Color, ObjectView, css, type t } from './-common';
 const stripBinary = (dropped: t.Dropped) => {
   // NB: The Uint8Array is replaced with a string for display purposes. If left as the
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
-  const files = dropped.files.map((file) => ({ ...file, data: '<Uint8Array>' }));
+  const files = dropped.files.map((file) => ({
+    ...file,
+    data: `<Uint8Array>[${file.data.byteLength}]`,
+  }));
   return { ...dropped, files };
 };
 

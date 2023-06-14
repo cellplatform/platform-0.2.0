@@ -41,8 +41,8 @@ export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
     const dragHandler = (fn?: (e: Event) => void) => {
       return (e: Event) => {
         if (isEnabled) {
-          e.preventDefault();
           fn?.(e);
+          e.preventDefault();
           changeDragOver(count > 0);
         }
       };
