@@ -19,4 +19,5 @@ export {
   ObjectView,
   ProgressBar,
   useSizeObserver,
+  useDragTarget,
 } from 'sys.ui.react.common';
