@@ -29,9 +29,10 @@ export { TextSyntax } from './ui/Text.Syntax';
 /**
  * Hooks
  */
+export { useMouseState } from './common';
 export { useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';
-export { useMouseState } from './common';
+export { useDragTarget } from './ui/useDragTarget';
 
 /**
  * Common up-stream modules
