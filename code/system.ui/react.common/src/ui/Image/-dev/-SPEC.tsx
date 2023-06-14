@@ -1,8 +1,8 @@
-import { Dev, type t } from '../../../test.ui';
-import { Image, type ImageProps } from '..';
+import { Dev, type t, Filesize } from '../../../test.ui';
+import { Image } from '..';
 
 type T = {
-  props: ImageProps;
+  props: t.ImageProps;
   file?: t.DroppedFile;
 };
 const initial: T = { props: {} };
@@ -36,10 +36,14 @@ export default Dev.describe('Image', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
+      const bytes = e.state.file?.data.byteLength ?? -1;
+
       const data = {
         ...e.state,
         file: e.state.file ? stripBinary(e.state.file) : undefined,
+        filesize: bytes > -1 ? Filesize(bytes) : '-',
       };
+
       return <Dev.Object name={'Image'} data={data} expand={1} />;
     });
   });
@@ -48,11 +52,8 @@ export default Dev.describe('Image', (e) => {
 /**
  * Helpers
  */
-
 const stripBinary = (file?: t.DroppedFile) => {
   // NB: The Uint8Array is replaced with a string for display purposes. If left as the
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
-  // const files = dropped.files.map((file) => ({ ...file, data: '<Uint8Array>' }));
-
   return file ? { ...file, data: `<Uint8Array>[${file.data.byteLength}]` } : undefined;
 };

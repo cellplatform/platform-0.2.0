@@ -1,13 +1,8 @@
 import { DEFAULTS, FC, css, useDragTarget, type t } from './common';
 import { useBinaryImage } from './useBinaryImage.mjs';
+export type { ImageProps } from './types.mjs';
 
-export type ImageProps = {
-  src?: string | t.ImageBinary;
-  style?: t.CssValue;
-  onDrop?: t.ImageDropHandler;
-};
-
-const View: React.FC<ImageProps> = (props) => {
+const View: React.FC<t.ImageProps> = (props) => {
   const { src } = props;
   const binary = useBinaryImage(typeof src === 'object' ? src : undefined);
 
@@ -25,13 +20,12 @@ const View: React.FC<ImageProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
     }),
     dragOver: css({
       Absolute: 0,
       display: 'grid',
       placeItems: 'center',
-      backdropFilter: 'blur(5px)',
+      backdropFilter: `blur(${Wrangle.backdropBlur(props)}px)`,
       pointerEvents: 'none',
     }),
     image: css({
@@ -43,16 +37,23 @@ const View: React.FC<ImageProps> = (props) => {
   };
 
   const elDragOver = drag.isDragOver && <div {...styles.dragOver}>Drop Image</div>;
-
   const elImg = binary.url && <div {...styles.image} />;
 
   return (
     <div ref={drag.ref} {...css(styles.base, props.style)}>
       {elImg}
       {elDragOver}
-      code/system.ui/react.common/src/ui/Image/Image.tsx{' '}
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  backdropBlur(props: t.ImageProps) {
+    return props.dragOver?.blur ?? DEFAULTS.dragOver.blur;
+  },
 };
 
 /**
@@ -61,4 +62,8 @@ const View: React.FC<ImageProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Image = FC.decorate<ImageProps, Fields>(View, { DEFAULTS }, { displayName: 'Image' });
+export const Image = FC.decorate<t.ImageProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'Image' },
+);

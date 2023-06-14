@@ -2,6 +2,7 @@
  * @system
  */
 export { expect, expectError } from 'sys.test';
+export { Filesize } from 'sys.fs';
 
 /**
  * @local
