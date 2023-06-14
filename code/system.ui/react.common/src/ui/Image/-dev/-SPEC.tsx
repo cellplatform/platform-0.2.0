@@ -5,7 +5,9 @@ type T = {
   props: t.ImageProps;
   file?: t.DroppedFile;
 };
-const initial: T = { props: {} };
+const initial: T = {
+  props: { drop: Image.DEFAULTS.drop },
+};
 
 export default Dev.describe('Image', (e) => {
   e.it('ui:init', async (e) => {
@@ -31,6 +33,17 @@ export default Dev.describe('Image', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.section('Drop', (dev) => {
+      const getDrop = (props: t.ImageProps) => props.drop || (props.drop = Image.DEFAULTS.drop);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `drop.enabled`)
+          .value((e) => Boolean(e.state.props.drop?.enabled))
+          .onClick((e) => e.change((d) => Dev.toggle(getDrop(d.props), 'enabled'))),
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {

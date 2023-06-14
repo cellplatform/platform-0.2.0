@@ -9,9 +9,12 @@ const View: React.FC<t.ImageProps> = (props) => {
   /**
    * Drag/drop
    */
-  const drag = useDragTarget((e) => {
-    const file = e.files.find((item) => DEFAULTS.supportedMimeTypes.includes(item.mimetype));
-    if (file) props.onDrop?.({ file });
+  const drag = useDragTarget({
+    isEnabled: props.drop?.enabled ?? DEFAULTS.drop.enabled,
+    onDrop(e) {
+      const file = e.files.find((item) => DEFAULTS.supportedMimeTypes.includes(item.mimetype));
+      if (file) props.onDrop?.({ file });
+    },
   });
 
   /**

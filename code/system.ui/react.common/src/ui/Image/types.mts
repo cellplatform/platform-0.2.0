@@ -18,6 +18,7 @@ export type ImageProps = {
 };
 
 export type ImageDropSettings = {
+  enabled?: boolean;
   overBlur?: Pixels;
   overContent?: string | JSX.Element;
 };
