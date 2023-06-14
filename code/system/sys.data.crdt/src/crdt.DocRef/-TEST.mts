@@ -18,8 +18,10 @@ export default Test.describe('DocRef', (e) => {
 
     e.it('id', (e) => {
       const doc = DocRef.init<D>(docid, { count: 0 });
-      expect(doc.id.doc).to.eql(docid);
-      expect(typeof doc.id.actor).to.eql('string');
+      const id = doc.id;
+      expect(id.doc).to.eql(docid);
+      expect(typeof id.actor).to.eql('string');
+      expect(id.toString()).to.eql(`${id.doc}:${id.actor}`);
     });
 
     e.it('from initial {object}', (e) => {

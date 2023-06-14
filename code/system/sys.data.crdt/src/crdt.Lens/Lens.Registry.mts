@@ -23,11 +23,11 @@ export const Registry = {
   },
 
   get(root: Doc) {
-    return store.get(Wrangle.id(root));
+    return store.get(root.id.toString());
   },
 
   add(root: Doc) {
-    const id = Wrangle.id(root);
+    const id = root.id.toString();
     if (store.has(id)) {
       const entry = store.get(id)!;
       const total = entry.total + 1;
@@ -39,7 +39,7 @@ export const Registry = {
   },
 
   remove(root: Doc) {
-    const id = Wrangle.id(root);
+    const id = root.id.toString();
     const entry = store.get(id)!;
     if (!entry) return;
 
@@ -49,14 +49,5 @@ export const Registry = {
     } else {
       store.set(id, { ...entry, total });
     }
-  },
-};
-
-/**
- * Helpers
- */
-const Wrangle = {
-  id(doc: Doc) {
-    return `${doc.id.actor}:${doc.id.doc}`;
   },
 };

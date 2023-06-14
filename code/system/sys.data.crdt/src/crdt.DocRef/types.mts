@@ -17,7 +17,7 @@ export type CrdtDocRefChangeHandlerArgs<D extends {}> = {
  */
 export type CrdtDocRef<D extends {}> = t.Disposable & {
   readonly kind: 'Crdt:DocRef';
-  readonly id: { actor: Id; doc: Id };
+  readonly id: CrdtDocRefId;
   readonly $: t.Observable<CrdtDocAction<D>>;
   readonly current: D;
   readonly disposed: boolean;
@@ -28,6 +28,8 @@ export type CrdtDocRef<D extends {}> = t.Disposable & {
   onChange(fn: CrdtDocRefChangeHandler<D>): CrdtDocRef<D>;
   toObject(): D;
 };
+
+export type CrdtDocRefId = { actor: Id; doc: Id; toString(): string };
 
 export type CrdtDocHistory<D extends {}> = t.AutomergeState<D>;
 

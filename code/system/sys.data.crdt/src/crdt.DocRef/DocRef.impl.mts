@@ -59,7 +59,11 @@ export function init<D extends {}>(
        *   distinct actor IDs."
        */
       const actor = Automerge.getActorId(_doc);
-      return { actor, doc: docid };
+      return {
+        actor,
+        doc: docid,
+        toString: () => `${docid}:${actor}`,
+      };
     },
 
     /**
