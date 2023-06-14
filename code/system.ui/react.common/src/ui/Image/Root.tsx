@@ -1,13 +1,10 @@
 import { DEFAULTS, FC, css, useDragTarget, type t } from './common';
 import { useBinaryImage } from './useBinaryImage.mjs';
 
-export type ImageDropHandler = (e: ImageDropHandlerArgs) => void;
-export type ImageDropHandlerArgs = { file: t.DroppedFile };
-
 export type ImageProps = {
   src?: string | t.ImageBinary;
   style?: t.CssValue;
-  onDrop?: ImageDropHandler;
+  onDrop?: t.ImageDropHandler;
 };
 
 const View: React.FC<ImageProps> = (props) => {
@@ -53,6 +50,7 @@ const View: React.FC<ImageProps> = (props) => {
     <div ref={drag.ref} {...css(styles.base, props.style)}>
       {elImg}
       {elDragOver}
+      code/system.ui/react.common/src/ui/Image/Image.tsx{' '}
     </div>
   );
 };
