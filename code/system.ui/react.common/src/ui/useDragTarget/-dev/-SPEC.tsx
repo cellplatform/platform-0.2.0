@@ -1,7 +1,8 @@
 import { Dev } from '../../../test.ui';
+import { Sample } from './-Sample';
 
-type T = { count: number };
-const initial: T = { count: 0 };
+type T = { isEnabled: boolean };
+const initial: T = { isEnabled: true };
 
 export default Dev.describe('useDragTarget', (e) => {
   e.it('ui:init', async (e) => {
@@ -9,16 +10,22 @@ export default Dev.describe('useDragTarget', (e) => {
     const state = await ctx.state<T>(initial);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 useDragTarget-${e.state.count}`}</div>;
+        return <Sample isEnabled={e.state.isEnabled} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.button('tmp', (e) => e.change((d) => d.count++));
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `isEnabled`)
+        .value((e) => Boolean(e.state.isEnabled))
+        .onClick((e) => e.change((d) => Dev.toggle(d, 'isEnabled'))),
+    );
   });
 
   e.it('ui:footer', async (e) => {

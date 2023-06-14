@@ -14,3 +14,12 @@ export type DragTargetHook<T extends HTMLElement> = {
   readonly dropped?: Dropped;
   reset(): void;
 };
+
+/**
+ * Events
+ */
+export type DragTargetDropHandler = (e: DragTargetDropHandlerArgs) => void;
+export type DragTargetDropHandlerArgs = Dropped;
+
+export type DragTargetOverHandler = (e: DragTargetOverHandlerArgs) => void;
+export type DragTargetOverHandlerArgs = { isOver: boolean };

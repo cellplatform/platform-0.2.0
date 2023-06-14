@@ -2,19 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { type t } from '../common';
 import { readDropEvent } from './util.mjs';
 
-type OnDrop = (e: t.Dropped) => void;
 type Args<T extends HTMLElement> = {
   ref?: React.RefObject<T>;
   isEnabled?: boolean;
-  onDrop?: OnDrop;
+  onDrop?: t.DragTargetDropHandler;
   onDragOver?: (e: { isOver: boolean }) => void;
 };
+type Input<T extends HTMLElement> = Partial<Args<T>> | t.DragTargetDropHandler;
 
 /**
  * Provides hooks for treating a DIV element as a "drag-n-drop" target.
  */
-export function useDragTarget<T extends HTMLElement>(
-  input?: Partial<Args<T>> | OnDrop,
+export function useDragTarget<T extends HTMLElement = HTMLDivElement>(
+  input?: Input<T>,
 ): t.DragTargetHook<T> {
   const args = wrangle<T>(useRef<T>(null), input);
   const { ref, onDrop, isEnabled = true } = args;
@@ -93,10 +93,7 @@ export function useDragTarget<T extends HTMLElement>(
 /**
  * [Helpers]
  */
-function wrangle<T extends HTMLElement>(
-  ref: React.RefObject<T>,
-  input?: Partial<Args<T>> | OnDrop,
-) {
+function wrangle<T extends HTMLElement>(ref: React.RefObject<T>, input?: Input<T>) {
   if (typeof input === 'function') return { ref, onDrop: input };
   if (input === undefined) return { ref };
   return { ...input, ref: input.ref ?? ref };
