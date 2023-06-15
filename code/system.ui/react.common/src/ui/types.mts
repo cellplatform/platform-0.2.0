@@ -4,7 +4,6 @@ export type * from './Card/types.mjs';
 export type * from './Center/types.mjs';
 export type * from './Icon/types.mjs';
 export type * from './IFrame/types.mjs';
-export type * from './Image/types.mjs';
 export type * from './ObjectView/types.mjs';
 export type * from './ProgressBar/types.mjs';
 export type * from './PropList/types.mjs';
