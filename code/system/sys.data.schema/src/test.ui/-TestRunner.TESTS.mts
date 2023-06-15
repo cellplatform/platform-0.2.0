@@ -1,5 +1,5 @@
 export const TESTS = {
   get all() {
-    return ['Title', import('./-TEST.mjs')];
+    return [import('./-TEST.mjs')];
   },
 };
