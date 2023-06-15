@@ -1,29 +1,28 @@
-import {
-  Crdt,
-  css,
-  Dev,
-  Icons,
-  Pkg,
-  PropList,
-  rx,
-  TestNetwork,
-  Vimeo,
-  WebRtc,
-  type t,
-} from './common';
-import { DevRemotes } from './DEV.Remotes';
-
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
+import { DevRemotes } from './DEV.Remotes';
+import {
+  COLORS,
+  Crdt,
+  Dev,
+  Icons,
+  Pkg,
+  PropList,
+  TestNetwork,
+  Vimeo,
+  WebRtc,
+  css,
+  rx,
+  type t,
+} from './common';
 
 /**
  * video:   727951677
  * diagram: https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
  * youtube: https://youtu.be/WGfS6pPJ5jo
  */
-
 type T = {
   props: WebRtcInfoProps;
   debug: {
@@ -34,9 +33,7 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
   };
-  layers: {
-    overlay?: JSX.Element;
-  };
+  layers: { overlay?: JSX.Element };
 };
 const initial: T = {
   props: {},
@@ -252,7 +249,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const updateOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+    const loadOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+      console.log('load overlay');
+
       const set = (el?: JSX.Element) => state.change((d) => (d.layers.overlay = el));
 
       if (!kind) {
@@ -284,7 +283,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     props.$.pipe(
       rx.map((e) => e.lens.overlay),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe(updateOverlay);
+    ).subscribe(loadOverlay);
+
+    dev.button('redraw', (e) => {
+      dev.redraw();
+    });
 
     dev.bdd((bdd) =>
       bdd
