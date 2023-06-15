@@ -22,8 +22,7 @@
   },
   "devDependencies": {
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0",
-    "sys.ui.react.dev.types": "0.0.0"
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,
