@@ -1,9 +1,6 @@
 import { type t } from '../common';
-export * from '../common';
 
-export { Keyboard } from '../Text.Keyboard';
-export { useDragTarget } from '../useDragTarget';
-export { useFocus } from '../useFocus';
+export * from '../common';
 
 /**
  * Defaults.
