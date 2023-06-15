@@ -16,13 +16,16 @@ const drop: Required<t.ImageDropSettings> = {
 
 const paste: Required<t.ImagePasteSettings> = {
   enabled: true,
+  primary: false,
   tabIndex: 0,
   focusedBlur: 20,
   focusedContent: 'Paste Image',
 };
 
+const supportedMimetypes: t.ImageSupportedMimetypes[] = ['image/png', 'image/jpeg', 'image/webp'];
+
 export const DEFAULTS = {
-  supportedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
+  supportedMimetypes,
   drop,
   paste,
 };

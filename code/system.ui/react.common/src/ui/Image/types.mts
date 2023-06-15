@@ -7,6 +7,8 @@ export type ImageBinary = {
   mimetype: string;
 };
 
+export type ImageSupportedMimetypes = 'image/png' | 'image/jpeg' | 'image/webp';
+
 /**
  * Component Properties
  */
@@ -16,7 +18,7 @@ export type ImageProps = {
   paste?: t.ImagePasteSettings;
   tabIndex?: number;
   style?: t.CssValue;
-  onAdd?: t.ImageAddHandler;
+  onDropOrPaste?: t.ImageDropOrPasteHandler;
 };
 
 export type ImageDropSettings = {
@@ -30,14 +32,15 @@ export type ImagePasteSettings = {
   tabIndex?: number;
   focusedBlur?: Pixels;
   focusedContent?: string | JSX.Element;
+  primary?: boolean;
 };
 
 /**
  * Events
  */
-export type ImageAddHandler = (e: ImageAddHandlerArgs) => void;
-export type ImageAddHandlerArgs = {
-  file?: t.DroppedFile;
-  supportedMimeTypes: string[];
+export type ImageDropOrPasteHandler = (e: ImageDropOrPasteHandlerArgs) => void;
+export type ImageDropOrPasteHandlerArgs = {
+  file?: t.ImageBinary;
+  supportedMimetypes: string[];
   isSupported: boolean | null;
 };

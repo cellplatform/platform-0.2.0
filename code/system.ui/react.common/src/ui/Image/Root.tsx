@@ -4,8 +4,6 @@ import { DEFAULTS, FC, css, type t } from './common';
 import { useBinaryImage } from './hooks/useBinaryImage.mjs';
 import { useDrop } from './hooks/useDrop.mjs';
 import { usePaste } from './hooks/usePaste.mjs';
-import { Overlay } from './ui/Overlay';
-import { Util } from './Util.mjs';
 import { DropOverlay } from './ui/Drop';
 import { PasteOverlay } from './ui/Paste';
 
@@ -18,9 +16,6 @@ const View: React.FC<t.ImageProps> = (props) => {
   const binary = useBinaryImage(typeof src === 'object' ? src : undefined);
   const drag = useDrop(ref, props);
   const paste = usePaste(ref, props);
-
-  // console.log('focus', focus.containsFocus);
-  // console.log('paste', paste.is, paste.tabIndex);
 
   /**
    * [Render]
@@ -35,15 +30,9 @@ const View: React.FC<t.ImageProps> = (props) => {
     }),
   };
 
-  const elDragOverlay = drag.is.over && (
-    // <Overlay blur={Util.dropOverBlur(props.drop)} message={Util.dropOverContent(props.drop)} />
-    <DropOverlay settings={props.drop} />
-  );
-
-  const elPasteOverlay = !elDragOverlay && paste.is.focused && (
-    // <Overlay blur={Util.focusedBlur(props.paste)} message={Util.focusedContent(props.paste)} />
-    <PasteOverlay settings={props.paste} />
-  );
+  const elDragOverlay = drag.is.over && <DropOverlay settings={props.drop} />;
+  const showPaste = !elDragOverlay && paste.is.focused;
+  const elPasteOverlay = showPaste && <PasteOverlay settings={props.paste} />;
 
   const elImg = binary.url && <div {...styles.image} />;
 

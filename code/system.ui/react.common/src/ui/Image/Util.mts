@@ -19,4 +19,8 @@ export const Util = {
   focusedContent(input?: t.ImagePasteSettings) {
     return input?.focusedContent ?? DEFAULTS.paste.focusedContent;
   },
+
+  isSupportedMimetype(input: string) {
+    return DEFAULTS.supportedMimetypes.includes(input as t.ImageSupportedMimetypes);
+  },
 };
