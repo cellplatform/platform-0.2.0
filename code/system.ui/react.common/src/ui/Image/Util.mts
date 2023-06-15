@@ -5,22 +5,34 @@ import { DEFAULTS, type t } from './common';
  */
 export const Util = {
   dropOverBlur(input?: t.ImageDropSettings) {
-    return input?.overBlur ?? DEFAULTS.drop.overBlur;
+    return input?.blur ?? DEFAULTS.drop.blur;
   },
 
   dropOverContent(input?: t.ImageDropSettings) {
-    return input?.overContent ?? DEFAULTS.drop.overContent;
+    return input?.content ?? DEFAULTS.drop.content;
   },
 
   focusedBlur(input?: t.ImagePasteSettings) {
-    return input?.focusedBlur ?? DEFAULTS.paste.focusedBlur;
+    return input?.blur ?? DEFAULTS.paste.blur;
   },
 
   focusedContent(input?: t.ImagePasteSettings) {
-    return input?.focusedContent ?? DEFAULTS.paste.focusedContent;
+    return input?.content ?? DEFAULTS.paste.content;
   },
 
-  isSupportedMimetype(input: string) {
-    return DEFAULTS.supportedMimetypes.includes(input as t.ImageSupportedMimetypes);
+  warningBlur(input?: t.ImageWarningSettings) {
+    return input?.blur ?? DEFAULTS.warning.blur;
+  },
+
+  warningDelay(input?: t.ImageWarningSettings) {
+    return input?.delay ?? DEFAULTS.warning.delay;
+  },
+
+  isSupportedMimetype(mimetype: string) {
+    return DEFAULTS.supportedMimetypes.includes(mimetype as t.ImageSupportedMimetypes);
+  },
+
+  notSupportedMessage(mimetype: string = 'Unknown') {
+    return `File type '${mimetype}' is not supported.`;
   },
 };

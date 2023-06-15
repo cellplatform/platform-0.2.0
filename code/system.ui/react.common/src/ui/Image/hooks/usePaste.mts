@@ -7,7 +7,11 @@ const supportedMimetypes = DEFAULTS.supportedMimetypes;
 /**
  * Hook to manage paste operations.
  */
-export function usePaste(ref: React.RefObject<HTMLDivElement>, props: t.ImageProps) {
+export function usePaste(
+  ref: React.RefObject<HTMLDivElement>,
+  props: t.ImageProps,
+  options: { warn?: (message: string) => void } = {},
+) {
   const blur = () => ref.current?.blur();
 
   const enabled = props.paste?.enabled ?? DEFAULTS.paste.enabled;
@@ -17,8 +21,9 @@ export function usePaste(ref: React.RefObject<HTMLDivElement>, props: t.ImagePro
   const focus = useFocus(ref);
   const focused = enabled && !primary ? focus.containsFocus : false;
 
-  const [image, setImage] = useState<t.ImageBinary>();
   const [supported, setSupported] = useState<boolean | null>(null);
+  const [image, setImage] = useState<t.ImageBinary>();
+  const mimetype = image?.mimetype;
 
   /**
    * Handlers
@@ -27,20 +32,16 @@ export function usePaste(ref: React.RefObject<HTMLDivElement>, props: t.ImagePro
     if (!enabled) return;
     if (!focused && !primary) return;
 
-    const items: DataTransferItem[] = Array.from(event.clipboardData?.items || []);
-
     setSupported(null);
 
-    for (const item of items) {
-      const mime = item.type;
-
-
-      const isSupported = Util.isSupportedMimetype(mime);
+    for (const item of Wrangle.clipboardItems(event)) {
+      const mimetype = item.type;
+      const isSupported = Util.isSupportedMimetype(mimetype);
       setSupported(isSupported);
 
       if (isSupported) {
         const buffer = await Wrangle.buffer(item);
-        const file = buffer ? Wrangle.file(buffer, mime) : undefined;
+        const file = buffer ? Wrangle.file(buffer, mimetype) : undefined;
         if (file) {
           blur();
           setImage(file);
@@ -50,6 +51,8 @@ export function usePaste(ref: React.RefObject<HTMLDivElement>, props: t.ImagePro
         }
 
         break;
+      } else {
+        options.warn?.(Util.notSupportedMessage(mimetype));
       }
     }
   };
@@ -78,9 +81,9 @@ export function usePaste(ref: React.RefObject<HTMLDivElement>, props: t.ImagePro
    */
   return {
     image,
-    mimetype: image?.mimetype,
-    is: { enabled, focused, supported },
+    mimetype,
     tabIndex,
+    is: { enabled, focused, supported },
     blur,
   } as const;
 }
@@ -97,5 +100,9 @@ const Wrangle = {
     const data = new Uint8Array(buffer);
     const file: t.ImageBinary = { data, mimetype };
     return file;
+  },
+
+  clipboardItems(event: ClipboardEvent): DataTransferItem[] {
+    return Array.from(event.clipboardData?.items || []);
   },
 };

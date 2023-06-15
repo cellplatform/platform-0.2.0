@@ -7,7 +7,11 @@ const supportedMimetypes = DEFAULTS.supportedMimetypes;
 /**
  * Hook to manage drag/drop operations.
  */
-export function useDrop(ref: React.RefObject<HTMLDivElement>, props: t.ImageProps) {
+export function useDrop(
+  ref: React.RefObject<HTMLDivElement>,
+  props: t.ImageProps,
+  options: { warn?: (message: string) => void } = {},
+) {
   const blur = () => ref.current?.blur();
   const enabled = props.drop?.enabled ?? DEFAULTS.drop.enabled;
 
@@ -24,7 +28,7 @@ export function useDrop(ref: React.RefObject<HTMLDivElement>, props: t.ImageProp
       setFile(file);
       setSupported(isSupported);
       props.onDropOrPaste?.({ file, supportedMimetypes, isSupported });
-
+      if (!isSupported) options.warn?.(Util.notSupportedMessage(file?.mimetype));
     },
   });
 

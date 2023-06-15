@@ -2,14 +2,14 @@ import { COLORS, Color, css, type t } from '../common';
 import { OverlayMessage } from './Overlay.Message';
 
 export type OverlayProps = {
-  blur: number;
-  message: string | JSX.Element;
+  message?: string | JSX.Element;
+  blur?: number;
   focusBorder?: boolean;
   style?: t.CssValue;
 };
 
 export const Overlay: React.FC<OverlayProps> = (props) => {
-  const { focusBorder = true, blur } = props;
+  const { focusBorder = true, blur = 0 } = props;
 
   /**
    * [Render]
@@ -26,7 +26,7 @@ export const Overlay: React.FC<OverlayProps> = (props) => {
 
     border: {
       base: css({
-        border: `dashed 3px`,
+        border: 'dashed 3px',
         borderRadius: 30,
       }),
       background: css({

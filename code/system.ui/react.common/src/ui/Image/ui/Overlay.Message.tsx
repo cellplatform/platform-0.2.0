@@ -1,7 +1,7 @@
 import { COLORS, Color, css, type t } from '../common';
 
 export type OverlayMessageProps = {
-  content: string | JSX.Element;
+  content?: string | JSX.Element;
   style?: t.CssValue;
 };
 
@@ -15,9 +15,12 @@ export const OverlayMessage: React.FC<OverlayMessageProps> = (props) => {
       backdropFilter: 'blur(10px)',
       borderRadius: 8,
       boxSizing: 'border-box',
+      Padding: [20, 30],
       userSelect: 'none',
       minWidth: 190,
       minHeight: 60,
+      maxWidth: 290,
+      boxShadow: `0 0px 30px 0 ${Color.alpha(COLORS.DARK, 0.1)}`,
       display: 'grid',
       placeItems: 'center',
     }),

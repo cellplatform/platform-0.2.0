@@ -1,6 +1,7 @@
 import type { t } from './common';
 
 type Pixels = number;
+type Milliseconds = number;
 
 export type ImageBinary = {
   data: Uint8Array;
@@ -16,23 +17,28 @@ export type ImageProps = {
   src?: string | t.ImageBinary;
   drop?: t.ImageDropSettings;
   paste?: t.ImagePasteSettings;
-  tabIndex?: number;
+  warning?: t.ImageWarningSettings;
   style?: t.CssValue;
   onDropOrPaste?: t.ImageDropOrPasteHandler;
 };
 
 export type ImageDropSettings = {
   enabled?: boolean;
-  overBlur?: Pixels;
-  overContent?: string | JSX.Element;
+  blur?: Pixels;
+  content?: string | JSX.Element;
 };
 
 export type ImagePasteSettings = {
   enabled?: boolean;
   tabIndex?: number;
-  focusedBlur?: Pixels;
-  focusedContent?: string | JSX.Element;
+  blur?: Pixels;
+  content?: string | JSX.Element;
   primary?: boolean;
+};
+
+export type ImageWarningSettings = {
+  blur?: Pixels;
+  delay?: Milliseconds;
 };
 
 /**
