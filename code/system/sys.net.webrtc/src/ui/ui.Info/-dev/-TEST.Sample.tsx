@@ -1,12 +1,24 @@
-import { Time, Dev, type t, Crdt } from './common';
+import { Crdt, Dev, type t } from './common';
 
 export const CreateRepo = Dev.describe('sys.crdt.repo ("project")', (e) => {
   e.it('init', async (e) => {
     const ctx = Wrangle.ctx(e);
-    // await Time.wait(350);
 
     const repo = Crdt.repo();
-    console.log('repo', repo);
+    console.log('🐷 CRDT repo:', repo);
+
+    ctx.props.change((d) => (d.overlay = 'sys.data.crdt'));
+  });
+});
+
+export const LoadImage = Dev.describe('sys.ui.image', (e) => {
+  e.it('init', async (e) => {
+    const ctx = Wrangle.ctx(e);
+
+    ctx.props.change((d) => (d.overlay = 'sys.ui.image'));
+
+    // const repo = Crdt.repo();
+    // console.log('repo', repo);
   });
 });
 

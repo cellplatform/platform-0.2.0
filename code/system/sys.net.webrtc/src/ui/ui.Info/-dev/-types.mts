@@ -22,7 +22,7 @@ export type TDevRemote = {
 export type TDevSharedProps = {
   count: number;
   showRight?: boolean;
-  overlay?: 'sys.data.project' | 'sys.data.crdt' | null;
+  overlay?: 'sys.data.project' | 'sys.data.crdt' | 'sys.ui.image' | null;
 
   fullscreenVideo?: boolean;
   cardFlipped?: boolean;

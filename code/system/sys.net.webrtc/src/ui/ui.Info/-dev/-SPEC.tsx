@@ -274,6 +274,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         const el = <div>🐷 TDB: sys.data.project</div>;
         set(el);
       }
+
+      if (kind === 'sys.ui.image') {
+        const { dev } = await import('sys.ui.react.media.image');
+        const { Specs } = await dev();
+
+        const m = await Specs['sys.ui.media.image.Image']();
+        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
+        set(el);
+      }
     };
 
     props.$.pipe(
@@ -291,7 +300,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         .margin([30, 50, 30, 50])
         .run({
           ctx: () => ({ props }),
-          label: 'Environment Setup',
+          label: 'Environment',
           button: 'hidden',
         })
         .specs({ selectable: false })
