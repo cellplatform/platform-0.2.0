@@ -1,72 +1,69 @@
 /**
  * @external
  */
-export type { Observable, Subject } from 'rxjs';
 export type { CSSProperties } from 'react';
+export type { Observable, Subject } from 'rxjs';
 
 /**
  * @system
  */
 export type {
-  DomRect,
   Disposable,
+  DomRect,
   EventBus,
   IgnoredResponse,
-  JsonU,
   JsonMapU,
-  Size,
+  JsonU,
   ModuleDef,
+  Size,
 } from 'sys.types/src/types.mjs';
 
-export type { CssValue, CssEdgesInput, CssShadow } from 'sys.ui.react.css/src/types.mjs';
 export type { TextCharDiff } from 'sys.text/src/types.mjs';
+export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/types.mjs';
 export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
 
 export type {
+  BundleImport,
+  SpecImport,
+  SpecImports,
+  TestHandlerArgs,
+  TestRunResponse,
   TestSuiteModel,
   TestSuiteRunResponse,
-  TestRunResponse,
-  TestHandlerArgs,
   TestSuiteRunStats,
-  SpecImports,
-  SpecImport,
-  BundleImport,
 } from 'sys.test.spec/src/types.mjs';
 
 export type {
   DevCtx,
+  DevCtxDebug,
+  DevCtxEdge,
   DevCtxInput,
   DevCtxState,
   DevEvents,
   DevInfo,
-  DevCtxDebug,
-  DevCtxEdge,
-  DevTheme,
-  DevValueHandler,
+  DevRedrawTarget,
+  DevRenderProps,
   DevRenderRef,
   DevRenderer,
-  DevRenderProps,
-  DevRedrawTarget,
-} from 'sys.ui.react.dev.types/src/types.mjs';
-
-export type {
+  DevTheme,
+  DevValueHandler,
   SpecListBadge,
-  SpecListChildVisibilityHandler,
   SpecListChildVisibility,
+  SpecListChildVisibilityHandler,
   SpecListScrollTarget,
 } from 'sys.ui.react.dev/src/types.mjs';
 
 export type {
-  UIEventBase,
-  UIModifierKeys,
-  KeyboardState,
+  KeyMatchSubscriberHandler,
+  KeyMatchSubscriberHandlerArgs,
   KeyboardKeypress,
   KeyboardKeypressProps,
   KeyboardModifierEdges,
   KeyboardModifierFlags,
-  KeyMatchSubscriberHandler,
-  KeyMatchSubscriberHandlerArgs,
+  KeyboardState,
   LocalStorage,
+  UIEventBase,
+  UIModifierKeys,
 } from 'sys.ui.dom/src/types.mjs';
 
 /**

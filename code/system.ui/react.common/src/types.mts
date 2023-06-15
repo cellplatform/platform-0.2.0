@@ -15,7 +15,6 @@ export type {
 export type * from './ui/types.mjs';
 export type * from './ui.dev/types.mjs';
 export type * from './ui.tools/types.mjs';
-
 export type { DevCtx, DevCtxState } from './common/types.mjs';
 
 /**
