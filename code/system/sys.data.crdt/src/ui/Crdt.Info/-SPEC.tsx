@@ -74,9 +74,9 @@ export default Dev.describe('CrdtInfo', async (e) => {
         ...props,
         title: debug.title ? ['CRDT Document', null] : undefined,
         data: {
+          url: { href: location.href },
           file: { doc: docFile, path: fsdirs.doc.path },
           network: { doc: debug.syncDoc ? syncDocA : undefined },
-          url: { href: location.href },
           history: {
             data: docA.history,
             item: {
