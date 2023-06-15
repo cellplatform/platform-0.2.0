@@ -1,9 +1,9 @@
 import { type t } from '../common';
-
 export * from '../common';
+
+export { Keyboard } from '../Text.Keyboard';
 export { useDragTarget } from '../useDragTarget';
 export { useFocus } from '../useFocus';
-export { Keyboard } from '../Text.Keyboard';
 
 /**
  * Defaults.
@@ -28,9 +28,11 @@ const warning: Required<t.ImageWarningSettings> = {
 };
 
 const supportedMimetypes: t.ImageSupportedMimetypes[] = ['image/png', 'image/jpeg', 'image/webp'];
+const sizing: t.ImageSizeStrategy = 'contain';
 
 export const DEFAULTS = {
   supportedMimetypes,
+  sizing,
   drop,
   paste,
   warning,

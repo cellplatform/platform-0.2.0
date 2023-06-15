@@ -9,6 +9,7 @@ export type ImageBinary = {
 };
 
 export type ImageSupportedMimetypes = 'image/png' | 'image/jpeg' | 'image/webp';
+export type ImageSizeStrategy = 'cover' | 'contain';
 
 /**
  * Component Properties
@@ -18,6 +19,7 @@ export type ImageProps = {
   drop?: t.ImageDropSettings;
   paste?: t.ImagePasteSettings;
   warning?: t.ImageWarningSettings;
+  sizing?: t.ImageSizeStrategy;
   style?: t.CssValue;
   onDropOrPaste?: t.ImageDropOrPasteHandler;
 };

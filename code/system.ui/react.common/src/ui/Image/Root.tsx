@@ -30,8 +30,9 @@ const View: React.FC<t.ImageProps> = (props) => {
     image: css({
       Absolute: 0,
       backgroundImage: binary.url ? `url(${binary.url})` : undefined,
-      backgroundSize: 'cover',
       backgroundPosition: 'center',
+      backgroundSize: props.sizing ?? DEFAULTS.sizing,
+      backgroundRepeat: 'no-repeat',
     }),
   };
 

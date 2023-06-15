@@ -1,5 +1,7 @@
-import { Dev, type t, Filesize } from '../../../test.ui';
 import { Image } from '..';
+import { Dev, Filesize, type t } from '../../../test.ui';
+
+const DEFAULTS = Image.DEFAULTS;
 
 type T = {
   props: t.ImageProps;
@@ -25,8 +27,8 @@ export default Dev.describe('Image', (e) => {
     pastePrimary: false,
   });
 
-  const getDrop = (props: t.ImageProps) => props.drop || (props.drop = Image.DEFAULTS.drop);
-  const getPaste = (props: t.ImageProps) => props.paste || (props.paste = Image.DEFAULTS.paste);
+  const getDrop = (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop);
+  const getPaste = (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -37,11 +39,15 @@ export default Dev.describe('Image', (e) => {
       getDrop(d.props).enabled = local.dropEnabled;
       getPaste(d.props).enabled = local.pasteEnabled;
       getPaste(d.props).primary = local.pastePrimary;
+      d.props.sizing = DEFAULTS.sizing;
     });
 
+    ctx.debug.width(350);
+    ctx.host.tracelineColor(-0.05);
     ctx.subject
       .size('fill', 100)
       .display('grid')
+
       .render<T>((e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
 
@@ -60,11 +66,11 @@ export default Dev.describe('Image', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('Properties', (dev) => {
+    dev.section(['Input', 'Properties'], (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `drop.enabled`)
-          .value((e) => Boolean(e.state.props.drop?.enabled ?? Image.DEFAULTS.drop.enabled))
+          .value((e) => Boolean(e.state.props.drop?.enabled ?? DEFAULTS.drop.enabled))
           .onClick((e) =>
             e.change((d) => (local.dropEnabled = Dev.toggle(getDrop(d.props), 'enabled'))),
           ),
@@ -75,7 +81,7 @@ export default Dev.describe('Image', (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `paste.enabled`)
-          .value((e) => Boolean(e.state.props.paste?.enabled ?? Image.DEFAULTS.paste.enabled))
+          .value((e) => Boolean(e.state.props.paste?.enabled ?? DEFAULTS.paste.enabled))
           .onClick((e) =>
             e.change((d) => (local.pasteEnabled = Dev.toggle(getPaste(d.props), 'enabled'))),
           ),
@@ -84,28 +90,66 @@ export default Dev.describe('Image', (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `paste.primary`)
-          .value((e) => Boolean(e.state.props.paste?.primary ?? Image.DEFAULTS.paste.primary))
+          .value((e) => Boolean(e.state.props.paste?.primary ?? DEFAULTS.paste.primary))
           .onClick((e) =>
             e.change((d) => (local.pastePrimary = Dev.toggle(getPaste(d.props), 'primary'))),
           ),
       );
-    });
-
-    dev.hr(8, 20);
-
-    dev.section('Debug', (dev) => {
-      dev.button('reset', (e) => {
-        e.state.change((d) => (d.props.src = undefined));
-      });
 
       dev.hr(-1, 5);
 
+      dev.button((btn) =>
+        btn
+          .label((e) => '→ (disable as input)')
+          .right('')
+          .onClick((e) => {
+            e.state.change((d) => {
+              getPaste(d.props).enabled = false;
+              getDrop(d.props).enabled = false;
+            });
+          }),
+      );
+    });
+
+    dev.hr(2, 20);
+
+    dev.section('Sizing', (dev) => {
+      const size = (strategy: t.ImageSizeStrategy) => {
+        dev.button((btn) =>
+          btn
+            .label(`${strategy}`)
+            .right((e) => (e.state.props.sizing === strategy ? '←' : ''))
+            .onClick((e) => {
+              e.change((d) => (d.props.sizing = strategy));
+            }),
+        );
+      };
+
+      size('cover');
+      size('contain');
+    });
+
+    dev.hr(2, 20);
+
+    dev.section('CRDT', (dev) => {
+      dev.TODO();
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(['', 'Debug'], (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)
           .value((e) => Boolean(e.state.debug.bg))
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
+
+      dev.hr(-1, 5);
+
+      dev.button('reset', (e) => {
+        e.state.change((d) => (d.props.src = undefined));
+      });
     });
   });
 
@@ -115,6 +159,7 @@ export default Dev.describe('Image', (e) => {
       const src = e.state.props.src;
       const bytes = typeof src === 'object' ? src.data.byteLength : -1;
       const file = typeof src === 'object' ? stripBinary(src) : undefined;
+      const mimetype = typeof src === 'object' ? src.mimetype : undefined;
 
       const props = {
         ...e.state.props,
@@ -125,6 +170,7 @@ export default Dev.describe('Image', (e) => {
         props,
         file,
         filesize: bytes > -1 ? Filesize(bytes) : undefined,
+        mimetype,
       };
 
       return <Dev.Object name={'Image'} data={data} expand={1} />;
