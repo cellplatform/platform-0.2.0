@@ -21,35 +21,14 @@ export const Overlay: React.FC<OverlayProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
       backdropFilter: `blur(${blur}px)`,
+      backgroundColor: Color.alpha(COLORS.DARK, 0.1),
       color: COLORS.DARK,
     }),
-
-    border: {
-      base: css({
-        border: 'dashed 3px',
-        borderRadius: 30,
-      }),
-      background: css({
-        Absolute: 15,
-        borderColor: Color.alpha(COLORS.WHITE, 0.5),
-      }),
-      foreground: css({
-        Absolute: -1.5,
-        borderColor: Color.alpha(COLORS.DARK, 0.1),
-      }),
-    },
   };
-
-  const elBorder = focusBorder && (
-    <div {...css(styles.border.base, styles.border.background)}>
-      <div {...css(styles.border.base, styles.border.foreground)} />
-    </div>
-  );
 
   return (
     <div {...css(styles.base, props.style)}>
       <OverlayMessage content={props.message} />
-      {elBorder}
     </div>
   );
 };
