@@ -261,7 +261,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       if (kind === 'sys.data.crdt') {
         const { dev } = await import('sys.data.crdt');
         const { Specs } = await dev();
-        const m = await Specs['sys.crdt.tests']();
+        const m = await Specs['sys.data.crdt.tests']();
         const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
         set(el);
       }
