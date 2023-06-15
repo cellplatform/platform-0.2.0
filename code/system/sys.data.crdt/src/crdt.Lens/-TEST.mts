@@ -1,5 +1,6 @@
 import { CrdtLens } from '.';
 import { Automerge, Crdt, Test, expect, type t } from '../test.ui';
+import { DEFAULTS } from './common';
 
 export default Test.describe('Lens', (e) => {
   type TRoot = { msg?: string; child?: TChild };
@@ -7,7 +8,7 @@ export default Test.describe('Lens', (e) => {
 
   const setup = () => {
     const initial: TRoot = {};
-    const root = Crdt.Doc.ref<TRoot>('foo-id', initial);
+    const root = Crdt.ref<TRoot>('foo', initial);
     return { initial, root };
   };
 
@@ -35,6 +36,14 @@ export default Test.describe('Lens', (e) => {
       const lens = Crdt.lens<TRoot, TChild>(root, getDesendent);
       expect(lens.root).to.equal(root);
       root.dispose();
+    });
+
+    e.it('toObject', (e) => {
+      const { root } = setup();
+      const lens = Crdt.lens<TRoot, TChild>(root, getDesendent);
+
+      expect(lens.toObject()).to.eql(lens.current);
+      expect(lens.toObject()).to.not.equal(lens.current);
     });
   });
 
@@ -70,7 +79,7 @@ export default Test.describe('Lens', (e) => {
 
   e.describe('change', (e) => {
     e.it('lens descendent object does initially exist', () => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', { child: { count: 0 } });
+      const root = Crdt.ref<TRoot>('foo', { child: { count: 0 } });
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
 
       const res = lens.change((child) => (child.count = 123));
@@ -89,7 +98,7 @@ export default Test.describe('Lens', (e) => {
     });
 
     e.it('lens descendent object does not initially exist (factory generated)', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
 
       const res = lens.change((child) => (child.count = 123));
@@ -103,7 +112,7 @@ export default Test.describe('Lens', (e) => {
     });
 
     e.it('with/without message', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
 
       lens.change('hello', (child) => (child.count = 123));
@@ -121,7 +130,7 @@ export default Test.describe('Lens', (e) => {
 
   e.describe('$ (change)', (e) => {
     e.it('change events → descendent', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const fired: t.CrdtLensChange<TRoot, TChild>[] = [];
       lens.$.subscribe((e) => fired.push(e));
@@ -136,7 +145,7 @@ export default Test.describe('Lens', (e) => {
     });
 
     e.it('change on root', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const fired: t.CrdtLensChange<TRoot, TChild>[] = [];
       lens.$.subscribe((e) => fired.push(e));
@@ -160,8 +169,8 @@ export default Test.describe('Lens', (e) => {
       root.dispose();
     });
 
-    e.it('change on different lens', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+    e.it('change on same descendent → different lens', (e) => {
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens1 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const lens2 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
 
@@ -187,8 +196,69 @@ export default Test.describe('Lens', (e) => {
       root.dispose();
     });
 
-    e.it('root replace', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+    e.it('no-change: lens on different sub-trees', (e) => {
+      type T = {
+        A: { count: number };
+        B: { child: { count: number } };
+      };
+
+      const root = Crdt.ref<T>('foo', { A: { count: 0 }, B: { child: { count: 0 } } });
+
+      const lens1 = CrdtLens.init<T, T['A']>(root, (doc) => doc.A);
+      const lens2 = CrdtLens.init<T, T['B']>(root, (doc) => doc.B);
+
+      const fired1: t.CrdtLensChange<T, T['A']>[] = [];
+      const fired2: t.CrdtLensChange<T, T['B']>[] = [];
+      lens1.$.subscribe((e) => fired1.push(e));
+      lens2.$.subscribe((e) => fired2.push(e));
+
+      lens1.change((d) => d.count++);
+      expect(lens1.current.count).to.eql(1);
+      expect(fired1.length).to.eql(1);
+      expect(fired2.length).to.eql(0); // No change on lens2 sub-tree.
+
+      lens2.change((d) => (d.child.count = 1234));
+      expect(lens2.current.child.count).to.eql(1234);
+      expect(fired1.length).to.eql(1); // No change (new) on lens1 sub-tree.
+      expect(fired2.length).to.eql(1);
+
+      root.dispose();
+    });
+
+    e.it('lens nested within lens (same root) ← events', (e) => {
+      const root = Crdt.ref<TRoot>('foo', {});
+      const lens1 = CrdtLens.init<TRoot, TChild>(root, (doc) => {
+        const d1 = doc.child || (doc.child = { count: 0 });
+        return d1;
+      });
+
+      const lens2 = CrdtLens.init<TRoot, TChild>(root, (doc) => {
+        const d1 = doc.child || (doc.child = { count: 0 });
+        const d2 = d1.child || (d1.child = { count: 0 });
+        return d2;
+      });
+
+      type C = t.CrdtLensChange<TRoot, TChild>;
+      const fired1: C[] = [];
+      const fired2: C[] = [];
+      lens1.$.subscribe((e) => fired1.push(e));
+      lens2.$.subscribe((e) => fired2.push(e));
+
+      lens2.change((d) => (d.count = 1234));
+      expect(lens1.current.count).to.eql(0);
+      expect(lens1.current.child?.count).to.eql(1234);
+      expect(lens2.current.count).to.eql(1234);
+
+      expect(fired1.length).to.eql(2);
+      expect(fired2.length).to.eql(1);
+
+      expect(fired1[0].info.message).to.eql(DEFAULTS.ensureLensMessage);
+      expect(fired1[1].info.message).to.eql(undefined);
+      expect(fired2[0].info.message).to.eql(undefined);
+    });
+
+    e.it('root replace ← events', (e) => {
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       expect(lens.current.count).to.eql(0);
 
@@ -217,9 +287,9 @@ export default Test.describe('Lens', (e) => {
     });
   });
 
-  e.describe('sub lens', (e) => {
+  e.describe('sub-lens ← lens.lens(...)', (e) => {
     e.it('init', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       expect(root.current).to.eql({});
 
       const lens1 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
@@ -234,21 +304,31 @@ export default Test.describe('Lens', (e) => {
     });
 
     e.it('change', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens1 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const lens2 = lens1.lens(getDesendent);
+      const lens3 = lens2.lens(getDesendent);
+      const lens4 = lens3.lens(getDesendent);
 
-      lens2.change((d) => (d.count = 123));
+      expect(lens1.current).to.eql({
+        count: 0,
+        child: { count: 0, child: { count: 0, child: { count: 0 } } },
+      });
+      expect(lens4.current).to.eql({ count: 0 });
 
-      expect(root.current.child?.count).to.eql(0);
-      expect(root.current.child?.child?.count).to.eql(123);
-      expect(lens2.current.count).to.eql(123);
+      lens4.change((d) => (d.count = 4));
+
+      expect(lens4.current.count).to.eql(4);
+      expect(lens1.current).to.eql({
+        count: 0,
+        child: { count: 0, child: { count: 0, child: { count: 4 } } },
+      });
 
       root.dispose();
     });
 
     e.it('dispose', (e) => {
-      const root = Crdt.Doc.ref<TRoot>('foo-id', {});
+      const root = Crdt.ref<TRoot>('foo', {});
       const lens1 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const lens2 = CrdtLens.init<TRoot, TChild>(root, getDesendent);
       const lens3 = lens2.lens(getDesendent);
@@ -257,13 +337,79 @@ export default Test.describe('Lens', (e) => {
       expect(root.disposed).to.eql(false);
       expect(lens1.disposed).to.eql(false);
       expect(lens2.disposed).to.eql(true);
-      expect(lens3.disposed).to.eql(true);
+      expect(lens3.disposed).to.eql(true); // NB: sub-lens of lens2 is auto disposed.
 
       root.dispose();
       expect(root.disposed).to.eql(true);
       expect(lens1.disposed).to.eql(true);
       expect(lens2.disposed).to.eql(true);
       expect(lens3.disposed).to.eql(true);
+    });
+  });
+
+  e.describe('LensRegistry', (e) => {
+    const Registry = Crdt.Lens.Registry;
+
+    e.it('does not exist (get, total)', (e) => {
+      const root = Crdt.ref<TRoot>('foo', {});
+      expect(Registry.get(root)).to.eql(undefined);
+      expect(Registry.total(root)).to.eql(0);
+    });
+
+    e.it('add', (e) => {
+      const root = Crdt.ref<TRoot>('foo', {});
+      const res1 = Registry.add(root);
+      const res2 = Registry.add(root);
+      expect(res1.total).to.eql(1);
+      expect(res2.total).to.eql(2);
+      expect(Registry.get(root)?.total).to.eql(2);
+      expect(Registry.total(root)).to.eql(2);
+    });
+
+    e.it('remove', (e) => {
+      const root1 = Crdt.ref<TRoot>('foo', {});
+      const root2 = Crdt.ref<TRoot>('foo', {});
+
+      Registry.add(root1);
+      Registry.add(root1);
+      expect(Registry.total(root1)).to.eql(2);
+
+      Registry.remove(root1);
+      expect(Registry.total(root1)).to.eql(1);
+
+      Registry.remove(root2);
+      expect(Registry.total(root1)).to.eql(1);
+
+      Registry.remove(root1);
+      Registry.remove(root1);
+      Registry.remove(root1);
+      expect(Registry.total(root1)).to.eql(0);
+      expect(Registry.get(root1)).to.eql(undefined);
+    });
+
+    e.it('lens → add → dispose → remove', (e) => {
+      const root1 = Crdt.ref<TRoot>('foo', {});
+      const root2 = Crdt.ref<TRoot>('foo', {});
+
+      expect(Registry.total(root1)).to.eql(0);
+
+      const lens1 = CrdtLens.init<TRoot, TChild>(root1, getDesendent);
+      const lens2 = CrdtLens.init<TRoot, TChild>(root1, getDesendent);
+      const lens3 = lens2.lens(getDesendent);
+      const lens4 = CrdtLens.init<TRoot, TChild>(root2, getDesendent); // NB: not the same root doc.
+
+      expect(Registry.total(root1)).to.eql(3);
+
+      lens1.dispose();
+      expect(Registry.total(root1)).to.eql(2);
+
+      lens2.dispose();
+      expect(Registry.total(root1)).to.eql(0); // NB: lens3 is disposed because it is a sub-lens of lens2.
+
+      expect(lens1.disposed).to.eql(true);
+      expect(lens2.disposed).to.eql(true);
+      expect(lens3.disposed).to.eql(true);
+      expect(lens4.disposed).to.eql(false);
     });
   });
 });

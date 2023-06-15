@@ -8,7 +8,7 @@ import { containsFocus, withinFocus, Wrangle } from './util.mjs';
  * Monitors focus state for an element,
  * and causes redraws when focus changes.
  */
-export function useFocus<H extends HTMLElement>(
+export function useFocus<H extends HTMLElement = HTMLDivElement>(
   input?: RefObject<H>,
   options: { redraw?: boolean; onFocus?: t.FocusHandler } = {},
 ): t.FocusHook<H> {

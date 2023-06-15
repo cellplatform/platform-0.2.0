@@ -23,8 +23,12 @@ export const ModuleSpecs = {
   'sys.ui.common.Text.Keyboard': () => import('../ui/Text.Keyboard/-dev/-SPEC'),
   'sys.ui.common.Text.Secret': () => import('../ui/Text.Secret/-SPEC'),
   'sys.ui.common.Text.Syntax': () => import('../ui/Text.Syntax/-SPEC'),
+};
+
+export const HookSpecs = {
   'sys.ui.common.useFocus': () => import('../ui/useFocus/-SPEC'),
   'sys.ui.common.useSizeObserver': () => import('../ui/useSizeObserver/-SPEC'),
+  'sys.ui.common.useDragTarget': () => import('../ui/useDragTarget/-dev/-SPEC'),
 };
 
 export const DevSpecs = {
@@ -46,6 +50,7 @@ export const DevSpecs = {
 
 export const Specs = {
   ...ModuleSpecs,
+  ...HookSpecs,
   ...DevSpecs,
 };
 

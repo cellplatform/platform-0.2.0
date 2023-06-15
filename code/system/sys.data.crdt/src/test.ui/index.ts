@@ -1,12 +1,13 @@
-import { rx, t, Is } from '../common';
 import { TestFilesystem } from 'sys.fs';
+import { Is, rx, type t } from '../common';
 
 export { expect, expectError } from 'sys.test';
 export { Test, Tree } from 'sys.test.spec';
+export { Dev } from 'sys.ui.react.common';
 export { TestFilesystem };
 
+export { Automerge, Crdt, toObject } from '../index.mjs';
 export * from '../ui/common';
-export { Crdt, toObject, Automerge } from '../index.mjs';
 
 /**
  * Retrieve a file-system (safe to run on node AND/OR browser)

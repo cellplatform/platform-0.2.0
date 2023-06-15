@@ -16,7 +16,6 @@
     "sys.data.crdt": "0.0.0",
     "sys.fs": "0.0.0",
     "sys.text": "0.0.0",
-    "sys.types": "0.0.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
@@ -24,11 +23,11 @@
     "react-dom": "18.2.0",
     "yaml": "2.3.1",
     "sys.test": "0.0.0",
+    "sys.types": "0.0.0",
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.media": "0.0.0",
-    "spike.concept": "0.0.6"
+    "sys.ui.react.media.image": "0.0.0"
   },
   "license": "MIT",
   "private": true,

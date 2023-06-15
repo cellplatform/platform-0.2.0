@@ -12,11 +12,9 @@ export type {
 /**
  * @local
  */
-export * from './ui/types.mjs';
-export * from './ui.dev/types.mjs';
-export * from './ui.tools/types.mjs';
-export * from './ui.dev/types.mjs';
-
+export type * from './ui/types.mjs';
+export type * from './ui.dev/types.mjs';
+export type * from './ui.tools/types.mjs';
 export type { DevCtx, DevCtxState } from './common/types.mjs';
 
 /**

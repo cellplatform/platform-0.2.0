@@ -1,4 +1,4 @@
-import { init } from './DocFile.init.mjs';
+import { init } from './DocFile.impl.mjs';
 import { toObject } from '../crdt.helpers';
 
 /**
@@ -7,4 +7,4 @@ import { toObject } from '../crdt.helpers';
 export const DocFile = {
   init: init,
   toObject,
-};
+} as const;

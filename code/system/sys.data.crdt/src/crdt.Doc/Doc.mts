@@ -15,4 +15,4 @@ export const CrdtDoc = {
   sync: DocSync.init,
 
   toObject,
-};
+} as const;

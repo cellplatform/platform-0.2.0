@@ -13,7 +13,6 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.dom',
   version: '0.0.0',
   dependencies: {
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'ua-parser-js': '1.0.35',
   },

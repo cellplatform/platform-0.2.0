@@ -10,7 +10,7 @@ export default Test.describe('DocRef', (e) => {
     expect(Crdt.Doc.ref).to.equal(DocRef.init);
   });
 
-  e.describe('initialize', (e) => {
+  e.describe('create', (e) => {
     e.it('kind', (e) => {
       const doc = DocRef.init<D>(docid, { count: 0 });
       expect(doc.kind).to.eql('Crdt:DocRef');
@@ -18,8 +18,10 @@ export default Test.describe('DocRef', (e) => {
 
     e.it('id', (e) => {
       const doc = DocRef.init<D>(docid, { count: 0 });
-      expect(doc.id.doc).to.eql(docid);
-      expect(typeof doc.id.actor).to.eql('string');
+      const id = doc.id;
+      expect(id.doc).to.eql(docid);
+      expect(typeof id.actor).to.eql('string');
+      expect(id.toString()).to.eql(`${id.doc}:${id.actor}`);
     });
 
     e.it('from initial {object}', (e) => {
@@ -41,6 +43,13 @@ export default Test.describe('DocRef', (e) => {
       expect(doc.current).to.eql({ count: 999 });
       expect(doc.current).to.equal(initial);
       expect(Automerge.isAutomerge(doc.current)).to.eql(true);
+    });
+
+    e.it('toObject', (e) => {
+      const doc = DocRef.init<D>(docid, { count: 0 });
+
+      expect(doc.toObject()).to.eql(doc.current);
+      expect(doc.toObject()).to.not.equal(doc.current);
     });
   });
 

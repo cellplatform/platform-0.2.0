@@ -7,8 +7,6 @@ export type { IconType } from 'react-icons';
 /**
  * @system
  */
-export * from 'sys.ui.react.dev.types/src/types.mjs';
-
 export type {
   EventBus,
   Event,
@@ -33,7 +31,8 @@ export type {
 /**
  * @local
  */
-export * from '../types.mjs';
 export type UrlInput = string | URL | Location;
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];
+
+export type * from '../types.mjs';

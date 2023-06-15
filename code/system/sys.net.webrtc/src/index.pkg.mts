@@ -18,7 +18,6 @@ export const Pkg: ModuleDef = {
     'sys.data.crdt': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.text': '0.0.0',
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {

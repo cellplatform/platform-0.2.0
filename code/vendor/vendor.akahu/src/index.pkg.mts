@@ -14,7 +14,6 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'akahu': '1.12.0',
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },

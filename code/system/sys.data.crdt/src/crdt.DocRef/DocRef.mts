@@ -1,4 +1,4 @@
-import { init } from './DocRef.init.mjs';
+import { init } from './DocRef.impl.mjs';
 import { toObject } from '../crdt.helpers';
 
 /**
@@ -7,4 +7,4 @@ import { toObject } from '../crdt.helpers';
 export const DocRef = {
   init,
   toObject,
-};
+} as const;

@@ -1,29 +1,28 @@
-import {
-  Crdt,
-  css,
-  Dev,
-  Icons,
-  Pkg,
-  PropList,
-  rx,
-  TestNetwork,
-  Vimeo,
-  WebRtc,
-  type t,
-} from './common';
-import { DevRemotes } from './DEV.Remotes';
-
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
+import { DevRemotes } from './DEV.Remotes';
+import {
+  COLORS,
+  Crdt,
+  Dev,
+  Icons,
+  Pkg,
+  PropList,
+  TestNetwork,
+  Vimeo,
+  WebRtc,
+  css,
+  rx,
+  type t,
+} from './common';
 
 /**
  * video:   727951677
  * diagram: https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png
  * youtube: https://youtu.be/WGfS6pPJ5jo
  */
-
 type T = {
   props: WebRtcInfoProps;
   debug: {
@@ -34,9 +33,7 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
   };
-  layers: {
-    overlay?: JSX.Element;
-  };
+  layers: { overlay?: JSX.Element };
 };
 const initial: T = {
   props: {},
@@ -252,7 +249,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const updateOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+    const loadOverlay = async (kind: t.TDevSharedProps['overlay']) => {
+      console.log('load overlay');
+
       const set = (el?: JSX.Element) => state.change((d) => (d.layers.overlay = el));
 
       if (!kind) {
@@ -262,7 +261,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       if (kind === 'sys.data.crdt') {
         const { dev } = await import('sys.data.crdt');
         const { Specs } = await dev();
-        const m = await Specs['sys.crdt.tests']();
+        const m = await Specs['sys.data.crdt.tests']();
         const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
         set(el);
       }
@@ -272,11 +271,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
          * TODO 🐷
          * import from remote repo via [Module Federation].
          */
-        const el = <div>🐷 TDB</div>;
-        // const { dev } = await import('spike.concept');
-        // const { Specs } = await dev();
-        // const m = await Specs['sys.data.project']();
-        // const el = <Dev.Harness key={'project'} spec={m.default} background={1} />;
+        const el = <div>🐷 TDB: sys.data.project</div>;
+        set(el);
+      }
+
+      if (kind === 'sys.ui.image') {
+        const { dev } = await import('sys.ui.react.media.image');
+        const { Specs } = await dev();
+
+        const m = await Specs['sys.ui.media.image.Image']();
+        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
         set(el);
       }
     };
@@ -284,7 +288,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     props.$.pipe(
       rx.map((e) => e.lens.overlay),
       rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe(updateOverlay);
+    ).subscribe(loadOverlay);
+
+    dev.button('redraw', (e) => {
+      dev.redraw();
+    });
 
     dev.bdd((bdd) =>
       bdd
@@ -292,7 +300,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         .margin([30, 50, 30, 50])
         .run({
           ctx: () => ({ props }),
-          label: 'Environment Setup',
+          label: 'Environment',
           button: 'hidden',
         })
         .specs({ selectable: false })

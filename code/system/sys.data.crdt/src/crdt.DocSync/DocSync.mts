@@ -1,4 +1,4 @@
-import { init } from './DocSync.init.mjs';
+import { init } from './DocSync.impl.mjs';
 import { toObject } from '../crdt.helpers';
 
 /**
@@ -7,4 +7,4 @@ import { toObject } from '../crdt.helpers';
 export const DocSync = {
   init,
   toObject,
-};
+} as const;

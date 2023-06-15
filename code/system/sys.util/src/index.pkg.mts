@@ -14,7 +14,6 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@noble/hashes': '1.3.1',
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'nanoid': '4.0.2',
   },
