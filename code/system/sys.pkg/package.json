@@ -13,11 +13,11 @@
   "dependencies": {
     "sys.fs": "0.0.0",
     "sys.text": "0.0.0",
-    "sys.types": "0.0.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
-    "sys.test": "0.0.0"
+    "sys.test": "0.0.0",
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,

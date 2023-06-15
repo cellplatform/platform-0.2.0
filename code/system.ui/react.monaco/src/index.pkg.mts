@@ -14,16 +14,15 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@monaco-editor/react': '4.5.1',
-    'monaco-editor': '0.39.0',
     'diff': '5.1.0',
+    'monaco-editor': '0.39.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.crdt': '0.0.0',
-    'sys.types': '0.0.0',
     'sys.text': '0.0.0',
-    'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.util': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

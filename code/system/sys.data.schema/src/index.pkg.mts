@@ -13,7 +13,6 @@ export const Pkg: ModuleDef = {
   name: 'sys.data.schema',
   version: '0.0.0',
   dependencies: {
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
     'zod': '3.21.4',
   },

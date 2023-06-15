@@ -18,7 +18,6 @@ export const Pkg: ModuleDef = {
     '@improbable-eng/grpc-web': '0.15.0',
     '@improbable-eng/grpc-web-node-http-transport': '0.15.0',
     '@noble/ed25519': '2.0.0',
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {

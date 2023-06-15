@@ -14,7 +14,6 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'openai': '3.3.0',
-    'sys.types': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {
