@@ -19,6 +19,7 @@ export const Pkg: ModuleDef = {
     'react-icons': '4.9.0',
     'react-spinners': '0.13.8',
     'react-inspector': '6.0.2',
+    'sys.data.crdt': '0.0.0',
     'sys.data.json': '0.0.0',
     'sys.text': '0.0.0',
     'sys.types': '0.0.0',
