@@ -271,11 +271,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
          * TODO 🐷
          * import from remote repo via [Module Federation].
          */
-        const el = <div>🐷 TDB</div>;
-        // const { dev } = await import('spike.concept');
-        // const { Specs } = await dev();
-        // const m = await Specs['sys.data.project']();
-        // const el = <Dev.Harness key={'project'} spec={m.default} background={1} />;
+        const el = <div>🐷 TDB: sys.data.project</div>;
         set(el);
       }
     };
