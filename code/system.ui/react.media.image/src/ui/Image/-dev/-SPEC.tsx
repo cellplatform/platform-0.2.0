@@ -53,7 +53,15 @@ export default Dev.describe('Image', (e) => {
       getPaste(d.props).primary = local.pastePrimary;
     });
 
-    if (state.current.debug.dataEnabled) await initCrdt();
+    if (state.current.debug.dataEnabled) {
+      const crdt = await initCrdt();
+      const { mimetype, data } = crdt.file.doc.current;
+      console.log('data', mimetype, data);
+      if (data && mimetype) {
+        const file: t.ImageBinary = { mimetype, data };
+        await state.change((d) => (d.props.src = file));
+      }
+    }
 
     ctx.debug.width(350);
     ctx.host.tracelineColor(-0.05);
@@ -73,9 +81,8 @@ export default Dev.describe('Image', (e) => {
               if (e.isSupported) {
                 state.change((d) => (d.props.src = e.file));
 
-                // Save.
-                if (crdt?.file && e.file) {
-                  console.log('save');
+                // Save to file.
+                if (crdt) {
                   crdt.file.doc.change((d) => {
                     d.data = e.file?.data;
                     d.mimetype = e.file?.mimetype;
