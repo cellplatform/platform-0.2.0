@@ -14,11 +14,12 @@ export * from '../ui/common';
  */
 export async function getTestFs(bus: t.EventBus<any>) {
   // NodeJS (UI tests running in CI)
-  if (Is.env.nodejs) return TestFilesystem.memory({ bus }).fs;
+  const id = 'fs.dev';
+  if (Is.env.nodejs) return TestFilesystem.memory({ bus, id }).fs;
 
   // Browser.
   const { Filesystem } = await import('sys.fs.indexeddb');
-  return (await Filesystem.client({ bus })).fs;
+  return (await Filesystem.client({ bus, id })).fs;
 }
 
 /**
