@@ -1,5 +1,6 @@
 import { Image } from '..';
 import { Dev, Filesize, type t } from '../../../test.ui';
+import { type DevDataController } from './-DEV.data';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -7,6 +8,7 @@ type T = {
   props: t.ImageProps;
   debug: {
     bg?: boolean;
+    dataEnabled?: boolean;
     dropEnabled?: boolean;
     pasteEnabled?: boolean;
     pastePrimary?: boolean;
@@ -22,6 +24,7 @@ export default Dev.describe('Image', (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Image');
   const local = localstore.object({
     bg: true,
+    dataEnabled: false,
     dropEnabled: true,
     pasteEnabled: true,
     pastePrimary: false,
@@ -30,17 +33,27 @@ export default Dev.describe('Image', (e) => {
   const getDrop = (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop);
   const getPaste = (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste);
 
+  let crdt: DevDataController | undefined;
+  const initCrdt = async () => {
+    const { DevDataController } = await import('./-DEV.data');
+    crdt = await DevDataController();
+    return crdt;
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
       d.debug.bg = local.bg;
+      d.debug.dataEnabled = local.dataEnabled;
+      d.props.sizing = DEFAULTS.sizing;
       getDrop(d.props).enabled = local.dropEnabled;
       getPaste(d.props).enabled = local.pasteEnabled;
       getPaste(d.props).primary = local.pastePrimary;
-      d.props.sizing = DEFAULTS.sizing;
     });
+
+    if (state.current.debug.dataEnabled) await initCrdt();
 
     ctx.debug.width(350);
     ctx.host.tracelineColor(-0.05);
@@ -48,15 +61,27 @@ export default Dev.describe('Image', (e) => {
       .size('fill', 100)
       .display('grid')
 
-      .render<T>((e) => {
+      .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
+        if (e.state.debug.dataEnabled) await initCrdt();
 
         return (
           <Image
             {...e.state.props}
             onDropOrPaste={(e) => {
               console.info('⚡️ onDropOrPaste:', e);
-              if (e.isSupported) state.change((d) => (d.props.src = e.file));
+              if (e.isSupported) {
+                state.change((d) => (d.props.src = e.file));
+
+                // Save.
+                if (crdt?.file && e.file) {
+                  console.log('save');
+                  crdt.file.doc.change((d) => {
+                    d.data = e.file?.data;
+                    d.mimetype = e.file?.mimetype;
+                  });
+                }
+              }
             }}
           />
         );
@@ -132,7 +157,29 @@ export default Dev.describe('Image', (e) => {
     dev.hr(2, 20);
 
     dev.section('CRDT', (dev) => {
-      dev.TODO();
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
+          .value((e) => Boolean(e.state.debug.dataEnabled))
+          .onClick(async (e) => {
+            e.change((d) => (local.dataEnabled = Dev.toggle(d.debug, 'dataEnabled')));
+            if (local.dataEnabled) {
+              await initCrdt();
+              dev.redraw();
+            }
+          }),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) =>
+        btn
+          .label('delete file')
+          .enabled((e) => Boolean(e.state.debug.dataEnabled))
+          .onClick((e) => crdt?.file.delete()),
+      );
+
+      dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render() : null));
     });
 
     dev.hr(5, 20);
@@ -150,6 +197,8 @@ export default Dev.describe('Image', (e) => {
       dev.button('reset', (e) => {
         e.state.change((d) => (d.props.src = undefined));
       });
+
+      dev.button('redraw', (e) => dev.redraw());
     });
   });
 
