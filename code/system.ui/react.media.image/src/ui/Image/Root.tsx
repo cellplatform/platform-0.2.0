@@ -6,16 +6,16 @@ import { useDrop } from './hooks/useDrop.mjs';
 import { usePaste } from './hooks/usePaste.mjs';
 import { useWarning } from './hooks/useWarning.mjs';
 import { DropOverlay } from './ui/Drop';
-import { PasteOverlay } from './ui/Paste';
-import { WarnOverlay } from './ui/Warn';
+import { Focused } from './ui/Focused';
+import { Warning } from './ui/Warning';
 
 export type { ImageProps } from './types.mjs';
 
 const View: React.FC<t.ImageProps> = (props) => {
   const { src } = props;
 
-  const message = useWarning(props);
-  const warn = message.write;
+  const warning = useWarning(props);
+  const warn = warning.write;
 
   const ref = useRef<HTMLDivElement>(null);
   const drag = useDrop(ref, props, { warn });
@@ -36,24 +36,20 @@ const View: React.FC<t.ImageProps> = (props) => {
     }),
   };
 
+  const elFocused = paste.is.focused && <Focused />;
   const elDrag = drag.is.over && <DropOverlay settings={props.drop} />;
-
-  const showWarning = message.content && !elDrag;
-  const elWarning = showWarning && (
-    <WarnOverlay settings={props.warning} message={message.content} />
+  const elWarn = warning.content && !elDrag && (
+    <Warning settings={props.warning} message={warning.content} />
   );
 
-  const showPaste = paste.is.focused && !elDrag && !elWarning;
-  const elPaste = showPaste && <PasteOverlay settings={props.paste} />;
-
-  const elImg = binary.url && <div {...styles.image} />;
+  const elImage = binary.url && <div {...styles.image} />;
 
   return (
     <div ref={ref} {...css(styles.base, props.style)} tabIndex={paste.tabIndex}>
-      {elImg}
+      {elImage}
       {elDrag}
-      {elPaste}
-      {elWarning}
+      {elFocused}
+      {elWarn}
     </div>
   );
 };
