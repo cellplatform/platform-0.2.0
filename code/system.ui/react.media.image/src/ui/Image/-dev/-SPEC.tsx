@@ -1,6 +1,7 @@
 import { Image } from '..';
 import { Dev, Filesize, type t } from '../../../test.ui';
-import { type DevDataController } from './-DEV.data';
+import { DevDataController } from './-data';
+import { Util } from '../Util.mjs';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -19,7 +20,7 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('Image', (e) => {
+export default Dev.describe('Image', async (e) => {
   type LocalStore = T['debug'];
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Image');
   const local = localstore.object({
@@ -32,13 +33,7 @@ export default Dev.describe('Image', (e) => {
 
   const getDrop = (props: t.ImageProps) => props.drop || (props.drop = DEFAULTS.drop);
   const getPaste = (props: t.ImageProps) => props.paste || (props.paste = DEFAULTS.paste);
-
-  let crdt: DevDataController | undefined;
-  const initCrdt = async () => {
-    const { DevDataController } = await import('./-DEV.data');
-    crdt = await DevDataController();
-    return crdt;
-  };
+  const crdt = await DevDataController();
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -54,13 +49,7 @@ export default Dev.describe('Image', (e) => {
     });
 
     if (state.current.debug.dataEnabled) {
-      const crdt = await initCrdt();
-      const { mimetype, data } = crdt.file.doc.current;
-      console.log('data', mimetype, data);
-      if (data && mimetype) {
-        const file: t.ImageBinary = { mimetype, data };
-        await state.change((d) => (d.props.src = file));
-      }
+      await state.change((d) => (d.props.src = crdt.current.image));
     }
 
     ctx.debug.width(350);
@@ -71,7 +60,6 @@ export default Dev.describe('Image', (e) => {
 
       .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
-        if (e.state.debug.dataEnabled) await initCrdt();
 
         return (
           <Image
@@ -80,14 +68,7 @@ export default Dev.describe('Image', (e) => {
               console.info('⚡️ onDropOrPaste:', e);
               if (e.isSupported) {
                 state.change((d) => (d.props.src = e.file));
-
-                // Save to file.
-                if (crdt) {
-                  crdt.file.doc.change((d) => {
-                    d.data = e.file?.data;
-                    d.mimetype = e.file?.mimetype;
-                  });
-                }
+                if (crdt && e.file) crdt.update(e.file);
               }
             }}
           />
@@ -163,17 +144,16 @@ export default Dev.describe('Image', (e) => {
 
     dev.hr(2, 20);
 
-    dev.section('CRDT', (dev) => {
+    dev.section(['File', 'CRDT'], (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
           .value((e) => Boolean(e.state.debug.dataEnabled))
-          .onClick(async (e) => {
-            e.change((d) => (local.dataEnabled = Dev.toggle(d.debug, 'dataEnabled')));
-            if (local.dataEnabled) {
-              await initCrdt();
-              dev.redraw();
-            }
+          .onClick((e) => {
+            return e.change((d) => {
+              local.dataEnabled = Dev.toggle(d.debug, 'dataEnabled');
+              if (local.dataEnabled) d.props.src = crdt.current.image;
+            });
           }),
       );
 
@@ -183,7 +163,10 @@ export default Dev.describe('Image', (e) => {
         btn
           .label('delete file')
           .enabled((e) => Boolean(e.state.debug.dataEnabled))
-          .onClick((e) => crdt?.file.delete()),
+          .onClick(async (e) => {
+            await crdt?.file.delete();
+            await e.change((d) => (d.props.src = undefined));
+          }),
       );
 
       dev.row((e) => (e.state.debug.dataEnabled ? crdt?.render() : null));
@@ -198,14 +181,9 @@ export default Dev.describe('Image', (e) => {
           .value((e) => Boolean(e.state.debug.bg))
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
-
       dev.hr(-1, 5);
-
-      dev.button('reset', (e) => {
-        e.state.change((d) => (d.props.src = undefined));
-      });
-
       dev.button('redraw', (e) => dev.redraw());
+      dev.button('reset', (e) => e.change((d) => (d.props.src = null)));
     });
   });
 
