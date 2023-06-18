@@ -4,6 +4,11 @@ import { DEFAULTS, type t } from './common';
  * Helpers
  */
 export const Util = {
+  srcAsBinary(input?: t.ImageProps['src']): t.ImageBinary | undefined {
+    if (!input) return undefined;
+    return typeof input === 'object' ? input : undefined;
+  },
+
   dropOverBlur(input?: t.ImageDropSettings) {
     return input?.blur ?? DEFAULTS.drop.blur;
   },

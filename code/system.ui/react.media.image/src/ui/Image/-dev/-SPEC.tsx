@@ -212,21 +212,20 @@ export default Dev.describe('Image', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const src = e.state.props.src;
-      const bytes = typeof src === 'object' ? src.data.byteLength : -1;
-      const file = typeof src === 'object' ? stripBinary(src) : undefined;
-      const mimetype = typeof src === 'object' ? src.mimetype : undefined;
+      const src = Util.srcAsBinary(e.state.props.src);
+      const bytes = src?.data.byteLength ?? -1;
+      const file = stripBinary(src);
 
       const props = {
         ...e.state.props,
-        src: typeof src === 'string' ? src : stripBinary(src),
+        src: typeof src === 'string' ? src : file,
       };
 
       const data = {
         props,
         file,
         filesize: bytes > -1 ? Filesize(bytes) : undefined,
-        mimetype,
+        mimetype: src?.mimetype ?? undefined,
       };
 
       return <Dev.Object name={'Image'} data={data} expand={1} />;
@@ -237,8 +236,8 @@ export default Dev.describe('Image', (e) => {
 /**
  * Helpers
  */
-const stripBinary = (file?: t.ImageBinary) => {
+const stripBinary = (file?: t.ImageBinary | null) => {
   // NB: The Uint8Array is replaced with a string for display purposes. If left as the
   //     binary object, the UI will hanging, attempting to write it as integers to the DOM.
-  return file ? { ...file, data: `<Uint8Array>[${file.data.byteLength}]` } : undefined;
+  return !file ? undefined : { ...file, data: `<Uint8Array>[${file.data.byteLength}]` };
 };
