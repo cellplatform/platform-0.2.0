@@ -8,8 +8,7 @@ export type DevDataController = Awaited<ReturnType<typeof DevDataController>>;
 const docid = 'dev-image';
 type Doc = {
   name: string;
-  data?: Uint8Array;
-  mimetype?: string;
+  image?: t.ImageBinary | null;
 };
 const initial: Doc = { name: 'Untitled' };
 
@@ -27,16 +26,17 @@ export async function DevDataController(options: { dispose$?: t.Observable<any> 
   return {
     dir,
     file,
-    render() {
-      return render(dir, file);
+    render: () => render(dir, file),
+    update: (image: t.ImageBinary) => doc.change((d) => (d.image = image)),
+    get current() {
+      return doc.current;
     },
   } as const;
 }
 
 /**
- * Render Info
+ * Render <Info> Component.
  */
-
 function render(path: string, file: t.CrdtDocFile<Doc>) {
   const doc = file.doc;
   return (
