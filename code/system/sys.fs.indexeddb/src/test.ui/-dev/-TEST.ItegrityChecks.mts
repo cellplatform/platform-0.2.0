@@ -1,6 +1,4 @@
-import { Time, rx, Dev, Filesystem, expect, Path, t, slug, Filesize } from '../common';
-import { MemoryMock } from 'sys.fs.spec';
-import { Spec } from 'sys.fs.spec';
+import { Dev, Filesize, Filesystem, Time, expect, rx } from '../common';
 
 /**
  * TODO 🐷
@@ -13,8 +11,6 @@ export default Dev.describe('Health Check', async (e) => {
   const { driver } = db;
 
   e.it(`Driver: ${Filesystem.Driver.kind}`, async (e) => {
-    console.log('db', db);
-
     const now = Time.now.timestamp;
     const json = JSON.stringify({ foo: 123, now });
     const data = new TextEncoder().encode(json);
