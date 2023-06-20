@@ -27,5 +27,5 @@ export const TestPrep = (options: { dir?: string; id?: string } = {}) => {
     mocks,
     driver,
     fileExists,
-  };
+  } as const;
 };

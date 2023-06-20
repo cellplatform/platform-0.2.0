@@ -6,4 +6,4 @@ export const Filesystem = {
   Bus,
   Path,
   Filesize,
-};
+} as const;
