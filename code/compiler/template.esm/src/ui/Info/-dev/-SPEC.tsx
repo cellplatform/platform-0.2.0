@@ -1,4 +1,4 @@
-import { Dev } from '../test.ui';
+import { Dev } from '../../../test.ui';
 
 type T = { count: number };
 const initial: T = { count: 0 };

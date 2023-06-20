@@ -65,8 +65,14 @@ export const Paths = {
       'src/test.ui/entry.tsx',
       'src/test.ui/index.ts',
 
-      'src/ui/-SPEC.tsx',
-      'src/ui/common.ts',
+      'src/ui/common/index.ts',
+      'src/ui/common/libs.mts',
+      'src/ui/common/types.mts',
+
+      'src/ui/Info/-dev/-SPEC.tsx',
+      'src/ui/Info/index.ts',
+      'src/ui/Info/Root.tsx',
+      'src/ui/Info/types.mts',
     ],
   },
 };
