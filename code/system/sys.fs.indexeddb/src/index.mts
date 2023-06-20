@@ -15,6 +15,7 @@ export { Filesystem } from './Filesystem.mjs';
  * Dev
  */
 export const dev = async () => {
+  const { TestFilesystem } = await import('./TestFilesystem.mjs');
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Specs, Pkg };
+  return { Pkg, Specs, TestFilesystem };
 };
