@@ -84,7 +84,7 @@ export function FieldFile(
         let strategy = '';
         let strategyCount = 0;
         if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `compressed-file`;
+          strategy += `single:file ← compressed`;
           strategyCount++;
         }
         if (docFile.logging || logFiles.length > 0) {
