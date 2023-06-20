@@ -37,5 +37,5 @@ export function BusController(args: {
   /**
    * API
    */
-  return { id, fs, dir, events, dispose, dispose$ };
+  return { id, fs, dir, events, dispose, dispose$ } as const;
 }

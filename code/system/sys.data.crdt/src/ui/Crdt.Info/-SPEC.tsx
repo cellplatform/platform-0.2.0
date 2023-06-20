@@ -2,13 +2,13 @@ import { CrdtInfo, CrdtInfoProps } from '.';
 import {
   ConnectionMock,
   Crdt,
-  css,
   Dev,
-  getTestFs,
   Keyboard,
   PropList,
+  css,
+  TestFilesystem,
   rx,
-  t,
+  type t,
 } from '../../test.ui';
 
 type T = {
@@ -32,7 +32,7 @@ const initialDoc: Doc = { count: 0 };
 
 export default Dev.describe('CrdtInfo', async (e) => {
   const bus = rx.bus();
-  const fs = await getTestFs(bus);
+  const fs = (await TestFilesystem.client(bus)).fs;
 
   const toFs = (path: string) => ({ path, fs: fs.dir('dev.sample/crdt-info') });
   const fsdirs = {
@@ -74,9 +74,9 @@ export default Dev.describe('CrdtInfo', async (e) => {
         ...props,
         title: debug.title ? ['CRDT Document', null] : undefined,
         data: {
+          url: { href: location.href },
           file: { doc: docFile, path: fsdirs.doc.path },
           network: { doc: debug.syncDoc ? syncDocA : undefined },
-          url: { href: location.href },
           history: {
             data: docA.history,
             item: {

@@ -1,8 +1,7 @@
-import { rx, slug, t } from './common';
+import { rx, slug, type t } from './common';
 import { Filesystem } from './Filesystem.mjs';
 import { MemoryMock } from './MemoryMock';
 
-type FilesystemId = string;
 type DirPath = string;
 
 /**
@@ -15,12 +14,21 @@ export const TestFilesystem = {
   /**
    * A test filesystem backed my an in-memory shim.
    */
-  memory(options: { bus?: t.EventBus; id?: FilesystemId; dir?: DirPath } = {}) {
-    const { bus = rx.bus(), id = `foo.${slug()}` } = options;
+  memory(
+    options: {
+      dir?: DirPath;
+      bus?: t.EventBus<any>;
+      dispose$?: t.Observable<any>;
+    } = {},
+  ) {
+    const { bus = rx.bus(), dir, dispose$ } = options;
     const driver = MemoryMock.create().driver;
-    const controller = Filesystem.Bus.Controller({ id, bus, driver });
+
+    const id = `fs.memory.${slug()}`;
+    const controller = Filesystem.Bus.Controller({ id, bus, driver, dispose$ });
     const { events, dispose } = controller;
-    const fs = events.fs(options.dir);
-    return { bus, driver, fs, events, dispose };
+
+    const fs = events.fs(dir);
+    return { bus, driver, fs, events, dispose } as const;
   },
-};
+} as const;

@@ -25,7 +25,7 @@ const warning: Required<t.ImageWarningSettings> = {
 };
 
 const supportedMimetypes: t.ImageSupportedMimetypes[] = ['image/png', 'image/jpeg', 'image/webp'];
-const sizing: t.ImageSizeStrategy = 'contain';
+const sizing: t.ImageSizeStrategy = 'cover';
 
 export const DEFAULTS = {
   supportedMimetypes,

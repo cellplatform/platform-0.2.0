@@ -34,14 +34,8 @@ export default Dev.describe('TestRunner', (e) => {
     dev.bdd((bdd) =>
       bdd
         .localstore('dev:sys.fs.indexeddb')
-        .modules([
-          //
-          import('./-TEST.ItegrityChecks.mjs'),
-          import('./-TEST.Functional.mjs'),
-        ])
-        .onChanged((e) => {
-          e.change((d) => (d.results = e.results));
-        }),
+        .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
+        .onChanged((e) => e.change((d) => (d.results = e.results))),
     );
   });
 

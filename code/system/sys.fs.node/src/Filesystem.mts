@@ -28,6 +28,6 @@ export const Filesystem = {
     const fs = events.fs();
     const ready = await events.ready();
     if (ready.error) throw new Error(ready.error.message);
-    return { fs, bus, events, dispose };
+    return { fs, bus, events, dispose } as const;
   },
-};
+} as const;

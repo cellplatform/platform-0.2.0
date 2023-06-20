@@ -1,7 +1,7 @@
 import { asArray, t, Path } from './common';
 
-type FilesystemId = string;
 type FilePath = string;
+type FilesystemId = string;
 type MaybeError = t.FsError | undefined;
 
 /**

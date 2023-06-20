@@ -37,7 +37,6 @@ export { useDragTarget } from './ui/useDragTarget';
 /**
  * Common up-stream modules
  */
-
 export { css, Style, Color, COLORS, rx, FC, UserAgent } from './common';
 
 /**
@@ -46,5 +45,5 @@ export { css, Style, Color, COLORS, rx, FC, UserAgent } from './common';
 export { Dev, DevTools, Spec, TestRunner } from './ui.dev';
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Specs, Pkg };
+  return { Pkg, Specs };
 };

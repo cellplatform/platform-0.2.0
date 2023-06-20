@@ -6,5 +6,5 @@ export { Pkg };
  */
 export const dev = async () => {
   const { Specs } = await import('./test.ui/entry.Specs.mjs');
-  return { Specs, Pkg };
+  return { Pkg, Specs };
 };

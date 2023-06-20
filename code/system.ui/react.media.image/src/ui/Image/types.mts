@@ -15,7 +15,7 @@ export type ImageSizeStrategy = 'cover' | 'contain';
  * Component Properties
  */
 export type ImageProps = {
-  src?: string | t.ImageBinary;
+  src?: string | t.ImageBinary | null;
   drop?: t.ImageDropSettings;
   paste?: t.ImagePasteSettings;
   warning?: t.ImageWarningSettings;
