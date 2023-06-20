@@ -1,5 +1,5 @@
 import { Test, describe, expect, it, type t } from '.';
-import { getTestFilesystem } from '../test.ui';
+import { TestFilesystem } from '../test.ui';
 import { TESTS } from '../test.ui/-TestRunner.TESTS.mjs';
 
 /**
@@ -25,7 +25,7 @@ describe('visual specs', () => {
   });
 
   it('test filesystem', async (e) => {
-    const fs = await getTestFilesystem();
+    const fs = await TestFilesystem.client();
     expect(fs.events.id).to.match(/^fs\.memory\./); // NB: because running on node.
   });
 });

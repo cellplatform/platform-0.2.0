@@ -1,5 +1,6 @@
 import { TestFilesystem as Base } from 'sys.fs';
 import { rx, Is, type t } from './common';
+import { Filesystem } from './Filesystem.mjs';
 
 /**
  * Common setup for tests that interact with a filesystem.
@@ -18,7 +19,6 @@ export const TestFilesystem = {
 
     // Browser.
     const id = 'fs.dev';
-    const { Filesystem } = await import('sys.fs.indexeddb');
     return await Filesystem.client({ bus, id });
   },
 } as const;
