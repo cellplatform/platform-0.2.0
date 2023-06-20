@@ -1,23 +1,63 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, rx, FC, type t } from '../common';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
+import { FieldModuleVerify } from './fields/Module.Verify';
 
 export type InfoProps = {
+  title?: t.PropListProps['title'];
+  width?: t.PropListProps['width'];
+  fields?: t.InfoField[];
+  data?: t.InfoData;
+  margin?: t.CssEdgesInput;
+  card?: boolean;
+  flipped?: boolean;
   style?: t.CssValue;
 };
 
-export const Info: React.FC<InfoProps> = (props) => {
-  /**
-   * [Render]
-   */
-  const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-  };
+/**
+ * Component
+ */
+const View: React.FC<InfoProps> = (props) => {
+  const { fields = DEFAULTS.fields, data = {} } = props;
+
+  const items = PropList.builder<t.InfoField>()
+    .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
+    .field('Module.Verify', () => FieldModuleVerify(data))
+    .items(fields);
 
   return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 Info`}</div>
-    </div>
+    <PropList
+      title={Wrangle.title(props)}
+      items={items}
+      width={props.width ?? { min: 230 }}
+      defaults={{ clipboard: false }}
+      card={props.card}
+      flipped={props.flipped}
+      padding={props.card ? [20, 25, 30, 25] : undefined}
+      margin={props.margin}
+      style={props.style}
+    />
   );
 };
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  title(props: InfoProps) {
+    const title = PropList.Wrangle.title(props.title);
+    if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
+    return title;
+  },
+};
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+  FIELDS: typeof FIELDS;
+};
+export const Info = FC.decorate<InfoProps, Fields>(
+  View,
+  { DEFAULTS, FIELDS },
+  { displayName: 'Info' },
+);

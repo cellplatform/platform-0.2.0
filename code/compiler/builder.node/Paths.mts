@@ -50,6 +50,8 @@ export const Paths = {
       'src/index.pkg.mts',
 
       'src/types.mts',
+      'src/global.d.mts',
+
       'src/common/index.ts',
       'src/common/libs.mts',
       'src/common/types.mts',
@@ -65,11 +67,14 @@ export const Paths = {
       'src/test.ui/entry.tsx',
       'src/test.ui/index.ts',
 
+      'src/ui/common.t.ts',
       'src/ui/common/index.ts',
       'src/ui/common/libs.mts',
       'src/ui/common/types.mts',
 
       'src/ui/Info/-dev/-SPEC.tsx',
+      'src/ui/Info/fields/Module.Verify.tsx',
+      'src/ui/Info/common.ts',
       'src/ui/Info/index.ts',
       'src/ui/Info/Root.tsx',
       'src/ui/Info/types.mts',

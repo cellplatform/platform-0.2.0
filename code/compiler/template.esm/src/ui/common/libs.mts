@@ -6,6 +6,8 @@ export {
   Color,
   FC,
   Keyboard,
+  PropList,
+  TestRunner,
   css,
   useDragTarget,
   useFocus,
