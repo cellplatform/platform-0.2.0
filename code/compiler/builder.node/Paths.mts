@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { t, fs } from './common/index.mjs';
+import { fs, type t } from './common/index.mjs';
 
 /**
  * Paths.
@@ -45,14 +45,28 @@ export const Paths = {
     src: [
       'script.ts/tmp.mts',
       'src/global.d.mts',
+
       'src/index.mts',
       'src/index.pkg.mts',
-      'src/index.TEST.v.mts',
+
       'src/types.mts',
-      'src/test/index.ts',
       'src/common/index.ts',
       'src/common/libs.mts',
       'src/common/types.mts',
+
+      'src/test/-TEST.v.mts',
+      'src/test/index.ts',
+
+      'src/test.ui/-TEST.mts',
+      'src/test.ui/-TestRunner.TESTS.mts',
+      'src/test.ui/-TestRunner.tsx',
+      'src/test.ui/common.ts',
+      'src/test.ui/entry.Specs.mts',
+      'src/test.ui/entry.tsx',
+      'src/test.ui/index.ts',
+
+      'src/ui/-SPEC.tsx',
+      'src/ui/common.ts',
     ],
   },
 };
