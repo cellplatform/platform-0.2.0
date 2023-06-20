@@ -13,20 +13,21 @@ export const Filesystem = {
 
   /**
    * Initialize an event-bus driven client API
-   * to the node filesystem.
+   * to the IndexedDB filesystem.
    */
   async client(
     options: {
-      dir?: DirPath;
-      bus?: t.EventBus;
       id?: FilesystemId;
+      bus?: t.EventBus;
+      dir?: DirPath;
       dispose$?: t.Observable<any>;
     } = {},
   ) {
     const { bus = rx.bus(), dir, dispose$ } = options;
     const driver = (await IndexedDb({ dir, id: options.id })).driver;
 
-    const controller = Bus.Controller({ bus, id: `fs.indexeddb.${slug()}`, driver, dispose$ });
+    const id = `fs.indexeddb.${slug()}`;
+    const controller = Bus.Controller({ id, bus, driver, dispose$ });
     const { events, dispose } = controller;
     const fs = events.fs();
 
@@ -40,4 +41,4 @@ export const Filesystem = {
       dispose,
     };
   },
-};
+} as const;
