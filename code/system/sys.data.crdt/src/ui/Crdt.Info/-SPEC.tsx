@@ -6,7 +6,7 @@ import {
   Keyboard,
   PropList,
   css,
-  getTestFs,
+  getTestFilesystem,
   rx,
   type t,
 } from '../../test.ui';
@@ -32,7 +32,7 @@ const initialDoc: Doc = { count: 0 };
 
 export default Dev.describe('CrdtInfo', async (e) => {
   const bus = rx.bus();
-  const fs = await getTestFs(bus);
+  const fs = (await getTestFilesystem(bus)).fs;
 
   const toFs = (path: string) => ({ path, fs: fs.dir('dev.sample/crdt-info') });
   const fsdirs = {
