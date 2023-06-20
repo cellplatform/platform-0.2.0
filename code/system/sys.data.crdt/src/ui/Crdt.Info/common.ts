@@ -1,4 +1,4 @@
-import { t, Value, Filesize, DEFAULTS as DEFAULTS_BASE } from '../common';
+import { DEFAULTS as DEFAULTS_BASE, Filesize, Value, type t } from '../common';
 
 export * from '../common';
 

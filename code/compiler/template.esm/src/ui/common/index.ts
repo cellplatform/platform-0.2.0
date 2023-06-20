@@ -1,4 +1,5 @@
-export type { t } from '../common.t';
+import type * as t from './types.mjs';
 
+export { type t };
 export * from '../../common';
 export * from './libs.mjs';

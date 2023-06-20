@@ -8,7 +8,5 @@ export const DEFAULTS = {
     logdir: 'local.log',
     autosaveDebounce: 300,
   },
-  query: {
-    dev: 'dev',
-  },
+  query: { dev: 'dev' },
 } as const;

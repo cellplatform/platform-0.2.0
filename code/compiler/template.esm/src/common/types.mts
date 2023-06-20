@@ -1,9 +1,15 @@
 /**
+ * @external
+ */
+export type { Observable } from 'rxjs';
+
+/**
  * @system
  */
-export type { EventBus, Disposable } from 'sys.types/src/types.mjs';
+export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
+export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types.mjs';
 
 /**
  * @local
  */
-export * from '../types.mjs';
+export type * from '../types.mjs';

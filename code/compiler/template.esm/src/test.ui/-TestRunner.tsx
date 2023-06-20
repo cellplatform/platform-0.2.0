@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
-        .localstore('dev:sys.crdt.testrunner')
+        .localstore('dev:NAMESPACE')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );
@@ -45,8 +45,8 @@ export default Dev.describe('TestRunner', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = { TestResults: e.state.results };
-      return <Dev.Object name={'state'} data={data} expand={1} />;
+      const data = { Results: e.state.results };
+      return <Dev.Object name={'TestRunner'} data={data} expand={1} />;
     });
   });
 });
