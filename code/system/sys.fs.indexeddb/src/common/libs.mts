@@ -1,2 +1,2 @@
-export { rx, slug, Stream, Hash, Delete, Mime, Time, Json } from 'sys.util';
-export { Path, ManifestHash, ManifestFiles, Wrangle, Filesize } from 'sys.fs';
+export { Filesize, ManifestFiles, ManifestHash, Path, Wrangle } from 'sys.fs';
+export { Delete, Hash, Is, Json, Mime, Stream, Time, rx, slug } from 'sys.util';
