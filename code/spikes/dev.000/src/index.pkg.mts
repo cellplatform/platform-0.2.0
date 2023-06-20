@@ -27,6 +27,10 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
     'vendor.stripe': '0.0.0',
+    'vendor.wallet.rainbow': '0.0.0',
+    '@rainbow-me/rainbowkit': '1.0.2',
+    'viem': '1.0.7',
+    'wagmi': '1.2.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
