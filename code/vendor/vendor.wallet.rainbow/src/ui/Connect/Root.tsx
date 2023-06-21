@@ -3,7 +3,7 @@ import { useImports } from './useImports.mjs';
 
 export type ConnectProps = {
   appName: string;
-  projectId: string; // WalletConnect Cloud project ID. https://cloud.walletconnect.com/
+  projectId: string; // WalletConnect Cloud project. https://cloud.walletconnect.com/
   autoload?: boolean;
   style?: t.CssValue;
 };
