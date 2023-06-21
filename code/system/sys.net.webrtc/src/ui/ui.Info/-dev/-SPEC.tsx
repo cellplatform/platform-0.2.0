@@ -280,7 +280,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         const { Specs } = await dev();
 
         const m = await Specs['sys.ui.media.image.Image']();
-        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
+        const el = <Dev.Harness key={'image'} spec={m.default} background={1} />;
         set(el);
       }
     };
