@@ -1,1 +1,1 @@
-# Vendor Modules (Wrappers to APIs of External Systems)
+# Vendor Modules (Wrappers to External System APIs)

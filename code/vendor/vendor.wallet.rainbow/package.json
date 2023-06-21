@@ -1,5 +1,5 @@
 {
-  "name": "sys.ui.react.common",
+  "name": "vendor.wallet.rainbow",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -11,38 +11,29 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "qrcode": "1.5.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "4.9.0",
-    "react-spinners": "0.13.8",
-    "react-inspector": "6.0.2",
-    "sys.text": "0.0.0",
-    "sys.ui.dom": "0.0.0",
-    "sys.ui.react.util": "0.0.0",
-    "sys.ui.react.css": "0.0.0",
-    "sys.util": "0.0.0"
+    "@rainbow-me/rainbowkit": "1.0.2",
+    "viem": "1.1.2",
+    "wagmi": "1.2.1",
+    "sys.util": "0.0.0",
+    "sys.ui.react.common": "0.0.0"
   },
   "devDependencies": {
-    "@types/qrcode": "1.5.0",
-    "sys.fs": "0.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sys.fs.indexeddb": "0.0.0",
     "sys.test": "0.0.0",
-    "sys.types": "0.0.0",
-    "sys.ui.react.dev": "0.0.0"
+    "sys.test.spec": "0.0.0",
+    "sys.types": "0.0.0"
   },
   "license": "MIT",
   "private": true,
   "types": "./dist/types.d/index.d.mts",
   "exports": {
     ".": "./dist/web/index.js",
-    "./dev": "./dist/web/dev.js",
     "./specs": "./dist/web/specs.js"
   },
   "typesVersions": {
     "*": {
-      "dev": [
-        "./dist/types.d/ui.dev/index.d.ts"
-      ],
       "specs": [
         "./dist/types.d/test.ui/entry.Specs.d.mts"
       ]
