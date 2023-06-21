@@ -1,3 +1,5 @@
+import '@rainbow-me/rainbowkit/styles.css';
+
 import { css, type t } from '../common';
 import { useImports } from './useImports.mjs';
 

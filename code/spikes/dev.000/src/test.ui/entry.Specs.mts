@@ -1,3 +1,5 @@
+import '@rainbow-me/rainbowkit/styles.css';
+
 const { Specs: Crdt } = await import('sys.data.crdt/specs');
 const { Specs: Fs } = await import('sys.fs.indexeddb/specs');
 const { Specs: WebRtc } = await import('sys.net.webrtc/specs');
@@ -9,6 +11,7 @@ const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 
 const { Specs: VendorStripe } = await import('vendor.stripe/specs');
+const { Specs: VendorWallet } = await import('vendor.wallet.rainbow/specs');
 
 export const Specs = {
   ...WebRtc,
@@ -21,4 +24,5 @@ export const Specs = {
   ...MediaImage,
   ...Fs,
   ...VendorStripe,
+  ...VendorWallet,
 };
