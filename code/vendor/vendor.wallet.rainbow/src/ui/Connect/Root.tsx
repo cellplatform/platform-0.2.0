@@ -1,11 +1,19 @@
+/**
+ * Configuration
+ * NOTE: May need to copy this style import in up-stream host module.
+ */
 import '@rainbow-me/rainbowkit/styles.css';
 
-import { css, type t } from '../common';
-import { useImports } from './useImports.mjs';
+/**
+ * Imports.
+ */
+import { lightTheme } from '@rainbow-me/rainbowkit';
+import { Loading } from './Root.Loading';
+import { DEFAULTS, FC, css, type t } from './common';
+import { useConfigImport } from './useConfigImport.mjs';
 
 export type ConnectProps = {
-  appName: string;
-  projectId: string; // WalletConnect Cloud project. https://cloud.walletconnect.com/
+  config: t.ConnectConfig;
   autoload?: boolean;
   style?: t.CssValue;
 };
@@ -14,18 +22,22 @@ export type ConnectProps = {
  * A wallet connect button.
  * https://www.rainbowkit.com/docs
  */
-export const Connect: React.FC<ConnectProps> = (props) => {
-  const { autoload = true, appName, projectId } = props;
+const View: React.FC<ConnectProps> = (props) => {
+  const { autoload = DEFAULTS.autoload, config } = props;
 
-  const imports = useImports({ appName, projectId, autoload });
-  if (!imports.ready) return null;
+  /**
+   * Load dynamic (code-split) imports.
+   */
+  const imports = useConfigImport({ config, autoload });
+  const { Wagmi, RainbowKit } = imports;
 
-  const { WagmiConfig, RainbowKit } = imports;
-  if (!WagmiConfig?.Component) return null;
-  if (!WagmiConfig?.data) return null;
-  if (!RainbowKit?.ConnectButton) return null;
-  if (!RainbowKit?.Provider) return null;
-  if (!RainbowKit?.chains) return null;
+  const elLoading = <Loading />;
+  if (!imports.ready) return elLoading;
+  if (!Wagmi?.ConfigProvider) return elLoading;
+  if (!Wagmi?.config) return elLoading;
+  if (!RainbowKit?.ConnectButton) return elLoading;
+  if (!RainbowKit?.Provider) return elLoading;
+  if (!RainbowKit?.chains) return elLoading;
 
   /**
    * [Render]
@@ -34,13 +46,31 @@ export const Connect: React.FC<ConnectProps> = (props) => {
     base: css({}),
   };
 
+  const theme = lightTheme({
+    // https://www.rainbowkit.com/docs/theming
+    borderRadius: 'medium',
+    fontStack: 'system',
+  });
+
   return (
     <div {...css(styles.base, props.style)}>
-      <WagmiConfig.Component config={WagmiConfig.data}>
-        <RainbowKit.Provider chains={RainbowKit.chains}>
+      <Wagmi.ConfigProvider config={Wagmi.config}>
+        <RainbowKit.Provider chains={RainbowKit.chains} theme={theme}>
           <RainbowKit.ConnectButton />
         </RainbowKit.Provider>
-      </WagmiConfig.Component>
+      </Wagmi.ConfigProvider>
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const Connect = FC.decorate<ConnectProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'Connect' },
+);

@@ -5,8 +5,8 @@ import { type t } from '../common';
 /**
  * Hook for dynamically importing code-split libs.
  */
-export function useImports(args: { appName: string; projectId: string; autoload?: boolean }) {
-  const { appName, projectId } = args;
+export function useConfigImport(args: { config: t.ConnectConfig; autoload?: boolean }) {
+  const { appName, projectId } = args.config;
   const [config, setConfig] = useState<t.ConfigureResponse>();
 
   /**
@@ -18,21 +18,25 @@ export function useImports(args: { appName: string; projectId: string; autoload?
     }
   }, [appName, projectId, args.autoload]);
 
+  const Wagmi = {
+    ConfigProvider: config?.WagmiConfig,
+    config: config?.wagmiConfig,
+  };
+
+  const RainbowKit = {
+    Provider: config?.RainbowKitProvider,
+    ConnectButton: config?.ConnectButton,
+    chains: config?.chains,
+  };
+
   /**
    * API
    */
-  return {
+  const api = {
     ready: Boolean(config),
-    appName,
-    projectId,
-    WagmiConfig: {
-      Component: config?.WagmiConfig,
-      data: config?.wagmiConfig,
-    },
-    RainbowKit: {
-      ConnectButton: config?.ConnectButton,
-      Provider: config?.RainbowKitProvider,
-      chains: config?.chains,
-    },
+    Wagmi,
+    RainbowKit,
   } as const;
+
+  return api;
 }

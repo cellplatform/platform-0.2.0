@@ -1,7 +1,11 @@
 import { Import } from './Config.Import.mjs';
 
 /**
- * Dynamically load and configure the wallet and chain connections
+ * Dynamically load (code-split) modules and configure
+ * the wallet, chain connections and UI components.
+ *
+ * See:
+ *    https://www.rainbowkit.com/docs/installation#manual-setup
  */
 export async function configure(args: { appName: string; projectId: string }) {
   const { appName, projectId } = args;
