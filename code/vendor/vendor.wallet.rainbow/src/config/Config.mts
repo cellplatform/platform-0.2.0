@@ -11,6 +11,15 @@ export async function configure(args: { appName: string; projectId: string }) {
   const { appName, projectId } = args;
   const eth = await Import.all();
 
+  /**
+   * Docs:
+   *  - https://wagmi.sh/react/chains
+   *  - https://www.rainbowkit.com/docs/chains
+   *
+   * Available chains:
+   *  - https://wagmi.sh/react/chains#supported-chains
+   *
+   */
   const { chains, publicClient } = eth.configureChains(
     [eth.mainnet, eth.polygon, eth.optimism, eth.arbitrum],
     [
