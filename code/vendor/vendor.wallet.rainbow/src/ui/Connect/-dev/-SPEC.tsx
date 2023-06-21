@@ -2,7 +2,13 @@ import { Dev } from '../../../test.ui';
 import { Connect, type ConnectProps } from '..';
 
 type T = { props: ConnectProps };
-const initial: T = { props: { autoload: false } };
+const initial: T = {
+  props: {
+    appName: 'Foo',
+    projectId: '4d190498d1b5bc687c6118ed29015c65',
+    autoload: false,
+  },
+};
 
 export default Dev.describe('Connect', (e) => {
   e.it('ui:init', async (e) => {

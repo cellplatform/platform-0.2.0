@@ -2,17 +2,18 @@ import { css, type t } from '../common';
 import { useImports } from './useImports.mjs';
 
 export type ConnectProps = {
+  appName: string;
+  projectId: string; // WalletConnect Cloud project ID. https://cloud.walletconnect.com/
   autoload?: boolean;
   style?: t.CssValue;
 };
 
 /**
- * A wallet connect button
+ * A wallet connect button.
+ * https://www.rainbowkit.com/docs
  */
 export const Connect: React.FC<ConnectProps> = (props) => {
-  const { autoload = true } = props;
-  const appName = 'Foo';
-  const projectId = '4d190498d1b5bc687c6118ed29015c65'; // TEMP 🐷
+  const { autoload = true, appName, projectId } = props;
 
   const imports = useImports({ appName, projectId, autoload });
   if (!imports.ready) return null;
