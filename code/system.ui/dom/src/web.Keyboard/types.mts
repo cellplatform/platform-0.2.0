@@ -3,7 +3,7 @@ import type { t } from '../common.t';
 export type KeyListenerHandle = t.Disposable;
 
 export type KeyPattern = string; // eg. "CMD + K"
-export type KeyboardStage = 'Down' | 'Up';
+export type KeyPressStage = 'Down' | 'Up';
 export type KeyboardModifierEdges = [] | ['Left'] | ['Right'] | ['Left' | 'Right'];
 export type KeyboardModifierKey = 'SHIFT' | 'CTRL' | 'ALT' | 'META';
 
@@ -82,7 +82,7 @@ export type KeyboardModifierFlags = {
  * Keypress
  */
 export type KeyboardKeypress = {
-  readonly stage: KeyboardStage;
+  readonly stage: KeyPressStage;
   readonly key: string;
   readonly keypress: KeyboardKeypressProps;
   readonly is: KeyboardKeyFlags;
