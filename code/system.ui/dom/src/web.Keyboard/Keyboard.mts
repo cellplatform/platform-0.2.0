@@ -9,9 +9,14 @@ import { Util } from './Util.mjs';
 export const Keyboard = {
   Monitor,
   Match,
-  subscribe: Monitor.subscribe,
+
+  get $() {
+    return Monitor.$;
+  },
+
   on: Monitor.on,
   onKeydown: KeyListener.keydown,
   onKeyup: KeyListener.keyup,
+
   toKeypress: Util.toKeypress,
-};
+} as const;
