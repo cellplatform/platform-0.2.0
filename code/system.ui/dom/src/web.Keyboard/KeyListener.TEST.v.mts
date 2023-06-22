@@ -1,16 +1,8 @@
 import { describe, expect, it, Time } from '../test';
 import { KeyListener } from './KeyListener.mjs';
+import { Mock } from './Util.Mock.mjs';
 
 describe('KeyListener', () => {
-  const Mock = {
-    keydownEvent() {
-      return new window.KeyboardEvent('keydown', { key: 'z', keyCode: 90 });
-    },
-    keyupEvent() {
-      return new window.KeyboardEvent('keydown', { key: 'z', keyCode: 90 });
-    },
-  };
-
   it('fires (keydown | keyup)', async () => {
     const fired: KeyboardEvent[] = [];
     KeyListener.keydown((e) => fired.push(e));

@@ -1,4 +1,4 @@
-import { KeyboardMonitor as Monitor } from './KeyboardMonitor.mjs';
+import { KeyboardMonitor as Monitor } from './Keyboard.Monitor.mjs';
 import { KeyListener } from './KeyListener.mjs';
 import { Match } from './Match.mjs';
 import { Util } from './Util.mjs';
