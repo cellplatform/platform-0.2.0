@@ -32,8 +32,8 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
   subscribe(fn: (e: t.KeyboardState) => void) {
     const disposable = rx.disposable();
     if (KeyboardMonitor.isSupported) {
-      ensureStarted();
-      singleton$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
+      const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$));
+      $.subscribe(fn);
     }
     return disposable;
   },
