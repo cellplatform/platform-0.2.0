@@ -20,7 +20,14 @@ addSamples('boo.cat');
 add('zoo');
 
 type T = { props: CmdHostProps };
-const initial: T = { props: { pkg: Pkg, specs, hrDepth: 2 } };
+
+const badge = {
+  image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
+  href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
+};
+const initial: T = {
+  props: { pkg: Pkg, specs, hrDepth: 2, badge },
+};
 
 export default Dev.describe('CmdHost', (e) => {
   e.it('init', async (e) => {
