@@ -42,7 +42,11 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative', display: 'grid', gridTemplateRows: '1fr auto' }),
-    body: css({ position: 'relative', display: 'grid' }),
+    body: css({
+      userSelect: 'none',
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
   return (
