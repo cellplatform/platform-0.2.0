@@ -9,6 +9,7 @@ import { Util } from './Util.mjs';
 export const Keyboard = {
   Monitor,
   Match,
+  subscribe: Monitor.subscribe,
   on: Monitor.on,
   onKeydown: KeyListener.keydown,
   onKeyup: KeyListener.keyup,
