@@ -1,14 +1,14 @@
+import type { ConfigType, Dayjs } from 'dayjs';
 import type { Observable } from 'rxjs';
-import type { Dayjs, ConfigType } from 'dayjs';
-import { type t } from '../common.t';
+import type { t } from '../common.t';
 
 export type TimeDuration = {
-  ok: boolean;
-  msec: number;
-  sec: number;
-  min: number;
-  hour: number;
-  day: number;
+  readonly ok: boolean;
+  readonly msec: number;
+  readonly sec: number;
+  readonly min: number;
+  readonly hour: number;
+  readonly day: number;
   toString(unit?: TimeUnit | { unit?: TimeUnit; round?: number }): string;
 };
 
@@ -16,10 +16,10 @@ export type TimeUnit = 'msec' | 'ms' | 'sec' | 's' | 'min' | 'm' | 'hour' | 'h' 
 
 export type TimeDelay<T = any> = (msecs: number, callback?: () => T) => TimeDelayPromise<T>;
 export type TimeDelayPromise<T = any> = Promise<T> & {
-  id: NodeJS.Timeout;
-  isCancelled: boolean;
+  readonly id: NodeJS.Timeout;
+  readonly result: T | undefined;
+  readonly isCancelled: boolean;
   cancel(): void;
-  result: T | undefined;
 };
 
 export type TimeWait = (msecs: number | Observable<any>) => Promise<unknown>;
@@ -32,31 +32,32 @@ export type DayFactory = (config?: ConfigType) => Dayjs;
 export type DateInput = number | string | Date | Dayjs;
 
 export type Time = {
-  delay: TimeDelay;
-  wait: TimeWait;
-  elapsed: TimeElapsed;
-  day: DayFactory;
-  now: DateTime;
+  readonly delay: TimeDelay;
+  readonly wait: TimeWait;
+  readonly elapsed: TimeElapsed;
+  readonly day: DayFactory;
+  readonly now: DateTime;
+  readonly timezone: string;
   until(until$?: t.UntilObservable): TimeUntil;
-  timezone: string;
   utc(input?: Date | number): DateTime;
   timer(start?: Date, options?: { round?: number }): Timer;
   duration(msec: number | string, options?: { round?: number }): TimeDuration;
 };
 
 export type DateTime = {
-  date: Date;
-  timestamp: number;
-  unix: number;
+  readonly date: Date;
+  readonly timestamp: number;
+  readonly unix: number;
   format(template?: string): string;
 };
 
 export type Timer = {
-  startedAt: Date;
+  readonly startedAt: Date;
+  readonly elapsed: TimeDuration;
   reset: () => Timer;
-  elapsed: TimeDuration;
 };
 
-export type TimeUntil = t.Lifecycle & {
-  delay: TimeDelay;
+export type TimeUntil = {
+  readonly delay: TimeDelay;
+  readonly disposed: boolean;
 };

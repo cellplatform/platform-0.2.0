@@ -8,3 +8,5 @@ export type Disposable = {
 export type Lifecycle = Disposable & {
   readonly disposed: boolean;
 };
+
+export type UntilObservable = Observable<any> | (Observable<any> | undefined)[];
