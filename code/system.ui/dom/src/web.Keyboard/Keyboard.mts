@@ -1,5 +1,6 @@
-import { KeyboardMonitor as Monitor } from './Keyboard.Monitor.mjs';
 import { KeyListener } from './KeyListener.mjs';
+import { KeyboardMonitor as Monitor } from './Keyboard.Monitor.mjs';
+import { until } from './Keyboard.until.mjs';
 import { Match } from './Match.mjs';
 import { Util } from './Util.mjs';
 
@@ -10,13 +11,10 @@ export const Keyboard = {
   Monitor,
   Match,
 
-  get $() {
-    return Monitor.$;
-  },
-
   on: Monitor.on,
   onKeydown: KeyListener.keydown,
   onKeyup: KeyListener.keyup,
 
+  until,
   toKeypress: Util.toKeypress,
 } as const;
