@@ -779,18 +779,6 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@farcaster/core@0.9.0", "@farcaster/core@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@farcaster/core/-/core-0.9.0.tgz#54972cbbb7b84fb0985bd4b4bb1c12e3089010a3"
-  integrity sha512-RJPYG6y7an3316avmEwRi2hSKsgxza/9hOQOz0YYgRukOu6qfobt7awQHnDIgV8NUrVtHM0q5UYat5s0N/4UnA==
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@noble/curves" "^1.0.0"
-    "@noble/hashes" "^1.3.0"
-    ethers "~6.2.1"
-    neverthrow "^6.0.0"
-    viem "^0.3.2"
-
 "@farcaster/core@0.9.1", "@farcaster/core@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@farcaster/core/-/core-0.9.1.tgz#2b154e8dd278be13a4fc70d3718c282a2ced748d"
@@ -802,16 +790,6 @@
     ethers "~6.2.1"
     neverthrow "^6.0.0"
     viem "^0.3.2"
-
-"@farcaster/hub-web@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@farcaster/hub-web/-/hub-web-0.3.5.tgz#72191403c87e05e2f83f5aeb8693f570228b2e28"
-  integrity sha512-+dItw/r3xo5XK/tBxKU8Bx1eVX2YejZqfprnZhLZ8HJU6ObUpV87DrvW38cjYdHP4uRpTgd/aAitsCS8jANrZA==
-  dependencies:
-    "@farcaster/core" "^0.9.0"
-    "@improbable-eng/grpc-web" "^0.15.0"
-    "@improbable-eng/grpc-web-node-http-transport" "^0.15.0"
-    rxjs "^7.8.0"
 
 "@farcaster/hub-web@0.3.6":
   version "0.3.6"
@@ -5926,11 +5904,6 @@ react-icons@4.10.1:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
 
-react-icons@4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.9.0.tgz#ba44f436a053393adb1bdcafbc5c158b7b70d2a3"
-  integrity sha512-ijUnFr//ycebOqujtqtV9PFS7JjhWg0QU6ykURVHuL4cbofvRCf3f6GMn9+fBktEFQOIVZnuAYLZdiyadRQRFg==
-
 react-inspector@6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-6.0.2.tgz#aa3028803550cb6dbd7344816d5c80bf39d07e9d"
@@ -7085,6 +7058,21 @@ viem@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.1.2.tgz#04d36cf53df0be3ffceeaf32f55c27d9213007b6"
   integrity sha512-U7Z2JhijfNW7le5hw2QdULW0jzmBG65qN2xIp8hBv26qHGQ3NyIWQGpm1QfpAoR44l7K4TYPNcYn5UMKRcpxnA==
+  dependencies:
+    "@adraffy/ens-normalize" "1.9.0"
+    "@noble/curves" "1.0.0"
+    "@noble/hashes" "1.3.0"
+    "@scure/bip32" "1.3.0"
+    "@scure/bip39" "1.2.0"
+    "@wagmi/chains" "1.2.0"
+    abitype "0.8.7"
+    isomorphic-ws "5.0.0"
+    ws "8.12.0"
+
+viem@1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.1.4.tgz#21be6d235fb387a391d4abdbbf95cd93bd066ffb"
+  integrity sha512-3bJkS60Sw6Rf6a2ydKDnDxAI0PTZK0yGoyux2nqPSBoXBL+w9hXPNcnm8Uf6FlKce5sQadVRfi2n6MrgzablxA==
   dependencies:
     "@adraffy/ens-normalize" "1.9.0"
     "@noble/curves" "1.0.0"
