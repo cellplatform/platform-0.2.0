@@ -11,9 +11,9 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.384',
+  version: '0.0.385',
   dependencies: {
-    '@rainbow-me/rainbowkit': '1.0.2',
+    '@rainbow-me/rainbowkit': '1.0.3',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.crdt': '0.0.0',
@@ -29,8 +29,8 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'vendor.stripe': '0.0.0',
     'vendor.wallet.rainbow': '0.0.0',
-    'viem': '1.1.4',
-    'wagmi': '1.2.1',
+    'viem': '1.1.7',
+    'wagmi': '1.3.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
