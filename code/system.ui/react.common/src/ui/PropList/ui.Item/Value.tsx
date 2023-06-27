@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
 import { format } from '../Util.format.mjs';
-import { DEFAULTS, Time, css, t, useMouseState } from './common';
-
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
+import { DEFAULTS, Time, css, useMouseState, type t } from './common';
 
 export type PropListValueProps = {
   item: t.PropListItem;

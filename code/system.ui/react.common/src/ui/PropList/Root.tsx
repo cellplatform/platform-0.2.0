@@ -1,5 +1,5 @@
 import { Wrangle } from './Util.mjs';
-import { Chip, DEFAULTS, FC, THEMES, t } from './common';
+import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 
 import { FieldBuilder } from './FieldBuilder.mjs';
 import { PropListProps } from './types.mjs';
