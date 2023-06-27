@@ -69,6 +69,8 @@ export default Dev.describe('Connect', (e) => {
         />
       );
     });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {
