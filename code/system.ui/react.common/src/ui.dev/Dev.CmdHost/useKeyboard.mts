@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Keyboard, t } from './common';
+import { Keyboard, rx, type t } from './common';
 
 export type ArrowKey = 'Up' | 'Down';
 export type ArrowKeyHandler = (e: ArrowKeyHandlerArgs) => void;
@@ -13,13 +13,15 @@ export function useKeyboard(
   options: { onArrowKey?: ArrowKeyHandler } = {},
 ) {
   useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+
     const arrowKey = (e: t.KeyMatchSubscriberHandlerArgs, key: ArrowKey) => {
       e.handled();
       const meta = e.state.modifiers.meta;
       options.onArrowKey?.({ key, meta });
     };
 
-    const handler = Keyboard.on({
+    const handlers = Keyboard.on({
       ['ALT + KeyJ'](e) {
         e.handled();
         textboxRef?.focus();
@@ -34,6 +36,14 @@ export function useKeyboard(
       ['CMD + ArrowDown']: (e) => arrowKey(e, 'Down'),
     });
 
-    return () => handler.dispose();
+    const keypress = Keyboard.until(dispose$);
+    keypress.down$
+      .pipe(rx.filter((e) => Boolean(e.last?.is.letter || e.last?.is.number)))
+      .subscribe((e) => textboxRef?.focus());
+
+    return () => {
+      handlers.dispose();
+      dispose();
+    };
   }, [textboxRef]);
 }

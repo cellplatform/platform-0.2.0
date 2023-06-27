@@ -1,4 +1,5 @@
 import { Import } from './Config.Import.mjs';
+import { ChainNameMapping, type t } from './common';
 
 /**
  * Dynamically load (code-split) modules and configure
@@ -7,9 +8,13 @@ import { Import } from './Config.Import.mjs';
  * See:
  *    https://www.rainbowkit.com/docs/installation#manual-setup
  */
-export async function configure(args: { appName: string; projectId: string }) {
+export async function configure(args: {
+  appName: string;
+  projectId: string;
+  chains: t.ChainName[];
+}) {
   const { appName, projectId } = args;
-  const eth = await Import.all();
+  const evm = await Import.walletModules();
 
   /**
    * Docs:
@@ -20,32 +25,32 @@ export async function configure(args: { appName: string; projectId: string }) {
    *  - https://wagmi.sh/react/chains#supported-chains
    *
    */
-  const { chains, publicClient } = eth.configureChains(
-    [eth.mainnet, eth.polygon, eth.optimism, eth.arbitrum],
+  const { chains, publicClient } = evm.configureChains(
+    ChainNameMapping.filterAndOrder(evm.chains, args.chains, 'EVM.L1.mainnet'),
     [
       // Eth.alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
-      eth.publicProvider(),
+      evm.publicProvider(),
     ],
   );
 
-  const { connectors } = eth.getDefaultWallets({ appName, projectId, chains });
+  const { connectors } = evm.getDefaultWallets({ appName, projectId, chains });
 
-  const wagmiConfig = eth.createConfig({
+  const wagmiConfig = evm.createConfig({
     autoConnect: true,
-    connectors,
     publicClient,
+    connectors,
   });
 
   /**
    * API
    */
-  const { WagmiConfig, RainbowKitProvider, ConnectButton } = eth;
+  const { WagmiConfig, RainbowKitProvider, RainbowConnectButton } = evm;
   return {
     connectors,
     chains,
     wagmiConfig,
     WagmiConfig,
     RainbowKitProvider,
-    ConnectButton,
+    RainbowConnectButton,
   } as const;
 }

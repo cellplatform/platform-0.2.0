@@ -1,4 +1,4 @@
-import { Color, COLORS, DEFAULTS, t, WrangleCard } from './common';
+import { Color, COLORS, DEFAULTS, WrangleCard, type t } from './common';
 import { format } from './Util.format.mjs';
 import { theme } from './Util.theme.mjs';
 

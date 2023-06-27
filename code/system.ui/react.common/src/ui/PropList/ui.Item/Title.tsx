@@ -1,4 +1,4 @@
-import { Style, css, DEFAULTS, t, Wrangle } from './common';
+import { DEFAULTS, Style, Wrangle, css, type t } from './common';
 
 export type PropListTitleProps = {
   data?: t.PropListTitleInput;

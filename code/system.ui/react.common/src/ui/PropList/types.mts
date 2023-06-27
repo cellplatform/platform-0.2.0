@@ -50,6 +50,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   default?: F[];
   resettable?: boolean;
   showIndexes?: boolean;
+  indent?: number;
   style?: t.CssValue;
   onClick?: PropListFieldSelectorClickHandler;
 };
@@ -105,6 +106,7 @@ type ValueBase = {
   fontSize?: number;
   bold?: boolean;
   opacity?: number;
+  indent?: number;
   onClick?: (e: PropListValueEventArgs) => void;
 };
 

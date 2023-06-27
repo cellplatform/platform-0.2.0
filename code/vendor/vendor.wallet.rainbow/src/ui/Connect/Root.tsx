@@ -1,6 +1,6 @@
 /**
  * Configuration
- * NOTE: May need to copy this style import in up-stream host module.
+ * NOTE: You may need to copy this style import in up-stream host.
  */
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -11,24 +11,19 @@ import { lightTheme } from '@rainbow-me/rainbowkit';
 import { Loading } from './Root.Loading';
 import { DEFAULTS, FC, css, type t } from './common';
 import { useConfigImport } from './useConfigImport.mjs';
-
-export type ConnectProps = {
-  config: t.ConnectConfig;
-  autoload?: boolean;
-  style?: t.CssValue;
-};
+import { ChainSelector } from '../ChainSelector';
 
 /**
  * A wallet connect button.
  * https://www.rainbowkit.com/docs
  */
-const View: React.FC<ConnectProps> = (props) => {
-  const { autoload = DEFAULTS.autoload, config } = props;
+const View: React.FC<t.ConnectProps> = (props) => {
+  const { config, autoload = DEFAULTS.autoload, chains = DEFAULTS.chains.default } = props;
 
   /**
    * Load dynamic (code-split) imports.
    */
-  const imports = useConfigImport({ config, autoload });
+  const imports = useConfigImport({ config, autoload, chains });
   const { Wagmi, RainbowKit } = imports;
 
   const elLoading = <Loading />;
@@ -68,9 +63,10 @@ const View: React.FC<ConnectProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  ChainSelector: typeof ChainSelector;
 };
-export const Connect = FC.decorate<ConnectProps, Fields>(
+export const Connect = FC.decorate<t.ConnectProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, ChainSelector },
   { displayName: 'Connect' },
 );

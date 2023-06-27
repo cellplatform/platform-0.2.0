@@ -1,6 +1,6 @@
 import { Match } from './Match.mjs';
 import { DEFAULTS, R, rx, type t } from './common';
-import { Util } from './util.mjs';
+import { Util } from './Util.mjs';
 
 let _isListening = false;
 let _state: t.KeyboardState = R.clone(DEFAULTS.state);
@@ -32,8 +32,8 @@ export const KeyboardMonitor: t.KeyboardMonitor = {
   subscribe(fn: (e: t.KeyboardState) => void) {
     const disposable = rx.disposable();
     if (KeyboardMonitor.isSupported) {
-      ensureStarted();
-      singleton$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$)).subscribe(fn);
+      const $ = KeyboardMonitor.$.pipe(rx.takeUntil(dispose$), rx.takeUntil(disposable.dispose$));
+      $.subscribe(fn);
     }
     return disposable;
   },

@@ -1,4 +1,4 @@
-import { Color, css, DEFAULTS, t, Wrangle } from './common';
+import { Color, css, DEFAULTS, Wrangle, type t } from './common';
 import { PropListLabel } from './Label';
 import { PropListValue } from './Value';
 

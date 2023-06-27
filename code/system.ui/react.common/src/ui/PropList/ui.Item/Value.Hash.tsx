@@ -1,4 +1,4 @@
-import { COLORS, css, t, useMouseState, Value } from './common';
+import { COLORS, Value, css, useMouseState, type t } from './common';
 
 const DEFAULT = {
   length: [8, 5] as [number, number],

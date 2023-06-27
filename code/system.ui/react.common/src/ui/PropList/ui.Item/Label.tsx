@@ -1,4 +1,4 @@
-import { css, t, Wrangle } from './common';
+import { Wrangle, css, type t } from './common';
 
 export type PropListLabelProps = {
   data: t.PropListItem;

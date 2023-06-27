@@ -7,9 +7,9 @@ import { type t } from './common.mjs';
  * Exposes timer functions that cease after a
  * dispose signal is received.
  */
-export function until(until$?: t.UntilObservable) {
+export function until(until$: t.UntilObservable) {
   let _disposed = false;
-  const { dispose, dispose$ } = create(until$);
+  const { dispose$ } = create(until$);
   dispose$.subscribe(() => (_disposed = true));
 
   /**
@@ -19,7 +19,6 @@ export function until(until$?: t.UntilObservable) {
     /**
      * A more useful (promise based) timeout function.
      */
-    // delay,
     delay<T = any>(msecs: number, callback?: () => T): t.TimeDelayPromise<T> {
       const done$ = new Subject<void>();
       const res = baseDelay(msecs, () => {
@@ -31,14 +30,12 @@ export function until(until$?: t.UntilObservable) {
     },
 
     /**
-     * Lifecycle.
+     * Lifecycle
      */
-    dispose,
-    dispose$,
     get disposed() {
       return _disposed;
     },
-  };
+  } as const;
 
   return api;
 }

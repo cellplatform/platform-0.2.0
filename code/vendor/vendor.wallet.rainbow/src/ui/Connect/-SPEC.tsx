@@ -1,13 +1,14 @@
-import { Connect, type ConnectProps } from '..';
-import { Dev, type t } from '../../../test.ui';
+import { Connect } from '.';
+import { Dev, type t } from '../../test.ui';
 
 const { DEFAULTS } = Connect;
 const config: t.ConnectConfig = {
   appName: 'Foo',
-  projectId: '4d190498d1b5bc687c6118ed29015c65',
+  projectId: '4d190498d1b5bc687c6118ed29015c65', // Sample (display) project.
+  //                                                https://cloud.walletconnect.com
 };
 
-type T = { props: ConnectProps };
+type T = { props: t.ConnectProps };
 const initial: T = {
   props: { config },
 };
@@ -15,13 +16,13 @@ const initial: T = {
 /**
  * Refs:
  *    https://www.rainbowkit.com/docs/
- *
  */
 export default Dev.describe('Connect', (e) => {
-  type LocalStore = { autoload: boolean };
+  type LocalStore = { autoload: boolean; chains?: t.ChainName[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:vendor.wallet.rainbow.Connect');
   const local = localstore.object({
     autoload: DEFAULTS.autoload,
+    chains: DEFAULTS.chains.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -30,6 +31,7 @@ export default Dev.describe('Connect', (e) => {
 
     state.change((d) => {
       d.props.autoload = local.autoload;
+      d.props.chains = local.chains;
     });
 
     ctx.host.tracelineColor(-0.03);
@@ -54,7 +56,21 @@ export default Dev.describe('Connect', (e) => {
       });
     });
 
-    dev.hr(-1, 5);
+    dev.hr(-1, 20);
+
+    dev.row((e) => {
+      return (
+        <Connect.ChainSelector
+          selected={e.state.props.chains}
+          onChange={(e) => {
+            dev.change((d) => (d.props.chains = e.next));
+            local.chains = e.empty ? undefined : e.next;
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {

@@ -1,6 +1,6 @@
-import { css, FC, t, Button, DEFAULTS } from './common';
 import { FieldBuilder } from '../FieldBuilder.mjs';
 import { PropList } from '../ui/PropList';
+import { Button, DEFAULTS, FC, css, type t } from './common';
 
 import { FieldSelectorLabel } from './FieldSelector.Label';
 
@@ -9,6 +9,7 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     selected = [],
     resettable = DEFAULTS.resettable,
     showIndexes = DEFAULTS.showIndexes,
+    indent = DEFAULTS.indent,
   } = props;
   const all = [...(props.all ?? [])];
   const isSelected = (field: string) => selected.includes(field);
@@ -46,12 +47,14 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
         all={all}
         selected={selected}
         showIndexes={showIndexes}
+        indent={indent}
         onClick={onClick}
       />
     );
     const value: t.PropListValueSwitch = {
       kind: 'Switch',
       data: isSelected(field),
+      indent,
       onClick,
     };
     return { label, value };
