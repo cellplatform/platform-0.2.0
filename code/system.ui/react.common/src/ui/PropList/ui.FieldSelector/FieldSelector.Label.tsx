@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
-
-import { t, css, Color, COLORS } from './common';
+import { Color, COLORS, css, type t } from './common';
 import { Util } from './Util.mjs';
 
 export type FieldSelectorLabelProps = {
@@ -8,6 +7,7 @@ export type FieldSelectorLabelProps = {
   selected: string[];
   field: string;
   showIndexes: boolean;
+  indent: number;
   style?: t.CssValue;
   onClick?: () => void;
 };
@@ -21,6 +21,7 @@ export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => 
    * [Render]
    */
   const styles = {
+    base: css({ marginLeft: props.indent }),
     subpart: css({ opacity: 0.4 }),
     index: css({
       position: 'relative',
@@ -53,7 +54,7 @@ export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => 
   const elIndex = showIndexes && index > -1 && <span {...styles.index}>{index}</span>;
 
   return (
-    <div {...css(props.style)} onMouseDown={props.onClick}>
+    <div {...css(styles.base, props.style)} onMouseDown={props.onClick}>
       {elParts}
       {elIndex}
     </div>
