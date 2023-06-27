@@ -5,6 +5,13 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Components
+ */
+export { Connect } from './ui/Connect';
+export { ChainSelector } from './ui/ChainSelector';
+export { Info } from './ui/Info';
+
+/**
  * Dev
  */
 export const dev = async () => {

@@ -1,12 +1,22 @@
+import { type t } from '../common.t';
 export * from '../common';
 
-import { DEFAULTS as BASE_DEFAULTS } from '../Connect/common';
+const allChains: t.ChainName[] = [
+  'EVM.L1.mainnet',
+  'EVM.L2.optimism',
+  'EVM.L2.polygon',
+  'EVM.L2.arbitrum',
+];
+const defaultChains: t.ChainName[] = ['EVM.L1.mainnet', 'EVM.L2.optimism'];
 
 /**
  * Default Values.
  */
 export const DEFAULTS = {
   title: 'Chains',
-  chains: BASE_DEFAULTS.chains,
   resettable: true,
+  chains: {
+    all: allChains,
+    default: defaultChains,
+  },
 } as const;

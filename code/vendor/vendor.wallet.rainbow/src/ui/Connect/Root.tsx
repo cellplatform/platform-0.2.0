@@ -11,19 +11,13 @@ import { lightTheme } from '@rainbow-me/rainbowkit';
 import { Loading } from './Root.Loading';
 import { DEFAULTS, FC, css, type t } from './common';
 import { useConfigImport } from './useConfigImport.mjs';
-
-export type ConnectProps = {
-  config: t.ConnectConfig;
-  chains?: t.ChainName[];
-  autoload?: boolean;
-  style?: t.CssValue;
-};
+import { ChainSelector } from '../ChainSelector';
 
 /**
  * A wallet connect button.
  * https://www.rainbowkit.com/docs
  */
-const View: React.FC<ConnectProps> = (props) => {
+const View: React.FC<t.ConnectProps> = (props) => {
   const { config, autoload = DEFAULTS.autoload, chains = DEFAULTS.chains.default } = props;
 
   /**
@@ -69,9 +63,10 @@ const View: React.FC<ConnectProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  ChainSelector: typeof ChainSelector;
 };
-export const Connect = FC.decorate<ConnectProps, Fields>(
+export const Connect = FC.decorate<t.ConnectProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, ChainSelector },
   { displayName: 'Connect' },
 );

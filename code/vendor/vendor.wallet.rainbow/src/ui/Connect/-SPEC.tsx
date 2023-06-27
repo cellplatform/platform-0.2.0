@@ -1,5 +1,5 @@
-import { Connect, type ConnectProps } from '.';
-import { PropList, Dev, type t } from '../../test.ui';
+import { Connect } from '.';
+import { Dev, type t } from '../../test.ui';
 
 const { DEFAULTS } = Connect;
 const config: t.ConnectConfig = {
@@ -8,7 +8,7 @@ const config: t.ConnectConfig = {
   //                                                https://cloud.walletconnect.com
 };
 
-type T = { props: ConnectProps };
+type T = { props: t.ConnectProps };
 const initial: T = {
   props: { config },
 };
@@ -60,15 +60,11 @@ export default Dev.describe('Connect', (e) => {
 
     dev.row((e) => {
       return (
-        <PropList.FieldSelector
-          title={'Chains'}
-          //   style={{ Margin: [10, 40, 10, 30] }}
-          all={DEFAULTS.chains.all}
-          selected={e.state.props.chains ?? DEFAULTS.chains.default}
-          onClick={(ev) => {
-            const fields = ev.next as t.ChainName[];
-            dev.change((d) => (d.props.chains = fields));
-            local.chains = fields?.length === 0 ? undefined : fields;
+        <Connect.ChainSelector
+          selected={e.state.props.chains}
+          onChange={(e) => {
+            dev.change((d) => (d.props.chains = e.next));
+            local.chains = e.empty ? undefined : e.next;
           }}
         />
       );

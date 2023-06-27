@@ -1,1 +1,1 @@
-export * from './ChainSelector';
+export * from './Root';
