@@ -14,10 +14,10 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@rainbow-me/rainbowkit': '1.0.3',
-    'viem': '1.1.7',
-    'wagmi': '1.3.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
+    'viem': '1.1.8',
+    'wagmi': '1.3.2',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
