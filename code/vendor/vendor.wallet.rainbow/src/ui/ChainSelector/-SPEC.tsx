@@ -7,15 +7,17 @@ const { DEFAULTS } = ChainSelector;
 
 export default Dev.describe('ChainSelector', (e) => {
   type LocalStore = {
-    selected?: t.ChainName[];
     title?: string;
+    selected?: t.ChainName[];
     resettable?: boolean;
+    showIndexes?: boolean;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:vendor.wallet.rainbow.ChainSelector');
   const local = localstore.object({
-    selected: DEFAULTS.chains.default,
     title: DEFAULTS.title,
+    selected: DEFAULTS.chains.default,
     resettable: DEFAULTS.resettable,
+    showIndexes: DEFAULTS.showIndexes,
   });
 
   e.it('ui:init', async (e) => {
@@ -26,6 +28,7 @@ export default Dev.describe('ChainSelector', (e) => {
       d.props.title = local.title;
       d.props.selected = local.selected;
       d.props.resettable = local.resettable;
+      d.props.showIndexes = local.showIndexes;
     });
 
     ctx.subject
@@ -67,6 +70,17 @@ export default Dev.describe('ChainSelector', (e) => {
             e.change((d) => (local.resettable = Dev.toggle(d.props, 'resettable')));
           }),
       );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `showIndexes`)
+          .value((e) => Boolean(e.state.props.showIndexes))
+          .onClick((e) => {
+            e.change((d) => (local.showIndexes = Dev.toggle(d.props, 'showIndexes')));
+          }),
+      );
+
+      dev.hr(5, 20);
     });
   });
 

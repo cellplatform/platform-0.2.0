@@ -5,6 +5,8 @@ const View: React.FC<t.ChainSelectorProps> = (props) => {
     title = DEFAULTS.title,
     selected = DEFAULTS.chains.default,
     resettable = DEFAULTS.resettable,
+    showIndexes = DEFAULTS.showIndexes,
+    indent = DEFAULTS.indent,
   } = props;
 
   const handleChange = (next: t.ChainName[]) => {
@@ -24,6 +26,8 @@ const View: React.FC<t.ChainSelectorProps> = (props) => {
       all={DEFAULTS.chains.all}
       selected={selected}
       resettable={resettable}
+      showIndexes={showIndexes}
+      indent={indent}
       onClick={(e) => handleChange(e.next as t.ChainName[])}
     />
   );
