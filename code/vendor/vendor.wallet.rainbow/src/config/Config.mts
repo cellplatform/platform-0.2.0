@@ -14,7 +14,7 @@ export async function configure(args: {
   chains: t.ChainName[];
 }) {
   const { appName, projectId } = args;
-  const evm = await Import.modules();
+  const evm = await Import.walletModules();
 
   /**
    * Docs:

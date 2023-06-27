@@ -6,7 +6,7 @@ import { type t } from './common';
  *    https://www.rainbowkit.com/docs/installation#manual-setup
  */
 export const Import = {
-  async modules() {
+  async walletModules() {
     // Load all dependencies in parallel
     const promise = {
       wagmi: Import.wagmi(),
