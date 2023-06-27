@@ -1,6 +1,6 @@
 /**
  * Configuration
- * NOTE: May need to copy this style import in up-stream host module.
+ * NOTE: You may need to copy this style import in up-stream host.
  */
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -14,6 +14,7 @@ import { useConfigImport } from './useConfigImport.mjs';
 
 export type ConnectProps = {
   config: t.ConnectConfig;
+  chains?: t.ChainName[];
   autoload?: boolean;
   style?: t.CssValue;
 };
@@ -23,12 +24,12 @@ export type ConnectProps = {
  * https://www.rainbowkit.com/docs
  */
 const View: React.FC<ConnectProps> = (props) => {
-  const { autoload = DEFAULTS.autoload, config } = props;
+  const { config, autoload = DEFAULTS.autoload, chains = DEFAULTS.chains.default } = props;
 
   /**
    * Load dynamic (code-split) imports.
    */
-  const imports = useConfigImport({ config, autoload });
+  const imports = useConfigImport({ config, autoload, chains });
   const { Wagmi, RainbowKit } = imports;
 
   const elLoading = <Loading />;

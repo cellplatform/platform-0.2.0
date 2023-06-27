@@ -1,10 +1,12 @@
+import { type t } from './common';
+
 /**
  * Dynamic importing of dependencies (code-splitting).
  * See:
  *    https://www.rainbowkit.com/docs/installation#manual-setup
  */
 export const Import = {
-  async all() {
+  async modules() {
     // Load all dependencies in parallel
     const promise = {
       wagmi: Import.wagmi(),
@@ -19,7 +21,7 @@ export const Import = {
     // NB: already resolved by this point(↑), await is used for typescript convenience.
     return {
       ...(await promise.wagmi),
-      ...(await promise.chains),
+      chains: await promise.chains,
       ...(await promise.alchemy),
       ...(await promise.public),
       ...(await promise.rainbow),
@@ -31,9 +33,9 @@ export const Import = {
     return { configureChains, createConfig, WagmiConfig };
   },
 
-  async chains() {
+  async chains(): Promise<t.WagmiChain[]> {
     const { mainnet, polygon, optimism, arbitrum } = await import('wagmi/chains');
-    return { mainnet, polygon, optimism, arbitrum };
+    return [mainnet, polygon, optimism, arbitrum];
   },
 
   async alchemy() {
@@ -47,9 +49,12 @@ export const Import = {
   },
 
   async rainbow() {
-    const { getDefaultWallets, RainbowKitProvider, ConnectButton } = await import(
-      '@rainbow-me/rainbowkit'
-    );
-    return { getDefaultWallets, RainbowKitProvider, ConnectButton };
+    const {
+      //
+      getDefaultWallets,
+      RainbowKitProvider,
+      ConnectButton: RainbowConnectButton,
+    } = await import('@rainbow-me/rainbowkit');
+    return { getDefaultWallets, RainbowKitProvider, RainbowConnectButton };
   },
 };

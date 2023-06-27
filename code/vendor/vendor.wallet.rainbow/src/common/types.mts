@@ -3,7 +3,11 @@
  */
 export type { Observable } from 'rxjs';
 export type { WagmiConfig } from 'wagmi';
-export type { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit';
+export type { Chain as WagmiChain } from 'wagmi/chains';
+export type {
+  RainbowKitProvider,
+  ConnectButton as RainbowConnectButton,
+} from '@rainbow-me/rainbowkit';
 
 /**
  * @system

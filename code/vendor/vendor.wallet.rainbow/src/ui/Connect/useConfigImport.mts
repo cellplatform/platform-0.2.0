@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
 import { configure } from '../../config';
-import { type t } from '../common';
+import { type t, DEFAULTS } from './common';
 
 /**
  * Hook for dynamically importing code-split libs.
  */
-export function useConfigImport(args: { config: t.ConnectConfig; autoload?: boolean }) {
+export function useConfigImport(args: {
+  config: t.ConnectConfig;
+  chains: t.ChainName[];
+  autoload?: boolean;
+}) {
+  const { chains } = args;
   const { appName, projectId } = args.config;
   const [config, setConfig] = useState<t.ConfigureResponse>();
 
@@ -14,9 +19,9 @@ export function useConfigImport(args: { config: t.ConnectConfig; autoload?: bool
    */
   useEffect(() => {
     if (args.autoload) {
-      configure({ appName, projectId }).then((res) => setConfig(res));
+      configure({ appName, projectId, chains }).then(setConfig);
     }
-  }, [appName, projectId, args.autoload]);
+  }, [appName, projectId, args.autoload, chains.join(',')]);
 
   const Wagmi = {
     ConfigProvider: config?.WagmiConfig,
@@ -25,7 +30,7 @@ export function useConfigImport(args: { config: t.ConnectConfig; autoload?: bool
 
   const RainbowKit = {
     Provider: config?.RainbowKitProvider,
-    ConnectButton: config?.ConnectButton,
+    ConnectButton: config?.RainbowConnectButton,
     chains: config?.chains,
   };
 
