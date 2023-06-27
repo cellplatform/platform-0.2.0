@@ -17,7 +17,7 @@ export const DEFAULTS = {
     return {
       host: {
         backgroundColor: Color.alpha(COLORS.DARK, 0.02),
-        tracelineColor: Color.alpha(COLORS.DARK, 0.1),
+        tracelineColor: Color.alpha(COLORS.DARK, 0.05),
         backgroundImage: { url: '', size: 'cover', margin: [0, 0, 0, 0] },
         header: { border: { color: -0.1 }, padding: [8, 8, 8, 8] },
         footer: { border: { color: -0.1 }, padding: [8, 8, 8, 8] },
