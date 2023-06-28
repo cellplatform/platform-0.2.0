@@ -1,5 +1,4 @@
 import { type t } from '../common';
-
 export * from '../common';
 
 /**
@@ -7,16 +6,14 @@ export * from '../common';
  */
 const drop: Required<t.ImageDropSettings> = {
   enabled: true,
-  blur: 20,
   content: 'Drop Image',
+  blur: 20,
 };
 
 const paste: Required<t.ImagePasteSettings> = {
   enabled: true,
   primary: false,
   tabIndex: 0,
-  blur: 20,
-  content: 'Paste Image',
 };
 
 const warning: Required<t.ImageWarningSettings> = {

@@ -17,14 +17,6 @@ export const Util = {
     return input?.content ?? DEFAULTS.drop.content;
   },
 
-  focusedBlur(input?: t.ImagePasteSettings) {
-    return input?.blur ?? DEFAULTS.paste.blur;
-  },
-
-  focusedContent(input?: t.ImagePasteSettings) {
-    return input?.content ?? DEFAULTS.paste.content;
-  },
-
   warningBlur(input?: t.ImageWarningSettings) {
     return input?.blur ?? DEFAULTS.warning.blur;
   },

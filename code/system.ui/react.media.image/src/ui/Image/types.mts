@@ -32,10 +32,8 @@ export type ImageDropSettings = {
 
 export type ImagePasteSettings = {
   enabled?: boolean;
-  tabIndex?: number;
-  blur?: Pixels;
-  content?: string | JSX.Element;
   primary?: boolean;
+  tabIndex?: number;
 };
 
 export type ImageWarningSettings = {
