@@ -22,11 +22,11 @@ export type TDevRemote = {
 export type TDevSharedProps = {
   count: number;
   showRight?: boolean;
-  overlay?: 'sys.data.project' | 'sys.data.crdt' | 'sys.ui.image' | null;
-
   fullscreenVideo?: boolean;
-  cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
+
+  imageShow?: boolean;
+  imageBinary?: t.ImageBinary;
 };
 
 export type TDevSharedPropsLens = t.WebRtcPropsLens<TDevSharedProps>;

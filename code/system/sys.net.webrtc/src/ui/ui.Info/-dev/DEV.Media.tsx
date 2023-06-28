@@ -33,6 +33,7 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
       opacity: 0.3,
+      userSelect: 'none',
     }),
     selected: css({ Absolute: 0 }),
     thumbnails: css({

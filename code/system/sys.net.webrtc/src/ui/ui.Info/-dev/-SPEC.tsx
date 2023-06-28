@@ -1,9 +1,9 @@
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
+import { DevMedia } from './DEV.Media';
 import { DevRemotes } from './DEV.Remotes';
 import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
-import { DevMedia } from './DEV.Media';
 
 /**
  * video:   727951677
@@ -20,17 +20,14 @@ type T = {
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
     useGroupController?: boolean;
   };
-  layers: { overlay?: JSX.Element };
 };
 const initial: T = {
   props: {},
   debug: { bg: true, title: false },
-  layers: {},
 };
 
 type LocalStore = T['debug'] & {
   fullscreenVideo?: boolean;
-  cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
@@ -40,7 +37,6 @@ const local = localstore.object({
   useGroupController: true,
   fields: WebRtcInfo.DEFAULTS.fields,
   fullscreenVideo: false,
-  cardFlipped: false,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -53,9 +49,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
     fields: local.fields ?? [],
-    showRight: true,
     fullscreenVideo: local.fullscreenVideo,
-    cardFlipped: local.cardFlipped,
+    showRight: true,
+    imageShow: false,
   });
 
   DevKeyboard(props);
@@ -156,7 +152,31 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     /**
      * Render overlay.
      */
-    ctx.host.layer(1).render<T>((e) => e.state.layers.overlay);
+    ctx.host.layer(1).render<T>(async (e) => {
+      if (!props.current.imageShow) return null;
+
+      const { Image } = await import('sys.ui.react.media.image');
+
+      return (
+        <Image
+          style={{
+            Absolute: 51,
+            pointerEvents: 'auto',
+          }}
+          src={props.current.imageBinary}
+          drop={{ enabled: true }}
+          paste={{
+            enabled: true,
+            primary: false,
+            tabIndex: 0,
+          }}
+          onDropOrPaste={(e) => {
+            console.log('e', e);
+            props.change((d) => (d.imageBinary = e.file));
+          }}
+        />
+      );
+    });
   });
 
   e.it('ui:header', async (e) => {
@@ -187,88 +207,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     });
   });
 
-  e.it('ui:specs', async (e) => {
-    const dev = Dev.tools<T>(e, initial);
-    const state = await dev.state();
-
-    const loadOverlay = async (kind: t.TDevSharedProps['overlay']) => {
-      console.log('load overlay');
-
-      const set = (el?: JSX.Element) => state.change((d) => (d.layers.overlay = el));
-
-      if (!kind) {
-        set(undefined);
-      }
-
-      if (kind === 'sys.data.crdt') {
-        const { dev } = await import('sys.data.crdt');
-        const { Specs } = await dev();
-        const m = await Specs['sys.data.crdt.tests']();
-        const el = <Dev.Harness key={'crdt'} spec={m.default} background={1} />;
-        set(el);
-      }
-
-      if (kind === 'sys.data.project') {
-        /**
-         * TODO 🐷
-         * import from remote repo via [Module Federation].
-         */
-        const el = <div>🐷 TDB: sys.data.project</div>;
-        set(el);
-      }
-
-      if (kind === 'sys.ui.image') {
-        const { dev } = await import('sys.ui.react.media.image');
-        const { Specs } = await dev();
-
-        const m = await Specs['sys.ui.media.image.Image']();
-        const el = <Dev.Harness key={'image'} spec={m.default} background={1} />;
-        set(el);
-      }
-    };
-
-    props.$.pipe(
-      rx.map((e) => e.lens.overlay),
-      rx.distinctUntilChanged((prev, next) => prev === next),
-    ).subscribe(loadOverlay);
-
-    dev.button('redraw', (e) => {
-      dev.redraw();
-    });
-
-    dev.hr(5, 20);
-  });
-
   e.it('ui:card', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
-    dev.title('Card');
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => (Boolean(props.current.fullscreenVideo) ? 'configure' : 'configuring'))
-        .value((e) => !Boolean(props.current.fullscreenVideo))
-        .onClick((e) => {
-          props.change((d) => {
-            local.fullscreenVideo = Dev.toggle(d, 'fullscreenVideo');
-          });
-
-          e.change((d) => {
-            if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id;
-          });
-        }),
-    );
-
-    dev.boolean((btn) =>
-      btn
-        .label((e) => (Boolean(props.current.cardFlipped) ? 'flipped' : 'flip'))
-        .value((e) => Boolean(props.current.cardFlipped))
-        .enabled((e) => Boolean(props.current.fullscreenVideo))
-        .onClick((e) => props.change((d) => Dev.toggle(d, 'cardFlipped'))),
-    );
-
-    dev.hr(-1, 5);
 
     dev.section((dev) => {
       dev.row((e) => {
@@ -292,19 +233,24 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     dev.row((e) => {
       if (!props.current.fullscreenVideo) return null;
-      return (
-        <WebRtcInfo
-          {...Util.props(state)}
-          card={true}
-          flipped={props.current.cardFlipped}
-          margin={[20, 25, 20, 25]}
-        />
-      );
+      return <WebRtcInfo {...Util.props(state)} card={true} margin={[15, 25, 20, 25]} />;
     });
 
-    dev.hr(5, 20);
+    dev.section((dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => (Boolean(props.current.fullscreenVideo) ? 'configure' : 'configuring'))
+          .value((e) => !Boolean(props.current.fullscreenVideo))
+          .onClick((e) => {
+            props.change((d) => (local.fullscreenVideo = Dev.toggle(d, 'fullscreenVideo')));
+            e.change((d) => {
+              if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id;
+            });
+          }),
+      );
 
-    dev.section('Properites', (dev) => {
+      dev.hr(-1, 5);
+
       dev.boolean((btn) =>
         btn
           .label((e) => 'title')
@@ -329,6 +275,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const state = await dev.state();
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `image`)
+          .value((e) => Boolean(props.current.imageShow))
+          .onClick((e) => props.change((d) => Dev.toggle(d, 'imageShow'))),
+      );
+
+      dev.hr(-1, 5);
+
       const isAdding = (state: T) => state.debug.addingConnection === 'VirtualNetwork';
       dev.button((btn) =>
         btn
