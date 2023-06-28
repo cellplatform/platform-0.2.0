@@ -1,22 +1,9 @@
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { ConnectInput } from '../../ui.ConnectInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
-import { DevMedia } from './DEV.Media';
 import { DevRemotes } from './DEV.Remotes';
-import {
-  COLORS,
-  Crdt,
-  Dev,
-  Icons,
-  Pkg,
-  PropList,
-  TestNetwork,
-  Vimeo,
-  WebRtc,
-  css,
-  rx,
-  type t,
-} from './common';
+import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
+import { DevMedia } from './DEV.Media';
 
 /**
  * video:   727951677
@@ -43,18 +30,8 @@ const initial: T = {
 
 type LocalStore = T['debug'] & {
   fullscreenVideo?: boolean;
-  showRight?: boolean;
   cardFlipped?: boolean;
   fields?: t.WebRtcInfoField[];
-  imageUrl?: t.TDevSharedProps['imageUrl'];
-  imageVisible?: t.TDevSharedProps['imageVisible'];
-  imageFit?: t.TDevSharedProps['imageFit'];
-  vimeoId?: t.TDevSharedProps['vimeoId'];
-  vimeoVisible?: t.TDevSharedProps['vimeoVisible'];
-  vimeoMuted?: t.TDevSharedProps['vimeoMuted'];
-  youtubeId?: t.TDevSharedProps['youtubeId'];
-  youtubeVisible?: t.TDevSharedProps['youtubeVisible'];
-  youtubeMuted?: t.TDevSharedProps['youtubeMuted'];
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
@@ -63,17 +40,7 @@ const local = localstore.object({
   useGroupController: true,
   fields: WebRtcInfo.DEFAULTS.fields,
   fullscreenVideo: false,
-  showRight: true,
-  imageUrl: '',
-  imageVisible: true,
-  imageFit: 'cover',
   cardFlipped: false,
-  vimeoId: '',
-  vimeoVisible: true,
-  vimeoMuted: true,
-  youtubeId: '',
-  youtubeVisible: true,
-  youtubeMuted: true,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -81,29 +48,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   const self = await TestNetwork.peer();
   const remotes: t.TDevRemote[] = [];
 
-  const vimeo = Vimeo.Events({ instance: { bus, id: 'foo' } });
-
   const controller = WebRtc.controller(self);
   const client = controller.client();
   const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
     count: 0,
     fields: local.fields ?? [],
     showRight: true,
-    // showRight: local.showRight,
     fullscreenVideo: local.fullscreenVideo,
     cardFlipped: local.cardFlipped,
-
-    imageUrl: local.imageUrl ?? '',
-    imageVisible: local.imageVisible,
-    imageFit: local.imageFit,
-
-    vimeoId: local.vimeoId,
-    vimeoVisible: local.vimeoVisible,
-    vimeoMuted: local.vimeoMuted,
-
-    youtubeId: local.youtubeId,
-    youtubeVisible: local.youtubeVisible,
-    youtubeMuted: local.youtubeMuted,
   });
 
   DevKeyboard(props);
@@ -156,16 +108,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       ).subscribe((value) => ((local[localField] as any) = value));
     }
     persistToLocalOnChange('fields', 'fields');
-    persistToLocalOnChange('showRight', 'showRight');
-    persistToLocalOnChange('imageUrl', 'imageUrl');
-    persistToLocalOnChange('imageVisible', 'imageVisible');
-    persistToLocalOnChange('imageFit', 'imageFit');
-    persistToLocalOnChange('vimeoId', 'vimeoId');
-    persistToLocalOnChange('vimeoVisible', 'vimeoVisible');
-    persistToLocalOnChange('vimeoMuted', 'vimeoMuted');
-    persistToLocalOnChange('youtubeId', 'youtubeId');
-    persistToLocalOnChange('youtubeVisible', 'youtubeVisible');
-    persistToLocalOnChange('youtubeMuted', 'youtubeMuted');
 
     await state.change((d) => {
       d.props.fields = local.fields;
@@ -294,20 +236,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.redraw();
     });
 
-    dev.bdd((bdd) =>
-      bdd
-        .localstore('dev:sys.net.webrtc.Info')
-        .margin([30, 50, 30, 50])
-        .run({
-          ctx: () => ({ props }),
-          label: 'Environment',
-          button: 'hidden',
-        })
-        .specs({ selectable: false })
-        .modules(import('./-TEST.Sample'))
-        .onChanged(async (e) => {}),
-    );
-
     dev.hr(5, 20);
   });
 
@@ -369,112 +297,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           {...Util.props(state)}
           card={true}
           flipped={props.current.cardFlipped}
-          margin={[15, 25, 40, 25]}
+          margin={[20, 25, 20, 25]}
         />
-      );
-    });
-
-    dev.section('Image', (dev) => {
-      dev.textbox((txt) =>
-        txt
-          .margin([5, 0, 10, 0])
-          .placeholder('https:')
-          .left(true)
-          .value((e) => props.current.imageUrl ?? '')
-          .onChange((e) => {
-            props.change((d) => (d.imageUrl = e.to.value));
-          })
-          .onEnter((e) => {}),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `visible`)
-          .value((e) => Boolean(props.current.imageVisible))
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => props.change((d) => Dev.toggle(d, 'imageVisible'))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `${props.current.imageFit === 'cover' ? 'cover' : 'contained'}`)
-          .value((e) => Boolean(props.current.imageFit === 'cover'))
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => {
-            props.change((d) => {
-              const next = d.imageFit === 'cover' ? 'contain' : 'cover';
-              d.imageFit = next;
-            });
-          }),
-      );
-    });
-
-    dev.hr(-1, 15);
-
-    dev.section('Vimeo', (dev) => {
-      dev.textbox((txt) =>
-        txt
-          .margin([5, 0, 10, 0])
-          .left(true)
-          .placeholder('vimeo id')
-          .value((e) => props.current.vimeoId ?? '')
-          .onChange((e) => {
-            props.change((d) => (d.vimeoId = e.to.value));
-          })
-          .onEnter((e) => {}),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `visible`)
-          .value((e) => Boolean(props.current.vimeoVisible))
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => props.change((d) => Dev.toggle(d, 'vimeoVisible'))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `muted`)
-          .value((e) => Boolean(props.current.vimeoMuted))
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => props.change((d) => Dev.toggle(d, 'vimeoMuted'))),
-      );
-
-      dev.hr(-1, 5);
-      dev.button('play', (e) => props.change((d) => (d.vimeoPlaying = true)));
-      dev.button('pause', (e) => props.change((d) => (d.vimeoPlaying = false)));
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('YouTube', (dev) => {
-      dev.textbox((txt) =>
-        txt
-          .margin([5, 0, 10, 0])
-          .left(true)
-          .placeholder('https:')
-          .value((e) => props.current.youtubeId ?? '')
-          .onChange((e) => {
-            props.change((d) => (d.youtubeId = e.to.value));
-          })
-          .onEnter((e) => {}),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `visible`)
-          .value((e) => Boolean(props.current.youtubeVisible))
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => props.change((d) => Dev.toggle(d, 'youtubeVisible'))),
-      );
-
-      dev.boolean((btn) =>
-        btn
-          .label((e) => `muted`)
-          .value((e) => Boolean(props.current.youtubeMuted))
-          .enabled(false)
-          .enabled((e) => Boolean(props.current.fullscreenVideo))
-          .onClick((e) => props.change((d) => Dev.toggle(d, 'youtubeMuted'))),
       );
     });
 
@@ -520,7 +344,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             const controller = WebRtc.controller(peer);
             const client = controller.client();
             const name = `remote-${remotes.length + 1}`;
-            remotes.push({ name, peer, controller, client });
 
             await client.connect.fire(peer.id);
             e.change((d) => (d.debug.addingConnection = undefined));
@@ -637,8 +460,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return (
         <Dev.Object
           name={'WebRtc.Info'}
-          data={data}
           expand={{ level: 1, paths: ['$.State:::peers'] }}
+          data={data}
         />
       );
     });

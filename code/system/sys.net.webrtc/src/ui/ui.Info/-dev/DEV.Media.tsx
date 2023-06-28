@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { DevMediaImage } from './Dev.Media.Image';
 import { Button, COLORS, Color, MediaStream, css, t } from './common';
-import { DevVimeo } from './Dev.Media.Vimeo';
-import { DevYoutube } from './Dev.Media.YouTube';
 
 export type DevMediaProps = {
   bus: t.EventBus<any>;
@@ -56,7 +53,7 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
   const elEmpty = <div {...styles.empty}>No media to display.</div>;
 
   if (conns.length === 0) {
-    <div {...css(styles.base, props.style)}>{elEmpty}</div>;
+    return <div {...css(styles.base, props.style)}>{elEmpty}</div>;
   }
 
   const elThumbnails = conns.map((conn, i) => {
@@ -76,22 +73,13 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
     );
   });
 
-  const elVimeo = stream && (
+  const elVideo = stream && (
     <MediaStream.Video stream={stream} muted={true} style={styles.selected} />
-  );
-
-  const elYoutube = shared.youtubeId && (
-    <DevYoutube bus={bus} shared={props.shared} style={styles.fill} />
   );
 
   return (
     <div {...css(styles.base, props.style)}>
-      {!elVimeo && elEmpty}
-      {elVimeo}
-      {elYoutube}
-      <DevMediaImage bus={bus} shared={props.shared} style={styles.fill} />
-      <DevVimeo bus={bus} shared={props.shared} style={styles.player} />
-
+      {elVideo || elEmpty}
       <div {...styles.thumbnails}>{elThumbnails}</div>
     </div>
   );
