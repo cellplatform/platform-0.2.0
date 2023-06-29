@@ -1,4 +1,4 @@
-import { DEFAULTS, rx, t } from './common';
+import { DEFAULTS, rx, type t } from './common';
 import { PeerSyncer } from './PeerSyncer.mjs';
 
 /**

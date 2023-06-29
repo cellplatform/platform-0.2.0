@@ -1,4 +1,4 @@
-import { Automerge, t } from './common';
+import { Automerge, type t } from './common';
 
 export const Wrangle = {
   automergeDoc<D extends {}>(initial: D | Uint8Array) {

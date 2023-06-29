@@ -1,4 +1,4 @@
-import { COLORS, css, Icons, t } from '../common';
+import { COLORS, css, Icons, type t } from '../common';
 
 export type NetworkProps = {
   syncDoc?: t.CrdtDocSync<any>;

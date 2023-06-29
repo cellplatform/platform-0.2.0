@@ -1,4 +1,4 @@
-import { Automerge, rx, slug, t } from './common';
+import { Automerge, rx, slug, type t } from './common';
 import { SyncState } from './PeerSyncer.State.mjs';
 import { toObject } from '../crdt.helpers';
 

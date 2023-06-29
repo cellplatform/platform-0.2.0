@@ -1,4 +1,4 @@
-import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
+import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
 import { FieldFile } from './fields/File';
 import { FieldHistoryItem } from './fields/History.Item';
 import { FieldHistory } from './fields/History.mjs';
