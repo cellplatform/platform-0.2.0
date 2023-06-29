@@ -171,7 +171,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             tabIndex: 0,
           }}
           onDropOrPaste={(e) => {
-            console.log('e', e);
             props.change((d) => (d.imageBinary = e.file));
           }}
         />
