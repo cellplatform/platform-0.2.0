@@ -1,4 +1,4 @@
-import { Color, COLORS, css, Icons, t } from '../common';
+import { Color, COLORS, css, Icons, type t } from '../common';
 
 export type PeerCopiedProps = {
   message?: string;

@@ -1,4 +1,4 @@
-import { WebRtcUtil, rx, slug, t } from './common';
+import { WebRtcUtil, rx, slug, type t } from './common';
 
 const DEFAULT = { timeout: 1000 };
 

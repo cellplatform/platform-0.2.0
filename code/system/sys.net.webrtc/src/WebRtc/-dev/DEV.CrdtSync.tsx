@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Automerge, Button, Color, COLORS, Crdt, css, Dev, rx, t } from './common';
+import { Automerge, Button, Color, COLORS, Crdt, css, Dev, rx, type t } from './common';
 import { PeerSyncer } from 'sys.data.crdt';
 
 /**

@@ -1,5 +1,5 @@
 import { WebRtc } from '../../WebRtc';
-import { rx, slug, t } from '../common';
+import { rx, slug, type t } from '../common';
 
 type EdgeOptions = {
   id: string;

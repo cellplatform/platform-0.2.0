@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, COLORS, Color, MediaStream, css, t } from './common';
+import { Button, COLORS, Color, MediaStream, css, type t } from './common';
 
 export type DevMediaProps = {
   bus: t.EventBus<any>;

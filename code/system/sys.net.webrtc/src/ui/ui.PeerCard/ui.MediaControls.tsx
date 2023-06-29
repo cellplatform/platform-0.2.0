@@ -1,4 +1,4 @@
-import { Button, Color, css, Icons, t } from '../common';
+import { Button, Color, css, Icons, type t } from '../common';
 
 export type MediaControlsProps = {
   self: t.Peer;

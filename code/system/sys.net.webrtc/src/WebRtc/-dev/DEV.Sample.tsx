@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MonacoEditor } from 'sys.ui.react.monaco';
 import { DevCrdtTextSample } from './DEV.CrdtText.mjs';
 
-import { Color, COLORS, css, Dev, IFrame, t } from './common';
+import { Color, COLORS, css, Dev, IFrame, type t } from './common';
 import { DevCrdtSync } from './DEV.CrdtSync';
 
 import type { Doc } from './DEV.CrdtSync';

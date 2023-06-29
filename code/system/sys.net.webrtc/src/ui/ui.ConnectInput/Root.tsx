@@ -1,4 +1,4 @@
-import { Color, COLORS, css, DEFAULTS, FC, FIELDS, t } from './common';
+import { Color, COLORS, css, DEFAULTS, FC, FIELDS, type t } from './common';
 import { Remote } from './ui.Remote';
 import { Self } from './ui.Self';
 import { Wrangle } from './Wrangle.mjs';

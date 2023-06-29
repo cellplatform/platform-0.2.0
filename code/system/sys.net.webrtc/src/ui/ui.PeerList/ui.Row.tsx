@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { ActionBar } from './ui.Row.ActionBar';
 import { RowBody } from './ui.Row.Body';
 import { RowThumbnail } from './ui.Row.Thumbnail';

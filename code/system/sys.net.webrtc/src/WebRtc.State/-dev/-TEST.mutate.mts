@@ -1,4 +1,4 @@
-import { Dev, UserAgent, expect, slug, t } from '../../test.ui';
+import { Dev, UserAgent, expect, slug, type t } from '../../test.ui';
 import { WebRtcState } from '../State.mjs';
 
 export default Dev.describe('State.Mutate', (e) => {

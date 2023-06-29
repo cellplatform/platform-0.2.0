@@ -1,4 +1,4 @@
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { Row } from './ui.Row';
 
 export type PeerListProps = {

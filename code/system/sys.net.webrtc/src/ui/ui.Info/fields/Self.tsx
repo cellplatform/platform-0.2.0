@@ -1,4 +1,4 @@
-import { PropList, Value, t } from '../common';
+import { PropList, Value, type t } from '../common';
 
 export function FieldSelf(args: {
   fields: t.WebRtcInfoField[];

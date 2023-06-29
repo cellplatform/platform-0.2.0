@@ -1,4 +1,4 @@
-import { UserAgent, t } from './common';
+import { UserAgent, type t } from './common';
 
 /**
  * Helpers for mutating the state data.

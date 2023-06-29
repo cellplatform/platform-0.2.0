@@ -1,4 +1,4 @@
-import { Dev, TestNetwork, WebRtc, t } from './common';
+import { Dev, TestNetwork, WebRtc, type t } from './common';
 import { PeerRow, PeerRowProps } from '../ui/PeerRow';
 
 type NetworkProximity = 'Local' | 'Remote';

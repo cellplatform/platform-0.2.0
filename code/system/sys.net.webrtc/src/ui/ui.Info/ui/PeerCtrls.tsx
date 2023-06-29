@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, FC, Keyboard, R, css, t } from '../common';
+import { COLORS, Color, DEFAULTS, FC, Keyboard, R, css, type t } from '../common';
 import { PeerCtrlButton, PeerCtrlButtonProps } from './PeerCtrls.Button';
 
 export type PeerCtrlsProps = {
