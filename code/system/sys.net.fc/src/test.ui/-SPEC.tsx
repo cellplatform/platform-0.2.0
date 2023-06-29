@@ -63,7 +63,7 @@ export default Dev.describe('Root', (e) => {
            */
           const tmp: string[] = [];
 
-          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285', true);
+          const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285', {});
           const fid = e.state.current.debug.fid;
           const res = await client.getCastsByFid({ fid });
 

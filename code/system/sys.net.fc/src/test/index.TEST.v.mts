@@ -6,7 +6,7 @@ describe('@farcaster/hub-web', () => {
    */
   it('Getting start: fetching casts', async () => {
     const { getHubRpcClient } = await import('@farcaster/hub-web');
-    const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285');
+    const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285', {});
 
     let count = 0;
     const res = await client.getCastsByFid({ fid: 15 });
