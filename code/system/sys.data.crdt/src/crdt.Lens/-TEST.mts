@@ -9,7 +9,7 @@ export default Test.describe('Lens', (e) => {
   const setup = () => {
     const initial: TRoot = {};
     const root = Crdt.ref<TRoot>('foo', initial);
-    return { initial, root };
+    return { initial, root } as const;
   };
 
   const getDesendent: t.CrdtLensDescendent<TRoot, TChild> = (doc) => {
