@@ -62,6 +62,26 @@ export default Test.describe('crdt helpers', (e) => {
         expect(Is.text(d)).to.eql(false);
       });
     });
+
+    e.it('Is.counter', (e) => {
+      const counter = new Automerge.Counter();
+      expect(Is.counter(counter)).to.eql(true);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.counter(d)).to.eql(false);
+      });
+    });
+
+    e.it('Is.funcData', (e) => {
+      const data: t.CrdtFuncData = {
+        count: new Automerge.Counter(),
+        params: {},
+      };
+      expect(Is.funcData(data)).to.eql(true);
+      expect(Is.funcData({ count: 0, params: {} })).to.eql(false);
+      [null, undefined, {}, [], 0, true, 'a'].forEach((d) => {
+        expect(Is.funcData(d)).to.eql(false);
+      });
+    });
   });
 
   e.describe('fieldAs', (e) => {
