@@ -23,7 +23,7 @@ export function init<P extends {} = {}>(
     /**
      * Invoke the function.
      */
-    run(params: P) {
+    invoke(params: P) {
       lens.change((d) => {
         d.params = params;
         d.count.increment(1); // NB: <any> because of Automerge type bug.

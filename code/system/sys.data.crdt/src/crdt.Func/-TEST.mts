@@ -57,7 +57,7 @@ export default Test.describe('Func', (e) => {
       const func = Crdt.func<P>(lens, (e) => fired.push(e));
 
       expect(lens.current.count.value).to.eql(0);
-      func.run({ msg: 'hello' });
+      func.invoke({ msg: 'hello' });
       expect(lens.current.count.value).to.eql(1);
 
       expect(fired.length).to.eql(1);
@@ -72,11 +72,11 @@ export default Test.describe('Func', (e) => {
       const func1 = Crdt.func<P>(lens, (e) => fired1.push(e));
       const func2 = Crdt.func<P>(lens, (e) => fired2.push(e));
 
-      func1.run({ msg: 'hello' });
+      func1.invoke({ msg: 'hello' });
       expect(fired1.length).to.eql(1);
       expect(fired2.length).to.eql(1);
 
-      func2.run({ msg: '👋' });
+      func2.invoke({ msg: '👋' });
       expect(fired1.length).to.eql(2);
       expect(fired2.length).to.eql(2);
 

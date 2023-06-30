@@ -16,5 +16,5 @@ export type CrdtFuncHandlerArgs = {
 
 export type CrdtFunc<P extends {}> = t.Lifecycle & {
   readonly kind: 'Crdt:Func';
-  run(params: P): void;
+  invoke(params: P): void;
 };
