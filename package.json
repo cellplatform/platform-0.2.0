@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "@automerge/automerge": "2.0.3",
+    "@automerge/automerge": "2.1.0-alpha.8",
     "@farcaster/core": "0.10.0",
     "@farcaster/hub-web": "0.4.0",
     "@improbable-eng/grpc-web": "0.15.0",
@@ -96,7 +96,7 @@
     "@types/minimist": "1.2.2",
     "@types/node": "20.3.2",
     "@types/qrcode": "1.5.0",
-    "@types/ramda": "0.29.2",
+    "@types/ramda": "0.29.3",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "@types/sanitize-html": "2.9.0",

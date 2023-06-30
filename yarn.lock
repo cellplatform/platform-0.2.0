@@ -15,17 +15,17 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@automerge/automerge-wasm@^0.1.26":
-  version "0.1.26"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.1.26.tgz#825848beab15a759de273fa4f99e9344c3850a26"
-  integrity sha512-NLH7KpErTuy2O1VIA0uE+48e0u69o0qL8/9RZYjLd2uEZeWBzIWbhyDJGfUPDMIYXtkcy8z2H7h6YcwusG0BXA==
+"@automerge/automerge-wasm@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge-wasm/-/automerge-wasm-0.2.7.tgz#a1de3fbf93b165f2488bde93f438c88dd822e3a4"
+  integrity sha512-z0LTg8+6kowLOhv7AO3sIU2l9SL9EOiO/eMPOgujQZtbNjiV74wOIlYptHYSl5lOg1dvUDFcor6sMNq9+l6cWA==
 
-"@automerge/automerge@2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.0.3.tgz#ff040d9dbc3f203bf9fea7c58d815c0a94e5ea14"
-  integrity sha512-ihfyW/pt+bmHNmPzf4nyH9OzfowAlOaK+1XD8wbtbsJeaGL/8Kap88xMO0lU3wgrddsrZtX5uTbrB/6kMl1PEA==
+"@automerge/automerge@2.1.0-alpha.8":
+  version "2.1.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@automerge/automerge/-/automerge-2.1.0-alpha.8.tgz#f3ca0b9043d18cc368862d613df610747e8d32aa"
+  integrity sha512-KyeHWgw8QxZt/Txgfjm7OMFRPomcsYgRoywWpr0l+AzUtQb0mpLi50bWX85dTOIBpJR6UQ8cLotACXY8qJIZHw==
   dependencies:
-    "@automerge/automerge-wasm" "^0.1.26"
+    "@automerge/automerge-wasm" "^0.2.7"
     uuid "^9.0.0"
 
 "@babel/code-frame@^7.10.4":
@@ -1240,12 +1240,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/ramda@0.29.2":
-  version "0.29.2"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.29.2.tgz#b50d52c3958b0988356bc881bf77aadbd2e33651"
-  integrity sha512-JxvBGR3G4gV3RTOBugVHAAOD6iiv2WjlJ8BHr0s7KALdPpx2l+didoTuoJMmrA0eqpUaCm/slKP4TmxMRihd8g==
+"@types/ramda@0.29.3":
+  version "0.29.3"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.29.3.tgz#6e4d4066df900a3456cf402bcef9b78b6990a754"
+  integrity sha512-Yh/RHkjN0ru6LVhSQtTkCRo6HXkfL9trot/2elzM/yXLJmbLm2v6kJc8yftTnwv1zvUob6TEtqI2cYjdqG3U0Q==
   dependencies:
-    types-ramda "^0.29.3"
+    types-ramda "^0.29.4"
 
 "@types/react-dom@18.2.6":
   version "18.2.6"
@@ -6273,10 +6273,10 @@ typedarray-to-buffer@3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-types-ramda@^0.29.3:
-  version "0.29.3"
-  resolved "https://registry.yarnpkg.com/types-ramda/-/types-ramda-0.29.3.tgz#0a611b4d414bf7c51ba417c3fd3352985b0de97f"
-  integrity sha512-6z8/UCI5/kRorQ91Mo+TUXImHpGAhmhg8ZIdT/tNrG+xSQvDwJXYyT5Nlw2U5VpoKetUZVqQXYYLQyq5Bzccsg==
+types-ramda@^0.29.4:
+  version "0.29.4"
+  resolved "https://registry.yarnpkg.com/types-ramda/-/types-ramda-0.29.4.tgz#8d9b51df2e550a05cedab541cc75dcd72972c625"
+  integrity sha512-XO/820iRsCDwqLjE8XE+b57cVGPyk1h+U9lBGpDWvbEky+NQChvHVwaKM05WnW1c5z3EVQh8NhXFmh2E/1YazQ==
   dependencies:
     ts-toolbelt "^9.6.0"
 

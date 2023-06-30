@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.388',
+  version: '0.0.390',
   dependencies: {
     '@rainbow-me/rainbowkit': '1.0.4',
     'react': '18.2.0',
