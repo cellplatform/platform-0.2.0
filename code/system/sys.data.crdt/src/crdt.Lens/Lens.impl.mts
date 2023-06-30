@@ -1,15 +1,15 @@
-import { Time, Wrangle, rx, type t, DEFAULTS } from './common';
 import { toObject } from '../crdt.helpers';
 import { Registry } from './Lens.Registry.mjs';
+import { DEFAULTS, Time, Wrangle, rx, type t } from './common';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.
  */
-export function init<D extends {}, L extends {}>(
-  root: t.CrdtDocRef<D>,
-  get: t.CrdtLensDescendent<D, L>,
+export function init<R extends {}, L extends {}>(
+  root: t.CrdtDocRef<R>,
+  get: t.CrdtLensDescendent<R, L>,
   options: { dispose$?: t.Observable<any> } = {},
-): t.CrdtLens<D, L> {
+): t.CrdtLens<R, L> {
   Registry.add(root);
   let _count = 0;
 
@@ -20,15 +20,15 @@ export function init<D extends {}, L extends {}>(
     Registry.remove(root);
   });
 
-  const subject$ = new rx.Subject<t.CrdtLensChange<D, L>>();
+  const subject$ = new rx.Subject<t.CrdtLensChange<R, L>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
 
-  const fireFromChange = (e: t.CrdtDocChange<D>) => {
+  const fireFromChange = (e: t.CrdtDocChange<R>) => {
     const lens = api.current;
     subject$.next({ ...e, lens });
   };
 
-  const fireFromReplace = (e: t.CrdtDocReplace<D>) => {
+  const fireFromReplace = (e: t.CrdtDocReplace<R>) => {
     subject$.next({
       action: 'change',
       doc: e.doc,
@@ -54,7 +54,7 @@ export function init<D extends {}, L extends {}>(
   /**
    * API
    */
-  const api: t.CrdtLens<D, L> = {
+  const api: t.CrdtLens<R, L> = {
     kind: 'Crdt:Lens',
     root,
     $,
@@ -73,7 +73,7 @@ export function init<D extends {}, L extends {}>(
       if (api.disposed) return api;
 
       _changing = true;
-      const { message, fn } = Wrangle.changeArgs<D, L>(args);
+      const { message, fn } = Wrangle.changeArgs<R, L>(args);
 
       // NB: forces the [get] factory to initialize the descendent if necessary.
       if (_count === 0) {
@@ -89,16 +89,16 @@ export function init<D extends {}, L extends {}>(
         });
       }
 
-      let _fired: t.CrdtDocChange<D> | undefined;
+      let _fired: t.CrdtDocChange<R> | undefined;
       root.$.pipe(
         rx.filter((e) => e.action === 'change'),
         rx.take(1),
       ).subscribe((e) => {
-        _fired = e as t.CrdtDocChange<D>;
+        _fired = e as t.CrdtDocChange<R>;
       });
 
       // Perform change.
-      const mutate: t.CrdtMutator<D> = (draft: D) => {
+      const mutate: t.CrdtMutator<R> = (draft: R) => {
         const child = get(draft);
         fn(child);
       };
