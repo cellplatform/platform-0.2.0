@@ -1,7 +1,5 @@
 import { rx, toObject, type t } from './common';
 
-type O = Record<string, unknown>;
-
 /**
  * Adapter for running an RPC style function
  * based on an observable CRDT.
