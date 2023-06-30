@@ -1,2 +1,3 @@
 export * from '../common';
-export { toObject } from '../crdt.helpers';
+export { Automerge } from '../driver.Automerge';
+export { toObject, CrdtIs } from '../crdt.helpers';

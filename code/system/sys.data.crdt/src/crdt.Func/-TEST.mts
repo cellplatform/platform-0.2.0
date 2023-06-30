@@ -1,22 +1,16 @@
-import { Automerge, Crdt, Test, expect, type t } from '../test.ui';
 import { CrdtFunc } from '.';
+import { Crdt, Test, expect, type t } from '../test.ui';
 
 export default Test.describe('Func', (e) => {
-  type TRoot = { fn?: t.CrdtFuncData };
+  type TRoot = {
+    child: { fn?: t.CrdtFuncData };
+  };
 
   const setup = () => {
-    const initial: TRoot = {};
+    const initial: TRoot = { child: {} };
     const root = Crdt.ref<TRoot>('foo', initial);
-    const lens = Crdt.lens<TRoot, t.CrdtFuncData>(
-      root,
-      (d) => d.fn || (d.fn = { count: new Automerge.Counter(), params: {} }),
-    );
-
-    return {
-      initial,
-      root,
-      lens,
-    } as const;
+    const lens = Crdt.lens<TRoot, t.CrdtFuncData>(root, (d) => CrdtFunc.data(d.child, 'fn'));
+    return { initial, root, lens } as const;
   };
 
   e.it('exposed from root API', (e) => {
@@ -60,7 +54,7 @@ export default Test.describe('Func', (e) => {
     e.it('run local', (e) => {
       const { lens } = setup();
       const fired: t.CrdtFuncHandlerArgs[] = [];
-      const func = Crdt.func<TRoot, P>(lens, (e) => fired.push(e));
+      const func = Crdt.func<P>(lens, (e) => fired.push(e));
 
       expect(lens.current.count.value).to.eql(0);
       func.run({ msg: 'hello' });
@@ -75,8 +69,8 @@ export default Test.describe('Func', (e) => {
       const { lens } = setup();
       const fired1: t.CrdtFuncHandlerArgs[] = [];
       const fired2: t.CrdtFuncHandlerArgs[] = [];
-      const func1 = Crdt.func<TRoot, P>(lens, (e) => fired1.push(e));
-      const func2 = Crdt.func<TRoot, P>(lens, (e) => fired2.push(e));
+      const func1 = Crdt.func<P>(lens, (e) => fired1.push(e));
+      const func2 = Crdt.func<P>(lens, (e) => fired2.push(e));
 
       func1.run({ msg: 'hello' });
       expect(fired1.length).to.eql(1);

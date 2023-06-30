@@ -2,7 +2,7 @@ import type { t } from './common';
 
 type O = Record<string, unknown>;
 
-export type CrdtFuncLens<R extends {}> = t.CrdtLens<R, CrdtFuncData>;
+export type CrdtFuncLens = t.CrdtLens<{}, CrdtFuncData>;
 export type CrdtFuncData = {
   count: t.AutomergeCounter;
   params: O;

@@ -4,8 +4,8 @@ import { rx, toObject, type t } from './common';
  * Adapter for running an RPC style function
  * based on an observable CRDT.
  */
-export function init<R extends {}, P extends {}>(
-  lens: t.CrdtFuncLens<R>,
+export function init<P extends {} = {}>(
+  lens: t.CrdtFuncLens,
   handler: t.CrdtFuncHandler,
 ): t.CrdtFunc<P> {
   const lifecycle = rx.lifecycle(lens.dispose$);
@@ -26,7 +26,7 @@ export function init<R extends {}, P extends {}>(
     run(params: P) {
       lens.change((d) => {
         d.params = params;
-        (d.count as any).increment(); // NB: <any> because of Automerge type bug.
+        d.count.increment(1); // NB: <any> because of Automerge type bug.
       });
     },
 
