@@ -159,20 +159,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       return (
         <Image
-          style={{
-            Absolute: 51,
-            pointerEvents: 'auto',
-          }}
+          style={{ Absolute: 51, pointerEvents: 'auto' }}
           src={props.current.imageBinary}
           drop={{ enabled: true }}
-          paste={{
-            enabled: true,
-            primary: false,
-            tabIndex: 0,
-          }}
-          onDropOrPaste={(e) => {
-            props.change((d) => (d.imageBinary = e.file));
-          }}
+          paste={{ enabled: true, primary: false, tabIndex: 0 }}
+          onDropOrPaste={(e) => props.change((d) => (d.imageBinary = e.file))}
         />
       );
     });
@@ -272,6 +263,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    const func = Crdt.func(
+      props.lens((d) => Crdt.Func.data(d, 'func')),
+      async (e) => console.log('run', e),
+    );
+
+    dev.button('run', (e) => func.invoke({}));
+
+    dev.hr(-1, 5);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>

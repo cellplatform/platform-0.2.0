@@ -27,6 +27,8 @@ export type TDevSharedProps = {
 
   imageShow?: boolean;
   imageBinary?: t.ImageBinary;
+
+  func?: t.CrdtFuncData;
 };
 
 export type TDevSharedPropsLens = t.WebRtcPropsLens<TDevSharedProps>;
