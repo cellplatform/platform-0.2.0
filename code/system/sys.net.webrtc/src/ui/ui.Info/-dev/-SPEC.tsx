@@ -13,7 +13,7 @@ import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t }
 type T = {
   props: WebRtcInfoProps;
   debug: {
-    bg: boolean;
+    card: boolean;
     title: boolean;
     remotePeer?: t.PeerId;
     selectedPeer?: t.PeerId;
@@ -23,7 +23,7 @@ type T = {
 };
 const initial: T = {
   props: {},
-  debug: { bg: true, title: false },
+  debug: { card: true, title: false },
 };
 
 type LocalStore = T['debug'] & {
@@ -32,7 +32,7 @@ type LocalStore = T['debug'] & {
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
-  bg: initial.debug.bg,
+  card: initial.debug.card,
   title: initial.debug.title,
   fields: WebRtcInfo.DEFAULTS.fields,
   useController: true,
@@ -107,7 +107,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     await state.change((d) => {
       d.props.fields = local.fields;
-      d.debug.bg = local.bg;
+      d.debug.card = local.card;
       d.debug.title = local.title;
       d.debug.useController = local.useController;
       if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
@@ -119,17 +119,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       /**
        * Setup host
        */
-      ctx.subject.backgroundColor(debug.bg ? 1 : 0);
-      ctx.subject.size([320, null]);
+      const width = debug.card ? 320 : 280;
+      ctx.subject.size([width, null]);
+      ctx.subject.backgroundColor(debug.card ? 1 : 0);
 
       /**
        * Render <Component>
        */
-      return (
-        <div {...css({ Padding: debug.bg ? [20, 25] : 0 })}>
-          <WebRtcInfo {...Util.props(state)} card={false} />
-        </div>
-      );
+      return <WebRtcInfo {...Util.props(state)} card={debug.card} />;
     };
 
     const renderFullscreenVideo = (e: { state: T }) => {
@@ -250,10 +247,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label('background')
+          .label('card')
           .enabled((e) => !Boolean(props.current.fullscreenVideo))
-          .value((e) => e.state.debug.bg)
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
+          .value((e) => e.state.debug.card)
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.debug, 'card')))),
       );
     });
 
