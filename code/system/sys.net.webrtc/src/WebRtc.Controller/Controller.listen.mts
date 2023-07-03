@@ -1,6 +1,17 @@
 import { WebRtcState } from '../WebRtc.State';
 import { NetworkSchema } from '../sys.net.schema';
-import { Crdt, Pkg, R, Time, UserAgent, WebRtcEvents, WebRtcUtils, rx, slug, t } from './common';
+import {
+  Crdt,
+  Pkg,
+  R,
+  Time,
+  UserAgent,
+  WebRtcEvents,
+  WebRtcUtils,
+  rx,
+  slug,
+  type t,
+} from './common';
 import { pruneDeadPeers } from './util.mjs';
 
 const Mutate = WebRtcState.Mutate;

@@ -1,4 +1,4 @@
-import { Value, t } from '../common';
+import { Value, type t } from '../common';
 
 export function FieldPeer(args: {
   fields: t.WebRtcInfoField[];

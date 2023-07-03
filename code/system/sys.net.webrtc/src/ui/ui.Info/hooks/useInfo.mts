@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { rx, t } from '../common';
+import { rx, type t } from '../common';
 
 export function useInfo(client?: t.WebRtcEvents) {
   const [info, setInfo] = useState<t.WebRtcInfo | undefined>(undefined);

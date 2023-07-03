@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Color, COLORS, css, Icons, t } from '../common';
+import { Button, Color, COLORS, css, Icons, type t } from '../common';
 
 export type ActionBarProps = {
   // peerConnections: t.PeerConnectionsByPeer;

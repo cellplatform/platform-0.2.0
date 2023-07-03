@@ -1,4 +1,4 @@
-import { DEFAULTS, t } from '../common';
+import { DEFAULTS, type t } from '../common';
 import { Network } from '../ui/Network';
 import { SyncTraffic } from '../ui/Network.SyncTraffic';
 

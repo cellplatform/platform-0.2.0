@@ -1,4 +1,4 @@
-import { COLORS, Color, Icons, t } from '../common';
+import { COLORS, Color, Icons, type t } from '../common';
 
 export type PeerCtrlIconProps = {
   kind: t.WebRtcInfoPeerFacet;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, COLORS, Spinner, css, t } from '../common';
+import { Button, COLORS, Spinner, css, type t } from '../common';
 import { PeerCtrlIcon } from './PeerCtrls.Icon';
 
 export type PeerCtrlButtonProps = {

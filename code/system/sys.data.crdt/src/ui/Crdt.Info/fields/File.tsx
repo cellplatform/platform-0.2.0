@@ -1,4 +1,4 @@
-import { COLORS, DEFAULTS, Icons, Path, PropList, Value, Wrangle, t } from '../common';
+import { COLORS, DEFAULTS, Icons, Path, PropList, Value, Wrangle, type t } from '../common';
 
 export function FieldFile(
   fields: t.CrdtInfoField[],

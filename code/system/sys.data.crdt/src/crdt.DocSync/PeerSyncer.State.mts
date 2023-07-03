@@ -1,4 +1,4 @@
-import { rx, Automerge, DEFAULTS, t } from './common';
+import { rx, Automerge, DEFAULTS, type t } from './common';
 
 type SyncState = Automerge.SyncState;
 const { initSyncState, decodeSyncState, encodeSyncState } = Automerge;

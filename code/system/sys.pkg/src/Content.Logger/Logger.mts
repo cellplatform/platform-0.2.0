@@ -89,7 +89,7 @@ function dedupeVersionsToLatest(list: t.LogHistoryPublicItem[]) {
   const grouped = byVersion(list);
 
   const history = Object.keys(grouped).map((version) => {
-    const items = grouped[version];
+    const items = grouped[version] ?? [];
     const descending = R.sortBy(R.prop('timestamp'), items).reverse();
     return descending[0];
   });

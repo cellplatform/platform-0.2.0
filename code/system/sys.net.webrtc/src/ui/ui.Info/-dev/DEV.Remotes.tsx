@@ -1,5 +1,5 @@
 import { DevRow } from './DEV.Remotes.Row';
-import { css, t } from './common';
+import { css, type t } from './common';
 
 export type DevRemotesProps = {
   self: t.WebRtcController;

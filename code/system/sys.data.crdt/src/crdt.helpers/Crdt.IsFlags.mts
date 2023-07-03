@@ -1,4 +1,4 @@
-import { t, Is, Automerge } from './common';
+import { Automerge, Is, type t } from './common';
 
 /**
  * Flags
@@ -8,8 +8,8 @@ export const CrdtIs = {
    * Determine if the given input is a [DocRef].
    */
   ref(input: any): input is t.CrdtDocRef<{}> {
-    if (notObject(input)) return false;
     return (
+      isObject(input) &&
       input.kind === 'Crdt:DocRef' &&
       typeof input.change === 'function' &&
       Automerge.isAutomerge(input.current) &&
@@ -21,8 +21,8 @@ export const CrdtIs = {
    * Determine if the given input is a [DocFile].
    */
   file(input: any): input is t.CrdtDocFile<{}> {
-    if (notObject(input)) return false;
     return (
+      isObject(input) &&
       input.kind === 'Crdt:DocFile' &&
       CrdtIs.ref(input.doc) &&
       typeof input.exists === 'function' &&
@@ -35,9 +35,11 @@ export const CrdtIs = {
    * Determine if the given input is a [DocSync].
    */
   sync(input: any): input is t.CrdtDocSync<{}> {
-    if (notObject(input)) return false;
     return (
-      input.kind === 'Crdt:DocSync' && CrdtIs.ref(input.doc) && typeof input.update === 'function'
+      isObject(input) &&
+      input.kind === 'Crdt:DocSync' &&
+      CrdtIs.ref(input.doc) &&
+      typeof input.update === 'function'
     );
   },
 
@@ -45,8 +47,8 @@ export const CrdtIs = {
    * Determine if the given input is a Lens.
    */
   lens(input: any): input is t.CrdtLens<{}, {}> {
-    if (notObject(input)) return false;
     return (
+      isObject(input) &&
       input.kind === 'Crdt:Lens' &&
       CrdtIs.ref(input.root) &&
       typeof input.change === 'function' &&
@@ -58,8 +60,21 @@ export const CrdtIs = {
    * Determine if the given input is an [Automerge.Text] type.
    */
   text(input: any): input is Automerge.Text {
-    if (notObject(input)) return false;
-    return input instanceof Automerge.Text;
+    return isObject(input) && input instanceof Automerge.Text;
+  },
+
+  /**
+   * Determine if the given input is an [Automerge.Counter] type.
+   */
+  counter(input: any): input is Automerge.Counter {
+    return isObject(input) && input instanceof Automerge.Counter;
+  },
+
+  /**
+   * Determine if the given input is a [CrdtFuncData].
+   */
+  funcData(input: any): input is t.CrdtFuncData {
+    return isObject(input) && CrdtIs.counter(input.count) && typeof input.params === 'object';
   },
 };
 
@@ -67,6 +82,10 @@ export const CrdtIs = {
  * [Helpers]
  */
 
-export function notObject(input: any) {
+function notObject(input: any) {
   return typeof input !== 'object' || input === null;
+}
+
+function isObject(input: any) {
+  return !notObject(input);
 }

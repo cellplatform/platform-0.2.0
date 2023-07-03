@@ -1,4 +1,4 @@
-import { COLORS, Color, DEFAULTS, Icons, css, t } from '../common';
+import { COLORS, Color, DEFAULTS, Icons, css, type t } from '../common';
 import { PeerCtrls } from './PeerCtrls';
 import { VideoThumbnails } from './PeerRow.Video';
 import { usePeerRowController } from '../hooks/usePeerRowController.mjs';

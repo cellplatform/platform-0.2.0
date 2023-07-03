@@ -1,5 +1,5 @@
 import { WebRtcState } from '..';
-import { Crdt, Dev, WebRtc, expect, t } from '../../test.ui';
+import { Crdt, Dev, WebRtc, expect, type t } from '../../test.ui';
 
 export default Dev.describe('Network: State', (e) => {
   type N = 'ns.foo' | 'ns.bar';

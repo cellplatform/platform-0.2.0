@@ -1,4 +1,4 @@
-import { Color, COLORS, MediaStream, css, t } from '../common';
+import { Color, COLORS, MediaStream, css, type t } from '../common';
 
 const RADIUS = 3;
 

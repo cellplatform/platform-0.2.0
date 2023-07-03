@@ -1,4 +1,4 @@
-import { DEFAULTS, css, t } from '../common';
+import { DEFAULTS, css, type t } from '../common';
 
 const { indent } = DEFAULTS;
 

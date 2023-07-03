@@ -1,4 +1,4 @@
-import { Button, Color, COLORS, css, Spinner, t } from './common';
+import { Button, Color, COLORS, css, Spinner, type t } from './common';
 
 export type ConnectButtonProps = {
   isSpinning?: boolean;

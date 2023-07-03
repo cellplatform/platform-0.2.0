@@ -13,6 +13,7 @@ export const TESTS = {
       import('../crdt.Schema/-dev/-TEST.mjs'),
       import('../crdt.Lens/-TEST.mjs'),
       import('../crdt.Repo/-TEST.mjs'),
+      import('../crdt.Func/-TEST.mjs'),
 
       'Helpers',
       import('../crdt.helpers/-TEST.mjs'),

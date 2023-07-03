@@ -1,4 +1,4 @@
-import { Automerge, DEFAULTS, rx, t } from './common';
+import { Automerge, DEFAULTS, rx, type t } from './common';
 import { autoSaveStrategy } from './strategy.AutoSave.mjs';
 import { saveLogStrategy } from './strategy.SaveLog.mjs';
 

@@ -1,5 +1,5 @@
 import { PeerSyncer } from '..';
-import { t, Automerge, ConnectionMock, expect, Test, Time } from '../../test.ui';
+import { Automerge, ConnectionMock, Test, Time, expect, type t } from '../../test.ui';
 
 export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
   type Doc = { name?: string; count: number };
@@ -157,5 +157,31 @@ export default Test.describe('Sync Protocol: PeerSyncer', (e) => {
       syncerB1.dispose(),
       syncerB2.dispose(),
     ]);
+  });
+
+  e.it('update.complete (promise)', async (e) => {
+    let docA = createTestDoc();
+    let docB = createTestDoc();
+    const mock = ConnectionMock();
+
+    const syncerA = PeerSyncer(
+      mock.a.bus,
+      'doc-id',
+      () => docA,
+      (d) => (docA = d),
+    );
+
+    const syncerB = PeerSyncer(
+      mock.b.bus,
+      'doc-id',
+      () => docB,
+      (d) => (docB = d),
+    );
+
+    docA = Automerge.change(docA, (doc) => (doc.name = 'Foo'));
+    docB = Automerge.change(docB, (doc) => (doc.count = 1234));
+
+    await syncerA.update().complete;
+    expect(docA).to.eql({ name: 'Foo', count: 1234 });
   });
 });

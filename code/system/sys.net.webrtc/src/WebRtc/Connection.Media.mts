@@ -1,4 +1,4 @@
-import { rx, t } from './common';
+import { rx, type t } from './common';
 
 /**
  * Represents a P2P media connection (video/screenshare).

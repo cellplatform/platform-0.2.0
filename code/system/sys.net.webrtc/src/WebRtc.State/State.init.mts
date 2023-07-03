@@ -1,4 +1,4 @@
-import { Crdt, t } from './common';
+import { Crdt, type t } from './common';
 import { Mutate } from './State.Mutate.mjs';
 
 /**

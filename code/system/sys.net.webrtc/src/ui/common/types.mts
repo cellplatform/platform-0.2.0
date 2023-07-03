@@ -21,7 +21,7 @@ export type {
   TestSuiteModel,
 } from 'sys.test.spec/src/types.mjs';
 
-export type { CrdtInfoData } from 'sys.data.crdt/src/types.mjs';
+export type { CrdtInfoData, CrdtFuncData } from 'sys.data.crdt/src/types.mjs';
 export type { MonacoCodeEditor, EditorPeersState, Monaco } from 'sys.ui.react.monaco/src/types.mjs';
 
 /**

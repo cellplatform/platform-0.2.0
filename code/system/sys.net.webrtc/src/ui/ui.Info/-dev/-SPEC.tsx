@@ -18,7 +18,7 @@ type T = {
     remotePeer?: t.PeerId;
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
-    useGroupController?: boolean;
+    useController?: boolean;
   };
 };
 const initial: T = {
@@ -34,8 +34,8 @@ const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   bg: initial.debug.bg,
   title: initial.debug.title,
-  useGroupController: true,
   fields: WebRtcInfo.DEFAULTS.fields,
+  useController: true,
   fullscreenVideo: false,
 });
 
@@ -74,7 +74,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return {
         group: {
           selected: debug.selectedPeer,
-          useController: debug.useGroupController,
+          useController: debug.useController,
           async onPeerSelect(e) {
             console.info('⚡️ onPeerSelect', e);
             state.change((d) => (d.debug.selectedPeer = e.peerid));
@@ -109,7 +109,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.title = local.title;
-      d.debug.useGroupController = local.useGroupController;
+      d.debug.useController = local.useController;
       if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
     });
 
@@ -159,20 +159,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       return (
         <Image
-          style={{
-            Absolute: 51,
-            pointerEvents: 'auto',
-          }}
+          style={{ Absolute: 51, pointerEvents: 'auto' }}
           src={props.current.imageBinary}
           drop={{ enabled: true }}
-          paste={{
-            enabled: true,
-            primary: false,
-            tabIndex: 0,
-          }}
-          onDropOrPaste={(e) => {
-            props.change((d) => (d.imageBinary = e.file));
-          }}
+          paste={{ enabled: true, primary: false, tabIndex: 0 }}
+          onDropOrPaste={(e) => props.change((d) => (d.imageBinary = e.file))}
         />
       );
     });
@@ -273,6 +264,15 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    const func = Crdt.func(
+      props.lens((d) => Crdt.Func.field(d, 'func')),
+      async (e) => console.log('run', e),
+    );
+
+    dev.button('run', (e) => func.invoke({}));
+
+    dev.hr(-1, 5);
+
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
@@ -348,11 +348,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `useGroupController`)
-          .value((e) => Boolean(e.state.debug.useGroupController))
+          .value((e) => Boolean(e.state.debug.useController))
           .onClick((e) => {
-            e.change((d) => {
-              local.useGroupController = Dev.toggle(d.debug, 'useGroupController');
-            });
+            e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));
           }),
       );
 

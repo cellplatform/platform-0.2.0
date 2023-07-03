@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Color, COLORS, css, Icons, t } from '../common';
+import { Button, Color, COLORS, css, Icons, type t } from '../common';
 
 export type ConnScreenshareProps = {
   peerConnections: t.PeerConnectionsByPeer;

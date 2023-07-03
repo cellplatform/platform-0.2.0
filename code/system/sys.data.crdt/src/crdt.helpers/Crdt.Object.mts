@@ -1,5 +1,5 @@
 import { R, t, Automerge } from './common';
-import { CrdtIs as Is } from './Crdt.Is.mjs';
+import { CrdtIs as Is } from './Crdt.IsFlags.mjs';
 
 /**
  * (implementation) Convert a CRDT document into a plain object.

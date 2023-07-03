@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Icons, PropList, Value, css, rx, t } from './common';
+import { Button, Icons, PropList, Value, css, rx, type t } from './common';
 
 /**
  * List Item (Row)

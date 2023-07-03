@@ -1,4 +1,4 @@
-import { COLORS, Color, Crdt, Filesize, Icons, Value, css, t } from '../common';
+import { COLORS, Color, Crdt, Filesize, Icons, Value, css, type t } from '../common';
 import { useSyncTraffic } from '../hooks/useSyncTraffic.mjs';
 
 export function FieldStateShared(args: {

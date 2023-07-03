@@ -1,4 +1,4 @@
-import { QRCode as BaseQRCode, css, t } from '../common';
+import { QRCode as BaseQRCode, css, type t } from '../common';
 
 export type QRCodeProps = {
   href?: string;

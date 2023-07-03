@@ -1,4 +1,4 @@
-import { COLORS, Color, MediaStream, css, t } from '../common';
+import { COLORS, Color, MediaStream, css, type t } from '../common';
 
 export type VideoProps = {
   stream?: MediaStream;
