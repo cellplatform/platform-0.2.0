@@ -4,8 +4,8 @@ import { COLORS, Color, css, type t } from '../common';
 export type Edge = Extract<t.WebRtcInfoField, 'Connect.Top' | 'Connect.Bottom'>;
 
 export type ConnectProps = {
-  fields: t.WebRtcInfoField[];
   edge: Edge;
+  fields: t.WebRtcInfoField[];
   data: t.WebRtcInfoData;
   style?: t.CssValue;
 };
@@ -28,8 +28,10 @@ export const Connect: React.FC<ConnectProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <ConnectInput
-        fields={['Peer:Self', 'Peer:Remote']}
         self={self}
+        remote={data.remote}
+        fields={['Peer:Self', 'Peer:Remote']}
+        spinning={data.spinning}
         onLocalCopied={data.onLocalCopied}
         onRemoteChanged={data.onRemoteChanged}
         onConnectRequest={data.onConnectRequest}

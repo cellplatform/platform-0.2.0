@@ -3,7 +3,12 @@ import { cuid, Dev } from '../../test.ui';
 
 type T = { props: PeerIdProps };
 const initial: T = {
-  props: { peer: cuid(), fontSize: 24, copyOnClick: true },
+  props: {
+    peer: cuid(),
+    fontSize: 24,
+    enabled: true,
+    copyOnClick: true,
+  },
 };
 
 export default Dev.describe('PeerId', (e) => {
@@ -30,8 +35,6 @@ export default Dev.describe('PeerId', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    console.log('state', state);
-
     dev.footer
       .border(-0.1)
       .render<T>((e) => <Dev.Object name={'spec'} data={e.state} expand={1} />);
@@ -44,6 +47,13 @@ export default Dev.describe('PeerId', (e) => {
     });
 
     dev.hr();
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `enabled`)
+        .value((e) => Boolean(e.state.props.enabled))
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
+    );
 
     dev.boolean((btn) =>
       btn

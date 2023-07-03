@@ -112,7 +112,7 @@ export const Remote: React.FC<RemoteProps> = (props) => {
             onClick={handleConnect}
           />
         )}
-        {error && <Icons.Error tooltip={error} color={COLORS.YELLOW} />}
+        {error && <Icons.Error tooltip={error} size={16} color={COLORS.YELLOW} />}
       </div>
     </div>
   );

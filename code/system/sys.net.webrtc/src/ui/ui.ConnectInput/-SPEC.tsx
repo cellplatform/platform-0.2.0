@@ -51,6 +51,7 @@ export default Dev.describe('ConnectInput', async (e) => {
           <ConnectInput
             {...props}
             onRemoteChanged={(e) => state.change((d) => (d.props.remote = e.remote))}
+            onLocalCopied={(e) => console.info(`⚡️ onLocalCopied:`, e)}
           />
         );
       });

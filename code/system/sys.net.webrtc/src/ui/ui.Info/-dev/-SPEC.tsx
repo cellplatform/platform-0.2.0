@@ -75,6 +75,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
         connect: {
           self,
           remote: debug.remotePeer,
+          spinning: debug.addingConnection === 'RealNetwork',
           onLocalCopied: (e) => navigator.clipboard.writeText(e.local),
           onRemoteChanged: (e) => state.change((d) => (d.debug.remotePeer = e.remote)),
           async onConnectRequest(e) {
@@ -196,7 +197,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           self={self}
           remote={e.state.debug.remotePeer}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
-          spinning={e.state.debug.addingConnection === 'RealNetwork'}
+          spinning={data.connect?.spinning}
           video={firstCamera?.stream.local}
           muted={true}
           onLocalCopied={data.connect?.onLocalCopied}

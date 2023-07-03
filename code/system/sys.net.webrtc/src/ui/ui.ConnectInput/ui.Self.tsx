@@ -1,5 +1,5 @@
-import { css, type t } from './common';
 import { PeerId } from '../ui.PeerId';
+import { css, type t } from './common';
 
 export type SelfProps = {
   self?: t.Peer;
@@ -34,7 +34,12 @@ export const Self: React.FC<SelfProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PeerId peer={self?.id} prefix={'me'} onClick={handleCopyPeer} />
+      <PeerId
+        peer={self?.id}
+        prefix={'me'}
+        enabled={Boolean(props.onLocalPeerCopied)}
+        onClick={handleCopyPeer}
+      />
     </div>
   );
 };

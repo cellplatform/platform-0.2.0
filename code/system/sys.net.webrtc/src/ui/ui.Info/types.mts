@@ -32,6 +32,7 @@ export type WebRtcInfoDataGroup = {
 export type WebRtcInfoDataConnect = {
   self?: t.Peer;
   remote?: t.PeerId;
+  spinning?: boolean;
   onLocalCopied?: t.PeerCardLocalCopiedHandler;
   onRemoteChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;

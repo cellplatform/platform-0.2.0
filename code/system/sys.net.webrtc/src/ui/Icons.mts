@@ -1,5 +1,6 @@
 import { FaNetworkWired } from 'react-icons/fa';
 import {
+  MdCable,
   MdCamera,
   MdClose,
   MdDelete,
@@ -21,15 +22,15 @@ import {
   MdOutlineViewInAr,
   MdPublic,
   MdPublicOff,
+  MdRefresh,
   MdSettingsInputAntenna,
   MdStart,
   MdVpnLock,
   MdWifiTethering,
   MdWifiTetheringOff,
-  MdRefresh,
-  MdCable,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
+import { BiCopy } from 'react-icons/bi';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -38,6 +39,7 @@ const icon = Icon.renderer;
  * Icon collection.
  */
 export const Icons = {
+  Copy: icon(BiCopy),
   Refresh: icon(MdRefresh),
   Cable: icon(MdCable),
   Close: icon(MdClose),

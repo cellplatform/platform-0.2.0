@@ -1,11 +1,13 @@
+import { useState } from 'react';
 import { WebRtc } from '../../WebRtc';
-import { Button, copyPeer, css, FC, t, TextSyntax } from '../common';
+import { Button, COLORS, FC, Icons, TextSyntax, copyPeer, css, type t } from '../common';
 
 export type PeerIdProps = {
   peer?: t.PeerId | t.PeerUri;
   abbreviate?: boolean | number | [number, number];
   prefix?: string;
   fontSize?: number;
+  enabled?: boolean;
   copyOnClick?: boolean;
   style?: t.CssValue;
   onClick?: (e: { id: t.PeerId; uri: t.PeerUri; copied: boolean }) => void;
@@ -16,7 +18,8 @@ const DEFAULTS = {
 };
 
 const View: React.FC<PeerIdProps> = (props) => {
-  const { fontSize = DEFAULTS.fontSize, copyOnClick = false } = props;
+  const { fontSize = DEFAULTS.fontSize, copyOnClick = false, enabled = true } = props;
+  const [isOver, setOver] = useState(false);
 
   /**
    * Handlers
@@ -39,6 +42,8 @@ const View: React.FC<PeerIdProps> = (props) => {
       filter: `grayscale(${props.peer ? 0 : 1})`,
       transition: 'all 150ms ease',
     }),
+    body: css({ Flex: 'x-center-start' }),
+    icon: css({ marginLeft: fontSize / 5 }),
   };
 
   const elText = (
@@ -51,9 +56,21 @@ const View: React.FC<PeerIdProps> = (props) => {
   );
 
   if (props.copyOnClick || props.onClick) {
+    const elCopy = isOver && props.onClick && (
+      <Icons.Copy size={fontSize + 2} style={styles.icon} color={COLORS.CYAN} tooltip={'Copy'} />
+    );
+
     return (
-      <Button onClick={handleClick} style={css(styles.base, props.style)}>
-        {elText}
+      <Button
+        onClick={handleClick}
+        isEnabled={enabled}
+        onMouse={(e) => setOver(e.isOver)}
+        style={css(styles.base, props.style)}
+      >
+        <div {...styles.body}>
+          {elText}
+          {elCopy}
+        </div>
       </Button>
     );
   }
