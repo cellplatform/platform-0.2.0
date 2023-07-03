@@ -4,7 +4,7 @@ export type ConnectInputField = 'Peer:Remote' | 'Peer:Self' | 'Video';
 
 export type ConnectInputProps = {
   self?: t.Peer;
-  remotePeer?: t.PeerId;
+  remote?: t.PeerId;
   spinning?: boolean;
   fields?: t.ConnectInputField[];
   video?: MediaStream;

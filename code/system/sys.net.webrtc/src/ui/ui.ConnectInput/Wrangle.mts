@@ -3,7 +3,7 @@ import { R, t, WebRtcUtils, DEFAULTS } from './common';
 export const Wrangle = {
   ids(props: t.ConnectInputProps) {
     const local = (props.self?.id ?? '').trim();
-    const remote = WebRtcUtils.asId(props.remotePeer ?? '');
+    const remote = WebRtcUtils.asId(props.remote ?? '');
     return { local, remote };
   },
 

@@ -50,7 +50,7 @@ export default Dev.describe('ConnectInput', async (e) => {
         return (
           <ConnectInput
             {...props}
-            onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
+            onRemotePeerChanged={(e) => state.change((d) => (d.props.remote = e.remote))}
           />
         );
       });
