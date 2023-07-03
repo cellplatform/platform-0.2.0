@@ -1,5 +1,5 @@
-import { Card } from '..';
-import { Color, COLORS, css, Dev, Keyboard, type t } from '../../../test.ui';
+import { Card } from '.';
+import { Color, COLORS, css, Dev, Keyboard, type t } from '../../test.ui';
 
 type T = {
   props: t.CardProps;
