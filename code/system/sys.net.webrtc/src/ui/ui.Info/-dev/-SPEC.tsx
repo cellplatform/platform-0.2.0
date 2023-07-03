@@ -13,8 +13,8 @@ import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t }
 type T = {
   props: WebRtcInfoProps;
   debug: {
-    card: boolean;
-    title: boolean;
+    card?: boolean;
+    title?: boolean;
     remotePeer?: t.PeerId;
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
@@ -23,7 +23,7 @@ type T = {
 };
 const initial: T = {
   props: {},
-  debug: { card: true, title: false },
+  debug: {},
 };
 
 type LocalStore = T['debug'] & {
@@ -32,8 +32,8 @@ type LocalStore = T['debug'] & {
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
-  card: initial.debug.card,
-  title: initial.debug.title,
+  card: true,
+  title: false,
   fields: WebRtcInfo.DEFAULTS.fields,
   useController: true,
   fullscreenVideo: false,
@@ -72,6 +72,9 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     data(state: t.DevCtxState<T>): t.WebRtcInfoData {
       const { debug } = state.current;
       return {
+        connect: {
+          self,
+        },
         group: {
           selected: debug.selectedPeer,
           useController: debug.useController,
@@ -115,13 +118,16 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     const renderInfoCard = (e: { state: T }) => {
       const { debug } = e.state;
+      const props = Util.props(state);
+      const fields = props.fields ?? [];
+      const hasConnect = fields.includes('Connect.Top') || fields.includes('Connect.Bottom');
 
       /**
        * Setup host
        */
-      const width = debug.card ? 320 : 280;
+      const width = debug.card || hasConnect ? 320 : 280;
       ctx.subject.size([width, null]);
-      ctx.subject.backgroundColor(debug.card ? 1 : 0);
+      ctx.subject.backgroundColor(debug.card ? 0 : 1);
 
       /**
        * Render <Component>

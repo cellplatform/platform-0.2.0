@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
+
 import { FieldGroup } from './fields/Group';
 import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
 import { FieldModuleVerify } from './fields/Module.Verify';
@@ -8,6 +9,7 @@ import { FieldPeerConnections } from './fields/Peer.Connections';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
 import { useInfo } from './hooks/useInfo.mjs';
+import { Connect } from './ui/Connect';
 
 export type WebRtcInfoProps = {
   client?: t.WebRtcEvents;
@@ -42,6 +44,11 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
     .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))
     .items(fields);
 
+  const includes = (field: t.WebRtcInfoField) => fields.includes(field);
+  const elTop = includes('Connect.Top') && <Connect edge={'Top'} data={data} />;
+  const elBottom = includes('Connect.Bottom') && <Connect edge={'Bottom'} data={data} />;
+  const hasEdge = Boolean(elTop || elBottom);
+
   return (
     <PropList
       style={props.style}
@@ -51,8 +58,10 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       defaults={{ clipboard: false }}
       card={props.card}
       flipped={props.flipped}
-      padding={props.card ? [20, 25] : undefined}
+      padding={props.card || hasEdge ? [20, 25] : undefined}
       margin={props.margin}
+      header={elTop}
+      footer={elBottom}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
     />
