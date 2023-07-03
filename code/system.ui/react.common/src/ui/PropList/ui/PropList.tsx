@@ -1,4 +1,4 @@
-import { Card, COLORS, css, DEFAULTS, Style, type t } from '../common';
+import { Card, COLORS, css, DEFAULTS, type t } from '../common';
 import { PropListItem } from '../ui.Item/Item';
 import { PropListTitle } from '../ui.Item/Title';
 import { Wrangle } from '../Util.mjs';
@@ -23,17 +23,12 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
     base: css({
       position: 'relative',
       color: COLORS.DARK,
-
       width: width?.fixed,
       height: height?.fixed,
       minWidth: width?.min ?? 10,
       minHeight: height?.min ?? 10,
       maxWidth: width?.max,
       maxHeight: height?.max,
-
-      boxSizing: 'border-box',
-      ...Style.toMargins(card ? undefined : props.margin),
-      ...Style.toPadding(card ? undefined : props.padding),
     }),
     items: css({}),
     title: css({}),
@@ -72,7 +67,7 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       shadow={card?.shadow}
       background={card?.background}
       border={card?.border}
-      padding={card ? props.padding ?? [20, 25] : 0}
+      padding={props.padding ?? card ? [20, 25] : undefined}
       margin={props.margin}
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>
