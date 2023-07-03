@@ -10,7 +10,7 @@ export type ConnectInputProps = {
   video?: MediaStream;
   muted?: boolean;
   style?: t.CssValue;
-  onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
-  onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
+  onLocalCopied?: t.PeerCardLocalCopiedHandler;
+  onRemoteChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
 };

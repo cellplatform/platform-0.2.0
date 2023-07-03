@@ -41,7 +41,7 @@ const View: React.FC<t.ConnectInputProps> = (props) => {
           canConnect={canConnect}
           isConnected={isConnected}
           isSpinning={isSpinning}
-          onRemotePeerChanged={props.onRemotePeerChanged}
+          onRemotePeerChanged={props.onRemoteChanged}
           onConnectRequest={props.onConnectRequest}
           style={dividerStyle}
         />
@@ -50,12 +50,7 @@ const View: React.FC<t.ConnectInputProps> = (props) => {
 
     if (field === 'Peer:Self') {
       return (
-        <Self
-          key={key}
-          self={self}
-          onLocalPeerCopied={props.onLocalPeerCopied}
-          style={dividerStyle}
-        />
+        <Self key={key} self={self} onLocalPeerCopied={props.onLocalCopied} style={dividerStyle} />
       );
     }
 
