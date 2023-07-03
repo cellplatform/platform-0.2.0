@@ -264,15 +264,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    const func = Crdt.func(
-      props.lens((d) => Crdt.Func.field(d, 'func')),
-      async (e) => console.log('run', e),
-    );
-
-    dev.button('run', (e) => func.invoke({}));
-
-    dev.hr(-1, 5);
-
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
@@ -385,6 +376,18 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .onClick((e) => dev.redraw()),
       );
     });
+
+    dev.hr(-1, 5);
+    const func = Crdt.func<{ msg: string }>(
+      props.lens((d) => Crdt.Func.field(d, 'func')),
+      async (e) => console.log('run', e),
+    );
+    dev.button((btn) =>
+      btn
+        .label('invoke')
+        .right('Crdt.func')
+        .onClick((e) => func.invoke({ msg: `run:by:${self.id}` })),
+    );
   });
 
   e.it('ui:footer', async (e) => {
