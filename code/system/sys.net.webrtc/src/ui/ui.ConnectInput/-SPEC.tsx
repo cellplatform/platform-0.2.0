@@ -60,7 +60,13 @@ export default Dev.describe('ConnectInput', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtcInfo fields={['Module', 'Self.Id']} client={client} />;
+      return (
+        <WebRtcInfo
+          fields={['Module', 'Self.Id']}
+          client={client}
+          style={{ Margin: [0, 20, 0, 0] }}
+        />
+      );
     });
 
     dev.hr(5, 20);
