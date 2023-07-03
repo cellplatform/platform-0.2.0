@@ -1,19 +1,29 @@
-import { Card } from '.';
-import { css, Dev, Keyboard, type t } from '../../test.ui';
+import { Card } from '..';
+import { Color, COLORS, css, Dev, Keyboard, type t } from '../../../test.ui';
 
 type T = {
   props: t.CardProps;
-  debug: { flipFast: boolean; focusable: boolean };
+  debug: {
+    flipFast: boolean;
+    focusable: boolean;
+    header: boolean;
+    footer: boolean;
+  };
 };
 const initial: T = {
   props: {
     padding: [25, 30],
-    userSelect: true,
+    userSelect: false,
     shadow: true,
     showAsCard: true,
     showBackside: false,
   },
-  debug: { flipFast: true, focusable: true },
+  debug: {
+    flipFast: true,
+    focusable: true,
+    header: false,
+    footer: true,
+  },
 };
 
 export default Dev.describe('Card', (e) => {
@@ -21,7 +31,6 @@ export default Dev.describe('Card', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    ctx.host.tracelineColor(-0.05);
     ctx.subject
       .display('grid')
       .size([450, null])
@@ -33,15 +42,32 @@ export default Dev.describe('Card', (e) => {
             backgroundColor: 'rgba(255, 0, 0, 0.03)' /* RED */,
             lineHeight: 1.3,
           }),
+          header: css({
+            Padding: [8, 10],
+            borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          }),
+          footer: css({
+            Padding: [8, 10],
+            borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          }),
         };
 
         const elBody = <div {...styles.body}>{Dev.Lorem.toString()}</div>;
         const elBackside = <div {...styles.body}>{`🐷 Backside`}</div>;
 
+        const elHeader = debug.header && <div {...styles.header}>Header</div>;
+        const elFooter = debug.footer && <div {...styles.footer}>Footer</div>;
+        const elBacksideHeader = debug.header && <div {...styles.header}>Header</div>;
+        const elBacksideFooter = debug.footer && <div {...styles.footer}>Footer</div>;
+
         return (
           <Card
             {...props}
+            header={elHeader}
+            footer={elFooter}
             backside={elBackside}
+            backsideHeader={elBacksideHeader}
+            backsideFooter={elBacksideFooter}
             showBackside={{
               // NB: Typically this is a simple boolean that uses the default values.
               //     Shown here with the full configuration option.
@@ -177,6 +203,22 @@ export default Dev.describe('Card', (e) => {
           .label((e) => 'showBackside (Enter)')
           .value((e) => Boolean(e.state.props.showBackside))
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'showBackside'))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `header`)
+          .value((e) => Boolean(e.state.debug.header))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'header'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `footer`)
+          .value((e) => Boolean(e.state.debug.footer))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'footer'))),
       );
     });
   });

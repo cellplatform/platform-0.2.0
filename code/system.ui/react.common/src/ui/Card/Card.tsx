@@ -1,7 +1,8 @@
 import { forwardRef } from 'react';
 
-import { Color, css, Style, type t } from '../common';
 import { Flip } from '../Flip';
+import { CardBody } from './Card.Body';
+import { Color, css, Style, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 /**
@@ -29,6 +30,7 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
       position: 'relative',
       boxSizing: 'border-box',
       userSelect: Wrangle.userSelect(props),
+      outline: 'none',
 
       width: size.width?.fixed,
       height: size.height?.fixed,
@@ -36,8 +38,8 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
       minHeight: size.height?.min ?? 10,
       maxWidth: size.width?.max,
       maxHeight: size.height?.max,
-
       ...Style.toMargins(props.margin),
+
       display: 'grid',
     }),
     card: css({
@@ -47,14 +49,25 @@ export const Card = forwardRef<HTMLDivElement, t.CardProps>((props, ref) => {
       backdropFilter: typeof bg.blur === 'number' ? `blur(${bg.blur}px)` : undefined,
       boxShadow: Style.toShadow(shadow),
       transition: `box-shadow 0.1s ease`,
-      ...Style.toPadding(props.padding),
       display: 'grid',
     }),
   };
 
   const sideStyle = showAsCard ? styles.card : undefined;
-  const elFront = <div {...sideStyle}>{props.children}</div>;
-  const elBack = backside && <div {...sideStyle}>{backside}</div>;
+  const elFront = (
+    <div {...sideStyle}>
+      <CardBody header={props.header} footer={props.footer} padding={props.padding}>
+        {props.children}
+      </CardBody>
+    </div>
+  );
+  const elBack = backside && (
+    <div {...sideStyle}>
+      <CardBody padding={props.padding}>{backside}</CardBody>
+
+      {/* <div {...styles.body}>{backside}</div> */}
+    </div>
+  );
 
   return (
     <div

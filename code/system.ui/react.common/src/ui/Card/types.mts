@@ -1,9 +1,11 @@
 import type { t } from '../../common.t';
 
+type ElementInput = JSX.Element | null | false;
 type Milliseconds = number;
+type Color = string | number;
 
 export type CardBorder = {
-  color?: number | string;
+  color?: Color;
   radius?: number | string;
 };
 
@@ -22,20 +24,29 @@ export type CardWidth = CardSizeDimension;
 export type CardHeight = CardSizeDimension;
 
 export type CardProps = {
-  children?: React.ReactNode;
+  children?: ElementInput;
+  header?: ElementInput;
+  footer?: ElementInput;
+
+  backside?: ElementInput;
+  backsideHeader?: ElementInput;
+  backsideFooter?: ElementInput;
+
   background?: t.CardBackground;
   border?: t.CardBorder;
   showAsCard?: boolean;
   showBackside?: boolean | CardBackside;
-  backside?: JSX.Element | null;
-  padding?: t.CssEdgesInput; // NB: padding is dropped if "NOT" showing as card.
+  shadow?: boolean | t.CssShadow;
+
+  focused?: boolean;
+  focusBorder?: boolean | Color;
+  tabIndex?: number; // NB: auto set to 0 if [focused] property or [onFocus/onBlur] handlers are set.
+
+  userSelect?: string | boolean;
+  padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
   width?: t.CardWidth;
   height?: t.CardHeight;
-  userSelect?: string | boolean;
-  shadow?: boolean | t.CssShadow;
-  focused?: boolean;
-  tabIndex?: number; // NB: auto set to 0 if [focused] property or [onFocus/onBlur] handlers are set.
   style?: t.CssValue;
 
   onClick?: React.MouseEventHandler;
