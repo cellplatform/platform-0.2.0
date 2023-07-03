@@ -15,6 +15,8 @@ export const FIELDS: t.WebRtcInfoField[] = [
   'Group.Peers',
   'Peer',
   'Peer.Connections',
+  'Connect.Top',
+  'Connect.Bottom',
 ];
 
 export const DEFAULTS = {
