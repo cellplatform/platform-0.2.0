@@ -338,7 +338,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `useGroupController`)
+          .label((e) => `useController`)
           .value((e) => Boolean(e.state.debug.useController))
           .onClick((e) => {
             e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));
