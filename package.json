@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "@automerge/automerge": "2.1.0-alpha.8",
+    "@automerge/automerge": "2.0.3",
     "@farcaster/core": "0.10.0",
     "@farcaster/hub-web": "0.4.0",
     "@improbable-eng/grpc-web": "0.15.0",
