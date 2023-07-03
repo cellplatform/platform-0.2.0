@@ -29,7 +29,7 @@ export const Pkg: ModuleDef = {
     'sys.util': '0.0.0',
     'vendor.stripe': '0.0.0',
     'vendor.wallet.rainbow': '0.0.0',
-    'viem': '1.2.6',
+    'viem': '1.2.9',
     'wagmi': '1.3.3',
   },
   toString() {
