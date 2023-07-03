@@ -1,4 +1,4 @@
-import { Color, DEFAULTS, R, t } from './common';
+import { Color, DEFAULTS, R, type t } from './common';
 import type { TextInputStyle } from './types.mjs';
 
 export const CssUtil = {

@@ -1,4 +1,4 @@
-import { Color, css, R, t } from '../../common';
+import { Color, css, R, type t } from '../../common';
 import { SwitchTheme } from './theme.mjs';
 
 export type SwitchThumbProps = {

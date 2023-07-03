@@ -1,6 +1,6 @@
 import QRCodeLib from 'qrcode';
 import { useEffect, useRef } from 'react';
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 
 type Pixels = number;
 const DEFAULTS = { size: 128 };

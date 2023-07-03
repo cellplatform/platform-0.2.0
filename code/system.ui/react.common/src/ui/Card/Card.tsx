@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { Color, css, Style, t } from '../common';
+import { Color, css, Style, type t } from '../common';
 import { Flip } from '../Flip';
 import { Wrangle } from './Wrangle.mjs';
 

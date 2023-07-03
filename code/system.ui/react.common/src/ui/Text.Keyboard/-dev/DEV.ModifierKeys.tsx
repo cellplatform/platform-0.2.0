@@ -1,4 +1,4 @@
-import { css, t } from './DEV.common';
+import { css, type t } from './DEV.common';
 import { DevKey, DevKeyDefaults } from './DEV.Key';
 
 type Edge = 'Left' | 'Right';

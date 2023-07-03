@@ -1,5 +1,5 @@
 import { Card } from '.';
-import { css, Dev, Keyboard, t } from '../../test.ui';
+import { css, Dev, Keyboard, type t } from '../../test.ui';
 
 type T = {
   props: t.CardProps;

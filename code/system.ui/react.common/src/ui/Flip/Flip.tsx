@@ -1,4 +1,4 @@
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 
 type Milliseconds = number;
 const DEFAULTS = { speed: 300 };

@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 import { Wrangle } from './util.mjs';
 
 const handlers = new Set<t.ActiveElementChangedHandler>();

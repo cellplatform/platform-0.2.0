@@ -1,4 +1,4 @@
-import { css, FC, Style, t } from '../common';
+import { css, FC, Style, type t } from '../common';
 import { DEFAULT } from './ui.Title.DEFAULT.mjs';
 
 export type TitleProps = {

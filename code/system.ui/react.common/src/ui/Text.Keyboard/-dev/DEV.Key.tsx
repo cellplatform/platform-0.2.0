@@ -1,4 +1,4 @@
-import { COLORS, Color, TextSyntax, css, t } from './DEV.common';
+import { COLORS, Color, TextSyntax, css, type t } from './DEV.common';
 
 export const DevKeyDefaults = { SPACING: 4 };
 

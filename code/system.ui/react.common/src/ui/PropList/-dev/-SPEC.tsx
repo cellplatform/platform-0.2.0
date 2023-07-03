@@ -1,6 +1,6 @@
 import { BuilderSample, SampleFields, sampleItems } from '.';
 import { PropList } from '..';
-import { Dev, Keyboard, t } from '../../../test.ui';
+import { Dev, Keyboard, type t } from '../../../test.ui';
 import { Wrangle } from '../Util.mjs';
 
 import type { MyFields } from '.';

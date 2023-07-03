@@ -1,5 +1,5 @@
 import { Dev } from '../../test.ui';
-import { css, t } from '../common';
+import { css, type t } from '../common';
 import { RenderCount } from '.';
 
 import type { RenderCountProps } from '.';

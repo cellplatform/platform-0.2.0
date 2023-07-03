@@ -1,4 +1,4 @@
-import { Color, css, t } from '../common';
+import { Color, css, type t } from '../common';
 
 export type HintKeyProps = {
   text: string;

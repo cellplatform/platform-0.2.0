@@ -1,4 +1,4 @@
-import { Color, COLORS, t } from '../common';
+import { Color, COLORS, type t } from '../common';
 import { Flip } from '../Flip';
 
 export const Wrangle = {

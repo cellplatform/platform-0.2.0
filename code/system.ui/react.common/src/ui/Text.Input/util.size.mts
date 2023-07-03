@@ -1,4 +1,4 @@
-import { Measure, Color, DEFAULTS, R, t } from './common';
+import { Measure, Color, DEFAULTS, R, type t } from './common';
 import type { TextInputStyle } from './types.mjs';
 import { CssUtil } from './util.css.mjs';
 

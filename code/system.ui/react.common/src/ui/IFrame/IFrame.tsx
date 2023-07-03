@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import type { HTMLAttributeReferrerPolicy } from 'react';
 
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 import { DEFAULTS } from './const.mjs';
 
 type HttpPermissionsPolicy = string; // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy

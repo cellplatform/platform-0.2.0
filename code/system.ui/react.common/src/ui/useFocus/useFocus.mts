@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 
-import { R, t } from '../common';
+import { R, type t } from '../common';
 import { ActiveElement } from './ActiveElement.mjs';
 import { containsFocus, withinFocus, Wrangle } from './util.mjs';
 

@@ -1,4 +1,4 @@
-import { Color, COLORS, css, t } from '../common';
+import { Color, COLORS, css, type t } from '../common';
 import { useImporter } from './useImporter.mjs';
 
 export type SpinnerPuffProps = {

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { COLORS, Color, DevIcons, FC, Style, TextInput, css, t } from '../common';
+import { COLORS, Color, DevIcons, FC, Style, TextInput, css, type t } from '../common';
 
 const DEFAULT = {
   isEnabled: true,

@@ -1,4 +1,4 @@
-import { FC, Switch, t } from '../common';
+import { FC, Switch, type t } from '../common';
 import { Button } from '../DevTools.Button';
 
 const DEFAULT = { ...Button.DEFAULT, value: false };
