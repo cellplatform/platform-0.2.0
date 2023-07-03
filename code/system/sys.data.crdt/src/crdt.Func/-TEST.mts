@@ -19,15 +19,15 @@ export default Test.describe('Func', (e) => {
   });
 
   e.it('Crdt.field', (e) => {
-    type T = { myFunc?: t.CrdtFuncData };
-    const doc = Crdt.ref<T>('my-doc', {});
+    // type T = { myFunc?: t.CrdtFuncData };
+    const doc = Crdt.ref<TRoot>('my-doc', { child: {} });
 
-    expect(doc.current.myFunc).to.eql(undefined);
-    const lens = Crdt.lens(doc, (d) => CrdtFunc.field(d, 'myFunc'));
+    expect(doc.current.child.fn).to.eql(undefined);
+    const lens = Crdt.lens(doc, (d) => CrdtFunc.field(d.child, 'fn'));
 
     expect(lens.current.count.value).to.eql(0);
     expect(lens.current.params).to.eql({});
-    expect(doc.current.myFunc).to.eql(lens.current);
+    expect(doc.current.child.fn).to.eql(lens.current);
   });
 
   e.describe('init', (e) => {
