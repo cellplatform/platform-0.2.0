@@ -1,5 +1,4 @@
-import { Card, COLORS, css, DEFAULTS, Style, t } from '../common';
-
+import { Card, COLORS, css, DEFAULTS, Style, type t } from '../common';
 import { PropListItem } from '../ui.Item/Item';
 import { PropListTitle } from '../ui.Item/Title';
 import { Wrangle } from '../Util.mjs';
@@ -65,11 +64,15 @@ export const PropList: React.FC<t.PropListProps> = (props) => {
       style={css(styles.base, props.style)}
       showAsCard={Boolean(card)}
       showBackside={{ flipped: props.flipped, speed: card?.flipSpeed }}
-      backside={props.backside || <EmptyBackside />}
+      backside={props.backside ?? <EmptyBackside />}
+      backsideHeader={props.backsideHeader}
+      backsideFooter={props.backsideFooter}
+      header={props.header}
+      footer={props.footer}
       shadow={card?.shadow}
       background={card?.background}
       border={card?.border}
-      padding={props.padding ?? [20, 25]}
+      padding={card ? props.padding ?? [20, 25] : 0}
       margin={props.margin}
     >
       <div onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}>

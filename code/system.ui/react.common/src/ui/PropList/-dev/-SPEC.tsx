@@ -1,6 +1,7 @@
+import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
+
 import { BuilderSample, SampleFields, sampleItems } from '.';
 import { PropList } from '..';
-import { Dev, Keyboard, type t } from '../../../test.ui';
 import { Wrangle } from '../Util.mjs';
 
 import type { MyFields } from '.';
@@ -11,11 +12,9 @@ type T = {
   debug: {
     source: SampleKind;
     fields?: MyFields[];
-    fieldSelector: {
-      title: boolean;
-      resettable: boolean;
-      showIndexes: boolean;
-    };
+    fieldSelector: { title: boolean; resettable: boolean; showIndexes: boolean };
+    header: boolean;
+    footer: boolean;
   };
 };
 
@@ -24,8 +23,6 @@ const initial: T = {
     title: 'MyTitle',
     defaults: { clipboard: false },
     theme: 'Light',
-    card: false,
-    flipped: false,
   },
   debug: {
     source: 'Samples',
@@ -34,15 +31,19 @@ const initial: T = {
       resettable: PropList.FieldSelector.DEFAULTS.resettable,
       showIndexes: PropList.FieldSelector.DEFAULTS.showIndexes,
     },
+    header: true,
+    footer: true,
   },
 };
 
 export default Dev.describe('PropList', (e) => {
-  type LocalStore = { card?: boolean; flipped: boolean };
+  type LocalStore = { card: boolean; flipped: boolean; header: boolean; footer: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.common.PropList');
   const local = localstore.object({
-    card: initial.props.card as boolean,
-    flipped: initial.props.flipped as boolean,
+    card: false,
+    flipped: false,
+    header: false,
+    footer: false,
   });
 
   e.it('init', async (e) => {
@@ -53,19 +54,45 @@ export default Dev.describe('PropList', (e) => {
     state.change((d) => {
       d.props.card = local.card;
       d.props.flipped = local.flipped;
+      d.debug.header = local.header;
+      d.debug.footer = local.footer;
     });
 
     ctx.subject
       .display('grid')
       .size([250, null])
       .render<T>((e) => {
-        const isCard = Boolean(e.state.props.card);
+        const { props, debug } = e.state;
+
+        const isCard = Boolean(props.card);
         ctx.subject.size([isCard ? 250 + 25 * 2 : 250, null]);
         ctx.host.tracelineColor(isCard ? -0.03 : -0.05);
 
+        const styles = {
+          header: css({
+            Padding: [8, 10],
+            borderBottom: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          }),
+          footer: css({
+            Padding: [8, 10],
+            borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+          }),
+        };
+
         const backside = <div>🐷 Sample Backside</div>;
-        // const backside = null;
-        return <PropList {...e.state.props} backside={backside} />;
+        const elHeader = debug.header && <div {...styles.header}>Header</div>;
+        const elFooter = debug.footer && <div {...styles.footer}>Footer</div>;
+
+        return (
+          <PropList
+            {...props}
+            backside={backside}
+            header={elHeader}
+            footer={elFooter}
+            backsideHeader={elHeader}
+            backsideFooter={elFooter}
+          />
+        );
       });
   });
 
@@ -127,6 +154,22 @@ export default Dev.describe('PropList', (e) => {
           .label((e) => `flipped (← Enter)`)
           .value((e) => Boolean(e.state.props.flipped))
           .onClick((e) => e.change((d) => (local.flipped = Dev.toggle(d.props, 'flipped')))),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `header`)
+          .value((e) => Boolean(e.state.debug.header))
+          .onClick((e) => e.change((d) => (local.header = Dev.toggle(d.debug, 'header')))),
+      );
+
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `footer`)
+          .value((e) => Boolean(e.state.debug.footer))
+          .onClick((e) => e.change((d) => (local.footer = Dev.toggle(d.debug, 'footer')))),
       );
 
       dev.hr(5, 20);
