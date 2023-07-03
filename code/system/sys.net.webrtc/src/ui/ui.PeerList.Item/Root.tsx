@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { Color, COLORS, css, type t, rx } from '../common';
 import { ActionBar } from './ui.Item.ActionBar';
 
 export type PeerListItemProps = {

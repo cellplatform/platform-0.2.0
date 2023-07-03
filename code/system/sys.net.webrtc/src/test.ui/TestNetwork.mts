@@ -1,5 +1,5 @@
 import { WebRtc } from '../WebRtc';
-import { rx, t, TEST, cuid } from './common';
+import { rx, type t, TEST, cuid } from './common';
 
 export type TestNetworkP2P = t.Disposable & {
   peerA: t.Peer;

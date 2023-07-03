@@ -1,5 +1,5 @@
 import { ConnectInput } from '.';
-import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
+import { Dev, PropList, TestNetwork, WebRtc, WebRtcInfo, type t } from '../../test.ui';
 
 const { DEFAULTS } = ConnectInput;
 

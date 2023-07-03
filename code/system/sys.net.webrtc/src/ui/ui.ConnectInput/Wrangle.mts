@@ -1,4 +1,4 @@
-import { R, t, WebRtcUtils, DEFAULTS } from './common';
+import { R, type t, WebRtcUtils, DEFAULTS } from './common';
 
 export const Wrangle = {
   ids(props: t.ConnectInputProps) {

@@ -1,4 +1,4 @@
-import { cuid, Dev, expect, t, TEST, TestNetwork, Time, WebRtc } from '../../test.ui';
+import { cuid, Dev, expect, type t, TEST, TestNetwork, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(1000 * 15);

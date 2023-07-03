@@ -1,5 +1,5 @@
 import { PeerCard, PeerCardProps } from '.';
-import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
+import { Dev, PropList, type t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
 
 type T = { props: PeerCardProps };
 const initial: T = { props: {} };

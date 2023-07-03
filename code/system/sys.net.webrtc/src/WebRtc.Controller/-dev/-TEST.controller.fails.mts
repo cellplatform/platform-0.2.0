@@ -1,5 +1,5 @@
 import { WebRtcController } from '..';
-import { Crdt, Dev, expect, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
+import { Crdt, Dev, expect, rx, type t, TestNetwork, Time, WebRtc } from '../../test.ui';
 import { pruneDeadPeers } from '../util.mjs';
 
 export default Dev.describe('Network Controller: Failure', async (e) => {

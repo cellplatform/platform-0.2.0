@@ -1,4 +1,4 @@
-import { Path, PeerJS, rx, t, WebRtcUtils } from './common';
+import { Path, PeerJS, rx, type t, WebRtcUtils } from './common';
 import { MemoryState } from './WebRtc.memory.mjs';
 
 type Options = {

@@ -1,3 +1,4 @@
+import { BiCopy } from 'react-icons/bi';
 import { FaNetworkWired } from 'react-icons/fa';
 import {
   MdCable,
@@ -30,7 +31,6 @@ import {
   MdWifiTetheringOff,
 } from 'react-icons/md';
 import { VscGithubAction } from 'react-icons/vsc';
-import { BiCopy } from 'react-icons/bi';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;

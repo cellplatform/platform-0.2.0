@@ -1,4 +1,4 @@
-import { slug, rx, t, WebRtcUtils } from './common';
+import { slug, rx, type t, WebRtcUtils } from './common';
 import { PeerDataConnection } from './Connection.Data.mjs';
 import { PeerMediaConnection } from './Connection.Media.mjs';
 

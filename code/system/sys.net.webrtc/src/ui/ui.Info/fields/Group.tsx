@@ -1,4 +1,4 @@
-import { t, Value } from '../common';
+import { type t, Value } from '../common';
 
 export function FieldGroup(args: {
   fields: t.WebRtcInfoField[];

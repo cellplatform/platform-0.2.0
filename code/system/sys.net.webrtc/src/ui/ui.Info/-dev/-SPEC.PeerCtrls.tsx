@@ -1,4 +1,4 @@
-import { PropList, Dev, WebRtc, t, MediaStream } from './common';
+import { PropList, Dev, WebRtc, type t, MediaStream } from './common';
 import { PeerCtrls, PeerCtrlsProps } from '../ui/PeerCtrls';
 
 type T = {

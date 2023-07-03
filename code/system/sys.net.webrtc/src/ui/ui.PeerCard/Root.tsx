@@ -8,7 +8,7 @@ import {
   FC,
   MediaStream,
   Spinner,
-  t,
+  type t,
   useMouseState,
   DEFAULTS,
   FIELDS,

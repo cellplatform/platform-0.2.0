@@ -1,4 +1,4 @@
-import { Color, COLORS, css, Icons, t, TextInput } from './common';
+import { COLORS, Color, Icons, TextInput, css, type t } from './common';
 import { ConnectButton } from './ui.ConnectButton';
 
 export type RemoteProps = {

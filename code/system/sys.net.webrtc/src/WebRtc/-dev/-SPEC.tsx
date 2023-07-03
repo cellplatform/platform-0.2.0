@@ -12,7 +12,7 @@ import {
   Path,
   rx,
   slug,
-  t,
+  type t,
   TEST,
   TextInput,
 } from '../../test.ui';

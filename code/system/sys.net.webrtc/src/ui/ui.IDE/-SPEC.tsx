@@ -12,7 +12,7 @@ import {
   Keyboard,
   MediaStream,
   rx,
-  t,
+  type t,
   TEST,
   WebRtc,
   WebRtcInfo,

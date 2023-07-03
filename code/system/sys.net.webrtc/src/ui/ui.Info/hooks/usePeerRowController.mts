@@ -1,4 +1,4 @@
-import { R, t, WebRtcState } from '../common';
+import { R, type t, WebRtcState } from '../common';
 import { useInfo } from './useInfo.mjs';
 import { useNetworkState } from './useNetworkState.mjs';
 

@@ -189,9 +189,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.header.border(-0.1).padding(0);
     dev.header.render<T>((e) => {
       const firstCamera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
-
       const data = Util.data(state);
-
       return (
         <ConnectInput
           self={self}
