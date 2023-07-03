@@ -11,18 +11,17 @@ export function init<D extends {}>(
 ) {
   const { syncOnStart = true, filedir } = options;
 
-  const { dispose, dispose$ } = rx.disposable(options.dispose$);
-  let _isDisposed = false;
+  const lifecycle = rx.lifecycle(options.dispose$);
+  const { dispose, dispose$ } = lifecycle;
   dispose$.subscribe(() => ensureDisposed());
   const ensureDisposed = async () => {
-    _isDisposed = true;
     change$.complete();
     await syncer.dispose();
   };
 
   const change$ = new rx.Subject<t.CrdtDocRefChangeHandlerArgs<D>>();
   const onChange: t.CrdtDocRefChangeHandler<D> = (e) => {
-    if (!_isDisposed) {
+    if (!lifecycle.disposed) {
       change$.next(e);
       options.onChange?.(e);
     }
@@ -77,7 +76,7 @@ export function init<D extends {}>(
      */
     dispose$,
     get disposed() {
-      return _isDisposed;
+      return lifecycle.disposed;
     },
     async dispose() {
       await ensureDisposed();
