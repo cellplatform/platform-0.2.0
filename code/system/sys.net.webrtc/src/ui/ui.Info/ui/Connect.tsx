@@ -1,9 +1,10 @@
 import { ConnectInput } from '../../ui.ConnectInput';
 import { COLORS, Color, css, type t } from '../common';
 
-type Edge = 'Top' | 'Bottom';
+export type Edge = Extract<t.WebRtcInfoField, 'Connect.Top' | 'Connect.Bottom'>;
 
 export type ConnectProps = {
+  fields: t.WebRtcInfoField[];
   edge: Edge;
   data: t.WebRtcInfoData;
   style?: t.CssValue;
@@ -12,24 +13,45 @@ export type ConnectProps = {
 export const Connect: React.FC<ConnectProps> = (props) => {
   const data = props.data.connect;
   const self = data?.self;
-
   if (!self) return null;
 
   /**
    * [Render]
    */
-  const borderValue = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
-  const border = (edge: Edge) => (props.edge === edge ? borderValue : undefined);
   const styles = {
     base: css({
-      borderTop: border('Bottom'),
-      borderBottom: border('Top'),
+      borderTop: Wrangle.border(props, 'Connect.Bottom'),
+      borderBottom: Wrangle.border(props, 'Connect.Top'),
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ConnectInput fields={['Peer:Self', 'Peer:Remote']} self={self} />
+      <ConnectInput
+        fields={['Peer:Self', 'Peer:Remote']}
+        self={self}
+        onLocalCopied={data.onLocalCopied}
+        onRemoteChanged={data.onRemoteChanged}
+        onConnectRequest={data.onConnectRequest}
+      />
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  hasOthers(fields: t.WebRtcInfoField[]) {
+    return fields.some((field) => field !== 'Connect.Top' && field !== 'Connect.Bottom');
+  },
+
+  border(props: ConnectProps, edge: Edge) {
+    if (props.edge !== edge) return;
+    if (!Wrangle.hasOthers(props.fields)) {
+      if (props.fields.length === 1) return;
+      if (edge === 'Connect.Bottom') return;
+    }
+    return `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  },
 };

@@ -166,11 +166,11 @@ const View: React.FC<PeerCardProps> = (props) => {
         style={styles.footer}
         fields={fields}
         self={self}
-        remotePeer={props.remotePeer}
+        remote={props.remotePeer}
         video={props.footerVideo}
         spinning={props.spinning}
-        onLocalPeerCopied={handlePeerCopied}
-        onRemotePeerChanged={props.onRemotePeerChanged}
+        onLocalCopied={handlePeerCopied}
+        onRemoteChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
       />
     </div>

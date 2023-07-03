@@ -74,6 +74,14 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return {
         connect: {
           self,
+          remote: debug.remotePeer,
+          onLocalCopied: (e) => navigator.clipboard.writeText(e.local),
+          onRemoteChanged: (e) => state.change((d) => (d.debug.remotePeer = e.remote)),
+          async onConnectRequest(e) {
+            await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
+            await client.connect.fire(e.remote);
+            await state.change((d) => (d.debug.addingConnection = undefined));
+          },
         },
         group: {
           selected: debug.selectedPeer,
@@ -116,8 +124,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
     });
 
-    const renderInfoCard = (e: { state: T }) => {
-      const { debug } = e.state;
+    const renderInfoCard = () => {
+      const { debug } = state.current;
       const props = Util.props(state);
       const fields = props.fields ?? [];
       const hasConnect = fields.includes('Connect.Top') || fields.includes('Connect.Bottom');
@@ -135,10 +143,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       return <WebRtcInfo {...Util.props(state)} card={debug.card} />;
     };
 
-    const renderFullscreenVideo = (e: { state: T }) => {
+    const renderFullscreenVideo = () => {
+      const debug = state.current.debug;
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-      return <DevMedia bus={bus} self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
+      return <DevMedia bus={bus} self={self} shared={props} peerid={debug.selectedPeer} />;
     };
 
     /**
@@ -148,8 +157,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       ctx.debug.width(props.current.showRight ? 400 : 0);
       return props.current.fullscreenVideo
         ? //
-          renderFullscreenVideo(e)
-        : renderInfoCard(e);
+          renderFullscreenVideo()
+        : renderInfoCard();
     });
 
     /**
@@ -180,21 +189,19 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.header.render<T>((e) => {
       const firstCamera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
 
+      const data = Util.data(state);
+
       return (
         <ConnectInput
-          remotePeer={e.state.debug.remotePeer}
           self={self}
+          remote={e.state.debug.remotePeer}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
           spinning={e.state.debug.addingConnection === 'RealNetwork'}
           video={firstCamera?.stream.local}
           muted={true}
-          onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
-          onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
-          onConnectRequest={async (e) => {
-            await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
-            await client.connect.fire(e.remote);
-            await state.change((d) => (d.debug.addingConnection = undefined));
-          }}
+          onLocalCopied={data.connect?.onLocalCopied}
+          onRemoteChanged={data.connect?.onRemoteChanged}
+          onConnectRequest={data.connect?.onConnectRequest}
         />
       );
     });
