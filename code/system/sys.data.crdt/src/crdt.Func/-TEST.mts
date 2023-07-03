@@ -9,13 +9,25 @@ export default Test.describe('Func', (e) => {
   const setup = () => {
     const initial: TRoot = { child: {} };
     const root = Crdt.ref<TRoot>('foo', initial);
-    const lens = Crdt.lens<TRoot, t.CrdtFuncData>(root, (d) => CrdtFunc.data(d.child, 'fn'));
+    const lens = Crdt.lens<TRoot, t.CrdtFuncData>(root, (d) => CrdtFunc.field(d.child, 'fn'));
     return { initial, root, lens } as const;
   };
 
-  e.it('exposed from root API', (e) => {
+  e.it('exposed from API root', (e) => {
     expect(CrdtFunc.init).to.equal(Crdt.func);
     expect(Crdt.Func).to.equal(CrdtFunc);
+  });
+
+  e.it('Crdt.field', (e) => {
+    type T = { myFunc?: t.CrdtFuncData };
+    const doc = Crdt.ref<T>('my-doc', {});
+
+    expect(doc.current.myFunc).to.eql(undefined);
+    const lens = Crdt.lens(doc, (d) => CrdtFunc.field(d, 'myFunc'));
+
+    expect(lens.current.count.value).to.eql(0);
+    expect(lens.current.params).to.eql({});
+    expect(doc.current.myFunc).to.eql(lens.current);
   });
 
   e.describe('init', (e) => {

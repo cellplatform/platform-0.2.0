@@ -7,5 +7,5 @@ import { Util } from './util.mjs';
  */
 export const CrdtFunc = {
   init,
-  data: Util.data,
+  field: Util.field,
 } as const;

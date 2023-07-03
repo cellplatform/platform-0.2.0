@@ -265,7 +265,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const state = await dev.state();
 
     const func = Crdt.func(
-      props.lens((d) => Crdt.Func.data(d, 'func')),
+      props.lens((d) => Crdt.Func.field(d, 'func')),
       async (e) => console.log('run', e),
     );
 
