@@ -4,7 +4,7 @@ import { Self } from './ui.Self';
 import { Wrangle } from './Wrangle.mjs';
 import { Video } from './ui.Video';
 
-const View: React.FC<t.ConnectInputProps> = (props) => {
+const View: React.FC<t.PeerInputProps> = (props) => {
   const { self, spinning: isSpinning = DEFAULTS.spinning, fields = DEFAULTS.fields } = props;
   const canConnect = Wrangle.canConnect(props);
   const isConnected = Wrangle.isConnected(props);
@@ -77,8 +77,8 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   FIELDS: typeof FIELDS;
 };
-export const ConnectInput = FC.decorate<t.ConnectInputProps, Fields>(
+export const PeerInput = FC.decorate<t.PeerInputProps, Fields>(
   View,
   { DEFAULTS, FIELDS },
-  { displayName: 'ConnectInput' },
+  { displayName: 'PeerInput' },
 );

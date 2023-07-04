@@ -1,12 +1,12 @@
 import type { t } from '../common.t';
 
-export type ConnectInputField = 'Peer:Remote' | 'Peer:Self' | 'Video';
+export type PeerInputField = 'Peer:Remote' | 'Peer:Self' | 'Video';
 
-export type ConnectInputProps = {
+export type PeerInputProps = {
   self?: t.Peer;
   remote?: t.PeerId;
   spinning?: boolean;
-  fields?: t.ConnectInputField[];
+  fields?: t.PeerInputField[];
   video?: MediaStream;
   muted?: boolean;
   style?: t.CssValue;

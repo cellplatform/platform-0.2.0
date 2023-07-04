@@ -1,4 +1,4 @@
-import { ConnectInput } from '../ui.ConnectInput';
+import { PeerInput } from '../ui.PeerInput';
 import { WebRtcInfo } from '../ui.Info';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
@@ -76,7 +76,7 @@ const Wrangle = {
 
     return (
       <div {...css(styles.base, is.edge.top && styles.top, is.edge.bottom && styles.bottom)}>
-        <ConnectInput
+        <PeerInput
           self={self}
           remote={data.remote}
           fields={['Peer:Self', 'Peer:Remote']}

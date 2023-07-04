@@ -1,7 +1,7 @@
 import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
-import { ConnectInput } from '../../ui.ConnectInput';
+import { PeerInput } from '../../ui.PeerInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
 import { DevRemotes } from './DEV.Remotes';
@@ -189,7 +189,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const firstCamera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
       const data = Util.data(state);
       return (
-        <ConnectInput
+        <PeerInput
           self={self}
           remote={e.state.debug.remotePeer}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
