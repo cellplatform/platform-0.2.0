@@ -9,7 +9,7 @@ import { Dev } from 'sys.ui.react.common';
   console.info(`Pkg:`, Pkg);
   const { Specs } = await import('./entry.Specs.mjs');
 
-  const el = await Dev.render(Pkg, Specs, { hrDepth: 3 });
+  const el = await Dev.render(Pkg, Specs, { hrDepth: 4 });
   const root = createRoot(document.getElementById('root')!);
   root.render(<StrictMode>{el}</StrictMode>);
 })();
