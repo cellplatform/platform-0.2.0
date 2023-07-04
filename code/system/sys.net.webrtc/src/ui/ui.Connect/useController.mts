@@ -4,16 +4,28 @@ import { WebRtc, rx, type t } from './common';
 /**
  * Behavior controller for the <Connect> component.
  */
-export function useConnectController(args: {
-  self?: t.Peer;
-  onChange?: t.ConnectStatefulChangedHandler;
-}) {
+export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefulChangedHandler }) {
   const { self } = args;
 
   const [client, setClient] = useState<t.WebRtcEvents>();
   const [remote, setRemote] = useState('');
   const [spinning, setSpinning] = useState(false);
   const [selectedPeer, setSelectedPeer] = useState('');
+
+  const fireChange = () => {
+    if (self && client) args.onChange?.({ self, data, client });
+  };
+
+  const connectToPeer = async (remote: t.PeerId) => {
+    setSpinning(true);
+    await client?.connect.fire(remote);
+    setSpinning(false);
+  };
+
+  /**
+   * Alert listeners via [onChange] event.
+   */
+  useEffect(fireChange, [client?.instance.id, remote, spinning, selectedPeer]);
 
   /**
    * Initialize controller
@@ -31,21 +43,14 @@ export function useConnectController(args: {
   }, [self?.id]);
 
   /**
-   * Alert listeners via [onChange] event.
-   */
-  useEffect(() => {
-    if (self && client) args.onChange?.({ self, data, client });
-  }, [remote, spinning, client?.instance.id]);
-
-  /**
    * Ensure [selectedPeer].
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
     if (client) {
-      const connections$ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
-      connections$.subscribe((e) => {
+      const $ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
+      $.subscribe((e) => {
         // NB: If no peer is selected then select the first remote.
         if (!selectedPeer) setSelectedPeer(e.connections[0].peer.remote);
       });
@@ -64,22 +69,13 @@ export function useConnectController(args: {
       spinning,
       onLocalCopied: (e) => navigator.clipboard.writeText(e.local),
       onRemoteChanged: (e) => setRemote(e.remote),
-      async onConnectRequest(e) {
-        setSpinning(true);
-        await client?.connect.fire(e.remote);
-        // if (!selectedPeer) setSelectedPeer(e.remote);
-        setSpinning(false);
-      },
+      onConnectRequest: (e) => connectToPeer(e.remote),
     },
     group: {
       useController: true,
       selected: selectedPeer,
-      onPeerSelect(e) {
-        setSelectedPeer(e.peerid);
-      },
-      onPeerCtrlClick(e) {
-        console.info('⚡️ onPeerCtrlClick', e);
-      },
+      onPeerSelect: (e) => setSelectedPeer(e.peerid),
+      onPeerCtrlClick: (e) => console.info('⚡️ onPeerCtrlClick', e),
     },
   };
 

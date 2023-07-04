@@ -26,6 +26,8 @@ import {
   MdRefresh,
   MdSettingsInputAntenna,
   MdStart,
+  MdVerticalAlignBottom,
+  MdVerticalAlignTop,
   MdVpnLock,
   MdWifiTethering,
   MdWifiTetheringOff,
@@ -44,6 +46,12 @@ export const Icons = {
   Cable: icon(MdCable),
   Close: icon(MdClose),
   Delete: { Bin: icon(MdDelete) },
+  Align: {
+    Vertical: {
+      Top: icon(MdVerticalAlignTop),
+      Bottom: icon(MdVerticalAlignBottom),
+    },
+  },
   Cube: icon(MdOutlineViewInAr),
   Person: icon(MdEmojiPeople),
   Screenshare: {

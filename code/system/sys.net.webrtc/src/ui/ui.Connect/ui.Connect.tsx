@@ -1,19 +1,91 @@
+import { ConnectInput } from '../ui.ConnectInput';
 import { WebRtcInfo } from '../ui.Info';
-import { DEFAULTS, type t } from './common';
+import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
 export const Connect: React.FC<t.ConnectProps> = (props) => {
-  const { data = {} } = props;
-  const fields = Wrangle.fields(props);
-  return <WebRtcInfo fields={fields} client={props.client} data={data} />;
+  const { data = {}, fields = DEFAULTS.fields } = props;
+  const isCard = props.card ?? DEFAULTS.card;
+
+  /**
+   * [Render]
+   */
+  const styles = {
+    base: css({ boxSizing: 'border-box' }),
+    info: css({
+      marginLeft: 32,
+      marginRight: isCard ? 32 : 15,
+    }),
+  };
+
+  const elTop = Wrangle.ConnectComponent(props, 'Top');
+  const elBottom = Wrangle.ConnectComponent(props, 'Bottom');
+
+  const elInfo = (
+    <WebRtcInfo
+      fields={fields}
+      client={props.client}
+      data={data}
+      style={styles.info}
+      card={isCard}
+    />
+  );
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      {elTop}
+      {elInfo}
+      {elBottom}
+    </div>
+  );
 };
 
 /**
  * Helpers
  */
 const Wrangle = {
-  fields(props: t.ConnectProps): t.WebRtcInfoField[] {
+  is(props: t.ConnectProps) {
     const { edge = DEFAULTS.edge } = props;
-    const connect: t.WebRtcInfoField = edge === 'Top' ? 'Connect.Top' : 'Connect.Bottom';
-    return [connect, 'State.Shared', 'Group', 'Group.Peers'];
+    return {
+      edge: {
+        top: edge === 'Top',
+        bottom: edge === 'Bottom',
+      },
+    };
+  },
+
+  ConnectComponent(props: t.ConnectProps, targetEdge: t.Edge) {
+    const data = props.data?.connect;
+    const self = data?.self;
+    const { edge = DEFAULTS.edge } = props;
+    if (!data || !self) return null;
+    if (edge !== targetEdge) return null;
+
+    const is = Wrangle.is(props);
+    const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+    const styles = {
+      base: css({ boxSizing: 'border-box' }),
+      top: css({
+        borderBottom: border,
+        marginBottom: 20,
+      }),
+      bottom: css({
+        borderTop: border,
+        marginTop: 20,
+      }),
+    };
+
+    return (
+      <div {...css(styles.base, is.edge.top && styles.top, is.edge.bottom && styles.bottom)}>
+        <ConnectInput
+          self={self}
+          remote={data.remote}
+          fields={['Peer:Self', 'Peer:Remote']}
+          spinning={data.spinning}
+          onLocalCopied={data.onLocalCopied}
+          onRemoteChanged={data.onRemoteChanged}
+          onConnectRequest={data.onConnectRequest}
+        />
+      </div>
+    );
   },
 };
