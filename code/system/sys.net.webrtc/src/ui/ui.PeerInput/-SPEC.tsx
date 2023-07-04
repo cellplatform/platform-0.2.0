@@ -108,7 +108,7 @@ export default Dev.describe('PeerInput', async (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => (local.self ? 'self (set)' : 'self (not set)'))
+          .label((e) => (local.self ? 'self (is set)' : 'self (not set)'))
           .value((e) => local.self)
           .onClick((e) => {
             local.self = !local.self;

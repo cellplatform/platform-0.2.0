@@ -10,7 +10,7 @@ const initial: T = {
     peer: cuid(),
     fontSize: 24,
     enabled: PeerId.DEFAULTS.enabled,
-    copyable: PeerId.DEFAULTS.copyable,
+    copyable: true,
   },
   debug: { assignClickHandler: true },
 };

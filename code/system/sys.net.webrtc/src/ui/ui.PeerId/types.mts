@@ -18,5 +18,5 @@ export type PeerIdClickHandler = (e: PeerIdClickHandlerArgs) => void;
 export type PeerIdClickHandlerArgs = {
   readonly id: t.PeerId;
   readonly uri: t.PeerUri;
-  copy(): void;
+  copy(): t.PeerId;
 };
