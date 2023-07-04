@@ -2,17 +2,14 @@ import { useState } from 'react';
 import { Button, COLORS, Color, MediaStream, css, type t } from './common';
 
 export type DevMediaProps = {
-  bus: t.EventBus<any>;
   self: t.Peer;
-  shared: t.TDevSharedPropsLens;
   peerid?: t.PeerId;
   style?: t.CssValue;
 };
 
 export const DevMedia: React.FC<DevMediaProps> = (props) => {
-  const { self, peerid, bus } = props;
+  const { self, peerid } = props;
   const isSelf = peerid === self.id;
-  const shared = props.shared.current;
 
   const [selected, setSelected] = useState<t.PeerMediaConnection>();
 

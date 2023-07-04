@@ -41,7 +41,6 @@ const local = localstore.object({
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
-  const bus = rx.bus();
   const self = await TestNetwork.peer();
   const remotes: t.TDevRemote[] = [];
 
@@ -129,13 +128,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     const renderInfoCard = () => {
       const { debug } = state.current;
       const props = Util.props(state);
-      const fields = props.fields ?? [];
-      const hasConnect = fields.includes('Connect.Top') || fields.includes('Connect.Bottom');
 
       /**
        * Setup host
        */
-      const width = debug.card || hasConnect ? 320 : 280;
+      const width = debug.card ? 320 : 280;
       ctx.subject.size([width, null]);
       ctx.subject.backgroundColor(debug.card ? 0 : 1);
 
@@ -149,7 +146,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       const debug = state.current.debug;
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-      return <DevMedia bus={bus} self={self} shared={props} peerid={debug.selectedPeer} />;
+      return <DevMedia self={self} peerid={debug.selectedPeer} />;
     };
 
     /**

@@ -1,8 +1,9 @@
-import { Dev, TestNetwork } from '../../test.ui';
+import { Dev, TestNetwork, type t } from '../../test.ui';
 import { Connect } from '../ui.Connect';
+import { DevMedia } from '../ui.Info/-dev/DEV.Media';
 
-type T = { count: number };
-const initial: T = { count: 0 };
+type T = { selectedPeer?: t.PeerId };
+const initial: T = {};
 
 export default Dev.describe('GroupVideo', async (e) => {
   const self = await TestNetwork.peer();
@@ -16,17 +17,27 @@ export default Dev.describe('GroupVideo', async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <div>{`🐷 GroupVideo-${e.state.count}`}</div>;
+        return <DevMedia self={self} peerid={e.state.selectedPeer} />;
       });
   });
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
+
     dev.header
       .border(-0.1)
-      .padding(0)
+      .padding([0, 0, 20, 0])
       .render((e) => {
-        return <Connect.Stateful self={self} />;
+        return (
+          <Connect.Stateful
+            self={self}
+            onChange={(e) => {
+              const selected = e.data.group?.selected;
+              state.change((d) => (d.selectedPeer = selected));
+            }}
+          />
+        );
       });
   });
 
