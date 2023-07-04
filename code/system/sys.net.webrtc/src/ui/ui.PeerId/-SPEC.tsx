@@ -1,25 +1,36 @@
-import { PeerId, PeerIdProps } from '.';
-import { cuid, Dev } from '../../test.ui';
+import { PeerId } from '.';
+import { cuid, Dev, type t } from '../../test.ui';
 
-type T = { props: PeerIdProps };
+type T = {
+  props: t.PeerIdProps;
+  debug: { assignClickHandler: boolean };
+};
 const initial: T = {
   props: {
     peer: cuid(),
     fontSize: 24,
-    enabled: true,
+    enabled: PeerId.DEFAULTS.enabled,
+    copyable: PeerId.DEFAULTS.copyable,
   },
+  debug: { assignClickHandler: true },
 };
 
 export default Dev.describe('PeerId', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
 
     ctx.subject
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
-        return <PeerId {...e.state.props} onClick={(e) => console.info('⚡️ onClick', e)} />;
+        const { props, debug } = e.state;
+
+        const onClick: t.PeerIdClickHandler = (e) => {
+          console.info('⚡️ onClick', e);
+          e.copy();
+        };
+
+        return <PeerId {...props} onClick={debug.assignClickHandler ? onClick : undefined} />;
       });
   });
 
@@ -47,6 +58,13 @@ export default Dev.describe('PeerId', (e) => {
         .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
     );
 
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `copyable`)
+        .value((e) => Boolean(e.state.props.copyable))
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'copyable'))),
+    );
+
     dev.hr(-1, 5);
 
     dev.button('prefix: "me"', (e) => e.change((d) => (d.props.prefix = '  me:  ')));
@@ -67,6 +85,18 @@ export default Dev.describe('PeerId', (e) => {
       fontsize(8);
       fontsize(undefined, `${PeerId.DEFAULTS.fontSize}px (undefined → default)`);
       fontsize(24);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      const value = (state: T) => Boolean(state.debug.assignClickHandler);
+      dev.boolean((btn) => {
+        btn
+          .label((e) => `onClick → ${value(e.state) ? 'ƒ' : '<undefined>'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'assignClickHandler')));
+      });
     });
   });
 });
