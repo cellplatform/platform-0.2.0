@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
 import { Connect as View } from './ui.Connect';
 import { ConnectStateful as Stateful } from './ui.ConnectStateful';
-import { useController } from './useController.mjs';
+import { useConnectController } from './useConnectController.mjs';
 
 /**
  * Export
@@ -9,10 +9,10 @@ import { useController } from './useController.mjs';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Stateful: typeof Stateful;
-  useController: typeof useController;
+  useConnectController: typeof useConnectController;
 };
 export const Connect = FC.decorate<t.ConnectProps, Fields>(
   View,
-  { DEFAULTS, Stateful, useController },
+  { DEFAULTS, Stateful, useConnectController },
   { displayName: 'Connect' },
 );

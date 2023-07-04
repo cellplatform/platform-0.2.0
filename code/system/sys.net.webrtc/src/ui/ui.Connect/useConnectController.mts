@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { rx, WebRtc, type t } from './common';
+import { WebRtc, rx, type t } from './common';
 
 /**
  * Behavior controller for the <Connect> component.
  */
-export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefulChangedHandler }) {
+export function useConnectController(args: {
+  self?: t.Peer;
+  onChange?: t.ConnectStatefulChangedHandler;
+}) {
   const { self } = args;
 
   const [client, setClient] = useState<t.WebRtcEvents>();
@@ -13,7 +16,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   const [selectedPeer, setSelectedPeer] = useState('');
 
   /**
-   * Lifecycle.
+   * Initialize controller
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -27,11 +30,22 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
     return dispose;
   }, [self?.id]);
 
+  /**
+   * Alert listeners via [onChange] event.
+   */
   useEffect(() => {
-    if (self && client) {
-      args.onChange?.({ self, data, client });
-    }
+    if (self && client) args.onChange?.({ self, data, client });
   }, [remote, spinning, client?.instance.id]);
+
+  /**
+   * Ensure [selectedPeer]
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+
+    return dispose;
+    //
+  }, [client?.instance.id]);
 
   /**
    * Data Object
