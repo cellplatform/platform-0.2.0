@@ -1,5 +1,5 @@
 import { Dev, TestNetwork } from '../../test.ui';
-import { WebRtcInfo } from '../ui.Info';
+import { Connect } from '../ui.Connect';
 
 type T = { count: number };
 const initial: T = { count: 0 };
@@ -22,19 +22,11 @@ export default Dev.describe('GroupVideo', async (e) => {
 
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-
     dev.header
       .border(-0.1)
       .padding(0)
       .render((e) => {
-        return (
-          <WebRtcInfo
-            fields={['Connect.Top', 'Group', 'Group.Peers', 'State.Shared']}
-            data={{
-              connect: { self },
-            }}
-          />
-        );
+        return <Connect.Stateful self={self} />;
       });
   });
 

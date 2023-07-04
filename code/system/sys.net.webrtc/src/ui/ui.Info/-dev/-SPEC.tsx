@@ -86,8 +86,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           },
         },
         group: {
-          selected: debug.selectedPeer,
           useController: debug.useController,
+          selected: debug.selectedPeer,
           async onPeerSelect(e) {
             console.info('⚡️ onPeerSelect', e);
             state.change((d) => (d.debug.selectedPeer = e.peerid));

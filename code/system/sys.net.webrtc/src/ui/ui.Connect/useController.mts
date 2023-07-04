@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WebRtc, type t } from './common';
+import { rx, WebRtc, type t } from './common';
 
 /**
  * Behavior controller for the <Connect> component.
@@ -7,30 +7,31 @@ import { WebRtc, type t } from './common';
 export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefulChangedHandler }) {
   const { self } = args;
 
-  const [controller, setController] = useState<t.WebRtcController>();
   const [client, setClient] = useState<t.WebRtcEvents>();
   const [remote, setRemote] = useState('');
   const [spinning, setSpinning] = useState(false);
+  const [selectedPeer, setSelectedPeer] = useState('');
 
   /**
    * Lifecycle.
    */
   useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+
     if (self) {
-      const controller = WebRtc.controller(self);
-      const client = controller.client();
-      setController(controller);
+      const controller = WebRtc.controller(self, { dispose$ });
+      const client = controller.client(dispose$);
       setClient(client);
     }
-    return () => {
-      controller?.dispose();
-      client?.dispose();
-    };
+
+    return dispose;
   }, [self?.id]);
 
   useEffect(() => {
-    args.onChange?.({ data });
-  }, [remote, spinning]);
+    if (self && client) {
+      args.onChange?.({ self, data, client });
+    }
+  }, [remote, spinning, client?.instance.id]);
 
   /**
    * Data Object
@@ -45,7 +46,18 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
       async onConnectRequest(e) {
         setSpinning(true);
         await client?.connect.fire(e.remote);
+        if (!selectedPeer) setSelectedPeer(e.remote);
         setSpinning(false);
+      },
+    },
+    group: {
+      useController: true,
+      selected: selectedPeer,
+      onPeerSelect(e) {
+        setSelectedPeer(e.peerid);
+      },
+      onPeerCtrlClick(e) {
+        console.info('⚡️ onPeerCtrlClick', e);
       },
     },
   };

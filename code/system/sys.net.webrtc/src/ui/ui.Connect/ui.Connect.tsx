@@ -4,7 +4,7 @@ import { DEFAULTS, type t } from './common';
 export const Connect: React.FC<t.ConnectProps> = (props) => {
   const { data = {} } = props;
   const fields = Wrangle.fields(props);
-  return <WebRtcInfo fields={fields} data={data} />;
+  return <WebRtcInfo fields={fields} client={props.client} data={data} />;
 };
 
 /**

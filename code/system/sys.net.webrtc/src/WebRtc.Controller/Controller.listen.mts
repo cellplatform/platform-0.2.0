@@ -32,7 +32,7 @@ const Mutate = WebRtcState.Mutate;
  *    All group peers within the conversation are aware of this shared
  *    document instance.
  *
- *    UI should read/write to the CFDT and the controller will change
+ *    UI should read/write to the CRDT and the controller will change
  *    the state of the WebRTC network-peers accordingly.
  *
  */

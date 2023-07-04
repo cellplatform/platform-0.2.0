@@ -56,7 +56,7 @@ const View: React.FC<PeerIdProps> = (props) => {
   );
 
   if (props.copyOnClick || props.onClick) {
-    const elCopy = isOver && props.onClick && (
+    const elCopy = isOver && props.onClick && enabled && (
       <Icons.Copy size={fontSize + 2} style={styles.icon} color={COLORS.CYAN} tooltip={'Copy'} />
     );
 
