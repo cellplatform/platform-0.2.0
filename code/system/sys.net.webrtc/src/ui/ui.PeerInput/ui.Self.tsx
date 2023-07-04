@@ -1,14 +1,15 @@
 import { PeerId } from '../ui.PeerId';
-import { css, type t } from './common';
+import { DEFAULTS, css, type t } from './common';
 
 export type SelfProps = {
   self?: t.Peer;
+  enabled: boolean;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
 };
 
 export const Self: React.FC<SelfProps> = (props) => {
-  const { self } = props;
+  const { self, enabled } = props;
 
   /**
    * [Handlers]
@@ -29,12 +30,19 @@ export const Self: React.FC<SelfProps> = (props) => {
       display: 'grid',
       alignContent: 'center',
       paddingLeft: 8,
+      opacity: enabled ? 1 : 0.4,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PeerId peer={self?.id} prefix={'me'} onClick={handleCopyPeer} />
+      <PeerId
+        peer={self?.id}
+        enabled={enabled}
+        prefix={DEFAULTS.prefix}
+        copyable={true}
+        onClick={handleCopyPeer}
+      />
     </div>
   );
 };

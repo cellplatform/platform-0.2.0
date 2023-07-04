@@ -12,4 +12,6 @@ const fields: t.PeerInputField[] = ['Peer:Remote', 'Peer:Self'];
 export const DEFAULTS = {
   fields,
   spinning: false,
+  enabled: true,
+  prefix: 'me',
 } as const;

@@ -5,6 +5,7 @@ export type PeerInputField = 'Peer:Remote' | 'Peer:Self' | 'Video';
 export type PeerInputProps = {
   self?: t.Peer;
   remote?: t.PeerId;
+  enabled?: boolean;
   spinning?: boolean;
   fields?: t.PeerInputField[];
   video?: MediaStream;

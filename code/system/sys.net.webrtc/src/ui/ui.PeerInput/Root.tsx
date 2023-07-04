@@ -1,11 +1,16 @@
 import { Color, COLORS, css, DEFAULTS, FC, FIELDS, type t } from './common';
 import { Remote } from './ui.Remote';
 import { Self } from './ui.Self';
-import { Wrangle } from './Wrangle.mjs';
 import { Video } from './ui.Video';
+import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.PeerInputProps> = (props) => {
-  const { self, spinning: isSpinning = DEFAULTS.spinning, fields = DEFAULTS.fields } = props;
+  const {
+    self,
+    spinning = DEFAULTS.spinning,
+    enabled = DEFAULTS.enabled,
+    fields = DEFAULTS.fields,
+  } = props;
   const canConnect = Wrangle.canConnect(props);
   const isConnected = Wrangle.isConnected(props);
   const ids = Wrangle.ids(props);
@@ -24,6 +29,10 @@ const View: React.FC<t.PeerInputProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     }),
+    disabled: css({
+      pointerEvents: 'none',
+      filter: 'grayscale(1)',
+    }),
     divider: css({ borderTop: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}` }),
     fields: css({}),
   };
@@ -38,9 +47,10 @@ const View: React.FC<t.PeerInputProps> = (props) => {
           key={key}
           self={self}
           ids={ids}
+          enabled={enabled}
           canConnect={canConnect}
           isConnected={isConnected}
-          isSpinning={isSpinning}
+          isSpinning={spinning}
           onRemotePeerChanged={props.onRemoteChanged}
           onConnectRequest={props.onConnectRequest}
           style={dividerStyle}
@@ -50,7 +60,13 @@ const View: React.FC<t.PeerInputProps> = (props) => {
 
     if (field === 'Peer:Self') {
       return (
-        <Self key={key} self={self} onLocalPeerCopied={props.onLocalCopied} style={dividerStyle} />
+        <Self
+          key={key}
+          self={self}
+          enabled={enabled}
+          onLocalPeerCopied={props.onLocalCopied}
+          style={dividerStyle}
+        />
       );
     }
 
@@ -63,7 +79,7 @@ const View: React.FC<t.PeerInputProps> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...css(styles.base, !enabled && styles.disabled, props.style)}>
       <div {...styles.fields}>{elFields}</div>
       {elVideo}
     </div>

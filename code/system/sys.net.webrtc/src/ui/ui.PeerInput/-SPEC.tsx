@@ -6,6 +6,7 @@ const { DEFAULTS } = PeerInput;
 type T = { props: t.PeerInputProps };
 const initial: T = {
   props: {
+    enabled: DEFAULTS.enabled,
     spinning: DEFAULTS.spinning,
     fields: DEFAULTS.fields,
   },
@@ -95,11 +96,16 @@ export default Dev.describe('PeerInput', async (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
+          .label((e) => `enabled`)
+          .value((e) => Boolean(e.state.props.enabled))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
           .label('spinning')
           .value((e) => Boolean(e.state.props.spinning))
-          .onClick((e) => {
-            e.change((d) => Dev.toggle(d.props, 'spinning'));
-          }),
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
       );
     });
 
