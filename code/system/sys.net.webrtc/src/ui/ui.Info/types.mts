@@ -9,9 +9,7 @@ export type WebRtcInfoField =
   | 'Group'
   | 'Group.Peers'
   | 'Peer'
-  | 'Peer.Connections'
-  | 'Connect.Top'
-  | 'Connect.Bottom';
+  | 'Peer.Connections';
 
 export type WebRtcInfoData = {
   self?: { title?: string };

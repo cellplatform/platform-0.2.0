@@ -9,7 +9,6 @@ import { FieldPeerConnections } from './fields/Peer.Connections';
 import { FieldSelf } from './fields/Self';
 import { FieldStateShared } from './fields/State.Shared';
 import { useInfo } from './hooks/useInfo.mjs';
-import { Connect, type Edge } from './ui/Connect';
 
 export type WebRtcInfoProps = {
   client?: t.WebRtcEvents;
@@ -27,8 +26,7 @@ export type WebRtcInfoProps = {
  * Component
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
-  const { client, data = {} } = props;
-  const fields = Wrangle.fields(props);
+  const { client, data = {}, fields = DEFAULTS.fields } = props;
 
   const info = useInfo(client);
   const [isOver, setOver] = useState(false);
@@ -45,10 +43,6 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
     .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))
     .items(fields);
 
-  const elTop = Wrangle.Connect(props, 'Connect.Top');
-  const elBottom = Wrangle.Connect(props, 'Connect.Bottom');
-  const hasEdge = Boolean(elTop || elBottom);
-
   return (
     <PropList
       style={props.style}
@@ -59,9 +53,7 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       card={props.card}
       flipped={props.flipped}
       margin={props.margin}
-      padding={(props.card || hasEdge) && items.length > 0 ? [20, 25] : undefined}
-      header={elTop}
-      footer={elBottom}
+      padding={props.card && items.length > 0 ? [20, 25] : undefined}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
     />
@@ -72,21 +64,10 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  fields(props: WebRtcInfoProps) {
-    return props.fields ?? DEFAULTS.fields;
-  },
-
   title(props: WebRtcInfoProps) {
     const title = PropList.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
-  },
-
-  Connect(props: WebRtcInfoProps, edge: Edge) {
-    const { data = {} } = props;
-    const fields = Wrangle.fields(props);
-    if (!fields.includes(edge)) return null;
-    return <Connect edge={edge} data={data} fields={fields} />;
   },
 };
 
