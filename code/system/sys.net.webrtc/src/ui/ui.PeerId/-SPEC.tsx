@@ -3,7 +3,7 @@ import { cuid, Dev, type t } from '../../test.ui';
 
 type T = {
   props: t.PeerIdProps;
-  debug: { assignClickHandler: boolean };
+  debug: { assignClickHandler: boolean; message: boolean };
 };
 const initial: T = {
   props: {
@@ -12,7 +12,7 @@ const initial: T = {
     enabled: PeerId.DEFAULTS.enabled,
     copyable: true,
   },
-  debug: { assignClickHandler: true },
+  debug: { assignClickHandler: true, message: false },
 };
 
 export default Dev.describe('PeerId', (e) => {
@@ -26,8 +26,8 @@ export default Dev.describe('PeerId', (e) => {
         const { props, debug } = e.state;
 
         const onClick: t.PeerIdClickHandler = (e) => {
-          console.info('⚡️ onClick', e);
           e.copy();
+          console.info('⚡️ onClick', e);
         };
 
         return <PeerId {...props} onClick={debug.assignClickHandler ? onClick : undefined} />;
@@ -66,9 +66,16 @@ export default Dev.describe('PeerId', (e) => {
     );
 
     dev.hr(-1, 5);
+    dev.button('peer: none', (e) => e.change((d) => (d.props.peer = undefined)));
+    dev.button('peer: <cuid>', (e) => e.change((d) => (d.props.peer = cuid())));
 
+    dev.hr(-1, 5);
     dev.button('prefix: "me"', (e) => e.change((d) => (d.props.prefix = '  me:  ')));
     dev.button('prefix: (undefined)', (e) => e.change((d) => (d.props.prefix = undefined)));
+
+    dev.hr(-1, 5);
+    dev.button('message: none', (e) => e.change((d) => (d.props.message = undefined)));
+    dev.button('message: "copied"', (e) => e.change((d) => (d.props.message = 'copied')));
 
     dev.hr();
 
@@ -84,6 +91,7 @@ export default Dev.describe('PeerId', (e) => {
       };
       fontsize(8);
       fontsize(undefined, `${PeerId.DEFAULTS.fontSize}px (undefined → default)`);
+      fontsize(16);
       fontsize(24);
     });
 

@@ -34,4 +34,10 @@ export const Wrangle = {
     const prefix = (props.prefix ?? '').trim();
     return prefix ? `${prefix.replace(/\:$/, '')}:${id}` : WebRtc.Util.asUri(id);
   },
+
+  greyscale(props: t.PeerIdProps): number {
+    const message = (props.message ?? '').trim();
+    if (!props.peer || message) return 1;
+    return 0;
+  },
 };

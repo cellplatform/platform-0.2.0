@@ -7,6 +7,7 @@ export type PeerIdProps = {
   fontSize?: number;
   enabled?: boolean;
   copyable?: boolean;
+  message?: string;
   style?: t.CssValue;
   onClick?: PeerIdClickHandler;
 };
