@@ -1,5 +1,6 @@
-export * from './ui.Info/types.mjs';
-export * from './ui.ConnectInput/types.mjs';
-export * from './ui.PeerCard/types.mjs';
-export * from './ui.PeerList/types.mjs';
-export * from './ui.PeerList.Item/types.mjs';
+export type * from './ui.Info/types.mjs';
+export type * from './ui.ConnectInput/types.mjs';
+export type * from './ui.PeerCard/types.mjs';
+export type * from './ui.PeerList/types.mjs';
+export type * from './ui.PeerList.Item/types.mjs';
+export type * from './ui.Connect/types.mjs';
