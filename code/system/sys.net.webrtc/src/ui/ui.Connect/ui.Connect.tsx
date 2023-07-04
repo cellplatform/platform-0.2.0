@@ -14,6 +14,6 @@ const Wrangle = {
   fields(props: t.ConnectProps): t.WebRtcInfoField[] {
     const { edge = DEFAULTS.edge } = props;
     const connect: t.WebRtcInfoField = edge === 'Top' ? 'Connect.Top' : 'Connect.Bottom';
-    return [connect, 'Group', 'Group.Peers', 'State.Shared'];
+    return [connect, 'State.Shared', 'Group', 'Group.Peers'];
   },
 };
