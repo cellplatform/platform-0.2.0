@@ -3,7 +3,7 @@ import { Dev, Icons, TestNetwork, type t } from '../../test.ui';
 
 type T = {
   props: t.ConnectProps;
-  debug: { bg?: boolean };
+  debug: { bg?: boolean; useController?: boolean };
 };
 const initial: T = {
   props: { data: {} },
@@ -19,6 +19,7 @@ export default Dev.describe('Connect', async (e) => {
     edge: Connect.DEFAULTS.edge,
     card: Connect.DEFAULTS.card,
     bg: true,
+    useController: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -29,6 +30,7 @@ export default Dev.describe('Connect', async (e) => {
       d.props.card = local.card;
       d.props.edge = local.edge;
       d.debug.bg = local.bg;
+      d.debug.useController = local.useController;
     });
 
     ctx.subject
@@ -37,6 +39,10 @@ export default Dev.describe('Connect', async (e) => {
       .render<T>((e) => {
         const { props, debug } = e.state;
         ctx.subject.backgroundColor(debug.bg ? 1 : 0);
+
+        if (!debug.useController) {
+          return <Connect {...props} />;
+        }
 
         return (
           <Connect.Stateful
@@ -88,6 +94,16 @@ export default Dev.describe('Connect', async (e) => {
           .value((e) => Boolean(e.state.debug.bg))
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.useController);
+        btn
+          .label((e) => `useController ${value(e.state) ? '(stateful)' : '(stateless)'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));
+          });
+      });
     });
   });
 
