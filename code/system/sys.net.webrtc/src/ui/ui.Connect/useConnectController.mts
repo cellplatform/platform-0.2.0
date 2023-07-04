@@ -38,17 +38,24 @@ export function useConnectController(args: {
   }, [remote, spinning, client?.instance.id]);
 
   /**
-   * Ensure [selectedPeer]
+   * Ensure [selectedPeer].
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
 
+    if (client) {
+      const connections$ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
+      connections$.subscribe((e) => {
+        // NB: If no peer is selected then select the first remote.
+        if (!selectedPeer) setSelectedPeer(e.connections[0].peer.remote);
+      });
+    }
+
     return dispose;
-    //
   }, [client?.instance.id]);
 
   /**
-   * Data Object
+   * Data Object.
    */
   const data: t.WebRtcInfoData = {
     connect: {
@@ -60,7 +67,7 @@ export function useConnectController(args: {
       async onConnectRequest(e) {
         setSpinning(true);
         await client?.connect.fire(e.remote);
-        if (!selectedPeer) setSelectedPeer(e.remote);
+        // if (!selectedPeer) setSelectedPeer(e.remote);
         setSpinning(false);
       },
     },
