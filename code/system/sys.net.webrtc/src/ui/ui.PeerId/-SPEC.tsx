@@ -7,21 +7,13 @@ const initial: T = {
     peer: cuid(),
     fontSize: 24,
     enabled: true,
-    copyOnClick: true,
   },
 };
 
 export default Dev.describe('PeerId', (e) => {
-  type LocalStore = { copyOnClick: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.peerid');
-  const local = localstore.object({ copyOnClick: initial.props.copyOnClick! });
-
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
-    state.change((d) => {
-      d.props.copyOnClick = local.copyOnClick;
-    });
 
     ctx.subject
       .backgroundColor(1)
@@ -53,13 +45,6 @@ export default Dev.describe('PeerId', (e) => {
         .label((e) => `enabled`)
         .value((e) => Boolean(e.state.props.enabled))
         .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
-    );
-
-    dev.boolean((btn) =>
-      btn
-        .label('⚡️ copyOnClick')
-        .value((e) => e.state.props.copyOnClick)
-        .onClick((e) => e.change((d) => (local.copyOnClick = Dev.toggle(d.props, 'copyOnClick')))),
     );
 
     dev.hr(-1, 5);

@@ -1,1 +1,1 @@
-export * from './PeerId';
+export * from './Root';

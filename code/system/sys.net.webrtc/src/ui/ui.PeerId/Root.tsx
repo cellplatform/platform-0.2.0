@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { WebRtc } from '../../WebRtc';
-import { Button, COLORS, FC, Icons, TextSyntax, copyPeer, css, type t } from '../common';
+import { Button, COLORS, FC, Icons, TextSyntax, css, type t } from '../common';
+
+export type PeerIdClickHandler = (e: PeerIdClickHandlerArgs) => void;
+export type PeerIdClickHandlerArgs = {
+  id: t.PeerId;
+  uri: t.PeerUri;
+};
 
 export type PeerIdProps = {
   peer?: t.PeerId | t.PeerUri;
@@ -8,9 +14,8 @@ export type PeerIdProps = {
   prefix?: string;
   fontSize?: number;
   enabled?: boolean;
-  copyOnClick?: boolean;
   style?: t.CssValue;
-  onClick?: (e: { id: t.PeerId; uri: t.PeerUri; copied: boolean }) => void;
+  onClick?: PeerIdClickHandler;
 };
 
 const DEFAULTS = {
@@ -18,7 +23,7 @@ const DEFAULTS = {
 };
 
 const View: React.FC<PeerIdProps> = (props) => {
-  const { fontSize = DEFAULTS.fontSize, copyOnClick = false, enabled = true } = props;
+  const { fontSize = DEFAULTS.fontSize, enabled = true } = props;
   const [isOver, setOver] = useState(false);
 
   /**
@@ -28,8 +33,8 @@ const View: React.FC<PeerIdProps> = (props) => {
     if (!props.peer) return;
     const id = WebRtc.Util.asId(props.peer);
     const uri = WebRtc.Util.asUri(id);
-    if (copyOnClick) copyPeer(id);
-    props.onClick?.({ id, uri, copied: copyOnClick });
+    // if (copyOnClick) copyPeer(id);
+    props.onClick?.({ id, uri });
   };
 
   /**
