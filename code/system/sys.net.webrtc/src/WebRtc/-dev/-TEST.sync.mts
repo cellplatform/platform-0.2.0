@@ -1,8 +1,8 @@
 import { PeerSyncer } from 'sys.data.crdt';
-import { Automerge, Dev, expect, type t, TEST, Time, WebRtc } from '../../test.ui';
+import { Automerge, Dev, expect, type t, TEST_DEFAULTS, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRTC ⇔ CRDT (Sync Protocol)', (e) => {
-  const signal = TEST.signal;
+  const signal = TEST_DEFAULTS.signal;
   const SECOND = 1000;
   e.timeout(15 * SECOND);
 

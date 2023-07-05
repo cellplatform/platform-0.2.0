@@ -1,8 +1,8 @@
-import { cuid, Dev, expect, type t, TEST, TestNetwork, Time, WebRtc } from '../../test.ui';
+import { cuid, Dev, expect, type t, TEST_DEFAULTS, TestNetwork, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRTC', (e) => {
   e.timeout(1000 * 15);
-  const signal = TEST.signal;
+  const signal = TEST_DEFAULTS.signal;
 
   e.describe('peer: initial state', (e) => {
     const endpoint = `${signal.host}/${signal.path}`;

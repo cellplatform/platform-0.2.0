@@ -1,11 +1,5 @@
 import { WebRtc } from '../WebRtc';
-import { rx, type t, TEST, cuid } from './common';
-
-export type TestNetworkP2P = t.Disposable & {
-  peerA: t.Peer;
-  peerB: t.Peer;
-  connect(kind?: t.PeerConnectionKind[]): Promise<void>;
-};
+import { DEFAULTS, cuid, rx, type t } from './common';
 
 /**
  * Helpers for working with test P2P networks.
@@ -32,7 +26,7 @@ export const TestNetwork = {
   ) {
     const { dispose$ } = options;
     const getStream = Wrangle.getStream(options);
-    const signal = TEST.signal;
+    const signal = DEFAULTS.signal;
     const log = options.log;
     const wait = Array.from({ length }).map((_, i) => {
       // const id = `p${i + 1}-${cuid()}`;
@@ -53,7 +47,7 @@ export const TestNetwork = {
       dispose$,
     });
 
-    const api: TestNetworkP2P = {
+    const api: t.TestNetworkP2P = {
       peerA,
       peerB,
       dispose,
