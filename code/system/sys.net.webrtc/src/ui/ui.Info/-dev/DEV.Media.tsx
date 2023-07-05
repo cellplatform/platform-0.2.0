@@ -24,7 +24,10 @@ export const DevMedia: React.FC<DevMediaProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', backgroundColor: COLORS.WHITE }),
+    base: css({
+      position: 'relative',
+      backgroundColor: COLORS.WHITE,
+    }),
     empty: css({
       Absolute: 0,
       display: 'grid',
