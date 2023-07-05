@@ -157,7 +157,6 @@ export default Dev.describe('Connect', async (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const count = e.state.debug.changed ?? 0;
       const data = {
-        self,
         props: e.state.props,
         selected: e.state.changed?.selected,
         [`⚡️changed(${count})`]: e.state.changed,
