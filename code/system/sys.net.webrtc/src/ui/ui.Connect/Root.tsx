@@ -1,6 +1,6 @@
 import { DEFAULTS, FC, type t } from './common';
 import { Connect as View } from './ui.Connect';
-import { ConnectStateful as Stateful } from './ui.Connect.Stateful';
+import { Stateful } from './ui.Stateful';
 import { useController } from './useController.mjs';
 
 /**

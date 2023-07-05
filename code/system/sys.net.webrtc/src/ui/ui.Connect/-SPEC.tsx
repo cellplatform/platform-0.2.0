@@ -14,12 +14,13 @@ const initial: T = {
 export default Dev.describe('Connect', async (e) => {
   const self = await TestNetwork.peer();
 
-  type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean };
+  type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean; fields?: t.WebRtcInfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
     edge: Connect.DEFAULTS.edge,
     card: Connect.DEFAULTS.card,
-    bg: true,
+    fields: Connect.DEFAULTS.fields.default,
+    bg: false,
     useController: true,
   });
 
@@ -30,6 +31,7 @@ export default Dev.describe('Connect', async (e) => {
     state.change((d) => {
       d.props.card = local.card;
       d.props.edge = local.edge;
+      d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.useController = local.useController;
     });
@@ -59,6 +61,7 @@ export default Dev.describe('Connect', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
       const edge = (edge: t.VEdge) => {
@@ -87,6 +90,31 @@ export default Dev.describe('Connect', async (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('Fields', (dev) => {
+      dev.row((e) => {
+        return (
+          <Dev.FieldSelector
+            style={{ Margin: [20, 50, 0, 50] }}
+            all={Connect.DEFAULTS.fields.all}
+            default={Connect.DEFAULTS.fields.default}
+            selected={e.state.props.fields}
+            resettable={true}
+            onClick={(ev) => {
+              /**
+               * TODO 🐷
+               */
+              console.log('ev', ev);
+              const next = ev.next as t.WebRtcInfoField[];
+
+              state.change((d) => (d.props.fields = next));
+            }}
+          />
+        );
+      });
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
@@ -98,7 +126,7 @@ export default Dev.describe('Connect', async (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.useController);
         btn
-          .label((e) => `useController ${value(e.state) ? '(stateful)' : '(stateless)'}`)
+          .label((e) => `useController ${value(e.state) ? '(stateful)' : '(stateless, defaults)'}`)
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));

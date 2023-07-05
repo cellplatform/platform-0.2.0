@@ -3,7 +3,7 @@ import { DEFAULTS, css, type t } from './common';
 import { ConnectInput } from './ui.Connect.Input';
 
 export const Connect: React.FC<t.ConnectProps> = (props) => {
-  const { fields = DEFAULTS.fields } = props;
+  const { fields = DEFAULTS.fields.default } = props;
   const isCard = props.card ?? DEFAULTS.card;
 
   /**

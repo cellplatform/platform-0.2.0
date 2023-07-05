@@ -1,20 +1,20 @@
 import { type t } from './common';
 
-export type ConnectProps = {
+export type Common = {
   edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
-  client?: t.WebRtcEvents;
-  info?: t.WebRtcInfoData;
   card?: boolean;
-  copiedMessage?: string;
   style?: t.CssValue;
 };
 
-export type ConnectStatefulProps = {
+export type ConnectProps = Common & {
+  client?: t.WebRtcEvents;
+  info?: t.WebRtcInfoData;
+  copiedMessage?: string;
+};
+
+export type ConnectStatefulProps = Common & {
   self?: t.Peer;
-  edge?: t.VEdge;
-  card?: boolean;
-  style?: t.CssValue;
   onChange?: ConnectChangedHandler;
 };
 
