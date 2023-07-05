@@ -16,7 +16,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
   const registerChange = () => setCount((prev) => prev + 1);
 
   const fireChange = () => {
-    const payload = Wrangle.event(self, selected);
+    const payload = Wrangle.event(client, selected);
     if (payload) args.onChange?.(payload);
   };
 
@@ -103,7 +103,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
     client,
     info,
     copied: Wrangle.copied(copiedMessage),
-    event: Wrangle.event(self, selected),
+    event: Wrangle.event(client, selected),
   } as const;
 }
 
@@ -115,9 +115,9 @@ const Wrangle = {
     return message ? { message } : undefined;
   },
 
-  event(self?: t.Peer, selected?: t.PeerId) {
-    if (!self) return;
-    const payload: t.ConnectChangedHandlerArgs = { self, selected };
+  event(client?: t.WebRtcEvents, selected?: t.PeerId) {
+    if (!client) return;
+    const payload: t.ConnectChangedHandlerArgs = { client, selected };
     return payload;
   },
 };

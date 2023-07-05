@@ -23,6 +23,6 @@ export type ConnectStatefulProps = {
  */
 export type ConnectChangedHandler = (e: ConnectChangedHandlerArgs) => void;
 export type ConnectChangedHandlerArgs = {
-  readonly self: t.Peer;
+  readonly client: t.WebRtcEvents;
   readonly selected?: t.PeerId;
 };
