@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { DEFAULTS, WebRtc, rx, type t, Time } from './common';
+import { DEFAULTS, Time, WebRtc, rx, type t } from './common';
 
 /**
- * Behavior controller for the <Connect> component.
+ * HOOK: Stateful behavior controller for the <Connect> component.
  */
 export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefulChangedHandler }) {
   const { self } = args;
@@ -14,7 +14,8 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   const [copiedMessage, setCopiedMessage] = useState('');
 
   const fireChange = () => {
-    if (self && client) args.onChange?.({ self, data: info, client });
+    if (!self || !client) return;
+    args.onChange?.({ self, data: info, client });
   };
 
   const connectToPeer = async (remote: t.PeerId) => {
@@ -24,12 +25,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   };
 
   /**
-   * Alert listeners via [onChange] event.
-   */
-  useEffect(fireChange, [client?.instance.id, remote, spinning, selectedPeer]);
-
-  /**
-   * Initialize controller
+   * Initialize.
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
@@ -42,6 +38,11 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
 
     return dispose;
   }, [self?.id]);
+
+  /**
+   * Alert listeners via [onChange] event.
+   */
+  useEffect(fireChange, [client?.instance.id, remote, spinning, selectedPeer]);
 
   /**
    * Ensure [selectedPeer].
@@ -72,7 +73,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   }, [copiedMessage]);
 
   /**
-   * Data Object.
+   * <Info> data.
    */
   const info: t.WebRtcInfoData = {
     connect: {
