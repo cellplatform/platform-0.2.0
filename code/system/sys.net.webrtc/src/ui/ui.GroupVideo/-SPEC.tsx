@@ -24,24 +24,20 @@ export default Dev.describe('GroupVideo', async (e) => {
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const self = await Connect.peer();
 
-    dev.header
-      .border(-0.1)
-      .padding([0, 0, 20, 0])
-      .render((e) => {
-        return (
-          <Connect.Stateful
-            self={self}
-            onChange={(e) =>
-              state.change((d) => {
-                d.props.selected = e.selected;
-                d.props.client = e.client;
-              })
-            }
-          />
-        );
-      });
+    dev.header.border(-0.1).render((e) => {
+      return (
+        <Connect.Stateful
+          margin={[0, 0, 20, 0]}
+          onChange={(e) =>
+            state.change((d) => {
+              d.props.selected = e.selected;
+              d.props.client = e.client;
+            })
+          }
+        />
+      );
+    });
   });
 
   e.it('ui:debug', async (e) => {

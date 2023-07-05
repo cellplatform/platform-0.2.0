@@ -1,4 +1,4 @@
-import { DEFAULTS, css, type t } from './common';
+import { Style, DEFAULTS, css, type t } from './common';
 
 import { WebRtcInfo } from '../ui.Info';
 import { ConnectInput } from './ui.Connect.Input';
@@ -14,7 +14,10 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ boxSizing: 'border-box' }),
+    base: css({
+      boxSizing: 'border-box',
+      ...Style.toMargins(props.margin),
+    }),
     info: css({
       marginLeft: 32,
       marginRight: isCard ? 32 : 15,

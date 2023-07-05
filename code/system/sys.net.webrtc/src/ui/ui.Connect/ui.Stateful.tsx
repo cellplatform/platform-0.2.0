@@ -17,6 +17,7 @@ export const Stateful: React.FC<t.ConnectStatefulProps> = (props) => {
       card={props.card}
       copiedMessage={controller.copied?.message}
       style={props.style}
+      margin={props.margin}
     />
   );
 };

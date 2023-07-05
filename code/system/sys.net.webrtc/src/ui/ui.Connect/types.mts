@@ -5,6 +5,7 @@ export type Common = {
   fields?: t.WebRtcInfoField[];
   card?: boolean;
   style?: t.CssValue;
+  margin?: t.CssEdgesInput;
 };
 
 export type ConnectProps = Common & {
