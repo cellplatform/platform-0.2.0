@@ -35,9 +35,9 @@ const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   card: true,
   title: false,
-  fields: WebRtcInfo.DEFAULTS.fields.default,
   useController: true,
   fullscreenVideo: false,
+  fields: WebRtcInfo.DEFAULTS.fields.default,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
