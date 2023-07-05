@@ -10,13 +10,13 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
   const [client, setClient] = useState<t.WebRtcEvents>();
   const [remote, setRemote] = useState('');
   const [spinning, setSpinning] = useState(false);
-  const [selectedPeer, setSelectedPeer] = useState('');
+  const [selected, setSelected] = useState<t.PeerId>();
   const [copiedMessage, setCopiedMessage] = useState('');
   const [count, setCount] = useState(0);
   const registerChange = () => setCount((prev) => prev + 1);
 
   const fireChange = () => {
-    const payload = api.event;
+    const payload = Wrangle.event(self, selected);
     if (payload) args.onChange?.(payload);
   };
 
@@ -44,7 +44,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
   /**
    * Alert listeners via [onChange] event.
    */
-  const fireOn = [client?.instance.id, count, remote, spinning, selectedPeer, copiedMessage];
+  const fireOn = [client?.instance.id, count, remote, spinning, selected, copiedMessage];
   useEffect(fireChange, fireOn);
 
   /**
@@ -59,9 +59,9 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
 
       // NB: If no peer is selected then select the first remote.
       $.pipe(
-        rx.filter(() => !selectedPeer),
+        rx.filter(() => !selected),
         rx.map((e) => e.connections[0].peer.remote),
-      ).subscribe((e) => setSelectedPeer(e));
+      ).subscribe((e) => setSelected(e));
     }
 
     return dispose;
@@ -90,8 +90,8 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
     },
     group: {
       useController: true,
-      selected: selectedPeer,
-      onPeerSelect: (e) => setSelectedPeer(e.peerid),
+      selected: selected,
+      onPeerSelect: (e) => setSelected(e.peerid),
       onPeerCtrlClick: (e) => console.info('⚡️ onPeerCtrlClick', e),
     },
   };
@@ -99,20 +99,12 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
   /**
    * API
    */
-  const api = {
+  return {
     client,
     info,
     copied: Wrangle.copied(copiedMessage),
-    get event(): t.ConnectChangedHandlerArgs | undefined {
-      if (!self) return;
-      return {
-        self,
-        selected: Wrangle.selected(self, selectedPeer),
-      };
-    },
+    event: Wrangle.event(self, selected),
   } as const;
-
-  return api;
 }
 
 /**
@@ -123,29 +115,9 @@ const Wrangle = {
     return message ? { message } : undefined;
   },
 
-  selected(self: t.Peer, peerid?: t.PeerId): t.ConnectSelected | undefined {
-    if (!peerid) return undefined;
-    return {
-      peer: {
-        id: peerid,
-        self: self.id === peerid,
-      },
-      stream: Wrangle.selectedStream(self, peerid),
-    } as const;
-  },
-
-  selectedStream(self: t.Peer, peerid?: t.PeerId) {
-    const isSelf = self.id === peerid;
-    const conns = Wrangle.mediaConnections(self, peerid);
-    const conn = conns[0];
-    if (!conn) return undefined;
-    return isSelf ? conn.stream.local : conn.stream.remote;
-  },
-
-  mediaConnections(self: t.Peer, peerid?: t.PeerId) {
-    type T = t.PeerConnectionsByPeer;
-    const isSelf = self.id === peerid;
-    const isMatch = (conn: T) => peerid === (isSelf ? conn.peer.local : conn.peer.remote);
-    return self.connectionsByPeer.find((conn) => isMatch(conn))?.media ?? [];
+  event(self?: t.Peer, selected?: t.PeerId) {
+    if (!self) return;
+    const payload: t.ConnectChangedHandlerArgs = { self, selected };
+    return payload;
   },
 };

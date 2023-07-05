@@ -18,16 +18,11 @@ export type ConnectStatefulProps = {
   onChange?: ConnectChangedHandler;
 };
 
-export type ConnectSelected = {
-  peer: { readonly self: boolean; readonly id: t.PeerId };
-  stream?: MediaStream;
-};
-
 /**
  * Events
  */
 export type ConnectChangedHandler = (e: ConnectChangedHandlerArgs) => void;
 export type ConnectChangedHandlerArgs = {
   readonly self: t.Peer;
-  readonly selected?: ConnectSelected;
+  readonly selected?: t.PeerId;
 };
