@@ -33,8 +33,7 @@ export default Dev.describe('GroupVideo', async (e) => {
           <Connect.Stateful
             self={self}
             onChange={(e) => {
-              const selected = e.data.group?.selected;
-              state.change((d) => (d.selectedPeer = selected));
+              state.change((d) => (d.selectedPeer = e.selected?.peer.id));
             }}
           />
         );

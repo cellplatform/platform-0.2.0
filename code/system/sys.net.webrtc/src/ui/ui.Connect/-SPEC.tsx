@@ -3,10 +3,11 @@ import { Dev, Icons, TestNetwork, type t } from '../../test.ui';
 
 type T = {
   props: t.ConnectProps;
-  debug: { bg?: boolean; useController?: boolean };
+  changed?: t.ConnectChangedHandlerArgs;
+  debug: { bg?: boolean; useController?: boolean; changed?: number };
 };
 const initial: T = {
-  props: { info: {} },
+  props: {},
   debug: {},
 };
 
@@ -44,16 +45,15 @@ export default Dev.describe('Connect', async (e) => {
           return <Connect {...props} />;
         }
 
-        return (
-          <Connect.Stateful
-            {...props}
-            self={self}
-            onChange={(e) => {
-              console.info('⚡️ onChange', e);
-              state.change((d) => (d.props.info = e.data));
-            }}
-          />
-        );
+        const onChange: t.ConnectChangedHandler = (e) => {
+          console.info('⚡️ onChange', e);
+          state.change((d) => {
+            d.changed = e;
+            d.debug.changed = (d.debug.changed ?? 0) + 1;
+          });
+        };
+
+        return <Connect.Stateful {...props} self={self} onChange={onChange} />;
       });
   });
 
@@ -110,7 +110,12 @@ export default Dev.describe('Connect', async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const count = e.state.debug.changed ?? 0;
+      const data = {
+        props: e.state.props,
+        selected: e.state.changed?.selected,
+        [`⚡️changed(${count})`]: e.state.changed,
+      };
       return <Dev.Object name={'Connect'} data={data} expand={1} />;
     });
   });

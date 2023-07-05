@@ -15,15 +15,19 @@ export type ConnectStatefulProps = {
   edge?: t.VEdge;
   card?: boolean;
   style?: t.CssValue;
-  onChange?: ConnectStatefulChangedHandler;
+  onChange?: ConnectChangedHandler;
+};
+
+export type ConnectSelected = {
+  peer: { readonly self: boolean; readonly id: t.PeerId };
+  stream?: MediaStream;
 };
 
 /**
  * Events
  */
-export type ConnectStatefulChangedHandler = (e: ConnectStatefulChangedHandlerArgs) => void;
-export type ConnectStatefulChangedHandlerArgs = {
-  self: t.Peer;
-  data: t.WebRtcInfoData;
-  client: t.WebRtcEvents;
+export type ConnectChangedHandler = (e: ConnectChangedHandlerArgs) => void;
+export type ConnectChangedHandlerArgs = {
+  readonly self: t.Peer;
+  readonly selected?: ConnectSelected;
 };

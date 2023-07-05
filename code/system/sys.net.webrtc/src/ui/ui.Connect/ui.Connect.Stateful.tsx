@@ -9,7 +9,7 @@ export const ConnectStateful: React.FC<t.ConnectStatefulProps> = (props) => {
     <Connect
       client={controller.client}
       info={controller.info}
-      copiedMessage={controller.copiedMessage}
+      copiedMessage={controller.copied?.message}
       edge={props.edge}
       card={props.card}
       style={props.style}
