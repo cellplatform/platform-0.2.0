@@ -11,9 +11,9 @@ export const OverlayMessage: React.FC<OverlayMessageProps> = (props) => {
    */
   const styles = {
     base: css({
-      boxShadow: `0 0px 30px 0 ${Color.alpha(COLORS.DARK, 0.05)}`,
-      border: `solid 1px ${Color.alpha(COLORS.WHITE, 0.8)}`,
+      boxShadow: `0 0px 90px 0 ${Color.alpha(COLORS.DARK, 0.5)}`,
       backgroundColor: Color.alpha(COLORS.WHITE, 0.65),
+      border: `solid 1px ${Color.alpha(COLORS.WHITE, 0.2)}`,
       backdropFilter: 'blur(10px)',
       borderRadius: 8,
       boxSizing: 'border-box',
@@ -25,9 +25,7 @@ export const OverlayMessage: React.FC<OverlayMessageProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
     }),
-    label: css({
-      fontSize: 16,
-    }),
+    label: css({ fontSize: 16 }),
   };
 
   return (
