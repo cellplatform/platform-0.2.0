@@ -102,6 +102,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
   return {
     client,
     info,
+    loading: !Boolean(self),
     copied: Wrangle.copied(copiedMessage),
     event: Wrangle.event(client, selected),
   } as const;

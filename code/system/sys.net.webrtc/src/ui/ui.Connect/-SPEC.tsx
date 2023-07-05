@@ -12,8 +12,6 @@ const initial: T = {
 };
 
 export default Dev.describe('Connect', async (e) => {
-  const self = await Connect.peer();
-
   type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean; fields?: t.WebRtcInfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
@@ -25,6 +23,9 @@ export default Dev.describe('Connect', async (e) => {
     useSelf: true,
   });
 
+  let self: t.Peer | undefined;
+  if (local.useSelf) self = await Connect.peer();
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -35,12 +36,13 @@ export default Dev.describe('Connect', async (e) => {
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
       d.debug.useController = local.useController;
+      d.debug.useSelf = local.useSelf;
     });
 
     ctx.subject
       .size([350, null])
       .display('grid')
-      .render<T>((e) => {
+      .render<T>(async (e) => {
         const { props, debug } = e.state;
         ctx.subject.backgroundColor(debug.bg ? 1 : 0);
 
@@ -55,6 +57,8 @@ export default Dev.describe('Connect', async (e) => {
             d.debug.changed = (d.debug.changed ?? 0) + 1;
           });
         };
+
+        if (debug.useSelf && !self) self = await Connect.peer();
 
         return (
           <Connect.Stateful
@@ -126,6 +130,8 @@ export default Dev.describe('Connect', async (e) => {
           .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg'))));
       });
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.useController);
         btn
@@ -150,12 +156,10 @@ export default Dev.describe('Connect', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const count = e.state.debug.changed ?? 0;
-      const selected = e.state.changed?.selected;
-      const isSelf = selected === self.id;
       const data = {
         self,
         props: e.state.props,
-        selected: isSelf ? `(self):${selected}` : selected,
+        selected: e.state.changed?.selected,
         [`⚡️changed(${count})`]: e.state.changed,
       };
       return <Dev.Object name={'Connect'} data={data} expand={1} />;

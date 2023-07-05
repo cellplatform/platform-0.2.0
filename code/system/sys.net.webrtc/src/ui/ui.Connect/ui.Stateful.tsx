@@ -11,6 +11,7 @@ export const Stateful: React.FC<t.ConnectStatefulProps> = (props) => {
     <Connect
       client={controller.client}
       info={controller.info}
+      loading={controller.loading}
       fields={props.fields}
       edge={props.edge}
       card={props.card}

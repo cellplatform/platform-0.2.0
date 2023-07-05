@@ -10,6 +10,7 @@ export type Common = {
 export type ConnectProps = Common & {
   client?: t.WebRtcEvents;
   info?: t.WebRtcInfoData;
+  loading?: boolean;
   copiedMessage?: string;
 };
 
