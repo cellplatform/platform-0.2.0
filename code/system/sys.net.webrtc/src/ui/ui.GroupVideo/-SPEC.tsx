@@ -1,4 +1,4 @@
-import { Dev, TestNetwork, type t } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
 
 import { GroupVideo } from '.';
 import { Connect } from '../ui.Connect';
@@ -7,8 +7,6 @@ type T = { props: t.GroupVideoProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('GroupVideo', async (e) => {
-  const self = await TestNetwork.peer();
-
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
@@ -26,6 +24,7 @@ export default Dev.describe('GroupVideo', async (e) => {
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const self = await Connect.peer();
 
     dev.header
       .border(-0.1)
@@ -34,12 +33,12 @@ export default Dev.describe('GroupVideo', async (e) => {
         return (
           <Connect.Stateful
             self={self}
-            onChange={(e) => {
+            onChange={(e) =>
               state.change((d) => {
                 d.props.selected = e.selected;
                 d.props.client = e.client;
-              });
-            }}
+              })
+            }
           />
         );
       });

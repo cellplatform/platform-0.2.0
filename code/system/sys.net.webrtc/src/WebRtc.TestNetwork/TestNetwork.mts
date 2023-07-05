@@ -1,4 +1,5 @@
 import { WebRtc } from '../WebRtc';
+import { Wrangle } from './Wrangle.mjs';
 import { DEFAULTS, cuid, rx, type t } from './common';
 
 /**
@@ -70,17 +71,5 @@ export const TestNetwork = {
     };
 
     return api;
-  },
-};
-
-/**
- * Helpers
- */
-
-export const Wrangle = {
-  getStream(options: { getStream?: t.PeerGetMediaStream | boolean } = {}) {
-    if (options.getStream === true) return WebRtc.Media.singleton({}).getStream;
-    if (typeof options.getStream === 'function') return options.getStream;
-    return undefined;
   },
 };

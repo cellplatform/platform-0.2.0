@@ -1,5 +1,5 @@
 import { Connect } from '.';
-import { Dev, Icons, TestNetwork, type t } from '../../test.ui';
+import { Dev, Icons, type t } from '../../test.ui';
 
 type T = {
   props: t.ConnectProps;
@@ -12,7 +12,7 @@ const initial: T = {
 };
 
 export default Dev.describe('Connect', async (e) => {
-  const self = await TestNetwork.peer();
+  const self = await Connect.peer();
 
   type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean; fields?: t.WebRtcInfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
@@ -139,9 +139,12 @@ export default Dev.describe('Connect', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const count = e.state.debug.changed ?? 0;
+      const selected = e.state.changed?.selected;
+      const isSelf = selected === self.id;
       const data = {
+        self,
         props: e.state.props,
-        selected: e.state.changed?.selected,
+        selected: isSelf ? `(self):${selected}` : selected,
         [`⚡️changed(${count})`]: e.state.changed,
       };
       return <Dev.Object name={'Connect'} data={data} expand={1} />;
