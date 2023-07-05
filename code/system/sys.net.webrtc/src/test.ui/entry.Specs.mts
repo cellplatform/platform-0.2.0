@@ -1,7 +1,7 @@
 export { Pkg } from '../index.pkg.mjs';
 
 export const Specs = {
-  'sys.net.webrtc': () => import('../ui/ui.Info/-dev/-SPEC'),
+  'sys.net.webrtc': () => import('../ui/ui.GroupVideo/-SPEC'),
 
   'sys.net.webrtc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'sys.net.webrtc.ui.Info.PeerRow': () => import('../ui/ui.Info/-dev/-SPEC.PeerRow'),
