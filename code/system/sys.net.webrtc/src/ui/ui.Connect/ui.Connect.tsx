@@ -38,18 +38,3 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
     </div>
   );
 };
-
-/**
- * Helpers
- */
-const Wrangle = {
-  is(props: t.ConnectProps) {
-    const { edge = DEFAULTS.edge } = props;
-    return {
-      edge: {
-        top: edge === 'Top',
-        bottom: edge === 'Bottom',
-      },
-    };
-  },
-};
