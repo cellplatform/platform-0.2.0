@@ -1,4 +1,5 @@
 import { COLORS, DEFAULTS, FC, MediaStream, css, type t } from './common';
+import { Empty } from './ui.Empty';
 import { useController } from './useController.mjs';
 
 export const View: React.FC<t.GroupVideoProps> = (props) => {
@@ -13,17 +14,10 @@ export const View: React.FC<t.GroupVideoProps> = (props) => {
   const styles = {
     base: css({ position: 'relative', backgroundColor: COLORS.WHITE }),
     main: css({ Absolute: 0 }),
-    empty: css({
-      Absolute: 0,
-      display: 'grid',
-      placeItems: 'center',
-      opacity: 0.3,
-      userSelect: 'none',
-    }),
   };
 
   const elMain = stream && <MediaStream.Video stream={stream} muted={true} style={styles.main} />;
-  const elEmpty = !stream && <div {...styles.empty}>No media to display.</div>;
+  const elEmpty = !stream && <Empty message={props.message} />;
 
   return (
     <div {...css(styles.base, props.style)}>

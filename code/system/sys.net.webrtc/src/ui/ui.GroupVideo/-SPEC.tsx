@@ -13,6 +13,7 @@ export default Dev.describe('GroupVideo', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
+    ctx.debug.width(340);
     ctx.subject
       .backgroundColor(1)
       .size('fill')

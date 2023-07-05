@@ -3,4 +3,6 @@ export * from '../common';
 /**
  * Defaults
  */
-export const DEFAULTS = {} as const;
+export const DEFAULTS = {
+  empty: { message: 'No video to display.' },
+} as const;
