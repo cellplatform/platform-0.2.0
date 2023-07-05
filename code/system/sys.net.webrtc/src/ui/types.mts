@@ -6,4 +6,4 @@ export type * from './ui.PeerInput/types.mjs';
 export type * from './ui.PeerList.Item/types.mjs';
 export type * from './ui.PeerList/types.mjs';
 
-export type Edge = 'Top' | 'Bottom';
+export type VEdge = 'Top' | 'Bottom';

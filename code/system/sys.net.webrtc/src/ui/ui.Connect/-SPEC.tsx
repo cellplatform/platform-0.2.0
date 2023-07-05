@@ -13,7 +13,7 @@ const initial: T = {
 export default Dev.describe('Connect', async (e) => {
   const self = await TestNetwork.peer();
 
-  type LocalStore = T['debug'] & { edge?: t.Edge; card?: boolean };
+  type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
     edge: Connect.DEFAULTS.edge,
@@ -61,7 +61,7 @@ export default Dev.describe('Connect', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
-      const edge = (edge: t.Edge) => {
+      const edge = (edge: t.VEdge) => {
         const Vertical = Icons.Align.Vertical;
         const Icon = edge === 'Top' ? Vertical.Top : Vertical.Bottom;
         const opacity = (state: T) => (state.props.edge === edge ? 1 : 0.3);

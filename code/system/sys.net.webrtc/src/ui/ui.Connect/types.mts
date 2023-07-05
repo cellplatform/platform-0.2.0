@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 export type ConnectProps = {
-  edge?: t.Edge;
+  edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
   data?: t.WebRtcInfoData;
   client?: t.WebRtcEvents;
@@ -11,7 +11,7 @@ export type ConnectProps = {
 
 export type ConnectStatefulProps = {
   self?: t.Peer;
-  edge?: t.Edge;
+  edge?: t.VEdge;
   card?: boolean;
   style?: t.CssValue;
   onChange?: ConnectStatefulChangedHandler;
