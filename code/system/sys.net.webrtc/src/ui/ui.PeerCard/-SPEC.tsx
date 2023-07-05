@@ -74,7 +74,7 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.row((e) => {
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             title={'Fields'}
             style={{ Margin: [30, 20, 0, 20] }}
             all={PeerCard.FIELDS}

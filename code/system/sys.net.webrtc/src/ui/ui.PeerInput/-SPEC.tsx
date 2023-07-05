@@ -77,7 +77,7 @@ export default Dev.describe('PeerInput', async (e) => {
       dev.row((e) => {
         const props = Util.props(e.state);
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
             all={PeerInput.FIELDS}
             selected={props.fields ?? DEFAULTS.fields}

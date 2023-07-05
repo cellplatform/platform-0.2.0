@@ -35,7 +35,7 @@ const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
   card: true,
   title: false,
-  fields: WebRtcInfo.DEFAULTS.fields,
+  fields: WebRtcInfo.DEFAULTS.fields.default,
   useController: true,
   fullscreenVideo: false,
 });
@@ -212,11 +212,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.row((e) => {
         if (props.current.fullscreenVideo) return null;
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
             all={WebRtcInfo.FIELDS}
-            default={WebRtcInfo.DEFAULTS.fields}
+            default={WebRtcInfo.DEFAULTS.fields.default}
             selected={props.current.fields}
             resettable={true}
             onClick={(ev) => {
