@@ -310,9 +310,6 @@ export function listen(
       doc.change((d) => (d.network.peers[remote].error = `[${error.type}] ${err.message}`));
     }
 
-    const s = R.clone(doc.current.network);
-    console.log('s|||', s);
-
     /**
      * After.
      */
