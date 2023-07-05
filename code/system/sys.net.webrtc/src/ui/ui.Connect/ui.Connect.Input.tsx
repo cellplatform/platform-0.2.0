@@ -20,7 +20,6 @@ export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
   /**
    * [Render]
    */
-
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   const margin = card ? 25 : 15;
   const styles = {
@@ -40,7 +39,7 @@ export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
       <PeerInput
         self={self}
         remote={data.remote}
-        fields={['Peer:Self', 'Peer:Remote']}
+        fields={Wrangle.fields(targetEdge)}
         spinning={data.spinning}
         copiedMessage={props.copiedMessage}
         onLocalCopied={data.onLocalCopied}
@@ -49,4 +48,15 @@ export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
       />
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  fields(edge: t.VEdge): t.PeerInputField[] {
+    const res = ['Peer:Self', 'Peer:Remote'] as t.PeerInputField[];
+    if (edge === 'Bottom') res.reverse();
+    return res;
+  },
 };
