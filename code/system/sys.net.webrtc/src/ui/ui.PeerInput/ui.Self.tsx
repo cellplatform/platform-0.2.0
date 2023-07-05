@@ -4,6 +4,7 @@ import { DEFAULTS, css, type t } from './common';
 export type SelfProps = {
   self?: t.Peer;
   enabled: boolean;
+  copiedMessage?: string;
   style?: t.CssValue;
   onLocalPeerCopied?: t.PeerCardLocalCopiedHandler;
 };
@@ -39,8 +40,9 @@ export const Self: React.FC<SelfProps> = (props) => {
       <PeerId
         peer={self?.id}
         enabled={enabled}
-        prefix={DEFAULTS.prefix}
         copyable={true}
+        prefix={DEFAULTS.prefix}
+        message={props.copiedMessage}
         onClick={handleCopyPeer}
       />
     </div>

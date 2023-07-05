@@ -3,7 +3,7 @@ import { WebRtcInfo } from '../ui.Info';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
 export const Connect: React.FC<t.ConnectProps> = (props) => {
-  const { data = {}, fields = DEFAULTS.fields } = props;
+  const { fields = DEFAULTS.fields } = props;
   const isCard = props.card ?? DEFAULTS.card;
 
   /**
@@ -24,7 +24,7 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
     <WebRtcInfo
       fields={fields}
       client={props.client}
-      data={data}
+      data={props.info}
       style={styles.info}
       card={isCard}
     />
@@ -53,24 +53,26 @@ const Wrangle = {
     };
   },
 
-  ConnectComponent(props: t.ConnectProps, targetEdge: t.Edge) {
-    const data = props.data?.connect;
+  ConnectComponent(props: t.ConnectProps, targetEdge: t.VEdge) {
+    const data = props.info?.connect;
     const self = data?.self;
-    const { edge = DEFAULTS.edge } = props;
+    const { edge = DEFAULTS.edge, card = DEFAULTS.card } = props;
+
     if (!data || !self) return null;
     if (edge !== targetEdge) return null;
 
     const is = Wrangle.is(props);
     const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+    const margin = card ? 25 : 15;
     const styles = {
       base: css({ boxSizing: 'border-box' }),
       top: css({
         borderBottom: border,
-        marginBottom: 20,
+        marginBottom: margin,
       }),
       bottom: css({
         borderTop: border,
-        marginTop: 20,
+        marginTop: margin,
       }),
     };
 
@@ -81,6 +83,7 @@ const Wrangle = {
           remote={data.remote}
           fields={['Peer:Self', 'Peer:Remote']}
           spinning={data.spinning}
+          copiedMessage={props.copiedMessage}
           onLocalCopied={data.onLocalCopied}
           onRemoteChanged={data.onRemoteChanged}
           onConnectRequest={data.onConnectRequest}

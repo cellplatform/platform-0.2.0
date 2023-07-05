@@ -8,9 +8,11 @@ export type PeerInputProps = {
   enabled?: boolean;
   spinning?: boolean;
   fields?: t.PeerInputField[];
+  copiedMessage?: string;
   video?: MediaStream;
   muted?: boolean;
   style?: t.CssValue;
+
   onLocalCopied?: t.PeerCardLocalCopiedHandler;
   onRemoteChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;

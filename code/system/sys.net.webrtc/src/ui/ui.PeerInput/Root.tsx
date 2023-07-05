@@ -64,6 +64,7 @@ const View: React.FC<t.PeerInputProps> = (props) => {
           key={key}
           self={self}
           enabled={enabled}
+          copiedMessage={props.copiedMessage}
           onLocalPeerCopied={props.onLocalCopied}
           style={dividerStyle}
         />

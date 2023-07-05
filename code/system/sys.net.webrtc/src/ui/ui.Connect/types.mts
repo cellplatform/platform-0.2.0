@@ -3,9 +3,10 @@ import { type t } from './common';
 export type ConnectProps = {
   edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
-  data?: t.WebRtcInfoData;
   client?: t.WebRtcEvents;
+  info?: t.WebRtcInfoData;
   card?: boolean;
+  copiedMessage?: string;
   style?: t.CssValue;
 };
 

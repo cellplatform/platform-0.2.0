@@ -8,7 +8,8 @@ export const ConnectStateful: React.FC<t.ConnectStatefulProps> = (props) => {
   return (
     <Connect
       client={controller.client}
-      data={controller.data}
+      info={controller.info}
+      copiedMessage={controller.copiedMessage}
       edge={props.edge}
       card={props.card}
       style={props.style}

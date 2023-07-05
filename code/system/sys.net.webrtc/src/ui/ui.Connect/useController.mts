@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WebRtc, rx, type t } from './common';
+import { DEFAULTS, WebRtc, rx, type t, Time } from './common';
 
 /**
  * Behavior controller for the <Connect> component.
@@ -11,9 +11,10 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   const [remote, setRemote] = useState('');
   const [spinning, setSpinning] = useState(false);
   const [selectedPeer, setSelectedPeer] = useState('');
+  const [copiedMessage, setCopiedMessage] = useState('');
 
   const fireChange = () => {
-    if (self && client) args.onChange?.({ self, data, client });
+    if (self && client) args.onChange?.({ self, data: info, client });
   };
 
   const connectToPeer = async (remote: t.PeerId) => {
@@ -50,24 +51,35 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
 
     if (client) {
       const $ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
-      $.subscribe((e) => {
-        // NB: If no peer is selected then select the first remote.
-        if (!selectedPeer) setSelectedPeer(e.connections[0].peer.remote);
-      });
+
+      // NB: If no peer is selected then select the first remote.
+      $.pipe(
+        rx.filter(() => !selectedPeer),
+        rx.map((e) => e.connections[0].peer.remote),
+      ).subscribe((e) => setSelectedPeer(e));
     }
 
     return dispose;
   }, [client?.instance.id]);
 
   /**
+   * Reset [copiedMessage] after a delay.
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    Time.until(dispose$).delay(DEFAULTS.copied.delay, () => setCopiedMessage(''));
+    return dispose;
+  }, [copiedMessage]);
+
+  /**
    * Data Object.
    */
-  const data: t.WebRtcInfoData = {
+  const info: t.WebRtcInfoData = {
     connect: {
       self,
       remote,
       spinning,
-      onLocalCopied: (e) => navigator.clipboard.writeText(e.local),
+      onLocalCopied: (e) => setCopiedMessage(DEFAULTS.copied.message),
       onRemoteChanged: (e) => setRemote(e.remote),
       onConnectRequest: (e) => connectToPeer(e.remote),
     },
@@ -82,5 +94,5 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectStatefu
   /**
    * API
    */
-  return { client, data } as const;
+  return { client, info, copiedMessage } as const;
 }

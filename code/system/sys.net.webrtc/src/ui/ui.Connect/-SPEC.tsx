@@ -6,7 +6,7 @@ type T = {
   debug: { bg?: boolean; useController?: boolean };
 };
 const initial: T = {
-  props: { data: {} },
+  props: { info: {} },
   debug: {},
 };
 
@@ -50,7 +50,7 @@ export default Dev.describe('Connect', async (e) => {
             self={self}
             onChange={(e) => {
               console.info('⚡️ onChange', e);
-              state.change((d) => (d.props.data = e.data));
+              state.change((d) => (d.props.info = e.data));
             }}
           />
         );
