@@ -1,7 +1,7 @@
 import { Image } from '..';
 import { Dev, Filesize, type t } from '../../../test.ui';
-import { DevDataController } from './-DEV.data';
 import { Util } from '../Util.mjs';
+import { DevDataController } from './-DEV.data';
 
 const DEFAULTS = Image.DEFAULTS;
 

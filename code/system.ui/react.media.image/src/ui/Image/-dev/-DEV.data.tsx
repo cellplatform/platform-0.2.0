@@ -38,6 +38,7 @@ function render(path: string, file: t.CrdtDocFile<Doc>) {
   return (
     <CrdtInfo
       margin={[30, 25, 30, 30]}
+      card={true}
       fields={[
         'Module',
         'Module.Verify',
