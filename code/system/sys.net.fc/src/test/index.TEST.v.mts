@@ -4,7 +4,7 @@ describe('@farcaster/hub-web', () => {
   /**
    * https://github.com/farcasterxyz/hub-monorepo/tree/main/packages/hub-web#getting-start-fetching-casts
    */
-  it('Getting start: fetching casts', async () => {
+  it.skip('Getting start: fetching casts', async () => {
     const { getHubRpcClient } = await import('@farcaster/hub-web');
     const client = getHubRpcClient('https://testnet1.farcaster.xyz:2285', {});
 
