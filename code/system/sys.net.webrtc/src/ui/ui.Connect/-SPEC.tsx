@@ -99,13 +99,8 @@ export default Dev.describe('Connect', async (e) => {
             default={Connect.DEFAULTS.fields.default}
             selected={e.state.props.fields}
             resettable={true}
-            onClick={(ev) => {
-              /**
-               * TODO 🐷
-               */
-              console.log('ev', ev);
-              const next = ev.next as t.WebRtcInfoField[];
-
+            onClick={(args) => {
+              const next = args.next as t.WebRtcInfoField[];
               state.change((d) => (d.props.fields = next));
             }}
           />
@@ -116,12 +111,13 @@ export default Dev.describe('Connect', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.bg);
         btn
-          .label((e) => `background`)
-          .value((e) => Boolean(e.state.debug.bg))
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
-      );
+          .label((e) => `background ${value(e.state) ? '(white)' : ''}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg'))));
+      });
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.useController);
