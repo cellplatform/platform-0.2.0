@@ -4,7 +4,7 @@ import { Dev, Icons, type t } from '../../test.ui';
 type T = {
   props: t.ConnectProps;
   changed?: t.ConnectChangedHandlerArgs;
-  debug: { bg?: boolean; useController?: boolean; changed?: number };
+  debug: { bg?: boolean; useController?: boolean; useSelf?: boolean; changed?: number };
 };
 const initial: T = {
   props: {},
@@ -22,6 +22,7 @@ export default Dev.describe('Connect', async (e) => {
     fields: Connect.DEFAULTS.fields.default,
     bg: false,
     useController: true,
+    useSelf: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -55,7 +56,13 @@ export default Dev.describe('Connect', async (e) => {
           });
         };
 
-        return <Connect.Stateful {...props} self={self} onChange={onChange} />;
+        return (
+          <Connect.Stateful
+            {...props}
+            self={debug.useSelf ? self : undefined}
+            onChange={onChange}
+          />
+        );
       });
   });
 
@@ -127,6 +134,14 @@ export default Dev.describe('Connect', async (e) => {
           .onClick((e) => {
             e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));
           });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.useSelf);
+        btn
+          .label((e) => `useSelf ${value(e.state) ? '(explicit)' : '(auto generated)'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.useSelf = Dev.toggle(d.debug, 'useSelf'))));
       });
     });
   });
