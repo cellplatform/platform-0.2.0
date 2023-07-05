@@ -1,4 +1,5 @@
 export type * from './ui.Connect/types.mjs';
+export type * from './ui.GroupVideo/types.mjs';
 export type * from './ui.Info/types.mjs';
 export type * from './ui.PeerCard/types.mjs';
 export type * from './ui.PeerId/types.mjs';

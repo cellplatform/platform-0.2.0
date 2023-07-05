@@ -1,9 +1,10 @@
 import { Dev, TestNetwork, type t } from '../../test.ui';
-import { Connect } from '../ui.Connect';
-import { DevMedia } from '../ui.Info/-dev/DEV.Media';
 
-type T = { selectedPeer?: t.PeerId };
-const initial: T = {};
+import { GroupVideo } from '.';
+import { Connect } from '../ui.Connect';
+
+type T = { props: t.GroupVideoProps };
+const initial: T = { props: {} };
 
 export default Dev.describe('GroupVideo', async (e) => {
   const self = await TestNetwork.peer();
@@ -17,7 +18,7 @@ export default Dev.describe('GroupVideo', async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <DevMedia self={self} peerid={e.state.selectedPeer} />;
+        return <GroupVideo {...e.state.props} />;
       });
   });
 
@@ -33,7 +34,10 @@ export default Dev.describe('GroupVideo', async (e) => {
           <Connect.Stateful
             self={self}
             onChange={(e) => {
-              state.change((d) => (d.selectedPeer = e.selected?.peer.id));
+              state.change((d) => {
+                d.props.selected = e.selected;
+                d.props.client = e.client;
+              });
             }}
           />
         );
