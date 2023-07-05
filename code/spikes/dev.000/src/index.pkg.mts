@@ -30,7 +30,7 @@ export const Pkg: ModuleDef = {
     'vendor.stripe': '0.0.0',
     'vendor.wallet.rainbow': '0.0.0',
     'viem': '1.2.9',
-    'wagmi': '1.3.6',
+    'wagmi': '1.3.7',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
