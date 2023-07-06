@@ -1,4 +1,4 @@
-import { rx, t, WebRtcUtils } from './common';
+import { rx, type t, WebRtcUtils } from './common';
 
 /**
  * Represents a P2P data connection.

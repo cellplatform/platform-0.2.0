@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { load } from './Font.load.mjs';
 
-import { t } from './common';
+import { type t } from './common';
 import { Util } from './util.mjs';
 
 /**

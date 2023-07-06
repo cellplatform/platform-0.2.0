@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { COLORS, css, FC, Style, t } from '../common';
+import { COLORS, css, FC, Style, type t } from '../common';
 import { Spinner } from '../Spinner';
 
 const DEFAULTS = {

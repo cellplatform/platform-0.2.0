@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, rx, t } from './common';
+import { Keyboard, rx, type t } from './common';
 
 /**
  * Hook for maintaining the current keyboard state.

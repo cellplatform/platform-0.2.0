@@ -1,4 +1,4 @@
-import { Color, COLORS, t } from '../common';
+import { Color, COLORS, type t } from '../common';
 import { Flip } from '../Flip';
 
 export const Wrangle = {
@@ -24,7 +24,7 @@ export const Wrangle = {
 
   border(props: t.CardProps) {
     const { border, focused } = props;
-    const color = border?.color ?? Color.alpha(COLORS.DARK, focused ? 0.35 : 0.3);
+    const color = border?.color ?? focused ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.25);
     const radius = props.border?.radius ?? 4;
     return { color, radius };
   },

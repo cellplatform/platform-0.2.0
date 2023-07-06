@@ -10,6 +10,7 @@ describe('@farcaster/hub-web', () => {
 
     let count = 0;
     const res = await client.getCastsByFid({ fid: 15 });
+    console.log('res', res);
     res.map(({ messages }) => (count = messages.length));
 
     expect(res.isOk()).to.eql(true);

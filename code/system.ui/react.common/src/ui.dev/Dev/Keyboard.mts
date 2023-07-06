@@ -1,12 +1,11 @@
-import { DEFAULTS } from '../common';
-
+import { DEFAULTS, Time } from '../common';
 export type EscapeAction = 'ReloadRootUrl';
 
 export const KeyboardActions = {
   /**
    * Apply "escape key" trigger action.
    */
-  onDoubleEscape(action?: EscapeAction | null) {
+  async onDoubleEscape(action?: EscapeAction | null) {
     if (action === 'ReloadRootUrl') {
       /**
        * Load the root URL.
@@ -16,10 +15,10 @@ export const KeyboardActions = {
       const namespace = params.get(DEFAULTS.qs.dev) ?? '';
 
       params.set(DEFAULTS.qs.dev, 'true');
-      if (namespace && namespace !== 'true') params.set(DEFAULTS.qs.selected, namespace); // NB: hint to load with current selection
+      if (namespace && namespace !== 'true') params.set(DEFAULTS.qs.selected, namespace); // NB: hint to load with current selection.
 
       window.history.pushState({}, '', url.href);
-      window.location.reload();
+      await Time.delay(0, () => window.location.reload());
     }
   },
 };

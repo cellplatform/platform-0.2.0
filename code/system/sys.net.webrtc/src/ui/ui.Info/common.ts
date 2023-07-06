@@ -17,15 +17,31 @@ export const FIELDS: t.WebRtcInfoField[] = [
   'Peer.Connections',
 ];
 
+const fieldsAll: t.WebRtcInfoField[] = [
+  'Module',
+  'Module.Verify',
+  'Self.Id',
+  'State.Shared',
+  'Group',
+  'Group.Peers',
+  'Peer',
+  'Peer.Connections',
+];
+
+const defaultFields: t.WebRtcInfoField[] = [
+  'Module.Verify',
+  'Module',
+  'Self.Id',
+  'Group',
+  'Group.Peers',
+  'State.Shared',
+];
+
 export const DEFAULTS = {
-  fields: [
-    'Module.Verify',
-    'Module',
-    'Self.Id',
-    'Group',
-    'Group.Peers',
-    'State.Shared',
-  ] as t.WebRtcInfoField[],
+  fields: {
+    all: fieldsAll,
+    default: defaultFields,
+  },
   indent: 15,
   fontSize: 13,
   minRowHeight: 16,

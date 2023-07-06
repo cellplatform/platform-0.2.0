@@ -220,7 +220,7 @@ export default Dev.describe('CrdtInfo', async (e) => {
       dev.row((e) => {
         const props = Util.props(e.state);
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
             all={CrdtInfo.FIELDS}
             selected={props.fields ?? CrdtInfo.DEFAULTS.fields}

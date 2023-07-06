@@ -36,7 +36,7 @@ export default Dev.describe('Info', (e) => {
       dev.row((e) => {
         const props = e.state.props;
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
             all={Info.FIELDS}
             selected={props.fields}

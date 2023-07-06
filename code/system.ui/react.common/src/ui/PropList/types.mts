@@ -1,5 +1,6 @@
 import type { t } from '../common.t';
 
+type ElementInput = JSX.Element | null | false;
 type Milliseconds = number;
 
 /**
@@ -19,15 +20,23 @@ export type PropListProps = {
   title?: t.PropListTitleInput;
   items?: (PropListItem | undefined)[] | Record<string, unknown>;
   defaults?: t.PropListDefaults;
+  card?: boolean | PropListCard;
+  flipped?: boolean;
+
+  header?: ElementInput;
+  footer?: ElementInput;
+
+  backside?: ElementInput;
+  backsideHeader?: ElementInput;
+  backsideFooter?: ElementInput;
+
   padding?: t.CssEdgesInput;
   margin?: t.CssEdgesInput;
   width?: number | t.PropListSize;
   height?: number | t.PropListSize;
-  card?: boolean | PropListCard;
-  flipped?: boolean;
-  backside?: JSX.Element | null;
   theme?: t.PropListTheme;
   style?: t.CssValue;
+
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
 };

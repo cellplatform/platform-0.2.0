@@ -1,4 +1,4 @@
-import { Crdt, t, Automerge } from '../../test.ui';
+import { Crdt, type t, Automerge } from '../../test.ui';
 
 import type { Doc } from './DEV.CrdtSync';
 

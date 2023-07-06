@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { t } from '../common';
+import { type t } from '../common';
 
 /**
  * Lifecycle manager for managing an [Events] API within a react component

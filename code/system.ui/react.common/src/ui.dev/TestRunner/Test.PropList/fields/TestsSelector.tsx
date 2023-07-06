@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 import { SpecsRow } from '../ui/Specs.Row';
 
 /**

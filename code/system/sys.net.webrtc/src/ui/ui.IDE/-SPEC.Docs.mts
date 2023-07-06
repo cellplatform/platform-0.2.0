@@ -1,4 +1,4 @@
-import { Crdt, t, WebRtc } from './common';
+import { Crdt, type t, WebRtc } from './common';
 
 export type { DocShared } from '../../sys.net.schema';
 export type DocMe = { count: number; text?: string; code?: t.AutomergeText };

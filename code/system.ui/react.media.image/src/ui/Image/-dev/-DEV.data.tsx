@@ -22,7 +22,7 @@ export async function DevDataController(options: { dispose$?: t.Observable<any> 
   return {
     dir,
     file,
-    render: () => render(dir, file),
+    render: () => renderFileCard(dir, file),
     update: (image: t.ImageBinary) => doc.change((d) => (d.image = image)),
     get current() {
       return doc.current;
@@ -33,10 +33,12 @@ export async function DevDataController(options: { dispose$?: t.Observable<any> 
 /**
  * Render <Info> Component.
  */
-function render(path: string, file: t.CrdtDocFile<Doc>) {
+function renderFileCard(path: string, file: t.CrdtDocFile<Doc>) {
   const doc = file.doc;
   return (
     <CrdtInfo
+      card={true}
+      title={['', 'CRDT']}
       margin={[30, 25, 30, 30]}
       fields={[
         'Module',

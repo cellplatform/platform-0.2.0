@@ -5,9 +5,9 @@ export * from '../common';
  * Defaults.
  */
 const drop: Required<t.ImageDropSettings> = {
-  enabled: true,
   content: 'Drop Image',
-  blur: 20,
+  enabled: true,
+  blur: 25,
 };
 
 const paste: Required<t.ImagePasteSettings> = {

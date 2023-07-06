@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 import { SwitchThumb } from './Switch.Thumb';
 import { SwitchTrack } from './Switch.Track';
 import { SwitchTheme } from './theme.mjs';

@@ -1,4 +1,4 @@
-import { t } from '../common';
+import { type t } from '../common';
 import { SpecsReset } from '../ui/Specs.Reset';
 import { Util } from '../Util.mjs';
 

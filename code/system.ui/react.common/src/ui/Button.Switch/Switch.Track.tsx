@@ -1,4 +1,4 @@
-import { Color, css, R, t } from '../../common';
+import { Color, css, R, type t } from '../../common';
 
 export type SwitchTrackProps = {
   track: Partial<t.SwitchTrack>;

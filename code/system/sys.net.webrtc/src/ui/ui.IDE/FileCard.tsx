@@ -1,4 +1,4 @@
-import { t, CrdtInfo } from './common';
+import { type t, CrdtInfo } from './common';
 
 export type FileCardProps = {
   title?: t.PropListProps['title'];

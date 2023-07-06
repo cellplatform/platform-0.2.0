@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { css, t } from '../../common';
+import { css, type t } from '../../common';
 
 export type ComponentProps = t.MeasureSizeStyle & {
   content?: React.ReactNode;

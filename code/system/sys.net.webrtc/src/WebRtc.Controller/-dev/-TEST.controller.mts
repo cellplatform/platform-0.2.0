@@ -10,7 +10,7 @@ import {
   WebRtc,
   expect,
   rx,
-  t,
+  type t,
 } from '../../test.ui';
 
 export default Dev.describe('Network Controller', async (e) => {

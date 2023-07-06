@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Icons, css, Filesize, rx, t, Value } from '../common';
+import { Icons, css, Filesize, rx, type t, Value } from '../common';
 
 export type SyncProps = {
   info?: t.WebRtcInfo;

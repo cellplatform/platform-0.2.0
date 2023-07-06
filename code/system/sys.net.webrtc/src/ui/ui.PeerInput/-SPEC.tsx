@@ -1,24 +1,25 @@
-import { ConnectInput } from '.';
-import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
+import { PeerInput } from '.';
+import { Dev, PropList, TestNetwork, WebRtc, WebRtcInfo, type t } from '../../test.ui';
 
-const { DEFAULTS } = ConnectInput;
+const { DEFAULTS } = PeerInput;
 
-type T = { props: t.ConnectInputProps };
+type T = { props: t.PeerInputProps };
 const initial: T = {
   props: {
+    enabled: DEFAULTS.enabled,
     spinning: DEFAULTS.spinning,
     fields: DEFAULTS.fields,
   },
 };
 
-type LocalStore = { fields?: t.ConnectInputField[]; self: boolean };
-const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ConnectInput');
+type LocalStore = { fields?: t.PeerInputField[]; self: boolean };
+const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.PeerInput');
 const local = localstore.object({
   fields: initial.props.fields,
   self: true,
 });
 
-export default Dev.describe('ConnectInput', async (e) => {
+export default Dev.describe('PeerInput', async (e) => {
   const self = await TestNetwork.peer();
   const controller = WebRtc.controller(self);
   const client = controller.client();
@@ -48,9 +49,10 @@ export default Dev.describe('ConnectInput', async (e) => {
       .render<T>((e) => {
         const props = Util.props(e.state);
         return (
-          <ConnectInput
+          <PeerInput
             {...props}
-            onRemotePeerChanged={(e) => state.change((d) => (d.props.remotePeer = e.remote))}
+            onRemoteChanged={(e) => state.change((d) => (d.props.remote = e.remote))}
+            onLocalCopied={(e) => console.info(`⚡️ onLocalCopied:`, e)}
           />
         );
       });
@@ -60,7 +62,13 @@ export default Dev.describe('ConnectInput', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.row((e) => {
-      return <WebRtcInfo fields={['Module', 'Self.Id']} client={client} />;
+      return (
+        <WebRtcInfo
+          fields={['Module', 'Self.Id']}
+          client={client}
+          style={{ Margin: [0, 20, 0, 0] }}
+        />
+      );
     });
 
     dev.hr(5, 20);
@@ -69,12 +77,12 @@ export default Dev.describe('ConnectInput', async (e) => {
       dev.row((e) => {
         const props = Util.props(e.state);
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
-            all={ConnectInput.FIELDS}
+            all={PeerInput.FIELDS}
             selected={props.fields ?? DEFAULTS.fields}
             onClick={(ev) => {
-              const fields = ev.next as t.ConnectInputProps['fields'];
+              const fields = ev.next as t.PeerInputProps['fields'];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}
@@ -88,11 +96,16 @@ export default Dev.describe('ConnectInput', async (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
+          .label((e) => `enabled`)
+          .value((e) => Boolean(e.state.props.enabled))
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
+      );
+
+      dev.boolean((btn) =>
+        btn
           .label('spinning')
           .value((e) => Boolean(e.state.props.spinning))
-          .onClick((e) => {
-            e.change((d) => Dev.toggle(d.props, 'spinning'));
-          }),
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'spinning'))),
       );
     });
 
@@ -101,7 +114,7 @@ export default Dev.describe('ConnectInput', async (e) => {
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label((e) => (local.self ? 'self (set)' : 'self (not set)'))
+          .label((e) => (local.self ? 'self (is set)' : 'self (not set)'))
           .value((e) => local.self)
           .onClick((e) => {
             local.self = !local.self;
@@ -119,7 +132,7 @@ export default Dev.describe('ConnectInput', async (e) => {
         [`WebRtc.Peer[${total}]`]: self,
         props: e.state.props,
       };
-      return <Dev.Object name={'Dev.ConnectInput'} data={data} expand={1} />;
+      return <Dev.Object name={'PeerInput'} data={data} expand={1} />;
     });
   });
 });

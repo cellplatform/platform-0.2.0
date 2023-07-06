@@ -1,4 +1,4 @@
-import { PropList, Dev, WebRtc, t, MediaStream } from './common';
+import { PropList, Dev, WebRtc, type t, MediaStream } from './common';
 import { PeerCtrls, PeerCtrlsProps } from '../ui/PeerCtrls';
 
 type T = {
@@ -146,7 +146,7 @@ export default Dev.describe('PeerFacets', (e) => {
       dev.section(title, (dev) => {
         dev.row((e) => {
           return (
-            <PropList.FieldSelector
+            <Dev.FieldSelector
               style={{ Margin: [10, 40, 5, 30] }}
               all={PeerCtrls.FIELDS}
               selected={e.state.props[prop] as string[]}

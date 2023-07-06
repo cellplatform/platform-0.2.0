@@ -1,36 +1,42 @@
-import { PeerId, PeerIdProps } from '.';
-import { cuid, Dev } from '../../test.ui';
+import { PeerId } from '.';
+import { cuid, Dev, type t } from '../../test.ui';
 
-type T = { props: PeerIdProps };
+type T = {
+  props: t.PeerIdProps;
+  debug: { assignClickHandler: boolean; message: boolean };
+};
 const initial: T = {
-  props: { peer: cuid(), fontSize: 24, copyOnClick: true },
+  props: {
+    peer: cuid(),
+    fontSize: 24,
+    enabled: PeerId.DEFAULTS.enabled,
+    copyable: true,
+  },
+  debug: { assignClickHandler: true, message: false },
 };
 
 export default Dev.describe('PeerId', (e) => {
-  type LocalStore = { copyOnClick: boolean };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.peerid');
-  const local = localstore.object({ copyOnClick: initial.props.copyOnClick! });
-
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
-    state.change((d) => {
-      d.props.copyOnClick = local.copyOnClick;
-    });
 
     ctx.subject
       .backgroundColor(1)
       .display('grid')
       .render<T>((e) => {
-        return <PeerId {...e.state.props} onClick={(e) => console.info('⚡️ onClick', e)} />;
+        const { props, debug } = e.state;
+
+        const onClick: t.PeerIdClickHandler = (e) => {
+          e.copy();
+          console.info('⚡️ onClick', e);
+        };
+
+        return <PeerId {...props} onClick={debug.assignClickHandler ? onClick : undefined} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
-    console.log('state', state);
 
     dev.footer
       .border(-0.1)
@@ -47,15 +53,29 @@ export default Dev.describe('PeerId', (e) => {
 
     dev.boolean((btn) =>
       btn
-        .label('⚡️ copyOnClick')
-        .value((e) => e.state.props.copyOnClick)
-        .onClick((e) => e.change((d) => (local.copyOnClick = Dev.toggle(d.props, 'copyOnClick')))),
+        .label((e) => `enabled`)
+        .value((e) => Boolean(e.state.props.enabled))
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
+    );
+
+    dev.boolean((btn) =>
+      btn
+        .label((e) => `copyable`)
+        .value((e) => Boolean(e.state.props.copyable))
+        .onClick((e) => e.change((d) => Dev.toggle(d.props, 'copyable'))),
     );
 
     dev.hr(-1, 5);
+    dev.button('peer: none', (e) => e.change((d) => (d.props.peer = undefined)));
+    dev.button('peer: <cuid>', (e) => e.change((d) => (d.props.peer = cuid())));
 
+    dev.hr(-1, 5);
     dev.button('prefix: "me"', (e) => e.change((d) => (d.props.prefix = '  me:  ')));
     dev.button('prefix: (undefined)', (e) => e.change((d) => (d.props.prefix = undefined)));
+
+    dev.hr(-1, 5);
+    dev.button('message: none', (e) => e.change((d) => (d.props.message = undefined)));
+    dev.button('message: "copied"', (e) => e.change((d) => (d.props.message = 'copied')));
 
     dev.hr();
 
@@ -71,7 +91,20 @@ export default Dev.describe('PeerId', (e) => {
       };
       fontsize(8);
       fontsize(undefined, `${PeerId.DEFAULTS.fontSize}px (undefined → default)`);
+      fontsize(16);
       fontsize(24);
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      const value = (state: T) => Boolean(state.debug.assignClickHandler);
+      dev.boolean((btn) => {
+        btn
+          .label((e) => `onClick → ${value(e.state) ? 'ƒ' : '<undefined>'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'assignClickHandler')));
+      });
     });
   });
 });

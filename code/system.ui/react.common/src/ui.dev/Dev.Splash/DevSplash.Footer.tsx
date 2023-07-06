@@ -1,4 +1,4 @@
-import { css, t } from './common';
+import { css, type t } from './common';
 
 type C = string | JSX.Element | null;
 export type FooterInput = C | [C, C] | [C, C, C];

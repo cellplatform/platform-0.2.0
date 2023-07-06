@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { DevTools } from '.';
-import { Dev, RenderCount, t } from '../../test.ui';
+import { Dev, RenderCount, type t } from '../../test.ui';
 import { css } from '../common';
 
 type T = { count: number; on: boolean; theme: t.CommonTheme };

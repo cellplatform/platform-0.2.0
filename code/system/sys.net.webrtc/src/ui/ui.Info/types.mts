@@ -1,5 +1,6 @@
 import type { t } from '../common.t';
 
+export type WebRtcInfoPeerFacet = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';
 export type WebRtcInfoField =
   | 'Module'
   | 'Module.Verify'
@@ -15,6 +16,7 @@ export type WebRtcInfoData = {
   state?: { shared?: { title?: string } };
   peer?: { title?: string };
   group?: WebRtcInfoDataGroup;
+  connect?: WebRtcInfoDataConnect;
 };
 
 export type WebRtcInfoDataGroup = {
@@ -25,7 +27,14 @@ export type WebRtcInfoDataGroup = {
   onPeerCtrlClick?: WebRtcInfoPeerCtrlsClickHandler;
 };
 
-export type WebRtcInfoPeerFacet = 'Mic' | 'Video' | 'Screen' | 'Identity' | 'StateDoc';
+export type WebRtcInfoDataConnect = {
+  self?: t.Peer;
+  remote?: t.PeerId;
+  spinning?: boolean;
+  onLocalCopied?: t.PeerCardLocalCopiedHandler;
+  onRemoteChanged?: t.PeerCardRemoteChangedHandler;
+  onConnectRequest?: t.PeerCardConnectRequestHandler;
+};
 
 /**
  * Event: Peer row selected.

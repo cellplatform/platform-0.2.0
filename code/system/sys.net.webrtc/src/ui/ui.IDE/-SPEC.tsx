@@ -12,8 +12,8 @@ import {
   Keyboard,
   MediaStream,
   rx,
-  t,
-  TEST,
+  type t,
+  TEST_DEFAULTS,
   WebRtc,
   WebRtcInfo,
 } from './common';
@@ -251,7 +251,7 @@ export default Dev.describe('PeerCard', async (e) => {
       const state = await ctx.state<T>(initial);
 
       const getStream = WebRtc.Media.singleton().getStream;
-      const self = await WebRtc.peer(TEST.signal, { getStream, log: true });
+      const self = await WebRtc.peer(TEST_DEFAULTS.signal, { getStream, log: true });
       self.connections$.subscribe(async (e) => ctx.redraw());
 
       const filedir = docs.shared.fs;

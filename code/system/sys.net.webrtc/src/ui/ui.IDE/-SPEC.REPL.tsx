@@ -1,4 +1,4 @@
-import { t, Color, css, COLORS } from './common';
+import { type t, Color, css, COLORS } from './common';
 
 /**
  * Read, Eval, Print, Loop - Helpers

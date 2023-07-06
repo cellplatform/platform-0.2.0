@@ -1,4 +1,4 @@
-import { t, rx } from './common';
+import { type t, rx } from './common';
 import { init, is } from './Events.init.mjs';
 
 /**

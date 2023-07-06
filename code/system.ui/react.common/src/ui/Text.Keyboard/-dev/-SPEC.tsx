@@ -1,5 +1,5 @@
 import { Keyboard } from '..';
-import { Dev, t } from '../../../test.ui';
+import { Dev, type t } from '../../../test.ui';
 import { DevSample } from './DEV.Sample';
 import { DevHook } from './DEV.Hook';
 

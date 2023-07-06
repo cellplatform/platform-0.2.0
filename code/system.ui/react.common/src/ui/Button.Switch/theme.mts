@@ -1,4 +1,4 @@
-import { Style, COLORS, R, t } from '../common';
+import { Style, COLORS, R, type t } from '../common';
 
 const { GREEN, WHITE, BLUE } = COLORS;
 

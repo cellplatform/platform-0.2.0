@@ -1,4 +1,4 @@
-import { Keyboard, t, Dev } from './common';
+import { Keyboard, type t, Dev } from './common';
 
 export function DevKeyboard(props: t.WebRtcPropsLens<t.TDevSharedProps>) {
   Keyboard.on({

@@ -1,4 +1,4 @@
-import { Dev, t } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
 import { Spinner } from '.';
 
 type T = { el?: JSX.Element };

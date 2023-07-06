@@ -1,5 +1,5 @@
 import { WebRtcController } from '..';
-import { Crdt, Dev, expect, rx, t, TestNetwork, Time } from '../../test.ui';
+import { Crdt, Dev, expect, rx, type t, TestNetwork, Time } from '../../test.ui';
 
 export default Dev.describe('Network Controller: 3-way connections', async (e) => {
   e.timeout(1000 * 50);

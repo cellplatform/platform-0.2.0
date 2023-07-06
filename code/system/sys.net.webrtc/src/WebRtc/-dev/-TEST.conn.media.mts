@@ -1,4 +1,4 @@
-import { Dev, expect, expectError, rx, t, TestNetwork, Time, WebRtc } from '../../test.ui';
+import { Dev, expect, expectError, rx, type t, TestNetwork, Time, WebRtc } from '../../test.ui';
 
 export default Dev.describe('WebRTC: connection → media', (e) => {
   e.timeout(1000 * 15);

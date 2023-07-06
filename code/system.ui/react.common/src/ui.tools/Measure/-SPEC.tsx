@@ -1,5 +1,5 @@
 import { Measure, MeasureSizeProps } from '.';
-import { Dev, t } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
 
 type T = {
   props?: MeasureSizeProps;

@@ -1,4 +1,4 @@
-import { t, Crdt } from './common';
+import { type t, Crdt } from './common';
 import { bytes, typeDef } from './Schema.bytes.mjs';
 
 import type { NetworkDocShared } from './Schema.bytes.mjs';

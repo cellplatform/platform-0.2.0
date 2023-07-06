@@ -1,9 +1,10 @@
-import { Color, COLORS, css, Icons, t, TextInput } from './common';
+import { COLORS, Color, Icons, TextInput, css, type t } from './common';
 import { ConnectButton } from './ui.ConnectButton';
 
 export type RemoteProps = {
   self?: t.Peer;
   ids: { local: t.PeerId; remote: t.PeerId };
+  enabled: boolean;
   canConnect: boolean;
   isConnected: boolean;
   isSpinning: boolean;
@@ -13,8 +14,9 @@ export type RemoteProps = {
 };
 
 export const Remote: React.FC<RemoteProps> = (props) => {
-  const { self, ids } = props;
+  const { self, ids, enabled } = props;
   const error = Wrangle.error(props);
+  const hasValue = Boolean(ids.remote.trim());
 
   /**
    * [Handlers]
@@ -50,6 +52,7 @@ export const Remote: React.FC<RemoteProps> = (props) => {
       alignContent: 'center',
       gridTemplateColumns: 'repeat(5, auto)',
       gap: '1px',
+      opacity: enabled ? 1 : 0.5,
     }),
   };
 
@@ -76,14 +79,14 @@ export const Remote: React.FC<RemoteProps> = (props) => {
       </div>
       <div {...styles.textbox}>
         <TextInput
-          isEnabled={Boolean(self)}
+          isEnabled={Boolean(self) && enabled}
           value={ids.remote}
           placeholder={'connect to remote peer'}
           valueStyle={{
             fontFamily: 'monospace',
             fontSize: 13,
             fontWeight: 'bold',
-            color: Color.alpha(COLORS.CYAN, 1),
+            color: hasValue ? COLORS.CYAN : Color.alpha(COLORS.DARK, 1),
           }}
           placeholderStyle={{
             fontFamily: 'sans-serif',
@@ -105,14 +108,14 @@ export const Remote: React.FC<RemoteProps> = (props) => {
         />
       </div>
       <div {...styles.edgeIcons}>
-        {!props.isConnected && props.canConnect && !error && (
+        {!props.isConnected && props.canConnect && enabled && !error && (
           <ConnectButton
             isSpinning={props.isSpinning}
             canConnect={props.canConnect}
             onClick={handleConnect}
           />
         )}
-        {error && <Icons.Error tooltip={error} color={COLORS.YELLOW} />}
+        {error && <Icons.Error tooltip={error} size={16} color={COLORS.YELLOW} />}
       </div>
     </div>
   );

@@ -8,14 +8,14 @@ import {
   FC,
   MediaStream,
   Spinner,
-  t,
+  type t,
   useMouseState,
   DEFAULTS,
   FIELDS,
 } from './common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
-import { ConnectInput } from '../ui.ConnectInput';
+import { PeerInput } from '../ui.PeerInput';
 
 const URL = {
   Rowan:
@@ -40,7 +40,7 @@ export type PeerCardProps = {
   style?: t.CssValue;
   fill?: boolean;
 
-  fields?: t.ConnectInputField[];
+  fields?: t.PeerInputField[];
   onMuteClick?(e: React.MouseEvent): void;
   onRemotePeerChanged?: t.PeerCardRemoteChangedHandler;
   onConnectRequest?: t.PeerCardConnectRequestHandler;
@@ -162,15 +162,15 @@ const View: React.FC<PeerCardProps> = (props) => {
         {elPeerCopied}
         {elSpinner}
       </div>
-      <ConnectInput
+      <PeerInput
         style={styles.footer}
         fields={fields}
         self={self}
-        remotePeer={props.remotePeer}
+        remote={props.remotePeer}
         video={props.footerVideo}
         spinning={props.spinning}
-        onLocalPeerCopied={handlePeerCopied}
-        onRemotePeerChanged={props.onRemotePeerChanged}
+        onLocalCopied={handlePeerCopied}
+        onRemoteChanged={props.onRemotePeerChanged}
         onConnectRequest={props.onConnectRequest}
       />
     </div>

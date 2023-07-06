@@ -1,9 +1,10 @@
+import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
+
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
-import { ConnectInput } from '../../ui.ConnectInput';
+import { PeerInput } from '../../ui.PeerInput';
 import { DevKeyboard } from './DEV.Keyboard.mjs';
 import { DevMedia } from './DEV.Media';
 import { DevRemotes } from './DEV.Remotes';
-import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
 
 /**
  * video:   727951677
@@ -13,8 +14,8 @@ import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t }
 type T = {
   props: WebRtcInfoProps;
   debug: {
-    bg: boolean;
-    title: boolean;
+    card?: boolean;
+    title?: boolean;
     remotePeer?: t.PeerId;
     selectedPeer?: t.PeerId;
     addingConnection?: 'VirtualNetwork' | 'RealNetwork';
@@ -23,7 +24,7 @@ type T = {
 };
 const initial: T = {
   props: {},
-  debug: { bg: true, title: false },
+  debug: {},
 };
 
 type LocalStore = T['debug'] & {
@@ -32,15 +33,14 @@ type LocalStore = T['debug'] & {
 };
 const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.Info');
 const local = localstore.object({
-  bg: initial.debug.bg,
-  title: initial.debug.title,
-  fields: WebRtcInfo.DEFAULTS.fields,
+  card: true,
+  title: false,
   useController: true,
   fullscreenVideo: false,
+  fields: WebRtcInfo.DEFAULTS.fields.default,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
-  const bus = rx.bus();
   const self = await TestNetwork.peer();
   const remotes: t.TDevRemote[] = [];
 
@@ -72,9 +72,21 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     data(state: t.DevCtxState<T>): t.WebRtcInfoData {
       const { debug } = state.current;
       return {
+        connect: {
+          self,
+          remote: debug.remotePeer,
+          spinning: debug.addingConnection === 'RealNetwork',
+          onLocalCopied: (e) => navigator.clipboard.writeText(e.local),
+          onRemoteChanged: (e) => state.change((d) => (d.debug.remotePeer = e.remote)),
+          async onConnectRequest(e) {
+            await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
+            await client.connect.fire(e.remote);
+            await state.change((d) => (d.debug.addingConnection = undefined));
+          },
+        },
         group: {
-          selected: debug.selectedPeer,
           useController: debug.useController,
+          selected: debug.selectedPeer,
           async onPeerSelect(e) {
             console.info('⚡️ onPeerSelect', e);
             state.change((d) => (d.debug.selectedPeer = e.peerid));
@@ -107,35 +119,34 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
     await state.change((d) => {
       d.props.fields = local.fields;
-      d.debug.bg = local.bg;
+      d.debug.card = local.card;
       d.debug.title = local.title;
       d.debug.useController = local.useController;
       if (!d.debug.selectedPeer) d.debug.selectedPeer = self.id; // NB: Ensure selection if showing video
     });
 
-    const renderInfoCard = (e: { state: T }) => {
-      const { debug } = e.state;
+    const renderInfoCard = () => {
+      const { debug } = state.current;
+      const props = Util.props(state);
 
       /**
        * Setup host
        */
-      ctx.subject.backgroundColor(debug.bg ? 1 : 0);
-      ctx.subject.size([320, null]);
+      const width = debug.card ? 320 : 280;
+      ctx.subject.size([width, null]);
+      ctx.subject.backgroundColor(debug.card ? 0 : 1);
 
       /**
        * Render <Component>
        */
-      return (
-        <div {...css({ Padding: debug.bg ? [20, 25] : 0 })}>
-          <WebRtcInfo {...Util.props(state)} card={false} />
-        </div>
-      );
+      return <WebRtcInfo {...Util.props(state)} card={debug.card} />;
     };
 
-    const renderFullscreenVideo = (e: { state: T }) => {
+    const renderFullscreenVideo = () => {
+      const debug = state.current.debug;
       ctx.subject.backgroundColor(1);
       ctx.subject.size('fill');
-      return <DevMedia bus={bus} self={self} shared={props} peerid={e.state.debug.selectedPeer} />;
+      return <DevMedia self={self} peerid={debug.selectedPeer} />;
     };
 
     /**
@@ -145,8 +156,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       ctx.debug.width(props.current.showRight ? 400 : 0);
       return props.current.fullscreenVideo
         ? //
-          renderFullscreenVideo(e)
-        : renderInfoCard(e);
+          renderFullscreenVideo()
+        : renderInfoCard();
     });
 
     /**
@@ -176,22 +187,18 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     dev.header.border(-0.1).padding(0);
     dev.header.render<T>((e) => {
       const firstCamera = self.connections.media.find((conn) => conn.metadata.input === 'camera');
-
+      const data = Util.data(state);
       return (
-        <ConnectInput
-          remotePeer={e.state.debug.remotePeer}
+        <PeerInput
           self={self}
+          remote={e.state.debug.remotePeer}
           fields={['Peer:Self', 'Peer:Remote', 'Video']}
-          spinning={e.state.debug.addingConnection === 'RealNetwork'}
+          spinning={data.connect?.spinning}
           video={firstCamera?.stream.local}
           muted={true}
-          onLocalPeerCopied={(e) => navigator.clipboard.writeText(e.local)}
-          onRemotePeerChanged={(e) => state.change((d) => (d.debug.remotePeer = e.remote))}
-          onConnectRequest={async (e) => {
-            await state.change((d) => (d.debug.addingConnection = 'RealNetwork'));
-            await client.connect.fire(e.remote);
-            await state.change((d) => (d.debug.addingConnection = undefined));
-          }}
+          onLocalCopied={data.connect?.onLocalCopied}
+          onRemoteChanged={data.connect?.onRemoteChanged}
+          onConnectRequest={data.connect?.onConnectRequest}
         />
       );
     });
@@ -205,11 +212,11 @@ export default Dev.describe('WebRtcInfo', async (e) => {
       dev.row((e) => {
         if (props.current.fullscreenVideo) return null;
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
             all={WebRtcInfo.FIELDS}
-            default={WebRtcInfo.DEFAULTS.fields}
+            default={WebRtcInfo.DEFAULTS.fields.default}
             selected={props.current.fields}
             resettable={true}
             onClick={(ev) => {
@@ -250,10 +257,10 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label('background')
+          .label('card')
           .enabled((e) => !Boolean(props.current.fullscreenVideo))
-          .value((e) => e.state.debug.bg)
-          .onClick((e) => e.change((d) => (local.bg = Dev.toggle(d.debug, 'bg')))),
+          .value((e) => e.state.debug.card)
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.debug, 'card')))),
       );
     });
 
@@ -263,15 +270,6 @@ export default Dev.describe('WebRtcInfo', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-
-    const func = Crdt.func(
-      props.lens((d) => Crdt.Func.field(d, 'func')),
-      async (e) => console.log('run', e),
-    );
-
-    dev.button('run', (e) => func.invoke({}));
-
-    dev.hr(-1, 5);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
@@ -347,7 +345,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `useGroupController`)
+          .label((e) => `useController`)
           .value((e) => Boolean(e.state.debug.useController))
           .onClick((e) => {
             e.change((d) => (local.useController = Dev.toggle(d.debug, 'useController')));
@@ -385,6 +383,18 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           .onClick((e) => dev.redraw()),
       );
     });
+
+    dev.hr(-1, 5);
+    const func = Crdt.func<{ msg: string }>(
+      props.lens((d) => Crdt.Func.field(d, 'func')),
+      async (e) => console.log('run', e),
+    );
+    dev.button((btn) =>
+      btn
+        .label('invoke')
+        .right('Crdt.func')
+        .onClick((e) => func.invoke({ msg: `run:by:${self.id}` })),
+    );
   });
 
   e.it('ui:footer', async (e) => {

@@ -1,4 +1,4 @@
-import { COLORS, Color, t } from '../../common';
+import { COLORS, Color, type t } from '../../common';
 
 export * from '../../common';
 

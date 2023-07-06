@@ -1,4 +1,4 @@
-import { Dev, t } from '../../../test.ui';
+import { Dev, type t } from '../../../test.ui';
 import { Time, DEFAULTS, KeyboardMonitor } from '../common';
 import { DevSample } from './DEV.Sample';
 

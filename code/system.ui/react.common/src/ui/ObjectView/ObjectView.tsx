@@ -1,6 +1,6 @@
 import { chromeDark, chromeLight, ObjectInspector } from 'react-inspector';
 
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 import { DEFAULTS } from './DEFAULT.mjs';
 import { renderer } from './Renderer';
 

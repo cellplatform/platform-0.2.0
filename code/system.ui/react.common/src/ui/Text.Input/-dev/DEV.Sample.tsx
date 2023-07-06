@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { TextInput } from '..';
-import { css, Color, Time, t } from '../common';
+import { css, Color, Time, type t } from '../common';
 import { Hints } from './DEV.Hints.mjs';
 
 export type DevSampleProps = {

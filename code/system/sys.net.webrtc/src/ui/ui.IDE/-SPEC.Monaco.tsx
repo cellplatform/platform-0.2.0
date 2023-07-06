@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MonacoCrdt, MonacoEditor } from 'sys.ui.react.monaco';
 
-import { Yaml, COLORS, Crdt, css, rx, t, Color, Path } from './common';
+import { Yaml, COLORS, Crdt, css, rx, type t, Color, Path } from './common';
 
 import type { DocShared, DocMe } from './-SPEC.Docs.mjs';
 

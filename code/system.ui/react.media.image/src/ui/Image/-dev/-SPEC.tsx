@@ -1,7 +1,7 @@
 import { Image } from '..';
 import { Dev, Filesize, type t } from '../../../test.ui';
-import { DevDataController } from './-DEV.data';
 import { Util } from '../Util.mjs';
+import { DevDataController } from './-DEV.data';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -144,7 +144,7 @@ export default Dev.describe('Image', async (e) => {
 
     dev.hr(2, 20);
 
-    dev.section(['File', 'CRDT'], (dev) => {
+    dev.section('File', (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)

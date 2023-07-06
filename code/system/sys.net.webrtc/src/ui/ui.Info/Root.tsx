@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
+
 import { FieldGroup } from './fields/Group';
 import { FieldGroupList as FieldGroupPeers } from './fields/Group.Peers';
 import { FieldModuleVerify } from './fields/Module.Verify';
@@ -25,7 +26,7 @@ export type WebRtcInfoProps = {
  * Component
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
-  const { client, fields = DEFAULTS.fields, data = {} } = props;
+  const { client, data = {}, fields = DEFAULTS.fields.default } = props;
 
   const info = useInfo(client);
   const [isOver, setOver] = useState(false);
@@ -51,8 +52,8 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
       defaults={{ clipboard: false }}
       card={props.card}
       flipped={props.flipped}
-      padding={props.card ? [20, 25] : undefined}
       margin={props.margin}
+      padding={props.card && items.length > 0 ? [20, 25] : undefined}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
     />

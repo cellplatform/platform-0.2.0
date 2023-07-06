@@ -1,4 +1,4 @@
-import { t, WebRtcUtils } from './common';
+import { type t, WebRtcUtils } from './common';
 import { Mutate } from '../WebRtc.State/State.Mutate.mjs';
 
 /**

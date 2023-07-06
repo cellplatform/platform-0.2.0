@@ -32,7 +32,7 @@ const Mutate = WebRtcState.Mutate;
  *    All group peers within the conversation are aware of this shared
  *    document instance.
  *
- *    UI should read/write to the CFDT and the controller will change
+ *    UI should read/write to the CRDT and the controller will change
  *    the state of the WebRTC network-peers accordingly.
  *
  */
@@ -309,9 +309,6 @@ export function listen(
       const error = WebRtcUtils.error.toPeerError(err);
       doc.change((d) => (d.network.peers[remote].error = `[${error.type}] ${err.message}`));
     }
-
-    const s = R.clone(doc.current.network);
-    console.log('s|||', s);
 
     /**
      * After.

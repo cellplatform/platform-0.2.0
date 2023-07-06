@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { css, MediaStream, Spinner, t, copyPeer } from '../common';
+import { css, MediaStream, Spinner, type t, copyPeer } from '../common';
 import { PeerId } from '../ui.PeerId';
 
 export type RowThumbnailProps = {

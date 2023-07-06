@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { css, SpecList, t } from './common';
+import { css, SpecList, type t } from './common';
 import { CmdBar } from './ui.CmdBar';
 import { useKeyboard } from './useKeyboard.mjs';
 

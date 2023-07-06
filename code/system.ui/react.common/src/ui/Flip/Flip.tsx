@@ -1,15 +1,17 @@
-import { css, FC, t } from '../common';
+import { css, FC, type t } from '../common';
 
+type ElementInput = JSX.Element | null | false;
 type Milliseconds = number;
-const DEFAULTS = { speed: 300 };
 
 export type FlipProps = {
   flipped?: boolean;
   speed?: Milliseconds;
-  front?: JSX.Element | null;
-  back?: JSX.Element | null;
+  front?: ElementInput;
+  back?: ElementInput;
   style?: t.CssValue;
 };
+
+const DEFAULTS = { speed: 300 };
 
 const View: React.FC<FlipProps> = (props) => {
   const { flipped = false, speed = DEFAULTS.speed } = props;

@@ -1,12 +1,12 @@
 import { PeerCard, PeerCardProps } from '.';
-import { Dev, PropList, t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
+import { Dev, PropList, type t, TestNetwork, WebRtc, WebRtcInfo } from '../../test.ui';
 
 type T = { props: PeerCardProps };
 const initial: T = { props: {} };
 const { DEFAULTS } = PeerCard;
 
 type LocalStore = {
-  fields?: t.ConnectInputField[];
+  fields?: t.PeerInputField[];
   backgroundUrl?: string;
   whiteBg: boolean;
   gap: number;
@@ -74,13 +74,13 @@ export default Dev.describe('PeerCard', async (e) => {
 
       dev.row((e) => {
         return (
-          <PropList.FieldSelector
+          <Dev.FieldSelector
             title={'Fields'}
             style={{ Margin: [30, 20, 0, 20] }}
             all={PeerCard.FIELDS}
             selected={e.state.props.fields ?? PeerCard.DEFAULTS.fields}
             onClick={(ev) => {
-              const fields = ev.next as t.ConnectInputField[];
+              const fields = ev.next as t.PeerInputField[];
               dev.change((d) => (d.props.fields = fields));
               local.fields = fields?.length === 0 ? undefined : fields;
             }}

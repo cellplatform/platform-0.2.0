@@ -1,4 +1,4 @@
-import { Color, COLORS, css, R, t } from '../common';
+import { Color, COLORS, css, R, type t } from '../common';
 
 type Seconds = number;
 

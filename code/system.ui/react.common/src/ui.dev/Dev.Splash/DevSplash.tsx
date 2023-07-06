@@ -1,4 +1,4 @@
-import { COLORS, css, DEFAULTS, FC, t } from './common';
+import { COLORS, css, DEFAULTS, FC, type t } from './common';
 import { useKeyboard } from './useKeyboard.mjs';
 import { Footer, FooterInput } from './DevSplash.Footer';
 

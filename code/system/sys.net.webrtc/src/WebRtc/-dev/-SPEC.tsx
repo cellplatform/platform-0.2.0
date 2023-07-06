@@ -12,8 +12,8 @@ import {
   Path,
   rx,
   slug,
-  t,
-  TEST,
+  type t,
+  TEST_DEFAULTS,
   TextInput,
 } from '../../test.ui';
 import { PeerCard, PeerList } from '../../ui';
@@ -99,7 +99,7 @@ export default Dev.describe('WebRtc', async (e) => {
      * WebRTC (network).
      */
     const { getStream } = media;
-    self = await WebRtc.peer(TEST.signal, { getStream });
+    self = await WebRtc.peer(TEST_DEFAULTS.signal, { getStream });
     await state.change((d) => (d.self = self));
     self.connections$.subscribe((e) => state.change((d) => (d.self = self)));
   });

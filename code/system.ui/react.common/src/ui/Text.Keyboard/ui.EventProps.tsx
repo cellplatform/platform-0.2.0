@@ -1,4 +1,4 @@
-import { css, FC, t } from './common';
+import { css, FC, type t } from './common';
 import { PropList } from '../PropList';
 
 export type EventPropsProps = {

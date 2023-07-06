@@ -18,6 +18,7 @@ export {
   Keyboard,
   PropList,
   Spinner,
+  Style,
   TestRunner,
   TextInput,
   TextSyntax,
