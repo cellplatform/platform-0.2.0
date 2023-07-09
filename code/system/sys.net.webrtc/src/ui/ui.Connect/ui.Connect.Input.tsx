@@ -6,7 +6,7 @@ export type ConnectInputProps = t.ConnectProps & {
 };
 
 export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
-  const { edge = DEFAULTS.edge, card = DEFAULTS.card, targetEdge } = props;
+  const { edge = DEFAULTS.edge, innerCard = DEFAULTS.innerCard, targetEdge } = props;
   const data = props.info?.connect;
   const self = data?.self;
   const is = {
@@ -21,7 +21,7 @@ export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
    * [Render]
    */
   const border = `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
-  const margin = card ? 25 : 15;
+  const margin = innerCard ? 25 : 15;
   const styles = {
     base: css({ boxSizing: 'border-box' }),
     top: css({

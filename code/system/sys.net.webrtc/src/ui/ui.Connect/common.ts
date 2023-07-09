@@ -12,11 +12,11 @@ const DEFAULT_FIELDS: t.WebRtcInfoField[] = ['State.Shared', 'Group', 'Group.Pee
 
 export const DEFAULTS = {
   edge,
+  innerCard: false,
   fields: {
     all: INFO_DEFAULTS.fields.all,
     default: DEFAULT_FIELDS,
   },
-  card: false,
   copied: {
     message: '( copied to clipboard )',
     delay: 1500,

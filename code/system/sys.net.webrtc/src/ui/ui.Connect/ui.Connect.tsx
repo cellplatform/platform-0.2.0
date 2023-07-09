@@ -8,7 +8,7 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
   if (props.loading) return <Loading />;
 
   const { fields = DEFAULTS.fields.default } = props;
-  const isCard = props.card ?? DEFAULTS.card;
+  const isCard = props.innerCard ?? DEFAULTS.innerCard;
 
   /**
    * [Render]

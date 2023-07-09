@@ -16,7 +16,7 @@ export default Dev.describe('Connect', async (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
     edge: Connect.DEFAULTS.edge,
-    card: Connect.DEFAULTS.card,
+    card: Connect.DEFAULTS.innerCard,
     fields: Connect.DEFAULTS.fields.default,
     bg: false,
     useController: true,
@@ -31,7 +31,7 @@ export default Dev.describe('Connect', async (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.card = local.card;
+      d.props.innerCard = local.card;
       d.props.edge = local.edge;
       d.props.fields = local.fields;
       d.debug.bg = local.bg;
@@ -93,9 +93,9 @@ export default Dev.describe('Connect', async (e) => {
 
       dev.boolean((btn) =>
         btn
-          .label((e) => `card: ${e.state.props.card}`)
-          .value((e) => Boolean(e.state.props.card))
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'card')))),
+          .label((e) => `card: ${e.state.props.innerCard}`)
+          .value((e) => Boolean(e.state.props.innerCard))
+          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'innerCard')))),
       );
     });
 
