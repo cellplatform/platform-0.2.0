@@ -13,9 +13,9 @@ export default Config.vite(import.meta.url, (e) => {
   e.chunk('ext.framer-motion', 'framer-motion');
 
   // e.chunk('ext.eth.wallet.rainbow', '@rainbow-me/rainbowkit');
-  e.chunk('ext.eth.wagmi', 'wagmi');
-  e.chunk('ext.eth.viem', 'viem');
-  e.chunk('ext.eth.ens', '@adraffy/ens-normalize');
+  // e.chunk('ext.eth.wagmi', 'wagmi');
+  // e.chunk('ext.eth.viem', 'viem');
+  // e.chunk('ext.eth.ens', '@adraffy/ens-normalize');
 
   e.chunk('sys.util', 'sys.util');
   e.chunk('sys.text', 'sys.text');

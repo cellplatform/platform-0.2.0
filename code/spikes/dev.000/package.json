@@ -11,12 +11,10 @@
     "bundle": "ts-node-esm -T ./script/bundle.mts",
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
-    "deploy__": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
-    "deploy": "yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
+    "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
     "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "1.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sys.data.crdt": "0.0.0",
@@ -30,10 +28,7 @@
     "sys.ui.react.media.image": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
     "sys.util": "0.0.0",
-    "vendor.stripe": "0.0.0",
-    "vendor.wallet.rainbow": "0.0.0",
-    "viem": "1.2.10",
-    "wagmi": "1.3.8"
+    "vendor.stripe": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

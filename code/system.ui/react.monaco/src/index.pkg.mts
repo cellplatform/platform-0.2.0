@@ -15,7 +15,7 @@ export const Pkg: ModuleDef = {
   dependencies: {
     '@monaco-editor/react': '4.5.1',
     'diff': '5.1.0',
-    'monaco-editor': '0.39.0',
+    'monaco-editor': '0.40.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.crdt': '0.0.0',
