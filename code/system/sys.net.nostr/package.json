@@ -1,32 +1,26 @@
 {
-  "name": "sys.net.webrtc",
+  "name": "sys.net.nostr",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "cd dist/web && serve",
+    "serve": "cd dist && serve",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts",
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "peerjs": "1.4.7",
-    "sys.data.crdt": "0.0.0",
-    "sys.fs": "0.0.0",
-    "sys.text": "0.0.0",
+    "nostr-tools": "1.12.1",
     "sys.util": "0.0.0"
   },
   "devDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "yaml": "2.3.1",
     "sys.test": "0.0.0",
+    "sys.test.spec": "0.0.0",
     "sys.types": "0.0.0",
-    "sys.ui.dom": "0.0.0",
-    "sys.ui.react.common": "0.0.0",
-    "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.media.image": "0.0.0"
+    "sys.ui.react.common": "0.0.0"
   },
   "license": "MIT",
   "private": true,

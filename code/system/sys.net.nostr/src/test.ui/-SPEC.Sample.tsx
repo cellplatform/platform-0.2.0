@@ -128,8 +128,8 @@ export default Dev.describe('Nostr (Protocol)', (e) => {
       return <Dev.Object name={'spec'} data={clone} expand={1} />;
     });
 
-    dev.section('nostr:// (client)', (dev) => {
-      dev.hr();
+    dev.section('client (websocket)', (dev) => {
+      dev.hr(-1, 5);
       dev.button('pull', async (e) => {
         e.change((d) => (d.loading = true));
 
