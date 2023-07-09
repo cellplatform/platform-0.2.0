@@ -1,14 +1,14 @@
+import { describe, expect, it } from '../test';
+
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-import { selectAll, select } from 'unist-util-select';
+import { select, selectAll } from 'unist-util-select';
 import { visit } from 'unist-util-visit';
 import { visitParents } from 'unist-util-visit-parents';
 
-import { describe, expect, it } from '../test';
-
-import type { Root, Heading, Text } from 'mdast';
-import type { Parent, Node, Data } from 'unist';
+import type { Heading, Root, Text } from 'mdast';
+import type { Parent } from 'unist';
 
 describe('Sample: markdown with "universal syntax tree" utilities (unist)', () => {
   describe('unist-util ', () => {
@@ -90,7 +90,8 @@ describe('Sample: markdown with "universal syntax tree" utilities (unist)', () =
      */
     describe('unist-util-select', () => {
       it('select a node', async () => {
-        const _matches: Node<Data>[] = [];
+        type T = ReturnType<typeof selectAll>;
+        const _matches: T = [];
 
         function samplePlugin() {
           return (tree: Root) => {
