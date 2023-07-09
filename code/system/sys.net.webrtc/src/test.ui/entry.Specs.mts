@@ -17,8 +17,6 @@ export const Specs = {
   'sys.net.webrtc._archive.01.ui.PeerCard': () => import('../ui/ui.PeerCard/-SPEC'),
   'sys.net.webrtc._archive.01.ui.PeerList.Item': () => import('../ui/ui.PeerList.Item/-SPEC'),
   'sys.net.webrtc._archive.01.ui.ide': () => import('../ui/ui.IDE/-SPEC'),
-
-  'sys.net.nostr': () => import('../sys.net.nostr/Nostr.Client.SPEC'),
 };
 
 export default Specs;
