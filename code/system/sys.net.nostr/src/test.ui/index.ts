@@ -4,3 +4,4 @@ export { Test, Tree } from 'sys.test.spec';
 export { Dev } from 'sys.ui.react.common';
 
 export * from './common';
+export * from '../ui/Icons.mjs';
