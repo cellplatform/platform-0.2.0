@@ -61,13 +61,13 @@ const Wrangle = {
   },
 
   margin(props: ConnectInputProps) {
-    const { innerCard = DEFAULTS.innerCard, showInfo = DEFAULTS.showInfo } = props;
+    const { showInfoAsCard = DEFAULTS.showInfoAsCard, showInfo = DEFAULTS.showInfo } = props;
     if (!showInfo) return 0;
-    return innerCard ? 25 : 15;
+    return showInfoAsCard ? 25 : 15;
   },
 
   border(props: ConnectInputProps) {
-    const { innerCard = DEFAULTS.innerCard, showInfo = DEFAULTS.showInfo } = props;
+    const { showInfo = DEFAULTS.showInfo } = props;
     if (!showInfo) return undefined;
     return `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
   },

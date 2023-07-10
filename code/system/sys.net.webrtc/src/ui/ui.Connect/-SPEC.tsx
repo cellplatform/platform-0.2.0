@@ -15,15 +15,15 @@ export default Dev.describe('Connect', async (e) => {
   type LocalStore = T['debug'] & {
     fields?: t.WebRtcInfoField[];
     edge?: t.VEdge;
-    innerCard?: boolean;
     showInfo?: boolean;
+    showInfoAsCard?: boolean;
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
     fields: Connect.DEFAULTS.fields.default,
     edge: Connect.DEFAULTS.edge,
-    innerCard: Connect.DEFAULTS.innerCard,
     showInfo: Connect.DEFAULTS.showInfo,
+    showInfoAsCard: Connect.DEFAULTS.showInfoAsCard,
     bg: false,
     useController: true,
     useSelf: true,
@@ -39,7 +39,7 @@ export default Dev.describe('Connect', async (e) => {
     state.change((d) => {
       d.props.fields = local.fields;
       d.props.edge = local.edge;
-      d.props.innerCard = local.innerCard;
+      d.props.showInfoAsCard = local.showInfoAsCard;
       d.props.showInfo = local.showInfo;
       d.debug.bg = local.bg;
       d.debug.useController = local.useController;
@@ -99,11 +99,13 @@ export default Dev.describe('Connect', async (e) => {
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.innerCard);
+        const value = (state: T) => Boolean(state.props.showInfoAsCard);
         btn
-          .label((e) => `innerCard`)
+          .label((e) => `showInfoAsCard`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.innerCard = Dev.toggle(d.props, 'innerCard'))));
+          .onClick((e) =>
+            e.change((d) => (local.showInfoAsCard = Dev.toggle(d.props, 'showInfoAsCard'))),
+          );
       });
 
       dev.boolean((btn) => {

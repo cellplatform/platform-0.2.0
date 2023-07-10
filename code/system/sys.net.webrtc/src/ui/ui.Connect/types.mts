@@ -3,8 +3,8 @@ import { type t } from './common';
 export type Common = {
   edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
-  innerCard?: boolean;
   showInfo?: boolean;
+  showInfoAsCard?: boolean;
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
 };

@@ -12,7 +12,7 @@ const DEFAULT_FIELDS: t.WebRtcInfoField[] = ['State.Shared', 'Group', 'Group.Pee
 
 export const DEFAULTS = {
   edge,
-  innerCard: false,
+  showInfoAsCard: false,
   showInfo: true,
   fields: {
     all: INFO_DEFAULTS.fields.all,
