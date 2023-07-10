@@ -40,7 +40,7 @@ export default Dev.describe('Network: State', (e) => {
     e.it('create lens', (e) => {
       const { doc } = setup();
       const state = WebRtcState.init<N>(doc);
-      const foo = state.props<T>('ns.foo', { count: 0 });
+      const foo = state.props.lens<T>('ns.foo', { count: 0 });
 
       expect(doc.current.network.props['ns.foo']).to.eql(undefined); // NB: not yet initialised.
       expect(doc.current.network.props['ns.bar']).to.eql(undefined);
@@ -49,7 +49,7 @@ export default Dev.describe('Network: State', (e) => {
       expect(doc.current.network.props['ns.foo']).to.eql({ count: 0 });
       expect(doc.current.network.props['ns.bar']).to.eql(undefined);
 
-      const bar = state.props('ns.bar', { count: 888 });
+      const bar = state.props.lens('ns.bar', { count: 888 });
       expect(bar.current).to.eql({ count: 888 });
       expect(doc.current.network.props['ns.foo']).to.eql({ count: 0 });
       expect(doc.current.network.props['ns.bar']).to.eql({ count: 888 });
@@ -60,8 +60,8 @@ export default Dev.describe('Network: State', (e) => {
     e.it('change', (e) => {
       const { doc } = setup();
       const state = WebRtcState.init<N>(doc);
-      const foo = state.props('ns.foo', initial);
-      const bar = state.props('ns.bar', initial);
+      const foo = state.props.lens('ns.foo', initial);
+      const bar = state.props.lens('ns.bar', initial);
 
       foo.change((d) => (d.count = 123));
       expect(doc.current.network.props['ns.foo']).to.eql({ count: 123 });
@@ -77,8 +77,8 @@ export default Dev.describe('Network: State', (e) => {
     e.it('dispose of lens', (e) => {
       const { doc } = setup();
       const state = WebRtcState.init<N>(doc);
-      const foo = state.props('ns.foo', initial);
-      const bar = state.props('ns.bar', initial);
+      const foo = state.props.lens('ns.foo', initial);
+      const bar = state.props.lens('ns.bar', initial);
 
       expect(foo.disposed).to.eql(false);
       expect(bar.disposed).to.eql(false);

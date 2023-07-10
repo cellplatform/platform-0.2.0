@@ -2,7 +2,7 @@
  * @external
  */
 import Yaml from 'yaml';
-export { CrdtInfo } from 'sys.data.crdt';
+export { CrdtViews } from 'sys.data.crdt';
 export { Test } from 'sys.test.spec';
 /**
  * @system

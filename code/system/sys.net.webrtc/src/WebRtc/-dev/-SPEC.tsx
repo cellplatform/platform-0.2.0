@@ -1,4 +1,4 @@
-import { Automerge, CrdtInfo } from 'sys.data.crdt';
+import { Automerge, CrdtViews } from 'sys.data.crdt';
 
 import { WebRtc } from '..';
 import {
@@ -388,7 +388,7 @@ export default Dev.describe('WebRtc', async (e) => {
     // CRDT (Info)
     dev.section('CRDT (State)', (dev) => {
       dev.row((e) => {
-        return <CrdtInfo style={{ Margin: [0, 20] }} />;
+        return <CrdtViews.Info style={{ Margin: [0, 20] }} />;
       });
     });
 

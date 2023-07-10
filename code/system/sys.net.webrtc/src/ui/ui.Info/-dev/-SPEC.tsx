@@ -46,7 +46,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   const controller = WebRtc.controller(self);
   const client = controller.client();
-  const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
+  const props = controller.state.props.lens<t.TDevSharedProps>('dev:ui', {
     count: 0,
     fields: local.fields ?? [],
     fullscreenVideo: local.fullscreenVideo,
