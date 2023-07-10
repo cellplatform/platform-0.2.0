@@ -1,11 +1,11 @@
 import { PeerInput } from '../ui.PeerInput';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
-export type ConnectInputProps = t.ConnectProps & {
+export type ConnectInputEdgeProps = t.ConnectProps & {
   targetEdge: t.VEdge;
 };
 
-export const ConnectInput: React.FC<ConnectInputProps> = (props) => {
+export const ConnectInputEdge: React.FC<ConnectInputEdgeProps> = (props) => {
   const { targetEdge, edge = DEFAULTS.edge } = props;
   const data = props.info?.connect;
   const self = data?.self;
@@ -60,13 +60,13 @@ const Wrangle = {
     return res;
   },
 
-  margin(props: ConnectInputProps) {
+  margin(props: ConnectInputEdgeProps) {
     const { showInfoAsCard = DEFAULTS.showInfoAsCard, showInfo = DEFAULTS.showInfo } = props;
     if (!showInfo) return 0;
-    return showInfoAsCard ? 25 : 15;
+    return showInfoAsCard ? 20 : 15;
   },
 
-  border(props: ConnectInputProps) {
+  border(props: ConnectInputEdgeProps) {
     const { showInfo = DEFAULTS.showInfo } = props;
     if (!showInfo) return undefined;
     return `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
