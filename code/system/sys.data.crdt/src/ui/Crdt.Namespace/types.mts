@@ -13,4 +13,5 @@ export type CrdtNamespaceProps = {
  * Properties for when inserting within the <Info>.
  */
 export type CrdtNamespaceInfoData = {
+  //
 };
