@@ -1,4 +1,4 @@
-import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
+import { Crdt, Dev, Icons, Pkg, TestNetwork, WebRtc, css, rx, type t } from './common';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { PeerInput } from '../../ui.PeerInput';
