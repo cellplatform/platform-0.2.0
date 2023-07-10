@@ -1,5 +1,5 @@
 import { CrdtLens } from '.';
-import { Automerge, Crdt, Test, expect, type t, toObject } from '../test.ui';
+import { Automerge, Crdt, Test, expect, rx, type t } from '../test.ui';
 import { DEFAULTS } from './common';
 
 export default Test.describe('Lens', (e) => {
@@ -347,7 +347,7 @@ export default Test.describe('Lens', (e) => {
     });
   });
 
-  e.describe('LensRegistry', (e) => {
+  e.describe('Lens Registry', (e) => {
     const Registry = Crdt.Lens.Registry;
 
     e.it('does not exist (get, total)', (e) => {
@@ -420,62 +420,62 @@ export default Test.describe('Lens', (e) => {
 
     const setup = () => {
       const initial: TRoot = {};
-      const root = Crdt.ref<TRoot>('foo', initial);
-      return { initial, root } as const;
+      const doc = Crdt.ref<TRoot>('foo', initial);
+      return { initial, doc } as const;
     };
 
     e.it('namespace.lens: from { document } root', (e) => {
-      const { root } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot>(root);
+      const { doc } = setup();
+      const namespace = Crdt.Lens.namespace<TRoot>(doc);
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
       const ns2 = namespace.lens('foo', { count: 0 });
       const ns3 = namespace.lens<TDoc>('bar', { count: 456 });
 
-      expect(root.current.ns).to.eql(undefined);
-      expect((root.current as any).foo).to.eql({ count: 123 }); // NB: initial count from first call.
-      expect((root.current as any).bar).to.eql({ count: 456 });
+      expect(doc.current.ns).to.eql(undefined);
+      expect((doc.current as any).foo).to.eql({ count: 123 }); // NB: initial count from first call.
+      expect((doc.current as any).bar).to.eql({ count: 456 });
 
       ns2.change((d) => (d.count = 888));
       ns3.change((d) => (d.count = 999));
 
       expect(ns1.current).to.eql({ count: 888 });
       expect(namespace.lens('foo', { count: 0 }).current).to.eql({ count: 888 });
-      expect((root.current as any).foo).to.eql({ count: 888 });
-      expect((root.current as any).bar).to.eql({ count: 999 });
+      expect((doc.current as any).foo).to.eql({ count: 888 });
+      expect((doc.current as any).bar).to.eql({ count: 999 });
 
-      root.dispose();
+      doc.dispose();
     });
 
-    e.it('namespace.lens: from sub-tree (get container ƒ)', (e) => {
-      const { root } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot>(root, (d) => d.ns || (d.ns = {}));
-      expect(root.current.ns).to.eql(undefined);
+    e.it('namespace.lens: from sub-tree (get container → ƒ)', (e) => {
+      const { doc } = setup();
+      const namespace = Crdt.Lens.namespace<TRoot>(doc, (d) => d.ns || (d.ns = {}));
+      expect(doc.current.ns).to.eql(undefined);
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
       const ns2 = namespace.lens<TError>('bar', {});
 
       type NS = t.CrdtNamespaceMap; // NB: generic string as namespace key.
-      expect((root.current.ns as NS).foo).to.eql({ count: 0 });
-      expect((root.current.ns as NS).bar).to.eql({});
+      expect((doc.current.ns as NS).foo).to.eql({ count: 0 });
+      expect((doc.current.ns as NS).bar).to.eql({});
 
       ns1.change((d) => (d.count = 123));
       ns2.change((d) => (d.message = 'hello'));
 
-      expect((root.current.ns as NS).foo).to.eql({ count: 123 });
-      expect((root.current.ns as NS).bar).to.eql({ message: 'hello' });
+      expect((doc.current.ns as NS).foo).to.eql({ count: 123 });
+      expect((doc.current.ns as NS).bar).to.eql({ message: 'hello' });
 
       expect(ns1.current).to.eql({ count: 123 });
       expect(ns2.current).to.eql({ message: 'hello' });
 
-      root.dispose();
+      doc.dispose();
     });
 
     e.it('strongly typed namespace "names" (string | union)', (e) => {
       type N = 'foo.bar' | 'foo.baz';
       type NS = t.CrdtNamespaceMap<N>;
-      const { root } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot, N>(root, (d) => d.ns || (d.ns = {}));
+      const { doc } = setup();
+      const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns || (d.ns = {}));
 
       const ns1 = namespace.lens<TDoc>('foo.bar', { count: 0 });
       const ns2 = namespace.lens<TError>('foo.baz', {});
@@ -483,10 +483,50 @@ export default Test.describe('Lens', (e) => {
       ns1.change((d) => (d.count = 123));
       ns2.change((d) => (d.message = 'hello'));
 
-      expect((root.current.ns as NS)['foo.bar']).to.eql({ count: 123 });
-      expect((root.current.ns as NS)['foo.baz']).to.eql({ message: 'hello' });
+      expect((doc.current.ns as NS)['foo.bar']).to.eql({ count: 123 });
+      expect((doc.current.ns as NS)['foo.baz']).to.eql({ message: 'hello' });
 
-      root.dispose();
+      doc.dispose();
+    });
+
+    e.describe('dispose', (e) => {
+      const getMap: t.CrdtNamespaceMapLens<TRoot> = (d) => d.ns || (d.ns = {});
+
+      e.it('{ dispose$ } ← as param', (e) => {
+        const { doc: root } = setup();
+        const { dispose, dispose$ } = rx.disposable();
+        const namespace = Crdt.Lens.namespace<TRoot>(root, getMap, { dispose$ });
+        const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
+        const ns2 = namespace.lens<TError>('bar', {});
+
+        expect(namespace.disposed).to.eql(false);
+        expect(ns2.disposed).to.eql(false);
+        expect(ns1.disposed).to.eql(false);
+
+        dispose();
+
+        expect(namespace.disposed).to.eql(true);
+        expect(ns2.disposed).to.eql(true);
+        expect(ns1.disposed).to.eql(true);
+      });
+
+      e.it('namespace.dispose() ← method ', (e) => {
+        const { doc: root } = setup();
+
+        const namespace = Crdt.Lens.namespace<TRoot>(root, getMap);
+        const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
+        const ns2 = namespace.lens<TError>('bar', {});
+
+        expect(namespace.disposed).to.eql(false);
+        expect(ns2.disposed).to.eql(false);
+        expect(ns1.disposed).to.eql(false);
+
+        namespace.dispose();
+
+        expect(namespace.disposed).to.eql(true);
+        expect(ns2.disposed).to.eql(true);
+        expect(ns1.disposed).to.eql(true);
+      });
     });
   });
 });
