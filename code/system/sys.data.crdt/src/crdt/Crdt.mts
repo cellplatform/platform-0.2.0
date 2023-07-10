@@ -9,9 +9,10 @@ import { CrdtFunc as Func } from '../crdt.Func';
  */
 export const Crdt = {
   Doc,
-  Lens,
   Repo,
+  Lens,
   Func,
+
   Is,
   Text,
 
@@ -21,6 +22,7 @@ export const Crdt = {
   lens: Lens.init,
   repo: Repo.init,
   func: Func.init,
+  namespace: Lens.namespace,
 
   fieldAs,
   toObject,

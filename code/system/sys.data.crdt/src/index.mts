@@ -13,7 +13,7 @@ export { Crdt } from './crdt';
 /**
  * UI
  */
-export { CrdtInfo } from './ui/Crdt.Info';
+export { CrdtView } from './ui';
 
 /**
  * Helpers

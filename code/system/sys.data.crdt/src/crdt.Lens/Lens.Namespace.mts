@@ -10,13 +10,15 @@ import { type t } from './common';
  */
 export function namespace<R extends {}, N extends string = string>(
   doc: t.CrdtDocRef<R>,
-  getContainer?: t.CrdtLensDescendent<R, t.CrdtLensNamespace>,
+  getContainer?: t.CrdtLensDescendent<R, t.CrdtNamespaceMap>,
 ) {
-  return <T extends {}>(address: N, initial: T) => {
-    return lens<R, T>(doc, (draft) => {
-      const container = (getContainer ? getContainer(draft) : draft) as t.CrdtLensNamespace;
-      const subject = container[address] || (container[address] = initial ?? {});
-      return subject as T;
-    });
-  };
+  return {
+    lens<L extends {}>(namespace: N, initial: L) {
+      return lens<R, L>(doc, (draft) => {
+        const container = (getContainer ? getContainer(draft) : draft) as t.CrdtNamespaceMap;
+        const subject = container[namespace] || (container[namespace] = initial ?? {});
+        return subject as L;
+      });
+    },
+  } as const;
 }

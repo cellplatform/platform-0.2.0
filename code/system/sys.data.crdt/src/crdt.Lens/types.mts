@@ -1,10 +1,10 @@
-import type { t } from '../common.t';
+import { type t } from '../common.t';
 
 /**
  * Map containing a namespaces of child objects
  * that are managed by a lenes.
  */
-export type CrdtLensNamespace<K extends string = string> = Record<K, {}>;
+export type CrdtNamespaceMap<K extends string = string> = Record<K, {}>;
 
 /**
  * Retrieves a child descentent from within a {document} object.
