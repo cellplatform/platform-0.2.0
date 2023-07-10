@@ -4,6 +4,7 @@ export type Common = {
   edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
   innerCard?: boolean;
+  showInfo?: boolean;
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
 };

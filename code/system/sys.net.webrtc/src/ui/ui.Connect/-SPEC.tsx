@@ -12,12 +12,18 @@ const initial: T = {
 };
 
 export default Dev.describe('Connect', async (e) => {
-  type LocalStore = T['debug'] & { edge?: t.VEdge; card?: boolean; fields?: t.WebRtcInfoField[] };
+  type LocalStore = T['debug'] & {
+    fields?: t.WebRtcInfoField[];
+    edge?: t.VEdge;
+    innerCard?: boolean;
+    showInfo?: boolean;
+  };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
-    edge: Connect.DEFAULTS.edge,
-    card: Connect.DEFAULTS.innerCard,
     fields: Connect.DEFAULTS.fields.default,
+    edge: Connect.DEFAULTS.edge,
+    innerCard: Connect.DEFAULTS.innerCard,
+    showInfo: Connect.DEFAULTS.showInfo,
     bg: false,
     useController: true,
     useSelf: true,
@@ -31,9 +37,10 @@ export default Dev.describe('Connect', async (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.innerCard = local.card;
-      d.props.edge = local.edge;
       d.props.fields = local.fields;
+      d.props.edge = local.edge;
+      d.props.innerCard = local.innerCard;
+      d.props.showInfo = local.showInfo;
       d.debug.bg = local.bg;
       d.debug.useController = local.useController;
       d.debug.useSelf = local.useSelf;
@@ -91,12 +98,21 @@ export default Dev.describe('Connect', async (e) => {
 
       dev.hr(-1, 5);
 
-      dev.boolean((btn) =>
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.innerCard);
         btn
-          .label((e) => `card: ${e.state.props.innerCard}`)
-          .value((e) => Boolean(e.state.props.innerCard))
-          .onClick((e) => e.change((d) => (local.card = Dev.toggle(d.props, 'innerCard')))),
-      );
+          .label((e) => `innerCard`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.innerCard = Dev.toggle(d.props, 'innerCard'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.showInfo);
+        btn
+          .label((e) => `showInfo`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.showInfo = Dev.toggle(d.props, 'showInfo'))));
+      });
     });
 
     dev.hr(5, 20);

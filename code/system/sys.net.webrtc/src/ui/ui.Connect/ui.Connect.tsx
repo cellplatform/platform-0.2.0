@@ -7,7 +7,7 @@ import { Loading } from './ui.Connect.Loading';
 export const Connect: React.FC<t.ConnectProps> = (props) => {
   if (props.loading) return <Loading />;
 
-  const { fields = DEFAULTS.fields.default } = props;
+  const { fields = DEFAULTS.fields.default, showInfo = DEFAULTS.showInfo } = props;
   const isCard = props.innerCard ?? DEFAULTS.innerCard;
 
   /**
@@ -27,7 +27,7 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
   const elTop = <ConnectInput {...props} targetEdge={'Top'} />;
   const elBottom = <ConnectInput {...props} targetEdge={'Bottom'} />;
 
-  const elInfo = (
+  const elInfo = showInfo && (
     <WebRtcInfo
       fields={fields}
       client={props.client}
