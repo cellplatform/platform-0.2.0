@@ -1,2 +1,2 @@
-export * from './crdt.types';
-export * from './ui/types.mjs';
+export type * from './crdt.types';
+export type * from './ui/types.mjs';
