@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, rx, FC, type t, DEFAULTS } from './common';
+import { Color, COLORS, css, rx, FC, type t, DEFAULTS, CrdtLens } from './common';
+
+const ns = CrdtLens.namespace;
 
 const View: React.FC<t.CrdtNamespaceProps> = (props) => {
   /**
@@ -23,9 +25,10 @@ const View: React.FC<t.CrdtNamespaceProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  ns: typeof CrdtLens.namespace;
 };
 export const CrdtNamespace = FC.decorate<t.CrdtNamespaceProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, ns },
   { displayName: 'CrdtNamespace' },
 );

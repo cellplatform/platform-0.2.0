@@ -3,6 +3,6 @@ export { expect, expectError } from 'sys.test';
 export { Test, Tree } from 'sys.test.spec';
 export { Dev } from 'sys.ui.react.common';
 
-export { Automerge, Crdt, toObject } from '../index.mjs';
+export { Automerge, Crdt, CrdtView, toObject } from '../index.mjs';
 export * from '../ui/common';
 export * from './ConnectionMock.mjs';

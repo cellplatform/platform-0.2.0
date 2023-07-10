@@ -13,6 +13,7 @@ export {
   Spinner,
   useMouseState,
   TestRunner,
+  TextInput,
   QRCode,
   Keyboard,
 } from 'sys.ui.react.common';
