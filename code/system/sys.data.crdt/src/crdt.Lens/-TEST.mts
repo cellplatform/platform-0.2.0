@@ -493,9 +493,9 @@ export default Test.describe('Lens', (e) => {
       const getMap: t.CrdtNamespaceMapLens<TRoot> = (d) => d.ns || (d.ns = {});
 
       e.it('{ dispose$ } ← as param', (e) => {
-        const { doc: root } = setup();
+        const { doc } = setup();
         const { dispose, dispose$ } = rx.disposable();
-        const namespace = Crdt.Lens.namespace<TRoot>(root, getMap, { dispose$ });
+        const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap, { dispose$ });
         const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
         const ns2 = namespace.lens<TError>('bar', {});
 
@@ -511,9 +511,9 @@ export default Test.describe('Lens', (e) => {
       });
 
       e.it('namespace.dispose() ← method ', (e) => {
-        const { doc: root } = setup();
+        const { doc } = setup();
 
-        const namespace = Crdt.Lens.namespace<TRoot>(root, getMap);
+        const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
         const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
         const ns2 = namespace.lens<TError>('bar', {});
 
@@ -523,6 +523,26 @@ export default Test.describe('Lens', (e) => {
 
         namespace.dispose();
 
+        expect(namespace.disposed).to.eql(true);
+        expect(ns2.disposed).to.eql(true);
+        expect(ns1.disposed).to.eql(true);
+      });
+
+      e.it('doc.dispose (root document)', (e) => {
+        const { doc } = setup();
+
+        const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
+        const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
+        const ns2 = namespace.lens<TError>('bar', {});
+
+        expect(doc.disposed).to.eql(false);
+        expect(namespace.disposed).to.eql(false);
+        expect(ns2.disposed).to.eql(false);
+        expect(ns1.disposed).to.eql(false);
+
+        doc.dispose();
+
+        expect(doc.disposed).to.eql(true);
         expect(namespace.disposed).to.eql(true);
         expect(ns2.disposed).to.eql(true);
         expect(ns1.disposed).to.eql(true);

@@ -1,5 +1,5 @@
 import { init as lens } from './Lens.impl.mjs';
-import { type t } from './common';
+import { rx, type t } from './common';
 
 /**
  * A lens namespace manager within the given document.
@@ -10,15 +10,37 @@ import { type t } from './common';
  */
 export function namespace<R extends {}, N extends string = string>(
   doc: t.CrdtDocRef<R>,
-  getContainer?: t.CrdtLensDescendent<R, t.CrdtNamespaceMap>,
+  getMap?: t.CrdtNamespaceMapLens<R>,
+  options?: { dispose$: t.Observable<any> },
 ) {
-  return {
+  const life = rx.lifecycle([doc.dispose$, options?.dispose$]);
+  const { dispose, dispose$ } = life;
+
+  /**
+   * API.
+   */
+  const api: t.CrdtNamespaceManager<R, N> = {
     lens<L extends {}>(namespace: N, initial: L) {
-      return lens<R, L>(doc, (draft) => {
-        const container = (getContainer ? getContainer(draft) : draft) as t.CrdtNamespaceMap;
-        const subject = container[namespace] || (container[namespace] = initial ?? {});
-        return subject as L;
-      });
+      return lens<R, L>(
+        doc,
+        (draft) => {
+          const container = (getMap ? getMap(draft) : draft) as t.CrdtNamespaceMap;
+          const subject = container[namespace] || (container[namespace] = initial ?? {});
+          return subject as L;
+        },
+        { dispose$ },
+      );
+    },
+
+    /**
+     * Lifecycle
+     */
+    dispose$,
+    dispose,
+    get disposed() {
+      return life.disposed;
     },
   } as const;
+
+  return api;
 }

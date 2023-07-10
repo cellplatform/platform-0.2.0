@@ -5,6 +5,11 @@ import { type t } from '../common.t';
  * that are managed by a lenes.
  */
 export type CrdtNamespaceMap<K extends string = string> = Record<K, {}>;
+export type CrdtNamespaceMapLens<R extends {}> = CrdtLensDescendent<R, CrdtNamespaceMap>;
+
+export type CrdtNamespaceManager<R extends {}, N extends string = string> = t.Lifecycle & {
+  lens<L extends {}>(namespace: N, initial: L): CrdtLens<R, L>;
+};
 
 /**
  * Retrieves a child descentent from within a {document} object.
