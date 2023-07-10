@@ -9,13 +9,13 @@ const store = new Map<Id, RegistryEntry>();
 /**
  * A registry of all current Lens instances.
  *
- * NOTES:
+ * NOTE:
  *    Keeping track of the instance count is required
  *    within the lens so that when changing, the lens
  *    knows how many times it needs to run it's initial
- *    "get" function to ensure the entire sub-tree that
- *    all lens's may constructing accurately completes.
- *
+ *    "get" function to ensure that within the entire
+ *    sub-tree that all lens's may constructing accurately
+ *    complete.
  */
 export const Registry = {
   total(root: Doc) {
