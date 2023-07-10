@@ -4,9 +4,8 @@ import {
   Crdt,
   Dev,
   Keyboard,
-  PropList,
-  css,
   TestFilesystem,
+  css,
   rx,
   type t,
 } from '../../test.ui';
@@ -70,21 +69,25 @@ export default Dev.describe('CrdtInfo', async (e) => {
   const Util = {
     props(state: T): CrdtInfoProps {
       const { debug, props } = state;
+
+      const data: t.CrdtInfoData = {
+        url: { href: location.href },
+        file: { doc: docFile, path: fsdirs.doc.path },
+        network: { doc: debug.syncDoc ? syncDocA : undefined },
+        history: {
+          data: docA.history,
+          item: {
+            title: 'Latest Change',
+            data: docA.history[docA.history.length - 1],
+          },
+        },
+        namespace: {},
+      };
+
       return {
         ...props,
         title: debug.title ? ['CRDT Document', null] : undefined,
-        data: {
-          url: { href: location.href },
-          file: { doc: docFile, path: fsdirs.doc.path },
-          network: { doc: debug.syncDoc ? syncDocA : undefined },
-          history: {
-            data: docA.history,
-            item: {
-              title: 'Latest Change',
-              data: docA.history[docA.history.length - 1],
-            },
-          },
-        },
+        data,
       };
     },
   };

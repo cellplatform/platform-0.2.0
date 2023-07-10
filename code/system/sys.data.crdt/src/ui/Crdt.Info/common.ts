@@ -18,6 +18,7 @@ export const FIELDS: t.CrdtInfoField[] = [
   'Network',
   'Url',
   'Url.QRCode',
+  'Namespace',
 ];
 
 const fields = ['Module', 'Module.Verify'] as t.CrdtInfoField[];
