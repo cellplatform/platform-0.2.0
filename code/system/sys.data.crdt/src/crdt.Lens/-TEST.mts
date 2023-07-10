@@ -450,21 +450,23 @@ export default Test.describe('Lens', (e) => {
       e.it('namespace.container: from sub-tree (get container → ƒ)', (e) => {
         const { doc } = setup();
         type N = 'foo' | 'bar';
-        const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+        const ns = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
 
-        expect(namespace.container).to.eql({});
+        expect(ns.container).to.eql({});
+        expect(ns.container).to.not.equal(ns.container);
+        expect(Automerge.isAutomerge(ns.container)).to.eql(false);
 
-        const foo = namespace.lens<TDoc>('foo', { count: 0 });
-        const bar = namespace.lens<TError>('bar', {});
-        expect(namespace.container.foo).to.eql({ count: 0 });
+        const foo = ns.lens<TDoc>('foo', { count: 0 });
+        const bar = ns.lens<TError>('bar', {});
+        expect(ns.container.foo).to.eql({ count: 0 });
 
         foo.change((d) => d.count++);
-        expect(namespace.container.foo).to.eql({ count: 1 });
-        expect(namespace.container.bar).to.eql({});
+        expect(ns.container.foo).to.eql({ count: 1 });
+        expect(ns.container.bar).to.eql({});
 
         bar.change((d) => (d.message = '👋'));
-        expect(namespace.container.foo).to.eql({ count: 1 });
-        expect(namespace.container.bar).to.eql({ message: '👋' });
+        expect(ns.container.foo).to.eql({ count: 1 });
+        expect(ns.container.bar).to.eql({ message: '👋' });
 
         doc.dispose();
       });
