@@ -7,7 +7,7 @@ import { CrdtNamespace } from './Crdt.Namespace';
 
 export { CrdtHistory, CrdtInfo, CrdtNamespace };
 
-export const CrdtView = {
+export const CrdtViews = {
   Info: CrdtInfo,
   Namespace: CrdtNamespace,
   History: CrdtHistory,

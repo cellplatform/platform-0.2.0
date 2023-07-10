@@ -1,4 +1,6 @@
 export * from '../common';
 export { CrdtLens } from '../../crdt.Lens';
 
-export const DEFAULT = {} as const;
+export const DEFAULTS = {
+  enabled: true,
+} as const;
