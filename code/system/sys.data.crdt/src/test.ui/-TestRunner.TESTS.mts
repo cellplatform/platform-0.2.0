@@ -12,6 +12,7 @@ export const TESTS = {
       'Data Model',
       import('../crdt.Schema/-dev/-TEST.mjs'),
       import('../crdt.Lens/-TEST.mjs'),
+      import('../crdt.Lens/-TEST.Namespace.mjs'),
       import('../crdt.Repo/-TEST.mjs'),
       import('../crdt.Func/-TEST.mjs'),
 
