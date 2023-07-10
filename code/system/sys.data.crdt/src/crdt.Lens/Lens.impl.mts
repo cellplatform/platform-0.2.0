@@ -81,10 +81,10 @@ export function init<R extends {}, L extends {}>(
           /**
            * HACK: The `get` function is called for the total
            *       number of current lens instances to ensure that
-           *       all sub-trees each lens getter may greate are
+           *       all sub-trees each lens getter may create are
            *       correctly initialized.
            */
-          const length = Registry.total(root);
+          const length = Registry.total(root) + 1;
           Array.from({ length }).forEach(() => get(draft));
         });
       }

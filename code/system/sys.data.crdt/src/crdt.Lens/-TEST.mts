@@ -424,69 +424,117 @@ export default Test.describe('Lens', (e) => {
       return { initial, doc } as const;
     };
 
-    e.it('namespace.lens: from { document } root', (e) => {
-      const { doc } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot>(doc);
+    e.describe('container', (e) => {
+      e.it('namespace.lens: { document } root', (e) => {
+        const { doc } = setup();
+        const namespace = Crdt.Lens.namespace<TRoot>(doc);
+        const res1 = namespace.container;
+        const res2 = namespace.container;
 
-      const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
-      const ns2 = namespace.lens('foo', { count: 0 });
-      const ns3 = namespace.lens<TDoc>('bar', { count: 456 });
+        expect(res1).to.eql({});
+        expect(res2).to.eql({});
+        expect(res1).to.not.equal(res2); // NB: different object instances.
 
-      expect(doc.current.ns).to.eql(undefined);
-      expect((doc.current as any).foo).to.eql({ count: 123 }); // NB: initial count from first call.
-      expect((doc.current as any).bar).to.eql({ count: 456 });
+        expect(Automerge.isAutomerge(res1)).to.eql(false);
 
-      ns2.change((d) => (d.count = 888));
-      ns3.change((d) => (d.count = 999));
+        const lens = namespace.lens<TDoc>('foo', { count: 0 });
+        lens.change((d) => d.count++);
 
-      expect(ns1.current).to.eql({ count: 888 });
-      expect(namespace.lens('foo', { count: 0 }).current).to.eql({ count: 888 });
-      expect((doc.current as any).foo).to.eql({ count: 888 });
-      expect((doc.current as any).bar).to.eql({ count: 999 });
+        const res3 = namespace.container;
+        expect(res1).to.eql({});
+        expect(res3).to.eql({ foo: { count: 1 } });
 
-      doc.dispose();
+        doc.dispose();
+      });
+
+      e.it('namespace.container: from sub-tree (get container → ƒ)', (e) => {
+        const { doc } = setup();
+        type N = 'foo' | 'bar';
+        const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+
+        expect(namespace.container).to.eql({});
+
+        const foo = namespace.lens<TDoc>('foo', { count: 0 });
+        const bar = namespace.lens<TError>('bar', {});
+        expect(namespace.container.foo).to.eql({ count: 0 });
+
+        foo.change((d) => d.count++);
+        expect(namespace.container.foo).to.eql({ count: 1 });
+        expect(namespace.container.bar).to.eql({});
+
+        bar.change((d) => (d.message = '👋'));
+        expect(namespace.container.foo).to.eql({ count: 1 });
+        expect(namespace.container.bar).to.eql({ message: '👋' });
+
+        doc.dispose();
+      });
     });
 
-    e.it('namespace.lens: from sub-tree (get container → ƒ)', (e) => {
-      const { doc } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot>(doc, (d) => d.ns || (d.ns = {}));
-      expect(doc.current.ns).to.eql(undefined);
+    e.describe('lens', (e) => {
+      e.it('namespace.lens: from { document } root', (e) => {
+        const { doc } = setup();
+        const namespace = Crdt.Lens.namespace<TRoot>(doc);
 
-      const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
-      const ns2 = namespace.lens<TError>('bar', {});
+        const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
+        const ns2 = namespace.lens('foo', { count: 0 });
+        const ns3 = namespace.lens<TDoc>('bar', { count: 456 });
 
-      type NS = t.CrdtNamespaceMap; // NB: generic string as namespace key.
-      expect((doc.current.ns as NS).foo).to.eql({ count: 0 });
-      expect((doc.current.ns as NS).bar).to.eql({});
+        expect(doc.current.ns).to.eql(undefined);
+        expect((doc.current as any).foo).to.eql({ count: 123 }); // NB: initial count from first call.
+        expect((doc.current as any).bar).to.eql({ count: 456 });
 
-      ns1.change((d) => (d.count = 123));
-      ns2.change((d) => (d.message = 'hello'));
+        ns2.change((d) => (d.count = 888));
+        ns3.change((d) => (d.count = 999));
 
-      expect((doc.current.ns as NS).foo).to.eql({ count: 123 });
-      expect((doc.current.ns as NS).bar).to.eql({ message: 'hello' });
+        expect(ns1.current).to.eql({ count: 888 });
+        expect(namespace.lens('foo', { count: 0 }).current).to.eql({ count: 888 });
+        expect((doc.current as any).foo).to.eql({ count: 888 });
+        expect((doc.current as any).bar).to.eql({ count: 999 });
 
-      expect(ns1.current).to.eql({ count: 123 });
-      expect(ns2.current).to.eql({ message: 'hello' });
+        doc.dispose();
+      });
 
-      doc.dispose();
-    });
+      e.it('namespace.lens: from sub-tree (get container → ƒ)', (e) => {
+        const { doc } = setup();
+        const namespace = Crdt.Lens.namespace<TRoot>(doc, (d) => d.ns || (d.ns = {}));
+        expect(doc.current.ns).to.eql(undefined);
 
-    e.it('strongly typed namespace "names" (string | union)', (e) => {
-      type N = 'foo.bar' | 'foo.baz';
-      type NS = t.CrdtNamespaceMap<N>;
-      const { doc } = setup();
-      const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns || (d.ns = {}));
+        const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
+        const ns2 = namespace.lens<TError>('bar', {});
 
-      const ns1 = namespace.lens<TDoc>('foo.bar', { count: 0 });
-      const ns2 = namespace.lens<TError>('foo.baz', {});
+        type NS = t.CrdtNamespaceMap; // NB: generic string as namespace key.
+        expect((doc.current.ns as NS).foo).to.eql({ count: 0 });
+        expect((doc.current.ns as NS).bar).to.eql({});
 
-      ns1.change((d) => (d.count = 123));
-      ns2.change((d) => (d.message = 'hello'));
+        ns1.change((d) => (d.count = 123));
+        ns2.change((d) => (d.message = 'hello'));
 
-      expect((doc.current.ns as NS)['foo.bar']).to.eql({ count: 123 });
-      expect((doc.current.ns as NS)['foo.baz']).to.eql({ message: 'hello' });
+        expect((doc.current.ns as NS).foo).to.eql({ count: 123 });
+        expect((doc.current.ns as NS).bar).to.eql({ message: 'hello' });
 
-      doc.dispose();
+        expect(ns1.current).to.eql({ count: 123 });
+        expect(ns2.current).to.eql({ message: 'hello' });
+
+        doc.dispose();
+      });
+
+      e.it('strongly typed namespace "names" (string | union)', (e) => {
+        type N = 'foo.bar' | 'foo.baz';
+        type NS = t.CrdtNamespaceMap<N>;
+        const { doc } = setup();
+        const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns || (d.ns = {}));
+
+        const ns1 = namespace.lens<TDoc>('foo.bar', { count: 0 });
+        const ns2 = namespace.lens<TError>('foo.baz', {});
+
+        ns1.change((d) => (d.count = 123));
+        ns2.change((d) => (d.message = 'hello'));
+
+        expect((doc.current.ns as NS)['foo.bar']).to.eql({ count: 123 });
+        expect((doc.current.ns as NS)['foo.baz']).to.eql({ message: 'hello' });
+
+        doc.dispose();
+      });
     });
 
     e.describe('dispose', (e) => {
@@ -547,6 +595,13 @@ export default Test.describe('Lens', (e) => {
         expect(ns2.disposed).to.eql(true);
         expect(ns1.disposed).to.eql(true);
       });
+    });
+
+    e.describe('Namespace on a lens (as root)', (e) => {
+      /**
+       * TODO 🐷
+       */
+      e.it.skip('TMP', async (e) => {});
     });
   });
 });

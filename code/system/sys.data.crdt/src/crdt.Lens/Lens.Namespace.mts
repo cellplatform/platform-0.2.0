@@ -1,5 +1,5 @@
 import { init as lens } from './Lens.impl.mjs';
-import { rx, type t } from './common';
+import { rx, toObject, type t } from './common';
 
 /**
  * A lens namespace manager within the given document.
@@ -20,11 +20,15 @@ export function namespace<R extends {}, N extends string = string>(
    * API.
    */
   const api: t.CrdtNamespaceManager<R, N> = {
+    get container() {
+      return toObject(Wrangle.container<R, N>(doc.current, getMap));
+    },
+
     lens<L extends {}>(namespace: N, initial: L) {
       return lens<R, L>(
         doc,
         (draft) => {
-          const container = (getMap ? getMap(draft) : draft) as t.CrdtNamespaceMap;
+          const container = Wrangle.container<R, N>(draft, getMap);
           const subject = container[namespace] || (container[namespace] = initial ?? {});
           return subject as L;
         },
@@ -44,3 +48,12 @@ export function namespace<R extends {}, N extends string = string>(
 
   return api;
 }
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNamespaceMapLens<R>) {
+    return (getMap ? getMap(root) : root) as t.CrdtNamespaceMap<N>;
+  },
+};
