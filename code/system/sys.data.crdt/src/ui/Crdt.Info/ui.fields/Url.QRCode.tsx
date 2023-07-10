@@ -1,18 +1,5 @@
-import { t } from '../common';
+import { type t } from '../common';
 import { QRCode } from '../ui/QRCode';
-
-/**
- * Field: URL link
- */
-export function FieldUrl(data: t.CrdtInfoData, info?: {}) {
-  const value = data.url?.href;
-  if (!value) return;
-
-  const label = data.url?.title ?? 'URL';
-  const item: t.PropListItem = { label, value };
-
-  return item;
-}
 
 /**
  * Field: QRCode

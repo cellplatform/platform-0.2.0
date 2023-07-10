@@ -84,11 +84,11 @@ export function FieldFile(
         let strategy = '';
         let strategyCount = 0;
         if (docFile.autosaving || stdFiles.length > 0) {
-          strategy += `compressed-file`;
+          strategy += `file.compressed`;
           strategyCount++;
         }
         if (docFile.logging || logFiles.length > 0) {
-          strategy += `${strategy ? ', ' : ''}append-log`;
+          strategy += `${strategy ? ', ' : ''}append→log`;
           strategyCount++;
         }
         if (strategy.trim()) {
