@@ -23,6 +23,7 @@ export type {
   CrdtDocSync,
   CrdtInfoField,
   CrdtLens,
+  CrdtNamespaceManager,
 } from 'sys.data.crdt/src/types.mjs';
 export type { Fs } from 'sys.fs/src/types.mjs';
 
