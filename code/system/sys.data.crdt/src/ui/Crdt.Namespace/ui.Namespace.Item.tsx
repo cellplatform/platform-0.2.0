@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, rx, FC, type t, TextInput } from './common';
 
-export type NamespaceNameProps = t.CrdtNamespaceProps & {
-  name: string;
+export type NamespaceItemProps = t.CrdtNamespaceProps & {
+  name?: string;
 };
 
-export const NamespaceName: React.FC<NamespaceNameProps> = (props) => {
+export const NamespaceItem: React.FC<NamespaceItemProps> = (props) => {
   /**
    * [Render]
    */

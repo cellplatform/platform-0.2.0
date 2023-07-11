@@ -1,4 +1,4 @@
-import { Crdt, CrdtViews, Dev, rx, type t } from '../../test.ui';
+import { Crdt, CrdtViews, Dev, rx, type t } from '../../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -37,7 +37,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
 
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size([280, null])
       .display('grid')
       .render<T>((e) => {
         return <CrdtViews.Namespace {...e.state.props} />;

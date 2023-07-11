@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, rx, FC, type t, DEFAULTS, CrdtLens } from './common';
-import { NamespaceName } from './ui.Namespace.Name';
+import { NamespaceItem } from './ui.Namespace.Item';
 
 const ns = CrdtLens.namespace;
 
@@ -19,7 +19,7 @@ const View: React.FC<t.CrdtNamespaceProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <NamespaceName {...props} enabled={enabled} name={'foo'} style={styles.item} />
+      <NamespaceItem {...props} enabled={enabled} name={'foo'} style={styles.item} />
     </div>
   );
 };
