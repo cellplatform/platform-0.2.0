@@ -14,7 +14,10 @@ export type CrdtNsItemProps = {
   data?: t.CrdtNsInfoData;
   enabled?: boolean;
   selected?: boolean;
+
   style?: t.CssValue;
+  indent?: number;
+  padding?: t.CssEdgesInput;
 };
 
 /**

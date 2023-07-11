@@ -13,11 +13,13 @@ const initial: T = {
 };
 
 export default Dev.describe('CrdtNamespace.Item', (e) => {
-  type LocalStore = Pick<t.CrdtNsItemProps, 'enabled' | 'selected'>;
+  type LocalStore = Pick<t.CrdtNsItemProps, 'enabled' | 'selected' | 'indent' | 'padding'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
-    selected: DEFAULTS.selected,
+    selected: DEFAULTS.item.selected,
+    indent: DEFAULTS.item.indent,
+    padding: DEFAULTS.item.padding,
   });
 
   /**
@@ -52,6 +54,8 @@ export default Dev.describe('CrdtNamespace.Item', (e) => {
     state.change((d) => {
       d.props.enabled = local.enabled;
       d.props.selected = local.selected;
+      d.props.indent = local.indent;
+      d.props.padding = local.padding;
     });
 
     ctx.subject
@@ -82,6 +86,38 @@ export default Dev.describe('CrdtNamespace.Item', (e) => {
           .label((e) => `selected`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected'))));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const defaultValue = DEFAULTS.item.indent;
+        const value = (state: T) => state.props.indent ?? defaultValue;
+        btn
+          .label((e) => `indent = ${value(e.state)}`)
+          .value((e) => value(e.state) !== defaultValue)
+          .onClick((e) => {
+            e.change((d) => {
+              const current = d.props.indent ?? defaultValue;
+              const next = current === defaultValue ? 15 : defaultValue;
+              local.indent = d.props.indent = next;
+            });
+          });
+      });
+
+      dev.boolean((btn) => {
+        const defaultValue = DEFAULTS.item.padding;
+        const value = (state: T) => state.props.padding ?? defaultValue;
+        btn
+          .label((e) => `padding = ${value(e.state)}`)
+          .value((e) => value(e.state) === defaultValue)
+          .onClick((e) => {
+            e.change((d) => {
+              const current = d.props.padding ?? defaultValue;
+              const next = current === defaultValue ? 0 : defaultValue;
+              local.padding = d.props.padding = next;
+            });
+          });
       });
     });
   });

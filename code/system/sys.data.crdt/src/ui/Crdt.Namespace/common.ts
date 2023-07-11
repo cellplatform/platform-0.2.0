@@ -8,7 +8,11 @@ const data: t.CrdtNsInfoData = {
 };
 
 export const DEFAULTS = {
-  enabled: true,
-  selected: false,
   data,
+  enabled: true,
+  item: {
+    selected: false,
+    indent: 0,
+    padding: 3,
+  },
 } as const;
