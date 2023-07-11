@@ -70,6 +70,7 @@ export const TextInputBase: React.FC<Props> = (props) => {
     base: {
       position: 'relative',
       boxSizing: 'border-box',
+      pointerEvents: isEnabled ? 'auto' : 'none',
       width,
     } as const,
     inner: { position: 'relative' } as const,
@@ -94,11 +95,11 @@ export const TextInputBase: React.FC<Props> = (props) => {
     } as const,
     readonly: {
       userSelect: 'auto',
-      pointerEvents: 'auto',
+      pointerEvents: isEnabled ? 'auto' : 'none',
     } as const,
     input: {
       visibility: isReadOnly ? 'hidden' : 'visible',
-      pointerEvents: isReadOnly ? 'none' : 'auto',
+      pointerEvents: isReadOnly || !isEnabled ? 'none' : 'auto',
     } as const,
   };
 
