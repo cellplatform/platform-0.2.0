@@ -1,4 +1,4 @@
-import { GoGitCommit, GoRepo } from 'react-icons/go';
+import { GoGitCommit } from 'react-icons/go';
 import {
   MdDoneAll,
   MdInfoOutline,
@@ -8,7 +8,7 @@ import {
   MdToggleOn,
   MdWarning,
 } from 'react-icons/md';
-import { VscDebugDisconnect } from 'react-icons/vsc';
+import { VscDebugDisconnect, VscRepo } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -18,7 +18,7 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Info: icon(MdInfoOutline),
-  Repo: icon(GoRepo),
+  Repo: icon(VscRepo),
   Commit: icon(GoGitCommit),
   Network: {
     Antenna: icon(MdSettingsInputAntenna),

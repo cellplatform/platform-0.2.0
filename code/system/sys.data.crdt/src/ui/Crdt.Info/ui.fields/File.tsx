@@ -29,7 +29,7 @@ export function FieldFile(
 
     res.push({
       label: file?.title ?? 'Local Persistence',
-      value: hasFiles ? <Icons.Repo size={15} color={COLORS.DARK} /> : MSG.NOT_SAVED,
+      value: hasFiles ? <Icons.Repo size={17} color={COLORS.DARK} /> : MSG.NOT_SAVED,
     });
 
     if (manifest) {
