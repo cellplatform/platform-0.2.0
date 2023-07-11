@@ -35,5 +35,5 @@ type Fields = {
 export const CrdtNamespace = FC.decorate<t.CrdtNsProps, Fields>(
   View,
   { DEFAULTS, ns, Item: CrdtNamespaceItem },
-  { displayName: 'CrdtNamespace' },
+  { displayName: 'Crdt.Namespace' },
 );

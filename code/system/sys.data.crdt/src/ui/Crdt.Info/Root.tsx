@@ -84,5 +84,5 @@ type Fields = {
 export const CrdtInfo = FC.decorate<CrdtInfoProps, Fields>(
   View,
   { DEFAULTS, FIELDS, Wrangle: PropList.Wrangle },
-  { displayName: 'CrdtInfo' },
+  { displayName: 'Crdt.Info' },
 );

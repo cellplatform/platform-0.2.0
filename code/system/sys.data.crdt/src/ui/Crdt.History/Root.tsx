@@ -30,5 +30,5 @@ type Fields = {
 export const CrdtHistory = FC.decorate<CrdtHistoryProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'CrdtHistory' },
+  { displayName: 'Crdt.History' },
 );
