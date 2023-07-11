@@ -19,6 +19,6 @@ export type CrdtInfoData = {
   file?: { doc?: t.CrdtDocFile<any>; title?: string; path?: string };
   network?: { doc?: t.CrdtDocSync<any> };
   url?: { href: string; title?: string };
-  namespace?: t.CrdtNamespaceInfoData;
+  namespace?: t.CrdtNsInfoData;
   history?: t.CrdtHistoryInfoData;
 };
