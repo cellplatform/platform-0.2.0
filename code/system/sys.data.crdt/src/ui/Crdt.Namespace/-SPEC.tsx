@@ -1,4 +1,4 @@
-import { Crdt, CrdtViews, Dev, type t } from '../../test.ui';
+import { Crdt, CrdtViews, Dev, rx, type t } from '../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -29,6 +29,8 @@ export default Dev.describe('CrdtNamespace', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
+    ns.$.pipe(rx.mergeWith(ns.dispose$)).subscribe((e) => ctx.redraw());
+
     state.change((d) => {
       d.props.enabled = local.enabled;
     });
@@ -58,10 +60,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('dispose', () => {
-        ns.dispose();
-        dev.redraw();
-      });
+      dev.button('dispose', () => ns.dispose());
 
       dev.hr(-1, 5);
 
