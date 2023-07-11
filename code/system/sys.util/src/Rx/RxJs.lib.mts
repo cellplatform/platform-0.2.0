@@ -25,6 +25,7 @@ export {
   take,
   timeout,
   catchError,
+  tap,
 } from 'rxjs/operators';
 
 /**
