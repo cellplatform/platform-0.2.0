@@ -30,9 +30,10 @@ const View: React.FC<t.CrdtNamespaceProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   ns: typeof CrdtLens.namespace;
+  Item: typeof NamespaceItem;
 };
 export const CrdtNamespace = FC.decorate<t.CrdtNamespaceProps, Fields>(
   View,
-  { DEFAULTS, ns },
+  { DEFAULTS, ns, Item: NamespaceItem },
   { displayName: 'CrdtNamespace' },
 );
