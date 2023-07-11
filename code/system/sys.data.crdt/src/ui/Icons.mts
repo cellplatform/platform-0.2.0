@@ -7,8 +7,9 @@ import {
   MdSettingsInputAntenna,
   MdToggleOn,
   MdWarning,
+  MdDataObject,
 } from 'react-icons/md';
-import { VscDebugDisconnect, VscRepo } from 'react-icons/vsc';
+import { VscDebugDisconnect, VscRepo, VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -31,4 +32,6 @@ export const Icons = {
     Failed: icon(MdWarning),
     Skipped: icon(MdToggleOn),
   },
+  ObjectTree: icon(VscSymbolClass),
+  Json: icon(MdDataObject),
 };

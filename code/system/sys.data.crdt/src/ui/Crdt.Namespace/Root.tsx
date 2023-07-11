@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, rx, FC, type t, DEFAULTS, CrdtLens } from './common';
-import { NamespaceItem } from './ui.Namespace.Item';
+import { CrdtNsItem } from './ui.Ns.Item';
 
 const ns = CrdtLens.namespace;
 
-const View: React.FC<t.CrdtNamespaceProps> = (props) => {
-  const { enabled = DEFAULTS.enabled } = props;
+const View: React.FC<t.CrdtNsProps> = (props) => {
+  const { data = DEFAULTS.data, enabled = DEFAULTS.enabled } = props;
+  if (!data) return '⚠️ Not set: { data }';
+  if (data.ns?.disposed) return '⚠️ Disposed: { data: { ns } }';
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    base: css({ position: 'relative' }),
     item: css({}),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <NamespaceItem {...props} enabled={enabled} name={'foo'} style={styles.item} />
+      <CrdtNsItem {...props} enabled={enabled} namespace={'foo'} style={styles.item} />
     </div>
   );
 };
@@ -29,11 +29,11 @@ const View: React.FC<t.CrdtNamespaceProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Item: typeof CrdtNsItem;
   ns: typeof CrdtLens.namespace;
-  Item: typeof NamespaceItem;
 };
-export const CrdtNamespace = FC.decorate<t.CrdtNamespaceProps, Fields>(
+export const CrdtNamespace = FC.decorate<t.CrdtNsProps, Fields>(
   View,
-  { DEFAULTS, ns, Item: NamespaceItem },
+  { DEFAULTS, ns, Item: CrdtNsItem },
   { displayName: 'CrdtNamespace' },
 );
