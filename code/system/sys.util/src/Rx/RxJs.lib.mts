@@ -6,7 +6,6 @@ export {
   Observable,
   Subject,
   animationFrameScheduler,
-  // ref:  https://rxjs.dev/deprecations/to-promise
   firstValueFrom,
   interval,
   lastValueFrom,
