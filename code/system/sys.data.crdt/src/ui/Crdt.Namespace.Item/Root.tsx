@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { DEFAULTS, Color, COLORS, css, rx, FC, type t, TextInput, Icons, Style } from './common';
 
-export const CrdtNamespaceItem: React.FC<t.CrdtNamespaceItemProps> = (props) => {
+const View: React.FC<t.CrdtNamespaceItemProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     selected = DEFAULTS.selected,
@@ -81,3 +81,15 @@ export const CrdtNamespaceItem: React.FC<t.CrdtNamespaceItemProps> = (props) => 
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const CrdtNamespaceItem = FC.decorate<t.CrdtNamespaceItemProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'Crdt.Namespace.Item' },
+);

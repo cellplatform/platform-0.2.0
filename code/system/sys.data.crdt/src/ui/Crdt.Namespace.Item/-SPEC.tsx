@@ -1,6 +1,7 @@
-import { Crdt, Dev, type t } from '../../test.ui';
 import { CrdtNamespaceItem } from '.';
-import { DEFAULTS } from './common';
+import { Dev, type t } from '../../test.ui';
+
+const DEFAULTS = CrdtNamespaceItem.DEFAULTS;
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
