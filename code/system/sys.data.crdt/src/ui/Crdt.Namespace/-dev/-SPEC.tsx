@@ -27,7 +27,6 @@ export default Dev.describe('CrdtNamespace', (e) => {
   /**
    * CRDT
    */
-
   const createNamespace = (ctx: t.DevCtx) => {
     const ns = Crdt.namespace(doc, (d) => d.ns || (d.ns = {}));
     ns.$.pipe(rx.mergeWith(ns.dispose$)).subscribe((e) => ctx.redraw());
@@ -37,23 +36,25 @@ export default Dev.describe('CrdtNamespace', (e) => {
   const doc = Crdt.ref<TRoot>('test-doc', {});
   let ns: t.CrdtNsManager<TRoot>;
 
-  const toDataProp = (state: T, force?: boolean) => {
-    if (!force && !state.debug.withData) return undefined;
-    const data: t.CrdtNsInfoData = {
-      ns,
-      onChange(e) {
-        console.info('⚡️ onChange', e);
-      },
-    };
-    return data;
-  };
+  const State = {
+    toDataProp(state: T, force?: boolean) {
+      if (!force && !state.debug.withData) return undefined;
+      const data: t.CrdtNsInfoData = {
+        ns,
+        onChange(e) {
+          console.info('⚡️ onChange', e);
+        },
+      };
+      return data;
+    },
 
-  const toDisplayProps = (state: T) => {
-    const props: t.CrdtNsProps = {
-      ...state.props,
-      data: toDataProp(state),
-    };
-    return props;
+    toDisplayProps(state: T, force?: boolean) {
+      const props: t.CrdtNsProps = {
+        ...state.props,
+        data: State.toDataProp(state, force),
+      };
+      return props;
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -71,7 +72,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
-        const props = toDisplayProps(e.state);
+        const props = State.toDisplayProps(e.state);
         return <CrdtViews.Namespace {...props} />;
       });
   });

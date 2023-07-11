@@ -19,21 +19,23 @@ export default Dev.describe('Namespace.Item', (e) => {
   const doc = Crdt.ref<TRoot>('test-doc', {});
   const ns = Crdt.namespace(doc, (d) => d.ns || (d.ns = {}));
 
-  const toDataProp = (state: t.DevCtxState<T>): t.CrdtNsInfoData => {
-    return {
-      ns,
-      onChange(e) {
-        console.info('⚡️ onChange', e);
-        state.change((d) => (d.props.namespace = e.namespace));
-      },
-    };
-  };
+  const State = {
+    toDataProp(state: t.DevCtxState<T>): t.CrdtNsInfoData {
+      return {
+        ns,
+        onChange(e) {
+          console.info('⚡️ onChange', e);
+          state.change((d) => (d.props.namespace = e.namespace));
+        },
+      };
+    },
 
-  const toDisplayProps = (state: t.DevCtxState<T>): t.CrdtNsItemProps => {
-    return {
-      ...state.current.props,
-      data: toDataProp(state),
-    };
+    toDisplayProps(state: t.DevCtxState<T>): t.CrdtNsItemProps {
+      return {
+        ...state.current.props,
+        data: State.toDataProp(state),
+      };
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -49,7 +51,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
-        const props = toDisplayProps(state);
+        const props = State.toDisplayProps(state);
         return <CrdtNsItem {...props} />;
       });
   });
@@ -73,7 +75,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const props = toDisplayProps(state);
+      const props = State.toDisplayProps(state);
       const data = { props };
       return <Dev.Object name={'<Namespace.Item>'} data={data} expand={1} />;
     });
