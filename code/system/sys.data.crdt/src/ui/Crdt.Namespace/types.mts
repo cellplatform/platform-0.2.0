@@ -10,9 +10,10 @@ export type CrdtNsProps = {
 };
 
 export type CrdtNsItemProps = {
-  enabled?: boolean;
   namespace?: string;
   data?: t.CrdtNsInfoData;
+  enabled?: boolean;
+  selected?: boolean;
   style?: t.CssValue;
 };
 

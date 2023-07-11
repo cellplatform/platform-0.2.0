@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DEFAULTS, Color, COLORS, css, rx, FC, type t, TextInput, Icons } from './common';
 
 export const CrdtNsItem: React.FC<t.CrdtNsItemProps> = (props) => {
-  const { data, enabled = DEFAULTS.enabled } = props;
+  const { data, enabled = DEFAULTS.enabled, selected = DEFAULTS.selected } = props;
   if (!data) return '⚠️ Not set: { data }';
   if (data.ns?.disposed) return '⚠️ Disposed: { data: { ns } }';
 
@@ -14,6 +14,7 @@ export const CrdtNsItem: React.FC<t.CrdtNsItemProps> = (props) => {
    */
   const styles = {
     base: css({
+      backgroundColor: selected ? COLORS.BLUE : undefined,
       pointerEvents: enabled ? 'auto' : 'none',
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',

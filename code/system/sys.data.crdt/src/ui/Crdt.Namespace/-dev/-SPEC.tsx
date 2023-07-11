@@ -19,7 +19,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
    * Local storage.
    */
   type LocalStore = Pick<t.CrdtNsProps, 'enabled'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.ui.Namespace');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
   });

@@ -9,5 +9,6 @@ const data: t.CrdtNsInfoData = {
 
 export const DEFAULTS = {
   enabled: true,
+  selected: false,
   data,
 } as const;

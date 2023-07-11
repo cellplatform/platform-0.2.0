@@ -12,7 +12,14 @@ const initial: T = {
   props: {},
 };
 
-export default Dev.describe('Namespace.Item', (e) => {
+export default Dev.describe('CrdtNamespace.Item', (e) => {
+  type LocalStore = Pick<t.CrdtNsItemProps, 'enabled' | 'selected'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
+  const local = localstore.object({
+    enabled: DEFAULTS.enabled,
+    selected: DEFAULTS.selected,
+  });
+
   /**
    * CRDT
    */
@@ -43,7 +50,8 @@ export default Dev.describe('Namespace.Item', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.enabled = DEFAULTS.enabled;
+      d.props.enabled = local.enabled;
+      d.props.selected = local.selected;
     });
 
     ctx.subject
@@ -65,7 +73,15 @@ export default Dev.describe('Namespace.Item', (e) => {
         btn
           .label((e) => `enabled`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled')));
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.selected);
+        btn
+          .label((e) => `selected`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected'))));
       });
     });
   });
