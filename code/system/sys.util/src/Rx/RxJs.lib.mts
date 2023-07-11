@@ -2,30 +2,30 @@
  * Common RXJS
  */
 export {
+  BehaviorSubject,
   Observable,
   Subject,
-  BehaviorSubject,
-  of,
-
+  animationFrameScheduler,
   // ref:  https://rxjs.dev/deprecations/to-promise
   firstValueFrom,
-  lastValueFrom,
   interval,
+  lastValueFrom,
   observeOn,
-  animationFrameScheduler,
+  of,
 } from 'rxjs';
 
 export {
+  catchError,
   debounceTime,
-  throttleTime,
   delay,
   distinctUntilChanged,
   filter,
   map,
+  mergeWith,
   take,
-  timeout,
-  catchError,
   tap,
+  throttleTime,
+  timeout,
 } from 'rxjs/operators';
 
 /**
