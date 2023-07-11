@@ -1,16 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { DEFAULTS, Color, COLORS, css, rx, FC, type t, TextInput, Icons, Style } from './common';
 
-export const CrdtNsItem: React.FC<t.CrdtNsItemProps> = (props) => {
+export const CrdtNamespaceItem: React.FC<t.CrdtNamespaceItemProps> = (props) => {
   const {
-    data,
     enabled = DEFAULTS.enabled,
-    selected = DEFAULTS.item.selected,
-    indent = DEFAULTS.item.indent,
-    padding = DEFAULTS.item.padding,
+    selected = DEFAULTS.selected,
+    indent = DEFAULTS.indent,
+    padding = DEFAULTS.padding,
+    maxLength = DEFAULTS.maxLength,
   } = props;
-  if (!data) return '⚠️ Not set: { data }';
-  if (data.ns?.disposed) return '⚠️ Disposed: { data: { ns } }';
 
   const value = props.namespace;
   const hasValue = Boolean(value);
@@ -66,10 +64,10 @@ export const CrdtNsItem: React.FC<t.CrdtNsItemProps> = (props) => {
             color: foreColor,
             disabledColor: foreColor,
           }}
-          maxLength={data.maxLength ?? DEFAULTS.data.maxLength}
+          maxLength={maxLength}
           spellCheck={false}
           isEnabled={enabled}
-          onChanged={(e) => data.onChange?.({ data, namespace: e.to })}
+          onChanged={(e) => props.onChange?.({ namespace: e.to })}
         />
         <div {...styles.right}>
           <div {...styles.centerChild}>

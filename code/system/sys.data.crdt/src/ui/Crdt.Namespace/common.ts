@@ -2,17 +2,17 @@ import { type t } from '../common';
 
 export * from '../common';
 export { CrdtLens } from '../../crdt.Lens';
+import { DEFAULTS as item } from '../Crdt.Namespace.Item/common';
 
+/**
+ * Constants.
+ */
 const data: t.CrdtNsInfoData = {
-  maxLength: 120,
+  maxLength: item.maxLength,
 };
 
 export const DEFAULTS = {
-  data,
   enabled: true,
-  item: {
-    selected: false,
-    indent: 0,
-    padding: 3,
-  },
+  data,
+  item,
 } as const;

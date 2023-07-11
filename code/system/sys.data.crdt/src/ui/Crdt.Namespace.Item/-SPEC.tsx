@@ -1,48 +1,35 @@
-import { Crdt, Dev, type t } from '../../../test.ui';
-import { CrdtNsItem } from '../ui.Ns.Item';
-import { DEFAULTS } from '../common';
+import { Crdt, Dev, type t } from '../../test.ui';
+import { CrdtNamespaceItem } from '.';
+import { DEFAULTS } from './common';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
 
 type T = {
-  props: t.CrdtNsItemProps;
+  props: t.CrdtNamespaceItemProps;
 };
 const initial: T = {
   props: {},
 };
 
-export default Dev.describe('CrdtNamespace.Item', (e) => {
-  type LocalStore = Pick<t.CrdtNsItemProps, 'enabled' | 'selected' | 'indent' | 'padding'>;
+export default Dev.describe('Namespace.Item', (e) => {
+  type LocalStore = Pick<t.CrdtNamespaceItemProps, 'enabled' | 'selected' | 'indent' | 'padding'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
-    selected: DEFAULTS.item.selected,
-    indent: DEFAULTS.item.indent,
-    padding: DEFAULTS.item.padding,
+    selected: DEFAULTS.selected,
+    indent: DEFAULTS.indent,
+    padding: DEFAULTS.padding,
   });
 
-  /**
-   * CRDT
-   */
-  const doc = Crdt.ref<TRoot>('test-doc', {});
-  const ns = Crdt.namespace(doc, (d) => d.ns || (d.ns = {}));
-
   const State = {
-    toDataProp(state: t.DevCtxState<T>): t.CrdtNsInfoData {
+    toDisplayProps(state: t.DevCtxState<T>): t.CrdtNamespaceItemProps {
       return {
-        ns,
+        ...state.current.props,
         onChange(e) {
           console.info('⚡️ onChange', e);
           state.change((d) => (d.props.namespace = e.namespace));
         },
-      };
-    },
-
-    toDisplayProps(state: t.DevCtxState<T>): t.CrdtNsItemProps {
-      return {
-        ...state.current.props,
-        data: State.toDataProp(state),
       };
     },
   };
@@ -64,7 +51,7 @@ export default Dev.describe('CrdtNamespace.Item', (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = State.toDisplayProps(state);
-        return <CrdtNsItem {...props} />;
+        return <CrdtNamespaceItem {...props} />;
       });
   });
 
@@ -91,7 +78,7 @@ export default Dev.describe('CrdtNamespace.Item', (e) => {
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
-        const defaultValue = DEFAULTS.item.indent;
+        const defaultValue = DEFAULTS.indent;
         const value = (state: T) => state.props.indent ?? defaultValue;
         btn
           .label((e) => `indent = ${value(e.state)}`)
@@ -106,7 +93,7 @@ export default Dev.describe('CrdtNamespace.Item', (e) => {
       });
 
       dev.boolean((btn) => {
-        const defaultValue = DEFAULTS.item.padding;
+        const defaultValue = DEFAULTS.padding;
         const value = (state: T) => state.props.padding ?? defaultValue;
         btn
           .label((e) => `padding = ${value(e.state)}`)

@@ -1,4 +1,4 @@
-import { Crdt, CrdtViews, Dev, rx, type t } from '../../../test.ui';
+import { Crdt, CrdtViews, Dev, rx, type t } from '../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -14,7 +14,7 @@ const initial: T = {
 
 const DEFAULTS = CrdtViews.Namespace.DEFAULTS;
 
-export default Dev.describe('CrdtNamespace', (e) => {
+export default Dev.describe('Namespace', (e) => {
   /**
    * Local storage.
    */
