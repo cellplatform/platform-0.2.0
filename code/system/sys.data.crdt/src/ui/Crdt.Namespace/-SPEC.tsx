@@ -51,6 +51,15 @@ export default Dev.describe('CrdtNamespace', (e) => {
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button('dispose', () => {
+        ns.dispose();
+        dev.redraw();
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
