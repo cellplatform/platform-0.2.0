@@ -4,7 +4,7 @@ export type WebRtcState<N extends string = string> = {
   readonly kind: 'WebRtc:State';
   readonly doc: t.NetworkDocSharedRef;
   readonly current: t.NetworkDocShared;
-  readonly props: t.CrdtNamespaceManager<t.NetworkDocShared, N>;
+  readonly props: t.CrdtNsManager<t.NetworkDocShared, N>;
   peer(
     self: t.PeerId,
     subject: t.PeerId,
