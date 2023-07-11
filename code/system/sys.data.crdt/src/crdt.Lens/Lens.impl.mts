@@ -7,7 +7,7 @@ import { DEFAULTS, Time, Wrangle, rx, type t } from './common';
  */
 export function init<R extends {}, L extends {}>(
   root: t.CrdtDocRef<R>,
-  get: t.CrdtLensDescendent<R, L>,
+  get: t.CrdtLensGetDescendent<R, L>,
   options: { dispose$?: t.Observable<any> } = {},
 ): t.CrdtLens<R, L> {
   Registry.add(root);
@@ -118,7 +118,7 @@ export function init<R extends {}, L extends {}>(
     /**
      * Create a new sub-lens.
      */
-    lens<T extends {}>(fn: t.CrdtLensDescendent<L, T>) {
+    lens<T extends {}>(fn: t.CrdtLensGetDescendent<L, T>) {
       return init(root, (doc) => fn(get(doc)), { dispose$ });
     },
 

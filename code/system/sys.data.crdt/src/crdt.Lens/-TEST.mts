@@ -11,7 +11,7 @@ export default Test.describe('Lens', (e) => {
     return { initial, root } as const;
   };
 
-  const getDesendent: t.CrdtLensDescendent<TRoot, TChild> = (doc) => {
+  const getDesendent: t.CrdtLensGetDescendent<TRoot, TChild> = (doc) => {
     // NB: If the child does not exist, it is written onto the object.
     //     Required for the CRDT to register the {root} subject
     //     prior to be handed to the lens mutator function

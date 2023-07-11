@@ -10,7 +10,7 @@ import { rx, toObject, type t } from './common';
  */
 export function namespace<R extends {}, N extends string = string>(
   root: t.CrdtDocRef<R>,
-  getMap?: t.CrdtNsMapLens<R>,
+  getMap?: t.CrdtNsMapGetLens<R>,
   options?: { dispose$: t.Observable<any> },
 ) {
   const life = rx.lifecycle([root.dispose$, options?.dispose$]);
@@ -61,13 +61,13 @@ export function namespace<R extends {}, N extends string = string>(
  * Helpers
  */
 const Wrangle = {
-  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNsMapLens<R>) {
+  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNsMapGetLens<R>) {
     return (getMap ? getMap(root) : root) as t.CrdtNsMap<N>;
   },
 
   containerLens<R extends {}, N extends string = string>(
     root: t.CrdtDocRef<R>,
-    getMap?: t.CrdtNsMapLens<R>,
+    getMap?: t.CrdtNsMapGetLens<R>,
     dispose$?: t.Observable<any>,
   ) {
     return lens<R, t.CrdtNsMap<N>>(

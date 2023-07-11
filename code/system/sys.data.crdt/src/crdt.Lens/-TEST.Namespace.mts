@@ -187,7 +187,7 @@ export default Test.describe('Lens Namespace', (e) => {
   });
 
   e.describe('dispose', (e) => {
-    const getMap: t.CrdtNsMapLens<TRoot> = (d) => d.ns || (d.ns = {});
+    const getMap: t.CrdtNsMapGetLens<TRoot> = (d) => d.ns || (d.ns = {});
 
     e.it('{ dispose$ } ← as param', (e) => {
       const { doc } = setup();
