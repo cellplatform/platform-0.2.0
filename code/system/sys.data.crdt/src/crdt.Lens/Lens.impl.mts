@@ -23,18 +23,19 @@ export function init<R extends {}, L extends {}>(
   const subject$ = new rx.Subject<t.CrdtLensChange<R, L>>();
   const $ = subject$.pipe(rx.takeUntil(dispose$));
 
-  const fireFromChange = (e: t.CrdtDocChange<R>) => {
-    const lens = api.current;
-    subject$.next({ ...e, lens });
-  };
-
-  const fireFromReplace = (e: t.CrdtDocReplace<R>) => {
-    subject$.next({
-      action: 'change',
-      doc: e.doc,
-      lens: api.current,
-      info: { time: Time.now.timestamp },
-    });
+  const fire = {
+    fromChange(e: t.CrdtDocChange<R>) {
+      const lens = api.current;
+      subject$.next({ ...e, lens });
+    },
+    fromReplace(e: t.CrdtDocReplace<R>) {
+      subject$.next({
+        action: 'change',
+        doc: e.doc,
+        lens: api.current,
+        info: { time: Time.now.timestamp },
+      });
+    },
   };
 
   let _changing = false;
@@ -46,8 +47,8 @@ export function init<R extends {}, L extends {}>(
     rx.filter(() => !_changing),
     rx.filter(() => _lastValue !== api.current),
   ).subscribe((e) => {
-    if (e.action === 'change') fireFromChange(e);
-    if (e.action === 'replace') fireFromReplace(e);
+    if (e.action === 'change') fire.fromChange(e);
+    if (e.action === 'replace') fire.fromReplace(e);
     _lastValue = api.current;
   });
 
@@ -71,7 +72,6 @@ export function init<R extends {}, L extends {}>(
      */
     change(...args: []) {
       if (api.disposed) return api;
-
       _changing = true;
       const { message, fn } = Wrangle.changeArgs<R, L>(args);
 
@@ -102,12 +102,11 @@ export function init<R extends {}, L extends {}>(
         const child = get(draft);
         fn(child);
       };
-
       if (message) root.change(message, mutate);
       if (!message) root.change(mutate);
 
       // Alert listeners.
-      if (_fired) fireFromChange(_fired);
+      if (_fired) fire.fromChange(_fired);
 
       // Finish up.
       _count++;
@@ -140,6 +139,7 @@ export function init<R extends {}, L extends {}>(
     },
   };
 
+  api.change(() => null); // NB: Ensure the lens is initialized.
   _lastValue = api.current;
   return api;
 }

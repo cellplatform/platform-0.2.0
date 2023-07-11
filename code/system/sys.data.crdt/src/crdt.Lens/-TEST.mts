@@ -1,6 +1,5 @@
 import { CrdtLens } from '.';
 import { Automerge, Crdt, Test, expect, type t } from '../test.ui';
-import { DEFAULTS } from './common';
 
 export default Test.describe('Lens', (e) => {
   type TRoot = { msg?: string; child?: TChild };
@@ -185,10 +184,8 @@ export default Test.describe('Lens', (e) => {
       lens1.change((d) => d.count++);
 
       expect(fired1.length).to.eql(1);
-      expect(fired2.length).to.eql(2); // NB: Additional change event fired for the secondary lens.
-      //                                      This is because related to efficient object comparison within
-      //                                      the Lens and should ultimately be more efficnet, not less.
-      expect(fired2[1]).to.eql(fired1[0]);
+      expect(fired2.length).to.eql(1);
+      expect(fired2[0]).to.eql(fired1[0]);
 
       expect(lens1.current.count).to.eql(1);
       expect(lens2.current.count).to.eql(1);
@@ -249,12 +246,8 @@ export default Test.describe('Lens', (e) => {
       expect(lens1.current.child?.count).to.eql(1234);
       expect(lens2.current.count).to.eql(1234);
 
-      expect(fired1.length).to.eql(2);
+      expect(fired1.length).to.eql(1);
       expect(fired2.length).to.eql(1);
-
-      expect(fired1[0].info.message).to.eql(DEFAULTS.ensureLensMessage);
-      expect(fired1[1].info.message).to.eql(undefined);
-      expect(fired2[0].info.message).to.eql(undefined);
     });
 
     e.it('root replace ← events', (e) => {
