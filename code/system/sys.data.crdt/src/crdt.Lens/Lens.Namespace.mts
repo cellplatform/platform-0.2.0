@@ -9,11 +9,11 @@ import { rx, toObject, type t } from './common';
  *    object within the single document.
  */
 export function namespace<R extends {}, N extends string = string>(
-  doc: t.CrdtDocRef<R>,
+  root: t.CrdtDocRef<R>,
   getMap?: t.CrdtNamespaceMapLens<R>,
   options?: { dispose$: t.Observable<any> },
 ) {
-  const life = rx.lifecycle([doc.dispose$, options?.dispose$]);
+  const life = rx.lifecycle([root.dispose$, options?.dispose$]);
   const { dispose, dispose$ } = life;
 
   /**
@@ -21,12 +21,12 @@ export function namespace<R extends {}, N extends string = string>(
    */
   const api: t.CrdtNamespaceManager<R, N> = {
     get container() {
-      return toObject(Wrangle.container<R, N>(doc.current, getMap));
+      return toObject(Wrangle.container<R, N>(root.current, getMap));
     },
 
     lens<L extends {}>(namespace: N, initial: L) {
       return lens<R, L>(
-        doc,
+        root,
         (draft) => {
           const container = Wrangle.container<R, N>(draft, getMap);
           const subject = container[namespace] || (container[namespace] = initial ?? {});

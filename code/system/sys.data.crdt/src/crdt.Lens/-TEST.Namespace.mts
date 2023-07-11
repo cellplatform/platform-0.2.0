@@ -1,9 +1,8 @@
-import { CrdtLens } from '.';
 import { Automerge, Crdt, Test, expect, rx, type t } from '../test.ui';
-import { DEFAULTS } from './common';
 
 export default Test.describe('Lens Namespace', (e) => {
-  type TRoot = { ns?: Record<string, {}> };
+  type TFoo = { ns?: t.CrdtNamespaceMap };
+  type TRoot = { ns?: t.CrdtNamespaceMap; foo?: TFoo };
   type TDoc = { count: number };
   type TError = { message?: string };
 
@@ -14,7 +13,7 @@ export default Test.describe('Lens Namespace', (e) => {
   };
 
   e.describe('container', (e) => {
-    e.it('namespace.lens: { document } root', (e) => {
+    e.it('namespace.container: { document } root', (e) => {
       const { doc } = setup();
       const namespace = Crdt.Lens.namespace<TRoot>(doc);
       const res1 = namespace.container;
@@ -167,7 +166,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns1.disposed).to.eql(true);
     });
 
-    e.it('doc.dispose (root document)', (e) => {
+    e.it('doc.dispose ← root document', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
@@ -186,12 +185,5 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns2.disposed).to.eql(true);
       expect(ns1.disposed).to.eql(true);
     });
-  });
-
-  e.describe('Namespace on a lens (as root)', (e) => {
-    /**
-     * TODO 🐷
-     */
-    e.it.skip('TMP', async (e) => {});
   });
 });
