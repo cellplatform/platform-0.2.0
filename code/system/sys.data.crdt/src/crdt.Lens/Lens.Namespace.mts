@@ -10,20 +10,25 @@ import { rx, toObject, type t } from './common';
  */
 export function namespace<R extends {}, N extends string = string>(
   root: t.CrdtDocRef<R>,
-  getMap?: t.CrdtNamespaceMapLens<R>,
+  getMap?: t.CrdtNsMapLens<R>,
   options?: { dispose$: t.Observable<any> },
 ) {
   const life = rx.lifecycle([root.dispose$, options?.dispose$]);
   const { dispose, dispose$ } = life;
+  const container = Wrangle.containerLens<R, N>(root, getMap, dispose$);
 
   /**
    * API.
    */
-  const api: t.CrdtNamespaceManager<R, N> = {
+  const api: t.CrdtNsManager<R, N> = {
     kind: 'Crdt:Namespace',
 
+    get $() {
+      return container.$;
+    },
+
     get container() {
-      return toObject(Wrangle.container<R, N>(root.current, getMap));
+      return toObject(container.current);
     },
 
     lens<L extends {}>(namespace: N, initial: L) {
@@ -48,6 +53,7 @@ export function namespace<R extends {}, N extends string = string>(
     },
   } as const;
 
+  // Finish up.
   return api;
 }
 
@@ -55,7 +61,20 @@ export function namespace<R extends {}, N extends string = string>(
  * Helpers
  */
 const Wrangle = {
-  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNamespaceMapLens<R>) {
-    return (getMap ? getMap(root) : root) as t.CrdtNamespaceMap<N>;
+  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNsMapLens<R>) {
+    return (getMap ? getMap(root) : root) as t.CrdtNsMap<N>;
+  },
+
+  containerLens<R extends {}, N extends string = string>(
+    root: t.CrdtDocRef<R>,
+    getMap?: t.CrdtNsMapLens<R>,
+    dispose$?: t.Observable<any>,
+  ) {
+    return lens<R, t.CrdtNsMap<N>>(
+      //
+      root,
+      (draft) => Wrangle.container<R, N>(draft, getMap),
+      { dispose$ },
+    );
   },
 };

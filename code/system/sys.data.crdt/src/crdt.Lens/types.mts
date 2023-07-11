@@ -1,19 +1,6 @@
 import { type t } from '../common.t';
 
 /**
- * Map containing a namespaces of child objects
- * that are managed by a lenes.
- */
-export type CrdtNamespaceMap<K extends string = string> = Record<K, {}>;
-export type CrdtNamespaceMapLens<R extends {}> = CrdtLensDescendent<R, CrdtNamespaceMap>;
-
-export type CrdtNamespaceManager<R extends {}, N extends string = string> = t.Lifecycle & {
-  readonly kind: 'Crdt:Namespace';
-  readonly container: t.CrdtNamespaceMap<N>;
-  lens<L extends {}>(namespace: N, initial: L): CrdtLens<R, L>;
-};
-
-/**
  * Retrieves a child descentent from within a {document} object.
  */
 export type CrdtLensDescendent<R extends {}, L extends {}> = (doc: R) => L;
@@ -33,3 +20,20 @@ export type CrdtLens<R extends {}, L extends {}> = t.Lifecycle & {
 };
 
 export type CrdtLensChange<R extends {}, L extends {}> = t.CrdtDocChange<R> & { lens: L };
+
+/**
+ * Lens Namespace.
+ */
+export type CrdtNsMap<K extends string = string> = Record<K, {}>;
+export type CrdtNsMapLens<R extends {}> = CrdtLensDescendent<R, CrdtNsMap>;
+export type CrdtNsChange<R extends {}, N extends string = string> = t.CrdtLensChange<
+  R,
+  t.CrdtNsMap<N>
+>;
+
+export type CrdtNsManager<R extends {}, N extends string = string> = t.Lifecycle & {
+  readonly kind: 'Crdt:Namespace';
+  readonly $: t.Observable<t.CrdtNsChange<R, N>>;
+  readonly container: t.CrdtNsMap<N>;
+  lens<L extends {}>(namespace: N, initial: L): CrdtLens<R, L>;
+};

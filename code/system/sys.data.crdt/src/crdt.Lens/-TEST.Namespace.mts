@@ -1,8 +1,8 @@
-import { Automerge, Crdt, Test, expect, rx, type t } from '../test.ui';
+import { Automerge, Crdt, Is, Test, expect, rx, toObject, type t } from '../test.ui';
 
 export default Test.describe('Lens Namespace', (e) => {
-  type TFoo = { ns?: t.CrdtNamespaceMap };
-  type TRoot = { ns?: t.CrdtNamespaceMap; foo?: TFoo };
+  type TFoo = { ns?: t.CrdtNsMap };
+  type TRoot = { ns?: t.CrdtNsMap; foo?: TFoo };
   type TDoc = { count: number };
   type TError = { message?: string };
 
@@ -60,6 +60,64 @@ export default Test.describe('Lens Namespace', (e) => {
     });
   });
 
+  e.describe('$ ← (namespace container)', (e) => {
+    type N = 'foo' | 'bar';
+
+    e.it('same observable instance', (e) => {
+      const { doc } = setup();
+      const ns = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+
+      expect(Is.observable(ns.$)).to.eql(true);
+      expect(ns.$).to.equal(ns.$);
+
+      doc.dispose();
+    });
+
+    e.it('change events', (e) => {
+      const { doc } = setup();
+      const ns = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+
+      const events: t.CrdtNsChange<TRoot, N>[] = [];
+      ns.$.subscribe((e) => events.push(e));
+
+      const foo = ns.lens<TDoc>('foo', { count: 0 });
+      expect(events.length).to.eql(1);
+      expect(events[0].lens.foo).to.eql({ count: 0 });
+      expect(events[0].lens.bar).to.eql(undefined);
+
+      const bar = ns.lens<TDoc>('bar', { count: 123 });
+      expect(events.length).to.eql(2);
+      expect(events[1].lens.foo).to.eql({ count: 0 });
+      expect(events[1].lens.bar).to.eql({ count: 123 });
+
+      foo.change((d) => d.count++);
+      expect(events.length).to.eql(3);
+      expect(events[2].lens.foo).to.eql({ count: 1 });
+      expect(events[2].lens.bar).to.eql({ count: 123 });
+
+      doc.dispose();
+    });
+
+    e.it('no longer fires after dispose', (e) => {
+      const { doc } = setup();
+      const ns = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns ?? (d.ns = {}));
+
+      const events: t.CrdtNsChange<TRoot, N>[] = [];
+      ns.$.subscribe((e) => events.push(e));
+
+      const foo = ns.lens<TDoc>('foo', { count: 0 });
+      foo.change((d) => d.count++);
+      expect(events.length).to.eql(2);
+
+      ns.dispose();
+      foo.change((d) => d.count++);
+      foo.change((d) => d.count++);
+      expect(events.length).to.eql(2);
+
+      doc.dispose();
+    });
+  });
+
   e.describe('lens', (e) => {
     e.it('namespace.lens: from { document } root', (e) => {
       const { doc } = setup();
@@ -88,12 +146,12 @@ export default Test.describe('Lens Namespace', (e) => {
     e.it('namespace.lens: from sub-tree (get container → ƒ)', (e) => {
       const { doc } = setup();
       const namespace = Crdt.Lens.namespace<TRoot>(doc, (d) => d.ns || (d.ns = {}));
-      expect(doc.current.ns).to.eql(undefined);
+      expect(doc.current.ns).to.eql({});
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 0 });
       const ns2 = namespace.lens<TError>('bar', {});
 
-      type NS = t.CrdtNamespaceMap; // NB: generic string as namespace key.
+      type NS = t.CrdtNsMap; // NB: generic string as namespace key.
       expect((doc.current.ns as NS).foo).to.eql({ count: 0 });
       expect((doc.current.ns as NS).bar).to.eql({});
 
@@ -111,7 +169,7 @@ export default Test.describe('Lens Namespace', (e) => {
 
     e.it('strongly typed namespace "names" (string | union)', (e) => {
       type N = 'foo.bar' | 'foo.baz';
-      type NS = t.CrdtNamespaceMap<N>;
+      type NS = t.CrdtNsMap<N>;
       const { doc } = setup();
       const namespace = Crdt.Lens.namespace<TRoot, N>(doc, (d) => d.ns || (d.ns = {}));
 
@@ -129,7 +187,7 @@ export default Test.describe('Lens Namespace', (e) => {
   });
 
   e.describe('dispose', (e) => {
-    const getMap: t.CrdtNamespaceMapLens<TRoot> = (d) => d.ns || (d.ns = {});
+    const getMap: t.CrdtNsMapLens<TRoot> = (d) => d.ns || (d.ns = {});
 
     e.it('{ dispose$ } ← as param', (e) => {
       const { doc } = setup();

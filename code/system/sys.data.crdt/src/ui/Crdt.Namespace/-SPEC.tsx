@@ -1,6 +1,9 @@
 import { Crdt, CrdtViews, Dev, type t } from '../../test.ui';
 
-type TDoc = { ns?: t.CrdtNamespaceMap };
+type TRoot = { ns?: t.CrdtNsMap };
+type TFoo = { count: number };
+type TError = { message?: string };
+
 type T = { props: t.CrdtNamespaceProps };
 const initial: T = { props: {} };
 
@@ -19,7 +22,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
   /**
    * CRDT
    */
-  const doc = Crdt.ref<TDoc>('test-doc', {});
+  const doc = Crdt.ref<TRoot>('test-doc', {});
   const ns = CrdtViews.Namespace.ns(doc, (d) => d.ns || (d.ns = {}));
 
   e.it('ui:init', async (e) => {
@@ -58,6 +61,16 @@ export default Dev.describe('CrdtNamespace', (e) => {
       dev.button('dispose', () => {
         ns.dispose();
         dev.redraw();
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('add namespace: foo', () => {
+        const lens = ns.lens<TFoo>('foo', { count: 0 });
+      });
+
+      dev.button('add namespace: bar', () => {
+        const lens = ns.lens<TFoo>('bar', { count: 123 });
       });
     });
   });
