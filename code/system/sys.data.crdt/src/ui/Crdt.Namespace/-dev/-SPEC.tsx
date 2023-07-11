@@ -2,10 +2,15 @@ import { Crdt, CrdtViews, Dev, rx, type t } from '../../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
-type TError = { message?: string };
 
-type T = { props: t.CrdtNamespaceProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.CrdtNsProps;
+  debug: { withData: boolean };
+};
+const initial: T = {
+  props: {},
+  debug: { withData: true },
+};
 
 const DEFAULTS = CrdtViews.Namespace.DEFAULTS;
 
@@ -13,7 +18,7 @@ export default Dev.describe('CrdtNamespace', (e) => {
   /**
    * Local storage.
    */
-  type LocalStore = Pick<t.CrdtNamespaceProps, 'enabled'>;
+  type LocalStore = Pick<t.CrdtNsProps, 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.crdt.ui.Namespace');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
@@ -22,14 +27,40 @@ export default Dev.describe('CrdtNamespace', (e) => {
   /**
    * CRDT
    */
+
+  const createNamespace = (ctx: t.DevCtx) => {
+    const ns = Crdt.namespace(doc, (d) => d.ns || (d.ns = {}));
+    ns.$.pipe(rx.mergeWith(ns.dispose$)).subscribe((e) => ctx.redraw());
+    return ns;
+  };
+
   const doc = Crdt.ref<TRoot>('test-doc', {});
-  const ns = CrdtViews.Namespace.ns(doc, (d) => d.ns || (d.ns = {}));
+  let ns: t.CrdtNsManager<TRoot>;
+
+  const toDataProp = (state: T, force?: boolean) => {
+    if (!force && !state.debug.withData) return undefined;
+    const data: t.CrdtNsInfoData = {
+      ns,
+      onChange(e) {
+        console.info('⚡️ onChange', e);
+      },
+    };
+    return data;
+  };
+
+  const toDisplayProps = (state: T) => {
+    const props: t.CrdtNsProps = {
+      ...state.props,
+      data: toDataProp(state),
+    };
+    return props;
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    ns.$.pipe(rx.mergeWith(ns.dispose$)).subscribe((e) => ctx.redraw());
+    ns = createNamespace(ctx);
 
     state.change((d) => {
       d.props.enabled = local.enabled;
@@ -40,12 +71,14 @@ export default Dev.describe('CrdtNamespace', (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
-        return <CrdtViews.Namespace {...e.state.props} />;
+        const props = toDisplayProps(e.state);
+        return <CrdtViews.Namespace {...props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -60,7 +93,18 @@ export default Dev.describe('CrdtNamespace', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      dev.button('dispose', () => ns.dispose());
+      dev.button((btn) => {
+        btn
+          .label((e) => (ns.disposed ? 'create namespace' : 'dispose'))
+          .onClick((e) => {
+            if (ns.disposed) {
+              ns = createNamespace(dev.ctx);
+              dev.redraw();
+            } else {
+              ns.dispose();
+            }
+          });
+      });
 
       dev.hr(-1, 5);
 
@@ -71,6 +115,16 @@ export default Dev.describe('CrdtNamespace', (e) => {
       dev.button('add namespace: bar', () => {
         const lens = ns.lens<TFoo>('bar', { count: 123 });
       });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.withData);
+        btn
+          .label((e) => (value(e.state) ? `with data` : `no data`))
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'withData')));
+      });
     });
   });
 
@@ -79,10 +133,10 @@ export default Dev.describe('CrdtNamespace', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        doc: doc.current,
+        'doc.crdt': doc.current,
         ns,
       };
-      return <Dev.Object name={'Namespace'} data={data} expand={1} />;
+      return <Dev.Object name={'<Namespace>'} data={data} expand={1} />;
     });
   });
 });
