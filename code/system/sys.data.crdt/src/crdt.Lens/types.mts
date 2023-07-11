@@ -8,6 +8,7 @@ export type CrdtNamespaceMap<K extends string = string> = Record<K, {}>;
 export type CrdtNamespaceMapLens<R extends {}> = CrdtLensDescendent<R, CrdtNamespaceMap>;
 
 export type CrdtNamespaceManager<R extends {}, N extends string = string> = t.Lifecycle & {
+  readonly kind: 'Crdt:Namespace';
   readonly container: t.CrdtNamespaceMap<N>;
   lens<L extends {}>(namespace: N, initial: L): CrdtLens<R, L>;
 };

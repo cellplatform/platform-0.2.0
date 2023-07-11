@@ -64,6 +64,7 @@ export default Test.describe('Lens Namespace', (e) => {
     e.it('namespace.lens: from { document } root', (e) => {
       const { doc } = setup();
       const namespace = Crdt.Lens.namespace<TRoot>(doc);
+      expect(namespace.kind).to.eql('Crdt:Namespace');
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
       const ns2 = namespace.lens('foo', { count: 0 });

@@ -20,6 +20,8 @@ export function namespace<R extends {}, N extends string = string>(
    * API.
    */
   const api: t.CrdtNamespaceManager<R, N> = {
+    kind: 'Crdt:Namespace',
+
     get container() {
       return toObject(Wrangle.container<R, N>(root.current, getMap));
     },
