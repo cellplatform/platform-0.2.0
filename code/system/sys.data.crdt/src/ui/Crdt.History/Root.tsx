@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, t, rx } from '../common';
+import { DEFAULTS, FC, css, type t } from './common';
 
 export type CrdtHistoryProps = {
   style?: t.CssValue;
 };
 
-export const CrdtHistory: React.FC<CrdtHistoryProps> = (props) => {
+const View: React.FC<CrdtHistoryProps> = (props) => {
   /**
    * [Render]
    */
@@ -21,3 +20,15 @@ export const CrdtHistory: React.FC<CrdtHistoryProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const CrdtHistory = FC.decorate<CrdtHistoryProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'CrdtHistory' },
+);
