@@ -95,15 +95,18 @@ export default Dev.describe('Namespace.Item', (e) => {
     };
 
     dev.section('Properties', (dev) => {
-      dev.textbox((txt) =>
+      dev.textbox((txt) => {
+        const change = (to: string) => state.change((d) => (local.text = d.props.text = to));
         txt
           .placeholder('label text')
           .value((e) => e.state.props.text)
           .margin([0, 0, 10, 0])
-          .onChange((e) => {
-            state.change((d) => (local.text = d.props.text = e.to.value));
-          }),
-      );
+          .onChange((e) => change(e.to.value))
+          .onEnter((e) => {
+            const text = (e.state.current.props.text ?? '').trim().toLowerCase();
+            if (text === 'lorem') change(Dev.Lorem.toString());
+          });
+      });
 
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);

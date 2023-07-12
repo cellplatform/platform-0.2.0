@@ -5,7 +5,8 @@ export const Wrangle = {
   text(props: t.CrdtNamespaceItemProps) {
     const text = props.text || '';
     const hasValue = Boolean(text.trim());
-    return { text, hasValue };
+    const isEmpty = !hasValue;
+    return { text, hasValue, isEmpty };
   },
 
   foreColor(props: t.CrdtNamespaceItemProps) {
