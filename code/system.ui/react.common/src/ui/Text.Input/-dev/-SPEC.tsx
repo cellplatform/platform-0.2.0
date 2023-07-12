@@ -75,6 +75,15 @@ export default Dev.describe('TextInput', (e) => {
             console.log('⚡️ onReady:', ref);
             state.change((d) => (d.ref = ref));
           },
+          onEnter(e) {
+            console.info('⚡️ onEnter', e);
+          },
+          onEscape(e) {
+            console.info('⚡️ onEscape', e);
+          },
+          onLabelDoubleClick(e) {
+            console.info('⚡️ onLabelDoubleClick', e);
+          },
         };
 
         return <DevSample props={props} debug={debug} />;
