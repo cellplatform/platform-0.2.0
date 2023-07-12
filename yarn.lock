@@ -557,12 +557,31 @@
     neverthrow "^6.0.0"
     viem "^1.1.4"
 
+"@farcaster/core@0.10.2", "@farcaster/core@^0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@farcaster/core/-/core-0.10.2.tgz#78d78d3b23442b584897c0670f530f9d97dd230b"
+  integrity sha512-4kn3XsDyYnuAL7ncgqm7UUy3qAJyKRdE1RKDlnHP2qHbCGhFoGaErKgoN3cmppWxgqs+GFzAZwdwkhE6rKABRA==
+  dependencies:
+    "@noble/curves" "^1.0.0"
+    "@noble/hashes" "^1.3.0"
+    neverthrow "^6.0.0"
+    viem "^1.1.4"
+
 "@farcaster/hub-web@0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@farcaster/hub-web/-/hub-web-0.4.1.tgz#08418136fee29b63dec160d9a9aacfe239aa9ac2"
   integrity sha512-dBvbaRK4P9/agtpLN5m/O9NOb9Y0KCHiaaNZDL7Xe/6Sm+/hxsepR9NQ1BRG+gM4CP3y15ECSLlKRG9f5fqdPQ==
   dependencies:
     "@farcaster/core" "^0.10.1"
+    "@improbable-eng/grpc-web" "^0.15.0"
+    rxjs "^7.8.0"
+
+"@farcaster/hub-web@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@farcaster/hub-web/-/hub-web-0.4.2.tgz#456be4e26906488a9630a78f2817d6eed097b363"
+  integrity sha512-P37ORmRc1hd+B3kM5HDcUNJzE/onsKso+4O3bVJ5wEjsJb4zu31rH0HYga9EAdghSxLkcaM9OhU6k0okyGQrsA==
+  dependencies:
+    "@farcaster/core" "^0.10.2"
     "@improbable-eng/grpc-web" "^0.15.0"
     rxjs "^7.8.0"
 
@@ -6895,7 +6914,7 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
-viem@1.2.12, viem@1.2.13, viem@>=1.2.13, viem@^1.0.0, viem@^1.1.4:
+viem@1.2.13, viem@>=1.2.13, viem@^1.0.0, viem@^1.1.4:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.2.13.tgz#03d20066a12e32d2205d8a32ec4c5a00ed1e1f00"
   integrity sha512-BhBbL/JieVZvM1hiSvzoQCsj96j7HoOx/apvl4YYIR/0m/tue4JK/a03P1GKPJ9S316HEB/bT6AIJMlXS/SyiQ==

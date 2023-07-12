@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@automerge/automerge": "2.0.3",
-    "@farcaster/core": "0.10.1",
-    "@farcaster/hub-web": "0.4.1",
+    "@farcaster/core": "0.10.2",
+    "@farcaster/hub-web": "0.4.2",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
     "@monaco-editor/react": "4.5.1",
