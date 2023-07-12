@@ -1,6 +1,5 @@
-import { type t } from './common';
-
 import type { RefObject } from 'react';
+import { type t } from './common';
 
 /**
  * The "ref={...}" API for manipulating the component

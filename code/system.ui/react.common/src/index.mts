@@ -22,7 +22,7 @@ export { RenderCount } from './ui/RenderCount';
 export { Spinner } from './ui/Spinner';
 export { Switch } from './ui/Button.Switch';
 export { Text } from './ui/Text';
-export { TextInput } from './ui/Text.Input';
+export { TextInput, TextInputRef } from './ui/Text.Input';
 export { TextSecret } from './ui/Text.Secret';
 export { TextSyntax } from './ui/Text.Syntax';
 
