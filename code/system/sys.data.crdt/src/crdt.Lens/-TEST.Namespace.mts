@@ -245,7 +245,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns1.disposed).to.eql(true);
     });
 
-    e.it.only('dispose clears { container } → { }', (e) => {
+    e.it('dispose clears { container } → { }', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
