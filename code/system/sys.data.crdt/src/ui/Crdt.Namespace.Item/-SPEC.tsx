@@ -139,7 +139,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('States', (dev) => {
+    dev.section(['States', '↑ (update)'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.props.enabled;
@@ -202,7 +202,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Actions', (dev) => {
+    dev.section(['Methods', 'ref={ ƒ }'], (dev) => {
       type F = (ref: t.CrdtNamespaceItemRef) => void;
       const focusThen = (msecs: number, ref: t.CrdtNamespaceItemRef, fn: F) => {
         ref.focus();
