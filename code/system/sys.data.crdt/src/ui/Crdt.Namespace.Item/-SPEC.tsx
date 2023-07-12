@@ -144,7 +144,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         });
       });
 
-      dev.button('editing (← selected)', (e) => {
+      dev.button('selected → editing', (e) => {
         e.change((d) => {
           d.props.selected = true;
           d.props.editing = true;
