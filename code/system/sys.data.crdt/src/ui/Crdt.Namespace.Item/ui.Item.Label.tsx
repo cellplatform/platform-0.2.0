@@ -70,19 +70,16 @@ export const Label: React.FC<Props> = (props) => {
     />
   );
 
-  console.log('elTextbox', elTextbox);
-
+  const labelText = isEmpty ? placeholder : text;
   const elLabel = !editing && (
-    <div {...css(styles.label, isEmpty && styles.labelEmpty)}>{isEmpty ? placeholder : text}</div>
+    <div {...css(styles.label, isEmpty && styles.labelEmpty)}>{labelText}</div>
   );
-  // const elLabelEmpty = !editing && isEmpty && <div {...styles.labelEmpty}>{placeholder}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
       {editing && <div {...styles.underline} />}
       {elTextbox}
       {elLabel}
-      {/* {elLabelEmpty} */}
     </div>
   );
 };
