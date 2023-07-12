@@ -4,7 +4,7 @@ import { Color, DEFAULTS, TextInput, css, type t } from './common';
 
 type Props = t.CrdtNamespaceItemProps & { inputRef: RefObject<t.TextInputRef> };
 
-export const ItemLabel: React.FC<Props> = (props) => {
+export const Label: React.FC<Props> = (props) => {
   const {
     inputRef,
     enabled = DEFAULTS.enabled,
@@ -21,8 +21,12 @@ export const ItemLabel: React.FC<Props> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
-    textbox: css({}),
+    base: css({
+      position: 'relative',
+    }),
+    textbox: css({
+      userSelect: editing ? 'auto' : 'none',
+    }),
     underline: css({
       pointerEvents: 'none',
       borderBottom: `dashed 1.2px ${underlineColor}`,

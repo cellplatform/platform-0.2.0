@@ -2,8 +2,8 @@ import { RefObject } from 'react';
 import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { ItemLabel } from './ui.Item.Label';
-import { RightOptions } from './ui.RightOptions';
+import { Label } from './ui.Item.Label';
+import { Actions } from './ui.Item.Actions';
 
 type Props = t.CrdtNamespaceItemProps & { inputRef: RefObject<t.TextInputRef> };
 
@@ -40,8 +40,8 @@ export const View: React.FC<Props> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         {Wrangle.leftIcon(props)}
-        <ItemLabel {...props} inputRef={inputRef} />
-        <RightOptions {...props} style={styles.right} />
+        <Label {...props} inputRef={inputRef} />
+        <Actions {...props} style={styles.right} />
       </div>
     </div>
   );

@@ -1,29 +1,43 @@
-import { COLORS, Icons, css, type t } from './common';
+import { Button, COLORS, Icons, css, type t } from './common';
 
 export type ItemIconProps = {
-  kind: 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
+  action: t.CrdtNsItemActionKind;
   color?: string | number;
   opacity?: number;
+  enabled?: boolean;
   width?: number;
+  button?: boolean;
   style?: t.CssValue;
+  onClick?: t.CrdtNamespaceItemClickHandler;
 };
 
-export const ItemIcon: React.FC<ItemIconProps> = (props) => {
-  const { opacity = 1, width } = props;
+export const Icon: React.FC<ItemIconProps> = (props) => {
+  const { action, width, opacity, enabled = true } = props;
+  const isButton = props.button && props.onClick && enabled;
+
+  /**
+   * [Handlers]
+   */
+  const onClick = () => {
+    props.onClick?.({ actions: [action] });
+  };
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      display: 'grid',
-      placeItems: 'center',
-      opacity,
-      width,
-    }),
+    base: css({ opacity, width, display: 'grid', placeItems: 'center' }),
+    button: css({ display: 'grid', placeItems: 'center' }),
   };
 
-  return <div {...css(styles.base, props.style)}>{Wrangle.icon(props)}</div>;
+  const elIcon = Wrangle.icon(props);
+  const elButton = isButton && (
+    <Button onClick={onClick} isEnabled={enabled}>
+      <div {...styles.button}>{elIcon}</div>
+    </Button>
+  );
+
+  return <div {...css(styles.base, props.style)}>{elButton || elIcon}</div>;
 };
 
 /**
@@ -31,7 +45,7 @@ export const ItemIcon: React.FC<ItemIconProps> = (props) => {
  */
 const Wrangle = {
   icon(props: ItemIconProps) {
-    const { kind, color = COLORS.DARK } = props;
+    const { action: kind, color = COLORS.DARK } = props;
 
     if (kind === 'Repo') {
       return <Icons.Repo size={18} color={color} offset={[0, 1]} />;

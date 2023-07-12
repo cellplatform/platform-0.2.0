@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+export type CrdtNsItemActionKind = 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
+
 /**
  * Component
  */
@@ -16,6 +18,7 @@ export type CrdtNamespaceItemProps = {
   indent?: number;
   padding?: t.CssEdgesInput;
 
+  onClick?: CrdtNamespaceItemClickHandler;
   onChange?: CrdtNamespaceItemChangeHandler;
   onReady?: CrdtNamespaceItemReadyHandler;
 };
@@ -40,3 +43,8 @@ export type CrdtNamespaceItemReadyHandlerArgs = { ref: CrdtNamespaceItemRef };
 
 export type CrdtNamespaceItemChangeHandler = (e: CrdtNamespaceItemChangeHandlerArgs) => void;
 export type CrdtNamespaceItemChangeHandlerArgs = { text: string };
+
+export type CrdtNamespaceItemClickHandler = (e: CrdtNamespaceItemClickHandlerArgs) => void;
+export type CrdtNamespaceItemClickHandlerArgs = {
+  actions: t.CrdtNsItemActionKind[];
+};
