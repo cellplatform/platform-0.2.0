@@ -47,7 +47,7 @@ export const ItemLabel: React.FC<t.CrdtNamespaceItemProps> = (props) => {
         spellCheck={false}
         isEnabled={enabled}
         isReadOnly={!editing}
-        onChanged={(e) => props.onChange?.({ namespace: e.to })}
+        onChanged={(e) => props.onChange?.({ text: e.to })}
       />
     </div>
   );

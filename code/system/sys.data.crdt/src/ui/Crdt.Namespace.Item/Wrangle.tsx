@@ -3,7 +3,7 @@ import { ItemIcon } from './ui.Item.Icon';
 
 export const Wrangle = {
   value(props: t.CrdtNamespaceItemProps) {
-    const value = props.namespace;
+    const value = props.text;
     const hasValue = Boolean(value);
     return { value, hasValue };
   },

@@ -17,9 +17,13 @@ const initial: T = {
 
 export default Dev.describe('Namespace.Item', (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.CrdtNamespaceItemProps, 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'>;
+    Pick<
+      t.CrdtNamespaceItemProps,
+      'text' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'
+    >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
   const local = localstore.object({
+    text: '',
     enabled: DEFAULTS.enabled,
     selected: DEFAULTS.selected,
     indent: DEFAULTS.indent,
@@ -34,7 +38,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         ...state.current.props,
         onChange(e) {
           console.info('⚡️ onChange', e);
-          state.change((d) => (d.props.namespace = e.namespace));
+          state.change((d) => (local.text = d.props.text = e.text));
         },
       };
     },
@@ -45,6 +49,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
+      d.props.text = local.text;
       d.props.enabled = local.enabled;
       d.props.selected = local.selected;
       d.props.indent = local.indent;

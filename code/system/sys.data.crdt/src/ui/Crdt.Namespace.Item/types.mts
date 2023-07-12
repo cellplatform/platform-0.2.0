@@ -4,7 +4,7 @@ import { type t } from './common';
  * Component
  */
 export type CrdtNamespaceItemProps = {
-  namespace?: string;
+  text?: string;
   enabled?: boolean;
   selected?: boolean;
   editing?: boolean;
@@ -22,5 +22,5 @@ export type CrdtNamespaceItemProps = {
  */
 export type CrdtNamespaceItemChangeHandler = (e: CrdtNamespaceItemChangeHandlerArgs) => void;
 export type CrdtNamespaceItemChangeHandlerArgs = {
-  namespace: string;
+  text: string;
 };

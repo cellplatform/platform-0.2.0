@@ -19,7 +19,7 @@ const View: React.FC<t.CrdtNsProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <CrdtNamespaceItem {...props} enabled={enabled} namespace={'foo'} style={styles.item} />
+      <CrdtNamespaceItem {...props} enabled={enabled} text={'foo'} style={styles.item} />
     </div>
   );
 };
