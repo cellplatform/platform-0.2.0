@@ -1,13 +1,17 @@
+import { RefObject } from 'react';
+import { Wrangle } from './Wrangle';
 import { Color, DEFAULTS, TextInput, css, type t } from './common';
 
-import { Wrangle } from './Wrangle';
+type Props = t.CrdtNamespaceItemProps & { inputRef: RefObject<t.TextInputRef> };
 
-export const ItemLabel: React.FC<t.CrdtNamespaceItemProps> = (props) => {
+export const ItemLabel: React.FC<Props> = (props) => {
   const {
+    inputRef,
     enabled = DEFAULTS.enabled,
     editing = DEFAULTS.editing,
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
+    focusOnReady = DEFAULTS.focusOnReady,
   } = props;
   const { value } = Wrangle.value(props);
   const color = Wrangle.foreColor(props);
@@ -30,6 +34,7 @@ export const ItemLabel: React.FC<t.CrdtNamespaceItemProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {editing && <div {...styles.underline} />}
       <TextInput
+        ref={inputRef}
         style={styles.textbox}
         placeholder={'namespace'}
         placeholderStyle={{
@@ -47,6 +52,7 @@ export const ItemLabel: React.FC<t.CrdtNamespaceItemProps> = (props) => {
         spellCheck={false}
         isEnabled={enabled}
         isReadOnly={!editing}
+        focusOnReady={focusOnReady}
         onChanged={(e) => props.onChange?.({ text: e.to })}
       />
     </div>

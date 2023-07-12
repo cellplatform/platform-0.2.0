@@ -1,17 +1,16 @@
-import { CrdtNamespaceItem } from '.';
-import { Dev, type t } from '../../test.ui';
-
-const DEFAULTS = CrdtNamespaceItem.DEFAULTS;
+import { CrdtNamespaceItem, DEFAULTS } from '.';
+import { Dev, Time, type t } from '../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
 
 type T = {
+  ref?: t.CrdtNamespaceItemRef;
   props: t.CrdtNamespaceItemProps;
   debug: { devBg?: boolean };
 };
 const initial: T = {
-  props: {},
+  props: { focusOnReady: true },
   debug: {},
 };
 
@@ -64,9 +63,15 @@ export default Dev.describe('Namespace.Item', (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
-
-        const props = State.toDisplayProps(state);
-        return <CrdtNamespaceItem {...props} />;
+        return (
+          <CrdtNamespaceItem
+            {...State.toDisplayProps(state)}
+            onReady={(e) => {
+              console.log('⚡️ onReady:', e);
+              state.change((d) => (d.ref = e.ref));
+            }}
+          />
+        );
       });
   });
 
@@ -193,6 +198,29 @@ export default Dev.describe('Namespace.Item', (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Actions', (dev) => {
+      type F = (ref: t.CrdtNamespaceItemRef) => void;
+      const focusThen = (msecs: number, ref: t.CrdtNamespaceItemRef, fn: F) => {
+        ref.focus();
+        Time.delay(msecs, () => fn(ref));
+      };
+      const action = (label: string, fn: F) => {
+        dev.button(label, (e) => {
+          const ref = e.state.current.ref;
+          if (ref) fn(ref);
+        });
+      };
+      action('focus', (ref) => ref.focus());
+      action('focus → blur', (ref) => focusThen(500, ref, () => ref.blur()));
+      dev.hr(-1, 5);
+      action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));
+      dev.hr(-1, 5);
+      action('cursorToStart', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
+      action('cursorToEnd', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
     });
   });
 

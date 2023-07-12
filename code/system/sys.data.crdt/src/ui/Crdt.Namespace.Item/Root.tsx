@@ -1,20 +1,20 @@
-import { DEFAULTS, FC, type t } from './common';
-import { Item } from './ui.Item';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { Time, type t } from './common';
 
-/**
- * Export
- */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
-export const CrdtNamespaceItem = FC.decorate<t.CrdtNamespaceItemProps, Fields>(
-  Item,
-  { DEFAULTS },
-  { displayName: 'Crdt.Namespace.Item' },
+import { Ref } from './Root.Ref';
+import { View } from './Root.View';
+
+export const CrdtNamespaceItem = forwardRef<t.CrdtNamespaceItemRef, t.CrdtNamespaceItemProps>(
+  (props, ref) => {
+    const inputRef = useRef<t.TextInputRef>(null);
+    useImperativeHandle(ref, () => Ref(inputRef));
+
+    useEffect(() => {
+      const ref = Ref(inputRef);
+      if (props.focusOnReady) Time.delay(0, () => ref.focus());
+      props.onReady?.({ ref });
+    }, []);
+
+    return <View {...props} inputRef={inputRef} />;
+  },
 );
-
-/**
- * TODO 🐷
- * - store value in local-storage
- * - focus (method)
- */
