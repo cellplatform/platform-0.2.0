@@ -37,7 +37,14 @@ const Wrangle = {
       return <Icons.Repo size={18} color={color} offset={[0, 1]} />;
     }
     if (kind === 'Editing') {
-      return <Icons.Editing size={17} color={color} offset={[0, 4]} />;
+      return (
+        <Icons.Editing
+          size={16}
+          color={color}
+          offset={[0, 0]}
+          style={{ transform: `scaleX(-1)` }}
+        />
+      );
     }
     if (kind === 'Json') {
       return <Icons.Json size={17} color={color} />;

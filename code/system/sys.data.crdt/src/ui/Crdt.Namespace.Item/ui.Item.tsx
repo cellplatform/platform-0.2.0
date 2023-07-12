@@ -31,6 +31,7 @@ export const Item: React.FC<t.CrdtNamespaceItemProps> = (props) => {
       columnGap: 3,
     }),
     right: css({
+      marginLeft: 5,
       display: 'grid',
       gridTemplateColumns: 'auto auto',
       columnGap: 5,

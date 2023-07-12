@@ -1,5 +1,7 @@
 import { GoGitCommit } from 'react-icons/go';
+import { LuEdit2 } from 'react-icons/lu';
 import {
+  MdDataObject,
   MdDoneAll,
   MdInfoOutline,
   MdPlayArrow,
@@ -7,12 +9,9 @@ import {
   MdSettingsInputAntenna,
   MdToggleOn,
   MdWarning,
-  MdDataObject,
-  MdDraw,
 } from 'react-icons/md';
 import { VscDebugDisconnect, VscRepo, VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
-import { AiOutlineEdit } from 'react-icons/ai';
 
 const icon = Icon.renderer;
 
@@ -22,8 +21,7 @@ const icon = Icon.renderer;
 export const Icons = {
   Info: icon(MdInfoOutline),
   Repo: icon(VscRepo),
-  // Editing: icon(MdDraw),
-  Editing: icon(AiOutlineEdit),
+  Editing: icon(LuEdit2),
   Commit: icon(GoGitCommit),
   Network: {
     Antenna: icon(MdSettingsInputAntenna),

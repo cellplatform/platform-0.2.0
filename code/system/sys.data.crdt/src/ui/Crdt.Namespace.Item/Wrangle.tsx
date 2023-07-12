@@ -20,6 +20,13 @@ export const Wrangle = {
     let opacity = 0.5;
     if (hasValue) opacity = 1;
     if (editing) opacity = 1;
-    return <ItemIcon kind={editing ? 'Editing' : 'Repo'} color={foreColor} opacity={opacity} />;
+    return (
+      <ItemIcon
+        width={18}
+        kind={editing ? 'Editing' : 'Repo'}
+        color={foreColor}
+        opacity={opacity}
+      />
+    );
   },
 };
