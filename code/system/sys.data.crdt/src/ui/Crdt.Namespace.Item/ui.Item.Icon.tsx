@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Icons } from './common';
+import { COLORS, Icons, css, type t } from './common';
 
 export type ItemIconProps = {
   kind: 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
   color?: string | number;
   opacity?: number;
+  width?: number;
   style?: t.CssValue;
 };
 
 export const ItemIcon: React.FC<ItemIconProps> = (props) => {
-  const { opacity = 1 } = props;
+  const { opacity = 1, width } = props;
 
   /**
    * [Render]
@@ -19,6 +19,7 @@ export const ItemIcon: React.FC<ItemIconProps> = (props) => {
       display: 'grid',
       placeItems: 'center',
       opacity,
+      width,
     }),
   };
 
@@ -36,7 +37,7 @@ const Wrangle = {
       return <Icons.Repo size={18} color={color} offset={[0, 1]} />;
     }
     if (kind === 'Editing') {
-      return <Icons.Editing size={17} color={color} offset={[0, 3]} />;
+      return <Icons.Editing size={17} color={color} offset={[0, 4]} />;
     }
     if (kind === 'Json') {
       return <Icons.Json size={17} color={color} />;
