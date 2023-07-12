@@ -18,6 +18,17 @@ export type { Disposable, EventBus, Lifecycle } from 'sys.types/src/types.mjs';
 export type { DevCtx, DevCtxState } from 'sys.ui.react.common/src/types.mjs';
 
 /**
+ * @system → ui
+ */
+export type {
+  CssEdgesInput,
+  CssValue,
+  PropListItem,
+  PropListProps,
+  TextInputRef,
+} from 'sys.ui.react.common/src/types.mjs';
+
+/**
  * @local
  */
 export * from '../types.mjs';
