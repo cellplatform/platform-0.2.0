@@ -7,6 +7,7 @@ export type CrdtNamespaceItemProps = {
   namespace?: string;
   enabled?: boolean;
   selected?: boolean;
+  editing?: boolean;
   maxLength?: number;
 
   style?: t.CssValue;

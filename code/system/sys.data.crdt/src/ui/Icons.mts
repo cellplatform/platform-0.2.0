@@ -8,9 +8,11 @@ import {
   MdToggleOn,
   MdWarning,
   MdDataObject,
+  MdDraw,
 } from 'react-icons/md';
 import { VscDebugDisconnect, VscRepo, VscSymbolClass } from 'react-icons/vsc';
 import { Icon } from 'sys.ui.react.common';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 const icon = Icon.renderer;
 
@@ -20,6 +22,8 @@ const icon = Icon.renderer;
 export const Icons = {
   Info: icon(MdInfoOutline),
   Repo: icon(VscRepo),
+  // Editing: icon(MdDraw),
+  Editing: icon(AiOutlineEdit),
   Commit: icon(GoGitCommit),
   Network: {
     Antenna: icon(MdSettingsInputAntenna),

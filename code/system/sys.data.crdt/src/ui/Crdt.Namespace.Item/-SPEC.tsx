@@ -14,13 +14,17 @@ const initial: T = {
 };
 
 export default Dev.describe('Namespace.Item', (e) => {
-  type LocalStore = Pick<t.CrdtNamespaceItemProps, 'enabled' | 'selected' | 'indent' | 'padding'>;
+  type LocalStore = Pick<
+    t.CrdtNamespaceItemProps,
+    'enabled' | 'selected' | 'indent' | 'padding' | 'editing'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     selected: DEFAULTS.selected,
     indent: DEFAULTS.indent,
     padding: DEFAULTS.padding,
+    editing: DEFAULTS.editing,
   });
 
   const State = {
@@ -44,6 +48,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.selected = local.selected;
       d.props.indent = local.indent;
       d.props.padding = local.padding;
+      d.props.editing = local.editing;
     });
 
     ctx.subject
@@ -76,6 +81,14 @@ export default Dev.describe('Namespace.Item', (e) => {
           .onClick((e) => e.change((d) => (local.selected = Dev.toggle(d.props, 'selected'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.editing);
+        btn
+          .label((e) => `editing`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
+      });
+
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
@@ -106,6 +119,36 @@ export default Dev.describe('Namespace.Item', (e) => {
               local.padding = d.props.padding = next;
             });
           });
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('States', (dev) => {
+      dev.button('default', (e) => {
+        e.change((d) => {
+          d.props.enabled = DEFAULTS.enabled;
+          d.props.selected = DEFAULTS.selected;
+          d.props.editing = DEFAULTS.editing;
+          d.props.padding = DEFAULTS.padding;
+          d.props.indent = DEFAULTS.indent;
+        });
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('selected', (e) => {
+        e.change((d) => {
+          d.props.selected = true;
+          d.props.editing = false;
+        });
+      });
+
+      dev.button('editing (← selected)', (e) => {
+        e.change((d) => {
+          d.props.selected = true;
+          d.props.editing = true;
+        });
       });
     });
   });

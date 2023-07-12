@@ -1,17 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, Color, COLORS, css, rx, FC, type t, TextInput, Icons, Style } from './common';
+import { COLORS, DEFAULTS, FC, Style, TextInput, css, type t } from './common';
+import { ItemIcon } from './ui.Item.Icon';
 
 const View: React.FC<t.CrdtNamespaceItemProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     selected = DEFAULTS.selected,
+    editing = DEFAULTS.editing,
     indent = DEFAULTS.indent,
     padding = DEFAULTS.padding,
     maxLength = DEFAULTS.maxLength,
   } = props;
-
-  const value = props.namespace;
-  const hasValue = Boolean(value);
+  const { value, hasValue } = Wrangle.value(props);
 
   /**
    * [Render]
@@ -36,20 +35,13 @@ const View: React.FC<t.CrdtNamespaceItemProps> = (props) => {
       gridTemplateColumns: 'auto auto',
       columnGap: 5,
     }),
-    centerChild: css({ display: 'grid', placeItems: 'center' }),
     textbox: css({}),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <div {...styles.centerChild}>
-          <Icons.Repo
-            size={18}
-            color={Color.alpha(foreColor, hasValue ? 1 : 0.4)}
-            offset={[0, 1]}
-          />
-        </div>
+        {Wrangle.leftIcon(props)}
         <TextInput
           style={styles.textbox}
           placeholder={'namespace'}
@@ -67,19 +59,42 @@ const View: React.FC<t.CrdtNamespaceItemProps> = (props) => {
           maxLength={maxLength}
           spellCheck={false}
           isEnabled={enabled}
+          isReadOnly={!editing}
           onChanged={(e) => props.onChange?.({ namespace: e.to })}
         />
         <div {...styles.right}>
-          <div {...styles.centerChild}>
-            <Icons.Json size={17} color={Color.alpha(foreColor, 1)} />
-          </div>
-          <div {...styles.centerChild}>
-            <Icons.ObjectTree size={17} color={Color.alpha(foreColor, 1)} />
-          </div>
+          <ItemIcon kind={'Json'} color={foreColor} />
+          <ItemIcon kind={'ObjectTree'} color={foreColor} />
         </div>
       </div>
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  value(props: t.CrdtNamespaceItemProps) {
+    const value = props.namespace;
+    const hasValue = Boolean(value);
+    return { value, hasValue };
+  },
+
+  foreColor(props: t.CrdtNamespaceItemProps) {
+    const { selected = DEFAULTS.selected } = props;
+    return selected ? COLORS.WHITE : COLORS.DARK;
+  },
+
+  leftIcon(props: t.CrdtNamespaceItemProps) {
+    const { editing = DEFAULTS.editing } = props;
+    const { hasValue } = Wrangle.value(props);
+    const foreColor = Wrangle.foreColor(props);
+    let opacity = 0.5;
+    if (hasValue) opacity = 1;
+    if (editing) opacity = 1;
+    return <ItemIcon kind={editing ? 'Editing' : 'Repo'} color={foreColor} opacity={opacity} />;
+  },
 };
 
 /**
