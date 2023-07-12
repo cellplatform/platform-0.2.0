@@ -12,7 +12,6 @@ export type DevSampleProps = {
     isUpdateAsync: boolean;
     elementPlaceholder: boolean;
   };
-  onReady: t.TextInputReadyHandler;
 };
 
 export const DevSample: React.FC<DevSampleProps> = (dev) => {
@@ -30,7 +29,6 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
   /**
    * [Render]
    */
-
   const styles = {
     placeholder: css({
       display: 'grid',
@@ -69,7 +67,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
       value={value}
       hint={debug.isHintEnabled ? hint : undefined}
       placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
-      onReady={dev.onReady}
+      onReady={dev.props.onReady}
       onEnter={(e) => {
         console.info('⚡️ onEnter', e);
       }}
@@ -85,6 +83,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
           setHint('');
         }
         console.info('⚡️ onChanged', e);
+        dev.props.onChanged?.(e);
       }}
       onLabelDoubleClick={(e) => {
         console.info('⚡️ onLabelDoubleClick', e);

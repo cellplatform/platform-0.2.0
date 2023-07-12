@@ -1,5 +1,5 @@
 import { Dev, type t } from '../../../test.ui';
-import { Time, DEFAULTS, KeyboardMonitor } from '../common';
+import { DEFAULTS, KeyboardMonitor, Time } from '../common';
 import { DevSample } from './DEV.Sample';
 
 type T = {
@@ -37,15 +37,19 @@ const initial: T = {
 };
 
 export default Dev.describe('TextInput', (e) => {
-  type LocalStoreDebug = T['debug'];
+  type LocalStoreDebug = T['debug'] & Pick<t.TextInputProps, 'value'>;
   const localstore = Dev.LocalStorage<LocalStoreDebug>('dev:sys.ui.TextInput');
-  const localDebug = localstore.object(initial.debug);
+  const local = localstore.object({
+    ...initial.debug,
+    value: '',
+  });
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
     state.change((d) => {
-      d.debug = localDebug;
+      d.debug = local;
+      d.props.value = local.value;
     });
 
     KeyboardMonitor.on('CMD + KeyP', async (e) => {
@@ -64,16 +68,16 @@ export default Dev.describe('TextInput', (e) => {
         if (autoSize) ctx.subject.size('fill-x');
         if (!autoSize) ctx.subject.size([300, null]);
 
-        return (
-          <DevSample
-            props={e.state.props}
-            debug={debug}
-            onReady={(ref) => {
-              console.log('⚡️ onReady:', ref);
-              state.change((d) => (d.ref = ref));
-            }}
-          />
-        );
+        const props: t.TextInputProps = {
+          ...e.state.props,
+          onChanged: (e) => (local.value = e.to),
+          onReady(ref) {
+            console.log('⚡️ onReady:', ref);
+            state.change((d) => (d.ref = ref));
+          },
+        };
+
+        return <DevSample props={props} debug={debug} />;
       });
   });
 
@@ -85,10 +89,14 @@ export default Dev.describe('TextInput', (e) => {
 
     dev.section('Configurations', (dev) => {
       const value = (value: string, label?: string) => {
-        dev.button(`text: ${label ?? value}`, (e) => e.change((d) => (d.props.value = value)));
+        dev.button(`text: ${label ?? value}`, (e) => {
+          e.change((d) => (local.value = d.props.value = value));
+        });
       };
       value('hello 👋');
       value(dev.lorem(50), 'long (lorem)');
+      dev.hr(-1, 5);
+      value('', '(clear)');
     });
 
     dev.hr(5, 20);
@@ -149,7 +157,7 @@ export default Dev.describe('TextInput', (e) => {
           .label('render')
           .value((e) => e.state.debug.render)
           .onClick((e) => {
-            e.change((d) => (localDebug.render = Dev.toggle(d.debug, 'render')));
+            e.change((d) => (local.render = Dev.toggle(d.debug, 'render')));
           }),
       );
 
@@ -159,7 +167,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `update handler: ${current(e.state)}`)
           .value((e) => e.state.debug.isUpdateEnabled)
           .onClick((e) => {
-            e.change((d) => (localDebug.isUpdateEnabled = Dev.toggle(d.debug, 'isUpdateEnabled')));
+            e.change((d) => (local.isUpdateEnabled = Dev.toggle(d.debug, 'isUpdateEnabled')));
           });
       });
 
@@ -169,7 +177,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `update async: ${current(e.state)}`)
           .value((e) => e.state.debug.isUpdateAsync)
           .onClick((e) => {
-            e.change((d) => (localDebug.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
+            e.change((d) => (local.isUpdateAsync = Dev.toggle(d.debug, 'isUpdateAsync')));
           });
       });
 
@@ -180,7 +188,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `mask: isNumeric`)
           .value((e) => e.state.debug.isNumericMask)
           .onClick((e) => {
-            e.change((d) => (localDebug.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
+            e.change((d) => (local.isNumericMask = Dev.toggle(d.debug, 'isNumericMask')));
           }),
       );
 
@@ -189,7 +197,7 @@ export default Dev.describe('TextInput', (e) => {
           .label((e) => `hinting (auto-complete)`)
           .value((e) => e.state.debug.isHintEnabled)
           .onClick((e) => {
-            e.change((d) => (localDebug.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
+            e.change((d) => (local.isHintEnabled = Dev.toggle(d.debug, 'isHintEnabled')));
           }),
       );
 
@@ -199,7 +207,7 @@ export default Dev.describe('TextInput', (e) => {
           .value((e) => e.state.debug.elementPlaceholder)
           .onClick((e) => {
             e.change((d) => {
-              localDebug.elementPlaceholder = Dev.toggle(d.debug, 'elementPlaceholder');
+              local.elementPlaceholder = Dev.toggle(d.debug, 'elementPlaceholder');
             });
           });
       });
