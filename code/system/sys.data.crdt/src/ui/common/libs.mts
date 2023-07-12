@@ -2,25 +2,26 @@
  * @system
  */
 export {
-  css,
+  Button,
   COLORS,
+  Card,
   Color,
   FC,
+  Keyboard,
   PropList,
-  Style,
-  Card,
-  Button,
+  QRCode,
   Spinner,
-  useMouseState,
+  Style,
   TestRunner,
   TextInput,
-  QRCode,
-  Keyboard,
+  TextInputRef,
+  css,
+  useMouseState,
 } from 'sys.ui.react.common';
 
 export { Filesize } from 'sys.fs';
-export { Value } from 'sys.util';
 export { Test } from 'sys.test.spec';
+export { Value } from 'sys.util';
 
 /**
  * @local

@@ -2,10 +2,11 @@
  * @system
  */
 export type {
-  CssValue,
   CssEdgesInput,
+  CssValue,
   PropListItem,
   PropListProps,
+  TextInputRef,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
