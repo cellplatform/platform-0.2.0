@@ -57,6 +57,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.debug.devBg = local.devBg;
     });
 
+    ctx.debug.width(300);
     ctx.subject
       .size([280, null])
       .display('grid')
@@ -79,7 +80,22 @@ export default Dev.describe('Namespace.Item', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    const focus = () => {
+      const ref = state.current.ref;
+      Time.delay(0, () => ref?.focus());
+    };
+
     dev.section('Properties', (dev) => {
+      dev.textbox((txt) =>
+        txt
+          .placeholder('label text')
+          .value((e) => e.state.props.text)
+          .margin([0, 0, 10, 0])
+          .onChange((e) => {
+            state.change((d) => (local.text = d.props.text = e.to.value));
+          }),
+      );
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
         btn
@@ -167,6 +183,7 @@ export default Dev.describe('Namespace.Item', (e) => {
           d.props.editing = true;
         });
         updateLocalStorage();
+        focus();
       });
 
       dev.hr(-1, 5);
@@ -179,12 +196,21 @@ export default Dev.describe('Namespace.Item', (e) => {
         updateLocalStorage();
       });
 
-      dev.button('selected → editing', async (e) => {
+      dev.button('editing → selected', async (e) => {
         await e.change((d) => {
           d.props.selected = true;
           d.props.editing = true;
         });
         updateLocalStorage();
+        focus();
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('clear (text)', async (e) => {
+        await e.change((d) => (d.props.text = undefined));
+        updateLocalStorage();
+        focus();
       });
     });
 
