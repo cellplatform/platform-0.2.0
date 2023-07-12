@@ -8,16 +8,16 @@ type TFoo = { count: number };
 
 type T = {
   props: t.CrdtNamespaceItemProps;
+  debug: { devBg?: boolean };
 };
 const initial: T = {
   props: {},
+  debug: {},
 };
 
 export default Dev.describe('Namespace.Item', (e) => {
-  type LocalStore = Pick<
-    t.CrdtNamespaceItemProps,
-    'enabled' | 'selected' | 'indent' | 'padding' | 'editing'
-  >;
+  type LocalStore = T['debug'] &
+    Pick<t.CrdtNamespaceItemProps, 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace.Item');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
@@ -25,6 +25,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     indent: DEFAULTS.indent,
     padding: DEFAULTS.padding,
     editing: DEFAULTS.editing,
+    devBg: true,
   });
 
   const State = {
@@ -49,13 +50,16 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.indent = local.indent;
       d.props.padding = local.padding;
       d.props.editing = local.editing;
+      d.debug.devBg = local.devBg;
     });
 
     ctx.subject
-      .backgroundColor(1)
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
+        const { debug } = e.state;
+        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
+
         const props = State.toDisplayProps(state);
         return <CrdtNamespaceItem {...props} />;
       });
@@ -63,6 +67,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -125,30 +130,63 @@ export default Dev.describe('Namespace.Item', (e) => {
     dev.hr(5, 20);
 
     dev.section('States', (dev) => {
-      dev.button('default', (e) => {
-        e.change((d) => {
+      const updateLocalStorage = () => {
+        const data = state.current;
+        local.enabled = data.props.enabled;
+        local.selected = data.props.selected;
+        local.editing = data.props.editing;
+        local.padding = data.props.padding;
+        local.indent = data.props.indent;
+        local.devBg = data.debug.devBg;
+      };
+
+      dev.button('default', async (e) => {
+        await e.change((d) => {
           d.props.enabled = DEFAULTS.enabled;
           d.props.selected = DEFAULTS.selected;
           d.props.editing = DEFAULTS.editing;
           d.props.padding = DEFAULTS.padding;
           d.props.indent = DEFAULTS.indent;
         });
+        updateLocalStorage();
+      });
+
+      dev.button('editing', async (e) => {
+        await e.change((d) => {
+          d.props.selected = false;
+          d.props.editing = true;
+        });
+        updateLocalStorage();
       });
 
       dev.hr(-1, 5);
 
-      dev.button('selected', (e) => {
-        e.change((d) => {
+      dev.button('selected', async (e) => {
+        await e.change((d) => {
           d.props.selected = true;
           d.props.editing = false;
         });
+        updateLocalStorage();
       });
 
-      dev.button('selected → editing', (e) => {
-        e.change((d) => {
+      dev.button('selected → editing', async (e) => {
+        await e.change((d) => {
           d.props.selected = true;
           d.props.editing = true;
         });
+        updateLocalStorage();
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devBg);
+        btn
+          .label((e) => `background`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
       });
     });
   });
