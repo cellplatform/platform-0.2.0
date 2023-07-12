@@ -18,9 +18,10 @@ export type CrdtNamespaceItemProps = {
   indent?: number;
   padding?: t.CssEdgesInput;
 
-  onClick?: CrdtNamespaceItemClickHandler;
-  onChange?: CrdtNamespaceItemChangeHandler;
   onReady?: CrdtNamespaceItemReadyHandler;
+  onChange?: CrdtNamespaceItemChangeHandler;
+  onClick?: CrdtNamespaceItemClickHandler;
+  onEnter?: CrdtNamespaceItemEnterKeyHandler;
 };
 
 /**
@@ -39,12 +40,21 @@ export type CrdtNamespaceItemRef = {
  * Events
  */
 export type CrdtNamespaceItemReadyHandler = (e: CrdtNamespaceItemReadyHandlerArgs) => void;
-export type CrdtNamespaceItemReadyHandlerArgs = { ref: CrdtNamespaceItemRef };
+export type CrdtNamespaceItemReadyHandlerArgs = {
+  ref: CrdtNamespaceItemRef;
+};
 
 export type CrdtNamespaceItemChangeHandler = (e: CrdtNamespaceItemChangeHandlerArgs) => void;
-export type CrdtNamespaceItemChangeHandlerArgs = { text: string };
+export type CrdtNamespaceItemChangeHandlerArgs = {
+  text: string;
+};
 
 export type CrdtNamespaceItemClickHandler = (e: CrdtNamespaceItemClickHandlerArgs) => void;
 export type CrdtNamespaceItemClickHandlerArgs = {
   actions: t.CrdtNsItemActionKind[];
+};
+
+export type CrdtNamespaceItemEnterKeyHandler = (e: CrdtNamespaceItemEnterKeyHandlerArgs) => void;
+export type CrdtNamespaceItemEnterKeyHandlerArgs = {
+  text: string;
 };

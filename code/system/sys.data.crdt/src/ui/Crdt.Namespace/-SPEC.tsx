@@ -5,11 +5,11 @@ type TFoo = { count: number };
 
 type T = {
   props: t.CrdtNsProps;
-  debug: { withData: boolean };
+  debug: { withData?: boolean; devBg?: boolean };
 };
 const initial: T = {
   props: {},
-  debug: { withData: true },
+  debug: {},
 };
 
 const DEFAULTS = CrdtViews.Namespace.DEFAULTS;
@@ -18,10 +18,12 @@ export default Dev.describe('Namespace', (e) => {
   /**
    * Local storage.
    */
-  type LocalStore = Pick<t.CrdtNsProps, 'enabled'>;
+  type LocalStore = T['debug'] & Pick<t.CrdtNsProps, 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
+    devBg: true,
+    withData: true,
   });
 
   /**
@@ -65,6 +67,8 @@ export default Dev.describe('Namespace', (e) => {
 
     state.change((d) => {
       d.props.enabled = local.enabled;
+      d.debug.withData = local.withData;
+      d.debug.devBg = local.devBg;
     });
 
     ctx.subject
@@ -72,6 +76,8 @@ export default Dev.describe('Namespace', (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
+        const { debug } = e.state;
+        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
         const props = State.toDisplayProps(e.state);
         return <CrdtViews.Namespace {...props} />;
       });
@@ -96,7 +102,8 @@ export default Dev.describe('Namespace', (e) => {
     dev.section('Debug', (dev) => {
       dev.button((btn) => {
         btn
-          .label((e) => (ns.disposed ? 'create namespace' : 'dispose'))
+          .label((e) => (ns.disposed ? 'create' : 'dispose'))
+          .right((e) => (ns.disposed ? '🌳' : ''))
           .onClick((e) => {
             if (ns.disposed) {
               ns = createNamespace(dev.ctx);
@@ -105,6 +112,24 @@ export default Dev.describe('Namespace', (e) => {
               ns.dispose();
             }
           });
+      });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devBg);
+        btn
+          .label((e) => `background`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.withData);
+        btn
+          .label((e) => (value(e.state) ? `with data` : `no data`))
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.withData = Dev.toggle(d.debug, 'withData'))));
       });
 
       dev.hr(-1, 5);
@@ -118,14 +143,6 @@ export default Dev.describe('Namespace', (e) => {
       });
 
       dev.hr(-1, 5);
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.withData);
-        btn
-          .label((e) => (value(e.state) ? `with data` : `no data`))
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'withData')));
-      });
     });
   });
 

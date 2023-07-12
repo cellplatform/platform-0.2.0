@@ -35,9 +35,18 @@ export default Dev.describe('Namespace.Item', (e) => {
     toDisplayProps(state: t.DevCtxState<T>): t.CrdtNamespaceItemProps {
       return {
         ...state.current.props,
+        onReady(e) {
+          console.info('⚡️ onReady', e);
+        },
         onChange(e) {
           console.info('⚡️ onChange', e);
           state.change((d) => (local.text = d.props.text = e.text));
+        },
+        onClick(e) {
+          console.info('⚡️ onClick', e);
+        },
+        onEnter() {
+          console.info('⚡️ onEnter', e);
         },
       };
     },
@@ -155,7 +164,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['States', '↑ (update)'], (dev) => {
+    dev.section(['States', '(update) ↑'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.props.enabled;

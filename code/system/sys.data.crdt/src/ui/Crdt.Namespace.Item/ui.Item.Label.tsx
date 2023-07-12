@@ -13,20 +13,16 @@ export const Label: React.FC<Props> = (props) => {
     maxLength = DEFAULTS.maxLength,
     focusOnReady = DEFAULTS.focusOnReady,
   } = props;
-  const { value } = Wrangle.value(props);
-  const color = Wrangle.foreColor(props);
-  const underlineColor = Color.alpha(color, selected ? 0.5 : 0.2);
+  const { text } = Wrangle.text(props);
 
   /**
    * [Render]
    */
+  const color = Wrangle.foreColor(props);
+  const underlineColor = Color.alpha(color, selected ? 0.5 : 0.2);
   const styles = {
-    base: css({
-      position: 'relative',
-    }),
-    textbox: css({
-      userSelect: editing ? 'auto' : 'none',
-    }),
+    base: css({ position: 'relative' }),
+    textbox: css({ userSelect: editing ? 'auto' : 'none' }),
     underline: css({
       pointerEvents: 'none',
       borderBottom: `dashed 1.2px ${underlineColor}`,
@@ -34,31 +30,36 @@ export const Label: React.FC<Props> = (props) => {
     }),
   };
 
+  const elTextbox = (
+    <TextInput
+      ref={inputRef}
+      style={styles.textbox}
+      placeholder={'namespace'}
+      placeholderStyle={{
+        opacity: 0.3,
+        color: color,
+        disabledColor: color,
+      }}
+      value={text}
+      valueStyle={{
+        fontSize: 13,
+        color: color,
+        disabledColor: color,
+      }}
+      maxLength={maxLength}
+      spellCheck={false}
+      isEnabled={enabled}
+      isReadOnly={!editing}
+      focusOnReady={focusOnReady}
+      onChanged={(e) => props.onChange?.({ text: e.to })}
+      onEnter={(e) => props.onEnter?.({ text })}
+    />
+  );
+
   return (
     <div {...css(styles.base, props.style)}>
       {editing && <div {...styles.underline} />}
-      <TextInput
-        ref={inputRef}
-        style={styles.textbox}
-        placeholder={'namespace'}
-        placeholderStyle={{
-          opacity: 0.3,
-          color: color,
-          disabledColor: color,
-        }}
-        value={value}
-        valueStyle={{
-          fontSize: 13,
-          color: color,
-          disabledColor: color,
-        }}
-        maxLength={maxLength}
-        spellCheck={false}
-        isEnabled={enabled}
-        isReadOnly={!editing}
-        focusOnReady={focusOnReady}
-        onChanged={(e) => props.onChange?.({ text: e.to })}
-      />
+      {elTextbox}
     </div>
   );
 };

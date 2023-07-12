@@ -2,10 +2,10 @@ import { COLORS, DEFAULTS, type t } from './common';
 import { Icon } from './ui.Item.Icon';
 
 export const Wrangle = {
-  value(props: t.CrdtNamespaceItemProps) {
-    const value = props.text;
-    const hasValue = Boolean(value);
-    return { value, hasValue };
+  text(props: t.CrdtNamespaceItemProps) {
+    const text = props.text || '';
+    const hasValue = Boolean(text.trim());
+    return { text, hasValue };
   },
 
   foreColor(props: t.CrdtNamespaceItemProps) {
@@ -15,7 +15,7 @@ export const Wrangle = {
 
   leftIcon(props: t.CrdtNamespaceItemProps) {
     const { editing = DEFAULTS.editing } = props;
-    const { hasValue } = Wrangle.value(props);
+    const { hasValue } = Wrangle.text(props);
     const foreColor = Wrangle.foreColor(props);
 
     let opacity = 0.5;
