@@ -28,7 +28,7 @@ export function namespace<R extends {}, N extends string = string>(
     },
 
     get container() {
-      return toObject(container.current);
+      return life.disposed ? ({} as t.CrdtNsMap<N>) : toObject(container.current);
     },
 
     lens<L extends {}>(namespace: N, initial: L) {

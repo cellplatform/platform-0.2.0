@@ -1,4 +1,4 @@
-import { Automerge, Crdt, Is, Test, expect, rx, toObject, type t } from '../test.ui';
+import { Automerge, Crdt, Is, Test, expect, rx, type t } from '../test.ui';
 
 export default Test.describe('Lens Namespace', (e) => {
   type TFoo = { ns?: t.CrdtNsMap };
@@ -243,6 +243,21 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(namespace.disposed).to.eql(true);
       expect(ns2.disposed).to.eql(true);
       expect(ns1.disposed).to.eql(true);
+    });
+
+    e.it.only('dispose clears { container } → { }', (e) => {
+      const { doc } = setup();
+
+      const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
+      namespace.lens<TDoc>('foo', { count: 0 });
+      namespace.lens<TError>('bar', {});
+
+      const keys1 = Object.keys(namespace.container);
+      doc.dispose();
+      const keys2 = Object.keys(namespace.container);
+
+      expect(keys1).to.eql(['foo', 'bar']);
+      expect(keys2).to.eql([]);
     });
   });
 });
