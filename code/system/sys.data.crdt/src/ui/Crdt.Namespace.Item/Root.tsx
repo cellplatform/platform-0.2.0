@@ -12,3 +12,9 @@ export const CrdtNamespaceItem = FC.decorate<t.CrdtNamespaceItemProps, Fields>(
   { DEFAULTS },
   { displayName: 'Crdt.Namespace.Item' },
 );
+
+/**
+ * TODO 🐷
+ * - store value in local-storage
+ * - focus (method)
+ */

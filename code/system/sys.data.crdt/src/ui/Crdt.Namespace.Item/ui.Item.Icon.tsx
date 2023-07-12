@@ -36,6 +36,12 @@ const Wrangle = {
     if (kind === 'Repo') {
       return <Icons.Repo size={18} color={color} offset={[0, 1]} />;
     }
+    if (kind === 'Json') {
+      return <Icons.Json size={17} color={color} />;
+    }
+    if (kind === 'ObjectTree') {
+      return <Icons.ObjectTree size={17} color={color} />;
+    }
     if (kind === 'Editing') {
       return (
         <Icons.Editing
@@ -45,12 +51,6 @@ const Wrangle = {
           style={{ transform: `scaleX(-1)` }}
         />
       );
-    }
-    if (kind === 'Json') {
-      return <Icons.Json size={17} color={color} />;
-    }
-    if (kind === 'ObjectTree') {
-      return <Icons.ObjectTree size={17} color={color} />;
     }
 
     return null;

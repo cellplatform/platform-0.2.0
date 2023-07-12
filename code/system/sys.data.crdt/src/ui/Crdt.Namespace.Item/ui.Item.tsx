@@ -1,8 +1,8 @@
 import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { ItemIcon } from './ui.Item.Icon';
 import { ItemLabel } from './ui.Item.Label';
+import { RightOptions } from './ui.RightOptions';
 
 export const Item: React.FC<t.CrdtNamespaceItemProps> = (props) => {
   const {
@@ -15,7 +15,7 @@ export const Item: React.FC<t.CrdtNamespaceItemProps> = (props) => {
   /**
    * [Render]
    */
-  const foreColor = Wrangle.foreColor(props);
+
   const styles = {
     base: css({
       pointerEvents: enabled ? 'auto' : 'none',
@@ -30,12 +30,7 @@ export const Item: React.FC<t.CrdtNamespaceItemProps> = (props) => {
       gridTemplateColumns: 'auto 1fr auto',
       columnGap: 3,
     }),
-    right: css({
-      marginLeft: 5,
-      display: 'grid',
-      gridTemplateColumns: 'auto auto',
-      columnGap: 5,
-    }),
+    right: css({ marginLeft: 5 }),
   };
 
   return (
@@ -43,10 +38,7 @@ export const Item: React.FC<t.CrdtNamespaceItemProps> = (props) => {
       <div {...styles.body}>
         {Wrangle.leftIcon(props)}
         <ItemLabel {...props} />
-        <div {...styles.right}>
-          <ItemIcon kind={'Json'} color={foreColor} />
-          <ItemIcon kind={'ObjectTree'} color={foreColor} />
-        </div>
+        <RightOptions {...props} style={styles.right} />
       </div>
     </div>
   );
