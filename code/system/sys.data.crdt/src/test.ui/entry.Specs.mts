@@ -8,6 +8,8 @@ export const Specs = {
   'sys.data.crdt.types.Text': () => import('../test.ui.specs/-SPEC.Text'),
 
   'sys.ui.common.Item.LabelItem': () => import('../sys.ui.common/LabelItem/-SPEC'),
+  'sys.ui.common.Item.LabelItem.Stateful': () =>
+    import('../sys.ui.common/LabelItem.Stateful/-Spec'),
 };
 
 export default Specs;

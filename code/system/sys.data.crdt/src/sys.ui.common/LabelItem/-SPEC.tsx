@@ -161,7 +161,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['States', '(update) ↑'], (dev) => {
+    dev.section(['States', '( change ) ↑'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.props.enabled;
@@ -213,7 +213,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('clear (text)', async (e) => {
+      dev.button('clear ("text")', async (e) => {
         await e.change((d) => (d.props.text = undefined));
         updateLocalStorage();
         focus();
