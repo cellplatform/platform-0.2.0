@@ -251,8 +251,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.hr(-1, 5);
       action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));
       dev.hr(-1, 5);
-      action('cursorToStart', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
-      action('cursorToEnd', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
+      action('cursorTo → Start', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
+      action('cursorTo → End', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
     });
   });
 
