@@ -8,9 +8,11 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
+
+    ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
-      .size([250, null])
+      .size([280, null])
       .display('grid')
       .render<T>((e) => {
         return <LabelItemStateful {...e.state.props} />;

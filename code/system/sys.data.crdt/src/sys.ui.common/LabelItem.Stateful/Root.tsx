@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from '../common';
+import { useController } from './useController.mjs';
+
+import { LabelItem } from '../LabelItem/Root';
 
 const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   /**
    * [Render]
    */
-  const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
-  };
+  const controller = useController({});
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 LabelItemStateful`}</div>
-    </div>
-  );
+  console.log('controller', controller);
+
+  return <LabelItem style={props.style} />;
 };
 
 /**
@@ -23,9 +20,10 @@ const View: React.FC<t.LabelItemStatefulProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  useController: typeof useController;
 };
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, useController },
   { displayName: 'LabelItem.Stateful' },
 );
