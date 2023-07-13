@@ -16,5 +16,5 @@ export type CrdtNsProps = {
 export type CrdtNsInfoData = {
   ns?: t.CrdtNsManager<{}>;
   maxLength?: number;
-  onChange?: t.CrdtNamespaceItemChangeHandler;
+  onChange?: t.LabelItemChangeHandler;
 };

@@ -32,3 +32,4 @@ export type {
  * @local
  */
 export * from '../types.mjs';
+export * from '../sys.ui.common/types.mjs'; // TEMP 🐷
