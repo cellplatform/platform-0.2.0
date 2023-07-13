@@ -4,8 +4,9 @@ import { useController } from './useController.mjs';
 import { LabelItem } from '../LabelItem/Root';
 
 const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const controller = useController({ enabled: props.useController });
-  return <LabelItem style={props.style} />;
+  const enabled = props.useController && !props.props;
+  const controller = useController({ enabled });
+  return <LabelItem {...(props.props ?? controller.props)} style={props.style} />;
 };
 
 /**

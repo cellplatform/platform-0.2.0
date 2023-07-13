@@ -8,25 +8,31 @@ import { rx, type t, Keyboard, DEFAULTS } from './common';
 export function useController(args: { enabled?: boolean }) {
   const { enabled = DEFAULTS.useController } = args;
 
+  const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);
+
   /**
    * Keyboard monitor.
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    const keypress$ = Keyboard.Monitor.$.pipe(
-      rx.takeUntil(dispose$),
-      rx.filter(() => enabled),
-    );
 
-    keypress$.subscribe((e) => {
-      console.log('keypress:', e);
+    const todo = Keyboard.until(dispose$);
+
+    const keyboard = Keyboard.on({
+      Enter(e) {
+        if (!enabled) return;
+        setProps((prev) => ({ ...prev, editing: !Boolean(prev.editing) }));
+      },
     });
 
-    return dispose;
+    return () => {
+      keyboard.dispose();
+      dispose();
+    };
   }, [enabled]);
 
   /**
    * API
    */
-  return {} as const;
+  return { props } as const;
 }
