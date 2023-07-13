@@ -21,4 +21,5 @@ export const DEFAULTS = {
   item,
   enabled: true,
   indent: 0,
+  placeholder: 'namespace',
 } as const;

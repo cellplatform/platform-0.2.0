@@ -8,5 +8,5 @@ export const DEFAULTS = {
   maxLength: 120,
   indent: 0,
   padding: 5,
-  placeholder: 'namespace',
+  placeholder: 'placeholder',
 } as const;

@@ -11,10 +11,10 @@ export const Label: React.FC<Props> = (props) => {
     editing = DEFAULTS.editing,
     selected = DEFAULTS.selected,
     maxLength = DEFAULTS.maxLength,
+    placeholder = DEFAULTS.placeholder,
     focusOnReady = DEFAULTS.focusOnReady,
   } = props;
   const { text, isEmpty } = Wrangle.text(props);
-  const placeholder = DEFAULTS.placeholder;
 
   /**
    * [Render]

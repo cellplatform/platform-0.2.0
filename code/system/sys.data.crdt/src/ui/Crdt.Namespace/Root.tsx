@@ -22,7 +22,11 @@ const View: React.FC<t.CrdtNsProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <LabelItem enabled={enabled} text={'foo 🐷'} style={styles.item} />
+      <LabelItem
+        placeholder={DEFAULTS.placeholder}
+        enabled={enabled}
+        style={styles.item}
+      />
     </div>
   );
 };

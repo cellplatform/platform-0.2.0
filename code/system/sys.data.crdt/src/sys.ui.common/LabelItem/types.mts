@@ -7,6 +7,7 @@ export type LabelItemActionKind = 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
  */
 export type LabelItemProps = {
   text?: string;
+  placeholder?: string;
   maxLength?: number;
 
   enabled?: boolean;
