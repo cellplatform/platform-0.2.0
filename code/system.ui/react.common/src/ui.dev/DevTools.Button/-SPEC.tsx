@@ -94,6 +94,7 @@ export default Dev.describe('Button', (e) => {
       );
 
       dev.button((btn) => btn.label('sample left').right('"right string"'));
+      dev.button(['[left, 🐷]', '[🐷, right]'], () => {});
     });
 
     dev.hr(5, 15);
