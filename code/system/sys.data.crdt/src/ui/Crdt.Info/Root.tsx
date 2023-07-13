@@ -38,7 +38,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     .field('Network', () => FieldNetwork(data))
     .field('Url', () => FieldUrl(data))
     .field('Url.QRCode', () => FieldUrlQRCode(data))
-    .field('Namespace', () => FieldNamespace(data))
+    .field('Namespace', () => FieldNamespace(fields, data))
     .items(fields);
 
   return (

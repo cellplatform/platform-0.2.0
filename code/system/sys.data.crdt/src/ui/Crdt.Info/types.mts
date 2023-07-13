@@ -13,7 +13,8 @@ export type CrdtInfoField =
   | 'History.Item.Message'
   | 'Url'
   | 'Url.QRCode'
-  | 'Namespace';
+  | 'Namespace'
+  | 'Namespace.Title';
 
 export type CrdtInfoData = {
   file?: { doc?: t.CrdtDocFile<any>; title?: string; path?: string };

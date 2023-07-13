@@ -7,6 +7,7 @@ export type CrdtNsProps = {
   enabled?: boolean;
   data?: t.CrdtNsInfoData;
   style?: t.CssValue;
+  indent?: number;
 };
 
 /**
@@ -14,6 +15,7 @@ export type CrdtNsProps = {
  * Properties for when inserting within the <Info>.
  */
 export type CrdtNsInfoData = {
+  title?: string;
   ns?: t.CrdtNsManager<{}>;
   maxLength?: number;
   onChange?: t.LabelItemChangeHandler;

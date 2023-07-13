@@ -1,4 +1,4 @@
-import { CrdtInfo, CrdtInfoProps } from '.';
+import { CrdtInfo, CrdtInfoProps } from '..';
 import {
   ConnectionMock,
   Crdt,
@@ -8,7 +8,7 @@ import {
   css,
   rx,
   type t,
-} from '../../test.ui';
+} from '../../../test.ui';
 
 type T = {
   props: CrdtInfoProps;

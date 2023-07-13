@@ -17,7 +17,8 @@ const data: t.CrdtNsInfoData = {
 };
 
 export const DEFAULTS = {
-  enabled: true,
   data,
   item,
+  enabled: true,
+  indent: 0,
 } as const;

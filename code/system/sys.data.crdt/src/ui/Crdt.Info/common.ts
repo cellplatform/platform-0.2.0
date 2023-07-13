@@ -19,6 +19,7 @@ export const FIELDS: t.CrdtInfoField[] = [
   'Url',
   'Url.QRCode',
   'Namespace',
+  'Namespace.Title',
 ];
 
 const fields = ['Module', 'Module.Verify'] as t.CrdtInfoField[];
@@ -28,6 +29,7 @@ export const DEFAULTS = {
   indent: 15,
   doc: DEFAULTS_BASE.doc,
   query: DEFAULTS_BASE.query,
+  namespace: { title: 'Namespace' },
 } as const;
 
 /**
