@@ -94,6 +94,7 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
       onPeerSelect: (e) => setSelected(e.peerid),
       onPeerCtrlClick: (e) => console.info('⚡️ onPeerCtrlClick', e),
     },
+    namespace: {},
   };
 
   /**

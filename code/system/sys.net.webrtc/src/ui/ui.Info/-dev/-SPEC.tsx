@@ -95,6 +95,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             console.info('⚡️ onPeerCtrlClick', e);
           },
         },
+        namespace: {},
       };
     },
   };
@@ -215,7 +216,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           <Dev.FieldSelector
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
-            all={WebRtcInfo.FIELDS}
+            all={WebRtcInfo.DEFAULTS.fields.all}
             default={WebRtcInfo.DEFAULTS.fields.default}
             selected={props.current.fields}
             resettable={true}

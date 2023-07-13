@@ -6,17 +6,6 @@ export * from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.WebRtcInfoField[] = [
-  'Module',
-  'Module.Verify',
-  'Self.Id',
-  'State.Shared',
-  'Group',
-  'Group.Peers',
-  'Peer',
-  'Peer.Connections',
-];
-
 const fieldsAll: t.WebRtcInfoField[] = [
   'Module',
   'Module.Verify',
@@ -26,6 +15,7 @@ const fieldsAll: t.WebRtcInfoField[] = [
   'Group.Peers',
   'Peer',
   'Peer.Connections',
+  'Namespace',
 ];
 
 const defaultFields: t.WebRtcInfoField[] = [

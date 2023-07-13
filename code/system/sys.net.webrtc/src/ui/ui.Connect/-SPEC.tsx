@@ -130,7 +130,7 @@ export default Dev.describe('Connect', async (e) => {
             resettable={true}
             onClick={(args) => {
               const next = args.next as t.WebRtcInfoField[];
-              state.change((d) => (d.props.fields = next));
+              state.change((d) => (local.fields = d.props.fields = next));
             }}
           />
         );
@@ -173,9 +173,10 @@ export default Dev.describe('Connect', async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const count = e.state.debug.changed ?? 0;
+      const { props, debug } = e.state;
+      const count = debug.changed ?? 0;
       const data = {
-        props: e.state.props,
+        props,
         selected: e.state.changed?.selected,
         [`⚡️changed(${count})`]: e.state.changed,
       };

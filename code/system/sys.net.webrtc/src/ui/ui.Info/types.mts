@@ -9,7 +9,8 @@ export type WebRtcInfoField =
   | 'Group'
   | 'Group.Peers'
   | 'Peer'
-  | 'Peer.Connections';
+  | 'Peer.Connections'
+  | 'Namespace';
 
 export type WebRtcInfoData = {
   self?: { title?: string };
@@ -17,6 +18,7 @@ export type WebRtcInfoData = {
   peer?: { title?: string };
   group?: WebRtcInfoDataGroup;
   connect?: WebRtcInfoDataConnect;
+  namespace?: t.CrdtNsInfoData;
 };
 
 export type WebRtcInfoDataGroup = {

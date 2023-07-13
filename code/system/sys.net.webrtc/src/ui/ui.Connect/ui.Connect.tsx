@@ -1,4 +1,4 @@
-import { Style, DEFAULTS, css, type t } from './common';
+import { DEFAULTS, Style, css, type t } from './common';
 
 import { WebRtcInfo } from '../ui.Info';
 import { ConnectInputEdge } from './ui.Connect.Input.Edge';
@@ -18,9 +18,7 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
       boxSizing: 'border-box',
       ...Style.toMargins(props.margin),
     }),
-    info: css({
-      MarginX: 15,
-    }),
+    info: css({ MarginX: 15 }),
   };
 
   const elTop = <ConnectInputEdge {...props} targetEdge={'Top'} />;
