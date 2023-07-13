@@ -1,9 +1,9 @@
 import { RefObject } from 'react';
 import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
-import { Wrangle } from './Wrangle';
 import { Label } from './ui.Label';
-import { Actions } from './ui.Actions';
+import { LeftIcon } from './ui.Left.Icon';
+import { Actions } from './ui.Right.Actions';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 
@@ -39,7 +39,7 @@ export const View: React.FC<Props> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        {Wrangle.leftIcon(props)}
+        <LeftIcon {...props} />
         <Label {...props} inputRef={inputRef} />
         <Actions {...props} style={styles.right} />
       </div>
