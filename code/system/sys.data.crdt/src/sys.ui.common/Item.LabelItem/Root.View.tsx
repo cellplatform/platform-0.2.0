@@ -2,8 +2,8 @@ import { RefObject } from 'react';
 import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { Label } from './ui.Item.Label';
-import { Actions } from './ui.Item.Actions';
+import { Label } from './ui.Label';
+import { Actions } from './ui.Actions';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 

@@ -1,7 +1,7 @@
 import { DEFAULTS, css, type t } from './common';
 
 import { Wrangle } from './Wrangle';
-import { Icon } from './ui.Item.Icon';
+import { Icon } from './ui.Icon';
 
 export const Actions: React.FC<t.LabelItemProps> = (props) => {
   const { editing = DEFAULTS.editing } = props;

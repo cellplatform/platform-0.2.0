@@ -1,5 +1,5 @@
 import { COLORS, DEFAULTS, type t } from './common';
-import { Icon } from './ui.Item.Icon';
+import { Icon } from './ui.Icon';
 
 export const Wrangle = {
   text(props: t.LabelItemProps) {
