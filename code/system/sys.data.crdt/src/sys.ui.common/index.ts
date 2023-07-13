@@ -1,1 +1,1 @@
-export * from './Item.LabelItem';
+export * from './LabelItem';

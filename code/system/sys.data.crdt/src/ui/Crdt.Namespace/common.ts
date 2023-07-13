@@ -7,7 +7,7 @@ export { CrdtLens } from '../../crdt.Lens';
  * @system → sys.ui.common
  */
 export { LabelItem } from '../../sys.ui.common';
-import { DEFAULTS as item } from '../../sys.ui.common/Item.LabelItem/common';
+import { DEFAULTS as item } from '../../sys.ui.common/LabelItem/common';
 
 /**
  * Constants.
