@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, rx, FC, type t, DEFAULTS, CrdtLens } from './common';
-import { CrdtNamespaceItem } from '../Crdt.Namespace.Item';
+import { CrdtLens, DEFAULTS, FC, LabelItem, css, type t } from './common';
 
 const ns = CrdtLens.namespace;
 
@@ -19,7 +17,8 @@ const View: React.FC<t.CrdtNsProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <CrdtNamespaceItem {...props} enabled={enabled} text={'foo'} style={styles.item} />
+      {/* <CrdtNamespaceItem {...props} enabled={enabled} text={'foo'} style={styles.item} /> */}
+      <LabelItem enabled={enabled} text={'foo 🐷'} style={styles.item} />
     </div>
   );
 };
@@ -29,11 +28,11 @@ const View: React.FC<t.CrdtNsProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  Item: typeof CrdtNamespaceItem;
+  // Item: typeof CrdtNamespaceItem;
   ns: typeof CrdtLens.namespace;
 };
 export const CrdtNamespace = FC.decorate<t.CrdtNsProps, Fields>(
   View,
-  { DEFAULTS, ns, Item: CrdtNamespaceItem },
+  { DEFAULTS, ns },
   { displayName: 'Crdt.Namespace' },
 );

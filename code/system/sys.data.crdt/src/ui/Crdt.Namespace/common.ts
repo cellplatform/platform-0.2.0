@@ -2,7 +2,12 @@ import { type t } from '../common';
 
 export * from '../common';
 export { CrdtLens } from '../../crdt.Lens';
-import { DEFAULTS as item } from '../Crdt.Namespace.Item/common';
+
+/**
+ * @system → sys.ui.common
+ */
+export { LabelItem } from '../../sys.ui.common';
+import { DEFAULTS as item } from '../../sys.ui.common/Item.LabelItem/common';
 
 /**
  * Constants.
