@@ -10,7 +10,6 @@ export function until(until$?: t.UntilObservable) {
   const { dispose, dispose$ } = lifecycle;
 
   const on: t.KeyboardMonitor['on'] = (...args: any) => {
-    console.log('until >> on');
     const listener = Monitor.on.apply(Monitor, args);
     dispose$.pipe(rx.take(1)).subscribe(() => listener.dispose());
     return listener;
