@@ -172,7 +172,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         local.devBg = data.debug.devBg;
       };
 
-      dev.button('default', async (e) => {
+      dev.button('(default)', async (e) => {
         await e.change((d) => {
           d.props.enabled = DEFAULTS.enabled;
           d.props.selected = DEFAULTS.selected;

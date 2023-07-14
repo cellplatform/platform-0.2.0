@@ -32,6 +32,8 @@ export default Dev.describe('CrdtHistory', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
+    dev.TODO();
+
     dev.section('Change CRDT document', (dev) => {
       let message = '';
       dev.textbox((txt) =>
