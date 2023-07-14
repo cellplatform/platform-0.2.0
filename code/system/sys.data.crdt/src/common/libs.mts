@@ -10,3 +10,4 @@ export const R = { clone, equals };
 export { rx, slug, Time, Is } from 'sys.util';
 export { Diff } from 'sys.text';
 export { Path } from 'sys.fs';
+export { Patch } from 'sys.data.json';
