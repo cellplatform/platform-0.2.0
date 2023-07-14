@@ -1,4 +1,4 @@
-import { KeyboardMonitor } from './Keyboard.Monitor.mjs';
+import { KeyboardMonitor as Monitor } from './Keyboard.Monitor.mjs';
 import { rx, type t } from './common';
 
 /**
@@ -7,21 +7,30 @@ import { rx, type t } from './common';
  */
 export function until(until$?: t.UntilObservable) {
   const lifecycle = rx.lifecycle(until$);
-  const { dispose$ } = lifecycle;
+  const { dispose, dispose$ } = lifecycle;
+
+  const on: t.KeyboardMonitor['on'] = (...args: any) => {
+    console.log('until >> on');
+    const listener = Monitor.on.apply(Monitor, args);
+    dispose$.pipe(rx.take(1)).subscribe(() => listener.dispose());
+    return listener;
+  };
+
+  const $ = Monitor.$.pipe(rx.takeUntil(dispose$));
+  const down$ = $.pipe(rx.filter((e) => e.last?.stage === 'Down'));
+  const up$ = $.pipe(rx.filter((e) => e.last?.stage === 'Up'));
 
   const api = {
-    get $() {
-      return KeyboardMonitor.$.pipe(rx.takeUntil(dispose$));
-    },
+    on,
+    $,
+    up$,
+    down$,
 
-    get down$() {
-      return api.$.pipe(rx.filter((e) => e.last?.stage === 'Down'));
-    },
-
-    get up$() {
-      return api.$.pipe(rx.filter((e) => e.last?.stage === 'Up'));
-    },
-
+    /**
+     * Lifecycle
+     */
+    dispose$,
+    dispose,
     get disposed() {
       return lifecycle.disposed;
     },
