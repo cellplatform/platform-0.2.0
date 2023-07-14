@@ -1,4 +1,4 @@
-import { Color, COLORS, css, Icons, type t } from './DEV.common';
+import { Color, COLORS, css, Icons, type t } from './-common';
 import { DevModifierKeys } from './DEV.ModifierKeys';
 
 export type DevSampleProps = {

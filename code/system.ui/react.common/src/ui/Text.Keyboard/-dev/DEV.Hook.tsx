@@ -1,4 +1,4 @@
-import { Keyboard, ObjectView, css, type t } from './DEV.common';
+import { Keyboard, ObjectView, css, type t } from './-common';
 
 export type DevHookProps = {
   style?: t.CssValue;

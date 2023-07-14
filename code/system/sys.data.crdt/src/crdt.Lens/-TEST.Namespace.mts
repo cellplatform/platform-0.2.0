@@ -259,5 +259,26 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(keys1).to.eql(['foo', 'bar']);
       expect(keys2).to.eql([]);
     });
+
+    e.it('dispose → 🌳 generate (new instance) → container:{ <empty> }', (e) => {
+      const { doc } = setup();
+
+      const generate = () => Crdt.Lens.namespace<TRoot>(doc, getMap);
+
+      const ns1 = generate();
+      ns1.lens<TDoc>('foo', { count: 0 });
+      ns1.lens<TError>('bar', {});
+
+      expect(Object.keys(ns1.container).length).to.eql(2);
+      doc.dispose();
+      expect(Object.keys(ns1.container).length).to.eql(0);
+
+      /**
+       * TODO 🐷
+       */
+
+      const ns2 = generate();
+      expect(Object.keys(ns2.container).length).to.eql(0);
+    });
   });
 });
