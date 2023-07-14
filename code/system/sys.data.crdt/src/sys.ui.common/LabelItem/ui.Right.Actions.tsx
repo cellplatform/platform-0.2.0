@@ -14,7 +14,7 @@ export const Actions: React.FC<t.LabelItemProps> = (props) => {
    * [Handlers]
    */
   const onClick = (...actions: t.LabelItemActionKind[]) => {
-    props.onClick?.({ actions });
+    props.onActionClick?.({ actions });
   };
 
   /**

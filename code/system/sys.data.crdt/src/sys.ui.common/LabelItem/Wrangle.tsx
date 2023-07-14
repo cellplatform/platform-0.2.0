@@ -2,7 +2,7 @@ import { COLORS, DEFAULTS, type t } from './common';
 
 export const Wrangle = {
   text(props: t.LabelItemProps) {
-    const text = props.text || '';
+    const text = props.label || '';
     const hasValue = Boolean(text.trim());
     const isEmpty = !hasValue;
     return { text, hasValue, isEmpty };

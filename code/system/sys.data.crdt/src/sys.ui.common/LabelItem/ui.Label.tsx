@@ -65,8 +65,8 @@ export const Label: React.FC<Props> = (props) => {
       isEnabled={enabled}
       isReadOnly={!editing}
       focusOnReady={focusOnReady}
-      onChanged={(e) => props.onChange?.({ text: e.to })}
-      onEnter={(e) => props.onEnter?.({ text })}
+      onChanged={(e) => props.onChange?.({ label: e.to })}
+      onEnter={(e) => props.onEnter?.({ label: text })}
     />
   );
 

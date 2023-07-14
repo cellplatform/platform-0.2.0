@@ -1,7 +1,36 @@
 import { type t } from './common';
 
+/**
+ * Data
+ */
+export type LabelItemData = {
+  label?: string;
+};
+
+/**
+ * Simple safe/immutable state wrapper for the data object.
+ */
+export type LabelItemState = {
+  readonly current: t.LabelItemData;
+  change(fn: (draft: t.LabelItemData) => void): void;
+};
+
+/**
+ * Component (View)
+ */
 export type LabelItemStatefulProps = {
   useController?: boolean;
-  props?: t.LabelItemProps; // Passed in from a high-level state controller if local [useController] not in use.
   style?: t.CssValue;
+  onChange?: LabelItemDataChangeHandler;
+};
+
+/**
+ * Events
+ */
+
+export type LabelItemDataChangeHandler = (e: LabelItemDataChangeHandlerArgs) => void;
+export type LabelItemDataChangeHandlerArgs = {
+  action: 'label' | 'editing';
+  data: LabelItemData;
+  props: t.LabelItemProps;
 };
