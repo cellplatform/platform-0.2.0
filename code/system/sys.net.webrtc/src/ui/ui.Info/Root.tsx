@@ -40,9 +40,9 @@ const View: React.FC<WebRtcInfoProps> = (props) => {
     .field('Group', () => FieldGroup({ fields, data, info }))
     .field('Group.Peers', () => FieldGroupList({ fields, data, info, client, isOver }))
     .field('State.Shared', () => FieldStateShared({ fields, data, info }))
+    .field('State.Shared.Namespace', () => FieldNamespace({ fields, data, info }))
     .field('Peer', () => FieldPeer({ fields, data, info }))
     .field('Peer.Connections', () => FieldPeerConnections({ fields, data, info }))
-    .field('Namespace', () => FieldNamespace({ fields, data, info }))
     .items(fields);
 
   return (

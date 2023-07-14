@@ -6,11 +6,11 @@ export type WebRtcInfoField =
   | 'Module.Verify'
   | 'Self.Id'
   | 'State.Shared'
+  | 'State.Shared.Namespace'
   | 'Group'
   | 'Group.Peers'
   | 'Peer'
-  | 'Peer.Connections'
-  | 'Namespace';
+  | 'Peer.Connections';
 
 export type WebRtcInfoData = {
   self?: { title?: string };

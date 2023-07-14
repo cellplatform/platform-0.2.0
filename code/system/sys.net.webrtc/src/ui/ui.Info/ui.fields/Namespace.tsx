@@ -6,15 +6,8 @@ export function FieldNamespace(args: {
   info?: t.WebRtcInfo;
 }): t.PropListItem[] {
   const namespace = args.data.namespace;
-  if (!namespace || !args.fields.includes('Namespace')) return [];
+  if (!namespace || !args.fields.includes('State.Shared.Namespace')) return [];
 
-  const value = (
-    <CrdtViews.Info
-      fields={['Namespace', 'Namespace.Title']}
-      data={{ namespace }}
-      style={{ flex: 1 }}
-    />
-  );
-
+  const value = <CrdtViews.Info fields={['Namespace']} data={{ namespace }} style={{ flex: 1 }} />;
   return [{ value }];
 }

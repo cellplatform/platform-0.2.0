@@ -11,11 +11,11 @@ const fieldsAll: t.WebRtcInfoField[] = [
   'Module.Verify',
   'Self.Id',
   'State.Shared',
+  'State.Shared.Namespace',
   'Group',
   'Group.Peers',
   'Peer',
   'Peer.Connections',
-  'Namespace',
 ];
 
 const defaultFields: t.WebRtcInfoField[] = [
