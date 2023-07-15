@@ -1,6 +1,6 @@
 import { init } from './Lens.impl.mjs';
 import { Registry } from './Lens.Registry.mjs';
-import { namespace } from './Lens.Namespace.mjs';
+import { CrdtNamespace as namespace } from '../crdt.Lens.Namespace';
 
 /**
  * Lens for operating on a sub-tree within a CRDT.

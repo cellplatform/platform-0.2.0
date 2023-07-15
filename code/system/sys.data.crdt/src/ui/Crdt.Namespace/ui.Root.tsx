@@ -10,6 +10,10 @@ export const View: React.FC<t.CrdtNsProps> = (props) => {
   const container = ns.container;
   const isEmpty = Object.keys(container).length === 0;
 
+  console.log('-------------------------------------------');
+  console.log('props', props);
+  console.log('ns', ns);
+  console.log('container', container, isEmpty);
 
   /**
    * [Render]
@@ -27,6 +31,7 @@ export const View: React.FC<t.CrdtNsProps> = (props) => {
   const elList = Object.keys(container).map((key) => {
     const ns = container[key];
 
+    console.log('ns', ns);
 
     return <Item key={key} enabled={enabled} />;
   });

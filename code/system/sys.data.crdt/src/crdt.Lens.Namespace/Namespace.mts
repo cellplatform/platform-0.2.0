@@ -1,4 +1,4 @@
-import { init as lens } from './Lens.impl.mjs';
+import { init as lens } from '../crdt.Lens/Lens.impl.mjs';
 import { rx, toObject, type t } from './common';
 
 /**
@@ -8,7 +8,7 @@ import { rx, toObject, type t } from './common';
  *    This allows multiple lens to be created on a {map}
  *    object within the single document.
  */
-export function namespace<R extends {}, N extends string = string>(
+export function CrdtNamespace<R extends {}, N extends string = string>(
   root: t.CrdtDocRef<R>,
   getMap?: t.CrdtNsMapGetLens<R>,
   options?: { dispose$: t.Observable<any> },

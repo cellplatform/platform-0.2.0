@@ -1,4 +1,5 @@
-import { toObject, Automerge, Crdt, Is, Test, expect, rx, type t } from '../test.ui';
+import { CrdtNamespace } from '.';
+import { Automerge, Crdt, Is, Test, expect, rx, type t } from '../test.ui';
 
 export default Test.describe('Lens Namespace', (e) => {
   type TFoo = { ns?: t.CrdtNsMap };
@@ -11,6 +12,14 @@ export default Test.describe('Lens Namespace', (e) => {
     const doc = Crdt.ref<TRoot>('foo', initial);
     return { initial, doc } as const;
   };
+
+  e.it('init', (e) => {
+    const { doc } = setup();
+    const ns1 = CrdtNamespace<TRoot>(doc);
+    const ns2 = Crdt.Lens.namespace<TRoot>(doc);
+    expect(ns1.kind).to.eql('Crdt:Namespace');
+    expect(ns2.kind).to.eql('Crdt:Namespace');
+  });
 
   e.describe('container', (e) => {
     e.it('namespace.container: { document } root', (e) => {
