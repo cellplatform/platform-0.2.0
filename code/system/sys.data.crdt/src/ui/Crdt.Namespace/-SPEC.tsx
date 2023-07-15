@@ -144,13 +144,13 @@ export default Dev.describe('Namespace', (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('add namespace: foo', () => {
-        const lens = ns.lens<TFoo>('foo', { count: 0 });
-      });
-
-      dev.button('add namespace: bar', () => {
-        const lens = ns.lens<TFoo>('bar', { count: 123 });
-      });
+      const addNamespace = (name: string) => {
+        dev.button(`add namespace: → "${name}"`, () => {
+          const lens = ns.lens<TFoo>(name, { count: 0 });
+        });
+      };
+      addNamespace('foo');
+      addNamespace('bar');
 
       dev.hr(-1, 5);
     });
@@ -161,10 +161,17 @@ export default Dev.describe('Namespace', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
-        'doc.crdt': doc.current,
+        doc: doc.current,
         ns,
+        'ns:container': ns.container,
       };
-      return <Dev.Object name={'<Namespace>'} data={data} expand={1} />;
+      return (
+        <Dev.Object
+          name={'<Namespace>'}
+          data={data}
+          expand={{ level: 1, paths: ['$', '$.ns:container'] }}
+        />
+      );
     });
   });
 });

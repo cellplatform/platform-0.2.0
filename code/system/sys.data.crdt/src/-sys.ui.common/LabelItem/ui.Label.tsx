@@ -77,7 +77,7 @@ export const Label: React.FC<Props> = (props) => {
   );
 
   return (
-    <div {...css(styles.base, props.style)}>
+    <div {...styles.base}>
       {editing && <div {...styles.underline} />}
       {elTextbox}
       {elLabel}

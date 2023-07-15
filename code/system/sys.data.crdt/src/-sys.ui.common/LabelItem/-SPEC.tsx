@@ -256,6 +256,16 @@ export default Dev.describe('Namespace.Item', (e) => {
         updateLocalStorage();
       });
 
+      dev.button('editing → selected', async (e) => {
+        await e.change((d) => {
+          d.props.selected = true;
+          d.props.editing = true;
+          d.props.focused = false;
+        });
+        updateLocalStorage();
+        focus();
+      });
+
       dev.button('editing → selected, focused', async (e) => {
         await e.change((d) => {
           d.props.selected = true;
@@ -268,7 +278,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
       dev.hr(-1, 5);
 
-      dev.button('clear ("text")', async (e) => {
+      dev.button(['clear', '"text"'], async (e) => {
         await e.change((d) => (d.props.label = undefined));
         updateLocalStorage();
         focus();

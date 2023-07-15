@@ -71,10 +71,10 @@ const Wrangle = {
     dispose$?: t.Observable<any>,
   ) {
     return lens<R, t.CrdtNsMap<N>>(
-      //
       root,
       (draft) => Wrangle.container<R, N>(draft, getMap),
       { dispose$ },
+      //
     );
   },
 };
