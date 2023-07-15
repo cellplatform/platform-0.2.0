@@ -1,6 +1,6 @@
 import { Automerge, rx, t, Time } from './common';
 import { Wrangle } from './Wrangle.mjs';
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 
 type Id = string;
 

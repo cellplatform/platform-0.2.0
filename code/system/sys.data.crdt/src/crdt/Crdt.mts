@@ -1,5 +1,5 @@
 import { CrdtDoc as Doc } from './crdt.Doc';
-import { CrdtIs as Is, CrdtText as Text, fieldAs, toObject } from './crdt.helpers';
+import { CrdtIs as Is, CrdtText as Text, fieldAs, toObject } from './helpers';
 import { CrdtLens as Lens } from './crdt.Lens';
 import { CrdtRepo as Repo } from './crdt.Repo';
 import { CrdtFunc as Func } from './crdt.Func';

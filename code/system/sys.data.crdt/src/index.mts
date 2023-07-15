@@ -7,8 +7,8 @@ export { Pkg };
 /**
  * Data Structures
  */
-export { Automerge } from './driver.Automerge';
 export { Crdt } from './crdt';
+export { Automerge } from './driver.Automerge';
 
 /**
  * UI
@@ -18,8 +18,8 @@ export { CrdtViews } from './ui';
 /**
  * Helpers
  */
-export { toObject } from './crdt/crdt.helpers';
 export { PeerSyncer } from './crdt/crdt.DocSync';
+export { toObject } from './crdt/helpers';
 
 /**
  * Dev

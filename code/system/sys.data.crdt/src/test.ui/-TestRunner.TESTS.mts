@@ -17,7 +17,7 @@ export const TESTS = {
       import('../crdt/crdt.Func/-TEST.mjs'),
 
       'Helpers',
-      import('../crdt/crdt.helpers/-TEST.mjs'),
+      import('../crdt/helpers/-TEST.mjs'),
 
       'Driver (Automerge)',
       import('../driver.Automerge/-dev/-TEST.basic.mjs'),

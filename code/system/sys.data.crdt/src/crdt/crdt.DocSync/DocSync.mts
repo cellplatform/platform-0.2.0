@@ -1,5 +1,5 @@
 import { init } from './DocSync.impl.mjs';
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 
 /**
  * Extends a CRDT [DocRef] with peer-sync capabilities.

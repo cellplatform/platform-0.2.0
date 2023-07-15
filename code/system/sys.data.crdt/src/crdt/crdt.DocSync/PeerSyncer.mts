@@ -1,6 +1,6 @@
 import { Automerge, rx, slug, type t } from './common';
 import { SyncState } from './PeerSyncer.State.mjs';
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 
 type Id = string;
 

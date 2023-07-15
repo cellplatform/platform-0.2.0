@@ -1,5 +1,5 @@
 import { init } from './DocFile.impl.mjs';
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 
 /**
  * Extends a CRDT [DocRef] with file-system persistence.

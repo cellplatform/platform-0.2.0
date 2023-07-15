@@ -1,4 +1,4 @@
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 import { Registry } from './Lens.Registry.mjs';
 import { DEFAULTS, Time, Wrangle, rx, type t } from './common';
 

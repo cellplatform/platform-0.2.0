@@ -7,5 +7,5 @@ export type * from '../crdt.Lens/types.mjs';
 export type * from '../crdt.Func/types.mjs';
 export type * from '../crdt.Repo/types.mjs';
 
-export type * from '../crdt.helpers/types.mjs';
+export type * from '../helpers/types.mjs';
 export type * from './types.events.mjs';

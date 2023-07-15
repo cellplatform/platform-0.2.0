@@ -1,5 +1,5 @@
 import { init } from './DocRef.impl.mjs';
-import { toObject } from '../crdt.helpers';
+import { toObject } from '../helpers';
 
 /**
  * In-memory CRDT document reference (wrapper).
