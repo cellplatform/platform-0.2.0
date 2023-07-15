@@ -1,10 +1,10 @@
 import { LabelItem, DEFAULTS } from '.';
-import { Dev, Time, type t } from '../test.ui';
+import { Dev, Time, type t, Icons } from '../test.ui';
 
 type T = {
   ref?: t.LabelItemRef;
   props: t.LabelItemProps;
-  debug: { devBg?: boolean };
+  debug: { subjectBg?: boolean; defaultLeft?: boolean; defaultRight?: boolean };
 };
 const initial: T = {
   props: { focusOnReady: true },
@@ -22,13 +22,40 @@ export default Dev.describe('Namespace.Item', (e) => {
     indent: DEFAULTS.indent,
     padding: DEFAULTS.padding,
     editing: DEFAULTS.editing,
-    devBg: true,
+    subjectBg: true,
+    defaultLeft: true,
+    defaultRight: false,
   });
 
   const State = {
     toDisplayProps(state: t.DevCtxState<T>): t.LabelItemProps {
+      const { debug } = state.current;
+
+      type K = 'left:sample' | 'right:foo' | 'right:bar';
+      const action = (
+        kind: K,
+        options: { width?: number; enabled?: boolean } = {},
+      ): t.LabelAction<K> => {
+        const { width, enabled } = options;
+        return {
+          kind,
+          width,
+          enabled,
+          icon: (e) => <Icons.ObjectTree size={17} color={e.color} />,
+          onClick: (e) => console.info('⚡️ action → onClick:', e),
+        };
+      };
+      const leftAction = action('left:sample', { width: 30 });
+      const rightActions: t.LabelAction<K>[] = [
+        action('right:foo', { enabled: false }),
+        action('right:bar'),
+      ];
+
       return {
         ...state.current.props,
+        leftAction: debug.defaultLeft ? leftAction : undefined,
+        rightActions: debug.defaultRight ? rightActions : undefined,
+
         onReady(e) {
           console.info('⚡️ onReady', e);
         },
@@ -36,10 +63,18 @@ export default Dev.describe('Namespace.Item', (e) => {
           console.info('⚡️ onChange', e);
           state.change((d) => (local.label = d.props.label = e.label));
         },
-        onActionClick(e) {
-          console.info('⚡️ onActionClick', e);
-        },
+
+        /**
+         * TODO 🐷
+         */
+        // onFocus(e)
+        // onBlur(e)
+
         onEnter() {
+          /**
+           * TODO 🐷
+           * - requires "focus" state concepts
+           */
           console.info('⚡️ onEnter', e);
         },
       };
@@ -57,7 +92,9 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.indent = local.indent;
       d.props.padding = local.padding;
       d.props.editing = local.editing;
-      d.debug.devBg = local.devBg;
+      d.debug.subjectBg = local.subjectBg;
+      d.debug.defaultLeft = local.defaultLeft;
+      d.debug.defaultRight = local.defaultRight;
     });
 
     ctx.debug.width(300);
@@ -66,7 +103,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       .display('grid')
       .render<T>((e) => {
         const { debug } = e.state;
-        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
+        ctx.subject.backgroundColor(debug.subjectBg ? 1 : 0);
+
         return (
           <LabelItem
             {...State.toDisplayProps(state)}
@@ -169,10 +207,10 @@ export default Dev.describe('Namespace.Item', (e) => {
         local.editing = data.props.editing;
         local.padding = data.props.padding;
         local.indent = data.props.indent;
-        local.devBg = data.debug.devBg;
+        local.subjectBg = data.debug.subjectBg;
       };
 
-      dev.button('(default)', async (e) => {
+      dev.button('default', async (e) => {
         await e.change((d) => {
           d.props.enabled = DEFAULTS.enabled;
           d.props.selected = DEFAULTS.selected;
@@ -224,11 +262,31 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.devBg);
+        const value = (state: T) => Boolean(state.debug.subjectBg);
         btn
           .label((e) => `background`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
+          .onClick((e) => e.change((d) => (local.subjectBg = Dev.toggle(d.debug, 'subjectBg'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.defaultLeft);
+        btn
+          .label((e) => `leftAction: ${!value(e.state) ? '(default)' : '(passed in)'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.defaultLeft = Dev.toggle(d.debug, 'defaultLeft')));
+          });
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.defaultRight);
+        btn
+          .label((e) => `rightActions: ${!value(e.state) ? '(default)' : '(passed in)'}`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.defaultRight = Dev.toggle(d.debug, 'defaultRight')));
+          });
       });
     });
 
