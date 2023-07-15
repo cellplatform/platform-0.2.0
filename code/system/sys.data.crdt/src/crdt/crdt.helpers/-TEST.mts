@@ -1,6 +1,7 @@
+import { Automerge, Diff, Test, TestFilesystem, expect, rx, type t } from '../../test.ui';
+
 import { CrdtIs, fieldAs } from '.';
 import { Crdt } from '..';
-import { Automerge, Diff, Test, TestFilesystem, expect, rx, t } from '../../test.ui';
 import { CrdtDoc } from '../crdt.Doc';
 
 export default Test.describe('crdt helpers', (e) => {

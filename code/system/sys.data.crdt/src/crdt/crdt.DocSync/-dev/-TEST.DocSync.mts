@@ -1,14 +1,15 @@
-import { DocSync } from '..';
 import {
   ConnectionMock,
   DEFAULTS,
-  expect,
-  rx,
-  type t,
   Test,
   TestFilesystem,
   Time,
+  expect,
+  rx,
+  type t,
 } from '../../../test.ui';
+
+import { DocSync } from '..';
 import { DocRef } from '../../crdt.DocRef';
 
 export default Test.describe('Sync Protocol: DocSync', (e) => {
