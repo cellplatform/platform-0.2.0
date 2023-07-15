@@ -7,7 +7,7 @@ const DEFAULTS = LabelItemStateful.DEFAULTS;
 type T = {
   data?: t.LabelItemData;
   props: t.LabelItemStatefulProps;
-  debug: { passState?: boolean };
+  debug: {};
 };
 const initial: T = {
   props: {},
@@ -22,9 +22,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     passState: true,
   });
 
-  const item = StateObject.init({
-    initial: { label: 'hello 👋' },
-  });
+  const item = StateObject.init({ initial: { label: 'hello 👋' } });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -32,7 +30,6 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
     state.change((d) => {
       d.props.useController = local.useController;
-      d.debug.passState = local.passState;
     });
 
     ctx.debug.width(300);
@@ -45,7 +42,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         return (
           <LabelItemStateful
             {...props}
-            state={debug.passState ? item : undefined}
+            state={item}
             onChange={(e) => {
               console.info('⚡️ onChange', e);
               state.change((d) => (d.data = e.data));
@@ -69,18 +66,6 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
           .onClick((e) => {
             e.change((d) => (local.useController = Dev.toggle(d.props, 'useController')));
           });
-      });
-    });
-
-    dev.hr(5, 20);
-
-    dev.section('Debug', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.passState);
-        btn
-          .label((e) => (value(e.state) ? `parent provided state` : `controller generated state`))
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.passState = Dev.toggle(d.debug, 'passState'))));
       });
     });
   });

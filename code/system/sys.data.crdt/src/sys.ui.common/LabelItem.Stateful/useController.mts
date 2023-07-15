@@ -10,7 +10,7 @@ type Args = {
 /**
  * HOOK: stateful behavior controller.
  */
-export function useController(args: Args = {}) {
+export function useController(args: Args) {
   const { enabled = DEFAULTS.useController, state } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
