@@ -1,4 +1,4 @@
-import { DEFAULT, Patch, rx, slug, t } from './common.mjs';
+import { DEFAULT, Patch, rx, slug, t } from './common';
 
 type J = Record<string, unknown>;
 type Id = string;
