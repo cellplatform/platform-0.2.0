@@ -20,20 +20,3 @@ export type CrdtLens<R extends {}, L extends {}> = t.Lifecycle & {
 };
 
 export type CrdtLensChange<R extends {}, L extends {}> = t.CrdtDocChange<R> & { lens: L };
-
-/**
- * Lens Namespace.
- */
-export type CrdtNsMap<K extends string = string> = Record<K, {}>;
-export type CrdtNsMapGetLens<R extends {}> = CrdtLensGetDescendent<R, CrdtNsMap>;
-export type CrdtNsChange<R extends {}, N extends string = string> = t.CrdtLensChange<
-  R,
-  t.CrdtNsMap<N>
->;
-
-export type CrdtNsManager<R extends {}, N extends string = string> = t.Lifecycle & {
-  readonly kind: 'Crdt:Namespace';
-  readonly $: t.Observable<t.CrdtNsChange<R, N>>;
-  readonly container: t.CrdtNsMap<N>;
-  lens<L extends {}>(namespace: N, initial: L): CrdtLens<R, L>;
-};
