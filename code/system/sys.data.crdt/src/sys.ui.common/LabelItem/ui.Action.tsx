@@ -7,12 +7,13 @@ export type ActionProps = {
   action: t.LabelAction;
   enabled?: boolean;
   selected?: boolean;
+  focused?: boolean;
   opacity?: number;
   style?: t.CssValue;
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action } = props;
+  const { action, focused } = props;
   const { onClick } = action;
   const isButton = onClick && (action.enabled ?? true);
   const isEnabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;

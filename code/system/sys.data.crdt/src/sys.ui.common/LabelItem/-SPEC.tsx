@@ -13,7 +13,10 @@ const initial: T = {
 
 export default Dev.describe('Namespace.Item', (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.LabelItemProps, 'label' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'>;
+    Pick<
+      t.LabelItemProps,
+      'label' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing' | 'focused'
+    >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
     label: '',
@@ -22,6 +25,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     indent: DEFAULTS.indent,
     padding: DEFAULTS.padding,
     editing: DEFAULTS.editing,
+    focused: DEFAULTS.focused,
     subjectBg: true,
     defaultLeft: true,
     defaultRight: false,
@@ -92,6 +96,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.indent = local.indent;
       d.props.padding = local.padding;
       d.props.editing = local.editing;
+      d.props.focused = local.focused;
       d.debug.subjectBg = local.subjectBg;
       d.debug.defaultLeft = local.defaultLeft;
       d.debug.defaultRight = local.defaultRight;
@@ -164,6 +169,14 @@ export default Dev.describe('Namespace.Item', (e) => {
           .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.focused);
+        btn
+          .label((e) => `focused`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.focused = Dev.toggle(d.props, 'focused'))));
+      });
+
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
@@ -217,14 +230,16 @@ export default Dev.describe('Namespace.Item', (e) => {
           d.props.editing = DEFAULTS.editing;
           d.props.padding = DEFAULTS.padding;
           d.props.indent = DEFAULTS.indent;
+          d.props.focused = DEFAULTS.focused;
         });
         updateLocalStorage();
       });
 
-      dev.button('editing', async (e) => {
+      dev.button('editing, focused', async (e) => {
         await e.change((d) => {
           d.props.selected = false;
           d.props.editing = true;
+          d.props.focused = true;
         });
         updateLocalStorage();
         focus();
@@ -240,10 +255,11 @@ export default Dev.describe('Namespace.Item', (e) => {
         updateLocalStorage();
       });
 
-      dev.button('editing → selected', async (e) => {
+      dev.button('editing → selected, focused', async (e) => {
         await e.change((d) => {
           d.props.selected = true;
           d.props.editing = true;
+          d.props.focused = true;
         });
         updateLocalStorage();
         focus();

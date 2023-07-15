@@ -25,10 +25,12 @@ export type LabelItemProps = {
   maxLength?: number;
 
   enabled?: boolean;
-  selected?: boolean;
   editing?: boolean;
+  selected?: boolean;
+  focused?: boolean;
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
+  tabIndex?: number;
 
   leftAction?: LabelAction;
   rightActions?: LabelAction[];

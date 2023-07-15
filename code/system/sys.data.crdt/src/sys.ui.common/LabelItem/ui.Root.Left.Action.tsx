@@ -3,7 +3,11 @@ import { DEFAULTS, type t } from './common';
 import { Action } from './ui.Action';
 
 export const LeftAction: React.FC<t.LabelItemProps> = (props) => {
-  const { editing = DEFAULTS.editing, selected = DEFAULTS.selected } = props;
+  const {
+    editing = DEFAULTS.editing,
+    selected = DEFAULTS.selected,
+    focused = DEFAULTS.focused,
+  } = props;
   const { hasValue } = Wrangle.labelText(props);
   const action = props.leftAction ?? DEFAULTS.leftAction;
 
@@ -14,5 +18,13 @@ export const LeftAction: React.FC<t.LabelItemProps> = (props) => {
   let enabled = true;
   if (editing) enabled = false;
 
-  return <Action action={action} enabled={enabled} opacity={opacity} selected={props.selected} />;
+  return (
+    <Action
+      action={action}
+      enabled={enabled}
+      opacity={opacity}
+      selected={props.selected}
+      focused={focused}
+    />
+  );
 };

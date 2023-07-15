@@ -1,5 +1,4 @@
 import { DEFAULTS, css, type t } from './common';
-
 import { Action } from './ui.Action';
 
 export const RightActions: React.FC<t.LabelItemProps> = (props) => {
@@ -7,6 +6,7 @@ export const RightActions: React.FC<t.LabelItemProps> = (props) => {
     editing = DEFAULTS.editing,
     rightActions = DEFAULTS.rightActions,
     selected = DEFAULTS.selected,
+    focused = DEFAULTS.focused,
   } = props;
 
   let enabled = true;
@@ -25,8 +25,15 @@ export const RightActions: React.FC<t.LabelItemProps> = (props) => {
   };
 
   const elements = rightActions.map((action, i) => {
-    const key = `${i}:${action.kind}`;
-    return <Action key={key} action={action} enabled={enabled} selected={selected} />;
+    return (
+      <Action
+        key={`${i}:${action.kind}`}
+        action={action}
+        enabled={enabled}
+        selected={selected}
+        focused={focused}
+      />
+    );
   });
 
   return <div {...css(styles.base, props.style)}>{elements}</div>;

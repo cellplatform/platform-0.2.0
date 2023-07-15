@@ -1,4 +1,4 @@
-import { COLORS, DEFAULTS, type t, Icons } from './common';
+import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 
 export const Wrangle = {
   labelText(args: { label?: string }) {
@@ -8,9 +8,22 @@ export const Wrangle = {
     return { text, hasValue, isEmpty };
   },
 
-  foreColor(args: { selected?: boolean }) {
-    const { selected = DEFAULTS.selected } = args;
-    return selected ? COLORS.WHITE : COLORS.DARK;
+  backgroundColor(args: { selected?: boolean; focused?: boolean }) {
+    const { selected = DEFAULTS.selected, focused = DEFAULTS.focused } = args;
+    if (!selected) return undefined;
+    return focused ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.08);
+  },
+
+  foreColor(args: { selected?: boolean; focused?: boolean }) {
+    const { selected = DEFAULTS.selected, focused = DEFAULTS.focused } = args;
+    return selected && focused ? COLORS.WHITE : COLORS.DARK;
+  },
+
+  borderColor(args: { selected?: boolean; focused?: boolean }) {
+    const { selected = DEFAULTS.selected, focused = DEFAULTS.focused } = args;
+    if (!focused) return Color.format(0);
+    const color = selected ? Color.format(0) : COLORS.BLUE;
+    return color;
   },
 
   icon(args: { action: t.LabelAction; selected?: boolean; enabled?: boolean }) {

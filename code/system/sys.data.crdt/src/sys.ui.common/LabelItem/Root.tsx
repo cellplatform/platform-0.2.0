@@ -9,7 +9,7 @@ export const LabelItem = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, re
   const inputRef = useRef<t.TextInputRef>(null);
   useImperativeHandle(ref, () => Ref(inputRef));
 
-  const focus = () => Time.delay(0, () => itemRef?.focus());
+  const focusTextbox = () => Time.delay(0, () => itemRef?.focus());
 
   /**
    * Lifecycle
@@ -17,12 +17,12 @@ export const LabelItem = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, re
   useEffect(() => {
     const ref = Ref(inputRef);
     setItemRef(ref);
-    if (props.focusOnReady) focus();
+    if (props.focusOnReady) focusTextbox();
     props.onReady?.({ ref });
   }, []);
 
   useEffect(() => {
-    if (props.focusOnEdit && Boolean(props.editing)) focus();
+    if (props.focusOnEdit && Boolean(props.editing)) focusTextbox();
   }, [props.editing]);
 
   /**
