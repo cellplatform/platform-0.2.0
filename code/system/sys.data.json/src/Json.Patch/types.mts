@@ -29,6 +29,7 @@ export type Patch = {
   apply<T extends O>(from: T, patches: t.PatchOperation[] | t.PatchSet): T;
 };
 
+export type PatchChangeHandler<T extends O> = (e: t.PatchChange<T>) => void;
 export type PatchChange<T extends O> = {
   to: T;
   op: PatchOperationKind;
