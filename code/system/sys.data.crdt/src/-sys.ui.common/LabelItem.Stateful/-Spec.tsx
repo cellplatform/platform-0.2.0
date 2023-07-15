@@ -1,6 +1,6 @@
 import { type t, Dev, Icons } from '../test.ui';
 import { LabelItemStateful } from '.';
-import { StateObject } from './StateObject.mjs';
+import { State } from './State.mjs';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -21,7 +21,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     useController: DEFAULTS.useController,
   });
 
-  const item = StateObject.init({
+  const item = State.init({
     initial: { label: 'hello 👋' },
   });
 

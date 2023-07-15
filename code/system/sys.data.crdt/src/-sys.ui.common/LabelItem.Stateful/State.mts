@@ -8,9 +8,9 @@ type Options = {
 /**
  * Simple safe/immutable memory state for a single item.
  */
-export const StateObject = {
+export const State = {
   init(options: Options = {}): t.LabelItemState {
-    const { initial = DEFAULTS.data, onChange } = options;
+    const { onChange, initial = DEFAULTS.data } = options;
     return PatchState.init<t.LabelItemData>({ initial, onChange });
   },
 };
