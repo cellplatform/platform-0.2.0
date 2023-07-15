@@ -11,10 +11,8 @@ export type LabelItemData = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = {
+export type LabelItemState = t.Immutable<t.LabelItemData> & {
   readonly instance: { id: string };
-  readonly current: t.LabelItemData;
-  change(fn: LabelItemStateChanger): void;
 };
 export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
 

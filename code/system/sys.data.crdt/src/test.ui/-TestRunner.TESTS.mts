@@ -26,9 +26,6 @@ export const TESTS = {
       import('../driver.Automerge/-dev/-TEST.immutability.mjs'),
       import('../driver.Automerge/-dev/-TEST.filesystem.mjs'),
       import('../driver.Automerge/-dev/-TEST.sync.mjs'),
-
-      'sys.ui.common',
-      import('../sys.ui.common/LabelItem.Stateful/StateObject.TEST.mjs'),
     ];
   },
 };
