@@ -14,7 +14,7 @@ export const Label: React.FC<Props> = (props) => {
     placeholder = DEFAULTS.placeholder,
     focusOnReady = DEFAULTS.focusOnReady,
   } = props;
-  const { text, isEmpty } = Wrangle.text(props);
+  const { text, isEmpty } = Wrangle.labelText(props);
 
   /**
    * [Render]

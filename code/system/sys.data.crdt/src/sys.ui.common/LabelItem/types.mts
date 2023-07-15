@@ -1,6 +1,20 @@
 import { type t } from './common';
 
-export type LabelItemActionKind = 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
+export type LabelActionKind = string;
+export type LabelAction<K extends LabelActionKind = string> = {
+  kind: K;
+  enabled?: boolean;
+  width?: number;
+  icon?: JSX.Element | RenderLabelActionIcon | false;
+  onClick?: LabelItemActionHandler;
+};
+
+export type RenderLabelActionIcon = (args: RenderLabelActionIconArgs) => JSX.Element;
+export type RenderLabelActionIconArgs = {
+  enabled: boolean;
+  selected: boolean;
+  color: string;
+};
 
 /**
  * Component (View)
@@ -16,6 +30,9 @@ export type LabelItemProps = {
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
 
+  leftAction?: LabelAction;
+  rightActions?: LabelAction[];
+
   style?: t.CssValue;
   indent?: number;
   padding?: t.CssEdgesInput;
@@ -24,7 +41,6 @@ export type LabelItemProps = {
 export type LabelItemPropsHandlers = {
   onReady?: LabelItemReadyHandler;
   onChange?: LabelItemChangeHandler;
-  onActionClick?: LabelItemClickHandler;
   onEnter?: LabelItemEnterKeyHandler;
 };
 
@@ -53,9 +69,9 @@ export type LabelItemChangeHandlerArgs = {
   label: string;
 };
 
-export type LabelItemClickHandler = (e: LabelItemClickHandlerArgs) => void;
-export type LabelItemClickHandlerArgs = {
-  actions: t.LabelItemActionKind[];
+export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
+export type LabelItemActionHandlerArgs = {
+  action: LabelActionKind;
 };
 
 export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;

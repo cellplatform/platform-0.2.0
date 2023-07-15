@@ -2,8 +2,8 @@ import { RefObject } from 'react';
 import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
 import { Label } from './ui.Label';
-import { LeftIcon } from './ui.Left.Icon';
-import { Actions } from './ui.Right.Actions';
+import { LeftAction } from './ui.Root.Left.Action';
+import { RightActions } from './ui.Root.Right.Actions';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 
@@ -39,9 +39,9 @@ export const View: React.FC<Props> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <LeftIcon {...props} />
+        <LeftAction {...props} />
         <Label {...props} inputRef={inputRef} />
-        <Actions {...props} style={styles.right} />
+        <RightActions {...props} style={styles.right} />
       </div>
     </div>
   );
