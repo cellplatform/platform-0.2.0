@@ -9,6 +9,7 @@ export { Pkg };
  */
 export { Json } from './Json/index.mjs';
 export { Patch } from './Json.Patch/index.mjs';
+export { PatchState } from './Json.PatchState';
 
 /**
  * Dev
