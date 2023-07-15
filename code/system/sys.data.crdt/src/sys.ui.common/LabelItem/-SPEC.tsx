@@ -13,10 +13,10 @@ const initial: T = {
 
 export default Dev.describe('Namespace.Item', (e) => {
   type LocalStore = T['debug'] &
-    Pick<t.LabelItemProps, 'text' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'>;
+    Pick<t.LabelItemProps, 'label' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
-    text: '',
+    label: '',
     enabled: DEFAULTS.enabled,
     selected: DEFAULTS.selected,
     indent: DEFAULTS.indent,
@@ -34,10 +34,10 @@ export default Dev.describe('Namespace.Item', (e) => {
         },
         onChange(e) {
           console.info('⚡️ onChange', e);
-          state.change((d) => (local.text = d.props.text = e.text));
+          state.change((d) => (local.label = d.props.label = e.label));
         },
-        onClick(e) {
-          console.info('⚡️ onClick', e);
+        onActionClick(e) {
+          console.info('⚡️ onActionClick', e);
         },
         onEnter() {
           console.info('⚡️ onEnter', e);
@@ -51,7 +51,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.text = local.text;
+      d.props.label = local.label;
       d.props.enabled = local.enabled;
       d.props.selected = local.selected;
       d.props.indent = local.indent;
@@ -90,14 +90,14 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.section('Properties', (dev) => {
       dev.textbox((txt) => {
-        const change = (to: string) => state.change((d) => (local.text = d.props.text = to));
+        const change = (to: string) => state.change((d) => (local.label = d.props.label = to));
         txt
           .placeholder('label text')
-          .value((e) => e.state.props.text)
+          .value((e) => e.state.props.label)
           .margin([0, 0, 10, 0])
           .onChange((e) => change(e.to.value))
           .onEnter((e) => {
-            const text = (e.state.current.props.text ?? '').trim().toLowerCase();
+            const text = (e.state.current.props.label ?? '').trim().toLowerCase();
             if (text === 'lorem') change(Dev.Lorem.toString());
           });
       });
@@ -161,7 +161,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['States', '( change ) ↑'], (dev) => {
+    dev.section(['States', 'changes ↑'], (dev) => {
       const updateLocalStorage = () => {
         const data = state.current;
         local.enabled = data.props.enabled;
@@ -214,7 +214,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.hr(-1, 5);
 
       dev.button('clear ("text")', async (e) => {
-        await e.change((d) => (d.props.text = undefined));
+        await e.change((d) => (d.props.label = undefined));
         updateLocalStorage();
         focus();
       });

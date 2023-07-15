@@ -3,10 +3,10 @@ import { type t } from './common';
 export type LabelItemActionKind = 'Repo' | 'Editing' | 'Json' | 'ObjectTree';
 
 /**
- * Component
+ * Component (View)
  */
 export type LabelItemProps = {
-  text?: string;
+  label?: string;
   placeholder?: string;
   maxLength?: number;
 
@@ -14,14 +14,17 @@ export type LabelItemProps = {
   selected?: boolean;
   editing?: boolean;
   focusOnReady?: boolean;
+  focusOnEdit?: boolean;
 
   style?: t.CssValue;
   indent?: number;
   padding?: t.CssEdgesInput;
+} & LabelItemPropsHandlers;
 
+export type LabelItemPropsHandlers = {
   onReady?: LabelItemReadyHandler;
   onChange?: LabelItemChangeHandler;
-  onClick?: LabelItemClickHandler;
+  onActionClick?: LabelItemClickHandler;
   onEnter?: LabelItemEnterKeyHandler;
 };
 
@@ -47,7 +50,7 @@ export type LabelItemReadyHandlerArgs = {
 
 export type LabelItemChangeHandler = (e: LabelItemChangeHandlerArgs) => void;
 export type LabelItemChangeHandlerArgs = {
-  text: string;
+  label: string;
 };
 
 export type LabelItemClickHandler = (e: LabelItemClickHandlerArgs) => void;
@@ -57,5 +60,5 @@ export type LabelItemClickHandlerArgs = {
 
 export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
 export type LabelItemEnterKeyHandlerArgs = {
-  text: string;
+  label: string;
 };
