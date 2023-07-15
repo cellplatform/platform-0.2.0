@@ -14,10 +14,21 @@ export const PatchState = {
     const { onChange } = args;
     let _current = { ...args.initial };
     return {
+      /**
+       * Unique instance identifier.
+       */
       instance: { id: slug() },
+
+      /**
+       * Current state.
+       */
       get current() {
         return _current;
       },
+
+      /**
+       * Immutable mutator.
+       */
       change(fn) {
         const res = Patch.change<T>(_current, fn);
         _current = res.to;
