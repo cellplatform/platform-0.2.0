@@ -44,6 +44,7 @@ export type LabelItemPropsHandlers = {
   onReady?: LabelItemReadyHandler;
   onChange?: LabelItemChangeHandler;
   onEnter?: LabelItemEnterKeyHandler;
+  onFocusChange?: LabelItemFocusHandler;
 };
 
 /**
@@ -79,4 +80,9 @@ export type LabelItemActionHandlerArgs = {
 export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
 export type LabelItemEnterKeyHandlerArgs = {
   label: string;
+};
+
+export type LabelItemFocusHandler = (e: LabelItemFocusHandlerArgs) => void;
+export type LabelItemFocusHandlerArgs = {
+  focused: boolean;
 };

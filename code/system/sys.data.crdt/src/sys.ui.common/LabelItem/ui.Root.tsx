@@ -19,6 +19,13 @@ export const View: React.FC<Props> = (props) => {
   } = props;
 
   /**
+   * Handlers
+   */
+  const onFocusHandler = (focused: boolean) => {
+    return () => props.onFocusChange?.({ focused });
+  };
+
+  /**
    * [Render]
    */
   const styles = {
@@ -48,7 +55,12 @@ export const View: React.FC<Props> = (props) => {
   const elFocusBorder = focused && <div {...styles.focusBorder} />;
 
   return (
-    <div {...css(styles.base, props.style)} tabIndex={tabIndex}>
+    <div
+      {...css(styles.base, props.style)}
+      tabIndex={tabIndex}
+      onFocus={onFocusHandler(true)}
+      onBlur={onFocusHandler(false)}
+    >
       <div {...styles.body}>
         <LeftAction {...props} />
         <Label {...props} inputRef={inputRef} />

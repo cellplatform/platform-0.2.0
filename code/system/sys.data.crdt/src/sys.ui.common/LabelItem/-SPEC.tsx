@@ -71,8 +71,9 @@ export default Dev.describe('Namespace.Item', (e) => {
         /**
          * TODO 🐷
          */
-        // onFocus(e)
-        // onBlur(e)
+        onFocusChange(e) {
+          console.info('⚡️ onFocusChange', e);
+        },
 
         onEnter() {
           /**
