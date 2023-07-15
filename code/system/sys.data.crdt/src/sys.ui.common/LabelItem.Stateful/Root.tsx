@@ -17,6 +17,7 @@ const View: React.FC<t.LabelItemStatefulProps> = (input) => {
       {...controller.props}
       {...controller.handlers}
       focusOnEdit={true}
+      rightActions={input.rightActions ?? controller.props.rightActions}
       label={controller.data.label}
     />
   );

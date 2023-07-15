@@ -1,4 +1,4 @@
-import { type t, Dev } from '../test.ui';
+import { type t, Dev, Icons } from '../test.ui';
 import { LabelItemStateful } from '.';
 import { StateObject } from './StateObject.mjs';
 
@@ -15,14 +15,15 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<t.LabelItemStatefulProps, 'useController'> & Pick<T['debug'], 'passState'>;
+  type LocalStore = Pick<t.LabelItemStatefulProps, 'useController'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     useController: DEFAULTS.useController,
-    passState: true,
   });
 
-  const item = StateObject.init({ initial: { label: 'hello 👋' } });
+  const item = StateObject.init({
+    initial: { label: 'hello 👋' },
+  });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -39,10 +40,18 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       .display('grid')
       .render<T>((e) => {
         const { debug, props } = e.state;
+
+        const rightAction: t.LabelAction = {
+          kind: 'foobar',
+          icon: (e) => <Icons.ObjectTree size={17} color={e.color} />,
+          onClick: (e) => console.info('⚡️ action → onClick:', e),
+        };
+
         return (
           <LabelItemStateful
             {...props}
             state={item}
+            rightActions={[rightAction]}
             onChange={(e) => {
               console.info('⚡️ onChange', e);
               state.change((d) => (d.data = e.data));
