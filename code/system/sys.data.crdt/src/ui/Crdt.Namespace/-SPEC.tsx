@@ -116,11 +116,8 @@ export default Dev.describe('Namespace', (e) => {
           .label((e) => (ns.disposed ? 'create' : 'dispose'))
           .right((e) => (ns.disposed ? '🌳' : '→ 💥'))
           .onClick((e) => {
-            if (ns.disposed) {
-              initCrdt(dev.ctx);
-            } else {
-              ns.dispose();
-            }
+            if (!ns.disposed) ns.dispose();
+            if (ns.disposed) initCrdt(dev.ctx);
           });
       });
 
