@@ -1,8 +1,8 @@
-import { describe, it, expect, t } from '../test/index.mjs';
-import { Json } from './index.mjs';
+import { describe, it, expect, t } from '../test';
+import { Json } from '.';
 
-import { JsonBus } from '../Json.Bus/index.mjs';
-import { Patch } from '../Json.Patch/index.mjs';
+import { JsonBus } from '../Json.Bus';
+import { Patch } from '../Json.Patch';
 
 describe('Json', () => {
   it('exposes [JsonBus]', () => {

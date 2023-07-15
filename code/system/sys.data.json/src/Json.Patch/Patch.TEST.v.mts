@@ -1,7 +1,6 @@
 import { isDraft } from 'immer';
-
-import { Patch } from './index.mjs';
-import { expect, t, describe, it, Time } from '../test/index.mjs';
+import { Patch } from '.';
+import { Time, describe, expect, it, type t } from '../test';
 
 describe('Patch', () => {
   describe('toObject', () => {

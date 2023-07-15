@@ -1,5 +1,5 @@
-export * from '../common/index.mjs';
-export { Patch } from '../Json.Patch/index.mjs';
+export * from '../common';
+export { Patch } from '../Json.Patch';
 
 /**
  * Default values.

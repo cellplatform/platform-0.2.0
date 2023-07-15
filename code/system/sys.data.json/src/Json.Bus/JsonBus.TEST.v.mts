@@ -1,5 +1,5 @@
-import { JsonBus } from './index.mjs';
-import { expect, Pkg, rx, slug, t, Time, expectError, describe, it } from '../test/index.mjs';
+import { JsonBus } from '.';
+import { expect, Pkg, rx, slug, t, Time, expectError, describe, it } from '../test';
 import { DEFAULT, Patch } from './common.mjs';
 
 const Setup = {

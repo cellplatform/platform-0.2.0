@@ -7,8 +7,8 @@ export { Pkg };
 /**
  * Data Structures
  */
-export { Json } from './Json/index.mjs';
-export { Patch } from './Json.Patch/index.mjs';
+export { Json } from './Json';
+export { Patch } from './Json.Patch';
 export { PatchState } from './Json.PatchState';
 
 /**

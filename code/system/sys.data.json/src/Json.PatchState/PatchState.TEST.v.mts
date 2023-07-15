@@ -1,4 +1,4 @@
-import { describe, expect, it, type t } from '../test/index.mjs';
+import { describe, expect, it, type t } from '../test';
 import { PatchState } from '.';
 
 describe('PatchState', () => {
