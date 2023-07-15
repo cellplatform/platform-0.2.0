@@ -262,18 +262,18 @@ export default Test.describe('Lens Namespace', (e) => {
 
     e.it('dispose → generate new( 🌳 ) → new instance container: { <empty> }', (e) => {
       const doc1 = setup().doc;
-      const generate = (doc: t.CrdtDocRef<TRoot>) => Crdt.Lens.namespace(doc, getMap);
+      const ns1 = Crdt.Lens.namespace<TRoot>(doc1, getMap);
 
-      const ns1 = generate(doc1);
       ns1.lens<TDoc>('foo', { count: 0 });
       ns1.lens<TError>('bar', {});
 
       expect(Object.keys(ns1.container).length).to.eql(2);
       doc1.dispose();
       expect(Object.keys(ns1.container).length).to.eql(0);
+      expect(Object.keys(doc1.current.ns ?? {}).length).to.eql(2); // NB: underlying document not changed on disposal.
 
       const doc2 = setup().doc;
-      const ns2 = generate(doc2);
+      const ns2 = Crdt.Lens.namespace<TRoot>(doc2, getMap);
       expect(Object.keys(ns2.container).length).to.eql(0);
     });
   });
