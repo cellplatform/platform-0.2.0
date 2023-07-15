@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { Time, type t } from './common';
 
 import { Ref } from './Root.Ref';
-import { View } from './ui.Root';
+import { View } from './ui';
 
 export const LabelItem = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
   const [itemRef, setItemRef] = useState<t.LabelItemRef>();
