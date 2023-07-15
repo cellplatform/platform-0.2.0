@@ -114,7 +114,7 @@ export default Dev.describe('Namespace', (e) => {
       dev.button((btn) => {
         btn
           .label((e) => (ns.disposed ? 'create' : 'dispose'))
-          .right((e) => (ns.disposed ? '🌳' : '💥'))
+          .right((e) => (ns.disposed ? '→ 🌳' : '→ 💥'))
           .onClick((e) => {
             if (ns.disposed) {
               initCrdt(dev.ctx);
