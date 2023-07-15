@@ -23,12 +23,12 @@ export async function pushToVercel(args: {
     source,
     team: 'tdb',
 
-    // project: 'tdb-dev',
-    // alias: 'dev.db.team',
+    project: 'tdb-dev',
+    alias: 'dev.db.team',
 
-    //jamesamuel.com/
-    project: 'cell-james',
-    alias: 'jamesamuel.com',
+    // jamesamuel.com
+    // project: 'cell-james',
+    // alias: 'jamesamuel.com',
 
     ensureProject: true,
     regions: ['sfo1'],
