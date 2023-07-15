@@ -1,6 +1,7 @@
+import { Pkg, Time, describe, expect, expectError, it, rx, slug, type t } from '../test';
+
 import { JsonBus } from '.';
-import { expect, Pkg, rx, slug, t, Time, expectError, describe, it } from '../test';
-import { DEFAULT, Patch } from './common.mjs';
+import { DEFAULT } from './common.mjs';
 
 const Setup = {
   instance: (): t.JsonBusInstance => ({ bus: rx.bus(), id: `foo.${slug()}` }),
