@@ -1,4 +1,4 @@
-import { Automerge, Crdt, Is, Test, expect, rx, type t } from '../test.ui';
+import { toObject, Automerge, Crdt, Is, Test, expect, rx, type t } from '../test.ui';
 
 export default Test.describe('Lens Namespace', (e) => {
   type TFoo = { ns?: t.CrdtNsMap };
@@ -260,24 +260,20 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(keys2).to.eql([]);
     });
 
-    e.it.skip('dispose → 🌳 generate (new instance) → container:{ <empty> }', (e) => {
-      const { doc } = setup();
+    e.it('dispose → generate new( 🌳 ) → new instance container:{ <empty> }', (e) => {
+      const doc1 = setup().doc;
+      const generate = (doc: t.CrdtDocRef<TRoot>) => Crdt.Lens.namespace(doc, getMap);
 
-      const generate = () => Crdt.Lens.namespace<TRoot>(doc, getMap);
-
-      const ns1 = generate();
+      const ns1 = generate(doc1);
       ns1.lens<TDoc>('foo', { count: 0 });
       ns1.lens<TError>('bar', {});
 
       expect(Object.keys(ns1.container).length).to.eql(2);
-      doc.dispose();
+      doc1.dispose();
       expect(Object.keys(ns1.container).length).to.eql(0);
 
-      /**
-       * TODO 🐷
-       */
-
-      const ns2 = generate();
+      const doc2 = setup().doc;
+      const ns2 = generate(doc2);
       expect(Object.keys(ns2.container).length).to.eql(0);
     });
   });

@@ -35,7 +35,18 @@ export default Dev.describe('Namespace', (e) => {
     return ns;
   };
 
-  const doc = Crdt.ref<TRoot>('test-doc', {});
+  const createDoc = () => {
+    return Crdt.ref<TRoot>('test-doc', {});
+  };
+
+  const initCrdt = (ctx: t.DevCtx) => {
+    if (doc) doc.dispose();
+    doc = createDoc();
+    ns = createNamespace(ctx);
+    ctx.redraw();
+  };
+
+  let doc = createDoc();
   let ns: t.CrdtNsManager<TRoot>;
 
   const State = {
@@ -63,7 +74,7 @@ export default Dev.describe('Namespace', (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    ns = createNamespace(ctx);
+    initCrdt(ctx);
 
     state.change((d) => {
       d.props.enabled = local.enabled;
@@ -103,11 +114,10 @@ export default Dev.describe('Namespace', (e) => {
       dev.button((btn) => {
         btn
           .label((e) => (ns.disposed ? 'create' : 'dispose'))
-          .right((e) => (ns.disposed ? '🌳' : ''))
+          .right((e) => (ns.disposed ? '🌳' : '💥'))
           .onClick((e) => {
             if (ns.disposed) {
-              ns = createNamespace(dev.ctx);
-              dev.redraw();
+              initCrdt(dev.ctx);
             } else {
               ns.dispose();
             }
