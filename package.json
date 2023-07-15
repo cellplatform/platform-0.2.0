@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@automerge/automerge": "2.0.3",
-    "@farcaster/core": "0.10.2",
-    "@farcaster/hub-web": "0.4.2",
+    "@farcaster/core": "0.11.0",
+    "@farcaster/hub-web": "0.5.0",
     "@improbable-eng/grpc-web": "0.15.0",
     "@improbable-eng/grpc-web-node-http-transport": "0.15.0",
     "@monaco-editor/react": "4.5.1",
@@ -81,8 +81,8 @@
     "ua-parser-js": "1.0.35",
     "unified": "10.1.2",
     "unist-util-select": "5.0.0",
-    "viem": "1.2.15",
-    "wagmi": "1.3.8",
+    "viem": "1.3.0",
+    "wagmi": "1.3.9",
     "yaml": "2.3.1",
     "zod": "3.21.4"
   },
@@ -119,7 +119,7 @@
     "ts-node": "10.9.1",
     "tslib": "2.6.0",
     "typescript": "5.1.6",
-    "vite": "4.4.3",
+    "vite": "4.4.4",
     "vite-plugin-top-level-await": "1.3.1",
     "vite-plugin-wasm": "3.2.2",
     "vitest": "0.33.0"
@@ -127,7 +127,7 @@
   "resolutions": {
     "semver": "7.5.4",
     "tough-cookie": "4.1.3",
-    "viem": "1.2.15"
+    "viem": "1.3.0"
   },
   "license": "MIT",
   "private": true
