@@ -6,6 +6,7 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
+export type { PatchChange } from 'sys.data.json/src/types.mjs';
 export type { DirManifest, Fs, ManifestFile } from 'sys.fs/src/types.mjs';
 export type {
   SpecImport,
@@ -31,5 +32,5 @@ export type {
 /**
  * @local
  */
-export * from '../types.mjs';
 export * from '../sys.ui.common/types.mjs'; // TEMP 🐷
+export * from '../types.mjs';

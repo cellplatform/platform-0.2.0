@@ -1,12 +1,25 @@
+import { LabelItem } from '../LabelItem/Root';
 import { DEFAULTS, FC, type t } from './common';
 import { useController } from './useController.mjs';
 
-import { LabelItem } from '../LabelItem/Root';
+const View: React.FC<t.LabelItemStatefulProps> = (input) => {
+  const { onChange, state } = input;
 
-const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const enabled = props.useController && !props.props;
-  const controller = useController({ enabled });
-  return <LabelItem {...(props.props ?? controller.props)} style={props.style} />;
+  const enabled = input.useController;
+  const controller = useController({ enabled, state, onChange });
+
+  /**
+   * Render
+   */
+  return (
+    <LabelItem
+      style={input.style}
+      {...controller.props}
+      {...controller.handlers}
+      focusOnEdit={true}
+      label={controller.data.label}
+    />
+  );
 };
 
 /**
