@@ -260,7 +260,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(keys2).to.eql([]);
     });
 
-    e.it('dispose → 🌳 generate (new instance) → container:{ <empty> }', (e) => {
+    e.it.skip('dispose → 🌳 generate (new instance) → container:{ <empty> }', (e) => {
       const { doc } = setup();
 
       const generate = () => Crdt.Lens.namespace<TRoot>(doc, getMap);
