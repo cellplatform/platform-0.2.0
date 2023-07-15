@@ -10,6 +10,12 @@ type Args<T extends O = {}> = {
  * Simple safe/immutable memory state for a single item.
  */
 export const PatchState = {
+  /**
+   * TODO 🐷 API
+   * - init
+   * - init$  <<  initializes: init → observable → init$:<response>
+   * - observable( state, options? )
+   */
   init<T extends O>(args: Args<T>): t.PatchState<T> {
     const { onChange } = args;
     let _current = { ...args.initial };
