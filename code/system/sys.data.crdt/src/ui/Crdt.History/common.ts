@@ -1,8 +1,11 @@
 import { type t } from '../common';
 
+export { CrdtLens } from '../../crdt/crdt.Lens';
 export * from '../common';
-export { CrdtLens } from '../../crdt.Lens';
 
+/**
+ * Constants
+ */
 const data: t.CrdtHistoryInfoData = {};
 
 export const DEFAULTS = {

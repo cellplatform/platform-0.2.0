@@ -1,7 +1,7 @@
 import { type t } from '../common';
 
 export * from '../common';
-export { CrdtLens } from '../../crdt.Lens';
+export { CrdtLens } from '../../crdt/crdt.Lens';
 
 /**
  * @system → sys.ui.common

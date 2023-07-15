@@ -18,8 +18,8 @@ export { CrdtViews } from './ui';
 /**
  * Helpers
  */
-export { toObject } from './crdt.helpers';
-export { PeerSyncer } from './crdt.DocSync';
+export { toObject } from './crdt/crdt.helpers';
+export { PeerSyncer } from './crdt/crdt.DocSync';
 
 /**
  * Dev
