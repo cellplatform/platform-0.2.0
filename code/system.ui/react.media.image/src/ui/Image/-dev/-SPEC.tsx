@@ -1,5 +1,6 @@
+import { Dev, Filesize, Icons, type t } from '../../../test.ui';
+
 import { Image } from '..';
-import { Dev, Filesize, type t } from '../../../test.ui';
 import { Util } from '../Util.mjs';
 import { DevDataController } from './-DEV.data';
 
@@ -128,10 +129,19 @@ export default Dev.describe('Image', async (e) => {
 
     dev.section('Sizing', (dev) => {
       const size = (strategy: t.ImageSizeStrategy) => {
+        const icon = (isSelected: boolean) => {
+          const Icon = strategy === 'cover' ? Icons.Cover : Icons.Contain;
+          const opacity = isSelected ? 1 : 0.3;
+          return <Icon size={18} opacity={opacity} />;
+        };
+        const right = (state: T) => {
+          const isSelected = state.props.sizing === strategy;
+          return <div>{icon(isSelected)}</div>;
+        };
         dev.button((btn) =>
           btn
             .label(`${strategy}`)
-            .right((e) => (e.state.props.sizing === strategy ? '←' : ''))
+            .right((e) => right(e.state))
             .onClick((e) => {
               e.change((d) => (d.props.sizing = strategy));
             }),
