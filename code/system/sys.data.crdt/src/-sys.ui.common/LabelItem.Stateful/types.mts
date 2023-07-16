@@ -21,7 +21,7 @@ export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
  */
 export type LabelItemStatefulProps = {
   state?: LabelItemState; // NB: If not specified default is generated.
-  useController?: boolean;
+  useEditController?: boolean;
   rightActions?: t.LabelAction[];
   style?: t.CssValue;
   onChange?: LabelItemDataChangeHandler;

@@ -10,8 +10,8 @@ type Args = {
 /**
  * HOOK: stateful behavior controller.
  */
-export function useController(args: Args) {
-  const { enabled = DEFAULTS.useController, state } = args;
+export function useEditController(args: Args) {
+  const { enabled = DEFAULTS.useEditController, state } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);

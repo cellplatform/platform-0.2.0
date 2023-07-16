@@ -1,24 +1,30 @@
 import { LabelItem } from '../LabelItem/Root';
 import { DEFAULTS, FC, type t } from './common';
-import { useController } from './useController.mjs';
+import { useEditController } from './useEditController.mjs';
 
+/**
+ * Sample of using the behavior controller hooks.
+ */
 const View: React.FC<t.LabelItemStatefulProps> = (input) => {
   const { onChange, state } = input;
 
-  const enabled = input.useController;
-  const controller = useController({ enabled, state, onChange });
+  const editController = useEditController({
+    enabled: input.useEditController ?? DEFAULTS.useEditController,
+    state,
+    onChange,
+  });
 
   /**
    * Render
    */
   return (
     <LabelItem
+      {...editController.props}
+      {...editController.handlers}
       style={input.style}
-      {...controller.props}
-      {...controller.handlers}
+      label={editController.data.label}
       focusOnEdit={true}
-      rightActions={input.rightActions ?? controller.props.rightActions}
-      label={controller.data.label}
+      rightActions={input.rightActions ?? editController.props.rightActions}
     />
   );
 };
@@ -28,10 +34,10 @@ const View: React.FC<t.LabelItemStatefulProps> = (input) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  useController: typeof useController;
+  useEditController: typeof useEditController;
 };
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
-  { DEFAULTS, useController },
+  { DEFAULTS, useEditController },
   { displayName: 'LabelItem.Stateful' },
 );

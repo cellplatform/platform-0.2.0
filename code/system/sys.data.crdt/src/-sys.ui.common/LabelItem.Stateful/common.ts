@@ -6,7 +6,7 @@ const props: t.LabelItemProps = {
 };
 
 export const DEFAULTS = {
-  useController: true,
+  useEditController: true,
   props,
   get data(): t.LabelItemData {
     return {};
