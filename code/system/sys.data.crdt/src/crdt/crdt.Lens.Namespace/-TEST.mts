@@ -176,7 +176,7 @@ export default Test.describe('Lens Namespace', (e) => {
       doc.dispose();
     });
 
-    e.it('strongly typed namespace "names" (string | union)', (e) => {
+    e.it('strongly typed namespace "names" (string union)', (e) => {
       type N = 'foo.bar' | 'foo.baz';
       type NS = t.CrdtNsMap<N>;
       const { doc } = setup();
@@ -190,6 +190,20 @@ export default Test.describe('Lens Namespace', (e) => {
 
       expect((doc.current.ns as NS)['foo.bar']).to.eql({ count: 123 });
       expect((doc.current.ns as NS)['foo.baz']).to.eql({ message: 'hello' });
+
+      doc.dispose();
+    });
+
+    e.it('same namespace → single instance of lens', (e) => {
+      const { doc } = setup();
+      const namespace = Crdt.namespace<TRoot>(doc);
+
+      const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
+      const ns2 = namespace.lens<TDoc>('foo', { count: 456 });
+
+      expect(ns1).to.equal(ns2); // NB: same instance.
+      expect(ns1.current).to.eql(ns2.current);
+      expect(ns2.current.count).to.eql(123); // NB: the second call to lens did not construct a new one.
 
       doc.dispose();
     });
@@ -216,7 +230,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns1.disposed).to.eql(true);
     });
 
-    e.it('namespace.dispose() ← method ', (e) => {
+    e.it('namespace.dispose ← (method) ', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
@@ -224,17 +238,43 @@ export default Test.describe('Lens Namespace', (e) => {
       const ns2 = namespace.lens<TError>('bar', {});
 
       expect(namespace.disposed).to.eql(false);
-      expect(ns2.disposed).to.eql(false);
       expect(ns1.disposed).to.eql(false);
+      expect(ns2.disposed).to.eql(false);
 
       namespace.dispose();
 
       expect(namespace.disposed).to.eql(true);
-      expect(ns2.disposed).to.eql(true);
       expect(ns1.disposed).to.eql(true);
+      expect(ns2.disposed).to.eql(true);
     });
 
-    e.it('doc.dispose ← root document', (e) => {
+    e.it('lens.dispose', (e) => {
+      const { doc } = setup();
+      const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
+
+      const initial: TDoc = { count: 0 };
+      const lens1 = namespace.lens('foo', initial);
+      const lens2a = namespace.lens('bar', initial);
+      const lens2b = namespace.lens('bar', initial);
+      expect(lens2a).to.equal(lens2b); // NB: same instance.
+
+      lens2a.dispose();
+
+      expect(namespace.disposed).to.eql(false);
+      expect(lens1.disposed).to.eql(false);
+      expect(lens2a.disposed).to.eql(true);
+
+      lens2a.change((d) => (d.count = 555));
+      expect(lens2a.current.count).to.eql(0);
+      expect(Object.keys(namespace.container)).to.eql(['foo']); // NB: does not contain disposed lens
+
+      const lens2c = namespace.lens('bar', initial);
+      expect(lens2a).to.not.equal(lens2c); // NB: new instance.
+
+      doc.dispose();
+    });
+
+    e.it('doc.dispose ← (root document)', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
@@ -254,7 +294,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns1.disposed).to.eql(true);
     });
 
-    e.it('dispose clears { container } → { }', (e) => {
+    e.it('disposal clears { container } → { }', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);

@@ -1,5 +1,6 @@
-import { init as lens } from '../crdt.Lens/Lens.impl.mjs';
+import { init as Lens } from '../crdt.Lens/Lens.impl.mjs';
 import { rx, toObject, type t } from './common';
+import { Wrangle } from './Wrangle.mjs';
 
 /**
  * A lens namespace manager within the given document.
@@ -12,10 +13,12 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
   root: t.CrdtDocRef<R>,
   getMap?: t.CrdtNsMapGetLens<R>,
   options?: { dispose$: t.Observable<any> },
-) {
+): t.CrdtNsManager<R, N> {
   const life = rx.lifecycle([root.dispose$, options?.dispose$]);
   const { dispose, dispose$ } = life;
   const container = Wrangle.containerLens<R, N>(root, getMap, dispose$);
+  const cache = new Map<N, t.CrdtLens<R, {}>>();
+  dispose$.subscribe(() => cache.clear());
 
   /**
    * API.
@@ -28,11 +31,18 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
     },
 
     get container() {
-      return life.disposed ? ({} as t.CrdtNsMap<N>) : toObject(container.current);
+      type T = t.CrdtNsMap<N>;
+      if (api.disposed) return {} as T;
+
+      const res = {} as T;
+      Array.from(cache).forEach(([key, value]) => (res[key] = toObject(value.current)));
+      return res;
     },
 
     lens<L extends {}>(namespace: N, initial: L) {
-      return lens<R, L>(
+      if (cache.has(namespace)) return cache.get(namespace) as t.CrdtLens<R, L>;
+
+      const lens = Lens<R, L>(
         root,
         (draft) => {
           const container = Wrangle.container<R, N>(draft, getMap);
@@ -41,6 +51,10 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
         },
         { dispose$ },
       );
+
+      cache.set(namespace, lens);
+      lens.dispose$.pipe(rx.take(1)).subscribe(() => cache.delete(namespace));
+      return lens;
     },
 
     /**
@@ -56,25 +70,3 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
   // Finish up.
   return api;
 }
-
-/**
- * Helpers
- */
-const Wrangle = {
-  container<R extends {}, N extends string = string>(root: R, getMap?: t.CrdtNsMapGetLens<R>) {
-    return (getMap ? getMap(root) : root) as t.CrdtNsMap<N>;
-  },
-
-  containerLens<R extends {}, N extends string = string>(
-    root: t.CrdtDocRef<R>,
-    getMap?: t.CrdtNsMapGetLens<R>,
-    dispose$?: t.Observable<any>,
-  ) {
-    return lens<R, t.CrdtNsMap<N>>(
-      root,
-      (draft) => Wrangle.container<R, N>(draft, getMap),
-      { dispose$ },
-      //
-    );
-  },
-};
