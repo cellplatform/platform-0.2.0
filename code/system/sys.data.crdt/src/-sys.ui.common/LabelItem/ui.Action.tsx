@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Button, Icons } from './common';
-
+import { Button, css, DEFAULTS, type t } from './common';
+import { ActionSpinner } from './ui.Action.Spinner';
 import { Wrangle } from './Wrangle';
 
 export type ActionProps = {
@@ -14,9 +13,10 @@ export type ActionProps = {
 
 export const Action: React.FC<ActionProps> = (props) => {
   const { action, focused } = props;
-  const { onClick } = action;
+  const { onClick, width } = action;
   const isButton = onClick && (action.enabled ?? true);
   const isEnabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;
+  const isSpinning = action.spinning ?? false;
   const opacity = props.opacity ?? (isEnabled ? 1 : 0.3);
 
   /**
@@ -31,11 +31,19 @@ export const Action: React.FC<ActionProps> = (props) => {
    */
   const styles = {
     base: css({
+      position: 'relative',
       opacity,
-      width: action.width,
+      width,
+      pointerEvents: isSpinning ? 'none' : 'auto',
+    }),
+    body: css({
+      width,
       display: 'grid',
       placeItems: 'center',
+      opacity: isSpinning ? 0 : 1,
+      transition: 'opacity 0.2s',
     }),
+
     button: css({ display: 'grid', placeItems: 'center' }),
   };
 
@@ -46,5 +54,10 @@ export const Action: React.FC<ActionProps> = (props) => {
     </Button>
   );
 
-  return <div {...css(styles.base, props.style)}>{elButton || elIcon}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.body}>{elButton || elIcon}</div>
+      {isSpinning && <ActionSpinner action={action} />}
+    </div>
+  );
 };

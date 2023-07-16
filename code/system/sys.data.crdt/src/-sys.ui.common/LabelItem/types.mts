@@ -6,6 +6,7 @@ export type LabelAction<K extends LabelActionKind = string> = {
   enabled?: boolean;
   width?: number;
   icon?: JSX.Element | RenderLabelActionIcon | false;
+  spinning?: boolean;
   onClick?: LabelItemActionHandler;
 };
 

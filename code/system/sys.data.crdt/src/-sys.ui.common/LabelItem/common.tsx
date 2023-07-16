@@ -23,4 +23,5 @@ export const DEFAULTS = {
   placeholder: 'placeholder',
   leftAction,
   rightActions,
+  spinner: { width: 15 },
 } as const;
