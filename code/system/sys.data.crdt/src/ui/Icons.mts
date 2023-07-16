@@ -1,5 +1,5 @@
 import { GoGitCommit } from 'react-icons/go';
-import { LuEdit2 } from 'react-icons/lu';
+import { LuDownload, LuEdit2 } from 'react-icons/lu';
 import {
   MdDataObject,
   MdDoneAll,
@@ -23,6 +23,9 @@ export const Icons = {
   Repo: icon(VscRepo),
   Editing: icon(LuEdit2),
   Commit: icon(GoGitCommit),
+  Download: {
+    ArrowTray: icon(LuDownload),
+  },
   Network: {
     Antenna: icon(MdSettingsInputAntenna),
     Disconnect: icon(VscDebugDisconnect),
