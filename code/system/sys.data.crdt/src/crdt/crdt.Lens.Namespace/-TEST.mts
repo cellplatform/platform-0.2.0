@@ -69,7 +69,7 @@ export default Test.describe('Lens Namespace', (e) => {
     });
   });
 
-  e.describe('$ ← (namespace container)', (e) => {
+  e.describe('$ ← (container.$ observable)', (e) => {
     type N = 'foo' | 'bar';
 
     e.it('same observable instance', (e) => {
@@ -209,6 +209,41 @@ export default Test.describe('Lens Namespace', (e) => {
     });
   });
 
+  e.describe('list', (e) => {
+    e.it('empty', (e) => {
+      const { doc } = setup();
+      const namespace = Crdt.namespace<TRoot>(doc);
+      expect(namespace.list()).to.eql([]);
+      doc.dispose();
+    });
+
+    e.it('items', (e) => {
+      type K = 'foo' | 'bar';
+      const { doc } = setup();
+      const namespace = Crdt.namespace<TRoot, K>(doc);
+
+      const initial: TDoc = { count: 0 };
+      const foo = namespace.lens('foo', initial);
+      const bar = namespace.lens('bar', initial);
+
+      const list = namespace.list<TDoc>();
+      expect(list.length).to.eql(2);
+      expect(list[0].namespace).to.eql('foo');
+      expect(list[1].namespace).to.eql('bar');
+      expect(list[0].lens).to.eql(foo);
+      expect(list[1].lens).to.eql(bar);
+
+      doc.dispose();
+    });
+
+    e.it('new list every call', (e) => {
+      const { doc } = setup();
+      const namespace = Crdt.namespace<TRoot>(doc);
+      expect(namespace.list()).to.not.equal(namespace.list()); // NB: new instance each time.
+      doc.dispose();
+    });
+  });
+
   e.describe('dispose', (e) => {
     const getMap: t.CrdtNsMapGetLens<TRoot> = (d) => d.ns || (d.ns = {});
 
@@ -230,7 +265,7 @@ export default Test.describe('Lens Namespace', (e) => {
       expect(ns1.disposed).to.eql(true);
     });
 
-    e.it('namespace.dispose ← (method) ', (e) => {
+    e.it('namespace.dispose ← ( method ) ', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);
@@ -274,7 +309,7 @@ export default Test.describe('Lens Namespace', (e) => {
       doc.dispose();
     });
 
-    e.it('doc.dispose ← (root document)', (e) => {
+    e.it('doc.dispose ← ( root document )', (e) => {
       const { doc } = setup();
 
       const namespace = Crdt.Lens.namespace<TRoot>(doc, getMap);

@@ -39,6 +39,14 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
       return res;
     },
 
+    list<L extends {}>() {
+      return Array.from(cache).map((item) => {
+        const namespace = item[0] as N;
+        const lens = item[1] as t.CrdtLens<R, L>;
+        return { namespace, lens };
+      });
+    },
+
     lens<L extends {}>(namespace: N, initial: L) {
       if (cache.has(namespace)) return cache.get(namespace) as t.CrdtLens<R, L>;
 
