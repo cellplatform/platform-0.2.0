@@ -2,8 +2,14 @@ import { DEFAULTS, css, type t } from './common';
 import { Item } from './ui.Item';
 
 export const View: React.FC<t.CrdtNsProps> = (props) => {
-  const { data = DEFAULTS.data, enabled = DEFAULTS.enabled, indent = DEFAULTS.indent } = props;
+  const {
+    data = DEFAULTS.data,
+    enabled = DEFAULTS.enabled,
+    indent = DEFAULTS.indent,
+    useBehaviors: useBehavior = DEFAULTS.useBehaviors,
+  } = props;
   const ns = data?.ns;
+
   if (!data || !ns) return '⚠️ not set: { data }';
   if (data.ns?.disposed) return '⚠️ disposed: { data: { ns } }';
 
@@ -21,11 +27,18 @@ export const View: React.FC<t.CrdtNsProps> = (props) => {
     }),
   };
 
-  const elEmpty = isEmpty && <Item enabled={enabled} />;
-
+  const elEmpty = isEmpty && <Item enabled={enabled} useBehavior={useBehavior} />;
   const elList = list.map((data, i) => {
     const key = `${i}.${data.namespace}`;
-    return <Item key={key} data={data} enabled={enabled} />;
+    return (
+      <Item
+        //
+        key={key}
+        ns={data}
+        enabled={enabled}
+        useBehavior={useBehavior}
+      />
+    );
   });
 
   return (

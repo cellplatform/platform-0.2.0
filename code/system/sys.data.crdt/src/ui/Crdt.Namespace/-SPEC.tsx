@@ -18,10 +18,11 @@ export default Dev.describe('Namespace', (e) => {
   /**
    * Local storage.
    */
-  type LocalStore = T['debug'] & Pick<t.CrdtNsProps, 'enabled'>;
+  type LocalStore = T['debug'] & Pick<t.CrdtNsProps, 'enabled' | 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
+    useBehaviors: DEFAULTS.useBehaviors,
     devBg: true,
     withData: true,
   });
@@ -78,6 +79,7 @@ export default Dev.describe('Namespace', (e) => {
 
     state.change((d) => {
       d.props.enabled = local.enabled;
+      d.props.useBehaviors = local.useBehaviors;
       d.debug.withData = local.withData;
       d.debug.devBg = local.devBg;
     });
@@ -106,6 +108,16 @@ export default Dev.describe('Namespace', (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
       });
+    });
+
+    dev.boolean((btn) => {
+      const value = (state: T) => Boolean(state.props.useBehaviors);
+      btn
+        .label((e) => `useBehavior ${value(e.state) ? '( 🧠 )' : '⚠️'} `)
+        .value((e) => value(e.state))
+        .onClick((e) => {
+          e.change((d) => (local.useBehaviors = Dev.toggle(d.props, 'useBehaviors')));
+        });
     });
 
     dev.hr(5, 20);
@@ -137,7 +149,7 @@ export default Dev.describe('Namespace', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.withData);
         btn
-          .label((e) => (value(e.state) ? `with data` : `no data`))
+          .label((e) => (value(e.state) ? `with { data }` : `⚠️ no { data }`))
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.withData = Dev.toggle(d.debug, 'withData'))));
       });

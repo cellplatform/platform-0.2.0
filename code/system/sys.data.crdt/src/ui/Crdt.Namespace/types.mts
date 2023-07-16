@@ -6,6 +6,7 @@ import { type t } from './common';
 export type CrdtNsProps = {
   enabled?: boolean;
   data?: t.CrdtNsInfoData;
+  useBehaviors?: boolean;
   style?: t.CssValue;
   indent?: number;
 };
