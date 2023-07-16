@@ -10,7 +10,7 @@ export type CrdtNsChange<R extends {}, N extends string = string> = t.CrdtLensCh
   t.CrdtNsMap<N>
 >;
 
-export type CrdtNsItem<R extends {}, L extends {}, N extends string = string> = {
+export type CrdtNs<R extends {}, L extends {}, N extends string = string> = {
   namespace: N;
   lens: t.CrdtLens<R, L>;
 };
@@ -20,5 +20,5 @@ export type CrdtNsManager<R extends {}, N extends string = string> = t.Lifecycle
   readonly $: t.Observable<t.CrdtNsChange<R, N>>;
   readonly container: t.CrdtNsMap<N>;
   lens<L extends {}>(namespace: N, initial: L): t.CrdtLens<R, L>;
-  list<L extends {}>(): CrdtNsItem<R, L, N>[];
+  list<L extends {}>(): CrdtNs<R, L, N>[];
 };
