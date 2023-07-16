@@ -74,7 +74,7 @@ export type LabelItemChangeHandlerArgs = {
 
 export type LabelItemActionHandler = (e: LabelItemActionHandlerArgs) => void;
 export type LabelItemActionHandlerArgs = {
-  action: LabelActionKind;
+  kind: LabelActionKind;
 };
 
 export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;

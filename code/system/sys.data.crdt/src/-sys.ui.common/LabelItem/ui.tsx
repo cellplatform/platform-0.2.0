@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, useState } from 'react';
 import { css, DEFAULTS, Style, type t } from './common';
 
 import { Label } from './ui.Label';
@@ -25,6 +25,9 @@ export const View: React.FC<Props> = (props) => {
     return () => props.onFocusChange?.({ focused });
   };
 
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
   /**
    * [Render]
    */
@@ -35,7 +38,16 @@ export const View: React.FC<Props> = (props) => {
       backgroundColor: Wrangle.backgroundColor(props),
       boxSizing: 'border-box',
       outline: 'none',
+      opacity: enabled ? 1 : 0.4,
+      filter: `blur(${enabled || isOver ? 0 : 1.5}px)`,
+      transition: 'opacity 0.2s',
       ...Style.toPadding(props.padding ?? padding),
+    }),
+    disabled: css({
+      Absolute: 0,
+      pointerEvents: !enabled ? 'auto' : 'none',
+      opacity: !enabled ? 1 : 0,
+      transition: 'opacity 0.2s',
     }),
     body: css({
       boxSizing: 'border-box',
@@ -53,6 +65,7 @@ export const View: React.FC<Props> = (props) => {
   };
 
   const elFocusBorder = focused && <div {...styles.focusBorder} />;
+  const elDisabled = <div {...styles.disabled} />;
 
   return (
     <div
@@ -60,12 +73,15 @@ export const View: React.FC<Props> = (props) => {
       tabIndex={tabIndex}
       onFocus={onFocusHandler(true)}
       onBlur={onFocusHandler(false)}
+      onMouseEnter={over(true)}
+      onMouseLeave={over(false)}
     >
       <div {...styles.body}>
         <LeftAction {...props} />
         <Label {...props} inputRef={inputRef} />
         <RightActions {...props} style={styles.right} />
       </div>
+      {elDisabled}
       {elFocusBorder}
     </div>
   );

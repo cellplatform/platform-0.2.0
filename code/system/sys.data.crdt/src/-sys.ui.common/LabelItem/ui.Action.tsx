@@ -23,7 +23,7 @@ export const Action: React.FC<ActionProps> = (props) => {
    * [Handlers]
    */
   const handleClick = () => {
-    onClick?.({ action: action.kind });
+    onClick?.({ kind: action.kind });
   };
 
   /**
