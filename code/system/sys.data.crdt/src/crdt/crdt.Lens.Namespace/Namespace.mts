@@ -24,7 +24,7 @@ export function CrdtNamespace<R extends {}, N extends string = string>(
    * API.
    */
   const api: t.CrdtNsManager<R, N> = {
-    kind: 'Crdt:Namespace',
+    kind: 'Crdt:Ns:Manager',
 
     get $() {
       return container.$;
