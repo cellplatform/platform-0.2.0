@@ -296,6 +296,8 @@ export default Dev.describe('Namespace.Item', (e) => {
           .onClick((e) => e.change((d) => (local.subjectBg = Dev.toggle(d.debug, 'subjectBg'))));
       });
 
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.defaultLeft);
         btn
