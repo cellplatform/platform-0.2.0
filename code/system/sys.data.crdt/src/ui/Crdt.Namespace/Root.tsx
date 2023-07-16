@@ -1,5 +1,5 @@
 import { CrdtLens, DEFAULTS, FC, type t } from './common';
-import { View } from './ui.Root';
+import { View } from './ui';
 
 const ns = CrdtLens.namespace;
 

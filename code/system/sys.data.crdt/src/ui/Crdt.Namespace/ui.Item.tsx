@@ -8,7 +8,7 @@ export type ItemProps = {
 };
 
 export const Item: React.FC<ItemProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, placeholder = DEFAULTS.placeholder } = props;
+  const { enabled = DEFAULTS.enabled, placeholder = DEFAULTS.placeholder.default } = props;
 
   /**
    * [Render]

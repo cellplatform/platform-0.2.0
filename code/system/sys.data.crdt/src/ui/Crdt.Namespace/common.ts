@@ -5,21 +5,22 @@ export { CrdtLens } from '../../crdt/crdt.Lens';
 export * from '../common';
 
 /**
- * @system → sys.ui.common
+ * @system → (sys.ui.common)
  */
 export { LabelItem } from '../../-sys.ui.common';
 
 /**
  * Constants.
  */
-const data: t.CrdtNsInfoData = {
-  maxLength: item.maxLength,
-};
+const data: t.CrdtNsInfoData = { maxLength: item.maxLength };
 
 export const DEFAULTS = {
   data,
   item,
   enabled: true,
   indent: 0,
-  placeholder: 'namespace',
+  placeholder: {
+    default: 'namespace',
+    empty: 'add namespace',
+  },
 } as const;
