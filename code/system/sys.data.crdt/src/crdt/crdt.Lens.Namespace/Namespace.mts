@@ -5,9 +5,9 @@ import { Wrangle } from './Wrangle.mjs';
 /**
  * A lens namespace manager within the given document.
  *
- * Context:
- *    This allows multiple lens to be created on a {map}
- *    object within the single document.
+ * [Context]:
+ *      This allows multiple lens to be created on a {map}
+ *      object within the single document.
  */
 export function CrdtNamespace<R extends {}, N extends string = string>(
   root: t.CrdtDocRef<R>,
