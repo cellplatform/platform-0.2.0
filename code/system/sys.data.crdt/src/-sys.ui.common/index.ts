@@ -1,1 +1,2 @@
-export * from './LabelItem';
+export { LabelItem } from './LabelItem';
+export { Item } from './Item.mjs';

@@ -7,7 +7,7 @@ export * from '../common';
 /**
  * @system → (sys.ui.common)
  */
-export { LabelItem } from '../../-sys.ui.common';
+export { Item } from '../../-sys.ui.common';
 
 /**
  * Constants.

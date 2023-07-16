@@ -1,4 +1,4 @@
-import { DEFAULTS, LabelItem, css, type t } from './common';
+import { DEFAULTS, Item as BaseItem, css, type t } from './common';
 
 export type ItemProps = {
   data?: t.CrdtNs<{}, {}>;
@@ -19,10 +19,10 @@ export const Item: React.FC<ItemProps> = (props) => {
   };
 
   return (
-    <LabelItem
+    <BaseItem.Label
+      enabled={enabled}
       label={text}
       placeholder={placeholder}
-      enabled={enabled}
       style={css(styles.base, props.style)}
     />
   );
