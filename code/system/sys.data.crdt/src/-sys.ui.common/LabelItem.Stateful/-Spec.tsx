@@ -1,6 +1,6 @@
-import { type t, Dev, Icons } from '../test.ui';
 import { LabelItemStateful } from '.';
-import { State } from './State.mjs';
+import { Item } from '..';
+import { Dev, Icons, type t } from '../test.ui';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -15,22 +15,20 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<t.LabelItemStatefulProps, 'useController'>;
+  type LocalStore = Pick<t.LabelItemStatefulProps, 'useEditController'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    useController: DEFAULTS.useController,
+    useEditController: DEFAULTS.useEditController,
   });
 
-  const item = State.init({
-    initial: { label: 'hello 👋' },
-  });
+  const item = Item.state({ initial: { label: 'hello 👋' } });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.useController = local.useController;
+      d.props.useEditController = local.useEditController;
     });
 
     ctx.debug.width(300);
@@ -48,6 +46,9 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         };
 
         return (
+          /**
+           * See: Examples of behavior/hook usages in component| ↓ |
+           */
           <LabelItemStateful
             {...props}
             state={item}
@@ -65,18 +66,20 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Properties', (dev) => {
+    dev.section('Behavior Logic', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.useController);
-        const isDefault = (state: T) => value(state) === DEFAULTS.useController;
+        const value = (state: T) => Boolean(state.props.useEditController);
+        const isDefault = (state: T) => value(state) === DEFAULTS.useEditController;
         btn
-          .label((e) => `useController ${isDefault(e.state) ? '(default)' : ''}`)
+          .label((e) => `useEditController ${isDefault(e.state) ? '( 🧠 )' : ''}`)
           .value((e) => value(e.state))
           .onClick((e) => {
-            e.change((d) => (local.useController = Dev.toggle(d.props, 'useController')));
+            e.change((d) => (local.useEditController = Dev.toggle(d.props, 'useEditController')));
           });
       });
     });
+
+    dev.hr(-1, 5);
   });
 
   e.it('ui:footer', async (e) => {
