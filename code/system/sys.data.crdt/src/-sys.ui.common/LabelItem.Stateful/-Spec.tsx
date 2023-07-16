@@ -71,7 +71,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         const value = (state: T) => Boolean(state.props.useEditController);
         const isDefault = (state: T) => value(state) === DEFAULTS.useEditController;
         btn
-          .label((e) => `useEditController ${isDefault(e.state) ? '( 🧠 )' : ''}`)
+          .label((e) => `useEditController ${isDefault(e.state) ? '( 🧠 )' : '⚠️'}`)
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.useEditController = Dev.toggle(d.props, 'useEditController')));

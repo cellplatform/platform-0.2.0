@@ -115,7 +115,7 @@ export default Dev.describe('Namespace.Item', (e) => {
           <LabelItem
             {...State.toDisplayProps(state)}
             onReady={(e) => {
-              console.log('⚡️ onReady:', e);
+              console.info('⚡️ onReady:', e);
               state.change((d) => (d.ref = e.ref));
             }}
           />
