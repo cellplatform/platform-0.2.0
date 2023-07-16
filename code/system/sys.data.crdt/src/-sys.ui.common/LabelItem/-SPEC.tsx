@@ -4,7 +4,7 @@ import { Dev, Time, type t, Icons } from '../test.ui';
 type T = {
   ref?: t.LabelItemRef;
   props: t.LabelItemProps;
-  debug: { subjectBg?: boolean; defaultLeft?: boolean; defaultRight?: boolean };
+  debug: { subjectBg?: boolean };
 };
 const initial: T = {
   props: { focusOnReady: true },
@@ -27,14 +27,10 @@ export default Dev.describe('Namespace.Item', (e) => {
     editing: DEFAULTS.editing,
     focused: DEFAULTS.focused,
     subjectBg: true,
-    defaultLeft: true,
-    defaultRight: false,
   });
 
-  const State = {
-    toDisplayProps(state: t.DevCtxState<T>): t.LabelItemProps {
-      const { debug } = state.current;
-
+  const Sample = {
+    get actions() {
       type K = 'left:sample' | 'right:foo' | 'right:bar';
       const action = (
         kind: K,
@@ -49,16 +45,22 @@ export default Dev.describe('Namespace.Item', (e) => {
           onClick: (e) => console.info('⚡️ action → onClick:', e),
         };
       };
-      const leftAction = action('left:sample', { width: 30 });
-      const rightActions: t.LabelAction<K>[] = [
+      const left = action('left:sample', { width: 30 });
+      const right: t.LabelAction<K>[] = [
         action('right:foo', { enabled: false }),
         action('right:bar'),
       ];
 
+      return { left, right };
+    },
+  };
+
+  const State = {
+    toDisplayProps(state: t.DevCtxState<T>): t.LabelItemProps {
+      const { debug } = state.current;
+
       return {
         ...state.current.props,
-        leftAction: debug.defaultLeft ? leftAction : undefined,
-        rightActions: debug.defaultRight ? rightActions : undefined,
 
         onReady(e) {
           console.info('⚡️ onReady', e);
@@ -98,6 +100,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.padding = local.padding;
       d.props.editing = local.editing;
       d.props.focused = local.focused;
+      d.props.rightActions = Sample.actions.right;
+
       d.debug.subjectBg = local.subjectBg;
       d.debug.defaultLeft = local.defaultLeft;
       d.debug.defaultRight = local.defaultRight;
@@ -278,6 +282,23 @@ export default Dev.describe('Namespace.Item', (e) => {
 
       dev.hr(-1, 5);
 
+      dev.button('actions: undefined', async (e) => {
+        await e.change((d) => {
+          d.props.leftAction = undefined;
+          d.props.rightActions = undefined;
+        });
+      });
+
+      dev.button('actions: (left) sample', async (e) => {
+        e.change((d) => (d.props.leftAction = Sample.actions.left));
+      });
+
+      dev.button('actions: (right) sample', async (e) => {
+        e.change((d) => (d.props.rightActions = Sample.actions.right));
+      });
+
+      dev.hr(-1, 5);
+
       dev.button(['clear', '"text"'], async (e) => {
         await e.change((d) => (d.props.label = undefined));
         updateLocalStorage();
@@ -294,28 +315,6 @@ export default Dev.describe('Namespace.Item', (e) => {
           .label((e) => `background`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.subjectBg = Dev.toggle(d.debug, 'subjectBg'))));
-      });
-
-      dev.hr(-1, 5);
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.defaultLeft);
-        btn
-          .label((e) => `leftAction: ${!value(e.state) ? '(default)' : '(passed in)'}`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.defaultLeft = Dev.toggle(d.debug, 'defaultLeft')));
-          });
-      });
-
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.defaultRight);
-        btn
-          .label((e) => `rightActions: ${!value(e.state) ? '(default)' : '(passed in)'}`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.defaultRight = Dev.toggle(d.debug, 'defaultRight')));
-          });
       });
     });
 
