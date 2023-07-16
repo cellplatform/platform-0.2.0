@@ -16,7 +16,7 @@ export type CrdtNs<R extends {}, L extends {}, N extends string = string> = {
 };
 
 export type CrdtNsManager<R extends {}, N extends string = string> = t.Lifecycle & {
-  readonly kind: 'Crdt:Namespace';
+  readonly kind: 'Crdt:Ns:Manager';
   readonly $: t.Observable<t.CrdtNsChange<R, N>>;
   readonly container: t.CrdtNsMap<N>;
   lens<L extends {}>(namespace: N, initial: L): t.CrdtLens<R, L>;

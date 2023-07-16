@@ -17,8 +17,8 @@ export default Test.describe('Lens Namespace', (e) => {
     const { doc } = setup();
     const ns1 = CrdtNamespace<TRoot>(doc);
     const ns2 = Crdt.Lens.namespace<TRoot>(doc);
-    expect(ns1.kind).to.eql('Crdt:Namespace');
-    expect(ns2.kind).to.eql('Crdt:Namespace');
+    expect(ns1.kind).to.eql('Crdt:Ns:Manager');
+    expect(ns2.kind).to.eql('Crdt:Ns:Manager');
   });
 
   e.describe('container', (e) => {
@@ -131,7 +131,6 @@ export default Test.describe('Lens Namespace', (e) => {
     e.it('namespace.lens: from { document } root', (e) => {
       const { doc } = setup();
       const namespace = Crdt.Lens.namespace<TRoot>(doc);
-      expect(namespace.kind).to.eql('Crdt:Namespace');
 
       const ns1 = namespace.lens<TDoc>('foo', { count: 123 });
       const ns2 = namespace.lens('foo', { count: 0 });
