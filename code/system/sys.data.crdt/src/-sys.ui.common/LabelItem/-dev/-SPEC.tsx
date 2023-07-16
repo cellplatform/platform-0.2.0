@@ -1,5 +1,6 @@
-import { LabelItem, DEFAULTS } from '.';
-import { Dev, Time, type t, Icons } from '../test.ui';
+import { DEFAULTS, LabelItem } from '..';
+import { Dev, Time, type t } from '../../test.ui';
+import { Sample } from './-Sample';
 
 type T = {
   ref?: t.LabelItemRef;
@@ -28,32 +29,6 @@ export default Dev.describe('Namespace.Item', (e) => {
     focused: DEFAULTS.focused,
     subjectBg: true,
   });
-
-  const Sample = {
-    get actions() {
-      type K = 'left:sample' | 'right:foo' | 'right:bar';
-      const action = (
-        kind: K,
-        options: { width?: number; enabled?: boolean } = {},
-      ): t.LabelAction<K> => {
-        const { width, enabled } = options;
-        return {
-          kind,
-          width,
-          enabled,
-          icon: (e) => <Icons.ObjectTree size={17} color={e.color} />,
-          onClick: (e) => console.info('⚡️ action → onClick:', e),
-        };
-      };
-      const left = action('left:sample', { width: 30 });
-      const right: t.LabelAction<K>[] = [
-        action('right:foo', { enabled: false }),
-        action('right:bar'),
-      ];
-
-      return { left, right };
-    },
-  };
 
   const State = {
     toDisplayProps(state: t.DevCtxState<T>): t.LabelItemProps {
@@ -100,11 +75,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.padding = local.padding;
       d.props.editing = local.editing;
       d.props.focused = local.focused;
-      d.props.rightActions = Sample.actions.right;
-
+      d.props.rightActions = Sample.actions().right;
       d.debug.subjectBg = local.subjectBg;
-      d.debug.defaultLeft = local.defaultLeft;
-      d.debug.defaultRight = local.defaultRight;
     });
 
     ctx.debug.width(300);
@@ -290,11 +262,21 @@ export default Dev.describe('Namespace.Item', (e) => {
       });
 
       dev.button('actions: (left) sample', async (e) => {
-        e.change((d) => (d.props.leftAction = Sample.actions.left));
+        const sample = Sample.actions();
+        await e.change((d) => (d.props.leftAction = sample.left));
       });
 
       dev.button('actions: (right) sample', async (e) => {
-        e.change((d) => (d.props.rightActions = Sample.actions.right));
+        const sample = Sample.actions();
+        await e.change((d) => (d.props.rightActions = sample.right));
+      });
+
+      dev.button('actions: spinning', async (e) => {
+        const sample = Sample.actions({ spinning: true });
+        await e.change((d) => {
+          if (d.props.leftAction) d.props.leftAction = sample.left;
+          if (d.props.rightActions) d.props.rightActions = sample.right;
+        });
       });
 
       dev.hr(-1, 5);
