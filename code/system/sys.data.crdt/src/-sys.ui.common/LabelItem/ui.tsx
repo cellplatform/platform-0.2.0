@@ -1,5 +1,5 @@
-import { RefObject, useState } from 'react';
-import { css, DEFAULTS, Style, type t } from './common';
+import { RefObject, useRef, useState } from 'react';
+import { css, DEFAULTS, Style, useClickOutside, type t } from './common';
 
 import { Label } from './ui.Label';
 import { LeftAction } from './ui.Root.Left.Action';
@@ -16,26 +16,38 @@ export const View: React.FC<Props> = (props) => {
     padding = DEFAULTS.padding,
     focused = DEFAULTS.focused,
     tabIndex = DEFAULTS.tabIndex,
+    editing = DEFAULTS.editing,
   } = props;
   const label = Wrangle.labelText(props);
+
+  const clickArgs = (): t.LabelItemClickHandlerArgs => {
+    return { label: label.text, focused, editing };
+  };
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useClickOutside({
+    ref,
+    callback(e) {
+      if (editing) props.onEditClickAway?.(clickArgs());
+    },
+  });
 
   /**
    * Handlers
    */
   const onFocusHandler = (focused: boolean) => {
-    return () =>
+    return () => {
       props.onFocusChange?.({
         focused,
         label: label.text,
       });
+    };
   };
 
-  const onClickHandler = (handler?: t.LabelItemClickHandler) => {
+  const clickHandler = (handler?: t.LabelItemClickHandler) => {
     return () => {
-      handler?.({
-        focused,
-        label: label.text,
-      });
+      handler?.(clickArgs());
     };
   };
 
@@ -83,14 +95,15 @@ export const View: React.FC<Props> = (props) => {
 
   return (
     <div
+      ref={ref}
       {...css(styles.base, props.style)}
       tabIndex={tabIndex}
       onFocus={onFocusHandler(true)}
       onBlur={onFocusHandler(false)}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
-      onMouseDown={onClickHandler(props.onClick)}
-      onDoubleClick={onClickHandler(props.onDoubleClick)}
+      onMouseDown={clickHandler(props.onClick)}
+      onDoubleClick={clickHandler(props.onDoubleClick)}
     >
       <div {...styles.body}>
         <LeftAction {...props} />

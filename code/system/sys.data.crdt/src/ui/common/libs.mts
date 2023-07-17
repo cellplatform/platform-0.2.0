@@ -7,6 +7,7 @@ export {
   Card,
   Color,
   FC,
+  Focus,
   Keyboard,
   PropList,
   QRCode,
@@ -16,7 +17,9 @@ export {
   TextInput,
   TextInputRef,
   css,
+  useFocus,
   useMouseState,
+  useClickOutside,
 } from 'sys.ui.react.common';
 
 export { Filesize } from 'sys.fs';

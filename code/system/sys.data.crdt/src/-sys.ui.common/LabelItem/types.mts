@@ -48,6 +48,7 @@ export type LabelItemPropsHandlers = {
   onFocusChange?: LabelItemFocusHandler;
   onClick?: LabelItemClickHandler;
   onDoubleClick?: LabelItemClickHandler;
+  onEditClickAway?: LabelItemClickHandler;
 };
 
 /**
@@ -94,4 +95,6 @@ export type LabelItemFocusHandlerArgs = {
 export type LabelItemClickHandler = (e: LabelItemFocusHandlerArgs) => void;
 export type LabelItemClickHandlerArgs = {
   label: string;
+  focused: boolean;
+  editing: boolean;
 };
