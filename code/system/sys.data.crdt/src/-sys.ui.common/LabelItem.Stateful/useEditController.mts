@@ -25,7 +25,8 @@ export function useEditController(args: Args): t.LabelActionController {
    */
   type A = t.LabelItemChangeAction;
   const change = (action: A, fn: t.LabelItemStateChanger) => {
-    if (enabled && item) {
+    if (!enabled) return;
+    if (item) {
       item.change(fn);
       fireChange(action);
     }
@@ -38,6 +39,7 @@ export function useEditController(args: Args): t.LabelActionController {
 
   const EditMode = {
     start() {
+      if (!enabled) return;
       setProps((prev) => {
         if (!prev.editing) fireChange('edit:start');
         return { ...props, editing: true };
@@ -45,6 +47,7 @@ export function useEditController(args: Args): t.LabelActionController {
     },
 
     cancel() {
+      if (!enabled) return;
       setProps((prev) => {
         if (prev.editing) fireChange('edit:cancel');
         return { ...props, editing: false };
@@ -52,6 +55,7 @@ export function useEditController(args: Args): t.LabelActionController {
     },
 
     toggle() {
+      if (!enabled) return;
       setProps((prev) => {
         const editing = !Boolean(prev.editing);
         fireChange(editing ? 'edit:start' : 'edit:accept');
