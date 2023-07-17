@@ -1,5 +1,5 @@
 import { LabelItem as Label } from './LabelItem';
-import { useEditController, State } from './LabelItem.Stateful';
+import { State } from './LabelItem.Stateful';
 
 /**
  * Representing a single, generic <Item>.
@@ -7,6 +7,5 @@ import { useEditController, State } from './LabelItem.Stateful';
  */
 export const Item = {
   Label,
-  useEditController,
-  state: State.init,
+  State,
 } as const;

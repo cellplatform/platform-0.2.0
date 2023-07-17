@@ -13,6 +13,7 @@ type Args = {
 export function useEditController(args: Args): t.LabelActionController {
   const { enabled = true, item } = args;
 
+  console.log('useEditController >> enabled:', enabled); // TEMP 🐷
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);

@@ -34,6 +34,7 @@ export type {
   PropListItem,
   PropListProps,
   TextInputRef,
+  PropListFieldSelectorClickHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**

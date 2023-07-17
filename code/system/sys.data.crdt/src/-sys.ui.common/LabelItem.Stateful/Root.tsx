@@ -1,5 +1,7 @@
-import { LabelItem } from '../LabelItem/Root';
 import { DEFAULTS, FC, type t } from './common';
+
+import { LabelItem } from '../LabelItem/Root';
+import { BehaviorSelector } from './ui.BehaviorSelector';
 import { useEditController } from './useEditController.mjs';
 import { useSelectionController } from './useSelectionController.mjs';
 
@@ -7,16 +9,16 @@ import { useSelectionController } from './useSelectionController.mjs';
  * Sample of using the behavior controller hooks.
  */
 const View: React.FC<t.LabelItemStatefulProps> = (input) => {
-  const { onChange, item, useControllers = DEFAULTS.useControllers.default } = input;
+  const { onChange, item, useBehaviors = DEFAULTS.useBehaviors.default } = input;
 
   const editController = useEditController({
-    enabled: useControllers.includes('Edit'),
+    enabled: useBehaviors.includes('Edit'),
     item,
     onChange,
   });
 
   const selectionController = useSelectionController({
-    enabled: useControllers.includes('Selection'),
+    enabled: useBehaviors.includes('Selection'),
     item,
   });
 
@@ -42,9 +44,15 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   useEditController: typeof useEditController;
   useSelectionController: typeof useSelectionController;
+  BehaviorSelector: typeof BehaviorSelector;
 };
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
-  { DEFAULTS, useEditController, useSelectionController },
+  {
+    DEFAULTS,
+    useEditController,
+    useSelectionController,
+    BehaviorSelector,
+  },
   { displayName: 'LabelItem.Stateful' },
 );

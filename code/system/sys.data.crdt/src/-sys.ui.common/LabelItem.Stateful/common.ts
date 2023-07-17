@@ -5,13 +5,13 @@ const props: t.LabelItemProps = {
   label: '',
 };
 
-const useControllerAll: t.LabelItemControllerKind[] = ['Edit', 'Selection'];
-const useControllerDefault = useControllerAll;
+const useBehaviorAll: t.LabelItemBehaviorKind[] = ['Edit', 'Selection'];
+const useBehaviorDefault = useBehaviorAll;
 
 export const DEFAULTS = {
-  useControllers: {
-    all: useControllerAll,
-    default: useControllerDefault,
+  useBehaviors: {
+    all: useBehaviorAll,
+    default: useBehaviorDefault,
   },
   props,
   get data(): t.LabelItemData {

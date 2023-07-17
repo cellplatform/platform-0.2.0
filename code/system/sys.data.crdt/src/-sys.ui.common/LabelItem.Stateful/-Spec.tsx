@@ -1,6 +1,6 @@
 import { LabelItemStateful } from '.';
 import { Item } from '..';
-import { Dev, Icons, type t, PropList } from '../test.ui';
+import { Dev, Icons, type t } from '../test.ui';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -15,20 +15,20 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<t.LabelItemStatefulProps, 'useControllers'>;
+  type LocalStore = Pick<t.LabelItemStatefulProps, 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    useControllers: DEFAULTS.useControllers.default,
+    useBehaviors: DEFAULTS.useBehaviors.default,
   });
 
-  const item = Item.state({ initial: { label: 'hello 👋' } });
+  const item = Item.State.init({ initial: { label: 'hello 👋' } });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.useControllers = local.useControllers;
+      d.props.useBehaviors = local.useBehaviors;
     });
 
     ctx.debug.width(300);
@@ -68,16 +68,10 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
     dev.row((e) => {
       return (
-        <PropList.FieldSelector
-          title={'useControllers'}
-          all={DEFAULTS.useControllers.all}
-          selected={e.state.props.useControllers}
-          showIndexes={true}
-          resettable={true}
-          onClick={async (e) => {
-            let next = (e.next ?? []) as t.LabelItemControllerKind[];
-            if (e.action === 'Reset') next = DEFAULTS.useControllers.default;
-            await state.change((d) => (local.useControllers = d.props.useControllers = next));
+        <LabelItemStateful.BehaviorSelector
+          selected={e.state.props.useBehaviors}
+          onChange={(e) => {
+            state.change((d) => (local.useBehaviors = d.props.useBehaviors = e.next));
           }}
         />
       );
