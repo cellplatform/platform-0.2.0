@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
-  item?: t.LabelItemState;
   enabled?: boolean;
+  item?: t.LabelItemState;
   onChange?: t.LabelItemDataChangeHandler;
 };
 
 /**
- * HOOK: stateful behavior controller.
+ * HOOK: edit behavior controller.
  */
 export function useEditController(args: Args): t.LabelActionController {
-  const { enabled = DEFAULTS.useEditController, item } = args;
+  const { enabled = true, item } = args;
+
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);

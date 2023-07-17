@@ -1,6 +1,6 @@
 import { LabelItemStateful } from '.';
 import { Item } from '..';
-import { Dev, Icons, type t } from '../test.ui';
+import { Dev, Icons, type t, PropList } from '../test.ui';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
@@ -15,10 +15,10 @@ const initial: T = {
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<t.LabelItemStatefulProps, 'useEditController'>;
+  type LocalStore = Pick<t.LabelItemStatefulProps, 'useControllers'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    useEditController: DEFAULTS.useEditController,
+    useControllers: DEFAULTS.useControllers.default,
   });
 
   const item = Item.state({ initial: { label: 'hello 👋' } });
@@ -28,7 +28,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const state = await ctx.state<T>(initial);
 
     state.change((d) => {
-      d.props.useEditController = local.useEditController;
+      d.props.useControllers = local.useControllers;
     });
 
     ctx.debug.width(300);
@@ -66,20 +66,22 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Behavior Logic', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.useEditController);
-        const isDefault = (state: T) => value(state) === DEFAULTS.useEditController;
-        btn
-          .label((e) => `useEditController ${isDefault(e.state) ? '( 🧠 )' : '⚠️'}`)
-          .value((e) => value(e.state))
-          .onClick((e) => {
-            e.change((d) => (local.useEditController = Dev.toggle(d.props, 'useEditController')));
-          });
-      });
+    dev.row((e) => {
+      return (
+        <PropList.FieldSelector
+          title={'useControllers'}
+          all={DEFAULTS.useControllers.all}
+          selected={e.state.props.useControllers}
+          showIndexes={true}
+          resettable={true}
+          onClick={async (e) => {
+            let next = (e.next ?? []) as t.LabelItemControllerKind[];
+            if (e.action === 'Reset') next = DEFAULTS.useControllers.default;
+            await state.change((d) => (local.useControllers = d.props.useControllers = next));
+          }}
+        />
+      );
     });
-
-    dev.hr(-1, 5);
   });
 
   e.it('ui:footer', async (e) => {

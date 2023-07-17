@@ -5,8 +5,14 @@ const props: t.LabelItemProps = {
   label: '',
 };
 
+const useControllerAll: t.LabelItemControllerKind[] = ['Edit', 'Selection'];
+const useControllerDefault = useControllerAll;
+
 export const DEFAULTS = {
-  useEditController: true,
+  useControllers: {
+    all: useControllerAll,
+    default: useControllerDefault,
+  },
   props,
   get data(): t.LabelItemData {
     return {};

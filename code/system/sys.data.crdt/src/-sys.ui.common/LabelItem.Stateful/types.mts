@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+export type LabelItemControllerKind = 'Edit' | 'Selection';
+
 /**
  * Data.
  */
@@ -31,7 +33,7 @@ export type LabelActionController = {
  */
 export type LabelItemStatefulProps = {
   item?: LabelItemState; // NB: If not specified default is generated.
-  useEditController?: boolean;
+  useControllers?: t.LabelItemControllerKind[];
   rightActions?: t.LabelAction[];
   style?: t.CssValue;
   onChange?: LabelItemDataChangeHandler;
