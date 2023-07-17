@@ -18,6 +18,9 @@ export function useEditController(args: Args): t.LabelActionController {
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
 
+  /**
+   * Handlers.
+   */
   type A = t.LabelItemChangeAction;
   const change = (action: A, fn: t.LabelItemStateChanger) => {
     if (enabled && item) {
@@ -69,6 +72,16 @@ export function useEditController(args: Args): t.LabelActionController {
           return { ...props, editing };
         });
         fireChange(next ? 'prop:edit:start' : 'prop:edit:accept');
+      },
+
+      /**
+       * [ESCAPE]: Cancel edit-mode.
+       */
+      Escape(e) {
+        setProps((prev) => {
+          if (prev.editing) fireChange('prop:edit:cancel');
+          return { ...props, editing: false };
+        });
       },
     });
 
