@@ -22,8 +22,11 @@ export const PatchState = {
     return {
       /**
        * Unique instance identifier.
+       * NB: This does not pertain to the data itself, rather
+       *     is an instance identifier that can be used for
+       *     cheap object instance comparison (eg. in hooks).
        */
-      instance: { id: slug() },
+      instance: slug(),
 
       /**
        * Current state.

@@ -25,7 +25,7 @@ describe('PatchState', () => {
   it('init: instance { id }', (e) => {
     const state1 = PatchState.init({ initial });
     const state2 = PatchState.init({ initial });
-    expect(state1.instance.id).to.not.eql(state2.instance.id);
+    expect(state1.instance).to.not.eql(state2.instance);
   });
 
   it('change', (e) => {
