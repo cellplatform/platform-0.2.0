@@ -34,8 +34,9 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       {...editController.handlers}
       style={props.style}
       label={editController.data.label}
+      left={editController.data.left}
+      right={editController.data.right}
       focusOnEdit={true}
-      rightActions={props.rightActions ?? editController.props.rightActions}
     />
   );
 };

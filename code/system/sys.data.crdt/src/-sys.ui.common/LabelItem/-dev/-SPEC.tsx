@@ -77,7 +77,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.padding = local.padding;
       d.props.editing = local.editing;
       d.props.focused = local.focused;
-      d.props.rightAction = Sample.actions().right;
+      d.props.right = Sample.actions().right;
       d.debug.subjectBg = local.subjectBg;
     });
 
@@ -258,31 +258,31 @@ export default Dev.describe('Namespace.Item', (e) => {
 
       dev.button('actions: undefined', async (e) => {
         await e.change((d) => {
-          d.props.leftAction = undefined;
-          d.props.rightAction = undefined;
+          d.props.left = undefined;
+          d.props.right = undefined;
         });
       });
 
       dev.button('actions: (left) single', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.leftAction = sample.left[0]));
+        await e.change((d) => (d.props.left = sample.left[0]));
       });
 
       dev.button('actions: (left) multiple', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.leftAction = sample.left));
+        await e.change((d) => (d.props.left = sample.left));
       });
 
       dev.button('actions: (right) multiple', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.rightAction = sample.right));
+        await e.change((d) => (d.props.right = sample.right));
       });
 
       dev.button('actions: spinning', async (e) => {
         const sample = Sample.actions({ spinning: true });
         await e.change((d) => {
-          d.props.leftAction = sample.left;
-          d.props.rightAction = sample.right;
+          d.props.left = sample.left;
+          d.props.right = sample.right;
         });
       });
 
@@ -326,8 +326,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.hr(-1, 5);
       action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));
       dev.hr(-1, 5);
-      action('cursorTo → Start', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
-      action('cursorTo → End', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
+      action('cursorTo → start', (ref) => focusThen(0, ref, () => ref.cursorToStart()));
+      action('cursorTo → end', (ref) => focusThen(0, ref, () => ref.cursorToEnd()));
     });
   });
 

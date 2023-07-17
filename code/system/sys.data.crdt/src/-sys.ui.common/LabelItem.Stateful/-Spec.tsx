@@ -21,7 +21,16 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     useBehaviors: DEFAULTS.useBehaviors.default,
   });
 
-  const item = Item.State.init({ initial: { label: 'hello 👋' } });
+  const item = Item.State.init({
+    initial: {
+      label: 'hello 👋',
+      right: {
+        kind: 'foobar',
+        icon: (e) => <Icons.ObjectTree size={17} color={e.color} offset={[0, 1]} />,
+        onClick: (e) => console.info('⚡️ action → onClick:', e),
+      },
+    },
+  });
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -39,12 +48,6 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       .render<T>((e) => {
         const { debug, props } = e.state;
 
-        const rightAction: t.LabelAction = {
-          kind: 'foobar',
-          icon: (e) => <Icons.ObjectTree size={17} color={e.color} offset={[0, 1]} />,
-          onClick: (e) => console.info('⚡️ action → onClick:', e),
-        };
-
         return (
           /**
            * See: Examples of behavior/hook usages in component| ↓ |
@@ -52,7 +55,6 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
           <LabelItemStateful
             {...props}
             item={item}
-            rightActions={[rightAction]}
             onChange={(e) => {
               console.info('⚡️ onChange', e);
               state.change((d) => (d.data = e.data));

@@ -25,6 +25,9 @@ export type LabelItemProps = {
   placeholder?: string;
   maxLength?: number;
 
+  left?: LabelAction | LabelAction[];
+  right?: LabelAction | LabelAction[];
+
   enabled?: boolean;
   editing?: boolean;
   selected?: boolean;
@@ -32,9 +35,6 @@ export type LabelItemProps = {
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
   tabIndex?: number;
-
-  leftAction?: LabelAction | LabelAction[];
-  rightAction?: LabelAction[];
 
   style?: t.CssValue;
   indent?: number;

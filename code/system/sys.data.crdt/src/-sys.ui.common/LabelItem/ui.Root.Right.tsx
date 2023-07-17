@@ -5,6 +5,6 @@ import { Actions } from './ui.Actions';
 
 export const Right: React.FC<t.LabelItemProps> = (props) => {
   const flags = Wrangle.flagProps(props);
-  const action = props.rightAction ?? DEFAULTS.rightAction;
+  const action = props.right ?? DEFAULTS.rightAction;
   return <Actions {...flags} edge={'Right'} action={action} />;
 };

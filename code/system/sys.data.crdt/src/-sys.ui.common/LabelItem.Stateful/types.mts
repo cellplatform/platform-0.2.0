@@ -9,6 +9,8 @@ export type LabelItemBehaviorKind = 'Edit' | 'Selection';
 export type LabelItemData = {
   label?: string;
   editing?: boolean;
+  left?: t.LabelAction | t.LabelAction[];
+  right?: t.LabelAction | t.LabelAction[];
 };
 
 /**
@@ -33,7 +35,6 @@ export type LabelActionController = {
 export type LabelItemStatefulProps = {
   item?: LabelItemState; // NB: If not specified default is generated.
   useBehaviors?: t.LabelItemBehaviorKind[];
-  rightActions?: t.LabelAction[];
   style?: t.CssValue;
   onChange?: LabelItemDataChangeHandler;
 };

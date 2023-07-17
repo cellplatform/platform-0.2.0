@@ -21,7 +21,7 @@ export const DEFAULTS = {
   indent: 0,
   padding: 5,
   placeholder: 'placeholder',
+  spinner: { width: 15 },
   leftAction,
   rightAction,
-  spinner: { width: 15 },
 } as const;
