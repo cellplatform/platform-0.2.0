@@ -144,19 +144,19 @@ export default Dev.describe('Namespace', (e) => {
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.devBg);
-        btn
-          .label((e) => `background`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
-      });
-
-      dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.withData);
         btn
           .label((e) => (value(e.state) ? `with { data }` : `⚠️ no { data }`))
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.withData = Dev.toggle(d.debug, 'withData'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devBg);
+        btn
+          .label((e) => `background`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
       });
 
       dev.hr(-1, 5);
