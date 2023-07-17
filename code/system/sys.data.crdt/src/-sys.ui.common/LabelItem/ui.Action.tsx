@@ -49,7 +49,12 @@ export const Action: React.FC<ActionProps> = (props) => {
 
   const elIcon = Wrangle.icon(props);
   const elButton = isButton && (
-    <Button onClick={handleClick} isEnabled={isEnabled} disabledOpacity={1}>
+    <Button
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={handleClick}
+      isEnabled={isEnabled}
+      disabledOpacity={1}
+    >
       <div {...styles.button}>{elIcon}</div>
     </Button>
   );

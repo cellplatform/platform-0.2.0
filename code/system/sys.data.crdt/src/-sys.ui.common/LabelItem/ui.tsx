@@ -17,12 +17,26 @@ export const View: React.FC<Props> = (props) => {
     focused = DEFAULTS.focused,
     tabIndex = DEFAULTS.tabIndex,
   } = props;
+  const label = Wrangle.labelText(props);
 
   /**
    * Handlers
    */
   const onFocusHandler = (focused: boolean) => {
-    return () => props.onFocusChange?.({ focused });
+    return () =>
+      props.onFocusChange?.({
+        focused,
+        label: label.text,
+      });
+  };
+
+  const onClickHandler = (handler?: t.LabelItemClickHandler) => {
+    return () => {
+      handler?.({
+        focused,
+        label: label.text,
+      });
+    };
   };
 
   const [isOver, setOver] = useState(false);
@@ -75,6 +89,8 @@ export const View: React.FC<Props> = (props) => {
       onBlur={onFocusHandler(false)}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
+      onMouseDown={onClickHandler(props.onClick)}
+      onDoubleClick={onClickHandler(props.onDoubleClick)}
     >
       <div {...styles.body}>
         <LeftAction {...props} />

@@ -45,19 +45,20 @@ export default Dev.describe('Namespace.Item', (e) => {
           state.change((d) => (local.label = d.props.label = e.label));
         },
 
-        /**
-         * TODO 🐷
-         */
         onFocusChange(e) {
           console.info('⚡️ onFocusChange', e);
         },
 
-        onEnter() {
-          /**
-           * TODO 🐷
-           * - requires "focus" state concepts
-           */
+        onEnter(e) {
           console.info('⚡️ onEnter', e);
+        },
+
+        onClick(e) {
+          console.info('⚡️ onClick', e);
+        },
+
+        onDoubleClick(e) {
+          console.info('⚡️ onDoubleClick', e);
         },
       };
     },

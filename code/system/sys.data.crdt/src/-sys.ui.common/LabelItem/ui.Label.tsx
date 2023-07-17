@@ -14,7 +14,7 @@ export const Label: React.FC<Props> = (props) => {
     placeholder = DEFAULTS.placeholder,
     focusOnReady = DEFAULTS.focusOnReady,
   } = props;
-  const { text, isEmpty } = Wrangle.labelText(props);
+  const label = Wrangle.labelText(props);
 
   /**
    * [Render]
@@ -56,7 +56,7 @@ export const Label: React.FC<Props> = (props) => {
   const elTextbox = editing && (
     <TextInput
       ref={inputRef}
-      value={text}
+      value={label.text}
       placeholder={placeholder}
       valueStyle={valueStyle}
       placeholderStyle={placeholderStyle}
@@ -67,13 +67,13 @@ export const Label: React.FC<Props> = (props) => {
       focusOnReady={focusOnReady}
       focusAction={'Select'}
       onChanged={(e) => props.onChange?.({ label: e.to })}
-      onEnter={(e) => props.onEnter?.({ label: text })}
+      onEnter={(e) => props.onEnter?.({ label: label.text })}
     />
   );
 
-  const labelText = isEmpty ? placeholder : text;
+  const labelText = label.isEmpty ? placeholder : label.text;
   const elLabel = !editing && (
-    <div {...css(styles.label, isEmpty && styles.labelEmpty)}>{labelText}</div>
+    <div {...css(styles.label, label.isEmpty && styles.labelEmpty)}>{labelText}</div>
   );
 
   return (
