@@ -41,7 +41,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
         const rightAction: t.LabelAction = {
           kind: 'foobar',
-          icon: (e) => <Icons.ObjectTree size={17} color={e.color} />,
+          icon: (e) => <Icons.ObjectTree size={17} color={e.color} offset={[0, 1]} />,
           onClick: (e) => console.info('⚡️ action → onClick:', e),
         };
 
