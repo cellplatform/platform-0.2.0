@@ -51,7 +51,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
            */
           <LabelItemStateful
             {...props}
-            state={item}
+            item={item}
             rightActions={[rightAction]}
             onChange={(e) => {
               console.info('⚡️ onChange', e);

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
-  state?: t.LabelItemState;
+  item?: t.LabelItemState;
   enabled?: boolean;
   onChange?: t.LabelItemDataChangeHandler;
 };
@@ -10,18 +10,18 @@ type Args = {
 /**
  * HOOK: stateful behavior controller.
  */
-export function useEditController(args: Args) {
-  const { enabled = DEFAULTS.useEditController, state } = args;
+export function useEditController(args: Args): t.LabelActionController {
+  const { enabled = DEFAULTS.useEditController, item } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
 
-  type A = t.LabelItemDataChangeHandlerArgs['action'];
+  type A = t.LabelItemChangeAction;
   const change = (action: A, fn: t.LabelItemStateChanger) => {
-    if (enabled && state) {
-      state.change(fn);
+    if (enabled && item) {
+      item.change(fn);
       fireChange(action);
     }
   };
@@ -49,7 +49,7 @@ export function useEditController(args: Args) {
    */
   useEffect(() => {
     increment();
-  }, [state?.instance.id]);
+  }, [item?.instance.id]);
 
   /**
    * Keyboard monitor.
@@ -63,8 +63,12 @@ export function useEditController(args: Args) {
        * [ENTER]: Toggle edit-mode.
        */
       Enter(e) {
-        setProps((prev) => ({ ...props, editing: !Boolean(prev.editing) }));
-        fireChange('prop:editing');
+        let next: boolean | undefined;
+        setProps((prev) => {
+          const editing = (next = !Boolean(prev.editing));
+          return { ...props, editing };
+        });
+        fireChange(next ? 'prop:edit:start' : 'prop:edit:accept');
       },
     });
 
@@ -75,13 +79,14 @@ export function useEditController(args: Args) {
   /**
    * API
    */
-  const api = {
-    get data() {
-      return state?.current ?? DEFAULTS.data;
-    },
-    props,
+  const api: t.LabelActionController = {
+    enabled,
     handlers,
-  } as const;
+    props,
+    get data() {
+      return item?.current ?? DEFAULTS.data;
+    },
+  };
 
   return api;
 }

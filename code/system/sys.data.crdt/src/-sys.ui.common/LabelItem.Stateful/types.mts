@@ -17,10 +17,20 @@ export type LabelItemState = t.Immutable<t.LabelItemData> & {
 export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
 
 /**
+ * Controller API
+ */
+export type LabelActionController = {
+  readonly enabled: boolean;
+  readonly data: t.LabelItemData;
+  readonly props: t.LabelItemProps;
+  readonly handlers: t.LabelItemPropsHandlers;
+};
+
+/**
  * Component (View).
  */
 export type LabelItemStatefulProps = {
-  state?: LabelItemState; // NB: If not specified default is generated.
+  item?: LabelItemState; // NB: If not specified default is generated.
   useEditController?: boolean;
   rightActions?: t.LabelAction[];
   style?: t.CssValue;
@@ -32,6 +42,11 @@ export type LabelItemStatefulProps = {
  */
 export type LabelItemDataChangeHandler = (e: LabelItemDataChangeHandlerArgs) => void;
 export type LabelItemDataChangeHandlerArgs = {
-  action: 'data:label' | 'prop:editing';
+  action: LabelItemChangeAction;
   data: LabelItemData;
 };
+export type LabelItemChangeAction =
+  | 'data:label'
+  | 'prop:edit:start'
+  | 'prop:edit:accept'
+  | 'prop:edit:cancel';

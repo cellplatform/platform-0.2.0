@@ -6,11 +6,11 @@ import { useEditController } from './useEditController.mjs';
  * Sample of using the behavior controller hooks.
  */
 const View: React.FC<t.LabelItemStatefulProps> = (input) => {
-  const { onChange, state } = input;
+  const { onChange, item } = input;
 
   const editController = useEditController({
     enabled: input.useEditController ?? DEFAULTS.useEditController,
-    state,
+    item,
     onChange,
   });
 
