@@ -2,8 +2,8 @@ import { RefObject, useRef, useState } from 'react';
 import { css, DEFAULTS, Style, useClickOutside, type t } from './common';
 
 import { Label } from './ui.Label';
-import { LeftAction } from './ui.Root.Left.Action';
-import { RightActions } from './ui.Root.Right.Actions';
+import { Left } from './ui.Root.Left';
+import { Right } from './ui.Root.Right';
 import { Wrangle } from './Wrangle';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
@@ -80,7 +80,6 @@ export const View: React.FC<Props> = (props) => {
       gridTemplateColumns: 'auto 1fr auto',
       columnGap: 3,
     }),
-    right: css({}),
     focusBorder: css({
       Absolute: 0,
       pointerEvents: 'none',
@@ -110,9 +109,9 @@ export const View: React.FC<Props> = (props) => {
       onDoubleClick={clickHandler(props.onDoubleClick)}
     >
       <div {...styles.body}>
-        <LeftAction {...props} />
+        <Left {...props} />
         <Label {...props} inputRef={inputRef} />
-        <RightActions {...props} style={styles.right} />
+        <Right {...props} />
       </div>
       {elDisabled}
       {elFocusBorder}

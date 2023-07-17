@@ -40,6 +40,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         onReady(e) {
           console.info('⚡️ onReady', e);
         },
+
         onChange(e) {
           console.info('⚡️ onChange', e);
           state.change((d) => (local.label = d.props.label = e.label));
@@ -76,7 +77,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.padding = local.padding;
       d.props.editing = local.editing;
       d.props.focused = local.focused;
-      d.props.rightActions = Sample.actions().right;
+      d.props.rightAction = Sample.actions().right;
       d.debug.subjectBg = local.subjectBg;
     });
 
@@ -258,25 +259,30 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.button('actions: undefined', async (e) => {
         await e.change((d) => {
           d.props.leftAction = undefined;
-          d.props.rightActions = undefined;
+          d.props.rightAction = undefined;
         });
       });
 
-      dev.button('actions: (left) sample', async (e) => {
+      dev.button('actions: (left) single', async (e) => {
+        const sample = Sample.actions();
+        await e.change((d) => (d.props.leftAction = sample.left[0]));
+      });
+
+      dev.button('actions: (left) multiple', async (e) => {
         const sample = Sample.actions();
         await e.change((d) => (d.props.leftAction = sample.left));
       });
 
-      dev.button('actions: (right) sample', async (e) => {
+      dev.button('actions: (right) multiple', async (e) => {
         const sample = Sample.actions();
-        await e.change((d) => (d.props.rightActions = sample.right));
+        await e.change((d) => (d.props.rightAction = sample.right));
       });
 
       dev.button('actions: spinning', async (e) => {
         const sample = Sample.actions({ spinning: true });
         await e.change((d) => {
           d.props.leftAction = sample.left;
-          d.props.rightActions = sample.right;
+          d.props.rightAction = sample.right;
         });
       });
 

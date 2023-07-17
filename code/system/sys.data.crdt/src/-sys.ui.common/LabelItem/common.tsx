@@ -8,7 +8,7 @@ const leftAction: t.LabelAction<K> = {
   icon: (e) => <Icons.Repo size={18} color={e.color} offset={[0, 2]} />,
 };
 
-const rightActions: t.LabelAction<K>[] = [];
+const rightAction: t.LabelAction<K> | undefined = undefined;
 
 export const DEFAULTS = {
   enabled: true,
@@ -22,6 +22,6 @@ export const DEFAULTS = {
   padding: 5,
   placeholder: 'placeholder',
   leftAction,
-  rightActions,
+  rightAction,
   spinner: { width: 15 },
 } as const;

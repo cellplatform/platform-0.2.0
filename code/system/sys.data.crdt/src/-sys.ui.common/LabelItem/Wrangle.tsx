@@ -1,11 +1,21 @@
 import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 
 export const Wrangle = {
+  flagProps(props: t.LabelItemProps) {
+    const {
+      enabled = DEFAULTS.enabled,
+      editing = DEFAULTS.editing,
+      selected = DEFAULTS.selected,
+      focused = DEFAULTS.focused,
+    } = props;
+    return { enabled, editing, selected, focused } as const;
+  },
+
   labelText(args: { label?: string }) {
     const text = args.label || '';
     const hasValue = Boolean(text.trim());
     const isEmpty = !hasValue;
-    return { text, hasValue, isEmpty };
+    return { text, hasValue, isEmpty } as const;
   },
 
   backgroundColor(args: { selected?: boolean; focused?: boolean }) {

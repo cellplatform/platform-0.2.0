@@ -33,8 +33,8 @@ export type LabelItemProps = {
   focusOnEdit?: boolean;
   tabIndex?: number;
 
-  leftAction?: LabelAction;
-  rightActions?: LabelAction[];
+  leftAction?: LabelAction | LabelAction[];
+  rightAction?: LabelAction[];
 
   style?: t.CssValue;
   indent?: number;
