@@ -82,11 +82,9 @@ export function useEditController(args: Args): t.LabelActionController {
   };
 
   /**
-   * Lifecycle
+   * Reset when state instance changes.
    */
-  useEffect(() => {
-    increment();
-  }, [item?.instance.id]);
+  useEffect(() => increment(), [item?.instance]);
 
   /**
    * Keyboard monitor.

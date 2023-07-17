@@ -1,5 +1,6 @@
 import { type t } from './common';
 
+type Id = string;
 export type LabelItemBehaviorKind = 'Edit' | 'Selection';
 
 /**
@@ -13,9 +14,7 @@ export type LabelItemData = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.Immutable<t.LabelItemData> & {
-  readonly instance: { id: string };
-};
+export type LabelItemState = t.Immutable<t.LabelItemData> & { readonly instance: Id };
 export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
 
 /**
