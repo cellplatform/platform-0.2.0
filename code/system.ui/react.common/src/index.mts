@@ -30,7 +30,7 @@ export { TextSyntax } from './ui/Text.Syntax';
  * Hooks
  */
 export { useMouseState } from './common';
-export { useFocus } from './ui/useFocus';
+export { useFocus, Focus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';
 export { useDragTarget } from './ui/useDragTarget';
 

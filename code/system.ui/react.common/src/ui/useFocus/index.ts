@@ -1,3 +1,2 @@
-export * from './types.mjs';
-export * from './useFocus.mjs';
-export { containsFocus, withinFocus } from './util.mjs';
+export { useFocus } from './useFocus.mjs';
+export { Focus } from './Focus.mjs';
