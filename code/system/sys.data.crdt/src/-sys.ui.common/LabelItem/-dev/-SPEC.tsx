@@ -275,8 +275,8 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.button('actions: spinning', async (e) => {
         const sample = Sample.actions({ spinning: true });
         await e.change((d) => {
-          if (d.props.leftAction) d.props.leftAction = sample.left;
-          if (d.props.rightActions) d.props.rightActions = sample.right;
+          d.props.leftAction = sample.left;
+          d.props.rightActions = sample.right;
         });
       });
 

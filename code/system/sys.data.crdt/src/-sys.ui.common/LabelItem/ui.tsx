@@ -21,7 +21,11 @@ export const View: React.FC<Props> = (props) => {
   const label = Wrangle.labelText(props);
 
   const clickArgs = (): t.LabelItemClickHandlerArgs => {
-    return { label: label.text, focused, editing };
+    return {
+      label: label.text,
+      focused,
+      editing,
+    };
   };
 
   const ref = useRef<HTMLDivElement>(null);
