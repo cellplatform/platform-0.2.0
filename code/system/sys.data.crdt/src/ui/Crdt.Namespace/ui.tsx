@@ -1,14 +1,20 @@
 import { DEFAULTS, css, type t } from './common';
 import { Item } from './ui.Item';
+import { useController } from './useController.mjs';
 
 export const View: React.FC<t.CrdtNsProps> = (props) => {
   const {
+    enabled = true,
     data = DEFAULTS.data,
-    enabled = DEFAULTS.enabled,
     indent = DEFAULTS.indent,
-    useBehaviors: useBehavior = DEFAULTS.useBehaviors,
+    useBehaviors = DEFAULTS.useBehaviors,
   } = props;
   const ns = data?.ns;
+
+  const controller = useController({
+    ns,
+    enabled: enabled && useBehaviors,
+  });
 
   if (!data || !ns) return '⚠️ not set: { data }';
   if (data.ns?.disposed) return '⚠️ disposed: { data: { ns } }';
@@ -27,18 +33,11 @@ export const View: React.FC<t.CrdtNsProps> = (props) => {
     }),
   };
 
-  const elEmpty = isEmpty && <Item enabled={enabled} useBehavior={useBehavior} />;
+  const elEmpty = isEmpty && <Item state={controller} />;
+
   const elList = list.map((data, i) => {
     const key = `${i}.${data.namespace}`;
-    return (
-      <Item
-        //
-        key={key}
-        ns={data}
-        enabled={enabled}
-        useBehavior={useBehavior}
-      />
-    );
+    return <Item key={key} state={controller} />;
   });
 
   return (

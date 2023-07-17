@@ -17,7 +17,6 @@ const data: t.CrdtNsInfoData = { maxLength: item.maxLength };
 export const DEFAULTS = {
   data,
   item,
-  enabled: true,
   indent: 0,
   useBehaviors: true,
   placeholder: {
