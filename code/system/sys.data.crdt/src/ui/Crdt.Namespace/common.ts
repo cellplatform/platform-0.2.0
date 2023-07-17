@@ -7,7 +7,8 @@ export * from '../common';
 /**
  * @system → (sys.ui.common)
  */
-export { Item } from '../../-sys.ui.common';
+import { Item } from '../../-sys.ui.common';
+export { Item };
 
 /**
  * Constants.
@@ -18,7 +19,7 @@ export const DEFAULTS = {
   data,
   item,
   indent: 0,
-  useBehaviors: true,
+  useBehaviors: Item.State.DEFAULTS.useBehaviors.default,
   placeholder: {
     default: 'namespace',
     empty: 'add namespace',

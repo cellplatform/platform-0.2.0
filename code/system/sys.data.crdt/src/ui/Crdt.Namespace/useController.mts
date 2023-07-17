@@ -3,20 +3,21 @@ import { DEFAULTS, Item, type t } from './common';
 type Args = {
   enabled?: boolean;
   ns?: t.CrdtNsManager<{}>;
+  useBehaviors?: t.LabelItemBehaviorKind[];
 };
 
 /**
  * TODO 🐷
  * - Temporary state until item/group refactor.
  */
-const itemState_TMP = Item.state();
+const itemState_TMP = Item.State.init();
 
 export function useController(args: Args) {
-  const { ns } = args;
+  const { ns, useBehaviors = DEFAULTS.useBehaviors } = args;
   const enabled = Boolean(ns) && (args.enabled ?? true);
 
-  const editController = Item.useEditController({
-    enabled,
+  const editController = Item.State.useEditController({
+    // enabled: enabled && useBehaviors.includes('Edit'),
     item: itemState_TMP,
     onChange(e) {
       /**
@@ -32,6 +33,7 @@ export function useController(args: Args) {
       console.groupEnd();
 
       const namespace = e.data.label ?? '';
+
       if (e.action === 'edit:accept') {
         if (namespace && ns) {
           const initial = { count: 0 };

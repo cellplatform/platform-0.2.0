@@ -1,4 +1,5 @@
 import { Crdt, CrdtViews, Dev, rx, type t } from '../../../test.ui';
+import { Item } from '../common';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -84,6 +85,7 @@ export default Dev.describe('Namespace', (e) => {
       d.debug.devBg = local.devBg;
     });
 
+    ctx.debug.width(300);
     ctx.subject
       .backgroundColor(1)
       .size([280, null])
@@ -110,14 +112,17 @@ export default Dev.describe('Namespace', (e) => {
       });
     });
 
-    dev.boolean((btn) => {
-      const value = (state: T) => Boolean(state.props.useBehaviors);
-      btn
-        .label((e) => `useBehavior ${value(e.state) ? '( 🧠 )' : '⚠️'} `)
-        .value((e) => value(e.state))
-        .onClick((e) => {
-          e.change((d) => (local.useBehaviors = Dev.toggle(d.props, 'useBehaviors')));
-        });
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      return (
+        <Item.State.BehaviorSelector
+          selected={e.state.props.useBehaviors}
+          onChange={(e) => {
+            state.change((d) => (local.useBehaviors = d.props.useBehaviors = e.next));
+          }}
+        />
+      );
     });
 
     dev.hr(5, 20);

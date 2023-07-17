@@ -6,7 +6,7 @@ import { type t } from './common';
 export type CrdtNsProps = {
   enabled?: boolean;
   data?: t.CrdtNsInfoData;
-  useBehaviors?: boolean;
+  useBehaviors?: t.LabelItemBehaviorKind[];
   style?: t.CssValue;
   indent?: number;
 };

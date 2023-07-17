@@ -13,7 +13,8 @@ export const View: React.FC<t.CrdtNsProps> = (props) => {
 
   const controller = useController({
     ns,
-    enabled: enabled && useBehaviors,
+    useBehaviors,
+    enabled,
   });
 
   if (!data || !ns) return '⚠️ not set: { data }';
