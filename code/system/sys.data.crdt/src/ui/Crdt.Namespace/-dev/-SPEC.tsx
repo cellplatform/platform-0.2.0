@@ -1,4 +1,4 @@
-import { Crdt, CrdtViews, Dev, rx, type t } from '../../test.ui';
+import { Crdt, CrdtViews, Dev, rx, type t } from '../../../test.ui';
 
 type TRoot = { ns?: t.CrdtNsMap };
 type TFoo = { count: number };
@@ -21,8 +21,8 @@ export default Dev.describe('Namespace', (e) => {
   type LocalStore = T['debug'] & Pick<t.CrdtNsProps, 'enabled' | 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.data.crdt.Namespace');
   const local = localstore.object({
-    enabled: DEFAULTS.enabled,
     useBehaviors: DEFAULTS.useBehaviors,
+    enabled: true,
     devBg: true,
     withData: true,
   });
