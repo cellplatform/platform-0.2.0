@@ -73,6 +73,10 @@ export function useEditController(args: Args): t.LabelActionController {
     onDoubleClick(e) {
       EditMode.start();
     },
+
+    onEditClickAway(e) {
+      EditMode.cancel();
+    },
   };
 
   /**
