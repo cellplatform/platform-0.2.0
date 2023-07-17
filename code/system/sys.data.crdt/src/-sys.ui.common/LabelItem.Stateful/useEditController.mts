@@ -34,6 +34,30 @@ export function useEditController(args: Args): t.LabelActionController {
     increment();
   };
 
+  const EditMode = {
+    start() {
+      setProps((prev) => {
+        if (!prev.editing) fireChange('edit:start');
+        return { ...props, editing: true };
+      });
+    },
+
+    cancel() {
+      setProps((prev) => {
+        if (prev.editing) fireChange('edit:cancel');
+        return { ...props, editing: false };
+      });
+    },
+
+    toggle() {
+      setProps((prev) => {
+        const editing = !Boolean(prev.editing);
+        fireChange(editing ? 'edit:start' : 'edit:accept');
+        return { ...props, editing };
+      });
+    },
+  };
+
   /**
    * View component events.
    */
@@ -44,6 +68,10 @@ export function useEditController(args: Args): t.LabelActionController {
 
     onChange(e) {
       change('data:label', (draft) => (draft.label = e.label));
+    },
+
+    onDoubleClick(e) {
+      EditMode.start();
     },
   };
 
@@ -62,27 +90,8 @@ export function useEditController(args: Args): t.LabelActionController {
     const keyboard = Keyboard.until(dispose$);
 
     keyboard.on({
-      /**
-       * [ENTER]: Toggle edit-mode.
-       */
-      Enter(e) {
-        let next: boolean | undefined;
-        setProps((prev) => {
-          const editing = (next = !Boolean(prev.editing));
-          return { ...props, editing };
-        });
-        fireChange(next ? 'prop:edit:start' : 'prop:edit:accept');
-      },
-
-      /**
-       * [ESCAPE]: Cancel edit-mode.
-       */
-      Escape(e) {
-        setProps((prev) => {
-          if (prev.editing) fireChange('prop:edit:cancel');
-          return { ...props, editing: false };
-        });
-      },
+      Enter: (e) => EditMode.toggle(),
+      Escape: (e) => EditMode.cancel(),
     });
 
     if (!enabled) dispose();

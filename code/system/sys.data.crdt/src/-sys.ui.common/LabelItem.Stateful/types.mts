@@ -45,8 +45,4 @@ export type LabelItemDataChangeHandlerArgs = {
   action: LabelItemChangeAction;
   data: LabelItemData;
 };
-export type LabelItemChangeAction =
-  | 'data:label'
-  | 'prop:edit:start'
-  | 'prop:edit:accept'
-  | 'prop:edit:cancel';
+export type LabelItemChangeAction = 'data:label' | 'edit:start' | 'edit:accept' | 'edit:cancel';
