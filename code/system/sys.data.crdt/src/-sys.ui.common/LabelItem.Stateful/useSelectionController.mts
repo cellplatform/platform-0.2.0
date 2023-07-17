@@ -12,7 +12,7 @@ type Args = {
 export function useSelectionController(args: Args) {
   const { enabled = true, item } = args;
 
-  console.log('useSelectionController >> enabled:', enabled); // TEMP 🐷
+  // console.log('useSelectionController >> enabled:', enabled); // TEMP 🐷
 
   /**
    * API

@@ -8,6 +8,7 @@ export type LabelItemBehaviorKind = 'Edit' | 'Selection';
  */
 export type LabelItemData = {
   label?: string;
+  enabled?: boolean;
   editing?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
@@ -25,7 +26,6 @@ export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
 export type LabelActionController = {
   readonly enabled: boolean;
   readonly data: t.LabelItemData;
-  readonly props: t.LabelItemProps;
   readonly handlers: t.LabelItemPropsHandlers;
 };
 

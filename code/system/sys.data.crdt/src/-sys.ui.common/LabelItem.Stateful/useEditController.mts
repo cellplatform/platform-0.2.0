@@ -13,10 +13,7 @@ type Args = {
 export function useEditController(args: Args): t.LabelActionController {
   const { enabled = true, item } = args;
 
-  console.log('useEditController >> enabled:', enabled); // TEMP 🐷
-
   const [ref, setRef] = useState<t.LabelItemRef>();
-  const [props, setProps] = useState<t.LabelItemProps>(DEFAULTS.props);
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
 
@@ -38,29 +35,31 @@ export function useEditController(args: Args): t.LabelActionController {
   };
 
   const EditMode = {
+    get isEditing() {
+      return Boolean(item?.current.editing);
+    },
+
     start() {
-      if (!enabled) return;
-      setProps((prev) => {
-        if (!prev.editing) fireChange('edit:start');
-        return { ...props, editing: true };
-      });
+      if (EditMode.isEditing) return;
+      change('edit:start', (draft) => (draft.editing = true));
+    },
+
+    accept() {
+      if (!EditMode.isEditing) return;
+      change('edit:accept', (draft) => (draft.editing = false));
     },
 
     cancel() {
-      if (!enabled) return;
-      setProps((prev) => {
-        if (prev.editing) fireChange('edit:cancel');
-        return { ...props, editing: false };
-      });
+      if (!EditMode.isEditing) return;
+      change('edit:cancel', (draft) => (draft.editing = false));
     },
 
     toggle() {
-      if (!enabled) return;
-      setProps((prev) => {
-        const editing = !Boolean(prev.editing);
-        fireChange(editing ? 'edit:start' : 'edit:accept');
-        return { ...props, editing };
-      });
+      if (EditMode.isEditing) {
+        EditMode.accept();
+      } else {
+        EditMode.start();
+      }
     },
   };
 
@@ -112,7 +111,6 @@ export function useEditController(args: Args): t.LabelActionController {
   const api: t.LabelActionController = {
     enabled,
     handlers,
-    props,
     get data() {
       return item?.current ?? DEFAULTS.data;
     },
