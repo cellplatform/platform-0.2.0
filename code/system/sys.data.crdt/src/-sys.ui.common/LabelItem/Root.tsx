@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Time, type t } from './common';
 
-import { Ref } from './Root.Ref';
+import { Ref } from './Ref';
 import { View } from './ui';
 
 export const LabelItem = forwardRef<t.LabelItemRef, t.LabelItemProps>((props, ref) => {
