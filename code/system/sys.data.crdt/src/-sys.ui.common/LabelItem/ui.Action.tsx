@@ -43,8 +43,10 @@ export const Action: React.FC<ActionProps> = (props) => {
       opacity: isSpinning ? 0 : 1,
       transition: 'opacity 0.2s',
     }),
-
-    button: css({ display: 'grid', placeItems: 'center' }),
+    button: css({
+      display: 'grid',
+      placeItems: 'center',
+    }),
   };
 
   const elIcon = Wrangle.icon(props);

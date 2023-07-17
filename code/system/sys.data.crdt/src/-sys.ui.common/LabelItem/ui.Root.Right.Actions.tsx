@@ -18,11 +18,8 @@ export const RightActions: React.FC<t.LabelItemProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({
-      display: 'grid',
-      gridTemplateColumns: 'auto auto',
-      columnGap: 5,
-    }),
+    base: css({ display: 'grid', Flex: 'x-center-center' }),
+    action: css({ marginLeft: 5 }),
   };
 
   const elements = actions.map((action, i) => {
@@ -33,6 +30,7 @@ export const RightActions: React.FC<t.LabelItemProps> = (props) => {
         enabled={enabled}
         selected={selected}
         focused={focused}
+        style={styles.action}
       />
     );
   });

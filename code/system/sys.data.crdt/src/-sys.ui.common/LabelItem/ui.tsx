@@ -73,12 +73,6 @@ export const View: React.FC<Props> = (props) => {
       transition: 'opacity 0.2s',
       ...Style.toPadding(props.padding ?? padding),
     }),
-    disabled: css({
-      Absolute: 0,
-      pointerEvents: !enabled ? 'auto' : 'none',
-      opacity: !enabled ? 1 : 0,
-      transition: 'opacity 0.2s',
-    }),
     body: css({
       boxSizing: 'border-box',
       marginLeft: indent,
@@ -86,11 +80,17 @@ export const View: React.FC<Props> = (props) => {
       gridTemplateColumns: 'auto 1fr auto',
       columnGap: 3,
     }),
-    right: css({ marginLeft: 5 }),
+    right: css({}),
     focusBorder: css({
-      pointerEvents: 'none',
       Absolute: 0,
+      pointerEvents: 'none',
       border: `solid 1px ${Wrangle.borderColor(props)}`,
+    }),
+    disabled: css({
+      Absolute: 0,
+      pointerEvents: !enabled ? 'auto' : 'none',
+      opacity: !enabled ? 1 : 0,
+      transition: 'opacity 0.2s',
     }),
   };
 
