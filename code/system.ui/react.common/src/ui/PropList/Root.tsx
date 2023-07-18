@@ -1,4 +1,4 @@
-import { Wrangle } from './Util.mjs';
+import { Wrangle } from './util.mjs';
 import { Chip, DEFAULTS, FC, THEMES, type t } from './common';
 
 import { FieldSelector } from '../PropList.FieldSelector';
