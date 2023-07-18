@@ -1,14 +1,14 @@
 import { type t } from './common';
 
-type Id = string;
+type InstanceId = string;
 export type LabelItemBehaviorKind = 'Edit' | 'Selection';
 
 export type LabelItemList = {};
 
 /**
- * Item Data
+ * Item (Data Model)
  */
-export type LabelItemData = {
+export type LabelItem = {
   label?: string;
   editing?: boolean;
   enabled?: boolean;
@@ -20,15 +20,16 @@ export type LabelItemData = {
 /**
  * Simple safe/immutable state wrapper for the data object.
  */
-export type LabelItemState = t.Immutable<t.LabelItemData> & { readonly instance: Id };
-export type LabelItemStateChanger = (draft: t.LabelItemData) => void;
+export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: InstanceId };
+export type LabelItemStateChanger = (draft: t.LabelItem) => void;
+
 
 /**
  * Controller API
  */
 export type LabelActionController = {
   readonly enabled: boolean;
-  readonly data: t.LabelItemData;
+  readonly data: t.LabelItem;
   readonly handlers: t.LabelItemPropsHandlers;
 };
 
@@ -48,7 +49,7 @@ export type LabelItemStatefulProps = {
 export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;
 export type LabelItemStateChangeHandlerArgs = {
   action: LabelItemChangeAction;
-  data: LabelItemData;
+  data: LabelItem;
 };
 export type LabelItemChangeAction =
   | 'ready'
