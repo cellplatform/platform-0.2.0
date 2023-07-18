@@ -27,7 +27,7 @@ export type WebRtcInfoProps = {
  * Component
  */
 const View: React.FC<WebRtcInfoProps> = (props) => {
-  const { client, data = {}, fields = DEFAULTS.fields.default } = props;
+  const { client, data = {}, fields = DEFAULTS.fields.defaults } = props;
 
   const info = useInfo(client);
   const [isOver, setOver] = useState(false);

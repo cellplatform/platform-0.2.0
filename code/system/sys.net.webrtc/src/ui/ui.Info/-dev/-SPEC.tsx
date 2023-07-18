@@ -37,7 +37,7 @@ const local = localstore.object({
   title: false,
   useController: true,
   fullscreenVideo: false,
-  fields: WebRtcInfo.DEFAULTS.fields.default,
+  fields: WebRtcInfo.DEFAULTS.fields.defaults,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -217,7 +217,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
             all={WebRtcInfo.DEFAULTS.fields.all}
-            default={WebRtcInfo.DEFAULTS.fields.default}
+            defaults={WebRtcInfo.DEFAULTS.fields.defaults}
             selected={props.current.fields}
             resettable={true}
             onClick={(ev) => {

@@ -30,7 +30,7 @@ const defaultFields: t.WebRtcInfoField[] = [
 export const DEFAULTS = {
   fields: {
     all: fieldsAll,
-    default: defaultFields,
+    defaults: defaultFields,
   },
   indent: 15,
   fontSize: 13,
