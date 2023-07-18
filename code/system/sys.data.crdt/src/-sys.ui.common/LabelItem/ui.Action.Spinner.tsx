@@ -1,18 +1,21 @@
-import { DEFAULTS, Spinner, css, type t } from './common';
+import { COLORS, DEFAULTS, Spinner, css, type t } from './common';
 
 export type ActionSpinnerProps = {
   action: t.LabelAction;
+  selected?: boolean;
+  focused?: boolean;
   style?: t.CssValue;
 };
 
 export const ActionSpinner: React.FC<ActionSpinnerProps> = (props) => {
-  const { action } = props;
+  const { action, selected, focused } = props;
   if (!action.spinning) return null;
 
   /**
    * [Render]
    */
   const width = Wrangle.spinnerWidth(props);
+  const color = selected && focused ? COLORS.WHITE : COLORS.DARK;
   const styles = {
     base: css({
       Absolute: 0,
@@ -24,7 +27,7 @@ export const ActionSpinner: React.FC<ActionSpinnerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Spinner.Bar width={width} />
+      <Spinner.Bar width={width} color={color} />
     </div>
   );
 };
