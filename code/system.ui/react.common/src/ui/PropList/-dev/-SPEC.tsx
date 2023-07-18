@@ -249,7 +249,7 @@ export default Dev.describe('PropList', (e) => {
             .onClick((e) => e.change((d) => (d.debug.fieldSelector[key] = !e.current)));
         });
       bool('title');
-      bool('showIndexes');
+      bool('indexes');
       bool('resettable');
 
       dev.row((e) => {

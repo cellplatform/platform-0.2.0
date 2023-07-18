@@ -1,4 +1,4 @@
-import { COLORS, css, t, DEFAULTS, Lorem } from './common';
+import { COLORS, css, t, DEFAULTS, Lorem } from './-common';
 import { TextSecret } from '../../Text.Secret';
 import { PropList } from '..';
 
