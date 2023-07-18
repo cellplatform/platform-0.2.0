@@ -19,7 +19,7 @@ export const DEFAULTS = {
   data,
   item,
   indent: 0,
-  useBehaviors: Item.State.DEFAULTS.useBehaviors.default,
+  useBehaviors: Item.State.DEFAULTS.useBehaviors.defaults,
   placeholder: {
     default: 'namespace',
     empty: 'add namespace',
