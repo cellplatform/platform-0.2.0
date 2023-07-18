@@ -1,38 +1,41 @@
-import { RefObject, useRef, useState } from 'react';
+import { RefObject, useRef, useState, useEffect } from 'react';
 import { css, DEFAULTS, Style, useClickOutside, type t } from './common';
 
 import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
 import { Wrangle } from './Wrangle';
+import { lifecycle } from 'sys.util/dist/types.d/Rx/Rx.disposable.mjs';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 
 export const View: React.FC<Props> = (props) => {
   const {
     inputRef,
-    enabled = DEFAULTS.enabled,
     indent = DEFAULTS.indent,
     padding = DEFAULTS.padding,
-    focused = DEFAULTS.focused,
     tabIndex = DEFAULTS.tabIndex,
+    enabled = DEFAULTS.enabled,
+    focused = DEFAULTS.focused,
     editing = DEFAULTS.editing,
   } = props;
   const label = Wrangle.labelText(props);
   const ref = useRef<HTMLDivElement>(null);
 
+  const [isOver, setOver] = useState(false);
+  const over = (isOver: boolean) => () => setOver(isOver);
+
   const clickArgs = (): t.LabelItemClickHandlerArgs => {
-    return {
-      label: label.text,
-      focused,
-      editing,
-    };
+    return { label: label.text, focused, editing };
   };
 
   useClickOutside({
     ref,
     callback(e) {
-      if (editing) props.onEditClickAway?.(clickArgs());
+      if (editing) {
+        inputRef.current?.blur();
+        props.onEditClickAway?.(clickArgs());
+      }
     },
   });
 
@@ -52,11 +55,17 @@ export const View: React.FC<Props> = (props) => {
     return () => handler?.(clickArgs());
   };
 
-  const [isOver, setOver] = useState(false);
-  const over = (isOver: boolean) => () => setOver(isOver);
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    // HACK: When editing stopped, if the item was focused (within the textbox)
+    //       ensure that focus state is retained on the root DOM element.
+    if (!editing && focused) ref.current?.focus();
+  }, [editing]);
 
   /**
-   * [Render]
+   * Render
    */
   const styles = {
     base: css({

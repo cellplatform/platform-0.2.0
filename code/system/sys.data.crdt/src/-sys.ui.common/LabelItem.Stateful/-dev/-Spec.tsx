@@ -1,6 +1,7 @@
-import { LabelItemStateful } from '.';
-import { Item } from '..';
-import { Dev, Icons, type t } from '../test.ui';
+import { Dev, Icons, type t } from '../../test.ui';
+
+import { LabelItemStateful } from '..';
+import { Item } from '../..';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 

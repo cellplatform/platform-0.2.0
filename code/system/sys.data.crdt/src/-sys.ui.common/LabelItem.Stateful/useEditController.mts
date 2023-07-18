@@ -92,6 +92,7 @@ export function useEditController(args: Args): t.LabelActionController {
     },
 
     onFocusChange(e) {
+      if (EditMode.isEditing) return; // NB: Hack to reduce irrelevant focus/blur events.
       const action = e.focused ? 'view:focus' : 'view:blur';
       change(action, (d) => (d.focused = e.focused));
       args.handlers?.onFocusChange?.(e);

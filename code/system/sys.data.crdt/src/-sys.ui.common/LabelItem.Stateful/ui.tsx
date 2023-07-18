@@ -38,6 +38,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
       right={editController.data.right}
       enabled={editController.data.enabled ?? DEFAULTS.enabled}
       editing={editController.data.editing ?? DEFAULTS.editing}
+      focused={editController.data.focused}
       focusOnEdit={true}
     />
   );

@@ -9,7 +9,7 @@ export const Specs = {
 
   'sys.ui.common.Item.LabelItem': () => import('../-sys.ui.common/LabelItem/-dev/-SPEC'),
   'sys.ui.common.Item.LabelItem.Stateful': () =>
-    import('../-sys.ui.common/LabelItem.Stateful/-Spec'),
+    import('../-sys.ui.common/LabelItem.Stateful/-dev/-Spec'),
 };
 
 export default Specs;
