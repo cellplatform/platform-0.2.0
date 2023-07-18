@@ -4,8 +4,8 @@ import { useSelectionController } from './useSelectionController.mjs';
 import { BehaviorSelector } from './ui.BehaviorSelector';
 
 type Options = {
-  initial?: t.LabelItemData;
-  onChange?: t.PatchChangeHandler<t.LabelItemData>;
+  initial?: t.LabelItem;
+  onChange?: t.PatchChangeHandler<t.LabelItem>;
 };
 
 /**
@@ -17,8 +17,13 @@ export const State = {
   useEditController,
   useSelectionController,
 
-  init(initial = DEFAULTS.data, options: Options = {}): t.LabelItemState {
+  ctx(): t.LabelItemListCtxState {
+    const initial: t.LabelItemListCtx = {};
+    return PatchState.init<t.LabelItemListCtx>({ initial });
+  },
+
+  item(initial = DEFAULTS.data, options: Options = {}): t.LabelItemState {
     const { onChange } = options;
-    return PatchState.init<t.LabelItemData>({ initial, onChange });
+    return PatchState.init<t.LabelItem>({ initial, onChange });
   },
 } as const;

@@ -1,7 +1,7 @@
 import { Icons, type t } from '../common';
 
 export const Sample = {
-  data(): t.LabelItemData {
+  data(): t.LabelItem {
     return {
       label: 'hello 👋',
       right: {

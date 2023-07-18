@@ -11,7 +11,7 @@ export const DEFAULTS = {
     all: useBehaviorAll,
     default: useBehaviorDefault,
   },
-  get data(): t.LabelItemData {
+  get data(): t.LabelItem {
     return {};
   },
 } as const;
