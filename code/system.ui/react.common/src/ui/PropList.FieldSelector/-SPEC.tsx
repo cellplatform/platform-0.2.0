@@ -13,11 +13,11 @@ const initial: T = {
 };
 
 export default Dev.describe('PropList.FieldSelector', (e) => {
-  type LocalStore = Pick<t.PropListFieldSelectorProps, 'resettable' | 'showIndexes'>;
+  type LocalStore = Pick<t.PropListFieldSelectorProps, 'resettable' | 'indexes'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.PropList.FieldSelector');
   const local = localstore.object({
     resettable: DEFAULTS.resettable,
-    showIndexes: DEFAULTS.showIndexes,
+    indexes: DEFAULTS.indexes,
   });
 
   e.it('ui:init', async (e) => {
@@ -25,7 +25,7 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.resettable = local.resettable;
-      d.props.showIndexes = local.showIndexes;
+      d.props.indexes = local.indexes;
     });
 
     ctx.subject
@@ -43,13 +43,11 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.showIndexes);
+        const value = (state: T) => Boolean(state.props.indexes);
         btn
-          .label((e) => `showIndexes`)
+          .label((e) => `indexes (${value(e.state) ? 'visible' : 'hidden'})`)
           .value((e) => value(e.state))
-          .onClick((e) =>
-            e.change((d) => (local.showIndexes = Dev.toggle(d.props, 'showIndexes'))),
-          );
+          .onClick((e) => e.change((d) => (local.indexes = Dev.toggle(d.props, 'indexes'))));
       });
 
       dev.boolean((btn) => {

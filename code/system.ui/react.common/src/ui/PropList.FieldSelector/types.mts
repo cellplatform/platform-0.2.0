@@ -9,7 +9,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   selected?: F[];
   default?: F[];
   resettable?: boolean;
-  showIndexes?: boolean;
+  indexes?: boolean;
   indent?: number;
   style?: t.CssValue;
   onClick?: PropListFieldSelectorClickHandler;

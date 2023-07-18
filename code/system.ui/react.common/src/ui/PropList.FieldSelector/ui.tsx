@@ -7,7 +7,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
     selected = [],
     resettable = DEFAULTS.resettable,
-    showIndexes = DEFAULTS.showIndexes,
+    indexes: showIndexes = DEFAULTS.indexes,
     indent = DEFAULTS.indent,
   } = props;
   const all = [...(props.all ?? [])];

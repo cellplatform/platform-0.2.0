@@ -6,6 +6,6 @@ export { Button } from '../Button';
  */
 export const DEFAULTS = {
   resettable: true,
-  showIndexes: true,
+  indexes: true,
   indent: 0,
 } as const;

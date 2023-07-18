@@ -12,7 +12,7 @@ type T = {
   debug: {
     source: SampleKind;
     fields?: MyFields[];
-    fieldSelector: { title: boolean; resettable: boolean; showIndexes: boolean };
+    fieldSelector: { title: boolean; resettable: boolean; indexes: boolean };
     header: boolean;
     footer: boolean;
   };
@@ -29,7 +29,7 @@ const initial: T = {
     fieldSelector: {
       title: true,
       resettable: PropList.FieldSelector.DEFAULTS.resettable,
-      showIndexes: PropList.FieldSelector.DEFAULTS.showIndexes,
+      indexes: PropList.FieldSelector.DEFAULTS.indexes,
     },
     header: true,
     footer: true,
@@ -260,7 +260,7 @@ export default Dev.describe('PropList', (e) => {
           selected: debug.fields,
           title: fieldSelector.title ? 'Field Selector' : undefined,
           resettable: fieldSelector.resettable,
-          showIndexes: fieldSelector.showIndexes,
+          indexes: fieldSelector.indexes,
           async onClick(ev) {
             await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
             Util.setSample(dev.ctx, 'Builder');
