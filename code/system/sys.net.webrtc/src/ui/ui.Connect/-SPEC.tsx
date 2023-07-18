@@ -20,7 +20,7 @@ export default Dev.describe('Connect', async (e) => {
   };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
-    fields: Connect.DEFAULTS.fields.default,
+    fields: Connect.DEFAULTS.fields.defaults,
     edge: Connect.DEFAULTS.edge,
     showInfo: Connect.DEFAULTS.showInfo,
     showInfoAsCard: Connect.DEFAULTS.showInfoAsCard,
@@ -125,7 +125,7 @@ export default Dev.describe('Connect', async (e) => {
           <Dev.FieldSelector
             style={{ Margin: [20, 50, 0, 50] }}
             all={Connect.DEFAULTS.fields.all}
-            default={Connect.DEFAULTS.fields.default}
+            defaults={Connect.DEFAULTS.fields.defaults}
             selected={e.state.props.fields}
             resettable={true}
             onClick={(args) => {

@@ -21,7 +21,7 @@ export const DEFAULTS = {
   showInfo: true,
   fields: {
     all: INFO_DEFAULTS.fields.all,
-    default: defaultFields,
+    defaults: defaultFields,
   },
   copied: {
     message: '( copied to clipboard )',

@@ -7,7 +7,7 @@ import { Loading } from './ui.Connect.Loading';
 export const Connect: React.FC<t.ConnectProps> = (props) => {
   if (props.loading) return <Loading />;
 
-  const { fields = DEFAULTS.fields.default, showInfo = DEFAULTS.showInfo } = props;
+  const { fields = DEFAULTS.fields.defaults, showInfo = DEFAULTS.showInfo } = props;
   const isCard = props.showInfoAsCard ?? DEFAULTS.showInfoAsCard;
 
   /**
