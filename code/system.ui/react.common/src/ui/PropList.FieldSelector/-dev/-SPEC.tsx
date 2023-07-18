@@ -68,7 +68,7 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.title);
         btn
-          .label((e) => `title`)
+          .label((e) => (value(e.state) ? `title ("${e.state.props.title}")` : 'title'))
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => {
