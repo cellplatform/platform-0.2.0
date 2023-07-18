@@ -116,9 +116,12 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = {
-        items,
-      };
+      const data = items.reduce((acc, next, i) => {
+        const key = `${i}.${next.instance}`;
+        acc[key] = next;
+        return acc;
+      }, {} as Record<string, t.LabelItemState>);
+
       return (
         <Dev.Object
           name={'LabelItem.Stateful'}
