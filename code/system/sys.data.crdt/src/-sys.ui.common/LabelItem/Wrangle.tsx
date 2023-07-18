@@ -1,14 +1,27 @@
 import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 
 export const Wrangle = {
-  flagProps(props: t.LabelItemProps) {
+  flagsOrDefault(props: Partial<t.LabelItemDynamicValueArgs>): t.LabelItemDynamicValueArgs {
     const {
       enabled = DEFAULTS.enabled,
-      editing = DEFAULTS.editing,
       selected = DEFAULTS.selected,
       focused = DEFAULTS.focused,
+      editing = DEFAULTS.editing,
     } = props;
-    return { enabled, editing, selected, focused } as const;
+    return { enabled, selected, focused, editing } as const;
+  },
+
+  dynamicValue<T>(
+    value: t.LabelItemValue<T> | undefined,
+    flags: Partial<t.LabelItemDynamicValueArgs>,
+    defaultValue: T,
+  ) {
+    if (typeof value === 'function') {
+      const fn = value as t.LabelItemDynamicValue<T>;
+      const args = Wrangle.flagsOrDefault(flags);
+      return fn(args);
+    }
+    return value ?? defaultValue;
   },
 
   labelText(args: { label?: string }) {
@@ -36,9 +49,16 @@ export const Wrangle = {
     return color;
   },
 
-  icon(args: { action: t.LabelAction; selected?: boolean; enabled?: boolean }) {
-    const { action, enabled = DEFAULTS.enabled, selected = DEFAULTS.selected } = args;
+  icon(args: {
+    action: t.LabelAction;
+    selected?: boolean;
+    enabled?: boolean;
+    focused?: boolean;
+    editing?: boolean;
+  }) {
+    const { action } = args;
     const { icon } = action;
+    const { enabled, selected, focused, editing } = Wrangle.flagsOrDefault(args);
 
     if (!icon) {
       return Wrangle.defaultIcon(args);
@@ -46,7 +66,7 @@ export const Wrangle = {
 
     if (typeof action.icon === 'function') {
       const color = Wrangle.foreColor(args);
-      const el = action.icon({ enabled, selected, color });
+      const el = action.icon({ enabled, selected, focused, editing, color });
       return el ?? Wrangle.defaultIcon(args);
     }
 
@@ -57,4 +77,4 @@ export const Wrangle = {
     const color = Wrangle.foreColor(args);
     return <Icons.Repo size={18} color={color} offset={[0, 1]} />;
   },
-};
+} as const;

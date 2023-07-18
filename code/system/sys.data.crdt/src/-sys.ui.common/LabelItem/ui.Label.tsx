@@ -2,7 +2,10 @@ import { RefObject } from 'react';
 import { Wrangle } from './Wrangle';
 import { Color, DEFAULTS, TextInput, css, type t } from './common';
 
-type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
+type Props = t.LabelItemProps & {
+  inputRef: RefObject<t.TextInputRef>;
+  onDoubleClick?: React.MouseEventHandler;
+};
 
 export const Label: React.FC<Props> = (props) => {
   const {
@@ -77,7 +80,7 @@ export const Label: React.FC<Props> = (props) => {
   );
 
   return (
-    <div {...styles.base}>
+    <div {...styles.base} onDoubleClick={props.onDoubleClick}>
       {editing && <div {...styles.underline} />}
       {elTextbox}
       {elLabel}

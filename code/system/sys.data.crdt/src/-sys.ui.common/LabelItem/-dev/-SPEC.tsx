@@ -58,8 +58,8 @@ export default Dev.describe('Namespace.Item', (e) => {
           console.info('⚡️ onClick', e);
         },
 
-        onDoubleClick(e) {
-          console.info('⚡️ onDoubleClick', e);
+        onLabelDoubleClick(e) {
+          console.info('⚡️ onLabelDoubleClick', e);
         },
       };
     },

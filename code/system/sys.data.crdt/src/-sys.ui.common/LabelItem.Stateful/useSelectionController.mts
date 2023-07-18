@@ -4,6 +4,7 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 type Args = {
   enabled?: boolean;
   item?: t.LabelItemState;
+  handlers?: t.LabelItemPropsHandlers;
 };
 
 /**
@@ -15,8 +16,15 @@ export function useSelectionController(args: Args) {
   // console.log('useSelectionController >> enabled:', enabled); // TEMP 🐷
 
   /**
+   * View component events.
+   */
+  const handlers: t.LabelItemPropsHandlers = {
+    ...args.handlers,
+  };
+
+  /**
    * API
    */
-  const api = { enabled } as const;
+  const api = { enabled, handlers } as const;
   return api;
 }

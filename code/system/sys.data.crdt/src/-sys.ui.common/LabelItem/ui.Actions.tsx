@@ -1,4 +1,4 @@
-import { css, type t, asArray } from './common';
+import { DEFAULTS, asArray, css, type t } from './common';
 import { Action } from './ui.Action';
 
 export type ActionsProps = {
@@ -7,15 +7,15 @@ export type ActionsProps = {
   spacing?: number;
 
   enabled?: boolean;
-  editing?: boolean;
   selected?: boolean;
   focused?: boolean;
+  editing?: boolean;
 
   style?: t.CssValue;
 };
 
 export const Actions: React.FC<ActionsProps> = (props) => {
-  const { selected, focused, enabled = true } = props;
+  const { selected, focused, editing, enabled = DEFAULTS.enabled } = props;
   const actions = Wrangle.actions(props);
 
   /**
@@ -33,11 +33,12 @@ export const Actions: React.FC<ActionsProps> = (props) => {
     return (
       <Action
         key={`${i}:${action.kind}`}
+        style={margins}
         action={action}
         enabled={enabled}
         selected={selected}
         focused={focused}
-        style={margins}
+        editing={editing}
       />
     );
   });
@@ -69,4 +70,4 @@ const Wrangle = {
 
     return { marginLeft, marginRight };
   },
-};
+} as const;

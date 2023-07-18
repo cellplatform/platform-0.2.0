@@ -19,6 +19,7 @@ export const View: React.FC<Props> = (props) => {
     editing = DEFAULTS.editing,
   } = props;
   const label = Wrangle.labelText(props);
+  const ref = useRef<HTMLDivElement>(null);
 
   const clickArgs = (): t.LabelItemClickHandlerArgs => {
     return {
@@ -27,8 +28,6 @@ export const View: React.FC<Props> = (props) => {
       editing,
     };
   };
-
-  const ref = useRef<HTMLDivElement>(null);
 
   useClickOutside({
     ref,
@@ -50,9 +49,7 @@ export const View: React.FC<Props> = (props) => {
   };
 
   const clickHandler = (handler?: t.LabelItemClickHandler) => {
-    return () => {
-      handler?.(clickArgs());
-    };
+    return () => handler?.(clickArgs());
   };
 
   const [isOver, setOver] = useState(false);
@@ -106,11 +103,14 @@ export const View: React.FC<Props> = (props) => {
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
       onMouseDown={clickHandler(props.onClick)}
-      onDoubleClick={clickHandler(props.onDoubleClick)}
     >
       <div {...styles.body}>
         <Left {...props} />
-        <Label {...props} inputRef={inputRef} />
+        <Label
+          {...props}
+          inputRef={inputRef}
+          onDoubleClick={clickHandler(props.onLabelDoubleClick)}
+        />
         <Right {...props} />
       </div>
       {elDisabled}

@@ -4,7 +4,8 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 type Args = {
   enabled?: boolean;
   item?: t.LabelItemState;
-  onChange?: t.LabelItemDataChangeHandler;
+  handlers?: t.LabelItemPropsHandlers;
+  onChange?: t.LabelItemStateChangeHandler;
 };
 
 /**
@@ -67,20 +68,33 @@ export function useEditController(args: Args): t.LabelActionController {
    * View component events.
    */
   const handlers: t.LabelItemPropsHandlers = {
+    ...args.handlers,
+
     onReady(e) {
       setRef(e.ref);
+      args.handlers?.onReady?.(e);
+      change('ready', (d) => null);
     },
 
     onChange(e) {
       change('data:label', (draft) => (draft.label = e.label));
+      args.handlers?.onChange?.(e);
     },
 
-    onDoubleClick(e) {
+    onLabelDoubleClick(e) {
       EditMode.start();
+      args.handlers?.onLabelDoubleClick?.(e);
     },
 
     onEditClickAway(e) {
       EditMode.cancel();
+      args.handlers?.onEditClickAway?.(e);
+    },
+
+    onFocusChange(e) {
+      const action = e.focused ? 'view:focus' : 'view:blur';
+      change(action, (d) => (d.focused = e.focused));
+      args.handlers?.onFocusChange?.(e);
     },
   };
 

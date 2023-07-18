@@ -7,40 +7,39 @@ export type ActionProps = {
   enabled?: boolean;
   selected?: boolean;
   focused?: boolean;
-  opacity?: number;
+  editing?: boolean;
   style?: t.CssValue;
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, focused } = props;
-  const { onClick, width } = action;
-  const isButton = onClick && (action.enabled ?? true);
-  const isEnabled = action.enabled ?? props.enabled ?? DEFAULTS.enabled;
-  const isSpinning = action.spinning ?? false;
-  const opacity = props.opacity ?? (isEnabled ? 1 : 0.3);
+  const { action, selected, focused, editing } = props;
+  const { kind, width, onClick } = action;
+
+  const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
+  const spinning = Wrangle.dynamicValue(action.spinning, props, false);
+  const is = {
+    button: Boolean(onClick && enabled),
+  };
 
   /**
    * [Handlers]
    */
-  const handleClick = () => {
-    onClick?.({ kind: action.kind });
-  };
+  const handleClick = () => onClick?.({ kind });
 
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      position: 'relative',
-      opacity,
       width,
-      pointerEvents: isSpinning ? 'none' : 'auto',
+      position: 'relative',
+      pointerEvents: spinning ? 'none' : 'auto',
     }),
     body: css({
       width,
       display: 'grid',
       placeItems: 'center',
-      opacity: isSpinning ? 0 : 1,
+      opacity: spinning ? 0 : 1,
       transition: 'opacity 0.2s',
     }),
     button: css({
@@ -49,12 +48,13 @@ export const Action: React.FC<ActionProps> = (props) => {
     }),
   };
 
-  const elIcon = Wrangle.icon(props);
-  const elButton = isButton && (
+  const elIcon = Wrangle.icon({ action, selected, enabled, focused, editing });
+
+  const elButton = is.button && (
     <Button
       onMouseDown={(e) => e.stopPropagation()}
       onClick={handleClick}
-      isEnabled={isEnabled}
+      isEnabled={enabled}
       disabledOpacity={1}
     >
       <div {...styles.button}>{elIcon}</div>
@@ -64,7 +64,7 @@ export const Action: React.FC<ActionProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>{elButton || elIcon}</div>
-      {isSpinning && <ActionSpinner action={action} />}
+      {spinning && <ActionSpinner action={action} />}
     </div>
   );
 };

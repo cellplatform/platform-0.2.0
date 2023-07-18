@@ -8,8 +8,9 @@ export type LabelItemBehaviorKind = 'Edit' | 'Selection';
  */
 export type LabelItemData = {
   label?: string;
-  enabled?: boolean;
   editing?: boolean;
+  enabled?: boolean;
+  focused?: boolean;
   left?: t.LabelAction | t.LabelAction[];
   right?: t.LabelAction | t.LabelAction[];
 };
@@ -36,15 +37,22 @@ export type LabelItemStatefulProps = {
   item?: LabelItemState; // NB: If not specified default is generated.
   useBehaviors?: t.LabelItemBehaviorKind[];
   style?: t.CssValue;
-  onChange?: LabelItemDataChangeHandler;
+  onChange?: LabelItemStateChangeHandler;
 };
 
 /**
  * Events.
  */
-export type LabelItemDataChangeHandler = (e: LabelItemDataChangeHandlerArgs) => void;
-export type LabelItemDataChangeHandlerArgs = {
+export type LabelItemStateChangeHandler = (e: LabelItemStateChangeHandlerArgs) => void;
+export type LabelItemStateChangeHandlerArgs = {
   action: LabelItemChangeAction;
   data: LabelItemData;
 };
-export type LabelItemChangeAction = 'data:label' | 'edit:start' | 'edit:accept' | 'edit:cancel';
+export type LabelItemChangeAction =
+  | 'ready'
+  | 'data:label'
+  | 'view:focus'
+  | 'view:blur'
+  | 'edit:start'
+  | 'edit:accept'
+  | 'edit:cancel';

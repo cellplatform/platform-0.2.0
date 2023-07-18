@@ -17,8 +17,8 @@ export const State = {
   useEditController,
   useSelectionController,
 
-  init(options: Options = {}): t.LabelItemState {
-    const { onChange, initial = DEFAULTS.data } = options;
+  init(initial = DEFAULTS.data, options: Options = {}): t.LabelItemState {
+    const { onChange } = options;
     return PatchState.init<t.LabelItemData>({ initial, onChange });
   },
 } as const;

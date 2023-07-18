@@ -22,6 +22,7 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
 
   const selectionController = useSelectionController({
     enabled: useBehaviors.includes('Selection'),
+    handlers: editController.handlers,
     item,
   });
 

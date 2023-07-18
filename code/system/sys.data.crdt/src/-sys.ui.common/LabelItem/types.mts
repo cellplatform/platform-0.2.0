@@ -1,20 +1,34 @@
 import { type t } from './common';
 
+/**
+ * An "action" represented as a clickable icon button.
+ */
 export type LabelActionKind = string;
 export type LabelAction<K extends LabelActionKind = string> = {
   kind: K;
-  enabled?: boolean;
   width?: number;
-  icon?: JSX.Element | RenderLabelActionIcon | false;
-  spinning?: boolean;
+  icon?: LabelActionRender | JSX.Element | false;
+  enabled?: LabelItemValue<boolean>;
+  spinning?: LabelItemValue<boolean>;
   onClick?: LabelItemActionHandler;
 };
 
-export type RenderLabelActionIcon = (args: RenderLabelActionIconArgs) => JSX.Element;
-export type RenderLabelActionIconArgs = {
+/**
+ * JSX Renderer.
+ */
+export type LabelActionRender = (args: LabelActionRenderArgs) => JSX.Element;
+export type LabelActionRenderArgs = LabelItemDynamicValueArgs & { color: string };
+
+/**
+ * Values (explicit or dynamic).
+ */
+export type LabelItemValue<T> = T | LabelItemDynamicValue<T>;
+export type LabelItemDynamicValue<T> = (e: LabelItemDynamicValueArgs) => T;
+export type LabelItemDynamicValueArgs = {
   enabled: boolean;
   selected: boolean;
-  color: string;
+  editing: boolean;
+  focused: boolean;
 };
 
 /**
@@ -29,9 +43,10 @@ export type LabelItemProps = {
   right?: LabelAction | LabelAction[];
 
   enabled?: boolean;
-  editing?: boolean;
   selected?: boolean;
+  editing?: boolean;
   focused?: boolean;
+
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
   tabIndex?: number;
@@ -47,7 +62,7 @@ export type LabelItemPropsHandlers = {
   onEnter?: LabelItemEnterKeyHandler;
   onFocusChange?: LabelItemFocusHandler;
   onClick?: LabelItemClickHandler;
-  onDoubleClick?: LabelItemClickHandler;
+  onLabelDoubleClick?: LabelItemClickHandler;
   onEditClickAway?: LabelItemClickHandler;
 };
 

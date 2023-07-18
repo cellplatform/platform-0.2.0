@@ -21,16 +21,25 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     useBehaviors: DEFAULTS.useBehaviors.default,
   });
 
-  const item = Item.State.init({
-    initial: {
-      label: 'hello 👋',
-      right: {
-        kind: 'foobar',
-        icon: (e) => <Icons.ObjectTree size={17} color={e.color} offset={[0, 1]} />,
-        onClick: (e) => console.info('⚡️ action → onClick:', e),
+  const initialState: t.LabelItemData = {
+    label: 'hello 👋',
+    right: {
+      kind: 'foobar',
+      enabled: (e) => !e.editing,
+      icon(e) {
+        return (
+          <Icons.ObjectTree
+            size={17}
+            color={e.color}
+            opacity={e.enabled ? 1 : 0.3}
+            offset={[0, 1]}
+          />
+        );
       },
+      onClick: (e) => console.info('⚡️ action → onClick:', e),
     },
-  });
+  };
+  const item = Item.State.init(initialState);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -73,7 +82,8 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         <LabelItemStateful.BehaviorSelector
           selected={e.state.props.useBehaviors}
           onChange={(e) => {
-            state.change((d) => (local.useBehaviors = d.props.useBehaviors = e.next));
+            state.change((d) => (d.props.useBehaviors = e.next));
+            local.useBehaviors = e.next;
           }}
         />
       );
@@ -89,7 +99,13 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
         props: e.state.props,
         data: e.state.data,
       };
-      return <Dev.Object name={'LabelItem.Stateful'} data={data} expand={1} />;
+      return (
+        <Dev.Object
+          name={'LabelItem.Stateful'}
+          data={data}
+          expand={{ level: 1, paths: ['$', '$.data'] }}
+        />
+      );
     });
   });
 });
