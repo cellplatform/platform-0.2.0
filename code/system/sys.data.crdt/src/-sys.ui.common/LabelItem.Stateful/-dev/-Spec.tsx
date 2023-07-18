@@ -1,54 +1,50 @@
-import { Dev, Icons, type t } from '../../test.ui';
+import { Dev, Value, type t } from '../../test.ui';
 
 import { LabelItemStateful } from '..';
 import { Item } from '../..';
+import { Sample } from './-Sample';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
 type T = {
   data?: t.LabelItemData;
-  props: t.LabelItemStatefulProps;
-  debug: {};
+  debug: {
+    total?: number;
+    useBehaviors?: t.LabelItemBehaviorKind[];
+  };
 };
 const initial: T = {
-  props: {},
   debug: {},
 };
 
 export default Dev.describe('LabelItem.Stateful', (e) => {
-  type LocalStore = Pick<t.LabelItemStatefulProps, 'useBehaviors'>;
+  type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
+    total: 1,
     useBehaviors: DEFAULTS.useBehaviors.default,
   });
 
-  const initialState: t.LabelItemData = {
-    label: 'hello 👋',
-    right: {
-      kind: 'foobar',
-      enabled: (e) => !e.editing,
-      icon(e) {
-        return (
-          <Icons.ObjectTree
-            size={17}
-            color={e.color}
-            opacity={e.enabled ? 1 : 0.3}
-            offset={[0, 1]}
-          />
-        );
-      },
-      onClick: (e) => console.info('⚡️ action → onClick:', e),
+  let items: t.LabelItemState[] = [];
+  const Init = {
+    items(state: T) {
+      const length = state.debug.total ?? 0;
+      items = Array.from({ length }).map(() => {
+        const initial = Sample.data();
+        return Item.State.init(initial);
+      });
     },
   };
-  const item = Item.State.init(initialState);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
-    state.change((d) => {
-      d.props.useBehaviors = local.useBehaviors;
+    await state.change((d) => {
+      d.debug.total = local.total;
+      d.debug.useBehaviors = local.useBehaviors;
     });
+    Init.items(state.current);
 
     ctx.debug.width(300);
     ctx.subject
@@ -56,21 +52,22 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
       .size([280, null])
       .display('grid')
       .render<T>((e) => {
-        const { debug, props } = e.state;
-
-        return (
-          /**
-           * See: Examples of behavior/hook usages in component| ↓ |
-           */
-          <LabelItemStateful
-            {...props}
-            item={item}
-            onChange={(e) => {
-              console.info('⚡️ onChange', e);
-              state.change((d) => (d.data = e.data));
-            }}
-          />
-        );
+        const { debug } = e.state;
+        const length = debug.total ?? 0;
+        const elList = Array.from({ length }).map((v, i) => {
+          return (
+            <LabelItemStateful
+              key={`item.${i}`}
+              item={items[i]}
+              useBehaviors={debug.useBehaviors}
+              onChange={(e) => {
+                console.info(`⚡️ onChange[${i}]`, e);
+                state.change((d) => (d.data = e.data));
+              }}
+            />
+          );
+        });
+        return <>{elList}</>;
       });
   });
 
@@ -81,13 +78,36 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     dev.row((e) => {
       return (
         <LabelItemStateful.BehaviorSelector
-          selected={e.state.props.useBehaviors}
+          selected={e.state.debug.useBehaviors}
           onChange={(e) => {
-            state.change((d) => (d.props.useBehaviors = e.next));
+            state.change((d) => (d.debug.useBehaviors = e.next));
             local.useBehaviors = e.next;
           }}
         />
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section((dev) => {
+      const total = (total: number) => {
+        const label = `${total} ${Value.plural(total, 'item', 'items')}`;
+        dev.button((btn) =>
+          btn
+            .label(label)
+            .right((e) => (e.state.debug.total === total ? '←' : ''))
+            .onClick(async (e) => {
+              await e.change((d) => (d.debug.total = total));
+              Init.items(state.current);
+              local.total = total;
+              dev.redraw();
+            }),
+        );
+      };
+      total(0);
+      dev.hr(-1, 5);
+      total(1);
+      total(3);
     });
   });
 
@@ -97,9 +117,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
 
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
-        props: e.state.props,
-        'data:instance': item.instance,
-        data: e.state.data,
+        items,
       };
       return (
         <Dev.Object
