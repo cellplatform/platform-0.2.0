@@ -17,12 +17,16 @@ const initial: T = {
 };
 
 export default Dev.describe('PropList.FieldSelector', (e) => {
-  type LocalStore = Pick<t.PropListFieldSelectorProps, 'resettable' | 'indexes' | 'selected'> &
+  type LocalStore = Pick<
+    t.PropListFieldSelectorProps,
+    'resettable' | 'indexes' | 'selected' | 'autoChildSelection'
+  > &
     Pick<T['debug'], 'hostBg'> & { hasTitle?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.PropList.FieldSelector');
   const local = localstore.object({
     resettable: DEFAULTS.resettable,
     indexes: DEFAULTS.indexes,
+    autoChildSelection: DEFAULTS.autoChildSelection,
     hostBg: false,
     hasTitle: false,
   });
@@ -32,10 +36,11 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
+      d.props.title = local.hasTitle ? 'My Title' : undefined;
       d.props.resettable = local.resettable;
       d.props.indexes = local.indexes;
       d.props.selected = local.selected;
-      d.props.title = local.hasTitle ? 'My Title' : undefined;
+      d.props.autoChildSelection = local.autoChildSelection;
       d.debug.hostBg = local.hostBg;
     });
 
@@ -95,6 +100,16 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
           .label((e) => `resettable`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.resettable = Dev.toggle(d.props, 'resettable'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.autoChildSelection);
+        btn
+          .label((e) => `autoChildSelection`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.autoChildSelection = Dev.toggle(d.props, 'autoChildSelection')));
+          });
       });
     });
 

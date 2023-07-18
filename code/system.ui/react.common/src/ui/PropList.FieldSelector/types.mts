@@ -8,10 +8,14 @@ export type PropListFieldSelectorProps<F extends string = string> = {
   all?: F[];
   selected?: F[];
   defaults?: F[];
+
   resettable?: boolean;
   indexes?: boolean;
+  autoChildSelection?: boolean; // Selects namespace children when parent is selected (eg. "foo" → "foo.bar")
+
   indent?: number;
   style?: t.CssValue;
+
   onClick?: PropListFieldSelectorClickHandler;
 };
 

@@ -8,6 +8,7 @@ export const DEFAULTS = {
   indexes: true,
   indent: 0,
   resettable: true,
+  autoChildSelection: false,
   label: {
     reset: 'reset',
     clear: 'clear',
