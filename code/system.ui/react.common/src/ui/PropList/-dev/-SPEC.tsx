@@ -243,7 +243,6 @@ export default Dev.describe('PropList', (e) => {
           async onClick(ev) {
             await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
             Util.setSample(dev.ctx, 'Builder');
-            console.log('⚡️ FieldSelector.onClick:', ev);
           },
         };
 
