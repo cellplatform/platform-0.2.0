@@ -1,7 +1,7 @@
-import { FieldBuilder } from '../FieldBuilder.mjs';
-import { PropList } from '../ui/PropList';
 import { Button, DEFAULTS, FC, css, type t } from './common';
 
+import { FieldBuilder } from '../PropList/FieldBuilder.mjs';
+import { PropList } from '../PropList/ui/PropList';
 import { FieldSelectorLabel } from './FieldSelector.Label';
 
 const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
