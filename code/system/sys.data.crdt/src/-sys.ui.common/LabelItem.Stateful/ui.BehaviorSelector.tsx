@@ -23,9 +23,10 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
       all={DEFAULTS.useBehaviors.all}
       defaults={DEFAULTS.useBehaviors.defaults}
       selected={props.selected}
+      indent={20}
       indexes={false}
       resettable={true}
-      indent={20}
+      autoSubfieldSelection={true}
       onClick={(e) => {
         const { previous, next } = e.as<t.LabelItemBehaviorKind>();
         props.onChange?.({ previous, next });
