@@ -6,6 +6,7 @@ export type ActionsProps = {
   edge: 'Left' | 'Right';
   spacing?: number;
 
+  label?: string;
   enabled?: boolean;
   selected?: boolean;
   focused?: boolean;
@@ -15,7 +16,7 @@ export type ActionsProps = {
 };
 
 export const Actions: React.FC<ActionsProps> = (props) => {
-  const { selected, focused, editing, enabled = DEFAULTS.enabled } = props;
+  const { selected, focused, editing, label, enabled = DEFAULTS.enabled } = props;
   const actions = Wrangle.actions(props);
 
   /**
@@ -35,6 +36,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         key={`${i}:${action.kind}`}
         style={margins}
         action={action}
+        label={label}
         enabled={enabled}
         selected={selected}
         focused={focused}

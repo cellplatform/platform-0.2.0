@@ -4,6 +4,7 @@ import { Wrangle } from './Wrangle';
 
 export type ActionProps = {
   action: t.LabelAction;
+  label?: string;
   enabled?: boolean;
   selected?: boolean;
   focused?: boolean;
