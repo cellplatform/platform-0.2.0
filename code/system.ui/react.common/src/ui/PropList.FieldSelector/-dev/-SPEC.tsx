@@ -19,14 +19,15 @@ const initial: T = {
 export default Dev.describe('PropList.FieldSelector', (e) => {
   type LocalStore = Pick<
     t.PropListFieldSelectorProps,
-    'resettable' | 'indexes' | 'selected' | 'autoChildSelection'
+    'resettable' | 'indexes' | 'selected' | 'autoSubfieldSelection'
   > &
     Pick<T['debug'], 'hostBg'> & { hasTitle?: boolean };
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.PropList.FieldSelector');
   const local = localstore.object({
+    selected: undefined,
     resettable: DEFAULTS.resettable,
     indexes: DEFAULTS.indexes,
-    autoChildSelection: DEFAULTS.autoChildSelection,
+    autoSubfieldSelection: DEFAULTS.autoSubfieldSelection,
     hostBg: false,
     hasTitle: false,
   });
@@ -40,9 +41,11 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
       d.props.resettable = local.resettable;
       d.props.indexes = local.indexes;
       d.props.selected = local.selected;
-      d.props.autoChildSelection = local.autoChildSelection;
+      d.props.autoSubfieldSelection = local.autoSubfieldSelection;
       d.debug.hostBg = local.hostBg;
     });
+
+    console.log('local.selected', local.selected);
 
     ctx.subject
       .size([250, null])
@@ -55,10 +58,11 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
           <FieldSelector
             {...e.state.props}
             style={{ margin }}
-            onClick={async (ev) => {
-              const next = ev.next as MyField[];
+            onClick={async (event) => {
+              const { next } = event.as<MyField>();
               await state.change((d) => (d.props.selected = next));
-              console.log('⚡️ onClick:', ev);
+              local.selected = next;
+              console.log('⚡️ onClick:', event);
             }}
           />
         );
@@ -103,12 +107,14 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.props.autoChildSelection);
+        const value = (state: T) => Boolean(state.props.autoSubfieldSelection);
         btn
-          .label((e) => `autoChildSelection`)
+          .label((e) => `autoSubfieldSelection`)
           .value((e) => value(e.state))
           .onClick((e) => {
-            e.change((d) => (local.autoChildSelection = Dev.toggle(d.props, 'autoChildSelection')));
+            e.change(
+              (d) => (local.autoSubfieldSelection = Dev.toggle(d.props, 'autoSubfieldSelection')),
+            );
           });
       });
     });

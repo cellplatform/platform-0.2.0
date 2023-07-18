@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+export type PropListFieldSelectorAction = 'Select' | 'Deselect' | 'Reset:Default' | 'Reset:Clear';
+
 /**
  * Component: <PropsList.FieldSelector>
  */
@@ -11,7 +13,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
 
   resettable?: boolean;
   indexes?: boolean;
-  autoChildSelection?: boolean; // Selects namespace children when parent is selected (eg. "foo" → "foo.bar")
+  autoSubfieldSelection?: boolean; // Selects namespace children when parent is selected (eg. "foo" → "foo.bar")
 
   indent?: number;
   style?: t.CssValue;
@@ -21,7 +23,7 @@ export type PropListFieldSelectorProps<F extends string = string> = {
 
 export type PropListFieldSelectorClickHandler = (e: PropListFieldSelectorClickHandlerArgs) => void;
 export type PropListFieldSelectorClickHandlerArgs<F extends string = string> = {
-  action: 'Select' | 'Deselect' | 'Reset:Default' | 'Reset:Clear';
+  action: PropListFieldSelectorAction;
   field?: F;
   previous?: F[];
   next?: F[];

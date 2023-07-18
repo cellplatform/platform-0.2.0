@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Color, COLORS, css, type t } from './common';
-import { Util } from './util.mjs';
+import { Wrangle } from './Wrangle.mjs';
 
 export type LabelProps = {
   all: string[];
@@ -14,7 +14,7 @@ export type LabelProps = {
 
 export const Label: React.FC<LabelProps> = (props) => {
   const { field, all, selected, indexes } = props;
-  const isSubField = Util.isSubField(all, field);
+  const isSubField = Wrangle.isSubfield(all, field);
   const index = selected.indexOf(field);
 
   /**
