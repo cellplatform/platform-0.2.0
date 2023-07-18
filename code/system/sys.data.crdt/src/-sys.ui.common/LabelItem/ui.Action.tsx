@@ -9,11 +9,12 @@ export type ActionProps = {
   selected?: boolean;
   focused?: boolean;
   editing?: boolean;
+  debug?: boolean;
   style?: t.CssValue;
 };
 
 export const Action: React.FC<ActionProps> = (props) => {
-  const { action, selected, focused, editing } = props;
+  const { action, selected, focused, editing, debug } = props;
   const { kind, width, onClick } = action;
 
   const enabled = Wrangle.dynamicValue(action.enabled, props, DEFAULTS.enabled);
@@ -35,6 +36,7 @@ export const Action: React.FC<ActionProps> = (props) => {
       width,
       position: 'relative',
       pointerEvents: spinning ? 'none' : 'auto',
+      backgroundColor: debug ? DEFAULTS.RUBY : undefined,
     }),
     body: css({
       width,
@@ -65,7 +67,7 @@ export const Action: React.FC<ActionProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>{elButton || elIcon}</div>
-      {spinning && <ActionSpinner action={action} />}
+      {spinning && <ActionSpinner action={action} selected={selected} focused={focused} />}
     </div>
   );
 };

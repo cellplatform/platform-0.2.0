@@ -18,6 +18,7 @@ export const View: React.FC<Props> = (props) => {
     enabled = DEFAULTS.enabled,
     focused = DEFAULTS.focused,
     editing = DEFAULTS.editing,
+    debug,
   } = props;
   const label = Wrangle.labelText(props);
   const ref = useRef<HTMLDivElement>(null);
@@ -119,6 +120,7 @@ export const View: React.FC<Props> = (props) => {
           {...props}
           inputRef={inputRef}
           onDoubleClick={clickHandler(props.onLabelDoubleClick)}
+          debug={debug}
         />
         <Right {...props} />
       </div>

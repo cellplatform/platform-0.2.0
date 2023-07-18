@@ -51,6 +51,7 @@ export type LabelItemProps = {
   focusOnReady?: boolean;
   focusOnEdit?: boolean;
   tabIndex?: number;
+  debug?: boolean;
 
   style?: t.CssValue;
   indent?: number;

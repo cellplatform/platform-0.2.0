@@ -5,6 +5,7 @@ import { Color, DEFAULTS, TextInput, css, type t } from './common';
 type Props = t.LabelItemProps & {
   inputRef: RefObject<t.TextInputRef>;
   onDoubleClick?: React.MouseEventHandler;
+  debug?: boolean;
 };
 
 export const Label: React.FC<Props> = (props) => {
@@ -16,6 +17,7 @@ export const Label: React.FC<Props> = (props) => {
     maxLength = DEFAULTS.maxLength,
     placeholder = DEFAULTS.placeholder,
     focusOnReady = DEFAULTS.focusOnReady,
+    debug,
   } = props;
   const label = Wrangle.labelText(props);
 
@@ -35,6 +37,7 @@ export const Label: React.FC<Props> = (props) => {
       cursor: 'default',
       boxSizing: 'border-box',
       display: 'grid',
+      backgroundColor: debug ? DEFAULTS.RUBY : undefined,
     }),
     label: css({
       color,

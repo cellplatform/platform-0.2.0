@@ -11,12 +11,13 @@ export type ActionsProps = {
   selected?: boolean;
   focused?: boolean;
   editing?: boolean;
+  debug?: boolean;
 
   style?: t.CssValue;
 };
 
 export const Actions: React.FC<ActionsProps> = (props) => {
-  const { selected, focused, editing, label, enabled = DEFAULTS.enabled } = props;
+  const { selected, focused, editing, label, debug, enabled = DEFAULTS.enabled } = props;
   const actions = Wrangle.actions(props);
 
   /**
@@ -41,6 +42,7 @@ export const Actions: React.FC<ActionsProps> = (props) => {
         selected={selected}
         focused={focused}
         editing={editing}
+        debug={debug}
       />
     );
   });
