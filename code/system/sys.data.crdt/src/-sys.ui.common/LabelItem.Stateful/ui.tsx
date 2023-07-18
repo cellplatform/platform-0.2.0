@@ -14,16 +14,16 @@ export type ViewProps = {
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   const { onChange, item, useBehaviors = DEFAULTS.useBehaviors.default } = props;
 
+  const selectionController = useSelectionController({
+    enabled: useBehaviors.includes('Selection'),
+    item,
+  });
+
   const editController = useEditController({
     enabled: useBehaviors.includes('Edit'),
     item,
     onChange,
-  });
-
-  const selectionController = useSelectionController({
-    enabled: useBehaviors.includes('Selection'),
-    handlers: editController.handlers,
-    item,
+    handlers: selectionController.handlers,
   });
 
   /**

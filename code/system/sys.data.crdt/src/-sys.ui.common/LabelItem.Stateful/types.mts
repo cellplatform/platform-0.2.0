@@ -3,8 +3,10 @@ import { type t } from './common';
 type Id = string;
 export type LabelItemBehaviorKind = 'Edit' | 'Selection';
 
+export type LabelItemList = {};
+
 /**
- * Data.
+ * Item Data
  */
 export type LabelItemData = {
   label?: string;

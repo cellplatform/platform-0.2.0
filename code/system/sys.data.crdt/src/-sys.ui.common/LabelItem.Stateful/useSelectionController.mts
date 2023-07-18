@@ -13,6 +13,9 @@ type Args = {
 export function useSelectionController(args: Args) {
   const { enabled = true, item } = args;
 
+  const [_, setCount] = useState(0);
+  const increment = () => setCount((prev) => prev + 1);
+
   // console.log('useSelectionController >> enabled:', enabled); // TEMP 🐷
 
   /**
