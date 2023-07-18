@@ -1,10 +1,8 @@
 import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
 
-import { BuilderSample, SampleFields, sampleItems } from '.';
+import { BuilderSample, SampleFields, sampleItems, type MyFields } from '.';
 import { PropList } from '..';
 import { Wrangle } from '../util.mjs';
-
-import type { MyFields } from '.';
 
 type SampleKind = 'Samples' | 'Builder' | 'Empty';
 type T = {
@@ -12,7 +10,6 @@ type T = {
   debug: {
     source: SampleKind;
     fields?: MyFields[];
-    fieldSelector: { title: boolean; resettable: boolean; indexes: boolean };
     header: boolean;
     footer: boolean;
   };
@@ -26,11 +23,6 @@ const initial: T = {
   },
   debug: {
     source: 'Samples',
-    fieldSelector: {
-      title: true,
-      resettable: PropList.FieldSelector.DEFAULTS.resettable,
-      indexes: PropList.FieldSelector.DEFAULTS.indexes,
-    },
     header: true,
     footer: true,
   },
@@ -58,6 +50,7 @@ export default Dev.describe('PropList', (e) => {
       d.debug.footer = local.footer;
     });
 
+    ctx.debug.width(330);
     ctx.subject
       .display('grid')
       .size([250, null])
@@ -238,29 +231,15 @@ export default Dev.describe('PropList', (e) => {
       button('Builder');
     });
 
-    dev.hr(5, 20);
+    dev.hr(-1, 10);
 
     dev.section((dev) => {
-      const bool = (key: keyof T['debug']['fieldSelector']) =>
-        dev.boolean((btn) => {
-          btn
-            .label(`FieldSelector.${key}`)
-            .value((e) => e.state.debug.fieldSelector[key])
-            .onClick((e) => e.change((d) => (d.debug.fieldSelector[key] = !e.current)));
-        });
-      bool('title');
-      bool('indexes');
-      bool('resettable');
-
       dev.row((e) => {
         const debug = e.state.debug;
-        const fieldSelector = debug.fieldSelector;
         const props: t.PropListFieldSelectorProps<MyFields> = {
+          title: 'Field Selector',
           all: SampleFields.all,
           selected: debug.fields,
-          title: fieldSelector.title ? 'Field Selector' : undefined,
-          resettable: fieldSelector.resettable,
-          indexes: fieldSelector.indexes,
           async onClick(ev) {
             await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
             Util.setSample(dev.ctx, 'Builder');
@@ -268,7 +247,7 @@ export default Dev.describe('PropList', (e) => {
           },
         };
 
-        return <PropList.FieldSelector {...props} style={{ Margin: [25, 25, 25, 38] }} />;
+        return <PropList.FieldSelector {...props} style={{ Margin: [20, 25, 20, 38] }} />;
       });
     });
   });
