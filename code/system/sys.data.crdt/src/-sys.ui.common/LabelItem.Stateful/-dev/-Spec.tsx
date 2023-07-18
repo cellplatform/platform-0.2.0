@@ -22,7 +22,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
     total: 3,
-    useBehaviors: DEFAULTS.useBehaviors.default,
+    useBehaviors: DEFAULTS.useBehaviors.defaults,
   });
 
   const State = {

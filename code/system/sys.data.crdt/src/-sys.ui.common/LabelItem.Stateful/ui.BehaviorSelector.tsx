@@ -2,8 +2,8 @@ import { DEFAULTS, PropList, type t } from './common';
 
 export type BehaviorSelectorHandler = (e: BehaviorSelectorHandlerArgs) => void;
 export type BehaviorSelectorHandlerArgs = {
-  previous: t.LabelItemBehaviorKind[];
-  next: t.LabelItemBehaviorKind[];
+  previous?: t.LabelItemBehaviorKind[];
+  next?: t.LabelItemBehaviorKind[];
 };
 
 export type BehaviorSelectorProps = {
@@ -21,17 +21,15 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
       style={props.style}
       title={title}
       all={DEFAULTS.useBehaviors.all}
+      defaults={DEFAULTS.useBehaviors.defaults}
       selected={props.selected}
       indexes={true}
       resettable={true}
       indent={20}
       onClick={(e) => {
-        type K = t.LabelItemBehaviorKind;
-        const previous = (e.previous ?? []) as K[];
-        let next = (e.next ?? []) as K[];
-        if (e.action === 'Reset') next = DEFAULTS.useBehaviors.default;
-        props.onClick?.(e);
+        const { previous, next } = e.as<t.LabelItemBehaviorKind>();
         props.onChange?.({ previous, next });
+        props.onClick?.(e);
       }}
     />
   );
