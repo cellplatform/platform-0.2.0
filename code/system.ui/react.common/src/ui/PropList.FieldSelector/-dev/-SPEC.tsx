@@ -45,8 +45,6 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
       d.debug.hostBg = local.hostBg;
     });
 
-    console.log('local.selected', local.selected);
-
     ctx.subject
       .size([250, null])
       .display('grid')
