@@ -5,7 +5,11 @@ export { Button } from '../Button';
  * Constants
  */
 export const DEFAULTS = {
-  resettable: true,
   indexes: true,
   indent: 0,
+  resettable: true,
+  label: {
+    reset: 'reset',
+    clear: 'clear',
+  },
 } as const;

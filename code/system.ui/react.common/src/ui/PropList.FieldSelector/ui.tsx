@@ -1,4 +1,5 @@
-import { Button, DEFAULTS, css, type t } from './common';
+import { useEffect, useState } from 'react';
+import { Button, DEFAULTS, KeyboardMonitor, css, rx, useMouseState, type t } from './common';
 
 import { PropList } from '../PropList/ui/PropList';
 import { FieldSelectorLabel } from './ui.Label';
@@ -12,6 +13,23 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   } = props;
   const all = [...(props.all ?? [])];
   const isSelected = (field: string) => selected.includes(field);
+
+  const mouse = useMouseState();
+  const [_, setCount] = useState(0);
+  const increment = () => setCount((prev) => prev + 1);
+
+  /**
+   * Ensure redraw when keyboard changes.∏
+   * Used for "resetable" display option.
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    KeyboardMonitor.$.pipe(
+      rx.takeUntil(dispose$),
+      rx.filter(() => resettable),
+    ).subscribe(() => increment());
+    return dispose;
+  }, []);
 
   /**
    * [Handlers]
@@ -62,16 +80,21 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   });
 
   if (resettable) {
-    const el = <Button onClick={handleReset}>{'reset'}</Button>;
+    const keyboard = KeyboardMonitor.state.current;
+    const metaKey = keyboard.modifiers.meta;
+    const label = mouse.isOver && metaKey ? DEFAULTS.label.clear : DEFAULTS.label.reset;
+    const el = <Button onClick={handleReset}>{label}</Button>;
     items.push({ label: ``, value: { data: el } });
   }
 
   return (
-    <PropList
-      title={props.title}
-      items={items}
-      defaults={{ clipboard: false }}
-      style={css(styles.base, props.style)}
-    />
+    <div {...css(styles.base, props.style)} {...mouse.handlers}>
+      <PropList
+        //
+        title={props.title}
+        items={items}
+        defaults={{ clipboard: false }}
+      />
+    </div>
   );
 };
