@@ -5,7 +5,7 @@ type Options = { maxErrors?: number };
 export const Filter = {
   /**
    * Filter an object of spec imports.
-   * Spaces within the filter string are treated as "AND" operators.
+   * Spaces within the filter |→ start a new filter on the prior block (recursively 🌳).
    *
    *    {
    *      'foo.bar': import('path'),
@@ -23,7 +23,7 @@ export const Filter = {
 
   /**
    * Filter a list of namespace strings.
-   * Spaces within the filter string are treated as "AND" operators.
+   * Spaces within the filter |→ start a new filter on the prior block (recursively 🌳).
    */
   namespaces(all: string[], filter?: string, options: Options = {}): string[] {
     const { maxErrors = 1 } = options;
