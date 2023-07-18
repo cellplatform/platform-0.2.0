@@ -1,10 +1,9 @@
-import { Button, DEFAULTS, FC, css, type t } from './common';
+import { Button, DEFAULTS, css, type t } from './common';
 
-import { FieldBuilder } from '../PropList/FieldBuilder.mjs';
 import { PropList } from '../PropList/ui/PropList';
-import { FieldSelectorLabel } from './FieldSelector.Label';
+import { FieldSelectorLabel } from './ui.Label';
 
-const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
+export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
     selected = [],
     resettable = DEFAULTS.resettable,
@@ -74,16 +73,3 @@ const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     />
   );
 };
-
-/**
- * Export
- */
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-  FieldBuilder: typeof FieldBuilder;
-};
-export const FieldSelector = FC.decorate<t.PropListFieldSelectorProps, Fields>(
-  View,
-  { DEFAULTS, FieldBuilder },
-  { displayName: 'PropList.FieldSelector' },
-);
