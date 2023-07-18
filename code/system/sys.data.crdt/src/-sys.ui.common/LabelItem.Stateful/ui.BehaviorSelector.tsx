@@ -15,7 +15,7 @@ export type BehaviorSelectorProps = {
 };
 
 export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
-  const { title = 'Behaviors' } = props;
+  const { title = 'Behavior Controllers' } = props;
   return (
     <PropList.FieldSelector
       style={props.style}
