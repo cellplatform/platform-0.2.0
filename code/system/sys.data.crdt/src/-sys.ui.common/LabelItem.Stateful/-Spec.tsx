@@ -97,6 +97,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const data = {
         props: e.state.props,
+        'data:instance': item.instance,
         data: e.state.data,
       };
       return (
