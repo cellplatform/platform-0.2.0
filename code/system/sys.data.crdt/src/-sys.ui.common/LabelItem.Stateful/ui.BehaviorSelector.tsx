@@ -22,7 +22,7 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
       title={title}
       all={DEFAULTS.useBehaviors.all}
       selected={props.selected}
-      showIndexes={true}
+      indexes={true}
       resettable={true}
       indent={20}
       onClick={(e) => {

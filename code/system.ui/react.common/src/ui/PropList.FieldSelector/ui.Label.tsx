@@ -2,18 +2,18 @@ import { Fragment } from 'react';
 import { Color, COLORS, css, type t } from './common';
 import { Util } from './Util.mjs';
 
-export type FieldSelectorLabelProps = {
+export type LabelProps = {
   all: string[];
   selected: string[];
   field: string;
-  showIndexes: boolean;
+  indexes: boolean;
   indent: number;
   style?: t.CssValue;
   onClick?: () => void;
 };
 
-export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => {
-  const { field, all, selected, showIndexes } = props;
+export const Label: React.FC<LabelProps> = (props) => {
+  const { field, all, selected, indexes } = props;
   const isSubField = Util.isSubField(all, field);
   const index = selected.indexOf(field);
 
@@ -51,7 +51,7 @@ export const FieldSelectorLabel: React.FC<FieldSelectorLabelProps> = (props) => 
     );
   });
 
-  const elIndex = showIndexes && index > -1 && <span {...styles.index}>{index}</span>;
+  const elIndex = indexes && index > -1 && <span {...styles.index}>{index}</span>;
 
   return (
     <div {...css(styles.base, props.style)} onMouseDown={props.onClick}>

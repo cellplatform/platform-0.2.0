@@ -7,7 +7,7 @@ export type ChainSelectorProps = {
   title?: string;
   selected?: t.ChainName[];
   resettable?: boolean;
-  showIndexes?: boolean;
+  indexes?: boolean;
   indent?: number;
   style?: t.CssValue;
   onChange?: t.ChainSelectionChangeHandler;

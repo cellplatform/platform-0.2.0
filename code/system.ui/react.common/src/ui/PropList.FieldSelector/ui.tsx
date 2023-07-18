@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { Button, DEFAULTS, KeyboardMonitor, css, rx, useMouseState, type t } from './common';
 
 import { PropList } from '../PropList/ui/PropList';
-import { FieldSelectorLabel } from './ui.Label';
+import { Label } from './ui.Label';
 
 export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const {
     selected = [],
     resettable = DEFAULTS.resettable,
-    indexes: showIndexes = DEFAULTS.indexes,
+    indexes = DEFAULTS.indexes,
     indent = DEFAULTS.indent,
   } = props;
   const all = [...(props.all ?? [])];
@@ -19,7 +19,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const increment = () => setCount((prev) => prev + 1);
 
   /**
-   * Ensure redraw when keyboard changes.∏
+   * Ensure redraw when keyboard changes.
    * Used for "resetable" display option.
    */
   useEffect(() => {
@@ -61,11 +61,11 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const items: t.PropListItem[] = all.map((field) => {
     const onClick = () => handleClick(field);
     const label = (
-      <FieldSelectorLabel
+      <Label
         field={field}
         all={all}
         selected={selected}
-        showIndexes={showIndexes}
+        indexes={indexes}
         indent={indent}
         onClick={onClick}
       />
