@@ -16,7 +16,15 @@ export default Dev.describe('Namespace.Item', (e) => {
   type LocalStore = T['debug'] &
     Pick<
       t.LabelItemProps,
-      'label' | 'enabled' | 'selected' | 'indent' | 'padding' | 'editing' | 'focused'
+      | 'label'
+      | 'placeholder'
+      | 'enabled'
+      | 'selected'
+      | 'indent'
+      | 'padding'
+      | 'editing'
+      | 'focused'
+      | 'debug'
     >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.comon.Item.LabelItem');
   const local = localstore.object({
@@ -27,6 +35,7 @@ export default Dev.describe('Namespace.Item', (e) => {
     padding: DEFAULTS.padding,
     editing: DEFAULTS.editing,
     focused: DEFAULTS.focused,
+    debug: DEFAULTS.debug,
     subjectBg: true,
   });
 
@@ -78,6 +87,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       d.props.editing = local.editing;
       d.props.focused = local.focused;
       d.props.right = Sample.actions().right;
+      d.props.debug = local.debug;
       d.debug.subjectBg = local.subjectBg;
     });
 
@@ -120,6 +130,21 @@ export default Dev.describe('Namespace.Item', (e) => {
           .onChange((e) => change(e.to.value))
           .onEnter((e) => {
             const text = (e.state.current.props.label ?? '').trim().toLowerCase();
+            if (text === 'lorem') change(Dev.Lorem.toString());
+          });
+      });
+
+      dev.textbox((txt) => {
+        const change = (to: string) => {
+          state.change((d) => (local.placeholder = d.props.placeholder = to));
+        };
+        txt
+          .placeholder('placeholder')
+          .value((e) => e.state.props.placeholder)
+          .margin([0, 0, 10, 0])
+          .onChange((e) => change(e.to.value))
+          .onEnter((e) => {
+            const text = (e.state.current.props.placeholder ?? '').trim().toLowerCase();
             if (text === 'lorem') change(Dev.Lorem.toString());
           });
       });
@@ -199,6 +224,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         local.editing = data.props.editing;
         local.padding = data.props.padding;
         local.indent = data.props.indent;
+        local.debug = data.props.debug;
         local.subjectBg = data.debug.subjectBg;
       };
 
@@ -278,18 +304,30 @@ export default Dev.describe('Namespace.Item', (e) => {
         await e.change((d) => (d.props.right = sample.right));
       });
 
-      dev.button('actions: spinning', async (e) => {
-        const sample = Sample.actions({ spinning: true });
-        await e.change((d) => {
-          d.props.left = sample.left;
-          d.props.right = sample.right;
-        });
-      });
+      dev.button((btn) =>
+        btn
+          .label('actions: spinning')
+          .right('←')
+          .onClick(async (e) => {
+            const sample = Sample.actions({ spinning: true });
+            await e.change((d) => {
+              d.props.left = sample.left;
+              d.props.right = sample.right;
+            });
+          }),
+      );
 
       dev.hr(-1, 5);
 
-      dev.button(['clear', '"text"'], async (e) => {
-        await e.change((d) => (d.props.label = undefined));
+      dev.button(['reset', '🌳'], async (e) => {
+        await e.change((d) => {
+          d.props.label = undefined;
+          d.props.left = undefined;
+          d.props.right = undefined;
+          d.props.enabled = true;
+          d.props.focused = false;
+          d.props.selected = false;
+        });
         updateLocalStorage();
         focus();
       });
@@ -304,6 +342,14 @@ export default Dev.describe('Namespace.Item', (e) => {
           .label((e) => `background`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.subjectBg = Dev.toggle(d.debug, 'subjectBg'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.debug);
+        btn
+          .label((e) => `debug`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug'))));
       });
     });
 

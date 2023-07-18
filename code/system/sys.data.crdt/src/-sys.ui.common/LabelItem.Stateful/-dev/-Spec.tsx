@@ -7,7 +7,7 @@ import { Sample } from './-Sample';
 const DEFAULTS = LabelItemStateful.DEFAULTS;
 
 type T = {
-  data?: t.LabelItemData;
+  data?: t.LabelItem;
   debug: {
     total?: number;
     useBehaviors?: t.LabelItemBehaviorKind[];
@@ -21,17 +21,22 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    total: 1,
+    total: 3,
     useBehaviors: DEFAULTS.useBehaviors.default,
   });
 
-  let items: t.LabelItemState[] = [];
+  const State = {
+    ctx: undefined as t.LabelItemListCtxState | undefined,
+    items: [] as t.LabelItemState[],
+  };
+
   const Init = {
     items(state: T) {
       const length = state.debug.total ?? 0;
-      items = Array.from({ length }).map(() => {
+      State.ctx = length > 1 ? Item.State.ctx() : undefined;
+      State.items = Array.from({ length }).map(() => {
         const initial = Sample.data();
-        return Item.State.init(initial);
+        return Item.State.item(initial);
       });
     },
   };
@@ -58,7 +63,8 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
           return (
             <LabelItemStateful
               key={`item.${i}`}
-              item={items[i]}
+              ctx={State.ctx}
+              item={State.items[i]}
               useBehaviors={debug.useBehaviors}
               onChange={(e) => {
                 console.info(`⚡️ onChange[${i}]`, e);
@@ -116,17 +122,22 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
     const state = await dev.state();
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = items.reduce((acc, next, i) => {
+      const items = State.items.reduce((acc, next, i) => {
         const key = `${i}.${next.instance}`;
         acc[key] = next;
         return acc;
       }, {} as Record<string, t.LabelItemState>);
 
+      const data = {
+        ctx: State.ctx?.current,
+        items,
+      };
+
       return (
         <Dev.Object
           name={'LabelItem.Stateful'}
           data={data}
-          expand={{ level: 1, paths: ['$', '$.data'] }}
+          expand={{ level: 1, paths: ['$', '$.items'] }}
         />
       );
     });
