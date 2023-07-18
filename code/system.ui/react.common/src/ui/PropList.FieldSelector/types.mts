@@ -21,4 +21,5 @@ export type PropListFieldSelectorClickHandlerArgs<F extends string = string> = {
   field?: F;
   previous?: F[];
   next?: F[];
+  as<T extends string>(): PropListFieldSelectorClickHandlerArgs<T>;
 };

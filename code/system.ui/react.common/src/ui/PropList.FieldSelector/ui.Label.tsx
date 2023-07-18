@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Color, COLORS, css, type t } from './common';
-import { Util } from './Util.mjs';
+import { Util } from './util.mjs';
 
 export type LabelProps = {
   all: string[];

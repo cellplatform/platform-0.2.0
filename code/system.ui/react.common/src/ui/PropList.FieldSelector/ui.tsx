@@ -38,17 +38,19 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     const previous = [...selected];
     const action = selected.includes(field) ? 'Deselect' : 'Select';
     const next = action === 'Select' ? [...selected, field] : selected.filter((f) => f !== field);
-    props.onClick?.({ field, action, previous, next });
+    props.onClick?.(Wrangle.clickArgs({ field, action, previous, next }));
   };
 
   const handleReset = (e: React.MouseEvent) => {
     const action = e.metaKey ? 'Reset:Clear' : 'Reset:Default';
     const next = e.metaKey ? [] : props.defaults; // NB: force empty if meta-key, otherwise use defaults.
-    props.onClick?.({
-      action,
-      previous: [...selected],
-      next,
-    });
+    props.onClick?.(
+      Wrangle.clickArgs({
+        action,
+        previous: [...selected],
+        next,
+      }),
+    );
   };
 
   /**
@@ -97,4 +99,21 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
       />
     </div>
   );
+};
+
+/**
+ * Helpers
+ */
+type ClickArgs<F extends string = string> = t.PropListFieldSelectorClickHandlerArgs<F>;
+
+const Wrangle = {
+  clickArgs(input: Omit<ClickArgs, 'as'>): ClickArgs {
+    const payload: ClickArgs = {
+      ...input,
+      as<T extends string>() {
+        return payload as ClickArgs<T>;
+      },
+    };
+    return payload;
+  },
 };
