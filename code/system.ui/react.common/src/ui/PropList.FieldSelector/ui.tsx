@@ -24,10 +24,12 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   };
 
   const handleReset = (e: React.MouseEvent) => {
+    const action = e.metaKey ? 'Reset:Clear' : 'Reset:Default';
+    const next = e.metaKey ? [] : props.defaults; // NB: force empty if meta-key, otherwise use defaults.
     props.onClick?.({
-      action: 'Reset',
+      action,
       previous: [...selected],
-      next: e.metaKey ? [] : props.default, // NB: force empty if meta-key, otherwise use defaults.
+      next,
     });
   };
 

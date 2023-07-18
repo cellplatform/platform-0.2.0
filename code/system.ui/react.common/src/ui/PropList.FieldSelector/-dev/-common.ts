@@ -1,2 +1,2 @@
 export * from '../common';
-export { SampleFields, type MyFields } from '../../PropList/-dev/-common';
+export { SampleFields, type MyField } from '../../PropList/-dev/-common';

@@ -1,6 +1,6 @@
 import { COLORS, Color, Dev, Keyboard, css, type t } from '../../../test.ui';
 
-import { BuilderSample, SampleFields, sampleItems, type MyFields } from '.';
+import { BuilderSample, SampleFields, sampleItems, type MyField } from '.';
 import { PropList } from '..';
 import { Wrangle } from '../util.mjs';
 
@@ -9,7 +9,7 @@ type T = {
   props: t.PropListProps;
   debug: {
     source: SampleKind;
-    fields?: MyFields[];
+    fields?: MyField[];
     header: boolean;
     footer: boolean;
   };
@@ -236,12 +236,12 @@ export default Dev.describe('PropList', (e) => {
     dev.section((dev) => {
       dev.row((e) => {
         const debug = e.state.debug;
-        const props: t.PropListFieldSelectorProps<MyFields> = {
+        const props: t.PropListFieldSelectorProps<MyField> = {
           title: 'Field Selector',
           all: SampleFields.all,
           selected: debug.fields,
           async onClick(ev) {
-            await dev.change((d) => (d.debug.fields = ev.next as MyFields[]));
+            await dev.change((d) => (d.debug.fields = ev.next as MyField[]));
             Util.setSample(dev.ctx, 'Builder');
           },
         };

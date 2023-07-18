@@ -1,6 +1,6 @@
 import { Dev, type t } from '../../../test.ui';
 import { FieldSelector } from '..';
-import { SampleFields, type MyFields } from './-common';
+import { SampleFields, type MyField } from './-common';
 
 const DEFAULTS = FieldSelector.DEFAULTS;
 
@@ -9,7 +9,10 @@ type T = {
   debug: { hostBg?: boolean };
 };
 const initial: T = {
-  props: { all: SampleFields.all },
+  props: {
+    all: SampleFields.all,
+    defaults: SampleFields.defaults,
+  },
   debug: {},
 };
 
@@ -48,7 +51,7 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
             {...e.state.props}
             style={{ margin }}
             onClick={async (ev) => {
-              const next = ev.next as MyFields[];
+              const next = ev.next as MyField[];
               await state.change((d) => (d.props.selected = next));
               console.log('⚡️ onClick:', ev);
             }}

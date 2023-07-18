@@ -2,7 +2,7 @@ export * from '../common';
 export { Icons } from '../../Icons.mjs';
 export { PropList } from '..';
 
-export type MyFields =
+export type MyField =
   | 'Module'
   | 'Module.Name'
   | 'Module.Version'
@@ -13,7 +13,7 @@ export type MyFields =
   | 'Factory.EmptyArray';
 
 export const SampleFields = {
-  all: <MyFields[]>[
+  all: <MyField[]>[
     'Module',
     'Module.Name',
     'Module.Version',
@@ -23,5 +23,5 @@ export const SampleFields = {
     'Factory.Many',
     'Factory.EmptyArray',
   ],
-  default: <MyFields[]>['Module.Name', 'Module.Version'],
+  defaults: <MyField[]>['Module.Name', 'Module.Version'],
 };
