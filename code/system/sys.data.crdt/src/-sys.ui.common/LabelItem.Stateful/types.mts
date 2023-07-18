@@ -1,9 +1,15 @@
 import { type t } from './common';
 
 type InstanceId = string;
-export type LabelItemBehaviorKind = 'Edit' | 'Selection';
+export type LabelItemBehaviorKind = 'Item' | 'Item.Edit' | 'Item.Selection';
 
-export type LabelItemList = {};
+/**
+ * Context for when an item exists
+ * within the context of a list.
+ */
+export type LabelItemListCtx = {
+  selected?: InstanceId;
+};
 
 /**
  * Item (Data Model)
@@ -23,6 +29,8 @@ export type LabelItem = {
 export type LabelItemState = t.Immutable<t.LabelItem> & { readonly instance: InstanceId };
 export type LabelItemStateChanger = (draft: t.LabelItem) => void;
 
+export type LabelItemListCtxState = t.Immutable<LabelItemListCtx>;
+export type LabelItemListCtxStateChanger = (draft: t.LabelItemListCtx) => void;
 
 /**
  * Controller API
@@ -37,7 +45,8 @@ export type LabelActionController = {
  * Component (View).
  */
 export type LabelItemStatefulProps = {
-  item?: LabelItemState; // NB: If not specified default is generated.
+  ctx?: LabelItemListCtxState;
+  item?: LabelItemState;
   useBehaviors?: t.LabelItemBehaviorKind[];
   style?: t.CssValue;
   onChange?: LabelItemStateChangeHandler;

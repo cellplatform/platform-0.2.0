@@ -3,6 +3,7 @@ import { DEFAULTS, Keyboard, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
+  ctx?: t.LabelItemListCtxState;
   item?: t.LabelItemState;
   handlers?: t.LabelItemPropsHandlers;
   onChange?: t.LabelItemStateChangeHandler;
@@ -12,7 +13,7 @@ type Args = {
  * HOOK: edit behavior controller.
  */
 export function useEditController(args: Args): t.LabelActionController {
-  const { enabled = true, item } = args;
+  const { ctx, item, enabled = true } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
   const [_, setCount] = useState(0);
@@ -23,16 +24,11 @@ export function useEditController(args: Args): t.LabelActionController {
    */
   type A = t.LabelItemChangeAction;
   const change = (action: A, fn: t.LabelItemStateChanger) => {
-    if (!enabled) return;
-    if (item) {
+    if (item && enabled) {
       item.change(fn);
-      fireChange(action);
+      args.onChange?.({ action, data: api.data });
+      increment();
     }
-  };
-  const fireChange = (action: A) => {
-    const data = api.data;
-    args.onChange?.({ action, data });
-    increment();
   };
 
   const EditMode = {
@@ -92,9 +88,6 @@ export function useEditController(args: Args): t.LabelActionController {
     },
 
     onFocusChange(e) {
-      if (EditMode.isEditing) return; // NB: Hack to reduce irrelevant focus/blur events.
-      const action = e.focused ? 'view:focus' : 'view:blur';
-      change(action, (d) => (d.focused = e.focused));
       args.handlers?.onFocusChange?.(e);
     },
   };
@@ -110,10 +103,17 @@ export function useEditController(args: Args): t.LabelActionController {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
     const keyboard = Keyboard.until(dispose$);
+    const isFocused = () => item?.current.focused ?? false;
 
     keyboard.on({
-      Enter: (e) => EditMode.toggle(),
-      Escape: (e) => EditMode.cancel(),
+      Escape(e) {
+        if (!isFocused()) return;
+        EditMode.cancel();
+      },
+      Enter(e) {
+        if (!isFocused()) return;
+        EditMode.toggle();
+      },
     });
 
     if (!enabled) dispose();

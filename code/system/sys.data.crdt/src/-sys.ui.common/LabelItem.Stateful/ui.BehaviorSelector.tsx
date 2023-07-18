@@ -23,7 +23,7 @@ export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
       all={DEFAULTS.useBehaviors.all}
       defaults={DEFAULTS.useBehaviors.defaults}
       selected={props.selected}
-      indexes={true}
+      indexes={false}
       resettable={true}
       indent={20}
       onClick={(e) => {

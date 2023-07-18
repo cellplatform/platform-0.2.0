@@ -1,7 +1,7 @@
 import { type t } from '../common';
 export * from '../common';
 
-const useBehaviorAll: t.LabelItemBehaviorKind[] = ['Edit', 'Selection'];
+const useBehaviorAll: t.LabelItemBehaviorKind[] = ['Item', 'Item.Edit', 'Item.Selection'];
 const useBehaviorDefaults = useBehaviorAll;
 
 export const DEFAULTS = {

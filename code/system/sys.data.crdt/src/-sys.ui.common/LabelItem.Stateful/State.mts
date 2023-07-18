@@ -1,7 +1,8 @@
 import { DEFAULTS, PatchState, type t } from './common';
+import { BehaviorSelector } from './ui.BehaviorSelector';
+import { useController } from './useController.mjs';
 import { useEditController } from './useEditController.mjs';
 import { useSelectionController } from './useSelectionController.mjs';
-import { BehaviorSelector } from './ui.BehaviorSelector';
 
 type Options = {
   initial?: t.LabelItem;
@@ -14,6 +15,7 @@ type Options = {
 export const State = {
   DEFAULTS,
   BehaviorSelector,
+  useController,
   useEditController,
   useSelectionController,
 

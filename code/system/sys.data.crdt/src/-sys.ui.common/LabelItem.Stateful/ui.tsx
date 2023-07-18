@@ -1,44 +1,39 @@
 import { DEFAULTS, type t } from './common';
 
 import { LabelItem } from '../LabelItem/Root';
-import { useEditController } from './useEditController.mjs';
-import { useSelectionController } from './useSelectionController.mjs';
-
-export type ViewProps = {
-  style?: t.CssValue;
-};
+import { useController } from './useController.mjs';
 
 /**
  * Sample of using the behavior controller hooks.
  */
 export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
-  const { onChange, item, useBehaviors = DEFAULTS.useBehaviors.default } = props;
+  const { ctx, item, onChange, useBehaviors = DEFAULTS.useBehaviors.defaults } = props;
 
-  const selectionController = useSelectionController({
-    enabled: useBehaviors.includes('Selection'),
-    item,
-  });
-
-  const editController = useEditController({
-    enabled: useBehaviors.includes('Edit'),
+  /**
+   * Roll-up controller.
+   */
+  const controller = useController({
+    useBehaviors,
+    ctx,
     item,
     onChange,
-    handlers: selectionController.handlers,
   });
+
+  const { data, handlers } = controller;
 
   /**
    * Render
    */
   return (
     <LabelItem
-      {...editController.handlers}
+      {...handlers}
       style={props.style}
-      label={editController.data.label}
-      left={editController.data.left}
-      right={editController.data.right}
-      enabled={editController.data.enabled ?? DEFAULTS.enabled}
-      editing={editController.data.editing ?? DEFAULTS.editing}
-      focused={editController.data.focused}
+      label={data.label}
+      left={data.left}
+      right={data.right}
+      enabled={data.enabled}
+      editing={data.editing}
+      focused={data.focused}
       focusOnEdit={true}
     />
   );
