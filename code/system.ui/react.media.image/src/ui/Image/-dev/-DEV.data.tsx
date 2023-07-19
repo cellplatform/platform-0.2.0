@@ -37,7 +37,7 @@ function renderFileCard(path: string, file: t.CrdtDocFile<Doc>) {
     <CrdtViews.Info
       card={true}
       title={['', 'CRDT']}
-      margin={[30, 25, 30, 30]}
+      margin={[15, 25, 25, 30]}
       fields={[
         'Module',
         'Module.Verify',

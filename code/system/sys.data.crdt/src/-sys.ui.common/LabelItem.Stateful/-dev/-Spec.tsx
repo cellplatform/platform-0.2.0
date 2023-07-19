@@ -21,7 +21,7 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   type LocalStore = Pick<T['debug'], 'total' | 'useBehaviors'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.LabelItem.Stateful');
   const local = localstore.object({
-    total: 3,
+    total: 1,
     useBehaviors: DEFAULTS.useBehaviors.defaults,
   });
 

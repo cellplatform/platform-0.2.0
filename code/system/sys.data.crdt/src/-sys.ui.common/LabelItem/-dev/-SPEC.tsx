@@ -240,16 +240,6 @@ export default Dev.describe('Namespace.Item', (e) => {
         updateLocalStorage();
       });
 
-      dev.button('editing, focused', async (e) => {
-        await e.change((d) => {
-          d.props.selected = false;
-          d.props.editing = true;
-          d.props.focused = true;
-        });
-        updateLocalStorage();
-        focus();
-      });
-
       dev.hr(-1, 5);
 
       dev.button('selected', async (e) => {
@@ -258,6 +248,27 @@ export default Dev.describe('Namespace.Item', (e) => {
           d.props.editing = false;
         });
         updateLocalStorage();
+      });
+
+      dev.button('selected, focused', async (e) => {
+        await e.change((d) => {
+          d.props.selected = true;
+          d.props.editing = false;
+          d.props.focused = true;
+        });
+        updateLocalStorage();
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button('editing, focused', async (e) => {
+        await e.change((d) => {
+          d.props.selected = false;
+          d.props.editing = true;
+          d.props.focused = true;
+        });
+        updateLocalStorage();
+        focus();
       });
 
       dev.button('editing → selected', async (e) => {
@@ -307,7 +318,7 @@ export default Dev.describe('Namespace.Item', (e) => {
       dev.button((btn) =>
         btn
           .label('actions: spinning')
-          .right('←')
+          // .right('←')
           .onClick(async (e) => {
             const sample = Sample.actions({ spinning: true });
             await e.change((d) => {
@@ -327,6 +338,7 @@ export default Dev.describe('Namespace.Item', (e) => {
           d.props.enabled = true;
           d.props.focused = false;
           d.props.selected = false;
+          d.props.editing = false;
         });
         updateLocalStorage();
         focus();
@@ -355,7 +367,7 @@ export default Dev.describe('Namespace.Item', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['Methods', 'ref={ ƒ }'], (dev) => {
+    dev.section(['Methods', 'inputRef = { ƒ }'], (dev) => {
       type F = (ref: t.LabelItemRef) => void;
       const focusThen = (msecs: number, ref: t.LabelItemRef, fn: F) => {
         ref.focus();
