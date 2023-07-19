@@ -1,7 +1,7 @@
 import { DEFAULTS, type t } from './common';
 
 import { LabelItem } from '../LabelItem/Root';
-import { useController } from './useController.mjs';
+import { useController } from './use.mjs';
 
 /**
  * Sample of using the behavior controller hooks.

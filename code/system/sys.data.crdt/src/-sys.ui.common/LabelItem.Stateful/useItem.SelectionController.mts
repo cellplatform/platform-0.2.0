@@ -10,7 +10,7 @@ type Args = {
 };
 
 /**
- * HOOK: selection behavior controller.
+ * HOOK: selection behavior controller for a single <Item>.
  */
 export function useItemSelectionController(args: Args) {
   const { ctx, item, onChange, enabled = true } = args;
@@ -48,13 +48,13 @@ export function useItemSelectionController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelItemActionController = {
+  const api: t.LabelItemController<'controller:Item.Edit'> = {
+    kind: 'controller:Item.Edit',
     enabled,
     handlers,
     get data() {
       return item?.current ?? DEFAULTS.data;
     },
   };
-
   return api;
 }

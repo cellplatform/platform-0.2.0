@@ -1,7 +1,12 @@
 import { type t } from './common';
 
 type InstanceId = string;
-export type LabelItemBehaviorKind = 'Item' | 'Item.Edit' | 'Item.Selection';
+export type LabelItemBehaviorKind =
+  | 'Item'
+  | 'Item.Edit'
+  | 'Item.Selection'
+  | 'List'
+  | 'List.Selection';
 
 /**
  * Context for when an item exists
@@ -35,10 +40,16 @@ export type LabelItemListCtxStateChanger = (draft: t.LabelItemListCtx) => void;
 /**
  * Controller API
  */
-export type LabelItemActionController = {
+export type LabelItemController<Kind extends string> = {
+  readonly kind: Kind;
   readonly enabled: boolean;
   readonly data: t.LabelItem;
   readonly handlers: t.LabelItemPropsHandlers;
+};
+
+export type LabelListController<Kind extends string> = {
+  readonly kind: Kind;
+  readonly enabled: boolean;
 };
 
 /**

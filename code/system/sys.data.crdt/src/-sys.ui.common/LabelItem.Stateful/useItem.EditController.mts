@@ -10,9 +10,9 @@ type Args = {
 };
 
 /**
- * HOOK: edit behavior controller.
+ * HOOK: edit behavior controller for a single <Item>.
  */
-export function useItemEditController(args: Args): t.LabelItemActionController {
+export function useItemEditController(args: Args) {
   const { ctx, item, enabled = true } = args;
 
   const [ref, setRef] = useState<t.LabelItemRef>();
@@ -123,13 +123,13 @@ export function useItemEditController(args: Args): t.LabelItemActionController {
   /**
    * API
    */
-  const api: t.LabelItemActionController = {
+  const api: t.LabelItemController<'controller:Item.Edit'> = {
+    kind: 'controller:Item.Edit',
     enabled,
     handlers,
     get data() {
       return item?.current ?? DEFAULTS.data;
     },
   };
-
   return api;
 }

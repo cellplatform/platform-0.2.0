@@ -2,9 +2,12 @@ import { DEFAULTS, FC, type t } from './common';
 
 import { View } from './ui';
 import { BehaviorSelector } from './ui.BehaviorSelector';
-import { useController } from './useController.mjs';
-import { useItemEditController } from './useItem.EditController.mjs';
-import { useItemSelectionController } from './useItem.SelectionController.mjs';
+import {
+  useController,
+  useItemEditController,
+  useItemSelectionController,
+  useListSelectionController,
+} from './use.mjs';
 
 /**
  * Export
@@ -15,6 +18,7 @@ type Fields = {
   useController: typeof useController;
   useItemEditController: typeof useItemEditController;
   useItemSelectionController: typeof useItemSelectionController;
+  useListSelectionController: typeof useListSelectionController;
 };
 export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
   View,
@@ -24,6 +28,7 @@ export const LabelItemStateful = FC.decorate<t.LabelItemStatefulProps, Fields>(
     useController,
     useItemEditController,
     useItemSelectionController,
+    useListSelectionController,
   },
   { displayName: 'LabelItem.Stateful' },
 );
