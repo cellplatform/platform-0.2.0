@@ -1,4 +1,4 @@
-import { type t } from '../common.t';
+import { type t } from '../common';
 
 export type LocalStorageChange<T extends t.JsonMapU> =
   | LocalStoragePut<T>

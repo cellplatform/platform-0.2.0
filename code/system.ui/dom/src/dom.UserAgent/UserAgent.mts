@@ -1,5 +1,5 @@
 import UAParser from 'ua-parser-js';
-import type { t } from '../common.t';
+import { type t } from '../common';
 
 /**
  * Ref:
