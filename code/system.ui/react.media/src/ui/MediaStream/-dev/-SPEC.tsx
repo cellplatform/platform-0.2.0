@@ -1,22 +1,26 @@
 import { MediaStream } from '..';
-import { Button, css, Delete, Dev, rx, slug, t } from '../../../test.ui';
+import { Button, css, Delete, Dev, rx, slug, type t } from '../../../test.ui';
 import { DevAudioWaveform } from './DEV.AudioWaveform';
 import { DevRecordButton } from './DEV.RecordButton';
 import { Sample } from './DEV.Sample';
 import { FileUtil } from '../util';
 
-import type { VideoProps } from '../../MediaStream.Video';
-
 type T = {
-  props: VideoProps;
+  props: t.VideoProps;
   muted: { video: boolean; audio: boolean };
 };
 const initial: T = {
-  props: { muted: true },
+  props: {},
   muted: { video: false, audio: false },
 };
 
 export default Dev.describe('MediaStream', (e) => {
+  type LocalStore = Pick<t.VideoProps, 'muted'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.MediaStream');
+  const local = localstore.object({
+    muted: false,
+  });
+
   const ref = `sample.${slug()}`;
   const bus = rx.bus<t.MediaEvent>();
   const events = MediaStream.Events(bus);
@@ -37,7 +41,10 @@ export default Dev.describe('MediaStream', (e) => {
 
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
-    await ctx.state<T>(initial);
+    const state = await ctx.state<T>(initial);
+    await state.change((d) => {
+      d.props.muted = local.muted;
+    });
 
     MediaStream.Controller({ bus });
 
@@ -132,11 +139,11 @@ export default Dev.describe('MediaStream', (e) => {
         btn
           .label('muted')
           .value((e) => e.state.props.muted)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'muted'))),
+          .onClick((e) => e.change((d) => (local.muted = Dev.toggle(d.props, 'muted')))),
       );
     });
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       const muted = (key: keyof T['muted']) => {
