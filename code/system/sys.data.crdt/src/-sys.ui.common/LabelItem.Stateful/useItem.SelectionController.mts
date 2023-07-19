@@ -12,7 +12,7 @@ type Args = {
 /**
  * HOOK: selection behavior controller.
  */
-export function useSelectionController(args: Args) {
+export function useItemSelectionController(args: Args) {
   const { ctx, item, onChange, enabled = true } = args;
 
   const [_, setCount] = useState(0);
@@ -48,7 +48,7 @@ export function useSelectionController(args: Args) {
   /**
    * API
    */
-  const api: t.LabelActionController = {
+  const api: t.LabelItemActionController = {
     enabled,
     handlers,
     get data() {

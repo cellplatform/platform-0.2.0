@@ -1,8 +1,8 @@
 import { DEFAULTS, PatchState, type t } from './common';
 import { BehaviorSelector } from './ui.BehaviorSelector';
 import { useController } from './useController.mjs';
-import { useEditController } from './useEditController.mjs';
-import { useSelectionController } from './useSelectionController.mjs';
+import { useItemEditController } from './useItem.EditController.mjs';
+import { useItemSelectionController } from './useItem.SelectionController.mjs';
 
 type Options = {
   initial?: t.LabelItem;
@@ -16,8 +16,8 @@ export const State = {
   DEFAULTS,
   BehaviorSelector,
   useController,
-  useEditController,
-  useSelectionController,
+  useItemEditController,
+  useItemSelectionController,
 
   ctx(): t.LabelItemListCtxState {
     const initial: t.LabelItemListCtx = {};

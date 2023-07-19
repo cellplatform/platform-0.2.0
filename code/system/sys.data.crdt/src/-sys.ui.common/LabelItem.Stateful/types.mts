@@ -35,7 +35,7 @@ export type LabelItemListCtxStateChanger = (draft: t.LabelItemListCtx) => void;
 /**
  * Controller API
  */
-export type LabelActionController = {
+export type LabelItemActionController = {
   readonly enabled: boolean;
   readonly data: t.LabelItem;
   readonly handlers: t.LabelItemPropsHandlers;
