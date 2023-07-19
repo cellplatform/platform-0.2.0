@@ -4,10 +4,9 @@ import { css, t } from './common';
 
 export type DevRecordButtonFileReadyHandler = (e: DevRecordButtonFileReadyHandlerArgs) => void;
 export type DevRecordButtonFileReadyHandlerArgs = {
-  mimetype: string;
   data: Uint8Array;
   bytes: number;
-  toBlob(): Blob;
+  mimetype: string;
 };
 
 export type DevRecordButtonProps = {
@@ -35,9 +34,6 @@ export const DevRecordButton: React.FC<DevRecordButtonProps> = (props) => {
           mimetype,
           bytes,
           data,
-          toBlob() {
-            return new Blob([data], { type: mimetype });
-          },
         });
       }
     },

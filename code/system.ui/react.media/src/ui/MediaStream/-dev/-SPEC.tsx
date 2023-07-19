@@ -1,9 +1,9 @@
+import { Button, Delete, Dev, File, css, rx, slug, type t } from '../../../test.ui';
+
 import { MediaStream } from '..';
-import { Button, css, Delete, Dev, rx, slug, type t } from '../../../test.ui';
 import { DevAudioWaveform } from './DEV.AudioWaveform';
 import { DevRecordButton } from './DEV.RecordButton';
 import { Sample } from './DEV.Sample';
-import { FileUtil } from '../util';
 
 type T = {
   props: t.VideoProps;
@@ -109,9 +109,8 @@ export default Dev.describe('MediaStream', (e) => {
             console.log('TODO', 'save video', path);
             console.log('video/data:', e.mimetype, data);
 
-            const name = 'video.webm';
-            const blob = e.toBlob();
-            FileUtil.download(name, blob);
+            const filename = 'video.webm';
+            File.download(filename, e.data);
           }}
         />
       );
