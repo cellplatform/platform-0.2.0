@@ -1,6 +1,6 @@
 /**
  * @system
  */
-export { COLORS, Color, FC, css, useFocus, useDragTarget, Keyboard } from 'sys.ui.react.common';
-export { rx, Time } from 'sys.util';
 export { Filesize } from 'sys.fs';
+export { COLORS, Color, FC, Keyboard, css, useDragTarget, useFocus } from 'sys.ui.react.common';
+export { Time, rx } from 'sys.util';
