@@ -20,11 +20,11 @@ export const Wrangle = {
     let next = action === 'Select' ? [...selected, field] : selected.filter((f) => f !== field);
     return {
       action,
-      next: autoSubfield ? Wrangle.adjustSubfields(all, next) : next,
+      next: autoSubfield ? Wrangle.autoAdjustSubfields(all, next) : next,
     } as const;
   },
 
-  adjustSubfields(all: string[], selected: string[]) {
+  autoAdjustSubfields(all: string[], selected: string[]) {
     /**
      * TODO 🐷
      * - If a parent is selected, select all children.
