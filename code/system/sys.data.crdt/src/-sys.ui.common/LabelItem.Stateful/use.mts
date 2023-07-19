@@ -1,5 +1,5 @@
-export { useController } from './useController.mjs';
+export { useController } from './use.Controller.mjs';
 
-export { useItemEditController } from './useItem.EditController.mjs';
-export { useItemSelectionController } from './useItem.SelectionController.mjs';
-export { useListSelectionController } from './useList.SelectionController.mjs';
+export { useItemEditController } from './use.Item.EditController.mjs';
+export { useItemSelectionController } from './use.Item.SelectionController.mjs';
+export { useListSelectionController } from './use.List.SelectionController.mjs';
