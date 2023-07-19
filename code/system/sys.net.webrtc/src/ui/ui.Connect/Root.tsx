@@ -3,7 +3,7 @@ import { DEFAULTS, FC, type t } from './common';
 import { peer } from './Root.peer.mjs';
 import { Connect as View } from './ui.Connect';
 import { Stateful } from './ui.Stateful';
-import { useController } from './useController.mjs';
+import { useController } from './use.mjs';
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;

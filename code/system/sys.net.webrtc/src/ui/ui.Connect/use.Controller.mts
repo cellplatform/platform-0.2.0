@@ -4,7 +4,11 @@ import { DEFAULTS, Time, WebRtc, rx, type t } from './common';
 /**
  * HOOK: Stateful behavior controller for the <Connect> component.
  */
-export function useController(args: { self?: t.Peer; onChange?: t.ConnectChangedHandler }) {
+export function useController(args: {
+  self?: t.Peer;
+  onReady?: t.ConnectReadyHandler;
+  onChange?: t.ConnectChangedHandler;
+}) {
   const { self } = args;
 
   const [client, setClient] = useState<t.WebRtcEvents>();
@@ -36,6 +40,11 @@ export function useController(args: { self?: t.Peer; onChange?: t.ConnectChanged
       const controller = WebRtc.controller(self, { dispose$ });
       const client = controller.client(dispose$);
       setClient(client);
+      Time.delay(0, async () => {
+        const info = await client.info.get();
+        if (!info) throw new Error(`Failed to get WebRTC info.`);
+        args.onReady?.({ client, info });
+      });
     }
 
     return dispose;

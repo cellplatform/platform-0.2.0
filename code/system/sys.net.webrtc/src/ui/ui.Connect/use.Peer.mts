@@ -3,7 +3,7 @@ import { peer } from './Root.peer.mjs';
 import { rx, type t } from './common';
 
 /**
- * HOOK: Pass-through of generate a network peer.
+ * HOOK: Pass-through [OR] generate a network peer.
  */
 export function usePeer(input?: t.Peer) {
   const [self, setSelf] = useState<t.Peer>();

@@ -1,12 +1,13 @@
 import { type t } from './common';
 import { Connect } from './ui.Connect';
-import { useController } from './useController.mjs';
-import { usePeer } from './usePeer.mjs';
+import { useController, usePeer } from './use.mjs';
 
 export const Stateful: React.FC<t.ConnectStatefulProps> = (props) => {
-  const { onChange } = props;
+  const { onReady, onChange } = props;
+
   const self = usePeer(props.self);
-  const controller = useController({ self, onChange });
+  const controller = useController({ self, onChange, onReady });
+
   return (
     <Connect
       client={controller.client}
