@@ -1,15 +1,16 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, rx } from '../../test.ui';
 
 import { GroupVideo } from '.';
 import { Connect } from '../ui.Connect';
 
 type T = {
   props: t.GroupVideoProps;
-  network?: t.NetworkDocSharedRef;
 };
 const initial: T = { props: {} };
 
 export default Dev.describe('GroupVideo', async (e) => {
+  let network: t.NetworkDocSharedRef;
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -36,9 +37,11 @@ export default Dev.describe('GroupVideo', async (e) => {
         return (
           <Connect.Stateful
             margin={[0, 0, 20, 0]}
-            onReady={(e) => {
-              state.change((d) => (d.network = e.info.state));
-              e.client.$.subscribe((d) => dev.redraw());
+            onReady={async (e) => {
+              console.info('⚡️ Connect.onReady:', e);
+              network = e.info.state;
+              const $ = e.client.$.pipe(rx.mergeWith(network.$));
+              $.subscribe(() => dev.redraw());
             }}
             onChange={(e) =>
               state.change((d) => {
@@ -53,12 +56,30 @@ export default Dev.describe('GroupVideo', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+
+    dev.section('debug', (dev) => {
+      const count = (label: string, by: number) => {
+        dev.button((btn) => {
+          const current = () => (network?.current.tmp.count ?? 0) as number;
+          const next = () => current() + by;
+          btn
+            .label(label)
+            .right(() => `${current()} ${by < 0 ? '-' : '+'} ${Math.abs(by)}`)
+            .onClick((e) => {
+              network?.change((d) => (d.tmp.count = next()));
+            });
+        });
+      };
+
+      count('increment', 1);
+      // count('decrement', -1);
+    });
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props, network } = e.state;
+      const { props } = e.state;
       const data = {
         props,
         'state:(public)': network?.current,
