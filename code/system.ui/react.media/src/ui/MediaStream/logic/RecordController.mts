@@ -1,4 +1,4 @@
-import { Time, rx, type t } from '../common';
+import { Time, rx, type t, File } from '../common';
 import { FileUtil } from '../util';
 
 type M = 'video/webm';
@@ -94,10 +94,13 @@ export function MediaStreamRecordController(args: { bus: t.EventBus<any>; stream
       const blob = await recorder.stop();
       if (e.download) FileUtil.download(e.download.filename, blob);
       if (typeof e.onData === 'function') {
-        const { toUint8Array } = FileUtil;
-        const mimetype = blob.type;
-        const bytes = blob.size;
-        e.onData({ mimetype, bytes, blob, toUint8Array });
+        const { toUint8Array } = File;
+        e.onData({
+          blob,
+          bytes: blob.size,
+          mimetype: blob.type,
+          toUint8Array,
+        });
       }
 
       bus.fire({

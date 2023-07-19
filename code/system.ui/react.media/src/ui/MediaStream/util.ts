@@ -37,24 +37,4 @@ export const FileUtil = {
       window.URL.revokeObjectURL(url);
     });
   },
-
-  /**
-   * Read a Blob/File object into a [Uint8Array].
-   */
-  toUint8Array(input: Blob | File) {
-    return new Promise<Uint8Array>((resolve, reject) => {
-      try {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const result = reader.result;
-          if (result === null) throw new Error('File reader returned null');
-          if (typeof result === 'string') return resolve(new TextEncoder().encode(result));
-          if (typeof result === 'object') return resolve(new Uint8Array(result));
-        };
-        reader.readAsArrayBuffer(input);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  },
 };
