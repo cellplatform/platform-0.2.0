@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'vendor.wallet.rainbow',
   version: '0.0.0',
   dependencies: {
-    '@rainbow-me/rainbowkit': '1.0.6',
+    '@rainbow-me/rainbowkit': '1.0.7',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'viem': '1.3.0',
