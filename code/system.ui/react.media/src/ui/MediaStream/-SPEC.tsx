@@ -3,6 +3,7 @@ import { Button, css, Delete, Dev, rx, slug, t } from '../../test.ui';
 import { DevAudioWaveform } from './-dev/DEV.AudioWaveform';
 import { DevRecordButton } from './-dev/DEV.RecordButton';
 import { Sample } from './-dev/DEV.Sample';
+import { FileUtil } from './util';
 
 import type { VideoProps } from '../MediaStream.Video';
 
@@ -93,10 +94,17 @@ export default Dev.describe('MediaStream', (e) => {
         <DevRecordButton
           bus={bus}
           streamRef={ref}
-          onFileReady={async ({ data }) => {
+          onFileReady={async (e) => {
+            const data = e.data;
             const path = await getNextPath();
+
             // e.ctx.action.saveVideo(path, data);
             console.log('TODO', 'save video', path);
+            console.log('video/data:', e.mimetype, data);
+
+            const name = 'video.webm';
+            const blob = e.toBlob();
+            FileUtil.download(name, blob);
           }}
         />
       );

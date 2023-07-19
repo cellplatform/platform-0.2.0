@@ -2,12 +2,20 @@ import { useStreamState } from '..';
 import { RecordButton, useRecordController } from '../../RecordButton';
 import { css, t } from './common';
 
+export type DevRecordButtonFileReadyHandler = (e: DevRecordButtonFileReadyHandlerArgs) => void;
+export type DevRecordButtonFileReadyHandlerArgs = {
+  mimetype: string;
+  data: Uint8Array;
+  bytes: number;
+  toBlob(): Blob;
+};
+
 export type DevRecordButtonProps = {
   streamRef?: string; // MediaStream ID.
   downloadFilename?: string;
   bus: t.EventBus<any>;
   style?: t.CssValue;
-  onFileReady?: (e: { mimetype: string; data: Uint8Array; bytes: number }) => void;
+  onFileReady?: DevRecordButtonFileReadyHandler;
 };
 
 export const DevRecordButton: React.FC<DevRecordButtonProps> = (props) => {
@@ -23,7 +31,14 @@ export const DevRecordButton: React.FC<DevRecordButtonProps> = (props) => {
       if (props.onFileReady) {
         const { mimetype, bytes } = e;
         const data = await e.toUint8Array(e.blob);
-        props.onFileReady({ mimetype, bytes, data });
+        props.onFileReady({
+          mimetype,
+          bytes,
+          data,
+          toBlob() {
+            return new Blob([data], { type: mimetype });
+          },
+        });
       }
     },
   });
