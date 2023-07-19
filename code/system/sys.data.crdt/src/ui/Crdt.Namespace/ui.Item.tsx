@@ -1,7 +1,7 @@
 import { Item as BaseItem, Icons, css, type t } from './common';
 
 export type ItemProps = {
-  state: t.LabelActionController;
+  state: t.LabelItemController<string>;
   style?: t.CssValue;
 };
 
@@ -22,21 +22,19 @@ export const Item: React.FC<ItemProps> = (props) => {
     kind: 'Pull:Namespace',
     icon: (e) => <Icons.Download.ArrowTray color={e.color} size={16} offset={[0, 2]} />,
     onClick(e) {
-      // TODO 🐷
+      /**
+       * TODO 🐷
+       */
       console.log('💧', e.kind, '→ Item.onClick ⚡️⚡️⚡️');
     },
   };
 
   return (
     <BaseItem.Label
-      {...state.props}
       {...state.handlers}
       label={state.data.label}
-      placeholder={state.props.placeholder}
-      enabled={state.props.enabled}
-      //
       style={css(styles.base, props.style)}
-      rightActions={[download]}
+      right={[download]}
       focusOnEdit={true}
     />
   );

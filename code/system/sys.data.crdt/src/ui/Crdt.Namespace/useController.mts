@@ -10,14 +10,19 @@ type Args = {
  * TODO 🐷
  * - Temporary state until item/group refactor.
  */
-const itemState_TMP = Item.State.init();
+const itemState_TMP = Item.State.item();
 
 export function useController(args: Args) {
   const { ns, useBehaviors = DEFAULTS.useBehaviors } = args;
   const enabled = Boolean(ns) && (args.enabled ?? true);
 
-  const editController = Item.State.useEditController({
+  /**
+   * TODO 🐷
+   * - change this to [useController] ← (full list)
+   */
+  const controller = Item.State.useItemController({
     // enabled: enabled && useBehaviors.includes('Edit'),
+    useBehaviors,
     item: itemState_TMP,
     onChange(e) {
       /**
@@ -28,7 +33,7 @@ export function useController(args: Args) {
       console.group('🌳 within CRDT Namespace controller');
       console.log('e.action', e.action);
       console.log('ns', ns);
-      console.log('⚡️ useController >> editController.onChange:', editController);
+      console.log('⚡️ useController >> editController.onChange:', controller);
       console.log('item.current', item.current);
       console.groupEnd();
 
@@ -38,21 +43,23 @@ export function useController(args: Args) {
         if (namespace && ns) {
           const initial = { count: 0 };
           const lens = ns.lens(namespace, initial);
-
-          console.log('lens', lens);
+          console.log('lens', lens); // TEMP 🐷
         }
       }
     },
   });
 
-  const data = editController.data;
-  const props = editController.props;
+  /**
+   * TODO 🐷
+   * - take root useController, not the editCongtroller
+   */
 
-  const api: t.LabelActionController = {
+  const { data, handlers } = controller;
+  const api: t.LabelItemController<'controller:Crdt:Namespace'> = {
+    kind: 'controller:Crdt:Namespace',
     enabled,
     data,
-    props: { ...props },
-    handlers: editController.handlers,
+    handlers,
   };
 
   return api;
