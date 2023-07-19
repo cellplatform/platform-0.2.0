@@ -1,4 +1,4 @@
-import { Dev, Filesize, Icons, type t } from '../../../test.ui';
+import { Dev, Filesize, Icons, Time, type t } from '../../../test.ui';
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
@@ -154,7 +154,7 @@ export default Dev.describe('Image', async (e) => {
 
     dev.hr(2, 20);
 
-    dev.section('File', (dev) => {
+    dev.section(['File', 'Data / State'], (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
@@ -170,8 +170,35 @@ export default Dev.describe('Image', async (e) => {
       dev.hr(-1, 5);
 
       dev.button((btn) =>
+        btn.label('download').onClick((e) => {
+          const File = {
+            download(name: string, data: Uint8Array, mimetype: string) {
+              const blob = new Blob([data], { type: mimetype });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = name;
+              a.style.display = 'none';
+              document.body.appendChild(a);
+              a.click();
+              Time.delay(100, () => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+              });
+            },
+          };
+
+          const image = crdt.current.image;
+          if (image) {
+            const filename = 'image.png';
+            File.download(filename, image.data, image.mimetype);
+          }
+        }),
+      );
+
+      dev.button((btn) =>
         btn
-          .label('delete file')
+          .label('delete file ↓')
           .enabled((e) => Boolean(e.state.debug.dataEnabled))
           .onClick(async (e) => {
             await crdt?.file.delete();
@@ -184,7 +211,7 @@ export default Dev.describe('Image', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['', 'Debug'], (dev) => {
+    dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)
