@@ -1,4 +1,4 @@
-import { Dev, Filesize, Icons, Time, type t } from '../../../test.ui';
+import { File, Dev, Filesize, Icons, Time, type t } from '../../../test.ui';
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
@@ -171,23 +171,6 @@ export default Dev.describe('Image', async (e) => {
 
       dev.button((btn) =>
         btn.label('download').onClick((e) => {
-          const File = {
-            download(name: string, data: Uint8Array, mimetype: string) {
-              const blob = new Blob([data], { type: mimetype });
-              const url = window.URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = name;
-              a.style.display = 'none';
-              document.body.appendChild(a);
-              a.click();
-              Time.delay(100, () => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-              });
-            },
-          };
-
           const image = crdt.current.image;
           if (image) {
             const filename = 'image.png';
