@@ -1,6 +1,7 @@
 import { Dev, type t } from '../../../test.ui';
 import { FieldSelector } from '..';
 import { SampleFields, type MyField } from './-common';
+import { Wrangle } from '../Wrangle.mjs';
 
 const DEFAULTS = FieldSelector.DEFAULTS;
 
@@ -34,7 +35,12 @@ export default Dev.describe('PropList.FieldSelector', (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
+    const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
+
+    dev.TODO('Auto sub-field selection behavior');
+    // see ↓
+    Wrangle.autoAdjustSubfields;
 
     await state.change((d) => {
       d.props.title = local.hasTitle ? 'My Title' : undefined;
