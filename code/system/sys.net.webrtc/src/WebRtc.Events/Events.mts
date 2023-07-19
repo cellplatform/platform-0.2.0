@@ -1,5 +1,5 @@
 import { type t, rx } from './common';
-import { init, is } from './Events.init.mjs';
+import { init, is } from './Events.impl.mjs';
 
 /**
  * Event API.

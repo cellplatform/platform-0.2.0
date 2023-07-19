@@ -1,8 +1,7 @@
 import { MonacoCrdt } from '..';
-import { rx, Dev, t, Value } from './common';
+import { rx, Dev, t, Value, CrdtViews } from './-common';
 import { initDocsWithPeerSyncers } from './DEV.crdt.mjs';
 import { DevLayout } from './DEV.Layout';
-import { CrdtInfo } from 'sys.data.crdt';
 
 type T = {
   language: t.EditorLanguage;
@@ -120,7 +119,7 @@ export default Dev.describe('MonacoCrdt', (e) => {
   e.it('ui:header', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.header.border(-0.1).render((e) => {
-      return <CrdtInfo style={{ Margin: [0, 20] }} />;
+      return <CrdtViews.Info style={{ Margin: [0, 20] }} />;
     });
   });
 

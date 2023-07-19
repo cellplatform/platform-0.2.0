@@ -78,7 +78,7 @@ export default Dev.describe('Button', (e) => {
     dev.section((dev) => {
       dev.button((btn) =>
         btn
-          .label((e) => `sample left`)
+          .label((e) => `"string left"`)
           .right((e) => {
             const style = css({
               PaddingX: 10,
@@ -86,14 +86,15 @@ export default Dev.describe('Button', (e) => {
               borderRadius: 10,
               backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
             });
-            return <div {...style}>right element</div>;
+            return <div {...style}>element right</div>;
           })
           .onClick((e) => {
             console.log('click');
           }),
       );
 
-      dev.button((btn) => btn.label('sample left').right('"right string"'));
+      dev.button((btn) => btn.label('"string left"').right('"string right"'));
+      dev.button(['[ "left", 🐷 ]', '[ 🐷, "right" ]'], () => {});
     });
 
     dev.hr(5, 15);

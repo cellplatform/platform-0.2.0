@@ -98,6 +98,9 @@ export function init<S extends O = O>(input: t.DevCtxInput, initialState?: S) {
      * Simple button.
      */
     button(...args: any[]) {
+      if (Array.isArray(args[0])) {
+        api.button((btn) => btn.label(args[0][0]).right(args[0][1]).onClick(args[1]));
+      }
       if (typeof args[0] === 'string') {
         api.button((btn) => btn.label(args[0]).onClick(args[1]));
       }

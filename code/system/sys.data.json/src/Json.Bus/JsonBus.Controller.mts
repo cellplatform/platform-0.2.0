@@ -1,4 +1,4 @@
-import { DEFAULT, Patch, Pkg, rx, t } from './common.mjs';
+import { DEFAULT, Patch, Pkg, rx, t } from './common';
 import { JsonBusEvents } from './JsonBus.Events.mjs';
 
 type J = Record<string, unknown>;

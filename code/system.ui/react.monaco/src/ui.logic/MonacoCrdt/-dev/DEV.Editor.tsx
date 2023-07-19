@@ -1,4 +1,4 @@
-import { Color, css, MonacoEditor, t } from './common';
+import { Color, css, MonacoEditor, t } from './-common';
 import { DevEditorCard } from './DEV.Editor.Card';
 
 export type DevEditorProps = {

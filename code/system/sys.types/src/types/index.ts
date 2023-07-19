@@ -2,6 +2,7 @@ export type * from './types.dispose.mjs';
 export type * from './types.dom.mjs';
 export type * from './types.event.mjs';
 export type * from './types.event.pump.mjs';
+export type * from './types.immutable.mjs';
 export type * from './types.json.mjs';
 export type * from './types.mjs';
 export type * from './types.module.mjs';

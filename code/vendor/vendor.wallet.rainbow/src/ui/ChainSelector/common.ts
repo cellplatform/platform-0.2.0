@@ -15,7 +15,7 @@ const defaultChains: t.ChainName[] = ['EVM.L1.mainnet', 'EVM.L2.optimism'];
 export const DEFAULTS = {
   title: 'Chains',
   resettable: true,
-  showIndexes: true,
+  indexes: true,
   indent: 15,
   chains: {
     all: allChains,

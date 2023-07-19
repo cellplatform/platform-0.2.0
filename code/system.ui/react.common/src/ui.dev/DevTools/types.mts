@@ -32,7 +32,7 @@ export type DevTools<S extends O = O> = {
   title(text: string | [string, string], style?: t.DevTitleStyle): DevTools<S>;
   title(fn: t.DevTitleHandler<S>): DevTools<S>;
 
-  button(label: string, onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
+  button(label: string | [string, string], onClick?: t.DevButtonClickHandler<S>): DevTools<S>;
   button(fn: t.DevButtonHandler<S>): DevTools<S>;
 
   boolean(fn: t.DevBooleanHandler<S>): DevTools<S>;

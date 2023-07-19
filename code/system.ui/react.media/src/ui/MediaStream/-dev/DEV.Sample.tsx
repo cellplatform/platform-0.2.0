@@ -1,10 +1,8 @@
 import { MediaStream } from '..';
 import { Icons } from '../../Icons';
-import { Color, css, t } from './common';
+import { Color, css, type t } from './common';
 
-import type { VideoProps } from '../../MediaStream.Video';
-
-export type SampleProps = VideoProps & { streamRef: string; bus: t.EventBus<any> };
+export type SampleProps = t.VideoProps & { streamRef: string; bus: t.EventBus<any> };
 
 export const Sample: React.FC<SampleProps> = (props) => {
   const { streamRef, bus } = props;

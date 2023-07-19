@@ -150,7 +150,7 @@ export default Dev.describe('PeerFacets', (e) => {
               style={{ Margin: [10, 40, 5, 30] }}
               all={PeerCtrls.FIELDS}
               selected={e.state.props[prop] as string[]}
-              showIndexes={false}
+              indexes={false}
               onClick={(ev) => {
                 const next = ev.next as t.WebRtcInfoPeerFacet[];
                 const fields = next?.length === 0 ? undefined : next;

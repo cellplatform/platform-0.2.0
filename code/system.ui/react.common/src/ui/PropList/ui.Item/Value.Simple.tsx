@@ -1,6 +1,7 @@
 import { isValidElement } from 'react';
-import { Wrangle } from '../Util.mjs';
 import { Color, COLORS, css, type t } from './common';
+
+import { Wrangle } from '../util.mjs';
 import { CopyIcon } from './CopyIcon';
 
 export type SimpleValueProps = {

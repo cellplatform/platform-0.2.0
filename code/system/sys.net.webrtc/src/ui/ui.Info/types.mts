@@ -6,6 +6,7 @@ export type WebRtcInfoField =
   | 'Module.Verify'
   | 'Self.Id'
   | 'State.Shared'
+  | 'State.Shared.Namespace'
   | 'Group'
   | 'Group.Peers'
   | 'Peer'
@@ -17,6 +18,7 @@ export type WebRtcInfoData = {
   peer?: { title?: string };
   group?: WebRtcInfoDataGroup;
   connect?: WebRtcInfoDataConnect;
+  namespace?: t.CrdtNsInfoData;
 };
 
 export type WebRtcInfoDataGroup = {

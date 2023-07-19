@@ -8,9 +8,9 @@ type Pixels = number;
 export type TextInputRef = {
   focus(): void;
   blur(): void;
+  selectAll(): void;
   cursorToStart(): void;
   cursorToEnd(): void;
-  selectAll(): void;
 };
 
 export type TextInputLabelKind = 'ReadOnly' | 'Placeholder';

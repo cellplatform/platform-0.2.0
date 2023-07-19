@@ -2,7 +2,8 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 
 import { R, type t } from '../common';
 import { ActiveElement } from './ActiveElement.mjs';
-import { containsFocus, withinFocus, Wrangle } from './util.mjs';
+import { Focus } from './Focus.mjs';
+import { Wrangle } from './util.mjs';
 
 /**
  * Monitors focus state for an element,
@@ -63,13 +64,13 @@ export function useFocus<H extends HTMLElement = HTMLDivElement>(
   return {
     ref,
     get containsFocus() {
-      return containsFocus(ref);
+      return Focus.containsFocus(ref);
     },
     get withinFocus() {
-      return withinFocus(ref);
+      return Focus.withinFocus(ref);
     },
     get directlyFocused() {
-      return containsFocus(ref) && withinFocus(ref);
+      return Focus.containsFocus(ref) && Focus.withinFocus(ref);
     },
-  };
+  } as const;
 }

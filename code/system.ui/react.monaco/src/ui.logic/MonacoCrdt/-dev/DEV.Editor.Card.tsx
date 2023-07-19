@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Color, COLORS, css, Dev, rx, t, Card } from './common';
+import { Color, COLORS, css, Dev, rx, t, Card } from './-common';
 
 export type DevEditorCardProps = {
   name: string;

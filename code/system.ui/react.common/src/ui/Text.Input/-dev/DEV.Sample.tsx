@@ -12,7 +12,6 @@ export type DevSampleProps = {
     isUpdateAsync: boolean;
     elementPlaceholder: boolean;
   };
-  onReady: t.TextInputReadyHandler;
 };
 
 export const DevSample: React.FC<DevSampleProps> = (dev) => {
@@ -30,7 +29,6 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
   /**
    * [Render]
    */
-
   const styles = {
     placeholder: css({
       display: 'grid',
@@ -69,13 +67,6 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
       value={value}
       hint={debug.isHintEnabled ? hint : undefined}
       placeholder={debug.elementPlaceholder ? elPlaceholder : dev.props.placeholder}
-      onReady={dev.onReady}
-      onEnter={(e) => {
-        console.info('⚡️ onEnter', e);
-      }}
-      onEscape={(e) => {
-        console.info('⚡️ onEscape', e);
-      }}
       onChanged={async (e) => {
         if (debug.isUpdateAsync) await Time.wait(0); // NB: simulate an async break between a controller updating state, and the component re-rendering.
         if (debug.isUpdateEnabled) {
@@ -85,9 +76,7 @@ export const DevSample: React.FC<DevSampleProps> = (dev) => {
           setHint('');
         }
         console.info('⚡️ onChanged', e);
-      }}
-      onLabelDoubleClick={(e) => {
-        console.info('⚡️ onLabelDoubleClick', e);
+        dev.props.onChanged?.(e);
       }}
     />
   );

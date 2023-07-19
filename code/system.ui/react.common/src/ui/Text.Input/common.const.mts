@@ -1,4 +1,4 @@
-import { t, COLORS } from '../common';
+import { type t, COLORS } from '../common';
 
 const systemFont = {
   weights: { thin: 100, light: 300, normal: 400, bold: 900 },

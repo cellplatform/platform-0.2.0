@@ -3,7 +3,8 @@ import { type t } from './common';
 export type Common = {
   edge?: t.VEdge;
   fields?: t.WebRtcInfoField[];
-  card?: boolean;
+  showInfo?: boolean;
+  showInfoAsCard?: boolean;
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
 };
@@ -17,12 +18,19 @@ export type ConnectProps = Common & {
 
 export type ConnectStatefulProps = Common & {
   self?: t.Peer;
+  onReady?: ConnectReadyHandler;
   onChange?: ConnectChangedHandler;
 };
 
 /**
  * Events
  */
+export type ConnectReadyHandler = (e: ConnectReadyHandlerArgs) => void;
+export type ConnectReadyHandlerArgs = {
+  readonly client: t.WebRtcEvents;
+  readonly info: t.WebRtcInfo;
+};
+
 export type ConnectChangedHandler = (e: ConnectChangedHandlerArgs) => void;
 export type ConnectChangedHandlerArgs = {
   readonly client: t.WebRtcEvents;

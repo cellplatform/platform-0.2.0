@@ -1,4 +1,4 @@
-import { type t, CrdtInfo } from './common';
+import { type t, CrdtViews } from './common';
 
 export type FileCardProps = {
   title?: t.PropListProps['title'];
@@ -43,12 +43,12 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
    * [Render]
    */
   return (
-    <CrdtInfo
+    <CrdtViews.Info
+      margin={props.margin}
       title={Wrangle.title(props)}
       fields={fields}
       data={data}
       card={true}
-      margin={props.margin}
     />
   );
 };
@@ -56,10 +56,9 @@ export const FileCard: React.FC<FileCardProps> = (props) => {
 /**
  * Helpers
  */
-
 const Wrangle = {
   title(props: FileCardProps) {
-    const title = CrdtInfo.Wrangle.title(props.title || 'CRDT Document');
+    const title = CrdtViews.Info.Wrangle.title(props.title || 'CRDT Document');
     return {
       ...title,
       margin: title.margin ?? [0, 0, 15, 0],

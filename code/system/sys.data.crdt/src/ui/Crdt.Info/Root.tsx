@@ -1,11 +1,13 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, type t } from './common';
-import { FieldFile } from './fields/File';
-import { FieldHistoryItem } from './fields/History.Item';
-import { FieldHistory } from './fields/History.mjs';
-import { FieldModuleVerify } from './fields/Module.Verify';
-import { FieldNetwork } from './fields/Network';
-import { FieldUrl, FieldUrlQRCode } from './fields/Url';
+import { FieldFile } from './ui.fields/File';
+import { FieldHistoryItem } from './ui.fields/History.Item';
+import { FieldHistory } from './ui.fields/History.mjs';
+import { FieldModuleVerify } from './ui.fields/Module.Verify';
+import { FieldNetwork } from './ui.fields/Network';
+import { FieldUrl } from './ui.fields/Url';
+import { FieldUrlQRCode } from './ui.fields/Url.QRCode';
 import { useFile } from './hooks/useFile.mjs';
+import { FieldNamespace } from './ui.fields/Namespace';
 
 export type CrdtInfoProps = {
   title?: t.PropListProps['title'];
@@ -36,6 +38,7 @@ const View: React.FC<CrdtInfoProps> = (props) => {
     .field('Network', () => FieldNetwork(data))
     .field('Url', () => FieldUrl(data))
     .field('Url.QRCode', () => FieldUrlQRCode(data))
+    .field('Namespace', () => FieldNamespace(fields, data))
     .items(fields);
 
   return (
@@ -81,5 +84,5 @@ type Fields = {
 export const CrdtInfo = FC.decorate<CrdtInfoProps, Fields>(
   View,
   { DEFAULTS, FIELDS, Wrangle: PropList.Wrangle },
-  { displayName: 'CrdtInfo' },
+  { displayName: 'Crdt.Info' },
 );

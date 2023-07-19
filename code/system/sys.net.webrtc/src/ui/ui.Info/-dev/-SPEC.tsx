@@ -1,4 +1,4 @@
-import { Crdt, Dev, Icons, Pkg, PropList, TestNetwork, WebRtc, css, rx, type t } from './common';
+import { Crdt, Dev, Icons, Pkg, TestNetwork, WebRtc, css, rx, type t } from './common';
 
 import { WebRtcInfo, type WebRtcInfoProps } from '..';
 import { PeerInput } from '../../ui.PeerInput';
@@ -37,7 +37,7 @@ const local = localstore.object({
   title: false,
   useController: true,
   fullscreenVideo: false,
-  fields: WebRtcInfo.DEFAULTS.fields.default,
+  fields: WebRtcInfo.DEFAULTS.fields.defaults,
 });
 
 export default Dev.describe('WebRtcInfo', async (e) => {
@@ -46,7 +46,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
 
   const controller = WebRtc.controller(self);
   const client = controller.client();
-  const props = controller.state.props<t.TDevSharedProps>('dev:ui', {
+  const props = controller.state.props.lens<t.TDevSharedProps>('dev:ui', {
     count: 0,
     fields: local.fields ?? [],
     fullscreenVideo: local.fullscreenVideo,
@@ -95,6 +95,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
             console.info('⚡️ onPeerCtrlClick', e);
           },
         },
+        namespace: {},
       };
     },
   };
@@ -215,8 +216,8 @@ export default Dev.describe('WebRtcInfo', async (e) => {
           <Dev.FieldSelector
             title={[Pkg.name, 'Card Fields']}
             style={{ Margin: [20, 50, 30, 50] }}
-            all={WebRtcInfo.FIELDS}
-            default={WebRtcInfo.DEFAULTS.fields.default}
+            all={WebRtcInfo.DEFAULTS.fields.all}
+            defaults={WebRtcInfo.DEFAULTS.fields.defaults}
             selected={props.current.fields}
             resettable={true}
             onClick={(ev) => {

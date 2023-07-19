@@ -1,6 +1,7 @@
 export { Pkg } from './index.pkg.mjs';
 
-export { Keyboard, KeyboardMonitor, KeyListener } from './web.Keyboard';
-export { LocalStorage } from './web.LocalStorage';
-export { WrangleUrl } from './web.Url';
-export { UserAgent } from './web.UserAgent';
+export { File } from './dom.File';
+export { KeyListener, Keyboard, KeyboardMonitor } from './dom.Keyboard';
+export { LocalStorage } from './dom.LocalStorage';
+export { WrangleUrl } from './dom.Url';
+export { UserAgent } from './dom.UserAgent';

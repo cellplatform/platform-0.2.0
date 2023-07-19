@@ -13,6 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'sys.data.crdt',
   version: '0.0.0',
   dependencies: {
+    'sys.data.json': '0.0.0',
     'sys.fs': '0.0.0',
     'sys.text': '0.0.0',
     'sys.util': '0.0.0',

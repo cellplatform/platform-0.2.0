@@ -8,15 +8,21 @@ export * from '../common';
  * Defaults
  */
 const edge: t.VEdge = 'Top';
-const DEFAULT_FIELDS: t.WebRtcInfoField[] = ['State.Shared', 'Group', 'Group.Peers'];
+const defaultFields: t.WebRtcInfoField[] = [
+  'State.Shared',
+  'Group',
+  'Group.Peers',
+  'State.Shared.Namespace',
+];
 
 export const DEFAULTS = {
   edge,
+  showInfoAsCard: false,
+  showInfo: true,
   fields: {
     all: INFO_DEFAULTS.fields.all,
-    default: DEFAULT_FIELDS,
+    defaults: defaultFields,
   },
-  card: false,
   copied: {
     message: '( copied to clipboard )',
     delay: 1500,

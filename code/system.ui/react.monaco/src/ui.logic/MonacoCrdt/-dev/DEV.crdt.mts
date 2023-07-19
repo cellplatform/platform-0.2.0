@@ -1,4 +1,4 @@
-import { Automerge, Crdt, rx, t } from './common';
+import { Automerge, Crdt, rx, t } from './-common';
 
 export function initDocsWithPeerSyncers(peerNames: string[], options: { initial?: string } = {}) {
   const { initial } = options;

@@ -1,4 +1,5 @@
-export * from './web.events/types.mjs';
-export * from './web.Keyboard/types.mjs';
-export * from './web.LocalStorage/types.mjs';
-export * from './web.UserAgent/types.mjs';
+export type * from './dom.File/types.mjs';
+export type * from './dom.Keyboard/types.mjs';
+export type * from './dom.LocalStorage/types.mjs';
+export type * from './dom.UserAgent/types.mjs';
+export type * from './dom.events/types.mjs';

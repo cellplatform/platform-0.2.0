@@ -1,7 +1,7 @@
 import { Card, COLORS, css, DEFAULTS, type t } from '../common';
 import { PropListItem } from '../ui.Item/Item';
 import { PropListTitle } from '../ui.Item/Title';
-import { Wrangle } from '../Util.mjs';
+import { Wrangle } from '../util.mjs';
 import { EmptyBackside } from './EmptyBackside';
 
 /**

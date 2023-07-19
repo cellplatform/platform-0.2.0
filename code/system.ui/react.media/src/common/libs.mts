@@ -7,16 +7,17 @@ export const R = { clamp, mergeDeepRight, prop, sortBy };
 /**
  * @system
  */
-export { rx, slug, cuid, Time, Delete, Value } from 'sys.util';
 export { Path } from 'sys.fs';
 export {
+  Color,
   FC,
   IFrame,
-  TextInput,
-  css,
-  Color,
-  Style,
   ObjectView,
   ProgressBar,
+  Style,
+  TextInput,
+  css,
   useSizeObserver,
 } from 'sys.ui.react.common';
+export { Delete, Time, Value, cuid, rx, slug } from 'sys.util';
+export { File } from 'sys.ui.dom';

@@ -1,2 +1,2 @@
 export * from '../common';
-export { Wrangle } from '../Util.mjs';
+export { Wrangle } from '../util.mjs';

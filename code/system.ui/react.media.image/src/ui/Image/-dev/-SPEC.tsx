@@ -1,5 +1,6 @@
+import { File, Dev, Filesize, Icons, Time, type t } from '../../../test.ui';
+
 import { Image } from '..';
-import { Dev, Filesize, type t } from '../../../test.ui';
 import { Util } from '../Util.mjs';
 import { DevDataController } from './-DEV.data';
 
@@ -128,10 +129,19 @@ export default Dev.describe('Image', async (e) => {
 
     dev.section('Sizing', (dev) => {
       const size = (strategy: t.ImageSizeStrategy) => {
+        const icon = (isSelected: boolean) => {
+          const Icon = strategy === 'cover' ? Icons.Cover : Icons.Contain;
+          const opacity = isSelected ? 1 : 0.3;
+          return <Icon size={18} opacity={opacity} />;
+        };
+        const right = (state: T) => {
+          const isSelected = state.props.sizing === strategy;
+          return <div>{icon(isSelected)}</div>;
+        };
         dev.button((btn) =>
           btn
             .label(`${strategy}`)
-            .right((e) => (e.state.props.sizing === strategy ? '←' : ''))
+            .right((e) => right(e.state))
             .onClick((e) => {
               e.change((d) => (d.props.sizing = strategy));
             }),
@@ -144,7 +154,7 @@ export default Dev.describe('Image', async (e) => {
 
     dev.hr(2, 20);
 
-    dev.section('File', (dev) => {
+    dev.section(['File', 'Data / State'], (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `data ${e.state.debug.dataEnabled ? 'enabled' : 'disabled'}`)
@@ -160,8 +170,18 @@ export default Dev.describe('Image', async (e) => {
       dev.hr(-1, 5);
 
       dev.button((btn) =>
+        btn.label('download').onClick((e) => {
+          const image = crdt.current.image;
+          if (image) {
+            const filename = 'image.png';
+            File.download(filename, image.data, image.mimetype);
+          }
+        }),
+      );
+
+      dev.button((btn) =>
         btn
-          .label('delete file')
+          .label('delete file ↓')
           .enabled((e) => Boolean(e.state.debug.dataEnabled))
           .onClick(async (e) => {
             await crdt?.file.delete();
@@ -174,7 +194,7 @@ export default Dev.describe('Image', async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section(['', 'Debug'], (dev) => {
+    dev.section('Debug', (dev) => {
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)
