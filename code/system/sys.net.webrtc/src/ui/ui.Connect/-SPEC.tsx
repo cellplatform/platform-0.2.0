@@ -5,6 +5,7 @@ type T = {
   props: t.ConnectProps;
   changed?: t.ConnectChangedHandlerArgs;
   debug: { bg?: boolean; useController?: boolean; useSelf?: boolean; changed?: number };
+  network?: t.NetworkDocSharedRef;
 };
 const initial: T = {
   props: {},
@@ -34,7 +35,8 @@ export default Dev.describe('Connect', async (e) => {
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
-    const state = await ctx.state<T>(initial);
+    const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     state.change((d) => {
       d.props.fields = local.fields;
@@ -57,21 +59,24 @@ export default Dev.describe('Connect', async (e) => {
           return <Connect {...props} />;
         }
 
-        const onChange: t.ConnectChangedHandler = (e) => {
-          console.info('⚡️ onChange', e);
-          state.change((d) => {
-            d.changed = e;
-            d.debug.changed = (d.debug.changed ?? 0) + 1;
-          });
-        };
-
         if (debug.useSelf && !self) self = await Connect.peer();
 
         return (
           <Connect.Stateful
             {...props}
             self={debug.useSelf ? self : undefined}
-            onChange={onChange}
+            onReady={(e) => {
+              console.info('⚡️ Connect: onReady', e);
+              state.change((d) => (d.network = e.info.state));
+              e.client.$.subscribe((d) => dev.redraw());
+            }}
+            onChange={(e) => {
+              console.info('⚡️ Connect: onChange', e);
+              state.change((d) => {
+                d.changed = e;
+                d.debug.changed = (d.debug.changed ?? 0) + 1;
+              });
+            }}
           />
         );
       });
@@ -173,12 +178,13 @@ export default Dev.describe('Connect', async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const { props, debug } = e.state;
+      const { props, debug, network } = e.state;
       const count = debug.changed ?? 0;
       const data = {
         props,
         selected: e.state.changed?.selected,
         [`⚡️changed(${count})`]: e.state.changed,
+        'state:(public)': network?.current,
       };
       return <Dev.Object name={'Connect'} data={data} expand={1} />;
     });
