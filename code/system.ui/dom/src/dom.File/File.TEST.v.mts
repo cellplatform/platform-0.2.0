@@ -17,4 +17,13 @@ describe('File', () => {
       expect(blob.size).to.eql(3);
     });
   });
+
+  describe('toUint8Array', () => {
+    it('from blob', async () => {
+      const data = new Uint8Array([1, 2, 3]);
+      const blob = File.toBlob(data);
+      const res = await File.toUint8Array(blob);
+      expect(res).to.eql(data);
+    });
+  });
 });
