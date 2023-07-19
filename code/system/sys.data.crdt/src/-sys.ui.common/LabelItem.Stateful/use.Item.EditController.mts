@@ -98,7 +98,7 @@ export function useItemEditController(args: Args) {
   useEffect(() => increment(), [item?.instance]);
 
   /**
-   * Keyboard monitor.
+   * Keyboard.
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();

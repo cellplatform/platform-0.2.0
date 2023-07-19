@@ -5,6 +5,7 @@ import {
   useItemEditController,
   useItemSelectionController,
   useListSelectionController,
+  useItemController,
 } from './use.mjs';
 
 type Options = {
@@ -22,6 +23,7 @@ export const State = {
   useController,
   useItemEditController,
   useItemSelectionController,
+  useItemController,
   useListSelectionController,
 
   ctx(): t.LabelItemListCtxState {

@@ -1,7 +1,7 @@
 import { DEFAULTS, type t } from './common';
 
 import { LabelItem } from '../LabelItem/Root';
-import { useController } from './use.mjs';
+import { useItemController } from './use.mjs';
 
 /**
  * Sample of using the behavior controller hooks.
@@ -12,11 +12,11 @@ export const View: React.FC<t.LabelItemStatefulProps> = (props) => {
   /**
    * Roll-up controller.
    */
-  const controller = useController({
-    useBehaviors,
+  const controller = useItemController({
     ctx,
     item,
     onChange,
+    useBehaviors,
   });
 
   const { data, handlers } = controller;
