@@ -1,3 +1,5 @@
+import { Time } from '../common';
+
 const DEFAULTS = {
   mimetype: 'application/octet-stream',
 };
@@ -32,6 +34,29 @@ export const File = {
       } catch (error) {
         reject(error);
       }
+    });
+  },
+
+  /**
+   * Initiates a file download from the browser
+   */
+  download(name: string, data: Uint8Array | Blob, mimetype?: string) {
+    return new Promise<void>((resolve, reject) => {
+      const blob = data instanceof Blob ? data : File.toBlob(data, mimetype);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.download = name;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+
+      a.click();
+      Time.delay(100, () => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        resolve();
+      });
     });
   },
 } as const;
