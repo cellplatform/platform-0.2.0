@@ -50,6 +50,7 @@ export type LabelItemController<Kind extends string> = {
 export type LabelListController<Kind extends string> = {
   readonly kind: Kind;
   readonly enabled: boolean;
+  readonly listRef: React.MutableRefObject<HTMLDivElement | undefined>;
 };
 
 /**

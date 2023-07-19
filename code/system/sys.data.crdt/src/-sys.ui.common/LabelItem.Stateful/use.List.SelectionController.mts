@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-
 import { type t, Keyboard, rx } from './common';
 
 type Args = {
@@ -19,7 +18,7 @@ export function useListSelectionController(args: Args) {
    * - attach to "list container" div
    * - used for focusing
    */
-  const focusRef = useRef<HTMLDivElement>();
+  const listRef = useRef<HTMLDivElement>();
 
   /**
    * TODO 🐷
@@ -32,8 +31,8 @@ export function useListSelectionController(args: Args) {
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
     const keyboard = Keyboard.until(dispose$);
-    // const isFocused = () => item?.current.focused ?? false;
 
+    // const isFocused = () => item?.current.focused ?? false;
     console.log('keyboard', keyboard);
 
     keyboard.on({
@@ -52,7 +51,7 @@ export function useListSelectionController(args: Args) {
 
     if (!enabled) dispose();
     return dispose;
-  }, [enabled, focusRef]);
+  }, [enabled, listRef]);
 
   /**
    * API
@@ -60,6 +59,7 @@ export function useListSelectionController(args: Args) {
   const api: t.LabelListController<'controller:List.Selection'> = {
     kind: 'controller:List.Selection',
     enabled,
+    listRef,
   } as const;
   return api;
 }
