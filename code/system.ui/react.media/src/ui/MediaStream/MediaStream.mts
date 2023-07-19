@@ -11,8 +11,8 @@ export const MediaStream = {
   Events,
   Controller,
   RecordController,
+  Video,
 
   useVideoStreamState,
   useOfflineState,
-  Video,
 };

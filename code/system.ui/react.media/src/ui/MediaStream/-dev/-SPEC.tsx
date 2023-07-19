@@ -1,11 +1,11 @@
-import { MediaStream } from '.';
-import { Button, css, Delete, Dev, rx, slug, t } from '../../test.ui';
-import { DevAudioWaveform } from './-dev/DEV.AudioWaveform';
-import { DevRecordButton } from './-dev/DEV.RecordButton';
-import { Sample } from './-dev/DEV.Sample';
-import { FileUtil } from './util';
+import { MediaStream } from '..';
+import { Button, css, Delete, Dev, rx, slug, t } from '../../../test.ui';
+import { DevAudioWaveform } from './DEV.AudioWaveform';
+import { DevRecordButton } from './DEV.RecordButton';
+import { Sample } from './DEV.Sample';
+import { FileUtil } from '../util';
 
-import type { VideoProps } from '../MediaStream.Video';
+import type { VideoProps } from '../../MediaStream.Video';
 
 type T = {
   props: VideoProps;

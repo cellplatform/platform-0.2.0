@@ -1,8 +1,8 @@
 import type { t } from './common';
 
-export type * from './types.events.record';
-export type * from './types.events.stream';
-export type * from './types.events.streams';
+export type * from './types.events.record.mjs';
+export type * from './types.events.stream.mjs';
+export type * from './types.events.streams.mjs';
 
 /**
  * EVENTS
