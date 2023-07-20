@@ -102,6 +102,8 @@ export default Dev.describe('Namespace', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    dev.TODO();
+
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
