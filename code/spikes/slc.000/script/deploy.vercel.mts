@@ -23,8 +23,11 @@ export async function pushToVercel(args: {
     source,
     team: 'tdb',
 
-    project: 'slc-dev',
-    alias: 'dev.socialleancanvas.com',
+    // project: 'slc-dev',
+    // alias: 'dev.socialleancanvas.com',
+
+    project: 'slc-prod',
+    alias: 'socialleancanvas.com',
 
     ensureProject: true,
     regions: ['sfo1'],
@@ -34,6 +37,7 @@ export async function pushToVercel(args: {
     vercelJson: {
       cleanUrls: true,
       trailingSlash: true,
+      redirects: [{ source: '/d/', destination: '/?dev' }],
       rewrites: [
         { source: '/:root/', destination: '/' },
         { source: '/:root/lib/:path', destination: '/lib/:path' },

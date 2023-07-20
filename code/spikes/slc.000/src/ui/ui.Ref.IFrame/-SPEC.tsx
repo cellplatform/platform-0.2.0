@@ -32,7 +32,7 @@ export default Dev.describe('Landing.IFrame', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('src', (dev) => {
+    dev.section(['Load Target:', 'URL'], (dev) => {
       const target = (title: string, url: string) => {
         dev.button((btn) => {
           btn
