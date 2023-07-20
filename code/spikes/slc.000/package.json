@@ -1,6 +1,6 @@
 {
   "name": "slc",
-  "version": "0.0.1",
+  "version": "0.0.14",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "patch": "yarn version --patch --no-git-tag-version",
     "prepare": "yarn build && yarn test --run --reporter=verbose && yarn bundle",
     "deploy": "yarn audit && yarn patch && yarn prepare && ts-node-esm -T ./script/deploy.mts",
-    "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
+    "tmp": "ts-node-esm -T ./script/tmp.mts"
   },
   "dependencies": {
     "react": "18.2.0",
