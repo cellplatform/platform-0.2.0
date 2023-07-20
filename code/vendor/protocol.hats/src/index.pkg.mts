@@ -13,8 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'protocol.hats',
   version: '0.0.0',
   dependencies: {
-    'react': '18.2.0',
-    'react-dom': '18.2.0',
+    '@hatsprotocol/sdk-v1-core': '0.3.1',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },
