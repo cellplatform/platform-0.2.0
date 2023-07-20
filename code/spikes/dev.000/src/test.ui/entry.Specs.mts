@@ -11,6 +11,7 @@ const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 
 const { Specs: VendorStripe } = await import('vendor.stripe/specs');
+const { Specs: ProtocolHats } = await import('protocol.hats/specs');
 // const { Specs: VendorWallet } = await import('vendor.wallet.rainbow/specs');
 
 export const Specs = {
@@ -24,5 +25,6 @@ export const Specs = {
   ...MediaImage,
   ...Fs,
   ...VendorStripe,
+  ...ProtocolHats,
   // ...VendorWallet,
 };
