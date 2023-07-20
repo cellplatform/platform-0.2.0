@@ -1,10 +1,10 @@
 import { Dev } from '../../test.ui';
-import { Root } from '.';
+import { Root, type RootProps } from '.';
 
-type T = {};
-const initial: T = {};
+type T = { props: RootProps };
+const initial: T = { props: {} };
 
-export default Dev.describe('Home.IFrame', (e) => {
+export default Dev.describe('Landing.IFrame', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -15,14 +15,13 @@ export default Dev.describe('Home.IFrame', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Root />;
+        return <Root {...e.state.props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {
@@ -30,7 +29,7 @@ export default Dev.describe('Home.IFrame', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'Home.IFrame'} data={data} expand={1} />;
+      return <Dev.Object name={'Landing.IFrame'} data={data} expand={1} />;
     });
   });
 });

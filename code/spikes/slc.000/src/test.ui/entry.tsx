@@ -9,15 +9,29 @@ const url = new URL(window.location.href);
 const isDev = url.searchParams.has('dev');
 const root = createRoot(document.getElementById('root')!);
 
-(async () => {
-  if (isDev) {
+const Render = {
+  async dev() {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('./entry.Specs.mjs');
     const el = await Dev.render(Pkg, Specs, { hrDepth: 3 });
-    root.render(<StrictMode>{el}</StrictMode>);
-  } else {
-    const { Root } = await import('../ui/Root.IFrame');
-    const el = <Root />;
-    root.render(<StrictMode>{el}</StrictMode>);
-  }
+    return root.render(el);
+  },
+
+  async root() {
+    const { Root } = await import('../ui/Landing.IFrame');
+    return root.render(<Root />);
+  },
+
+  async ember() {
+    const { Root } = await import('../ui/Landing.Ember');
+    return root.render(<Root />);
+  },
+};
+
+(async () => {
+  // return Render.ember();
+
+  if (isDev) return Render.dev();
+  if (url.pathname === '/ember/') return Render.ember();
+  Render.root();
 })();
