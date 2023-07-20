@@ -18,8 +18,8 @@ const Render = {
   },
 
   async ref(src: string) {
-    const { RefIFrame } = await import('../ui/ui.Ref.IFrame');
-    return root.render(<RefIFrame src={src} />);
+    const { IFrameRef } = await import('../ui/ui.IFrameRef');
+    return root.render(<IFrameRef src={src} />);
   },
 
   async ember() {

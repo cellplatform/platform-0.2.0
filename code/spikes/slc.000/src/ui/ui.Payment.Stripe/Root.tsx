@@ -12,6 +12,7 @@ export const PaymentStripe: React.FC<PaymentStripeProps> = (props) => {
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      padding: 20,
     }),
   };
 

@@ -1,12 +1,12 @@
 import { Dev } from '../../test.ui';
-import { RefIFrame, type RootProps } from '.';
+import { IFrameRef, type IFrameRefProps } from '.';
 
 const DEFAULTS = {
   LandingPage: 'https://slc-1dot1ggiz.vercel.app/',
   EUSIC: 'https://slc-eusic-ph1bc4ut7-tdb.vercel.app/',
 };
 
-type T = { props: RootProps };
+type T = { props: IFrameRefProps };
 const initial: T = {
   props: {
     src: DEFAULTS.LandingPage,
@@ -19,12 +19,14 @@ export default Dev.describe('Landing.IFrame', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+
+    ctx.debug.width(350);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <RefIFrame {...e.state.props} />;
+        return <IFrameRef {...e.state.props} />;
       });
   });
 
@@ -36,7 +38,7 @@ export default Dev.describe('Landing.IFrame', (e) => {
       const target = (title: string, url: string) => {
         dev.button((btn) => {
           btn
-            .label(`${title}`)
+            .label(`url → "${title}"`)
             .right((e) => (e.state.props.src === url ? `←` : ''))
             .onClick((e) =>
               e.change((d) => {
@@ -47,7 +49,7 @@ export default Dev.describe('Landing.IFrame', (e) => {
         });
       };
 
-      target('Landing Page (Root)', DEFAULTS.LandingPage);
+      target('Root Landing Page', DEFAULTS.LandingPage);
       target('EUSIC', DEFAULTS.EUSIC);
     });
   });

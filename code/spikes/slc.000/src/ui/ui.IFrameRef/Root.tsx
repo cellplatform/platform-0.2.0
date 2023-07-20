@@ -1,12 +1,12 @@
 import { COLORS, IFrame, css, type t } from '../common';
 
-export type RootProps = {
+export type IFrameRefProps = {
   src?: string;
   title?: string;
   style?: t.CssValue;
 };
 
-export const RefIFrame: React.FC<RootProps> = (props) => {
+export const IFrameRef: React.FC<IFrameRefProps> = (props) => {
   /**
    * [Render]
    */
