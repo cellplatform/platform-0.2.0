@@ -17,9 +17,9 @@ const Render = {
     return root.render(el);
   },
 
-  async root() {
-    const { Root } = await import('../ui/Landing.IFrame');
-    return root.render(<Root />);
+  async iframe(src: string) {
+    const { RefIFrame } = await import('../ui/Ref.IFrame');
+    return root.render(<RefIFrame src={src} />);
   },
 
   async ember() {
@@ -29,9 +29,7 @@ const Render = {
 };
 
 (async () => {
-  // return Render.ember();
-
   if (isDev) return Render.dev();
   if (url.pathname === '/ember/') return Render.ember();
-  Render.root();
+  Render.iframe('https://slc-1dot1ggiz.vercel.app/'); // SLC landing page.
 })();

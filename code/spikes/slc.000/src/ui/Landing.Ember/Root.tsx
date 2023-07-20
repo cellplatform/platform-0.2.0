@@ -12,7 +12,6 @@ export const Root: React.FC<RootProps> = (props) => {
   const styles = {
     base: css({
       Absolute: 0,
-      // backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       padding: 20,
     }),
   };
