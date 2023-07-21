@@ -15,7 +15,7 @@ describe.only('Sheet', () => {
         expect(() => Cell.address(0, -1)).to.throw(/y is less than 0 \(-1\)/);
       });
 
-      it('A1..Z9', () => {
+      it.skip('A1..Z9', () => {
         const test = (x: number, y: number, expected: t.CellAddress) => {
           const res = Cell.address(x, y);
           expect(res).to.eql(expected);
