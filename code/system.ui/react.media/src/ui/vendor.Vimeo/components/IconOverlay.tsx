@@ -1,11 +1,9 @@
-import { COLORS, Color, Icons, css, type t } from '../common.mjs';
-
-export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
+import { COLORS, Color, Icons, css, type t } from '../common';
 
 export type IconOverlayProps = {
   icon?: t.VimeoIconFlag;
   style?: t.CssValue;
-  onClick?: (e: VimeoIconClickArgs) => void;
+  onClick?: (e: t.VimeoIconClickArgs) => void;
 };
 
 export const IconOverlay: React.FC<IconOverlayProps> = (props) => {

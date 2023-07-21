@@ -1,22 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { css, FC, type t } from './common.mjs';
+import { css, FC, type t } from './common';
 import { usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './Vimeo.Events.mjs';
 
-export type VimeoBackgroundProps = {
-  instance: t.VimeoInstance;
-  video: number;
-  opacity?: number;
-  blur?: number;
-  opacityTransition?: number; // msecs
-};
-
 /**
  * Component
  */
-const View: React.FC<VimeoBackgroundProps> = (props) => {
+const View: React.FC<t.VimeoBackgroundProps> = (props) => {
   const { instance, video } = props;
   const { bus, id } = instance;
   const blur = props.blur ?? 0;
@@ -87,8 +79,8 @@ const View: React.FC<VimeoBackgroundProps> = (props) => {
 type Fields = {
   Events: t.VimeoEventsFactory;
 };
-export const VimeoBackground = FC.decorate<VimeoBackgroundProps, Fields>(
+export const VimeoBackground = FC.decorate<t.VimeoBackgroundProps, Fields>(
   View,
   { Events: VimeoEvents },
-  { displayName: 'VimeoBackground' },
+  { displayName: 'Vimeo.Background' },
 );

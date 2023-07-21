@@ -1,5 +1,5 @@
 import { Dev } from '../../../test.ui';
-import { rx, slug, type t } from '../common.mjs';
+import { rx, slug, type t } from '../common';
 
 import { VimeoBackground } from '..';
 import { VIDEO } from './-Sample.mjs';
