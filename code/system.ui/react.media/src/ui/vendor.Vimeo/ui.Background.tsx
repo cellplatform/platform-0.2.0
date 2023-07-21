@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-
-import { css, FC, type t } from './common';
+import { FC, css, type t } from './common';
 import { usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
-import { VimeoEvents } from './Vimeo.Events.mjs';
+import { VimeoEvents } from './logic.Events.mjs';
 
 /**
  * Component

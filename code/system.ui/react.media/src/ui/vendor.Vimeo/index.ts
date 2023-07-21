@@ -1,3 +1,3 @@
-export { Vimeo } from './Vimeo';
-export { VimeoBackground } from './Vimeo.Background';
-export { VimeoEvents } from './Vimeo.Events.mjs';
+export { Vimeo } from './ui.Vimeo';
+export { VimeoBackground } from './ui.Background';
+export { VimeoEvents } from './logic.Events.mjs';
