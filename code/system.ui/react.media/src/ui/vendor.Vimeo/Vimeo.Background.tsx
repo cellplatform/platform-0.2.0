@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { css, FC, t } from './common.mjs';
+import { css, FC, type t } from './common.mjs';
 import { usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './Vimeo.Events.mjs';

@@ -1,10 +1,9 @@
 import { domAnimation, LazyMotion } from 'framer-motion';
-
-import { css, t } from './common';
+import { css, type t } from './common';
 import { Background } from './ui.Background';
+import { Dialog } from './ui.Dialog';
 import { Paused } from './ui.Paused';
 import { Recording } from './ui.Recording';
-import { Dialog } from './ui.Dialog';
 
 export type RecordButtonProps = {
   bus: t.EventBus<any>;

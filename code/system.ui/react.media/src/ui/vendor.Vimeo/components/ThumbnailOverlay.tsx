@@ -1,4 +1,4 @@
-import { css, t } from '../common.mjs';
+import { css, type t } from '../common.mjs';
 
 export type ThumbnailOverlayProps = {
   href?: string;

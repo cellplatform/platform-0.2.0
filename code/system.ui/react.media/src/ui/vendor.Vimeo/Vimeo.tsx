@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
 
-import { css, FC, t } from './common.mjs';
+import { css, FC, type t } from './common.mjs';
 import { IconOverlay, VimeoIconClickArgs } from './components/IconOverlay';
 import { ThumbnailOverlay } from './components/ThumbnailOverlay';
 import { useIconController, usePlayerController } from './hooks';

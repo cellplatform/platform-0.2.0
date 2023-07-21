@@ -1,6 +1,6 @@
 import { useStreamState } from '..';
 import { RecordButton, useRecordController } from '../../RecordButton';
-import { css, t } from './common';
+import { css, type t } from './common';
 
 export type DevRecordButtonFileReadyHandler = (e: DevRecordButtonFileReadyHandlerArgs) => void;
 export type DevRecordButtonFileReadyHandlerArgs = {

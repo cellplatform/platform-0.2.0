@@ -1,4 +1,4 @@
-import { describe, it, expect, t } from '../../test';
+import { describe, expect, it } from '../../test';
 import { Wrangle } from './util.mjs';
 
 describe('YouTube', () => {

@@ -1,7 +1,6 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, take } from 'rxjs/operators';
-
-import { R, rx, slug, t } from './common.mjs';
+import { R, rx, slug, type t } from './common.mjs';
 
 /**
  * Event API.

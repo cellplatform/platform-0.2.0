@@ -1,4 +1,4 @@
-import { Dev, t } from '../../../test.ui';
+import { Dev, type t } from '../../../test.ui';
 import { DevSample, DevSampleProps } from '../-dev/DEV.Sample';
 
 /**
