@@ -1,7 +1,8 @@
-import { VimeoBackground } from '..';
 import { Dev } from '../../../test.ui';
-import { rx, slug, t } from '../common.mjs';
-import { VIDEO } from './SAMPLES.mjs';
+import { rx, slug, type t } from '../common.mjs';
+
+import { VimeoBackground } from '..';
+import { VIDEO } from './-Sample.mjs';
 
 const initial = { count: 0 };
 type S = typeof initial;
