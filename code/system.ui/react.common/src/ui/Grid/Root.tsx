@@ -30,10 +30,8 @@ export const View: React.FC<t.GridProps> = (props) => {
 
   const elements: JSX.Element[] = [];
   config.forEach((e) => {
-    const { x, y } = e;
-    const pos = `x:${x} y:${y}`;
     const el = (
-      <div key={pos} {...styles.block} data-pos={pos}>
+      <div {...styles.block} key={e.cell} data-address={e.cell}>
         {e.body}
       </div>
     );

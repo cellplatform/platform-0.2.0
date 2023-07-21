@@ -45,7 +45,8 @@ export const Wrangle = {
         },
       };
       config.cell?.(args);
-      cells.push({ cell, x, y, body });
+      const position = { x, y };
+      cells.push({ cell, position, body });
     };
 
     const size = (total: number, index: number, fn?: t.GridSizeConfigure) => {
@@ -60,7 +61,7 @@ export const Wrangle = {
     Wrangle.forEach(total, (x, y) => cell(x, y));
 
     const findItem = (x: number, y: number) => {
-      return cells.find((item) => item.x === x && item.y === y);
+      return cells.find(({ position }) => position.x === x && position.y === y);
     };
 
     return {
@@ -70,8 +71,9 @@ export const Wrangle = {
       forEach(fn: t.GridCellHandler) {
         Wrangle.forEach(total, (x, y) => {
           const cell = Sheet.Cell.address(x, y);
+          const position = { x, y };
           const item = findItem(x, y);
-          fn({ cell, x, y, body: item?.body });
+          fn({ cell, position, body: item?.body });
         });
       },
     } as const;
