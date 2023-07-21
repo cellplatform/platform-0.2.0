@@ -6,7 +6,7 @@ export * from '../common';
  * Contants
  */
 
-const total: t.GridXY = { x: 3, y: 3 };
+const total: t.GridPoint = { x: 3, y: 3 };
 
 export const DEFAULTS = {
   total,

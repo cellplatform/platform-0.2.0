@@ -1,17 +1,23 @@
 import { type t } from './common';
 
 type SizeValue = number | string;
+export type GridPoint = { x: number; y: number };
+export type GridSizePoint = { x: SizeValue; y: SizeValue };
 
 /**
  * Component
  */
 export type GridProps = {
-  total?: number | GridXY;
+  config?: GridPropsConfig;
+  style?: t.CssValue;
+};
+
+export type GridPropsConfig = {
+  total?: number | GridPoint;
   cell?: GridCellConfigure;
   column?: GridSizeConfigure;
   row?: GridSizeConfigure;
-  gap?: number | Partial<GridXY>;
-  style?: t.CssValue;
+  gap?: number | Partial<GridPoint>;
 };
 
 /**
@@ -24,16 +30,9 @@ export type GridCell = {
   body?: JSX.Element;
 };
 
-/**
- * Builder
- */
-export type GridAxis = 'x' | 'y';
-export type GridXY = { x: number; y: number };
-export type GridSizeXY = { x: SizeValue; y: SizeValue };
-
 export type GridCellConfigure = (e: GridCellConfigureArgs) => void;
-export type GridCellConfigureArgs = GridXY & {
-  total: GridXY;
+export type GridCellConfigureArgs = GridPoint & {
+  total: GridPoint;
   body(element: JSX.Element | null): GridCellConfigureArgs;
 };
 

@@ -11,22 +11,24 @@ type T = {
 export default Dev.describe('Grid', (e) => {
   const initial: T = {
     props: {
-      gap: 5,
+      config: {
+        gap: 5,
 
-      row(e) {
-        // return e.index === 0 ? 2.5 : 1;
-        return 1;
-      },
-      cell(e) {
-        if (e.x === 1 && e.y === 2) {
-          e.body(<div>{'🌳'}</div>);
-        }
+        row(e) {
+          // return e.index === 0 ? 2.5 : 1;
+          return 1;
+        },
+        cell(e) {
+          if (e.x === 1 && e.y === 2) {
+            e.body(<div>{'🌳'}</div>);
+          }
+        },
       },
     },
     debug: {},
   };
 
-  type LocalStore = Pick<t.GridProps, 'total'> & Pick<T['debug'], 'devBg'>;
+  type LocalStore = Pick<t.GridPropsConfig, 'total'> & Pick<T['debug'], 'devBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Grid');
   const local = localstore.object({
     total: DEFAULTS.total,
@@ -38,7 +40,8 @@ export default Dev.describe('Grid', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.total = local.total;
+      const config = (d.props.config = d.props.config ?? {});
+      config.total = local.total;
     });
 
     ctx.debug.width(330);
@@ -58,12 +61,13 @@ export default Dev.describe('Grid', (e) => {
 
     dev.section('States', (dev) => {
       const total = (total: number, right: string = '') => {
-        const current = (state: T) => state.props.total ?? DEFAULTS.total;
+        const config = (state: T) => state.props.config ?? {};
+        const current = (state: T) => config(state).total ?? DEFAULTS.total;
         dev.button((btn) => {
           btn
             .label(`total: ${total}`)
             .right((e) => (current(e.state) === total ? `←` : right))
-            .onClick((e) => e.change((d) => (local.total = d.props.total = total)));
+            .onClick((e) => e.change((d) => (local.total = config(d).total = total)));
         });
       };
       total(0);

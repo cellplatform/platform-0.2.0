@@ -4,12 +4,14 @@ type SizeValue = number | string;
 
 export const Wrangle = {
   total(props: t.GridProps) {
-    const value = props.total ?? DEFAULTS.total;
+    const { config = {} } = props;
+    const value = config.total ?? DEFAULTS.total;
     return typeof value === 'object' ? value : positiveXY(value);
   },
 
-  gap(props: t.GridProps): t.GridXY {
-    const value = props.gap ?? DEFAULTS.gap;
+  gap(props: t.GridProps): t.GridPoint {
+    const { config = {} } = props;
+    const value = config.gap ?? DEFAULTS.gap;
     if (typeof value === 'number') return positiveXY(value);
 
     const x = positive(value.x ?? DEFAULTS.gap);
@@ -17,13 +19,14 @@ export const Wrangle = {
     return { x, y } as const;
   },
 
-  forEach(total: t.GridXY, fn: (x: number, y: number) => void) {
+  forEach(total: t.GridPoint, fn: (x: number, y: number) => void) {
     Array.from({ length: total.y }).forEach((_, y) => {
       Array.from({ length: total.x }).forEach((_, x) => fn(x, y));
     });
   },
 
   config(props: t.GridProps) {
+    const { config = {} } = props;
     const total = Wrangle.total(props);
     const cells: t.GridCell[] = [];
     const columns: SizeValue[] = [];
@@ -40,7 +43,7 @@ export const Wrangle = {
           return args;
         },
       };
-      props.cell?.(args);
+      config.cell?.(args);
       cells.push({ x, y, body });
     };
 
@@ -51,8 +54,8 @@ export const Wrangle = {
     const put = (length: number, into: SizeValue[], fn: (value: number) => SizeValue) => {
       Array.from({ length }).forEach((_, v) => into.push(fn(v)));
     };
-    put(total.x, columns, (value) => size(total.x, value, props.row));
-    put(total.y, rows, (value) => size(total.y, value, props.row));
+    put(total.x, columns, (value) => size(total.x, value, config.column));
+    put(total.y, rows, (value) => size(total.y, value, config.row));
     Wrangle.forEach(total, (x, y) => cell(x, y));
 
     const findItem = (x: number, y: number) => {
@@ -83,4 +86,4 @@ export const Wrangle = {
  * Helpers
  */
 const positive = (value: number) => Math.max(0, value);
-const positiveXY = (x: number, y: number = x): t.GridXY => ({ x: positive(x), y: positive(y) });
+const positiveXY = (x: number, y: number = x): t.GridPoint => ({ x: positive(x), y: positive(y) });
