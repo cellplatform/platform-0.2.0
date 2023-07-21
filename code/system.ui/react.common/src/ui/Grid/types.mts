@@ -25,6 +25,7 @@ export type GridPropsConfig = {
  */
 export type GridCellHandler = (e: GridCell) => void;
 export type GridCell = {
+  cell: t.CellAddress;
   x: number;
   y: number;
   body?: JSX.Element;

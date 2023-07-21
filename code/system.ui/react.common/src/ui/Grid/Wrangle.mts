@@ -1,4 +1,4 @@
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, type t, Sheet } from './common';
 
 type SizeValue = number | string;
 
@@ -33,6 +33,7 @@ export const Wrangle = {
     const rows: SizeValue[] = [];
 
     const cell = (x: number, y: number) => {
+      const cell = Sheet.Cell.address(x, y);
       let body: JSX.Element | undefined;
       const args: t.GridCellConfigureArgs = {
         total,
@@ -44,7 +45,7 @@ export const Wrangle = {
         },
       };
       config.cell?.(args);
-      cells.push({ x, y, body });
+      cells.push({ cell, x, y, body });
     };
 
     const size = (total: number, index: number, fn?: t.GridSizeConfigure) => {
@@ -68,8 +69,9 @@ export const Wrangle = {
       rows,
       forEach(fn: t.GridCellHandler) {
         Wrangle.forEach(total, (x, y) => {
+          const cell = Sheet.Cell.address(x, y);
           const item = findItem(x, y);
-          fn({ x, y, body: item?.body });
+          fn({ cell, x, y, body: item?.body });
         });
       },
     } as const;
