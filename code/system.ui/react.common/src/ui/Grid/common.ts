@@ -1,3 +1,14 @@
+import { type t } from '../common';
+
 export * from '../common';
 
-export const DEFAULTS = {} as const;
+/**
+ * Contants
+ */
+
+const total: t.GridXY = { x: 3, y: 3 };
+
+export const DEFAULTS = {
+  total,
+  gap: 0,
+} as const;
