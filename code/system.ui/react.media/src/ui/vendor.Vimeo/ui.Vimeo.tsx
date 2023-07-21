@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { FC, css, type t } from './common';
-import { IconOverlay } from './components/IconOverlay';
-import { ThumbnailOverlay } from './components/ThumbnailOverlay';
+import { IconOverlay } from './ui/IconOverlay';
+import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
 import { useIconController, usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './logic.Events.mjs';
