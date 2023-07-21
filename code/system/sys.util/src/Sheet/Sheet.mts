@@ -1,5 +1,5 @@
-import { type t } from '../common';
 import { SheetCell as Cell } from './Sheet.Cell.mjs';
+export { Cell };
 
 /**
  * Utilities for working with a Cartesian plane (x,y) that
