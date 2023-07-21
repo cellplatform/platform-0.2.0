@@ -7,6 +7,7 @@ export const ModuleSpecs = {
   'sys.ui.common.Center': () => import('../ui/Center/-SPEC'),
   'sys.ui.common.Chip': () => import('../ui/Chip/-SPEC'),
   'sys.ui.common.Flip': () => import('../ui/Flip/-SPEC'),
+  'sys.ui.common.Grid': () => import('../ui/Grid/-SPEC'),
   'sys.ui.common.Icon': () => import('../ui/Icon/-SPEC'),
   'sys.ui.common.IFrame': () => import('../ui/IFrame/-SPEC'),
   'sys.ui.common.LoadPanel': () => import('../ui/LoadPanel/-SPEC'),

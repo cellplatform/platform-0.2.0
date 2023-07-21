@@ -9,6 +9,7 @@ export type * from './ProgressBar/types.mjs';
 export type * from './PropList/types.mjs';
 export type * from './PropList.FieldSelector/types.mjs';
 export type * from './Spinner/types.mjs';
+export type * from './Grid/types.mjs';
 
 export type * from './Event/types.mjs';
 
