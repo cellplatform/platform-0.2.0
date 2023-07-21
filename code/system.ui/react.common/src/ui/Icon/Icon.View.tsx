@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { t, css, Color } from '../../common';
 
 export type IconProps = { size: number; color?: string };
