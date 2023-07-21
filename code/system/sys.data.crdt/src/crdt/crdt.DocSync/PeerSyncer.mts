@@ -111,7 +111,7 @@ export function PeerSyncer<D extends {}>(
           const complete$ = tx$.pipe(
             rx.filter((e) => e.message === null),
             rx.take(1),
-            rx.delay(10),
+            rx.delay(100),
             rx.map(() => ({ tx, bytes, count, doc: getCurrentDoc() })),
           );
 
