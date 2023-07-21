@@ -1,5 +1,5 @@
 import { expect, t, describe, it } from '../test/index.mjs';
-import * as Util from './Util.mjs';
+import { Util } from './Util.mjs';
 
 describe('Util', () => {
   it('headerValue', () => {
