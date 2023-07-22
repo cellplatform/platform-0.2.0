@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef } from 'react';
+
 import { Dev, type t } from '../../test.ui';
 import { IFrame, DEFAULTS } from '.';
 
@@ -28,9 +30,15 @@ export default Dev.describe('IFrame', (e) => {
     ctx.subject
       .display('grid')
       .size('fill')
-      .render<T>((e) => (
-        <IFrame {...e.state.props} onLoad={(e) => console.info('⚡️ onLoad:', e)} />
-      ));
+      .render<T>((e) => {
+        return (
+          <IFrame
+            {...e.state.props}
+            onReady={(e) => console.info('⚡️ onReady:', e)}
+            onLoad={(e) => console.info('⚡️ onLoad:', e)}
+          />
+        );
+      });
   });
 
   e.it('ui:debug', async (e) => {

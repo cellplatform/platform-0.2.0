@@ -1,28 +1,33 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { css, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 export const IFrame: React.FC<t.IFrameProps> = (props) => {
   const { width, height, loading = 'eager' } = props;
   const content = Wrangle.content(props);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const ref = useRef<HTMLIFrameElement>(null);
 
   /**
-   * [Handlers]
+   * Handlers.
    */
   const handleLoad = () => {
     let href = content.src ?? '';
     try {
-      href = iframeRef.current?.contentWindow?.location.href ?? href;
+      href = ref.current?.contentWindow?.location.href ?? href;
     } catch (error) {
       // [Ignore]: This will be a cross-origin block.
       //           Fire the best guess at what the URL is.
     }
-    props.onLoad?.({ href });
+    props.onLoad?.({ ref, href });
   };
 
   /**
-   * [Render]
+   * Lifecycle
+   */
+  useEffect(() => props.onReady?.({ ref }), []);
+
+  /**
+   * Render
    */
   const styles = {
     base: css({ position: 'relative', width, height }),
@@ -39,7 +44,7 @@ export const IFrame: React.FC<t.IFrameProps> = (props) => {
       {props.src && (
         <iframe
           {...styles.iframe}
-          ref={iframeRef}
+          ref={ref}
           src={content.src}
           srcDoc={content.html}
           title={props.title}
