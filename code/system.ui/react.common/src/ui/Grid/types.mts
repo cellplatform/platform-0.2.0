@@ -31,9 +31,15 @@ export type GridCell = {
 };
 
 export type GridCellConfigure = (e: GridCellConfigureArgs) => void;
-export type GridCellConfigureArgs = GridPoint & {
+export type GridCellConfigureArgs = {
+  cell: GridCellArgs;
   total: GridPoint;
   body(element: JSX.Element | null): GridCellConfigureArgs;
+};
+
+export type GridCellArgs = GridPoint & {
+  address: t.CellAddress;
+  toString(): string;
 };
 
 export type GridSizeConfigure = (e: GridSizeConfigureArgs) => SizeValue;

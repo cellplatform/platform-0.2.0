@@ -35,10 +35,10 @@ export const Wrangle = {
     const cell = (x: number, y: number) => {
       const cell = Sheet.Cell.address(x, y);
       let body: JSX.Element | undefined;
+      const toString = () => `[${x}, ${y}]`;
       const args: t.GridCellConfigureArgs = {
         total,
-        x,
-        y,
+        cell: { x, y, address: Sheet.Cell.address(x, y), toString },
         body(element) {
           body = element ?? undefined;
           return args;

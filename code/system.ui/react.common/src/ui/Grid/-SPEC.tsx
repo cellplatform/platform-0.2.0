@@ -19,7 +19,7 @@ export default Dev.describe('Grid', (e) => {
           return 1;
         },
         cell(e) {
-          if (e.x === 1 && e.y === 2) {
+          if (e.cell.x === 1 && e.cell.y === 2) {
             e.body(<div>{'🌳'}</div>);
           }
         },

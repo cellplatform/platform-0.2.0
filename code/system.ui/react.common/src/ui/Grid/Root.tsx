@@ -25,6 +25,7 @@ export const View: React.FC<t.GridProps> = (props) => {
       border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       position: 'relative',
       boxSizing: 'border-box',
+      display: 'grid',
     }),
   };
 
