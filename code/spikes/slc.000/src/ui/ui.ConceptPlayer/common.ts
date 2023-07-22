@@ -1,2 +1,12 @@
+import { type t } from './common';
 export * from '../common';
-export const DEFAULTS = {} as const;
+
+/**
+ * Constants
+ */
+
+const pos: t.Pos = ['center', 'center'];
+
+export const DEFAULTS = {
+  pos,
+} as const;

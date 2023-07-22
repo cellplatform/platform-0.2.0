@@ -1,5 +1,5 @@
-import { DEFAULTS, FC, type t } from '../common';
 import { PositionSelector } from '../ui.PositionSelector';
+import { DEFAULTS, FC, type t } from './common';
 import { View } from './ui';
 
 /**
