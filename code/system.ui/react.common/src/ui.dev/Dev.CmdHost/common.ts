@@ -7,5 +7,6 @@ export const SpecList = DevBase.SpecList;
  * Constants
  */
 export const DEFAULTS = {
+  focusOnReady: true,
   qs: BASE.qs,
 } as const;

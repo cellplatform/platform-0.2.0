@@ -34,7 +34,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
    * Lifecycle
    */
   useEffect(() => {
-    textboxRef?.focus();
+    textboxRef?.focus(true);
     textboxRef?.selectAll();
   }, []);
 

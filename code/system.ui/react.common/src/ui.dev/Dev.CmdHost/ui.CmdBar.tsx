@@ -14,6 +14,8 @@ export type CmdBarProps = {
 };
 
 export const CmdBar: React.FC<CmdBarProps> = (props) => {
+  const { focusOnReady = DEFAULTS.focusOnReady } = props;
+
   const hintKeys = Wrangle.hintKeys(props);
   const hasHintKeys = hintKeys.length > 0;
 
@@ -57,7 +59,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       spellCheck={false}
       autoCorrect={false}
       autoCapitalize={false}
-      focusOnReady={props.focusOnReady}
+      focusOnReady={focusOnReady}
       //
       onFocusChange={props.onFocusChange}
       onReady={props.onReady}
