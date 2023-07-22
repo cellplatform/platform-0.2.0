@@ -8,6 +8,12 @@ export const R = { clamp, mergeDeepRight, prop, sortBy };
  * @system
  */
 export { Path } from 'sys.fs';
+export { Delete, Time, Value, cuid, rx, slug } from 'sys.util';
+
+/**
+ * @system → UI
+ */
+export { File } from 'sys.ui.dom';
 export {
   Color,
   FC,
@@ -19,5 +25,3 @@ export {
   css,
   useSizeObserver,
 } from 'sys.ui.react.common';
-export { Delete, Time, Value, cuid, rx, slug } from 'sys.util';
-export { File } from 'sys.ui.dom';
