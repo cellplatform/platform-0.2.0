@@ -8,9 +8,7 @@ const DEFAULTS = {
 
 type T = { props: IFrameRefProps };
 const initial: T = {
-  props: {
-    src: DEFAULTS.LandingPage,
-  },
+  props: { src: DEFAULTS.LandingPage },
 };
 
 export default Dev.describe('Landing.IFrame', (e) => {
@@ -38,7 +36,7 @@ export default Dev.describe('Landing.IFrame', (e) => {
       const target = (title: string, url: string) => {
         dev.button((btn) => {
           btn
-            .label(`url → "${title}"`)
+            .label(`${title}`)
             .right((e) => (e.state.props.src === url ? `←` : ''))
             .onClick((e) =>
               e.change((d) => {
@@ -49,7 +47,7 @@ export default Dev.describe('Landing.IFrame', (e) => {
         });
       };
 
-      target('Root Landing Page', DEFAULTS.LandingPage);
+      target('Landing Page (Root)', DEFAULTS.LandingPage);
       target('EUSIC', DEFAULTS.EUSIC);
     });
   });
