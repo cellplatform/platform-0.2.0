@@ -16,7 +16,7 @@ const initial: T = {
 export default Dev.describe('Vimeo Player', (e) => {
   const bus = rx.bus();
   const instance = { bus, id: `foo.${slug()}` };
-  const events = VimeoPlayer.Events({ instance });
+  const events = VimeoPlayer.Events(instance);
 
   type LocalStore = Pick<t.VimeoPlayerProps, 'video'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.Vimeo');

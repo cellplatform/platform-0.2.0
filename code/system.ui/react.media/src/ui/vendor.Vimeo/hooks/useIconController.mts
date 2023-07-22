@@ -18,7 +18,7 @@ export const useIconController: t.UseVimeoIconController = (args: {
    * Lifecycle
    */
   useEffect(() => {
-    const events = VimeoEvents({ instance, isEnabled });
+    const events = VimeoEvents(instance, { isEnabled });
     const status$ = events.status.$.pipe();
     const start$ = status$.pipe(filter((e) => e.action === 'start'));
     const loaded$ = status$.pipe(filter((e) => e.action === 'start'));

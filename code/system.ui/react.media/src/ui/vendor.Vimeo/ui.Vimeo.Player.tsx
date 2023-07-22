@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { FC, css, type t } from './common';
+import { rx, FC, css, type t } from './common';
 
 import { VimeoEvents as Events } from './Events.mjs';
 import { useIconController, usePlayerController } from './hooks';
@@ -45,20 +45,21 @@ const View: React.FC<t.VimeoPlayerProps> = (props) => {
   const controller = usePlayerController({ instance, video, player });
 
   useEffect(() => {
-    const events = Events({ instance });
-    const status$ = events.status.$;
+    const { dispose$, dispose } = rx.disposable();
 
-    if (player && typeof video === 'number') {
-      events.load.fire(video, { muted });
+    if (instance) {
+      const events = Events(instance, { dispose$ });
+      const status$ = events.status.$;
+
+      if (player && typeof video === 'number') {
+        events.load.fire(video, { muted });
+      }
+
+      status$
+        .pipe(distinctUntilChanged((prev, next) => prev.playing === next.playing))
+        .subscribe((e) => setIsPlaying(e.playing));
     }
-
-    status$
-      .pipe(distinctUntilChanged((prev, next) => prev.playing === next.playing))
-      .subscribe((e) => {
-        setIsPlaying(e.playing);
-      });
-
-    return () => events.dispose();
+    return dispose;
   }, [video, player]); // eslint-disable-line
 
   useEffect(() => {

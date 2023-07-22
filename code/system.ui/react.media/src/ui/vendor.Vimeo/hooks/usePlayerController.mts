@@ -16,7 +16,6 @@ export function usePlayerController(args: {
   const { player, video = -1 } = args;
   const busid = rx.bus.instance(args.instance?.bus);
   const instance = args.instance?.id ?? '';
-  const isValid = Boolean(busid && args.instance && instance && video > 0);
 
   const seekRef = useRef<number | undefined>();
   const playing = useRef<boolean>(false);
@@ -27,181 +26,186 @@ export function usePlayerController(args: {
    * Lifecycle
    */
   useEffect(() => {
-    const bus = rx.busAsType<t.VimeoEvent>(args.instance?.bus ?? rx.bus());
-    const events = VimeoEvents({ instance: args.instance ?? { id: '', bus } });
+    const { dispose, dispose$ } = rx.disposable();
 
-    const getTimes = async (): Promise<Times> => {
-      if (!player) return { duration: -1, percent: -1, seconds: -1 };
-      const duration = await player.getDuration();
-      const seconds = await player.getCurrentTime();
-      const percent = duration === 0 ? 0 : seconds / duration;
-      return { duration, seconds, percent };
-    };
+    if (args.instance) {
+      const events = VimeoEvents(args.instance, { dispose$ });
+      const bus = rx.busAsType<t.VimeoEvent>(args.instance.bus);
 
-    const getStatus = async () => toStatus('info', await getTimes());
+      const getTimes = async (): Promise<Times> => {
+        if (!player) return { duration: -1, percent: -1, seconds: -1 };
+        const duration = await player.getDuration();
+        const seconds = await player.getCurrentTime();
+        const percent = duration === 0 ? 0 : seconds / duration;
+        return { duration, seconds, percent };
+      };
 
-    const toStatus = async (action: Action, times: Times): Promise<t.VimeoStatus> => {
-      return Delete.undefined({
-        instance,
-        action,
-        ...times,
-        video: (await player?.getVideoId()) ?? video,
-        percent: Math.min(times.percent, 1),
-        playing: playing.current,
-        ended: times.seconds >= times.duration,
-      });
-    };
+      const getStatus = async () => toStatus('info', await getTimes());
 
-    const fireStatus = async (action: Action, times: Times) => {
-      if (loading.current && action !== 'loaded') return;
-      bus.fire({
-        type: 'Vimeo/status',
-        payload: await toStatus(action, times),
-      });
-    };
-
-    const initLoad = async () => {
-      loading.current = video;
-      setOpacity(0);
-
-      // HACK: Force load the video's first frame by playing then immediately stopping.
-      //       This allows seeking behavior to work correctly, whereby changes to
-      //       the "seek" position nothing until the video has started playing.
-
-      /**
-       * NOTE - This will fail if the user has not interactived with the document.
-       *        See:
-       *          https://developer.chrome.com/blog/autoplay
-       */
-
-      // await events.play.fire();
-      // await events.pause.fire();
-      // await events.seek.fire(0);
-      // await time.wait(10);
-
-      loading.current = undefined;
-      setOpacity(1);
-    };
-
-    const onLoaded = async () => {
-      fireStatus('loaded', await getTimes());
-    };
-
-    const onUpdate = (data: Times) => {
-      const status: Action = seekRef.current !== undefined ? 'seek' : 'update';
-
-      fireStatus(status, data);
-      seekRef.current = undefined;
-    };
-    const onPlay = (data: Times) => {
-      const wasPlaying = playing.current;
-      playing.current = true;
-      if (!wasPlaying) fireStatus('start', data);
-    };
-    const onPause = (data: Times) => {
-      const wasPlaying = playing.current;
-      playing.current = false;
-      if (wasPlaying) fireStatus('stop', data);
-    };
-    const onEnd = (data: Times) => {
-      playing.current = false;
-      fireStatus('end', data);
-    };
-
-    if (player) {
-      player.on('loaded', onLoaded);
-      player.on('play', onPlay);
-      player.on('timeupdate', onUpdate);
-      player.on('pause', onPause);
-      player.on('ended', onEnd);
-
-      /**
-       * Contoller: Status.
-       */
-      events.status.req$.subscribe(async (e) => {
-        const { tx = slug() } = e;
-        const status = await getStatus();
-        bus.fire({
-          type: 'Vimeo/status:res',
-          payload: { tx, instance, status },
+      const toStatus = async (action: Action, times: Times): Promise<t.VimeoStatus> => {
+        return Delete.undefined({
+          instance,
+          action,
+          ...times,
+          video: (await player?.getVideoId()) ?? video,
+          percent: Math.min(times.percent, 1),
+          playing: playing.current,
+          ended: times.seconds >= times.duration,
         });
-      });
+      };
 
-      /**
-       * Controller: Load.
-       */
-      events.load.req$.subscribe(async (e) => {
-        const { tx = slug() } = e;
+      const fireStatus = async (action: Action, times: Times) => {
+        if (loading.current && action !== 'loaded') return;
+        bus.fire({
+          type: 'Vimeo/status',
+          payload: await toStatus(action, times),
+        });
+      };
 
-        const current = await player.getVideoId();
-        const isLoaded = current === e.video;
+      const initLoad = async () => {
+        loading.current = video;
+        setOpacity(0);
 
-        if (!isLoaded) await player.loadVideo(e.video);
-        if (e.muted !== undefined) await player.setMuted(e.muted);
-
-        await initLoad();
+        // HACK: Force load the video's first frame by playing then immediately stopping.
+        //       This allows seeking behavior to work correctly, whereby changes to
+        //       the "seek" position nothing until the video has started playing.
 
         /**
-         * TODO 🐷
-         * - perform "Play/Stop" (seek fix) HACK here
-         *   not on the [onLoaded] handler
+         * NOTE - This will fail if the user has not interactived with the document.
+         *        See:
+         *          https://developer.chrome.com/blog/autoplay
          */
 
-        bus.fire({
-          type: 'Vimeo/load:res',
-          payload: {
-            tx,
-            instance,
-            action: isLoaded ? 'none:already-loaded' : 'loaded',
-            status: await getStatus(),
-          },
+        // await events.play.fire();
+        // await events.pause.fire();
+        // await events.seek.fire(0);
+        // await time.wait(10);
+
+        loading.current = undefined;
+        setOpacity(1);
+      };
+
+      const onLoaded = async () => {
+        fireStatus('loaded', await getTimes());
+      };
+
+      const onUpdate = (data: Times) => {
+        const status: Action = seekRef.current !== undefined ? 'seek' : 'update';
+
+        fireStatus(status, data);
+        seekRef.current = undefined;
+      };
+      const onPlay = (data: Times) => {
+        const wasPlaying = playing.current;
+        playing.current = true;
+        if (!wasPlaying) fireStatus('start', data);
+      };
+      const onPause = (data: Times) => {
+        const wasPlaying = playing.current;
+        playing.current = false;
+        if (wasPlaying) fireStatus('stop', data);
+      };
+      const onEnd = (data: Times) => {
+        playing.current = false;
+        fireStatus('end', data);
+      };
+
+      if (player) {
+        player.on('loaded', onLoaded);
+        player.on('play', onPlay);
+        player.on('timeupdate', onUpdate);
+        player.on('pause', onPause);
+        player.on('ended', onEnd);
+
+        /**
+         * Contoller: Status.
+         */
+        events.status.req$.subscribe(async (e) => {
+          const { tx = slug() } = e;
+          const status = await getStatus();
+          bus.fire({
+            type: 'Vimeo/status:res',
+            payload: { tx, instance, status },
+          });
         });
-      });
 
-      /**
-       * Controller: Play.
-       */
-      events.play.req$.subscribe(async (e) => {
-        const { tx = slug() } = e;
-        await player.play();
-        await Time.wait(1); // NB: Allow a tick to prevent "pause" (or other actions performed immediately after) from erroring.
-        bus.fire({ type: 'Vimeo/play:res', payload: { tx, instance } });
-      });
+        /**
+         * Controller: Load.
+         */
+        events.load.req$.subscribe(async (e) => {
+          const { tx = slug() } = e;
 
-      /**
-       * Controller: Pause.
-       */
-      events.pause.req$.subscribe(async (e) => {
-        const { tx = slug() } = e;
-        await player.pause();
-        bus.fire({ type: 'Vimeo/pause:res', payload: { tx, instance } });
-      });
+          const current = await player.getVideoId();
+          const isLoaded = current === e.video;
 
-      /**
-       * Contoller: Seek.
-       */
-      events.seek.req$.subscribe(async (e) => {
-        const { tx = slug() } = e;
-        const secs = R.clamp(0, await player.getDuration(), e.seconds);
-        seekRef.current = secs;
-        await player.setCurrentTime(secs);
-        bus.fire({ type: 'Vimeo/seek:res', payload: { tx, instance } });
-      });
-    }
+          if (!isLoaded) await player.loadVideo(e.video);
+          if (e.muted !== undefined) await player.setMuted(e.muted);
 
-    return () => {
+          await initLoad();
+
+          /**
+           * TODO 🐷
+           * - perform "Play/Stop" (seek fix) HACK here
+           *   not on the [onLoaded] handler
+           */
+
+          bus.fire({
+            type: 'Vimeo/load:res',
+            payload: {
+              tx,
+              instance,
+              action: isLoaded ? 'none:already-loaded' : 'loaded',
+              status: await getStatus(),
+            },
+          });
+        });
+
+        /**
+         * Controller: Play.
+         */
+        events.play.req$.subscribe(async (e) => {
+          const { tx = slug() } = e;
+          await player.play();
+          await Time.wait(1); // NB: Allow a tick to prevent "pause" (or other actions performed immediately after) from erroring.
+          bus.fire({ type: 'Vimeo/play:res', payload: { tx, instance } });
+        });
+
+        /**
+         * Controller: Pause.
+         */
+        events.pause.req$.subscribe(async (e) => {
+          const { tx = slug() } = e;
+          await player.pause();
+          bus.fire({ type: 'Vimeo/pause:res', payload: { tx, instance } });
+        });
+
+        /**
+         * Contoller: Seek.
+         */
+        events.seek.req$.subscribe(async (e) => {
+          const { tx = slug() } = e;
+          const secs = R.clamp(0, await player.getDuration(), e.seconds);
+          seekRef.current = secs;
+          await player.setCurrentTime(secs);
+          bus.fire({ type: 'Vimeo/seek:res', payload: { tx, instance } });
+        });
+      }
+
       /**
        * Dispose.
        */
-      if (player) {
-        player.off('loaded', onLoaded);
-        player.off('play', onPlay);
-        player.off('timeupdate', onUpdate);
-        player.off('pause', onPause);
-        player.off('ended', onEnd);
-      }
-      events.dispose();
-    };
+      dispose$.subscribe(() => {
+        if (player) {
+          player.off('loaded', onLoaded);
+          player.off('play', onPlay);
+          player.off('timeupdate', onUpdate);
+          player.off('pause', onPause);
+          player.off('ended', onEnd);
+        }
+      });
+    }
+
+    return dispose;
   }, [busid, instance, player]); // eslint-disable-line
 
   /**
@@ -210,6 +214,5 @@ export function usePlayerController(args: {
   return {
     instance: { bus: busid, id: instance },
     opacity,
-    isValid,
   } as const;
 }

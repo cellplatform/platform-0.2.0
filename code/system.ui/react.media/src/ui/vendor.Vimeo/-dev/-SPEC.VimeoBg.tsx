@@ -16,9 +16,9 @@ export default Dev.describe('VimeoBackground Player', (e) => {
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
 
-    const bus = rx.bus<t.VimeoEvent>();
+    const bus = rx.bus();
     const instance = { bus, id: `foo.${slug()}` };
-    events = VimeoBackground.Events({ instance });
+    events = VimeoBackground.Events(instance);
 
     ctx.subject.size([800, 600]).render<T>((e) => {
       return (

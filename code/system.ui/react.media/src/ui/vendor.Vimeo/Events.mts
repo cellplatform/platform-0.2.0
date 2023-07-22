@@ -5,15 +5,17 @@ import { R, rx, slug, type t } from './common';
 /**
  * Event API.
  */
-export function VimeoEvents(args: {
-  instance?: t.VimeoInstance;
-  isEnabled?: boolean;
-  dispose$?: t.Observable<any>;
-}): t.VimeoEvents {
-  const { isEnabled = true } = args;
-  const busid = rx.bus.instance(args.instance?.bus);
-  const instance = args.instance?.id ?? '';
-  const bus = rx.busAsType<t.VimeoEvent>(args.instance?.bus ?? rx.bus());
+export function VimeoEvents(
+  input: t.VimeoInstance,
+  options: {
+    isEnabled?: boolean;
+    dispose$?: t.Observable<any>;
+  } = {},
+): t.VimeoEvents {
+  const { isEnabled = true } = options;
+  const busid = rx.bus.instance(input?.bus);
+  const instance = input?.id ?? '';
+  const bus = rx.busAsType<t.VimeoEvent>(input?.bus ?? rx.bus());
 
   const { dispose, dispose$ } = rx.disposable();
 
