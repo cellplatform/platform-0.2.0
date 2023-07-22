@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { css, Dev, type t } from '../../test.ui';
 import { Grid } from '.';
 
 const DEFAULTS = Grid.DEFAULTS;
@@ -19,8 +19,18 @@ export default Dev.describe('Grid', (e) => {
           return 1;
         },
         cell(e) {
+          const styles = {
+            base: css({ padding: 5 }),
+            tree: css({ fontSize: 30 }),
+          };
           if (e.cell.x === 1 && e.cell.y === 2) {
-            e.body(<div>{'🌳'}</div>);
+            e.body(
+              <div {...css(styles.base)}>
+                <div {...styles.tree}>{'🌳'}</div>
+              </div>,
+            );
+          } else {
+            e.body(<div {...styles.base}>{`${e.cell.address}`}</div>);
           }
         },
       },
