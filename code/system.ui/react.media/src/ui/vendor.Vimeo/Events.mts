@@ -13,9 +13,9 @@ export function VimeoEvents(
   } = {},
 ): t.VimeoEvents {
   const { enabled = true } = options;
-  const busid = rx.bus.instance(input?.bus);
+  const busid = rx.bus.instance(input.bus);
   const instance = input?.id ?? '';
-  const bus = rx.busAsType<t.VimeoEvent>(input?.bus ?? rx.bus());
+  const bus = rx.busAsType<t.VimeoEvent>(input.bus ?? rx.bus());
 
   const { dispose, dispose$ } = rx.disposable();
 
