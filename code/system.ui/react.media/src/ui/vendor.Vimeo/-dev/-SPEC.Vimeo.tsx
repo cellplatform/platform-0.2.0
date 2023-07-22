@@ -1,11 +1,11 @@
 import { Dev } from '../../../test.ui';
 
-import { Vimeo } from '..';
+import { VimeoPlayer } from '..';
 import { rx, slug, type t } from '../common';
 import { VIDEO } from './-Sample.mjs';
 
 type T = {
-  props: t.VimeoProps;
+  props: t.VimeoPlayerProps;
   debug: { video?: string };
 };
 const initial: T = {
@@ -16,9 +16,9 @@ const initial: T = {
 export default Dev.describe('Vimeo Player', (e) => {
   const bus = rx.bus();
   const instance = { bus, id: `foo.${slug()}` };
-  const events = Vimeo.Events({ instance });
+  const events = VimeoPlayer.Events({ instance });
 
-  type LocalStore = Pick<t.VimeoProps, 'video'>;
+  type LocalStore = Pick<t.VimeoPlayerProps, 'video'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.Vimeo');
   const local = localstore.object({
     video: VIDEO['stock/running'],
@@ -37,7 +37,7 @@ export default Dev.describe('Vimeo Player', (e) => {
 
     ctx.subject.render<T>((e) => {
       return (
-        <Vimeo
+        <VimeoPlayer
           {...e.state.props}
           instance={instance}
           onIconClick={(e) => console.info(`⚡️ icon click`, e)}
@@ -51,8 +51,8 @@ export default Dev.describe('Vimeo Player', (e) => {
 
     dev.section('Controls', (dev) => {
       dev
-        .button((btn) => btn.label('Play').onClick((e) => events.play.fire()))
-        .button((btn) => btn.label('Pause').onClick((e) => events.pause.fire()));
+        .button((btn) => btn.label('play').onClick((e) => events.play.fire()))
+        .button((btn) => btn.label('pause').onClick((e) => events.pause.fire()));
     });
 
     dev.hr(5, 20);

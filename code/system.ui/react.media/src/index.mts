@@ -12,8 +12,8 @@ export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
 export { ConceptPlayer } from './ui/Concept.Player';
 
-export { Vimeo, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
 export { YouTube } from './ui/vendor.YouTube';
+export { VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
 
 /**
  * Dev

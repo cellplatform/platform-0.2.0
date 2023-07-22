@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { FC, IFrame, css, type t } from './common';
 
 import { usePlayerController } from './hooks';
-import { VimeoPlayer } from './libs.mjs';
-import { VimeoEvents } from './logic.Events.mjs';
+import { VimeoLib } from './libs.mjs';
+import { VimeoEvents } from './Events.mjs';
 
 type Ref = React.RefObject<HTMLIFrameElement>;
 
@@ -15,13 +15,13 @@ const View: React.FC<t.VimeoBackgroundProps> = (props) => {
   const src = `https://player.vimeo.com/video/${props.video}?background=1&dnt=true`;
 
   const [ref, setRef] = useState<Ref>();
-  const [player, setPlayer] = useState<VimeoPlayer>();
+  const [player, setPlayer] = useState<VimeoLib>();
 
   useEffect(() => {
     const el = ref?.current;
-    let player: VimeoPlayer | undefined;
+    let player: VimeoLib | undefined;
     if (el) {
-      player = new VimeoPlayer(el);
+      player = new VimeoLib(el);
       setPlayer(player);
     }
     return () => {

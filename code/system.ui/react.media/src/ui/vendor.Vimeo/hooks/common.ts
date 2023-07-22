@@ -1,2 +1,2 @@
 export * from '../common';
-export { VimeoEvents } from '../logic.Events.mjs';
+export { VimeoEvents } from '../Events.mjs';

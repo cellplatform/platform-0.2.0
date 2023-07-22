@@ -1,12 +1,13 @@
 import { type t } from '../common';
 
 type Url = string;
+
 export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
 
 /**
  * Component: Player
  */
-export type VimeoProps = {
+export type VimeoPlayerProps = {
   instance?: t.VimeoInstance;
   video?: number;
   muted?: boolean;

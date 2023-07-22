@@ -3,8 +3,8 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { FC, css, type t } from './common';
 
 import { useIconController, usePlayerController } from './hooks';
-import { VimeoPlayer } from './libs.mjs';
-import { VimeoEvents } from './logic.Events.mjs';
+import { VimeoLib } from './libs.mjs';
+import { VimeoEvents } from './Events.mjs';
 import { IconOverlay } from './ui/IconOverlay';
 import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
 
@@ -12,17 +12,17 @@ import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
  * Wrapper for the Vimeo player API.
  * https://github.com/vimeo/player.js
  */
-const View: React.FC<t.VimeoProps> = (props) => {
+const View: React.FC<t.VimeoPlayerProps> = (props) => {
   const { instance, video, width, height, borderRadius, muted } = props;
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [player, setPlayer] = useState<VimeoPlayer>();
+  const [player, setPlayer] = useState<VimeoLib>();
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
   useEffect(() => {
     const div = divRef.current as HTMLDivElement;
 
-    const player = new VimeoPlayer(div, {
+    const player = new VimeoLib(div, {
       id: video,
       width,
       height,
@@ -104,7 +104,7 @@ type Fields = {
   Events: t.VimeoEventsFactory;
   useIconController: t.UseVimeoIconController;
 };
-export const Vimeo = FC.decorate<t.VimeoProps, Fields>(
+export const VimeoPlayer = FC.decorate<t.VimeoPlayerProps, Fields>(
   View,
   { Events: VimeoEvents, useIconController },
   { displayName: 'Vimeo.Player' },

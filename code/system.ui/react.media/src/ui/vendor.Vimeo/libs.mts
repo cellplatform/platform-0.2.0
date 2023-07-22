@@ -1,2 +1,2 @@
-import VimeoPlayer from '@vimeo/player';
-export { VimeoPlayer };
+import VimeoLib from '@vimeo/player';
+export { VimeoLib };
