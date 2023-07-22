@@ -1,4 +1,4 @@
-import { DEFAULTS, Vimeo, css, type t } from './common';
+import { DEFAULTS, Position, Vimeo, css, type t } from './common';
 
 export type VideoProps = {
   vimeo?: t.VimeoInstance;
@@ -8,19 +8,16 @@ export type VideoProps = {
 
 export const Video: React.FC<VideoProps> = (props) => {
   const { video = {}, vimeo } = props;
+  const pos = video.pos;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      ...Wrangle.gridCss(video?.pos),
-    }),
     player: css({}),
   };
 
-  const elPlayer = video.id && vimeo && (
+  const elPlayer = Boolean(video.id && vimeo) && (
     <Vimeo.Player
       //
       instance={vimeo}
@@ -30,7 +27,11 @@ export const Video: React.FC<VideoProps> = (props) => {
     />
   );
 
-  return <div {...css(styles.base, props.style)}>{elPlayer}</div>;
+  return (
+    <Position position={pos} style={props.style}>
+      {elPlayer}
+    </Position>
+  );
 };
 
 /**

@@ -1,7 +1,7 @@
 import { ConceptPlayer } from '..';
 import { Dev, css, rx, slug, type t, Icons } from '../../../test.ui';
 
-import { Vimeo } from '../common';
+import { Vimeo, Position } from '../common';
 
 const DEFAULTS = ConceptPlayer.DEFAULTS;
 const SAMPLE_VIDEO = 499921561; // vimeo/tubes
@@ -49,7 +49,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
     dev.row((e) => {
       return (
         <div {...css({ display: 'grid', placeItems: 'center' })}>
-          <ConceptPlayer.PositionSelector
+          <Position.Selector
             selected={e.state.props.video?.pos}
             onSelect={(e) => {
               state.change((d) => {
