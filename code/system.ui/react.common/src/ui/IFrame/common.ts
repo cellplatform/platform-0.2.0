@@ -1,5 +1,9 @@
-import type { t } from '../common.t';
+import { type t } from '../common';
+export * from '../common';
 
+/**
+ * Constants
+ */
 const loading: t.IFrameLoading = 'eager';
 
 export const DEFAULTS = {

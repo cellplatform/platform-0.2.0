@@ -1,5 +1,5 @@
-import { Dev } from '../../test.ui';
-import { IFrame, IFrameProps } from './IFrame';
+import { Dev, type t } from '../../test.ui';
+import { IFrame } from '.';
 
 const DEFAULTS = IFrame.DEFAULTS;
 
@@ -8,13 +8,16 @@ const backgroundImage = {
   opacity: 0.3,
 };
 
-type T = { props: IFrameProps; debug: { backgroundImage: boolean } };
+type T = {
+  props: t.IFrameProps;
+  debug: { bgImage: boolean };
+};
 const initial: T = {
   props: {
     src: 'https://en.wikipedia.org/wiki/World_Wide_Web_Consortium',
     allow: 'camera; microphone',
   },
-  debug: { backgroundImage: true },
+  debug: { bgImage: true },
 };
 
 export default Dev.describe('IFrame', (e) => {
@@ -41,15 +44,15 @@ export default Dev.describe('IFrame', (e) => {
     dev.boolean((btn) =>
       btn
         .label('host.backgroundImage')
-        .value((e) => e.state.debug.backgroundImage)
+        .value((e) => e.state.debug.bgImage)
         .onClick((e) => {
-          const next = !e.state.current.debug.backgroundImage;
-          e.change((d) => (d.debug.backgroundImage = next));
+          const next = !e.state.current.debug.bgImage;
+          e.change((d) => (d.debug.bgImage = next));
           e.ctx.host.backgroundImage(next ? backgroundImage : null);
         }),
     );
 
-    dev.hr();
+    dev.hr(5, 20);
 
     dev.section('Load', (dev) => {
       const load = (label: string, url?: string) => {
@@ -59,19 +62,19 @@ export default Dev.describe('IFrame', (e) => {
       const local = new URL(`${location.origin}${location.pathname}`);
       load('local', local.href);
       load('local?dev=...', `${local.href}?dev=sys.ui.common.Center`);
-      dev.hr();
+      dev.hr(-1, 5);
       load('Wikipedia: "W3C"', 'https://en.wikipedia.org/wiki/World_Wide_Web_Consortium');
       load('Wikipedia: "Foobar" mobile format', 'https://en.m.wikipedia.org/wiki/Foobar');
       load('Google (← blocked)', 'https://google.com');
-      dev.hr();
+      dev.hr(-1, 5);
       dev.button('srcDoc (← <html>)', (e) => {
         e.change((d) => (d.props.src = { html: '<h1>Hello 👋<h1>' }));
       });
-      dev.hr();
+      dev.hr(-1, 5);
       dev.button('`undefined`', (e) => e.change((d) => (d.props.src = undefined)));
     });
 
-    dev.hr(5, 15);
+    dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
@@ -82,7 +85,7 @@ export default Dev.describe('IFrame', (e) => {
       );
 
       dev.boolean((btn) => {
-        const label = (props: IFrameProps) => `loading: "${props.loading ?? DEFAULTS.loading}"`;
+        const label = (props: t.IFrameProps) => `loading: "${props.loading ?? DEFAULTS.loading}"`;
         btn
           .label((e) => label(e.state.props))
           .value((e) => (e.state.props.loading ?? DEFAULTS.loading) === DEFAULTS.loading)
