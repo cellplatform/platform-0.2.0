@@ -12,6 +12,8 @@ export { Switch } from './ui/Button.Switch';
 export { Card } from './ui/Card';
 export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
+export { Flip } from './ui/Flip';
+export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { ObjectView } from './ui/ObjectView';
