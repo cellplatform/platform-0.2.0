@@ -1,7 +1,14 @@
 /**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListProps } from 'sys.ui.react.common/src/types.mjs';
+export type {
+  CssValue,
+  CssEdgesInput,
+  PropListProps,
+  CSSProperties,
+} from 'sys.ui.react.common/src/types.mjs';
+
+export type { VimeoEvents, VimeoInstance } from 'sys.ui.react.media/src/types.mjs';
 
 /**
  * @local
