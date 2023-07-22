@@ -21,8 +21,6 @@ export const View: React.FC<t.GridProps> = (props) => {
       rowGap: `${gap.y}px`,
     }),
     block: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       position: 'relative',
       boxSizing: 'border-box',
       display: 'grid',

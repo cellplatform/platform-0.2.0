@@ -1,6 +1,8 @@
 import { type t } from './common';
 
+type RenderValue = JSX.Element | null | undefined | false;
 type SizeValue = number | string;
+
 export type GridPoint = { x: number; y: number };
 export type GridSizePoint = { x: SizeValue; y: SizeValue };
 
@@ -30,20 +32,16 @@ export type GridCell = {
   body?: JSX.Element;
 };
 
-export type GridCellConfigure = (e: GridCellConfigureArgs) => void;
-export type GridCellConfigureArgs = {
-  cell: GridCellArgs;
-  total: GridPoint;
-  body(element: JSX.Element | null): GridCellConfigureArgs;
-};
-
-export type GridCellArgs = GridPoint & {
+export type GridCellConfigure = (e: GridCellConfigureArgs) => RenderValue | void; // NB: return value is the [body] if specified.
+export type GridCellConfigureArgs = GridPoint & {
   address: t.CellAddress;
+  total: GridPoint;
+  body(element: RenderValue): GridCellConfigureArgs;
   toString(): string;
 };
 
 export type GridSizeConfigure = (e: GridSizeConfigureArgs) => SizeValue;
 export type GridSizeConfigureArgs = {
-  total: number;
   index: number;
+  total: number;
 };

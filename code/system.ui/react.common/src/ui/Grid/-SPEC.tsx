@@ -20,18 +20,22 @@ export default Dev.describe('Grid', (e) => {
         },
         cell(e) {
           const styles = {
-            base: css({ padding: 5 }),
+            base: css({ padding: 5, backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */ }),
             tree: css({ fontSize: 30 }),
           };
-          if (e.cell.x === 1 && e.cell.y === 2) {
-            e.body(
+          // NB: showing as return value.
+          if (e.x === 1 && e.y === 2) {
+            return (
               <div {...css(styles.base)}>
                 <div {...styles.tree}>{'🌳'}</div>
-              </div>,
+              </div>
             );
-          } else {
-            e.body(<div {...styles.base}>{`${e.cell.address}`}</div>);
           }
+
+          // NB: showing as method call.
+          e.body(<div {...styles.base}>{`${e.address}`}</div>);
+
+          return;
         },
       },
     },

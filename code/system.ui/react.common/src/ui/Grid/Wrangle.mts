@@ -1,3 +1,5 @@
+import { useEffect, useState, useRef, isValidElement } from 'react';
+
 import { DEFAULTS, type t, Sheet } from './common';
 
 type SizeValue = number | string;
@@ -34,17 +36,22 @@ export const Wrangle = {
 
     const cell = (x: number, y: number) => {
       const cell = Sheet.Cell.address(x, y);
-      let body: JSX.Element | undefined;
-      const toString = () => `[${x}, ${y}]`;
+      let body: JSX.Element | undefined = undefined;
+
       const args: t.GridCellConfigureArgs = {
         total,
-        cell: { x, y, address: Sheet.Cell.address(x, y), toString },
+        x,
+        y,
+        address: Sheet.Cell.address(x, y),
+        toString: () => `[${x}, ${y}]`,
         body(element) {
-          body = element ?? undefined;
+          if (isValidElement(element)) body = element;
           return args;
         },
       };
-      config.cell?.(args);
+      const res = config.cell?.(args);
+      if (isValidElement(res)) body = res;
+
       const position = { x, y };
       cells.push({ cell, position, body });
     };
