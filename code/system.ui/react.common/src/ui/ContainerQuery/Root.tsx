@@ -25,7 +25,10 @@ export const ContainerQuery: React.FC<t.ContainerQueryProps> = (props) => {
      */
     withinClass(parentClass, `{ container-type: inline-size; }`);
     insert(`@container (width < 500px) {
-      .${childClass} { color: blue; }
+      .${childClass} { 
+        color: blue; 
+        font-size: 50px;
+      }
     }`);
 
     return () => {
