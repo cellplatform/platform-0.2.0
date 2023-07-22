@@ -18,7 +18,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
 
   const bus = rx.bus();
   const instance = { bus, id: `foo.${slug()}` };
-  const events = Vimeo.Events({ instance });
+  const events = Vimeo.Events(instance);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
