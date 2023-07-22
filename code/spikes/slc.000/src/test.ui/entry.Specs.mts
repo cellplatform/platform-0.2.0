@@ -12,10 +12,12 @@ export const Specs = {
   // SLC (Social Lean Canvas)
   'slc.tests': () => import('./-TestRunner'),
   'slc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
-  'slc.ui.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
-  'slc.ui.ConceptPlayer': () => import('../ui/ui.ConceptPlayer/-dev/-SPEC'),
-  'slc.ui.PositionSelector': () => import('../ui/ui.PositionSelector/-dev/-SPEC'),
-  'slc.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
+  'slc.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
+
+  'sys.common.ui.ConceptPlayer': () => import('../ui/ui.ConceptPlayer/-dev/-SPEC'),
+  'sys.common.ui.Position': () => import('../ui/ui.Position/-SPEC'),
+  'sys.common.ui.Position.Selector': () => import('../ui/ui.PositionSelector/-SPEC'),
+  'sys.common.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
   // External
   'slc.ext.Ember': () => import('../ui/ext.Ember/-SPEC'),
