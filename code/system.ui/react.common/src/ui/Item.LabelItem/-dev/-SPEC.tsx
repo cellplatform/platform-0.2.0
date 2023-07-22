@@ -1,5 +1,5 @@
 import { DEFAULTS, LabelItem } from '..';
-import { Dev, Time, type t } from '../../test.ui';
+import { Dev, Time, type t } from '../../../test.ui';
 import { Sample } from './-Sample';
 
 type T = {

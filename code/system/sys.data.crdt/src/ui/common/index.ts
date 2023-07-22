@@ -1,4 +1,6 @@
-export type { t } from '../common.t';
+import type * as t from '../common/types.mjs';
+export type { t };
+
 export { Pkg } from '../../index.pkg.mjs';
 
 export * from '../../common';

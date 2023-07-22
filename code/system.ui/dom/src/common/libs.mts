@@ -2,8 +2,7 @@
  * @external
  */
 import { clone, uniq } from 'ramda';
-export const R = { clone, uniq };
-
+export const R = { clone, uniq } as const;
 export { Subject } from 'rxjs';
 
 /**

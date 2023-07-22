@@ -2,7 +2,7 @@
  * @external
  */
 import { clamp, mergeDeepRight, prop, sortBy } from 'ramda';
-export const R = { clamp, mergeDeepRight, prop, sortBy };
+export const R = { clamp, mergeDeepRight, prop, sortBy } as const;
 
 /**
  * @system

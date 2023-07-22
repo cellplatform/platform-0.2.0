@@ -15,6 +15,7 @@ export { Chip } from './ui/Chip';
 export { Flip } from './ui/Flip';
 export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
+export { Item } from './ui/Item';
 export { Icon } from './ui/Icon';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';

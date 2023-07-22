@@ -8,6 +8,20 @@ export type { Observable, Subject } from 'rxjs';
  * @system
  */
 export type {
+  Disposable,
+  DomRect,
+  EventBus,
+  IgnoredResponse,
+  Immutable,
+  ImmutableNext,
+  JsonMapU,
+  JsonU,
+  ModuleDef,
+  Size,
+} from 'sys.types/src/types.mjs';
+
+export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';
+export type {
   BundleImport,
   SpecImport,
   SpecImports,
@@ -18,16 +32,6 @@ export type {
   TestSuiteRunStats,
 } from 'sys.test.spec/src/types.mjs';
 export type { TextCharDiff } from 'sys.text/src/types.mjs';
-export type {
-  Disposable,
-  DomRect,
-  EventBus,
-  IgnoredResponse,
-  JsonMapU,
-  JsonU,
-  ModuleDef,
-  Size,
-} from 'sys.types/src/types.mjs';
 export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types.mjs';
 
 /**

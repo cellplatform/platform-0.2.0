@@ -1,7 +1,7 @@
-import { Dev, Value, type t } from '../../test.ui';
+import { Dev, Value, type t } from '../../../test.ui';
 
 import { LabelItemStateful } from '..';
-import { Item } from '../..';
+import { Item } from '../../Item';
 import { Sample } from './-Sample';
 
 const DEFAULTS = LabelItemStateful.DEFAULTS;
@@ -33,10 +33,10 @@ export default Dev.describe('LabelItem.Stateful', (e) => {
   const Init = {
     items(state: T) {
       const length = state.debug.total ?? 0;
-      State.ctx = length > 1 ? Item.State.ctx() : undefined;
+      State.ctx = length > 1 ? Item.Label.State.ctx() : undefined;
       State.items = Array.from({ length }).map(() => {
         const initial = Sample.data();
-        return Item.State.item(initial);
+        return Item.Label.State.item(initial);
       });
     },
   };

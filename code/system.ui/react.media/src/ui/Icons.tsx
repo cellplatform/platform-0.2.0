@@ -15,4 +15,4 @@ export const Icons = {
     PlayCircle: icon(MdPlayArrow),
     Replay: icon(MdReplay),
   },
-};
+} as const;

@@ -8,4 +8,4 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Note: { Event: icon(VscGithubAction) },
-};
+} as const;

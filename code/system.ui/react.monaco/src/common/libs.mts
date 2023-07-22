@@ -2,7 +2,7 @@
  * @external
  */
 import { uniq, equals, clamp } from 'ramda';
-export const R = { uniq, equals, clamp };
+export const R = { uniq, equals, clamp } as const;
 
 /**
  * @system

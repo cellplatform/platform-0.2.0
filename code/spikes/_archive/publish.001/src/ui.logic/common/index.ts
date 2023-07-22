@@ -7,7 +7,7 @@ export type { t };
  * @external
  */
 import { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight } from 'ramda';
-export const R = { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight };
+export const R = { clamp, clone, equals, groupBy, prop, sortBy, uniq, mergeDeepRight } as const;
 
 /**
  * @system

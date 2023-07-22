@@ -1,4 +1,4 @@
-import { Item as BaseItem, Icons, css, type t } from './common';
+import { Icons, LabelItem, css, type t } from './common';
 
 export type ItemProps = {
   state: t.LabelItemController<string>;
@@ -30,7 +30,7 @@ export const Item: React.FC<ItemProps> = (props) => {
   };
 
   return (
-    <BaseItem.Label
+    <LabelItem.View
       {...state.handlers}
       label={state.data.label}
       style={css(styles.base, props.style)}

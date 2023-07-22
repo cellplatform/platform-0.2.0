@@ -16,7 +16,7 @@ type Options = {
 /**
  * Simple safe/immutable memory state for a single item.
  */
-export const State = {
+export const LabelItemState = {
   DEFAULTS,
   BehaviorSelector,
 

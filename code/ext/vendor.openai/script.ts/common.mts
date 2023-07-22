@@ -3,4 +3,4 @@
  */
 
 import { clamp } from 'ramda';
-export const R = { clamp };
+export const R = { clamp } as const;

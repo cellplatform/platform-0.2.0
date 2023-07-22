@@ -1,4 +1,4 @@
-import { Icons, type t } from '../../test.ui';
+import { Icons, type t } from '../../../test.ui';
 
 export const Sample = {
   /**

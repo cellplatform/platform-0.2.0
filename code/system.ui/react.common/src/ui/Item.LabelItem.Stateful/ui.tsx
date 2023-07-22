@@ -1,6 +1,6 @@
 import { DEFAULTS, type t } from './common';
 
-import { LabelItem } from '../LabelItem/Root';
+import { LabelItem } from '../Item.LabelItem/Root';
 import { useItemController } from './use.mjs';
 
 /**

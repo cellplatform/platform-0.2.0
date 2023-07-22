@@ -1,5 +1,5 @@
 import { clone, equals, uniq, mergeDeepRight } from 'ramda';
-export const R = { clone, equals, uniq, mergeDeepRight };
+export const R = { clone, equals, uniq, mergeDeepRight } as const;
 
 import { execa } from 'execa';
 import pc from 'picocolors';

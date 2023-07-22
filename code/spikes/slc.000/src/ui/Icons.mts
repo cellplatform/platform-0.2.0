@@ -18,4 +18,4 @@ export const Icons = {
   Play: { Sharp: icon(MdPlayArrow), Circle: icon(MdPlayCircle) },
   Pause: { Sharp: icon(MdPause), Circle: icon(MdPauseCircle) },
   Replay: icon(MdReplay),
-};
+} as const;

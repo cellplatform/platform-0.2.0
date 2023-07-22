@@ -1,4 +1,4 @@
-import { DEFAULTS, PropList, type t } from './common';
+import { DEFAULTS, FieldSelector, type t } from './common';
 
 export type BehaviorSelectorHandler = (e: BehaviorSelectorHandlerArgs) => void;
 export type BehaviorSelectorHandlerArgs = {
@@ -17,7 +17,7 @@ export type BehaviorSelectorProps = {
 export const BehaviorSelector: React.FC<BehaviorSelectorProps> = (props) => {
   const { title = 'Behavior Controllers' } = props;
   return (
-    <PropList.FieldSelector
+    <FieldSelector
       style={props.style}
       title={title}
       all={DEFAULTS.useBehaviors.all}

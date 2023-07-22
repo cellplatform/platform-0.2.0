@@ -32,4 +32,4 @@ export const Icons = {
   Arrow: { Left: icon(MdArrowBack), Right: icon(MdArrowForward) },
   Complete: icon(MdFactCheck),
   Video: { Library: icon(MdVideoLibrary) },
-};
+} as const;

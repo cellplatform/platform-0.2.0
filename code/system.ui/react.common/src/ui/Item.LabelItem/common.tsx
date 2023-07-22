@@ -1,6 +1,14 @@
-import { type t, Icons } from '../common';
+import { Icons, type t } from '../common';
+
 export * from '../common';
 
+export { Button } from '../Button';
+export { Spinner } from '../Spinner';
+export { TextInput } from '../Text.Input';
+
+/**
+ * Constants.
+ */
 type K = 'left:default';
 
 const leftAction: t.LabelAction<K> = {
