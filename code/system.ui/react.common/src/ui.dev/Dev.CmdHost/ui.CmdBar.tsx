@@ -1,4 +1,4 @@
-import { COLORS, css, t, TextInput, DEFAULTS } from './common';
+import { COLORS, DEFAULTS, TextInput, css, type t } from './common';
 import { HintKey } from './ui.HintKey';
 
 export type CmdBarProps = {
@@ -60,6 +60,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       autoCorrect={false}
       autoCapitalize={false}
       focusOnReady={focusOnReady}
+      selectOnReady={focusOnReady}
       //
       onFocusChange={props.onFocusChange}
       onReady={props.onReady}

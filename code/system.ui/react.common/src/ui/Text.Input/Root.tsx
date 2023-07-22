@@ -12,8 +12,9 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
   useImperativeHandle(ref, () => TextInputRef(inputRef));
 
   useEffect(() => {
+    const { focusOnReady, selectOnReady } = props;
     const ref = TextInputRef(inputRef);
-    if (props.focusOnReady) Time.delay(0, () => ref.focus(true));
+    if (focusOnReady) Time.delay(0, () => ref.focus(selectOnReady));
     props.onReady?.(ref);
   }, []);
 

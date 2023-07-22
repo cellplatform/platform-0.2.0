@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { css, SpecList, type t } from './common';
 import { CmdBar } from './ui.CmdBar';
@@ -29,14 +29,6 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
   useKeyboard(textboxRef, {
     onArrowKey: () => textboxRef?.focus(),
   });
-
-  /**
-   * Lifecycle
-   */
-  useEffect(() => {
-    textboxRef?.focus(true);
-    textboxRef?.selectAll();
-  }, []);
 
   /**
    * Handlers
