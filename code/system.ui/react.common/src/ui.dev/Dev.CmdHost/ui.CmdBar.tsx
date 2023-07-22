@@ -57,9 +57,7 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
       spellCheck={false}
       autoCorrect={false}
       autoCapitalize={false}
-      //
       focusOnReady={props.focusOnReady}
-      focusAction={'Select'}
       //
       onFocusChange={props.onFocusChange}
       onReady={props.onReady}
