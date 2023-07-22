@@ -13,7 +13,7 @@ export { RecordButton } from './ui/RecordButton';
 export { ConceptPlayer } from './ui/Concept.Player';
 
 export { YouTube } from './ui/vendor.YouTube';
-export { VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
+export { Vimeo, VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
 
 /**
  * Dev
