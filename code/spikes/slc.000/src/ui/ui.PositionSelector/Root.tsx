@@ -21,8 +21,7 @@ const View: React.FC<t.PositionSelectorProps> = (props) => {
         config={{
           total: 3,
           cell(e) {
-            const { x, y } = e.cell;
-            const { position, pos } = Wrangle.position(x, y);
+            const { position, pos } = Wrangle.position(e.x, e.y);
             const isSelected = Wrangle.eqPos(pos, Wrangle.pos(selected));
             const el = (
               <Cell
@@ -32,7 +31,8 @@ const View: React.FC<t.PositionSelectorProps> = (props) => {
                 onClick={(e) => props.onSelect?.(e)}
               />
             );
-            e.body(el);
+            // e.body(el);
+            return el;
           },
         }}
       />

@@ -5,6 +5,7 @@ const importCommon = async () => {
   const { Specs } = await dev();
   return {
     'sys.ui.common.Grid': Specs['sys.ui.common.Grid'],
+    'sys.ui.common.Item.LabelItem': Specs['sys.ui.common.Item.LabelItem'],
   };
 };
 
@@ -20,7 +21,7 @@ export const Specs = {
   'sys.common.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
   // External
-  'slc.ext.Ember': () => import('../ui/ext.Ember/-SPEC'),
+  'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
 
   // sys.common
   ...(await importCommon()),

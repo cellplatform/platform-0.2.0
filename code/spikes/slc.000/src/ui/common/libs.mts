@@ -7,6 +7,7 @@ export {
   FC,
   Grid,
   IFrame,
+  Item,
   Keyboard,
   PropList,
   Style,
