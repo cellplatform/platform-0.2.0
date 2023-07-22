@@ -3,7 +3,7 @@ import { FC, IFrame, css, type t } from './common';
 
 import { usePlayerController } from './hooks';
 import { VimeoLib } from './libs.mjs';
-import { VimeoEvents } from './Events.mjs';
+import { VimeoEvents as Events } from './Events.mjs';
 
 type Ref = React.RefObject<HTMLIFrameElement>;
 
@@ -89,10 +89,10 @@ const View: React.FC<t.VimeoBackgroundProps> = (props) => {
  * Export
  */
 type Fields = {
-  Events: t.VimeoEventsFactory;
+  Events: typeof Events;
 };
 export const VimeoBackground = FC.decorate<t.VimeoBackgroundProps, Fields>(
   View,
-  { Events: VimeoEvents },
+  { Events },
   { displayName: 'Vimeo.Background' },
 );

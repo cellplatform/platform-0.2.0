@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { FC, css, type t } from './common';
 
+import { VimeoEvents as Events } from './Events.mjs';
 import { useIconController, usePlayerController } from './hooks';
 import { VimeoLib } from './libs.mjs';
-import { VimeoEvents } from './Events.mjs';
 import { IconOverlay } from './ui/IconOverlay';
 import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
 
@@ -45,7 +45,7 @@ const View: React.FC<t.VimeoPlayerProps> = (props) => {
   const controller = usePlayerController({ instance, video, player });
 
   useEffect(() => {
-    const events = VimeoEvents({ instance });
+    const events = Events({ instance });
     const status$ = events.status.$;
 
     if (player && typeof video === 'number') {
@@ -101,11 +101,11 @@ const View: React.FC<t.VimeoPlayerProps> = (props) => {
  * Export
  */
 type Fields = {
-  Events: t.VimeoEventsFactory;
+  Events: typeof Events;
   useIconController: t.UseVimeoIconController;
 };
 export const VimeoPlayer = FC.decorate<t.VimeoPlayerProps, Fields>(
   View,
-  { Events: VimeoEvents, useIconController },
+  { Events, useIconController },
   { displayName: 'Vimeo.Player' },
 );

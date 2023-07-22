@@ -7,15 +7,6 @@ type Milliseconds = number;
 /**
  * Event API.
  */
-export type VimeoEventsFactory = {
-  (args: {
-    instance?: t.VimeoInstance;
-    isEnabled?: boolean;
-    dispose$?: t.Observable<any>;
-  }): VimeoEvents;
-  is: VimeoEvents['is'];
-};
-
 export type VimeoEvents = t.Disposable & {
   $: t.Observable<VimeoEvent>;
 

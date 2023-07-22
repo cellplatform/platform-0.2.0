@@ -1,1 +1,1 @@
-export * from './Root.mjs';
+export { Vimeo, VimeoPlayer, VimeoBackground, VimeoEvents } from './Vimeo.mjs';

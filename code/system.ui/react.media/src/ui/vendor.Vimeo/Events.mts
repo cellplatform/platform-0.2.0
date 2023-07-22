@@ -5,7 +5,7 @@ import { R, rx, slug, type t } from './common';
 /**
  * Event API.
  */
-function Events(args: {
+export function VimeoEvents(args: {
   instance?: t.VimeoInstance;
   isEnabled?: boolean;
   dispose$?: t.Observable<any>;
@@ -13,9 +13,7 @@ function Events(args: {
   const { isEnabled = true } = args;
   const busid = rx.bus.instance(args.instance?.bus);
   const instance = args.instance?.id ?? '';
-  const isValid = Boolean(busid && args.instance && instance);
   const bus = rx.busAsType<t.VimeoEvent>(args.instance?.bus ?? rx.bus());
-  const is = Events.is;
 
   const { dispose, dispose$ } = rx.disposable();
 
@@ -147,7 +145,7 @@ function Events(args: {
   };
 
   return {
-    instance: { bus: rx.bus.instance(bus), id: instance },
+    instance: { bus: busid, id: instance },
     $,
     is,
     dispose,
@@ -157,13 +155,14 @@ function Events(args: {
     play,
     pause,
     seek,
-  };
+  } as const;
 }
 
 /**
  * Event matching.
  */
 const matcher = (startsWith: string) => (input: any) => rx.isEvent(input, { startsWith });
-Events.is = { base: matcher('Vimeo/') };
+// Events.is = { base: matcher('Vimeo/') };
+const is = { base: matcher('Vimeo/') };
 
-export const VimeoEvents = Events as unknown as t.VimeoEventsFactory;
+// export const VimeoEvents = Events as unknown as t.VimeoEventsFactory;
