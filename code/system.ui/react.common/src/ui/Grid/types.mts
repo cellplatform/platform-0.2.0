@@ -36,7 +36,7 @@ export type GridCellConfigure = (e: GridCellConfigureArgs) => RenderValue | void
 export type GridCellConfigureArgs = GridPoint & {
   address: t.CellAddress;
   total: GridPoint;
-  body(element: RenderValue): GridCellConfigureArgs;
+  body(element?: RenderValue): GridCellConfigureArgs;
   toString(): string;
 };
 

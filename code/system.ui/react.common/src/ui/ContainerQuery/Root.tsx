@@ -6,8 +6,8 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t, slug, Style } from './com
  * [Container Query](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) CSS feature.
  */
 export const ContainerQuery: React.FC<t.ContainerQueryProps> = (props) => {
-  const idRef = useRef(slug());
-  const parentClass = `sys-container-${idRef.current}`;
+  const parentIdRef = useRef(slug());
+  const parentClass = `sys-container-${parentIdRef.current}`;
   const childClass = `${parentClass}-child`;
 
   /**
