@@ -150,6 +150,7 @@ export default Dev.describe('TextInput', (e) => {
         });
       };
       action('focus', (ref) => ref.focus());
+      action('focus( select )', (ref) => ref.focus(true));
       action('focus → blur', (ref) => focusThen(500, ref, () => ref.blur()));
       dev.hr(-1, 5);
       action('selectAll', (ref) => focusThen(0, ref, () => ref.selectAll()));

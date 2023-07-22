@@ -13,7 +13,7 @@ export const TextInput = forwardRef<t.TextInputRef, t.TextInputProps>((props, re
 
   useEffect(() => {
     const ref = TextInputRef(inputRef);
-    if (props.focusOnReady) Time.delay(0, () => ref.focus());
+    if (props.focusOnReady) Time.delay(0, () => ref.focus(true));
     props.onReady?.(ref);
   }, []);
 

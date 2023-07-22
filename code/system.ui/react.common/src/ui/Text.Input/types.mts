@@ -6,7 +6,7 @@ type Milliseconds = number;
 type Pixels = number;
 
 export type TextInputRef = {
-  focus(): void;
+  focus(select?: boolean): void;
   blur(): void;
   selectAll(): void;
   cursorToStart(): void;
