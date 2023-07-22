@@ -7,8 +7,8 @@ export type VimeoIconClickArgs = { icon: t.VimeoIconFlag };
  * Component: Player
  */
 export type VimeoProps = {
-  instance: t.VimeoInstance;
-  video: number;
+  instance?: t.VimeoInstance;
+  video?: number;
   muted?: boolean;
   width?: number;
   height?: number;
@@ -24,8 +24,8 @@ export type VimeoProps = {
  * Component: Background
  */
 export type VimeoBackgroundProps = {
-  instance: t.VimeoInstance;
-  video: number;
+  instance?: t.VimeoInstance;
+  video?: number;
   opacity?: number;
   blur?: number;
   opacityTransition?: number; // msecs

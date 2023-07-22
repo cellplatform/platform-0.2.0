@@ -1,23 +1,23 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, filter } from 'rxjs/operators';
 import { R, rx, slug, type t } from './common';
 
 /**
  * Event API.
  */
 function Events(args: {
-  instance: t.VimeoInstance;
+  instance?: t.VimeoInstance;
   isEnabled?: boolean;
   dispose$?: t.Observable<any>;
 }): t.VimeoEvents {
   const { isEnabled = true } = args;
+  const busid = rx.bus.instance(args.instance?.bus);
+  const instance = args.instance?.id ?? '';
+  const isValid = Boolean(busid && args.instance && instance);
+  const bus = rx.busAsType<t.VimeoEvent>(args.instance?.bus ?? rx.bus());
+  const is = Events.is;
 
   const { dispose, dispose$ } = rx.disposable();
-  dispose$?.pipe(take(1)).subscribe(() => dispose());
-
-  const bus = rx.busAsType<t.VimeoEvent>(args.instance.bus);
-  const is = Events.is;
-  const instance = args.instance.id;
 
   const $ = bus.$.pipe(
     rx.takeUntil(dispose$),

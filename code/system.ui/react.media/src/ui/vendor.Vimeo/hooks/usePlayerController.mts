@@ -9,24 +9,26 @@ type Action = t.VimeoStatus['action'];
  * Event-bus controller for a Vimeo player.
  */
 export function usePlayerController(args: {
-  instance: t.VimeoInstance;
-  video: number;
+  instance?: t.VimeoInstance;
+  video?: number;
   player?: VimeoPlayer;
 }) {
+  const { player, video = -1 } = args;
+  const busid = rx.bus.instance(args.instance?.bus);
+  const instance = args.instance?.id ?? '';
+  const isValid = Boolean(busid && args.instance && instance && video > 0);
+
   const seekRef = useRef<number | undefined>();
   const playing = useRef<boolean>(false);
   const loading = useRef<number | undefined>(); // Video-ID.
   const [opacity, setOpacity] = useState<number>(0);
 
-  const { player, video } = args;
-  const instance = args.instance.id;
-
   /**
    * Lifecycle
    */
   useEffect(() => {
-    const bus = rx.busAsType<t.VimeoEvent>(args.instance.bus);
-    const events = VimeoEvents({ instance: args.instance });
+    const bus = rx.busAsType<t.VimeoEvent>(args.instance?.bus ?? rx.bus());
+    const events = VimeoEvents({ instance: args.instance ?? { id: '', bus } });
 
     const getTimes = async (): Promise<Times> => {
       if (!player) return { duration: -1, percent: -1, seconds: -1 };
@@ -200,11 +202,14 @@ export function usePlayerController(args: {
       }
       events.dispose();
     };
-  }, [args.instance.bus, instance, player]); // eslint-disable-line
+  }, [busid, instance, player]); // eslint-disable-line
 
-  // Finish up.
+  /**
+   * API
+   */
   return {
-    instance: { bus: rx.bus.instance(args.instance.bus), id: instance },
+    instance: { bus: busid, id: instance },
     opacity,
-  };
+    isValid,
+  } as const;
 }

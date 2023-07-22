@@ -1,31 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
-import { FC, css, type t } from './common';
+import { useEffect, useState } from 'react';
+import { FC, IFrame, css, type t } from './common';
+
 import { usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './logic.Events.mjs';
+
+type Ref = React.RefObject<HTMLIFrameElement>;
 
 /**
  * Component
  */
 const View: React.FC<t.VimeoBackgroundProps> = (props) => {
-  const { instance, video } = props;
-  const { bus, id } = instance;
-  const blur = props.blur ?? 0;
-  const opacityTransition = props.opacityTransition ?? 300;
+  const { instance, video, opacityTransition = 300, blur = 0 } = props;
+  const src = `https://player.vimeo.com/video/${props.video}?background=1&dnt=true`;
 
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [ref, setRef] = useState<Ref>();
   const [player, setPlayer] = useState<VimeoPlayer>();
 
   useEffect(() => {
-    const player = new VimeoPlayer(iframeRef.current as HTMLIFrameElement);
-    setPlayer(player);
+    const el = ref?.current;
+    let player: VimeoPlayer | undefined;
+    if (el) {
+      player = new VimeoPlayer(el);
+      setPlayer(player);
+    }
     return () => {
-      player.destroy();
+      player?.destroy();
     };
-  }, []); // eslint-disable-line
+  }, [ref]);
 
-  usePlayerController({ instance: { id, bus }, video, player });
+  usePlayerController({ instance, video, player });
 
+  /**
+   * Exist if incomplete props.
+   */
+  if (!instance || !video) return null;
+
+  /**
+   * Render
+   */
   const styles = {
     base: css({
       Absolute: 0,
@@ -46,6 +59,7 @@ const View: React.FC<t.VimeoBackgroundProps> = (props) => {
       top: '50%',
       width: '177.77777778vh',
       overflow: 'hidden',
+      border: 'none',
     }),
     blurMask: css({
       Absolute: 0,
@@ -59,15 +73,14 @@ const View: React.FC<t.VimeoBackgroundProps> = (props) => {
 
   return (
     <div {...styles.base}>
-      <iframe
-        ref={iframeRef}
-        src={`https://player.vimeo.com/video/${props.video}?background=1&dnt=true`}
-        frameBorder={'0'}
+      <IFrame
+        style={styles.iframe}
+        src={src}
         allow={'autoplay'}
         allowFullScreen={false}
-        {...styles.iframe}
+        onReady={(e) => setRef(e.ref)}
       />
-      <div {...styles.blurMask} />
+      <div {...styles.blurMask} className="blur-mask" />
     </div>
   );
 };

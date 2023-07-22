@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { FC, css, type t } from './common';
-import { IconOverlay } from './ui/IconOverlay';
-import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
+
 import { useIconController, usePlayerController } from './hooks';
 import { VimeoPlayer } from './libs.mjs';
 import { VimeoEvents } from './logic.Events.mjs';
+import { IconOverlay } from './ui/IconOverlay';
+import { ThumbnailOverlay } from './ui/ThumbnailOverlay';
 
 /**
  * Wrapper for the Vimeo player API.
@@ -64,6 +65,14 @@ const View: React.FC<t.VimeoProps> = (props) => {
     if (player) player.setMuted(props.muted ?? false);
   }, [player, props.muted]);
 
+  /**
+   * Exist if incomplete props.
+   */
+  if (!instance || !video) return null;
+
+  /**
+   * Render
+   */
   const styles = {
     base: css({
       lineHeight: 0, // NB: Prevents space below IFrame.
