@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
       display: 'grid',
       alignContent: 'end',
       boxSizing: 'border-box',
-      paddingBottom: 3,
+      paddingBottom: 5,
     }),
     title: css({
       fontSize: 12,

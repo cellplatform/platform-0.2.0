@@ -8,22 +8,22 @@ const slugs: t.VideoConceptSlug[] = [
   },
   {
     id: 'ember.pitch.structure',
-    title: 'Simple structure',
+    title: 'Simple Structure',
     video: { id: 846848747 },
   },
   {
     id: 'ember.pitch.example',
-    title: 'An example',
+    title: 'An Example',
     video: { id: 846848687 },
   },
   {
     id: 'ember.pitch.succes',
-    title: 'Making it memorable',
+    title: 'Making it Memorable',
     video: { id: 847199651 },
   },
   {
     id: 'ember.pitch.conclusion',
-    title: 'Tie it all together',
+    title: 'Tie it all Together',
     video: { id: 847193255 },
   },
 ];
