@@ -1,13 +1,11 @@
-import { Dev, type t } from '../../../test.ui';
-import { PositionSelector } from '..';
+import { Dev, type t } from '../../test.ui';
+import { PositionSelector } from '.';
 
 const DEFAULTS = PositionSelector.DEFAULTS;
 
 type T = { props: t.PositionSelectorProps };
 const initial: T = {
-  props: {
-    size: 180,
-  },
+  props: { size: 180 },
 };
 
 export default Dev.describe('PositionSelector', (e) => {

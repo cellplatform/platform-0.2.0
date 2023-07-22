@@ -1,7 +1,7 @@
 import { DEFAULTS, FC, Grid, css, type t } from './common';
-import { Cell } from './ui.Cell';
 
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './Wrangle.mjs';
+import { Cell } from './ui.Cell';
 
 const View: React.FC<t.PositionSelectorProps> = (props) => {
   const { enabled = DEFAULTS.enabled, size = DEFAULTS.size, selected = DEFAULTS.selected } = props;

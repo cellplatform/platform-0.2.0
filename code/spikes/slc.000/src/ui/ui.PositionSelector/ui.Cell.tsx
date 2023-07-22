@@ -1,4 +1,4 @@
-import { Wrangle } from './Wrangle';
+import { Wrangle } from './Wrangle.mjs';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
 export type CellProps = {
