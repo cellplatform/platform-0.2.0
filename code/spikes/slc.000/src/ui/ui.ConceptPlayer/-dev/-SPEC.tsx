@@ -9,7 +9,13 @@ const SAMPLE_VIDEO = 499921561; // vimeo/tubes
 type T = { props: t.ConceptPlayerProps };
 const initial: T = { props: {} };
 
-export default Dev.describe('ConceptSlug', (e) => {
+export default Dev.describe('ConceptPlayer', (e) => {
+  type LocalStore = { videoPos?: t.Pos };
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptPlayer');
+  const local = localstore.object({
+    videoPos: DEFAULTS.pos,
+  });
+
   const bus = rx.bus();
   const instance = { bus, id: `foo.${slug()}` };
   const events = Vimeo.Events({ instance });
@@ -22,7 +28,7 @@ export default Dev.describe('ConceptSlug', (e) => {
     await state.change((d) => {
       d.props.video = {
         id: SAMPLE_VIDEO,
-        pos: DEFAULTS.pos,
+        pos: local.videoPos,
       };
     });
 
@@ -48,7 +54,7 @@ export default Dev.describe('ConceptSlug', (e) => {
             onSelect={(e) => {
               state.change((d) => {
                 const video = d.props.video ?? (d.props.video = {});
-                video.pos = e.pos;
+                video.pos = local.videoPos = e.pos;
               });
             }}
           />
