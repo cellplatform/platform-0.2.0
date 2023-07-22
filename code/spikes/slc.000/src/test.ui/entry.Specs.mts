@@ -14,6 +14,7 @@ export const Specs = {
   'slc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'slc.ui.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
   'slc.ui.ConceptPlayer': () => import('../ui/ui.ConceptPlayer/-dev/-SPEC'),
+  'slc.ui.PositionSelector': () => import('../ui/ui.PositionSelector/-dev/-SPEC'),
   'slc.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
   // External
