@@ -11,7 +11,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Video vimeo={props.vimeo} video={props.video} />
+      <Video vimeo={props.vimeo} video={props.video} style={{ Absolute: 0 }} />
     </div>
   );
 };

@@ -14,7 +14,7 @@ export const Video: React.FC<VideoProps> = (props) => {
    */
   const styles = {
     base: css({
-      Absolute: 0,
+      position: 'relative',
       ...Wrangle.gridCss(video?.pos),
     }),
     player: css({}),
@@ -26,7 +26,7 @@ export const Video: React.FC<VideoProps> = (props) => {
       instance={vimeo}
       video={video.id}
       style={styles.player}
-      borderRadius={15}
+      borderRadius={10}
     />
   );
 
