@@ -1,10 +1,10 @@
 import { Dev, type t } from '../test.ui';
-import { ContainerQuery } from '.';
+import { Root } from '.';
 
-type T = {};
-const initial: T = {};
+type T = { props: t.RootProps };
+const initial: T = { props: {} };
 
-export default Dev.describe('ContainerQuery', (e) => {
+export default Dev.describe('Root', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -15,7 +15,7 @@ export default Dev.describe('ContainerQuery', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <ContainerQuery />;
+        return <Root {...e.state.props} />;
       });
   });
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-export const ContainerQuery: React.FC<t.ContainerQueryProps> = (props) => {
+export const Root: React.FC<t.RootProps> = (props) => {
   /**
    * [Render]
    */
@@ -13,7 +13,7 @@ export const ContainerQuery: React.FC<t.ContainerQueryProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ContainerQuery`}</div>
+      <div>{`🐷 Root`}</div>
     </div>
   );
 };
