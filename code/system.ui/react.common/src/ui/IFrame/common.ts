@@ -9,4 +9,4 @@ const loading: t.IFrameLoading = 'eager';
 export const DEFAULTS = {
   loading,
   sandbox: true,
-};
+} as const;
