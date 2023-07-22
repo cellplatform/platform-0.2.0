@@ -1,5 +1,6 @@
 import { ConceptPlayer } from '..';
-import { Dev, css, rx, slug, type t } from '../../../test.ui';
+import { Dev, css, rx, slug, type t, Icons } from '../../../test.ui';
+
 import { Vimeo } from '../common';
 
 const DEFAULTS = ConceptPlayer.DEFAULTS;
@@ -58,8 +59,31 @@ export default Dev.describe('ConceptSlug', (e) => {
     dev.hr(5, 20);
 
     dev.section('Video', (dev) => {
-      dev.button('play', (e) => events.play.fire());
-      dev.button('pause', (e) => events.pause.fire());
+      dev.button((btn) => {
+        btn
+          .label('play')
+          .right((e) => <Icons.Play.Sharp size={16} />)
+          .onClick((e) => events.play.fire());
+      });
+
+      dev.button((btn) => {
+        btn
+          .label('pause')
+          .right((e) => <Icons.Pause.Sharp size={16} />)
+          .onClick((e) => events.pause.fire());
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) => {
+        btn
+          .label('restart')
+          .right((e) => <Icons.Replay size={16} />)
+          .onClick((e) => {
+            events.seek.start();
+            events.play.fire();
+          });
+      });
     });
   });
 
