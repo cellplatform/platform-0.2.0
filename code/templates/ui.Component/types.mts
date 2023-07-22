@@ -1,5 +1,5 @@
 import { type t } from './common';
 
-export type ContainerQueryProps = {
+export type RootProps = {
   style?: t.CssValue;
 };
