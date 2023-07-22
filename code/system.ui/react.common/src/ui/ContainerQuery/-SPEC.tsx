@@ -25,6 +25,7 @@ export default Dev.describe('ContainerQuery', (e) => {
       .render<T>((e) => {
         const { debug } = e.state;
         if (!debug.render) return <div />;
+
         return <ContainerQuery {...e.state.props} />;
       });
   });
