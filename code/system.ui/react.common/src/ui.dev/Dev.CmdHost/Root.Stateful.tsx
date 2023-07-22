@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { CmdHost, CmdHostProps } from './ui.CmdHost';
-import { R, DEFAULTS, t, SpecList, rx } from './common';
+import { DEFAULTS, R, SpecList, rx, t } from './common';
+
+import { useEffect, useRef, useState } from 'react';
+import { CmdHost, type CmdHostProps } from './Root';
 
 export type CmdHostStatefulProps = Omit<CmdHostProps, 'filter'> & {
   mutateUrl?: boolean;
