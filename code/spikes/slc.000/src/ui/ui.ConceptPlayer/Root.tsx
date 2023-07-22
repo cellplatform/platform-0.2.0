@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from '../common';
+import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Grid } from '../common';
 
 export const ConceptPlayer: React.FC<t.ConceptPlayerProps> = (props) => {
   /**
@@ -10,11 +10,15 @@ export const ConceptPlayer: React.FC<t.ConceptPlayerProps> = (props) => {
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       padding: 10,
     }),
+    videoLayout: css({ Absolute: 0 }),
   };
+
+  const elVideoLayout = <Grid style={styles.videoLayout} />;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div>{`🐷 ConceptPlayer`}</div>
+      {elVideoLayout}
     </div>
   );
 };
