@@ -8,11 +8,11 @@ import { R, rx, slug, type t } from './common';
 export function VimeoEvents(
   input: t.VimeoInstance,
   options: {
-    isEnabled?: boolean;
+    enabled?: boolean;
     dispose$?: t.Observable<any>;
   } = {},
 ): t.VimeoEvents {
-  const { isEnabled = true } = options;
+  const { enabled = true } = options;
   const busid = rx.bus.instance(input?.bus);
   const instance = input?.id ?? '';
   const bus = rx.busAsType<t.VimeoEvent>(input?.bus ?? rx.bus());
@@ -21,7 +21,7 @@ export function VimeoEvents(
 
   const $ = bus.$.pipe(
     rx.takeUntil(dispose$),
-    rx.filter((e) => isEnabled),
+    rx.filter((e) => enabled),
     rx.filter((e) => is.base(e)),
     rx.filter((e) => e.payload.instance === instance),
   );
@@ -148,6 +148,7 @@ export function VimeoEvents(
 
   return {
     instance: { bus: busid, id: instance },
+    enabled,
     $,
     is,
     dispose,
@@ -164,7 +165,4 @@ export function VimeoEvents(
  * Event matching.
  */
 const matcher = (startsWith: string) => (input: any) => rx.isEvent(input, { startsWith });
-// Events.is = { base: matcher('Vimeo/') };
 const is = { base: matcher('Vimeo/') };
-
-// export const VimeoEvents = Events as unknown as t.VimeoEventsFactory;

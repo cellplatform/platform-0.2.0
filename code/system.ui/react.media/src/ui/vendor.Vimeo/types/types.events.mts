@@ -8,10 +8,10 @@ type Milliseconds = number;
  * Event API.
  */
 export type VimeoEvents = t.Disposable & {
-  $: t.Observable<VimeoEvent>;
-
-  instance: { bus: Id; id: Id };
-  is: { base(input: any): boolean };
+  readonly $: t.Observable<VimeoEvent>;
+  readonly instance: { bus: Id; id: Id };
+  readonly is: { base(input: any): boolean };
+  readonly enabled: boolean;
 
   load: {
     req$: t.Observable<VimeoLoadReq>;

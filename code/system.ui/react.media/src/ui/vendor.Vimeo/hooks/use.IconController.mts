@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react';
 import { distinctUntilChanged, filter, take } from 'rxjs/operators';
-import { VimeoEvents, type t } from './common';
+import { VimeoEvents, type t, rx } from './common';
 
 /**
  * Monitors a Videmo player providing icon values to display based on various strategies..
  */
-export const useIconController: t.UseVimeoIconController = (args: {
-  instance: t.VimeoInstance;
-  showPlayPause?: boolean;
-  isEnabled?: boolean;
-}) => {
-  const { instance, isEnabled = true, showPlayPause = true } = args;
-  const { id } = instance;
-  const [icon, setIcon] = useState<t.VimeoIconFlag | undefined>();
+export const useIconController = (
+  input: t.VimeoInstance,
+  options: {
+    showPlayPause?: boolean;
+    enabled?: boolean;
+  } = {},
+) => {
+  const { enabled = true, showPlayPause = true } = options;
+  const busid = rx.bus.instance(input.bus);
+  const [current, setCurrent] = useState<t.VimeoIconFlag | undefined>();
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    const events = VimeoEvents(instance, { isEnabled });
+    const events = VimeoEvents(input, { enabled });
     const status$ = events.status.$.pipe();
     const start$ = status$.pipe(filter((e) => e.action === 'start'));
     const loaded$ = status$.pipe(filter((e) => e.action === 'start'));
@@ -38,8 +40,8 @@ export const useIconController: t.UseVimeoIconController = (args: {
 
     const updatePlayVisibility = async () => {
       if (!showPlayPause) return;
-      if (!isEnabled) {
-        setIcon(undefined);
+      if (!enabled) {
+        setCurrent(undefined);
         return;
       }
 
@@ -47,8 +49,8 @@ export const useIconController: t.UseVimeoIconController = (args: {
       const isPlaying = status?.playing ?? false;
 
       if (!isBuffering) {
-        if (!isPlaying) setIcon('play');
-        if (isPlaying) setIcon(undefined);
+        if (!isPlaying) setCurrent('play');
+        if (isPlaying) setCurrent(undefined);
       }
     };
 
@@ -74,9 +76,9 @@ export const useIconController: t.UseVimeoIconController = (args: {
      */
     events.play.req$.pipe(filter((e) => !isBuffered())).subscribe(async (e) => {
       isBuffering = true;
-      setIcon('spinner');
+      setCurrent('spinner');
       start$.pipe(take(1)).subscribe(() => {
-        setIcon(undefined);
+        setCurrent(undefined);
         buffered.push(currentVideo);
         isBuffering = false;
       });
@@ -84,11 +86,10 @@ export const useIconController: t.UseVimeoIconController = (args: {
 
     updatePlayVisibility();
     return () => events.dispose();
-  }, [instance.bus, id, isEnabled, showPlayPause]); // eslint-disable-line
+  }, [busid, input.id, enabled, showPlayPause]); // eslint-disable-line
 
-  // Finish up.
-  return {
-    isEnabled,
-    current: icon,
-  };
+  /**
+   * API
+   */
+  return { enabled, current } as const;
 };

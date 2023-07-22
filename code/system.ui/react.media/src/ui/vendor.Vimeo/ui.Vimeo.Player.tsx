@@ -103,7 +103,7 @@ const View: React.FC<t.VimeoPlayerProps> = (props) => {
  */
 type Fields = {
   Events: typeof Events;
-  useIconController: t.UseVimeoIconController;
+  useIconController: typeof useIconController;
 };
 export const VimeoPlayer = FC.decorate<t.VimeoPlayerProps, Fields>(
   View,
