@@ -13,7 +13,6 @@ export default Dev.describe('PositionSelector', (e) => {
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
-      .size([250, 250])
       .display('grid')
       .render<T>((e) => {
         return <PositionSelector {...e.state.props} />;

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Grid } from './common';
 
 export const PositionSelector: React.FC<t.PositionSelectorProps> = (props) => {
+  const { size = DEFAULTS.size } = props;
+
   /**
    * [Render]
    */
@@ -9,6 +11,7 @@ export const PositionSelector: React.FC<t.PositionSelectorProps> = (props) => {
     base: css({
       position: 'relative',
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      Size: size,
     }),
     grid: css({ Absolute: 0 }),
   };

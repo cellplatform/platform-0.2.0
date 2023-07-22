@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../../test.ui';
+import { Dev, type t, css, Style } from '../../../test.ui';
 import { ConceptPlayer } from '..';
 
 type T = { props: t.ConceptPlayerProps };
@@ -24,6 +24,19 @@ export default Dev.describe('ConceptSlug', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.TODO();
+
+    dev.hr(5, 20);
+
+    dev.row((e) => {
+      const styles = {
+        base: css({ display: 'grid', placeItems: 'center' }),
+      };
+      return (
+        <div {...styles.base}>
+          <ConceptPlayer.PositionSelector />
+        </div>
+      );
+    });
   });
 
   e.it('ui:footer', async (e) => {
