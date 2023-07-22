@@ -1,18 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Grid } from './common';
+import { DEFAULTS, FC, Grid, css, type t } from './common';
+import { Cell } from './ui.Cell';
 
-export const PositionSelector: React.FC<t.PositionSelectorProps> = (props) => {
-  const { size = DEFAULTS.size } = props;
+import { Wrangle } from './Wrangle';
+
+const View: React.FC<t.PositionSelectorProps> = (props) => {
+  const { enabled = DEFAULTS.enabled, size = DEFAULTS.size, selected = DEFAULTS.selected } = props;
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      Size: size,
-    }),
+    base: css({ position: 'relative', Size: size }),
     grid: css({ Absolute: 0 }),
   };
 
@@ -22,8 +20,34 @@ export const PositionSelector: React.FC<t.PositionSelectorProps> = (props) => {
         style={styles.grid}
         config={{
           total: 3,
+          cell(e) {
+            const { x, y } = e.cell;
+            const { position, pos } = Wrangle.position(x, y);
+            const isSelected = Wrangle.eqPos(pos, Wrangle.pos(selected));
+            const el = (
+              <Cell
+                enabled={enabled}
+                position={position}
+                selected={isSelected}
+                onClick={(e) => props.onSelect?.(e)}
+              />
+            );
+            e.body(el);
+          },
         }}
       />
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const PositionSelector = FC.decorate<t.PositionSelectorProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'PositionSelector' },
+);
