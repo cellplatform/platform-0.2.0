@@ -27,13 +27,14 @@ glamor.jss.use(PluginGlobal);
  */
 export const Global: t.CssGlobal = (
   styles: t.CssPropsMap,
-  options: { prefix?: string; dispose$?: t.Observable<any> } = {},
+  options: {
+    prefix?: string;
+    dispose$?: t.Observable<any>;
+  } = {},
 ) => {
   if (R.isEmpty(styles)) {
     return { dispose: () => undefined } as const;
   }
-
-  const { dispose$, dispose } = rx.disposable(options.dispose$);
 
   // Prepare styles for global insertion.
   const { prefix } = options;
@@ -49,6 +50,9 @@ export const Global: t.CssGlobal = (
   // Load the global styles into the document.
   const stylesheet = glamor.jss.createStyleSheet({ '@global': global });
   stylesheet.attach();
+
+  // Disposable.
+  const { dispose$, dispose } = rx.disposable(options.dispose$);
   dispose$.subscribe(() => stylesheet?.detach());
 
   /**
