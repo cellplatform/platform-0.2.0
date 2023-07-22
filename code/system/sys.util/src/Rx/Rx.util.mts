@@ -4,7 +4,7 @@ import { Is } from '../Is';
 /**
  * Read the "_instance" hidden ID from the bus.
  */
-export function instance(bus: t.EventBus<any>) {
+export function instance(bus?: t.EventBus<any>) {
   return ((bus ?? {}) as any)._instance ?? '';
 }
 
