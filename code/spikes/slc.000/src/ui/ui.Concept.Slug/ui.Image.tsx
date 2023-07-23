@@ -18,8 +18,8 @@ export const ImageLayout: React.FC<ImageLayoutProps> = (props) => {
     image: css({
       /**
        * TODO 🐷 Temp HACK!
-       * - do some better form of image positioning and layout
-       *   so as not to bang into the <Video>.
+       * - do some better form of image positioning and
+       *   layout so as not to bang into the <Video>.
        */
       MarginX: 20,
       marginTop: 20,
