@@ -1,12 +1,13 @@
 import {
   MdArrowBack,
   MdArrowDownward,
+  MdArrowForward,
   MdArrowUpward,
   MdInfoOutline,
+  MdOutlineDownloadForOffline,
   MdPause,
   MdPauseCircle,
   MdPlayArrow,
-  MdArrowForward,
   MdPlayCircle,
   MdReplay,
 } from 'react-icons/md';
@@ -19,13 +20,22 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Info: icon(MdInfoOutline),
-  Play: { Sharp: icon(MdPlayArrow), Circle: icon(MdPlayCircle) },
-  Pause: { Sharp: icon(MdPause), Circle: icon(MdPauseCircle) },
+  Play: {
+    Sharp: icon(MdPlayArrow),
+    Circle: icon(MdPlayCircle),
+  },
+  Pause: {
+    Sharp: icon(MdPause),
+    Circle: icon(MdPauseCircle),
+  },
   Replay: icon(MdReplay),
   Arrow: {
     Left: icon(MdArrowBack),
     Right: icon(MdArrowForward),
     Up: icon(MdArrowUpward),
     Down: icon(MdArrowDownward),
+  },
+  Download: {
+    Circle: icon(MdOutlineDownloadForOffline),
   },
 } as const;
