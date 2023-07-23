@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type M = (e: {}) => void;
+type M = React.MouseEventHandler;
 type Args = {
   onDown?: M;
   onUp?: M;
@@ -15,16 +15,16 @@ export function useMouseState(args: Args = {}) {
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
 
-  const down = (isDown: boolean) => () => {
+  const down = (isDown: boolean) => (e: React.MouseEvent) => {
     setDown(isDown);
-    if (isDown) args.onDown?.({});
-    if (!isDown) args.onUp?.({});
+    if (isDown) args.onDown?.(e);
+    if (!isDown) args.onUp?.(e);
   };
-  const over = (isOver: boolean) => () => {
+  const over = (isOver: boolean) => (e: React.MouseEvent) => {
     setOver(isOver);
     if (isOver === false) setDown(false);
-    if (isOver) args.onEnter?.({});
-    if (!isOver) args.onLeave?.({});
+    if (isOver) args.onEnter?.(e);
+    if (!isOver) args.onLeave?.(e);
   };
 
   const onMouseDown = down(true);
