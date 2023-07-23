@@ -11,6 +11,7 @@ export type CellProps = {
 
 export const Cell: React.FC<CellProps> = (props) => {
   const { position, selected, enabled = DEFAULTS.enabled } = props;
+  const { x, y } = position;
   const pos = Wrangle.pos(position);
 
   /**
@@ -35,6 +36,7 @@ export const Cell: React.FC<CellProps> = (props) => {
       backgroundColor,
       userSelect: 'none',
       cursor: enabled ? 'pointer' : undefined,
+      border: `solid 0.5px ${Color.alpha(COLORS.DARK, 0.1)}`,
     }),
   };
 
