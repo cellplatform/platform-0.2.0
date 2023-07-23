@@ -60,7 +60,7 @@ const slugs: t.ConceptSlug[] = [
     video: { id: 847199651, position, scale, height },
     image: {
       src: '/images/ember/succes.png',
-      sizing: 'cover',
+      sizing: 'contain',
     },
   },
   {

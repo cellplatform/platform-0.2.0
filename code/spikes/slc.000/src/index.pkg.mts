@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'slc',
-  version: '0.0.40',
+  version: '0.0.42',
   dependencies: {
     'react': '18.2.0',
     'react-dom': '18.2.0',
