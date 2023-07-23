@@ -41,7 +41,7 @@ const slugs: t.ConceptSlug[] = [
     },
     download: {
       kind: 'pdf',
-      url: 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf',
+      url: '/images/ember/structure.pdf',
       filename: 'slc.pdf',
     },
   },
