@@ -15,7 +15,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
    */
   const isScaled = typeof slug.scale === 'number';
   const styles = {
-    base: css({ overflow: 'hidden' }),
+    base: css({ overflow: 'hidden', borderRadius: 5 }),
     inner: css({
       transform: isScaled ? `scale(${slug.scale})` : undefined, // NB: transform → scale/zoom.
     }),
