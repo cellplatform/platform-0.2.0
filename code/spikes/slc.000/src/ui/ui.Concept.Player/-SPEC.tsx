@@ -1,11 +1,11 @@
-import { css, Color, COLORS, slug, Dev, type t, Vimeo, rx } from '../../test.ui';
 import { ConceptPlayer } from '.';
+import { Color, Dev, Vimeo, css, rx, slug, type t } from '../../test.ui';
 
 const DEFAULTS = ConceptPlayer.DEFAULTS;
 
 type T = {
   props: t.ConceptPlayerProps;
-  debug: { withSlug?: boolean; download?: boolean };
+  debug: { devBg?: boolean; withSlug?: boolean; download?: boolean };
 };
 const initial: T = {
   props: {},
@@ -16,11 +16,12 @@ export default Dev.describe('ConceptPlayer', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'withSlug' | 'download'>;
+  type LocalStore = Pick<T['debug'], 'withSlug' | 'download' | 'devBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptPlayer');
   const local = localstore.object({
     withSlug: true,
     download: true,
+    devBg: true,
   });
 
   /**
@@ -56,18 +57,21 @@ export default Dev.describe('ConceptPlayer', (e) => {
       d.props.slug = DEFAULTS.sample;
       d.debug.withSlug = local.withSlug;
       d.debug.download = local.download;
+      d.debug.devBg = local.devBg;
     });
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size([600, null])
       .display('grid')
       .render<T>((e) => {
         const props = State.props(e.state);
+        ctx.subject.backgroundColor(e.state.debug.devBg ? 1 : 0);
+        const padding = e.state.debug.devBg ? 10 : 0;
         return (
           <ConceptPlayer
             {...props}
+            style={{ padding }}
             onComplete={(e) => {
               console.info('⚡️ onComplete:', e);
             }}
@@ -84,10 +88,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
       dev.row((e) => {
         const borderRadius = 10;
         const styles = {
-          base: css({
-            borderRadius,
-            backgroundColor: Color.format(-0.04),
-          }),
+          base: css({ borderRadius, backgroundColor: Color.format(-0.04) }),
         };
         return (
           <div {...styles.base}>
@@ -123,6 +124,14 @@ export default Dev.describe('ConceptPlayer', (e) => {
           .label((e) => (value(e.state) ? `with slug (data)` : 'without slug (undefined)'))
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.withSlug = Dev.toggle(d.debug, 'withSlug'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devBg);
+        btn
+          .label((e) => `background`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
       });
     });
   });
