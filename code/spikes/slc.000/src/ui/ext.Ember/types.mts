@@ -1,21 +1,18 @@
 import { type t } from './common';
 
-type Id = string;
-type Url = string;
-
 /**
  * Component
  */
 export type RootProps = {
   vimeo?: t.VimeoInstance;
-  slugs?: t.VideoConceptSlug[];
+  slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
   onSelect?: t.VideoConceptClickHandler;
 };
 
 export type RootStatefulProps = {
-  slugs?: t.VideoConceptSlug[];
+  slugs?: t.ConceptSlug[];
   style?: t.CssValue;
   onReady?: RootStatefulReadyHandler;
 };
@@ -23,7 +20,6 @@ export type RootStatefulProps = {
 /**
  * Events
  */
-
 export type RootStatefulReadyHandler = (e: RootStatefulReadyHandlerArgs) => void;
 export type RootStatefulReadyHandlerArgs = {
   vimeo: t.VimeoInstance;
@@ -32,12 +28,6 @@ export type RootStatefulReadyHandlerArgs = {
 /**
  * Content
  */
-export type VideoConceptSlug = {
-  id: Id;
-  title?: string;
-  video?: t.ConceptSlugVideo;
-  image?: { src: Url };
-};
 
 export type VideoConceptClickHandler = (e: VideoConceptClickHandlerArgs) => void;
 export type VideoConceptClickHandlerArgs = {

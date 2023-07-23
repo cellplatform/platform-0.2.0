@@ -4,7 +4,7 @@ import { ConceptPlayer } from '../ui.Concept.Player';
 
 export type FooterProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.VideoConceptSlug;
+  slug?: t.ConceptSlug;
   style?: t.CssValue;
 };
 

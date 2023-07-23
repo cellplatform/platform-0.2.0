@@ -2,11 +2,11 @@ import { Grid, css, type t } from './common';
 
 import { Footer } from './ui.Body.Footer';
 import { Header } from './ui.Body.Header';
-import { Slug } from './ui.Body.Slug';
+import { Slug } from './ui.Slug';
 
 export type BodyProps = {
   vimeo?: t.VimeoInstance;
-  slugs?: t.VideoConceptSlug[];
+  slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
 };

@@ -46,6 +46,7 @@ export default Dev.describe('Landing.Ember', (e) => {
       d.debug.withSlugs = local.withSlugs;
     });
 
+    ctx.debug.width(330);
     ctx.subject
       .size('fill')
       .display('grid')

@@ -1,7 +1,7 @@
 import { Item, css, type t } from './common';
 
 export type IndexProps = {
-  slugs?: t.VideoConceptSlug[];
+  slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
   onSelect?: t.VideoConceptClickHandler;
@@ -17,8 +17,9 @@ export const Index: React.FC<IndexProps> = (props) => {
   const styles = {
     base: css({
       boxSizing: 'border-box',
-      width: 175,
+      width: 190,
       padding: 5,
+      paddingLeft: 15,
       display: 'grid',
       alignContent: 'center',
       paddingBottom: 100,

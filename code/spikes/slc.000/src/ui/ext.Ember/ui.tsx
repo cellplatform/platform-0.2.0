@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, FC, rx, type t, Style } from './common';
+import { COLORS, css, type t } from './common';
 
 import { Body } from './ui.Body';
-import { Index } from './ui.Index';
 import { Empty } from './ui.Empty';
+import { Index } from './ui.Index';
 
 export const View: React.FC<t.RootProps> = (props) => {
   const { slugs = [], selected, vimeo } = props;
