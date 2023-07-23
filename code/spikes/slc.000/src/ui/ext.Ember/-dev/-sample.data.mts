@@ -49,7 +49,7 @@ const slugs: t.ConceptSlug[] = [
     title: 'Making it Memorable',
     video: { id: 847199651, position, scale, height },
     image: {
-      src: '/images/ember/success.png',
+      src: '/images/ember/succes.png',
       sizing: 'cover',
     },
   },
