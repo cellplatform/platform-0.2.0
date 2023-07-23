@@ -8,7 +8,7 @@ export type {
   CSSProperties,
 } from 'sys.ui.react.common/src/types.mjs';
 
-export type { VimeoEvents, VimeoInstance } from 'sys.ui.react.media/src/types.mjs';
+export type { VimeoEvents, VimeoInstance, VimeoStatus } from 'sys.ui.react.media/src/types.mjs';
 
 /**
  * @local

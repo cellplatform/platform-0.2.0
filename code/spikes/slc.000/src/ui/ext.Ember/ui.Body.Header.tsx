@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 export type HeaderProps = {
+  vimeo?: t.VimeoInstance;
   slug?: t.VideoConceptSlug;
   style?: t.CssValue;
 };

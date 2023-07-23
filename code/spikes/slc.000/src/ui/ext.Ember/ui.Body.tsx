@@ -42,9 +42,9 @@ export const Body: React.FC<BodyProps> = (props) => {
         cell(e) {
           const { x, y } = e;
           if (x === 1) {
-            if (y === 0) return <Header slug={slug} />;
+            if (y === 0) return <Header slug={slug} vimeo={vimeo} />;
             if (y === 1) return <Slug slug={slug} vimeo={vimeo} />;
-            if (y === 2) return <Footer slug={slug} />;
+            if (y === 2) return <Footer slug={slug} vimeo={vimeo} />;
           }
           return;
         },

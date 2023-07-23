@@ -2,6 +2,7 @@
  * @system → UI
  */
 export {
+  Button,
   COLORS,
   Color,
   FC,
