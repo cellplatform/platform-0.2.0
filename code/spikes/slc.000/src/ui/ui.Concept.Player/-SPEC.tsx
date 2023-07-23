@@ -102,7 +102,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.withSlug);
         btn
-          .label((e) => `with slug (data)`)
+          .label((e) => (value(e.state) ? `with slug (data)` : 'without slug (undefined)'))
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.withSlug = Dev.toggle(d.debug, 'withSlug'))));
       });
