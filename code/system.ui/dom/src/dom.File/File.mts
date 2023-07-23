@@ -40,14 +40,15 @@ export const File = {
   /**
    * Initiates a file download from the browser
    */
-  download(name: string, data: Uint8Array | Blob, mimetype?: string) {
+  download(filename: string, data: Uint8Array | Blob, options: { mimetype?: string } = {}) {
     return new Promise<void>((resolve, reject) => {
+      const { mimetype } = options;
       const blob = data instanceof Blob ? data : File.toBlob(data, mimetype);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
 
       a.href = url;
-      a.download = name;
+      a.download = filename;
       a.style.display = 'none';
       document.body.appendChild(a);
 
@@ -58,5 +59,14 @@ export const File = {
         resolve();
       });
     });
+  },
+
+  /**
+   * Pull the file at the given URL and download it from the browser.
+   */
+  async downloadUrl(url: string, filename: string) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+    return File.download(filename, await res.blob());
   },
 } as const;
