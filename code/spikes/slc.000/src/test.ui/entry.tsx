@@ -2,6 +2,7 @@ import 'symbol-observable';
 
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
+import { type t } from '../common';
 
 console.info(`Pkg:`, Pkg);
 const url = new URL(window.location.href);
@@ -24,11 +25,14 @@ const Render = {
 
   async ember() {
     const { Root } = await import('../ui/ext.Ember');
-    return root.render(<Root />);
+    const { DATA } = await import('../ui/ext.Ember/-dev/-data.mjs');
+    return root.render(<Root.Stateful slugs={DATA.slugs} />);
   },
 };
 
 (async () => {
+  return Render.ember();
+
   if (isDev) return Render.dev();
   if (url.pathname === '/ember/') return Render.ember();
   if (url.pathname === '/eusic/') return Render.ref('https://slc-eusic-ph1bc4ut7-tdb.vercel.app/');

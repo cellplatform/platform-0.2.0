@@ -1,9 +1,9 @@
 import { Dev, type t } from '../../../test.ui';
-import { Root, type RootProps } from '..';
+import { Root } from '..';
 import { DATA } from './-data.mjs';
 
 type T = {
-  props: RootProps;
+  props: t.RootProps;
   debug: { withSlugs?: boolean };
 };
 const initial: T = {
@@ -12,7 +12,7 @@ const initial: T = {
 };
 
 export default Dev.describe('Landing.Ember', (e) => {
-  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<RootProps, 'selected'>;
+  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.RootProps, 'selected'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:landing.ember');
   const local = localstore.object({
     withSlugs: true,
@@ -20,9 +20,9 @@ export default Dev.describe('Landing.Ember', (e) => {
   });
 
   const State = {
-    displayProps(state: T): RootProps {
+    displayProps(state: T): t.RootProps {
       const { debug } = state;
-      const props: RootProps = {
+      const props: t.RootProps = {
         ...state.props,
         slugs: debug.withSlugs ? DATA.slugs : undefined,
       };
