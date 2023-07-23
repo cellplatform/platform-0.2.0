@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { rx, slug, type t } from '../common';
 import { View } from './ui';
+import { Wrangle } from './Wrangle.mjs';
 
 export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
   const { slugs = [] } = props;
@@ -29,6 +30,10 @@ export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
       selected={selected}
       onSelect={(e) => {
         setSelected(e.index);
+      }}
+      onPlayComplete={(e) => {
+        const next = Wrangle.nextSlug(slugs, selected);
+        if (next.exists) setSelected(next.index);
       }}
     />
   );

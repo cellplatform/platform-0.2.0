@@ -9,7 +9,7 @@ export const Wrangle = {
     const exists = index < slugs.length;
     return {
       exists,
-      index: exists ? index : undefined,
+      index: exists ? index : -1,
       slug: slugs[index],
     } as const;
   },
