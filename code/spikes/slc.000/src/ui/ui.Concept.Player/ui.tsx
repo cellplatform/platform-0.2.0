@@ -34,7 +34,6 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
       gridTemplateColumns: 'auto 1fr',
       alignContent: 'center',
       columnGap: 15,
-      PaddingX: 8,
     }),
     left: css({ display: 'grid' }),
     right: css({ display: 'grid', alignContent: 'center' }),

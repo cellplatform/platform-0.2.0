@@ -18,6 +18,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
     base: css({
       paddingTop: 5,
       paddingBottom: 10,
+      PaddingX: 8,
       display: 'grid',
     }),
   };
