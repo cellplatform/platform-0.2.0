@@ -56,6 +56,7 @@ export type LabelItemProps = {
   style?: t.CssValue;
   indent?: number;
   padding?: t.CssEdgesInput;
+  borderRadius?: number;
 } & LabelItemPropsHandlers;
 
 export type LabelItemPropsHandlers = {

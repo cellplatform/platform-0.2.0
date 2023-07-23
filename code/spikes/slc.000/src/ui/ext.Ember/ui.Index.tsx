@@ -36,10 +36,8 @@ export const Index: React.FC<IndexProps> = (props) => {
         key={index}
         label={slug.title}
         selected={isSelected}
-        onClick={(e) => {
-          console.log('click', e);
-          props.onSelect?.({ index: index });
-        }}
+        borderRadius={3}
+        onClick={(e) => props.onSelect?.({ index: index })}
       />
     );
   });

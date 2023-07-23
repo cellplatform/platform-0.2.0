@@ -30,6 +30,7 @@ export const DEFAULTS = {
   tabIndex: 0,
   indent: 0,
   padding: 5,
+  borderRadius: 0,
   placeholder: 'placeholder',
   spinner: { width: 15 },
   leftAction,

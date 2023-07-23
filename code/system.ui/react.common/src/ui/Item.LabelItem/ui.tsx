@@ -5,7 +5,6 @@ import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
 import { Right } from './ui.Root.Right';
 import { Wrangle } from './Wrangle';
-import { lifecycle } from 'sys.util/dist/types.d/Rx/Rx.disposable.mjs';
 
 type Props = t.LabelItemProps & { inputRef: RefObject<t.TextInputRef> };
 
@@ -18,6 +17,7 @@ export const View: React.FC<Props> = (props) => {
     enabled = DEFAULTS.enabled,
     focused = DEFAULTS.focused,
     editing = DEFAULTS.editing,
+    borderRadius = DEFAULTS.borderRadius,
     debug,
   } = props;
   const label = Wrangle.labelText(props);
@@ -73,6 +73,7 @@ export const View: React.FC<Props> = (props) => {
       position: 'relative',
       pointerEvents: enabled ? 'auto' : 'none',
       backgroundColor: Wrangle.backgroundColor(props),
+      borderRadius,
       boxSizing: 'border-box',
       outline: 'none',
       opacity: enabled ? 1 : 0.4,

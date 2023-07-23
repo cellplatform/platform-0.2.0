@@ -17,8 +17,8 @@ export const Slug: React.FC<SlugProps> = (props) => {
     base: css({
       position: 'relative',
       backgroundColor: COLORS.WHITE,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.15)}`,
-      borderRadius: 3,
+      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
+      borderRadius: 4,
       boxSizing: 'border-box',
       boxShadow: `0 1px 30px 5px ${Color.format(-0.06)}`,
     }),

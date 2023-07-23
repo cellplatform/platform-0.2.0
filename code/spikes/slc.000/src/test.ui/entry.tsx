@@ -31,8 +31,6 @@ const Render = {
 };
 
 (async () => {
-  return Render.ember();
-
   if (isDev) return Render.dev();
   if (url.pathname === '/ember/') return Render.ember();
   if (url.pathname === '/eusic/') return Render.ref('https://slc-eusic-ph1bc4ut7-tdb.vercel.app/');

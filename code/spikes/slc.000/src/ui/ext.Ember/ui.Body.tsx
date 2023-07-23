@@ -35,8 +35,9 @@ export const Body: React.FC<BodyProps> = (props) => {
           return e.index === 1 ? 1 : '50px';
         },
         row(e) {
+          if (e.index === 0) return '45px';
           if (e.index === 2) return '60px';
-          return e.index === 1 ? 1 : '50px';
+          return 1; // 1fr
         },
         cell(e) {
           const { x, y } = e;
