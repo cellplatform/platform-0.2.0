@@ -12,7 +12,6 @@ export type DummyProps = {
  */
 export const Dummy: React.FC<DummyProps> = (props) => {
   const { vimeo } = props;
-  const sample = DEFAULTS.sample.video;
 
   /**
    * [Render]
@@ -31,7 +30,7 @@ export const Dummy: React.FC<DummyProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ConceptSlug style={props.style} vimeo={vimeo} video={sample} />
+      <ConceptSlug style={props.style} vimeo={vimeo} slug={DEFAULTS.sample} />
       <div {...styles.rubyOverlay} />
     </div>
   );

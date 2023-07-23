@@ -3,16 +3,18 @@ import { VideoPlayer } from './ui.Video.Player';
 
 export type VideoProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlugVideo;
+  slug?: t.ConceptSlug;
   style?: t.CssValue;
 };
 
 export const VideoLayout: React.FC<VideoProps> = (props) => {
-  const { slug = {}, vimeo } = props;
-  const hasVideo = Boolean(slug.id && vimeo);
+  const { slug, vimeo } = props;
+  const video = slug?.video;
+  const hasVideo = Boolean(video?.id && vimeo);
+
   return (
-    <Position position={slug.position} style={props.style}>
-      {hasVideo && <VideoPlayer slug={slug} vimeo={vimeo} />}
+    <Position position={video?.position} style={props.style}>
+      {hasVideo && <VideoPlayer slug={video} vimeo={vimeo} />}
     </Position>
   );
 };

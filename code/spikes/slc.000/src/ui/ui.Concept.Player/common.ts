@@ -6,7 +6,7 @@ export { Icons } from '../Icons.mjs';
 /**
  * Constants
  */
-const sample: t.VideoConceptSlug = {
+const sample: t.ConceptSlug = {
   id: 'uniq.id',
   title: 'Name and Topic of the Slug.',
   video: {

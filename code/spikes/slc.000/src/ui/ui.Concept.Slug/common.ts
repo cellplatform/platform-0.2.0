@@ -7,14 +7,13 @@ export { Position } from '../ui.Position';
  */
 const position: t.Pos = ['center', 'center'];
 
-type Sample = {
-  video: t.ConceptSlugVideo;
-};
-const sample: Sample = {
+const sample: t.ConceptSlug = {
+  id: 'sample',
   video: {
     id: 499921561, //→ vimeo/tubes
     position: ['left', 'bottom'],
   },
+  image: {},
 };
 
 export const DEFAULTS = {

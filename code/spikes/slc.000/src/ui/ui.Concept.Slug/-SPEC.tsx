@@ -32,10 +32,12 @@ export default Dev.describe('ConceptSlug', (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.video = {
-        ...DEFAULTS.sample.video,
+      const sample = DEFAULTS.sample;
+      const video = {
+        ...sample.video,
         position: local.videoPosition,
       };
+      d.props.slug = { ...sample, video };
       d.debug.dummy = local.dummy;
     });
 
@@ -59,10 +61,12 @@ export default Dev.describe('ConceptSlug', (e) => {
       return (
         <div {...css({ display: 'grid', placeItems: 'center' })}>
           <Position.Selector
-            selected={e.state.props.video?.position}
+            selected={e.state.props.slug?.video?.position}
             onSelect={(e) => {
               state.change((d) => {
-                const video = d.props.video ?? (d.props.video = {});
+                const id = DEFAULTS.sample.id;
+                const slug = d.props.slug ?? (d.props.slug = { id });
+                const video = slug.video ?? (slug.video = {});
                 video.position = local.videoPosition = e.pos;
               });
             }}

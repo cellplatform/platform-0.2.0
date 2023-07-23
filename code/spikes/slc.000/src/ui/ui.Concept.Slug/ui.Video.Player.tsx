@@ -13,6 +13,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   /**
    * [Render]
    */
+  const height = slug.height ?? 200;
   const isScaled = typeof slug.scale === 'number';
   const styles = {
     base: css({ overflow: 'hidden', borderRadius: 5 }),
@@ -24,7 +25,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.inner}>
-        <Vimeo.Player instance={vimeo} video={slug.id} borderRadius={10} />
+        <Vimeo.Player instance={vimeo} video={slug.id} borderRadius={10} height={height} />
       </div>
     </div>
   );

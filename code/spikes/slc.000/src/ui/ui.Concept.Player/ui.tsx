@@ -22,6 +22,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
 
     const secs = status.duration * e.progress;
     player.events?.seek.fire(secs);
+    if (!player.playing) player.play();
   };
 
   /**
