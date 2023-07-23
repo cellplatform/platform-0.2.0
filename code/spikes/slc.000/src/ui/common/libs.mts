@@ -18,4 +18,4 @@ export {
   useFocus,
   useMouseState,
 } from 'sys.ui.react.common';
-export { Vimeo } from 'sys.ui.react.media';
+export { Vimeo, SeekBar } from 'sys.ui.react.media';

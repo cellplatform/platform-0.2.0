@@ -1,10 +1,28 @@
-import { css, type t } from './common';
+import { SeekBar, css, type t } from './common';
 import { PlayButton } from './ui.PlayButton';
 import { usePlayer } from './usePlayer.mjs';
 
 export const View: React.FC<t.ConceptPlayerProps> = (props) => {
   const { vimeo, slug } = props;
   const player = usePlayer(vimeo);
+  const status = player.status;
+
+  /**
+   * Handlers
+   */
+  const handleToggle = () => player.toggle();
+  const handleSeekClick: t.SeekBarClickHandler = (e) => {
+    if (!status) return;
+
+    /**
+     * TODO 🐷
+     * - immediate UI update.
+     * - wait for "status" to update, then use the new value.
+     */
+
+    const secs = status.duration * e.progress;
+    player.events?.seek.fire(secs);
+  };
 
   /**
    * [Render]
@@ -14,21 +32,21 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: 'auto 1fr',
       alignContent: 'center',
-      columnGap: 5,
-      rowGap: 5,
+      columnGap: 15,
+      PaddingX: 8,
     }),
-    left: css({}),
-    right: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-    }),
+    left: css({ display: 'grid' }),
+    right: css({ display: 'grid', alignContent: 'center' }),
   };
-
-  const elPlayButton = <PlayButton playing={player.playing} onClick={() => player.toggle()} />;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.left}>{elPlayButton}</div>
-      <div {...styles.right}>{'Progress'}</div>
+      <div {...styles.left}>
+        <PlayButton playing={player.playing} onClick={handleToggle} />
+      </div>
+      <div {...styles.right}>
+        <SeekBar progress={status?.percent} onClick={handleSeekClick} />
+      </div>
     </div>
   );
 };
