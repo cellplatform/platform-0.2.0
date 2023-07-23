@@ -1,24 +1,30 @@
-import { ConceptPlayer } from '..';
-import { Dev, css, rx, slug, type t, Icons } from '../../../test.ui';
+import { ConceptSlug } from '.';
+import { Dev, css, rx, slug, type t, Icons } from '../../test.ui';
 
-import { Vimeo, Position } from '../common';
+import { Vimeo, Position } from './common';
 
-const DEFAULTS = ConceptPlayer.DEFAULTS;
-const SAMPLE_VIDEO = 499921561; // vimeo/tubes
+const DEFAULTS = ConceptSlug.DEFAULTS;
 
-type T = { props: t.ConceptPlayerProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.ConceptSlugProps;
+  debug: { dummy?: boolean };
+};
+const initial: T = {
+  props: {},
+  debug: {},
+};
 
-export default Dev.describe('ConceptPlayer', (e) => {
-  type LocalStore = { videoPos?: t.Pos };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptPlayer');
+export default Dev.describe('ConceptSlug', (e) => {
+  type LocalStore = { videoPosition?: t.Pos } & Pick<T['debug'], 'dummy'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptSlug');
   const local = localstore.object({
-    videoPos: DEFAULTS.pos,
+    videoPosition: DEFAULTS.position,
+    dummy: false,
   });
 
   const bus = rx.bus();
-  const instance = { bus, id: `foo.${slug()}` };
-  const events = Vimeo.Events(instance);
+  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
+  const player = Vimeo.Events(vimeo);
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -27,9 +33,10 @@ export default Dev.describe('ConceptPlayer', (e) => {
 
     await state.change((d) => {
       d.props.video = {
-        id: SAMPLE_VIDEO,
-        pos: local.videoPos,
+        ...DEFAULTS.sample.video,
+        position: local.videoPosition,
       };
+      d.debug.dummy = local.dummy;
     });
 
     ctx.debug.width(330);
@@ -38,7 +45,9 @@ export default Dev.describe('ConceptPlayer', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <ConceptPlayer {...e.state.props} vimeo={instance} />;
+        const { debug, props } = e.state;
+        if (debug.dummy) return <ConceptSlug.Dummy vimeo={vimeo} />;
+        return <ConceptSlug {...props} vimeo={vimeo} />;
       });
   });
 
@@ -50,11 +59,11 @@ export default Dev.describe('ConceptPlayer', (e) => {
       return (
         <div {...css({ display: 'grid', placeItems: 'center' })}>
           <Position.Selector
-            selected={e.state.props.video?.pos}
+            selected={e.state.props.video?.position}
             onSelect={(e) => {
               state.change((d) => {
                 const video = d.props.video ?? (d.props.video = {});
-                video.pos = local.videoPos = e.pos;
+                video.position = local.videoPosition = e.pos;
               });
             }}
           />
@@ -69,14 +78,14 @@ export default Dev.describe('ConceptPlayer', (e) => {
         btn
           .label('play')
           .right((e) => <Icons.Play.Sharp size={16} />)
-          .onClick((e) => events.play.fire());
+          .onClick((e) => player.play.fire());
       });
 
       dev.button((btn) => {
         btn
           .label('pause')
           .right((e) => <Icons.Pause.Sharp size={16} />)
-          .onClick((e) => events.pause.fire());
+          .onClick((e) => player.pause.fire());
       });
 
       dev.hr(-1, 5);
@@ -86,9 +95,21 @@ export default Dev.describe('ConceptPlayer', (e) => {
           .label('restart')
           .right((e) => <Icons.Replay size={16} />)
           .onClick((e) => {
-            events.seek.start();
-            events.play.fire();
+            player.seek.start();
+            player.play.fire();
           });
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.dummy);
+        btn
+          .label((e) => `dummy`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.dummy = Dev.toggle(d.debug, 'dummy'))));
       });
     });
   });

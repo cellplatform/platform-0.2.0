@@ -1,7 +1,7 @@
 import { css, type t } from './common';
-import { Video } from './ui.Video';
+import { VideoLayout } from './ui.Video.Layout';
 
-export const View: React.FC<t.ConceptPlayerProps> = (props) => {
+export const View: React.FC<t.ConceptSlugProps> = (props) => {
   /**
    * [Render]
    */
@@ -11,7 +11,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Video vimeo={props.vimeo} video={props.video} style={{ Absolute: 0 }} />
+      <VideoLayout vimeo={props.vimeo} slug={props.video} style={{ Absolute: 0 }} />
     </div>
   );
 };
