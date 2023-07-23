@@ -30,6 +30,8 @@ export type ConceptPlayerProps = {
 export type ConceptPlayerDownloadProps = {
   kind: 'pdf';
   url: string;
+  filename: string;
+  onClick?: (e: { url: string; mimetype: string }) => void;
 };
 
 /**

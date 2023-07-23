@@ -18,4 +18,5 @@ const sample: t.ConceptSlug = {
 
 export const DEFAULTS = {
   sample,
+  downloadOnClick: true,
 } as const;
