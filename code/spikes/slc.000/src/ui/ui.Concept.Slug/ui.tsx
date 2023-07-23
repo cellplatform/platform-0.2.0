@@ -9,7 +9,7 @@ export const View: React.FC<t.ConceptSlugProps> = (props) => {
   /**
    * Handlers
    */
-  const handleClick = () => player.toggle();
+  const togglePlay = () => player.toggle();
 
   /**
    * [Render]
@@ -21,10 +21,10 @@ export const View: React.FC<t.ConceptSlugProps> = (props) => {
   };
 
   return (
-    <div {...css(styles.base, props.style)} onClick={handleClick}>
+    <div {...css(styles.base, props.style)}>
       <ImageLayout slug={slug} style={styles.fill} />
       <VideoLayout slug={slug} vimeo={vimeo} style={styles.fill} />
-      <div {...styles.mask} onClick={handleClick} />
+      <div {...styles.mask} onClick={togglePlay} />
     </div>
   );
 };
