@@ -33,4 +33,4 @@ const slugs: t.VideoConceptSlug[] = [
 
 export const DATA = {
   slugs,
-};
+} as const;
