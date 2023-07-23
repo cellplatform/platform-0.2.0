@@ -8,6 +8,7 @@ import { Empty } from './ui.Empty';
 export const View: React.FC<t.RootProps> = (props) => {
   const { slugs = [], selected, vimeo } = props;
   const isEmpty = slugs.length === 0;
+  const warning = !vimeo ? '⚠️ Vimeo instance not specified.' : undefined;
 
   /**
    * [Render]
@@ -25,8 +26,8 @@ export const View: React.FC<t.RootProps> = (props) => {
     }),
   };
 
-  const elEmpty = isEmpty && <Empty />;
-  const elBody = !isEmpty && (
+  const elEmpty = (isEmpty || warning) && <Empty text={warning} />;
+  const elBody = !elEmpty && (
     <div {...styles.body}>
       <Index slugs={slugs} selected={selected} onSelect={props.onSelect} />
       <Body slugs={slugs} selected={selected} vimeo={vimeo} />

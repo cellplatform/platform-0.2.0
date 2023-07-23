@@ -1,4 +1,4 @@
-import { DEFAULTS, css, type t } from './common';
+import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
 export type EmptyProps = {
   text?: string;
@@ -15,9 +15,8 @@ export const Empty: React.FC<EmptyProps> = (props) => {
     base: css({
       Absolute: 0,
       userSelect: 'none',
-      fontStyle: 'italic',
       fontSize: 14,
-      opacity: 0.3,
+      color: Color.alpha(COLORS.DARK, 0.5),
       display: 'grid',
       placeItems: 'center',
     }),

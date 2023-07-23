@@ -17,6 +17,16 @@ export type RootProps = {
 export type RootStatefulProps = {
   slugs?: t.VideoConceptSlug[];
   style?: t.CssValue;
+  onReady?: RootStatefulReadyHandler;
+};
+
+/**
+ * Events
+ */
+
+export type RootStatefulReadyHandler = (e: RootStatefulReadyHandlerArgs) => void;
+export type RootStatefulReadyHandlerArgs = {
+  vimeo: t.VimeoInstance;
 };
 
 /**
