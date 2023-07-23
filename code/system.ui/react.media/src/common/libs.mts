@@ -24,4 +24,5 @@ export {
   TextInput,
   css,
   useSizeObserver,
+  useMouseState,
 } from 'sys.ui.react.common';

@@ -3,14 +3,21 @@ import { SeekBar } from '.';
 
 const DEFAULTS = SeekBar.DEFAULTS;
 
-type T = { props: t.SeekBarProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.SeekBarProps;
+  debug: { devBg?: boolean };
+};
+const initial: T = {
+  props: {},
+  debug: {},
+};
 
 export default Dev.describe('SeekBar', (e) => {
-  type LocalStore = Pick<t.SeekBarProps, 'progress'>;
+  type LocalStore = Pick<t.SeekBarProps, 'progress'> & Pick<T['debug'], 'devBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.SeekBar');
   const local = localstore.object({
     progress: DEFAULTS.progress,
+    devBg: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -19,6 +26,7 @@ export default Dev.describe('SeekBar', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.progress = local.progress;
+      d.debug.devBg = local.devBg;
     });
 
     ctx.subject
@@ -26,7 +34,19 @@ export default Dev.describe('SeekBar', (e) => {
       .size([500, null])
       .display('grid')
       .render<T>((e) => {
-        return <SeekBar {...e.state.props} />;
+        const { debug, props } = e.state;
+
+        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
+
+        return (
+          <SeekBar
+            {...props}
+            onClick={(e) => {
+              console.info('⚡️ onClick', e);
+              state.change((d) => (d.props.progress = e.progress));
+            }}
+          />
+        );
       });
   });
 
@@ -51,6 +71,16 @@ export default Dev.describe('SeekBar', (e) => {
     });
 
     dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devBg);
+        btn
+          .label((e) => `background`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

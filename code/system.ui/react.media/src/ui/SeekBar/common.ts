@@ -6,4 +6,5 @@ import { Color, COLORS } from '../common';
  */
 export const DEFAULTS = {
   progress: 0,
+  thumbColor: COLORS.BLUE,
 } as const;

@@ -7,5 +7,15 @@ type Percent = number; // 0..1
  */
 export type SeekBarProps = {
   progress?: Percent;
+  thumbColor?: string;
   style?: t.CssValue;
+  onClick?: SeekBarClickHandler;
+};
+
+/**
+ * Events
+ */
+export type SeekBarClickHandler = (e: SeekBarClickHandlerArgs) => void;
+export type SeekBarClickHandlerArgs = {
+  progress: Percent;
 };
