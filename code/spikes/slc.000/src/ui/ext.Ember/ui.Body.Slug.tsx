@@ -1,4 +1,4 @@
-import { ConceptSlug } from '../ui.ConceptSlug';
+import { ConceptSlug } from '../ui.Concept.Slug';
 import { COLORS, Color, DEFAULTS, css, type t } from './common';
 import { Empty } from './ui.Empty';
 
