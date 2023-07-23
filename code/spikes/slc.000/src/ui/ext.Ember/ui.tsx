@@ -6,7 +6,7 @@ import { Index } from './ui.Index';
 import { Empty } from './ui.Empty';
 
 export const View: React.FC<t.RootProps> = (props) => {
-  const { slugs = [], selected } = props;
+  const { slugs = [], selected, vimeo } = props;
   const isEmpty = slugs.length === 0;
 
   /**
@@ -29,7 +29,7 @@ export const View: React.FC<t.RootProps> = (props) => {
   const elBody = !isEmpty && (
     <div {...styles.body}>
       <Index slugs={slugs} selected={selected} onSelect={props.onSelect} />
-      <Body slugs={slugs} selected={selected} />
+      <Body slugs={slugs} selected={selected} vimeo={vimeo} />
     </div>
   );
 

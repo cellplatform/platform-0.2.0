@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from '../common';
+import { COLORS, Color, css, type t, DEFAULTS } from './common';
+import { ConceptSlug } from '../ui.ConceptSlug';
 import { Empty } from './ui.Empty';
 
 export type SlugProps = {
+  vimeo?: t.VimeoInstance;
   slug?: t.VideoConceptSlug;
   style?: t.CssValue;
 };
 
 export const Slug: React.FC<SlugProps> = (props) => {
-  const { slug } = props;
+  const { slug, vimeo } = props;
 
   /**
    * [Render]
@@ -21,15 +22,19 @@ export const Slug: React.FC<SlugProps> = (props) => {
       borderRadius: 4,
       boxSizing: 'border-box',
       boxShadow: `0 1px 30px 5px ${Color.format(-0.06)}`,
+      display: 'grid',
     }),
   };
 
-  const elEmpty = !slug && <Empty text={'Nothing selected.'} />;
+  console.log('slug.video', slug?.video);
+
+  const elEmpty = !slug && <Empty text={DEFAULTS.text.nothingSelected} />;
+  const elSlug = slug && <ConceptSlug video={slug.video} vimeo={vimeo} />;
 
   return (
     <div {...css(styles.base, props.style)}>
       {elEmpty}
-      <div></div>
+      {elSlug}
     </div>
   );
 };

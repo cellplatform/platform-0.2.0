@@ -6,13 +6,14 @@ import { Header } from './ui.Body.Header';
 import { Footer } from './ui.Body.Footer';
 
 export type BodyProps = {
+  vimeo?: t.VimeoInstance;
   slugs?: t.VideoConceptSlug[];
   selected?: number;
   style?: t.CssValue;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
-  const { slugs = [], selected = -1 } = props;
+  const { slugs = [], selected = -1, vimeo } = props;
   const slug = slugs[selected];
 
   /**
@@ -43,7 +44,7 @@ export const Body: React.FC<BodyProps> = (props) => {
           const { x, y } = e;
           if (x === 1) {
             if (y === 0) return <Header slug={slug} />;
-            if (y === 1) return <Slug slug={slug} />;
+            if (y === 1) return <Slug slug={slug} vimeo={vimeo} />;
             if (y === 2) return <Footer slug={slug} />;
           }
           return;

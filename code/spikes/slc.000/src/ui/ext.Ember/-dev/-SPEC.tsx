@@ -1,6 +1,7 @@
-import { Dev, type t } from '../../../test.ui';
+import { Dev, Icons, Vimeo, rx, slug, type t } from '../../../test.ui';
+
 import { Root } from '..';
-import { DATA } from './-data.mjs';
+import { DATA } from './-sample.data.mjs';
 
 type T = {
   props: t.RootProps;
@@ -19,12 +20,17 @@ export default Dev.describe('Landing.Ember', (e) => {
     selected: -1,
   });
 
+  const bus = rx.bus();
+  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
+  const player = Vimeo.Events(vimeo);
+
   const State = {
     displayProps(state: T): t.RootProps {
       const { debug } = state;
       const props: t.RootProps = {
         ...state.props,
         slugs: debug.withSlugs ? DATA.slugs : undefined,
+        vimeo,
       };
       return props;
     },
@@ -85,6 +91,36 @@ export default Dev.describe('Landing.Ember', (e) => {
       select(-1);
       dev.hr(-1, 5);
       Array.from({ length: 5 }).forEach((v, i) => select(i));
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Video', (dev) => {
+      dev.button((btn) => {
+        btn
+          .label('play')
+          .right((e) => <Icons.Play.Sharp size={16} />)
+          .onClick((e) => player.play.fire());
+      });
+
+      dev.button((btn) => {
+        btn
+          .label('pause')
+          .right((e) => <Icons.Pause.Sharp size={16} />)
+          .onClick((e) => player.pause.fire());
+      });
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) => {
+        btn
+          .label('restart')
+          .right((e) => <Icons.Replay size={16} />)
+          .onClick((e) => {
+            player.seek.start();
+            player.play.fire();
+          });
+      });
     });
   });
 

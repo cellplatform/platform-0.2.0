@@ -1,4 +1,4 @@
-import { css, type t } from '../common';
+import { css, type t, DEFAULTS } from './common';
 
 export type EmptyProps = {
   text?: string;
@@ -6,7 +6,7 @@ export type EmptyProps = {
 };
 
 export const Empty: React.FC<EmptyProps> = (props) => {
-  const { text = 'Nothing to display.' } = props;
+  const { text = DEFAULTS.text.nothingToDisplay } = props;
 
   /**
    * [Render]

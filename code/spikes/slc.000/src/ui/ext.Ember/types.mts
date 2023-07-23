@@ -8,6 +8,7 @@ type VideoId = number;
  * Component
  */
 export type RootProps = {
+  vimeo?: t.VimeoInstance;
   slugs?: t.VideoConceptSlug[];
   selected?: number;
   style?: t.CssValue;
@@ -25,7 +26,7 @@ export type RootStatefulProps = {
 export type VideoConceptSlug = {
   id: Id;
   title?: string;
-  video: { id: VideoId };
+  video?: t.ConceptSlugVideo;
   image?: { src: Url };
 };
 
