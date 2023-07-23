@@ -29,8 +29,5 @@ export type RootStatefulReadyHandlerArgs = {
 /**
  * Content
  */
-
 export type VideoConceptClickHandler = (e: VideoConceptClickHandlerArgs) => void;
-export type VideoConceptClickHandlerArgs = {
-  index: number;
-};
+export type VideoConceptClickHandlerArgs = { index: number };

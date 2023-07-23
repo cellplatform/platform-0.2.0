@@ -16,22 +16,22 @@ export type VimeoPlayer = {
   seek(seconds: number): void;
 };
 
+export type DownloadFileProps = {
+  kind: 'pdf';
+  url: string;
+  filename: string;
+  onClick?: (e: { url: string; mimetype: string }) => void;
+};
+
 /**
  * Component
  */
 export type ConceptPlayerProps = {
   vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug;
-  download?: ConceptPlayerDownloadProps;
+  download?: t.DownloadFileProps;
   style?: t.CssValue;
   onComplete?: ConceptPlayerCompleteHandler;
-};
-
-export type ConceptPlayerDownloadProps = {
-  kind: 'pdf';
-  url: string;
-  filename: string;
-  onClick?: (e: { url: string; mimetype: string }) => void;
 };
 
 /**

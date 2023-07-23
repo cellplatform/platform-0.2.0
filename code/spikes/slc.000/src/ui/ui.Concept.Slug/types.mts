@@ -21,6 +21,7 @@ export type ConceptSlug = {
   title?: string;
   video?: t.ConceptSlugVideo;
   image?: t.ConceptSlugImage;
+  download?: t.DownloadFileProps;
 };
 
 export type ConceptSlugVideo = {

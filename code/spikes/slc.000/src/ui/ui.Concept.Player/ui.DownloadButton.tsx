@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DEFAULTS, Button, COLORS, Color, Icons, css, type t, File } from './common';
 
 export type DownloadButtonProps = {
-  data?: t.ConceptPlayerDownloadProps;
+  data?: t.DownloadFileProps;
   downloadOnClick?: boolean;
   style?: t.CssValue;
 };
@@ -58,7 +58,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  mimetype(kind: t.ConceptPlayerDownloadProps['kind']) {
+  mimetype(kind: t.DownloadFileProps['kind']) {
     if (kind === 'pdf') return 'application/pdf';
     return 'application/octet-stream'; // Unknown.
   },

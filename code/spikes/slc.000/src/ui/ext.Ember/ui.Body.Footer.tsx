@@ -26,7 +26,12 @@ export const Footer: React.FC<FooterProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ConceptPlayer vimeo={vimeo} slug={slug} onComplete={props.onPlayComplete} />
+      <ConceptPlayer
+        vimeo={vimeo}
+        slug={slug}
+        onComplete={props.onPlayComplete}
+        download={slug?.download}
+      />
     </div>
   );
 };

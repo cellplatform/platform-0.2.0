@@ -1,5 +1,10 @@
 import { type t } from '../common';
 
+const download: t.DownloadFileProps = {
+  kind: 'pdf',
+  url: 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf',
+  filename: 'slc.pdf',
+};
 const SAMPLE = {
   groupScaleDiagram:
     'https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png',
@@ -33,6 +38,11 @@ const slugs: t.ConceptSlug[] = [
     image: {
       src: '/images/ember/structure.png',
       sizing: 'cover',
+    },
+    download: {
+      kind: 'pdf',
+      url: 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf',
+      filename: 'slc.pdf',
     },
   },
   {

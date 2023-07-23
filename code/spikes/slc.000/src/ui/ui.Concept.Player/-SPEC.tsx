@@ -38,7 +38,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
       const { props, debug } = state;
 
       const url = 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf';
-      const download: t.ConceptPlayerDownloadProps = { kind: 'pdf', url, filename: 'slc.pdf' };
+      const download: t.DownloadFileProps = { kind: 'pdf', url, filename: 'slc.pdf' };
       return {
         ...props,
         vimeo,
