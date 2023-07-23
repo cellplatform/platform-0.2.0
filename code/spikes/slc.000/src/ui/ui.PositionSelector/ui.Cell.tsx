@@ -36,7 +36,7 @@ export const Cell: React.FC<CellProps> = (props) => {
       backgroundColor,
       userSelect: 'none',
       cursor: enabled ? 'pointer' : undefined,
-      border: `solid 0.5px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      border: `solid 0.5px ${Color.alpha(COLORS.DARK, 0.15)}`,
     }),
   };
 
