@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+type VideoId = number;
+
 export type ConceptSlugProps = {
   vimeo?: t.VimeoInstance;
   video?: ConceptSlugVideo;
@@ -7,6 +9,7 @@ export type ConceptSlugProps = {
 };
 
 export type ConceptSlugVideo = {
-  id?: number; // Video-identifier (eg. 499921561 on vimeo).
-  position?: t.Pos;
+  id?: VideoId; // Video-identifier (eg. 499921561 on vimeo).
+  position?: t.PositionInput;
+  scale?: number;
 };
