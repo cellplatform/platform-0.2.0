@@ -11,6 +11,7 @@ export { AudioWaveform } from './ui/Audio.Waveform';
 export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
 export { ConceptPlayer } from './ui/Concept.Player';
+export { SeekBar } from './ui/SeekBar';
 
 export { YouTube } from './ui/vendor.YouTube';
 export { Vimeo, VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/vendor.Vimeo';
