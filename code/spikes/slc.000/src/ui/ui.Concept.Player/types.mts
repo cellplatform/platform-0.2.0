@@ -1,11 +1,5 @@
 import { type t } from './common';
 
-export type ConceptPlayerProps = {
-  vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug;
-  style?: t.CssValue;
-};
-
 /**
  *
  * TODO: Move to sys.ui.media.Vimeo
@@ -20,4 +14,22 @@ export type VimeoPlayer = {
   pause(): void;
   toggle(): void;
   seek(seconds: number): void;
+};
+
+/**
+ * Component
+ */
+export type ConceptPlayerProps = {
+  vimeo?: t.VimeoInstance;
+  slug?: t.ConceptSlug;
+  style?: t.CssValue;
+  onComplete?: ConceptPlayerCompleteHandler;
+};
+
+/**
+ * Events
+ */
+export type ConceptPlayerCompleteHandler = (e: ConceptPlayerCompleteHandlerArgs) => void;
+export type ConceptPlayerCompleteHandlerArgs = {
+  status: t.VimeoStatus;
 };

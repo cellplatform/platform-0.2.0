@@ -59,7 +59,14 @@ export default Dev.describe('ConceptPlayer', (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = State.props(e.state);
-        return <ConceptPlayer {...props} />;
+        return (
+          <ConceptPlayer
+            {...props}
+            onComplete={(e) => {
+              console.info('⚡️ onComplete:', e);
+            }}
+          />
+        );
       });
   });
 

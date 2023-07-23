@@ -1,10 +1,10 @@
 import { SeekBar, css, type t } from './common';
-import { PlayButton } from './ui.PlayButton';
+import { PlayButton } from './ui.Button.Play';
 import { usePlayer } from './usePlayer.mjs';
 
 export const View: React.FC<t.ConceptPlayerProps> = (props) => {
-  const { vimeo, slug } = props;
-  const player = usePlayer(vimeo);
+  const { vimeo, slug, onComplete } = props;
+  const player = usePlayer(vimeo, { onComplete });
   const status = player.status;
 
   /**
