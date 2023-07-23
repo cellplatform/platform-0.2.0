@@ -1,11 +1,14 @@
 import { SeekBar, css, type t } from './common';
-import { PlayButton } from './ui.Button.Play';
+import { PlayButton } from './ui.PlayButton';
 import { usePlayer } from './usePlayer.mjs';
+import { DownloadButton } from './ui.DownloadButton';
 
 export const View: React.FC<t.ConceptPlayerProps> = (props) => {
-  const { vimeo, slug, onComplete } = props;
+  const { vimeo, slug, onComplete, download } = props;
   const player = usePlayer(vimeo, { onComplete });
   const status = player.status;
+
+  console.log('download', download);
 
   /**
    * Handlers
@@ -31,22 +34,26 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
   const styles = {
     base: css({
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
+      gridTemplateColumns: 'auto 1fr auto',
       alignContent: 'center',
       columnGap: 15,
     }),
     left: css({ display: 'grid' }),
-    right: css({ display: 'grid', alignContent: 'center' }),
+    middle: css({ display: 'grid', alignContent: 'center' }),
+    right: css({ display: 'grid' }),
   };
+
+  const elDownload = download && <DownloadButton data={download} />;
 
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
         <PlayButton playing={player.playing} onClick={handleToggle} />
       </div>
-      <div {...styles.right}>
+      <div {...styles.middle}>
         <SeekBar progress={status?.percent} onClick={handleSeekClick} />
       </div>
+      <div {...styles.right}>{elDownload}</div>
     </div>
   );
 };
