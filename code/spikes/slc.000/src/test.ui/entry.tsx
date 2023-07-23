@@ -30,7 +30,7 @@ const Render = {
 };
 
 (async () => {
-  // return Render.ember();
+  if (queryHas('ember')) return Render.ember();
 
   if (isDev) return Render.dev();
   if (url.pathname === '/ember/') return Render.ember();

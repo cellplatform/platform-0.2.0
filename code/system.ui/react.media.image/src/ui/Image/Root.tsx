@@ -49,7 +49,12 @@ const View: React.FC<t.ImageProps> = (props) => {
   const elImage = backgroundImage && <div {...styles.image} />;
 
   return (
-    <div ref={ref} {...css(styles.base, props.style)} tabIndex={paste.tabIndex}>
+    <div
+      ref={ref}
+      {...css(styles.base, props.style)}
+      tabIndex={paste.tabIndex}
+      className={'sys-Image'}
+    >
       {elImage}
       {elDrag}
       {elFocused}

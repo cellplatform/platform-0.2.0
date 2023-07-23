@@ -1,6 +1,6 @@
 import { css, type t } from './common';
-import { ImageLayout } from './ui.Image.Layout';
-import { VideoLayout } from './ui.Video.Layout';
+import { ImageLayout } from './ui.Image';
+import { VideoLayout } from './ui.Video';
 
 export const View: React.FC<t.ConceptSlugProps> = (props) => {
   const { slug, vimeo } = props;

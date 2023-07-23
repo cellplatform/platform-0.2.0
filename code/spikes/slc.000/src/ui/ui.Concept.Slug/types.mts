@@ -32,4 +32,5 @@ export type ConceptSlugVideo = {
 
 export type ConceptSlugImage = {
   src?: Url;
+  sizing?: t.ImageSizeStrategy;
 };
