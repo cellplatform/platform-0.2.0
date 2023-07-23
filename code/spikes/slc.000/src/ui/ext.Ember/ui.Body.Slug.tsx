@@ -1,5 +1,5 @@
-import { COLORS, Color, css, type t, DEFAULTS } from './common';
 import { ConceptSlug } from '../ui.ConceptSlug';
+import { COLORS, Color, DEFAULTS, css, type t } from './common';
 import { Empty } from './ui.Empty';
 
 export type SlugProps = {

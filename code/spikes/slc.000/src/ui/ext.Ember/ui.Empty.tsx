@@ -1,4 +1,4 @@
-import { css, type t, DEFAULTS } from './common';
+import { DEFAULTS, css, type t } from './common';
 
 export type EmptyProps = {
   text?: string;

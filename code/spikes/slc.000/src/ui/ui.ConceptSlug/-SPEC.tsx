@@ -1,7 +1,7 @@
-import { ConceptSlug } from '.';
-import { Dev, css, rx, slug, type t, Icons } from '../../test.ui';
+import { Dev, Icons, css, rx, slug, type t } from '../../test.ui';
 
-import { Vimeo, Position } from './common';
+import { ConceptSlug } from '.';
+import { Position, Vimeo } from './common';
 
 const DEFAULTS = ConceptSlug.DEFAULTS;
 

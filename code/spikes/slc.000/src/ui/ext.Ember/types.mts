@@ -2,7 +2,6 @@ import { type t } from './common';
 
 type Id = string;
 type Url = string;
-type VideoId = number;
 
 /**
  * Component

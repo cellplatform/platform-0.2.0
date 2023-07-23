@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Item } from './common';
+import { Item, css, type t } from './common';
 
 export type IndexProps = {
   slugs?: t.VideoConceptSlug[];

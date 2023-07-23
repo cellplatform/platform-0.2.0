@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Grid } from './common';
+import { Grid, css, type t } from './common';
 
-import { Slug } from './ui.Body.Slug';
-import { Header } from './ui.Body.Header';
 import { Footer } from './ui.Body.Footer';
+import { Header } from './ui.Body.Header';
+import { Slug } from './ui.Body.Slug';
 
 export type BodyProps = {
   vimeo?: t.VimeoInstance;

@@ -2,7 +2,6 @@ import 'symbol-observable';
 
 import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
-import { type t } from '../common';
 
 console.info(`Pkg:`, Pkg);
 const url = new URL(window.location.href);
