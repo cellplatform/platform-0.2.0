@@ -9,6 +9,7 @@ export type RootProps = {
   selected?: number;
   style?: t.CssValue;
   onSelect?: t.VideoConceptClickHandler;
+  onPlayComplete?: t.ConceptPlayerCompleteHandler;
 };
 
 export type RootStatefulProps = {

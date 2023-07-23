@@ -29,7 +29,7 @@ export const View: React.FC<t.RootProps> = (props) => {
   const elBody = !elEmpty && (
     <div {...styles.body}>
       <Index slugs={slugs} selected={selected} onSelect={props.onSelect} />
-      <Body slugs={slugs} selected={selected} vimeo={vimeo} />
+      <Body slugs={slugs} selected={selected} vimeo={vimeo} onPlayComplete={props.onPlayComplete} />
     </div>
   );
 

@@ -1,6 +1,7 @@
 import { Dev, Icons, Vimeo, rx, slug, type t } from '../../../test.ui';
 
 import { Root } from '..';
+import { Wrangle } from '../Wrangle.mjs';
 import { DATA } from './-sample.data.mjs';
 
 type T = {
@@ -27,11 +28,8 @@ export default Dev.describe('Landing.Ember', (e) => {
   const State = {
     displayProps(state: T): t.RootProps {
       const { debug } = state;
-      const props: t.RootProps = {
-        ...state.props,
-        slugs: debug.withSlugs ? DATA.slugs : undefined,
-        vimeo,
-      };
+      const props: t.RootProps = { ...state.props, vimeo };
+      if (!debug.withSlugs) delete props.slugs;
       return props;
     },
   };
@@ -43,6 +41,7 @@ export default Dev.describe('Landing.Ember', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.selected = local.selected;
+      d.props.slugs = DATA.slugs;
       d.debug.withSlugs = local.withSlugs;
     });
 
@@ -58,6 +57,12 @@ export default Dev.describe('Landing.Ember', (e) => {
             onSelect={(e) => {
               state.change((d) => (d.props.selected = e.index));
               local.selected = e.index;
+            }}
+            onPlayComplete={(e) => {
+              console.info('⚡️ onPlayComplete:', e);
+              const { slugs, selected } = state.current.props;
+              const next = Wrangle.nextSlug(slugs, selected);
+              if (next.exists) state.change((d) => (d.props.selected = next.index));
             }}
           />
         );

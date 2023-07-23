@@ -9,6 +9,7 @@ export type BodyProps = {
   slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
+  onPlayComplete?: t.ConceptPlayerCompleteHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
@@ -44,7 +45,8 @@ export const Body: React.FC<BodyProps> = (props) => {
           if (x === 1) {
             if (y === 0) return <Header slug={slug} vimeo={vimeo} />;
             if (y === 1) return <Slug slug={slug} vimeo={vimeo} />;
-            if (y === 2) return <Footer slug={slug} vimeo={vimeo} />;
+            if (y === 2)
+              return <Footer slug={slug} vimeo={vimeo} onPlayComplete={props.onPlayComplete} />;
           }
           return;
         },
