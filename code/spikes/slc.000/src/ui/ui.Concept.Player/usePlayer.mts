@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { TimeHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { rx, type t, Vimeo } from './common';
 
 /**
@@ -24,8 +24,15 @@ export function usePlayer(vimeo?: t.VimeoInstance) {
       setEvents(events);
 
       const status$ = events.status.$.pipe(rx.takeUntil(dispose$));
+      const playing$ = events.status.playing$.pipe(rx.takeUntil(dispose$));
+
       events.status.get().then((res) => setStatus(res.status));
       status$.subscribe((e) => setStatus(e));
+
+      // Resinde on complete
+      playing$.pipe(rx.filter((e) => e.percent === 1)).subscribe((e) => {
+        api.seek(0);
+      });
     }
     return dispose;
   }, [busid, vimeo?.id]);
@@ -50,6 +57,9 @@ export function usePlayer(vimeo?: t.VimeoInstance) {
       const playing = api.playing;
       if (playing) api.pause();
       if (!playing) api.play();
+    },
+    seek(seconds) {
+      events?.seek.fire(seconds);
     },
   };
   return api;

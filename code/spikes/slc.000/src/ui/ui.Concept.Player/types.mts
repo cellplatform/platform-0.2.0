@@ -19,4 +19,5 @@ export type VimeoPlayer = {
   play(): void;
   pause(): void;
   toggle(): void;
+  seek(seconds: number): void;
 };
