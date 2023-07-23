@@ -58,7 +58,7 @@ const slugs: t.ConceptSlug[] = [
     title: 'Tie it all Together',
     video: { id: 847193255, position, scale, height },
     image: {
-      src: '/images/ember/pitching.png',
+      src: '/images/ember/thats-it.png',
       sizing: 'cover',
     },
   },
