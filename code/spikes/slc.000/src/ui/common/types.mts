@@ -5,6 +5,7 @@ export type {
   CSSProperties,
   CssEdgesInput,
   CssValue,
+  DomRect,
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
