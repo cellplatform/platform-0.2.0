@@ -61,14 +61,9 @@ export default Dev.describe('Image', async (e) => {
       .display('grid')
       .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
-
-        const { props } = e.state;
-
-        console.log('props', props);
-
         return (
           <Image
-            {...props}
+            {...e.state.props}
             onDropOrPaste={(e) => {
               console.info('⚡️ onDropOrPaste:', e);
               if (e.isSupported) {
@@ -164,11 +159,7 @@ export default Dev.describe('Image', async (e) => {
           btn
             .label(title)
             .right((e) => (e.state.props.src === src ? '←' : ''))
-            .onClick((e) => {
-              console.log('e', e);
-              console.log('src', src);
-              e.change((d) => (d.props.src = src));
-            });
+            .onClick((e) => e.change((d) => (d.props.src = src)));
         });
       };
 
