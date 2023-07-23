@@ -12,7 +12,7 @@ const slugs: t.VideoConceptSlug[] = [
   {
     id: 'ember.pitch.structure',
     title: 'Simple Structure',
-    video: { id: 846848747, position, scale },
+    video: { id: 846848747, position: ['right', 'bottom'], scale },
   },
   {
     id: 'ember.pitch.example',
