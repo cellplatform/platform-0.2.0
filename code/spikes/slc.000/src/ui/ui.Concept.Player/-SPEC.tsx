@@ -5,7 +5,7 @@ const DEFAULTS = ConceptPlayer.DEFAULTS;
 
 type T = {
   props: t.ConceptPlayerProps;
-  debug: { withSlug?: boolean };
+  debug: { withSlug?: boolean; download?: boolean };
 };
 const initial: T = {
   props: {},
@@ -16,10 +16,11 @@ export default Dev.describe('ConceptPlayer', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'withSlug'>;
+  type LocalStore = Pick<T['debug'], 'withSlug' | 'download'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptPlayer');
   const local = localstore.object({
     withSlug: true,
+    download: true,
   });
 
   /**
@@ -34,10 +35,14 @@ export default Dev.describe('ConceptPlayer', (e) => {
   const State = {
     props(state: T): t.ConceptPlayerProps {
       const { props, debug } = state;
+
+      const url = 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf';
+      const download: t.ConceptPlayerDownloadProps = { kind: 'pdf', url };
       return {
         ...props,
         vimeo,
         slug: debug.withSlug ? props.slug : undefined,
+        download: debug.download ? download : undefined,
       };
     },
   };
@@ -50,6 +55,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
     await state.change((d) => {
       d.props.slug = DEFAULTS.sample;
       d.debug.withSlug = local.withSlug;
+      d.debug.download = local.download;
     });
 
     ctx.debug.width(330);
@@ -97,6 +103,18 @@ export default Dev.describe('ConceptPlayer', (e) => {
     });
 
     dev.hr(5, [50, 20]);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.download);
+        btn
+          .label((e) => `download`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.download = Dev.toggle(d.debug, 'download'))));
+      });
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {

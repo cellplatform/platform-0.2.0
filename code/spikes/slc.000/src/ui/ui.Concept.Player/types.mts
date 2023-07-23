@@ -22,8 +22,14 @@ export type VimeoPlayer = {
 export type ConceptPlayerProps = {
   vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug;
+  download?: ConceptPlayerDownloadProps;
   style?: t.CssValue;
   onComplete?: ConceptPlayerCompleteHandler;
+};
+
+export type ConceptPlayerDownloadProps = {
+  kind: 'pdf';
+  url: string;
 };
 
 /**
