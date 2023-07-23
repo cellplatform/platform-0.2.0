@@ -189,7 +189,8 @@ export default Dev.describe('Image', async (e) => {
           const image = crdt.current.image;
           if (image) {
             const filename = 'image.png';
-            File.download(filename, image.data, image.mimetype);
+            const mimetype = image.mimetype;
+            File.download(filename, image.data, { mimetype });
           }
         }),
       );
