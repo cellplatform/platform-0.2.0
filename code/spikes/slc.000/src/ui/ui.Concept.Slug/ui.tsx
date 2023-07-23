@@ -10,13 +10,13 @@ export const View: React.FC<t.ConceptSlugProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
-    video: css({ Absolute: 0 }),
+    fill: css({ Absolute: 0 }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ImageLayout slug={slug} />
-      <VideoLayout slug={slug} vimeo={vimeo} style={styles.video} />
+      <ImageLayout slug={slug} style={styles.fill} />
+      <VideoLayout slug={slug} vimeo={vimeo} style={styles.fill} />
     </div>
   );
 };
