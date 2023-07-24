@@ -1,6 +1,7 @@
 import type { t } from '../common';
 
 export type * from './types.events.mjs';
+export type * from './types.player.mjs';
 export type * from './types.state.mjs';
 export type * from './types.ui.mjs';
 
