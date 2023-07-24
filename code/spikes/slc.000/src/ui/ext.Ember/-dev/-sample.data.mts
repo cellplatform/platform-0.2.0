@@ -57,7 +57,7 @@ const slugs: t.ConceptSlug[] = [
   {
     id: 'ember.pitch.succes',
     title: 'Making it Memorable',
-    video: { id: 847199651, position, scale, height },
+    video: { id: 847199651, position, scale, height: 140 },
     image: {
       src: '/images/ember/succes.png',
       sizing: 'contain',
