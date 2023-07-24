@@ -1,14 +1,12 @@
 import { SeekBar, css, type t } from './common';
+import { DownloadButton } from './ui.DownloadButton';
 import { PlayButton } from './ui.PlayButton';
 import { usePlayer } from './usePlayer.mjs';
-import { DownloadButton } from './ui.DownloadButton';
 
 export const View: React.FC<t.ConceptPlayerProps> = (props) => {
   const { vimeo, slug, onComplete, download } = props;
   const player = usePlayer(vimeo, { onComplete });
   const status = player.status;
-
-  console.log('download', download);
 
   /**
    * Handlers
@@ -48,7 +46,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
-        <PlayButton playing={player.playing} onClick={handleToggle} />
+        <PlayButton isPlaying={player.playing} onClick={handleToggle} />
       </div>
       <div {...styles.middle}>
         <SeekBar progress={status?.percent} onClick={handleSeekClick} />
