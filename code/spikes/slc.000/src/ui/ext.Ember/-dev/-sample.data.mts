@@ -1,26 +1,17 @@
 import { type t } from '../common';
 
-const download: t.DownloadFileProps = {
-  kind: 'pdf',
-  url: 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf',
-  filename: 'slc.pdf',
-};
-const SAMPLE = {
-  groupScaleDiagram:
-    'https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png',
-};
-
-/**
- * https://github.com/team-db/tdb.working/issues/22
- */
-
 const left: t.Pos = ['left', 'bottom'];
 const center: t.Pos = ['center', 'bottom'];
 const right: t.Pos = ['right', 'bottom'];
+
 const position = center;
+
 const scale = 1.1;
 const height = 280;
 
+/**
+ * Content Slugs.
+ */
 const slugs: t.ConceptSlug[] = [
   {
     id: 'ember.pitch.intro',

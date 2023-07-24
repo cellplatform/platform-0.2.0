@@ -22,7 +22,8 @@ export const Specs = {
   'sys.common.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
   // External
-  'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC'),
+  'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
+  'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC.Stateful'),
 
   // sys.common
   ...(await importCommon()),
