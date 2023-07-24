@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-
 import { COLORS, Color, DEFAULTS, FC, css, type t, useMouseState } from './common';
 
 const View: React.FC<t.SeekBarProps> = (props) => {
@@ -23,7 +22,7 @@ const View: React.FC<t.SeekBarProps> = (props) => {
    * [Render]
    */
   const trackHeight = mouse.isOver ? 10 : 5;
-  const transition = `height 0.15s`;
+  const transition = `height 0.15s, background-color 0.15s`;
   const styles = {
     base: css({
       height: 20,
