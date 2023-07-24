@@ -10,6 +10,7 @@ export type PlayButtonProps = {
 export const PlayButton: React.FC<PlayButtonProps> = (props) => {
   const { isPlaying } = props;
   const Icon = props.isPlaying ? Icons.Pause.Sharp : Icons.Play.Sharp;
+
   const mouse = useMouseState({ onDown: (e) => props.onClick?.() });
   const { isOver, isDown } = mouse;
 

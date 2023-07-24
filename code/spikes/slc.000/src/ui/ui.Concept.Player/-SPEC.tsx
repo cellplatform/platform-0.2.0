@@ -72,7 +72,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
           <ConceptPlayer
             {...props}
             style={{ padding }}
-            onComplete={(e) => {
+            onPlayComplete={(e) => {
               console.info('⚡️ onComplete:', e);
             }}
           />

@@ -3,6 +3,7 @@ import { type t } from './common';
 /**
  *
  * TODO: Move to sys.ui.media.Vimeo
+ * response from hook: usePlayer()
  *
  */
 export type VimeoPlayer = {
@@ -31,13 +32,14 @@ export type ConceptPlayerProps = {
   slug?: t.ConceptSlug;
   download?: t.DownloadFileProps;
   style?: t.CssValue;
-  onComplete?: ConceptPlayerCompleteHandler;
+  onPlayToggle?: ConceptPlayerHandler;
+  onPlayComplete?: ConceptPlayerHandler;
 };
 
 /**
  * Events
  */
-export type ConceptPlayerCompleteHandler = (e: ConceptPlayerCompleteHandlerArgs) => void;
-export type ConceptPlayerCompleteHandlerArgs = {
+export type ConceptPlayerHandler = (e: ConceptPlayerHandlerArgs) => void;
+export type ConceptPlayerHandlerArgs = {
   status: t.VimeoStatus;
 };

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Vimeo, rx, type t } from './common';
 
 type Options = {
-  onComplete?: t.ConceptPlayerCompleteHandler;
+  onPlayToggle?: t.ConceptPlayerHandler;
+  onPlayComplete?: t.ConceptPlayerHandler;
 };
 
 /**
@@ -29,16 +30,22 @@ export function usePlayer(vimeo: t.VimeoInstance | undefined, options: Options =
 
       const status$ = events.status.$.pipe(rx.takeUntil(dispose$));
       const playing$ = events.status.playing$.pipe(rx.takeUntil(dispose$));
+      const startStop$ = playing$.pipe(rx.distinctUntilChanged((p, n) => p.playing === n.playing));
 
       // Status
       // (updates while playing).
       events.status.get().then((res) => setStatus(res.status));
       status$.subscribe((e) => setStatus(e));
 
-      // Complete.
+      // [⚡️] Start/Stop
+      startStop$.pipe().subscribe((status) => {
+        options.onPlayToggle?.({ status });
+      });
+
+      // [⚡️] Completed
       playing$.pipe(rx.filter((e) => e.percent === 1)).subscribe((status) => {
         events?.seek.fire(0);
-        options.onComplete?.({ status });
+        options.onPlayComplete?.({ status });
       });
     }
     return dispose;
