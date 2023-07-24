@@ -32,8 +32,13 @@ export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
         setSelected(e.index);
       }}
       onPlayComplete={(e) => {
-        const next = Wrangle.nextSlug(slugs, selected);
-        if (next.exists) setSelected(next.index);
+        /**
+         * Action: Move to next slug.
+         */
+        setSelected((current) => {
+          const { exists, index } = Wrangle.nextSlug(slugs, current);
+          return exists ? index : current;
+        });
       }}
     />
   );
