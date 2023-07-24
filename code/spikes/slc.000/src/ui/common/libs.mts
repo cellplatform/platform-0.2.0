@@ -18,6 +18,7 @@ export {
   useFocus,
   useMouseState,
   useSizeObserver,
+  useRubberband,
 } from 'sys.ui.react.common';
 export { Vimeo, SeekBar } from 'sys.ui.react.media';
 export { Image } from 'sys.ui.react.media.image';

@@ -1,4 +1,4 @@
-import { COLORS, css, type t, useSizeObserver } from './common';
+import { COLORS, css, useRubberband, useSizeObserver, type t } from './common';
 
 import { Body } from './ui.Body';
 import { Empty } from './ui.Empty';
@@ -9,6 +9,7 @@ export const View: React.FC<t.RootProps> = (props) => {
   const isEmpty = slugs.length === 0;
   let warning = !vimeo ? '⚠️ Vimeo instance not specified.' : undefined;
 
+  useRubberband(false);
   const resize = useSizeObserver();
   const tooSmall = resize.ready && Wrangle.tooSmall(resize.rect);
   if (!warning && tooSmall) warning = 'Window is too small.';
