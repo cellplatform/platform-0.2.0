@@ -8,13 +8,14 @@ export { Observable, Subject } from 'rxjs';
 /**
  * @system
  */
-export { Diff, Fuzzy, Text } from 'sys.text';
-export { Delete, Hash, Is, Time, Value, cuid, rx, slug, Sheet, asArray } from 'sys.util';
 export { Patch, PatchState } from 'sys.data.json';
+export { Diff, Fuzzy, Text } from 'sys.text';
+export { Delete, Hash, Is, Sheet, Time, Value, asArray, cuid, rx, slug } from 'sys.util';
 
 /**
  * @system → UI
  */
 export { KeyboardMonitor, LocalStorage, UserAgent } from 'sys.ui.dom';
 export { Color, Style, css } from 'sys.ui.react.css';
+export { useRubberband } from 'sys.ui.react.dev';
 export { FC, useClickInside, useClickOutside, useMouseState } from 'sys.ui.react.util';
