@@ -1,11 +1,10 @@
-import { COLORS, Color, SeekBar, css, type t } from './common';
+import { COLORS, Color, SeekBar, css, Vimeo, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
 import { PlayButton } from './ui.PlayButton';
-import { usePlayer } from './usePlayer.mjs';
 
 export const View: React.FC<t.ConceptPlayerProps> = (props) => {
   const { vimeo, slug, onPlayToggle, onPlayComplete, download } = props;
-  const player = usePlayer(vimeo, { onPlayToggle, onPlayComplete });
+  const player = Vimeo.usePlayer(vimeo, { onPlayToggle, onPlayComplete });
   const status = player.status;
   const thumbColor = status?.playing ? COLORS.BLUE : Color.alpha(COLORS.DARK, 0.5);
 

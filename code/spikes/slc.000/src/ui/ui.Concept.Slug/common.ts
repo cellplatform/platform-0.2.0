@@ -1,7 +1,7 @@
 import { type t } from './common';
+
 export * from '../common';
 export { Position } from '../ui.Position';
-export { usePlayer } from '../ui.Concept.Player/usePlayer.mjs';
 
 /**
  * Constants

@@ -13,6 +13,7 @@ export type {
   SeekBarClickHandler,
   VimeoEvents,
   VimeoInstance,
+  VimeoPlayer,
   VimeoStatus,
 } from 'sys.ui.react.media/src/types.mjs';
 

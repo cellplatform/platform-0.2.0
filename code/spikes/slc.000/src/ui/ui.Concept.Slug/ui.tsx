@@ -1,10 +1,10 @@
-import { css, type t, usePlayer } from './common';
+import { Vimeo, css, type t } from './common';
 import { ImageLayout } from './ui.Image';
 import { VideoLayout } from './ui.Video';
 
 export const View: React.FC<t.ConceptSlugProps> = (props) => {
   const { slug, vimeo } = props;
-  const player = usePlayer(vimeo);
+  const player = Vimeo.usePlayer(vimeo);
 
   /**
    * Handlers

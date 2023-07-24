@@ -1,22 +1,5 @@
 import { type t } from './common';
 
-/**
- *
- * TODO: Move to sys.ui.media.Vimeo
- * response from hook: usePlayer()
- *
- */
-export type VimeoPlayer = {
-  readonly ready: boolean;
-  readonly events?: t.VimeoEvents;
-  readonly status?: t.VimeoStatus;
-  readonly playing: boolean;
-  play(): void;
-  pause(): void;
-  toggle(): void;
-  seek(seconds: number): void;
-};
-
 export type DownloadFileProps = {
   kind: 'pdf';
   url: string;
