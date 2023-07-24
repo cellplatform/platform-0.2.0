@@ -1,5 +1,4 @@
 import { Grid, css, type t } from './common';
-
 import { Footer } from './ui.Body.Footer';
 import { Header } from './ui.Body.Header';
 import { Slug } from './ui.Slug';
@@ -9,7 +8,8 @@ export type BodyProps = {
   slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
-  onPlayComplete?: t.ConceptPlayerCompleteHandler;
+  onPlayToggle?: t.ConceptPlayerHandler;
+  onPlayComplete?: t.ConceptPlayerHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
@@ -38,7 +38,7 @@ export const Body: React.FC<BodyProps> = (props) => {
         row(e) {
           if (e.index === 0) return '45px';
           if (e.index === 2) return '60px';
-          return 1; // 1fr
+          return 1; // 1fr.
         },
         cell(e) {
           const { x, y } = e;
@@ -46,7 +46,14 @@ export const Body: React.FC<BodyProps> = (props) => {
             if (y === 0) return <Header slug={slug} vimeo={vimeo} />;
             if (y === 1) return <Slug slug={slug} vimeo={vimeo} />;
             if (y === 2)
-              return <Footer slug={slug} vimeo={vimeo} onPlayComplete={props.onPlayComplete} />;
+              return (
+                <Footer
+                  slug={slug}
+                  vimeo={vimeo}
+                  onPlayToggle={props.onPlayToggle}
+                  onPlayComplete={props.onPlayComplete}
+                />
+              );
           }
           return;
         },

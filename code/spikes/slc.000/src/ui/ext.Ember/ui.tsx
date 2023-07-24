@@ -33,8 +33,19 @@ export const View: React.FC<t.RootProps> = (props) => {
   const elEmpty = (isEmpty || warning) && <Empty text={warning} />;
   const elBody = !elEmpty && (
     <div {...styles.body}>
-      <Index slugs={slugs} selected={selected} onSelect={props.onSelect} />
-      <Body slugs={slugs} selected={selected} vimeo={vimeo} onPlayComplete={props.onPlayComplete} />
+      <Index
+        slugs={slugs}
+        selected={selected}
+        focused={props.focused === 'index'}
+        onSelect={props.onSelect}
+      />
+      <Body
+        slugs={slugs}
+        selected={selected}
+        vimeo={vimeo}
+        onPlayToggle={props.onPlayToggle}
+        onPlayComplete={props.onPlayComplete}
+      />
     </div>
   );
 

@@ -6,7 +6,8 @@ export type FooterProps = {
   vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug;
   style?: t.CssValue;
-  onPlayComplete?: t.ConceptPlayerCompleteHandler;
+  onPlayToggle?: t.ConceptPlayerHandler;
+  onPlayComplete?: t.ConceptPlayerHandler;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
@@ -29,7 +30,8 @@ export const Footer: React.FC<FooterProps> = (props) => {
       <ConceptPlayer
         vimeo={vimeo}
         slug={slug}
-        onComplete={props.onPlayComplete}
+        onPlayToggle={props.onPlayToggle}
+        onPlayComplete={props.onPlayComplete}
         download={slug?.download}
       />
     </div>

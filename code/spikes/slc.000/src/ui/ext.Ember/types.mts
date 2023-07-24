@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+export type RootPropsFocused = 'index' | 'player.footer';
+
 /**
  * Component
  */
@@ -7,9 +9,11 @@ export type RootProps = {
   vimeo?: t.VimeoInstance;
   slugs?: t.ConceptSlug[];
   selected?: number;
+  focused?: RootPropsFocused;
   style?: t.CssValue;
   onSelect?: t.VideoConceptClickHandler;
-  onPlayComplete?: t.ConceptPlayerCompleteHandler;
+  onPlayToggle?: t.ConceptPlayerHandler;
+  onPlayComplete?: t.ConceptPlayerHandler;
 };
 
 export type RootStatefulProps = {

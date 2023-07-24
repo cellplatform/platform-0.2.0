@@ -7,8 +7,12 @@ export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
   const { slugs = [] } = props;
 
   const busRef = useRef(rx.bus());
-  const [selected, setSelected] = useState(0);
   const [vimeo, setVimeo] = useState<t.VimeoInstance>();
+  const [selected, setSelected] = useState(0);
+  const [focused, setFocused] = useState<t.RootPropsFocused>('index');
+  const updateFocus = (status: t.VimeoStatus) => {
+    setFocused(status.playing ? 'player.footer' : 'index');
+  };
 
   /**
    * Lifecycle
@@ -28,14 +32,15 @@ export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
       vimeo={vimeo}
       slugs={slugs}
       selected={selected}
+      focused={focused}
       onSelect={(e) => {
         setSelected(e.index);
       }}
+      onPlayToggle={(e) => updateFocus(e.status)}
       onPlayComplete={(e) => {
-        /**
-         * Action: Move to next slug.
-         */
+        updateFocus(e.status);
         setSelected((current) => {
+          // ACTION: Move to next slug.
           const { exists, index } = Wrangle.nextSlug(slugs, current);
           return exists ? index : current;
         });
