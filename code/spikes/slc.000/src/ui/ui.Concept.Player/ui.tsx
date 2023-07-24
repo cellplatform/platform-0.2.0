@@ -35,14 +35,11 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',
       alignContent: 'center',
-      columnGap: 15,
     }),
-    left: css({ display: 'grid' }),
+    left: css({ display: 'grid', marginRight: 15 }),
     middle: css({ display: 'grid', alignContent: 'center' }),
-    right: css({ display: 'grid' }),
+    right: css({ display: 'grid', marginLeft: 15 }),
   };
-
-  const elDownload = download && <DownloadButton data={download} />;
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -52,7 +49,11 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
       <div {...styles.middle}>
         <SeekBar thumbColor={thumbColor} progress={status?.percent} onClick={handleSeekClick} />
       </div>
-      <div {...styles.right}>{elDownload}</div>
+      {download && (
+        <div {...styles.right}>
+          <DownloadButton data={download} />
+        </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import {
   MdPlayCircle,
   MdReplay,
 } from 'react-icons/md';
+import { FiDownloadCloud, FiDownload } from 'react-icons/fi';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -37,5 +38,7 @@ export const Icons = {
   },
   Download: {
     Circle: icon(MdOutlineDownloadForOffline),
+    Cloud: icon(FiDownloadCloud),
+    Tray: icon(FiDownload),
   },
 } as const;

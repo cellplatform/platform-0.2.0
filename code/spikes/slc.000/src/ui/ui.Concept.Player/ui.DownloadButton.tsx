@@ -40,7 +40,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = (props) => {
 
   const elBody = (
     <div {...styles.body}>
-      <Icons.Download.Circle size={28} color={color} />
+      <Icons.Download.Tray size={20} color={color} />
       <div {...styles.kind}>{data.kind.toUpperCase()}</div>
     </div>
   );
