@@ -13,7 +13,7 @@ export const Wrangle = {
     }
 
     const iconColor = isActive ? COLORS.WHITE : COLORS.DARK;
-    const borderColor = Color.alpha(COLORS.DARK, 0.1);
+    const borderColor = Color.alpha(COLORS.DARK, 0.08);
     return {
       backgroundColor,
       borderColor,
