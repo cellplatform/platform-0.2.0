@@ -1,6 +1,5 @@
 import { useRef } from 'react';
-
-import { css, t } from '../../common';
+import { css, type t } from '../../common';
 import { useAudioAnalyser } from './useAudioAnalyser.mjs';
 import { useDrawWaveform } from './useDrawWaveform.mjs';
 

@@ -1,8 +1,9 @@
-import type { t } from './common.mjs';
+import type { t } from '../common';
 
-export type * from './types.event.mjs';
-export type * from './types.hooks.mjs';
+export type * from './types.events.mjs';
+export type * from './types.player.mjs';
 export type * from './types.state.mjs';
+export type * from './types.ui.mjs';
 
 export type VimeoId = number; // Vimeo video identifier.
 export type VimeoIconFlag = 'spinner' | 'play' | 'pause' | 'replay';

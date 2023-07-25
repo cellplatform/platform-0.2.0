@@ -1,4 +1,4 @@
-import { COLORS, css, t, TextInput } from './common';
+import { COLORS, DEFAULTS, TextInput, css, type t } from './common';
 import { HintKey } from './ui.HintKey';
 
 export type CmdBarProps = {
@@ -14,6 +14,8 @@ export type CmdBarProps = {
 };
 
 export const CmdBar: React.FC<CmdBarProps> = (props) => {
+  const { focusOnReady = DEFAULTS.focusOnReady } = props;
+
   const hintKeys = Wrangle.hintKeys(props);
   const hasHintKeys = hintKeys.length > 0;
 
@@ -54,11 +56,13 @@ export const CmdBar: React.FC<CmdBarProps> = (props) => {
         fontWeight: 'normal',
         fontSize: 16,
       }}
-      onFocusChange={props.onFocusChange}
       spellCheck={false}
       autoCorrect={false}
       autoCapitalize={false}
-      focusOnReady={props.focusOnReady}
+      focusOnReady={focusOnReady}
+      selectOnReady={focusOnReady}
+      //
+      onFocusChange={props.onFocusChange}
       onReady={props.onReady}
       onChanged={props.onChanged}
       onKeyDown={props.onKeyDown}

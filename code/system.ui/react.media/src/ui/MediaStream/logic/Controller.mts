@@ -1,4 +1,4 @@
-import { R, rx, slug, t } from '../common';
+import { R, rx, slug, type t } from '../common';
 import { StreamUtil } from '../util';
 
 type Refs = { [ref: string]: Ref };

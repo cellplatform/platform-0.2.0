@@ -12,16 +12,15 @@ export type {
   DomRect,
   EventBus,
   IgnoredResponse,
+  Immutable,
+  ImmutableNext,
   JsonMapU,
   JsonU,
   ModuleDef,
   Size,
 } from 'sys.types/src/types.mjs';
 
-export type { TextCharDiff } from 'sys.text/src/types.mjs';
-export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/types.mjs';
-export type { TimeDelayPromise } from 'sys.util/src/types.mjs';
-
+export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';
 export type {
   BundleImport,
   SpecImport,
@@ -32,7 +31,25 @@ export type {
   TestSuiteRunResponse,
   TestSuiteRunStats,
 } from 'sys.test.spec/src/types.mjs';
+export type { TextCharDiff } from 'sys.text/src/types.mjs';
+export type { CellAddress, TimeDelayPromise } from 'sys.util/src/types.mjs';
 
+/**
+ * @system → UI
+ */
+export type {
+  KeyMatchSubscriberHandler,
+  KeyMatchSubscriberHandlerArgs,
+  KeyboardKeypress,
+  KeyboardKeypressProps,
+  KeyboardModifierEdges,
+  KeyboardModifierFlags,
+  KeyboardState,
+  LocalStorage,
+  UIEventBase,
+  UIModifierKeys,
+} from 'sys.ui.dom/src/types.mjs';
+export type { CssEdgesInput, CssShadow, CssValue } from 'sys.ui.react.css/src/types.mjs';
 export type {
   DevCtx,
   DevCtxDebug,
@@ -53,23 +70,10 @@ export type {
   SpecListScrollTarget,
 } from 'sys.ui.react.dev/src/types.mjs';
 
-export type {
-  KeyMatchSubscriberHandler,
-  KeyMatchSubscriberHandlerArgs,
-  KeyboardKeypress,
-  KeyboardKeypressProps,
-  KeyboardModifierEdges,
-  KeyboardModifierFlags,
-  KeyboardState,
-  LocalStorage,
-  UIEventBase,
-  UIModifierKeys,
-} from 'sys.ui.dom/src/types.mjs';
-
 /**
  * @local
  */
-export * from '../types.mjs';
+export type * from '../types.mjs';
 export type UrlInput = string | URL | Location;
 export type MarginInput = number | [number] | [number, number] | [number, number, number, number];
 export type Margin = [number, number, number, number];

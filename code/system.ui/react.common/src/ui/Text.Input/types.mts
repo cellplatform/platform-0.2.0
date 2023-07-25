@@ -6,7 +6,7 @@ type Milliseconds = number;
 type Pixels = number;
 
 export type TextInputRef = {
-  focus(): void;
+  focus(select?: boolean): void;
   blur(): void;
   selectAll(): void;
   cursorToStart(): void;
@@ -87,8 +87,9 @@ export type TextInputStyle = t.TextStyle & { disabledColor?: number | string };
  */
 export type TextInputFocusAction = 'Select' | TextInputCursorAction;
 export type TextInputFocusProps = {
-  focusOnReady?: boolean;
   focusAction?: TextInputFocusAction;
+  focusOnReady?: boolean;
+  selectOnReady?: boolean;
 };
 
 /**

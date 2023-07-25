@@ -1,6 +1,6 @@
 export { ErrorBoundary } from 'react-error-boundary';
 import { mergeDeepRight, clone, equals, prop, sortBy } from 'ramda';
-export const R = { mergeDeepRight, clone, equals, prop, sortBy };
+export const R = { mergeDeepRight, clone, equals, prop, sortBy } as const;
 
 /**
  * @system

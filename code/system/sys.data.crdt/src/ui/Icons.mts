@@ -39,4 +39,4 @@ export const Icons = {
   },
   ObjectTree: icon(VscSymbolClass),
   Json: icon(MdDataObject),
-};
+} as const;

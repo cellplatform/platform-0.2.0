@@ -2,7 +2,7 @@
  * @vendor
  */
 import { splitEvery } from 'ramda';
-export const R = { splitEvery };
+export const R = { splitEvery } as const;
 
 import ora from 'ora';
 import pc from 'picocolors';

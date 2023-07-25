@@ -9,4 +9,4 @@ const icon = Icon.renderer;
 export const Icons = {
   Cover: icon(MdCropFree),
   Contain: icon(MdFitScreen),
-};
+} as const;

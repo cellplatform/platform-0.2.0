@@ -1,8 +1,8 @@
-import { COLORS, Color, css, t } from '../common';
 import { PropList } from '../../../test.ui';
+import { COLORS, Color, css, type t } from '../common';
 
 export const DialogKinds = ['hello', 'dev/dialog'] as const;
-export type DialogKind = typeof DialogKinds[number];
+export type DialogKind = (typeof DialogKinds)[number];
 
 export type DevDialogProps = {
   children?: JSX.Element;

@@ -2,7 +2,7 @@
  * @external
  */
 import { clamp, clone, uniq, equals, uniqBy, groupBy } from 'ramda';
-export const R = { clamp, clone, uniq, equals, uniqBy, groupBy };
+export const R = { clamp, clone, uniq, equals, uniqBy, groupBy } as const;
 
 export { Peer as PeerJS } from 'peerjs';
 

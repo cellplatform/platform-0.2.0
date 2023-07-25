@@ -1,17 +1,21 @@
 /**
  * @external
  */
-
+import { clamp, clone, equals, mergeDeepRight, prop, sortBy, uniq } from 'ramda';
+export const R = { clone, equals, mergeDeepRight, uniq, clamp, prop, sortBy } as const;
 export { Observable, Subject } from 'rxjs';
-
-import { clone, equals, mergeDeepRight, uniq, clamp, prop, sortBy } from 'ramda';
-export const R = { clone, equals, mergeDeepRight, uniq, clamp, prop, sortBy };
 
 /**
  * @system
  */
-export { FC, useMouseState, useClickOutside, useClickInside } from 'sys.ui.react.util';
-export { rx, slug, cuid, Is, Time, Value, Delete, Hash } from 'sys.util';
-export { css, Color, Style } from 'sys.ui.react.css';
-export { LocalStorage, UserAgent, KeyboardMonitor } from 'sys.ui.dom';
-export { Text, Fuzzy, Diff } from 'sys.text';
+export { Patch, PatchState } from 'sys.data.json';
+export { Diff, Fuzzy, Text } from 'sys.text';
+export { Delete, Hash, Is, Sheet, Time, Value, asArray, cuid, rx, slug } from 'sys.util';
+
+/**
+ * @system → UI
+ */
+export { KeyboardMonitor, LocalStorage, UserAgent } from 'sys.ui.dom';
+export { Color, Style, css } from 'sys.ui.react.css';
+export { useRubberband } from 'sys.ui.react.dev';
+export { FC, useClickInside, useClickOutside, useMouseState } from 'sys.ui.react.util';

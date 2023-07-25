@@ -1,2 +1,3 @@
-export * from './useIconController.mjs';
-export * from './usePlayerController.mjs';
+export * from './use.Icon.Controller.mjs';
+export * from './use.Player.Controller.mjs';
+export * from './use.Player.mjs';

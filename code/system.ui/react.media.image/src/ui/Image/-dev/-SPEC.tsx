@@ -1,8 +1,9 @@
-import { File, Dev, Filesize, Icons, Time, type t } from '../../../test.ui';
+import { Dev, File, Filesize, Icons, type t } from '../../../test.ui';
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
 import { DevDataController } from './-DEV.data';
+import { SAMPLE } from './-sample.mjs';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -58,10 +59,8 @@ export default Dev.describe('Image', async (e) => {
     ctx.subject
       .size('fill', 100)
       .display('grid')
-
       .render<T>(async (e) => {
         ctx.subject.backgroundColor(e.state.debug.bg ? 1 : 0);
-
         return (
           <Image
             {...e.state.props}
@@ -152,7 +151,23 @@ export default Dev.describe('Image', async (e) => {
       size('contain');
     });
 
-    dev.hr(2, 20);
+    dev.hr(5, 20);
+
+    dev.section('Source', (dev) => {
+      const srcUrl = (title: string, src?: string) => {
+        dev.button((btn) => {
+          btn
+            .label(title)
+            .right((e) => (e.state.props.src === src ? '←' : ''))
+            .onClick((e) => e.change((d) => (d.props.src = src)));
+        });
+      };
+
+      srcUrl('(undefined)', undefined);
+      srcUrl('url: "Group Scale Diagram"', SAMPLE.groupScale.src);
+    });
+
+    dev.hr(5, 20);
 
     dev.section(['File', 'Data / State'], (dev) => {
       dev.boolean((btn) =>
@@ -174,7 +189,8 @@ export default Dev.describe('Image', async (e) => {
           const image = crdt.current.image;
           if (image) {
             const filename = 'image.png';
-            File.download(filename, image.data, image.mimetype);
+            const mimetype = image.mimetype;
+            File.download(filename, image.data, { mimetype });
           }
         }),
       );
@@ -210,20 +226,23 @@ export default Dev.describe('Image', async (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const src = Util.srcAsBinary(e.state.props.src);
-      const bytes = src?.data.byteLength ?? -1;
-      const file = stripBinary(src);
+      const srcValue = e.state.props.src;
+      const srcBinary = Util.srcAsBinary(srcValue);
+      const mimetype = srcBinary?.mimetype ?? undefined;
+      const bytes = srcBinary?.data.byteLength ?? -1;
+      const file = stripBinary(srcBinary);
 
+      const src = typeof srcValue === 'string' ? srcValue : Util.srcAsBinary(srcValue);
       const props = {
         ...e.state.props,
-        src: typeof src === 'string' ? src : file,
+        src: typeof src === 'string' ? src : typeof src,
       };
 
       const data = {
         props,
         file,
         filesize: bytes > -1 ? Filesize(bytes) : undefined,
-        mimetype: src?.mimetype ?? undefined,
+        mimetype,
       };
 
       return <Dev.Object name={'Image'} data={data} expand={1} />;

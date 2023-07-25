@@ -12,8 +12,11 @@ export { Switch } from './ui/Button.Switch';
 export { Card } from './ui/Card';
 export { Center } from './ui/Center';
 export { Chip } from './ui/Chip';
+export { Flip } from './ui/Flip';
+export { Grid } from './ui/Grid';
 export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
+export { Item } from './ui/Item';
 export { ObjectView } from './ui/ObjectView';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
@@ -37,7 +40,7 @@ export { useSizeObserver } from './ui/useSizeObserver';
 /**
  * Common up-stream modules
  */
-export { COLORS, Color, FC, Style, UserAgent, css, rx } from './common';
+export { COLORS, Color, FC, Style, UserAgent, css, rx, useRubberband } from './common';
 
 /**
  * Dev

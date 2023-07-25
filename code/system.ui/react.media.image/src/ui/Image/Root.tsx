@@ -22,6 +22,10 @@ const View: React.FC<t.ImageProps> = (props) => {
   const paste = usePaste(ref, props, { warn });
   const binary = useBinaryImage(typeof src === 'object' ? src : undefined);
 
+  let backgroundImage = '';
+  if (binary.url) backgroundImage = `url(${binary.url})`;
+  if (!binary.url && src) backgroundImage = `url(${src})`;
+
   /**
    * [Render]
    */
@@ -29,10 +33,10 @@ const View: React.FC<t.ImageProps> = (props) => {
     base: css({ position: 'relative', outline: 'none' }),
     image: css({
       Absolute: 0,
-      backgroundImage: binary.url ? `url(${binary.url})` : undefined,
+      backgroundImage,
       backgroundPosition: 'center',
-      backgroundSize: props.sizing ?? DEFAULTS.sizing,
       backgroundRepeat: 'no-repeat',
+      backgroundSize: props.sizing ?? DEFAULTS.sizing,
     }),
   };
 
@@ -42,10 +46,15 @@ const View: React.FC<t.ImageProps> = (props) => {
     <Warning settings={props.warning} message={warning.content} />
   );
 
-  const elImage = binary.url && <div {...styles.image} />;
+  const elImage = backgroundImage && <div {...styles.image} />;
 
   return (
-    <div ref={ref} {...css(styles.base, props.style)} tabIndex={paste.tabIndex}>
+    <div
+      ref={ref}
+      {...css(styles.base, props.style)}
+      tabIndex={paste.tabIndex}
+      className={'sys-Image'}
+    >
       {elImage}
       {elDrag}
       {elFocused}

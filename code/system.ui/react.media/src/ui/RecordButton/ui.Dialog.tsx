@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { css, t } from './common';
+import { css, type t } from './common';
 
 export type DialogProps = {
   data?: t.RecordButtonDialog;

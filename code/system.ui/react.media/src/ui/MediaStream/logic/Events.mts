@@ -1,4 +1,4 @@
-import { rx, slug, t } from '../common';
+import { rx, slug, type t } from '../common';
 
 type E = t.MediaStreamEvent | t.MediaStreamsEvent | t.MediaStreamRecordEvent;
 

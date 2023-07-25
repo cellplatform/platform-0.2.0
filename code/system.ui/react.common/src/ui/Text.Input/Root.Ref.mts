@@ -6,9 +6,10 @@ import { type t } from './common';
  * for things like focus/blur/select.
  */
 export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
-  return {
-    focus() {
+  const api: t.TextInputRef = {
+    focus(select) {
       ref.current?.focus();
+      if (select) api.selectAll();
     },
 
     blur() {
@@ -51,4 +52,6 @@ export function TextInputRef(ref: RefObject<HTMLInputElement>): t.TextInputRef {
       }
     },
   };
+
+  return api;
 }

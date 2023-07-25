@@ -92,4 +92,4 @@ export const Icons = {
     Antenna: icon(MdSettingsInputAntenna),
     Nodes: icon(FaNetworkWired),
   },
-};
+} as const;

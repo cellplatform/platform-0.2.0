@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export type { CSSProperties } from 'react';
+
+/**
  * @system
  */
 export type { DomRect } from 'sys.types/src/types.mjs';

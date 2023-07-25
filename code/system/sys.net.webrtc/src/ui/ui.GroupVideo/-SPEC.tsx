@@ -57,7 +57,7 @@ export default Dev.describe('GroupVideo', async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
 
-    dev.section('debug', (dev) => {
+    dev.section('Debug', (dev) => {
       const count = (label: string, by: number) => {
         dev.button((btn) => {
           const current = () => (network?.current.tmp.count ?? 0) as number;

@@ -1,5 +1,5 @@
 import PluginGlobal from 'jss-plugin-global';
-import { glamor, R, t } from '../common';
+import { R, glamor, rx, type t } from '../common';
 
 glamor.jss.use(PluginGlobal);
 
@@ -25,8 +25,16 @@ glamor.jss.use(PluginGlobal);
  *        global(styles, { prefix: '.markdown' });
  *
  */
-export const Global: t.CssGlobal = (styles: t.CssPropsMap, options: { prefix?: string } = {}) => {
-  if (R.isEmpty(styles)) return;
+export const Global: t.CssGlobal = (
+  styles: t.CssPropsMap,
+  options: {
+    prefix?: string;
+    dispose$?: t.Observable<any>;
+  } = {},
+) => {
+  if (R.isEmpty(styles)) {
+    return { dispose: () => undefined } as const;
+  }
 
   // Prepare styles for global insertion.
   const { prefix } = options;
@@ -40,7 +48,17 @@ export const Global: t.CssGlobal = (styles: t.CssPropsMap, options: { prefix?: s
   });
 
   // Load the global styles into the document.
-  glamor.jss.createStyleSheet({ '@global': global }).attach();
+  const stylesheet = glamor.jss.createStyleSheet({ '@global': global });
+  stylesheet.attach();
+
+  // Disposable.
+  const { dispose$, dispose } = rx.disposable(options.dispose$);
+  dispose$.subscribe(() => stylesheet?.detach());
+
+  /**
+   * API
+   */
+  return { dispose } as const;
 };
 
 /**

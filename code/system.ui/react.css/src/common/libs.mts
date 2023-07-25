@@ -5,9 +5,9 @@ import * as glamor from 'glamor-jss';
 export { glamor };
 
 import { isEmpty } from 'ramda';
-export const R = { isEmpty };
+export const R = { isEmpty } as const;
 
 /**
- * @local
+ * @system
  */
-export { Is, Value, Id } from 'sys.util';
+export { Id, Is, Value, rx } from 'sys.util';
