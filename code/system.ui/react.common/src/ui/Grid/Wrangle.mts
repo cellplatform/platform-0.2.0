@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef, isValidElement } from 'react';
-
-import { DEFAULTS, type t, Sheet } from './common';
+import { isValidElement } from 'react';
+import { DEFAULTS, Sheet, type t } from './common';
 
 type SizeValue = number | string;
 
@@ -12,7 +11,7 @@ export const Wrangle = {
   },
 
   gap(props: t.GridProps): t.GridPoint {
-    const { config = {} } = props;
+    const { config = DEFAULTS.config } = props;
     const value = config.gap ?? DEFAULTS.gap;
     if (typeof value === 'number') return positiveXY(value);
 
@@ -28,7 +27,8 @@ export const Wrangle = {
   },
 
   config(props: t.GridProps) {
-    const { config = {} } = props;
+    const { config = DEFAULTS.config } = props;
+    const gap = Wrangle.gap(props);
     const total = Wrangle.total(props);
     const cells: t.GridCell[] = [];
     const columns: SizeValue[] = [];
@@ -72,6 +72,7 @@ export const Wrangle = {
     };
 
     return {
+      gap,
       cells,
       columns,
       rows,

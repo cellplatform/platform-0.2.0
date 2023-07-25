@@ -5,57 +5,42 @@ const DEFAULTS = Grid.DEFAULTS;
 
 type T = {
   props: t.GridProps;
-  debug: { devBg?: boolean };
+  debug: { devBg?: boolean; devWithConfig?: boolean };
+};
+const initial: T = {
+  props: {},
+  debug: {},
 };
 
 export default Dev.describe('Grid', (e) => {
-  const initial: T = {
-    props: {
-      config: {
-        gap: 5,
-
-        row(e) {
-          // return e.index === 0 ? 2.5 : 1;
-          return 1;
-        },
-        cell(e) {
-          const styles = {
-            base: css({ padding: 5, backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */ }),
-            tree: css({ fontSize: 30 }),
-          };
-          // NB: showing as return value.
-          if (e.x === 1 && e.y === 2) {
-            return (
-              <div {...css(styles.base)}>
-                <div {...styles.tree}>{'🌳'}</div>
-              </div>
-            );
-          }
-
-          // NB: showing as method call.
-          e.body(<div {...styles.base}>{`${e.address}`}</div>);
-
-          return;
-        },
-      },
-    },
-    debug: {},
-  };
-
-  type LocalStore = Pick<t.GridPropsConfig, 'total'> & Pick<T['debug'], 'devBg'>;
+  type LocalStore = Pick<t.GridPropsConfig, 'total'> & Pick<T['debug'], 'devBg' | 'devWithConfig'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Grid');
   const local = localstore.object({
     total: DEFAULTS.total,
     devBg: false,
+    devWithConfig: true,
   });
+
+  const State = {
+    displayProps(state: T) {
+      const debug = state.debug;
+      const props = { ...state.props };
+      if (!debug.devWithConfig) delete props.config;
+      return props;
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const config = (d.props.config = d.props.config ?? {});
+      const config = d.props.config ?? DEFAULTS.config;
       config.total = local.total;
+      d.props.config = config;
+      d.debug.devWithConfig = local.devWithConfig;
+      d.debug.devBg = local.devBg;
     });
 
     ctx.debug.width(330);
@@ -63,9 +48,11 @@ export default Dev.describe('Grid', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const { props, debug } = e.state;
+        const { debug } = e.state;
         ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
-        return <Grid {...props} style={{ padding: debug.devBg ? 20 : 0 }} />;
+        const props = State.displayProps(e.state);
+        const padding = debug.devBg ? 20 : 0;
+        return <Grid {...props} style={{ padding }} />;
       });
   });
 
@@ -102,6 +89,16 @@ export default Dev.describe('Grid', (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
       });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devWithConfig);
+        btn
+          .label((e) => `${value(e.state) ? 'with' : 'without'} { config }`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.devWithConfig = Dev.toggle(d.debug, 'devWithConfig')));
+          });
+      });
     });
   });
 
@@ -109,7 +106,8 @@ export default Dev.describe('Grid', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const props = State.displayProps(e.state);
+      const data = { props };
       return <Dev.Object name={'Grid'} data={data} expand={1} />;
     });
   });

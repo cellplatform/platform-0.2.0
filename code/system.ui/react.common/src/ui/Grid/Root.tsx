@@ -1,11 +1,10 @@
 import { Wrangle } from './Wrangle.mjs';
-import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
+import { DEFAULTS, FC, css, type t } from './common';
 
 export const View: React.FC<t.GridProps> = (props) => {
   const total = Wrangle.total(props);
-  const gap = Wrangle.gap(props);
   const config = Wrangle.config(props);
-
+  const gap = config.gap;
   if (total.x === 0 && total.y === 0) return null;
 
   /**
