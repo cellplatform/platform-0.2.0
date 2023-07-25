@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.openai',
+  name: 'ext.openai',
   version: '0.0.0',
   dependencies: {
     'openai': '3.3.0',

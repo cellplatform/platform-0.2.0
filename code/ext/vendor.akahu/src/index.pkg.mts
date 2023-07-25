@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.akahu',
+  name: 'ext.akahu',
   version: '0.0.0',
   dependencies: {
     'akahu': '1.13.0',

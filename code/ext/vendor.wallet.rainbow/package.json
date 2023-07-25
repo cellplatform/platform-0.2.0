@@ -1,5 +1,5 @@
 {
-  "name": "vendor.wallet.rainbow",
+  "name": "ext.wallet.rainbow",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

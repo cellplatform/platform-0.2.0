@@ -1,5 +1,5 @@
 {
-  "name": "vendor.vercel",
+  "name": "ext.vercel",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.stripe',
+  name: 'ext.stripe',
   version: '0.0.0',
   dependencies: {
     'sys.ui.react.common': '0.0.0',

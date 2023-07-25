@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.vercel',
+  name: 'ext.vercel',
   version: '0.0.0',
   dependencies: {
     'sys.fs': '0.0.0',

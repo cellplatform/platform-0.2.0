@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'vendor.wallet.rainbow',
+  name: 'ext.wallet.rainbow',
   version: '0.0.0',
   dependencies: {
     '@rainbow-me/rainbowkit': '1.0.7',
