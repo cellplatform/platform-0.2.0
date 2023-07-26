@@ -19,6 +19,7 @@ const { ModuleSpecs: Dev } = await import('sys.ui.react.dev/specs');
 const { Specs: Monaco } = await import('sys.ui.react.monaco/specs');
 const { Specs: Media } = await import('sys.ui.react.media/specs');
 const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
+const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 
 const { Specs: ExtProtocolHats } = await import('protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.stripe/specs');
@@ -37,6 +38,7 @@ export const Specs = {
   ...Media,
   ...MediaImage,
   ...Fs,
+  ...Concept,
   ...ExtStripe,
   ...ExtProtocolHats,
   ...ExtVime,

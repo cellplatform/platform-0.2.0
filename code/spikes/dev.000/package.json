@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.437",
+  "version": "0.0.438",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -27,6 +27,7 @@
     "sys.net.webrtc": "0.0.0",
     "sys.text": "0.0.0",
     "sys.ui.react.common": "0.0.0",
+    "sys.ui.react.concept": "0.0.0",
     "sys.ui.react.dev": "0.0.0",
     "sys.ui.react.media": "0.0.0",
     "sys.ui.react.media.image": "0.0.0",
