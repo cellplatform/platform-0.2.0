@@ -2,7 +2,7 @@ import { Dev } from '../../../test.ui';
 
 import { VimeoPlayer } from '..';
 import { rx, slug, type t } from '../common';
-import { VIDEO } from './-Sample.mjs';
+import { VIMEO } from './-Sample.mjs';
 
 type T = {
   props: t.VimeoPlayerProps;
@@ -21,7 +21,7 @@ export default Dev.describe('Vimeo Player', (e) => {
   type LocalStore = Pick<t.VimeoPlayerProps, 'video'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.Vimeo');
   const local = localstore.object({
-    video: VIDEO['stock/running'],
+    video: VIMEO['stock/running'],
   });
 
   /**
@@ -86,7 +86,7 @@ export default Dev.describe('Vimeo Player', (e) => {
         });
       };
 
-      Object.entries(VIDEO).forEach(([key, id]) => video(key, id));
+      Object.entries(VIMEO).forEach(([key, id]) => video(key, id));
     });
   });
 });

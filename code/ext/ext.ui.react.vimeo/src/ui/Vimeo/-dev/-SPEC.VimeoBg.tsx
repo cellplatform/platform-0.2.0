@@ -2,7 +2,7 @@ import { Dev } from '../../../test.ui';
 import { rx, slug, type t } from '../common';
 
 import { VimeoBackground } from '..';
-import { VIDEO } from './-Sample.mjs';
+import { VIMEO } from './-Sample.mjs';
 
 const initial = { count: 0 };
 type T = typeof initial;
@@ -24,7 +24,7 @@ export default Dev.describe('VimeoBackground Player', (e) => {
       return (
         <VimeoBackground
           instance={instance}
-          video={VIDEO['app/tubes']}
+          video={VIMEO['app/tubes']}
           opacity={1}
           opacityTransition={300}
           blur={0}
