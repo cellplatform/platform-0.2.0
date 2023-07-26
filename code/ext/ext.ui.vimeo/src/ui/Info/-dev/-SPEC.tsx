@@ -1,5 +1,5 @@
-import { Dev, PropList, type t } from '../../../test.ui';
 import { Info, type InfoProps } from '..';
+import { Dev, type t } from '../../../test.ui';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
@@ -17,6 +17,7 @@ export default Dev.describe('Info', (e) => {
 
     await state.change((d) => {
       d.props.fields = local.selectedFields;
+      d.props.margin = 10;
     });
 
     ctx.subject
