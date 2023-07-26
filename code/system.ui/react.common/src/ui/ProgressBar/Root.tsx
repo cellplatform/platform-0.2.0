@@ -23,7 +23,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
    * [Render]
    */
   const trackHeight = mouse.isOver ? 10 : 5;
-  const transition = `height 0.15s, background-color 0.15s`;
+  const transition = `width 0.15s, height 0.15s, background-color 0.15s`;
   const styles = {
     base: css({
       height,
