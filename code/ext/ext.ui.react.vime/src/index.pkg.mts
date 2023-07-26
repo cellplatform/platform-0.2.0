@@ -10,9 +10,10 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.ui.vime',
+  name: 'ext.ui.react.vime',
   version: '0.0.0',
   dependencies: {
+    '@vime/react': '5.4.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',

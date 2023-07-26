@@ -33,6 +33,7 @@
     "@tauri-apps/api": "1.4.0",
     "@vercel/edge": "0.3.4",
     "@vimeo/player": "2.20.1",
+    "@vime/react": "5.4.1",
     "approx-string-match": "2.0.0",
     "akahu": "1.13.0",
     "cli-table3": "0.6.3",
