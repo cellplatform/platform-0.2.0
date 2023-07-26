@@ -72,8 +72,8 @@ const Wrangle = {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const SeekBar = FC.decorate<t.ProgressBarProps, Fields>(
+export const ProgressBar = FC.decorate<t.ProgressBarProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'SeekBar' },
+  { displayName: 'ProgressBar' },
 );

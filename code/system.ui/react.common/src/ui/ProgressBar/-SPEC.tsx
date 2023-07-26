@@ -1,7 +1,7 @@
 import { Dev, type t } from '../../test.ui';
-import { SeekBar } from '.';
+import { ProgressBar } from '.';
 
-const DEFAULTS = SeekBar.DEFAULTS;
+const DEFAULTS = ProgressBar.DEFAULTS;
 
 type T = {
   props: t.ProgressBarProps;
@@ -12,9 +12,9 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('SeekBar', (e) => {
+export default Dev.describe('ProgressBar', (e) => {
   type LocalStore = Pick<t.ProgressBarProps, 'percent'> & Pick<T['debug'], 'devBg'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.SeekBar');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.ProgressBar');
   const local = localstore.object({
     percent: DEFAULTS.percent,
     devBg: false,
@@ -39,7 +39,7 @@ export default Dev.describe('SeekBar', (e) => {
         ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
 
         return (
-          <SeekBar
+          <ProgressBar
             {...props}
             onClick={(e) => {
               console.info('⚡️ onClick', e);
@@ -87,7 +87,7 @@ export default Dev.describe('SeekBar', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'SeekBar'} data={data} expand={1} />;
+      return <Dev.Object name={'ProgressBar'} data={data} expand={1} />;
     });
   });
 });
