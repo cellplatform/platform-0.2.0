@@ -6,7 +6,7 @@ const initial: T = { props: {} };
 
 export default Dev.describe('Info', (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept');
   const local = localstore.object({
     selectedFields: Info.DEFAULTS.fields,
   });

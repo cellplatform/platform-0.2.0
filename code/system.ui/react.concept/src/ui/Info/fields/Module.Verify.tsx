@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'NAMESPACE.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'sys.ui.concept.tests');
       return url.href;
     },
 
