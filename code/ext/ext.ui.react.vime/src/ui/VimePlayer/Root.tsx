@@ -1,7 +1,6 @@
+import '../../css.mjs';
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
-
-import './css.mjs';
 
 import { Player, Ui, Video } from '@vime/react';
 
