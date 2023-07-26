@@ -11,8 +11,9 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.436',
+  version: '0.0.437',
   dependencies: {
+    'ext.stripe': '0.0.0',
     'protocol.hats': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
@@ -27,7 +28,6 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.media.image': '0.0.0',
     'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
-    'ext.stripe': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
