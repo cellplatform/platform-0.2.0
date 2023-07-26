@@ -8,7 +8,6 @@ const initial: T = { props: {} };
  * Vime Docs:
  * https://vimejs.com/4.x/getting-started/installation#react
  */
-
 export default Dev.describe('VimePlayer', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

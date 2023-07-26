@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
+import './css.mjs';
+
+import { Player, Ui, Video } from '@vime/react';
+
+/**
+ * Vime Docs:
+ * https://vimejs.com/4.x/getting-started/installation#react
+ */
 export const Root: React.FC<t.RootProps> = (props) => {
   /**
    * [Render]
@@ -14,7 +22,13 @@ export const Root: React.FC<t.RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 VimePlayer`}</div>
+      <Player>
+        {/* Provider component is placed here. */}
+
+        <Video crossOrigin="" poster="https://media.vimejs.com/poster.png" />
+
+        <Ui>{/* UI components are placed here. */}</Ui>
+      </Player>
     </div>
   );
 };
