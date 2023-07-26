@@ -4,7 +4,7 @@ import { Root } from '.';
 type T = { props: t.RootProps };
 const initial: T = { props: {} };
 
-export default Dev.describe('Root', (e) => {
+export default Dev.describe('Namespace', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -30,7 +30,7 @@ export default Dev.describe('Root', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'ContainerQuery'} data={data} expand={1} />;
+      return <Dev.Object name={'Namespace'} data={data} expand={1} />;
     });
   });
 });
