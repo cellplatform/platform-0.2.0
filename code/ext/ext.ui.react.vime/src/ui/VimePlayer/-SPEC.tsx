@@ -1,32 +1,71 @@
 import { Dev, type t } from '../../test.ui';
 import { Root } from '.';
 
-type T = { props: t.RootProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.RootProps;
+  debug: { devWidth?: number };
+};
+const initial: T = {
+  props: {},
+  debug: {},
+};
 
 /**
  * Vime Docs:
- * https://vimejs.com/4.x/getting-started/installation#react
+ * https://vimejs.com/getting-started/installation
  */
 export default Dev.describe('VimePlayer', (e) => {
+  type LocalStore = Pick<T['debug'], 'devWidth'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.VimePlayer');
+  const local = localstore.object({
+    devWidth: 500,
+  });
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {});
+    await state.change((d) => {
+      d.debug.devWidth = local.devWidth;
+    });
+
     ctx.subject
       .backgroundColor(1)
-      .size([500, 330])
+      // .size([500, null])
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} />;
+        const { debug, props } = e.state;
+        ctx.subject.size([debug.devWidth, null]);
+        return <Root {...props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const ctx = dev.ctx;
     const state = await dev.state();
     dev.TODO();
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      //
+
+      const width = (width: number) => {
+        dev.button((btn) => {
+          btn
+            .label(`width: ${width}`)
+            .right((e) => (e.state.debug.devWidth === width ? `←` : ''))
+            .onClick((e) => {
+              e.change((d) => (local.devWidth = d.debug.devWidth = width));
+            });
+        });
+      };
+
+      width(500);
+      width(300);
+    });
   });
 
   e.it('ui:footer', async (e) => {

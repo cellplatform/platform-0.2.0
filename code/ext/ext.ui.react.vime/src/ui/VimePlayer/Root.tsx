@@ -4,29 +4,43 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 import { Player, Ui, Video } from '@vime/react';
 
-/**
- * Vime Docs:
- * https://vimejs.com/4.x/getting-started/installation#react
- */
 export const Root: React.FC<t.RootProps> = (props) => {
+  const onTimeUpdate = (event: CustomEvent<number>) => {
+    console.log('event', event);
+    // setCurrentTime(event.detail);
+  };
+
   /**
    * [Render]
    */
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 8,
+      // padding: 8,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Player>
-        {/* Provider component is placed here. */}
+      <Player
+        //
+        controls
+        onVmCurrentTimeChange={onTimeUpdate}
+      >
+        <Video crossOrigin="" poster="https://media.vimejs.com/poster.png">
+          {/* These are passed directly to the underlying HTML5 `<video>` element. */}
+          {/* Why `data-src`? Lazy loading, you can always use `src` if you prefer.  */}
+          <source data-src="https://media.vimejs.com/720p.mp4" type="video/mp4" />
+          <track
+            default
+            kind="subtitles"
+            src="https://media.vimejs.com/subs/english.vtt"
+            srcLang="en"
+            label="English"
+          />
+        </Video>
 
-        <Video crossOrigin="" poster="https://media.vimejs.com/poster.png" />
-
-        <Ui>{/* UI components are placed here. */}</Ui>
+        {/* ... */}
       </Player>
     </div>
   );
