@@ -6,6 +6,10 @@ import { Player, Ui, Video, Vimeo } from '@vime/react';
 
 import { SAMPLE } from './-dev/-Sample.mjs';
 
+/**
+ * Vime Docs:
+ * https://vimejs.com/
+ */
 export const Root: React.FC<t.RootProps> = (props) => {
   const onTimeUpdate = (event: CustomEvent<number>) => {
     console.log('event', event);

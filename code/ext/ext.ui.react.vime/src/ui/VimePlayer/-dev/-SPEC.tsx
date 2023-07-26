@@ -12,7 +12,7 @@ const initial: T = {
 
 /**
  * Vime Docs:
- * https://vimejs.com/getting-started/installation
+ * https://vimejs.com/
  */
 export default Dev.describe('VimePlayer', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'>;
