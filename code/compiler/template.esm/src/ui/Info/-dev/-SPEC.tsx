@@ -20,6 +20,7 @@ export default Dev.describe('Info', (e) => {
       d.props.margin = 10;
     });
 
+    ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size([320, null])
