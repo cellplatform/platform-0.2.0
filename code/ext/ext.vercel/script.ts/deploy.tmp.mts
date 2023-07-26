@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { Vercel } from 'vendor.vercel';
+import { Vercel } from 'ext.vercel';
 import { Filesystem } from 'sys.fs.node';
 import { Time, rx, Path } from 'sys.util';
 

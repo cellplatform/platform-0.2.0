@@ -1,4 +1,4 @@
-import { Vercel } from 'vendor.vercel';
+import { Vercel } from 'ext.vercel';
 import pc from 'picocolors';
 import { rx } from 'sys.util';
 

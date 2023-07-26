@@ -29,7 +29,7 @@
     "sys.ui.react.media.image": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
     "sys.util": "0.0.0",
-    "vendor.stripe": "0.0.0"
+    "ext.stripe": "0.0.0"
   },
   "devDependencies": {
     "sys.test": "0.0.0",

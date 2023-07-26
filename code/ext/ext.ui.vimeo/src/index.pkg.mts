@@ -10,24 +10,13 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.dev',
-  version: '0.0.436',
+  name: 'ext.ui.vimeo',
+  version: '0.0.0',
   dependencies: {
-    'protocol.hats': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'sys.data.crdt': '0.0.0',
-    'sys.fs': '0.0.0',
-    'sys.fs.indexeddb': '0.0.0',
-    'sys.net.webrtc': '0.0.0',
-    'sys.text': '0.0.0',
-    'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.dev': '0.0.0',
-    'sys.ui.react.media': '0.0.0',
-    'sys.ui.react.media.image': '0.0.0',
-    'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
-    'ext.stripe': '0.0.0',
+    'sys.ui.react.common': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

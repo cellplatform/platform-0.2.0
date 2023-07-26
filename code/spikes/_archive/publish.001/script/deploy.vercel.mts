@@ -1,4 +1,4 @@
-import { Vercel } from 'vendor.vercel';
+import { Vercel } from 'ext.vercel';
 import { rx } from 'sys.util';
 
 import { Pkg } from '../src/index.pkg.mjs';
