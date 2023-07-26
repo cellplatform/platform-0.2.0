@@ -5,6 +5,7 @@ export {
   COLORS,
   Color,
   FC,
+  IFrame,
   Keyboard,
   PropList,
   TestRunner,

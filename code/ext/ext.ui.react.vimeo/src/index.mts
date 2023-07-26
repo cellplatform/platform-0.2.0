@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Components
+ */
+export { Vimeo, VimeoPlayer, VimeoBackground, VimeoEvents } from './ui/Vimeo';
+
+/**
  * Dev
  */
 export const dev = async () => {

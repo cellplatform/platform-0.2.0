@@ -1,8 +1,6 @@
 export { Pkg } from '../index.pkg.mjs';
 
-export const ServiceSpecs = {
-  'sys.ui.media.video.Vimeo': () => import('../ui/vendor.Vimeo/-dev/-SPEC.Vimeo'),
-  'sys.ui.media.video.VimeoBackground': () => import('../ui/vendor.Vimeo/-dev/-SPEC.VimeoBg'),
+export const ExtSpecs = {
   'sys.ui.media.video.YouTube': () => import('../ui/vendor.YouTube/-dev/-SPEC'),
 };
 
@@ -12,7 +10,7 @@ export const Specs = {
   'sys.ui.media.MediaStream': () => import('../ui/MediaStream/-dev/-SPEC'),
   'sys.ui.media.RecordButton': () => import('../ui/RecordButton/-SPEC'),
   'sys.ui.media.SeekBar': () => import('../ui/SeekBar/-SPEC'),
-  ...ServiceSpecs,
+  ...ExtSpecs,
 };
 
 export default Specs;
