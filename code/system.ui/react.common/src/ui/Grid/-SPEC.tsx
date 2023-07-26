@@ -66,7 +66,7 @@ export default Dev.describe('Grid', (e) => {
         const current = (state: T) => config(state).total ?? DEFAULTS.total;
         dev.button((btn) => {
           btn
-            .label(`total: ${total}`)
+            .label(`total: ${total} x ${total}`)
             .right((e) => (current(e.state) === total ? `←` : right))
             .onClick((e) => e.change((d) => (local.total = config(d).total = total)));
         });
@@ -93,7 +93,7 @@ export default Dev.describe('Grid', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.devWithConfig);
         btn
-          .label((e) => `${value(e.state) ? 'with' : 'without'} { config }`)
+          .label((e) => `${value(e.state) ? 'with' : '⚠️ without'} { config }`)
           .value((e) => value(e.state))
           .onClick((e) => {
             e.change((d) => (local.devWithConfig = Dev.toggle(d.debug, 'devWithConfig')));
