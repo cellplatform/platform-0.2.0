@@ -27,7 +27,7 @@ export {
   useMouseState,
   useSizeObserver,
 } from 'sys.ui.react.common';
-export { AudioWaveform, RecordButton, Vimeo, YouTube } from 'sys.ui.react.media';
+export { AudioWaveform, RecordButton, YouTube } from 'sys.ui.react.media';
 /**
  * @local
  */
