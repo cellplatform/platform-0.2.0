@@ -5,17 +5,18 @@ type Percent = number; // 0..1
 /**
  * Component
  */
-export type SeekBarProps = {
-  progress?: Percent;
+export type ProgressBarProps = {
+  percent?: Percent;
   thumbColor?: string;
+  height?: number;
   style?: t.CssValue;
-  onClick?: SeekBarClickHandler;
+  onClick?: ProgressBarPropsClickHandler;
 };
 
 /**
  * Events
  */
-export type SeekBarClickHandler = (e: SeekBarClickHandlerArgs) => void;
-export type SeekBarClickHandlerArgs = {
-  progress: Percent;
+export type ProgressBarPropsClickHandler = (e: ProgressBarPropsClickHandlerArgs) => void;
+export type ProgressBarPropsClickHandlerArgs = {
+  percent: Percent;
 };

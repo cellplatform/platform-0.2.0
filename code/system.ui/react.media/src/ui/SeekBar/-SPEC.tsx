@@ -4,7 +4,7 @@ import { SeekBar } from '.';
 const DEFAULTS = SeekBar.DEFAULTS;
 
 type T = {
-  props: t.SeekBarProps;
+  props: t.ProgressBarProps;
   debug: { devBg?: boolean };
 };
 const initial: T = {
@@ -13,10 +13,10 @@ const initial: T = {
 };
 
 export default Dev.describe('SeekBar', (e) => {
-  type LocalStore = Pick<t.SeekBarProps, 'progress'> & Pick<T['debug'], 'devBg'>;
+  type LocalStore = Pick<t.ProgressBarProps, 'percent'> & Pick<T['debug'], 'devBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.SeekBar');
   const local = localstore.object({
-    progress: DEFAULTS.progress,
+    percent: DEFAULTS.percent,
     devBg: false,
   });
 
@@ -25,13 +25,13 @@ export default Dev.describe('SeekBar', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.progress = local.progress;
+      d.props.percent = local.percent;
       d.debug.devBg = local.devBg;
     });
 
     ctx.subject
       .backgroundColor(1)
-      .size([500, null])
+      .size('fill-x')
       .display('grid')
       .render<T>((e) => {
         const { debug, props } = e.state;
@@ -43,7 +43,7 @@ export default Dev.describe('SeekBar', (e) => {
             {...props}
             onClick={(e) => {
               console.info('⚡️ onClick', e);
-              state.change((d) => (d.props.progress = e.progress));
+              state.change((d) => (d.props.percent = e.percent));
             }}
           />
         );
@@ -54,20 +54,20 @@ export default Dev.describe('SeekBar', (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.section('Properties', (dev) => {
-      const progress = (value: number) => {
+      const percent = (value: number) => {
         dev.button((btn) => {
           btn
-            .label(`progress: ${value}`)
-            .right((e) => (e.state.props.progress === value ? '←' : ''))
-            .onClick((e) => e.change((d) => (local.progress = d.props.progress = value)));
+            .label(`percent: ${value}`)
+            .right((e) => (e.state.props.percent === value ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.percent = d.props.percent = value)));
         });
       };
-      progress(0);
+      percent(0);
       dev.hr(-1, 5);
-      progress(0.25);
-      progress(0.9);
+      percent(0.25);
+      percent(0.9);
       dev.hr(-1, 5);
-      progress(1);
+      percent(1);
     });
 
     dev.hr(5, 20);

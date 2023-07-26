@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { COLORS, Color, DEFAULTS, FC, css, type t, useMouseState } from './common';
 
-const View: React.FC<t.SeekBarProps> = (props) => {
-  const { thumbColor = DEFAULTS.thumbColor } = props;
-  const progress = Wrangle.percent(props.progress);
+const View: React.FC<t.ProgressBarProps> = (props) => {
+  const { thumbColor = DEFAULTS.thumbColor, height = DEFAULTS.height } = props;
+  const progress = Wrangle.percent(props.percent);
 
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({
@@ -13,7 +13,7 @@ const View: React.FC<t.SeekBarProps> = (props) => {
         const totalWidth = el.offsetWidth;
         const position = e.clientX - el.getBoundingClientRect().left;
         const progress = Wrangle.percent(position / totalWidth);
-        props.onClick({ progress });
+        props.onClick({ percent: progress });
       }
     },
   });
@@ -25,7 +25,7 @@ const View: React.FC<t.SeekBarProps> = (props) => {
   const transition = `height 0.15s, background-color 0.15s`;
   const styles = {
     base: css({
-      height: 20,
+      height,
       display: 'grid',
       alignContent: 'center',
     }),
@@ -61,7 +61,7 @@ const View: React.FC<t.SeekBarProps> = (props) => {
  */
 const Wrangle = {
   percent(value?: number) {
-    if (!value) return DEFAULTS.progress;
+    if (!value) return DEFAULTS.percent;
     return Math.max(0, Math.min(1, value));
   },
 } as const;
@@ -72,7 +72,7 @@ const Wrangle = {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const SeekBar = FC.decorate<t.SeekBarProps, Fields>(
+export const SeekBar = FC.decorate<t.ProgressBarProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'SeekBar' },
