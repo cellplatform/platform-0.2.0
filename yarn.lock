@@ -932,6 +932,11 @@
     "@noble/hashes" "~1.3.0"
     "@scure/base" "~1.1.0"
 
+"@seznam/compose-react-refs@^1.0.4":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@seznam/compose-react-refs/-/compose-react-refs-1.0.6.tgz#6ec4e70bdd6e32f8e70b4100f27267cf306bd8df"
+  integrity sha512-izzOXQfeQLonzrIQb8u6LQ8dk+ymz3WXTIXjvOlTXHq6sbzROg3NWU+9TTAOpEoK9Bth24/6F/XrfHJ5yR5n6Q==
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
@@ -1644,6 +1649,13 @@
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.3.4.tgz#4b88bc202e1ba3b70096b588219b57fe82c4a5de"
   integrity sha512-dFU+yAUDQRwpuRGxRDlEO1LMq0y1LGsBgkyryQWe4w15/Fy2/lCnpvdIoAhHl3QvIGAxCLHzwRHsqfLRdpxgJQ==
+
+"@vime/react@5.4.1":
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/@vime/react/-/react-5.4.1.tgz#88f8d422f400b332e6941f34b5504b73b26aa03e"
+  integrity sha512-cwZDp6d+gGTfXiYhZlZ5QF7GvmJZfATcJG5Hdc1TulCnbxpw7zJsE5zH0p9d2YCkKKSE3/r64gG16a0kqZTaMg==
+  dependencies:
+    "@seznam/compose-react-refs" "^1.0.4"
 
 "@vimeo/player@2.20.1":
   version "2.20.1"

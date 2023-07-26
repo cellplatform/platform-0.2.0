@@ -1,5 +1,5 @@
 {
-  "name": "ext.ui.vimeo",
+  "name": "ext.ui.react.vimeo",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
