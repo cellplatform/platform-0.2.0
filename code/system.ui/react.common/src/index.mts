@@ -18,7 +18,7 @@ export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { Item } from './ui/Item';
 export { ObjectView } from './ui/ObjectView';
-// export { ProgressBar } from './ui/ProgressBar';
+export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
 export { QRCode } from './ui/QRCode';
 export { RenderCount } from './ui/RenderCount';

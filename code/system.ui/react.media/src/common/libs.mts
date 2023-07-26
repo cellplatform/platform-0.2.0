@@ -23,6 +23,6 @@ export {
   Style,
   TextInput,
   css,
-  useSizeObserver,
   useMouseState,
+  useSizeObserver,
 } from 'sys.ui.react.common';

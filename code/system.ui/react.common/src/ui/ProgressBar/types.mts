@@ -1,6 +1,6 @@
 import { type t } from './common';
 
-type Percent = number; // 0..1
+type Percent = number; // 0..1  ←(0=0%, 1=100%)
 
 /**
  * Component
@@ -10,13 +10,13 @@ export type ProgressBarProps = {
   thumbColor?: string;
   height?: number;
   style?: t.CssValue;
-  onClick?: ProgressBarPropsClickHandler;
+  onClick?: ProgressBarClickHandler;
 };
 
 /**
  * Events
  */
-export type ProgressBarPropsClickHandler = (e: ProgressBarPropsClickHandlerArgs) => void;
-export type ProgressBarPropsClickHandlerArgs = {
+export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
+export type ProgressBarClickHandlerArgs = {
   percent: Percent;
 };

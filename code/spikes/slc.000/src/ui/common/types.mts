@@ -17,9 +17,8 @@ export type {
   CssValue,
   DomRect,
   PropListProps,
+  ProgressBarClickHandler,
 } from 'sys.ui.react.common/src/types.mjs';
-
-export type { SeekBarClickHandler } from 'sys.ui.react.media/src/types.mjs';
 
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 

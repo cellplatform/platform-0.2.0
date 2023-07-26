@@ -15,13 +15,14 @@ export const Specs = {
   'slc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'slc.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
 
-  'sys.common.ui.Concept.Slug': () => import('../ui/ui.Concept.Slug/-SPEC'),
-  'sys.common.ui.Concept.Player': () => import('../ui/ui.Concept.Player/-SPEC'),
+  // System
+  'sys.ui.concept.Slug': () => import('../ui/ui.Concept.Slug/-SPEC'),
+  'sys.ui.concept.Player': () => import('../ui/ui.Concept.Player/-SPEC'),
   'sys.common.ui.Position': () => import('../ui/ui.Position/-SPEC'),
   'sys.common.ui.Position.Selector': () => import('../ui/ui.PositionSelector/-SPEC'),
-  'sys.common.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
+  'ext.ui.Stripe.Payment': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
-  // External
+  // External (3rd party)
   'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
   'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC.Stateful'),
 

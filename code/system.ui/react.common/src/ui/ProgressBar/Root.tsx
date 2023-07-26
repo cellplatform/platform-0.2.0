@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
-import { COLORS, Color, DEFAULTS, FC, css, type t, useMouseState } from './common';
+import { useRef } from 'react';
+import { Wrangle } from './Wrangle.mjs';
+import { COLORS, Color, DEFAULTS, FC, css, useMouseState, type t } from './common';
 
 const View: React.FC<t.ProgressBarProps> = (props) => {
   const { thumbColor = DEFAULTS.thumbColor, height = DEFAULTS.height } = props;
-  const progress = Wrangle.percent(props.percent);
+  const progress = Wrangle.toPercent(props.percent);
 
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({
@@ -12,7 +13,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
         const el = ref.current;
         const totalWidth = el.offsetWidth;
         const position = e.clientX - el.getBoundingClientRect().left;
-        const progress = Wrangle.percent(position / totalWidth);
+        const progress = Wrangle.toPercent(position / totalWidth);
         props.onClick({ percent: progress });
       }
     },
@@ -57,23 +58,14 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
 };
 
 /**
- * Helpers
- */
-const Wrangle = {
-  percent(value?: number) {
-    if (!value) return DEFAULTS.percent;
-    return Math.max(0, Math.min(1, value));
-  },
-} as const;
-
-/**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Wrangle: typeof Wrangle;
 };
 export const ProgressBar = FC.decorate<t.ProgressBarProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, Wrangle },
   { displayName: 'ProgressBar' },
 );

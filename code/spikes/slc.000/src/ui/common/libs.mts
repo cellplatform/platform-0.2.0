@@ -6,6 +6,7 @@ export { Vimeo } from 'ext.ui.react.vimeo';
 /**
  * @system → UI
  */
+export { File } from 'sys.ui.dom';
 export {
   Button,
   COLORS,
@@ -15,6 +16,7 @@ export {
   IFrame,
   Item,
   Keyboard,
+  ProgressBar,
   PropList,
   Style,
   TestRunner,
@@ -22,9 +24,7 @@ export {
   useDragTarget,
   useFocus,
   useMouseState,
-  useSizeObserver,
   useRubberband,
+  useSizeObserver,
 } from 'sys.ui.react.common';
-export { SeekBar } from 'sys.ui.react.media';
 export { Image } from 'sys.ui.react.media.image';
-export { File } from 'sys.ui.dom';

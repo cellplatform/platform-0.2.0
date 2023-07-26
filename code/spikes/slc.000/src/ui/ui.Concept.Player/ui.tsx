@@ -1,4 +1,4 @@
-import { COLORS, Color, SeekBar, css, Vimeo, type t } from './common';
+import { COLORS, Color, ProgressBar, css, Vimeo, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
 import { PlayButton } from './ui.PlayButton';
 
@@ -12,7 +12,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
    * Handlers
    */
   const handleToggle = () => player.toggle();
-  const handleSeekClick: t.SeekBarClickHandler = (e) => {
+  const handleSeekClick: t.ProgressBarClickHandler = (e) => {
     if (!status) return;
 
     /**
@@ -21,7 +21,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
      * - wait for "status" to update, then use the new value.
      */
 
-    const secs = status.duration * e.progress;
+    const secs = status.duration * e.percent;
     player.events?.seek.fire(secs);
     if (!player.playing) player.play();
   };
@@ -46,7 +46,7 @@ export const View: React.FC<t.ConceptPlayerProps> = (props) => {
         <PlayButton isPlaying={player.playing} onClick={handleToggle} />
       </div>
       <div {...styles.middle}>
-        <SeekBar thumbColor={thumbColor} progress={status?.percent} onClick={handleSeekClick} />
+        <ProgressBar thumbColor={thumbColor} percent={status?.percent} onClick={handleSeekClick} />
       </div>
       {download && (
         <div {...styles.right}>
