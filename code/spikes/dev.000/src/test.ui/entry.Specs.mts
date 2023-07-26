@@ -23,6 +23,7 @@ const { Specs: MediaImage } = await import('sys.ui.react.media.image/specs');
 const { Specs: ExtProtocolHats } = await import('protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.stripe/specs');
 const { Specs: ExtVime } = await import('ext.ui.react.vime/specs');
+const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 // const { Specs: ProtocolHats } = await import('protocol.hats/specs');
 // const { Specs: ExtWallet } = await import('ext.wallet.rainbow/specs');
 
@@ -39,5 +40,6 @@ export const Specs = {
   ...ExtStripe,
   ...ExtProtocolHats,
   ...ExtVime,
+  ...ExtVimeo,
   // ...ExtWallet,
 };

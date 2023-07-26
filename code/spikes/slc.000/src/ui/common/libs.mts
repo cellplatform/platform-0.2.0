@@ -1,4 +1,9 @@
 /**
+ * @external
+ */
+export { Vimeo } from 'ext.ui.react.vimeo';
+
+/**
  * @system → UI
  */
 export {
@@ -20,6 +25,6 @@ export {
   useSizeObserver,
   useRubberband,
 } from 'sys.ui.react.common';
-export { Vimeo, SeekBar } from 'sys.ui.react.media';
+export { SeekBar } from 'sys.ui.react.media';
 export { Image } from 'sys.ui.react.media.image';
 export { File } from 'sys.ui.dom';

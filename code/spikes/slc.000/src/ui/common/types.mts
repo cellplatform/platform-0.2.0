@@ -1,4 +1,14 @@
 /**
+ * @external
+ */
+export type {
+  VimeoEvents,
+  VimeoInstance,
+  VimeoPlayer,
+  VimeoStatus,
+} from 'ext.ui.react.vimeo/src/types.mjs';
+
+/**
  * @system
  */
 export type {
@@ -9,13 +19,7 @@ export type {
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
-export type {
-  SeekBarClickHandler,
-  VimeoEvents,
-  VimeoInstance,
-  VimeoPlayer,
-  VimeoStatus,
-} from 'sys.ui.react.media/src/types.mjs';
+export type { SeekBarClickHandler } from 'sys.ui.react.media/src/types.mjs';
 
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 
