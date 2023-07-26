@@ -22,7 +22,7 @@ export const Specs = {
   'sys.common.ui.Position.Selector': () => import('../ui/ui.PositionSelector/-SPEC'),
   'ext.ui.Stripe.Payment': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
-  // External (3rd party)
+  // External (3rd party).
   'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
   'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC.Stateful'),
 

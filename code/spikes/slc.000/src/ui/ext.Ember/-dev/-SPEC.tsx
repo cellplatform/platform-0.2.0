@@ -4,6 +4,8 @@ import { Root } from '..';
 import { Wrangle } from '../Wrangle.mjs';
 import { DATA } from './-sample.data.mjs';
 
+const DEFAULTS = Root.DEFAULTS;
+
 type T = {
   props: t.RootProps;
   debug: { withSlugs?: boolean };
@@ -14,11 +16,12 @@ const initial: T = {
 };
 
 export default Dev.describe('Landing.Ember', (e) => {
-  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.RootProps, 'selected'>;
+  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.RootProps, 'selected' | 'focused'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:landing.ember');
   const local = localstore.object({
     withSlugs: true,
     selected: -1,
+    focused: DEFAULTS.focused,
   });
 
   const bus = rx.bus();
@@ -73,33 +76,24 @@ export default Dev.describe('Landing.Ember', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.section('Debug', (dev) => {
-      dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state);
-        btn
-          .label((e) => `with slugs (data)`)
-          .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.withSlugs = Dev.toggle(d.debug, 'withSlugs'))));
-      });
-
-      dev.hr(5, 20);
-
-      const select = (index: number) => {
+    dev.section('Properties', (dev) => {
+      const focused = (value?: t.RootPropsFocused, label?: string) => {
+        const current = (state: T) => state.props.focused;
         dev.button((btn) => {
-          const value = (state: T) => state.props.selected ?? -1;
           btn
-            .label((e) => `select: ${index}`)
-            .right((e) => (value(e.state) === index ? '←' : ''))
-            .onClick((e) => e.change((d) => (local.selected = d.props.selected = index)));
+            .label(`focused: ${label ?? value}`)
+            .right((e) => (current(e.state) === value ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.focused = d.props.focused = value)));
         });
       };
 
-      select(-1);
+      focused(undefined, '(undefined)');
       dev.hr(-1, 5);
-      Array.from({ length: 5 }).forEach((v, i) => select(i));
+      focused('index');
+      focused('player.footer');
     });
 
-    dev.hr(5, 20);
+    dev.hr(-1, [5, 10]);
 
     dev.section('Video', (dev) => {
       dev.button((btn) => {
@@ -127,6 +121,34 @@ export default Dev.describe('Landing.Ember', (e) => {
             player.play.fire();
           });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state);
+        btn
+          .label((e) => `with slugs (data)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.withSlugs = Dev.toggle(d.debug, 'withSlugs'))));
+      });
+
+      dev.hr(5, 20);
+
+      const select = (index: number) => {
+        dev.button((btn) => {
+          const value = (state: T) => state.props.selected ?? -1;
+          btn
+            .label((e) => `select: ${index}`)
+            .right((e) => (value(e.state) === index ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.selected = d.props.selected = index)));
+        });
+      };
+
+      select(-1);
+      dev.hr(-1, 5);
+      Array.from({ length: 5 }).forEach((v, i) => select(i));
     });
   });
 
