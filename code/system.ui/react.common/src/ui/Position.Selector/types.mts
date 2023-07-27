@@ -6,7 +6,7 @@ import { type t } from './common';
 export type PositionSelectorProps = {
   enabled?: boolean;
   size?: number;
-  selected?: PositionInput;
+  selected?: t.PositionInput;
   style?: t.CssValue;
   onSelect?: PositionClickHandler;
 };
@@ -16,6 +16,6 @@ export type PositionSelectorProps = {
  */
 export type PositionClickHandler = (e: PositionClickHandlerArgs) => void;
 export type PositionClickHandlerArgs = {
-  pos: Pos;
-  position: Position;
+  pos: t.Pos;
+  position: t.Position;
 };
