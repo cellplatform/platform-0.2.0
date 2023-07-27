@@ -1,7 +1,21 @@
 /**
+ * @external
+ */
+export type { VimeoInstance, VimeoStatus } from 'ext.ui.react.vimeo/src/types.mjs';
+
+/**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListProps } from 'sys.ui.react.common/src/types.mjs';
+export type {
+  CssEdgesInput,
+  CssValue,
+  Pos,
+  Position,
+  PositionInput,
+  ProgressBarClickHandler,
+  PropListProps,
+} from 'sys.ui.react.common/src/types.mjs';
+export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 
 /**
  * @local

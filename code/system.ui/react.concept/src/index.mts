@@ -5,6 +5,11 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Components
+ */
+export { Concept } from './ui/Concept';
+
+/**
  * Dev
  */
 export const dev = async () => {

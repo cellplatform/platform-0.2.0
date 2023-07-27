@@ -4,7 +4,7 @@
 export { Vimeo } from 'ext.ui.react.vimeo';
 
 /**
- * @system → UI
+ * @system
  */
 export { File } from 'sys.ui.dom';
 export {
@@ -28,4 +28,5 @@ export {
   useRubberband,
   useSizeObserver,
 } from 'sys.ui.react.common';
+export { Concept } from 'sys.ui.react.concept';
 export { Image } from 'sys.ui.react.media.image';

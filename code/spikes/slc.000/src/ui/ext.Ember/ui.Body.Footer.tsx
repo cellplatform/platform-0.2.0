@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
-import { ConceptPlayer } from '../ui.Concept.Player';
+import { Concept, css, type t } from './common';
 
 export type FooterProps = {
   vimeo?: t.VimeoInstance;
@@ -27,7 +25,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ConceptPlayer
+      <Concept.Player
         vimeo={vimeo}
         slug={slug}
         onPlayToggle={props.onPlayToggle}
