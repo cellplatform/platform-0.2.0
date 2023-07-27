@@ -1,11 +1,10 @@
 import { css, DEFAULTS, FC, type t } from './common';
 
-import { PositionSelector as Selector } from '../Position.Selector';
+import { EdgePositionSelector as Selector } from '../EdgePosition.Selector';
 import { Wrangle } from './Wrangle.mjs';
-
 const toGridCss = Wrangle.gridCss;
 
-const View: React.FC<t.PositionProps> = (props) => {
+const View: React.FC<t.EdgePositionProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
@@ -24,8 +23,8 @@ type Fields = {
   Wrangle: typeof Wrangle;
   toGridCss: typeof toGridCss;
 };
-export const Position = FC.decorate<t.PositionProps, Fields>(
+export const EdgePosition = FC.decorate<t.EdgePositionProps, Fields>(
   View,
   { DEFAULTS, Selector, Wrangle, toGridCss },
-  { displayName: 'Position' },
+  { displayName: 'EdgePosition' },
 );

@@ -3,7 +3,7 @@ import { DEFAULTS, FC, Grid, css, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 import { Cell } from './ui.Cell';
 
-const View: React.FC<t.PositionSelectorProps> = (props) => {
+const View: React.FC<t.EdgePositionSelectorProps> = (props) => {
   const { enabled = DEFAULTS.enabled, size = DEFAULTS.size, selected = DEFAULTS.selected } = props;
 
   /**
@@ -31,7 +31,6 @@ const View: React.FC<t.PositionSelectorProps> = (props) => {
                 onClick={(e) => props.onSelect?.(e)}
               />
             );
-            // e.body(el);
             return el;
           },
         }}
@@ -46,8 +45,8 @@ const View: React.FC<t.PositionSelectorProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const PositionSelector = FC.decorate<t.PositionSelectorProps, Fields>(
+export const EdgePositionSelector = FC.decorate<t.EdgePositionSelectorProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'PositionSelector' },
+  { displayName: 'EdgePositionSelector' },
 );

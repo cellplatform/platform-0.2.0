@@ -1,13 +1,13 @@
 import { Dev, type t, css } from '../../test.ui';
-import { Position } from '.';
+import { EdgePosition } from '.';
 
-const DEFAULTS = Position.DEFAULTS;
+const DEFAULTS = EdgePosition.DEFAULTS;
 
-type T = { props: t.PositionProps };
+type T = { props: t.EdgePositionProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('Position', (e) => {
-  type LocalStore = Pick<t.PositionProps, 'position'>;
+  type LocalStore = Pick<t.EdgePositionProps, 'position'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Position');
   const local = localstore.object({
     position: DEFAULTS.position,
@@ -32,9 +32,9 @@ export default Dev.describe('Position', (e) => {
           base: css({ fontSize: 30 }),
         };
         return (
-          <Position {...e.state.props}>
+          <EdgePosition {...e.state.props}>
             <div {...styles.base}>{`🌳`}</div>
-          </Position>
+          </EdgePosition>
         );
       });
   });
@@ -47,7 +47,7 @@ export default Dev.describe('Position', (e) => {
     dev.row((e) => {
       return (
         <div {...css({ display: 'grid', placeItems: 'center' })}>
-          <Position.Selector
+          <EdgePosition.Selector
             selected={e.state.props.position}
             onSelect={(e) => {
               state.change((d) => (d.props.position = e.pos));

@@ -1,15 +1,15 @@
 import { Dev, type t } from '../../test.ui';
-import { PositionSelector } from '.';
+import { EdgePositionSelector } from '.';
 
-const DEFAULTS = PositionSelector.DEFAULTS;
+const DEFAULTS = EdgePositionSelector.DEFAULTS;
 
-type T = { props: t.PositionSelectorProps };
+type T = { props: t.EdgePositionSelectorProps };
 const initial: T = {
   props: { size: 180 },
 };
 
-export default Dev.describe('PositionSelector', (e) => {
-  type LocalStore = Pick<t.PositionSelectorProps, 'enabled' | 'selected'>;
+export default Dev.describe('EdgePositionSelector', (e) => {
+  type LocalStore = Pick<t.EdgePositionSelectorProps, 'enabled' | 'selected'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.PositionSelector');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
@@ -32,7 +32,7 @@ export default Dev.describe('PositionSelector', (e) => {
       .display('grid')
       .render<T>((e) => {
         return (
-          <PositionSelector
+          <EdgePositionSelector
             {...e.state.props}
             onSelect={(e) => {
               console.info('⚡️ onSelect:', e.pos, e);
@@ -69,7 +69,7 @@ export default Dev.describe('PositionSelector', (e) => {
         props: e.state.props,
         'props:selected': e.state.props.selected,
       };
-      return <Dev.Object name={'PositionSelector'} data={data} expand={1} />;
+      return <Dev.Object name={'EdgePositionSelector'} data={data} expand={1} />;
     });
   });
 });

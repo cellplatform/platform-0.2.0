@@ -3,19 +3,19 @@ import { type t } from './common';
 /**
  * Component
  */
-export type PositionSelectorProps = {
+export type EdgePositionSelectorProps = {
   enabled?: boolean;
   size?: number;
   selected?: t.EdgePositionInput;
   style?: t.CssValue;
-  onSelect?: PositionClickHandler;
+  onSelect?: EdgePositionClickHandler;
 };
 
 /**
  * Events
  */
-export type PositionClickHandler = (e: PositionClickHandlerArgs) => void;
-export type PositionClickHandlerArgs = {
+export type EdgePositionClickHandler = (e: EdgePositionClickHandlerArgs) => void;
+export type EdgePositionClickHandlerArgs = {
   pos: t.EdgePos;
   position: t.EdgePosition;
 };

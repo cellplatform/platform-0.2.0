@@ -1,7 +1,7 @@
 import { DEFAULTS, type t } from './common';
-import { Wrangle as WrangleSelector } from '../Position.Selector/Wrangle.mjs';
+import { Wrangle as SelectorWrangle } from '../EdgePosition.Selector/Wrangle.mjs';
 
-const { pos } = WrangleSelector;
+const { pos } = SelectorWrangle;
 
 /**
  * Helpers
