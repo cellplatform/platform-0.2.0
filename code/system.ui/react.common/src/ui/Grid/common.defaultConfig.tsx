@@ -16,7 +16,14 @@ export const config: t.GridPropsConfig = {
       base: css({ padding: 5, backgroundColor: 'rgba(255, 0, 0, 0.05)' /* RED */ }),
       tree: css({ fontSize: 30 }),
     };
-    // NB: showing as return value.
+
+    // [A1]
+    if (e.x === 0 && e.y === 0) {
+      return <div {...styles.base}>{`${e.address} → ⚠️ config not set`}</div>;
+    }
+
+    // [B3]
+    // Note: showing as return value.
     if (e.x === 1 && e.y === 2) {
       return (
         <div {...css(styles.base)}>
@@ -25,9 +32,8 @@ export const config: t.GridPropsConfig = {
       );
     }
 
-    // NB: showing as method call.
+    // NOTE: sample showing as method call, not return value.
     e.body(<div {...styles.base}>{`${e.address}`}</div>);
-
     return;
   },
 };
