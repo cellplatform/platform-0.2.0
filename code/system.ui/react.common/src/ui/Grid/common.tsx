@@ -1,12 +1,11 @@
-import { css, type t } from '../common';
-
+import { type t } from '../common';
 export * from '../common';
 
 /**
  * Contants
  */
-import { total, config } from './common.defaultConfig';
-
+import { config } from './common.config';
+export const total: t.GridPoint = { x: 3, y: 3 };
 export const DEFAULTS = {
   config,
   total,

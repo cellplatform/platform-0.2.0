@@ -1,5 +1,6 @@
-import { css, Dev, type t } from '../../test.ui';
-import { Grid } from '.';
+import { css, Dev, type t } from '../../../test.ui';
+import { Grid } from '..';
+import { SAMPLE } from './-sample';
 
 const DEFAULTS = Grid.DEFAULTS;
 
@@ -36,7 +37,7 @@ export default Dev.describe('Grid', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const config = d.props.config ?? DEFAULTS.config;
+      const config = d.props.config ?? SAMPLE.config;
       config.total = local.total;
       d.props.config = config;
       d.debug.devWithConfig = local.devWithConfig;
