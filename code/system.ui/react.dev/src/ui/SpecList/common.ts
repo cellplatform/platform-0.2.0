@@ -1,3 +1,11 @@
+import { DEFAULTS as BASE } from '../common';
+
 export * from '../common';
 export * from './common.Calc';
-export * from './common.Filter';
+
+/**
+ * Constants
+ */
+export const DEFAULTS = {
+  qs: BASE.qs,
+} as const;

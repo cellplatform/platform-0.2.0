@@ -34,6 +34,7 @@ export const Filter = {
     const filtered = all.filter((ns) => matcher.match(ns.toLowerCase()).exists);
     if (parts.length < 2) return filtered;
 
-    return Filter.namespaces(filtered, parts.slice(1).join(' '), options); // <== 🌳 RECURSION
+    // ↓ RECURSION 🌳
+    return Filter.namespaces(filtered, parts.slice(1).join(' '), options);
   },
 };
