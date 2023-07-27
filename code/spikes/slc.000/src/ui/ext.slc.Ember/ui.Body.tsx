@@ -8,8 +8,8 @@ export type BodyProps = {
   slugs?: t.ConceptSlug[];
   selected?: number;
   style?: t.CssValue;
-  onPlayToggle?: t.ConceptPlayerHandler;
-  onPlayComplete?: t.ConceptPlayerHandler;
+  onPlayToggle?: t.PlayBarHandler;
+  onPlayComplete?: t.PlayBarHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {

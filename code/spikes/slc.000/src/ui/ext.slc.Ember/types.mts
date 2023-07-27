@@ -12,8 +12,8 @@ export type RootProps = {
   focused?: RootPropsFocused;
   style?: t.CssValue;
   onSelect?: t.VideoConceptClickHandler;
-  onPlayToggle?: t.ConceptPlayerHandler;
-  onPlayComplete?: t.ConceptPlayerHandler;
+  onPlayToggle?: t.PlayBarHandler;
+  onPlayComplete?: t.PlayBarHandler;
 };
 
 export type RootStatefulProps = {

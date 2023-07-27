@@ -26,12 +26,12 @@ export const Slug: React.FC<SlugProps> = (props) => {
   };
 
   const elEmpty = !slug && <Empty text={DEFAULTS.text.nothingSelected} />;
-  const elSlug = slug && <Concept.Slug slug={slug} vimeo={vimeo} />;
+  const elMain = slug && <Concept.VideoDiagram slug={slug} vimeo={vimeo} />;
 
   return (
     <div {...css(styles.base, props.style)}>
       {elEmpty}
-      {elSlug}
+      {elMain}
     </div>
   );
 };
