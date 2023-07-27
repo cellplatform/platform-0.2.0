@@ -62,22 +62,23 @@ export default Dev.describe('Grid', (e) => {
     const state = await dev.state();
 
     dev.section('States', (dev) => {
-      const total = (total: number, right: string = '') => {
+      const total = (x: number, y: number, right: string = '') => {
         const config = (state: T) => state.props.config ?? {};
         const current = (state: T) => config(state).total ?? DEFAULTS.total;
         dev.button((btn) => {
           btn
-            .label(`total: ${total} x ${total}`)
-            .right((e) => (current(e.state) === total ? `← ` : '') + right)
-            .onClick((e) => e.change((d) => (local.total = config(d).total = total)));
+            .label(`total: ${x} x ${y}`)
+            .right((e) => (current(e.state) === x ? `← ` : '') + right)
+            .onClick((e) => e.change((d) => (local.total = config(d).total = { x, y })));
         });
       };
-      total(0);
-      total(1);
+      total(0, 0);
+      total(1, 1);
       dev.hr(-1, 5);
-      total(2);
-      total(3, '(default)');
-      total(8);
+      total(2, 2);
+      total(3, 3, '(default)');
+      total(8, 8);
+      total(26, 8);
     });
 
     dev.hr(5, 20);

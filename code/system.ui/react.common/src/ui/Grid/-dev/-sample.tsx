@@ -14,7 +14,7 @@ export const config: t.GridPropsConfig = {
 
     // [B3]
     // Note: showing as return value.
-    if (e.x === 1 && e.y === 2) {
+    if (e.x === 1 && e.y === 1) {
       return (
         <div {...css(styles.base)}>
           <div {...styles.tree}>{'🌳'}</div>
