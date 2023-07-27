@@ -1,7 +1,6 @@
 import { type t } from './common';
 
 export * from '../common';
-export { Position } from '../ui.Position';
 
 /**
  * Constants

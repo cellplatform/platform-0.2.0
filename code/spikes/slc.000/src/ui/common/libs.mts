@@ -16,6 +16,7 @@ export {
   IFrame,
   Item,
   Keyboard,
+  Position,
   ProgressBar,
   PropList,
   Style,

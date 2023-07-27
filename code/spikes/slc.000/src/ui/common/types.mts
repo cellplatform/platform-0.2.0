@@ -16,8 +16,11 @@ export type {
   CssEdgesInput,
   CssValue,
   DomRect,
-  PropListProps,
+  Pos,
+  Position,
+  PositionInput,
   ProgressBarClickHandler,
+  PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';

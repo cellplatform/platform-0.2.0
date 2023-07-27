@@ -6,6 +6,8 @@ const importCommon = async () => {
   return {
     'sys.ui.common.Grid': Specs['sys.ui.common.Grid'],
     'sys.ui.common.Item.LabelItem': Specs['sys.ui.common.Item.LabelItem'],
+    'sys.ui.common.Position': Specs['sys.ui.common.Position'],
+    'sys.ui.common.Position.Selector': Specs['sys.ui.common.Position.Selector'],
   };
 };
 
@@ -18,8 +20,6 @@ export const Specs = {
   // System
   'sys.ui.concept.Slug': () => import('../ui/ui.Concept.Slug/-SPEC'),
   'sys.ui.concept.Player': () => import('../ui/ui.Concept.Player/-SPEC'),
-  'sys.common.ui.Position': () => import('../ui/ui.Position/-SPEC'),
-  'sys.common.ui.Position.Selector': () => import('../ui/ui.PositionSelector/-SPEC'),
   'ext.ui.Stripe.Payment': () => import('../ui/ui.Payment.Stripe/-SPEC'),
 
   // External (3rd party).
