@@ -18,13 +18,13 @@ const Render = {
   },
 
   async ref(src: string) {
-    const { IFrameRef } = await import('../ui/ui.IFrameRef');
+    const { IFrameRef } = await import('../ui/slc.IFrameRef');
     return root.render(<IFrameRef src={src} />);
   },
 
   async ember() {
-    const { Root } = await import('../ui/ext.Ember');
-    const { DATA } = await import('../ui/ext.Ember/-dev/-sample.data.mjs');
+    const { Root } = await import('../ui/ext.slc.Ember');
+    const { DATA } = await import('../ui/ext.slc.Ember/-dev/-sample.data.mjs');
     return root.render(<Root.Stateful slugs={DATA.slugs} />);
   },
 };

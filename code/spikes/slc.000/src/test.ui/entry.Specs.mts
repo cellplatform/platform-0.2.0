@@ -20,15 +20,15 @@ const importConcept = async () => {
 export const Specs = {
   // SLC ("Social Lean Canvas")
   'slc.tests': () => import('./-TestRunner'),
-  'slc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
-  'slc.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
+  'slc.ui.Info': () => import('../ui/slc.Info/-dev/-SPEC'),
+  'slc.ui.IFrameRef': () => import('../ui/slc.IFrameRef/-SPEC'),
 
   // System
-  'ext.ui.Stripe.Payment': () => import('../ui/ui.Payment.Stripe/-SPEC'),
+  'ext.ui.Payment.Stripe': () => import('../ui/ext.ui.Payment.Stripe/-SPEC'),
 
   // External (3rd party).
-  'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
-  'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC.Stateful'),
+  'ext.slc.Ember': () => import('../ui/ext.slc.Ember/-dev/-SPEC'),
+  'ext.slc.Ember.Stateful': () => import('../ui/ext.slc.Ember/-dev/-SPEC.Stateful'),
 
   // system
   ...(await importCommon()),
