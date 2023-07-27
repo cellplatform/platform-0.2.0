@@ -9,8 +9,8 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Dummy: typeof Dummy;
 };
-export const ConceptSlug = FC.decorate<t.ConceptSlugProps, Fields>(
+export const VideoDiagram = FC.decorate<t.VideoDiagramProps, Fields>(
   View,
   { DEFAULTS, Dummy },
-  { displayName: 'ConceptSlug' },
+  { displayName: 'VideoDiagram' },
 );

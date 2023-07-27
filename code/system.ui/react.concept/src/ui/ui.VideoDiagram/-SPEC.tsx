@@ -1,12 +1,12 @@
 import { Dev, Icons, css, rx, slug, type t } from '../../test.ui';
 
-import { ConceptSlug } from '.';
+import { VideoDiagram } from '.';
 import { Position, Vimeo } from './common';
 
-const DEFAULTS = ConceptSlug.DEFAULTS;
+const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
-  props: t.ConceptSlugProps;
+  props: t.VideoDiagramProps;
   debug: { dummy?: boolean };
 };
 const initial: T = {
@@ -48,8 +48,8 @@ export default Dev.describe('ConceptSlug', (e) => {
       .display('grid')
       .render<T>((e) => {
         const { debug, props } = e.state;
-        if (debug.dummy) return <ConceptSlug.Dummy vimeo={vimeo} />;
-        return <ConceptSlug {...props} vimeo={vimeo} />;
+        if (debug.dummy) return <VideoDiagram.Dummy vimeo={vimeo} />;
+        return <VideoDiagram {...props} vimeo={vimeo} />;
       });
   });
 

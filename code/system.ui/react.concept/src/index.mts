@@ -5,9 +5,9 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
- * Components
+ * Module API
  */
-export { Concept } from './ui/Concept';
+export { Concept } from './Concept';
 
 /**
  * Dev

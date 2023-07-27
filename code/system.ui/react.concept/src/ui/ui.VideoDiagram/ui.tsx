@@ -2,7 +2,7 @@ import { Vimeo, css, type t } from './common';
 import { ImageLayout } from './ui.Image';
 import { VideoLayout } from './ui.Video';
 
-export const View: React.FC<t.ConceptSlugProps> = (props) => {
+export const View: React.FC<t.VideoDiagramProps> = (props) => {
   const { slug, vimeo } = props;
   const player = Vimeo.usePlayer(vimeo);
 

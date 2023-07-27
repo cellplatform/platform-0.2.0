@@ -17,6 +17,9 @@ export type {
   JsonMapU,
   JsonU,
   ModuleDef,
+  Pos,
+  Position,
+  PositionInput,
   Size,
 } from 'sys.types/src/types.mjs';
 
