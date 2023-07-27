@@ -1,7 +1,7 @@
 import { Dev, Icons, css, rx, slug, type t } from '../../test.ui';
 
 import { VideoDiagram } from '.';
-import { Position, Vimeo } from './common';
+import { EdgePosition, Vimeo } from './common';
 
 const DEFAULTS = VideoDiagram.DEFAULTS;
 
@@ -60,7 +60,7 @@ export default Dev.describe('VideoDiagram', (e) => {
     dev.row((e) => {
       return (
         <div {...css({ display: 'grid', placeItems: 'center' })}>
-          <Position.Selector
+          <EdgePosition.Selector
             selected={e.state.props.slug?.video?.position}
             onSelect={(e) => {
               state.change((d) => {
