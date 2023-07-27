@@ -5,6 +5,6 @@ import { type t } from './common';
  */
 export type PositionProps = {
   children?: JSX.Element | false;
-  position?: t.PositionInput;
+  position?: t.EdgePositionInput;
   style?: t.CssValue;
 };

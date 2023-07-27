@@ -8,11 +8,11 @@ export type { CSSProperties } from 'react';
  */
 export type {
   DomRect,
-  Pos,
-  Position,
-  PositionInput,
-  PositionX,
-  PositionY,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
+  EdgePositionX,
+  EdgePositionY,
 } from 'sys.types/src/types.mjs';
 export type {
   KeyboardKeypress,

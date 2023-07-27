@@ -4,5 +4,5 @@ export * from '../common';
 /**
  * Constants
  */
-const pos: t.Pos = ['center', 'center'];
-export const DEFAULTS = { pos } as const;
+const position: t.EdgePos = ['center', 'center'];
+export const DEFAULTS = { position } as const;

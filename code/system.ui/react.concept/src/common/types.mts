@@ -11,9 +11,9 @@ export type {
   Disposable,
   EventBus,
   Lifecycle,
-  Pos,
-  Position,
-  PositionInput,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
 } from 'sys.types/src/types.mjs';
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 

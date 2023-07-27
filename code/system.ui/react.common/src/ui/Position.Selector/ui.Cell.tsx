@@ -3,7 +3,7 @@ import { COLORS, Color, DEFAULTS, css, type t } from './common';
 
 export type CellProps = {
   enabled?: boolean;
-  position: t.Position;
+  position: t.EdgePosition;
   selected?: boolean;
   style?: t.CssValue;
   onClick: t.PositionClickHandler;

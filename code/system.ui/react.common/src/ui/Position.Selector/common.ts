@@ -3,11 +3,11 @@ import { type t } from './common';
 export * from '../common';
 export { Grid } from '../Grid';
 
-const selected: t.Pos = ['left', 'top'];
-
 /**
  * Constants
  */
+const selected: t.EdgePos = ['left', 'top'];
+
 export const DEFAULTS = {
   enabled: true,
   size: 150,

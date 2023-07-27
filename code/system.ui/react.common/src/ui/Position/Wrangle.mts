@@ -9,8 +9,8 @@ const { pos } = WrangleSelector;
 export const Wrangle = {
   pos,
 
-  gridCss(input?: t.PositionInput): t.CSSProperties {
-    const pos = Wrangle.pos(input, DEFAULTS.pos);
+  gridCss(input?: t.EdgePositionInput): t.CSSProperties {
+    const pos = Wrangle.pos(input, DEFAULTS.position);
     return {
       display: 'grid',
       justifyContent: Wrangle.justifyContent(pos[0]),
@@ -18,14 +18,14 @@ export const Wrangle = {
     } as const;
   },
 
-  justifyContent(x: t.PositionX) {
+  justifyContent(x: t.EdgePositionX) {
     if (x === 'left') return 'start';
     if (x === 'center') return 'center';
     if (x === 'right') return 'end';
     return 'start';
   },
 
-  alignContent(x: t.PositionY) {
+  alignContent(x: t.EdgePositionY) {
     if (x === 'top') return 'start';
     if (x === 'center') return 'center';
     if (x === 'bottom') return 'end';

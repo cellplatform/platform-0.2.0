@@ -14,9 +14,9 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('ConceptSlug', (e) => {
-  type LocalStore = { videoPosition?: t.Pos } & Pick<T['debug'], 'dummy'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptSlug');
+export default Dev.describe('VideoDiagram', (e) => {
+  type LocalStore = { videoPosition?: t.EdgePos } & Pick<T['debug'], 'dummy'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.VideoDiagram');
   const local = localstore.object({
     videoPosition: DEFAULTS.position,
     dummy: false,
@@ -123,7 +123,7 @@ export default Dev.describe('ConceptSlug', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'ConceptSlug'} data={data} expand={1} />;
+      return <Dev.Object name={'VideoDiagram'} data={data} expand={1} />;
     });
   });
 });

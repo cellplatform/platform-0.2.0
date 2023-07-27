@@ -5,7 +5,7 @@ export * from '../common';
 /**
  * Constants
  */
-const position: t.Pos = ['center', 'center'];
+const position: t.EdgePos = ['center', 'center'];
 const imageSizing: t.ImageSizeStrategy = 'contain';
 
 const sample: t.ConceptSlug = {

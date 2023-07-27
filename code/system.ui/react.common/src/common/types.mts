@@ -10,6 +10,11 @@ export type { Observable, Subject } from 'rxjs';
 export type {
   Disposable,
   DomRect,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
+  EdgePositionX,
+  EdgePositionY,
   EventBus,
   IgnoredResponse,
   Immutable,
@@ -17,9 +22,6 @@ export type {
   JsonMapU,
   JsonU,
   ModuleDef,
-  Pos,
-  Position,
-  PositionInput,
   Size,
 } from 'sys.types/src/types.mjs';
 

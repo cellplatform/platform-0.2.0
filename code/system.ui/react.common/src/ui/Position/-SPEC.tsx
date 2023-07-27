@@ -10,7 +10,7 @@ export default Dev.describe('Position', (e) => {
   type LocalStore = Pick<t.PositionProps, 'position'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Position');
   const local = localstore.object({
-    position: DEFAULTS.pos,
+    position: DEFAULTS.position,
   });
 
   e.it('ui:init', async (e) => {

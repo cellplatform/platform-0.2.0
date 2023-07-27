@@ -1,8 +1,8 @@
 import { type t } from '../common';
 
-const left: t.Pos = ['left', 'bottom'];
-const center: t.Pos = ['center', 'bottom'];
-const right: t.Pos = ['right', 'bottom'];
+const left: t.EdgePos = ['left', 'bottom'];
+const center: t.EdgePos = ['center', 'bottom'];
+const right: t.EdgePos = ['right', 'bottom'];
 
 const position = center;
 

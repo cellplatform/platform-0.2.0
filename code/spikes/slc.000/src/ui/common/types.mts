@@ -16,9 +16,9 @@ export type {
   CssEdgesInput,
   CssValue,
   DomRect,
-  Pos,
-  Position,
-  PositionInput,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
   ProgressBarClickHandler,
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
