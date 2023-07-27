@@ -1,7 +1,8 @@
 import { css, DEFAULTS, FC, type t } from './common';
 
-import { PositionSelector as Selector } from '../ui.PositionSelector';
+import { PositionSelector as Selector } from '../Position.Selector';
 import { Wrangle } from './Wrangle.mjs';
+
 const toGridCss = Wrangle.gridCss;
 
 const View: React.FC<t.PositionProps> = (props) => {

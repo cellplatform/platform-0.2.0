@@ -18,6 +18,8 @@ export { IFrame } from './ui/IFrame';
 export { Icon } from './ui/Icon';
 export { Item } from './ui/Item';
 export { ObjectView } from './ui/ObjectView';
+export { Position } from './ui/Position';
+export { PositionSelector } from './ui/Position.Selector';
 export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
 export { QRCode } from './ui/QRCode';
