@@ -11,14 +11,23 @@ export const Filter = {
    *      'foo.bar': import('path'),
    *      'foo.bar.baz': import('path'),
    *    }
+   *
+   * Multiple filters can be applied by specifying " | " between each filter.
    */
   specs(all?: t.SpecImports, filter?: string, options: Options = {}): t.SpecImports {
     if (!all) return {};
-    if (!(filter || '').trim()) return all;
-    return Filter.namespaces(Object.keys(all), filter, options).reduce((acc, key) => {
-      acc[key] = all[key];
-      return acc;
-    }, {} as t.SpecImports);
+
+    const text = (filter || '').trim();
+    const filters = text.split(' | ').map((f) => f.trim());
+    if (!text) return all;
+
+    const res: t.SpecImports = {};
+    filters.forEach((filter) => {
+      const filtered = Filter.namespaces(Object.keys(all), filter, options);
+      filtered.forEach((ns) => (res[ns] = all[ns]));
+    });
+
+    return res;
   },
 
   /**
