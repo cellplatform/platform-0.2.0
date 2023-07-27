@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.442',
+  version: '0.0.443',
   dependencies: {
     'ext.stripe': '0.0.0',
     'ext.ui.react.vime': '0.0.0',
