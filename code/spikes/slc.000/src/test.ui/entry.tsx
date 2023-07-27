@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
 
 console.info(`Pkg:`, Pkg);
+
 const url = new URL(window.location.href);
 const queryHas = (...value: string[]) => value.some((v) => url.searchParams.has(v));
 const isDev = queryHas('dev', 'd');
