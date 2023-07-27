@@ -10,19 +10,19 @@ export type DownloadFileProps = {
 /**
  * Component
  */
-export type ConceptPlayerProps = {
+export type PlayBarProps = {
   vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug;
   download?: t.DownloadFileProps;
   style?: t.CssValue;
-  onPlayToggle?: ConceptPlayerHandler;
-  onPlayComplete?: ConceptPlayerHandler;
+  onPlayToggle?: PlayBarHandler;
+  onPlayComplete?: PlayBarHandler;
 };
 
 /**
  * Events
  */
-export type ConceptPlayerHandler = (e: ConceptPlayerHandlerArgs) => void;
-export type ConceptPlayerHandlerArgs = {
+export type PlayBarHandler = (e: PlayBarHandlerArgs) => void;
+export type PlayBarHandlerArgs = {
   status: t.VimeoStatus;
 };

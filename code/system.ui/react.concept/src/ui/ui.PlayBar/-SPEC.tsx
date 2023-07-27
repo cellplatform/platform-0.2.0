@@ -1,10 +1,10 @@
-import { ConceptPlayer } from '.';
+import { PlayBar } from '.';
 import { Color, Dev, Vimeo, css, rx, slug, type t } from '../../test.ui';
 
-const DEFAULTS = ConceptPlayer.DEFAULTS;
+const DEFAULTS = PlayBar.DEFAULTS;
 
 type T = {
-  props: t.ConceptPlayerProps;
+  props: t.PlayBarProps;
   debug: { devBg?: boolean; withSlug?: boolean; download?: boolean };
 };
 const initial: T = {
@@ -12,12 +12,12 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('ConceptPlayer', (e) => {
+export default Dev.describe('PlayBar', (e) => {
   /**
    * LocalStorage
    */
   type LocalStore = Pick<T['debug'], 'withSlug' | 'download' | 'devBg'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.ConceptPlayer');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     withSlug: true,
     download: true,
@@ -34,7 +34,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
    * State
    */
   const State = {
-    props(state: T): t.ConceptPlayerProps {
+    props(state: T): t.PlayBarProps {
       const { props, debug } = state;
 
       const url = 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf';
@@ -69,7 +69,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
         ctx.subject.backgroundColor(e.state.debug.devBg ? 1 : 0);
         const padding = e.state.debug.devBg ? 10 : 0;
         return (
-          <ConceptPlayer
+          <PlayBar
             {...props}
             style={{ padding }}
             onPlayComplete={(e) => {
@@ -145,7 +145,7 @@ export default Dev.describe('ConceptPlayer', (e) => {
         props,
         'props:slug': props.slug,
       };
-      return <Dev.Object name={'ConceptPlayer'} data={data} expand={1} />;
+      return <Dev.Object name={'PlayBar'} data={data} expand={1} />;
     });
   });
 });

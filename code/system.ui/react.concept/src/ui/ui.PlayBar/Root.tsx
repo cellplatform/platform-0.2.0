@@ -7,8 +7,8 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const ConceptPlayer = FC.decorate<t.ConceptPlayerProps, Fields>(
+export const PlayBar = FC.decorate<t.PlayBarProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'ConceptPlayer' },
+  { displayName: 'PlayBar' },
 );

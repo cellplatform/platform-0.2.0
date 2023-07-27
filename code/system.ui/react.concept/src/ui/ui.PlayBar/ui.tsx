@@ -2,7 +2,7 @@ import { COLORS, Color, ProgressBar, css, Vimeo, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
 import { PlayButton } from './ui.PlayButton';
 
-export const View: React.FC<t.ConceptPlayerProps> = (props) => {
+export const View: React.FC<t.PlayBarProps> = (props) => {
   const { vimeo, slug, onPlayToggle, onPlayComplete, download } = props;
   const player = Vimeo.usePlayer(vimeo, { onPlayToggle, onPlayComplete });
   const status = player.status;

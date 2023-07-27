@@ -1,9 +1,7 @@
-import { ConceptPlayer } from '../Concept.Player';
+import { PlayBar } from '../ui.PlayBar';
 import { ConceptSlug } from '../Concept.Slug';
 
-export { ConceptPlayer, ConceptSlug };
-
 export const Concept = {
-  Player: ConceptPlayer,
+  PlayBar: PlayBar,
   Slug: ConceptSlug,
 } as const;
