@@ -68,7 +68,7 @@ export default Dev.describe('Grid', (e) => {
         dev.button((btn) => {
           btn
             .label(`total: ${total} x ${total}`)
-            .right((e) => (current(e.state) === total ? `←` : right))
+            .right((e) => (current(e.state) === total ? `← ` : '') + right)
             .onClick((e) => e.change((d) => (local.total = config(d).total = total)));
         });
       };
