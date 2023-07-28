@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.ui.react.media.image',
+  name: 'sys.ui.react.image',
   version: '0.0.0',
   dependencies: {
     'react': '18.2.0',

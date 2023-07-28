@@ -15,7 +15,7 @@ export type {
   EdgePosition,
   EdgePositionInput,
 } from 'sys.types/src/types.mjs';
-export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
+export type { ImageSizeStrategy } from 'sys.ui.react.image/src/types.mjs';
 
 /**
  * @local

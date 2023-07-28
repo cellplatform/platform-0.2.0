@@ -16,7 +16,7 @@ export type {
   ProgressBarClickHandler,
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';
-export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
+export type { ImageSizeStrategy } from 'sys.ui.react.image/src/types.mjs';
 
 /**
  * @local

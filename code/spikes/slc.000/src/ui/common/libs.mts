@@ -29,4 +29,4 @@ export {
   useSizeObserver,
 } from 'sys.ui.react.common';
 export { Concept } from 'sys.ui.react.concept';
-export { Image } from 'sys.ui.react.media.image';
+export { Image } from 'sys.ui.react.image';
