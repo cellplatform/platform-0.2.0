@@ -111,7 +111,7 @@ export default Dev.describe('VideoDiagram', (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.dummy);
         btn
-          .label((e) => `dummy`)
+          .label((e) => (value(e.state) ? 'dummy: true ⚠️' : 'dummy: false'))
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.dummy = Dev.toggle(d.debug, 'dummy'))));
       });
