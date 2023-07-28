@@ -14,9 +14,9 @@ const initial: T = {
  * Vime Docs:
  * https://vimejs.com/
  */
-export default Dev.describe('VimePlayer', (e) => {
+export default Dev.describe('Player', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.VimePlayer');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
   });
