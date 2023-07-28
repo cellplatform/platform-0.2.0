@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.ui.react.vime',
+  name: 'sys.ui.react.media.video',
   version: '0.0.0',
   dependencies: {
     '@vime/core': '5.4.1',

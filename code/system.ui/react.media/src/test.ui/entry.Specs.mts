@@ -1,7 +1,7 @@
 export { Pkg } from '../index.pkg.mjs';
 
 export const ExtSpecs = {
-  'sys.ui.media.video.YouTube': () => import('../ui/vendor.YouTube/-dev/-SPEC'),
+  'sys.ui.media.video.YouTube__': () => import('../ui/vendor.YouTube/-dev/-SPEC'),
 };
 
 export const Specs = {
