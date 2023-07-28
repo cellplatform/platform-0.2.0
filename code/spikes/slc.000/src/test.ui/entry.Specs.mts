@@ -6,27 +6,32 @@ const importCommon = async () => {
   return {
     'sys.ui.common.Grid': Specs['sys.ui.common.Grid'],
     'sys.ui.common.Item.LabelItem': Specs['sys.ui.common.Item.LabelItem'],
+    'sys.ui.common.EdgePosition': Specs['sys.ui.common.EdgePosition'],
+    'sys.ui.common.EdgePosition.Selector': Specs['sys.ui.common.EdgePosition.Selector'],
   };
+};
+
+const importConcept = async () => {
+  const { dev } = await import('sys.ui.react.concept');
+  const { Specs } = await dev();
+  return Specs;
 };
 
 export const Specs = {
   // SLC ("Social Lean Canvas")
   'slc.tests': () => import('./-TestRunner'),
-  'slc.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
-  'slc.IFrameRef': () => import('../ui/ui.IFrameRef/-SPEC'),
+  'slc.ui.Info': () => import('../ui/slc.Info/-dev/-SPEC'),
+  'slc.ui.IFrameRef': () => import('../ui/slc.IFrameRef/-SPEC'),
 
-  'sys.common.ui.Concept.Slug': () => import('../ui/ui.Concept.Slug/-SPEC'),
-  'sys.common.ui.Concept.Player': () => import('../ui/ui.Concept.Player/-SPEC'),
-  'sys.common.ui.Position': () => import('../ui/ui.Position/-SPEC'),
-  'sys.common.ui.Position.Selector': () => import('../ui/ui.PositionSelector/-SPEC'),
-  'sys.common.ui.Payment.Stripe': () => import('../ui/ui.Payment.Stripe/-SPEC'),
+  // System
+  'ext.ui.Payment.Stripe': () => import('../ui/ext.ui.Payment.Stripe/-SPEC'),
 
-  // External
-  'slc.ext.Ember': () => import('../ui/ext.Ember/-dev/-SPEC'),
-  'slc.ext.Ember.Stateful': () => import('../ui/ext.Ember/-dev/-SPEC.Stateful'),
+  // External (Partitions).
+  'ext.slc.Ember': () => import('../ui/ext.slc.Ember/-SPEC'),
 
-  // sys.common
+  // system
   ...(await importCommon()),
+  ...(await importConcept()),
 };
 
 export default Specs;

@@ -26,7 +26,7 @@
     "sys.ui.dom": "0.0.0",
     "sys.ui.react.common": "0.0.0",
     "sys.ui.react.monaco": "0.0.0",
-    "sys.ui.react.media.image": "0.0.0"
+    "sys.ui.react.image": "0.0.0"
   },
   "license": "MIT",
   "private": true,

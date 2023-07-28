@@ -167,7 +167,7 @@ export default Dev.describe('WebRtcInfo', async (e) => {
     ctx.host.layer(1).render<T>(async (e) => {
       if (!props.current.imageShow) return null;
 
-      const { Image } = await import('sys.ui.react.media.image');
+      const { Image } = await import('sys.ui.react.image');
 
       return (
         <Image

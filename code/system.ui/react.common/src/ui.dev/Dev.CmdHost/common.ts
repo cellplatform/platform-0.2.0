@@ -1,6 +1,7 @@
-import { DevBase, DEFAULTS as BASE } from '../common';
+import { DEFAULTS as BASE, DevBase } from '../common';
 
 export * from '../common';
+export * from './common.Filter';
 export const SpecList = DevBase.SpecList;
 
 /**

@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { Pkg } from '../index.pkg.mjs';
 
 console.info(`Pkg:`, Pkg);
+
 const url = new URL(window.location.href);
 const queryHas = (...value: string[]) => value.some((v) => url.searchParams.has(v));
 const isDev = queryHas('dev', 'd');
@@ -18,14 +19,13 @@ const Render = {
   },
 
   async ref(src: string) {
-    const { IFrameRef } = await import('../ui/ui.IFrameRef');
+    const { IFrameRef } = await import('../ui/slc.IFrameRef');
     return root.render(<IFrameRef src={src} />);
   },
 
   async ember() {
-    const { Root } = await import('../ui/ext.Ember');
-    const { DATA } = await import('../ui/ext.Ember/-dev/-sample.data.mjs');
-    return root.render(<Root.Stateful slugs={DATA.slugs} />);
+    const { render } = await import('../ui/ext.slc.Ember');
+    return await render();
   },
 };
 

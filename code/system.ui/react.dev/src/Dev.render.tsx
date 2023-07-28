@@ -38,7 +38,7 @@ export async function render(
     <SpecList
       title={pkg.name}
       version={pkg.version}
-      imports={specs}
+      specs={specs}
       badge={options.badge}
       hrDepth={options.hrDepth}
       style={style}

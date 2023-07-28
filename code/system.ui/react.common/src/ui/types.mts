@@ -11,6 +11,8 @@ export type * from './Item.LabelItem.Stateful/types.mjs';
 export type * from './Item.LabelItem/types.mjs';
 export type * from './Item/types.mjs';
 export type * from './ObjectView/types.mjs';
+export type * from './EdgePosition.Selector/types.mjs';
+export type * from './EdgePosition/types.mjs';
 export type * from './ProgressBar/types.mjs';
 export type * from './PropList.FieldSelector/types.mjs';
 export type * from './PropList/types.mjs';
@@ -21,6 +23,7 @@ export type * from './Text.Keyboard/types.mjs';
 export type * from './Text.Secret/types.mjs';
 export type * from './Text.Syntax/types.mjs';
 export type * from './Text/types.mjs';
+
 export type * from './useDragTarget/types.mjs';
 export type * from './useFocus/types.mjs';
 export type * from './useSizeObserver/types.mjs';

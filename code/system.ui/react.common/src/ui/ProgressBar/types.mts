@@ -1,11 +1,22 @@
-type Seconds = number;
-type Percentage = number; // 0..1
+import { type t } from './common';
 
+type Percent = number; // 0..1  ←(0=0%, 1=100%)
+
+/**
+ * Component
+ */
+export type ProgressBarProps = {
+  percent?: Percent;
+  thumbColor?: string;
+  height?: number;
+  style?: t.CssValue;
+  onClick?: ProgressBarClickHandler;
+};
+
+/**
+ * Events
+ */
 export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
-export type ProgressBarClickHandlerArgs = { percent: Percentage };
-
-export type TimeWindow = {
-  label?: string;
-  start?: Seconds | null;
-  end?: Seconds | null;
+export type ProgressBarClickHandlerArgs = {
+  percent: Percent;
 };

@@ -1,4 +1,4 @@
-import { DEFAULTS, R, SpecList, rx, t } from './common';
+import { DEFAULTS, Filter, R, rx, type t } from './common';
 
 import { useEffect, useRef, useState } from 'react';
 import { CmdHost, type CmdHostProps } from './Root';
@@ -19,7 +19,7 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   const [isFocused, setFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const specs = SpecList.Filter.specs(props.specs, command, { maxErrors: 1 });
+  const specs = Filter.specs(props.specs, command, { maxErrors: 1 });
   const total = Object.keys(specs).length;
   const hintKeys = Wrangle.hintKey({ isFocused, selectedIndex, specs, command });
 
@@ -100,7 +100,9 @@ export const CmdHostStateful: React.FC<CmdHostStatefulProps> = (props) => {
   return (
     <CmdHost
       {...props}
+      specs={specs}
       command={command}
+      applyFilter={false} // NB: Filter already applied above.
       selectedIndex={isFocused ? selectedIndex : undefined}
       hintKey={hintKeys}
       scrollTo$={scrollToRef$.current}

@@ -35,7 +35,7 @@ export default Spec.describe('SpecList', (e) => {
           <SpecList
             title={Pkg.name}
             version={Pkg.version}
-            imports={specs}
+            specs={specs}
             hrDepth={2}
             scroll={true}
             // filter={'foo'}

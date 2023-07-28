@@ -11,11 +11,13 @@
 
 export const Pkg: ModuleDef = {
   name: 'slc',
-  version: '0.0.48',
+  version: '0.0.49',
   dependencies: {
+    'ext.ui.react.vimeo': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.ui.react.common': '0.0.0',
+    'sys.ui.react.concept': '0.0.0',
     'sys.util': '0.0.0',
   },
   toString() {

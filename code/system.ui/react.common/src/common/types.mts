@@ -10,6 +10,11 @@ export type { Observable, Subject } from 'rxjs';
 export type {
   Disposable,
   DomRect,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
+  EdgePositionX,
+  EdgePositionY,
   EventBus,
   IgnoredResponse,
   Immutable,

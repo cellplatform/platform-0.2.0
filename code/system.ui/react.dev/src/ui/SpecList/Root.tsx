@@ -1,20 +1,19 @@
 import { useRef } from 'react';
 
-import { COLORS, css, FC, Filter, t, useRubberband } from './common';
+import { COLORS, DEFAULTS, FC, css, useRubberband, type t } from './common';
 import { Footer } from './ui.Footer';
 import { List } from './ui.List';
 import { Title } from './ui.Title';
-import { useScrollObserver } from './useScrollObserver.mjs';
 import { useScrollController } from './useScrollController.mjs';
+import { useScrollObserver } from './useScrollObserver.mjs';
 
 type LiMap = Map<number, HTMLLIElement>;
 
 export type SpecListProps = {
   title?: string;
   version?: string;
-  imports?: t.SpecImports;
+  specs?: t.SpecImports;
   selectedIndex?: number;
-  filter?: string;
   href?: string;
   hrDepth?: number;
   badge?: t.SpecListBadge;
@@ -28,7 +27,7 @@ export type SpecListProps = {
 const View: React.FC<SpecListProps> = (props) => {
   const { scroll = false } = props;
   const url = new URL(props.href ?? window.location.href);
-  const imports = Filter.specs(props.imports, props.filter);
+  const imports = props.specs ?? {};
 
   const baseRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<LiMap>(new Map<number, HTMLLIElement>());
@@ -105,10 +104,10 @@ const View: React.FC<SpecListProps> = (props) => {
  * Export
  */
 type Fields = {
-  Filter: typeof Filter;
+  DEFAULTS: typeof DEFAULTS;
 };
 export const SpecList = FC.decorate<SpecListProps, Fields>(
   View,
-  { Filter },
+  { DEFAULTS },
   { displayName: 'SpecList' },
 );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { css, SpecList, type t } from './common';
+import { css, SpecList, type t, Filter } from './common';
 import { CmdBar } from './ui.CmdBar';
 import { useKeyboard } from './useKeyboard.mjs';
 
@@ -8,6 +8,7 @@ export type CmdHostProps = {
   pkg: { name: string; version: string };
   specs?: t.SpecImports;
   command?: string;
+  applyFilter?: boolean;
   selectedIndex?: number;
   hintKey?: string | string[];
   hrDepth?: number;
@@ -23,7 +24,9 @@ export type CmdHostProps = {
 };
 
 export const CmdHost: React.FC<CmdHostProps> = (props) => {
-  const { pkg } = props;
+  const { pkg, applyFilter = true } = props;
+  const filteredSpecs = applyFilter ? Filter.specs(props.specs, props.command) : props.specs;
+
   const [textboxRef, setTextboxRef] = useState<t.TextInputRef>();
 
   useKeyboard(textboxRef, {
@@ -55,8 +58,7 @@ export const CmdHost: React.FC<CmdHostProps> = (props) => {
         <SpecList
           title={pkg.name}
           version={pkg.version}
-          imports={props.specs}
-          filter={props.command}
+          specs={filteredSpecs}
           badge={props.badge}
           hrDepth={props.hrDepth}
           scroll={true}
