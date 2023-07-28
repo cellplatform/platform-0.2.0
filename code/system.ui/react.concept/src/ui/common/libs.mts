@@ -26,4 +26,4 @@ export {
   useRubberband,
   useSizeObserver,
 } from 'sys.ui.react.common';
-export { Image } from 'sys.ui.react.image';
+export { Image } from 'sys.ui.react.media.image';
