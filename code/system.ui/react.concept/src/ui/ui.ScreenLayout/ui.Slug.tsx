@@ -1,4 +1,4 @@
-import { COLORS, Color, Concept, DEFAULTS, css, type t } from './common';
+import { COLORS, Color, DEFAULTS, VideoDiagram, css, type t } from './common';
 import { Empty } from './ui.Empty';
 
 export type SlugProps = {
@@ -26,7 +26,7 @@ export const Slug: React.FC<SlugProps> = (props) => {
   };
 
   const elEmpty = !slug && <Empty text={DEFAULTS.text.nothingSelected} />;
-  const elMain = slug && <Concept.VideoDiagram slug={slug} vimeo={vimeo} />;
+  const elMain = slug && <VideoDiagram slug={slug} vimeo={vimeo} />;
 
   return (
     <div {...css(styles.base, props.style)}>

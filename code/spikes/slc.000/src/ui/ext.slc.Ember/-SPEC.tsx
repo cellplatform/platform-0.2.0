@@ -1,27 +1,25 @@
-import { Dev, type t } from '../../../test.ui';
-import { Root } from '..';
-import { DATA } from './-sample.data.mjs';
+import { Dev } from '../../test.ui';
+import { render } from './index.render';
 
-type T = { props: t.RootStatefulProps };
-const initial: T = { props: {} };
+type T = {};
+const initial: T = {};
 
-export default Dev.describe('Root (Stateful)', (e) => {
+export default Dev.describe('Ember (Example Agency)', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
-    await state.change((d) => {
-      d.props.slugs = DATA.slugs;
-    });
+    await state.change((d) => {});
 
     ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        return <Root.Stateful {...e.state.props} />;
+      .render<T>(async (e) => {
+        const el = await render();
+        return el;
       });
   });
 

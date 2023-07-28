@@ -3,6 +3,7 @@ import { type t } from './common';
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.VideoDiagram/types.mjs';
+export type * from './ui/ui.ScreenLayout/types.mjs';
 
 type Id = string;
 type Url = string;

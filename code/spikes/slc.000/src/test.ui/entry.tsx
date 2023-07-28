@@ -24,9 +24,8 @@ const Render = {
   },
 
   async ember() {
-    const { Root } = await import('../ui/ext.slc.Ember');
-    const { DATA } = await import('../ui/ext.slc.Ember/-dev/-sample.data.mjs');
-    return root.render(<Root.Stateful slugs={DATA.slugs} />);
+    const { render } = await import('../ui/ext.slc.Ember');
+    return await render();
   },
 };
 

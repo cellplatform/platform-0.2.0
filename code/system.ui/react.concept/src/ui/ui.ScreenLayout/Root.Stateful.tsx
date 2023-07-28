@@ -3,13 +3,13 @@ import { rx, slug, type t } from '../common';
 import { View } from './ui';
 import { Wrangle } from './Wrangle.mjs';
 
-export const Stateful: React.FC<t.RootStatefulProps> = (props) => {
+export const Stateful: React.FC<t.ScreenLayoutStatefulProps> = (props) => {
   const { slugs = [] } = props;
 
   const busRef = useRef(rx.bus());
   const [vimeo, setVimeo] = useState<t.VimeoInstance>();
   const [selected, setSelected] = useState(0);
-  const [focused, setFocused] = useState<t.RootPropsFocused>('index');
+  const [focused, setFocused] = useState<t.ScreenLayoutFocused>('index');
   const updateFocus = (status: t.VimeoStatus) => {
     setFocused(status.playing ? 'player.footer' : 'index');
   };

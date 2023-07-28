@@ -12,5 +12,5 @@ type Fields = {
 export const VideoDiagram = FC.decorate<t.VideoDiagramProps, Fields>(
   View,
   { DEFAULTS, Dummy },
-  { displayName: 'VideoDiagram' },
+  { displayName: 'Concept.VideoDiagram' },
 );

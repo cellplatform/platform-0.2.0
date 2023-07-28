@@ -9,6 +9,7 @@ export type { VimeoInstance, VimeoStatus } from 'ext.ui.react.vimeo/src/types.mj
 export type {
   CssEdgesInput,
   CssValue,
+  DomRect,
   EdgePos as Pos,
   EdgePosition as Position,
   EdgePositionInput as PositionInput,

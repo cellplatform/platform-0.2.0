@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Module API
  */
-export { Concept } from './Concept';
+export { Concept } from './index.Concept';
 
 /**
  * Dev

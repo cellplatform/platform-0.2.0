@@ -9,9 +9,9 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Stateful: typeof Stateful;
 };
-export const Root = FC.decorate<t.RootProps, Fields>(
+export const ScreenLayout = FC.decorate<t.ScreenLayoutProps, Fields>(
   //
   View,
   { DEFAULTS, Stateful },
-  { displayName: 'Root' },
+  { displayName: 'Concept.ScreenLayout' },
 );

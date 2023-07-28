@@ -13,6 +13,8 @@ export {
   Color,
   EdgePosition,
   FC,
+  Grid,
+  Item,
   Keyboard,
   ProgressBar,
   PropList,
@@ -21,5 +23,7 @@ export {
   useDragTarget,
   useFocus,
   useMouseState,
+  useRubberband,
+  useSizeObserver,
 } from 'sys.ui.react.common';
 export { Image } from 'sys.ui.react.media.image';

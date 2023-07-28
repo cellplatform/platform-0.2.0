@@ -10,5 +10,5 @@ type Fields = {
 export const PlayBar = FC.decorate<t.PlayBarProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'PlayBar' },
+  { displayName: 'Concept.PlayBar' },
 );

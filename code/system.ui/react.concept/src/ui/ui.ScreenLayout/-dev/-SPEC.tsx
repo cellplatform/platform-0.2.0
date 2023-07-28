@@ -1,13 +1,13 @@
 import { Dev, Icons, Vimeo, rx, slug, type t } from '../../../test.ui';
 
-import { Root } from '..';
+import { ScreenLayout } from '..';
 import { Wrangle } from '../Wrangle.mjs';
 import { DATA } from './-sample.data.mjs';
 
-const DEFAULTS = Root.DEFAULTS;
+const DEFAULTS = ScreenLayout.DEFAULTS;
 
 type T = {
-  props: t.RootProps;
+  props: t.ScreenLayoutProps;
   debug: { withSlugs?: boolean };
 };
 const initial: T = {
@@ -15,9 +15,10 @@ const initial: T = {
   debug: {},
 };
 
-export default Dev.describe('Landing.Ember', (e) => {
-  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.RootProps, 'selected' | 'focused'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:landing.ember');
+export default Dev.describe('ScreenLayout', (e) => {
+  type LocalStore = Pick<T['debug'], 'withSlugs'> &
+    Pick<t.ScreenLayoutProps, 'selected' | 'focused'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.ScreenLayout');
   const local = localstore.object({
     withSlugs: true,
     selected: -1,
@@ -29,9 +30,9 @@ export default Dev.describe('Landing.Ember', (e) => {
   const player = Vimeo.Events(vimeo);
 
   const State = {
-    displayProps(state: T): t.RootProps {
+    displayProps(state: T): t.ScreenLayoutProps {
       const { debug } = state;
-      const props: t.RootProps = { ...state.props, vimeo };
+      const props: t.ScreenLayoutProps = { ...state.props, vimeo };
       if (!debug.withSlugs) delete props.slugs;
       return props;
     },
@@ -55,7 +56,7 @@ export default Dev.describe('Landing.Ember', (e) => {
       .render<T>((e) => {
         const props = State.displayProps(e.state);
         return (
-          <Root
+          <ScreenLayout
             {...props}
             onSelect={(e) => {
               state.change((d) => (d.props.selected = e.index));
@@ -77,7 +78,7 @@ export default Dev.describe('Landing.Ember', (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
-      const focused = (value?: t.RootPropsFocused, label?: string) => {
+      const focused = (value?: t.ScreenLayoutFocused, label?: string) => {
         const current = (state: T) => state.props.focused;
         dev.button((btn) => {
           btn
@@ -158,7 +159,7 @@ export default Dev.describe('Landing.Ember', (e) => {
     dev.footer.border(-0.1).render<T>((e) => {
       const props = State.displayProps(e.state);
       const data = { props };
-      return <Dev.Object name={'Landing.Ember'} data={data} expand={1} />;
+      return <Dev.Object name={'ScreenLayout'} data={data} expand={1} />;
     });
   });
 });

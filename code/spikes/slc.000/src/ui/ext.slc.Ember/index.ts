@@ -1,1 +1,1 @@
-export * from './Root';
+export * from './index.render';

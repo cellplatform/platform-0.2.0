@@ -26,9 +26,8 @@ export const Specs = {
   // System
   'ext.ui.Payment.Stripe': () => import('../ui/ext.ui.Payment.Stripe/-SPEC'),
 
-  // External (3rd party).
-  'ext.slc.Ember': () => import('../ui/ext.slc.Ember/-dev/-SPEC'),
-  'ext.slc.Ember.Stateful': () => import('../ui/ext.slc.Ember/-dev/-SPEC.Stateful'),
+  // External (Partitions).
+  'ext.slc.Ember': () => import('../ui/ext.slc.Ember/-SPEC'),
 
   // system
   ...(await importCommon()),

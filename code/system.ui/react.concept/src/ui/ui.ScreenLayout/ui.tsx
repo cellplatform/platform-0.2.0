@@ -4,7 +4,7 @@ import { Body } from './ui.Body';
 import { Empty } from './ui.Empty';
 import { Index } from './ui.Index';
 
-export const View: React.FC<t.RootProps> = (props) => {
+export const View: React.FC<t.ScreenLayoutProps> = (props) => {
   const { slugs = [], selected, vimeo } = props;
   const isEmpty = slugs.length === 0;
   let warning = !vimeo ? '⚠️ Vimeo instance not specified.' : undefined;
