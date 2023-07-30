@@ -1,8 +1,8 @@
 import { Dev, type t } from '../../../test.ui';
-import { Root } from '..';
+import { VideoPlayer } from '..';
 
 type T = {
-  props: t.RootProps;
+  props: t.VideoPlayerProps;
   debug: { devWidth?: number };
 };
 const initial: T = {
@@ -37,7 +37,7 @@ export default Dev.describe('Player', (e) => {
       .render<T>((e) => {
         const { debug, props } = e.state;
         ctx.subject.size([debug.devWidth, null]);
-        return <Root {...props} />;
+        return <VideoPlayer {...props} />;
       });
   });
 

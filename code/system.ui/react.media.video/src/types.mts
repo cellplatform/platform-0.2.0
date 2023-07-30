@@ -1,13 +1,13 @@
 export type * from './ui/ui.Info/types.mjs';
-export type * from './ui/ui.Player/types.mjs';
+export type * from './ui/ui.VideoPlayer/types.mjs';
+
+export type VideoId = string;
 
 /**
- * TODO 🐷
- * - rename module to: [sys.ui.video]
+ * Common Video Media Definition
  */
-
 export type Video = {
-  id: string;
+  id: VideoId;
   status: VideoStatus;
 };
 
