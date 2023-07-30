@@ -1,6 +1,11 @@
+import { type t } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+const unknown: t.VideoDef = { kind: 'Unknown', id: '' };
+
+export const DEFAULTS = {
+  unknown,
+} as const;

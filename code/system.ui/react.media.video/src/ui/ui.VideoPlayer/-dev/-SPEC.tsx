@@ -1,5 +1,8 @@
 import { Dev, type t } from '../../../test.ui';
 import { VideoPlayer } from '..';
+import { SAMPLE } from './-Sample.mjs';
+
+const DEFAULTS = VideoPlayer.DEFAULTS;
 
 type T = {
   props: t.VideoPlayerProps;
@@ -15,10 +18,11 @@ const initial: T = {
  * https://vimejs.com/
  */
 export default Dev.describe('Player', (e) => {
-  type LocalStore = Pick<T['debug'], 'devWidth'>;
+  type LocalStore = Pick<T['debug'], 'devWidth'> & Pick<t.VideoPlayerProps, 'video'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
+    video: SAMPLE.VIMEO.Tubes,
   });
 
   e.it('ui:init', async (e) => {
@@ -27,12 +31,12 @@ export default Dev.describe('Player', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.video = local.video;
       d.debug.devWidth = local.devWidth;
     });
 
     ctx.subject
       .backgroundColor(1)
-      // .size([500, null])
       .display('grid')
       .render<T>((e) => {
         const { debug, props } = e.state;
@@ -45,7 +49,25 @@ export default Dev.describe('Player', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const ctx = dev.ctx;
     const state = await dev.state();
-    dev.TODO();
+
+    dev.section('Video', (dev) => {
+      const def = (def: t.VideoDef, hint?: string) => {
+        const isCurrent = () => def.id === state.current.props.video?.id;
+        dev.button((btn) => {
+          btn
+            .label(`${def.kind}: “${def.id || '<empty>'}” ${hint ? `(${hint})` : ''}`)
+            .right((e) => (isCurrent() ? `←` : ''))
+            .onClick((e) => e.change((d) => (local.video = d.props.video = def)));
+        });
+      };
+
+      def(SAMPLE.VIMEO.Tubes, 'Tubes');
+      def(SAMPLE.VIMEO.Running, 'Running');
+      dev.hr(-1, 5);
+      def(SAMPLE.YOUTUBE.AlanKay, 'Alan Kay');
+      dev.hr(-1, 5);
+      def(DEFAULTS.unknown);
+    });
 
     dev.hr(5, 20);
 
