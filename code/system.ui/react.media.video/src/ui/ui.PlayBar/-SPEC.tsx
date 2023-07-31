@@ -1,5 +1,9 @@
 import { Dev, type t } from '../../test.ui';
 import { PlayBar } from '.';
+import { VideoPlayer } from '../ui.VideoPlayer';
+import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
+
+const DEFAULTS = PlayBar.DEFAULTS;
 
 type T = {
   props: t.PlayBarProps;
@@ -14,9 +18,10 @@ export default Dev.describe('PlayBar', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'devBg'>;
+  type LocalStore = Pick<T['debug'], 'devBg'> & Pick<t.PlayBarProps, 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
+    enabled: DEFAULTS.enabled,
     devBg: false,
   });
 
@@ -26,6 +31,7 @@ export default Dev.describe('PlayBar', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.enabled = local.enabled;
       d.debug.devBg = local.devBg;
     });
 
@@ -45,6 +51,25 @@ export default Dev.describe('PlayBar', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
+    dev.row((e) => {
+      const { props } = e.state;
+      return <VideoPlayer video={SAMPLE.VIMEO.Tubes} enabled={props.enabled} borderRadius={10} />;
+    });
+
+    dev.hr(0, 15);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.enabled);
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {

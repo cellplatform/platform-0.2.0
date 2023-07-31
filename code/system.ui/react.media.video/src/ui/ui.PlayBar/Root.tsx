@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { PlayButton, Color, COLORS, css, DEFAULTS, FC, rx, type t, ProgressBar } from './common';
 
 const View: React.FC<t.PlayBarProps> = (props) => {
+  const { enabled = DEFAULTS.enabled } = props;
+
   /**
    * [Render]
    */
@@ -10,7 +12,6 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     base: css({
       height,
       boxSizing: 'border-box',
-
       display: 'grid',
       gridTemplateColumns: 'auto 1fr',
       alignContent: 'center',
@@ -22,8 +23,8 @@ const View: React.FC<t.PlayBarProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PlayButton style={styles.button} />
-      <ProgressBar style={styles.bar} height={height} />
+      <PlayButton enabled={enabled} style={styles.button} />
+      <ProgressBar enabled={enabled} style={styles.bar} height={height} />
     </div>
   );
 };
