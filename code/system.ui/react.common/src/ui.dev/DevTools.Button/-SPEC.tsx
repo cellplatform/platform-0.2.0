@@ -71,6 +71,13 @@ export default Dev.describe('Button', (e) => {
         .button('right: `<div>123</div>`', (e) =>
           e.change(({ props }) => (props.rightElement = <div>123</div>)),
         );
+
+      dev.button((btn) => {
+        btn
+          .label(`right: false`)
+          .right((e) => false && `←`)
+          .onClick((e) => {});
+      });
     });
 
     dev.hr(5, 15);

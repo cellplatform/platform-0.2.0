@@ -2,7 +2,7 @@ import { COLORS, Spinner, t, ValueHandler } from '../common';
 import { Button } from './ui.Button';
 
 type O = Record<string, unknown>;
-type RightInput = string | JSX.Element;
+type RightInput = string | false | JSX.Element;
 type SpinnerInput = boolean;
 
 /**
@@ -28,6 +28,7 @@ export function button<S extends O = O>(
     rightElement() {
       if (values.spinner.current) return <Spinner.Bar color={COLORS.GREEN} width={35} />;
       const right = values.right.current;
+      if (right === false) return undefined;
       return typeof right === 'string' ? <div>{right}</div> : right;
     },
   };
