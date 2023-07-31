@@ -1,3 +1,4 @@
+import { FiDownload, FiDownloadCloud } from 'react-icons/fi';
 import {
   MdArrowBack,
   MdArrowDownward,
@@ -6,12 +7,9 @@ import {
   MdInfoOutline,
   MdOutlineDownloadForOffline,
   MdPause,
-  MdPauseCircle,
   MdPlayArrow,
-  MdPlayCircle,
   MdReplay,
 } from 'react-icons/md';
-import { FiDownloadCloud, FiDownload } from 'react-icons/fi';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -21,14 +19,8 @@ const icon = Icon.renderer;
  */
 export const Icons = {
   Info: icon(MdInfoOutline),
-  Play: {
-    Sharp: icon(MdPlayArrow),
-    Circle: icon(MdPlayCircle),
-  },
-  Pause: {
-    Sharp: icon(MdPause),
-    Circle: icon(MdPauseCircle),
-  },
+  Play: icon(MdPlayArrow),
+  Pause: icon(MdPause),
   Replay: icon(MdReplay),
   Arrow: {
     Left: icon(MdArrowBack),

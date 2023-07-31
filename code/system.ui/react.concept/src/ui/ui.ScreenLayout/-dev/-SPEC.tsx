@@ -100,14 +100,14 @@ export default Dev.describe('ScreenLayout', (e) => {
       dev.button((btn) => {
         btn
           .label('play')
-          .right((e) => <Icons.Play.Sharp size={16} />)
+          .right((e) => <Icons.Play size={16} />)
           .onClick((e) => player.play.fire());
       });
 
       dev.button((btn) => {
         btn
           .label('pause')
-          .right((e) => <Icons.Pause.Sharp size={16} />)
+          .right((e) => <Icons.Pause size={16} />)
           .onClick((e) => player.pause.fire());
       });
 
