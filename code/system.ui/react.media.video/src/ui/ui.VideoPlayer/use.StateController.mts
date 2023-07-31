@@ -4,6 +4,7 @@ import { Time, DEFAULTS, type t } from './common';
 
 import { type PlayerProps } from '@vime/react';
 
+type C = CustomEvent;
 type Seconds = number;
 type Args = {
   video?: t.VideoDef;
@@ -21,13 +22,11 @@ export function useStateController(args: Args) {
   const def = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
 
   const ref = useRef<HTMLVmPlayerElement>(null);
-
-  const [src, setSrc] = useState('');
   const [video, setVideo] = useState<t.VideoDef>(DEFAULTS.unknown);
   const [ready, setReady] = useState(false);
   const [total, setTotal] = useState<Seconds>(-1);
-  const [current, setCurrent] = useState<Seconds>(0);
-  const [buffered, setBuffered] = useState<Seconds>(0);
+  const [current, setCurrent] = useState<Seconds>(-1);
+  const [buffered, setBuffered] = useState<Seconds>(-1);
   const [buffering, setBuffering] = useState(false);
 
   const fireChange = (input?: t.VideoStatus) => {
@@ -86,25 +85,17 @@ export function useStateController(args: Args) {
     updatePlay();
   };
   const onVmCurrentTimeChange = (e: CustomEvent<number>) => setCurrent(e.detail);
-  const onVmCurrentSrcChange = (e: CustomEvent<PlayerProps['currentSrc']>) => {
-    setSrc(e.detail ?? '');
-  };
   const onVmDurationChange = (e: CustomEvent<number>) => {
     setTotal(e.detail);
     updatePlay();
   };
   const onVmBufferingChange = (e: CustomEvent<PlayerProps['buffering']>) => setBuffering(e.detail);
   const onVmBufferedChange = (e: CustomEvent<number>) => setBuffered(e.detail);
-  // const onVmPlay = (e: CustomEvent<void>) => {};
-  // const onVmPause = (e: CustomEvent<void>) => {};
 
   const handlers = {
     onVmReady,
-    onVmCurrentSrcChange,
     onVmCurrentTimeChange,
     onVmDurationChange,
-    // onVmPlay,
-    // onVmPause,
     onVmBufferedChange,
     onVmBufferingChange,
   } as const;
@@ -115,7 +106,6 @@ export function useStateController(args: Args) {
   const api = {
     ref,
     handlers,
-    src,
     video,
     get ready() {
       return ready && total > -1;
