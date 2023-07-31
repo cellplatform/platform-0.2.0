@@ -7,6 +7,7 @@ export * from '../common';
 export const DEFAULTS = {
   playing: false,
   loop: false,
+  muted: false,
   borderRadius: 0,
 
   get unknown(): t.VideoDefUnknown {

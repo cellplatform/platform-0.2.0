@@ -21,13 +21,14 @@ const initial: T = {
  */
 export default Dev.describe('Player (Vime)', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'> &
-    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius'>;
+    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius' | 'muted'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
     video: SAMPLE.VIMEO.Tubes,
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
+    muted: DEFAULTS.muted,
     borderRadius: DEFAULTS.borderRadius,
   });
 
@@ -41,6 +42,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.loop = local.loop;
       d.props.video = local.video;
       d.props.borderRadius = local.borderRadius;
+      d.props.muted = local.muted;
       d.debug.devWidth = local.devWidth;
     });
 
@@ -84,6 +86,14 @@ export default Dev.describe('Player (Vime)', (e) => {
           .onClick((e) => e.change((d) => (local.loop = Dev.toggle(d.props, 'loop'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.muted);
+        btn
+          .label((e) => `muted`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.muted = Dev.toggle(d.props, 'muted'))));
+      });
+
       dev.hr(-1, 5);
 
       dev.boolean((btn) => {
@@ -104,7 +114,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       const def = (def: t.VideoDef, hint?: string) => {
         const isCurrent = () => def.id === state.current.props.video?.id;
 
-        const id = def.id ? `${def.id.substring(0, 5)}...` : '(empty)';
+        const id = def.id ? `${def.id.substring(0, 4)}...` : '(empty)';
         let label = `${def.kind}: “${id}” ${hint ? `(${hint})` : ''}`;
 
         dev.button((btn) => {

@@ -9,7 +9,15 @@ import { useHasInteracted } from './use.HasInteracted.mjs';
  * https://vimejs.com/
  */
 export const View: React.FC<t.VideoPlayerProps> = (props) => {
-  const { video, playing, loop, timestamp, onChange, borderRadius = DEFAULTS.borderRadius } = props;
+  const {
+    video,
+    playing,
+    loop,
+    timestamp,
+    onChange,
+    borderRadius = DEFAULTS.borderRadius,
+    muted = DEFAULTS.muted,
+  } = props;
 
   const hasInteracted = useHasInteracted();
   const controller = useStateController({
@@ -65,7 +73,12 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Player ref={controller.ref} {...controller.handlers} style={customCssProps as any}>
+      <Player
+        ref={controller.ref}
+        muted={muted}
+        style={customCssProps as any}
+        {...controller.handlers}
+      >
         {elVimeo}
         {elYouTube}
       </Player>
