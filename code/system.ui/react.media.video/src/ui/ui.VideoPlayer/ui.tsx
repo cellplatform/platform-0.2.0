@@ -1,6 +1,6 @@
 import { Player, Vimeo, Youtube } from '@vime/react';
 
-import { css, type t } from './common';
+import { DEFAULTS, css, type t } from './common';
 import { useStateController } from './use.StateController.mjs';
 import { useHasInteracted } from './use.HasInteracted.mjs';
 
@@ -9,7 +9,7 @@ import { useHasInteracted } from './use.HasInteracted.mjs';
  * https://vimejs.com/
  */
 export const View: React.FC<t.VideoPlayerProps> = (props) => {
-  const { video, playing, loop, timestamp, onChange } = props;
+  const { video, playing, loop, timestamp, onChange, borderRadius = DEFAULTS.borderRadius } = props;
 
   const hasInteracted = useHasInteracted();
   const controller = useStateController({
@@ -55,9 +55,17 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     />
   );
 
+  // https://vimejs.com/components/core/player#css-custom-properties
+  const customCssProps = {
+    '--vm-player-bg': 'transparent',
+    '--vm-player-theme': 'transparent',
+    '--vm-player-border-radius': `${borderRadius}px`,
+    '--vm-player-box-shadow': 'none',
+  };
+
   return (
     <div {...css(styles.base, props.style)}>
-      <Player ref={controller.ref} {...controller.handlers}>
+      <Player ref={controller.ref} {...controller.handlers} style={customCssProps as any}>
         {elVimeo}
         {elYouTube}
       </Player>

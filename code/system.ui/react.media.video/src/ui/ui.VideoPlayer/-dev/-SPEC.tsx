@@ -21,14 +21,14 @@ const initial: T = {
  */
 export default Dev.describe('Player (Vime)', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'> &
-    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'timestamp'>;
+    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
     video: SAMPLE.VIMEO.Tubes,
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
-    timestamp: undefined,
+    borderRadius: DEFAULTS.borderRadius,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,7 +40,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.playing = local.playing;
       d.props.loop = local.loop;
       d.props.video = local.video;
-      d.props.timestamp = local.timestamp;
+      d.props.borderRadius = local.borderRadius;
       d.debug.devWidth = local.devWidth;
     });
 
@@ -82,6 +82,19 @@ export default Dev.describe('Player (Vime)', (e) => {
           .label((e) => `loop`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.loop = Dev.toggle(d.props, 'loop'))));
+      });
+
+      dev.hr(-1, 5);
+
+      dev.boolean((btn) => {
+        const value = (state: T) => state.props.borderRadius ?? 0;
+        btn
+          .label((e) => `borderRadius: ${value(e.state)}px`)
+          .value((e) => value(e.state) > 0)
+          .onClick(async (e) => {
+            await e.change((d) => (d.props.borderRadius = value(d) > 0 ? 0 : 10));
+            local.borderRadius = state.current.props.borderRadius;
+          });
       });
     });
 
@@ -135,7 +148,7 @@ export default Dev.describe('Player (Vime)', (e) => {
           btn
             .label(label ?? `${secs} seconds`)
             .right((e) => (value(e.state) === secs ? `←` : ''))
-            .onClick((e) => e.change((d) => (local.timestamp = d.props.timestamp = secs)));
+            .onClick((e) => e.change((d) => (d.props.timestamp = secs)));
         });
       };
 
@@ -158,9 +171,7 @@ export default Dev.describe('Player (Vime)', (e) => {
               const percent = e.percent;
               state.change((d) => {
                 const total = d.status?.secs.total ?? -1;
-                if (total > 0) {
-                  local.timestamp = d.props.timestamp = total * percent;
-                }
+                if (total > 0) d.props.timestamp = total * percent;
               });
             }}
           />
