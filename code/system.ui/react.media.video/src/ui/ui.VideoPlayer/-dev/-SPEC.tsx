@@ -1,7 +1,7 @@
-import { css, COLORS, Style, Color, Dev, type t, Icons } from '../../../test.ui';
-import { VideoPlayer } from '..';
-import { SAMPLE } from './-Sample.mjs';
 import { ProgressBar } from 'sys.ui.react.common';
+import { VideoPlayer } from '..';
+import { Dev, Icons, type t } from '../../../test.ui';
+import { SAMPLE } from './-Sample.mjs';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
@@ -120,7 +120,7 @@ export default Dev.describe('Player (Vime)', (e) => {
         dev.button((btn) => {
           btn
             .label(label)
-            .right((e) => (isCurrent() ? `←` : ''))
+            .right((e) => isCurrent() && `←`)
             .onClick((e) => e.change((d) => (local.video = d.props.video = def)));
         });
       };
