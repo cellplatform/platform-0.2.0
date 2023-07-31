@@ -1,6 +1,5 @@
-import { ProgressBar } from 'sys.ui.react.common';
 import { VideoPlayer } from '..';
-import { Dev, Icons, type t } from '../../../test.ui';
+import { Dev, Icons, ProgressBar, type t } from '../../../test.ui';
 import { SAMPLE } from './-Sample.mjs';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;

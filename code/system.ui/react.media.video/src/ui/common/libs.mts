@@ -6,6 +6,7 @@ export {
   Color,
   FC,
   Keyboard,
+  ProgressBar,
   PropList,
   Spinner,
   Style,
