@@ -688,6 +688,11 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
+"@maverick-js/signals@^5.10.3":
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/@maverick-js/signals/-/signals-5.11.2.tgz#da52498c29a2a834e426b5310c114f3b3885825c"
+  integrity sha512-jKAyNE2O7H+xrigPoqdV0Iq2AeQ6cysfBf/b2jasJ4FfCUKjGyazgtp+pIspTW6skFvpPrvq40Qft+7HuR+Tlg==
+
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
@@ -1659,6 +1664,11 @@
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-0.3.4.tgz#4b88bc202e1ba3b70096b588219b57fe82c4a5de"
   integrity sha512-dFU+yAUDQRwpuRGxRDlEO1LMq0y1LGsBgkyryQWe4w15/Fy2/lCnpvdIoAhHl3QvIGAxCLHzwRHsqfLRdpxgJQ==
+
+"@vidstack/react@0.6.13":
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/@vidstack/react/-/react-0.6.13.tgz#d078681b26e4b7560bb876be889cf1cf564ee8ca"
+  integrity sha512-VGdHv3sCra0ZDXgbKHqHLy/X9AJtbANZoftk+/8EKbEI8bHzEX0AF0h5fncGXwpkV07jcAp3sLuP7kp041hlLA==
 
 "@vime/core@5.4.1":
   version "5.4.1"
@@ -4626,6 +4636,14 @@ markdown-table@^3.0.0:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-3.0.3.tgz#e6331d30e493127e031dd385488b5bd326e4a6bd"
   integrity sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==
 
+maverick.js@0.37.0:
+  version "0.37.0"
+  resolved "https://registry.yarnpkg.com/maverick.js/-/maverick.js-0.37.0.tgz#3dc371786540ba5cc327179a268b60c165a317d8"
+  integrity sha512-1Dk/9rienLiihlktVvH04ADC2UJTMflC1fOMVQCCaQAaz7hgzDI5i0p/arFbDM52hFFiIcq4RdXtYz47SgsLgw==
+  dependencies:
+    "@maverick-js/signals" "^5.10.3"
+    type-fest "^3.8.0"
+
 mdast-util-definitions@^5.0.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/mdast-util-definitions/-/mdast-util-definitions-5.1.2.tgz#9910abb60ac5d7115d6819b57ae0bcef07a3f7a7"
@@ -4777,6 +4795,11 @@ mdn-data@2.0.30:
   version "2.0.30"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.30.tgz#ce4df6f80af6cfbe218ecd5c552ba13c4dfa08cc"
   integrity sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==
+
+media-captions@0.0.18:
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/media-captions/-/media-captions-0.0.18.tgz#ad2de78b06d6d222407057279a1595f8b0408a7e"
+  integrity sha512-JW18P6FuHdyLSGwC4TQ0kF3WdNj/+wMw2cKOb8BnmY6vSJGtnwJ+vkYj+IjHOV34j3XMc70HDeB/QYKR7E7fuQ==
 
 media-query-parser@^2.0.2:
   version "2.0.2"
@@ -6700,6 +6723,11 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
   integrity sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
 
+type-fest@^3.8.0:
+  version "3.13.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.13.1.tgz#bb744c1f0678bea7543a2d1ec24e83e68e8c8706"
+  integrity sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==
+
 type@^1.0.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/type/-/type-1.2.0.tgz#848dd7698dafa3e54a6c479e759c4bc3f18847a0"
@@ -6996,6 +7024,15 @@ vfile@^5.0.0:
     is-buffer "^2.0.0"
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
+
+vidstack@0.6.13:
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/vidstack/-/vidstack-0.6.13.tgz#026e8876db454c7a2f9e610a6bf02eebcc6e999c"
+  integrity sha512-g5wH6Hfc4EQqOI0Mm7qW4D1DWPZfQnlATLZuqpuVAKI8HOz4UGfd1v48MLK9cR+ZfPjVL4/iZLu7YOIdSX3L2g==
+  dependencies:
+    maverick.js "0.37.0"
+    media-captions "0.0.18"
+    type-fest "^3.8.0"
 
 viem@1.2.6:
   version "1.2.6"
