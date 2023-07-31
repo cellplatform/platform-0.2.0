@@ -8,7 +8,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
   const Icon = Wrangle.icon(status);
 
   const mouse = useMouseState({ onDown: (e) => props.onClick?.({ status }) });
-  const { isOver } = mouse;
+  const { isOver, isDown } = mouse;
 
   /**
    * [Render]
@@ -25,7 +25,11 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
       height: DEFAULTS.height,
       PaddingY: 3,
       display: 'grid',
+    }),
+    body: css({
+      display: 'grid',
       placeItems: 'center',
+      transform: isDown ? 'translateY(1px)' : undefined,
     }),
   };
 
@@ -34,8 +38,10 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      {elIcon}
-      {elSpinner}
+      <div {...styles.body}>
+        {elIcon}
+        {elSpinner}
+      </div>
     </div>
   );
 };
