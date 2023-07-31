@@ -12,6 +12,10 @@ export const Wrangle = {
     return { kind, id: id.toString() } as t.VideoDef;
   },
 
+  clampPercent(value: t.Percent) {
+    return Math.max(0, Math.min(1, value));
+  },
+
   /**
    * Play status.
    */
@@ -23,22 +27,18 @@ export const Wrangle = {
     loop?: boolean;
     buffering?: boolean;
   }): t.VideoStatus {
-    const {
-      total: totalTime,
-      current: currentTime,
-      buffered,
-      buffering = false,
-      playing = false,
-      loop = false,
-    } = args;
-    const percent = totalTime === 0 ? 0 : Math.max(0, Math.min(1, currentTime / totalTime));
-    const complete = percent === 1;
+    const { total, current, buffered, buffering = false, playing = false, loop = false } = args;
+    const percent = {
+      complete: total === 0 ? 0 : Wrangle.clampPercent(current / total),
+      buffered: total === 0 ? 0 : Wrangle.clampPercent(buffered / total),
+    };
+    const complete = percent.complete === 1;
     return {
       percent,
-      secs: { total: totalTime, current: currentTime, buffered },
+      secs: { total, current, buffered },
       is: {
-        playing: complete ? loop : playing, // NB: Always playing if looping.
         complete,
+        playing: complete ? loop : playing, // NB: Always playing if looping.
         buffering,
       },
     };

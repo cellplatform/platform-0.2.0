@@ -133,7 +133,7 @@ export default Dev.describe('Player (Vime)', (e) => {
         const value = (state: T) => state.props.timestamp;
         dev.button((btn) => {
           btn
-            .label(label ?? `${secs} secs`)
+            .label(label ?? `${secs} seconds`)
             .right((e) => (value(e.state) === secs ? `←` : ''))
             .onClick((e) => e.change((d) => (local.timestamp = d.props.timestamp = secs)));
         });
@@ -148,11 +148,12 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     dev.section('Progress Bar', (dev) => {
       dev.row((e) => {
-        const percent = e.state.status?.percent ?? 0;
+        const { status } = e.state;
         return (
           <ProgressBar
             style={{ MarginX: 60 }}
-            percent={percent}
+            percent={status?.percent.complete}
+            buffered={status?.percent.buffered}
             onClick={(e) => {
               const percent = e.percent;
               state.change((d) => {

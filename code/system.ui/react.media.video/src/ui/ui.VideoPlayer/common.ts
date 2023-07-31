@@ -14,7 +14,7 @@ export const DEFAULTS = {
 
   get emptyStatus(): t.VideoStatus {
     return {
-      percent: -1,
+      percent: { complete: -1, buffered: -1 },
       secs: { total: -1, current: -1, buffered: -1 },
       is: { playing: false, complete: false, buffering: false },
     };
