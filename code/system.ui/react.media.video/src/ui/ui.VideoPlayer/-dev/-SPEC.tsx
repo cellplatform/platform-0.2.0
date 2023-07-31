@@ -1,6 +1,7 @@
-import { Dev, type t } from '../../../test.ui';
+import { css, COLORS, Style, Color, Dev, type t } from '../../../test.ui';
 import { VideoPlayer } from '..';
 import { SAMPLE } from './-Sample.mjs';
+import { ProgressBar } from 'sys.ui.react.common';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
@@ -51,7 +52,6 @@ export default Dev.describe('Player (Vime)', (e) => {
           <VideoPlayer
             {...props}
             onChange={(e) => {
-              // console.info(`⚡️ onChange`, e.status);
               state.change((d) => (d.status = e.status));
             }}
           />
@@ -111,14 +111,27 @@ export default Dev.describe('Player (Vime)', (e) => {
           btn
             .label(`width: ${width}`)
             .right((e) => (e.state.debug.devWidth === width ? `←` : ''))
-            .onClick((e) => {
-              e.change((d) => (local.devWidth = d.debug.devWidth = width));
-            });
+            .onClick((e) => e.change((d) => (local.devWidth = d.debug.devWidth = width)));
         });
       };
 
       width(500);
       width(300);
+    });
+
+    dev.hr(5, 20);
+
+    dev.title('Progress');
+    dev.row((e) => {
+      const percent = e.state.status?.percent ?? 0;
+      return (
+        <ProgressBar
+          style={{ MarginX: 50 }}
+          percent={percent}
+          onClick={(e) => {
+          }}
+        />
+      );
     });
   });
 

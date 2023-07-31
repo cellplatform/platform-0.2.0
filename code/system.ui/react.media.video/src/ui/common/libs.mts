@@ -7,6 +7,7 @@ export {
   FC,
   Keyboard,
   PropList,
+  Style,
   TestRunner,
   css,
   useDragTarget,

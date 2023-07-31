@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { Time, DEFAULTS, type t } from './common';
+import { DEFAULTS, type t } from './common';
 
 import { type PlayerProps } from '@vime/react';
 
@@ -42,8 +42,10 @@ export function useStateController(args: Args) {
 
   const play = () => ref.current?.play();
   const pause = () => ref.current?.pause();
-  const seek = (secs: number) => {
-    if (ref.current) ref.current.currentTime = secs;
+  const seek = (secs: number, ensurePlay?: boolean) => {
+    const player = ref.current;
+    if (player) player.currentTime = secs;
+    if (player && ensurePlay) play();
   };
   const updatePlay = () => {
     if (playing) play();
@@ -53,28 +55,14 @@ export function useStateController(args: Args) {
   /**
    * Lifecycle.
    */
-  useEffect(() => {
-    //
-    // TEMP 🐷
-    /**
-     * TODO 🐷
-     */
-    seek(11);
-  }, [Boolean(ref.current)]);
 
   useEffect(reset, [def]);
+  useEffect(updatePlay, [def, playing, loop, args.hasInteracted]);
   useEffect(() => {
-    Time.delay(0, updatePlay);
-    // updatePlay();
-  }, [def, playing, loop, args.hasInteracted]);
-  useEffect(() => {
-    //
     const status = api.status;
+    const loopRestart = status.is.complete && status.is.playing; // NB: looping is determined within the <Status> calculation.
+    if (loopRestart) seek(0, true);
     fireChange(status);
-    if (status.is.complete && status.is.playing) {
-      seek(0);
-      updatePlay();
-    }
   }, [total, current, playing, ready]);
 
   /**
