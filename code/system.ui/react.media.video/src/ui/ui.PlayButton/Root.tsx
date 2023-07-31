@@ -2,9 +2,8 @@ import { css, DEFAULTS, FC, Spinner, useMouseState, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.PlayButtonProps> = (props) => {
-  const { status = DEFAULTS.status } = props;
+  const { status = DEFAULTS.status, enabled = DEFAULTS.enabled } = props;
   const isSpinning = status === 'Spinning';
-  const isPlaying = Wrangle.isPlaying(status);
   const Icon = Wrangle.icon(status);
 
   const mouse = useMouseState({ onDown: (e) => props.onClick?.({ status }) });
@@ -13,7 +12,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
   /**
    * [Render]
    */
-  const { backgroundColor, borderColor, iconColor } = Wrangle.buttonColors({ isOver, isPlaying });
+  const { backgroundColor, borderColor, iconColor } = Wrangle.buttonColors(props, { isOver });
   const styles = {
     base: css({
       backgroundColor,
@@ -24,12 +23,15 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
       width: DEFAULTS.width,
       height: DEFAULTS.height,
       PaddingY: 3,
+      cursor: enabled ? 'pointer' : 'default',
       display: 'grid',
     }),
     body: css({
       display: 'grid',
       placeItems: 'center',
-      transform: isDown ? 'translateY(1px)' : undefined,
+      transform: isDown && enabled ? 'translateY(1px)' : undefined,
+      opacity: enabled ? 1 : 0.5,
+      transition: 'opacity 0.15s',
     }),
   };
 

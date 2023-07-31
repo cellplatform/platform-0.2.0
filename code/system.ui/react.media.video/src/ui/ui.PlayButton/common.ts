@@ -9,6 +9,7 @@ export { Icons } from '../Icons.mjs';
 const status: t.PlayButtonStatus = 'Play';
 export const DEFAULTS = {
   status,
+  enabled: true,
   width: 56,
   height: 32,
 } as const;

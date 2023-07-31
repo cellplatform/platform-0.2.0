@@ -7,6 +7,7 @@ export type PlayButtonStatus = 'Play' | 'Pause' | 'Replay' | 'Spinning';
  */
 export type PlayButtonProps = {
   status?: PlayButtonStatus;
+  enabled?: boolean;
   style?: t.CssValue;
   onClick?: PlayButtonClickHandler;
 };

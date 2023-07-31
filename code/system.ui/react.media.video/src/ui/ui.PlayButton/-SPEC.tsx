@@ -7,10 +7,11 @@ type T = { props: t.PlayButtonProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('PlayButton', (e) => {
-  type LocalStore = Pick<t.PlayButtonProps, 'status'>;
+  type LocalStore = Pick<t.PlayButtonProps, 'status' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.video.PlayButton');
   const local = localstore.object({
     status: DEFAULTS.status,
+    enabled: DEFAULTS.enabled,
   });
 
   e.it('ui:init', async (e) => {
@@ -20,6 +21,7 @@ export default Dev.describe('PlayButton', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.status = local.status;
+      d.props.enabled = local.enabled;
     });
 
     ctx.subject
@@ -42,6 +44,16 @@ export default Dev.describe('PlayButton', (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.enabled);
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.hr(3, 15);
+
       const status = (status: t.PlayButtonStatus) => {
         dev.button((btn) => {
           btn
@@ -50,7 +62,6 @@ export default Dev.describe('PlayButton', (e) => {
             .onClick((e) => e.change((d) => (local.status = d.props.status = status)));
         });
       };
-
       status('Play');
       status('Pause');
       status('Replay');
