@@ -1,12 +1,12 @@
 import { Player, Vimeo, Youtube } from '@vime/react';
 
 import { DEFAULTS, css, type t } from './common';
-import { useStateController } from './use.StateController.mjs';
 import { useHasInteracted } from './use.HasInteracted.mjs';
+import { useStateController } from './use.StateController.mjs';
 
 /**
  * Vime Docs:
- * https://vimejs.com/
+ * https://vimejs.com
  */
 export const View: React.FC<t.VideoPlayerProps> = (props) => {
   const {
@@ -41,6 +41,15 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
       transition: 'opacity 0.15s',
     }),
   };
+  /**
+   * https://vimejs.com/components/core/player#css-custom-properties
+   */
+  const customCssOverrides = {
+    '--vm-player-bg': 'transparent',
+    '--vm-player-theme': 'transparent',
+    '--vm-player-border-radius': `${borderRadius}px`,
+    '--vm-player-box-shadow': 'none',
+  };
 
   const elVimeo = video.kind === 'Vimeo' && (
     <Vimeo
@@ -63,20 +72,12 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     />
   );
 
-  // https://vimejs.com/components/core/player#css-custom-properties
-  const customCssProps = {
-    '--vm-player-bg': 'transparent',
-    '--vm-player-theme': 'transparent',
-    '--vm-player-border-radius': `${borderRadius}px`,
-    '--vm-player-box-shadow': 'none',
-  };
-
   return (
     <div {...css(styles.base, props.style)}>
       <Player
         ref={controller.ref}
         muted={muted}
-        style={customCssProps as any}
+        style={customCssOverrides as any}
         {...controller.handlers}
       >
         {elVimeo}

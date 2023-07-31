@@ -6,9 +6,6 @@ import { View } from './ui';
 import { useHasInteracted } from './use.HasInteracted.mjs';
 import { useStateController } from './use.StateController.mjs';
 
-/**
- * Export
- */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Wrangle: typeof Wrangle;
