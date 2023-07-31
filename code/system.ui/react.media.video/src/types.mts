@@ -7,12 +7,12 @@ export type * from './ui/ui.VideoPlayer/types.mjs';
  * Common Video resource definition
  */
 export type VideoId = string;
-export type VideoKind = VideoDef['kind'];
-export type VideoDef = VideoDefVimeo | VideoDefYouTube | VideoDefUnknown;
+export type VideoKind = VideoSrc['kind'];
+export type VideoSrc = VideoSrcVimeo | VideoSrcYouTube | VideoSrcUnknown;
 
-export type VideoDefVimeo = { kind: 'Vimeo'; id: VideoId };
-export type VideoDefYouTube = { kind: 'YouTube'; id: VideoId };
-export type VideoDefUnknown = { kind: 'Unknown'; id: '' };
+export type VideoSrcVimeo = { kind: 'Vimeo'; id: VideoId };
+export type VideoSrcYouTube = { kind: 'YouTube'; id: VideoId };
+export type VideoSrcUnknown = { kind: 'Unknown'; id: '' };
 
 /**
  * Common status of a playing video.

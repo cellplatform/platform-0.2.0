@@ -5,7 +5,7 @@ import { DEFAULTS, type t } from './common';
 import { type PlayerProps } from '@vime/react';
 
 type Args = {
-  video?: t.VideoDef;
+  video?: t.VideoSrc;
   playing?: boolean;
   loop?: boolean;
   timestamp?: t.Seconds;
@@ -21,7 +21,7 @@ export function useStateController(args: Args) {
   const videoDef = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
 
   const ref = useRef<HTMLVmPlayerElement>(null);
-  const [video, setVideo] = useState<t.VideoDef>(DEFAULTS.unknown);
+  const [video, setVideo] = useState<t.VideoSrc>(DEFAULTS.unknown);
   const [ready, setReady] = useState(false);
   const [total, setTotal] = useState<t.Seconds>(-1);
   const [current, setCurrent] = useState<t.Seconds>(-1);

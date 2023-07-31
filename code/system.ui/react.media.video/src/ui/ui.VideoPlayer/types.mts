@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 export type VideoPlayerProps = {
-  video?: t.VideoDef;
+  video?: t.VideoSrc;
   playing?: boolean;
   loop?: boolean;
   timestamp?: t.Seconds;
@@ -16,6 +16,6 @@ export type VideoPlayerProps = {
  */
 export type VideoPlayerChangeHandler = (e: VideoPlayerChangeHandlerArgs) => void;
 export type VideoPlayerChangeHandlerArgs = {
-  video: t.VideoDef;
+  video: t.VideoSrc;
   status: t.VideoStatus;
 };

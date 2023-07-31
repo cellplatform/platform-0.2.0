@@ -6,10 +6,10 @@ export const Wrangle = {
   /**
    * Video definition object formatting.
    */
-  toYouTube: (id: string): t.VideoDef => Wrangle.toDef('YouTube', id),
-  toVimeo: (id: string | number): t.VideoDef => Wrangle.toDef('Vimeo', id),
+  toYouTube: (id: string): t.VideoSrc => Wrangle.toDef('YouTube', id),
+  toVimeo: (id: string | number): t.VideoSrc => Wrangle.toDef('Vimeo', id),
   toDef(kind: t.VideoKind, id: string | number) {
-    return { kind, id: id.toString() } as t.VideoDef;
+    return { kind, id: id.toString() } as t.VideoSrc;
   },
 
   clampPercent(value: t.Percent) {

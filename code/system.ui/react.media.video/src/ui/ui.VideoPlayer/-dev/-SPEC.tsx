@@ -111,7 +111,7 @@ export default Dev.describe('Player (Vime)', (e) => {
     dev.hr(5, 20);
 
     dev.section(['Video', '(Source)'], (dev) => {
-      const def = (def: t.VideoDef, hint?: string) => {
+      const def = (def: t.VideoSrc, hint?: string) => {
         const isCurrent = () => def.id === state.current.props.video?.id;
 
         const id = def.id ? `${def.id.substring(0, 4)}...` : '(empty)';

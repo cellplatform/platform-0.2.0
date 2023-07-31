@@ -10,7 +10,7 @@ export const DEFAULTS = {
   muted: false,
   borderRadius: 0,
 
-  get unknown(): t.VideoDefUnknown {
+  get unknown(): t.VideoSrcUnknown {
     return { kind: 'Unknown', id: '' };
   },
 
