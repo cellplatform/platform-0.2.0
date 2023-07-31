@@ -9,6 +9,7 @@ export type ProgressBarProps = {
   thumbColor?: string;
   bufferedColor?: string;
   height?: number;
+  enabled?: boolean;
   style?: t.CssValue;
   onClick?: ProgressBarClickHandler;
 };

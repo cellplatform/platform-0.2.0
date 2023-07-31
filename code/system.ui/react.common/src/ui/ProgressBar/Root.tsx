@@ -7,6 +7,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
     thumbColor = DEFAULTS.thumbColor,
     bufferedColor = DEFAULTS.bufferedColor,
     height = DEFAULTS.height,
+    enabled = DEFAULTS.enabled,
   } = props;
 
   const progress = Wrangle.toPercent(props.percent);
@@ -15,6 +16,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({
     onDown(e) {
+      if (!enabled) return;
       if (ref.current && props.onClick) {
         const el = ref.current;
         const totalWidth = el.offsetWidth;
@@ -28,9 +30,8 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
   /**
    * [Render]
    */
-  const trackHeight = mouse.isOver ? 10 : 5;
+  const trackHeight = mouse.isOver && enabled ? 10 : 5;
   const transition = `height 0.15s, background-color 0.15s`;
-
   const thumbCss = (progress: t.Percent = 0, color: string) => {
     return css({
       display: progress > 0 ? 'block' : 'none',
@@ -49,6 +50,9 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
       height,
       display: 'grid',
       alignContent: 'center',
+      opacity: enabled ? 1 : 0.8,
+      filter: enabled ? undefined : 'grayscale(100%)',
+      transition: 'opacity 0.15s, filter 0.15s',
     }),
     track: css({
       position: 'relative',
