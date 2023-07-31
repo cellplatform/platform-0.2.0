@@ -5,6 +5,12 @@ import { Pkg } from './index.pkg.mjs';
 export { Pkg };
 
 /**
+ * Components
+ */
+export { PlayButton } from './ui/ui.PlayButton';
+export { VideoPlayer } from './ui/ui.VideoPlayer';
+
+/**
  * Dev
  */
 export const dev = async () => {

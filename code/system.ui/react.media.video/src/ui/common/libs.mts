@@ -7,6 +7,7 @@ export {
   FC,
   Keyboard,
   PropList,
+  Spinner,
   Style,
   TestRunner,
   css,

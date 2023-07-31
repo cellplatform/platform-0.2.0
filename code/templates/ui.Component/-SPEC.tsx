@@ -8,8 +8,10 @@ export default Dev.describe('Namespace', (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
+
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
+
     ctx.subject
       .backgroundColor(1)
       .size('fill')
