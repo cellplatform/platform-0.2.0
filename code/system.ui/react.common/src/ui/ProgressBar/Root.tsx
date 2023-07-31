@@ -1,10 +1,16 @@
 import { useRef } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { COLORS, Color, DEFAULTS, FC, css, useMouseState, type t } from './common';
+import { DEFAULTS, FC, css, useMouseState, type t } from './common';
 
 const View: React.FC<t.ProgressBarProps> = (props) => {
-  const { thumbColor = DEFAULTS.thumbColor, height = DEFAULTS.height } = props;
+  const {
+    thumbColor = DEFAULTS.thumbColor,
+    bufferedColor = DEFAULTS.bufferedColor,
+    height = DEFAULTS.height,
+  } = props;
+
   const progress = Wrangle.toPercent(props.percent);
+  const buffered = Wrangle.toPercent(props.buffered);
 
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({
@@ -24,6 +30,19 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
    */
   const trackHeight = mouse.isOver ? 10 : 5;
   const transition = `height 0.15s, background-color 0.15s`;
+
+  const thumbCss = (progress: t.Percent = 0, color: string) => {
+    return css({
+      display: progress > 0 ? 'block' : 'none',
+      borderRadius: 20,
+      backgroundColor: color,
+      Absolute: [0, null, 0, 0],
+      width: `${progress * 100}%`,
+      height: trackHeight,
+      transition,
+    });
+  };
+
   const styles = {
     base: css({
       position: 'relative',
@@ -35,23 +54,18 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
       position: 'relative',
       height: trackHeight,
       borderRadius: 20,
-      backgroundColor: Color.alpha(COLORS.DARK, 0.1),
+      backgroundColor: DEFAULTS.trackColor,
       overflow: 'hidden',
       transition,
     }),
-    thumb: css({
-      borderRadius: 20,
-      backgroundColor: thumbColor,
-      Absolute: [0, null, 0, 0],
-      width: `${progress * 100}%`,
-      height: trackHeight,
-      transition,
-    }),
+    buffered: thumbCss(buffered, bufferedColor),
+    thumb: thumbCss(progress, thumbColor),
   };
 
   return (
     <div ref={ref} {...css(styles.base, props.style)} {...mouse.handlers}>
       <div {...styles.track}>
+        <div {...styles.buffered} />
         <div {...styles.thumb} />
       </div>
     </div>

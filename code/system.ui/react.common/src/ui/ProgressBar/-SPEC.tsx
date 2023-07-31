@@ -13,10 +13,11 @@ const initial: T = {
 };
 
 export default Dev.describe('ProgressBar', (e) => {
-  type LocalStore = Pick<t.ProgressBarProps, 'percent'> & Pick<T['debug'], 'devBg'>;
+  type LocalStore = Pick<t.ProgressBarProps, 'percent' | 'buffered'> & Pick<T['debug'], 'devBg'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.ProgressBar');
   const local = localstore.object({
     percent: DEFAULTS.percent,
+    buffered: DEFAULTS.buffered,
     devBg: false,
   });
 
@@ -26,9 +27,11 @@ export default Dev.describe('ProgressBar', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.percent = local.percent;
+      d.props.buffered = local.buffered;
       d.debug.devBg = local.devBg;
     });
 
+    ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size('fill-x')
@@ -68,6 +71,23 @@ export default Dev.describe('ProgressBar', (e) => {
       percent(0.9);
       dev.hr(-1, 5);
       percent(1);
+
+      dev.hr(2, 10);
+
+      const buffered = (value: number) => {
+        dev.button((btn) => {
+          btn
+            .label(`buffered: ${value}`)
+            .right((e) => (e.state.props.buffered === value ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.buffered = d.props.buffered = value)));
+        });
+      };
+      buffered(0);
+      dev.hr(-1, 5);
+      buffered(0.25);
+      buffered(0.9);
+      dev.hr(-1, 5);
+      buffered(1);
     });
 
     dev.hr(5, 20);

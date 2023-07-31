@@ -23,6 +23,7 @@ export type {
   JsonU,
   ModuleDef,
   Size,
+  Percent,
 } from 'sys.types/src/types.mjs';
 
 export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';
