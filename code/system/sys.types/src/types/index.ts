@@ -10,3 +10,4 @@ export type * from './types.module.mjs';
 export type * from './types.partial.mjs';
 export type * from './types.pkg.mjs';
 export type * from './types.readonly.mjs';
+export type * from './types.time.mjs';
