@@ -1,4 +1,4 @@
-import { css, COLORS, Style, Color, Dev, type t } from '../../../test.ui';
+import { css, COLORS, Style, Color, Dev, type t, Icons } from '../../../test.ui';
 import { VideoPlayer } from '..';
 import { SAMPLE } from './-Sample.mjs';
 import { ProgressBar } from 'sys.ui.react.common';
@@ -21,13 +21,14 @@ const initial: T = {
  */
 export default Dev.describe('Player (Vime)', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'> &
-    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop'>;
+    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'timestamp'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
     video: SAMPLE.VIMEO.Tubes,
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
+    timestamp: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -39,24 +40,26 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.playing = local.playing;
       d.props.loop = local.loop;
       d.props.video = local.video;
+      d.props.timestamp = local.timestamp;
       d.debug.devWidth = local.devWidth;
     });
 
-    ctx.subject
-      // .backgroundColor(1)
-      .display('grid')
-      .render<T>((e) => {
-        const { debug, props } = e.state;
-        ctx.subject.size([debug.devWidth, null]);
-        return (
-          <VideoPlayer
-            {...props}
-            onChange={(e) => {
-              state.change((d) => (d.status = e.status));
-            }}
-          />
-        );
-      });
+    ctx.debug.width(330);
+    ctx.subject.display('grid').render<T>((e) => {
+      const { debug, props } = e.state;
+      ctx.subject.size([debug.devWidth, null]);
+      return (
+        <VideoPlayer
+          {...props}
+          onChange={(e) => {
+            /**
+             * Update host state: → "status"
+             */
+            state.change((d) => (d.status = e.status));
+          }}
+        />
+      );
+    });
   });
 
   e.it('ui:debug', async (e) => {
@@ -87,9 +90,13 @@ export default Dev.describe('Player (Vime)', (e) => {
     dev.section(['Video', '(Source)'], (dev) => {
       const def = (def: t.VideoDef, hint?: string) => {
         const isCurrent = () => def.id === state.current.props.video?.id;
+
+        const id = def.id ? `${def.id.substring(0, 5)}...` : '(empty)';
+        let label = `${def.kind}: “${id}” ${hint ? `(${hint})` : ''}`;
+
         dev.button((btn) => {
           btn
-            .label(`${def.kind}: “${def.id || '(empty)'}” ${hint ? `(${hint})` : ''}`)
+            .label(label)
             .right((e) => (isCurrent() ? `←` : ''))
             .onClick((e) => e.change((d) => (local.video = d.props.video = def)));
         });
@@ -109,8 +116,8 @@ export default Dev.describe('Player (Vime)', (e) => {
       const width = (width: number) => {
         dev.button((btn) => {
           btn
-            .label(`width: ${width}`)
-            .right((e) => (e.state.debug.devWidth === width ? `←` : ''))
+            .label(`resize → width: ${width}`)
+            .right((e) => (e.state.debug.devWidth === width ? <Icons.Photo size={18} /> : ''))
             .onClick((e) => e.change((d) => (local.devWidth = d.debug.devWidth = width)));
         });
       };
@@ -121,17 +128,43 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     dev.hr(5, 20);
 
-    dev.title('Progress');
-    dev.row((e) => {
-      const percent = e.state.status?.percent ?? 0;
-      return (
-        <ProgressBar
-          style={{ MarginX: 50 }}
-          percent={percent}
-          onClick={(e) => {
-          }}
-        />
-      );
+    dev.section('Timestamp', (dev) => {
+      const timestamp = (secs?: t.Seconds, label?: string) => {
+        const value = (state: T) => state.props.timestamp;
+        dev.button((btn) => {
+          btn
+            .label(label ?? `${secs} secs`)
+            .right((e) => (value(e.state) === secs ? `←` : ''))
+            .onClick((e) => e.change((d) => (local.timestamp = d.props.timestamp = secs)));
+        });
+      };
+
+      timestamp(undefined, '(undefined)');
+      timestamp(0);
+      timestamp(10);
+    });
+
+    dev.hr(0, 15);
+
+    dev.section('Progress Bar', (dev) => {
+      dev.row((e) => {
+        const percent = e.state.status?.percent ?? 0;
+        return (
+          <ProgressBar
+            style={{ MarginX: 60 }}
+            percent={percent}
+            onClick={(e) => {
+              const percent = e.percent;
+              state.change((d) => {
+                const total = d.status?.secs.total ?? -1;
+                if (total > 0) {
+                  local.timestamp = d.props.timestamp = total * percent;
+                }
+              });
+            }}
+          />
+        );
+      });
     });
   });
 
