@@ -17,11 +17,13 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     onChange,
     borderRadius = DEFAULTS.borderRadius,
     muted = DEFAULTS.muted,
+    enabled = DEFAULTS.enabled,
   } = props;
 
   const hasInteracted = useHasInteracted();
   const controller = useStateController({
     video,
+    enabled,
     playing,
     loop,
     timestamp,
@@ -37,8 +39,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
-      opacity: controller.ready ? 1 : 0,
-      transition: 'opacity 0.15s',
+      opacity: controller.ready ? (enabled ? 1 : 0.3) : 0,
+      filter: enabled ? undefined : 'grayscale(100%)',
+      transition: 'opacity 0.15s, filter 0.15s',
     }),
   };
   /**

@@ -7,6 +7,7 @@ import { type PlayerProps } from '@vime/react';
 type Args = {
   video?: t.VideoSrc;
   playing?: boolean;
+  enabled?: boolean;
   loop?: boolean;
   timestamp?: t.Seconds;
   hasInteracted?: boolean;
@@ -17,7 +18,12 @@ type Args = {
  * Manages monitoring and reporting on the state of a video.
  */
 export function useStateController(args: Args) {
-  const { playing = DEFAULTS.playing, loop = DEFAULTS.loop, timestamp } = args;
+  const {
+    playing = DEFAULTS.playing,
+    enabled = DEFAULTS.enabled,
+    loop = DEFAULTS.loop,
+    timestamp,
+  } = args;
   const videoDef = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
 
   const ref = useRef<HTMLVmPlayerElement>(null);
@@ -47,7 +53,7 @@ export function useStateController(args: Args) {
     if (player && ensurePlay) play();
   };
   const updatePlay = () => {
-    if (playing) play();
+    if (playing && enabled) play();
     else pause();
   };
 
@@ -55,7 +61,7 @@ export function useStateController(args: Args) {
    * Behavior.
    */
   useEffect(reset, [videoDef]);
-  useEffect(updatePlay, [videoDef, playing, loop, args.hasInteracted]);
+  useEffect(updatePlay, [videoDef, playing, loop, args.hasInteracted, enabled]);
   useEffect(() => {
     /**
      * Fire status update event

@@ -5,6 +5,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
+  enabled: true,
   playing: false,
   loop: false,
   muted: false,

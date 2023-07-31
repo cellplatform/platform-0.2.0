@@ -20,7 +20,7 @@ const initial: T = {
  */
 export default Dev.describe('Player (Vime)', (e) => {
   type LocalStore = Pick<T['debug'], 'devWidth'> &
-    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius' | 'muted'>;
+    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius' | 'muted' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
@@ -28,6 +28,7 @@ export default Dev.describe('Player (Vime)', (e) => {
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
     muted: DEFAULTS.muted,
+    enabled: DEFAULTS.enabled,
     borderRadius: DEFAULTS.borderRadius,
   });
 
@@ -42,6 +43,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.video = local.video;
       d.props.borderRadius = local.borderRadius;
       d.props.muted = local.muted;
+      d.props.enabled = local.enabled;
       d.debug.devWidth = local.devWidth;
     });
 
@@ -69,6 +71,16 @@ export default Dev.describe('Player (Vime)', (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.enabled);
+        btn
+          .label((e) => 'enabled')
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.playing);
         btn

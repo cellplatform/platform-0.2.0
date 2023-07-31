@@ -1,6 +1,7 @@
 import { type t } from './common';
 
 export type VideoPlayerProps = {
+  enabled?: boolean;
   video?: t.VideoSrc;
   playing?: boolean;
   loop?: boolean;
