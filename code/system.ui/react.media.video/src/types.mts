@@ -1,6 +1,7 @@
 import { type t } from './common';
 
 export type * from './ui/ui.Info/types.mjs';
+export type * from './ui/ui.PlayButton/types.mjs';
 export type * from './ui/ui.VideoPlayer/types.mjs';
 
 /**
