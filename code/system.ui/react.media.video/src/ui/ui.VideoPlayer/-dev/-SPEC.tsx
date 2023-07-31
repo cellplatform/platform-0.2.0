@@ -139,7 +139,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       const width = (width: number) => {
         dev.button((btn) => {
           btn
-            .label(`resize → width: ${width}`)
+            .label(`resize → width: ${width}px`)
             .right((e) => (e.state.debug.devWidth === width ? <Icons.Photo size={18} /> : ''))
             .onClick((e) => e.change((d) => (local.devWidth = d.debug.devWidth = width)));
         });
