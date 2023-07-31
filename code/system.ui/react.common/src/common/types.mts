@@ -21,9 +21,11 @@ export type {
   ImmutableNext,
   JsonMapU,
   JsonU,
+  Milliseconds,
   ModuleDef,
-  Size,
   Percent,
+  Seconds,
+  Size,
 } from 'sys.types/src/types.mjs';
 
 export type { PatchChange, PatchChangeHandler } from 'sys.data.json/src/types.mjs';

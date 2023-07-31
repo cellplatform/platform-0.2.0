@@ -20,4 +20,5 @@ export type ProgressBarProps = {
 export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
 export type ProgressBarClickHandlerArgs = {
   percent: t.Percent;
+  timestamp(total?: t.Seconds): t.Seconds; // Convinence method to convert the [percent] into a timestamp.
 };

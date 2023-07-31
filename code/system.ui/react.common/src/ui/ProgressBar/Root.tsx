@@ -10,7 +10,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
     enabled = DEFAULTS.enabled,
   } = props;
 
-  const progress = Wrangle.toPercent(props.percent);
+  const percent = Wrangle.toPercent(props.percent);
   const buffered = Wrangle.toPercent(props.buffered);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -21,8 +21,14 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
         const el = ref.current;
         const totalWidth = el.offsetWidth;
         const position = e.clientX - el.getBoundingClientRect().left;
-        const progress = Wrangle.toPercent(position / totalWidth);
-        props.onClick({ percent: progress });
+        const percent = totalWidth <= 0 ? 0 : Wrangle.toPercent(position / totalWidth);
+        props.onClick({
+          percent,
+          timestamp(total = 0) {
+            total = Math.max(0, total);
+            return total * percent;
+          },
+        });
       }
     },
   });
@@ -31,8 +37,8 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
    * [Render]
    */
   const trackHeight = mouse.isOver && enabled ? 10 : 5;
-  const transition = `height 0.15s, background-color 0.15s`;
-  const thumbCss = (progress: t.Percent = 0, color: string) => {
+  const transition = `height 0.15s, background-color 0.15s, opacity 0.15s`;
+  const thumbCss = (progress: t.Percent = 0, color: string, disabledOpacity?: number) => {
     return css({
       display: progress > 0 ? 'block' : 'none',
       borderRadius: 20,
@@ -41,6 +47,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
       width: `${progress * 100}%`,
       height: trackHeight,
       transition,
+      opacity: enabled ? 1 : disabledOpacity ?? 1,
     });
   };
 
@@ -50,7 +57,6 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
       height,
       display: 'grid',
       alignContent: 'center',
-      opacity: enabled ? 1 : 0.8,
       filter: enabled ? undefined : 'grayscale(100%)',
       transition: 'opacity 0.15s, filter 0.15s',
     }),
@@ -62,8 +68,8 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
       overflow: 'hidden',
       transition,
     }),
-    buffered: thumbCss(buffered, bufferedColor),
-    thumb: thumbCss(progress, thumbColor),
+    buffered: thumbCss(buffered, bufferedColor, 0.25),
+    thumb: thumbCss(percent, thumbColor, 0.15),
   };
 
   return (
