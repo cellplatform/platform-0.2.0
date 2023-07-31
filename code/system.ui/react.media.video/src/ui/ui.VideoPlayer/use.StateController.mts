@@ -4,12 +4,11 @@ import { DEFAULTS, type t } from './common';
 
 import { type PlayerProps } from '@vime/react';
 
-type C = CustomEvent;
-type Seconds = number;
 type Args = {
   video?: t.VideoDef;
   playing?: boolean;
   loop?: boolean;
+  timestamp?: t.Seconds;
   hasInteracted?: boolean;
   onChange?: t.VideoPlayerChangeHandler;
 };
@@ -18,15 +17,15 @@ type Args = {
  * Manages monitoring and reporting on the state of a video.
  */
 export function useStateController(args: Args) {
-  const { playing = DEFAULTS.playing, loop = DEFAULTS.loop } = args;
-  const def = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
+  const { playing = DEFAULTS.playing, loop = DEFAULTS.loop, timestamp } = args;
+  const videoDef = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
 
   const ref = useRef<HTMLVmPlayerElement>(null);
   const [video, setVideo] = useState<t.VideoDef>(DEFAULTS.unknown);
   const [ready, setReady] = useState(false);
-  const [total, setTotal] = useState<Seconds>(-1);
-  const [current, setCurrent] = useState<Seconds>(-1);
-  const [buffered, setBuffered] = useState<Seconds>(-1);
+  const [total, setTotal] = useState<t.Seconds>(-1);
+  const [current, setCurrent] = useState<t.Seconds>(-1);
+  const [buffered, setBuffered] = useState<t.Seconds>(-1);
   const [buffering, setBuffering] = useState(false);
 
   const fireChange = (input?: t.VideoStatus) => {
@@ -53,17 +52,24 @@ export function useStateController(args: Args) {
   };
 
   /**
-   * Lifecycle.
+   * Behavior.
    */
-
-  useEffect(reset, [def]);
-  useEffect(updatePlay, [def, playing, loop, args.hasInteracted]);
+  useEffect(reset, [videoDef]);
+  useEffect(updatePlay, [videoDef, playing, loop, args.hasInteracted]);
   useEffect(() => {
+    /**
+     * Fire status update event
+     * and handle looping.
+     */
     const status = api.status;
-    const loopRestart = status.is.complete && status.is.playing; // NB: looping is determined within the <Status> calculation.
-    if (loopRestart) seek(0, true);
+    const doLoopRestart = status.is.complete && status.is.playing && loop; // NB: looping is determined within the <Status> calculation.
+    if (doLoopRestart) seek(0, true);
     fireChange(status);
   }, [total, current, playing, ready]);
+
+  useEffect(() => {
+    if (typeof timestamp === 'number') seek(timestamp, true);
+  }, [timestamp]);
 
   /**
    * Handlers

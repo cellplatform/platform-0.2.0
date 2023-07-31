@@ -4,6 +4,7 @@ export type VideoPlayerProps = {
   video?: t.VideoDef;
   playing?: boolean;
   loop?: boolean;
+  timestamp?: t.Seconds;
   style?: t.CssValue;
   onChange?: VideoPlayerChangeHandler;
 };

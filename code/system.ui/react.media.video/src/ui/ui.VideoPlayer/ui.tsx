@@ -9,10 +9,17 @@ import { useHasInteracted } from './use.HasInteracted.mjs';
  * https://vimejs.com/
  */
 export const View: React.FC<t.VideoPlayerProps> = (props) => {
-  const { video, playing, loop, onChange } = props;
+  const { video, playing, loop, timestamp, onChange } = props;
 
   const hasInteracted = useHasInteracted();
-  const controller = useStateController({ video, playing, loop, hasInteracted, onChange });
+  const controller = useStateController({
+    video,
+    playing,
+    loop,
+    timestamp,
+    hasInteracted, // NB: for "autoplay policy" on <Video> element.
+    onChange,
+  });
 
   if (!video || video.kind === 'Unknown' || !video.id) return null;
 
