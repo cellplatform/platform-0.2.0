@@ -4,8 +4,19 @@ export * from '../common';
 /**
  * Constants
  */
-const unknown: t.VideoDef = { kind: 'Unknown', id: '' };
-
 export const DEFAULTS = {
-  unknown,
+  playing: false,
+  loop: false,
+
+  get unknown(): t.VideoDefUnknown {
+    return { kind: 'Unknown', id: '' };
+  },
+
+  get emptyStatus(): t.VideoStatus {
+    return {
+      percent: -1,
+      secs: { total: -1, current: -1 },
+      is: { playing: false, complete: false },
+    };
+  },
 } as const;

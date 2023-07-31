@@ -1,4 +1,4 @@
 /**
  * @system
  */
-export { rx } from 'sys.util';
+export { Time, rx } from 'sys.util';
