@@ -6,6 +6,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     button = DEFAULTS.button,
     progress = DEFAULTS.progress,
     status = DEFAULTS.status,
+    right,
   } = props;
 
   /**
@@ -17,13 +18,16 @@ const View: React.FC<t.PlayBarProps> = (props) => {
       height,
       boxSizing: 'border-box',
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
+      gridTemplateColumns: Boolean(right) ? 'auto 1fr auto' : 'auto 1fr',
       alignContent: 'center',
       columnGap: 10,
     }),
     button: css({}),
     bar: css({}),
+    right: css({ display: 'grid' }),
   };
+
+  const elRight = right && <div {...styles.right}>{right}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -45,6 +49,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         height={height}
         onClick={props.onProgressClick}
       />
+      {elRight}
     </div>
   );
 };

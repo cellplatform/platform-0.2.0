@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, css } from '../../test.ui';
 import { PlayBar } from '.';
 import { VideoPlayer } from '../ui.VideoPlayer';
 import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
@@ -8,7 +8,7 @@ const DEFAULTS = PlayBar.DEFAULTS;
 type T = {
   props: t.PlayBarProps;
   player: t.VideoPlayerProps;
-  debug: { devBg?: boolean };
+  debug: { devBg?: boolean; devRight?: boolean };
 };
 const initial: T = {
   props: {},
@@ -20,11 +20,12 @@ export default Dev.describe('PlayBar', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'devBg'> & Pick<t.PlayBarProps, 'enabled'>;
+  type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> & Pick<t.PlayBarProps, 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     devBg: false,
+    devRight: false,
   });
 
   e.it('ui:init', async (e) => {
@@ -35,6 +36,7 @@ export default Dev.describe('PlayBar', (e) => {
     await state.change((d) => {
       d.props.enabled = local.enabled;
       d.debug.devBg = local.devBg;
+      d.debug.devRight = local.devRight;
     });
 
     ctx.subject
@@ -46,10 +48,22 @@ export default Dev.describe('PlayBar', (e) => {
         ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
         const margin = debug.devBg ? 5 : 0;
 
+        const styles = {
+          right: css({
+            display: 'grid',
+            placeItems: 'center',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+            PaddingX: 20,
+            fontSize: 18,
+          }),
+        };
+        const elRight = debug.devRight && <div {...styles.right}>{'🐷'}</div>;
+
         return (
           <PlayBar
             {...e.state.props}
             style={{ margin }}
+            right={elRight}
             /**
              * State updates: → <VideoPlayer>
              */
@@ -108,6 +122,13 @@ export default Dev.describe('PlayBar', (e) => {
           .label((e) => `background`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.devBg = Dev.toggle(d.debug, 'devBg'))));
+      });
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.devRight);
+        btn
+          .label((e) => `right (element)`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.devRight = Dev.toggle(d.debug, 'devRight'))));
       });
     });
   });

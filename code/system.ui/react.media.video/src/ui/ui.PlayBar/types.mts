@@ -5,6 +5,7 @@ export type PlayBarProps = {
   status?: t.VideoStatus;
   button?: PlayBarPropsButton;
   progress?: PlayBarPropsProgress;
+  right?: false | JSX.Element;
   style?: t.CssValue;
   onPlayClick?: t.PlayButtonClickHandler;
   onProgressClick?: t.ProgressBarClickHandler;
