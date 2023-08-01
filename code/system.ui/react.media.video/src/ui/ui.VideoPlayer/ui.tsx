@@ -39,6 +39,8 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      borderRadius,
+      overflow: 'hidden',
       opacity: controller.ready ? (enabled ? 1 : 0.3) : 0,
       filter: enabled ? undefined : 'grayscale(100%)',
       transition: 'opacity 0.15s, filter 0.15s',
