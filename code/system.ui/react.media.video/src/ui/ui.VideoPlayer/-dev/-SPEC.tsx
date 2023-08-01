@@ -123,7 +123,7 @@ export default Dev.describe('Player (Vime)', (e) => {
     dev.row((e) => {
       return (
         <PlayBar
-          style={{ marginTop: 15, marginBottom: 15 }}
+          style={{ marginTop: 25, marginBottom: 25 }}
           status={e.state.status}
           useKeyboard={true}
           onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
@@ -143,12 +143,12 @@ export default Dev.describe('Player (Vime)', (e) => {
         const isCurrent = () => def.id === state.current.props.video?.id;
 
         const id = def.id ? `${def.id.substring(0, 4)}...` : '(empty)';
-        let label = `${def.kind}: “${id}” ${hint ? `(${hint})` : ''}`;
+        let label = `${def.kind}:${id} ${hint ? `← ${hint}` : ''}`;
 
         dev.button((btn) => {
           btn
             .label(label)
-            .right((e) => isCurrent() && `←`)
+            .right((e) => isCurrent() && <Icons.Photo size={16} />)
             .onClick((e) => e.change((d) => (local.video = d.props.video = def)));
         });
       };
@@ -157,6 +157,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       def(SAMPLE.VIMEO.Running, 'Running');
       dev.hr(-1, 5);
       def(SAMPLE.YOUTUBE.AlanKay, 'Alan Kay');
+      def(SAMPLE.YOUTUBE.LocalFirst, 'Local First @pvh');
       dev.hr(-1, 5);
       def(DEFAULTS.unknown);
     });
@@ -168,7 +169,7 @@ export default Dev.describe('Player (Vime)', (e) => {
         dev.button((btn) => {
           btn
             .label(`resize → width: ${width}px`)
-            .right((e) => (e.state.debug.devWidth === width ? <Icons.Photo size={18} /> : ''))
+            .right((e) => e.state.debug.devWidth === width && <Icons.Photo size={16} />)
             .onClick((e) => e.change((d) => (local.devWidth = d.debug.devWidth = width)));
         });
       };

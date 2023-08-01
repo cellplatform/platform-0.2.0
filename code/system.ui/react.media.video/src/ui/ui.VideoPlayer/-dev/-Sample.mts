@@ -1,6 +1,4 @@
-import { type t } from '../common';
 import { Wrangle } from '../Wrangle.mjs';
-
 const { toYouTube, toVimeo } = Wrangle;
 
 export const SAMPLE = {
@@ -10,5 +8,6 @@ export const SAMPLE = {
   },
   YOUTUBE: {
     AlanKay: toYouTube('N9c7_8Gp7gI'),
+    LocalFirst: toYouTube('KrPsyr8Ig6M'),
   },
 };
