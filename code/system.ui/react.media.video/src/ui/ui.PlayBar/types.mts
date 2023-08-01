@@ -11,6 +11,7 @@ export type PlayBarProps = {
   style?: t.CssValue;
   onPlayAction?: t.PlayButtonClickHandler;
   onSeek?: PlayBarSeekHandler;
+  onMute?: PlayBarMuteHandler;
 };
 
 export type PlayBarPropsButton = {};
@@ -27,3 +28,6 @@ export type PlayBarSeekHandlerArgs = {
   status: t.VideoStatus;
   seconds: t.Seconds;
 };
+
+export type PlayBarMuteHandler = (e: PlayBarMuteHandlerArgs) => void;
+export type PlayBarMuteHandlerArgs = { muted: boolean };

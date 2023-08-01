@@ -19,7 +19,7 @@ export const DEFAULTS = {
     return {
       percent: { complete: -1, buffered: -1 },
       secs: { total: -1, current: -1, buffered: -1 },
-      is: { playing: false, complete: false, buffering: false },
+      is: { playing: false, complete: false, buffering: false, muted: false },
     };
   },
 } as const;

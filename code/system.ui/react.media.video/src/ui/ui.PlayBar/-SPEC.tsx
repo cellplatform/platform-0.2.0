@@ -88,6 +88,10 @@ export default Dev.describe('PlayBar', (e) => {
               console.info('⚡️ onSeek', e);
               state.change((d) => (d.player.timestamp = e.seconds));
             }}
+            onMute={(e) => {
+              console.info('⚡️ onMute', e);
+              state.change((d) => (d.player.muted = e.muted));
+            }}
           />
         );
       });

@@ -127,6 +127,7 @@ export default Dev.describe('Player (Vime)', (e) => {
           status={e.state.status}
           useKeyboard={true}
           onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
+          onMute={(e) => state.change((d) => (d.props.muted = e.muted))}
           onPlayAction={(e) => {
             state.change((d) => {
               d.props.playing = e.is.playing;

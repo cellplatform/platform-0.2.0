@@ -26,8 +26,17 @@ export const Wrangle = {
     playing?: boolean;
     loop?: boolean;
     buffering?: boolean;
+    muted?: boolean;
   }): t.VideoStatus {
-    const { total, current, buffered, buffering = false, playing = false, loop = false } = args;
+    const {
+      total,
+      current,
+      buffered,
+      buffering = false,
+      playing = false,
+      loop = false,
+      muted = false,
+    } = args;
     const percent = {
       complete: total === 0 ? 0 : Wrangle.clampPercent(current / total),
       buffered: total === 0 ? 0 : Wrangle.clampPercent(buffered / total),
@@ -40,6 +49,7 @@ export const Wrangle = {
         complete,
         playing: complete ? loop : playing, // NB: Always playing if looping.
         buffering,
+        muted,
       },
     };
   },

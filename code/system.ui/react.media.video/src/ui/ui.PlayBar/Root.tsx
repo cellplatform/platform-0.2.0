@@ -10,6 +10,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     right,
     onPlayAction,
     onSeek,
+    onMute,
   } = props;
 
   useKeyboard({
@@ -17,6 +18,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     status,
     onPlayAction,
     onSeek,
+    onMute,
   });
 
   /**

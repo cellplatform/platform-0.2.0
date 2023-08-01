@@ -22,5 +22,10 @@ export type VideoSrcUnknown = { kind: 'Unknown'; id: '' };
 export type VideoStatus = {
   secs: { total: t.Seconds; current: t.Seconds; buffered: t.Seconds };
   percent: { complete: t.Percent; buffered: t.Percent };
-  is: { playing: boolean; complete: boolean; buffering: boolean };
+  is: {
+    playing: boolean;
+    complete: boolean;
+    buffering: boolean;
+    muted: boolean;
+  };
 };

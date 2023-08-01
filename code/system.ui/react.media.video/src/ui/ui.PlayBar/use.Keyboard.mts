@@ -1,19 +1,19 @@
-import { useEffect, useState, useRef } from 'react';
-
-import { DEFAULTS, PlayButton, rx, Keyboard, type t, ProgressBar } from './common';
+import { useEffect, useRef } from 'react';
+import { DEFAULTS, Keyboard, PlayButton, rx, type t } from './common';
 
 type Args = {
   enabled?: boolean;
   status?: t.VideoStatus;
   onPlayAction?: t.PlayButtonClickHandler;
   onSeek?: t.PlayBarSeekHandler;
+  onMute?: t.PlayBarMuteHandler;
 };
 
 /**
  * Hook for listening to keyboard events to control a video playback.
  */
 export function useKeyboard(args: Args) {
-  const { enabled = true, onPlayAction, onSeek } = args;
+  const { enabled = true, onPlayAction, onSeek, onMute } = args;
   const statusRef = useRef<t.VideoStatus>(DEFAULTS.status);
 
   /**
@@ -34,11 +34,17 @@ export function useKeyboard(args: Args) {
       };
 
       Keyboard.until(dispose$).on({
-        Space(e) {
+        ['Space'](e) {
           const status = statusRef.current;
           const toggle: t.PlayButtonStatus = status.is.playing ? 'Pause' : 'Play';
           const args = PlayButton.Wrangle.clickArgs(toggle);
           onPlayAction?.(args);
+        },
+
+        ['KeyM'](e) {
+          const status = statusRef.current;
+          const muted = !status.is.muted;
+          onMute?.({ muted });
         },
 
         ['ArrowLeft']: (e) => jump(-5),

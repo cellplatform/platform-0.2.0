@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { DEFAULTS, type t, Time } from './common';
+import { DEFAULTS, Time, type t } from './common';
 
 import { type PlayerProps } from '@vime/react';
 
@@ -9,6 +9,7 @@ type Args = {
   playing?: boolean;
   enabled?: boolean;
   loop?: boolean;
+  muted?: boolean;
   timestamp?: t.Seconds;
   hasInteracted?: boolean;
   onChange?: t.VideoPlayerChangeHandler;
@@ -22,6 +23,7 @@ export function useStateController(args: Args) {
     playing = DEFAULTS.playing,
     enabled = DEFAULTS.enabled,
     loop = DEFAULTS.loop,
+    muted = DEFAULTS.muted,
     timestamp,
   } = args;
   const videoDef = args.video ? `${args.video.kind}.${args.video.id}` : 'empty';
@@ -115,7 +117,7 @@ export function useStateController(args: Args) {
     },
     get status(): t.VideoStatus {
       if (!api.ready || total <= 0) return DEFAULTS.emptyStatus;
-      return Wrangle.toStatus({ total, current, buffered, playing, loop, buffering });
+      return Wrangle.toStatus({ total, current, buffered, playing, loop, buffering, muted });
     },
   } as const;
   return api;

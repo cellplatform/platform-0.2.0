@@ -26,6 +26,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     enabled,
     playing,
     loop,
+    muted,
     timestamp,
     hasInteracted, // NB: for "autoplay policy" on <Video> element.
     onChange,
