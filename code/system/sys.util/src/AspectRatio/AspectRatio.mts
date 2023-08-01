@@ -24,14 +24,14 @@ export const AspectRatio = {
    * Derive the width from the given height.
    */
   width(ratio: string, height: number) {
-    return dimension('width', ratio, height);
+    return dimension('height', height, ratio);
   },
 
   /**
    * Derive the height form the given width.
    */
   height(ratio: string, width: number) {
-    return dimension('height', ratio, width);
+    return dimension('width', width, ratio);
   },
 } as const;
 
@@ -45,7 +45,7 @@ function gcd(a: number, b: number): number {
 /**
  * Derive the width or height from the other dimension and the aspect ratio.
  */
-function dimension(dimension: Dimension, ratio: string, value: number) {
+function dimension(dimension: Dimension, value: number, ratio: string) {
   const throwInvalid = () => {
     throw new Error(`Invalid aspect ratio: ${ratio}`);
   };

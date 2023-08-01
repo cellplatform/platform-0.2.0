@@ -14,12 +14,12 @@ describe('AspectRatio', (e) => {
 
   describe('width / height', () => {
     it('width, 16:9, 500', () => {
-      const res = AspectRatio.width('16:9', 500);
+      const res = AspectRatio.height('16:9', 500);
       expect(res).to.eql(281.25);
     });
 
     it('height, 16:9, 200', () => {
-      const res = AspectRatio.height('16:9', 200);
+      const res = AspectRatio.width('16:9', 200);
       expect(res).to.eql(355.55555555555554);
     });
 
