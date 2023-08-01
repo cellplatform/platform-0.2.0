@@ -1,13 +1,13 @@
 import { VideoPlayer } from '..';
 import { Dev, Icons, ProgressBar, type t } from '../../../test.ui';
-import { SAMPLE } from './-Sample.mjs';
 import { PlayBar } from '../../ui.PlayBar';
+import { SAMPLE } from './-Sample.mjs';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
 type T = {
   props: t.VideoPlayerProps;
-  debug: { devWidth?: number };
+  debug: { devWidth?: number | null; devHeight?: number | null };
   status?: t.VideoStatus;
 };
 const initial: T = {
@@ -20,11 +20,12 @@ const initial: T = {
  * https://vimejs.com/
  */
 export default Dev.describe('Player (Vime)', (e) => {
-  type LocalStore = Pick<T['debug'], 'devWidth'> &
+  type LocalStore = Pick<T['debug'], 'devWidth' | 'devHeight'> &
     Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius' | 'muted' | 'enabled'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
     devWidth: 500,
+    devHeight: null,
     video: SAMPLE.VIMEO.Tubes,
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
@@ -46,12 +47,13 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.muted = local.muted;
       d.props.enabled = local.enabled;
       d.debug.devWidth = local.devWidth;
+      d.debug.devHeight = local.devHeight;
     });
 
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>((e) => {
       const { debug, props } = e.state;
-      ctx.subject.size([debug.devWidth, null]);
+      ctx.subject.size([debug.devWidth ?? null, debug.devHeight ?? null]);
       return (
         <VideoPlayer
           {...props}
@@ -165,17 +167,37 @@ export default Dev.describe('Player (Vime)', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      const width = (width: number) => {
+      const width = (value: t.Pixels) => {
         dev.button((btn) => {
           btn
-            .label(`resize → width: ${width}px`)
-            .right((e) => e.state.debug.devWidth === width && <Icons.Photo size={16} />)
-            .onClick((e) => e.change((d) => (local.devWidth = d.debug.devWidth = width)));
+            .label(`resize → width: ${value}px`)
+            .right((e) => e.state.debug.devWidth === value && <Icons.Photo size={16} />)
+            .onClick((e) => {
+              e.change((d) => {
+                local.devWidth = d.debug.devWidth = value;
+                local.devHeight = d.debug.devHeight = null;
+              });
+            });
+        });
+      };
+
+      const height = (value: t.Pixels) => {
+        dev.button((btn) => {
+          btn
+            .label(`resize → height: ${value}px`)
+            .right((e) => e.state.debug.devHeight === value && <Icons.Photo size={16} />)
+            .onClick((e) => {
+              e.change((d) => {
+                local.devWidth = d.debug.devWidth = null;
+                local.devHeight = d.debug.devHeight = value;
+              });
+            });
         });
       };
 
       width(500);
       width(300);
+      height(350);
     });
 
     dev.hr(5, 20);
@@ -204,9 +226,7 @@ export default Dev.describe('Player (Vime)', (e) => {
             buffered={status?.percent.buffered}
             onClick={(e) => {
               console.info('⚡️ progress → click', e);
-              state.change((d) => {
-                d.props.timestamp = e.timestamp(d.status?.secs.total);
-              });
+              state.change((d) => (d.props.timestamp = e.timestamp(d.status?.secs.total)));
             }}
           />
         );
