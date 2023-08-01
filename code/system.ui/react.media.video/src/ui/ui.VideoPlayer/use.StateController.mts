@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, type t, Time } from './common';
 
 import { type PlayerProps } from '@vime/react';
 
@@ -49,8 +49,10 @@ export function useStateController(args: Args) {
   const pause = () => ref.current?.pause();
   const seek = (secs: number, ensurePlay?: boolean) => {
     const player = ref.current;
-    if (player) player.currentTime = secs;
-    if (player && ensurePlay) play();
+    if (player) {
+      player.currentTime = secs;
+      if (ensurePlay) Time.delay(100, play);
+    }
   };
   const updatePlay = () => {
     if (playing && enabled) play();
@@ -74,7 +76,9 @@ export function useStateController(args: Args) {
   }, [total, current, playing, ready]);
 
   useEffect(() => {
-    if (typeof timestamp === 'number') seek(timestamp, playing);
+    if (typeof timestamp !== 'number') return;
+    seek(timestamp, playing);
+    console.log('seek', timestamp, playing);
   }, [timestamp]);
 
   /**

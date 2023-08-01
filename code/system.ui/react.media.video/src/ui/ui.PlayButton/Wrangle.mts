@@ -1,9 +1,9 @@
-import { COLORS, Color, Icons, DEFAULTS, type t } from './common';
+import { COLORS, Color, DEFAULTS, Icons, type t } from './common';
 
 export const Wrangle = {
-  isPlaying(input?: t.PlayButtonStatus) {
-    const status = input ?? DEFAULTS.status;
-    return status === 'Pause' || status === 'Spinning';
+  isPlaying(props: t.PlayButtonProps) {
+    const { status = DEFAULTS.status, spinning = DEFAULTS.spinning } = props;
+    return status === 'Pause' || spinning;
   },
 
   icon(status: t.PlayButtonStatus) {
@@ -14,7 +14,7 @@ export const Wrangle = {
   },
 
   buttonColors(props: t.PlayButtonProps, options: { isOver?: boolean }) {
-    const isPlaying = Wrangle.isPlaying(props.status);
+    const isPlaying = Wrangle.isPlaying(props);
     const { enabled = DEFAULTS.enabled } = props;
     const { isOver = false } = options;
     const isActive = enabled && (isOver || isPlaying);

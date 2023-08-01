@@ -20,10 +20,12 @@ export default Dev.describe('PlayBar', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> & Pick<t.PlayBarProps, 'enabled'>;
+  type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> &
+    Pick<t.PlayBarProps, 'enabled' | 'replay'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
+    replay: DEFAULTS.replay,
     devBg: false,
     devRight: false,
   });
@@ -35,6 +37,7 @@ export default Dev.describe('PlayBar', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.enabled = local.enabled;
+      d.props.replay = local.replay;
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;
     });
@@ -50,11 +53,11 @@ export default Dev.describe('PlayBar', (e) => {
 
         const styles = {
           right: css({
-            display: 'grid',
-            placeItems: 'center',
             backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
             PaddingX: 20,
             fontSize: 18,
+            display: 'grid',
+            placeItems: 'center',
           }),
         };
         const elRight = debug.devRight && <div {...styles.right}>{'🐷'}</div>;
@@ -69,7 +72,15 @@ export default Dev.describe('PlayBar', (e) => {
              */
             onPlayClick={(e) => {
               console.info('⚡️ onPlayClick', e);
-              state.change((d) => (d.player.playing = e.is.playing));
+              state.change((d) => {
+                d.player.playing = e.is.playing;
+
+                // Replay.
+                if (e.replay) d.player.timestamp = 0;
+
+                // Alt: Restart (if not in replay mode, but at end of video).
+                if (d.props.status?.is.complete && e.play) d.player.timestamp = 0;
+              });
             }}
             onProgressClick={(e) => {
               console.info('⚡️ onProgressClick', e);
@@ -110,6 +121,14 @@ export default Dev.describe('PlayBar', (e) => {
           .label((e) => `enabled`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.replay);
+        btn
+          .label((e) => `replay`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.replay = Dev.toggle(d.props, 'replay'))));
       });
     });
 

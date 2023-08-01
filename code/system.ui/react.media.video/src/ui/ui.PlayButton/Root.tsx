@@ -66,10 +66,9 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
-  Wrangle: typeof Wrangle;
 };
 export const PlayButton = FC.decorate<t.PlayButtonProps, Fields>(
   View,
-  { DEFAULTS, Wrangle },
+  { DEFAULTS },
   { displayName: 'PlayButton' },
 );

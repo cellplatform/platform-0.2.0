@@ -6,6 +6,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     button = DEFAULTS.button,
     progress = DEFAULTS.progress,
     status = DEFAULTS.status,
+    replay = DEFAULTS.replay,
     right,
   } = props;
 
@@ -35,7 +36,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         {...button}
         style={styles.button}
         enabled={enabled}
-        status={status.is.playing ? 'Pause' : 'Play'}
+        status={Wrangle.toPlayStatus(props)}
         spinning={status.is.buffering}
         onClick={props.onPlayClick}
       />
@@ -53,6 +54,17 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Helpers
+ */
+const Wrangle = {
+  toPlayStatus(props: t.PlayBarProps): t.PlayButtonStatus {
+    const { status = DEFAULTS.status, replay = DEFAULTS.replay } = props;
+    if (replay && status.is.complete) return 'Replay';
+    return status.is.playing ? 'Pause' : 'Play';
+  },
+} as const;
 
 /**
  * Export
