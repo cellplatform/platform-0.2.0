@@ -8,14 +8,14 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     progress = DEFAULTS.progress,
     status = DEFAULTS.status,
     right,
-    onPlayChange,
+    onPlayAction,
     onSeek,
   } = props;
 
   useKeyboard({
     enabled: props.useKeyboard ?? DEFAULTS.useKeyboard,
     status,
-    onPlayChange,
+    onPlayAction,
     onSeek,
   });
 
@@ -47,7 +47,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         enabled={enabled}
         status={Wrangle.toPlayStatus(props)}
         spinning={status.is.buffering}
-        onClick={onPlayChange}
+        onClick={onPlayAction}
       />
       <ProgressBar
         style={styles.bar}

@@ -9,7 +9,7 @@ export type PlayBarProps = {
   replay?: boolean;
   useKeyboard?: boolean;
   style?: t.CssValue;
-  onPlayChange?: t.PlayButtonClickHandler;
+  onPlayAction?: t.PlayButtonClickHandler;
   onSeek?: PlayBarSeekHandler;
 };
 

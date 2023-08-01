@@ -72,7 +72,7 @@ export default Dev.describe('PlayBar', (e) => {
             /**
              * State updates: → <VideoPlayer>
              */
-            onPlayChange={(e) => {
+            onPlayAction={(e) => {
               console.info('⚡️ onPlayClick', e);
               state.change((d) => {
                 d.player.playing = e.is.playing;
@@ -86,7 +86,7 @@ export default Dev.describe('PlayBar', (e) => {
             }}
             onSeek={(e) => {
               console.info('⚡️ onSeek', e);
-              state.change((d) => d.player.timestamp = e.seconds);
+              state.change((d) => (d.player.timestamp = e.seconds));
             }}
           />
         );

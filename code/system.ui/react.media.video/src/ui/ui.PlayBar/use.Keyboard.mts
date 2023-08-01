@@ -5,7 +5,7 @@ import { DEFAULTS, PlayButton, rx, Keyboard, type t, ProgressBar } from './commo
 type Args = {
   enabled?: boolean;
   status?: t.VideoStatus;
-  onPlayChange?: t.PlayButtonClickHandler;
+  onPlayAction?: t.PlayButtonClickHandler;
   onSeek?: t.PlayBarSeekHandler;
 };
 
@@ -13,7 +13,7 @@ type Args = {
  * Hook for listening to keyboard events to control a video playback.
  */
 export function useKeyboard(args: Args) {
-  const { enabled = true, onPlayChange, onSeek } = args;
+  const { enabled = true, onPlayAction, onSeek } = args;
   const statusRef = useRef<t.VideoStatus>(DEFAULTS.status);
 
   /**
@@ -38,7 +38,7 @@ export function useKeyboard(args: Args) {
           const status = statusRef.current;
           const toggle: t.PlayButtonStatus = status.is.playing ? 'Pause' : 'Play';
           const args = PlayButton.Wrangle.clickArgs(toggle);
-          onPlayChange?.(args);
+          onPlayAction?.(args);
         },
 
         ['ArrowLeft']: (e) => jump(-5),
