@@ -1,3 +1,4 @@
+export { AspectRatio } from './AspectRatio';
 export { Delete } from './Delete';
 export { Dispose } from './Dispose';
 export { Hash } from './Hash/Hash.mjs';
