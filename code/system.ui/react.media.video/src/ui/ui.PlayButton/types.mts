@@ -19,11 +19,11 @@ export type PlayButtonProps = {
 export type PlayButtonClickHandler = (e: PlayButtonClickHandlerArgs) => void;
 export type PlayButtonClickHandlerArgs = {
   status: PlayButtonStatus;
+  play: boolean;
+  pause: boolean;
+  replay: boolean;
   is: {
     playing: boolean; // "play" OR "replay"
     paused: boolean;
   };
-  play: boolean;
-  pause: boolean;
-  replay: boolean;
 };

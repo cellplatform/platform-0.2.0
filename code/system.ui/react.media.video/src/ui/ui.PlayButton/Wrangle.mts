@@ -34,4 +34,13 @@ export const Wrangle = {
       iconColor,
     };
   },
+
+  clickArgs(status: t.PlayButtonStatus): t.PlayButtonClickHandlerArgs {
+    const play = status === 'Play';
+    const pause = status === 'Pause';
+    const replay = status === 'Replay';
+    const playing = (play || replay) && !pause;
+    const is = { playing, paused: !playing };
+    return { status, play, pause, replay, is };
+  },
 } as const;

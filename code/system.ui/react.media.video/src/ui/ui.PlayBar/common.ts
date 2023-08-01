@@ -15,6 +15,7 @@ const progress: t.PlayBarPropsProgress = {};
 export const DEFAULTS = {
   enabled: true,
   replay: true,
+  useKeyboard: false,
   height: PlayButtonDefaults.height,
   button,
   progress,

@@ -1,4 +1,5 @@
 import { COLORS, Color, DEFAULTS, FC, PlayButton, ProgressBar, css, type t } from './common';
+import { useKeyboard } from './use.Keyboard.mjs';
 
 const View: React.FC<t.PlayBarProps> = (props) => {
   const {
@@ -6,9 +7,17 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     button = DEFAULTS.button,
     progress = DEFAULTS.progress,
     status = DEFAULTS.status,
-    replay = DEFAULTS.replay,
     right,
+    onPlayChange,
+    onSeek,
   } = props;
+
+  useKeyboard({
+    enabled: props.useKeyboard ?? DEFAULTS.useKeyboard,
+    status,
+    onPlayChange,
+    onSeek,
+  });
 
   /**
    * [Render]
@@ -38,7 +47,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         enabled={enabled}
         status={Wrangle.toPlayStatus(props)}
         spinning={status.is.buffering}
-        onClick={props.onPlayClick}
+        onClick={onPlayChange}
       />
       <ProgressBar
         style={styles.bar}
@@ -48,7 +57,11 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         thumbColor={status.is.playing ? progress.thumbColor : Color.alpha(COLORS.DARK, 0.2)}
         bufferedColor={progress.bufferedColor}
         height={height}
-        onClick={props.onProgressClick}
+        onClick={(e) => {
+          const total = status.secs.total;
+          const seconds = e.timestamp(total);
+          onSeek?.({ status, seconds });
+        }}
       />
       {elRight}
     </div>
@@ -71,9 +84,10 @@ const Wrangle = {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  useKeyboard: typeof useKeyboard;
 };
 export const PlayBar = FC.decorate<t.PlayBarProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, useKeyboard },
   { displayName: 'PlayBar' },
 );

@@ -21,11 +21,12 @@ export default Dev.describe('PlayBar', (e) => {
    * LocalStorage
    */
   type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> &
-    Pick<t.PlayBarProps, 'enabled' | 'replay'>;
+    Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     replay: DEFAULTS.replay,
+    useKeyboard: true,
     devBg: false,
     devRight: false,
   });
@@ -38,6 +39,7 @@ export default Dev.describe('PlayBar', (e) => {
     await state.change((d) => {
       d.props.enabled = local.enabled;
       d.props.replay = local.replay;
+      d.props.useKeyboard = local.useKeyboard;
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;
     });
@@ -70,7 +72,7 @@ export default Dev.describe('PlayBar', (e) => {
             /**
              * State updates: → <VideoPlayer>
              */
-            onPlayClick={(e) => {
+            onPlayChange={(e) => {
               console.info('⚡️ onPlayClick', e);
               state.change((d) => {
                 d.player.playing = e.is.playing;
@@ -82,12 +84,9 @@ export default Dev.describe('PlayBar', (e) => {
                 if (d.props.status?.is.complete && e.play) d.player.timestamp = 0;
               });
             }}
-            onProgressClick={(e) => {
-              console.info('⚡️ onProgressClick', e);
-              state.change((d) => {
-                const total = d.props.status?.secs.total;
-                d.player.timestamp = e.timestamp(total);
-              });
+            onSeek={(e) => {
+              console.info('⚡️ onSeek', e);
+              state.change((d) => d.player.timestamp = e.seconds);
             }}
           />
         );
@@ -129,6 +128,16 @@ export default Dev.describe('PlayBar', (e) => {
           .label((e) => `replay`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.replay = Dev.toggle(d.props, 'replay'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.useKeyboard);
+        btn
+          .label((e) => `useKeyboard`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
+          });
       });
     });
 

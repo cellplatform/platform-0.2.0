@@ -11,13 +11,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
 
   const mouse = useMouseState({
     onDown(e) {
-      if (!enabled) return;
-      const play = status === 'Play';
-      const pause = status === 'Pause';
-      const replay = status === 'Replay';
-      const playing = (play || replay) && !pause;
-      const is = { playing, paused: !playing };
-      props.onClick?.({ status, play, pause, replay, is });
+      if (enabled) props.onClick?.(Wrangle.clickArgs(status));
     },
   });
   const { isOver, isDown } = mouse;
@@ -66,9 +60,10 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  Wrangle: typeof Wrangle;
 };
 export const PlayButton = FC.decorate<t.PlayButtonProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, Wrangle },
   { displayName: 'PlayButton' },
 );
