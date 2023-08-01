@@ -2,18 +2,18 @@ import '../../css.mjs';
 
 import { Wrangle } from './Wrangle.mjs';
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './ui';
 import { useHasInteracted } from './use.HasInteracted.mjs';
-import { useStateController } from './use.StateController.mjs';
+import { useController } from './use.Controller.mjs';
+import { View } from './view';
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Wrangle: typeof Wrangle;
   useHasInteracted: typeof useHasInteracted;
-  useStateController: typeof useStateController;
+  useController: typeof useController;
 };
 export const VideoPlayer = FC.decorate<t.VideoPlayerProps, Fields>(
   View,
-  { DEFAULTS, Wrangle, useHasInteracted, useStateController },
+  { DEFAULTS, Wrangle, useHasInteracted, useController },
   { displayName: 'VideoPlayer' },
 );

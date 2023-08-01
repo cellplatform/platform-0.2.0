@@ -18,7 +18,7 @@ type Args = {
 /**
  * Manages monitoring and reporting on the state of a video.
  */
-export function useStateController(args: Args) {
+export function useController(args: Args) {
   const {
     playing = DEFAULTS.playing,
     enabled = DEFAULTS.enabled,
