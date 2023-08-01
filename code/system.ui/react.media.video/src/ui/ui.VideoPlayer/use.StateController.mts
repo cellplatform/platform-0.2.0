@@ -74,7 +74,7 @@ export function useStateController(args: Args) {
   }, [total, current, playing, ready]);
 
   useEffect(() => {
-    if (typeof timestamp === 'number') seek(timestamp, true);
+    if (typeof timestamp === 'number') seek(timestamp, playing);
   }, [timestamp]);
 
   /**
