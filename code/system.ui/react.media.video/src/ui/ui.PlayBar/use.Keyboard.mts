@@ -43,10 +43,12 @@ export function useKeyboard(args: Args) {
 
         ['ArrowLeft']: (e) => jump(-5),
         ['ArrowRight']: (e) => jump(5),
-        ['ArrowLeft + Shift']: (e) => jump(-20),
-        ['ArrowRight + Shift']: (e) => jump(20),
-        ['ArrowLeft + Alt']: (e) => jump(-1),
-        ['ArrowRight + Alt']: (e) => jump(1),
+        ['ArrowLeft + ALT']: (e) => jump(-1),
+        ['ArrowRight + ALT']: (e) => jump(1),
+        ['ArrowLeft + SHIFT']: (e) => jump(-20),
+        ['ArrowRight + SHIFT']: (e) => jump(20),
+        ['ArrowLeft + ALT + SHIFT']: (e) => jump(-90),
+        ['ArrowRight + ALT + SHIFT']: (e) => jump(90),
       });
     }
 
