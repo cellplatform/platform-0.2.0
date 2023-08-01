@@ -1,7 +1,7 @@
 import type { t } from '../../common.t';
 
 type O = Record<string, unknown>;
-type RightInput = string | JSX.Element;
+type RightInput = string | JSX.Element | false;
 type SpinnerInput = boolean;
 
 /**

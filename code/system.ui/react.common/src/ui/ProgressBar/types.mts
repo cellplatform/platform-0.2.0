@@ -1,14 +1,15 @@
 import { type t } from './common';
 
-type Percent = number; // 0..1  ←(0=0%, 1=100%)
-
 /**
  * Component
  */
 export type ProgressBarProps = {
-  percent?: Percent;
+  percent?: t.Percent;
+  buffered?: t.Percent;
   thumbColor?: string;
+  bufferedColor?: string;
   height?: number;
+  enabled?: boolean;
   style?: t.CssValue;
   onClick?: ProgressBarClickHandler;
 };
@@ -18,5 +19,6 @@ export type ProgressBarProps = {
  */
 export type ProgressBarClickHandler = (e: ProgressBarClickHandlerArgs) => void;
 export type ProgressBarClickHandlerArgs = {
-  percent: Percent;
+  percent: t.Percent;
+  timestamp(total?: t.Seconds): t.Seconds; // Convinence method to convert the [percent] into a timestamp.
 };

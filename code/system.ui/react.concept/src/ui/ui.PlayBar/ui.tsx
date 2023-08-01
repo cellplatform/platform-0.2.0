@@ -1,6 +1,5 @@
-import { COLORS, Color, ProgressBar, css, Vimeo, type t } from './common';
+import { COLORS, Color, PlayButton, ProgressBar, Vimeo, css, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
-import { PlayButton } from './ui.PlayButton';
 
 export const View: React.FC<t.PlayBarProps> = (props) => {
   const { vimeo, slug, onPlayToggle, onPlayComplete, download } = props;
@@ -43,7 +42,7 @@ export const View: React.FC<t.PlayBarProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.left}>
-        <PlayButton isPlaying={player.playing} onClick={handleToggle} />
+        <PlayButton status={player.playing ? 'Pause' : 'Play'} onClick={handleToggle} />
       </div>
       <div {...styles.middle}>
         <ProgressBar thumbColor={thumbColor} percent={status?.percent} onClick={handleSeekClick} />

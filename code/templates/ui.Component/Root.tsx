@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-export const Root: React.FC<t.RootProps> = (props) => {
+const View: React.FC<t.RootProps> = (props) => {
   /**
    * [Render]
    */
@@ -17,3 +17,11 @@ export const Root: React.FC<t.RootProps> = (props) => {
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const Root = FC.decorate<t.RootProps, Fields>(View, { DEFAULTS }, { displayName: 'Root' });

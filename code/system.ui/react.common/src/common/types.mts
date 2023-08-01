@@ -21,7 +21,10 @@ export type {
   ImmutableNext,
   JsonMapU,
   JsonU,
+  Milliseconds,
   ModuleDef,
+  Percent,
+  Seconds,
   Size,
 } from 'sys.types/src/types.mjs';
 

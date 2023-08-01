@@ -11,10 +11,9 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.444',
+  version: '0.0.454',
   dependencies: {
     'ext.stripe': '0.0.0',
-    'ext.ui.react.vime': '0.0.0',
     'ext.ui.react.vimeo': '0.0.0',
     'protocol.hats': '0.0.0',
     'react': '18.2.0',
@@ -27,8 +26,9 @@ export const Pkg: ModuleDef = {
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.concept': '0.0.0',
     'sys.ui.react.dev': '0.0.0',
-    'sys.ui.react.image': '0.0.0',
     'sys.ui.react.media': '0.0.0',
+    'sys.ui.react.media.image': '0.0.0',
+    'sys.ui.react.media.video': '0.0.0',
     'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
   },
