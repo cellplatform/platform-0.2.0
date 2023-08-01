@@ -1,8 +1,9 @@
 import { Player, Vimeo, Youtube } from '@vime/react';
 
 import { DEFAULTS, css, type t } from './common';
+import { useController } from './use.Controller.mjs';
 import { useHasInteracted } from './use.HasInteracted.mjs';
-import { useStateController } from './use.StateController.mjs';
+import { Wrangle } from './Wrangle.mjs';
 
 /**
  * Vime Docs:
@@ -18,10 +19,12 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     borderRadius = DEFAULTS.borderRadius,
     muted = DEFAULTS.muted,
     enabled = DEFAULTS.enabled,
+    aspectRatio = DEFAULTS.aspectRatio,
   } = props;
+  const { width, height } = Wrangle.dimensions(aspectRatio, props.width, props.height);
 
   const hasInteracted = useHasInteracted();
-  const controller = useStateController({
+  const controller = useController({
     video,
     enabled,
     playing,
@@ -41,6 +44,8 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     base: css({
       position: 'relative',
       borderRadius,
+      width,
+      height,
       overflow: 'hidden',
       opacity: controller.ready ? (enabled ? 1 : 0.3) : 0,
       filter: enabled ? undefined : 'grayscale(100%)',
@@ -57,6 +62,10 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     '--vm-player-box-shadow': 'none',
   };
 
+  /**
+   * https://vimejs.com/components/providers/vimeo
+   * ↑ https://vimejs.com/components/core/embed
+   */
   const elVimeo = video.kind === 'Vimeo' && (
     <Vimeo
       key={`${video.kind}:${video.id}`}
@@ -68,6 +77,10 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     />
   );
 
+  /**
+   * https://vimejs.com/components/providers/youtube
+   * ↑ https://vimejs.com/components/core/embed
+   */
   const elYouTube = video.kind === 'YouTube' && (
     <Youtube
       key={`${video.kind}:${video.id}`}
@@ -78,17 +91,22 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     />
   );
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <Player
-        ref={controller.ref}
-        muted={muted}
-        style={customCssOverrides as any}
-        {...controller.handlers}
-      >
-        {elVimeo}
-        {elYouTube}
-      </Player>
-    </div>
+  /**
+   * https://vimejs.com/components/core/player
+   */
+  const elPlayer = (
+    <Player
+      ref={controller.ref}
+      muted={muted}
+      controls={false}
+      aspectRatio={aspectRatio}
+      style={customCssOverrides as any}
+      {...controller.handlers}
+    >
+      {elVimeo}
+      {elYouTube}
+    </Player>
   );
+
+  return <div {...css(styles.base, props.style)}>{elPlayer}</div>;
 };

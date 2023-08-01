@@ -7,7 +7,7 @@ const DEFAULTS = VideoPlayer.DEFAULTS;
 
 type T = {
   props: t.VideoPlayerProps;
-  debug: { devWidth?: number | null; devHeight?: number | null };
+  debug: {};
   status?: t.VideoStatus;
 };
 const initial: T = {
@@ -20,18 +20,20 @@ const initial: T = {
  * https://vimejs.com/
  */
 export default Dev.describe('Player (Vime)', (e) => {
-  type LocalStore = Pick<T['debug'], 'devWidth' | 'devHeight'> &
-    Pick<t.VideoPlayerProps, 'video' | 'playing' | 'loop' | 'borderRadius' | 'muted' | 'enabled'>;
+  type LocalStore = Pick<
+    t.VideoPlayerProps,
+    'video' | 'playing' | 'loop' | 'borderRadius' | 'muted' | 'enabled' | 'width' | 'height'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.ui.react.vime.Player');
   const local = localstore.object({
-    devWidth: 500,
-    devHeight: null,
     video: SAMPLE.VIMEO.Tubes,
     playing: DEFAULTS.playing,
     loop: DEFAULTS.loop,
     muted: DEFAULTS.muted,
     enabled: DEFAULTS.enabled,
     borderRadius: DEFAULTS.borderRadius,
+    width: 500,
+    height: undefined,
   });
 
   e.it('ui:init', async (e) => {
@@ -46,14 +48,14 @@ export default Dev.describe('Player (Vime)', (e) => {
       d.props.borderRadius = local.borderRadius;
       d.props.muted = local.muted;
       d.props.enabled = local.enabled;
-      d.debug.devWidth = local.devWidth;
-      d.debug.devHeight = local.devHeight;
+      d.props.width = local.width;
+      d.props.height = local.height;
     });
 
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>((e) => {
       const { debug, props } = e.state;
-      ctx.subject.size([debug.devWidth ?? null, debug.devHeight ?? null]);
+      // ctx.subject.size([debug.devWidth ?? null, debug.devHeight ?? null]);
       return (
         <VideoPlayer
           {...props}
@@ -129,7 +131,7 @@ export default Dev.describe('Player (Vime)', (e) => {
           status={e.state.status}
           useKeyboard={true}
           onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
-          onMute={(e) => state.change((d) => (d.props.muted = e.muted))}
+          onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
           onPlayAction={(e) => {
             state.change((d) => {
               d.props.playing = e.is.playing;
@@ -144,7 +146,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       const def = (def: t.VideoSrc, hint?: string) => {
         const isCurrent = () => def.id === state.current.props.video?.id;
 
-        const id = def.id ? `${def.id.substring(0, 4)}...` : '(empty)';
+        const id = def.id ? `${def.id.substring(0, 4)}...` : 'empty';
         let label = `${def.kind}:${id} ${hint ? `← ${hint}` : ''}`;
 
         dev.button((btn) => {
@@ -167,37 +169,27 @@ export default Dev.describe('Player (Vime)', (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
-      const width = (value: t.Pixels) => {
+      type Dimension = 'width' | 'height';
+
+      const size = (dimension: Dimension, value: t.Pixels) => {
+        const other = dimension === 'width' ? 'height' : 'width';
         dev.button((btn) => {
           btn
-            .label(`resize → width: ${value}px`)
-            .right((e) => e.state.debug.devWidth === value && <Icons.Photo size={16} />)
+            .label(`resize → ${dimension}: ${value}px`)
+            .right((e) => e.state.props[dimension] === value && <Icons.Photo size={16} />)
             .onClick((e) => {
               e.change((d) => {
-                local.devWidth = d.debug.devWidth = value;
-                local.devHeight = d.debug.devHeight = null;
+                local[dimension] = d.props[dimension] = value;
+                local[other] = d.props[other] = undefined;
               });
             });
         });
       };
 
-      const height = (value: t.Pixels) => {
-        dev.button((btn) => {
-          btn
-            .label(`resize → height: ${value}px`)
-            .right((e) => e.state.debug.devHeight === value && <Icons.Photo size={16} />)
-            .onClick((e) => {
-              e.change((d) => {
-                local.devWidth = d.debug.devWidth = null;
-                local.devHeight = d.debug.devHeight = value;
-              });
-            });
-        });
-      };
-
-      width(500);
-      width(300);
-      height(350);
+      size('width', 500);
+      size('width', 300);
+      size('height', 200);
+      size('height', 400);
     });
 
     dev.hr(5, 20);

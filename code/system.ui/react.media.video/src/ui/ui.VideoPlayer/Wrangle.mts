@@ -1,4 +1,4 @@
-import { type t } from './common';
+import { type t, AspectRatio, DEFAULTS } from './common';
 
 type Seconds = number;
 
@@ -52,5 +52,26 @@ export const Wrangle = {
         muted,
       },
     };
+  },
+
+  /**
+   * Derive [width/height] from aspect ratio.
+   */
+  dimensions(aspectRatio: string, width?: t.Pixels, height?: t.Pixels) {
+    // NB: Only one dimension is required to derive from the aspect ratio.
+    if (typeof width === 'number' && typeof height === 'number') height = undefined;
+    if (width === undefined && height === undefined) width = DEFAULTS.width;
+
+    if (typeof width === 'number') {
+      const height = AspectRatio.height(aspectRatio, width);
+      return { width, height };
+    }
+
+    if (typeof height === 'number') {
+      const width = AspectRatio.width(aspectRatio, height);
+      return { width, height };
+    }
+
+    throw new Error('Failed to derive dimensions from aspect ratio.');
   },
 };

@@ -10,6 +10,8 @@ export const DEFAULTS = {
   loop: false,
   muted: false,
   borderRadius: 0,
+  width: 500,
+  aspectRatio: '16:9',
 
   get unknown(): t.VideoSrcUnknown {
     return { kind: 'Unknown', id: '' };

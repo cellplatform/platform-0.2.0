@@ -1,4 +1,4 @@
 /**
  * @system
  */
-export { Time, rx } from 'sys.util';
+export { AspectRatio, Time, rx } from 'sys.util';
