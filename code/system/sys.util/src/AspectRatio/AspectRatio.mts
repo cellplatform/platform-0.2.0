@@ -5,7 +5,7 @@ type Dimension = 'width' | 'height';
  */
 export const AspectRatio = {
   /**
-   * Derive the aspect ratio from width x height dimensions.
+   * Derive the aspect ratio from [width] x [height] dimensions.
    */
   fromSize(width: number, height: number) {
     const divisor = gcd(width, height);
@@ -20,31 +20,18 @@ export const AspectRatio = {
     } as const;
   },
 
-  fromWidth(ratio: string, width: number) {
-    return AspectRatio.fromDimension('width', ratio, width);
-  },
-
-  fromHeight(ratio: string, width: number) {
-    return AspectRatio.fromDimension('height', ratio, width);
+  /**
+   * Derive the width from the given height.
+   */
+  width(ratio: string, height: number) {
+    return dimension('width', ratio, height);
   },
 
   /**
-   * Derive the width or height from the other dimension and the aspect ratio.
+   * Derive the height form the given width.
    */
-  fromDimension(dimension: Dimension, ratio: string, value: number) {
-    const throwInvalid = () => {
-      throw new Error(`Invalid aspect ratio: ${ratio}`);
-    };
-    const parts = typeof ratio === 'string' ? ratio.split(':') : [];
-    if (parts.length !== 2) throwInvalid();
-
-    const widthRatio = parseFloat(parts[0]);
-    const heightRatio = parseFloat(parts[1]);
-    if (isNaN(widthRatio) || isNaN(heightRatio)) throwInvalid();
-
-    if (dimension === 'width') return (value * heightRatio) / widthRatio;
-    if (dimension === 'height') return (value * widthRatio) / heightRatio;
-    return throwInvalid();
+  height(ratio: string, width: number) {
+    return dimension('height', ratio, width);
   },
 } as const;
 
@@ -53,4 +40,23 @@ export const AspectRatio = {
  */
 function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b);
+}
+
+/**
+ * Derive the width or height from the other dimension and the aspect ratio.
+ */
+function dimension(dimension: Dimension, ratio: string, value: number) {
+  const throwInvalid = () => {
+    throw new Error(`Invalid aspect ratio: ${ratio}`);
+  };
+  const parts = typeof ratio === 'string' ? ratio.split(':') : [];
+  if (parts.length !== 2) throwInvalid();
+
+  const widthRatio = parseFloat(parts[0]);
+  const heightRatio = parseFloat(parts[1]);
+  if (isNaN(widthRatio) || isNaN(heightRatio)) throwInvalid();
+
+  if (dimension === 'width') return (value * heightRatio) / widthRatio;
+  if (dimension === 'height') return (value * widthRatio) / heightRatio;
+  return throwInvalid();
 }

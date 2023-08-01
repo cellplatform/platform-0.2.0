@@ -12,25 +12,22 @@ describe('AspectRatio', (e) => {
     });
   });
 
-  describe('fromDimension', () => {
+  describe('width / height', () => {
     it('width, 16:9, 500', () => {
-      const res1 = AspectRatio.fromDimension('width', '16:9', 500);
-      const res2 = AspectRatio.fromWidth('16:9', 500);
-      expect(res1).to.eql(281.25);
-      expect(res1).to.eql(res2);
+      const res = AspectRatio.width('16:9', 500);
+      expect(res).to.eql(281.25);
     });
 
     it('height, 16:9, 200', () => {
-      const res1 = AspectRatio.fromDimension('height', '16:9', 200);
-      const res2 = AspectRatio.fromHeight('16:9', 200);
-      expect(res1).to.eql(355.55555555555554);
-      expect(res1).to.eql(res2);
+      const res = AspectRatio.height('16:9', 200);
+      expect(res).to.eql(355.55555555555554);
     });
 
     it('throw: invalid aspect-ratio', () => {
       const test = (ratio: any) => {
-        const fn = () => AspectRatio.fromDimension('width', ratio, 100);
-        expect(fn).to.throw(/Invalid aspect ratio/);
+        const err = /Invalid aspect ratio/;
+        expect(() => AspectRatio.width(ratio, 100)).to.throw(err);
+        expect(() => AspectRatio.height(ratio, 100)).to.throw(err);
       };
       ['', undefined, null, {}, 123, true].forEach((ratio) => test(ratio));
       test('1');
