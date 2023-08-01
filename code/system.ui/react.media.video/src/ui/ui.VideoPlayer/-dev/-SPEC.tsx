@@ -189,10 +189,10 @@ export default Dev.describe('Player (Vime)', (e) => {
             percent={status?.percent.complete}
             buffered={status?.percent.buffered}
             onClick={(e) => {
-              const percent = e.percent;
+              console.info('⚡️ progress → click', e);
               state.change((d) => {
-                const total = d.status?.secs.total ?? -1;
-                if (total > 0) d.props.timestamp = total * percent;
+                const total = d.status?.secs.total;
+                d.props.timestamp = e.timestamp(total);
               });
             }}
           />
