@@ -1,6 +1,7 @@
 import { VideoPlayer } from '..';
 import { Dev, Icons, ProgressBar, type t } from '../../../test.ui';
 import { SAMPLE } from './-Sample.mjs';
+import { PlayBar } from '../../ui.PlayBar';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
@@ -119,7 +120,22 @@ export default Dev.describe('Player (Vime)', (e) => {
       });
     });
 
-    dev.hr(5, 20);
+    dev.row((e) => {
+      return (
+        <PlayBar
+          style={{ marginTop: 15, marginBottom: 15 }}
+          status={e.state.status}
+          useKeyboard={true}
+          onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
+          onPlayAction={(e) => {
+            state.change((d) => {
+              d.props.playing = e.is.playing;
+              if (e.replay) d.props.timestamp = 0;
+            });
+          }}
+        />
+      );
+    });
 
     dev.section(['Video', '(Source)'], (dev) => {
       const def = (def: t.VideoSrc, hint?: string) => {
@@ -176,23 +192,18 @@ export default Dev.describe('Player (Vime)', (e) => {
       timestamp(undefined, '(undefined)');
       timestamp(0);
       timestamp(10);
-    });
 
-    dev.hr(0, 15);
-
-    dev.section('Progress Bar', (dev) => {
       dev.row((e) => {
         const { status } = e.state;
         return (
           <ProgressBar
-            style={{ MarginX: 60 }}
+            style={{ MarginX: 0 }}
             percent={status?.percent.complete}
             buffered={status?.percent.buffered}
             onClick={(e) => {
               console.info('⚡️ progress → click', e);
               state.change((d) => {
-                const total = d.status?.secs.total;
-                d.props.timestamp = e.timestamp(total);
+                d.props.timestamp = e.timestamp(d.status?.secs.total);
               });
             }}
           />
