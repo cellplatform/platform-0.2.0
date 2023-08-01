@@ -2,11 +2,24 @@ import { css, DEFAULTS, FC, Spinner, useMouseState, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.PlayButtonProps> = (props) => {
-  const { status = DEFAULTS.status, enabled = DEFAULTS.enabled } = props;
-  const isSpinning = status === 'Spinning';
+  const {
+    status = DEFAULTS.status,
+    enabled = DEFAULTS.enabled,
+    spinning = DEFAULTS.spinning,
+  } = props;
   const Icon = Wrangle.icon(status);
 
-  const mouse = useMouseState({ onDown: (e) => props.onClick?.({ status }) });
+  const mouse = useMouseState({
+    onDown(e) {
+      if (!enabled) return;
+      const play = status === 'Play';
+      const pause = status === 'Pause';
+      const replay = status === 'Replay';
+      const playing = (play || replay) && !pause;
+      const is = { playing, paused: !playing };
+      props.onClick?.({ status, play, pause, replay, is });
+    },
+  });
   const { isOver, isDown } = mouse;
 
   /**
@@ -35,8 +48,8 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
     }),
   };
 
-  const elIcon = Icon && !isSpinning && <Icon size={22} color={iconColor} />;
-  const elSpinner = isSpinning && <Spinner.Bar color={iconColor} width={20} />;
+  const elIcon = Icon && !spinning && <Icon size={22} color={iconColor} />;
+  const elSpinner = spinning && <Spinner.Bar color={iconColor} width={20} />;
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>

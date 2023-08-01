@@ -10,6 +10,7 @@ const status: t.PlayButtonStatus = 'Play';
 export const DEFAULTS = {
   status,
   enabled: true,
+  spinning: false,
   width: 56,
   height: 32,
 } as const;

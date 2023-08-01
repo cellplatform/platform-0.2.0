@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { PlayButton, Color, COLORS, css, DEFAULTS, FC, rx, type t, ProgressBar } from './common';
+import { COLORS, Color, DEFAULTS, FC, PlayButton, ProgressBar, css, type t } from './common';
 
 const View: React.FC<t.PlayBarProps> = (props) => {
-  const { enabled = DEFAULTS.enabled } = props;
+  const {
+    enabled = DEFAULTS.enabled,
+    button = DEFAULTS.button,
+    progress = DEFAULTS.progress,
+    status = DEFAULTS.status,
+  } = props;
 
   /**
    * [Render]
@@ -23,8 +27,24 @@ const View: React.FC<t.PlayBarProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PlayButton enabled={enabled} style={styles.button} />
-      <ProgressBar enabled={enabled} style={styles.bar} height={height} />
+      <PlayButton
+        {...button}
+        style={styles.button}
+        enabled={enabled}
+        status={status.is.playing ? 'Pause' : 'Play'}
+        spinning={status.is.buffering}
+        onClick={props.onPlayClick}
+      />
+      <ProgressBar
+        style={styles.bar}
+        enabled={enabled}
+        percent={status.percent.complete}
+        buffered={status.percent.buffered}
+        thumbColor={status.is.playing ? progress.thumbColor : Color.alpha(COLORS.DARK, 0.2)}
+        bufferedColor={progress.bufferedColor}
+        height={height}
+        onClick={props.onProgressClick}
+      />
     </div>
   );
 };

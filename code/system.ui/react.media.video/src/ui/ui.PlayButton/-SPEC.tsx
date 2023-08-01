@@ -7,11 +7,12 @@ type T = { props: t.PlayButtonProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('PlayButton', (e) => {
-  type LocalStore = Pick<t.PlayButtonProps, 'status' | 'enabled'>;
+  type LocalStore = Pick<t.PlayButtonProps, 'status' | 'enabled' | 'spinning'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.video.PlayButton');
   const local = localstore.object({
     status: DEFAULTS.status,
     enabled: DEFAULTS.enabled,
+    spinning: DEFAULTS.spinning,
   });
 
   e.it('ui:init', async (e) => {
@@ -22,6 +23,7 @@ export default Dev.describe('PlayButton', (e) => {
     await state.change((d) => {
       d.props.status = local.status;
       d.props.enabled = local.enabled;
+      d.props.spinning = local.spinning;
     });
 
     ctx.subject
@@ -52,6 +54,14 @@ export default Dev.describe('PlayButton', (e) => {
           .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.spinning);
+        btn
+          .label((e) => `spinning`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.spinning = Dev.toggle(d.props, 'spinning'))));
+      });
+
       dev.hr(3, 15);
 
       const status = (status: t.PlayButtonStatus) => {
@@ -66,7 +76,6 @@ export default Dev.describe('PlayButton', (e) => {
       status('Pause');
       status('Replay');
       dev.hr(-1, 5);
-      status('Spinning');
     });
   });
 

@@ -7,10 +7,12 @@ const DEFAULTS = PlayBar.DEFAULTS;
 
 type T = {
   props: t.PlayBarProps;
+  player: t.VideoPlayerProps;
   debug: { devBg?: boolean };
 };
 const initial: T = {
   props: {},
+  player: { video: SAMPLE.VIMEO.Tubes },
   debug: {},
 };
 
@@ -44,7 +46,26 @@ export default Dev.describe('PlayBar', (e) => {
         ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
         const margin = debug.devBg ? 5 : 0;
 
-        return <PlayBar {...e.state.props} style={{ margin }} />;
+        return (
+          <PlayBar
+            {...e.state.props}
+            style={{ margin }}
+            /**
+             * State updates: → <VideoPlayer>
+             */
+            onPlayClick={(e) => {
+              console.info('⚡️ onPlayClick', e);
+              state.change((d) => (d.player.playing = e.is.playing));
+            }}
+            onProgressClick={(e) => {
+              console.info('⚡️ onProgressClick', e);
+              state.change((d) => {
+                const total = d.props.status?.secs.total;
+                d.player.timestamp = e.timestamp(total);
+              });
+            }}
+          />
+        );
       });
   });
 
@@ -53,8 +74,17 @@ export default Dev.describe('PlayBar', (e) => {
     const state = await dev.state();
 
     dev.row((e) => {
-      const { props } = e.state;
-      return <VideoPlayer video={SAMPLE.VIMEO.Tubes} enabled={props.enabled} borderRadius={10} />;
+      const { props, player: video } = e.state;
+      return (
+        <VideoPlayer
+          {...video}
+          enabled={props.enabled}
+          borderRadius={10}
+          onChange={(e) => {
+            state.change((d) => (d.props.status = e.status));
+          }}
+        />
+      );
     });
 
     dev.hr(0, 15);
@@ -85,8 +115,16 @@ export default Dev.describe('PlayBar', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const { props, player: video } = e.state;
+      const status = props.status;
+      const percentComplete = Number((status?.percent.complete ?? 0).toFixed(2));
+      const data = {
+        props: { playbar: props, video },
+        'props:playbar:status:percent': percentComplete,
+        'props:playbar:status': status,
+      };
       return <Dev.Object name={'PlayBar'} data={data} expand={1} />;
     });
   });
