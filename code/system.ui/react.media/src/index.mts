@@ -11,8 +11,6 @@ export { AudioWaveform } from './ui/Audio.Waveform';
 export { MediaStream } from './ui/MediaStream';
 export { RecordButton } from './ui/RecordButton';
 
-export { YouTube } from './ui/vendor.YouTube';
-
 /**
  * Dev
  */
