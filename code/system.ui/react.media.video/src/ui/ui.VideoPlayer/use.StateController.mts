@@ -78,7 +78,6 @@ export function useStateController(args: Args) {
   useEffect(() => {
     if (typeof timestamp !== 'number') return;
     seek(timestamp, playing);
-    console.log('seek', timestamp, playing);
   }, [timestamp]);
 
   /**
