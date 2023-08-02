@@ -6,7 +6,7 @@ import { EdgePosition, Vimeo } from './common';
 const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
-  props: t.VideoDiagramProps;
+  props: t.VideoDiagramProps__OLD;
   debug: { dummy?: boolean };
 };
 const initial: T = {

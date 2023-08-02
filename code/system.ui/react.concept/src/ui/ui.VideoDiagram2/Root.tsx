@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
-const View: React.FC<t.RootProps> = (props) => {
+const View: React.FC<t.VideoDiagramProps> = (props) => {
   /**
    * [Render]
    */
@@ -14,7 +14,7 @@ const View: React.FC<t.RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 Root`}</div>
+      <div>{`🐷 Video Diagram`}</div>
     </div>
   );
 };
@@ -25,4 +25,8 @@ const View: React.FC<t.RootProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.RootProps, Fields>(View, { DEFAULTS }, { displayName: 'Root' });
+export const VideoDiagram = FC.decorate<t.VideoDiagramProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'VideoDiagram' },
+);
