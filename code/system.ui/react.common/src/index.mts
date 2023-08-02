@@ -35,7 +35,7 @@ export { TextSyntax } from './ui/Text.Syntax';
 /**
  * Hooks
  */
-export { useClickInside, useClickOutside, useMouseState } from './common';
+export { useClickInside, useClickOutside, useMouse } from './common';
 export { useDragTarget } from './ui/useDragTarget';
 export { Focus, useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';

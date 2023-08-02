@@ -1,4 +1,4 @@
-import { COLORS, css, FC, t, useMouseState } from '../common';
+import { COLORS, css, FC, t, useMouse } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
 const DEFAULT = {
@@ -19,7 +19,7 @@ export type ButtonProps = {
 const View: React.FC<ButtonProps> = (props) => {
   const { label = DEFAULT.label } = props;
 
-  const mouse = useMouseState();
+  const mouse = useMouse();
   const isActive = Wrangle.isActive(props);
 
   /**

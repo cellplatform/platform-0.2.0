@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { DEFAULTS, useMouseState, type t } from './common';
+import { DEFAULTS, useMouse, type t } from './common';
 
 type M = React.MouseEventHandler;
 type Args = {
@@ -56,7 +56,7 @@ export function useEventMonitor(args: Args = {}) {
   };
 
   const ref = useRef<HTMLDivElement>(null);
-  const mouse = useMouseState({ onDown });
+  const mouse = useMouse({ onDown });
 
   /**
    * API

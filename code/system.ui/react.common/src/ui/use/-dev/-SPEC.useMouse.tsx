@@ -2,7 +2,7 @@ import { Dev, type t } from '../../../test.ui';
 
 type T = {};
 const initial: T = {};
-const name = 'useMouseState';
+const name = 'useMouse';
 
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {

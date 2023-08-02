@@ -1,4 +1,4 @@
-import { COLORS, Value, css, useMouseState, type t } from './common';
+import { COLORS, Value, css, useMouse, type t } from './common';
 
 const DEFAULT = {
   length: [8, 5] as [number, number],
@@ -15,7 +15,7 @@ export const Hash: React.FC<HashProps> = (props) => {
   const text = props.text ?? '';
   const prefix = props.prefix ?? Wrangle.prefix(text);
   const shortened = Value.shortenHash(text, props.length ?? DEFAULT.length, { trimPrefix: true });
-  const mouse = useMouseState();
+  const mouse = useMouse();
 
   /**
    * [Render]

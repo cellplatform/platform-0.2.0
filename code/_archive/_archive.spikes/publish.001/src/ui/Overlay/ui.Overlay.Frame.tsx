@@ -7,7 +7,7 @@ import {
   State,
   t,
   useClickOutside,
-  useMouseState,
+  useMouse,
 } from '../common';
 import { Icons } from '../Icons.mjs';
 import { useOverlayState } from './useOverlayState.mjs';
@@ -24,8 +24,8 @@ export const OverlayFrame: React.FC<OverlayFrameProps> = (props) => {
   const outside = useClickOutside((e) => State.withEvents(instance, (e) => e.overlay.close()));
   const state = useOverlayState(instance, props.def);
   const mouse = {
-    root: useMouseState(),
-    body: useMouseState(),
+    root: useMouse(),
+    body: useMouse(),
   };
 
   const isOverGutter = mouse.root.isOver && !mouse.body.isOver;

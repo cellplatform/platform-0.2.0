@@ -18,4 +18,4 @@ export { Delete, Hash, Is, Sheet, Time, Value, asArray, cuid, rx, slug } from 's
 export { KeyboardMonitor, LocalStorage, UserAgent } from 'sys.ui.dom';
 export { Color, Style, css } from 'sys.ui.react.css';
 export { useRubberband } from 'sys.ui.react.dev';
-export { FC, useClickInside, useClickOutside, useMouseState } from 'sys.ui.react.util';
+export { FC, useClickInside, useClickOutside, useMouse } from 'sys.ui.react.util';

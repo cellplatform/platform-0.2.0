@@ -1,5 +1,5 @@
-import { Color, COLORS, css, t, useMouseState } from '../common';
 import { RenderCount } from '../../ui/RenderCount';
+import { COLORS, Color, css, useMouse, type t } from '../common';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
 export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx };
@@ -13,7 +13,7 @@ export type ButtonProps = {
 
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
   const { ctx } = props;
-  const mouse = useMouseState();
+  const mouse = useMouse();
 
   /**
    * [Render]

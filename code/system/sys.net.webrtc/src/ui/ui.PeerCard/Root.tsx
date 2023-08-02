@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
+import { PeerInput } from '../ui.PeerInput';
 import {
-  R,
   Color,
+  DEFAULTS,
+  FC,
+  FIELDS,
+  MediaStream,
+  R,
+  Spinner,
   copyPeer,
   css,
-  FC,
-  MediaStream,
-  Spinner,
+  useMouse,
   type t,
-  useMouseState,
-  DEFAULTS,
-  FIELDS,
 } from './common';
 import { MediaControls } from './ui.MediaControls';
 import { PeerCopied } from './ui.PeerCopied';
-import { PeerInput } from '../ui.PeerInput';
 
 const URL = {
   Rowan:
@@ -54,7 +54,7 @@ const View: React.FC<PeerCardProps> = (props) => {
   const gap = R.clamp(0, Number.MAX_VALUE, props.gap ?? DEFAULTS.gap);
   const isSpinning = props.spinning ? true : !self;
   const [showCopied, setShowCopied] = useState(false);
-  const mouse = useMouseState();
+  const mouse = useMouse();
 
   /**
    * TODO 🐷

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { DEFAULTS, FC, css, useMouseState, type t } from './common';
+import { DEFAULTS, FC, css, useMouse, type t } from './common';
 
 const View: React.FC<t.ProgressBarProps> = (props) => {
   const {
@@ -14,7 +14,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
   const buffered = Wrangle.percent(props.buffered);
 
   const ref = useRef<HTMLDivElement>(null);
-  const mouse = useMouseState({
+  const mouse = useMouse({
     onDown(e) {
       if (!enabled) return;
       if (ref.current && props.onClick) {

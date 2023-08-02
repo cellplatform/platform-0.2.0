@@ -23,7 +23,7 @@ export {
   css,
   useDragTarget,
   useFocus,
-  useMouseState,
+  useMouse,
   useRubberband,
   useSizeObserver,
 } from 'sys.ui.react.common';

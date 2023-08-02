@@ -1,4 +1,4 @@
-import { css, DEFAULTS, FC, Spinner, useMouseState, type t } from './common';
+import { css, DEFAULTS, FC, Spinner, useMouse, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.PlayButtonProps> = (props) => {
@@ -9,7 +9,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
   } = props;
   const Icon = Wrangle.icon(status);
 
-  const mouse = useMouseState({
+  const mouse = useMouse({
     onDown(e) {
       if (enabled) props.onClick?.(Wrangle.clickArgs(status));
     },

@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { format } from '../util.format.mjs';
 import { SimpleValue } from './Value.Simple';
 import { SwitchValue } from './Value.Switch';
-import { DEFAULTS, Time, css, useMouseState, type t } from './common';
+import { DEFAULTS, Time, css, useMouse, type t } from './common';
 
 export type PropListValueProps = {
   item: t.PropListItem;
@@ -19,7 +19,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
   const isCopyable = item.isCopyable(props.defaults);
   const cursor = item.value.onClick ? 'pointer' : undefined;
 
-  const mouse = useMouseState();
+  const mouse = useMouse();
   const [message, setMessage] = useState<JSX.Element | string>();
   const messageDelay = useRef<t.TimeDelayPromise>();
 

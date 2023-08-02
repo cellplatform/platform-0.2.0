@@ -12,5 +12,5 @@ export {
   css,
   useDragTarget,
   useFocus,
-  useMouseState,
+  useMouse,
 } from 'sys.ui.react.common';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, DEFAULTS, KeyboardMonitor, css, rx, useMouseState, type t } from './common';
+import { Button, DEFAULTS, KeyboardMonitor, css, rx, useMouse, type t } from './common';
 
 import { PropList } from '../PropList/ui/PropList';
 import { Label } from './ui.Label';
@@ -16,7 +16,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   const all = [...(props.all ?? [])];
   const isSelected = (field: string) => selected.includes(field);
 
-  const mouse = useMouseState();
+  const mouse = useMouse();
   const [_, setCount] = useState(0);
   const increment = () => setCount((prev) => prev + 1);
 
