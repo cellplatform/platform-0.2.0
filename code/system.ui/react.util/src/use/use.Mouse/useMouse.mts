@@ -1,12 +1,5 @@
+import { type t } from '../common';
 import { useState } from 'react';
-
-type M = React.MouseEventHandler;
-type Args = {
-  onDown?: M;
-  onUp?: M;
-  onEnter?: M;
-  onLeave?: M;
-};
 
 /**
  * HOOK: keep track of mouse events for an HTML element
@@ -16,20 +9,20 @@ type Args = {
  *     <div {...mouse.handlers} />
  *
  */
-export function useMouse(args: Args = {}) {
+export function useMouse(props: t.UseMouseProps = {}) {
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
 
   const down = (isDown: boolean) => (e: React.MouseEvent) => {
     setDown(isDown);
-    if (isDown) args.onDown?.(e);
-    if (!isDown) args.onUp?.(e);
+    if (isDown) props.onDown?.(e);
+    if (!isDown) props.onUp?.(e);
   };
   const over = (isOver: boolean) => (e: React.MouseEvent) => {
     setOver(isOver);
     if (isOver === false) setDown(false);
-    if (isOver) args.onEnter?.(e);
-    if (!isOver) args.onLeave?.(e);
+    if (isOver) props.onEnter?.(e);
+    if (!isOver) props.onLeave?.(e);
   };
 
   const onMouseDown = down(true);

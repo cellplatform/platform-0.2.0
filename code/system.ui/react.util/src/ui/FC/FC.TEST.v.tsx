@@ -1,6 +1,5 @@
-import { expect, describe, it } from '../../test/index.mjs';
-import React from 'react';
-import { FC } from './index.mjs';
+import { FC } from '.';
+import { describe, expect, it } from '../../test';
 
 describe('FC (Functional Component)', () => {
   describe('FC.decorate', () => {
