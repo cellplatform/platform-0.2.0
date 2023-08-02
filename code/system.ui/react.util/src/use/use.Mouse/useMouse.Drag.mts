@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type t } from '../common';
 
 /**
@@ -26,6 +26,11 @@ export function useMouseDrag(onMove?: t.UseMouseDragHandler) {
     // NB: Prevent content around the slider from being selected while thumb is dragging.
     e.preventDefault();
   };
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => api.cancel, []); // Ensure disposed.
 
   /**
    * API
