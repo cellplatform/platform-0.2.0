@@ -78,7 +78,11 @@ export type {
   SpecListChildVisibilityHandler,
   SpecListScrollTarget,
 } from 'sys.ui.react.dev/src/types.mjs';
-export type { UseMouseProps } from 'sys.ui.react.util/src/types.mjs';
+export type {
+  UseMouseDragHandler,
+  UseMouseMovement,
+  UseMouseProps,
+} from 'sys.ui.react.util/src/types.mjs';
 
 /**
  * @local
