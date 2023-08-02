@@ -43,6 +43,7 @@ export const View: React.FC<t.SliderProps> = (props) => {
     <Thumb
       totalWidth={totalWidth}
       percent={percent}
+      height={height}
       thumb={thumb}
       enabled={enabled}
       pressed={monitor.pressed}
