@@ -11,7 +11,7 @@ export type TrackProps = {
 };
 
 export const Track: React.FC<TrackProps> = (props) => {
-  const { totalWidth, thumb, track, percent } = props;
+  const { totalWidth, thumb, track, percent, enabled } = props;
   const height = track.height;
   const thumbLeft = Wrangle.thumbLeft(percent, totalWidth, thumb.size);
 
@@ -38,7 +38,8 @@ export const Track: React.FC<TrackProps> = (props) => {
       height,
       Absolute: [0, null, 0, 0],
       width: thumbLeft + thumb.size / 2,
-      opacity: percent > 0 ? 1 : 0,
+      opacity: percent == 0 ? 0 : enabled ? 1 : 0.3,
+      transition: ' opacity 0.2s',
     }),
     border: css({
       Absolute: 0,

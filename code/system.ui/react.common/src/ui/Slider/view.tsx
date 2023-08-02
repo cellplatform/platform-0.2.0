@@ -28,8 +28,11 @@ export const View: React.FC<t.SliderProps> = (props) => {
    */
   const styles = {
     base: css({
-      height,
       position: 'relative',
+      height,
+      filter: `grayscale(${enabled ? 0 : 100}%)`,
+      opacity: enabled ? 1 : 0.6,
+      transition: 'filter 0.2s, opacity 0.2s',
       display: 'grid',
     }),
   };
