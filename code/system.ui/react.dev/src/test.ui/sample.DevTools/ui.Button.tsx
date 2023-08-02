@@ -1,5 +1,5 @@
-import { Color, COLORS, css, t, useMouseState } from '../common';
 import { RenderCount } from '../../ui/RenderCount';
+import { COLORS, Color, css, useMouse, type t } from '../common';
 
 export type ButtonSampleClickHandler = (e: ButtonSampleClickHandlerArgs) => void;
 export type ButtonSampleClickHandlerArgs = { ctx: t.DevCtx };
@@ -13,7 +13,7 @@ export type ButtonProps = {
 
 export const ButtonSample: React.FC<ButtonProps> = (props) => {
   const { ctx } = props;
-  const mouse = useMouseState();
+  const mouse = useMouse();
 
   /**
    * [Render]
@@ -24,7 +24,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
       color: COLORS.DARK,
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       userSelect: 'none',
-      transform: `translateY(${mouse.isDown ? 1 : 0}px)`,
+      transform: `translateY(${mouse.is.down ? 1 : 0}px)`,
       cursor: 'pointer',
       marginBottom: 1,
 
@@ -50,7 +50,7 @@ export const ButtonSample: React.FC<ButtonProps> = (props) => {
     body: css({
       position: 'relative',
       margin: 1,
-      color: mouse.isOver ? COLORS.BLUE : COLORS.DARK,
+      color: mouse.is.over ? COLORS.BLUE : COLORS.DARK,
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',

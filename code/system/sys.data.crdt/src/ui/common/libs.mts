@@ -20,7 +20,7 @@ export {
   css,
   useClickOutside,
   useFocus,
-  useMouseState,
+  useMouse,
 } from 'sys.ui.react.common';
 
 export { Filesize } from 'sys.fs';

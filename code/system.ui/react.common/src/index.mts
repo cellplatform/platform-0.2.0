@@ -24,6 +24,7 @@ export { ProgressBar } from './ui/ProgressBar';
 export { PropList } from './ui/PropList';
 export { QRCode } from './ui/QRCode';
 export { RenderCount } from './ui/RenderCount';
+export { Slider } from './ui/Slider';
 export { Spinner } from './ui/Spinner';
 export { Text } from './ui/Text';
 export { TextInput, TextInputRef } from './ui/Text.Input';
@@ -34,7 +35,7 @@ export { TextSyntax } from './ui/Text.Syntax';
 /**
  * Hooks
  */
-export { useClickInside, useClickOutside, useMouseState } from './common';
+export { useClickInside, useClickOutside, useMouse } from './common';
 export { useDragTarget } from './ui/useDragTarget';
 export { Focus, useFocus } from './ui/useFocus';
 export { useSizeObserver } from './ui/useSizeObserver';

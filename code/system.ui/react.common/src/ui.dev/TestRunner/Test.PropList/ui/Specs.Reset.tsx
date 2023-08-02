@@ -1,5 +1,5 @@
 import { Util } from '../Util.mjs';
-import { Button, Keyboard, css, useMouseState, type t } from '../common';
+import { Button, Keyboard, css, useMouse, type t } from '../common';
 
 export type SpecsResetProps = {
   data: t.TestPropListData;
@@ -11,9 +11,9 @@ export type SpecsResetProps = {
 export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
   const { enabled = true } = props;
 
-  const mouse = useMouseState();
+  const mouse = useMouse();
   const keyboard = Keyboard.useKeyboardState();
-  const isOver = mouse.isOver;
+  const isOver = mouse.is.over;
   const isMeta = keyboard.current.modifiers.meta;
   const isClear = Wrangle.isClear(props, isMeta, isOver);
   const label = isClear ? '(none)' : '(all)';

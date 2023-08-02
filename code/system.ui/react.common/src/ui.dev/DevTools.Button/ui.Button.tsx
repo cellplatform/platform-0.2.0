@@ -1,4 +1,4 @@
-import { COLORS, css, FC, t, useMouseState } from '../common';
+import { COLORS, css, FC, t, useMouse } from '../common';
 import { ButtonIcon } from './ui.Button.Icon';
 
 const DEFAULT = {
@@ -19,7 +19,7 @@ export type ButtonProps = {
 const View: React.FC<ButtonProps> = (props) => {
   const { label = DEFAULT.label } = props;
 
-  const mouse = useMouseState();
+  const mouse = useMouse();
   const isActive = Wrangle.isActive(props);
 
   /**
@@ -32,7 +32,7 @@ const View: React.FC<ButtonProps> = (props) => {
   /**
    * [Render]
    */
-  const pressedTransform = `translateY(${isActive && mouse.isDown ? 1 : 0}px)`;
+  const pressedTransform = `translateY(${isActive && mouse.is.down ? 1 : 0}px)`;
   const styles = {
     base: css({
       position: 'relative',
@@ -54,7 +54,7 @@ const View: React.FC<ButtonProps> = (props) => {
     }),
     body: css({
       position: 'relative',
-      color: isActive && mouse.isOver ? COLORS.BLUE : COLORS.DARK,
+      color: isActive && mouse.is.over ? COLORS.BLUE : COLORS.DARK,
       display: 'grid',
       alignContent: 'center',
       justifyContent: 'start',
@@ -69,8 +69,8 @@ const View: React.FC<ButtonProps> = (props) => {
     <div {...css(styles.base, props.style)} {...mouse.handlers} onClick={handlerClick}>
       <ButtonIcon
         isActive={isActive}
-        isDown={mouse.isDown}
-        isOver={mouse.isOver}
+        isDown={mouse.is.down}
+        isOver={mouse.is.over}
         style={styles.icon}
       />
       <div {...styles.body}>

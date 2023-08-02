@@ -1,4 +1,4 @@
-import { css, DEFAULTS, FC, Spinner, useMouseState, type t } from './common';
+import { css, DEFAULTS, FC, Spinner, useMouse, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.PlayButtonProps> = (props) => {
@@ -9,12 +9,13 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
   } = props;
   const Icon = Wrangle.icon(status);
 
-  const mouse = useMouseState({
+  const mouse = useMouse({
     onDown(e) {
       if (enabled) props.onClick?.(Wrangle.clickArgs(status));
     },
   });
-  const { isOver, isDown } = mouse;
+  const { is } = mouse;
+  const isOver = is.over;
 
   /**
    * [Render]
@@ -36,7 +37,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
     body: css({
       display: 'grid',
       placeItems: 'center',
-      transform: isDown && enabled ? 'translateY(1px)' : undefined,
+      transform: is.down && enabled ? 'translateY(1px)' : undefined,
       opacity: enabled ? 1 : 0.5,
       transition: 'opacity 0.15s',
     }),

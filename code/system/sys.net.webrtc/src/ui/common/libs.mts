@@ -24,7 +24,7 @@ export {
   TextSyntax,
   css,
   rx,
-  useMouseState,
+  useMouse,
   useSizeObserver,
 } from 'sys.ui.react.common';
 export { AudioWaveform, RecordButton } from 'sys.ui.react.media';

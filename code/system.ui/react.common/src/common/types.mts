@@ -24,6 +24,7 @@ export type {
   Milliseconds,
   ModuleDef,
   Percent,
+  Pixels,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';
@@ -77,6 +78,11 @@ export type {
   SpecListChildVisibilityHandler,
   SpecListScrollTarget,
 } from 'sys.ui.react.dev/src/types.mjs';
+export type {
+  UseMouseDragHandler,
+  UseMouseMovement,
+  UseMouseProps,
+} from 'sys.ui.react.util/src/types.mjs';
 
 /**
  * @local

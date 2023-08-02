@@ -18,6 +18,7 @@ const View: React.FC<TitleProps> = (props) => {
     base: css({
       ...Style.toMargins(style.margin),
       cursor: props.onClick ? 'pointer' : 'default',
+      userSelect: 'none',
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',
       columnGap: 8,

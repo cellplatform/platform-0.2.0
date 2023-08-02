@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Wrangle } from './Wrangle.mjs';
-import { DEFAULTS, FC, css, useMouseState, type t } from './common';
+import { DEFAULTS, FC, css, useMouse, type t } from './common';
 
 const View: React.FC<t.ProgressBarProps> = (props) => {
   const {
@@ -10,18 +10,18 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
     enabled = DEFAULTS.enabled,
   } = props;
 
-  const percent = Wrangle.toPercent(props.percent);
-  const buffered = Wrangle.toPercent(props.buffered);
+  const percent = Wrangle.percent(props.percent);
+  const buffered = Wrangle.percent(props.buffered);
 
   const ref = useRef<HTMLDivElement>(null);
-  const mouse = useMouseState({
+  const mouse = useMouse({
     onDown(e) {
       if (!enabled) return;
       if (ref.current && props.onClick) {
         const el = ref.current;
         const totalWidth = el.offsetWidth;
         const position = e.clientX - el.getBoundingClientRect().left;
-        const percent = totalWidth <= 0 ? 0 : Wrangle.toPercent(position / totalWidth);
+        const percent = totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
         props.onClick({
           percent,
           timestamp(total = 0) {
@@ -36,7 +36,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
   /**
    * [Render]
    */
-  const trackHeight = mouse.isOver && enabled ? 10 : 5;
+  const trackHeight = mouse.is.over && enabled ? 10 : 5;
   const transition = `height 0.15s, background-color 0.15s, opacity 0.15s`;
   const thumbCss = (progress: t.Percent = 0, color: string, disabledOpacity?: number) => {
     return css({
