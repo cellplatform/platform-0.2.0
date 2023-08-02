@@ -2,6 +2,7 @@ import { type t } from './common';
 
 export type SliderProps = {
   enabled?: boolean;
+  width?: number;
   percent?: t.Percent;
   track?: Partial<t.SliderTrackProps>;
   thumb?: Partial<t.SliderThumbProps>;

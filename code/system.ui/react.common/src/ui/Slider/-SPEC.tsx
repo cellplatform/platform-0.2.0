@@ -21,24 +21,22 @@ export default Dev.describe('Slider', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
+      d.props.width = 350;
       d.props.enabled = local.enabled;
       d.props.percent = local.percent;
     });
 
-    ctx.subject
-      .size([350, null])
-      .display('grid')
-      .render<T>((e) => {
-        return (
-          <Slider
-            {...e.state.props}
-            onChange={(e) => {
-              console.info('⚡️ onChange', e);
-              state.change((d) => (local.percent = d.props.percent = e.percent));
-            }}
-          />
-        );
-      });
+    ctx.subject.display('grid').render<T>((e) => {
+      return (
+        <Slider
+          {...e.state.props}
+          onChange={(e) => {
+            console.info('⚡️ onChange', e);
+            state.change((d) => (local.percent = d.props.percent = e.percent));
+          }}
+        />
+      );
+    });
   });
 
   e.it('ui:debug', async (e) => {

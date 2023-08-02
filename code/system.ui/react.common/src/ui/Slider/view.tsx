@@ -12,7 +12,6 @@ export const View: React.FC<t.SliderProps> = (props) => {
   const { enabled = DEFAULTS.enabled, onChange } = props;
   const { thumb, track } = Wrangle.props(props);
   const percent = Wrangle.percent(props.percent);
-  const height = Math.max(thumb.size, track.height);
 
   /**
    * Hooks
@@ -26,9 +25,12 @@ export const View: React.FC<t.SliderProps> = (props) => {
   /**
    * [Render]
    */
+  const width = props.width;
+  const height = Math.max(thumb.size, track.height);
   const styles = {
     base: css({
       position: 'relative',
+      width,
       height,
       filter: `grayscale(${enabled ? 0 : 100}%)`,
       opacity: enabled ? 1 : 0.6,
