@@ -24,6 +24,7 @@ export type {
   Milliseconds,
   ModuleDef,
   Percent,
+  Pixels,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';

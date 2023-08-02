@@ -23,6 +23,7 @@ export const ModuleSpecs = {
   'sys.ui.common.PropList.FieldSelector': () => import('../ui/PropList.FieldSelector/-dev/-SPEC'),
   'sys.ui.common.ObjectView': () => import('../ui/ObjectView/-SPEC'),
   'sys.ui.common.QRCode': () => import('../ui/QRCode/-SPEC'),
+  'sys.ui.common.Slider': () => import('../ui/Slider/-SPEC'),
   'sys.ui.common.Spinner': () => import('../ui/Spinner/-SPEC'),
   'sys.ui.common.Text': () => import('../ui/Text/-dev/-SPEC'),
   'sys.ui.common.Text.Font': () => import('../ui/Text.Font/-SPEC'),
