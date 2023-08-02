@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Wrangle } from './Wrangle.mjs';
 import { DEFAULTS, useMouseState, type t } from './common';
 
@@ -13,16 +13,18 @@ type Args = {
  */
 export function useEventMonitor(args: Args = {}) {
   const { enabled = DEFAULTS.enabled, onChange } = args;
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
-    return () => removeTransientEvents(); // Dispose.
+    return () => removeMovementEvents(); // Dispose.
   }, []);
 
-  const removeTransientEvents = () => {
+  const removeMovementEvents = () => {
     const detach = document.removeEventListener;
     detach('mousemove', onMouseMove);
-    detach('mouseup', removeTransientEvents);
+    detach('mouseup', removeMovementEvents);
     detach('selectstart', onSelectStart);
+    setDragging(false);
   };
 
   const onDown: M = (e) => {
@@ -31,7 +33,7 @@ export function useEventMonitor(args: Args = {}) {
       // Start listening to mouse movement (drag-start).
       const attach = document.addEventListener;
       attach('mousemove', onMouseMove);
-      attach('mouseup', removeTransientEvents);
+      attach('mouseup', removeMovementEvents);
       attach('selectstart', onSelectStart);
 
       // Fire event.
@@ -42,6 +44,7 @@ export function useEventMonitor(args: Args = {}) {
 
   const onMouseMove = (e: MouseEvent) => {
     if (!enabled || !ref.current) return;
+    setDragging(true);
     const percent = Wrangle.elementToPercent(ref.current, e.clientX);
     onChange?.({ percent });
   };
@@ -62,7 +65,8 @@ export function useEventMonitor(args: Args = {}) {
     ref,
     el: ref.current,
     enabled,
-    pressed: mouse.isDown,
+    pressed: mouse.isDown || dragging,
+    dragging,
     handlers: mouse.handlers,
   } as const;
 }
