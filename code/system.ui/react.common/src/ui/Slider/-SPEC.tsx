@@ -1,5 +1,6 @@
+import { COLORS, Dev, type t } from '../../test.ui';
+
 import { Slider } from '.';
-import { Dev, type t } from '../../test.ui';
 import { Wrangle } from './Wrangle.mjs';
 
 const DEFAULTS = Slider.DEFAULTS;
@@ -55,9 +56,9 @@ export default Dev.describe('Slider', (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Sample States', (dev) => {
+    dev.section('Configuration Samples', (dev) => {
       type Args = { thumb: t.SliderThumbProps; track: t.SliderTrackProps };
-      const config = (label: string, fn: (e: Args) => void) => {
+      const config = (label: string, fn?: (e: Args) => void) => {
         dev.button((btn) => {
           btn.label(label).onClick((e) =>
             e.change((d) => {
@@ -67,7 +68,7 @@ export default Dev.describe('Slider', (e) => {
               };
               const thumb = Wrangle.thumb(partial.thumb);
               const track = Wrangle.track(partial.track);
-              fn({ thumb, track });
+              fn?.({ thumb, track });
               d.props.thumb = thumb;
               d.props.track = track;
             }),
@@ -80,10 +81,22 @@ export default Dev.describe('Slider', (e) => {
         e.track.height = DEFAULTS.track.height;
       });
 
+      dev.hr(-1, 5);
+
       config('skinny track', (e) => {
         e.track.height = 5;
-        console.log('e.track', e.track);
+        e.thumb.size = 15;
       });
+
+      config('smaller thumb than track', (e) => {
+        e.track.height = 20;
+        e.thumb.size = 10;
+      });
+
+      dev.hr(-1, 5);
+
+      config('blue', (e) => (e.track.progressColor = COLORS.BLUE));
+      config('green', (e) => (e.track.progressColor = COLORS.GREEN));
     });
   });
 
