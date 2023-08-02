@@ -17,17 +17,24 @@ export const View: React.FC<t.SliderProps> = (props) => {
    * Handlers
    */
   const removeTransientEvents = () => {
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', removeTransientEvents);
+    const detach = document.removeEventListener;
+    detach('mousemove', onMouseMove);
+    detach('mouseup', removeTransientEvents);
+    detach('selectstart', onSelectStart);
   };
 
   const onDown: M = (e) => {
     if (!enabled || !ref.current) return;
     if (props.onChange) {
+      // Start listening to mouse movement.
+      const attach = document.addEventListener;
+      attach('mousemove', onMouseMove);
+      attach('mouseup', removeTransientEvents);
+      attach('selectstart', onSelectStart);
+
+      // Fire event.
       const percent = Wrangle.elementToPercent(ref.current, e.clientX);
       props.onChange({ percent });
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', removeTransientEvents);
     }
   };
 
@@ -35,6 +42,10 @@ export const View: React.FC<t.SliderProps> = (props) => {
     if (!enabled || !ref.current) return;
     const percent = Wrangle.elementToPercent(ref.current, e.clientX);
     props.onChange?.({ percent });
+  };
+
+  const onSelectStart = (e: Event) => {
+    e.preventDefault();
   };
 
   /**

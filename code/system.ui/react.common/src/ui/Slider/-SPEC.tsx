@@ -8,10 +8,11 @@ type T = { props: t.SliderProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('Slider', (e) => {
-  type LocalStore = Pick<t.SliderProps, 'enabled'>;
+  type LocalStore = Pick<t.SliderProps, 'enabled' | 'percent'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Slider');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
+    percent: DEFAULTS.percent,
   });
 
   e.it('ui:init', async (e) => {
@@ -21,6 +22,7 @@ export default Dev.describe('Slider', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.enabled = local.enabled;
+      d.props.percent = local.percent;
     });
 
     ctx.subject
@@ -32,7 +34,7 @@ export default Dev.describe('Slider', (e) => {
             {...e.state.props}
             onChange={(e) => {
               console.info('⚡️ onChange', e);
-              state.change((d) => (d.props.percent = e.percent));
+              state.change((d) => (local.percent = d.props.percent = e.percent));
             }}
           />
         );
@@ -68,6 +70,8 @@ export default Dev.describe('Slider', (e) => {
               const thumb = Wrangle.thumb(partial.thumb);
               const track = Wrangle.track(partial.track);
               fn({ thumb, track });
+              d.props.thumb = thumb;
+              d.props.track = track;
             }),
           );
         });
@@ -89,8 +93,12 @@ export default Dev.describe('Slider', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
-      return <Dev.Object name={'Slider'} data={data} expand={2} />;
+      const { props } = e.state;
+      const data = {
+        props,
+        'props:percent': props.percent,
+      };
+      return <Dev.Object name={'Slider'} data={data} expand={1} />;
     });
   });
 });
