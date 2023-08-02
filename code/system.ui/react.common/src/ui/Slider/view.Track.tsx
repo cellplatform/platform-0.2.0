@@ -1,21 +1,24 @@
-import { useRef } from 'react';
-import { COLORS, Color, css, type t } from './common';
+import { Wrangle } from './Wrangle.mjs';
+import { css, type t } from './common';
 
 export type TrackProps = {
   enabled: boolean;
   percent: t.Percent;
-  track: Required<t.SliderTrackProps>;
+  totalWidth: t.Pixels;
+  track: t.SliderTrackProps;
+  thumb: t.SliderThumbProps;
   style?: t.CssValue;
 };
 
 export const Track: React.FC<TrackProps> = (props) => {
-  const { track, enabled } = props;
+  const { totalWidth, thumb, track, percent } = props;
   const height = track.height;
-  const ref = useRef<HTMLDivElement>(null);
+  const thumbLeft = Wrangle.thumbLeft(percent, totalWidth, thumb.size);
 
   /**
    * [Render]
    */
+  const borderRadius = height / 2;
   const styles = {
     base: css({
       Absolute: 0,
@@ -24,19 +27,32 @@ export const Track: React.FC<TrackProps> = (props) => {
     }),
     body: css({
       position: 'relative',
-      boxSizing: 'border-box',
-      backgroundColor: Color.alpha(COLORS.DARK, 0.06),
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.06)}`,
+      overflow: 'hidden',
+      backgroundColor: track.defaultColor,
+      borderRadius,
       height,
-      borderRadius: height / 2,
+    }),
+    progress: css({
+      backgroundColor: track.progressColor,
+      borderRadius: `${borderRadius}px 0 0 ${borderRadius}px`,
+      height,
+      Absolute: [0, null, 0, 0],
+      width: thumbLeft + thumb.size / 2,
+      opacity: percent > 0 ? 1 : 0,
+    }),
+    border: css({
+      Absolute: 0,
+      border: `solid 1px ${track.borderColor}`,
+      borderRadius,
     }),
   };
 
   return (
-    <div ref={ref} {...css(styles.base, props.style)}>
+    <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
-        <div />
+        <div {...styles.progress} />
       </div>
+      <div {...styles.border} />
     </div>
   );
 };

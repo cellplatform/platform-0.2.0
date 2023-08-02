@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { DEFAULTS, css, useMouseState, type t } from './common';
+import { useEffect, useRef } from 'react';
+import { DEFAULTS, css, useMouseState, useRedraw, type t } from './common';
 
 import { Wrangle } from './Wrangle.mjs';
 import { Thumb } from './view.Thumb';
@@ -9,15 +9,15 @@ type M = React.MouseEventHandler;
 
 export const View: React.FC<t.SliderProps> = (props) => {
   const { enabled = DEFAULTS.enabled } = props;
+  const { thumb, track } = Wrangle.props(props);
   const percent = Wrangle.percent(props.percent);
-  const { thumb, track } = Wrangle.settings(props);
   const height = Math.max(thumb.size, track.height);
 
   /**
    * Handlers
    */
   const removeTransientEvents = () => {
-    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', removeTransientEvents);
   };
 
@@ -26,16 +26,15 @@ export const View: React.FC<t.SliderProps> = (props) => {
     if (props.onChange) {
       const percent = Wrangle.elementToPercent(ref.current, e.clientX);
       props.onChange({ percent });
-      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', removeTransientEvents);
     }
   };
 
-  const onMove = (e: MouseEvent) => {
+  const onMouseMove = (e: MouseEvent) => {
     if (!enabled || !ref.current) return;
-    const current = Wrangle.percent(props.percent);
     const percent = Wrangle.elementToPercent(ref.current, e.clientX);
-    if (percent !== current) props.onChange?.({ percent });
+    props.onChange?.({ percent });
   };
 
   /**
@@ -44,6 +43,8 @@ export const View: React.FC<t.SliderProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({ onDown });
   const totalWidth = ref.current?.offsetWidth ?? -1;
+  const redraw = useRedraw();
+  useEffect(redraw, [Boolean(ref.current)]); // NB: ensure the thumb renders (which is waiting for the [ref] → totalWidth).
 
   /**
    * [Render]
@@ -57,12 +58,24 @@ export const View: React.FC<t.SliderProps> = (props) => {
   };
 
   const elThumb = totalWidth > -1 && (
-    <Thumb enabled={enabled} percent={percent} totalWidth={totalWidth} thumb={thumb} />
+    <Thumb
+      totalWidth={totalWidth}
+      percent={percent}
+      thumb={thumb}
+      enabled={enabled}
+      pressed={mouse.isDown}
+    />
   );
 
   return (
     <div ref={ref} {...css(styles.base, props.style)} {...mouse.handlers}>
-      <Track enabled={enabled} percent={percent} track={track} />
+      <Track
+        totalWidth={totalWidth}
+        percent={percent}
+        track={track}
+        thumb={thumb}
+        enabled={enabled}
+      />
       {elThumb}
     </div>
   );

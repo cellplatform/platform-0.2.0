@@ -3,19 +3,23 @@ import { type t } from './common';
 export type SliderProps = {
   enabled?: boolean;
   percent?: t.Percent;
-  track?: t.SliderTrackProps;
-  thumb?: t.SliderThumbProps;
+  track?: Partial<t.SliderTrackProps>;
+  thumb?: Partial<t.SliderThumbProps>;
   style?: t.CssValue;
   onChange?: t.SliderTrackChangeHandler;
 };
 
 export type SliderTrackProps = {
-  height?: t.Pixels;
+  height: t.Pixels;
+  defaultColor: string;
+  progressColor: string;
+  borderColor: string;
 };
 
 export type SliderThumbProps = {
-  size?: t.Pixels;
-  color?: string;
+  size: t.Pixels;
+  color: string;
+  pressedScale: t.Percent;
 };
 
 /**

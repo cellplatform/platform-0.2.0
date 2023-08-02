@@ -1,5 +1,6 @@
 import { Slider } from '.';
 import { Dev, type t } from '../../test.ui';
+import { Wrangle } from './Wrangle.mjs';
 
 const DEFAULTS = Slider.DEFAULTS;
 
@@ -60,8 +61,12 @@ export default Dev.describe('Slider', (e) => {
         dev.button((btn) => {
           btn.label(label).onClick((e) =>
             e.change((d) => {
-              const thumb = d.props.thumb ?? (d.props.thumb = DEFAULTS.thumb);
-              const track = d.props.track ?? (d.props.track = DEFAULTS.track);
+              const partial = {
+                thumb: d.props.thumb ?? (d.props.thumb = DEFAULTS.thumb),
+                track: d.props.track ?? (d.props.track = DEFAULTS.track),
+              };
+              const thumb = Wrangle.thumb(partial.thumb);
+              const track = Wrangle.track(partial.track);
               fn({ thumb, track });
             }),
           );
