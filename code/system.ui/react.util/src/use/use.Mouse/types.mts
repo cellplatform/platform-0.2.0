@@ -27,8 +27,4 @@ export type UseMouseMovement = {
  * Events
  */
 export type UseMouseDragHandler = (e: UseMouseDragHandlerArgs) => void;
-export type UseMouseDragHandlerArgs = {
-  event: MouseEvent;
-  movement: UseMouseMovement;
-  cancel(): void;
-};
+export type UseMouseDragHandlerArgs = UseMouseMovement & { cancel(): void };

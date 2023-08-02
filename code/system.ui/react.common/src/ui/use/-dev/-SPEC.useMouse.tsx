@@ -1,9 +1,9 @@
 import { Dev, css, useMouse, type t } from '../../../test.ui';
 
-type TDebug = { dragEnabled: boolean; cancelOnMove: boolean };
+type TDebug = { dragEnabled: boolean; cancelOnFirstMove: boolean };
 type T = { debug: TDebug };
 const initial: T = {
-  debug: { dragEnabled: true, cancelOnMove: false },
+  debug: { dragEnabled: true, cancelOnFirstMove: false },
 };
 
 const name = 'useMouse';
@@ -39,13 +39,15 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.cancelOnMove);
+        const value = (state: T) => Boolean(state.debug.cancelOnFirstMove);
         btn
           .label((e) => `cancel on move (first event)`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'cancelOnMove')));
+          .onClick((e) => e.change((d) => Dev.toggle(d.debug, 'cancelOnFirstMove')));
       });
     });
+
+    dev.hr(5, 20);
   });
 
   e.it('ui:footer', async (e) => {
@@ -62,12 +64,13 @@ export default Dev.describe(name, (e) => {
  * Component
  */
 function Sample(props: TDebug) {
-  const handleMove: t.UseMouseDragHandler = (e) => {
-    console.info('⚡️ onMove', e);
-    if (props.cancelOnMove) e.cancel();
+  const handleDrag: t.UseMouseDragHandler = (e) => {
+    console.info('⚡️ onDrag', e);
+    if (props.cancelOnFirstMove) e.cancel();
   };
 
-  const onDrag = props.dragEnabled ? handleMove : undefined;
+  // NB: when onDrag is undefined, the drag behavior is not enabled (no performance hit).
+  const onDrag = props.dragEnabled ? handleDrag : undefined;
   const mouse = useMouse({ onDrag });
 
   const styles = {

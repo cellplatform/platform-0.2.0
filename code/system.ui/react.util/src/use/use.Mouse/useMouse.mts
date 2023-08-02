@@ -11,10 +11,11 @@ import { useMouseDrag } from './useMouse.Drag.mjs';
  *
  */
 export function useMouse(props: t.UseMouseProps = {}) {
+  const { onDrag } = props;
+
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
-
-  const drag = useMouseDrag(props.onDrag);
+  const drag = useMouseDrag({ onDrag });
 
   const down = (isDown: boolean) => (e: React.MouseEvent) => {
     setDown(isDown);

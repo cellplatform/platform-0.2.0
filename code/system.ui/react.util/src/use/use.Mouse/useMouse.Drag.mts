@@ -4,54 +4,55 @@ import { type t } from '../common';
 /**
  * Internal hook that trackes mouse movement events (drag).
  */
-export function useMouseDrag(onMove?: t.UseMouseDragHandler) {
-  const enabled = Boolean(onMove);
+export function useMouseDrag(props: { onDrag?: t.UseMouseDragHandler }) {
+  const enabled = Boolean(props.onDrag);
   const [dragging, setDragging] = useState(false);
   const [movement, setMovement] = useState<t.UseMouseMovement>();
 
-  const reset = () => {
-    setDragging(false);
-    setMovement(undefined);
-  };
-
-  const handleMouseMove = (event: MouseEvent) => {
+  const handleMove = (e: MouseEvent) => {
     if (!enabled) return;
-    const movement = Wrangle.toMouseMovement(event);
+    const movement = Wrangle.toMouseMovement(e);
     setDragging(true);
     setMovement(movement);
-    onMove?.({ event, movement, cancel: api.cancel });
+    props.onDrag?.({ ...movement, cancel });
   };
 
-  const handleSelectStart = (e: Event) => {
-    // NB: Prevent content around the slider from being selected while thumb is dragging.
-    e.preventDefault();
-  };
+  // NB: Prevent content around the slider from being selected while thumb is dragging.
+  const handleSelectStart = (e: Event) => e.preventDefault();
 
   /**
    * Lifecycle
    */
-  useEffect(() => api.cancel, []); // Ensure disposed.
+  useEffect(() => cancel, []); // Ensure disposed.
+
+  /**
+   * Methods
+   */
+  const start = () => {
+    const attach = document.addEventListener;
+    attach('mousemove', handleMove);
+    attach('selectstart', handleSelectStart);
+    attach('mouseup', cancel);
+  };
+
+  const cancel = () => {
+    const detach = document.removeEventListener;
+    detach('mousemove', handleMove);
+    detach('selectstart', handleSelectStart);
+    detach('mouseup', cancel);
+    setDragging(false);
+    setMovement(undefined);
+  };
 
   /**
    * API
    */
   const api = {
-    enabled,
     is: { dragging },
+    enabled,
     movement,
-    start() {
-      const attach = document.addEventListener;
-      attach('mousemove', handleMouseMove);
-      attach('selectstart', handleSelectStart);
-      attach('mouseup', api.cancel);
-    },
-    cancel() {
-      const detach = document.removeEventListener;
-      detach('mousemove', handleMouseMove);
-      detach('selectstart', handleSelectStart);
-      detach('mouseup', api.cancel);
-      reset();
-    },
+    start,
+    cancel,
   } as const;
   return api;
 }
