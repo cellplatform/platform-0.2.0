@@ -36,16 +36,8 @@ export function useMouseState(args: Args = {}) {
    * API
    */
   return {
-    isOver,
-    isDown,
-
-    onMouseDown,
-    onMouseUp,
-    onMouseEnter,
-    onMouseLeave,
-
+    is: { over: isOver, down: isDown },
     handlers: { onMouseDown, onMouseUp, onMouseEnter, onMouseLeave },
-
     reset() {
       setDown(false);
       setOver(false);

@@ -13,7 +13,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 
   const mouse = useMouseState();
   const keyboard = Keyboard.useKeyboardState();
-  const isOver = mouse.isOver;
+  const isOver = mouse.is.over;
   const isMeta = keyboard.current.modifiers.meta;
   const isClear = Wrangle.isClear(props, isMeta, isOver);
   const label = isClear ? '(none)' : '(all)';

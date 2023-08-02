@@ -114,7 +114,7 @@ const View: React.FC<PeerCardProps> = (props) => {
     }),
     controls: css({
       Absolute: [10, 10, null, null],
-      opacity: mouse.isOver || muted ? 1 : 0,
+      opacity: mouse.is.over || muted ? 1 : 0,
       transition: 'all 250ms ease',
     }),
     spinner: css({

@@ -36,7 +36,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
   /**
    * [Render]
    */
-  const trackHeight = mouse.isOver && enabled ? 10 : 5;
+  const trackHeight = mouse.is.over && enabled ? 10 : 5;
   const transition = `height 0.15s, background-color 0.15s, opacity 0.15s`;
   const thumbCss = (progress: t.Percent = 0, color: string, disabledOpacity?: number) => {
     return css({

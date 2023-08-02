@@ -85,7 +85,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
   if (resettable) {
     const keyboard = KeyboardMonitor.state.current;
     const metaKey = keyboard.modifiers.meta;
-    const label = mouse.isOver && metaKey ? DEFAULTS.label.clear : DEFAULTS.label.reset;
+    const label = mouse.is.over && metaKey ? DEFAULTS.label.clear : DEFAULTS.label.reset;
     const el = <Button onClick={handleReset}>{label}</Button>;
     items.push({ label: ``, value: { data: el } });
   }

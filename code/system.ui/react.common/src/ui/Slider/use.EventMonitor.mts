@@ -65,7 +65,7 @@ export function useEventMonitor(args: Args = {}) {
     ref,
     el: ref.current,
     enabled,
-    pressed: mouse.isDown || dragging,
+    pressed: mouse.is.down || dragging,
     dragging,
     handlers: mouse.handlers,
   } as const;

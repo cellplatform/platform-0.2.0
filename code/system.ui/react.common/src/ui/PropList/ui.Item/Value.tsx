@@ -82,7 +82,7 @@ export const PropListValue: React.FC<PropListValueProps> = (props) => {
         <SimpleValue
           value={value}
           message={message}
-          isOver={mouse.isOver}
+          isOver={mouse.is.over}
           isCopyable={isCopyable}
           cursor={cursor}
           defaults={props.defaults}
