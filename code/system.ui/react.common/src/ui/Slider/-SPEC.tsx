@@ -94,7 +94,7 @@ export default Dev.describe('Slider', (e) => {
       const { props } = e.state;
       const data = {
         props,
-        'props:percent': props.percent,
+        'props:percent': Number(props.percent?.toFixed(2) ?? 0),
       };
       return <Dev.Object name={'Slider'} data={data} expand={1} />;
     });
