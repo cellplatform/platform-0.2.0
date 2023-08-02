@@ -92,9 +92,10 @@ export default Dev.describe('Slider', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const { props } = e.state;
+      const percent = Number(props.percent?.toFixed(2) ?? 0);
       const data = {
         props,
-        'props:percent': Number(props.percent?.toFixed(2) ?? 0),
+        'props:percent': percent,
       };
       return <Dev.Object name={'Slider'} data={data} expand={1} />;
     });

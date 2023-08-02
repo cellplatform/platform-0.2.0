@@ -39,7 +39,7 @@ export const Track: React.FC<TrackProps> = (props) => {
       Absolute: [0, null, 0, 0],
       width: thumbLeft + thumb.size / 2,
       opacity: percent == 0 ? 0 : enabled ? 1 : 0.3,
-      transition: ' opacity 0.2s',
+      transition: 'opacity 0.2s',
     }),
     border: css({
       Absolute: 0,
