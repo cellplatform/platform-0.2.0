@@ -10,8 +10,8 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
     enabled = DEFAULTS.enabled,
   } = props;
 
-  const percent = Wrangle.toPercent(props.percent);
-  const buffered = Wrangle.toPercent(props.buffered);
+  const percent = Wrangle.percent(props.percent);
+  const buffered = Wrangle.percent(props.buffered);
 
   const ref = useRef<HTMLDivElement>(null);
   const mouse = useMouseState({
@@ -21,7 +21,7 @@ const View: React.FC<t.ProgressBarProps> = (props) => {
         const el = ref.current;
         const totalWidth = el.offsetWidth;
         const position = e.clientX - el.getBoundingClientRect().left;
-        const percent = totalWidth <= 0 ? 0 : Wrangle.toPercent(position / totalWidth);
+        const percent = totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
         props.onClick({
           percent,
           timestamp(total = 0) {
