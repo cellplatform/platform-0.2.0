@@ -1,6 +1,7 @@
 import { Dev, type t, css } from '../../test.ui';
 import { VideoDiagram } from '.';
-import { EdgePosition, Vimeo, Slider } from './common';
+import { EdgePosition, Vimeo, Slider, Video } from './common';
+import { ScalePlacement } from './-SPEC.ScalePlacement';
 
 type T = { props: t.VideoDiagramProps };
 const initial: T = { props: {} };
@@ -13,6 +14,7 @@ export default Dev.describe('VideoDiagram', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
+    ctx.debug.width(330);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
@@ -26,28 +28,32 @@ export default Dev.describe('VideoDiagram', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      return (
-        <div {...css({ display: 'grid', placeItems: 'center' })}>
-          <EdgePosition.Selector
-            // selected={e.state.props.slug?.video?.position}
-            onSelect={(e) => {
-              state.change((d) => {
-                // const id = DEFAULTS.sample.id;
-                // const slug = d.props.slug ?? (d.props.slug = { id });
-                // const video = slug.video ?? (slug.video = {});
-                // video.position = local.videoPosition = e.pos;
-              });
-            }}
-          />
-        </div>
-      );
+    dev.section('Video', (dev) => {
+      dev.row((e) => <ScalePlacement />);
+      dev.hr(0, 5);
+      dev.textbox((txt) => {
+        txt
+          .label((e) => 'Video Source (ID)')
+          .placeholder('eg. Vimeo number')
+          .value((e) => '')
+          .onChange((e) => {})
+          .onEnter((e) => {});
+      });
     });
 
-    dev.hr(0, 10);
+    dev.hr(5, 20);
 
-    dev.row((e) => {
-      return <Slider />;
+    dev.section('Image', (dev) => {
+      dev.row((e) => <ScalePlacement />);
+      dev.hr(0, 5);
+      dev.textbox((txt) => {
+        txt
+          .label((e) => 'Image Source')
+          .placeholder('eg. domain.com/image.png')
+          .value((e) => '')
+          .onChange((e) => {})
+          .onEnter((e) => {});
+      });
     });
 
     dev.hr(5, 20);
@@ -59,8 +65,15 @@ export default Dev.describe('VideoDiagram', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
+      // dev.row((e) => <Video.PlayBar />);
+
       const data = e.state;
-      return <Dev.Object name={'VideoDiagram'} data={data} expand={1} />;
+      return (
+        <div>
+          <Video.PlayBar style={{ marginBottom: 10 }} />
+          <Dev.Object name={'VideoDiagram'} data={data} expand={1} />
+        </div>
+      );
     });
   });
 });
