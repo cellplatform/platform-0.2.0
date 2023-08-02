@@ -28,4 +28,4 @@ export {
   useSizeObserver,
 } from 'sys.ui.react.common';
 export { Image } from 'sys.ui.react.media.image';
-export { PlayButton } from 'sys.ui.react.media.video';
+export { Video } from 'sys.ui.react.media.video';
