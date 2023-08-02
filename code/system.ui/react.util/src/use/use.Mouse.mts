@@ -12,11 +12,11 @@ type Args = {
  * HOOK: keep track of mouse events for an HTML element
  * Usage:
  *
- *     const mouse = useMouseState();
+ *     const mouse = useMouse();
  *     <div {...mouse.handlers} />
  *
  */
-export function useMouseState(args: Args = {}) {
+export function useMouse(args: Args = {}) {
   const [isDown, setDown] = useState(false);
   const [isOver, setOver] = useState(false);
 
