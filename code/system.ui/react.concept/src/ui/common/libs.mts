@@ -18,6 +18,7 @@ export {
   Keyboard,
   ProgressBar,
   PropList,
+  Slider,
   TestRunner,
   css,
   useDragTarget,

@@ -1,6 +1,6 @@
 import { Dev, type t, css } from '../../test.ui';
 import { VideoDiagram } from '.';
-import { EdgePosition, Vimeo } from './common';
+import { EdgePosition, Vimeo, Slider } from './common';
 
 type T = { props: t.VideoDiagramProps };
 const initial: T = { props: {} };
@@ -42,6 +42,12 @@ export default Dev.describe('VideoDiagram', (e) => {
           />
         </div>
       );
+    });
+
+    dev.hr(0, 10);
+
+    dev.row((e) => {
+      return <Slider />;
     });
 
     dev.hr(5, 20);
