@@ -5,7 +5,7 @@ type Stage = 'down' | 'up';
 type EventName = 'mousedown' | 'mouseup';
 
 type Callback = (e: MouseEvent) => void;
-type Args<T extends E> = { stage?: Stage; ref?: RefObject<T>; callback?: Callback };
+type UseClickProps<T extends E> = { stage?: Stage; ref?: RefObject<T>; callback?: Callback };
 
 const DEFAULT_STAGE: Stage = 'down';
 
@@ -14,7 +14,7 @@ const DEFAULT_STAGE: Stage = 'down';
  * Usage:
  *    Useful for clicking away from modal dialogs or popups.
  */
-export function useClickOutside<T extends E = HTMLDivElement>(input: Args<T> | Callback) {
+export function useClickOutside<T extends E = HTMLDivElement>(input: UseClickProps<T> | Callback) {
   const { callback, stage, ref, event } = Wrangle.args(input);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function useClickOutside<T extends E = HTMLDivElement>(input: Args<T> | C
  * Usage:
  *    Useful for clicking away from modal dialogs or popups.
  */
-export function useClickInside<T extends E = HTMLDivElement>(input: Args<T> | Callback) {
+export function useClickInside<T extends E = HTMLDivElement>(input: UseClickProps<T> | Callback) {
   const { callback, stage, ref, event } = Wrangle.args(input);
 
   useEffect(() => {
@@ -51,13 +51,13 @@ export function useClickInside<T extends E = HTMLDivElement>(input: Args<T> | Ca
  * Helpers
  */
 const Wrangle = {
-  args<T extends E>(input: Args<T> | Callback) {
+  args<T extends E>(input: UseClickProps<T> | Callback) {
     const { callback, stage = DEFAULT_STAGE, ref = useRef<T>(null) } = Wrangle.input(input);
     const event = Wrangle.eventName(stage);
     return { callback, event, ref, stage };
   },
 
-  input<T extends E>(input: Args<T> | Callback): Args<T> {
+  input<T extends E>(input: UseClickProps<T> | Callback): UseClickProps<T> {
     if (typeof input === 'object') return input;
     if (typeof input === 'function') return { callback: input };
     throw new Error('Unable to parse parameter input');
