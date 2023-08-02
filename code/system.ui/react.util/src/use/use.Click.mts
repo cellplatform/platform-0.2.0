@@ -19,7 +19,7 @@ export function useClickOutside<T extends E = HTMLDivElement>(input: Args<T> | C
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current?.contains(e.target as E)) callback?.(e);
+      if (!ref.current?.contains(e.target as E)) callback?.(e);
     };
     document?.addEventListener(event, handler, true);
     return () => document?.removeEventListener(event, handler, true);
@@ -38,7 +38,7 @@ export function useClickInside<T extends E = HTMLDivElement>(input: Args<T> | Ca
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && ref.current?.contains(e.target as E)) callback?.(e);
+      if (ref.current?.contains(e.target as E)) callback?.(e);
     };
     document?.addEventListener(event, handler, true);
     return () => document?.removeEventListener(event, handler, true);
