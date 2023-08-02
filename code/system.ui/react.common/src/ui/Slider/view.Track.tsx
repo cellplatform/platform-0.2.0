@@ -52,8 +52,8 @@ export const Track: React.FC<TrackProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         <div {...styles.progress} />
+        <div {...styles.border} />
       </div>
-      <div {...styles.border} />
     </div>
   );
 };
