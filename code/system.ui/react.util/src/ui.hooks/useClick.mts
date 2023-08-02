@@ -25,7 +25,7 @@ export function useClickOutside<T extends E = HTMLDivElement>(input: Args<T> | C
     return () => document?.removeEventListener(event, handler, true);
   }, [event, ref, callback]);
 
-  return { ref, stage };
+  return { ref, stage } as const;
 }
 
 /**
@@ -44,13 +44,12 @@ export function useClickInside<T extends E = HTMLDivElement>(input: Args<T> | Ca
     return () => document?.removeEventListener(event, handler, true);
   }, [event, ref, callback]);
 
-  return { ref, stage };
+  return { ref, stage } as const;
 }
 
 /**
  * Helpers
  */
-
 const Wrangle = {
   args<T extends E>(input: Args<T> | Callback) {
     const { callback, stage = DEFAULT_STAGE, ref = useRef<T>(null) } = Wrangle.input(input);

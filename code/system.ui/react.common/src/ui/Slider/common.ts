@@ -1,20 +1,17 @@
-import { type t } from './common';
-
+import { COLORS, type t } from './common';
 export * from '../common';
 
 /**
  * Constants
  */
-const thumb: Required<t.SliderThumbProps> = {
-  height: 20,
-};
-
-const track: Required<t.SliderTrackProps> = {
-  height: 20,
-};
-
 export const DEFAULTS = {
+  enabled: true,
   percent: 0,
-  thumb,
-  track,
+
+  get thumb(): Required<t.SliderThumbProps> {
+    return { size: 20, color: COLORS.WHITE };
+  },
+  get track(): Required<t.SliderTrackProps> {
+    return { height: 20 };
+  },
 } as const;

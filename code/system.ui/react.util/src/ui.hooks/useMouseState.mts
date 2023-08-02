@@ -6,6 +6,7 @@ type Args = {
   onUp?: M;
   onEnter?: M;
   onLeave?: M;
+  onMove?: M;
 };
 
 /**
@@ -31,6 +32,7 @@ export function useMouseState(args: Args = {}) {
   const onMouseUp = down(false);
   const onMouseEnter = over(true);
   const onMouseLeave = over(false);
+  const onMouseMove = args.onMove;
 
   /**
    * API
@@ -44,11 +46,11 @@ export function useMouseState(args: Args = {}) {
     onMouseEnter,
     onMouseLeave,
 
-    handlers: { onMouseDown, onMouseUp, onMouseEnter, onMouseLeave },
+    handlers: { onMouseDown, onMouseUp, onMouseEnter, onMouseLeave, onMouseMove },
 
     reset() {
       setDown(false);
       setOver(false);
     },
-  };
+  } as const;
 }
