@@ -9,7 +9,12 @@ type Args = {
 };
 
 /**
- * Monitor [isOver] and [isDown] state of an HTML element.
+ * HOOK: keep track of mouse events for an HTML element
+ * Usage:
+ *
+ *     const mouse = useMouseState();
+ *     <div {...mouse.handlers} />
+ *
  */
 export function useMouseState(args: Args = {}) {
   const [isDown, setDown] = useState(false);
