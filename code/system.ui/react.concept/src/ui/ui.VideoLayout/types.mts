@@ -31,7 +31,8 @@ export type VideoLayoutProps = {
 
 export type VideoLayoutSizeHandler = (e: VideoLayoutSizeHandlerArgs) => void;
 export type VideoLayoutSizeHandlerArgs = {
-  parent: t.DomRect;
-  video: t.DomRect;
+  container: t.Size;
+  video: t.Size;
+  isMin: boolean;
 };
 

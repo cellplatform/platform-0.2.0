@@ -18,6 +18,7 @@ export type {
   PixelOrPercent,
   Pixels,
   Seconds,
+  Size,
 } from 'sys.types/src/types.mjs';
 
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
