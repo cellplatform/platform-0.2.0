@@ -118,9 +118,9 @@ export const Sample: React.FC<SampleProps> = (props) => {
   const styles = {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      margin: 15,
       border: `dashed 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
       borderRadius: 5,
+      margin: 15,
       padding: 5,
     }),
   };
