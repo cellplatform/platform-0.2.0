@@ -15,6 +15,8 @@ export type {
   Lifecycle,
   Milliseconds,
   Percent,
+  PixelOrPercent,
+  Pixels,
   Seconds,
 } from 'sys.types/src/types.mjs';
 

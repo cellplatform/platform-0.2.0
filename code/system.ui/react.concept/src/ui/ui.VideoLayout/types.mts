@@ -16,8 +16,9 @@ export type VideoLayoutProps = {
  * Definition
  */
 export type VideoLayout = {
-  id?: t.VideoSrcInput; // Video-identifier (eg. 499921561 on vimeo).
+  id?: t.VideoSrcInput;
   position?: t.EdgePositionInput;
   innerScale?: t.Percent;
-  height?: number;
+  height?: t.PixelOrPercent;
+  minHeight?: t.Pixels;
 };

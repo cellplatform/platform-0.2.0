@@ -38,6 +38,8 @@ export default Dev.describe(name, (e) => {
       video.position = local.position;
       video.innerScale = 1.1;
       video.id = 612010014; // Sample - (Rowan)
+      video.height = 0.3;
+      video.minHeight = 180;
 
       d.props.muted = local.muted;
     });

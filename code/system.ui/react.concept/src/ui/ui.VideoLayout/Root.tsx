@@ -1,4 +1,4 @@
-import { DEFAULTS, EdgePosition, FC, Video, css, type t } from './common';
+import { DEFAULTS, EdgePosition, FC, Size, Video, css, useSizeObserver, type t } from './common';
 
 const View: React.FC<t.VideoLayoutProps> = (props) => {
   const {
@@ -9,25 +9,35 @@ const View: React.FC<t.VideoLayoutProps> = (props) => {
   } = props;
   const src = Video.toSrc(data?.id);
 
+  const resize = useSizeObserver();
+  const parentHeight = resize.rect.height;
+  const height = Size.fromPixelOrPercent(data?.height, parentHeight, data?.minHeight);
+
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', display: 'grid' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
+  const elPlayer = resize.ready && height > 0 && (
+    <Video.Player
+      video={src}
+      playing={playing}
+      muted={muted}
+      timestamp={timestamp}
+      innerScale={data?.innerScale}
+      onStatus={props.onStatus}
+      height={height}
+    />
+  );
+
   return (
-    <div {...css(styles.base, props.style)}>
-      <EdgePosition position={data?.position}>
-        <Video.Player
-          video={src}
-          playing={playing}
-          muted={muted}
-          timestamp={timestamp}
-          innerScale={data?.innerScale}
-          onStatus={props.onStatus}
-        />
-      </EdgePosition>
+    <div ref={resize.ref} {...css(styles.base, props.style)}>
+      <EdgePosition position={data?.position}>{elPlayer}</EdgePosition>
     </div>
   );
 };
