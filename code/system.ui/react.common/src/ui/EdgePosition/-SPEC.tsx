@@ -49,7 +49,7 @@ export default Dev.describe('Position', (e) => {
         <div {...css({ display: 'grid', placeItems: 'center' })}>
           <EdgePosition.Selector
             selected={e.state.props.position}
-            onSelect={(e) => {
+            onChange={(e) => {
               state.change((d) => (d.props.position = e.pos));
               local.position = e.pos;
             }}

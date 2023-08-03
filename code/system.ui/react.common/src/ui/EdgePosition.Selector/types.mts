@@ -8,7 +8,7 @@ export type EdgePositionSelectorProps = {
   size?: number;
   selected?: t.EdgePositionInput;
   style?: t.CssValue;
-  onSelect?: EdgePositionClickHandler;
+  onChange?: EdgePositionClickHandler;
 };
 
 /**

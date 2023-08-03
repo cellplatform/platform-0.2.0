@@ -28,7 +28,7 @@ export const View: React.FC<t.EdgePositionSelectorProps> = (props) => {
                 enabled={enabled}
                 position={position}
                 selected={isSelected}
-                onClick={(e) => props.onSelect?.(e)}
+                onClick={(e) => props.onChange?.(e)}
               />
             );
           },
