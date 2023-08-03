@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import {
   COLORS,
@@ -22,18 +22,25 @@ export const View: React.FC<t.VideoLayoutProps> = (props) => {
   } = props;
   const src = Video.toSrc(data?.id);
 
+  // Hooks.
   const playerDivRef = useRef<HTMLDivElement>(null);
   const resize = useSizeObserver();
+
+  // Size.
   const parentHeight = resize.rect.height;
   const height = Size.fromPixelOrPercent(data?.height, parentHeight, data?.minHeight);
   const isMin = height <= (data?.minHeight ?? -1);
 
-  // Alert listeners to size dimensions.
-  if (onSize && resize.ready && playerDivRef.current) {
-    const container = Size.rectToSize(resize.rect);
-    const video = Size.rectToSize(playerDivRef.current.getBoundingClientRect());
-    onSize?.({ container, video, isMin });
-  }
+  /**
+   * [Effects]
+   */
+  useEffect(() => {
+    if (onSize && resize.ready && playerDivRef.current) {
+      const container = Size.rectToSize(resize.rect);
+      const video = Size.rectToSize(playerDivRef.current.getBoundingClientRect());
+      onSize?.({ container, video, isMin });
+    }
+  }, [height]);
 
   /**
    * [Render]
@@ -58,7 +65,6 @@ export const View: React.FC<t.VideoLayoutProps> = (props) => {
         onStatus={props.onStatus}
         height={height}
       />
-      {props.debug && <div {...styles.debug} />}
     </div>
   );
 
