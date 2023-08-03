@@ -7,21 +7,28 @@ export const Percent = {
   /**
    * Converts a value to a percentage.
    */
-  clamp(input?: any): t.Percent {
+  clamp(value?: string | number, min?: string | number, max?: string | number): t.Percent {
     const clamp = (value: number) => Math.max(0, Math.min(1, value));
-    if (typeof input === 'number') return clamp(input);
-    if (typeof input === 'string') {
-      const text = input.trim();
+    const done = (value: number) => {
+      value = clamp(value);
+      if (typeof min === 'number') value = Math.max(min, value);
+      if (typeof max === 'number') value = Math.min(max, value);
+      return value;
+    };
+
+    if (typeof value === 'number') return done(value);
+    if (typeof value === 'string') {
+      const text = value.trim();
       if (!text) return 0;
       if (text.endsWith('%')) {
         const num = Number(text.replace(/%$/, ''));
-        return isNaN(num) ? 0 : clamp(num / 100);
+        return done(isNaN(num) ? 0 : num / 100);
       } else {
         const num = Number(text);
-        return isNaN(num) ? 0 : clamp(num);
+        return done(isNaN(num) ? 0 : num);
       }
     }
-    return 0;
+    return done(0);
   },
 
   /**

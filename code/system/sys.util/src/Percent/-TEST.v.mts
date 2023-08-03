@@ -27,6 +27,25 @@ describe('Percent', () => {
       test('  0.3  ', 0.3);
       test(' 30% ', 0.3);
       test(' 45.1% ', 0.451);
+      test('0.1% ', 0.001);
+    });
+
+    it('min/max', () => {
+      type T = string | number | undefined;
+      const test = (input: T, min: T, max: T, expected: t.Percent) => {
+        expect(Percent.clamp(input, min, max)).to.eql(expected);
+      };
+
+      test(0.5, 0.1, 0.9, 0.5);
+
+      test(0, 0.1, 0.9, 0.1);
+      test(1, 0.1, 0.9, 0.9);
+
+      test(-1, 0.1, 0.9, 0.1);
+      test(2, 0.1, 0.9, 0.9);
+
+      test('10%', 0.25, 0.9, 0.25);
+      test('60%', 0.1, 0.5, 0.5);
     });
   });
 
