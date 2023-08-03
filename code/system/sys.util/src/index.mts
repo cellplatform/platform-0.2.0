@@ -7,6 +7,7 @@ export { Is } from './Is';
 export { Json } from './Json';
 export { Mime } from './Mime';
 export { Path } from './Path';
+export { Percent } from './Percent';
 export { Promise, maybeWait } from './Promise';
 export { rx } from './Rx';
 export { Sheet } from './Sheet';
