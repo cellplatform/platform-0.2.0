@@ -12,6 +12,7 @@ export type VideoPlayerProps = {
   width?: t.Pixels; // NB: set [width] OR [height] not both. If both set then [width] is used.
   height?: t.Pixels;
   aspectRatio?: string; // eg. "16:9" ← "width:height"
+  innerScale?: t.Percent; // NB: useful for clipping noise at the border of a video (eg. 1.1).
 
   borderRadius?: t.Pixels;
   style?: t.CssValue;

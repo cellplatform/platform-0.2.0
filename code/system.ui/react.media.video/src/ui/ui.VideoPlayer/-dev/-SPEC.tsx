@@ -54,8 +54,7 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>((e) => {
-      const { debug, props } = e.state;
-      // ctx.subject.size([debug.devWidth ?? null, debug.devHeight ?? null]);
+      const { props } = e.state;
       return (
         <VideoPlayer
           {...props}
