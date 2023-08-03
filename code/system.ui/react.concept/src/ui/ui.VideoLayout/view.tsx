@@ -65,6 +65,7 @@ export const View: React.FC<t.VideoLayoutProps> = (props) => {
         onStatus={props.onStatus}
         height={height}
       />
+      {props.debug && <div {...styles.debug} />}
     </div>
   );
 

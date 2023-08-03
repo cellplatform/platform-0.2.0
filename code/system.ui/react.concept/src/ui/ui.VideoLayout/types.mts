@@ -28,7 +28,6 @@ export type VideoLayoutProps = {
 /**
  * Events
  */
-
 export type VideoLayoutSizeHandler = (e: VideoLayoutSizeHandlerArgs) => void;
 export type VideoLayoutSizeHandlerArgs = {
   container: t.Size;
