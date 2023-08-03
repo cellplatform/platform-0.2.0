@@ -7,7 +7,7 @@ export { Pkg };
 /**
  * Components
  */
-export { Video } from './Video.mjs';
+export { Video } from './Video';
 
 export { PlayBar } from './ui/ui.PlayBar';
 export { PlayButton } from './ui/ui.PlayButton';

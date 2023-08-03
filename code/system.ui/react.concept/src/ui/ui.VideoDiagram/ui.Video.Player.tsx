@@ -2,7 +2,7 @@ import { Vimeo, css, type t } from './common';
 
 export type VideoPlayerProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlugVideo;
+  slug?: t.ConceptSlugVideo___;
   style?: t.CssValue;
 };
 

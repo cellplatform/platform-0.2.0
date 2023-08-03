@@ -5,7 +5,7 @@ export const Specs = {
   'sys.ui.concept.ui.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'sys.ui.concept.ui.PlayBar': () => import('../ui/ui.PlayBar/-SPEC'),
   'sys.ui.concept.ui.VideoDiagram': () => import('../ui/ui.VideoDiagram/-SPEC'),
-  'sys.ui.concept.ui.VideoDiagram2': () => import('../ui/ui.VideoDiagram2/-SPEC'),
+  'sys.ui.concept.ui.VideoLayout': () => import('../ui/ui.VideoLayout/-SPEC'),
   'sys.ui.concept.ui.ScreenLayout': () => import('../ui/ui.ScreenLayout/-dev/-SPEC'),
 };
 

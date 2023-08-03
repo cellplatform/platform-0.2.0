@@ -24,11 +24,13 @@ export type ConceptSlug = {
 export type ConceptSlugVideo = {
   id?: VideoId; // Video-identifier (eg. 499921561 on vimeo).
   position?: t.EdgePositionInput;
-  scale?: number;
+  scale?: t.Percent;
   height?: number;
 };
 
-export type ConceptSlugImage = {
+export type ConceptSlugImage___ = {
   src?: Url;
   sizing?: t.ImageSizeStrategy;
 };
+
+/**
