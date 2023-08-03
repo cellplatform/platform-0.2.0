@@ -4,14 +4,19 @@ import { ScalePlacement } from './-SPEC.ScalePlacement';
 import { Video } from './common';
 
 const DEFAULTS = VideoLayout.DEFAULTS;
+const SAMPLE = {
+  RowanVideo: 612010014,
+};
 
 type T = {
-  props: t.VideoLayoutProps;
   status?: t.VideoStatus;
+  props: t.VideoLayoutProps;
+  debug: { editingVideoId?: string };
 };
 
 const initial: T = {
   props: {},
+  debug: {},
 };
 const name = 'VideoLayout';
 
@@ -37,7 +42,7 @@ export default Dev.describe(name, (e) => {
       const video = State.video(d.props);
       video.position = local.position;
       video.innerScale = 1.1;
-      video.id = 612010014; // Sample - (Rowan)
+      video.id = SAMPLE.RowanVideo;
       video.height = 0.3;
       video.minHeight = 180;
 
@@ -73,14 +78,14 @@ export default Dev.describe(name, (e) => {
             position={props.data?.position}
             onPositionChange={(e) => {
               state.change((d) => {
-                local.position = State.video(d.props).position = e.position;
+                const video = State.video(d.props);
+                video.position = e.position;
+                local.position = e.position;
               });
             }}
           />
         );
       });
-
-      // dev.hr(0, 5);
 
       dev.hr(5, 20);
 
@@ -88,9 +93,15 @@ export default Dev.describe(name, (e) => {
         txt
           .label((e) => 'Video Source (ID)')
           .placeholder('eg. Vimeo number')
-          .value((e) => '')
-          .onChange((e) => {})
-          .onEnter((e) => {});
+          .value((e) => e.state.debug.editingVideoId)
+          .onChange((e) => e.change((d) => (d.debug.editingVideoId = e.to.value)))
+          .onEnter((e) =>
+            e.change((d) => {
+              const edited = (d.debug.editingVideoId || '').trim();
+              const next = edited || SAMPLE.RowanVideo;
+              State.video(d.props).id = next;
+            }),
+          );
       });
     });
   });
