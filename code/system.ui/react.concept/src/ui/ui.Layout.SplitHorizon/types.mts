@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 export type SplitHorizonProps = {
-  ratio?: t.Percent;
+  split?: t.Percent;
   debug?: boolean;
   style?: t.CssValue;
 };

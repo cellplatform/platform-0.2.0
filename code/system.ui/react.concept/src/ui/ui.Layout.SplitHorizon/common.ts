@@ -5,5 +5,5 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  ratio: 0.6,
+  split: 0.6,
 } as const;

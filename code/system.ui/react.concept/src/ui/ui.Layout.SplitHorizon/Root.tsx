@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 import { Wrangle } from './Wrangle.mjs';
+import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
 const View: React.FC<t.SplitHorizonProps> = (props) => {
-  const { debug = false, ratio = DEFAULTS.ratio } = props;
+  const { debug = false } = props;
 
   /**
    * [Render]
