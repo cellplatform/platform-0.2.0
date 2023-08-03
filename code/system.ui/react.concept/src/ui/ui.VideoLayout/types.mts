@@ -36,3 +36,9 @@ export type VideoLayoutSizeHandlerArgs = {
   isMin: boolean;
 };
 
+/**
+ * TODO 🐷
+ * - dev: text video
+ * - dev: copy
+ * - minSize >> show too-small message
+ */

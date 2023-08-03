@@ -34,3 +34,15 @@ export type ConceptSlugImage___ = {
 };
 
 /**
+ * Time.
+ */
+// export type VideoTimestamp = {
+//   start: t.Seconds;
+//   end?: t.Seconds;
+//   content: Id[] | VideoTimestampContentRef[];
+// };
+//
+// export type VideoTimestampContentRef<P extends O = O> = {
+//   id: Id;
+//   props?: P;
+// };

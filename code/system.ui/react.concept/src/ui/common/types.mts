@@ -15,6 +15,7 @@ export type {
   EdgePositionInput as PositionInput,
   ProgressBarClickHandler,
   PropListProps,
+  SliderTrackChangeHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**

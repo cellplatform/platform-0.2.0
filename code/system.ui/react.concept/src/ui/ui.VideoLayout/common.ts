@@ -4,12 +4,12 @@ export * from '../common';
 /**
  * Constants
  */
-const data: t.VideoLayout = {
-  position: ['center', 'bottom'],
-};
+const position: t.Pos = ['center', 'bottom'];
+const data: t.VideoLayout = { position };
 
 export const DEFAULTS = {
   data,
+  position,
   playing: false,
   muted: false,
   timestamp: undefined,

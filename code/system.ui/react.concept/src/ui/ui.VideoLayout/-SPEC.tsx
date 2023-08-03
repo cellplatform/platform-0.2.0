@@ -6,6 +6,7 @@ import { Video } from './common';
 const DEFAULTS = VideoLayout.DEFAULTS;
 const SAMPLE = {
   RowanVideo: 612010014,
+  Tubes: 499921561,
 };
 
 type T = {
@@ -32,7 +33,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const State = {
-    video(props: t.VideoLayoutProps) {
+    data(props: t.VideoLayoutProps) {
       return props.data ?? (props.data = {});
     },
   };
@@ -43,7 +44,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const video = State.video(d.props);
+      const video = State.data(d.props);
       video.position = local.position;
       video.innerScale = 1.1;
       video.id = SAMPLE.RowanVideo;
@@ -77,15 +78,15 @@ export default Dev.describe(name, (e) => {
     dev.section('Video', (dev) => {
       dev.row((e) => {
         const { props } = e.state;
-
         return (
           <ScalePlacement
             position={props.data?.position}
-            onPositionChange={(e) => {
+            percent={props.data?.height}
+            onChange={(e) => {
               state.change((d) => {
-                const video = State.video(d.props);
-                video.position = e.position;
-                local.position = e.position;
+                const data = State.data(d.props);
+                data.position = local.position = e.position;
+                data.height = e.percent;
               });
             }}
           />
@@ -104,7 +105,7 @@ export default Dev.describe(name, (e) => {
             e.change((d) => {
               const edited = (d.debug.editingVideoId || '').trim();
               const next = edited || SAMPLE.RowanVideo;
-              State.video(d.props).id = next;
+              State.data(d.props).id = next;
             }),
           );
       });
@@ -125,7 +126,7 @@ export default Dev.describe(name, (e) => {
           .label(`copy to clipboard`)
           .right((e) => `←`)
           .onClick((e) => {
-            const data = State.video(state.current.props);
+            const data = State.data(state.current.props);
             const json = JSON.stringify(data, null, '  ');
             navigator.clipboard.writeText(json);
           });

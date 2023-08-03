@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, EdgePosition, Slider } from './common';
+import { DEFAULTS, EdgePosition, Slider, css, type t } from './common';
 
-export type ScalePlacementPositionHandler = (e: ScalePlacementPositionHandlerArgs) => void;
-export type ScalePlacementPositionHandlerArgs = {
+export type ScalePlacementChangeHandler = (e: ScalePlacementChangeHandlerArgs) => void;
+export type ScalePlacementChangeHandlerArgs = {
   position: t.EdgePosition;
-  pos: t.EdgePos;
+  percent: t.Percent;
 };
 
 export type ScalePlacementProps = {
+  percent?: t.Percent;
   position?: t.PositionInput;
   style?: t.CssValue;
-  onPositionChange?: ScalePlacementPositionHandler;
+  onChange?: ScalePlacementChangeHandler;
 };
 
 /**
@@ -19,6 +19,13 @@ export type ScalePlacementProps = {
  */
 export const ScalePlacement: React.FC<ScalePlacementProps> = (props) => {
   const width = 100;
+
+  const fireChange = (percent?: t.Percent, position?: t.Position) => {
+    props.onChange?.({
+      position: position ?? EdgePosition.toPosition(props.position, DEFAULTS.position),
+      percent: percent ?? props.percent ?? 0,
+    });
+  };
 
   /**
    * [Render]
@@ -39,11 +46,17 @@ export const ScalePlacement: React.FC<ScalePlacementProps> = (props) => {
       <EdgePosition.Selector
         size={width}
         selected={props.position}
-        onChange={(e) => props.onPositionChange?.(e)}
+        onChange={(e) => fireChange(props.percent, e.position)}
       />
 
       <div {...styles.slider}>
-        <Slider width={width - 20} thumb={{ size: 15 }} track={{ height: 15 }} />
+        <Slider
+          percent={props.percent}
+          width={width - 20}
+          thumb={{ size: 15 }}
+          track={{ height: 15 }}
+          onChange={(e) => fireChange(e.percent, undefined)}
+        />
       </div>
     </div>
   );
