@@ -19,6 +19,7 @@ export type VideoLayoutProps = {
   playing?: boolean;
   timestamp?: t.Seconds;
   muted?: boolean;
+  debug?: boolean;
   style?: t.CssValue;
   onStatus?: t.VideoPlayerStatusHandler;
   onSize?: t.VideoLayoutSizeHandler;

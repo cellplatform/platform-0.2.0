@@ -1,6 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 
-import { DEFAULTS, EdgePosition, FC, Size, Video, css, useSizeObserver, type t } from './common';
+import {
+  DEFAULTS,
+  EdgePosition,
+  FC,
+  Size,
+  Video,
+  css,
+  Color,
+  COLORS,
+  useSizeObserver,
+  type t,
+} from './common';
 
 const View: React.FC<t.VideoLayoutProps> = (props) => {
   const {
@@ -33,7 +44,11 @@ const View: React.FC<t.VideoLayoutProps> = (props) => {
       position: 'relative',
       display: 'grid',
     }),
-    player: css({}),
+    player: css({ position: 'relative' }),
+    debug: css({
+      Absolute: 0,
+      border: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}`,
+    }),
   };
 
   const elPlayer = resize.ready && height > 0 && (
@@ -47,6 +62,7 @@ const View: React.FC<t.VideoLayoutProps> = (props) => {
         onStatus={props.onStatus}
         height={height}
       />
+      {props.debug && <div {...styles.debug} />}
     </div>
   );
 

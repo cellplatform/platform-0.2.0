@@ -1,5 +1,5 @@
 import { VideoLayout } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Button, Dev, type t } from '../../test.ui';
 import { ScalePlacement } from './-SPEC.ScalePlacement';
 import { Video } from './common';
 
@@ -21,10 +21,14 @@ const initial: T = {
 const name = 'VideoLayout';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.VideoLayout, 'position'> & Pick<t.VideoLayoutProps, 'muted'>;
+  type LocalStore = Pick<t.VideoLayoutProps, 'debug'> &
+    Pick<t.VideoLayout, 'position'> &
+    Pick<t.VideoLayoutProps, 'muted'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoLayout');
   const local = localstore.object({
     position: DEFAULTS.data.position,
+    muted: false,
+    debug: false,
   });
 
   const State = {
@@ -47,6 +51,7 @@ export default Dev.describe(name, (e) => {
       video.minHeight = 180;
 
       d.props.muted = local.muted;
+      d.props.debug = local.debug;
     });
 
     ctx.debug.width(330);
@@ -104,6 +109,28 @@ export default Dev.describe(name, (e) => {
           );
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.debug);
+        btn
+          .label((e) => `debug`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug'))));
+      });
+      dev.button((btn) => {
+        btn
+          .label(`copy to clipboard`)
+          .right((e) => `←`)
+          .onClick((e) => {
+            const data = State.video(state.current.props);
+            const json = JSON.stringify(data, null, '  ');
+            navigator.clipboard.writeText(json);
+          });
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -115,7 +142,7 @@ export default Dev.describe(name, (e) => {
       return (
         <div>
           <Video.PlayBar
-            style={{ marginBottom: 10 }}
+            style={{ marginTop: 5, marginBottom: 15 }}
             status={e.state.status}
             useKeyboard={true}
             onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
