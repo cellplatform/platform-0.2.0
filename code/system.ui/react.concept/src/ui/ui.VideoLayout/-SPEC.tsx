@@ -54,6 +54,7 @@ export default Dev.describe(name, (e) => {
           <VideoLayout
             {...e.state.props}
             onStatus={(e) => state.change((d) => (d.status = e.status))}
+            onSize={(e) => console.info(`⚡️ onSize`, e)}
           />
         );
       });

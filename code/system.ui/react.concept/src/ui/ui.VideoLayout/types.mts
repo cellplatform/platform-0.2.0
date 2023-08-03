@@ -1,18 +1,6 @@
 import { type t } from './common';
 
 /**
- * Component
- */
-export type VideoLayoutProps = {
-  data?: VideoLayout;
-  playing?: boolean;
-  timestamp?: t.Seconds;
-  muted?: boolean;
-  style?: t.CssValue;
-  onStatus?: t.VideoPlayerStatusHandler;
-};
-
-/**
  * Definition
  */
 export type VideoLayout = {
@@ -22,3 +10,27 @@ export type VideoLayout = {
   height?: t.PixelOrPercent;
   minHeight?: t.Pixels;
 };
+
+/**
+ * Component
+ */
+export type VideoLayoutProps = {
+  data?: VideoLayout;
+  playing?: boolean;
+  timestamp?: t.Seconds;
+  muted?: boolean;
+  style?: t.CssValue;
+  onStatus?: t.VideoPlayerStatusHandler;
+  onSize?: t.VideoLayoutSizeHandler;
+};
+
+/**
+ * Events
+ */
+
+export type VideoLayoutSizeHandler = (e: VideoLayoutSizeHandlerArgs) => void;
+export type VideoLayoutSizeHandlerArgs = {
+  parent: t.DomRect;
+  video: t.DomRect;
+};
+
