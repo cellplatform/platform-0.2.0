@@ -6,7 +6,7 @@ export type CellProps = {
   position: t.EdgePosition;
   selected?: boolean;
   style?: t.CssValue;
-  onClick: t.EdgePositionClickHandler;
+  onClick: t.EdgePositionChangeHandler;
 };
 
 export const Cell: React.FC<CellProps> = (props) => {
