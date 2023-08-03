@@ -120,7 +120,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       margin: 15,
       border: `dashed 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
-      borderRadius: 3,
+      borderRadius: 5,
       padding: 5,
     }),
   };

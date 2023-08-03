@@ -16,9 +16,11 @@ const View: React.FC<t.SplitLayoutProps> = (props) => {
     top: css({}),
     bottom: css({}),
     debug: css({
-      Absolute: [0, 0, null, 0],
-      borderTop: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}`,
+      Absolute: axis === 'x' ? [0, 0, null, 0] : [0, null, 0, 0],
+      width: axis === 'y' ? 1 : undefined,
+      height: axis === 'x' ? 1 : undefined,
       pointerEvents: 'none',
+      backgroundColor: Color.alpha(COLORS.RED, 0.1),
     }),
   };
 
