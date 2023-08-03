@@ -12,7 +12,7 @@ export type CellProps = {
 export const Cell: React.FC<CellProps> = (props) => {
   const { position, selected, enabled = DEFAULTS.enabled } = props;
   const { x, y } = position;
-  const pos = Wrangle.pos(position);
+  const pos = Wrangle.toPos(position);
 
   /**
    * Handlers

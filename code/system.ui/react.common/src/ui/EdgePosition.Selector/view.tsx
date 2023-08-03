@@ -22,7 +22,7 @@ export const View: React.FC<t.EdgePositionSelectorProps> = (props) => {
           total: 3,
           cell(e) {
             const { position, pos } = Wrangle.position(e.x, e.y);
-            const isSelected = Wrangle.eqPos(pos, Wrangle.pos(selected));
+            const isSelected = Wrangle.eqPos(pos, Wrangle.toPos(selected));
             return (
               <Cell
                 enabled={enabled}
