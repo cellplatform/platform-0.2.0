@@ -1,4 +1,4 @@
 /**
  * @system
  */
-export { rx, slug } from 'sys.util';
+export { rx, slug, Percent } from 'sys.util';
