@@ -48,10 +48,7 @@ export const View: React.FC<t.VideoLayoutProps> = (props) => {
   const styles = {
     base: css({ position: 'relative', display: 'grid' }),
     player: css({ position: 'relative' }),
-    debug: css({
-      Absolute: 0,
-      border: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}`,
-    }),
+    debug: css({ Absolute: 0, border: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}` }),
   };
 
   const elPlayer = resize.ready && height > 0 && (
