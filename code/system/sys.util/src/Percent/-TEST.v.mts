@@ -29,4 +29,23 @@ describe('Percent', () => {
       test(' 45.1% ', 0.451);
     });
   });
+
+  it('isPercent', () => {
+    expect(Percent.isPercent(0)).to.eql(true);
+    expect(Percent.isPercent(0.123)).to.eql(true);
+    expect(Percent.isPercent(1)).to.eql(true);
+
+    expect(Percent.isPercent(-1)).to.eql(false);
+    expect(Percent.isPercent(2)).to.eql(false);
+  });
+
+  it('isPixels', () => {
+    expect(Percent.isPixels(-1)).to.eql(false);
+    expect(Percent.isPixels(0)).to.eql(false);
+    expect(Percent.isPixels(0.123)).to.eql(false);
+    expect(Percent.isPixels(1)).to.eql(false);
+
+    expect(Percent.isPixels(1.1)).to.eql(true);
+    expect(Percent.isPixels(2)).to.eql(true);
+  });
 });
