@@ -7,7 +7,7 @@ export const Percent = {
   /**
    * Converts a value to a percentage.
    */
-  toPercent(input?: any): t.Percent {
+  clamp(input?: any): t.Percent {
     const clamp = (value: number) => Math.max(0, Math.min(1, value));
     if (typeof input === 'number') return clamp(input);
     if (typeof input === 'string') {
