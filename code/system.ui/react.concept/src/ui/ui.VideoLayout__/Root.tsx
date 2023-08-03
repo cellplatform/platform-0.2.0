@@ -7,7 +7,7 @@ import { View } from './view';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const VideoLayout = FC.decorate<t.VideoLayoutProps, Fields>(
+export const VideoLayout = FC.decorate<t.VideoLayoutProps__, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'VideoLayout' },

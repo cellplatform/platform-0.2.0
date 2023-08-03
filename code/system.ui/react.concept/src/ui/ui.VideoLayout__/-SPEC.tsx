@@ -11,7 +11,7 @@ const SAMPLE = {
 
 type T = {
   status?: t.VideoStatus;
-  props: t.VideoLayoutProps;
+  props: t.VideoLayoutProps__;
   debug: { editingVideoId?: string };
 };
 
@@ -22,9 +22,9 @@ const initial: T = {
 const name = 'VideoLayout';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.VideoLayoutProps, 'debug'> &
-    Pick<t.VideoLayout, 'position'> &
-    Pick<t.VideoLayoutProps, 'muted'>;
+  type LocalStore = Pick<t.VideoLayoutProps__, 'debug'> &
+    Pick<t.VideoLayout__, 'position'> &
+    Pick<t.VideoLayoutProps__, 'muted'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoLayout');
   const local = localstore.object({
     position: DEFAULTS.data.position,
@@ -33,7 +33,7 @@ export default Dev.describe(name, (e) => {
   });
 
   const State = {
-    data(props: t.VideoLayoutProps) {
+    data(props: t.VideoLayoutProps__) {
       return props.data ?? (props.data = {});
     },
   };

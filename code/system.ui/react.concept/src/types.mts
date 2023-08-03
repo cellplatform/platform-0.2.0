@@ -3,8 +3,9 @@ import { type t } from './common';
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.ScreenLayout/types.mjs';
-export type * from './ui/ui.VideoDiagram/types.mjs';
-export type * from './ui/ui.VideoLayout/types.mjs';
+
+export type * from './ui/ui.VideoDiagram__/types.mjs';
+export type * from './ui/ui.VideoLayout__/types.mjs';
 
 type Id = string;
 type Url = string;
@@ -17,7 +18,7 @@ export type ConceptSlug = {
   id: Id;
   title?: string;
   video?: t.ConceptSlugVideo___;
-  image?: t.ConceptSlugImage___;
+  image?: t.ConceptSlugImage__;
   download?: t.DownloadFileProps;
 };
 
@@ -28,7 +29,7 @@ export type ConceptSlugVideo___ = {
   height?: number;
 };
 
-export type ConceptSlugImage___ = {
+export type ConceptSlugImage__ = {
   src?: Url;
   sizing?: t.ImageSizeStrategy;
 };

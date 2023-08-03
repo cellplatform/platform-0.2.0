@@ -1,7 +1,7 @@
 import { type t } from '../common';
 
 export * from '../common';
-export { VideoDiagram } from '../ui.VideoDiagram';
+export { VideoDiagram } from '../ui.VideoDiagram__';
 export { PlayBar } from '../ui.PlayBar';
 
 /**

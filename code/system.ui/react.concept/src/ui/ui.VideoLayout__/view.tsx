@@ -12,7 +12,7 @@ import {
   type t,
 } from './common';
 
-export const View: React.FC<t.VideoLayoutProps> = (props) => {
+export const View: React.FC<t.VideoLayoutProps__> = (props) => {
   const {
     data,
     playing = DEFAULTS.playing,

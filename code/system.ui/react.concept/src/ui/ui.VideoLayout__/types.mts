@@ -3,7 +3,7 @@ import { type t } from './common';
 /**
  * Definition
  */
-export type VideoLayout = {
+export type VideoLayout__ = {
   id?: t.VideoSrcInput;
   position?: t.EdgePositionInput;
   innerScale?: t.Percent;
@@ -14,8 +14,8 @@ export type VideoLayout = {
 /**
  * Component
  */
-export type VideoLayoutProps = {
-  data?: VideoLayout;
+export type VideoLayoutProps__ = {
+  data?: VideoLayout__;
   playing?: boolean;
   timestamp?: t.Seconds;
   muted?: boolean;

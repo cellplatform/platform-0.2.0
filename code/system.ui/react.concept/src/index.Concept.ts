@@ -1,6 +1,6 @@
 import { PlayBar } from './ui/ui.PlayBar';
 import { ScreenLayout } from './ui/ui.ScreenLayout';
-import { VideoDiagram } from './ui/ui.VideoDiagram';
+import { VideoDiagram } from './ui/ui.VideoDiagram__';
 
 export const Concept = {
   ScreenLayout,
