@@ -1,7 +1,7 @@
 import { Wrangle } from './Wrangle.mjs';
 import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
-const View: React.FC<t.SplitHorizonProps> = (props) => {
+const View: React.FC<t.SplitLayoutProps> = (props) => {
   const { debug = false } = props;
 
   /**
@@ -40,8 +40,8 @@ const View: React.FC<t.SplitHorizonProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const SplitHorizon = FC.decorate<t.SplitHorizonProps, Fields>(
+export const SplitLayout = FC.decorate<t.SplitLayoutProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'SplitHorizon' },
+  { displayName: 'SplitLayout' },
 );

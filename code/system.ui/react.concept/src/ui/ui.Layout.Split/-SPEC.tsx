@@ -1,17 +1,17 @@
 import { Dev, type t, Slider } from '../../test.ui';
-import { SplitHorizon } from '.';
+import { SplitLayout } from '.';
 
-const DEFAULTS = SplitHorizon.DEFAULTS;
+const DEFAULTS = SplitLayout.DEFAULTS;
 
-type T = { props: t.SplitHorizonProps };
+type T = { props: t.SplitLayoutProps };
 const initial: T = { props: {} };
-const name = 'SplitHorizonLayout';
+const name = SplitLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SplitHorizonProps, 'debug' | 'split'>;
+  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'percent'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.SplitHorizonLayout');
   const local = localstore.object({
-    split: DEFAULTS.split,
+    percent: DEFAULTS.percent,
     debug: true,
   });
 
@@ -21,7 +21,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.split = local.split;
+      d.props.percent = local.percent;
       d.props.debug = local.debug;
     });
 
@@ -31,7 +31,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <SplitHorizon {...e.state.props} />;
+        return <SplitLayout {...e.state.props} />;
       });
   });
 
@@ -40,19 +40,22 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
-      dev.title('split (ratio)', { bold: false, size: 12, opacity: 0.6 });
+      dev.title('percent', { bold: false, size: 12, opacity: 0.6 });
       dev.row((e) => {
         return (
           <Slider
+            style={{ MarginX: 5 }}
             thumb={{ size: 16 }}
             track={{ height: 16 }}
-            percent={e.state.props.split}
+            percent={e.state.props.percent}
             onChange={(e) => {
-              state.change((d) => (local.split = d.props.split = e.percent));
+              state.change((d) => (local.percent = d.props.percent = e.percent));
             }}
           />
         );
       });
+
+      dev.hr(-1, [10, 5]);
     });
 
     dev.hr(5, 20);
@@ -73,10 +76,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
-      const percent = Number((props.split ?? 0).toFixed(2));
+      const percent = Number((props.percent ?? 0).toFixed(2));
       const data = {
         props,
-        'props:split': percent,
+        'props:percent': percent,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
