@@ -1,4 +1,4 @@
-import { Dev, type t, Slider } from '../../test.ui';
+import { css, Color, COLORS, Dev, type t, Slider } from '../../test.ui';
 import { SplitLayout } from '.';
 
 const DEFAULTS = SplitLayout.DEFAULTS;
@@ -33,7 +33,12 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <SplitLayout {...e.state.props} />;
+        return (
+          <SplitLayout {...e.state.props}>
+            <Sample />
+            <Sample />
+          </SplitLayout>
+        );
       });
   });
 
@@ -98,3 +103,31 @@ export default Dev.describe(name, (e) => {
     });
   });
 });
+
+/**
+ * Sample Components
+ */
+export type SampleProps = {
+  style?: t.CssValue;
+};
+
+export const Sample: React.FC<SampleProps> = (props) => {
+  /**
+   * [Render]
+   */
+  const styles = {
+    base: css({
+      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      margin: 15,
+      border: `dashed 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      borderRadius: 3,
+      padding: 5,
+    }),
+  };
+
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div>{`🐷`}</div>
+    </div>
+  );
+};

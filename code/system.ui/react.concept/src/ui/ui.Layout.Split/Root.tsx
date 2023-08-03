@@ -2,7 +2,7 @@ import { Wrangle } from './Wrangle.mjs';
 import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
 const View: React.FC<t.SplitLayoutProps> = (props) => {
-  const { debug = false, axis = DEFAULTS.axis } = props;
+  const { debug = false, axis = DEFAULTS.axis, children = [] } = props;
 
   /**
    * [Render]
@@ -12,8 +12,9 @@ const View: React.FC<t.SplitLayoutProps> = (props) => {
       position: 'relative',
       ...Wrangle.gridCss(props),
     }),
-    top: css({ position: 'relative' }),
-    bottom: css({ position: 'relative' }),
+    container: css({ position: 'relative', display: 'grid' }),
+    top: css({}),
+    bottom: css({}),
     debug: css({
       Absolute: [0, 0, null, 0],
       borderTop: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}`,
@@ -23,12 +24,10 @@ const View: React.FC<t.SplitLayoutProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.top}>
-        <div>top</div>
-      </div>
-      <div {...styles.bottom}>
+      <div {...css(styles.container, styles.top)}>{children[0]}</div>
+      <div {...css(styles.container, styles.bottom)}>
+        {children[1]}
         {debug && <div {...styles.debug} />}
-        <div>bottom</div>
       </div>
     </div>
   );
