@@ -75,9 +75,16 @@ export default Dev.describe('Title', (e) => {
     dev.title(['Left', 'Right']);
     dev.hr(-1, 10);
     dev.title([Dev.Lorem.words(50), Dev.Lorem.words(50)]);
+
+    dev.hr(5, 20);
+
+    dev.title('italic', { italic: true });
+    dev.title('size: 12 (bold)', { size: 12 });
+    dev.title('size: 12 (normal)', { size: 12, bold: false });
+    dev.title('size: 12 (normal, opacity: 0.4)', { size: 12, bold: false, opacity: 0.4 });
   });
 
-  e.it('ui:footer', async (e) => {
+  e.it('ui:footer', (e) => {
     const dev = Dev.tools<T>(e);
     dev.footer
       .border(-0.1)

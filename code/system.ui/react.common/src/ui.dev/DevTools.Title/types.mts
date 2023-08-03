@@ -19,8 +19,11 @@ export type DevTitleHandlerArgs<S extends O = O> = {
 export type DevTitleStyle = {
   margin?: t.CssValue['Margin'];
   color?: t.CssValue['color'];
+  size?: t.CssValue['fontSize'];
   bold?: boolean;
+  italic?: boolean;
   ellipsis?: boolean;
+  opacity?: t.Percent;
 };
 
 /**
