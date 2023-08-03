@@ -1,20 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { Wrangle } from './Wrangle.mjs';
 
 const View: React.FC<t.SplitHorizonProps> = (props) => {
+  const { debug = false, ratio = DEFAULTS.ratio } = props;
+
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
+      position: 'relative',
+      ...Wrangle.gridCss(props),
+    }),
+    top: css({ position: 'relative' }),
+    bottom: css({ position: 'relative' }),
+    debug: css({
+      Absolute: [0, 0, null, 0],
+      borderTop: `solid 1px ${Color.alpha(COLORS.RED, 0.1)}`,
+      pointerEvents: 'none',
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${SplitHorizon.displayName}`}</div>
+      <div {...styles.top}>
+        <div>top</div>
+      </div>
+      <div {...styles.bottom}>
+        {debug && <div {...styles.debug} />}
+        <div>bottom</div>
+      </div>
     </div>
   );
 };
