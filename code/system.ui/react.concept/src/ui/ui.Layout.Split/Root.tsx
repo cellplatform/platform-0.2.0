@@ -2,7 +2,7 @@ import { Wrangle } from './Wrangle.mjs';
 import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
 const View: React.FC<t.SplitLayoutProps> = (props) => {
-  const { debug = false } = props;
+  const { debug = false, axis = DEFAULTS.axis } = props;
 
   /**
    * [Render]

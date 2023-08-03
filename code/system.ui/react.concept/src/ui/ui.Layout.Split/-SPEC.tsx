@@ -8,10 +8,11 @@ const initial: T = { props: {} };
 const name = SplitLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'percent'>;
+  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'percent' | 'axis'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.SplitHorizonLayout');
   const local = localstore.object({
     percent: DEFAULTS.percent,
+    axis: DEFAULTS.axis,
     debug: true,
   });
 
@@ -22,6 +23,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.percent = local.percent;
+      d.props.axis = local.axis;
       d.props.debug = local.debug;
     });
 
@@ -56,6 +58,17 @@ export default Dev.describe(name, (e) => {
       });
 
       dev.hr(-1, [10, 5]);
+
+      const axis = (value: t.Axis) => {
+        dev.button((btn) => {
+          btn
+            .label(`axis: ${value}`)
+            .right((e) => (value === e.state.props.axis ? '←' : ''))
+            .onClick((e) => e.change((d) => (local.axis = d.props.axis = value)));
+        });
+      };
+      axis('x');
+      axis('y');
     });
 
     dev.hr(5, 20);

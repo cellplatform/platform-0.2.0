@@ -6,4 +6,5 @@ export * from '../common';
  */
 export const DEFAULTS = {
   percent: 0.6,
+  axis: 'x',
 } as const;

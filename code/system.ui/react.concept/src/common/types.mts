@@ -19,6 +19,7 @@ export type {
   Pixels,
   Seconds,
   Size,
+  Axis,
 } from 'sys.types/src/types.mjs';
 
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';

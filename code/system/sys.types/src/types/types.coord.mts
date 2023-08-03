@@ -8,3 +8,10 @@ export type EdgePositionXY = EdgePositionX | EdgePositionY;
 export type EdgePosition = { x: EdgePositionX; y: EdgePositionY };
 export type EdgePos = [EdgePositionX, EdgePositionY];
 export type EdgePositionInput = EdgePosition | EdgePos;
+
+/**
+ * Axis
+ */
+export type AxisX = 'x';
+export type AxisY = 'y';
+export type Axis = AxisX | AxisY;
