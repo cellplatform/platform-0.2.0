@@ -3,6 +3,7 @@ import { type t } from './common';
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.ScreenLayout/types.mjs';
+export type * from './ui/ui.Layout.SplitHorizon/types.mjs';
 
 export type * from './ui/ui.VideoDiagram__/types.mjs';
 export type * from './ui/ui.VideoLayout__/types.mjs';
