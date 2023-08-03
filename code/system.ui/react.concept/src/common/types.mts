@@ -6,16 +6,21 @@ export type { Observable } from 'rxjs';
 /**
  * @system
  */
-export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
 export type {
   Disposable,
-  EventBus,
-  Lifecycle,
   EdgePos,
   EdgePosition,
   EdgePositionInput,
+  EventBus,
+  Lifecycle,
+  Milliseconds,
+  Percent,
+  Seconds,
 } from 'sys.types/src/types.mjs';
+
+export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
+export type { VideoSrc, VideoSrcVimeo } from 'sys.ui.react.media.video/src/types.mjs';
 
 /**
  * @local
