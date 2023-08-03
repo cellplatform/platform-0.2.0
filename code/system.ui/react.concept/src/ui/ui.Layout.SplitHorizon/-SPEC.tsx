@@ -1,7 +1,7 @@
 import { Dev, type t } from '../../test.ui';
-import { Root } from '.';
+import { SplitHorizon } from '.';
 
-type T = { props: t.RootProps };
+type T = { props: t.SplitHorizonProps };
 const initial: T = { props: {} };
 const name = 'SplitHorizonLayout';
 
@@ -19,7 +19,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} />;
+        return <SplitHorizon {...e.state.props} />;
       });
   });
 
