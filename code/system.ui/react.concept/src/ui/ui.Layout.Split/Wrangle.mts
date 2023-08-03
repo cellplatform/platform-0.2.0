@@ -5,7 +5,7 @@ import { DEFAULTS, Percent, type t } from './common';
  */
 export const Wrangle = {
   gridCss(props: t.SplitLayoutProps) {
-    const percent = Percent.clamp(props.percent ?? DEFAULTS.percent);
+    const percent = Percent.clamp(props.split ?? DEFAULTS.percent);
     const top = 1 * percent;
     const bottom = 1 - top;
     return {

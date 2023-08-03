@@ -8,10 +8,10 @@ const initial: T = { props: {} };
 const name = SplitLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'percent' | 'axis'>;
+  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'split' | 'axis'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.SplitHorizonLayout');
   const local = localstore.object({
-    percent: DEFAULTS.percent,
+    split: DEFAULTS.percent,
     axis: DEFAULTS.axis,
     debug: true,
   });
@@ -22,7 +22,7 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.percent = local.percent;
+      d.props.split = local.split;
       d.props.axis = local.axis;
       d.props.debug = local.debug;
     });
@@ -49,9 +49,9 @@ export default Dev.describe(name, (e) => {
             style={{ MarginX: 5 }}
             thumb={{ size: 16 }}
             track={{ height: 16 }}
-            percent={e.state.props.percent}
+            percent={e.state.props.split}
             onChange={(e) => {
-              state.change((d) => (local.percent = d.props.percent = e.percent));
+              state.change((d) => (local.split = d.props.split = e.percent));
             }}
           />
         );
@@ -89,10 +89,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
-      const percent = Number((props.percent ?? 0).toFixed(2));
+      const percent = Number((props.split ?? 0).toFixed(2));
       const data = {
         props,
-        'props:percent': percent,
+        'props:split': percent,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
