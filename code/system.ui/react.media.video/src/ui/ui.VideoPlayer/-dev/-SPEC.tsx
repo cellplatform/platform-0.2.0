@@ -58,7 +58,7 @@ export default Dev.describe('Player (Vime)', (e) => {
       return (
         <VideoPlayer
           {...props}
-          onChange={(e) => {
+          onStatus={(e) => {
             /**
              * Update host state: → "status"
              */

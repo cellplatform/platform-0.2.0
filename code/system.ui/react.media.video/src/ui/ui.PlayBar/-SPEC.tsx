@@ -108,7 +108,7 @@ export default Dev.describe('PlayBar', (e) => {
           {...video}
           enabled={props.enabled}
           borderRadius={10}
-          onChange={(e) => {
+          onStatus={(e) => {
             state.change((d) => (d.props.status = e.status));
           }}
         />

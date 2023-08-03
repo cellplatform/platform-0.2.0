@@ -17,14 +17,14 @@ export type VideoPlayerProps = {
   borderRadius?: t.Pixels;
   style?: t.CssValue;
 
-  onChange?: VideoPlayerChangeHandler;
+  onStatus?: VideoPlayerStatusHandler;
 };
 
 /**
  * Events
  */
-export type VideoPlayerChangeHandler = (e: VideoPlayerChangeHandlerArgs) => void;
-export type VideoPlayerChangeHandlerArgs = {
+export type VideoPlayerStatusHandler = (e: VideoPlayerStatusHandlerArgs) => void;
+export type VideoPlayerStatusHandlerArgs = {
   video: t.VideoSrc;
   status: t.VideoStatus;
 };

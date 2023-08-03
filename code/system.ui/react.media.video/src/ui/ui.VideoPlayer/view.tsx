@@ -15,7 +15,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     playing,
     loop,
     timestamp,
-    onChange,
+    onStatus,
     borderRadius = DEFAULTS.borderRadius,
     muted = DEFAULTS.muted,
     enabled = DEFAULTS.enabled,
@@ -33,7 +33,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     muted,
     timestamp,
     hasInteracted, // NB: for "autoplay policy" on <Video> element.
-    onChange,
+    onStatus,
   });
 
   if (!video || video.kind === 'Unknown' || !video.id) return null;

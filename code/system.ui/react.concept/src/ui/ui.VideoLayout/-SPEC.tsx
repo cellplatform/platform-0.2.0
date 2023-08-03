@@ -5,12 +5,18 @@ import { Video } from './common';
 
 const DEFAULTS = VideoLayout.DEFAULTS;
 
-type T = { props: t.VideoLayoutProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.VideoLayoutProps;
+  status?: t.VideoStatus;
+};
+
+const initial: T = {
+  props: {},
+};
 const name = 'VideoLayout';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.VideoLayout, 'position'>;
+  type LocalStore = Pick<t.VideoLayout, 'position'> & Pick<t.VideoLayoutProps, 'muted'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoLayout');
   const local = localstore.object({
     position: DEFAULTS.data.position,
@@ -18,7 +24,7 @@ export default Dev.describe(name, (e) => {
 
   const State = {
     video(props: t.VideoLayoutProps) {
-      return props.video ?? (props.video = {});
+      return props.data ?? (props.data = {});
     },
   };
 
@@ -32,6 +38,8 @@ export default Dev.describe(name, (e) => {
       video.position = local.position;
       video.innerScale = 1.1;
       video.id = 612010014; // Sample - (Rowan)
+
+      d.props.muted = local.muted;
     });
 
     ctx.debug.width(330);
@@ -40,7 +48,12 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <VideoLayout {...e.state.props} />;
+        return (
+          <VideoLayout
+            {...e.state.props}
+            onStatus={(e) => state.change((d) => (d.status = e.status))}
+          />
+        );
       });
   });
 
@@ -54,7 +67,7 @@ export default Dev.describe(name, (e) => {
 
         return (
           <ScalePlacement
-            position={props.video?.position}
+            position={props.data?.position}
             onPositionChange={(e) => {
               state.change((d) => {
                 local.position = State.video(d.props).position = e.position;
@@ -64,7 +77,10 @@ export default Dev.describe(name, (e) => {
         );
       });
 
-      dev.hr(0, 5);
+      // dev.hr(0, 5);
+
+      dev.hr(5, 20);
+
       dev.textbox((txt) => {
         txt
           .label((e) => 'Video Source (ID)')
@@ -74,37 +90,29 @@ export default Dev.describe(name, (e) => {
           .onEnter((e) => {});
       });
     });
-
-    dev.hr(5, 20);
-
-    dev.section('Image', (dev) => {
-      dev.row((e) => <ScalePlacement />);
-      dev.hr(0, 5);
-      dev.textbox((txt) => {
-        txt
-          .label((e) => 'Image Source')
-          .placeholder('eg. domain.com/image.png')
-          .value((e) => '')
-          .onChange((e) => {})
-          .onEnter((e) => {});
-      });
-    });
-
-    dev.hr(5, 20);
-
-    dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.footer.border(-0.1).render<T>((e) => {
-      // dev.row((e) => <Video.PlayBar />);
 
+    dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
       return (
         <div>
-          <Video.PlayBar style={{ marginBottom: 10 }} />
+          <Video.PlayBar
+            style={{ marginBottom: 10 }}
+            status={e.state.status}
+            useKeyboard={true}
+            onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
+            onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
+            onPlayAction={(e) => {
+              state.change((d) => {
+                d.props.playing = e.is.playing;
+                if (e.replay) d.props.timestamp = 0;
+              });
+            }}
+          />
           <Dev.Object name={name} data={data} expand={1} />
         </div>
       );

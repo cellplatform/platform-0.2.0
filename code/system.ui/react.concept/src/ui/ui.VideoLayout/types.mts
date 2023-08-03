@@ -4,8 +4,12 @@ import { type t } from './common';
  * Component
  */
 export type VideoLayoutProps = {
-  video?: VideoLayout;
+  data?: VideoLayout;
+  playing?: boolean;
+  timestamp?: t.Seconds;
+  muted?: boolean;
   style?: t.CssValue;
+  onStatus?: t.VideoPlayerStatusHandler;
 };
 
 /**

@@ -62,7 +62,7 @@ export default Dev.describe('VideoDiagram', (e) => {
         <div {...css({ display: 'grid', placeItems: 'center' })}>
           <EdgePosition.Selector
             selected={e.state.props.slug?.video?.position}
-            onSelect={(e) => {
+            onChange={(e) => {
               state.change((d) => {
                 const id = DEFAULTS.sample.id;
                 const slug = d.props.slug ?? (d.props.slug = { id });

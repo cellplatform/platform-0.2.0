@@ -1,8 +1,13 @@
 import { DEFAULTS, EdgePosition, FC, Video, css, type t } from './common';
 
 const View: React.FC<t.VideoLayoutProps> = (props) => {
-  const { video } = props;
-  const src = Video.toSrc(video?.id);
+  const {
+    data,
+    playing = DEFAULTS.playing,
+    muted = DEFAULTS.muted,
+    timestamp = DEFAULTS.timestamp,
+  } = props;
+  const src = Video.toSrc(data?.id);
 
   /**
    * [Render]
@@ -13,8 +18,15 @@ const View: React.FC<t.VideoLayoutProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <EdgePosition position={video?.position}>
-        <Video.Player video={src} innerScale={video?.innerScale} />
+      <EdgePosition position={data?.position}>
+        <Video.Player
+          video={src}
+          playing={playing}
+          muted={muted}
+          timestamp={timestamp}
+          innerScale={data?.innerScale}
+          onStatus={props.onStatus}
+        />
       </EdgePosition>
     </div>
   );
