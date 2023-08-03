@@ -4,6 +4,7 @@ export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.Layout.Screen/types.mjs';
 export type * from './ui/ui.Layout.SplitHorizon/types.mjs';
+export type * from './ui/ui.TooSmall/types.mjs';
 
 export type * from './ui/ui.VideoDiagram__/types.mjs';
 export type * from './ui/ui.VideoLayout__/types.mjs';

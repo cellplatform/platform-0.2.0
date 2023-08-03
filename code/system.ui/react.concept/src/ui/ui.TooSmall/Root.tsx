@@ -1,25 +1,38 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, FC, rx, type t } from '../common';
+import { DEFAULTS, FC, css, type t } from './common';
 
-export type TooSmallProps = {
-  style?: t.CssValue;
-};
-
-export const TooSmall: React.FC<TooSmallProps> = (props) => {
+const View: React.FC<t.TooSmallProps> = (props) => {
+  const { message = DEFAULTS.message } = props;
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+      position: 'relative',
+      userSelect: 'none',
       display: 'grid',
       placeItems: 'center',
+    }),
+    message: css({
+      opacity: 0.5,
+      fontStyle: props.italic ? 'italic' : undefined,
     }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 TooSmall`}</div>
+      <div {...styles.message}>{message}</div>
     </div>
   );
 };
+
+/**
+ * Export
+ */
+type Fields = {
+  DEFAULTS: typeof DEFAULTS;
+};
+export const Root = FC.decorate<t.TooSmallProps, Fields>(
+  View,
+  { DEFAULTS },
+  { displayName: 'Root' },
+);
