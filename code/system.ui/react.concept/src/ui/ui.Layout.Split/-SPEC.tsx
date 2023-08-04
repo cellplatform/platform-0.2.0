@@ -25,8 +25,8 @@ export default Dev.describe(name, (e) => {
       d.props.debug = local.debug;
       d.props.axis = local.axis;
       d.props.split = local.split;
-      d.props.min = 0.1;
-      d.props.max = 0.9;
+      d.props.splitMin = 0.1;
+      d.props.splitMax = 0.9;
     });
 
     ctx.debug.width(330);

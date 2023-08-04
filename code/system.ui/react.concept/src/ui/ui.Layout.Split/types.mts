@@ -9,8 +9,8 @@ export type SplitLayoutProps = {
   children?: [Content, Content];
   axis?: t.Axis;
   split?: t.Percent;
-  min?: t.Percent;
-  max?: t.Percent;
+  splitMin?: t.Percent;
+  splitMax?: t.Percent;
   debug?: boolean;
   style?: t.CssValue;
 };
@@ -20,6 +20,7 @@ export type SplitLayoutProps = {
  */
 export type SplitLayoutEditorProps = {
   enabled?: boolean;
+  showAxis?: boolean;
   axis?: t.Axis;
   split?: t.Percent;
   min?: t.Percent;

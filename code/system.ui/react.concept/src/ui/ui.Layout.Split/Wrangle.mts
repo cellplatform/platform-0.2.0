@@ -4,9 +4,9 @@ import { DEFAULTS, Percent, type t } from './common';
  * Helpers
  */
 export const Wrangle = {
-  percent(props: { split?: t.Percent; min?: t.Percent; max?: t.Percent }) {
+  percent(props: Pick<t.SplitLayoutProps, 'split' | 'splitMin' | 'splitMax'>) {
     const { split = DEFAULTS.split } = props;
-    return Percent.clamp(split, props.min, props.max);
+    return Percent.clamp(split, props.splitMin, props.splitMax);
   },
 
   gridCss(props: t.SplitLayoutProps): React.CSSProperties {
