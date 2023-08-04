@@ -1,5 +1,5 @@
 import { css, DEFAULTS, FC, Spinner, useMouse, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 const View: React.FC<t.PlayButtonProps> = (props) => {
   const {

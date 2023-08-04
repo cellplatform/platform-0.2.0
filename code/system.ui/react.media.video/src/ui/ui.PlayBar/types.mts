@@ -1,7 +1,10 @@
 import { type t } from './common';
 
+export type PlayBarSize = t.PlayButtonSize;
+
 export type PlayBarProps = {
   status?: t.VideoStatus;
+  size?: t.PlayBarSize;
   button?: PlayBarPropsButton;
   progress?: PlayBarPropsProgress;
   right?: false | JSX.Element;

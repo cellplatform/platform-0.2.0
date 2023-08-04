@@ -22,12 +22,14 @@ export default Dev.describe('PlayBar', (e) => {
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> &
-    Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard'>;
+  type LocalStore = Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard' | 'size'> &
+    Pick<T['debug'], 'devBg' | 'devRight'>;
+
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     replay: DEFAULTS.replay,
+    size: DEFAULTS.size,
     useKeyboard: true,
     devBg: false,
     devRight: false,
@@ -42,6 +44,7 @@ export default Dev.describe('PlayBar', (e) => {
       d.props.enabled = local.enabled;
       d.props.replay = local.replay;
       d.props.useKeyboard = local.useKeyboard;
+      d.props.size = local.size;
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;
     });
@@ -53,8 +56,8 @@ export default Dev.describe('PlayBar', (e) => {
       .display('grid')
       .render<T>((e) => {
         const { debug } = e.state;
-        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
         const margin = debug.devBg ? 5 : 0;
+        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
 
         const styles = {
           right: css({
@@ -111,6 +114,7 @@ export default Dev.describe('PlayBar', (e) => {
           display: 'grid',
           placeItems: 'center',
           marginBottom: 15,
+          marginTop: 5,
         }),
       };
       return (
@@ -154,6 +158,20 @@ export default Dev.describe('PlayBar', (e) => {
             e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
           });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Size', (dev) => {
+      const button = (value: t.PlayButtonSize) => {
+        dev.button((btn) => {
+          btn
+            .label(`size: ${value}`)
+            .right((e) => e.state.props.size === value && `←`)
+            .onClick((e) => e.change((d) => (local.size = d.props.size = value)));
+        });
+      };
+      PlayBar.sizes.forEach(button);
     });
 
     dev.hr(5, 20);

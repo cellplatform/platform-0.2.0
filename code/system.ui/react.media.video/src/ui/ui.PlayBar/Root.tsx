@@ -1,5 +1,6 @@
 import { COLORS, Color, DEFAULTS, FC, PlayButton, ProgressBar, css, type t } from './common';
 import { useKeyboard } from './use.Keyboard.mjs';
+import { Wrangle } from './Wrangle';
 
 const View: React.FC<t.PlayBarProps> = (props) => {
   const {
@@ -7,6 +8,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
     button = DEFAULTS.button,
     progress = DEFAULTS.progress,
     status = DEFAULTS.status,
+    size = DEFAULTS.size,
     right,
     onPlayAction,
     onSeek,
@@ -24,7 +26,8 @@ const View: React.FC<t.PlayBarProps> = (props) => {
   /**
    * [Render]
    */
-  const height = DEFAULTS.height;
+  const sizes = Wrangle.sizes(props);
+  const { height } = sizes;
   const styles = {
     base: css({
       height,
@@ -47,6 +50,7 @@ const View: React.FC<t.PlayBarProps> = (props) => {
         {...button}
         style={styles.button}
         enabled={enabled}
+        size={size}
         status={Wrangle.toPlayStatus(props)}
         spinning={status.is.buffering}
         onClick={onPlayAction}
@@ -71,25 +75,15 @@ const View: React.FC<t.PlayBarProps> = (props) => {
 };
 
 /**
- * Helpers
- */
-const Wrangle = {
-  toPlayStatus(props: t.PlayBarProps): t.PlayButtonStatus {
-    const { status = DEFAULTS.status, replay = DEFAULTS.replay } = props;
-    if (replay && status.is.complete) return 'Replay';
-    return status.is.playing ? 'Pause' : 'Play';
-  },
-} as const;
-
-/**
  * Export
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  sizes: typeof DEFAULTS.sizes;
   useKeyboard: typeof useKeyboard;
 };
 export const PlayBar = FC.decorate<t.PlayBarProps, Fields>(
   View,
-  { DEFAULTS, useKeyboard },
+  { DEFAULTS, sizes: DEFAULTS.sizes, useKeyboard },
   { displayName: 'PlayBar' },
 );

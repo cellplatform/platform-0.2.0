@@ -13,14 +13,14 @@ export const Wrangle = {
     return undefined;
   },
 
-  sizes(props: t.PlayButtonProps) {
+  sizes(props: { size?: t.PlayButtonSize }) {
     const { size = DEFAULTS.size } = props;
     let icon = 22;
     let width = 56;
     let height = 32;
     let spinner = 20;
     if (size === 'small') {
-      icon = 16;
+      icon = 15;
       width = 38;
       height = 20;
       spinner = 16;
