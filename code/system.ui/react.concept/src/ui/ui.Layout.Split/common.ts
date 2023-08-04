@@ -1,5 +1,7 @@
 import { type t } from './common';
+
 export * from '../common';
+export { Icons } from '../Icons.mjs';
 
 /**
  * Constants
@@ -7,6 +9,6 @@ export * from '../common';
 const axis: t.Axis = 'x';
 
 export const DEFAULTS = {
-  percent: 0.6,
+  split: 0.6,
   axis,
 } as const;

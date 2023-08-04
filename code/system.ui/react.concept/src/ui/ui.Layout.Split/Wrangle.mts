@@ -4,8 +4,8 @@ import { DEFAULTS, Percent, type t } from './common';
  * Helpers
  */
 export const Wrangle = {
-  percent(props: t.SplitLayoutProps) {
-    const { split = DEFAULTS.percent } = props;
+  percent(props: { split?: t.Percent; min?: t.Percent; max?: t.Percent }) {
+    const { split = DEFAULTS.split } = props;
     return Percent.clamp(split, props.min, props.max);
   },
 

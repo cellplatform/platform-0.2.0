@@ -9,6 +9,7 @@ import {
   MdPause,
   MdPlayArrow,
   MdReplay,
+  MdOutlineVerticalAlignCenter,
 } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
@@ -33,4 +34,5 @@ export const Icons = {
     Cloud: icon(FiDownloadCloud),
     Tray: icon(FiDownload),
   },
+  Align: { Center: icon(MdOutlineVerticalAlignCenter) },
 } as const;

@@ -1,5 +1,5 @@
-import { css, Color, COLORS, Dev, type t, Slider } from '../../test.ui';
 import { SplitLayout } from '.';
+import { COLORS, Color, Dev, css, type t } from '../../test.ui';
 
 const DEFAULTS = SplitLayout.DEFAULTS;
 
@@ -11,7 +11,7 @@ export default Dev.describe(name, (e) => {
   type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'split' | 'axis'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.SplitHorizonLayout');
   const local = localstore.object({
-    split: DEFAULTS.percent,
+    split: DEFAULTS.split,
     axis: DEFAULTS.axis,
     debug: true,
   });
@@ -49,34 +49,20 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.section('Properties', (dev) => {
-      dev.title('percent', { bold: false, size: 12, opacity: 0.6 });
+      dev.hr(0, 5);
       dev.row((e) => {
-        const percent = SplitLayout.percent(e.state.props);
         return (
-          <Slider
-            style={{ MarginX: 5 }}
-            thumb={{ size: 16 }}
-            track={{ height: 16 }}
-            percent={percent}
+          <SplitLayout.PropEditor
+            {...e.state.props}
             onChange={(e) => {
-              state.change((d) => (local.split = d.props.split = e.percent));
+              state.change((d) => {
+                local.split = d.props.split = e.split;
+                local.axis = d.props.axis = e.axis;
+              });
             }}
           />
         );
       });
-
-      dev.hr(-1, [10, 5]);
-
-      const axis = (value: t.Axis) => {
-        dev.button((btn) => {
-          btn
-            .label(`axis: ${value}`)
-            .right((e) => (value === e.state.props.axis ? '←' : ''))
-            .onClick((e) => e.change((d) => (local.axis = d.props.axis = value)));
-        });
-      };
-      axis('x');
-      axis('y');
     });
 
     dev.hr(5, 20);
@@ -97,12 +83,11 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
-      const percent = SplitLayout.percent(e.state.props);
+      const split = Number(SplitLayout.percent(e.state.props).toFixed(2));
       const data = {
-        props,
-        'props:split': Number(percent.toFixed(2)),
+        props: { ...props, split },
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={2} />;
     });
   });
 });
