@@ -1,9 +1,13 @@
-import { DEFAULTS, type t } from './common';
+import { DEFAULTS, Percent, type t } from './common';
 
 /**
  * Helpers
  */
 export const Wrangle = {
+  percent(value?: number) {
+    return Percent.clamp(value);
+  },
+
   props(props: t.SliderProps) {
     const track = Wrangle.track(props.track);
     const thumb = Wrangle.thumb(props.thumb);
@@ -11,10 +15,21 @@ export const Wrangle = {
     return { track, thumb, ticks } as const;
   },
 
+  elementToPercent(el: HTMLDivElement, clientX: number) {
+    const totalWidth = el.offsetWidth;
+    const position = clientX - el.getBoundingClientRect().left;
+    const res = totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
+    return Number(res.toFixed(3));
+  },
+
+  /**
+   * Track
+   */
   track(props?: Partial<t.SliderTrackProps>): t.SliderTrackProps {
     const DEFAULT = DEFAULTS.track;
     return {
       height: props?.height ?? DEFAULT.height,
+      percent: props?.percent,
       color: {
         default: props?.color?.default ?? DEFAULT.color.default,
         highlight: props?.color?.highlight ?? DEFAULT.color.highlight,
@@ -23,6 +38,9 @@ export const Wrangle = {
     };
   },
 
+  /**
+   * Thumb
+   */
   thumb(props?: Partial<t.SliderThumbProps>): t.SliderThumbProps {
     const DEFAULT = DEFAULTS.thumb;
     return {
@@ -32,6 +50,13 @@ export const Wrangle = {
     };
   },
 
+  thumbLeft(percent: t.Percent, totalWidth: t.Pixels, thumbSize: t.Pixels) {
+    return (totalWidth - thumbSize) * percent;
+  },
+
+  /**
+   * Ticks
+   */
   ticks(props?: Partial<t.SliderTickProps>): t.SliderTickProps {
     const DEFAULT = DEFAULTS.ticks;
     return {
@@ -47,20 +72,5 @@ export const Wrangle = {
       .map((value) => {
         return typeof value === 'number' ? { value } : (value as t.SliderTick);
       });
-  },
-
-  percent(value?: number) {
-    return Math.max(0, Math.min(1, value ?? 0));
-  },
-
-  elementToPercent(el: HTMLDivElement, clientX: number) {
-    const totalWidth = el.offsetWidth;
-    const position = clientX - el.getBoundingClientRect().left;
-    const res = totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
-    return Number(res.toFixed(3));
-  },
-
-  thumbLeft(percent: t.Percent, totalWidth: t.Pixels, thumbSize: t.Pixels) {
-    return (totalWidth - thumbSize) * percent;
   },
 } as const;
