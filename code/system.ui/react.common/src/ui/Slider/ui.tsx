@@ -3,8 +3,8 @@ import { DEFAULTS, css, useRedraw, type t } from './common';
 
 import { Wrangle } from './Wrangle.mjs';
 import { useEventMonitor } from './use.EventMonitor.mjs';
-import { Thumb } from './view.Thumb';
-import { Track } from './view.Track';
+import { Thumb } from './ui.Thumb';
+import { Track } from './ui.Track';
 
 type M = React.MouseEventHandler;
 
