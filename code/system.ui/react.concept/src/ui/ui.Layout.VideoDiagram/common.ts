@@ -6,4 +6,7 @@ export { SplitLayout } from '../ui.Layout.Split';
 /**
  * Constants
  */
-export const DEFAULTS = {} as const;
+
+export const DEFAULTS = {
+  split: 0.6,
+} as const;
