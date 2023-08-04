@@ -39,9 +39,11 @@ export const Wrangle = {
   },
 
   tickItems(input?: t.SliderTickInput[]): t.SliderTick[] {
-    return (input ?? []).map((item) => {
-      return typeof item === 'number' ? { value: item } : item;
-    });
+    return (input ?? [])
+      .filter((item) => typeof item === 'number' || typeof item === 'object')
+      .map((value) => {
+        return typeof value === 'number' ? { value } : value;
+      });
   },
 
   percent(value?: number) {

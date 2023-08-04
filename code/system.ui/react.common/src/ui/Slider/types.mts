@@ -26,7 +26,7 @@ export type SliderThumbProps = {
 
 export type SliderTickProps = {
   offset: { top: t.Pixels; bottom: t.Pixels };
-  items: SliderTickInput[];
+  items: (SliderTickInput | undefined | false)[];
 };
 
 export type SliderTickInput = t.Percent | SliderTick;

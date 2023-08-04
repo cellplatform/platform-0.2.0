@@ -117,6 +117,8 @@ export default Dev.describe('Slider', (e) => {
           0.25,
           { value: 0.5, label: 'Midway' },
           { value: 0.75, el: <div {...style} /> },
+          undefined,
+          false,
         ];
       });
     });
