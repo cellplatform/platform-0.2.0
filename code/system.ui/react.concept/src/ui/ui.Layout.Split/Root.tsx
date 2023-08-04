@@ -40,9 +40,10 @@ const View: React.FC<t.SplitLayoutProps> = (props) => {
  */
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
+  percent: typeof Wrangle.percent;
 };
 export const SplitLayout = FC.decorate<t.SplitLayoutProps, Fields>(
   View,
-  { DEFAULTS },
+  { DEFAULTS, percent: Wrangle.percent },
   { displayName: 'SplitLayout' },
 );

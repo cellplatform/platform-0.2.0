@@ -22,9 +22,11 @@ export default Dev.describe(name, (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.split = local.split;
-      d.props.axis = local.axis;
       d.props.debug = local.debug;
+      d.props.axis = local.axis;
+      d.props.split = local.split;
+      d.props.min = 0.1;
+      d.props.max = 0.9;
     });
 
     ctx.debug.width(330);
@@ -49,12 +51,13 @@ export default Dev.describe(name, (e) => {
     dev.section('Properties', (dev) => {
       dev.title('percent', { bold: false, size: 12, opacity: 0.6 });
       dev.row((e) => {
+        const percent = SplitLayout.percent(e.state.props);
         return (
           <Slider
             style={{ MarginX: 5 }}
             thumb={{ size: 16 }}
             track={{ height: 16 }}
-            percent={e.state.props.split}
+            percent={percent}
             onChange={(e) => {
               state.change((d) => (local.split = d.props.split = e.percent));
             }}
@@ -94,10 +97,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
-      const percent = Number((props.split ?? 0).toFixed(2));
+      const percent = SplitLayout.percent(e.state.props);
       const data = {
         props,
-        'props:split': percent,
+        'props:split': Number(percent.toFixed(2)),
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
