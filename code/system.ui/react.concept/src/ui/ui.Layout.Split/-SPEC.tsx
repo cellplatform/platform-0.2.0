@@ -3,17 +3,25 @@ import { COLORS, Color, Dev, css, type t } from '../../test.ui';
 
 const DEFAULTS = SplitLayout.DEFAULTS;
 
-type T = { props: t.SplitLayoutProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.SplitLayoutProps;
+  debug: { samples?: boolean };
+};
+const initial: T = {
+  props: {},
+  debug: {},
+};
 const name = SplitLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'split' | 'axis'>;
+  type LocalStore = Pick<t.SplitLayoutProps, 'debug' | 'split' | 'axis'> &
+    Pick<T['debug'], 'samples'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.SplitHorizonLayout');
   const local = localstore.object({
     split: DEFAULTS.split,
     axis: DEFAULTS.axis,
     debug: true,
+    samples: true,
   });
 
   e.it('ui:init', async (e) => {
@@ -27,6 +35,8 @@ export default Dev.describe(name, (e) => {
       d.props.split = local.split;
       d.props.splitMin = 0.1;
       d.props.splitMax = 0.9;
+
+      d.debug.samples = local.samples;
     });
 
     ctx.debug.width(330);
@@ -35,10 +45,12 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const { props, debug } = e.state;
+        if (!debug.samples) return <SplitLayout {...props} />;
         return (
-          <SplitLayout {...e.state.props}>
+          <SplitLayout {...props}>
             <Sample />
-            <Sample />
+            <Sample minHeight={180} />
           </SplitLayout>
         );
       });
@@ -75,6 +87,14 @@ export default Dev.describe(name, (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug'))));
       });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.debug.samples);
+        btn
+          .label((e) => `samples`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.samples = Dev.toggle(d.debug, 'samples'))));
+      });
     });
   });
 
@@ -83,9 +103,10 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
-      const split = Number(SplitLayout.percent(e.state.props).toFixed(2));
+      const split = Number((e.state.props.split ?? 0).toFixed(2));
       const data = {
         props: { ...props, split },
+        'props:split': split,
       };
       return <Dev.Object name={name} data={data} expand={2} />;
     });
@@ -96,10 +117,12 @@ export default Dev.describe(name, (e) => {
  * Sample Components
  */
 export type SampleProps = {
+  minHeight?: number;
   style?: t.CssValue;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
+  const { minHeight } = props;
   /**
    * [Render]
    */
@@ -107,9 +130,11 @@ export const Sample: React.FC<SampleProps> = (props) => {
     base: css({
       backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
       border: `dashed 1px ${Color.alpha(COLORS.DARK, 0.1)}`,
+      boxSizing: 'border-box',
       borderRadius: 5,
       margin: 15,
       padding: 5,
+      minHeight,
     }),
   };
 

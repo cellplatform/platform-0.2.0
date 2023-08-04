@@ -1,12 +1,12 @@
 import { type t } from './common';
 
-type Content = JSX.Element | false | null;
+type Body = JSX.Element | false | null;
 
 /**
  * Component
  */
 export type SplitLayoutProps = {
-  children?: [Content, Content];
+  children?: [Body, Body] | Body[] | false | null;
   axis?: t.Axis;
   split?: t.Percent;
   splitMin?: t.Percent;

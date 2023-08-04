@@ -13,7 +13,7 @@ export const Wrangle = {
     const percent = Wrangle.percent(props.split, props.splitMin, props.splitMax);
     const near = 1 * percent;
     const far = 1 - near;
-    const template = `${near}fr ${far}fr`;
+    const template = `${near.toFixed(3)}fr ${far.toFixed(3)}fr`;
     return {
       display: 'grid',
       gridTemplateRows: axis === 'x' ? template : undefined,

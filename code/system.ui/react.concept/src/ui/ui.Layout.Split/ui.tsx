@@ -1,8 +1,9 @@
 import { Wrangle } from './Wrangle.mjs';
-import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
+import { Color, DEFAULTS, css, type t } from './common';
 
 export const View: React.FC<t.SplitLayoutProps> = (props) => {
   const { debug = false, axis = DEFAULTS.axis, children = [] } = props;
+  const debugColor = Color.debug(debug);
 
   /**
    * [Render]
@@ -10,17 +11,18 @@ export const View: React.FC<t.SplitLayoutProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      backgroundColor: debugColor(0.06),
       ...Wrangle.gridCss(props),
     }),
     container: css({ position: 'relative', display: 'grid' }),
-    top: css({}),
-    bottom: css({}),
+    top: css({ backgroundColor: debugColor(0.03) }),
+    bottom: css({ backgroundColor: debugColor(0.03) }),
     debug: css({
       Absolute: axis === 'x' ? [0, 0, null, 0] : [0, null, 0, 0],
       width: axis === 'y' ? 1 : undefined,
       height: axis === 'x' ? 1 : undefined,
       pointerEvents: 'none',
-      backgroundColor: Color.alpha(COLORS.RED, 0.1),
+      backgroundColor: debugColor(0.2),
     }),
   };
 

@@ -47,7 +47,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
         enabled={enabled}
         percent={clampPercent(props.split)}
         thumb={{ size: 16 }}
-        track={{ height: 16 }}
+        track={{ height: 10 }}
         onChange={(e) => {
           const split = clampPercent(e.percent);
           props.onChange?.({ axis, split });

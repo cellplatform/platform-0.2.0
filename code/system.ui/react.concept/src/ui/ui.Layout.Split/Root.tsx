@@ -1,7 +1,7 @@
 import { Wrangle } from './Wrangle.mjs';
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './view';
-import { PropEditor } from './view.PropEditor';
+import { View } from './ui';
+import { PropEditor } from './ui.PropEditor';
 
 /**
  * Export
