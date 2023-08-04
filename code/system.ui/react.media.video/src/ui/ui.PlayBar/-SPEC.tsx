@@ -1,6 +1,6 @@
-import { Dev, type t, css } from '../../test.ui';
+import { Dev, Video, css, type t } from '../../test.ui';
+
 import { PlayBar } from '.';
-import { VideoPlayer } from '../ui.VideoPlayer';
 import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
 
 const DEFAULTS = PlayBar.DEFAULTS;
@@ -17,6 +17,8 @@ const initial: T = {
 };
 
 export default Dev.describe('PlayBar', (e) => {
+  const sidebarWidth = 350;
+
   /**
    * LocalStorage
    */
@@ -44,6 +46,7 @@ export default Dev.describe('PlayBar', (e) => {
       d.debug.devRight = local.devRight;
     });
 
+    ctx.debug.width(sidebarWidth);
     ctx.subject
       .backgroundColor(1)
       .size('fill-x')
@@ -70,7 +73,7 @@ export default Dev.describe('PlayBar', (e) => {
             style={{ margin }}
             right={elRight}
             /**
-             * State updates: → <VideoPlayer>
+             * State updates: → <Video.Player>
              */
             onPlayAction={(e) => {
               console.info('⚡️ onPlayClick', e);
@@ -102,20 +105,28 @@ export default Dev.describe('PlayBar', (e) => {
     const state = await dev.state();
 
     dev.row((e) => {
-      const { props, player: video } = e.state;
+      const { props } = e.state;
+      const styles = {
+        base: css({
+          display: 'grid',
+          placeItems: 'center',
+          marginBottom: 15,
+        }),
+      };
       return (
-        <VideoPlayer
-          {...video}
-          enabled={props.enabled}
-          borderRadius={10}
-          onStatus={(e) => {
-            state.change((d) => (d.props.status = e.status));
-          }}
-        />
+        <div {...styles.base}>
+          <Video.Player
+            {...e.state.player}
+            enabled={props.enabled}
+            borderRadius={10}
+            width={sidebarWidth - 50}
+            onStatus={(e) => {
+              state.change((d) => (d.props.status = e.status));
+            }}
+          />
+        </div>
       );
     });
-
-    dev.hr(0, 15);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {

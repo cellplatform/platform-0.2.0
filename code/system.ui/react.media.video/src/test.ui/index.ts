@@ -5,3 +5,4 @@ export { Dev } from 'sys.ui.react.common';
 
 export * from './common';
 export { Icons } from '../ui/Icons.mjs';
+export { Video } from '../index.mjs';
