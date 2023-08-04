@@ -39,10 +39,11 @@ export const Wrangle = {
   },
 
   tickItems(input?: t.SliderTickInput[]): t.SliderTick[] {
-    return (input ?? [])
+    if (!Array.isArray(input)) return [];
+    return input
       .filter((item) => typeof item === 'number' || typeof item === 'object')
       .map((value) => {
-        return typeof value === 'number' ? { value } : value;
+        return typeof value === 'number' ? { value } : (value as t.SliderTick);
       });
   },
 
