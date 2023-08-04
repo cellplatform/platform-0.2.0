@@ -15,3 +15,8 @@ export type EdgePositionInput = EdgePosition | EdgePos;
 export type AxisX = 'x';
 export type AxisY = 'y';
 export type Axis = AxisX | AxisY;
+
+/**
+ * 2D Coordinate
+ */
+export type Point = { x: number; y: number };
