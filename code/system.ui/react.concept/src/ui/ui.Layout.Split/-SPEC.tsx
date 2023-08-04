@@ -91,7 +91,7 @@ export default Dev.describe(name, (e) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.debug.samples);
         btn
-          .label((e) => `samples`)
+          .label((e) => `sample child components`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.samples = Dev.toggle(d.debug, 'samples'))));
       });

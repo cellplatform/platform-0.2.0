@@ -20,4 +20,8 @@ export const Wrangle = {
       gridTemplateColumns: axis === 'y' ? template : undefined,
     } as const;
   },
+
+  children(props: t.SplitLayoutProps) {
+    return Array.isArray(props.children) ? props.children : [];
+  },
 } as const;
