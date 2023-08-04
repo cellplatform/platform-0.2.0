@@ -46,11 +46,15 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
+
         if (!debug.samples) return <SplitLayout {...props} />;
         return (
           <SplitLayout {...props}>
             <Sample />
-            <Sample minHeight={150} />
+            <Sample
+              minHeight={props.axis === 'x' ? 150 : undefined}
+              minWidth={props.axis === 'y' ? 220 : undefined}
+            />
           </SplitLayout>
         );
       });
@@ -118,11 +122,12 @@ export default Dev.describe(name, (e) => {
  */
 export type SampleProps = {
   minHeight?: number;
+  minWidth?: number;
   style?: t.CssValue;
 };
 
 export const Sample: React.FC<SampleProps> = (props) => {
-  const { minHeight } = props;
+  const { minHeight, minWidth } = props;
   /**
    * [Render]
    */
@@ -135,12 +140,20 @@ export const Sample: React.FC<SampleProps> = (props) => {
       margin: 15,
       padding: 5,
       minHeight,
+      minWidth,
     }),
   };
 
+  const elMinHeight = minHeight && <span>{`min-height: ${minHeight}px`}</span>;
+  const elMinWidth = minWidth && <span>{`min-width: ${minWidth}px`}</span>;
+
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${minHeight ? `min-height: ${minHeight}px` : ''}`}</div>
+      <div>
+        {`🐷 `}
+        {elMinWidth}
+        {elMinHeight}
+      </div>
     </div>
   );
 };
