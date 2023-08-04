@@ -11,7 +11,6 @@ type E = HTMLElement;
  *    Standards API
  *    https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
  *
- *
  */
 export function useSizeObserver<T extends E = HTMLDivElement>(args?: t.UseSizeObserverArgs<T>) {
   const ref = args?.ref ?? useRef<T>(null);
