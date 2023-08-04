@@ -45,6 +45,7 @@ export const Wrangle = {
     const DEFAULT = DEFAULTS.thumb;
     return {
       size: props?.size ?? DEFAULT.size,
+      opacity: props?.opacity ?? DEFAULT.opacity,
       color: props?.color ?? DEFAULT.color,
       pressedScale: props?.pressedScale ?? DEFAULT.pressedScale,
     };

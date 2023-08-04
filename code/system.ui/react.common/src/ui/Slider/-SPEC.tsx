@@ -85,7 +85,9 @@ export default Dev.describe('Slider', (e) => {
 
       config('(reset)', (e) => {
         e.thumb.size = DEFAULTS.thumb.size;
+        e.thumb.opacity = DEFAULTS.thumb.opacity;
         e.track.height = DEFAULTS.track.height;
+        e.track.percent = DEFAULTS.track.percent;
         e.ticks.items = DEFAULTS.ticks.items;
       });
 
@@ -121,6 +123,11 @@ export default Dev.describe('Slider', (e) => {
           false,
         ];
       });
+
+      dev.hr(-1, 5);
+
+      config('hidden thumb', (e) => (e.thumb.opacity = 0));
+      config('progress overshoots thumb', (e) => (e.track.percent = 0.5));
     });
   });
 

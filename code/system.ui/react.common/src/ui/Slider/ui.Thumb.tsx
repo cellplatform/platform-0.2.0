@@ -26,6 +26,7 @@ export const Thumb: React.FC<ThumbProps> = (props) => {
       height: props.height,
       pointerEvents: 'none',
       transform: `scale(${pressed ? thumb.pressedScale : 1})`,
+      opacity: thumb.opacity,
       display: 'grid',
       placeItems: 'center',
     }),

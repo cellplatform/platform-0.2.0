@@ -11,8 +11,9 @@ export type TrackProps = {
 };
 
 export const Track: React.FC<TrackProps> = (props) => {
-  const { totalWidth, thumb, track, percent, enabled } = props;
+  const { totalWidth, thumb, track, enabled } = props;
   const height = track.height;
+  const percent = track.percent ?? props.percent;
   const thumbLeft = Wrangle.thumbLeft(percent, totalWidth, thumb.size);
   const progressWidth = percent === 1 ? totalWidth : thumbLeft + thumb.size / 2;
 
@@ -20,12 +21,14 @@ export const Track: React.FC<TrackProps> = (props) => {
    * [Render]
    */
   const borderRadius = height / 2;
+  const progressRadius = [borderRadius, 0, 0, borderRadius];
+  if (percent !== props.percent || thumb.opacity === 0) {
+    progressRadius[1] = borderRadius;
+    progressRadius[2] = borderRadius;
+  }
+
   const styles = {
-    base: css({
-      Absolute: 0,
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    base: css({ Absolute: 0, display: 'grid', alignContent: 'center' }),
     body: css({
       position: 'relative',
       overflow: 'hidden',
@@ -35,7 +38,7 @@ export const Track: React.FC<TrackProps> = (props) => {
     }),
     progress: css({
       backgroundColor: track.color.highlight,
-      borderRadius: `${borderRadius}px 0 0 ${borderRadius}px`,
+      borderRadius: progressRadius.map((num) => num + 'px').join(' '),
       height,
       Absolute: [0, null, 0, 0],
       width: progressWidth,
