@@ -122,6 +122,6 @@ export function darken(color: string, amount: number) {
 /**
  * A curried function that returns a "red/ruby" color shade based on the given debug flag.
  */
-export function debug(debugging: boolean) {
-  return (opacity: t.Percent) => (debugging ? `rgba(255, 0, 0, ${opacity})` : undefined);
+export function debug(debug?: boolean) {
+  return (opacity: t.Percent) => (debug ? `rgba(255, 0, 0, ${opacity})` : undefined);
 }
