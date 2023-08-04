@@ -140,7 +140,7 @@ export const Sample: React.FC<SampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷`}</div>
+      <div>{`🐷 ${minHeight ? `min-height: ${minHeight}px` : ''}`}</div>
     </div>
   );
 };
