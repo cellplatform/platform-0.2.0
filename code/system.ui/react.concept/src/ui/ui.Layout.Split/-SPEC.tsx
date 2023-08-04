@@ -46,7 +46,6 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const { props, debug } = e.state;
-
         if (!debug.samples) return <SplitLayout {...props} />;
         return (
           <SplitLayout {...props}>
