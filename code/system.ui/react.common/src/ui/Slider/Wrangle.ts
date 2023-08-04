@@ -51,7 +51,8 @@ export const Wrangle = {
   elementToPercent(el: HTMLDivElement, clientX: number) {
     const totalWidth = el.offsetWidth;
     const position = clientX - el.getBoundingClientRect().left;
-    return totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
+    const res = totalWidth <= 0 ? 0 : Wrangle.percent(position / totalWidth);
+    return Number(res.toFixed(3));
   },
 
   thumbLeft(percent: t.Percent, totalWidth: t.Pixels, thumbSize: t.Pixels) {
