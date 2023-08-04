@@ -19,9 +19,7 @@ export type SliderProps = {
  */
 export type SliderTrackProps = {
   height: t.Pixels;
-  defaultColor: string;
-  highlightColor: string;
-  borderColor: string;
+  color: { default: string; highlight: string; border: string };
 };
 
 /**
@@ -29,7 +27,7 @@ export type SliderTrackProps = {
  */
 export type SliderThumbProps = {
   size: t.Pixels;
-  color: string;
+  color: { default: string; border: string };
   pressedScale: number; // eg: 1.1
 };
 

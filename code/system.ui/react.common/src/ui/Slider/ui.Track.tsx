@@ -29,12 +29,12 @@ export const Track: React.FC<TrackProps> = (props) => {
     body: css({
       position: 'relative',
       overflow: 'hidden',
-      backgroundColor: track.defaultColor,
+      backgroundColor: track.color.default,
       borderRadius,
       height,
     }),
     progress: css({
-      backgroundColor: track.highlightColor,
+      backgroundColor: track.color.highlight,
       borderRadius: `${borderRadius}px 0 0 ${borderRadius}px`,
       height,
       Absolute: [0, null, 0, 0],
@@ -44,7 +44,7 @@ export const Track: React.FC<TrackProps> = (props) => {
     }),
     border: css({
       Absolute: 0,
-      border: `solid 1px ${track.borderColor}`,
+      border: `solid 1px ${track.color.border}`,
       borderRadius,
     }),
   };

@@ -15,9 +15,11 @@ export const Wrangle = {
     const DEFAULT = DEFAULTS.track;
     return {
       height: props?.height ?? DEFAULT.height,
-      defaultColor: props?.defaultColor ?? DEFAULT.defaultColor,
-      highlightColor: props?.highlightColor ?? DEFAULT.highlightColor,
-      borderColor: props?.borderColor ?? DEFAULT.borderColor,
+      color: {
+        default: props?.color?.default ?? DEFAULT.color.default,
+        highlight: props?.color?.highlight ?? DEFAULT.color.highlight,
+        border: props?.color?.border ?? DEFAULT.color.border,
+      },
     };
   },
 

@@ -103,8 +103,8 @@ export default Dev.describe('Slider', (e) => {
 
       dev.hr(-1, 5);
 
-      config('blue', (e) => (e.track.highlightColor = COLORS.BLUE));
-      config('green', (e) => (e.track.highlightColor = COLORS.GREEN));
+      config('blue', (e) => (e.track.color.highlight = COLORS.BLUE));
+      config('green', (e) => (e.track.color.highlight = COLORS.GREEN));
 
       dev.hr(-1, 5);
 

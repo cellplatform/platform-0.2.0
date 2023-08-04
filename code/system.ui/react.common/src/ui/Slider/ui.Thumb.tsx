@@ -1,4 +1,4 @@
-import { Color, COLORS, css, type t } from './common';
+import { Color, css, type t } from './common';
 import { Wrangle } from './Wrangle';
 
 export type ThumbProps = {
@@ -33,8 +33,8 @@ export const Thumb: React.FC<ThumbProps> = (props) => {
       Size: thumb.size,
       overflow: 'hidden',
       borderRadius: thumb.size / 2,
-      backgroundColor: thumb.color,
-      border: `solid 1px ${Color.alpha(COLORS.DARK, 0.2)}`,
+      backgroundColor: thumb.color.default,
+      border: `solid 1px ${thumb.color.border}`,
       boxSizing: 'border-box',
       boxShadow: `0 1px 5px 0 ${Color.format(-0.1)}`,
     }),

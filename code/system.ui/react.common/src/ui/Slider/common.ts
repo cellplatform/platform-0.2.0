@@ -13,16 +13,21 @@ export const DEFAULTS = {
   get thumb(): t.SliderThumbProps {
     return {
       size: 20,
-      color: COLORS.WHITE,
       pressedScale: 1.1,
+      color: {
+        default: COLORS.WHITE,
+        border: Color.alpha(COLORS.DARK, 0.2),
+      },
     };
   },
   get track(): t.SliderTrackProps {
     return {
       height: 20,
-      borderColor: Color.alpha(COLORS.DARK, 0.06),
-      defaultColor: Color.alpha(COLORS.DARK, 0.06),
-      highlightColor: COLORS.BLUE,
+      color: {
+        default: Color.alpha(COLORS.DARK, 0.06),
+        highlight: COLORS.BLUE,
+        border: Color.alpha(COLORS.DARK, 0.06),
+      },
     };
   },
   get ticks(): t.SliderTickProps {
