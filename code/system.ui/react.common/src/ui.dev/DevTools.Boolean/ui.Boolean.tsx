@@ -35,6 +35,7 @@ const View: React.FC<BooleanProps> = (props) => {
       value={value}
       isEnabled={isActive}
       height={16}
+      theme={Switch.Theme.light.blue}
       onMouseDown={(e) => e.preventDefault()}
     />
   );
