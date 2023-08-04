@@ -20,16 +20,18 @@ export const DEFAULTS = {
       },
     };
   },
+
   get track(): t.SliderTrackProps {
     return {
       height: 20,
       color: {
         default: Color.alpha(COLORS.DARK, 0.06),
-        highlight: COLORS.BLUE,
         border: Color.alpha(COLORS.DARK, 0.06),
+        highlight: COLORS.BLUE,
       },
     };
   },
+
   get ticks(): t.SliderTickProps {
     return {
       offset: { top: 5, bottom: 5 },
