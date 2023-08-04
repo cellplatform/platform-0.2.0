@@ -1,5 +1,9 @@
 import tinycolor from 'tinycolor2';
+import { type t } from '../common';
 
+/**
+ * Standard "ruby" RED color (semi-transparent).
+ */
 export const RED = `rgba(255, 0, 0, 0.1)`;
 
 /**
@@ -113,4 +117,11 @@ export function lighten(color: string, amount: number) {
  */
 export function darken(color: string, amount: number) {
   return create(color).darken(amount).toRgbString();
+}
+
+/**
+ * A curried function that returns a "red/ruby" color shade based on the given debug flag.
+ */
+export function debug(debugging: boolean) {
+  return (opacity: t.Percent) => (debugging ? `rgba(255, 0, 0, ${opacity})` : undefined);
 }
