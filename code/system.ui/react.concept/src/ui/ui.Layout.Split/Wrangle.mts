@@ -17,9 +17,9 @@ export const Wrangle = {
     const ratio = Wrangle.percent(props.split, props.splitMin, props.splitMax);
 
     function calc(ratio: number): string {
-      const first = (ratio * 100).toFixed(2) + '%';
-      const last = (100 - ratio * 100).toFixed(2) + '%';
-      return `${first} ${last}`;
+      const first = (ratio * 100).toFixed(2);
+      const last = (100 - ratio * 100).toFixed(2);
+      return `${first}% ${last}%`;
     }
 
     const template = calc(ratio);

@@ -50,7 +50,7 @@ export default Dev.describe(name, (e) => {
         return (
           <SplitLayout {...props}>
             <Sample />
-            <Sample minHeight={180} />
+            <Sample minHeight={150} />
           </SplitLayout>
         );
       });
