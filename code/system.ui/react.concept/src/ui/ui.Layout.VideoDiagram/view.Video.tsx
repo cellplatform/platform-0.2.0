@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Video, useSizeObserver } from './common';
+import { useEffect } from 'react';
+import { Video, css, useSizeObserver, type t } from './common';
 
 export type VideoViewProps = {
   style?: t.CssValue;
