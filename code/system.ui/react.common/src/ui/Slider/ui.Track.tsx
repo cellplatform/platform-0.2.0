@@ -34,7 +34,7 @@ export const Track: React.FC<TrackProps> = (props) => {
       height,
     }),
     progress: css({
-      backgroundColor: track.progressColor,
+      backgroundColor: track.highlighColor,
       borderRadius: `${borderRadius}px 0 0 ${borderRadius}px`,
       height,
       Absolute: [0, null, 0, 0],

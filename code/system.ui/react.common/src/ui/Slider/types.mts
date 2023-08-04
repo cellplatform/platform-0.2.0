@@ -14,7 +14,7 @@ export type SliderProps = {
 export type SliderTrackProps = {
   height: t.Pixels;
   defaultColor: string;
-  progressColor: string;
+  highlighColor: string;
   borderColor: string;
 };
 
