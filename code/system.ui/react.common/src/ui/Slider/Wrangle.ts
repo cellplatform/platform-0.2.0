@@ -1,4 +1,4 @@
-import { css, Color, COLORS, type t, DEFAULTS } from './common';
+import { DEFAULTS, type t } from './common';
 
 /**
  * Helpers
