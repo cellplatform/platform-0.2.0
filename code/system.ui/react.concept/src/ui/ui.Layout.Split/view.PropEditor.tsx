@@ -4,6 +4,10 @@ import { Button, DEFAULTS, Icons, Slider, css, type t } from './common';
 export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const { axis = DEFAULTS.axis, split = DEFAULTS.split, enabled = true, showAxis = true } = props;
 
+  const clampPercent = (value?: t.Percent) => {
+    return Wrangle.percent(value, props.splitMin, props.splitMax);
+  };
+
   /**
    * Handlers
    */
@@ -41,11 +45,11 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     <div {...styles.slider}>
       <Slider
         enabled={enabled}
-        percent={split}
+        percent={clampPercent(props.split)}
         thumb={{ size: 16 }}
         track={{ height: 16 }}
         onChange={(e) => {
-          const split = Wrangle.percent({ ...props, split: e.percent });
+          const split = clampPercent(e.percent);
           props.onChange?.({ axis, split });
         }}
       />

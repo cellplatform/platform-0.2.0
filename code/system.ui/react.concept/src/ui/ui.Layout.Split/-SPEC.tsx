@@ -1,5 +1,5 @@
 import { SplitLayout } from '.';
-import { COLORS, Color, Dev, css, type t, Video, useSizeObserver } from '../../test.ui';
+import { COLORS, Color, Dev, css, type t } from '../../test.ui';
 
 const DEFAULTS = SplitLayout.DEFAULTS;
 

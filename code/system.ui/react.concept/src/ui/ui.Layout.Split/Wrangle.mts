@@ -4,14 +4,13 @@ import { DEFAULTS, Percent, type t } from './common';
  * Helpers
  */
 export const Wrangle = {
-  percent(props: Pick<t.SplitLayoutProps, 'split' | 'splitMin' | 'splitMax'>) {
-    const { split = DEFAULTS.split } = props;
-    return Percent.clamp(split, props.splitMin, props.splitMax);
+  percent(value?: t.Percent, min?: t.Percent, max?: t.Percent) {
+    return Percent.clamp(value ?? DEFAULTS.split, min, max);
   },
 
   gridCss(props: t.SplitLayoutProps): React.CSSProperties {
     const { axis = DEFAULTS.axis } = props;
-    const percent = Wrangle.percent(props);
+    const percent = Wrangle.percent(props.split, props.splitMin, props.splitMax);
     const near = 1 * percent;
     const far = 1 - near;
     const template = `${near}fr ${far}fr`;

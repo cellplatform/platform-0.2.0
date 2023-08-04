@@ -23,8 +23,8 @@ export type SplitLayoutEditorProps = {
   showAxis?: boolean;
   axis?: t.Axis;
   split?: t.Percent;
-  min?: t.Percent;
-  max?: t.Percent;
+  splitMin?: t.Percent;
+  splitMax?: t.Percent;
   style?: t.CssValue;
   onChange?: SplitLayoutEditorChangeHandler;
 };
