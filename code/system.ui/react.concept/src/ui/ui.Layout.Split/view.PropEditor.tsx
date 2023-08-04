@@ -10,7 +10,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const toggleAxis = () => {
     props.onChange?.({
       split,
-      axis: axis === 'x' ? 'y' : 'x',
+      axis: axis === 'x' ? 'y' : 'x', // ← toggle.
     });
   };
 
