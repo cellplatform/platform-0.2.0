@@ -1,4 +1,4 @@
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 import { css, type t } from './common';
 
 export type TrackProps = {

@@ -25,4 +25,10 @@ export const DEFAULTS = {
       progressColor: COLORS.BLUE,
     };
   },
+  get ticks(): t.SliderTickProps {
+    return {
+      offset: { top: 5, bottom: 5 },
+      items: [],
+    };
+  },
 } as const;

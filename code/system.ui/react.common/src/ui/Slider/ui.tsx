@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 import { DEFAULTS, css, useRedraw, type t } from './common';
 
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 import { useEventMonitor } from './use.EventMonitor.mjs';
 import { Thumb } from './ui.Thumb';
 import { Track } from './ui.Track';
-
-type M = React.MouseEventHandler;
+import { Ticks } from './ui.Ticks';
 
 export const View: React.FC<t.SliderProps> = (props) => {
   const { enabled = DEFAULTS.enabled, onChange } = props;
-  const { thumb, track } = Wrangle.props(props);
+  const { thumb, track, ticks } = Wrangle.props(props);
   const percent = Wrangle.percent(props.percent);
 
   /**
@@ -50,15 +49,22 @@ export const View: React.FC<t.SliderProps> = (props) => {
     />
   );
 
+  const elTrack = (
+    <Track
+      totalWidth={totalWidth}
+      percent={percent}
+      track={track}
+      thumb={thumb}
+      enabled={enabled}
+    />
+  );
+
+  const elTicks = <Ticks ticks={ticks} />;
+
   return (
     <div ref={monitor.ref} {...css(styles.base, props.style)} {...monitor.handlers}>
-      <Track
-        totalWidth={totalWidth}
-        percent={percent}
-        track={track}
-        thumb={thumb}
-        enabled={enabled}
-      />
+      {elTrack}
+      {elTicks}
       {elThumb}
     </div>
   );

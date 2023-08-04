@@ -1,4 +1,4 @@
-import { type t, DEFAULTS } from './common';
+import { css, Color, COLORS, type t, DEFAULTS } from './common';
 
 /**
  * Helpers
@@ -7,7 +7,8 @@ export const Wrangle = {
   props(props: t.SliderProps) {
     const track = Wrangle.track(props.track);
     const thumb = Wrangle.thumb(props.thumb);
-    return { track, thumb } as const;
+    const ticks = Wrangle.ticks(props.ticks);
+    return { track, thumb, ticks } as const;
   },
 
   track(props?: Partial<t.SliderTrackProps>): t.SliderTrackProps {
@@ -27,6 +28,20 @@ export const Wrangle = {
       color: props?.color ?? DEFAULT.color,
       pressedScale: props?.pressedScale ?? DEFAULT.pressedScale,
     };
+  },
+
+  ticks(props?: Partial<t.SliderTickProps>): t.SliderTickProps {
+    const DEFAULT = DEFAULTS.ticks;
+    return {
+      offset: props?.offset ?? DEFAULT.offset,
+      items: props?.items ?? DEFAULT.items,
+    };
+  },
+
+  tickItems(input?: t.SliderTickInput[]): t.SliderTick[] {
+    return (input ?? []).map((item) => {
+      return typeof item === 'number' ? { value: item } : item;
+    });
   },
 
   percent(value?: number) {

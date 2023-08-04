@@ -10,7 +10,7 @@ export { Observable, Subject } from 'rxjs';
  */
 export { Patch, PatchState } from 'sys.data.json';
 export { Diff, Fuzzy, Text } from 'sys.text';
-export { Delete, Hash, Is, Sheet, Time, Value, asArray, cuid, rx, slug } from 'sys.util';
+export { Delete, Hash, Is, Percent, Sheet, Time, Value, asArray, cuid, rx, slug } from 'sys.util';
 
 /**
  * @system → UI

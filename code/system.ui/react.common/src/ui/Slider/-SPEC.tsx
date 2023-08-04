@@ -1,7 +1,7 @@
-import { COLORS, Dev, type t } from '../../test.ui';
+import { css, COLORS, Dev, type t } from '../../test.ui';
 
 import { Slider } from '.';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 const DEFAULTS = Slider.DEFAULTS;
 
@@ -57,7 +57,11 @@ export default Dev.describe('Slider', (e) => {
     dev.hr(5, 20);
 
     dev.section('Configuration Samples', (dev) => {
-      type Args = { thumb: t.SliderThumbProps; track: t.SliderTrackProps };
+      type Args = {
+        thumb: t.SliderThumbProps;
+        track: t.SliderTrackProps;
+        ticks: t.SliderTickProps;
+      };
       const config = (label: string, fn?: (e: Args) => void) => {
         dev.button((btn) => {
           btn.label(label).onClick((e) =>
@@ -65,20 +69,24 @@ export default Dev.describe('Slider', (e) => {
               const partial = {
                 thumb: d.props.thumb ?? (d.props.thumb = DEFAULTS.thumb),
                 track: d.props.track ?? (d.props.track = DEFAULTS.track),
+                ticks: d.props.ticks ?? (d.props.ticks = DEFAULTS.ticks),
               };
               const thumb = Wrangle.thumb(partial.thumb);
               const track = Wrangle.track(partial.track);
-              fn?.({ thumb, track });
+              const ticks = Wrangle.ticks(partial.ticks);
+              fn?.({ thumb, track, ticks });
               d.props.thumb = thumb;
               d.props.track = track;
+              d.props.ticks = ticks;
             }),
           );
         });
       };
 
-      config('(default)', (e) => {
+      config('(reset)', (e) => {
         e.thumb.size = DEFAULTS.thumb.size;
         e.track.height = DEFAULTS.track.height;
+        e.ticks.items = DEFAULTS.ticks.items;
       });
 
       dev.hr(-1, 5);
@@ -97,6 +105,20 @@ export default Dev.describe('Slider', (e) => {
 
       config('blue', (e) => (e.track.progressColor = COLORS.BLUE));
       config('green', (e) => (e.track.progressColor = COLORS.GREEN));
+
+      dev.hr(-1, 5);
+
+      config('ticks', (e) => {
+        const style = css({
+          backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
+          Absolute: [0, -5, 0, -5],
+        });
+        e.ticks.items = [
+          0.25,
+          { value: 0.5, label: 'Midway' },
+          { value: 0.75, el: <div {...style} /> },
+        ];
+      });
     });
   });
 

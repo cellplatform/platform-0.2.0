@@ -1,5 +1,5 @@
 import { Color, COLORS, css, type t } from './common';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 
 export type ThumbProps = {
   enabled: boolean;

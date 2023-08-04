@@ -25,6 +25,7 @@ export type {
   ModuleDef,
   Percent,
   Pixels,
+  Point,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';
