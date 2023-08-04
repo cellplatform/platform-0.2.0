@@ -46,4 +46,12 @@ export const Percent = {
     if (typeof value !== 'number') return false;
     return value > 1;
   },
+
+  /**
+   * Convert a percentage to a "100%" string
+   */
+  toString(value?: t.Percent) {
+    const percent = Percent.clamp(value);
+    return `${Math.round(percent * 100)}%`;
+  },
 } as const;

@@ -67,4 +67,10 @@ describe('Percent', () => {
     expect(Percent.isPixels(1.1)).to.eql(true);
     expect(Percent.isPixels(2)).to.eql(true);
   });
+
+  it('toString', () => {
+    expect(Percent.toString(0)).to.eql('0%');
+    expect(Percent.toString(0.123)).to.eql('12%');
+    expect(Percent.toString(1)).to.eql('100%');
+  });
 });
