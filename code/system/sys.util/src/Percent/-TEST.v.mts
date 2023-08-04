@@ -69,6 +69,7 @@ describe('Percent', () => {
   });
 
   it('toString', () => {
+    expect(Percent.toString()).to.eql('0%');
     expect(Percent.toString(0)).to.eql('0%');
     expect(Percent.toString(0.123)).to.eql('12%');
     expect(Percent.toString(1)).to.eql('100%');
