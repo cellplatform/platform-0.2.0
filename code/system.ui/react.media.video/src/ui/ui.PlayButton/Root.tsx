@@ -6,6 +6,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
     status = DEFAULTS.status,
     enabled = DEFAULTS.enabled,
     spinning = DEFAULTS.spinning,
+    size = DEFAULTS.size,
   } = props;
   const Icon = Wrangle.icon(status);
 
@@ -20,6 +21,7 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
   /**
    * [Render]
    */
+  const sizes = Wrangle.sizes(props);
   const { backgroundColor, borderColor, iconColor } = Wrangle.buttonColors(props, { isOver });
   const styles = {
     base: css({
@@ -28,9 +30,8 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
       border: `solid 1px ${borderColor}`,
       borderRadius: 4,
       boxSizing: 'border-box',
-      width: DEFAULTS.width,
-      height: DEFAULTS.height,
-      PaddingY: 3,
+      width: sizes.width,
+      height: sizes.height,
       cursor: enabled ? 'pointer' : 'default',
       display: 'grid',
     }),
@@ -43,8 +44,8 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
     }),
   };
 
-  const elIcon = Icon && !spinning && <Icon size={22} color={iconColor} />;
-  const elSpinner = spinning && <Spinner.Bar color={iconColor} width={20} />;
+  const elIcon = Icon && !spinning && <Icon size={sizes.icon} color={iconColor} />;
+  const elSpinner = spinning && <Spinner.Bar color={iconColor} width={sizes.spinner} />;
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
@@ -62,9 +63,16 @@ const View: React.FC<t.PlayButtonProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Wrangle: typeof Wrangle;
+  sizes: typeof DEFAULTS.sizes;
+  statuses: typeof DEFAULTS.statuses;
 };
 export const PlayButton = FC.decorate<t.PlayButtonProps, Fields>(
   View,
-  { DEFAULTS, Wrangle },
+  {
+    DEFAULTS,
+    Wrangle,
+    statuses: DEFAULTS.statuses,
+    sizes: DEFAULTS.sizes,
+  },
   { displayName: 'PlayButton' },
 );

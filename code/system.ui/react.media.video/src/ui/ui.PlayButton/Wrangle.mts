@@ -13,6 +13,27 @@ export const Wrangle = {
     return undefined;
   },
 
+  sizes(props: t.PlayButtonProps) {
+    const { size = DEFAULTS.size } = props;
+    let icon = 22;
+    let width = 56;
+    let height = 32;
+    let spinner = 20;
+    if (size === 'small') {
+      icon = 16;
+      width = 38;
+      height = 20;
+      spinner = 16;
+    }
+    if (size === 'large') {
+      icon = 28;
+      width = 80;
+      height = 38;
+      spinner = 28;
+    }
+    return { icon, width, height, spinner } as const;
+  },
+
   buttonColors(props: t.PlayButtonProps, options: { isOver?: boolean }) {
     const isPlaying = Wrangle.isPlaying(props);
     const { enabled = DEFAULTS.enabled } = props;
@@ -32,7 +53,7 @@ export const Wrangle = {
       backgroundColor,
       borderColor,
       iconColor,
-    };
+    } as const;
   },
 
   clickArgs(status: t.PlayButtonStatus): t.PlayButtonClickHandlerArgs {

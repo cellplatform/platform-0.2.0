@@ -1,12 +1,14 @@
 import { type t } from './common';
 
 export type PlayButtonStatus = 'Play' | 'Pause' | 'Replay';
+export type PlayButtonSize = 'small' | 'medium' | 'large';
 
 /**
  * Component
  */
 export type PlayButtonProps = {
   status?: PlayButtonStatus;
+  size?: PlayButtonSize;
   spinning?: boolean;
   enabled?: boolean;
   style?: t.CssValue;
@@ -18,12 +20,12 @@ export type PlayButtonProps = {
  */
 export type PlayButtonClickHandler = (e: PlayButtonClickHandlerArgs) => void;
 export type PlayButtonClickHandlerArgs = {
-  status: PlayButtonStatus;
-  play: boolean;
-  pause: boolean;
-  replay: boolean;
-  is: {
-    playing: boolean; // "play" OR "replay"
-    paused: boolean;
+  readonly status: PlayButtonStatus;
+  readonly play: boolean;
+  readonly pause: boolean;
+  readonly replay: boolean;
+  readonly is: {
+    readonly playing: boolean; // "play" OR "replay"
+    readonly paused: boolean;
   };
 };

@@ -7,11 +7,12 @@ type T = { props: t.PlayButtonProps };
 const initial: T = { props: {} };
 
 export default Dev.describe('PlayButton', (e) => {
-  type LocalStore = Pick<t.PlayButtonProps, 'status' | 'enabled' | 'spinning'>;
+  type LocalStore = Pick<t.PlayButtonProps, 'status' | 'enabled' | 'spinning' | 'size'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.media.video.PlayButton');
   const local = localstore.object({
-    status: DEFAULTS.status,
     enabled: DEFAULTS.enabled,
+    status: DEFAULTS.status,
+    size: DEFAULTS.size,
     spinning: DEFAULTS.spinning,
   });
 
@@ -21,8 +22,9 @@ export default Dev.describe('PlayButton', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.status = local.status;
       d.props.enabled = local.enabled;
+      d.props.status = local.status;
+      d.props.size = local.size;
       d.props.spinning = local.spinning;
     });
 
@@ -74,8 +76,22 @@ export default Dev.describe('PlayButton', (e) => {
       };
       status('Play');
       status('Pause');
-      status('Replay');
       dev.hr(-1, 5);
+      status('Replay');
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Size', (dev) => {
+      const button = (value: t.PlayButtonSize) => {
+        dev.button((btn) => {
+          btn
+            .label(`size: ${value}`)
+            .right((e) => e.state.props.size === value && `←`)
+            .onClick((e) => e.change((d) => (local.size = d.props.size = value)));
+        });
+      };
+      PlayButton.sizes.forEach(button);
     });
   });
 
