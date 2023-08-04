@@ -1,15 +1,8 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
-import type { t } from '../../common.t';
+import { useEffect, useRef, useState } from 'react';
+import { Wrangle } from './Wrangle';
+import { DEFAULTS, rx, type t } from './common';
 
 type E = HTMLElement;
-
-export const DEFAULT = {
-  get RECT(): t.DomRect {
-    return { x: -1, y: -1, width: -1, height: -1, top: -1, right: -1, bottom: -1, left: -1 };
-  },
-} as const;
-
-type Args<T extends E> = { ref?: RefObject<T> };
 
 /**
  * Monitor size of an HTML/DOM element.
@@ -20,37 +13,69 @@ type Args<T extends E> = { ref?: RefObject<T> };
  *
  *
  */
-export function useSizeObserver<T extends E = HTMLDivElement>(args?: Args<T>) {
+export function useSizeObserver<T extends E = HTMLDivElement>(args?: t.UseSizeObserverArgs<T>) {
   const ref = args?.ref ?? useRef<T>(null);
   const ready = typeof ref.current === 'object';
 
-  const [rect, setRect] = useState<t.DomRect>(DEFAULT.RECT);
+  const [batch, setBatch] = useState(0);
+  const [resizing, setResizing] = useState(false);
+  const [rect, setRect] = useState<t.DomRect>(DEFAULTS.emptyRect);
 
   /**
    * Lifecycle
    */
   useEffect(() => {
-    let $: ResizeObserver;
+    let dom$: ResizeObserver;
+    const { dispose, dispose$ } = rx.disposable();
+    const batchSubject$ = new rx.Subject<void>();
+    const batch$ = batchSubject$.pipe(rx.takeUntil(dispose$));
+
+    // Debounce resize events into batches that can
+    // signal to containing components.
+    batch$.subscribe(() => setResizing(true));
+    batch$.pipe(rx.debounceTime(150)).subscribe(() => {
+      setResizing(false);
+      setBatch((prev) => prev + 1);
+    });
+
+    const update = (rect: t.DomRect) => {
+      setRect(rect);
+      args?.onChange?.({
+        ready,
+        rect: Wrangle.rect(rect),
+        size: Wrangle.size(rect),
+      });
+      batchSubject$.next();
+    };
 
     if (ref.current) {
-      $ = new ResizeObserver((entries) => {
-        entries.forEach((entry) => setRect(entry.contentRect));
-      });
-      $.observe(ref.current);
+      dom$ = new ResizeObserver((entries) => entries.forEach((entry) => update(entry.contentRect)));
+      dom$.observe(ref.current);
     }
 
     /**
      * Dispose
      */
-    return () => $?.disconnect();
+    return () => {
+      dispose();
+      dom$?.disconnect();
+    };
   }, [ready]);
 
   /**
    * API
    */
-  return {
+  const api = {
     ref,
     ready,
-    rect,
-  };
+    resizing,
+    batch,
+    get rect() {
+      return Wrangle.rect(rect);
+    },
+    get size() {
+      return Wrangle.rect(rect);
+    },
+  } as const;
+  return api;
 }
