@@ -8,6 +8,10 @@ export type VideoViewProps = {
 export const VideoView: React.FC<VideoViewProps> = (props) => {
   const resize = useSizeObserver();
   const height = resize.rect.height;
+
+  /**
+   * TODO 🐷
+   */
   console.log('resize', resize.batch, resize.resizing);
 
   useEffect(() => {

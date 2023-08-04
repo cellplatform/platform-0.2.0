@@ -3,7 +3,7 @@ export const TESTS = {
     return [
       //
       import('./-TEST.mjs'),
-      import('../Video/-TEST.mjs'),
+      import('../ui.Root/-TEST.mjs'),
       import('../common/Is.TEST.mjs'),
     ];
   },
