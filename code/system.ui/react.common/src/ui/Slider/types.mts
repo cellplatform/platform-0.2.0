@@ -1,5 +1,8 @@
 import { type t } from './common';
 
+/**
+ * Component
+ */
 export type SliderProps = {
   enabled?: boolean;
   width?: number;
@@ -11,19 +14,28 @@ export type SliderProps = {
   onChange?: t.SliderTrackChangeHandler;
 };
 
+/**
+ * Slider → Track
+ */
 export type SliderTrackProps = {
   height: t.Pixels;
   defaultColor: string;
-  highlighColor: string;
+  highlightColor: string;
   borderColor: string;
 };
 
+/**
+ * Slider → Thumb
+ */
 export type SliderThumbProps = {
   size: t.Pixels;
   color: string;
-  pressedScale: t.Percent;
+  pressedScale: number; // eg: 1.1
 };
 
+/**
+ * Slider → Tick Marks
+ */
 export type SliderTickProps = {
   offset: { top: t.Pixels; bottom: t.Pixels };
   items: SliderTickInput[];

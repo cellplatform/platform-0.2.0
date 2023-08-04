@@ -16,7 +16,7 @@ export const Wrangle = {
     return {
       height: props?.height ?? DEFAULT.height,
       defaultColor: props?.defaultColor ?? DEFAULT.defaultColor,
-      highlighColor: props?.highlighColor ?? DEFAULT.highlighColor,
+      highlightColor: props?.highlightColor ?? DEFAULT.highlightColor,
       borderColor: props?.borderColor ?? DEFAULT.borderColor,
     };
   },

@@ -22,7 +22,7 @@ export const DEFAULTS = {
       height: 20,
       borderColor: Color.alpha(COLORS.DARK, 0.06),
       defaultColor: Color.alpha(COLORS.DARK, 0.06),
-      highlighColor: COLORS.BLUE,
+      highlightColor: COLORS.BLUE,
     };
   },
   get ticks(): t.SliderTickProps {
