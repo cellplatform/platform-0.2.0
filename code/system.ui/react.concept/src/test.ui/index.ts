@@ -10,4 +10,5 @@ export { Dev } from 'sys.ui.react.common';
  * @local
  */
 export { Icons } from '../ui/Icons.mjs';
+export * from './-SAMPLES.mjs';
 export * from './common';

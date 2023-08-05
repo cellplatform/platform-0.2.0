@@ -20,7 +20,7 @@ export const View: React.FC<t.VideoLayoutProps__> = (props) => {
     timestamp = DEFAULTS.timestamp,
     onSize,
   } = props;
-  const src = Video.toSrc(data?.id);
+  const src = Video.src(data?.id);
 
   // Hooks.
   const playerDivRef = useRef<HTMLDivElement>(null);

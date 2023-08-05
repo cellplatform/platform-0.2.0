@@ -1,13 +1,13 @@
 import { VideoLayout } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, SAMPLE } from '../../test.ui';
 import { ScalePlacement } from './-SPEC.ScalePlacement';
 import { Video } from './common';
 
 const DEFAULTS = VideoLayout.DEFAULTS;
-const SAMPLE = {
-  RowanVideo: 612010014,
-  Tubes: 499921561,
-};
+// const SAMPLE = {
+//   RowanVideo: 612010014,
+//   Tubes: 499921561,
+// };
 
 type T = {
   status?: t.VideoStatus;
@@ -47,7 +47,7 @@ export default Dev.describe(name, (e) => {
       const video = State.data(d.props);
       video.position = local.position;
       video.innerScale = 1.1;
-      video.id = SAMPLE.RowanVideo;
+      video.id = SAMPLE.VIMEO.WhiteBackdrop1;
       video.height = 0.3;
       video.minHeight = 180;
 
@@ -104,7 +104,7 @@ export default Dev.describe(name, (e) => {
           .onEnter((e) =>
             e.change((d) => {
               const edited = (d.debug.editingVideoId || '').trim();
-              const next = edited || SAMPLE.RowanVideo;
+              const next = edited || SAMPLE.VIMEO.WhiteBackdrop1;
               State.data(d.props).id = next;
             }),
           );

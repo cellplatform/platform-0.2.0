@@ -34,7 +34,7 @@ export const VideoView: React.FC<VideoViewProps> = (props) => {
     }),
   };
 
-  const src = Video.toSrc(612010014);
+  const src = Video.src(612010014);
 
   const elPlayer = resize.ready && (
     <div {...styles.player}>
