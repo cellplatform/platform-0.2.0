@@ -1,7 +1,7 @@
 import { Item, css, type t } from './common';
 
 export type IndexProps = {
-  slugs?: t.ConceptSlug[];
+  slugs?: t.ConceptSlug__[];
   selected?: number;
   focused?: boolean;
   playing?: boolean;

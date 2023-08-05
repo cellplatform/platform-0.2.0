@@ -12,7 +12,7 @@ export type DownloadFileProps = {
  */
 export type PlayBarProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug;
+  slug?: t.ConceptSlug__;
   download?: t.DownloadFileProps;
   style?: t.CssValue;
   onPlayToggle?: PlayBarHandler;

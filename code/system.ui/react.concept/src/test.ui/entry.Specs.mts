@@ -8,9 +8,6 @@ export const Specs = {
   'sys.ui.concept.Layout.VideoDiagram': () => import('../ui/ui.Layout.VideoDiagram/-SPEC'),
   'sys.ui.concept.TooSmall': () => import('../ui/ui.TooSmall/-SPEC'),
 
-  '__sys.ui.concept.VideoDiagram': () => import('../ui/ui.VideoDiagram__/-SPEC'),
-  '__sys.ui.concept.VideoLayout': () => import('../ui/ui.VideoLayout__/-SPEC'),
-
   'sys.ui.common.Layout.Split': () => import('../ui/-sys.common.Layout.Split/-SPEC'),
 };
 

@@ -2,7 +2,7 @@ import { PlayBar, css, type t } from './common';
 
 export type FooterProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug;
+  slug?: t.ConceptSlug__;
   style?: t.CssValue;
   onPlayToggle?: t.PlayBarHandler;
   onPlayComplete?: t.PlayBarHandler;

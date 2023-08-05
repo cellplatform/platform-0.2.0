@@ -8,9 +8,6 @@ export type * from './ui/ui.Layout.Screen/types.mjs';
 export type * from './ui/ui.Layout.VideoDiagram/types.mjs';
 export type * from './ui/ui.TooSmall/types.mjs';
 
-export type * from './ui/ui.VideoDiagram__/types.mjs';
-export type * from './ui/ui.VideoLayout__/types.mjs';
-
 type Id = string;
 type Url = string;
 type VideoId = number;
@@ -18,7 +15,7 @@ type VideoId = number;
 /**
  * Slug
  */
-export type ConceptSlug = {
+export type ConceptSlug__ = {
   id: Id;
   title?: string;
   video?: t.ConceptSlugVideo___;

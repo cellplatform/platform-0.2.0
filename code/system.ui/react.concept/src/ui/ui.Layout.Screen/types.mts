@@ -7,7 +7,7 @@ export type ScreenLayoutFocused = 'index' | 'player.footer';
  */
 export type ScreenLayoutProps = {
   vimeo?: t.VimeoInstance;
-  slugs?: t.ConceptSlug[];
+  slugs?: t.ConceptSlug__[];
   selected?: number;
   focused?: ScreenLayoutFocused;
   style?: t.CssValue;
@@ -17,7 +17,7 @@ export type ScreenLayoutProps = {
 };
 
 export type ScreenLayoutStatefulProps = {
-  slugs?: t.ConceptSlug[];
+  slugs?: t.ConceptSlug__[];
   style?: t.CssValue;
   onReady?: ScreenLayoutStatefulReadyHandler;
 };

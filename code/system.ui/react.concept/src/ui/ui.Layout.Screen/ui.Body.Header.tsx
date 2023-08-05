@@ -3,7 +3,7 @@ import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 export type HeaderProps = {
   vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug;
+  slug?: t.ConceptSlug__;
   style?: t.CssValue;
 };
 

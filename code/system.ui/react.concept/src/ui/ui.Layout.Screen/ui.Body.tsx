@@ -5,7 +5,7 @@ import { Slug } from './ui.Slug';
 
 export type BodyProps = {
   vimeo?: t.VimeoInstance;
-  slugs?: t.ConceptSlug[];
+  slugs?: t.ConceptSlug__[];
   selected?: number;
   style?: t.CssValue;
   onPlayToggle?: t.PlayBarHandler;
