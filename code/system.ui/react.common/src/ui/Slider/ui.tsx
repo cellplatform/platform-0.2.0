@@ -9,7 +9,7 @@ import { Ticks } from './ui.Ticks';
 
 export const View: React.FC<t.SliderProps> = (props) => {
   const { enabled = DEFAULTS.enabled, onChange } = props;
-  const { thumb, track, ticks } = Wrangle.props(props);
+  const { tracks, ticks, thumb } = Wrangle.props(props);
   const percent = Wrangle.percent(props.percent);
 
   /**
@@ -25,7 +25,9 @@ export const View: React.FC<t.SliderProps> = (props) => {
    * [Render]
    */
   const width = props.width;
-  const height = Math.max(thumb.size, track.height);
+  const maxTrackHeight = Math.max(...tracks.map((item) => item.height));
+  const height = Math.max(thumb.size, maxTrackHeight);
+
   const styles = {
     base: css({
       position: 'relative',
@@ -38,6 +40,19 @@ export const View: React.FC<t.SliderProps> = (props) => {
     }),
   };
 
+  const elTracks = tracks.map((track, i) => (
+    <Track
+      key={i}
+      totalWidth={totalWidth}
+      percent={percent}
+      track={track}
+      thumb={thumb}
+      enabled={enabled}
+    />
+  ));
+
+  const elTicks = <Ticks ticks={ticks} />;
+
   const elThumb = totalWidth > -1 && (
     <Thumb
       totalWidth={totalWidth}
@@ -49,21 +64,9 @@ export const View: React.FC<t.SliderProps> = (props) => {
     />
   );
 
-  const elTrack = (
-    <Track
-      totalWidth={totalWidth}
-      percent={percent}
-      track={track}
-      thumb={thumb}
-      enabled={enabled}
-    />
-  );
-
-  const elTicks = <Ticks ticks={ticks} />;
-
   return (
     <div ref={monitor.ref} {...css(styles.base, props.style)} {...monitor.handlers}>
-      {elTrack}
+      {elTracks}
       {elTicks}
       {elThumb}
     </div>

@@ -34,7 +34,7 @@ export const Thumb: React.FC<ThumbProps> = (props) => {
       Size: thumb.size,
       overflow: 'hidden',
       borderRadius: thumb.size / 2,
-      backgroundColor: thumb.color.default,
+      backgroundColor: Color.format(thumb.color.default),
       border: `solid 1px ${thumb.color.border}`,
       boxSizing: 'border-box',
       boxShadow: `0 1px 5px 0 ${Color.format(-0.1)}`,

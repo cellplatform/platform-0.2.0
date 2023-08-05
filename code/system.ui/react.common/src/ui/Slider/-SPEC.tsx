@@ -1,4 +1,4 @@
-import { css, COLORS, Dev, type t } from '../../test.ui';
+import { COLORS, Color, Dev, css, type t } from '../../test.ui';
 
 import { Slider } from '.';
 import { Wrangle } from './Wrangle';
@@ -60,6 +60,7 @@ export default Dev.describe('Slider', (e) => {
       type Args = {
         thumb: t.SliderThumbProps;
         track: t.SliderTrackProps;
+        tracks: t.SliderTrackProps[];
         ticks: t.SliderTickProps;
       };
       const config = (label: string, fn?: (e: Args) => void) => {
@@ -72,11 +73,12 @@ export default Dev.describe('Slider', (e) => {
                 ticks: d.props.ticks ?? (d.props.ticks = DEFAULTS.ticks),
               };
               const thumb = Wrangle.thumb(partial.thumb);
-              const track = Wrangle.track(partial.track);
+              const tracks = Wrangle.tracks(partial.track);
+              const track = tracks[0];
               const ticks = Wrangle.ticks(partial.ticks);
-              fn?.({ thumb, track, ticks });
+              fn?.({ tracks, track, thumb, ticks });
               d.props.thumb = thumb;
-              d.props.track = track;
+              d.props.track = tracks;
               d.props.ticks = ticks;
             }),
           );
@@ -84,14 +86,14 @@ export default Dev.describe('Slider', (e) => {
       };
 
       config('(reset)', (e) => {
-        e.thumb.size = DEFAULTS.thumb.size;
-        e.thumb.opacity = DEFAULTS.thumb.opacity;
         e.track.height = DEFAULTS.track.height;
         e.track.percent = DEFAULTS.track.percent;
         e.ticks.items = DEFAULTS.ticks.items;
+        e.thumb.size = DEFAULTS.thumb.size;
+        e.thumb.opacity = DEFAULTS.thumb.opacity;
       });
 
-      dev.hr(-1, 5);
+      dev.hr(-1, [5, 15]);
 
       config('skinny track', (e) => {
         e.track.height = 5;
@@ -127,7 +129,17 @@ export default Dev.describe('Slider', (e) => {
       dev.hr(-1, 5);
 
       config('hidden thumb', (e) => (e.thumb.opacity = 0));
-      config('progress overshoots thumb', (e) => (e.track.percent = 0.5));
+      config('visible thumb', (e) => (e.thumb.opacity = 1));
+      dev.hr(-1, 5);
+      config('progress track overshoots thumb', (e) => (e.track.percent = 0.5));
+      config('multiple tracks (eg. "buffered")', (e) => {
+        const buffer = DEFAULTS.track;
+        buffer.color.default = 0;
+        buffer.color.highlight = Color.alpha(COLORS.DARK, 0.15);
+        buffer.color.border = 0;
+        buffer.percent = 0.75;
+        e.tracks.unshift(buffer);
+      });
     });
   });
 

@@ -1,5 +1,5 @@
 import { Wrangle } from './Wrangle';
-import { css, type t } from './common';
+import { Color, css, type t } from './common';
 
 export type TrackProps = {
   enabled: boolean;
@@ -32,12 +32,12 @@ export const Track: React.FC<TrackProps> = (props) => {
     body: css({
       position: 'relative',
       overflow: 'hidden',
-      backgroundColor: track.color.default,
+      backgroundColor: Color.format(track.color.default),
       borderRadius,
       height,
     }),
     progress: css({
-      backgroundColor: track.color.highlight,
+      backgroundColor: Color.format(track.color.highlight),
       borderRadius: progressRadius.map((num) => num + 'px').join(' '),
       height,
       Absolute: [0, null, 0, 0],
@@ -47,7 +47,7 @@ export const Track: React.FC<TrackProps> = (props) => {
     }),
     border: css({
       Absolute: 0,
-      border: `solid 1px ${track.color.border}`,
+      border: `solid 1px ${Color.format(track.color.border)}`,
       borderRadius,
     }),
   };
@@ -56,7 +56,7 @@ export const Track: React.FC<TrackProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       <div {...styles.body}>
         <div {...styles.progress} />
-        <div {...styles.border} />
+        {track.color.border !== 0 && <div {...styles.border} />}
       </div>
     </div>
   );

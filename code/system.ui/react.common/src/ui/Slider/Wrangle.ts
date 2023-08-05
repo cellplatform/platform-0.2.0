@@ -9,10 +9,10 @@ export const Wrangle = {
   },
 
   props(props: t.SliderProps) {
-    const track = Wrangle.track(props.track);
+    const tracks = Wrangle.tracks(props.track);
     const thumb = Wrangle.thumb(props.thumb);
     const ticks = Wrangle.ticks(props.ticks);
-    return { track, thumb, ticks } as const;
+    return { tracks, thumb, ticks } as const;
   },
 
   elementToPercent(el: HTMLDivElement, clientX: number) {
@@ -25,15 +25,20 @@ export const Wrangle = {
   /**
    * Track
    */
-  track(props?: Partial<t.SliderTrackProps>): t.SliderTrackProps {
+  tracks(input?: t.SliderProps['track']): t.SliderTrackProps[] {
+    const tracks = Array.isArray(input) ? input : [input];
+    return tracks.map((track) => Wrangle.track(track));
+  },
+
+  track(track?: Partial<t.SliderTrackProps>): t.SliderTrackProps {
     const DEFAULT = DEFAULTS.track;
     return {
-      height: props?.height ?? DEFAULT.height,
-      percent: props?.percent,
+      height: track?.height ?? DEFAULT.height,
+      percent: track?.percent,
       color: {
-        default: props?.color?.default ?? DEFAULT.color.default,
-        highlight: props?.color?.highlight ?? DEFAULT.color.highlight,
-        border: props?.color?.border ?? DEFAULT.color.border,
+        default: track?.color?.default ?? DEFAULT.color.default,
+        highlight: track?.color?.highlight ?? DEFAULT.color.highlight,
+        border: track?.color?.border ?? DEFAULT.color.border,
       },
     };
   },
@@ -41,13 +46,13 @@ export const Wrangle = {
   /**
    * Thumb
    */
-  thumb(props?: Partial<t.SliderThumbProps>): t.SliderThumbProps {
+  thumb(thumb?: t.SliderProps['thumb']): t.SliderThumbProps {
     const DEFAULT = DEFAULTS.thumb;
     return {
-      size: props?.size ?? DEFAULT.size,
-      opacity: props?.opacity ?? DEFAULT.opacity,
-      color: props?.color ?? DEFAULT.color,
-      pressedScale: props?.pressedScale ?? DEFAULT.pressedScale,
+      size: thumb?.size ?? DEFAULT.size,
+      opacity: thumb?.opacity ?? DEFAULT.opacity,
+      color: thumb?.color ?? DEFAULT.color,
+      pressedScale: thumb?.pressedScale ?? DEFAULT.pressedScale,
     };
   },
 
@@ -58,11 +63,11 @@ export const Wrangle = {
   /**
    * Ticks
    */
-  ticks(props?: Partial<t.SliderTickProps>): t.SliderTickProps {
+  ticks(ticks?: t.SliderProps['ticks']): t.SliderTickProps {
     const DEFAULT = DEFAULTS.ticks;
     return {
-      offset: props?.offset ?? DEFAULT.offset,
-      items: props?.items ?? DEFAULT.items,
+      offset: ticks?.offset ?? DEFAULT.offset,
+      items: ticks?.items ?? DEFAULT.items,
     };
   },
 
