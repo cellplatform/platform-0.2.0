@@ -11,6 +11,7 @@ export const ImagePanel: React.FC<ImagePanelProps> = (props) => {
 
   const defaults = DEFAULTS.image;
   const sizing = image.sizing ?? defaults.sizing;
+  const scale = image.scale ?? DEFAULTS.image.scale;
 
   /**
    * [Render]
@@ -21,16 +22,8 @@ export const ImagePanel: React.FC<ImagePanelProps> = (props) => {
       overflow: 'hidden',
       paddingBottom: 1, // NB: prevent debug border from obscuring the focus outline.
     }),
-    image: css({
-      transform: `scale(${image.scale ?? DEFAULTS.image.scale})`,
-    }),
+    image: css({ transform: `scale(${scale})` }),
   };
-
-  /**
-   * TODO 🐷
-   * - pass image props down
-   * - fire image events up
-   */
 
   return (
     <div {...css(styles.base, props.style)}>
