@@ -1,5 +1,5 @@
 import { Wrangle } from './Wrangle.mjs';
-import { Button, DEFAULTS, Icons, Slider, css, type t } from './common';
+import { Button, COLORS, Color, DEFAULTS, Icons, Slider, css, type t } from './common';
 
 export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const {
@@ -9,6 +9,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     splitMax,
     enabled = true,
     showAxis = true,
+    title,
   } = props;
 
   const clampPercent = (value?: t.Percent) => Wrangle.percent(value, splitMin, splitMax);
@@ -29,6 +30,9 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const styles = {
     base: css({
       position: 'relative',
+      userSelect: 'none',
+    }),
+    body: css({
       display: 'grid',
       gridTemplateColumns: showAxis ? 'auto 1fr' : '',
       columnGap: '5px',
@@ -36,6 +40,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     slider: css({ display: 'grid', alignContent: 'center' }),
     button: css({ display: 'grid', alignItems: 'center' }),
     icon: css({ transform: `rotate(${axis === 'x' ? 0 : -90}deg)` }),
+    title: css({ color: Color.alpha(COLORS.DARK, 0.6), fontSize: 12, marginBottom: 10 }),
   };
 
   const elAxis = showAxis && (
@@ -54,7 +59,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
         thumb={{ size: 16 }}
         track={{ height: 10 }}
         ticks={{
-          offset: { top: -10, bottom: -10 },
+          offset: { top: -6, bottom: -6 },
           items: [splitMin, splitMax].filter(Boolean),
         }}
         onChange={(e) => {
@@ -67,8 +72,11 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      {elAxis}
-      {elSlider}
+      {title && <div {...styles.title}>{title}</div>}
+      <div {...styles.body}>
+        {elAxis}
+        {elSlider}
+      </div>
     </div>
   );
 };

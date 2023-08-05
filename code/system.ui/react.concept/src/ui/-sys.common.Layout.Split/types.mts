@@ -19,6 +19,7 @@ export type SplitLayoutProps = {
  * Component: Property Editor
  */
 export type SplitLayoutEditorProps = {
+  title?: string;
   enabled?: boolean;
   showAxis?: boolean;
   axis?: t.Axis;

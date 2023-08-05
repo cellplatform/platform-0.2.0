@@ -69,6 +69,7 @@ export default Dev.describe(name, (e) => {
         return (
           <SplitLayout.PropEditor
             {...e.state.props}
+            title={'split (ratio)'}
             onChange={(e) => {
               state.change((d) => {
                 local.split = d.props.split = e.split;
