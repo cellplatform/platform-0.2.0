@@ -1,4 +1,4 @@
-import { Dev, type t, SAMPLE } from '../../test.ui';
+import { Dev, type t, SAMPLE, R } from '../../test.ui';
 import { VideoDiagramLayout } from '.';
 import { SplitLayout, Video } from './common';
 
@@ -72,7 +72,7 @@ export default Dev.describe(name, (e) => {
     const state = await dev.state();
 
     dev.header
-      .padding(10)
+      .padding(15)
       .border(-0.1)
       .render<T>((e) => {
         return (
@@ -95,7 +95,7 @@ export default Dev.describe(name, (e) => {
       });
 
     dev.section('Properties', (dev) => {
-      dev.hr(0, 10);
+      dev.hr(0, 3);
       dev.row((e) => {
         const { props } = e.state;
         return (
@@ -113,7 +113,28 @@ export default Dev.describe(name, (e) => {
       });
     });
 
-    dev.hr(5, [80, 10]);
+    dev.hr(5, 20);
+
+    dev.section('Video', (dev) => {
+      const video = (label: string, src: t.VideoSrc) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .right((e) => R.equals(State.video(e.state).src, src) && `←`)
+            .onClick((e) => {
+              e.change((d) => {
+                const video = State.video(d);
+                video.src = src;
+                video.innerScale = 1.05;
+              });
+            });
+        });
+      };
+      video('white backdrop (tonal 1)', SAMPLE.VIMEO.WhiteBackdrop1);
+      video('white backdrop (tonal 2)', SAMPLE.VIMEO.WhiteBackdrop2);
+    });
+
+    dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
