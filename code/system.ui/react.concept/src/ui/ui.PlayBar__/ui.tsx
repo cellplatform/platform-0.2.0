@@ -1,5 +1,11 @@
-import { Video, COLORS, Color, ProgressBar, Vimeo, css, type t } from './common';
+import { COLORS, Color, ProgressBar, Video, Vimeo, css, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
+
+/**
+ * TODO 🐷
+ * - Change <ProgressBar> → <sys.ui.video.PlayBar>
+ * - Delete <ProgressBar> from [sys.ui.common]
+ */
 
 export const View: React.FC<t.PlayBarProps> = (props) => {
   const { vimeo, slug, onPlayToggle, onPlayComplete, download } = props;
