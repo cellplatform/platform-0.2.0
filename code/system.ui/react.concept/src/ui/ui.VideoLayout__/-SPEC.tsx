@@ -47,7 +47,7 @@ export default Dev.describe(name, (e) => {
       const video = State.data(d.props);
       video.position = local.position;
       video.innerScale = 1.1;
-      video.id = SAMPLE.VIMEO.WhiteBackdrop1;
+      video.id = SAMPLE.Vimeo.WhiteBackdrop1;
       video.height = 0.3;
       video.minHeight = 180;
 
@@ -104,7 +104,7 @@ export default Dev.describe(name, (e) => {
           .onEnter((e) =>
             e.change((d) => {
               const edited = (d.debug.editingVideoId || '').trim();
-              const next = edited || SAMPLE.VIMEO.WhiteBackdrop1;
+              const next = edited || SAMPLE.Vimeo.WhiteBackdrop1;
               State.data(d.props).id = next;
             }),
           );

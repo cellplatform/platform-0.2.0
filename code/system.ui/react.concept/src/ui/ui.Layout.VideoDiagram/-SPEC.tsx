@@ -44,7 +44,7 @@ export default Dev.describe(name, (e) => {
       d.props.muted = local.muted;
 
       d.props.video = {
-        src: SAMPLE.VIMEO.WhiteBackdrop1,
+        src: SAMPLE.Vimeo.WhiteBackdrop1,
         innerScale: 1.1,
       };
     });
@@ -129,8 +129,8 @@ export default Dev.describe(name, (e) => {
             });
         });
       };
-      video('white backdrop (tonal 1)', SAMPLE.VIMEO.WhiteBackdrop1);
-      video('white backdrop (tonal 2)', SAMPLE.VIMEO.WhiteBackdrop2);
+      video('white backdrop (tonal 1)', SAMPLE.Vimeo.WhiteBackdrop1);
+      video('white backdrop (tonal 2)', SAMPLE.Vimeo.WhiteBackdrop2);
     });
 
     dev.hr(5, 20);
