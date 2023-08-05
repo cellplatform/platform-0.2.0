@@ -23,9 +23,10 @@ const initial: T = {
 };
 
 export default Dev.describe('Image', async (e) => {
-  type LocalStore = T['debug'];
+  type LocalStore = T['debug'] & Pick<t.ImageProps, 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Image');
   const local = localstore.object({
+    debug: false,
     bg: true,
     dataEnabled: false,
     dropEnabled: true,
@@ -42,12 +43,14 @@ export default Dev.describe('Image', async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.bg = local.bg;
-      d.debug.dataEnabled = local.dataEnabled;
-      d.props.sizing = DEFAULTS.sizing;
       getDrop(d.props).enabled = local.dropEnabled;
       getPaste(d.props).enabled = local.pasteEnabled;
       getPaste(d.props).primary = local.pastePrimary;
+      d.props.sizing = DEFAULTS.sizing;
+      d.props.debug = local.debug;
+
+      d.debug.bg = local.bg;
+      d.debug.dataEnabled = local.dataEnabled;
     });
 
     if (state.current.debug.dataEnabled) {
@@ -211,6 +214,12 @@ export default Dev.describe('Image', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `debug`)
+          .value((e) => Boolean(e.state.props.debug))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug')))),
+      );
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)

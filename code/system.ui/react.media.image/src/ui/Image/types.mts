@@ -20,6 +20,7 @@ export type ImageProps = {
   paste?: t.ImagePasteSettings;
   warning?: t.ImageWarningSettings;
   sizing?: t.ImageSizeStrategy;
+  debug?: boolean;
   style?: t.CssValue;
   onDropOrPaste?: t.ImageDropOrPasteHandler;
 };
