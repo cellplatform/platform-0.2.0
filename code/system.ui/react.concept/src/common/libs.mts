@@ -7,4 +7,6 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { rx, slug, Percent } from 'sys.util';
+export { Crdt, CrdtViews } from 'sys.data.crdt';
+export { Filesize } from 'sys.fs';
+export { Percent, rx, slug } from 'sys.util';
