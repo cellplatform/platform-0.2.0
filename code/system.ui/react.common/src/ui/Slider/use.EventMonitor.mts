@@ -4,7 +4,7 @@ import { DEFAULTS, useMouse, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  onChange?: t.SliderTrackChangeHandler;
+  onChange?: t.SliderChangeHandler;
 };
 
 /**

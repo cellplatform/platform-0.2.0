@@ -13,7 +13,7 @@ export type SliderProps = {
   ticks?: Partial<t.SliderTickProps>;
   thumb?: Partial<t.SliderThumbProps>;
   style?: t.CssValue;
-  onChange?: t.SliderTrackChangeHandler;
+  onChange?: t.SliderChangeHandler;
 };
 
 /**
@@ -53,5 +53,5 @@ export type SliderTick = {
 /**
  * Events
  */
-export type SliderTrackChangeHandler = (e: SliderTrackChangeHandlerArgs) => void;
-export type SliderTrackChangeHandlerArgs = { percent: t.Percent };
+export type SliderChangeHandler = (e: SliderChangeHandlerArgs) => void;
+export type SliderChangeHandlerArgs = { percent: t.Percent };
