@@ -11,11 +11,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     showAxis = true,
   } = props;
 
-  const clampPercent = (value?: t.Percent) => {
-    return Wrangle.percent(value, props.splitMin, props.splitMax);
-  };
-
-  const ticks = [splitMin, splitMax].filter(Boolean);
+  const clampPercent = (value?: t.Percent) => Wrangle.percent(value, splitMin, splitMax);
 
   /**
    * Handlers

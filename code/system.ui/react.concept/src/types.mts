@@ -1,9 +1,10 @@
 import { type t } from './common';
 
+export type * from './ui/-sys.common.Layout.Split/types.mjs';
+
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.Layout.Screen/types.mjs';
-export type * from './ui/ui.Layout.Split/types.mjs';
 export type * from './ui/ui.Layout.VideoDiagram/types.mjs';
 export type * from './ui/ui.TooSmall/types.mjs';
 
