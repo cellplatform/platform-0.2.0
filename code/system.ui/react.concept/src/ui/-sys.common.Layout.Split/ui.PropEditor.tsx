@@ -1,5 +1,5 @@
 import { Wrangle } from './Wrangle.mjs';
-import { Button, COLORS, Color, DEFAULTS, Icons, Slider, css, type t } from './common';
+import { Button, DEFAULTS, Icons, Slider, css, type t } from './common';
 
 export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const {
@@ -40,7 +40,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     slider: css({ display: 'grid', alignContent: 'center' }),
     button: css({ display: 'grid', alignItems: 'center' }),
     icon: css({ transform: `rotate(${axis === 'x' ? 0 : -90}deg)` }),
-    title: css({ color: Color.alpha(COLORS.DARK, 0.6), fontSize: 12, marginBottom: 10 }),
+    title: css({ fontSize: 12, marginBottom: 10 }),
   };
 
   const elAxis = showAxis && (
@@ -56,16 +56,10 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
       <Slider
         percent={clampPercent(props.split)}
         enabled={enabled}
-        thumb={{ size: 16 }}
+        thumb={{ size: 15 }}
         track={{ height: 10 }}
-        ticks={{
-          offset: { top: -6, bottom: -6 },
-          items: [splitMin, splitMax].filter(Boolean),
-        }}
-        onChange={(e) => {
-          const split = clampPercent(e.percent);
-          props.onChange?.({ axis, split });
-        }}
+        ticks={{ items: [splitMin, splitMax].filter(Boolean) }}
+        onChange={(e) => props.onChange?.({ axis, split: clampPercent(e.percent) })}
       />
     </div>
   );
