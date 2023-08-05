@@ -142,7 +142,8 @@ export default Dev.describe('PlayBar', (e) => {
         });
       };
       video('tubes', SAMPLE.VIMEO.Tubes);
-      video('white backdrop', SAMPLE.VIMEO.WhiteBackdrop);
+      video('white backdrop (tonal 1)', SAMPLE.VIMEO.WhiteBackdrop1);
+      video('white backdrop (tonal 2)', SAMPLE.VIMEO.WhiteBackdrop2);
 
       dev.hr(-1, 15);
     });
