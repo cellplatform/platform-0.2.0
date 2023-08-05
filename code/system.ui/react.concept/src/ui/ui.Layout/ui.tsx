@@ -2,7 +2,7 @@ import { COLORS, Empty, css, useRubberband, useSizeObserver, type t } from './co
 import { Body } from './ui.Body';
 import { Index } from './ui.Index';
 
-export const View: React.FC<t.ScreenLayoutProps> = (props) => {
+export const View: React.FC<t.LayoutProps> = (props) => {
   const { slugs = [], selected } = props;
   const isEmpty = slugs.length === 0;
 

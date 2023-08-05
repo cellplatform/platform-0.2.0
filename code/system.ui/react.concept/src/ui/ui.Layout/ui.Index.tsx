@@ -6,7 +6,7 @@ export type IndexProps = {
   focused?: boolean;
   playing?: boolean;
   style?: t.CssValue;
-  onSelect?: t.ScreenLayoutSelectHandler;
+  onSelect?: t.LayoutSelectHandler;
 };
 
 export const Index: React.FC<IndexProps> = (props) => {

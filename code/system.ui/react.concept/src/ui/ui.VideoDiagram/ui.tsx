@@ -2,7 +2,7 @@ import { SplitLayout, css, type t } from './common';
 import { ImagePanel } from './ui.Panel.Image';
 import { VideoPanel } from './ui.Panel.Video';
 
-export const View: React.FC<t.VideoDiagramLayoutProps> = (props) => {
+export const View: React.FC<t.VideoDiagramProps> = (props) => {
   const { debug = false } = props;
 
   /**

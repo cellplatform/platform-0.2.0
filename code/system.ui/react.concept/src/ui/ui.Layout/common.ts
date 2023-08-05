@@ -7,7 +7,7 @@ export { Empty } from '../ui.Empty';
 /**
  * Constants
  */
-const focused: t.ScreenLayoutFocused | undefined = undefined;
+const focused: t.LayoutFocused | undefined = undefined;
 
 export const DEFAULTS = {
   focused,

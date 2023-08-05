@@ -1,6 +1,7 @@
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './ui';
+
 import { Stateful } from './Root.Stateful';
+import { View } from './ui';
 
 /**
  * Export
@@ -9,9 +10,9 @@ type Fields = {
   DEFAULTS: typeof DEFAULTS;
   Stateful: typeof Stateful;
 };
-export const ScreenLayout = FC.decorate<t.ScreenLayoutProps, Fields>(
+export const Layout = FC.decorate<t.LayoutProps, Fields>(
   //
   View,
   { DEFAULTS, Stateful },
-  { displayName: 'Concept.ScreenLayout' },
+  { displayName: 'Concept.Layout' },
 );

@@ -17,7 +17,7 @@ export type VideoDiagramImage = {
 /**
  * Component
  */
-export type VideoDiagramLayoutProps = {
+export type VideoDiagramProps = {
   video?: t.VideoDiagramVideo;
   image?: t.VideoDiagramImage;
 

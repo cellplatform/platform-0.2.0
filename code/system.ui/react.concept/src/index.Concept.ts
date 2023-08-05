@@ -1,7 +1,5 @@
-import { PlayBar } from './ui/ui.PlayBar';
-import { ScreenLayout } from './ui/ui.Layout.Screen';
+import { Layout } from './ui/ui.Layout';
 
 export const Concept = {
-  ScreenLayout,
-  PlayBar,
+  Layout,
 } as const;

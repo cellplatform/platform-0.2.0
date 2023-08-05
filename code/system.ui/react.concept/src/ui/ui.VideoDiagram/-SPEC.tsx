@@ -1,11 +1,11 @@
-import { VideoDiagramLayout } from '.';
+import { VideoDiagram } from '.';
 import { Dev, R, SAMPLE, Slider, css, type t } from '../../test.ui';
 import { SplitLayout, Video } from './common';
 
-const DEFAULTS = VideoDiagramLayout.DEFAULTS;
+const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
-  props: t.VideoDiagramLayoutProps;
+  props: t.VideoDiagramProps;
   video: {
     status?: t.VideoStatus;
   };
@@ -14,11 +14,11 @@ const initial: T = {
   props: {},
   video: {},
 };
-const name = VideoDiagramLayout.displayName ?? '';
+const name = VideoDiagram.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.VideoDiagramLayoutProps, 'split' | 'debug' | 'muted'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagramLayout');
+  type LocalStore = Pick<t.VideoDiagramProps, 'split' | 'debug' | 'muted'>;
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagram');
   const local = localstore.object({
     split: DEFAULTS.split,
     muted: DEFAULTS.muted,
@@ -63,7 +63,7 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         return (
-          <VideoDiagramLayout
+          <VideoDiagram
             {...e.state.props}
             onVideoStatus={(e) => {
               console.info(`⚡️ onVideoStatus`, e);

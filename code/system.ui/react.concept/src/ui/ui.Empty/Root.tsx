@@ -35,5 +35,5 @@ type Fields = {
 export const Empty = FC.decorate<t.EmptyProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Empty' },
+  { displayName: 'Concept.Empty' },
 );

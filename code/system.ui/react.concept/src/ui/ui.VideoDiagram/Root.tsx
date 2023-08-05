@@ -7,8 +7,8 @@ import { View } from './ui';
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const VideoDiagramLayout = FC.decorate<t.VideoDiagramLayoutProps, Fields>(
+export const VideoDiagram = FC.decorate<t.VideoDiagramProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'VideoDiagramLayout' },
+  { displayName: 'Concept.VideoDiagram' },
 );

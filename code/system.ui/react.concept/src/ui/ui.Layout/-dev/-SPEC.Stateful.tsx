@@ -1,11 +1,12 @@
 import { Dev, type t } from '../../../test.ui';
-import { ScreenLayout } from '..';
+import { Layout } from '..';
 import { DATA } from './-sample.data.mjs';
 
-type T = { props: t.ScreenLayoutStatefulProps };
+type T = { props: t.LayoutStatefulProps };
 const initial: T = { props: {} };
 
-export default Dev.describe('ScreenLayout (Stateful)', (e) => {
+const name = 'Layout (Stateful)';
+export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -21,7 +22,7 @@ export default Dev.describe('ScreenLayout (Stateful)', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <ScreenLayout.Stateful {...e.state.props} />;
+        return <Layout.Stateful {...e.state.props} />;
       });
   });
 
@@ -36,7 +37,7 @@ export default Dev.describe('ScreenLayout (Stateful)', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'ScreenLayout (Stateful)'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });
