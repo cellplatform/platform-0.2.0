@@ -1,7 +1,5 @@
-import { Dev, R, Video, css, type t } from '../../test.ui';
-
+import { Dev, R, SAMPLE, Video, css, type t } from '../../test.ui';
 import { PlayBar } from '.';
-import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
 
 const DEFAULTS = PlayBar.DEFAULTS;
 
