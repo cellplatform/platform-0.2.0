@@ -34,7 +34,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     }),
     body: css({
       display: 'grid',
-      gridTemplateColumns: showAxis ? 'auto 1fr' : '',
+      gridTemplateColumns: showAxis ? '1fr auto' : '',
       columnGap: '5px',
     }),
     slider: css({ display: 'grid', alignContent: 'center' }),
@@ -74,8 +74,8 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
     <div {...css(styles.base, props.style)}>
       {title && <div {...styles.title}>{title}</div>}
       <div {...styles.body}>
-        {elAxis}
         {elSlider}
+        {elAxis}
       </div>
     </div>
   );

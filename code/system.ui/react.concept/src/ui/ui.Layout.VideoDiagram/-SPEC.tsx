@@ -100,6 +100,7 @@ export default Dev.describe(name, (e) => {
         const { props } = e.state;
         return (
           <SplitLayout.PropEditor
+            title={'diagram / video split'}
             split={props.split}
             splitMin={props.splitMin}
             splitMax={props.splitMax}
