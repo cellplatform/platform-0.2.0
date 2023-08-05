@@ -2,6 +2,11 @@ import { Video, css, useSizeObserver, type t } from './common';
 
 export type VideoPlayerProps = {
   video?: t.VideoDiagramVideo;
+
+  muted?: boolean;
+  playing?: boolean;
+  timestamp?: t.Seconds;
+
   style?: t.CssValue;
   onStatus?: t.VideoPlayerStatusHandler;
 };
@@ -32,10 +37,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   const elPlayer = resize.ready && (
     <div {...styles.player}>
       <Video.Player
+        playing={props.playing}
+        muted={props.muted}
+        timestamp={props.timestamp}
         video={video.src}
-        playing={video.playing}
-        muted={video.muted}
-        timestamp={video.timestamp}
         innerScale={video.innerScale}
         onStatus={props.onStatus}
         height={height}

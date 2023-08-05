@@ -25,7 +25,13 @@ export const View: React.FC<t.VideoDiagramLayoutProps> = (props) => {
         splitMax={props.splitMax}
       >
         <div />
-        <VideoPlayer video={props.video} onStatus={props.onVideoStatus} />
+        <VideoPlayer
+          video={props.video}
+          muted={props.muted}
+          playing={props.playing}
+          timestamp={props.timestamp}
+          onStatus={props.onVideoStatus}
+        />
       </SplitLayout>
     </div>
   );

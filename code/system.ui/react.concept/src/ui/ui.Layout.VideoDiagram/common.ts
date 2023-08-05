@@ -9,4 +9,5 @@ export { SplitLayout } from '../-sys.common.Layout.Split';
 
 export const DEFAULTS = {
   split: 0.6,
+  muted: false,
 } as const;

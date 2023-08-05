@@ -5,9 +5,6 @@ import { type t } from './common';
  */
 export type VideoDiagramVideo = {
   src?: t.VideoSrc;
-  muted?: boolean;
-  timestamp?: t.Seconds;
-  playing?: boolean;
   innerScale?: number;
 };
 
@@ -16,6 +13,10 @@ export type VideoDiagramVideo = {
  */
 export type VideoDiagramLayoutProps = {
   video?: t.VideoDiagramVideo;
+
+  muted?: boolean;
+  playing?: boolean;
+  timestamp?: t.Seconds;
 
   split?: t.Percent;
   splitMin?: t.Percent;

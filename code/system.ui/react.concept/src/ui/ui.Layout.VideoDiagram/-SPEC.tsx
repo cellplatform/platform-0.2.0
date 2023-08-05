@@ -17,17 +17,17 @@ const initial: T = {
 const name = VideoDiagramLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = { muted: boolean } & Pick<t.VideoDiagramLayoutProps, 'split' | 'debug'>;
+  type LocalStore = Pick<t.VideoDiagramLayoutProps, 'split' | 'debug' | 'muted'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagramLayout');
   const local = localstore.object({
-    muted: false,
     split: DEFAULTS.split,
+    muted: DEFAULTS.muted,
     debug: false,
   });
 
   const State = {
     video(state: T) {
-      return state.props.video ?? (state.props.video = { muted: local.muted });
+      return state.props.video ?? (state.props.video = {});
     },
   };
 
@@ -41,11 +41,11 @@ export default Dev.describe(name, (e) => {
       d.props.split = local.split;
       d.props.splitMin = 0.1;
       d.props.splitMax = 0.9;
+      d.props.muted = local.muted;
 
       d.props.video = {
         src: SAMPLE.VIMEO.WhiteBackdrop1,
         innerScale: 1.1,
-        muted: local.muted,
       };
     });
 
@@ -81,13 +81,12 @@ export default Dev.describe(name, (e) => {
             style={{}}
             status={e.state.video.status}
             useKeyboard={true}
-            onSeek={(e) => state.change((d) => (State.video(d).timestamp = e.seconds))}
-            onMute={(e) => state.change((d) => (local.muted = State.video(d).muted = e.muted))}
+            onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
+            onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
             onPlayAction={(e) => {
               state.change((d) => {
-                const video = State.video(d);
-                video.playing = e.is.playing;
-                if (e.replay) video.timestamp = 0;
+                d.props.playing = e.is.playing;
+                if (e.replay) d.props.timestamp = 0;
               });
             }}
           />
