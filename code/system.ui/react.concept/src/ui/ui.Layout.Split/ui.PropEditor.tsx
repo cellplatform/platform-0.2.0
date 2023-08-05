@@ -53,8 +53,8 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   const elSlider = (
     <div {...styles.slider}>
       <Slider
-        enabled={enabled}
         percent={clampPercent(props.split)}
+        enabled={enabled}
         thumb={{ size: 16 }}
         track={{ height: 10 }}
         ticks={{

@@ -10,13 +10,12 @@ export type {
   CssEdgesInput,
   CssValue,
   DomRect,
-  EdgePos as Pos,
-  EdgePosition as Position,
-  EdgePositionInput as PositionInput,
+  EdgePos,
+  EdgePosition,
+  EdgePositionInput,
   ProgressBarClickHandler,
   PropListProps,
   SliderTick,
-  SliderTrackChangeHandler,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**

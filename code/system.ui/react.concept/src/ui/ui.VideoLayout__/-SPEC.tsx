@@ -143,7 +143,7 @@ export default Dev.describe(name, (e) => {
       return (
         <div>
           <Video.PlayBar
-            size={'small'}
+            size={'Small'}
             style={{ marginTop: 5, marginBottom: 15 }}
             status={e.state.status}
             useKeyboard={true}

@@ -8,7 +8,7 @@ export type ScalePlacementChangeHandlerArgs = {
 
 export type ScalePlacementProps = {
   percent?: t.Percent;
-  position?: t.PositionInput;
+  position?: t.EdgePositionInput;
   style?: t.CssValue;
   onChange?: ScalePlacementChangeHandler;
 };
@@ -20,7 +20,7 @@ export type ScalePlacementProps = {
 export const ScalePlacement: React.FC<ScalePlacementProps> = (props) => {
   const width = 100;
 
-  const fireChange = (percent?: t.Percent, position?: t.Position) => {
+  const fireChange = (percent?: t.Percent, position?: t.EdgePosition) => {
     props.onChange?.({
       position: position ?? EdgePosition.toPosition(props.position, DEFAULTS.position),
       percent: percent ?? props.percent ?? 0,

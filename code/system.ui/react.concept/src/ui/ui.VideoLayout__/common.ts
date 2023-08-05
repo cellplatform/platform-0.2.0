@@ -4,7 +4,7 @@ export * from '../common';
 /**
  * Constants
  */
-const position: t.Pos = ['center', 'bottom'];
+const position: t.EdgePos = ['center', 'bottom'];
 const data: t.VideoLayout__ = { position };
 
 export const DEFAULTS = {
