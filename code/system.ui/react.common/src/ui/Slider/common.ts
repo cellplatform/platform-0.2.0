@@ -3,6 +3,8 @@ import { Color, COLORS, type t } from './common';
 export * from '../common';
 export { useRedraw } from '../use';
 
+type Mutate<T> = (draft: T) => void;
+
 /**
  * Constants
  */
@@ -10,8 +12,8 @@ export const DEFAULTS = {
   enabled: true,
   percent: 0,
 
-  get track(): t.SliderTrackProps {
-    return {
+  track(edit?: Mutate<t.SliderTrackProps>) {
+    const obj: t.SliderTrackProps = {
       percent: undefined,
       height: 20,
       color: {
@@ -20,10 +22,12 @@ export const DEFAULTS = {
         highlight: COLORS.BLUE,
       },
     };
+    edit?.(obj);
+    return obj;
   },
 
-  get thumb(): t.SliderThumbProps {
-    return {
+  thumb(edit?: Mutate<t.SliderThumbProps>) {
+    const obj: t.SliderThumbProps = {
       size: 20,
       pressedScale: 1.1,
       opacity: 1,
@@ -32,12 +36,16 @@ export const DEFAULTS = {
         border: Color.alpha(COLORS.DARK, 0.2),
       },
     };
+    edit?.(obj);
+    return obj;
   },
 
-  get ticks(): t.SliderTickProps {
-    return {
+  ticks(edit?: Mutate<t.SliderTickProps>) {
+    const obj: t.SliderTickProps = {
       offset: { top: 5, bottom: 5 },
       items: [],
     };
+    edit?.(obj);
+    return obj;
   },
 } as const;

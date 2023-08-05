@@ -31,7 +31,7 @@ export const Wrangle = {
   },
 
   track(track?: Partial<t.SliderTrackProps>): t.SliderTrackProps {
-    const DEFAULT = DEFAULTS.track;
+    const DEFAULT = DEFAULTS.track();
     return {
       height: track?.height ?? DEFAULT.height,
       percent: track?.percent,
@@ -47,7 +47,7 @@ export const Wrangle = {
    * Thumb
    */
   thumb(thumb?: t.SliderProps['thumb']): t.SliderThumbProps {
-    const DEFAULT = DEFAULTS.thumb;
+    const DEFAULT = DEFAULTS.thumb();
     return {
       size: thumb?.size ?? DEFAULT.size,
       opacity: thumb?.opacity ?? DEFAULT.opacity,
@@ -64,7 +64,7 @@ export const Wrangle = {
    * Ticks
    */
   ticks(ticks?: t.SliderProps['ticks']): t.SliderTickProps {
-    const DEFAULT = DEFAULTS.ticks;
+    const DEFAULT = DEFAULTS.ticks();
     return {
       offset: ticks?.offset ?? DEFAULT.offset,
       items: ticks?.items ?? DEFAULT.items,
