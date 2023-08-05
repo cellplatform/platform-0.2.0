@@ -15,6 +15,9 @@ export const SAMPLE = {
   },
   Diagrams: {
     GroupScale:
-      'https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png',
+      'https://user-images.githubusercontent.com/185555/258566213-c75e78cf-a0e5-443d-888a-7fbe1682b868.png',
+
+    ProductSystem:
+      'https://user-images.githubusercontent.com/185555/258566241-90756274-3664-4670-b80b-48057c1b8c71.png',
   },
 } as const;

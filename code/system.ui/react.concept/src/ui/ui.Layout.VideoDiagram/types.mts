@@ -8,11 +8,17 @@ export type VideoDiagramVideo = {
   innerScale?: number;
 };
 
+export type VideoDiagramImage = {
+  src?: t.ImageSrc;
+  sizing?: t.ImageSizeStrategy;
+};
+
 /**
  * Component
  */
 export type VideoDiagramLayoutProps = {
   video?: t.VideoDiagramVideo;
+  image?: t.VideoDiagramImage;
 
   muted?: boolean;
   playing?: boolean;

@@ -23,7 +23,7 @@ export type {
 } from 'sys.types/src/types.mjs';
 
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
-export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
+export type { ImageSizeStrategy, ImageSrc } from 'sys.ui.react.media.image/src/types.mjs';
 export type {
   VideoPlayerStatusHandler,
   VideoSrc,

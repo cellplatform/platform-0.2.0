@@ -29,6 +29,9 @@ export default Dev.describe(name, (e) => {
     video(state: T) {
       return state.props.video ?? (state.props.video = {});
     },
+    image(state: T) {
+      return state.props.image ?? (state.props.image = {});
+    },
   };
 
   e.it('ui:init', async (e) => {
@@ -46,6 +49,9 @@ export default Dev.describe(name, (e) => {
       d.props.video = {
         src: SAMPLE.Vimeo.WhiteBackdrop1,
         innerScale: 1.1,
+      };
+      d.props.image = {
+        src: SAMPLE.Diagrams.GroupScale,
       };
     });
 
@@ -110,6 +116,27 @@ export default Dev.describe(name, (e) => {
           />
         );
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Image', (dev) => {
+      const image = (label: string, src: t.ImageSrc) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .right((e) => R.equals(State.image(e.state).src, src) && `←`)
+            .onClick((e) => {
+              e.change((d) => {
+                const image = State.image(d);
+                image.src = src;
+                image.sizing = 'contain';
+              });
+            });
+        });
+      };
+      image('group scale', SAMPLE.Diagrams.GroupScale);
+      image('product system', SAMPLE.Diagrams.ProductSystem);
     });
 
     dev.hr(5, 20);
