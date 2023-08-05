@@ -1,7 +1,7 @@
 import { DEFAULTS, Image, css, type t } from './common';
 
 export type ImagePanelProps = {
-  image?: t.VideoDiagramImage;
+  image?: t.SlugImage;
   style?: t.CssValue;
 };
 

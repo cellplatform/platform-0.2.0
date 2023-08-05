@@ -3,12 +3,12 @@ import { type t } from './common';
 /**
  * Definition
  */
-export type VideoDiagramVideo = {
+export type SlugVideo = {
   src?: t.VideoSrc;
   innerScale?: number;
 };
 
-export type VideoDiagramImage = {
+export type SlugImage = {
   src?: t.ImageSrc;
   sizing?: t.ImageSizeStrategy; // 'cover' | 'contain';
   scale?: number;
@@ -18,8 +18,8 @@ export type VideoDiagramImage = {
  * Component
  */
 export type VideoDiagramProps = {
-  video?: t.VideoDiagramVideo;
-  image?: t.VideoDiagramImage;
+  video?: t.SlugVideo;
+  image?: t.SlugImage;
 
   muted?: boolean;
   playing?: boolean;

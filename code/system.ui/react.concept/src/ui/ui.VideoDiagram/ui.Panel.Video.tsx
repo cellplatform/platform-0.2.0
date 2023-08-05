@@ -1,7 +1,7 @@
 import { Video, css, useSizeObserver, type t } from './common';
 
 export type VideoPanelProps = {
-  video?: t.VideoDiagramVideo;
+  video?: t.SlugVideo;
 
   muted?: boolean;
   playing?: boolean;
