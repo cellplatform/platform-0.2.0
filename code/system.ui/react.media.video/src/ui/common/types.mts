@@ -2,10 +2,10 @@
  * @system
  */
 export type {
-  CssValue,
   CssEdgesInput,
+  CssValue,
   PropListProps,
-  ProgressBarClickHandler,
+  SliderTrackProps,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
