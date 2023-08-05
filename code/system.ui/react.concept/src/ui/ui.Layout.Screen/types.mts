@@ -6,7 +6,6 @@ export type ScreenLayoutFocused = 'index' | 'player.footer';
  * Component
  */
 export type ScreenLayoutProps = {
-  vimeo?: t.VimeoInstance;
   slugs?: t.ConceptSlug__[];
   selected?: number;
   focused?: ScreenLayoutFocused;

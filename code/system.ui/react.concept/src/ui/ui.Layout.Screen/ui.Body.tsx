@@ -4,7 +4,6 @@ import { Header } from './ui.Body.Header';
 import { Slug } from './ui.Slug';
 
 export type BodyProps = {
-  vimeo?: t.VimeoInstance;
   slugs?: t.ConceptSlug__[];
   selected?: number;
   style?: t.CssValue;
@@ -13,7 +12,7 @@ export type BodyProps = {
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
-  const { slugs = [], selected = -1, vimeo } = props;
+  const { slugs = [], selected = -1 } = props;
   const slug = slugs[selected];
 
   /**
@@ -43,13 +42,12 @@ export const Body: React.FC<BodyProps> = (props) => {
         cell(e) {
           const { x, y } = e;
           if (x === 1) {
-            if (y === 0) return <Header slug={slug} vimeo={vimeo} />;
-            if (y === 1) return <Slug slug={slug} vimeo={vimeo} />;
+            if (y === 0) return <Header slug={slug} />;
+            if (y === 1) return <Slug slug={slug} />;
             if (y === 2)
               return (
                 <Footer
                   slug={slug}
-                  vimeo={vimeo}
                   onPlayToggle={props.onPlayToggle}
                   onPlayComplete={props.onPlayComplete}
                 />

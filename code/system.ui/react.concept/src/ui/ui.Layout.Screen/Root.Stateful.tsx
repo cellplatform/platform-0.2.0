@@ -29,7 +29,6 @@ export const Stateful: React.FC<t.ScreenLayoutStatefulProps> = (props) => {
    */
   return (
     <View
-      vimeo={vimeo}
       slugs={slugs}
       selected={selected}
       focused={focused}

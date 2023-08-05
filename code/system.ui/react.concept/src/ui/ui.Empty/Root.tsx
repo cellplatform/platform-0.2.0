@@ -1,19 +1,20 @@
-import { DEFAULTS, FC, css, type t } from './common';
+import { COLORS, Color, DEFAULTS, FC, css, type t } from './common';
 
-const View: React.FC<t.TooSmallProps> = (props) => {
+const View: React.FC<t.EmptyProps> = (props) => {
   const { message = DEFAULTS.message } = props;
   /**
    * [Render]
    */
   const styles = {
     base: css({
-      position: 'relative',
+      Absolute: props.abs ? 0 : undefined,
       userSelect: 'none',
       display: 'grid',
       placeItems: 'center',
     }),
     message: css({
-      opacity: 0.5,
+      fontSize: 14,
+      color: Color.alpha(COLORS.DARK, 0.5),
       fontStyle: props.italic ? 'italic' : undefined,
     }),
   };
@@ -31,8 +32,8 @@ const View: React.FC<t.TooSmallProps> = (props) => {
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Root = FC.decorate<t.TooSmallProps, Fields>(
+export const Empty = FC.decorate<t.EmptyProps, Fields>(
   View,
   { DEFAULTS },
-  { displayName: 'Root' },
+  { displayName: 'Empty' },
 );

@@ -1,7 +1,6 @@
 import { PlayBar, css, type t } from './common';
 
 export type FooterProps = {
-  vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug__;
   style?: t.CssValue;
   onPlayToggle?: t.PlayBarHandler;
@@ -9,7 +8,7 @@ export type FooterProps = {
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
-  const { vimeo, slug } = props;
+  const { slug } = props;
 
   /**
    * [Render]
@@ -26,7 +25,6 @@ export const Footer: React.FC<FooterProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <PlayBar
-        vimeo={vimeo}
         slug={slug}
         onPlayToggle={props.onPlayToggle}
         onPlayComplete={props.onPlayComplete}

@@ -32,7 +32,7 @@ export default Dev.describe('ScreenLayout', (e) => {
   const State = {
     displayProps(state: T): t.ScreenLayoutProps {
       const { debug } = state;
-      const props: t.ScreenLayoutProps = { ...state.props, vimeo };
+      const props: t.ScreenLayoutProps = { ...state.props };
       if (!debug.withSlugs) delete props.slugs;
       return props;
     },

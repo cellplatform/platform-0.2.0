@@ -2,11 +2,11 @@ import { type t } from './common';
 
 export type * from './ui/-sys.common.Layout.Split/types.mjs';
 
+export type * from './ui/ui.Empty/types.mjs';
 export type * from './ui/ui.Info/types.mjs';
-export type * from './ui/ui.PlayBar/types.mjs';
 export type * from './ui/ui.Layout.Screen/types.mjs';
 export type * from './ui/ui.Layout.VideoDiagram/types.mjs';
-export type * from './ui/ui.TooSmall/types.mjs';
+export type * from './ui/ui.PlayBar/types.mjs';
 
 type Id = string;
 type Url = string;
@@ -24,7 +24,7 @@ export type ConceptSlug__ = {
 };
 
 export type ConceptSlugVideo___ = {
-  id?: VideoId; // Video-identifier (eg. 499921561 on vimeo).
+  id?: VideoId;
   position?: t.EdgePositionInput;
   scale?: t.Percent;
   height?: number;
@@ -34,20 +34,3 @@ export type ConceptSlugImage__ = {
   src?: Url;
   sizing?: t.ImageSizeStrategy;
 };
-
-/**
- * TODO 🐷
- */
-/**
- * Time.
- */
-// export type VideoTimestamp = {
-//   start: t.Seconds;
-//   end?: t.Seconds;
-//   content: Id[] | VideoTimestampContentRef[];
-// };
-//
-// export type VideoTimestampContentRef<P extends O = O> = {
-//   id: Id;
-//   props?: P;
-// };

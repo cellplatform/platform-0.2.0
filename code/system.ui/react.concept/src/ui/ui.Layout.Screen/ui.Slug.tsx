@@ -1,14 +1,12 @@
-import { COLORS, Color, DEFAULTS, css, type t } from './common';
-import { Empty } from './ui.Empty';
+import { COLORS, Color, DEFAULTS, Empty, css, type t } from './common';
 
 export type SlugProps = {
-  vimeo?: t.VimeoInstance;
   slug?: t.ConceptSlug__;
   style?: t.CssValue;
 };
 
 export const Slug: React.FC<SlugProps> = (props) => {
-  const { slug, vimeo } = props;
+  const { slug } = props;
 
   /**
    * [Render]
@@ -23,13 +21,10 @@ export const Slug: React.FC<SlugProps> = (props) => {
       borderRadius: 4,
       display: 'grid',
     }),
-    VIDEO_DIAGRAM: css({
-      display: 'grid',
-      placeItems: 'center',
-    }),
+    VIDEO_DIAGRAM: css({ display: 'grid', placeItems: 'center' }),
   };
 
-  const elEmpty = !slug && <Empty text={DEFAULTS.text.nothingSelected} />;
+  const elEmpty = !slug && <Empty abs={true} message={DEFAULTS.text.nothingSelected} />;
   const elMain = slug && <div {...styles.VIDEO_DIAGRAM}>🐷 VIDEO DIAGRAM</div>;
 
   return (
