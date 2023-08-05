@@ -2,7 +2,7 @@ import { Dev, File, Filesize, Icons, SAMPLE, Slider, css, type t } from '../../.
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
-import { DevDataController } from './-DEV.data';
+import { DevDataController } from './-DEV.File';
 
 const DEFAULTS = Image.DEFAULTS;
 
