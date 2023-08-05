@@ -22,16 +22,20 @@ export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
    */
   const height = resize.rect.height;
   const styles = {
-    base: css({
-      overflow: 'hidden',
+    base: css({ position: 'relative' }),
+    body: css({
+      Absolute: 0,
       display: 'grid',
       justifyContent: 'center',
       alignContent: 'end',
+      overflow: 'hidden',
     }),
     player: css({
       opacity: resize.resizing ? 0 : 1,
       transition: 'opacity 0.2s',
     }),
+    // NB: Click mask ensure no click events ever pass through to the embedded player.
+    mask: css({ Absolute: 0 }),
   };
 
   const elPlayer = resize.ready && (
@@ -50,7 +54,8 @@ export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
 
   return (
     <div ref={resize.ref} {...css(styles.base, props.style)}>
-      {elPlayer}
+      <div {...styles.body}>{elPlayer}</div>
+      <div {...styles.mask} />
     </div>
   );
 };
