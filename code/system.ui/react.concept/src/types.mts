@@ -5,7 +5,7 @@ export type * from './ui/-sys.common.Layout.Split/types.mjs';
 export type * from './ui/ui.Empty/types.mjs';
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.Layout.Screen/types.mjs';
-export type * from './ui/ui.Layout.VideoDiagram/types.mjs';
+export type * from './ui/ui.VideoDiagram/types.mjs';
 export type * from './ui/ui.PlayBar/types.mjs';
 
 type Id = string;
