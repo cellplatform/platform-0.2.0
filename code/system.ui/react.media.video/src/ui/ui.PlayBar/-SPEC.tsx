@@ -1,4 +1,4 @@
-import { Dev, Video, css, type t } from '../../test.ui';
+import { Dev, R, Video, css, type t } from '../../test.ui';
 
 import { PlayBar } from '.';
 import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
@@ -10,11 +10,7 @@ type T = {
   player: t.VideoPlayerProps;
   debug: { devBg?: boolean; devRight?: boolean };
 };
-const initial: T = {
-  props: {},
-  player: { video: SAMPLE.VIMEO.Tubes },
-  debug: {},
-};
+const initial: T = { props: {}, player: {}, debug: {} };
 
 export default Dev.describe('PlayBar', (e) => {
   const sidebarWidth = 350;
@@ -23,7 +19,8 @@ export default Dev.describe('PlayBar', (e) => {
    * LocalStorage
    */
   type LocalStore = Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard' | 'size'> &
-    Pick<T['debug'], 'devBg' | 'devRight'>;
+    Pick<T['debug'], 'devBg' | 'devRight'> &
+    Pick<t.VideoPlayerProps, 'video'>;
 
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
@@ -33,6 +30,7 @@ export default Dev.describe('PlayBar', (e) => {
     useKeyboard: true,
     devBg: false,
     devRight: false,
+    video: SAMPLE.VIMEO.Tubes,
   });
 
   e.it('ui:init', async (e) => {
@@ -45,8 +43,11 @@ export default Dev.describe('PlayBar', (e) => {
       d.props.replay = local.replay;
       d.props.useKeyboard = local.useKeyboard;
       d.props.size = local.size;
+
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;
+
+      d.player.video = local.video;
     });
 
     ctx.debug.width(sidebarWidth);
@@ -107,29 +108,43 @@ export default Dev.describe('PlayBar', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      const { props } = e.state;
-      const styles = {
-        base: css({
-          display: 'grid',
-          placeItems: 'center',
-          marginBottom: 15,
-          marginTop: 5,
-        }),
+    dev.section(/* Video Player */ '', (dev) => {
+      dev.row((e) => {
+        const { props } = e.state;
+        const styles = {
+          base: css({
+            display: 'grid',
+            placeItems: 'center',
+            marginBottom: 15,
+            marginTop: 5,
+          }),
+        };
+        return (
+          <div {...styles.base}>
+            <Video.Player
+              {...e.state.player}
+              enabled={props.enabled}
+              innerScale={1.1}
+              borderRadius={10}
+              width={sidebarWidth - 50}
+              onStatus={(e) => state.change((d) => (d.props.status = e.status))}
+            />
+          </div>
+        );
+      });
+
+      const video = (label: string, src: t.VideoSrc) => {
+        dev.button((btn) => {
+          btn
+            .label(`video: ${label}`)
+            .right((e) => R.equals(e.state.player.video, src) && `←`)
+            .onClick((e) => e.change((d) => (local.video = d.player.video = src)));
+        });
       };
-      return (
-        <div {...styles.base}>
-          <Video.Player
-            {...e.state.player}
-            enabled={props.enabled}
-            borderRadius={10}
-            width={sidebarWidth - 50}
-            onStatus={(e) => {
-              state.change((d) => (d.props.status = e.status));
-            }}
-          />
-        </div>
-      );
+      video('Tubes', SAMPLE.VIMEO.Tubes);
+      video('White backdrop', SAMPLE.VIMEO.WhiteBackdrop);
+
+      dev.hr(-1, 15);
     });
 
     dev.section('Properties', (dev) => {
