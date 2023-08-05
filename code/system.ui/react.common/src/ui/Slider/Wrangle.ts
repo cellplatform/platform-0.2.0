@@ -68,10 +68,10 @@ export const Wrangle = {
 
   tickItems(input?: t.SliderTickInput[]): t.SliderTick[] {
     if (!Array.isArray(input)) return [];
+    const isNumber = (value: any): value is number => typeof value === 'number';
+    const isObject = (value: any): value is t.SliderTick => typeof value === 'object';
     return input
-      .filter((item) => typeof item === 'number' || typeof item === 'object')
-      .map((value) => {
-        return typeof value === 'number' ? { value } : (value as t.SliderTick);
-      });
+      .filter((item) => isNumber(item) || isObject(item))
+      .map((value) => (isObject(value) ? value : ({ value } as t.SliderTick)));
   },
 } as const;
