@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, SplitLayout } from './common';
-import { VideoPlayer } from './ui.VideoPlayer';
-import { Wrangle } from './Wrangle';
+import { SplitLayout, css, type t } from './common';
+import { VideoPanel } from './ui.Panel.Video';
+import { ImagePanel } from './ui.Panel.Image';
 
 export const View: React.FC<t.VideoDiagramLayoutProps> = (props) => {
   const { debug = false } = props;
@@ -24,8 +23,8 @@ export const View: React.FC<t.VideoDiagramLayoutProps> = (props) => {
         splitMin={props.splitMin}
         splitMax={props.splitMax}
       >
-        <div />
-        <VideoPlayer
+        <ImagePanel />
+        <VideoPanel
           video={props.video}
           muted={props.muted}
           playing={props.playing}

@@ -1,6 +1,6 @@
 import { Video, css, useSizeObserver, type t } from './common';
 
-export type VideoPlayerProps = {
+export type VideoPanelProps = {
   video?: t.VideoDiagramVideo;
 
   muted?: boolean;
@@ -11,7 +11,7 @@ export type VideoPlayerProps = {
   onStatus?: t.VideoPlayerStatusHandler;
 };
 
-export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
+export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
   const { video } = props;
   const resize = useSizeObserver();
 
