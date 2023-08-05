@@ -141,8 +141,8 @@ export default Dev.describe('PlayBar', (e) => {
             .onClick((e) => e.change((d) => (local.video = d.player.video = src)));
         });
       };
-      video('Tubes', SAMPLE.VIMEO.Tubes);
-      video('White backdrop', SAMPLE.VIMEO.WhiteBackdrop);
+      video('tubes', SAMPLE.VIMEO.Tubes);
+      video('white backdrop', SAMPLE.VIMEO.WhiteBackdrop);
 
       dev.hr(-1, 15);
     });
