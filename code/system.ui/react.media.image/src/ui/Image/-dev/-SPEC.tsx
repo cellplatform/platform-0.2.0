@@ -165,9 +165,7 @@ export default Dev.describe('Image', async (e) => {
             title: css({ fontSize: 14, marginBottom: 5 }),
             slider: css({}),
           };
-
           const percent = e.state.props.offset?.[axis] ?? 0;
-
           return (
             <div {...styles.base}>
               <div {...styles.title}>{`axis: ${axis}`}</div>

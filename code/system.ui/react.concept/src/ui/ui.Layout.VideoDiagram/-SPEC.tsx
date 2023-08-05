@@ -1,5 +1,5 @@
-import { Dev, type t, SAMPLE, R } from '../../test.ui';
 import { VideoDiagramLayout } from '.';
+import { Dev, R, SAMPLE, Slider, css, type t } from '../../test.ui';
 import { SplitLayout, Video } from './common';
 
 const DEFAULTS = VideoDiagramLayout.DEFAULTS;
@@ -52,6 +52,7 @@ export default Dev.describe(name, (e) => {
       };
       d.props.image = {
         src: SAMPLE.Diagrams.GroupScale,
+        scale: 1,
       };
     });
 
@@ -114,6 +115,34 @@ export default Dev.describe(name, (e) => {
               state.change((d) => (local.split = d.props.split = e.split));
             }}
           />
+        );
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section(/* Image Scale */ '', (dev) => {
+      dev.row((e) => {
+        const styles = {
+          base: css({ marginBottom: 10 }),
+          title: css({ fontSize: 12, marginBottom: 5 }),
+          slider: css({}),
+        };
+
+        const scale = e.state.props.image?.scale ?? DEFAULTS.image.scale;
+        const percent = scale / 2;
+
+        return (
+          <div {...styles.base}>
+            <div {...styles.title}>{'image scale'}</div>
+            <Slider
+              track={{ height: 10 }}
+              thumb={{ size: 15 }}
+              ticks={{ items: [0.5] }}
+              percent={percent}
+              onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
+            />
+          </div>
         );
       });
     });

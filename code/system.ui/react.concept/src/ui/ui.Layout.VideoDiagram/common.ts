@@ -12,6 +12,7 @@ export const DEFAULTS = {
   muted: false,
 
   image: {
+    scale: 1,
     get sizing(): t.ImageSizeStrategy {
       return 'contain';
     },

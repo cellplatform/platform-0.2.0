@@ -10,7 +10,8 @@ export type VideoDiagramVideo = {
 
 export type VideoDiagramImage = {
   src?: t.ImageSrc;
-  sizing?: t.ImageSizeStrategy;
+  sizing?: t.ImageSizeStrategy; // 'cover' | 'contain';
+  scale?: number;
 };
 
 /**
