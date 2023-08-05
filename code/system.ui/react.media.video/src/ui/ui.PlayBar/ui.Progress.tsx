@@ -16,7 +16,7 @@ export const Progress: React.FC<ProgressProps> = (props) => {
    * [Render]
    */
   let height = 5;
-  if (size === 'large') height = 10;
+  if (size === 'Large') height = 10;
 
   const styles = {
     base: css({

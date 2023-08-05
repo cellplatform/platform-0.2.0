@@ -127,7 +127,7 @@ export default Dev.describe('Player (Vime)', (e) => {
         <Video.PlayBar
           style={{ marginTop: 25, marginBottom: 25 }}
           status={e.state.status}
-          size={'small'}
+          size={'Small'}
           useKeyboard={true}
           onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
           onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}

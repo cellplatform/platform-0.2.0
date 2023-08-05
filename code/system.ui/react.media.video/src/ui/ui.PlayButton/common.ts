@@ -1,7 +1,7 @@
 import { type t } from './common';
 
-export * from '../common';
 export { Icons } from '../Icons.mjs';
+export * from '../common';
 
 /**
  * Constants
@@ -9,8 +9,8 @@ export { Icons } from '../Icons.mjs';
 const status: t.PlayButtonStatus = 'Play';
 const statuses: t.PlayButtonStatus[] = ['Play', 'Pause', 'Replay'];
 
-const size: t.PlayButtonSize = 'medium';
-const sizes: t.PlayButtonSize[] = ['small', 'medium', 'large'];
+const size: t.PlayButtonSize = 'Medium';
+const sizes: t.PlayButtonSize[] = ['Small', 'Medium', 'Large'];
 
 export const DEFAULTS = {
   status,

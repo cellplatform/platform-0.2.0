@@ -19,13 +19,13 @@ export const Wrangle = {
     let width = 56;
     let height = 32;
     let spinner = 20;
-    if (size === 'small') {
+    if (size === 'Small') {
       icon = 15;
       width = 38;
       height = 20;
       spinner = 16;
     }
-    if (size === 'large') {
+    if (size === 'Large') {
       icon = 28;
       width = 80;
       height = 38;

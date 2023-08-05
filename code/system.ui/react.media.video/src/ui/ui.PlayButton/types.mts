@@ -1,7 +1,7 @@
 import { type t } from './common';
 
 export type PlayButtonStatus = 'Play' | 'Pause' | 'Replay';
-export type PlayButtonSize = 'small' | 'medium' | 'large';
+export type PlayButtonSize = 'Small' | 'Medium' | 'Large';
 
 /**
  * Component

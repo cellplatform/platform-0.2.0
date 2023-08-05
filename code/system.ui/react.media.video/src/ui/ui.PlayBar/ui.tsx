@@ -1,5 +1,5 @@
 import { Wrangle } from './Wrangle';
-import { COLORS, Color, DEFAULTS, FC, PlayButton, css, type t } from './common';
+import { DEFAULTS, FC, PlayButton, css, type t } from './common';
 import { Progress } from './ui.Progress';
 import { useKeyboard } from './use.Keyboard.mjs';
 
@@ -36,7 +36,7 @@ export const View: React.FC<t.PlayBarProps> = (props) => {
       display: 'grid',
       gridTemplateColumns: Boolean(right) ? 'auto 1fr auto' : 'auto 1fr',
       alignContent: 'center',
-      columnGap: size === 'large' ? 15 : 10,
+      columnGap: size === 'Large' ? 15 : 10,
     }),
     right: css({ display: 'grid' }),
   };
