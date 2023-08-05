@@ -12,7 +12,7 @@ const height = 280;
 /**
  * Content Slugs.
  */
-const slugs: t.ConceptSlug[] = [
+const slugs: t.ConceptSlug__[] = [
   {
     id: 'ember.pitch.intro',
     title: 'Introduction',

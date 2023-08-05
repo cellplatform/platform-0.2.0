@@ -25,7 +25,7 @@ export type {
 
 export type { ImageSizeStrategy } from 'sys.ui.react.media.image/src/types.mjs';
 
-export type { ConceptSlug, PlayBarHandler } from 'sys.ui.react.concept/src/types.mjs';
+export type { ConceptSlug__, PlayBarHandler } from 'sys.ui.react.concept/src/types.mjs';
 
 /**
  * @local
