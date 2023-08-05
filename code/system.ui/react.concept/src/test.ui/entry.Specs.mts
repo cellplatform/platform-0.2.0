@@ -7,7 +7,7 @@ export const Specs = {
   'sys.ui.concept.Empty': () => import('../ui/ui.Empty/-SPEC'),
   'sys.ui.concept.Layout': () => import('../ui/ui.Layout/-dev/-SPEC'),
 
-  '__sys.ui.concept.PlayBar': () => import('../ui/ui.PlayBar/-SPEC'),
+  '__sys.ui.concept.PlayBar': () => import('../ui/ui.PlayBar__/-SPEC'),
 
   // sys.ui.common
   'sys.ui.common.Layout.Split': () => import('../ui/-sys.common.Layout.Split/-SPEC'),

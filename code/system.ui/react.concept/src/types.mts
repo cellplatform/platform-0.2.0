@@ -6,7 +6,8 @@ export type * from './ui/ui.Empty/types.mjs';
 export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.Layout/types.mjs';
 export type * from './ui/ui.VideoDiagram/types.mjs';
-export type * from './ui/ui.PlayBar/types.mjs';
+
+export type * from './ui/ui.PlayBar__/types.mjs';
 
 type Id = string;
 type Url = string;
