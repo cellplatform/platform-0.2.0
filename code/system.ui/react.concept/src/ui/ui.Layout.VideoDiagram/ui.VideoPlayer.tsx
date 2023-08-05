@@ -1,26 +1,21 @@
-import { useEffect } from 'react';
 import { Video, css, useSizeObserver, type t } from './common';
 
-export type VideoViewProps = {
+export type VideoPlayerProps = {
+  video?: t.VideoDiagramVideo;
   style?: t.CssValue;
+  onStatus?: t.VideoPlayerStatusHandler;
 };
 
-export const VideoView: React.FC<VideoViewProps> = (props) => {
+export const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
+  const { video } = props;
   const resize = useSizeObserver();
-  const height = resize.rect.height;
 
-  /**
-   * TODO 🐷
-   */
-  console.log('resize', resize.batch, resize.resizing);
-
-  useEffect(() => {
-    console.log('height', height);
-  }, [height]);
+  if (!video) return null;
 
   /**
    * [Render]
    */
+  const height = resize.rect.height;
   const styles = {
     base: css({
       overflow: 'hidden',
@@ -34,17 +29,15 @@ export const VideoView: React.FC<VideoViewProps> = (props) => {
     }),
   };
 
-  const src = Video.src(612010014);
-
   const elPlayer = resize.ready && (
     <div {...styles.player}>
       <Video.Player
-        video={src}
-        // playing={playing}
-        // muted={muted}
-        // timestamp={timestamp}
-        innerScale={1.1}
-        // onStatus={props.onStatus}
+        video={video.src}
+        playing={video.playing}
+        muted={video.muted}
+        timestamp={video.timestamp}
+        innerScale={video.innerScale}
+        onStatus={props.onStatus}
         height={height}
       />
     </div>

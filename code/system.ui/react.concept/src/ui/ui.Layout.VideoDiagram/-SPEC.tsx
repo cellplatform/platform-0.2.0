@@ -1,20 +1,35 @@
-import { Dev, type t } from '../../test.ui';
+import { Dev, type t, SAMPLE } from '../../test.ui';
 import { VideoDiagramLayout } from '.';
-import { SplitLayout } from './common';
+import { SplitLayout, Video } from './common';
 
 const DEFAULTS = VideoDiagramLayout.DEFAULTS;
 
-type T = { props: t.VideoDiagramLayoutProps };
-const initial: T = { props: {} };
+type T = {
+  props: t.VideoDiagramLayoutProps;
+  video: {
+    status?: t.VideoStatus;
+  };
+};
+const initial: T = {
+  props: {},
+  video: {},
+};
 const name = VideoDiagramLayout.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
-  type LocalStore = Pick<t.VideoDiagramLayoutProps, 'split' | 'debug'>;
+  type LocalStore = { muted: boolean } & Pick<t.VideoDiagramLayoutProps, 'split' | 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagramLayout');
   const local = localstore.object({
+    muted: false,
     split: DEFAULTS.split,
     debug: false,
   });
+
+  const State = {
+    video(state: T) {
+      return state.props.video ?? (state.props.video = { muted: local.muted });
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -26,6 +41,12 @@ export default Dev.describe(name, (e) => {
       d.props.split = local.split;
       d.props.splitMin = 0.1;
       d.props.splitMax = 0.9;
+
+      d.props.video = {
+        src: SAMPLE.VIMEO.WhiteBackdrop1,
+        innerScale: 1.1,
+        muted: local.muted,
+      };
     });
 
     ctx.debug.width(330);
@@ -34,7 +55,15 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <VideoDiagramLayout {...e.state.props} />;
+        return (
+          <VideoDiagramLayout
+            {...e.state.props}
+            onVideoStatus={(e) => {
+              console.info(`⚡️ onVideoStatus`, e);
+              state.change((d) => (d.video.status = e.status));
+            }}
+          />
+        );
       });
   });
 
@@ -42,8 +71,31 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    dev.header
+      .padding(10)
+      .border(-0.1)
+      .render<T>((e) => {
+        return (
+          <Video.PlayBar
+            size={'Small'}
+            style={{}}
+            status={e.state.video.status}
+            useKeyboard={true}
+            onSeek={(e) => state.change((d) => (State.video(d).timestamp = e.seconds))}
+            onMute={(e) => state.change((d) => (local.muted = State.video(d).muted = e.muted))}
+            onPlayAction={(e) => {
+              state.change((d) => {
+                const video = State.video(d);
+                video.playing = e.is.playing;
+                if (e.replay) video.timestamp = 0;
+              });
+            }}
+          />
+        );
+      });
+
     dev.section('Properties', (dev) => {
-      dev.hr(0, 5);
+      dev.hr(0, 10);
       dev.row((e) => {
         const { props } = e.state;
         return (
@@ -60,7 +112,7 @@ export default Dev.describe(name, (e) => {
       });
     });
 
-    dev.hr(5, 20);
+    dev.hr(5, [80, 10]);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
@@ -82,6 +134,7 @@ export default Dev.describe(name, (e) => {
       const data = {
         props: { ...props, split },
         'props:split': split,
+        'video:status': e.state.video.status,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

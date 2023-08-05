@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, type t } from './common';
-import { View } from './view';
+import { View } from './ui';
 
 /**
  * Export
