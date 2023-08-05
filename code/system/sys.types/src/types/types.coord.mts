@@ -20,3 +20,5 @@ export type Axis = AxisX | AxisY;
  * 2D Coordinate
  */
 export type Point = { x: number; y: number };
+export type Offset = { x: number; y: number };
+export type PixelOffset = { x: number; y: number };

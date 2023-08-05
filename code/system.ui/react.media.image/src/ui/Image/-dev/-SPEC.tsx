@@ -1,4 +1,4 @@
-import { Dev, File, Filesize, Icons, type t } from '../../../test.ui';
+import { css, Color, COLORS, Dev, File, Filesize, Icons, type t, Slider } from '../../../test.ui';
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
@@ -81,6 +81,7 @@ export default Dev.describe('Image', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section(['Input', 'Properties'], (dev) => {
       dev.boolean((btn) =>
@@ -152,6 +153,48 @@ export default Dev.describe('Image', async (e) => {
 
       size('cover');
       size('contain');
+
+      dev.hr(-1, 5);
+
+      dev.TODO();
+
+      const offsetSlider = (axis: t.Axis) => {
+        dev.row((e) => {
+          const styles = {
+            base: css({ marginBottom: 10 }),
+            title: css({ fontSize: 14, marginBottom: 5 }),
+            slider: css({}),
+          };
+
+          const percent = e.state.props.offset?.[axis] ?? 0;
+
+          return (
+            <div {...styles.base}>
+              <div {...styles.title}>{`axis: ${axis}`}</div>
+              <Slider
+                track={{ height: 16 }}
+                thumb={{ size: 16 }}
+                percent={percent}
+                onChange={(e) => {
+                  state.change((d) => {
+                    /**
+                     * TODO 🐷
+                     * - Translate percentage into pixel offset.
+                     * - Break this out into sub-component: <Image.OffsetEditor>
+                     */
+
+                    const offset = d.props.offset ?? (d.props.offset = { x: 0, y: 0 });
+                    offset[axis] = e.percent;
+                  });
+                }}
+              />
+            </div>
+          );
+        });
+      };
+
+      offsetSlider('x');
+      offsetSlider('y');
     });
 
     dev.hr(5, 20);
