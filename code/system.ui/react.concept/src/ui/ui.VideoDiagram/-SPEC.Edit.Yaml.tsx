@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, Is, Text, css, type t } from './common';
+import { COLORS, Color, Is, Text, css, type t, Delete } from './common';
 
 export type YamlTextAreaFocusHandler = (e: YamlTextAreaFocusHandlerArgs) => void;
 export type YamlTextAreaFocusHandlerArgs = { focused: boolean };
@@ -20,7 +20,7 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
   const [yaml, setYaml] = useState('');
 
   useEffect(() => {
-    const yaml = Wrangle.stringify(props.images ?? []);
+    const yaml = Wrangle.images.stringify(props.images ?? []);
     setYaml(yaml);
   }, [props.images]);
 
@@ -37,7 +37,8 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
 
   const onKeypress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.metaKey) {
-      const images = Wrangle.parse(yaml);
+      const images = Wrangle.images.parse(yaml);
+      console.log('Wrangle.parseToImages(yaml):', images);
       props.onEnter?.({ images });
     }
   };
@@ -82,31 +83,27 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
 const Wrangle = {
   ensureDefaults(input: t.SlugImage) {
     const { start = 0, end, src, sizing, scale } = input;
-    // NB: Best order for display in YAML
-    //     (the long URL that will wrap at the end.)
-    return {
-      start,
-      end,
-      scale,
-      sizing,
-      src,
-    } as const;
+    // NB: Best order for display in YAML textbox.
+    //    (the long URL that will wrap at the end of the props)
+    return Delete.undefined({ start, end, scale, sizing, src });
   },
 
-  parse(text: string): t.SlugImage[] {
-    try {
-      const res = text.split('\n\n').map((text) => Text.Yaml.parse(text));
-      return res
-        .filter(Boolean)
-        .filter((obj) => Is.slugImage(obj))
-        .map((image) => image as t.SlugImage)
-        .map(Wrangle.ensureDefaults);
-    } catch (error) {
-      return [];
-    }
-  },
+  images: {
+    parse(yaml: string): t.SlugImage[] {
+      try {
+        const res = yaml.split('\n\n').map((text) => Text.Yaml.parse(text));
+        return res
+          .filter(Boolean)
+          .filter((obj) => Is.slugImage(obj))
+          .map((image) => image as t.SlugImage)
+          .map(Wrangle.ensureDefaults);
+      } catch (error) {
+        return [];
+      }
+    },
 
-  stringify(images: t.SlugImage[]): string {
-    return images.map((image) => Text.Yaml.stringify(image)).join('\n');
+    stringify(images: t.SlugImage[]): string {
+      return images.map((image) => Text.Yaml.stringify(image)).join('\n');
+    },
   },
 } as const;

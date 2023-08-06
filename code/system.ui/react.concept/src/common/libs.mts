@@ -9,5 +9,5 @@ export const R = { equals } as const;
  */
 export { Crdt, CrdtViews } from 'sys.data.crdt';
 export { Filesize } from 'sys.fs';
-export { Percent, rx, slug, cuid, Time } from 'sys.util';
+export { Percent, rx, slug, cuid, Time, Delete } from 'sys.util';
 export { Text } from 'sys.text';
