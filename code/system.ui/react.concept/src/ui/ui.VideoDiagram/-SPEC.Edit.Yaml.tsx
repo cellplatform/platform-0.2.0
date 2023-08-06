@@ -80,10 +80,17 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
  * Helpers
  */
 const Wrangle = {
-  ensureDefaults(image: t.SlugImage) {
-    image = { ...image };
-    if (!image.start) image.start = 0;
-    return image;
+  ensureDefaults(input: t.SlugImage) {
+    const { start = 0, end, src, sizing, scale } = input;
+    // NB: Best order for display in YAML
+    //     (the long URL that will wrap at the end.)
+    return {
+      start,
+      end,
+      scale,
+      sizing,
+      src,
+    } as const;
   },
 
   parse(text: string): t.SlugImage[] {
