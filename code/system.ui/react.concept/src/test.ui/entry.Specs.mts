@@ -5,6 +5,7 @@ export const Specs = {
   'sys.ui.concept.Info': () => import('../ui/ui.Info/-dev/-SPEC'),
   'sys.ui.concept.Index': () => import('../ui/ui.Index/-SPEC'),
   'sys.ui.concept.VideoDiagram': () => import('../ui/ui.VideoDiagram/-SPEC'),
+  'sys.ui.concept.VideoDiagram.Edit': () => import('../ui/ui.VideoDiagram/-SPEC.IndexEdit'),
   'sys.ui.concept.Empty': () => import('../ui/ui.Empty/-SPEC'),
   'sys.ui.concept.Layout': () => import('../ui/ui.Layout/-dev/-SPEC'),
 

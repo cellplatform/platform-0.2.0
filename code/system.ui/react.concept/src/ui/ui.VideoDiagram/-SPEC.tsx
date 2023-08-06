@@ -6,18 +6,21 @@ const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
   props: t.VideoDiagramProps;
-  video: {
-    status?: t.VideoStatus;
-  };
+  video: { status?: t.VideoStatus };
 };
 const initial: T = {
   props: {},
   video: {},
 };
+
+/**
+ * Spec
+ */
 const name = VideoDiagram.displayName ?? '';
 
-export default Dev.describe(name, (e) => {
+export default Dev.describe(name, async (e) => {
   type LocalStore = Pick<t.VideoDiagramProps, 'split' | 'debug' | 'muted'>;
+
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagram');
   const local = localstore.object({
     split: DEFAULTS.split,
@@ -103,14 +106,9 @@ export default Dev.describe(name, (e) => {
     dev.section('Properties', (dev) => {
       dev.hr(0, 3);
       dev.row((e) => {
-        const { props } = e.state;
         return (
-          <SplitLayout.PropEditor
-            title={'diagram / video split'}
-            split={props.split}
-            splitMin={props.splitMin}
-            splitMax={props.splitMax}
-            showAxis={false}
+          <VideoDiagram.Props.Split
+            props={e.state.props}
             onChange={(e) => {
               state.change((d) => (local.split = d.props.split = e.split));
             }}
@@ -119,32 +117,15 @@ export default Dev.describe(name, (e) => {
       });
     });
 
-    dev.hr(5, 20);
+    dev.hr(0, 10);
 
-    dev.section(/* Image Scale */ '', (dev) => {
-      dev.row((e) => {
-        const styles = {
-          base: css({ marginBottom: 10 }),
-          title: css({ fontSize: 12, marginBottom: 5 }),
-          slider: css({}),
-        };
-
-        const scale = e.state.props.image?.scale ?? DEFAULTS.image.scale;
-        const percent = scale / 2;
-
-        return (
-          <div {...styles.base}>
-            <div {...styles.title}>{'image scale'}</div>
-            <Slider
-              track={{ height: 10 }}
-              thumb={{ size: 15 }}
-              ticks={{ items: [0.5] }}
-              percent={percent}
-              onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
-            />
-          </div>
-        );
-      });
+    dev.row((e) => {
+      return (
+        <VideoDiagram.Props.ImageScale
+          props={e.state.props}
+          onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
+        />
+      );
     });
 
     dev.hr(5, 20);
@@ -205,6 +186,7 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.footer.border(-0.1).render<T>((e) => {
       const props = e.state.props;
       const split = Number((e.state.props.split ?? 0).toFixed(2));

@@ -1,10 +1,10 @@
 import { Index } from '.';
-import { Crdt, Dev, Is, TestFilesystem, rx, type t } from '../../test.ui';
+import { Crdt, Dev, Is, TestFile, rx, type t } from '../../test.ui';
 import { DevFile } from './-SEC.File';
 import { DevItemEditor } from './-SPEC.ItemEditor';
 import { DevSelected } from './-SPEC.Selected';
 
-import type { T, TDoc } from './-SPEC.t';
+import type { T } from './-SPEC.t';
 
 const initial: T = { props: {} };
 const DEFAULTS = Index.DEFAULTS;
@@ -29,14 +29,7 @@ export default Dev.describe(name, async (e) => {
   /**
    * (CRDT) Filesystem
    */
-  const dir = 'dev/concept/slugs';
-  const fs = (await TestFilesystem.client()).fs.dir(dir);
-  const docid = 'dev-index';
-  const doc = Crdt.ref<TDoc>(docid, { slugs: [] });
-  const file = await Crdt.file<TDoc>(fs.dir('head'), doc, { autosave: true, dispose$ });
-  const Doc = {
-    slugs: () => doc.current.slugs.map((item) => item),
-  };
+  const { dir, fs, doc, file } = await TestFile.init({ dispose$ });
 
   /**
    * Initialize.
@@ -51,12 +44,11 @@ export default Dev.describe(name, async (e) => {
       d.props.editing = local.editing;
       d.props.selected = local.selected;
       d.props.scroll = local.scroll;
-      d.props.items = Doc.slugs();
+      d.props.items = doc.current.slugs;
     });
 
     file.doc.$.subscribe((e) => {
-      const items = Doc.slugs();
-      state.change((d) => (d.props.items = items));
+      state.change((d) => (d.props.items = doc.current.slugs));
     });
 
     ctx.debug.width(330);
@@ -65,13 +57,10 @@ export default Dev.describe(name, async (e) => {
       .size('fill-y')
       .display('grid')
       .render<T>((e) => {
-        const width = 200;
         return (
           <Index
             {...e.state.props}
-            // margin={50}
-            // padding={50}
-            style={{ width }}
+            style={{ width: 260 }}
             onSelect={(e) => {
               state.change((d) => (local.selected = d.props.selected = e.index));
             }}
@@ -148,7 +137,7 @@ export default Dev.describe(name, async (e) => {
         });
 
         await state.change((d) => {
-          d.props.items = Doc.slugs();
+          d.props.items = doc.current.slugs;
           local.selected = d.props.selected = toIndex;
         });
 

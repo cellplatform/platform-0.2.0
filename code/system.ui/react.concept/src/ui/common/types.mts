@@ -9,18 +9,17 @@ export type { VimeoInstance, VimeoStatus } from 'ext.ui.react.vimeo/src/types.mj
 export type {
   CssEdgesInput,
   CssValue,
-  DevTools,
   DevCtxState,
+  DevTools,
   DomRect,
   EdgePos,
   EdgePosition,
   EdgePositionInput,
   ProgressBarClickHandler,
   PropListProps,
+  SliderChangeHandler,
   SliderTick,
 } from 'sys.ui.react.common/src/types.mjs';
-
-import type { CssEdgesInput } from 'sys.ui.react.css/src/types.mjs';
 
 /**
  * @local
