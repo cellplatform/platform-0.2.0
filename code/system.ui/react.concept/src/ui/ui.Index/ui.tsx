@@ -1,10 +1,10 @@
-import { Wrangle } from './Wrangle';
-import { DEFAULTS, Item, css, type t, Is } from './common';
-import { Title } from './ui.Title';
+import { DEFAULTS, Is, css, type t } from './common';
+
 import { Slug } from './ui.Slug';
+import { Title } from './ui.Title';
 
 export const View: React.FC<t.IndexProps> = (props) => {
-  const { items = [], scroll = DEFAULTS.scroll } = props;
+  const { items = [] } = props;
 
   /**
    * [Render]
@@ -13,7 +13,7 @@ export const View: React.FC<t.IndexProps> = (props) => {
     base: css({ position: 'relative' }),
     body: css({
       Absolute: 0,
-      Scroll: true,
+      Scroll: props.scroll ?? DEFAULTS.scroll,
     }),
   };
 
