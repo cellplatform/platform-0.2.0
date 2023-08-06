@@ -1,14 +1,15 @@
 import { useState } from 'react';
 
-import { COLORS, Empty, css, useRubberband, useSizeObserver, type t } from './common';
+import { COLORS, Empty, css, useRubberband, useSizeObserver, type t, Is } from './common';
 import { Body } from './ui.Body';
 import { Left } from './ui.Left';
 
 export const View: React.FC<t.LayoutProps> = (props) => {
   const { slugs = [] } = props;
   const isEmpty = slugs.length === 0;
+  const first = Wrangle.firstSlug(slugs);
 
-  const [selected, setSelected] = useState<t.Index>();
+  const [selected, setSelected] = useState<t.Index>(first.index);
   const [status, setStatus] = useState<t.VideoStatus>();
   const [timestamp, setTimestamp] = useState<number>();
   const [muted, setMuted] = useState<boolean>();
@@ -87,5 +88,10 @@ const Wrangle = {
     if (rect.width < 600) return true;
     if (rect.height < 550) return true;
     return false;
+  },
+
+  firstSlug(slugs: t.SlugListItem[] = []) {
+    const index = slugs.findIndex((item) => Is.slug(item));
+    return { index, item: slugs[index] } as const;
   },
 } as const;
