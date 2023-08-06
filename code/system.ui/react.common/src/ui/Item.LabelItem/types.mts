@@ -61,7 +61,7 @@ export type LabelItemProps = {
 
 export type LabelItemPropsHandlers = {
   onReady?: LabelItemReadyHandler;
-  onChange?: LabelItemChangeHandler;
+  onEditChange?: LabelItemChangeHandler;
   onEnter?: LabelItemEnterKeyHandler;
   onFocusChange?: LabelItemFocusHandler;
   onClick?: LabelItemClickHandler;
@@ -101,6 +101,7 @@ export type LabelItemActionHandlerArgs = {
 
 export type LabelItemEnterKeyHandler = (e: LabelItemEnterKeyHandlerArgs) => void;
 export type LabelItemEnterKeyHandlerArgs = {
+  editing: boolean;
   label: string;
 };
 

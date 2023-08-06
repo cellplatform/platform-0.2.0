@@ -49,26 +49,21 @@ export default Dev.describe('Namespace.Item', (e) => {
         onReady(e) {
           console.info('⚡️ onReady', e);
         },
-
-        onChange(e) {
-          console.info('⚡️ onChange', e);
-          state.change((d) => (local.label = d.props.label = e.label));
-        },
-
         onFocusChange(e) {
           console.info('⚡️ onFocusChange', e);
         },
-
-        onEnter(e) {
-          console.info('⚡️ onEnter', e);
-        },
-
         onClick(e) {
           console.info('⚡️ onClick', e);
         },
-
         onLabelDoubleClick(e) {
           console.info('⚡️ onLabelDoubleClick', e);
+        },
+        onEditChange(e) {
+          console.info('⚡️ onEditChange', e);
+          state.change((d) => (local.label = d.props.label = e.label));
+        },
+        onEnter(e) {
+          console.info('⚡️ onEnter', e);
         },
       };
     },

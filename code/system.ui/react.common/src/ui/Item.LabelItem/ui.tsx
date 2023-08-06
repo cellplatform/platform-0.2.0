@@ -1,5 +1,5 @@
 import { RefObject, useRef, useState, useEffect } from 'react';
-import { css, DEFAULTS, Style, useClickOutside, type t } from './common';
+import { rx, css, DEFAULTS, Style, useClickOutside, type t, Keyboard } from './common';
 
 import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
@@ -63,6 +63,18 @@ export const View: React.FC<Props> = (props) => {
     // HACK: When editing stopped, if the item was focused (within the textbox)
     //       ensure that focus state is retained on the root DOM element.
     if (!editing && focused) ref.current?.focus();
+  }, [editing]);
+
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+
+    // NB: The "is editing" version of this event happens within the <TextInput> component.
+    if (!editing && props.onEnter) {
+      const fire = () => props.onEnter?.({ label: label.text, editing });
+      Keyboard.until(dispose$).on('Enter', fire);
+    }
+
+    return dispose;
   }, [editing]);
 
   /**
