@@ -1,4 +1,4 @@
-import { Dev, type t, Crdt, TestFilesystem, CrdtViews } from '../../test.ui';
+import { Dev, type t, Crdt, TestFilesystem, CrdtViews, File } from '../../test.ui';
 import { Root } from '.';
 
 type T = { props: t.IndexProps };
@@ -39,7 +39,6 @@ export default Dev.describe(name, async (e) => {
     dev.section('File', (dev) => {
       dev.button('increment (+)', () => file.doc.change((d) => d.count++));
       dev.button('delete file', () => file.delete());
-
       dev.hr(0, 6);
 
       dev.row((e) => {
@@ -62,11 +61,15 @@ export default Dev.describe(name, async (e) => {
           />
         );
       });
+
+      dev.hr(0, 6);
+      dev.button('download', () => {
+        const json = JSON.stringify(file.doc.current, null, '  ');
+        const bytes = new TextEncoder().encode(json);
+        const blob = new Blob([bytes], { type: 'application/json' });
+        File.download('foo.json', blob, { mimetype: 'application/json' });
+      });
     });
-
-    dev.hr(0, 10);
-
-    dev.TODO();
   });
 
   e.it('ui:footer', async (e) => {
