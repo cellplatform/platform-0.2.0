@@ -14,7 +14,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    ctx.debug.width(330);
+    ctx.debug.width(0);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
