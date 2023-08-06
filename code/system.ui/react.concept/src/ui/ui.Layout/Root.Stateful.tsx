@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { rx, slug, type t } from '../common';
-import { View } from './ui';
 import { Wrangle } from './Wrangle.mjs';
+import { View } from './ui';
 
 export const Stateful: React.FC<t.LayoutStatefulProps> = (props) => {
   const { slugs = [] } = props;

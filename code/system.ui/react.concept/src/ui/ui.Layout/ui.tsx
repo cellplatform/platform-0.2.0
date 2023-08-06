@@ -1,6 +1,6 @@
 import { COLORS, Empty, css, useRubberband, useSizeObserver, type t } from './common';
 import { Body } from './ui.Body';
-import { Index } from './ui.Index';
+import { Left } from './ui.Left';
 
 export const View: React.FC<t.LayoutProps> = (props) => {
   const { slugs = [], selected } = props;
@@ -32,7 +32,7 @@ export const View: React.FC<t.LayoutProps> = (props) => {
   const elEmpty = (isEmpty || warning) && <Empty message={warning} />;
   const elBody = !elEmpty && (
     <div {...styles.body}>
-      <Index
+      <Left
         slugs={slugs}
         selected={selected}
         focused={props.focused === 'index'}

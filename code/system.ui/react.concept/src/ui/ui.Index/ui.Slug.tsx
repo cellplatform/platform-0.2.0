@@ -45,7 +45,7 @@ export const Slug: React.FC<SlugProps> = (props) => {
    */
   const styles = {
     base: css({}),
-    item: css({ marginBottom: 3 }),
+    item: css({ marginBottom: 1 }),
   };
 
   return (

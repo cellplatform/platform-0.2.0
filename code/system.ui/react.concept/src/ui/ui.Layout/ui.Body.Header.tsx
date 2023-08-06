@@ -1,7 +1,7 @@
 import { css, type t } from './common';
 
 export type HeaderProps = {
-  slug?: t.ConceptSlug__;
+  slug?: t.SlugListItem;
   style?: t.CssValue;
 };
 

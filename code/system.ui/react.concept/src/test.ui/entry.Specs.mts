@@ -8,6 +8,7 @@ export const Specs = {
   'sys.ui.concept.VideoDiagram.Edit': () => import('../ui/ui.VideoDiagram/-SPEC.IndexEdit'),
   'sys.ui.concept.Empty': () => import('../ui/ui.Empty/-SPEC'),
   'sys.ui.concept.Layout': () => import('../ui/ui.Layout/-dev/-SPEC'),
+  'sys.ui.concept.Layout.Stateful': () => import('../ui/ui.Layout/-dev/-SPEC.Stateful'),
 
   '__sys.ui.concept.PlayBar': () => import('../ui/ui.PlayBar__/-SPEC'),
 

@@ -6,7 +6,7 @@ export type LayoutFocused = 'index' | 'player.footer';
  * Component
  */
 export type LayoutProps = {
-  slugs?: t.ConceptSlug__[];
+  slugs?: t.SlugListItem[];
   selected?: number;
   focused?: LayoutFocused;
   style?: t.CssValue;
@@ -16,7 +16,7 @@ export type LayoutProps = {
 };
 
 export type LayoutStatefulProps = {
-  slugs?: t.ConceptSlug__[];
+  slugs?: t.SlugListItem[];
   style?: t.CssValue;
   onReady?: LayoutStatefulReadyHandler;
 };
@@ -25,9 +25,7 @@ export type LayoutStatefulProps = {
  * Events
  */
 export type LayoutStatefulReadyHandler = (e: LayoutStatefulReadyHandlerArgs) => void;
-export type LayoutStatefulReadyHandlerArgs = {
-  vimeo: t.VimeoInstance;
-};
+export type LayoutStatefulReadyHandlerArgs = {};
 
 /**
  * Content

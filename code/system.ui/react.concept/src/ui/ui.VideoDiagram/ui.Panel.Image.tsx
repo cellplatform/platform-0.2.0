@@ -1,5 +1,5 @@
-import { DEFAULTS, Image, css, type t } from './common';
 import { Wrangle } from './Wrangle';
+import { DEFAULTS, Image, css, type t } from './common';
 
 export type ImagePanelProps = {
   video?: t.SlugVideo;

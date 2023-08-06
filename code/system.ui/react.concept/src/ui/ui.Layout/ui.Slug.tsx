@@ -1,7 +1,7 @@
 import { COLORS, Color, DEFAULTS, Empty, css, type t } from './common';
 
 export type SlugProps = {
-  slug?: t.ConceptSlug__;
+  slug?: t.SlugListItem;
   style?: t.CssValue;
 };
 

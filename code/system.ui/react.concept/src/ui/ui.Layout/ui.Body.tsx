@@ -4,7 +4,7 @@ import { Header } from './ui.Body.Header';
 import { Slug } from './ui.Slug';
 
 export type BodyProps = {
-  slugs?: t.ConceptSlug__[];
+  slugs?: t.SlugListItem[];
   selected?: number;
   style?: t.CssValue;
   onPlayToggle?: t.PlayBarHandler;
@@ -31,12 +31,12 @@ export const Body: React.FC<BodyProps> = (props) => {
       config={{
         total: 3,
         column(e) {
-          if (e.index === 0) return '15px';
+          if (e.index === 0) return '40px';
           return e.index === 1 ? 1 : '50px';
         },
         row(e) {
-          if (e.index === 0) return '45px';
-          if (e.index === 2) return '60px';
+          if (e.index === 0) return '40px';
+          if (e.index === 2) return '55px';
           return 1; // 1fr.
         },
         cell(e) {

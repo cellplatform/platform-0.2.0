@@ -1,19 +1,33 @@
-import { Dev, type t } from '../../../test.ui';
+import { Dev, type t, rx, TestFile } from '../../../test.ui';
 import { Layout } from '..';
-import { DATA } from './-sample.data.mjs';
+// import { DATA } from './-sample.data.mjs';
 
 type T = { props: t.LayoutStatefulProps };
 const initial: T = { props: {} };
 
+/**
+ * Spec
+ */
 const name = 'Layout (Stateful)';
-export default Dev.describe(name, (e) => {
+
+export default Dev.describe(name, async (e) => {
+  const { dispose, dispose$ } = rx.disposable();
+
+  /**
+   * (CRDT) Filesystem
+   */
+  const { dir, fs, doc, file } = await TestFile.init({ dispose$ });
+
+  /**
+   * Initialize
+   */
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.slugs = DATA.slugs;
+      d.props.slugs = doc.current.slugs;
     });
 
     ctx.debug.width(330);

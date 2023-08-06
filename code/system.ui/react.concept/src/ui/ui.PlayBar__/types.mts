@@ -11,8 +11,7 @@ export type DownloadFileProps = {
  * Component
  */
 export type PlayBarProps = {
-  vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug__;
+  slug?: t.SlugListItem;
   download?: t.DownloadFileProps;
   style?: t.CssValue;
   onPlayToggle?: PlayBarHandler;

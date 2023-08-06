@@ -173,20 +173,6 @@ export default Dev.describe(name, async (e) => {
       });
 
       dev.hr(0, 5);
-
-      //   dev.row((e) => {
-      //     return (
-      //       <Concept.VideoDiagram.Props.ImageScale
-      //         props={e.state.diagram}
-      //         onChange={(e) => {
-      //           /**
-      //            * TODO 🐷
-      //            */
-      //           console.log('change image scale', e);
-      //         }}
-      //       />
-      //     );
-      //   });
     });
 
     dev.section(/* Video Settings */ '', (dev) => {

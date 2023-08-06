@@ -41,7 +41,7 @@ export default Dev.describe('PlayBar', (e) => {
       const download: t.DownloadFileProps = { kind: 'pdf', url, filename: 'slc.pdf' };
       return {
         ...props,
-        vimeo,
+        // vimeo,
         slug: debug.withSlug ? props.slug : undefined,
         download: debug.download ? download : undefined,
       };
@@ -54,7 +54,7 @@ export default Dev.describe('PlayBar', (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.slug = DEFAULTS.sample;
+      // d.props.slug = DEFAULTS.sample;
       d.debug.withSlug = local.withSlug;
       d.debug.download = local.download;
       d.debug.devBg = local.devBg;

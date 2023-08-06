@@ -1,8 +1,7 @@
-import { Dev, Icons, Vimeo, rx, slug, type t } from '../../../test.ui';
+import { Dev, Icons, TestFile, Vimeo, rx, slug, type t } from '../../../test.ui';
 
 import { Layout } from '..';
 import { Wrangle } from '../Wrangle.mjs';
-import { DATA } from './-sample.data.mjs';
 
 const DEFAULTS = Layout.DEFAULTS;
 
@@ -15,8 +14,14 @@ const initial: T = {
   debug: {},
 };
 
+/**
+ * Spec
+ */
 const name = 'Layout';
-export default Dev.describe(name, (e) => {
+
+export default Dev.describe(name, async (e) => {
+  const { dispose, dispose$ } = rx.disposable();
+
   type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.LayoutProps, 'selected' | 'focused'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.Layout');
   const local = localstore.object({
@@ -29,6 +34,11 @@ export default Dev.describe(name, (e) => {
   const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
   const player = Vimeo.Events(vimeo);
 
+  /**
+   * (CRDT) Filesystem
+   */
+  const { dir, fs, doc, file } = await TestFile.init({ dispose$ });
+
   const State = {
     displayProps(state: T): t.LayoutProps {
       const { debug } = state;
@@ -38,6 +48,9 @@ export default Dev.describe(name, (e) => {
     },
   };
 
+  /**
+   * Initialize
+   */
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -45,7 +58,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.selected = local.selected;
-      d.props.slugs = DATA.slugs;
+      d.props.slugs = doc.current.slugs;
       d.debug.withSlugs = local.withSlugs;
     });
 

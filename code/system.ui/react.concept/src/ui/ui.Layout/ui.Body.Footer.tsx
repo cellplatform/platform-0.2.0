@@ -1,7 +1,7 @@
-import { PlayBar, css, type t } from './common';
+import { PlayBar, css, type t, Video } from './common';
 
 export type FooterProps = {
-  slug?: t.ConceptSlug__;
+  slug?: t.SlugListItem;
   style?: t.CssValue;
   onPlayToggle?: t.PlayBarHandler;
   onPlayComplete?: t.PlayBarHandler;
@@ -15,21 +15,23 @@ export const Footer: React.FC<FooterProps> = (props) => {
    */
   const styles = {
     base: css({
-      paddingTop: 5,
-      paddingBottom: 10,
       PaddingX: 8,
       display: 'grid',
+      alignItems: 'center',
     }),
+    playbar: css({}),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PlayBar
+      <Video.PlayBar size={'Medium'} style={styles.playbar} />
+
+      {/* <PlayBar
         slug={slug}
         onPlayToggle={props.onPlayToggle}
         onPlayComplete={props.onPlayComplete}
         download={slug?.download}
-      />
+      /> */}
     </div>
   );
 };
