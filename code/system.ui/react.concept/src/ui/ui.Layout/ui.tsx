@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { COLORS, Empty, css, useRubberband, useSizeObserver, type t } from './common';
 import { Body } from './ui.Body';
 import { Left } from './ui.Left';
@@ -5,6 +7,12 @@ import { Left } from './ui.Left';
 export const View: React.FC<t.LayoutProps> = (props) => {
   const { slugs = [], selected } = props;
   const isEmpty = slugs.length === 0;
+
+  const [status, setStatus] = useState<t.VideoStatus>();
+  const [timestamp, setTimestamp] = useState<number>();
+  const [muted, setMuted] = useState<boolean>();
+  const [playing, setPlaying] = useState<boolean>();
+  const video: t.LayoutVideoState = { status, playing, timestamp, muted };
 
   useRubberband(false);
   const resize = useSizeObserver();
@@ -40,9 +48,15 @@ export const View: React.FC<t.LayoutProps> = (props) => {
       />
       <Body
         slugs={slugs}
+        video={video}
         selected={selected}
-        onPlayToggle={props.onPlayToggle}
-        onPlayComplete={props.onPlayComplete}
+        onVideo={(e) => {
+          setStatus(e.status);
+          setPlaying(e.playing);
+          setMuted(e.muted);
+          setTimestamp(e.timestamp);
+          props.onVideo?.(e);
+        }}
       />
     </div>
   );

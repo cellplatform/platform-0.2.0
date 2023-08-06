@@ -36,6 +36,7 @@ export const Slug: React.FC<SlugProps> = (props) => {
 
     /**
      * TODO 🐷 Toggle editing on as well
+     * [Edit]
      * NB: requires update in [sys.ui.common.TextInput] on fire [onEnter] from a non-editing state.
      */
   };

@@ -75,11 +75,16 @@ export default Dev.describe(name, async (e) => {
               state.change((d) => (d.props.selected = e.index));
               local.selected = e.index;
             }}
-            onPlayComplete={(e) => {
-              console.info('⚡️ onPlayComplete:', e);
-              const { slugs, selected } = state.current.props;
-              const next = Wrangle.nextSlug(slugs, selected);
-              if (next.exists) state.change((d) => (d.props.selected = next.index));
+            onVideo={(e) => {
+              // console.info('⚡️ onVideo:', e);
+              /**
+               * TODO 🐷
+               * - on play complete >> Next Slug
+               */
+              //   console.info('⚡️ onPlayComplete:', e);
+              //   const { slugs, selected } = state.current.props;
+              //   const next = Wrangle.nextSlug(slugs, selected);
+              //   if (next.exists) state.change((d) => (d.props.selected = next.index));
             }}
           />
         );

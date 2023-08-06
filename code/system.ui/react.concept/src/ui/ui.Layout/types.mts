@@ -11,8 +11,7 @@ export type LayoutProps = {
   focused?: LayoutFocused;
   style?: t.CssValue;
   onSelect?: t.LayoutSelectHandler;
-  onPlayToggle?: t.PlayBarHandler;
-  onPlayComplete?: t.PlayBarHandler;
+  onVideo?: t.LayoutVideoHandler;
 };
 
 export type LayoutStatefulProps = {
@@ -21,14 +20,21 @@ export type LayoutStatefulProps = {
   onReady?: LayoutStatefulReadyHandler;
 };
 
+export type LayoutVideoState = {
+  status?: t.VideoStatus;
+  playing?: boolean;
+  timestamp?: number;
+  muted?: boolean;
+};
+
 /**
  * Events
  */
 export type LayoutStatefulReadyHandler = (e: LayoutStatefulReadyHandlerArgs) => void;
 export type LayoutStatefulReadyHandlerArgs = {};
 
-/**
- * Content
- */
 export type LayoutSelectHandler = (e: LayoutSelectHandlerArgs) => void;
 export type LayoutSelectHandlerArgs = { index: number };
+
+export type LayoutVideoHandler = (e: LayoutVideoHandlerArgs) => void;
+export type LayoutVideoHandlerArgs = t.LayoutVideoState;

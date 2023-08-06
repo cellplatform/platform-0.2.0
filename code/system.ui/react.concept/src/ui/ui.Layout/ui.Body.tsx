@@ -1,18 +1,18 @@
 import { Grid, css, type t } from './common';
 import { Footer } from './ui.Body.Footer';
 import { Header } from './ui.Body.Header';
-import { Slug } from './ui.Slug';
+import { Main } from './ui.Main';
 
 export type BodyProps = {
   slugs?: t.SlugListItem[];
   selected?: number;
+  video?: t.LayoutVideoState;
   style?: t.CssValue;
-  onPlayToggle?: t.PlayBarHandler;
-  onPlayComplete?: t.PlayBarHandler;
+  onVideo?: t.LayoutVideoHandler;
 };
 
 export const Body: React.FC<BodyProps> = (props) => {
-  const { slugs = [], selected = -1 } = props;
+  const { slugs = [], selected = -1, video, onVideo } = props;
   const slug = slugs[selected];
 
   /**
@@ -43,15 +43,8 @@ export const Body: React.FC<BodyProps> = (props) => {
           const { x, y } = e;
           if (x === 1) {
             if (y === 0) return <Header slug={slug} />;
-            if (y === 1) return <Slug slug={slug} />;
-            if (y === 2)
-              return (
-                <Footer
-                  slug={slug}
-                  onPlayToggle={props.onPlayToggle}
-                  onPlayComplete={props.onPlayComplete}
-                />
-              );
+            if (y === 1) return <Main slug={slug} video={video} onVideo={onVideo} />;
+            if (y === 2) return <Footer slug={slug} video={video} onVideo={onVideo} />;
           }
           return;
         },

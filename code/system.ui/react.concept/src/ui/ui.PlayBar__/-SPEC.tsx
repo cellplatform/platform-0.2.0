@@ -4,7 +4,7 @@ import { Color, Dev, Vimeo, css, rx, slug, type t } from '../../test.ui';
 const DEFAULTS = PlayBar.DEFAULTS;
 
 type T = {
-  props: t.PlayBarProps;
+  props: t.PlayBarProps__;
   debug: { devBg?: boolean; withSlug?: boolean; download?: boolean };
 };
 const initial: T = {
@@ -34,7 +34,7 @@ export default Dev.describe('PlayBar', (e) => {
    * State
    */
   const State = {
-    props(state: T): t.PlayBarProps {
+    props(state: T): t.PlayBarProps__ {
       const { props, debug } = state;
 
       const url = 'https://slc-1dot1ggiz.vercel.app/static/pdf/slc.pdf';

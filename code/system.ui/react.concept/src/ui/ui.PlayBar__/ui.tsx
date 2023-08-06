@@ -7,7 +7,7 @@ import { DownloadButton } from './ui.DownloadButton';
  * - Delete <ProgressBar> from [sys.ui.common]
  */
 
-export const View: React.FC<t.PlayBarProps> = (props) => {
+export const View: React.FC<t.PlayBarProps__> = (props) => {
   const { slug, onPlayToggle, onPlayComplete, download } = props;
   return null;
   // const player = Vimeo.usePlayer(vimeo, { onPlayToggle, onPlayComplete });

@@ -10,18 +10,18 @@ export type DownloadFileProps = {
 /**
  * Component
  */
-export type PlayBarProps = {
+export type PlayBarProps__ = {
   slug?: t.SlugListItem;
   download?: t.DownloadFileProps;
   style?: t.CssValue;
-  onPlayToggle?: PlayBarHandler;
-  onPlayComplete?: PlayBarHandler;
+  onPlayToggle?: PlayBarHandler__;
+  onPlayComplete?: PlayBarHandler__;
 };
 
 /**
  * Events
  */
-export type PlayBarHandler = (e: PlayBarHandlerArgs) => void;
-export type PlayBarHandlerArgs = {
+export type PlayBarHandler__ = (e: PlayBarHandlerArgs__) => void;
+export type PlayBarHandlerArgs__ = {
   status: t.VimeoStatus;
 };

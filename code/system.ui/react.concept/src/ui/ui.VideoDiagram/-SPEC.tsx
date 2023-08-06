@@ -6,11 +6,10 @@ const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
   props: t.VideoDiagramProps;
-  video: { status?: t.VideoStatus };
+  status?: t.VideoStatus;
 };
 const initial: T = {
   props: {},
-  video: {},
 };
 
 /**
@@ -67,7 +66,7 @@ export default Dev.describe(name, async (e) => {
             {...e.state.props}
             onVideoStatus={(e) => {
               console.info(`⚡️ onVideoStatus`, e);
-              state.change((d) => (d.video.status = e.status));
+              state.change((d) => (d.status = e.status));
             }}
           />
         );
@@ -86,7 +85,7 @@ export default Dev.describe(name, async (e) => {
           <Video.PlayBar
             size={'Small'}
             style={{}}
-            status={e.state.video.status}
+            status={e.state.status}
             useKeyboard={true}
             onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
             onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
@@ -189,7 +188,7 @@ export default Dev.describe(name, async (e) => {
       const data = {
         props: { ...props, split },
         'props:split': split,
-        'video:status': e.state.video.status,
+        'video:status': e.state.status,
       };
       return <Dev.Object name={name} data={data} expand={1} />;
     });

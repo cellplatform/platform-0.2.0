@@ -36,7 +36,8 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Layout.Stateful {...e.state.props} />;
+        return null;
+        // return <Layout.Stateful {...e.state.props} />;
       });
   });
 
