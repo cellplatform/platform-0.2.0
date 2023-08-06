@@ -3,7 +3,7 @@ import { Crdt, Dev, Is, TestFile, rx, type t } from '../../test.ui';
 import { DevFile } from './-DEV.File';
 import { DevItemEditor } from './-DEV.ItemEditor';
 
-import type { T } from './-SPEC.t';
+import type { T, TDoc } from './-SPEC.t';
 
 const initial: T = { props: {} };
 const DEFAULTS = Index.DEFAULTS;
@@ -83,10 +83,13 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.button('tmp 🐷', () => {
+    dev.button('tmp 🐷', async (e) => {
+      // const json = await import('./-.tmp.json');
+      // const root = json.default as TDoc;
+
       doc.change((d) => {
-        const slugs = d.slugs;
-        console.log('slugs', slugs);
+        const slugs = d.slugs.length;
+        // d.slugs = root.slugs;
       });
     });
 
