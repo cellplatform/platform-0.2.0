@@ -11,4 +11,5 @@ export const DEFAULTS = {
   focused: false,
   editing: false,
   selected: undefined, // index.
+  scroll: true,
 } as const;

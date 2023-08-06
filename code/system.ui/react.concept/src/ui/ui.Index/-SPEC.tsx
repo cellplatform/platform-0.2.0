@@ -17,12 +17,13 @@ const name = Index.displayName ?? '';
 export default Dev.describe(name, async (e) => {
   const { dispose, dispose$ } = rx.disposable();
 
-  type LocalStore = Pick<t.IndexProps, 'focused' | 'editing' | 'selected'>;
+  type LocalStore = Pick<t.IndexProps, 'focused' | 'editing' | 'selected' | 'scroll'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.Index');
   const local = localstore.object({
     focused: DEFAULTS.focused,
     editing: DEFAULTS.editing,
     selected: DEFAULTS.selected,
+    scroll: DEFAULTS.scroll,
   });
 
   /**
@@ -49,6 +50,7 @@ export default Dev.describe(name, async (e) => {
       d.props.focused = local.focused;
       d.props.editing = local.editing;
       d.props.selected = local.selected;
+      d.props.scroll = local.scroll;
       d.props.items = Doc.slugs();
     });
 
@@ -107,6 +109,14 @@ export default Dev.describe(name, async (e) => {
           .label((e) => `editing`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.scroll);
+        btn
+          .label((e) => `scroll`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.scroll = Dev.toggle(d.props, 'scroll'))));
       });
 
       dev.hr(-1, 5);

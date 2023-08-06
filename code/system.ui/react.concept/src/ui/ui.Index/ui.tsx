@@ -4,13 +4,17 @@ import { Title } from './ui.Title';
 import { Slug } from './ui.Slug';
 
 export const View: React.FC<t.IndexProps> = (props) => {
-  const { items = [] } = props;
+  const { items = [], scroll = DEFAULTS.scroll } = props;
 
   /**
    * [Render]
    */
   const styles = {
     base: css({ position: 'relative' }),
+    body: css({
+      Absolute: 0,
+      Scroll: true,
+    }),
   };
 
   const elList = items.map((item, index) => {
@@ -37,5 +41,9 @@ export const View: React.FC<t.IndexProps> = (props) => {
     return null;
   });
 
-  return <div {...css(styles.base, props.style)}>{elList}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.body}>{elList}</div>
+    </div>
+  );
 };

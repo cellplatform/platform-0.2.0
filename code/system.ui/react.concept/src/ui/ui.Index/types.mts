@@ -5,6 +5,7 @@ export type IndexProps = {
   selected?: t.Index;
   focused?: boolean;
   editing?: boolean;
+  scroll?: boolean;
   style?: t.CssValue;
   onSelect?: t.LayoutSelectHandler;
   onSlugEditStart?: t.IndexSlugEditStartHandler;
