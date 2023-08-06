@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Item } from './common';
 
 const View: React.FC<t.IndexProps> = (props) => {
   /**
@@ -7,16 +7,16 @@ const View: React.FC<t.IndexProps> = (props) => {
    */
   const styles = {
     base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
+      position: 'relative',
     }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${Root.displayName}`}</div>
-    </div>
-  );
+  const elList = Array.from({ length: 5 }).map((_, i) => {
+    const text = `hello-${i}`;
+    return <Item.Label.View key={i} label={text} />;
+  });
+
+  return <div {...css(styles.base, props.style)}>{elList}</div>;
 };
 
 /**

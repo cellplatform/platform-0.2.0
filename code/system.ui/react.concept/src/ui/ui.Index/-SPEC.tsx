@@ -24,11 +24,11 @@ export default Dev.describe(name, async (e) => {
 
     ctx.debug.width(330);
     ctx.subject
-      .backgroundColor(1)
       .size('fill-y')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} style={{ width: 200 }} />;
+        const width = 200;
+        return <Root {...e.state.props} style={{ width }} />;
       });
   });
 
