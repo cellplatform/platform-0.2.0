@@ -13,6 +13,7 @@ export type {
   EdgePosition,
   EdgePositionInput,
   EventBus,
+  Index,
   Lifecycle,
   Milliseconds,
   Percent,

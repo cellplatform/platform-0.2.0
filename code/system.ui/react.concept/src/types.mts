@@ -10,12 +10,36 @@ export type * from './ui/ui.VideoDiagram/types.mjs';
 
 export type * from './ui/ui.PlayBar__/types.mjs';
 
+/**
+ * Primary "Slug" concept.
+ */
 type Id = string;
 type Url = string;
 type VideoId = number;
 
+export type SlugListItem = t.Slug | t.SlugNamespace;
+export type SlugNamespace = { namespace: string };
+
+export type Slug = {
+  id: Id;
+  kind: string;
+  title?: string;
+  video?: t.SlugVideo;
+};
+
+export type SlugVideo = {
+  src?: t.VideoSrc;
+  innerScale?: number;
+};
+
+export type SlugImage = {
+  src?: t.ImageSrc;
+  sizing?: t.ImageSizeStrategy; // 'cover' | 'contain';
+  scale?: number;
+};
+
 /**
- * Slug
+ * Slug (OLD)
  */
 export type ConceptSlug__ = {
   id: Id;

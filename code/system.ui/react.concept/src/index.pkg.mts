@@ -16,9 +16,10 @@ export const Pkg: ModuleDef = {
     'ext.ui.react.vimeo': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'sys.util': '0.0.0',
+    'sys.data.crdt': '0.0.0',
     'sys.ui.react.common': '0.0.0',
     'sys.ui.react.media.video': '0.0.0',
+    'sys.util': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;

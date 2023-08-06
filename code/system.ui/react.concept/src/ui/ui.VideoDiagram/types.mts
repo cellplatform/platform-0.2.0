@@ -1,20 +1,6 @@
 import { type t } from './common';
 
 /**
- * Definition
- */
-export type SlugVideo = {
-  src?: t.VideoSrc;
-  innerScale?: number;
-};
-
-export type SlugImage = {
-  src?: t.ImageSrc;
-  sizing?: t.ImageSizeStrategy; // 'cover' | 'contain';
-  scale?: number;
-};
-
-/**
  * Component
  */
 export type VideoDiagramProps = {
