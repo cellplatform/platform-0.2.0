@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 import { COLORS, Color, Is, Text, css, type t } from './common';
 
-export type ImageYamlFocusHandler = (e: ImageYamlFocusHandlerArgs) => void;
-export type ImageYamlFocusHandlerArgs = { focused: boolean };
+export type YamlTextAreaFocusHandler = (e: YamlTextAreaFocusHandlerArgs) => void;
+export type YamlTextAreaFocusHandlerArgs = { focused: boolean };
 
-export type ImageYamlEnterHandler = (e: ImageYamlEnterHandlerArgs) => void;
-export type ImageYamlEnterHandlerArgs = { images: t.SlugImage[] };
+export type YamlTextAreaEnterHandler = (e: YamlTextAreaEnterHandlerArgs) => void;
+export type YamlTextAreaEnterHandlerArgs = { images: t.SlugImage[] };
 
-export type ImageYamlProps = {
+export type YamlTextAreaProps = {
   title?: string;
   images?: t.SlugImage[];
   style?: t.CssValue;
-  onFocus?: ImageYamlFocusHandler;
-  onEnter?: ImageYamlEnterHandler;
+  onFocus?: YamlTextAreaFocusHandler;
+  onEnter?: YamlTextAreaEnterHandler;
 };
 
-export const ImageYaml: React.FC<ImageYamlProps> = (props) => {
+export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
   const { title = 'image timestamps' } = props;
   const [yaml, setYaml] = useState('');
 

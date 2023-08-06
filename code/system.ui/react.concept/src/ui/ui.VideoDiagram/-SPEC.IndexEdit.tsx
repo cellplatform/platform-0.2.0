@@ -12,7 +12,7 @@ import {
   type t,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-SPEC.Selected';
-import { ImageYaml } from './-SPEC.ImageYaml';
+import { YamlTextArea } from './-SPEC.Yaml';
 
 type T = {
   status?: t.VideoStatus;
@@ -218,7 +218,7 @@ export default Dev.describe(name, async (e) => {
       dev.row((e) => {
         const images = Selected.slug.item?.video?.timestamps;
         return (
-          <ImageYaml
+          <YamlTextArea
             images={images}
             onFocus={(e) => state.change((d) => (d.debug.playbarEnabled = !e.focused))}
             onEnter={(e) => {
