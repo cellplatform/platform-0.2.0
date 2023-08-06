@@ -32,7 +32,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
         .value((e) => findSection(doc.current)?.namespace)
         .onChange((e) => {
           doc.change((d) => {
-            const section = findSection(doc.current);
+            const section = findSection(d);
             if (section) section.namespace = e.to.value;
           });
         });
@@ -47,7 +47,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
         .value((e) => findSection(doc.current)?.title)
         .onChange((e) => {
           doc.change((d) => {
-            const section = findSection(doc.current);
+            const section = findSection(d);
             if (section) section.title = e.to.value;
           });
         });

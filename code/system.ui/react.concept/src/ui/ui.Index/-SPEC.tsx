@@ -141,9 +141,10 @@ export default Dev.describe(name, async (e) => {
         doc.change((d) => {
           const slugs = d.slugs;
           if (!slugs[fromIndex]) return;
-          var element = slugs[toIndex];
+
+          const el = Crdt.toObject(slugs[toIndex]);
           slugs.splice(toIndex, 1);
-          slugs.splice(fromIndex, 0, Crdt.toObject(element));
+          slugs.splice(fromIndex, 0, el);
         });
 
         await state.change((d) => {
@@ -171,7 +172,10 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {
+        props: e.state.props,
+        doc: doc.current,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
