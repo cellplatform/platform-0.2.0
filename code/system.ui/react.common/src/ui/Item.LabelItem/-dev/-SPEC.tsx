@@ -64,6 +64,7 @@ export default Dev.describe('Namespace.Item', (e) => {
         },
         onEnter(e) {
           console.info('⚡️ onEnter', e);
+          state.change((d) => (local.editing = d.props.editing = !e.editing));
         },
       };
     },

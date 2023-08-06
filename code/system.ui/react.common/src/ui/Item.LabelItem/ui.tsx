@@ -1,5 +1,5 @@
-import { RefObject, useRef, useState, useEffect } from 'react';
-import { rx, css, DEFAULTS, Style, useClickOutside, type t, Keyboard } from './common';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { css, DEFAULTS, Keyboard, rx, Style, useClickOutside, type t } from './common';
 
 import { Label } from './ui.Label';
 import { Left } from './ui.Root.Left';
@@ -69,13 +69,19 @@ export const View: React.FC<Props> = (props) => {
     const { dispose, dispose$ } = rx.disposable();
 
     // NB: The "is editing" version of this event happens within the <TextInput> component.
-    if (!editing && props.onEnter) {
-      const fire = () => props.onEnter?.({ label: label.text, editing });
-      Keyboard.until(dispose$).on('Enter', fire);
-    }
+    const fire = () => {
+      if (!focused || editing) return;
+      /**
+       * TODO 🐷
+       * - fire the "not editing" version of the event
+       * - BUG: this currently causes a feedback loop.
+       */
+      // props.onEnter?.({ label: label.text, editing });
+    };
+    Keyboard.until(dispose$).on('Enter', fire);
 
     return dispose;
-  }, [editing]);
+  }, [editing, focused]);
 
   /**
    * Render
