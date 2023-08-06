@@ -17,7 +17,7 @@ export const View: React.FC<t.PlayBarProps> = (props) => {
   } = props;
 
   useKeyboard({
-    enabled: props.useKeyboard ?? DEFAULTS.useKeyboard,
+    enabled: enabled && (props.useKeyboard ?? DEFAULTS.useKeyboard),
     status,
     onPlayAction,
     onSeek,
