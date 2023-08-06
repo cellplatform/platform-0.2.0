@@ -1,5 +1,5 @@
-import { expect, Test } from '../test.ui';
 import { Is } from '.';
+import { expect, Test } from '../test.ui';
 
 export default Test.describe('Is (flags)', (e) => {
   e.it('is.namespace', (e) => {
@@ -7,7 +7,7 @@ export default Test.describe('Is (flags)', (e) => {
       const actual = Is.namespace(input);
       expect(actual).to.eql(expected);
     };
-    test({ namespace: 'foo' }, true);
+    test({ kind: 'slug:namespace', namespace: 'foo' }, true);
     [null, undefined, '', 123, false, [], {}, { foo: 123 }].forEach((value) => test(value, false));
   });
 
@@ -16,9 +16,8 @@ export default Test.describe('Is (flags)', (e) => {
       const actual = Is.slug(input);
       expect(actual).to.eql(expected);
     };
-    test({ id: 'foo', kind: 'MySlugType' }, true);
-    [null, undefined, '', 123, false, [], { namespace: 'foo' }].forEach((value) =>
-      test(value, false),
-    );
+    test({ id: 'foo', kind: 'slug:VideoDiagram' }, true);
+    [null, undefined, '', 123, false, []].forEach((value) => test(value, false));
+    [{ kind: 'slug:namespace', namespace: 'foo' }].forEach((value) => test(value, false));
   });
 });

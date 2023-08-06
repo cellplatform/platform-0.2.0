@@ -6,17 +6,12 @@ import type * as t from './types.mjs';
 export const Is = {
   namespace(input?: t.SlugListItem): input is t.SlugNamespace {
     if (!isObject(input)) return false;
-    return 'namespace' in input && typeof input.namespace === 'string';
+    return input.kind === 'slug:namespace' && typeof input.namespace === 'string';
   },
 
   slug(input?: t.SlugListItem): input is t.Slug {
     if (!isObject(input)) return false;
-    return (
-      'id' in input &&
-      'kind' in input &&
-      typeof input.id === 'string' &&
-      typeof input.kind === 'string'
-    );
+    return input.kind === 'slug:VideoDiagram' && typeof input.id === 'string';
   },
 } as const;
 
