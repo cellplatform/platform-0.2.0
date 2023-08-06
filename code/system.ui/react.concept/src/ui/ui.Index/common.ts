@@ -8,5 +8,6 @@ export * from '../common';
 export const DEFAULTS = {
   untitled: 'Untitled',
   focused: false,
-  selected: undefined,
+  editing: false,
+  selected: undefined, // index.
 } as const;

@@ -18,7 +18,7 @@ type Url = string;
 type VideoId = number;
 
 export type SlugListItem = t.Slug | t.SlugNamespace;
-export type SlugNamespace = { namespace: string };
+export type SlugNamespace = { namespace: string; title?: string };
 
 export type Slug = {
   id: Id;

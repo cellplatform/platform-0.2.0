@@ -1,6 +1,7 @@
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Item, css, type t, Is } from './common';
 import { Title } from './ui.Title';
+import { Slug } from './ui.Slug';
 
 export const View: React.FC<t.IndexProps> = (props) => {
   const { items = [] } = props;
@@ -10,29 +11,24 @@ export const View: React.FC<t.IndexProps> = (props) => {
    */
   const styles = {
     base: css({ position: 'relative' }),
-    section: css({}),
-    item: css({ marginBottom: 3 }),
   };
 
   const elList = items.map((item, index) => {
-    const text = DEFAULTS.untitled;
-    const isSelected = index === props.selected;
-    const isFocused = isSelected && props.focused;
-
     if (Is.namespace(item)) {
-      return <Title key={index} text={item.namespace} style={styles.section} />;
+      return <Title key={index} item={item} />;
     }
 
     if (Is.slug(item)) {
       return (
-        <Item.Label.View
-          style={styles.item}
+        <Slug
           key={index}
-          label={text}
-          selected={isSelected}
-          focused={isFocused}
-          borderRadius={3}
-          onClick={(e) => props.onSelect?.({ index })}
+          index={index}
+          item={item}
+          selected={props.selected}
+          focused={props.focused}
+          editing={props.editing}
+          onEdited={props.onSlugEdited}
+          onSelect={props.onSelect}
         />
       );
     }

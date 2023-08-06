@@ -1,12 +1,14 @@
-import { COLORS, Color, DEFAULTS, css, type t } from './common';
+import { Wrangle } from './Wrangle';
+import { COLORS, Color, css, type t } from './common';
 
 export type SectionProps = {
-  text?: string;
+  item: t.SlugNamespace;
   style?: t.CssValue;
 };
 
 export const Title: React.FC<SectionProps> = (props) => {
-  const text = (props.text || '').trim() || DEFAULTS.untitled;
+  const { item } = props;
+  const text = Wrangle.title(item);
 
   /**
    * [Render]
@@ -14,12 +16,13 @@ export const Title: React.FC<SectionProps> = (props) => {
   const styles = {
     base: css({
       userSelect: 'none',
-      marginTop: 10,
+      marginTop: 20,
+      marginBottom: 5,
       ':first-child': { marginTop: 0 },
     }),
     text: css({
       fontSize: 12,
-      color: Color.alpha(COLORS.DARK, 0.5),
+      color: Color.alpha(COLORS.DARK, 0.4),
     }),
   };
 

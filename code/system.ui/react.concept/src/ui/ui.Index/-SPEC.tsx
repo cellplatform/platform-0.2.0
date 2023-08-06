@@ -1,5 +1,5 @@
 import { Index } from '.';
-import { Crdt, CrdtViews, Dev, File, TestFilesystem, cuid, rx, type t } from '../../test.ui';
+import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, cuid, rx, type t } from '../../test.ui';
 
 const DEFAULTS = Index.DEFAULTS;
 type T = { props: t.IndexProps };
@@ -15,10 +15,11 @@ const name = Index.displayName ?? '';
 export default Dev.describe(name, async (e) => {
   const { dispose, dispose$ } = rx.disposable();
 
-  type LocalStore = Pick<t.IndexProps, 'focused' | 'selected'>;
+  type LocalStore = Pick<t.IndexProps, 'focused' | 'editing' | 'selected'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.Index');
   const local = localstore.object({
     focused: DEFAULTS.focused,
+    editing: DEFAULTS.editing,
     selected: DEFAULTS.selected,
   });
 
@@ -44,6 +45,7 @@ export default Dev.describe(name, async (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
       d.props.focused = local.focused;
+      d.props.editing = local.editing;
       d.props.selected = local.selected;
       d.props.items = Doc.cloneSlugs();
     });
@@ -67,6 +69,14 @@ export default Dev.describe(name, async (e) => {
             onSelect={(e) => {
               state.change((d) => (local.selected = d.props.selected = e.index));
             }}
+            onSlugEdited={async (e) => {
+              console.info('⚡️ onSlugEdited', e);
+              await state.change((d) => (local.editing = d.props.editing = false));
+              doc.change((d) => {
+                const item = d.slugs[e.index];
+                if (Is.slug(item)) item.title = e.title;
+              });
+            }}
           />
         );
       });
@@ -85,6 +95,14 @@ export default Dev.describe(name, async (e) => {
           .onClick((e) => e.change((d) => (local.focused = Dev.toggle(d.props, 'focused'))));
       });
 
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.editing);
+        btn
+          .label((e) => `editing`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.editing = Dev.toggle(d.props, 'editing'))));
+      });
+
       dev.hr(-1, 5);
       dev.button('(reset)', (e) => {
         e.change((d) => {
@@ -98,7 +116,7 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Add', (dev) => {
       dev.button('add: section', (e) => {
-        const section: t.SlugNamespace = { namespace: `Hello` };
+        const section: t.SlugNamespace = { namespace: `my.namespace`, title: 'Slug Namespace' };
         doc.change((d) => d.slugs.push(section));
       });
 
@@ -111,10 +129,16 @@ export default Dev.describe(name, async (e) => {
     dev.hr(5, 20);
 
     dev.section('File', (dev) => {
-      dev.button('⚠️ delete file', () => {
-        file.delete();
-        state.change((d) => (d.props.items = undefined));
+      dev.button((btn) => {
+        btn
+          .label(`⚠️ delete file`)
+          .enabled(false)
+          .onClick((e) => {
+            file.delete();
+            state.change((d) => (d.props.items = undefined));
+          });
       });
+
       dev.hr(0, 6);
 
       dev.row((e) => {
