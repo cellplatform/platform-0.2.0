@@ -12,7 +12,7 @@ import {
   type t,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-SPEC.Selected';
-import { YamlTextArea } from './-SPEC.Yaml';
+import { YamlTextArea } from './-SPEC.Edit.Yaml';
 
 type T = {
   status?: t.VideoStatus;
