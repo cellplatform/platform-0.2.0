@@ -41,7 +41,7 @@ export const Index: React.FC<IndexProps> = (props) => {
         selected={isSelected}
         focused={isFocused}
         borderRadius={3}
-        onClick={(e) => props.onSelect?.({ index: index })}
+        onClick={(e) => props.onSelect?.({ index })}
       />
     );
   });
