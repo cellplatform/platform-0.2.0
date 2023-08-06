@@ -46,8 +46,8 @@ export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
         timestamp={props.timestamp}
         video={video.src}
         innerScale={video.innerScale}
-        onStatus={props.onStatus}
         height={height}
+        onStatus={props.onStatus}
       />
     </div>
   );

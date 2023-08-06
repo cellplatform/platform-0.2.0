@@ -1,9 +1,22 @@
-import { Is, TestFile, Color, COLORS, Concept, Dev, css, type t, rx } from '../../test.ui';
+import {
+  COLORS,
+  Color,
+  Concept,
+  Dev,
+  Is,
+  TestFile,
+  Time,
+  Video,
+  css,
+  rx,
+  type t,
+} from '../../test.ui';
 import { DevSelected } from '../ui.Index/-SPEC.Selected';
 
 type T = {
   index: t.IndexProps;
   diagram: t.VideoDiagramProps;
+  status?: t.VideoStatus;
 };
 const initial: T = {
   index: {},
@@ -18,25 +31,18 @@ const name = 'VideoDiagram (Edit)';
 export default Dev.describe(name, async (e) => {
   const { dispose, dispose$ } = rx.disposable();
 
-  type LocalStore = Pick<t.IndexProps, 'selected'>;
+  type LocalStore = Pick<t.IndexProps, 'selected'> & Pick<t.VideoDiagramProps, 'muted' | 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagram.Edit');
   const local = localstore.object({
     selected: undefined,
+    muted: false,
+    debug: false,
   });
 
   /**
    * (CRDT) Filesystem
    */
   const { dir, fs, doc, file } = await TestFile.init({ dispose$ });
-
-  const State = {
-    video(state: T) {
-      return state.diagram.video ?? (state.diagram.video = {});
-    },
-    image(state: T) {
-      return state.diagram.image ?? (state.diagram.image = {});
-    },
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -49,6 +55,25 @@ export default Dev.describe(name, async (e) => {
       d.index.items = doc.current.slugs;
       d.index.selected = local.selected;
       d.index.focused = true;
+      d.diagram.debug = local.debug;
+      d.diagram.muted = local.muted;
+    });
+
+    const onSelectionChanged = async () => {
+      await state.change((d) => {
+        const slug = Selected.slug.item;
+        if (Is.slug(slug)) {
+          d.diagram.split = slug.split;
+          d.diagram.video = slug.video;
+        }
+      });
+    };
+
+    await onSelectionChanged();
+    localstore.changed$.subscribe((e) => {
+      if (e.kind === 'put' && e.key === 'selected') {
+        Time.delay(0, onSelectionChanged);
+      }
     });
 
     doc.$.subscribe((e) => {
@@ -56,6 +81,7 @@ export default Dev.describe(name, async (e) => {
       if (Is.slug(slug)) {
         state.change((d) => {
           d.diagram.split = slug.split;
+          d.diagram.video = slug.video;
         });
       }
     });
@@ -66,12 +92,9 @@ export default Dev.describe(name, async (e) => {
       .display('grid')
       .render<T>((e) => {
         const styles = {
-          base: css({
-            display: 'grid',
-            gridTemplateColumns: 'auto 1fr',
-          }),
+          base: css({ display: 'grid', gridTemplateColumns: 'auto 1fr' }),
           left: css({
-            width: 300,
+            width: 265,
             display: 'grid',
             borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.06)}`,
           }),
@@ -80,6 +103,7 @@ export default Dev.describe(name, async (e) => {
             backgroundColor: COLORS.WHITE,
           }),
         };
+
         return (
           <div {...styles.base}>
             <div {...styles.left}>
@@ -90,7 +114,10 @@ export default Dev.describe(name, async (e) => {
               />
             </div>
             <div {...styles.right}>
-              <Concept.VideoDiagram {...e.state.diagram} debug={true} />
+              <Concept.VideoDiagram
+                {...e.state.diagram}
+                onVideoStatus={(e) => state.change((d) => (d.status = e.status))}
+              />
             </div>
           </div>
         );
@@ -101,6 +128,28 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     const Selected = DevSelected(doc, () => state.current.index.selected);
+
+    dev.header
+      .padding(15)
+      .border(-0.1)
+      .render<T>((e) => {
+        return (
+          <Video.PlayBar
+            size={'Small'}
+            style={{}}
+            status={e.state.status}
+            useKeyboard={true}
+            onSeek={(e) => state.change((d) => (d.diagram.timestamp = e.seconds))}
+            onMute={(e) => state.change((d) => (local.muted = d.diagram.muted = e.muted))}
+            onPlayAction={(e) => {
+              state.change((d) => {
+                d.diagram.playing = e.is.playing;
+                if (e.replay) d.diagram.timestamp = 0;
+              });
+            }}
+          />
+        );
+      });
 
     dev.section('Properties', (dev) => {
       dev.hr(0, 3);
@@ -125,26 +174,68 @@ export default Dev.describe(name, async (e) => {
           <Concept.VideoDiagram.Props.ImageScale
             props={e.state.diagram}
             onChange={(e) => {
-              doc.change((d) => {
-                //
-              });
-              //
-              //
+              doc.change((d) => {});
               /**
                * TODO 🐷
                */
+              // onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
               console.log('change image scale', e);
             }}
-            // onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
           />
         );
       });
     });
 
-    dev.hr(5, 20);
+    dev.section(/* Video Settings */ '', (dev) => {
+      dev.textbox((txt) => {
+        const value = () => Selected.slug.item?.video?.src?.id ?? '';
+        txt
+          .label((e) => 'video')
+          .placeholder('video source id')
+          .value((e) => value())
+          .onChange((e) => {
+            doc.change((d) => {
+              const slug = d.slugs[Selected.index];
+              if (Is.slug(slug)) {
+                const video = slug.video ?? (slug.video = {});
+                video.src = Video.src(e.to.value);
+              }
+            });
+          });
+      });
 
-    //
-    // });
+      dev.hr(0, 5);
+
+      dev.textbox((txt) => {
+        const value = () => String(Selected.slug.item?.video?.innerScale ?? 1);
+        txt
+          .label((e) => 'innerScale')
+          .placeholder('1')
+          .value((e) => value())
+          .onChange((e) => {
+            doc.change((d) => {
+              const slug = d.slugs[Selected.index];
+              if (Is.slug(slug)) {
+                const video = slug.video ?? (slug.video = {});
+                const innerScale = Number(e.to.value);
+                if (!isNaN(innerScale)) video.innerScale = innerScale;
+              }
+            });
+          });
+      });
+    });
+
+    dev.hr(0, 50);
+
+    dev.section('Debug', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.diagram.debug);
+        btn
+          .label((e) => `debug`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.diagram, 'debug'))));
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {

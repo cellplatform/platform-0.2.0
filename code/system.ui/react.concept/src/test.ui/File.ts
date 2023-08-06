@@ -1,6 +1,8 @@
 import { Crdt, TestFilesystem, type t } from './common';
 
-export type TDoc = { slugs: t.SlugListItem[] };
+export type TDoc = {
+  slugs: t.SlugListItem[];
+};
 
 export const TestFile = {
   async init(options: { dispose$?: t.Observable<any> } = {}) {
