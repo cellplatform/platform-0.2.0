@@ -54,7 +54,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
     });
 
     dev.hr(0, 5);
-    dev.button(['create', '(new)'], (e) => {
+    dev.button(['create 🌳', '(new)'], (e) => {
       const slug: t.SlugNamespace = { kind: 'slug:namespace', namespace: '' };
       doc.change((d) => d.slugs.push(slug));
     });
@@ -94,7 +94,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
     });
 
     dev.hr(0, 5);
-    dev.button(['create', '(new)'], (e) => {
+    dev.button(['create 🌳', '(new)'], (e) => {
       const slug: t.Slug = { id: slugid(), kind: 'slug:VideoDiagram' };
       doc.change((d) => d.slugs.push(slug));
     });
