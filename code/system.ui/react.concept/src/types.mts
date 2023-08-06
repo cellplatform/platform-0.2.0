@@ -35,7 +35,7 @@ export type Slug = {
 export type SlugVideo = {
   src?: t.VideoSrc;
   innerScale?: number;
-  images?: t.SlugImage[];
+  timestamps?: t.SlugImage[];
 };
 
 export type SlugImage = {

@@ -83,6 +83,15 @@ export default Dev.describe(name, async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
+    dev.button('tmp 🐷', () => {
+      doc.change((d) => {
+        const slugs = d.slugs;
+        console.log('slugs', slugs);
+      });
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.focused);

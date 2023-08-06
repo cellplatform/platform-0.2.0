@@ -230,7 +230,7 @@ export default Dev.describe(name, async (e) => {
       dev.hr(0, 10);
 
       dev.row((e) => {
-        const images = Selected.slug.item?.video?.images;
+        const images = Selected.slug.item?.video?.timestamps;
         return (
           <ImageYaml
             images={images}
@@ -240,7 +240,7 @@ export default Dev.describe(name, async (e) => {
                 const slug = d.slugs[Selected.index];
                 if (Is.slug(slug)) {
                   const video = slug.video ?? (slug.video = {});
-                  video.images = e.images;
+                  video.timestamps = e.images;
                 }
               });
             }}

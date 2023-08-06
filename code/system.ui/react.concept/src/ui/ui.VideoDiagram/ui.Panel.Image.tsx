@@ -1,13 +1,18 @@
 import { DEFAULTS, Image, css, type t } from './common';
+import { Wrangle } from './Wrangle';
 
 export type ImagePanelProps = {
-  image?: t.SlugImage;
+  video?: t.SlugVideo;
+  status?: t.VideoStatus;
   style?: t.CssValue;
 };
 
 export const ImagePanel: React.FC<ImagePanelProps> = (props) => {
-  const { image = {} } = props;
-  if (!image.src) return null;
+  const { video = {}, status } = props;
+  const timestamps = video.timestamps;
+  const seconds = status?.secs.current;
+  const image = Wrangle.imageAtTime(timestamps, seconds);
+  if (!image) return;
 
   const defaults = DEFAULTS.image;
   const sizing = image.sizing ?? defaults.sizing;

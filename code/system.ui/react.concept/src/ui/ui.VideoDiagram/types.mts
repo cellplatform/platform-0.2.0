@@ -5,7 +5,6 @@ import { type t } from './common';
  */
 export type VideoDiagramProps = {
   video?: t.SlugVideo;
-  image?: t.SlugImage;
 
   muted?: boolean;
   playing?: boolean;

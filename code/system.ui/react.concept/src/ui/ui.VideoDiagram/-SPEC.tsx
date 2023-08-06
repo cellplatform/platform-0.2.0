@@ -32,9 +32,6 @@ export default Dev.describe(name, async (e) => {
     video(state: T) {
       return state.props.video ?? (state.props.video = {});
     },
-    image(state: T) {
-      return state.props.image ?? (state.props.image = {});
-    },
   };
 
   e.it('ui:init', async (e) => {
@@ -52,10 +49,10 @@ export default Dev.describe(name, async (e) => {
       d.props.video = {
         src: SAMPLE.Vimeo.WhiteBackdrop1,
         innerScale: 1.1,
-      };
-      d.props.image = {
-        src: SAMPLE.Diagrams.GroupScale,
-        scale: 1,
+        timestamps: [
+          { src: SAMPLE.Diagrams.GroupScale },
+          { src: SAMPLE.Diagrams.ProductSystem, start: 3 },
+        ],
       };
     });
 
@@ -117,39 +114,38 @@ export default Dev.describe(name, async (e) => {
       });
     });
 
-    dev.hr(0, 10);
+    // dev.hr(0, 10);
+    // dev.row((e) => {
+    //   return (
+    //     <VideoDiagram.Props.ImageScale
+    //       props={e.state.props}
+    //       // onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
+    //     />
+    //   );
+    // });
 
-    dev.row((e) => {
-      return (
-        <VideoDiagram.Props.ImageScale
-          props={e.state.props}
-          onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
-        />
-      );
-    });
+    // dev.hr(5, 20);
 
-    dev.hr(5, 20);
+    // dev.section('Image', (dev) => {
+    //   const image = (label: string, src: t.ImageSrc) => {
+    //     dev.button((btn) => {
+    //       btn
+    //         .label(label)
+    //         .right((e) => R.equals(State.image(e.state).src, src) && `←`)
+    //         .onClick((e) => {
+    //           e.change((d) => {
+    //             const image = State.image(d);
+    //             image.src = src;
+    //             image.sizing = 'contain';
+    //           });
+    //         });
+    //     });
+    //   };
+    //   image('group scale', SAMPLE.Diagrams.GroupScale);
+    //   image('product system', SAMPLE.Diagrams.ProductSystem);
+    // });
 
-    dev.section('Image', (dev) => {
-      const image = (label: string, src: t.ImageSrc) => {
-        dev.button((btn) => {
-          btn
-            .label(label)
-            .right((e) => R.equals(State.image(e.state).src, src) && `←`)
-            .onClick((e) => {
-              e.change((d) => {
-                const image = State.image(d);
-                image.src = src;
-                image.sizing = 'contain';
-              });
-            });
-        });
-      };
-      image('group scale', SAMPLE.Diagrams.GroupScale);
-      image('product system', SAMPLE.Diagrams.ProductSystem);
-    });
-
-    dev.hr(5, 20);
+    dev.hr(0, 20);
 
     dev.section('Video', (dev) => {
       const video = (label: string, src: t.VideoSrc) => {
