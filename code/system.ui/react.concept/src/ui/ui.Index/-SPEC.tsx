@@ -1,6 +1,6 @@
 import { Index } from '.';
 import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, rx, type t } from '../../test.ui';
-import { DevItemEditor } from './-SPEC.ItemEditor';
+import { DevItemEditor } from './-SPEC.DevItemEditor';
 import { SelectedRef } from './-SPEC.Selected';
 
 import type { T, TDoc } from './-SPEC.t';
