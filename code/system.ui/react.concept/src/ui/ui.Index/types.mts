@@ -7,15 +7,18 @@ export type IndexProps = {
   editing?: boolean;
   style?: t.CssValue;
   onSelect?: t.LayoutSelectHandler;
-  onSlugEdited?: t.IndexSlugEditHandler;
+  onSlugEditStart?: t.IndexSlugEditStartHandler;
+  onSlugEditComplete?: t.IndexSlugEditCompleteHandler;
 };
 
 /**
  * Events
  */
+export type IndexSlugEditStartHandler = (e: IndexSlugEditStartHandlerArgs) => void;
+export type IndexSlugEditStartHandlerArgs = { index: t.Index };
 
-export type IndexSlugEditHandler = (e: IndexSlugEditHandlerArgs) => void;
-export type IndexSlugEditHandlerArgs = {
+export type IndexSlugEditCompleteHandler = (e: IndexSlugEditCompleteHandlerArgs) => void;
+export type IndexSlugEditCompleteHandlerArgs = {
   index: t.Index;
   title: string;
 };

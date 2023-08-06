@@ -8,8 +8,9 @@ export type SlugProps = {
   focused?: boolean;
   editing?: boolean;
   style?: t.CssValue;
-  onEdited?: t.IndexSlugEditHandler;
   onSelect?: t.LayoutSelectHandler;
+  onEditStart?: t.IndexSlugEditStartHandler;
+  onEditComplete?: t.IndexSlugEditCompleteHandler;
 };
 
 export const Slug: React.FC<SlugProps> = (props) => {
@@ -26,8 +27,17 @@ export const Slug: React.FC<SlugProps> = (props) => {
    */
   const onEditComplete = () => {
     if (editedText !== item.title) {
-      props.onEdited?.({ index, title: editedText });
+      props.onEditComplete?.({ index, title: editedText });
     }
+  };
+
+  const onEnter = (editing: boolean) => {
+    if (editing) onEditComplete();
+
+    /**
+     * TODO 🐷 Toggle editing on as well
+     * NB: requires update in [sys.ui.common.TextInput] on fire [onEnter] from a non-editing state.
+     */
   };
 
   /**
@@ -49,8 +59,8 @@ export const Slug: React.FC<SlugProps> = (props) => {
         focused={isFocused}
         focusOnEdit={true}
         onClick={(e) => props.onSelect?.({ index })}
-        onChange={(e) => setEditedText(e.label)}
-        onEnter={onEditComplete}
+        onEditChange={(e) => setEditedText(e.label)}
+        onEnter={(e) => onEnter(e.editing)}
         onEditClickAway={onEditComplete}
 
         /**

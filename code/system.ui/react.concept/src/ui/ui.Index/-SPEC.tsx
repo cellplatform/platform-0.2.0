@@ -69,12 +69,15 @@ export default Dev.describe(name, async (e) => {
             onSelect={(e) => {
               state.change((d) => (local.selected = d.props.selected = e.index));
             }}
-            onSlugEdited={async (e) => {
+            onSlugEditStart={(e) => {
+              console.info('⚡️ onSlugEditStart', e);
+              state.change((d) => (local.editing = d.props.editing = true));
+            }}
+            onSlugEditComplete={async (e) => {
               console.info('⚡️ onSlugEdited', e);
               await state.change((d) => (local.editing = d.props.editing = false));
               doc.change((d) => {
-                const item = d.slugs[e.index];
-                if (Is.slug(item)) item.title = e.title;
+                if (Is.slug(d.slugs[e.index])) d.slugs[e.index].title = e.title;
               });
             }}
           />
@@ -110,6 +113,34 @@ export default Dev.describe(name, async (e) => {
           d.props.selected = undefined;
         });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Move', (dev) => {
+      const move = async (by: number) => {
+        const fromIndex = state.current.props.selected ?? -1;
+        const toIndex = fromIndex + by;
+        if (fromIndex < 0 || toIndex > doc.current.slugs.length - 1) return;
+
+        doc.change((d) => {
+          const slugs = d.slugs;
+          if (!slugs[fromIndex]) return;
+          var element = slugs[toIndex];
+          slugs.splice(toIndex, 1);
+          slugs.splice(fromIndex, 0, Crdt.toObject(element));
+        });
+
+        await state.change((d) => {
+          d.props.items = Doc.cloneSlugs();
+          local.selected = d.props.selected = toIndex;
+        });
+
+        dev.redraw();
+      };
+
+      dev.button('↑ up', (e) => move(-1));
+      dev.button('↓ down', (e) => move(+1));
     });
 
     dev.hr(5, 20);

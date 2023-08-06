@@ -27,7 +27,8 @@ export const View: React.FC<t.IndexProps> = (props) => {
           selected={props.selected}
           focused={props.focused}
           editing={props.editing}
-          onEdited={props.onSlugEdited}
+          onEditStart={props.onSlugEditStart}
+          onEditComplete={props.onSlugEditComplete}
           onSelect={props.onSelect}
         />
       );
