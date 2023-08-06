@@ -159,7 +159,9 @@ export default Dev.describe(name, async (e) => {
     });
 
     dev.hr(5, 20);
+
     await DevItemEditor(dev, doc);
+
     dev.hr(5, 20);
 
     await DevFile(dev, fs, file, dir);
