@@ -21,6 +21,7 @@ export const View: React.FC<t.IndexProps> = (props) => {
       Scroll: props.scroll ?? DEFAULTS.scroll,
       ...Style.toPadding(props.padding),
     }),
+    footer: css({ height: 30 }),
   };
 
   const elList = items.map((item, index) => {
@@ -50,7 +51,10 @@ export const View: React.FC<t.IndexProps> = (props) => {
   return (
     <div {...css(styles.base, props.style)}>
       <div {...styles.inner}>
-        <div {...styles.body}>{elList}</div>
+        <div {...styles.body}>
+          {elList}
+          <div {...styles.footer} />
+        </div>
       </div>
     </div>
   );

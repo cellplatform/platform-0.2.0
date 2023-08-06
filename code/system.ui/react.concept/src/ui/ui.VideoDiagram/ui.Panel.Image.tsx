@@ -27,7 +27,13 @@ export const ImagePanel: React.FC<ImagePanelProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Image src={image.src} sizing={sizing} style={styles.image} />
+      <Image
+        style={styles.image}
+        src={image.src}
+        sizing={sizing}
+        drop={{ enabled: false }}
+        paste={{ enabled: false }}
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import type { t, T, TDoc } from './-SPEC.t';
 
 import { DevSelected } from './-SPEC.Selected';
-import { Icons, Is, slug as slugid } from './common';
+import { Time, Icons, Is, slug as slugid } from './common';
 
 export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>) {
   const state = await dev.state();
@@ -9,6 +9,11 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
 
   const elIconId = <Icons.Slug.Id size={16} style={{ Margin: 4 }} />;
   const elIconTitle = <Icons.Slug.Title size={16} style={{ Margin: 4 }} />;
+
+  const selectLast = async () => {
+    await Time.wait(0);
+    await state.change((d) => (d.props.selected = (d.props.items ?? []).length - 1));
+  };
 
   const findSection = (doc: TDoc) => {
     const selected = Selected.slug;
@@ -68,7 +73,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
         .margin([0, 0, 0, 20])
         .placeholder((e) => 'id')
         .left(elIconId)
-        .enabled((e) => Boolean(Selected.slug.id))
+        .enabled((e) => typeof Selected.slug.id === 'string')
         .value((e) => Selected.slug.id)
         .onChange((e) => {
           doc.change((d) => {
@@ -83,7 +88,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
         .margin([0, 0, 0, 20])
         .placeholder((e) => 'title')
         .left(elIconTitle)
-        .enabled((e) => Boolean(Selected.slug.id))
+        .enabled((e) => typeof Selected.slug.id === 'string')
         .value((e) => Selected.slug.title)
         .onChange((e) => {
           doc.change((d) => {
@@ -94,9 +99,10 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
     });
 
     dev.hr(0, 5);
-    dev.button(['create 🌳', '(new)'], (e) => {
-      const slug: t.Slug = { id: slugid(), kind: 'slug:VideoDiagram' };
+    dev.button(['create 🌳', '(new)'], async (e) => {
+      const slug: t.Slug = { id: '', kind: 'slug:VideoDiagram' };
       doc.change((d) => d.slugs.push(slug));
+      await selectLast();
     });
   });
 }
