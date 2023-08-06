@@ -7,10 +7,7 @@ export async function render() {
   const json = await res.json();
 
   const slugs = json.slugs as t.SlugListItem[];
+  console.info('json', json);
 
-  console.log('m', res);
-  console.log('json', json);
-  // const { DATA } = await import('./-sample.data.pitch.mjs');
-  // return <Concept.Layout.Stateful slugs={DATA.slugs} />;
   return <Concept.Layout slugs={slugs} />;
 }

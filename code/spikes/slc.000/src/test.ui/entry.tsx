@@ -23,14 +23,21 @@ const Render = {
     return root.render(<IFrameRef src={src} />);
   },
 
+  async emberPitch() {
+    const url = 'https://slc-prod-2w8ys4g50-tdb.vercel.app/?ember';
+    return Render.ref(url);
+  },
+
   async ember() {
     const { render } = await import('../ui/ext.slc.Ember');
-    return await render();
+    const el = await render();
+    return root.render(el);
   },
 };
 
 (async () => {
   if (queryHas('ember')) return Render.ember();
+  if (queryHas('ember.pitch')) return Render.emberPitch();
 
   if (isDev) return Render.dev();
   if (url.pathname === '/ember/') return Render.ember();
