@@ -47,7 +47,7 @@ export async function DevFile(
 
   dev.hr(0, 6);
 
-  const getJson = () => JSON.stringify(file.doc.current, null, '  ') + '\n';
+  const getJson = () => JSON.stringify(doc.current, null, '  ') + '\n';
 
   dev.button('copy (json)', () => {
     navigator.clipboard.writeText(getJson());

@@ -245,6 +245,11 @@ export default Dev.describe(name, async (e) => {
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.diagram, 'debug'))));
       });
+
+      dev.button(['copy', '(json)'], () => {
+        const json = JSON.stringify(doc.current, null, '  ') + '\n';
+        navigator.clipboard.writeText(json);
+      });
     });
   });
 
