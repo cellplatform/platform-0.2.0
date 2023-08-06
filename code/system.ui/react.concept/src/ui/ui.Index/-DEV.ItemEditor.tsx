@@ -1,6 +1,6 @@
 import type { t, T, TDoc } from './-SPEC.t';
 
-import { DevSelected } from './-SPEC.Selected';
+import { DevSelected } from './-DEV.Selected';
 import { Time, Icons, Is, slug as slugid } from './common';
 
 export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>) {

@@ -1,7 +1,7 @@
 import { Index } from '.';
 import { Crdt, Dev, Is, TestFile, rx, type t } from '../../test.ui';
-import { DevFile } from './-SEC.File';
-import { DevItemEditor } from './-SPEC.ItemEditor';
+import { DevFile } from './-DEV.File';
+import { DevItemEditor } from './-DEV.ItemEditor';
 
 import type { T } from './-SPEC.t';
 

@@ -11,7 +11,7 @@ import {
   rx,
   type t,
 } from '../../test.ui';
-import { DevSelected } from '../ui.Index/-SPEC.Selected';
+import { DevSelected } from '../ui.Index/-DEV.Selected';
 import { YamlTextArea } from './-SPEC.Edit.Yaml';
 
 type T = {
