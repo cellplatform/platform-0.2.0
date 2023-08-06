@@ -35,6 +35,7 @@ export function useKeyboard(args: Args) {
 
       Keyboard.until(dispose$).on({
         ['Space'](e) {
+          e.handled();
           const status = statusRef.current;
           const toggle: t.PlayButtonStatus = status.is.playing ? 'Pause' : 'Play';
           const args = PlayButton.Wrangle.clickArgs(toggle);
