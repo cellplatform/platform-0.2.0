@@ -1,6 +1,6 @@
 import { VideoDiagram } from '.';
-import { Dev, R, SAMPLE, Slider, css, type t } from '../../test.ui';
-import { SplitLayout, Video } from './common';
+import { Dev, R, SAMPLE, type t } from '../../test.ui';
+import { Video } from './common';
 
 const DEFAULTS = VideoDiagram.DEFAULTS;
 
