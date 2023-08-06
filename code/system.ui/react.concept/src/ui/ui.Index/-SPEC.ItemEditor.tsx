@@ -1,7 +1,7 @@
 import type { t, T, TDoc } from './-SPEC.t';
 
 import { SelectedRef } from './-SPEC.Selected';
-import { Crdt, Icons, Is, slug as slugid } from './common';
+import { Icons, Is, slug as slugid } from './common';
 
 export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>) {
   const state = await dev.state();
