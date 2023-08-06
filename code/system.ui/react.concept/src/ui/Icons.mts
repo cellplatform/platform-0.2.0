@@ -11,6 +11,9 @@ import {
   MdReplay,
   MdOutlineVerticalAlignCenter,
 } from 'react-icons/md';
+
+import { PiSignature } from 'react-icons/pi';
+import { LuFileBadge2 } from 'react-icons/lu';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -35,4 +38,8 @@ export const Icons = {
     Tray: icon(FiDownload),
   },
   Align: { Center: icon(MdOutlineVerticalAlignCenter) },
+  Slug: {
+    Id: icon(LuFileBadge2),
+    Title: icon(PiSignature),
+  },
 } as const;

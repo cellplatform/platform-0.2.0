@@ -1,11 +1,12 @@
 import { Index } from '.';
-import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, cuid, rx, type t } from '../../test.ui';
+import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, rx, type t } from '../../test.ui';
+import { DevItemEditor } from './-SPEC.ItemEditor';
+import { SelectedRef } from './-SPEC.Selected';
 
-const DEFAULTS = Index.DEFAULTS;
-type T = { props: t.IndexProps };
+import type { T, TDoc } from './-SPEC.t';
+
 const initial: T = { props: {} };
-
-type Doc = { slugs: t.SlugListItem[] };
+const DEFAULTS = Index.DEFAULTS;
 
 /**
  * Spec
@@ -29,10 +30,10 @@ export default Dev.describe(name, async (e) => {
   const dir = 'dev/concept/index.spec';
   const fs = (await TestFilesystem.client()).fs.dir(dir);
   const docid = 'dev-index';
-  const doc = Crdt.ref<Doc>(docid, { slugs: [] });
-  const file = await Crdt.file<Doc>(fs, doc, { autosave: true, dispose$ });
+  const doc = Crdt.ref<TDoc>(docid, { slugs: [] });
+  const file = await Crdt.file<TDoc>(fs, doc, { autosave: true, dispose$ });
   const Doc = {
-    cloneSlugs: () => doc.current.slugs.map((item) => item),
+    slugs: () => doc.current.slugs.map((item) => item),
   };
 
   /**
@@ -47,11 +48,11 @@ export default Dev.describe(name, async (e) => {
       d.props.focused = local.focused;
       d.props.editing = local.editing;
       d.props.selected = local.selected;
-      d.props.items = Doc.cloneSlugs();
+      d.props.items = Doc.slugs();
     });
 
     file.doc.$.subscribe((e) => {
-      const items = Doc.cloneSlugs();
+      const items = Doc.slugs();
       state.change((d) => (d.props.items = items));
     });
 
@@ -88,6 +89,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const Selected = SelectedRef(state, doc);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -132,7 +134,7 @@ export default Dev.describe(name, async (e) => {
         });
 
         await state.change((d) => {
-          d.props.items = Doc.cloneSlugs();
+          d.props.items = Doc.slugs();
           local.selected = d.props.selected = toIndex;
         });
 
@@ -145,17 +147,19 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(5, 20);
 
-    dev.section('Add', (dev) => {
-      dev.button('add: section', (e) => {
+    /**
+     * Namespace (Sections)
+     */
+    dev.section('Namespace', (dev) => {
+      dev.button(['add', '(new)'], (e) => {
         const section: t.SlugNamespace = { namespace: `my.namespace`, title: 'Slug Namespace' };
         doc.change((d) => d.slugs.push(section));
       });
-
-      dev.button('add: slug', (e) => {
-        const slug: t.Slug = { id: cuid(), kind: 'VideoDiagram' };
-        doc.change((d) => d.slugs.push(slug));
-      });
     });
+
+    dev.hr(5, 20);
+
+    await DevItemEditor(dev, doc);
 
     dev.hr(5, 20);
 

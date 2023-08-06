@@ -1,6 +1,7 @@
 import { type t } from './common';
 
 export * from '../common';
+export { Icons } from '../Icons.mjs';
 
 /**
  * Constants
