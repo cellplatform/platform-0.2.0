@@ -1,8 +1,8 @@
 import { Index } from '.';
-import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, rx, type t } from '../../test.ui';
+import { Crdt, Dev, Is, TestFilesystem, rx, type t } from '../../test.ui';
+import { DevFile } from './-SEC.File';
 import { DevItemEditor } from './-SPEC.ItemEditor';
 import { DevSelected } from './-SPEC.Selected';
-import { DevFile } from './-SEC.File';
 
 import type { T, TDoc } from './-SPEC.t';
 
@@ -29,11 +29,11 @@ export default Dev.describe(name, async (e) => {
   /**
    * (CRDT) Filesystem
    */
-  const dir = 'dev/concept/index.spec';
+  const dir = 'dev/concept/slugs';
   const fs = (await TestFilesystem.client()).fs.dir(dir);
   const docid = 'dev-index';
   const doc = Crdt.ref<TDoc>(docid, { slugs: [] });
-  const file = await Crdt.file<TDoc>(fs, doc, { autosave: true, dispose$ });
+  const file = await Crdt.file<TDoc>(fs.dir('head'), doc, { autosave: true, dispose$ });
   const Doc = {
     slugs: () => doc.current.slugs.map((item) => item),
   };
@@ -69,6 +69,8 @@ export default Dev.describe(name, async (e) => {
         return (
           <Index
             {...e.state.props}
+            // margin={50}
+            // padding={50}
             style={{ width }}
             onSelect={(e) => {
               state.change((d) => (local.selected = d.props.selected = e.index));
@@ -160,7 +162,7 @@ export default Dev.describe(name, async (e) => {
     await DevItemEditor(dev, doc);
     dev.hr(5, 20);
 
-    await DevFile(dev, file, dir);
+    await DevFile(dev, fs, file, dir);
 
     dev.hr(0, 50);
   });

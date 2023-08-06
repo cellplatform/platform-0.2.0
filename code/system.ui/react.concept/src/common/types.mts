@@ -23,6 +23,7 @@ export type {
   Size,
 } from 'sys.types/src/types.mjs';
 
+export type { Fs } from 'sys.fs';
 export type { CrdtDocFile, CrdtDocRef, CrdtDocSync } from 'sys.data.crdt/src/types.mjs';
 export type { SpecImport, TestSuiteRunResponse } from 'sys.test.spec/src/types.mjs';
 export type { ImageSizeStrategy, ImageSrc } from 'sys.ui.react.media.image/src/types.mjs';
