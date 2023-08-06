@@ -23,11 +23,11 @@ export async function pushToVercel(args: {
     source,
     team: 'tdb',
 
-    // project: 'slc-dev',
-    // alias: 'dev.socialleancanvas.com',
+    project: 'slc-dev',
+    alias: 'dev.socialleancanvas.com',
 
-    project: 'slc-prod',
-    alias: 'socialleancanvas.com',
+    // project: 'slc-prod',
+    // alias: 'socialleancanvas.com',
 
     ensureProject: true,
     regions: ['sfo1'],
