@@ -38,7 +38,6 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
   const onKeypress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.metaKey) {
       const images = Wrangle.images.parse(yaml);
-      console.log('Wrangle.parseToImages(yaml):', images);
       props.onEnter?.({ images });
     }
   };

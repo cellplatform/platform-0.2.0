@@ -13,6 +13,7 @@ import {
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-DEV.Selected';
 import { YamlTextArea } from './-SPEC.Edit.Yaml';
+import { DevFile } from '../ui.Index/-DEV.File';
 
 type T = {
   status?: t.VideoStatus;
@@ -235,9 +236,9 @@ export default Dev.describe(name, async (e) => {
       });
     });
 
-    dev.hr(0, 50);
+    dev.hr(0, 30);
 
-    dev.section('Debug', (dev) => {
+    dev.section('Debug', async (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.diagram.debug);
         btn
@@ -250,6 +251,11 @@ export default Dev.describe(name, async (e) => {
         const json = JSON.stringify(doc.current, null, '  ') + '\n';
         navigator.clipboard.writeText(json);
       });
+
+      dev.hr(5, 20);
+
+      await DevFile(dev, fs, file, dir);
+      dev.hr(0, 50);
     });
   });
 
