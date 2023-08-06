@@ -194,7 +194,7 @@ export default Dev.describe(name, async (e) => {
 
       dev.hr(0, 6);
 
-      const getJson = () => JSON.stringify(file.doc.current, null, '  ');
+      const getJson = () => JSON.stringify(file.doc.current, null, '  ') + '\n';
 
       dev.button(['download (json)', '↓'], () => {
         const bytes = new TextEncoder().encode(getJson());
