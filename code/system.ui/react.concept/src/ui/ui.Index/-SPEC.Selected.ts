@@ -1,7 +1,7 @@
 import type { t, T, TDoc } from './-SPEC.t';
 import { Wrangle } from './Wrangle';
 
-export function SelectedRef(state: t.DevCtxState<T>, doc: t.CrdtDocRef<TDoc>) {
+export function DevSelected(state: t.DevCtxState<T>, doc: t.CrdtDocRef<TDoc>) {
   const Selected = {
     get index() {
       return state.current.props.selected ?? -1;

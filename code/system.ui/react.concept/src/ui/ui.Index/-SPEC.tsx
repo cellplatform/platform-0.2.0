@@ -1,7 +1,8 @@
 import { Index } from '.';
 import { Crdt, CrdtViews, Dev, File, Is, TestFilesystem, rx, type t } from '../../test.ui';
 import { DevItemEditor } from './-SPEC.ItemEditor';
-import { SelectedRef } from './-SPEC.Selected';
+import { DevSelected } from './-SPEC.Selected';
+import { DevFile } from './-SEC.File';
 
 import type { T, TDoc } from './-SPEC.t';
 
@@ -89,7 +90,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const Selected = SelectedRef(state, doc);
+    const Selected = DevSelected(state, doc);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -149,54 +150,9 @@ export default Dev.describe(name, async (e) => {
     await DevItemEditor(dev, doc);
     dev.hr(5, 20);
 
-    dev.section('File', (dev) => {
-      dev.button((btn) => {
-        btn
-          .label(`delete file`)
-          .right('⚠️')
-          // .enabled(false)
-          .onClick((e) => {
-            file.delete();
-            state.change((d) => (d.props.items = undefined));
-          });
-      });
+    await DevFile(dev, file, dir);
 
-      dev.hr(0, 6);
-
-      dev.row((e) => {
-        return (
-          <CrdtViews.Info
-            card={true}
-            fields={[
-              'Module',
-              'History',
-              'History.Item',
-              'History.Item.Message',
-              'File',
-              'File.Driver',
-            ]}
-            data={{
-              file: { doc: file, path: dir },
-              history: { data: doc.history },
-            }}
-          />
-        );
-      });
-
-      dev.hr(0, 6);
-
-      const getJson = () => JSON.stringify(file.doc.current, null, '  ') + '\n';
-
-      dev.button(['download (json)', '↓'], () => {
-        const bytes = new TextEncoder().encode(getJson());
-        const blob = new Blob([bytes], { type: 'application/json' });
-        File.download('foo.json', blob, { mimetype: 'application/json' });
-      });
-
-      dev.button('copy (json)', () => {
-        navigator.clipboard.writeText(getJson());
-      });
-    });
+    dev.hr(0, 50);
   });
 
   e.it('ui:footer', async (e) => {

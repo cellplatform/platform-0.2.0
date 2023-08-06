@@ -1,7 +1,7 @@
 import type { t, T, TDoc } from './-SPEC.t';
 
 import { DevSelected } from './-SPEC.Selected';
-import { Icons, Is, slug as slugid } from './common';
+import { Crdt, Icons, Is, slug as slugid } from './common';
 
 export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>) {
   const state = await dev.state();
@@ -95,7 +95,7 @@ export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>)
 
     dev.hr(0, 5);
     dev.button(['create', '(new)'], (e) => {
-      const slug: t.Slug = { id: slugid(), kind: 'slug:VideoDiagram' };
+      const slug: t.Slug = { kind: 'slug:VideoDiagram', id: slugid() };
       doc.change((d) => d.slugs.push(slug));
     });
   });
