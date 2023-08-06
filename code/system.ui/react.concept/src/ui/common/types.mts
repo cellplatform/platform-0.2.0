@@ -20,6 +20,8 @@ export type {
   SliderTick,
 } from 'sys.ui.react.common/src/types.mjs';
 
+import type { CssEdgesInput } from 'sys.ui.react.css/src/types.mjs';
+
 /**
  * @local
  */

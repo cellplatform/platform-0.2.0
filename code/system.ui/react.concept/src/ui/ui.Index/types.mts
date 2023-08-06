@@ -7,6 +7,8 @@ export type IndexProps = {
   editing?: boolean;
   scroll?: boolean;
   style?: t.CssValue;
+  padding?: t.CssEdgesInput;
+  margin?: t.CssEdgesInput;
   onSelect?: t.LayoutSelectHandler;
   onSlugEditStart?: t.IndexSlugEditStartHandler;
   onSlugEditComplete?: t.IndexSlugEditCompleteHandler;

@@ -1,4 +1,4 @@
-import { DEFAULTS, Is, css, type t } from './common';
+import { Style, DEFAULTS, Is, css, type t } from './common';
 
 import { Slug } from './ui.Slug';
 import { Title } from './ui.Title';
@@ -10,10 +10,16 @@ export const View: React.FC<t.IndexProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+      ...Style.toMargins(props.margin),
+    }),
+    inner: css({ position: 'relative' }),
     body: css({
       Absolute: 0,
       Scroll: props.scroll ?? DEFAULTS.scroll,
+      ...Style.toPadding(props.padding),
     }),
   };
 
@@ -43,7 +49,9 @@ export const View: React.FC<t.IndexProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div {...styles.body}>{elList}</div>
+      <div {...styles.inner}>
+        <div {...styles.body}>{elList}</div>
+      </div>
     </div>
   );
 };
