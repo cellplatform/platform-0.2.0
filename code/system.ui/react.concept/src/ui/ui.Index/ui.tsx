@@ -1,6 +1,6 @@
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Item, css, type t, Is } from './common';
-import { Section } from './ui.Section';
+import { Title } from './ui.Title';
 
 export const View: React.FC<t.IndexProps> = (props) => {
   const { items = [] } = props;
@@ -20,7 +20,7 @@ export const View: React.FC<t.IndexProps> = (props) => {
     const isFocused = isSelected && props.focused;
 
     if (Is.namespace(item)) {
-      return <Section key={index} ns={item} style={styles.section} />;
+      return <Title key={index} text={item.namespace} style={styles.section} />;
     }
 
     if (Is.slug(item)) {

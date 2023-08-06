@@ -98,12 +98,12 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Add', (dev) => {
       dev.button('add: section', (e) => {
-        const section: t.SlugNamespace = { namespace: `Hello 👋` };
+        const section: t.SlugNamespace = { namespace: `Hello` };
         doc.change((d) => d.slugs.push(section));
       });
 
       dev.button('add: slug', (e) => {
-        const slug: t.Slug = { id: cuid() };
+        const slug: t.Slug = { id: cuid(), kind: 'VideoDiagram' };
         doc.change((d) => d.slugs.push(slug));
       });
     });
