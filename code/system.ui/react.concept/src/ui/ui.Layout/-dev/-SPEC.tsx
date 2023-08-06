@@ -21,7 +21,7 @@ const name = 'Layout';
 export default Dev.describe(name, async (e) => {
   const { dispose, dispose$ } = rx.disposable();
 
-  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.LayoutProps, 'focused'>;
+  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.LayoutProps, 'focused' | 'selected'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.Layout');
   const local = localstore.object({
     withSlugs: true,
