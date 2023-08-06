@@ -172,21 +172,21 @@ export default Dev.describe(name, async (e) => {
         );
       });
 
-      dev.hr(0, 10);
+      dev.hr(0, 5);
 
-      dev.row((e) => {
-        return (
-          <Concept.VideoDiagram.Props.ImageScale
-            props={e.state.diagram}
-            onChange={(e) => {
-              /**
-               * TODO 🐷
-               */
-              console.log('change image scale', e);
-            }}
-          />
-        );
-      });
+      //   dev.row((e) => {
+      //     return (
+      //       <Concept.VideoDiagram.Props.ImageScale
+      //         props={e.state.diagram}
+      //         onChange={(e) => {
+      //           /**
+      //            * TODO 🐷
+      //            */
+      //           console.log('change image scale', e);
+      //         }}
+      //       />
+      //     );
+      //   });
     });
 
     dev.section(/* Video Settings */ '', (dev) => {
@@ -231,7 +231,6 @@ export default Dev.describe(name, async (e) => {
 
       dev.row((e) => {
         const images = Selected.slug.item?.video?.images;
-        console.log('images', images);
         return (
           <ImageYaml
             images={images}
