@@ -15,7 +15,7 @@ export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
   const { video } = props;
   const resize = useSizeObserver();
 
-  if (!video) return null;
+  // if (!video) return null;
 
   /**
    * [Render]
@@ -44,8 +44,8 @@ export const VideoPanel: React.FC<VideoPanelProps> = (props) => {
         playing={props.playing}
         muted={props.muted}
         timestamp={props.timestamp}
-        video={video.src}
-        innerScale={video.innerScale}
+        video={video?.src ?? Video.src(499921561)}
+        innerScale={video?.innerScale ?? 1}
         height={height}
         onStatus={props.onStatus}
       />
