@@ -7,14 +7,14 @@ export type LayoutFocused = 'index' | 'player.footer';
  */
 export type LayoutProps = {
   slugs?: t.SlugListItem[];
-  selected?: number;
+  // selected?: number;
   focused?: LayoutFocused;
   style?: t.CssValue;
   onSelect?: t.LayoutSelectHandler;
   onVideo?: t.LayoutVideoHandler;
 };
 
-export type LayoutStatefulProps = {
+export type LayoutStatefulProps__ = {
   slugs?: t.SlugListItem[];
   style?: t.CssValue;
   onReady?: LayoutStatefulReadyHandler;

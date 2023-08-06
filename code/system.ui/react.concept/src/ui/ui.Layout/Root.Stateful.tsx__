@@ -3,7 +3,7 @@ import { rx, slug, type t } from '../common';
 import { Wrangle } from './Wrangle.mjs';
 import { View } from './ui';
 
-export const Stateful: React.FC<t.LayoutStatefulProps> = (props) => {
+export const Stateful: React.FC<t.LayoutStatefulProps__> = (props) => {
   return null;
   //   const { slugs = [] } = props;
   //

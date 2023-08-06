@@ -1,7 +1,6 @@
 import { Dev, Icons, TestFile, Vimeo, rx, slug, type t } from '../../../test.ui';
 
 import { Layout } from '..';
-import { Wrangle } from '../Wrangle.mjs';
 
 const DEFAULTS = Layout.DEFAULTS;
 
@@ -22,7 +21,7 @@ const name = 'Layout';
 export default Dev.describe(name, async (e) => {
   const { dispose, dispose$ } = rx.disposable();
 
-  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.LayoutProps, 'selected' | 'focused'>;
+  type LocalStore = Pick<T['debug'], 'withSlugs'> & Pick<t.LayoutProps, 'focused'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.Layout');
   const local = localstore.object({
     withSlugs: true,
@@ -57,7 +56,7 @@ export default Dev.describe(name, async (e) => {
 
     const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      d.props.selected = local.selected;
+      // d.props.selected = local.selected;
       d.props.slugs = doc.current.slugs;
       d.debug.withSlugs = local.withSlugs;
     });
@@ -72,8 +71,8 @@ export default Dev.describe(name, async (e) => {
           <Layout
             {...props}
             onSelect={(e) => {
-              state.change((d) => (d.props.selected = e.index));
-              local.selected = e.index;
+              // state.change((d) => (d.props.selected = e.index));
+              // local.selected = e.index;
             }}
             onVideo={(e) => {
               // console.info('⚡️ onVideo:', e);

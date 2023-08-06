@@ -5,9 +5,10 @@ import { Body } from './ui.Body';
 import { Left } from './ui.Left';
 
 export const View: React.FC<t.LayoutProps> = (props) => {
-  const { slugs = [], selected } = props;
+  const { slugs = [] } = props;
   const isEmpty = slugs.length === 0;
 
+  const [selected, setSelected] = useState<t.Index>();
   const [status, setStatus] = useState<t.VideoStatus>();
   const [timestamp, setTimestamp] = useState<number>();
   const [muted, setMuted] = useState<boolean>();
@@ -44,7 +45,10 @@ export const View: React.FC<t.LayoutProps> = (props) => {
         slugs={slugs}
         selected={selected}
         focused={props.focused === 'index'}
-        onSelect={props.onSelect}
+        onSelect={(e) => {
+          setSelected(e.index);
+          props.onSelect?.(e);
+        }}
       />
       <Body
         slugs={slugs}

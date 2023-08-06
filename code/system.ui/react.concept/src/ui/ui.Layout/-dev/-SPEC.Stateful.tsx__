@@ -2,7 +2,7 @@ import { Dev, type t, rx, TestFile } from '../../../test.ui';
 import { Layout } from '..';
 // import { DATA } from './-sample.data.mjs';
 
-type T = { props: t.LayoutStatefulProps };
+type T = { props: t.LayoutStatefulProps__ };
 const initial: T = { props: {} };
 
 /**
