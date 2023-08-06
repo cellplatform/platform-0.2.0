@@ -13,9 +13,14 @@ export const Is = {
     if (!isObject(input)) return false;
     return input.kind === 'slug:VideoDiagram' && typeof input.id === 'string';
   },
+
+  slugImage(input?: any): input is t.SlugImage {
+    if (!isObject(input)) return false;
+    return typeof input.src === 'string';
+  },
 } as const;
 
 /**
  * Helpers
  */
-const isObject = (input: any): input is object => typeof input === 'object' && input !== null;
+const isObject = (input: any): input is Object => typeof input === 'object' && input !== null;

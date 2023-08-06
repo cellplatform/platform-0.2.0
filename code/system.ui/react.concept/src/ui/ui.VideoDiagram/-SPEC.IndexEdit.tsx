@@ -12,15 +12,18 @@ import {
   type t,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-SPEC.Selected';
+import { ImageYaml } from './-SPEC.ImageYaml';
 
 type T = {
+  status?: t.VideoStatus;
   index: t.IndexProps;
   diagram: t.VideoDiagramProps;
-  status?: t.VideoStatus;
+  debug: { playbarEnabled?: boolean };
 };
 const initial: T = {
   index: {},
   diagram: {},
+  debug: {},
 };
 
 /**
@@ -57,6 +60,7 @@ export default Dev.describe(name, async (e) => {
       d.index.focused = true;
       d.diagram.debug = local.debug;
       d.diagram.muted = local.muted;
+      d.debug.playbarEnabled = true;
     });
 
     const onSelectionChanged = async () => {
@@ -135,6 +139,7 @@ export default Dev.describe(name, async (e) => {
       .render<T>((e) => {
         return (
           <Video.PlayBar
+            enabled={e.state.debug.playbarEnabled ?? true}
             size={'Small'}
             style={{}}
             status={e.state.status}
@@ -174,11 +179,9 @@ export default Dev.describe(name, async (e) => {
           <Concept.VideoDiagram.Props.ImageScale
             props={e.state.diagram}
             onChange={(e) => {
-              doc.change((d) => {});
               /**
                * TODO 🐷
                */
-              // onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
               console.log('change image scale', e);
             }}
           />
@@ -222,6 +225,28 @@ export default Dev.describe(name, async (e) => {
               }
             });
           });
+      });
+
+      dev.hr(0, 10);
+
+      dev.row((e) => {
+        const images = Selected.slug.item?.video?.images;
+        console.log('images', images);
+        return (
+          <ImageYaml
+            images={images}
+            onFocus={(e) => state.change((d) => (d.debug.playbarEnabled = !e.focused))}
+            onEnter={(e) => {
+              doc.change((d) => {
+                const slug = d.slugs[Selected.index];
+                if (Is.slug(slug)) {
+                  const video = slug.video ?? (slug.video = {});
+                  video.images = e.images;
+                }
+              });
+            }}
+          />
+        );
       });
     });
 

@@ -35,9 +35,12 @@ export type Slug = {
 export type SlugVideo = {
   src?: t.VideoSrc;
   innerScale?: number;
+  images?: t.SlugImage[];
 };
 
 export type SlugImage = {
+  start?: t.Seconds;
+  end?: t.Seconds;
   src?: t.ImageSrc;
   sizing?: t.ImageSizeStrategy; // 'cover' | 'contain';
   scale?: number;
