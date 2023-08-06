@@ -72,9 +72,9 @@ export function useItemEditController(args: Args) {
       change('ready', (d) => null);
     },
 
-    onChange(e) {
+    onEditChange(e) {
       change('data:label', (draft) => (draft.label = e.label));
-      args.handlers?.onChange?.(e);
+      args.handlers?.onEditChange?.(e);
     },
 
     onLabelDoubleClick(e) {
