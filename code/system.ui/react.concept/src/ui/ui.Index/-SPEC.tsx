@@ -146,28 +146,15 @@ export default Dev.describe(name, async (e) => {
     });
 
     dev.hr(5, 20);
-
-    /**
-     * Namespace (Sections)
-     */
-    dev.section('Namespace', (dev) => {
-      dev.button(['add', '(new)'], (e) => {
-        const section: t.SlugNamespace = { namespace: `my.namespace`, title: 'Slug Namespace' };
-        doc.change((d) => d.slugs.push(section));
-      });
-    });
-
-    dev.hr(5, 20);
-
     await DevItemEditor(dev, doc);
-
     dev.hr(5, 20);
 
     dev.section('File', (dev) => {
       dev.button((btn) => {
         btn
-          .label(`⚠️ delete file`)
-          .enabled(false)
+          .label(`delete file`)
+          .right('⚠️')
+          // .enabled(false)
           .onClick((e) => {
             file.delete();
             state.change((d) => (d.props.items = undefined));
