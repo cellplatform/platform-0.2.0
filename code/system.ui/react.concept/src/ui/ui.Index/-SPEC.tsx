@@ -2,7 +2,6 @@ import { Index } from '.';
 import { Crdt, Dev, Is, TestFile, rx, type t } from '../../test.ui';
 import { DevFile } from './-SEC.File';
 import { DevItemEditor } from './-SPEC.ItemEditor';
-import { DevSelected } from './-SPEC.Selected';
 
 import type { T } from './-SPEC.t';
 
@@ -83,7 +82,6 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    const Selected = DevSelected(state, doc);
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {

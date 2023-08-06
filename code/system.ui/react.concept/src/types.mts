@@ -29,6 +29,7 @@ export type Slug = {
   kind: 'slug:VideoDiagram';
   title?: string;
   video?: t.SlugVideo;
+  split?: t.Percent;
 };
 
 export type SlugVideo = {

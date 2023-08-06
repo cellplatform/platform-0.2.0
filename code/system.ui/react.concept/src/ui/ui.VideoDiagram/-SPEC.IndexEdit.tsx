@@ -1,4 +1,5 @@
-import { TestFile, Color, COLORS, Concept, Dev, css, type t, rx } from '../../test.ui';
+import { Is, TestFile, Color, COLORS, Concept, Dev, css, type t, rx } from '../../test.ui';
+import { DevSelected } from '../ui.Index/-SPEC.Selected';
 
 type T = {
   index: t.IndexProps;
@@ -28,15 +29,35 @@ export default Dev.describe(name, async (e) => {
    */
   const { dir, fs, doc, file } = await TestFile.init({ dispose$ });
 
+  const State = {
+    video(state: T) {
+      return state.diagram.video ?? (state.diagram.video = {});
+    },
+    image(state: T) {
+      return state.diagram.image ?? (state.diagram.image = {});
+    },
+  };
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
 
     const state = await ctx.state<T>(initial);
+    const Selected = DevSelected(doc, () => state.current.index.selected);
+
     await state.change((d) => {
       d.index.items = doc.current.slugs;
       d.index.selected = local.selected;
       d.index.focused = true;
+    });
+
+    doc.$.subscribe((e) => {
+      const slug = e.doc.slugs[Selected.index];
+      if (Is.slug(slug)) {
+        state.change((d) => {
+          d.diagram.split = slug.split;
+        });
+      }
     });
 
     ctx.debug.width(330);
@@ -69,7 +90,7 @@ export default Dev.describe(name, async (e) => {
               />
             </div>
             <div {...styles.right}>
-              <Concept.VideoDiagram {...e.state.diagram} />
+              <Concept.VideoDiagram {...e.state.diagram} debug={true} />
             </div>
           </div>
         );
@@ -79,6 +100,7 @@ export default Dev.describe(name, async (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const Selected = DevSelected(doc, () => state.current.index.selected);
 
     dev.section('Properties', (dev) => {
       dev.hr(0, 3);
@@ -87,11 +109,10 @@ export default Dev.describe(name, async (e) => {
           <Concept.VideoDiagram.Props.Split
             props={e.state.diagram}
             onChange={(e) => {
-              /**
-               * TODO 🐷 update selected
-               */
-              // state.change((d) => (d.props.split = e.split));
-              console.log('change slit', e);
+              doc.change((d) => {
+                const slug = d.slugs[Selected.index];
+                if (Is.slug(slug)) slug.split = e.split;
+              });
             }}
           />
         );
@@ -104,6 +125,9 @@ export default Dev.describe(name, async (e) => {
           <Concept.VideoDiagram.Props.ImageScale
             props={e.state.diagram}
             onChange={(e) => {
+              doc.change((d) => {
+                //
+              });
               //
               //
               /**

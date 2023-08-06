@@ -5,7 +5,7 @@ import { Time, Icons, Is, slug as slugid } from './common';
 
 export async function DevItemEditor(dev: t.DevTools<T>, doc: t.CrdtDocRef<TDoc>) {
   const state = await dev.state();
-  const Selected = DevSelected(state, doc);
+  const Selected = DevSelected(doc, () => state.current.props.selected);
 
   const elIconId = <Icons.Slug.Id size={16} style={{ Margin: 4 }} />;
   const elIconTitle = <Icons.Slug.Title size={16} style={{ Margin: 4 }} />;
