@@ -9,6 +9,7 @@ import {
   Video,
   css,
   rx,
+  Wrangle,
   type t,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-DEV.Selected';
@@ -138,12 +139,15 @@ export default Dev.describe(name, async (e) => {
       .padding(15)
       .border(-0.1)
       .render<T>((e) => {
+        const slug = Selected.slug.item;
+        const status = e.state.status;
+        const ticks = Wrangle.ticks(slug?.video, status);
         return (
           <Video.PlayBar
             enabled={e.state.debug.playbarEnabled ?? true}
             size={'Small'}
-            style={{}}
-            status={e.state.status}
+            status={status}
+            progress={{ ticks }}
             useKeyboard={true}
             onSeek={(e) => state.change((d) => (d.diagram.timestamp = e.seconds))}
             onMute={(e) => state.change((d) => (local.muted = d.diagram.muted = e.muted))}
