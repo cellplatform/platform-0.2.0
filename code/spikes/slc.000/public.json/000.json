@@ -1790,7 +1790,14 @@
         "src": {
           "id": "598793514",
           "kind": "Vimeo"
-        }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.9,
+            "src": "https://user-images.githubusercontent.com/185555/258729336-52097361-322e-4bb2-a0e6-9f2b39aee9c9.png"
+          }
+        ]
       }
     },
     {
@@ -1802,8 +1809,16 @@
         "src": {
           "id": "598795704",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.97,
+            "src": "https://user-images.githubusercontent.com/185555/258729479-036ae33e-47d0-4533-b08d-b0388484d5da.png"
+          }
+        ]
+      },
+      "split": 0.72
     },
     {
       "id": "strategy.stage.2",
@@ -1814,8 +1829,16 @@
         "src": {
           "id": "598795918",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.9,
+            "src": "https://user-images.githubusercontent.com/185555/258729516-fa75631c-32ef-45f1-91dc-9370a67aaddf.png"
+          }
+        ]
+      },
+      "split": 0.72
     },
     {
       "id": "strategy.stage.3",
@@ -1826,8 +1849,16 @@
         "src": {
           "id": "598796095",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.85,
+            "src": "https://user-images.githubusercontent.com/185555/258729578-3c37e55e-4aa1-45c5-9c74-78d01dc42962.png"
+          }
+        ]
+      },
+      "split": 0.717
     },
     {
       "kind": "slug:namespace",
@@ -1843,8 +1874,16 @@
         "src": {
           "id": "598794082",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.8,
+            "src": "https://user-images.githubusercontent.com/185555/258731304-0c36ff18-5adb-4ca7-84c6-679f024a6fc2.png"
+          }
+        ]
+      },
+      "split": 0.62
     },
     {
       "id": "strategy.models.2",
@@ -1855,8 +1894,16 @@
         "src": {
           "id": "598793732",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 1,
+            "src": "https://user-images.githubusercontent.com/185555/258731717-f2698344-9b96-46d7-8237-069d1cb9b3a8.png"
+          }
+        ]
+      },
+      "split": 0.743
     },
     {
       "id": "strategy.models.validation",
@@ -1867,8 +1914,21 @@
         "src": {
           "id": "598795327",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.95,
+            "src": "https://user-images.githubusercontent.com/185555/258732088-883064dc-60be-44f3-b59e-430e66bb05f5.png"
+          },
+          {
+            "start": 0,
+            "scale": 0.9,
+            "src": "https://user-images.githubusercontent.com/185555/258732112-cdd6881b-539c-4ce2-8ad5-0026b5bede20.png"
+          }
+        ]
+      },
+      "split": 0.727
     },
     {
       "id": "strategy.models.together",
@@ -1879,8 +1939,16 @@
         "src": {
           "id": "598796367",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.95,
+            "src": "https://user-images.githubusercontent.com/185555/258732446-070a44a1-3c7b-4415-a03d-2e641f526f9d.png"
+          }
+        ]
+      },
+      "split": 0.72
     },
     {
       "id": "strategy.timeline",
@@ -1891,8 +1959,16 @@
         "src": {
           "id": "851214652",
           "kind": "Vimeo"
-        }
-      }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.97,
+            "src": "https://user-images.githubusercontent.com/185555/258733175-6c16ec25-0395-4629-a267-f7bb537656c0.png"
+          }
+        ]
+      },
+      "split": 0.723
     },
     {
       "id": "strategy.conclusion",
@@ -1904,7 +1980,14 @@
         "src": {
           "id": "598793191",
           "kind": "Vimeo"
-        }
+        },
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 1,
+            "src": "https://user-images.githubusercontent.com/185555/258735372-664939ab-6574-4aca-8d05-0901cab728fc.png"
+          }
+        ]
       }
     }
   ]
