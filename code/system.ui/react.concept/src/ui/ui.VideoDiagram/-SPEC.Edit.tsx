@@ -11,6 +11,7 @@ import {
   rx,
   Wrangle,
   type t,
+  Icons,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-DEV.Selected';
 import { YamlTextArea } from './-DEV.Edit.Yaml';
@@ -97,18 +98,31 @@ export default Dev.describe(name, async (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
+        const slug = Selected.slug.item;
+
         const styles = {
           base: css({ display: 'grid', gridTemplateColumns: 'auto 1fr' }),
           left: css({
             width: 265,
+            position: 'relative',
             display: 'grid',
             borderRight: `solid 1px ${Color.alpha(COLORS.DARK, 0.06)}`,
           }),
           right: css({
+            position: 'relative',
             display: 'grid',
             backgroundColor: COLORS.WHITE,
           }),
+          id: css({
+            fontSize: 9,
+            fontFamily: 'monospace',
+            fontWeight: 600,
+            Absolute: [-20, 8, null, null],
+            opacity: 0.3,
+          }),
         };
+
+        const elSlugId = slug && <div {...styles.id}>{`slug:${slug.id}`}</div>;
 
         return (
           <div {...styles.base}>
@@ -124,6 +138,7 @@ export default Dev.describe(name, async (e) => {
                 {...e.state.diagram}
                 onVideoStatus={(e) => state.change((d) => (d.status = e.status))}
               />
+              {elSlugId}
             </div>
           </div>
         );
