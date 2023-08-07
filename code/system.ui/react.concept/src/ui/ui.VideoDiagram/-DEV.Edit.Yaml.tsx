@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { COLORS, Color, Is, Text, css, type t, Delete } from './common';
+import { Path, COLORS, Color, Is, Text, css, type t, Delete } from './common';
 
 export type YamlTextAreaFocusHandler = (e: YamlTextAreaFocusHandlerArgs) => void;
 export type YamlTextAreaFocusHandlerArgs = { focused: boolean };
@@ -88,10 +88,17 @@ const Wrangle = {
     return Delete.undefined({ start, end, scale, sizing, src });
   },
 
+  isHttpUrl(text: string) {
+    return ['https://', 'http://'].some((prefix) => text.startsWith(prefix));
+  },
+
   images: {
     parse(yaml: string): t.SlugImage[] {
       try {
-        const res = yaml.split('\n\n').map((text) => Text.Yaml.parse(text));
+        const res = yaml.split('\n\n').map((text) => {
+          if (Wrangle.isHttpUrl(text)) text = `src: ${text}`;
+          return Text.Yaml.parse(text);
+        });
         return res
           .filter(Boolean)
           .filter((obj) => Is.slugImage(obj))
