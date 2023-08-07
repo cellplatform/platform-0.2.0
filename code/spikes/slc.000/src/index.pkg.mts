@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'slc',
-  version: '0.0.55',
+  version: '0.0.57',
   dependencies: {
     'ext.ui.react.vimeo': '0.0.0',
     'react': '18.2.0',
