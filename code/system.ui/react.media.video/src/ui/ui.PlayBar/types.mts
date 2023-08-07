@@ -21,6 +21,7 @@ export type PlayBarPropsButton = {};
 export type PlayBarPropsProgress = {
   thumbColor?: string;
   bufferedColor?: string;
+  ticks?: Partial<t.SliderTickProps>;
 };
 
 /**

@@ -16,6 +16,14 @@ export type {
   Pixels,
 } from 'sys.types/src/types.mjs';
 
+export type {
+  CssEdgesInput,
+  CssValue,
+  PropListProps,
+  SliderTrackProps,
+  SliderTickProps,
+} from 'sys.ui.react.common/src/types.mjs';
+
 /**
  * @local
  */

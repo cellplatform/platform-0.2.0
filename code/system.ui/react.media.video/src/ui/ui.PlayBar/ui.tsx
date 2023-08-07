@@ -60,7 +60,7 @@ export const View: React.FC<t.PlayBarProps> = (props) => {
       enabled={enabled}
       status={status}
       size={size}
-      settings={progress}
+      progress={progress}
       onSeek={onSeek}
     />
   );

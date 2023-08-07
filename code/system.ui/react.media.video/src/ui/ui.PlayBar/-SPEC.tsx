@@ -41,6 +41,7 @@ export default Dev.describe('PlayBar', (e) => {
       d.props.replay = local.replay;
       d.props.useKeyboard = local.useKeyboard;
       d.props.size = local.size;
+      d.props.progress = { ticks: { items: [0.25, 0.5, 0.75] } };
 
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;

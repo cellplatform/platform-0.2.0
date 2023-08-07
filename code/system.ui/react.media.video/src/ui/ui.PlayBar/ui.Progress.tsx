@@ -3,14 +3,14 @@ import { COLORS, Color, Slider, css, type t } from './common';
 export type ProgressProps = {
   enabled: boolean;
   size: t.PlayButtonSize;
-  settings?: t.PlayBarPropsProgress;
   status: t.VideoStatus;
+  progress?: t.PlayBarPropsProgress;
   style?: t.CssValue;
   onSeek?: t.PlayBarSeekHandler;
 };
 
 export const Progress: React.FC<ProgressProps> = (props) => {
-  const { enabled, status, settings, size } = props;
+  const { enabled, status, progress, size } = props;
 
   /**
    * [Render]
@@ -30,11 +30,11 @@ export const Progress: React.FC<ProgressProps> = (props) => {
     track.percent = status.percent.buffered;
     track.color.border = 0;
     track.color.default = 0;
-    track.color.highlight = settings?.bufferedColor ?? Color.alpha(COLORS.DARK, 0.15);
+    track.color.highlight = progress?.bufferedColor ?? Color.alpha(COLORS.DARK, 0.15);
   });
 
   const progessTrack = Slider.DEFAULTS.track((track) => {
-    const playingColor = settings?.thumbColor ?? COLORS.BLUE;
+    const playingColor = progress?.thumbColor ?? COLORS.BLUE;
     track.color.highlight = status.is.playing ? playingColor : Color.alpha(COLORS.DARK, 0.2);
     track.height = height;
     track.percent = status.percent.complete;
@@ -47,6 +47,7 @@ export const Progress: React.FC<ProgressProps> = (props) => {
         percent={status.percent.complete}
         thumb={{ size: height, opacity: 0 }}
         track={[bufferedTrack, progessTrack]}
+        ticks={progress?.ticks}
         onChange={(e) => {
           const total = status.secs.total;
           const seconds = total * e.percent;
