@@ -82,7 +82,7 @@ export const YamlTextArea: React.FC<YamlTextAreaProps> = (props) => {
  */
 const Wrangle = {
   ensureDefaults(input: t.SlugImage) {
-    const { start = 0, end, src, sizing, scale } = input;
+    const { start = 0, end, src, sizing, scale = 1 } = input;
     // NB: Best order for display in YAML textbox.
     //    (the long URL that will wrap at the end of the props)
     return Delete.undefined({ start, end, scale, sizing, src });
