@@ -8,4 +8,12 @@ export const Render = {
     const slugs = json.slugs as t.SlugListItem[];
     return <Concept.Layout slugs={slugs} />;
   },
+
+  async pitch() {
+    const { Concept } = await import('sys.ui.react.concept');
+    const res = await fetch('/json/ember-pitch.json');
+    const json = await res.json();
+    const slugs = json.slugs as t.SlugListItem[];
+    return <Concept.Layout slugs={slugs} />;
+  },
 } as const;

@@ -29,8 +29,8 @@ const Render = {
   },
 
   async emberSlc() {
-    const { render } = await import('../ui/ext.slc.Ember');
-    const el = await render();
+    const { Render } = await import('../ui/ext.slc.Ember');
+    const el = await Render.slc();
     return root.render(el);
   },
 };

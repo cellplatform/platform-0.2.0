@@ -1,5 +1,5 @@
 import { Dev } from '../../test.ui';
-import { render } from './index.render';
+import { Render } from './index.Render';
 
 type T = {};
 const initial: T = {};
@@ -20,7 +20,8 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>(async (e) => {
-        const el = await render();
+        const el = await Render.slc();
+        // const el = await Render.pitch();
         return el;
       });
   });
