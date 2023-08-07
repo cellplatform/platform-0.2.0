@@ -23,25 +23,22 @@ const Render = {
     return root.render(<IFrameRef src={src} />);
   },
 
-  async emberPitch() {
-    const url = 'https://slc-prod-2w8ys4g50-tdb.vercel.app/?ember';
-    return Render.ref(url);
-  },
-
-  async emberSlc() {
+  async ember(topic: 'SLC' | 'Pitch') {
     const { Render } = await import('../ui/ext.slc.Ember');
-    const el = await Render.slc();
-    return root.render(el);
+    let el: JSX.Element | undefined;
+    if (topic === 'SLC') el = await Render.slc();
+    if (topic == 'Pitch') el = await Render.pitch();
+    return el ? root.render(el) : null;
   },
 };
 
 (async () => {
-  if (queryHas('ember')) return Render.emberPitch();
-  if (queryHas('ember-slc')) return Render.emberSlc();
+  if (queryHas('ember')) return Render.ember('Pitch');
+  if (queryHas('ember-slc')) return Render.ember('SLC');
 
   if (isDev) return Render.dev();
-  if (url.pathname === '/ember/') return Render.emberPitch();
-  if (url.pathname === '/ember-slc/') return Render.emberSlc();
+  if (url.pathname === '/ember/') return Render.ember('Pitch');
+  if (url.pathname === '/ember-slc/') return Render.ember('SLC');
   if (url.pathname === '/eusic/') return Render.ref('https://slc-eusic-ph1bc4ut7-tdb.vercel.app/');
 
   // Default: SLC landing page.
