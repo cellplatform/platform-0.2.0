@@ -12,7 +12,7 @@ import {
   type t,
 } from '../../test.ui';
 import { DevSelected } from '../ui.Index/-DEV.Selected';
-import { YamlTextArea } from './-SPEC.Edit.Yaml';
+import { YamlTextArea } from './-DEV.Edit.Yaml';
 import { DevFile } from '../ui.Index/-DEV.File';
 
 type T = {
@@ -199,7 +199,7 @@ export default Dev.describe(name, async (e) => {
       dev.textbox((txt) => {
         const value = () => String(Selected.slug.item?.video?.innerScale ?? 1);
         txt
-          .label((e) => 'innerScale')
+          .label((e) => 'inner scale')
           .placeholder('1')
           .value((e) => value())
           .onChange((e) => {
@@ -245,11 +245,6 @@ export default Dev.describe(name, async (e) => {
           .label((e) => `debug`)
           .value((e) => value(e.state))
           .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.diagram, 'debug'))));
-      });
-
-      dev.button(['copy', '(json)'], () => {
-        const json = JSON.stringify(doc.current, null, '  ') + '\n';
-        navigator.clipboard.writeText(json);
       });
 
       dev.hr(5, 20);
