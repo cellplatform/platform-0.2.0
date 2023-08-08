@@ -14,6 +14,7 @@ const filter = (path: string) => {
   if (path.includes('code/spikes/dev.000')) return true;
   if (path.includes('code/spikes/slc.000')) return true;
   if (path.includes('code/spikes/')) return false;
+  if (path.includes('code/templates/')) return false;
   if (path.includes('_legacy')) return false;
   return true;
 };
