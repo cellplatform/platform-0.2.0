@@ -12,11 +12,14 @@ export { PlayButton } from '../ui.PlayButton';
 const button: t.PlayBarPropsButton = {};
 const progress: t.PlayBarPropsProgress = {};
 
+const { size, sizes } = PlayButtonDefaults;
+
 export const DEFAULTS = {
   enabled: true,
   replay: true,
   useKeyboard: false,
-  height: PlayButtonDefaults.height,
+  size,
+  sizes,
   button,
   progress,
   get status() {

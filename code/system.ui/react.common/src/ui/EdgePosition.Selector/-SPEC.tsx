@@ -34,7 +34,7 @@ export default Dev.describe('EdgePositionSelector', (e) => {
         return (
           <EdgePositionSelector
             {...e.state.props}
-            onSelect={(e) => {
+            onChange={(e) => {
               console.info('⚡️ onSelect:', e.pos, e);
               state.change((d) => (d.props.selected = e.pos));
               local.selected = e.pos;

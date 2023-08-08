@@ -1,9 +1,9 @@
-import { PlayBar } from './ui/ui.PlayBar';
-import { ScreenLayout } from './ui/ui.ScreenLayout';
+import { Index } from './ui/ui.Index';
+import { Layout } from './ui/ui.Layout';
 import { VideoDiagram } from './ui/ui.VideoDiagram';
 
 export const Concept = {
-  ScreenLayout,
-  PlayBar,
+  Layout,
+  Index,
   VideoDiagram,
 } as const;

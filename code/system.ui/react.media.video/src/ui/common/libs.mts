@@ -1,4 +1,10 @@
 /**
+ * @external
+ */
+import { equals } from 'ramda';
+export const R = { equals } as const;
+
+/**
  * @system
  */
 export {
@@ -6,8 +12,8 @@ export {
   Color,
   FC,
   Keyboard,
-  ProgressBar,
   PropList,
+  Slider,
   Spinner,
   Style,
   TestRunner,

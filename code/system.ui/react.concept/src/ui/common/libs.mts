@@ -19,6 +19,7 @@ export {
   ProgressBar,
   PropList,
   Slider,
+  Style,
   TestRunner,
   css,
   useDragTarget,

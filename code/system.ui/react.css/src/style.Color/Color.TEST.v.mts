@@ -1,5 +1,5 @@
-import { expect, describe, it } from '../test';
 import { Color } from '.';
+import { describe, expect, it } from '../test';
 
 describe('color', () => {
   describe('Color.format()', () => {
@@ -45,6 +45,23 @@ describe('color', () => {
     it('string: does not convert "url(...)"', () => {
       const value = `url(my-image.png)`;
       test(value, value);
+    });
+  });
+
+  describe('debugColor', () => {
+    it('debugging: true', () => {
+      const debugColor = Color.debug(true);
+      expect(debugColor(0.3)).to.eql('rgba(255, 0, 0, 0.3)');
+    });
+
+    it('not debugging: false', () => {
+      const debugColor = Color.debug(false);
+      expect(debugColor(0.3)).to.eql(undefined);
+    });
+
+    it('not debugging: (undefined)', () => {
+      const debugColor = Color.debug();
+      expect(debugColor(0.3)).to.eql(undefined);
     });
   });
 });

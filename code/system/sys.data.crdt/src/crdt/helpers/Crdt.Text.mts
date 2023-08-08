@@ -24,4 +24,4 @@ export const CrdtText = {
       }
     });
   },
-};
+} as const;

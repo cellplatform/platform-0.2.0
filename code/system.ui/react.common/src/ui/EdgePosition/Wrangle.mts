@@ -1,16 +1,17 @@
 import { DEFAULTS, type t } from './common';
 import { Wrangle as SelectorWrangle } from '../EdgePosition.Selector/Wrangle.mjs';
 
-const { pos } = SelectorWrangle;
+const { toPos, toPosition } = SelectorWrangle;
 
 /**
  * Helpers
  */
 export const Wrangle = {
-  pos,
+  toPosition,
+  toPos,
 
   gridCss(input?: t.EdgePositionInput): t.CSSProperties {
-    const pos = Wrangle.pos(input, DEFAULTS.position);
+    const pos = Wrangle.toPos(input, DEFAULTS.position);
     return {
       display: 'grid',
       justifyContent: Wrangle.justifyContent(pos[0]),

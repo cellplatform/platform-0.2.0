@@ -1,10 +1,12 @@
 import { Dev } from '../../test.ui';
-import { render } from './index.render';
+import { Render } from './index.Render';
 
 type T = {};
 const initial: T = {};
 
-export default Dev.describe('Ember (Example Agency)', (e) => {
+const name = 'Ember';
+
+export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -12,13 +14,14 @@ export default Dev.describe('Ember (Example Agency)', (e) => {
     const state = await ctx.state<T>(initial);
     await state.change((d) => {});
 
-    ctx.debug.width(330);
+    ctx.debug.width(0);
     ctx.subject
       .backgroundColor(1)
       .size('fill')
       .display('grid')
       .render<T>(async (e) => {
-        const el = await render();
+        const el = await Render.slc();
+        // const el = await Render.pitch();
         return el;
       });
   });
@@ -26,7 +29,7 @@ export default Dev.describe('Ember (Example Agency)', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
-    dev.title(['Stateful', '(Controller)']);
+    // dev.title(['Stateful', '(Controller)']);
   });
 
   e.it('ui:footer', async (e) => {
@@ -34,7 +37,7 @@ export default Dev.describe('Ember (Example Agency)', (e) => {
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'Root (Stateful)'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

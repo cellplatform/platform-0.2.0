@@ -5,6 +5,7 @@ export * from '../common';
 export { Button } from '../Button';
 export { Spinner } from '../Spinner';
 export { TextInput } from '../Text.Input';
+export { Keyboard } from '../Text.Keyboard';
 
 /**
  * Constants.

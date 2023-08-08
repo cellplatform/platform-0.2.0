@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { DEFAULTS, FC, css, type t } from './common';
+import { DEFAULTS, FC, css, type t, Color } from './common';
 import { useBinaryImage } from './hooks/useBinaryImage.mjs';
 import { useDrop } from './hooks/useDrop.mjs';
 import { usePaste } from './hooks/usePaste.mjs';
@@ -12,7 +12,9 @@ import { Warning } from './ui/Warning';
 export type { ImageProps } from './types.mjs';
 
 const View: React.FC<t.ImageProps> = (props) => {
-  const { src } = props;
+  const { src, debug = false } = props;
+
+  const debugColor = Color.debug(props.debug);
 
   const warning = useWarning(props);
   const warn = warning.write;
@@ -30,7 +32,16 @@ const View: React.FC<t.ImageProps> = (props) => {
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative', outline: 'none' }),
+    base: css({
+      position: 'relative',
+      outline: 'none',
+    }),
+    debug: css({
+      Absolute: 0,
+      backgroundColor: debugColor(0.05),
+      border: `dashed 1px ${debugColor(0.15)}`,
+      pointerEvents: 'none',
+    }),
     image: css({
       Absolute: 0,
       backgroundImage,
@@ -48,6 +59,8 @@ const View: React.FC<t.ImageProps> = (props) => {
 
   const elImage = backgroundImage && <div {...styles.image} />;
 
+  const elDebug = debug && <div {...styles.debug} />;
+
   return (
     <div
       ref={ref}
@@ -59,6 +72,7 @@ const View: React.FC<t.ImageProps> = (props) => {
       {elDrag}
       {elFocused}
       {elWarn}
+      {elDebug}
     </div>
   );
 };

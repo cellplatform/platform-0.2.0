@@ -1,3 +1,4 @@
+import { type t } from './common';
 export * from '../common';
 
 /**

@@ -2,17 +2,19 @@ import { type t } from '../common.t';
 
 export type SwitchThemeName = 'LIGHT' | 'DARK';
 
+type Color = string | number;
+
 export type SwitchTheme = {
-  trackColor: { on: number | string; off: number | string; disabled: number | string };
-  thumbColor: { on: number | string; off: number | string; disabled: number | string };
-  shadowColor: number | string;
-  disabledOpacity: number;
+  trackColor: { on: Color; off: Color; disabled: Color };
+  thumbColor: { on: Color; off: Color; disabled: Color };
+  shadowColor: Color;
+  disabledOpacity: t.Percent;
 };
 
 export type SwitchTrack = {
   widthOffset: number;
   heightOffset: number;
-  color: { on: number | string; off: number | string; disabled: number | string };
+  color: { on: Color; off: Color; disabled: Color };
   borderRadius: number;
   borderWidth: { on?: number; off?: number };
 };
@@ -23,6 +25,6 @@ export type SwitchThumb = {
   xOffset: number;
   yOffset: number;
   borderRadius: number;
-  color: { on: number | string; off: number | string; disabled: number | string };
+  color: { on: Color; off: Color; disabled: Color };
   shadow: t.CssShadow;
 };

@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 import { DEFAULTS, useMouse, type t } from './common';
 
 type Args = {
   enabled?: boolean;
-  onChange?: t.SliderTrackChangeHandler;
+  onChange?: t.SliderChangeHandler;
 };
 
 /**

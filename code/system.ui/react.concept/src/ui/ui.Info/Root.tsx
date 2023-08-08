@@ -59,5 +59,5 @@ type Fields = {
 export const Info = FC.decorate<InfoProps, Fields>(
   View,
   { DEFAULTS, FIELDS },
-  { displayName: 'Info' },
+  { displayName: 'Concept.Info' },
 );

@@ -1,4 +1,4 @@
-import { Automerge, DEFAULTS, rx, type t } from './common';
+import { Automerge, CrdtFile, DEFAULTS, rx, type t } from './common';
 import { autoSaveStrategy } from './strategy.AutoSave.mjs';
 import { saveLogStrategy } from './strategy.SaveLog.mjs';
 
@@ -122,8 +122,8 @@ export async function init<D extends {}>(
      */
     async save() {
       if (api.disposed) return;
-      const data = Automerge.save(doc.current);
-      const { bytes, hash } = await filedir.write(filename, data);
+
+      const { bytes, hash } = await CrdtFile.save(filedir, filename, doc);
       action$.next({
         action: 'saved',
         kind: 'file',

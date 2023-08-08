@@ -4,7 +4,16 @@ import { type t } from './common';
  * Helpers
  */
 export const Wrangle = {
-  pos(input: t.EdgePositionInput | undefined, defaultPos: t.EdgePos = ['left', 'top']): t.EdgePos {
+  toPosition(input: t.EdgePositionInput | undefined, defaultPos: t.EdgePos = ['left', 'top']) {
+    if (Array.isArray(input)) return { x: input[0], y: input[1] };
+    if (typeof input === 'object') return input;
+    return { x: defaultPos[0], y: defaultPos[1] };
+  },
+
+  toPos(
+    input: t.EdgePositionInput | undefined,
+    defaultPos: t.EdgePos = ['left', 'top'],
+  ): t.EdgePos {
     if (Array.isArray(input)) return input;
     if (typeof input === 'object') return [input.x, input.y];
     return defaultPos;

@@ -1,7 +1,5 @@
-import { Dev, type t, css } from '../../test.ui';
+import { Dev, R, SAMPLE, Video, css, type t } from '../../test.ui';
 import { PlayBar } from '.';
-import { VideoPlayer } from '../ui.VideoPlayer';
-import { SAMPLE } from '../ui.VideoPlayer/-dev/-Sample.mjs';
 
 const DEFAULTS = PlayBar.DEFAULTS;
 
@@ -10,25 +8,27 @@ type T = {
   player: t.VideoPlayerProps;
   debug: { devBg?: boolean; devRight?: boolean };
 };
-const initial: T = {
-  props: {},
-  player: { video: SAMPLE.VIMEO.Tubes },
-  debug: {},
-};
+const initial: T = { props: {}, player: {}, debug: {} };
 
 export default Dev.describe('PlayBar', (e) => {
+  const sidebarWidth = 350;
+
   /**
    * LocalStorage
    */
-  type LocalStore = Pick<T['debug'], 'devBg' | 'devRight'> &
-    Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard'>;
+  type LocalStore = Pick<t.PlayBarProps, 'enabled' | 'replay' | 'useKeyboard' | 'size'> &
+    Pick<T['debug'], 'devBg' | 'devRight'> &
+    Pick<t.VideoPlayerProps, 'video'>;
+
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.PlayBar');
   const local = localstore.object({
     enabled: DEFAULTS.enabled,
     replay: DEFAULTS.replay,
+    size: DEFAULTS.size,
     useKeyboard: true,
     devBg: false,
     devRight: false,
+    video: SAMPLE.VIMEO.Tubes,
   });
 
   e.it('ui:init', async (e) => {
@@ -40,18 +40,24 @@ export default Dev.describe('PlayBar', (e) => {
       d.props.enabled = local.enabled;
       d.props.replay = local.replay;
       d.props.useKeyboard = local.useKeyboard;
+      d.props.size = local.size;
+      d.props.progress = { ticks: { items: [0.25, 0.5, 0.75] } };
+
       d.debug.devBg = local.devBg;
       d.debug.devRight = local.devRight;
+
+      d.player.video = local.video;
     });
 
+    ctx.debug.width(sidebarWidth);
     ctx.subject
       .backgroundColor(1)
       .size('fill-x')
       .display('grid')
       .render<T>((e) => {
         const { debug } = e.state;
-        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
         const margin = debug.devBg ? 5 : 0;
+        ctx.subject.backgroundColor(debug.devBg ? 1 : 0);
 
         const styles = {
           right: css({
@@ -70,7 +76,7 @@ export default Dev.describe('PlayBar', (e) => {
             style={{ margin }}
             right={elRight}
             /**
-             * State updates: → <VideoPlayer>
+             * State updates: → <Video.Player>
              */
             onPlayAction={(e) => {
               console.info('⚡️ onPlayClick', e);
@@ -101,21 +107,45 @@ export default Dev.describe('PlayBar', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      const { props, player: video } = e.state;
-      return (
-        <VideoPlayer
-          {...video}
-          enabled={props.enabled}
-          borderRadius={10}
-          onChange={(e) => {
-            state.change((d) => (d.props.status = e.status));
-          }}
-        />
-      );
-    });
+    dev.section(/* Video Player */ '', (dev) => {
+      dev.row((e) => {
+        const { props } = e.state;
+        const styles = {
+          base: css({
+            display: 'grid',
+            placeItems: 'center',
+            marginBottom: 15,
+            marginTop: 5,
+          }),
+        };
+        return (
+          <div {...styles.base}>
+            <Video.Player
+              {...e.state.player}
+              enabled={props.enabled}
+              innerScale={1.1}
+              borderRadius={10}
+              width={sidebarWidth - 50}
+              onStatus={(e) => state.change((d) => (d.props.status = e.status))}
+            />
+          </div>
+        );
+      });
 
-    dev.hr(0, 15);
+      const video = (label: string, src: t.VideoSrc) => {
+        dev.button((btn) => {
+          btn
+            .label(`video: ${label}`)
+            .right((e) => R.equals(e.state.player.video, src) && `←`)
+            .onClick((e) => e.change((d) => (local.video = d.player.video = src)));
+        });
+      };
+      video('tubes', SAMPLE.VIMEO.Tubes);
+      video('white backdrop (tonal 1)', SAMPLE.VIMEO.WhiteBackdrop1);
+      video('white backdrop (tonal 2)', SAMPLE.VIMEO.WhiteBackdrop2);
+
+      dev.hr(-1, 15);
+    });
 
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
@@ -143,6 +173,20 @@ export default Dev.describe('PlayBar', (e) => {
             e.change((d) => (local.useKeyboard = Dev.toggle(d.props, 'useKeyboard')));
           });
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Size', (dev) => {
+      const button = (value: t.PlayButtonSize) => {
+        dev.button((btn) => {
+          btn
+            .label(`size: ${value}`)
+            .right((e) => e.state.props.size === value && `←`)
+            .onClick((e) => e.change((d) => (local.size = d.props.size = value)));
+        });
+      };
+      PlayBar.sizes.forEach(button);
     });
 
     dev.hr(5, 20);

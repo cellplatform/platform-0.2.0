@@ -15,11 +15,12 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     playing,
     loop,
     timestamp,
-    onChange,
+    onStatus,
     borderRadius = DEFAULTS.borderRadius,
     muted = DEFAULTS.muted,
     enabled = DEFAULTS.enabled,
     aspectRatio = DEFAULTS.aspectRatio,
+    innerScale,
   } = props;
   const { width, height } = Wrangle.dimensions(aspectRatio, props.width, props.height);
 
@@ -32,7 +33,7 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     muted,
     timestamp,
     hasInteracted, // NB: for "autoplay policy" on <Video> element.
-    onChange,
+    onStatus,
   });
 
   if (!video || video.kind === 'Unknown' || !video.id) return null;
@@ -50,6 +51,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
       opacity: controller.ready ? (enabled ? 1 : 0.3) : 0,
       filter: enabled ? undefined : 'grayscale(100%)',
       transition: 'opacity 0.15s, filter 0.15s',
+    }),
+    body: css({
+      transform: typeof innerScale === 'number' ? `scale(${innerScale})` : undefined,
     }),
   };
   /**
@@ -108,5 +112,9 @@ export const View: React.FC<t.VideoPlayerProps> = (props) => {
     </Player>
   );
 
-  return <div {...css(styles.base, props.style)}>{elPlayer}</div>;
+  return (
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.body}>{elPlayer}</div>
+    </div>
+  );
 };

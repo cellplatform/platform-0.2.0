@@ -76,7 +76,7 @@ export const CrdtIs = {
   funcData(input: any): input is t.CrdtFuncData {
     return isObject(input) && CrdtIs.counter(input.count) && typeof input.params === 'object';
   },
-};
+} as const;
 
 /**
  * [Helpers]

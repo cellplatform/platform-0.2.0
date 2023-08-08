@@ -12,7 +12,7 @@ type Args = {
   muted?: boolean;
   timestamp?: t.Seconds;
   hasInteracted?: boolean;
-  onChange?: t.VideoPlayerChangeHandler;
+  onStatus?: t.VideoPlayerStatusHandler;
 };
 
 /**
@@ -38,7 +38,7 @@ export function useController(args: Args) {
 
   const fireChange = (input?: t.VideoStatus) => {
     const status = input ?? api.status;
-    args.onChange?.({ video, status });
+    args.onStatus?.({ video, status });
   };
 
   const reset = () => {

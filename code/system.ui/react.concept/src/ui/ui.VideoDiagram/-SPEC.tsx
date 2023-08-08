@@ -1,44 +1,58 @@
-import { Dev, Icons, css, rx, slug, type t } from '../../test.ui';
-
 import { VideoDiagram } from '.';
-import { EdgePosition, Vimeo } from './common';
+import { Dev, R, SAMPLE, type t } from '../../test.ui';
+import { Video } from './common';
 
 const DEFAULTS = VideoDiagram.DEFAULTS;
 
 type T = {
-  props: t.VideoDiagramProps__OLD;
-  debug: { dummy?: boolean };
+  props: t.VideoDiagramProps;
+  status?: t.VideoStatus;
 };
 const initial: T = {
   props: {},
-  debug: {},
 };
 
-export default Dev.describe('VideoDiagram', (e) => {
-  type LocalStore = { videoPosition?: t.EdgePos } & Pick<T['debug'], 'dummy'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.VideoDiagram');
+/**
+ * Spec
+ */
+const name = VideoDiagram.displayName ?? '';
+
+export default Dev.describe(name, async (e) => {
+  type LocalStore = Pick<t.VideoDiagramProps, 'split' | 'debug' | 'muted'>;
+
+  const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.concept.VideoDiagram');
   const local = localstore.object({
-    videoPosition: DEFAULTS.position,
-    dummy: false,
+    split: DEFAULTS.split,
+    muted: DEFAULTS.muted,
+    debug: false,
   });
 
-  const bus = rx.bus();
-  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
-  const player = Vimeo.Events(vimeo);
+  const State = {
+    video(state: T) {
+      return state.props.video ?? (state.props.video = {});
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
-    const state = await ctx.state<T>(initial);
 
+    const state = await ctx.state<T>(initial);
     await state.change((d) => {
-      const sample = DEFAULTS.sample;
-      const video = {
-        ...sample.video,
-        position: local.videoPosition,
+      d.props.debug = local.debug;
+      d.props.split = local.split;
+      d.props.splitMin = 0.1;
+      d.props.splitMax = 0.9;
+      d.props.muted = local.muted;
+
+      d.props.video = {
+        src: SAMPLE.Vimeo.WhiteBackdrop1,
+        innerScale: 1.1,
+        timestamps: [
+          { src: SAMPLE.Diagrams.GroupScale },
+          { src: SAMPLE.Diagrams.ProductSystem, start: 3 },
+        ],
       };
-      d.props.slug = { ...sample, video };
-      d.debug.dummy = local.dummy;
     });
 
     ctx.debug.width(330);
@@ -47,9 +61,15 @@ export default Dev.describe('VideoDiagram', (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        const { debug, props } = e.state;
-        if (debug.dummy) return <VideoDiagram.Dummy vimeo={vimeo} />;
-        return <VideoDiagram {...props} vimeo={vimeo} />;
+        return (
+          <VideoDiagram
+            {...e.state.props}
+            onVideoStatus={(e) => {
+              console.info(`⚡️ onVideoStatus`, e);
+              state.change((d) => (d.status = e.status));
+            }}
+          />
+        );
       });
   });
 
@@ -57,63 +77,103 @@ export default Dev.describe('VideoDiagram', (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
 
-    dev.row((e) => {
-      return (
-        <div {...css({ display: 'grid', placeItems: 'center' })}>
-          <EdgePosition.Selector
-            selected={e.state.props.slug?.video?.position}
-            onSelect={(e) => {
+    dev.header
+      .padding(15)
+      .border(-0.1)
+      .render<T>((e) => {
+        return (
+          <Video.PlayBar
+            size={'Small'}
+            style={{}}
+            status={e.state.status}
+            useKeyboard={true}
+            onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
+            onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
+            onPlayAction={(e) => {
               state.change((d) => {
-                const id = DEFAULTS.sample.id;
-                const slug = d.props.slug ?? (d.props.slug = { id });
-                const video = slug.video ?? (slug.video = {});
-                video.position = local.videoPosition = e.pos;
+                d.props.playing = e.is.playing;
+                if (e.replay) d.props.timestamp = 0;
               });
             }}
           />
-        </div>
-      );
+        );
+      });
+
+    dev.section('Properties', (dev) => {
+      dev.hr(0, 3);
+      dev.row((e) => {
+        return (
+          <VideoDiagram.Props.Split
+            props={e.state.props}
+            onChange={(e) => {
+              state.change((d) => (local.split = d.props.split = e.split));
+            }}
+          />
+        );
+      });
     });
 
-    dev.hr(5, 20);
+    // dev.hr(0, 10);
+    // dev.row((e) => {
+    //   return (
+    //     <VideoDiagram.Props.ImageScale
+    //       props={e.state.props}
+    //       // onChange={(e) => state.change((d) => (State.image(d).scale = e.percent * 2))}
+    //     />
+    //   );
+    // });
+
+    // dev.hr(5, 20);
+
+    // dev.section('Image', (dev) => {
+    //   const image = (label: string, src: t.ImageSrc) => {
+    //     dev.button((btn) => {
+    //       btn
+    //         .label(label)
+    //         .right((e) => R.equals(State.image(e.state).src, src) && `←`)
+    //         .onClick((e) => {
+    //           e.change((d) => {
+    //             const image = State.image(d);
+    //             image.src = src;
+    //             image.sizing = 'contain';
+    //           });
+    //         });
+    //     });
+    //   };
+    //   image('group scale', SAMPLE.Diagrams.GroupScale);
+    //   image('product system', SAMPLE.Diagrams.ProductSystem);
+    // });
+
+    dev.hr(0, 20);
 
     dev.section('Video', (dev) => {
-      dev.button((btn) => {
-        btn
-          .label('play')
-          .right((e) => <Icons.Play size={16} />)
-          .onClick((e) => player.play.fire());
-      });
-
-      dev.button((btn) => {
-        btn
-          .label('pause')
-          .right((e) => <Icons.Pause size={16} />)
-          .onClick((e) => player.pause.fire());
-      });
-
-      dev.hr(-1, 5);
-
-      dev.button((btn) => {
-        btn
-          .label('restart')
-          .right((e) => <Icons.Replay size={16} />)
-          .onClick((e) => {
-            player.seek.start();
-            player.play.fire();
-          });
-      });
+      const video = (label: string, src: t.VideoSrc) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .right((e) => R.equals(State.video(e.state).src, src) && `←`)
+            .onClick((e) => {
+              e.change((d) => {
+                const video = State.video(d);
+                video.src = src;
+                video.innerScale = 1.05;
+              });
+            });
+        });
+      };
+      video('white backdrop (tonal 1)', SAMPLE.Vimeo.WhiteBackdrop1);
+      video('white backdrop (tonal 2)', SAMPLE.Vimeo.WhiteBackdrop2);
     });
 
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
       dev.boolean((btn) => {
-        const value = (state: T) => Boolean(state.debug.dummy);
+        const value = (state: T) => Boolean(state.props.debug);
         btn
-          .label((e) => (value(e.state) ? 'dummy: true ⚠️' : 'dummy: false'))
+          .label((e) => `debug`)
           .value((e) => value(e.state))
-          .onClick((e) => e.change((d) => (local.dummy = Dev.toggle(d.debug, 'dummy'))));
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug'))));
       });
     });
   });
@@ -121,9 +181,16 @@ export default Dev.describe('VideoDiagram', (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
-      return <Dev.Object name={'VideoDiagram'} data={data} expand={1} />;
+      const props = e.state.props;
+      const split = Number((e.state.props.split ?? 0).toFixed(2));
+      const data = {
+        props: { ...props, split },
+        'props:split': split,
+        'video:status': e.state.status,
+      };
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

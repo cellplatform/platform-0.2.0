@@ -1,8 +1,8 @@
 import { CrdtDoc as Doc } from './crdt.Doc';
-import { CrdtIs as Is, CrdtText as Text, fieldAs, toObject } from './helpers';
+import { CrdtFunc as Func } from './crdt.Func';
 import { CrdtLens as Lens } from './crdt.Lens';
 import { CrdtRepo as Repo } from './crdt.Repo';
-import { CrdtFunc as Func } from './crdt.Func';
+import { CrdtFile, CrdtIs as Is, CrdtText as Text, fieldAs, toObject } from './helpers';
 
 /**
  * Main index for the [sys.data.crdt] module.
@@ -27,4 +27,5 @@ export const Crdt = {
   fieldAs,
   toObject,
   text: Text.init,
+  save: CrdtFile.save,
 } as const;

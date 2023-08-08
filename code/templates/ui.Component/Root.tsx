@@ -14,7 +14,7 @@ const View: React.FC<t.RootProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <div>{`🐷 Root`}</div>
+      <div>{`🐷 ${Root.displayName}`}</div>
     </div>
   );
 };

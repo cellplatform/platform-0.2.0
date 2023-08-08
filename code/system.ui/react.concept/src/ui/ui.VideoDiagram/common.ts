@@ -1,29 +1,20 @@
 import { type t } from './common';
 
 export * from '../common';
+export { SplitLayout } from '../-sys.common.Layout.Split';
 
 /**
  * Constants
  */
-const position: t.EdgePos = ['center', 'center'];
-const imageSizing: t.ImageSizeStrategy = 'contain';
-
-const sample: t.ConceptSlug = {
-  id: 'sample',
-  video: {
-    id: 499921561, //→ vimeo/tubes
-    position: ['left', 'bottom'],
-    height: 280,
-  },
-  image: {
-    // NB: "group scale" diagram.
-    src: 'https://user-images.githubusercontent.com/185555/208217954-0427e91d-fcb3-4e9a-b5f1-1f86ed3500bf.png',
-  },
-};
 
 export const DEFAULTS = {
-  videoHeight: 200,
-  imageSizing,
-  position,
-  sample,
+  split: 0.6,
+  muted: false,
+
+  image: {
+    scale: 1,
+    get sizing(): t.ImageSizeStrategy {
+      return 'contain';
+    },
+  },
 } as const;

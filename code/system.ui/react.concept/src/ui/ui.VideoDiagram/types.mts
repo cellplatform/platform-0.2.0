@@ -3,8 +3,18 @@ import { type t } from './common';
 /**
  * Component
  */
-export type VideoDiagramProps__OLD = {
-  vimeo?: t.VimeoInstance;
-  slug?: t.ConceptSlug;
+export type VideoDiagramProps = {
+  video?: t.SlugVideo;
+
+  muted?: boolean;
+  playing?: boolean;
+  timestamp?: t.Seconds;
+
+  split?: t.Percent;
+  splitMin?: t.Percent;
+  splitMax?: t.Percent;
+  debug?: boolean;
+
   style?: t.CssValue;
+  onVideoStatus?: t.VideoPlayerStatusHandler;
 };

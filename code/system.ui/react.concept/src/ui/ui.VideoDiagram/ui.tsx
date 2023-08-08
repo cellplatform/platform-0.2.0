@@ -1,30 +1,44 @@
-import { Vimeo, css, type t } from './common';
-import { ImageLayout } from './ui.Image';
-import { VideoLayout } from './ui.Video';
+import { useState } from 'react';
 
-export const View: React.FC<t.VideoDiagramProps__OLD> = (props) => {
-  const { slug, vimeo } = props;
-  const player = Vimeo.usePlayer(vimeo);
+import { SplitLayout, css, type t } from './common';
+import { ImagePanel } from './ui.Panel.Image';
+import { VideoPanel } from './ui.Panel.Video';
 
-  /**
-   * Handlers
-   */
-  const togglePlay = () => player.toggle();
+export const View: React.FC<t.VideoDiagramProps> = (props) => {
+  const { debug = false } = props;
+
+  const [status, setStatus] = useState<t.VideoStatus>();
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({ position: 'relative' }),
-    fill: css({ Absolute: 0 }),
-    mask: css({ Absolute: 0 }),
+    base: css({
+      position: 'relative',
+      display: 'grid',
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <ImageLayout slug={slug} style={styles.fill} />
-      <VideoLayout slug={slug} vimeo={vimeo} style={styles.fill} />
-      <div {...styles.mask} onClick={togglePlay} />
+      <SplitLayout
+        debug={debug}
+        split={props.split}
+        splitMin={props.splitMin}
+        splitMax={props.splitMax}
+      >
+        <ImagePanel video={props.video} status={status} />
+        <VideoPanel
+          video={props.video}
+          muted={props.muted}
+          playing={props.playing}
+          timestamp={props.timestamp}
+          onStatus={(e) => {
+            setStatus(e.status);
+            props.onVideoStatus?.(e);
+          }}
+        />
+      </SplitLayout>
     </div>
   );
 };

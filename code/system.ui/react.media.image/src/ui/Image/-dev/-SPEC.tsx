@@ -1,9 +1,8 @@
-import { Dev, File, Filesize, Icons, type t } from '../../../test.ui';
+import { Dev, File, Filesize, Icons, SAMPLE, Slider, css, type t } from '../../../test.ui';
 
 import { Image } from '..';
 import { Util } from '../Util.mjs';
-import { DevDataController } from './-DEV.data';
-import { SAMPLE } from './-sample.mjs';
+import { DevDataController } from './-DEV.File';
 
 const DEFAULTS = Image.DEFAULTS;
 
@@ -23,9 +22,10 @@ const initial: T = {
 };
 
 export default Dev.describe('Image', async (e) => {
-  type LocalStore = T['debug'];
+  type LocalStore = T['debug'] & Pick<t.ImageProps, 'debug'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Image');
   const local = localstore.object({
+    debug: false,
     bg: true,
     dataEnabled: false,
     dropEnabled: true,
@@ -42,12 +42,14 @@ export default Dev.describe('Image', async (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.debug.bg = local.bg;
-      d.debug.dataEnabled = local.dataEnabled;
-      d.props.sizing = DEFAULTS.sizing;
       getDrop(d.props).enabled = local.dropEnabled;
       getPaste(d.props).enabled = local.pasteEnabled;
       getPaste(d.props).primary = local.pastePrimary;
+      d.props.sizing = DEFAULTS.sizing;
+      d.props.debug = local.debug;
+
+      d.debug.bg = local.bg;
+      d.debug.dataEnabled = local.dataEnabled;
     });
 
     if (state.current.debug.dataEnabled) {
@@ -78,6 +80,7 @@ export default Dev.describe('Image', async (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section(['Input', 'Properties'], (dev) => {
       dev.boolean((btn) =>
@@ -149,6 +152,46 @@ export default Dev.describe('Image', async (e) => {
 
       size('cover');
       size('contain');
+
+      dev.hr(-1, 5);
+
+      dev.TODO();
+
+      const offsetSlider = (axis: t.Axis) => {
+        dev.row((e) => {
+          const styles = {
+            base: css({ marginBottom: 10 }),
+            title: css({ fontSize: 14, marginBottom: 5 }),
+            slider: css({}),
+          };
+          const percent = e.state.props.offset?.[axis] ?? 0;
+          return (
+            <div {...styles.base}>
+              <div {...styles.title}>{`axis: ${axis}`}</div>
+              <Slider
+                track={{ height: 16 }}
+                thumb={{ size: 16 }}
+                percent={percent}
+                onChange={(e) => {
+                  state.change((d) => {
+                    /**
+                     * TODO 🐷
+                     * - Translate percentage into pixel offset.
+                     * - Break this out into sub-component: <Image.OffsetEditor>
+                     */
+
+                    const offset = d.props.offset ?? (d.props.offset = { x: 0, y: 0 });
+                    offset[axis] = e.percent;
+                  });
+                }}
+              />
+            </div>
+          );
+        });
+      };
+
+      offsetSlider('x');
+      offsetSlider('y');
     });
 
     dev.hr(5, 20);
@@ -211,6 +254,12 @@ export default Dev.describe('Image', async (e) => {
     dev.hr(5, 20);
 
     dev.section('Debug', (dev) => {
+      dev.boolean((btn) =>
+        btn
+          .label((e) => `debug`)
+          .value((e) => Boolean(e.state.props.debug))
+          .onClick((e) => e.change((d) => (local.debug = Dev.toggle(d.props, 'debug')))),
+      );
       dev.boolean((btn) =>
         btn
           .label((e) => `background`)

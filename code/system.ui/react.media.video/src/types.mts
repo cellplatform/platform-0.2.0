@@ -10,10 +10,13 @@ export type * from './ui/ui.VideoPlayer/types.mjs';
  */
 export type VideoId = string;
 export type VideoKind = VideoSrc['kind'];
-export type VideoSrc = VideoSrcVimeo | VideoSrcYouTube | VideoSrcUnknown;
 
+export type VideoSrcInput = VideoSrc | string | number;
+export type VideoSrc = VideoSrcVimeo | VideoSrcYoutube | VideoSrcUnknown;
+
+export type VideoSrcKind = VideoSrc['kind'];
 export type VideoSrcVimeo = { kind: 'Vimeo'; id: VideoId };
-export type VideoSrcYouTube = { kind: 'YouTube'; id: VideoId };
+export type VideoSrcYoutube = { kind: 'YouTube'; id: VideoId };
 export type VideoSrcUnknown = { kind: 'Unknown'; id: '' };
 
 /**

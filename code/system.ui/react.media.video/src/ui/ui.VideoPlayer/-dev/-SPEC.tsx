@@ -1,7 +1,5 @@
 import { VideoPlayer } from '..';
-import { Dev, Icons, ProgressBar, type t } from '../../../test.ui';
-import { PlayBar } from '../../ui.PlayBar';
-import { SAMPLE } from './-Sample.mjs';
+import { SAMPLE, Dev, Icons, Video, type t } from '../../../test.ui';
 
 const DEFAULTS = VideoPlayer.DEFAULTS;
 
@@ -54,12 +52,11 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     ctx.debug.width(330);
     ctx.subject.display('grid').render<T>((e) => {
-      const { debug, props } = e.state;
-      // ctx.subject.size([debug.devWidth ?? null, debug.devHeight ?? null]);
+      const { props } = e.state;
       return (
         <VideoPlayer
           {...props}
-          onChange={(e) => {
+          onStatus={(e) => {
             /**
              * Update host state: → "status"
              */
@@ -126,9 +123,10 @@ export default Dev.describe('Player (Vime)', (e) => {
 
     dev.row((e) => {
       return (
-        <PlayBar
+        <Video.PlayBar
           style={{ marginTop: 25, marginBottom: 25 }}
           status={e.state.status}
+          size={'Small'}
           useKeyboard={true}
           onSeek={(e) => state.change((d) => (d.props.timestamp = e.seconds))}
           onMute={(e) => state.change((d) => (local.muted = d.props.muted = e.muted))}
@@ -209,20 +207,20 @@ export default Dev.describe('Player (Vime)', (e) => {
       timestamp(0);
       timestamp(10);
 
-      dev.row((e) => {
-        const { status } = e.state;
-        return (
-          <ProgressBar
-            style={{ MarginX: 0 }}
-            percent={status?.percent.complete}
-            buffered={status?.percent.buffered}
-            onClick={(e) => {
-              console.info('⚡️ progress → click', e);
-              state.change((d) => (d.props.timestamp = e.timestamp(d.status?.secs.total)));
-            }}
-          />
-        );
-      });
+      // dev.row((e) => {
+      //   const { status } = e.state;
+      //   return (
+      //     <ProgressBar
+      //       style={{ MarginX: 0 }}
+      //       percent={status?.percent.complete}
+      //       buffered={status?.percent.buffered}
+      //       onClick={(e) => {
+      //         console.info('⚡️ progress → click', e);
+      //         state.change((d) => (d.props.timestamp = e.timestamp(d.status?.secs.total)));
+      //       }}
+      //     />
+      //   );
+      // });
     });
   });
 

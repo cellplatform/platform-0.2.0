@@ -31,9 +31,11 @@ const View: React.FC<TitleProps> = (props) => {
         textOverflow: 'ellipsis',
       }),
     text: css({
-      fontSize: 14,
-      fontWeight: style.bold ? 'bold' : undefined,
       color: style.color,
+      opacity: style.opacity ?? DEFAULT.style.opacity,
+      fontSize: style.size ?? DEFAULT.style.size,
+      fontWeight: style.bold ? 'bold' : undefined,
+      fontStyle: style.italic ? 'italic' : undefined,
     }),
   };
   return (

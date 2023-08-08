@@ -4,7 +4,10 @@ export * from '../common';
 /**
  * Constants
  */
+const sampleVideo: t.VideoSrcVimeo = { kind: 'Vimeo', id: '499921561' }; // Tubes.
+
 export const DEFAULTS = {
+  sampleVideo,
   enabled: true,
   playing: false,
   loop: false,
