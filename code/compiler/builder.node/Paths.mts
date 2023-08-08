@@ -71,12 +71,12 @@ export const Paths = {
       'src/ui/common/libs.mts',
       'src/ui/common/types.mts',
 
-      'src/ui/Info/-SPEC.tsx',
-      'src/ui/Info/fields/Module.Verify.tsx',
-      'src/ui/Info/common.ts',
-      'src/ui/Info/index.ts',
-      'src/ui/Info/Root.tsx',
-      'src/ui/Info/types.mts',
+      'src/ui/ui.Info/-SPEC.tsx',
+      'src/ui/ui.Info/fields/Module.Verify.tsx',
+      'src/ui/ui.Info/common.ts',
+      'src/ui/ui.Info/index.ts',
+      'src/ui/ui.Info/Root.tsx',
+      'src/ui/ui.Info/types.mts',
     ],
   },
 };
