@@ -71,7 +71,7 @@ export const Paths = {
       'src/ui/common/libs.mts',
       'src/ui/common/types.mts',
 
-      'src/ui/Info/-dev/-SPEC.tsx',
+      'src/ui/Info/-SPEC.tsx',
       'src/ui/Info/fields/Module.Verify.tsx',
       'src/ui/Info/common.ts',
       'src/ui/Info/index.ts',
