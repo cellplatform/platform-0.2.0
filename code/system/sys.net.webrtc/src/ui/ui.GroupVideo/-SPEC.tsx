@@ -1,4 +1,4 @@
-import { Dev, type t, rx } from '../../test.ui';
+import { CrdtViews, Dev, rx, type t } from '../../test.ui';
 
 import { GroupVideo } from '.';
 import { Connect } from '../ui.Connect';
@@ -10,6 +10,7 @@ const initial: T = { props: {} };
 
 export default Dev.describe('GroupVideo', async (e) => {
   let network: t.NetworkDocSharedRef;
+  let syncer: t.CrdtDocSync<t.NetworkDocShared> | undefined;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -43,12 +44,23 @@ export default Dev.describe('GroupVideo', async (e) => {
               const $ = e.client.$.pipe(rx.mergeWith(network.$));
               $.subscribe(() => dev.redraw());
             }}
-            onChange={(e) =>
+            onChange={async (e) => {
+              console.info('⚡️ Connect.onChange:', e);
+
+              if (!syncer) {
+                const info = await e.client.info.get();
+                const syncers = info?.syncers ?? [];
+                const total = syncers.length;
+                syncer = syncers[0].syncer; // ← ✋ NB: First one reported only.
+                console.info(`network syncer established [0 of ${total}]`, syncer);
+                dev.redraw();
+              }
+
               state.change((d) => {
                 d.props.selected = e.selected;
                 d.props.client = e.client;
-              })
-            }
+              });
+            }}
           />
         );
       });
@@ -72,7 +84,34 @@ export default Dev.describe('GroupVideo', async (e) => {
       };
 
       count('increment', 1);
-      // count('decrement', -1);
+      count('decrement', -1);
+    });
+
+    dev.hr(0, 20);
+
+    dev.row(async (e) => {
+      if (!network) return null;
+      const doc = network as t.CrdtDocRef<any>;
+      return (
+        <CrdtViews.Info
+          title={['Network Peer', 'CRDT']}
+          card={true}
+          fields={[
+            'Module',
+            'History',
+            'History.Item',
+            'History.Item.Message',
+            'File',
+            'File.Driver',
+            'Network',
+          ]}
+          data={{
+            // file: { doc },
+            network: { doc: syncer },
+            history: { data: doc.history },
+          }}
+        />
+      );
     });
   });
 
