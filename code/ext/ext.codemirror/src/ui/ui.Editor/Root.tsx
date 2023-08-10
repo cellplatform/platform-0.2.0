@@ -1,22 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
+import { EditorView, minimalSetup, basicSetup } from 'codemirror';
+
 const View: React.FC<t.RootProps> = (props) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    const { dispose, dispose$ } = rx.disposable();
+    const parent = ref.current;
+
+    if (parent) {
+      dispose$.subscribe(() => editor.destroy());
+      const editor = new EditorView({
+        extensions: [basicSetup],
+        parent,
+      });
+    }
+
+    return dispose;
+  }, [ref.current]);
+
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
-    }),
+    base: css({ padding: 5, fontSize: 14 }),
   };
 
-  return (
-    <div {...css(styles.base, props.style)}>
-      <div>{`🐷 ${Root.displayName}`}</div>
-    </div>
-  );
+  return <div ref={ref} {...css(styles.base, props.style)}></div>;
 };
 
 /**
