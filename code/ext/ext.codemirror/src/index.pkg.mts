@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     'codemirror': '6.0.1',
+    '@codemirror/highlight': '0.19.8',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
