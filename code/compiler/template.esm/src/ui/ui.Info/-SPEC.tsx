@@ -7,7 +7,7 @@ const initial: T = { props: {} };
 /**
  * Spec
  */
-const name = 'Info';
+const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE');
