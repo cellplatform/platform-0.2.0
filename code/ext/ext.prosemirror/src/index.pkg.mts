@@ -13,6 +13,12 @@ export const Pkg: ModuleDef = {
   name: 'ext.prosemirror',
   version: '0.0.0',
   dependencies: {
+    'prosemirror-state': '1.4.3',
+    'prosemirror-view': '1.31.7',
+    'prosemirror-model': '1.19.3',
+    'prosemirror-schema-basic': '1.2.2',
+    'prosemirror-schema-list': '1.3.0',
+    'prosemirror-example-setup': '1.2.2',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
