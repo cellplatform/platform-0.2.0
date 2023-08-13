@@ -30,14 +30,11 @@ const render = async (subject: SubjectMatter) => {
     const { Dev } = await import('sys.ui.react.common');
 
     const version = Pkg.toString();
-    const width = 200;
-    const style = { width, borderRadius: 200, useSelect: 'none' };
-    const url = 'https://euc.li/jamesamuel.eth';
-    const el = (
-      <Dev.Splash footer={version}>
-        <img src={url} style={style} />
-      </Dev.Splash>
-    );
+    // const width = 200;
+    // const style = { width, borderRadius: 200, useSelect: 'none' };
+    // const url = '';
+    // <img src={url} style={style} />
+    const el = <Dev.Splash footer={version}></Dev.Splash>;
 
     root.render(el);
     return;
