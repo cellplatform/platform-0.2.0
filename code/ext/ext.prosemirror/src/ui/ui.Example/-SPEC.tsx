@@ -1,9 +1,9 @@
 import { Dev, type t } from '../../test.ui';
-import { Root } from '.';
+import { ExampleEditor } from '.';
 
-type T = { props: t.RootProps };
+type T = { props: t.ExampleEditorProps };
 const initial: T = { props: {} };
-const name = Root.displayName ?? '';
+const name = ExampleEditor.displayName ?? '';
 
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
@@ -19,7 +19,7 @@ export default Dev.describe(name, (e) => {
       .size('fill')
       .display('grid')
       .render<T>((e) => {
-        return <Root {...e.state.props} />;
+        return <ExampleEditor {...e.state.props} />;
       });
   });
 

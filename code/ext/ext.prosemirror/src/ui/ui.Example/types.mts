@@ -1,5 +1,5 @@
 import { type t } from './common';
 
-export type RootProps = {
+export type ExampleEditorProps = {
   style?: t.CssValue;
 };
