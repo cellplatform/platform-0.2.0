@@ -13,7 +13,7 @@ const badge = {
 /**
  * User Interface
  */
-type SubjectMatter = 'Dev' | 'DefaultEntry' | 'Temp';
+type SubjectMatter = 'Dev' | 'DefaultEntry';
 
 const render = async (subject: SubjectMatter) => {
   const root = createRoot(document.getElementById('root')!);
@@ -28,13 +28,15 @@ const render = async (subject: SubjectMatter) => {
 
   if (subject === 'DefaultEntry') {
     const { Dev } = await import('sys.ui.react.common');
-    root.render(<Dev.Splash footer={Pkg.toString()} />);
-    return;
-  }
 
-  if (subject === 'Temp') {
-    const { Temp } = await import('../ui/Root.Temp');
-    root.render(<Temp />);
+    const version = Pkg.toString();
+    // const width = 200;
+    // const style = { width, borderRadius: 200, useSelect: 'none' };
+    // const url = '';
+    // <img src={url} style={style} />
+    const el = <Dev.Splash footer={version}></Dev.Splash>;
+
+    root.render(el);
     return;
   }
 };

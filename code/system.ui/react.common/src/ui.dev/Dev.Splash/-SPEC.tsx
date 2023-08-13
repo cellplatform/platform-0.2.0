@@ -66,21 +66,29 @@ export default Dev.describe('DevSplash', (e) => {
 
     dev.section('Samples', (dev) => {
       dev.button((btn) =>
-        btn
-          .label('none (default)')
-          .right((e) => (!e.state.props.children ? '←' : ''))
-          .onClick((e) => e.change((d) => (d.props.children = undefined))),
+        btn.label('none (default)').onClick((e) => {
+          e.change((d) => (d.props.children = undefined));
+        }),
+      );
+
+      dev.hr(-1, 5);
+
+      dev.button((btn) =>
+        btn.label('sample element: text').onClick((e) =>
+          e.change((d) => {
+            d.props.children = <div>hello 👋</div>;
+          }),
+        ),
       );
 
       dev.button((btn) =>
-        btn
-          .label('sample element')
-          .right((e) => (isValidElement(e.state.props.children) ? '←' : ''))
-          .onClick((e) =>
-            e.change((d) => {
-              d.props.children = <div>hello 👋</div>;
-            }),
-          ),
+        btn.label('sample element: image').onClick((e) =>
+          e.change((d) => {
+            const url = 'https://euc.li/yeoro.eth';
+            const width = 200;
+            d.props.children = <img src={url} style={{ width, borderRadius: width }} />;
+          }),
+        ),
       );
     });
   });

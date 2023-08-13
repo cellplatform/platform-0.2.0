@@ -1,6 +1,6 @@
 import { COLORS, css, DEFAULTS, FC, type t } from './common';
-import { useKeyboard } from './useKeyboard.mjs';
 import { Footer, FooterInput } from './DevSplash.Footer';
+import { useKeyboard } from './useKeyboard.mjs';
 
 export type DevSplashProps = {
   children?: JSX.Element;

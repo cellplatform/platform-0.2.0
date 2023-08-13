@@ -120,7 +120,7 @@
     {
       "id": "customermodel.overview",
       "kind": "slug:VideoDiagram",
-      "split": 0.513,
+      "split": 0.64,
       "title": "Customers",
       "video": {
         "innerScale": 1.02,
@@ -128,7 +128,18 @@
           "id": "577933592",
           "kind": "Vimeo"
         },
-        "timestamps": []
+        "timestamps": [
+          {
+            "start": 0,
+            "scale": 0.6,
+            "src": "https://user-images.githubusercontent.com/185555/259265555-11f11af7-d993-4e81-bac6-d88fdcd315ad.png"
+          },
+          {
+            "start": 0,
+            "scale": 0.9,
+            "src": "https://user-images.githubusercontent.com/185555/259265623-95af98f0-e9b0-470f-b3df-d67075b79369.png"
+          }
+        ]
       }
     },
     {
@@ -353,14 +364,14 @@
         },
         "timestamps": [
           {
+            "start": 0,
             "scale": 0.8,
-            "src": "https://user-images.githubusercontent.com/185555/258691202-19b6d32a-f225-4802-8b2c-2665c929fe46.png",
-            "start": 0
+            "src": "https://user-images.githubusercontent.com/185555/258691202-19b6d32a-f225-4802-8b2c-2665c929fe46.png"
           },
           {
+            "start": 5,
             "scale": 0.8,
-            "src": "https://user-images.githubusercontent.com/185555/258691209-4d84be14-65c9-4d7e-a49f-eb81657f2e45.png",
-            "start": 0
+            "src": "https://user-images.githubusercontent.com/185555/258691209-4d84be14-65c9-4d7e-a49f-eb81657f2e45.png"
           }
         ]
       }
@@ -511,9 +522,9 @@
         },
         "timestamps": [
           {
+            "start": 0,
             "scale": 0.7,
-            "src": "https://user-images.githubusercontent.com/185555/258683462-06937cb7-e874-40fa-9420-b05e2ea7f377.png",
-            "start": 0
+            "src": "https://user-images.githubusercontent.com/185555/259269324-ef25251c-b135-41f9-9fe9-520c9383ae30.png"
           }
         ]
       }
@@ -669,9 +680,9 @@
         },
         "timestamps": [
           {
+            "start": 0,
             "scale": 0.9,
-            "src": "https://user-images.githubusercontent.com/185555/258696392-531aaa91-5a7c-4492-9e99-013039da0098.png",
-            "start": 0
+            "src": "https://user-images.githubusercontent.com/185555/259268593-2651e155-e1c2-484b-aa9b-6783971180f9.png"
           }
         ]
       }
@@ -1527,6 +1538,7 @@
     {
       "id": "goodbm.improve.leverage.intro",
       "kind": "slug:VideoDiagram",
+      "split": 0.727,
       "title": "Leverage",
       "video": {
         "innerScale": 1.02,
@@ -1536,17 +1548,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.8,
-            "src": "https://user-images.githubusercontent.com/185555/258723704-9852d071-5eb1-44d4-b3ec-7ff3e386fb1a.png"
+            "src": "https://user-images.githubusercontent.com/185555/258723704-9852d071-5eb1-44d4-b3ec-7ff3e386fb1a.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.727
+      }
     },
     {
       "id": "goodbm.improve.leverage.2types.intro",
       "kind": "slug:VideoDiagram",
+      "split": 0.667,
       "title": "Types of Leverage",
       "video": {
         "innerScale": 1.02,
@@ -1556,13 +1568,12 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724142-506416bd-3e64-41d9-b85e-8315d2254daa.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724142-506416bd-3e64-41d9-b85e-8315d2254daa.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.667
+      }
     },
     {
       "id": "goodbm.improve.leverage.2types.labour",
@@ -1576,9 +1587,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724235-ad03d995-eee1-486a-8f13-b8658cd81c5b.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724235-ad03d995-eee1-486a-8f13-b8658cd81c5b.png",
+            "start": 0
           }
         ]
       }
@@ -1595,9 +1606,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724317-a78a3bc6-fcd5-4cb0-b1d0-113f0d94ae74.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724317-a78a3bc6-fcd5-4cb0-b1d0-113f0d94ae74.png",
+            "start": 0
           }
         ]
       }
@@ -1614,9 +1625,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724389-d57fc9e2-bb59-4d2d-a646-3703493f79aa.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724389-d57fc9e2-bb59-4d2d-a646-3703493f79aa.png",
+            "start": 0
           }
         ]
       }
@@ -1633,9 +1644,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724467-273fabf7-4e97-4a4a-bae0-882ec8b5da47.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724467-273fabf7-4e97-4a4a-bae0-882ec8b5da47.png",
+            "start": 0
           }
         ]
       }
@@ -1652,9 +1663,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724550-96195499-9f2c-4cc5-a618-1870d525defa.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724550-96195499-9f2c-4cc5-a618-1870d525defa.png",
+            "start": 0
           }
         ]
       }
@@ -1671,9 +1682,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724616-d1a76df8-a4e0-4482-9d9d-85f6cade59fe.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724616-d1a76df8-a4e0-4482-9d9d-85f6cade59fe.png",
+            "start": 0
           }
         ]
       }
@@ -1690,9 +1701,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724693-57184816-71bb-43df-b0dd-494327d72e57.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724693-57184816-71bb-43df-b0dd-494327d72e57.png",
+            "start": 0
           }
         ]
       }
@@ -1700,6 +1711,7 @@
     {
       "id": "goodbm.improve.leverage.2types.strategic",
       "kind": "slug:VideoDiagram",
+      "split": 0.753,
       "title": "Strategic",
       "video": {
         "innerScale": 1.02,
@@ -1709,17 +1721,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724758-314e94b2-b9bc-4da9-9ac3-44763fd67ceb.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724758-314e94b2-b9bc-4da9-9ac3-44763fd67ceb.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.753
+      }
     },
     {
       "id": "goodbm.improve.leverage.3size.1",
       "kind": "slug:VideoDiagram",
+      "split": 0.663,
       "title": "Enterprise Size",
       "video": {
         "innerScale": 1.02,
@@ -1729,13 +1741,12 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 1,
-            "src": "https://user-images.githubusercontent.com/185555/258724873-6813f52a-01de-48bc-bcfe-49d7fcb79e81.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724873-6813f52a-01de-48bc-bcfe-49d7fcb79e81.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.663
+      }
     },
     {
       "id": "goodbm.improve.leverage.3size.2",
@@ -1749,9 +1760,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258724944-7a99c045-65e0-4e0b-81a0-d2363b6cca39.png"
+            "src": "https://user-images.githubusercontent.com/185555/258724944-7a99c045-65e0-4e0b-81a0-d2363b6cca39.png",
+            "start": 0
           }
         ]
       }
@@ -1759,6 +1770,7 @@
     {
       "id": "goodbm.improve.conclusion",
       "kind": "slug:VideoDiagram",
+      "split": 0.773,
       "title": "Conclusion ",
       "video": {
         "innerScale": 1.02,
@@ -1768,13 +1780,12 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 1,
-            "src": "https://user-images.githubusercontent.com/185555/258725150-f1a44a40-21fc-406a-94aa-7c330dd24ede.png"
+            "src": "https://user-images.githubusercontent.com/185555/258725150-f1a44a40-21fc-406a-94aa-7c330dd24ede.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.773
+      }
     },
     {
       "kind": "slug:namespace",
@@ -1793,9 +1804,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.9,
-            "src": "https://user-images.githubusercontent.com/185555/258729336-52097361-322e-4bb2-a0e6-9f2b39aee9c9.png"
+            "src": "https://user-images.githubusercontent.com/185555/258729336-52097361-322e-4bb2-a0e6-9f2b39aee9c9.png",
+            "start": 0
           }
         ]
       }
@@ -1803,6 +1814,7 @@
     {
       "id": "strategy.stage.1",
       "kind": "slug:VideoDiagram",
+      "split": 0.72,
       "title": "Assessing Your Stage",
       "video": {
         "innerScale": 1.02,
@@ -1812,17 +1824,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.97,
-            "src": "https://user-images.githubusercontent.com/185555/258729479-036ae33e-47d0-4533-b08d-b0388484d5da.png"
+            "src": "https://user-images.githubusercontent.com/185555/258729479-036ae33e-47d0-4533-b08d-b0388484d5da.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.72
+      }
     },
     {
       "id": "strategy.stage.2",
       "kind": "slug:VideoDiagram",
+      "split": 0.72,
       "title": "The Venture Map",
       "video": {
         "innerScale": 1.02,
@@ -1832,17 +1844,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.9,
-            "src": "https://user-images.githubusercontent.com/185555/258729516-fa75631c-32ef-45f1-91dc-9370a67aaddf.png"
+            "src": "https://user-images.githubusercontent.com/185555/258729516-fa75631c-32ef-45f1-91dc-9370a67aaddf.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.72
+      }
     },
     {
       "id": "strategy.stage.3",
       "kind": "slug:VideoDiagram",
+      "split": 0.717,
       "title": "Conclusions",
       "video": {
         "innerScale": 1.02,
@@ -1852,13 +1864,12 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.85,
-            "src": "https://user-images.githubusercontent.com/185555/258729578-3c37e55e-4aa1-45c5-9c74-78d01dc42962.png"
+            "src": "https://user-images.githubusercontent.com/185555/258729578-3c37e55e-4aa1-45c5-9c74-78d01dc42962.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.717
+      }
     },
     {
       "kind": "slug:namespace",
@@ -1868,6 +1879,7 @@
     {
       "id": "strategy.models.intro",
       "kind": "slug:VideoDiagram",
+      "split": 0.62,
       "title": "Strategy",
       "video": {
         "innerScale": 1.02,
@@ -1877,17 +1889,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.8,
-            "src": "https://user-images.githubusercontent.com/185555/258731304-0c36ff18-5adb-4ca7-84c6-679f024a6fc2.png"
+            "src": "https://user-images.githubusercontent.com/185555/258731304-0c36ff18-5adb-4ca7-84c6-679f024a6fc2.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.62
+      }
     },
     {
       "id": "strategy.models.2",
       "kind": "slug:VideoDiagram",
+      "split": 0.743,
       "title": "Canvas Models",
       "video": {
         "innerScale": 1.02,
@@ -1900,14 +1912,29 @@
             "start": 0,
             "scale": 1,
             "src": "https://user-images.githubusercontent.com/185555/258731717-f2698344-9b96-46d7-8237-069d1cb9b3a8.png"
+          },
+          {
+            "start": 60,
+            "scale": 1,
+            "src": "https://user-images.githubusercontent.com/185555/259271445-e0a699f2-5782-4c40-ba5d-f77f803b7090.png"
+          },
+          {
+            "start": 67,
+            "scale": 1,
+            "src": "https://user-images.githubusercontent.com/185555/259271453-bd6b4125-498d-4a56-848e-1db0737a4fa1.png"
+          },
+          {
+            "start": 76,
+            "scale": 1,
+            "src": "https://user-images.githubusercontent.com/185555/259271461-ebd7d480-178e-4e5c-a9b1-6f98e19fd192.png"
           }
         ]
-      },
-      "split": 0.743
+      }
     },
     {
       "id": "strategy.models.validation",
       "kind": "slug:VideoDiagram",
+      "split": 0.727,
       "title": "Validation",
       "video": {
         "innerScale": 1.02,
@@ -1917,22 +1944,22 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258732088-883064dc-60be-44f3-b59e-430e66bb05f5.png"
+            "src": "https://user-images.githubusercontent.com/185555/258732088-883064dc-60be-44f3-b59e-430e66bb05f5.png",
+            "start": 0
           },
           {
-            "start": 0,
             "scale": 0.9,
-            "src": "https://user-images.githubusercontent.com/185555/258732112-cdd6881b-539c-4ce2-8ad5-0026b5bede20.png"
+            "src": "https://user-images.githubusercontent.com/185555/258732112-cdd6881b-539c-4ce2-8ad5-0026b5bede20.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.727
+      }
     },
     {
       "id": "strategy.models.together",
       "kind": "slug:VideoDiagram",
+      "split": 0.72,
       "title": "Pulling Your Strategy Together",
       "video": {
         "innerScale": 1.02,
@@ -1942,17 +1969,17 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.95,
-            "src": "https://user-images.githubusercontent.com/185555/258732446-070a44a1-3c7b-4415-a03d-2e641f526f9d.png"
+            "src": "https://user-images.githubusercontent.com/185555/258732446-070a44a1-3c7b-4415-a03d-2e641f526f9d.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.72
+      }
     },
     {
       "id": "strategy.timeline",
       "kind": "slug:VideoDiagram",
+      "split": 0.723,
       "title": "Strategy Timeline",
       "video": {
         "innerScale": 1.02,
@@ -1962,13 +1989,12 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 0.97,
-            "src": "https://user-images.githubusercontent.com/185555/258733175-6c16ec25-0395-4629-a267-f7bb537656c0.png"
+            "src": "https://user-images.githubusercontent.com/185555/258733175-6c16ec25-0395-4629-a267-f7bb537656c0.png",
+            "start": 0
           }
         ]
-      },
-      "split": 0.723
+      }
     },
     {
       "id": "strategy.conclusion",
@@ -1983,9 +2009,9 @@
         },
         "timestamps": [
           {
-            "start": 0,
             "scale": 1,
-            "src": "https://user-images.githubusercontent.com/185555/258735372-664939ab-6574-4aca-8d05-0901cab728fc.png"
+            "src": "https://user-images.githubusercontent.com/185555/258735372-664939ab-6574-4aca-8d05-0901cab728fc.png",
+            "start": 0
           }
         ]
       }

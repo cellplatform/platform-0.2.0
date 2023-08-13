@@ -1,10 +1,14 @@
-import { Dev, PropList, type t } from '../../../test.ui';
-import { Info, type InfoProps } from '..';
+import { Dev, PropList, type t } from '../../test.ui';
+import { Info, type InfoProps } from '.';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
 
-export default Dev.describe('Info', (e) => {
+/**
+ * Spec
+ */
+const name = Info.displayName ?? '⚠️';
+export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:NAMESPACE');
   const local = localstore.object({
@@ -57,7 +61,7 @@ export default Dev.describe('Info', (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
       const data = e.state;
-      return <Dev.Object name={'Info'} data={data} expand={1} />;
+      return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
 });

@@ -1,9 +1,7 @@
+import { Vercel } from 'ext.vercel';
 import pc from 'picocolors';
 import { rx } from 'sys.util';
-import { Vercel } from 'ext.vercel';
-
-import { type t } from '../src/common';
-import { Pkg } from '../src/index.pkg.mjs';
+import { Pkg, type t } from '../src/common';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 
@@ -26,7 +24,7 @@ export async function pushToVercel(args: {
     project: 'tdb-dev',
     alias: 'dev.db.team',
 
-    // jamesamuel.com
+    // → jamesamuel.com
     // project: 'cell-james',
     // alias: 'jamesamuel.com',
 
