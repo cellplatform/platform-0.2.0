@@ -26,6 +26,7 @@ import {
   MdRefresh,
   MdSettingsInputAntenna,
   MdStart,
+  MdTune,
   MdVerticalAlignBottom,
   MdVerticalAlignTop,
   MdVpnLock,
@@ -53,6 +54,7 @@ export const Icons = {
     },
   },
   Cube: icon(MdOutlineViewInAr),
+  Config: icon(MdTune),
   Person: icon(MdEmojiPeople),
   Screenshare: {
     Start: icon(MdOutlineScreenShare),

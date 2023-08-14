@@ -9,6 +9,7 @@ const initial: T = {
     enabled: DEFAULTS.enabled,
     spinning: DEFAULTS.spinning,
     fields: DEFAULTS.fields,
+    config: {},
   },
 };
 
@@ -53,6 +54,11 @@ export default Dev.describe('PeerInput', async (e) => {
             {...props}
             onRemoteChanged={(e) => state.change((d) => (d.props.remote = e.remote))}
             onLocalCopied={(e) => console.info(`⚡️ onLocalCopied:`, e)}
+            onConfigClick={(e) => {
+              const selected = !e.config.selected;
+              state.change((d) => (d.props.config = { ...e.config, selected }));
+              console.info(`⚡️ onConfigClick:`, e);
+            }}
           />
         );
       });
