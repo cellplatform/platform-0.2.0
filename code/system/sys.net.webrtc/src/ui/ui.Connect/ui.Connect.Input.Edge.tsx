@@ -12,10 +12,15 @@ export const ConnectInputEdge: React.FC<ConnectInputEdgeProps> = (props) => {
   const is = {
     top: edge === 'Top',
     bottom: edge === 'Bottom',
-  };
+  } as const;
 
   if (!data || !self) return null;
   if (edge !== targetEdge) return null;
+
+  const handleToggleClick = () => {
+    const showing = Boolean(props.showInfo);
+    props.onInfoToggle?.({ showing });
+  };
 
   /**
    * [Render]
@@ -41,10 +46,12 @@ export const ConnectInputEdge: React.FC<ConnectInputEdgeProps> = (props) => {
         remote={data.remote}
         fields={Wrangle.fields(targetEdge)}
         spinning={data.spinning}
+        config={Wrangle.configButton(props)}
         copiedMessage={props.copiedMessage}
         onLocalCopied={data.onLocalCopied}
         onRemoteChanged={data.onRemoteChanged}
         onConnectRequest={data.onConnectRequest}
+        onConfigClick={handleToggleClick}
       />
     </div>
   );
@@ -70,5 +77,11 @@ const Wrangle = {
     const { showInfo = DEFAULTS.showInfo } = props;
     if (!showInfo) return undefined;
     return `solid 1px ${Color.alpha(COLORS.DARK, 0.1)}`;
+  },
+
+  configButton(props: ConnectInputEdgeProps): t.PeerInputConfigButton | undefined {
+    const { showInfo = DEFAULTS.showInfo, showInfoToggle = DEFAULTS.showInfoToggle } = props;
+    if (!showInfoToggle) return undefined;
+    return { visible: true, selected: showInfo };
   },
 };

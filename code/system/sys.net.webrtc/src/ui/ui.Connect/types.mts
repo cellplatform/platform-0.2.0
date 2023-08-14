@@ -5,8 +5,10 @@ export type Common = {
   fields?: t.WebRtcInfoField[];
   showInfo?: boolean;
   showInfoAsCard?: boolean;
+  showInfoToggle?: boolean;
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
+  onInfoToggle?: t.ConnectToggleInfoHandler;
 };
 
 export type ConnectProps = Common & {
@@ -36,3 +38,6 @@ export type ConnectChangedHandlerArgs = {
   readonly client: t.WebRtcEvents;
   readonly selected?: t.PeerId;
 };
+
+export type ConnectToggleInfoHandler = (e: ConnectToggleInfoHandlerArgs) => void;
+export type ConnectToggleInfoHandlerArgs = { showing: boolean };

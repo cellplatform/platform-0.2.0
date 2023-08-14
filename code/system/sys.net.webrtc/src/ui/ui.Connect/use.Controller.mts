@@ -6,6 +6,7 @@ import { DEFAULTS, Time, WebRtc, rx, type t } from './common';
  */
 export function useController(args: {
   self?: t.Peer;
+  showInfo?: boolean;
   onReady?: t.ConnectReadyHandler;
   onChange?: t.ConnectChangedHandler;
 }) {
@@ -16,6 +17,7 @@ export function useController(args: {
   const [spinning, setSpinning] = useState(false);
   const [selected, setSelected] = useState<t.PeerId>();
   const [copiedMessage, setCopiedMessage] = useState('');
+  const [showInfo, setShowInfo] = useState(args.showInfo ?? false);
   const [count, setCount] = useState(0);
   const registerChange = () => setCount((prev) => prev + 1);
 
@@ -106,6 +108,10 @@ export function useController(args: {
     namespace: {},
   };
 
+  const onToggleInfo: t.ConnectToggleInfoHandler = (e) => {
+    setShowInfo((prev) => !e.showing);
+  };
+
   /**
    * API
    */
@@ -115,6 +121,8 @@ export function useController(args: {
     loading: !Boolean(self),
     copied: Wrangle.copied(copiedMessage),
     event: Wrangle.event(client, selected),
+    showInfo,
+    onToggleInfo,
   } as const;
 }
 

@@ -18,6 +18,7 @@ const defaultFields: t.WebRtcInfoField[] = [
 export const DEFAULTS = {
   edge,
   showInfoAsCard: false,
+  showInfoToggle: true,
   showInfo: true,
   fields: {
     all: INFO_DEFAULTS.fields.all,

@@ -37,7 +37,6 @@ export default Dev.describe('GroupVideo', async (e) => {
       .render((e) => {
         return (
           <Connect.Stateful
-            margin={[0, 0, 20, 0]}
             onReady={async (e) => {
               console.info('⚡️ Connect.onReady:', e);
               network = e.info.state;

@@ -1,6 +1,8 @@
 import { Connect } from '.';
 import { Dev, Icons, type t } from '../../test.ui';
 
+const DEFAULTS = Connect.DEFAULTS;
+
 type T = {
   props: t.ConnectProps;
   changed?: t.ConnectChangedHandlerArgs;
@@ -13,18 +15,16 @@ const initial: T = {
 };
 
 export default Dev.describe('Connect', async (e) => {
-  type LocalStore = T['debug'] & {
-    fields?: t.WebRtcInfoField[];
-    edge?: t.VEdge;
-    showInfo?: boolean;
-    showInfoAsCard?: boolean;
-  };
+  type LocalStore = T['debug'] &
+    Pick<t.ConnectProps, 'fields' | 'edge' | 'showInfo' | 'showInfoAsCard' | 'showInfoToggle'>;
+
   const localstore = Dev.LocalStorage<LocalStore>('dev:sys.net.webrtc.ui.Connect');
   const local = localstore.object({
-    fields: Connect.DEFAULTS.fields.defaults,
-    edge: Connect.DEFAULTS.edge,
-    showInfo: Connect.DEFAULTS.showInfo,
-    showInfoAsCard: Connect.DEFAULTS.showInfoAsCard,
+    fields: DEFAULTS.fields.defaults,
+    edge: DEFAULTS.edge,
+    showInfo: DEFAULTS.showInfo,
+    showInfoAsCard: DEFAULTS.showInfoAsCard,
+    showInfoToggle: DEFAULTS.showInfoToggle,
     bg: false,
     useController: true,
     useSelf: true,
@@ -43,6 +43,7 @@ export default Dev.describe('Connect', async (e) => {
       d.props.edge = local.edge;
       d.props.showInfoAsCard = local.showInfoAsCard;
       d.props.showInfo = local.showInfo;
+      d.props.showInfoToggle = local.showInfoToggle;
       d.debug.bg = local.bg;
       d.debug.useController = local.useController;
       d.debug.useSelf = local.useSelf;
@@ -76,6 +77,10 @@ export default Dev.describe('Connect', async (e) => {
                 d.changed = e;
                 d.debug.changed = (d.debug.changed ?? 0) + 1;
               });
+            }}
+            onInfoToggle={(e) => {
+              state.change((d) => (d.props.showInfo = !e.showing));
+              console.log('e', e);
             }}
           />
         );
@@ -114,6 +119,16 @@ export default Dev.describe('Connect', async (e) => {
       });
 
       dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.showInfoToggle);
+        btn
+          .label((e) => `showInfoToggle`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => (local.showInfoToggle = Dev.toggle(d.props, 'showInfoToggle')));
+          });
+      });
+
+      dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.showInfo);
         btn
           .label((e) => `showInfo`)
@@ -129,8 +144,8 @@ export default Dev.describe('Connect', async (e) => {
         return (
           <Dev.FieldSelector
             style={{ Margin: [20, 50, 0, 50] }}
-            all={Connect.DEFAULTS.fields.all}
-            defaults={Connect.DEFAULTS.fields.defaults}
+            all={DEFAULTS.fields.all}
+            defaults={DEFAULTS.fields.defaults}
             selected={e.state.props.fields}
             resettable={true}
             onClick={(args) => {
