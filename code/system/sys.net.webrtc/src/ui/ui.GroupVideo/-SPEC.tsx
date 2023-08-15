@@ -83,7 +83,7 @@ export default Dev.describe('GroupVideo', async (e) => {
       };
 
       count('increment', 1);
-      count('decrement', -1);
+      // count('decrement', -1);
     });
 
     dev.hr(0, 20);
