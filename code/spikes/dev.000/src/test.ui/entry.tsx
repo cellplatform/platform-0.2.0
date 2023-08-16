@@ -32,12 +32,14 @@ const render = async (subject: SubjectMatter) => {
     const version = Pkg.toString();
     const width = 200;
     const style = { width, borderRadius: 200, useSelect: 'none' };
-    const url = 'https://euc.li/jamesamuel.eth';
+    const url = 'https://euc.li/yeoro.eth';
 
-    {
-      /* <img src={url} style={style} /> */
-    }
-    const el = <Dev.Splash footer={version}></Dev.Splash>;
+    const el = (
+      <Dev.Splash footer={version}>
+        {/*  */}
+        <img src={url} style={style} />
+      </Dev.Splash>
+    );
 
     root.render(el);
     return;
