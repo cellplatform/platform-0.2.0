@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "sys.util": "0.0.0",
-    "zod": "3.21.4"
+    "zod": "3.22.1"
   },
   "devDependencies": {
     "react": "18.2.0",
