@@ -18,18 +18,21 @@ export const Connect: React.FC<t.ConnectProps> = (props) => {
       boxSizing: 'border-box',
       ...Style.toMargins(props.margin),
     }),
-    info: css({ MarginX: 15 }),
+    info: css({
+      MarginX: 15,
+      display: showInfo ? 'block' : 'none',
+    }),
   };
 
   const elTop = <ConnectInputEdge {...props} targetEdge={'Top'} />;
   const elBottom = <ConnectInputEdge {...props} targetEdge={'Bottom'} />;
 
-  const elInfo = showInfo && (
+  const elInfo = (
     <WebRtcInfo
+      style={styles.info}
       fields={fields}
       client={props.client}
       data={props.info}
-      style={styles.info}
       card={isCard}
     />
   );
