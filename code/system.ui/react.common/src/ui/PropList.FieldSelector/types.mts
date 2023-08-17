@@ -17,7 +17,6 @@ export type PropListFieldSelectorProps<F extends string = string> = {
 
   indent?: number;
   style?: t.CssValue;
-
   onClick?: PropListFieldSelectorClickHandler;
 };
 

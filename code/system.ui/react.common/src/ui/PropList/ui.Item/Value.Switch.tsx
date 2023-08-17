@@ -1,5 +1,5 @@
 import { Switch } from '../../Button.Switch';
-import { css, type t } from './common';
+import { Color, css, type t } from './common';
 
 export type SwitchValueProps = {
   value: t.PropListValue;
@@ -16,13 +16,29 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
 
   const value = item.data;
   const isEnabled = typeof item.enabled === 'boolean' ? item.enabled : value !== undefined;
+
   return (
     <Switch
       height={12}
       value={value}
       isEnabled={isEnabled}
-      onMouseDown={props.onClick}
+      track={Wrangle.track(item)}
       style={styles.base}
+      onMouseDown={props.onClick}
     />
   );
 };
+
+/**
+ * Helpers
+ */
+export const Wrangle = {
+  track(item: t.PropListValueSwitch): Partial<t.SwitchTrack> | undefined {
+    if (!item.color) return undefined;
+    const color = {
+      ...Switch.Theme.light.blue.trackColor,
+      on: Color.format(item.color)!,
+    };
+    return { color };
+  },
+} as const;
