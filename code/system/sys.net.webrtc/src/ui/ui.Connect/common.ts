@@ -19,7 +19,7 @@ export const DEFAULTS = {
   edge,
   showInfoAsCard: false,
   showInfoToggle: true,
-  showInfo: true,
+  showInfo: false,
   fields: {
     all: INFO_DEFAULTS.fields.all,
     defaults: defaultFields,

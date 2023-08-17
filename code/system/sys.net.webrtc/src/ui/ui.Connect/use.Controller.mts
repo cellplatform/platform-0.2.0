@@ -17,7 +17,7 @@ export function useController(args: {
   const [spinning, setSpinning] = useState(false);
   const [selected, setSelected] = useState<t.PeerId>();
   const [copiedMessage, setCopiedMessage] = useState('');
-  const [showInfo, setShowInfo] = useState(args.showInfo ?? false);
+  const [showInfo, setShowInfo] = useState(args.showInfo ?? DEFAULTS.showInfo);
   const [count, setCount] = useState(0);
   const registerChange = () => setCount((prev) => prev + 1);
 
