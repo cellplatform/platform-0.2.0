@@ -97,6 +97,7 @@ export default Dev.describe('GroupVideo', async (e) => {
           card={true}
           fields={[
             'Module',
+            'Driver.Runtime',
             'History',
             'History.Item',
             'History.Item.Message',
