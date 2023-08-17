@@ -32,12 +32,12 @@ const render = async (subject: SubjectMatter) => {
     const version = Pkg.toString();
     const width = 200;
     const style = { width, borderRadius: 200, useSelect: 'none' };
-    const url = 'https://euc.li/yeoro.eth';
+    const url = '';
 
     const el = (
       <Dev.Splash footer={version}>
-        {/*  */}
-        <img src={url} style={style} />
+        {/* */}
+        {/* <img src={url} style={style} /> */}
       </Dev.Splash>
     );
 
