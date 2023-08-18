@@ -21,7 +21,7 @@ export const SwitchValue: React.FC<SwitchValueProps> = (props) => {
     <Switch
       height={12}
       value={value}
-      isEnabled={isEnabled}
+      enabled={isEnabled}
       track={Wrangle.track(item)}
       style={styles.base}
       onMouseDown={props.onClick}

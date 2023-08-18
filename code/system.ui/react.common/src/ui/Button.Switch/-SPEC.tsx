@@ -24,7 +24,7 @@ export default Dev.describe('Switch (Button)', (e) => {
 
     dev
       .button('toggle: `isEnabled`', (e) => {
-        e.change(({ props }) => (props.isEnabled = !props.isEnabled));
+        e.change(({ props }) => (props.enabled = !props.enabled));
       })
       .button('toggle: `value`', (e) => {
         e.change(({ props }) => (props.value = !props.value));

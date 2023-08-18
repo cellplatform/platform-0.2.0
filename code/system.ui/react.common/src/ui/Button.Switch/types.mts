@@ -11,7 +11,7 @@ export type SwitchProps = {
   value?: boolean;
   width?: number;
   height?: number;
-  isEnabled?: boolean;
+  enabled?: boolean;
   tooltip?: string;
   track?: Partial<t.SwitchTrack>;
   thumb?: Partial<t.SwitchThumb>;

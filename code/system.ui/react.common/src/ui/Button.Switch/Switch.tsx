@@ -11,7 +11,7 @@ const View: React.FC<t.SwitchProps> = (props) => {
   const height = props.height ?? 32;
   const width = props.width ?? height * 2 - height * 0.4;
   const transitionSpeed = props.transitionSpeed ?? 200;
-  const isEnabled = props.isEnabled ?? true;
+  const isEnabled = props.enabled ?? true;
   const value = Boolean(props.value);
 
   const [isDown, setIsDown] = useState<boolean>(false);
