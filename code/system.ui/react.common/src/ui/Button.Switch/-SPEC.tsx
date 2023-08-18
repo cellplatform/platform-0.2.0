@@ -1,7 +1,7 @@
-import { Switch, SwitchProps } from '.';
-import { Dev } from '../../test.ui';
+import { Switch } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: SwitchProps };
+type T = { props: t.SwitchProps };
 const initial: T = { props: { value: true } };
 
 export default Dev.describe('Switch (Button)', (e) => {

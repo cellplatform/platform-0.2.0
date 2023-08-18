@@ -4,6 +4,28 @@ export type SwitchThemeName = 'LIGHT' | 'DARK';
 
 type Color = string | number;
 
+/**
+ * Component
+ */
+export type SwitchProps = {
+  value?: boolean;
+  width?: number;
+  height?: number;
+  isEnabled?: boolean;
+  tooltip?: string;
+  track?: Partial<t.SwitchTrack>;
+  thumb?: Partial<t.SwitchThumb>;
+  theme?: t.SwitchThemeName | Partial<t.SwitchTheme>;
+  transitionSpeed?: number;
+  style?: t.CssValue;
+
+  onClick?: React.MouseEventHandler;
+  onMouseDown?: React.MouseEventHandler;
+  onMouseUp?: React.MouseEventHandler;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
+};
+
 export type SwitchTheme = {
   trackColor: { on: Color; off: Color; disabled: Color };
   thumbColor: { on: Color; off: Color; disabled: Color };
