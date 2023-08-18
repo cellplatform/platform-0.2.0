@@ -91,8 +91,9 @@ const View: React.FC<t.SwitchProps> = (props) => {
 
 function toTheme(input?: t.SwitchThemeName | Partial<t.SwitchTheme>): t.SwitchTheme {
   let theme = input || 'Light';
-  theme =
-    typeof theme === 'string' ? SwitchTheme.fromString(theme as t.SwitchThemeName).green : theme;
+  if (typeof theme === 'string') {
+    theme = SwitchTheme.fromString(theme as t.SwitchThemeName).green;
+  }
   return theme as t.SwitchTheme;
 }
 
