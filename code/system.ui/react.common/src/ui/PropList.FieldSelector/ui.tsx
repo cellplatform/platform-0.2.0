@@ -78,6 +78,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
       data: isSelected(field),
       indent,
       onClick,
+      color: props.switchColor ?? DEFAULTS.switchColor,
     };
     return { label, value };
   });
