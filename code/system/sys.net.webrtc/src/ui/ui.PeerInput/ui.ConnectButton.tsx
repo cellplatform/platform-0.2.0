@@ -52,7 +52,7 @@ export const ConnectButton: React.FC<ConnectButtonProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      isEnabled={canConnect && !isSpinning}
+      enabled={canConnect && !isSpinning}
       disabledOpacity={isSpinning ? 0.8 : 1}
       onClick={props.onClick}
     >

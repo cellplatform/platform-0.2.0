@@ -76,7 +76,7 @@ export const PeerCtrlButton: React.FC<PeerCtrlButtonProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      isEnabled={enabled}
+      enabled={enabled}
       disabledOpacity={disabledOpacity}
       tooltip={props.tooltip}
       onClick={props.onClick}
