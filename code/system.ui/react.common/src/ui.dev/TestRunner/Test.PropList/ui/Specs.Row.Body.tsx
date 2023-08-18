@@ -86,7 +86,7 @@ export const Body: React.FC<BodyProps> = (props) => {
   return (
     <Button
       style={css(styles.base, props.style)}
-      isEnabled={enabled}
+      enabled={enabled}
       onClick={props.onClick}
       onMouse={(e) => setOver(e.isOver)}
     >

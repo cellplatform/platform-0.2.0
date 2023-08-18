@@ -8,7 +8,7 @@ type MouseHandler = React.MouseEventHandler;
 export type ButtonProps = {
   children?: JSX.Element | string | number;
   label?: string;
-  isEnabled?: boolean;
+  enabled?: boolean;
   block?: boolean;
   tooltip?: string;
   spinning?: boolean;

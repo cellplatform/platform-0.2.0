@@ -5,7 +5,7 @@ import { COLORS, DEFAULTS, FC, Style, css, type t } from './common';
 
 const View: React.FC<t.ButtonProps> = (props) => {
   const {
-    isEnabled = DEFAULTS.isEnabled,
+    enabled: isEnabled = DEFAULTS.enabled,
     block = DEFAULTS.block,
     disabledOpacity = DEFAULTS.disabledOpacity,
     userSelect = DEFAULTS.userSelect,

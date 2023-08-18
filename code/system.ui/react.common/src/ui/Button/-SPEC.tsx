@@ -9,7 +9,7 @@ type T = {
 };
 const initial: T = {
   props: {
-    isEnabled: DEFAULTS.isEnabled,
+    enabled: DEFAULTS.enabled,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
     tooltip: 'My Button',
@@ -73,8 +73,8 @@ export default Dev.describe('Button', (e) => {
       dev.boolean((btn) =>
         btn
           .label('isEnabled')
-          .value((e) => e.state.props.isEnabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isEnabled'))),
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
       );
 
       dev.boolean((btn) =>

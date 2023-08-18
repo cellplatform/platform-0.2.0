@@ -4,7 +4,7 @@ export * from '../common';
  * Constants
  */
 export const DEFAULTS = {
-  isEnabled: true,
+  enabled: true,
   block: false,
   spinning: false,
   disabledOpacity: 0.3,

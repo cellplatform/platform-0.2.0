@@ -44,7 +44,7 @@ export const SpecsReset: React.FC<SpecsResetProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)} {...mouse.handlers}>
-      <Button onClick={handleResetClick} style={styles.button} isEnabled={enabled}>
+      <Button onClick={handleResetClick} style={styles.button} enabled={enabled}>
         {label}
       </Button>
     </div>
