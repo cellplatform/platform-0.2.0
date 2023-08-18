@@ -10,9 +10,9 @@ export const SwitchTheme = {
 
   fromString(theme: t.SwitchThemeName) {
     switch (theme) {
-      case 'LIGHT':
+      case 'Light':
         return SwitchTheme.light;
-      case 'DARK':
+      case 'Dark':
         return SwitchTheme.dark;
       default:
         throw new Error(`Theme name '${theme}' not supported.`);

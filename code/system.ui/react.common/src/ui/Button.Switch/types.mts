@@ -1,6 +1,6 @@
 import { type t } from '../common.t';
 
-export type SwitchThemeName = 'LIGHT' | 'DARK';
+export type SwitchThemeName = 'Light' | 'Dark';
 
 type Color = string | number;
 
