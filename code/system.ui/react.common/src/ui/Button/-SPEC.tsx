@@ -1,9 +1,12 @@
-import { Dev } from '../../test.ui';
-import { Button, ButtonProps } from './Button';
+import { Dev, type t } from '../../test.ui';
+import { Button } from './Button';
 
 const DEFAULTS = Button.DEFAULTS;
 
-type T = { props: ButtonProps; debug: { bg: boolean; useLabel: boolean; padding: boolean } };
+type T = {
+  props: t.ButtonProps;
+  debug: { bg: boolean; useLabel: boolean; padding: boolean };
+};
 const initial: T = {
   props: {
     isEnabled: DEFAULTS.isEnabled,
