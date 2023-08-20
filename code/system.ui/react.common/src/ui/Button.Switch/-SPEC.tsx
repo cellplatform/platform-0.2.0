@@ -23,7 +23,7 @@ export default Dev.describe('Switch (Button)', (e) => {
     dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'Switch'} data={e.state} />);
 
     dev
-      .button('toggle: `isEnabled`', (e) => {
+      .button('toggle: `enabled`', (e) => {
         e.change(({ props }) => (props.enabled = !props.enabled));
       })
       .button('toggle: `value`', (e) => {

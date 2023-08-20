@@ -72,7 +72,7 @@ export default Dev.describe('Button', (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('isEnabled')
+          .label('enabled')
           .value((e) => e.state.props.enabled)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
       );
