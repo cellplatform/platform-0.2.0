@@ -10,7 +10,6 @@ export const DEFAULTS = {
   indexes: true,
   indent: 0,
   resettable: true,
-  autoSubfieldSelection: false,
   switchColor: COLORS.BLUE,
   label: {
     reset: 'reset',

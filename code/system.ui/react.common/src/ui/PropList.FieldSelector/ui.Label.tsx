@@ -9,7 +9,7 @@ export type LabelProps = {
   indexes: boolean;
   indent: number;
   style?: t.CssValue;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler;
 };
 
 export const Label: React.FC<LabelProps> = (props) => {

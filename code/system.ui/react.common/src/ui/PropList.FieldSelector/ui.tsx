@@ -11,14 +11,13 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     resettable = DEFAULTS.resettable,
     indexes = DEFAULTS.indexes,
     indent = DEFAULTS.indent,
-    autoSubfieldSelection = DEFAULTS.autoSubfieldSelection,
   } = props;
   const all = [...(props.all ?? [])];
   const isSelected = (field: string) => selected.includes(field);
 
   const mouse = useMouse();
   const [_, setCount] = useState(0);
-  const increment = () => setCount((prev) => prev + 1);
+  const redraw = () => setCount((prev) => prev + 1);
 
   /**
    * Ensure redraw when keyboard changes.
@@ -29,7 +28,7 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
     KeyboardMonitor.$.pipe(
       rx.takeUntil(dispose$),
       rx.filter(() => resettable),
-    ).subscribe(() => increment());
+    ).subscribe(() => redraw());
     return dispose;
   }, []);
 
@@ -37,9 +36,11 @@ export const View: React.FC<t.PropListFieldSelectorProps> = (props) => {
    * [Handlers]
    */
   const handleClick = (field: string) => {
+    const modifiers = KeyboardMonitor.state.current.modifiers;
     const previous = [...selected];
-    const { action, next } = Wrangle.next(autoSubfieldSelection, all, selected, field);
-    props.onClick?.(Wrangle.clickArgs({ field, action, previous, next }));
+    const { action, next } = Wrangle.next(all, selected, field, modifiers);
+    const args = Wrangle.clickArgs({ field, action, previous, next });
+    props.onClick?.(args);
   };
 
   const handleReset = (e: React.MouseEvent) => {

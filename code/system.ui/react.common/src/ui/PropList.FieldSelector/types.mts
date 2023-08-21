@@ -13,7 +13,6 @@ export type PropListFieldSelectorProps<F extends string = string> = {
 
   resettable?: boolean;
   indexes?: boolean;
-  autoSubfieldSelection?: boolean; // Selects namespace children when parent is selected (eg. "foo" → "foo.bar")
 
   switchColor?: string | number;
   indent?: number;
