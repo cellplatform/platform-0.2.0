@@ -9,28 +9,33 @@ export const Wrangle = {
     return all.includes(prefix);
   },
 
+  next(all: string[], selected: string[], field: string, modifiers: t.KeyboardModifierFlags) {
+    type A = t.PropListFieldSelectorAction;
+    const action: A = selected.includes(field) ? 'Deselect' : 'Select';
+    let next = action === 'Select' ? [...selected, field] : selected.filter((f) => f !== field);
+    if (modifiers.meta) {
+      if (action === 'Select') next = Wrangle.addSubfields(all, next, field);
+      if (action === 'Deselect') next = Wrangle.removeSubfields(all, next, field);
+    }
+    return { action, next } as const;
+  },
+
   subfields(all: string[], field: string) {
     const match = `${field}.`;
     return all.filter((field) => field.startsWith(match));
   },
 
-  next(autoSubfield: boolean, all: string[], selected: string[], field: string) {
-    type A = t.PropListFieldSelectorAction;
-    const action: A = selected.includes(field) ? 'Deselect' : 'Select';
-    let next = action === 'Select' ? [...selected, field] : selected.filter((f) => f !== field);
-    return {
-      action,
-      next: autoSubfield ? Wrangle.autoAdjustSubfields(all, next) : next,
-    } as const;
+  addSubfields(all: string[], selected: string[], field: string) {
+    const subfields = Wrangle.subfields(all, field);
+    selected = selected.filter((f) => !subfields.includes(f));
+    const index = selected.indexOf(field);
+    selected.splice(index < 0 ? selected.length : index + 1, 0, ...subfields);
+    return selected;
   },
 
-  autoAdjustSubfields(all: string[], selected: string[]) {
-    /**
-     * TODO 🐷
-     * - If a parent is selected, select all children.
-     * - If a parent is NOT selected, deselect all children.
-     */
-    return selected;
+  removeSubfields(all: string[], selected: string[], field: string) {
+    const subfields = Wrangle.subfields(all, field);
+    return selected.filter((f) => !subfields.includes(f));
   },
 
   clickArgs(input: Omit<ClickArgs, 'as'>): ClickArgs {
