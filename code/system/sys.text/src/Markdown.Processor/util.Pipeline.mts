@@ -102,4 +102,4 @@ export const Pipeline = {
       },
     };
   },
-};
+} as const;
