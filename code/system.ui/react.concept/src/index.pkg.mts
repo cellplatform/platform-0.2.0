@@ -13,7 +13,6 @@ export const Pkg: ModuleDef = {
   name: 'sys.ui.react.concept',
   version: '0.0.0',
   dependencies: {
-    'ext.ui.react.vimeo': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.data.crdt': '0.0.0',

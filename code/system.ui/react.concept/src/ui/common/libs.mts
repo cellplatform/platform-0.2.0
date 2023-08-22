@@ -1,9 +1,4 @@
 /**
- * @external
- */
-export { Vimeo } from 'ext.ui.react.vimeo';
-
-/**
  * @system
  */
 export { File } from 'sys.ui.dom';

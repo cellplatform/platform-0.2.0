@@ -1,4 +1,4 @@
-import { Dev, Icons, TestFile, Vimeo, rx, slug, type t } from '../../../test.ui';
+import { Dev, Icons, TestFile, rx, slug, type t } from '../../../test.ui';
 
 import { Layout } from '..';
 
@@ -30,8 +30,8 @@ export default Dev.describe(name, async (e) => {
   });
 
   const bus = rx.bus();
-  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
-  const player = Vimeo.Events(vimeo);
+  // const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
+  // const player = Vimeo.Events(vimeo);
 
   /**
    * (CRDT) Filesystem
@@ -115,17 +115,13 @@ export default Dev.describe(name, async (e) => {
 
     dev.section('Video', (dev) => {
       dev.button((btn) => {
-        btn
-          .label('play')
-          .right((e) => <Icons.Play size={16} />)
-          .onClick((e) => player.play.fire());
+        btn.label('play').right((e) => <Icons.Play size={16} />);
+        // .onClick((e) => player.play.fire());
       });
 
       dev.button((btn) => {
-        btn
-          .label('pause')
-          .right((e) => <Icons.Pause size={16} />)
-          .onClick((e) => player.pause.fire());
+        btn.label('pause').right((e) => <Icons.Pause size={16} />);
+        // .onClick((e) => player.pause.fire());
       });
 
       dev.hr(-1, 5);
@@ -135,8 +131,8 @@ export default Dev.describe(name, async (e) => {
           .label('restart')
           .right((e) => <Icons.Replay size={16} />)
           .onClick((e) => {
-            player.seek.start();
-            player.play.fire();
+            // player.seek.start();
+            // player.play.fire();
           });
       });
     });

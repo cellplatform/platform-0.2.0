@@ -1,4 +1,4 @@
-import { COLORS, Color, ProgressBar, Video, Vimeo, css, type t } from './common';
+import { COLORS, Color, ProgressBar, Video, css, type t } from './common';
 import { DownloadButton } from './ui.DownloadButton';
 
 /**

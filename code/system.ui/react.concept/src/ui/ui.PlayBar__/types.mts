@@ -1,5 +1,7 @@
 import { type t } from './common';
 
+import type { VimeoInstance, VimeoStatus } from 'ext.ui.react.vimeo/src/types.mjs';
+
 export type DownloadFileProps = {
   kind: 'pdf';
   url: string;
@@ -23,5 +25,5 @@ export type PlayBarProps__ = {
  */
 export type PlayBarHandler__ = (e: PlayBarHandlerArgs__) => void;
 export type PlayBarHandlerArgs__ = {
-  status: t.VimeoStatus;
+  status: VimeoStatus;
 };

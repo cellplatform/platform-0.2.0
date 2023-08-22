@@ -1,5 +1,7 @@
 import { PlayBar } from '.';
-import { Color, Dev, Vimeo, css, rx, slug, type t } from '../../test.ui';
+import { Color, Dev, css, rx, slug, type t } from '../../test.ui';
+
+import type { VimeoInstance, VimeoStatus } from 'ext.ui.react.vimeo/src/types.mjs';
 
 const DEFAULTS = PlayBar.DEFAULTS;
 
@@ -28,7 +30,7 @@ export default Dev.describe('PlayBar', (e) => {
    * Video
    */
   const bus = rx.bus();
-  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
+  const vimeo: VimeoInstance = { bus, id: `foo.${slug()}` };
 
   /**
    * State
@@ -92,12 +94,12 @@ export default Dev.describe('PlayBar', (e) => {
         };
         return (
           <div {...styles.base}>
-            <Vimeo.Player
+            {/* <Vimeo.Player
               width={300}
               borderRadius={borderRadius}
               instance={vimeo}
               video={DEFAULTS.sample.video?.id}
-            />
+            /> */}
           </div>
         );
       });
