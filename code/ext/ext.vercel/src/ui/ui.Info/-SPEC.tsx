@@ -36,7 +36,6 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.TODO();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -54,6 +53,12 @@ export default Dev.describe(name, (e) => {
           />
         );
       });
+    });
+
+    dev.hr(5, 20);
+
+    dev.button('import: ../sample.mjs', async (e) => {
+      import('../sample.mjs');
     });
   });
 
