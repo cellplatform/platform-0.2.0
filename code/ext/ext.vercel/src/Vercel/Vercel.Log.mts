@@ -1,4 +1,4 @@
-import { t, pc, asArray } from './common.mjs';
+import { t, pc, asArray } from './common';
 
 export const VercelLog = {
   /**

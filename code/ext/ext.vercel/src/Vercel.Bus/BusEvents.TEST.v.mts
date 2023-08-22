@@ -1,5 +1,5 @@
-import { describe, expect, it } from '../test/index.mjs';
-import { BusEvents } from './index.mjs';
+import { describe, expect, it } from '../test';
+import { BusEvents } from '.';
 
 describe('BusEvents', () => {
   const is = BusEvents.is;

@@ -1,3 +1,3 @@
-export * from '../common/index.mjs';
+export * from '../common';
 export * from './Test.Util.mjs';
 export * from './libs.mjs';

@@ -1,11 +1,8 @@
 /**
  * Sample (Web/Browser)
  */
-import { Filesystem } from 'sys.fs.indexeddb';
-import { Time } from 'sys.util';
-import { rx, Vercel } from '../index.mjs';
-
-import { Pkg } from '../index.pkg.mjs';
+import { Vercel } from '../Vercel';
+import { Filesystem, Pkg, Time, rx } from './common';
 
 console.info(Pkg.toString());
 console.info('');
