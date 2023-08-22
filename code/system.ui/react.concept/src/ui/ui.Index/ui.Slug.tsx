@@ -8,7 +8,7 @@ export type SlugProps = {
   focused?: boolean;
   editing?: boolean;
   style?: t.CssValue;
-  onSelect?: t.LayoutSelectHandler;
+  onSelect?: t.IndexSelectHandler;
   onEditStart?: t.IndexSlugEditStartHandler;
   onEditComplete?: t.IndexSlugEditCompleteHandler;
 };

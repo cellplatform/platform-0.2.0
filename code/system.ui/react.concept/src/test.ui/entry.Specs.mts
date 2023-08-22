@@ -10,7 +10,6 @@ export const Specs = {
   // 'sys.ui.concept.Layout.Stateful': () => import('../ui/ui.Layout/-dev/-SPEC.Stateful'),
 
   '__sys.ui.concept.PlayBar': () => import('../ui/ui.PlayBar__/-SPEC'),
-  '__sys.ui.concept.Layout': () => import('../ui/ui.Layout__/-dev/-SPEC'),
 
   // sys.ui.common
   'sys.ui.common.Layout.Split': () => import('../ui/-sys.common.Layout.Split/-SPEC'),

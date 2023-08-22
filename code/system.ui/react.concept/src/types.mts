@@ -7,7 +7,6 @@ export type * from './ui/ui.VideoDiagram/types.mjs';
 
 export type * from './ui/-sys.common.Layout.Split/types.mjs';
 
-export type * from './ui/ui.Layout__/types.mjs';
 export type * from './ui/ui.PlayBar__/types.mjs';
 
 /**
