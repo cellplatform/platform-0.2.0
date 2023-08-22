@@ -1,8 +1,16 @@
+import { Icon } from './Icon';
+
 import { BsKeyboard, BsKeyboardFill } from 'react-icons/bs';
-import { MdFace, MdPortableWifiOff, MdVisibility, MdVisibilityOff, MdWifi } from 'react-icons/md';
+import {
+  MdFace,
+  MdOutlineVerticalAlignCenter,
+  MdPortableWifiOff,
+  MdVisibility,
+  MdVisibilityOff,
+  MdWifi,
+} from 'react-icons/md';
 import { TbCopy } from 'react-icons/tb';
 import { VscRepo, VscSymbolClass } from 'react-icons/vsc';
-import { Icon } from './Icon';
 
 const icon = Icon.renderer;
 
@@ -17,4 +25,5 @@ export const Icons = {
   Keyboard: { fill: icon(BsKeyboardFill), outline: icon(BsKeyboard) },
   Repo: icon(VscRepo),
   ObjectTree: icon(VscSymbolClass),
+  Align: { Center: icon(MdOutlineVerticalAlignCenter) },
 } as const;

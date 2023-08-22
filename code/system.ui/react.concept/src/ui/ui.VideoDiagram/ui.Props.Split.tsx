@@ -1,4 +1,4 @@
-import { SplitLayout, type t } from './common';
+import { Layout, type t } from './common';
 
 export type SplitProps = {
   title?: string;
@@ -10,7 +10,7 @@ export type SplitProps = {
 export const Split: React.FC<SplitProps> = (input) => {
   const { props = {}, title = 'split (diagram / video)' } = input;
   return (
-    <SplitLayout.PropEditor
+    <Layout.Split.PropEditor
       title={title}
       split={props.split}
       splitMin={props.splitMin}

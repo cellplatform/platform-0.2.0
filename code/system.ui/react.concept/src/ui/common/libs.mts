@@ -22,6 +22,7 @@ export {
   useMouse,
   useRubberband,
   useSizeObserver,
+  Layout,
 } from 'sys.ui.react.common';
 export { Image } from 'sys.ui.react.media.image';
 export { Video } from 'sys.ui.react.media.video';

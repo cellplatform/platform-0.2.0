@@ -12,6 +12,8 @@ export type * from './Icon/types.mjs';
 export type * from './Item.LabelItem.Stateful/types.mjs';
 export type * from './Item.LabelItem/types.mjs';
 export type * from './Item/types.mjs';
+export type * from './Layout.Split/types.mjs';
+export type * from './Layout/types.mjs';
 export type * from './ObjectView/types.mjs';
 export type * from './ProgressBar/types.mjs';
 export type * from './PropList.FieldSelector/types.mjs';

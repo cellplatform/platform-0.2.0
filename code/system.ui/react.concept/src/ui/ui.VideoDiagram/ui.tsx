@@ -1,27 +1,23 @@
 import { useState } from 'react';
 
-import { SplitLayout, css, type t } from './common';
+import { Layout, css, type t } from './common';
 import { ImagePanel } from './ui.Panel.Image';
 import { VideoPanel } from './ui.Panel.Video';
 
 export const View: React.FC<t.VideoDiagramProps> = (props) => {
   const { debug = false } = props;
-
   const [status, setStatus] = useState<t.VideoStatus>();
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      position: 'relative',
-      display: 'grid',
-    }),
+    base: css({ position: 'relative', display: 'grid' }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
-      <SplitLayout
+      <Layout.Split
         debug={debug}
         split={props.split}
         splitMin={props.splitMin}
@@ -38,7 +34,7 @@ export const View: React.FC<t.VideoDiagramProps> = (props) => {
             props.onVideoStatus?.(e);
           }}
         />
-      </SplitLayout>
+      </Layout.Split>
     </div>
   );
 };

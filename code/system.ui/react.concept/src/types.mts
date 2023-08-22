@@ -6,11 +6,6 @@ export type * from './ui/ui.Info/types.mjs';
 export type * from './ui/ui.VideoDiagram/types.mjs';
 
 /**
- * TODO 🐷
- */
-export type * from './ui/-sys.common.Layout.Split/types.mjs';
-
-/**
  * Primary "Slug" concept.
  */
 type Id = string;

@@ -1,5 +1,4 @@
-import { Percent } from '../../common';
-import type * as t from './types.mjs';
+import { Percent, type t } from '../../common';
 
 /**
  * Helpers
