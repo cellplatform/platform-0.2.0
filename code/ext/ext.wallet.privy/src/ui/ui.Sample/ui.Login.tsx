@@ -10,8 +10,6 @@ export type LoginProps = {
 export const Login: React.FC<LoginProps> = (props) => {
   const privy = usePrivy();
 
-  console.log('privy', privy);
-
   /**
    * [Render]
    */

@@ -1,8 +1,9 @@
-import { Dev, PropList, type t } from '../../test.ui';
 import { Info, type InfoProps } from '.';
+import { Dev, type t } from '../../test.ui';
 
 type T = { props: InfoProps };
 const initial: T = { props: {} };
+const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
@@ -12,7 +13,7 @@ export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.wallet.privy.Info');
   const local = localstore.object({
-    selectedFields: Info.DEFAULTS.fields,
+    selectedFields: DEFAULTS.fields.default,
   });
 
   e.it('ui:init', async (e) => {
@@ -44,7 +45,7 @@ export default Dev.describe(name, (e) => {
         return (
           <Dev.FieldSelector
             style={{ Margin: [10, 40, 10, 30] }}
-            all={Info.FIELDS}
+            all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(ev) => {
               const fields = ev.next as InfoProps['fields'];

@@ -4,10 +4,21 @@ export * from '../common';
 /**
  * Constants
  */
-export const FIELDS: t.InfoField[] = ['Module', 'Module.Verify'];
-const fields = ['Module', 'Module.Verify'] as t.InfoField[];
+const allFields: t.InfoField[] = [
+  'Module',
+  'Module.Verify',
+  'Login.Method.Wallet',
+  'Login.Method.SMS',
+  'Login.Method.Email',
+];
+const defaultFields: t.InfoField[] = [
+  'Module',
+  'Module.Verify',
+  'Login.Method.SMS',
+  'Login.Method.Wallet',
+];
 
 export const DEFAULTS = {
-  fields,
+  fields: { all: allFields, default: defaultFields },
   query: { dev: 'dev' },
 } as const;
