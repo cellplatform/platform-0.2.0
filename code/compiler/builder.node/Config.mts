@@ -3,6 +3,7 @@
 import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
@@ -65,7 +66,11 @@ export const Config = {
 
       let config: UserConfig = {
         build,
-        plugins: [topLevelAwait(), wasm()],
+        plugins: [
+          topLevelAwait(),
+          wasm(),
+          nodePolyfills({ exclude: ['fs'] }), // NB: Temporary requirement of: ext.wallet.privy
+        ],
         worker: {
           format: 'es',
           plugins: [topLevelAwait(), wasm()],
