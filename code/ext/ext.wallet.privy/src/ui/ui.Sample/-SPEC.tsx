@@ -7,6 +7,10 @@ type T = { props: t.SampleProps };
 const initial: T = { props: { appId } };
 const name = Root.displayName ?? '';
 
+/**
+ * https://docs.privy.io/
+ * https://docs.privy.io/reference/react-auth/modules#useprivy
+ */
 export default Dev.describe(name, (e) => {
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);

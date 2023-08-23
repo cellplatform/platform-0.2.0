@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
 
 import { PrivyProvider, type User } from '@privy-io/react-auth';
-console.log('PrivyProvider', PrivyProvider);
+import { Login } from './ui.Login';
 
 const View: React.FC<t.SampleProps> = (props) => {
   const { appId } = props;
@@ -10,19 +10,15 @@ const View: React.FC<t.SampleProps> = (props) => {
 
   const handleLogin = (user: User, isNewUser: boolean) => {
     console.log(`User ${user.id} logged in!`);
+    console.log('isNewUser', isNewUser);
   };
 
   /**
    * [Render]
    */
   const styles = {
-    base: css({
-      backgroundColor: 'rgba(255, 0, 0, 0.1)' /* RED */,
-      padding: 5,
-    }),
+    base: css({ padding: 15 }),
   };
-
-  const el = `🐷 Hello Privy`;
 
   return (
     <div {...css(styles.base, props.style)}>
@@ -30,15 +26,16 @@ const View: React.FC<t.SampleProps> = (props) => {
         appId={appId}
         onSuccess={handleLogin}
         config={{
-          loginMethods: ['email', 'wallet'],
+          loginMethods: ['email', 'sms', 'wallet'],
           appearance: {
             theme: 'light',
             accentColor: '#676FFF',
-            logo: 'https://your-logo-url',
+            logo: 'https://db.team/images/ro.png',
+            showWalletLoginFirst: false,
           },
         }}
       >
-        {el}
+        <Login />
       </PrivyProvider>
     </div>
   );
