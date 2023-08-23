@@ -5,17 +5,30 @@ import { pushToVercel } from './deploy.vercel.mjs';
 /**
  * Deploy
  */
-const deployment = await pushToVercel({
-  bus,
-  version: bundle.version,
-  fs: bundle.fs,
-  source: bundle.dirs.app,
-});
 
-console.log('-------------------------------------------');
-console.log('deployed', deployment.status);
+export async function deploy(project: string, alias: string) {
+  const version = bundle.version;
+  const fs = bundle.fs;
+  const source = bundle.dirs.app;
+  const deployment = await pushToVercel({ bus, version, fs, source, project, alias });
 
-/**
- * Log results.
- */
-await bundle.logger.write({ bundle, deployment });
+  /**
+   * Log results.
+   */
+  await bundle.logger.write({ bundle, deployment });
+}
+
+await deploy('tdb-dev', 'dev.db.team');
+
+// project: 'tdb-dev',
+// alias: 'dev.db.team',
+
+// project: 'cell-phil',
+// alias: 'phil.cockfield.net',
+
+// project: 'cell-rowan',
+// alias: 'rowanyeoman.com',
+
+// → jamesamuel.com
+// project: 'cell-james',
+// alias: 'jamesamuel.com',

@@ -44,7 +44,7 @@ export const PropEditor: React.FC<t.SplitLayoutEditorProps> = (props) => {
   };
 
   const elAxis = showAxis && (
-    <Button onClick={toggleAxis} isEnabled={enabled}>
+    <Button onClick={toggleAxis} enabled={enabled}>
       <div {...styles.button}>
         <Icons.Align.Center size={20} style={styles.icon} />
       </div>

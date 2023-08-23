@@ -1,4 +1,4 @@
-import { Http, rx } from '../common/index.mjs';
+import { Http, rx } from '../common';
 import { TestFilesystem } from './libs.mjs';
 
 const bus = rx.bus();

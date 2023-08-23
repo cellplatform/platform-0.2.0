@@ -57,7 +57,7 @@ export const Action: React.FC<ActionProps> = (props) => {
     <Button
       onMouseDown={(e) => e.stopPropagation()}
       onClick={handleClick}
-      isEnabled={enabled}
+      enabled={enabled}
       disabledOpacity={1}
     >
       <div {...styles.button}>{elIcon}</div>

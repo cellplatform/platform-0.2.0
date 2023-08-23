@@ -1,4 +1,4 @@
-import { VercelBus as Bus } from '../Vercel.Bus/index.mjs';
+import { VercelBus as Bus } from '../Vercel.Bus';
 import { client } from './Vercel.client.mjs';
 import { VercelFs as Fs } from './Vercel.Fs.mjs';
 import { VercelHttp as Http } from './Vercel.Http/index.mjs';
@@ -12,4 +12,4 @@ export const Vercel = {
   Info,
   Log,
   client,
-};
+} as const;

@@ -8,6 +8,7 @@ export type { Observable, Subject } from 'rxjs';
  * @system
  */
 export type {
+  Axis,
   Disposable,
   DomRect,
   EdgePos,

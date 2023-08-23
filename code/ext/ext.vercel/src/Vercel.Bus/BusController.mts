@@ -1,6 +1,6 @@
-import { VercelHttp } from '../Vercel/index.mjs';
+import { VercelHttp } from '../Vercel';
 import { BusEvents } from './BusEvents.mjs';
-import { DEFAULT, rx, slug, t } from './common.mjs';
+import { DEFAULT, rx, slug, t } from './common';
 
 type Id = string;
 

@@ -1,7 +1,7 @@
 import { firstValueFrom, of, timeout } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { rx, slug, t, DEFAULT } from './common.mjs';
+import { rx, slug, t, DEFAULT } from './common';
 
 type Id = string;
 

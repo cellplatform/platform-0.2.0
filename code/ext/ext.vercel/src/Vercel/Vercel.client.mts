@@ -1,6 +1,6 @@
-import { rx, t, slug } from './common.mjs';
+import { rx, t, slug } from './common';
 
-import { VercelBus } from '../Vercel.Bus/index.mjs';
+import { VercelBus } from '../Vercel.Bus';
 import { VercelFs } from './Vercel.Fs.mjs';
 import { VercelInfo } from './Vercel.Info.mjs';
 import { VercelLog } from './Vercel.Log.mjs';

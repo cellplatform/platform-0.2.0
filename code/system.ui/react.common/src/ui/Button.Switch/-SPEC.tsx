@@ -1,7 +1,7 @@
-import { Switch, SwitchProps } from '.';
-import { Dev } from '../../test.ui';
+import { Switch } from '.';
+import { Dev, type t } from '../../test.ui';
 
-type T = { props: SwitchProps };
+type T = { props: t.SwitchProps };
 const initial: T = { props: { value: true } };
 
 export default Dev.describe('Switch (Button)', (e) => {
@@ -23,8 +23,8 @@ export default Dev.describe('Switch (Button)', (e) => {
     dev.footer.border(-0.1).render<T>((e) => <Dev.Object name={'Switch'} data={e.state} />);
 
     dev
-      .button('toggle: `isEnabled`', (e) => {
-        e.change(({ props }) => (props.isEnabled = !props.isEnabled));
+      .button('toggle: `enabled`', (e) => {
+        e.change(({ props }) => (props.enabled = !props.enabled));
       })
       .button('toggle: `value`', (e) => {
         e.change(({ props }) => (props.value = !props.value));

@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
+import { Vercel } from 'ext.vercel';
 import { Filesystem } from 'sys.fs.node';
 import { rx } from 'sys.util';
-import { Vercel } from 'ext.vercel';
 
 const token = process.env.VERCEL_TEST_TOKEN || ''; // Secure API token (secret).
 const bus = rx.bus();

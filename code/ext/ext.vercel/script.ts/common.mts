@@ -1,5 +1,5 @@
 import { NodeFs } from 'sys.fs.node';
-import type { Fs } from 'sys.fs/src/types/index.mjs';
+import type { Fs } from 'sys.fs/src/types';
 
 export const Util = {
   /**

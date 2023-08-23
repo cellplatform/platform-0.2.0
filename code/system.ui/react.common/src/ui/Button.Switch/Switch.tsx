@@ -5,32 +5,13 @@ import { SwitchThumb } from './Switch.Thumb';
 import { SwitchTrack } from './Switch.Track';
 import { SwitchTheme } from './theme.mjs';
 
-export type SwitchProps = {
-  value?: boolean;
-  width?: number;
-  height?: number;
-  isEnabled?: boolean;
-  tooltip?: string;
-  track?: Partial<t.SwitchTrack>;
-  thumb?: Partial<t.SwitchThumb>;
-  theme?: t.SwitchThemeName | Partial<t.SwitchTheme>;
-  transitionSpeed?: number;
-  style?: t.CssValue;
-
-  onClick?: React.MouseEventHandler;
-  onMouseDown?: React.MouseEventHandler;
-  onMouseUp?: React.MouseEventHandler;
-  onMouseEnter?: React.MouseEventHandler;
-  onMouseLeave?: React.MouseEventHandler;
-};
-
-const View: React.FC<SwitchProps> = (props) => {
+const View: React.FC<t.SwitchProps> = (props) => {
   const { track = {}, thumb = {} } = props;
   const theme = toTheme(props.theme);
   const height = props.height ?? 32;
   const width = props.width ?? height * 2 - height * 0.4;
   const transitionSpeed = props.transitionSpeed ?? 200;
-  const isEnabled = props.isEnabled ?? true;
+  const isEnabled = props.enabled ?? true;
   const value = Boolean(props.value);
 
   const [isDown, setIsDown] = useState<boolean>(false);
@@ -109,9 +90,10 @@ const View: React.FC<SwitchProps> = (props) => {
  */
 
 function toTheme(input?: t.SwitchThemeName | Partial<t.SwitchTheme>): t.SwitchTheme {
-  let theme = input || 'LIGHT';
-  theme =
-    typeof theme === 'string' ? SwitchTheme.fromString(theme as t.SwitchThemeName).green : theme;
+  let theme = input || 'Light';
+  if (typeof theme === 'string') {
+    theme = SwitchTheme.fromString(theme as t.SwitchThemeName).green;
+  }
   return theme as t.SwitchTheme;
 }
 
@@ -122,7 +104,7 @@ function toTheme(input?: t.SwitchThemeName | Partial<t.SwitchTheme>): t.SwitchTh
 type Fields = {
   Theme: typeof SwitchTheme;
 };
-export const Switch = FC.decorate<SwitchProps, Fields>(
+export const Switch = FC.decorate<t.SwitchProps, Fields>(
   View,
   { Theme: SwitchTheme },
   { displayName: 'Switch' },

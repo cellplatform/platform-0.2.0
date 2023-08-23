@@ -1,7 +1,7 @@
 import { type t } from '../common';
 
 export * from '../common';
-export { PlayBar } from '../ui.PlayBar__';
+// export { PlayBar } from '../ui.PlayBar__';
 export { Empty } from '../ui.Empty';
 
 /**

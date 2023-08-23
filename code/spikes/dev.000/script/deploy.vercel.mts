@@ -11,10 +11,12 @@ export async function pushToVercel(args: {
   fs: t.Fs;
   version: string;
   source: string;
+  project: string;
+  alias: string;
   bus?: t.EventBus<any>;
 }): Promise<t.LogDeploymentEntry> {
   //
-  const { fs, version, source } = args;
+  const { fs, version, source, project, alias } = args;
   const bus = args.bus ?? rx.bus();
   const vercel = Vercel.client({ bus, token, fs });
 
@@ -23,12 +25,8 @@ export async function pushToVercel(args: {
     source,
     team: 'tdb',
 
-    project: 'tdb-dev',
-    alias: 'dev.db.team',
-
-    // → jamesamuel.com
-    // project: 'cell-james',
-    // alias: 'jamesamuel.com',
+    project,
+    alias,
 
     ensureProject: true,
     regions: ['sfo1'],

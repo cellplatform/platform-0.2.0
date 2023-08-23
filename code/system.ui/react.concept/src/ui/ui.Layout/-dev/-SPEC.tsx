@@ -1,6 +1,5 @@
-import { Dev, Icons, TestFile, Vimeo, rx, slug, type t } from '../../../test.ui';
-
 import { Layout } from '..';
+import { Dev, TestFile, rx, type t } from '../../../test.ui';
 
 const DEFAULTS = Layout.DEFAULTS;
 
@@ -8,10 +7,7 @@ type T = {
   props: t.LayoutProps;
   debug: { withSlugs?: boolean };
 };
-const initial: T = {
-  props: {},
-  debug: {},
-};
+const initial: T = { props: {}, debug: {} };
 
 /**
  * Spec
@@ -28,10 +24,6 @@ export default Dev.describe(name, async (e) => {
     selected: -1,
     focused: DEFAULTS.focused,
   });
-
-  const bus = rx.bus();
-  const vimeo: t.VimeoInstance = { bus, id: `foo.${slug()}` };
-  const player = Vimeo.Events(vimeo);
 
   /**
    * (CRDT) Filesystem
@@ -71,11 +63,12 @@ export default Dev.describe(name, async (e) => {
           <Layout
             {...props}
             onSelect={(e) => {
+              console.info('⚡️ onSelect:', e);
               // state.change((d) => (d.props.selected = e.index));
               // local.selected = e.index;
             }}
             onVideo={(e) => {
-              // console.info('⚡️ onVideo:', e);
+              console.info('⚡️ onVideo:', e);
               /**
                * TODO 🐷
                * - on play complete >> Next Slug
@@ -113,33 +106,33 @@ export default Dev.describe(name, async (e) => {
 
     dev.hr(-1, [5, 10]);
 
-    dev.section('Video', (dev) => {
-      dev.button((btn) => {
-        btn
-          .label('play')
-          .right((e) => <Icons.Play size={16} />)
-          .onClick((e) => player.play.fire());
-      });
-
-      dev.button((btn) => {
-        btn
-          .label('pause')
-          .right((e) => <Icons.Pause size={16} />)
-          .onClick((e) => player.pause.fire());
-      });
-
-      dev.hr(-1, 5);
-
-      dev.button((btn) => {
-        btn
-          .label('restart')
-          .right((e) => <Icons.Replay size={16} />)
-          .onClick((e) => {
-            player.seek.start();
-            player.play.fire();
-          });
-      });
-    });
+    //     dev.section('Video', (dev) => {
+    //       dev.button((btn) => {
+    //         btn
+    //           .label('play')
+    //           .right((e) => <Icons.Play size={16} />)
+    //           .onClick((e) => player.play.fire());
+    //       });
+    //
+    //       dev.button((btn) => {
+    //         btn
+    //           .label('pause')
+    //           .right((e) => <Icons.Pause size={16} />)
+    //           .onClick((e) => player.pause.fire());
+    //       });
+    //
+    //       dev.hr(-1, 5);
+    //
+    //       dev.button((btn) => {
+    //         btn
+    //           .label('restart')
+    //           .right((e) => <Icons.Replay size={16} />)
+    //           .onClick((e) => {
+    //             player.seek.start();
+    //             player.play.fire();
+    //           });
+    //       });
+    //     });
 
     dev.hr(5, 20);
 

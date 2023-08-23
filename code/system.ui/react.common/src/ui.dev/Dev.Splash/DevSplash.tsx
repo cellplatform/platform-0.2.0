@@ -3,7 +3,7 @@ import { Footer, FooterInput } from './DevSplash.Footer';
 import { useKeyboard } from './useKeyboard.mjs';
 
 export type DevSplashProps = {
-  children?: JSX.Element;
+  children?: JSX.Element | never[];
   center?: boolean;
   footer?: FooterInput;
   fill?: boolean;

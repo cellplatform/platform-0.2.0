@@ -1,45 +1,11 @@
 import { useState } from 'react';
-import { COLORS, css, FC, Style, type t } from '../common';
 import { Spinner } from '../Spinner';
+import { Wrangle } from './Wrangle.mjs';
+import { COLORS, DEFAULTS, FC, Style, css, type t } from './common';
 
-const DEFAULTS = {
-  isEnabled: true,
-  block: false,
-  spinning: false,
-  disabledOpacity: 0.3,
-  userSelect: false,
-  pressedOffset: [0, 1] as [number, number],
-};
-
-export type ButtonProps = {
-  children?: JSX.Element | string | number;
-  label?: string;
-  isEnabled?: boolean;
-  block?: boolean;
-  tooltip?: string;
-  spinning?: boolean;
-
-  style?: t.CssValue;
-  margin?: t.CssEdgesInput;
-  padding?: t.CssEdgesInput;
-  minWidth?: number;
-  maxWidth?: number;
-  disabledOpacity?: number;
-  userSelect?: boolean;
-  pressedOffset?: [number, number];
-
-  onClick?: React.MouseEventHandler;
-  onMouseDown?: React.MouseEventHandler;
-  onMouseUp?: React.MouseEventHandler;
-  onMouseEnter?: React.MouseEventHandler;
-  onMouseLeave?: React.MouseEventHandler;
-  onDoubleClick?: React.MouseEventHandler;
-  onMouse?: t.ButtonMouseHandler;
-};
-
-const View: React.FC<ButtonProps> = (props) => {
+const View: React.FC<t.ButtonProps> = (props) => {
   const {
-    isEnabled = DEFAULTS.isEnabled,
+    enabled: isEnabled = DEFAULTS.enabled,
     block = DEFAULTS.block,
     disabledOpacity = DEFAULTS.disabledOpacity,
     userSelect = DEFAULTS.userSelect,
@@ -139,37 +105,13 @@ const View: React.FC<ButtonProps> = (props) => {
 };
 
 /**
- * [Helpers]
- */
-
-const Wrangle = {
-  color(args: { isEnabled: boolean; isOver: boolean }) {
-    const { isEnabled, isOver } = args;
-    if (!isEnabled) return COLORS.DARK;
-    return isOver ? COLORS.BLUE : COLORS.DARK;
-  },
-  pressedOffset(args: {
-    isEnabled: boolean;
-    isOver: boolean;
-    isDown: boolean;
-    pressedOffset: [number, number];
-  }) {
-    const { isEnabled, isOver, isDown, pressedOffset } = args;
-    if (!isEnabled) return undefined;
-    if (!isOver) return undefined;
-    if (!isDown) return undefined;
-    return `translateX(${pressedOffset[0]}px) translateY(${pressedOffset[1]}px)`;
-  },
-};
-
-/**
  * [Export]
  */
 
 type Fields = {
   DEFAULTS: typeof DEFAULTS;
 };
-export const Button = FC.decorate<ButtonProps, Fields>(
+export const Button = FC.decorate<t.ButtonProps, Fields>(
   View,
   { DEFAULTS },
   { displayName: 'Button' },

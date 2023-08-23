@@ -64,7 +64,7 @@ export const TestRunner: React.FC<TestRunnerProps> = (props) => {
   );
 
   const elButton = !isRunning && isButtonVisible && (
-    <Button onClick={runTestsClick} isEnabled={isEnabled}>
+    <Button onClick={runTestsClick} enabled={isEnabled}>
       <Results results={results} isColored={isColored} isOver={mouse.is.over} />
     </Button>
   );

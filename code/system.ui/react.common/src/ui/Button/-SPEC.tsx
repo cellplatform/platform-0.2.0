@@ -1,12 +1,15 @@
-import { Dev } from '../../test.ui';
-import { Button, ButtonProps } from './Button';
+import { Dev, type t } from '../../test.ui';
+import { Button } from './Button';
 
 const DEFAULTS = Button.DEFAULTS;
 
-type T = { props: ButtonProps; debug: { bg: boolean; useLabel: boolean; padding: boolean } };
+type T = {
+  props: t.ButtonProps;
+  debug: { bg: boolean; useLabel: boolean; padding: boolean };
+};
 const initial: T = {
   props: {
-    isEnabled: DEFAULTS.isEnabled,
+    enabled: DEFAULTS.enabled,
     block: DEFAULTS.block,
     spinning: DEFAULTS.spinning,
     tooltip: 'My Button',
@@ -69,9 +72,9 @@ export default Dev.describe('Button', (e) => {
     dev.section('Properties', (dev) => {
       dev.boolean((btn) =>
         btn
-          .label('isEnabled')
-          .value((e) => e.state.props.isEnabled)
-          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'isEnabled'))),
+          .label('enabled')
+          .value((e) => e.state.props.enabled)
+          .onClick((e) => e.change((d) => Dev.toggle(d.props, 'enabled'))),
       );
 
       dev.boolean((btn) =>

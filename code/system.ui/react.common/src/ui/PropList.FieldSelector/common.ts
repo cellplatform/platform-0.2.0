@@ -1,3 +1,5 @@
+import { COLORS } from '../common';
+
 export * from '../common';
 export { Button } from '../Button';
 
@@ -8,7 +10,7 @@ export const DEFAULTS = {
   indexes: true,
   indent: 0,
   resettable: true,
-  autoSubfieldSelection: false,
+  switchColor: COLORS.BLUE,
   label: {
     reset: 'reset',
     clear: 'clear',

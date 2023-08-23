@@ -1,6 +1,6 @@
-import { describe, expect, it, rx, t, TestFilesystem } from '../test/index.mjs';
-import { DEFAULT } from './common.mjs';
-import { BusController, BusEvents } from './index.mjs';
+import { describe, expect, it, rx, t, TestFilesystem } from '../test';
+import { DEFAULT } from './common';
+import { BusController, BusEvents } from '.';
 
 describe('BusController', (e) => {
   const token = process.env.VERCEL_TEST_TOKEN || '';

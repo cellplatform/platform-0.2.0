@@ -26,7 +26,7 @@ export const Switch: React.FC<RowSwitchProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <BaseSwitch height={12} value={isSelected} onClick={props.onClick} isEnabled={enabled} />
+      <BaseSwitch height={12} value={isSelected} onClick={props.onClick} enabled={enabled} />
     </div>
   );
 };

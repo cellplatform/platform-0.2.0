@@ -1,4 +1,4 @@
-import { t, Filesize } from './common.mjs';
+import { t, Filesize } from './common';
 import { VercelFs } from './Vercel.Fs.mjs';
 import { VercelHttpInfo } from './Vercel.Http/VercelHttp.Info.mjs';
 

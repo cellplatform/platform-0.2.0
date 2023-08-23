@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     'approx-string-match': '2.0.0',
     'diff': '5.1.0',
     'rehype-sanitize': '5.0.1',
-    'rehype-stringify': '9.0.3',
+    'rehype-stringify': '9.0.4',
     'rehype-format': '4.0.1',
     'remark-frontmatter': '4.0.1',
     'remark-gfm': '3.0.1',

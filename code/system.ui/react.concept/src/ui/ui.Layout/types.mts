@@ -14,12 +14,6 @@ export type LayoutProps = {
   onVideo?: t.LayoutVideoHandler;
 };
 
-export type LayoutStatefulProps__ = {
-  slugs?: t.SlugListItem[];
-  style?: t.CssValue;
-  onReady?: LayoutStatefulReadyHandler;
-};
-
 export type LayoutVideoState = {
   status?: t.VideoStatus;
   playing?: boolean;

@@ -79,7 +79,7 @@ const View: React.FC<t.PeerIdProps> = (props) => {
     return (
       <Button
         onClick={handleClick}
-        isEnabled={enabled}
+        enabled={enabled}
         onMouse={(e) => setOver(e.isOver)}
         style={css(styles.base, props.style)}
       >
