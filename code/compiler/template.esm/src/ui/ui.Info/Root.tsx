@@ -1,5 +1,5 @@
 import { DEFAULTS, FC, FIELDS, Pkg, PropList, t } from './common';
-import { FieldModuleVerify } from './fields/Module.Verify';
+import { FieldModuleVerify } from './field.Module.Verify';
 
 export type InfoProps = {
   title?: t.PropListProps['title'];

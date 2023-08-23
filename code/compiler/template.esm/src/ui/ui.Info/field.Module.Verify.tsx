@@ -1,4 +1,4 @@
-import { DEFAULTS, TestRunner, type t } from '../common';
+import { DEFAULTS, TestRunner, type t } from './common';
 
 export function FieldModuleVerify(data: t.InfoData, info?: {}) {
   const ctx = {};
@@ -12,7 +12,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
     },
 
     async modules() {
-      const { TESTS } = await import('../../../test.ui/-TestRunner.TESTS.mjs');
+      const { TESTS } = await import('../../test.ui/-TestRunner.TESTS.mjs');
       return TESTS.all;
     },
   });
