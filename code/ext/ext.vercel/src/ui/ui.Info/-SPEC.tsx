@@ -57,7 +57,7 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
-    dev.button('import: ../sample.mjs', async (e) => {
+    dev.button(['import: sample.mjs', '(see console)'], async (e) => {
       import('../sample.mjs');
     });
   });
