@@ -27,6 +27,7 @@ const { Specs: ExtStripe } = await import('ext.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 // const { Specs: ProtocolHats } = await import('protocol.hats/specs');
 // const { Specs: ExtWallet } = await import('ext.wallet.rainbow/specs');
+const { Specs: ExtWalletPrivy } = await import('ext.wallet.privy/specs');
 
 export const Specs = {
   ...WebRtc,
@@ -44,4 +45,5 @@ export const Specs = {
   ...ExtProtocolHats,
   ...ExtVimeo,
   // ...ExtWallet,
+  ...ExtWalletPrivy,
 };
