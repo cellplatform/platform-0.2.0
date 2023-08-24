@@ -14,6 +14,7 @@ export const Pkg: ModuleDef = {
   version: '0.0.0',
   dependencies: {
     '@hatsprotocol/sdk-v1-core': '0.3.2',
+    'sys.fs.indexeddb': '0.0.0',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
   },
