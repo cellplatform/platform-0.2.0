@@ -1,7 +1,5 @@
-import { Dev, type t } from '../../test.ui';
 import { Root } from '.';
-
-const appId = (import.meta as any).env.VITE_PUBLIC_PRIVY_APP_ID;
+import { Dev, appId, type t } from '../../test.ui';
 
 type T = { props: t.SampleProps };
 const initial: T = { props: { appId } };

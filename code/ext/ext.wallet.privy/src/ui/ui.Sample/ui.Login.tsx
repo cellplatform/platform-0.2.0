@@ -3,11 +3,11 @@ import { Button, COLORS, Color, css, type t } from './common';
 import { usePrivy } from '@privy-io/react-auth';
 import { ObjectView } from 'sys.ui.react.common';
 
-export type LoginProps = {
+export type SampleLoginProps = {
   style?: t.CssValue;
 };
 
-export const Login: React.FC<LoginProps> = (props) => {
+export const SampleLogin: React.FC<SampleLoginProps> = (props) => {
   const privy = usePrivy();
 
   /**
