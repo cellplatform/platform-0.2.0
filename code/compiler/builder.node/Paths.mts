@@ -44,17 +44,17 @@ export const Paths = {
     pkg: 'src/index.pkg.mts',
     src: [
       'script.ts/tmp.mts',
-      'src/global.d.mts',
+      'src/global.d.ts',
 
       'src/index.mts',
       'src/index.pkg.mts',
 
-      'src/types.mts',
-      'src/global.d.mts',
+      'src/types.ts',
+      'src/global.d.ts',
 
       'src/common/index.ts',
-      'src/common/libs.mts',
-      'src/common/types.mts',
+      'src/common/libs.ts',
+      'src/common/types.ts',
 
       'src/test/-TEST.v.mts',
       'src/test/index.ts',
@@ -68,15 +68,15 @@ export const Paths = {
       'src/test.ui/index.ts',
 
       'src/ui/common/index.ts',
-      'src/ui/common/libs.mts',
-      'src/ui/common/types.mts',
+      'src/ui/common/libs.ts',
+      'src/ui/common/types.ts',
 
       'src/ui/ui.Info/-SPEC.tsx',
-      'src/ui/ui.Info/fields/Module.Verify.tsx',
+      'src/ui/ui.Info/field.Module.Verify.tsx',
       'src/ui/ui.Info/common.ts',
       'src/ui/ui.Info/index.ts',
       'src/ui/ui.Info/Root.tsx',
-      'src/ui/ui.Info/types.mts',
+      'src/ui/ui.Info/types.ts',
     ],
   },
 };
