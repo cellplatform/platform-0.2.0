@@ -1,7 +1,7 @@
-import { Info, type InfoProps } from '.';
-import { Dev, type t } from '../../test.ui';
+import { Info } from '.';
+import { Dev, type t, appId } from '../../test.ui';
 
-type T = { props: InfoProps };
+type T = { props: t.InfoProps };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -10,19 +10,36 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] };
+  type LocalStore = { selectedFields?: t.InfoField[] } & Pick<t.InfoProps, 'useAuthProvider'>;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.wallet.privy.Info');
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
+    useAuthProvider: DEFAULTS.useAuthProvider,
   });
+
+  const State = {
+    props(state: T): t.InfoProps {
+      const data: t.InfoData = {
+        provider: {
+          appId,
+          onSuccess(e) {
+            console.info(`⚡️ onSuccess`, e);
+          },
+        },
+      };
+
+      return { ...state.props, data };
+    },
+  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.fields = local.selectedFields;
       d.props.margin = 10;
+      d.props.fields = local.selectedFields;
+      d.props.useAuthProvider = local.useAuthProvider;
     });
 
     ctx.debug.width(330);
@@ -31,13 +48,13 @@ export default Dev.describe(name, (e) => {
       .size([320, null])
       .display('grid')
       .render<T>((e) => {
-        return <Info {...e.state.props} />;
+        const props = State.props(e.state);
+        return <Info {...props} />;
       });
   });
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
-    dev.TODO();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -48,12 +65,29 @@ export default Dev.describe(name, (e) => {
             all={DEFAULTS.fields.all}
             selected={props.fields}
             onClick={(ev) => {
-              const fields = ev.next as InfoProps['fields'];
+              const fields =
+                ev.action === 'Reset:Default'
+                  ? DEFAULTS.fields.default
+                  : (ev.next as t.InfoProps['fields']);
               dev.change((d) => (d.props.fields = fields));
               local.selectedFields = fields?.length === 0 ? undefined : fields;
             }}
           />
         );
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.useAuthProvider);
+        btn
+          .label((e) => `useAuthProvider`)
+          .value((e) => value(e.state))
+          .onClick((e) =>
+            e.change((d) => (local.useAuthProvider = Dev.toggle(d.props, 'useAuthProvider'))),
+          );
       });
     });
   });

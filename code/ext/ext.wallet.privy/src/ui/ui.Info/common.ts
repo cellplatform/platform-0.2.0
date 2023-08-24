@@ -7,18 +7,17 @@ export * from '../common';
 const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
+  'Login',
   'Login.Method.Wallet',
   'Login.Method.SMS',
-  'Login.Method.Email',
 ];
-const defaultFields: t.InfoField[] = [
-  'Module',
-  'Module.Verify',
-  'Login.Method.SMS',
-  'Login.Method.Wallet',
-];
+const defaultFields: t.InfoField[] = ['Module', 'Login', 'Login.Method.SMS'];
+
+const data: t.InfoData = {};
 
 export const DEFAULTS = {
-  fields: { all: allFields, default: defaultFields },
   query: { dev: 'dev' },
+  fields: { all: allFields, default: defaultFields },
+  useAuthProvider: true,
+  data,
 } as const;

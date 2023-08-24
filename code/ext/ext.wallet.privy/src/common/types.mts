@@ -1,6 +1,7 @@
 /**
  * @external
  */
+export type { PrivyInterface } from '@privy-io/react-auth';
 export type { Observable } from 'rxjs';
 
 /**

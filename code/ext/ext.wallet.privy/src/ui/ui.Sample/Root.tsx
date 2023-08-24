@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { DEFAULTS, FC, css, type t } from './common';
+import { Auth } from '../ui.Auth';
 
 import { PrivyProvider, type User } from '@privy-io/react-auth';
-import { Login } from './ui.Login';
+import { SampleLogin } from './ui.Login';
 
 const View: React.FC<t.SampleProps> = (props) => {
   const { appId } = props;
@@ -22,21 +22,24 @@ const View: React.FC<t.SampleProps> = (props) => {
 
   return (
     <div {...css(styles.base, props.style)}>
-      <PrivyProvider
+      <Auth.Provider
         appId={appId}
-        onSuccess={handleLogin}
-        config={{
-          loginMethods: ['email', 'sms', 'wallet'],
-          appearance: {
-            theme: 'light',
-            accentColor: '#676FFF',
-            logo: 'https://db.team/images/ro.png',
-            showWalletLoginFirst: false,
-          },
+        onSuccess={(e) => {
+          console.info(`User ${e.user.id} logged in!`);
+          console.info('isNewUser', e.isNewUser);
         }}
+        // config={{
+        //   loginMethods: ['email', 'sms', 'wallet'],
+        //   appearance: {
+        //     theme: 'light',
+        //     accentColor: '#676FFF',
+        //     logo: 'https://db.team/images/ro.png',
+        //     showWalletLoginFirst: false,
+        //   },
+        // }}
       >
-        <Login />
-      </PrivyProvider>
+        <SampleLogin />
+      </Auth.Provider>
     </div>
   );
 };
