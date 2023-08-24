@@ -3,13 +3,13 @@
 import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import { asArray, fs, R, t, Util } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
