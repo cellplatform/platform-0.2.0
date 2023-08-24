@@ -13,11 +13,7 @@ export const View: React.FC<t.InfoProps> = (props) => {
   if (!useAuthProvider) return <List {...props} />;
 
   return (
-    <AuthProvider
-      appId={data.provider?.appId}
-      loginMethods={Wrangle.toLoginMethods(fields)}
-      onSuccess={data.provider?.onSuccess}
-    >
+    <AuthProvider appId={data.provider?.appId} loginMethods={Wrangle.toLoginMethods(fields)}>
       <List {...props} />
     </AuthProvider>
   );

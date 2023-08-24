@@ -1,4 +1,6 @@
 import { usePrivy } from '@privy-io/react-auth';
+import { useEffect } from 'react';
+
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Pkg, PropList, t } from './common';
 import { FieldLogin } from './field.Login';
@@ -13,6 +15,10 @@ export const List: React.FC<t.InfoProps> = (props) => {
     .field('Module.Verify', () => FieldModuleVerify(data))
     .field('Login', () => FieldLogin(privy, fields, data))
     .items(fields);
+
+  useEffect(() => {
+    props.onChange?.(Wrangle.toStatus(privy));
+  }, [Wrangle.toDepFlag(privy)]);
 
   return (
     <PropList

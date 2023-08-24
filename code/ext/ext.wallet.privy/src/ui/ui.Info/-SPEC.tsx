@@ -1,5 +1,5 @@
 import { Info } from '.';
-import { Dev, type t, appId } from '../../test.ui';
+import { Dev, appId, type t } from '../../test.ui';
 
 type T = { props: t.InfoProps };
 const initial: T = { props: {} };
@@ -19,15 +19,7 @@ export default Dev.describe(name, (e) => {
 
   const State = {
     props(state: T): t.InfoProps {
-      const data: t.InfoData = {
-        provider: {
-          appId,
-          onSuccess(e) {
-            console.info(`⚡️ onSuccess`, e);
-          },
-        },
-      };
-
+      const data: t.InfoData = { provider: { appId } };
       return { ...state.props, data };
     },
   };
@@ -49,7 +41,14 @@ export default Dev.describe(name, (e) => {
       .display('grid')
       .render<T>((e) => {
         const props = State.props(e.state);
-        return <Info {...props} />;
+        return (
+          <Info
+            {...props}
+            onChange={(e) => {
+              console.info(`⚡️ onChange`, e);
+            }}
+          />
+        );
       });
   });
 

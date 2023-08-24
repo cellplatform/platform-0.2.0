@@ -8,6 +8,7 @@ export type AuthLoginMethod = 'wallet' | 'sms';
 export type AuthProviderProps = {
   children?: JSX.Element | never[];
   appId?: string;
+  logoUrl?: string;
   loginMethods?: t.AuthLoginMethod[];
   onSuccess?: t.AuthProviderSuccessHandler;
 };

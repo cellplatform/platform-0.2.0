@@ -8,7 +8,7 @@ export type InfoField =
   | 'Login.Method.SMS';
 
 export type InfoData = {
-  provider?: { appId?: string; onSuccess?: t.AuthProviderSuccessHandler };
+  provider?: { appId?: string };
   url?: { href: string; title?: string };
 };
 
@@ -25,4 +25,11 @@ export type InfoProps = {
   card?: boolean;
   flipped?: boolean;
   style?: t.CssValue;
+  onChange?: t.InfoStatusHandler;
 };
+
+/**
+ * Events
+ */
+export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
+export type InfoStatusHandlerArgs = {};
