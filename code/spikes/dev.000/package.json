@@ -1,6 +1,6 @@
 {
   "name": "sys.dev",
-  "version": "0.0.480",
+  "version": "0.0.482",
   "type": "module",
   "scripts": {
     "dev": "vite",
