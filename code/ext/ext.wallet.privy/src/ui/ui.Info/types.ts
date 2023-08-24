@@ -5,7 +5,8 @@ export type InfoField =
   | 'Module.Verify'
   | 'Login'
   | 'Login.Method.Wallet'
-  | 'Login.Method.SMS';
+  | 'Login.Method.SMS'
+  | 'User.Id';
 
 export type InfoData = {
   provider?: { appId?: string };
@@ -32,4 +33,4 @@ export type InfoProps = {
  * Events
  */
 export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
-export type InfoStatusHandlerArgs = {};
+export type InfoStatusHandlerArgs = { status: t.AuthStatus };

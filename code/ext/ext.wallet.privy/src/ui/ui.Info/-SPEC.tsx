@@ -1,7 +1,7 @@
 import { Info } from '.';
-import { Dev, appId, type t } from '../../test.ui';
+import { Dev, appId, type t, Time } from '../../test.ui';
 
-type T = { props: t.InfoProps };
+type T = { props: t.InfoProps; status?: t.AuthStatus };
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
@@ -34,7 +34,7 @@ export default Dev.describe(name, (e) => {
       d.props.useAuthProvider = local.useAuthProvider;
     });
 
-    ctx.debug.width(330);
+    ctx.debug.width(380);
     ctx.subject
       .backgroundColor(1)
       .size([320, null])
@@ -46,6 +46,7 @@ export default Dev.describe(name, (e) => {
             {...props}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
+              state.change((d) => (d.status = e.status));
             }}
           />
         );
@@ -94,7 +95,17 @@ export default Dev.describe(name, (e) => {
   e.it('ui:footer', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const user = e.state.status?.user as any;
+      if (user) {
+        const date = Time.day(user.createdAt).format('YYYY-MM-DD hh:mm A');
+        user.createdAt = date;
+      }
+
+      const data = {
+        props: e.state.props,
+        status: e.state.status,
+        'status:user': user,
+      };
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });

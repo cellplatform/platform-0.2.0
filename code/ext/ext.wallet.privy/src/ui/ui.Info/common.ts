@@ -10,9 +10,9 @@ const allFields: t.InfoField[] = [
   'Login',
   'Login.Method.Wallet',
   'Login.Method.SMS',
+  'User.Id',
 ];
 const defaultFields: t.InfoField[] = ['Module', 'Login', 'Login.Method.SMS'];
-
 const data: t.InfoData = {};
 
 export const DEFAULTS = {

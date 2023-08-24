@@ -21,6 +21,12 @@ export const Wrangle = {
   toStatus(privy: t.PrivyInterface): t.AuthStatus {
     const { authenticated, ready } = privy;
     const user = privy.user || undefined;
+    delete user?.apple;
+    delete user?.discord;
+    delete user?.email;
+    delete user?.github;
+    delete user?.google;
+    delete user?.twitter;
     return { authenticated, ready, user };
   },
 
