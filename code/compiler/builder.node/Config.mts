@@ -9,7 +9,7 @@ import { Paths } from './Paths.mjs';
 
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
-// import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
@@ -66,11 +66,7 @@ export const Config = {
 
       let config: UserConfig = {
         build,
-        plugins: [
-          topLevelAwait(),
-          wasm(),
-          // nodePolyfills({ exclude: ['fs'] }), // NB: Temporary requirement of: ext.wallet.privy
-        ],
+        plugins: [topLevelAwait(), wasm()],
         worker: {
           format: 'es',
           plugins: [topLevelAwait(), wasm()],
@@ -89,6 +85,21 @@ export const Config = {
         server: { port: 1234 },
         base: './',
       };
+
+      /**
+       * TODO 🐷 - Temporary ←[DELETE]
+       * Temporary requirement of module: ext.wallet.privy
+       */
+      console.log(modulePath);
+      if (modulePath.includes('ext.wallet.privy')) {
+        config.plugins?.push(
+          nodePolyfills({
+            exclude: ['fs'],
+            globals: { process: true },
+            protocolImports: false,
+          }),
+        );
+      }
 
       /**
        * Modification IoC
