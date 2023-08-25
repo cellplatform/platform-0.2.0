@@ -28,7 +28,6 @@ import { COLORS, Color } from './common';
 const singleton = {
   isOverriden: false,
 };
-// let _isOverridden = false; // singleton
 
 export function useStylesOverride() {
   useEffect(() => {
