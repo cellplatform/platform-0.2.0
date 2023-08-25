@@ -90,7 +90,6 @@ export const Config = {
        * TODO 🐷 - Temporary ←[DELETE]
        * Temporary requirement of module: ext.wallet.privy
        */
-      console.log(modulePath);
       if (modulePath.includes('ext.wallet.privy')) {
         config.plugins?.push(
           nodePolyfills({
