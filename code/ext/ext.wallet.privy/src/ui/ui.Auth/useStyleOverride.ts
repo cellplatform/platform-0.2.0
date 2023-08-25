@@ -31,15 +31,15 @@ export function useStyleOverride() {
   useEffect(() => {
     if (!_isOverridden) {
       const root = document.documentElement;
-      const setProperty = root.style.setProperty;
+      const style = root.style;
 
-      setProperty('--privy-border-radius-sm', '5px');
-      setProperty('--privy-border-radius-md', '6px');
-      setProperty('--privy-border-radius-lg', '10px');
-      setProperty('--privy-border-radius-full', '15px');
+      style.setProperty('--privy-border-radius-sm', '5px');
+      style.setProperty('--privy-border-radius-md', '6px');
+      style.setProperty('--privy-border-radius-lg', '10px');
+      style.setProperty('--privy-border-radius-full', '15px');
 
-      setProperty('--privy-color-accent:', COLORS.DARK);
-      setProperty('--privy-color-accent-light', Color.alpha(COLORS.BLUE, 0.2));
+      style.setProperty('--privy-color-accent:', COLORS.DARK);
+      style.setProperty('--privy-color-accent-light', Color.alpha(COLORS.BLUE, 0.2));
     }
 
     _isOverridden = true;
