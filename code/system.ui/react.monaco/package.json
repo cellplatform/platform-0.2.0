@@ -11,7 +11,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "@monaco-editor/react": "4.5.2",
+    "@monaco-editor/react": "4.5.1",
     "diff": "5.1.0",
     "monaco-editor": "0.41.0",
     "react": "18.2.0",
