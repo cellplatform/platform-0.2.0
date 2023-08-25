@@ -1,10 +1,10 @@
+import type { ConfigEnv, UserConfigFn } from 'vite';
 import { build } from 'vite';
-import type { UserConfigFn, ConfigEnv } from 'vite';
 
-import { fs, t, Util, R } from '../common/index.mjs';
-import { Template } from '../Template.mjs';
-import { Paths } from '../Paths.mjs';
 import { Config } from '../Config.mjs';
+import { Paths } from '../Paths.mjs';
+import { Template } from '../Template.mjs';
+import { Util, fs, type t } from '../common/index.mjs';
 
 /**
  * Refs:
