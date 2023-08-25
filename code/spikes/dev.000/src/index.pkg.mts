@@ -11,11 +11,11 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.482',
+  version: '0.0.483',
   dependencies: {
-    'ext.stripe': '0.0.0',
     'ext.driver.auth.privy': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
+    'ext.stripe': '0.0.0',
     'ext.ui.react.vimeo': '0.0.0',
     'react': '18.2.0',
     'react-dom': '18.2.0',
