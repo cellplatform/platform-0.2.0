@@ -25,16 +25,19 @@ import { COLORS, Color } from './common';
 
  */
 
-let _isOverridden = false; // singleton
+const singleton = {
+  isOverriden: false,
+};
+// let _isOverridden = false; // singleton
 
-export function useStyleOverride() {
+export function useStylesOverride() {
   useEffect(() => {
-    if (!_isOverridden) {
+    if (!singleton.isOverriden) {
       const root = document.documentElement;
       const style = root.style;
 
       style.setProperty('--privy-border-radius-sm', '5px');
-      style.setProperty('--privy-border-radius-md', '6px');
+      style.setProperty('--privy-border-radius-md', '8px');
       style.setProperty('--privy-border-radius-lg', '10px');
       style.setProperty('--privy-border-radius-full', '15px');
 
@@ -42,6 +45,6 @@ export function useStyleOverride() {
       style.setProperty('--privy-color-accent-light', Color.alpha(COLORS.BLUE, 0.2));
     }
 
-    _isOverridden = true;
+    singleton.isOverriden = true;
   }, []);
 }
