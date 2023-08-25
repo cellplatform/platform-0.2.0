@@ -8,6 +8,11 @@ const loginMethods: t.AuthLoginMethod[] = ['sms', 'wallet'];
 
 export const DEFAULTS = {
   loginMethods,
+
+  /**
+   * Source:
+   *    https://github.com/cellplatform/platform-0.2.0/issues/159
+   */
   logoUrl:
-    'https://user-images.githubusercontent.com/185555/262841995-1c11bcd3-1360-451d-ad24-93407bf28356.png',
+    'https://user-images.githubusercontent.com/185555/262834108-4efb7e56-ac2a-4fcb-b747-2e1245df09e0.png',
 } as const;
