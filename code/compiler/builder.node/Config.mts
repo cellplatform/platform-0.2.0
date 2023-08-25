@@ -4,11 +4,12 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
-import { asArray, fs, R, t, Util } from './common/index.mjs';
+import { asArray, fs, R, Util, type t } from './common/index.mjs';
 import { Paths } from './Paths.mjs';
 
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
@@ -24,7 +25,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['src/**/*.v.{mts,tsx}'],
+        include: ['src/**/*.v.{mts,ts,tsx}'],
         environment: 'node', // NB: Default, makes JSDOM available.
       };
     },
@@ -84,6 +85,20 @@ export const Config = {
         server: { port: 1234 },
         base: './',
       };
+
+      /**
+       * TODO 🐷 - Temporary ←[DELETE]
+       * Temporary requirement of module: ext.wallet.privy
+       */
+      if (modulePath.includes('ext.wallet.privy')) {
+        config.plugins?.push(
+          nodePolyfills({
+            exclude: ['fs'],
+            globals: { process: true },
+            protocolImports: false,
+          }),
+        );
+      }
 
       /**
        * Modification IoC

@@ -1,4 +1,4 @@
-import { DEFAULTS, TestRunner, type t } from '../common';
+import { DEFAULTS, TestRunner, type t } from './common';
 
 export function FieldModuleVerify(data: t.InfoData, info?: {}) {
   const ctx = {};
@@ -7,12 +7,12 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'NAMESPACE.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.wallet.privy.tests');
       return url.href;
     },
 
     async modules() {
-      const { TESTS } = await import('../../../test.ui/-TestRunner.TESTS.mjs');
+      const { TESTS } = await import('../../test.ui/-TestRunner.TESTS.mjs');
       return TESTS.all;
     },
   });

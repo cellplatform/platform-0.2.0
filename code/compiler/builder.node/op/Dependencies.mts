@@ -1,4 +1,4 @@
-import { R, t, Util } from '../common/index.mjs';
+import { R, Util, type t } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 
 const PackageJson = Util.PackageJson;
@@ -36,8 +36,8 @@ export const Dependencies = {
    *  2b. Ensure the "hightest version used" scope extends across all modules within the "global workspace".
    *
    */
-  async syncVersions(options: { filter?: t.PathFilter; save?: boolean } = {}) {
-    const { filter, save = true } = options;
+  async syncVersions(options: { filter?: t.PathFilter; save?: boolean; useMax?: boolean } = {}) {
+    const { filter, save = true, useMax = true } = options;
 
     const loadRootPackage = () => PackageJson.load(Paths.rootDir);
     let rootPkg = await loadRootPackage();
@@ -77,7 +77,7 @@ export const Dependencies = {
 
           if (existsInRoot) {
             // Reference is accounted for in the root - ensure we have the latest version.
-            const version = Util.Version.max(rootVersion, depVersion);
+            const version = useMax ? Util.Version.max(rootVersion, depVersion) : rootVersion;
             if (dep.version !== version) {
               modulePkg = PackageJson.deps.set(modulePkg, dep.name, version, dep.isDev);
               registerChange('module', module.name, version, dep);
@@ -89,7 +89,7 @@ export const Dependencies = {
             // Not accounted for in the root.
             //    Add it to the root now.
             const { name } = dep;
-            const version = Util.Version.max(rootVersion, depVersion);
+            const version = useMax ? Util.Version.max(rootVersion, depVersion) : rootVersion;
             rootPkg = PackageJson.deps.set(rootPkg, name, version, dep.isDev);
             registerChange('root', module.name, version, dep);
           }

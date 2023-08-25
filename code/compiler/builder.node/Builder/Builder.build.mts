@@ -1,4 +1,4 @@
-import { fs, t, pc, Util, LogTable } from '../common/index.mjs';
+import { fs, LogTable, pc, Util, type t } from '../common/index.mjs';
 import { Dependencies } from '../op/Dependencies.mjs';
 import { Package } from '../op/Package.mjs';
 import { Typescript } from '../op/Typescript.mjs';

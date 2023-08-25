@@ -12,6 +12,7 @@ export default Config.vite(import.meta.url, (e) => {
   e.chunk('ext.react.dom', 'react-dom');
   e.chunk('ext.framer-motion', 'framer-motion');
 
+  e.chunk('ext.wallet.privy', '@privy-io/react-auth');
   // e.chunk('ext.eth.wallet.rainbow', '@rainbow-me/rainbowkit');
   // e.chunk('ext.eth.wagmi', 'wagmi');
   // e.chunk('ext.eth.viem', 'viem');

@@ -1,4 +1,4 @@
-import { execa, fs, pc, R, t, Util } from '../common/index.mjs';
+import { execa, fs, pc, R, Util, type t } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 
 /**
