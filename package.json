@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@automerge/automerge": "2.0.3",
+    "@automerge/automerge-repo": "1.0.0-alpha.3",
     "@codemirror/highlight": "0.19.8",
     "@farcaster/core": "0.12.5",
     "@farcaster/hub-web": "0.6.2",
