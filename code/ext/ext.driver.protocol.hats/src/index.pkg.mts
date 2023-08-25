@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'protocol.hats',
+  name: 'ext.driver.protocol.hats',
   version: '0.0.0',
   dependencies: {
     '@hatsprotocol/sdk-v1-core': '0.4.0',
