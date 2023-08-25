@@ -1,5 +1,5 @@
 {
-  "name": "protocol.hats",
+  "name": "ext.driver.protocol.hats",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
