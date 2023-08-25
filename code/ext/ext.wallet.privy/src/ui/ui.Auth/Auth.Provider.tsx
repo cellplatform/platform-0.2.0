@@ -1,8 +1,12 @@
 import { PrivyProvider } from '@privy-io/react-auth';
 import { COLORS, DEFAULTS, FC, type t } from './common';
+import { useStyleOverride } from './useStyleOverride';
 
 const View: React.FC<t.AuthProviderProps> = (props) => {
   const { appId, loginMethods = DEFAULTS.loginMethods, logoUrl = DEFAULTS.logoUrl } = props;
+
+  useStyleOverride();
+
   if (!appId) return '⚠️ AuthProvider missing "appId"';
   if (loginMethods.length === 0) return '⚠️ AuthProvider must have at least one login method.';
 
