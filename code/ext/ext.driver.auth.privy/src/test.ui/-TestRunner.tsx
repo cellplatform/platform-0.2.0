@@ -36,7 +36,7 @@ export default Dev.describe('TestRunner', (e) => {
       runner
         .run({})
         .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
-        .localstore('dev:ext.wallet.privy')
+        .localstore('dev:ext.driver.auth.privy')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
     );

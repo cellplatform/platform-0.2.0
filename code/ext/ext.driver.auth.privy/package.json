@@ -1,5 +1,5 @@
 {
-  "name": "ext.wallet.privy",
+  "name": "ext.driver.auth.privy",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

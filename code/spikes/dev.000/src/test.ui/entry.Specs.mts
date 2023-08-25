@@ -25,9 +25,8 @@ const { Specs: Concept } = await import('sys.ui.react.concept/specs');
 const { Specs: ExtProtocolHats } = await import('ext.driver.protocol.hats/specs');
 const { Specs: ExtStripe } = await import('ext.stripe/specs');
 const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
-// const { Specs: ProtocolHats } = await import('protocol.hats/specs');
-// const { Specs: ExtWallet } = await import('ext.wallet.rainbow/specs');
-const { Specs: ExtWalletPrivy } = await import('ext.wallet.privy/specs');
+// const { Specs: ProtocolHats } = await import('ext.driver.protocol.hats/specs');
+const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
 
 export const Specs = {
   ...WebRtc,
@@ -41,9 +40,10 @@ export const Specs = {
   ...MediaVideo,
   ...Fs,
   ...Concept,
+
   ...ExtStripe,
   ...ExtProtocolHats,
   ...ExtVimeo,
-  // ...ExtWallet,
-  ...ExtWalletPrivy,
+
+  ...ExtAuthPrivy,
 };

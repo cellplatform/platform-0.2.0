@@ -7,7 +7,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
 
     infoUrl() {
       const url = new URL(location.origin);
-      url.searchParams.set(DEFAULTS.query.dev, 'ext.wallet.privy.tests');
+      url.searchParams.set(DEFAULTS.query.dev, 'ext.driver.auth.privy.tests');
       return url.href;
     },
 

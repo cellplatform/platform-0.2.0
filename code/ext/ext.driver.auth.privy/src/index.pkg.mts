@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.wallet.privy',
+  name: 'ext.driver.auth.privy',
   version: '0.0.0',
   dependencies: {
     '@privy-io/react-auth': '1.34.1',

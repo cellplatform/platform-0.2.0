@@ -11,7 +11,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] } & Pick<t.InfoProps, 'useAuthProvider'>;
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.wallet.privy.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.auth.privy.Info');
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
     useAuthProvider: DEFAULTS.useAuthProvider,
