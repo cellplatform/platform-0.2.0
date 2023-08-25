@@ -9,7 +9,7 @@ import { Paths } from './Paths.mjs';
 
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+// import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
@@ -25,7 +25,7 @@ export const Config = {
     test(): TestConfig {
       return {
         globals: false,
-        include: ['src/**/*.v.{mts,tsx}'],
+        include: ['src/**/*.v.{mts,ts,tsx}'],
         environment: 'node', // NB: Default, makes JSDOM available.
       };
     },
@@ -69,7 +69,7 @@ export const Config = {
         plugins: [
           topLevelAwait(),
           wasm(),
-          nodePolyfills({ exclude: ['fs'] }), // NB: Temporary requirement of: ext.wallet.privy
+          // nodePolyfills({ exclude: ['fs'] }), // NB: Temporary requirement of: ext.wallet.privy
         ],
         worker: {
           format: 'es',
