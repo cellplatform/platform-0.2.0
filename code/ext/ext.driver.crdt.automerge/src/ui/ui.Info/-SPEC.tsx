@@ -11,7 +11,7 @@ const DEFAULTS = Info.DEFAULTS;
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] };
-  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.automerge.Info');
+  const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.crdt.automerge.ui.Info');
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
   });

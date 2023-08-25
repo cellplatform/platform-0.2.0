@@ -10,7 +10,7 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'ext.driver.automerge',
+  name: 'ext.driver.crdt.automerge',
   version: '0.0.0',
   dependencies: {
     '@automerge/automerge-repo': '1.0.0-alpha.3',
