@@ -11,7 +11,7 @@
 
 export const Pkg: ModuleDef = {
   name: 'sys.dev',
-  version: '0.0.483',
+  version: '0.0.484',
   dependencies: {
     'ext.driver.auth.privy': '0.0.0',
     'ext.driver.protocol.hats': '0.0.0',
