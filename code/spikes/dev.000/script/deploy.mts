@@ -19,16 +19,7 @@ export async function deploy(project: string, alias: string) {
 }
 
 await deploy('tdb-dev', 'dev.db.team');
-
-// project: 'tdb-dev',
-// alias: 'dev.db.team',
-
-// project: 'cell-phil',
-// alias: 'phil.cockfield.net',
-
-// project: 'cell-rowan',
-// alias: 'rowanyeoman.com',
-
-// → jamesamuel.com
-// project: 'cell-james',
-// alias: 'jamesamuel.com',
+// await deploy('cell-rowan', 'rowanyeoman.com');
+// await deploy('cell-phil', 'phil.cockfield.net');
+// await deploy('cell-abi', 'abi.cockfield.net');
+// await deploy('cell-james', 'jamesamuel.com');
