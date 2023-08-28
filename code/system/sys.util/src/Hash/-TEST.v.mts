@@ -7,7 +7,7 @@ circular.ref = circular;
 import { sha256 } from '@noble/hashes/sha256';
 
 describe('hash', () => {
-  it.only('toBytes', () => {
+  it('toBytes', () => {
     const res = Hash.toBytes('hello');
     console.log('res', res);
 
