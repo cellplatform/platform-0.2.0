@@ -23,6 +23,9 @@ const timer = Time.timer();
 const filter = (path: string) => {
   if (path.includes('/code/compiler.samples/')) return false;
   if (path.includes('/code/spikes/')) return false;
+
+  if (!path.includes('/sys.util')) return false; // TEMP 🐷
+
   return true;
 };
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Alpha' });
