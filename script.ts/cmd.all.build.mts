@@ -16,6 +16,9 @@ const filter = (path: string) => {
   if (path.includes('code/spikes/')) return false;
   if (path.includes('code/templates/')) return false;
   if (path.includes('_legacy')) return false;
+
+  if (!['/sys.test', '/sys.util'].some((p) => path.includes(p))) return false; // TEMP 🐷
+
   return true;
 };
 let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological' });

@@ -6,12 +6,18 @@ circular.ref = circular;
 
 import { sha256 } from '@noble/hashes/sha256';
 
-describe('hash', () => {
-  it('toBytes', () => {
+describe.only('hash', () => {
+  it.only('toBytes', () => {
     const res = Hash.toBytes('hello');
     console.log('res', res);
 
     const h = sha256(res);
+    console.log('h', h);
+
+    // new TextEncoder().encode('hello'), '62938b9824'
+    const b = new TextEncoder().encode('hello');
+    const h2 = sha256(new Uint8Array(b));
+    console.log('h2', h2);
   });
 
   it('TMP', () => {

@@ -48,9 +48,12 @@ export const Hash = {
    * Convert an input for hashing to a [Uint8Array].
    */
   toBytes(input: any, options: HashOptions = {}) {
-    if (input instanceof Uint8Array) return input;
+    if (input instanceof Uint8Array) return Uint8Array.from(input);
+
     const text = (options.asString ?? R.toString)(input);
-    return new TextEncoder().encode(text);
+    const bytes = new TextEncoder().encode(text);
+    return Uint8Array.from(bytes);
+    // return bytes;
   },
 
   /**
