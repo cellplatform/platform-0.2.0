@@ -4,7 +4,26 @@ import { Hash } from '.';
 const circular: any = { foo: 123 };
 circular.ref = circular;
 
+import { sha256 } from '@noble/hashes/sha256';
+
 describe('hash', () => {
+  it.only('toBytes', () => {
+    const res = Hash.toBytes('hello');
+    console.log('res', res);
+
+    const h = sha256(res);
+  });
+
+  it('TMP', () => {
+    const test = (input: any, expected: string) => {
+      const res = Hash.sha256(input);
+
+      console.log('res1', res);
+    };
+
+    test('foo', '');
+  });
+
   it('sha256', () => {
     const test = (input: any, expected: string) => {
       const res1 = Hash.sha256(input);
