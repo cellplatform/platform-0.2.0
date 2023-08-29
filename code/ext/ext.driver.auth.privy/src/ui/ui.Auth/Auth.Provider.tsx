@@ -19,6 +19,7 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
       onSuccess={(user, isNewUser) => props.onSuccess?.({ user, isNewUser })}
       config={{
         loginMethods,
+        walletConnectCloudProjectId: props.walletConnectId,
         appearance: {
           theme: 'light',
           accentColor: COLORS.BLUE,
