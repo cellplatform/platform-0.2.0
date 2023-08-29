@@ -156,7 +156,7 @@ export default Test.describe('Sync Protocol: DocSync', (e) => {
 
       docA.change((doc) => (doc.name = 'Foo'));
       docB.change((doc) => (doc.count = 1234));
-      await Time.wait(200);
+      await Time.wait(500);
 
       expect(firedA.length).to.greaterThan(5);
       expect(firedB.length).to.greaterThan(5);

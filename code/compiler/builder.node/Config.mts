@@ -88,9 +88,9 @@ export const Config = {
 
       /**
        * TODO 🐷 - Temporary ←[DELETE]
-       * Temporary requirement of module: ext.wallet.privy
+       * Temporary requirement of module: ext.driver.auth.privy
        */
-      if (modulePath.includes('ext.wallet.privy')) {
+      if (modulePath.includes('ext.driver.auth.privy')) {
         config.plugins?.push(
           nodePolyfills({
             exclude: ['fs'],

@@ -10,28 +10,14 @@
  */
 
 export const Pkg: ModuleDef = {
-  name: 'sys.dev',
-  version: '0.0.482',
+  name: 'ext.driver.auth.privy',
+  version: '0.0.0',
   dependencies: {
-    'ext.stripe': '0.0.0',
-    'ext.driver.auth.privy': '0.0.0',
-    'ext.driver.protocol.hats': '0.0.0',
-    'ext.ui.react.vimeo': '0.0.0',
+    '@privy-io/react-auth': '1.34.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
-    'sys.data.crdt': '0.0.0',
-    'sys.fs': '0.0.0',
-    'sys.fs.indexeddb': '0.0.0',
-    'sys.net.webrtc': '0.0.0',
-    'sys.text': '0.0.0',
-    'sys.ui.react.common': '0.0.0',
-    'sys.ui.react.concept': '0.0.0',
-    'sys.ui.react.dev': '0.0.0',
-    'sys.ui.react.media': '0.0.0',
-    'sys.ui.react.media.image': '0.0.0',
-    'sys.ui.react.media.video': '0.0.0',
-    'sys.ui.react.monaco': '0.0.0',
     'sys.util': '0.0.0',
+    'sys.ui.react.common': '0.0.0',
   },
   toString() {
     return `${Pkg.name}@${Pkg.version}`;
