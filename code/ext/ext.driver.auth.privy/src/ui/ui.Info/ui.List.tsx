@@ -19,7 +19,7 @@ export const List: React.FC<t.InfoProps> = (props) => {
     .items(fields);
 
   useEffect(() => {
-    props.onChange?.({ status: Wrangle.toStatus(privy) });
+    props.onChange?.({ status: Wrangle.toStatus(privy), privy });
   }, [Wrangle.toDepFlag(privy)]);
 
   return (

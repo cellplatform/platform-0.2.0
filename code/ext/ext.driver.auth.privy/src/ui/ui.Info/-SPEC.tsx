@@ -1,12 +1,18 @@
 import { Info } from '.';
-import { Dev, appId, type t, Time } from '../../test.ui';
+import { Delete, Dev, Hash, Time, appId, walletConnectId, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps; status?: t.AuthStatus };
+type T = {
+  props: t.InfoProps;
+  privy?: t.PrivyInterface;
+  status?: t.AuthStatus;
+  signature?: string;
+};
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
+ * https://docs.privy.io/
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
@@ -19,7 +25,7 @@ export default Dev.describe(name, (e) => {
 
   const State = {
     props(state: T): t.InfoProps {
-      const data: t.InfoData = { provider: { appId } };
+      const data: t.InfoData = { provider: { appId, walletConnectId } };
       return { ...state.props, data };
     },
   };
@@ -46,7 +52,10 @@ export default Dev.describe(name, (e) => {
             {...props}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
-              state.change((d) => (d.status = e.status));
+              state.change((d) => {
+                d.status = e.status;
+                d.privy = e.privy;
+              });
             }}
           />
         );
@@ -55,6 +64,7 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -90,6 +100,36 @@ export default Dev.describe(name, (e) => {
           );
       });
     });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button((btn) => {
+        const enabled = (state: T) => state.status?.user?.wallet?.walletClientType === 'privy';
+        btn
+          .label(`sign message`)
+          .right((e) => (enabled(e.state) ? `privy` : ''))
+          .enabled((e) => enabled(e.state))
+          .onClick(async (e) => {
+            const { privy, status } = state.current;
+            if (!privy || !status) return;
+
+            const hash = Hash.sha256(state.current, { prefix: true });
+            const message = `The hash of the current state is\n${hash}`;
+
+            try {
+              const signature = await privy.signMessage(message, {
+                title: 'My Message Title',
+                description: `Sign to attest that you have seen the current state`,
+                buttonText: `Sign Message`,
+              });
+              await e.change((d) => (d.signature = signature));
+            } catch (error) {
+              console.log('error', error);
+            }
+          });
+      });
+    });
   });
 
   e.it('ui:footer', async (e) => {
@@ -105,8 +145,10 @@ export default Dev.describe(name, (e) => {
         props: e.state.props,
         status: e.state.status,
         'status:user': user,
+        signature: Hash.shorten(e.state.signature ?? '', 4),
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+
+      return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
     });
   });
 });

@@ -9,7 +9,7 @@ export type InfoField =
   | 'User.Id';
 
 export type InfoData = {
-  provider?: { appId?: string };
+  provider?: { appId?: string; walletConnectId?: string };
   url?: { href: string; title?: string };
 };
 
@@ -33,4 +33,7 @@ export type InfoProps = {
  * Events
  */
 export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
-export type InfoStatusHandlerArgs = { status: t.AuthStatus };
+export type InfoStatusHandlerArgs = {
+  readonly status: t.AuthStatus;
+  readonly privy: t.PrivyInterface;
+};
