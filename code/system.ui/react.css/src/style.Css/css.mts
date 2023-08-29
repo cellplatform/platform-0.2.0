@@ -233,8 +233,8 @@ function formatFlexPosition(key: string, value: string, target: t.CssProps) {
 }
 
 export const transform: t.CssTransform = (style) => {
-  if (style === null || style === undefined || style === false) return {};
-  if (typeof style !== 'object') return style;
+  if (style === null || style === undefined || style === false || style === '') return {};
+  if (typeof style !== 'object') return style as React.CSSProperties;
 
   const obj = style as {
     [key: string]:
@@ -249,7 +249,7 @@ export const transform: t.CssTransform = (style) => {
   Object.keys(obj).forEach((key) => {
     const value = obj[key] as any;
 
-    if (value === false || value === null || value === undefined) {
+    if (value === false || value === null || value === undefined || value === '') {
       delete obj[key];
     } else if (Is.plainObject(value)) {
       // NB: This is not using formatCss, as we only want the transform, we don't want to convert it to a glamor value.
