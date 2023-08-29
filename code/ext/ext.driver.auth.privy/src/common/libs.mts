@@ -7,4 +7,4 @@ export const R = { equals } as const;
 /**
  * @system
  */
-export { rx, Time } from 'sys.util';
+export { Delete, Hash, Time, rx } from 'sys.util';
