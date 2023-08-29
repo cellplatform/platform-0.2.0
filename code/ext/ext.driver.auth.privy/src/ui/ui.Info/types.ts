@@ -19,6 +19,7 @@ export type InfoData = {
  * Component
  */
 export type InfoProps = {
+  enabled?: boolean;
   title?: t.PropListProps['title'];
   width?: t.PropListProps['width'];
   fields?: t.InfoField[];

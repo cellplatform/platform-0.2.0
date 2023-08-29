@@ -3,9 +3,9 @@ import { Button, COLORS, type t } from './common';
 export function FieldLogin(
   privy: t.PrivyInterface,
   fields: t.InfoField[],
-  data: t.InfoData,
+  enabled: boolean,
 ): t.PropListItem | undefined {
-  const enabled = privy.ready;
+  if (!privy.ready) enabled = false;
   const methods = fields.filter((field) => field.startsWith('Login.Method.'));
   if (methods.length === 0 || !fields.includes('Login')) return;
 

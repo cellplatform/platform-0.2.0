@@ -19,10 +19,11 @@ const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
   type LocalStore = { selectedFields?: t.InfoField[] } & Pick<
     t.InfoProps,
-    'useAuthProvider' | 'clipboard'
+    'enabled' | 'useAuthProvider' | 'clipboard'
   >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.auth.privy.Info');
   const local = localstore.object({
+    enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,
     useAuthProvider: DEFAULTS.useAuthProvider,
     clipboard: DEFAULTS.clipboard,
@@ -40,6 +41,7 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
+      d.props.enabled = local.enabled;
       d.props.fields = local.selectedFields;
       d.props.useAuthProvider = local.useAuthProvider;
       d.props.clipboard = local.clipboard;
@@ -96,6 +98,16 @@ export default Dev.describe(name, (e) => {
     dev.hr(5, 20);
 
     dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.enabled);
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.useAuthProvider);
         btn
