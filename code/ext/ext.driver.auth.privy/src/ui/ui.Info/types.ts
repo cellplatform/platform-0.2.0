@@ -6,7 +6,7 @@ export type InfoField =
   | 'Login'
   | 'Login.Method.Wallet'
   | 'Login.Method.SMS'
-  | 'User.Id';
+  | 'Id.User';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
