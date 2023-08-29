@@ -1,4 +1,3 @@
-import { defineProject } from 'vitest/dist/config';
 import { Info } from '.';
 import { Delete, Dev, Hash, Time, appId, walletConnectId, type t } from '../../test.ui';
 
