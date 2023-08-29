@@ -11,6 +11,11 @@ describe('Value.Hash', () => {
       expect(res).to.eql('sha .. 890');
     });
 
+    it('empty string', () => {
+      expect(Value.shortenHash('', 3)).to.eql('');
+      expect(Value.shortenHash('  ', 3)).to.eql('');
+    });
+
     it('length: number', () => {
       const res = Value.shortenHash(hash, 6);
       expect(res).to.eql('sha256 .. 567890');
