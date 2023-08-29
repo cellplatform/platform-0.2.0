@@ -1,3 +1,4 @@
+import { defineProject } from 'vitest/dist/config';
 import { Info } from '.';
 import { Delete, Dev, Hash, Time, appId, walletConnectId, type t } from '../../test.ui';
 
@@ -16,11 +17,15 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] } & Pick<t.InfoProps, 'useAuthProvider'>;
+  type LocalStore = { selectedFields?: t.InfoField[] } & Pick<
+    t.InfoProps,
+    'useAuthProvider' | 'clipboard'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.auth.privy.Info');
   const local = localstore.object({
     selectedFields: DEFAULTS.fields.default,
     useAuthProvider: DEFAULTS.useAuthProvider,
+    clipboard: DEFAULTS.clipboard,
   });
 
   const State = {
@@ -35,21 +40,22 @@ export default Dev.describe(name, (e) => {
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.margin = 10;
       d.props.fields = local.selectedFields;
       d.props.useAuthProvider = local.useAuthProvider;
+      d.props.clipboard = local.clipboard;
     });
 
     ctx.debug.width(380);
     ctx.subject
       .backgroundColor(1)
-      .size([320, null])
+      .size([360, null])
       .display('grid')
       .render<T>((e) => {
         const props = State.props(e.state);
         return (
           <Info
             {...props}
+            margin={24}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
               state.change((d) => {
@@ -98,6 +104,14 @@ export default Dev.describe(name, (e) => {
           .onClick((e) =>
             e.change((d) => (local.useAuthProvider = Dev.toggle(d.props, 'useAuthProvider'))),
           );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.clipboard);
+        btn
+          .label((e) => `clipboard`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.clipboard = Dev.toggle(d.props, 'clipboard'))));
       });
     });
 

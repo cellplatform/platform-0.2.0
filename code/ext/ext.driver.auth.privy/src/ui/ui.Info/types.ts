@@ -6,7 +6,9 @@ export type InfoField =
   | 'Login'
   | 'Login.Method.Wallet'
   | 'Login.Method.SMS'
-  | 'Id.User';
+  | 'Id.User'
+  | 'Id.App.Privy'
+  | 'Id.App.WalletConnect';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
@@ -24,6 +26,7 @@ export type InfoProps = {
   data?: t.InfoData;
   margin?: t.CssEdgesInput;
   card?: boolean;
+  clipboard?: boolean;
   flipped?: boolean;
   style?: t.CssValue;
   onChange?: t.InfoStatusHandler;

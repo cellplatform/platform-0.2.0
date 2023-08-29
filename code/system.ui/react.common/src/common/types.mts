@@ -17,6 +17,7 @@ export type {
   EdgePositionX,
   EdgePositionY,
   EventBus,
+  Falsy,
   IgnoredResponse,
   Immutable,
   ImmutableNext,

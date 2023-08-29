@@ -1,2 +1,2 @@
-export type Falsy = undefined | null | false;
+export type Falsy = false | 0 | '' | null | undefined;
 export type IgnoredResponse = any | Promise<any>;
