@@ -34,12 +34,12 @@ export const List: React.FC<t.InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
-    .field('Id.User', () => user && copyable('User Identifier', user.id))
+    .field('Id.User', () => copyable('User Identifier', user?.id))
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
-    .field('Login', () => FieldLogin(privy, fields, enabled))
-    .field('Link.Wallet', () => FieldLinkWallet(privy, wallets, enabled))
+    .field('Login', () => FieldLogin(privy, enabled))
+    .field('Link.Wallet', () => user && FieldLinkWallet(privy, wallets, enabled))
     .items(fields);
 
   useEffect(() => {

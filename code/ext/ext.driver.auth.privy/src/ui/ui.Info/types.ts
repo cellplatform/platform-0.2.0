@@ -8,8 +8,6 @@ export type InfoField =
   | 'Id.App.Privy'
   | 'Id.App.WalletConnect'
   | 'Login'
-  | 'Login.Method.Wallet'
-  | 'Login.Method.SMS'
   | 'Link.Wallet';
 
 export type InfoData = {

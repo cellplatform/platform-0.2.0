@@ -1,13 +1,7 @@
-import { Button, COLORS, type t, Icons } from './common';
+import { Button, COLORS, type t, Spinner } from './common';
 
-export function FieldLogin(
-  privy: t.PrivyInterface,
-  fields: t.InfoField[],
-  enabled: boolean,
-): t.PropListItem | undefined {
+export function FieldLogin(privy: t.PrivyInterface, enabled: boolean): t.PropListItem | undefined {
   if (!privy.ready) enabled = false;
-  const methods = fields.filter((field) => field.startsWith('Login.Method.'));
-  if (methods.length === 0 || !fields.includes('Login')) return;
 
   /**
    * Handlers
@@ -21,7 +15,7 @@ export function FieldLogin(
    * Render
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
-  const value = (
+  const elButton = (
     <Button
       label={privy.authenticated ? 'Logout' : 'Login'}
       style={{ color }}
@@ -30,8 +24,12 @@ export function FieldLogin(
     />
   );
 
+  const elSpinner = !privy.ready && (
+    <Spinner.Bar width={20} color={enabled ? COLORS.BLUE : undefined} />
+  );
+
   return {
     label: privy.authenticated ? 'Authenticated' : 'Authenticate',
-    value,
+    value: elSpinner || elButton,
   };
 }

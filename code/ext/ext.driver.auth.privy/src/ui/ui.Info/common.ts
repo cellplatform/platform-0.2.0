@@ -12,18 +12,9 @@ const allFields: t.InfoField[] = [
   'Id.App.Privy',
   'Id.App.WalletConnect',
   'Login',
-  'Login.Method.Wallet',
-  'Login.Method.SMS',
   'Link.Wallet',
 ];
-const defaultFields: t.InfoField[] = [
-  'Module',
-  'Id.User',
-  'Id.User.Phone',
-  'Login',
-  'Login.Method.SMS',
-  'Login.Method.Wallet',
-];
+const defaultFields: t.InfoField[] = ['Module', 'Id.User', 'Id.User.Phone', 'Login'];
 const data: t.InfoData = {};
 
 export const DEFAULTS = {

@@ -1,7 +1,5 @@
 import type { t } from './common';
 
-export type AuthLoginMethod = 'wallet' | 'sms';
-
 /**
  * Component
  */
@@ -10,7 +8,6 @@ export type AuthProviderProps = {
   appId?: string;
   walletConnectId?: string;
   logoUrl?: string;
-  loginMethods?: t.AuthLoginMethod[];
   onSuccess?: t.AuthProviderSuccessHandler;
 };
 

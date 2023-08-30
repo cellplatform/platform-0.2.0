@@ -29,7 +29,7 @@ const singleton = {
   isOverriden: false,
 };
 
-export function useStylesOverride() {
+export function useStyleOverrides() {
   useEffect(() => {
     if (!singleton.isOverriden) {
       const root = document.documentElement;

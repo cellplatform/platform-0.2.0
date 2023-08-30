@@ -7,17 +7,6 @@ export const Wrangle = {
     return title;
   },
 
-  toLoginMethods(fields: t.InfoField[] = []) {
-    return fields
-      .filter((field) => field.startsWith('Login.Method.'))
-      .map((field) => {
-        if (field === 'Login.Method.SMS') return 'sms';
-        if (field === 'Login.Method.Wallet') return 'wallet';
-        return;
-      })
-      .filter(Boolean) as t.AuthLoginMethod[];
-  },
-
   toStatus(privy: t.PrivyInterface): t.AuthStatus {
     const { authenticated, ready } = privy;
     const user = privy.user || undefined;
