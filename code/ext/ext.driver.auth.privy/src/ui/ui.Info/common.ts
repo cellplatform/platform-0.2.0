@@ -8,6 +8,7 @@ const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
   'Id.User',
+  'Id.User.Phone',
   'Id.App.Privy',
   'Id.App.WalletConnect',
   'Login',
@@ -18,6 +19,7 @@ const allFields: t.InfoField[] = [
 const defaultFields: t.InfoField[] = [
   'Module',
   'Id.User',
+  'Id.User.Phone',
   'Login',
   'Login.Method.SMS',
   'Login.Method.Wallet',

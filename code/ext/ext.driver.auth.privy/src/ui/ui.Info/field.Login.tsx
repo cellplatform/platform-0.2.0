@@ -1,4 +1,4 @@
-import { Button, COLORS, type t } from './common';
+import { Button, COLORS, type t, Icons } from './common';
 
 export function FieldLogin(
   privy: t.PrivyInterface,

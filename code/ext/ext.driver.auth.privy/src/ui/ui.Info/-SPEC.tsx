@@ -133,7 +133,7 @@ export default Dev.describe(name, (e) => {
         const enabled = (state: T) => state.status?.user?.wallet?.walletClientType === 'privy';
         btn
           .label(`sign message`)
-          .right((e) => (enabled(e.state) ? `privy` : ''))
+          .right((e) => (enabled(e.state) ? `(privy)` : ''))
           .enabled((e) => enabled(e.state))
           .onClick(async (e) => {
             const { privy, status } = state.current;

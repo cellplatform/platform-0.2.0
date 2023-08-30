@@ -18,6 +18,7 @@ export const List: React.FC<t.InfoProps> = (props) => {
   const privy = usePrivy();
   const { wallets } = useWallets();
   const user = privy.user;
+  const phone = user?.phone?.number;
   const provider = data.provider;
 
   const copyable = (label: string, value?: string): t.PropListItem => {
@@ -34,6 +35,7 @@ export const List: React.FC<t.InfoProps> = (props) => {
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
     .field('Id.User', () => user && copyable('User Identifier', user.id))
+    .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Login', () => FieldLogin(privy, fields, enabled))

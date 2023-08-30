@@ -11,17 +11,8 @@ export function FieldLinkWallet(
   /**
    * Handlers
    */
-  const connectAndLink = () => {
-    if (!enabled) return;
-
-    /**
-     * TODO 🐷
-     *  Figure this out.
-     *  https://docs.privy.io/guide/frontend/wallets/multiwallet#linking-multiple-wallets
-     */
-
-    // wallets[0].loginOrLink();
-    // privy.connectWallet();
+  const linkWallet = () => {
+    if (enabled) privy.linkWallet();
   };
 
   /**
@@ -29,11 +20,11 @@ export function FieldLinkWallet(
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const value = (
-    <Button style={{ color }} label={'Connect'} enabled={enabled} onClick={connectAndLink} />
+    <Button style={{ color }} label={'Connect'} enabled={enabled} onClick={linkWallet} />
   );
 
   return {
-    label: 'Link Wallet (TBD)',
+    label: 'Link Wallet',
     value,
   };
 }

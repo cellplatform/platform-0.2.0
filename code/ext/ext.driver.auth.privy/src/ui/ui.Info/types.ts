@@ -4,6 +4,7 @@ export type InfoField =
   | 'Module'
   | 'Module.Verify'
   | 'Id.User'
+  | 'Id.User.Phone'
   | 'Id.App.Privy'
   | 'Id.App.WalletConnect'
   | 'Login'
