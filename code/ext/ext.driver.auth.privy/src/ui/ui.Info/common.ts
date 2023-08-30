@@ -7,19 +7,19 @@ export * from '../common';
 const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
-  'Login',
-  'Login.Method.Wallet',
-  'Login.Method.SMS',
   'Id.User',
   'Id.App.Privy',
   'Id.App.WalletConnect',
+  'Login',
+  'Login.Method.Wallet',
+  'Login.Method.SMS',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',
+  'Id.User',
   'Login',
   'Login.Method.SMS',
   'Login.Method.Wallet',
-  'Id.User',
 ];
 const data: t.InfoData = {};
 

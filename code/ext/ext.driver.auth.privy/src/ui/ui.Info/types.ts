@@ -3,12 +3,12 @@ import type { t } from './common';
 export type InfoField =
   | 'Module'
   | 'Module.Verify'
-  | 'Login'
-  | 'Login.Method.Wallet'
-  | 'Login.Method.SMS'
   | 'Id.User'
   | 'Id.App.Privy'
-  | 'Id.App.WalletConnect';
+  | 'Id.App.WalletConnect'
+  | 'Login'
+  | 'Login.Method.Wallet'
+  | 'Login.Method.SMS';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
