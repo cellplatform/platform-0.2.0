@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Pkg, PropList, t } from './common';
-import { FieldLinkWallet } from './field.Link.Wallet';
-import { FieldLogin } from './field.Login';
+import { FieldLinkWallet } from './field.Auth.Link.Wallet';
+import { FieldLogin } from './field.Auth.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
 
-export const List: React.FC<t.InfoProps> = (props) => {
+export const ListBuilder: React.FC<t.InfoProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     fields = DEFAULTS.fields.default,
@@ -17,6 +17,7 @@ export const List: React.FC<t.InfoProps> = (props) => {
 
   const privy = usePrivy();
   const { wallets } = useWallets();
+
   const user = privy.user;
   const phone = user?.phone?.number;
   const provider = data.provider;

@@ -8,7 +8,8 @@ export type InfoField =
   | 'Id.App.Privy'
   | 'Id.App.WalletConnect'
   | 'Auth.Login'
-  | 'Auth.Link.Wallet';
+  | 'Auth.Link.Wallet'
+  | 'Wallets.List';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
