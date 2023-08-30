@@ -1,8 +1,9 @@
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect } from 'react';
 
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Pkg, PropList, t } from './common';
+import { FieldLinkWallet } from './field.Link.Wallet';
 import { FieldLogin } from './field.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
 
@@ -10,11 +11,12 @@ export const List: React.FC<t.InfoProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     fields = DEFAULTS.fields.default,
-    data = DEFAULTS.data,
     clipboard = DEFAULTS.clipboard,
+    data = DEFAULTS.data,
   } = props;
 
   const privy = usePrivy();
+  const { wallets } = useWallets();
   const user = privy.user;
   const provider = data.provider;
 
@@ -31,10 +33,11 @@ export const List: React.FC<t.InfoProps> = (props) => {
   const items = PropList.builder<t.InfoField>()
     .field('Module', { label: 'Module', value: `${Pkg.name}@${Pkg.version}` })
     .field('Module.Verify', () => FieldModuleVerify(data))
-    .field('Login', () => FieldLogin(privy, fields, enabled))
     .field('Id.User', () => user && copyable('User Identifier', user.id))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
+    .field('Login', () => FieldLogin(privy, fields, enabled))
+    .field('Link.Wallet', () => FieldLinkWallet(privy, wallets, enabled))
     .items(fields);
 
   useEffect(() => {

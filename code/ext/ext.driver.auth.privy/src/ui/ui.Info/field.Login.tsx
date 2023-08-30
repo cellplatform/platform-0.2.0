@@ -23,8 +23,8 @@ export function FieldLogin(
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
   const value = (
     <Button
-      style={{ color }}
       label={privy.authenticated ? 'Logout' : 'Login'}
+      style={{ color }}
       enabled={enabled}
       onClick={handleClick}
     />

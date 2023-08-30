@@ -8,7 +8,8 @@ export type InfoField =
   | 'Id.App.WalletConnect'
   | 'Login'
   | 'Login.Method.Wallet'
-  | 'Login.Method.SMS';
+  | 'Login.Method.SMS'
+  | 'Link.Wallet';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };

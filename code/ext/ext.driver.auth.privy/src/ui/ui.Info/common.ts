@@ -13,6 +13,7 @@ const allFields: t.InfoField[] = [
   'Login',
   'Login.Method.Wallet',
   'Login.Method.SMS',
+  'Link.Wallet',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',
