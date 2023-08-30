@@ -38,8 +38,8 @@ export const List: React.FC<t.InfoProps> = (props) => {
     .field('Id.User.Phone', () => user && copyable('Phone', phone))
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
-    .field('Login', () => FieldLogin(privy, enabled))
-    .field('Link.Wallet', () => user && FieldLinkWallet(privy, wallets, enabled))
+    .field('Auth.Login', () => FieldLogin(privy, enabled))
+    .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, enabled))
     .items(fields);
 
   useEffect(() => {
