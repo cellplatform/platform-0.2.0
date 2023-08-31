@@ -19,6 +19,8 @@ export async function deploy(project: string, alias: string) {
 }
 
 await deploy('tdb-dev', 'dev.db.team');
+await deploy('cell-rowan', 'rowanyeoman.com');
+await deploy('cell-phil', 'phil.cockfield.net');
 
 // project: 'tdb-dev',
 // alias: 'dev.db.team',
