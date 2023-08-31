@@ -19,9 +19,8 @@ export const Wrangle = {
     return { authenticated, ready, user };
   },
 
-  toDepFlag(privy: t.PrivyInterface) {
+  privyDeps(privy: t.PrivyInterface) {
     const { authenticated, ready, user } = privy;
-
     const did = user?.id;
     const wallet = user?.wallet?.address;
     const linked = (user?.linkedAccounts ?? [])
@@ -31,7 +30,10 @@ export const Wrangle = {
         return '';
       })
       .filter(Boolean);
-
     return `${authenticated}:${ready}:${did}:${linked}:${wallet}`;
+  },
+
+  walletDeps(wallet: t.ConnectedWallet) {
+    return `${wallet.address}:${wallet.connectorType}:${wallet.walletClientType}:${wallet.chainId}`;
   },
 } as const;

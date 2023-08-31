@@ -47,7 +47,7 @@ export const ListBuilder: React.FC<t.InfoProps> = (props) => {
 
   useEffect(() => {
     props.onChange?.({ status: Wrangle.toStatus(privy), privy });
-  }, [Wrangle.toDepFlag(privy)]);
+  }, [Wrangle.privyDeps(privy)]);
 
   return (
     <PropList
