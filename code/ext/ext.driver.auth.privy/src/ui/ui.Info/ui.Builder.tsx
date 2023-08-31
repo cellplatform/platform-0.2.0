@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Pkg, PropList, t } from './common';
-import { FieldLinkWallet } from './field.Auth.Link.Wallet';
+import { FieldLinkWallet } from './field.Wallets.Link';
 import { FieldLogin } from './field.Auth.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
 import { FieldWalletsList } from './field.Wallets.List';
@@ -41,7 +41,7 @@ export const ListBuilder: React.FC<t.InfoProps> = (props) => {
     .field('Id.App.Privy', copyable('Privy App', provider?.appId))
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Auth.Login', () => FieldLogin(privy, enabled))
-    .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, enabled))
+    .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, fields, enabled))
     .field('Wallets.List', () => FieldWalletsList(privy, wallets, enabled))
     .items(fields);
 

@@ -1,8 +1,9 @@
-import { Button, COLORS, type t } from './common';
+import { Button, COLORS, Value, type t } from './common';
 
 export function FieldLinkWallet(
   privy: t.PrivyInterface,
   wallets: t.ConnectedWallet[],
+  fields: t.InfoField[],
   enabled: boolean,
 ): t.PropListItem | undefined {
   if (!privy.ready || !privy.authenticated) enabled = false;
@@ -19,12 +20,13 @@ export function FieldLinkWallet(
    * Render
    */
   const color = enabled ? COLORS.BLUE : COLORS.DARK;
-  const value = (
-    <Button style={{ color }} label={'Connect'} enabled={enabled} onClick={linkWallet} />
-  );
+  const value = <Button style={{ color }} label={'Add'} enabled={enabled} onClick={linkWallet} />;
+
+  let label = Value.plural(wallets.length, 'Wallet', 'Wallets');
+  if (!fields.includes('Wallets.List')) label = `${label} (${wallets.length})`;
 
   return {
-    label: 'Link Wallet',
+    label,
     value,
   };
 }

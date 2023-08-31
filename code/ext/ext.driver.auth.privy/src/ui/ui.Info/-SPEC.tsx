@@ -96,6 +96,24 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('Field Samples', (dev) => {
+      const button = (label: string, fn?: () => t.InfoField[]) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .enabled((e) => true)
+            .onClick((e) => {
+              if (!fn) return;
+              e.change((d) => (local.selectedFields = d.props.fields = fn()));
+            });
+        });
+      };
+
+      button('wallet view', () => ['Auth.Login', 'Auth.Link.Wallet', 'Wallets.List']);
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Properties', (dev) => {
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.enabled);
