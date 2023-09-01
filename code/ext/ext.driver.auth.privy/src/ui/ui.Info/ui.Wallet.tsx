@@ -1,5 +1,5 @@
 import { Button, DEFAULTS, Hash, Icons, css, type t } from './common';
-import { useBalance } from './ui.Wallet.useBalance';
+import { useBalance } from './use.Balance';
 
 export type WalletProps = {
   enabled?: boolean;
