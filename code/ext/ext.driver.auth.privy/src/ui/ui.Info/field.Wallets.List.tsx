@@ -1,16 +1,27 @@
 import { type t } from './common';
 import { Wallet } from './ui.Wallet';
 
-export function FieldWalletsList(
-  privy: t.PrivyInterface,
-  wallets: t.ConnectedWallet[],
-  enabled: boolean,
-): t.PropListItem[] {
-  if (!privy.ready) enabled = false;
+export function FieldWalletsList(args: {
+  privy: t.PrivyInterface;
+  wallets: t.ConnectedWallet[];
+  enabled: boolean;
+  modifiers: t.KeyboardModifierFlags;
+  isOver: boolean;
+}): t.PropListItem[] {
+  const { privy, wallets } = args;
+  const enabled = privy.ready ? args.enabled : false;
+  const showClose = args.isOver && args.modifiers.alt;
 
   return wallets.map((wallet, i) => {
-    const key = `${i}.${wallet.address}}`;
-    const value = <Wallet key={key} wallet={wallet} privy={privy} enabled={enabled} />;
+    const value = (
+      <Wallet
+        key={`${i}.${wallet.address}}`}
+        wallet={wallet}
+        privy={privy}
+        enabled={enabled}
+        showClose={showClose}
+      />
+    );
     return { value };
   });
 }

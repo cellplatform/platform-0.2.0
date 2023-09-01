@@ -1,4 +1,4 @@
-import { MdCall, MdWallet } from 'react-icons/md';
+import { MdCall, MdClose, MdWallet } from 'react-icons/md';
 import { Icon } from 'sys.ui.react.common';
 
 const icon = Icon.renderer;
@@ -9,4 +9,5 @@ const icon = Icon.renderer;
 export const Icons = {
   Phone: icon(MdCall),
   Wallet: icon(MdWallet),
+  Close: icon(MdClose),
 } as const;

@@ -5,12 +5,15 @@ export type WalletProps = {
   enabled?: boolean;
   privy: t.PrivyInterface;
   wallet: t.ConnectedWallet;
+  showClose?: boolean;
   style?: t.CssValue;
 };
 
 export const Wallet: React.FC<WalletProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, wallet, privy } = props;
+  const { enabled = DEFAULTS.enabled, wallet, showClose = false, privy } = props;
   const { address } = wallet;
+  const isEmbedded = Wrangle.isEmbedded(wallet);
+
   const shortHash = Hash.shorten(address, [2, 4], { divider: '..' });
   const balance = useBalance(wallet);
 
@@ -21,31 +24,61 @@ export const Wallet: React.FC<WalletProps> = (props) => {
     window.navigator.clipboard.writeText(address);
   };
 
+  const unlinkWallet = () => {
+    /**
+     * TODO 🐷
+     * Bug: not working
+     * https://privy-developers.slack.com/archives/C059ABLSB47/p1693530998199469
+     */
+    privy.unlinkWallet(wallet.address);
+    wallet.unlink();
+  };
+
   /**
    * [Render]
    */
+  const Size = 16;
   const styles = {
     base: css({
       flex: 1,
       display: 'grid',
-      gridTemplateColumns: 'auto auto 1fr auto',
+      gridTemplateColumns: 'auto auto 1fr auto ',
       gridGap: '5px',
+      justifyContent: 'center',
+      alignContent: 'center',
     }),
+    wallet: css({}),
     kind: css({
       opacity: 0.2,
+      display: 'grid',
+      alignContent: 'center',
     }),
+    address: css({
+      display: 'grid',
+      alignContent: 'center',
+    }),
+    close: css({ Size }),
   };
+
+  const elAddress = (
+    <Button enabled={enabled} onClick={copyAddress} style={styles.address}>
+      {shortHash}
+    </Button>
+  );
+
+  const elClose = showClose && !isEmbedded && (
+    <Button style={styles.close} enabled={enabled} onClick={unlinkWallet}>
+      <Icons.Close size={Size} />
+    </Button>
+  );
+  const elBalance = !elClose && <div>{balance.toString('ETH', 5)}</div>;
 
   return (
     <div {...css(styles.base, props.style)}>
-      <Icons.Wallet size={17} opacity={0.8} offset={[0, -2]} />
-      <div>
-        <Button enabled={enabled} onClick={copyAddress}>
-          {shortHash}
-        </Button>
-      </div>
+      <Icons.Wallet size={16} opacity={0.8} offset={[0, 0]} style={styles.wallet} />
+      {elAddress}
       <div {...styles.kind}>{Wrangle.walletClientType(wallet)}</div>
-      <div>{balance.toString('ETH', 4)}</div>
+      {elClose || elBalance}
     </div>
   );
 };
@@ -54,9 +87,12 @@ export const Wallet: React.FC<WalletProps> = (props) => {
  * Helpers
  */
 export const Wrangle = {
+  isEmbedded(wallet: t.ConnectedWallet) {
+    return wallet.walletClientType === 'privy';
+  },
+
   walletClientType(wallet: t.ConnectedWallet) {
-    const type = wallet.walletClientType;
-    if (type === 'privy') return 'embedded';
-    return type.replace(/_/, ' ').toLocaleLowerCase();
+    if (Wrangle.isEmbedded(wallet)) return 'embedded';
+    return wallet.walletClientType.replace(/_/, ' ').toLocaleLowerCase();
   },
 } as const;

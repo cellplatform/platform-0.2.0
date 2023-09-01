@@ -4,6 +4,7 @@
 export type {
   CssEdgesInput,
   CssValue,
+  KeyboardModifierFlags,
   PropListItem,
   PropListProps,
 } from 'sys.ui.react.common/src/types.mjs';

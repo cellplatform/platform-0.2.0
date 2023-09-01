@@ -2,10 +2,10 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useEffect } from 'react';
 
 import { Wrangle } from './Wrangle';
-import { DEFAULTS, Pkg, PropList, t } from './common';
-import { FieldLinkWallet } from './field.Wallets.Link';
+import { DEFAULTS, Keyboard, Pkg, PropList, useMouse, type t } from './common';
 import { FieldLogin } from './field.Auth.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
+import { FieldLinkWallet } from './field.Wallets.Link';
 import { FieldWalletsList } from './field.Wallets.List';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
@@ -16,8 +16,12 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     data = DEFAULTS.data,
   } = props;
 
+  const keyboard = Keyboard.useKeyboardState();
   const privy = usePrivy();
   const { wallets } = useWallets();
+  const mouse = useMouse();
+  const isOver = mouse.is.over;
+  const modifiers = keyboard.current.modifiers;
 
   const user = privy.user;
   const phone = user?.phone?.number;
@@ -42,7 +46,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Auth.Login', () => FieldLogin(privy, enabled))
     .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, fields, enabled))
-    .field('Wallets.List', () => FieldWalletsList(privy, wallets, enabled))
+    .field('Wallets.List', () => FieldWalletsList({ privy, wallets, enabled, isOver, modifiers }))
     .items(fields);
 
   useEffect(() => {
@@ -60,6 +64,8 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
       padding={props.card ? [20, 25, 30, 25] : undefined}
       margin={props.margin}
       style={props.style}
+      onMouseEnter={mouse.handlers.onMouseEnter}
+      onMouseLeave={mouse.handlers.onMouseLeave}
     />
   );
 };
