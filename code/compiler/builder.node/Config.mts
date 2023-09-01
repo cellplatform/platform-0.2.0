@@ -89,6 +89,7 @@ export const Config = {
       /**
        * TODO 🐷 - Temporary ←[DELETE]
        * Temporary requirement of module: ext.driver.auth.privy
+       * https://privy-developers.slack.com/archives/C059ABLSB47/p1692753366943129?thread_ts=1692753043.728049&cid=C059ABLSB47
        */
       if (modulePath.includes('ext.driver.auth.privy')) {
         config.plugins?.push(
