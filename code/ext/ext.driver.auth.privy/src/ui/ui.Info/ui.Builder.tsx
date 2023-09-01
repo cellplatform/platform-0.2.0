@@ -8,7 +8,7 @@ import { FieldLogin } from './field.Auth.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
 import { FieldWalletsList } from './field.Wallets.List';
 
-export const ListBuilder: React.FC<t.InfoProps> = (props) => {
+export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
     enabled = DEFAULTS.enabled,
     fields = DEFAULTS.fields.default,
