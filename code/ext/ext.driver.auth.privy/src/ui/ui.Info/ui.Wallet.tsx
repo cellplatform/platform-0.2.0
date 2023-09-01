@@ -1,8 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t, Icons, Hash, Button } from './common';
-
-import { createWalletClient, createPublicClient, custom, formatEther } from 'viem';
-import { mainnet } from 'viem/chains';
+import { Button, DEFAULTS, Hash, Icons, css, type t } from './common';
+import { useBalance } from './ui.Wallet.useBalance';
 
 export type WalletProps = {
   enabled?: boolean;
@@ -13,48 +10,16 @@ export type WalletProps = {
 
 export const Wallet: React.FC<WalletProps> = (props) => {
   const { enabled = DEFAULTS.enabled, wallet, privy } = props;
-
   const { address } = wallet;
   const shortHash = Hash.shorten(address, [2, 4], { divider: '..' });
-
-  const [balance, setBalance] = useState(-1);
+  const balance = useBalance(wallet);
 
   /**
-   * Lifecycle
+   * Handlers
    */
-  useEffect(() => {
-    const life = rx.lifecycle();
-
-    /**
-     * TODO 🐷
-     * Refactor
-     */
-    async function init() {
-      const ethereumProvider = await wallet.getEthereumProvider();
-      if (life.disposed) return;
-
-      const account = wallet.address as any;
-      const walletClient = createWalletClient({
-        account,
-        chain: mainnet,
-        transport: custom(ethereumProvider),
-      });
-
-      const publicClient = createPublicClient({
-        chain: mainnet,
-        transport: custom(ethereumProvider),
-      });
-
-      const res = await publicClient.getBalance({ address: account });
-      if (life.disposed) return;
-
-      const eth = Number.parseFloat(formatEther(res));
-      setBalance(eth);
-    }
-
-    init();
-    return life.dispose;
-  }, [wallet.address, wallet.connectorType, wallet.walletClientType, wallet.chainId]);
+  const copyAddress = () => {
+    window.navigator.clipboard.writeText(address);
+  };
 
   /**
    * [Render]
@@ -66,21 +31,21 @@ export const Wallet: React.FC<WalletProps> = (props) => {
       gridTemplateColumns: 'auto auto 1fr auto',
       gridGap: '5px',
     }),
-    kind: css({ opacity: 0.2 }),
-  };
-
-  const copyAddress = () => {
-    window.navigator.clipboard.writeText(address);
+    kind: css({
+      opacity: 0.2,
+    }),
   };
 
   return (
     <div {...css(styles.base, props.style)}>
       <Icons.Wallet size={17} opacity={0.8} offset={[0, -2]} />
       <div>
-        <Button onClick={copyAddress}>{shortHash}</Button>
+        <Button enabled={enabled} onClick={copyAddress}>
+          {shortHash}
+        </Button>
       </div>
       <div {...styles.kind}>{Wrangle.walletClientType(wallet)}</div>
-      <div>{balance < 0 ? `-` : `${balance.toFixed(4)} ETH`}</div>
+      <div>{balance.toString('ETH', 4)}</div>
     </div>
   );
 };

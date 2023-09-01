@@ -23,7 +23,9 @@ export function FieldLinkWallet(
   const value = <Button style={{ color }} label={'Add'} enabled={enabled} onClick={linkWallet} />;
 
   let label = Value.plural(wallets.length, 'Wallet', 'Wallets');
-  if (!fields.includes('Wallets.List')) label = `${label} (${wallets.length})`;
+  if (!fields.includes('Wallets.List') && wallets.length > 1) {
+    label = `${label} (${wallets.length})`;
+  }
 
   return {
     label,
