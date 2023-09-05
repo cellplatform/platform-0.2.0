@@ -14,7 +14,9 @@ const allFields: t.InfoField[] = [
   'Auth.Login',
   'Auth.Link.Wallet',
   'Wallet.List',
+  'Wallet.List.Title',
   'Chain.List',
+  'Chain.List.Title',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',
@@ -23,7 +25,12 @@ const defaultFields: t.InfoField[] = [
   'Auth.Login',
   'Auth.Link.Wallet',
 ];
-const data: t.InfoData = {};
+
+const data: t.InfoData = {
+  chains: {
+    list: [{ name: 'Ethereum Mainnet' }, { name: 'Optimism Mainnet' }],
+  },
+};
 
 export const DEFAULTS = {
   query: { dev: 'dev' },

@@ -10,12 +10,16 @@ export type InfoField =
   | 'Auth.Login'
   | 'Auth.Link.Wallet'
   | 'Wallet.List'
-  | 'Chain.List';
+  | 'Wallet.List.Title'
+  | 'Chain.List'
+  | 'Chain.List.Title';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
-  url?: { href: string; title?: string };
+  chains?: { list?: InfoDataChain[] };
 };
+
+export type InfoDataChain = { name: string };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 
