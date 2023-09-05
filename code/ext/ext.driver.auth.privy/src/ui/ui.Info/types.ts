@@ -9,12 +9,15 @@ export type InfoField =
   | 'Id.App.WalletConnect'
   | 'Auth.Login'
   | 'Auth.Link.Wallet'
-  | 'Wallet.List';
+  | 'Wallet.List'
+  | 'Chain.List';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
   url?: { href: string; title?: string };
 };
+
+export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 
 /**
  * Component

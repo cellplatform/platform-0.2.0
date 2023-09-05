@@ -1,16 +1,17 @@
 import { type t } from './common';
 import { Wallet } from './ui.Wallet';
 
+export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
+
 export function FieldWalletsList(args: {
   privy: t.PrivyInterface;
   wallets: t.ConnectedWallet[];
   enabled: boolean;
-  modifiers: t.KeyboardModifierFlags;
-  isOver: boolean;
+  modifiers: t.InfoFieldModifiers;
 }): t.PropListItem[] {
-  const { privy, wallets } = args;
+  const { privy, wallets, modifiers } = args;
   const enabled = privy.ready ? args.enabled : false;
-  const showClose = args.isOver && args.modifiers.alt;
+  const showClose = modifiers.is.over && modifiers.keys.alt;
 
   return wallets.map((wallet, i) => {
     const value = (

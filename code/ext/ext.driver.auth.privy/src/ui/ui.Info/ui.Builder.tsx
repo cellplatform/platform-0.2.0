@@ -7,6 +7,7 @@ import { FieldLogin } from './field.Auth.Login';
 import { FieldModuleVerify } from './field.Module.Verify';
 import { FieldLinkWallet } from './field.Wallets.Link';
 import { FieldWalletsList } from './field.Wallets.List';
+import { FieldChainList } from './field.Chain.List';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
@@ -21,8 +22,10 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const privy = usePrivy();
   const { wallets } = useWallets();
 
-  const modifiers = keyboard.current.modifiers;
-  const isOver = mouse.is.over;
+  const modifiers = {
+    is: { over: mouse.is.over },
+    keys: keyboard.current.modifiers,
+  } as const;
 
   const user = privy.user;
   const phone = user?.phone?.number;
@@ -47,7 +50,8 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Auth.Login', () => FieldLogin(privy, enabled))
     .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, fields, enabled))
-    .field('Wallet.List', () => FieldWalletsList({ privy, wallets, enabled, isOver, modifiers }))
+    .field('Wallet.List', () => FieldWalletsList({ privy, wallets, enabled, modifiers }))
+    .field('Chain.List', () => FieldChainList({ privy, wallets, enabled, modifiers }))
     .items(fields);
 
   useEffect(() => {

@@ -14,6 +14,7 @@ const allFields: t.InfoField[] = [
   'Auth.Login',
   'Auth.Link.Wallet',
   'Wallet.List',
+  'Chain.List',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',
