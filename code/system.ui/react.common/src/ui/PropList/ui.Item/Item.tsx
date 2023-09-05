@@ -16,10 +16,12 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const theme = Wrangle.theme(props.theme);
   const hasValue = Boolean(data.label);
   const selected = Wrangle.selected(data, theme.is.dark);
+  const divider = data.divider ?? true;
 
   /**
    * [Render]
    */
+  const borderColor = theme.color.alpha(isLast || !divider ? 0 : 0.1);
   const styles = {
     base: css({
       backgroundColor: selected ? Color.format(selected.color) : undefined,
@@ -27,7 +29,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       PaddingY: 4,
       minHeight: 16,
       fontSize: DEFAULTS.fontSize,
-      borderBottom: `solid 1px ${theme.color.alpha(isLast ? 0 : 0.1)}`,
+      borderBottom: `solid 1px ${borderColor}`,
       ':first-child': { paddingTop: 2 },
       ':last-child': { border: 'none', paddingBottom: 2 },
     }),

@@ -76,6 +76,7 @@ export type PropListItem = {
   visible?: boolean;
   indent?: number;
   selected?: boolean | PropListItemSelected;
+  divider?: boolean;
 };
 
 export type PropListItemSelected = { color: string | number };
