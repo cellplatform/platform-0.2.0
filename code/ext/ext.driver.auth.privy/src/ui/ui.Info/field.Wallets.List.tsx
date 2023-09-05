@@ -1,8 +1,6 @@
 import { type t } from './common';
 import { Wallet } from './ui.Wallet';
 
-export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
-
 export function FieldWalletsList(args: {
   privy: t.PrivyInterface;
   wallets: t.ConnectedWallet[];
