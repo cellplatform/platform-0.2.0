@@ -62,8 +62,9 @@ const getFiatConversion = async () => {
   //
   const url = `https://api.exchangerate.host/convert?from=ETH&to=USD`;
   const res = await fetch(url);
-  console.log('res', res);
   const json = await res.json();
+
+  console.log('res', res);
   console.log('json', json);
   // const res =
 };

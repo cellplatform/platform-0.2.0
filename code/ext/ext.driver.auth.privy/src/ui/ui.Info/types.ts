@@ -9,7 +9,7 @@ export type InfoField =
   | 'Id.App.WalletConnect'
   | 'Auth.Login'
   | 'Auth.Link.Wallet'
-  | 'Wallets.List';
+  | 'Wallet.List';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };

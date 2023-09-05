@@ -47,7 +47,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Id.App.WalletConnect', copyable('WalletConnect Project', provider?.walletConnectId))
     .field('Auth.Login', () => FieldLogin(privy, enabled))
     .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, fields, enabled))
-    .field('Wallets.List', () => FieldWalletsList({ privy, wallets, enabled, isOver, modifiers }))
+    .field('Wallet.List', () => FieldWalletsList({ privy, wallets, enabled, isOver, modifiers }))
     .items(fields);
 
   useEffect(() => {

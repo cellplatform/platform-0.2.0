@@ -13,7 +13,7 @@ const allFields: t.InfoField[] = [
   'Id.App.WalletConnect',
   'Auth.Login',
   'Auth.Link.Wallet',
-  'Wallets.List',
+  'Wallet.List',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',

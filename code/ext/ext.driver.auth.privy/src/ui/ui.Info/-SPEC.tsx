@@ -109,7 +109,7 @@ export default Dev.describe(name, (e) => {
         });
       };
 
-      button('wallet view', () => ['Auth.Login', 'Auth.Link.Wallet', 'Wallets.List']);
+      button('wallet view', () => ['Auth.Login', 'Auth.Link.Wallet', 'Wallet.List']);
     });
 
     dev.hr(5, 20);
