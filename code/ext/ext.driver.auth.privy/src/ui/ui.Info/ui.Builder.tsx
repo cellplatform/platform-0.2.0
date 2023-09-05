@@ -17,11 +17,12 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   } = props;
 
   const keyboard = Keyboard.useKeyboardState();
+  const mouse = useMouse();
   const privy = usePrivy();
   const { wallets } = useWallets();
-  const mouse = useMouse();
-  const isOver = mouse.is.over;
+
   const modifiers = keyboard.current.modifiers;
+  const isOver = mouse.is.over;
 
   const user = privy.user;
   const phone = user?.phone?.number;

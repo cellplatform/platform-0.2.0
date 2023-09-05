@@ -13,7 +13,8 @@ export function FieldLinkWallet(
    * Handlers
    */
   const linkWallet = () => {
-    if (enabled) privy.linkWallet();
+    if (!enabled) return;
+    privy.linkWallet();
   };
 
   /**
