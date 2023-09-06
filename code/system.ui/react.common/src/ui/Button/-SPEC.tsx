@@ -1,4 +1,4 @@
-import { Dev, type t } from '../../test.ui';
+import { Delete, Dev, type t } from '../../test.ui';
 import { Button } from './Button';
 
 const DEFAULTS = Button.DEFAULTS;
@@ -19,7 +19,7 @@ const initial: T = {
 };
 
 type LocalStore = T['debug'];
-const localstore = Dev.LocalStorage<LocalStore>('dev:key');
+const localstore = Dev.LocalStorage<LocalStore>('dev:sys.ui.common.Button');
 const local = localstore.object({ ...initial.debug });
 
 export default Dev.describe('Button', (e) => {
@@ -41,17 +41,13 @@ export default Dev.describe('Button', (e) => {
         padding: debug.padding ? 20 : undefined,
       };
 
-      if (!debug.useLabel) {
+      if (debug.useLabel) {
         props.label = 'Label-🐷';
         props.children = undefined;
       } else {
         props.label = undefined;
         props.children = <div>{'My Child Element'}</div>;
       }
-
-      // const styles = {
-      //   base: css({}),
-      // };
 
       return (
         <Button
@@ -92,6 +88,19 @@ export default Dev.describe('Button', (e) => {
           .value((e) => e.state.props.block)
           .onClick((e) => e.change((d) => Dev.toggle(d.props, 'block'))),
       );
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.overlay);
+        btn
+          .label((e) => `overlay (Element)`)
+          .value((e) => value(e.state))
+          .onClick((e) => {
+            e.change((d) => {
+              const el = <div style={{ fontSize: 11 }}>{`Overlay 🐷`}</div>;
+              d.props.overlay = d.props.overlay ? undefined : el;
+            });
+          });
+      });
     });
 
     dev.hr(5, 20);
@@ -99,16 +108,16 @@ export default Dev.describe('Button', (e) => {
     dev.section('Debug', (dev) => {
       dev.button((btn) =>
         btn
-          .label('content: <child element>')
+          .label('content: <Element>')
           .right((e) => (!e.state.debug.useLabel ? '← current' : ''))
-          .onClick((e) => e.change((d) => (d.debug.useLabel = false))),
+          .onClick((e) => e.change((d) => (local.useLabel = d.debug.useLabel = false))),
       );
 
       dev.button((btn) =>
         btn
           .label('content: "label" property')
           .right((e) => (e.state.debug.useLabel ? '← current' : ''))
-          .onClick((e) => e.change((d) => (d.debug.useLabel = true))),
+          .onClick((e) => e.change((d) => (local.useLabel = d.debug.useLabel = true))),
       );
 
       dev.hr(-1, 5);
@@ -133,7 +142,9 @@ export default Dev.describe('Button', (e) => {
     const dev = Dev.tools<T>(e, initial);
 
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = { props: e.state.props };
+      const data = {
+        props: Delete.undefined(e.state.props),
+      };
       return <Dev.Object name={'Button'} data={data} expand={1} />;
     });
   });

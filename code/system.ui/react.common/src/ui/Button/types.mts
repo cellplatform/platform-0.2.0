@@ -1,17 +1,20 @@
-import { type t } from './common';
+import type { t } from './common';
 
 type MouseHandler = React.MouseEventHandler;
+type Content = JSX.Element | string | number | false;
 
 /**
  * Component
  */
 export type ButtonProps = {
-  children?: JSX.Element | string | number;
+  children?: Content;
   label?: string;
   enabled?: boolean;
   block?: boolean;
   tooltip?: string;
+
   spinning?: boolean;
+  overlay?: Content; // eg. a "copied" message.
 
   style?: t.CssValue;
   margin?: t.CssEdgesInput;

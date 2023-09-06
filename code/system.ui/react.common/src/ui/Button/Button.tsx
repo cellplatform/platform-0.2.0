@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Spinner } from '../Spinner';
-import { Wrangle } from './Wrangle.mjs';
+import { Wrangle } from './Wrangle';
 import { COLORS, DEFAULTS, FC, Style, css, type t } from './common';
 
 const View: React.FC<t.ButtonProps> = (props) => {
@@ -11,11 +11,15 @@ const View: React.FC<t.ButtonProps> = (props) => {
     userSelect = DEFAULTS.userSelect,
     pressedOffset = DEFAULTS.pressedOffset,
     spinning = DEFAULTS.spinning,
+    overlay,
   } = props;
 
   const [isOver, setOver] = useState(false);
   const [isDown, setDown] = useState(false);
 
+  /**
+   * Handlers
+   */
   const over = (isOver: boolean): React.MouseEventHandler => {
     return (e) => {
       setOver(isOver);
@@ -55,6 +59,7 @@ const View: React.FC<t.ButtonProps> = (props) => {
   /**
    * [Render]
    */
+  const isBlurred = Boolean(spinning || overlay);
   const styles = {
     base: css({
       ...Style.toMargins(props.margin),
@@ -64,25 +69,28 @@ const View: React.FC<t.ButtonProps> = (props) => {
       minWidth: props.minWidth,
       maxWidth: props.maxWidth,
       opacity: isEnabled ? 1 : disabledOpacity,
-      cursor: isEnabled && !spinning ? 'pointer' : 'default',
+      cursor: isEnabled && !isBlurred ? 'pointer' : 'default',
       color: Wrangle.color({ isEnabled, isOver }),
       userSelect: userSelect ? 'auto' : 'none',
     }),
     body: css({
       transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
-      opacity: spinning ? 0.15 : 1,
-      filter: `blur(${spinning ? 3 : 0}px)`,
+      opacity: isBlurred ? 0.15 : 1,
+      filter: `blur(${isBlurred ? 3 : 0}px)`,
       transition: 'opacity 0.1s ease',
     }),
     label: css({}),
     spinner: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
+    overlay: css({ Absolute: 0, display: 'grid', placeItems: 'center' }),
   };
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner.Bar color={isEnabled ? COLORS.GREEN : COLORS.DARK} width={30} {...styles.spinner} />
+      <Spinner.Bar color={isEnabled ? COLORS.BLUE : COLORS.DARK} width={30} {...styles.spinner} />
     </div>
   );
+
+  const elOverlay = !spinning && overlay && <div {...styles.overlay}>{overlay}</div>;
 
   return (
     <div
@@ -100,6 +108,7 @@ const View: React.FC<t.ButtonProps> = (props) => {
         {props.children}
       </div>
       {elSpinner}
+      {elOverlay}
     </div>
   );
 };
