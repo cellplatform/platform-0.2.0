@@ -3,7 +3,7 @@ import { Spinner } from '../Spinner';
 import { Wrangle } from './Wrangle';
 import { COLORS, DEFAULTS, FC, Style, css, type t } from './common';
 
-const View: React.FC<t.ButtonProps> = (props) => {
+export const View: React.FC<t.ButtonProps> = (props) => {
   const {
     enabled: isEnabled = DEFAULTS.enabled,
     block = DEFAULTS.block,
@@ -94,8 +94,8 @@ const View: React.FC<t.ButtonProps> = (props) => {
 
   return (
     <div
-      role={'button'}
       {...css(styles.base, props.style)}
+      role={'button'}
       title={props.tooltip}
       onMouseEnter={over(true)}
       onMouseLeave={over(false)}
@@ -112,16 +112,3 @@ const View: React.FC<t.ButtonProps> = (props) => {
     </div>
   );
 };
-
-/**
- * [Export]
- */
-
-type Fields = {
-  DEFAULTS: typeof DEFAULTS;
-};
-export const Button = FC.decorate<t.ButtonProps, Fields>(
-  View,
-  { DEFAULTS },
-  { displayName: 'Button' },
-);

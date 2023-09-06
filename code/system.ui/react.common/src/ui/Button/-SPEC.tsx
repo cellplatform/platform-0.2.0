@@ -1,5 +1,5 @@
 import { Delete, Dev, type t } from '../../test.ui';
-import { Button } from './Button';
+import { Button } from '.';
 
 const DEFAULTS = Button.DEFAULTS;
 
@@ -108,7 +108,7 @@ export default Dev.describe('Button', (e) => {
     dev.section('Debug', (dev) => {
       dev.button((btn) =>
         btn
-          .label('content: <Element>')
+          .label('content: Element')
           .right((e) => (!e.state.debug.useLabel ? '← current' : ''))
           .onClick((e) => e.change((d) => (local.useLabel = d.debug.useLabel = false))),
       );
