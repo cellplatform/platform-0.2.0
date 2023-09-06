@@ -6,7 +6,7 @@ import { Is } from '.';
 describe('Is', () => {
   it('Is.env.(node|browser)', () => {
     // NB: Tests are running within on [node] via Vitest, which is why [Is.node === true]
-    //     Also, the target environment is set to "web", and so [jsdom] has been turned on for testing.
+    //     Also, the target environment is set to "web", and so [happy-dom] has been turned on for testing.
     expect(Is.env.browser).to.eql(true);
     expect(Is.env.nodejs).to.eql(true);
   });
