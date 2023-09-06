@@ -20,9 +20,9 @@ export const Wallet: React.FC<WalletProps> = (props) => {
   /**
    * Handlers
    */
-  const copyAddress = () => {
-    window.navigator.clipboard.writeText(address);
-  };
+  const copyAddress = () => window.navigator.clipboard.writeText(address);
+
+  const copyBalance = () => window.navigator.clipboard.writeText(balance.eth.toString());
 
   const unlinkWallet = () => {
     /**
@@ -71,7 +71,11 @@ export const Wallet: React.FC<WalletProps> = (props) => {
       <Icons.Close size={Size} />
     </Button>
   );
-  const elBalance = !elClose && <div>{balance.toString('ETH', 5)}</div>;
+  const elBalance = !elClose && (
+    <Button enabled={enabled} onClick={copyBalance}>
+      <div>{balance.toString('ETH', 5)}</div>
+    </Button>
+  );
 
   return (
     <div {...css(styles.base, props.style)}>
