@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { Color, COLORS, css, DEFAULTS, FC, rx, type t } from './common';
+import { COLORS, css, type t } from './common';
 
-export type ChainProps = {
+export type ChainRowProps = {
   name: string;
   modifiers: t.InfoFieldModifiers;
   enabled?: boolean;
   style?: t.CssValue;
 };
 
-export const Chain: React.FC<ChainProps> = (props) => {
+export const ChainRow: React.FC<ChainRowProps> = (props) => {
   const { enabled = true, name, modifiers } = props;
 
   /**
