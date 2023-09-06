@@ -55,7 +55,12 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .items(fields);
 
   useEffect(() => {
-    props.onChange?.({ status: Wrangle.toStatus(privy), privy });
+    const run = async () => {
+      const status = Wrangle.toStatus(privy);
+      const accessToken = (await privy.getAccessToken()) || undefined;
+      props.onChange?.({ status, privy, accessToken });
+    };
+    run();
   }, [Wrangle.privyDeps(privy)]);
 
   return (

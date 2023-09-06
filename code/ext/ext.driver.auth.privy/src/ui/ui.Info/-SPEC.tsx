@@ -5,6 +5,7 @@ type T = {
   props: t.InfoProps;
   privy?: t.PrivyInterface;
   status?: t.AuthStatus;
+  accessToken?: string;
   signature?: string;
 };
 const initial: T = { props: {} };
@@ -67,6 +68,7 @@ export default Dev.describe(name, (e) => {
               state.change((d) => {
                 d.status = e.status;
                 d.privy = e.privy;
+                d.accessToken = e.accessToken;
               });
             }}
           />
@@ -194,6 +196,7 @@ export default Dev.describe(name, (e) => {
         status: e.state.status,
         'status:user': user,
         signature: Hash.shorten(e.state.signature ?? '', 4),
+        accessToken: Hash.shorten(e.state.accessToken ?? '', 7),
       };
 
       return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;

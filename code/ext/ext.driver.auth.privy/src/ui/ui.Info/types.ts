@@ -54,4 +54,5 @@ export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
 export type InfoStatusHandlerArgs = {
   readonly status: t.AuthStatus;
   readonly privy: t.PrivyInterface;
+  readonly accessToken?: string;
 };
