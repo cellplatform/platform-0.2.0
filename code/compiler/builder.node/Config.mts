@@ -26,7 +26,7 @@ export const Config = {
       return {
         globals: false,
         include: ['src/**/*.v.{mts,ts,tsx}'],
-        environment: 'node', // NB: Default, makes JSDOM available.
+        environment: 'happy-dom', // NB: Default, makes DOM available on server/node.
       };
     },
   },
@@ -184,8 +184,8 @@ export const Config = {
         return items.some((name) => targets.includes(name));
       };
 
-      if (isTarget('web')) test.environment = 'jsdom';
-      if (isTarget('node') && !isTarget('web')) test.environment = 'node';
+      if (isTarget('web')) test.environment = 'happy-dom';
+      if (isTarget('node') && !isTarget('web')) test.environment = 'happy-dom';
       if (isTarget('node')) config.build!.ssr = true;
 
       (config as any).__targets = targets;

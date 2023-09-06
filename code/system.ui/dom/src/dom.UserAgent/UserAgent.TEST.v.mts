@@ -14,7 +14,7 @@ describe('UserAgent', () => {
 
   it('UserAgent.current (safe on server)', () => {
     const res = UserAgent.current;
-    expect(res.browser.name).to.eql('WebKit');
-    expect(res.engine.name).to.eql('WebKit');
+    expect(res.browser.name).to.eql('Firefox');
+    expect(res.engine.name).to.eql('Gecko');
   });
 });

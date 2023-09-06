@@ -123,6 +123,7 @@
     "dotenv": "16.3.1",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-prettier": "5.0.0",
+    "happy-dom": "11.0.1",
     "jsdom": "22.1.0",
     "rollup-plugin-visualizer": "5.9.2",
     "svelte": "4.2.0",
