@@ -51,7 +51,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     .field('Auth.Login', () => FieldLogin(privy, enabled))
     .field('Auth.Link.Wallet', () => user && FieldLinkWallet(privy, wallets, fields, enabled))
     .field('Wallet.List', () => FieldWalletsList({ privy, wallets, enabled, modifiers, fields }))
-    .field('Chain.List', () => FieldChainList({ privy, wallets, data, enabled, modifiers, fields }))
+    .field('Chain.List', () => FieldChainList({ privy, data, enabled, modifiers, fields }))
     .items(fields);
 
   useEffect(() => {

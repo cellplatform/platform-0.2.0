@@ -1,14 +1,14 @@
 import { Chains, DEFAULTS, Value, type t } from './common';
+import { Chain } from './ui.Chain';
 
 export function FieldChainList(args: {
   privy: t.PrivyInterface;
-  wallets: t.ConnectedWallet[];
   data: t.InfoData;
   enabled: boolean;
   modifiers: t.InfoFieldModifiers;
   fields: t.InfoField[];
 }): t.PropListItem[] {
-  const { privy, wallets, modifiers, fields, data } = args;
+  const { privy, modifiers, fields, data } = args;
   const enabled = privy.ready ? args.enabled : false;
 
   let chains = data.chain?.list ?? DEFAULTS.data.chain!.list!;
@@ -26,8 +26,8 @@ export function FieldChainList(args: {
   res.push(
     ...chains.map((name) => {
       const chain = Chains.get(name);
-      const label = chain.name;
-      return { label, indent: 20 };
+      const value = <Chain name={chain.name} modifiers={modifiers} enabled={enabled} />;
+      return { value };
     }),
   );
 
