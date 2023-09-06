@@ -19,8 +19,13 @@ export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
   chain?: {
     names?: t.EvmChainName[];
+    selected?: t.EvmChainName;
+    onSelected?: InfoChainSelectedHandler;
   };
 };
+
+export type InfoChainSelectedHandler = (e: InfoChainSelectedHandlerArgs) => void;
+export type InfoChainSelectedHandlerArgs = { chain: t.EvmChainName };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 

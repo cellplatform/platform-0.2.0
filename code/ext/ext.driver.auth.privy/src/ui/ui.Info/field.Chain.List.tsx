@@ -26,9 +26,7 @@ export function FieldChainList(args: {
 
   res.push(
     ...chains.map((chain) => {
-      const value = (
-        <ChainRow name={Chain.displayName(chain)} modifiers={modifiers} enabled={enabled} />
-      );
+      const value = <ChainRow data={data} chain={chain} modifiers={modifiers} enabled={enabled} />;
       return { value };
     }),
   );

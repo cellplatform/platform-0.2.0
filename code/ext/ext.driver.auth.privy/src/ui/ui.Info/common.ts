@@ -30,6 +30,7 @@ const defaultFields: t.InfoField[] = [
 const data: t.InfoData = {
   chain: {
     names: Chain.names,
+    selected: 'Op:main',
   },
 };
 

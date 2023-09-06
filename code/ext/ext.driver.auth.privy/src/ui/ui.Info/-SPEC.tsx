@@ -16,7 +16,7 @@ const DEFAULTS = Info.DEFAULTS;
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] } & Pick<
+  type LocalStore = { selectedFields?: t.InfoField[]; selectedChain?: t.EvmChainName } & Pick<
     t.InfoProps,
     'enabled' | 'useAuthProvider' | 'clipboard'
   >;
@@ -25,15 +25,9 @@ export default Dev.describe(name, (e) => {
     enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,
     useAuthProvider: DEFAULTS.useAuthProvider,
+    selectedChain: DEFAULTS.data.chain!.selected,
     clipboard: DEFAULTS.clipboard,
   });
-
-  const State = {
-    props(state: T): t.InfoProps {
-      const data: t.InfoData = { provider: { appId, walletConnectId } };
-      return { ...state.props, data };
-    },
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -42,8 +36,20 @@ export default Dev.describe(name, (e) => {
     await state.change((d) => {
       d.props.enabled = local.enabled;
       d.props.fields = local.selectedFields;
-      d.props.useAuthProvider = local.useAuthProvider;
       d.props.clipboard = local.clipboard;
+      d.props.useAuthProvider = local.useAuthProvider;
+
+      d.props.data = {
+        provider: { appId, walletConnectId },
+        chain: {
+          selected: local.selectedChain,
+          onSelected(e) {
+            console.info(`⚡️ onSelected`, e);
+            state.change((d) => (d.props.data!.chain!.selected = e.chain));
+            local.selectedChain = e.chain;
+          },
+        },
+      };
     });
 
     ctx.debug.width(380);
@@ -52,10 +58,9 @@ export default Dev.describe(name, (e) => {
       .size([360, null])
       .display('grid')
       .render<T>((e) => {
-        const props = State.props(e.state);
         return (
           <Info
-            {...props}
+            {...e.state.props}
             margin={24}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);

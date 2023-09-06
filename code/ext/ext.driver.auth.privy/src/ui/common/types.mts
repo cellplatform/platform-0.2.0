@@ -7,6 +7,7 @@ export type {
   KeyboardModifierFlags,
   PropListItem,
   PropListProps,
+  DevCtxState,
 } from 'sys.ui.react.common/src/types.mjs';
 
 /**
