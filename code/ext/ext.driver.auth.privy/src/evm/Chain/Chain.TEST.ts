@@ -1,12 +1,12 @@
 import { expect, Test, type t } from '../../test.ui';
-import { Chains } from '.';
+import { Chain } from '.';
 
 export default Test.describe('Chains', (e) => {
   e.describe('get', (e) => {
     const test = (name: t.EvmChainName, id: number) => {
       e.it(`${name}`, (e) => {
-        const res = Chains.get(name);
-        expect(res.id).to.eql(id);
+        const chain = Chain.get(name);
+        expect(chain.id).to.eql(id);
       });
     };
 
@@ -23,7 +23,7 @@ export default Test.describe('Chains', (e) => {
 
   e.it('isTestnet', (e) => {
     const test = (name: t.EvmChainName, expected: boolean) => {
-      expect(Chains.isTestnet(name)).to.eql(expected);
+      expect(Chain.isTestnet(name)).to.eql(expected);
     };
 
     test('Eth:main', false);

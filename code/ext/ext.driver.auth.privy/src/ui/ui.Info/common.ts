@@ -1,4 +1,4 @@
-import { Chains, type t } from '../common';
+import { Chain, type t } from '../common';
 export * from '../common';
 
 /**
@@ -29,7 +29,7 @@ const defaultFields: t.InfoField[] = [
 
 const data: t.InfoData = {
   chain: {
-    list: Chains.names,
+    names: Chain.names,
   },
 };
 

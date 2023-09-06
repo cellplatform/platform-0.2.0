@@ -17,7 +17,9 @@ export type InfoField =
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
-  chain?: { list?: t.EvmChainName[] };
+  chain?: {
+    names?: t.EvmChainName[];
+  };
 };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };

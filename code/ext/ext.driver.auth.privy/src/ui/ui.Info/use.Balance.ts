@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPublicClient, createWalletClient, custom, formatEther, type Address } from 'viem';
 
 import { Wrangle } from './Wrangle';
-import { type t, Chains } from './common';
+import { type t, Chain } from './common';
 
 export function useBalance(wallet: t.ConnectedWallet) {
   const walletDeps = Wrangle.walletDeps(wallet);
@@ -40,7 +40,7 @@ async function fetchBalance(wallet: t.ConnectedWallet) {
   });
   const transport = custom(ethereumProvider);
 
-  const chain = Chains.get('Op:main');
+  const chain = Chain.get('Op:main');
   const address = wallet.address as Address;
 
   const walletClient = createWalletClient({ account: address, chain, transport });

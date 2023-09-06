@@ -23,7 +23,7 @@ const names: t.EvmChainName[] = [
   'Zora:test',
 ];
 
-export const Chains = {
+export const Chain = {
   names,
 
   /**

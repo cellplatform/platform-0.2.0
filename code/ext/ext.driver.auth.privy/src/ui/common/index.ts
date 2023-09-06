@@ -5,4 +5,4 @@ export * from '../../common';
 export * from './libs.mjs';
 
 export { Icons } from '../Icons';
-export { Chains } from '../../evm';
+export { Chain } from '../../evm';
