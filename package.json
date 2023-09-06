@@ -2,6 +2,7 @@
   "name": "platform-0.2.0",
   "version": "0.2.7-alpha",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "ci": "yarn audit && yarn build && yarn test && yarn count",
     "prepare": "cp code/compiler/tsconfig/tsconfig.json ./tsconfig.json",

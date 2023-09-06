@@ -2,6 +2,7 @@
   "name": "sample.node.lib",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
