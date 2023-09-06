@@ -25,4 +25,4 @@ export { LogTable } from '../../code/system/sys.util.node/src/index.mjs';
 /**
  * @local
  */
-export { fs, Builder, Count } from '../../code/compiler/builder.node/index.mjs';
+export { fs, Builder, Count } from '../../code/compiler/builder/index.mjs';

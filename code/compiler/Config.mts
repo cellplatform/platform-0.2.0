@@ -4,8 +4,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
-import { asArray, fs, R, Util, type t } from './common/index.mjs';
-import { Paths } from './Paths.mjs';
+import { asArray, fs, R, Util, type t } from './builder/common/index.mjs';
+import { Paths } from './builder/index.mjs';
 
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
