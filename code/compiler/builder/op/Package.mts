@@ -2,6 +2,7 @@ import { fs, R, Util, type t } from '../common/index.mjs';
 import { Paths } from '../Paths.mjs';
 import { Vite } from './Vite.mjs';
 
+type StringMap = { [key: string]: string };
 type PkgMeta = {
   types: string;
   exports: t.PkgJsonExports;
@@ -168,13 +169,12 @@ export const Package = {
 /**
  * Helpers
  */
-
-function sortKeys<T extends Object>(obj: T) {
+function sortKeys<T extends Record<string, unknown>>(obj: T) {
   const keys = Object.keys(obj).sort();
   return keys.reduce((acc, key) => {
     acc[key] = obj[key];
     return acc;
-  }, {} as T);
+  }, {} as Record<string, any>) as T;
 }
 
 const Is = {
@@ -210,10 +210,12 @@ const Wrangle = {
     const lib = config?.build?.lib;
     if (typeof lib !== 'object') return undefined;
     if (typeof lib.entry !== 'object') return undefined;
-    return Object.keys(lib.entry).reduce((acc, key) => {
-      acc[key] = lib.entry[key].substring(root.length + 1);
+
+    const entry = lib.entry as StringMap;
+    return Object.keys(entry).reduce((acc, key) => {
+      acc[key] = entry[key].substring(root.length + 1);
       return acc;
-    }, {});
+    }, {} as StringMap);
   },
 
   exportKey(targets: t.ViteTarget[], target: t.ViteTarget, key: string) {
