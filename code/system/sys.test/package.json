@@ -8,8 +8,10 @@
     "build": "ts-node-esm -T ../../../script.ts/cmd.build.mts",
     "clean": "ts-node-esm -T ../../../script.ts/cmd.clean.mts"
   },
+  "dependencies": {
+    "chai": "4.3.8"
+  },
   "devDependencies": {
-    "chai": "4.3.8",
     "sys.types": "0.0.0"
   },
   "license": "MIT",
