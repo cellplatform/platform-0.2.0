@@ -4,6 +4,7 @@ import { Vite } from './Vite.mjs';
 
 type StringMap = { [key: string]: string };
 type PkgMeta = {
+  sideEffects: false;
   types: string;
   exports: t.PkgJsonExports;
   typesVersions?: t.PkgJsonTypesVersions;
@@ -145,6 +146,7 @@ export const Package = {
 
     // Finish up.
     return {
+      sideEffects: false,
       types: _types,
       exports: Exports.sorted,
       typesVersions: Types.versions,
