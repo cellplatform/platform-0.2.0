@@ -13,13 +13,13 @@ const View: React.FC<t.ButtonProps> = (props) => {
     spinning = DEFAULTS.spinning,
   } = props;
 
-  const [isOver, setIsOver] = useState(false);
-  const [isDown, setIsDown] = useState(false);
+  const [isOver, setOver] = useState(false);
+  const [isDown, setDown] = useState(false);
 
   const over = (isOver: boolean): React.MouseEventHandler => {
     return (e) => {
-      setIsOver(isOver);
-      if (!isOver && isDown) setIsDown(false);
+      setOver(isOver);
+      if (!isOver && isDown) setDown(false);
       if (isEnabled) {
         if (isOver && props.onMouseEnter) props.onMouseEnter(e);
         if (!isOver && props.onMouseLeave) props.onMouseLeave(e);
@@ -36,7 +36,7 @@ const View: React.FC<t.ButtonProps> = (props) => {
 
   const down = (isDown: boolean): React.MouseEventHandler => {
     return (e) => {
-      setIsDown(isDown);
+      setDown(isDown);
       if (isEnabled) {
         if (isDown && props.onMouseDown) props.onMouseDown(e);
         if (!isDown && props.onMouseUp) props.onMouseUp(e);
