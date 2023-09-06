@@ -1,4 +1,4 @@
-import { DEFAULTS, Value, type t } from './common';
+import { Chains, DEFAULTS, Value, type t } from './common';
 
 export function FieldChainList(args: {
   privy: t.PrivyInterface;
@@ -10,7 +10,11 @@ export function FieldChainList(args: {
 }): t.PropListItem[] {
   const { privy, wallets, modifiers, fields, data } = args;
   const enabled = privy.ready ? args.enabled : false;
-  const chains = data.chains?.list ?? DEFAULTS.data.chains!.list!;
+
+  let chains = data.chain?.list ?? DEFAULTS.data.chain!.list!;
+  if (!fields.includes('Chain.List.Testnets')) {
+    chains = chains.filter((name) => !Chains.isTestnet(name));
+  }
 
   const res: t.PropListItem[] = [];
 
@@ -18,6 +22,14 @@ export function FieldChainList(args: {
     const label = Value.plural(chains.length, 'Chain', 'Chains');
     res.push({ label, divider: false });
   }
+
+  res.push(
+    ...chains.map((name) => {
+      const chain = Chains.get(name);
+      const label = chain.name;
+      return { label, indent: 20 };
+    }),
+  );
 
   return res;
 }

@@ -11,7 +11,6 @@ export function FieldWalletsList(args: {
   const { privy, wallets, modifiers, fields } = args;
   const enabled = privy.ready ? args.enabled : false;
   const showClose = modifiers.is.over && modifiers.keys.alt;
-
   const res: t.PropListItem[] = [];
 
   if (fields.includes('Wallet.List.Title')) {

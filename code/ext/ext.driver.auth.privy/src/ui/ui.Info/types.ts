@@ -12,14 +12,13 @@ export type InfoField =
   | 'Wallet.List'
   | 'Wallet.List.Title'
   | 'Chain.List'
-  | 'Chain.List.Title';
+  | 'Chain.List.Title'
+  | 'Chain.List.Testnets';
 
 export type InfoData = {
   provider?: { appId?: string; walletConnectId?: string };
-  chains?: { list?: InfoDataChain[] };
+  chain?: { list?: t.EvmChainName[] };
 };
-
-export type InfoDataChain = { name: string };
 
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 

@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Chains, type t } from '../common';
 export * from '../common';
 
 /**
@@ -17,6 +17,7 @@ const allFields: t.InfoField[] = [
   'Wallet.List.Title',
   'Chain.List',
   'Chain.List.Title',
+  'Chain.List.Testnets',
 ];
 const defaultFields: t.InfoField[] = [
   'Module',
@@ -27,8 +28,8 @@ const defaultFields: t.InfoField[] = [
 ];
 
 const data: t.InfoData = {
-  chains: {
-    list: [{ name: 'Ethereum Mainnet' }, { name: 'Optimism Mainnet' }],
+  chain: {
+    list: Chains.names,
   },
 };
 
