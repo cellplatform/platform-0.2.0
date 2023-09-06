@@ -26,6 +26,12 @@ const names: t.EvmChainName[] = [
 export const Chain = {
   names,
 
+  displayName(name: t.EvmChainName) {
+    const chain = Chain.get(name);
+    if (name === 'Op:main') return 'Optimism';
+    return chain.name;
+  },
+
   /**
    * Retrieve the named chain.
    */
