@@ -11,7 +11,7 @@ export function shortenHash(
   length: number | [number, number],
   options: ShortenHashOptions = {},
 ) {
-  const { divider = ' .. ' } = options;
+  const { divider = '..' } = options;
 
   hash = Wrangle.trimPrefixes((hash || '').trim(), options);
   if (!hash) return '';

@@ -80,6 +80,6 @@ describe('hash', () => {
   it('shorten', () => {
     const hash = 'sha256-1234567890';
     const res = Hash.shorten(hash, 3, { trimPrefix: true });
-    expect(res).to.eql('123 .. 890');
+    expect(res).to.eql('123..890');
   });
 });
