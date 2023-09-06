@@ -1,5 +1,5 @@
-import { expect, Test, type t } from '../../test.ui';
 import { Chain } from '.';
+import { Test, expect, type t } from '../../test.ui';
 
 export default Test.describe('Chains', (e) => {
   e.describe('get', (e) => {
@@ -10,15 +10,15 @@ export default Test.describe('Chains', (e) => {
       });
     };
 
-    test('Eth:main', 1);
-    test('Eth:test:goerli', 5);
-    test('Eth:test:sepolia', 11155111);
-    test('Op:main', 10);
-    test('Op:test:goerli', 420);
-    test('Base:main', 8453);
-    test('Base:test:goerli', 84531);
-    test('Zora:main', 7777777);
-    test('Zora:test', 999);
+    test('Eth:Main', 1);
+    test('Eth:Test:Goerli', 5);
+    test('Eth:Test:Sepolia', 11155111);
+    test('Op:Main', 10);
+    test('Op:Test:Goerli', 420);
+    test('Base:Main', 8453);
+    test('Base:Test:Goerli', 84531);
+    test('Zora:Main', 7777777);
+    test('Zora:Test', 999);
   });
 
   e.it('isTestnet', (e) => {
@@ -26,14 +26,14 @@ export default Test.describe('Chains', (e) => {
       expect(Chain.isTestnet(name)).to.eql(expected);
     };
 
-    test('Eth:main', false);
-    test('Eth:test:goerli', true);
-    test('Eth:test:sepolia', true);
-    test('Op:main', false);
-    test('Op:test:goerli', true);
-    test('Base:main', false);
-    test('Base:test:goerli', true);
-    test('Zora:main', false);
-    test('Zora:test', true);
+    test('Eth:Main', false);
+    test('Eth:Test:Goerli', true);
+    test('Eth:Test:Sepolia', true);
+    test('Op:Main', false);
+    test('Op:Test:Goerli', true);
+    test('Base:Main', false);
+    test('Base:Test:Goerli', true);
+    test('Zora:Main', false);
+    test('Zora:Test', true);
   });
 });

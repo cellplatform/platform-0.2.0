@@ -40,7 +40,7 @@ async function fetchBalance(wallet: t.ConnectedWallet) {
   });
   const transport = custom(ethereumProvider);
 
-  const chain = Chain.get('Op:main');
+  const chain = Chain.get('Op:Main'); // TEMP 🐷
   const address = wallet.address as Address;
 
   const walletClient = createWalletClient({ account: address, chain, transport });

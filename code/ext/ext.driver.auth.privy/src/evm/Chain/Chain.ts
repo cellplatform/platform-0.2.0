@@ -12,15 +12,15 @@ import {
 import { type t } from '../common';
 
 const names: t.EvmChainName[] = [
-  'Eth:main',
-  'Eth:test:goerli',
-  'Eth:test:sepolia',
-  'Op:main',
-  'Op:test:goerli',
-  'Base:main',
-  'Base:test:goerli',
-  'Zora:main',
-  'Zora:test',
+  'Eth:Main',
+  'Eth:Test:Goerli',
+  'Eth:Test:Sepolia',
+  'Op:Main',
+  'Op:Test:Goerli',
+  'Base:Main',
+  'Base:Test:Goerli',
+  'Zora:Main',
+  'Zora:Test',
 ];
 
 export const Chain = {
@@ -29,12 +29,12 @@ export const Chain = {
   displayName(name: t.EvmChainName) {
     const chain = Chain.get(name);
 
-    if (name === 'Eth:test:goerli') return 'Ethereum (Goerli)';
-    if (name === 'Eth:test:sepolia') return 'Ethereum (Sepolia)';
-    if (name === 'Op:main') return 'Optimism';
-    if (name === 'Op:test:goerli') return 'Optimism (Goerli)';
-    if (name === 'Base:test:goerli') return 'Base (Goerli)';
-    if (name === 'Zora:test') return 'Base (Test)';
+    if (name === 'Eth:Test:Goerli') return 'Ethereum (Goerli)';
+    if (name === 'Eth:Test:Sepolia') return 'Ethereum (Sepolia)';
+    if (name === 'Op:Main') return 'Optimism';
+    if (name === 'Op:Test:Goerli') return 'Optimism (Goerli)';
+    if (name === 'Base:Test:Goerli') return 'Base (Goerli)';
+    if (name === 'Zora:Test') return 'Base (Test)';
 
     return chain.name;
   },
@@ -43,19 +43,19 @@ export const Chain = {
    * Retrieve the named chain.
    */
   get(name: t.EvmChainName) {
-    if (name === 'Eth:main') return mainnet;
-    if (name === 'Eth:test:goerli') return goerli;
-    if (name === 'Eth:test:sepolia') return sepolia;
-    if (name === 'Op:main') return optimism;
-    if (name === 'Op:test:goerli') return optimismGoerli;
-    if (name === 'Base:main') return base;
-    if (name === 'Base:test:goerli') return baseGoerli;
-    if (name === 'Zora:main') return zora;
-    if (name === 'Zora:test') return zoraTestnet;
+    if (name === 'Eth:Main') return mainnet;
+    if (name === 'Eth:Test:Goerli') return goerli;
+    if (name === 'Eth:Test:Sepolia') return sepolia;
+    if (name === 'Op:Main') return optimism;
+    if (name === 'Op:Test:Goerli') return optimismGoerli;
+    if (name === 'Base:Main') return base;
+    if (name === 'Base:Test:Goerli') return baseGoerli;
+    if (name === 'Zora:Main') return zora;
+    if (name === 'Zora:Test') return zoraTestnet;
     throw new Error(`Chain named '${name}' not supported.`);
   },
 
   isTestnet(name: t.EvmChainName) {
-    return name.includes(':test');
+    return name.includes(':Test');
   },
 } as const;

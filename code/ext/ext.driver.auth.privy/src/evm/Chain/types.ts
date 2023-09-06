@@ -1,10 +1,10 @@
 export type EvmChainName =
-  | 'Eth:main'
-  | 'Eth:test:goerli'
-  | 'Eth:test:sepolia'
-  | 'Op:main'
-  | 'Op:test:goerli'
-  | 'Base:main'
-  | 'Base:test:goerli'
-  | 'Zora:main'
-  | 'Zora:test';
+  | 'Eth:Main'
+  | 'Eth:Test:Goerli'
+  | 'Eth:Test:Sepolia'
+  | 'Op:Main'
+  | 'Op:Test:Goerli'
+  | 'Base:Main'
+  | 'Base:Test:Goerli'
+  | 'Zora:Main'
+  | 'Zora:Test';
