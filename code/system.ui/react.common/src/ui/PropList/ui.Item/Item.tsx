@@ -21,7 +21,8 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   /**
    * [Render]
    */
-  const borderColor = theme.color.alpha(isLast || !divider ? 0 : 0.1);
+  const noBorder = isLast || !divider;
+  const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
       backgroundColor: selected ? Color.format(selected.color) : undefined,
@@ -29,7 +30,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
       PaddingY: 4,
       minHeight: 16,
       fontSize: DEFAULTS.fontSize,
-      borderBottom: `solid 1px ${borderColor}`,
+      borderBottom: `solid ${noBorder ? 0 : 1}px ${borderColor}`,
       ':first-child': { paddingTop: 2 },
       ':last-child': { border: 'none', paddingBottom: 2 },
     }),
