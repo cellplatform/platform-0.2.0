@@ -19,7 +19,7 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const divider = data.divider ?? true;
 
   /**
-   * [Render]
+   * Render
    */
   const noBorder = isLast || !divider;
   const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
@@ -27,7 +27,9 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
     base: css({
       backgroundColor: selected ? Color.format(selected.color) : undefined,
       Flex: 'horizontal-start-spaceBetween',
-      PaddingY: 4,
+      position: 'relative',
+      paddingTop: 4,
+      paddingBottom: noBorder ? 0 : 4,
       minHeight: 16,
       fontSize: DEFAULTS.fontSize,
       borderBottom: `solid ${noBorder ? 0 : 1}px ${borderColor}`,

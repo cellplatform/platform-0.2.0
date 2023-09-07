@@ -49,7 +49,10 @@ export const sampleItems: t.PropListItem[] = [
     },
   },
   { label: 'descender gyp', value: 'descender gyp' },
-  { label: 'no divider', value: '🌳', divider: false },
+  { label: 'no divider', divider: false },
+  { label: 'one', value: '🙈', indent: 15 },
+  { label: 'two', value: '🙊', indent: 15 },
+  { label: 'three', value: '🙉', indent: 15 },
   {
     label: 'label',
     value: <div {...styles.value}>value</div>,
