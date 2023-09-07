@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Spinner } from '../Spinner';
 import { Wrangle } from './Wrangle';
-import { COLORS, DEFAULTS, FC, Style, css, type t } from './common';
+import { COLORS, DEFAULTS, Style, css, type t } from './common';
 
 export const View: React.FC<t.ButtonProps> = (props) => {
   const {
@@ -13,6 +13,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
     spinning = DEFAULTS.spinning,
     overlay,
   } = props;
+  const isBlurred = Boolean(spinning || overlay);
 
   const [isOver, setOver] = useState(false);
   const [isDown, setDown] = useState(false);
@@ -44,7 +45,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       if (isEnabled) {
         if (isDown && props.onMouseDown) props.onMouseDown(e);
         if (!isDown && props.onMouseUp) props.onMouseUp(e);
-        if (!isDown && props.onClick) props.onClick(e);
+        if (!isDown && props.onClick && !isBlurred) props.onClick(e);
       }
       props.onMouse?.({
         event: e,
@@ -59,7 +60,6 @@ export const View: React.FC<t.ButtonProps> = (props) => {
   /**
    * [Render]
    */
-  const isBlurred = Boolean(spinning || overlay);
   const styles = {
     base: css({
       ...Style.toMargins(props.margin),
@@ -70,13 +70,13 @@ export const View: React.FC<t.ButtonProps> = (props) => {
       maxWidth: props.maxWidth,
       opacity: isEnabled ? 1 : disabledOpacity,
       cursor: isEnabled && !isBlurred ? 'pointer' : 'default',
-      color: Wrangle.color({ isEnabled, isOver }),
       userSelect: userSelect ? 'auto' : 'none',
     }),
     body: css({
+      color: Wrangle.color({ isEnabled, isOver }),
       transform: Wrangle.pressedOffset({ isEnabled, isOver, isDown, pressedOffset }),
       opacity: isBlurred ? 0.15 : 1,
-      filter: `blur(${isBlurred ? 3 : 0}px)`,
+      filter: `blur(${isBlurred ? 3 : 0}px) grayscale(${isBlurred ? 100 : 0}%)`,
       transition: 'opacity 0.1s ease',
     }),
     label: css({}),

@@ -34,6 +34,10 @@ export type ButtonProps = {
   onMouse?: t.ButtonMouseHandler;
 };
 
+export type CopyButtonProps = Omit<t.ButtonProps, 'overlay'> & {
+  onCopy?: ButtonCopyHandler;
+};
+
 /**
  * Events
  */
@@ -44,4 +48,11 @@ export type ButtonMouseHandlerArgs = {
   isEnabled: boolean;
   event: React.MouseEvent;
   action: 'MouseEnter' | 'MouseLeave' | 'MouseDown' | 'MouseUp';
+};
+
+export type ButtonCopyHandler = (e: ButtonCopyHandlerArgs) => void;
+export type ButtonCopyHandlerArgs = {
+  delay(msecs: t.Milliseconds): void;
+  message(content: Content): void;
+  write(value?: string | number): Promise<void>;
 };
