@@ -1,4 +1,5 @@
-import { Dev, type t } from '.';
+import { AuthProvider } from '../ui/ui.Auth/Auth.Provider';
+import { Dev, appId, walletConnectId, type t } from './common';
 
 type T = {
   spinning?: boolean;
@@ -18,12 +19,14 @@ export default Dev.describe('TestRunner', (e) => {
       .render<T>((e) => {
         const { spinning, results } = e.state;
         return (
-          <Dev.TestRunner.Results
-            style={{ Absolute: 0 }}
-            data={results}
-            spinning={spinning}
-            scroll={true}
-          />
+          <AuthProvider appId={appId} walletConnectId={walletConnectId}>
+            <Dev.TestRunner.Results
+              style={{ Absolute: 0 }}
+              data={results}
+              spinning={spinning}
+              scroll={true}
+            />
+          </AuthProvider>
         );
       });
   });
