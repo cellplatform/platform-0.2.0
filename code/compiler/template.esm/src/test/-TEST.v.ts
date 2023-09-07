@@ -1,5 +1,5 @@
 import { Test, describe, it, type t } from '.';
-import { TESTS } from '../test.ui/-TestRunner.TESTS.mjs';
+import { TESTS } from '../test.ui/-TestRunner.TESTS';
 
 /**
  * Test Harness (UI)
