@@ -1,10 +1,10 @@
-import 'symbol-observable';
-
 import { Pkg } from '../index.pkg.mjs';
 import { createRoot } from 'react-dom/client';
 
-const params = new URL(location.href).searchParams;
+const url = new URL(location.href);
+const params = url.searchParams;
 const isDev = params.has('dev') || params.has('d');
+const isLocalhost = url.hostname === 'localhost' && url.port !== '3000'; // NB: 3000 is the built sample port
 const badge = {
   image: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml/badge.svg',
   href: 'https://github.com/cellplatform/platform-0.2.0/actions/workflows/node.esm.yml',
@@ -13,12 +13,12 @@ const badge = {
 /**
  * User Interface
  */
-type SubjectMatter = 'Dev' | 'DefaultEntry';
+type Subject = 'Dev' | 'Dev:Localhost' | 'DefaultEntry';
 
-const render = async (subject: SubjectMatter) => {
+const render = async (content: Subject) => {
   const root = createRoot(document.getElementById('root')!);
 
-  if (subject === 'Dev') {
+  if (content === 'Dev') {
     const { Dev } = await import('sys.ui.react.common');
     const { Specs } = await import('./entry.Specs.mjs');
     const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
@@ -26,7 +26,15 @@ const render = async (subject: SubjectMatter) => {
     return;
   }
 
-  if (subject === 'DefaultEntry') {
+  if (content === 'Dev:Localhost') {
+    const { Dev } = await import('sys.ui.react.common');
+    const { Specs } = await import('./entry.Specs.Localhost.mjs');
+    const el = await Dev.render(Pkg, Specs, { badge, hrDepth: 3 });
+    root.render(el);
+    return;
+  }
+
+  if (content === 'DefaultEntry') {
     const { Dev } = await import('sys.ui.react.common');
 
     const version = Pkg.toString();
@@ -44,10 +52,15 @@ const render = async (subject: SubjectMatter) => {
     root.render(el);
     return;
   }
+
+  throw new Error(`Subject type '${content}' not supported.`);
 };
 
 /**
  * ENTRY
  */
-if (isDev) render('Dev');
-if (!isDev) render('DefaultEntry');
+(() => {
+  if (isDev && isLocalhost) return render('Dev:Localhost');
+  if (isDev) return render('Dev');
+  return render('DefaultEntry');
+})();

@@ -1,9 +1,4 @@
 /**
- * RainbowKit
- */
-// import '@rainbow-me/rainbowkit/styles.css';
-
-/**
  * Vime.js
  * https://vimejs.com/4.x/getting-started/installation#react
  */
@@ -29,6 +24,7 @@ const { Specs: ExtVimeo } = await import('ext.ui.react.vimeo/specs');
 const { Specs: ExtAuthPrivy } = await import('ext.driver.auth.privy/specs');
 
 export const Specs = {
+  App: () => import('../ui/App/-SPEC'),
   ...WebRtc,
   ...Crdt,
   ...Monaco,
