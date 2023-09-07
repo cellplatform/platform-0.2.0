@@ -16,7 +16,7 @@ export const Pkg: ModuleDef = {
     '@rainbow-me/rainbowkit': '1.0.10',
     'sys.util': '0.0.0',
     'sys.ui.react.common': '0.0.0',
-    'viem': '1.10.4',
+    'viem': '1.10.7',
     'wagmi': '1.4.1',
   },
   toString() {
