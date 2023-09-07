@@ -14,6 +14,7 @@ export const View: React.FC<t.ButtonProps> = (props) => {
     overlay,
   } = props;
   const isBlurred = Boolean(spinning || overlay);
+  const spinner = Wrangle.spinner(props.spinner);
 
   const [isOver, setOver] = useState(false);
   const [isDown, setDown] = useState(false);
@@ -86,7 +87,11 @@ export const View: React.FC<t.ButtonProps> = (props) => {
 
   const elSpinner = spinning && (
     <div {...styles.spinner}>
-      <Spinner.Bar color={isEnabled ? COLORS.BLUE : COLORS.DARK} width={30} {...styles.spinner} />
+      <Spinner.Bar
+        {...styles.spinner}
+        width={spinner.width}
+        color={isEnabled ? spinner.color.enabled : spinner.color.disabled}
+      />
     </div>
   );
 

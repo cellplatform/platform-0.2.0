@@ -1,4 +1,4 @@
-import { Button, DEFAULTS, Hash, Icons, css, type t } from './common';
+import { Button, COLORS, DEFAULTS, Hash, Icons, css, type t } from './common';
 import { useBalance } from './use.Balance';
 
 export type WalletRowProps = {
@@ -47,11 +47,7 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
     wallet: css({}),
     kind: css({ opacity: 0.2, display: 'grid', alignContent: 'center' }),
     address: css({ display: 'grid', alignContent: 'center' }),
-    balance: css({
-      display: 'grid',
-      justifyContent: 'end',
-      alignContent: 'center',
-    }),
+    balance: css({ display: 'grid', justifyContent: 'end', alignContent: 'center' }),
     close: css({ Size }),
   };
 
@@ -71,6 +67,7 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
       minWidth={80}
       enabled={enabled}
       spinning={balance.is.fetching}
+      spinner={{ color: { enabled: COLORS.DARK } }}
       onCopy={(e) => e.copy(balance.eth)}
       style={styles.balance}
     >

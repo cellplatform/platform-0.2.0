@@ -2,6 +2,7 @@ import type { t } from './common';
 
 type MouseHandler = React.MouseEventHandler;
 type Content = JSX.Element | string | number | false;
+type Color = string;
 
 /**
  * Component
@@ -12,9 +13,10 @@ export type ButtonProps = {
   enabled?: boolean;
   block?: boolean;
   tooltip?: string;
+  overlay?: Content; // eg. a "copied" message.
 
   spinning?: boolean;
-  overlay?: Content; // eg. a "copied" message.
+  spinner?: t.PartialDeep<ButtonSpinner>;
 
   style?: t.CssValue;
   margin?: t.CssEdgesInput;
@@ -32,6 +34,11 @@ export type ButtonProps = {
   onMouseLeave?: MouseHandler;
   onDoubleClick?: MouseHandler;
   onMouse?: t.ButtonMouseHandler;
+};
+
+export type ButtonSpinner = {
+  width: number;
+  color: { enabled: Color; disabled: Color };
 };
 
 export type CopyButtonProps = Omit<t.ButtonProps, 'overlay'> & {

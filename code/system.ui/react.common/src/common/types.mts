@@ -28,6 +28,7 @@ export type {
   Percent,
   Pixels,
   Point,
+  PartialDeep,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';
