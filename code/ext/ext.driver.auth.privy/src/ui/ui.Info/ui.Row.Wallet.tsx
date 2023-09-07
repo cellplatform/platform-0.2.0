@@ -1,7 +1,7 @@
 import { Button, DEFAULTS, Hash, Icons, css, type t } from './common';
 import { useBalance } from './use.Balance';
 
-export type WalletProps = {
+export type WalletRowProps = {
   enabled?: boolean;
   privy: t.PrivyInterface;
   wallet: t.ConnectedWallet;
@@ -9,7 +9,7 @@ export type WalletProps = {
   style?: t.CssValue;
 };
 
-export const Wallet: React.FC<WalletProps> = (props) => {
+export const WalletRow: React.FC<WalletRowProps> = (props) => {
   const { enabled = DEFAULTS.enabled, wallet, showClose = false, privy } = props;
   const { address } = wallet;
   const isEmbedded = Wrangle.isEmbedded(wallet);

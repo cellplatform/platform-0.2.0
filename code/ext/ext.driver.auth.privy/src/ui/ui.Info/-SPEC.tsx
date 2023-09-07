@@ -117,6 +117,13 @@ export default Dev.describe(name, (e) => {
       };
 
       button('wallet view', () => ['Auth.Login', 'Auth.Link.Wallet', 'Wallet.List']);
+      button('wallet view (chain selector)', () => [
+        'Auth.Login',
+        'Auth.Link.Wallet',
+        'Wallet.List',
+        'Chain.List',
+        'Chain.List.Title',
+      ]);
     });
 
     dev.hr(5, 20);

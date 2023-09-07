@@ -1,4 +1,4 @@
-import { COLORS, Chain, css, type t } from './common';
+import { COLORS, Button, Chain, css, type t } from './common';
 
 export type ChainRowProps = {
   enabled?: boolean;
@@ -34,7 +34,7 @@ export const ChainRow: React.FC<ChainRowProps> = (props) => {
       flex: 1,
       position: 'relative',
       cursor: enabled ? 'pointer' : 'default',
-      opacity: enabled ? 1 : 0.4,
+      opacity: enabled ? 1 : 0.7,
       filter: enabled ? undefined : 'grayscale(100%)',
 
       display: 'grid',
@@ -51,19 +51,18 @@ export const ChainRow: React.FC<ChainRowProps> = (props) => {
       alignContent: 'center',
     }),
     right: {
-      base: css({
-        display: 'grid',
-        alignContent: 'center',
-      }),
+      base: css({ display: 'grid', alignContent: 'center' }),
     },
   };
 
-  const elDot = is.selected && <div {...styles.selection.dot} />;
-
   return (
-    <div {...css(styles.base, props.style)} onMouseDown={handleClick}>
-      <div {...styles.selection.base}>{elDot}</div>
-      <div {...styles.name}>{name}</div>
+    <div {...css(styles.base, props.style)}>
+      <div {...styles.selection.base}>{is.selected && <div {...styles.selection.dot} />}</div>
+      <Button enabled={enabled} onClick={handleClick} style={styles.name}>
+        {name}
+      </Button>
+      {/* <div {...styles.name}>
+      </div> */}
       <div {...styles.right.base}></div>
     </div>
   );

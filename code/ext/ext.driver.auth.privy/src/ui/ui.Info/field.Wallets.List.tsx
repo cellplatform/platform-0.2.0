@@ -1,5 +1,5 @@
 import { Value, type t } from './common';
-import { Wallet } from './ui.Wallet';
+import { WalletRow } from './ui.Row.Wallet';
 
 export function FieldWalletsList(args: {
   privy: t.PrivyInterface;
@@ -21,7 +21,7 @@ export function FieldWalletsList(args: {
   res.push(
     ...wallets.map((wallet, i) => {
       const value = (
-        <Wallet
+        <WalletRow
           key={`${i}.${wallet.address}}`}
           wallet={wallet}
           privy={privy}
