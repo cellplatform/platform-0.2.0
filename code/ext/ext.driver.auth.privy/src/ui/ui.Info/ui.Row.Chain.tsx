@@ -61,8 +61,6 @@ export const ChainRow: React.FC<ChainRowProps> = (props) => {
       <Button enabled={enabled} onClick={handleClick} style={styles.name}>
         {name}
       </Button>
-      {/* <div {...styles.name}>
-      </div> */}
       <div {...styles.right.base}></div>
     </div>
   );
