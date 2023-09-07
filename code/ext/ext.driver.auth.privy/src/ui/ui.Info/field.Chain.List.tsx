@@ -13,7 +13,7 @@ export function FieldChainList(args: {
 
   let chains = data.chain?.names ?? DEFAULTS.data.chain!.names!;
   if (!fields.includes('Chain.List.Testnets')) {
-    const notTestnet = (name: t.EvmChainName) => !Chain.isTestnet(name);
+    const notTestnet = (name: t.EvmChainName) => !Chain.is.testnet(name);
     chains = chains.filter(notTestnet);
   }
 

@@ -1,8 +1,8 @@
 import type * as t from './types.mjs';
 
-export { type t };
 export * from '../../common';
 export * from './libs.mjs';
+export { type t };
 
+export { Balance, Chain } from '../../evm';
 export { Icons } from '../Icons';
-export { Chain } from '../../evm';

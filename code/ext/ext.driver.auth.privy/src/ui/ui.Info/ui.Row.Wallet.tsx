@@ -5,17 +5,18 @@ export type WalletRowProps = {
   enabled?: boolean;
   privy: t.PrivyInterface;
   wallet: t.ConnectedWallet;
+  chain: t.EvmChainName;
   showClose?: boolean;
   style?: t.CssValue;
 };
 
 export const WalletRow: React.FC<WalletRowProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, wallet, showClose = false, privy } = props;
+  const { enabled = DEFAULTS.enabled, wallet, showClose = false, privy, chain } = props;
   const { address } = wallet;
   const isEmbedded = Wrangle.isEmbedded(wallet);
 
-  const shortHash = Hash.shorten(address, [2, 4], { divider: '..' });
-  const balance = useBalance(wallet);
+  const shortHash = Hash.shorten(address, [2, 4]);
+  const balance = useBalance({ wallet, chain });
 
   /**
    * Handlers
@@ -46,6 +47,11 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
     wallet: css({}),
     kind: css({ opacity: 0.2, display: 'grid', alignContent: 'center' }),
     address: css({ display: 'grid', alignContent: 'center' }),
+    balance: css({
+      display: 'grid',
+      justifyContent: 'end',
+      alignContent: 'center',
+    }),
     close: css({ Size }),
   };
 
@@ -61,7 +67,13 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
     </Button>
   );
   const elBalance = !elClose && (
-    <Button.Copy enabled={enabled} onCopy={(e) => e.copy(balance.eth)}>
+    <Button.Copy
+      minWidth={80}
+      enabled={enabled}
+      spinning={balance.is.fetching}
+      onCopy={(e) => e.copy(balance.eth)}
+      style={styles.balance}
+    >
       <div>{balance.toString('ETH', 5)}</div>
     </Button.Copy>
   );

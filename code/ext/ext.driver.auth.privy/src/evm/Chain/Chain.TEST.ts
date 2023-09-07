@@ -1,8 +1,8 @@
 import { Chain } from '.';
 import { Test, expect, type t } from '../../test.ui';
 
-export default Test.describe('Chains', (e) => {
-  e.describe('get', (e) => {
+export default Test.describe('EVM: Chain', (e) => {
+  e.describe('Chain.get', (e) => {
     const test = (name: t.EvmChainName, id: number) => {
       e.it(`${name}`, (e) => {
         const chain = Chain.get(name);
@@ -21,9 +21,9 @@ export default Test.describe('Chains', (e) => {
     test('Zora:Test', 999);
   });
 
-  e.it('isTestnet', (e) => {
+  e.it('Chain.is.testnet', (e) => {
     const test = (name: t.EvmChainName, expected: boolean) => {
-      expect(Chain.isTestnet(name)).to.eql(expected);
+      expect(Chain.is.testnet(name)).to.eql(expected);
     };
 
     test('Eth:Main', false);
@@ -35,5 +35,16 @@ export default Test.describe('Chains', (e) => {
     test('Base:Test:Goerli', true);
     test('Zora:Main', false);
     test('Zora:Test', true);
+  });
+
+  e.it('Chain.identifier', (e) => {
+    const res1 = Chain.identifier('Eth:Main');
+    const res2 = Chain.identifier('Op:Main');
+
+    expect(res1.id).to.eql(1);
+    expect(res1.hex).to.eql('0x1');
+
+    expect(res2.id).to.eql(10);
+    expect(res2.hex).to.eql('0xa');
   });
 });

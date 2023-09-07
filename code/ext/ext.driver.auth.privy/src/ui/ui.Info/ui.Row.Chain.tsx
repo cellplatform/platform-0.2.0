@@ -15,7 +15,7 @@ export const ChainRow: React.FC<ChainRowProps> = (props) => {
   const name = Chain.displayName(chain);
   const is = {
     selected: data.selected === chain,
-    testnet: Chain.isTestnet(chain),
+    testnet: Chain.is.testnet(chain),
   };
 
   /**

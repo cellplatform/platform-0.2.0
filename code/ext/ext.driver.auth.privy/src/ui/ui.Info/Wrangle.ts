@@ -1,4 +1,4 @@
-import { PropList, type t, DEFAULTS } from './common';
+import { DEFAULTS, PropList, type t } from './common';
 
 export const Wrangle = {
   title(props: t.InfoProps) {

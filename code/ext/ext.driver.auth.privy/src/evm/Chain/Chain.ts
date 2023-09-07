@@ -1,3 +1,4 @@
+import { custom } from 'viem';
 import {
   base,
   baseGoerli,
@@ -26,17 +27,10 @@ const names: t.EvmChainName[] = [
 export const Chain = {
   names,
 
-  displayName(name: t.EvmChainName) {
-    const chain = Chain.get(name);
-
-    if (name === 'Eth:Test:Goerli') return 'Ethereum (Goerli)';
-    if (name === 'Eth:Test:Sepolia') return 'Ethereum (Sepolia)';
-    if (name === 'Op:Main') return 'Optimism';
-    if (name === 'Op:Test:Goerli') return 'Optimism (Goerli)';
-    if (name === 'Base:Test:Goerli') return 'Base (Goerli)';
-    if (name === 'Zora:Test') return 'Base (Test)';
-
-    return chain.name;
+  is: {
+    testnet(name: t.EvmChainName) {
+      return name.includes(':Test');
+    },
   },
 
   /**
@@ -55,7 +49,34 @@ export const Chain = {
     throw new Error(`Chain named '${name}' not supported.`);
   },
 
-  isTestnet(name: t.EvmChainName) {
-    return name.includes(':Test');
+  displayName(name: t.EvmChainName) {
+    const chain = Chain.get(name);
+
+    if (name === 'Eth:Test:Goerli') return 'Ethereum (Goerli)';
+    if (name === 'Eth:Test:Sepolia') return 'Ethereum (Sepolia)';
+    if (name === 'Op:Main') return 'Optimism';
+    if (name === 'Op:Test:Goerli') return 'Optimism (Goerli)';
+    if (name === 'Base:Test:Goerli') return 'Base (Goerli)';
+    if (name === 'Zora:Test') return 'Base (Test)';
+
+    return chain.name;
+  },
+
+  identifier(name: t.EvmChainName) {
+    const chain = Chain.get(name);
+    const id = chain.id;
+    const hex = `0x${Number(id).toString(16)}`;
+    return { id, hex } as const;
+  },
+
+  async provider(wallet: t.ConnectedWallet, name: t.EvmChainName) {
+    const chain = Chain.get(name);
+    const chainId = Chain.identifier(name).hex;
+
+    const eip1193 = await wallet.getEthereumProvider();
+    eip1193.request({ method: 'wallet_switchEthereumChain', params: [{ chainId }] });
+    const transport = custom(eip1193);
+
+    return { name, chain, transport, eip1193 } as const;
   },
 } as const;
