@@ -1,4 +1,4 @@
-import { Button, COLORS, DEFAULTS, Hash, Icons, css, type t } from './common';
+import { Button, COLORS, DEFAULTS, Hash, Icons, css, type t, Wallet } from './common';
 import { useBalance } from './use.Balance';
 
 export type WalletRowProps = {
@@ -90,7 +90,7 @@ export const WalletRow: React.FC<WalletRowProps> = (props) => {
  */
 export const Wrangle = {
   isEmbedded(wallet: t.ConnectedWallet) {
-    return wallet.walletClientType === 'privy';
+    return Wallet.is.embedded(wallet);
   },
 
   walletClientType(wallet: t.ConnectedWallet) {
