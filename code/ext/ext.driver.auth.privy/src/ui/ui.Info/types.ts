@@ -24,9 +24,6 @@ export type InfoData = {
   };
 };
 
-export type InfoChainSelectedHandler = (e: InfoChainSelectedHandlerArgs) => void;
-export type InfoChainSelectedHandlerArgs = { chain: t.EvmChainName };
-
 export type InfoFieldModifiers = { keys: t.KeyboardModifierFlags; is: { over: boolean } };
 
 /**
@@ -44,6 +41,7 @@ export type InfoProps = {
   clipboard?: boolean;
   flipped?: boolean;
   style?: t.CssValue;
+  onReady?: t.InfoStatusHandler;
   onChange?: t.InfoStatusHandler;
 };
 
@@ -54,5 +52,11 @@ export type InfoStatusHandler = (e: InfoStatusHandlerArgs) => void;
 export type InfoStatusHandlerArgs = {
   readonly status: t.AuthStatus;
   readonly privy: t.PrivyInterface;
+  readonly wallets: t.ConnectedWallet[];
   readonly accessToken?: string;
+};
+
+export type InfoChainSelectedHandler = (e: InfoChainSelectedHandlerArgs) => void;
+export type InfoChainSelectedHandlerArgs = {
+  readonly chain: t.EvmChainName;
 };

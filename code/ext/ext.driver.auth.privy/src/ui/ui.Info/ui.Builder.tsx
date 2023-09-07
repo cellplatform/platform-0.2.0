@@ -1,13 +1,13 @@
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Wrangle } from './Wrangle';
 import { DEFAULTS, Keyboard, Pkg, PropList, useMouse, type t } from './common';
 import { FieldLogin } from './field.Auth.Login';
+import { FieldChainList } from './field.Chain.List';
 import { FieldModuleVerify } from './field.Module.Verify';
 import { FieldLinkWallet } from './field.Wallets.Link';
 import { FieldWalletsList } from './field.Wallets.List';
-import { FieldChainList } from './field.Chain.List';
 
 export const Builder: React.FC<t.InfoProps> = (props) => {
   const {
@@ -21,6 +21,7 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
   const mouse = useMouse();
   const privy = usePrivy();
   const { wallets } = useWallets();
+  const [ready, setReady] = useState(false);
 
   const modifiers = {
     is: { over: mouse.is.over },
@@ -60,10 +61,15 @@ export const Builder: React.FC<t.InfoProps> = (props) => {
     const run = async () => {
       const status = Wrangle.toStatus(privy);
       const accessToken = (await privy.getAccessToken()) || undefined;
-      props.onChange?.({ status, privy, accessToken });
+      const args: t.InfoStatusHandlerArgs = { status, privy, wallets, accessToken };
+      props.onChange?.(args);
+      if (!ready && privy.ready) {
+        props.onReady?.(args);
+        setReady(true);
+      }
     };
     run();
-  }, [Wrangle.privyDeps(privy)]);
+  }, [Wrangle.privyDeps(privy), ready]);
 
   return (
     <PropList

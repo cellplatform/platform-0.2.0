@@ -63,6 +63,7 @@ export default Dev.describe(name, (e) => {
           <Info
             {...e.state.props}
             margin={24}
+            onReady={(e) => console.info(`⚡️ onReady`, e)}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
               state.change((d) => {

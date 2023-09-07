@@ -1,5 +1,4 @@
-import { Test, describe, it, type t } from '.';
-import { TESTS } from '../test.ui/-TestRunner.TESTS';
+import { describe, it } from '.';
 
 /**
  * Test Harness (UI)
@@ -12,13 +11,3 @@ describe('visual specs', () => {
     expect(res.ok).to.eql(true);
   });
 });
-
-/**
- * Run tests within CI (server-side).
- */
-const run = Test.using(describe, it);
-const wait = TESTS.all
-  .filter((m) => typeof m === 'object')
-  .map((m) => m as t.SpecImport)
-  .map((m) => run.suite(m));
-await Promise.all(wait);
