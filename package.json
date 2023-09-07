@@ -34,6 +34,7 @@
     "@privy-io/react-auth": "1.37.0",
     "@rainbow-me/rainbowkit": "1.0.10",
     "@tauri-apps/api": "1.4.0",
+    "@vercel/blob": "0.11.0",
     "@vercel/edge": "1.0.1",
     "@vime/core": "5.4.1",
     "@vime/react": "5.4.1",
