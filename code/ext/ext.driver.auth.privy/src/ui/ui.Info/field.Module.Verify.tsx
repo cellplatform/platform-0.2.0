@@ -12,7 +12,7 @@ export function FieldModuleVerify(data: t.InfoData, info?: {}) {
     },
 
     async modules() {
-      const { TESTS } = await import('../../test.ui/-TestRunner.TESTS.mjs');
+      const { TESTS } = await import('../../test.ui/-TestRunner.TESTS');
       return TESTS.all;
     },
   });

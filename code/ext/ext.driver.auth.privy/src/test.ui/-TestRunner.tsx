@@ -35,7 +35,7 @@ export default Dev.describe('TestRunner', (e) => {
     dev.bdd((runner) =>
       runner
         .run({})
-        .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
+        .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
         .localstore('dev:ext.driver.auth.privy')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),
