@@ -46,13 +46,15 @@ export type ButtonMouseHandlerArgs = {
   isDown: boolean;
   isOver: boolean;
   isEnabled: boolean;
-  event: React.MouseEvent;
   action: 'MouseEnter' | 'MouseLeave' | 'MouseDown' | 'MouseUp';
+  event: React.MouseEvent;
 };
 
 export type ButtonCopyHandler = (e: ButtonCopyHandlerArgs) => void;
 export type ButtonCopyHandlerArgs = {
-  delay(msecs: t.Milliseconds): void;
-  message(content: Content): void;
-  write(value?: string | number): Promise<void>;
+  message(value: Content): ButtonCopyHandlerArgs;
+  fontSize(value: number): ButtonCopyHandlerArgs;
+  opacity(value: number): ButtonCopyHandlerArgs;
+  delay(value: t.Milliseconds): ButtonCopyHandlerArgs;
+  copy(value?: string | number): Promise<void>;
 };

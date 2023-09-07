@@ -39,7 +39,7 @@ export default Dev.describe(name, (e) => {
             onClick={(e) => console.info('⚡️ onClick')}
             onCopy={(e) => {
               console.info('⚡️ onCopy', e);
-              e.write(`My Text (${slug()})`);
+              e.copy(`My Text (${slug()})`);
               // e.delay(1200);
               // e.message('Foobar');
             }}

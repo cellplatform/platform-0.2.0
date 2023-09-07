@@ -20,10 +20,6 @@ export const Wallet: React.FC<WalletProps> = (props) => {
   /**
    * Handlers
    */
-  const copyAddress = () => window.navigator.clipboard.writeText(address);
-
-  const copyBalance = () => window.navigator.clipboard.writeText(balance.eth.toString());
-
   const unlinkWallet = () => {
     /**
      * TODO 🐷
@@ -48,22 +44,15 @@ export const Wallet: React.FC<WalletProps> = (props) => {
       alignContent: 'center',
     }),
     wallet: css({}),
-    kind: css({
-      opacity: 0.2,
-      display: 'grid',
-      alignContent: 'center',
-    }),
-    address: css({
-      display: 'grid',
-      alignContent: 'center',
-    }),
+    kind: css({ opacity: 0.2, display: 'grid', alignContent: 'center' }),
+    address: css({ display: 'grid', alignContent: 'center' }),
     close: css({ Size }),
   };
 
   const elAddress = (
-    <Button enabled={enabled} onClick={copyAddress} style={styles.address}>
+    <Button.Copy enabled={enabled} style={styles.address} onCopy={(e) => e.copy(address)}>
       {shortHash}
-    </Button>
+    </Button.Copy>
   );
 
   const elClose = showClose && !isEmbedded && (
@@ -72,9 +61,9 @@ export const Wallet: React.FC<WalletProps> = (props) => {
     </Button>
   );
   const elBalance = !elClose && (
-    <Button enabled={enabled} onClick={copyBalance}>
+    <Button.Copy enabled={enabled} onCopy={(e) => e.copy(balance.eth)}>
       <div>{balance.toString('ETH', 5)}</div>
-    </Button>
+    </Button.Copy>
   );
 
   return (

@@ -14,17 +14,22 @@ export const CopyButton: React.FC<t.CopyButtonProps> = (props) => {
 
   const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
   const [copiedContent, setCopiedContent] = useState<Content>();
+  const [copiedFontSize, setCopiedFontSize] = useState<number>(DEFAULTS.copy.fontSize);
+  const [copiedOpacity, setCopiedOpacity] = useState<number>(DEFAULTS.copy.opacity);
 
   /**
    * Handlers
    */
+  const reset = () => {
+    setTimer(undefined);
+    setCopiedContent(undefined);
+    setCopiedFontSize(DEFAULTS.copy.fontSize);
+    setCopiedOpacity(DEFAULTS.copy.opacity);
+  };
+
   const startTimer = (delay: t.Milliseconds) => {
     if (timer) clearTimeout(timer);
-    const onTimeout = () => {
-      setTimer(undefined);
-      setCopiedContent(undefined);
-    };
-    setTimer(setTimeout(onTimeout, delay));
+    setTimer(setTimeout(reset, delay));
   };
 
   const handleClick: React.MouseEventHandler = (e) => {
@@ -32,15 +37,35 @@ export const CopyButton: React.FC<t.CopyButtonProps> = (props) => {
     if (onCopy) {
       let delay: number = DEFAULTS.copy.delay;
       let content: Content = <div {...styles.copied}>{DEFAULTS.copy.message}</div>;
-      onCopy?.({
-        delay: (msecs) => (delay = Math.max(0, msecs)),
-        message: (input) => (content = input),
-        async write(value) {
-          if (value === undefined) return;
-          await navigator.clipboard.writeText(String(value));
+      let fontSize: number = DEFAULTS.copy.fontSize;
+      let opacity: number = DEFAULTS.copy.opacity;
+
+      const args: t.ButtonCopyHandlerArgs = {
+        delay(value) {
+          delay = Math.max(0, value);
+          return args;
         },
-      });
+        message(value) {
+          content = value;
+          return args;
+        },
+        fontSize(value) {
+          fontSize = value;
+          return args;
+        },
+        opacity(value) {
+          opacity = Math.max(0, Math.min(1, value));
+          return args;
+        },
+        async copy(value) {
+          if (value !== undefined) await navigator.clipboard.writeText(String(value));
+        },
+      };
+      onCopy?.(args);
+
       setCopiedContent(content);
+      setCopiedFontSize(fontSize);
+      setCopiedOpacity(opacity);
       startTimer(delay);
     }
   };
@@ -51,7 +76,8 @@ export const CopyButton: React.FC<t.CopyButtonProps> = (props) => {
   const styles = {
     copied: css({
       color: COLORS.DARK,
-      fontSize: 13,
+      fontSize: copiedFontSize,
+      opacity: copiedOpacity,
     }),
   };
 
