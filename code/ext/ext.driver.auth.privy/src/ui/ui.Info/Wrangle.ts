@@ -1,4 +1,4 @@
-import { PropList, type t } from './common';
+import { PropList, type t, DEFAULTS } from './common';
 
 export const Wrangle = {
   title(props: t.InfoProps) {
@@ -35,5 +35,9 @@ export const Wrangle = {
 
   walletDeps(wallet: t.ConnectedWallet) {
     return `${wallet.address}:${wallet.connectorType}:${wallet.walletClientType}:${wallet.chainId}`;
+  },
+
+  chain(data: t.InfoData) {
+    return (data.chain?.selected ?? DEFAULTS.data.chain!.selected!) as t.EvmChainName;
   },
 } as const;
