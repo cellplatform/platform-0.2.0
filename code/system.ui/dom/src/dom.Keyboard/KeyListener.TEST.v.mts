@@ -24,11 +24,11 @@ describe('KeyListener', () => {
   it('dispose: removes event listener', async () => {
     /**
      * NOTE: The removing of the event handlers (in particular when multiple handlers
-     *       are in play) is done correctly in the borser, however JSDOM does not behave
+     *       are in play) is done correctly in the borser, however [happy-dom] does not behave
      *       accurately and removes all handlers.
      *
-     *       This tests only tests the removal of the event, but does not attempt to
-     *       simulate within JSDOM any further than this.
+     *       This test only asserts the removal of the event, but does not attempt to
+     *       simulate within [happy-dom] any further than this.
      */
     const fired: KeyboardEvent[] = [];
     const keydown = KeyListener.keydown((e) => fired.push(e));

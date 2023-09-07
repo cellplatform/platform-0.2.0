@@ -2,6 +2,7 @@
   "name": "ext.openai",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
@@ -11,7 +12,7 @@
     "tmp": "ts-node-esm -T   ./script.ts/tmp.mts"
   },
   "dependencies": {
-    "openai": "4.2.0",
+    "openai": "4.5.0",
     "sys.util": "0.0.0"
   },
   "devDependencies": {

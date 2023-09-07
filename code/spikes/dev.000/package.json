@@ -1,7 +1,8 @@
 {
   "name": "sys.dev",
-  "version": "0.0.485",
+  "version": "0.0.490",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist/web && serve",

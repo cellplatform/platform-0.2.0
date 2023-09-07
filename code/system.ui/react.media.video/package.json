@@ -2,6 +2,7 @@
   "name": "sys.ui.react.media.video",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",

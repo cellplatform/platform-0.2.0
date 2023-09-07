@@ -1,1 +1,1 @@
-export type { TestStats, VitestResultsData } from '../../code/compiler/builder.node/types.mjs';
+export type { TestStats, VitestResultsData } from '../../code/compiler/builder/types.mjs';

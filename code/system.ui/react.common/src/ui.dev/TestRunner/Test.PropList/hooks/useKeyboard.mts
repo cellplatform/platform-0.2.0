@@ -42,6 +42,7 @@ export function useKeyboard(args: {
      * Run selected.
      */
     handle(keyboard.run, (e) => {
+      if (!enabled) return;
       e.handled();
       const modifiers = { ...Wrangle.modifiers(), meta: false };
       data.run?.onRunAll?.({ modifiers });
@@ -51,6 +52,7 @@ export function useKeyboard(args: {
      * Run all (force).
      */
     handle(keyboard.runAll, (e) => {
+      if (!enabled) return;
       e.handled();
       const modifiers = { ...Wrangle.modifiers(), meta: true };
       data.run?.onRunAll?.({ modifiers });

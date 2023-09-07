@@ -2,6 +2,7 @@
   "name": "sys.ui.react.common",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
@@ -24,7 +25,7 @@
     "sys.util": "0.0.0"
   },
   "devDependencies": {
-    "@types/qrcode": "1.5.1",
+    "@types/qrcode": "1.5.2",
     "sys.fs": "0.0.0",
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",

@@ -2,6 +2,7 @@
   "name": "sys.ui.dom",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "serve": "cd dist && serve",
@@ -17,7 +18,7 @@
   "devDependencies": {
     "sys.test": "0.0.0",
     "sys.types": "0.0.0",
-    "@types/ua-parser-js": "0.7.36"
+    "@types/ua-parser-js": "0.7.37"
   },
   "license": "MIT",
   "private": true,

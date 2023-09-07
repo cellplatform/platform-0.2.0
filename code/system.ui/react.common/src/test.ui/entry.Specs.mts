@@ -2,6 +2,7 @@ export { Pkg } from '../index.pkg.mjs';
 
 export const ModuleSpecs = {
   'sys.ui.common.Button': () => import('../ui/Button/-SPEC'),
+  'sys.ui.common.Button.Copy': () => import('../ui/Button/-SPEC.CopyButton'),
   'sys.ui.common.Button.Switch': () => import('../ui/Button.Switch/-SPEC'),
   'sys.ui.common.Card': () => import('../ui/Card/-SPEC'),
   'sys.ui.common.Center': () => import('../ui/Center/-SPEC'),

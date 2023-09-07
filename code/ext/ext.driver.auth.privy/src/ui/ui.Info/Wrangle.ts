@@ -1,21 +1,10 @@
-import { PropList, type t } from './common';
+import { DEFAULTS, PropList, type t } from './common';
 
 export const Wrangle = {
   title(props: t.InfoProps) {
     const title = PropList.Wrangle.title(props.title);
     if (!title.margin && props.card) title.margin = [0, 0, 15, 0];
     return title;
-  },
-
-  toLoginMethods(fields: t.InfoField[] = []) {
-    return fields
-      .filter((field) => field.startsWith('Login.Method.'))
-      .map((field) => {
-        if (field === 'Login.Method.SMS') return 'sms';
-        if (field === 'Login.Method.Wallet') return 'wallet';
-        return;
-      })
-      .filter(Boolean) as t.AuthLoginMethod[];
   },
 
   toStatus(privy: t.PrivyInterface): t.AuthStatus {
@@ -30,9 +19,8 @@ export const Wrangle = {
     return { authenticated, ready, user };
   },
 
-  toDepFlag(privy: t.PrivyInterface) {
+  privyDeps(privy: t.PrivyInterface) {
     const { authenticated, ready, user } = privy;
-
     const did = user?.id;
     const wallet = user?.wallet?.address;
     const linked = (user?.linkedAccounts ?? [])
@@ -42,7 +30,14 @@ export const Wrangle = {
         return '';
       })
       .filter(Boolean);
-
     return `${authenticated}:${ready}:${did}:${linked}:${wallet}`;
+  },
+
+  walletDeps(wallet: t.ConnectedWallet) {
+    return `${wallet.address}:${wallet.connectorType}:${wallet.walletClientType}:${wallet.chainId}`;
+  },
+
+  chain(data: t.InfoData) {
+    return (data.chain?.selected ?? DEFAULTS.data.chain!.selected!) as t.EvmChainName;
   },
 } as const;

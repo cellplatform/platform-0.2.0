@@ -1,20 +1,15 @@
 import { AuthProvider } from '../ui.Auth/Auth.Provider';
-import { Wrangle } from './Wrangle';
-import { DEFAULTS, t } from './common';
-import { List } from './ui.List';
+import { DEFAULTS, type t } from './common';
+import { Builder } from './ui.Builder';
 
 export const View: React.FC<t.InfoProps> = (props) => {
-  const {
-    fields = DEFAULTS.fields.default,
-    data = DEFAULTS.data,
-    useAuthProvider = DEFAULTS.useAuthProvider,
-  } = props;
+  const { data = DEFAULTS.data, useAuthProvider = DEFAULTS.useAuthProvider } = props;
 
-  if (!useAuthProvider) return <List {...props} />;
+  if (!useAuthProvider) return <Builder {...props} />;
 
   return (
-    <AuthProvider appId={data.provider?.appId} loginMethods={Wrangle.toLoginMethods(fields)}>
-      <List {...props} />
+    <AuthProvider appId={data.provider?.appId} walletConnectId={data.provider?.walletConnectId}>
+      <Builder {...props} />
     </AuthProvider>
   );
 };

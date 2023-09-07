@@ -1,4 +1,4 @@
-import { type t } from '../common';
+import { Chain, type t } from '../common';
 export * from '../common';
 
 /**
@@ -7,17 +7,38 @@ export * from '../common';
 const allFields: t.InfoField[] = [
   'Module',
   'Module.Verify',
-  'Login',
-  'Login.Method.Wallet',
-  'Login.Method.SMS',
-  'User.Id',
+  'Id.User',
+  'Id.User.Phone',
+  'Id.App.Privy',
+  'Id.App.WalletConnect',
+  'Auth.Login',
+  'Auth.Link.Wallet',
+  'Wallet.List',
+  'Wallet.List.Title',
+  'Chain.List',
+  'Chain.List.Title',
+  'Chain.List.Testnets',
 ];
-const defaultFields: t.InfoField[] = ['Module', 'Login', 'Login.Method.SMS', 'Login.Method.Wallet'];
-const data: t.InfoData = {};
+const defaultFields: t.InfoField[] = [
+  'Module',
+  'Id.User',
+  'Id.User.Phone',
+  'Auth.Login',
+  'Auth.Link.Wallet',
+];
+
+const data: t.InfoData = {
+  chain: {
+    names: Chain.names,
+    selected: 'Op:Main',
+  },
+};
 
 export const DEFAULTS = {
   query: { dev: 'dev' },
   fields: { all: allFields, default: defaultFields },
+  enabled: true,
   useAuthProvider: true,
+  clipboard: true,
   data,
 } as const;

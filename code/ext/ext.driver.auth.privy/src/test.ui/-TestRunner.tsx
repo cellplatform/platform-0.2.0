@@ -1,12 +1,17 @@
-import { Dev, type t } from '.';
+import { Info } from '../ui/ui.Info';
+import { Dev, appId, walletConnectId, type t } from './common';
 
 type T = {
+  ready?: boolean;
   spinning?: boolean;
   results?: t.TestSuiteRunResponse[];
 };
 const initial: T = {};
 
 export default Dev.describe('TestRunner', (e) => {
+  let privy: t.PrivyInterface;
+  let wallets: t.ConnectedWallet[] = [];
+
   e.it('init', async (e) => {
     const ctx = Dev.ctx(e);
     await ctx.state<T>(initial);
@@ -31,11 +36,30 @@ export default Dev.describe('TestRunner', (e) => {
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
+    const ctx = (): t.TestCtx => ({ privy, wallets });
+
+    dev.row((e) => {
+      return (
+        <Info
+          data={{ provider: { appId, walletConnectId } }}
+          fields={['Module', 'Id.User', 'Auth.Login']}
+          clipboard={false}
+          onChange={(e) => {
+            privy = e.privy;
+            wallets = e.wallets;
+            if (privy.authenticated) state.change((d) => (d.ready = true));
+          }}
+        />
+      );
+    });
+
+    dev.hr(5, 20);
 
     dev.bdd((runner) =>
       runner
-        .run({})
-        .modules(async () => (await import('./-TestRunner.TESTS.mjs')).TESTS.all)
+        .run({ ctx })
+        .enabled(() => Boolean(privy?.authenticated))
+        .modules(async () => (await import('./-TestRunner.TESTS')).TESTS.all)
         .localstore('dev:ext.driver.auth.privy')
         .keyboard(true)
         .onChanged((e) => state.change((d) => (d.results = e.results))),

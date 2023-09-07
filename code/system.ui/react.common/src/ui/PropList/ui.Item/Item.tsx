@@ -16,18 +16,23 @@ export const PropListItem: React.FC<PropListItemProps> = (props) => {
   const theme = Wrangle.theme(props.theme);
   const hasValue = Boolean(data.label);
   const selected = Wrangle.selected(data, theme.is.dark);
+  const divider = data.divider ?? true;
 
   /**
-   * [Render]
+   * Render
    */
+  const noBorder = isLast || !divider;
+  const borderColor = theme.color.alpha(noBorder ? 0 : 0.1);
   const styles = {
     base: css({
       backgroundColor: selected ? Color.format(selected.color) : undefined,
       Flex: 'horizontal-start-spaceBetween',
-      PaddingY: 4,
+      position: 'relative',
+      paddingTop: 4,
+      paddingBottom: noBorder ? 0 : 4,
       minHeight: 16,
       fontSize: DEFAULTS.fontSize,
-      borderBottom: `solid 1px ${theme.color.alpha(isLast ? 0 : 0.1)}`,
+      borderBottom: `solid ${noBorder ? 0 : 1}px ${borderColor}`,
       ':first-child': { paddingTop: 2 },
       ':last-child': { border: 'none', paddingBottom: 2 },
     }),

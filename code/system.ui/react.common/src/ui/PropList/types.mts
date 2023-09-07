@@ -56,7 +56,7 @@ export type PropListFieldBuilder<F extends string> = {
   field(name: F, item: PropListItemFactory | PropListItem): PropListFieldBuilder<F>;
   items(fields?: F[]): PropListItem[];
 };
-export type PropListItemFactory = () => PropListItem | PropListItem[] | undefined;
+export type PropListItemFactory = () => PropListItem | PropListItem[] | t.Falsy;
 
 /**
  * Default values used when optional properties are ommitted.
@@ -76,6 +76,7 @@ export type PropListItem = {
   visible?: boolean;
   indent?: number;
   selected?: boolean | PropListItemSelected;
+  divider?: boolean;
 };
 
 export type PropListItemSelected = { color: string | number };

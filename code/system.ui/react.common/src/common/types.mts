@@ -17,6 +17,7 @@ export type {
   EdgePositionX,
   EdgePositionY,
   EventBus,
+  Falsy,
   IgnoredResponse,
   Immutable,
   ImmutableNext,
@@ -27,6 +28,7 @@ export type {
   Percent,
   Pixels,
   Point,
+  PartialDeep,
   Seconds,
   Size,
 } from 'sys.types/src/types.mjs';

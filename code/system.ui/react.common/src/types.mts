@@ -18,6 +18,8 @@ export type {
   KeyboardKeypress,
   KeyboardState,
   KeyboardStateCurrent,
+  KeyboardModifierFlags,
+  KeyboardModifierKeys,
 } from 'sys.ui.dom/src/types.mjs';
 export type { CssEdgesInput, CssRadiusInput, CssValue } from 'sys.ui.react.css/src/types.mjs';
 

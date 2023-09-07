@@ -1,52 +1,76 @@
 import { Info } from '.';
-import { Dev, appId, type t, Time } from '../../test.ui';
+import { Delete, Dev, Hash, Time, appId, walletConnectId, type t } from '../../test.ui';
 
-type T = { props: t.InfoProps; status?: t.AuthStatus };
+type T = {
+  props: t.InfoProps;
+  privy?: t.PrivyInterface;
+  status?: t.AuthStatus;
+  accessToken?: string;
+  signature?: string;
+};
 const initial: T = { props: {} };
 const DEFAULTS = Info.DEFAULTS;
 
 /**
  * Spec
+ * https://docs.privy.io/
  */
 const name = Info.displayName ?? '⚠️';
 export default Dev.describe(name, (e) => {
-  type LocalStore = { selectedFields?: t.InfoField[] } & Pick<t.InfoProps, 'useAuthProvider'>;
+  type LocalStore = { selectedFields?: t.InfoField[]; selectedChain?: t.EvmChainName } & Pick<
+    t.InfoProps,
+    'enabled' | 'useAuthProvider' | 'clipboard'
+  >;
   const localstore = Dev.LocalStorage<LocalStore>('dev:ext.driver.auth.privy.Info');
   const local = localstore.object({
+    enabled: DEFAULTS.enabled,
     selectedFields: DEFAULTS.fields.default,
     useAuthProvider: DEFAULTS.useAuthProvider,
+    selectedChain: DEFAULTS.data.chain!.selected,
+    clipboard: DEFAULTS.clipboard,
   });
-
-  const State = {
-    props(state: T): t.InfoProps {
-      const data: t.InfoData = { provider: { appId } };
-      return { ...state.props, data };
-    },
-  };
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const state = await ctx.state<T>(initial);
 
     await state.change((d) => {
-      d.props.margin = 10;
+      d.props.enabled = local.enabled;
       d.props.fields = local.selectedFields;
+      d.props.clipboard = local.clipboard;
       d.props.useAuthProvider = local.useAuthProvider;
+
+      d.props.data = {
+        provider: { appId, walletConnectId },
+        chain: {
+          selected: local.selectedChain,
+          onSelected(e) {
+            console.info(`⚡️ onSelected`, e);
+            state.change((d) => (d.props.data!.chain!.selected = e.chain));
+            local.selectedChain = e.chain;
+          },
+        },
+      };
     });
 
     ctx.debug.width(380);
     ctx.subject
       .backgroundColor(1)
-      .size([320, null])
+      .size([360, null])
       .display('grid')
       .render<T>((e) => {
-        const props = State.props(e.state);
         return (
           <Info
-            {...props}
+            {...e.state.props}
+            margin={24}
+            onReady={(e) => console.info(`⚡️ onReady`, e)}
             onChange={(e) => {
               console.info(`⚡️ onChange`, e);
-              state.change((d) => (d.status = e.status));
+              state.change((d) => {
+                d.status = e.status;
+                d.privy = e.privy;
+                d.accessToken = e.accessToken;
+              });
             }}
           />
         );
@@ -55,6 +79,7 @@ export default Dev.describe(name, (e) => {
 
   e.it('ui:debug', async (e) => {
     const dev = Dev.tools<T>(e, initial);
+    const state = await dev.state();
 
     dev.section('Fields', (dev) => {
       dev.row((e) => {
@@ -79,7 +104,42 @@ export default Dev.describe(name, (e) => {
 
     dev.hr(5, 20);
 
+    dev.section('Field Samples', (dev) => {
+      const button = (label: string, fn?: () => t.InfoField[]) => {
+        dev.button((btn) => {
+          btn
+            .label(label)
+            .enabled((e) => true)
+            .onClick((e) => {
+              if (!fn) return;
+              e.change((d) => (local.selectedFields = d.props.fields = fn()));
+            });
+        });
+      };
+
+      button('wallet view', () => ['Auth.Login', 'Auth.Link.Wallet', 'Wallet.List']);
+      button('wallet view (chain selector)', () => [
+        'Auth.Login',
+        'Auth.Link.Wallet',
+        'Wallet.List',
+        'Chain.List',
+        'Chain.List.Title',
+      ]);
+    });
+
+    dev.hr(5, 20);
+
     dev.section('Properties', (dev) => {
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.enabled);
+        btn
+          .label((e) => `enabled`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.enabled = Dev.toggle(d.props, 'enabled'))));
+      });
+
+      dev.hr(-1, 5);
+
       dev.boolean((btn) => {
         const value = (state: T) => Boolean(state.props.useAuthProvider);
         btn
@@ -88,6 +148,44 @@ export default Dev.describe(name, (e) => {
           .onClick((e) =>
             e.change((d) => (local.useAuthProvider = Dev.toggle(d.props, 'useAuthProvider'))),
           );
+      });
+
+      dev.boolean((btn) => {
+        const value = (state: T) => Boolean(state.props.clipboard);
+        btn
+          .label((e) => `clipboard`)
+          .value((e) => value(e.state))
+          .onClick((e) => e.change((d) => (local.clipboard = Dev.toggle(d.props, 'clipboard'))));
+      });
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      dev.button((btn) => {
+        const enabled = (state: T) => state.status?.user?.wallet?.walletClientType === 'privy';
+        btn
+          .label(`sign message`)
+          .right((e) => (enabled(e.state) ? `(privy)` : ''))
+          .enabled((e) => enabled(e.state))
+          .onClick(async (e) => {
+            const { privy, status } = state.current;
+            if (!privy || !status) return;
+
+            const hash = Hash.sha256(state.current, { prefix: true });
+            const message = `The hash of the current state is\n${hash}`;
+
+            try {
+              const signature = await privy.signMessage(message, {
+                title: 'My Message Title',
+                description: `Sign to attest that you have seen the current state`,
+                buttonText: `Sign Message`,
+              });
+              await e.change((d) => (d.signature = signature));
+            } catch (error) {
+              console.log('error', error);
+            }
+          });
       });
     });
   });
@@ -105,8 +203,11 @@ export default Dev.describe(name, (e) => {
         props: e.state.props,
         status: e.state.status,
         'status:user': user,
+        signature: Hash.shorten(e.state.signature ?? '', 4),
+        accessToken: Hash.shorten(e.state.accessToken ?? '', 7),
       };
-      return <Dev.Object name={name} data={data} expand={1} />;
+
+      return <Dev.Object name={name} data={Delete.empty(data)} expand={1} />;
     });
   });
 });

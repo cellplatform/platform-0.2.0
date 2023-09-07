@@ -1,4 +1,5 @@
 export type * from './types.coord.mjs';
+export type * from './types.deep.mjs';
 export type * from './types.dispose.mjs';
 export type * from './types.dom.mjs';
 export type * from './types.event.mjs';
@@ -9,6 +10,5 @@ export type * from './types.mjs';
 export type * from './types.module.mjs';
 export type * from './types.number.mjs';
 export type * from './types.number.time.mjs';
-export type * from './types.partial.mjs';
 export type * from './types.pkg.mjs';
 export type * from './types.readonly.mjs';

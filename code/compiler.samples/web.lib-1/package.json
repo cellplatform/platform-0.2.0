@@ -2,6 +2,7 @@
   "name": "sample.web.lib-1",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "test": "ts-node-esm  -T ../../../script.ts/cmd.test.mts",

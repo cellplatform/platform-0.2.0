@@ -4,11 +4,8 @@ export * from '../common';
 /**
  * Constants
  */
-const loginMethods: t.AuthLoginMethod[] = ['sms', 'wallet'];
 
 export const DEFAULTS = {
-  loginMethods,
-
   /**
    * Source:
    *    https://github.com/cellplatform/platform-0.2.0/issues/159

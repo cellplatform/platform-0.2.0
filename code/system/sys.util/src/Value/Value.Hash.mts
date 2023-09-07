@@ -11,9 +11,11 @@ export function shortenHash(
   length: number | [number, number],
   options: ShortenHashOptions = {},
 ) {
-  const { divider = ' .. ' } = options;
+  const { divider = '..' } = options;
 
   hash = Wrangle.trimPrefixes((hash || '').trim(), options);
+  if (!hash) return '';
+
   const lengths = Array.isArray(length) ? length : [length, length];
   const left = hash.slice(0, lengths[0]);
   const right = hash.slice(0 - lengths[1]);
