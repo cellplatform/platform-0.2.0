@@ -5,6 +5,4 @@ export type EvmChainName =
   | 'Op:Main'
   | 'Op:Test:Goerli'
   | 'Base:Main'
-  | 'Base:Test:Goerli'
-  | 'Zora:Main'
-  | 'Zora:Test';
+  | 'Base:Test:Goerli';

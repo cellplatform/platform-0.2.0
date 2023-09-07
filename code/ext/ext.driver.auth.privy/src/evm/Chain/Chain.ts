@@ -1,15 +1,5 @@
 import { custom } from 'viem';
-import {
-  base,
-  baseGoerli,
-  goerli,
-  mainnet,
-  optimism,
-  optimismGoerli,
-  sepolia,
-  zora,
-  zoraTestnet,
-} from 'viem/chains';
+import { base, baseGoerli, goerli, mainnet, optimism, optimismGoerli, sepolia } from 'viem/chains';
 import { type t } from '../common';
 
 const names: t.EvmChainName[] = [
@@ -20,8 +10,6 @@ const names: t.EvmChainName[] = [
   'Op:Test:Goerli',
   'Base:Main',
   'Base:Test:Goerli',
-  'Zora:Main',
-  'Zora:Test',
 ];
 
 export const Chain = {
@@ -44,8 +32,6 @@ export const Chain = {
     if (name === 'Op:Test:Goerli') return optimismGoerli;
     if (name === 'Base:Main') return base;
     if (name === 'Base:Test:Goerli') return baseGoerli;
-    if (name === 'Zora:Main') return zora;
-    if (name === 'Zora:Test') return zoraTestnet;
     throw new Error(`Chain named '${name}' not supported.`);
   },
 
@@ -57,7 +43,6 @@ export const Chain = {
     if (name === 'Op:Main') return 'Optimism';
     if (name === 'Op:Test:Goerli') return 'Optimism (Goerli)';
     if (name === 'Base:Test:Goerli') return 'Base (Goerli)';
-    if (name === 'Zora:Test') return 'Base (Test)';
 
     return chain.name;
   },

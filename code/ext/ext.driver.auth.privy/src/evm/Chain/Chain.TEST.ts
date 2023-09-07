@@ -17,8 +17,6 @@ export default Test.describe('EVM: Chain', (e) => {
     test('Op:Test:Goerli', 420);
     test('Base:Main', 8453);
     test('Base:Test:Goerli', 84531);
-    test('Zora:Main', 7777777);
-    test('Zora:Test', 999);
   });
 
   e.it('Chain.is.testnet', (e) => {
@@ -33,8 +31,6 @@ export default Test.describe('EVM: Chain', (e) => {
     test('Op:Test:Goerli', true);
     test('Base:Main', false);
     test('Base:Test:Goerli', true);
-    test('Zora:Main', false);
-    test('Zora:Test', true);
   });
 
   e.it('Chain.identifier', (e) => {
