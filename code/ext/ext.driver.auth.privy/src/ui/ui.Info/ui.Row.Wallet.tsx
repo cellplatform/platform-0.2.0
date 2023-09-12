@@ -11,9 +11,10 @@ export type WalletRowProps = {
 };
 
 export const WalletRow: React.FC<WalletRowProps> = (props) => {
-  const { enabled = DEFAULTS.enabled, wallet, showClose = false, privy, chain } = props;
+  const { enabled = DEFAULTS.enabled, wallet, privy, chain } = props;
   const { address } = wallet;
   const isEmbedded = Wrangle.isEmbedded(wallet);
+  const showClose = (props.showClose ?? false) && enabled;
 
   const shortHash = Hash.shorten(address, [2, 4]);
   const balance = useBalance({ wallet, chain });
