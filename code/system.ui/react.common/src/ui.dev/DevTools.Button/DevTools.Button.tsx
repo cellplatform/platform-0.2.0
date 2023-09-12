@@ -26,7 +26,7 @@ export function button<S extends O = O>(
 
   const wrangle = {
     rightElement() {
-      if (values.spinner.current) return <Spinner.Bar color={COLORS.GREEN} width={35} />;
+      if (values.spinner.current) return <Spinner.Bar color={COLORS.BLUE} width={35} />;
       const right = values.right.current;
       if (right === false) return undefined;
       return typeof right === 'string' ? <div>{right}</div> : right;
