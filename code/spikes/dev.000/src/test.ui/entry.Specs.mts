@@ -26,6 +26,7 @@ const { Specs: ExtVercelBlob } = await import('ext.vercel.blob/specs');
 
 export const Specs = {
   App: () => import('../ui/App/-SPEC'),
+
   ...WebRtc,
   ...Crdt,
   ...Monaco,
