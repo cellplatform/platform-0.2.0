@@ -8,3 +8,4 @@ export const R = { equals } as const;
  * @system
  */
 export { rx } from 'sys.util';
+export { Filesize } from 'sys.fs';

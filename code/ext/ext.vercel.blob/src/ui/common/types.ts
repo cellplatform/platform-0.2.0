@@ -1,7 +1,13 @@
 /**
  * @system
  */
-export type { CssValue, CssEdgesInput, PropListProps } from 'sys.ui.react.common/src/types.mjs';
+export type {
+  CssEdgesInput,
+  CssValue,
+  DevCtxState,
+  PropListItem,
+  PropListProps,
+} from 'sys.ui.react.common/src/types.mjs';
 
 /**
  * @local
