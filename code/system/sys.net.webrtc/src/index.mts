@@ -9,6 +9,11 @@ export { Pkg };
  */
 export { WebRtc } from './WebRtc';
 
+export async function ui() {
+  const { Connect } = await import('./ui/ui.Connect');
+  return { Connect } as const;
+}
+
 /**
  * Dev
  */
