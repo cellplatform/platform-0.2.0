@@ -1,9 +1,6 @@
 import { Dev, type t } from '../../test.ui';
 
-type T = {
-  selected?: string;
-  client?: t.WebRtcEvents;
-};
+type T = { selected?: string };
 const initial: T = {};
 
 /**
@@ -13,6 +10,7 @@ const name = 'App';
 
 export default Dev.describe(name, (e) => {
   let network: t.NetworkDocSharedRef;
+  let client: t.WebRtcEvents;
 
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
@@ -29,7 +27,7 @@ export default Dev.describe(name, (e) => {
       .render<T>(async (e) => {
         const { ui } = await import('sys.net.webrtc');
         const WebRtc = await ui();
-        return <WebRtc.GroupVideo client={e.state.client} selected={e.state.selected} />;
+        return <WebRtc.GroupVideo client={client} selected={e.state.selected} />;
       });
   });
 
@@ -48,6 +46,7 @@ export default Dev.describe(name, (e) => {
             onReady={async (e) => {
               console.info('⚡️ Connect.onReady:', e);
               network = e.network;
+              client = e.client;
             }}
             onNetwork={(e) => {
               console.info('⚡️ Connect.onNetwork:', e);
@@ -55,21 +54,7 @@ export default Dev.describe(name, (e) => {
             }}
             onChange={async (e) => {
               console.info('⚡️ Connect.onChange:', e);
-              dev.redraw();
-
-              //               if (!syncer) {
-              //                 const info = await e.client.info.get();
-              //                 const syncers = info?.syncers ?? [];
-              //                 const total = syncers.length;
-              //                 syncer = syncers[0].syncer; // ← ✋ NB: First one reported only.
-              //                 console.info(`network syncer established [0 of ${total}]`, syncer);
-              //                 dev.redraw();
-              //               }
-              //
-              //               state.change((d) => {
-              //                 d.props.selected = e.selected;
-              //                 d.props.client = e.client;
-              //               });
+              state.change((d) => (d.selected = e.selected));
             }}
           />
         );
@@ -117,7 +102,7 @@ export default Dev.describe(name, (e) => {
     const dev = Dev.tools<T>(e, initial);
     const state = await dev.state();
     dev.footer.border(-0.1).render<T>((e) => {
-      const data = e.state;
+      const data = {};
       return <Dev.Object name={name} data={data} expand={1} />;
     });
   });
