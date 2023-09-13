@@ -1,4 +1,4 @@
-import { Dev } from '../../test.ui';
+import { Dev, type t } from '../../test.ui';
 
 type T = {};
 const initial: T = {};
@@ -9,6 +9,8 @@ const initial: T = {};
 const name = 'App';
 
 export default Dev.describe(name, (e) => {
+  let network: t.NetworkDocSharedRef;
+
   e.it('ui:init', async (e) => {
     const ctx = Dev.ctx(e);
     const dev = Dev.tools<T>(e, initial);
@@ -40,9 +42,11 @@ export default Dev.describe(name, (e) => {
           <UI.Connect.Stateful
             onReady={async (e) => {
               console.info('⚡️ Connect.onReady:', e);
-              // network = e.info.state;
-              // const $ = e.client.$.pipe(rx.mergeWith(network.$));
-              // $.subscribe(() => dev.redraw());
+              network = e.network;
+            }}
+            onNetwork={(e) => {
+              console.info('⚡️ Connect.onNetwork:', e);
+              dev.redraw();
             }}
             onChange={async (e) => {
               console.info('⚡️ Connect.onChange:', e);
@@ -81,6 +85,26 @@ export default Dev.describe(name, (e) => {
           ]}
         />
       );
+    });
+
+    dev.hr(5, 20);
+
+    dev.section('Debug', (dev) => {
+      const count = (label: string, by: number) => {
+        dev.button((btn) => {
+          const current = () => (network?.current.tmp.count ?? 0) as number;
+          const next = () => current() + by;
+          btn
+            .label(label)
+            .right(() => `${current()} ${by < 0 ? '-' : '+'} ${Math.abs(by)}`)
+            .onClick((e) => {
+              network?.change((d) => (d.tmp.count = next()));
+            });
+        });
+      };
+
+      count('increment', 1);
+      // count('decrement', -1);
     });
   });
 
