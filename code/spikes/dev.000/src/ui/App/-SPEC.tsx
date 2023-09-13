@@ -1,6 +1,9 @@
 import { Dev, type t } from '../../test.ui';
 
-type T = {};
+type T = {
+  selected?: string;
+  client?: t.WebRtcEvents;
+};
 const initial: T = {};
 
 /**
@@ -23,8 +26,10 @@ export default Dev.describe(name, (e) => {
       .backgroundColor(1)
       .size('fill')
       .display('grid')
-      .render<T>((e) => {
-        return <div>{`🐷 ${name}`}</div>;
+      .render<T>(async (e) => {
+        const { ui } = await import('sys.net.webrtc');
+        const WebRtc = await ui();
+        return <WebRtc.GroupVideo client={e.state.client} selected={e.state.selected} />;
       });
   });
 
@@ -37,9 +42,9 @@ export default Dev.describe(name, (e) => {
       .border(-0.1)
       .render(async (e) => {
         const { ui } = await import('sys.net.webrtc');
-        const UI = await ui();
+        const WebRtc = await ui();
         return (
-          <UI.Connect.Stateful
+          <WebRtc.Connect.Stateful
             onReady={async (e) => {
               console.info('⚡️ Connect.onReady:', e);
               network = e.network;

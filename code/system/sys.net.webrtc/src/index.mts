@@ -9,9 +9,13 @@ export { Pkg };
  */
 export { WebRtc } from './WebRtc';
 
+/**
+ * Dynamically load UI components.
+ */
 export async function ui() {
   const { Connect } = await import('./ui/ui.Connect');
-  return { Connect } as const;
+  const { GroupVideo } = await import('./ui/ui.GroupVideo');
+  return { Connect, GroupVideo } as const;
 }
 
 /**
