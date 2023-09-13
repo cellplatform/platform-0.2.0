@@ -1261,47 +1261,6 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@privy-io/react-auth@1.37.0":
-  version "1.37.0"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.37.0.tgz#fcf99e77012124ff1fac12c2ba412cbe591c419a"
-  integrity sha512-hZmABeWDbxO4ibKp8prdLDhNTljN4I5bGQ6TnzXjBORHalboWX7nQOiCFOiQkr1iMomaXEiJWRL072SZzICGFw==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.8.0-beta.3"
-    "@ethersproject/abstract-signer" "^5.7.0"
-    "@ethersproject/address" "^5.7.0"
-    "@ethersproject/bignumber" "^5.7.0"
-    "@ethersproject/bytes" "^5.7.0"
-    "@ethersproject/logger" "^5.7.0"
-    "@ethersproject/providers" "^5.7.1"
-    "@ethersproject/strings" "^5.7.0"
-    "@ethersproject/transactions" "^5.7.0"
-    "@ethersproject/units" "^5.7.0"
-    "@heroicons/react" "^2.0.18"
-    "@metamask/eth-sig-util" "^6.0.0"
-    "@walletconnect/ethereum-provider" "^2.8.6"
-    "@walletconnect/modal" "^2.5.9"
-    "@walletconnect/qrcode-modal" "^1.8.0"
-    base64-js "^1.5.1"
-    body-scroll-lock "^4.0.0-beta.0"
-    dotenv "^16.0.3"
-    encoding "^0.1.13"
-    eventemitter3 "^5.0.1"
-    jose "^4.11.2"
-    js-cookie "^3.0.5"
-    libphonenumber-js "^1.10.14"
-    lokijs "^1.5.12"
-    md5 "^2.3.0"
-    ofetch "^1.2.0"
-    pino-pretty "^10.0.0"
-    qrcode "^1.5.1"
-    react-device-detect "^2.2.2"
-    styled-components "^5.3.6"
-    tinycolor2 "^1.6.0"
-    uuid ">=8 <10"
-    web3-core "^1.8.0"
-    web3-core-helpers "^1.8.0"
-    wicg-inert "^3.1.2"
-
 "@privy-io/react-auth@1.37.1":
   version "1.37.1"
   resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.37.1.tgz#9c5f53eb325f721ebd80a4ecd6db0212ea228e1e"
@@ -9096,10 +9055,10 @@ vite-node@0.34.3:
     picocolors "^1.0.0"
     vite "^3.0.0 || ^4.0.0"
 
-vite-plugin-node-polyfills@0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/vite-plugin-node-polyfills/-/vite-plugin-node-polyfills-0.12.0.tgz#f97606cb9bdfa66e71d83738e5e05a409096321f"
-  integrity sha512-xZfpD81aNhwEbIjccEiy8Q/hDdnlYqBSeEaUMIukOpGHuMaz65jqrC2lmnF/FXnliovISy2L1n92da0JOvk36A==
+vite-plugin-node-polyfills@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-node-polyfills/-/vite-plugin-node-polyfills-0.14.0.tgz#ae7385dc7afa1f928e98339d010bb95a88f9154a"
+  integrity sha512-ADd9hQ3zjxbdLxmI5q5w3sdSB8r8fqtYswjzBONN+mwUeALO78y1avJfc5UFxz27ZHaf+z2BxRw5mxdopAcX5w==
   dependencies:
     "@rollup/plugin-inject" "^5.0.3"
     buffer-polyfill "npm:buffer@^6.0.3"
