@@ -1,10 +1,9 @@
 import { PrivyProvider } from '@privy-io/react-auth';
-
 import { COLORS, DEFAULTS, FC, type t } from './common';
 import { useStyleOverrides } from './use.StyleOverrides';
 
 const View: React.FC<t.AuthProviderProps> = (props) => {
-  const { appId, logoUrl = DEFAULTS.logoUrl } = props;
+  const { appId, logoUrl: logo = DEFAULTS.logoUrl } = props;
   useStyleOverrides();
 
   if (!appId) return '⚠️ AuthProvider missing "appId"';
@@ -20,10 +19,10 @@ const View: React.FC<t.AuthProviderProps> = (props) => {
         loginMethods: ['sms'], // NB: Start with phone (embedded wallet), then progressively add other wallets later.
         walletConnectCloudProjectId: props.walletConnectId,
         appearance: {
+          logo,
           theme: 'light',
           accentColor: COLORS.BLUE,
           showWalletLoginFirst: false,
-          logo: logoUrl,
         },
       }}
     >

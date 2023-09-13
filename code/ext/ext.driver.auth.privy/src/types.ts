@@ -12,6 +12,8 @@ export type * from './ui/ui.Info/types';
 /**
  * Authentication
  */
+export type AuthEnvKey = 'VITE_PUBLIC_PRIVY_APP_ID' | 'VITE_WALLET_CONNECT_PROJECT_ID';
+
 export type { AuthUser };
 
 export type AuthStatus = {

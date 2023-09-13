@@ -38,6 +38,7 @@ export const Chain = {
   displayName(name: t.EvmChainName) {
     const chain = Chain.get(name);
 
+    if (name === 'Eth:Main') return 'Ethereum (L1)';
     if (name === 'Eth:Test:Goerli') return 'Ethereum (Goerli)';
     if (name === 'Eth:Test:Sepolia') return 'Ethereum (Sepolia)';
     if (name === 'Op:Main') return 'Optimism';

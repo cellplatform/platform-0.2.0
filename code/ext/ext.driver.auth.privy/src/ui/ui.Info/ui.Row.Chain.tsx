@@ -1,4 +1,4 @@
-import { COLORS, Button, Chain, css, type t } from './common';
+import { Button, COLORS, Chain, DEFAULTS, css, type t } from './common';
 
 export type ChainRowProps = {
   enabled?: boolean;
@@ -10,7 +10,7 @@ export type ChainRowProps = {
 
 export const ChainRow: React.FC<ChainRowProps> = (props) => {
   const { enabled = true, chain, modifiers } = props;
-  const data = props.data.chain ?? {};
+  const data = props.data.chain ?? DEFAULTS.data.chain!;
 
   const name = Chain.displayName(chain);
   const is = {

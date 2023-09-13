@@ -13,7 +13,7 @@ export const Pkg: ModuleDef = {
   name: 'ext.driver.auth.privy',
   version: '0.0.0',
   dependencies: {
-    '@privy-io/react-auth': '1.37.0',
+    '@privy-io/react-auth': '1.37.1',
     'react': '18.2.0',
     'react-dom': '18.2.0',
     'sys.util': '0.0.0',
