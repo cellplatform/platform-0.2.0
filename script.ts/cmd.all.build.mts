@@ -18,7 +18,7 @@ const filter = (path: string) => {
   if (path.includes('_legacy')) return false;
   return true;
 };
-let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological' });
+let paths = await Builder.Find.projectDirs({ filter, sortBy: 'Topological', hasViteConfig: true });
 
 // Log module list.
 console.log();
