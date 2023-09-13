@@ -4,12 +4,12 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { BuildOptions, defineConfig, LibraryOptions, UserConfig, UserConfigExport } from 'vite';
 
-import { asArray, fs, R, Util, type t } from './builder/common/index.mjs';
+import { asArray, fs, pc, R, Util, type t } from './builder/common/index.mjs';
 import { Paths } from './builder/index.mjs';
 
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 import type { ManualChunksOption, RollupOptions } from 'rollup';
 import type { InlineConfig as TestConfig } from 'vitest';
@@ -91,14 +91,16 @@ export const Config = {
        * Temporary requirement of module: ext.driver.auth.privy
        * https://privy-developers.slack.com/archives/C059ABLSB47/p1692753366943129?thread_ts=1692753043.728049&cid=C059ABLSB47
        */
-      if (modulePath.includes('ext.driver.auth.privy')) {
-        config.plugins?.push(
-          nodePolyfills({
-            exclude: ['fs'],
-            globals: { process: true },
-            protocolImports: false,
-          }),
-        );
+      const addPolyfill = () => {
+        if (mode === 'production') return false;
+        const modules = ['ext.driver.auth.privy', 'ext.vercel.blob', 'dev.000'];
+        return modules.some((item) => modulePath.includes(item));
+      };
+
+      if (addPolyfill()) {
+        const dirname = fs.basename(fs.dirname(modulePath));
+        console.log(`${pc.yellow('[TMP]')} node polyfills added for: ${dirname}`);
+        config.plugins?.push(nodePolyfills({ include: ['process'] }));
       }
 
       /**
