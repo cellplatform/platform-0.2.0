@@ -1,4 +1,4 @@
-import { CrdtViews, Dev, rx, type t } from '../../test.ui';
+import { CrdtViews, Dev, type t } from '../../test.ui';
 
 import { GroupVideo } from '.';
 import { Connect } from '../ui.Connect';
@@ -40,8 +40,10 @@ export default Dev.describe('GroupVideo', async (e) => {
             onReady={async (e) => {
               console.info('⚡️ Connect.onReady:', e);
               network = e.info.state;
-              const $ = e.client.$.pipe(rx.mergeWith(network.$));
-              $.subscribe(() => dev.redraw());
+            }}
+            onNetwork={(e) => {
+              console.info('⚡️ Connect.onNetwork:', e);
+              dev.redraw();
             }}
             onChange={async (e) => {
               console.info('⚡️ Connect.onChange:', e);
@@ -50,7 +52,7 @@ export default Dev.describe('GroupVideo', async (e) => {
                 const info = await e.client.info.get();
                 const syncers = info?.syncers ?? [];
                 const total = syncers.length;
-                syncer = syncers[0].syncer; // ← ✋ NB: First one reported only.
+                syncer = syncers[0]?.syncer; // ← ✋ NB: First one reported only.
                 console.info(`network syncer established [0 of ${total}]`, syncer);
                 dev.redraw();
               }

@@ -17,12 +17,12 @@ export function useController(args: { client?: t.WebRtcEvents; selected?: t.Peer
    */
   useEffect(() => {
     const { dispose, dispose$ } = rx.disposable();
-    if (client) {
+    if (client && !client.disposed) {
       const $ = client.connections.changed.$.pipe(rx.takeUntil(dispose$));
       $.pipe(rx.debounceTime(50)).subscribe(registerChange);
     }
     return dispose;
-  }, [client?.instance.id, selected]);
+  }, [client?.instance.id, client?.disposed, selected]);
 
   /**
    * Retrieve the selected media stream.

@@ -22,6 +22,7 @@ export type ConnectStatefulProps = Common & {
   self?: t.Peer;
   onReady?: ConnectReadyHandler;
   onChange?: ConnectChangedHandler;
+  onNetwork?: t.ConnectNetworkHandler;
 };
 
 /**
@@ -39,5 +40,12 @@ export type ConnectChangedHandlerArgs = {
   readonly selected?: t.PeerId;
 };
 
+export type ConnectNetworkHandler = (e: ConnectNetworkHandlerArgs) => void;
+export type ConnectNetworkHandlerArgs = {
+  readonly current: t.NetworkDocShared;
+};
+
 export type ConnectToggleInfoHandler = (e: ConnectToggleInfoHandlerArgs) => void;
-export type ConnectToggleInfoHandlerArgs = { showing: boolean };
+export type ConnectToggleInfoHandlerArgs = {
+  readonly showing: boolean;
+};

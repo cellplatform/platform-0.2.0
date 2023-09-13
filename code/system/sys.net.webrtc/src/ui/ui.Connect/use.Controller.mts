@@ -9,6 +9,7 @@ export function useController(args: {
   showInfo?: boolean;
   onReady?: t.ConnectReadyHandler;
   onChange?: t.ConnectChangedHandler;
+  onNetwork?: t.ConnectNetworkHandler;
 }) {
   const { self } = args;
 
@@ -23,6 +24,7 @@ export function useController(args: {
 
   const fireChange = () => {
     const payload = Wrangle.event(client, selected);
+    console.log('payload', payload);
     if (payload) args.onChange?.(payload);
   };
 
@@ -42,11 +44,21 @@ export function useController(args: {
       const controller = WebRtc.controller(self, { dispose$ });
       const client = controller.client(dispose$);
       setClient(client);
-      Time.delay(0, async () => {
+
+      const onReady = async () => {
+        if (client.disposed) return;
+
         const info = await client.info.get();
         if (!info) throw new Error(`Failed to get WebRTC info.`);
+
         args.onReady?.({ client, info });
-      });
+
+        const network = info.state;
+        const $ = client.$.pipe(rx.mergeWith(network.$)).pipe(rx.takeUntil(dispose$));
+        $.subscribe(() => args.onNetwork?.({ current: network.current }));
+      };
+
+      Time.delay(0, onReady);
     }
 
     return dispose;
